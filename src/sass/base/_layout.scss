@@ -1,0 +1,31 @@
+html {
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+.row {
+  // @include outer-container;
+}
+.gray {
+  background: $midGray;
+}
+.full-row {
+  @extend .row;
+  // @include outer-container;
+  max-width: 100% !important;
+}
+
+footer {
+  @extend .row;
+  // @include outer-container;
+} 
+
+.col-pad {
+  padding-top: $base-pad;
+  padding-bottom: $base-pad;
+}

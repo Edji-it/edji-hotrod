@@ -1,0 +1,95 @@
+
+$navBarHeight: 100px;
+$sideBarWidth: 100px;
+
+.nav-bar {
+	position: relative;
+	top: 0;
+	left: 0;
+	padding: 10px;
+	height: $navBarHeight;
+	width: 100%;
+	text-align: center;
+	background: transparent;
+	z-index: $zTop;
+}
+
+.nav__center-logo {
+	display: inline-block;
+}
+
+nav {
+	height: $navBarHeight;
+	width: 100%;
+}
+
+.side-bar__wrap {
+	float: left;
+	height: 100%;
+	width: $sideBarWidth;
+
+	// & + .session-column, & + .reading-column, & + .sessions-container {
+	// 	float: left;
+    // 	width: calc(100% - #{ $sideBarWidth });
+	// }
+
+	// & + .reading-column {
+	// 	width: calc(100% - #{ $sideBarWidth + $sessionPanelWidth });
+	// }
+
+	// & + .session-column {
+	// 	width: calc(100% - #{ $sideBarWidth + 250px });
+
+	// 	&:before {
+	// 		right: calc(100% + 0px);
+	// 	}
+	// }
+}
+
+.side-bar {
+	position: fixed;
+	top: 0;
+	left: 0;
+	padding: 10px;
+	height: 100%;
+	width: $sideBarWidth;
+	text-align: center;
+	background: #fff; //$midGray;
+	z-index: $zMid;
+	border-right: $lightBorder;
+
+	& .logo-button {
+		width: 80px;
+		height: auto;
+	}
+
+	&.on-top {
+		z-index: $zMid + 2000;
+	}
+}
+
+.side-bar__user {
+	font-family: 'Open Sans';
+	font-weight: bold;
+	font-size: 18px;
+	color: #676767;
+	position: fixed;
+	left: 35px;
+	bottom: 10px; //$base-pad;
+	@include transform(rotate(-90deg));
+	@include transform-origin(left top);
+
+	& i, & .emojioneemoji {
+		height: 1.5em;
+		width: auto;
+		@include transform(rotate(90deg));
+	}
+}
+
+.side-bar__role {
+	font-weight: 300;
+	color: rgb(170,170,170);
+	margin-left: 10px;
+	top: 0;
+	left: 0;
+}

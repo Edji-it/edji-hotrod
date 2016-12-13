@@ -1,0 +1,69 @@
+// Medium Editor Overrides
+
+$editorToolbarRadius: 10px;
+$editorToolbarBg: #fff;
+
+.medium-editor-toolbar-actions {
+	box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.2);
+	border-radius: $editorToolbarRadius;
+}
+
+.medium-editor-action {
+	border-radius: 0px;
+	background-color: $editorToolbarBg;
+	color: #333;
+
+	&:hover, &:active, &:focus {
+		background-color: #efefef;
+		color: $purple;
+	}
+}
+
+.medium-editor-button-active {
+  background-color: #fafafa;
+  color: $purple;
+}
+
+.medium-editor-button-first {
+	border-top-left-radius: $editorToolbarRadius;
+	border-bottom-left-radius: $editorToolbarRadius;
+}
+
+.medium-editor-button-last {
+	border-top-right-radius: $editorToolbarRadius;
+	border-bottom-right-radius: $editorToolbarRadius;
+}
+
+.medium-editor-placeholder {
+	color: $seamlessPlaceholderColor;
+}
+
+.medium-toolbar-arrow-under:after, .medium-toolbar-arrow-over:before {
+  border-style: solid;
+  content: '';
+  display: block;
+  height: 0;
+  left: 50%;
+  margin-left: -8px;
+  position: absolute;
+  width: 0; 
+}
+
+.medium-toolbar-arrow-under:after {
+  border-width: 8px 8px 0 8px; 
+}
+
+.medium-toolbar-arrow-over:before {
+  border-width: 0 8px 8px 8px;
+  top: -8px; 
+}
+
+
+.medium-toolbar-arrow-under:after {
+  border-color: $editorToolbarBg transparent transparent transparent;
+  top: 48px; 
+}
+
+.medium-toolbar-arrow-over:before {
+  border-color: transparent transparent $editorToolbarBg transparent; 
+}

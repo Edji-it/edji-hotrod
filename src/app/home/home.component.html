@@ -1,0 +1,85 @@
+<div>
+  <nav-bar></nav-bar>
+  <div class="full-row gray">
+    <div class="row">
+      <div class="col-sm-6 col-pad">
+         <h2 class="center">Get In Quick!</h2>
+          <input type="text" class="big-field lowercase-field on-white" (keyup.enter)="joinSession(sessionCode)" [(ngModel)]="sessionCode" placeholder="Project Code" />
+          <p class="center">Join a project without an account</p>
+          <div class="button__row">
+              <button (click)="joinSession(sessionCode)" class="button" name="Join" href="#">Join Project!</button>
+          </div>
+          <div class="banner-error" *ngIf="errorObject.invalidCode">
+            {{errorObject.invalidCode}}
+          </div>
+
+          <br />
+          <hr />
+          <br />
+
+          <h2 class="center">Highlight As You Read</h2>
+          <img class="promo-gif" loop="infinite" src="assets/images/promo-highlight.gif" />
+          <br />
+          <hr />
+          <br />
+          <h2 class="center">Add Meaningful Emoji</h2>
+          <img class="promo-gif" loop="infinite" src="assets/images/promo-comment.gif" />
+          <br />
+          <hr />
+          <br />
+          <h2 class="center">Learn Through Class Discussion</h2>
+          
+      </div>
+      <div class="col-sm-6 col-pad">
+        <h2 class="center">Let's Begin!</h2>
+        <label>Username
+          <input type="text" [(ngModel)]="user.username" />
+          <div class="banner-error" *ngIf="submitted && errorObject.noUsername" [(textContent)]="errorObject.noUsername"></div>
+        </label>
+        <label>Password
+          <input type="password" [(ngModel)]="user.password" (keyup.enter)="login(user)" />
+          <div class="banner-error" *ngIf="submitted && errorObject.incorrect" [(textContent)]="errorObject.incorrect"></div>
+          <div class="banner-error" *ngIf="submitted && errorObject.noPassword" [(textContent)]="errorObject.noPassword"></div>
+        </label>
+        <div class="button__row" [class.loading]="loginLoading">
+          <!--ngHide loginLoading-->
+          <a class="button" name="Login" (click)="login(user)">Login</a>
+        </div>
+        <div style="text-align:center;">
+          <a class="link" (click)="showPasswordModal()">Forgotten password?</a>
+        </div>
+        <br />
+        <hr>
+        <br />
+        <div class="button__row">
+        <a class="button" name="Sign Up" href="#/register">I still need to Register</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="passwordModal" class="modal fade">
+    <div class="modal-bg" (click)="hidePasswordModal()"></div>
+      <!--<div class="modal-dialog">-->
+          <div class="modal-content">
+              <div class="modal-header">
+                  <button (click)="hidePasswordModal()" type="button" class="close">&times;</button>
+                  <h4 class="modal-title">Reset Password</h4>
+              </div>
+              <div class="modal-body">
+                   <label>Username (not email!)
+                      <input type="text" [(ngModel)]="passwordModal.username" (keyup.enter)="resetPassword(passwordModal.username)" />
+                      <div class="banner-error" *ngIf="!passwordModal.sent &&passwordModal.message" [(textContent)]="passwordModal.message"></div>
+                       <div class="banner-success" *ngIf="passwordModal.sent && passwordModal.message" [(textContent)]="passwordModal.message"></div>
+                    </label>
+                    
+              </div>
+              <div class="modal-footer">
+                  <button (click)="hidePasswordModal()" type="button" class="btn" data-dismiss="modal">Close</button>
+                  <button ng-hide="passwordModal.sent" type="button" class="btn btn-primary" (click)="resetPassword(passwordModal.username)">Send Reset Email</button>
+              </div>
+          </div>
+      <!--</div>-->
+  </div>
+
+</div>

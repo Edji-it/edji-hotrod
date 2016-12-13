@@ -1,0 +1,154 @@
+
+$inputVPadding: 10px;
+$inputHPadding: 20px;
+$inputShadow: none;
+$inputFocusShadow: 0px 1px 15px 0px rgba(0,0,0,0.1);
+$inputFocusBorder: none; // 1px solid $purple;
+$inputLineHeight: 20px;
+$inputFormRadius: ($inputLineHeight + 2*$inputVPadding )/2;
+
+
+fieldset {
+  background-color: transparent;
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+legend {
+  font-weight: 600;
+  margin-bottom: $small-spacing / 2;
+  padding: 0;
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: $small-spacing / 2;
+}
+
+input,
+select,
+textarea {
+  display: block;
+  font-family: $base-font-family;
+  font-size: $base-font-size;
+}
+
+// All Input Styles
+input[type="color"], input[type="date"], input[type="datetime"], input[type="datetime-local"], 
+input[type="email"], input[type="month"], input[type="number"], input[type="password"], input[type="search"], 
+input[type="tel"], input[type="text"], input[type="time"], input[type="url"], input[type="week"], 
+input:not([type]), textarea, select[multiple],
+#{$all-text-inputs} {
+  background-color: $base-background-color;
+  border: none; //$base-border;
+  border-radius: $inputFormRadius;
+  line-height: $inputLineHeight;
+  box-shadow: $inputShadow;
+  box-sizing: border-box;
+  margin-bottom: $small-spacing;
+  padding: $inputVPadding $inputHPadding;
+  transition: border-color $base-duration $base-timing;
+  width: 100%;
+  outline: none;
+
+  @include transition(transform linear 0.2s);
+
+  &:active, &:focus, &:hover {
+    outline: none;
+  }
+
+  &:active {
+    
+  }
+
+  &:hover {
+    border-color: shade($base-border-color, 20%);
+  }
+
+  &:focus {
+    border-color: $action-color;
+    box-shadow: $inputFocusShadow;
+    outline: none;
+    border-bottom: $inputFocusBorder;
+
+    @include transform(scale(1.02));
+  }
+
+  &:disabled {
+    background-color: shade($base-background-color, 5%);
+    cursor: not-allowed;
+
+    &:hover {
+      border: $base-border;
+    }
+  }
+
+  
+  &.on-white {
+    border-color: $gray;
+
+    &:focus, &:active  {
+      border-color: $purple;
+    }
+  }
+
+  &.big-field {
+    line-height: 32px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    border-radius: (32px + 2*$inputVPadding)/2;
+
+    @include placeholder {
+      color: #ededed;
+    }
+  }
+}
+
+textarea {
+  resize: vertical;
+}
+
+[type="search"] {
+  appearance: none;
+}
+
+[type="checkbox"],
+[type="radio"] {
+  display: inline;
+  margin-right: $small-spacing / 2;
+}
+
+[type="file"] {
+  margin-bottom: $small-spacing;
+  width: 100%;
+}
+
+select {
+  margin-bottom: $small-spacing;
+  max-width: 100%;
+  width: auto;
+}
+
+label input, label textarea {
+  margin-top: 4px;
+}
+
+.btn-group {
+  margin-bottom: 12px;
+}
+
+.field-wrap {
+  position: relative;
+}
+
+.lowercase-field {
+  text-transform: lowercase !important;
+}
+
+.form-control.form-text {
+  min-height: 34px;
+  height: auto;
+}

@@ -1,0 +1,29 @@
+<div class="side-bar__wrap">
+	<div id="sideBar" class="side-bar">
+		<!--<a class="logo-button" href="#/dashboard">
+			<img id="logomark" src="assets/images/logo-mark.svg" />
+			<!--<img id="logo" src="assets/images/logo.svg" />
+			<img id="logoPressed" src="assets/images/logo-pressed.svg" />-->
+		<!--</a>-->
+		<a class="logo-button" href="#/home">
+			<img id="logo" src="assets/images/logo.svg" />
+			<img id="logoPressed" src="assets/images/logo-pressed.svg" />
+		</a>
+
+		<button *ngIf="isTeacher && hasCommentCount" type="button" class="btn btn-clear" aria-label="Comment Counts" (click)="toggleCommentCounts()">
+			<i class="fa fa-comment gray fa--wrap-text fa-2x" >
+				<span>{{ commentCount }}</span>
+			</i>
+		</button>
+
+		<div class="side-bar__user hover-reveal-span">
+			<span *ngIf="user.fullname">{{ user.fullname }}</span>
+			<span *ngIf="!user.fullname">{{ user.username }}</span>
+			<span class="side-bar__role" *ngIf="user">{{  isTeacher ? "Teacher" : "Student"  }}</span>
+			<span class="reveal-span" (click)="logout()">Logout &nbsp;
+				<!--<i class="glyphicon glyphicon-log-out" />-->
+				<img alt="🏃" class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/1f3c3.png">
+			</span>
+		</div>
+	</div>
+</div>

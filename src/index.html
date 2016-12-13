@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+   <!-- social media tags -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@edjinotes">
+  <meta name="twitter:title" content="Edji">
+  <meta name="twitter:description" content="Get students engaged with reading with emoji annotations!">
+  <meta name="twitter:creator" content="@edjinotes">
+  <meta property="og:title" content="Edji" />
+  <meta property="og:type" content="website" />
+  <!-- <meta property="og:url" content="http://bit.ly/ngBoilerplate" /> -->
+  <meta property="og:description" content="Get students engaged with reading with emoji annotations!">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+
+  <title><%= htmlWebpackPlugin.options.title %></title>
+
+  <meta name="description" content="<%= htmlWebpackPlugin.options.title %>">
+
+  <% if (webpackConfig.htmlElements.headTags) { %>
+  <!-- Configured Head Tags  -->
+  <%= webpackConfig.htmlElements.headTags %>
+  <% } %>
+
+  <!-- base url -->
+  <base href="<%= htmlWebpackPlugin.options.metadata.baseUrl %>">
+
+  <script>
+    // Setup Google Analytics
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','/vendor/ga/analytics.js','ga');
+
+    ga('create', 'UA-83792906-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+
+  <!--Test with fallback link: Needs to be implemented dynamically-->
+  <script type="text/javascript" src="//optimus.edji.it/socket.io/socket.io.js"></script>
+
+</head>
+
+  <body class="yin">
+
+  <app>
+    Loading...
+  </app>
+
+  <% if (htmlWebpackPlugin.options.metadata.isDevServer && htmlWebpackPlugin.options.metadata.HMR !== true) { %>
+  <!-- Webpack Dev Server reload -->
+  <script src="/webpack-dev-server.js"></script>
+  <% } %>
+
+
+</body>
+</html>

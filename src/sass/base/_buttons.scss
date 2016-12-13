@@ -1,0 +1,175 @@
+
+$btnSecondaryBg: #cdcdcd;
+
+button, .button, .btn, [class*='btn'] {
+  appearance: none;
+  background-color: $action-color;
+  border: 0;
+  border-radius: $base-border-radius;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  font-family: $base-font-family;
+  font-size: $base-font-size;
+  -webkit-font-smoothing: antialiased;
+  font-weight: 700;
+  line-height: 1;
+  padding: $small-spacing $base-spacing;
+  text-decoration: none;
+  transition: background-color $base-duration $base-timing;
+  user-select: none;
+  vertical-align: middle;
+  white-space: nowrap;
+  -webkit-appearance: inherit;
+
+  &:hover,
+  &:focus {
+    background-color: shade($action-color, 20%);
+    color: #fff;
+  }
+
+  &:disabled {
+    // cursor: not-allowed;
+    opacity: 0.5;
+
+    &:hover {
+      @include transform(translate3d(0,0,0));
+      background-color: $action-color;
+    }
+  }
+}
+
+html .button, .button, html .btn {
+  @extend #{$all-buttons};
+  box-shadow: -3px 3px 0px 0px $purple;
+  background: lighten($purple,10%);
+
+  &:hover, &:active, &:focus, &.active {
+    text-decoration: none;
+    box-shadow: none;
+    background: lighten($purple,10%);
+    @include transform(translate3d(-3px, 3px, 0));
+  }
+}
+
+.button, button {
+  &.square {
+    width: 1em;
+    text-align: center;
+    padding: 0.75em 30px 0.75em 15px;
+  }
+
+  &.disabled {
+    pointer-events: none;
+  }
+
+  &.image {
+    padding: 2px;
+    width: 40px;
+    width: 40px;
+    background: $gray;
+    box-shadow: -3px 3px 0px 0px darken($gray, 5%);
+
+    & img {
+      opacity: 0.8;
+    }
+
+    &:hover, &:active, &:focus {
+      background: darken($gray, 5%);
+      & img {
+        opacity: 1;
+      }
+    }
+  } 
+
+  & img {
+    height: 1.2em;
+    width: auto;
+  }
+}
+
+.button.button--float-right {
+  float: right;
+  margin: 3px;
+}
+
+.button__row, .btn-row {
+  width: 100%;
+  text-align: center;
+  padding: $base-pad/2 0;
+
+  & .button {
+    margin: 5px;
+  }
+}
+
+.button-group-2 {
+  // Based on Bootstrap btn-group
+  @extend .btn-group;
+  width: 100%;
+  
+  & .btn {
+    width: 50%;
+    box-shadow: -3px 3px 0px 0px darken($btnSecondaryBg, 10%);
+    background: $btnSecondaryBg;
+    z-index: $zMid + 500;
+
+    &:hover {
+      
+    }
+  }
+  
+  & > .btn.active {
+    box-shadow: none;
+    background: lighten($purple,10%);
+    @include transform(translate3d(-3px, 3px, 0));
+    z-index: $zMid;
+  }
+} 
+
+.btn-secondary { 
+  background: $btnSecondaryBg;
+
+  &:disabled {
+    background: $btnSecondaryBg !important;
+
+    &:hover, &:active, &:focus {
+      background: $btnSecondaryBg;
+    }
+  }
+}
+
+.btn-clear {
+    border: none !important;
+    box-shadow: none !important;
+    background-color: transparent !important;
+    color: #555;
+
+    &:active, &:focus {
+      outline: none;
+      @include transform(translate3d(0,0,0) !important);
+    }
+
+     &:hover {
+      @include transform(translate3d(0,0,0) !important);
+      background-color: transparent !important;
+      outline: none;
+
+      & i.fa {
+        &:before {
+          color: $purple;
+        }
+      }
+    }
+}
+
+.btn-icon {
+  cursor: pointer;
+  padding: 5px;
+
+  &:hover, &:active, &:focus {
+    &:before {
+      color: $purple;
+    }
+  }
+}

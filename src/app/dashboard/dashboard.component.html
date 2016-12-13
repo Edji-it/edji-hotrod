@@ -1,0 +1,167 @@
+<div class="container">
+    <side-bar></side-bar>
+
+    <!--Teacher View-->
+    <div class="sessions-container" *ngIf="isTeacher">
+
+        <div class="col-sm-12"> 
+            <h1 style="margin-top: 20px;">My Readings
+                <!--<button class="button" style="float:right;" (click)="closeReadingPane()">
+                    Back&nbsp;<i class="glyphicon glyphicon-chevron-right" />
+                </button>-->
+            </h1>
+            <div class="reading-list">
+
+                <div class="reading-list-item-wrapper list-link">
+                    <div class="col-sm-12">
+                        <div class="reading-list-item" style="padding:0px">
+                            <a href="#/newReading" class="reading-list-item-title link-block">
+                                Add Reading
+                                 <span class="icon-button" href="#/newReading" style="position: absolute; right: -10px; top: 10px;">
+                                    <img class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/2795.png">
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!--Show readings with date values-->
+                <div class="reading-list-item-wrapper" *ngFor="let reading of readings" [class.hide]="reading.createdAt">
+                    <!--Implement: | orderBy:'-createdAt'-->
+                    <div class="list-item__message" [ngClass]="{ 'slide-down' : confirmDelete }">
+                        Delete "{{reading.title}}"?
+                        <div class="button-row--right">
+                            <button class="btn-danger" (click)="deleteReading(reading)">Delete</button>
+                            <button class="btn-secondary" (click)="confirmDelete = false">Cancel</button>
+                        </div>
+                    </div>
+                    <div class="reading-list-item">
+                        <div class="col-sm-6">
+                            <a href="#/reading/{{reading._id}}" class="reading-list-item-title">
+                                {{reading.title}}
+                                <span *ngIf="!reading.title"><i>Untitled</i></span>
+                            </a>
+                            <p *ngIf="reading.createdAt">
+                                Created: {{ reading.createdAt | date:'mediumDate' }} 
+                            </p>
+                        </div>
+                            <div class="icon-row--right">
+                                <!--<a class="icon-button" (click)="confirmDelete = !confirmDelete">
+                                    <img alt="❌" class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/274c.png">
+                                </a>-->
+                                <a class="icon-button" href="#/reading/{{reading._id}}">
+                                    <img alt="👁" class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/1f441.png">
+                                </a>
+                            </div>
+                    </div>
+                </div>
+                <!--Show readings without date values AFTER-->
+                <div class="reading-list-item-wrapper" *ngFor="let reading of readings" [class.hide]="!reading.createdAt">
+                    <div class="list-item__message" [ngClass]="{ 'slide-down' : confirmDelete }">
+                        Delete "{{reading.title}}"?
+                        <div class="button-row--right">
+                            <button class="btn-danger" (click)="deleteReading(reading)">Delete</button>
+                            <button class="btn-secondary" (click)="confirmDelete = false">Cancel</button>
+                        </div>
+                    </div>
+                    <div class="reading-list-item">
+                        <div class="col-sm-6">
+                            <a href="#/reading/{{reading._id}}" class="reading-list-item-title">
+                                {{reading.title}}
+                                <span *ngIf="!reading.title"><i>Untitled</i></span>
+                            </a>
+                            <p *ngIf="reading.createdAt">
+                                Created: {{ reading.createdAt | date:'mediumDate' }} 
+                            </p>
+                        </div>
+                            <div class="icon-row--right">
+                                <!--<a class="icon-button" (click)="confirmDelete = !confirmDelete">
+                                    <img alt="❌" class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/274c.png">
+                                </a>-->
+                                <a class="icon-button" href="#/reading/{{reading._id}}">
+                                    <img alt="👁" class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/1f441.png">
+                                </a>
+                            </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+          <!--<h1 style="margin-top:20px;">My Sessions
+            <button class="button" style="float:right;" (click)="openReadingPane()">
+                New Session&nbsp;<i class="glyphicon glyphicon-plus" />
+            </button>
+          </h1>
+          <div class="session-list">
+            <a href="#/session/{{session._id}}" class="session-list-item-wrapper" ng-repeat="session in sessions">
+                  <div class="session-list-item">
+                      <div class="session-list-item-title">
+                          {{session.label}}
+                      </div>
+                      <div class="session-list-comment-number session-list-number">
+                          {{session.comments.length || 0}} Comments
+                      </div>
+                      <div class="session-list-student-number session-list-number">
+                          {{session.students.length || 0}} Students
+                      </div>
+                  </div>
+              </a>
+          </div>-->
+        </div>
+    </div>
+    <!--Student View-->
+    <div class="sessions-container" *ngIf="!isTeacher">
+        <div class="col-sm-6">
+            <h1>Your Projects</h1>
+
+            <!--Temp-->
+            <div class="session-list">
+                <p  class="session-list-item-wrapper" *ngIf="projects.length < 1">
+                   You have yet to add your first project. Ask your teacher for a project code!
+                </p>
+                <a *ngFor="let project of projects" href="#/project/{{project._id}}" class="list-item--button" [class.hide]="project.createdAt">
+                    <!--Implement: | orderBy:'-createdAt'-->
+                    <div class="session-list-item row ">
+                        <div class="col-sm-12">
+                            <div class="session-list-item-title">
+                                {{ project.label }}
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="session-list-item-data" *ngIf="project.reading_id && project.reading_id.title">
+                                <label>Reading</label>
+                                {{ project.reading_id.title }}
+                            </div>
+                        </div>
+                         <div class="col-sm-6">
+                            <div class="session-list-item-data" *ngIf="project.teacher_id && (project.teacher_id.fullname || project.teacher_id.username)">
+                                <label>Created by:</label>
+                                <span style="text-decoration:underline;">{{ project.teacher_id.fullname }}</span><span *ngIf="!project.teacher_id.fullname ">{{ project.teacher_id.username }}</span>
+                                <span> on {{ project.createdAt | date:'mediumDate' }}</span>
+                         </div>
+                        </div>
+                        <!--<div class="col-sm-4" style="text-align:right;">
+                            <button class="btn" style="float:right;">Open</button>
+                            <br/>
+                            <div class="session-list-comment-number session-list-number">
+                                {{ session.comments.length || 0}} Comments
+                            </div>
+                            <div class="session-list-student-number session-list-number">
+                                {{ session.students_ids.length || 0}} Students
+                            </div>
+                        </div>-->
+                    </div>
+                </a>
+            </div>
+
+
+
+        </div>
+        <div class="col-sm-6">
+            <h1>Add Project</h1>
+            <input type="text" class="big-field lowercase-field on-white" ng-enter="addSession(sessionCode)" [(ngModel)]="sessionCode" placeholder="Project Code" />
+            <div class="button__row">
+                <button (click)="addSession(sessionCode)" class="button" name="Add" href="#">Join Project!</button>
+            </div>
+            <div class="banner-error" *ngIf="errorObject.wrongCode" (textContent)="errorObject.wrongCode"></div>
+        </div>
+    </div>
