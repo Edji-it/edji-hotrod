@@ -7,7 +7,7 @@ import { Locker } from 'angular2-locker';
 
 @Injectable()
 export class AuthService {
-    public baseUrl = "http://localhost:8444";
+    public baseUrl = "http://localhost:3354";
     // Check to see if prod or dev environment
     public protocol = window.location.protocol ? window.location.protocol : '';
     
