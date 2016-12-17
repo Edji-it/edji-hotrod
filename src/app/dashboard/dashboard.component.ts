@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AppState } from '../app.service';
-import { AuthService } from '../auth.service';
-import { ReadingService } from './reading.service';
-import { ProjectService } from './project.service';
+import { AuthService } from '../shared/auth.service';
+import { ReadingService } from '../shared/reading.service';
+import { ProjectService } from '../shared/project.service';
 
 @Component({
   // The selector is what angular internally uses

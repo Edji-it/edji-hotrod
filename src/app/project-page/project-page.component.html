@@ -1,0 +1,27 @@
+<div style="height:100%;">
+  <!--<side-bar has-comment-count="true"></side-bar>-->
+
+  <section class="project-column paper" [ngClass]="{ loading: isLoading }">
+    <p class="banner-error" *ngIf="error">{{ error }}</p>
+    <!--<emoji-annotator project-fn="getSession()"></emoji-annotator>-->
+  </section>
+  
+  <div class="reading__hud">
+    <label>{{ project.label }}</label>
+    
+    <div class="hud__info"> 
+      <pre class="project-code--inline">{{project.code || 'none'}}</pre>
+        <img class="emojioneemoji" src="assets/emoji/png/1f511.png">
+      <br/>
+      {{liveCount}} Readers 
+        <img ng-show="true" alt="🔥" class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/1f525.png">
+    </div>
+  </div>
+
+  <!--<div class="big-emoji-keyboard">-->
+    <!--<input id="emojiFunnel" ng-model="emojiFunnel" />-->
+  <!--</div>-->
+  <footer></footer>
+
+  <!--<feedback-form *ngIf="user.isTeacher"></feedback-form>-->
+</div>

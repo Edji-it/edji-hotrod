@@ -19,18 +19,20 @@ import { ROUTES } from './app.routes';
 import { AppComponent } from './app.component';
 import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 import { AppState, InternalStateType } from './app.service';
-import { NavBarComponent } from './nav-bar';
-import { SideBarComponent } from './side-bar';
-import { FooterComponent } from './footer';
+import { AuthService } from './shared/auth.service';
+import { NavBarComponent } from './shared/nav-bar';
+import { SideBarComponent } from './shared/side-bar';
+import { FooterComponent } from './shared/footer';
 import { HomeComponent } from './home';
+import { ProjectPageComponent } from './project-page';
 import { DashboardComponent } from './dashboard';
 import { NoContentComponent } from './no-content';
-import { XLarge } from './home/x-large';
 
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
-  AppState
+  AppState,
+  AuthService
 ];
 
 type StoreType = {
@@ -49,10 +51,10 @@ type StoreType = {
     SideBarComponent,
     FooterComponent,
     AppComponent,
+    ProjectPageComponent,
     DashboardComponent,
     HomeComponent,
-    NoContentComponent,
-    XLarge
+    NoContentComponent
   ],
   imports: [ // import Angular's modules
     BrowserModule,

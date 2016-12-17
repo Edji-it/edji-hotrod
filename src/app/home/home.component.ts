@@ -3,8 +3,7 @@ import { Router } from '@angular/router';
 
 import { AppState } from '../app.service';
 import { Title } from './title';
-import { XLarge } from './x-large';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../shared/auth.service';
 
 @Component({
   // The selector is what angular internally uses

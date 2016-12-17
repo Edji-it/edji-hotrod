@@ -3,7 +3,7 @@ import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 import 'rxjs/add/operator/toPromise';
 
-import { AuthService } from '../auth.service';
+import { AuthService } from './auth.service';
 
 @Injectable()
 export class ReadingService {

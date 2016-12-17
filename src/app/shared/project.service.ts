@@ -3,7 +3,7 @@ import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 import 'rxjs/add/operator/toPromise';
 
-import { AuthService } from '../auth.service';
+import { AuthService } from './auth.service';
 
 @Injectable()
 export class ProjectService {
@@ -26,5 +26,12 @@ export class ProjectService {
             .toPromise()
             .then(this._auth.extractData);
     }
+
+  public get(id) {
+    let header = new Headers({ 'Content-Type' : 'application/json', 'Authorization' : this._auth.getToken()  }); 
+    let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
+    
+    return this.http.get(this._auth.baseUrl + '/sessions/' + id, options );
+  }
 
 }
