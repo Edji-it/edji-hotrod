@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Component } from '@angular/core';
 
 import { AuthService } from '../auth.service';
@@ -10,9 +11,8 @@ import { AuthService } from '../auth.service';
 export class SideBarComponent {
     public commentCount = 0;
     private user: any;
-    private isTeacher: Boolean = false;
 
-    constructor(private _auth: AuthService) {
+    constructor(private _auth: AuthService, private _router: Router) {
 
     }
     
@@ -25,6 +25,7 @@ export class SideBarComponent {
     }
 
     logout() {
-        
+        this._auth.logout();
+        this._router.navigate(['/']);
     }
 }

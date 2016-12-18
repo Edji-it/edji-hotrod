@@ -74,6 +74,11 @@ export class AuthService {
         return this.locker.get('token');
     }
 
+    private destroyCredentials() {
+        this.locker.remove('token');
+        this.locker.remove('user');
+    }
+
     login(user: any) {
         let header = new Headers({ 'Content-Type' : 'application/json'  }); 
         let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
@@ -88,6 +93,10 @@ export class AuthService {
             .post(this.baseUrl + '/users/login', data, options)
             .toPromise()
             .then(this.extractData);
+    }
+
+    logout() {
+        this.destroyCredentials();
     }
 
 }

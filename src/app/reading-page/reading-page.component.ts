@@ -2,29 +2,29 @@ import { Observable, Subscription } from 'rxjs/Rx';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import { ProjectService } from '../shared/project.service';
+import { ReadingService } from '../shared/reading.service';
 
 @Component({
     // moduleId: module.id,
-    selector: 'edji-project-page',
-    styleUrls: ['project-page.component.scss'],
-    templateUrl: 'project-page.component.html',
+    selector: 'edji-reading-page',
+    styleUrls: ['reading-page.component.scss'],
+    templateUrl: 'reading-page.component.html',
     providers: [
-        ProjectService
+        ReadingService
     ]
 })
-export class ProjectPageComponent implements OnInit, OnDestroy {
-    private projectId: any;
-    private project: any = {};
+export class ReadingPageComponent implements OnInit, OnDestroy {
+    private readingId: any;
+    private reading: any = {};
     private subscriptions: Subscription[] = [];
 
-    constructor(private _route: ActivatedRoute, private _projects: ProjectService) {
+    constructor(private _route: ActivatedRoute, private _readings: ReadingService) {
         this.subscriptions.push(
             this._route.params
             .subscribe((params: Params) => { 
                 if(params['id']){
-                    this.projectId = params['id'];
-                    this.getProject(this.projectId);
+                    this.readingId = params['id'];
+                    this.getReading(this.readingId);
                 }
             })
         );
@@ -34,12 +34,12 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
  
     }
 
-    getProject(projectId) {
+    getReading(readingId) {
         this.subscriptions.push(
-            this._projects.get(projectId)
+            this._readings.get(readingId)
                 .subscribe(
                     data => {
-                        this.project = data.json();
+                        this.reading = data.json();
                     },
                     err => {
                         console.log(err);

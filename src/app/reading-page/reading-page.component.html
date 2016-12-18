@@ -1,9 +1,16 @@
 <div style="height:100%;">
-  <!--<side-bar has-comment-count="true"></side-bar>-->
+  <side-bar has-comment-count="true"></side-bar>
 
   <section class="reading-column paper" [ngClass]="{ loading: isLoading }">
-    <p class="banner-error" *ngIf="error">{{ error }}</p>
-    <!--<emoji-annotator reading-fn="getSession()"></emoji-annotator>-->
+    <header id="annotatorTitle" class="header">{{ reading.title ? reading.title : "Untitled Reading" }}</header>
+    <div *ngIf="reading.source" class="sub-heading">
+        <img alt="📖" class="emojioneemoji" src="assets/emoji/png/1f4d6.png"> 
+        <a title="Source" href="{{reading.source}}" target="_blank">{{reading.source}}</a>
+    </div>
+    <p *ngIf="error" class="banner-error">{{ error }}</p>
+    <div class="article-wrap">
+      <article id="annotatorText" class="content" [innerHtml]="reading.html"></article>
+    </div>
   </section>
   
   <div class="reading__hud">
@@ -17,11 +24,6 @@
         <img ng-show="true" alt="🔥" class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/1f525.png">
     </div>
   </div>
-
-  <!--<div class="big-emoji-keyboard">-->
-    <!--<input id="emojiFunnel" ng-model="emojiFunnel" />-->
-  <!--</div>-->
-  <footer></footer>
 
   <!--<feedback-form *ngIf="user.isTeacher"></feedback-form>-->
 </div>

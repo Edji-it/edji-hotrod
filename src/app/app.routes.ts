@@ -1,6 +1,7 @@
 import { Routes, RouterModule } from '@angular/router';
 
 import { ProjectPageComponent } from './project-page';
+import { ReadingPageComponent } from './reading-page';
 import { HomeComponent } from './home';
 import { DashboardComponent } from './dashboard';
 import { NoContentComponent } from './no-content';
@@ -13,5 +14,6 @@ export const ROUTES: Routes = [
   { path: 'home',  component: HomeComponent },
   { path: 'dashboard',  component: DashboardComponent },
   { path: 'project/:id',  component: ProjectPageComponent },
+  { path: 'reading/:id',  component: ReadingPageComponent },
   { path: '**',    component: NoContentComponent },
 ];

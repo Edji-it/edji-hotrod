@@ -16,14 +16,18 @@
 			</i>
 		</button>
 
-		<div class="side-bar__user hover-reveal-span">
-			<span *ngIf="user.fullname">{{ user.fullname }}</span>
-			<span *ngIf="!user.fullname">{{ user.username }}</span>
-			<span class="side-bar__role" *ngIf="user">{{  isTeacher ? "Teacher" : "Student"  }}</span>
-			<span class="reveal-span" (click)="logout()">Logout &nbsp;
-				<!--<i class="glyphicon glyphicon-log-out" />-->
+		<div class="side-bar__user">
+			<a class="side-bar__link" href="#/accountInfo">
+				<span *ngIf="user.fullname">{{ user.fullname }}</span>
+				<span *ngIf="!user.fullname">{{ user.username }}</span>
+			</a>
+			
+			<span class="side-bar__role" *ngIf="user">{{  user.isTeacher ? "Teacher" : "Student"  }}</span>
+			&nbsp;
+			<a class="side-bar__link" (click)="logout()">
+				Logout &nbsp;
 				<img alt="🏃" class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/1f3c3.png">
-			</span>
+			</a>
 		</div>
 	</div>
 </div>

@@ -24,6 +24,15 @@ export class ReadingService {
             .get(this._auth.baseUrl + '/readings', options)
             .toPromise()
             .then(this._auth.extractData);
-    }
+  }
+
+  // Pull one reading by ID
+  public get(id) {
+    let header = new Headers({ 'Content-Type' : 'application/json', 'Authorization' : this._auth.getToken()  }); 
+    let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
+    
+    return this.http
+      .get(this._auth.baseUrl + '/readings/' + id, options);
+  }
 
 }

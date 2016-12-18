@@ -1,0 +1,73 @@
+
+$sideBarWidth: 100px;
+$lightBorder: 1px solid #f1f1f1;
+$purple: rgb(150, 40, 255);
+
+.side-bar__wrap {
+	float: left;
+	height: 100%;
+	width: $sideBarWidth;
+}
+
+.side-bar {
+	position: fixed;
+	top: 0;
+	left: 0;
+	padding: 10px;
+	height: 100%;
+	width: $sideBarWidth;
+	text-align: center;
+	background: #fff; //$midGray;
+	z-index: 5000;
+	border-right: $lightBorder;
+
+	& .logo-button {
+		width: 80px;
+		height: auto;
+	}
+
+	&.on-top {
+		z-index: 5000 + 2000;
+	}
+}
+
+.side-bar__user {
+	font-family: 'Open Sans';
+	font-weight: bold;
+	font-size: 18px;
+	color: #676767;
+	position: fixed;
+	left: 35px;
+	bottom: 10px; 
+	transform:rotate(-90deg);
+	transform-origin: left top;
+
+	& i, & .emojioneemoji {
+		height: 1.5em;
+		width: auto;
+		transform:rotate(90deg);
+	}
+}
+
+.side-bar__role {
+	font-weight: 300;
+	color: rgb(200,200,200);
+	margin-left: 10px;
+	top: 0;
+	left: 0;
+}
+
+a.side-bar__link {
+	color: #000;
+	background: rgb(240,240,240);
+	cursor: pointer;
+	display: inline-block;
+	border-radius: 5px;
+	padding: 0 10px;
+
+	&:hover, &:active, &:focus {
+		color: $purple;
+		text-decoration: none;
+		background: rgb(220,220,220);
+	}
+}
