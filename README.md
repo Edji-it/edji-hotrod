@@ -23,7 +23,7 @@ npm run server:dev:hmr
 # if you're in China use cnpm
 # https://github.com/cnpm/cnpm
 ```
-go to [http://0.0.0.0:3000](http://0.0.0.0:3000) or [http://localhost:3000](http://localhost:3000) in your browser
+go to [http://0.0.0.0:3375](http://0.0.0.0:3375) or [http://localhost:3375](http://localhost:3375) in your browser
 
 # Table of Contents
 * [File Structure](#file-structure)
@@ -105,7 +105,7 @@ Once you have those, you should install these globals with `npm install --global
 * `npm run server` to start the dev server in another tab
 
 ## Running the app
-After you have installed all dependencies you can now run the app. Run `npm run server` to start a local server using `webpack-dev-server` which will watch, build (in-memory), and reload for you. The port will be displayed to you as `http://0.0.0.0:3000` (or if you prefer IPv6, if you're using `express` server, then it's `http://[::1]:3000/`).
+After you have installed all dependencies you can now run the app. Run `npm run server` to start a local server using `webpack-dev-server` which will watch, build (in-memory), and reload for you. The port will be displayed to you as `http://0.0.0.0:3375` (or if you prefer IPv6, if you're using `express` server, then it's `http://[::1]:3375/`).
 
 ### server
 ```bash
@@ -197,7 +197,7 @@ We have good experience using these editors:
 ### Visual Studio Code + Debugger for Chrome
 > Install [Debugger for Chrome](https://marketplace.visualstudio.com/items?itemName=msjsdiag.debugger-for-chrome) and see docs for instructions to launch Chrome 
 
-The included `.vscode` automatically connects to the webpack development server on port `3000`.
+The included `.vscode` automatically connects to the webpack development server on port `3375`.
 
 # Types
 > When you include a module that doesn't include Type Definitions inside of the module you can include external Type Definitions with @types
@@ -257,7 +257,7 @@ import * as _ from 'lodash';
 * Where do I write my tests?
   * You can write your tests next to your component files. See [`/src/app/home/home.component.spec.ts`](/src/app/home/home.component.spec.ts)
 * How do I start the app when I get `EACCES` and `EADDRINUSE` errors?
-  * The `EADDRINUSE` error means the port `3000` is currently being used and `EACCES` is lack of permission for webpack to build files to `./dist/`
+  * The `EADDRINUSE` error means the port `3375` is currently being used and `EACCES` is lack of permission for webpack to build files to `./dist/`
 * How to use `sass` for css?
  * `loaders: ['raw-loader','sass-loader']` and `@Component({ styleUrls: ['./filename.scss'] })` see issue [#136](https://github.com/AngularClass/angular2-webpack-starter/issues/136)
 * How do I test a Service?
@@ -312,7 +312,7 @@ starter kit in the cloud on [Nitrous](https://www.nitrous.io/):
 </a>
 
 Simply run `HOST=0.0.0.0 npm start` from the terminal inside of
-`~/code/angular2-webpack-starter` and access your site via the "Preview > 3000"
+`~/code/angular2-webpack-starter` and access your site via the "Preview > 3375"
 link in the IDE.
 
 <p align="center">
