@@ -10,9 +10,10 @@ export class AuthService {
     public baseUrl = "http://localhost:3354";
     // Check to see if prod or dev environment
     public protocol = window.location.protocol ? window.location.protocol : '';
-    
-  constructor(private http: Http, private locker: Locker,) {
+    private locker : any;
 
+  constructor(private http: Http, private _locker: Locker) {
+      this.locker = _locker.useDriver(Locker.DRIVERS.LOCAL);
   }
 
   ngOnInit() {
