@@ -35,16 +35,16 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
     }
 
     getProject(projectId) {
-        this.subscriptions.push(
-            this._projects.get(projectId)
-                .subscribe(
-                    data => {
-                        this.project = data.json();
-                    },
-                    err => {
-                        console.log(err);
-                    })
-        )
+        // this.subscriptions.push(
+        //     this._projects.get(projectId)
+        //         .subscribe(
+        //             data => {
+        //                 this.project = data.json();
+        //             },
+        //             err => {
+        //                 console.log(err);
+        //             })
+        // )
     }
 
     ngOnDestroy() {

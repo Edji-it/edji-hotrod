@@ -8,6 +8,7 @@ import { AuthService } from './auth.service';
 @Injectable()
 export class ProjectService {
 
+  private targetProjectId: string = '';
   private currentProject: any = {};
     
   constructor(private http: Http, private _auth: AuthService) {
@@ -15,10 +16,19 @@ export class ProjectService {
   }
 
   ngOnInit() {
-
+        this.subscriptions.push(
+            this._route.params
+            .subscribe((params: Params) => { 
+                if(params['id']){
+                    this.projectId = params['id'];
+                    if (this)
+                    this.getProject(this.projectId);
+                }
+            })
+        );
   }
-
-    // Pull all projects for a user
+  
+  // Pull all projects for a user
   public getAll() {
         let header = new Headers({ 'Content-Type' : 'application/json', 'Authorization' : this._auth.getToken()  }); 
         let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
