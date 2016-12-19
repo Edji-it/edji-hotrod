@@ -1,6 +1,61 @@
 <div style="height:100%;">
   <side-bar has-comment-count="true"></side-bar>
 
+  <div class="session-pane">
+      <div class="col-sm-12">
+          <h1 style="margin-top:20px;">Projects
+            <button class="button square image" style="float:right; margin-top: -4px;" ng-disabled="!readingId" (click)="toggleNew()">
+                <!--<i ng-show="!addNew" class="glyphicon glyphicon-plus" />-->
+                <img *ngIf="!addNew"  alt="➕" class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/2795.png">
+                <img  *ngIf="addNew" alt="✖" class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/2716.png">
+                <!--<i *ngIf="addNew" class="glyphicon glyphicon-remove" />-->
+            </button>
+          </h1>
+          <div class="session-list">
+            <div *ngIf="addNew">
+              <!--<label>
+                New Session-->
+                <input id="newProjectLabel" type="text" placeholder="Project Label" [(ngModel)]="newProject.label" (keyup.enter)="addNewProject()"/>
+                <div *ngIf="projectErr.failed" class="banner-error">
+                    {{ projectErr.failed }}</div>
+                <div *ngIf="projectErr.duplicateLabel" class="banner-error">
+                    {{ projectErr.duplicateLabel }}</div>
+              <!--</label>-->
+               <div class="button__row" style="padding-top:0px;"  [ngClass]="{ loading : addingNew }">
+                  <a ng-hide="addingNew" class="button" name="Register" (click)="addNewProject()" style="margin: 5px 3px; width:100%;">Add New</a>
+                </div>
+                <hr />
+            </div>
+            <div class="session-list-item-wrapper" *ngFor="let project of projects">
+                  <div class="session-list-item">
+                      <a title="Open" class="button square button--float-right image" name="View" href="#/project/{{project._id}}">
+                        <img alt="👁" class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/1f441.png">
+                      </a>
+                       <a title="Delete" (click)="deleteModal(project._id, project.label, $index)" class="button square button--float-right image" name="View">
+                        <img alt="❌" class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/274c.png">
+                      </a>
+                      <div class="session-list-item-title">
+                          <span class="session-list__emoji" ng-if="project.isNew">
+                              <img alt="✨" class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/2728.png">
+                          </span>
+                          {{project.label}} 
+                      </div>
+                      <div class="session-list-comment-number session-list-number">
+                          {{project.comments.length || 0}} Comments
+                      </div>
+                      <div class="session-list-student-number session-list-number">
+                          {{project.students_ids.length || 0}} Students
+                      </div>
+                      <div class="session-list-code session-list-number">
+                        <span>Code</span>
+                        <pre>{{project.code || 'none'}}</pre>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+
   <section class="reading-column paper" [ngClass]="{ loading: isLoading }">
     <header id="annotatorTitle" class="header">{{ reading.title ? reading.title : "Untitled Reading" }}</header>
     <div *ngIf="reading.source" class="sub-heading">
@@ -12,18 +67,5 @@
       <article id="annotatorText" class="content" [innerHtml]="reading.html"></article>
     </div>
   </section>
-  
-  <div class="reading__hud">
-    <label>{{ reading.label }}</label>
-    
-    <div class="hud__info"> 
-      <pre class="reading-code--inline">{{reading.code || 'none'}}</pre>
-        <img class="emojioneemoji" src="assets/emoji/png/1f511.png">
-      <br/>
-      {{liveCount}} Readers 
-        <img ng-show="true" alt="🔥" class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/1f525.png">
-    </div>
-  </div>
-
   <!--<feedback-form *ngIf="user.isTeacher"></feedback-form>-->
 </div>

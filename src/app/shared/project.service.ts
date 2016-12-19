@@ -27,11 +27,13 @@ export class ProjectService {
             .then(this._auth.extractData);
     }
 
-  public get(id) {
+  // Get a teacher's Projects for a Reading
+  public getForReading(readingId) {
     let header = new Headers({ 'Content-Type' : 'application/json', 'Authorization' : this._auth.getToken()  }); 
     let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
+    let userId = this._auth.getUser()._id;
     
-    return this.http.get(this._auth.baseUrl + '/sessions/' + id, options );
+    return this.http.get(this._auth.baseUrl + '/readings/' + readingId + '/sessions/' + userId , options );
   }
 
 }

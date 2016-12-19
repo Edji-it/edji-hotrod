@@ -1,3 +1,4 @@
+import { ProjectService } from '../shared/project.service';
 import { Observable, Subscription } from 'rxjs/Rx';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Component, OnDestroy, OnInit } from '@angular/core';
@@ -10,15 +11,21 @@ import { ReadingService } from '../shared/reading.service';
     styleUrls: ['reading-page.component.scss'],
     templateUrl: 'reading-page.component.html',
     providers: [
-        ReadingService
+        ReadingService,
+        ProjectService
     ]
 })
 export class ReadingPageComponent implements OnInit, OnDestroy {
-    private readingId: any;
+    private readingId: any = "";
     private reading: any = {};
+    private projects: any[] = [];
+    private newProject: any = {};
     private subscriptions: Subscription[] = [];
+    
+    private addingNew: boolean = false;
+    private projectErr: any = {};
 
-    constructor(private _route: ActivatedRoute, private _readings: ReadingService) {
+    constructor(private _route: ActivatedRoute, private _readings: ReadingService, private _projects: ProjectService) {
         this.subscriptions.push(
             this._route.params
             .subscribe((params: Params) => { 
@@ -35,16 +42,39 @@ export class ReadingPageComponent implements OnInit, OnDestroy {
     }
 
     getReading(readingId) {
-        this.subscriptions.push(
-            this._readings.get(readingId)
-                .subscribe(
-                    data => {
-                        this.reading = data.json();
-                    },
-                    err => {
-                        console.log(err);
-                    })
-        )
+        this.subscriptions
+            .push(
+                this._readings.get(readingId)
+                    .subscribe(
+                        data => {
+                            this.reading = data.json();
+                        },
+                        err => {
+                            console.log(err);
+                        })
+            );
+        this.subscriptions
+            .push(
+                this._projects.getForReading(readingId)
+                    .subscribe(
+                        data => {
+                            if (data.json() instanceof Array) {
+                                this.projects = data.json();
+                            }
+                        },
+                        err => {
+                            console.log(err);
+                        }
+                    )
+            );
+    }
+
+    addNewProject() {
+
+    }
+
+    deleteModal(id, label, index) {
+
     }
 
     ngOnDestroy() {

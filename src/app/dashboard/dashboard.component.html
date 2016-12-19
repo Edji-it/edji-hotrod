@@ -36,7 +36,7 @@
                     </div>
                     <div class="reading-list-item">
                         <div class="col-sm-6">
-                            <a href="#/reading/{{reading._id}}" class="reading-list-item-title">
+                            <a [routerLink]="['/reading', reading._id ]" class="reading-list-item-title">
                                 {{reading.title}}
                                 <span *ngIf="!reading.title"><i>Untitled</i></span>
                             </a>
