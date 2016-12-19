@@ -28,7 +28,7 @@
             </div>
             <div class="session-list-item-wrapper" *ngFor="let project of projects">
                   <div class="session-list-item">
-                      <a title="Open" class="button square button--float-right image" name="View" href="#/project/{{project._id}}">
+                      <a title="Open" class="button square button--float-right image" name="View" [routerLink]="[ '/project', project._id ]">
                         <img alt="👁" class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/1f441.png">
                       </a>
                        <a title="Delete" (click)="deleteModal(project._id, project.label, $index)" class="button square button--float-right image" name="View">

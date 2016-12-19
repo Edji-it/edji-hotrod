@@ -1,7 +1,6 @@
-<div>
+<div class="gray">
   <nav-bar></nav-bar>
-  <div class="full-row gray">
-    <div class="row">
+    <div class="container-fluid">
       <div class="col-sm-6 col-pad">
          <h2 class="center">Get In Quick!</h2>
           <input type="text" class="big-field lowercase-field on-white" (keyup.enter)="joinSession(sessionCode)" [(ngModel)]="sessionCode" placeholder="Project Code" />
@@ -12,7 +11,6 @@
           <div class="banner-error" *ngIf="errorObject.invalidCode">
             {{errorObject.invalidCode}}
           </div>
-
           <br />
           <hr />
           <br />
@@ -80,6 +78,4 @@
               </div>
           </div>
       <!--</div>-->
-  </div>
-
 </div>

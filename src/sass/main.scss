@@ -60,11 +60,11 @@ $seamlessPlaceholderColor: #888;
 @import 'emojionearea';
 @import 'comment';
 @import 'session';
-@import 'nav-bar';
 @import 'sliding-pane';
 @import 'modals';
 @import 'medium-editor';
 @import 'cards';
+@import 'item-list';
 
 /**
  * ----------------------------------------------------------
@@ -89,6 +89,7 @@ $seamlessPlaceholderColor: #888;
 }
 
 
+@include font-face('Open Sans', '../assets/fonts/OpenSans-Light-webfont', 100 );
 @include font-face('Open Sans', '../assets/fonts/OpenSans-Regular-webfont', normal );
 @include font-face('Open Sans', '../assets/fonts/OpenSans-Semibold-webfont', 500 );
 @include font-face('Open Sans', '../assets/fonts/OpenSans-Bold-webfont', 700 );

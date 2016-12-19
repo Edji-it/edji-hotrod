@@ -14,11 +14,11 @@ html {
 .gray {
   background: $midGray;
 }
-.full-row {
-  @extend .row;
-  // @include outer-container;
-  max-width: 100% !important;
-}
+// .full-row {
+//   @extend .row;
+//   // @include outer-container;
+//   max-width: 100% !important;
+// }
 
 footer {
   @extend .row;
@@ -28,4 +28,13 @@ footer {
 .col-pad {
   padding-top: $base-pad;
   padding-bottom: $base-pad;
+}
+
+.container--side-bar {
+  padding-left: 15px + 100px;
+
+  @media(max-width: 576px) {
+    padding-top: 100px;
+    padding-left: 15px;
+  }
 }

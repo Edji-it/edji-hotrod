@@ -25,7 +25,15 @@ export class ProjectService {
             .get(this._auth.baseUrl + '/sessions', options)
             .toPromise()
             .then(this._auth.extractData);
-    }
+  }
+
+  public get(projectId) {
+      let header = new Headers({ 'Content-Type' : 'application/json', 'Authorization' : this._auth.getToken()  }); 
+      let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
+      
+      return this.http
+        .get(this._auth.baseUrl + '/sessions/' + projectId, options);
+  }
 
   // Get a teacher's Projects for a Reading
   public getForReading(readingId) {
