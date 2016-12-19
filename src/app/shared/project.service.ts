@@ -1,17 +1,20 @@
-import { Injectable } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
+import { Injectable, OnDestroy, OnInit } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
-import { Observable } from 'rxjs/Rx';
+import { Observable, Subscription } from 'rxjs/Rx';
 import 'rxjs/add/operator/toPromise';
 
 import { AuthService } from './auth.service';
 
 @Injectable()
-export class ProjectService {
+export class ProjectService implements OnInit, OnDestroy {
 
   private targetProjectId: string = '';
   private currentProject: any = {};
+
+  private subscriptions: Subscription[] = [];
     
-  constructor(private http: Http, private _auth: AuthService) {
+  constructor(private http: Http, private _auth: AuthService, private _route: ActivatedRoute) {
 
   }
 
@@ -20,9 +23,11 @@ export class ProjectService {
             this._route.params
             .subscribe((params: Params) => { 
                 if(params['id']){
-                    this.projectId = params['id'];
-                    if (this)
-                    this.getProject(this.projectId);
+                    this.targetProjectId = params['id'];
+                    if (this.targetProjectId !== this.currentProject._id) {
+                        this.get(this.targetProjectId);
+                    }
+                    
                 }
             })
         );
@@ -43,8 +48,18 @@ export class ProjectService {
       let header = new Headers({ 'Content-Type' : 'application/json', 'Authorization' : this._auth.getToken()  }); 
       let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
       
-      return this.http
-        .get(this._auth.baseUrl + '/sessions/' + projectId, options);
+      this.subscriptions.push(
+          this.http
+            .get(this._auth.baseUrl + '/sessions/' + projectId, options)
+            .subscribe(
+                data => {
+                    this.currentProject = data.json();
+                },
+                err => {
+                    console.log(err);
+                })
+      );
+
   }
 
   // Get a teacher's Projects for a Reading
@@ -56,4 +71,7 @@ export class ProjectService {
     return this.http.get(this._auth.baseUrl + '/readings/' + readingId + '/sessions/' + userId , options );
   }
 
+   ngOnDestroy() {
+        this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
+    }
 }
