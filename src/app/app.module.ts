@@ -24,6 +24,7 @@ import { NavBarComponent } from './shared/nav-bar';
 import { SideBarComponent } from './shared/side-bar';
 import { FooterComponent } from './shared/footer';
 import { HomeComponent } from './home';
+import { AnnotatorComponent } from './annotator';
 import { ProjectPageComponent } from './project-page';
 import { ReadingPageComponent } from './reading-page';
 import { DashboardComponent } from './dashboard';
@@ -52,6 +53,7 @@ type StoreType = {
     SideBarComponent,
     FooterComponent,
     AppComponent,
+    AnnotatorComponent,
     ProjectPageComponent,
     ReadingPageComponent,
     DashboardComponent,

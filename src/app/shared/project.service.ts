@@ -7,6 +7,8 @@ import { AuthService } from './auth.service';
 
 @Injectable()
 export class ProjectService {
+
+  private currentProject: any = {};
     
   constructor(private http: Http, private _auth: AuthService) {
 
@@ -27,7 +29,7 @@ export class ProjectService {
             .then(this._auth.extractData);
   }
 
-  public get(projectId) {
+  private get(projectId) {
       let header = new Headers({ 'Content-Type' : 'application/json', 'Authorization' : this._auth.getToken()  }); 
       let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
       

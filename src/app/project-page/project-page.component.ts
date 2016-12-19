@@ -19,15 +19,15 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription[] = [];
 
     constructor(private _route: ActivatedRoute, private _projects: ProjectService) {
-        this.subscriptions.push(
-            this._route.params
-            .subscribe((params: Params) => { 
-                if(params['id']){
-                    this.projectId = params['id'];
-                    this.getProject(this.projectId);
-                }
-            })
-        );
+        // this.subscriptions.push(
+        //     this._route.params
+        //     .subscribe((params: Params) => { 
+        //         if(params['id']){
+        //             this.projectId = params['id'];
+        //             this.getProject(this.projectId);
+        //         }
+        //     })
+        // );
     }
 
     ngOnInit() {
