@@ -29,6 +29,7 @@ import { ProjectPageComponent } from './project-page';
 import { ReadingPageComponent } from './reading-page';
 import { DashboardComponent } from './dashboard';
 import { NoContentComponent } from './no-content';
+import { AccountComponent } from './account/account.component';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -53,6 +54,7 @@ type StoreType = {
     SideBarComponent,
     FooterComponent,
     AppComponent,
+    AccountComponent,
     AnnotatorComponent,
     ProjectPageComponent,
     ReadingPageComponent,

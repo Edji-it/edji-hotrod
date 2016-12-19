@@ -19,18 +19,18 @@ export class ProjectService implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-        this.subscriptions.push(
-            this._route.params
-            .subscribe((params: Params) => { 
-                if(params['id']){
-                    this.targetProjectId = params['id'];
-                    if (this.targetProjectId !== this.currentProject._id) {
-                        this.get(this.targetProjectId);
-                    }
-                    
+    this.subscriptions.push(
+        this._route.params
+        .subscribe((params: Params) => { 
+            if(params['id']){
+                this.targetProjectId = params['id'];
+                if (this.targetProjectId !== this.currentProject._id) {
+                    this.get(this.targetProjectId);
                 }
-            })
-        );
+                
+            }
+        })
+    );
   }
   
   // Pull all projects for a user

@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { ProjectPageComponent } from './project-page';
 import { ReadingPageComponent } from './reading-page';
 import { HomeComponent } from './home';
+import { AccountComponent } from './account';
 import { DashboardComponent } from './dashboard';
 import { NoContentComponent } from './no-content';
 
@@ -13,7 +14,8 @@ export const ROUTES: Routes = [
   { path: '',      component: HomeComponent },
   { path: 'home',  component: HomeComponent },
   { path: 'dashboard',  component: DashboardComponent },
+  { path: 'account', component: AccountComponent },
   { path: 'project/:id',  component: ProjectPageComponent },
   { path: 'reading/:id',  component: ReadingPageComponent },
-  { path: '**',    component: NoContentComponent },
+  { path: '**',    component: NoContentComponent }
 ];
