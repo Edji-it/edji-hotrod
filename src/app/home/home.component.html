@@ -31,17 +31,17 @@
       <div class="col-sm-6 col-pad">
         <h2 class="center">Let's Begin!</h2>
         <label>Username
-          <input type="text" [(ngModel)]="user.username" />
+          <input type="text" [(ngModel)]="user.username" tabindex="0" />
           <div class="banner-error" *ngIf="submitted && errorObject.noUsername" [(textContent)]="errorObject.noUsername"></div>
         </label>
         <label>Password
-          <input type="password" [(ngModel)]="user.password" (keyup.enter)="login(user)" />
+          <input type="password" [(ngModel)]="user.password" (keyup.enter)="login(user)" tabindex="0" />
           <div class="banner-error" *ngIf="submitted && errorObject.incorrect" [(textContent)]="errorObject.incorrect"></div>
           <div class="banner-error" *ngIf="submitted && errorObject.noPassword" [(textContent)]="errorObject.noPassword"></div>
         </label>
         <div class="button__row" [class.loading]="loginLoading">
           <!--ngHide loginLoading-->
-          <button class="button" name="Login" (click)="login(user)">Login</button>
+          <button tabindex="0" class="button" name="Login" (click)="login(user)">Login</button>
         </div>
         <div style="text-align:center;">
           <a class="link" (click)="showPasswordModal()">Forgotten password?</a>
@@ -50,7 +50,7 @@
         <hr>
         <br />
         <div class="button__row">
-        <a class="button" name="Sign Up" href="#/register">I still need to Register</a>
+        <a tabindex="0" class="button" name="Sign Up" href="#/register">I still need to Register</a>
         </div>
       </div>
     </div>
