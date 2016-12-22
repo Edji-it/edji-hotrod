@@ -32,6 +32,7 @@ import { EmojiCommentComponent } from './annotator/emoji-comment';
 import { AnnotatorComponent } from './annotator';
 import { ProjectPageComponent } from './project-page';
 import { ReadingPageComponent } from './reading-page';
+import { NewReadingPage } from './new-reading-page';
 import { DashboardComponent } from './dashboard';
 import { NoContentComponent } from './no-content';
 import { AccountComponent } from './account/account.component';
@@ -64,6 +65,7 @@ type StoreType = {
     AccountComponent,
     ChangePassComponent,
     AnnotatorComponent,
+    NewReadingPage,
     ProjectPageComponent,
     ReadingPageComponent,
     DashboardComponent,
