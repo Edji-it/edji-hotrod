@@ -39,12 +39,10 @@ export class ChangePassComponent {
       .then((res) => {
         this.responseSuccess = true;
         this._auth.setToken(res.token);
-        console.log("success!");
       })
       .catch((res) => {
         this.responseSuccess = false;
-        console.log("no dice!");
-        console.log(res);
+        console.log("no dice! 🎲");
       });
   }
 }
