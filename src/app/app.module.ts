@@ -18,12 +18,17 @@ import { ROUTES } from './app.routes';
 // App is our top level component
 import { AppComponent } from './app.component';
 import { APP_RESOLVER_PROVIDERS } from './app.resolver';
+
+// Services
 import { AppState, InternalStateType } from './app.service';
 import { AuthService } from './shared/auth.service';
+
+// Components
 import { NavBarComponent } from './shared/nav-bar';
 import { SideBarComponent } from './shared/side-bar';
 import { FooterComponent } from './shared/footer';
 import { HomeComponent } from './home';
+import { EmojiCommentComponent } from './annotator/emoji-comment';
 import { AnnotatorComponent } from './annotator';
 import { ProjectPageComponent } from './project-page';
 import { ReadingPageComponent } from './reading-page';
@@ -54,6 +59,7 @@ type StoreType = {
     NavBarComponent,
     SideBarComponent,
     FooterComponent,
+    EmojiCommentComponent,
     AppComponent,
     AccountComponent,
     ChangePassComponent,
