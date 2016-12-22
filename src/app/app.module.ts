@@ -1,6 +1,6 @@
 import { NgModule, ApplicationRef } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule, PreloadAllModules } from '@angular/router';
 import { removeNgStyles, createNewHosts, createInputTransfer } from '@angularclass/hmr';
@@ -30,6 +30,7 @@ import { ReadingPageComponent } from './reading-page';
 import { DashboardComponent } from './dashboard';
 import { NoContentComponent } from './no-content';
 import { AccountComponent } from './account/account.component';
+import { ChangePassComponent } from './account/change-pass.component';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -55,6 +56,7 @@ type StoreType = {
     FooterComponent,
     AppComponent,
     AccountComponent,
+    ChangePassComponent,
     AnnotatorComponent,
     ProjectPageComponent,
     ReadingPageComponent,
@@ -65,6 +67,7 @@ type StoreType = {
   imports: [ // import Angular's modules
     BrowserModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpModule,
     LockerModule,
     RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules })

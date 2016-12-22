@@ -13,8 +13,8 @@ import { DataResolver } from './app.resolver';
 export const ROUTES: Routes = [
   { path: '',      component: HomeComponent },
   { path: 'home',  component: HomeComponent },
-  { path: 'dashboard',  component: DashboardComponent },
   { path: 'account', component: AccountComponent },
+  { path: 'dashboard',  component: DashboardComponent },
   { path: 'project/:id',  component: ProjectPageComponent },
   { path: 'reading/:id',  component: ReadingPageComponent },
   { path: '**',    component: NoContentComponent }

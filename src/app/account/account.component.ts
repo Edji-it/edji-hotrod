@@ -8,6 +8,7 @@ import { AuthService } from '../shared/auth.service';
 })
 export class AccountComponent implements OnInit {
   private currentUser: any;
+  private showPassModal: boolean = true;
   
   constructor(private _auth: AuthService) {
     this.currentUser = this._auth.getUser();

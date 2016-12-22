@@ -12,6 +12,9 @@ export class AuthService {
     public protocol = window.location.protocol ? window.location.protocol : '';
     private locker : any;
 
+    private header = new Headers({ 'Content-Type' : 'application/json'  }); 
+    private options = new RequestOptions({ headers: this.header, withCredentials: true }); // Create a request option
+
   constructor(private http: Http, private _locker: Locker) {
       this.locker = _locker.useDriver(Locker.DRIVERS.LOCAL);
   }
@@ -81,8 +84,6 @@ export class AuthService {
     }
 
     login(user: any) {
-        let header = new Headers({ 'Content-Type' : 'application/json'  }); 
-        let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
         let data = {
                 'user' : {
                     'username' : user.username,
@@ -91,7 +92,7 @@ export class AuthService {
             };
 
         return this.http
-            .post(this.baseUrl + '/users/login', data, options)
+            .post(this.baseUrl + '/users/login', data, this.options)
             .toPromise()
             .then(this.extractData);
     }
@@ -99,5 +100,19 @@ export class AuthService {
     logout() {
         this.destroyCredentials();
     }
+
+    /**
+     * There are two cases to use this call:
+     *  1) User is logged in and resetting password => resetObject should be assigned properties oldPassword, newPassword
+     *  2) User has a password recovery email => resetObject should be assigned properties: token, newPassword
+     * @param resetObject Can have properties: oldPassword, newPassword, token
+     * @returns Chainable promise resolved with json data containing either a user object & token or errors
+    **/
+    resetPassword(resetObject: any) {
+    return this.http
+        .post(this.baseUrl + ['users', 'reset_password'].join("/"), resetObject, this.options)
+        .toPromise()
+        .then(this.extractData);
+    };
 
 }
