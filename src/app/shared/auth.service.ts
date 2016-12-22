@@ -12,11 +12,13 @@ export class AuthService {
     public protocol = window.location.protocol ? window.location.protocol : '';
     private locker : any;
 
-    private header = new Headers({ 'Content-Type' : 'application/json'  }); 
-    private options = new RequestOptions({ headers: this.header, withCredentials: true }); // Create a request option
+    private header: Headers;
+    private options: RequestOptions;
 
   constructor(private http: Http, private _locker: Locker) {
       this.locker = _locker.useDriver(Locker.DRIVERS.LOCAL);
+      this.header = new Headers({ 'Content-Type' : 'application/json', 'Authorization' : this.getToken()  });
+      this.options = new RequestOptions({ headers: this.header, withCredentials: true }); // Create a request option
   }
 
   ngOnInit() {
@@ -110,7 +112,10 @@ export class AuthService {
     **/
     resetPassword(resetObject: any) {
     return this.http
-        .post(this.baseUrl + ['users', 'reset_password'].join("/"), resetObject, this.options)
+        .post(
+            [this.baseUrl, 'users', 'reset_password'].join("/"),
+            { resetObject: resetObject },
+            this.options)
         .toPromise()
         .then(this.extractData);
     };
