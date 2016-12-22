@@ -31,7 +31,7 @@
                   </li>
               </ul>
               <div class="card-block">
-                  <button ng-click="showPasswordModal()" type="button" class="btn btn-primary">Change Password</button>
+                  <button type="button" (click)="showPassModal = !showPassModal" class="btn btn-primary">Change Password</button>
               </div>
           </div>
       </div>
@@ -39,4 +39,4 @@
   </div>
   </div>
 </div>
-<edji-change-pass *ngIf="showPassModal"></edji-change-pass>
+<edji-change-pass *ngIf="showPassModal" (closeModal)="showPassModal = !showPassModal"></edji-change-pass>
