@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { AppState } from '../app.service';
 import { Title } from './title';
@@ -12,23 +14,21 @@ import { AuthService } from '../shared/auth.service';
   selector: 'home',  // <home></home>
   // We need to tell Angular's Dependency Injection which providers are in our app.
   providers: [
-    Title,
-    AuthService
+    Title
   ],
   // Our list of styles in our component. We may add more to compose many styles together
   styleUrls: [ './home.component.scss' ],
   // Every Angular template is first compiled by the browser before Angular runs it's compiler
   templateUrl: './home.component.html'
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
   // Set our default values
   private sessionCode: String;
-  private submitted: Boolean = false;
   private loginLoading: Boolean = false;
+
+  private loginForm: FormGroup;
   private errorObject = {
     "invalidCode": "",
-    "noUsername": "",
-    "noPassword": "",
     "incorrect": ""
   };
   private user= {
@@ -42,8 +42,16 @@ export class HomeComponent {
   }
 
   // TypeScript public modifiers
-  constructor(public appState: AppState, public title: Title, public _auth: AuthService, public router: Router) {
-
+  constructor(public appState: AppState,
+    public title: Title,
+    public _auth: AuthService,
+    public router: Router,
+    fb: FormBuilder
+  ) {
+    this.loginForm = fb.group({
+      username: [null, Validators.required],
+      password: [null, Validators.required]
+    });
   }
 
   ngOnInit() {
@@ -55,25 +63,24 @@ export class HomeComponent {
 
   }
 
-  login(user) {
-    this.submitted = true;
-		// this.errorObject = { };
+  private login(formValue: any) {
 
-		if (!this.user.username) {
-			this.errorObject.noUsername = "Please provide a username";
-			return;
-		}
-
-		if (!this.user.password) {
-			this.errorObject.noPassword = "Please provide a password";
-			return;
-		}
+    for (let property in this.errorObject) {
+      if (this.errorObject.hasOwnProperty(property) && typeof this.errorObject[property] === 'string') {
+        this.errorObject[property] = "";
+      }
+    }
+		
+    let user: any = {
+      username: formValue.username,
+      password: formValue.password
+    };
 
 		this.loginLoading = true;
 
 		this._auth.login(user)
       .then(
-        (data)  => { 
+        (data: any)  => { 
           console.log(data);
           this.loginLoading = false;
 
@@ -90,6 +97,7 @@ export class HomeComponent {
           // } else {
           // 	$analytics.eventTrack('Student logged in', {  category: 'Student', label: 'General' });
           // }
+
           if (data.token) {
             this._auth.setToken(data.token);
             this._auth.setUser(data.user);
@@ -99,10 +107,10 @@ export class HomeComponent {
         (error) =>  { 
           this.loginLoading = false;
           console.log(error);
+          console.log(error._body);
           if (error === null) {
             this.errorObject.incorrect = "Network error";
-          }
-          if (error && error['error']) {
+          } else {
             this.errorObject.incorrect = "Password is incorrect for that username";
           }
         }
