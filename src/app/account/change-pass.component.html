@@ -1,4 +1,4 @@
-<div id="passwordModal" class="modal fade fade-in">
+<div id="passwordModal" class="modal fade in start-in">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -8,16 +8,16 @@
             <form class="modal-body form-group" (ngSubmit)="onSubmit(passwordForm.value)" [formGroup]="passwordForm">
                 <label for="old-password-input">Old Password</label>
                 <input type="password" id="old-password-input" class="form-control" [formControl]="passwordForm.controls['oldPassword']" />
-                <div *ngIf="passwordForm.controls['oldPassword'].hasError('required') && passwordForm.submitted" class="banner-error">You must have a password!</div>
+                <div *ngIf="passwordForm.controls['oldPassword'].hasError('required') && passwordForm.controls['oldPassword'].dirty" class="banner-error">You must have a password</div>
 
                 <label for="new-password-input">New Password</label>
                 <input type="password" id="new-password-input" class="form-control" [formControl]="passwordForm.controls['newPassword']" />
-                <div *ngIf="passwordForm.controls['newPassword'].hasError('required') && passwordForm.submitted" class="banner-error">A new password is required!</div>
+                <div *ngIf="passwordForm.controls['newPassword'].hasError('required') && passwordForm.controls['newPassword'].dirty" class="banner-error">A new password is required</div>
                 
                 <label for="new-password-confirm-input">New Confirm New Password</label>
                 <input type="password" id="new-password-confirm-input" class="form-control" [formControl]="passwordForm.controls['newPasswordConfirm']" />
-                <div *ngIf="passwordForm.controls['newPasswordConfirm'].hasError('required') && passwordForm.submitted" class="banner-error">Please confirm your new password!</div>
-                <div *ngIf="passwordForm.hasError('mismatch') && passwordForm.submitted" class="banner-error">Please make sure your passwords match!</div>
+                <div *ngIf="passwordForm.controls['newPasswordConfirm'].hasError('required')  && passwordForm.controls['newPasswordConfirm'].dirty" class="banner-error">Please confirm your new password</div>
+                <div *ngIf="passwordForm.hasError('mismatch')" class="banner-error">Please make sure your passwords match</div>
                 
                 <!--<div class="banner-error" ng-if="!passwordModal.sent && errorObject.failed" ng-bind="errorObject.failed"></div>
                 <div class="banner-success" ng-if="passwordModal.sent && passwordModal.success" ng-bind="passwordModal.success"></div>-->
