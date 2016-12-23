@@ -6,6 +6,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AppState } from '../app.service';
 import { Title } from './title';
 import { AuthService } from '../shared/auth.service';
+import { ProjectService } from './../shared/project.service';
 
 @Component({
   // The selector is what angular internally uses
@@ -31,10 +32,6 @@ export class HomeComponent implements OnInit {
     "invalidCode": "",
     "incorrect": ""
   };
-  private user= {
-    username: "",
-    password: ""
-  };
   private passwordModal = {
     username: "",
     sent: false,
@@ -42,10 +39,12 @@ export class HomeComponent implements OnInit {
   }
 
   // TypeScript public modifiers
-  constructor(public appState: AppState,
-    public title: Title,
-    public _auth: AuthService,
-    public router: Router,
+  constructor(
+    private appState: AppState,
+    private title: Title,
+    private _auth: AuthService,
+    private _project: ProjectService,
+    private router: Router,
     fb: FormBuilder
   ) {
     this.loginForm = fb.group({
@@ -59,11 +58,23 @@ export class HomeComponent implements OnInit {
     // this.title.getData().subscribe(data => this.data = data);
   }
 
-  joinSession(code){
-
+  /**
+   * Validates project and then navigates to project if valid
+   * @param code The project's short code
+   */
+  joinSession(code: string): void{
+    this._project.validateProject(code)
+      .subscribe(
+        (data) => {
+          console.log("it is a good one");
+        },
+        (error) => {
+          console.log("it is a bad one");
+        }
+      );
   }
 
-  private login(formValue: any) {
+  private login(formValue: any): void {
 
     for (let property in this.errorObject) {
       if (this.errorObject.hasOwnProperty(property) && typeof this.errorObject[property] === 'string') {

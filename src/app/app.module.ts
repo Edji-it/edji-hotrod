@@ -22,6 +22,8 @@ import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 // Services
 import { AppState, InternalStateType } from './app.service';
 import { AuthService } from './shared/auth.service';
+import { ReadingService } from './shared/reading.service';
+import { ProjectService } from './shared/project.service';
 
 // Components
 import { NavBarComponent } from './shared/nav-bar';
@@ -42,7 +44,10 @@ import { ChangePassComponent } from './account/change-pass.component';
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
   AppState,
-  AuthService
+  AuthService,
+  ReadingService,
+  ProjectService,
+
 ];
 
 type StoreType = {
