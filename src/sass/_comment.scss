@@ -78,7 +78,7 @@ input.emojiComment {
 	padding: 0px;
 	border-radius: 50%;
 	content: '+';
-	@include transform(rotate(45deg));
+	transform: rotate(45deg);
 	//  input.emojiComment.active + & {
 	// 	 display: block;
 	//  }
@@ -218,7 +218,7 @@ input.emojiComment {
 	height: 1px;
 	pointer-events: none;
 }
-@include keyframes(fadeInOut) {
+@keyframes fadeInOut {
   0% {
     opacity: 0;
   }
@@ -234,7 +234,7 @@ input.emojiComment {
 }
 .emoji-comment__wrap.saved:before {
   //@include transition(opacity linear 0.3s);
-  @include animation(fadeInOut 2.0s ease);
+  animation: fadeInOut 2.0s ease;
 }
 
 [class*='line-count'] {
@@ -372,7 +372,7 @@ $expandShadowSize: 3px;
 	.expand-line & {
 		&:after {
 			top: 10px;
-			@include transform(rotate(180deg));
+			transform: rotate(180deg);
 		}
 		// Emoji Minus
 		// background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAAAGYktHRAD/AP8A/6C9p5MAAAAJcEhZcwAACxMAAAsTAQCanBgAAAAJdnBBZwAAAEAAAABAAOrz+GAAAAChSURBVHja7daxDQIxDEbhB6KkQdQskz3YgjEYgJ49sszV6JqrEgXRUJICCgzK+9o4kvMrlgySJEmSJEmSJEkaw6p3kFIC2AEnYA/co5t90xq4AWdgzjm/LNr0brfWALbAEThEv+ZDE3AB5l5BN4Baa3TzX2EABtBRSonuzQBCAxh+BIYPwBEY/Qc8N8EFuPLfq/AS3YgkSZIkSZIkSZJ+wQNLlC8HbLV/1QAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAxNS0xMC0wMVQxMjowMDoxNi0wNzowMONYuOUAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMTUtMTAtMDFUMTI6MDA6MTYtMDc6MDCSBQBZAAAAAElFTkSuQmCC');

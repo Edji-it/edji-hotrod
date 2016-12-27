@@ -23,6 +23,9 @@ import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 import { AppState, InternalStateType } from './app.service';
 import { AuthService } from './shared/auth.service';
 
+// Directives
+import { MediumEditorDirective } from '../../custom_modules/angular2-medium-editor/medium-editor.directive.ts';
+
 // Components
 import { NavBarComponent } from './shared/nav-bar';
 import { SideBarComponent } from './shared/side-bar';
@@ -57,6 +60,7 @@ type StoreType = {
 @NgModule({
   bootstrap: [ AppComponent ],
   declarations: [
+    MediumEditorDirective,
     NavBarComponent,
     SideBarComponent,
     FooterComponent,

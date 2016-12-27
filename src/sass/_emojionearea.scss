@@ -161,7 +161,7 @@ $image-map: () !default;
 
 .#{$css-prefix} {
     &, & * {
-        @include box-sizing(border-box);
+        box-sizing: border-box;
     }
 
     &, &.form-control {
@@ -321,7 +321,8 @@ $image-map: () !default;
         z-index: $z-index;
         @include transition(all ease-in-out .25s);
         opacity: 0;
-        @include user-select(none);
+        // @include user-select(none);
+        user-select: none;
 
         &.hidden {
             display: none;
@@ -358,14 +359,14 @@ $image-map: () !default;
                 filter: inherit;
                 padding: 7px 1px 0;
                 cursor: pointer;
-                @include filter(grayscale(1));
+                filter: grayscale(1);
 
                 &.active {
                     background: #fff;
                 }
 
                 &.active, &:hover {
-                    @include filter(grayscale(0));
+                    filter: grayscale(0);
                 }
 
                 > i {
@@ -542,7 +543,7 @@ $image-map: () !default;
             }
 
             [class*=emojione-] {
-                @include box-sizing(content-box);
+                box-sizing: content-box;
                 margin: 0;
                 width: 24px;
                 height: 24px;
@@ -550,7 +551,7 @@ $image-map: () !default;
             }
 
             .emojibtn {
-                @include box-sizing(content-box);
+                box-sizing: content-box;
                 width: 24px;
                 height: 24px;
                 float: left;
@@ -777,7 +778,7 @@ $image-map: () !default;
 		// background: hotpink !important;
 		z-index: $zTop !important;
 
-        @include transform(translateZ(0px));
+        transform: translateZ(0px);
 	}
 
 	& .emojionearea .emojionearea-picker .emojionearea-wrapper {

@@ -201,10 +201,10 @@ $hudColor: #676767;
 	padding: 15px 20px;
 	font-weight: bold;
 	@include transition(transform linear 0.3s);
-	@include transform(translateY(-100%));
+	transform: translateY(-100%);
 	
 	&.slide-down  {
-		@include transform(translateY(0%));
+		transform: translateY(0%);
 	}
 }
 
@@ -235,11 +235,11 @@ $hudColor: #676767;
 		position: absolute;
 		top: 50%;
 		left: 50%;
-		@include transform(translate3d(-50%, -50%, 0));
+		transform: translate3d(-50%, -50%, 0);
 	}
 
 	&:hover, &:active {
-		@include filter(grayscale(0%));
+		// @include filter(grayscale(0%));
 		background: #ddd;
 	}
 }

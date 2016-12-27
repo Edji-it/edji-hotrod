@@ -2,4 +2,33 @@
 
 <div class="container container--side-bar">
 
+    <div class="row">
+        <div class="col-sm-12" style="padding-left:100px"> 
+             <br/>
+                <label class="border-wrap">
+                    <span class="offset-left">Title</span>
+                    <input class="form-item--seamless h1" type="text" [ngModel]="newReading.title" placeholder="New Reading Title..." />
+                </label>
+                <label class="border-wrap">
+                    <span class="offset-left">Source URL</span>
+                    <input class="form-item--seamless h3" type="text" [ngModel]="newReading.source" placeholder="Where it came from (optional)" />
+                </label>
+                <label class="border-wrap">
+                    <span class="offset-left">Content</span>
+                    <div medium-editor
+                        [(innerHtml)]="newReading.html"
+                        [bindOptions]="{'toolbar': {'buttons': ['bold', 'italic', 'underline', 'h1', 'h2', 'h3']}}"
+                        contenteditable="true"
+                        id="newReading"
+                        class="content"
+                        data-placeholder="Write, paste, or edit your reading here!"></div>
+                        <!--
+                        bind-options="{'toolbar': {'buttons': ['bold', 'italic', 'underline', 'h1', 'h2', 'h3']}}"-->
+                </label>
+                <p class="banner-error" *ngIf="submitted && error">{{ error }}</p>
+                <div class="button__row">
+                    <button (click)="addReading(newReading)" class="button" name="Add" href="#">Add Reading</button>
+                </div>
+        </div>
+    </div>
 </div>

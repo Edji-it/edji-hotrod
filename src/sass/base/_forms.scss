@@ -73,7 +73,7 @@ input:not([type]), textarea, select[multiple],
     outline: none;
     border-bottom: $inputFocusBorder;
 
-    @include transform(scale(1.02));
+    transform: scale(1.02);
   }
 
   &:disabled {
@@ -101,7 +101,7 @@ input:not([type]), textarea, select[multiple],
     font-weight: bold;
     border-radius: (32px + 2*$inputVPadding)/2;
 
-    @include placeholder {
+    &::placeholder {
       color: #ededed;
     }
   }
