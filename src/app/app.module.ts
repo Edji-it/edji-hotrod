@@ -22,6 +22,7 @@ import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 // Services
 import { AppState, InternalStateType } from './app.service';
 import { AuthService } from './shared/auth.service';
+import { ReadingService } from './shared/reading.service';
 
 // Directives
 import { MediumEditorDirective } from 'angular2-medium-editor/medium-editor.directive.ts';
@@ -45,7 +46,8 @@ import { ChangePassComponent } from './account/change-pass.component';
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
   AppState,
-  AuthService
+  AuthService,
+  ReadingService
 ];
 
 type StoreType = {
