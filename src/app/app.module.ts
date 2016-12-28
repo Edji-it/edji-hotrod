@@ -24,7 +24,7 @@ import { AppState, InternalStateType } from './app.service';
 import { AuthService } from './shared/auth.service';
 
 // Directives
-import { MediumEditorDirective } from '../../custom_modules/angular2-medium-editor/medium-editor.directive.ts';
+import { MediumEditorDirective } from 'angular2-medium-editor/medium-editor.directive.ts';
 
 // Components
 import { NavBarComponent } from './shared/nav-bar';

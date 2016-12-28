@@ -7,10 +7,15 @@ import { Component, OnInit } from '@angular/core';
 export class NewReadingPage implements OnInit {
 
     private newReading: any = {
-        html: "This is some test text for the directive..."
+        html: ""
     };
+    private readingPlaceholder: string = 'Type or paste your reading...';
 
     constructor() { }
 
     ngOnInit() { }
+
+    addReading() {
+        
+    }
 }

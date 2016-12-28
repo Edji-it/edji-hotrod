@@ -15,15 +15,12 @@
                 </label>
                 <label class="border-wrap">
                     <span class="offset-left">Content</span>
-                    <div medium-editor
-                        [(innerHtml)]="newReading.html"
-                        [bindOptions]="{'toolbar': {'buttons': ['bold', 'italic', 'underline', 'h1', 'h2', 'h3']}}"
-                        contenteditable="true"
+                    <medium-editor
+                        [(editorModel)]="newReading.html"
+                        [editorOptions]="{'toolbar': {'buttons': ['bold', 'italic', 'underline', 'h1', 'h2', 'h3']}}"
+                        [editorPlaceholder]="readingPlaceholder"
                         id="newReading"
-                        class="content"
-                        data-placeholder="Write, paste, or edit your reading here!"></div>
-                        <!--
-                        bind-options="{'toolbar': {'buttons': ['bold', 'italic', 'underline', 'h1', 'h2', 'h3']}}"-->
+                        class="content"></medium-editor>
                 </label>
                 <p class="banner-error" *ngIf="submitted && error">{{ error }}</p>
                 <div class="button__row">
