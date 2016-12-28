@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 
@@ -17,7 +18,7 @@ export class NewReadingPage implements OnInit {
     // Used for processing reading
     private words: any[] = [];
     
-    constructor(private _readings: ReadingService, fb: FormBuilder, private el: ElementRef) {
+    constructor(private _readings: ReadingService, private router: Router, fb: FormBuilder, private el: ElementRef) {
         this.readingForm = fb.group({
             title: [null, Validators.required],
             source: [null, null]
@@ -86,6 +87,11 @@ export class NewReadingPage implements OnInit {
         // Set submitted to show form errors
         this.submitted = true;
 
+        // This would be better handled by formcontrols
+        if (!form.title || form.title.length < 1 || this.readingHtml.length < 1) {
+            return;
+        }
+
         // Clear parsed words array
         this.words = [];
 
@@ -102,13 +108,14 @@ export class NewReadingPage implements OnInit {
         let reading: any = form;
         reading.html = this.readingHtml;
         reading.words = this.words;
-        
-        console.log(reading);
 
         this._readings.save(reading)
             .subscribe(
                 data => {
                     console.log(data);
+                    if (data._id) {
+                        this.router.navigate(['reading', data._id]);
+                    }
                 },
                 error => {
                     console.log(error)

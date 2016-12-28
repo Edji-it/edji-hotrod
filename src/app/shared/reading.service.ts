@@ -41,10 +41,13 @@ export class ReadingService {
   public save(reading: any): Observable<any> {
     let readingObj = { 'reading': reading };
     return this.http
-            .post(this._auth.baseUrl + '/readings', readingObj, this.options);
-            // .map(data => {
-            //     return data.json();
-            // });
+            .post(this._auth.baseUrl + '/readings', readingObj, this.options)
+            .map(data => {
+              return data.json();
+            },
+              error => {
+
+            });
   }
 
 }

@@ -22,6 +22,7 @@
                         [editorPlaceholder]="readingPlaceholder"
                         id="newReading"
                         class="content"></medium-editor>
+                    <div *ngIf="submitted && readingHtml.length < 1"  class="banner-error">Please give your Reading some text!</div>
                 </label>
                 <p class="banner-error" *ngIf="submitted && error">{{ error }}</p>
                 <div class="button__row">
