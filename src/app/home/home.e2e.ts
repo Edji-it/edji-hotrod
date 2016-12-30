@@ -1,4 +1,4 @@
-import { browser, by, element } from 'protractor';
+import { browser, by, element, protractor } from 'protractor';
 
 describe('App', () => {
 
@@ -13,11 +13,20 @@ describe('App', () => {
     let result  = 'Edji';
     expect(subject).toEqual(result);
   });
-
-  it('should have `your content here` x-large', () => {
-    let subject = element(by.css('[x-large]')).getText();
-    let result  = 'Your Content Here';
-    expect(subject).toEqual(result);
+  
+  // it('should have `your content here` x-large', () => {
+  //   let subject = element(by.css('[x-large]')).getText();
+  //   let result  = 'Your Content Here';
+  //   expect(subject).toEqual(result);
+  // });
+  
+  it('user can login with correct credentials', () => {
+    let EC = protractor.ExpectedConditions;
+    element(by.id('usernameInput')).sendKeys('student');
+    element(by.id('passwordInput')).sendKeys('student'); // protractor.Key.ENTER
+    element(by.id('buttonLogin')).click().then(function() {
+      browser.wait( EC.urlContains('dashboard'), 3000, 'Dashboard should open within 3 seconds');
+    });
   });
 
 
