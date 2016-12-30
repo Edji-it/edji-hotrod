@@ -21,6 +21,10 @@ describe('App', () => {
   //   let result  = 'Your Content Here';
   //   expect(subject).toEqual(result);
   // });
+
+  /**
+   * Login Tests
+   */
   
   it('user can login with correct credentials', () => {
     element(by.id('usernameInput')).sendKeys('student');
@@ -31,13 +35,15 @@ describe('App', () => {
   });
 
   it('user cannot login without password', () => {
-    let EC = protractor.ExpectedConditions;
     element(by.id('usernameInput')).sendKeys('student');
-    element(by.id('buttonLogin')).click().then(function() {
-      return true; // <- edit this. It's not finding the error message for whatever reason.
-      // browser.wait( EC.visibilityOf( element(by.id('msgNoPassword')) ), 1000, 'No password entered message should show within 1 second');
-    });
+    element(by.id('buttonLogin')).click();
+
+    let errorMsg = element(by.id('msgErrorPassword'));
+    browser.wait(EC.presenceOf(errorMsg), 1000);
   });
 
+  /**
+   * Project Code Tests
+   */
 
 });
