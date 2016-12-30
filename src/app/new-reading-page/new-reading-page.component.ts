@@ -42,9 +42,9 @@ export class NewReadingPage implements OnInit {
         // Children should inherit tags from several elements up
         // eg. "B" style should propagate down
         if (ancestorTags) {
-            let ancestorTags = [tagName];
-        } else {
             ancestorTags.push(tagName);
+        } else {
+            let ancestorTags = [tagName];
         }
 
         for (let node of nodes) {
