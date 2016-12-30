@@ -98,9 +98,13 @@
   version "0.0.32"
   resolved "https://registry.yarnpkg.com/@types/q/-/q-0.0.32.tgz#bd284e57c84f1325da702babfc82a5328190c0c5"
 
-"@types/selenium-webdriver@2.53.33", "@types/selenium-webdriver@~2.53.31":
+"@types/selenium-webdriver@2.53.33":
   version "2.53.33"
   resolved "https://registry.yarnpkg.com/@types/selenium-webdriver/-/selenium-webdriver-2.53.33.tgz#64672bae3acedf9d9e6bcfa8bdb7c37497751c3d"
+
+"@types/selenium-webdriver@2.53.37":
+  version "2.53.37"
+  resolved "https://registry.yarnpkg.com/@types/selenium-webdriver/-/selenium-webdriver-2.53.37.tgz#34f743c20e53ae7100ede90870fde554df2447f8"
 
 "@types/shelljs@^0.3.32":
   version "0.3.33"
@@ -3732,14 +3736,14 @@ progress@^1.1.8:
   version "1.1.8"
   resolved "https://registry.yarnpkg.com/progress/-/progress-1.1.8.tgz#e260c78f6161cdd9b0e56cc3e0a85de17c7a57be"
 
-protractor@^4.0.10:
-  version "4.0.13"
-  resolved "https://registry.yarnpkg.com/protractor/-/protractor-4.0.13.tgz#24070732cd912545d42ef257c5bbe1998a237f73"
+protractor@^4.0.14:
+  version "4.0.14"
+  resolved "https://registry.yarnpkg.com/protractor/-/protractor-4.0.14.tgz#efc4a877fac3a182a9dded26cd5869f4762fd172"
   dependencies:
     "@types/jasmine" "^2.5.36"
     "@types/node" "^6.0.46"
     "@types/q" "^0.0.32"
-    "@types/selenium-webdriver" "~2.53.31"
+    "@types/selenium-webdriver" "2.53.37"
     adm-zip "0.4.7"
     chalk "^1.1.3"
     glob "^7.0.3"
@@ -3750,7 +3754,7 @@ protractor@^4.0.10:
     saucelabs "~1.3.0"
     selenium-webdriver "2.53.3"
     source-map-support "~0.4.0"
-    webdriver-manager "^10.2.8"
+    webdriver-manager "^10.3.0"
 
 proxy-addr@~1.1.2:
   version "1.1.2"
@@ -4943,9 +4947,9 @@ weak-map@1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/weak-map/-/weak-map-1.0.0.tgz#b66e56a9df0bd25a76bbf1b514db129080614a37"
 
-webdriver-manager@^10.2.8:
-  version "10.2.10"
-  resolved "https://registry.yarnpkg.com/webdriver-manager/-/webdriver-manager-10.2.10.tgz#e81d869375dd9395e1a88d7342bbc759b8d654f3"
+webdriver-manager@^10.3.0:
+  version "10.3.0"
+  resolved "https://registry.yarnpkg.com/webdriver-manager/-/webdriver-manager-10.3.0.tgz#99314588a0b1dbe688c441d74288c6cb1875fa8b"
   dependencies:
     adm-zip "^0.4.7"
     chalk "^1.1.1"
@@ -5097,16 +5101,9 @@ wrappy@1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/wrappy/-/wrappy-1.0.2.tgz#b5243d8f3ec1aa35f1364605bc0d1036e30ab69f"
 
-ws@1.0.1:
+ws@1.0.1, ws@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/ws/-/ws-1.0.1.tgz#7d0b2a2e58cddd819039c29c9de65045e1b310e9"
-  dependencies:
-    options ">=0.0.5"
-    ultron "1.0.x"
-
-ws@^1.0.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/ws/-/ws-1.1.1.tgz#082ddb6c641e85d4bb451f03d52f06eabdb1f018"
   dependencies:
     options ">=0.0.5"
     ultron "1.0.x"
