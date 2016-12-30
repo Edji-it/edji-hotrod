@@ -35,9 +35,17 @@ export class NewReadingPage implements OnInit {
      * Pushes text nodes as formatted objects into this.words
      * @param element Root element to start crawling from
      */
-    extractTextNodes(element) {
+    extractTextNodes(element: any, ancestorTags ?: string[]) {
         let tagName = element.tagName;
         let nodes = element.childNodes;
+        
+        // Children should inherit tags from several elements up
+        // eg. "B" style should propagate down
+        if (ancestorTags) {
+            let ancestorTags = [tagName];
+        } else {
+            ancestorTags.push(tagName);
+        }
 
         for (let node of nodes) {
             if (node.nodeType === 3) {
@@ -74,7 +82,7 @@ export class NewReadingPage implements OnInit {
                 });
             } else {
                 // If not a text node, dig deeper for text nodes
-                this.extractTextNodes(node);
+                this.extractTextNodes(node, ancestorTags);
             }
         }
     }
@@ -103,7 +111,9 @@ export class NewReadingPage implements OnInit {
         for (let childEl of childEls) {
             this.extractTextNodes(childEl);
         }
-        
+
+        console.log(this.words);
+
         // Create reading object to submit based on form object parameter
         let reading: any = form;
         reading.html = this.readingHtml;
