@@ -28,8 +28,12 @@
             {{errorObject.invalidCode}}
           </div>
         </div>
+
+        <br />
+        <hr>
+        <br />
         <!--Login Row-->
-        <div *ngIf="showLogin">
+        <!--<div *ngIf="showLogin">-->
           <form [formGroup]="loginForm" (ngSubmit)="login(loginForm.value)">
             <h2 class="center">Login to your Dashboard</h2>
             <label for="username-input">Username</label>
@@ -50,13 +54,13 @@
           <div style="text-align:center;">
             <a id="linkForgotPassword" class="link" (click)="showPasswordModal()">Forgotten password?</a>
           </div>
-        </div>
+        <!--</div>-->
         <br />
         <hr>
         <br />
         <div class="button__row">
-            <button *ngIf="!showLogin" (click)="showLogin = true" class="btn btn-secondary" name="Login" tabindex="0">Log In</button>
-            <button *ngIf="showLogin" (click)="showLogin = false" class="btn btn-secondary" name="Lightning Code" tabindex="0"><img class="inline-emoji emojioneemoji" src="assets/emoji/png/26a1.png" />Code</button>
+            <!--<button *ngIf="!showLogin" (click)="showLogin = true" class="btn btn-secondary" name="Login" tabindex="0">Log In</button>
+            <button *ngIf="showLogin" (click)="showLogin = false" class="btn btn-secondary" name="Lightning Code" tabindex="0"><img class="inline-emoji emojioneemoji" src="assets/emoji/png/26a1.png" />Code</button>-->
           <a id="buttonGoRegister" tabindex="0" class="btn btn-secondary" name="Sign Up" href="#/register">!Register</a>
         </div>
       </div>
