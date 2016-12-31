@@ -20,11 +20,19 @@ article.content {
 	}
 
 
+	&:after {
+		display: inline-block;
+		content: '';
+		clear:both;
+		user-select: none;
+		-webkit-user-select: none;
+		-moz-user-select: none;
+	}
 
 	& .word {
 		// Styles applied by word
 		&.space {
-			white-space: pre;
+			white-space: pre-line;
 		}
 
 		&.b, &.B {
@@ -35,16 +43,14 @@ article.content {
 			font-style: italic;
 		}
 
-		&.H1, &.h1 {
-
-			font-size: 32px;
-			// margin-bottom: 40px;
+		&.H1, &.h1, &.H2, &.h2, &.H3, &.h3, &.P, &.p {
 			
 			&.first {
 				// display:table;
 				&::before {
-					content: '';
 					display: block;
+					content: "\A";
+      				white-space: pre;
 				}
 			}
 
@@ -56,6 +62,18 @@ article.content {
 					margin-right: 100%;
 				}
 			}
+		}
+
+		&.H1, &.h1 {
+			font-size: 32px;
+		}
+
+		&.H2, &.h2 {
+			font-size: 24px;
+		}
+
+		&.h3, &.h3 {
+			font-weight: bold;
 		}
 	} 
 }
