@@ -41,14 +41,14 @@ button, .button, .btn, [class*='btn'] {
 
 html .button, .button, html .btn {
   // @extend #{$all-buttons};
-  box-shadow: -3px 3px 0px 0px $purple;
+  // box-shadow: -3px 3px 0px 0px $purple;
   background: lighten($purple,10%);
 
   &:hover, &:active, &:focus, &.active {
     text-decoration: none;
     box-shadow: none;
-    background: lighten($purple,10%);
-    transform: translate3d(-3px, 3px, 0);
+    background: $purple;
+    // transform: translate3d(-3px, 3px, 0);
   }
 }
 
@@ -68,14 +68,14 @@ html .button, .button, html .btn {
     width: 40px;
     width: 40px;
     background: $gray;
-    box-shadow: -3px 3px 0px 0px darken($gray, 5%);
+    // box-shadow: -3px 3px 0px 0px darken($gray, 5%);
 
     & img {
       opacity: 0.8;
     }
 
     &:hover, &:active, &:focus {
-      background: darken($gray, 5%);
+      // background: darken($gray, 5%);
       & img {
         opacity: 1;
       }

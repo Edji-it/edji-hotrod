@@ -1,5 +1,6 @@
 
 $navBarHeight: 100px;
+$navBarLargeHeight: 120px;
 $sideBarWidth: 100px;
 
 .nav-bar {
@@ -10,8 +11,9 @@ $sideBarWidth: 100px;
 	height: $navBarHeight;
 	width: 100%;
 	text-align: center;
-	background: transparent;
+	background:#fff;
 	z-index: 9000;
+	border-bottom:1px solid #f1f1f1;
 }
 
 .nav__center-logo {
@@ -21,4 +23,8 @@ $sideBarWidth: 100px;
 nav {
 	height: $navBarHeight;
 	width: 100%;
+}
+
+nav.large, .large .nav-bar {
+	height: $navBarLargeHeight;
 }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'nav-bar',
@@ -6,5 +6,10 @@ import { Component } from '@angular/core';
   templateUrl: './nav-bar.component.html'
 })
 export class NavBarComponent {
+  @Input()
+  public isLarge: boolean;
 
+  ngOnInit() {
+    console.log(this.isLarge);
+  }
 }

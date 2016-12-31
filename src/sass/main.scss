@@ -4,7 +4,6 @@
  * the Grunt configuration that is automatically processed.
  */
 
-@import '../../node_modules/bootstrap/scss/bootstrap.scss';
 @import '../../node_modules/medium-editor/dist/css/medium-editor';
 @import './lib/bourbon/_bourbon.scss';
 
@@ -591,6 +590,7 @@ html, body {
 body {
 	overflow-y: scroll;
 	width: 100%;
+	background: $pageBg;
 
 	-webkit-transition: all 600ms;
 	-moz-transition: all 600ms;
@@ -616,6 +616,12 @@ $commentColWidth: 350px;
 //     padding-bottom: 100px;
 // 	float: left;
 // }
+
+
+.inline-emoji {
+    height: 1.1em;
+    width: auto;
+}
 
 .session-column {
 	width: calc(100% - #{ $commentColWidth + $sideBarWidth  });
@@ -701,7 +707,7 @@ blockquote {
 }
 
 .yin { 
-	background: #f6f6f6;
+	// background: #fff; //f6f6f6;
 	color: #111;
 
 	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#000000+0,cdcdcd+100 */
@@ -714,11 +720,6 @@ blockquote {
   // filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2d2d2d', endColorstr='#cdcdcd',GradientType=1 ); /* IE6-9 */
   // copy
 
-}
-
-.yang {
-	background-color: #111;
-	color: #fafafa;
 }
 
 .ui {
@@ -1004,7 +1005,7 @@ a:hover {
 	display: inline-block;
 
 	& img {
-		height: 75px;
+		height: 100px;
 		width: auto;
 	}
 
@@ -1012,19 +1013,19 @@ a:hover {
 		display: inline-block;
 	}
 
-	#logoPressed {
-		display: none;
-		padding: 4px 4px 0 0;
-	}
+	// #logoPressed {
+	// 	// display: none;
+	// 	padding: 4px 4px 0 0;
+	// }
 
 	&:hover, &:active, &:focus {
-		& #logoPressed {
+		& #logo {
 			display: inline-block;
 		}
 
-		& #logo {
-			display: none;
-		}
+		// & #logo {
+		// 	display: none;
+		// }
 	}
 }
 
