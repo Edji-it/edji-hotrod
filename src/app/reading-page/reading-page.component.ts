@@ -51,7 +51,7 @@ export class ReadingPageComponent implements OnInit, OnDestroy {
                 this._readings.get(readingId)
                     .subscribe(
                         data => {
-                            this.reading = data.json();
+                            this.reading = data;
                         },
                         err => {
                             console.log(err);

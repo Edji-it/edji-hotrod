@@ -4,7 +4,10 @@
  *  - Compiles word components
  *  - Triggers highilghting
  */
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs/Rx';
+
+import { ReadingService } from '../shared/reading.service';
 
 @Component({
     selector: 'annotator',
@@ -13,7 +16,11 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 })
 export class AnnotatorComponent implements OnInit, OnDestroy {
     // Component input
- 
+    @Input()
+    private project: any;
+
+    private reading: any = {};
+
     private lineExpanded: boolean = false;
     private showCommentCounts: boolean = false;
     private showAllComments: boolean = false;
@@ -21,14 +28,27 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     private highlightY = '100px'; 
     private optionsShow = false;
 
-    private words = [
-        { str : 'Lorem', style : 'b' },{ str : ' ' },{ str : 'Impsum' },{ str : 'Lorem', style : '' },{ str : ' ' },{ str : 'Impsum', style : 'i' },{ str : 'Lorem', style : 'i' },{ str : ' ' },{ str : 'Impsum' },{ str : 'Lorem', style : '' },{ str : ' ' },{ str : 'Impsum' },{ str : 'Lorem', style : '' },{ str : ' ' },{ str : 'Impsum' },{ str : 'Lorem', style : 'b' },{ str : ' ' },{ str : 'Impsum' },{ str : 'Lorem', style : 'b' },{ str : ' ' },{ str : 'Impsum' },{ str : 'Lorem', style : '' },{ str : ' ' },{ str : 'Impsum', style : 'i' },{ str : 'Lorem', style : 'i' },{ str : ' ' },{ str : 'Impsum' },{ str : 'Lorem', style : '' },{ str : ' ' },{ str : 'Impsum' },{ str : 'Lorem', style : '' },{ str : ' ' },{ str : 'Impsum' },{ str : 'Lorem', style : 'b' },{ str : ' ' },{ str : 'Impsum' }
-    ];
+    private loadingReading = true;
 
-    constructor( ) { }
+    private subscriptions: Subscription[] = [];
+
+    constructor(private _readings: ReadingService) { }
  
     ngOnInit() {
-        // Establish bindings
+        console.log(this.project);
+        // Get Reading via Observable
+        this.subscriptions.push(
+            this._readings.get(this.project.reading_id)
+                .subscribe(
+                    reading => {
+                        console.log(reading);
+                        this.reading = reading;
+                    },
+                    error => {
+                        console.error(error);
+                    }
+                )
+        );
         
     }
     

@@ -77,14 +77,14 @@ word, .word {
   //   }
   // }
   
-  &:after {
-    display: inline-block;
-    content: '';
-    clear:both;
-    user-select: none;
-    -webkit-user-select: none;
-	-moz-user-select: none;
-  }
+//   &:after {
+//     display: inline-block;
+//     content: '';
+//     clear:both;
+//     user-select: none;
+//     -webkit-user-select: none;
+// 	-moz-user-select: none;
+//   }
 }
 
 

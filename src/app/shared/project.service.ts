@@ -44,19 +44,17 @@ export class ProjectService implements OnInit, OnDestroy {
             .then(this._auth.extractData);
   }
 
-  private get(projectId) {
-      this.subscriptions.push(
-          this.http
+  /**
+   * Pull a Project object
+   * @param projectId
+   */
+  public get(projectId: string) : Observable<any> {
+        return this.http
             .get(this._auth.baseUrl + '/sessions/' + projectId, this.options)
-            .subscribe(
+            .map(
                 data => {
-                    this.currentProject = data.json();
-                },
-                err => {
-                    console.log(err);
-                })
-      );
-
+                    return data.json();
+                });
   }
 
   // Get a teacher's Projects for a Reading

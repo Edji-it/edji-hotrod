@@ -4,7 +4,8 @@ article.content {
 	
 	&, & p, & span {
 		// Prevent word breaks since "span" wrapped words don't match behavior
-		white-space: pre-wrap;
+		// white-space: pre-wrap;
+
 		// Disable iOS copy/paste popup
 		// -webkit-touch-callout: none !important;
 	}
@@ -17,6 +18,46 @@ article.content {
 		-moz-user-select: none; /* Firefox */
 		pointer-events: none;
 	}
+
+
+
+	& .word {
+		// Styles applied by word
+		&.space {
+			white-space: pre;
+		}
+
+		&.b, &.B {
+			font-weight: bold;
+		}
+
+		&.i {
+			font-style: italic;
+		}
+
+		&.H1, &.h1 {
+
+			font-size: 32px;
+			// margin-bottom: 40px;
+			
+			&.first {
+				// display:table;
+				&::before {
+					content: '';
+					display: block;
+				}
+			}
+
+			&.last {
+				clear:right;
+				&::after {
+					content: '';
+					display: block;
+					margin-right: 100%;
+				}
+			}
+		}
+	} 
 }
 
 

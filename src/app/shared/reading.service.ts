@@ -29,16 +29,22 @@ export class ReadingService {
   }
 
   // Pull one reading by ID
-  public get(id) {
+  public get(id : string) : Observable<any> {
     let header = new Headers({ 'Content-Type' : 'application/json', 'Authorization' : this._auth.getToken()  }); 
     let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
     
     return this.http
-      .get(this._auth.baseUrl + '/readings/' + id, options);
+      .get(this._auth.baseUrl + '/readings/' + id, options)
+      .map(data => {
+        return data.json()
+      });
   }
 
   // Push new or update Reading
   public save(reading: any): Observable<any> {
+    if (!reading['owner_id']) {
+      reading['owner_id'] = this._auth.getUser()._id;
+    }
     let readingObj = { 'reading': reading };
     return this.http
             .post(this._auth.baseUrl + '/readings', readingObj, this.options)
