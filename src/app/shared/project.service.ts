@@ -9,11 +9,14 @@ import { AuthService } from './auth.service';
 @Injectable()
 export class ProjectService implements OnInit, OnDestroy {
 
-  private targetProjectId: string = '';
-  private currentProject: any = {};
+    private header = new Headers({ 'Content-Type' : 'application/json', 'Authorization' : this._auth.getToken()  }); 
+    private options = new RequestOptions({ headers: this.header, withCredentials: true });
 
-  private subscriptions: Subscription[] = [];
-    
+    private targetProjectId: string = '';
+    private currentProject: any = {};
+
+    private subscriptions: Subscription[] = [];
+
   constructor(private http: Http, private _auth: AuthService, private _route: ActivatedRoute) {
 
   }
@@ -35,22 +38,16 @@ export class ProjectService implements OnInit, OnDestroy {
   
   // Pull all projects for a user
   public getAll() {
-        let header = new Headers({ 'Content-Type' : 'application/json', 'Authorization' : this._auth.getToken()  }); 
-        let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
-        
         return this.http
-            .get(this._auth.baseUrl + '/sessions', options)
+            .get(this._auth.baseUrl + '/sessions', this.options)
             .toPromise()
             .then(this._auth.extractData);
   }
 
   private get(projectId) {
-      let header = new Headers({ 'Content-Type' : 'application/json', 'Authorization' : this._auth.getToken()  }); 
-      let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
-      
       this.subscriptions.push(
           this.http
-            .get(this._auth.baseUrl + '/sessions/' + projectId, options)
+            .get(this._auth.baseUrl + '/sessions/' + projectId, this.options)
             .subscribe(
                 data => {
                     this.currentProject = data.json();
@@ -64,12 +61,22 @@ export class ProjectService implements OnInit, OnDestroy {
 
   // Get a teacher's Projects for a Reading
   public getForReading(readingId) {
-    let header = new Headers({ 'Content-Type' : 'application/json', 'Authorization' : this._auth.getToken()  }); 
-    let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
     let userId = this._auth.getUser()._id;
     
-    return this.http.get(this._auth.baseUrl + '/readings/' + readingId + '/sessions/' + userId , options );
+    return this.http.get(this._auth.baseUrl + '/readings/' + readingId + '/sessions/' + userId , this.options );
   }
+
+    /**
+     * Create a new Project
+     * @param Requires a Reading ID
+     * @param takes a Project object with the new label
+     */
+    public new(readingId, project) {
+        return this.http
+            .post(this._auth.baseUrl + '/sessions/' + readingId, { 'session' : project }, this.options)
+            .toPromise()
+            .then(this._auth.extractData);
+    }
 
    ngOnDestroy() {
         this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
