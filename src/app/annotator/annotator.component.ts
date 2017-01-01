@@ -19,8 +19,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     // Component input
     @Input()
     private project: any;
-
+    
     private reading: any = {};
+    private commentsByIndex: any[] = [];
 
     private lineExpanded: boolean = false;
     private showCommentCounts: boolean = false;
@@ -82,6 +83,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         let range = Rangy.getSelection();
         let start : number;
         let end : number;
+        let comment: any;
         
         let getNodeIndex = function(node: any) : number {
             // Selections often happen at the text node level, inside the actual element
@@ -102,7 +104,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             end = [start, start = end][0]; // Swap start and end values
         }
         
-        console.log(start,end);
         // Increment highlight array
         for (var i = start; i <= end; i ++) {
             if (this.highlightArray[i]) {
@@ -111,6 +112,19 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 this.highlightArray[i] = 1;
             }
         }
+        
+        comment = {
+            start: start,
+            end: end
+        };
+
+        // Add Comment
+        if (this.commentsByIndex[start]) {
+            this.commentsByIndex[start].push(comment);
+        } else {
+            this.commentsByIndex[start] = [ comment ];
+        }
+        
 
     }
 }

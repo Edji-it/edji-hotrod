@@ -32,6 +32,7 @@ import { NavBarComponent } from './shared/nav-bar';
 import { SideBarComponent } from './shared/side-bar';
 import { FooterComponent } from './shared/footer';
 import { HomeComponent } from './home';
+import { CommentComponent } from './annotator/comment';
 import { EmojiCommentComponent } from './annotator/emoji-comment';
 import { AnnotatorComponent } from './annotator';
 import { ProjectPageComponent } from './project-page';
@@ -66,6 +67,7 @@ type StoreType = {
     NavBarComponent,
     SideBarComponent,
     FooterComponent,
+    CommentComponent,
     EmojiCommentComponent,
     AppComponent,
     AccountComponent,
