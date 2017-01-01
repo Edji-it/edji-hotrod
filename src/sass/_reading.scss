@@ -43,9 +43,13 @@ article.content {
 			font-style: italic;
 		}
 
+		&.u {
+			text-decoration: underline;
+		}
+
 		&.H1, &.h1, &.H2, &.h2, &.H3, &.h3, &.P, &.p {
 			
-			&.first {
+			&-first {
 				// display:table;
 				&::before {
 					display: block;
@@ -54,7 +58,7 @@ article.content {
 				}
 			}
 
-			&.last {
+			&-last {
 				clear:right;
 				&::after {
 					content: '';

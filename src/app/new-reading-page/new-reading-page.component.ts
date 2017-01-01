@@ -36,18 +36,24 @@ export class NewReadingPage implements OnInit {
      * @param element Root element to start crawling from
      */
     extractTextNodes(element: any, ancestorTags ?: string[]) {
-        let tagName = element.tagName;
+        let tagName = element.tagName.toLowerCase();
         let nodes = element.childNodes;
-        
+        console.log(ancestorTags);
+        console.log(tagName);
         // Children should inherit tags from several elements up
         // eg. "B" style should propagate down
-        if (ancestorTags) {
+        if (!ancestorTags) {
+            ancestorTags = [];
+        } 
+
+        if (ancestorTags.indexOf(tagName) < 0) {
             ancestorTags.push(tagName);
-        } else {
-            let ancestorTags = [tagName];
         }
 
-        for (let node of nodes) {
+        nodes.forEach((node, index) => {
+            // Copy tags array to variable local to loop instance
+            let inheritedTags = ancestorTags.slice();
+
             if (node.nodeType === 3) {
                 // Found a text node!
 
@@ -58,33 +64,32 @@ export class NewReadingPage implements OnInit {
                 if (nodeWords.length < 1) {
                     this.words.push({
                         str: '',
-                        styles: [tagName, 'space', 'first', 'last']
+                        styles: ['space', 'space-first', 'space-last'].concat(inheritedTags)
                     });
                 }
 
                 // Otherwise loop through words, and process into array
-                nodeWords.forEach((nodeWord, index) => {
+                nodeWords.forEach((nodeWord, wIndex) => {
                     let word = {
                         str : nodeWord,
-                        styles: []
+                        styles: [].concat(inheritedTags)
                     };
                     if (word.str.trim().length < 1) {
                         word.styles.push('space');
                     }
-                    if (index == 0) {
-                        word.styles.push('first');
+                    if (index == 0 && wIndex == 0) {
+                        word.styles.push(tagName + '-first');
                     }
-                    if (index == nodeWords.length - 1) {
-                        word.styles.push('last');
+                    if (index == nodes.length - 1 && wIndex == nodeWords.length - 1) {
+                        word.styles.push(tagName + '-last');
                     }
-                    word.styles.push(tagName);
                     this.words.push(word);
                 });
             } else {
                 // If not a text node, dig deeper for text nodes
-                this.extractTextNodes(node, ancestorTags);
+                this.extractTextNodes(node, inheritedTags);
             }
-        }
+        });
     }
 
     /**
