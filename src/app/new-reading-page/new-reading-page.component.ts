@@ -38,8 +38,7 @@ export class NewReadingPage implements OnInit {
     extractTextNodes(element: any, ancestorTags ?: string[]) {
         let tagName = element.tagName.toLowerCase();
         let nodes = element.childNodes;
-        console.log(ancestorTags);
-        console.log(tagName);
+        
         // Children should inherit tags from several elements up
         // eg. "B" style should propagate down
         if (!ancestorTags) {
