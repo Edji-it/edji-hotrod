@@ -13,6 +13,22 @@ export class CommentComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+
+  }
+
+  focusComment():void {
+
+  }
+
+  unfocusComment(): void {
+    
+  }
+
+  /** 
+   * To do
+   */
+  updateComment(commentId, commentText): void {
+
   }
 
 }

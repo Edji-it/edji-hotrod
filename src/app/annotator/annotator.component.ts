@@ -9,6 +9,7 @@ import { Subscription } from 'rxjs/Rx';
 import * as Rangy from 'rangy';
 
 import { ReadingService } from '../shared/reading.service';
+import { ProjectService } from '../shared/project.service';
 
 @Component({
     selector: 'annotator',
@@ -34,9 +35,12 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
     private subscriptions: Subscription[] = [];
 
-    private highlightArray: number[] = [ 0, 0, 1, 2, 2, 3, 0, 0];
+    private highlightArray: number[] = [];
 
-    constructor(private _readings: ReadingService) { }
+    constructor(
+        private _readings: ReadingService,
+        private _projects: ProjectService
+    ) { }
  
     ngOnInit() {
         console.log(this.project);
@@ -54,33 +58,91 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 )
         );
         
+        // Populate local Comment and Highlight arrays
+        // (Used for super speedy rendering!)
+        this.project.comments.forEach(comment => {
+            if (!this.commentsByIndex[comment.start]) {
+                this.commentsByIndex[comment.start] = [];
+            }
+            // Populate local comments array by start index
+            this.commentsByIndex[comment.start].push(comment);
+
+            // Add highlights
+            this.incrementHighlights(comment.start, comment.end);
+        });
+
     }
     
     ngOnDestroy() {
         
     }
 
-    hideCommentOptions(event) {
+    hideCommentOptions(event): void {
         this.optionsShow = false;
     }
 
     /**
      * Show tooltip to the side with buttons for adding comment types
      */
-    showCommentOptions(event) {
-        console.log("See youuu");
+    showCommentOptions(event): void {
         this.highlightY = event.clientY + 'px';
         this.optionsShow = true;
+    }
+
+    /**
+     * Add new highlights to local array
+     */
+    incrementHighlights(start: number, end: number): void {
+        for (var i = start; i <= end; i ++) {
+            if (this.highlightArray[i]) {
+                this.highlightArray[i]++;
+            } else {
+                this.highlightArray[i] = 1;
+            }
+        }
+    }
+
+    /**
+     * Create a Comment of any Type
+     * Requires three parameters, and finds the other information it needs
+     * @param start Index of first word
+     * @param end Index of last word
+     * @param type What kind of comment: emoji, text...
+     */
+    createComment(start: number, end: number, type: string): void {
+        let projectId = this.project._id;
+        let text = this.reading.words.slice(start, end).toString();
+
+        // Tell server we've added a comment
+        this._projects.saveComment(projectId, '', start, end, text)
+            .then(comment => {
+                // We use the comment from the service because it has an Id
+                if (comment._id) {
+                    // Add Comment
+                    if (this.commentsByIndex[start]) {
+                        this.commentsByIndex[start].push(comment);
+                    } else {
+                        this.commentsByIndex[start] = [ comment ];
+                    }
+                } else {
+                    console.warn('Didn\'t get a comment from server!');
+                }
+            })
+            .catch(error => {
+                // We should figure out how to handle this properly!
+                // Maybe show a warning icon?
+                console.warn(error);
+            });
     }
 
     /** 
      * Add Comment of Emoji type
      * - Fired from comment options tooltip
      */
-    addEmojiComment(event) {
+    addEmojiComment(event): void {
         // Get selection indices
         console.log(Rangy.getSelection());
-        let range = Rangy.getSelection();
+        let selection = Rangy.getSelection();
         let start : number;
         let end : number;
         let comment: any;
@@ -95,8 +157,12 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             }
         }
 
-        start = getNodeIndex(range['anchorNode']);
-        end = getNodeIndex(range['focusNode']);
+        start = getNodeIndex(selection['anchorNode']);
+        end = getNodeIndex(selection['focusNode']);
+
+        // Clear selection and hide tooltip
+        this.optionsShow = false;
+        selection.removeAllRanges();
 
         // It's possible that a selection is made backwards
         // We want the start index to come first
@@ -105,26 +171,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         }
         
         // Increment highlight array
-        for (var i = start; i <= end; i ++) {
-            if (this.highlightArray[i]) {
-                this.highlightArray[i]++;
-            } else {
-                this.highlightArray[i] = 1;
-            }
-        }
-        
-        comment = {
-            start: start,
-            end: end
-        };
+        this.incrementHighlights(start, end);
 
-        // Add Comment
-        if (this.commentsByIndex[start]) {
-            this.commentsByIndex[start].push(comment);
-        } else {
-            this.commentsByIndex[start] = [ comment ];
-        }
-        
-
+        // Tell the server we've got a comment!
+        this.createComment(start, end, 'emoji');
     }
 }
