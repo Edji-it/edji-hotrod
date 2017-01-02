@@ -51,10 +51,20 @@ export class JoinComponent implements OnInit, OnDestroy {
   }
 
   private joinSessionAsGuest(formValue: any) {
-    //create the user's temporary account
-    // set the project as current project
-    // after creation, navigate to the project's page
-    console.log(formValue);
+    
+    // create the user's temporary account and set local token and user
+    this._auth.createTempUser(formValue.guestName).subscribe(
+      (data) => {
+        this._auth.setToken(data.token);
+        this._auth.setUser(data.user);
+
+        // set the project as current project
+        // after creation, navigate to the project's page
+      },
+      (error) => {
+        console.error(error);
+      }
+    )
   }
 
   private joinSessionAsUser(formValue: any) {
@@ -64,15 +74,9 @@ export class JoinComponent implements OnInit, OnDestroy {
     console.log(formValue);
 
     this.clearErrors();
-		
-    let user: any = {
-      username: formValue.username,
-      password: formValue.password
-    };
-
 		this.loginLoading = true;
 
-		this._auth.login(user)
+		this._auth.login(formValue)
       .then(
         (data: any)  => { 
           console.log(data);

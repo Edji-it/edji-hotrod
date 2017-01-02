@@ -104,6 +104,24 @@ export class AuthService {
     }
 
     /**
+     * Calls to server, which creates a temp user object
+     * @param username String value for the temp user's username, gets assigned to fullname property of TempUser model
+     * @returns Observable object with user and token properties
+     */
+    public createTempUser(username: string): Observable<any> {
+        let data = {
+            user: {
+                fullname: username
+            }
+        };
+
+        return this.http.post([this.baseUrl, 'tempusers'].join('/'), data, this.options)
+            .map((data) => {
+                return data.json();
+            });
+    }
+
+    /**
      * There are two cases to use this call:
      *  1) User is logged in and resetting password => resetObject should be assigned properties oldPassword, newPassword
      *  2) User has a password recovery email => resetObject should be assigned properties: token, newPassword
