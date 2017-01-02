@@ -129,14 +129,31 @@ export class AuthService {
      * @param resetObject Can have properties: oldPassword, newPassword, token
      * @returns Chainable promise resolved with json data containing either a user object & token or errors
     **/
-    resetPassword(resetObject: any) {
-    return this.http
-        .post(
-            [this.baseUrl, 'users', 'reset_password'].join("/"),
-            { resetObject: resetObject },
-            this.getOptions())
-        .toPromise()
-        .then(this.extractData);
+    public resetPassword(resetObject: any) {
+        return this.http
+            .post(
+                [this.baseUrl, 'users', 'reset_password'].join('/'),
+                { resetObject: resetObject },
+                this.getOptions()
+            )
+            .toPromise()
+            .then(this.extractData);
     };
+
+    public recoverPassword(username: string): Observable<boolean> {
+        return this.http
+            .post(
+                [this.baseUrl, 'users', 'recover_password'].join('/'),
+                { username: username },
+                this.getOptions()
+            )
+            .map((data) => {
+                if (data.status === 204) {
+                    return true;
+                } else {
+                    return false;
+                }
+            });
+    }
 
 }

@@ -30,8 +30,6 @@ export class ChangePassComponent {
   }
 
   private onSubmit(value: any): void {
-    console.log("form data: ");
-    console.log(value);
     this._auth.resetPassword({
         oldPassword: this.passwordForm.get('oldPassword').value,
         newPassword: this.passwordForm.get('newPassword').value

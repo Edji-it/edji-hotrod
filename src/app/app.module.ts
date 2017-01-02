@@ -35,7 +35,7 @@ import { EmojiOnePipe } from './shared/emojione.pipe.ts';
 import { NavBarComponent } from './shared/nav-bar';
 import { SideBarComponent } from './shared/side-bar';
 import { FooterComponent } from './shared/footer';
-import { HomeComponent } from './home';
+import { HomeComponent, ResetPassComponent } from './home';
 import { JoinComponent } from './join/join.component';
 import { CommentComponent } from './annotator/comment';
 import { EmojiCommentComponent } from './annotator/emoji-comment';
@@ -45,8 +45,7 @@ import { ReadingPageComponent } from './reading-page';
 import { NewReadingPage } from './new-reading-page';
 import { DashboardComponent } from './dashboard';
 import { NoContentComponent } from './no-content';
-import { AccountComponent } from './account/account.component';
-import { ChangePassComponent } from './account/change-pass.component';
+import { AccountComponent, ChangePassComponent } from './account';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -79,6 +78,7 @@ type StoreType = {
     AppComponent,
     AccountComponent,
     ChangePassComponent,
+    ResetPassComponent,
     AnnotatorComponent,
     NewReadingPage,
     ProjectPageComponent,
