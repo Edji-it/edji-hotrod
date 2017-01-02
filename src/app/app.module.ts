@@ -36,6 +36,7 @@ import { NavBarComponent } from './shared/nav-bar';
 import { SideBarComponent } from './shared/side-bar';
 import { FooterComponent } from './shared/footer';
 import { HomeComponent } from './home';
+import { JoinComponent } from './join/join.component';
 import { CommentComponent } from './annotator/comment';
 import { EmojiCommentComponent } from './annotator/emoji-comment';
 import { AnnotatorComponent } from './annotator';
@@ -84,6 +85,7 @@ type StoreType = {
     ReadingPageComponent,
     DashboardComponent,
     HomeComponent,
+    JoinComponent,
     NoContentComponent
   ],
   imports: [ // import Angular's modules

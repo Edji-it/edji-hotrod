@@ -13,19 +13,8 @@ export class ProjectService {
   private currentProjectSource: Subject<any> = new Subject<any>();
   private project: any;
   public currentProject: Observable<any> = this.currentProjectSource.asObservable();
-  
-  
-  private header: Headers;
-  private options: RequestOptions;
-    
-    // private targetProjectId: string = '';
-    // private currentProject: any = {};
-
-    // private subscriptions: Subscription[] = [];
 
   constructor(private http: Http, private _auth: AuthService, private _route: ActivatedRoute) {
-    this.header = new Headers({ 'Content-Type' : 'application/json', 'Authorization' : this._auth.getToken()  }); 
-    this.options = new RequestOptions({ headers: this.header, withCredentials: true }); // Create a request option
   }
   
   /**
@@ -34,7 +23,7 @@ export class ProjectService {
    */
   public getAll() {
         return this.http
-            .get(this._auth.baseUrl + '/sessions', this.options)
+            .get(this._auth.baseUrl + '/sessions', this._auth.getOptions())
             .toPromise()
             .then(this._auth.extractData);
   }
@@ -44,7 +33,7 @@ export class ProjectService {
    * @param projectCode Short project code
    */
   public setCurrentProject(projectCode: string): void {
-    this.http.get(this._auth.baseUrl + '/sessions/' + projectCode, this.options)
+    this.http.get(this._auth.baseUrl + '/sessions/' + projectCode, this._auth.getOptions())
         .subscribe(
             data => {
                 this.project = data.json(); //can later have local setter to do validation/data manipulation before passing through observable
@@ -61,7 +50,7 @@ export class ProjectService {
   public getForReading(readingId: string): Observable<any> {
     let userId = this._auth.getUser()._id;
     
-    return this.http.get(this._auth.baseUrl + '/readings/' + readingId + '/sessions/' + userId , this.options );
+    return this.http.get(this._auth.baseUrl + '/readings/' + readingId + '/sessions/' + userId , this._auth.getOptions() );
   }
 
   /**
@@ -71,7 +60,7 @@ export class ProjectService {
    */
   public validateProject(projectCode: string): Observable<any> {
 
-      return this.http.get(this._auth.baseUrl + '/sessions/' + projectCode + "/validate", this.options)
+      return this.http.get(this._auth.baseUrl + '/sessions/' + projectCode + "/validate", this._auth.getOptions())
         
   }
 
@@ -81,7 +70,7 @@ export class ProjectService {
     */
   public get(projectId: string) : Observable<any> {
         return this.http
-            .get(this._auth.baseUrl + '/sessions/' + projectId, this.options)
+            .get(this._auth.baseUrl + '/sessions/' + projectId, this._auth.getOptions())
             .map(
                 data => {
                     return data.json();
@@ -95,7 +84,7 @@ export class ProjectService {
      */
     public new(readingId, project) {
         return this.http
-            .post(this._auth.baseUrl + '/sessions/' + readingId, { 'session' : project }, this.options)
+            .post(this._auth.baseUrl + '/sessions/' + readingId, { 'session' : project }, this._auth.getOptions())
             .toPromise()
             .then(this._auth.extractData);
     }
@@ -130,7 +119,7 @@ export class ProjectService {
         }
 
         return this.http
-            .post(url, data, this.options)
+            .post(url, data, this.getOptions())
             .toPromise()
             .then(this._auth.extractData);
     }

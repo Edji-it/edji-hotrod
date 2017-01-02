@@ -12,13 +12,14 @@ export class AuthService {
     public protocol = window.location.protocol ? window.location.protocol : '';
     private locker : any;
 
-    private header: Headers;
-    private options: RequestOptions;
-
   constructor(private http: Http, private _locker: Locker) {
       this.locker = _locker.useDriver(Locker.DRIVERS.LOCAL);
-      this.header = new Headers({ 'Content-Type' : 'application/json', 'Authorization' : this.getToken()  });
-      this.options = new RequestOptions({ headers: this.header, withCredentials: true }); // Create a request option
+  }
+
+  public getOptions(): RequestOptions {
+    let header = new Headers({ 'Content-Type' : 'application/json', 'Authorization' : this.getToken()  }); 
+    let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
+    return options;
   }
 
   ngOnInit() {
@@ -94,13 +95,31 @@ export class AuthService {
             };
 
         return this.http
-            .post(this.baseUrl + '/users/login', data, this.options)
+            .post(this.baseUrl + '/users/login', data, this.getOptions())
             .toPromise()
             .then(this.extractData);
     }
 
     logout() {
         this.destroyCredentials();
+    }
+
+    /**
+     * Calls to server, which creates a temp user object
+     * @param username String value for the temp user's username, gets assigned to fullname property of TempUser model
+     * @returns Observable object with user and token properties
+     */
+    public createTempUser(username: string): Observable<any> {
+        let data = {
+            user: {
+                fullname: username
+            }
+        };
+
+        return this.http.post([this.baseUrl, 'tempusers'].join('/'), data, this.getOptions())
+            .map((data) => {
+                return data.json();
+            });
     }
 
     /**
@@ -115,7 +134,7 @@ export class AuthService {
         .post(
             [this.baseUrl, 'users', 'reset_password'].join("/"),
             { resetObject: resetObject },
-            this.options)
+            this.getOptions())
         .toPromise()
         .then(this.extractData);
     };

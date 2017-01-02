@@ -69,19 +69,12 @@ export class HomeComponent implements OnInit, OnDestroy {
    * Validates project and then navigates to project if valid
    * @param code The project's short code
    */
-  joinSession(code: string): void{
+  private joinSession(code: string): void{
     this._project.validateProject(code)
       .subscribe(
         (data) => {
           console.log("it is a good one");
-          //if it is a good project, currentProject will be updated
-          this.subscriptions.push(this._project.currentProject.subscribe(
-            (project) => {
-              console.log(project);
-            }
-          ));
-
-          this._project.setCurrentProject(code);
+          this.router.navigate(['join', code]);
         },
         (error) => {
           console.log("it is a bad one");
@@ -91,24 +84,15 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   private login(formValue: any): void {
 
-    for (let property in this.errorObject) {
-      if (this.errorObject.hasOwnProperty(property) && typeof this.errorObject[property] === 'string') {
-        this.errorObject[property] = "";
-      }
-    }
-		
-    let user: any = {
-      username: formValue.username,
-      password: formValue.password
-    };
 
 		this.loginLoading = true;
 
-		this._auth.login(user)
+		this._auth.login(formValue)
       .then(
         (data: any)  => { 
           console.log(data);
           this.loginLoading = false;
+          this.clearErrors();
 
           // $analytics.setAlias(alias);
           // if (data.user && data.user.username) {
@@ -150,6 +134,17 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   resetPassword(username) {
     
+  }
+
+  /**
+   * Clears all errorObject strings to equal empty strings
+   */
+  private clearErrors(): void {
+    for (let property in this.errorObject) {
+      if (this.errorObject.hasOwnProperty(property) && typeof this.errorObject[property] === 'string') {
+        this.errorObject[property] = "";
+      }
+    }
   }
 
 }
