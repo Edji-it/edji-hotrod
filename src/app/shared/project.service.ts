@@ -119,7 +119,7 @@ export class ProjectService {
         }
 
         return this.http
-            .post(url, data, this.getOptions())
+            .post(url, data, this_auth.getOptions())
             .toPromise()
             .then(this._auth.extractData);
     }
