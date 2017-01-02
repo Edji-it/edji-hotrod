@@ -32,11 +32,12 @@ describe('App', () => {
   // Test: logging in with correct login information.
   // WIP
   it('user can login with correct credentials', () => {
+    let loginBtn = element(by.id('buttonLogin'));
 
     element(by.id('usernameInput')).sendKeys('student');
     element(by.id('passwordInput')).sendKeys('student'); // protractor.Key.ENTER
 
-    element(by.id('buttonLogin')).click().then(function() {
+    loginBtn.click().then(function() {
       browser.wait( EC.urlContains('dashboard'), 3000, 'Dashboard should open within 3 seconds');
     });
   });
@@ -45,10 +46,12 @@ describe('App', () => {
   // Test: Not typing in a password on log in.
   // WIP
   it('user cannot login without password', () => {
-    element(by.id('usernameInput')).sendKeys('student');
-    element(by.id('buttonLogin')).click();
-
+    let loginBtn = element(by.id('buttonLogin'));
     let errorMsg = element(by.id('msgErrorPassword'));
+
+    element(by.id('usernameInput')).sendKeys('student');
+    loginBtn.click();
+    
     browser.wait(EC.presenceOf(errorMsg), 1000);
   }); 
 
