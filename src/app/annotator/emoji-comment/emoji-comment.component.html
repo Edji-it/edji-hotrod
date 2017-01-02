@@ -1,6 +1,9 @@
-<div class='emoji-comment-input-wrapper emojionearea'>
-    <textarea type='text' class='emojiComment' readonly='true'></textarea>
-    <div [ngClass]="'active'" class="emojionearea-picker emojionearea-picker-position-bottom emojionearea-filters-position-top">
+<div [ngClass]="{'active' : isActive}" class='emoji-comment-input-wrapper emojionearea'>
+
+    <!--<textarea type='text' class='emojiComment' readonly='true'></textarea>-->
+    <div (click)="isActive = !isActive" class="emoji-comment-input" [innerHtml]="comment.data | emojione"></div>
+
+    <div class="emojionearea-picker emojionearea-picker-position-bottom emojionearea-filters-position-top">
         <div class="emojionearea-wrapper">
             <div class="emojionearea-filters">
                 <i *ngFor="let category of emojifilters" class="emojionearea-filter" [innerHtml]="category.icon | emojione"></i>
@@ -9,7 +12,7 @@
                 <div class="emojionearea-emojis-list">
                         <div *ngFor="let category of emojifilters" class="emojionearea-category">
                             <h1>{{category.title}}</h1>
-                            <i *ngFor="let emoji of category.emoji" class="emojibtn" role="button" data-name=":santa_tone5:" [innerHtml]="':'+emoji+':' | emojione">
+                            <i *ngFor="let emoji of category.emoji" (click)="addEmoji(':'+emoji+':')" class="emojibtn" role="button" [attr.dataName]="':'+emoji+':'" [innerHtml]="':'+emoji+':' | emojione">
                             </i>
                         </div>
                 </div>

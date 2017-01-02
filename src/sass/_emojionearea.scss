@@ -823,7 +823,7 @@ $image-map: () !default;
 	}
 }
 
-.emojionearea .emojionearea-editor {
+.emojionearea .emojionearea-editor, .emojionearea .emoji-comment-input {
     min-height: 30px;
     max-height: 30px;
     width: 180px;

@@ -9,6 +9,8 @@ export class EmojiCommentComponent implements OnInit {
     @Input()
     private comment: any;
 
+    private isActive: boolean = false;
+
     private emojifilters = [
         {
             icon: ":yum:",
@@ -52,5 +54,9 @@ export class EmojiCommentComponent implements OnInit {
 
     ngOnInit() { 
 
+    }
+
+    addEmoji(emoji: string): void {
+        this.comment.data += emoji;
     }
 }
