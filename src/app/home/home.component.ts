@@ -75,14 +75,6 @@ export class HomeComponent implements OnInit, OnDestroy {
         (data) => {
           console.log("it is a good one");
           this.router.navigate(['join', code]);
-          //if it is a good project, currentProject will be updated
-          // this.subscriptions.push(this._project.currentProject.subscribe(
-          //   (project) => {
-          //     console.log(project);
-          //   }
-          // ));
-
-          // this._project.setCurrentProject(code);
         },
         (error) => {
           console.log("it is a bad one");
@@ -98,14 +90,14 @@ export class HomeComponent implements OnInit, OnDestroy {
       }
     }
 		
-    let user: any = {
-      username: formValue.username,
-      password: formValue.password
-    };
+    // let user: any = {
+    //   username: formValue.username,
+    //   password: formValue.password
+    // };
 
 		this.loginLoading = true;
 
-		this._auth.login(user)
+		this._auth.login(formValue)
       .then(
         (data: any)  => { 
           console.log(data);
