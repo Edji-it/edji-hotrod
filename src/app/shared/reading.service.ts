@@ -7,8 +7,12 @@ import { AuthService } from './auth.service';
 
 @Injectable()
 export class ReadingService {
-  constructor(private http: Http, private _auth: AuthService) {
+  private header: Headers;
+  private options: RequestOptions;
 
+  constructor(private http: Http, private _auth: AuthService) {
+    this.header = new Headers({ 'Content-Type' : 'application/json', 'Authorization' : this._auth.getToken()  }); 
+    this.options = new RequestOptions({ headers: this.header, withCredentials: true }); // Create a request option
   }
 
   ngOnInit() {
@@ -17,22 +21,16 @@ export class ReadingService {
 
     // Pull all readings for a user
   public getAll() {
-        let header = new Headers({ 'Content-Type' : 'application/json', 'Authorization' : this._auth.getToken()  }); 
-        let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
-        
         return this.http
-            .get(this._auth.baseUrl + '/readings', options)
+            .get(this._auth.baseUrl + '/readings', this.options)
             .toPromise()
             .then(this._auth.extractData);
   }
 
   // Pull one reading by ID
   public get(id) {
-    let header = new Headers({ 'Content-Type' : 'application/json', 'Authorization' : this._auth.getToken()  }); 
-    let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
-    
     return this.http
-      .get(this._auth.baseUrl + '/readings/' + id, options);
+      .get(this._auth.baseUrl + '/readings/' + id, this.options);
   }
 
 }

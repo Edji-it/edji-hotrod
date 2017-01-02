@@ -1,39 +1,26 @@
 import { ActivatedRoute, Params } from '@angular/router';
-import { Injectable, OnDestroy, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
-import { Observable, Subscription } from 'rxjs/Rx';
+import { Observable, Subject } from 'rxjs/Rx';
 import 'rxjs/add/operator/toPromise';
 
 import { AuthService } from './auth.service';
 
 @Injectable()
-export class ProjectService implements OnInit, OnDestroy {
+export class ProjectService {
 
   private targetProjectId: string = '';
-  private currentProject: any = {};
-
-  private subscriptions: Subscription[] = [];
-
-    private header = new Headers({ 'Content-Type' : 'application/json', 'Authorization' : this._auth.getToken()  }); 
-    private options = new RequestOptions({ headers: this.header, withCredentials: true }); // Create a request option
+  private currentProjectSource: Subject<any> = new Subject<any>();
+  private project: any;
+  public currentProject: Observable<any> = this.currentProjectSource.asObservable();
+  
+  
+  private header: Headers;
+  private options: RequestOptions;
     
   constructor(private http: Http, private _auth: AuthService, private _route: ActivatedRoute) {
-
-  }
-
-  ngOnInit() {
-    this.subscriptions.push(
-        this._route.params
-        .subscribe((params: Params) => { 
-            if(params['id']){
-                this.targetProjectId = params['id'];
-                if (this.targetProjectId !== this.currentProject._id) {
-                    this.get(this.targetProjectId);
-                }
-                
-            }
-        })
-    );
+    this.header = new Headers({ 'Content-Type' : 'application/json', 'Authorization' : this._auth.getToken()  }); 
+    this.options = new RequestOptions({ headers: this.header, withCredentials: true }); // Create a request option
   }
   
   /**
@@ -41,7 +28,6 @@ export class ProjectService implements OnInit, OnDestroy {
    * @returns chainable promise resolved with reading data
    */
   public getAll() {
-        
         return this.http
             .get(this._auth.baseUrl + '/sessions', this.options)
             .toPromise()
@@ -49,27 +35,25 @@ export class ProjectService implements OnInit, OnDestroy {
   }
 
   /**
-   * Adds a user to a projectId
+   * Adds a user to a project code and updates currentProject observable
+   * @param projectCode Short project code
    */
-  private get(projectId: string): void {
-      
-      this.subscriptions.push(
-          this.http
-            .get(this._auth.baseUrl + '/sessions/' + projectId, this.options)
-            .subscribe(
-                data => {
-                    this.currentProject = data.json();
-                },
-                err => {
-                    console.log(err);
-                })
-      );
+  public setCurrentProject(projectCode: string): void {
+    this.http.get(this._auth.baseUrl + '/sessions/' + projectCode, this.options)
+        .subscribe(
+            data => {
+                this.project = data.json(); //can later have local setter to do validation/data manipulation before passing through observable
+                this.currentProjectSource.next(this.project);
+            },
+            err => {
+                console.log(err);
+            });
   }
 
   /**
    * Gets all of a teacher's projects for a reading
    */
-  public getForReading(readingId: string) {
+  public getForReading(readingId: string): Observable<any> {
     let userId = this._auth.getUser()._id;
     
     return this.http.get(this._auth.baseUrl + '/readings/' + readingId + '/sessions/' + userId , this.options );
@@ -86,7 +70,4 @@ export class ProjectService implements OnInit, OnDestroy {
         
   }
 
-    ngOnDestroy() {
-        this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
-    }
 }
