@@ -109,7 +109,15 @@ export class JoinComponent implements OnInit, OnDestroy {
           if (data.token) {
             this._auth.setToken(data.token);
             this._auth.setUser(data.user);
-            //go to project dashboard
+
+            // set the project as current project
+            this.subscriptions.push(this._project.currentProject.subscribe(
+              (project) => {
+                console.log(project);
+              }
+            ));
+
+            this._project.setCurrentProject(this.projectCode);
           }
         },
         (error) =>  { 
