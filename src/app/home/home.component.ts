@@ -74,14 +74,15 @@ export class HomeComponent implements OnInit, OnDestroy {
       .subscribe(
         (data) => {
           console.log("it is a good one");
+          this.router.navigate(['join', code]);
           //if it is a good project, currentProject will be updated
-          this.subscriptions.push(this._project.currentProject.subscribe(
-            (project) => {
-              console.log(project);
-            }
-          ));
+          // this.subscriptions.push(this._project.currentProject.subscribe(
+          //   (project) => {
+          //     console.log(project);
+          //   }
+          // ));
 
-          this._project.setCurrentProject(code);
+          // this._project.setCurrentProject(code);
         },
         (error) => {
           console.log("it is a bad one");
