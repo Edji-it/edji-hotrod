@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
@@ -25,6 +25,7 @@ export class JoinComponent implements OnInit, OnDestroy {
   };
 
   constructor(
+    private router: Router,
     private route: ActivatedRoute,
     private _auth: AuthService,
     private _project: ProjectService,
@@ -63,7 +64,7 @@ export class JoinComponent implements OnInit, OnDestroy {
         // set the project as current project
         this.subscriptions.push(this._project.currentProject.subscribe(
           (project) => {
-            console.log(project);
+            this.router.navigate(['project', project._id]);
           }
         ));
 
@@ -113,11 +114,12 @@ export class JoinComponent implements OnInit, OnDestroy {
             // set the project as current project
             this.subscriptions.push(this._project.currentProject.subscribe(
               (project) => {
-                console.log(project);
+                this.router.navigate(['project', project._id]);
               }
             ));
 
             this._project.setCurrentProject(this.projectCode);
+
           }
         },
         (error) =>  { 
