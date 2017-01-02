@@ -53,7 +53,10 @@ export class JoinComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((sub) => { sub.unsubscribe() });
   }
 
-  private joinSessionAsGuest(formValue: any) {
+  /**
+   * Happens when join as guest is pressed. First calls to sign in the tempuser and then navigates upon receiving project data
+   */
+  private joinSessionAsGuest(formValue: any): void {
     
     // create the user's temporary account and set local token and user
     this._auth.createTempUser(formValue.guestName).subscribe(
@@ -78,15 +81,14 @@ export class JoinComponent implements OnInit, OnDestroy {
     )
   }
 
+  /**
+   * Called when user joins project from login. Logs them in and then navigates to the route
+   */
   private joinSessionAsUser(formValue: any) {
-    //log the user in
-    // set the project as current project
-    // navigate to the project
-    console.log(formValue);
-
     this.clearErrors();
 		this.loginLoading = true;
 
+    // logs them in
 		this._auth.login(formValue)
       .then(
         (data: any)  => { 
