@@ -1,5 +1,7 @@
-<div style="height:100%;">
-  <side-bar has-comment-count="true"></side-bar>
+
+<side-bar has-comment-count="true"></side-bar>
+  
+<div class="container container--side-bar">
 
   <section class="project-column paper" [ngClass]="{ loading: !project._id }">
     <p class="banner-error" *ngIf="error">{{ error }}</p>

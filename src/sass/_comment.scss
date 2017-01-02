@@ -108,8 +108,9 @@ input.emojiComment {
 	border-radius: 9px;
 	width: 180px;
     overflow: hidden;
+	// min-height: 30px;
 
-	&.focused, &:active, &:focus {
+	&.focused, &:active, &:focus, &.active {
 		outline: none;
 		box-shadow: -3px 3px 0px 0px rgba(151, 114, 177, 1);
 		// @include transform(translate3d(3px, -3px, 0));

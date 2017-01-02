@@ -8,7 +8,7 @@ import { removeNgStyles, createNewHosts, createInputTransfer } from '@angularcla
 
 // import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 // import { CoolStorageModule } from 'angular2-cool-storage';
-import {LockerModule, Locker, LockerConfig} from 'angular2-locker'
+import {LockerModule, Locker, LockerConfig} from 'angular2-locker';
 
 /*
  * Platform and Environment providers/directives/pipes
@@ -27,6 +27,9 @@ import { ProjectService } from './shared/project.service';
 
 // Directives
 import { MediumEditorDirective } from 'angular2-medium-editor/medium-editor.directive.ts';
+
+// Pipes
+import { EmojiOnePipe } from './shared/emojione.pipe.ts';
 
 // Components
 import { NavBarComponent } from './shared/nav-bar';
@@ -51,8 +54,7 @@ const APP_PROVIDERS = [
   AppState,
   AuthService,
   ReadingService,
-  ProjectService,
-
+  ProjectService
 ];
 
 type StoreType = {
@@ -67,6 +69,7 @@ type StoreType = {
 @NgModule({
   bootstrap: [ AppComponent ],
   declarations: [
+    EmojiOnePipe,
     MediumEditorDirective,
     NavBarComponent,
     SideBarComponent,

@@ -6,6 +6,7 @@
 
 @import '../../node_modules/medium-editor/dist/css/medium-editor';
 @import './lib/bourbon/_bourbon.scss';
+@import './lib/emojionearea/emojionearea.scss';
 
 /**
  * ----------------------------------------------------------
@@ -63,6 +64,7 @@ $seamlessPlaceholderColor: #888;
 @import 'medium-editor';
 @import 'cards';
 @import 'item-list';
+@import 'emoji';
 
 /**
  * ----------------------------------------------------------
