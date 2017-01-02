@@ -11,12 +11,6 @@ export class ReadingService {
   constructor(private http: Http, private _auth: AuthService) {
   }
 
-  private getOptions(): RequestOptions {
-    let header = new Headers({ 'Content-Type' : 'application/json', 'Authorization' : this._auth.getToken()  }); 
-    let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
-    return options;
-  }
-
   ngOnInit() {
       
   }
@@ -24,7 +18,7 @@ export class ReadingService {
     // Pull all readings for a user
   public getAll() {
         return this.http
-            .get(this._auth.baseUrl + '/readings', this.getOptions())
+            .get(this._auth.baseUrl + '/readings', this._auth.getOptions())
             .toPromise()
             .then(this._auth.extractData);
   }
@@ -33,7 +27,7 @@ export class ReadingService {
   public get(id : string) : Observable<any> {
     
     return this.http
-      .get(this._auth.baseUrl + '/readings/' + id, this.getOptions())
+      .get(this._auth.baseUrl + '/readings/' + id, this._auth.getOptions())
       .map(data => {
         return data.json()
       });
@@ -46,7 +40,7 @@ export class ReadingService {
     }
     let readingObj = { 'reading': reading };
     return this.http
-            .post(this._auth.baseUrl + '/readings', readingObj, this.getOptions())
+            .post(this._auth.baseUrl + '/readings', readingObj, this._auth.getOptions())
             .map(data => {
               return data.json();
             },

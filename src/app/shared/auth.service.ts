@@ -16,7 +16,7 @@ export class AuthService {
       this.locker = _locker.useDriver(Locker.DRIVERS.LOCAL);
   }
 
-  private getOptions(): RequestOptions {
+  public getOptions(): RequestOptions {
     let header = new Headers({ 'Content-Type' : 'application/json', 'Authorization' : this.getToken()  }); 
     let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
     return options;
