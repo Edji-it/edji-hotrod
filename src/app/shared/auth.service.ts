@@ -12,13 +12,14 @@ export class AuthService {
     public protocol = window.location.protocol ? window.location.protocol : '';
     private locker : any;
 
-    private header: Headers;
-    private options: RequestOptions;
-
   constructor(private http: Http, private _locker: Locker) {
       this.locker = _locker.useDriver(Locker.DRIVERS.LOCAL);
-      this.header = new Headers({ 'Content-Type' : 'application/json', 'Authorization' : this.getToken()  });
-      this.options = new RequestOptions({ headers: this.header, withCredentials: true }); // Create a request option
+  }
+
+  private getOptions(): RequestOptions {
+    let header = new Headers({ 'Content-Type' : 'application/json', 'Authorization' : this.getToken()  }); 
+    let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
+    return options;
   }
 
   ngOnInit() {
@@ -94,7 +95,7 @@ export class AuthService {
             };
 
         return this.http
-            .post(this.baseUrl + '/users/login', data, this.options)
+            .post(this.baseUrl + '/users/login', data, this.getOptions())
             .toPromise()
             .then(this.extractData);
     }
@@ -115,7 +116,7 @@ export class AuthService {
             }
         };
 
-        return this.http.post([this.baseUrl, 'tempusers'].join('/'), data, this.options)
+        return this.http.post([this.baseUrl, 'tempusers'].join('/'), data, this.getOptions())
             .map((data) => {
                 return data.json();
             });
@@ -133,7 +134,7 @@ export class AuthService {
         .post(
             [this.baseUrl, 'users', 'reset_password'].join("/"),
             { resetObject: resetObject },
-            this.options)
+            this.getOptions())
         .toPromise()
         .then(this.extractData);
     };
