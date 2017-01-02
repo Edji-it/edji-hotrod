@@ -2,7 +2,8 @@ import { Component, OnInit, Input, ViewChild } from '@angular/core';
 
 @Component({
     selector: 'emoji-comment',
-    templateUrl: 'emoji-comment.component.html'
+    templateUrl: 'emoji-comment.component.html',
+    styleUrls: ['./emoji-comment.component.scss']
 })
 export class EmojiCommentComponent implements OnInit {
 

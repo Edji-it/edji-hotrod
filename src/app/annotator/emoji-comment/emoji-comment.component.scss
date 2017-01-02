@@ -1,0 +1,9 @@
+.emojionearea-picker {
+    display: none;
+    pointer-events: none;
+
+    .active & {
+        display: block;
+        pointer-events: all;
+    }
+}
