@@ -10,6 +10,9 @@ import { AuthService } from './../shared/auth.service';
 })
 export class ResetPassComponent {
 
+  @Output()
+  closeModal = new EventEmitter();
+
   private passwordForm: FormGroup;
   private responseSuccess: boolean;
   private submissionSuccess: boolean = false;
@@ -28,7 +31,7 @@ export class ResetPassComponent {
         if (success) {
           this.submissionSuccess = true;
         } else {
-          this.errorObject.unsuccessful = "We're having issues right now and were not able to send the email";
+          this.errorObject.unsuccessful = "We were unable to send the email";
         }
       });
 

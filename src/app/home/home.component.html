@@ -52,7 +52,7 @@
           
         </form>
         <div style="text-align:center;">
-          <a id="linkForgotPassword" class="link" (click)="showPasswordModal()">Forgotten password?</a>
+          <a id="linkForgotPassword" class="link" (click)="showPassModal = !showPassModal">Forgotten password?</a>
         </div>
       <!--</div>-->
       <br />
@@ -67,4 +67,4 @@
   </div>
 </div>
 
-<edji-reset-pass></edji-reset-pass>
+<edji-reset-pass *ngIf="showPassModal"  (closeModal)="showPassModal = !showPassModal"></edji-reset-pass>

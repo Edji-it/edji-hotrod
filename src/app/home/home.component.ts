@@ -35,11 +35,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     "invalidCode": "",
     "incorrect": ""
   };
-  private passwordModal = {
-    username: "",
-    sent: false,
-    message: ""
-  }
+
+  private showPassModal: boolean = false;
 
   // TypeScript public modifiers
   constructor(
