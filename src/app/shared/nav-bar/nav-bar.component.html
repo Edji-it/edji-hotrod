@@ -1,8 +1,19 @@
-<nav>
+<nav [ngClass]="{ 'large' : isLarge }">
 	<div class="nav-bar">
-		<a class="nav__center-logo logo-button" href="#/home">
-			<img id="logo" src="assets/images/logo.svg" />
-			<img id="logoPressed" src="assets/images/logo-pressed.svg" />
-		</a>
+		<div class="col-sm-4">
+		</div>
+
+		<div class="col-sm-4">
+			<a class="nav__center-logo logo-button" href="#/home">
+				<!--<img id="logo" src="assets/images/logo.svg" />-->
+				<img *ngIf="isLarge" id="logo" src="assets/images/logo-3.1-full.svg" />
+				<img *ngIf="!isLarge" id="logo" src="assets/images/logo-3.1-mark.svg" />
+			</a>
+		</div>
+
+		<div class="col-sm-4">
+			<!--<button class="btn btn-secondary">Login</button>
+			<button class="btn btn-secondary">Sign Up</button>-->
+		</div>
 	</div>
 </nav>

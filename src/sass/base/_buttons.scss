@@ -33,22 +33,22 @@ button, .button, .btn, [class*='btn'] {
     opacity: 0.5;
 
     &:hover {
-      @include transform(translate3d(0,0,0));
+      transform: translate3d(0,0,0);
       background-color: $action-color;
     }
   }
 }
 
 html .button, .button, html .btn {
-  @extend #{$all-buttons};
-  box-shadow: -3px 3px 0px 0px $purple;
+  // @extend #{$all-buttons};
+  // box-shadow: -3px 3px 0px 0px $purple;
   background: lighten($purple,10%);
 
   &:hover, &:active, &:focus, &.active {
     text-decoration: none;
     box-shadow: none;
-    background: lighten($purple,10%);
-    @include transform(translate3d(-3px, 3px, 0));
+    background: $purple;
+    // transform: translate3d(-3px, 3px, 0);
   }
 }
 
@@ -68,14 +68,14 @@ html .button, .button, html .btn {
     width: 40px;
     width: 40px;
     background: $gray;
-    box-shadow: -3px 3px 0px 0px darken($gray, 5%);
+    // box-shadow: -3px 3px 0px 0px darken($gray, 5%);
 
     & img {
       opacity: 0.8;
     }
 
     &:hover, &:active, &:focus {
-      background: darken($gray, 5%);
+      // background: darken($gray, 5%);
       & img {
         opacity: 1;
       }
@@ -122,7 +122,7 @@ html .button, .button, html .btn {
   & > .btn.active {
     box-shadow: none;
     background: lighten($purple,10%);
-    @include transform(translate3d(-3px, 3px, 0));
+    transform: translate3d(-3px, 3px, 0);
     z-index: $zMid;
   }
 } 
@@ -147,11 +147,11 @@ html .button, .button, html .btn {
 
     &:active, &:focus {
       outline: none;
-      @include transform(translate3d(0,0,0) !important);
+      transform: translate3d(0,0,0) !important;
     }
 
      &:hover {
-      @include transform(translate3d(0,0,0) !important);
+      transform: translate3d(0,0,0) !important;
       background-color: transparent !important;
       outline: none;
 

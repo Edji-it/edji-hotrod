@@ -4,7 +4,8 @@ article.content {
 	
 	&, & p, & span {
 		// Prevent word breaks since "span" wrapped words don't match behavior
-		white-space: pre-wrap;
+		// white-space: pre-wrap;
+
 		// Disable iOS copy/paste popup
 		// -webkit-touch-callout: none !important;
 	}
@@ -17,6 +18,68 @@ article.content {
 		-moz-user-select: none; /* Firefox */
 		pointer-events: none;
 	}
+
+
+	&:after {
+		display: inline-block;
+		content: '';
+		clear:both;
+		user-select: none;
+		-webkit-user-select: none;
+		-moz-user-select: none;
+	}
+
+	& .word {
+		// Styles applied by word
+		&.space {
+			// white-space: pre-line;
+		}
+
+		&.b, &.B {
+			font-weight: bold;
+		}
+
+		&.i {
+			font-style: italic;
+		}
+
+		&.u {
+			text-decoration: underline;
+		}
+
+		&.H1, &.h1, &.H2, &.h2, &.H3, &.h3, &.P, &.p {
+			
+			&-first {
+				// display:table;
+				&::before {
+					display: block;
+					content: "\A";
+      				white-space: pre;
+				}
+			}
+
+			&-last {
+				clear:right;
+				&::after {
+					content: '';
+					display: block;
+					margin-right: 100%;
+				}
+			}
+		}
+
+		&.H1, &.h1 {
+			font-size: 32px;
+		}
+
+		&.H2, &.h2 {
+			font-size: 24px;
+		}
+
+		&.h3, &.h3 {
+			font-weight: bold;
+		}
+	} 
 }
 
 
@@ -201,10 +264,10 @@ $hudColor: #676767;
 	padding: 15px 20px;
 	font-weight: bold;
 	@include transition(transform linear 0.3s);
-	@include transform(translateY(-100%));
+	transform: translateY(-100%);
 	
 	&.slide-down  {
-		@include transform(translateY(0%));
+		transform: translateY(0%);
 	}
 }
 
@@ -235,11 +298,11 @@ $hudColor: #676767;
 		position: absolute;
 		top: 50%;
 		left: 50%;
-		@include transform(translate3d(-50%, -50%, 0));
+		transform: translate3d(-50%, -50%, 0);
 	}
 
 	&:hover, &:active {
-		@include filter(grayscale(0%));
+		// @include filter(grayscale(0%));
 		background: #ddd;
 	}
 }

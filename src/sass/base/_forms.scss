@@ -1,11 +1,13 @@
 
 $inputVPadding: 10px;
 $inputHPadding: 20px;
+$inputBg: #ffffff;
 $inputShadow: none;
 $inputFocusShadow: 0px 1px 15px 0px rgba(0,0,0,0.1);
-$inputFocusBorder: none; // 1px solid $purple;
+$inputBorder: none; //1px solid #969696;
+$inputFocusBorder: none; // 1px solid #9628ff; // 1px solid $purple;
 $inputLineHeight: 20px;
-$inputFormRadius: ($inputLineHeight + 2*$inputVPadding )/2;
+$inputFormRadius: 3px; //($inputLineHeight + 2*$inputVPadding )/2;
 
 
 fieldset {
@@ -41,8 +43,8 @@ input[type="email"], input[type="month"], input[type="number"], input[type="pass
 input[type="tel"], input[type="text"], input[type="time"], input[type="url"], input[type="week"], 
 input:not([type]), textarea, select[multiple],
 #{$all-text-inputs} {
-  background-color: $base-background-color;
-  border: none; //$base-border;
+  background-color: $inputBg;
+  border: $inputBorder; //$base-border;
   border-radius: $inputFormRadius;
   line-height: $inputLineHeight;
   box-shadow: $inputShadow;
@@ -68,12 +70,12 @@ input:not([type]), textarea, select[multiple],
   }
 
   &:focus {
-    border-color: $action-color;
+    // border-color: $action-color;
     box-shadow: $inputFocusShadow;
     outline: none;
-    border-bottom: $inputFocusBorder;
+    border: $inputFocusBorder;
 
-    @include transform(scale(1.02));
+    transform: scale(1.02);
   }
 
   &:disabled {
@@ -99,9 +101,9 @@ input:not([type]), textarea, select[multiple],
     text-align: center;
     font-size: 24px;
     font-weight: bold;
-    border-radius: (32px + 2*$inputVPadding)/2;
+    // border-radius: (32px + 2*$inputVPadding)/2;
 
-    @include placeholder {
+    &::placeholder {
       color: #ededed;
     }
   }

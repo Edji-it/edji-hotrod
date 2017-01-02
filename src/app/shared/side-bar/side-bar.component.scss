@@ -78,3 +78,14 @@ a.side-bar__link {
 		background: rgb(220,220,220);
 	}
 }
+
+.side-bar__logo {
+	width: 100px;
+	height: auto;
+	cursor: pointer;
+	padding: 15px;
+
+	&:hover {
+		opacity: 0.8;
+	}
+}

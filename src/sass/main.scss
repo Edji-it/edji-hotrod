@@ -4,9 +4,8 @@
  * the Grunt configuration that is automatically processed.
  */
 
-
-@import '../../node_modules/bootstrap/scss/bootstrap.scss';
-@import '../../node_modules/bourbon/app/assets/stylesheets/_bourbon.scss';
+@import '../../node_modules/medium-editor/dist/css/medium-editor';
+@import './lib/bourbon/_bourbon.scss';
 
 /**
  * ----------------------------------------------------------
@@ -87,11 +86,25 @@ $seamlessPlaceholderColor: #888;
 	display: none !important;
 }
 
+@mixin fontFace($family,$src,$style: normal,$weight: normal) {
+	@font-face {
+		font-family: $family;
+		src: url('#{$src}.eot'); // IE9 compat
+		src: url('#{$src}.eot?#iefix') format('embedded-opentype'), // IE8 and below
+			url('#{$src}.woff') format('woff'), // standards
+			url('#{$src}.ttf') format('truetype'), // Safari, Android, iOS
+			url('#{$src}.svg##{$family}') format('svg'); // legacy iOS
 
-@include font-face('Open Sans', '../assets/fonts/OpenSans-Light-webfont', 100 );
-@include font-face('Open Sans', '../assets/fonts/OpenSans-Regular-webfont', normal );
-@include font-face('Open Sans', '../assets/fonts/OpenSans-Semibold-webfont', 500 );
-@include font-face('Open Sans', '../assets/fonts/OpenSans-Bold-webfont', 700 );
+		font-style: $style;
+		font-weight: $weight;
+	}
+}
+
+
+@include fontFace('Open Sans', '../assets/fonts/OpenSans-Light-webfont', normal, 100 );
+@include fontFace('Open Sans', '../assets/fonts/OpenSans-Regular-webfont', normal, normal );
+@include fontFace('Open Sans', '../assets/fonts/OpenSans-Semibold-webfont', normal, 500 );
+@include fontFace('Open Sans', '../assets/fonts/OpenSans-Bold-webfont', normal, 700 );
 
 
 .fa--wrap-text {
@@ -108,7 +121,7 @@ $seamlessPlaceholderColor: #888;
 		position: absolute;
 		top: 50%;
 		left: 50%;
-		@include transform(translate3d(-50%,-50%, 0));
+		transform: translate3d(-50%,-50%, 0);
 	}
 
 	&:before {
@@ -229,7 +242,7 @@ pre {
 }
 .loading{
 	&::after{
-		background: url("loading.svg") !important;
+		background: url("assets/images/loading.svg") !important;
 		background-position: center !important;
 		background-repeat: no-repeat !important;
 		background-size: 50px !important;
@@ -452,13 +465,13 @@ $commentFadeOpacity: 0.35;
 
 article.content word {
 	@include transition(background linear 0.2s);
-	@include transition-delay(0.2s);
+	transition-delay: 0.2s;
 }
 
 .spotlight-comment article.content word[class*='highlight'] {
 	// opacity: $commentFadeOpacity;
 	background: transparent;
-	@include transition-delay(0s);
+	transition-delay: 0s;
 }
 
 .spotlight-comment article.content word.in-spotlight--word {
@@ -468,11 +481,7 @@ article.content word {
 	& * {
 		/*opacity: 1;*/
 	}
-
-	& .emoji-comment__wrap {
-		/*opacity: $commentFadeOpacity;*/
-	}
-
+	
 	& .emoji-comment-username {
 		/*display: none;*/
 	}
@@ -481,7 +490,7 @@ article.content word {
 .spotlight-comment article.content word.in-spotlight {
 	/*opacity: 1 !important;*/
 	background: rgba($highlight1R, $highlight1G, $highlight1B, $highlight1A) !important;
-	@include transition-delay(0s);
+	transition-delay: 0s;
 
 	& * {
 		/*opacity: 1 !important;*/
@@ -577,6 +586,7 @@ html, body {
 body {
 	overflow-y: scroll;
 	width: 100%;
+	background: $pageBg;
 
 	-webkit-transition: all 600ms;
 	-moz-transition: all 600ms;
@@ -602,6 +612,12 @@ $commentColWidth: 350px;
 //     padding-bottom: 100px;
 // 	float: left;
 // }
+
+
+.inline-emoji {
+    height: 1.1em;
+    width: auto;
+}
 
 .session-column {
 	width: calc(100% - #{ $commentColWidth + $sideBarWidth  });
@@ -687,7 +703,7 @@ blockquote {
 }
 
 .yin { 
-	background: #f6f6f6;
+	// background: #fff; //f6f6f6;
 	color: #111;
 
 	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#000000+0,cdcdcd+100 */
@@ -700,11 +716,6 @@ blockquote {
   // filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2d2d2d', endColorstr='#cdcdcd',GradientType=1 ); /* IE6-9 */
   // copy
 
-}
-
-.yang {
-	background-color: #111;
-	color: #fafafa;
 }
 
 .ui {
@@ -746,7 +757,7 @@ blockquote {
 
 a {
 	text-decoration: none;
-	color: deepskyblue;
+	//color: deepskyblue;
 }
 
 a:hover {
@@ -978,11 +989,11 @@ a:hover {
 }
 
 #logomark {
-	@include transform(scale(1));
+	transform: scale(1);
 	@include transition(transform ease 0.2s);
 
 	&:hover, &:focus, &:active {
-		@include transform(scale(1.2));
+		transform: scale(1.2);
 	}
 }
 
@@ -990,7 +1001,7 @@ a:hover {
 	display: inline-block;
 
 	& img {
-		height: 75px;
+		height: 100px;
 		width: auto;
 	}
 
@@ -998,19 +1009,19 @@ a:hover {
 		display: inline-block;
 	}
 
-	#logoPressed {
-		display: none;
-		padding: 4px 4px 0 0;
-	}
+	// #logoPressed {
+	// 	// display: none;
+	// 	padding: 4px 4px 0 0;
+	// }
 
 	&:hover, &:active, &:focus {
-		& #logoPressed {
+		& #logo {
 			display: inline-block;
 		}
 
-		& #logo {
-			display: none;
-		}
+		// & #logo {
+		// 	display: none;
+		// }
 	}
 }
 
@@ -1099,12 +1110,12 @@ input.form-item--seamless {
 	margin: 0px;
 	border-radius: 0px;
 
-	@include placeholder {
+	&::placeholder {
 		color: $seamlessPlaceholderColor;
 	}
 	
 	&:hover, &:active, &:focus, &.active {
-		@include transform(scale(1));
+		transform: scale(1);
 		box-shadow: none;
 	}
 }

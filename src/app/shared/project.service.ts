@@ -18,6 +18,11 @@ export class ProjectService {
   private header: Headers;
   private options: RequestOptions;
     
+    // private targetProjectId: string = '';
+    // private currentProject: any = {};
+
+    // private subscriptions: Subscription[] = [];
+
   constructor(private http: Http, private _auth: AuthService, private _route: ActivatedRoute) {
     this.header = new Headers({ 'Content-Type' : 'application/json', 'Authorization' : this._auth.getToken()  }); 
     this.options = new RequestOptions({ headers: this.header, withCredentials: true }); // Create a request option
@@ -70,4 +75,63 @@ export class ProjectService {
         
   }
 
+    /** 
+    * Pull a Project object
+    * @param projectId
+    */
+  public get(projectId: string) : Observable<any> {
+        return this.http
+            .get(this._auth.baseUrl + '/sessions/' + projectId, this.options)
+            .map(
+                data => {
+                    return data.json();
+                });
+  }
+
+    /**
+     * Create a new Project
+     * @param Requires a Reading ID
+     * @param takes a Project object with the new label
+     */
+    public new(readingId, project) {
+        return this.http
+            .post(this._auth.baseUrl + '/sessions/' + readingId, { 'session' : project }, this.options)
+            .toPromise()
+            .then(this._auth.extractData);
+    }
+
+    /** 
+     * Update or Create a comment on a project
+     * @param projectId Id of project comment is on
+     * @param commentText Contents of the comment
+     * @param start Index of first word
+     * @param end Index of last word
+     * @param text (optional) Selection of text comment was made on. Left as optional, but SHOULD be passed.
+     * @param commentId (optional) If passed, will update comment with that ID
+     */
+    public saveComment(projectId: string, commentText: string, start: number, end: number, text ?: string, commentId ?: string) {
+        let url = this._auth.baseUrl + '/sessions/' + projectId + '/comments';
+        let data = {
+            'comment' : {
+                'data' : commentText,
+                'start' : start,
+                'end' : end,
+                'user_id' : this._auth.getUser().fullname ? this._auth.getUser().fullname : this._auth.getUser().username
+            }
+        }
+
+        if (text) {
+            data.comment['text'] = text;
+        }
+
+        // Add comment ID if passed
+        if (commentId) {
+            data.comment['_id'] = commentId;
+        }
+
+        return this.http
+            .post(url, data, this.options)
+            .toPromise()
+            .then(this._auth.extractData);
+    }
 }

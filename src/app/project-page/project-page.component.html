@@ -1,10 +1,10 @@
 <div style="height:100%;">
   <side-bar has-comment-count="true"></side-bar>
 
-  <section class="project-column paper" [ngClass]="{ loading: isLoading }">
+  <section class="project-column paper" [ngClass]="{ loading: !project._id }">
     <p class="banner-error" *ngIf="error">{{ error }}</p>
     <!--<emoji-annotator project-fn="getSession()"></emoji-annotator>-->
-    <annotator></annotator>
+    <annotator *ngIf="project._id" [project]="project"></annotator>
   </section>
   
   <div class="reading__hud">

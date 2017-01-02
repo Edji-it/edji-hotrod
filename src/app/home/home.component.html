@@ -1,59 +1,67 @@
 <div class="gray">
-  <nav-bar></nav-bar>
+  <nav-bar [isLarge]="true"></nav-bar>
     <div class="container-fluid">
       <div class="col-sm-6 col-pad">
-         <h2 class="center">Get In Quick!</h2>
-          <input type="text" class="big-field lowercase-field on-white" (keyup.enter)="joinSession(sessionCode)" [(ngModel)]="sessionCode" placeholder="Project Code" />
-          <p class="center">Join a project without an account</p>
-          <div class="button__row">
-              <button (click)="joinSession(sessionCode)" class="button" name="Join" href="#">Join Project!</button>
+          <h1 class="center">Read Together</h1>
+          <h2 class="center">Add highlights with text or emoji</h2>
+          <img class="promo-gif" loop="infinite" src="assets/images/promo-highlight.gif" />
+          <hr />
+          <!--<h1 class="center">Add Meaningful Emoji</h1>
+          <img class="promo-gif" loop="infinite" src="assets/images/promo-comment.gif" />-->
+          <!--<br />
+          <hr />
+          <br />-->
+          <h2 class="center">Then discuss with the Heatmap!</h2>
+          <img class="promo-gif" loop="infinite" src="assets/images/promo-heatmap.gif" />
+
+      </div>
+      <div class="col-sm-6 col-pad">
+        <!--Lightning Code Row-->
+        <div *ngIf="!showLogin">
+         <h2 class="center">Enter with <img class="inline-emoji emojioneemoji" src="assets/emoji/png/26a1.png" />Code</h2>
+          <input type="text" class="big-field lowercase-field on-white" (keyup.enter)="joinSession(sessionCode)" [(ngModel)]="sessionCode" placeholder="Code" />
+          <!--<p class="center">Join a project without an account</p>-->
+          <div class="button__row"> 
+              <button (click)="joinSession(sessionCode)" class="button" name="Join" href="#">Go!</button>
           </div>
           <div class="banner-error" *ngIf="errorObject.invalidCode">
             {{errorObject.invalidCode}}
           </div>
-          <br />
-          <hr />
-          <br />
-
-          <h2 class="center">Highlight As You Read</h2>
-          <img class="promo-gif" loop="infinite" src="assets/images/promo-highlight.gif" />
-          <br />
-          <hr />
-          <br />
-          <h2 class="center">Add Meaningful Emoji</h2>
-          <img class="promo-gif" loop="infinite" src="assets/images/promo-comment.gif" />
-          <br />
-          <hr />
-          <br />
-          <h2 class="center">Learn Through Class Discussion</h2>
-          
-      </div>
-      <div class="col-sm-6 col-pad">
-        <form [formGroup]="loginForm" (ngSubmit)="login(loginForm.value)">
-          <h2 class="center">Let's Begin!</h2>
-          <label for="username-input">Username</label>
-          <input type="text" id="username-input" [formControl]="loginForm.controls['username']" tabindex="0" />
-          <div class="banner-error" *ngIf="loginForm.controls['username'].hasError('required') && (loginForm.controls['username'].dirty || loginForm.submitted)">A username is required</div>
-          
-          <label for="password-input">Password</label>
-          <input type="password" id="password-input" [formControl]="loginForm.controls['password']" tabindex="0" />
-          <div class="banner-error" *ngIf="loginForm.controls['password'].hasError('required') && (loginForm.controls['password'].dirty || loginForm.submitted)">A password is required</div>
-          <div class="banner-error" *ngIf="errorObject.incorrect">{{errorObject.incorrect}}</div>
-          
-          <div class="button__row" [class.loading]="loginLoading">
-            <!--ngHide loginLoading-->
-            <button type="submit" class="button" name="Login" tabindex="0">Login</button>
-          </div>
-          
-        </form>
-        <div style="text-align:center;">
-          <a class="link" (click)="showPasswordModal()">Forgotten password?</a>
         </div>
+
+        <br />
+        <hr>
+        <br />
+        <!--Login Row-->
+        <!--<div *ngIf="showLogin">-->
+          <form [formGroup]="loginForm" (ngSubmit)="login(loginForm.value)">
+            <h2 class="center">Login to your Dashboard</h2>
+            <label for="username-input">Username</label>
+            <input type="text" id="usernameInput" [formControl]="loginForm.controls['username']" tabindex="0" />
+            <div class="banner-error" *ngIf="loginForm.controls['username'].hasError('required') && (loginForm.controls['username'].dirty || loginForm.submitted)">A username is required</div>
+            
+            <label for="password-input">Password</label>
+            <input type="password" id="passwordInput" [formControl]="loginForm.controls['password']" tabindex="0" />
+            <div id="msgNoPassword" class="banner-error" *ngIf="loginForm.controls['password'].hasError('required') && (loginForm.controls['password'].dirty || loginForm.submitted)">A password is required</div>
+            <div id="msgErrorPassword" class="banner-error" *ngIf="errorObject.incorrect">{{errorObject.incorrect}}</div>
+            
+            <div class="button__row" [class.loading]="loginLoading">
+              <!--ngHide loginLoading-->
+              <button id="buttonLogin" type="submit" class="button" name="Login" tabindex="0">Login</button>
+            </div>
+            
+          </form>
+          <div style="text-align:center;">
+            <a id="linkForgotPassword" class="link" (click)="showPasswordModal()">Forgotten password?</a>
+          </div>
+        <!--</div>-->
         <br />
         <hr>
         <br />
         <div class="button__row">
-          <a tabindex="0" class="button" name="Sign Up" href="#/register">I still need to Register</a>
+            <!--<button *ngIf="!showLogin" (click)="showLogin = true" class="btn btn-secondary" name="Login" tabindex="0">Log In</button>
+            <button *ngIf="showLogin" (click)="showLogin = false" class="btn btn-secondary" name="Lightning Code" tabindex="0"><img class="inline-emoji emojioneemoji" src="assets/emoji/png/26a1.png" />Code</button>-->
+          <a id="buttonGoRegister" tabindex="0" class="btn btn-secondary" name="Sign Up" href="#/register">!Register</a>
         </div>
       </div>
     </div>

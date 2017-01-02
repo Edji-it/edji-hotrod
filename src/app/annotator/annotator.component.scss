@@ -53,39 +53,31 @@ article.content p {
 	-moz-user-select: none !important;
 }
 
-.word.b {
-    font-weight: bold;
-}
+// .word.b {
+//     font-weight: bold;
+// }
 
-.word.i {
-    font-style: italic;
-}
+// .word.i {
+//     font-style: italic;
+// }
 
-u word, u .word {
-  text-decoration: underline;
-}
+// u word, u .word {
+//   text-decoration: underline;
+// }
 
-word, .word {
-  user-select: text;
-  -webkit-user-select: text;
-	-moz-user-select: text;
+// word, .word {
+//   user-select: text;
+//   -webkit-user-select: text;
+// 	-moz-user-select: text;
 
-  display: inline-block;
-  // &.spacer {
-  //   &:before {
-  //     display: none;
-  //   }
-  // }
+//   display: inline-block;
+//   // &.spacer {
+//   //   &:before {
+//   //     display: none;
+//   //   }
+//   // }
   
-  &:after {
-    display: inline-block;
-    content: '';
-    clear:both;
-    user-select: none;
-    -webkit-user-select: none;
-	-moz-user-select: none;
-  }
-}
+// }
 
 
 .text-options {

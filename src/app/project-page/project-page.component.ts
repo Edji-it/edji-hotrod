@@ -19,32 +19,21 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription[] = [];
 
     constructor(private _route: ActivatedRoute, private _projects: ProjectService) {
-        // this.subscriptions.push(
-        //     this._route.params
-        //     .subscribe((params: Params) => { 
-        //         if(params['id']){
-        //             this.projectId = params['id'];
-        //             this.getProject(this.projectId);
-        //         }
-        //     })
-        // );
+        
     }
 
     ngOnInit() {
- 
-    }
-
-    getProject(projectId) {
-        // this.subscriptions.push(
-        //     this._projects.get(projectId)
-        //         .subscribe(
-        //             data => {
-        //                 this.project = data.json();
-        //             },
-        //             err => {
-        //                 console.log(err);
-        //             })
-        // )
+        this.projectId = this._route.snapshot.params['id'];
+        this.subscriptions.push(
+            this._projects.get(this.projectId)
+                .subscribe(
+                    data => {
+                        this.project = data;
+                    },
+                    err => {
+                        console.log(err);
+                    })
+        );
     }
 
     ngOnDestroy() {

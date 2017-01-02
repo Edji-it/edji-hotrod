@@ -1,5 +1,34 @@
 <side-bar></side-bar>
 
 <div class="container container--side-bar">
-
+    <div class="row">
+        <div class="col-sm-12" style="padding-left:100px"> 
+             <br/>
+             <form [formGroup]="readingForm" (ngSubmit)="onSubmit(readingForm.value)">
+                <label class="border-wrap">
+                    <span class="offset-left">Title</span>
+                    <input type="text" id="readingTitle" class="form-control form-item--seamless h1" placeholder="New Reading Title..." [formControl]="readingForm.controls['title']" />
+                    <div *ngIf="readingForm.controls['title'].hasError('required') && (readingForm.controls['title'].dirty || submitted)"  class="banner-error">Please give your Reading a title!</div>
+                </label>
+                <label class="border-wrap">
+                    <span class="offset-left">Source URL</span>
+                     <input type="url" id="readingSource" class="form-control form-item--seamless h3" placeholder="New Reading Source..." [formControl]="readingForm.controls['source']" />
+                </label>
+                <label class="border-wrap">
+                    <span class="offset-left">Content</span>
+                    <medium-editor
+                        [(editorModel)]="readingHtml"
+                        [editorOptions]="{'toolbar': {'buttons': ['bold', 'italic', 'underline', 'h1', 'h2', 'h3']}}"
+                        [editorPlaceholder]="readingPlaceholder"
+                        id="newReading"
+                        class="content"></medium-editor>
+                    <div *ngIf="submitted && readingHtml.length < 1"  class="banner-error">Please give your Reading some text!</div>
+                </label>
+                <p class="banner-error" *ngIf="submitted && error">{{ error }}</p>
+                <div class="button__row">
+                    <button type="submit" class="button" name="Add">Add Reading</button>
+                </div>
+             </form>
+        </div>
+    </div>
 </div>

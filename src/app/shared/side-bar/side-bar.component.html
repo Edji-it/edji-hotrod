@@ -5,9 +5,9 @@
 			<img id="logo" src="assets/images/logo.svg" />
 			<img id="logoPressed" src="assets/images/logo-pressed.svg" />
 		</a>-->
-		<a class="logo-button" [routerLink]="['/dashboard']">
-			<img id="logo" src="assets/images/logo.svg" />
-			<img id="logoPressed" src="assets/images/logo-pressed.svg" />
+		<a [routerLink]="['/dashboard']">
+			<img id="logo" class="side-bar__logo" src="assets/images/logo-3.1-mark.svg" />
+			<!--<img id="logoPressed" src="assets/images/logo-pressed.svg" />-->
 		</a>
 
 		<button *ngIf="isTeacher && hasCommentCount" type="button" class="btn btn-clear" aria-label="Comment Counts" (click)="toggleCommentCounts()">
