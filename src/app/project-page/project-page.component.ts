@@ -17,6 +17,7 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
     private projectId: any;
     private project: any = {};
     private subscriptions: Subscription[] = [];
+    private error: string;
 
     constructor(private _route: ActivatedRoute, private _projects: ProjectService) {
         
@@ -32,6 +33,9 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
                     },
                     err => {
                         console.log(err);
+                        if (err['error']) {
+                            this.error = err['error'];
+                        }
                     })
         );
     }
