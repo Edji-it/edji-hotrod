@@ -69,7 +69,7 @@ export class HomeComponent implements OnInit, OnDestroy {
    * Validates project and then navigates to project if valid
    * @param code The project's short code
    */
-  joinSession(code: string): void{
+  private joinSession(code: string): void{
     this._project.validateProject(code)
       .subscribe(
         (data) => {

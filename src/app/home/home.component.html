@@ -36,11 +36,11 @@
         <!--<div *ngIf="showLogin">-->
           <form [formGroup]="loginForm" (ngSubmit)="login(loginForm.value)">
             <h2 class="center">Login to your Dashboard</h2>
-            <label for="username-input">Username</label>
+            <label for="usernameInput">Username</label>
             <input type="text" id="usernameInput" [formControl]="loginForm.controls['username']" tabindex="0" />
             <div class="banner-error" *ngIf="loginForm.controls['username'].hasError('required') && (loginForm.controls['username'].dirty || loginForm.submitted)">A username is required</div>
             
-            <label for="password-input">Password</label>
+            <label for="passwordInput">Password</label>
             <input type="password" id="passwordInput" [formControl]="loginForm.controls['password']" tabindex="0" />
             <div id="msgNoPassword" class="banner-error" *ngIf="loginForm.controls['password'].hasError('required') && (loginForm.controls['password'].dirty || loginForm.submitted)">A password is required</div>
             <div id="msgErrorPassword" class="banner-error" *ngIf="errorObject.incorrect">{{errorObject.incorrect}}</div>
