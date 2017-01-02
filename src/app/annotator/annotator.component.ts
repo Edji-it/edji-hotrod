@@ -76,8 +76,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     ngOnDestroy() {
         
     }
-
-    hideCommentOptions(event): void {
+    
+    hideCommentOptions(event ?): void {
         this.optionsShow = false;
     }
 
@@ -161,7 +161,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         end = getNodeIndex(selection['focusNode']);
 
         // Clear selection and hide tooltip
-        this.optionsShow = false;
+        this.hideCommentOptions();
         selection.removeAllRanges();
 
         // It's possible that a selection is made backwards

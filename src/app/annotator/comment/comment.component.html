@@ -2,8 +2,9 @@
     <div class='expand-comments' (click)='toggleExpand($event)'></div>
     <div class='emoji-comment-username'>{{comment.author}}</div>
     <div class='emoji-comment-input-wrapper'>
-        Test Comment!
+        <emoji-comment [comment]="comment"></emoji-comment>
         <!--<textarea commentid='" + id + "' type='text' class='emojiComment' id='emojiInput" + index + "' readonly='true'></textarea>
-        <div class='represent'></div><button id='delete" + index  +"' class='inline-delete'>+</button>-->
+        <div class='represent'></div>-->
+        <button class='inline-delete'>+</button>
     </div>
 </div>
