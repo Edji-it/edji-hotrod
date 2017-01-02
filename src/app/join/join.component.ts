@@ -5,6 +5,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
 
 import { AuthService } from './../shared/auth.service';
+import { ProjectService } from './../shared/project.service';
 
 @Component({
   selector: 'edji-join',
@@ -26,6 +27,7 @@ export class JoinComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private _auth: AuthService,
+    private _project: ProjectService,
     fb: FormBuilder
   ) {
     this.guestForm = fb.group({
@@ -59,6 +61,14 @@ export class JoinComponent implements OnInit, OnDestroy {
         this._auth.setUser(data.user);
 
         // set the project as current project
+        this.subscriptions.push(this._project.currentProject.subscribe(
+          (project) => {
+            console.log(project);
+          }
+        ));
+
+        this._project.setCurrentProject(this.projectCode);
+
         // after creation, navigate to the project's page
       },
       (error) => {
