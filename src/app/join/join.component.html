@@ -1,39 +1,37 @@
 <div class="container-fluid">
   <nav-bar [isLarge]="true"></nav-bar>
-  <div class="full-row gray">
-    <div class="row">
-      <div class="col-sm-6 col-pad">
-      <form id="guestLoginForm" [formGroup]="guestForm" (ngSubmit)="joinSessionAsGuest(guestForm.value)">
-          <h2 class="center">Join as Guest</h2>
-          <label for="guestNameInput">Guest Name</label>
-          <input id="guestNameInput" type="text" [formControl]="guestForm.controls['guestName']" tabindex="0"/>
-          <div id="msgNoGuestName" class="banner-error" *ngIf="guestForm.controls['guestName'].hasError('required') && (guestForm.controls['guestName'].dirty || guestForm.submitted)">A name is required</div>
-          
-          <div class="button__row">
-            <button id="guestLoginButton" type="submit" class="button" [disabled]="!guestForm.valid" name="Sign Up">Guest it is!</button>
-          </div>
-      </form>
-      </div>
-      <div class="col-sm-6 col-pad">
-
-      <form [formGroup]="loginForm" (ngSubmit)="joinSessionAsUser(loginForm.value)">
-        <h2 class="center">Let's Begin!</h2>
-        <label for="usernameInput">Username</label>
-        <input type="text" id="usernameInput" [formControl]="loginForm.controls['username']" tabindex="1" />
-        <div class="banner-error" *ngIf="loginForm.controls['username'].hasError('required') && (loginForm.controls['username'].dirty || loginForm.submitted)">A username is required</div>
+  <div class="row">
+    <div class="col-sm-6 col-pad">
+    <form id="guestLoginForm" [formGroup]="guestForm" (ngSubmit)="joinSessionAsGuest(guestForm.value)">
+        <h2 class="center">Join as Guest</h2>
+        <label for="guestNameInput">Guest Name</label>
+        <input id="guestNameInput" type="text" [formControl]="guestForm.controls['guestName']" tabindex="0"/>
+        <div id="msgNoGuestName" class="banner-error" *ngIf="guestForm.controls['guestName'].hasError('required') && (guestForm.controls['guestName'].dirty || guestForm.submitted)">A name is required</div>
         
-        <label for="passwordInput">Password</label>
-        <input type="password" id="passwordInput" [formControl]="loginForm.controls['password']" tabindex="1" />
-        <div id="msgNoPassword" class="banner-error" *ngIf="loginForm.controls['password'].hasError('required') && (loginForm.controls['password'].dirty || loginForm.submitted)">A password is required</div>
-        <div id="msgErrorPassword" class="banner-error" *ngIf="errorObject.incorrect">{{errorObject.incorrect}}</div>
-        
-        <div class="button__row" [class.loading]="loginLoading">
-          <!--ngHide loginLoading-->
-          <button id="buttonLogin" type="submit" class="button" name="Login" tabindex="0">Login</button>
+        <div class="button__row">
+          <button id="guestLoginButton" type="submit" class="button" [disabled]="!guestForm.valid" name="Sign Up">Guest it is!</button>
         </div>
-        
-      </form>
+    </form>
+    </div>
+    <div class="col-sm-6 col-pad">
+
+    <form [formGroup]="loginForm" (ngSubmit)="joinSessionAsUser(loginForm.value)">
+      <h2 class="center">Let's Begin!</h2>
+      <label for="usernameInput">Username</label>
+      <input type="text" id="usernameInput" [formControl]="loginForm.controls['username']" tabindex="1" />
+      <div class="banner-error" *ngIf="loginForm.controls['username'].hasError('required') && (loginForm.controls['username'].dirty || loginForm.submitted)">A username is required</div>
+      
+      <label for="passwordInput">Password</label>
+      <input type="password" id="passwordInput" [formControl]="loginForm.controls['password']" tabindex="1" />
+      <div id="msgNoPassword" class="banner-error" *ngIf="loginForm.controls['password'].hasError('required') && (loginForm.controls['password'].dirty || loginForm.submitted)">A password is required</div>
+      <div id="msgErrorPassword" class="banner-error" *ngIf="errorObject.incorrect">{{errorObject.incorrect}}</div>
+      
+      <div class="button__row" [class.loading]="loginLoading">
+        <!--ngHide loginLoading-->
+        <button id="buttonLogin" type="submit" class="button" name="Login" tabindex="0">Login</button>
       </div>
+      
+    </form>
     </div>
   </div>
 
