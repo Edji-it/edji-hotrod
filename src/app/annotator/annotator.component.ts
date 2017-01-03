@@ -20,9 +20,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     // Component input
     @Input()
     private project: any;
-    
     private reading: any = {};
+    
     private commentsByIndex: any[] = [];
+    private highlightArray: number[] = [];
 
     private lineExpanded: boolean = false;
     private showCommentCounts: boolean = false;
@@ -35,7 +36,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
     private subscriptions: Subscription[] = [];
 
-    private highlightArray: number[] = [];
 
     constructor(
         private _readings: ReadingService,

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 
 @Component({
     selector: 'emoji-comment',
@@ -7,8 +7,8 @@ import { Component, OnInit, Input, ViewChild } from '@angular/core';
 })
 export class EmojiCommentComponent implements OnInit {
 
-    @Input()
-    private comment: any;
+    @Input() private comment: any;
+    @Output() onCommentUpdate = new EventEmitter<string>();
 
     private isActive: boolean = false;
 
@@ -59,5 +59,19 @@ export class EmojiCommentComponent implements OnInit {
 
     addEmoji(emoji: string): void {
         this.comment.data += emoji;
+    }
+
+    // Toggling away from Emoji Comment triggers save
+    toggleActive(): void {
+        if (this.isActive === true) {
+            this.isActive = false;
+            this.onCommentUpdate.emit(this.comment.data);
+        } else {
+            this.isActive = true;
+        }
+    }
+
+    deleteLastEmoji():void {
+        this.comment.data = this.comment.data.replace(/:[a-zA-Z0-9\-\_]*:$/, '');
     }
 }

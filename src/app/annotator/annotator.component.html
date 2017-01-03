@@ -38,7 +38,7 @@
 		<article class="content" (mouseup)="showCommentOptions($event)" (touchend)="showCommentOptions($event)">
 			<span *ngFor="let word of reading.words; let i = index" class="word" [ngClass]="[ word.styles.join(' '), 'highlight-' + highlightArray[i] ]" [attr.index]="i">
 				<!--Comment Component-->
-				<edji-comment *ngFor="let comment of commentsByIndex[i]; let ci = index" [comment]="comment"></edji-comment>
+				<edji-comment *ngFor="let comment of commentsByIndex[i]; let ci = index" [comment]="comment" [projectId]="project._id"></edji-comment>
 				{{ word.str }}
 			</span>
 		</article>

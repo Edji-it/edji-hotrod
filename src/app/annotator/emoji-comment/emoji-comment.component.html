@@ -1,12 +1,15 @@
 <div [ngClass]="{'active' : isActive}" class='emoji-comment-input-wrapper emojionearea'>
 
     <!--<textarea type='text' class='emojiComment' readonly='true'></textarea>-->
-    <div (click)="isActive = !isActive" class="emoji-comment-input" [innerHtml]="comment.data | emojione"></div>
+    <div (click)="toggleActive()" class="emoji-comment-input" [innerHtml]="comment.data | emojione"></div>
 
     <div class="emojionearea-picker emojionearea-picker-position-bottom emojionearea-filters-position-top">
         <div class="emojionearea-wrapper">
             <div class="emojionearea-filters">
                 <i *ngFor="let category of emojifilters" class="emojionearea-filter" [innerHtml]="category.icon | emojione"></i>
+                <span (click)="deleteLastEmoji()">
+                    Delete
+                </span>
             </div>
             <div class="emojionearea-scroll-area">
                 <div class="emojionearea-emojis-list">
