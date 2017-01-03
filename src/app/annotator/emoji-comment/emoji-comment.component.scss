@@ -12,3 +12,20 @@
     font-size: 17.5px;
     padding: 0 20px 0px 10px;
 }
+
+.emojionearea-filter {
+    &.below-scroll {
+        // Active filter/category displays in color!
+        filter: grayscale(0) !important;
+
+        // HACK: Any subsequent "below scroll" children are not "active"
+        & + .emojionearea-filter.below-scroll {
+            filter: grayscale(1) !important;
+        }
+    }
+}
+
+.emojionearea-emojis-list {
+    // Pushes emoji below filter bar, and gives space at the bottom to indicate the end of the list
+    padding: 35px 0px;
+}

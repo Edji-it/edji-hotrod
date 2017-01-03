@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { document } from '@angular/platform-browser/src/facade/browser';
+import { Component, EventEmitter, HostListener, Input, OnInit, Output, ViewChild, ViewRef } from '@angular/core';
 
 @Component({
     selector: 'emoji-comment',
@@ -9,8 +10,11 @@ export class EmojiCommentComponent implements OnInit {
 
     @Input() private comment: any;
     @Output() onCommentUpdate = new EventEmitter<string>();
-
+    @ViewChild('emojiScrollArea') emojiScrollArea;
+    
     private isActive: boolean = false;
+    private activeCategoryIndex: number = 0;
+    private scrollAreaOffset: number = 0;
 
     private emojifilters = [
         {
@@ -69,8 +73,20 @@ export class EmojiCommentComponent implements OnInit {
         if (this.isActive === true) {
             this.isActive = false;
             this.onCommentUpdate.emit(this.comment.data);
+
         } else {
             this.isActive = true;
+
+            // TO-DO: Let's avoid using Timeout to wait until it is rendered!
+            setTimeout(() => {
+                // Get Y values for categories
+                this.emojifilters.forEach((value, index) => {
+                    console.log( this.emojiScrollArea.nativeElement.querySelector('#category'+index).offsetTop );
+                    this.emojifilters[index]['scrollY'] = this.emojiScrollArea.nativeElement.querySelector('#category'+index).offsetTop;
+                });
+            }, 200);
+            
+            console.log(this.emojifilters);
         }
     }
 
@@ -82,5 +98,16 @@ export class EmojiCommentComponent implements OnInit {
     // Removes last emoji from comment
     deleteLastEmoji():void {
         this.comment.data = this.comment.data.replace(/:[a-zA-Z0-9\-\_]*:$/, '');
+    }
+
+    // When clicking a category, jump to that section
+    goToCategory(index): void {
+        let scrollOffset = this.emojiScrollArea.nativeElement.querySelector('#category'+index).offsetTop;
+        this.emojiScrollArea.nativeElement.scrollTop = scrollOffset;
+    }
+
+    scrollUpdate(event) {
+        // console.log(event);
+        this.scrollAreaOffset = event.target.scrollTop;
     }
 }
