@@ -43,9 +43,6 @@ export class ReadingService {
             .post(this._auth.baseUrl + '/readings', readingObj, this._auth.getOptions())
             .map(data => {
               return data.json();
-            },
-              error => {
-
             });
   }
 
