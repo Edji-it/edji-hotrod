@@ -54,7 +54,10 @@ export class EmojiCommentComponent implements OnInit {
     }
 
     ngOnInit() { 
-
+        // If comment is newly added, focus on it when created!
+        if (this.comment.isNew) {
+            this.isActive = true;
+        }
     }
 
     addEmoji(emoji: string): void {

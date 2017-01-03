@@ -2,7 +2,8 @@
  *  Annotator Component
  *  - Loads Reading text
  *  - Compiles word components
- *  - Triggers highilghting
+ *  - Triggers highlighting
+ *  - Deletes highlights and comment components
  */
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs/Rx';
@@ -24,7 +25,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     
     private commentsByIndex: any[] = [];
     private highlightArray: number[] = [];
-
+    
     private lineExpanded: boolean = false;
     private showCommentCounts: boolean = false;
     private showAllComments: boolean = false;
@@ -134,16 +135,18 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // Tell server we've added a comment
         this._projects.saveComment(projectId, '', start, end, text)
             .then(comment => {
-                // We use the comment from the service because it has an Id
+                // We add the comment from the service because it has an Id
                 if (comment._id) {
-                    // Add Comment
+                    // Add setting to trigger focus on new comment
+                    comment.isNew = true;
+                    // Add Comment to local array
                     if (this.commentsByIndex[start]) {
                         this.commentsByIndex[start].push(comment);
                     } else {
                         this.commentsByIndex[start] = [ comment ];
                     }
                 } else {
-                    console.warn('Didn\'t get a comment from server!');
+                    console.warn('Didn\'t get a comment back from server!');
                 }
             })
             .catch(error => {
