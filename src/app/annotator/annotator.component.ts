@@ -46,15 +46,12 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     ) { }
  
     ngOnInit() {
-        console.log(this.project);
         // Get Reading via Observable
         this.subscriptions.push(
             this._readings.get(this.project.reading_id)
                 .subscribe(
                     reading => {
-                        console.log(reading);
                         if (!reading.words || reading.words.length < 1) {
-                            console.log("PROCESS OLD READING");
                             this.reading = this.processOldReading(reading);
                         } else {
                             this.reading = reading;
@@ -82,7 +79,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     }
     
     ngOnDestroy() {
-        
+        this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
     }
     
     hideCommentOptions(event ?): void {
@@ -182,7 +179,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      */
     addEmojiComment(event): void {
         // Get selection indices
-        console.log(Rangy.getSelection());
         let selection = Rangy.getSelection();
         let start : number;
         let end : number;
@@ -201,8 +197,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         start = getNodeIndex(selection['anchorNode']);
         end = getNodeIndex(selection['focusNode']);
 
-        // Clear selection and hide tooltip
+        // Hide tool tips
         this.hideCommentOptions();
+        // Clear selections
         selection.removeAllRanges();
 
         // It's possible that a selection is made backwards
@@ -238,13 +235,12 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         }
 
         reading.words = this.words;
-        
+
         // Save processed reading with Words array
         this._readings.save(reading)
             .toPromise()
             .then(data => {
-                console.log(data);
-                console.log('success!');
+                // we don't really care if we get data back
             });
 
         return reading;
