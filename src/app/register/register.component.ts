@@ -26,17 +26,24 @@ export class RegisterComponent {
   }
 
   //https://angular.io/docs/ts/latest/api/forms/index/FormGroup-class.html
-  private passwordsEqual(group: FormGroup) {
+  /** Validates that the passwords are equal and assigns error if not
+   * @returns error to FormGroup called 'mismatch' if the passwords are not equal
+   */
+  private passwordsEqual(group: FormGroup): any {
     return group.get('password').value === group.get('passwordConfirm').value
       ? null : {'mismatch': true};
   }
 
-  private emailValidator(control: FormControl) {
+  /** Validates email against the same regex used on the server
+   * @returns error which should be assigned to the email input
+   */
+  private emailValidator(control: FormControl): any {
     let emailRe: RegExp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     return emailRe.test(control.value) ? null : { 'emailIncorrect': true };
   }
 
-  private register(formValue: any) {
+  /** Makes call to register the user */
+  private register(formValue: any): void {
     console.log(formValue);
   }
 }
