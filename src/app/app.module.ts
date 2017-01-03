@@ -27,6 +27,7 @@ import { ProjectService } from './shared/project.service';
 
 // Directives
 import { MediumEditorDirective } from 'angular2-medium-editor/medium-editor.directive.ts';
+import { ClickOutsideDirective } from 'angular2-click-outside/clickOutside.directive.ts';
 
 // Pipes
 import { EmojiOnePipe } from './shared/emojione.pipe.ts';
@@ -68,8 +69,9 @@ type StoreType = {
 @NgModule({
   bootstrap: [ AppComponent ],
   declarations: [
-    EmojiOnePipe,
     MediumEditorDirective,
+    ClickOutsideDirective,
+    EmojiOnePipe,
     NavBarComponent,
     SideBarComponent,
     FooterComponent,

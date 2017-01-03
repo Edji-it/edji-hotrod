@@ -85,8 +85,13 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      * Show tooltip to the side with buttons for adding comment types
      */
     showCommentOptions(event): void {
-        this.highlightY = event.clientY + 'px';
-        this.optionsShow = true;
+        // Only show options if text selected
+        if (Rangy.getSelection() && Rangy.getSelection().toString().length > 0) {
+            this.highlightY = event.clientY + 'px';
+            this.optionsShow = true;
+        } else {
+            this.optionsShow = false;
+        }
     }
 
     /**

@@ -35,8 +35,8 @@
 
 	<div class="article-wrap" ng-class="{ 'comments-disabled' : showAllComments, 'loading' : loadingReading }">
         <!--Create components after load for reading-->
-		<article class="content" (mouseup)="showCommentOptions($event)" (touchend)="showCommentOptions($event)">
-			<span *ngFor="let word of reading.words; let i = index" class="word" [ngClass]="[ word.styles.join(' '), 'highlight-' + highlightArray[i] ]" [attr.index]="i">
+		<article class="content" (mouseup)="showCommentOptions($event)" (touchend)="showCommentOptions($event)" (clickOutside)="hideCommentOptions()">
+			<span *ngFor="let word of reading.words; let i = index" class="word" [ngClass]="[ word.styles.join(' '), 'highlight-' + (highlightArray[i] ?  highlightArray[i] : 0)]" [attr.index]="i">
 				<!--Comment Component-->
 				<edji-comment *ngFor="let comment of commentsByIndex[i]; let ci = index" [comment]="comment" [projectId]="project._id"></edji-comment>
 				{{ word.str }}
