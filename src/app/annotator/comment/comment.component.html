@@ -4,7 +4,7 @@
     <div class='emoji-comment-input-wrapper'>
         <!--Swap between different comment types-->
         <emoji-comment [comment]="comment" (onCommentUpdate)='updateComment($event)'></emoji-comment>
-        <button class='inline-delete'>+</button>
+        <button (click)="deleteComment(comment._id)" class='inline-delete'>+</button>
     </div>
     <i class="emoji-comment__saved" [innerHtml]='":ok_hand:" | emojione'></i>
 </div>

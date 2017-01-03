@@ -11,6 +11,8 @@ export class ProjectService {
 
   private targetProjectId: string = '';
   private currentProjectSource: Subject<any> = new Subject<any>();
+
+  // Maintain local Project data and its updates in this service
   private project: any;
   public currentProject: Observable<any> = this.currentProjectSource.asObservable();
 
@@ -73,6 +75,10 @@ export class ProjectService {
             .get(this._auth.baseUrl + '/sessions/' + projectId, this._auth.getOptions())
             .map(
                 data => {
+                    // Update local Project object if returned
+                    if (data.json()._id) {
+                        this.project = data.json();
+                    }
                     return data.json();
                 });
   }
@@ -120,6 +126,29 @@ export class ProjectService {
 
         return this.http
             .post(url, data, this._auth.getOptions())
+            .toPromise()
+            .then(this._auth.extractData);
+    }
+
+    /**
+     * Deletes comment via service, then updates local Project object 
+     * - Project page should subscribe to the currentProject Observable to receive these updates
+     */
+    public deleteComment(commentId: string): Promise<any> {
+        let projectId = this.project._id;
+        let url = this._auth.baseUrl + '/sessions/' + projectId + '/comments/' + commentId;
+
+        return this.http
+            .delete(url, this._auth.getOptions())
+            .map(data => {
+                for (var i = 0; i <= this.project.comments.length; i++) {
+                    if (this.project.comments[i] && this.project.comments[i]._id === commentId) {
+                        // Remove comment from local object
+                        this.project.comments.splice(i);
+                    }
+                }
+                return data;
+            })
             .toPromise()
             .then(this._auth.extractData);
     }

@@ -108,6 +108,19 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Removes highlights from local array
+     */
+    decrementHighlights(start: number, end: number): void {
+        for (var i = start; i <= end; i ++) {
+            if (this.highlightArray[i] && this.highlightArray[i] > 0) {
+                this.highlightArray[i]--;
+            } else {
+                this.highlightArray[i] = 0;
+            }
+        }
+    }
+
+    /**
      * Create a Comment of any Type
      * Requires three parameters, and finds the other information it needs
      * @param start Index of first word
@@ -138,6 +151,19 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 // Maybe show a warning icon?
                 console.warn(error);
             });
+    }
+
+    /**
+     * Fires after the comment has been deleted in the database
+     * - Removes comment from locally transformed array (commentsByIndex)
+     * - De-increments the highlights
+     */
+    commentsByIndexRemove(commentId, index: number, commentIndex: number) {
+        let comment = this.commentsByIndex[index][commentIndex];
+        // Remove highlights from local array
+        this.decrementHighlights(comment.start, comment.end);
+        // Remove comment form local Comments array
+        this.commentsByIndex[index].splice(commentIndex);
     }
 
     /** 
