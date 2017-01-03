@@ -37,6 +37,7 @@ import { NavBarComponent } from './shared/nav-bar';
 import { SideBarComponent } from './shared/side-bar';
 import { FooterComponent } from './shared/footer';
 import { HomeComponent, ResetPassComponent } from './home';
+import { RegisterComponent } from './register';
 import { JoinComponent } from './join/join.component';
 import { CommentComponent } from './annotator/comment';
 import { EmojiCommentComponent } from './annotator/emoji-comment';
@@ -72,6 +73,7 @@ type StoreType = {
     MediumEditorDirective,
     ClickOutsideDirective,
     EmojiOnePipe,
+    RegisterComponent,
     NavBarComponent,
     SideBarComponent,
     FooterComponent,

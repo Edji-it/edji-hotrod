@@ -1,0 +1,19 @@
+<div class="container-fluid">
+  <nav-bar [isLarge]="true"></nav-bar>
+  <div class="row">
+    <div class="col-sm-6 col-pad">
+      <form id="registerForm" [formGroup]="registerForm" (ngSubmit)="register(registerForm.value)">
+        <label for="username">Username</label>
+        <input id="username" type="text" [formControl]="registerForm.controls['username']" tabindex="0"/>
+
+        <label for="fullname">Full Name</label>
+        <input id="fullname" type="text" [formControl]="registerForm.controls['fullname']" tabindex="0"/>
+
+        <div class="button__row" [class.loading]="loginLoading">
+          <!--ngHide loginLoading-->
+          <button id="buttonLogin" type="submit" class="button" name="Login" tabindex="0">Login</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
