@@ -81,12 +81,9 @@ export class EmojiCommentComponent implements OnInit {
             setTimeout(() => {
                 // Get Y values for categories
                 this.emojifilters.forEach((value, index) => {
-                    console.log( this.emojiScrollArea.nativeElement.querySelector('#category'+index).offsetTop );
                     this.emojifilters[index]['scrollY'] = this.emojiScrollArea.nativeElement.querySelector('#category'+index).offsetTop;
                 });
             }, 200);
-            
-            console.log(this.emojifilters);
         }
     }
 
@@ -107,7 +104,6 @@ export class EmojiCommentComponent implements OnInit {
     }
 
     scrollUpdate(event) {
-        // console.log(event);
         this.scrollAreaOffset = event.target.scrollTop;
     }
 }
