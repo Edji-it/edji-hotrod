@@ -7,9 +7,9 @@
             </div>
             <form class="modal-body form-group" (ngSubmit)="onSubmit(passwordForm.value)" [formGroup]="passwordForm">
                 <label for="usernameInput">Username</label>
-                <input type="password" id="usernameInput" class="form-control" [formControl]="passwordForm.controls['username']" />
+                <input type="text" id="usernameInput" class="form-control" [formControl]="passwordForm.controls['username']" />
                 <div *ngIf="passwordForm.controls['username'].hasError('required') && passwordForm.controls['username'].dirty" class="banner-error">You must enter a username</div>
-                <div *ngIf="submissionSuccess">We've sent you an email!</div>
+                <div *ngIf="submissionSuccess">If this account exists, we've just sent you an email!</div>
                 <div *ngIf="errorObject.unsuccessful" class="banner-error">{{errorObject.unsuccessful}}</div>
 
                 <div class="modal-footer">
