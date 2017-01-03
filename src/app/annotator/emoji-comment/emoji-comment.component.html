@@ -7,9 +7,13 @@
         <div class="emojionearea-wrapper">
             <div class="emojionearea-filters">
                 <i *ngFor="let category of emojifilters" class="emojionearea-filter" [innerHtml]="category.icon | emojione"></i>
-                <span (click)="deleteLastEmoji()">
-                    Delete
-                </span>
+                <i (click)="toggleActive()" class="keyboard-btn" style="float: right;">
+                    Done
+                </i>
+                <i (click)="clearEmoji()" class="keyboard-btn" style="float: right;">
+                    Clear
+                </i>
+                <i (click)="deleteLastEmoji()" class="keyboard-btn" style="float: right; padding-top: 2px;font-size:21.25px;" [innerHtml]='":back:" | emojione'></i>
             </div>
             <div class="emojionearea-scroll-area">
                 <div class="emojionearea-emojis-list">

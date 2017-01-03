@@ -71,6 +71,12 @@ export class EmojiCommentComponent implements OnInit {
         }
     }
 
+    // Empty the comment
+    clearEmoji(): void {
+        this.comment.data = '';
+    }
+
+    // Removes last emoji from comment
     deleteLastEmoji():void {
         this.comment.data = this.comment.data.replace(/:[a-zA-Z0-9\-\_]*:$/, '');
     }
