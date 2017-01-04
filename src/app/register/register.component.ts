@@ -8,7 +8,21 @@ import { AuthService } from './../shared';
 
 @Component({
   selector: 'edji-register',
-  templateUrl: 'register.component.html'
+  templateUrl: 'register.component.html',
+  styles: [`
+    label {
+      margin: 15px 0 3px 0;
+    }
+
+    .btn-group-wrapper {
+      width: 100%;
+      text-align: center;
+    }
+
+    .btn-group-wrapper label {
+      margin: 0;
+    }
+  `]
 })
 export class RegisterComponent {
   private registerForm: FormGroup;
