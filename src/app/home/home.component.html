@@ -19,10 +19,10 @@
       <!--Lightning Code Row-->
       <div *ngIf="!showLogin">
         <h2 class="center">Enter with <img class="inline-emoji emojioneemoji" src="assets/emoji/png/26a1.png" />Code</h2>
-        <input type="text" class="big-field lowercase-field on-white" (keyup.enter)="joinSession(sessionCode)" [(ngModel)]="sessionCode" placeholder="Code" />
+        <input type="text" id="projectCodeInput" class="big-field lowercase-field on-white" (keyup.enter)="joinSession(sessionCode)" [(ngModel)]="sessionCode" placeholder="Code" />
         <!--<p class="center">Join a project without an account</p>-->
         <div class="button__row"> 
-            <button (click)="joinSession(sessionCode)" class="button" name="Join" href="#">Go!</button>
+            <button (click)="joinSession(sessionCode)" class="button" id="buttonJoinProject" name="Join" href="#">Go!</button>
         </div>
         <div class="banner-error" *ngIf="errorObject.invalidCode">
           {{errorObject.invalidCode}}

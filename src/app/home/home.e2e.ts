@@ -32,6 +32,15 @@ describe('App', () => {
     element(by.id('passwordInput')).sendKeys(password);
   } // function enterPassword(password)
 
+  function enterProjectCodeAndSubmit(projectCode)
+  {
+    let codeInput = element(by.id('projectCodeInput'));
+    let joinBtn   = element(by.id('buttonJoinProject'));
+
+    codeInput.sendKeys(projectCode);
+    joinBtn.click();
+  } // function enterProjectCodeAndSubmit(code)
+
   /*
     Super Basic Tests
   */
@@ -169,6 +178,9 @@ describe('App', () => {
     - Click on join as guest field and type in valid not vulgar name hit enter or click join project button
     - Redirect to project
   */
+  it('user can get to a project through quick code, enter as guest', () => {
+    enterProjectCodeAndSubmit('fcx6');
+  });
 
   // WIP
   /* Test: Get to project through quick code, be rejected because of vulgar name
