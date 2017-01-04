@@ -99,21 +99,6 @@ article.content {
 	z-index: 6000;
 }
 
-section.paper {
-	//background: #fff;
-	//box-shadow: 1px 1px 5px #000;
-	padding-top: 52px;
-  	margin-top: 0px;
-	height: auto !important;
-	//overflow-x: hidden;
-	// transform: translateX(0px);
-	transition: transform 0.3s ease;
-}
-
-section.paper.slideover {
-	transform: translateX(150px);
-}
-
 section.recent {
 	height: auto !important;
 }

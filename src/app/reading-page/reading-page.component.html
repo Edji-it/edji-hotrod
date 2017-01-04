@@ -1,67 +1,74 @@
-<div style="height:100%;">
-  <side-bar has-comment-count="true"></side-bar>
+<side-bar></side-bar>
 
-  <section class="reading-column paper" [ngClass]="{ loading: isLoading }">
-    <header id="annotatorTitle" class="header">{{ reading.title ? reading.title : "Untitled Reading" }}</header>
-    <div *ngIf="reading.source" class="sub-heading">
-        <img alt="📖" class="inline-emoji emojioneemoji" src="assets/emoji/png/1f4d6.png"> 
-        <a title="Source" href="{{reading.source}}" target="_blank">{{reading.source}}</a>
-    </div>
-    <p *ngIf="error" class="banner-error">{{ error }}</p>
-    <div class="article-wrap">
-      <article id="annotatorText" class="content" [innerHtml]="reading.html"></article>
-    </div>
-  </section>
+<!--Reading uses the *fluid* container, for maximum space use-->
+<div class="container container--side-bar">
+    <div class="row">
 
-   <div class="col-sm-3">
-        <h1 style="margin-top:20px;">Projects
-        <button class="button square image" style="float:right; margin-top: -4px;" ng-disabled="!readingId" (click)="addNew = !addNew">
-            <!--<i ng-show="!addNew" class="glyphicon glyphicon-plus" />-->
-            <img *ngIf="!addNew"  alt="➕" class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/2795.png">
-            <img  *ngIf="addNew" alt="✖" class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/2716.png">
-            <!--<i *ngIf="addNew" class="glyphicon glyphicon-remove" />-->
-        </button>
-        </h1>
-        <div class="item-list">
-        <div *ngIf="addNew">
-            <!--<label>
-            New Session-->
-            <input id="newProjectLabel" type="text" placeholder="Project Label" [(ngModel)]="newProject.label" (keyup.enter)="addNewProject(newProject)"/>
-            <div *ngIf="projectErr.error" class="banner-error">
-                {{ projectErr.error }}</div>
-            <!--</label>-->
-            <div class="button__row" style="padding-top:0px;"  [ngClass]="{ loading : addingNew }">
-                <a ng-hide="addingNew" class="button" name="Register" (click)="addNewProject(newProject)" style="margin: 5px 3px; width:100%;">Add New</a>
+        <div class="col-lg-9 col-md-8 col-sm-7 header-padding" [ngClass]="{ loading: isLoading }">
+            <h3>Reading | Created {{ reading.createdAt | date:'longDate' }}</h3>
+            <hr/>
+            <h1 id="annotatorTitle">{{ reading.title ? reading.title : "Untitled Reading" }}</h1>
+            <div *ngIf="reading.source" class="sub-heading">
+                <img alt="📖" class="inline-emoji emojioneemoji" src="assets/emoji/png/1f4d6.png">
+                <a title="Source" href="{{reading.source}}" target="_blank">{{reading.source}}</a>
             </div>
-            <hr />
+            <p *ngIf="error" class="banner-error">{{ error }}</p>
+            <div class="article-wrap">
+                <article id="annotatorText" class="content" [innerHtml]="reading.html"></article>
+            </div>
         </div>
-        <div class="list-item-wrapper" *ngFor="let project of projects">
-                <div class="list-item">
-                    <a title="Open" class="button square button--float-right image" name="View" [routerLink]="[ '/project', project._id ]">
-                    <img alt="👁" class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/1f441.png">
-                    </a>
-                    <a title="Delete" (click)="deleteModal(project._id, project.label, $index)" class="button square button--float-right image" name="View">
-                    <img alt="❌" class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/274c.png">
-                    </a>
-                    <div class="list-item-title">
-                        <span class="list__emoji" *ngIf="project.isNew">
-                            <img alt="✨" class="inline-emoji emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/2728.png">
-                        </span>
-                        {{project.label}} 
+
+        <div class="col-lg-3 col-md-4 col-sm-5 header-padding">
+            <h2 class="header-block">
+                Projects
+                <button class="btn square image header__button" ng-disabled="!readingId" (click)="addNew = !addNew">
+                    <!--<i ng-show="!addNew" class="glyphicon glyphicon-plus" />-->
+                    <img *ngIf="!addNew"  alt="➕" class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/2795.png">
+                    <img  *ngIf="addNew" alt="✖" class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/2716.png">
+                    <!--<i *ngIf="addNew" class="glyphicon glyphicon-remove" />-->
+                </button>
+            </h2>
+            <div class="item-list overlap-gutter">
+                <div *ngIf="addNew">
+                    <!--<label>
+            New Session-->
+                    <input tabindex="1" id="newProjectLabel" type="text" placeholder="Project Label" [(ngModel)]="newProject.label" (keyup.enter)="addNewProject(newProject)" />
+                    <div *ngIf="projectErr.error" class="banner-error">
+                        {{ projectErr.error }}</div>
+                    <!--</label>-->
+                    <div class="button__row" style="padding-top:0px;" [ngClass]="{ loading : addingNew }">
+                        <a ng-hide="addingNew" tabindex="1" class="btn btn-primary" name="Register" (click)="addNewProject(newProject)" style="margin: 5px 3px; width:100%;">Add New</a>
                     </div>
-                    <div class="list-comment-number list-number">
-                        {{project.comments.length || 0}} Comments
-                    </div>
-                    <div class="list-student-number list-number">
-                        {{project.students_ids.length || 0}} Students
-                    </div>
-                    <div class="list-code list-number">
-                    <span>Code</span>
-                    <pre>{{project.code || 'none'}}</pre>
+                    <hr />
+                </div>
+                <div class="list-item-wrapper" *ngFor="let project of projects">
+                    <div class="list-item">
+                        <a title="Open" class="button square button--float-right image" name="View" [routerLink]="[ '/project', project._id ]">
+                            <img alt="👁" class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/1f441.png">
+                        </a>
+                        <a title="Delete" (click)="deleteModal(project._id, project.label, $index)" class="button square button--float-right image" name="View">
+                            <img alt="❌" class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/274c.png">
+                        </a>
+                        <div class="list-item-title">
+                            <span class="list__emoji" *ngIf="project.isNew">
+                                <img alt="✨" class="inline-emoji emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/2728.png">
+                            </span> 
+                            {{project.label}}
+                        </div>
+                        <div class="list-comment-number list-number">
+                            {{project.comments.length || 0}} Comments
+                        </div>
+                        <div class="list-student-number list-number">
+                            {{project.students_ids.length || 0}} Students
+                        </div>
+                        <div class="list-code list-number">
+                            <span>Code</span>
+                            <pre>{{project.code || 'none'}}</pre>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-  <!--<feedback-form *ngIf="user.isTeacher"></feedback-form>-->
+    <!--<feedback-form *ngIf="user.isTeacher"></feedback-form>-->
 </div>

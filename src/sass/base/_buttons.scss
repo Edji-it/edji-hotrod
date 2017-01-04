@@ -1,9 +1,11 @@
 
+$btnBg: #969696;
+$btnPrimaryBg: #969696;
 $btnSecondaryBg: #cdcdcd;
 
 button, .button, .btn { //, [class*='btn']
   appearance: none;
-  background-color: $action-color;
+  background-color: $btnBg;
   border: 0;
   border-radius: $base-border-radius;
   color: #fff;
@@ -24,7 +26,7 @@ button, .button, .btn { //, [class*='btn']
 
   &:hover,
   &:focus {
-    background-color: shade($action-color, 20%);
+    background-color: shade($btnBg, 20%);
     color: #fff;
   }
 
@@ -34,21 +36,12 @@ button, .button, .btn { //, [class*='btn']
 
     &:hover {
       transform: translate3d(0,0,0);
-      background-color: $action-color;
+      background-color: $btnBg;
     }
   }
-}
 
-html .button, .button, html .btn {
-  // @extend #{$all-buttons};
-  // box-shadow: -3px 3px 0px 0px $purple;
-  background: lighten($purple,10%);
-
-  &:hover, &:active, &:focus, &.active {
-    text-decoration: none;
-    box-shadow: none;
-    background: $purple;
-    // transform: translate3d(-3px, 3px, 0);
+  &:focus, &:active {
+    outline: none;
   }
 }
 
@@ -157,7 +150,7 @@ html .button, .button, html .btn {
 
       & i.fa {
         &:before {
-          color: $purple;
+          // color: $purple;
         }
       }
     }
@@ -169,7 +162,17 @@ html .button, .button, html .btn {
 
   &:hover, &:active, &:focus {
     &:before {
-      color: $purple;
+      // color: $purple;
     }
+  }
+}
+
+
+.header__button {
+  &.btn, & {
+    position: absolute;
+    right: 0px;
+    top: 50%;
+    transform: translateY(-50%);
   }
 }
