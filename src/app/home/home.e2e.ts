@@ -2,7 +2,7 @@ import { browser, by, element, protractor } from 'protractor';
 
 describe('App', () => {
 
-  let EC = protractor.ExpectedConditions; // vital
+  let EC    = protractor.ExpectedConditions; // vital
   
   // Does this before each test.
   beforeEach(() => {
@@ -11,20 +11,34 @@ describe('App', () => {
   });
   
   /*
-    Common Functions
+    ---------------------------- Common Functions ------------------------------
     
     These are functions that are going to be used in many places throughout the tests.
   */
 
   function logInWithStudentAccount () 
   {
+    browser.wait(EC.urlContains('home'), 3000, 'logInWithStudentAccount(): could not find the URL for the home page. :(');
+
     element(by.id('usernameInput')).sendKeys('student');
-    element(by.id('passwordInput')).sendKeys('student'); 
+    element(by.id('passwordInput')).sendKeys('student'); // protractor.Key.ENTER
+    
+    pressEnter();
+    browser.wait( EC.urlContains('dashboard'), 10000, 'Dashboard should open within 3 seconds');
   } // function logInWithStudentAccount
 
-  function enterUsername(username)
+  function pressEnter ()
   {
+    browser.waitForAngular();
+    browser.actions().sendKeys(protractor.Key.ENTER).perform();
+  } // function pressEnter ()
+
+  function enterUsernameAndPassword(username, password)
+  {
+    browser.wait(EC.urlContains('home'), 10000, 'enterUsernameAndPassword(): could not find the URL for the home page. :(');
+
     element(by.id('usernameInput')).sendKeys(username);
+    element(by.id('passwordInput')).sendKeys(password);
   } // function enterUsername(username)
 
   function enterPassword(password)
@@ -35,14 +49,20 @@ describe('App', () => {
   function enterProjectCodeAndSubmit(projectCode)
   {
     let codeInput = element(by.id('projectCodeInput'));
-    let joinBtn   = element(by.id('buttonJoinProject'));
-
     codeInput.sendKeys(projectCode);
-    joinBtn.click();
+    pressEnter();
   } // function enterProjectCodeAndSubmit(code)
 
+  function joinAsGuest(guestName)
+  {
+    let guestCodeInput  = element(by.id('guestNameInput'));
+
+    guestCodeInput.sendKeys(guestName);
+    pressEnter();
+  } // function joinAsGuest(guestName)
+
   /*
-    Super Basic Tests
+    ------------------------------------ Super Basic Tests ---------------------------------
   */
 
   /* Test: Extremely Basic Test.
@@ -56,48 +76,37 @@ describe('App', () => {
   });
 
   /*
-   * Login Tests
+   * ------------------------------------- Login Tests --------------------------------------
    */
 
-  // WIP  
   // Test: logging in with correct login information.
   it('user can login with correct credentials', () => {
-    let loginBtn = element(by.id('buttonLogin'));
-
-    element(by.id('usernameInput')).sendKeys('student');
-    element(by.id('passwordInput')).sendKeys('student'); // protractor.Key.ENTER
-
-    browser.wait(EC.elementToBeClickable(loginBtn), 10000);
-    loginBtn.click().then(function() {
-      browser.wait( EC.urlContains('dashboard'), 10000, 'Dashboard should open within 3 seconds');
-    });
+    logInWithStudentAccount();
   });
 
-  // WIP
   // Test: Not typing in a password on log in.
   it('user cannot login without password', () => {
-    let loginBtn = element(by.id('buttonLogin'));
     let errorMsg = element(by.id('msgErrorPassword'));
 
-    element(by.id('usernameInput')).sendKeys('student');
-    loginBtn.click();
+    enterUsernameAndPassword("student", "");
+    pressEnter();
     
-    browser.wait(EC.presenceOf(errorMsg), 1000);
+    browser.wait(EC.presenceOf(errorMsg), 5000, 'The error message never showed up. Like my last date. T_T');
   }); 
 
   // WIP
   // Test for typing in a non-existent user.
   it('user cannot login with an non-existent user', () => {
-    element(by.id('usernameInput')).sendKeys('HitlerHatesEDJI');
-    element(by.id('passwordInput')).sendKeys('student'); 
-    element(by.id('buttonLogin')).click();
-
     let errorMsg = element(by.id('msgErrorPassword'));
-    browser.wait(EC.presenceOf(errorMsg), 1000);
+
+    enterUsernameAndPassword("HitlerHatesEDJI", "student");
+    pressEnter();
+    
+    browser.wait(EC.presenceOf(errorMsg), 3000, 'The error message never showed up. Like my last date. T_T');
   });
 
   /*
-    Page Navigation Tests.
+    ---------------------------------- Page Navigation Tests ----------------------------------
   */
 
   // WIP 
@@ -129,7 +138,7 @@ describe('App', () => {
   */
 
   /*
-   * Teacher Action Tests
+   * ------------------------------------- Teacher Action Tests ------------------------------------
    */
 
   // WIP
@@ -167,12 +176,12 @@ describe('App', () => {
   */
 
   /*
-    Student Action Tests
+    ----------------------------------- Student Action Tests --------------------------------------
   */
 
   // WIP
   /* Test: Get to project through quick code, enter as guest
-    - Path to Edji.it
+    - Path to Edji.it 
     - Enter in valid project code, click join project or hit enter
     - Redirect to “Join” page
     - Click on join as guest field and type in valid not vulgar name hit enter or click join project button
@@ -180,6 +189,9 @@ describe('App', () => {
   */
   it('user can get to a project through quick code, enter as guest', () => {
     enterProjectCodeAndSubmit('fcx6');
+    browser.waitForAngular();
+    joinAsGuest('Queen Elizabeth II');
+    browser.wait(EC.urlContains('session'), 5000);
   });
 
   // WIP
