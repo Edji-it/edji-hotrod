@@ -10,7 +10,7 @@ export class AuthService {
     public baseUrl = "http://localhost:3354";
     // Check to see if prod or dev environment
     public protocol = window.location.protocol ? window.location.protocol : '';
-    private locker : any;
+    private locker : Locker;
 
   constructor(private http: Http, private _locker: Locker) {
       this.locker = _locker.useDriver(Locker.DRIVERS.LOCAL);
@@ -102,6 +102,25 @@ export class AuthService {
 
     logout() {
         this.destroyCredentials();
+    }
+
+    public register(user: any): Observable<any> {
+        this.destroyCredentials();
+        return this.http
+            .post([this.baseUrl, 'users'].join('/'), { user: user }, this.getOptions())
+            .map((data) => {
+                let object = data.json();
+
+                // if the response has a token, the user should be successfully registered and logged in
+                if (object.token) {
+                    this.setUser(object.user);
+                    this.setToken(object.token);
+                }
+
+                // if on production and isTeacher, send call to bumblebee
+                // if (object.user && object.user.isTeacher && )
+                return data.json();
+            });
     }
 
     /**

@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
 
-import { AuthService } from './../shared/auth.service';
+import { AuthService } from './../shared';
 
 @Component({
   selector: 'edji-register',
@@ -14,6 +15,7 @@ export class RegisterComponent {
 
   constructor(
     private _auth: AuthService,
+    private router: Router,
     fb: FormBuilder
   ) {
     this.registerForm = fb.group({
@@ -45,5 +47,12 @@ export class RegisterComponent {
   /** Makes call to register the user */
   private register(formValue: any): void {
     console.log(formValue);
+    this._auth.register(formValue)
+      .subscribe((data) => {
+        console.log(data);
+        this.router.navigate(['dashboard']);
+      }, (error) => {
+        
+      });
   }
 }
