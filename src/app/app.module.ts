@@ -43,7 +43,7 @@ import { CommentComponent } from './annotator/comment';
 import { EmojiCommentComponent } from './annotator/emoji-comment';
 import { AnnotatorComponent } from './annotator';
 import { ProjectPageComponent } from './project-page';
-import { ReadingPageComponent } from './reading-page';
+import { ReadingPageComponent, DeleteProjectComponent } from './reading-page';
 import { NewReadingPage } from './new-reading-page';
 import { DashboardComponent } from './dashboard';
 import { NoContentComponent } from './no-content';
@@ -87,11 +87,12 @@ type StoreType = {
     NewReadingPage,
     ProjectPageComponent,
     ReadingPageComponent,
+    DeleteProjectComponent,
     DashboardComponent,
     HomeComponent,
     JoinComponent,
     NoContentComponent
-  ],
+],
   imports: [ // import Angular's modules
     BrowserModule,
     FormsModule,

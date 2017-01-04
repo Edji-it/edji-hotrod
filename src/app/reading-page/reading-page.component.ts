@@ -100,9 +100,25 @@ export class ReadingPageComponent implements OnInit, OnDestroy {
 
     }
 
-    deleteModal(id, label, index) {
-
+    /**
+     * Removes deleted Project from local array after confirmed by modal
+     */
+    removeProject(project) {
+        console.log(this.projects);
+        if (project._id) {
+            for (var i = 0; i < this.projects.length; i++) {
+                if (this.projects[i]._id && this.projects[i]._id === project._id) {
+                    this.projects.splice(i, 1);
+                }
+            }
+        } else {
+            console.log('Couldn\'t find project locally to remove');
+        }
     }
+
+    // deleteModal(id, label, index) {
+        
+    // }
 
     ngOnDestroy() {
         this.subscriptions.forEach((sub) => { sub.unsubscribe(); });

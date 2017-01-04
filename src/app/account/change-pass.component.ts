@@ -12,8 +12,7 @@ export class ChangePassComponent {
 
   private passwordForm: FormGroup;
   private responseSuccess: boolean;
-  @Output()
-  closeModal = new EventEmitter();
+  @Output() closeModal = new EventEmitter();
 
   constructor(fb: FormBuilder, private _auth: AuthService) {
     this.passwordForm = fb.group({

@@ -31,7 +31,7 @@
             <div class="item-list overlap-gutter">
                 <div *ngIf="addNew">
                     <!--<label>
-            New Session-->
+                        New Session-->
                     <input tabindex="1" id="newProjectLabel" type="text" placeholder="Project Label" [(ngModel)]="newProject.label" (keyup.enter)="addNewProject(newProject)" />
                     <div *ngIf="projectErr.error" class="banner-error">
                         {{ projectErr.error }}</div>
@@ -46,7 +46,7 @@
                         <a title="Open" class="button square button--float-right image" name="View" [routerLink]="[ '/project', project._id ]">
                             <img alt="👁" class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/1f441.png">
                         </a>
-                        <a title="Delete" (click)="deleteModal(project._id, project.label, $index)" class="button square button--float-right image" name="View">
+                        <a title="Delete" (click)="projectToDelete = project; showDeleteModal = true;" class="button square button--float-right image" name="View">
                             <img alt="❌" class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/274c.png">
                         </a>
                         <div class="list-item-title">
@@ -70,5 +70,6 @@
             </div>
         </div>
     </div>
+    <edji-delete-project *ngIf="showDeleteModal" [project]="projectToDelete" (confirmModal)="showDeleteModal = false; removeProject(projectToDelete)" (closeModal)="showDeleteModal = !showDeleteModal"></edji-delete-project>
     <!--<feedback-form *ngIf="user.isTeacher"></feedback-form>-->
 </div>

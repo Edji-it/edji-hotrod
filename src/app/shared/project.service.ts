@@ -95,6 +95,17 @@ export class ProjectService {
             .then(this._auth.extractData);
     }
 
+    /**
+     * Delete a Project
+     * @param Requires a Project ID
+     */
+    public delete(projectId) {
+        return this.http
+            .delete(this._auth.baseUrl + '/sessions/' + projectId, this._auth.getOptions())
+            .toPromise()
+            .then(this._auth.extractData);
+    }
+
     /** 
      * Update or Create a comment on a project
      * @param projectId Id of project comment is on
