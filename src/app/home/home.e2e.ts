@@ -46,19 +46,20 @@ describe('App', () => {
     element(by.id('passwordInput')).sendKeys(password);
   } // function enterPassword(password)
 
-  function enterProjectCodeAndSubmit(projectCode)
+  function enterProjectCode(projectCode)
   {
     let codeInput = element(by.id('projectCodeInput'));
+
+    browser.wait(EC.urlContains('home'), 10000, 'enterProjectCode(): could not find the URL for the home page. :(');
     codeInput.sendKeys(projectCode);
-    pressEnter();
   } // function enterProjectCodeAndSubmit(code)
 
-  function joinAsGuest(guestName)
+  function enterGuestName(guestName)
   {
     let guestCodeInput  = element(by.id('guestNameInput'));
 
+    browser.wait(EC.urlContains('join'), 5000, 'The Join/Login page never showed up. :/');
     guestCodeInput.sendKeys(guestName);
-    pressEnter();
   } // function joinAsGuest(guestName)
 
   /*
@@ -94,7 +95,6 @@ describe('App', () => {
     browser.wait(EC.presenceOf(errorMsg), 5000, 'The error message never showed up. Like my last date. T_T');
   }); 
 
-  // WIP
   // Test for typing in a non-existent user.
   it('user cannot login with an non-existent user', () => {
     let errorMsg = element(by.id('msgErrorPassword'));
@@ -178,8 +178,7 @@ describe('App', () => {
   /*
     ----------------------------------- Student Action Tests --------------------------------------
   */
-
-  // WIP
+  
   /* Test: Get to project through quick code, enter as guest
     - Path to Edji.it 
     - Enter in valid project code, click join project or hit enter
@@ -188,10 +187,11 @@ describe('App', () => {
     - Redirect to project
   */
   it('user can get to a project through quick code, enter as guest', () => {
-    enterProjectCodeAndSubmit('fcx6');
-    browser.waitForAngular();
-    joinAsGuest('Queen Elizabeth II');
-    browser.wait(EC.urlContains('session'), 5000);
+    enterProjectCode('fcx6');
+    pressEnter();
+    enterGuestName('Queen Elizabeth II');
+    pressEnter();
+    browser.wait(EC.urlContains('project'), 5000);
   });
 
   // WIP
