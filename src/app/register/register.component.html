@@ -27,6 +27,10 @@
         <div *ngIf="registerForm.controls['passwordConfirm'].hasError('required') && registerForm.controls['passwordConfirm'].dirty" class="alert-info">Please confirm your password</div>
         <div *ngIf="registerForm.hasError('mismatch')" class="alert-info">Please make sure your passwords match</div>
 
+
+        <div *ngIf="errorObject.duplicateUser" class="banner-error">{{errorObject.duplicateUser}}</div>
+        <div *ngIf="errorObject.serverError" class="banner-error">{{errorObject.serverError}}</div>
+
         <div class="button__row">
           <!--ngHide loginLoading-->
           <button id="buttonRegister" type="submit" class="button" [disabled]="!registerForm.valid" name="Register" tabindex="0">Register!</button>

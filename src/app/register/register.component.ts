@@ -13,6 +13,11 @@ import { AuthService } from './../shared';
 export class RegisterComponent {
   private registerForm: FormGroup;
 
+  private errorObject: any = {
+    duplicateUser: null,
+    serverError: null
+  };
+
   constructor(
     private _auth: AuthService,
     private router: Router,
@@ -46,13 +51,29 @@ export class RegisterComponent {
 
   /** Makes call to register the user */
   private register(formValue: any): void {
-    console.log(formValue);
+    this.clearErrors();
+
     this._auth.register(formValue)
       .subscribe((data) => {
-        console.log(data);
         this.router.navigate(['dashboard']);
-      }, (error) => {
-        
+      }, (err) => {
+        let error = err.json();
+        if (error.code === 11000) {
+          this.errorObject.duplicateUser = "A user with that username already exists!";
+        } else {
+          this.errorObject.serverError = "We've run into an issue and are unable to create a new account";
+        }
       });
+  }
+
+  /**
+   * Clears all errorObject strings to equal empty strings
+   */
+  private clearErrors(): void {
+    for (let property in this.errorObject) {
+      if (this.errorObject.hasOwnProperty(property) && typeof this.errorObject[property] === 'string') {
+        this.errorObject[property] = null;
+      }
+    }
   }
 }

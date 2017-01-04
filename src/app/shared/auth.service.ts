@@ -104,6 +104,10 @@ export class AuthService {
         this.destroyCredentials();
     }
 
+    /**
+     * Makes call to server in order to register a new user and set their local information
+     * @returns observable which either has errors or an object which has properties: user, token
+     */
     public register(user: any): Observable<any> {
         this.destroyCredentials();
         return this.http
@@ -118,7 +122,7 @@ export class AuthService {
                 }
 
                 // if on production and isTeacher, send call to bumblebee
-                // if (object.user && object.user.isTeacher && )
+                // if (object.user && object.user.isTeacher && this.isProd)
                 return data.json();
             });
     }
