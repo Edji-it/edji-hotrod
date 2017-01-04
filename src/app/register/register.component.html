@@ -17,6 +17,15 @@
         <div *ngIf="registerForm.controls['email'].hasError('required')" class="alert-info">Please enter an email</div>
         <div *ngIf="registerForm.controls['email'].hasError('emailIncorrect') && registerForm.controls['email'].dirty" class="alert-info">We don't think that's an email</div>
 
+        <div ngbRadioGroup class="btn-group" name="user type" [formControl]="registerForm.controls['userType']" tabindex="0">
+          <label class="btn btn-primary">
+            <input type="radio" name="Is student" id="student" autocomplete="off" value="student">Student
+          </label>
+          <label class="btn btn-primary">
+            <input type="radio" name="Is teacher" id="option2" autocomplete="off" value="teacher">Teacher
+          </label>
+        </div>
+
         <label for="passwordInput">Password</label>
         <input id="passwordInput" type="password" [formControl]="registerForm.controls['password']" tabindex="0"/>
         <div *ngIf="registerForm.controls['password'].hasError('required')" class="alert-info">Give your account a password</div>
