@@ -24,7 +24,7 @@ describe('App', () => {
     element(by.id('passwordInput')).sendKeys('student'); // protractor.Key.ENTER
     
     pressEnter();
-    browser.wait( EC.urlContains('dashboard'), 10000, 'Dashboard should open within 3 seconds');
+    browser.wait( EC.urlContains('dashboard'), 10000, 'Dashboard should open within 3 seconds. It did not.');
   } // function logInWithStudentAccount
 
   function pressEnter ()
@@ -62,13 +62,24 @@ describe('App', () => {
     guestCodeInput.sendKeys(guestName);
   } // function joinAsGuest(guestName)
 
+  function clickSidebarAccountButton()
+  {
+    let accountBtn = element(by.id('accountButton'));
+    accountBtn.click();
+  } // function pressAccountButton()
+
+  function clickLogoButton()
+  {
+    let logoBtn = element(by.id('logo'));
+
+  } // function clickLogoButton()
+
   /*
     ------------------------------------ Super Basic Tests ---------------------------------
   */
 
   /* Test: Extremely Basic Test.
-    - I've been keeping this in there because it tells me when I'm being excessively
-      dumb elsewhere.
+    - IF THIS FAILS: You are not running Protractor correctly;
   */
   it('should have a title', () => {
     let subject = browser.getTitle();
@@ -109,18 +120,29 @@ describe('App', () => {
     ---------------------------------- Page Navigation Tests ----------------------------------
   */
 
-  // WIP 
   /* Test: Go to Account information page
     - Be logged into edji (teacher or student) and on dashboard, reading or project page
     - Click on your name in the bottom left corner
     - Redirect to Account info page
   */
+  it('user can go to Account information page', () => {
+    logInWithStudentAccount();
+    browser.wait(EC.urlContains('dashboard'), 5000, 'Never arrived at the dashboard. :(');
+    clickSidebarAccountButton();
+    browser.wait(EC.urlContains('account'), 5000, 'Never arrived at the account page. :(');
+  });
 
   // WIP 
   /* Test: Go back to Dashboard
     - Be logged into edji (teacher or student) and on reading, account details or project page
     - Click Edji logo in top left corner of page
     - Redirect to dashboard
+  */
+  /*
+  it('user can log in, go to home, and go back to the dashboard', () => {
+    
+    
+  });
   */
 
   // WIP
@@ -187,11 +209,17 @@ describe('App', () => {
     - Redirect to project
   */
   it('user can get to a project through quick code, enter as guest', () => {
+    // Home Page
     enterProjectCode('fcx6');
     pressEnter();
+
+    // Join/Login Page
     enterGuestName('Queen Elizabeth II');
     pressEnter();
-    browser.wait(EC.urlContains('project'), 5000);
+
+    //Project Page
+    browser.wait(EC.urlContains('project'), 3000, 'The project url was not reached.');
+    expect(element(by.id("projectTitle")).isPresent()).toBe(true, 'Could not find the project title.');  //FIND THE TITLE
   });
 
   // WIP

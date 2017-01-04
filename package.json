@@ -35,7 +35,7 @@
     "preclean:start": "npm run clean",
     "pree2e": "npm run webdriver:update -- --standalone",
     "preversion": "npm test",
-    "protractor": "protractor",
+    "protractor": "./node_modules/webdriver-manager/bin/webdriver-manager update && protractor",
     "rimraf": "rimraf",
     "server:dev:hmr": "npm run server:dev -- --inline --hot",
     "server:dev": "webpack-dev-server --config config/webpack.dev.js --progress --profile --watch --content-base src/",
