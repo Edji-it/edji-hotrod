@@ -3,7 +3,7 @@
   
 <div class="container container--side-bar">
 
-  <section class="project-column paper" [ngClass]="{ loading: !project._id }">
+  <section class="project-column header-padding" [ngClass]="{ loading: !project._id }">
     <p class="banner-error" *ngIf="error">{{ error }}</p>
     <!--<emoji-annotator project-fn="getSession()"></emoji-annotator>-->
     <annotator *ngIf="project._id" [project]="project"></annotator>
