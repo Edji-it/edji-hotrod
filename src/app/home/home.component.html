@@ -59,9 +59,7 @@
       <hr>
       <br />
       <div class="button__row">
-          <!--<button *ngIf="!showLogin" (click)="showLogin = true" class="btn btn-secondary" name="Login" tabindex="0">Log In</button>
-          <button *ngIf="showLogin" (click)="showLogin = false" class="btn btn-secondary" name="Lightning Code" tabindex="0"><img class="inline-emoji emojioneemoji" src="assets/emoji/png/26a1.png" />Code</button>-->
-        <a id="buttonGoRegister" tabindex="0" class="btn btn-secondary" name="Sign Up" href="#/register">!Register</a>
+        <button id="buttonGoRegister" class="btn btn-secondary" name="Register" [routerLink]="['/register']" tabindex="0">Register</button>
       </div>
     </div>
   </div>
