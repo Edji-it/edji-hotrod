@@ -11,7 +11,7 @@ describe('App', () => {
   });
   
   /*
-    ---------------------------- Common Functions ------------------------------
+---------------------------- Common Functions ------------------------------
     
     These are functions that are going to be used in many places throughout the tests.
   */
@@ -71,11 +71,16 @@ describe('App', () => {
   function clickLogoButton()
   {
     let logoBtn = element(by.id('logo'));
-
+    logoBtn.click();
   } // function clickLogoButton()
 
+  function verifyURL(urlSnippet)
+  {
+    browser.wait(EC.urlContains(urlSnippet), 5000, ('Never arrived at the url containing: ' + urlSnippet + '. :('));
+  }
+
   /*
-    ------------------------------------ Super Basic Tests ---------------------------------
+------------------------------------ Super Basic Tests ---------------------------------
   */
 
   /* Test: Extremely Basic Test.
@@ -88,7 +93,7 @@ describe('App', () => {
   });
 
   /*
-   * ------------------------------------- Login Tests --------------------------------------
+------------------------------------- Login Tests --------------------------------------
    */
 
   // Test: logging in with correct login information.
@@ -117,7 +122,7 @@ describe('App', () => {
   });
 
   /*
-    ---------------------------------- Page Navigation Tests ----------------------------------
+---------------------------------- Page Navigation Tests ----------------------------------
   */
 
   /* Test: Go to Account information page
@@ -126,10 +131,15 @@ describe('App', () => {
     - Redirect to Account info page
   */
   it('user can go to Account information page', () => {
+    // Home Page
     logInWithStudentAccount();
-    browser.wait(EC.urlContains('dashboard'), 5000, 'Never arrived at the dashboard. :(');
+
+    // Dashboard
+    verifyURL('dashboard');
     clickSidebarAccountButton();
-    browser.wait(EC.urlContains('account'), 5000, 'Never arrived at the account page. :(');
+
+    // Account Page
+    verifyURL('account');
   });
 
   // WIP 
@@ -138,12 +148,13 @@ describe('App', () => {
     - Click Edji logo in top left corner of page
     - Redirect to dashboard
   */
-  /*
   it('user can log in, go to home, and go back to the dashboard', () => {
-    
-    
+    // Uses the student account.
+
+    // Home Page
+    logInWithStudentAccount();
+    verifyURL('dashboard');
   });
-  */
 
   // WIP
   /* Test: View guides/faq
@@ -160,7 +171,7 @@ describe('App', () => {
   */
 
   /*
-   * ------------------------------------- Teacher Action Tests ------------------------------------
+------------------------------------- Teacher Action Tests ------------------------------------
    */
 
   // WIP
@@ -198,7 +209,7 @@ describe('App', () => {
   */
 
   /*
-    ----------------------------------- Student Action Tests --------------------------------------
+----------------------------------- Student Action Tests --------------------------------------
   */
   
   /* Test: Get to project through quick code, enter as guest
@@ -218,7 +229,7 @@ describe('App', () => {
     pressEnter();
 
     //Project Page
-    browser.wait(EC.urlContains('project'), 3000, 'The project url was not reached.');
+    verifyURL("project");
     expect(element(by.id("projectTitle")).isPresent()).toBe(true, 'Could not find the project title.');  //FIND THE TITLE
   });
 
