@@ -1,18 +1,18 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 import 'rxjs/add/operator/toPromise';
 import { Locker } from 'angular2-locker';
 
 @Injectable()
-export class AuthService {
+export class AuthService implements CanActivate {
     public baseUrl = "http://localhost:3354";
     // Check to see if prod or dev environment
     public protocol = window.location.protocol ? window.location.protocol : '';
     private locker : Locker;
 
-  constructor(private http: Http, private _locker: Locker) {
+  constructor(private http: Http, private _locker: Locker, private _router: Router) {
       this.locker = _locker.useDriver(Locker.DRIVERS.LOCAL);
   }
 
@@ -179,4 +179,13 @@ export class AuthService {
             });
     }
 
+    /** Provides logic for sending user back to home if they are not authorized */
+    public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+        if (!this.getUser()) {
+            this._router.navigate(['/home']);
+            return false;
+        } else {
+            return true;
+        }
+    }
 }

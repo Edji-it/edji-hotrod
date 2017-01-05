@@ -11,6 +11,7 @@ import { DashboardComponent } from './dashboard';
 import { NoContentComponent } from './no-content';
 
 import { DataResolver } from './app.resolver';
+import { AuthService } from './shared';
 
 
 export const ROUTES: Routes = [
@@ -18,10 +19,10 @@ export const ROUTES: Routes = [
   { path: 'home',  component: HomeComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'join/:code', component: JoinComponent },
-  { path: 'account', component: AccountComponent },
-  { path: 'dashboard',  component: DashboardComponent },
-  { path: 'project/:id',  component: ProjectPageComponent },
-  { path: 'reading/:id',  component: ReadingPageComponent },
-  { path: 'new-reading', component: NewReadingPage },
+  { path: 'account', component: AccountComponent, canActivate: [AuthService] },
+  { path: 'dashboard',  component: DashboardComponent, canActivate: [AuthService] },
+  { path: 'project/:id',  component: ProjectPageComponent, canActivate: [AuthService] },
+  { path: 'reading/:id',  component: ReadingPageComponent, canActivate: [AuthService] },
+  { path: 'new-reading', component: NewReadingPage, canActivate: [AuthService] },
   { path: '**',    component: NoContentComponent }
 ];
