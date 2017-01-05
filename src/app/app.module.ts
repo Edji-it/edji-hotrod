@@ -39,9 +39,7 @@ import { FooterComponent } from './shared/footer';
 import { HomeComponent, ResetPassComponent } from './home';
 import { RegisterComponent } from './register';
 import { JoinComponent } from './join/join.component';
-import { CommentComponent } from './annotator/comment';
-import { EmojiCommentComponent } from './annotator/emoji-comment';
-import { AnnotatorComponent } from './annotator';
+import { AnnotatorComponent, CommentComponent, EmojiCommentComponent, EmojiKeyboardComponent } from './annotator';
 import { ProjectPageComponent } from './project-page';
 import { ReadingPageComponent, DeleteProjectComponent } from './reading-page';
 import { NewReadingPage } from './new-reading-page';
@@ -79,6 +77,7 @@ type StoreType = {
     FooterComponent,
     CommentComponent,
     EmojiCommentComponent,
+    EmojiKeyboardComponent,
     AppComponent,
     AccountComponent,
     ChangePassComponent,
@@ -91,7 +90,7 @@ type StoreType = {
     DashboardComponent,
     HomeComponent,
     JoinComponent,
-    NoContentComponent
+    NoContentComponent,
 ],
   imports: [ // import Angular's modules
     BrowserModule,

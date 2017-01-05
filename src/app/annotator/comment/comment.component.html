@@ -1,7 +1,7 @@
 <div [ngClass]="{ 'saved' : justSaved }" (mouseenter)='focusComment(comment.start, comment.end)' (mouseleave)='unfocusComment(comment.start, comment.end)'>
     <div class='expand-comments' (click)='toggleExpand($event)'></div>
     <div class='emoji-comment-username'>{{comment.author}}</div>
-    <div class='emoji-comment-input-wrapper'>
+    <div (click)="toggleActive()" class='emoji-comment-input-wrapper'>
         <!--Swap between different comment types-->
         <emoji-comment [comment]="comment" (onCommentUpdate)='updateComment($event)'></emoji-comment>
         <button (click)="deleteComment(comment._id)" class='inline-delete'>+</button>

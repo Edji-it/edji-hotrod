@@ -747,99 +747,11 @@ $image-map: () !default;
 
 
 
-
-.emojionearea-button.active + .emojionearea-picker,
-.active .emojionearea-picker,
-.emojionearea-picker.active {
-		pointer-events: all !important;
-		opacity: 1 !important;
-}
-
-.big-emoji-keyboard, .emoji-comment-input-wrapper {
-
-	& .emojionearea-picker  {
-		// Debug
-        // pointer-events: all !important;
-		// opacity: 1 !important;
-        
-		display: block;
-        width: calc(100% - 100px) !important;
-		height: 30% !important;
-        min-height: 200px !important;
-		bottom: 0px !important;
-		left: 100px !important;
-		
-		position: fixed !important;
-		// bottom: 0 !important;
-		// left: -120px   !important;
-		// // right: 0  !important;
-		// width: 100vw;
-		// height: 30vh;
-		// background: hotpink !important;
-		z-index: $zTop !important;
-
-        transform: translateZ(0px);
-	}
-
-	& .emojionearea .emojionearea-picker .emojionearea-wrapper {
-		width: 100%;
-		height: 100%;
-
-		&:after {
-			display: none;
-		}
-	}
-	& .emojionearea .emojionearea-picker .emojionearea-scroll-area {
-		top: 0px;
-		bottom: 0px;
-		height: 100%  !important;
-		position: relative !important;
-	}
-
-	& .emojionearea.emojionearea-inline {
-		height: 100%;
-	}
-
-	& .emojionearea .emojionearea-picker .emojionearea-scroll-area .emojibtn {
-		width: 36px;
-		height: 36px;
-		padding: 6px;
-	}
-
-	& .emojionearea-picker .emojionearea-scroll-area .emojibtn img {
-		width: 36px;
-		height: 36px;
-	}
-
-	& .emojionearea .emojionearea-picker {
-		margin-top: 0px;
-		right: 0;
-	}
-
-	& .emojionearea .emojionearea-picker.emojionearea-filters-position-top .emojionearea-filters {
-		border-radius: 0px;
-
-		width: calc(100% - 15px); //room for scrollbar
-	}
-}
-
 .emojionearea .emojionearea-editor, .emojionearea .emoji-comment-input {
     min-height: 30px;
     max-height: 30px;
     width: 180px;
     overflow: hidden;
-}
-
-.emojionearea .emojionearea-picker.emojionearea-picker-position-bottom {
-    top: inherit !important;
-}
-
-.emojionearea-scroll-area {
-    // @include transform(translateZ(0px));
-}
-
-.emojibtn img {
-    // display: none !important;
 }
 
 // .emojionearea .emojionearea-picker .emojionearea-scroll-area .emojibtn img.lazy-emoji {
@@ -849,14 +761,3 @@ $image-map: () !default;
 //         opacity: 1;
 //     }
 // }
-
-.emojionearea-category.max-rows-1 {
-    max-height: 36px + 12px + 36px;
-    overflow-y: hidden;
-}
-
-.emojionearea-scroll-area,
-.emojionearea .emojionearea-picker .emojionearea-scroll-area {
-    overflow-y: scroll !important; /* has to be scroll, not auto */
-    -webkit-overflow-scrolling: touch  !important;
-}

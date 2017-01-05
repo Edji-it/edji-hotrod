@@ -25,6 +25,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     
     private commentsByIndex: any[] = [];
     private highlightArray: number[] = [];
+    private activeComment: any = {};
     
     private lineExpanded: boolean = false;
     private showCommentCounts: boolean = false;
@@ -142,12 +143,15 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 // We add the comment from the service because it has an Id
                 if (comment._id) {
                     // Add setting to trigger focus on new comment
-                    comment.isNew = true;
+                    this.inactivateComment();
+                    
                     // Add Comment to local array
                     if (this.commentsByIndex[start]) {
                         this.commentsByIndex[start].push(comment);
+                        this.setActiveCommentByIndex(true, start, this.commentsByIndex[start].length - 1);
                     } else {
                         this.commentsByIndex[start] = [ comment ];
+                        this.setActiveCommentByIndex(true, start, 0);
                     }
                 } else {
                     console.warn('Didn\'t get a comment back from server!');
@@ -167,10 +171,32 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      */
     commentsByIndexRemove(commentId, index: number, commentIndex: number) {
         let comment = this.commentsByIndex[index][commentIndex];
+
+        // Clear active comment
+        this.inactivateComment();
         // Remove highlights from local array
         this.decrementHighlights(comment.start, comment.end);
         // Remove comment form local Comments array
         this.commentsByIndex[index].splice(commentIndex);
+    }
+
+    setActiveCommentByIndex(isActive: boolean, wordIndex: number, commentIndex: number): void {
+        if (isActive) {
+            this.inactivateComment();
+            this.activeComment = this.commentsByIndex[wordIndex][commentIndex];
+            this.activeComment.active = true;
+        } else {
+            this.inactivateComment();
+        }
+    }
+
+    inactivateComment():void {
+        this.activeComment.active = false;
+        this.activeComment = {};
+    }
+
+    updateActiveComment(commentData: string) {
+        this.activeComment.data = commentData;
     }
 
     /** 

@@ -14,13 +14,14 @@ export class CommentComponent implements OnInit {
   @Input() private comment: any;
   @Input() private projectId: string;
   @Output() commentDeleted = new EventEmitter<string>();
+  @Output() commentActivation = new EventEmitter<boolean>();
 
   private justSaved: boolean = false;
 
   constructor(private _projects: ProjectService) { }
 
   ngOnInit() {
-
+    // If comment is newly added, focus on it when created!
   }
 
   focusComment():void {
@@ -29,6 +30,17 @@ export class CommentComponent implements OnInit {
 
   unfocusComment(): void {
     
+  }
+
+
+  toggleActive(): void {
+      if (this.comment.active === true) {
+          this.comment.active = false;
+          this.commentActivation.emit(false);
+      } else {
+          this.comment.active = true; 
+          this.commentActivation.emit(true);
+      }
   }
 
   // Updates comment when child comment-type tells it to via Output

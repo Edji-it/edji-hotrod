@@ -1,32 +1,5 @@
-<div [ngClass]="{'active' : isActive}" class='emoji-comment-input-wrapper emojionearea'>
+<div [ngClass]="{'active' : comment.active}" class='emoji-comment-input-wrapper emojionearea'>
 
     <!--<textarea type='text' class='emojiComment' readonly='true'></textarea>-->
-    <div (click)="toggleActive()" class="emoji-comment-input" [innerHtml]="comment.data | emojione"></div>
-
-    <div class="emojionearea-picker emojionearea-picker-position-bottom emojionearea-filters-position-top">
-        <div class="emojionearea-wrapper">
-            <div class="emojionearea-filters">
-                <i *ngFor="let category of emojifilters; let i = index" 
-                    class="emojionearea-filter" 
-                    [innerHtml]="category.icon | emojione" (click)="goToCategory(i)"
-                    [ngClass]="{ 'below-scroll' : category['scrollY'] >= scrollAreaOffset }"></i>
-                <i (click)="toggleActive()" class="keyboard-btn" style="float: right;">
-                    Done
-                </i>
-                <i (click)="clearEmoji()" class="keyboard-btn" style="float: right;">
-                    Clear
-                </i>
-                <i (click)="deleteLastEmoji()" class="keyboard-btn" style="float: right; padding-top: 2px;font-size:21.25px;" [innerHtml]='":back:" | emojione'></i>
-            </div>
-            <div #emojiScrollArea class="emojionearea-scroll-area" (scroll)="scrollUpdate($event)">
-                <div class="emojionearea-emojis-list">
-                        <div *ngFor="let category of emojifilters; let i = index"  [attr.id]="'category'+i" class="emojionearea-category">
-                            <h1>{{category.title}}</h1>
-                            <i *ngFor="let emoji of category.emoji" (click)="addEmoji(':'+emoji+':')" class="emojibtn" role="button" [attr.dataName]="':'+emoji+':'" [innerHtml]="':'+emoji+':' | emojione">
-                            </i>
-                        </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div class="emoji-comment-input" [innerHtml]="comment.data | emojione"></div>
 </div>

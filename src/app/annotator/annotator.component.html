@@ -31,17 +31,18 @@
 
     <header id="annotatorTitle" class="header">
 		{{ reading.title }}
-	</header> 
+	</header>  
 
 	<div class="article-wrap" ng-class="{ 'comments-disabled' : showAllComments, 'loading' : loadingReading }">
         <!--Create components after load for reading-->
 		<article class="content" (mouseup)="showCommentOptions($event)" (touchend)="showCommentOptions($event)" (clickOutside)="hideCommentOptions()">
 			<span *ngFor="let word of reading.words; let i = index" class="word" [ngClass]="[ word.styles.join(' '), 'highlight-' + (highlightArray[i] ?  highlightArray[i] : 0)]" [attr.index]="i">
 				<!--Comment Component-->
-				<edji-comment *ngFor="let comment of commentsByIndex[i]; let ci = index" [comment]="comment" [projectId]="project._id" (commentDeleted)="commentsByIndexRemove(event, i, ci)"></edji-comment>
+				<edji-comment *ngFor="let comment of commentsByIndex[i]; let ci = index" (commentActivation)="setActiveCommentByIndex($event, i, ci)" [comment]="comment" [projectId]="project._id" (commentDeleted)="commentsByIndexRemove($event, i, ci)"></edji-comment>
 				{{ word.str }}
 			</span>
 		</article>
+		<emoji-keyboard [isActive]="activeComment.active && (!activeComment.type || activeComment.type === 'emoji')" [currentComment]="activeComment.data" (commentChange)="updateActiveComment($event)" (dismissKeyboard)="inactivateComment()"></emoji-keyboard>
 	</div>
 	
 </div>
