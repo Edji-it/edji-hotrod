@@ -103,6 +103,36 @@ describe('App', () => {
     fterGuidesBtn.click();
   } // function clickOnFooterGuidesButton()
 
+  function clickAddReadingButton ()
+  {
+    let addReadingBtn = element(by.id("addReadingButton"));
+    addReadingBtn.click();
+  } // function clickAddReadingButton ()
+
+  function typeInReadingTitle(title)
+  {
+    let readingTitleInput = element(by.id("readingTitle"));
+    readingTitleInput.sendKeys(title);
+  } // function typeInReadingTitle(title)
+
+  function typeInSourceURL(url)
+  {
+    let sourceURLInput = element(by.id("readingSource"));
+    sourceURLInput.sendKeys(url);
+  } // function typeInSourceURL(url)
+
+  function typeInReadingContent(content)
+  {
+    let readingContentInput = element(by.id("newReading"));
+    readingContentInput.sendKeys(content);
+  } // function typeInReadingContent(content)
+
+  function clickSubmitAddReadingButton()
+  {
+    let submitButton = element(by.name("Add"));
+    submitButton.click();
+  }// function clickSubmitAddReadingButton()
+
   /*
 ------------------------------------ Super Basic Tests ---------------------------------
   */
@@ -230,11 +260,28 @@ describe('App', () => {
     - Tab and hit enter/ click on “Add reading button”
     - Redirect to reading page of newly created reading
   */
-  // WORK IN PROGRESS
-  it('teacher can add a reading', () => {
+  it('teacher user can add a reading', () => {
+    //Initialize variables.
+    let title           = "Protractor Likes Peaches (Test)";
+    let sourceURL       = "http://www.omfgdogs.com";
+    let readingContent  = "Cody is excessively fat";
+
     // Home Page
     logInWithTeacherAccount();
     
+    // Dashboard
+    verifyURL("dashboard");
+    clickAddReadingButton();
+
+    // Add Reading Page
+    verifyURL("/new-reading");
+    typeInReadingTitle(title);
+    typeInSourceURL(sourceURL);
+    typeInReadingContent(readingContent);
+    clickSubmitAddReadingButton();
+    
+    // Reading page
+    verifyURL("/reading/");
   });
 
   // WIP
@@ -247,6 +294,27 @@ describe('App', () => {
     - Tab and hit enter/ click on “Add reading button”
     - Receive error message asking to give reading a title
   */
+   it('teacher user cannot add a reading without a title', () => {
+    // Initialize variables
+    let sourceURL       = "http://www.omfgdogs.com";
+    let readingContent  = "Cody is excessively fat";
+
+    // Home Page
+    logInWithTeacherAccount();
+
+    // Dashboard
+    verifyURL("dashboard");
+    clickAddReadingButton();
+
+    // Add Reading Page
+    verifyURL("/new-reading");
+    typeInSourceURL(sourceURL);
+    typeInReadingContent(readingContent);
+    clickSubmitAddReadingButton();
+
+    //Wait for that error message, kids
+    browser.wait(EC.visibilityOf(element(by.className("banner-error"))), 3000, 'The error message never showed up.'); 
+  });
 
   // WIP
   /* Test: Add reading, don’t enter content
