@@ -109,8 +109,8 @@
     right: 0;
 }
 
-.emojionearea .emojionearea-picker.emojionearea-filters-position-top .emojionearea-filters {
+.emojionearea .emojionearea-picker .emojionearea-filters {
     border-radius: 0px;
-
+    background: rgba(255,255,255,0.9);
     width: calc(100% - 15px); //room for scrollbar
 }

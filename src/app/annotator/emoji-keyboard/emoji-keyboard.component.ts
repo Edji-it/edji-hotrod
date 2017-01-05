@@ -1,20 +1,23 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, AfterViewInit, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'emoji-keyboard',
   templateUrl: './emoji-keyboard.component.html',
   styleUrls: ['./emoji-keyboard.component.scss']
 })
-export class EmojiKeyboardComponent implements OnInit {
+export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
   
   @Input() private isActive: boolean;
   @Input() private currentComment: string;
 
+  // We have to tell the parent the comment updated since the keyboard doesn't maintain the comment
   @Output() commentChange = new EventEmitter();
+  // The keyboard's presence is controlled by the parent BUT the keyboard can also dismiss itself
   @Output() dismissKeyboard = new EventEmitter();
-
+  // Handy internal element reference for controlling the emoji filter actions
   @ViewChild('emojiScrollArea') emojiScrollArea;
 
+  // Variables for controlling the emoji filter buttons
   private activeCategoryIndex: number = 0;
   private scrollAreaOffset: number = 0;
 
@@ -58,9 +61,12 @@ export class EmojiKeyboardComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+      
   }
 
-
+  ngAfterViewInit() {
+    this.updateScrollValues();
+  }
 
   // When clicking a category, jump to that section
   goToCategory(index): void {
@@ -69,13 +75,16 @@ export class EmojiKeyboardComponent implements OnInit {
   }
 
   scrollUpdate(event) {
+      console.log( event.target.scrollTop + " " + event.target.offsetHeight );
       this.scrollAreaOffset = event.target.scrollTop;
   }
 
+  // Runs on view init and onresize, to keep scroll event light
   updateScrollValues() {
     // Get Y values for categories
     this.emojifilters.forEach((value, index) => {
         this.emojifilters[index]['scrollY'] = this.emojiScrollArea.nativeElement.querySelector('#category'+index).offsetTop;
+        console.log(this.emojifilters[index]['scrollY']);
     });
   }
 
