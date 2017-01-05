@@ -284,7 +284,6 @@ describe('App', () => {
     verifyURL("/reading/");
   });
 
-  // WIP
   /* Test: Add reading, don’t enter title
     - Go to Teacher Dashboard
     - Click add a reading button
@@ -316,7 +315,6 @@ describe('App', () => {
     browser.wait(EC.visibilityOf(element(by.className("banner-error"))), 3000, 'The error message never showed up.'); 
   });
 
-  // WIP
   /* Test: Add reading, don’t enter content
     - Go to Teacher Dashboard
     - Click add a reading button
@@ -326,6 +324,27 @@ describe('App', () => {
     - Tab and hit enter/ click on “Add reading button”
     - Receive error message asking to give reading some content
   */
+  it('teacher user cannot add a reading without a title', () => {
+    // Initialize variables
+    let title     = "Protractor Likes Peaches (Test)";
+    let sourceURL = "http://www.omfgdogs.com";
+
+    // Home Page
+    logInWithTeacherAccount();
+
+    // Dashboard
+    verifyURL("dashboard");
+    clickAddReadingButton();
+
+    // Add Reading Page
+    verifyURL("/new-reading");
+    typeInReadingTitle(title);
+    typeInSourceURL(sourceURL);
+    clickSubmitAddReadingButton();
+
+    //Wait for that error message, kids
+    browser.wait(EC.visibilityOf(element(by.className("banner-error"))), 3000, 'The error message never showed up.'); 
+  });
 
   /*
 ----------------------------------- Student Action Tests --------------------------------------
@@ -378,20 +397,27 @@ describe('App', () => {
     - Click on quick code and enter in invalid code, click enter or join button
     - Receive error stating that code is invalid
   */
+  it('user can view guides/FAQ', () => {
+    // Home Page
+    clickOnFooterGuidesButton();
+
+    // Guides Page
+    verifyURL("guide");
+  });
   
-  // WIP
   /* Test: Get to new project through dashboard
     - Be on Student dashboard page
     - Click project code and enter valid project code, click join button or hit enter
     - Redirect to project
   */
+  // YET TO BE VERIFIED AS A WORKING TEST
   it('enter a project code from the dashboard', () => {
     //Home Page
     logInWithStudentAccount();
 
     // Dashboard
     verifyURL("dashboard");
-    enterProjectCode('fcx6');
+    enterProjectCode('y657');
     let joinProjectBtn = element(by.buttonText("Join Project!"));
     browser.waitForAngular();
     joinProjectBtn.click();
