@@ -24,7 +24,18 @@ describe('App', () => {
     element(by.id('passwordInput')).sendKeys('student'); // protractor.Key.ENTER
     
     pressEnter();
-    browser.wait( EC.urlContains('dashboard'), 10000, 'Dashboard should open within 3 seconds. It did not.');
+    browser.wait( EC.urlContains('dashboard'), 10000, 'Dashboard should open within 3 seconds. It did not. Login potentially failed.');
+  } // function logInWithStudentAccount
+
+  function logInWithTeacherAccount () 
+  {
+    browser.wait(EC.urlContains('home'), 3000, 'logInWithTeacherAccount(): could not find the URL for the home page. :(');
+
+    element(by.id('usernameInput')).sendKeys('teach');
+    element(by.id('passwordInput')).sendKeys('teach'); // protractor.Key.ENTER
+    
+    pressEnter();
+    browser.wait( EC.urlContains('dashboard'), 10000, 'Dashboard should open within 3 seconds. It did not. Login potentially failed.');
   } // function logInWithStudentAccount
 
   function pressEnter ()
@@ -50,15 +61,18 @@ describe('App', () => {
   {
     let codeInput = element(by.id('projectCodeInput'));
 
-    browser.wait(EC.urlContains('home'), 10000, 'enterProjectCode(): could not find the URL for the home page. :(');
     codeInput.sendKeys(projectCode);
   } // function enterProjectCodeAndSubmit(code)
+
+  function submitProjectCode(projectCode)
+  {
+    enterProjectCode(projectCode);
+    pressEnter();
+  } // function submitProjectCode(projectCode)
 
   function enterGuestName(guestName)
   {
     let guestCodeInput  = element(by.id('guestNameInput'));
-
-    browser.wait(EC.urlContains('join'), 5000, 'The Join/Login page never showed up. :/');
     guestCodeInput.sendKeys(guestName);
   } // function joinAsGuest(guestName)
 
@@ -70,6 +84,7 @@ describe('App', () => {
 
   function clickLogoButton()
   {
+    let sideBar = element(by.id('sideBar')); // Make sure we're using the sidebar, ya know?
     let logoBtn = element(by.id('logo'));
     logoBtn.click();
   } // function clickLogoButton()
@@ -77,7 +92,16 @@ describe('App', () => {
   function verifyURL(urlSnippet)
   {
     browser.wait(EC.urlContains(urlSnippet), 5000, ('Never arrived at the url containing: ' + urlSnippet + '. :('));
-  }
+  } // function verifyURL(urlSnippet)
+
+  function clickOnFooterGuidesButton()
+  {
+    let footer = element(by.id("footer")); // hey it finds this though... solution in the works.
+    
+
+    let fterGuidesBtn = footer.element(by.id("footerGuidesLink")); // IT CAN'T FIND IT
+    fterGuidesBtn.click();
+  } // function clickOnFooterGuidesButton()
 
   /*
 ------------------------------------ Super Basic Tests ---------------------------------
@@ -98,6 +122,7 @@ describe('App', () => {
 
   // Test: logging in with correct login information.
   it('user can login with correct credentials', () => {
+    verifyURL("home");
     logInWithStudentAccount();
   });
 
@@ -142,39 +167,59 @@ describe('App', () => {
     verifyURL('account');
   });
 
-  // WIP 
   /* Test: Go back to Dashboard
     - Be logged into edji (teacher or student) and on reading, account details or project page
     - Click Edji logo in top left corner of page
     - Redirect to dashboard
   */
   it('user can log in, go to home, and go back to the dashboard', () => {
-    // Uses the student account.
-
     // Home Page
-    logInWithStudentAccount();
+    logInWithStudentAccount(); // Uses the student account.
+
+    // Dashboard
     verifyURL('dashboard');
+    clickSidebarAccountButton();
+
+    // Account Page
+    verifyURL("account");
+    clickLogoButton();
+
+    // Dashboard
+    verifyURL("dashboard");
   });
 
-  // WIP
   /* Test: View guides/faq
     - Be on any Edji page except guide.edji.it
     - Click guides button at bottom of page
     - Redirect to guide.edji.it
   */
+  // WORK IN PROGRESS
+  it('user can view guides/FAQ', () => {
+    // Home Page
+    clickOnFooterGuidesButton();
 
-  // WIP 
+    // Guides Page
+    verifyURL("guide");
+  });
+
   /* Test: View Edji twitter page
     - Be on any Edji page except guide.edji.it
     - Click guides button at bottom of page
     - Redirect to Edji twitter page
   */
+  // WORK IN PROGRESS
+  it('user can go to the EDJI twitter page', () => {
+    let footer = element(by.id("footer")); // hey it finds this though... solution in the works.
+    let twitterLink = footer.element(by.id("footerTwitterLink")); // IT CAN'T FIND IT
+    browser.waitForAngular();
+    twitterLink.click();
+    verifyURL("twitter");
+  });
 
   /*
 ------------------------------------- Teacher Action Tests ------------------------------------
    */
 
-  // WIP
   /* Test: Add a reading
     - Go to Teacher Dashboard
     - Click add a reading button
@@ -185,6 +230,12 @@ describe('App', () => {
     - Tab and hit enter/ click on “Add reading button”
     - Redirect to reading page of newly created reading
   */
+  // WORK IN PROGRESS
+  it('teacher can add a reading', () => {
+    // Home Page
+    logInWithTeacherAccount();
+    
+  });
 
   // WIP
   /* Test: Add reading, don’t enter title
@@ -225,6 +276,7 @@ describe('App', () => {
     pressEnter();
 
     // Join/Login Page
+    verifyURL("join");
     enterGuestName('Queen Elizabeth II');
     pressEnter();
 
@@ -233,7 +285,6 @@ describe('App', () => {
     expect(element(by.id("projectTitle")).isPresent()).toBe(true, 'Could not find the project title.');  //FIND THE TITLE
   });
 
-  // WIP
   /* Test: Get to project through quick code, be rejected because of vulgar name
     - Path to Edji.it
     - Enter in valid project code, click join project or hit enter
@@ -241,6 +292,17 @@ describe('App', () => {
     - Click on join as guest field and type in vulgar name hit enter or click join project button
     - Receive “Name is invalid” error message
   */
+  it('can get to project through quick code, be rejected because of vulgar name', () => {
+    // Home Page
+    submitProjectCode('fcx6');
+
+    // Join / Login Page
+    verifyURL("join");
+    enterGuestName("Fucking Fucks");
+    pressEnter();
+    let errorMsg = element(by.binding('errorObject.invalidAuthorName'));
+    browser.wait(EC.presenceOf(errorMsg), 3000, 'The error message should show up. It did not.');
+  });
 
   // WIP
   /* Test: Type in invalid project code at quick code enter
@@ -255,6 +317,21 @@ describe('App', () => {
     - Click project code and enter valid project code, click join button or hit enter
     - Redirect to project
   */
+  it('enter a project code from the dashboard', () => {
+    //Home Page
+    logInWithStudentAccount();
+
+    // Dashboard
+    verifyURL("dashboard");
+    enterProjectCode('fcx6');
+    let joinProjectBtn = element(by.buttonText("Join Project!"));
+    browser.waitForAngular();
+    joinProjectBtn.click();
+
+    //Project Page
+    verifyURL("project");
+    expect(element(by.id("projectTitle")).isPresent()).toBe(true, 'Could not find the project title.');  //FIND THE TITLE
+  });
 
   // WIP
   /* Test: Go to previous project

@@ -130,7 +130,7 @@
         </div>
         <div class="col-sm-6">
             <h1>Add Project</h1>
-            <input type="text" class="big-field lowercase-field on-white" ng-enter="addSession(sessionCode)" [(ngModel)]="sessionCode" placeholder="Project Code" />
+            <input id="projectCodeInput" type="text" class="big-field lowercase-field on-white" ng-enter="addSession(sessionCode)" [(ngModel)]="sessionCode" placeholder="Project Code" />
             <div class="button__row">
                 <button (click)="addSession(sessionCode)" class="button" name="Add" href="#">Join Project!</button>
             </div>
