@@ -15,7 +15,7 @@ import { AuthService } from './shared';
 
 
 export const ROUTES: Routes = [
-  { path: '',      redirectTo: '/home', pathMatch: 'full' },
+  { path: '',      redirectTo: '/dashboard', pathMatch: 'full', canActivate: [AuthService] },
   { path: 'home',  component: HomeComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'join/:code', component: JoinComponent },
