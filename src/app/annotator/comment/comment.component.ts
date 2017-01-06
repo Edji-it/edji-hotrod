@@ -1,6 +1,6 @@
 import { CommentStmt } from '@angular/compiler/src/output/output_ast';
 import { Comment } from '@angular/compiler/src/ml_parser/ast';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChange } from '@angular/core';
 
 import { ProjectService } from '../../shared/project.service';
 
@@ -12,7 +12,16 @@ import { ProjectService } from '../../shared/project.service';
 export class CommentComponent implements OnInit {
 
   @Input() private comment: any;
-  @Input() private projectId: string;
+  
+  private active = false;
+  @Input()
+  set isActive(isActive: boolean) {
+    if (typeof(isActive) !== 'undefined' && this.active !== isActive) {
+      this.toggleActive();
+    }
+  }
+  get isActive(): boolean { return this.active; }
+
   @Output() commentDeleted = new EventEmitter<string>();
   @Output() commentActivation = new EventEmitter<boolean>();
 
@@ -32,20 +41,21 @@ export class CommentComponent implements OnInit {
     
   }
 
-
-  toggleActive(): void {
-      if (this.comment.active === true) {
-          this.comment.active = false;
+  toggleActive( ): void {
+      if (this.active === true) {
+          this.active = false;
           this.commentActivation.emit(false);
+          // Save when comment is toggled away from
+          this.updateComment(this.comment.data);
       } else {
-          this.comment.active = true; 
+          this.active = true; 
           this.commentActivation.emit(true);
       }
   }
 
-  // Updates comment when child comment-type tells it to via Output
+  // Updates comment in db
   updateComment(commentData: string): void {
-    this._projects.saveComment(this.projectId, commentData, this.comment.start, this.comment.end, this.comment.text, this.comment._id)
+    this._projects.saveComment(this.comment.project_id, commentData, this.comment.start, this.comment.end, this.comment.text, this.comment._id)
       .then(data => {
         this.justSaved = true;
         setTimeout(() => {

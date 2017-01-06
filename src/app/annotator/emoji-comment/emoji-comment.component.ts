@@ -10,7 +10,7 @@ export class EmojiCommentComponent implements OnInit {
 
     @Input() private comment: any;
     // @Input() private isActive: boolean;
-    @Output() onCommentUpdate = new EventEmitter<string>(); 
+    // @Output() onCommentUpdate = new EventEmitter<string>(); 
     
     constructor() { 
         // console.log(emojiA);

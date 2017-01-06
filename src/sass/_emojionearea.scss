@@ -761,3 +761,10 @@ $image-map: () !default;
 //         opacity: 1;
 //     }
 // }
+
+
+.emojionearea .emojionearea-picker .emojionearea-scroll-area .emojibtn i, 
+.emojionearea .emojionearea-picker .emojionearea-scroll-area .emojibtn img {
+    width: 36px !important;
+    height: 36px !important;
+}

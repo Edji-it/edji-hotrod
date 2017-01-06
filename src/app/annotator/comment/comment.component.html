@@ -3,7 +3,7 @@
     <div class='emoji-comment-username'>{{comment.author}}</div>
     <div (click)="toggleActive()" class='emoji-comment-input-wrapper'>
         <!--Swap between different comment types-->
-        <emoji-comment [comment]="comment" (onCommentUpdate)='updateComment($event)'></emoji-comment>
+        <emoji-comment *ngIf="comment.type == 'emoji' || !comment.type" [comment]="comment"></emoji-comment>
         <button (click)="deleteComment(comment._id)" class='inline-delete'>+</button>
     </div>
     <i class="emoji-comment__saved" [innerHtml]='":ok_hand:" | emojione'></i>

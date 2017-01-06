@@ -71,6 +71,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 this.commentsByIndex[comment.start] = [];
             }
             // Populate local comments array by start index
+            comment.project_id = this.project._id;
             this.commentsByIndex[comment.start].push(comment);
 
             // Add highlights
@@ -195,6 +196,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.activeComment = {};
     }
 
+    /**
+     * Receive comment data from input sources:
+     * - Gets event from Emoji Keyboard
+     */
     updateActiveComment(commentData: string) {
         this.activeComment.data = commentData;
     }

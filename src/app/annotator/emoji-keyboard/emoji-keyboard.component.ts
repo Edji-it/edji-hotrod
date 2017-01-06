@@ -75,7 +75,6 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
   }
 
   scrollUpdate(event) {
-      console.log( event.target.scrollTop + " " + event.target.offsetHeight );
       this.scrollAreaOffset = event.target.scrollTop;
   }
 
@@ -84,13 +83,11 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
     // Get Y values for categories
     this.emojifilters.forEach((value, index) => {
         this.emojifilters[index]['scrollY'] = this.emojiScrollArea.nativeElement.querySelector('#category'+index).offsetTop;
-        console.log(this.emojifilters[index]['scrollY']);
     });
   }
 
   addEmoji(emoji: string): void {
       this.currentComment += emoji;
-      console.log(this.currentComment);
       this.commentChange.emit(this.currentComment);
   }
 
