@@ -1,6 +1,6 @@
 {
   "name": "angular2-webpack-starter",
-  "version": "5.1.1",
+  "version": "5.1.3",
   "description": "Hot Rod is Edji's roaring Front End!",
   "keywords": [
     "angular2",
@@ -19,6 +19,7 @@
     "clean:install": "npm set progress=false && npm install",
     "clean:start": "npm start",
     "clean": "npm cache clean && npm run rimraf -- node_modules doc coverage dist",
+    "deploy:dev" : "grunt bump && npm run build:dev && grunt push:dev && grunt cloudfront:dev",
     "dev": "npm run server:dev",
     "docker": "docker",
     "docs": "npm run typedoc -- --options typedoc.json --exclude '**/*.spec.ts' ./src/",
