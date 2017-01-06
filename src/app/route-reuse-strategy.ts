@@ -4,8 +4,9 @@ export class ReuseStrategy implements RouteReuseStrategy {
   private handlers: {[key: string]: DetachedRouteHandle} = {};
 
   shouldDetach(route: ActivatedRouteSnapshot): boolean {
+    // keep the route if it's going to dashboard
+    // can be expanded into array if we want to keep other components
     if (route.routeConfig.path === "dashboard") {
-      console.log("saving route!");
       return true;
     } else {
       return false;
@@ -29,7 +30,11 @@ export class ReuseStrategy implements RouteReuseStrategy {
   }
 
   shouldReuseRoute(future: ActivatedRouteSnapshot, curr: ActivatedRouteSnapshot): boolean {
-      // console.debug('CustomReuseStrategy:shouldReuseRoute', future, curr);
-      return future.routeConfig === curr.routeConfig;
+      if (future.routeConfig === "dashboard") {
+        return true;
+      } else {
+        return false;
+      }
+      
   }
 }

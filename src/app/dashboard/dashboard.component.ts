@@ -1,5 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Subscription } from 'rxjs/Subscription';
 
 import { AppState } from '../app.service';
 import { AuthService } from '../shared/auth.service';
@@ -18,7 +21,7 @@ import { ProjectService } from '../shared/project.service';
   // Every Angular template is first compiled by the browser before Angular runs it's compiler
   templateUrl: './dashboard.component.html'
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit, OnDestroy {
   // Set our default values
   private readings: any;
   private projects: Array<any> = [];
@@ -27,17 +30,23 @@ export class DashboardComponent {
   private errorObject = {
     wrongCode : ""
   };
+  private subscriptions: Subscription[] = [];
+
+  private codeForm: FormGroup;
 
   // TypeScript public modifiers
   constructor(
-      public appState: AppState, 
-      public router: Router,
-      private route: ActivatedRoute,
-      private _auth: AuthService, 
-      private _readings: ReadingService,
-      private _projects: ProjectService
-    ) {
-      //
+    public appState: AppState, 
+    public router: Router,
+    private route: ActivatedRoute,
+    private _auth: AuthService, 
+    private _readings: ReadingService,
+    private _projects: ProjectService,
+    fb: FormBuilder
+  ) {
+    this.codeForm = fb.group({
+      projectCode: [null, Validators.compose([Validators.required, Validators.minLength(4), Validators.maxLength(4)])]
+    });
   }
 
   ngOnInit() {
@@ -57,23 +66,35 @@ export class DashboardComponent {
     this._projects.getAll()
       .then(
         (data)  => { 
-          console.log(data);
           this.projects = data;
         },
         (error) => {
 
         });
-    
-    console.log(this.route.routeConfig.path);
-    console.log(this);
 
     // sessions.getAll().success(function(response){
     //     $scope.sessions = response;
     // });
   }
 
+  ngOnDestroy() {
+    this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
+  }
+
   deleteReading(reading) {
 
+  }
+
+  private addSession(formValue: any): void {
+    console.log("adding session!");
+    console.log(formValue);
+
+    this._projects.currentProject.subscribe((project) => {
+      console.log(project);
+      this.router.navigate(['project', project._id]);
+    });
+
+    this._projects.setCurrentProject(formValue.projectCode);
   }
 
 

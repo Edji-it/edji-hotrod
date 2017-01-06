@@ -129,12 +129,17 @@
 
         </div>
         <div class="col-sm-6">
-            <h1>Add Project</h1>
-            <input id="projectCodeInput" type="text" class="big-field lowercase-field on-white" ng-enter="addSession(sessionCode)" [(ngModel)]="sessionCode" placeholder="Project Code" />
+        <form [formGroup]="codeForm" (ngSubmit)="addSession(codeForm.value)">
+            <label for="projectCodeInput"><h1>Add Project</h1></label>
+            <input id="projectCodeInput" [formControl]="codeForm.controls['projectCode']" type="text" class="big-field lowercase-field on-white"  placeholder="Project Code" />
+            <div *ngIf="codeForm.controls['projectCode'].hasError('required')" class="alert-info">Enter a project code to add a project!</div>
+            <div *ngIf="codeForm.controls['projectCode'].hasError('minlength') || codeForm.controls['projectCode'].hasError('maxlength')" class="alert-info">We like 4-character codes at Edji</div>
+
             <div class="button__row">
-                <button (click)="addSession(sessionCode)" class="button" name="Add" href="#">Join Project!</button>
+                <button type="submit" class="button" name="add project">Join Project!</button>
             </div>
             <div class="banner-error" *ngIf="errorObject.wrongCode" (textContent)="errorObject.wrongCode"></div>
+        </form>
         </div>
     </div>
 
