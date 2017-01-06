@@ -94,15 +94,6 @@ describe('App', () => {
     browser.wait(EC.urlContains(urlSnippet), 5000, ('Never arrived at the url containing: ' + urlSnippet + '. :('));
   } // function verifyURL(urlSnippet)
 
-  function clickOnFooterGuidesButton()
-  {
-    let footer = element(by.id("footer")); // hey it finds this though... solution in the works.
-    
-
-    let fterGuidesBtn = footer.element(by.id("footerGuidesLink")); // IT CAN'T FIND IT
-    fterGuidesBtn.click();
-  } // function clickOnFooterGuidesButton()
-
   function clickAddReadingButton ()
   {
     let addReadingBtn = element(by.id("addReadingButton"));
@@ -133,6 +124,12 @@ describe('App', () => {
     submitButton.click();
   }// function clickSubmitAddReadingButton()
 
+  function clickProject(targetTitle)
+  {
+    let project = element(by.cssContainingText('.list-item-title', targetTitle));
+    project.click();
+  }
+
   /*
 ------------------------------------ Super Basic Tests ---------------------------------
   */
@@ -140,7 +137,7 @@ describe('App', () => {
   /* Test: Extremely Basic Test.
     - IF THIS FAILS: You are not running Protractor correctly;
   */
-  it('should have a title', () => {
+  it('Extremely Basic Test FAILED', () => {
     let subject = browser.getTitle();
     let result  = 'Edji';
     expect(subject).toEqual(result);
@@ -224,13 +221,17 @@ describe('App', () => {
     - Redirect to guide.edji.it
   */
   // WORK IN PROGRESS
+  /*
   it('user can view guides/FAQ', () => {
-    // Home Page
-    clickOnFooterGuidesButton();
+    let footer = element(by.id("footer")); // hey it finds this though... solution in the works.
+    let fterGuidesBtn = footer.element(by.id("footerGuidesLink")); // IT CAN'T FIND IT
+
+    fterGuidesBtn.click();
 
     // Guides Page
     verifyURL("guide");
   });
+  */
 
   /* Test: View Edji twitter page
     - Be on any Edji page except guide.edji.it
@@ -238,17 +239,28 @@ describe('App', () => {
     - Redirect to Edji twitter page
   */
   // WORK IN PROGRESS
+  /*
   it('user can go to the EDJI twitter page', () => {
+
+    // Initialize
     let footer = element(by.id("footer")); // hey it finds this though... solution in the works.
     let twitterLink = footer.element(by.id("footerTwitterLink")); // IT CAN'T FIND IT
-    browser.waitForAngular();
+
     twitterLink.click();
+
     verifyURL("twitter");
   });
+  */
 
   /*
 ------------------------------------- Teacher Action Tests ------------------------------------
    */
+
+  /* Test: Student account can log out successfully
+    - Log in with Student account
+    - Arrive at Dashboard
+    - Log out and arrive at home page
+  */
 
   /* Test: Add a reading
     - Go to Teacher Dashboard
@@ -346,6 +358,12 @@ describe('App', () => {
     browser.wait(EC.visibilityOf(element(by.className("banner-error"))), 3000, 'The error message never showed up.'); 
   });
 
+  /* Test: Teacher account can log out successfully
+    - Log in with Teacher account
+    - Arrive at Dashboard
+    - Log out and arrive at home page
+  */
+
   /*
 ----------------------------------- Student Action Tests --------------------------------------
   */
@@ -379,6 +397,7 @@ describe('App', () => {
     - Click on join as guest field and type in vulgar name hit enter or click join project button
     - Receive “Name is invalid” error message
   */
+   // YET TO BE VERIFIED AS A WORKING TEST BECAUSE SITE ISSUES
   it('can get to project through quick code, be rejected because of vulgar name', () => {
     // Home Page
     submitProjectCode('fcx6');
@@ -387,8 +406,10 @@ describe('App', () => {
     verifyURL("join");
     enterGuestName("Fucking Fucks");
     pressEnter();
+
+    // Lets find that error
     let errorMsg = element(by.binding('errorObject.invalidAuthorName'));
-    browser.wait(EC.presenceOf(errorMsg), 3000, 'The error message should show up. It did not.');
+    browser.wait(EC.visibilityOf(errorMsg), 3000, 'The error message should show up. It did not.');
   });
 
   // WIP
@@ -397,12 +418,14 @@ describe('App', () => {
     - Click on quick code and enter in invalid code, click enter or join button
     - Receive error stating that code is invalid
   */
-  it('user can view guides/FAQ', () => {
-    // Home Page
-    clickOnFooterGuidesButton();
+   // YET TO BE VERIFIED AS A WORKING TEST BECAUSE SITE ISSUES
+  it('user is given an error when giving an invalid project code at quick code enter', () => {
+    enterProjectCode("HitlerHatesEDJI");
+    pressEnter();
 
-    // Guides Page
-    verifyURL("guide");
+    // Check for that error
+    let errorMsg = element(by.binding('errorObject.invalidCode'));
+    browser.wait(EC.visibilityOf(errorMsg), 3000, 'The error message should show up. It did not.');
   });
   
   /* Test: Get to new project through dashboard
@@ -410,7 +433,7 @@ describe('App', () => {
     - Click project code and enter valid project code, click join button or hit enter
     - Redirect to project
   */
-  // YET TO BE VERIFIED AS A WORKING TEST
+  // YET TO BE VERIFIED AS A WORKING TEST BECAUSE SITE ISSUES
   it('enter a project code from the dashboard', () => {
     //Home Page
     logInWithStudentAccount();
@@ -427,12 +450,35 @@ describe('App', () => {
     expect(element(by.id("projectTitle")).isPresent()).toBe(true, 'Could not find the project title.');  //FIND THE TITLE
   });
 
-  // WIP
   /* Test: Go to previous project
     - Go to student dashboard
     - Click on a project under “your projects”
     - Redirect to correct project
   */
+  it('can go to a project, go to dashboard, then go to another project', () => {
+    //Initialize some variables
+    let firstProject  = "Monday";
+    let secondProject = "Vocabulary";
+
+    //Home Page
+    logInWithStudentAccount();
+
+    // Dashboard
+    verifyURL("dashboard");
+    clickProject(firstProject);
+
+    // Project page
+    verifyURL("project");
+    expect(element(by.id("projectTitle")).isDisplayed()).toBe(true);
+    clickLogoButton();
+
+    // Dashboard
+    verifyURL("dashboard");
+    clickProject(firstProject);
+
+    // Project Page
+    verifyURL("project");
+  });
 
   // WIP
   /* Test: Make a comment on a project
@@ -441,6 +487,42 @@ describe('App', () => {
     - Click Emoji button
     - Go to Emoji keyboard (on screen) and choose an emoji
     - Click done button
+  */
+  // WORK IN PROGRESS
+  /*
+  it('can go to a project and make a comment', () => {
+    //Initialize some variables
+    let firstProject  = "Monday";
+    let secondProject = "Vocabulary";
+
+    //Home Page
+    logInWithStudentAccount();
+
+    // Dashboard
+    verifyURL("dashboard");
+    clickProject(firstProject);
+
+    // Project page
+    verifyURL("project");
+    expect(element(by.id("projectTitle")).isDisplayed()).toBe(true);
+    clickLogoButton();
+
+    // Dashboard
+    verifyURL("dashboard");
+    clickProject(firstProject);
+
+    // Project Page
+    verifyURL("project");
+  });
+  */
+
+  // WIP
+  /* Test: 
+    - log in to student account
+    - add a project from dashboard
+    - go to said project 
+    - then go back to the dashboard 
+    - project should still exist.
   */
 
 });
