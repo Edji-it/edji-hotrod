@@ -110,8 +110,7 @@ module.exports = function ( grunt ) {
     bump: {
       options: {
         files: [
-          "package.json",
-          "bower.json"
+          "package.json"
         ],
         commit: true,
         commitMessage: 'Release v%VERSION%',
@@ -121,8 +120,7 @@ module.exports = function ( grunt ) {
         push: true,
         pushTo: 'origin',
         commitFiles: [
-          "package.json",
-          "bower.json"
+          "package.json"
         ]
       }
     },
