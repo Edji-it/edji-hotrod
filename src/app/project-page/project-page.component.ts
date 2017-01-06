@@ -24,8 +24,10 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.projectId = this._route.snapshot.params['id'];
-        // this.project = this._projects.currentProject.last;
-        // console.log(this.project);
+        
+        // One time subscription to set current Project from route
+        this._projects.setCurrentProject(this.projectId).take(1).subscribe();
+
         this.subscriptions.push(
             this._projects.currentProject.subscribe(
                 (project) => {
