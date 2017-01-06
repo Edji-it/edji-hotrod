@@ -24,6 +24,8 @@ import { AppState, InternalStateType } from './app.service';
 import { AuthService } from './shared/auth.service';
 import { ReadingService } from './shared/reading.service';
 import { ProjectService } from './shared/project.service';
+import { ReuseStrategy } from './route-reuse-strategy';
+import { RouteReuseStrategy } from '@angular/router';
 
 // Directives
 import { MediumEditorDirective } from 'angular2-medium-editor/medium-editor.directive.ts';
@@ -53,7 +55,8 @@ const APP_PROVIDERS = [
   AppState,
   AuthService,
   ReadingService,
-  ProjectService
+  ProjectService,
+  { provide: RouteReuseStrategy, useClass: ReuseStrategy }
 ];
 
 type StoreType = {

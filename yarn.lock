@@ -36,9 +36,9 @@
   dependencies:
     parse5 "^2.2.1"
 
-"@angular/router@3.2.1":
-  version "3.2.1"
-  resolved "https://registry.yarnpkg.com/@angular/router/-/router-3.2.1.tgz#eeace722a5a222bd6b1379df7a5bc580ace093ca"
+"@angular/router@^3.4.1":
+  version "3.4.1"
+  resolved "https://registry.yarnpkg.com/@angular/router/-/router-3.4.1.tgz#079c8580943547a710f292026ac86a08d336a49d"
 
 "@angularclass/conventions-loader@^1.0.2":
   version "1.0.13"

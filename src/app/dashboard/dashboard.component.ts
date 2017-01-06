@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { AppState } from '../app.service';
 import { AuthService } from '../shared/auth.service';
@@ -31,7 +31,8 @@ export class DashboardComponent {
   // TypeScript public modifiers
   constructor(
       public appState: AppState, 
-      public router: Router, 
+      public router: Router,
+      private route: ActivatedRoute,
       private _auth: AuthService, 
       private _readings: ReadingService,
       private _projects: ProjectService
@@ -62,6 +63,9 @@ export class DashboardComponent {
         (error) => {
 
         });
+    
+    console.log(this.route.routeConfig.path);
+    console.log(this);
 
     // sessions.getAll().success(function(response){
     //     $scope.sessions = response;
