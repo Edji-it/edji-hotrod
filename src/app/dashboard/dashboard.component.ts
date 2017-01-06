@@ -28,7 +28,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private currentUser: any; 
   private isTeacher: Boolean = false;
   private errorObject = {
-    wrongCode : ""
+    wrongCode : "",
+    projectError: "",
+    readingError: ""
   };
   private subscriptions: Subscription[] = [];
 
@@ -60,7 +62,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.readings = data;
         },
         (error) => {
-
+          this.errorObject.readingError = "We had some trouble getting your readings, it might be our fault";
         });
     
     this._projects.getAll()
@@ -69,7 +71,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.projects = data;
         },
         (error) => {
-
+          this.errorObject.projectError = "We had some trouble getting your projects, it might be our fault";
         });
 
     // sessions.getAll().success(function(response){
