@@ -86,13 +86,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   private addSession(formValue: any): void {
-    console.log("adding session!");
-    console.log(formValue);
 
-    this._projects.currentProject.subscribe((project) => {
-      console.log(project);
-      this.router.navigate(['project', project._id]);
-    });
+    // subscribe to the currentProject observable right before you change it
+    this.subscriptions.push(
+      this._projects.currentProject.subscribe((project) => {
+        this.router.navigate(['project', project._id]);
+      })
+    );
 
     this._projects.setCurrentProject(formValue.projectCode);
   }
