@@ -10,7 +10,6 @@ import { ProjectService } from '../shared/project.service';
     styleUrls: ['project-page.component.scss'],
     templateUrl: 'project-page.component.html',
     providers: [
-        ProjectService
     ]
 })
 export class ProjectPageComponent implements OnInit, OnDestroy {
@@ -25,18 +24,14 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.projectId = this._route.snapshot.params['id'];
+        // this.project = this._projects.currentProject.last;
+        // console.log(this.project);
         this.subscriptions.push(
-            this._projects.get(this.projectId)
-                .subscribe(
-                    data => {
-                        this.project = data;
-                    },
-                    err => {
-                        console.log(err);
-                        if (err['error']) {
-                            this.error = err['error'];
-                        }
-                    })
+            this._projects.currentProject.subscribe(
+                (project) => {
+                    this.project = project;
+                }
+            )
         );
     }
 

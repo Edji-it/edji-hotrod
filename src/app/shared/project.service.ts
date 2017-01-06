@@ -1,20 +1,22 @@
 import { ActivatedRoute, Params } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
-import { Observable, Subject } from 'rxjs/Rx';
+import { Observable, BehaviorSubject } from 'rxjs/Rx';
 import 'rxjs/add/operator/toPromise';
 
 import { AuthService } from './auth.service';
 
 @Injectable()
 export class ProjectService {
-
   private targetProjectId: string = '';
-  private currentProjectSource: Subject<any> = new Subject<any>();
+
+  /** project will be given out as observable */
+  private project: any = { title: "initial value" };
+  private currentProjectSource: BehaviorSubject<any> = new BehaviorSubject<any>(this.project);
+  public currentProject: Observable<any> = this.currentProjectSource.asObservable();
 
   // Maintain local Project data and its updates in this service
-  private project: any;
-  public currentProject: Observable<any> = this.currentProjectSource.asObservable();
+  
 
   constructor(private http: Http, private _auth: AuthService, private _route: ActivatedRoute) {
   }
@@ -33,6 +35,7 @@ export class ProjectService {
   /**
    * Adds a user to a project code and updates currentProject observable
    * @param projectCode Short project code
+   * @returns observable with project data
    */
   public setCurrentProject(projectCode: string): Observable<any> {
     return this.http.get(this._auth.baseUrl + '/sessions/' + projectCode, this._auth.getOptions())
@@ -40,6 +43,7 @@ export class ProjectService {
             (data) => {
                 this.project = data.json(); //can later have local setter to do validation/data manipulation before passing through observable
                 this.currentProjectSource.next(this.project);
+                return this.project;
             });
   }
 
