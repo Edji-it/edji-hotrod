@@ -34,15 +34,12 @@ export class ProjectService {
    * Adds a user to a project code and updates currentProject observable
    * @param projectCode Short project code
    */
-  public setCurrentProject(projectCode: string): void {
-    this.http.get(this._auth.baseUrl + '/sessions/' + projectCode, this._auth.getOptions())
-        .subscribe(
-            data => {
+  public setCurrentProject(projectCode: string): Observable<any> {
+    return this.http.get(this._auth.baseUrl + '/sessions/' + projectCode, this._auth.getOptions())
+        .map(
+            (data) => {
                 this.project = data.json(); //can later have local setter to do validation/data manipulation before passing through observable
                 this.currentProjectSource.next(this.project);
-            },
-            err => {
-                console.log(err);
             });
   }
 

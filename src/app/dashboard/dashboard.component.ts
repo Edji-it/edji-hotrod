@@ -81,20 +81,28 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }
 
-  deleteReading(reading) {
+  private deleteReading(reading) {
 
   }
 
+  /** attempts to navigate to the session */
   private addSession(formValue: any): void {
 
     // subscribe to the currentProject observable right before you change it
     this.subscriptions.push(
       this._projects.currentProject.subscribe((project) => {
+        console.log(project);
         this.router.navigate(['project', project._id]);
       })
     );
 
-    this._projects.setCurrentProject(formValue.projectCode);
+    this._projects.setCurrentProject(formValue.projectCode)
+      .subscribe(
+        (data) => {},
+        (error) => {
+          this.errorObject.wrongCode = "Unfortunately, we did not find that project";
+        }
+      );
   }
 
 
