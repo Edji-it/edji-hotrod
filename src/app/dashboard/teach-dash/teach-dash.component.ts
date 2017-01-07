@@ -41,6 +41,7 @@ export class TeachDashComponent implements OnInit, OnDestroy {
     this._readings.getAll()
       .then(
         (data)  => { 
+          console.log(data);
           this.readings = data;
         },
         (error) => {

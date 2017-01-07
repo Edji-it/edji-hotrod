@@ -43,6 +43,7 @@ export class StuDashComponent implements OnInit, OnDestroy {
     this._projects.getAll()
       .then(
         (data)  => {
+          console.log(data);
           this.projects = data;
         },
         (error) => {

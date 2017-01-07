@@ -22,7 +22,7 @@
                 </div>
             </div>
             <!--Show readings with date values-->
-            <div class="list-item-wrapper" *ngFor="let reading of readings" [class.hide]="reading.createdAt">
+            <div class="list-item-wrapper" *ngFor="let reading of readings">
                 <!--Implement: | orderBy:'-createdAt'-->
                 <div class="list-item__message" [ngClass]="{ 'slide-down' : confirmDelete }">
                     Delete "{{reading.title}}"?
@@ -34,35 +34,6 @@
                 <div class="list-item">
                     <div class="col-sm-6">
                         <a [routerLink]="['/reading', reading._id ]" class="list-item-title">
-                            {{reading.title}}
-                            <span *ngIf="!reading.title"><i>Untitled</i></span>
-                        </a>
-                        <p *ngIf="reading.createdAt">
-                            Created: {{ reading.createdAt | date:'mediumDate' }} 
-                        </p>
-                    </div>
-                        <div class="icon-row--right">
-                            <!--<a class="icon-button" (click)="confirmDelete = !confirmDelete">
-                                <img alt="❌" class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/274c.png">
-                            </a>-->
-                            <a class="icon-button" href="#/reading/{{reading._id}}">
-                                <img alt="👁" class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/1f441.png">
-                            </a>
-                        </div>
-                </div>
-            </div>
-            <!--Show readings without date values AFTER-->
-            <div class="list-item-wrapper" *ngFor="let reading of readings" [class.hide]="!reading.createdAt">
-                <div class="list-item__message" [ngClass]="{ 'slide-down' : confirmDelete }">
-                    Delete "{{reading.title}}"?
-                    <div class="button-row--right">
-                        <button class="btn-danger" (click)="deleteReading(reading)">Delete</button>
-                        <button class="btn-secondary" (click)="confirmDelete = false">Cancel</button>
-                    </div>
-                </div>
-                <div class="list-item">
-                    <div class="col-sm-6">
-                        <a href="#/reading/{{reading._id}}" class="list-item-title">
                             {{reading.title}}
                             <span *ngIf="!reading.title"><i>Untitled</i></span>
                         </a>
