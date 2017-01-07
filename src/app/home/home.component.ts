@@ -87,7 +87,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 		this._auth.login(formValue)
       .then(
         (data: any)  => { 
-          console.log(data);
           this.loginLoading = false;
           this.clearErrors();
 
