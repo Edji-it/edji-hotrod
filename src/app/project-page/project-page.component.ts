@@ -8,12 +8,9 @@ import { ProjectService } from '../shared/project.service';
     // moduleId: module.id,
     selector: 'edji-project-page',
     styleUrls: ['project-page.component.scss'],
-    templateUrl: 'project-page.component.html',
-    providers: [
-    ]
+    templateUrl: 'project-page.component.html'
 })
 export class ProjectPageComponent implements OnInit, OnDestroy {
-    private projectId: any;
     private project: any = {};
     private subscriptions: Subscription[] = [];
     private error: string;
@@ -36,6 +33,7 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
                         // I don't actually care to subscribe, but it doesn't fire if I don't...
                         this._projects.setCurrentProject(expectedId)
                             .subscribe((data) => {
+                                console.log(data);
                                 console.log("setCurrentProject finished");
                             })
                     } else {
