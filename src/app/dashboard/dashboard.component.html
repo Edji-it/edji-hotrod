@@ -93,42 +93,9 @@
     <!--Student View-->
     <div class="row" *ngIf="!isTeacher" style="margin-top: 50px;">
         <div class="col-sm-6">
-            <h1>Your Projects</h1>
-
-            <!--Temp-->
-            <div class="item-list">
-                <p  class="list-item-wrapper" *ngIf="projects.length < 1 && !errorObject.projectError">
-                   You have yet to add your first project. Ask your teacher for a project code!
-                </p>
-                <div *ngIf="errorObject.projectError && projects.length < 1" class="banner-error">{{errorObject.projectError}}</div>
-                <div *ngFor="let project of projects" [routerLink]="['/project', project._id]" class="list-item list-item--button" [class.hide]="!project.createdAt">
-                    <!--Implement: | orderBy:'-createdAt'-->
-                    <div class="list-item">
-                        <div class="col-sm-12">
-                            <div class="list-item-title">
-                                {{ project.label }}
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="list-item-data" *ngIf="project.reading_id && project.reading_id.title">
-                                <label>Reading</label>
-                                {{ project.reading_id.title }}
-                            </div>
-                        </div>
-                         <div class="col-sm-6">
-                            <div class="list-item-data" *ngIf="project.teacher_id && (project.teacher_id.fullname || project.teacher_id.username)">
-                                <label>Created by:</label>
-                                <span style="text-decoration:underline;">{{ project.teacher_id.fullname }}</span><span *ngIf="!project.teacher_id.fullname ">{{ project.teacher_id.username }}</span>
-                                <span> on {{ project.createdAt | date:'mediumDate' }}</span>
-                         </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-
+            <edji-stu-dash></edji-stu-dash>
         </div>
+        
         <div class="col-sm-6">
         <form [formGroup]="codeForm" (ngSubmit)="addSession(codeForm.value)">
             <label for="projectCodeInput"><h1>Add Project</h1></label>

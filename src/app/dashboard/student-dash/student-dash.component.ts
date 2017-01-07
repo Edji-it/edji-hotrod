@@ -1,0 +1,88 @@
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Subscription } from 'rxjs/Subscription';
+
+import { AuthService, ReadingService, ProjectService } from '../../shared';
+
+@Component({
+  selector: 'edji-stu-dash',
+  // We need to tell Angular's Dependency Injection which providers are in our app.
+  providers: [],
+  // Our list of styles in our component. We may add more to compose many styles together
+  styleUrls: [ './student-dash.component.scss' ],
+  // Every Angular template is first compiled by the browser before Angular runs it's compiler
+  templateUrl: './student-dash.component.html'
+})
+export class StuDashComponent implements OnInit, OnDestroy {
+  // Set our default values
+  private projects: Array<any> = [];
+  private currentUser: any; 
+  private isTeacher: Boolean = false;
+  private errorObject = {
+    wrongCode : "",
+    projectError: "",
+    readingError: ""
+  };
+  private subscriptions: Subscription[] = [];
+
+  private codeForm: FormGroup;
+
+  // TypeScript public modifiers
+  constructor(
+    public router: Router,
+    private route: ActivatedRoute,
+    private _auth: AuthService, 
+    private _readings: ReadingService,
+    private _projects: ProjectService,
+    fb: FormBuilder
+  ) {
+    this.codeForm = fb.group({
+      projectCode: [null, Validators.compose([Validators.required, Validators.minLength(4), Validators.maxLength(4)])]
+    });
+  }
+
+  ngOnInit() {
+    this.currentUser = this._auth.getUser();
+    this.isTeacher = this.currentUser.isTeacher;
+    
+    this._projects.getAll()
+      .then(
+        (data)  => {
+          console.log(data);
+          this.projects = data;
+        },
+        (error) => {
+          this.errorObject.projectError = "We had some trouble getting your projects, it might be our fault";
+        });
+
+    // sessions.getAll().success(function(response){
+    //     $scope.sessions = response;
+    // });
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
+  }
+
+  private deleteReading(reading) {
+
+  }
+
+  /** attempts to navigate to the session */
+  private addSession(formValue: any): void {
+
+    this._projects.setCurrentProject(formValue.projectCode)
+      .subscribe(
+        (project) => {
+          this.router.navigate(['/project', project._id]);
+        },
+        (error) => {
+          this.errorObject.wrongCode = "Unfortunately, we did not find that project";
+        }
+      );
+  }
+
+
+}

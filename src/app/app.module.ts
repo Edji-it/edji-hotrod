@@ -45,7 +45,7 @@ import { AnnotatorComponent, CommentComponent, EmojiCommentComponent, EmojiKeybo
 import { ProjectPageComponent } from './project-page';
 import { ReadingPageComponent, DeleteProjectComponent } from './reading-page';
 import { NewReadingPage } from './new-reading-page';
-import { DashboardComponent } from './dashboard';
+import { DashboardComponent, StuDashComponent } from './dashboard';
 import { NoContentComponent } from './no-content';
 import { AccountComponent, ChangePassComponent } from './account';
 
@@ -91,6 +91,7 @@ type StoreType = {
     ReadingPageComponent,
     DeleteProjectComponent,
     DashboardComponent,
+    StuDashComponent,
     HomeComponent,
     JoinComponent,
     NoContentComponent,
