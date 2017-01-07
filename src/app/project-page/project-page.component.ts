@@ -23,15 +23,22 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.projectId = this._route.snapshot.params['id'];
-        
-        // One time subscription to set current Project from route
-        this._projects.setCurrentProject(this.projectId).take(1).subscribe();
+        // gets id from route to compare to currentProject from projects.service
+        let expectedId: string = this._route.snapshot.params['id'];
 
         this.subscriptions.push(
             this._projects.currentProject.subscribe(
                 (project) => {
-                    this.project = project;
+                    // if the current project in projects.service isn't the same as the one requested by the route:
+                    //  update currentProject in projects.service
+                    if (project._id != expectedId) {
+                        this._projects.setCurrentProject(expectedId)
+                            .subscribe((data) => {
+                                console.log("setCurrentProject finished");
+                            })
+                    } else {
+                        this.project = project;
+                    }
                 }
             )
         );
