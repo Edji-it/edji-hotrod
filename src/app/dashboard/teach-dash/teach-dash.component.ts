@@ -21,34 +21,22 @@ import { AuthService, ReadingService, ProjectService } from '../../shared';
 export class TeachDashComponent implements OnInit, OnDestroy {
   // Set our default values
   private readings: any;
-  private currentUser: any; 
-  private isTeacher: Boolean = false;
   private errorObject = {
-    wrongCode : "",
-    projectError: "",
     readingError: ""
   };
   private subscriptions: Subscription[] = [];
 
-  private codeForm: FormGroup;
 
   // TypeScript public modifiers
   constructor(
     public router: Router,
     private route: ActivatedRoute,
     private _auth: AuthService, 
-    private _readings: ReadingService,
-    private _projects: ProjectService,
-    fb: FormBuilder
+    private _readings: ReadingService
   ) {
-    this.codeForm = fb.group({
-      projectCode: [null, Validators.compose([Validators.required, Validators.minLength(4), Validators.maxLength(4)])]
-    });
   }
 
   ngOnInit() {
-    this.currentUser = this._auth.getUser();
-    this.isTeacher = this.currentUser.isTeacher;
 
     this._readings.getAll()
       .then(

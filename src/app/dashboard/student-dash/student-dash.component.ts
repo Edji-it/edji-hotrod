@@ -18,12 +18,9 @@ import { AuthService, ReadingService, ProjectService } from '../../shared';
 export class StuDashComponent implements OnInit, OnDestroy {
   // Set our default values
   private projects: Array<any> = [];
-  private currentUser: any; 
-  private isTeacher: Boolean = false;
   private errorObject = {
     wrongCode : "",
-    projectError: "",
-    readingError: ""
+    projectError: ""
   };
   private subscriptions: Subscription[] = [];
 
@@ -34,7 +31,6 @@ export class StuDashComponent implements OnInit, OnDestroy {
     public router: Router,
     private route: ActivatedRoute,
     private _auth: AuthService, 
-    private _readings: ReadingService,
     private _projects: ProjectService,
     fb: FormBuilder
   ) {
@@ -43,31 +39,20 @@ export class StuDashComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnInit() {
-    this.currentUser = this._auth.getUser();
-    this.isTeacher = this.currentUser.isTeacher;
-    
+  ngOnInit() {    
     this._projects.getAll()
       .then(
         (data)  => {
-          console.log(data);
           this.projects = data;
         },
         (error) => {
           this.errorObject.projectError = "We had some trouble getting your projects, it might be our fault";
         });
 
-    // sessions.getAll().success(function(response){
-    //     $scope.sessions = response;
-    // });
   }
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
-  }
-
-  private deleteReading(reading) {
-
   }
 
   /** attempts to navigate to the session */
