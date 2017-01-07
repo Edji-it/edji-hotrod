@@ -42,19 +42,6 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
                 }
             )
         );
-
-        // subscribe to the 'id' url param and setCurrentProject if it changes
-        this.subscriptions.push(
-            this._route.params.subscribe((params) => {
-                if (params['id'] !== this.project._id) {
-                    // I don't actually care to subscribe, but it doesn't fire if I don't...
-                    this._projects.setCurrentProject(params['id']).subscribe(
-                        (data) => { console.log("project id changed"); }
-                    );
-                }
-                
-            })
-        );
     }
 
     ngOnDestroy() {
