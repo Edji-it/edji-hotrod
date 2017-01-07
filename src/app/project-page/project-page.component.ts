@@ -31,11 +31,7 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
                     //  update currentProject in projects.service
                     if (project._id !== expectedId) {
                         // I don't actually care to subscribe, but it doesn't fire if I don't...
-                        this._projects.setCurrentProject(expectedId)
-                            .subscribe((data) => {
-                                console.log(data);
-                                console.log("setCurrentProject finished");
-                            })
+                        this._projects.setCurrentProject(expectedId).take(1).subscribe();
                     } else {
                         this.project = project;
                     }
