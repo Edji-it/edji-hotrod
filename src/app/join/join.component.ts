@@ -65,9 +65,14 @@ export class JoinComponent implements OnInit, OnDestroy {
         this._auth.setUser(data.user);
 
         // set the project as current project
-        this.subscriptions.push(this._project.currentProject.subscribe(
+        this.subscriptions.push(this._project.setCurrentProject(this.projectCode).subscribe(
           (project) => {
-            this.router.navigate(['project', project._id]);
+            if (project && project._id) {
+              this.router.navigate(['project', project._id]);
+            } else {
+              console.warn('Didn\'t find project code yet.');
+            }
+            
           }
         ));
 
