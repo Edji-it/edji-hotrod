@@ -23,81 +23,23 @@ import { ProjectService } from '../shared/project.service';
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   // Set our default values
-  private readings: any;
-  private projects: Array<any> = [];
   private currentUser: any; 
-  private errorObject = {
-    wrongCode : "",
-    projectError: "",
-    readingError: ""
-  };
   private subscriptions: Subscription[] = [];
-
-  private codeForm: FormGroup;
 
   // TypeScript public modifiers
   constructor(
     public appState: AppState, 
     public router: Router,
     private route: ActivatedRoute,
-    private _auth: AuthService, 
-    private _readings: ReadingService,
-    private _projects: ProjectService,
-    fb: FormBuilder
+    private _auth: AuthService
   ) {
-    this.codeForm = fb.group({
-      projectCode: [null, Validators.compose([Validators.required, Validators.minLength(4), Validators.maxLength(4)])]
-    });
   }
 
   ngOnInit() {
     this.currentUser = this._auth.getUser();
-    // this._readings.getAll()
-    //   .then(
-    //     (data)  => { 
-    //       console.log(data);
-    //       this.readings = data;
-    //     },
-    //     (error) => {
-    //       this.errorObject.readingError = "We had some trouble getting your readings, it might be our fault";
-    //     });
-    
-    // this._projects.getAll()
-    //   .then(
-    //     (data)  => {
-    //       console.log(data);
-    //       this.projects = data;
-    //     },
-    //     (error) => {
-    //       this.errorObject.projectError = "We had some trouble getting your projects, it might be our fault";
-    //     });
-
-    // sessions.getAll().success(function(response){
-    //     $scope.sessions = response;
-    // });
   }
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }
-
-  // private deleteReading(reading) {
-
-  // }
-
-  // /** attempts to navigate to the session */
-  // private addSession(formValue: any): void {
-
-  //   this._projects.setCurrentProject(formValue.projectCode)
-  //     .subscribe(
-  //       (project) => {
-  //         this.router.navigate(['/project', project._id]);
-  //       },
-  //       (error) => {
-  //         this.errorObject.wrongCode = "Unfortunately, we did not find that project";
-  //       }
-  //     );
-  // }
-
-
 }
