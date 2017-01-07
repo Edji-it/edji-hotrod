@@ -26,6 +26,6 @@ export class SideBarComponent {
 
     logout() {
         this._auth.logout();
-        this._router.navigate(['/']);
+        this._router.navigate(['/home']);
     }
 }
