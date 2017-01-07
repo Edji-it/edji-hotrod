@@ -24,9 +24,7 @@
         <div class="button__row"> 
             <button (click)="joinSession(sessionCode)" class="button" id="buttonJoinProject" name="Join" href="#">Go!</button>
         </div>
-        <div class="banner-error" *ngIf="errorObject.invalidCode">
-          {{errorObject.invalidCode}}
-        </div>
+        <div id="msgInvalidCode" *ngIf="errorObject.invalidCode" [innerHtml]="errorObject.invalidCode | emojione" class="banner-error"></div>
       </div>
 
       <br />

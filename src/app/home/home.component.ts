@@ -70,11 +70,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     this._project.validateProject(code)
       .subscribe(
         (data) => {
-          console.log("it is a good one");
           this.router.navigate(['join', code]);
         },
         (error) => {
           console.log("it is a bad one");
+          this.errorObject.invalidCode = "We don't think that's a real code :confused:";
         }
       );
   }
