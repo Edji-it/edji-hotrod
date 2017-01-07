@@ -54,8 +54,8 @@ export class CommentComponent implements OnInit {
   }
 
   // Updates comment in db
-  updateComment(commentData: string): void {
-    this._projects.saveComment(this.comment.project_id, commentData, this.comment.start, this.comment.end, this.comment.text, this.comment._id)
+  public updateComment(commentData: string): void {
+    this._projects.saveComment(this.comment.project_id, commentData, this.comment.start, this.comment.end, this.comment.type, this.comment.text, this.comment._id)
       .then(data => {
         this.justSaved = true;
         setTimeout(() => {

@@ -139,7 +139,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         let text = this.reading.words.slice(start, end).toString();
 
         // Tell server we've added a comment
-        this._projects.saveComment(projectId, '', start, end, text)
+        this._projects.saveComment(projectId, '', start, end, type, text)
             .then(comment => {
                 // We add the comment from the service because it has an Id
                 if (comment._id) {
@@ -244,6 +244,48 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
         // Tell the server we've got a comment!
         this.createComment(start, end, 'emoji');
+    }
+
+    /** 
+     * Add Comment of Emoji type
+     * - Fired from comment options tooltip
+     */
+    addTextComment(event): void {
+        // Get selection indices
+        let selection = Rangy.getSelection();
+        let start : number;
+        let end : number;
+        let comment: any;
+        
+        let getNodeIndex = function(node: any) : number {
+            // Selections often happen at the text node level, inside the actual element
+            // In which case we need to reference its parent node
+            if(node.hasOwnProperty('className') && node.className.indexOf('word') > -1) {
+                return parseInt(node.getAttribute('index'));
+            } else {
+                return parseInt(node.parentNode.getAttribute('index'));
+            }
+        }
+
+        start = getNodeIndex(selection['anchorNode']);
+        end = getNodeIndex(selection['focusNode']);
+
+        // Hide tool tips
+        this.hideCommentOptions();
+        // Clear selections
+        selection.removeAllRanges();
+
+        // It's possible that a selection is made backwards
+        // We want the start index to come first
+        if (start > end) {
+            end = [start, start = end][0]; // Swap start and end values
+        }
+        
+        // Increment highlight array
+        this.incrementHighlights(start, end);
+
+        // Tell the server we've got a comment!
+        this.createComment(start, end, 'text');
     }
 
     /** 

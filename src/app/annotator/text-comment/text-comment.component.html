@@ -1,0 +1,3 @@
+<div [ngClass]="{'active' : comment.active}" class='text-comment'>
+    <textarea type='text' class="text-comment-input" [(ngModel)]="comment.data" (blur)='updateComment(comment.data)'></textarea>
+</div>

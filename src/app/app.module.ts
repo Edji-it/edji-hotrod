@@ -41,7 +41,7 @@ import { FooterComponent } from './shared/footer';
 import { HomeComponent, ResetPassComponent } from './home';
 import { RegisterComponent } from './register';
 import { JoinComponent } from './join/join.component';
-import { AnnotatorComponent, CommentComponent, EmojiCommentComponent, EmojiKeyboardComponent } from './annotator';
+import { AnnotatorComponent, CommentComponent, TextCommentComponent, EmojiCommentComponent, EmojiKeyboardComponent } from './annotator';
 import { ProjectPageComponent } from './project-page';
 import { ReadingPageComponent, DeleteProjectComponent } from './reading-page';
 import { NewReadingPage } from './new-reading-page';
@@ -79,6 +79,7 @@ type StoreType = {
     SideBarComponent,
     FooterComponent,
     CommentComponent,
+    TextCommentComponent,
     EmojiCommentComponent,
     EmojiKeyboardComponent,
     AppComponent,
