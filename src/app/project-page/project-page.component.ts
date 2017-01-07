@@ -26,12 +26,14 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
         // gets id from route to compare to currentProject from projects.service
         let expectedId: string = this._route.snapshot.params['id'];
 
+        // subscribe to the currentProject value
         this.subscriptions.push(
             this._projects.currentProject.subscribe(
                 (project) => {
                     // if the current project in projects.service isn't the same as the one requested by the route:
                     //  update currentProject in projects.service
-                    if (project._id != expectedId) {
+                    if (project._id !== expectedId) {
+                        // I don't actually care to subscribe, but it doesn't fire if I don't...
                         this._projects.setCurrentProject(expectedId)
                             .subscribe((data) => {
                                 console.log("setCurrentProject finished");
@@ -41,6 +43,19 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
                     }
                 }
             )
+        );
+
+        // subscribe to the 'id' url param and setCurrentProject if it changes
+        this.subscriptions.push(
+            this._route.params.subscribe((params) => {
+                if (params['id'] !== this.project._id) {
+                    // I don't actually care to subscribe, but it doesn't fire if I don't...
+                    this._projects.setCurrentProject(params['id']).subscribe(
+                        (data) => { console.log("project id changed"); }
+                    );
+                }
+                
+            })
         );
     }
 
