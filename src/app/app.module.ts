@@ -55,8 +55,8 @@ const APP_PROVIDERS = [
   AppState,
   AuthService,
   ReadingService,
-  ProjectService,
-  { provide: RouteReuseStrategy, useClass: ReuseStrategy }
+  ProjectService
+  // { provide: RouteReuseStrategy, useClass: ReuseStrategy }
 ];
 
 type StoreType = {
