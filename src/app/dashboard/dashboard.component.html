@@ -100,8 +100,8 @@
                 <p  class="list-item-wrapper" *ngIf="projects.length < 1 && !errorObject.projectError">
                    You have yet to add your first project. Ask your teacher for a project code!
                 </p>
-                <div *ngIf="errorObject.projectError" class="banner-error">{{errorObject.projectError}}</div>
-                <a *ngFor="let project of projects" href="#/project/{{project._id}}" class="list-item list-item--button" [class.hide]="project.createdAt">
+                <div *ngIf="errorObject.projectError && projects.length < 1" class="banner-error">{{errorObject.projectError}}</div>
+                <div *ngFor="let project of projects" [routerLink]="['/project', project._id]" class="list-item list-item--button" [class.hide]="!project.createdAt">
                     <!--Implement: | orderBy:'-createdAt'-->
                     <div class="list-item">
                         <div class="col-sm-12">
@@ -123,7 +123,7 @@
                          </div>
                         </div>
                     </div>
-                </a>
+                </div>
             </div>
 
 

@@ -67,7 +67,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     
     this._projects.getAll()
       .then(
-        (data)  => { 
+        (data)  => {
+          console.log(data);
           this.projects = data;
         },
         (error) => {
