@@ -21,6 +21,7 @@ export class JoinComponent implements OnInit, OnDestroy {
 
   private errorObject = {
     "invalidCode": "",
+    "badName": "",
     "incorrect": ""
   };
 
@@ -61,6 +62,7 @@ export class JoinComponent implements OnInit, OnDestroy {
     // create the user's temporary account and set local token and user
     this._auth.createTempUser(formValue.guestName).subscribe(
       (data) => {
+        console.log(data);
         this._auth.setToken(data.token);
         this._auth.setUser(data.user);
 
@@ -81,6 +83,9 @@ export class JoinComponent implements OnInit, OnDestroy {
         // after creation, navigate to the project's page
       },
       (error) => {
+        if (error.status === 406) {
+          this.errorObject.badName = ":anguished: Would you mind choosing another name?"
+        }
         console.error(error);
       }
     )
@@ -132,7 +137,6 @@ export class JoinComponent implements OnInit, OnDestroy {
         (error) =>  { 
           this.loginLoading = false;
           console.log(error);
-          console.log(error._body);
           if (error === null) {
             this.errorObject.incorrect = "Network error";
           } else {

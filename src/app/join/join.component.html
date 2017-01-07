@@ -7,6 +7,7 @@
         <label for="guestNameInput">Guest Name</label>
         <input id="guestNameInput" type="text" [formControl]="guestForm.controls['guestName']" tabindex="0"/>
         <div id="msgNoGuestName" class="banner-error" *ngIf="guestForm.controls['guestName'].hasError('required') && (guestForm.controls['guestName'].dirty || guestForm.submitted)">A name is required</div>
+        <div id="msgBadName" *ngIf="errorObject.badName" [innerHtml]="errorObject.badName | emojione" class="banner-error"></div>
         
         <div class="button__row">
           <button id="guestLoginButton" type="submit" class="button" [disabled]="!guestForm.valid" name="Sign Up">Guest it is!</button>
@@ -16,7 +17,7 @@
     <div class="col-sm-6 col-pad">
 
     <form [formGroup]="loginForm" (ngSubmit)="joinSessionAsUser(loginForm.value)">
-      <h2 class="center">Let's Begin!</h2>
+      <h2 class="center">Welcome Back!</h2>
       <label for="usernameInput">Username</label>
       <input type="text" id="usernameInput" [formControl]="loginForm.controls['username']" tabindex="1" />
       <div class="banner-error" *ngIf="loginForm.controls['username'].hasError('required') && (loginForm.controls['username'].dirty || loginForm.submitted)">A username is required</div>
