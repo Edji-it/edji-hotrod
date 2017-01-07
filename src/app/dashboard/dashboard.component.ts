@@ -26,7 +26,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private readings: any;
   private projects: Array<any> = [];
   private currentUser: any; 
-  private isTeacher: Boolean = false;
   private errorObject = {
     wrongCode : "",
     projectError: "",
@@ -53,27 +52,25 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.currentUser = this._auth.getUser();
-    this.isTeacher = this.currentUser.isTeacher;
-
-    this._readings.getAll()
-      .then(
-        (data)  => { 
-          console.log(data);
-          this.readings = data;
-        },
-        (error) => {
-          this.errorObject.readingError = "We had some trouble getting your readings, it might be our fault";
-        });
+    // this._readings.getAll()
+    //   .then(
+    //     (data)  => { 
+    //       console.log(data);
+    //       this.readings = data;
+    //     },
+    //     (error) => {
+    //       this.errorObject.readingError = "We had some trouble getting your readings, it might be our fault";
+    //     });
     
-    this._projects.getAll()
-      .then(
-        (data)  => {
-          console.log(data);
-          this.projects = data;
-        },
-        (error) => {
-          this.errorObject.projectError = "We had some trouble getting your projects, it might be our fault";
-        });
+    // this._projects.getAll()
+    //   .then(
+    //     (data)  => {
+    //       console.log(data);
+    //       this.projects = data;
+    //     },
+    //     (error) => {
+    //       this.errorObject.projectError = "We had some trouble getting your projects, it might be our fault";
+    //     });
 
     // sessions.getAll().success(function(response){
     //     $scope.sessions = response;
@@ -84,23 +81,23 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }
 
-  private deleteReading(reading) {
+  // private deleteReading(reading) {
 
-  }
+  // }
 
-  /** attempts to navigate to the session */
-  private addSession(formValue: any): void {
+  // /** attempts to navigate to the session */
+  // private addSession(formValue: any): void {
 
-    this._projects.setCurrentProject(formValue.projectCode)
-      .subscribe(
-        (project) => {
-          this.router.navigate(['/project', project._id]);
-        },
-        (error) => {
-          this.errorObject.wrongCode = "Unfortunately, we did not find that project";
-        }
-      );
-  }
+  //   this._projects.setCurrentProject(formValue.projectCode)
+  //     .subscribe(
+  //       (project) => {
+  //         this.router.navigate(['/project', project._id]);
+  //       },
+  //       (error) => {
+  //         this.errorObject.wrongCode = "Unfortunately, we did not find that project";
+  //       }
+  //     );
+  // }
 
 
 }
