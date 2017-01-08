@@ -29,7 +29,7 @@ export class FeedbackComponent {
   ) {
     this.user = this._auth.getUser();
 
-    let prevData: any = this._auth.getFromStorage("feedbackFormData");
+    let prevData: any = this._auth.getFromStorage("feedbackFormData") || {};
 
     this.feedbackForm = fb.group({
       name: [this.user.fullname, Validators.required],
