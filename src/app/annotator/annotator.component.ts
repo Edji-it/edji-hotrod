@@ -122,7 +122,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                     this.commentComponents.toArray().forEach(
                         (commentComp: CommentComponent, index: number) => {
                             let yPos = commentComp.getVerticalPosition();
-                            console.log(yPos);
+                            
                             if (yPos > 0) { // 0 is returned as the default
                                 if (this.lineCountArray[yPos]) {
                                     this.lineCountArray[yPos].push(commentComp);
@@ -206,6 +206,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                         this.commentsByIndex[start] = [ comment ];
                         this.setActiveCommentByIndex(true, start, 0);
                     }
+                    this.updateAllLineCounts();
                 } else {
                     console.warn('Didn\'t get a comment back from server!');
                 }
@@ -231,6 +232,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.decrementHighlights(comment.start, comment.end);
         // Remove comment form local Comments array
         this.commentsByIndex[index].splice(commentIndex);
+        // Update line counts
+        this.updateAllLineCounts();
     }
 
     setActiveCommentByIndex(isActive: boolean, wordIndex: number, commentIndex: number): void {

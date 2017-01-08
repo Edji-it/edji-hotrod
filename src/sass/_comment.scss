@@ -1,9 +1,20 @@
 
+%noSelect {
+	-webkit-touch-callout: none; /* iOS Safari */
+		-webkit-user-select: none; /* Chrome/Safari/Opera */
+		-khtml-user-select: none; /* Konqueror */
+		-moz-user-select: none; /* Firefox */
+			-ms-user-select: none; /* Internet Explorer/Edge */
+				user-select: none; /* Non-prefixed version, currently
+									not supported by any browser */	
+}
+
 // Component wrapping element
 edji-comment {
 	display: inline-block;
 	height:1em;
 	width: 0px;
+	@extend %noSelect;
 }
 
 // Primary comment block
@@ -17,6 +28,8 @@ edji-comment {
 	pointer-events: all;
 	cursor: pointer;
 	opacity: 1;
+
+	@extend %noSelect;
 
 	&.expanded {
 		z-index: 5000;
@@ -32,6 +45,7 @@ edji-comment {
 		border-radius: 5px;
 		// overflow: hidden;
 		position: relative;
+		transition: transform linear 0.2s;
 	}
 
 	.comment-username {
@@ -50,20 +64,25 @@ edji-comment {
 
 	&:hover{
 		z-index: 5500;
-		transform: scale(1.05);
-
-		& .input-wrap {
-			box-shadow: $inputFocusHalfShadow;
-		}
 
 		.comment-username{
 			opacity:1 ;
 		}
 	}
 
+	& .comment-input-wrapper:hover {
+		transform: scale(1.05);
+		& .input-wrap {
+			box-shadow: $inputFocusHalfShadow;
+		}
+	}
+
 	&.active {
 		z-index: 5500;
-		transform: scale(1.1);
+
+		& .comment-input-wrapper {
+			transform: scale(1.1);
+		}
 
 		& .input-wrap {
 			box-shadow: $inputFocusShadow;
@@ -294,7 +313,24 @@ input.emojiComment {
 				}
 
 				& .expand-comments {
-					display: none;
+					@if ($n != 1) {
+						// If not line-count-1, it should be part of the "line" showing the selection
+						// display: none;
+						width: 22px;
+						pointer-events: none;
+						&:before {
+							width: 12px;
+							right: 4px;
+							border-radius: 0px;
+							top: -5px;
+							height: 35px;
+							border-bottom-right-radius: 5px;
+						}
+						&:after {
+							display: none;
+						}
+					}
+					
 				}
 
 				&:after {
@@ -319,6 +355,10 @@ div.line-count-1 {
 		& .expand-comments {
 			// First line shows 'contract' minus
 			display: block !important;
+
+			&:after {
+				display: block;
+			}
 		}
 	}
 }
