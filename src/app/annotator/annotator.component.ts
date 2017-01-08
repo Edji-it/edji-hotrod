@@ -301,18 +301,20 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             }
         }
 
-        start = getNodeIndex(selection['anchorNode']);
-        end = getNodeIndex(selection['focusNode']);
-        
-        // It's possible that a selection is made backwards
-        // We want the start index to come first
-        if (start > end) {
-            end = [start, start = end][0]; // Swap start and end values
+        if (selection['anchorNode'] && selection['focusNode']) {
+            start = getNodeIndex(selection['anchorNode']);
+            end = getNodeIndex(selection['focusNode']);
+            
+            // It's possible that a selection is made backwards
+            // We want the start index to come first
+            if (start > end) {
+                end = [start, start = end][0]; // Swap start and end values
+            }
+            // Hide tool tips
+            this.hideCommentOptions();
+            // Clear selections
+            selection.removeAllRanges();
         }
-        // Hide tool tips
-        this.hideCommentOptions();
-        // Clear selections
-        selection.removeAllRanges();
         
         return { start: start, end: end };
     }
@@ -325,11 +327,13 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // Get selection indices
         let span = this.getSelectionSpan();
 
-        // Increment highlight array
-        this.incrementHighlights(span.start, span.end);
+        if (span.start && span.end) {
+            // Increment highlight array
+            this.incrementHighlights(span.start, span.end);
 
-        // Tell the server we've got a comment!
-        this.createComment(span.start, span.end, 'emoji');
+            // Tell the server we've got a comment!
+            this.createComment(span.start, span.end, 'emoji');
+        }
     }
 
     /** 
