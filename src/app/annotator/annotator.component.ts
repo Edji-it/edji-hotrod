@@ -115,7 +115,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     showCommentOptions(event): void {
         // Only show options if text selected
         if (Rangy.getSelection() && Rangy.getSelection().toString().length > 0) {
-            this.highlightY = event.clientY + 'px';
+            let scrollOffset = document.getElementById('emojiAnnotator').getBoundingClientRect().top;
+            const readingPad = 52;
+            // Account for page scroll offset
+            this.highlightY = (event.clientY - scrollOffset + readingPad) + 'px';
             this.optionsShow = true;
         } else {
             this.optionsShow = false;
@@ -280,11 +283,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     }
 
     /** 
-     * Add Comment of Emoji type
-     * - Fired from comment options tooltip
+     * Returns Start and End word indices of text selection
      */
-    addEmojiComment(event): void {
-        // Get selection indices
+    getSelectionSpan(): any {
         let selection = Rangy.getSelection();
         let start : number;
         let end : number;
@@ -302,23 +303,33 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
         start = getNodeIndex(selection['anchorNode']);
         end = getNodeIndex(selection['focusNode']);
-
-        // Hide tool tips
-        this.hideCommentOptions();
-        // Clear selections
-        selection.removeAllRanges();
-
+        
         // It's possible that a selection is made backwards
         // We want the start index to come first
         if (start > end) {
             end = [start, start = end][0]; // Swap start and end values
         }
+        // Hide tool tips
+        this.hideCommentOptions();
+        // Clear selections
+        selection.removeAllRanges();
         
+        return { start: start, end: end };
+    }
+
+    /** 
+     * Add Comment of Emoji type
+     * - Fired from comment options tooltip
+     */
+    addEmojiComment(event): void {
+        // Get selection indices
+        let span = this.getSelectionSpan();
+
         // Increment highlight array
-        this.incrementHighlights(start, end);
+        this.incrementHighlights(span.start, span.end);
 
         // Tell the server we've got a comment!
-        this.createComment(start, end, 'emoji');
+        this.createComment(span.start, span.end, 'emoji');
     }
 
     /** 
@@ -327,40 +338,13 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      */
     addTextComment(event): void {
         // Get selection indices
-        let selection = Rangy.getSelection();
-        let start : number;
-        let end : number;
-        let comment: any;
-        
-        let getNodeIndex = function(node: any) : number {
-            // Selections often happen at the text node level, inside the actual element
-            // In which case we need to reference its parent node
-            if(node.hasOwnProperty('className') && node.className.indexOf('word') > -1) {
-                return parseInt(node.getAttribute('index'));
-            } else {
-                return parseInt(node.parentNode.getAttribute('index'));
-            }
-        }
-
-        start = getNodeIndex(selection['anchorNode']);
-        end = getNodeIndex(selection['focusNode']);
-
-        // Hide tool tips
-        this.hideCommentOptions();
-        // Clear selections
-        selection.removeAllRanges();
-
-        // It's possible that a selection is made backwards
-        // We want the start index to come first
-        if (start > end) {
-            end = [start, start = end][0]; // Swap start and end values
-        }
+        let span = this.getSelectionSpan();
         
         // Increment highlight array
-        this.incrementHighlights(start, end);
+        this.incrementHighlights(span.start, span.end);
 
         // Tell the server we've got a comment!
-        this.createComment(start, end, 'text');
+        this.createComment(span.start, span.end, 'text');
     }
 
     /** 
