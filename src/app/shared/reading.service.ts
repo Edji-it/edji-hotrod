@@ -18,7 +18,7 @@ export class ReadingService {
     // Pull all readings for a user
   public getAll() {
         return this.http
-            .get(this._auth.baseUrl + '/readings', this._auth.getOptions())
+            .get(this._auth.getUrl() + '/readings', this._auth.getOptions())
             .toPromise()
             .then(this._auth.extractData);
   }
@@ -27,7 +27,7 @@ export class ReadingService {
   public get(id : string) : Observable<any> {
     
     return this.http
-      .get(this._auth.baseUrl + '/readings/' + id, this._auth.getOptions())
+      .get(this._auth.getUrl() + '/readings/' + id, this._auth.getOptions())
       .map(data => {
         return data.json()
       });
@@ -40,7 +40,7 @@ export class ReadingService {
     }
     let readingObj = { 'reading': reading };
     return this.http
-            .post(this._auth.baseUrl + '/readings', readingObj, this._auth.getOptions())
+            .post(this._auth.getUrl() + '/readings', readingObj, this._auth.getOptions())
             .map(data => {
               return data.json();
             });

@@ -1,6 +1,6 @@
 import { CommentStmt } from '@angular/compiler/src/output/output_ast';
 import { Comment } from '@angular/compiler/src/ml_parser/ast';
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChange } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChange, ElementRef } from '@angular/core';
 
 import { ProjectService } from '../../shared/project.service';
 
@@ -11,9 +11,14 @@ import { ProjectService } from '../../shared/project.service';
 })
 export class CommentComponent implements OnInit {
 
-  @Input() private comment: any;
-  
+  public lineCount: number = 1;
+  public expanded: boolean = false;
+
+  private yPos: number = 0;
+  private justSaved: boolean = false;
   private active = false;
+
+  @Input() public comment: any;
   @Input()
   set isActive(isActive: boolean) {
     if (typeof(isActive) !== 'undefined' && this.active !== isActive) {
@@ -24,21 +29,12 @@ export class CommentComponent implements OnInit {
 
   @Output() commentDeleted = new EventEmitter<string>();
   @Output() commentActivation = new EventEmitter<boolean>();
+  @Output() expandLine = new EventEmitter<number>();
 
-  private justSaved: boolean = false;
-
-  constructor(private _projects: ProjectService) { }
+  constructor(private _projects: ProjectService, public el: ElementRef) { }
 
   ngOnInit() {
     // If comment is newly added, focus on it when created!
-  }
-
-  focusComment():void {
-
-  }
-
-  unfocusComment(): void {
-    
   }
 
   toggleActive( ): void {
@@ -77,6 +73,22 @@ export class CommentComponent implements OnInit {
       .catch(error => {
         console.log(error);
       });
+  }
+
+  /**
+   * Returns comment block's y position
+   * - Used for collapse/expand multiple comments
+   */
+  public getVerticalPosition(): number {
+    this.yPos = Math.round(this.el.nativeElement.offsetTop);
+    return this.yPos;
+  }
+
+  /**
+   * Expand all stacked comments on the same line
+   */
+  toggleExpand(): void {
+    this.expandLine.emit(this.yPos);
   }
 
 }

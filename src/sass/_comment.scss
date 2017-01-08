@@ -1,4 +1,100 @@
 
+%noSelect {
+	-webkit-touch-callout: none; /* iOS Safari */
+		-webkit-user-select: none; /* Chrome/Safari/Opera */
+		-khtml-user-select: none; /* Konqueror */
+		-moz-user-select: none; /* Firefox */
+			-ms-user-select: none; /* Internet Explorer/Edge */
+				user-select: none; /* Non-prefixed version, currently
+									not supported by any browser */	
+}
+
+// Component wrapping element
+edji-comment {
+	display: inline-block;
+	height:1em;
+	width: 0px;
+	@extend %noSelect;
+}
+
+// Primary comment block
+.comment {
+	transition: all linear 0.2s;
+	z-index: 4500;
+	display: block; //inline-block;
+	position: absolute;
+	left: -230px; //-40px; //-25px;
+	margin-top: -5px;
+	pointer-events: all;
+	cursor: pointer;
+	opacity: 1;
+
+	@extend %noSelect;
+
+	&.expanded {
+		z-index: 5000;
+	}
+
+	&.fade-out {
+		opacity: 0 !important;
+		pointer-events: none;
+	}
+
+	.comment-input-wrapper{
+		border: none; // 1px solid #cdcdcd;
+		border-radius: 5px;
+		// overflow: hidden;
+		position: relative;
+		transition: transform linear 0.2s;
+	}
+
+	.comment-username {
+		position: absolute;
+		top: -22px;
+		font-size: 10px;
+		color: #404040;
+		font-family: 'Open Sans';
+		cursor:pointer;
+		opacity:0;
+	}
+
+	&.line-first-word {
+		// @include transform(translate3d(-100%, 0px, 0));
+	}
+
+	&:hover{
+		z-index: 5500;
+
+		.comment-username{
+			opacity:1 ;
+		}
+	}
+
+	& .comment-input-wrapper:hover {
+		transform: scale(1.05);
+		& .input-wrap {
+			box-shadow: $inputFocusHalfShadow;
+		}
+	}
+
+	&.active {
+		z-index: 5500;
+
+		& .comment-input-wrapper {
+			transform: scale(1.1);
+		}
+
+		& .input-wrap {
+			box-shadow: $inputFocusShadow;
+		}
+	}
+
+	.comment-username{
+		opacity:0;
+		transition: opacity 0.3s;
+	}
+}
+
 .comment-line {
 	position: relative;
 	display: inline-block;
@@ -73,7 +169,7 @@ input.emojiComment {
 	background: none;
 	border: none; 
 	outline: none;
-	color: rgba(0,0,0,0.5);
+	color: rgba(0,0,0,0.3);
 	transition:opacity 0.3s;
 	padding: 0px;
 	border-radius: 50%;
@@ -112,7 +208,7 @@ input.emojiComment {
 
 	&.focused, &:active, &:focus, &.active {
 		outline: none;
-		box-shadow: -3px 3px 0px 0px rgba(151, 114, 177, 1);
+		// box-shadow: -3px 3px 0px 0px rgba(151, 114, 177, 1);
 		// @include transform(translate3d(3px, -3px, 0));
 	}
 }
@@ -186,7 +282,7 @@ input.emojiComment {
 			&:after {
 				color: #fff;
 				content: '#{$n}';
-				//background: $lightBg;
+				background: transparent;
 				padding: 5px;
 				position: absolute;
 				right: -9px;
@@ -209,7 +305,7 @@ input.emojiComment {
 				height: 28px + $n;
 			}
 
-			&.expand-line {
+			&.expanded {
 				margin-top: (29px * $n) - 28;
 
 				& input {
@@ -217,7 +313,24 @@ input.emojiComment {
 				}
 
 				& .expand-comments {
-					display: none;
+					@if ($n != 1) {
+						// If not line-count-1, it should be part of the "line" showing the selection
+						// display: none;
+						width: 22px;
+						pointer-events: none;
+						&:before {
+							width: 12px;
+							right: 4px;
+							border-radius: 0px;
+							top: -5px;
+							height: 35px;
+							border-bottom-right-radius: 5px;
+						}
+						&:after {
+							display: none;
+						}
+					}
+					
 				}
 
 				&:after {
@@ -238,10 +351,14 @@ div.line-count-1 {
 		display: none;
 	}
 	
-	&.expand-line {
+	&.expanded {
 		& .expand-comments {
 			// First line shows 'contract' minus
 			display: block !important;
+
+			&:after {
+				display: block;
+			}
 		}
 	}
 }
@@ -300,7 +417,7 @@ $expandShadowSize: 3px;
 	// Emoji Plus
 	// background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAAAGYktHRAD/AP8A/6C9p5MAAAAJcEhZcwAACxMAAAsTAQCanBgAAAAJdnBBZwAAAEAAAABAAOrz+GAAAAFgSURBVHja7ZsxUoNQEIY/HStGi4yVhVwgwxksOIeFpdbpvIK12ll4DgrPwOQCWFg5FGaoHLAIpSQvQdan+38tC+z72PdgFgAhhBDCLQcWJ8nzHGAGnABdQE4fQF0UxeS5HVkI6LoOYAFcAZ8BOT0Btxa5mQjomQFnO8SaYCKgbVur8cQpoJ8CUSIBEiABEiABEjAxeg7wXgES4F2A1gDvFSABEQsYbIllWQbrxsQCOAXGTOQOuADmgfFL4IVxLbtD4B24A+qyLL8NGqyA/qodA5fA+YhE9mG+g6xNvAKPQD0UsE3Av0cChjbEfO82EeC+AtwL0BTwXgHuBWgKrCtgBTzztx+FV5uCTF6Pp2kKcA9cB+7yANxUVTV5bmqIWJwk5gVVAiRAAqZHi6D3CpAA7wK0BnivAAmQAAn47XFKQAwCauCNsM/l623H/ClMOkJJksAeP0w0TWPlQQghhPDIFzius9vRuvq3AAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDE1LTEwLTAxVDEyOjAwOjE2LTA3OjAw41i45QAAACV0RVh0ZGF0ZTptb2RpZnkAMjAxNS0xMC0wMVQxMjowMDoxNi0wNzowMJIFAFkAAAAASUVORK5CYII=');
 
-	.expand-line & {
+	.expanded & {
 		&:after {
 			top: 10px;
 			transform: rotate(180deg);
@@ -313,57 +430,4 @@ $expandShadowSize: 3px;
 
 // Edji-Comment style
 
-
-edji-comment {
-	// @extend %noSelect;
-
-	z-index: 4500;
-	display: block; //inline-block;
-	position: absolute;
-	left: -230px; //-40px; //-25px;
-	// transform: translate3d(-100%, -32px, 0);
-	pointer-events: all;
-	
-
-	transition: opacity linear 0.2s;
-	opacity: 1;
-
-	&.fade-out {
-		opacity: 0 !important;
-		pointer-events: none;
-	}
-
-	.emoji-comment-input-wrapper{
-		border: none; // 1px solid #cdcdcd;
-		border-radius: 5px;
-		// overflow: hidden;
-		position: relative;
-	}
-
-	.emoji-comment-username {
-		position: absolute;
-		top: -22px;
-		font-size: 10px;
-		color: #404040;
-		font-family: 'Open Sans';
-		cursor:pointer;
-		opacity:0;
-	}
-
-	&.line-first-word {
-		// @include transform(translate3d(-100%, 0px, 0));
-	}
-
-	&:hover{
-		.emoji-comment-username{
-			opacity:1 ;
-		}
-	}
-	.emoji-comment-username{
-		opacity:0;
-		transition:opacity 0.3s;
-	}
-
-	transition: opacity linear 350ms;
-}
-
+ 

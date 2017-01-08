@@ -7,7 +7,7 @@ import { Locker } from 'angular2-locker';
 
 @Injectable()
 export class AuthService implements CanActivate, OnInit {
-    public baseUrl = "http://localhost:3354";
+    private baseUrl = "http://localhost:3354";
     public protocol = window.location.protocol ? window.location.protocol : '';
     private locker: Locker;
 
@@ -39,6 +39,10 @@ export class AuthService implements CanActivate, OnInit {
 
     ngOnInit(): void {
         
+    }
+
+    public getUrl(): string {
+        return this.baseUrl;
     }
 
     /**

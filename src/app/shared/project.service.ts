@@ -27,7 +27,7 @@ export class ProjectService {
    */
   public getAll() {
         return this.http
-            .get(this._auth.baseUrl + '/sessions', this._auth.getOptions())
+            .get(this._auth.getUrl() + '/sessions', this._auth.getOptions())
             .toPromise()
             .then(this._auth.extractData);
   }
@@ -38,7 +38,7 @@ export class ProjectService {
    * @returns observable with project data
    */
   public setCurrentProject(projectCode: string): Observable<any> {
-    return this.http.get(this._auth.baseUrl + '/sessions/' + projectCode, this._auth.getOptions())
+    return this.http.get(this._auth.getUrl() + '/sessions/' + projectCode, this._auth.getOptions())
         .map(
             (data) => {
                 this.project = data.json(); //can later have local setter to do validation/data manipulation before passing through observable
@@ -53,7 +53,7 @@ export class ProjectService {
   public getForReading(readingId: string): Observable<any> {
     let userId = this._auth.getUser()._id;
     
-    return this.http.get(this._auth.baseUrl + '/readings/' + readingId + '/sessions/' + userId , this._auth.getOptions() );
+    return this.http.get(this._auth.getUrl() + '/readings/' + readingId + '/sessions/' + userId , this._auth.getOptions() );
   }
 
   /**
@@ -63,7 +63,7 @@ export class ProjectService {
    */
   public validateProject(projectCode: string): Observable<any> {
 
-      return this.http.get(this._auth.baseUrl + '/sessions/' + projectCode + "/validate", this._auth.getOptions())
+      return this.http.get(this._auth.getUrl() + '/sessions/' + projectCode + "/validate", this._auth.getOptions())
         
   }
 
@@ -73,7 +73,7 @@ export class ProjectService {
     */
   public get(projectId: string) : Observable<any> {
         return this.http
-            .get(this._auth.baseUrl + '/sessions/' + projectId, this._auth.getOptions())
+            .get(this._auth.getUrl() + '/sessions/' + projectId, this._auth.getOptions())
             .map(
                 data => {
                     // Update local Project object if returned
@@ -91,7 +91,7 @@ export class ProjectService {
      */
     public new(readingId, project) {
         return this.http
-            .post(this._auth.baseUrl + '/sessions/' + readingId, { 'session' : project }, this._auth.getOptions())
+            .post(this._auth.getUrl() + '/sessions/' + readingId, { 'session' : project }, this._auth.getOptions())
             .toPromise()
             .then(this._auth.extractData);
     }
@@ -102,7 +102,7 @@ export class ProjectService {
      */
     public delete(projectId) {
         return this.http
-            .delete(this._auth.baseUrl + '/sessions/' + projectId, this._auth.getOptions())
+            .delete(this._auth.getUrl() + '/sessions/' + projectId, this._auth.getOptions())
             .toPromise()
             .then(this._auth.extractData);
     }
@@ -117,13 +117,14 @@ export class ProjectService {
      * @param commentId (optional) If passed, will update comment with that ID
      */
     public saveComment(projectId: string, commentText: string, start: number, end: number, type: string, text ?: string, commentId ?: string) : Promise<any> {
-        let url = this._auth.baseUrl + '/sessions/' + projectId + '/comments';
+        let url = this._auth.getUrl() + '/sessions/' + projectId + '/comments';
         let data = {
             'comment' : {
                 'data' : commentText,
                 'start' : start,
                 'end' : end,
-                'user_id' : this._auth.getUser().fullname ? this._auth.getUser().fullname : this._auth.getUser().username,
+                'user_id' : this._auth.getUser()._id,
+                'author' : this._auth.getUser().fullname ? this._auth.getUser().fullname : this._auth.getUser().username,
                 'type' : type
             }
         }
@@ -149,7 +150,7 @@ export class ProjectService {
      */
     public deleteComment(commentId: string): Promise<any> {
         let projectId = this.project._id;
-        let url = this._auth.baseUrl + '/sessions/' + projectId + '/comments/' + commentId;
+        let url = this._auth.getUrl() + '/sessions/' + projectId + '/comments/' + commentId;
 
         return this.http
             .delete(url, this._auth.getOptions())

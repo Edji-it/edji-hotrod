@@ -5,12 +5,14 @@
  *  - Triggers highlighting
  *  - Deletes highlights and comment components
  */
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChildren, QueryList } from '@angular/core';
 import { Subscription } from 'rxjs/Rx';
 import * as Rangy from 'rangy';
 
 import { ReadingService } from '../shared/reading.service';
 import { ProjectService } from '../shared/project.service';
+import { CommentComponent } from './comment';
+import { AuthService } from '../shared/auth.service';
 
 @Component({
     selector: 'annotator',
@@ -18,13 +20,17 @@ import { ProjectService } from '../shared/project.service';
     styleUrls: ['annotator.component.scss']
 })
 export class AnnotatorComponent implements OnInit, OnDestroy {
-    // Component input
-    @Input()
-    private project: any;
+    @Input() private project: any;
+
+    @ViewChildren(CommentComponent) commentComponents: QueryList<CommentComponent>;
+
     private reading: any = {};
     
     private commentsByIndex: any[] = [];
     private highlightArray: number[] = [];
+    private lineCountArray: any[][] = [];
+    private lineCountRunning: boolean = false;
+
     private activeComment: any = {};
     
     private lineExpanded: boolean = false;
@@ -41,12 +47,18 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     // For converting old Readings
     private words: any[] = [];
 
+    // For verifying comment ownership
+    private user: any;
+
     constructor(
         private _readings: ReadingService,
-        private _projects: ProjectService
+        private _projects: ProjectService,
+        private _auth: AuthService
     ) { }
  
     ngOnInit() {
+        this.user = this._auth.getUser();
+
         // Get Reading via Observable
         this.subscriptions.push(
             this._readings.get(this.project.reading_id)
@@ -67,19 +79,28 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // Populate local Comment and Highlight arrays
         // (Used for super speedy rendering!)
         this.project.comments.forEach(comment => {
-            if (!this.commentsByIndex[comment.start]) {
-                this.commentsByIndex[comment.start] = [];
-            }
-            // Populate local comments array by start index
-            comment.project_id = this.project._id;
-            this.commentsByIndex[comment.start].push(comment);
+            // If student, only show the student's comments
+            if (comment.user_id === this.user._id || this.user.isTeacher === true) {
+                if (!this.commentsByIndex[comment.start]) {
+                    this.commentsByIndex[comment.start] = [];
+                }
+                // Populate local comments array by start index
+                comment.project_id = this.project._id;
+                this.commentsByIndex[comment.start].push(comment);
 
-            // Add highlights
-            this.incrementHighlights(comment.start, comment.end);
+                // Add highlights
+                this.incrementHighlights(comment.start, comment.end);
+            }
         });
 
+        // After comments are added to the array
+        this.updateAllLineCounts();
+
+        window.onresize = () => {
+            this.updateAllLineCounts();
+        }
     }
-    
+
     ngOnDestroy() {
         this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
     }
@@ -94,10 +115,54 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     showCommentOptions(event): void {
         // Only show options if text selected
         if (Rangy.getSelection() && Rangy.getSelection().toString().length > 0) {
-            this.highlightY = event.clientY + 'px';
+            let scrollOffset = document.getElementById('emojiAnnotator').getBoundingClientRect().top;
+            const readingPad = 52;
+            // Account for page scroll offset
+            this.highlightY = (event.clientY - scrollOffset + readingPad) + 'px';
             this.optionsShow = true;
         } else {
             this.optionsShow = false;
+        }
+    }
+
+    updateAllLineCounts(): void {
+        this.lineCountArray = [];
+        if (!this.lineCountRunning) {
+            this.lineCountRunning = true;
+            // TEMPORARY: Add delay so element is rendered
+            setTimeout(() => {
+                if (this.commentComponents) {
+                    this.commentComponents.toArray().forEach(
+                        (commentComp: CommentComponent, index: number) => {
+                            let yPos = commentComp.getVerticalPosition();
+                            
+                            if (yPos > 0) { // 0 is returned as the default
+                                if (this.lineCountArray[yPos]) {
+                                    this.lineCountArray[yPos].push(commentComp);
+                                } else {
+                                    this.lineCountArray[yPos] = [commentComp];
+                                }
+                                commentComp.lineCount = this.lineCountArray[yPos].length;
+                            }
+                        }
+                    );
+                }
+                this.lineCountRunning = false;
+            }, 2000);
+        }
+    }
+
+    /** 
+     * Fired by Output from the Comment Component
+     * - References lineCountArray
+     */
+    expandLine(yPosToExpand: number) {
+        console.log(yPosToExpand);
+        console.log(this.lineCountArray[yPosToExpand]);
+        if (this.lineCountArray[yPosToExpand]) {
+            this.lineCountArray[yPosToExpand].forEach( (comment, index) => {
+                comment.expanded = !comment.expanded;
+            });
         }
     }
 
@@ -124,6 +189,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             } else {
                 this.highlightArray[i] = 0;
             }
+            // Any time we decrement, we should ensure we remove the 1000 focus
+            if (this.highlightArray[i] >= 1000) {
+                this.highlightArray[i] -= 1000;
+            }
         }
     }
 
@@ -136,7 +205,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      */
     createComment(start: number, end: number, type: string): void {
         let projectId = this.project._id;
-        let text = this.reading.words.slice(start, end).toString();
+        let text: string = '';
+        for (var i = start; i <= end; i++) {
+            text += this.reading.words[i].str;
+        }
 
         // Tell server we've added a comment
         this._projects.saveComment(projectId, '', start, end, type, text)
@@ -146,6 +218,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                     // Add setting to trigger focus on new comment
                     this.inactivateComment();
                     
+                    // Give it the Project Id to pass down to the Comment Component
+                    comment.project_id = this.project._id;
+                    
                     // Add Comment to local array
                     if (this.commentsByIndex[start]) {
                         this.commentsByIndex[start].push(comment);
@@ -154,6 +229,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                         this.commentsByIndex[start] = [ comment ];
                         this.setActiveCommentByIndex(true, start, 0);
                     }
+                    this.updateAllLineCounts();
                 } else {
                     console.warn('Didn\'t get a comment back from server!');
                 }
@@ -179,6 +255,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.decrementHighlights(comment.start, comment.end);
         // Remove comment form local Comments array
         this.commentsByIndex[index].splice(commentIndex);
+        // Update line counts
+        this.updateAllLineCounts();
     }
 
     setActiveCommentByIndex(isActive: boolean, wordIndex: number, commentIndex: number): void {
@@ -205,11 +283,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     }
 
     /** 
-     * Add Comment of Emoji type
-     * - Fired from comment options tooltip
+     * Returns Start and End word indices of text selection
      */
-    addEmojiComment(event): void {
-        // Get selection indices
+    getSelectionSpan(): any {
         let selection = Rangy.getSelection();
         let start : number;
         let end : number;
@@ -225,25 +301,39 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             }
         }
 
-        start = getNodeIndex(selection['anchorNode']);
-        end = getNodeIndex(selection['focusNode']);
-
-        // Hide tool tips
-        this.hideCommentOptions();
-        // Clear selections
-        selection.removeAllRanges();
-
-        // It's possible that a selection is made backwards
-        // We want the start index to come first
-        if (start > end) {
-            end = [start, start = end][0]; // Swap start and end values
+        if (selection['anchorNode'] && selection['focusNode']) {
+            start = getNodeIndex(selection['anchorNode']);
+            end = getNodeIndex(selection['focusNode']);
+            
+            // It's possible that a selection is made backwards
+            // We want the start index to come first
+            if (start > end) {
+                end = [start, start = end][0]; // Swap start and end values
+            }
+            // Hide tool tips
+            this.hideCommentOptions();
+            // Clear selections
+            selection.removeAllRanges();
         }
         
-        // Increment highlight array
-        this.incrementHighlights(start, end);
+        return { start: start, end: end };
+    }
 
-        // Tell the server we've got a comment!
-        this.createComment(start, end, 'emoji');
+    /** 
+     * Add Comment of Emoji type
+     * - Fired from comment options tooltip
+     */
+    addEmojiComment(event): void {
+        // Get selection indices
+        let span = this.getSelectionSpan();
+
+        if (span.start && span.end) {
+            // Increment highlight array
+            this.incrementHighlights(span.start, span.end);
+
+            // Tell the server we've got a comment!
+            this.createComment(span.start, span.end, 'emoji');
+        }
     }
 
     /** 
@@ -252,40 +342,13 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      */
     addTextComment(event): void {
         // Get selection indices
-        let selection = Rangy.getSelection();
-        let start : number;
-        let end : number;
-        let comment: any;
-        
-        let getNodeIndex = function(node: any) : number {
-            // Selections often happen at the text node level, inside the actual element
-            // In which case we need to reference its parent node
-            if(node.hasOwnProperty('className') && node.className.indexOf('word') > -1) {
-                return parseInt(node.getAttribute('index'));
-            } else {
-                return parseInt(node.parentNode.getAttribute('index'));
-            }
-        }
-
-        start = getNodeIndex(selection['anchorNode']);
-        end = getNodeIndex(selection['focusNode']);
-
-        // Hide tool tips
-        this.hideCommentOptions();
-        // Clear selections
-        selection.removeAllRanges();
-
-        // It's possible that a selection is made backwards
-        // We want the start index to come first
-        if (start > end) {
-            end = [start, start = end][0]; // Swap start and end values
-        }
+        let span = this.getSelectionSpan();
         
         // Increment highlight array
-        this.incrementHighlights(start, end);
+        this.incrementHighlights(span.start, span.end);
 
         // Tell the server we've got a comment!
-        this.createComment(start, end, 'text');
+        this.createComment(span.start, span.end, 'text');
     }
 
     /** 
@@ -378,5 +441,42 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 this.extractTextNodes(node, inheritedTags);
             }
         });
+    }
+
+    private focusHighlight(start, end): void {
+        for (var i = start; i <= end; i ++) {
+            if (this.highlightArray[i]) {
+                this.highlightArray[i] += 1000;
+            } else {
+                this.highlightArray[i] = 1000;
+            }
+        }
+    }
+
+    private unfocusHighlight(start, end): void {
+        for (var i = start; i <= end; i ++) {
+            if (this.highlightArray[i] >= 1000) {
+                this.highlightArray[i] -= 1000;
+            } else {
+                this.highlightArray[i] = 0;
+            }
+        }
+    }
+
+    /**
+     * Keep this light! It runs for every word instance
+     * @param i is the word index
+     */
+    private getHighlightClass(i: number): string {
+        let classString = '';
+        if (this.highlightArray[i]) {
+            if (this.highlightArray[i] >= 1000) {
+                // Focus style
+                classString = 'highlight-f highlight-' + (this.highlightArray[i] - 1000);
+            } else {
+                classString = 'highlight-' + this.highlightArray[i];
+            }
+        }
+        return classString;
     }
 }

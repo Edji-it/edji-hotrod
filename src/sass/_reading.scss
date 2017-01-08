@@ -31,8 +31,17 @@ article.content {
 
 	& .word {
 		// Styles applied by word
+		
 		&.space {
-			// white-space: pre-line;
+			min-height: 1em;
+			
+			&:after {
+				// Corrects issue with comments positioning on the wrong line
+				display: inline-block;
+				content: '';
+				clear:both;
+				@extend %noSelect;
+			}
 		}
 
 		&.b, &.B {
@@ -55,6 +64,7 @@ article.content {
 					display: block;
 					content: "\A";
       				white-space: pre;
+					@extend %noSelect;
 				}
 			}
 
@@ -64,6 +74,7 @@ article.content {
 					content: '';
 					display: block;
 					margin-right: 100%;
+					@extend %noSelect;
 				}
 			}
 		}
@@ -120,95 +131,6 @@ section.search {
 	// position: fixed !important;
 }
 
-$sideNavTextColor: #404040;
-
-.reading__hud {
-	// border-top: 3px solid #9772B1;
-	font-family: $base-font-family;
-	position: fixed;
-	top: 20px;
-	right: 20px;
-	width: auto;
-	height: auto;
-	text-align:right;
-	padding: 20px;
-	background: rgba(255,255,255,0.6);
-	z-index: 8000;
-	border-radius: 20px;
-}
-
-$hudColor: #676767;
-
-.reading__hud label, .reading__hud a {
-	font-size: 12px;
-	display: block;
-	height: 1em;
-	margin:2px 0px 4px;
-	line-height: 1em;
-}
-
-.reading__hud label {
-	color: $hudColor;
-	font-weight: 700;
-}
-
-.hud__info {
-	font-size: 16px;
-	display: inline-block;
-	height: 1em;
-	margin: 2px 0px;
-	color: $hudColor;
-
-	& .emojioneemoji {
-		height: 1em;
-		margin: -4px 0px 0 2px;
-	}
-}
-
-.reading__hud a {
-	color: $sideNavTextColor;
-	text-decoration: underline;
-	cursor: pointer;
-}
-
-.reading__hud a:hover {
-	color: rgb(255,100,0);
-}
-
-.reading__hud .link {
-	color: $sideNavTextColor;
-	line-height: 24px;
-    text-indent: -10px;
-    margin-left: 10px;
-    cursor: pointer;
-    transition: background 0.3s linear;
-}
-.reading__hud .link:hover {
-	text-decoration: underline;
-}
-
-.reading__hud .link.active {
-	color:  #000;
-	text-decoration: underline;
-}
-
-.reading__hud .link.blocked {
-	background: #2d2d2d;
-}
-
-.reading__hud div.emoji {width:1.3em; height:1.3em; position:relative; display:inline-block;}
-.doc-nav span.emoji,
-.reading__hud span.emoji {
-	width:1.3em;
-	height:1.3em;
-	display:inline-block;
-	position:relative;
-	overflow:hidden;
-	text-indent:-9999px;
-	vertical-align:middle;
-    margin-top: -5px;
-    margin-right: 2px;
-}
 
 
 .list-link {
@@ -325,4 +247,79 @@ $hudColor: #676767;
 	display: block;
 	position: absolute;
 	left: -1.2em;
+}
+
+/******************************************* 
+
+  Highlight Class Generation
+
+********************************************/
+
+$startR: 255;//255;
+$startG: 250;//235;
+$startB: 103;//10;
+$endR: 237;
+$endG: 76;
+$endB: 108;
+
+$highlightSteps: 8;
+
+$highlight1R: $startR + ((($endR - $startR)/$highlightSteps) * 1);
+$highlight1G: $startG + ((($endG - $startG)/$highlightSteps) * 1);
+$highlight1B: $startB + ((($endB - $startB)/$highlightSteps) * 1);
+$highlight1A: 0.4 + (0.08 * 1); 
+
+@for $n from 1 through $highlightSteps {
+	.highlight-#{$n} {
+		$thisR: $startR + ((($endR - $startR)/$highlightSteps) * $n);
+		$thisG: $startG + ((($endG - $startG)/$highlightSteps) * $n);
+		$thisB: $startB + ((($endB - $startB)/$highlightSteps) * $n);
+		$thisA: 0.4 + (0.08 * $n);
+		background: rgba($thisR, $thisG, $thisB, $thisA);
+		// padding: 0px 4px;
+		// margin: 0px -4px;
+	}
+}
+
+
+$commentFadeOpacity: 0.35;
+
+article.content word {
+	@include transition(background linear 0.2s);
+	transition-delay: 0.2s;
+}
+
+.spotlight-comment article.content word[class*='highlight'] {
+	// opacity: $commentFadeOpacity;
+	background: transparent;
+	transition-delay: 0s;
+}
+
+.spotlight-comment article.content word.in-spotlight--word {
+	/*opacity: 1;*/
+	background: rgba($highlight1R, $highlight1G, $highlight1B, $highlight1A) !important;
+
+	& * {
+		/*opacity: 1;*/
+	}
+	
+	& .emoji-comment-username {
+		/*display: none;*/
+	}
+}
+
+.spotlight-comment article.content word.in-spotlight {
+	/*opacity: 1 !important;*/
+	background: rgba($highlight1R, $highlight1G, $highlight1B, $highlight1A) !important;
+	transition-delay: 0s;
+
+	& * {
+		/*opacity: 1 !important;*/
+	}
+}
+
+// Focus Highlight styles (for on comment hover)
+.highlight-f {
+	// background: blue;
+	border-bottom: 3px solid #969696; 
 }
