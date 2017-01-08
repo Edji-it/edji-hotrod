@@ -31,8 +31,17 @@ article.content {
 
 	& .word {
 		// Styles applied by word
+		
 		&.space {
-			// white-space: pre-line;
+			min-height: 1em;
+			
+			&:after {
+				// Corrects issue with comments positioning on the wrong line
+				display: inline-block;
+				content: '';
+				clear:both;
+				@extend %noSelect;
+			}
 		}
 
 		&.b, &.B {
@@ -55,6 +64,7 @@ article.content {
 					display: block;
 					content: "\A";
       				white-space: pre;
+					@extend %noSelect;
 				}
 			}
 
@@ -64,6 +74,7 @@ article.content {
 					content: '';
 					display: block;
 					margin-right: 100%;
+					@extend %noSelect;
 				}
 			}
 		}

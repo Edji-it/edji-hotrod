@@ -186,6 +186,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             } else {
                 this.highlightArray[i] = 0;
             }
+            // Any time we decrement, we should ensure we remove the 1000 focus
+            if (this.highlightArray[i] >= 1000) {
+                this.highlightArray[i] -= 1000;
+            }
         }
     }
 
@@ -198,7 +202,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      */
     createComment(start: number, end: number, type: string): void {
         let projectId = this.project._id;
-        let text = this.reading.words.slice(start, end).toString();
+        let text: string = '';
+        for (var i = start; i <= end; i++) {
+            text += this.reading.words[i].str;
+        }
 
         // Tell server we've added a comment
         this._projects.saveComment(projectId, '', start, end, type, text)
@@ -207,6 +214,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 if (comment._id) {
                     // Add setting to trigger focus on new comment
                     this.inactivateComment();
+                    
+                    // Give it the Project Id to pass down to the Comment Component
+                    comment.project_id = this.project._id;
                     
                     // Add Comment to local array
                     if (this.commentsByIndex[start]) {
@@ -457,7 +467,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
     private unfocusHighlight(start, end): void {
         for (var i = start; i <= end; i ++) {
-            if (this.highlightArray[i]) {
+            if (this.highlightArray[i] >= 1000) {
                 this.highlightArray[i] -= 1000;
             } else {
                 this.highlightArray[i] = 0;
