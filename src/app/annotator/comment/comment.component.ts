@@ -31,7 +31,10 @@ export class CommentComponent implements OnInit {
   @Output() commentActivation = new EventEmitter<boolean>();
   @Output() expandLine = new EventEmitter<number>();
 
-  constructor(private _projects: ProjectService, public el: ElementRef) { }
+  constructor(
+        private _projects: ProjectService, 
+        public el: ElementRef
+      ) { }
 
   ngOnInit() {
     // If comment is newly added, focus on it when created!
@@ -52,7 +55,7 @@ export class CommentComponent implements OnInit {
   // Updates comment in db
   public updateComment(commentData: string): void {
     this._projects.saveComment(this.comment.project_id, commentData, this.comment.start, this.comment.end, this.comment.type, this.comment.text, this.comment._id)
-      .then(data => {
+      .then(comment => {
         this.justSaved = true;
         setTimeout(() => {
           this.justSaved = false;
@@ -64,11 +67,11 @@ export class CommentComponent implements OnInit {
   }
 
   // Deletes comment via Project service, which updates the local Project object
-  deleteComment(commentId: string):void {
-    this._projects.deleteComment(commentId)
+  deleteComment(comment: any):void {
+    this._projects.deleteComment(comment)
       .then(data => {
         // Tell Annotator to destroy this comment element!
-        this.commentDeleted.emit(commentId);
+        this.commentDeleted.emit(comment._id);
       })
       .catch(error => {
         console.log(error);

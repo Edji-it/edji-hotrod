@@ -13,6 +13,7 @@ import { ReadingService } from '../shared/reading.service';
 import { ProjectService } from '../shared/project.service';
 import { CommentComponent } from './comment';
 import { AuthService } from '../shared/auth.service';
+import { SocketService } from '../shared/socket.service';
 
 @Component({
     selector: 'annotator',
@@ -53,7 +54,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     constructor(
         private _readings: ReadingService,
         private _projects: ProjectService,
-        private _auth: AuthService
+        private _auth: AuthService,
+        private _socket: SocketService
     ) { }
  
     ngOnInit() {
@@ -92,6 +94,45 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 this.incrementHighlights(comment.start, comment.end);
             }
         });
+
+        // Subscribe to comment updates on the Teacher view
+        if (this.user.isTeacher) {
+            this.subscriptions.push(
+                this._socket.commentUpdates().subscribe((commentUpdate) => {
+                    let comment = commentUpdate.comment;
+                    let wIndex = comment.start;
+                    let cIndex = -1;
+
+                    // Get local array index
+                    if (this.commentsByIndex[wIndex]) {
+                        for (var i = 0; i < this.commentsByIndex[wIndex].length; i++) {
+                            let commentRef = this.commentsByIndex[wIndex][i];
+                            if (commentRef._id === comment._id) {
+                                cIndex = i;
+                            }
+                        }
+                    }
+
+                    // Process different live comment updates
+                    if (commentUpdate.action === 'DELETE') {
+                        if (cIndex > -1) {
+                            this.commentsByIndexRemove(comment._id, wIndex, cIndex);
+                        }
+                    } else if (commentUpdate.action === 'UPDATE') {
+                        if (cIndex > -1 && this.commentsByIndex[wIndex] && this.commentsByIndex[wIndex][cIndex]) {
+                            this.commentsByIndex[wIndex][cIndex].data = comment.data;
+                        } else {
+                            // Sometimes an UPDATE comes through for comment not yet created
+                            this.commentsByIndexAdd(comment, wIndex);
+                        }
+                    } else if (commentUpdate.action === 'ADD') {
+                        this.commentsByIndexAdd(comment, wIndex);
+                    }
+                }, (error) => {
+                    console.warn(error);
+                })
+            );
+        }
 
         // After comments are added to the array
         this.updateAllLineCounts();
@@ -204,6 +245,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      * @param type What kind of comment: emoji, text...
      */
     createComment(start: number, end: number, type: string): void {
+        console.log(start, end, type);
         let projectId = this.project._id;
         let text: string = '';
         for (var i = start; i <= end; i++) {
@@ -217,19 +259,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 if (comment._id) {
                     // Add setting to trigger focus on new comment
                     this.inactivateComment();
-                    
-                    // Give it the Project Id to pass down to the Comment Component
-                    comment.project_id = this.project._id;
-                    
-                    // Add Comment to local array
-                    if (this.commentsByIndex[start]) {
-                        this.commentsByIndex[start].push(comment);
-                        this.setActiveCommentByIndex(true, start, this.commentsByIndex[start].length - 1);
-                    } else {
-                        this.commentsByIndex[start] = [ comment ];
-                        this.setActiveCommentByIndex(true, start, 0);
-                    }
-                    this.updateAllLineCounts();
+                    this.commentsByIndexAdd(comment, start);
                 } else {
                     console.warn('Didn\'t get a comment back from server!');
                 }
@@ -241,6 +271,22 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             });
     }
 
+    commentsByIndexAdd(comment, index: number): void {
+        let start = comment.start;
+        // Give it the Project Id to pass down to the Comment Component
+        comment.project_id = this.project._id;
+        
+        // Add Comment to local array
+        if (this.commentsByIndex[start]) {
+            this.commentsByIndex[start].push(comment);
+            this.setActiveCommentByIndex(true, start, this.commentsByIndex[start].length - 1);
+        } else {
+            this.commentsByIndex[start] = [ comment ];
+            this.setActiveCommentByIndex(true, start, 0);
+        }
+        this.updateAllLineCounts();
+    }
+
     /**
      * Fires after the comment has been deleted in the database
      * - Removes comment from locally transformed array (commentsByIndex)
@@ -249,6 +295,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     commentsByIndexRemove(commentId, index: number, commentIndex: number) {
         let comment = this.commentsByIndex[index][commentIndex];
 
+        if (!comment) {
+            return;
+        }
         // Clear active comment
         this.inactivateComment();
         // Remove highlights from local array
@@ -316,7 +365,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             selection.removeAllRanges();
         }
         
-        return { start: start, end: end };
+        return { 'start': start, 'end': end };
     }
 
     /** 

@@ -5,7 +5,7 @@
         <!--Swap between different comment types-->
         <emoji-comment *ngIf="comment.type == 'emoji' || !comment.type" #commentInput [comment]="comment"></emoji-comment>
         <!--<text-comment *ngIf="comment.type == 'text'" [comment]="comment" #commentInput (onCommentUpdate)="updateComment(comment.data)"></text-comment>-->
-        <button (click)="deleteComment(comment._id)" class='inline-delete'>+</button>
+        <button (click)="deleteComment(comment)" class='inline-delete'>+</button>
     </div>
     <i class="comment__saved" [innerHtml]='":ok_hand:" | emojione'></i>
 </div>

@@ -23,6 +23,7 @@ import { AppState, InternalStateType } from './app.service';
 import { AuthService } from './shared/auth.service';
 import { ReadingService } from './shared/reading.service';
 import { ProjectService } from './shared/project.service';
+import { SocketService } from './shared/socket.service';
 import { ReuseStrategy } from './route-reuse-strategy';
 import { RouteReuseStrategy } from '@angular/router';
 
@@ -54,7 +55,8 @@ const APP_PROVIDERS = [
   AppState,
   AuthService,
   ReadingService,
-  ProjectService
+  ProjectService,
+  SocketService
   // { provide: RouteReuseStrategy, useClass: ReuseStrategy }
 ];
 

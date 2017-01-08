@@ -5,6 +5,7 @@ import { Observable, BehaviorSubject } from 'rxjs/Rx';
 import 'rxjs/add/operator/toPromise';
 
 import { AuthService } from './auth.service';
+import { SocketService } from './socket.service';
 
 @Injectable()
 export class ProjectService {
@@ -18,7 +19,12 @@ export class ProjectService {
   // Maintain local Project data and its updates in this service
   
 
-  constructor(private http: Http, private _auth: AuthService, private _route: ActivatedRoute) {
+  constructor(
+        private http: Http, 
+        private _auth: AuthService, 
+        private _route: ActivatedRoute,
+        private _socket: SocketService
+    ) {
   }
   
   /**
@@ -138,6 +144,14 @@ export class ProjectService {
             data.comment['_id'] = commentId;
         }
 
+        // Tell other Project viewers comment changed, using Socket
+        // TO-DO: Move to after service responds
+        if (data.comment['_id']) {
+            this._socket.updateComment(data.comment, 'UPDATE', this.project._id);
+        } else {
+            this._socket.updateComment(data.comment, 'CREATE', this.project._id);
+        }        
+
         return this.http
             .post(url, data, this._auth.getOptions())
             .toPromise()
@@ -148,15 +162,18 @@ export class ProjectService {
      * Deletes comment via service, then updates local Project object 
      * - Project page should subscribe to the currentProject Observable to receive these updates
      */
-    public deleteComment(commentId: string): Promise<any> {
+    public deleteComment(comment): Promise<any> {
         let projectId = this.project._id;
-        let url = this._auth.getUrl() + '/sessions/' + projectId + '/comments/' + commentId;
+        let url = this._auth.getUrl() + '/sessions/' + projectId + '/comments/' + comment._id;
 
         return this.http
             .delete(url, this._auth.getOptions())
             .map(data => {
+                // Tell other Project views that the comment is gone
+                 this._socket.updateComment(comment, 'DELETE', this.project._id);
+
                 for (var i = 0; i <= this.project.comments.length; i++) {
-                    if (this.project.comments[i] && this.project.comments[i]._id === commentId) {
+                    if (this.project.comments[i] && this.project.comments[i]._id === comment._id) {
                         // Remove comment from local object
                         this.project.comments.splice(i);
                     }
