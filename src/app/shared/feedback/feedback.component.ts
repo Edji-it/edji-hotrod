@@ -29,10 +29,12 @@ export class FeedbackComponent {
   ) {
     this.user = this._auth.getUser();
 
+    let prevData: any = this._auth.getFromStorage("feedbackFormData");
+
     this.feedbackForm = fb.group({
       name: [this.user.fullname, Validators.required],
       email: [this.user.email, Validators.compose([Validators.required, this.emailValidator])],
-      content: [null, Validators.required]
+      content: [prevData.content, Validators.required]
     })
   }
 
@@ -48,7 +50,7 @@ export class FeedbackComponent {
     console.log("sending feedback!");
     console.log(formValue);
 
-    let data = {
+    let data: any = {
       emailSubject: "Feedback form submitted!",
       formInfo: formValue
     };
@@ -62,10 +64,12 @@ export class FeedbackComponent {
       (res) => {
         if (res.status === 204) {
           this.feedbackSuccess = true;
+          this._auth.deleteFromStorage("feedbackFormData");
         }
       },
       (err) => {
         this.errorObject.serverError = "I'm sorry, something has gone wrong! Please try submitting your feedback again later!";
+        this._auth.store("feedbackFormData", formValue);
       }
     )
   }

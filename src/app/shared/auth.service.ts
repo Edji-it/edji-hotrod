@@ -11,7 +11,7 @@ export class AuthService implements CanActivate, OnInit {
     public protocol = window.location.protocol ? window.location.protocol : '';
     private locker: Locker;
 
-    constructor(private http: Http, private _locker: Locker, private _router: Router) {
+    constructor(private http: Http, private _router: Router, _locker: Locker) {
         this.locker = _locker.useDriver(Locker.DRIVERS.LOCAL);
         
         // Check to see if prod or dev environment
@@ -93,6 +93,25 @@ export class AuthService implements CanActivate, OnInit {
     private destroyCredentials() {
         this.locker.remove('token');
         this.locker.remove('user');
+    }
+
+    /** Stores an object in local storage for you - your welcome */
+    public store(key: string, value: any): void {
+        if (key != "user" && key != "token") {
+            this.locker.set(key, value);
+        }
+    }
+
+    /** Gets an object from local storage */
+    public getFromStorage(key: string): any {
+        return this.locker.get(key);
+    }
+
+    /** Deletes things (not user or token) from local storage */
+    public deleteFromStorage(key: string): void {
+        if (key != "user" && key != "token") {
+            this.locker.remove(key);
+        }
     }
 
     login(user: any) {
