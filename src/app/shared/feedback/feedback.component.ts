@@ -56,7 +56,9 @@ export class FeedbackComponent {
 
     let data: any = {
       emailSubject: "Feedback form submitted!",
-      formInfo: formValue
+      formInfo: formValue,
+      type: "feedback",
+      user: this.user
     };
 
     this.http.post(
