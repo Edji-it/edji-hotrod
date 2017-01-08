@@ -28,6 +28,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     private commentsByIndex: any[] = [];
     private highlightArray: number[] = [];
     private lineCountArray: any[][] = [];
+    private lineCountRunning: boolean = false;
 
     private activeComment: any = {};
     
@@ -113,34 +114,40 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
     updateAllLineCounts(): void {
         this.lineCountArray = [];
-        // TEMPORARY: Add delay so element is rendered
-         setTimeout(() => {
-            if (this.commentComponents) {
-                this.commentComponents.toArray().forEach(
-                    (commentComp: CommentComponent, index: number) => {
-                        
-                        let yPos = commentComp.getVerticalPosition();
-
-                        if (this.lineCountArray[yPos]) {
-                            this.lineCountArray[yPos].push(commentComp);
-                        } else {
-                            this.lineCountArray[yPos] = [commentComp];
+        if (!this.lineCountRunning) {
+            this.lineCountRunning = true;
+            // TEMPORARY: Add delay so element is rendered
+            setTimeout(() => {
+                if (this.commentComponents) {
+                    this.commentComponents.toArray().forEach(
+                        (commentComp: CommentComponent, index: number) => {
+                            let yPos = commentComp.getVerticalPosition();
+                            console.log(yPos);
+                            if (yPos > 0) { // 0 is returned as the default
+                                if (this.lineCountArray[yPos]) {
+                                    this.lineCountArray[yPos].push(commentComp);
+                                } else {
+                                    this.lineCountArray[yPos] = [commentComp];
+                                }
+                                commentComp.lineCount = this.lineCountArray[yPos].length;
+                            }
                         }
-
-                        commentComp.lineCount = this.lineCountArray[yPos].length;
-                    }
-                );
-            }
-        }, 2000);
+                    );
+                }
+                this.lineCountRunning = false;
+            }, 2000);
+        }
     }
 
     /** 
      * Fired by Output from the Comment Component
      * - References lineCountArray
      */
-    expandLine(lineToExpand: number) {
-        if (this.lineCountArray[lineToExpand]) {
-            this.lineCountArray[lineToExpand].forEach( (comment, index) => {
+    expandLine(yPosToExpand: number) {
+        console.log(yPosToExpand);
+        console.log(this.lineCountArray[yPosToExpand]);
+        if (this.lineCountArray[yPosToExpand]) {
+            this.lineCountArray[yPosToExpand].forEach( (comment, index) => {
                 comment.expanded = !comment.expanded;
             });
         }

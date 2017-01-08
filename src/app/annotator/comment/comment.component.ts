@@ -11,12 +11,14 @@ import { ProjectService } from '../../shared/project.service';
 })
 export class CommentComponent implements OnInit {
 
-  @Input() public comment: any;
   public lineCount: number = 1;
-  private yPos: number = 0;
   public expanded: boolean = false;
-  
+
+  private yPos: number = 0;
+  private justSaved: boolean = false;
   private active = false;
+
+  @Input() public comment: any;
   @Input()
   set isActive(isActive: boolean) {
     if (typeof(isActive) !== 'undefined' && this.active !== isActive) {
@@ -28,8 +30,6 @@ export class CommentComponent implements OnInit {
   @Output() commentDeleted = new EventEmitter<string>();
   @Output() commentActivation = new EventEmitter<boolean>();
   @Output() expandLine = new EventEmitter<number>();
-
-  private justSaved: boolean = false;
 
   constructor(private _projects: ProjectService, public el: ElementRef) { }
 
@@ -83,9 +83,13 @@ export class CommentComponent implements OnInit {
       });
   }
 
+  /**
+   * Returns comment block's y position
+   * - Used for collapse/expand multiple comments
+   */
   public getVerticalPosition(): number {
-    this.yPos = this.el.nativeElement.offsetTop;
-    return this.el.nativeElement.offsetTop;
+    this.yPos = Math.round(this.el.nativeElement.offsetTop);
+    return this.yPos;
   }
 
   /**
