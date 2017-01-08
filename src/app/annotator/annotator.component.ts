@@ -434,4 +434,41 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             }
         });
     }
+
+    private focusHighlight(start, end): void {
+        for (var i = start; i <= end; i ++) {
+            if (this.highlightArray[i]) {
+                this.highlightArray[i] += 1000;
+            } else {
+                this.highlightArray[i] = 1000;
+            }
+        }
+    }
+
+    private unfocusHighlight(start, end): void {
+        for (var i = start; i <= end; i ++) {
+            if (this.highlightArray[i]) {
+                this.highlightArray[i] -= 1000;
+            } else {
+                this.highlightArray[i] = 0;
+            }
+        }
+    }
+
+    /**
+     * Keep this light! It runs for every word instance
+     * @param i is the word index
+     */
+    private getHighlightClass(i: number): string {
+        let classString = '';
+        if (this.highlightArray[i]) {
+            if (this.highlightArray[i] >= 1000) {
+                // Focus style
+                classString = 'highlight-f highlight-' + (this.highlightArray[i] - 1000);
+            } else {
+                classString = 'highlight-' + this.highlightArray[i];
+            }
+        }
+        return classString;
+    }
 }

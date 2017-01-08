@@ -37,14 +37,6 @@ export class CommentComponent implements OnInit {
     // If comment is newly added, focus on it when created!
   }
 
-  focusComment():void {
-
-  }
-
-  unfocusComment(): void {
-    
-  }
-
   toggleActive( ): void {
       if (this.active === true) {
           this.active = false;

@@ -1,4 +1,4 @@
-<div class="comment" [class.saved]="justSaved" [class.active]="active"  [ngClass]="[ 'line-count-' + lineCount, expanded ? 'expanded' : '' ]" (mouseenter)='focusComment(comment.start, comment.end)' (mouseleave)='unfocusComment(comment.start, comment.end)'>
+<div class="comment" [class.saved]="justSaved" [class.active]="active"  [ngClass]="[ 'line-count-' + lineCount, expanded ? 'expanded' : '' ]">
     <div class='expand-comments' (click)='toggleExpand($event)'></div>
     <div class='comment-username'>{{comment.author}}</div>
     <div (click)="toggleActive()" class='comment-input-wrapper'>

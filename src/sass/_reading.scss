@@ -326,3 +326,78 @@ $hudColor: #676767;
 	position: absolute;
 	left: -1.2em;
 }
+
+/******************************************* 
+
+  Highlight Class Generation
+
+********************************************/
+
+$startR: 255;//255;
+$startG: 250;//235;
+$startB: 103;//10;
+$endR: 237;
+$endG: 76;
+$endB: 108;
+
+$highlightSteps: 8;
+
+$highlight1R: $startR + ((($endR - $startR)/$highlightSteps) * 1);
+$highlight1G: $startG + ((($endG - $startG)/$highlightSteps) * 1);
+$highlight1B: $startB + ((($endB - $startB)/$highlightSteps) * 1);
+$highlight1A: 0.4 + (0.08 * 1); 
+
+@for $n from 1 through $highlightSteps {
+	.highlight-#{$n} {
+		$thisR: $startR + ((($endR - $startR)/$highlightSteps) * $n);
+		$thisG: $startG + ((($endG - $startG)/$highlightSteps) * $n);
+		$thisB: $startB + ((($endB - $startB)/$highlightSteps) * $n);
+		$thisA: 0.4 + (0.08 * $n);
+		background: rgba($thisR, $thisG, $thisB, $thisA);
+		// padding: 0px 4px;
+		// margin: 0px -4px;
+	}
+}
+
+
+$commentFadeOpacity: 0.35;
+
+article.content word {
+	@include transition(background linear 0.2s);
+	transition-delay: 0.2s;
+}
+
+.spotlight-comment article.content word[class*='highlight'] {
+	// opacity: $commentFadeOpacity;
+	background: transparent;
+	transition-delay: 0s;
+}
+
+.spotlight-comment article.content word.in-spotlight--word {
+	/*opacity: 1;*/
+	background: rgba($highlight1R, $highlight1G, $highlight1B, $highlight1A) !important;
+
+	& * {
+		/*opacity: 1;*/
+	}
+	
+	& .emoji-comment-username {
+		/*display: none;*/
+	}
+}
+
+.spotlight-comment article.content word.in-spotlight {
+	/*opacity: 1 !important;*/
+	background: rgba($highlight1R, $highlight1G, $highlight1B, $highlight1A) !important;
+	transition-delay: 0s;
+
+	& * {
+		/*opacity: 1 !important;*/
+	}
+}
+
+// Focus Highlight styles (for on comment hover)
+.highlight-f {
+	// background: blue;
+	border-bottom: 3px solid #969696; 
+}
