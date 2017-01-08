@@ -24,8 +24,8 @@
 					<button id="addEmojiComment" class="emoji" (click)="addEmojiComment($event)">
 						<img alt="☺" class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/263a.png">
 					</button>
-					<button id="addTextComment" class="emoji" (click)="addTextComment($event)" [innerHtml]="':writing_hand:' | emojione">
-					</button>
+					<!--<button id="addTextComment" class="emoji" (click)="addTextComment($event)" [innerHtml]="':writing_hand:' | emojione">
+					</button>-->
 				</span>
 			<!--</span>-->
 		</div>
@@ -37,10 +37,14 @@
 
 	<div class="article-wrap" ng-class="{ 'comments-disabled' : showAllComments, 'loading' : loadingReading }">
         <!--Create components after load for reading-->
-		<article class="content" (mouseup)="showCommentOptions($event)" (touchend)="showCommentOptions($event)" (clickOutside)="hideCommentOptions()">
-			<span *ngFor="let word of reading.words; let i = index" class="word" [ngClass]="[ word.styles.join(' '), 'highlight-' + (highlightArray[i] ?  highlightArray[i] : 0)]" [attr.index]="i">
+		<article #readingContent class="content" (mouseup)="showCommentOptions($event)" (touchend)="showCommentOptions($event)" (clickOutside)="hideCommentOptions()">
+			<span *ngFor="let word of reading.words; let i = index" class="word" [ngClass]="[ word.styles.join(' '), 'highlight-' + (highlightArray[i] ?  highlightArray[i] : 0), (commentsByIndex[i] && commentsByIndex[i].length > 0) ? 'has-comment' : '' ]" [attr.index]="i">
 				<!--Comment Component-->
-				<edji-comment *ngFor="let comment of commentsByIndex[i]; let ci = index" [comment]="comment" [isActive]="comment.active" (commentActivation)="setActiveCommentByIndex($event, i, ci)" (commentDeleted)="commentsByIndexRemove($event, i, ci)"></edji-comment>
+				<edji-comment *ngFor="let comment of commentsByIndex[i]; let ci = index" [comment]="comment" 
+					[isActive]="comment.active" 
+					(commentActivation)="setActiveCommentByIndex($event, i, ci)" 
+					(commentDeleted)="commentsByIndexRemove($event, i, ci)"
+					(expandLine)="expandLine($event)"></edji-comment>
 				{{ word.str }}
 			</span>
 		</article>

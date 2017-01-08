@@ -1,6 +1,6 @@
 import { CommentStmt } from '@angular/compiler/src/output/output_ast';
 import { Comment } from '@angular/compiler/src/ml_parser/ast';
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChange } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChange, ElementRef } from '@angular/core';
 
 import { ProjectService } from '../../shared/project.service';
 
@@ -11,7 +11,10 @@ import { ProjectService } from '../../shared/project.service';
 })
 export class CommentComponent implements OnInit {
 
-  @Input() private comment: any;
+  @Input() public comment: any;
+  public lineCount: number = 1;
+  private yPos: number = 0;
+  public expanded: boolean = false;
   
   private active = false;
   @Input()
@@ -24,10 +27,11 @@ export class CommentComponent implements OnInit {
 
   @Output() commentDeleted = new EventEmitter<string>();
   @Output() commentActivation = new EventEmitter<boolean>();
+  @Output() expandLine = new EventEmitter<number>();
 
   private justSaved: boolean = false;
 
-  constructor(private _projects: ProjectService) { }
+  constructor(private _projects: ProjectService, public el: ElementRef) { }
 
   ngOnInit() {
     // If comment is newly added, focus on it when created!
@@ -77,6 +81,18 @@ export class CommentComponent implements OnInit {
       .catch(error => {
         console.log(error);
       });
+  }
+
+  public getVerticalPosition(): number {
+    this.yPos = this.el.nativeElement.offsetTop;
+    return this.el.nativeElement.offsetTop;
+  }
+
+  /**
+   * Expand all stacked comments on the same line
+   */
+  toggleExpand(): void {
+    this.expandLine.emit(this.yPos);
   }
 
 }

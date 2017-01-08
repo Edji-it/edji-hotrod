@@ -1,4 +1,8 @@
 
+.comment {
+	transition: margin 0.2s linear, height 0.2s linear;
+}
+
 .comment-line {
 	position: relative;
 	display: inline-block;
@@ -186,7 +190,7 @@ input.emojiComment {
 			&:after {
 				color: #fff;
 				content: '#{$n}';
-				//background: $lightBg;
+				background: transparent;
 				padding: 5px;
 				position: absolute;
 				right: -9px;
@@ -209,7 +213,7 @@ input.emojiComment {
 				height: 28px + $n;
 			}
 
-			&.expand-line {
+			&.expanded {
 				margin-top: (29px * $n) - 28;
 
 				& input {
@@ -238,7 +242,7 @@ div.line-count-1 {
 		display: none;
 	}
 	
-	&.expand-line {
+	&.expanded {
 		& .expand-comments {
 			// First line shows 'contract' minus
 			display: block !important;
@@ -300,7 +304,7 @@ $expandShadowSize: 3px;
 	// Emoji Plus
 	// background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAAAGYktHRAD/AP8A/6C9p5MAAAAJcEhZcwAACxMAAAsTAQCanBgAAAAJdnBBZwAAAEAAAABAAOrz+GAAAAFgSURBVHja7ZsxUoNQEIY/HStGi4yVhVwgwxksOIeFpdbpvIK12ll4DgrPwOQCWFg5FGaoHLAIpSQvQdan+38tC+z72PdgFgAhhBDCLQcWJ8nzHGAGnABdQE4fQF0UxeS5HVkI6LoOYAFcAZ8BOT0Btxa5mQjomQFnO8SaYCKgbVur8cQpoJ8CUSIBEiABEiABEjAxeg7wXgES4F2A1gDvFSABEQsYbIllWQbrxsQCOAXGTOQOuADmgfFL4IVxLbtD4B24A+qyLL8NGqyA/qodA5fA+YhE9mG+g6xNvAKPQD0UsE3Av0cChjbEfO82EeC+AtwL0BTwXgHuBWgKrCtgBTzztx+FV5uCTF6Pp2kKcA9cB+7yANxUVTV5bmqIWJwk5gVVAiRAAqZHi6D3CpAA7wK0BnivAAmQAAn47XFKQAwCauCNsM/l623H/ClMOkJJksAeP0w0TWPlQQghhPDIFzius9vRuvq3AAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDE1LTEwLTAxVDEyOjAwOjE2LTA3OjAw41i45QAAACV0RVh0ZGF0ZTptb2RpZnkAMjAxNS0xMC0wMVQxMjowMDoxNi0wNzowMJIFAFkAAAAASUVORK5CYII=');
 
-	.expand-line & {
+	.expanded & {
 		&:after {
 			top: 10px;
 			transform: rotate(180deg);

@@ -5,12 +5,13 @@
  *  - Triggers highlighting
  *  - Deletes highlights and comment components
  */
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChildren, QueryList } from '@angular/core';
 import { Subscription } from 'rxjs/Rx';
 import * as Rangy from 'rangy';
 
 import { ReadingService } from '../shared/reading.service';
 import { ProjectService } from '../shared/project.service';
+import { CommentComponent } from './comment';
 
 @Component({
     selector: 'annotator',
@@ -18,13 +19,16 @@ import { ProjectService } from '../shared/project.service';
     styleUrls: ['annotator.component.scss']
 })
 export class AnnotatorComponent implements OnInit, OnDestroy {
-    // Component input
-    @Input()
-    private project: any;
+    @Input() private project: any;
+
+    @ViewChildren(CommentComponent) commentComponents: QueryList<CommentComponent>;
+
     private reading: any = {};
     
     private commentsByIndex: any[] = [];
     private highlightArray: number[] = [];
+    private lineCountArray: any[][] = [];
+
     private activeComment: any = {};
     
     private lineExpanded: boolean = false;
@@ -78,8 +82,14 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             this.incrementHighlights(comment.start, comment.end);
         });
 
+        // After comments are added to the array
+        this.updateAllLineCounts();
+
+        window.onresize = () => {
+            this.updateAllLineCounts();
+        }
     }
-    
+
     ngOnDestroy() {
         this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
     }
@@ -98,6 +108,41 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             this.optionsShow = true;
         } else {
             this.optionsShow = false;
+        }
+    }
+
+    updateAllLineCounts(): void {
+        this.lineCountArray = [];
+        // TEMPORARY: Add delay so element is rendered
+         setTimeout(() => {
+            if (this.commentComponents) {
+                this.commentComponents.toArray().forEach(
+                    (commentComp: CommentComponent, index: number) => {
+                        
+                        let yPos = commentComp.getVerticalPosition();
+
+                        if (this.lineCountArray[yPos]) {
+                            this.lineCountArray[yPos].push(commentComp);
+                        } else {
+                            this.lineCountArray[yPos] = [commentComp];
+                        }
+
+                        commentComp.lineCount = this.lineCountArray[yPos].length;
+                    }
+                );
+            }
+        }, 2000);
+    }
+
+    /** 
+     * Fired by Output from the Comment Component
+     * - References lineCountArray
+     */
+    expandLine(lineToExpand: number) {
+        if (this.lineCountArray[lineToExpand]) {
+            this.lineCountArray[lineToExpand].forEach( (comment, index) => {
+                comment.expanded = !comment.expanded;
+            });
         }
     }
 
