@@ -8,6 +8,7 @@ import { AuthService } from './..';
   selector: 'edji-feedback',
   templateUrl: 'feedback.component.html',
   styles: [`
+    .form-group { padding-top: 5px; }
   `]
 })
 export class FeedbackComponent {
