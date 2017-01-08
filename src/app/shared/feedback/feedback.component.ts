@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Http } from '@angular/http';
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 
@@ -14,10 +15,16 @@ import { AuthService } from './..';
 export class FeedbackComponent {
   private showFeedbackModal: true;
   private feedbackForm: FormGroup;
+  private feedbackSuccess: boolean = false;
   private user: any;
+
+  private errorObject: {
+    serverError?: string
+  } = {};
 
   constructor(
     private _auth: AuthService,
+    private http: Http,
     fb: FormBuilder
   ) {
     this.user = this._auth.getUser();
@@ -38,6 +45,28 @@ export class FeedbackComponent {
   }
 
   private sendFeedback(formValue: any) {
+    console.log("sending feedback!");
     console.log(formValue);
+
+    let data = {
+      emailSubject: "Feedback form submitted!",
+      formInfo: formValue
+    };
+
+    this.http.post(
+      "http://bumblebee-prod-1.us-west-2.elasticbeanstalk.com/newform",
+      // "http://localhost:8333/newform",
+      data,
+      this._auth.getOptions()
+    ).take(1).subscribe(
+      (res) => {
+        if (res.status === 204) {
+          this.feedbackSuccess = true;
+        }
+      },
+      (err) => {
+        this.errorObject.serverError = "I'm sorry, something has gone wrong! Please try submitting your feedback again later!";
+      }
+    )
   }
 }

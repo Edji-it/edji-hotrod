@@ -24,6 +24,7 @@ export class AuthService implements CanActivate, OnInit {
         }
     }
 
+    /** Give out options to any other http-using components or services */
     public getOptions(): RequestOptions {
         let header = new Headers({
             'Content-Type': 'application/json',
