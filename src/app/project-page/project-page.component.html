@@ -13,10 +13,10 @@
     
     <div class="hud__info"> 
       <pre class="project-code--inline">{{project.code || 'none'}}</pre>
-        <img class="emojioneemoji" src="assets/emoji/png/1f511.png">
+      <span [innerHtml]="':key:' | emojione"></span>
       <br/>
       {{liveCount}} Readers 
-        <img ng-show="true" alt="🔥" class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/1f525.png">
+      <span [innerHtml]="':fire:' | emojione"></span>
     </div>
   </div>
 

@@ -2,39 +2,6 @@ $sessionAccent: #FF7583;
 $sessionPanelWidth: 150px;
 $midGray: #f7f7f7;
 
-%projectCodeStyle {
-  font-family: 'Courier New', monospace;
-  font-weight: bold;
-  font-size: 20px;
-  line-height: 20px;
-  text-align: center;
-}
-
-.list-code {
-  padding: 5px 0px;
-  & span {
-    // font-weight: 500;
-    display: block;
-    text-align: center;
-  }
-
-  & pre {
-    @extend %projectCodeStyle;
-    display: block;
-    vertical-align: middle;
-    margin: 0px !important;
-    transform: translateY(6px);
-  }
-}
-
-.project-code--inline {
-  @extend %projectCodeStyle;
-  display: inline;
-  margin: 0;
-  font-size: 14px;
-  line-height: 32px;
-  background: transparent;
-}
 
 .session-pane{
 	width: $sessionPanelWidth;
