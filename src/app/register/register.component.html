@@ -6,16 +6,16 @@
       <form id="registerForm" [formGroup]="registerForm" (ngSubmit)="register(registerForm.value)">
         <label for="usernameInput">Username</label>
         <input id="usernameInput" type="text" [formControl]="registerForm.controls['username']" tabindex="0"/>
-        <div *ngIf="registerForm.controls['username'].hasError('required')" class="alert-info">Please enter a username</div>
+        <div id="msgUsernameRequired" *ngIf="registerForm.controls['username'].hasError('required')" class="alert-info">Please enter a username</div>
 
         <label for="fullnameInput">Full Name</label>
         <input id="fullnameInput" type="text" [formControl]="registerForm.controls['fullname']" tabindex="0"/>
-        <div *ngIf="registerForm.controls['fullname'].hasError('required')" class="alert-info">Please give your account a name</div>
+        <div id="msgFullnameRequired" *ngIf="registerForm.controls['fullname'].hasError('required')" class="alert-info">Please give your account a name</div>
 
         <label for="emailInput">Email</label>
         <input id="emailInput" type="text" [formControl]="registerForm.controls['email']" tabindex="0"/>
-        <div *ngIf="registerForm.controls['email'].hasError('required')" class="alert-info">Please enter an email</div>
-        <div *ngIf="registerForm.controls['email'].hasError('emailIncorrect') && registerForm.controls['email'].dirty" class="alert-info">We don't think that's an email</div>
+        <div id="msgEmailRequired" *ngIf="registerForm.controls['email'].hasError('required')" class="alert-info">Please enter an email</div>
+        <div id="msgEmailIncorrect" *ngIf="registerForm.controls['email'].hasError('emailIncorrect') && registerForm.controls['email'].dirty" class="alert-info">We don't think that's an email</div>
 
         <label id="accountTypeLabel" for="accountTypeGroup">Account Type</label>
         <div class="btn-group-wrapper">
@@ -31,18 +31,18 @@
 
         <label for="passwordInput">Password</label>
         <input id="passwordInput" type="password" [formControl]="registerForm.controls['password']" tabindex="0"/>
-        <div *ngIf="registerForm.controls['password'].hasError('required')" class="alert-info">Give your account a password</div>
-        <div *ngIf="registerForm.controls['password'].hasError('minlength')" class="alert-info">Your password should be 6 or more characters</div>
+        <div id="msgPasswordRequired" *ngIf="registerForm.controls['password'].hasError('required')" class="alert-info">Give your account a password</div>
+        <div id="msgPasswordMinLength" *ngIf="registerForm.controls['password'].hasError('minlength')" class="alert-info">Your password should be 6 or more characters</div>
 
         <label for="passwordConfirmInput">Password Confirm</label>
         <input id="passwordConfirmInput" type="password" [formControl]="registerForm.controls['passwordConfirm']" tabindex="0"/>
-        <div *ngIf="registerForm.controls['passwordConfirm'].hasError('required') && registerForm.controls['passwordConfirm'].dirty" class="alert-info">Please confirm your password</div>
-        <div *ngIf="registerForm.hasError('mismatch')" class="alert-info">Please make sure your passwords match</div>
+        <div id="msgPasswordConfirmRequired" *ngIf="registerForm.controls['passwordConfirm'].hasError('required') && registerForm.controls['passwordConfirm'].dirty" class="alert-info">Please confirm your password</div>
+        <div id="msgMismatch" *ngIf="registerForm.hasError('mismatch')" class="alert-info">Please make sure your passwords match</div>
 
 
-        <div *ngIf="errorObject.duplicateUser" class="banner-error" [innerHtml]="errorObject.duplicateUser | emojione"></div>
-        <div *ngIf="errorObject.badName" class="banner-error" [innerHtml]="errorObject.badName | emojione"></div>
-        <div *ngIf="errorObject.serverError" class="banner-error">{{errorObject.serverError}}</div>
+        <div id="msgDuplicateUser" *ngIf="errorObject.duplicateUser" class="banner-error" [innerHtml]="errorObject.duplicateUser | emojione"></div>
+        <div id="msgBadName" *ngIf="errorObject.badName" class="banner-error" [innerHtml]="errorObject.badName | emojione"></div>
+        <div id="msgServerError" *ngIf="errorObject.serverError" class="banner-error">{{errorObject.serverError}}</div>
 
         <div class="button__row">
           <!--ngHide loginLoading-->
