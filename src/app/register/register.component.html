@@ -40,7 +40,8 @@
         <div *ngIf="registerForm.hasError('mismatch')" class="alert-info">Please make sure your passwords match</div>
 
 
-        <div *ngIf="errorObject.duplicateUser" class="banner-error">{{errorObject.duplicateUser}}</div>
+        <div *ngIf="errorObject.duplicateUser" class="banner-error" [innerHtml]="errorObject.duplicateUser | emojione"></div>
+        <div *ngIf="errorObject.badName" class="banner-error" [innerHtml]="errorObject.badName | emojione"></div>
         <div *ngIf="errorObject.serverError" class="banner-error">{{errorObject.serverError}}</div>
 
         <div class="button__row">

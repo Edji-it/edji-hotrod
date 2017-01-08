@@ -84,9 +84,10 @@ export class JoinComponent implements OnInit, OnDestroy {
       },
       (error) => {
         if (error.status === 406) {
-          this.errorObject.badName = ":anguished: Would you mind choosing another name?"
+          this.errorObject.badName = ":anguished: Would you mind choosing another name?";
+        } else {
+          console.error(error);
         }
-        console.error(error);
       }
     )
   }

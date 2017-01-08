@@ -28,8 +28,9 @@ export class RegisterComponent {
   private registerForm: FormGroup;
 
   private errorObject: any = {
-    duplicateUser: null,
-    serverError: null
+    duplicateUser: "",
+    serverError: "",
+    badName: ""
   };
 
   constructor(
@@ -72,11 +73,12 @@ export class RegisterComponent {
       .subscribe((data) => {
         this.router.navigate(['dashboard']);
       }, (err) => {
-        let error = err.json();
-        if (error.code === 11000) {
-          this.errorObject.duplicateUser = "A user with that username already exists!";
-        } else {
-          this.errorObject.serverError = "We've run into an issue and are unable to create a new account";
+        switch (err.status) {
+          case 406:
+            this.errorObject.badName = ":anguished: Would you mind choosing another name?"; break;
+          case 409:
+            this.errorObject.duplicateUser = "Contrats! :grin: Somebody else liked your username so much that they already took it"; break;
+          default: console.log(err);
         }
       });
   }
