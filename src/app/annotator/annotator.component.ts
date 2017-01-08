@@ -12,6 +12,7 @@ import * as Rangy from 'rangy';
 import { ReadingService } from '../shared/reading.service';
 import { ProjectService } from '../shared/project.service';
 import { CommentComponent } from './comment';
+import { AuthService } from '../shared/auth.service';
 
 @Component({
     selector: 'annotator',
@@ -46,12 +47,18 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     // For converting old Readings
     private words: any[] = [];
 
+    // For verifying comment ownership
+    private user: any;
+
     constructor(
         private _readings: ReadingService,
-        private _projects: ProjectService
+        private _projects: ProjectService,
+        private _auth: AuthService
     ) { }
  
     ngOnInit() {
+        this.user = this._auth.getUser();
+
         // Get Reading via Observable
         this.subscriptions.push(
             this._readings.get(this.project.reading_id)
@@ -72,15 +79,18 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // Populate local Comment and Highlight arrays
         // (Used for super speedy rendering!)
         this.project.comments.forEach(comment => {
-            if (!this.commentsByIndex[comment.start]) {
-                this.commentsByIndex[comment.start] = [];
-            }
-            // Populate local comments array by start index
-            comment.project_id = this.project._id;
-            this.commentsByIndex[comment.start].push(comment);
+            // If student, only show the student's comments
+            if (comment.user_id === this.user._id || this.user.isTeacher === true) {
+                if (!this.commentsByIndex[comment.start]) {
+                    this.commentsByIndex[comment.start] = [];
+                }
+                // Populate local comments array by start index
+                comment.project_id = this.project._id;
+                this.commentsByIndex[comment.start].push(comment);
 
-            // Add highlights
-            this.incrementHighlights(comment.start, comment.end);
+                // Add highlights
+                this.incrementHighlights(comment.start, comment.end);
+            }
         });
 
         // After comments are added to the array

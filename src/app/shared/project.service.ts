@@ -123,7 +123,8 @@ export class ProjectService {
                 'data' : commentText,
                 'start' : start,
                 'end' : end,
-                'user_id' : this._auth.getUser().fullname ? this._auth.getUser().fullname : this._auth.getUser().username,
+                'user_id' : this._auth.getUser()._id,
+                'author' : this._auth.getUser().fullname ? this._auth.getUser().fullname : this._auth.getUser().username,
                 'type' : type
             }
         }
