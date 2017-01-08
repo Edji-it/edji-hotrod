@@ -1,0 +1,33 @@
+<a (click)="showFeedbackModal = true" class="button-lg-round fixed-feedback-button">
+    <img title="Feedback" src="assets/images/icon-feedback.svg" />
+</a>
+
+<div class="modal fade-in start-in">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" (click)="showFeedbackModal = false" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">How can we help?</h4>
+      </div>
+      <form id="feedbackForm" [formGroup]="feedbackForm" (ngSubmit)="sendFeedback(feedbackForm.value)" class="modal-body form-group">
+        <label for="nameInput">Name</label>
+        <input id="nameInput" type="text" [formControl]="feedbackForm.controls['name']" tabindex="0"/>
+        <div id="msgNameRequired" *ngIf="feedbackForm.controls['name'].hasError('required')" class="alert-info">Let us know who you are!</div>
+
+        <label for="emailInput">Email</label>
+        <input id="emailInput" type="text" [formControl]="feedbackForm.controls['email']" tabindex="0"/>
+        <div id="msgEmailRequired" *ngIf="feedbackForm.controls['email'].hasError('required')" class="alert-info">Let us know who to get back with!</div>
+        <div id="msgEmailIncorrect" *ngIf="feedbackForm.controls['email'].hasError('emailIncorrect') && feedbackForm.controls['email'].dirty" class="alert-info">Please enter a valid email</div>
+
+        <label for="feedbackInput">Tell us what's up!</label>
+        <textarea id="feedbackInput" [formControl]="feedbackForm.controls['content']" maxlength="1000" rows="10" name="content"></textarea>
+      </form>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="showFeedbackModal = false">Cancel</button>
+        <a type="submit" class="btn btn-primary" download="title">Send Feedback</a>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

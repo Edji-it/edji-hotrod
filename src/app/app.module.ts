@@ -48,6 +48,7 @@ import { NewReadingPage } from './new-reading-page';
 import { DashboardComponent, StuDashComponent, TeachDashComponent } from './dashboard';
 import { NoContentComponent } from './no-content';
 import { AccountComponent, ChangePassComponent } from './account';
+import { FeedbackComponent } from './shared/feedback/feedback.component';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -96,6 +97,7 @@ type StoreType = {
     TeachDashComponent,
     HomeComponent,
     JoinComponent,
+    FeedbackComponent,
     NoContentComponent,
 ],
   imports: [ // import Angular's modules
