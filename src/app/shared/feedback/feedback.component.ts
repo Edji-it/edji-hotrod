@@ -10,6 +10,11 @@ import { AuthService } from './..';
   templateUrl: 'feedback.component.html',
   styles: [`
     .form-group { padding-top: 5px; }
+    .modal {
+      margin: 0 auto;
+      width: 55%;
+      left: auto;
+    }
   `]
 })
 export class FeedbackComponent {
@@ -46,9 +51,8 @@ export class FeedbackComponent {
     return emailRe.test(control.value) ? null : { 'emailIncorrect': true };
   }
 
-  private sendFeedback(formValue: any) {
-    console.log("sending feedback!");
-    console.log(formValue);
+  /** Sends feedback to bumblebee */
+  private sendFeedback(formValue: any): void {
 
     let data: any = {
       emailSubject: "Feedback form submitted!",
