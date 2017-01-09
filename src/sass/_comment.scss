@@ -56,6 +56,20 @@ edji-comment {
 		font-family: 'Open Sans';
 		cursor:pointer;
 		opacity:0;
+
+		background: #fff;
+		border-top-left-radius: 8px;
+		line-height: 22px;
+		padding: 0 5px 2px;
+		border-top-right-radius: 8px;
+		top: -20px;
+		border: 1px solid #efefef;
+		height: 29px;
+		min-width: 30px;
+		font-weight: 700;
+		text-transform: uppercase;
+		color: #787878;
+		letter-spacing: 0.5px;
 	}
 
 	&.line-first-word {

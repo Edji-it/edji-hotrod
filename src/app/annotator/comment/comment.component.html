@@ -1,6 +1,6 @@
 <div class="comment" [class.saved]="justSaved" [class.active]="active" [class.readonly]="readOnly"  [ngClass]="[ 'line-count-' + lineCount, expanded ? 'expanded' : '' ]">
     <div class='expand-comments' (click)='toggleExpand($event)'></div>
-    <div class='comment-username'>{{comment.author}}</div>
+    <div *ngIf='comment.author' class='comment-username'>{{comment.author}}</div>
     <div (click)="toggleActive()" class='comment-input-wrapper'>
         <!--Swap between different comment types-->
         <emoji-comment *ngIf="comment.type == 'emoji' || !comment.type" #commentInput [comment]="comment"></emoji-comment>
