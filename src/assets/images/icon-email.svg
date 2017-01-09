@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="121px" height="100px" viewBox="0 0 121 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
+    <title>Edji pattern</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="0" y="0.985908225" width="120.364916" height="98.9002876" rx="6"></rect>
+        <rect id="path-3" x="0.214796238" y="169.91586" width="248.979108" height="189.721897"></rect>
+        <mask id="mask-4" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="248.979108" height="189.721897" fill="white">
+            <use xlink:href="#path-3"></use>
+        </mask>
+        <rect id="path-5" x="60.2303323" y="129.235134" width="103" height="103"></rect>
+        <mask id="mask-6" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="103" height="103" fill="white">
+            <use xlink:href="#path-5"></use>
+        </mask>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Edji-pattern" transform="translate(0.184279, 0.000000)">
+            <mask id="mask-2" fill="white">
+                <use xlink:href="#path-1"></use>
+            </mask>
+            <use id="Mask" fill="#D8D8D8" xlink:href="#path-1"></use>
+            <g mask="url(#mask-2)" stroke="#FFFFFF">
+                <g transform="translate(-51.149075, -190.759610)">
+                    <use id="Rectangle-11" mask="url(#mask-4)" stroke-width="6" fill="#FFCD80" fill-rule="evenodd" xlink:href="#path-3"></use>
+                    <use id="Rectangle-12" mask="url(#mask-6)" stroke-width="12" fill="#FEF282" fill-rule="evenodd" transform="translate(111.730332, 180.735134) rotate(45.000000) translate(-111.730332, -180.735134) " xlink:href="#path-5"></use>
+                    <path d="M173.464796,242.25961 L123.210355,291.514051" id="Line-Copy-7" stroke-width="6" stroke-linecap="square" fill="none" transform="translate(148.464796, 266.759610) scale(-1, 1) translate(-148.464796, -266.759610) "></path>
+                    <path d="M99.4647962,243.25961 L49.2103548,292.514051" id="Line-Copy-8" stroke-width="6" stroke-linecap="square" fill="none"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
