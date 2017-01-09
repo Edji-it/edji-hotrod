@@ -324,7 +324,7 @@ describe('App', () => {
     clickSubmitAddReadingButton();
 
     //Wait for that error message, kids
-    browser.wait(EC.visibilityOf(element(by.className("banner-error"))), 3000, 'The error message never showed up.'); 
+    browser.wait(EC.visibilityOf(element(by.className("alert-danger"))), 3000, 'The error message never showed up.'); 
   });
 
   /* Test: Add reading, don’t enter content
@@ -355,7 +355,7 @@ describe('App', () => {
     clickSubmitAddReadingButton();
 
     //Wait for that error message, kids
-    browser.wait(EC.visibilityOf(element(by.className("banner-error"))), 3000, 'The error message never showed up.'); 
+    browser.wait(EC.visibilityOf(element(by.className("alert"))), 3000, 'The error message never showed up.'); 
   });
 
   /* Test: Teacher account can log out successfully

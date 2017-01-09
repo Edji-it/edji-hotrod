@@ -7,7 +7,7 @@
             <p  class="list-item-wrapper" *ngIf="projects.length < 1 && !errorObject.projectError">
                 You have yet to add your first project. Ask your teacher for a project code!
             </p>
-            <div *ngIf="errorObject.projectError && projects.length < 1" class="banner-error">{{errorObject.projectError}}</div>
+            <div *ngIf="errorObject.projectError && projects.length < 1" class="alert alert-danger"><strong>Oh no!</strong> {{errorObject.projectError}}</div>
             <div *ngFor="let project of projects" [routerLink]="['/project', project._id]" class="list-item list-item--button" [class.hide]="!project.createdAt">
                 <!--Implement: | orderBy:'-createdAt'-->
                 <div class="list-item">
@@ -35,11 +35,11 @@
     </div>
     <div class="col-sm-6">
         <form [formGroup]="codeForm" (ngSubmit)="addSession(codeForm.value)">
-            <label for="projectCodeInput"><h1>Add Project</h1></label>
-            <input id="projectCodeInput" [formControl]="codeForm.controls['projectCode']" type="text" class="big-field lowercase-field on-white"  placeholder="Project Code" />
-            <div *ngIf="codeForm.controls['projectCode'].hasError('required')" class="alert-info">Enter a project code to add a project!</div>
+            <h1 for="projectCodeInput">Add Project</h1>
+            <input id="projectCodeInput" [formControl]="codeForm.controls['projectCode']" type="text" class="big-field lowercase-field on-white"  placeholder="Lightning Code" />
+            <div *ngIf="codeForm.controls['projectCode'].hasError('required')" class="alert alert-info"><strong [innerHtml]="':zap: Code' | emojione"></strong>  Enter a lightning code to quickly join a project!</div>
             <div *ngIf="codeForm.controls['projectCode'].hasError('minlength') || codeForm.controls['projectCode'].hasError('maxlength')" class="alert-info">We like 4-character codes at Edji</div>
-            <div *ngIf="errorObject.wrongCode" class="banner-error">{{errorObject.wrongCode}}</div>
+            <div *ngIf="errorObject.wrongCode" class="alert alert-danger">{{errorObject.wrongCode}}</div>
 
             <div class="button__row">
                 <button type="submit" class="button">Join Project!</button>

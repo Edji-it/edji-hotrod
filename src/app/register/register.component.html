@@ -40,9 +40,9 @@
         <div id="msgMismatch" *ngIf="registerForm.hasError('mismatch')" class="alert-info">Please make sure your passwords match</div>
 
 
-        <div id="msgDuplicateUser" *ngIf="errorObject.duplicateUser" class="banner-error" [innerHtml]="errorObject.duplicateUser | emojione"></div>
-        <div id="msgBadName" *ngIf="errorObject.badName" class="banner-error" [innerHtml]="errorObject.badName | emojione"></div>
-        <div id="msgServerError" *ngIf="errorObject.serverError" class="banner-error">{{errorObject.serverError}}</div>
+        <div id="msgDuplicateUser" *ngIf="errorObject.duplicateUser" class="alert alert-info" [innerHtml]="errorObject.duplicateUser | emojione"></div>
+        <div id="msgBadName" *ngIf="errorObject.badName" class="alert alert-warn" [innerHtml]="errorObject.badName | emojione"></div>
+        <div id="msgServerError" *ngIf="errorObject.serverError" class="alert alert-danger">{{errorObject.serverError}}</div>
 
         <div class="button__row">
           <!--ngHide loginLoading-->

@@ -12,7 +12,7 @@
                 <img alt="📖" class="inline-emoji emojioneemoji" src="assets/emoji/png/1f4d6.png">
                 <a title="Source" href="{{reading.source}}" target="_blank">{{reading.source}}</a>
             </div>
-            <p *ngIf="error" class="banner-error">{{ error }}</p>
+            <p *ngIf="error" class="alert alert-danger">{{ error }}</p>
             <div class="article-wrap">
                 <article id="annotatorText" class="content" [innerHtml]="reading.html"></article>
             </div>
@@ -33,7 +33,7 @@
                     <!--<label>
                         New Session-->
                     <input tabindex="1" id="newProjectLabel" type="text" placeholder="Project Label" [(ngModel)]="newProject.label" (keyup.enter)="addNewProject(newProject)" />
-                    <div *ngIf="projectErr.error" class="banner-error">
+                    <div *ngIf="projectErr.error" class="alert alert-danger">
                         {{ projectErr.error }}</div>
                     <!--</label>-->
                     <div class="button__row" style="padding-top:0px;" [ngClass]="{ loading : addingNew }">
