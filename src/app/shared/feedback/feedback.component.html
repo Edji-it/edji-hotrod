@@ -32,8 +32,8 @@
             <button type="submit" [disabled]="!feedbackForm.valid" class="btn btn-primary" name="send feedback" tabindex="0">Send Feedback</button>
           </div>
         </form>
-        <div id="msgServerError" *ngIf="errorObject.serverError" class="banner-error">{{errorObject.serverError}}</div>
-        <div id="msgSendSuccess" *ngIf="feedbackSuccess" class="banner-success">We have received your feedback!</div>
+        <div id="msgServerError" *ngIf="errorObject.serverError" class="alert alert-danger">{{errorObject.serverError}}</div>
+        <div id="msgSendSuccess" *ngIf="feedbackSuccess" class="alert alert-success">We have received your feedback!</div>
 
       </div>
     </div><!-- /.modal-content -->
