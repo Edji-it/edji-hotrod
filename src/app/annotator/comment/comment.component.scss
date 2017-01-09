@@ -29,3 +29,15 @@
   width: 1.3em;
   height: 1.3em;
 }
+
+.readonly {
+  
+
+  & .comment-input-wrapper { 
+    pointer-events: none;
+  }
+
+  & .inline-delete {
+    display: none;
+  }
+}

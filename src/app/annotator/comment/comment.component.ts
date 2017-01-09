@@ -19,6 +19,7 @@ export class CommentComponent implements OnInit {
   private active = false;
 
   @Input() public comment: any;
+  @Input() private readOnly: false; 
   @Input()
   set isActive(isActive: boolean) {
     if (typeof(isActive) !== 'undefined' && this.active !== isActive) {

@@ -42,6 +42,7 @@
 					[comment]="comment"
 					(mouseenter)='focusHighlight(comment.start, comment.end)'
 					(mouseleave)='unfocusHighlight(comment.start, comment.end)' 
+					[readOnly]="comment.user_id !== user._id"
 					[isActive]="comment.active" 
 					(commentActivation)="setActiveCommentByIndex($event, i, ci)" 
 					(commentDeleted)="commentsByIndexRemove($event, i, ci)"

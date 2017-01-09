@@ -155,7 +155,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      */
     showCommentOptions(event): void {
         // Only show options if text selected
-        if (Rangy.getSelection() && Rangy.getSelection().toString().length > 0) {
+        if (!this.user.isTeacher && Rangy.getSelection() && Rangy.getSelection().toString().length > 0) {
             let scrollOffset = document.getElementById('emojiAnnotator').getBoundingClientRect().top;
             const readingPad = 52;
             // Account for page scroll offset
