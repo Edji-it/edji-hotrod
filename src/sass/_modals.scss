@@ -1,38 +1,44 @@
-// Bootstrap modal overrides
+// // Bootstrap modal overrides
 
 .modal {
-    z-index: 9000;
-    background: transparent !important;
-    height: auto !important;
-    color: #000 !important;
-    overflow: visible;
-
-    & div {
-        margin: 0 !important;
-    }
+  z-index: 9000;
+  background: rgba(0,0,0,0.1);
+  overflow: auto;
 }
 
-.modal.start-in {
-    display: block;
-}
+// .modal {
+//     z-index: 9000;
+//     background: transparent !important;
+//     height: auto !important;
+//     color: #000 !important;
+//     overflow: visible;
 
-// .modal-bg {
-//     position: fixed;
-//     top:0;
-//     left: 0;
-//     min-width: 100%;
-//     min-height: 100%;
-//     z-index: 8999;
-//     background: rgba(0,0,0,0.3);
-//     display: block;
-//     margin: 0 !important;
+//     & div {
+//         margin: 0 !important;
+//     }
 // }
 
-.modal-content {
-    z-index: 9000;
-    margin-top: 20% !important;
-    box-shadow: none !important;
-}
+// .modal.start-in {
+//     display: block;
+// }
+
+// // .modal-bg {
+// //     position: fixed;
+// //     top:0;
+// //     left: 0;
+// //     min-width: 100%;
+// //     min-height: 100%;
+// //     z-index: 8999;
+// //     background: rgba(0,0,0,0.3);
+// //     display: block;
+// //     margin: 0 !important;
+// // }
+
+// .modal-content {
+//     z-index: 9000;
+//     margin-top: 20% !important;
+//     box-shadow: none !important;
+// }
 
 .modal-body {
     background: #f1f1f1;
@@ -40,21 +46,21 @@
     padding-bottom: 30px;
 }
 
-.form-group {
-    margin-bottom: 0;
-}
-
-form label {
-    margin: 15px 0 3px 0;
-}
-
-// .modal.fade {
-//    @include transition(opacity 300 linear);
-   
-//    opacity: 0;
-   
-//    &.fade-in {
-//      display: block;
-//      opacity: 1;
-//    }
+// .form-group {
+//     margin-bottom: 0;
 // }
+
+// form label {
+//     margin: 15px 0 3px 0;
+// }
+
+// // .modal.fade {
+// //    @include transition(opacity 300 linear);
+   
+// //    opacity: 0;
+   
+// //    &.fade-in {
+// //      display: block;
+// //      opacity: 1;
+// //    }
+// // }

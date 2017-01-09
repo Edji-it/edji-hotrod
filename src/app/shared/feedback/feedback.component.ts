@@ -11,9 +11,9 @@ import { AuthService } from './..';
   styles: [`
     .form-group { padding-top: 5px; }
     .modal {
-      margin: 0 auto;
-      width: 55%;
-      left: auto;
+      // margin: 0 auto;
+      // width: 55%;
+      // left: auto;
     }
   `]
 })
@@ -62,8 +62,8 @@ export class FeedbackComponent {
     };
 
     this.http.post(
-      "http://bumblebee-prod-1.us-west-2.elasticbeanstalk.com/newform",
-      // "http://localhost:8333/newform",
+      // "http://bumblebee-prod-1.us-west-2.elasticbeanstalk.com/newform",
+      "http://localhost:8333/newform",
       data,
       this._auth.getOptions()
     ).take(1).subscribe(
@@ -74,6 +74,7 @@ export class FeedbackComponent {
         }
       },
       (err) => {
+        console.log(err);
         this.errorObject.serverError = "I'm sorry, something has gone wrong! Please try submitting your feedback again later!";
         this._auth.store("feedbackFormData", formValue);
       }
