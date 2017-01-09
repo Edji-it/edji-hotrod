@@ -46,7 +46,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     private _auth: AuthService,
     private _project: ProjectService,
     private router: Router,
-    Angulartics2: Angulartics2,
+    private angulartics: Angulartics2,
     fb: FormBuilder
   ) {
     this.loginForm = fb.group({
@@ -91,6 +91,19 @@ export class HomeComponent implements OnInit, OnDestroy {
         (data: any)  => { 
           this.loginLoading = false;
           this.clearErrors();
+
+          // // sets username and email for analytics use
+          // if (data.user) {
+          //   this.angulartics.setUsername.next(data.user.username);
+          //   this.angulartics.setUserProperties.next({ email: data.user.email});
+          //   this.angulartics.eventTrack.next({ action: 'login', properties: { category: 'userActions' }})
+          // } else {
+          //   // should track some exception here
+          //   // there are other fields that the call should contain, like 'label' 'value' and 'interactionType'
+          //   // this.angulartics.exceptionTrack.next({ appId: 'app', appName: 'Test App', appVersion: '0.1' });
+          // }
+
+
 
           // $analytics.setAlias(alias);
           // if (data.user && data.user.username) {
