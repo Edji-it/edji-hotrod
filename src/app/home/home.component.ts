@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
+import { Angulartics2 } from 'angulartics2';
 
 import { AppState } from '../app.service';
 import { Title } from './title';
@@ -45,6 +46,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     private _auth: AuthService,
     private _project: ProjectService,
     private router: Router,
+    Angulartics2: Angulartics2,
     fb: FormBuilder
   ) {
     this.loginForm = fb.group({
