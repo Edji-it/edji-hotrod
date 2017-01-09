@@ -10,10 +10,6 @@ import { AuthService } from './../shared';
   selector: 'edji-register',
   templateUrl: 'register.component.html',
   styles: [`
-    label {
-      margin: 15px 0 3px 0;
-    }
-
     .btn-group-wrapper {
       width: 100%;
       text-align: center;

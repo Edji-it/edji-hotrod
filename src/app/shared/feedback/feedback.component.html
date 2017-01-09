@@ -1,0 +1,41 @@
+<button (click)="showFeedbackModal = true" class="button-lg-round fixed-feedback-button">
+    <img title="Feedback" src="assets/images/icon-feedback.svg" />
+</button>
+
+<div *ngIf="showFeedbackModal" class="modal fade-in start-in">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" (click)="showFeedbackModal = false" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">How can we help?</h4>
+      </div>
+      <div class="modal-body">
+        <p>What's on your mind? Maybe you found a problem with our website? Or have questions about how to use Edji? Let us know below!</p>
+        <form id="feedbackForm" [formGroup]="feedbackForm" (ngSubmit)="sendFeedback(feedbackForm.value)" class="form-group">
+          <label for="nameInput">Name</label>
+          <input id="nameInput" type="text" [formControl]="feedbackForm.controls['name']" tabindex="0"/>
+          <div id="msgNameRequired" *ngIf="feedbackForm.controls['name'].hasError('required')" class="alert-info">Let us know who you are!</div>
+
+          <label for="emailInput">Email</label>
+          <input id="emailInput" type="text" [formControl]="feedbackForm.controls['email']" tabindex="0"/>
+          <div id="msgEmailRequired" *ngIf="feedbackForm.controls['email'].hasError('required')" class="alert-info">Let us know who to get back with!</div>
+          <div id="msgEmailIncorrect" *ngIf="feedbackForm.controls['email'].hasError('emailIncorrect') && feedbackForm.controls['email'].dirty" class="alert-info">Please enter a valid email</div>
+
+          <label for="feedbackInput">Tell us what's up!</label>
+          <textarea id="feedbackInput" [formControl]="feedbackForm.controls['content']" maxlength="1000" rows="10" name="content" tabindex="0"></textarea>
+          <div id="msgContentRequired" *ngIf="feedbackForm.controls['content'].hasError('required')" class="alert-info">Put some content with it!</div>
+          
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="showFeedbackModal = false">Cancel</button>
+            <button type="submit" [disabled]="!feedbackForm.valid" class="btn btn-primary" name="send feedback" tabindex="0">Send Feedback</button>
+          </div>
+        </form>
+        <div id="msgServerError" *ngIf="errorObject.serverError" class="banner-error">{{errorObject.serverError}}</div>
+        <div id="msgSendSuccess" *ngIf="feedbackSuccess" class="banner-success">We have received your feedback!</div>
+
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
