@@ -9,11 +9,10 @@ import { AuthService } from './..';
   selector: 'edji-feedback',
   templateUrl: 'feedback.component.html',
   styles: [`
-    .form-group { padding-top: 5px; }
-    .modal {
-      // margin: 0 auto;
-      // width: 55%;
-      // left: auto;
+    .fixed-feedback-button {
+      position: absolute;
+      right: 30px;
+      bottom: 30px;
     }
   `]
 })
@@ -75,7 +74,7 @@ export class FeedbackComponent {
       },
       (err) => {
         console.log(err);
-        this.errorObject.serverError = "I'm sorry, something has gone wrong! Please try submitting your feedback again later!";
+        this.errorObject.serverError = "Something has gone wrong. Please try submitting your feedback again later!";
         this._auth.store("feedbackFormData", formValue);
       }
     )
