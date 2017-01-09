@@ -123,10 +123,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                             this.commentsByIndex[wIndex][cIndex].data = comment.data;
                         } else {
                             // Sometimes an UPDATE comes through for comment not yet created
-                            this.commentsByIndexAdd(comment, wIndex);
+                            this.commentsByIndexAdd(comment, wIndex, true);
                         }
                     } else if (commentUpdate.action === 'ADD') {
-                        this.commentsByIndexAdd(comment, wIndex);
+                        this.commentsByIndexAdd(comment, wIndex, true);
                     }
                 }, (error) => {
                     console.warn(error);
@@ -271,7 +271,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             });
     }
 
-    commentsByIndexAdd(comment, index: number): void {
+    commentsByIndexAdd(comment, index: number, addQuietly ?: boolean): void {
         let start = comment.start;
         // Give it the Project Id to pass down to the Comment Component
         comment.project_id = this.project._id;
@@ -279,10 +279,14 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // Add Comment to local array
         if (this.commentsByIndex[start]) {
             this.commentsByIndex[start].push(comment);
-            this.setActiveCommentByIndex(true, start, this.commentsByIndex[start].length - 1);
+            if (addQuietly !== true) { 
+                this.setActiveCommentByIndex(true, start, this.commentsByIndex[start].length - 1);
+            }
         } else {
             this.commentsByIndex[start] = [ comment ];
-            this.setActiveCommentByIndex(true, start, 0);
+            if (addQuietly !== true) { 
+                this.setActiveCommentByIndex(true, start, 0);
+            }
         }
         this.updateAllLineCounts();
     }
