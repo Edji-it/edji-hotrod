@@ -70,6 +70,8 @@ edji-comment {
 		text-transform: uppercase;
 		color: #787878;
 		letter-spacing: 0.5px;
+
+		pointer-events: none;
 	}
 
 	&.line-first-word {
