@@ -10,9 +10,24 @@ import { AuthService } from './..';
   templateUrl: 'feedback.component.html',
   styles: [`
     .fixed-feedback-button {
-      position: absolute;
-      right: 30px;
-      bottom: 30px;
+      position: fixed;
+      right: 25px;
+      bottom: 10px;
+      background: #b7b7b7;
+      transition: transform 0.2s linear;
+      padding: 8px;
+      opacity: 0.8;
+    }
+
+    .fixed-feedback-button:hover {
+      box-shadow: 0px 1px 8px 0px rgba(0,0,0,0.1);
+      transform: scale(1.05);
+      opacity: 1;
+    }
+
+    .fixed-feedback-button img {
+      width: 30px;
+      height: auto;
     }
   `]
 })
