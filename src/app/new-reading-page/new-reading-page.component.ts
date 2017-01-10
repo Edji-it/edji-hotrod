@@ -1,6 +1,7 @@
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Angulartics2 } from 'angulartics2';
 
 import { ReadingService } from '../shared/reading.service';
 
@@ -18,7 +19,13 @@ export class NewReadingPage implements OnInit {
     // Used for processing reading
     private words: any[] = [];
     
-    constructor(private _readings: ReadingService, private router: Router, fb: FormBuilder, private el: ElementRef) {
+    constructor(
+        private _readings: ReadingService,
+        private router: Router,
+        private angulartics: Angulartics2,
+        fb: FormBuilder,
+        private el: ElementRef
+    ) {
         this.readingForm = fb.group({
             title: [null, Validators.required],
             source: [null, null]
@@ -27,15 +34,12 @@ export class NewReadingPage implements OnInit {
 
     ngOnInit() { }
 
-
-
-
     /**
      * Loops through child elements to find textnodes
      * Pushes text nodes as formatted objects into this.words
      * @param element Root element to start crawling from
      */
-    extractTextNodes(element: any, ancestorTags ?: string[]) {
+    private extractTextNodes(element: any, ancestorTags ?: string[]) {
         let tagName = element.tagName.toLowerCase();
         let nodes = element.childNodes;
         
@@ -95,9 +99,11 @@ export class NewReadingPage implements OnInit {
      * Runs on form submit, and processes reading before calling service
      *  @param form Passed from the HTML form element
      */
-    onSubmit(form) {
+    private onSubmit(form) {
         // Set submitted to show form errors
         this.submitted = true;
+
+        this.angulartics.eventTrack.next({ action: 'createNewReading', properties: { category: 'contentManagement', label: 'attempt' }});
 
         // This would be better handled by formcontrols
         if (!form.title || form.title.length < 1 || this.readingHtml.length < 1) {
@@ -116,8 +122,6 @@ export class NewReadingPage implements OnInit {
             this.extractTextNodes(childEl);
         }
 
-        console.log(this.words);
-
         // Create reading object to submit based on form object parameter
         let reading: any = form;
         reading.html = this.readingHtml;
@@ -126,12 +130,13 @@ export class NewReadingPage implements OnInit {
         this._readings.save(reading)
             .subscribe(
                 data => {
-                    console.log(data);
                     if (data._id) {
+                        this.angulartics.eventTrack.next({ action: 'createNewReading', properties: { category: 'contentManagement', label: 'success' }});
                         this.router.navigate(['reading', data._id]);
                     }
                 },
                 error => {
+                    // TRACK EXCEPTION
                     console.log(error)
                 }
             );

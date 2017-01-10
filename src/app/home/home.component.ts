@@ -107,7 +107,6 @@ export class HomeComponent implements OnInit, OnDestroy {
           }
 
           if (data.token) {
-
             this._auth.setToken(data.token);
             this._auth.setUser(data.user);
             this.router.navigate(['/dashboard']);
