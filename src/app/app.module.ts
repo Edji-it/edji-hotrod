@@ -43,7 +43,7 @@ import { HomeComponent, ResetPassComponent } from './home';
 import { RegisterComponent } from './register';
 import { JoinComponent } from './join/join.component';
 import { AnnotatorComponent, CommentComponent, TextCommentComponent, EmojiCommentComponent, EmojiKeyboardComponent } from './annotator';
-import { ProjectPageComponent } from './project-page';
+import { ProjectPageComponent, ProjectInfoComponent } from './project-page';
 import { ReadingPageComponent, DeleteProjectComponent } from './reading-page';
 import { NewReadingPage } from './new-reading-page';
 import { DashboardComponent, StuDashComponent, TeachDashComponent } from './dashboard';
@@ -92,6 +92,7 @@ type StoreType = {
     AnnotatorComponent,
     NewReadingPage,
     ProjectPageComponent,
+    ProjectInfoComponent,
     ReadingPageComponent,
     DeleteProjectComponent,
     DashboardComponent,
