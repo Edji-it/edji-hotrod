@@ -1,11 +1,11 @@
 <div class="comment" [class.saved]="justSaved" [class.active]="active" [class.readonly]="readOnly"  [ngClass]="[ 'line-count-' + lineCount, expanded ? 'expanded' : '' ]">
-    <div class='expand-comments' (click)='toggleExpand($event)'></div>
+    <div class='expand-comments' (tap)='toggleExpand($event)'></div>
     <div *ngIf='comment.author' class='comment-username'>{{comment.author}}</div>
-    <div (click)="toggleActive()" class='comment-input-wrapper'>
+    <div (tap)="toggleActive()" class='comment-input-wrapper'>
         <!--Swap between different comment types-->
         <emoji-comment *ngIf="comment.type == 'emoji' || !comment.type" #commentInput [comment]="comment"></emoji-comment>
         <!--<text-comment *ngIf="comment.type == 'text'" [comment]="comment" #commentInput (onCommentUpdate)="updateComment(comment.data)"></text-comment>-->
-        <button (click)="deleteComment(comment)" class='inline-delete'>+</button>
+        <button (tap)="deleteComment(comment)" class='inline-delete'>+</button>
     </div>
     <i class="comment__saved" [innerHtml]='":ok_hand:" | emojione'></i>
 </div>

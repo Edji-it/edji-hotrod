@@ -5,6 +5,7 @@ import { HttpModule } from '@angular/http';
 import { RouterModule, PreloadAllModules } from '@angular/router';
 import { removeNgStyles, createNewHosts, createInputTransfer } from '@angularclass/hmr';
 
+import { HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 // import { CoolStorageModule } from 'angular2-cool-storage';
 import {LockerModule, Locker, LockerConfig} from 'angular2-locker';
@@ -51,6 +52,13 @@ import { NoContentComponent } from './no-content';
 import { AccountComponent, ChangePassComponent } from './account';
 import { FeedbackComponent } from './shared/feedback/feedback.component';
 
+// Configure Hammer.js
+export class MyHammerConfig extends HammerGestureConfig  {
+  overrides = <any>{
+      'swipe': {velocity: 0.4, threshold: 20} // override default settings
+  }
+}
+
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
@@ -58,7 +66,11 @@ const APP_PROVIDERS = [
   AuthService,
   ReadingService,
   ProjectService,
-  SocketService
+  SocketService,
+  { 
+      provide: HAMMER_GESTURE_CONFIG, 
+      useClass: MyHammerConfig 
+  }
   // { provide: RouteReuseStrategy, useClass: ReuseStrategy }
 ];
 
@@ -101,7 +113,7 @@ type StoreType = {
     HomeComponent,
     JoinComponent,
     FeedbackComponent,
-    NoContentComponent,
+    NoContentComponent
 ],
   imports: [ // import Angular's modules
     BrowserModule,
@@ -111,7 +123,7 @@ type StoreType = {
     LockerModule,
     RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
     Angulartics2Module.forRoot([ Angulartics2GoogleAnalytics ]),
-    NgbModule.forRoot() // Ng Bootstrap Import
+    NgbModule.forRoot(), // Ng Bootstrap Import
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     ENV_PROVIDERS,
