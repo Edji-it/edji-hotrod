@@ -8,6 +8,7 @@
 import { Component, Input, OnDestroy, OnInit, ViewChildren, QueryList } from '@angular/core';
 import { Subscription } from 'rxjs/Rx';
 import * as Rangy from 'rangy';
+import { Angulartics2 } from 'angulartics2';
 
 import { ReadingService } from '../shared/reading.service';
 import { ProjectService } from '../shared/project.service';
@@ -63,7 +64,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         private _readings: ReadingService,
         private _projects: ProjectService,
         private _auth: AuthService,
-        private _socket: SocketService
+        private _socket: SocketService,
+        private angulartics: Angulartics2
     ) { }
  
     ngOnInit() {
@@ -305,11 +307,14 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             text += this.reading.words[i].str;
         }
 
+        this.angulartics.eventTrack.next({ action: type + 'CommentCreate', properties: { category: 'projectAction', label: 'attempt' }});
+
         // Tell server we've added a comment
         this._projects.saveComment(projectId, '', start, end, type, text)
             .then(comment => {
                 // We add the comment from the service because it has an Id
                 if (comment._id) {
+                    this.angulartics.eventTrack.next({ action: type + 'CommentCreate', properties: { category: 'projectAction', label: 'attempt' }});
                     // Add setting to trigger focus on new comment
                     this.inactivateComment();
                     this.commentsByIndexAdd(comment, start);
@@ -318,6 +323,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 }
             })
             .catch(error => {
+                // TRACK EXCEPTION
                 // We should figure out how to handle this properly!
                 // Maybe show a warning icon?
                 console.warn(error);

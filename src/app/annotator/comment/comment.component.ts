@@ -1,6 +1,7 @@
 import { CommentStmt } from '@angular/compiler/src/output/output_ast';
 import { Comment } from '@angular/compiler/src/ml_parser/ast';
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChange, ElementRef } from '@angular/core';
+import { Angulartics2 } from 'angulartics2';
 
 import { ProjectService } from '../../shared/project.service';
 
@@ -33,7 +34,8 @@ export class CommentComponent implements OnInit {
   @Output() expandLine = new EventEmitter<number>();
 
   constructor(
-        private _projects: ProjectService, 
+        private _projects: ProjectService,
+        private angulartics: Angulartics2,
         public el: ElementRef
       ) { }
 
@@ -55,26 +57,34 @@ export class CommentComponent implements OnInit {
 
   // Updates comment in db
   public updateComment(commentData: string): void {
+    this.angulartics.eventTrack.next({ action: 'updateComment', properties: { category: 'projectAction', label: 'attempt' }});
+
     this._projects.saveComment(this.comment.project_id, commentData, this.comment.start, this.comment.end, this.comment.type, this.comment.text, this.comment._id)
       .then(comment => {
+        this.angulartics.eventTrack.next({ action: 'updateComment', properties: { category: 'projectAction', label: 'success' }});
         this.justSaved = true;
         setTimeout(() => {
           this.justSaved = false;
         }, 1000);
       })
       .catch(error => {
+        // TRACK EXCEPTION
         console.log(error);
       });
   }
 
   // Deletes comment via Project service, which updates the local Project object
   deleteComment(comment: any):void {
+    this.angulartics.eventTrack.next({ action: 'deleteComment', properties: { category: 'projectAction', label: 'attempt' }});
+
     this._projects.deleteComment(comment)
       .then(data => {
+        this.angulartics.eventTrack.next({ action: 'deleteComment', properties: { category: 'projectAction', label: 'success' }});
         // Tell Annotator to destroy this comment element!
         this.commentDeleted.emit(comment._id);
       })
       .catch(error => {
+        // TRACK EXCEPTION
         console.log(error);
       });
   }
