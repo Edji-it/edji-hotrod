@@ -90,6 +90,7 @@ export class JoinComponent implements OnInit, OnDestroy {
         if (error.status === 406) {
           this.errorObject.badName = ":anguished: Would you mind choosing another name?";
         } else {
+          // TRACK EXCEPTION
           console.error(error);
         }
       }
@@ -103,30 +104,22 @@ export class JoinComponent implements OnInit, OnDestroy {
     this.clearErrors();
 		this.loginLoading = true;
 
+    this.angulartics.eventTrack.next({ action: 'joinAsUser', properties: { category: 'joinProject', label: 'attempt' }});
+
     // logs them in
 		this._auth.login(formValue)
       .then(
         (data: any)  => { 
-          console.log(data);
           this.loginLoading = false;
-
-          // $analytics.setAlias(alias);
-          // if (data.user && data.user.username) {
-          //   $analytics.setUsername(data.user.username);
-          //   		$analytics.setUserProperties({ 'email' : data.user.email });
-          // } else {
-          //   console.error("Couldn't find username!");
-          // }
-
-          // if (data.isTeacher) {
-          // 	$analytics.eventTrack('Teacher logged in', {  category: 'Teacher', label: 'General' });
-          // } else {
-          // 	$analytics.eventTrack('Student logged in', {  category: 'Student', label: 'General' });
-          // }
 
           if (data.token) {
             this._auth.setToken(data.token);
             this._auth.setUser(data.user);
+
+            data.user.username && this.angulartics.setUsername.next(data.user.username);
+            data.user.email && this.angulartics.setUserProperties.next({ email: data.user.email});
+            data.user.isTeacher && this.angulartics.setUserProperties.next({ isTeacher: true });
+            this.angulartics.eventTrack.next({ action: 'joinAsUser', properties: { category: 'joinProject', label: 'success' }});            
 
             // set the project as current project
             this.subscriptions.push(this._project.currentProject.subscribe(
@@ -141,7 +134,7 @@ export class JoinComponent implements OnInit, OnDestroy {
         },
         (error) =>  { 
           this.loginLoading = false;
-          console.log(error);
+          // TRACK EXCEPTION
           if (error === null) {
             this.errorObject.incorrect = "Network error";
           } else {

@@ -96,7 +96,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
           // sets username and email for analytics use
           if (data.user) {
-            this.angulartics.setUsername.next(data.user.username);
+            data.user.username && this.angulartics.setUsername.next(data.user.username);
             data.user.email && this.angulartics.setUserProperties.next({ email: data.user.email});
             data.user.isTeacher && this.angulartics.setUserProperties.next({ isTeacher: true });
             this.angulartics.eventTrack.next({ action: 'loginMain', properties: { category: 'login', label: 'success' }});
