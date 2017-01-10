@@ -40,7 +40,7 @@ export class RegisterComponent {
       username: [null, Validators.required],
       fullname: [null, Validators.required],
       email: [null, Validators.compose([Validators.required, this.emailValidator])],
-      userType: ['student'],
+      isTeacher: ["false"],
       password: [null, Validators.compose([Validators.required, Validators.minLength(6)])],
       passwordConfirm: [null, Validators.required],
     }, { validator: this.passwordsEqual });

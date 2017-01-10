@@ -19,12 +19,12 @@
 
         <label id="accountTypeLabel" for="accountTypeGroup">Account Type</label>
         <div class="btn-group-wrapper">
-        <div id="accountTypeGroup" ngbRadioGroup class="btn-group" name="user type" [formControl]="registerForm.controls['userType']" tabindex="0">
+        <div id="accountTypeGroup" ngbRadioGroup class="btn-group" name="user type" [formControl]="registerForm.controls['isTeacher']" tabindex="0">
           <label class="btn btn-primary">
-            <input type="radio" name="Is student" id="student" autocomplete="off" value="student">Student
+            <input type="radio" name="Is student" id="student" autocomplete="off" value="{{false}}">Student
           </label>
           <label class="btn btn-primary">
-            <input type="radio" name="Is teacher" id="option2" autocomplete="off" value="teacher">Teacher
+            <input type="radio" name="Is teacher" id="option2" autocomplete="off" value="{{true}}">Teacher
           </label>
         </div>
         </div>
