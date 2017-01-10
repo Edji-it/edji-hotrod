@@ -36,9 +36,10 @@
 	<div class="article-wrap" ng-class="{ 'comments-disabled' : showAllComments, 'loading' : loadingReading }">
         <!--Create components after load for reading-->
 		<article class="content" (mouseup)="showCommentOptions($event)" (touchend)="showCommentOptions($event)" (clickOutside)="hideCommentOptions()">
-			<span *ngFor="let word of reading.words; let i = index" class="word" [ngClass]="[ word.styles.join(' '), getHighlightClass(i), (commentsByIndex[i] && commentsByIndex[i].length > 0) ? 'has-comment' : '' ]" [attr.index]="i">
-				<!--Comment Component-->
-				<edji-comment *ngFor="let comment of commentsByIndex[i]; let ci = index" 
+			<span *ngFor="let word of reading.words; let i = index" 
+				class="word" 
+				[ngClass]="[ word.styles.join(' '), getHighlightClass(i), (commentsByIndex[i] && commentsByIndex[i].length > 0) ? 'has-comment' : '' ]" 
+				[attr.index]="i"><edji-comment *ngFor="let comment of commentsByIndex[i]; let ci = index" 
 					[comment]="comment"
 					(mouseenter)='focusHighlight(comment.start, comment.end)'
 					(mouseleave)='unfocusHighlight(comment.start, comment.end)' 
@@ -46,9 +47,7 @@
 					[isActive]="comment.active" 
 					(commentActivation)="setActiveCommentByIndex($event, i, ci)" 
 					(commentDeleted)="removeComment(comment, i, ci)"
-					(expandLine)="expandLine($event)"></edji-comment>
-				{{ word.str }}
-			</span>
+					(expandLine)="expandLine($event)"></edji-comment>{{ word.str.trim() ? word.str : '&nbsp;' }}</span>
 		</article>
 		<emoji-keyboard [isActive]="activeComment.active && (!activeComment.type || activeComment.type === 'emoji')" [currentComment]="activeComment.data" (commentChange)="updateActiveComment($event)" (dismissKeyboard)="inactivateComment()"></emoji-keyboard>
 	</div>
