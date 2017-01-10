@@ -324,7 +324,7 @@ describe('App', () => {
     clickSubmitAddReadingButton();
 
     //Wait for that error message, kids
-    browser.wait(EC.visibilityOf(element(by.className("alert-danger"))), 3000, 'The error message never showed up.'); 
+    browser.wait(EC.visibilityOf(element(by.className("alert alert-info"))), 3000, 'The error message never showed up.'); 
   });
 
   /* Test: Add reading, don’t enter content
@@ -338,7 +338,7 @@ describe('App', () => {
   */
   it('teacher user cannot add a reading without a title', () => {
     // Initialize variables
-    let title     = "Protractor Likes Peaches (Test)";
+    let title     = "Protractor Implmented Test: Peaches";
     let sourceURL = "http://www.omfgdogs.com";
 
     // Home Page
@@ -355,7 +355,7 @@ describe('App', () => {
     clickSubmitAddReadingButton();
 
     //Wait for that error message, kids
-    browser.wait(EC.visibilityOf(element(by.className("alert"))), 3000, 'The error message never showed up.'); 
+    browser.wait(EC.visibilityOf(element(by.className("alert alert-info"))), 3000, 'The error message never showed up.'); 
   });
 
   /* Test: Teacher account can log out successfully
@@ -408,7 +408,7 @@ describe('App', () => {
     pressEnter();
 
     // Lets find that error
-    let errorMsg = element(by.binding('errorObject.invalidAuthorName'));
+    let errorMsg = element(by.id('msgBadName'));
     browser.wait(EC.visibilityOf(errorMsg), 3000, 'The error message should show up. It did not.');
   });
 
@@ -424,7 +424,7 @@ describe('App', () => {
     pressEnter();
 
     // Check for that error
-    let errorMsg = element(by.binding('errorObject.invalidCode'));
+    let errorMsg = element(by.id('msgInvalidCode'));
     browser.wait(EC.visibilityOf(errorMsg), 3000, 'The error message should show up. It did not.');
   });
   
@@ -433,14 +433,13 @@ describe('App', () => {
     - Click project code and enter valid project code, click join button or hit enter
     - Redirect to project
   */
-  // YET TO BE VERIFIED AS A WORKING TEST BECAUSE SITE ISSUES
   it('enter a project code from the dashboard', () => {
     //Home Page
     logInWithStudentAccount();
 
     // Dashboard
     verifyURL("dashboard");
-    enterProjectCode('y657');
+    enterProjectCode('78cc');
     let joinProjectBtn = element(by.buttonText("Join Project!"));
     browser.waitForAngular();
     joinProjectBtn.click();
@@ -455,6 +454,8 @@ describe('App', () => {
     - Click on a project under “your projects”
     - Redirect to correct project
   */
+  // NEEDS FIXING
+  /*
   it('can go to a project, go to dashboard, then go to another project', () => {
     //Initialize some variables
     let firstProject  = "Monday";
@@ -479,6 +480,7 @@ describe('App', () => {
     // Project Page
     verifyURL("project");
   });
+  */
 
   // WIP
   /* Test: Make a comment on a project

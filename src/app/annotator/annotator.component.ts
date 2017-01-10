@@ -116,6 +116,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                     // Process different live comment updates
                     if (commentUpdate.action === 'DELETE') {
                         if (cIndex > -1) {
+                            // Remove highlights from local array
+                            this.decrementHighlights(comment.start, comment.end);
                             this.commentsByIndexRemove(comment._id, wIndex, cIndex);
                         }
                     } else if (commentUpdate.action === 'UPDATE') {
@@ -123,9 +125,13 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                             this.commentsByIndex[wIndex][cIndex].data = comment.data;
                         } else {
                             // Sometimes an UPDATE comes through for comment not yet created
+                            // Add highlights to local array
+                            this.incrementHighlights(comment.start, comment.end);
                             this.commentsByIndexAdd(comment, wIndex, true);
                         }
                     } else if (commentUpdate.action === 'ADD') {
+                        // Add highlights to local array
+                        this.incrementHighlights(comment.start, comment.end);
                         this.commentsByIndexAdd(comment, wIndex, true);
                     }
                 }, (error) => {
@@ -292,9 +298,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Fires after the comment has been deleted in the database
-     * - Removes comment from locally transformed array (commentsByIndex)
-     * - De-increments the highlights
+     * Removes comment from locally transformed array (commentsByIndex)
      */
     commentsByIndexRemove(commentId, index: number, commentIndex: number) {
         let comment = this.commentsByIndex[index][commentIndex];
@@ -304,12 +308,22 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         }
         // Clear active comment
         this.inactivateComment();
-        // Remove highlights from local array
-        this.decrementHighlights(comment.start, comment.end);
         // Remove comment form local Comments array
         this.commentsByIndex[index].splice(commentIndex);
         // Update line counts
         this.updateAllLineCounts();
+    }
+
+     /**
+     * Fires after the comment has been deleted in the database
+     * - Removes comment from locally transformed array (commentsByIndex)
+     * - De-increments the highlights
+     */
+    removeComment(comment, index: number, commentIndex: number) {
+        // Remove Highlights
+        this.decrementHighlights(comment.start, comment.end);
+        // Remove local comment object
+        this.commentsByIndexRemove(comment.id, index, commentIndex);
     }
 
     setActiveCommentByIndex(isActive: boolean, wordIndex: number, commentIndex: number): void {
@@ -380,7 +394,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // Get selection indices
         let span = this.getSelectionSpan();
 
-        if (span.start && span.end) {
+        if (span.start > -1 && span.end > -1) {
             // Increment highlight array
             this.incrementHighlights(span.start, span.end);
 
