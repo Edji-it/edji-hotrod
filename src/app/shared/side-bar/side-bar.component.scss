@@ -18,7 +18,7 @@ $purple: rgb(150, 40, 255);
 	width: $sideBarWidth;
 	text-align: center;
 	background: #fff; //$midGray;
-	z-index: 5000;
+	z-index: 6000;
 	border-right: $lightBorder;
 
 	& .logo-button {
@@ -36,6 +36,11 @@ $purple: rgb(150, 40, 255);
 		width: 100%;
 		overflow: hidden;
   	}
+}
+.sliding-pane {
+	// Put sliding pane under the sideBar
+	// But above comments!
+	z-index: 5900;
 }
 
 .side-bar__user {

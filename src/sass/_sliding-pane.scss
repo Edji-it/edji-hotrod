@@ -10,6 +10,7 @@
     padding: $base-pad 0;
     z-index: $zMid + 1000;
     overflow-y:auto;
+    transition: transform 0.3s linear;
 
     &.mid-bar {
         width: 250px;
@@ -32,9 +33,6 @@
     &.slide-in {
         transform: translate3d(0, 0, 0);
     }
-    
-    @include transition(transform ease 0.3s);
-    
 }
 
 .user-list-item {
