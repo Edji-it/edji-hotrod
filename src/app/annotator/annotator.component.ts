@@ -215,8 +215,15 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         if (!this.user.isTeacher && Rangy.getSelection() && Rangy.getSelection().toString().length > 0) {
             let scrollOffset = document.getElementById('emojiAnnotator').getBoundingClientRect().top;
             const readingPad = 52;
-            // Account for page scroll offset
-            this.highlightY = (event.clientY - scrollOffset + readingPad) + 'px';
+
+            if (event.changedTouches) {
+                let touchobj = event.changedTouches[0]; // reference first touch point for this event
+                let touchY = parseInt(touchobj.clientY);
+                // Account for page scroll offset
+                this.highlightY = (touchY - scrollOffset + readingPad) + 'px';
+            } else {
+                this.highlightY = (event.clientY - scrollOffset + readingPad) + 'px';
+            }
             this.optionsShow = true;
         } else {
             this.optionsShow = false;
