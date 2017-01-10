@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Http } from '@angular/http';
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
+import { Angulartics2 } from 'angulartics2';
 
 import { AuthService } from './..';
 
@@ -44,6 +45,7 @@ export class FeedbackComponent {
   constructor(
     private _auth: AuthService,
     private http: Http,
+    private angulartics: Angulartics2,
     fb: FormBuilder
   ) {
     this.user = this._auth.getUser();
@@ -67,6 +69,7 @@ export class FeedbackComponent {
 
   /** Sends feedback to bumblebee */
   private sendFeedback(formValue: any): void {
+    this.angulartics.eventTrack.next({ action: 'sendFeedback', properties: { category: 'accountManagement', label: 'attempt' }});
 
     let data: any = {
       emailSubject: "Feedback form submitted!",
@@ -76,18 +79,20 @@ export class FeedbackComponent {
     };
 
     this.http.post(
-      // "http://bumblebee-prod-1.us-west-2.elasticbeanstalk.com/newform",
-      "http://localhost:8333/newform",
+      "http://bumblebee-prod-1.us-west-2.elasticbeanstalk.com/newform",
+      // "http://localhost:8333/newform",
       data,
       this._auth.getOptions()
     ).take(1).subscribe(
       (res) => {
         if (res.status === 204) {
+          this.angulartics.eventTrack.next({ action: 'sendFeedback', properties: { category: 'accountManagement', label: 'success' }});
           this.feedbackSuccess = true;
           this._auth.deleteFromStorage("feedbackFormData");
         }
       },
       (err) => {
+        // TRACK EXCEPTION
         console.log(err);
         this.errorObject.serverError = "Something has gone wrong. Please try submitting your feedback again later!";
         this._auth.store("feedbackFormData", formValue);

@@ -103,6 +103,7 @@ export class ReadingPageComponent implements OnInit, OnDestroy {
                 this.addNew = false;
                 this.newProject = {};
             }, error => {
+                // TRACK EXCEPTION
                 this.addingNew = false;
                 console.log(error);
             });
