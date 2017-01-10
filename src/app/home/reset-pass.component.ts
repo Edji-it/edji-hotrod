@@ -1,6 +1,7 @@
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Component, Output, EventEmitter } from '@angular/core';
+import { Angulartics2 } from 'angulartics2';
 
 import { AuthService } from './../shared/auth.service';
 
@@ -18,7 +19,7 @@ export class ResetPassComponent {
   private submissionSuccess: boolean = false;
   private errorObject: any = { };
 
-  constructor(fb: FormBuilder, private _auth: AuthService) {
+  constructor(private _auth: AuthService, private angulartics: Angulartics2, fb: FormBuilder) {
     this.passwordForm = fb.group({
       username: [null, Validators.required]
     });
@@ -26,27 +27,19 @@ export class ResetPassComponent {
 
   private onSubmit(formValue: any): void {
     this.clearErrors();
+
+    this.angulartics.eventTrack.next({ action: 'requestPasswordEmail', properties: { category: 'accountManagement', label: 'attempt' }});
+
     this._auth.recoverPassword( formValue.username )
       .subscribe((success) => {
         if (success) {
+          this.angulartics.eventTrack.next({ action: 'requestPasswordEmail', properties: { category: 'accountManagement', label: 'success' }});
           this.submissionSuccess = true;
         } else {
+          // TRACK EXCEPTION
           this.errorObject.unsuccessful = "We were unable to send the email";
         }
       });
-
-    // this._auth.resetPassword({
-    //     oldPassword: this.passwordForm.get('oldPassword').value,
-    //     newPassword: this.passwordForm.get('newPassword').value
-    //   })
-    //   .then((res) => {
-    //     this.responseSuccess = true;
-    //     this._auth.setToken(res.token);
-    //   })
-    //   .catch((res) => {
-    //     this.responseSuccess = false;
-    //     console.log("no dice! 🎲");
-    //   });
   }
 
   /**

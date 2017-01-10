@@ -1,6 +1,7 @@
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Component, Output, EventEmitter } from '@angular/core';
+import { Angulartics2 } from 'angulartics2';
 
 import { AuthService } from './../shared/auth.service';
 
@@ -14,7 +15,7 @@ export class ChangePassComponent {
   private responseSuccess: boolean;
   @Output() closeModal = new EventEmitter();
 
-  constructor(fb: FormBuilder, private _auth: AuthService) {
+  constructor(private _auth: AuthService, private angulartics: Angulartics2, fb: FormBuilder) {
     this.passwordForm = fb.group({
       oldPassword: [null, Validators.required],
       newPassword: [null, Validators.required],
@@ -29,15 +30,19 @@ export class ChangePassComponent {
   }
 
   private onSubmit(value: any): void {
+    this.angulartics.eventTrack.next({ action: 'resetPasswordLoggedIn', properties: { category: 'accountManagement', label: 'attempt' }});
+
     this._auth.resetPassword({
         oldPassword: this.passwordForm.get('oldPassword').value,
         newPassword: this.passwordForm.get('newPassword').value
       })
       .then((res) => {
+        this.angulartics.eventTrack.next({ action: 'resetPasswordLoggedIn', properties: { category: 'accountManagement', label: 'success' }});
         this.responseSuccess = true;
         this._auth.setToken(res.token);
       })
       .catch((res) => {
+        // TRACK EXCEPTION
         this.responseSuccess = false;
         console.log("no dice! 🎲");
       });
