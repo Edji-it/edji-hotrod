@@ -26,7 +26,7 @@
                         <div class="list-item-data" *ngIf="project.teacher_id && (project.teacher_id.fullname || project.teacher_id.username)">
                             <label>Created by:</label>
                             <span style="text-decoration:underline;">{{ project.teacher_id.fullname }}</span><span *ngIf="!project.teacher_id.fullname ">{{ project.teacher_id.username }}</span>
-                            <span> on {{ project.createdAt | date:'mediumDate' }}</span>
+                            <!--<span> on {{ project.createdAt | date:'mediumDate' }}</span>-->
                         </div>
                     </div>
                 </div>
