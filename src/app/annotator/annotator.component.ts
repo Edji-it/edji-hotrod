@@ -101,7 +101,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         if (this.project.temp_ids) {
             this.project.temp_ids.forEach(temp => {
                 this.commentStats.userRef[temp._id] = this.commentStats.users.length;
-                this.commentStats.users.push({ _id: temp._id, type: 'temp', name: temp.username, count: 0 });
+                this.commentStats.users.push({ _id: temp._id, type: 'temp', name: temp.fullname, count: 0 });
             });
         }  
 
@@ -122,6 +122,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             }
 
             // Populate Stats
+            console.log(this.commentStats);
             this.updateCommentStats(comment.user_id, 1, comment.author);
         });
 
@@ -195,11 +196,14 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      * This is the source of our CommentStats object!
      */
     updateCommentStats(user_id: string, difference: number, name ?: string): void {
+        console.log(name);
         let i = this.commentStats.userRef[user_id];
-        if (i) {
-            this.commentStats.users[i] += difference;
+        if (i > -1) {
+            this.commentStats.users[i].count += difference;
         } else {
+            // Add user ref index
             this.commentStats.userRef[user_id] = this.commentStats.users.length;
+            // Add user stat object
             this.commentStats.users.push(  { _id: user_id, name: name, count: difference > 0 ? 1 : 0 } );
         }
         this._projects.setCommentStats(this.commentStats);
