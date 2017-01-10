@@ -2,6 +2,7 @@ import { AuthService } from '../shared/auth.service';
 import { Observable, Subscription } from 'rxjs/Rx';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Angulartics2 } from 'angulartics2';
 
 import { ReadingService } from '../shared/reading.service';
 import { ProjectService } from '../shared/project.service';
@@ -29,7 +30,16 @@ export class ReadingPageComponent implements OnInit, OnDestroy {
     private addingNew: boolean = false;
     private projectErr: any = {};
 
-    constructor(private _route: ActivatedRoute, private _readings: ReadingService, private _projects: ProjectService, private _auth: AuthService) {
+    constructor(
+        private _route: ActivatedRoute,
+        private _readings: ReadingService,
+        private _projects: ProjectService,
+        private _auth: AuthService,
+        private angulartics: Angulartics2
+    ) {
+    }
+
+    ngOnInit() {
         this.subscriptions.push(
             this._route.params
             .subscribe((params: Params) => { 
@@ -41,50 +51,49 @@ export class ReadingPageComponent implements OnInit, OnDestroy {
         );
     }
 
-    ngOnInit() {
- 
+    private getReading(readingId: string) {
+
+        this._readings.get(readingId)
+            .take(1)
+            .subscribe(
+                data => {
+                    this.reading = data;
+                },
+                err => {
+                    // TRACK EXCEPTION
+                    console.log(err);
+                })
+
+        this._projects.getForReading(readingId)
+            .take(1)
+            .subscribe(
+                data => {
+                    if (data.json() instanceof Array) {
+                        this.projects = data.json();
+                    }
+                },
+                err => {
+                    // TRACK EXCEPTION
+                    console.log(err);
+                }
+            )
     }
 
-    getReading(readingId) {
-        this.subscriptions
-            .push(
-                this._readings.get(readingId)
-                    .subscribe(
-                        data => {
-                            this.reading = data;
-                        },
-                        err => {
-                            console.log(err);
-                        })
-            );
-        this.subscriptions
-            .push(
-                this._projects.getForReading(readingId)
-                    .subscribe(
-                        data => {
-                            if (data.json() instanceof Array) {
-                                this.projects = data.json();
-                            }
-                        },
-                        err => {
-                            console.log(err);
-                        }
-                    )
-            );
-    }
-
-    addNewProject(newProject) {
+    private addNewProject(newProject) {
         if (!newProject.label || newProject.label.length < 1) {
             this.projectErr.error = "A project label is required!";
             return;
         }
         this.addingNew = true;
 
+        this.angulartics.eventTrack.next({ action: 'createNewProject', properties: { category: 'contentManagement', label: 'attempt' }});
+
         // New Projects require a teacher id
         newProject['teacher_id'] = this._auth.getUser()._id;
 
         this._projects.new(this.readingId, newProject)
             .then(data => {
+                this.angulartics.eventTrack.next({ action: 'createNewProject', properties: { category: 'contentManagement', label: 'success' }});
                 this.addingNew = false;
                 // Set isNew flag to show user the newly added project
                 data['isNew'] = true;
@@ -103,8 +112,9 @@ export class ReadingPageComponent implements OnInit, OnDestroy {
     /**
      * Removes deleted Project from local array after confirmed by modal
      */
-    removeProject(project) {
-        console.log(this.projects);
+    private removeProject(project) {
+        this.angulartics.eventTrack.next({ action: 'deleteProject', properties: { category: 'contentManagement', label: 'attempt' }});
+
         if (project._id) {
             for (var i = 0; i < this.projects.length; i++) {
                 if (this.projects[i]._id && this.projects[i]._id === project._id) {
@@ -115,10 +125,6 @@ export class ReadingPageComponent implements OnInit, OnDestroy {
             console.log('Couldn\'t find project locally to remove');
         }
     }
-
-    // deleteModal(id, label, index) {
-        
-    // }
 
     ngOnDestroy() {
         this.subscriptions.forEach((sub) => { sub.unsubscribe(); });

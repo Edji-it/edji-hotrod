@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Angulartics2 } from 'angulartics2';
 
 @Component({
   selector: 'no-content',
@@ -8,6 +9,9 @@ import { Component } from '@angular/core';
     </div>
   `
 })
-export class NoContentComponent {
+export class NoContentComponent implements OnInit {
+  constructor(private angulartics: Angulartics2) {}
 
+  ngOnInit() {
+  }
 }
