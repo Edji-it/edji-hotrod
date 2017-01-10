@@ -119,7 +119,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             }
 
             // Populate Stats
-            console.log(this.commentStats);
             this.updateCommentStats(comment.user_id, 1, comment.author);
         });
 
@@ -262,8 +261,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      * - References lineCountArray
      */
     expandLine(yPosToExpand: number) {
-        console.log(yPosToExpand);
-        console.log(this.lineCountArray[yPosToExpand]);
         if (this.lineCountArray[yPosToExpand]) {
             this.lineCountArray[yPosToExpand].forEach( (comment, index) => {
                 comment.expanded = !comment.expanded;
@@ -309,7 +306,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      * @param type What kind of comment: emoji, text...
      */
     createComment(start: number, end: number, type: string): void {
-        console.log(start, end, type);
         let projectId = this.project._id;
         let text: string = '';
         for (var i = start; i <= end; i++) {
