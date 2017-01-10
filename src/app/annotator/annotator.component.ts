@@ -488,10 +488,11 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
                 // Otherwise loop through words, and process into array
                 nodeWords.forEach((nodeWord, wIndex) => {
-                    let word = {
+                   let word = {
                         str : nodeWord,
                         styles: [].concat(inheritedTags)
                     };
+                    let addBr = false;
                     if (word.str.trim().length < 1) {
                         word.styles.push('space');
                     }
@@ -500,8 +501,16 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                     }
                     if (index == nodes.length - 1 && wIndex == nodeWords.length - 1) {
                         word.styles.push(tagName + '-last');
+                        addBr = true;
                     }
                     this.words.push(word);
+                    if (addBr) {
+                        // Add break element
+                        this.words.push({
+                            str: '',
+                            styles: ['br']
+                        });
+                    }
                 });
             } else {
                 // If not a text node, dig deeper for text nodes

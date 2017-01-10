@@ -50,6 +50,10 @@ a {
   &:hover {
     color: shade($action-color, 25%);
   }
+
+  &.break {
+    word-break: break-all;
+  }
 }
 
 a.link {

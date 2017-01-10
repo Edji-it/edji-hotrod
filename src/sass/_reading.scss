@@ -1,4 +1,6 @@
 
+$focusUnderlineWidth: 3px;
+
 article.content {
 	margin-top: 0px;
 	
@@ -31,17 +33,31 @@ article.content {
 
 	& .word {
 		// Styles applied by word
-		
+		user-select: text;
+		-webkit-user-select: text;
+		-moz-user-select: text;
+		display: inline-block;
+		margin: 0;
+
+		// Swaps to color border on hover
+		border-bottom: $focusUnderlineWidth solid transparent;
+
+		&:after {
+			display: inline-block;
+			content: '';
+			clear: both;
+		}
+
 		&.space {
 			min-height: 1em;
-			
-			&:after {
-				// Corrects issue with comments positioning on the wrong line
-				display: inline-block;
-				content: '';
-				clear:both;
-				@extend %noSelect;
-			}
+			min-width: 0.2em;
+			// &:after {
+			// 	// Corrects issue with comments positioning on the wrong line
+			// 	display: inline-block;
+			// 	content: '';
+			// 	clear:both;
+			// 	@extend %noSelect;
+			// }
 		}
 
 		&.b, &.B {
@@ -56,26 +72,21 @@ article.content {
 			text-decoration: underline;
 		}
 
+		&.br {
+			display: block;
+			background: transparent !important;
+			// Override focus border
+			border-bottom: $focusUnderlineWidth solid transparent !important;
+		}
+
 		&.H1, &.h1, &.H2, &.h2, &.H3, &.h3, &.P, &.p {
 			
 			&-first {
-				// display:table;
-				&::before {
-					display: block;
-					content: "\A";
-      				white-space: pre;
-					@extend %noSelect;
-				}
+				// Beginning of style
 			}
 
 			&-last {
-				clear:right;
-				&::after {
-					content: '';
-					display: block;
-					margin-right: 100%;
-					@extend %noSelect;
-				}
+				// End of style
 			}
 		}
 
@@ -284,42 +295,8 @@ $highlight1A: 0.4 + (0.08 * 1);
 
 $commentFadeOpacity: 0.35;
 
-article.content word {
-	@include transition(background linear 0.2s);
-	transition-delay: 0.2s;
-}
-
-.spotlight-comment article.content word[class*='highlight'] {
-	// opacity: $commentFadeOpacity;
-	background: transparent;
-	transition-delay: 0s;
-}
-
-.spotlight-comment article.content word.in-spotlight--word {
-	/*opacity: 1;*/
-	background: rgba($highlight1R, $highlight1G, $highlight1B, $highlight1A) !important;
-
-	& * {
-		/*opacity: 1;*/
-	}
-	
-	& .emoji-comment-username {
-		/*display: none;*/
-	}
-}
-
-.spotlight-comment article.content word.in-spotlight {
-	/*opacity: 1 !important;*/
-	background: rgba($highlight1R, $highlight1G, $highlight1B, $highlight1A) !important;
-	transition-delay: 0s;
-
-	& * {
-		/*opacity: 1 !important;*/
-	}
-}
-
 // Focus Highlight styles (for on comment hover)
-.highlight-f {
+article.content .word.highlight-f {
 	// background: blue;
-	border-bottom: 3px solid #969696; 
+	border-bottom: $focusUnderlineWidth solid #969696; 
 }

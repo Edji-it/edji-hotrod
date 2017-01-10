@@ -10,7 +10,7 @@
             <h1 id="annotatorTitle">{{ reading.title ? reading.title : "Untitled Reading" }}</h1>
             <div *ngIf="reading.source" class="sub-heading">
                 <img alt="📖" class="inline-emoji emojioneemoji" src="assets/emoji/png/1f4d6.png">
-                <a title="Source" href="{{reading.source}}" target="_blank">{{reading.source}}</a>
+                <a title="Source" class="break" href="{{reading.source}}" target="_blank">{{reading.source}}</a>
             </div>
             <p *ngIf="error" class="alert alert-danger">{{ error }}</p>
             <div class="article-wrap">
