@@ -15,9 +15,15 @@ export class ProjectService {
   private project: any = { title: "initial value" };
   private currentProjectSource: BehaviorSubject<any> = new BehaviorSubject<any>(this.project);
   public currentProject: Observable<any> = this.currentProjectSource.asObservable();
-
   // Maintain local Project data and its updates in this service
   
+  private commentStats: any = {
+    count: 0,
+    users: [],
+    userRef: {}
+  };
+  private commentStatsSource: BehaviorSubject<any> = new BehaviorSubject<any>(this.commentStats);
+  public currentCommentStats: Observable<any> = this.commentStatsSource.asObservable();
 
   constructor(
         private http: Http, 
@@ -49,8 +55,18 @@ export class ProjectService {
             (data) => {
                 this.project = data.json(); //can later have local setter to do validation/data manipulation before passing through observable
                 this.currentProjectSource.next(this.project);
+                // Clear stats object
+                this.commentStatsSource.next({});
                 return this.project;
             });
+  }
+
+  /**
+   * Update the CommentStats object to be shared between components
+   */
+  public setCommentStats(commentStats: any): void {
+      this.commentStats = commentStats;
+      this.commentStatsSource.next(this.commentStats);
   }
 
   /**

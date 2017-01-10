@@ -89,3 +89,28 @@ a.side-bar__link {
 		opacity: 0.8;
 	}
 }
+
+.side-bar__icon-button {
+	position: relative;
+	padding: 20px 20px 15px 20px;
+	
+	& img {
+		width: 100px;
+		height: auto;
+		opacity: 0.5;
+	}
+
+	& span {
+		color: #fff;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate3d(-50%, -50%, 0);
+		font-family: 'Open Sans';
+		font-size: 12px;
+	}
+
+	&:hover, &:active {
+		opacity: 0.7;
+	}
+}

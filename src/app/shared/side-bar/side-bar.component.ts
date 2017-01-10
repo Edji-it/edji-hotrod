@@ -1,7 +1,9 @@
 import { Router } from '@angular/router';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { Subscription } from 'rxjs/Rx';
 
 import { AuthService } from '../auth.service';
+import { ProjectService } from '../project.service';
 
 @Component({
   selector: 'side-bar',
@@ -9,20 +11,33 @@ import { AuthService } from '../auth.service';
   templateUrl: './side-bar.component.html'
 })
 export class SideBarComponent {
-    public commentCount = 0;
+    @Input() hasCommentCount: boolean;
+    
     private user: any;
+    private commentStats: any = {};
+    private subscriptions: Subscription[] = [];
+    private showCommentCounts: boolean = false;
 
-    constructor(private _auth: AuthService, private _router: Router) {
+    constructor(private _auth: AuthService, private _router: Router, private _project: ProjectService) {
 
     }
     
     ngOnInit() {
       this.user = this._auth.getUser();
+
+      if (this.hasCommentCount) {
+        this._project.currentCommentStats.subscribe(data => {
+          console.log(data);
+          this.commentStats = data;
+        }, error => {
+          console.log(error);
+        })
+      }
     }
 
     toggleCommentCounts() {
 
-    }
+    } 
 
     logout() {
         this._auth.logout();

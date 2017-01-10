@@ -22,7 +22,8 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
     private error: string;
     private user: any;
     private liveCount: number = 1;
-
+    private commentCount: number = 0;
+    
     constructor(
         private _route: ActivatedRoute, 
         private _projects: ProjectService,
@@ -56,6 +57,7 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
                         this._projects.setCurrentProject(expectedId).take(1).subscribe();
                     } else {
                         this.project = project;
+                        this.commentCount = project.comments.length;
                     }
                 }
             )

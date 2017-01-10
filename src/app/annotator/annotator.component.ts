@@ -29,6 +29,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     
     private commentsByIndex: any[] = [];
     private highlightArray: number[] = [];
+    // An array of arrays!
     private lineCountArray: any[][] = [];
     private lineCountRunning: boolean = false;
 
@@ -50,6 +51,13 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
     // For verifying comment ownership
     private user: any;
+
+    // Publically available stats
+    public commentStats = {
+        count: 0,
+        users: [],
+        userRef: {}
+    };
 
     constructor(
         private _readings: ReadingService,
@@ -78,6 +86,23 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 )
         );
         
+        // Set initial comment count
+        this.commentStats.count = this.project.comments.length;
+
+        // Establish Users array
+        if (this.project.student_ids) {
+            this.project.student_ids.forEach(student => {
+                this.commentStats.userRef[student._id] = this.commentStats.users.length;
+                this.commentStats.users.push(  { _id: student._id, type: 'user', name: (student.fullname ? student.fullname : student.username), count: 0 } );
+            });
+        }
+        if (this.project.temp_ids) {
+            this.project.temp_ids.forEach(temp => {
+                this.commentStats.userRef[temp._id] = this.commentStats.users.length;
+                this.commentStats.users.push({ _id: temp._id, type: 'temp', name: temp.username, count: 0 });
+            });
+        }  
+
         // Populate local Comment and Highlight arrays
         // (Used for super speedy rendering!)
         this.project.comments.forEach(comment => {
@@ -89,11 +114,17 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 // Populate local comments array by start index
                 comment.project_id = this.project._id;
                 this.commentsByIndex[comment.start].push(comment);
-
+                
                 // Add highlights
                 this.incrementHighlights(comment.start, comment.end);
             }
+
+            // Populate Stats
+            this.updateCommentStats(comment.user_id, 1, comment.author);
         });
+
+        // Share updated CommentStats
+        this._projects.setCommentStats(this.commentStats);
 
         // Subscribe to comment updates on the Teacher view
         if (this.user.isTeacher) {
@@ -119,6 +150,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                             // Remove highlights from local array
                             this.decrementHighlights(comment.start, comment.end);
                             this.commentsByIndexRemove(comment._id, wIndex, cIndex);
+                            this.updateCommentStats(comment.user_id, -1, comment.author);
                         }
                     } else if (commentUpdate.action === 'UPDATE') {
                         if (cIndex > -1 && this.commentsByIndex[wIndex] && this.commentsByIndex[wIndex][cIndex]) {
@@ -133,6 +165,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                         // Add highlights to local array
                         this.incrementHighlights(comment.start, comment.end);
                         this.commentsByIndexAdd(comment, wIndex, true);
+                        this.updateCommentStats(comment.user_id, 1, comment.author);
                     }
                 }, (error) => {
                     console.warn(error);
@@ -154,6 +187,20 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     
     hideCommentOptions(event ?): void {
         this.optionsShow = false;
+    }
+
+    /**
+     * This is the source of our CommentStats object!
+     */
+    updateCommentStats(user_id: string, difference: number, name ?: string): void {
+        let i = this.commentStats.userRef[user_id];
+        if (i) {
+            this.commentStats.users[i] += difference;
+        } else {
+            this.commentStats.userRef[user_id] = this.commentStats.users.length;
+            this.commentStats.users.push(  { _id: user_id, name: name, count: difference > 0 ? 1 : 0 } );
+        }
+        this._projects.setCommentStats(this.commentStats);
     }
 
     /**
