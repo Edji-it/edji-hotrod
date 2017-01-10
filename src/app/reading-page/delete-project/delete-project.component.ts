@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Angulartics2 } from 'angulartics2';
 
 import { ProjectService } from '../../shared/project.service';
 
@@ -14,18 +15,21 @@ export class DeleteProjectComponent implements OnInit {
 
   showError: boolean = false;;
 
-  constructor(private _projects: ProjectService) { }
+  constructor(private _projects: ProjectService, private angulartics: Angulartics2) { }
 
   ngOnInit() {
 
   }
 
   deleteProject() {
+    this.angulartics.eventTrack.next({ action: 'deleteProject', properties: { category: 'contentManagement', label: 'attempt' }});
     this._projects.delete(this.project._id)
       .then(data => {
+        this.angulartics.eventTrack.next({ action: 'enterLightningCode', properties: { category: 'joinProject', label: 'success' }});
         console.log(data);
-        this.confirmModal.emit()
+        this.confirmModal.emit();
       }, error => {
+        // TRACK EXCEPTION
         console.log(error);
         this.showError = true;
       });

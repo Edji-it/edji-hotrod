@@ -114,7 +114,6 @@ export class ReadingPageComponent implements OnInit, OnDestroy {
      * Removes deleted Project from local array after confirmed by modal
      */
     private removeProject(project) {
-        this.angulartics.eventTrack.next({ action: 'deleteProject', properties: { category: 'contentManagement', label: 'attempt' }});
 
         if (project._id) {
             for (var i = 0; i < this.projects.length; i++) {
