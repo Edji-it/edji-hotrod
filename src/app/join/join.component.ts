@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
+import { Angulartics2 } from 'angulartics2';
 
 import { AuthService } from './../shared/auth.service';
 import { ProjectService } from './../shared/project.service';
@@ -30,6 +31,7 @@ export class JoinComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private _auth: AuthService,
     private _project: ProjectService,
+    private angulartics: Angulartics2,
     fb: FormBuilder
   ) {
     this.guestForm = fb.group({
@@ -58,11 +60,11 @@ export class JoinComponent implements OnInit, OnDestroy {
    * Happens when join as guest is pressed. First calls to sign in the tempuser and then navigates upon receiving project data
    */
   private joinSessionAsGuest(formValue: any): void {
-    
+    this.angulartics.eventTrack.next({ action: 'joinAsGuest', properties: { category: 'joinProject', label: 'attempt' }});
+
     // create the user's temporary account and set local token and user
     this._auth.createTempUser(formValue.guestName).subscribe(
       (data) => {
-        console.log(data);
         this._auth.setToken(data.token);
         this._auth.setUser(data.user);
 
@@ -70,8 +72,10 @@ export class JoinComponent implements OnInit, OnDestroy {
         this.subscriptions.push(this._project.setCurrentProject(this.projectCode).subscribe(
           (project) => {
             if (project && project._id) {
+              this.angulartics.eventTrack.next({ action: 'joinAsGuest', properties: { category: 'joinProject', label: 'success' }});
               this.router.navigate(['/project', project._id]);
             } else {
+              // TRACK EXCEPTION
               console.warn('Didn\'t find project code yet.');
             }
             
