@@ -69,21 +69,22 @@ export class HomeComponent implements OnInit, OnDestroy {
    * @param code The project's short code
    */
   private joinSession(code: string): void {
-    this.angulartics.eventTrack.next({ action: 'enterLightningCode', properties: { category: 'joinProject' }});
+    this.angulartics.eventTrack.next({ action: 'enterLightningCode', properties: { category: 'joinProject', label: 'attempt' }});
     this._project.validateProject(code)
       .subscribe(
         (data) => {
+          this.angulartics.eventTrack.next({ action: 'enterLightningCode', properties: { category: 'joinProject', label: 'success' }});
           this.router.navigate(['join', code]);
         },
         (error) => {
-          console.log("it is a bad one");
+          // TRACK EXCEPTION
           this.errorObject.invalidCode = "We don't think that's a real code :confused:";
         }
       );
   }
 
   private login(formValue: any): void {
-
+    this.angulartics.eventTrack.next({ action: 'loginMain', properties: { category: 'login', label: 'attempt' }});
 
 		this.loginLoading = true;
 
@@ -98,7 +99,7 @@ export class HomeComponent implements OnInit, OnDestroy {
             this.angulartics.setUsername.next(data.user.username);
             data.user.email && this.angulartics.setUserProperties.next({ email: data.user.email});
             data.user.isTeacher && this.angulartics.setUserProperties.next({ isTeacher: true });
-            this.angulartics.eventTrack.next({ action: 'loginMain', properties: { category: 'login' }});
+            this.angulartics.eventTrack.next({ action: 'loginMain', properties: { category: 'login', label: 'success' }});
           } else {
             // TRACK EXCEPTION
             // there are other fields that the call should contain, like 'label' 'value' and 'interactionType'
