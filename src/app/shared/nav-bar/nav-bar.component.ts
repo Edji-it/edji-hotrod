@@ -10,6 +10,6 @@ export class NavBarComponent {
   public isLarge: boolean;
 
   ngOnInit() {
-    console.log(this.isLarge);
+    
   }
 }
