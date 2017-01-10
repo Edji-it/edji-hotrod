@@ -143,7 +143,7 @@ module.exports = function ( grunt ) {
         }
       },
       prod: {
-        cwd: "buil/",
+        cwd: "dist/",
         src: "**",
         options: {
             bucket: "edji.it"
