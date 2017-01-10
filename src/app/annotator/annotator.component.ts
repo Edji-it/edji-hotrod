@@ -87,9 +87,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                     }
                 )
         );
-        
-        // Set initial comment count
-        this.commentStats.count = this.project.comments.length;
 
         // Establish Users array
         if (this.project.student_ids) {
@@ -163,8 +160,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                             // Add highlights to local array
                             this.incrementHighlights(comment.start, comment.end);
                             this.commentsByIndexAdd(comment, wIndex, true);
+                            this.updateCommentStats(comment.user_id, 1, comment.author);
                         }
-                    } else if (commentUpdate.action === 'ADD') {
+                    } else if (commentUpdate.action === 'CREATE') {
                         // Add highlights to local array
                         this.incrementHighlights(comment.start, comment.end);
                         this.commentsByIndexAdd(comment, wIndex, true);
@@ -196,7 +194,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      * This is the source of our CommentStats object!
      */
     updateCommentStats(user_id: string, difference: number, name ?: string): void {
-        console.log(name);
         let i = this.commentStats.userRef[user_id];
         if (i > -1) {
             this.commentStats.users[i].count += difference;
@@ -206,6 +203,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             // Add user stat object
             this.commentStats.users.push(  { _id: user_id, name: name, count: difference > 0 ? 1 : 0 } );
         }
+        this.commentStats.count += difference;
         this._projects.setCommentStats(this.commentStats);
     }
 
