@@ -8,7 +8,7 @@
       <span>Username</span> 
       <b style="float:right;">Comments</b>
     </div>
-    <div class="user-list-item" *ngFor="comments in commentsByUser | orderObjectBy:'length':true">
+    <div class="user-list-item">
       <span>{{ comments[0].author }}</span> 
       <b style="float:right;">{{ comments.length }}</b>
     </div>
