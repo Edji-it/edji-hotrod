@@ -68,7 +68,8 @@ export class HomeComponent implements OnInit, OnDestroy {
    * Validates project and then navigates to project if valid
    * @param code The project's short code
    */
-  private joinSession(code: string): void{
+  private joinSession(code: string): void {
+    this.angulartics.eventTrack.next({ action: 'enterLightningCode', properties: { category: 'joinProject' }});
     this._project.validateProject(code)
       .subscribe(
         (data) => {
@@ -92,34 +93,20 @@ export class HomeComponent implements OnInit, OnDestroy {
           this.loginLoading = false;
           this.clearErrors();
 
-          // // sets username and email for analytics use
-          // if (data.user) {
-          //   this.angulartics.setUsername.next(data.user.username);
-          //   this.angulartics.setUserProperties.next({ email: data.user.email});
-          //   this.angulartics.eventTrack.next({ action: 'login', properties: { category: 'userActions' }})
-          // } else {
-          //   // should track some exception here
-          //   // there are other fields that the call should contain, like 'label' 'value' and 'interactionType'
-          //   // this.angulartics.exceptionTrack.next({ appId: 'app', appName: 'Test App', appVersion: '0.1' });
-          // }
-
-
-
-          // $analytics.setAlias(alias);
-          // if (data.user && data.user.username) {
-          //   $analytics.setUsername(data.user.username);
-          //   		$analytics.setUserProperties({ 'email' : data.user.email });
-          // } else {
-          //   console.error("Couldn't find username!");
-          // }
-
-          // if (data.isTeacher) {
-          // 	$analytics.eventTrack('Teacher logged in', {  category: 'Teacher', label: 'General' });
-          // } else {
-          // 	$analytics.eventTrack('Student logged in', {  category: 'Student', label: 'General' });
-          // }
+          // sets username and email for analytics use
+          if (data.user) {
+            this.angulartics.setUsername.next(data.user.username);
+            data.user.email && this.angulartics.setUserProperties.next({ email: data.user.email});
+            data.user.isTeacher && this.angulartics.setUserProperties.next({ isTeacher: true });
+            this.angulartics.eventTrack.next({ action: 'loginMain', properties: { category: 'login' }});
+          } else {
+            // TRACK EXCEPTION
+            // there are other fields that the call should contain, like 'label' 'value' and 'interactionType'
+            // this.angulartics.exceptionTrack.next({ appId: 'app', appName: 'Test App', appVersion: '0.1' });
+          }
 
           if (data.token) {
+
             this._auth.setToken(data.token);
             this._auth.setUser(data.user);
             this.router.navigate(['/dashboard']);
@@ -128,23 +115,16 @@ export class HomeComponent implements OnInit, OnDestroy {
         (error) =>  { 
           this.loginLoading = false;
           console.log(error);
-          console.log(error._body);
           if (error === null) {
+            // TRACK EXCEPTION
             this.errorObject.incorrect = "Network error";
           } else {
+            // TRACK EXCEPTION
             this.errorObject.incorrect = "Password is incorrect for that username";
           }
         }
       );
 
-  }
-  
-  showPasswordModal() {
-
-  }
-
-  resetPassword(username) {
-    
   }
 
   /**
