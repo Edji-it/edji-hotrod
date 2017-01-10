@@ -49,7 +49,8 @@
 					(commentDeleted)="removeComment(comment, i, ci)"
 					(expandLine)="expandLine($event)"></edji-comment>{{ word.str.trim() ? word.str : '&nbsp;' }}</span>
 		</article>
-		<emoji-keyboard [isActive]="activeComment.active && (!activeComment.type || activeComment.type === 'emoji')" [currentComment]="activeComment.data" (commentChange)="updateActiveComment($event)" (dismissKeyboard)="inactivateComment()"></emoji-keyboard>
+		
 	</div>
 	
 </div>
+<emoji-keyboard [isActive]="activeComment.active && (!activeComment.type || activeComment.type === 'emoji')" [currentComment]="activeComment.data" (commentChange)="updateActiveComment($event)" (dismissKeyboard)="inactivateComment()"></emoji-keyboard>

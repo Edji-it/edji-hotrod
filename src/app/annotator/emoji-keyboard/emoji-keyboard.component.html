@@ -18,7 +18,7 @@
               <div class="emojionearea-emojis-list">
                       <div *ngFor="let category of emojifilters; let i = index"  [attr.id]="'category'+i" class="emojionearea-category">
                           <h1>{{category.title}}</h1>
-                          <i *ngFor="let emoji of category.emoji" (tap)="addEmoji(':'+emoji+':')" class="emojibtn" role="button" [attr.dataName]="':'+emoji+':'" [innerHtml]="':'+emoji+':' | emojione">
+                          <i *ngFor="let emoji of category.emoji" (click)="addEmoji(':'+emoji+':')" class="emojibtn" role="button" [attr.dataName]="':'+emoji+':'" [innerHtml]="':'+emoji+':' | emojione">
                           </i>
                       </div>
               </div>
