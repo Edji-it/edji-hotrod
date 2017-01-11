@@ -37,17 +37,16 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
         // gets id from route to compare to currentProject from projects.service
         let idParam: string = this._route.snapshot.params['id'];
 
-        // subscribe to the currentProject value
-        this.subscriptions.push(
-            this._projects.currentProject.subscribe(
-                (project) => {
-                    this.project = project;
-                    this.commentCount = project.comments.length;
-                }
-            )
-        );
-
-        this._projects.setCurrentProject(idParam);
+        this._projects.setCurrentProject(idParam)
+            .take(1)
+            .subscribe(
+            (project) => {
+                this.project = project;
+                this.commentCount = project.comments.length;
+            },
+            (error) => {
+                // TRACK EXCEPTION
+            });
 
         // Join and update live user count
         this.subscriptions.push(
