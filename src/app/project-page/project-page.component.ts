@@ -35,32 +35,27 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         // gets id from route to compare to currentProject from projects.service
-        let expectedId: string = this._route.snapshot.params['id'];
-
-        // Join and update live user count
-        this.subscriptions.push(
-            this._socket.joinLiveCount(expectedId, this.user._id).subscribe((count) => {
-                this.liveCount = count;
-            }, (error) => {
-                console.warn(error);
-            })
-        );
+        let idParam: string = this._route.snapshot.params['id'];
 
         // subscribe to the currentProject value
         this.subscriptions.push(
             this._projects.currentProject.subscribe(
                 (project) => {
-                    // if the current project in projects.service isn't the same as the one requested by the route:
-                    //  update currentProject in projects.service
-                    if (project._id !== expectedId) {
-                        // I don't actually care to subscribe, but it doesn't fire if I don't...
-                        this._projects.setCurrentProject(expectedId).take(1).subscribe();
-                    } else {
-                        this.project = project;
-                        this.commentCount = project.comments.length;
-                    }
+                    this.project = project;
+                    this.commentCount = project.comments.length;
                 }
             )
+        );
+
+        this._projects.setCurrentProject(idParam);
+
+        // Join and update live user count
+        this.subscriptions.push(
+            this._socket.joinLiveCount(idParam, this.user._id).subscribe((count) => {
+                this.liveCount = count;
+            }, (error) => {
+                console.warn(error);
+            })
         );
     }
 
