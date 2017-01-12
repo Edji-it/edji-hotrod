@@ -32,6 +32,7 @@ import { RouteReuseStrategy } from '@angular/router';
 // Directives
 import { MediumEditorDirective } from 'angular2-medium-editor/medium-editor.directive.ts';
 import { ClickOutsideDirective } from 'angular2-click-outside/clickOutside.directive.ts';
+import { Autosize } from 'angular2-autosize';
 
 // Pipes
 import { EmojiOnePipe } from './shared/emojione.pipe.ts';
@@ -113,7 +114,8 @@ type StoreType = {
     HomeComponent,
     JoinComponent,
     FeedbackComponent,
-    NoContentComponent
+    NoContentComponent,
+    Autosize
 ],
   imports: [ // import Angular's modules
     BrowserModule,
