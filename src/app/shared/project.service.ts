@@ -87,6 +87,7 @@ export class ProjectService {
   public validateProject(projectCode: string): Observable<any> {
 
       return this.http.get(this._auth.getUrl() + '/sessions/' + projectCode + "/validate", this._auth.getOptions())
+        .map((data) => { return data.json(); });
         
   }
 

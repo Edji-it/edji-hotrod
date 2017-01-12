@@ -68,34 +68,7 @@ export class JoinComponent implements OnInit, OnDestroy {
         this._auth.setToken(data.token);
         this._auth.setUser(data.user);
 
-        // // set the project as current project
-        // this.subscriptions.push(this._project.setCurrentProject(this.projectCode).subscribe(
-        //   (project) => {
-        //     if (project && project._id) {
-        //       this.angulartics.eventTrack.next({ action: 'joinAsGuest', properties: { category: 'joinProject', label: 'success' }});
-        //       this.router.navigate(['/project', project._id]);
-        //     } else {
-        //       // TRACK EXCEPTION
-        //       console.warn('Didn\'t find project code yet.');
-        //     }
-            
-        //   }
-        // ));
-
-        // this._project.setCurrentProject(this.projectCode)
-        //   .subscribe(
-        //     (project) => {
-        //       if (project && project._id) {
-        //         // this.angulartics.eventTrack.next({ action: 'joinAsGuest', properties: { category: 'joinProject', label: 'success' }});
-        //         this.router.navigate(['/project', project._id]);
-        //       } else {
-        //         // TRACK EXCEPTION
-        //         console.warn('Didn\'t find project code yet.');
-        //       }
-        //     }
-        //   );
-
-        this._project.setCurrentProject(formValue.projectCode)
+        this._project.setCurrentProject(this.projectCode)
           .subscribe(
             (project) => {
               this.router.navigate(['/project', project._id]);
@@ -103,11 +76,10 @@ export class JoinComponent implements OnInit, OnDestroy {
             (error) => {
               // TRACK EXCEPTION
               // this.errorObject.wrongCode = "Unfortunately, we did not find that project";
+              console.error(error);
             }
           );
 
-        // this.router.navigate(['/project', this.projectCode]);
-        // after creation, navigate to the project's page
       },
       (error) => {
         if (error.status === 406) {
@@ -144,20 +116,17 @@ export class JoinComponent implements OnInit, OnDestroy {
             data.user.isTeacher && this.angulartics.setUserProperties.next({ isTeacher: true });
             this.angulartics.eventTrack.next({ action: 'joinAsUser', properties: { category: 'joinProject', label: 'success' }});            
 
-            // set the project as current project
-            this.subscriptions.push(this._project.setCurrentProject(this.projectCode).subscribe(
-              (project) => {
-                if (project && project._id) {
+            this._project.setCurrentProject(this.projectCode)
+              .subscribe(
+                (project) => {
                   this.router.navigate(['/project', project._id]);
-                } else {
+                },
+                (error) => {
                   // TRACK EXCEPTION
-                  console.warn('Didn\'t find project code yet.');
+                  // this.errorObject.wrongCode = "Unfortunately, we did not find that project";
+                  console.error(error);
                 }
-                
-              }
-            ));
-
-            this._project.setCurrentProject(this.projectCode);
+              );
 
           }
         },
