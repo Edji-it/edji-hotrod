@@ -175,7 +175,13 @@ export class AuthService implements CanActivate, OnInit {
 
         return this.http.post([this.baseUrl, 'tempusers'].join('/'), data, this.getOptions())
             .map((data) => {
-                return data.json();
+                let object: any = data.json();
+
+                if (object.token) {
+                    this.setUser(object.user);
+                    this.setToken(object.token);
+                }
+                return object;
             });
     }
 
