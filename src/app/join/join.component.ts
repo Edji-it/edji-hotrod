@@ -68,21 +68,33 @@ export class JoinComponent implements OnInit, OnDestroy {
         this._auth.setToken(data.token);
         this._auth.setUser(data.user);
 
-        // set the project as current project
-        this.subscriptions.push(this._project.setCurrentProject(this.projectCode).subscribe(
-          (project) => {
-            if (project && project._id) {
-              this.angulartics.eventTrack.next({ action: 'joinAsGuest', properties: { category: 'joinProject', label: 'success' }});
-              this.router.navigate(['/project', project._id]);
-            } else {
-              // TRACK EXCEPTION
-              console.warn('Didn\'t find project code yet.');
-            }
+        // // set the project as current project
+        // this.subscriptions.push(this._project.setCurrentProject(this.projectCode).subscribe(
+        //   (project) => {
+        //     if (project && project._id) {
+        //       this.angulartics.eventTrack.next({ action: 'joinAsGuest', properties: { category: 'joinProject', label: 'success' }});
+        //       this.router.navigate(['/project', project._id]);
+        //     } else {
+        //       // TRACK EXCEPTION
+        //       console.warn('Didn\'t find project code yet.');
+        //     }
             
-          }
-        ));
+        //   }
+        // ));
 
-        this._project.setCurrentProject(this.projectCode);
+        this._project.setCurrentProject(this.projectCode)
+          .take(1)
+          .subscribe(
+            (project) => {
+              if (project && project._id) {
+                this.angulartics.eventTrack.next({ action: 'joinAsGuest', properties: { category: 'joinProject', label: 'success' }});
+                this.router.navigate(['/project', project._id]);
+              } else {
+                // TRACK EXCEPTION
+                console.warn('Didn\'t find project code yet.');
+              }
+            }
+          );
 
         // after creation, navigate to the project's page
       },
