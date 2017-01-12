@@ -86,7 +86,7 @@ edji-comment {
 		}
 	}
 
-	& .comment-input-wrapper:hover {
+	&:not(.active) .comment-input-wrapper:hover {
 		transform: scale(1.05);
 		& .input-wrap {
 			box-shadow: $inputFocusHalfShadow;

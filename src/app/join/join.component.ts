@@ -96,6 +96,7 @@ export class JoinComponent implements OnInit, OnDestroy {
             }
           );
 
+        // this.router.navigate(['/project', this.projectCode]);
         // after creation, navigate to the project's page
       },
       (error) => {

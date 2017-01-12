@@ -50,6 +50,7 @@ export class ProjectService {
    * @returns observable with project data
    */
   public setCurrentProject(projectCode: string): Observable<any> {
+      console.log( this._auth.getOptions() );
     return this.http.get(this._auth.getUrl() + '/sessions/' + projectCode, this._auth.getOptions())
         .map(
             (data) => {
