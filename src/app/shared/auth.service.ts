@@ -181,6 +181,7 @@ export class AuthService implements CanActivate, OnInit {
                     this.setUser(object.user);
                     this.setToken(object.token);
                 }
+                console.log(this.getOptions());
                 return object;
             });
     }
