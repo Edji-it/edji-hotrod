@@ -18,7 +18,7 @@
     <div class="col-sm-6 col-pad">
       <!--Lightning Code Row-->
       <div *ngIf="!showLogin">
-        <h2 class="center">Enter with <img class="inline-emoji emojioneemoji" src="assets/emoji/png/26a1.png" />Code</h2>
+        <h2 class="center" [innerHtml]="'Enter with :zap: Code' | emojione"></h2>
         <input type="text" id="projectCodeInput" class="big-field lowercase-field on-white" (keyup.enter)="joinSession(sessionCode)" [(ngModel)]="sessionCode" placeholder="Lightning Code" />
         <!--<p class="center">Join a project without an account</p>-->
         <div class="button__row"> 

@@ -19,6 +19,10 @@ const HtmlElementsPlugin = require('./html-elements-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
+const { version: appVersion } = require('../package.json');
+// this loads package.json
+// then you destructure that object and take out the 'version' property from it
+// and finally with ': appVersion' you rename it to const appVersion
 
 /*
  * Webpack Constants
@@ -27,7 +31,8 @@ const HMR = helpers.hasProcessFlag('hot');
 const METADATA = {
   title: 'Edji',
   baseUrl: '/',
-  isDevServer: helpers.isWebpackDevServer()
+  isDevServer: helpers.isWebpackDevServer(),
+  version: appVersion
 };
 
 /*

@@ -24,10 +24,7 @@
 			
 			<span class="side-bar__role" *ngIf="user">{{  user.isTeacher ? "Teacher" : "Student"  }}</span>
 			&nbsp;
-			<a class="side-bar__link" (click)="logout()">
-				Logout &nbsp;
-				<img alt="🏃" class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/1f3c3.png">
-			</a>
+			<a class="side-bar__link" (click)="logout()" [innerHtml]="'Logout &nbsp; :runner:' | emojione"></a>
 		</div>
 	</div>
 
