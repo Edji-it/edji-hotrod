@@ -82,17 +82,27 @@ export class JoinComponent implements OnInit, OnDestroy {
         //   }
         // ));
 
-        this._project.setCurrentProject(this.projectCode)
-          .take(1)
+        // this._project.setCurrentProject(this.projectCode)
+        //   .subscribe(
+        //     (project) => {
+        //       if (project && project._id) {
+        //         // this.angulartics.eventTrack.next({ action: 'joinAsGuest', properties: { category: 'joinProject', label: 'success' }});
+        //         this.router.navigate(['/project', project._id]);
+        //       } else {
+        //         // TRACK EXCEPTION
+        //         console.warn('Didn\'t find project code yet.');
+        //       }
+        //     }
+        //   );
+
+        this._project.setCurrentProject(formValue.projectCode)
           .subscribe(
             (project) => {
-              if (project && project._id) {
-                this.angulartics.eventTrack.next({ action: 'joinAsGuest', properties: { category: 'joinProject', label: 'success' }});
-                this.router.navigate(['/project', project._id]);
-              } else {
-                // TRACK EXCEPTION
-                console.warn('Didn\'t find project code yet.');
-              }
+              this.router.navigate(['/project', project._id]);
+            },
+            (error) => {
+              // TRACK EXCEPTION
+              // this.errorObject.wrongCode = "Unfortunately, we did not find that project";
             }
           );
 
