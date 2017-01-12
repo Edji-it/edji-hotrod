@@ -74,9 +74,27 @@ export class RegisterComponent {
         this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'success' }});
         this.router.navigate(['dashboard']);
       }, (err) => {
+        let error = err.json();
+
         switch (err.status) {
           case 406:
-            this.errorObject.badName = ":anguished: Would you mind choosing another name?"; break;
+            if (error.validationErrors) {
+              let errorCaught: boolean = false;
+              if (error.validationErrors.fullname === "badWords") {
+                this.errorObject.badName = ":anguished: Would you mind choosing another name?";
+                errorCaught = true;
+              } 
+              if (error.validationErrors.username === "badWords") {
+                this.errorObject.badUsername = ":anguished: Would you mind choosing another username?";
+                errorCaught = true;
+              }
+              if (!errorCaught) {
+                // TRACK EXCEPTION
+                // form validation should have caught any other errors
+              }
+            }
+            
+            break;
           case 409:
             this.errorObject.duplicateUser = "Contrats! :grin: Somebody else liked your username so much that they already took it"; break;
           default: console.log(err);
