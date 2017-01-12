@@ -82,6 +82,7 @@ export class JoinComponent implements OnInit, OnDestroy {
           }
         ));
 
+        // Fallback routing for iPads on school wifi
         this._project.setCurrentProject(this.projectCode);
 
         this.router.navigate(['/project', this.projectCode]);
