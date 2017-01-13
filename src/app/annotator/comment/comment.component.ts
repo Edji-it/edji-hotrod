@@ -55,6 +55,18 @@ export class CommentComponent implements OnInit {
       }
   }
 
+  activate(): void {
+    this.active = true;
+    this.commentActivation.emit(true);
+  }
+
+  deactivate(): void {
+    this.active = false;
+    this.commentActivation.emit(false);
+    // Save when comment is toggled away from
+    this.updateComment(this.comment.data);
+  }
+
   // Updates comment in db
   public updateComment(commentData: string): void {
     this.angulartics.eventTrack.next({ action: 'updateComment', properties: { category: 'projectAction', label: 'attempt' }});

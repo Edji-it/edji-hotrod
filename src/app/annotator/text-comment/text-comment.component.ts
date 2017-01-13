@@ -9,7 +9,7 @@ import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 export class TextCommentComponent implements OnInit {
 
     @Input() private comment: any;
-    @Output() onCommentUpdate = new EventEmitter<string>(); 
+    @Output() blur = new EventEmitter<string>(); 
 
     constructor() { 
         
@@ -20,6 +20,6 @@ export class TextCommentComponent implements OnInit {
     }
 
     updateComment(commentData: string) {
-        this.onCommentUpdate.emit(commentData);
+        this.blur.emit(commentData);
     }
 }
