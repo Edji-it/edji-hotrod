@@ -12,13 +12,14 @@ export class BumblebeeService {
   public sendUserDetails(userDetails: any) {
     this.http.post(
       "http://bumblebee-prod-1.us-west-2.elasticbeanstalk.com/newuser",
-      userDetails,
+      // "http://localhost:8333/newuser",
+      { userDetails: userDetails },
       this._auth.getOptions()
       )
       .take(1)
       .subscribe(
-        (data) => {  },
-        (error) => {  }
+        (success) => { console.log("bumblebee posted to slack!"); },
+        (error) => { console.error(error); } //don't think this can ever happen... bumblebee doesn't return errors
       )
   }
 }

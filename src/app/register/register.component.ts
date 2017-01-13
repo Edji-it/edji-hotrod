@@ -5,7 +5,7 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { Subscription } from 'rxjs/Subscription';
 import { Angulartics2 } from 'angulartics2';
 
-import { AuthService } from './../shared';
+import { AuthService, BumblebeeService } from './../shared';
 
 @Component({
   selector: 'edji-register',
@@ -34,6 +34,7 @@ export class RegisterComponent {
     private _auth: AuthService,
     private router: Router,
     private angulartics: Angulartics2,
+    private bumblebee: BumblebeeService,
     fb: FormBuilder
   ) {
     this.registerForm = fb.group({
@@ -70,10 +71,18 @@ export class RegisterComponent {
     this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'attempt' }});
 
     this._auth.register(formValue)
+      .take(1)
       .subscribe((data) => {
-        this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'success' }});
-        this.router.navigate(['dashboard']);
+        
+        if (data.user) {
+          if (data.user.isTeacher) { this.bumblebee.sendUserDetails(data.user); }
+          this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'success' }});
+          this.router.navigate(['dashboard']);
+        } else {
+          // TRACK EXCEPTION... there was no data
+        }
       }, (err) => {
+        console.log(err);
         let error = err.json();
 
         switch (err.status) {
