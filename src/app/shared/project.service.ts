@@ -101,10 +101,10 @@ export class ProjectService {
             .map(
                 data => {
                     // Update local Project object if returned
-                    if (data.json()._id) {
-                        this.project = data.json();
+                    if (data.json().project && data.json().project._id) {
+                        this.project = data.json().project;
                     }
-                    return data.json();
+                    return data.json().project;
                 });
   }
 
