@@ -30,6 +30,7 @@ exports.config = {
 
   capabilities: {
     'browserName': 'chrome',
+    marionette: true,
     'chromeOptions': {
       'args': ['show-fps-counter=true']
     }

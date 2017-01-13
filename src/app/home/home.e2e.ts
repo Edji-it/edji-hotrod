@@ -2,7 +2,21 @@ import { browser, by, element, protractor } from 'protractor';
 
 describe('App', () => {
 
-  let EC    = protractor.ExpectedConditions; // vital
+  let ptor;
+  let EC;
+
+  // initialization
+  EC = protractor.ExpectedConditions; // vital
+  
+  //
+  /*
+  beforeEach(function() {
+    ptor = protractor.getInstance();
+    ptor.ignoreSynchronization = true;
+  });
+  */
+
+
   
   // Does this before each test.
   beforeEach(() => {
@@ -128,7 +142,7 @@ describe('App', () => {
   {
     let project = element(by.cssContainingText('.list-item-title', targetTitle));
     project.click();
-  }
+  } // function clickProject(targetTitle)
 
   /*
 ------------------------------------ Super Basic Tests ---------------------------------
@@ -172,6 +186,21 @@ describe('App', () => {
     
     browser.wait(EC.presenceOf(errorMsg), 3000, 'The error message never showed up. Like my last date. T_T');
   });
+
+  /* Test: Change Password - Account Info Page
+    - Be on account page
+    - Click change password button
+    - Type old password
+    - Tab to/click on new password field, enter new password
+    - Tab to/click on reenter new password field, enter new password again
+    - Tab to/ click on/ press enter to change password
+    - Receive feedback that confirms password has been changed
+    - Log out
+    - Enter in username
+    - Enter in new password
+    - Log in
+    - Redirect to correct dashboard
+  */
 
   /*
 ---------------------------------- Page Navigation Tests ----------------------------------
@@ -220,13 +249,22 @@ describe('App', () => {
     - Click guides button at bottom of page
     - Redirect to guide.edji.it
   */
-  // WORK IN PROGRESS
   /*
   it('user can view guides/FAQ', () => {
     let footer = element(by.id("footer")); // hey it finds this though... solution in the works.
-    let fterGuidesBtn = footer.element(by.id("footerGuidesLink")); // IT CAN'T FIND IT
+    let fterGuidesBtn = element(by.linkText('Guides'));
 
-    fterGuidesBtn.click();
+    // expect(element(by.linkText('Guides')).getTagName()).toBe('a');
+
+    // browser.actions().mouseMove(fterGuidesBtn).perform();
+    // browser.executeScript("window.scrollTo(0," + fterGuidesBtn.getLocation() + ")");
+    // browser.wait(EC.elementToBeClickable(fterGuidesBtn), 5000);
+    // browser.actions().mouseMove(fterGuidesBtn);
+
+    browser.actions().mouseMove(fterGuidesBtn).click().perform(); // This one passes but stays on the home page
+
+    //browser.waitForAngular();
+    //fterGuidesBtn.click();
 
     // Guides Page
     verifyURL("guide");
@@ -364,6 +402,10 @@ describe('App', () => {
     - Log out and arrive at home page
   */
 
+  /* Test: Add reading, then adjust with editing buttons. (Headers, bold, underlines, italixs, text size)
+  
+  */
+
   /*
 ----------------------------------- Student Action Tests --------------------------------------
   */
@@ -412,7 +454,6 @@ describe('App', () => {
     browser.wait(EC.visibilityOf(errorMsg), 3000, 'The error message should show up. It did not.');
   });
 
-  // WIP
   /* Test: Type in invalid project code at quick code enter
     - Path to Edji.it
     - Click on quick code and enter in invalid code, click enter or join button
@@ -439,7 +480,7 @@ describe('App', () => {
 
     // Dashboard
     verifyURL("dashboard");
-    enterProjectCode('78cc');
+    enterProjectCode('wcsr');
     let joinProjectBtn = element(by.buttonText("Join Project!"));
     browser.waitForAngular();
     joinProjectBtn.click();
@@ -454,8 +495,8 @@ describe('App', () => {
     - Click on a project under “your projects”
     - Redirect to correct project
   */
-  // NEEDS FIXING
   /*
+  // NEEDS FIXING
   it('can go to a project, go to dashboard, then go to another project', () => {
     //Initialize some variables
     let firstProject  = "Monday";
@@ -494,8 +535,7 @@ describe('App', () => {
   /*
   it('can go to a project and make a comment', () => {
     //Initialize some variables
-    let firstProject  = "Monday";
-    let secondProject = "Vocabulary";
+    let firstProject  = " Monday ";
 
     //Home Page
     logInWithStudentAccount();
@@ -507,14 +547,8 @@ describe('App', () => {
     // Project page
     verifyURL("project");
     expect(element(by.id("projectTitle")).isDisplayed()).toBe(true);
-    clickLogoButton();
 
-    // Dashboard
-    verifyURL("dashboard");
-    clickProject(firstProject);
-
-    // Project Page
-    verifyURL("project");
+    // ADD MORE HEREs
   });
   */
 
