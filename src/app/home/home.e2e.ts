@@ -495,15 +495,21 @@ describe('App', () => {
   // NEEDS FIXING
   it('can go to a project, go to dashboard, then go to another project', () => {
     //Initialize some variables
-    let firstProject  = "Monday";
-    let secondProject = "Vocabulary";
 
     //Home Page
     logInWithStudentAccount();
 
     // Dashboard
     verifyURL("dashboard");
-    clickProject(firstProject);
+
+    // Wait for items to load
+    browser.manage().timeouts().implicitlyWait(3000);
+
+    // Get dashboard list of Projects
+    let projectItems = element.all(by.css(".list-item"));
+    
+    // Open first project in dashboard
+    projectItems.first().click();
 
     // Project page
     verifyURL("project");
@@ -512,7 +518,9 @@ describe('App', () => {
 
     // Dashboard
     verifyURL("dashboard");
-    clickProject(firstProject);
+
+    // Open second Project on Dashboard
+    projectItems.get(1).click();
 
     // Project Page
     verifyURL("project");
@@ -529,14 +537,16 @@ describe('App', () => {
   // WORK IN PROGRESS
   it('can go to a project and make a comment', () => {
     //Initialize some variables
-    let firstProject  = " Monday ";
+    // let firstProject  = " Monday ";
+    let firstProject = element.all(by.css('.list-item')).first();
 
     //Home Page
     logInWithStudentAccount();
 
     // Dashboard
     verifyURL("dashboard");
-    clickProject(firstProject);
+    firstProject.click();
+    // clickProject(firstProject);
 
     // Project page
     verifyURL("project");
