@@ -249,22 +249,16 @@ describe('App', () => {
     - Redirect to guide.edji.it
   */
   it('user can view guides/FAQ', () => {
-    let footer = element(by.id("footer")); // hey it finds this though... solution in the works.
-    let fterGuidesBtn = element(by.linkText('Guides'));
+    // let footer = element(by.id("footer")); // hey it finds this though... solution in the works.
+    let fterGuidesBtn = element(by.id('footerGuidesLink'));
 
-    // expect(element(by.linkText('Guides')).getTagName()).toBe('a');
+    // Little trick to scroll to ID
+    browser.get('#footerGuidesLink');
+    
+    // Click to open the link
+    fterGuidesBtn.click();
 
-    // browser.actions().mouseMove(fterGuidesBtn).perform();
-    // browser.executeScript("window.scrollTo(0," + fterGuidesBtn.getLocation() + ")");
-    // browser.wait(EC.elementToBeClickable(fterGuidesBtn), 5000);
-    // browser.actions().mouseMove(fterGuidesBtn);
-
-    browser.actions().mouseMove(fterGuidesBtn).click().perform(); // This one passes but stays on the home page
-
-    //browser.waitForAngular();
-    //fterGuidesBtn.click();
-
-    // Guides Page
+    // Did we make it to the Guides page?
     verifyURL("guide");
   });
 
