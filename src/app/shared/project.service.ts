@@ -39,7 +39,7 @@ export class ProjectService {
    */
   public getAll() {
         return this.http
-            .get(this._auth.getUrl() + '/sessions', this._auth.getOptions())
+            .get(this._auth.getUrl() + '/projects', this._auth.getOptions())
             .toPromise()
             .then(this._auth.extractData);
   }
@@ -51,7 +51,7 @@ export class ProjectService {
    */
   public setCurrentProject(projectCode: string): Observable<any> {
       console.log( this._auth.getOptions() );
-    return this.http.get(this._auth.getUrl() + '/sessions/' + projectCode, this._auth.getOptions())
+    return this.http.get(this._auth.getUrl() + '/projects/' + projectCode, this._auth.getOptions())
         .map(
             (data) => {
                 this.project = data.json(); //can later have local setter to do validation/data manipulation before passing through observable
@@ -76,7 +76,7 @@ export class ProjectService {
   public getForReading(readingId: string): Observable<any> {
     let userId = this._auth.getUser()._id;
     
-    return this.http.get(this._auth.getUrl() + '/readings/' + readingId + '/sessions/' + userId , this._auth.getOptions() );
+    return this.http.get(this._auth.getUrl() + '/readings/' + readingId + '/projects/' + userId , this._auth.getOptions() );
   }
 
   /**
@@ -86,7 +86,7 @@ export class ProjectService {
    */
   public validateProject(projectCode: string): Observable<any> {
 
-      return this.http.get(this._auth.getUrl() + '/sessions/' + projectCode + "/validate", this._auth.getOptions())
+      return this.http.get(this._auth.getUrl() + '/projects/' + projectCode + "/validate", this._auth.getOptions())
         .map((data) => { return data.json(); });
         
   }
@@ -97,7 +97,7 @@ export class ProjectService {
     */
   public get(projectId: string) : Observable<any> {
         return this.http
-            .get(this._auth.getUrl() + '/sessions/' + projectId, this._auth.getOptions())
+            .get(this._auth.getUrl() + '/projects/' + projectId, this._auth.getOptions())
             .map(
                 data => {
                     // Update local Project object if returned
@@ -115,7 +115,7 @@ export class ProjectService {
      */
     public new(readingId, project) {
         return this.http
-            .post(this._auth.getUrl() + '/sessions/' + readingId, { 'session' : project }, this._auth.getOptions())
+            .post(this._auth.getUrl() + '/projects/' + readingId, { 'session' : project }, this._auth.getOptions())
             .toPromise()
             .then(this._auth.extractData);
     }
@@ -126,7 +126,7 @@ export class ProjectService {
      */
     public delete(projectId) {
         return this.http
-            .delete(this._auth.getUrl() + '/sessions/' + projectId, this._auth.getOptions())
+            .delete(this._auth.getUrl() + '/projects/' + projectId, this._auth.getOptions())
             .toPromise()
             .then(this._auth.extractData);
     }
@@ -141,7 +141,7 @@ export class ProjectService {
      * @param commentId (optional) If passed, will update comment with that ID
      */
     public saveComment(projectId: string, commentText: string, start: number, end: number, type: string, text ?: string, commentId ?: string) : Promise<any> {
-        let url = this._auth.getUrl() + '/sessions/' + projectId + '/comments';
+        let url = this._auth.getUrl() + '/projects/' + projectId + '/comments';
         let data = {
             'comment' : {
                 'data' : commentText,
@@ -182,7 +182,7 @@ export class ProjectService {
      */
     public deleteComment(comment): Promise<any> {
         let projectId = this.project._id;
-        let url = this._auth.getUrl() + '/sessions/' + projectId + '/comments/' + comment._id;
+        let url = this._auth.getUrl() + '/projects/' + projectId + '/comments/' + comment._id;
 
         return this.http
             .delete(url, this._auth.getOptions())
