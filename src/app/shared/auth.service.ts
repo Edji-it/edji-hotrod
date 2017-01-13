@@ -10,6 +10,7 @@ export class AuthService implements CanActivate, OnInit {
     private baseUrl = "http://localhost:3354";
     public protocol = window.location.protocol ? window.location.protocol : '';
     private locker: Locker;
+    private ENV: string = "dev";
 
     constructor(private http: Http, private _router: Router, _locker: Locker) {
         this.locker = _locker.useDriver(Locker.DRIVERS.LOCAL);
@@ -18,10 +19,17 @@ export class AuthService implements CanActivate, OnInit {
         if (window.location.host.indexOf('dev.edji.it') > -1) {
             //   baseUrl = "http://edji-dev.herokuapp.com";
             this.baseUrl = this.protocol + "//optimus-dev.edji.it";
+            this.ENV = "dev";
         } else if (window.location.host.indexOf('edji.it') > -1 || window.location.host.indexOf('dvscf5tf91syg.cloudfront.net') > -1) {
             //   this.baseUrl = "http://edji-prod.herokuapp.com";
             this.baseUrl = this.protocol + "//optimus.edji.it";
+            this.ENV = "prod";
         }
+    }
+
+    /** Provides environment variable to the rest of the app */
+    public getEnv() {
+        return this.ENV;
     }
 
     /** Give out options to any other http-using components or services */

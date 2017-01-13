@@ -75,7 +75,7 @@ export class RegisterComponent {
       .subscribe((data) => {
         
         if (data.user) {
-          if (data.user.isTeacher) { this.bumblebee.sendUserDetails(data.user); }
+          if (data.user.isTeacher && this._auth.getEnv() === "prod") { this.bumblebee.sendUserDetails(data.user); }
           this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'success' }});
           this.router.navigate(['dashboard']);
         } else {
