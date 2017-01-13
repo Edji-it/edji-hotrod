@@ -2,7 +2,7 @@ import { NgModule, ApplicationRef } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import { RouterModule, PreloadAllModules } from '@angular/router';
+import { RouterModule, PreloadAllModules, RouteReuseStrategy } from '@angular/router';
 import { removeNgStyles, createNewHosts, createInputTransfer } from '@angularclass/hmr';
 
 import { HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
@@ -22,12 +22,8 @@ import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 
 // Services
 import { AppState, InternalStateType } from './app.service';
-import { AuthService } from './shared/auth.service';
-import { ReadingService } from './shared/reading.service';
-import { ProjectService } from './shared/project.service';
-import { SocketService } from './shared/socket.service';
+import { AuthService, BumblebeeService, ReadingService, ProjectService, SocketService } from './shared';
 import { ReuseStrategy } from './route-reuse-strategy';
-import { RouteReuseStrategy } from '@angular/router';
 
 // Directives
 import { MediumEditorDirective } from 'angular2-medium-editor/medium-editor.directive.ts';
@@ -68,6 +64,7 @@ const APP_PROVIDERS = [
   ReadingService,
   ProjectService,
   SocketService,
+  BumblebeeService,
   { 
       provide: HAMMER_GESTURE_CONFIG, 
       useClass: MyHammerConfig 
