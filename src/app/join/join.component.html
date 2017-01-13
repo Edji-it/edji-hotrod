@@ -8,6 +8,7 @@
         <input id="guestNameInput" type="text" [formControl]="guestForm.controls['guestName']" tabindex="0"/>
         <div id="msgNoGuestName" class="alert alert-info" *ngIf="guestForm.controls['guestName'].hasError('required') && (guestForm.controls['guestName'].dirty || guestForm.submitted)">A name is required</div>
         <div id="msgBadName" *ngIf="errorObject.badName" [innerHtml]="errorObject.badName | emojione" class="alert alert-warn"></div>
+        <div id="msgTempError" *ngIf="errorObject.tempError" [innerHtml]="errorObject.tempError | emojione" class="alert alert-warn"></div>
         
         <div class="button__row">
           <button id="guestLoginButton" type="submit" class="button" [disabled]="!guestForm.valid" name="Sign Up">Guest it is!</button>

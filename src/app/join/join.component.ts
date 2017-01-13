@@ -20,11 +20,13 @@ export class JoinComponent implements OnInit, OnDestroy {
   private loginForm: FormGroup;
   private loginLoading: Boolean = false;
 
-  private errorObject = {
-    "invalidCode": "",
-    "badName": "",
-    "incorrect": ""
-  };
+  private errorObject: {
+    invalidCode?:string,
+    badName?:string,
+    incorrect?:string,
+    tempError?:string,
+    loginError?:string
+  } = {};
 
   constructor(
     private router: Router,
@@ -76,6 +78,7 @@ export class JoinComponent implements OnInit, OnDestroy {
           this.errorObject.badName = ":anguished: Would you mind choosing another name?";
         } else {
           // TRACK EXCEPTION
+          this.errorObject.tempError = "I'm sorry :disappointed: something didn't happen right. It's probably our fault.";
           console.error(error);
         }
       }
