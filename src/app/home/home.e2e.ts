@@ -2,24 +2,14 @@ import { browser, by, element, protractor } from 'protractor';
 
 describe('App', () => {
 
-  let ptor;
   let EC;
 
   // initialization
   EC = protractor.ExpectedConditions; // vital
-  
-  //
-  /*
-  beforeEach(function() {
-    ptor = protractor.getInstance();
-    ptor.ignoreSynchronization = true;
-  });
-  */
 
-
-  
   // Does this before each test.
   beforeEach(() => {
+
     // change hash depending on router LocationStrategy
     browser.get('/#/home');
   });
@@ -32,12 +22,18 @@ describe('App', () => {
 
   function logInWithStudentAccount () 
   {
+    let loginBtn;
+
     browser.wait(EC.urlContains('home'), 3000, 'logInWithStudentAccount(): could not find the URL for the home page. :(');
+
+    loginBtn = element(by.id("buttonJoinProject"));
 
     element(by.id('usernameInput')).sendKeys('student');
     element(by.id('passwordInput')).sendKeys('student'); // protractor.Key.ENTER
     
-    pressEnter();
+    // pressEnter(); // THIS DOES WORK
+    loginBtn.click();
+
     browser.wait( EC.urlContains('dashboard'), 10000, 'Dashboard should open within 3 seconds. It did not. Login potentially failed.');
   } // function logInWithStudentAccount
 
@@ -249,7 +245,6 @@ describe('App', () => {
     - Click guides button at bottom of page
     - Redirect to guide.edji.it
   */
-  /*
   it('user can view guides/FAQ', () => {
     let footer = element(by.id("footer")); // hey it finds this though... solution in the works.
     let fterGuidesBtn = element(by.linkText('Guides'));
@@ -269,7 +264,6 @@ describe('App', () => {
     // Guides Page
     verifyURL("guide");
   });
-  */
 
   /* Test: View Edji twitter page
     - Be on any Edji page except guide.edji.it
@@ -495,7 +489,6 @@ describe('App', () => {
     - Click on a project under “your projects”
     - Redirect to correct project
   */
-  /*
   // NEEDS FIXING
   it('can go to a project, go to dashboard, then go to another project', () => {
     //Initialize some variables
@@ -521,7 +514,6 @@ describe('App', () => {
     // Project Page
     verifyURL("project");
   });
-  */
 
   // WIP
   /* Test: Make a comment on a project
@@ -532,7 +524,6 @@ describe('App', () => {
     - Click done button
   */
   // WORK IN PROGRESS
-  /*
   it('can go to a project and make a comment', () => {
     //Initialize some variables
     let firstProject  = " Monday ";
@@ -550,7 +541,6 @@ describe('App', () => {
 
     // ADD MORE HEREs
   });
-  */
 
   // WIP
   /* Test: 
