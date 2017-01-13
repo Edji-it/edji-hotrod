@@ -32,20 +32,25 @@
                 <div *ngIf="addNew">
                     <!--<label>
                         New Session-->
-                    <input tabindex="1" id="newProjectLabel" type="text" placeholder="Project Label" [(ngModel)]="newProject.label" (keyup.enter)="addNewProject(newProject)" />
-                    <div *ngIf="projectErr.error" class="alert alert-danger">
-                        {{ projectErr.error }}</div>
-
-                    <!--<label class="custom-control custom-checkbox">
-                        <input type="checkbox" [(ngModel)]="newEmojiType" class="custom-control-input">
-                        <span class="custom-control-indicator"></span>
-                        <span class="custom-control-description">Emoji Commenting</span>
-                    </label> 
-                    <label class="custom-control custom-checkbox">
-                        <input type="checkbox" [(ngModel)]="newTextType" class="custom-control-input">
-                        <span class="custom-control-indicator"></span>
-                        <span class="custom-control-description">Text Commenting</span>
-                    </label>-->
+                    <div class="form-group">
+                        <input tabindex="1" id="newProjectLabel" type="text" placeholder="Project Label" [(ngModel)]="newProject.label" (keyup.enter)="addNewProject(newProject)" />
+                        <div *ngIf="projectErr.error" class="alert alert-danger">
+                            {{ projectErr.error }}</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="custom-control custom-checkbox">
+                            <input type="checkbox" [(ngModel)]="newEmojiType" class="custom-control-input">
+                            <span class="custom-control-indicator"></span>
+                            <span class="custom-control-description">Emoji Commenting</span>
+                        </label> 
+                    </div>
+                    <div class="form-group">
+                        <label class="custom-control custom-checkbox">
+                            <input type="checkbox" [(ngModel)]="newTextType" class="custom-control-input">
+                            <span class="custom-control-indicator"></span>
+                            <span class="custom-control-description">Text Commenting</span>
+                        </label>
+                    </div>
                     <!--</label>-->
                     <div class="button__row" style="padding-top:0px;" [ngClass]="{ loading : addingNew }">
                         <a ng-hide="addingNew" tabindex="1" class="btn btn-primary" name="Add Project" (click)="addNewProject(newProject)" style="margin: 5px 3px; width:100%;">Add Project</a>

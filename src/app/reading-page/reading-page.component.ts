@@ -24,6 +24,8 @@ export class ReadingPageComponent implements OnInit, OnDestroy {
     private projects: any[] = []; 
     private newProject: any =  {};
     private addNew: boolean = false;
+    private newEmojiType: boolean = true;
+    private newTextType: boolean = false;
 
     private subscriptions: Subscription[] = [];
     
@@ -83,6 +85,13 @@ export class ReadingPageComponent implements OnInit, OnDestroy {
         if (!newProject.label || newProject.label.length < 1) {
             this.projectErr.error = "A project label is required!";
             return;
+        }
+        newProject.types = [];
+        if (this.newEmojiType) {
+            newProject.types.push('emoji');
+        }
+        if (this.newTextType) {
+            newProject.types.push('text');
         }
         this.addingNew = true;
 
