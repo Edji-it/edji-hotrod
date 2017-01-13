@@ -26,7 +26,7 @@ describe('App', () => {
 
     browser.wait(EC.urlContains('home'), 3000, 'logInWithStudentAccount(): could not find the URL for the home page. :(');
 
-    loginBtn = element(by.id("buttonJoinProject"));
+    loginBtn = element(by.id("buttonLogin"));
 
     element(by.id('usernameInput')).sendKeys('student');
     element(by.id('passwordInput')).sendKeys('student'); // protractor.Key.ENTER
@@ -41,10 +41,13 @@ describe('App', () => {
   {
     browser.wait(EC.urlContains('home'), 3000, 'logInWithTeacherAccount(): could not find the URL for the home page. :(');
 
+    let loginBtn = element(by.id("buttonLogin"));
     element(by.id('usernameInput')).sendKeys('teach');
     element(by.id('passwordInput')).sendKeys('teach'); // protractor.Key.ENTER
     
-    pressEnter();
+    // pressEnter();
+    loginBtn.click();
+
     browser.wait( EC.urlContains('dashboard'), 10000, 'Dashboard should open within 3 seconds. It did not. Login potentially failed.');
   } // function logInWithStudentAccount
 
