@@ -26,7 +26,7 @@
       <label for="passwordInput">Password</label>
       <input type="password" id="passwordInput" [formControl]="loginForm.controls['password']" tabindex="1" />
       <div id="msgNoPassword" class="alert alert-info" *ngIf="loginForm.controls['password'].hasError('required') && (loginForm.controls['password'].dirty || loginForm.submitted)">A password is required</div>
-      <div id="msgErrorPassword" class="alert alert-info" *ngIf="errorObject.incorrect">{{errorObject.incorrect}}</div>
+      <div id="msgErrorPassword" class="alert alert-info" *ngIf="errorObject.loginError">{{errorObject.loginError}}</div>
       
       <div class="button__row" [class.loading]="loginLoading">
         <!--ngHide loginLoading-->

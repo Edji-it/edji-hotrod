@@ -71,6 +71,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   private joinSession(code: string): void {
     this.angulartics.eventTrack.next({ action: 'enterLightningCode', properties: { category: 'joinProject', label: 'attempt' }});
     this._project.validateProject(code)
+      .take(1)
       .subscribe(
         (data) => {
           this.angulartics.eventTrack.next({ action: 'enterLightningCode', properties: { category: 'joinProject', label: 'success' }});

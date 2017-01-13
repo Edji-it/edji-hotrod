@@ -23,7 +23,6 @@ export class JoinComponent implements OnInit, OnDestroy {
   private errorObject: {
     invalidCode?:string,
     badName?:string,
-    incorrect?:string,
     tempError?:string,
     loginError?:string
   } = {};
@@ -117,9 +116,9 @@ export class JoinComponent implements OnInit, OnDestroy {
           this.loginLoading = false;
           // TRACK EXCEPTION
           if (error === null) {
-            this.errorObject.incorrect = "Network error";
+            this.errorObject.loginError = "Network error";
           } else {
-            this.errorObject.incorrect = "Password is incorrect for that username";
+            this.errorObject.loginError = "Password is incorrect for that username";
           }
         }
       );
