@@ -42,7 +42,7 @@ export class ReadingService {
     return this.http
             .post(this._auth.getUrl() + '/readings', readingObj, this._auth.getOptions())
             .map(data => {
-              return data.json();
+              return data.json().reading;
             });
   }
 
