@@ -18,7 +18,7 @@ export const ROUTES: Routes = [
   { path: '',      redirectTo: '/dashboard', pathMatch: 'full', canActivate: [AuthService] },
   { path: 'home',  component: HomeComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'join/:code', component: JoinComponent },
+  { path: 'join/:projectId', component: JoinComponent },
   { path: 'account', component: AccountComponent, canActivate: [AuthService] },
   { path: 'dashboard',  component: DashboardComponent, canActivate: [AuthService] },
   { path: 'project/:id',  component: ProjectPageComponent, canActivate: [AuthService] },

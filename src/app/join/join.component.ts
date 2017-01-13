@@ -15,7 +15,7 @@ import { ProjectService } from './../shared/project.service';
 export class JoinComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
-  private projectCode: string;
+  private projectId: string;
   private guestForm: FormGroup;
   private loginForm: FormGroup;
   private loginLoading: Boolean = false;
@@ -47,7 +47,7 @@ export class JoinComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscriptions.push(
       this.route.params.subscribe((params) => {
-        this.projectCode = params['code'];
+        this.projectId = params['projectId'];
       })
     );
   }
@@ -68,17 +68,7 @@ export class JoinComponent implements OnInit, OnDestroy {
         this._auth.setToken(data.token);
         this._auth.setUser(data.user);
 
-        this._project.setCurrentProject(this.projectCode)
-          .subscribe(
-            (project) => {
-              this.router.navigate(['/project', project._id]);
-            },
-            (error) => {
-              // TRACK EXCEPTION
-              // this.errorObject.wrongCode = "Unfortunately, we did not find that project";
-              console.error(error);
-            }
-          );
+        this.router.navigate(['/project', this.projectId]);
 
       },
       (error) => {
@@ -114,19 +104,9 @@ export class JoinComponent implements OnInit, OnDestroy {
             data.user.username && this.angulartics.setUsername.next(data.user.username);
             data.user.email && this.angulartics.setUserProperties.next({ email: data.user.email});
             data.user.isTeacher && this.angulartics.setUserProperties.next({ isTeacher: true });
-            this.angulartics.eventTrack.next({ action: 'joinAsUser', properties: { category: 'joinProject', label: 'success' }});            
+            this.angulartics.eventTrack.next({ action: 'joinAsUser', properties: { category: 'joinProject', label: 'success' }});
 
-            this._project.setCurrentProject(this.projectCode)
-              .subscribe(
-                (project) => {
-                  this.router.navigate(['/project', project._id]);
-                },
-                (error) => {
-                  // TRACK EXCEPTION
-                  // this.errorObject.wrongCode = "Unfortunately, we did not find that project";
-                  console.error(error);
-                }
-              );
+            this.router.navigate(['/project', this.projectId]);
 
           }
         },
