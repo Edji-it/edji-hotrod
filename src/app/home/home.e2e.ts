@@ -9,7 +9,6 @@ describe('App', () => {
 
   // Does this before each test.
   beforeEach(() => {
-
     // change hash depending on router LocationStrategy
     browser.get('/#/home');
   });
@@ -31,9 +30,9 @@ describe('App', () => {
     element(by.id('usernameInput')).sendKeys('student');
     element(by.id('passwordInput')).sendKeys('student'); // protractor.Key.ENTER
     
-    // pressEnter(); // THIS DOES WORK
-    loginBtn.click();
-
+    pressEnter();       // THIS DOES WORK
+    //loginBtn.click(); // THIS DOES NOT
+ 
     browser.wait( EC.urlContains('dashboard'), 10000, 'Dashboard should open within 3 seconds. It did not. Login potentially failed.');
   } // function logInWithStudentAccount
 
@@ -89,6 +88,12 @@ describe('App', () => {
     guestCodeInput.sendKeys(guestName);
   } // function joinAsGuest(guestName)
 
+  function submitGuestName(guestName)
+  {
+    enterGuestName(guestName);
+    pressEnter();
+  } // function submitGuestName(guestName)
+
   function clickSidebarAccountButton()
   {
     let accountBtn = element(by.id('accountButton'));
@@ -133,7 +138,10 @@ describe('App', () => {
 
   function clickSubmitAddReadingButton()
   {
-    let submitButton = element(by.name("Add"));
+    let submitButton = element(by.id("addReadingButton"));
+    
+    browser.get("#addReadingButton"); // Scroll to that button.
+
     submitButton.click();
   }// function clickSubmitAddReadingButton()
 
@@ -161,13 +169,13 @@ describe('App', () => {
    */
 
   // Test: logging in with correct login information.
-  it('user can login with correct credentials', () => {
+  it('user should be able to login with correct credentials', () => {
     verifyURL("home");
     logInWithStudentAccount();
   });
 
   // Test: Not typing in a password on log in.
-  it('user cannot login without password', () => {
+  it('user should not be able to login without password', () => {
     let errorMsg = element(by.id('msgErrorPassword'));
 
     enterUsernameAndPassword("student", "");
@@ -177,7 +185,7 @@ describe('App', () => {
   }); 
 
   // Test for typing in a non-existent user.
-  it('user cannot login with an non-existent user', () => {
+  it('user should not be able to login with an non-existent user', () => {
     let errorMsg = element(by.id('msgErrorPassword'));
 
     enterUsernameAndPassword("HitlerHatesEDJI", "student");
@@ -210,7 +218,7 @@ describe('App', () => {
     - Click on your name in the bottom left corner
     - Redirect to Account info page
   */
-  it('user can go to Account information page', () => {
+  it('user should be able to go to Account information page', () => {
     // Home Page
     logInWithStudentAccount();
 
@@ -227,7 +235,7 @@ describe('App', () => {
     - Click Edji logo in top left corner of page
     - Redirect to dashboard
   */
-  it('user can log in, go to home, and go back to the dashboard', () => {
+  it('user should be able to log in, go to home, and go back to the dashboard', () => {
     // Home Page
     logInWithStudentAccount(); // Uses the student account.
 
@@ -248,7 +256,7 @@ describe('App', () => {
     - Click guides button at bottom of page
     - Redirect to guide.edji.it
   */
-  it('user can view guides/FAQ', () => {
+  it('user should be able to view guides/FAQ', () => {
     // let footer = element(by.id("footer")); // hey it finds this though... solution in the works.
     let fterGuidesBtn = element(by.id('footerGuidesLink'));
 
@@ -267,19 +275,19 @@ describe('App', () => {
     - Click guides button at bottom of page
     - Redirect to Edji twitter page
   */
-  // WORK IN PROGRESS
-  /*
-  it('user can go to the EDJI twitter page', () => {
+  it('user should be able to go to the EDJI twitter page', () => {
 
     // Initialize
-    let footer = element(by.id("footer")); // hey it finds this though... solution in the works.
-    let twitterLink = footer.element(by.id("footerTwitterLink")); // IT CAN'T FIND IT
+    // let footer = element(by.id("footer")); // hey it finds this though... solution in the works.
+    let twitterLink = element(by.id("footerTwitterLink")); // IT CAN'T FIND IT
+
+    // Little trick to scroll to the ID
+    browser.get("#footerTwitterLink");
 
     twitterLink.click();
 
     verifyURL("twitter");
   });
-  */
 
   /*
 ------------------------------------- Teacher Action Tests ------------------------------------
@@ -301,7 +309,7 @@ describe('App', () => {
     - Tab and hit enter/ click on “Add reading button”
     - Redirect to reading page of newly created reading
   */
-  it('teacher user can add a reading', () => {
+  it('teacher user should be able to add a reading', () => {
     //Initialize variables.
     let title           = "Protractor Likes Peaches (Test)";
     let sourceURL       = "http://www.omfgdogs.com";
@@ -319,6 +327,7 @@ describe('App', () => {
     typeInReadingTitle(title);
     typeInSourceURL(sourceURL);
     typeInReadingContent(readingContent);
+
     clickSubmitAddReadingButton();
     
     // Reading page
@@ -334,7 +343,7 @@ describe('App', () => {
     - Tab and hit enter/ click on “Add reading button”
     - Receive error message asking to give reading a title
   */
-   it('teacher user cannot add a reading without a title', () => {
+   it('teacher user should get error msg when adding a reading without a title', () => {
     // Initialize variables
     let sourceURL       = "http://www.omfgdogs.com";
     let readingContent  = "Cody is excessively fat";
@@ -365,7 +374,7 @@ describe('App', () => {
     - Tab and hit enter/ click on “Add reading button”
     - Receive error message asking to give reading some content
   */
-  it('teacher user cannot add a reading without a title', () => {
+  it('teacher user should get an error msg when adding a reading without content', () => {
     // Initialize variables
     let title     = "Protractor Implmented Test: Peaches";
     let sourceURL = "http://www.omfgdogs.com";
@@ -394,7 +403,11 @@ describe('App', () => {
   */
 
   /* Test: Add reading, then adjust with editing buttons. (Headers, bold, underlines, italixs, text size)
-  
+    - Log in with Teacher account
+    - Arrive at Dashboard
+    - Add reading content.
+    - Adjust editing buttons.
+    - Click Add Reading
   */
 
   /*
@@ -408,7 +421,7 @@ describe('App', () => {
     - Click on join as guest field and type in valid not vulgar name hit enter or click join project button
     - Redirect to project
   */
-  it('user can get to a project through quick code, enter as guest', () => {
+  it('user should be able to get to a project through quick code, enter as guest', () => {
     // Home Page
     enterProjectCode('fcx6');
     pressEnter();
@@ -431,14 +444,13 @@ describe('App', () => {
     - Receive “Name is invalid” error message
   */
    // YET TO BE VERIFIED AS A WORKING TEST BECAUSE SITE ISSUES
-  it('can get to project through quick code, be rejected because of vulgar name', () => {
+  it('should be able to get to project through quick code, be rejected because of vulgar name', () => {
     // Home Page
     submitProjectCode('fcx6');
 
     // Join / Login Page
     verifyURL("join");
-    enterGuestName("Fucking Fucks");
-    pressEnter();
+    submitGuestName("Fucking Fucks");
 
     // Lets find that error
     let errorMsg = element(by.id('msgBadName'));
@@ -451,7 +463,7 @@ describe('App', () => {
     - Receive error stating that code is invalid
   */
    // YET TO BE VERIFIED AS A WORKING TEST BECAUSE SITE ISSUES
-  it('user is given an error when giving an invalid project code at quick code enter', () => {
+  it('user shoudl be given an error when giving an invalid project code at quick code enter', () => {
     enterProjectCode("HitlerHatesEDJI");
     pressEnter();
 
@@ -465,7 +477,7 @@ describe('App', () => {
     - Click project code and enter valid project code, click join button or hit enter
     - Redirect to project
   */
-  it('enter a project code from the dashboard', () => {
+  it('should be able to enter a project code from the dashboard', () => {
     //Home Page
     logInWithStudentAccount();
 
@@ -487,7 +499,7 @@ describe('App', () => {
     - Redirect to correct project
   */
   // NEEDS FIXING
-  it('can go to a project, go to dashboard, then go to another project', () => {
+  it('should be able to go to a project, go to dashboard, then go to another project', () => {
     //Initialize some variables
 
     //Home Page
@@ -529,7 +541,7 @@ describe('App', () => {
     - Click done button
   */
   // WORK IN PROGRESS
-  it('can go to a project and make a comment', () => {
+  it('shoudl be able to go to a project and make a comment', () => {
     //Initialize some variables
     // let firstProject  = " Monday ";
     let firstProject = element.all(by.css('.list-item')).first();

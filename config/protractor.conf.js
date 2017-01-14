@@ -47,4 +47,4 @@ exports.config = {
    * `rootEl`
    */
    useAllAngular2AppRoots: true
-};
+  };
