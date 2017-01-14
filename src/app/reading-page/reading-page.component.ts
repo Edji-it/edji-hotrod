@@ -100,17 +100,19 @@ export class ReadingPageComponent implements OnInit, OnDestroy {
         // New Projects require a teacher id
         newProject['teacher_id'] = this._auth.getUser()._id;
 
-        this._projects.new(this.readingId, newProject)
+        this._projects.create(this.readingId, newProject)
             .then(data => {
-                this.angulartics.eventTrack.next({ action: 'createNewProject', properties: { category: 'contentManagement', label: 'success' }});
-                this.addingNew = false;
-                // Set isNew flag to show user the newly added project
-                data['isNew'] = true;
-                // Add to current project list
-                this.projects.unshift(data);
-                // Reset New Project 
-                this.addNew = false;
-                this.newProject = {};
+                if (data && data.project) {
+                    this.angulartics.eventTrack.next({ action: 'createNewProject', properties: { category: 'contentManagement', label: 'success' }});
+                    this.addingNew = false;
+                    // Set isNew flag to show user the newly added project
+                    data.project['isNew'] = true;
+                    // Add to current project list
+                    this.projects.unshift(data.project);
+                    // Reset New Project 
+                    this.addNew = false;
+                    this.newProject = {};
+                }
             }, error => {
                 // TRACK EXCEPTION
                 this.addingNew = false;
