@@ -120,13 +120,12 @@ export class HomeComponent implements OnInit, OnDestroy {
         },
         (error) =>  { 
           this.loginLoading = false;
-          console.log(error);
-          if (error.status === 500) {
-            // TRACK EXCEPTION
-            this.errorObject.serverError = "Network error";
-          } else {
-            // TRACK EXCEPTION
+          if (error.status === 400) {
+            this.errorObject.loginFailed = "We are missing the username or password!";
+          } else if (error.status === 404) {
             this.errorObject.loginFailed = "Password is incorrect for that username";
+          } else {
+            this.errorObject.serverError = "Oh no, something went wrong and we don't know what it is!";
           }
         }
       );
