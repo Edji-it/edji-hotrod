@@ -32,10 +32,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   private loginForm: FormGroup;
-  private errorObject = {
-    "invalidCode": "",
-    "incorrect": ""
-  };
+  private errorObject: {
+    "invalidCode"?: string,
+    "loginFailed"?: string,
+    "serverError"?: string
+  } = {};
 
   private showPassModal: boolean = false;
 
@@ -120,12 +121,12 @@ export class HomeComponent implements OnInit, OnDestroy {
         (error) =>  { 
           this.loginLoading = false;
           console.log(error);
-          if (error === null) {
+          if (error.status === 500) {
             // TRACK EXCEPTION
-            this.errorObject.incorrect = "Network error";
+            this.errorObject.serverError = "Network error";
           } else {
             // TRACK EXCEPTION
-            this.errorObject.incorrect = "Password is incorrect for that username";
+            this.errorObject.loginFailed = "Password is incorrect for that username";
           }
         }
       );
