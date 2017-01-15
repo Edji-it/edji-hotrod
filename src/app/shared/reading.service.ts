@@ -20,7 +20,8 @@ export class ReadingService {
         return this.http
             .get(this._auth.getUrl() + '/readings', this._auth.getOptions())
             .toPromise()
-            .then(this._auth.extractData);
+            .then(this._auth.extractData)
+            .then((data) => { return data.readings })
   }
 
   // Pull one reading by ID
