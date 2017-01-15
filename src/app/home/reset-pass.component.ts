@@ -36,7 +36,7 @@ export class ResetPassComponent {
           this.angulartics.eventTrack.next({ action: 'requestPasswordEmail', properties: { category: 'accountManagement', label: 'success' }});
           this.submissionSuccess = true;
         } else {
-          // TRACK EXCEPTION
+          this.angulartics.eventTrack.next({ action: 'requestPasswordEmail', properties: { category: 'accountManagement', label: 'failure' }});
           this.errorObject.unsuccessful = "We were unable to send the email";
         }
       });

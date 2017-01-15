@@ -83,7 +83,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           }
         },
         (error) => {
-          // TRACK EXCEPTION
+          this.angulartics.eventTrack.next({ action: 'enterLightningCode', properties: { category: 'joinProject', label: 'failure' }});
           this.errorObject.invalidCode = "We don't think that's a real code :confused:";
         }
       );
@@ -125,6 +125,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           } else if (error.status === 404) {
             this.errorObject.loginFailed = "Password is incorrect for that username";
           } else {
+            this.angulartics.eventTrack.next({ action: 'loginMain', properties: { category: 'login', label: 'failure' }});
             this.errorObject.serverError = "Oh no, something went wrong and we don't know what it is!";
           }
         }

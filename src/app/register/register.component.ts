@@ -98,7 +98,7 @@ export class RegisterComponent {
                 errorCaught = true;
               }
               if (!errorCaught) {
-                // TRACK EXCEPTION
+                this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'failure' }});
                 // form validation should have caught any other errors
               }
             }
@@ -106,7 +106,9 @@ export class RegisterComponent {
             break;
           case 409:
             this.errorObject.duplicateUser = "Contrats! :grin: Somebody else liked your username so much that they already took it"; break;
-          default: console.log(err);
+          default:
+            this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'failure' }});
+            console.log(err);
         }
       });
   }

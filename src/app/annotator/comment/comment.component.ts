@@ -81,6 +81,7 @@ export class CommentComponent implements OnInit {
       })
       .catch(error => {
         // TRACK EXCEPTION
+        this.angulartics.eventTrack.next({ action: 'updateComment', properties: { category: 'projectAction', label: 'failure' }});
         console.log(error);
       });
   }
@@ -97,6 +98,7 @@ export class CommentComponent implements OnInit {
       })
       .catch(error => {
         // TRACK EXCEPTION
+        this.angulartics.eventTrack.next({ action: 'deleteComment', properties: { category: 'projectAction', label: 'failure' }});
         console.log(error);
       });
   }

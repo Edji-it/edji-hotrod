@@ -43,6 +43,7 @@ export class ChangePassComponent {
       })
       .catch((res) => {
         // TRACK EXCEPTION
+        this.angulartics.eventTrack.next({ action: 'resetPasswordLoggedIn', properties: { category: 'accountManagement', label: 'failure' }});
         this.responseSuccess = false;
         console.log("no dice! 🎲");
       });

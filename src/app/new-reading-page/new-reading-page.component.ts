@@ -145,7 +145,7 @@ export class NewReadingPage implements OnInit {
                     }
                 },
                 error => {
-                    // TRACK EXCEPTION
+                    this.angulartics.eventTrack.next({ action: 'createNewReading', properties: { category: 'contentManagement', label: 'failure' }});
                     console.log(error)
                 }
             );

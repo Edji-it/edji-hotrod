@@ -29,7 +29,7 @@ export class DeleteProjectComponent implements OnInit {
         console.log(data);
         this.confirmModal.emit();
       }, error => {
-        // TRACK EXCEPTION
+        this.angulartics.eventTrack.next({ action: 'enterLightningCode', properties: { category: 'joinProject', label: 'failure' }});
         console.log(error);
         this.showError = true;
       });

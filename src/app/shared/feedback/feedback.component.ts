@@ -92,7 +92,7 @@ export class FeedbackComponent {
         }
       },
       (err) => {
-        // TRACK EXCEPTION
+        this.angulartics.eventTrack.next({ action: 'sendFeedback', properties: { category: 'accountManagement', label: 'failure' }});
         console.log(err);
         this.errorObject.serverError = "Something has gone wrong. Please try submitting your feedback again later!";
         this._auth.store("feedbackFormData", formValue);

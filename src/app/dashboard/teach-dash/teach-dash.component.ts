@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
+import { Angulartics2 } from 'angulartics2';
 
 import { AuthService, ReadingService, ProjectService } from '../../shared';
 
@@ -32,7 +33,8 @@ export class TeachDashComponent implements OnInit, OnDestroy {
     public router: Router,
     private route: ActivatedRoute,
     private _auth: AuthService, 
-    private _readings: ReadingService
+    private _readings: ReadingService,
+    private angulartics: Angulartics2
   ) {
   }
 
@@ -40,11 +42,11 @@ export class TeachDashComponent implements OnInit, OnDestroy {
 
     this._readings.getAll()
       .then(
-        (data)  => { 
-          console.log(data);
+        (data)  => {
           this.readings = data;
         },
         (error) => {
+          this.angulartics.eventTrack.next({ action: "getAllReadings", properties: { category: "serviceCalls", label: "failure" }});
           this.errorObject.readingError = "We had some trouble getting your readings, it might be our fault";
         });
 

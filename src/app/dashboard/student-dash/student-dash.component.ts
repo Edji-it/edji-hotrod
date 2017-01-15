@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
+import { Angulartics2 } from 'angulartics2';
 
 import { AuthService, ReadingService, ProjectService } from '../../shared';
 
@@ -32,6 +33,7 @@ export class StuDashComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private _auth: AuthService, 
     private _projects: ProjectService,
+    private angulartics: Angulartics2,
     fb: FormBuilder
   ) {
     this.codeForm = fb.group({
@@ -39,17 +41,16 @@ export class StuDashComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnInit() {    
+  ngOnInit() {
     this._projects.getAll()
       .then(
         (data)  => {
-          console.log(data);
           this.projects = data;
         },
         (error) => {
+          this.angulartics.eventTrack.next({ action: "getAllProjects", properties: { category: "serviceCalls", label: "failure" }});
           this.errorObject.projectError = "We had some trouble getting your projects, it might be our fault";
         });
-
   }
 
   ngOnDestroy() {

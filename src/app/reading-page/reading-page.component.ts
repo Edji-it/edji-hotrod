@@ -114,7 +114,7 @@ export class ReadingPageComponent implements OnInit, OnDestroy {
                     this.newProject = {};
                 }
             }, error => {
-                // TRACK EXCEPTION
+                this.angulartics.eventTrack.next({ action: 'createNewProject', properties: { category: 'contentManagement', label: 'failure' }});
                 this.addingNew = false;
                 console.log(error);
             });

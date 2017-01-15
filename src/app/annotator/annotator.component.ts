@@ -329,6 +329,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             })
             .catch(error => {
                 // TRACK EXCEPTION
+                this.angulartics.eventTrack.next({ action: type + 'CommentCreate', properties: { category: 'projectAction', label: 'failure' }});
                 // We should figure out how to handle this properly!
                 // Maybe show a warning icon?
                 console.warn(error);

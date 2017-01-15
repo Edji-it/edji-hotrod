@@ -51,6 +51,10 @@ export class JoinComponent implements OnInit, OnDestroy {
         this.projectId = params['projectId'];
       })
     );
+
+    if (this._auth.getUrl()) {
+      this.router.navigate(['/project', this.projectId]);
+    }
   }
 
   ngOnDestroy() {
@@ -70,13 +74,14 @@ export class JoinComponent implements OnInit, OnDestroy {
         this._auth.setUser(data.user);
 
         this.router.navigate(['/project', this.projectId]);
+        this.angulartics.eventTrack.next({ action: 'joinAsGuest', properties: { category: 'joinProject', label: 'success' }});
 
       },
       (error) => {
         if (error.status === 406) {
           this.errorObject.badName = ":anguished: Would you mind choosing another name?";
         } else {
-          // TRACK EXCEPTION
+          this.angulartics.eventTrack.next({ action: 'joinAsGuest', properties: { category: 'joinProject', label: 'failure' }});
           this.errorObject.tempError = "I'm sorry :disappointed: something didn't happen right. It's probably our fault.";
           console.error(error);
         }
