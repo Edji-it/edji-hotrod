@@ -12,15 +12,15 @@
 					<img *ngIf="!isLarge" id="logo" src="assets/images/logo-3.2-mark.svg" />
 				</a>
 			</div>
-			<div class="col-sm-6"></div>
+			<div class="col-sm-5"></div>
 
-			<div *ngIf="showLinks" class="col-sm-3">
+			<div *ngIf="showLinks" class="col-sm-4">
 				<div class="nav-bar__links">
-					<a class="nav-bar__link" id="loginLink" [routerLink]="['/login']">
-						<span>login</span>
-					</a>
-					<a class="nav-bar__link" id="registerLink" [routerLink]="['/register']">
+					<a class="nav-bar__link btn btn-secondary" id="registerLink" [routerLink]="['/register']">
 						<span>Register</span>
+					</a>
+					<a class="nav-bar__link btn btn-primary" id="loginLink" [routerLink]="['/login']">
+						<span>Login</span>
 					</a>
 				</div>
 			</div>

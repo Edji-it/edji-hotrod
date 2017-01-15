@@ -129,6 +129,10 @@ button, .button, .btn { //, [class*='btn']
 .btn.btn-primary {
   background: $btnPrimaryBg;
   color: $btnPrimaryColor;
+
+  &:hover, &:active, &:focus {
+    background: darken($btnPrimaryBg, 20%);
+  }
 }
 
 .btn-secondary { 
