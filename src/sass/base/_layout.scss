@@ -31,6 +31,17 @@ footer {
   padding-bottom: $base-pad;
 }
 
+.col__center-fix {
+  height: 100%; 
+  position: relative;
+}
+
+.col__center-content {
+  position: absolute;
+  top:50%;
+  transform: translateY(-50%);
+}
+
 .container--side-bar {
   padding-left: 15px + 100px;
 

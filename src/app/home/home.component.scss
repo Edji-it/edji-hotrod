@@ -1,1 +1,58 @@
 /*styles for home content only*/
+
+.promo-image__wrap {
+    position: relative;
+
+    & img {
+        // height: 100%;
+        min-height: 475px;
+        width: auto;
+    }
+}
+
+.join-header {
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+#projectCodeInput {
+    color: #000;
+    font-family: Courier New, Courier, monospace;
+    font-weight: bold;
+
+    &::-webkit-input-placeholder {
+        font-family: 'Open Sans', Arial;
+        font-weight: normal;
+    }
+    &:-moz-placeholder           {
+        font-family: 'Open Sans', Arial;
+        font-weight: normal;
+    }
+    &::-moz-placeholder          {
+        font-family: 'Open Sans', Arial;
+        font-weight: normal;
+    }
+    &:-ms-input-placeholder      {
+        font-family: 'Open Sans', Arial;
+        font-weight: normal;
+    }
+}
+
+.demo-copy {
+    font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+    color: #fff;
+    text-align:center;
+    padding: 20px 10px;
+    font-size: 12px;
+    cursor: pointer;
+
+    & pre {
+        display: inline;
+        margin: 0px;
+    }
+}
+
+.promo-row {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}

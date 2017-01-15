@@ -1,6 +1,7 @@
 
 $btnBg: #969696;
-$btnPrimaryBg: #969696;
+$btnPrimaryBg: #7fd9fc;
+$btnPrimaryColor: #fff;
 $btnSecondaryBg: #cdcdcd;
 
 button, .button, .btn { //, [class*='btn']
@@ -119,6 +120,11 @@ button, .button, .btn { //, [class*='btn']
     z-index: $zMid;
   }
 } 
+
+.btn.btn-primary {
+  background: $btnPrimaryBg;
+  color: $btnPrimaryColor;
+}
 
 .btn-secondary { 
   background: $btnSecondaryBg;

@@ -77,6 +77,10 @@ input:not([type]), textarea, select[multiple],
     border: $inputFocusBorder;
 
     transform: scale(1.02);
+
+    & + .input-group-btn {
+      transform: scale(1.02);
+    }
   }
 
   &:disabled {
@@ -108,6 +112,10 @@ input:not([type]), textarea, select[multiple],
       color: #ededed;
     }
   }
+}
+
+.input-group input:focus {
+  transform: scale(1.0);
 }
 
 textarea {
