@@ -1,11 +1,12 @@
 /*styles for home content only*/
+$topPromoMinHeight: 500px;
 
 .promo-image__wrap {
     position: relative;
 
     & img {
         // height: 100%;
-            height: 500px;
+            height: $topPromoMinHeight;
             max-width: none !important;
     }
 }
@@ -68,4 +69,13 @@
     }
     padding: 50px 0;
     text-align: center;
+}
+
+.join-panel {
+    // Medium devices (tablets, less than 992px)
+    @media (max-width: 767px) {
+        position: absolute;
+        background: rgba(0,0,0,0.5);
+        height: $topPromoMinHeight;
+    }
 }
