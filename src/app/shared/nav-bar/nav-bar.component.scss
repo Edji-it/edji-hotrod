@@ -1,6 +1,6 @@
 
 $navBarHeight: 100px;
-$navBarLargeHeight: 120px;
+$navBarLargeHeight: 95px;
 $sideBarWidth: 100px;
 
 .nav-bar {
@@ -18,6 +18,10 @@ $sideBarWidth: 100px;
 
 .nav__center-logo {
 	display: inline-block;
+}
+
+.logo-button {
+	height: 75px;
 }
 
 nav {

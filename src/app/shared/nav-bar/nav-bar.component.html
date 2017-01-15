@@ -1,12 +1,12 @@
 <nav [ngClass]="{ 'large' : isLarge }">
 	<div class="nav-bar">
 		<div class="row">
-			<div class="col-sm-4">
+			<!--<div class="col-sm-4">
 				&nbsp;
-			</div>
+			</div>-->
 
-			<div class="col-sm-4">
-				<a class="nav__center-logo logo-button" href="#/home">
+			<div class="col-sm-3">
+				<a class="nav__center-logo logo-button" [routerLink]="['/home']">
 					<!--<img id="logo" src="assets/images/logo.svg" />-->
 					<img *ngIf="isLarge" id="logo" src="assets/images/logo-3.2-full.svg" />
 					<img *ngIf="!isLarge" id="logo" src="assets/images/logo-3.2-mark.svg" />
