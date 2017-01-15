@@ -34,12 +34,14 @@ footer {
 .col__center-fix {
   height: 100%; 
   position: relative;
+  min-height: 300px;
 }
 
 .col__center-content {
   position: absolute;
   top:50%;
   transform: translateY(-50%);
+  width: 100%;
 }
 
 .container--side-bar {

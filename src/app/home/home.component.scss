@@ -5,8 +5,8 @@
 
     & img {
         // height: 100%;
-        min-height: 475px;
-        width: auto;
+            height: 500px;
+            max-width: none !important;
     }
 }
 
