@@ -34,7 +34,10 @@ nav.large, .large .nav-bar {
 }
 
 .nav-bar__links {
-	padding: 25px;
+	// padding: 25px;
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
 }
 
 a.nav-bar__link {
