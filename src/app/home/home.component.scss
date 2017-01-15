@@ -56,3 +56,11 @@
     padding-top: 20px;
     padding-bottom: 20px;
 }
+
+.call-to-action {
+    & h1 {
+        color: #fff;
+    }
+    padding: 50px 0;
+    text-align: center;
+}

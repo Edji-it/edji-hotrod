@@ -33,8 +33,12 @@
     <!--Row below promo-->
     <div class="row promo-row">
       <div class="col-sm-6">
-          <h1>Read Together</h1>
-          <h2>Add highlights with text or emoji</h2>
+        <div class="col__center-fix">
+          <div class="col__center-content">
+            <h1>Highlight to React</h1>
+            <p>With Edji, a Reading instantly becomes a platform for expression. By highlighting text, different types of comments are at your fingertips.</p>
+          </div>
+        </div>
       </div>
       <div class="col-sm-6">
           <img class="promo-gif" loop="infinite" src="assets/images/promo-highlight.gif" />
@@ -45,9 +49,24 @@
           <img class="promo-gif" loop="infinite" src="assets/images/promo-heatmap.png" />
        </div>
        <div class="col-sm-6">
-          <h2>Then discuss with the Heatmap!</h2>
+         <div class="col__center-fix">
+          <div class="col__center-content">
+            <h1>Pinpoint with Heatmap</h1>
+            <p>
+              In the Teacher View, all comments and highlights overlap so you have an immediate understanindg of where your students are in the reading.
+            </p>
+          </div>
+        </div>
        </div>
+    </div>
+    <div class="row green">
+      <div class="col-sm-12">
+        <div class="call-to-action">
+          <h1>Start as a Teacher today!</h1>
+          <button class="btn btn-primary btn-lg" [routerLink]="['/register']">Join</button>
+        </div>
       </div>
+    </div>
   </div><!--container-fluid-->
 </div>
 
