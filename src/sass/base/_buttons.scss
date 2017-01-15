@@ -25,6 +25,11 @@ button, .button, .btn { //, [class*='btn']
   white-space: nowrap;
   -webkit-appearance: inherit;
 
+  &.btn-lg {
+    line-height: 1.25em;
+    font-size: 1.25*$base-font-size;
+  }
+
   &:hover,
   &:focus {
     background-color: shade($btnBg, 20%);
@@ -124,6 +129,10 @@ button, .button, .btn { //, [class*='btn']
 .btn.btn-primary {
   background: $btnPrimaryBg;
   color: $btnPrimaryColor;
+
+  &:hover, &:active, &:focus {
+    background: darken($btnPrimaryBg, 20%);
+  }
 }
 
 .btn-secondary { 

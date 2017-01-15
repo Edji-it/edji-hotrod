@@ -1,12 +1,13 @@
 /*styles for home content only*/
+$topPromoMinHeight: 500px;
 
 .promo-image__wrap {
     position: relative;
 
     & img {
         // height: 100%;
-        min-height: 475px;
-        width: auto;
+            height: $topPromoMinHeight;
+            max-width: none !important;
     }
 }
 
@@ -53,6 +54,28 @@
 }
 
 .promo-row {
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding-top: 40px;
+    padding-bottom: 40px;
+}
+
+.promo-text {
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+.call-to-action {
+    & h1 {
+        color: #fff;
+    }
+    padding: 50px 0;
+    text-align: center;
+}
+
+.join-panel {
+    // Medium devices (tablets, less than 992px)
+    @media (max-width: 767px) {
+        position: absolute;
+        background: rgba(0,0,0,0.5);
+        height: $topPromoMinHeight;
+    }
 }

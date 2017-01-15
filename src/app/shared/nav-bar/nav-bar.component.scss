@@ -38,19 +38,9 @@ nav.large, .large .nav-bar {
 	position: absolute;
 	top: 50%;
 	transform: translateY(-50%);
+	white-space: nowrap;
 }
 
 a.nav-bar__link {
-	color: #000;
-	background: rgb(240,240,240);
-	cursor: pointer;
 	display: inline-block;
-	border-radius: 5px;
-	padding: 0 10px;
-
-	&:hover, &:active, &:focus {
-		// color: $purple;
-		text-decoration: none;
-		background: rgb(220,220,220);
-	}
 }
