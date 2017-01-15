@@ -9,6 +9,7 @@ import { JoinComponent } from './join/join.component';
 import { AccountComponent } from './account';
 import { DashboardComponent } from './dashboard';
 import { NoContentComponent } from './no-content';
+import { LoginComponent } from './login';
 
 import { DataResolver } from './app.resolver';
 import { AuthService } from './shared';
@@ -18,6 +19,7 @@ export const ROUTES: Routes = [
   { path: '',      redirectTo: '/dashboard', pathMatch: 'full', canActivate: [AuthService] },
   { path: 'home',  component: HomeComponent },
   { path: 'register', component: RegisterComponent },
+  { path: 'login', component: LoginComponent }
   { path: 'join/:projectId', component: JoinComponent },
   { path: 'account', component: AccountComponent, canActivate: [AuthService] },
   { path: 'dashboard',  component: DashboardComponent, canActivate: [AuthService] },

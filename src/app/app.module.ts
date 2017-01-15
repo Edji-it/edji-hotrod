@@ -48,6 +48,7 @@ import { DashboardComponent, StuDashComponent, TeachDashComponent } from './dash
 import { NoContentComponent } from './no-content';
 import { AccountComponent, ChangePassComponent } from './account';
 import { FeedbackComponent } from './shared/feedback/feedback.component';
+import { LoginComponent } from './login';
 
 // Configure Hammer.js
 export class MyHammerConfig extends HammerGestureConfig  {
@@ -108,6 +109,7 @@ type StoreType = {
     DashboardComponent,
     StuDashComponent,
     TeachDashComponent,
+    LoginComponent,
     HomeComponent,
     JoinComponent,
     FeedbackComponent,

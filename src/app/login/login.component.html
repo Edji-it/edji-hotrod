@@ -1,0 +1,39 @@
+<div class="gray">
+  <nav-bar [isLarge]="true"></nav-bar>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-3"></div>
+      <div class="col-sm-6 col-pad">
+        <!--Lightning Code Row-->
+          <form [formGroup]="loginForm" (ngSubmit)="login(loginForm.value)">
+            <h2 class="center">Login to your Dashboard</h2>
+            <label for="usernameInput">Username</label>
+            <input type="text" id="usernameInput" [formControl]="loginForm.controls['username']" tabindex="0" />
+            <div class="alert alert-danger" *ngIf="loginForm.controls['username'].hasError('required') && (loginForm.controls['username'].dirty || loginForm.submitted)">A username is required</div>
+            
+            <label for="passwordInput">Password</label>
+            <input type="password" id="passwordInput" [formControl]="loginForm.controls['password']" tabindex="0" />
+            <div id="msgNoPassword" class="alert alert-danger" *ngIf="loginForm.controls['password'].hasError('required') && (loginForm.controls['password'].dirty || loginForm.submitted)">A password is required</div>
+            <div id="msgErrorPassword" class="alert alert-danger" *ngIf="errorObject.loginFailed">{{errorObject.loginFailed}}</div>
+            <div id="msgServerError" class="alert alert-danger" *ngIf="errorObject.serverError">{{errorObject.serverError}}</div>
+            
+            <div class="button__row" [class.loading]="loginLoading">
+              <button id="buttonLogin" type="submit" class="button" name="Login" tabindex="0">Login</button>
+            </div>
+            
+          </form>
+          <div style="text-align:center;">
+            <a id="linkForgotPassword" class="link" (click)="showPassModal = !showPassModal">Forgotten password?</a>
+          </div>
+        <br />
+        <hr>
+        <br />
+        <div class="button__row">
+          <button id="buttonGoRegister" class="btn btn-secondary" name="Register" [routerLink]="['/register']" tabindex="0">Register</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<edji-reset-pass *ngIf="showPassModal"  (closeModal)="showPassModal = !showPassModal"></edji-reset-pass>
