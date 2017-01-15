@@ -52,7 +52,7 @@ export class JoinComponent implements OnInit, OnDestroy {
       })
     );
 
-    if (this._auth.getUrl()) {
+    if (this._auth.getUser()) {
       this.router.navigate(['/project', this.projectId]);
     }
   }
