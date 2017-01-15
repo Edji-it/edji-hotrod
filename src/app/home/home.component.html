@@ -1,4 +1,4 @@
-<div class="gray">
+<div class="">
   <nav-bar [isLarge]="true" [showLinks]="true"></nav-bar>
   <div class="container-fluid">
     <div class="row navy">
@@ -11,7 +11,7 @@
         <!--Lightning Code Row-->
         <div class="col__center-fix">
           <div class="col__center-content">
-            <h1 class="center on-dark join-header">Join a Project now!</h1>
+            <h1 class="center on-dark join-header">Join a Project</h1>
             <div class="input-group input-group-lg">
               <input id="projectCodeInput" type="text" class="form-control" style="text-align: center;" maxlength="4" (keyup.enter)="joinSession(sessionCode)" [(ngModel)]="sessionCode"  placeholder="⚡️ Code" aria-describedby="add-project-code">
               <span class="input-group-btn">
@@ -34,36 +34,36 @@
     <div class="row promo-row">
       <div class="col-sm-6">
         <div class="col__center-fix">
-          <div class="col__center-content">
+          <div class="col__center-content promo-text">
             <h1>Highlight to React</h1>
             <p>With Edji, a Reading instantly becomes a platform for expression. By highlighting text, different types of comments are at your fingertips.</p>
           </div>
         </div>
       </div>
-      <div class="col-sm-6">
-          <img class="promo-gif" loop="infinite" src="assets/images/promo-highlight.gif" />
+      <div class="col-sm-6 center">
+          <img class="promo-gif" loop="infinite" src="assets/images/promo-highlight-b.gif" />
       </div>
     </div>
     <div class="row promo-row">
-       <div class="col-sm-6">
+       <div class="col-sm-6 center">
           <img class="promo-gif" loop="infinite" src="assets/images/promo-heatmap.png" />
        </div>
        <div class="col-sm-6">
          <div class="col__center-fix">
-          <div class="col__center-content">
-            <h1>Pinpoint with Heatmap</h1>
+          <div class="col__center-content promo-text">
+            <h1>Pinpoint with the Heatmap</h1>
             <p>
-              In the Teacher View, all comments and highlights overlap so you have an immediate understanindg of where your students are in the reading.
+              In the Teacher View, all comments and highlights overlap so you have an immediate understanding of where your students are in the reading.
             </p>
           </div>
         </div>
        </div>
     </div>
-    <div class="row green">
+    <div class="row navy">
       <div class="col-sm-12">
         <div class="call-to-action">
-          <h1>Start as a Teacher today!</h1>
-          <button class="btn btn-primary btn-lg" [routerLink]="['/register']">Join</button>
+          <h1>Share instantly. Read together. Learn loud.</h1>
+          <button class="btn btn-primary btn-lg" [routerLink]="['/register']">Get Started</button>
         </div>
       </div>
     </div>
