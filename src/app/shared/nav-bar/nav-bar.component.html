@@ -12,9 +12,17 @@
 					<img *ngIf="!isLarge" id="logo" src="assets/images/logo-3.2-mark.svg" />
 				</a>
 			</div>
+			<div class="col-sm-6"></div>
 
-			<div class="col-sm-4">
-				&nbsp;
+			<div *ngIf="showLinks" class="col-sm-3">
+				<div class="nav-bar__links">
+					<a class="nav-bar__link" id="loginLink" [routerLink]="['/login']">
+						<span>login</span>
+					</a>
+					<a class="nav-bar__link" id="registerLink" [routerLink]="['/register']">
+						<span>Register</span>
+					</a>
+				</div>
 			</div>
 		</div><!--.row-->
 	</div>

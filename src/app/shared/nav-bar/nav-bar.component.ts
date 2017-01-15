@@ -8,6 +8,8 @@ import { Component, Input } from '@angular/core';
 export class NavBarComponent {
   @Input()
   public isLarge: boolean;
+  @Input()
+  private showLinks: boolean;
 
   ngOnInit() {
     

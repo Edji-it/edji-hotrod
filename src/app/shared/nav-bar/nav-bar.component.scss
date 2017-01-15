@@ -32,3 +32,22 @@ nav {
 nav.large, .large .nav-bar {
 	height: $navBarLargeHeight;
 }
+
+.nav-bar__links {
+	padding: 25px;
+}
+
+a.nav-bar__link {
+	color: #000;
+	background: rgb(240,240,240);
+	cursor: pointer;
+	display: inline-block;
+	border-radius: 5px;
+	padding: 0 10px;
+
+	&:hover, &:active, &:focus {
+		// color: $purple;
+		text-decoration: none;
+		background: rgb(220,220,220);
+	}
+}
