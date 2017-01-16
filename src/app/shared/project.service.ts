@@ -114,9 +114,10 @@ export class ProjectService {
      * @param takes a Project object with the new label
      */
     public create(readingId: string, project: any) {
+        project.reading_id = readingId;
 
         return this.http
-            .post(this._auth.getUrl() + '/projects/' + readingId, { 'project' : project }, this._auth.getOptions())
+            .post(this._auth.getUrl() + '/projects/', { 'project' : project }, this._auth.getOptions())
             .toPromise()
             .then(this._auth.extractData);
     }
