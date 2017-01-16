@@ -20,10 +20,11 @@ describe('App', () => {
   */
 
   function logInWithStudentAccount () 
-  {
+  { 
+    browser.get('/#/login');
     let loginBtn;
 
-    browser.wait(EC.urlContains('home'), 3000, 'logInWithStudentAccount(): could not find the URL for the home page. :(');
+    browser.wait(EC.urlContains('login'), 3000, 'logInWithStudentAccount(): could not find the URL for the home page. :(');
 
     loginBtn = element(by.id("buttonLogin"));
 
@@ -37,8 +38,9 @@ describe('App', () => {
   } // function logInWithStudentAccount
 
   function logInWithTeacherAccount () 
-  {
-    browser.wait(EC.urlContains('home'), 3000, 'logInWithTeacherAccount(): could not find the URL for the home page. :(');
+  { 
+    browser.get('/#/login');
+    browser.wait(EC.urlContains('login'), 3000, 'logInWithTeacherAccount(): could not find the URL for the home page. :(');
 
     let loginBtn = element(by.id("buttonLogin"));
     element(by.id('usernameInput')).sendKeys('teach');
@@ -58,7 +60,8 @@ describe('App', () => {
 
   function enterUsernameAndPassword(username, password)
   {
-    browser.wait(EC.urlContains('home'), 10000, 'enterUsernameAndPassword(): could not find the URL for the home page. :(');
+    browser.get('/#/login');
+    browser.wait(EC.urlContains('login'), 10000, 'enterUsernameAndPassword(): could not find the URL for the home page. :(');
 
     element(by.id('usernameInput')).sendKeys(username);
     element(by.id('passwordInput')).sendKeys(password);
@@ -114,7 +117,8 @@ describe('App', () => {
 
   function clickAddReadingButton ()
   {
-    let addReadingBtn = element(by.id("addReadingButton"));
+    browser.get('#addReadingButton');
+    let addReadingBtn = element(by.id('addReadingButton'));
     addReadingBtn.click();
   } // function clickAddReadingButton ()
 
@@ -138,9 +142,8 @@ describe('App', () => {
 
   function clickSubmitAddReadingButton()
   {
-    let submitButton = element(by.id("addReadingButton"));
-    
     browser.get("#addReadingButton"); // Scroll to that button.
+    let submitButton = element(by.id("addReadingButton"));
 
     submitButton.click();
   }// function clickSubmitAddReadingButton()
@@ -313,7 +316,7 @@ describe('App', () => {
     //Initialize variables.
     let title           = "Protractor Likes Peaches (Test)";
     let sourceURL       = "http://www.omfgdogs.com";
-    let readingContent  = "Cody is excessively fat";
+    let readingContent  = "Cody is excessively fat Et cumque eos atque. Ea enim laborum dolorem ea ut. Non eaque amet necessitatibus quam est eligendi. Commodi quia distinctio porro laudantium sed. Et qui fuga quia cupiditate autem. Sed magnam occaecati perspiciatis neque quae. Itaque rem optio dolores autem ipsa aliquam et dignissimos. Veniam temporibus officia quis quas cupiditate ipsa. Et assumenda quia ipsum tempore et quia earum. Dolores rem id maxime porro eius et illum qui. Nihil saepe repellendus quae quia. Tempore voluptatem explicabo mollitia. Et voluptatem in animi ratione expedita temporibus.";
 
     // Home Page
     logInWithTeacherAccount();
@@ -423,7 +426,7 @@ describe('App', () => {
   */
   it('user should be able to get to a project through quick code, enter as guest', () => {
     // Home Page
-    enterProjectCode('fcx6');
+    enterProjectCode('m7y5');
     pressEnter();
 
     // Join/Login Page
@@ -446,7 +449,7 @@ describe('App', () => {
    // YET TO BE VERIFIED AS A WORKING TEST BECAUSE SITE ISSUES
   it('should be able to get to project through quick code, be rejected because of vulgar name', () => {
     // Home Page
-    submitProjectCode('fcx6');
+    submitProjectCode('m7y5');
 
     // Join / Login Page
     verifyURL("join");

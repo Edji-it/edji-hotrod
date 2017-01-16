@@ -28,7 +28,6 @@ export class SideBarComponent implements OnInit, OnDestroy {
       if (this.hasCommentCount) {
         this.subscriptions.push(
           this._project.currentCommentStats.subscribe(data => {
-            console.log(data);
             // this.commentStats.users = [];
             this.commentStats = data;
           }, error => {
