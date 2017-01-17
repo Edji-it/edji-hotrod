@@ -28,4 +28,9 @@ export class TextCommentComponent implements OnInit, AfterViewInit {
     updateComment(commentData: string) {
         this.blur.emit(commentData);
     }
+
+    blurField(event) {
+        event.preventDefault();
+        this.element.nativeElement.querySelector('textarea').blur();
+    }
 }

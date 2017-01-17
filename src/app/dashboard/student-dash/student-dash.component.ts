@@ -62,8 +62,11 @@ export class StuDashComponent implements OnInit, OnDestroy {
 
     this._projects.setCurrentProject(formValue.projectCode)
       .subscribe(
-        (project) => {
-          this.router.navigate(['/project', project._id]);
+        (data) => {
+          console.log(data);
+          if (data.project) {
+            this.router.navigate(['/project', data.project._id]);
+          }
         },
         (error) => {
           this.errorObject.wrongCode = "Unfortunately, we did not find that project";

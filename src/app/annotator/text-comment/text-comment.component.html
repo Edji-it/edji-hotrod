@@ -1,4 +1,4 @@
 <div [ngClass]="{'active' : comment.active}" class='text-comment input-wrap'>
-    <textarea autosize type='text' class="text-comment-input" [(ngModel)]="comment.data" (blur)='updateComment(comment.data)' maxlength="140"></textarea>
+    <textarea autosize type='text' class="text-comment-input" [(ngModel)]="comment.data" (blur)='updateComment(comment.data)' (keydown.enter)='blurField($event)' (keyup.esc)='blurField($event)' maxlength="140"></textarea>
     <div class="text-comment__countdown" [class.danger]="comment.data.length > 120">{{ -1*(140 - comment.data.length) }}</div>
 </div>
