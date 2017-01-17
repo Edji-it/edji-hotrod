@@ -6,6 +6,7 @@
         <emoji-comment (tap)="toggleActive()" *ngIf="comment.type == 'emoji' || !comment.type" #commentInput [comment]="comment"></emoji-comment>
         <text-comment (tap)="activate()" *ngIf="comment.type == 'text'" [comment]="comment" #commentInput (blur)="deactivate()"></text-comment>
         <button (tap)="deleteComment(comment)" class='inline-delete'>+</button>
+        <div *ngIf="comment.active" class="comment__save" (tap)="deactivate()" [innerHtml]="':white_check_mark:' | emojione"></div>
     </div>
     <i class="comment__saved" [innerHtml]='":ok_hand:" | emojione'></i>
 </div>
