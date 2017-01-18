@@ -54,7 +54,7 @@ export class ProjectService {
     return this.http.get(this._auth.getUrl() + '/projects/' + projectCode, this._auth.getOptions())
         .map(
             (data) => {
-                this.project = data.json(); //can later have local setter to do validation/data manipulation before passing through observable
+                this.project = data.json().project; //can later have local setter to do validation/data manipulation before passing through observable
                 this.currentProjectSource.next(this.project);
                 // Clear stats object
                 this.commentStatsSource.next({});

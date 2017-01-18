@@ -40,9 +40,9 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
         this._projects.setCurrentProject(idParam)
             .take(1)
             .subscribe(
-            (data) => {
-                if (data.project) {
-                    this.project = data.project;
+            (project) => {
+                if (project) {
+                    this.project =project;
                     this.commentCount = this.project.comments.length;
                 }
             },
