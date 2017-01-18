@@ -37,6 +37,11 @@ export class RegisterComponent {
     private bumblebee: BumblebeeService,
     fb: FormBuilder
   ) {
+    // this makes the window always render scrolled to the top
+    this.router.events.subscribe(() => {
+      window.scrollTo(0, 0);
+    });
+
     this.registerForm = fb.group({
       username: [null, Validators.required],
       fullname: [null, Validators.required],
