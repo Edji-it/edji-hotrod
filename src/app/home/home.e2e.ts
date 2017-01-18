@@ -117,9 +117,11 @@ describe('App', () => {
 
   function clickAddReadingButton ()
   {
-    browser.get('#addReadingButton');
+    //browser.get('#addReadingButton'); // Does not work
     let addReadingBtn = element(by.id('addReadingButton'));
-    addReadingBtn.click();
+
+    browser.actions().mouseMove(addReadingBtn).mouseDown().mouseUp().perform();
+    //addReadingBtn.click();
   } // function clickAddReadingButton ()
 
   function typeInReadingTitle(title)
@@ -139,14 +141,6 @@ describe('App', () => {
     let readingContentInput = element(by.id("newReading"));
     readingContentInput.sendKeys(content);
   } // function typeInReadingContent(content)
-
-  function clickSubmitAddReadingButton()
-  {
-    browser.get("#addReadingButton"); // Scroll to that button.
-    let submitButton = element(by.id("addReadingButton"));
-
-    submitButton.click();
-  }// function clickSubmitAddReadingButton()
 
   function clickProject(targetTitle)
   {
@@ -332,7 +326,7 @@ describe('App', () => {
     typeInSourceURL(sourceURL);
     typeInReadingContent(readingContent);
 
-    clickSubmitAddReadingButton();
+    clickAddReadingButton();
     
     // Reading page
     verifyURL("/reading/");
@@ -364,7 +358,7 @@ describe('App', () => {
     verifyURL("/new-reading");
     typeInSourceURL(sourceURL);
     typeInReadingContent(readingContent);
-    clickSubmitAddReadingButton();
+    clickAddReadingButton();
 
     //Wait for that error message, kids
     browser.wait(EC.visibilityOf(element(by.className("alert alert-info"))), 3000, 'The error message never showed up.'); 
@@ -395,7 +389,7 @@ describe('App', () => {
     verifyURL("/new-reading");
     typeInReadingTitle(title);
     typeInSourceURL(sourceURL);
-    clickSubmitAddReadingButton();
+    clickAddReadingButton();
 
     //Wait for that error message, kids
     browser.wait(EC.visibilityOf(element(by.className("alert alert-info"))), 3000, 'The error message never showed up.'); 
