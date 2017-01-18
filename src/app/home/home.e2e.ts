@@ -312,11 +312,12 @@ describe('App', () => {
     - Tab and hit enter/ click on “Add reading button”
     - Redirect to reading page of newly created reading
   */
+  // TEST DOES NOT WORK
   it('teacher user should be able to add a reading', () => {
     //Initialize variables.
     let title           = "Protractor Likes Peaches (Test)";
     let sourceURL       = "http://www.omfgdogs.com";
-    let readingContent  = "Cody is excessively fat Et cumque eos atque. Ea enim laborum dolorem ea ut. Non eaque amet necessitatibus quam est eligendi. Commodi quia distinctio porro laudantium sed. Et qui fuga quia cupiditate autem. Sed magnam occaecati perspiciatis neque quae. Itaque rem optio dolores autem ipsa aliquam et dignissimos. Veniam temporibus officia quis quas cupiditate ipsa. Et assumenda quia ipsum tempore et quia earum. Dolores rem id maxime porro eius et illum qui. Nihil saepe repellendus quae quia. Tempore voluptatem explicabo mollitia. Et voluptatem in animi ratione expedita temporibus.";
+    let readingContent  = "Cody is excessively fat <<<<<< Et cumque eos atque. Ea enim laborum dolorem ea ut. Non eaque amet necessitatibus quam est eligendi. Commodi quia distinctio porro laudantium sed. Et qui fuga quia cupiditate autem. Sed magnam occaecati perspiciatis neque quae. Itaque rem optio dolores autem ipsa aliquam et dignissimos. Veniam temporibus officia quis quas cupiditate ipsa. Et assumenda quia ipsum tempore et quia earum. Dolores rem id maxime porro eius et illum qui. Nihil saepe repellendus quae quia. Tempore voluptatem explicabo mollitia. Et voluptatem in animi ratione expedita temporibus.";
 
     // Home Page
     logInWithTeacherAccount();
@@ -346,6 +347,7 @@ describe('App', () => {
     - Tab and hit enter/ click on “Add reading button”
     - Receive error message asking to give reading a title
   */
+  // TEST DOES NOT WORK
    it('teacher user should get error msg when adding a reading without a title', () => {
     // Initialize variables
     let sourceURL       = "http://www.omfgdogs.com";
@@ -424,13 +426,14 @@ describe('App', () => {
     - Click on join as guest field and type in valid not vulgar name hit enter or click join project button
     - Redirect to project
   */
+  // TEST DOES NOT WORK
   it('user should be able to get to a project through quick code, enter as guest', () => {
     // Home Page
-    enterProjectCode('m7y5');
+    enterProjectCode('bx72');
     pressEnter();
 
     // Join/Login Page
-    verifyURL("join");
+    browser.wait(EC.urlContains("join"), 5000, ('Never arrived at the url containing: "join". :('));
     enterGuestName('Queen Elizabeth II');
     pressEnter();
 
@@ -446,7 +449,7 @@ describe('App', () => {
     - Click on join as guest field and type in vulgar name hit enter or click join project button
     - Receive “Name is invalid” error message
   */
-   // YET TO BE VERIFIED AS A WORKING TEST BECAUSE SITE ISSUES
+   // TEST DOES NOT WORK
   it('should be able to get to project through quick code, be rejected because of vulgar name', () => {
     // Home Page
     submitProjectCode('m7y5');
@@ -466,7 +469,7 @@ describe('App', () => {
     - Receive error stating that code is invalid
   */
    // YET TO BE VERIFIED AS A WORKING TEST BECAUSE SITE ISSUES
-  it('user shoudl be given an error when giving an invalid project code at quick code enter', () => {
+  it('user should be given an error when giving an invalid project code at quick code enter', () => {
     enterProjectCode("HitlerHatesEDJI");
     pressEnter();
 
