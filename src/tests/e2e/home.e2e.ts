@@ -1,5 +1,6 @@
 import { browser, by, element, protractor } from 'protractor';
 
+
 describe('App', () => {
 
   let EC;
@@ -81,7 +82,10 @@ describe('App', () => {
 
   function submitProjectCode(projectCode)
   {
-    enterProjectCode(projectCode);
+    let codeInput = element(by.id('projectCodeInput'));
+    codeInput.click();
+    codeInput.sendKeys(projectCode);
+
     pressEnter();
   } // function submitProjectCode(projectCode)
 

@@ -144,6 +144,8 @@
     "typescript": "^2.1.1",
     "url-loader": "^0.5.7",
     "v8-lazy-parse-webpack-plugin": "^0.3.0",
+    "wd": "^1.1.1",
+    "wd-bridge": "^0.0.2",
     "webpack": "^2.1.0-beta.27",
     "webpack-dev-middleware": "^1.6.1",
     "webpack-dev-server": "^2.1.0-beta.11",
