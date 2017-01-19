@@ -3,7 +3,7 @@
  */
 
 require('ts-node/register');
-var helpers = require('./helpers');
+var helpers = require('./helpers.js');
 
 exports.config = {
   
@@ -17,8 +17,8 @@ exports.config = {
     marionette: true,
     'chromeOptions': {
       'args': ['show-fps-counter=true']
-    }
-  },
+    } // chrome options
+  }, // capabilities
 
   // Spec patterns are relative to the location of the spec file. They may include glob patterns.
   suites: {
@@ -26,18 +26,12 @@ exports.config = {
 
     // To test the entire site:
     fulle2e: [
-      'src/tests/home/home.e2e.ts'
+      '../src/tests/home/home.e2e.ts'
     ],
-    home:     '../e2e/home.spec.ts',
-    oldhome:  '../e2e/home.e2e.ts',
-
-  },
-
-  // use `npm run e2e`
-  //specs: [
-  //  helpers.root('src/**/**.e2e.ts'),
-  //  helpers.root('src/**/*.e2e.ts')
-  //],
+    home:     '../src/tests/e2e/home.spec.ts',
+    oldhome:  helpers.root('src/tests/e2e/home.e2e.ts')
+  }, // suites
+  
   exclude: [],
 
   framework: 'jasmine2',
