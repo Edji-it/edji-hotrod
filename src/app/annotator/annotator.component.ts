@@ -72,8 +72,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.user = this._auth.getUser();
 
         // Get Reading via Observable
-        this.subscriptions.push(
+        // this.subscriptions.push(
             this._readings.get(this.project.reading_id)
+                .take(1)
                 .subscribe(
                     reading => {
                         if (!reading.words || reading.words.length < 1) {
@@ -86,7 +87,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                         console.error(error);
                     }
                 )
-        );
+        // );
 
         // Establish Users array
         if (this.project.student_ids) {
@@ -211,7 +212,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      */
     showCommentOptions(event): void {
         // Only show options if text selected
-        if (!this.user.isTeacher && Rangy.getSelection() && Rangy.getSelection().toString().length > 0) {
+        if (Rangy.getSelection() && Rangy.getSelection().toString().length > 0) {
             let scrollOffset = document.getElementById('emojiAnnotator').getBoundingClientRect().top;
             const readingPad = 52;
 
