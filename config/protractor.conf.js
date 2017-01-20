@@ -1,9 +1,19 @@
+/*
+  Last Modified: 19 Jan 2017
+
+  Configurations for running Protractor and get things testing.
+*/
+
 /**
  * @author: @AngularClass
  */
 
+// Require
 require('ts-node/register');
-var helpers = require('./helpers.js');
+
+var helpers;
+
+helpers = require('./helpers.js'); // Helps us get the root file reference.
 
 exports.config = {
   
@@ -20,7 +30,10 @@ exports.config = {
     } // chrome options
   }, // capabilities
 
-  // Spec patterns are relative to the location of the spec file. They may include glob patterns.
+  /*
+  Run a suite of tests using 'yarn run protractor --suite suiteNameHere'
+  - Spec patterns are relative to the location of the spec file. They may include glob patterns.
+   */
   suites: {
     // Example suite: homepage: 'tests/e2e/homepage/**/*Spec.js',
 
@@ -28,10 +41,10 @@ exports.config = {
     fulle2e: [
       '../src/tests/home/home.e2e.ts'
     ],
-    home:     '../src/tests/e2e/home.spec.ts',
+    home:     helpers.root('src/tests/e2e/home.spec.ts'),
     oldhome:  helpers.root('src/tests/e2e/home.e2e.ts')
   }, // suites
-  
+
   exclude: [],
 
   framework: 'jasmine2',
