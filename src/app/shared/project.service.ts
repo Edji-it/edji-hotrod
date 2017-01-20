@@ -175,7 +175,8 @@ export class ProjectService {
         return this.http
             .post(url, data, this._auth.getOptions())
             .toPromise()
-            .then(this._auth.extractData);
+            .then(this._auth.extractData)
+            .then((data) => { return data.comment; })
     }
 
     /**
