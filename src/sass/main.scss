@@ -1029,3 +1029,7 @@ input.form-item--seamless {
 		box-shadow: none;
 	}
 }
+
+input[type=text], input[type=password], input[type=text]:focus, input[type=password]:focus {
+	border: 1px solid #979797;
+}

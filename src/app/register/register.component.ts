@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { PRIMARY_OUTLET, Router } from '@angular/router';
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
@@ -18,6 +18,10 @@ import { AuthService, BumblebeeService } from './../shared';
 
     .btn-group-wrapper label {
       margin: 0;
+    }
+
+    label.btn.btn-primary.active {
+      border: 3px solid #4A92BC;
     }
   `]
 })
