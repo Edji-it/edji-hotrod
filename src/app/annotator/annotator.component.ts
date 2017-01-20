@@ -72,20 +72,22 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.user = this._auth.getUser();
 
         // Get Reading via Observable
-        this._readings.get(this.project.reading_id)
-            .take(1)
-            .subscribe(
-                reading => {
-                    if (!reading.words || reading.words.length < 1) {
-                        this.reading = this.processOldReading(reading);
-                    } else {
-                        this.reading = reading;
+        // this.subscriptions.push(
+            this._readings.get(this.project.reading_id)
+                .take(1)
+                .subscribe(
+                    reading => {
+                        if (!reading.words || reading.words.length < 1) {
+                            this.reading = this.processOldReading(reading);
+                        } else {
+                            this.reading = reading;
+                        }
+                    },
+                    error => {
+                        console.error(error);
                     }
-                },
-                error => {
-                    console.error(error);
-                }
-            );
+                )
+        // );
 
         // Establish Users array
         if (this.project.student_ids) {
@@ -104,8 +106,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // Populate local Comment and Highlight arrays
         // (Used for super speedy rendering!)
         this.project.comments.forEach(comment => {
-            // If student, only individual student and teacher comments shown
-            if (comment.user_id === this.user._id || comment.user_id === this.project.teacher_id || this.user.isTeacher === true) {
+            // If student, only show the student's comments
+            if (comment.user_id === this.user._id || this.user.isTeacher === true) {
                 if (!this.commentsByIndex[comment.start]) {
                     this.commentsByIndex[comment.start] = [];
                 }
