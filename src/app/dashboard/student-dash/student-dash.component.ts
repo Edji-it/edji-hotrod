@@ -62,10 +62,9 @@ export class StuDashComponent implements OnInit, OnDestroy {
 
     this._projects.setCurrentProject(formValue.projectCode)
       .subscribe(
-        (data) => {
-          console.log(data);
-          if (data.project) {
-            this.router.navigate(['/project', data.project._id]);
+        (project) => {
+          if (project) {
+            this.router.navigate(['/project', project._id]);
           }
         },
         (error) => {
