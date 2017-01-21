@@ -76,7 +76,9 @@ export class ProjectService {
   public getForReading(readingId: string): Observable<any> {
     let userId = this._auth.getUser()._id;
     
-    return this.http.get(this._auth.getUrl() + '/readings/' + readingId + '/projects/' + userId , this._auth.getOptions() );
+    // return this.http.get(this._auth.getUrl() + '/readings/' + readingId + '/projects/' + userId , this._auth.getOptions() );
+    return this.http.get(this._auth.getUrl() + "/projects/reading/" + readingId, this._auth.getOptions())
+        .map((data) => { return data.json() || {}; });
   }
 
   /**
@@ -87,7 +89,7 @@ export class ProjectService {
   public validateProject(projectCode: string): Observable<any> {
 
       return this.http.get(this._auth.getUrl() + '/projects/' + projectCode + "/validate", this._auth.getOptions())
-        .map((data) => { return data.json(); });
+        .map((data) => { return data.json() || {}; });
         
   }
 

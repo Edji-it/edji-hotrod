@@ -42,15 +42,9 @@ export class ReadingPageComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.subscriptions.push(
-            this._route.params
-            .subscribe((params: Params) => { 
-                if(params['id']){
-                    this.readingId = params['id'];
-                    this.getReading(this.readingId);
-                }
-            })
-        );
+        this.readingId = this._route.snapshot.params['id'];
+
+        this.getReading(this.readingId);
     }
 
     private getReading(readingId: string) {
@@ -70,8 +64,8 @@ export class ReadingPageComponent implements OnInit, OnDestroy {
             .take(1)
             .subscribe(
                 data => {
-                    if (data.json() instanceof Array) {
-                        this.projects = data.json();
+                    if (data.projects) {
+                        this.projects = data.projects;
                     }
                 },
                 err => {
