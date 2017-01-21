@@ -9,7 +9,7 @@
             <hr/>
             <h1 id="annotatorTitle">{{ reading.title ? reading.title : "Untitled Reading" }}</h1>
             <div *ngIf="reading.source" class="sub-heading">
-                <img alt="📖" class="inline-emoji emojioneemoji" src="assets/emoji/png/1f4d6.png">
+                <span [innerHtml]="':book:' | emojione"></span>
                 <a title="Source" class="break" href="{{reading.source}}" target="_blank">{{reading.source}}</a>
             </div>
             <p *ngIf="error" class="alert alert-danger">{{ error }}</p>
@@ -23,8 +23,8 @@
                 Projects
                 <button class="btn square image header__button" (click)="addNew = !addNew">
                     <!--<i ng-show="!addNew" class="glyphicon glyphicon-plus" />-->
-                    <img *ngIf="!addNew"  alt="➕" class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/2795.png">
-                    <img  *ngIf="addNew" alt="✖" class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/2716.png">
+                    <span *ngIf="!addNew" alt="➕"  [innerHtml]="':heavy_plus_sign:' | emojione"></span>
+                    <span *ngIf="addNew" alt="✖" [innerHtml]="':heavy_multiplication_x:' | emojione"></span>
                     <!--<i *ngIf="addNew" class="glyphicon glyphicon-remove" />-->
                 </button>
             </h2>
@@ -60,10 +60,10 @@
                 <div class="list-item-wrapper" *ngFor="let project of projects">
                     <div class="list-item">
                         <a title="Open" class="button square button--float-right image" name="View" [routerLink]="[ '/project', project._id ]">
-                            <img alt="👁" class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/1f441.png">
+                            <span [innerHtml]="':eye:' | emojione"></span>
                         </a>
                         <a title="Delete" (click)="projectToDelete = project; showDeleteModal = true;" class="button square button--float-right image" name="View">
-                            <img alt="❌" class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/274c.png">
+                            <span [innerHtml]="':x:' | emojione"></span>
                         </a>
                         <div class="list-item-title">
                             <span class="list__emoji" *ngIf="project.isNew">
