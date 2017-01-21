@@ -41,6 +41,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     private showAllComments: boolean = false;
 
     private highlightY = '100px'; 
+    private highlightX = '20px'; 
+    private optionLeft = true;
+    private isMobile = false;
     private optionsShow = false;
 
     private loadingReading = true;
@@ -52,6 +55,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
     // For verifying comment ownership
     private user: any;
+
+    // For mobile display of comments
+    private foundArray: any[] = [];
 
     // Publically available stats
     public commentStats = {
@@ -220,8 +226,35 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 let touchY = parseInt(touchobj.clientY);
                 // Account for page scroll offset
                 this.highlightY = (touchY - scrollOffset + readingPad) + 'px';
+                // If in mobile
+                if (window.screen.availWidth < 768) {
+                    this.isMobile = true;
+                    let touchX = parseInt(touchobj.clientX);
+                    if (touchX < 120) {
+                        this.optionLeft = false;
+                        this.highlightX = (180 - touchX) + 'px';
+                    } else {
+                        this.optionLeft = true;
+                        this.highlightX = (touchX + readingPad - 80) + 'px';
+                    }
+                } else {
+                    this.isMobile = false;
+                }
             } else {
                 this.highlightY = (event.clientY - scrollOffset + readingPad) + 'px';
+                // If in mobile
+                if (window.screen.availWidth < 768) {
+                    this.isMobile = true;
+                    if (event.clientX < 120) {
+                        this.optionLeft = false;
+                        this.highlightX = (180 - event.clientX) + 'px';
+                    } else {
+                        this.optionLeft = true;
+                        this.highlightX = (event.clientX + readingPad - 80) + 'px';
+                    }
+                } else {
+                    this.isMobile = false;
+                }
             }
             this.optionsShow = true;
         } else {
@@ -614,4 +647,35 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         }
         return classString;
     }
+
+    /**
+     * This will handle touching of highlighted text to toggle comment in mobile
+     */
+    private onTouch(index) {
+        /** Will likely need to change to checking for a highlight class 
+         * For now, just check if the selected has a comment
+        */
+        var commentCount = 0;
+        for (var j=index; j>=0; j--) {
+            if (this.commentsByIndex[j] && this.commentsByIndex[j].length >= 0) {
+                for (var k=0; k<this.commentsByIndex[j].length; k++) {
+                    if (this.commentsByIndex[j][k].start<=index && this.commentsByIndex[j][k].end>=index) {
+                        commentCount++;
+                        //this.foundArray.push(this.commentsByIndex[j][k]._id);
+                        this.foundArray.push({'wIndex' : [j], 'cIndex' : [k]});
+                        window.alert(this.commentsByIndex[this.foundArray[this.foundArray.length - 1].wIndex][this.foundArray[this.foundArray.length - 1].cIndex].data);
+                    }
+                }
+            }
+        }
+        //window.alert(index + ' & ' + commentCount);
+        // for (var i=index; foundArray.length<commentCount; i--) {
+        //     this.commentsByIndex[i].forEach((comment)=> {
+        //         if ((comment.end - comment.start) >= (startIndex - currentIndex)) {
+
+        //         }
+        //     })
+        // }
+    }
 }
+

@@ -16,7 +16,7 @@
 		</div>
     </div>
 
-    <div *ngIf="project.types.length > 0" class="text-options" (blur)="hideCommentOptions($event)" [style.top]="highlightY" [ngClass]="{ 'active' : optionsShow }">
+    <div *ngIf="project.types.length > 0" class="text-options" (blur)="hideCommentOptions($event)" [style.top]="highlightY" [ngStyle]="isMobile && optionLeft && { 'left': highlightX } || { 'right': highlightX }" [ngClass]="{ 'active' : optionsShow }">
 		<div class="options">
 			<!--<span class="no-overflow">-->
 				<!--<span class="ui-inputs">-->
@@ -38,7 +38,9 @@
 			<span *ngFor="let word of reading.words; let i = index" 
 				class="word" 
 				[ngClass]="[ word.styles.join(' '), getHighlightClass(i), (commentsByIndex[i] && commentsByIndex[i].length > 0) ? 'has-comment' : '' ]" 
-				[attr.index]="i"><edji-comment *ngFor="let comment of commentsByIndex[i]; let ci = index" 
+				[attr.index]="i"
+				(click)="onTouch(i)"
+				><edji-comment *ngFor="let comment of commentsByIndex[i]; let ci = index" 
 					[comment]="comment"
 					(mouseenter)='focusHighlight(comment.start, comment.end)'
 					(mouseleave)='unfocusHighlight(comment.start, comment.end)' 

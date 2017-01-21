@@ -1,0 +1,33 @@
+$phone-width-min: 0px;
+$phone-width: 480px;
+$tablet-width: 768px;
+
+@mixin phone {
+  @media (min-width: #{$phone-width-min}) and (max-width: #{$tablet-width - 1px}) {
+    @content;
+  }
+}
+
+/* Mobile Optimization */
+@include phone {
+	.reading__hud {
+        display: none;
+		padding: 6px 2px;
+	}
+    .project-column {
+        padding: 0;
+    }
+	.container--side-bar {
+		padding: 100px 15px 0px 15px;
+	}
+}
+
+/* On Click Display Logout & User */
+@include phone {
+    .side-bar__user__show {
+	
+	}
+    .reading__hud__show {
+        display: inherit;
+    }
+}

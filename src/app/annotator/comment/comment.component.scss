@@ -1,3 +1,6 @@
+$phone-width-min: 0px;
+$phone-width: 480px;
+$tablet-width: 768px;
 
 @keyframes fadeInOut {
   0% {
@@ -57,4 +60,36 @@
         opacity: 1;
         filter: none;
     }
+}
+
+@mixin phone {
+  @media (min-width: #{$phone-width-min}) and (max-width: #{$tablet-width - 1px}) {
+    @content;
+  }
+}
+
+/* Mobile Optimization */
+@include phone {
+	.comment {
+    display: none;
+    /*bottom: 30px;
+    left: initial;
+    position: relative;*/
+  }
+  .inline-delete {
+    left: 150px;
+  }
+}
+
+/* On Click Comment */
+@include phone {
+	.comment__show {
+    position: fixed;
+    top: 250px;
+    left: 5px;
+
+    /*bottom: 30px;
+    left: initial;
+    position: relative;*/
+  }
 }

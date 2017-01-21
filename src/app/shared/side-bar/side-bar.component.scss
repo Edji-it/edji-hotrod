@@ -2,6 +2,9 @@
 $sideBarWidth: 100px;
 $lightBorder: 1px solid #f1f1f1;
 $purple: rgb(150, 40, 255);
+$phone-width-min: 0px;
+$phone-width: 480px;
+$tablet-width: 768px;
 
 .side-bar__wrap {
 	float: left;
@@ -117,5 +120,36 @@ a.side-bar__link {
 
 	&:hover, &:active {
 		opacity: 0.7;
+	}
+}
+
+@mixin phone {
+  @media (min-width: #{$phone-width-min}) and (max-width: #{$tablet-width - 1px}) {
+    @content;
+  }
+}
+
+/* Mobile Optimization */
+@include phone {
+	.side-bar__user {
+		display: none;
+	}
+
+	.side-bar__logo {
+		width: 48px;
+		padding: 4px;
+	}
+	.side-bar {
+		height: 66px;
+	}
+}
+
+/* On Click Display Logout & User */
+@include phone {
+	.side-bar__user__show {
+		transform: rotate(0deg);
+		top: 114px;
+		position: fixed;
+		height: 30px;
 	}
 }
