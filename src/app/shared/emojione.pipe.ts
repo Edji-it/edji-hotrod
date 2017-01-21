@@ -17,7 +17,8 @@ export class EmojiOnePipe implements PipeTransform {
       } else {
         emojiUc = emojione.emojioneList[':question:'].uc;
       }
-      return '<img class="emojioneemoji" src="' + url + emojiUc + '.png">';  
+      // Provide unicode emoji as an alt fallback, and the shortcode as a title/tooltip
+      return '<img class="emojioneemoji" alt="' + String.fromCharCode(parseInt(emojiUc,16)) + '" title="' + substring.replace(/:/g,'') + '" src="' + url + emojiUc + '.png">';  
     };
 
     // Pipes could get passed anything from the template, lets not make assumptions
