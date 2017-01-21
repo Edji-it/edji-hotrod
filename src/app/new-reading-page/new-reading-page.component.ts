@@ -15,6 +15,7 @@ export class NewReadingPage implements OnInit {
     private readingHtml: string = "";
     private submitted: boolean = false;
     private readingPlaceholder: string = 'Type or paste your reading...';
+    private addLoading: boolean = false;
 
     // Used for processing reading
     private words: any[] = [];
@@ -111,6 +112,7 @@ export class NewReadingPage implements OnInit {
     private onSubmit(form) {
         // Set submitted to show form errors
         this.submitted = true;
+        this.addLoading = true;
 
         this.angulartics.eventTrack.next({ action: 'createNewReading', properties: { category: 'contentManagement', label: 'attempt' }});
 
@@ -139,12 +141,14 @@ export class NewReadingPage implements OnInit {
         this._readings.save(reading)
             .subscribe(
                 data => {
+                    this.addLoading = false;
                     if (data._id) {
                         this.angulartics.eventTrack.next({ action: 'createNewReading', properties: { category: 'contentManagement', label: 'success' }});
                         this.router.navigate(['reading', data._id]);
                     }
                 },
                 error => {
+                    this.addLoading = false;
                     this.angulartics.eventTrack.next({ action: 'createNewReading', properties: { category: 'contentManagement', label: 'failure' }});
                     console.log(error)
                 }
