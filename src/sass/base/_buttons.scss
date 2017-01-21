@@ -95,10 +95,24 @@ button, .button, .btn { //, [class*='btn']
 .button__row, .btn-row {
   width: 100%;
   text-align: center;
-  padding: $base-pad/2 0;
+  // padding: $base-pad/2 0;
 
-  & .button {
-    margin: 5px;
+  & .button, & .btn {
+    margin: 0px 5px;
+  }
+
+  &.right {
+    text-align: right;
+    & .button, & .btn {
+      margin: 0px 0px 0px 5px;
+    }
+  }
+
+  &.left {
+    text-align: left;
+    & .button, & .btn {
+      margin: 0px 5px 0px 0px;
+    }
   }
 }
 

@@ -12,7 +12,7 @@
             <a id="addReadingButton" [routerLink]="[ '/new-reading' ]" class="list-item-title list-item list-item--button">
                 Add Reading
                     <span class="icon-button" style="position: absolute; right: 15px; top: 10px;">
-                    <img class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/2795.png">
+                    <span [innerHtml]="':heavy_plus_sign:' | emojione"></span>
                 </span>
             </a>
             <!--Show readings with date values-->
@@ -40,7 +40,7 @@
                                 <img alt="❌" class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/274c.png">
                             </a>-->
                             <a class="icon-button" href="#/reading/{{reading._id}}">
-                                <img alt="👁" class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/1f441.png">
+                                <span [innerHtml]="':eye:' | emojione"></span>
                             </a>
                         </div>
                 </div>
