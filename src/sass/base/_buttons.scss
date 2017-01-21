@@ -196,6 +196,7 @@ button, .button, .btn { //, [class*='btn']
   position: relative;
   pointer-events: none;
   color: transparent;
+  filter: grayscale(80%);
 
   &:after {
     position: absolute;
