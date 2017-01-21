@@ -22,7 +22,7 @@
 				<!--<span class="ui-inputs">-->
 					<!--  <button id="addTextComment" class="">T</button>-->
 					<button *ngIf="project.types.indexOf('emoji') > -1" id="addEmojiComment" class="emoji" (tap)="addEmojiComment($event)" [innerHtml]="':thinking_face:' | emojione"></button>
-					<button *ngIf="project.types.indexOf('text') > -1" id="addTextComment" class="emoji" (click)="addTextComment($event)" [innerHtml]="':writing_hand:' | emojione"></button>
+					<button *ngIf="project.types.indexOf('text') > -1" id="addTextComment" class="emoji" (tap)="addTextComment($event)" [innerHtml]="':writing_hand:' | emojione"></button>
 				<!--</span>-->
 			<!--</span>-->
 		</div>

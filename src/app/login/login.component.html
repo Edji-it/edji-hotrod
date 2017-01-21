@@ -17,8 +17,8 @@
             <div id="msgErrorPassword" class="alert alert-danger" *ngIf="errorObject.loginFailed">{{errorObject.loginFailed}}</div>
             <div id="msgServerError" class="alert alert-danger" *ngIf="errorObject.serverError">{{errorObject.serverError}}</div>
             
-            <div class="button__row" [class.loading]="loginLoading">
-              <button id="buttonLogin" type="submit" class="button" name="Login" tabindex="0">Login</button>
+            <div class="button__row">
+              <button id="buttonLogin" type="submit" [class.loading]="loginLoading" class="btn btn-primary" name="Login" tabindex="0">Login</button>
             </div>
             
           </form>

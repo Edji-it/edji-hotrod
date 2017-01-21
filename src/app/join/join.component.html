@@ -11,7 +11,7 @@
         <div id="msgTempError" *ngIf="errorObject.tempError" [innerHtml]="errorObject.tempError | emojione" class="alert alert-warning"></div>
         
         <div class="button__row">
-          <button id="guestLoginButton" type="submit" class="button" [disabled]="!guestForm.valid" name="Sign Up">Guest it is!</button>
+          <button id="guestLoginButton" [class.loading]="guestLoading" type="submit" class="btn btn-primary" [disabled]="!guestForm.valid" name="Sign Up">Guest it is!</button>
         </div>
     </form>
     </div>
@@ -28,9 +28,9 @@
       <div id="msgNoPassword" class="alert alert-info" *ngIf="loginForm.controls['password'].hasError('required') && (loginForm.controls['password'].dirty || loginForm.submitted)">A password is required</div>
       <div id="msgErrorPassword" class="alert alert-info" *ngIf="errorObject.loginError">{{errorObject.loginError}}</div>
       
-      <div class="button__row" [class.loading]="loginLoading">
+      <div class="button__row" >
         <!--ngHide loginLoading-->
-        <button id="buttonLogin" type="submit" class="button" name="Login" tabindex="0">Login</button>
+        <button id="buttonLogin" [class.loading]="loginLoading" type="submit" class="btn btn-secondary" name="Login" tabindex="0">Login</button>
       </div>
       
     </form>
