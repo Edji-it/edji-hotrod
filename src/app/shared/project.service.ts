@@ -54,7 +54,7 @@ export class ProjectService {
     return this.http.get(this._auth.getUrl() + '/projects/' + projectCode, this._auth.getOptions())
         .map(
             (data) => {
-                this.project = data.json(); //can later have local setter to do validation/data manipulation before passing through observable
+                this.project = data.json().project; //can later have local setter to do validation/data manipulation before passing through observable
                 this.currentProjectSource.next(this.project);
                 // Clear stats object
                 this.commentStatsSource.next({});
@@ -76,7 +76,9 @@ export class ProjectService {
   public getForReading(readingId: string): Observable<any> {
     let userId = this._auth.getUser()._id;
     
-    return this.http.get(this._auth.getUrl() + '/readings/' + readingId + '/projects/' + userId , this._auth.getOptions() );
+    // return this.http.get(this._auth.getUrl() + '/readings/' + readingId + '/projects/' + userId , this._auth.getOptions() );
+    return this.http.get(this._auth.getUrl() + "/projects/reading/" + readingId, this._auth.getOptions())
+        .map((data) => { return data.json() || {}; });
   }
 
   /**
@@ -87,7 +89,7 @@ export class ProjectService {
   public validateProject(projectCode: string): Observable<any> {
 
       return this.http.get(this._auth.getUrl() + '/projects/' + projectCode + "/validate", this._auth.getOptions())
-        .map((data) => { return data.json(); });
+        .map((data) => { return data.json() || {}; });
         
   }
 
@@ -175,7 +177,8 @@ export class ProjectService {
         return this.http
             .post(url, data, this._auth.getOptions())
             .toPromise()
-            .then(this._auth.extractData);
+            .then(this._auth.extractData)
+            .then((data) => { return data.comment; })
     }
 
     /**

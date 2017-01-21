@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { PRIMARY_OUTLET, Router } from '@angular/router';
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
@@ -19,11 +19,15 @@ import { AuthService, BumblebeeService } from './../shared';
     .btn-group-wrapper label {
       margin: 0;
     }
+
+    label.btn.btn-primary.active {
+      border: 3px solid #4A92BC;
+    }
   `]
 })
 export class RegisterComponent {
   private registerForm: FormGroup;
-
+  private registerLoading: boolean = false;
   private errorObject: any = {
     duplicateUser: "",
     serverError: "",
@@ -37,6 +41,11 @@ export class RegisterComponent {
     private bumblebee: BumblebeeService,
     fb: FormBuilder
   ) {
+    // this makes the window always render scrolled to the top
+    this.router.events.subscribe(() => {
+      window.scrollTo(0, 0);
+    });
+
     this.registerForm = fb.group({
       username: [null, Validators.required],
       fullname: [null, Validators.required],
@@ -70,10 +79,12 @@ export class RegisterComponent {
 
     this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'attempt' }});
 
+    this.registerLoading = true;
+
     this._auth.register(formValue)
       .take(1)
       .subscribe((data) => {
-        
+        this.registerLoading = false;
         if (data.user) {
           if (data.user.isTeacher && this._auth.getEnv() === "prod") { this.bumblebee.sendUserDetails(data.user); }
           this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'success' }});
@@ -82,11 +93,11 @@ export class RegisterComponent {
           // TRACK EXCEPTION... there was no data
         }
       }, (err) => {
-        console.log(err);
-        let error = err.json();
+        this.registerLoading = false;
 
         switch (err.status) {
           case 406:
+            let error = err.json() || {};
             if (error.validationErrors) {
               let errorCaught: boolean = false;
               if (error.validationErrors.fullname === "badWords") {
@@ -102,10 +113,9 @@ export class RegisterComponent {
                 // form validation should have caught any other errors
               }
             }
-            
             break;
           case 409:
-            this.errorObject.duplicateUser = "Contrats! :grin: Somebody else liked your username so much that they already took it"; break;
+            this.errorObject.duplicateUser = "<strong>Wow!</strong> :grin: Somebody else liked your username so much that they already took it."; break;
           default:
             this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'failure' }});
             console.log(err);

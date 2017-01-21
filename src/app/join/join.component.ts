@@ -18,7 +18,8 @@ export class JoinComponent implements OnInit, OnDestroy {
   private projectId: string;
   private guestForm: FormGroup;
   private loginForm: FormGroup;
-  private loginLoading: Boolean = false;
+  private loginLoading: boolean = false;
+  private guestLoading: boolean = false;
 
   private errorObject: {
     invalidCode?:string,
@@ -65,11 +66,13 @@ export class JoinComponent implements OnInit, OnDestroy {
    * Happens when join as guest is pressed. First calls to sign in the tempuser and then navigates upon receiving project data
    */
   private joinSessionAsGuest(formValue: any): void {
+    this.guestLoading = true;
     this.angulartics.eventTrack.next({ action: 'joinAsGuest', properties: { category: 'joinProject', label: 'attempt' }});
 
     // create the user's temporary account and set local token and user
     this._auth.createTempUser(formValue.guestName).subscribe(
       (data) => {
+        this.guestLoading = false;
         this._auth.setToken(data.token);
         this._auth.setUser(data.user);
 
@@ -78,6 +81,7 @@ export class JoinComponent implements OnInit, OnDestroy {
 
       },
       (error) => {
+        this.guestLoading = false;
         if (error.status === 406) {
           this.errorObject.badName = ":anguished: Would you mind choosing another name?";
         } else {
