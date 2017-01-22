@@ -107,7 +107,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // (Used for super speedy rendering!)
         this.project.comments.forEach(comment => {
             // If student, only show the student's comments
-            if (comment.user_id === this.user._id || this.user._id === this.project.teacher_id) {
+            if (comment.user_id === this.user._id || this.user.isTeacher === true) {
                 if (!this.commentsByIndex[comment.start]) {
                     this.commentsByIndex[comment.start] = [];
                 }
@@ -127,7 +127,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this._projects.setCommentStats(this.commentStats);
 
         // Subscribe to comment updates on the Teacher view
-        if (this.user._id === this.project.teacher_id) {
+        if (this.user.isTeacher) {
             this.subscriptions.push(
                 this._socket.commentUpdates().subscribe((commentUpdate) => {
                     let comment = commentUpdate.comment;
