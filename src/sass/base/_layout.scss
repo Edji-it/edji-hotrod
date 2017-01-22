@@ -9,6 +9,10 @@ html {
   box-sizing: inherit;
 }
 
+.containter-fluid {
+  overflow-x: hidden;
+}
+
 .row {
   // @include outer-container;
 }
@@ -51,7 +55,7 @@ footer {
     padding-top: 100px;
     padding-left: 15px;
   }
-}
+} 
 
 .overlap-gutter {
   margin: 0 -15px;

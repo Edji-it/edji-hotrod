@@ -121,12 +121,12 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // (Used for super speedy rendering!)
         this.project.comments.forEach(comment => {
             // If student, only show the student's comments
-            if (comment.user_id === this.user._id || this.user.isTeacher === true) {
+            if (comment.user_id === this.user._id || this.user._id === this.project.teacher_id || comment.user_id === this.project.teacher_id) {
                 if (!this.commentsByIndex[comment.start]) {
                     this.commentsByIndex[comment.start] = [];
                 }
                 // Populate local comments array by start index
-                comment.project_id = this.project._id;
+                this.decorateComment(comment);
                 this.commentsByIndex[comment.start].push(comment);
                 
                 // Add highlights
@@ -140,8 +140,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // Share updated CommentStats
         this._projects.setCommentStats(this.commentStats);
 
-        // Subscribe to comment updates on the Teacher view
-        if (this.user.isTeacher) {
+        // Subscribe to comment comment updates
             this.subscriptions.push(
                 this._socket.commentUpdates().subscribe((commentUpdate) => {
                     let comment = commentUpdate.comment;
@@ -158,35 +157,36 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                         }
                     }
 
-                    // Process different live comment updates
-                    if (commentUpdate.action === 'DELETE') {
-                        if (cIndex > -1) {
-                            // Remove highlights from local array
-                            this.decrementHighlights(comment.start, comment.end);
-                            this.commentsByIndexRemove(comment._id, wIndex, cIndex);
-                            this.updateCommentStats(comment.user_id, -1, comment.author);
-                        }
-                    } else if (commentUpdate.action === 'UPDATE') {
-                        if (cIndex > -1 && this.commentsByIndex[wIndex] && this.commentsByIndex[wIndex][cIndex]) {
-                            this.commentsByIndex[wIndex][cIndex].data = comment.data;
-                        } else {
-                            // Sometimes an UPDATE comes through for comment not yet created
+                    if (this.user._id === this.project.teacher_id || comment.user_id === this.project.teacher_id) {
+                        // Process different live comment updates
+                        if (commentUpdate.action === 'DELETE') {
+                            if (cIndex > -1) {
+                                // Remove highlights from local array
+                                this.decrementHighlights(comment.start, comment.end);
+                                this.commentsByIndexRemove(comment._id, wIndex, cIndex);
+                                this.updateCommentStats(comment.user_id, -1, comment.author);
+                            }
+                        } else if (commentUpdate.action === 'UPDATE') {
+                            if (cIndex > -1 && this.commentsByIndex[wIndex] && this.commentsByIndex[wIndex][cIndex]) {
+                                this.commentsByIndex[wIndex][cIndex].data = comment.data;
+                            } else {
+                                // Sometimes an UPDATE comes through for comment not yet created
+                                // Add highlights to local array
+                                this.incrementHighlights(comment.start, comment.end);
+                                this.commentsByIndexAdd(comment, wIndex, true);
+                                this.updateCommentStats(comment.user_id, 1, comment.author);
+                            }
+                        } else if (commentUpdate.action === 'CREATE') {
                             // Add highlights to local array
                             this.incrementHighlights(comment.start, comment.end);
                             this.commentsByIndexAdd(comment, wIndex, true);
                             this.updateCommentStats(comment.user_id, 1, comment.author);
                         }
-                    } else if (commentUpdate.action === 'CREATE') {
-                        // Add highlights to local array
-                        this.incrementHighlights(comment.start, comment.end);
-                        this.commentsByIndexAdd(comment, wIndex, true);
-                        this.updateCommentStats(comment.user_id, 1, comment.author);
                     }
                 }, (error) => {
                     console.warn(error);
                 })
             );
-        }
 
         // After comments are added to the array
         this.updateAllLineCounts();
@@ -381,7 +381,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     commentsByIndexAdd(comment, index: number, addQuietly ?: boolean): void {
         let start = comment.start;
         // Give it the Project Id to pass down to the Comment Component
-        comment.project_id = this.project._id;
+        this.decorateComment(comment);
         
         // Add Comment to local array
         if (this.commentsByIndex[start]) {
@@ -396,6 +396,13 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             }
         }
         this.updateAllLineCounts();
+    }
+
+    private decorateComment(comment: any) {
+        comment.project_id = this.project._id;
+        if (comment.user_id === this.user._id || comment.user_id === this.project.teacher_id) {
+            comment.showAvatar = true;
+        }
     }
 
     /**

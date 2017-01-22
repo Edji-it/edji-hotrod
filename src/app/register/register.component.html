@@ -3,6 +3,8 @@
   <div class="row">
     <div class="col-sm-3"></div>
     <div class="col-sm-6 col-pad">
+      <h1 style="margin-bottom:0.5em;" [innerHtml]="'Welcome :tada:' | emojione"></h1>
+      <h4 style="margin-bottom:2em;">Your Edji adventure is about to begin!</h4>
       <form id="registerForm" [formGroup]="registerForm" (ngSubmit)="register(registerForm.value)">
         <label for="usernameInput">Username</label>
         <input id="usernameInput" type="text" [formControl]="registerForm.controls['username']" tabindex="0"/>
@@ -17,13 +19,15 @@
         <div id="msgEmailRequired" *ngIf="registerForm.controls['email'].hasError('required')" class="alert alert-info">Please enter an email</div>
         <div id="msgEmailIncorrect" *ngIf="registerForm.controls['email'].hasError('emailIncorrect') && registerForm.controls['email'].dirty" class="alert alert-info">We don't think that's an email</div>
 
-        <label id="accountTypeLabel" for="accountTypeGroup">Account Type</label>
+        <label id="accountTypeLabel" for="accountTypeGroup">
+          Account Type
+        </label>
         <div class="btn-group-wrapper">
         <div id="accountTypeGroup" ngbRadioGroup class="btn-group" name="user type" [formControl]="registerForm.controls['isTeacher']" tabindex="0">
-          <label class="btn btn-primary">
+          <label class="btn btn-primary" title="Students join projects to read!">
             <input type="radio" name="Is student" id="student" autocomplete="off" value="{{false}}">Student
           </label>
-          <label class="btn btn-primary">
+          <label class="btn btn-primary" title="Teachers create projects!">
             <input type="radio" name="Is teacher" id="option2" autocomplete="off" value="{{true}}">Teacher
           </label>
         </div>
