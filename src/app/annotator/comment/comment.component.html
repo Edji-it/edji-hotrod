@@ -1,6 +1,7 @@
 <div class="comment" [class.saved]="justSaved" [class.active]="active" [ngClass]="[ 'line-count-' + lineCount, expanded ? 'expanded' : '' ]">
     <div class='expand-comments' (tap)='toggleExpand($event)'></div>
     <div *ngIf='comment.author' class='comment-username'>{{comment.author}}</div>
+    <div *ngIf="comment.author" [class.show]="comment.showAvatar" class="comment__avatar">{{comment.author.substr(0,2).toUpperCase()}}</div>
     <div class='comment-input-wrapper'>
         <!--Swap between different comment types-->
         <emoji-comment (tap)="toggleActive()" *ngIf="comment.type == 'emoji' || !comment.type" #commentInput [comment]="comment"></emoji-comment>
@@ -9,5 +10,4 @@
         <div *ngIf="comment.active && !readOnly" class="comment__save" (tap)="deactivate()" [innerHtml]="':white_check_mark:' | emojione"></div>
     </div>
     <i class="comment__saved" [innerHtml]='":ok_hand:" | emojione'></i>
-    <div *ngIf="comment.author" [class.show]="comment.showAvatar" class="comment__avatar">{{comment.author.substr(0,2).toUpperCase()}}</div>
 </div>
