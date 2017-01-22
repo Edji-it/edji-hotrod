@@ -107,7 +107,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // (Used for super speedy rendering!)
         this.project.comments.forEach(comment => {
             // If student, only show the student's comments
-            if (comment.user_id === this.user._id || this.user._id === this.project.teacher_id) {
+            if (comment.user_id === this.user._id || this.user._id === this.project.teacher_id || comment.user_id === this.project.teacher_id) {
                 if (!this.commentsByIndex[comment.start]) {
                     this.commentsByIndex[comment.start] = [];
                 }
