@@ -22,18 +22,22 @@ $topPromoMinHeight: 500px;
     font-weight: bold;
 
     &::-webkit-input-placeholder {
+        color: #dedede;
         font-family: 'Open Sans', Arial;
         font-weight: normal;
     }
     &:-moz-placeholder           {
+        color: #dedede;
         font-family: 'Open Sans', Arial;
         font-weight: normal;
     }
     &::-moz-placeholder          {
+        color: #dedede;
         font-family: 'Open Sans', Arial;
         font-weight: normal;
     }
     &:-ms-input-placeholder      {
+        color: #dedede;
         font-family: 'Open Sans', Arial;
         font-weight: normal;
     }

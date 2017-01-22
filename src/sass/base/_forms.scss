@@ -58,6 +58,10 @@ input:not([type]), textarea, select[multiple],
 
   @include transition(transform linear 0.2s);
 
+  @include placeholder {
+    color: #dedede;
+  }
+
   &:active, &:focus, &:hover {
     outline: none;
   }
@@ -107,10 +111,6 @@ input:not([type]), textarea, select[multiple],
     font-size: 24px;
     font-weight: bold;
     // border-radius: (32px + 2*$inputVPadding)/2;
-
-    &::placeholder {
-      color: #ededed;
-    }
   }
 }
 
