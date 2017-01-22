@@ -1,4 +1,4 @@
-<div id="passwordModal" class="modal fade in start-in">
+<div id="deleteProjectModal" class="modal fade-in show">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -12,7 +12,7 @@
                 <div *ngIf="showError" class="alert alert-danger" role="alert">
                   <strong>Oh snap!</strong> Unable to delete Project.
                 </div>
-              <div class="row">
+              <div class="btn-row right">
                 <button (click)="closeModal.emit()" type="button" class="btn" data-dismiss="modal">Close</button><!--not sure what data-dismiss does-->
                 <button (click)="deleteProject()" class="btn btn-primary">Confirm Delete</button>
               </div>

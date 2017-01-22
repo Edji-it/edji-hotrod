@@ -9,6 +9,10 @@ html {
   box-sizing: inherit;
 }
 
+.containter-fluid {
+  overflow-x: hidden;
+}
+
 .row {
   // @include outer-container;
 }

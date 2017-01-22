@@ -12,7 +12,11 @@ export class SocketService {
     private socket;
 
     constructor(private _auth: AuthService) {
-        this.url = _auth.getUrl();
+        if (this._auth.getEnv() === "prod") {
+            this.url = "http://bluestreak.edji.it";
+        } else {
+            this.url = "http://bluestreak-dev.edji.it";
+        }
         this.socket = io(this.url);
     }
 
