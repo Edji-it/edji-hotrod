@@ -400,6 +400,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             this.activeComment.active = true;
         } else {
             this.inactivateComment();
+            this.unfocusHighlight(this.commentsByIndex[wordIndex][commentIndex].start, this.commentsByIndex[wordIndex][commentIndex].end);
         }
     }
 
