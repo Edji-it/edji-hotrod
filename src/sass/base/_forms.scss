@@ -60,6 +60,7 @@ input:not([type]), textarea, select[multiple],
 
   @include placeholder {
     color: #dedede;
+    font-style: italic;
   }
 
   &:active, &:focus, &:hover {

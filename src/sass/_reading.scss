@@ -280,18 +280,41 @@ $highlight1G: $startG + ((($endG - $startG)/$highlightSteps) * 1);
 $highlight1B: $startB + ((($endB - $startB)/$highlightSteps) * 1);
 $highlight1A: 0.4 + (0.08 * 1); 
 
+
+
+$nextLevelSteps: ($highlightSteps + 8);
+$nextR: 207;
+$nextG: 36;
+$nextB: 68;
+
+// Default to deepest Red
+[class*='highlight-'] {
+	$thisA: 0.4 + (0.05 * $highlightSteps);
+	background: rgba($nextR, $nextG, $nextB, $thisA);
+}
+
+// Process different gradient steps
 @for $n from 1 through $highlightSteps {
 	.highlight-#{$n} {
 		$thisR: $startR + ((($endR - $startR)/$highlightSteps) * $n);
 		$thisG: $startG + ((($endG - $startG)/$highlightSteps) * $n);
 		$thisB: $startB + ((($endB - $startB)/$highlightSteps) * $n);
-		$thisA: 0.4 + (0.08 * $n);
+		$thisA: 0.4 + (0.05 * $n);
 		background: rgba($thisR, $thisG, $thisB, $thisA);
 		// padding: 0px 4px;
 		// margin: 0px -4px;
 	}
 }
 
+@for $n from ($highlightSteps + 1) through $nextLevelSteps {
+	.highlight-#{$n} { 
+		$thisR: $endR + ((($nextR - $endR)/$nextLevelSteps) * $n);
+		$thisG: $endG + ((($nextG - $endG)/$nextLevelSteps) * $n);
+		$thisB: $endB + ((($nextB - $endB)/$nextLevelSteps) * $n);
+		$thisA: 0.4 + (0.05 * 8);
+		background: rgba($thisR, $thisG, $thisB, $thisA);
+	}
+}
 
 $commentFadeOpacity: 0.35;
 

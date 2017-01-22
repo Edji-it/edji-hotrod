@@ -141,13 +141,6 @@ $seamlessPlaceholderColor: #888;
 	}
 }
 
-
-body {
-	// @include transform(translate3d(0, 0, 0));
-	// overflow-y: scroll; /* has to be scroll, not auto */
-	// -webkit-overflow-scrolling: touch;
-}
-
 body > .main {
 	// @include transform(translate3d(0, 0, 0));
 	// min-height: 100%;
@@ -549,7 +542,6 @@ body {
 }
 
 section {
-	max-width: 900px;
 	height: 100%;
 	margin: auto;
 	padding-left: 200px;
@@ -1030,9 +1022,6 @@ input.form-item--seamless {
 	}
 }
 
-input[type=text], input[type=password], input[type=text]:focus, input[type=password]:focus {
-	border: 1px solid #979797;
-}
 
 input[type=text].input-noborder, input[type=password].input-noborder, input[type=text].input-noborder:focus, input[type=password].input-noborder:focus {
 	border: 0;
