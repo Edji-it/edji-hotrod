@@ -311,7 +311,7 @@ describe('App', () => {
     //Initialize variables.
     let title           = "Protractor Likes Peaches (Test)";
     let sourceURL       = "http://www.omfgdogs.com";
-    let readingContent  = "Cody is excessively fat <<<<<< Et cumque eos atque. Ea enim laborum dolorem ea ut. Non eaque amet necessitatibus quam est eligendi. Commodi quia distinctio porro laudantium sed. Et qui fuga quia cupiditate autem. Sed magnam occaecati perspiciatis neque quae. Itaque rem optio dolores autem ipsa aliquam et dignissimos. Veniam temporibus officia quis quas cupiditate ipsa. Et assumenda quia ipsum tempore et quia earum. Dolores rem id maxime porro eius et illum qui. Nihil saepe repellendus quae quia. Tempore voluptatem explicabo mollitia. Et voluptatem in animi ratione expedita temporibus.";
+    let readingContent  = "Cody is excessively fat. Et cumque eos atque. Ea enim laborum dolorem ea ut. Non eaque amet necessitatibus quam est eligendi. Commodi quia distinctio porro laudantium sed. Et qui fuga quia cupiditate autem. Sed magnam occaecati perspiciatis neque quae. Itaque rem optio dolores autem ipsa aliquam et dignissimos. Veniam temporibus officia quis quas cupiditate ipsa. Et assumenda quia ipsum tempore et quia earum. Dolores rem id maxime porro eius et illum qui. Nihil saepe repellendus quae quia. Tempore voluptatem explicabo mollitia. Et voluptatem in animi ratione expedita temporibus.";
 
     // Home Page
     logInWithTeacherAccount();

@@ -6,15 +6,17 @@
 
         <div class="col-lg-9 col-md-8 col-sm-7 header-padding" [ngClass]="{ loading: isLoading }">
             <h3>Reading | Created {{ reading.createdAt | date:'longDate' }}</h3>
-            <hr/>
-            <h1 id="annotatorTitle">{{ reading.title ? reading.title : "Untitled Reading" }}</h1>
             <div *ngIf="reading.source" class="sub-heading">
                 <span [innerHtml]="':book:' | emojione"></span>
                 <a title="Source" class="break" href="{{reading.source}}" target="_blank">{{reading.source}}</a>
             </div>
-            <p *ngIf="error" class="alert alert-danger">{{ error }}</p>
-            <div class="article-wrap">
-                <article id="annotatorText" class="content" [innerHtml]="reading.html"></article>
+            <hr/>
+            <div class="reading-wrap">
+                <h1 id="annotatorTitle">{{ reading.title ? reading.title : "Untitled Reading" }}</h1>
+                <p *ngIf="error" class="alert alert-danger">{{ error }}</p>
+                <div class="article-wrap">
+                    <article id="annotatorText" class="content" [innerHtml]="reading.html"></article>
+                </div>
             </div>
         </div>
 
@@ -60,7 +62,7 @@
                 <div class="list-item-wrapper" *ngFor="let project of projects">
                     <div class="list-item">
                         <a title="Open" class="button square button--float-right image" name="View" [routerLink]="[ '/project', project._id ]">
-                            <span [innerHtml]="':eye:' | emojione"></span>
+                            <span [innerHtml]="':eyes:' | emojione"></span>
                         </a>
                         <a title="Delete" (click)="projectToDelete = project; showDeleteModal = true;" class="button square button--float-right image" name="View">
                             <span [innerHtml]="':x:' | emojione"></span>
