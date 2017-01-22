@@ -126,8 +126,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // Share updated CommentStats
         this._projects.setCommentStats(this.commentStats);
 
-        // Subscribe to comment updates on the Teacher view
-        if (this.user._id === this.project.teacher_id) {
+        // Subscribe to comment comment updates
             this.subscriptions.push(
                 this._socket.commentUpdates().subscribe((commentUpdate) => {
                     let comment = commentUpdate.comment;
@@ -144,35 +143,36 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                         }
                     }
 
-                    // Process different live comment updates
-                    if (commentUpdate.action === 'DELETE') {
-                        if (cIndex > -1) {
-                            // Remove highlights from local array
-                            this.decrementHighlights(comment.start, comment.end);
-                            this.commentsByIndexRemove(comment._id, wIndex, cIndex);
-                            this.updateCommentStats(comment.user_id, -1, comment.author);
-                        }
-                    } else if (commentUpdate.action === 'UPDATE') {
-                        if (cIndex > -1 && this.commentsByIndex[wIndex] && this.commentsByIndex[wIndex][cIndex]) {
-                            this.commentsByIndex[wIndex][cIndex].data = comment.data;
-                        } else {
-                            // Sometimes an UPDATE comes through for comment not yet created
+                    if (this.user._id === this.project.teacher_id || comment.user_id === this.project.teacher_id) {
+                        // Process different live comment updates
+                        if (commentUpdate.action === 'DELETE') {
+                            if (cIndex > -1) {
+                                // Remove highlights from local array
+                                this.decrementHighlights(comment.start, comment.end);
+                                this.commentsByIndexRemove(comment._id, wIndex, cIndex);
+                                this.updateCommentStats(comment.user_id, -1, comment.author);
+                            }
+                        } else if (commentUpdate.action === 'UPDATE') {
+                            if (cIndex > -1 && this.commentsByIndex[wIndex] && this.commentsByIndex[wIndex][cIndex]) {
+                                this.commentsByIndex[wIndex][cIndex].data = comment.data;
+                            } else {
+                                // Sometimes an UPDATE comes through for comment not yet created
+                                // Add highlights to local array
+                                this.incrementHighlights(comment.start, comment.end);
+                                this.commentsByIndexAdd(comment, wIndex, true);
+                                this.updateCommentStats(comment.user_id, 1, comment.author);
+                            }
+                        } else if (commentUpdate.action === 'CREATE') {
                             // Add highlights to local array
                             this.incrementHighlights(comment.start, comment.end);
                             this.commentsByIndexAdd(comment, wIndex, true);
                             this.updateCommentStats(comment.user_id, 1, comment.author);
                         }
-                    } else if (commentUpdate.action === 'CREATE') {
-                        // Add highlights to local array
-                        this.incrementHighlights(comment.start, comment.end);
-                        this.commentsByIndexAdd(comment, wIndex, true);
-                        this.updateCommentStats(comment.user_id, 1, comment.author);
                     }
                 }, (error) => {
                     console.warn(error);
                 })
             );
-        }
 
         // After comments are added to the array
         this.updateAllLineCounts();
