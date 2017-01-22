@@ -85,7 +85,7 @@ input:not([type]), textarea, select[multiple],
 
   &:disabled {
     background-color: shade($base-background-color, 5%);
-    cursor: not-allowed;
+    cursor: default;
 
     &:hover {
       border: $base-border;
