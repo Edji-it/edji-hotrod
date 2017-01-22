@@ -17,7 +17,10 @@ export class CommentComponent implements OnInit {
 
   private yPos: number = 0;
   private justSaved: boolean = false;
+  // Is fully visible, focused, and editable
   private active = false;
+  // Is fully visible, focused, but not editable
+  private preview = false;
 
   @Input() public comment: any;
   @Input() private readOnly: false; 
@@ -44,6 +47,7 @@ export class CommentComponent implements OnInit {
   }
 
   toggleActive( ): void {
+    if (!this.readOnly) {
       if (this.active === true) {
           this.active = false;
           this.commentActivation.emit(false);
@@ -53,11 +57,27 @@ export class CommentComponent implements OnInit {
           this.active = true; 
           this.commentActivation.emit(true);
       }
+    } else {
+      this.togglePreview();
+    }
+      
   }
 
   activate(): void {
-    this.active = true;
-    this.commentActivation.emit(true);
+    if (!this.readOnly) {
+      this.active = true;
+      this.commentActivation.emit(true);
+    } else {
+      this.togglePreview();
+    }
+  }
+
+  togglePreview(): void {
+    if (this.preview === true) {
+      this.preview = false;
+    } else {
+      this.preview = true;
+    }
   }
 
   deactivate(): void {
