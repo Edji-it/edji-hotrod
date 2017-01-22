@@ -1020,7 +1020,7 @@ input.form-item--seamless {
 	margin: 0px;
 	border-radius: 0px;
 
-	&::placeholder {
+	@include placeholder {
 		color: $seamlessPlaceholderColor;
 	}
 	
