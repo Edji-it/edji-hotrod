@@ -9,4 +9,5 @@
         <div *ngIf="comment.active && !readOnly" class="comment__save" (tap)="deactivate()" [innerHtml]="':white_check_mark:' | emojione"></div>
     </div>
     <i class="comment__saved" [innerHtml]='":ok_hand:" | emojione'></i>
+    <div *ngIf="comment.author" class="comment__owner-icon">{{comment.author.substr(0,2).toUpperCase()}}</div>
 </div>
