@@ -17,6 +17,7 @@ export class SideBarComponent implements OnInit, OnDestroy {
     private commentStats: any = {};
     private subscriptions: Subscription[] = [];
     private showCommentCounts: boolean = false;
+    private mNavShow: boolean = false;
 
     constructor(private _auth: AuthService, private _router: Router, private _project: ProjectService) {
 
@@ -49,5 +50,13 @@ export class SideBarComponent implements OnInit, OnDestroy {
     logout() {
         this._auth.logout();
         this._router.navigate(['/home']);
+    }
+
+    mNavShowFlip() {
+      if (this.mNavShow === false) {
+        this.mNavShow = true;
+      } else {
+        this.mNavShow = false;
+      }
     }
 }

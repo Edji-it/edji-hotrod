@@ -123,6 +123,10 @@ a.side-bar__link {
 	}
 }
 
+.mNavIcon {
+	display: none;
+}
+
 @mixin phone {
   @media (min-width: #{$phone-width-min}) and (max-width: #{$tablet-width - 1px}) {
     @content;
@@ -142,14 +146,67 @@ a.side-bar__link {
 	.side-bar {
 		height: 66px;
 	}
+	.mNavIcon {
+		display: block;
+	}
 }
 
 /* On Click Display Logout & User */
 @include phone {
 	.side-bar__user__show {
+		display: block;
 		transform: rotate(0deg);
-		top: 114px;
+		top: 66px;
 		position: fixed;
-		height: 30px;
+		height: 40px;
+		background-color: #F0F0F0;
+		width: 100%;
+		left: 0;
+		padding-top: 6px;
+	}
+	.mNav {
+		font-family: 'Open Sans';
+		font-weight: 700;
+		position: absolute;
+		top: 32px;
+		left: 28px;
+		height: 18px;
+		width: 26px;
+		background: none;
+		border: none;
+		outline: none;
+		color: rgba(0, 0, 0, 0.3);
+		transition: opacity 0.3s;
+		padding: 0px;
+		border-radius: 50%;
+		content: '^';
+		touch-action: none; 
+		user-select: none; 
+		-webkit-user-drag: none; 
+		-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+		font-size: 42px;
+		-webkit-transform: scale(2,1) rotate(180deg); /* Safari and Chrome */
+		-moz-transform: scale(2,1) rotate(180deg); /* Firefox */
+		-ms-transform: scale(2,1) rotate(180deg); /* IE 9 */
+		-o-transform: scale(2,1) rotate(180deg); /* Opera */
+		transform: scale(2,1) rotate(180deg); /* W3C */
+		transition:         transform 550ms ease;
+        -moz-transition:    -moz-transform 550ms ease;
+        -ms-transition:     -ms-transform 550ms ease;
+        -o-transition:      -o-transform 550ms ease;
+        -webkit-transition: -webkit-transform 550ms ease;
+	}
+	.mNavShowing {
+		top: 16px;
+		-webkit-transform: scale(2,1); /* Safari and Chrome */
+		-moz-transform: scale(2,1); /* Firefox */
+		-ms-transform: scale(2,1); /* IE 9 */
+		-o-transform: scale(2,1); /* Opera */
+		transform: scale(2,1); /* W3C */
+		transition:         transform 550ms ease;
+        -moz-transition:    -moz-transform 550ms ease;
+        -ms-transition:     -ms-transform 550ms ease;
+        -o-transition:      -o-transform 550ms ease;
+        -webkit-transition: -webkit-transform 550ms ease;
 	}
 }

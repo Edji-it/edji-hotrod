@@ -11,8 +11,15 @@ $tablet-width: 768px;
 /* Mobile Optimization */
 @include phone {
 	.reading__hud {
-        display: none;
 		padding: 6px 2px;
+        position: relative;
+        width: 100%;
+        background: none;
+        z-index: 0;
+        left: 0;
+        right: 0;
+        text-align: center;
+        padding-bottom: 25px;
 	}
     .project-column {
         padding: 0;
@@ -20,14 +27,4 @@ $tablet-width: 768px;
 	.container--side-bar {
 		padding: 100px 15px 0px 15px;
 	}
-}
-
-/* On Click Display Logout & User */
-@include phone {
-    .side-bar__user__show {
-	
-	}
-    .reading__hud__show {
-        display: inherit;
-    }
 }

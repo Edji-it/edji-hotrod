@@ -72,9 +72,6 @@ $tablet-width: 768px;
 @include phone {
 	.comment {
     display: none;
-    /*bottom: 30px;
-    left: initial;
-    position: relative;*/
   }
   .inline-delete {
     left: 150px;
@@ -84,12 +81,31 @@ $tablet-width: 768px;
 /* On Click Comment */
 @include phone {
 	.comment__show {
-    position: fixed;
-    top: 250px;
-    left: 5px;
-
-    /*bottom: 30px;
-    left: initial;
-    position: relative;*/
+    display: block;
+		height: 200px;
+		width: 100%;
+		z-index: 5000;
+		position: fixed;
+		top: 80px;
+		opacity: 0.9;
+		background-color: white;
+		left: 0;
+		text-align: center;
+		-webkit-box-shadow: 0 -5px 10px -5px #777;
+    box-shadow: 0 -5px 10px -5px #777;
+  }
+  .emoji-comment-input-wrapper {
+    /*display: block;
+		height: 200px;
+		width: 100%;
+		z-index: 5000;
+		position: fixed;
+		bottom: 0;
+		opacity: 1;
+		background-color: white;
+		left: 0;
+		text-align: center;
+		-webkit-box-shadow: 0 -5px 10px -5px #777;
+    box-shadow: 0 -5px 10px -5px #777;*/
   }
 }

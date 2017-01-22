@@ -45,6 +45,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     private optionLeft = true;
     private isMobile = false;
     private optionsShow = false;
+    private mobileCommentShow = false;
+    private mobileIndex = 0;
+    private hideKeyboard = false;
 
     private loadingReading = true;
 
@@ -76,6 +79,11 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
  
     ngOnInit() {
         this.user = this._auth.getUser();
+
+        // Check if mobile
+        if (window.screen.availWidth < 768) {
+            this.isMobile = true;
+        }
 
         // Get Reading via Observable
         // this.subscriptions.push(
@@ -656,7 +664,12 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         /** Will likely need to change to checking for a highlight class 
          * For now, just check if the selected has a comment
         */
+        // Check if mobile (again just in case the viewport was changed)
+        if (window.screen.availWidth < 768) {
+            this.isMobile = true;
+        }
         var commentCount = 0;
+        this.foundArray = [];
         for (var j=index; j>=0; j--) {
             if (this.commentsByIndex[j] && this.commentsByIndex[j].length >= 0) {
                 for (var k=0; k<this.commentsByIndex[j].length; k++) {
@@ -664,19 +677,16 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                         commentCount++;
                         //this.foundArray.push(this.commentsByIndex[j][k]._id);
                         this.foundArray.push({'wIndex' : [j], 'cIndex' : [k]});
-                        window.alert(this.commentsByIndex[this.foundArray[this.foundArray.length - 1].wIndex][this.foundArray[this.foundArray.length - 1].cIndex].data);
+                        //window.alert(this.commentsByIndex[this.foundArray[this.foundArray.length - 1].wIndex][this.foundArray[this.foundArray.length - 1].cIndex].data);
                     }
                 }
             }
         }
-        //window.alert(index + ' & ' + commentCount);
-        // for (var i=index; foundArray.length<commentCount; i--) {
-        //     this.commentsByIndex[i].forEach((comment)=> {
-        //         if ((comment.end - comment.start) >= (startIndex - currentIndex)) {
 
-        //         }
-        //     })
-        // }
+        this.hideKeyboard = true;
+        this.mobileCommentShow = true;
+        this.mobileIndex = 0;
+        this.setActiveCommentByIndex(true, index, this.mobileIndex);
     }
 }
 
