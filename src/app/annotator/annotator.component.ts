@@ -112,7 +112,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                     this.commentsByIndex[comment.start] = [];
                 }
                 // Populate local comments array by start index
-                comment.project_id = this.project._id;
+                this.decorateComment(comment);
                 this.commentsByIndex[comment.start].push(comment);
                 
                 // Add highlights
@@ -340,7 +340,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     commentsByIndexAdd(comment, index: number, addQuietly ?: boolean): void {
         let start = comment.start;
         // Give it the Project Id to pass down to the Comment Component
-        comment.project_id = this.project._id;
+        this.decorateComment(comment);
         
         // Add Comment to local array
         if (this.commentsByIndex[start]) {
@@ -355,6 +355,13 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             }
         }
         this.updateAllLineCounts();
+    }
+
+    private decorateComment(comment: any) {
+        comment.project_id = this.project._id;
+        if (comment.user_id === this.user._id || comment.user_id === this.project.teacher_id) {
+            comment.showAvatar = true;
+        }
     }
 
     /**
