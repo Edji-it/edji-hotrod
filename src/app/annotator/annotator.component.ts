@@ -287,14 +287,15 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      */
     decrementHighlights(start: number, end: number): void {
         for (var i = start; i <= end; i ++) {
+            // Any time we decrement, we should ensure we remove the 1000 focus
+            if (this.highlightArray[i] >= 1000) {
+                this.highlightArray[i] -= 1000;
+            }
+
             if (this.highlightArray[i] && this.highlightArray[i] > 0) {
                 this.highlightArray[i]--;
             } else {
                 this.highlightArray[i] = 0;
-            }
-            // Any time we decrement, we should ensure we remove the 1000 focus
-            if (this.highlightArray[i] >= 1000) {
-                this.highlightArray[i] -= 1000;
             }
         }
     }
@@ -400,11 +401,11 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             this.activeComment.active = true;
         } else {
             this.inactivateComment();
-            this.unfocusHighlight(this.commentsByIndex[wordIndex][commentIndex].start, this.commentsByIndex[wordIndex][commentIndex].end);
         }
     }
 
     inactivateComment():void {
+        this.unfocusHighlight(this.activeComment.start, this.activeComment.end);
         this.activeComment.active = false;
         this.activeComment = {};
     }
@@ -601,9 +602,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         for (var i = start; i <= end; i ++) {
             if (this.highlightArray[i] >= 1000) {
                 this.highlightArray[i] -= 1000;
-            } else {
-                this.highlightArray[i] = 0;
-            }
+            } 
         }
     }
 

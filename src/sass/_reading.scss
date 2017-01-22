@@ -293,6 +293,10 @@ $nextB: 68;
 	background: rgba($nextR, $nextG, $nextB, $thisA);
 }
 
+.highlight-0 {
+	background: transparent;
+}
+
 // Process different gradient steps
 @for $n from 1 through $highlightSteps {
 	.highlight-#{$n} {
