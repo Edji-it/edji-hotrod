@@ -17,6 +17,7 @@ export class CommentComponent implements OnInit {
 
   private yPos: number = 0;
   private justSaved: boolean = false;
+  private isLoading: boolean = false;
   // Is fully visible, focused, and editable
   private active = false;
   // Is fully visible, focused, but not editable
@@ -90,9 +91,11 @@ export class CommentComponent implements OnInit {
   // Updates comment in db
   public updateComment(commentData: string): void {
     this.angulartics.eventTrack.next({ action: 'updateComment', properties: { category: 'projectAction', label: 'attempt' }});
+    this.isLoading = true;
 
     this._projects.saveComment(this.comment.project_id, commentData, this.comment.start, this.comment.end, this.comment.type, this.comment.text, this.comment._id)
       .then(comment => {
+        this.isLoading = false;
         this.angulartics.eventTrack.next({ action: 'updateComment', properties: { category: 'projectAction', label: 'success' }});
         this.justSaved = true;
         setTimeout(() => {
