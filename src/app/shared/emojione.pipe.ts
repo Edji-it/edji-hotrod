@@ -6,7 +6,9 @@ import * as emojione from 'emojione/lib/js/emojione.js';
 })
 export class EmojiOnePipe implements PipeTransform {
   transform(text: string): string {
-    let url = '//emoji.edji.it/png/';
+    let url = '//emoji.edji.it/png/'; 
+    // Emojione CDN '//cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/png/';
+    
     let html : string;
 
     let convertShortcodes = function(substring) {
