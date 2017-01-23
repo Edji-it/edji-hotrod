@@ -678,25 +678,22 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         if (window.screen.availWidth < 768) {
             this.isMobile = true;
         }
-        var commentCount = 0;
         this.foundArray = [];
+        this.mobileIndex = 0;
+
         for (var j=index; j>=0; j--) {
             if (this.commentsByIndex[j] && this.commentsByIndex[j].length >= 0) {
                 for (var k=0; k<this.commentsByIndex[j].length; k++) {
                     if (this.commentsByIndex[j][k].start<=index && this.commentsByIndex[j][k].end>=index) {
-                        commentCount++;
-                        //this.foundArray.push(this.commentsByIndex[j][k]._id);
-                        this.foundArray.push({'wIndex' : [j], 'cIndex' : [k]});
-                        //window.alert(this.commentsByIndex[this.foundArray[this.foundArray.length - 1].wIndex][this.foundArray[this.foundArray.length - 1].cIndex].data);
+                        this.foundArray.push({'wIndex' : [j], 'cIndex' : [k]});)
                     }
                 }
             }
         }
-
+        
         if (this.foundArray.length>0) {
             this.hideKeyboard = true;
-            this.mobileIndex = 0;
-            this.setActiveCommentByIndex(true, index, this.mobileIndex);
+            this.setActiveCommentByIndex(true, this.foundArray[this.mobileIndex].wIndex, this.foundArray[this.mobileIndex].cIndex);
         }
     }
 }
