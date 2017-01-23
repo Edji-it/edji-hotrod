@@ -373,14 +373,14 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      */
     commentsByIndexRemove(commentId, index: number, commentIndex: number) {
         let comment = this.commentsByIndex[index][commentIndex];
-
+        
         if (!comment) {
             return;
         }
         // Clear active comment
         this.inactivateComment();
         // Remove comment form local Comments array
-        this.commentsByIndex[index].splice(commentIndex);
+        this.commentsByIndex[index].splice(commentIndex,1);
         // Update line counts
         this.updateAllLineCounts();
     }
