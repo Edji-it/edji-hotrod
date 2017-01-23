@@ -51,9 +51,7 @@
 					(expandLine)="expandLine($event)"
 					[isMobile]="isMobile"
 					(mobileDeactivate)="inactivateComment()">
-				</edji-comment>
-				{{ word.str.trim() ? word.str : '&nbsp;' }}
-			</span>
+				</edji-comment>{{ word.str.trim() ? word.str : '&nbsp;' }}</span>
 		</article>
 		
 	</div>
