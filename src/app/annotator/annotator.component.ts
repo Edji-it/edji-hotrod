@@ -46,7 +46,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     private optionLeft = true;
     private isMobile = false;
     private optionsShow = false;
-    private mobileCommentShow = false;
     private mobileIndex = 0;
     private hideKeyboard = false;
 
@@ -453,7 +452,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.unfocusHighlight(this.activeComment.start, this.activeComment.end);
         this.activeComment.active = false;
         this.activeComment = {};
-        this.mobileCommentShow = false; // Important to clear the background darken div
     }
 
     /**
@@ -679,7 +677,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // Check if mobile (again just in case the viewport was changed)
         if (window.screen.availWidth < 768) {
             this.isMobile = true;
-            this.mobileCommentShow = true;
         }
         var commentCount = 0;
         this.foundArray = [];

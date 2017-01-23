@@ -59,25 +59,4 @@
 	</div>
 </div>
 <div [ngClass]="{ 'mobile__comment-background' : mobileCommentShow }"></div>
-<!--<div *ngIf="foundArray.length>0" [ngClass]="{ 'active' : mobileCommentShow }" id="mobile-comment" class="mobile-comment">
-	<button class="inline-delete eCmtRemove" (click)="mobileCommentShow=false;">+</button>
-	<hr style="margin-top: 40px;">
-	<!--<textarea *ngIf="commentsByIndex[foundArray[mobileIndex].wIndex][foundArray[mobileIndex].cIndex].type === 'text'" rows="3"
-		[innerHtml]="commentsByIndex[foundArray[mobileIndex].wIndex][foundArray[mobileIndex].cIndex].data | emojione" class="eSize">
-	
-	</textarea>
-	<div *ngIf="commentsByIndex[foundArray[mobileIndex].wIndex][foundArray[mobileIndex].cIndex].type === 'emoji'" [innerHtml]="commentsByIndex[foundArray[mobileIndex].wIndex][foundArray[mobileIndex].cIndex].data | emojione" class="eSize"></div>-->
-	<!--<ng-container *ngIf="isMobile">
-		<edji-comment *ngFor="let comment of commentsByIndex[i]; let ci = index"
-			[comment]="commentsByIndex[foundArray[mobileIndex].wIndex][foundArray[mobileIndex].cIndex]"
-			(mouseenter)='focusHighlight(comment.start, comment.end)'
-			(mouseleave)='unfocusHighlight(comment.start, comment.end)' 
-			[readOnly]="comment.user_id !== user._id"
-			[isActive]="comment.active" 
-			(commentActivation)="setActiveCommentByIndex($event, i, ci)" 
-			(commentDeleted)="removeComment(comment, i, ci)"
-			(expandLine)="expandLine($event)">
-		</edji-comment>
-	</ng-container>-->
-<!--</div>-->
 <emoji-keyboard [isActive]="activeComment.active && (!activeComment.type || activeComment.type === 'emoji')" [currentComment]="activeComment.data" (commentChange)="updateActiveComment($event)" (dismissKeyboard)="inactivateComment()"></emoji-keyboard>
