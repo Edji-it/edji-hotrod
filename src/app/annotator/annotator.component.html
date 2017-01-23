@@ -36,11 +36,11 @@
         <!--Create components after load for reading-->
 		<article class="content" (mouseup)="showCommentOptions($event)" (touchend)="showCommentOptions($event)" (clickOutside)="hideCommentOptions()">
 			<span *ngFor="let word of reading.words; let i = index" 
-				class="word" 
-				[ngClass]="[ word.styles.join(' '), getHighlightClass(i), (commentsByIndex[i] && commentsByIndex[i].length > 0) ? 'has-comment' : '' ]" 
+				class="word"
+				[ngClass]="[ word.styles.join(' '), getHighlightClass(i) ]" 
 				[attr.index]="i"
 				(click)="onTouch(i)">
-				<edji-comment *ngFor="let comment of commentsByIndex[i]; let ci = index"
+				<edji-comment *ngFor="let comment of commentsByIndex[i]; let ci = index" 
 					[comment]="comment"
 					(mouseenter)='focusHighlight(comment.start, comment.end)'
 					(mouseleave)='unfocusHighlight(comment.start, comment.end)' 
@@ -48,15 +48,17 @@
 					[isActive]="comment.active" 
 					(commentActivation)="setActiveCommentByIndex($event, i, ci)" 
 					(commentDeleted)="removeComment(comment, i, ci)"
-					(expandLine)="expandLine($event)">
+					(expandLine)="expandLine($event)"
+					[isMobile]="isMobile"
+					(mobileDeactivate)="inactivateComment()">
 				</edji-comment>
 				{{ word.str.trim() ? word.str : '&nbsp;' }}
 			</span>
 		</article>
 		
 	</div>
-	
 </div>
+<div [ngClass]="{ 'mobile__comment-background' : mobileCommentShow }"></div>
 <!--<div *ngIf="foundArray.length>0" [ngClass]="{ 'active' : mobileCommentShow }" id="mobile-comment" class="mobile-comment">
 	<button class="inline-delete eCmtRemove" (click)="mobileCommentShow=false;">+</button>
 	<hr style="margin-top: 40px;">

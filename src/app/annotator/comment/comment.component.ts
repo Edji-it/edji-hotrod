@@ -32,10 +32,12 @@ export class CommentComponent implements OnInit {
     }
   }
   get isActive(): boolean { return this.active; }
+  @Input() private isMobile: boolean;
 
   @Output() commentDeleted = new EventEmitter<string>();
   @Output() commentActivation = new EventEmitter<boolean>();
   @Output() expandLine = new EventEmitter<number>();
+  @Output() dismissKeyboard = new EventEmitter();
 
   constructor(
         private _projects: ProjectService,
@@ -86,6 +88,9 @@ export class CommentComponent implements OnInit {
     this.commentActivation.emit(false);
     // Save when comment is toggled away from
     this.updateComment(this.comment.data);
+    if (this.isMobile) {
+      this.dismissKeyboard.emit();
+    }
   }
 
   // Updates comment in db

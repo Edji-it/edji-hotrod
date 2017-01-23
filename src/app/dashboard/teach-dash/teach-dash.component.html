@@ -16,7 +16,7 @@
                 </span>
             </a>
             <!--Show readings with date values-->
-            <div class="list-item-wrapper list-item--button" *ngFor="let reading of readings">
+            <div class="list-item-wrapper list-item--button" *ngFor="let reading of readings" [routerLink]="[ '/reading', reading._id ]">
                 <!--Implement: | orderBy:'-createdAt'-->
                 <div class="list-item__message" [ngClass]="{ 'slide-down' : confirmDelete }">
                     Delete "{{reading.title}}"?
@@ -26,23 +26,23 @@
                     </div>
                 </div>
                 <div class="list-item ">
-                    <div class="col-sm-6">
-                        <a [routerLink]="['/reading', reading._id ]" class="list-item-title">
+                    <div class="col-sm-12">
+                        <span class="list-item-title">
                             {{reading.title}}
                             <span *ngIf="!reading.title"><i>Untitled</i></span>
-                        </a>
+                        </span>
                         <p *ngIf="reading.createdAt">
                             Created: {{ reading.createdAt | date:'mediumDate' }} 
                         </p>
                     </div>
-                        <div class="icon-row--right">
-                            <!--<a class="icon-button" (click)="confirmDelete = !confirmDelete">
+                        <!--<div class="icon-row--right">
+                            <a class="icon-button" (click)="confirmDelete = !confirmDelete">
                                 <img alt="❌" class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/274c.png">
-                            </a>-->
+                            </a>
                             <a class="icon-button" href="#/reading/{{reading._id}}">
                                 <span [innerHtml]="':eyes:' | emojione"></span>
                             </a>
-                        </div>
+                        </div>-->
                 </div>
             </div>
             </div>

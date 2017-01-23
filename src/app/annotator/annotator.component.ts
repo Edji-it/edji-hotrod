@@ -23,6 +23,7 @@ import { SocketService } from '../shared/socket.service';
 })
 export class AnnotatorComponent implements OnInit, OnDestroy {
     @Input() private project: any;
+    @Input() private mobileCommentActive: boolean;
 
     @ViewChildren(CommentComponent) commentComponents: QueryList<CommentComponent>;
 
@@ -328,14 +329,15 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      */
     decrementHighlights(start: number, end: number): void {
         for (var i = start; i <= end; i ++) {
+            // Any time we decrement, we should ensure we remove the 1000 focus
+            if (this.highlightArray[i] >= 1000) {
+                this.highlightArray[i] -= 1000;
+            }
+
             if (this.highlightArray[i] && this.highlightArray[i] > 0) {
                 this.highlightArray[i]--;
             } else {
                 this.highlightArray[i] = 0;
-            }
-            // Any time we decrement, we should ensure we remove the 1000 focus
-            if (this.highlightArray[i] >= 1000) {
-                this.highlightArray[i] -= 1000;
             }
         }
     }
@@ -445,8 +447,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     }
 
     inactivateComment():void {
+        this.unfocusHighlight(this.activeComment.start, this.activeComment.end);
         this.activeComment.active = false;
         this.activeComment = {};
+        this.mobileCommentShow = false; // Important to clear the background darken div
     }
 
     /**
@@ -641,9 +645,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         for (var i = start; i <= end; i ++) {
             if (this.highlightArray[i] >= 1000) {
                 this.highlightArray[i] -= 1000;
-            } else {
-                this.highlightArray[i] = 0;
-            }
+            } 
         }
     }
 
@@ -674,6 +676,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // Check if mobile (again just in case the viewport was changed)
         if (window.screen.availWidth < 768) {
             this.isMobile = true;
+            this.mobileCommentShow = true;
         }
         var commentCount = 0;
         this.foundArray = [];
@@ -690,10 +693,11 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             }
         }
 
-        this.hideKeyboard = true;
-        this.mobileCommentShow = true;
-        this.mobileIndex = 0;
-        this.setActiveCommentByIndex(true, index, this.mobileIndex);
+        if (this.foundArray.length>0) {
+            this.hideKeyboard = true;
+            this.mobileIndex = 0;
+            this.setActiveCommentByIndex(true, index, this.mobileIndex);
+        }
     }
 }
 

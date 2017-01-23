@@ -123,13 +123,13 @@ $tablet-width: 768px;
   .inline-delete {
     left: 150px;
   }
-}
 
-/* On Click Comment */
-@include phone {
 	.comment__show {
     display: block;
-		height: 200px;
+  }
+
+  .comment {
+    height: 180px;
 		width: 100%;
 		z-index: 5000;
 		position: fixed;
@@ -137,20 +137,30 @@ $tablet-width: 768px;
 		opacity: 0.9;
 		background-color: white;
 		left: 0;
-		text-align: center;
 		-webkit-box-shadow: 0 -5px 10px -5px #777;
     box-shadow: 0 -5px 10px -5px #777;
+    padding: 28px 38px;
   }
-  .emoji-comment-input-wrapper {
-    /*display: block;
-		height: 200px;
-		width: 100%;
-		z-index: 5000;
-		position: fixed;
-		bottom: 0;
-		opacity: 1;
-		background-color: white;
-		left: 0;
-		text-align: center;
-		-webkit-box-shadow: 0 -5px 10px -5px #777;
-    box-shadow: 0 -5px 10px -5px #777;*/
+
+  .comment__avatar {
+    left: -24px;
+    top: -14px;
+    position: relative;
+  }
+
+  .comment-username {
+    top: 15px;
+    left: 50px;
+  }
+
+	.mobile__comment-background {
+		position:fixed;
+		z-index:999;
+		width:100%;
+		height:100%;
+		background-color: black;
+		background-color:rgba(0,0,0,.75);
+		top: 0;
+    	left: 0;
+	}
+}
