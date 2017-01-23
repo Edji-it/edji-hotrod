@@ -20,9 +20,16 @@ export class SocketService {
         this.socket = io(this.url);
     }
 
+    /**
+     * Handles the live reading count on the project page
+     */
     public joinLiveCount(projectId, userId): Observable<any> {
         this.socket.emit('newSession', { id: projectId, user: userId });
 
+        return this.liveUsersCount();
+    }
+
+    public liveUsersCount(): Observable<any> {
         let observable = new Observable(observer => {
             this.socket.on('liveUsers', (liveCount) => {
                 observer.next(liveCount);    
@@ -32,7 +39,7 @@ export class SocketService {
             };  
         })     
         return observable;
-    } 
+    }
 
     public commentUpdates(): Observable<any> {
         let observable = new Observable(observer => {
