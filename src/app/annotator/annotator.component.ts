@@ -308,6 +308,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      * @param type What kind of comment: emoji, text...
      */
     createComment(start: number, end: number, type: string): void {
+        // We need to make sure they aren't already editing a comment
+        this.inactivateComment();
+
         let projectId = this.project._id;
         let text: string = '';
         for (var i = start; i <= end; i++) {
