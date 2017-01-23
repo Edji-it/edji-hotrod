@@ -16,7 +16,7 @@ const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 /**
  * Webpack Constants
  */
-const ENV = process.env.ENV = process.env.NODE_ENV = 'development';
+const ENV = process.env.ENV = process.env.NODE_ENV = 'dev';
 const HOST = process.env.HOST || 'localhost';
 const PORT = process.env.PORT || 3375;
 const HMR = helpers.hasProcessFlag('hot');
@@ -89,7 +89,7 @@ module.exports = function (options) {
       /**
        * Plugin: DefinePlugin
        * Description: Define free variables.
-       * Useful for having development builds with debug logging or adding global constants.
+       * Useful for having dev builds with debug logging or adding global constants.
        *
        * Environment helpers
        *
@@ -129,7 +129,7 @@ module.exports = function (options) {
     ],
 
     /**
-     * Webpack Development Server configuration
+     * Webpack dev Server configuration
      * Description: The webpack-dev-server is a little node.js Express server.
      * The server emits information about the compilation state to the client,
      * which reacts to those events.

@@ -23,6 +23,7 @@ import { SocketService } from '../shared/socket.service';
 })
 export class AnnotatorComponent implements OnInit, OnDestroy {
     @Input() private project: any;
+    @Input() private mobileCommentActive: boolean;
 
     @ViewChildren(CommentComponent) commentComponents: QueryList<CommentComponent>;
 
@@ -41,7 +42,12 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     private showAllComments: boolean = false;
 
     private highlightY = '100px'; 
+    private highlightX = '20px'; 
+    private optionLeft = true;
+    private isMobile = false;
     private optionsShow = false;
+    private mobileIndex = 0;
+    private hideKeyboard = false;
 
     private loadingReading = true;
 
@@ -52,6 +58,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
     // For verifying comment ownership
     private user: any;
+
+    // For mobile display of comments
+    private foundArray: any[] = [];
 
     // Publically available stats
     public commentStats = {
@@ -71,21 +80,28 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.user = this._auth.getUser();
 
+        // Check if mobile
+        if (window.screen.availWidth < 768) {
+            this.isMobile = true;
+        }
+
         // Get Reading via Observable
-        this._readings.get(this.project.reading_id)
-            .take(1)
-            .subscribe(
-                reading => {
-                    if (!reading.words || reading.words.length < 1) {
-                        this.reading = this.processOldReading(reading);
-                    } else {
-                        this.reading = reading;
+        // this.subscriptions.push(
+            this._readings.get(this.project.reading_id)
+                .take(1)
+                .subscribe(
+                    reading => {
+                        if (!reading.words || reading.words.length < 1) {
+                            this.reading = this.processOldReading(reading);
+                        } else {
+                            this.reading = reading;
+                        }
+                    },
+                    error => {
+                        console.error(error);
                     }
-                },
-                error => {
-                    console.error(error);
-                }
-            );
+                )
+        // );
 
         // Establish Users array
         if (this.project.student_ids) {
@@ -104,13 +120,13 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // Populate local Comment and Highlight arrays
         // (Used for super speedy rendering!)
         this.project.comments.forEach(comment => {
-            // If student, only individual student and teacher comments shown
-            if (comment.user_id === this.user._id || comment.user_id === this.project.teacher_id || this.user.isTeacher === true) {
+            // If student, only show the student's comments
+            if (comment.user_id === this.user._id || this.user._id === this.project.teacher_id || comment.user_id === this.project.teacher_id) {
                 if (!this.commentsByIndex[comment.start]) {
                     this.commentsByIndex[comment.start] = [];
                 }
                 // Populate local comments array by start index
-                comment.project_id = this.project._id;
+                this.decorateComment(comment);
                 this.commentsByIndex[comment.start].push(comment);
                 
                 // Add highlights
@@ -124,25 +140,24 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // Share updated CommentStats
         this._projects.setCommentStats(this.commentStats);
 
-        // Subscribe to comment updates on the Teacher view
-        // if (this.user.isTeacher) {
+        // Subscribe to comment comment updates
             this.subscriptions.push(
                 this._socket.commentUpdates().subscribe((commentUpdate) => {
                     let comment = commentUpdate.comment;
                     let wIndex = comment.start;
                     let cIndex = -1;
 
-                    if (comment.user_id === this.project.teacher_id) {
-                        // Get local array index
-                        if (this.commentsByIndex[wIndex]) {
-                            for (var i = 0; i < this.commentsByIndex[wIndex].length; i++) {
-                                let commentRef = this.commentsByIndex[wIndex][i];
-                                if (commentRef._id === comment._id) {
-                                    cIndex = i;
-                                }
+                    // Get local array index
+                    if (this.commentsByIndex[wIndex]) {
+                        for (var i = 0; i < this.commentsByIndex[wIndex].length; i++) {
+                            let commentRef = this.commentsByIndex[wIndex][i];
+                            if (commentRef._id === comment._id) {
+                                cIndex = i;
                             }
                         }
+                    }
 
+                    if (this.user._id === this.project.teacher_id || comment.user_id === this.project.teacher_id) {
                         // Process different live comment updates
                         if (commentUpdate.action === 'DELETE') {
                             if (cIndex > -1) {
@@ -168,12 +183,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                             this.updateCommentStats(comment.user_id, 1, comment.author);
                         }
                     }
-
                 }, (error) => {
                     console.warn(error);
                 })
             );
-        // }
 
         // After comments are added to the array
         this.updateAllLineCounts();
@@ -222,8 +235,35 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 let touchY = parseInt(touchobj.clientY);
                 // Account for page scroll offset
                 this.highlightY = (touchY - scrollOffset + readingPad) + 'px';
+                // If in mobile
+                if (window.screen.availWidth < 768) {
+                    this.isMobile = true;
+                    let touchX = parseInt(touchobj.clientX);
+                    if (touchX < 120) {
+                        this.optionLeft = false;
+                        this.highlightX = (180 - touchX) + 'px';
+                    } else {
+                        this.optionLeft = true;
+                        this.highlightX = (touchX + readingPad - 80) + 'px';
+                    }
+                } else {
+                    this.isMobile = false;
+                }
             } else {
                 this.highlightY = (event.clientY - scrollOffset + readingPad) + 'px';
+                // If in mobile
+                if (window.screen.availWidth < 768) {
+                    this.isMobile = true;
+                    if (event.clientX < 120) {
+                        this.optionLeft = false;
+                        this.highlightX = (180 - event.clientX) + 'px';
+                    } else {
+                        this.optionLeft = true;
+                        this.highlightX = (event.clientX + readingPad - 80) + 'px';
+                    }
+                } else {
+                    this.isMobile = false;
+                }
             }
             this.optionsShow = true;
         } else {
@@ -288,14 +328,15 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      */
     decrementHighlights(start: number, end: number): void {
         for (var i = start; i <= end; i ++) {
+            // Any time we decrement, we should ensure we remove the 1000 focus
+            if (this.highlightArray[i] >= 1000) {
+                this.highlightArray[i] -= 1000;
+            }
+
             if (this.highlightArray[i] && this.highlightArray[i] > 0) {
                 this.highlightArray[i]--;
             } else {
                 this.highlightArray[i] = 0;
-            }
-            // Any time we decrement, we should ensure we remove the 1000 focus
-            if (this.highlightArray[i] >= 1000) {
-                this.highlightArray[i] -= 1000;
             }
         }
     }
@@ -308,6 +349,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      * @param type What kind of comment: emoji, text...
      */
     createComment(start: number, end: number, type: string): void {
+        // We need to make sure they aren't already editing a comment
+        this.inactivateComment();
+
         let projectId = this.project._id;
         let text: string = '';
         for (var i = start; i <= end; i++) {
@@ -341,7 +385,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     commentsByIndexAdd(comment, index: number, addQuietly ?: boolean): void {
         let start = comment.start;
         // Give it the Project Id to pass down to the Comment Component
-        comment.project_id = this.project._id;
+        this.decorateComment(comment);
         
         // Add Comment to local array
         if (this.commentsByIndex[start]) {
@@ -358,19 +402,26 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.updateAllLineCounts();
     }
 
+    private decorateComment(comment: any) {
+        comment.project_id = this.project._id;
+        if (comment.user_id === this.user._id || comment.user_id === this.project.teacher_id) {
+            comment.showAvatar = true;
+        }
+    }
+
     /**
      * Removes comment from locally transformed array (commentsByIndex)
      */
     commentsByIndexRemove(commentId, index: number, commentIndex: number) {
         let comment = this.commentsByIndex[index][commentIndex];
-
+        
         if (!comment) {
             return;
         }
         // Clear active comment
         this.inactivateComment();
         // Remove comment form local Comments array
-        this.commentsByIndex[index].splice(commentIndex);
+        this.commentsByIndex[index].splice(commentIndex,1);
         // Update line counts
         this.updateAllLineCounts();
     }
@@ -398,6 +449,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     }
 
     inactivateComment():void {
+        this.unfocusHighlight(this.activeComment.start, this.activeComment.end);
         this.activeComment.active = false;
         this.activeComment = {};
     }
@@ -594,9 +646,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         for (var i = start; i <= end; i ++) {
             if (this.highlightArray[i] >= 1000) {
                 this.highlightArray[i] -= 1000;
-            } else {
-                this.highlightArray[i] = 0;
-            }
+            } 
         }
     }
 
@@ -616,4 +666,35 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         }
         return classString;
     }
+
+    /**
+     * This will handle touching of highlighted text to toggle comment in mobile
+     */
+    private onTouch(index) {
+        /** Will likely need to change to checking for a highlight class 
+         * For now, just check if the selected has a comment
+        */
+        // Check if mobile (again just in case the viewport was changed)
+        if (window.screen.availWidth < 768) {
+            this.isMobile = true;
+        }
+        this.foundArray = [];
+        this.mobileIndex = 0;
+
+        for (var j=index; j>=0; j--) {
+            if (this.commentsByIndex[j] && this.commentsByIndex[j].length >= 0) {
+                for (var k=0; k<this.commentsByIndex[j].length; k++) {
+                    if (this.commentsByIndex[j][k].start<=index && this.commentsByIndex[j][k].end>=index) {
+                        this.foundArray.push({'wIndex' : [j], 'cIndex' : [k]});)
+                    }
+                }
+            }
+        }
+        
+        if (this.foundArray.length>0) {
+            this.hideKeyboard = true;
+            this.setActiveCommentByIndex(true, this.foundArray[this.mobileIndex].wIndex, this.foundArray[this.mobileIndex].cIndex);
+        }
+    }
 }
+

@@ -1,15 +1,9 @@
 <!--<hot-project-info></hot-project-info>-->
 <side-bar [hasCommentCount]="true"></side-bar>
 
-<div class="container container--side-bar">
+<div class="container-fluid container--side-bar">
 
-  <section class="project-column header-padding" [ngClass]="{ loading: !project._id }">
-    <p class="alert alert-danger" *ngIf="error">{{ error }}</p>
-    <!--<emoji-annotator project-fn="getSession()"></emoji-annotator>-->
-    <annotator #annotator *ngIf="project._id" [project]="project"></annotator>
-  </section>
-  
-  <div class="reading__hud">
+   <div class="reading__hud">
     <label id="projectTitle" >{{ project.label }}</label>
     
     <div class="hud__info"> 
@@ -20,6 +14,12 @@
       <span [innerHtml]="':fire:' | emojione"></span>
     </div>
   </div>
+
+  <section class="project-column header-padding" [ngClass]="{ loading: !project._id }">
+    <p class="alert alert-danger" *ngIf="error">{{ error }}</p>
+    <!--<emoji-annotator project-fn="getSession()"></emoji-annotator>-->
+    <annotator #annotator *ngIf="project._id" [project]="project"></annotator>
+  </section>
 
 </div>
 

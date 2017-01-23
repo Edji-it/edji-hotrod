@@ -1,5 +1,5 @@
 import { browser, by, element, protractor } from 'protractor';
-import Home = require('./page-objects/home-page.ts');
+import Home = require('./page-objects/home-page');
 
 /*
     18 Jan 2017
@@ -35,5 +35,15 @@ describe('Home Page', () => {
         let result  = 'Edji';
         browser.wait(EC.titleContains('Edji'), 5000, 'Title should contain "Edji".');
     });
+
+    /* ---- Navigation Tests ------------------------ */
+
+    /* Test: Login Button goes to login page.
+        - Click login button.
+    */
+    it ('login button should bring you to the login page.', () => {
+        
+
+    }); // it ('login button should bring you to the login page.', ()
 
 }); // describe 'Home Page'

@@ -1,3 +1,6 @@
+$phone-width-min: 0px;
+$phone-width: 480px;
+$tablet-width: 768px;
 
 .emojionearea-picker {
     opacity: 0;
@@ -108,4 +111,23 @@
     border-radius: 0px;
     background: rgba(255,255,255,0.9);
     width: calc(100% - 15px); //room for scrollbar
+}
+
+@mixin phone {
+  @media (min-width: #{$phone-width-min}) and (max-width: #{$tablet-width - 1px}) {
+    @content;
+  }
+}
+
+/* Mobile Optimization */
+@include phone {
+	.emojionearea-picker {
+        width: 100%;
+        left: 0;
+        min-height: 38%;
+    }
+    .options {
+        bottom: 75px;
+        right: 0;
+    }
 }

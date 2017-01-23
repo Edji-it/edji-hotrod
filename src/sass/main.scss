@@ -141,13 +141,6 @@ $seamlessPlaceholderColor: #888;
 	}
 }
 
-
-body {
-	// @include transform(translate3d(0, 0, 0));
-	// overflow-y: scroll; /* has to be scroll, not auto */
-	// -webkit-overflow-scrolling: touch;
-}
-
 body > .main {
 	// @include transform(translate3d(0, 0, 0));
 	// min-height: 100%;
@@ -549,7 +542,6 @@ body {
 }
 
 section {
-	max-width: 900px;
 	height: 100%;
 	margin: auto;
 	padding-left: 200px;
@@ -594,7 +586,7 @@ $commentColWidth: 350px;
 		right: 100%; //calc( 100% - #{ $sideBarWidth - 20px });
 		content: ' ';
 	}
-} 
+}
 
 .sessions-container {
 	width: calc(100% - #{ $sideBarWidth });
@@ -1020,7 +1012,7 @@ input.form-item--seamless {
 	margin: 0px;
 	border-radius: 0px;
 
-	&::placeholder {
+	@include placeholder {
 		color: $seamlessPlaceholderColor;
 	}
 	
@@ -1028,4 +1020,9 @@ input.form-item--seamless {
 		transform: scale(1);
 		box-shadow: none;
 	}
+}
+
+
+input[type=text].input-noborder, input[type=password].input-noborder, input[type=text].input-noborder:focus, input[type=password].input-noborder:focus {
+	border: 0;
 }

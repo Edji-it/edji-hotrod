@@ -1,0 +1,29 @@
+.reading-wrap {
+    background: #fafafa;
+	box-shadow: 0 3px 9px 0 rgba(0,0,0,0.2), 0 0 0 1px rgba(0,0,0,0.04); //0px 2px 3px 0px rgba(0,0,0, 0.1);
+	padding: 40px 60px 50px 35px; 
+}
+
+.sub-heading a {
+	font-family: 'Open Sans', Arial, Helvetica;
+	margin: 0 3px;
+	text-decoration: underline;
+	color: #888;
+	font-size: 14px;
+
+	&:hover, &:focus {
+		color: #333;
+	}
+}
+
+.offset-buttons {
+	position: absolute;
+	top:0;
+	left: 100%;
+	padding-left: 5px;
+	max-width: 50px;
+
+	& a, & .btn {
+		margin-bottom: 5px;
+	}
+}

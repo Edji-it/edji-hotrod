@@ -1,7 +1,9 @@
 $sessionAccent: #FF7583;
 $sessionPanelWidth: 150px;
 $midGray: #f7f7f7;
-
+$phone-width-min: 0px;
+$phone-width: 480px;
+$tablet-width: 768px;
 
 .session-pane{
 	width: $sessionPanelWidth;
@@ -205,4 +207,62 @@ article.content p {
 	height: 0px;
 	width: 5px;
 	top: 50%;
+}
+
+.annotator {
+	background: #fafafa;
+	box-shadow: 0 3px 9px 0 rgba(0,0,0,0.2), 0 0 0 1px rgba(0,0,0,0.04); //0px 2px 3px 0px rgba(0,0,0, 0.1);
+	padding: 40px 60px 50px 35px; 
+}
+
+.mobile-comment {
+	display: none;
+}
+
+@mixin phone {
+  @media (min-width: #{$phone-width-min}) and (max-width: #{$tablet-width - 1px}) {
+    @content;
+  }
+}
+
+/* Mobile Optimization */
+@include phone {
+	.text-options {
+		left: initial;
+	}
+
+	.mobile-comment {
+		display: none;
+	}
+
+	.mobile-comment.active {
+		display: block;
+		height: 180px;
+		width: 100%;
+		z-index: 5000;
+		position: fixed;
+		bottom: 0;
+		opacity: 1;
+		background-color: white;
+		left: 0;
+		text-align: center;
+		-webkit-box-shadow: 0 -5px 10px -5px #777;
+    	box-shadow: 0 -5px 10px -5px #777;
+	}
+
+	.eSize {
+		font-size: 25px;
+		top: 20px;
+		position: relative;
+	}
+
+	.eCmtRemove {
+		touch-action: none; 
+		user-select: none; 
+		-webkit-user-drag: none; 
+		-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+		font-size: 42px;
+		top: 5px;
+		right: 5px;
+	}
 }

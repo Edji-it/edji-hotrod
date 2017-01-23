@@ -9,6 +9,8 @@ import { Component, EventEmitter, ElementRef, Input, Output, OnInit, AfterViewIn
 export class TextCommentComponent implements OnInit, AfterViewInit {
 
     @Input() private comment: any;
+    @Input() private readOnly: boolean;
+    @Input() private preview: boolean;
     @Output() blur = new EventEmitter<string>(); 
 
     constructor(private element: ElementRef) { 

@@ -17,7 +17,11 @@ export class CommentComponent implements OnInit {
 
   private yPos: number = 0;
   private justSaved: boolean = false;
+  private isLoading: boolean = false;
+  // Is fully visible, focused, and editable
   private active = false;
+  // Is fully visible, focused, but not editable
+  private preview = false;
 
   @Input() public comment: any;
   @Input() private readOnly: false; 
@@ -28,10 +32,12 @@ export class CommentComponent implements OnInit {
     }
   }
   get isActive(): boolean { return this.active; }
+  @Input() private isMobile: boolean;
 
   @Output() commentDeleted = new EventEmitter<string>();
   @Output() commentActivation = new EventEmitter<boolean>();
   @Output() expandLine = new EventEmitter<number>();
+  @Output() dismissKeyboard = new EventEmitter();
 
   constructor(
         private _projects: ProjectService,
@@ -44,6 +50,7 @@ export class CommentComponent implements OnInit {
   }
 
   toggleActive( ): void {
+    if (!this.readOnly) {
       if (this.active === true) {
           this.active = false;
           this.commentActivation.emit(false);
@@ -53,11 +60,27 @@ export class CommentComponent implements OnInit {
           this.active = true; 
           this.commentActivation.emit(true);
       }
+    } else {
+      this.togglePreview();
+    }
+      
   }
 
   activate(): void {
-    this.active = true;
-    this.commentActivation.emit(true);
+    if (!this.readOnly) {
+      this.active = true;
+      this.commentActivation.emit(true);
+    } else {
+      this.togglePreview();
+    }
+  }
+
+  togglePreview(): void {
+    if (this.preview === true) {
+      this.preview = false;
+    } else {
+      this.preview = true;
+    }
   }
 
   deactivate(): void {
@@ -65,14 +88,19 @@ export class CommentComponent implements OnInit {
     this.commentActivation.emit(false);
     // Save when comment is toggled away from
     this.updateComment(this.comment.data);
+    if (this.isMobile) {
+      this.dismissKeyboard.emit();
+    }
   }
 
   // Updates comment in db
   public updateComment(commentData: string): void {
     this.angulartics.eventTrack.next({ action: 'updateComment', properties: { category: 'projectAction', label: 'attempt' }});
+    this.isLoading = true;
 
     this._projects.saveComment(this.comment.project_id, commentData, this.comment.start, this.comment.end, this.comment.type, this.comment.text, this.comment._id)
       .then(comment => {
+        this.isLoading = false;
         this.angulartics.eventTrack.next({ action: 'updateComment', properties: { category: 'projectAction', label: 'success' }});
         this.justSaved = true;
         setTimeout(() => {
