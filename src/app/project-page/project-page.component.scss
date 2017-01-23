@@ -1,4 +1,35 @@
+$phone-width-min: 0px;
+$phone-width: 480px;
+$tablet-width: 768px;
+
 .project-column {
     max-width: 1000px;
     padding-left:210px;
+}
+
+@mixin phone {
+  @media (min-width: #{$phone-width-min}) and (max-width: #{$tablet-width - 1px}) {
+    @content;
+  }
+}
+
+/* Mobile Optimization */
+@include phone {
+	.reading__hud {
+		padding: 6px 2px;
+        position: relative;
+        width: 100%;
+        background: none;
+        z-index: 0;
+        left: 0;
+        right: 0;
+        text-align: center;
+        padding-bottom: 25px;
+	}
+    .project-column {
+        padding: 0;
+    }
+	.container--side-bar {
+		padding: 100px 15px 0px 15px;
+	}
 }
