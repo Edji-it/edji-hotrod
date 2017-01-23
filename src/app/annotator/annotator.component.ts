@@ -350,6 +350,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      * @param type What kind of comment: emoji, text...
      */
     createComment(start: number, end: number, type: string): void {
+        // We need to make sure they aren't already editing a comment
+        this.inactivateComment();
+
         let projectId = this.project._id;
         let text: string = '';
         for (var i = start; i <= end; i++) {
@@ -412,14 +415,14 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      */
     commentsByIndexRemove(commentId, index: number, commentIndex: number) {
         let comment = this.commentsByIndex[index][commentIndex];
-
+        
         if (!comment) {
             return;
         }
         // Clear active comment
         this.inactivateComment();
         // Remove comment form local Comments array
-        this.commentsByIndex[index].splice(commentIndex);
+        this.commentsByIndex[index].splice(commentIndex,1);
         // Update line counts
         this.updateAllLineCounts();
     }

@@ -21,7 +21,7 @@ import '@angularclass/hmr';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
 
-if ('production' === ENV) {
+if ('prod' === ENV) {
   // Production
 
 
