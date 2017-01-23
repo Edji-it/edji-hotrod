@@ -1,4 +1,4 @@
-<div class="comment" [class.saved]="justSaved" [class.active]="active" [ngClass]="[ 'line-count-' + lineCount, expanded ? 'expanded' : '' ]">
+<div class="comment" [class.saved]="justSaved" [class.active]="active" [class.readonly]="readOnly"  [ngClass]="[ 'line-count-' + lineCount, expanded ? 'expanded' : '', active ? 'comment__show' : '' ]">
     <div class='expand-comments' (tap)='toggleExpand($event)'></div>
     <div *ngIf='comment.author' class='comment-username'>{{comment.author}}</div>
     <div *ngIf="comment.author" [class.show]="comment.showAvatar" class="comment__avatar">{{comment.author.substr(0,2).toUpperCase()}}</div>
@@ -7,7 +7,9 @@
         <emoji-comment (tap)="toggleActive()" *ngIf="comment.type == 'emoji' || !comment.type" #commentInput [comment]="comment"></emoji-comment>
         <text-comment (tap)="activate()" [readOnly]="readOnly" [preview]="preview" *ngIf="comment.type == 'text'" [comment]="comment" #commentInput (blur)="deactivate()"></text-comment>
         <button *ngIf="!readOnly" (tap)="deleteComment(comment)" class='inline-delete'>+</button>
-        <div *ngIf="comment.active && !readOnly" class="comment__save" (tap)="deactivate()" [innerHtml]="':white_check_mark:' | emojione"></div>
+        <div *ngIf="comment.active && !readOnly" class="comment__save" [ngClass]="{ 'commentMobileCheck' : isMobile }" (tap)="deactivate()" [innerHtml]="':white_check_mark:' | emojione"></div>
     </div>
     <i class="comment__saved" [innerHtml]='":ok_hand:" | emojione'></i>
 </div>
+<div *ngIf="isMobile && active" class="mobile__comment-background"></div>
+
