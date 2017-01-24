@@ -677,23 +677,23 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // Check if mobile (again just in case the viewport was changed)
         if (window.screen.availWidth < 768) {
             this.isMobile = true;
-        }
-        this.foundArray = [];
-        this.mobileIndex = 0;
+            this.foundArray = [];
+            this.mobileIndex = 0;
 
-        for (var j=index; j>=0; j--) {
-            if (this.commentsByIndex[j] && this.commentsByIndex[j].length >= 0) {
-                for (var k=0; k<this.commentsByIndex[j].length; k++) {
-                    if (this.commentsByIndex[j][k].start<=index && this.commentsByIndex[j][k].end>=index) {
-                        this.foundArray.push({'wIndex' : [j], 'cIndex' : [k]});)
+            for (var j=index; j>=0; j--) {
+                if (this.commentsByIndex[j] && this.commentsByIndex[j].length >= 0) {
+                    for (var k=0; k<this.commentsByIndex[j].length; k++) {
+                        if (this.commentsByIndex[j][k].start<=index && this.commentsByIndex[j][k].end>=index) {
+                            this.foundArray.push({'wIndex' : [j], 'cIndex' : [k]});)
+                        }
                     }
                 }
             }
-        }
-        
-        if (this.foundArray.length>0) {
-            this.hideKeyboard = true;
-            this.setActiveCommentByIndex(true, this.foundArray[this.mobileIndex].wIndex, this.foundArray[this.mobileIndex].cIndex);
+            
+            if (this.foundArray.length>0) {
+                this.hideKeyboard = true;
+                this.setActiveCommentByIndex(true, this.foundArray[this.mobileIndex].wIndex, this.foundArray[this.mobileIndex].cIndex);
+            }
         }
     }
 }
