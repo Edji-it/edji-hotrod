@@ -684,7 +684,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 if (this.commentsByIndex[j] && this.commentsByIndex[j].length >= 0) {
                     for (var k=0; k<this.commentsByIndex[j].length; k++) {
                         if (this.commentsByIndex[j][k].start<=index && this.commentsByIndex[j][k].end>=index) {
-                            this.foundArray.push({'wIndex' : [j], 'cIndex' : [k]});)
+                            this.foundArray.push({'wIndex' : [j], 'cIndex' : [k]});
                         }
                     }
                 }
