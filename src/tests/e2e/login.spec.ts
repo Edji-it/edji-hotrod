@@ -1,5 +1,5 @@
 import { browser, by, element, protractor } from 'protractor';
-import Home = require('./page-objects/home-page');
+import Login = require('./page-objects/login-page');
 
 /*
     23 Jan 2017
@@ -13,6 +13,7 @@ import Home = require('./page-objects/home-page');
 describe('Login Page', () => {
 
     /* ---- Variable Initialization --------------- */
+    let Login   = new Login();
     let EC      = protractor.ExpectedConditions; // vital
 
     /* ---- beforeEach ---------------------------- */
@@ -29,5 +30,8 @@ describe('Login Page', () => {
         let subject = browser.getTitle();
         browser.wait(EC.titleContains('PEdji'), 5000, 'Title should contain "Edji".');
     });
+
+    /* ---- Login Tests ---------------------------- */
+
 
 }); // describe Login Page

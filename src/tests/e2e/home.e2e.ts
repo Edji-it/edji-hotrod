@@ -20,59 +20,6 @@ describe('App', () => {
     These are functions that are going to be used in many places throughout the tests.
   */
 
-  function logInWithStudentAccount () 
-  { 
-    browser.get('/#/login');
-    let loginBtn;
-
-    browser.wait(EC.urlContains('login'), 3000, 'logInWithStudentAccount(): could not find the URL for the home page. :(');
-
-    loginBtn = element(by.id("buttonLogin"));
-
-    element(by.id('usernameInput')).sendKeys('student');
-    element(by.id('passwordInput')).sendKeys('student'); // protractor.Key.ENTER
-    
-    pressEnter();       // THIS DOES WORK
-    //loginBtn.click(); // THIS DOES NOT
- 
-    browser.wait( EC.urlContains('dashboard'), 10000, 'Dashboard should open within 3 seconds. It did not. Login potentially failed.');
-  } // function logInWithStudentAccount
-
-  function logInWithTeacherAccount () 
-  { 
-    browser.get('/#/login');
-    browser.wait(EC.urlContains('login'), 3000, 'logInWithTeacherAccount(): could not find the URL for the home page. :(');
-
-    let loginBtn = element(by.id("buttonLogin"));
-    element(by.id('usernameInput')).sendKeys('teach');
-    element(by.id('passwordInput')).sendKeys('teach'); // protractor.Key.ENTER
-    
-    // pressEnter();
-    loginBtn.click();
-
-    browser.wait( EC.urlContains('dashboard'), 10000, 'Dashboard should open within 3 seconds. It did not. Login potentially failed.');
-  } // function logInWithStudentAccount
-
-  function pressEnter ()
-  {
-    browser.waitForAngular();
-    browser.actions().sendKeys(protractor.Key.ENTER).perform();
-  } // function pressEnter ()
-
-  function enterUsernameAndPassword(username, password)
-  {
-    browser.get('/#/login');
-    browser.wait(EC.urlContains('login'), 10000, 'enterUsernameAndPassword(): could not find the URL for the home page. :(');
-
-    element(by.id('usernameInput')).sendKeys(username);
-    element(by.id('passwordInput')).sendKeys(password);
-  } // function enterUsername(username)
-
-  function enterPassword(password)
-  {
-    element(by.id('passwordInput')).sendKeys(password);
-  } // function enterPassword(password)
-
   function enterProjectCode(projectCode)
   {
     let codeInput = element(by.id('projectCodeInput'));
@@ -172,7 +119,7 @@ describe('App', () => {
   // Test: logging in with correct login information.
   it('user should be able to login with correct credentials', () => {
     verifyURL("home");
-    logInWithStudentAccount();
+    //logInWithStudentAccount();
   });
 
   // Test: Not typing in a password on log in.
@@ -221,7 +168,7 @@ describe('App', () => {
   */
   it('user should be able to go to Account information page', () => {
     // Home Page
-    logInWithStudentAccount();
+    //logInWithStudentAccount();
 
     // Dashboard
     verifyURL('dashboard');
@@ -238,7 +185,7 @@ describe('App', () => {
   */
   it('user should be able to log in, go to home, and go back to the dashboard', () => {
     // Home Page
-    logInWithStudentAccount(); // Uses the student account.
+    //logInWithStudentAccount(); // Uses the student account.
 
     // Dashboard
     verifyURL('dashboard');
@@ -250,25 +197,6 @@ describe('App', () => {
 
     // Dashboard
     verifyURL("dashboard");
-  });
-
-  /* Test: View guides/faq
-    - Be on any Edji page except guide.edji.it
-    - Click guides button at bottom of page
-    - Redirect to guide.edji.it
-  */
-  it('user should be able to view guides/FAQ', () => {
-    // let footer = element(by.id("footer")); // hey it finds this though... solution in the works.
-    let fterGuidesBtn = element(by.id('footerGuidesLink'));
-
-    // Little trick to scroll to ID
-    browser.get('#footerGuidesLink');
-    
-    // Click to open the link
-    fterGuidesBtn.click();
-
-    // Did we make it to the Guides page?
-    verifyURL("guide");
   });
 
   /* Test: View Edji twitter page

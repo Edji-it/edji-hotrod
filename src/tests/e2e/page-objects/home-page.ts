@@ -1,0 +1,57 @@
+import { browser, by, element, protractor } from 'protractor';
+import { PageObjectInterface } from './PageObjectInterface';
+
+class Home implements PageObjectInterface
+{
+    /*
+    18 Jan 2017
+    Last Modified: 23 Jan 2017
+    Nicholas Pumper
+
+    Page Object for the EDJI Home Page
+
+    */
+
+    // Public Instance Variables
+    public loginLink         = element(by.id("loginLink"));
+    public registerButton    = element(by.id("registerLink"));
+    public joinProjectButton = element(by.id("buttonJoinProject"));
+    public projectCodeInput  = element(by.id("projectCodeInput"));
+    public footerGuidesLink  = element(by.id("footerGuidesLink"));
+    public footerTwitterLink = element(by.id("footerTwitterLink"));
+
+    // get the home page
+    getPage() : void 
+    {
+        browser.get('/#/home');
+    } // getPage() : void
+
+    // click on the login link
+    clickLogin() : void
+    {
+        this.loginLink.click();
+    } // clickLogin() : void
+
+    enterProjectCode(input: string) : void
+    {
+        this.projectCodeInput.sendKeys(input);
+    } // enterProjectCode(input: string) : void
+
+    // click the footer guides link
+    clickGuidesLink() : void
+    {
+        browser.get('#footerGuidesLink');  // Little trick to scroll to ID
+
+        this.footerGuidesLink.click();
+    } // clickGuidesLink() : void
+
+    // click the footer twitter link
+    clickTwitterLink() : void 
+    {
+        browser.get('#footerTwitterLink');  // Little trick to scroll to ID
+
+        this.footerTwitterLink.click();
+    } // clickTwitterLink() : void 
+} // class Home
+
+export = Home;

@@ -38,9 +38,9 @@ exports.config = {
     // Example suite: homepage: 'tests/e2e/homepage/**/*Spec.js',
 
     // To test the entire site:
-    home:     helpers.root('src/tests/e2e/home/home.spec.ts'),
-    oldhome:  helpers.root('src/tests/e2e/home/home.e2e.ts'),
-    login:    helpers.root('src/tests/e2e/login/login.spec.ts')
+    home:     helpers.root('src/tests/e2e/home.spec.ts'),
+    oldhome:  helpers.root('src/tests/e2e/home.e2e.ts'),
+    login:    helpers.root('src/tests/e2e/login.spec.ts')
   }, // suites
 
   exclude: [],
