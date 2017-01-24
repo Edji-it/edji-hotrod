@@ -1,16 +1,13 @@
 import { browser, by, element, protractor } from 'protractor';
-import Home = require('./page-objects/home-page');
+import Home = require('./home-page');
 
 /*
     18 Jan 2017
-    Last Modified: 18 Jan 2017
+    Last Modified: 23 Jan 2017
     Nicholas Pumper
 
     e2e test the home page!
 */
-
-// Require the necessary page objects.
-//var home = require('./page-objects/home-page.ts');
 
 // Now into the testing.
 describe('Home Page', () => {
