@@ -121,7 +121,7 @@ $tablet-width: 768px;
     display: none;
   }
   .inline-delete {
-    left: 150px;
+    right: 0;
   }
 
 	.comment__show {
@@ -129,17 +129,19 @@ $tablet-width: 768px;
   }
 
   .comment {
-    height: 180px;
-		width: 100%;
-		z-index: 5000;
-		position: fixed;
-		top: 80px;
-		opacity: 0.9;
-		background-color: white;
-		left: 0;
-		-webkit-box-shadow: 0 -5px 10px -5px #777;
+    /*height: 180px;*/
+    height: 100%;
+    width: 100%;
+    z-index: 5000;
+    position: fixed;
+    top: 0px;
+    opacity: 0.9;
+    background-color: white;
+    left: 0;
+    -webkit-box-shadow: 0 -5px 10px -5px #777;
     box-shadow: 0 -5px 10px -5px #777;
-    padding: 28px 38px;
+    padding: 100px 56px 0px 38px;
+    background: rgba(0,0,0,0.4);
   }
 
   .comment__avatar {

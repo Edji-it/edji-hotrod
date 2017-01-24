@@ -21,7 +21,7 @@ $tablet-width: 768px;
 	width: $sideBarWidth;
 	text-align: center;
 	background: #fff; //$midGray;
-	z-index: 6000;
+	z-index: 6001;
 	border-right: $lightBorder;
 
 	& .logo-button {
@@ -145,6 +145,7 @@ a.side-bar__link {
 	}
 	.side-bar {
 		height: 66px;
+		width: 100%;
 	}
 	.mNavIcon {
 		display: block;
@@ -156,6 +157,7 @@ a.side-bar__link {
 	.side-bar__user__show {
 		display: block;
 		transform: rotate(0deg);
+		-webkit-transform: rotate(0deg);
 		top: 66px;
 		position: fixed;
 		height: 40px;
@@ -163,6 +165,8 @@ a.side-bar__link {
 		width: 100%;
 		left: 0;
 		padding-top: 6px;
+		-webkit-box-shadow: 0 5px 10px -5px #777;
+    	box-shadow: 0 5px 10px -5px #777;
 	}
 	.mNav {
 		font-family: 'Open Sans';
