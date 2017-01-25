@@ -126,19 +126,17 @@ describe('Login Page', () => {
         - Click on join as guest field and type in vulgar name hit enter or click join project button
         - Receive “Name is invalid” error message
     */
-    /*
     it('should be able to get to project through quick code, be rejected because of vulgar name', () => {
         // Home Page
-        submitProjectCode('m7y5');
+        home.enterProjectCode(login.validProjectCode);
+        home.clickJoinProjectButton();
 
         // Join / Login Page
-        verifyURL("join");
-        submitGuestName("Fucking Fucks");
+        browser.wait(EC.urlContains("join"), 5000, ('Never arrived at the url containing: "join".'));
+        login.enterGuestName("Fucking Fucks");
 
         // Lets find that error
-        let errorMsg = element(by.id('msgBadName'));
-        browser.wait(EC.visibilityOf(errorMsg), 3000, 'The error message should show up. It did not.');
+        browser.wait(EC.visibilityOf(login.msgBadName), 3000, 'The error message should show up. It did not.');
     });
-    */
 
 }); // describe Login Page
