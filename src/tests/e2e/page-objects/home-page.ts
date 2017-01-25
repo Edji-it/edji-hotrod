@@ -37,6 +37,21 @@ class Home implements PageObjectInterface
         this.projectCodeInput.sendKeys(input);
     } // enterProjectCode(input: string) : void
 
+    clickJoinProjectButton () :  void
+    {
+        // This test does not want to get the join project button for some reason.
+        /*
+        browser.get('#buttonJoinProject');
+        this.joinProjectButton.click();
+        */
+
+        // so the work around is press enter:
+        browser.actions().sendKeys(protractor.Key.ENTER).perform();
+
+        // or very manually click it
+        // browser.actions().mouseMove(this.joinProjectButton).mouseDown().mouseUp().perform();
+    } // clickProjectButton () :  void
+
     // click the footer guides link
     clickGuidesLink() : void
     {

@@ -9,7 +9,7 @@
             <h2 class="center">Login to your Dashboard</h2>
             <label for="usernameInput">Username</label>
             <input type="text" id="usernameInput" [formControl]="loginForm.controls['username']" tabindex="0" />
-            <div class="alert alert-danger" *ngIf="loginForm.controls['username'].hasError('required') && (loginForm.controls['username'].dirty || loginForm.submitted)">A username is required</div>
+            <div id="msgNoUserName" class="alert alert-danger" *ngIf="loginForm.controls['username'].hasError('required') && (loginForm.controls['username'].dirty || loginForm.submitted)">A username is required</div>
             
             <label for="passwordInput">Password</label>
             <input type="password" id="passwordInput" [formControl]="loginForm.controls['password']" tabindex="0" />
