@@ -141,52 +141,52 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this._projects.setCommentStats(this.commentStats);
 
         // Subscribe to comment comment updates
-            this.subscriptions.push(
-                this._socket.commentUpdates().subscribe((commentUpdate) => {
-                    let comment = commentUpdate.comment;
-                    let wIndex = comment.start;
-                    let cIndex = -1;
+        this.subscriptions.push(
+            this._socket.commentUpdates().subscribe((commentUpdate) => {
+                let comment = commentUpdate.comment;
+                let wIndex = comment.start;
+                let cIndex = -1;
 
-                    // Get local array index
-                    if (this.commentsByIndex[wIndex]) {
-                        for (var i = 0; i < this.commentsByIndex[wIndex].length; i++) {
-                            let commentRef = this.commentsByIndex[wIndex][i];
-                            if (commentRef._id === comment._id) {
-                                cIndex = i;
-                            }
+                // Get local array index
+                if (this.commentsByIndex[wIndex]) {
+                    for (var i = 0; i < this.commentsByIndex[wIndex].length; i++) {
+                        let commentRef = this.commentsByIndex[wIndex][i];
+                        if (commentRef._id === comment._id) {
+                            cIndex = i;
                         }
                     }
+                }
 
-                    if (this.user._id === this.project.teacher_id || comment.user_id === this.project.teacher_id) {
-                        // Process different live comment updates
-                        if (commentUpdate.action === 'DELETE') {
-                            if (cIndex > -1) {
-                                // Remove highlights from local array
-                                this.decrementHighlights(comment.start, comment.end);
-                                this.commentsByIndexRemove(comment._id, wIndex, cIndex);
-                                this.updateCommentStats(comment.user_id, -1, comment.author);
-                            }
-                        } else if (commentUpdate.action === 'UPDATE') {
-                            if (cIndex > -1 && this.commentsByIndex[wIndex] && this.commentsByIndex[wIndex][cIndex]) {
-                                this.commentsByIndex[wIndex][cIndex].data = comment.data;
-                            } else {
-                                // Sometimes an UPDATE comes through for comment not yet created
-                                // Add highlights to local array
-                                this.incrementHighlights(comment.start, comment.end);
-                                this.commentsByIndexAdd(comment, wIndex, true);
-                                this.updateCommentStats(comment.user_id, 1, comment.author);
-                            }
-                        } else if (commentUpdate.action === 'CREATE') {
+                if (this.user._id === this.project.teacher_id || comment.user_id === this.project.teacher_id) {
+                    // Process different live comment updates
+                    if (commentUpdate.action === 'DELETE') {
+                        if (cIndex > -1) {
+                            // Remove highlights from local array
+                            this.decrementHighlights(comment.start, comment.end);
+                            this.commentsByIndexRemove(comment._id, wIndex, cIndex);
+                            this.updateCommentStats(comment.user_id, -1, comment.author);
+                        }
+                    } else if (commentUpdate.action === 'UPDATE') {
+                        if (cIndex > -1 && this.commentsByIndex[wIndex] && this.commentsByIndex[wIndex][cIndex]) {
+                            this.commentsByIndex[wIndex][cIndex].data = comment.data;
+                        } else {
+                            // Sometimes an UPDATE comes through for comment not yet created
                             // Add highlights to local array
                             this.incrementHighlights(comment.start, comment.end);
                             this.commentsByIndexAdd(comment, wIndex, true);
                             this.updateCommentStats(comment.user_id, 1, comment.author);
                         }
+                    } else if (commentUpdate.action === 'CREATE') {
+                        // Add highlights to local array
+                        this.incrementHighlights(comment.start, comment.end);
+                        this.commentsByIndexAdd(comment, wIndex, true);
+                        this.updateCommentStats(comment.user_id, 1, comment.author);
                     }
-                }, (error) => {
-                    console.warn(error);
-                })
-            );
+                }
+            }, (error) => {
+                console.warn(error);
+            })
+        );
 
         // After comments are added to the array
         this.updateAllLineCounts();
@@ -677,23 +677,23 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // Check if mobile (again just in case the viewport was changed)
         if (window.screen.availWidth < 768) {
             this.isMobile = true;
-        }
-        this.foundArray = [];
-        this.mobileIndex = 0;
+            this.foundArray = [];
+            this.mobileIndex = 0;
 
-        for (var j=index; j>=0; j--) {
-            if (this.commentsByIndex[j] && this.commentsByIndex[j].length >= 0) {
-                for (var k=0; k<this.commentsByIndex[j].length; k++) {
-                    if (this.commentsByIndex[j][k].start<=index && this.commentsByIndex[j][k].end>=index) {
-                        this.foundArray.push({'wIndex' : [j], 'cIndex' : [k]});)
+            for (var j=index; j>=0; j--) {
+                if (this.commentsByIndex[j] && this.commentsByIndex[j].length >= 0) {
+                    for (var k=0; k<this.commentsByIndex[j].length; k++) {
+                        if (this.commentsByIndex[j][k].start<=index && this.commentsByIndex[j][k].end>=index) {
+                            this.foundArray.push({'wIndex' : [j], 'cIndex' : [k]});
+                        }
                     }
                 }
             }
-        }
-        
-        if (this.foundArray.length>0) {
-            this.hideKeyboard = true;
-            this.setActiveCommentByIndex(true, this.foundArray[this.mobileIndex].wIndex, this.foundArray[this.mobileIndex].cIndex);
+            
+            if (this.foundArray.length>0) {
+                this.hideKeyboard = true;
+                this.setActiveCommentByIndex(true, this.foundArray[this.mobileIndex].wIndex, this.foundArray[this.mobileIndex].cIndex);
+            }
         }
     }
 }
