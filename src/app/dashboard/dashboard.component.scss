@@ -1,1 +1,7 @@
 /*styles for dashboard content only*/
+
+@import '../../sass/base/variables';
+
+.dashboard-container {
+    margin: $base-pad;
+}
