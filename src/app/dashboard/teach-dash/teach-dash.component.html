@@ -46,7 +46,10 @@
                 </div>
                 <div class="project-card-wrap">
                     <a class="list-item-wrapper list-item--button col-sm-6 project-card" *ngFor="let project of reading.projects" [routerLink]="['/project', project._id]">
-                        {{ project.label }}
+                        <span class="title">{{ project.label }}</span>
+                        <span class="metadata">{{ project.commentCount ? project.commentCount : 0 }} Comments</span>
+                        <span>|</span>
+                        <span class="metadata">{{ project.studentCount ? project.studentCount : 0 }} Students</span>
                     </a>
                 </div>
             </div>
