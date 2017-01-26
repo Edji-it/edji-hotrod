@@ -1,5 +1,9 @@
 /*styles for home content only*/
 $topPromoMinHeight: 500px;
+$phone-width-min: 0px;
+$phone-width: 480px;
+$tablet-width: 768px;
+
 
 .promo-image__wrap {
     position: relative;
@@ -79,7 +83,7 @@ $topPromoMinHeight: 500px;
     z-index: 6000;
     // Medium devices (tablets, less than 992px)
     @media (max-width: 767px) {
-        position: absolute;
+        //position: absolute;
         background: rgba(0,0,0,0.5);
         height: $topPromoMinHeight;
     }
@@ -109,4 +113,26 @@ $topPromoMinHeight: 500px;
 .has-sparks {
     overflow:hidden;
     position: relative;
+}
+
+@mixin phone {
+  @media (min-width: #{$phone-width-min}) and (max-width: #{$tablet-width - 1px}) {
+    @content;
+  }
+}
+
+/* Mobile Optimization */
+@include phone {
+    $topPromoMinHeight: 300px;
+    .join-panel {
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+    .promo-panel {
+        position: relative;
+    }
+    .home_vertical_fix {
+        padding-bottom: 40px;
+    }
 }

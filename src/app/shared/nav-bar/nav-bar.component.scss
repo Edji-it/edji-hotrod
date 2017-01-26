@@ -2,6 +2,9 @@
 $navBarHeight: 100px;
 $navBarLargeHeight: 95px;
 $sideBarWidth: 100px;
+$phone-width-min: 0px;
+$phone-width: 480px;
+$tablet-width: 768px;
 
 .nav-bar {
 	position: relative;
@@ -43,4 +46,29 @@ nav.large, .large .nav-bar {
 
 a.nav-bar__link {
 	display: inline-block;
+}
+
+@mixin phone {
+  @media (min-width: #{$phone-width-min}) and (max-width: #{$tablet-width - 1px}) {
+    @content;
+  }
+}
+
+/* Mobile Optimization */
+@include phone {
+    .nav-btns {
+        top: -60px;
+    	right: 40px;
+    }
+    .nav-btn-reg {
+        font-size: 10px;
+		width: 80px;
+    }
+    .nav-btn-login {
+        font-size: 10px;
+		position: fixed;
+		top: 40px;
+		right: 0;
+		width: 80px;
+    }
 }
