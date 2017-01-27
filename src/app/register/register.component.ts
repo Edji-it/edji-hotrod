@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { PRIMARY_OUTLET, Router } from '@angular/router';
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
@@ -25,7 +25,7 @@ import { AuthService, BumblebeeService, Copy } from './../shared';
     }
   `]
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit {
   private registerForm: FormGroup;
   private registerLoading: boolean = false;
   private errorObject: any = {
@@ -35,6 +35,7 @@ export class RegisterComponent {
   };
 
   private copy: Copy = new Copy();
+  private userCopy: any;
 
   private checkboxCopy = {
     student: "As a student! :writing_hand:",
@@ -73,6 +74,10 @@ export class RegisterComponent {
       password: [null, Validators.compose([Validators.required, Validators.minLength(6)])],
       passwordConfirm: [null, Validators.required],
     }, { validator: this.passwordsEqual });
+  }
+
+  ngOnInit() {
+    this.userCopy = this.copy.getUserCopy();
   }
 
   //https://angular.io/docs/ts/latest/api/forms/index/FormGroup-class.html

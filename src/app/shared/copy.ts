@@ -1,5 +1,5 @@
 export class Copy {
-  private registration: any = {
+  private userCopy: any = {
     placeholders: [
       {
         username: "pokemaster",
@@ -39,5 +39,11 @@ export class Copy {
         email: "dora@explorer.gov"
       }
     ]
+  }
+
+  public getUserCopy(): any {
+    var index = Math.floor(Math.random() * this.userCopy.placeholders.length - 1);
+
+    return this.userCopy.placeholders[index];
   }
 }
