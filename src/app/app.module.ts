@@ -32,6 +32,7 @@ import { Autosize } from 'angular2-autosize';
 
 // Pipes
 import { EmojiOnePipe } from './shared/emojione.pipe.ts';
+import { AddClassPipe } from './shared/addclass.pipe.ts';
 
 // Components
 import { NavBarComponent } from './shared/nav-bar';
@@ -88,6 +89,7 @@ type StoreType = {
     MediumEditorDirective,
     ClickOutsideDirective,
     EmojiOnePipe,
+    AddClassPipe,
     RegisterComponent,
     NavBarComponent,
     SideBarComponent,
