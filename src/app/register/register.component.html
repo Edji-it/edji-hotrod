@@ -20,17 +20,31 @@
         <div id="msgEmailIncorrect" *ngIf="registerForm.controls['email'].hasError('emailIncorrect') && registerForm.controls['email'].dirty" class="alert alert-info">We don't think that's an email</div>
 
         <label id="accountTypeLabel" for="accountTypeGroup">
-          Account Type
+          Account Type (what are the great ways you'll use Edji?)
         </label>
-        <div class="btn-group-wrapper">
-        <div id="accountTypeGroup" ngbRadioGroup class="btn-group" name="user type" [formControl]="registerForm.controls['isTeacher']" tabindex="0">
-          <label class="btn btn-primary" title="Students join projects to read!">
-            <input type="radio" name="Is student" id="student" autocomplete="off" value="{{false}}">Student
-          </label>
-          <label class="btn btn-primary" title="Teachers create projects!">
-            <input type="radio" name="Is teacher" id="option2" autocomplete="off" value="{{true}}">Teacher
-          </label>
+        <div class="form-check">
+          <label class="form-check-label">
+            <input class="form-check-input" type="checkbox" [formControl]="registerForm.controls['checkboxes'].controls['student']" value=""><div [innerHtml]="checkboxCopy.student | emojione"></div></label>
         </div>
+        <div class="form-check">
+          <label class="form-check-label">
+            <input class="form-check-input" type="checkbox" [formControl]="registerForm.controls['checkboxes'].controls['teacher']" value=""><div [innerHtml]="checkboxCopy.teacher | emojione"></div></label>
+        </div>
+        <div class="form-check">
+          <label class="form-check-label">
+            <input class="form-check-input" type="checkbox" [formControl]="registerForm.controls['checkboxes'].controls['business']" value=""><div [innerHtml]="checkboxCopy.business | emojione"></div></label>
+        </div>
+        <div class="form-check">
+          <label class="form-check-label">
+            <input class="form-check-input" type="checkbox" [formControl]="registerForm.controls['checkboxes'].controls['personal']" value=""><div [innerHtml]="checkboxCopy.personal | emojione"></div></label>
+        </div>
+        <div class="form-check">
+          <label class="form-check-label">
+            <input class="form-check-input" type="checkbox" [formControl]="registerForm.controls['checkboxes'].controls['robot']" value=""><div [innerHtml]="checkboxCopy.robot | emojione"></div></label>
+        </div>
+        <div class="form-check">
+          <label class="form-check-label">
+            <input class="form-check-input" type="checkbox" [formControl]="registerForm.controls['checkboxes'].controls['other']" value=""><div [innerHtml]="checkboxCopy.other | emojione"></div></label>
         </div>
 
         <label for="passwordInput">Password</label>
