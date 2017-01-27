@@ -169,3 +169,8 @@ label input, label textarea {
 .banner-error {
   font-family: 'Open Sans', sans-serif;
 }
+
+.form-group {
+  // the default margin seems to be collapsing, let's use padding
+  padding-bottom: 1rem;
+}
