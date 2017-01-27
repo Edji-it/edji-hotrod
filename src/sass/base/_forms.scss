@@ -55,12 +55,18 @@ input:not([type]), textarea, select[multiple],
   transition: border-color $base-duration $base-timing;
   width: 100%;
   outline: none;
+  font-style: normal;
+  font-weight: normal;
 
   @include transition(transform linear 0.2s);
 
   @include placeholder {
     color: #dedede;
     font-style: italic;
+  }
+
+  &.h1 {
+    font-weight: 100;
   }
 
   &:active, &:focus, &:hover {
@@ -164,7 +170,10 @@ label input, label textarea {
   min-height: 34px;
   height: auto;
 }
-
+.form-control:focus {
+  background: transparent;
+  color: #000;
+}
 //boostrap override
 .banner-error {
   font-family: 'Open Sans', sans-serif;
@@ -173,4 +182,25 @@ label input, label textarea {
 .form-group {
   // the default margin seems to be collapsing, let's use padding
   padding-bottom: 1rem;
+}
+
+.offset-label {
+	padding-left: 80px;
+
+	& label span {
+		display: block; //inline-block;
+		position: absolute;
+		left: -80px;
+		width: 80px;
+		text-align: right;
+		padding-right: 10px;
+		// color: $blue;
+	}
+}
+
+label.border-wrap {
+	position: relative;
+	border-left: 1px solid rgba($blue, 0.5);
+	padding-left: 10px;
+	margin-left: -10px;
 }

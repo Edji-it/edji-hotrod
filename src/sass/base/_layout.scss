@@ -49,6 +49,7 @@ footer {
 }
 
 .container--side-bar {
+  margin-top: $base-pad;
   padding-left: 15px + 100px;
 
   @media(max-width: 576px) {
