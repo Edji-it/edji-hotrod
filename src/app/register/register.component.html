@@ -6,59 +6,63 @@
       <h1 style="margin-bottom:0.5em;" [innerHtml]="'Welcome :tada:' | emojione"></h1>
       <h4 style="margin-bottom:2em;">Your Edji adventure is about to begin!</h4>
       <form id="registerForm" [formGroup]="registerForm" (ngSubmit)="register(registerForm.value)">
-        <label for="usernameInput">Username</label>
-        <input id="usernameInput" type="text" [formControl]="registerForm.controls['username']" tabindex="0" [placeholder]="userCopy.username"/>
-        <div id="msgUsernameRequired" *ngIf="registerForm.controls['username'].hasError('required')" class="alert alert-info">Please enter a username</div>
-
-        <label for="fullnameInput">Full Name</label>
-        <input id="fullnameInput" type="text" [formControl]="registerForm.controls['fullname']" tabindex="0" [placeholder]="userCopy.fullname"/>
-        <div id="msgFullnameRequired" *ngIf="registerForm.controls['fullname'].hasError('required')" class="alert alert-info">Please give your account a name</div>
-
-        <label for="emailInput">Email</label>
-        <input id="emailInput" type="text" [formControl]="registerForm.controls['email']" tabindex="0" [placeholder]="userCopy.email"/>
-        <div id="msgEmailRequired" *ngIf="registerForm.controls['email'].hasError('required')" class="alert alert-info">Please enter an email</div>
-        <div id="msgEmailIncorrect" *ngIf="registerForm.controls['email'].hasError('emailIncorrect') && registerForm.controls['email'].dirty" class="alert alert-info">We don't think that's an email</div>
-
-        <label id="accountTypeLabel" for="accountTypeGroup">
-          Account Type (what are the great ways you'll use Edji?)
-        </label>
         <div class="form-group">
-        <div class="form-check">
-          <label class="form-check-label">
-            <input class="form-check-input" type="checkbox" [formControl]="registerForm.controls['checkboxes'].controls['student']" value=""><div [innerHtml]="checkboxCopy.student | emojione"></div></label>
+          <label for="usernameInput">Username</label>
+          <input id="usernameInput" type="text" [formControl]="registerForm.controls['username']" tabindex="0" [placeholder]="userCopy.username"/>
+          <div id="msgUsernameRequired" *ngIf="registerForm.controls['username'].hasError('required')" class="alert alert-info">Usernames should not contain whitespace</div>
         </div>
-        <div class="form-check">
-          <label class="form-check-label">
-            <input class="form-check-input" type="checkbox" [formControl]="registerForm.controls['checkboxes'].controls['teacher']" value=""><div [innerHtml]="checkboxCopy.teacher | emojione"></div></label>
+        <div class="form-group">
+          <label for="fullnameInput">Full Name</label>
+          <input id="fullnameInput" type="text" [formControl]="registerForm.controls['fullname']" tabindex="0" [placeholder]="userCopy.fullname"/>
+          <div id="msgFullnameRequired" *ngIf="registerForm.controls['fullname'].hasError('required')" class="alert alert-info">What should we call you?</div>
         </div>
-        <div class="form-check">
-          <label class="form-check-label">
-            <input class="form-check-input" type="checkbox" [formControl]="registerForm.controls['checkboxes'].controls['business']" value=""><div [innerHtml]="checkboxCopy.business | emojione"></div></label>
+        <div class="form-group">
+          <label for="emailInput">Email</label>
+          <input id="emailInput" type="text" [formControl]="registerForm.controls['email']" tabindex="0" [placeholder]="userCopy.email"/>
+          <div id="msgEmailRequired" *ngIf="registerForm.controls['email'].hasError('required')" class="alert alert-info">Make sure the you can recover your password with a valid email!</div>
+          <div id="msgEmailIncorrect" *ngIf="registerForm.controls['email'].hasError('emailIncorrect') && registerForm.controls['email'].dirty" class="alert alert-info">We don't think that's an email...</div>
         </div>
-        <div class="form-check">
-          <label class="form-check-label">
-            <input class="form-check-input" type="checkbox" [formControl]="registerForm.controls['checkboxes'].controls['personal']" value=""><div [innerHtml]="checkboxCopy.personal | emojione"></div></label>
+        <div class="form-group">
+          <label id="accountTypeLabel" for="accountTypeGroup">
+            Account Type (what are the great ways you'll use Edji?)
+          </label>
+          <div class="form-check">
+            <label class="form-check-label">
+              <input class="form-check-input" type="checkbox" [formControl]="registerForm.controls['checkboxes'].controls['student']" value=""><div [innerHtml]="checkboxCopy.student | emojione"></div></label>
+          </div>
+          <div class="form-check">
+            <label class="form-check-label">
+              <input class="form-check-input" type="checkbox" [formControl]="registerForm.controls['checkboxes'].controls['teacher']" value=""><div [innerHtml]="checkboxCopy.teacher | emojione"></div></label>
+          </div>
+          <div class="form-check">
+            <label class="form-check-label">
+              <input class="form-check-input" type="checkbox" [formControl]="registerForm.controls['checkboxes'].controls['business']" value=""><div [innerHtml]="checkboxCopy.business | emojione"></div></label>
+          </div>
+          <div class="form-check">
+            <label class="form-check-label">
+              <input class="form-check-input" type="checkbox" [formControl]="registerForm.controls['checkboxes'].controls['personal']" value=""><div [innerHtml]="checkboxCopy.personal | emojione"></div></label>
+          </div>
+          <div class="form-check">
+            <label class="form-check-label">
+              <input class="form-check-input" type="checkbox" [formControl]="registerForm.controls['checkboxes'].controls['robot']" value=""><div [innerHtml]="checkboxCopy.robot | emojione"></div></label>
+          </div>
+          <div class="form-check">
+            <label class="form-check-label">
+              <input class="form-check-input" type="checkbox" [formControl]="registerForm.controls['checkboxes'].controls['other']" value=""><div [innerHtml]="checkboxCopy.other | emojione"></div></label>
+          </div>
         </div>
-        <div class="form-check">
-          <label class="form-check-label">
-            <input class="form-check-input" type="checkbox" [formControl]="registerForm.controls['checkboxes'].controls['robot']" value=""><div [innerHtml]="checkboxCopy.robot | emojione"></div></label>
+        <div class="form-group">
+          <label for="passwordInput">Password</label>
+          <input id="passwordInput" type="password" [formControl]="registerForm.controls['password']" tabindex="0" placeholder="Put a password here!"/>
+          <div id="msgPasswordRequired" *ngIf="registerForm.controls['password'].hasError('required')" class="alert alert-info">Every good account has a password with 6 or more characters</div>
+          <!--<div id="msgPasswordMinLength" *ngIf="registerForm.controls['password'].hasError('minlength')" class="alert alert-info">>Every good account has a password with 6 or more characters</div>-->
         </div>
-        <div class="form-check">
-          <label class="form-check-label">
-            <input class="form-check-input" type="checkbox" [formControl]="registerForm.controls['checkboxes'].controls['other']" value=""><div [innerHtml]="checkboxCopy.other | emojione"></div></label>
+        <div class="form-group">
+          <label for="passwordConfirmInput">Password Confirm</label>
+          <input id="passwordConfirmInput" type="password" [formControl]="registerForm.controls['passwordConfirm']" tabindex="0" placeholder="Type that password again!"/>
+          <!--<div id="msgPasswordConfirmRequired" *ngIf="registerForm.controls['passwordConfirm'].hasError('required') && registerForm.controls['passwordConfirm'].dirty" class="alert alert-info">After your passwords match, you can Edji!</div>-->
+          <div id="msgMismatch" *ngIf="registerForm.hasError('mismatch')" class="alert alert-info">After your passwords match, you can Edji!</div>
         </div>
-        </div>
-
-        <label for="passwordInput">Password</label>
-        <input id="passwordInput" type="password" [formControl]="registerForm.controls['password']" tabindex="0" placeholder="Put a password here!"/>
-        <div id="msgPasswordRequired" *ngIf="registerForm.controls['password'].hasError('required')" class="alert alert-info">Give your account a password</div>
-        <div id="msgPasswordMinLength" *ngIf="registerForm.controls['password'].hasError('minlength')" class="alert alert-info">Your password should be 6 or more characters</div>
-
-        <label for="passwordConfirmInput">Password Confirm</label>
-        <input id="passwordConfirmInput" type="password" [formControl]="registerForm.controls['passwordConfirm']" tabindex="0" placeholder="Type that password again!"/>
-        <div id="msgPasswordConfirmRequired" *ngIf="registerForm.controls['passwordConfirm'].hasError('required') && registerForm.controls['passwordConfirm'].dirty" class="alert alert-info">Please confirm your password</div>
-        <div id="msgMismatch" *ngIf="registerForm.hasError('mismatch')" class="alert alert-info">Please make sure your passwords match</div>
-
 
         <div id="msgDuplicateUser" *ngIf="errorObject.duplicateUser" class="alert alert-info" [innerHtml]="errorObject.duplicateUser | emojione"></div>
         <div id="msgBadName" *ngIf="errorObject.badName" class="alert alert-warn" [innerHtml]="errorObject.badName | emojione"></div>

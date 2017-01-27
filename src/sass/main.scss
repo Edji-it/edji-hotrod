@@ -965,23 +965,6 @@ h2 {
 	padding-left: 150px;
 }
 
-label .offset-left {
-	display: block; //inline-block;
-	position: absolute;
-	left: -150px;
-	width: 150px;
-	text-align: right;
-	padding-right: 10px;
-	color: $purple;
-}
-
-label.border-wrap {
-	position: relative;
-	border-left: 1px solid rgba($purple, 0.3);
-	padding-left: 10px;
-	margin-left: -10px;
-}
-
 input.form-item--seamless {
 	background: transparent;
 	border: none;

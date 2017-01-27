@@ -69,7 +69,7 @@ export class RegisterComponent implements OnInit {
         personal: null,
         robot: null,
         other: null
-      }),
+      }, { validator: this.checkboxValidator }),
       isTeacher: ["false"],
       password: [null, Validators.compose([Validators.required, Validators.minLength(6)])],
       passwordConfirm: [null, Validators.required],
@@ -86,7 +86,21 @@ export class RegisterComponent implements OnInit {
    */
   private passwordsEqual(group: FormGroup): any {
     return group.get('password').value === group.get('passwordConfirm').value
-      ? null : {'mismatch': true};
+      ? null : { mismatch: true };
+  }
+
+  /**
+   * Validates that at least one checkbox is checked, and assigns error if not
+   * @returns error to FormGroup called 'identity'
+   */
+  private checkboxValidator(group: FormGroup): any {
+    let valid = false;
+    for(let control in group.controls) {
+      if (group.controls[control].value === true) {
+        valid = true;
+      }
+    }
+    return valid ? null : { identity: true };
   }
 
   /** Validates email against the same regex used on the server
