@@ -36,6 +36,11 @@ export class JoinComponent implements OnInit, OnDestroy {
     private angulartics: Angulartics2,
     fb: FormBuilder
   ) {
+    // this makes the window always render scrolled to the top
+    this.router.events.subscribe(() => {
+      window.scrollTo(0, 0);
+    });
+
     this.guestForm = fb.group({
       guestName: [null, Validators.required]
     });

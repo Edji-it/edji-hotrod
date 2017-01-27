@@ -42,6 +42,11 @@ export class LoginComponent implements OnInit, OnDestroy {
     private angulartics: Angulartics2,
     fb: FormBuilder
   ) {
+    // this makes the window always render scrolled to the top
+    this.router.events.subscribe(() => {
+      window.scrollTo(0, 0);
+    });
+
     this.loginForm = fb.group({
       username: [null, Validators.required],
       password: [null, Validators.required]
