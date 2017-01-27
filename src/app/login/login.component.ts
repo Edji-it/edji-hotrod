@@ -6,8 +6,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { Angulartics2 } from 'angulartics2';
 
 import { AppState } from '../app.service';
-import { AuthService } from '../shared/auth.service';
-import { ProjectService } from './../shared/project.service';
+import { AuthService, ProjectService, Copy } from '../shared';
 
 @Component({
   // The selector is what angular internally uses
@@ -26,6 +25,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   private loginForm: FormGroup;
+  private userCopy: any;
   private errorObject: {
     "loginFailed"?: string,
     "serverError"?: string
@@ -49,7 +49,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    
+    this.userCopy = new Copy().getUserCopy();
     // this.title.getData().subscribe(data => this.data = data);
   }
 

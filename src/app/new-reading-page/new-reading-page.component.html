@@ -2,31 +2,40 @@
 
 <div class="container container--side-bar">
     <div class="row">
-        <div class="col-sm-12" style="padding-left:100px"> 
-             <br/>
+        <div class="col-sm-12">
+            <h1>New Reading</h1> 
              <form [formGroup]="readingForm" (ngSubmit)="onSubmit(readingForm.value)">
-                <label class="border-wrap">
-                    <span class="offset-left">Title</span>
-                    <input type="text" id="readingTitle" class="form-control form-item--seamless h1 input-noborder" placeholder="New Reading Title..." [formControl]="readingForm.controls['title']" />
-                    <div *ngIf="readingForm.controls['title'].hasError('required') && (readingForm.controls['title'].dirty || submitted)"  class="alert alert-info">Please give your Reading a title!</div>
-                </label>
-                <label class="border-wrap">
-                    <span class="offset-left">Source URL</span>
-                     <input type="url" id="readingSource" class="form-control form-item--seamless h3" placeholder="New Reading Source..." [formControl]="readingForm.controls['source']" />
-                </label>
-                <label class="border-wrap">
-                    <span class="offset-left">Content</span>
-                    <medium-editor
-                        [(editorModel)]="readingHtml"
-                        [editorOptions]="{'toolbar': {'buttons': ['bold', 'italic', 'underline', 'h1', 'h2', 'h3']}}"
-                        [editorPlaceholder]="readingPlaceholder"
-                        id="newReading"
-                        class="content"></medium-editor>
-                    <div *ngIf="submitted && readingHtml.length < 1"  class="alert alert-info">Please give your Reading some text!</div>
-                </label>
-                <p class="alert alert-danger" *ngIf="submitted && error">{{ error }}</p>
-                <div class="button__row">
-                    <button id="addReadingButton" type="submit" class="btn btn-primary" [class.loading]="addLoading" name="Add">Add Reading</button>
+                <div  class="reading-page">
+                    <div class="form-group offset-label">
+                        <label class="border-wrap">
+                            <span>Title</span>
+                            <input type="text" id="readingTitle" class="form-control form-item--seamless h1 input-noborder" placeholder="Reading Title..." [formControl]="readingForm.controls['title']" />
+                            <div *ngIf="readingForm.controls['title'].hasError('required') && (readingForm.controls['title'].dirty || submitted)"  class="alert alert-info">Please give your Reading a title!</div>
+                        </label>
+                    </div>
+                    <div class="form-group offset-label">
+                        <label class="border-wrap ">
+                            <span title="Optionally link to where this Reading came from!">Source URL</span>
+                            <input type="url" id="readingSource" class="form-control form-item--seamless h3" placeholder="New Reading Source..." [formControl]="readingForm.controls['source']" />
+                        </label>
+                    </div>
+                    <div class="form-group offset-label">
+                        <label class="border-wrap">
+                            <span>Content</span>
+                            <medium-editor
+                                [(editorModel)]="readingHtml"
+                                [editorOptions]="{'toolbar': {'buttons': ['bold', 'italic', 'underline', 'h1', 'h2', 'h3']}}"
+                                [editorPlaceholder]="readingPlaceholder"
+                                id="newReading"
+                                class="content"></medium-editor>
+                            <div *ngIf="submitted && readingHtml.length < 1"  class="alert alert-info">Please give your Reading some text!</div>
+                        </label>
+                    </div>
+                    <p class="alert alert-danger" *ngIf="submitted && error">{{ error }}</p>
+
+                    <div class="button__row">
+                        <button id="addReadingButton" type="submit" class="btn btn-primary" [class.loading]="addLoading" name="Add">Add Reading</button>
+                    </div>
                 </div>
              </form>
         </div>

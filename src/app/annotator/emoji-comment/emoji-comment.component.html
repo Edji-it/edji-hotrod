@@ -1,5 +1,6 @@
 <div [ngClass]="{'active' : comment.active}" class='emoji-comment-input-wrapper emojionearea input-wrap'>
 
     <!--<textarea type='text' class='emojiComment' readonly='true'></textarea>-->
-    <div class="emoji-comment-input" [innerHtml]="comment.data | emojione"></div>
+    <div *ngIf="comment.data.length > 0" class="emoji-comment-input" [innerHtml]="comment.data | emojione"></div>
+    <span *ngIf="comment.data.length < 1" class="emoji-comment-placeholder">Emoji comment...</span>
 </div>
