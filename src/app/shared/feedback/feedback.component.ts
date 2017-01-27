@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Http } from '@angular/http';
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { Angulartics2 } from 'angulartics2';
 
-import { AuthService } from './..';
+import { AuthService, Copy } from './..';
 
 @Component({
   selector: 'edji-feedback',
@@ -32,11 +32,12 @@ import { AuthService } from './..';
     }
   `]
 })
-export class FeedbackComponent {
+export class FeedbackComponent implements OnInit {
   private showFeedbackModal: true;
   private feedbackForm: FormGroup;
   private feedbackSuccess: boolean = false;
   private user: any;
+  private userCopy: any;
 
   private errorObject: {
     serverError?: string
@@ -57,6 +58,10 @@ export class FeedbackComponent {
       email: [this.user.email, Validators.compose([Validators.required, this.emailValidator])],
       content: [prevData.content, Validators.required]
     })
+  }
+
+  ngOnInit() {
+    this.userCopy = new Copy().getUserCopy();
   }
 
   /** Validates email against the same regex used on the server
