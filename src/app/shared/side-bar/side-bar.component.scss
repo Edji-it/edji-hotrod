@@ -137,6 +137,22 @@ a.side-bar__link {
 @include phone {
 	.side-bar__user {
 		display: none;
+        -webkit-transition: rotate(0deg);
+		-webkit-transform: rotate(0deg); /* Safari and Chrome */
+		-moz-transform: rotate(0deg); /* Firefox */
+		-ms-transform: rotate(0deg); /* IE 9 */
+		-o-transform: rotate(0deg); /* Opera */
+		transform: rotate(0deg); /* W3C */
+		position: fixed;
+		top: 66px;
+		position: absolute;
+		height: 40px;
+		background-color: #F0F0F0;
+		width: 100%;
+		left: 0;
+		padding-top: 6px;
+		-webkit-box-shadow: 0 5px 10px -5px #777;
+    	box-shadow: 0 5px 10px -5px #777;
 	}
 
 	.side-bar__logo {
@@ -146,9 +162,19 @@ a.side-bar__link {
 	.side-bar {
 		height: 66px;
 		width: 100%;
+		overflow: inherit;
 	}
 	.mNavIcon {
 		display: block;
+	}
+	.side-bar__icon-button {
+		position: absolute;
+		padding: 10px;
+		top: 0;
+		right: 10px;
+	}
+	img.icn-cmt {
+		width: 50px;
 	}
 }
 
@@ -156,17 +182,6 @@ a.side-bar__link {
 @include phone {
 	.side-bar__user__show {
 		display: block;
-		transform: rotate(0deg);
-		-webkit-transform: rotate(0deg);
-		top: 66px;
-		position: fixed;
-		height: 40px;
-		background-color: #F0F0F0;
-		width: 100%;
-		left: 0;
-		padding-top: 6px;
-		-webkit-box-shadow: 0 5px 10px -5px #777;
-    	box-shadow: 0 5px 10px -5px #777;
 	}
 	.mNav {
 		font-family: 'Open Sans';
