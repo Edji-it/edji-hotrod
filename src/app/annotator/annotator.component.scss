@@ -227,6 +227,18 @@ article.content p {
 
 /* Mobile Optimization */
 @include phone {
+	.options {
+		position: fixed;
+		bottom: 0;
+		width: 100%;
+		left: 0;
+		border-radius: 0;
+		text-align: center;
+    	height: 50px;
+	}
+	#addEmojiComment {
+		margin-right: 50px;
+	}
 	.text-options {
 		left: initial;
 	}
