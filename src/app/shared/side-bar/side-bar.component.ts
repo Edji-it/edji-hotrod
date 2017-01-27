@@ -18,6 +18,7 @@ export class SideBarComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription[] = [];
     private showCommentCounts: boolean = false;
     private mNavShow: boolean = false;
+    private isMobile: boolean = false;
 
     constructor(private _auth: AuthService, private _router: Router, private _project: ProjectService) {
 
@@ -36,6 +37,12 @@ export class SideBarComponent implements OnInit, OnDestroy {
           })
         );
         
+      }
+
+      if (window.screen.availWidth < 768) {
+        this.isMobile = true;
+      } else {
+        this.isMobile = false;
       }
 
       // this.subscriptions.push()

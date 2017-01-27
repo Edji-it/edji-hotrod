@@ -13,7 +13,8 @@
 
 		<!--Comment Stats pane-->
 		<button *ngIf="user.isTeacher && hasCommentCount" type="button" class="btn btn-clear side-bar__icon-button" aria-label="Comment Counts" (click)="showCommentCounts = !showCommentCounts">
-			<img src="assets/images/icon-comment.svg" />
+			<img *ngIf="isMobile" style="width: 50px;" src="assets/images/icon-comment.svg" />
+			<img *ngIf="!isMobile" src="assets/images/icon-comment.svg" />
 			<span>{{ commentStats ? commentStats.count : 0 }}</span>
 		</button>
 
