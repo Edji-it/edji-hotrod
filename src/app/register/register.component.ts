@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { PRIMARY_OUTLET, Router } from '@angular/router';
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
 import { Angulartics2 } from 'angulartics2';
 
-import { AuthService, BumblebeeService } from './../shared';
+import { AuthService, BumblebeeService, Copy } from './../shared';
 
 @Component({
   selector: 'edji-register',
@@ -25,7 +25,7 @@ import { AuthService, BumblebeeService } from './../shared';
     }
   `]
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit {
   private registerForm: FormGroup;
   private registerLoading: boolean = false;
   private errorObject: any = {
@@ -34,26 +34,50 @@ export class RegisterComponent {
     badName: ""
   };
 
+  // private copy: Copy = new Copy();
+  private userCopy: any;
+
+  private checkboxCopy = {
+    student: "As a student! :writing_hand:",
+    teacher: "As a teacher! :apple:",
+    business: "For business. :briefcase:",
+    personal: "My own reading and sharing :books:",
+    robot: "I'm a robot. :robot_face:",
+    other: "Some reason we haven't listed here! :sparkles:"
+  }
+
   constructor(
     private _auth: AuthService,
     private router: Router,
     private angulartics: Angulartics2,
     private bumblebee: BumblebeeService,
-    fb: FormBuilder
+    private _fb: FormBuilder
   ) {
     // this makes the window always render scrolled to the top
     this.router.events.subscribe(() => {
       window.scrollTo(0, 0);
     });
 
-    this.registerForm = fb.group({
+    this.registerForm = _fb.group({
       username: [null, Validators.required],
       fullname: [null, Validators.required],
       email: [null, Validators.compose([Validators.required, this.emailValidator])],
+      checkboxes: this._fb.group({
+        student: true,
+        teacher: null,
+        business: null,
+        personal: null,
+        robot: null,
+        other: null
+      }),
       isTeacher: ["false"],
       password: [null, Validators.compose([Validators.required, Validators.minLength(6)])],
       passwordConfirm: [null, Validators.required],
     }, { validator: this.passwordsEqual });
+  }
+
+  ngOnInit() {
+    this.userCopy = new Copy().getUserCopy();
   }
 
   //https://angular.io/docs/ts/latest/api/forms/index/FormGroup-class.html
@@ -80,6 +104,21 @@ export class RegisterComponent {
     this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'attempt' }});
 
     this.registerLoading = true;
+
+    formValue.identities = [];
+    for(let field in formValue.checkboxes) {
+      if (formValue.checkboxes[field]) {
+        formValue.identities.push(field); // the name of the field gets added to the array, making it important to name the fields properly
+      }
+    }
+
+    // this will be depricated as we move toward generalized accounts
+    if (formValue.checkboxes.teacher) {
+      formValue.isTeacher = true;
+    }
+
+    delete formValue.checkboxes; // we don't want to store the checkboxes object
+    console.log(formValue);
 
     this._auth.register(formValue)
       .take(1)
