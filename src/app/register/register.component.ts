@@ -34,7 +34,7 @@ export class RegisterComponent implements OnInit {
     badName: ""
   };
 
-  private copy: Copy = new Copy();
+  // private copy: Copy = new Copy();
   private userCopy: any;
 
   private checkboxCopy = {
@@ -77,7 +77,7 @@ export class RegisterComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.userCopy = this.copy.getUserCopy();
+    this.userCopy = new Copy().getUserCopy();
   }
 
   //https://angular.io/docs/ts/latest/api/forms/index/FormGroup-class.html
