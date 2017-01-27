@@ -48,6 +48,7 @@
             <input class="form-check-input" type="checkbox" [formControl]="registerForm.controls['checkboxes'].controls['other']" value=""><div [innerHtml]="checkboxCopy.other | emojione"></div></label>
         </div>
         </div>
+        <div id="msgIdentityRequired" *ngIf="registerForm.controls['checkboxes'].hasError('identity')" class="alert alert-info">Let us know how you plan to use Edji!</div>
 
         <label for="passwordInput">Password</label>
         <input id="passwordInput" type="password" [formControl]="registerForm.controls['password']" tabindex="0" placeholder="Put a password here!"/>
