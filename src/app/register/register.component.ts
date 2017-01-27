@@ -5,7 +5,7 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { Subscription } from 'rxjs/Subscription';
 import { Angulartics2 } from 'angulartics2';
 
-import { AuthService, BumblebeeService } from './../shared';
+import { AuthService, BumblebeeService, Copy } from './../shared';
 
 @Component({
   selector: 'edji-register',
@@ -33,6 +33,8 @@ export class RegisterComponent {
     serverError: "",
     badName: ""
   };
+
+  private copy: Copy = new Copy();
 
   private checkboxCopy = {
     student: "As a student! :writing_hand:",
