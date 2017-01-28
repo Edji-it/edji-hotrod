@@ -2,11 +2,11 @@
 <div class="row">
 
     <div class="col-sm-12"> 
-        <h1>Recent Readings
+        <h1 class="readings-header">Recent Readings
             <i class="icon__tooltip" placement="bottom" ngbTooltip="Readings are how you get content into Edji! Then you create Projects to share that content.">
                 <span class="icon icon-circle icon-info">i</span>
             </i>
-            <button class="btn btn-primary" style="float:right;" [routerLink]="[ '/new-reading' ]">
+            <button class="btn btn-primary new-reading-btn" [routerLink]="[ '/new-reading' ]">
                 New
             </button>
         </h1>
@@ -47,7 +47,7 @@
                             <div class="reading-title">
                                 <div class="reading-title--center-row">
                                     <h1 class="small">{{reading.title}} <span *ngIf="!reading.title"><i>Untitled</i></span></h1>
-                                    <p *ngIf="reading.createdAt">
+                                    <p *ngIf="reading.createdAt" class="readings-date">
                                         Created: {{ reading.createdAt | date:'mediumDate' }} 
                                     </p>
                                 </div>
