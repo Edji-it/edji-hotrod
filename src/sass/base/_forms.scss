@@ -185,13 +185,13 @@ label input, label textarea {
 }
 
 .offset-label {
-	padding-left: 80px;
+	padding-left: 90px;
 
 	& label span {
 		display: block; //inline-block;
 		position: absolute;
-		left: -80px;
-		width: 80px;
+		left: -90px;
+		width: 90px;
 		text-align: right;
 		padding-right: 10px;
 		// color: $blue;
@@ -203,4 +203,9 @@ label.border-wrap {
 	border-left: 1px solid rgba($blue, 0.5);
 	padding-left: 10px;
 	margin-left: -10px;
+}
+
+.input-group-tooltip {
+  width: auto;
+  position: relative;
 }
