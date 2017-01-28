@@ -5,7 +5,7 @@ class Home implements PageObjectInterface
 {
     /*
     18 Jan 2017
-    Last Modified: 23 Jan 2017
+    Last Modified: 27 Jan 2017
     Nicholas Pumper
 
     Page Object for the EDJI Home Page
@@ -16,7 +16,7 @@ class Home implements PageObjectInterface
     public loginLink         = element(by.id("loginLink"));
     public registerButton    = element(by.id("registerLink"));
     public joinProjectButton = element(by.id("buttonJoinProject"));
-    public projectCodeInput  = element(by.id("projectCodeInput"));
+    public projectCodeInput  = element(by.name("ProjectCodeInput"));
     public footerGuidesLink  = element(by.id("footerGuidesLink"));
     public footerTwitterLink = element(by.id("footerTwitterLink"));
 
@@ -35,6 +35,9 @@ class Home implements PageObjectInterface
     enterProjectCode(input: string) : void
     {
         browser.get('#projectCodeInput');
+
+        //browser.actions().mouseMove(this.projectCodeInput).mouseDown().mouseUp().perform();
+
         this.projectCodeInput.sendKeys(input);
     } // enterProjectCode(input: string) : void
 

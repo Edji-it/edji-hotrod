@@ -26,6 +26,7 @@ export class ReadingDashComponent implements OnInit, OnDestroy {
     readingError: ""
   };
   private subscriptions: Subscription[] = [];
+  private isLoading: boolean = false;
 
 
   // TypeScript public modifiers
@@ -39,13 +40,16 @@ export class ReadingDashComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.isLoading = true;
 
     this._readings.getAll()
       .then(
         (data)  => {
+          this.isLoading = false;
           this.readings = data || [];
         },
         (error) => {
+          this.isLoading = false;
           this.angulartics.eventTrack.next({ action: "getAllReadings", properties: { category: "serviceCalls", label: "failure" }});
           this.errorObject.readingError = "We had some trouble getting your readings, it might be our fault";
         });
