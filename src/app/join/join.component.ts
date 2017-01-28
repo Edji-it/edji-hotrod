@@ -119,7 +119,13 @@ export class JoinComponent implements OnInit, OnDestroy {
 
             data.user.username && this.angulartics.setUsername.next(data.user.username);
             data.user.email && this.angulartics.setUserProperties.next({ email: data.user.email});
-            data.user.isTeacher && this.angulartics.setUserProperties.next({ isTeacher: true });
+            if (data.user.identities) {
+              data.user.identities.forEach((identity) => {
+                let userProperty: any;
+                userProperty[identity] = true;
+                this.angulartics.setUserProperties.next(userProperty);
+              })
+            }
             this.angulartics.eventTrack.next({ action: 'joinAsUser', properties: { category: 'joinProject', label: 'success' }});
 
             this.router.navigate(['/project', this.projectId]);

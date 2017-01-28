@@ -25,10 +25,6 @@
                       <label>Email</label>
                       {{currentUser.email}}
                   </li>
-                  <li class="list-group-item">
-                      <label>Account Type</label>
-                      {{currentUser.isTeacher ? "Teacher" : "Student"}}
-                  </li>
               </ul>
               <div class="card-block">
                   <button type="button" (click)="showPassModal = !showPassModal" class="btn btn-primary">Change Password</button>
