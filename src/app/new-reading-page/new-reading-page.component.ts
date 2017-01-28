@@ -114,12 +114,13 @@ export class NewReadingPage implements OnInit {
         this.submitted = true;
         this.addLoading = true;
 
-        this.angulartics.eventTrack.next({ action: 'createNewReading', properties: { category: 'contentManagement', label: 'attempt' }});
-
         // This would be better handled by formcontrols
         if (!form.title || form.title.length < 1 || this.readingHtml.length < 1) {
+            this.addLoading = false;
             return;
         }
+        
+        this.angulartics.eventTrack.next({ action: 'createNewReading', properties: { category: 'contentManagement', label: 'attempt' }});
 
         // Clear parsed words array
         this.words = [];
@@ -141,6 +142,7 @@ export class NewReadingPage implements OnInit {
         this._readings.save(reading)
             .subscribe(
                 data => {
+                    console.log(data);
                     this.addLoading = false;
                     if (data._id) {
                         this.angulartics.eventTrack.next({ action: 'createNewReading', properties: { category: 'contentManagement', label: 'success' }});
@@ -148,9 +150,9 @@ export class NewReadingPage implements OnInit {
                     }
                 },
                 error => {
+                    console.log(error);
                     this.addLoading = false;
                     this.angulartics.eventTrack.next({ action: 'createNewReading', properties: { category: 'contentManagement', label: 'failure' }});
-                    console.log(error)
                 }
             );
     }
