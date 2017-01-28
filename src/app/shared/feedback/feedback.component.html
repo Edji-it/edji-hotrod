@@ -15,11 +15,11 @@
         <p>What's on your mind? Maybe you found a problem with our website? Or have questions about how to use Edji? Let us know below!</p>
         <form id="feedbackForm" [formGroup]="feedbackForm" (ngSubmit)="sendFeedback(feedbackForm.value)" class="form-group">
           <label for="nameInput">Name</label>
-          <input id="nameInput" type="text" [formControl]="feedbackForm.controls['name']" tabindex="0"/>
+          <input id="nameInput" type="text" [placeholder]="userCopy.fullname" [formControl]="feedbackForm.controls['name']" tabindex="0"/>
           <div id="msgNameRequired" *ngIf="feedbackForm.controls['name'].hasError('required')" class="alert alert-info"><strong>Info</strong> Let us know who you are!</div>
 
           <label for="emailInput">Email</label>
-          <input id="emailInput" type="text" [formControl]="feedbackForm.controls['email']" tabindex="0"/>
+          <input id="emailInput" type="text" [placeholder]="userCopy.email" [formControl]="feedbackForm.controls['email']" tabindex="0"/>
           <div id="msgEmailRequired" *ngIf="feedbackForm.controls['email'].hasError('required')" class="alert alert-info"><strong>Info</strong> Let us know who to get back with!</div>
           <div id="msgEmailIncorrect" *ngIf="feedbackForm.controls['email'].hasError('emailIncorrect') && feedbackForm.controls['email'].dirty" class="alert alert-info"><strong>Info</strong> We're not sure that's a real email</div>
 

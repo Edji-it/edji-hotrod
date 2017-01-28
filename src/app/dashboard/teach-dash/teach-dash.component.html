@@ -2,50 +2,64 @@
 <div class="row">
 
     <div class="col-sm-12"> 
-        <h1 style="margin-top: 20px;">My Readings
-            <!--<button class="button" style="float:right;" (click)="closeReadingPane()">
-                Back&nbsp;<i class="glyphicon glyphicon-chevron-right" />
-            </button>-->
+        <h1>Recent Readings
+            <button class="btn btn-primary" style="float:right;" [routerLink]="[ '/new-reading' ]">
+                New
+            </button>
         </h1>
-        <div class="item-list">
-
-            <a id="addReadingButton" [routerLink]="[ '/new-reading' ]" class="list-item-title list-item list-item--button">
-                Add Reading
-                    <span class="icon-button" style="position: absolute; right: 15px; top: 10px;">
-                    <span [innerHtml]="':heavy_plus_sign:' | emojione"></span>
-                </span>
-            </a>
+        <div class="item-list ">
             <!--Show readings with date values-->
-            <div class="list-item-wrapper list-item--button" *ngFor="let reading of readings" [routerLink]="[ '/reading', reading._id ]">
-                <!--Implement: | orderBy:'-createdAt'-->
-                <div class="list-item__message" [ngClass]="{ 'slide-down' : confirmDelete }">
-                    Delete "{{reading.title}}"?
-                    <div class="button-row--right">
-                        <button class="btn-danger" (click)="deleteReading(reading)">Delete</button>
-                        <button class="btn-secondary" (click)="confirmDelete = false">Cancel</button>
+            <div *ngFor="let reading of readings" class="reading-item-row">
+                <div class="list-item-wrapper list-item--button col-sm-12 reading-card" [routerLink]="[ '/reading', reading._id ]">
+                    <!--Implement: | orderBy:'-createdAt'-->
+                    <!--<div class="list-item__message" [ngClass]="{ 'slide-down' : confirmDelete }">
+                        Delete "{{reading.title}}"?
+                        <div class="button-row--right">
+                            <button class="btn-danger" (click)="deleteReading(reading)">Delete</button>
+                            <button class="btn-secondary" (click)="confirmDelete = false">Cancel</button>
+                        </div>
+                    </div>-->
+                    <div class="list-item ">
+                        <div class="col-sm-12">
+                            <div class="reading-icon">
+                                <span>{{reading.title.substring(0,2)}}</span>
+                            </div>
+                            <div class="reading-title">
+                                <div class="reading-title--center-row">
+                                    <h1 class="small">{{reading.title}} <span *ngIf="!reading.title"><i>Untitled</i></span></h1>
+                                    <p *ngIf="reading.createdAt">
+                                        Created: {{ reading.createdAt | date:'mediumDate' }} 
+                                    </p>
+                                </div>
+                            </div>
+                        
+                        </div>
+                            <!--<div class="icon-row--right">
+                                <a class="icon-button" (click)="confirmDelete = !confirmDelete">
+                                    <img alt="❌" class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/274c.png">
+                                </a>
+                                <a class="icon-button" href="#/reading/{{reading._id}}">
+                                    <span [innerHtml]="':eyes:' | emojione"></span>
+                                </a>
+                            </div>-->
                     </div>
                 </div>
-                <div class="list-item ">
-                    <div class="col-sm-12">
-                        <span class="list-item-title">
-                            {{reading.title}}
-                            <span *ngIf="!reading.title"><i>Untitled</i></span>
-                        </span>
-                        <p *ngIf="reading.createdAt">
-                            Created: {{ reading.createdAt | date:'mediumDate' }} 
-                        </p>
-                    </div>
-                        <!--<div class="icon-row--right">
-                            <a class="icon-button" (click)="confirmDelete = !confirmDelete">
-                                <img alt="❌" class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/274c.png">
-                            </a>
-                            <a class="icon-button" href="#/reading/{{reading._id}}">
-                                <span [innerHtml]="':eyes:' | emojione"></span>
-                            </a>
-                        </div>-->
+                <div class="project-card-wrap">
+                    <a class="list-item-wrapper list-item--button col-sm-6 project-card" *ngFor="let project of reading.projects" [routerLink]="['/project', project._id]">
+                        <span class="title">{{ project.label }}</span>
+                        <span class="metadata">{{ project.commentCount ? project.commentCount : 0 }} Comments</span>
+                        <span>|</span>
+                        <span class="metadata">{{ project.studentCount ? project.studentCount : 0 }} Students</span>
+                    </a>
                 </div>
             </div>
             </div>
     </div>
-
+    <!--<div class="col-sm-4">
+        <h1 class="small">Reading Tags</h1>
+        <span class="tag">Test</span>
+        <span class="tag">4th Grade</span>
+        <span class="tag">News</span>
+        <span class="tag">Accelerated Readers</span>
+    </div>-->
 </div>

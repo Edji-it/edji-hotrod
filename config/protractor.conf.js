@@ -39,8 +39,9 @@ exports.config = {
 
     // To test the entire site:
     home:     helpers.root('src/tests/e2e/home.spec.ts'),
-    oldhome:  helpers.root('src/tests/e2e/home.e2e.ts'),
-    login:    helpers.root('src/tests/e2e/login.spec.ts')
+    // oldhome:  helpers.root('src/tests/e2e/home.e2e.ts'),
+    login:    helpers.root('src/tests/e2e/login.spec.ts'),
+    all:      [helpers.root('src/tests/e2e/home.spec.ts'),  helpers.root('src/tests/e2e/login.spec.ts')]
   }, // suites
 
   exclude: [],

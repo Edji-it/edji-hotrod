@@ -13,12 +13,13 @@
 
 		<!--Comment Stats pane-->
 		<button *ngIf="user.isTeacher && hasCommentCount" type="button" class="btn btn-clear side-bar__icon-button" aria-label="Comment Counts" (click)="showCommentCounts = !showCommentCounts">
-			<img src="assets/images/icon-comment.svg" />
+			<img *ngIf="isMobile" style="width: 50px;" src="assets/images/icon-comment.svg" />
+			<img *ngIf="!isMobile" src="assets/images/icon-comment.svg" />
 			<span>{{ commentStats ? commentStats.count : 0 }}</span>
 		</button>
 
 		<div class="side-bar__user" [ngClass]="{ 'side-bar__user__show' : mNavShow }">
-			<a class="side-bar__link" (click)="logout()" [innerHtml]="'Logout &nbsp; :runner:' | emojione"></a>
+			<a class="side-bar__link" (click)="logout()" [innerHtml]="'Log Out &nbsp; :runner:' | emojione"></a>
 			
 			<span class="side-bar__role" *ngIf="user">{{  user.isTeacher ? "Teacher" : "Student"  }}</span>
 			&nbsp;

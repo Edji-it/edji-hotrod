@@ -39,6 +39,7 @@ $lightBg:#efeff1; //#f9f9f9;
 $midGray: #dadada; //#f0f0f0; //#f7f7f7;
 $purple: rgb(150, 40, 255);
 $red: rgb(237, 76, 92);
+$blue: rgb(0, 162, 245);
 
 // Set colors
 $pageBg: $lightBg;
@@ -72,3 +73,25 @@ $zMid: 5000;
 $zTop: 9000;
 
 $lightBorder: 1px solid #f1f1f1;
+
+$icon-font-path: "../../vendor/bootstrap-sass/assets/fonts/bootstrap/";
+
+$grid-gutter-width-base: 30px;
+$grid-gutter-width: $grid-gutter-width-base;
+
+// Small screen / tablet
+$container-tablet:             (720px + $grid-gutter-width) !default;
+//** For `$screen-sm-min` and up.
+$container-sm:                 $container-tablet !default;
+
+// Medium screen / desktop
+$container-desktop:            100%; //992px; //(940px + $grid-gutter-width) !default;
+//** For `$screen-md-min` and up.
+$container-md:                 $container-desktop !default;
+
+// Large screen / wide desktop
+$container-large-desktop:      1200px; //(1140px + $grid-gutter-width) !default;
+//** For `$screen-lg-min` and up.
+$container-lg:                 $container-large-desktop !default;
+
+$fa-font-path: 'fonts';

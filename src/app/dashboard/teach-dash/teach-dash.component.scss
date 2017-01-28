@@ -1,1 +1,99 @@
 /*styles for dashboard content only*/
+
+$readingIconHeight: 60px;
+
+.reading-icon {
+    height: $readingIconHeight;
+    width: $readingIconHeight;
+    border-radius: 50%;
+    background: #cef5e4;
+    text-align: center;
+    float:left;
+    margin-right: 15px;
+
+    & span {
+        text-transform: capitalize;
+        font-family: 'Open Sans';
+        font-weight: bold;
+        color: #fff;
+        line-height: $readingIconHeight;
+        font-size: $readingIconHeight/2;
+        vertical-align: middle;
+    }
+}
+
+.reading-title {
+    height: $readingIconHeight;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    line-height: $readingIconHeight;
+    vertical-align: middle;
+    position: relative;
+    float: left;
+    width: calc(100% - #{ $readingIconHeight + 15px });
+}
+
+.reading-title--center-row {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    text-overflow: ellipsis;
+
+    & h1 {
+        margin-bottom: 0px;
+    }
+
+    & p {
+        line-height: 18px;
+        margin-bottom: 0px;
+    }
+}
+
+$projectCardGutter: 4px;
+$phone: 576px;
+
+.project-card-wrap {
+    width: calc(100% - #{ $projectCardGutter });
+
+    @media (max-width: $phone) {
+        width: 100%;
+    }
+}
+
+.project-card {
+    float: left !important;
+    box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.2);
+
+
+    & .title {
+        display: block;
+        font-size: 14px;
+    }
+
+    & .metadata {
+        font-size: 10px;
+    }
+
+    @media (min-width: $phone) {
+        &:nth-of-type(2n) {
+            margin-right: -1* $projectCardGutter;
+            margin-left: $projectCardGutter;
+        }
+    }
+    
+
+    &:hover, &:active {
+        // transform: translateX(0px) scale(1.02);
+        // z-index: 1000;
+    }
+}
+
+.reading-card, .project-card {
+    margin-bottom: $projectCardGutter;
+}
+
+.reading-item-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}

@@ -16,7 +16,7 @@ class Home implements PageObjectInterface
     public loginLink         = element(by.id("loginLink"));
     public registerButton    = element(by.id("registerLink"));
     public joinProjectButton = element(by.id("buttonJoinProject"));
-    public projectCodeInput  = element(by.id("projectCodeInput"));
+    public projectCodeInput  = element(by.css(".form-control"));
     public footerGuidesLink  = element(by.id("footerGuidesLink"));
     public footerTwitterLink = element(by.id("footerTwitterLink"));
 
@@ -34,6 +34,7 @@ class Home implements PageObjectInterface
 
     enterProjectCode(input: string) : void
     {
+        browser.get('#projectCodeInput');
         this.projectCodeInput.sendKeys(input);
     } // enterProjectCode(input: string) : void
 

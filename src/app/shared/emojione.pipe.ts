@@ -5,11 +5,17 @@ import * as emojione from 'emojione/lib/js/emojione.js';
   name: 'emojione'
 })
 export class EmojiOnePipe implements PipeTransform {
-  transform(text: string): string {
+  transform(text: string, args?:string): string {
     let url = '//emoji.edji.it/png/'; 
     // Emojione CDN '//cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/png/';
     
     let html : string;
+
+    // If there are any classes to add
+    var c:string = '';
+    if (typeof(args) == 'string') {
+      c = ' ' + args;
+    }
 
     let convertShortcodes = function(substring) {
       let emojiUc : string;
@@ -20,7 +26,7 @@ export class EmojiOnePipe implements PipeTransform {
         emojiUc = emojione.emojioneList[':question:'].uc;
       }
       // Provide unicode emoji as an alt fallback, and the shortcode as a title/tooltip
-      return '<img class="emojioneemoji" alt="' + String.fromCharCode(parseInt(emojiUc,16)) + '" title="' + substring.replace(/:/g,'') + '" src="' + url + emojiUc + '.png">';  
+      return '<img class="emojioneemoji' + c + '" alt="' + String.fromCharCode(parseInt(emojiUc,16)) + '" title="' + substring.replace(/:/g,'') + '" src="' + url + emojiUc + '.png">';  
     };
 
     // Pipes could get passed anything from the template, lets not make assumptions

@@ -14,29 +14,6 @@
  * ----------------------------------------------------------
  */
 
- $icon-font-path: "../../vendor/bootstrap-sass/assets/fonts/bootstrap/";
-
-$grid-gutter-width: 60px;
-
-// Small screen / tablet
-$container-tablet:             (720px + $grid-gutter-width) !default;
-//** For `$screen-sm-min` and up.
-$container-sm:                 $container-tablet !default;
-
-// Medium screen / desktop
-$container-desktop:            100%; //992px; //(940px + $grid-gutter-width) !default;
-//** For `$screen-md-min` and up.
-$container-md:                 $container-desktop !default;
-
-// Large screen / wide desktop
-$container-large-desktop:      1200px; //(1140px + $grid-gutter-width) !default;
-//** For `$screen-lg-min` and up.
-$container-lg:                 $container-large-desktop !default;
-
-$fa-font-path: 'fonts';
-// @import '../../vendor/font-awesome/scss/font-awesome.scss';
-
-
 $sessionPanelWidth: 300px; 
 
 
@@ -67,6 +44,7 @@ $seamlessPlaceholderColor: #888;
 @import 'item-list';
 @import 'emoji';
 @import 'alerts';
+@import 'tags';
 
 /**
  * ----------------------------------------------------------
@@ -985,23 +963,6 @@ h2 {
 
 .col--label-padding {
 	padding-left: 150px;
-}
-
-label .offset-left {
-	display: block; //inline-block;
-	position: absolute;
-	left: -150px;
-	width: 150px;
-	text-align: right;
-	padding-right: 10px;
-	color: $purple;
-}
-
-label.border-wrap {
-	position: relative;
-	border-left: 1px solid rgba($purple, 0.3);
-	padding-left: 10px;
-	margin-left: -10px;
 }
 
 input.form-item--seamless {

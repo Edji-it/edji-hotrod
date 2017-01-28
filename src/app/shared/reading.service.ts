@@ -18,7 +18,7 @@ export class ReadingService {
     // Pull all readings for a user
   public getAll() {
         return this.http
-            .get(this._auth.getUrl() + '/readings', this._auth.getOptions())
+            .get(this._auth.getUrl() + '/readings/all/projects', this._auth.getOptions())
             .toPromise()
             .then(this._auth.extractData)
             .then((data) => { return data.readings })

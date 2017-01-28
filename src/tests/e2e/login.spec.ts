@@ -40,6 +40,7 @@ describe('Login Page', () => {
         - Log in, dammit.
     */
     it('should be able to log into Student account.', () => {
+
         login.enterStudentAccountCredentials();
         login.clickLoginButton();
 
@@ -51,6 +52,7 @@ describe('Login Page', () => {
         - Log in, dammit.
     */
     it('should be able to log into Teacher account.', () => {
+
         login.enterTeacherAccountCredentials();
         login.clickLoginButton();
 

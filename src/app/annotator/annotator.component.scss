@@ -209,12 +209,6 @@ article.content p {
 	top: 50%;
 }
 
-.annotator {
-	background: #fafafa;
-	box-shadow: 0 3px 9px 0 rgba(0,0,0,0.2), 0 0 0 1px rgba(0,0,0,0.04); //0px 2px 3px 0px rgba(0,0,0, 0.1);
-	padding: 40px 60px 50px 35px; 
-}
-
 .mobile-comment {
 	display: none;
 }
@@ -227,6 +221,18 @@ article.content p {
 
 /* Mobile Optimization */
 @include phone {
+	.options {
+		position: fixed;
+		bottom: 0;
+		width: 100%;
+		left: 0;
+		border-radius: 0;
+		text-align: center;
+    	height: 50px;
+	}
+	#addEmojiComment {
+		margin-right: 50px;
+	}
 	.text-options {
 		left: initial;
 	}

@@ -266,9 +266,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 }
             }
             this.optionsShow = true;
-        } else {
-            this.optionsShow = false;
-        }
+        } 
+        // else if (!doNotDismiss) {
+        //     this.optionsShow = false;
+        // }
     }
 
     updateAllLineCounts(): void {
