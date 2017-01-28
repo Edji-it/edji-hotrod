@@ -16,6 +16,7 @@ export class NewReadingPage implements OnInit {
     private submitted: boolean = false;
     private readingPlaceholder: string = 'Type or paste your reading...';
     private addLoading: boolean = false;
+    private error: string = '';
 
     // Used for processing reading
     private words: any[] = [];
@@ -113,10 +114,12 @@ export class NewReadingPage implements OnInit {
         // Set submitted to show form errors
         this.submitted = true;
         this.addLoading = true;
+        this.error = '';
 
         // This would be better handled by formcontrols
         if (!form.title || form.title.length < 1 || this.readingHtml.length < 1) {
             this.addLoading = false;
+            this.error = 'Not quite, please check all the fields!';
             return;
         }
         
