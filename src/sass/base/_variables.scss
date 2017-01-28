@@ -1,6 +1,13 @@
 // Breakpoints
-$medium-screen: 600px;
-$large-screen: 900px;
+$small-screen: 576px;
+$medium-screen: 768px;
+$large-screen: 992px;
+
+// Nice References
+$phone: $small-screen;
+$tablet: $medium-screen;
+$desktop: $large-screen;
+$largeDesktop: 1200px;
 
 // Typography
 $base-font-family: 'Open Sans'; //$font-stack-system;
@@ -66,6 +73,7 @@ $sansFontFamily: 'Roboto', sans-serif;
 // Layout Dimensions
 $base-pad: 30px;
 
+$navBarHeight: 68px;
 $sideBarWidth: 100px;
 
 $zLow: 1000;

@@ -14,6 +14,7 @@ export class SideBarComponent implements OnInit, OnDestroy {
     @Input() hasCommentCount: boolean;
     
     private user: any;
+    private currentProject: any;
     private commentStats: any = {};
     private subscriptions: Subscription[] = [];
     private showCommentCounts: boolean = false;
@@ -33,9 +34,15 @@ export class SideBarComponent implements OnInit, OnDestroy {
             // this.commentStats.users = [];
             this.commentStats = data;
           }, error => {
-            console.log(error);
+            console.error(error);
           })
         );
+
+        this._project.currentProject.subscribe(project => {
+          this.currentProject = project;
+        }, error => {
+          console.error(error)
+        });
         
       }
 

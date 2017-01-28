@@ -77,7 +77,13 @@ export class LoginComponent implements OnInit, OnDestroy {
           if (data.user) {
             data.user.username && this.angulartics.setUsername.next(data.user.username);
             data.user.email && this.angulartics.setUserProperties.next({ email: data.user.email});
-            data.user.isTeacher && this.angulartics.setUserProperties.next({ isTeacher: true });
+            if (data.user.identities) {
+              data.user.identities.forEach((identity) => {
+                let userProperty: any = {};
+                userProperty[identity] = true;
+                this.angulartics.setUserProperties.next(userProperty);
+              })
+            }
             this.angulartics.eventTrack.next({ action: 'loginMain', properties: { category: 'login', label: 'success' }});
           } else {
             this.angulartics.eventTrack.next({ action: 'loginMain', properties: { category: 'login', label: 'failure' }});

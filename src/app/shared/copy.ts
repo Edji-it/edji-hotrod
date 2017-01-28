@@ -18,11 +18,11 @@ export class Copy {
         fullname: "Jimmy Neutron",
         email: "jimmy@boygenius.edu"
       }, {
-        username: "i_want_a_snack",
+        username: "scooby_snack",
         fullname: "Scooby Dooby Doo",
         email: "scooby@mysterymachine.co"
       }, {
-        username: "yabbadabba",
+        username: "yabbadabbadoo",
         fullname: "Fred Flintstone",
         email: "fred.flinstone@slaterockgravel.co"
       }, {

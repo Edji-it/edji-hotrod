@@ -1,12 +1,12 @@
 <side-bar></side-bar>
 
+<div class="dashboard-toolbar">
+    <a class="tab-2 h1" [routerLink]="['/dashboard/projects']" routerLinkActive="active">Joined Projects</a>
+    <a class="tab-2 h1" [routerLink]="['/dashboard/readings']" routerLinkActive="active">Created Readings</a>
+</div>
 <!--Dashboard uses the *fluid* container, for maximum space use-->
 <div class="container-fluid container--side-bar dashboard-container">
-
-    <edji-teach-dash *ngIf="currentUser.isTeacher"></edji-teach-dash>
-
-    <edji-stu-dash *ngIf="!currentUser.isTeacher"></edji-stu-dash>
-
+    <router-outlet></router-outlet>
 </div>
 
 <edji-feedback></edji-feedback>

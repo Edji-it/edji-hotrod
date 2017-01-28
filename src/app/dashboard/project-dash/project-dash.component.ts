@@ -8,15 +8,15 @@ import { Angulartics2 } from 'angulartics2';
 import { AuthService, ReadingService, ProjectService } from '../../shared';
 
 @Component({
-  selector: 'edji-stu-dash',
+  selector: 'edji-project-dash',
   // We need to tell Angular's Dependency Injection which providers are in our app.
   providers: [],
   // Our list of styles in our component. We may add more to compose many styles together
-  styleUrls: [ './student-dash.component.scss' ],
+  styleUrls: [ './project-dash.component.scss' ],
   // Every Angular template is first compiled by the browser before Angular runs it's compiler
-  templateUrl: './student-dash.component.html'
+  templateUrl: './project-dash.component.html'
 })
-export class StuDashComponent implements OnInit, OnDestroy {
+export class ProjectDashComponent implements OnInit, OnDestroy {
   // Set our default values
   private projects: Array<any> = [];
   private errorObject = {

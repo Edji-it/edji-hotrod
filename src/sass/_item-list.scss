@@ -58,8 +58,8 @@ $listItemShadowSize: 3px;
   &:hover, &:focus, &:active {
     // @include box-shadow(none);
     // transform: translate3d(3px, 0, 0);
-    transform: translateX(0px) scale(1.02);
-      z-index: 1000;
+    transform: translateX(0px) scale(1.01);
+    z-index: 1000;
     // transform: scale(1.025);
     box-shadow: $inputFocusHalfShadow;
   }
