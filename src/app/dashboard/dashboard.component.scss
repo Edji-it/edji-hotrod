@@ -50,3 +50,9 @@ $dashToolbarHeight: 60px;
         color: $blue;
     }
 }
+
+@media(max-width: #{$tablet - 1px}) {
+    .tab-2 {
+        font-size: 18px;
+    }
+}
