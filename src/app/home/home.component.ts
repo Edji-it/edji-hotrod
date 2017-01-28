@@ -86,8 +86,12 @@ export class HomeComponent implements OnInit, OnDestroy {
         },
         (error) => {
           this.joinLoading = false;
-          this.angulartics.eventTrack.next({ action: 'enterLightningCode', properties: { category: 'joinProject', label: 'failure' }});
-          this.errorObject.invalidCode = "We don't think that's a real code :confused:";
+          if (error.status === 500) {
+            this.angulartics.eventTrack.next({ action: 'enterLightningCode', properties: { category: 'joinProject', label: 'failure' }});
+            this.errorObject.invalidCode = "Oh no! Something went wrong and we don't know what happened!";
+          } else {
+            this.errorObject.invalidCode = "We don't think that's a real code :confused:";
+          }
         }
       );
   }

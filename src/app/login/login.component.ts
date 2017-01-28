@@ -101,8 +101,10 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.loginLoading = false;
           if (error.status === 400) {
             this.errorObject.loginFailed = "We are missing the username or password!";
-          } else if (error.status === 404) {
+          } else if (error.status === 401) {
             this.errorObject.loginFailed = "Password is incorrect for that username";
+          } else if (error.status === 404) {
+            this.errorObject.loginFailed = "There might be a network error!";
           } else {
             this.angulartics.eventTrack.next({ action: 'loginMain', properties: { category: 'login', label: 'failure' }});
             this.errorObject.serverError = "Oh no, something went wrong and we don't know what it is!";
