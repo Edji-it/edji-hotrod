@@ -6,19 +6,6 @@
       <div class="col-sm-6 col-pad">
         <!--Lightning Code Row-->
           <form [formGroup]="loginForm" (ngSubmit)="login(loginForm.value)">
-<<<<<<< HEAD
-            <h2 class="center">Login to your Dashboard</h2>
-            <label for="usernameInput">Username</label>
-            <input type="text" id="usernameInput" [formControl]="loginForm.controls['username']" tabindex="0" />
-            <div id="msgNoUserName" class="alert alert-danger" *ngIf="loginForm.controls['username'].hasError('required') && (loginForm.controls['username'].dirty || loginForm.submitted)">A username is required</div>
-            
-            <label for="passwordInput">Password</label>
-            <input type="password" id="passwordInput" [formControl]="loginForm.controls['password']" tabindex="0" />
-            <div id="msgNoPassword" class="alert alert-danger" *ngIf="loginForm.controls['password'].hasError('required') && (loginForm.controls['password'].dirty || loginForm.submitted)">A password is required</div>
-            <div id="msgErrorPassword" class="alert alert-danger" *ngIf="errorObject.loginFailed">{{errorObject.loginFailed}}</div>
-            <div id="msgServerError" class="alert alert-danger" *ngIf="errorObject.serverError">{{errorObject.serverError}}</div>
-            
-=======
             <h2 class="center">Access your Edji Dashboard</h2>
             <div class="form-group">
               <label for="usernameInput">Username</label>
@@ -32,7 +19,6 @@
               <div id="msgErrorPassword" class="alert alert-danger" *ngIf="errorObject.loginFailed">{{errorObject.loginFailed}}</div>
               <div id="msgServerError" class="alert alert-danger" *ngIf="errorObject.serverError">{{errorObject.serverError}}</div>
             </div>
->>>>>>> master
             <div class="button__row">
               <button id="buttonLogin" type="submit" [class.loading]="loginLoading" class="btn btn-primary" name="Login" tabindex="0">Log In</button>
             </div>

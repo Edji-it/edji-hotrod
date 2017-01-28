@@ -14,7 +14,7 @@
           <div class="col__center-content">
             <h1 class="center on-dark join-header">Join a Project</h1>
             <div class="input-group input-group-lg">
-              <input id="projectCodeInput" type="text" class="form-control" style="text-align: center;" maxlength="4" (keyup.enter)="joinSession(sessionCode)" [(ngModel)]="sessionCode"  placeholder="⚡️ Code" aria-describedby="add-project-code">
+              <input id="projectCodeInput" type="text" class="form-control" style="text-align: center;" maxlength="4" (keyup.enter)="joinSession(sessionCode)" [(ngModel)]="sessionCode"  placeholder="⚡️ Code" aria-describedby="add-project-code" />
               <span class="input-group-btn">
                 <button class="btn btn-primary" [class.loading]="joinLoading" type="button" (click)="joinSession(sessionCode)" id="buttonJoinProject" name="Join" href="#">Go!</button>
               </span>
