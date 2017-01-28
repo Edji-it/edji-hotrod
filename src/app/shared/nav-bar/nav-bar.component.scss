@@ -56,19 +56,22 @@ a.nav-bar__link {
 
 /* Mobile Optimization */
 @include phone {
+	.nav__center-logo {
+		left: 10%;
+    	position: absolute;
+	}
     .nav-btns {
-        top: -60px;
-    	right: 40px;
+        top: 36px;
+    	position: relative;
     }
     .nav-btn-reg {
-        font-size: 10px;
+        font-size: 12px;
 		width: 80px;
     }
     .nav-btn-login {
-        font-size: 10px;
+        font-size: 12px;
 		position: fixed;
-		top: 40px;
-		right: 0;
+		margin-left: 12px;
 		width: 80px;
     }
 }
