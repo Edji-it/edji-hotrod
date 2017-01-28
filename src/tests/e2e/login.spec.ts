@@ -64,16 +64,8 @@ describe('Login Page', () => {
         login.enterUsername(login.studentUser);
         login.clickLoginButton();
         
-        browser.wait(EC.presenceOf(login.msgNoPassword), 5000, 'The error message never showed up. Like my last date.');
-    }); 
-
-    // Test: Not typing in a password on log in should throw an error message.
-    it('user should receive error message when they dont enter a username', () => {
-        login.enterPassword(login.studentPassword);
-        login.clickLoginButton();
-        
         browser.wait(EC.presenceOf(login.msgErrorPassword), 5000, 'The error message never showed up. Like my last date.');
-    }); 
+    });
 
     // Test: enter a correct user, but an invalid password
     it('user should receive error message when they enter an incorrect password', () => {
