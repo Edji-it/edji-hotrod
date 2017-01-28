@@ -1,5 +1,6 @@
 import { browser, by, element, protractor } from 'protractor';
 
+
 describe('App', () => {
 
   let EC;
@@ -19,59 +20,6 @@ describe('App', () => {
     These are functions that are going to be used in many places throughout the tests.
   */
 
-  function logInWithStudentAccount () 
-  { 
-    browser.get('/#/login');
-    let loginBtn;
-
-    browser.wait(EC.urlContains('login'), 3000, 'logInWithStudentAccount(): could not find the URL for the home page. :(');
-
-    loginBtn = element(by.id("buttonLogin"));
-
-    element(by.id('usernameInput')).sendKeys('student');
-    element(by.id('passwordInput')).sendKeys('student'); // protractor.Key.ENTER
-    
-    pressEnter();       // THIS DOES WORK
-    //loginBtn.click(); // THIS DOES NOT
- 
-    browser.wait( EC.urlContains('dashboard'), 10000, 'Dashboard should open within 3 seconds. It did not. Login potentially failed.');
-  } // function logInWithStudentAccount
-
-  function logInWithTeacherAccount () 
-  { 
-    browser.get('/#/login');
-    browser.wait(EC.urlContains('login'), 3000, 'logInWithTeacherAccount(): could not find the URL for the home page. :(');
-
-    let loginBtn = element(by.id("buttonLogin"));
-    element(by.id('usernameInput')).sendKeys('teach');
-    element(by.id('passwordInput')).sendKeys('teach'); // protractor.Key.ENTER
-    
-    // pressEnter();
-    loginBtn.click();
-
-    browser.wait( EC.urlContains('dashboard'), 10000, 'Dashboard should open within 3 seconds. It did not. Login potentially failed.');
-  } // function logInWithStudentAccount
-
-  function pressEnter ()
-  {
-    browser.waitForAngular();
-    browser.actions().sendKeys(protractor.Key.ENTER).perform();
-  } // function pressEnter ()
-
-  function enterUsernameAndPassword(username, password)
-  {
-    browser.get('/#/login');
-    browser.wait(EC.urlContains('login'), 10000, 'enterUsernameAndPassword(): could not find the URL for the home page. :(');
-
-    element(by.id('usernameInput')).sendKeys(username);
-    element(by.id('passwordInput')).sendKeys(password);
-  } // function enterUsername(username)
-
-  function enterPassword(password)
-  {
-    element(by.id('passwordInput')).sendKeys(password);
-  } // function enterPassword(password)
-
   function enterProjectCode(projectCode)
   {
     let codeInput = element(by.id('projectCodeInput'));
@@ -81,7 +29,10 @@ describe('App', () => {
 
   function submitProjectCode(projectCode)
   {
-    enterProjectCode(projectCode);
+    let codeInput = element(by.id('projectCodeInput'));
+    codeInput.click();
+    codeInput.sendKeys(projectCode);
+
     pressEnter();
   } // function submitProjectCode(projectCode)
 
@@ -165,31 +116,6 @@ describe('App', () => {
 ------------------------------------- Login Tests --------------------------------------
    */
 
-  // Test: logging in with correct login information.
-  it('user should be able to login with correct credentials', () => {
-    verifyURL("home");
-    logInWithStudentAccount();
-  });
-
-  // Test: Not typing in a password on log in.
-  it('user should not be able to login without password', () => {
-    let errorMsg = element(by.id('msgErrorPassword'));
-
-    enterUsernameAndPassword("student", "");
-    pressEnter();
-    
-    browser.wait(EC.presenceOf(errorMsg), 5000, 'The error message never showed up. Like my last date. T_T');
-  }); 
-
-  // Test for typing in a non-existent user.
-  it('user should not be able to login with an non-existent user', () => {
-    let errorMsg = element(by.id('msgErrorPassword'));
-
-    enterUsernameAndPassword("HitlerHatesEDJI", "student");
-    pressEnter();
-    
-    browser.wait(EC.presenceOf(errorMsg), 3000, 'The error message never showed up. Like my last date. T_T');
-  });
 
   /* Test: Change Password - Account Info Page
     - Be on account page
@@ -217,7 +143,7 @@ describe('App', () => {
   */
   it('user should be able to go to Account information page', () => {
     // Home Page
-    logInWithStudentAccount();
+    //logInWithStudentAccount();
 
     // Dashboard
     verifyURL('dashboard');
@@ -234,7 +160,7 @@ describe('App', () => {
   */
   it('user should be able to log in, go to home, and go back to the dashboard', () => {
     // Home Page
-    logInWithStudentAccount(); // Uses the student account.
+    //logInWithStudentAccount(); // Uses the student account.
 
     // Dashboard
     verifyURL('dashboard');
@@ -246,44 +172,6 @@ describe('App', () => {
 
     // Dashboard
     verifyURL("dashboard");
-  });
-
-  /* Test: View guides/faq
-    - Be on any Edji page except guide.edji.it
-    - Click guides button at bottom of page
-    - Redirect to guide.edji.it
-  */
-  it('user should be able to view guides/FAQ', () => {
-    // let footer = element(by.id("footer")); // hey it finds this though... solution in the works.
-    let fterGuidesBtn = element(by.id('footerGuidesLink'));
-
-    // Little trick to scroll to ID
-    browser.get('#footerGuidesLink');
-    
-    // Click to open the link
-    fterGuidesBtn.click();
-
-    // Did we make it to the Guides page?
-    verifyURL("guide");
-  });
-
-  /* Test: View Edji twitter page
-    - Be on any Edji page except guide.edji.it
-    - Click guides button at bottom of page
-    - Redirect to Edji twitter page
-  */
-  it('user should be able to go to the EDJI twitter page', () => {
-
-    // Initialize
-    // let footer = element(by.id("footer")); // hey it finds this though... solution in the works.
-    let twitterLink = element(by.id("footerTwitterLink")); // IT CAN'T FIND IT
-
-    // Little trick to scroll to the ID
-    browser.get("#footerTwitterLink");
-
-    twitterLink.click();
-
-    verifyURL("twitter");
   });
 
   /*
@@ -412,50 +300,8 @@ describe('App', () => {
   /*
 ----------------------------------- Student Action Tests --------------------------------------
   */
+
   
-  /* Test: Get to project through quick code, enter as guest
-    - Path to Edji.it 
-    - Enter in valid project code, click join project or hit enter
-    - Redirect to “Join” page
-    - Click on join as guest field and type in valid not vulgar name hit enter or click join project button
-    - Redirect to project
-  */
-  // TEST DOES NOT WORK
-  it('user should be able to get to a project through quick code, enter as guest', () => {
-    // Home Page
-    enterProjectCode('bx72');
-    pressEnter();
-
-    // Join/Login Page
-    browser.wait(EC.urlContains("join"), 5000, ('Never arrived at the url containing: "join". :('));
-    enterGuestName('Queen Elizabeth II');
-    pressEnter();
-
-    //Project Page
-    verifyURL("project");
-    expect(element(by.id("projectTitle")).isPresent()).toBe(true, 'Could not find the project title.');  //FIND THE TITLE
-  });
-
-  /* Test: Get to project through quick code, be rejected because of vulgar name
-    - Path to Edji.it
-    - Enter in valid project code, click join project or hit enter
-    - Redirect to “Join” page
-    - Click on join as guest field and type in vulgar name hit enter or click join project button
-    - Receive “Name is invalid” error message
-  */
-   // TEST DOES NOT WORK
-  it('should be able to get to project through quick code, be rejected because of vulgar name', () => {
-    // Home Page
-    submitProjectCode('m7y5');
-
-    // Join / Login Page
-    verifyURL("join");
-    submitGuestName("Fucking Fucks");
-
-    // Lets find that error
-    let errorMsg = element(by.id('msgBadName'));
-    browser.wait(EC.visibilityOf(errorMsg), 3000, 'The error message should show up. It did not.');
-  });
 
   /* Test: Type in invalid project code at quick code enter
     - Path to Edji.it

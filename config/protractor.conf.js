@@ -1,24 +1,56 @@
+/*
+  Last Modified: 19 Jan 2017
+
+  Configurations for running Protractor and get things testing.
+*/
+
 /**
  * @author: @AngularClass
  */
 
+// Require
 require('ts-node/register');
-var helpers = require('./helpers');
+
+var helpers;
+
+helpers = require('./helpers.js'); // Helps us get the root file reference.
 
 exports.config = {
-  baseUrl: 'http://localhost:3375/',
+  
+  // The address of a running selenium server.
+  baseUrl: 'http://localhost:3375/',        // Point it at localhost!
+  //baseUrl: 'http://dev.edji.it/#/home',     // Point it at dev.edji.it!
 
-  // use `npm run e2e`
-  specs: [
-    helpers.root('src/**/**.e2e.ts'),
-    helpers.root('src/**/*.e2e.ts')
-  ],
+  // Capabilities to be passed to the webdriver instance.
+  capabilities: {
+    'browserName': 'chrome',
+    marionette: true,
+    'chromeOptions': {
+      'args': ['show-fps-counter=true']
+    } // chrome options
+  }, // capabilities
+
+  /*
+  Run a suite of tests using 'yarn run protractor --suite suiteNameHere'
+  - Spec patterns are relative to the location of the spec file. They may include glob patterns.
+   */
+  suites: {
+    // Example suite: homepage: 'tests/e2e/homepage/**/*Spec.js',
+
+    // To test the entire site:
+    home:     helpers.root('src/tests/e2e/home.spec.ts'),
+    // oldhome:  helpers.root('src/tests/e2e/home.e2e.ts'),
+    login:    helpers.root('src/tests/e2e/login.spec.ts'),
+    all:      [helpers.root('src/tests/e2e/home.spec.ts'),  helpers.root('src/tests/e2e/login.spec.ts')]
+  }, // suites
+
   exclude: [],
 
   framework: 'jasmine2',
 
   allScriptsTimeout: 110000,
 
+  // Options to be passed to Jasmine-node.
   jasmineNodeOpts: {
     showTiming: true,
     showColors: true,
@@ -27,14 +59,6 @@ exports.config = {
     defaultTimeoutInterval: 400000
   },
   directConnect: true,
-
-  capabilities: {
-    'browserName': 'chrome',
-    marionette: true,
-    'chromeOptions': {
-      'args': ['show-fps-counter=true']
-    }
-  },
 
   onPrepare: function() {
     browser.ignoreSynchronization = true;
