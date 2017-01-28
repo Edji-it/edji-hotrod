@@ -1,5 +1,8 @@
 import { browser, by, element, protractor } from 'protractor';
 import Dashboard = require('./page-objects/dashboard-page');
+import Login    = require('./page-objects/login-page');
+import Home     = require('./page-objects/home-page');
+import Sidebar  = require('./page-objects/sidebar-page');
 
 /*
     27 Jan 2017
@@ -17,6 +20,9 @@ describe('Dashboard Page', () => {
     /* ---- Variable Initialization --------------- */
     
     let dashboard   = new Dashboard();
+    let login       = new Login();
+    let home        = new Home();
+    let sidebar     = new Sidebar();
     let EC          = protractor.ExpectedConditions; // vital
 
     /* ---- beforeEach ---------------------------- */
@@ -43,6 +49,15 @@ describe('Dashboard Page', () => {
         - Arrive at Dashboard
         - Log out and arrive at home page
     */
+    it('should log out of Student account successfully', () => {
+        // Login page
+        login.getPage();
+        login.enterStudentAccountCredentials();
+        login.clickLoginButton();
+
+        browser.wait(EC.urlContains("home"), 5000, ('Never arrived at the url containing: home.'));
+    });
+
 
     /* Test: Teacher account can log out successfully
         - Log in with Teacher account
