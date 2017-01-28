@@ -12,8 +12,6 @@ export class NavBarComponent implements OnInit {
   private isMobile = false;
 
   ngOnInit() {
-    if (window.screen.availWidth < 768) {
-      this.isMobile = true;
-    }
+    
   }
 }
