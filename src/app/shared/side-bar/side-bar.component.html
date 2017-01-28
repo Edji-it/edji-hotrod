@@ -21,7 +21,7 @@
 		<div class="side-bar__user" [ngClass]="{ 'side-bar__user__show' : mNavShow }">
 			<a class="side-bar__link" (click)="logout()" [innerHtml]="'Log Out &nbsp; :runner:' | emojione"></a>
 			
-			<span class="side-bar__role" *ngIf="user">{{  user.isTeacher ? "Teacher" : "Student"  }}</span>
+			<!--<span class="side-bar__role" *ngIf="user">{{  user.isTeacher ? "Teacher" : "Student"  }}</span>-->
 			&nbsp;
 			<a class="side-bar__link" id="accountButton" [routerLink]="['/account']">
 				<span *ngIf="user.fullname">{{ user.fullname }}</span>
