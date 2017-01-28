@@ -133,6 +133,15 @@ export class RegisterComponent implements OnInit {
         this.registerLoading = false;
         if (data.user) {
           if (this._auth.getEnv() === "prod") { this.bumblebee.sendUserDetails(data.user); }
+          data.user.username && this.angulartics.setUsername.next(data.user.username);
+          data.user.email && this.angulartics.setUserProperties.next({ email: data.user.email});
+          if (data.user.identities) {
+            data.user.identities.forEach((identity) => {
+              let userProperty: any = {};
+              userProperty[identity] = true;
+              this.angulartics.setUserProperties.next(userProperty);
+            })
+          }
           this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'success' }});
           this.router.navigate(['dashboard']);
         } else {

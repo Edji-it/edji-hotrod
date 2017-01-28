@@ -163,8 +163,6 @@ export class AuthService implements CanActivate, OnInit {
                     this.setToken(object.token);
                 }
 
-                // if on production and isTeacher, send call to bumblebee
-                // if (object.user && object.user.isTeacher && this.isProd)
                 return data.json();
             });
     }

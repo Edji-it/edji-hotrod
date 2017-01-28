@@ -79,7 +79,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             data.user.email && this.angulartics.setUserProperties.next({ email: data.user.email});
             if (data.user.identities) {
               data.user.identities.forEach((identity) => {
-                let userProperty: any;
+                let userProperty: any = {};
                 userProperty[identity] = true;
                 this.angulartics.setUserProperties.next(userProperty);
               })
