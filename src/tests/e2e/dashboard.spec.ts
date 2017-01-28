@@ -1,8 +1,9 @@
 import { browser, by, element, protractor } from 'protractor';
+import Dashboard = require('./page-objects/dashboard-page');
 
 /*
     27 Jan 2017
-    Last Modified: 27 Jan 2017
+    Last Modified: 28 Jan 2017
     Nicholas Pumper
 
     e2e test the dashboard page!
@@ -15,7 +16,8 @@ describe('Dashboard Page', () => {
 
     /* ---- Variable Initialization --------------- */
     
-    let EC      = protractor.ExpectedConditions; // vital
+    let dashboard   = new Dashboard();
+    let EC          = protractor.ExpectedConditions; // vital
 
     /* ---- beforeEach ---------------------------- */
     // Does this before each test.

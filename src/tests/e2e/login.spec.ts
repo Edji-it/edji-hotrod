@@ -4,7 +4,7 @@ import Home     = require('./page-objects/home-page');
 
 /*
     23 Jan 2017
-    Last Modified: 23 Jan 2017
+    Last Modified: 28 Jan 2017
     Nicholas Pumper
 
     e2e test the home page!
@@ -64,7 +64,7 @@ describe('Login Page', () => {
         login.enterUsername(login.studentUser);
         login.clickLoginButton();
         
-        browser.wait(EC.presenceOf(login.msgErrorPassword), 5000, 'The error message never showed up. Like my last date.');
+        browser.wait(EC.presenceOf(login.msgNoPassword), 5000, 'The error message never showed up. Like my last date.');
     }); 
 
     // Test: Not typing in a password on log in should throw an error message.
@@ -76,7 +76,7 @@ describe('Login Page', () => {
     }); 
 
     // Test: enter a correct user, but an invalid password
-    it('user should receive error message when they dont enter an incorrect password', () => {
+    it('user should receive error message when they enter an incorrect password', () => {
         login.enterUsername(login.studentUser);
         login.enterPassword(login.invalidEntry);
         login.clickLoginButton();
@@ -86,7 +86,7 @@ describe('Login Page', () => {
     }); 
 
     // Test: enter an invalid user, but a correct password
-    it('user should receive error message when they dont enter an incorrect password', () => {
+    it('user should receive error message when they enter an incorrect username', () => {
         login.enterUsername(login.invalidEntry);
         login.enterPassword(login.studentPassword);
         login.clickLoginButton();
