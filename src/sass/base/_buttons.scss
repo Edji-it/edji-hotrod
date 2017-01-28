@@ -224,3 +224,16 @@ button, .button, .btn { //, [class*='btn']
     background-size: 100% 100% !important;
   }
 }
+
+
+.offset-buttons {
+	position: absolute;
+	top:0;
+	left: 100%;
+	padding-left: 5px;
+	max-width: 50px;
+
+	& a, & .btn {
+		margin-bottom: 5px;
+	}
+}

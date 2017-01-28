@@ -11,14 +11,22 @@
             <!--Show readings with date values-->
             <div *ngFor="let reading of readings" class="reading-item-row">
                 <div class="list-item-wrapper list-item--button col-sm-12 reading-card" [routerLink]="[ '/reading', reading._id ]">
+                     <!--<div class="offset-buttons">
+                        <a class="icon-button" (click)="confirmDelete = !confirmDelete">
+                            <img alt="❌" class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/274c.png">
+                        </a>
+                        <a class="icon-button" href="#/reading/{{reading._id}}">
+                            <span [innerHtml]="':eyes:' | emojione"></span>
+                        </a>
+                    </div>-->
                     <!--Implement: | orderBy:'-createdAt'-->
-                    <!--<div class="list-item__message" [ngClass]="{ 'slide-down' : confirmDelete }">
+                    <div class="list-item__message" [ngClass]="{ 'slide-down' : confirmDelete }">
                         Delete "{{reading.title}}"?
                         <div class="button-row--right">
                             <button class="btn-danger" (click)="deleteReading(reading)">Delete</button>
                             <button class="btn-secondary" (click)="confirmDelete = false">Cancel</button>
                         </div>
-                    </div>-->
+                    </div>
                     <div class="list-item ">
                         <div class="col-sm-12">
                             <div class="reading-icon">
@@ -32,17 +40,9 @@
                                     </p>
                                 </div>
                             </div>
-                        
                         </div>
-                            <!--<div class="icon-row--right">
-                                <a class="icon-button" (click)="confirmDelete = !confirmDelete">
-                                    <img alt="❌" class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/274c.png">
-                                </a>
-                                <a class="icon-button" href="#/reading/{{reading._id}}">
-                                    <span [innerHtml]="':eyes:' | emojione"></span>
-                                </a>
-                            </div>-->
                     </div>
+                   
                 </div>
                 <div class="project-card-wrap">
                     <a class="list-item-wrapper list-item--button col-sm-6 project-card" *ngFor="let project of reading.projects" [routerLink]="['/project', project._id]">
