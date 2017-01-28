@@ -31,7 +31,7 @@
                             <div *ngIf="submitted && readingHtml.length < 1"  class="alert alert-info">Please give your Reading some text!</div>
                         </label>
                     </div>
-                    <p class="alert alert-danger" *ngIf="submitted && error">{{ error }}</p>
+                    <p class="alert alert-warning" *ngIf="error.length > 0">{{ error }}</p>
 
                     <div class="button__row">
                         <button id="addReadingButton" type="submit" class="btn btn-primary" [class.loading]="addLoading" name="Add">Add Reading</button>

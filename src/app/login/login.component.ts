@@ -42,6 +42,11 @@ export class LoginComponent implements OnInit, OnDestroy {
     private angulartics: Angulartics2,
     fb: FormBuilder
   ) {
+    // this makes the window always render scrolled to the top
+    this.router.events.subscribe(() => {
+      window.scrollTo(0, 0);
+    });
+
     this.loginForm = fb.group({
       username: [null, Validators.required],
       password: [null, Validators.required]
@@ -72,7 +77,13 @@ export class LoginComponent implements OnInit, OnDestroy {
           if (data.user) {
             data.user.username && this.angulartics.setUsername.next(data.user.username);
             data.user.email && this.angulartics.setUserProperties.next({ email: data.user.email});
-            data.user.isTeacher && this.angulartics.setUserProperties.next({ isTeacher: true });
+            if (data.user.identities) {
+              data.user.identities.forEach((identity) => {
+                let userProperty: any = {};
+                userProperty[identity] = true;
+                this.angulartics.setUserProperties.next(userProperty);
+              })
+            }
             this.angulartics.eventTrack.next({ action: 'loginMain', properties: { category: 'login', label: 'success' }});
           } else {
             this.angulartics.eventTrack.next({ action: 'loginMain', properties: { category: 'login', label: 'failure' }});

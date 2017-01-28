@@ -1,6 +1,6 @@
 {
   "name": "edji-hotrod",
-  "version": "2.0.84",
+  "version": "2.0.89",
   "description": "Hot Rod is Edji's roaring Front End!",
   "keywords": [
     "edji",
@@ -143,6 +143,8 @@
     "typescript": "^2.1.1",
     "url-loader": "^0.5.7",
     "v8-lazy-parse-webpack-plugin": "^0.3.0",
+    "wd": "^1.1.1",
+    "wd-bridge": "^0.0.2",
     "webdriver-manager": "^11.1.1",
     "webpack": "^2.1.0-beta.27",
     "webpack-auto-inject-version": "^0.2.11",

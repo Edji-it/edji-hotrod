@@ -36,6 +36,11 @@ export class JoinComponent implements OnInit, OnDestroy {
     private angulartics: Angulartics2,
     fb: FormBuilder
   ) {
+    // this makes the window always render scrolled to the top
+    this.router.events.subscribe(() => {
+      window.scrollTo(0, 0);
+    });
+
     this.guestForm = fb.group({
       guestName: [null, Validators.required]
     });
@@ -114,7 +119,13 @@ export class JoinComponent implements OnInit, OnDestroy {
 
             data.user.username && this.angulartics.setUsername.next(data.user.username);
             data.user.email && this.angulartics.setUserProperties.next({ email: data.user.email});
-            data.user.isTeacher && this.angulartics.setUserProperties.next({ isTeacher: true });
+            if (data.user.identities) {
+              data.user.identities.forEach((identity) => {
+                let userProperty: any = {};
+                userProperty[identity] = true;
+                this.angulartics.setUserProperties.next(userProperty);
+              })
+            }
             this.angulartics.eventTrack.next({ action: 'joinAsUser', properties: { category: 'joinProject', label: 'success' }});
 
             this.router.navigate(['/project', this.projectId]);
