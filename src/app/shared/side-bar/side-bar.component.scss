@@ -178,6 +178,10 @@ a.side-bar__link {
 	}
 }
 
+div.sliding-pane.from-left.slide-in {
+	box-shadow: 2px 2px 20px rgba(0,0,0,0.1);
+}
+
 /* On Click Display Logout & User */
 @include phone {
 	.side-bar__user__show {
@@ -227,5 +231,9 @@ a.side-bar__link {
         -ms-transition:     -ms-transform 550ms ease;
         -o-transition:      -o-transform 550ms ease;
         -webkit-transition: -webkit-transform 550ms ease;
+	}
+	div.sliding-pane.from-left.slide-in {
+		left: 0;
+		box-shadow: 2px 2px 20px rgba(0,0,0,0.1);
 	}
 }
