@@ -99,12 +99,16 @@ $phone: 576px;
     margin-bottom: 20px;
 }
 
+button.new-reading-btn {
+    float: right;
+}
+
 @media (max-width: #{$tablet - 1px}) {
     .reading-title--center-row h1 {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        max-width: calc(100% - 2px);
+        max-width: 250px;
         font-size: 16px;
     }
     .reading-icon {
@@ -119,11 +123,25 @@ $phone: 576px;
     }
     .readings-header {
         font-size: 26px;
+        margin-bottom: 50px;
     }
     .readings-header button {
         font-size: 12px;
     }
     .readings-date {
         font-size: 10px;
+    }
+    button.new-reading-btn {
+        float: right;
+    }
+}
+
+@media (max-width: #{$xsphone}) {
+    .reading-title--center-row h1 {
+        max-width: 200px;
+    }
+    button.new-reading-btn {
+        float: left;
+        margin-top: 10px;
     }
 }
