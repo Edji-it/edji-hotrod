@@ -24,6 +24,7 @@ export class ProjectDashComponent implements OnInit, OnDestroy {
     projectError: ""
   };
   private subscriptions: Subscription[] = [];
+  private isLoading: boolean = false;
 
   private codeForm: FormGroup;
 
@@ -42,12 +43,16 @@ export class ProjectDashComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.isLoading = true;
+
     this._projects.getAll()
       .then(
         (data)  => {
+          this.isLoading = false;
           this.projects = data;
         },
         (error) => {
+          this.isLoading = false;
           this.angulartics.eventTrack.next({ action: "getAllProjects", properties: { category: "serviceCalls", label: "failure" }});
           this.errorObject.projectError = "We had some trouble getting your projects, it might be our fault";
         });
