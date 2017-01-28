@@ -14,6 +14,7 @@ import { LoginComponent } from './login';
 import { DataResolver } from './app.resolver';
 import { AuthService } from './shared';
 
+import { DashboardRoutes } from './dashboard/dashboard.routes';
 
 export const ROUTES: Routes = [
   { path: '',      redirectTo: '/dashboard', pathMatch: 'full', canActivate: [AuthService] },
@@ -22,7 +23,7 @@ export const ROUTES: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'join/:projectId', component: JoinComponent },
   { path: 'account', component: AccountComponent, canActivate: [AuthService] },
-  { path: 'dashboard',  component: DashboardComponent, canActivate: [AuthService] },
+  { path: 'dashboard',  component: DashboardComponent, canActivate: [AuthService], children: DashboardRoutes },
   { path: 'project/:id',  component: ProjectPageComponent, canActivate: [AuthService] },
   { path: 'reading/:id',  component: ReadingPageComponent, canActivate: [AuthService] },
   { path: 'new-reading', component: NewReadingPage, canActivate: [AuthService] },

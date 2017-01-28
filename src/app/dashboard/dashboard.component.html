@@ -3,9 +3,16 @@
 <!--Dashboard uses the *fluid* container, for maximum space use-->
 <div class="container-fluid container--side-bar dashboard-container">
 
-    <edji-teach-dash *ngIf="currentUser.isTeacher"></edji-teach-dash>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="dashboard-toolbar">
+                <a [routerLink]="['/dashboard/projects']">Projects</a>
+                <a [routerLink]="['/dashboard/readings']">Readings</a>
+            </div>
+        </div>
+    </div>
 
-    <edji-stu-dash *ngIf="!currentUser.isTeacher"></edji-stu-dash>
+    <router-outlet></router-outlet>
 
 </div>
 
