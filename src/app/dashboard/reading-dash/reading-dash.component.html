@@ -9,6 +9,14 @@
         </h1>
         <div class="item-list ">
             <!--Show readings with date values-->
+            <div class="alert alert-info" role="alert" *ngIf="readings.length < 1 && !errorObject.readingError">
+                <h4 class="alert-heading">Welcome to your Reading Dashboard</h4>
+                <p>Readings you add will show here, along with the Projects you create to share those Readings.</p>
+                <p class="mb-0">Hit that "New" button in the top right to add a Reading now! From a Reading you can create a Project&mdash;it's an easy way to share the same content with different groups of people.</p>
+            </div>
+            <div class="alert alert-danger" role="alert" *ngIf="errorObject.readingError">
+                {{ errorObject.readingError }}
+            </div>
             <div *ngFor="let reading of readings" class="reading-item-row">
                 <div class="list-item-wrapper list-item--button col-sm-12 reading-card" [routerLink]="[ '/reading', reading._id ]">
                      <!--<div class="offset-buttons">
@@ -20,13 +28,13 @@
                         </a>
                     </div>-->
                     <!--Implement: | orderBy:'-createdAt'-->
-                    <div class="list-item__message" [ngClass]="{ 'slide-down' : confirmDelete }">
+                    <!--<div class="list-item__message" [ngClass]="{ 'slide-down' : confirmDelete }">
                         Delete "{{reading.title}}"?
                         <div class="button-row--right">
                             <button class="btn-danger" (click)="deleteReading(reading)">Delete</button>
                             <button class="btn-secondary" (click)="confirmDelete = false">Cancel</button>
                         </div>
-                    </div>
+                    </div>-->
                     <div class="list-item ">
                         <div class="col-sm-12">
                             <div class="reading-icon">

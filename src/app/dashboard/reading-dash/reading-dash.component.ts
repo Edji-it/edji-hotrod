@@ -21,7 +21,7 @@ import { AuthService, ReadingService, ProjectService } from '../../shared';
 })
 export class ReadingDashComponent implements OnInit, OnDestroy {
   // Set our default values
-  private readings: any;
+  private readings: any[] = [];
   private errorObject = {
     readingError: ""
   };
@@ -43,7 +43,7 @@ export class ReadingDashComponent implements OnInit, OnDestroy {
     this._readings.getAll()
       .then(
         (data)  => {
-          this.readings = data;
+          this.readings = data || [];
         },
         (error) => {
           this.angulartics.eventTrack.next({ action: "getAllReadings", properties: { category: "serviceCalls", label: "failure" }});
