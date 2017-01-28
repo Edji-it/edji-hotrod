@@ -70,7 +70,6 @@ export class RegisterComponent implements OnInit {
         robot: null,
         other: null
       }, { validator: this.checkboxValidator }),
-      isTeacher: ["false"],
       password: [null, Validators.compose([Validators.required, Validators.minLength(6)])],
       passwordConfirm: [null, Validators.required],
     }, { validator: this.passwordsEqual });
@@ -126,24 +125,19 @@ export class RegisterComponent implements OnInit {
       }
     }
 
-    // this will be depricated as we move toward generalized accounts
-    if (formValue.checkboxes.teacher) {
-      formValue.isTeacher = true;
-    }
-
     delete formValue.checkboxes; // we don't want to store the checkboxes object
-    console.log(formValue);
 
     this._auth.register(formValue)
       .take(1)
       .subscribe((data) => {
         this.registerLoading = false;
         if (data.user) {
-          if (data.user.isTeacher && this._auth.getEnv() === "prod") { this.bumblebee.sendUserDetails(data.user); }
+          if (this._auth.getEnv() === "prod") { this.bumblebee.sendUserDetails(data.user); }
           this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'success' }});
           this.router.navigate(['dashboard']);
         } else {
           // TRACK EXCEPTION... there was no data
+          this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'failure' }});
         }
       }, (err) => {
         this.registerLoading = false;

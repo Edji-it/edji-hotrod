@@ -91,6 +91,5 @@
         </div>
     </div>
     <edji-delete-project *ngIf="showDeleteModal" [project]="projectToDelete" (confirmModal)="showDeleteModal = false; removeProject(projectToDelete)" (closeModal)="showDeleteModal = !showDeleteModal"></edji-delete-project>
-    <!--<feedback-form *ngIf="user.isTeacher"></feedback-form>-->
 </div>
 <edji-feedback></edji-feedback>
