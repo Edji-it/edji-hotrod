@@ -1,0 +1,40 @@
+/**
+ * # Icons
+ */
+
+.icon {
+    width: 1em;
+    height: 1em;
+    display: inline-block;
+}
+
+.icon__tooltip {
+    cursor: pointer;
+    background: transparent;
+    padding: 4px;
+
+    &:hover {
+        &, & .icon {
+            color: $blue;
+            border-color: $blue;
+        }
+    }
+}
+
+.icon-circle {
+    font-style: normal;
+    border-radius: 50%;
+    border: 1px solid #777;
+    color: #777;
+    text-align: center;
+    font-size: 10px;
+    width: 1.5em;
+    height: 1.5em;
+    line-height: 1.5em;
+    vertical-align: middle;
+    font-weight: bold;
+}
+
+.icon-info {
+    font-family: 'Georgia', 'Times New Roman', Times, serif;
+}
