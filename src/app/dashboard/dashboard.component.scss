@@ -7,10 +7,6 @@ $dashToolbarHeight: 60px;
 .dashboard-container {
     margin: $base-pad;
     margin-top: $dashToolbarHeight + $base-pad;
-
-     @media(max-width: $tablet) {
-        margin-top: $navBarHeight + $dashToolbarHeight + $base-pad;
-    }
 }
 
 .dashboard-toolbar {
@@ -51,8 +47,11 @@ $dashToolbarHeight: 60px;
     }
 }
 
-@media(max-width: #{$tablet - 1px}) {
+@media (max-width: #{$tablet - 1px}) {
     .tab-2 {
         font-size: 18px;
+    }
+    .dashboard-container {
+        margin: #{$navBarHeight + $dashToolbarHeight + $base-pad} 10px 0px 10px;
     }
 }

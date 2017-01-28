@@ -2,7 +2,7 @@
 <div class="row">
 
     <div class="col-sm-12"> 
-        <h1>Recent Readings
+        <h1 class="readings-header">Recent Readings
             <button class="btn btn-primary" style="float:right;" [routerLink]="[ '/new-reading' ]">
                 New
             </button>
@@ -43,7 +43,7 @@
                             <div class="reading-title">
                                 <div class="reading-title--center-row">
                                     <h1 class="small">{{reading.title}} <span *ngIf="!reading.title"><i>Untitled</i></span></h1>
-                                    <p *ngIf="reading.createdAt">
+                                    <p *ngIf="reading.createdAt" class="readings-date">
                                         Created: {{ reading.createdAt | date:'mediumDate' }} 
                                     </p>
                                 </div>
