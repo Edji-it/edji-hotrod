@@ -17,7 +17,7 @@ import { AuthService } from './shared';
 import { DashboardRoutes } from './dashboard/dashboard.routes';
 
 export const ROUTES: Routes = [
-  { path: '',      redirectTo: '/dashboard', pathMatch: 'full', canActivate: [AuthService] },
+  { path: '', redirectTo: '/dashboard/projects', pathMatch: 'full', canActivate: [AuthService] },
   { path: 'home',  component: HomeComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
