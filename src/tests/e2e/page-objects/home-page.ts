@@ -16,7 +16,7 @@ class Home implements PageObjectInterface
     public loginLink         = element(by.id("loginLink"));
     public registerButton    = element(by.id("registerLink"));
     public joinProjectButton = element(by.id("buttonJoinProject"));
-    public projectCodeInput  = element(by.name("ProjectCodeInput"));
+    public projectCodeInput  = element(by.id("projectCodeInput"));
     public footerGuidesLink  = element(by.id("footerGuidesLink"));
     public footerTwitterLink = element(by.id("footerTwitterLink"));
 

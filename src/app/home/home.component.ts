@@ -26,7 +26,7 @@ import { ProjectService } from './../shared/project.service';
 })
 export class HomeComponent implements OnInit, OnDestroy {
   // Set our default values
-  private sessionCode: string;
+  private projectCode: string;
   private joinLoading: boolean = false;
 
   private subscriptions: Subscription[] = [];
