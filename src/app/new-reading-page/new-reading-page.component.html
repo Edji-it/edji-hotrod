@@ -14,12 +14,6 @@
                         </label>
                     </div>
                     <div class="form-group offset-label">
-                        <label class="border-wrap ">
-                            <span title="Optionally link to where this Reading came from!">Source URL</span>
-                            <input type="url" id="readingSource" class="form-control form-item--seamless h3" placeholder="New Reading Source..." [formControl]="readingForm.controls['source']" />
-                        </label>
-                    </div>
-                    <div class="form-group offset-label">
                         <label class="border-wrap">
                             <span>Content</span>
                             <medium-editor
@@ -31,9 +25,21 @@
                             <div *ngIf="submitted && readingHtml.length < 1"  class="alert alert-info">Please give your Reading some text!</div>
                         </label>
                     </div>
+                    <div class="form-group offset-label">
+                        <label class="border-wrap ">
+                            <span title="Optionally link to where this Reading came from!">Link to Source
+                            </span>
+                            <div class="input-group">
+                                <input type="url" id="readingSource" class="form-control form-item--seamless h3" placeholder="New Reading Source..." [formControl]="readingForm.controls['source']" />
+                                <i class="input-group-tooltip icon__tooltip" placement="left" ngbTooltip="Keep a link to the source, so you don't lose it!'">
+                                    <i class="icon icon-circle icon-info">i</i>
+                                </i>
+                            </div>
+                        </label>
+                    </div>
                     <p class="alert alert-warning" *ngIf="error.length > 0">{{ error }}</p>
 
-                    <div class="button__row">
+                    <div class="button__row">   
                         <button id="addReadingButton" type="submit" class="btn btn-primary" [class.loading]="addLoading" name="Add">Add Reading</button>
                     </div>
                 </div>

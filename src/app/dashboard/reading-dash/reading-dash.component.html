@@ -2,17 +2,18 @@
 <div class="row">
 
     <div class="col-sm-12"> 
-        <h1>Recent Readings
+        <h1 class="readings-header">Recent Readings
             <i class="icon__tooltip" placement="bottom" ngbTooltip="Readings are how you get content into Edji! Then you create Projects to share that content.">
                 <span class="icon icon-circle icon-info">i</span>
             </i>
-            <button class="btn btn-primary" style="float:right;" [routerLink]="[ '/new-reading' ]">
+            <button class="btn btn-primary new-reading-btn" [routerLink]="[ '/new-reading' ]">
                 New
             </button>
         </h1>
+        <div *ngIf="isLoading" class="row loading"></div>
         <div class="item-list ">
             <!--Show readings with date values-->
-            <div class="alert alert-info" role="alert" *ngIf="readings.length < 1 && !errorObject.readingError">
+            <div class="alert alert-info" role="alert" *ngIf="!isLoading && readings.length < 1 && !errorObject.readingError">
                 <h4 class="alert-heading">Welcome to your Reading Dashboard</h4>
                 <p>Readings you add will show here, along with the Projects you create to share those Readings.</p>
                 <p class="mb-0">Hit that "New" button in the top right to add a Reading now! From a Reading you can create a Project&mdash;it's an easy way to share the same content with different groups of people.</p>
@@ -46,7 +47,7 @@
                             <div class="reading-title">
                                 <div class="reading-title--center-row">
                                     <h1 class="small">{{reading.title}} <span *ngIf="!reading.title"><i>Untitled</i></span></h1>
-                                    <p *ngIf="reading.createdAt">
+                                    <p *ngIf="reading.createdAt" class="readings-date">
                                         Created: {{ reading.createdAt | date:'mediumDate' }} 
                                     </p>
                                 </div>
