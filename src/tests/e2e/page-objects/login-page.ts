@@ -20,7 +20,7 @@ class Login implements PageObjectInterface
     public passwordInput    = element(by.id("passwordInput"));
     public msgErrorPassword = element(by.id("msgErrorPassword"));
     public msgNoUserName    = element(by.id("msgNoUserName"));
-    public msgNoPassword    = element(by.id("msgNoPassword"));
+    public msgNoPassword    = element(by.id("msgErrorPassword"));
     public msgBadName       = element(by.id("msgBadName"));
     public guestNameInput   = element(by.id("guestNameInput"));
     public guestLoginButton = element(by.id("guestLoginButton"));
