@@ -34,10 +34,8 @@ class Home implements PageObjectInterface
 
     enterProjectCode(input: string) : void
     {
-        browser.get('#projectCodeInput');
-
-        //browser.actions().mouseMove(this.projectCodeInput).mouseDown().mouseUp().perform();
-
+        // This line actually *breaks* being able to find the input
+        // browser.get('#projectCodeInput');
         this.projectCodeInput.sendKeys(input);
     } // enterProjectCode(input: string) : void
 

@@ -1,6 +1,7 @@
 import { browser, by, element, protractor } from 'protractor';
 import Login    = require('./page-objects/login-page');
 import Home     = require('./page-objects/home-page');
+import Sidebar     = require('./page-objects/sidebar-page');
 
 /*
     23 Jan 2017
@@ -16,6 +17,7 @@ describe('Login Page', () => {
     /* ---- Variable Initialization --------------- */
     let login   = new Login();
     let home    = new Home();
+    let sidebar    = new Sidebar();
     let EC      = protractor.ExpectedConditions; // vital
 
 /* ---- beforeEach ---------------------------- */
@@ -40,11 +42,13 @@ describe('Login Page', () => {
         - Log in, dammit.
     */
     it('should be able to log into Student account.', () => {
-
+        login.getPage();
+        browser.wait(EC.elementToBeClickable(login.loginButton), 5000);
         login.enterStudentAccountCredentials();
         login.clickLoginButton();
 
         browser.wait(EC.urlContains("dashboard"), 5000, ('Never arrived at the url containing: dashboard.'));
+        sidebar.logOutButton.click();
     });
 
     /* Test: Log in to Teacher account.
@@ -52,15 +56,21 @@ describe('Login Page', () => {
         - Log in, dammit.
     */
     it('should be able to log into Teacher account.', () => {
-
+        login.getPage();
+        browser.wait(EC.elementToBeClickable(login.loginButton), 5000);
+        login.clearLoginFields();
         login.enterTeacherAccountCredentials();
         login.clickLoginButton();
 
         browser.wait(EC.urlContains("dashboard"), 5000, ('Never arrived at the url containing: dashboard.'));
+        sidebar.logOutButton.click();
     });
     
     // Test: Not typing in a password on log in should throw an error message.
     it('user should receive error message when they dont enter a password', () => {
+        login.getPage();
+        browser.wait(EC.elementToBeClickable(login.loginButton), 5000);
+        login.clearLoginFields();
         login.enterUsername(login.studentUser);
         login.clickLoginButton();
         
@@ -69,6 +79,9 @@ describe('Login Page', () => {
 
     // Test: Not typing in a password on log in should throw an error message.
     it('user should receive error message when they dont enter a username', () => {
+        login.getPage();
+        browser.wait(EC.elementToBeClickable(login.loginButton), 5000);
+        login.clearLoginFields();
         login.enterPassword(login.studentPassword);
         login.clickLoginButton();
         
@@ -77,6 +90,9 @@ describe('Login Page', () => {
 
     // Test: enter a correct user, but an invalid password
     it('user should receive error message when they enter an incorrect password', () => {
+        login.getPage();
+        browser.wait(EC.elementToBeClickable(login.loginButton), 5000);
+        login.clearLoginFields();
         login.enterUsername(login.studentUser);
         login.enterPassword(login.invalidEntry);
         login.clickLoginButton();
@@ -87,6 +103,9 @@ describe('Login Page', () => {
 
     // Test: enter an invalid user, but a correct password
     it('user should receive error message when they enter an incorrect username', () => {
+        login.getPage();
+        browser.wait(EC.elementToBeClickable(login.loginButton), 5000);
+        login.clearLoginFields();
         login.enterUsername(login.invalidEntry);
         login.enterPassword(login.studentPassword);
         login.clickLoginButton();
@@ -119,26 +138,6 @@ describe('Login Page', () => {
         //Project Page
         browser.wait(EC.urlContains("project"), 5000, ('Never arrived at the url containing: "project".'));
         expect(element(by.id("projectTitle")).isPresent()).toBe(true, 'Could not find the project title.');  //FIND THE TITLE
-    });
-
-    /* Test: Get to project through quick code, be rejected because of vulgar name
-        - Path to Edji.it
-        - Enter in valid project code, click join project or hit enter
-        - Redirect to “Join” page
-        - Click on join as guest field and type in vulgar name hit enter or click join project button
-        - Receive “Name is invalid” error message
-    */
-    it('should be able to get to project through quick code, be rejected because of vulgar name', () => {
-        // Home Page
-        home.enterProjectCode(login.validProjectCode);
-        home.clickJoinProjectButton();
-
-        // Join / Login Page
-        browser.wait(EC.urlContains("join"), 5000, ('Never arrived at the url containing: "join".'));
-        login.enterGuestName("Fucking Fucks");
-
-        // Lets find that error
-        browser.wait(EC.visibilityOf(login.msgBadName), 3000, 'The error message should show up. It did not.');
     });
 
 }); // describe Login Page

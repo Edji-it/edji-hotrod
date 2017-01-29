@@ -1,6 +1,7 @@
 import { browser, by, element, protractor } from 'protractor';
 import Home = require('./page-objects/home-page');
 import Login    = require('./page-objects/login-page');
+import Sidebar    = require('./page-objects/sidebar-page');
 
 /*
     18 Jan 2017
@@ -16,6 +17,7 @@ describe('Home Page', () => {
     /* ---- Variable Initialization --------------- */
     let home    = new Home(); // the Home pageObject.
     let login   = new Login();
+    let sidebar = new Sidebar();
     let EC      = protractor.ExpectedConditions; // vital
 
     /* ---- beforeEach ---------------------------- */
@@ -41,6 +43,8 @@ describe('Home Page', () => {
         - Click login button.
     */
     it ('login button should bring you to the login page.', () => {
+        home.getPage();
+        browser.wait(EC.elementToBeClickable(home.loginLink), 5000);
         home.clickLogin();
         browser.wait(EC.urlContains("login"), 5000, ('Never arrived at the url containing: login.'));
     }); // it ('login button should bring you to the login page.', ()
@@ -51,7 +55,8 @@ describe('Home Page', () => {
         - Redirect to guide.edji.it
     */
     it('user should be able to view guides/FAQ', () => {
-        
+        home.getPage();
+        browser.wait(EC.elementToBeClickable(home.footerGuidesLink), 5000);
         // Click to open the link
         home.footerGuidesLink.click();
 
@@ -65,7 +70,8 @@ describe('Home Page', () => {
         - Redirect to Edji twitter page
     */
     it('user should be able to go to the EDJI twitter page', () => {
-
+        home.getPage();
+        browser.wait(EC.elementToBeClickable(home.footerTwitterLink), 5000);
         // Click to open the link
         home.footerTwitterLink.click();
 
@@ -86,6 +92,8 @@ describe('Home Page', () => {
 
         // Home Page
         home.getPage();
+        browser.wait(home.projectCodeInput.isDisplayed, 5000, ('Never loaded Project Code input box'));
+        
         home.enterProjectCode(login.validProjectCode);
         home.clickJoinProjectButton();
 
@@ -97,7 +105,10 @@ describe('Home Page', () => {
         //Project Page
         browser.wait(EC.urlContains("project"), 5000, ('Never arrived at the url containing: "project".'));
         expect(element(by.id("projectTitle")).isPresent()).toBe(true, 'Could not find the project title.');  //FIND THE TITLE
-    });
+        
+        // Log Out
+        sidebar.logOutButton.click();
+});
 
     /* Test: Get to project through quick code, be rejected because of vulgar name
         - Path to Edji.it
@@ -108,15 +119,19 @@ describe('Home Page', () => {
     */
     it('should be able to get to project through quick code, be rejected because of vulgar name', () => {
         // Home Page
+        home.getPage();
+        browser.wait(home.projectCodeInput.isDisplayed, 5000, ('Never loaded Project Code input box'));
+        
         home.enterProjectCode(login.validProjectCode);
         home.clickJoinProjectButton();
 
         // Join / Login Page
         browser.wait(EC.urlContains("join"), 5000, ('Never arrived at the url containing: "join".'));
         login.enterGuestName("Fucking Fucks");
-
+        login.clickGuestLoginButton();
+        
         // Lets find that error
-        browser.wait(EC.visibilityOf(login.msgBadName), 3000, 'The error message should show up. It did not.');
+        browser.wait(EC.presenceOf(login.msgBadName), 3000, 'The error message should show up. It did not.');
     });
 
 }); // describe 'Home Page'
