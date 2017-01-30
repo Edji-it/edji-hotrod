@@ -43,7 +43,6 @@ describe('Home Page', () => {
         - Click login button.
     */
     it ('login button should bring you to the login page.', () => {
-        home.getPage();
         browser.wait(EC.elementToBeClickable(home.loginLink), 5000);
         home.clickLogin();
         browser.wait(EC.urlContains("login"), 5000, ('Never arrived at the url containing: login.'));
@@ -55,7 +54,6 @@ describe('Home Page', () => {
         - Redirect to guide.edji.it
     */
     it('user should be able to view guides/FAQ', () => {
-        home.getPage();
         browser.wait(EC.elementToBeClickable(home.footerGuidesLink), 5000);
         // Click to open the link
         home.footerGuidesLink.click();
@@ -70,7 +68,6 @@ describe('Home Page', () => {
         - Redirect to Edji twitter page
     */
     it('user should be able to go to the EDJI twitter page', () => {
-        home.getPage();
         browser.wait(EC.elementToBeClickable(home.footerTwitterLink), 5000);
         // Click to open the link
         home.footerTwitterLink.click();
@@ -91,7 +88,6 @@ describe('Home Page', () => {
     it('user should be able to get to a project through quick code, enter as guest', () => {
 
         // Home Page
-        home.getPage();
         browser.wait(home.projectCodeInput.isDisplayed, 5000, ('Never loaded Project Code input box'));
         
         home.enterProjectCode(login.validProjectCode);
@@ -119,7 +115,6 @@ describe('Home Page', () => {
     */
     it('should be able to get to project through quick code, be rejected because of vulgar name', () => {
         // Home Page
-        home.getPage();
         browser.wait(home.projectCodeInput.isDisplayed, 5000, ('Never loaded Project Code input box'));
         
         home.enterProjectCode(login.validProjectCode);
