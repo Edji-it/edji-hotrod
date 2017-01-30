@@ -44,6 +44,7 @@ describe('Login Page', () => {
     it('should be able to log into Student account.', () => {
         browser.wait(EC.elementToBeClickable(login.loginButton), 5000);
         login.enterStudentAccountCredentials();
+        browser.wait(EC.elementToBeClickable(login.loginButton), 5000);
         login.clickLoginButton();
 
         browser.wait(EC.urlContains("dashboard"), 5000, ('Never arrived at the url containing: dashboard.'));
@@ -58,6 +59,7 @@ describe('Login Page', () => {
         browser.wait(EC.elementToBeClickable(login.loginButton), 5000);
         login.clearLoginFields();
         login.enterTeacherAccountCredentials();
+        browser.wait(EC.elementToBeClickable(login.loginButton), 5000);
         login.clickLoginButton();
 
         browser.wait(EC.urlContains("dashboard"), 5000, ('Never arrived at the url containing: dashboard.'));
@@ -92,6 +94,7 @@ describe('Login Page', () => {
         login.clearLoginFields();
         login.enterUsername(login.studentUser);
         login.enterPassword(login.invalidEntry);
+        browser.wait(EC.elementToBeClickable(login.loginButton), 5000);
         login.clickLoginButton();
         
         browser.wait(EC.presenceOf(login.msgError), 5000, 'The error message never showed up. Like my last date.');
@@ -104,6 +107,7 @@ describe('Login Page', () => {
         login.clearLoginFields();
         login.enterUsername(login.invalidEntry);
         login.enterPassword(login.studentPassword);
+        browser.wait(EC.elementToBeClickable(login.loginButton), 5000);
         login.clickLoginButton();
         
         browser.wait(EC.presenceOf(login.msgError), 5000, 'The error message never showed up. Like my last date.');

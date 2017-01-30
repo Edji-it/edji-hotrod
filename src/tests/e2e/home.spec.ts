@@ -73,7 +73,7 @@ describe('Home Page', () => {
         home.footerTwitterLink.click();
 
         // Did we make it to the Twitter page?
-        browser.wait(EC.urlContains("twitter"), 5000, ('Never arrived at the url containing: Twitter.'));
+        browser.wait(EC.urlContains("twitter"), 10000, ('Never arrived at the url containing: Twitter.'));
     });
 
 /* ---- Project Code Login Tests ---------------------------- */
