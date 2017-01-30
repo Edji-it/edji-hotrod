@@ -1,5 +1,4 @@
 <form [formGroup]="loginForm" (ngSubmit)="login(loginForm.value)">
-  <h2 class="center">Access your Edji Dashboard</h2>
   <div class="form-group">
     <label for="usernameInput">Username</label>
     <input type="text" id="usernameInput" [placeholder]="'e.g. ' + userCopy.username" [formControl]="loginForm.controls['username']" tabindex="0" />

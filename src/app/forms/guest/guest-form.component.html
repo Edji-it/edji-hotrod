@@ -1,5 +1,4 @@
 <form id="guestLoginForm" [formGroup]="guestForm" (ngSubmit)="joinSessionAsGuest(guestForm.value)">
-    <h2 class="center">Join as Guest</h2>
     <label for="guestNameInput">Guest Name</label>
     <input id="guestNameInput" type="text" [formControl]="guestForm.controls['guestName']" tabindex="0"/>
     <div id="msgNoGuestName" class="alert alert-info" *ngIf="guestForm.controls['guestName'].hasError('required') && (guestForm.controls['guestName'].dirty || guestForm.submitted)">A name is required</div>
