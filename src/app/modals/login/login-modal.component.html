@@ -1,0 +1,26 @@
+<div class="modal fade show">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Login</h5>
+        <button (click)="closeModal.emit()" type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="guestLogin">
+          <p>Tell us what to call you!</p>
+          <hot-guest-login></hot-guest-login>
+          <p>Wait! I'm a member and just need to <a [routerLink]="['/login']">Login!</a></p>
+        </div>
+        <div *ngIf="!guestLogin">
+          <hot-login-form></hot-login-form>
+        </div>
+      </div>
+      <!--<div class="modal-footer">
+        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>-->
+    </div>
+  </div>
+</div>

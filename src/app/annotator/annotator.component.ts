@@ -5,7 +5,7 @@
  *  - Triggers highlighting
  *  - Deletes highlights and comment components
  */
-import { Component, Input, OnDestroy, OnInit, ViewChildren, QueryList } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChildren, QueryList, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs/Rx';
 import * as Rangy from 'rangy';
 import { Angulartics2 } from 'angulartics2';
@@ -26,6 +26,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     @Input() private mobileCommentActive: boolean;
 
     @ViewChildren(CommentComponent) commentComponents: QueryList<CommentComponent>;
+
+    private showLoginModal: boolean = false;
 
     private reading: any = {};
     
