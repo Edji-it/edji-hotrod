@@ -10,11 +10,11 @@
       <div class="modal-body">
         <div *ngIf="guestLogin">
           <h2>Edji as a guest</h2>
-          <hot-guest-login></hot-guest-login>
+          <hot-guest-login (loginSuccess)="closeModal.emit()"></hot-guest-login>
         </div>
         <div *ngIf="!guestLogin">
           <h2>Edji with your very own account</h2>
-          <hot-login-form></hot-login-form>
+          <hot-login-form (loginSuccess)="closeModal.emit()"></hot-login-form>
           <br>
         </div>
       </div>
