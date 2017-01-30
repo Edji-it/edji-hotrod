@@ -16,7 +16,7 @@ export class JoinComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   private projectId: string;
-  private guestForm: FormGroup;
+  // private guestForm: FormGroup;
   private loginForm: FormGroup;
   private loginLoading: boolean = false;
   private guestLoading: boolean = false;
@@ -41,9 +41,9 @@ export class JoinComponent implements OnInit, OnDestroy {
       window.scrollTo(0, 0);
     });
 
-    this.guestForm = fb.group({
-      guestName: [null, Validators.required]
-    });
+    // this.guestForm = fb.group({
+    //   guestName: [null, Validators.required]
+    // });
 
     this.loginForm = fb.group({
       username: [null, Validators.required],
@@ -68,35 +68,42 @@ export class JoinComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Happens when join as guest is pressed. First calls to sign in the tempuser and then navigates upon receiving project data
+   * Called upon completion of login by one of the forms
    */
-  private joinSessionAsGuest(formValue: any): void {
-    this.guestLoading = true;
-    this.angulartics.eventTrack.next({ action: 'joinAsGuest', properties: { category: 'joinProject', label: 'attempt' }});
-
-    // create the user's temporary account and set local token and user
-    this._auth.createTempUser(formValue.guestName).subscribe(
-      (data) => {
-        this.guestLoading = false;
-        this._auth.setToken(data.token);
-        this._auth.setUser(data.user);
-
-        this.router.navigate(['/project', this.projectId]);
-        this.angulartics.eventTrack.next({ action: 'joinAsGuest', properties: { category: 'joinProject', label: 'success' }});
-
-      },
-      (error) => {
-        this.guestLoading = false;
-        if (error.status === 406) {
-          this.errorObject.badName = ":anguished: Would you mind choosing another name?";
-        } else {
-          this.angulartics.eventTrack.next({ action: 'joinAsGuest', properties: { category: 'joinProject', label: 'failure' }});
-          this.errorObject.tempError = "I'm sorry :disappointed: something didn't happen right. It's probably our fault.";
-          console.error(error);
-        }
-      }
-    )
+  private loginSuccess() {
+    this.router.navigate(['/project', this.projectId]);
   }
+
+  // /**
+  //  * Happens when join as guest is pressed. First calls to sign in the tempuser and then navigates upon receiving project data
+  //  */
+  // private joinSessionAsGuest(formValue: any): void {
+  //   this.guestLoading = true;
+  //   this.angulartics.eventTrack.next({ action: 'joinAsGuest', properties: { category: 'joinProject', label: 'attempt' }});
+
+  //   // create the user's temporary account and set local token and user
+  //   this._auth.createTempUser(formValue.guestName).subscribe(
+  //     (data) => {
+  //       this.guestLoading = false;
+  //       this._auth.setToken(data.token);
+  //       this._auth.setUser(data.user);
+
+  //       this.router.navigate(['/project', this.projectId]);
+  //       this.angulartics.eventTrack.next({ action: 'joinAsGuest', properties: { category: 'joinProject', label: 'success' }});
+
+  //     },
+  //     (error) => {
+  //       this.guestLoading = false;
+  //       if (error.status === 406) {
+  //         this.errorObject.badName = ":anguished: Would you mind choosing another name?";
+  //       } else {
+  //         this.angulartics.eventTrack.next({ action: 'joinAsGuest', properties: { category: 'joinProject', label: 'failure' }});
+  //         this.errorObject.tempError = "I'm sorry :disappointed: something didn't happen right. It's probably our fault.";
+  //         console.error(error);
+  //       }
+  //     }
+  //   )
+  // }
 
   /**
    * Called when user joins project from login. Logs them in and then navigates to the route
