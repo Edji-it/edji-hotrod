@@ -39,7 +39,7 @@
 				class="word"
 				[ngClass]="[ word.styles.join(' '), getHighlightClass(i) ]" 
 				[attr.index]="i"
-				(click)="onTouch(i)">
+				(tap)="onTouch(i)">
 				<edji-comment *ngFor="let comment of commentsByIndex[i]; let ci = index" 
 					[comment]="comment"
 					(mouseenter)='focusHighlight(comment.start, comment.end)'
