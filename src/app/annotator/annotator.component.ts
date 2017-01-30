@@ -27,7 +27,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
     @ViewChildren(CommentComponent) commentComponents: QueryList<CommentComponent>;
 
-    private showLoginModal: boolean = true;
+    private showLoginModal: boolean = false;
 
     private reading: any = {};
     
@@ -81,6 +81,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
  
     ngOnInit() {
         this.user = this._auth.getUser();
+
+        if (!this.user) { this.showLoginModal = true; }
 
         // Check if mobile
         if (window.screen.availWidth < 768) {
