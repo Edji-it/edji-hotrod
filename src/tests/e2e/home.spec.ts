@@ -1,7 +1,6 @@
 import { browser, by, element, protractor } from 'protractor';
-import Home = require('./page-objects/home-page');
-import Login    = require('./page-objects/login-page');
-import Sidebar    = require('./page-objects/sidebar-page');
+
+import { Home, Login, Sidebar } from './page-objects';
 
 /*
     18 Jan 2017

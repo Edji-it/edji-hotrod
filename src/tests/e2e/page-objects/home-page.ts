@@ -1,7 +1,7 @@
 import { browser, by, element, protractor } from 'protractor';
 import { PageObjectInterface } from './PageObjectInterface';
 
-class Home implements PageObjectInterface
+export class Home implements PageObjectInterface
 {
     /*
     18 Jan 2017
@@ -70,5 +70,3 @@ class Home implements PageObjectInterface
         this.footerTwitterLink.click();
     } // clickTwitterLink() : void 
 } // class Home
-
-export = Home;

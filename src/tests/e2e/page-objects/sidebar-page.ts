@@ -1,7 +1,8 @@
 import { browser, by, element, protractor } from 'protractor';
 
-export class Sidebar 
-{
+export class Sidebar {
+
+    // constructor() {}
     /*
     28 Jan 2017
     Last Modified: 28 Jan 2017
@@ -18,13 +19,13 @@ export class Sidebar
     public dumb = this.accountButton.element(by.css('span'));
 
     // Click the log out button.
-    clickLogOutButton () : void
+    public clickLogOutButton () : void
     {
         this.logOutButton.click();
     } // clickLogOutButton () : void
 
     // Click the log out button.
-    clickAccountButton () : void
+    public clickAccountButton () : void
     {
         this.accountButton.click();
     } // clickAccountButton () : void

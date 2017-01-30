@@ -1,7 +1,6 @@
 import { browser, by, element, protractor } from 'protractor';
-import Login    = require('./page-objects/login-page');
-import Home     = require('./page-objects/home-page');
-import Sidebar     = require('./page-objects/sidebar-page');
+
+import { Home, Login, Sidebar } from './page-objects';
 
 /*
     23 Jan 2017
@@ -17,7 +16,7 @@ describe('Login Page', () => {
     /* ---- Variable Initialization --------------- */
     let login   = new Login();
     let home    = new Home();
-    let sidebar    = new Sidebar();
+    let sidebar = new Sidebar();
     let EC      = protractor.ExpectedConditions; // vital
 
 /* ---- beforeEach ---------------------------- */

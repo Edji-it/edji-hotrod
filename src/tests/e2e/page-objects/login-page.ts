@@ -1,7 +1,7 @@
 import { browser, by, element, protractor } from 'protractor';
 import { PageObjectInterface } from './PageObjectInterface';
 
-class Login implements PageObjectInterface
+export class Login implements PageObjectInterface
 {
     /*
     23 Jan 2017
@@ -87,5 +87,3 @@ class Login implements PageObjectInterface
     } // clickGuestLoginButton () : void
 
 } // class Login
-
-export = Login;
