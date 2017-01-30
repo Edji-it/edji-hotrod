@@ -1,6 +1,6 @@
 import { browser, by, element, protractor } from 'protractor';
 
-class Sidebar 
+export class Sidebar 
 {
     /*
     28 Jan 2017
@@ -15,6 +15,7 @@ class Sidebar
     // Public Instance Variables
     public logOutButton     = element(by.id("logOutButton"));
     public accountButton    = element(by.id("accountButton"));
+    public dumb = this.accountButton.element(by.css('span'));
 
     // Click the log out button.
     clickLogOutButton () : void
@@ -29,5 +30,3 @@ class Sidebar
     } // clickAccountButton () : void
 
 } // class Sidebar
-
-export = Sidebar;
