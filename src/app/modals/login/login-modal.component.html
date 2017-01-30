@@ -1,6 +1,6 @@
 <div class="modal fade show">
   <div class="modal-dialog" role="document">
-    <div class="modal-content">
+    <div id="loginModal" class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Log In</h5>
         <!--<button (click)="closeModal.emit()" type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -9,11 +9,11 @@
       </div>
       <div class="modal-body">
         <div *ngIf="guestLogin">
-          <h2>Edji as a guest</h2>
+          <h2 id="guestLoginHeader">Edji as a guest</h2>
           <hot-guest-login (loginSuccess)="closeModal.emit()"></hot-guest-login>
         </div>
         <div *ngIf="!guestLogin">
-          <h2>Edji with your very own account</h2>
+          <h2 id="accountLoginHeader">Edji with your very own account</h2>
           <hot-login-form (loginSuccess)="closeModal.emit()"></hot-login-form>
           <br>
         </div>
@@ -21,7 +21,7 @@
       <div *ngIf="guestLogin" class="modal-footer">
         <p class="center">Wait! I have an account and want to use it!</p>
         <div class="center">
-          <button (click)="guestLogin = false">Login with Account</button>
+          <button id="gotoAccountLoginButton" (click)="guestLogin = false">Login with Account</button>
         </div>
       </div>
       <div *ngIf="!guestLogin" class="modal-footer">
