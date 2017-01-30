@@ -69,6 +69,7 @@ describe('Login Page', () => {
         browser.wait(EC.elementToBeClickable(login.loginButton), 5000);
         login.clearLoginFields();
         login.enterUsername(login.studentUser);
+        browser.wait(EC.elementToBeClickable(login.loginButton), 5000);
         login.clickLoginButton();
         
         browser.wait(EC.presenceOf(login.msgError), 5000, 'The error message never showed up. Like my last date.');
@@ -79,6 +80,7 @@ describe('Login Page', () => {
         browser.wait(EC.elementToBeClickable(login.loginButton), 5000);
         login.clearLoginFields();
         login.enterPassword(login.studentPassword);
+        browser.wait(EC.elementToBeClickable(login.loginButton), 5000);
         login.clickLoginButton();
         
         browser.wait(EC.presenceOf(login.msgError), 5000, 'The error message never showed up. Like my last date.');
