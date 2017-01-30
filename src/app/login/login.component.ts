@@ -39,7 +39,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     if (this._auth.getUser()) {
-      // do something if the user is already logged in?
+      this._router.navigate(['/dashboard']);
     }
   }
 
