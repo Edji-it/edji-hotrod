@@ -111,6 +111,7 @@
     "grunt": "^1.0.1",
     "grunt-aws": "^0.6.2",
     "grunt-bump": "^0.8.0",
+    "grunt-checkbranch": "^1.0.4",
     "html-webpack-plugin": "^2.21.0",
     "http-server": "^0.9.0",
     "imports-loader": "^0.6.5",
