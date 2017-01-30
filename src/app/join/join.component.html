@@ -2,38 +2,10 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-sm-6 col-pad">
-    <form id="guestLoginForm" [formGroup]="guestForm" (ngSubmit)="joinSessionAsGuest(guestForm.value)">
-        <h2 class="center">Join as Guest</h2>
-        <label for="guestNameInput">Guest Name</label>
-        <input id="guestNameInput" type="text" [formControl]="guestForm.controls['guestName']" tabindex="0"/>
-        <div id="msgNoGuestName" class="alert alert-info" *ngIf="guestForm.controls['guestName'].hasError('required') && (guestForm.controls['guestName'].dirty || guestForm.submitted)">A name is required</div>
-        <div id="msgBadName" *ngIf="errorObject.badName" [innerHtml]="errorObject.badName | emojione" class="alert alert-warning"></div>
-        <div id="msgTempError" *ngIf="errorObject.tempError" [innerHtml]="errorObject.tempError | emojione" class="alert alert-warning"></div>
-        
-        <div class="button__row">
-          <button id="guestLoginButton" [class.loading]="guestLoading" type="submit" class="btn btn-primary" [disabled]="!guestForm.valid" name="Sign Up">Guest it is!</button>
-        </div>
-    </form>
+      <hot-guest-login (loginSuccess)="loginSuccess()"></hot-guest-login>
     </div>
     <div class="col-sm-6 col-pad">
-
-    <form [formGroup]="loginForm" (ngSubmit)="joinSessionAsUser(loginForm.value)">
-      <h2 class="center">Login with your Account</h2>
-      <label for="usernameInput">Username</label>
-      <input type="text" id="usernameInput" [formControl]="loginForm.controls['username']" tabindex="1" />
-      <div class="alert alert-info" *ngIf="loginForm.controls['username'].hasError('required') && (loginForm.controls['username'].dirty || loginForm.submitted)">A username is required</div>
-      
-      <label for="passwordInput">Password</label>
-      <input type="password" id="passwordInput" [formControl]="loginForm.controls['password']" tabindex="1" />
-      <div id="msgNoPassword" class="alert alert-info" *ngIf="loginForm.controls['password'].hasError('required') && (loginForm.controls['password'].dirty || loginForm.submitted)">A password is required</div>
-      <div id="msgErrorPassword" class="alert alert-info" *ngIf="errorObject.loginError">{{errorObject.loginError}}</div>
-      
-      <div class="button__row" >
-        <!--ngHide loginLoading-->
-        <button id="buttonLogin" [class.loading]="loginLoading" type="submit" class="btn btn-secondary" name="Login" tabindex="0">Login</button>
-      </div>
-      
-    </form>
+      <hot-login-form (loginSuccess)="loginSuccess()"></hot-login-form>
     </div>
   </div>
 

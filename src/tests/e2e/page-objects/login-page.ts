@@ -20,7 +20,7 @@ class Login implements PageObjectInterface
     public passwordInput    = element(by.id("passwordInput"));
     public msgErrorPassword = element(by.id("msgErrorPassword"));
     public msgNoUserName    = element(by.id("msgNoUserName"));
-    public msgNoPassword    = element(by.id("msgNoPassword"));
+    public msgNoPassword    = element(by.id("msgErrorPassword"));
     public msgBadName       = element(by.id("msgBadName"));
     public guestNameInput   = element(by.id("guestNameInput"));
     public guestLoginButton = element(by.id("guestLoginButton"));
@@ -30,7 +30,7 @@ class Login implements PageObjectInterface
     public teacherUser      = 'teach';
     public teacherPassword  = 'teach';
     public invalidEntry     = 'HitlerHatesEDJI_666_420';
-    public validProjectCode = 'bx72';
+    public validProjectCode = '35jz';
     public testGuestName    = "Queen Elizabeth II";
 
     // get the login page
@@ -53,7 +53,13 @@ class Login implements PageObjectInterface
     {
         this.passwordInput.sendKeys(input);
     } // enterPassword (input : string) : void
-
+    
+    clearLoginFields () : void
+    {
+        this.usernameInput.clear();
+        this.passwordInput.clear();
+    }
+    
     enterStudentAccountCredentials () : void
     {
         this.enterUsername(this.studentUser);
@@ -67,7 +73,7 @@ class Login implements PageObjectInterface
     } // enterTeacherAccountCredentials () : void
 
     clickLoginButton () : void
-    {
+    {   
         this.loginButton.click();
     } // clickLoginButton () : void
     

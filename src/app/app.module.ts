@@ -41,6 +41,8 @@ import { FooterComponent } from './shared/footer';
 import { HomeComponent, ResetPassComponent } from './home';
 import { RegisterComponent } from './register';
 import { JoinComponent } from './join/join.component';
+import { LoginForm, GuestForm } from './forms';
+import { LoginModal } from './modals';
 import { AnnotatorComponent, CommentComponent, TextCommentComponent, EmojiCommentComponent, EmojiKeyboardComponent } from './annotator';
 import { ProjectPageComponent, ProjectInfoComponent } from './project-page';
 import { ReadingPageComponent, DeleteProjectComponent } from './reading-page';
@@ -100,6 +102,9 @@ type StoreType = {
     EmojiKeyboardComponent,
     AppComponent,
     AccountComponent,
+    LoginForm,
+    GuestForm,
+    LoginModal,
     ChangePassComponent,
     ResetPassComponent,
     AnnotatorComponent,
