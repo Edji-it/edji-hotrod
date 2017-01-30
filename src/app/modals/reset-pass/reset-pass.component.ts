@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Component, Output, EventEmitter } from '@angular/core';
 import { Angulartics2 } from 'angulartics2';
 
-import { AuthService } from './../shared/auth.service';
+import { AuthService } from './../../shared';
 
 @Component({
   selector: 'edji-reset-pass',
