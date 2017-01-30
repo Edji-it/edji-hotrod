@@ -26,7 +26,12 @@ export class SideBarComponent implements OnInit, OnDestroy {
     }
     
     ngOnInit() {
-      this.user = this._auth.getUser();
+      /** Set the current user every time it changes */
+      this.subscriptions.push(
+          this._auth.getCurrentUser().subscribe((user) => {
+              this.user = user;
+          })
+      );
 
       if (this.hasCommentCount) {
         this.subscriptions.push(

@@ -77,12 +77,19 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         private _auth: AuthService,
         private _socket: SocketService,
         private angulartics: Angulartics2
-    ) { }
+    ) {
+    }
  
     ngOnInit() {
-        this.user = this._auth.getUser();
+        // this.user = this._auth.getUser();
 
-        if (!this.user.isLoggedIn) { this.showLoginModal = true; }
+        /** Set the current user every time it changes */
+        this.subscriptions.push(
+            this._auth.getCurrentUser().subscribe((user) => {
+                this.user = user;
+                if (!this.user.isLoggedIn) { this.showLoginModal = true; }
+            })
+        );
 
         // Check if mobile
         if (window.screen.availWidth < 768) {

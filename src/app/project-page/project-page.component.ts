@@ -29,14 +29,18 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
         private _projects: ProjectService,
         private _socket: SocketService,
         private _auth: AuthService
-    ) {
-        
-        this.user = _auth.getUser();
-    }
+    ) {}
 
     ngOnInit() {
         // gets id from route to compare to currentProject from projects.service
         let idParam: string = this._route.snapshot.params['id'];
+
+        /** Set the current user every time it changes */
+        this.subscriptions.push(
+            this._auth.getCurrentUser().subscribe((user) => {
+                this.user = user;
+            })
+        );
 
         this._projects.setCurrentProject(idParam)
             .take(1)

@@ -1,7 +1,7 @@
 import { Injectable, OnInit } from '@angular/core';
 import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
-import { Observable } from 'rxjs/Rx';
+import { Observable, BehaviorSubject } from 'rxjs/Rx';
 import 'rxjs/add/operator/toPromise';
 import { Locker } from 'angular2-locker';
 
@@ -12,8 +12,16 @@ export class AuthService implements CanActivate, OnInit {
     private locker: Locker;
     private ENV: string = "dev";
 
+    private user: any;
+    private currentUserSource: BehaviorSubject<any>;
+    private currentUser: Observable<any>;
+
     constructor(private http: Http, private _router: Router, _locker: Locker) {
         this.locker = _locker.useDriver(Locker.DRIVERS.LOCAL);
+
+        this.user = this.getUser();
+        this.currentUserSource = new BehaviorSubject<any>(this.user);
+        this.currentUser = this.currentUserSource.asObservable();
         
         // Check to see if prod or dev environment
         if (window.location.host.indexOf('dev.edji.it') > -1) {
@@ -82,6 +90,8 @@ export class AuthService implements CanActivate, OnInit {
      */
     public setUser(user: any) {
         //should have session timeout, username, baseProfileId, typeId
+        user.isLoggedIn = true;
+        this.currentUserSource.next(user);
         this.locker.set('user', user);
     }
 
@@ -98,11 +108,17 @@ export class AuthService implements CanActivate, OnInit {
                 fullname: "guest",
                 isLoggedIn: false
             }
+            // this.setUser(user);
         } else {
             user.isLoggedIn = true;
         }
 
         return user;
+    }
+
+    public getCurrentUser(): Observable<any> {
+        console.log(this.user);
+        return this.currentUser;
     }
 
     public setToken(token: any) {
