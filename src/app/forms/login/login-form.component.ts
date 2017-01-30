@@ -72,7 +72,6 @@ private login(formValue: any): void {
             this._auth.setToken(data.token);
             this._auth.setUser(data.user);
             this.loginSuccess.emit(data.user);
-            // this._router.navigate(['/dashboard']);
           }
         },
         (error) =>  { 
