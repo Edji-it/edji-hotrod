@@ -70,7 +70,7 @@ export class JoinComponent implements OnInit, OnDestroy {
   /**
    * Called upon completion of login by one of the forms
    */
-  private loginSuccess() {
+  private loginSuccess(): void {
     this.router.navigate(['/project', this.projectId]);
   }
 

@@ -5,7 +5,7 @@
       <div class="col-sm-3"></div>
       <div class="col-sm-6 col-pad">
         <!--Lightning Code Row-->
-        <hot-login-form></hot-login-form>
+        <hot-login-form (loginSuccess)="loginSuccess()"></hot-login-form>
         <div style="text-align:center; margin: 1em 0;">
           <a id="linkForgotPassword" class="link" (click)="showPassModal = !showPassModal">Forgotten password?</a>
         </div>

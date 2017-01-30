@@ -12,7 +12,7 @@ export class GuestForm implements OnInit {
   private guestForm: FormGroup;
 
   @Output()
-  private loggedIn: EventEmitter<any> = new EventEmitter();
+  private loginSuccess: EventEmitter<any> = new EventEmitter();
 
   private isLoading: boolean = false;
   private errorObject: {

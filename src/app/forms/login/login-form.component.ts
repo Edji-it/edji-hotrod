@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Angulartics2 } from 'angulartics2';
@@ -10,6 +10,9 @@ import { AuthService, Copy } from '../../shared';
   templateUrl: 'login-form.component.html'
 })
 export class LoginForm implements OnInit {
+
+  @Output()
+  private loginSuccess: EventEmitter<any> = new EventEmitter();
 
   private loginLoading: boolean = false;
 
@@ -68,7 +71,8 @@ private login(formValue: any): void {
           if (data.token) {
             this._auth.setToken(data.token);
             this._auth.setUser(data.user);
-            this._router.navigate(['/dashboard']);
+            this.loginSuccess.emit(data.user);
+            // this._router.navigate(['/dashboard']);
           }
         },
         (error) =>  { 

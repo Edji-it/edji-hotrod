@@ -29,10 +29,10 @@ export class LoginComponent implements OnInit {
     private appState: AppState,
     private _auth: AuthService,
     private _project: ProjectService,
-    private router: Router,
+    private _router: Router,
   ) {
     // this makes the window always render scrolled to the top
-    this.router.events.subscribe(() => {
+    this._router.events.subscribe(() => {
       window.scrollTo(0, 0);
     });
   }
@@ -41,6 +41,10 @@ export class LoginComponent implements OnInit {
     if (this._auth.getUser()) {
       // do something if the user is already logged in?
     }
+  }
+
+  private loginSuccess(): void {
+    this._router.navigate(['/dashboard']);
   }
 
 }
