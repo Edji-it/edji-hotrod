@@ -55,12 +55,6 @@ $tablet-width: 768px;
 }
 
 .readonly {
-  
-
-  & .comment-input-wrapper { 
-    pointer-events: none;
-  }
-
   & .inline-delete {
     display: none;
   }

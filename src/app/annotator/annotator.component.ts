@@ -684,8 +684,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         /** Will likely need to change to checking for a highlight class 
          * For now, just check if the selected has a comment
         */
+        
         // Check if mobile (again just in case the viewport was changed)
-        if (window.screen.availWidth < 768) {
+        if (document.documentElement.clientWidth < 768) {
             this.isMobile = true;
             this.foundArray = [];
             this.mobileIndex = 0;
