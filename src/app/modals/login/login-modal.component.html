@@ -2,37 +2,34 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Login</h5>
+        <h5 class="modal-title">Log In</h5>
         <button (click)="closeModal.emit()" type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
         <div *ngIf="guestLogin">
-          <h2>Guest Login</h2>
+          <h2>Edji as a guest</h2>
           <hot-guest-login></hot-guest-login>
-          <br>
-          <p class="center">Wait! I have an account and want to use it!</p>
-          <div class="center">
-            <button (click)="guestLogin = false">Login with Account</button>
-          </div>
         </div>
         <div *ngIf="!guestLogin">
-          <h2>Login with your very own account</h2>
+          <h2>Edji with your very own account</h2>
           <hot-login-form></hot-login-form>
           <br>
-          <div class="modal-footer">
-          <p class="center">Wait! I don't want to login, I just want to comment!</p>
-          <div class="center">
-            <button (click)="guestLogin = true">Guest Login</button>
-          </div>
-          </div>
         </div>
       </div>
-      <!--<div class="modal-footer">
-        <button type="button" class="btn btn-primary">Save changes</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      </div>-->
+      <div *ngIf="guestLogin" class="modal-footer">
+        <p class="center">Wait! I have an account and want to use it!</p>
+        <div class="center">
+          <button (click)="guestLogin = false">Login with Account</button>
+        </div>
+      </div>
+      <div *ngIf="!guestLogin" class="modal-footer">
+        <p>Wait! I don't want to login, I just want to comment!</p>
+        <div>
+          <button (click)="guestLogin = true">Guest Login</button>
+        </div>
+      </div>
     </div>
   </div>
 </div>

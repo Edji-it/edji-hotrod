@@ -27,7 +27,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
     @ViewChildren(CommentComponent) commentComponents: QueryList<CommentComponent>;
 
-    private showLoginModal: boolean = false;
+    private showLoginModal: boolean = true;
 
     private reading: any = {};
     
