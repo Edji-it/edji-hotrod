@@ -12,7 +12,7 @@ import { AuthService } from './../shared/auth.service';
 export class ResetPassComponent {
 
   @Output()
-  closeModal = new EventEmitter();
+  closeModal: EventEmitter<any> = new EventEmitter();
 
   private passwordForm: FormGroup;
   private responseSuccess: boolean;
