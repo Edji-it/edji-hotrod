@@ -29,10 +29,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
   // TypeScript public modifiers
   constructor(
     public appState: AppState, 
-    public router: Router,
-    private route: ActivatedRoute,
-    private _auth: AuthService
+    public _router: Router,
+    private _auth: AuthService,
+    private route: ActivatedRoute
   ) {
+    // this makes the window always render scrolled to the top
+    this._router.events.subscribe(() => {
+      window.scrollTo(0, 0);
+    });
   }
 
   ngOnInit() {

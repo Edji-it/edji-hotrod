@@ -1,5 +1,5 @@
 import { Observable, Subscription } from 'rxjs/Rx';
-import { ActivatedRoute, Params } from '@angular/router';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { ProjectService } from '../shared/project.service';
@@ -25,15 +25,21 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
     private commentCount: number = 0;
     
     constructor(
-        private _route: ActivatedRoute, 
+        private _router: Router,
         private _projects: ProjectService,
         private _socket: SocketService,
-        private _auth: AuthService
+        private _auth: AuthService,
+        private route: ActivatedRoute
     ) {}
 
     ngOnInit() {
+        // this makes the window always render scrolled to the top
+        this._router.events.subscribe(() => {
+        window.scrollTo(0, 0);
+        });
+
         // gets id from route to compare to currentProject from projects.service
-        let idParam: string = this._route.snapshot.params['id'];
+        let idParam: string = this.route.snapshot.params['id'];
 
         /** Set the current user every time it changes */
         this.subscriptions.push(
