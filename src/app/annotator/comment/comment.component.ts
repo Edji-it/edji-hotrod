@@ -50,19 +50,19 @@ export class CommentComponent implements OnInit {
   }
 
   toggleActive( ): void {
-    if (!this.readOnly) {
-      if (this.active === true) {
-          this.active = false;
-          this.commentActivation.emit(false);
-          // Save when comment is toggled away from
-          this.updateComment(this.comment.data);
+      if (!this.readOnly) {
+        if (this.active === true) {
+            this.active = false;
+            this.commentActivation.emit(false);
+            // Save when comment is toggled away from
+            this.updateComment(this.comment.data);
+        } else {
+            this.active = true; 
+            this.commentActivation.emit(true);
+        }
       } else {
-          this.active = true; 
-          this.commentActivation.emit(true);
+        this.togglePreview();
       }
-    } else {
-      this.togglePreview();
-    }
       
   }
 
@@ -76,10 +76,20 @@ export class CommentComponent implements OnInit {
   }
 
   togglePreview(): void {
-    if (this.preview === true) {
-      this.preview = false;
+    if (this.isMobile && this.readOnly) {
+      if (this.active == true) {
+        this.active = false;
+        this.commentActivation.emit(false);
+      } else {
+        this.active = true;
+      }
     } else {
-      this.preview = true;
+      if (this.preview === true) {
+        this.preview = false;
+        this.commentActivation.emit(false);
+      } else {
+        this.preview = true;
+      }
     }
   }
 
