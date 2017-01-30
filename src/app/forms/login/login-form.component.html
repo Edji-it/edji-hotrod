@@ -7,7 +7,7 @@
   <div class="form-group">
     <label for="passwordInput">Password</label>
     <input type="password" id="passwordInput" [placeholder]="'e.g. &#9679;&#9679;&#9679;&#9679;&#9679;&#9679;'" [formControl]="loginForm.controls['password']" tabindex="0" />
-    <div id="msgNoPassword" class="alert alert-danger" *ngIf="loginForm.controls['password'].hasError('required') && (loginForm.controls['password'].dirty || loginForm.submitted)">Make sure to add a password!</div>
+    <div id="msgNoPassword" class="alert alert-danger" *ngIf="loginForm.controls['password'].hasError('required') && (loginForm.controls['password'].dirty || loginForm.submitted)">Howdy Partner, why don't you add a password?</div>
     <div id="msgError" class="alert alert-danger" *ngIf="errorObject.loginFailed">{{errorObject.loginFailed}}</div>
     <div id="msgServerError" class="alert alert-danger" *ngIf="errorObject.serverError">{{errorObject.serverError}}</div>
   </div>
