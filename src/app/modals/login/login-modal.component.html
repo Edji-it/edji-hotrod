@@ -9,12 +9,22 @@
       </div>
       <div class="modal-body">
         <div *ngIf="guestLogin">
-          <p>Tell us what to call you!</p>
+          <h2>Guest Login</h2>
           <hot-guest-login></hot-guest-login>
-          <p>Wait! I'm a member and just need to <a [routerLink]="['/login']">Login!</a></p>
+          <br>
+          <p class="center">Wait! I have an account and want to use it!</p>
+          <div class="center">
+            <button (click)="guestLogin = false">Login with Account</button>
+          </div>
         </div>
         <div *ngIf="!guestLogin">
+          <h2>Login with your very own account</h2>
           <hot-login-form></hot-login-form>
+          <br>
+          <p class="center">Wait! I don't want to login, I just want to comment!</p>
+          <div class="center">
+            <button (click)="guestLogin = true">Guest Login</button>
+          </div>
         </div>
       </div>
       <!--<div class="modal-footer">
