@@ -24,7 +24,7 @@ export const ROUTES: Routes = [
   { path: 'join/:projectId', component: JoinComponent },
   { path: 'account', component: AccountComponent, canActivate: [AuthService] },
   { path: 'dashboard',  component: DashboardComponent, canActivate: [AuthService], children: DashboardRoutes },
-  { path: 'project/:id',  component: ProjectPageComponent, canActivate: [AuthService] },
+  { path: 'project/:id',  component: ProjectPageComponent },
   { path: 'reading/:id',  component: ReadingPageComponent, canActivate: [AuthService] },
   { path: 'new-reading', component: NewReadingPage, canActivate: [AuthService] },
   { path: '**',    component: NoContentComponent }

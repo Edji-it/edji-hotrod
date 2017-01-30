@@ -28,7 +28,8 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
         private _route: ActivatedRoute, 
         private _projects: ProjectService,
         private _socket: SocketService,
-        private _auth: AuthService) {
+        private _auth: AuthService
+    ) {
         
         this.user = _auth.getUser();
     }

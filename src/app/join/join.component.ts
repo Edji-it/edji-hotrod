@@ -58,7 +58,7 @@ export class JoinComponent implements OnInit, OnDestroy {
       })
     );
 
-    if (this._auth.getUser()) {
+    if (this._auth.getUser().isLoggedIn) {
       this.router.navigate(['/project', this.projectId]);
     }
   }

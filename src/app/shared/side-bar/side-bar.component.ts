@@ -52,7 +52,6 @@ export class SideBarComponent implements OnInit, OnDestroy {
         this.isMobile = false;
       }
 
-      // this.subscriptions.push()
     }
 
     ngOnDestroy() {

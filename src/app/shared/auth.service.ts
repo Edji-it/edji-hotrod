@@ -91,7 +91,18 @@ export class AuthService implements CanActivate, OnInit {
      * Gets user object from local storage
      */
     public getUser(): any {
-        return this.locker.get('user');
+        let user: any = this.locker.get('user');
+        if (!user) {
+            user = {
+                _id: "",
+                fullname: "guest",
+                isLoggedIn: false
+            }
+        } else {
+            user.isLoggedIn = true;
+        }
+
+        return user;
     }
 
     public setToken(token: any) {
@@ -230,7 +241,7 @@ export class AuthService implements CanActivate, OnInit {
 
     /** Provides logic for sending user back to home if they are not authorized */
     public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-        if (!this.getUser()) {
+        if (!this.getUser().isLoggedIn) {
             this._router.navigate(['/home']);
             return false;
         } else {

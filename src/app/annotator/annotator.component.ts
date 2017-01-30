@@ -82,7 +82,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.user = this._auth.getUser();
 
-        if (!this.user) { this.showLoginModal = true; }
+        if (!this.user.isLoggedIn) { this.showLoginModal = true; }
 
         // Check if mobile
         if (window.screen.availWidth < 768) {
@@ -90,22 +90,20 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         }
 
         // Get Reading via Observable
-        // this.subscriptions.push(
-            this._readings.get(this.project.reading_id)
-                .take(1)
-                .subscribe(
-                    reading => {
-                        if (!reading.words || reading.words.length < 1) {
-                            this.reading = this.processOldReading(reading);
-                        } else {
-                            this.reading = reading;
-                        }
-                    },
-                    error => {
-                        console.error(error);
+        this._readings.get(this.project.reading_id)
+            .take(1)
+            .subscribe(
+                reading => {
+                    if (!reading.words || reading.words.length < 1) {
+                        this.reading = this.processOldReading(reading);
+                    } else {
+                        this.reading = reading;
                     }
-                )
-        // );
+                },
+                error => {
+                    console.error(error);
+                }
+            )
 
         // Establish Users array
         if (this.project.student_ids) {
