@@ -94,26 +94,6 @@ $tablet-width: 768px;
 	to { background-position: 0 100%; }
 }
 
-.sparks {
-    background-image: url('/assets/images/sparks.svg');
-    background-size:100% auto;
-    background-repeat: repeat;
-    background-position: center center;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 5000;
-
-    // animation: scrollBackground 60s linear infinite;
-}
-
-.has-sparks {
-    overflow:hidden;
-    position: relative;
-}
 
 @mixin phone {
   @media (min-width: #{$phone-width-min}) and (max-width: #{$tablet-width - 1px}) {

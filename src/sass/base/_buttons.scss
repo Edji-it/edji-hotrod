@@ -2,7 +2,9 @@
 $btnBg: #969696;
 $btnPrimaryBg: $blue; //#7fd9fc;
 $btnPrimaryColor: #fff;
-$btnSecondaryBg: #cdcdcd;
+$btnSecondaryBg: #fff;
+$btnSecondaryColor: $blue;
+$btnSecondaryBorder: 1px solid rgba(0,0,0,0.05);
 
 button, .button, .btn { //, [class*='btn']
   appearance: none;
@@ -147,10 +149,25 @@ button, .button, .btn { //, [class*='btn']
   &:hover, &:active, &:focus {
     background: darken($btnPrimaryBg, 20%);
   }
+
+  &:disabled {
+    background: $btnPrimaryBg !important;
+
+    &:hover, &:active, &:focus {
+      background: $btnPrimaryBg;
+    }
+  }
 }
 
 .btn-secondary { 
   background: $btnSecondaryBg;
+  color: $btnSecondaryColor;
+  border: $btnSecondaryBorder;
+
+  &:hover, &:active, &:focus {
+    background: darken($btnSecondaryBg, 10%);
+    color: $btnSecondaryColor;
+  }
 
   &:disabled {
     background: $btnSecondaryBg !important;
