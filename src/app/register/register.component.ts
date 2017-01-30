@@ -58,6 +58,8 @@ export class RegisterComponent implements OnInit {
       window.scrollTo(0, 0);
     });
 
+    this.userCopy = new Copy().getUserCopy();
+
     this.registerForm = _fb.group({
       username: [null, Validators.required],
       fullname: [null, Validators.required],
@@ -76,7 +78,6 @@ export class RegisterComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.userCopy = new Copy().getUserCopy();
   }
 
   //https://angular.io/docs/ts/latest/api/forms/index/FormGroup-class.html

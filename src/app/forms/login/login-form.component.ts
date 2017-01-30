@@ -29,6 +29,8 @@ export class LoginForm implements OnInit {
     private angulartics: Angulartics2,
     fb: FormBuilder
   ) {
+    this.userCopy = new Copy().getUserCopy();
+    
     this.loginForm = fb.group({
       username: [null, Validators.required],
       password: [null, Validators.required]
@@ -36,7 +38,6 @@ export class LoginForm implements OnInit {
   }
 
   ngOnInit() {
-    this.userCopy = new Copy().getUserCopy();
   }
 
 private login(formValue: any): void {
