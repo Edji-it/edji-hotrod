@@ -209,3 +209,21 @@ label.border-wrap {
   width: auto;
   position: relative;
 }
+
+input.form-item--seamless {
+	background: transparent;
+	border: none;
+	box-shadow: none;
+	padding: 0px;
+	margin: 0px;
+	border-radius: 0px;
+
+	@include placeholder {
+		color: $seamlessPlaceholderColor;
+	}
+	
+	&:hover, &:active, &:focus, &.active {
+		transform: scale(1);
+		box-shadow: none;
+	}
+}

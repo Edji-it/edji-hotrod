@@ -1,0 +1,47 @@
+/**
+ * Helper classes
+ * -- Apply one or a few styles in a 100% generic fashion
+ */
+
+.hide {
+	display: none !important;
+}
+
+/**
+ * Color helpers (Backgrounds)
+ */
+.green {
+	background: mediumseagreen;
+}
+
+.navy {
+	background: #072649;
+}
+
+.navy-gradient {
+	background: #072649;
+	background: linear-gradient(to bottom, #072649, #17436c, #17436c, #27729a);
+}
+
+.gray {
+  background: $midGray;
+}
+
+.sparks {
+    background-image: url('/assets/images/sparks.svg');
+    background-size:100% auto;
+    background-repeat: repeat;
+    background-position: center center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 5000;
+}
+
+.has-sparks {
+    overflow:hidden;
+    position: relative;
+}

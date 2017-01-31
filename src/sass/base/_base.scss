@@ -16,3 +16,52 @@
 @import "media";
 @import "tables";
 @import "typography";
+@import "helpers";
+
+
+* {
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+*:focus {
+	outline: none;
+}
+
+html {
+	overflow: visible;
+}
+
+
+html, body {
+	font-family: 'Open Sans', serif;
+	padding: 0px;
+	margin: 0px;
+	height: 100%;
+	width: 100%;
+}
+
+body {
+	overflow-x: hidden;
+	color: #111;
+	overflow-y: auto;
+	width: 100%;
+	background: $pageBg;
+	-webkit-overflow-scrolling: touch;
+
+	-webkit-transition: all 600ms;
+	-moz-transition: all 600ms;
+	-ms-transition: all 600ms;
+	-o-transition: all 600ms;
+	transition: all 600ms;
+}

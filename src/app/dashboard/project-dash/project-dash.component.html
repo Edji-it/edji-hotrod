@@ -8,7 +8,7 @@
             </h1>
             <input id="projectCodeInput" [formControl]="codeForm.controls['projectCode']" type="text" class="big-field lowercase-field on-white"  placeholder="Lightning Code" />
             <div *ngIf="codeForm.controls['projectCode'].hasError('required')" class="alert alert-info"><strong [innerHtml]="':zap: Code' | emojione"></strong>  Enter a lightning code to quickly join a project!</div>
-            <div *ngIf="codeForm.controls['projectCode'].hasError('minlength') || codeForm.controls['projectCode'].hasError('maxlength')" class="alert-info">We like 4-character codes at Edji</div>
+            <div *ngIf="codeForm.controls['projectCode'].hasError('minlength') || codeForm.controls['projectCode'].hasError('maxlength')" class="alert alert-info">We like 4-character codes at Edji</div>
             <div *ngIf="errorObject.wrongCode" class="alert alert-danger">{{errorObject.wrongCode}}</div>
 
             <div class="button__row">

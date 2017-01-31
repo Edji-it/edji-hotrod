@@ -1,5 +1,21 @@
+/**
+ * Reading
+ * -- Concerned with the display of the core text in Readings and Projects
+ */
+
 
 $focusUnderlineWidth: 3px;
+
+article {
+	padding-bottom: 50px;
+	line-height: 30px;
+	margin-top: 22px;
+	min-height: 90%;
+	font-size: 22px;
+	display: block;
+	position: relative;
+	max-width: 100%;
+}
 
 article.content {
 	margin-top: 0px;
@@ -104,6 +120,12 @@ article.content {
 	} 
 }
 
+
+
+header {
+	font-weight: bold;
+	font-size: 38px;
+}
 
 
 .emojionearea.emojionearea-inline {
@@ -332,4 +354,100 @@ article.content .word.highlight-f {
 	background: #fafafa;
 	box-shadow: 0 3px 9px 0 rgba(0,0,0,0.2), 0 0 0 1px rgba(0,0,0,0.04); //0px 2px 3px 0px rgba(0,0,0, 0.1);
 	padding: 40px 60px 50px 35px; 
+}
+
+/**
+ * Reading text styles
+ */
+
+
+$readingFontSize: 16px;
+$readingLineHeight: 29px;
+$readingH1Size: 24px;
+$readingH2Size: 20px;
+$readingH3Size: 18px;
+
+/* Each word styling */
+.content p span {
+	display: inline; //-block;
+	//padding-right: 0.3em; // 2px;
+	white-space: normal;
+	line-height: 29px;
+} 
+
+.content, article.content {
+	//font-family: 'Georgia', serif;
+	font-family: $base-font-family;
+	font-size: $readingFontSize;
+    line-height: $readingLineHeight;
+    color: #333;
+
+	& > * {
+		font-family: $base-font-family;
+		font-size: $readingFontSize;
+		line-height: $readingLineHeight;
+		max-width: 100%;
+		padding: 0px;
+		margin: 0px;
+		margin-bottom: 0.5em;
+		height: auto;
+	}
+
+	& h1 {
+		font-size: $readingH1Size;
+	}
+
+	& h2 {
+		font-size: $readingH2Size;
+	}
+
+	& h3 {
+		font-size: $readingH3Size;
+	}
+
+	& .button {
+		pointer-events: none;
+		background: transparent;
+		border: none;
+		box-shadow: none;
+		color: #333;
+	}
+	
+	& > img {
+		max-width: 50%;
+		float: right;
+		margin: 15px;
+		margin-bottom: 24px;
+	}
+
+	/*& * {
+		@include transition(opacity linear 0.2s);
+	}*/
+}
+
+span.bold {
+	font-weight: bold;
+}
+
+span.italic {
+	font-style: italic;
+}
+
+span.underline {
+	text-decoration: underline;
+}
+
+button.underline {
+	text-decoration: underline;
+}
+
+
+header.header {
+	//font-family: 'Georgia', serif;
+	font-family: $base-font-family;
+	//font-style: italic;
+	font-weight: 500;
+	margin-top: 0px; //48px;
+    font-size: 32px;
+    color: #333;
 }
