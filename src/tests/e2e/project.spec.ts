@@ -13,7 +13,7 @@ import { LoginModal } from './components';
 */
 
 // Now into the testing.
-describe('Project Page As Guest', () => {
+describe('Project Page as Guest:', () => {
 
     /* ---- Variable Initialization --------------- */
     let project = new Project();
@@ -27,8 +27,6 @@ describe('Project Page As Guest', () => {
         project.getPage();
         
         // clears all the storage so that we will always get guest login modal
-        browser.executeScript('window.sessionStorage.clear();');
-        browser.executeScript('window.localStorage.clear();');
     });
 
     /* ---- Project Tests ------------------------- */
@@ -56,22 +54,22 @@ describe('Project Page As Guest', () => {
         expect(sidebar.dumb.getText()).toBe(loginModal.guestLogin);
     });
 
-    // it("it should login as a user", () => {
-    //     // initial validation
-    //     expect(loginModal.guestLoginHeader.isPresent()).toBeTruthy();
-    //     expect(loginModal.accountLoginHeader.isPresent()).toBeFalsy();
+    it("it should login as a user", () => {
+        // initial validation
+        expect(loginModal.guestLoginHeader.isPresent()).toBeTruthy();
+        expect(loginModal.accountLoginHeader.isPresent()).toBeFalsy();
 
-    //     // switch to login section and validate
-    //     browser.wait(EC.elementToBeClickable(loginModal.gotoGuestLoginButton), 5000);
-    //     expect(loginModal.accountLoginHeader.isPresent()).toBeTruthy();
-    //     loginModal.usernameInput.sendKeys(loginModal.username);
-    //     loginModal.passwordInput.sendKeys(loginModal.password);
-    //     browser.wait(EC.elementToBeClickable(loginModal.accountLoginButton), 5000);
-    //     loginModal.accountLoginButton.click();
+        // switch to login section and validate
+        browser.wait(EC.elementToBeClickable(loginModal.gotoGuestLoginButton), 5000);
+        expect(loginModal.accountLoginHeader.isPresent()).toBeTruthy();
+        loginModal.usernameInput.sendKeys(loginModal.username);
+        loginModal.passwordInput.sendKeys(loginModal.password);
+        browser.wait(EC.elementToBeClickable(loginModal.accountLoginButton), 5000);
+        loginModal.accountLoginButton.click();
 
-    //     browser.sleep(3000);
+        browser.sleep(5000);
 
-    // });
+    });
      
 }); // describe 'Dashboard Page'
   

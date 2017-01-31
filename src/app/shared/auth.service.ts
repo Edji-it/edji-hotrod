@@ -132,6 +132,7 @@ export class AuthService implements CanActivate, OnInit {
     private destroyCredentials() {
         this.locker.remove('token');
         this.locker.remove('user');
+        this.currentUserSource.next({ isLoggedIn: false });
     }
 
     /** Stores an object in local storage for you - your welcome */
