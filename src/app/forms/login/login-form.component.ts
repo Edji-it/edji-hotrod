@@ -17,7 +17,7 @@ export class LoginForm implements OnInit {
   private loginLoading: boolean = false;
 
   private loginForm: FormGroup;
-  private userCopy: any;
+  private userCopy: any = {};
   private errorObject: {
     "loginFailed"?: string,
     "serverError"?: string
