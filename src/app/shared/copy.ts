@@ -42,7 +42,7 @@ export class Copy {
   }
 
   public getUserCopy(): any {
-    var index = Math.floor(Math.random() * this.userCopy.placeholders.length - 1);
+    var index = Math.floor(Math.random() * (this.userCopy.placeholders.length - 1) + 1);
 
     return this.userCopy.placeholders[index];
   }
