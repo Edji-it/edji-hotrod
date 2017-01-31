@@ -16,7 +16,7 @@ export class Sidebar {
     // Public Instance Variables
     public logOutButton     = element(by.id("logOutButton"));
     public accountButton    = element(by.id("accountButton"));
-    public dumb = this.accountButton.element(by.css('span'));
+    public accountButtonSpan = this.accountButton.element(by.css('span'));
 
     // Click the log out button.
     public clickLogOutButton () : void

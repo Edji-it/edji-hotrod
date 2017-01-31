@@ -1,4 +1,5 @@
 import { browser, by, element, protractor } from 'protractor';
+
 import { Project, Sidebar } from './page-objects';
 import { LoginModal } from './components';
 
@@ -51,24 +52,38 @@ describe('Project Page as Guest:', () => {
 
         // account button validation
         browser.wait(EC.elementToBeClickable(sidebar.accountButton), 5000);
-        expect(sidebar.dumb.getText()).toBe(loginModal.guestLogin);
+        expect(sidebar.accountButtonSpan.getText()).toBe(loginModal.guestLogin);
+
+        // log out
+        browser.wait(EC.elementToBeClickable(sidebar.logOutButton), 5000);
+        sidebar.logOutButton.click();
     });
 
-    it("it should login as a user", () => {
+    it("it should login as a user with an account", () => {
         // initial validation
+        browser.wait(EC.elementToBeClickable(loginModal.guestLoginHeader), 5000);
         expect(loginModal.guestLoginHeader.isPresent()).toBeTruthy();
         expect(loginModal.accountLoginHeader.isPresent()).toBeFalsy();
 
         // switch to login section and validate
-        browser.wait(EC.elementToBeClickable(loginModal.gotoGuestLoginButton), 5000);
+        browser.wait(EC.elementToBeClickable(loginModal.gotoAccountLoginButton), 5000);
+        loginModal.gotoAccountLoginButton.click();
         expect(loginModal.accountLoginHeader.isPresent()).toBeTruthy();
         loginModal.usernameInput.sendKeys(loginModal.username);
         loginModal.passwordInput.sendKeys(loginModal.password);
         browser.wait(EC.elementToBeClickable(loginModal.accountLoginButton), 5000);
-        loginModal.accountLoginButton.click();
+        
+        // loginModal.accountLoginButton.click();
+        
+        loginModal.accountLoginButton.submit();
 
-        browser.sleep(5000);
+        // account button validation
+        browser.wait(EC.elementToBeClickable(sidebar.accountButton), 5000);
+        expect(sidebar.accountButtonSpan.getText()).toBe("student");
 
+        // log out
+        browser.wait(EC.elementToBeClickable(sidebar.logOutButton), 5000);
+        sidebar.logOutButton.click();
     });
      
 }); // describe 'Dashboard Page'
