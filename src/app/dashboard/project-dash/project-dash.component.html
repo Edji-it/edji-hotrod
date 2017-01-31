@@ -1,5 +1,22 @@
 <div class="row" style="margin-top: 50px;">
-    <div class="col-sm-6">
+    <div class="col-sm-6 col-sm-push-6">
+        <form [formGroup]="codeForm" (ngSubmit)="addSession(codeForm.value)">
+            <h1 for="projectCodeInput">Join Project
+                <i class="icon__tooltip" placement="bottom" ngbTooltip="Quickly add a Project by entering the Lighning Code shared with you!">
+                    <span class="icon icon-circle icon-info">i</span>
+                </i>
+            </h1>
+            <input id="projectCodeInput" [formControl]="codeForm.controls['projectCode']" type="text" class="big-field lowercase-field on-white"  placeholder="Lightning Code" />
+            <div *ngIf="codeForm.controls['projectCode'].hasError('required')" class="alert alert-info"><strong [innerHtml]="':zap: Code' | emojione"></strong>  Enter a lightning code to quickly join a project!</div>
+            <div *ngIf="codeForm.controls['projectCode'].hasError('minlength') || codeForm.controls['projectCode'].hasError('maxlength')" class="alert-info">We like 4-character codes at Edji</div>
+            <div *ngIf="errorObject.wrongCode" class="alert alert-danger">{{errorObject.wrongCode}}</div>
+
+            <div class="button__row">
+                <button type="submit" class="btn btn-primary">Join!</button>
+            </div>
+        </form>
+    </div>
+    <div class="col-sm-6 col-sm-pull-6">
         <h1>Recently Joined
             <i class="icon__tooltip" placement="bottom" ngbTooltip="These are Projects that someone else made, and you joined!">
                 <span class="icon icon-circle icon-info">i</span>
@@ -41,22 +58,5 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="col-sm-6">
-        <form [formGroup]="codeForm" (ngSubmit)="addSession(codeForm.value)">
-            <h1 for="projectCodeInput">Join Project
-                <i class="icon__tooltip" placement="bottom" ngbTooltip="Quickly add a Project by entering the Lighning Code shared with you!">
-                    <span class="icon icon-circle icon-info">i</span>
-                </i>
-            </h1>
-            <input id="projectCodeInput" [formControl]="codeForm.controls['projectCode']" type="text" class="big-field lowercase-field on-white"  placeholder="Lightning Code" />
-            <div *ngIf="codeForm.controls['projectCode'].hasError('required')" class="alert alert-info"><strong [innerHtml]="':zap: Code' | emojione"></strong>  Enter a lightning code to quickly join a project!</div>
-            <div *ngIf="codeForm.controls['projectCode'].hasError('minlength') || codeForm.controls['projectCode'].hasError('maxlength')" class="alert-info">We like 4-character codes at Edji</div>
-            <div *ngIf="errorObject.wrongCode" class="alert alert-danger">{{errorObject.wrongCode}}</div>
-
-            <div class="button__row">
-                <button type="submit" class="btn btn-primary">Join!</button>
-            </div>
-        </form>
     </div>
 </div>
