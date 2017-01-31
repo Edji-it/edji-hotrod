@@ -40,8 +40,8 @@ describe('Project Page as Guest:', () => {
      */
 
     it("it should login as a guest", () => {
-
         // initial validation
+        browser.wait(EC.elementToBeClickable(loginModal.guestLoginHeader), 5000);
         expect(loginModal.guestLoginHeader.isPresent()).toBeTruthy();
         expect(loginModal.accountLoginHeader.isPresent()).toBeFalsy();
 
