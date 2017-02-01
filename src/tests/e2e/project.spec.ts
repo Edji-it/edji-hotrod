@@ -41,27 +41,29 @@ describe('Project Page without a login: ', () => {
 
     it("it should login as a guest", () => {
         // initial validation
-        browser.wait(EC.elementToBeClickable(loginModal.guestLoginHeader), 5000, "never saw guest login header.");
+        browser.wait(EC.presenceOf(loginModal.guestLoginHeader), 5000, "never saw the login modal's header");
         expect(loginModal.guestLoginHeader.isPresent()).toBeTruthy();
         expect(loginModal.accountLoginHeader.isPresent()).toBeFalsy();
 
         // logging in
         loginModal.guestNameInput.sendKeys(loginModal.guestLogin);
-        browser.wait(EC.elementToBeClickable(loginModal.guestLoginButton), 5000);
+        browser.wait(EC.elementToBeClickable(loginModal.guestLoginButton), 5000, "never found the guest login button");
         loginModal.guestLoginButton.click();
 
         // account button validation
-        browser.wait(EC.elementToBeClickable(sidebar.accountButton), 5000);
+        browser.wait(EC.elementToBeClickable(sidebar.accountButton), 5000, "never found the account button on the sidebar");
         expect(sidebar.accountButtonSpan.getText()).toBe(loginModal.guestLogin);
 
         // log out
-        browser.wait(EC.elementToBeClickable(sidebar.logOutButton), 5000);
+        browser.wait(EC.elementToBeClickable(sidebar.logOutButton), 5000, "never found the logout button");
         sidebar.logOutButton.click();
     });
 
     it("it should be rejected for a vulgar guest name", () => {
         // initial validation
-        browser.wait(EC.presenceOf(loginModal.guestLoginHeader));
+        browser.wait(EC.presenceOf(loginModal.guestLoginHeader), 5000, "never saw the login modal's header");
+        expect(loginModal.guestLoginHeader.isPresent()).toBeTruthy();
+        expect(loginModal.accountLoginHeader.isPresent()).toBeFalsy();
 
         // enter vulgar name and submit to guest login
         loginModal.guestNameInput.sendKeys("Fucking Fucks");
@@ -74,28 +76,28 @@ describe('Project Page without a login: ', () => {
 
     it("it should login as a user with an account", () => {
         // initial validation
-        browser.wait(EC.elementToBeClickable(loginModal.guestLoginHeader), 5000);
+        browser.wait(EC.presenceOf(loginModal.guestLoginHeader), 5000, "never saw the login modal's header");
         expect(loginModal.guestLoginHeader.isPresent()).toBeTruthy();
         expect(loginModal.accountLoginHeader.isPresent()).toBeFalsy();
 
         // switch to login section and validate
-        browser.wait(EC.elementToBeClickable(loginModal.gotoAccountLoginButton), 5000);
+        browser.wait(EC.elementToBeClickable(loginModal.gotoAccountLoginButton), 5000, "never found button to go to account login");
         loginModal.gotoAccountLoginButton.click();
         expect(loginModal.accountLoginHeader.isPresent()).toBeTruthy();
         loginModal.usernameInput.sendKeys(loginModal.username);
         loginModal.passwordInput.sendKeys(loginModal.password);
-        browser.wait(EC.elementToBeClickable(loginModal.accountLoginButton), 5000);
+        browser.wait(EC.elementToBeClickable(loginModal.accountLoginButton), 5000, "never found the account login button on modal");
         
         // loginModal.accountLoginButton.click();
         
         loginModal.accountLoginButton.submit();
 
         // account button validation
-        browser.wait(EC.elementToBeClickable(sidebar.accountButton), 5000);
+        browser.wait(EC.elementToBeClickable(sidebar.accountButton), 5000, "never found the account button on the sidebar");
         expect(sidebar.accountButtonSpan.getText()).toBe("student");
 
         // log out
-        browser.wait(EC.elementToBeClickable(sidebar.logOutButton), 5000);
+        browser.wait(EC.elementToBeClickable(sidebar.logOutButton), 5000, "never found the logout button");
         sidebar.logOutButton.click();
     });
      
