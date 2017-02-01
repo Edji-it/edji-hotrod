@@ -447,3 +447,62 @@ $expandShadowSize: 3px;
 // Edji-Comment style
 
  
+.hide-comments .comment-line,
+.hide-comments .comment-line:before,
+.hide-comments input.emojiComment {
+	display: none;
+}
+
+// Comment Tooltip
+
+.no-overflow {
+	overflow: hidden;
+	display: block;
+	height: 100%;
+	width: 100%;
+}
+
+/* Used by the ui bubble to stop wrapping */
+.lengthen {
+	display: block;
+	/*width: 300px;*/
+	width: 32px;// 120px;
+	height: 100%;
+}
+
+.ui {
+	position: fixed;
+	padding: 20px;
+	width: 65px;
+	bottom: 0px;
+	left: 0px;
+	top: 0px;
+}
+
+.ui:hover button {
+	opacity: 0.4;
+}
+
+.ui button:hover {
+	opacity: 1;
+}
+
+.ui button, .text-options button {
+
+	-webkit-transition: opacity 400ms;
+	-moz-transition: opacity 400ms;
+	-ms-transition: opacity 400ms;
+	-o-transition: opacity 400ms;
+	transition: opacity 400ms;
+
+	font-family: inherit;
+	background: none;
+	cursor: pointer;
+	font-size: 25px;
+	color: inherit;
+	// opacity: 0.1;
+	padding: 0px;
+	height: 32px;
+	width: 25px;
+	border: 0px;
+}

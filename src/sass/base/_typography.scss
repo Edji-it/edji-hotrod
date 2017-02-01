@@ -1,3 +1,12 @@
+
+
+
+@include fontFace('Open Sans', '../assets/fonts/OpenSans-Light-webfont', normal, 100 );
+@include fontFace('Open Sans', '../assets/fonts/OpenSans-Regular-webfont', normal, normal );
+@include fontFace('Open Sans', '../assets/fonts/OpenSans-Semibold-webfont', normal, 500 );
+@include fontFace('Open Sans', '../assets/fonts/OpenSans-Bold-webfont', normal, 700 );
+
+
 body {
   color: $base-font-color;
   font-family: $base-font-family;

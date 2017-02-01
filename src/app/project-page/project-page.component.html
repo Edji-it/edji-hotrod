@@ -15,11 +15,11 @@
     </div>
   </div>
 
-  <section class="project-column header-padding" [ngClass]="{ loading: !project._id }">
+  <div class="project-column header-padding" [ngClass]="{ loading: !project._id }">
     <p class="alert alert-danger" *ngIf="error">{{ error }}</p>
     <!--<emoji-annotator project-fn="getSession()"></emoji-annotator>-->
     <annotator #annotator *ngIf="project._id" [project]="project"></annotator>
-  </section>
+  </div>
 
 </div>
 

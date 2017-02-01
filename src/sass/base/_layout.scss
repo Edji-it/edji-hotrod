@@ -1,29 +1,13 @@
 
-html {
-  box-sizing: border-box;
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: inherit;
-}
 
 .containter-fluid {
   overflow-x: hidden;
 }
 
-.row {
-  // @include outer-container;
+body > .main {
+	overflow: visible;
+	position:-webkit-sticky;
 }
-.gray {
-  background: $midGray;
-}
-// .full-row {
-//   @extend .row;
-//   // @include outer-container;
-//   max-width: 100% !important;
-// }
 
 footer {
   @extend .row;
@@ -64,4 +48,16 @@ footer {
 
 .center {
   text-align: center;
+}
+
+.page-header {
+  margin-top: 60px;
+
+  &:first-child {
+    margin-top: 20px;
+  }
+} 
+
+.header-padding {
+	padding-top: 52px;
 }
