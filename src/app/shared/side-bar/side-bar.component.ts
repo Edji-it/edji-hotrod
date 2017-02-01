@@ -3,7 +3,7 @@ import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/Rx';
 
 import { AuthService } from '../auth.service';
-import { ProjectService } from '../project.service';
+import { ProjectService, SocketService, HeatToggle } from '..';
 
 @Component({
   selector: 'side-bar',
@@ -21,7 +21,7 @@ export class SideBarComponent implements OnInit, OnDestroy {
     private mNavShow: boolean = false;
     private isMobile: boolean = false;
 
-    constructor(private _auth: AuthService, private _router: Router, private _project: ProjectService) {
+    constructor(private _auth: AuthService, private _socket: SocketService, private _router: Router, private _project: ProjectService) {
 
     }
     
@@ -64,8 +64,13 @@ export class SideBarComponent implements OnInit, OnDestroy {
     }
 
     toggleCommentCounts() {
+      this._socket.toggleHeatVision({
+        all: !this.currentProject.heat_vision
+      });
+    }
 
-    } 
+    private toggleHeatVision() {
+    }
 
     logout() {
         this._auth.logout();

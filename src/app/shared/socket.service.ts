@@ -64,4 +64,13 @@ export class SocketService {
             this.socket.emit('updateComment', { comment: comment, action: updateType, projectId: projectId });
         }
     }
+
+    public toggleHeatVision(value: HeatToggle) {
+        this.socket.emit('heatVision', value);
+    }
+}
+
+export interface HeatToggle {
+    all?: boolean;
+    userId?: string;
 }
