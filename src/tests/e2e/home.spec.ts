@@ -100,40 +100,6 @@ describe('Home Page', () => {
         // Make sure they see guest modal
         browser.wait(EC.elementToBeClickable(loginModal.gotoAccountLoginButton));
         expect(loginModal.gotoAccountLoginButton.isPresent()).toBeTruthy();
-
-
-        // login.enterGuestName(login.testGuestName);
-        // login.clickGuestLoginButton();
-
-        //Project Page
-        
-        // expect(element(by.id("projectTitle")).isPresent()).toBe(true, 'Could not find the project title.');  //FIND THE TITLE
-        
-        // Log Out
-        // sidebar.logOutButton.click();
-});
-
-    /* Test: Get to project through quick code, be rejected because of vulgar name
-        - Path to Edji.it
-        - Enter in valid project code, click join project or hit enter
-        - Redirect to “Join” page
-        - Click on join as guest field and type in vulgar name hit enter or click join project button
-        - Receive “Name is invalid” error message
-    */
-    it('should be able to get to project through quick code, be rejected because of vulgar name', () => {
-        // Home Page
-        browser.wait(home.projectCodeInput.isDisplayed, 5000, ('Never loaded Project Code input box'));
-        
-        home.enterProjectCode(login.validProjectCode);
-        home.clickJoinProjectButton();
-
-        // Join / Login Page
-        browser.wait(EC.urlContains("join"), 5000, ('Never arrived at the url containing: "join".'));
-        login.enterGuestName("Fucking Fucks");
-        login.clickGuestLoginButton();
-        
-        // Lets find that error
-        browser.wait(EC.presenceOf(login.msgBadName), 3000, 'The error message should show up. It did not.');
     });
 
 }); // describe 'Home Page'
