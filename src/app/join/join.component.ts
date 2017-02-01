@@ -37,18 +37,18 @@ export class JoinComponent implements OnInit, OnDestroy {
     fb: FormBuilder
   ) {
     // this makes the window always render scrolled to the top
-    this.router.events.subscribe(() => {
-      window.scrollTo(0, 0);
-    });
-
-    // this.guestForm = fb.group({
-    //   guestName: [null, Validators.required]
+    // this.router.events.subscribe(() => {
+    //   window.scrollTo(0, 0);
     // });
 
-    this.loginForm = fb.group({
-      username: [null, Validators.required],
-      password: [null, Validators.required]
-    });
+    // // this.guestForm = fb.group({
+    // //   guestName: [null, Validators.required]
+    // // });
+
+    // this.loginForm = fb.group({
+    //   username: [null, Validators.required],
+    //   password: [null, Validators.required]
+    // });
   }
 
   ngOnInit() {
@@ -60,9 +60,9 @@ export class JoinComponent implements OnInit, OnDestroy {
 
     this.router.navigate(['/project', this.projectId]);
 
-    if (this._auth.getUser().isLoggedIn) {
-      this.router.navigate(['/project', this.projectId]);
-    }
+    // if (this._auth.getUser().isLoggedIn) {
+    //   this.router.navigate(['/project', this.projectId]);
+    // }
   }
 
   ngOnDestroy() {
