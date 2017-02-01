@@ -30,7 +30,7 @@ describe('Home Page', () => {
     /* Test: Extremely Basic Test.
     - IF THIS FAILS: You are not running Protractor correctly;
     */
-    it('Extremely Basic Test FAILED', () => {
+    it('it should see Edji in the title', () => {
         let subject = browser.getTitle();
         let result  = 'Edji';
         browser.wait(EC.titleContains(result), 5000, 'Title should contain "Edji".');

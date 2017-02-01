@@ -129,8 +129,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // Populate local Comment and Highlight arrays
         // (Used for super speedy rendering!)
         this.project.comments.forEach(comment => {
-            // If student, only show the student's comments
-            if (comment.user_id === this.user._id || this.user._id === this.project.teacher_id || comment.user_id === this.project.teacher_id) {
+            // Show comments if in heat mode, 
+            if (this.project.heat_vision || comment.user_id === this.user._id || this.user._id === this.project.teacher_id || comment.user_id === this.project.teacher_id) {
                 if (!this.commentsByIndex[comment.start]) {
                     this.commentsByIndex[comment.start] = [];
                 }
@@ -166,7 +166,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                     }
                 }
 
-                if (this.user._id === this.project.teacher_id || comment.user_id === this.project.teacher_id) {
+                if (this.project.heat_vision || this.user._id === this.project.teacher_id || comment.user_id === this.project.teacher_id) {
                     // Process different live comment updates
                     if (commentUpdate.action === 'DELETE') {
                         if (cIndex > -1) {
