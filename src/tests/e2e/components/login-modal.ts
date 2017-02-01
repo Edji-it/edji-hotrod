@@ -7,6 +7,7 @@ export class LoginModal {
   public guestNameInput = element(by.id("guestNameInput"));
   public guestLoginButton = element(by.id("guestLoginButton"));
   public gotoAccountLoginButton = element(by.id("gotoAccountLoginButton"));
+  public guestBadNameErr = element(by.id("msgBadName"));
 
   // html elements for user login
   public accountLoginHeader = element(by.id("accountLoginHeader"));

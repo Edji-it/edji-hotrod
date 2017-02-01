@@ -58,7 +58,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     
-    // this.title.getData().subscribe(data => this.data = data);
   }
 
   ngOnDestroy() {

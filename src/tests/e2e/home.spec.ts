@@ -1,6 +1,7 @@
 import { browser, by, element, protractor } from 'protractor';
 
 import { Home, Login, Sidebar } from './page-objects';
+import { LoginModal } from './components';
 
 /*
     18 Jan 2017
@@ -17,6 +18,7 @@ describe('Home Page', () => {
     let home    = new Home(); // the Home pageObject.
     let login   = new Login();
     let sidebar = new Sidebar();
+    let loginModal = new LoginModal();
     let EC      = protractor.ExpectedConditions; // vital
 
     /* ---- beforeEach ---------------------------- */
@@ -92,17 +94,23 @@ describe('Home Page', () => {
         home.enterProjectCode(login.validProjectCode);
         home.clickJoinProjectButton();
 
-        // Join/Login Page
-        browser.wait(EC.urlContains("join"), 5000, ('Never arrived at the url containing: "join".'));
-        login.enterGuestName(login.testGuestName);
-        login.clickGuestLoginButton();
+        // Get to Project Page
+        browser.wait(EC.urlContains("project"), 5000, ('Never arrived at the url containing: "project".'));
+
+        // Make sure they see guest modal
+        browser.wait(EC.elementToBeClickable(loginModal.gotoAccountLoginButton));
+        expect(loginModal.gotoAccountLoginButton.isPresent()).toBeTruthy();
+
+
+        // login.enterGuestName(login.testGuestName);
+        // login.clickGuestLoginButton();
 
         //Project Page
-        browser.wait(EC.urlContains("project"), 5000, ('Never arrived at the url containing: "project".'));
-        expect(element(by.id("projectTitle")).isPresent()).toBe(true, 'Could not find the project title.');  //FIND THE TITLE
+        
+        // expect(element(by.id("projectTitle")).isPresent()).toBe(true, 'Could not find the project title.');  //FIND THE TITLE
         
         // Log Out
-        sidebar.logOutButton.click();
+        // sidebar.logOutButton.click();
 });
 
     /* Test: Get to project through quick code, be rejected because of vulgar name

@@ -14,7 +14,7 @@ import { LoginModal } from './components';
 */
 
 // Now into the testing.
-describe('Project Page as Guest:', () => {
+describe('Project Page without a login: ', () => {
 
     /* ---- Variable Initialization --------------- */
     let project = new Project();
@@ -41,7 +41,7 @@ describe('Project Page as Guest:', () => {
 
     it("it should login as a guest", () => {
         // initial validation
-        browser.wait(EC.elementToBeClickable(loginModal.guestLoginHeader), 5000);
+        browser.wait(EC.elementToBeClickable(loginModal.guestLoginHeader), 5000, "never saw guest login header.");
         expect(loginModal.guestLoginHeader.isPresent()).toBeTruthy();
         expect(loginModal.accountLoginHeader.isPresent()).toBeFalsy();
 
@@ -57,6 +57,19 @@ describe('Project Page as Guest:', () => {
         // log out
         browser.wait(EC.elementToBeClickable(sidebar.logOutButton), 5000);
         sidebar.logOutButton.click();
+    });
+
+    it("it should be rejected for a vulgar guest name", () => {
+        // initial validation
+        browser.wait(EC.presenceOf(loginModal.guestLoginHeader));
+
+        // enter vulgar name and submit to guest login
+        loginModal.guestNameInput.sendKeys("Fucking Fucks");
+        browser.wait(EC.elementToBeClickable(loginModal.guestLoginButton), 5000, "guest login button never became clickable");
+        loginModal.guestLoginButton.click();
+
+        // validate error
+        browser.wait(EC.presenceOf(loginModal.guestBadNameErr));
     });
 
     it("it should login as a user with an account", () => {
