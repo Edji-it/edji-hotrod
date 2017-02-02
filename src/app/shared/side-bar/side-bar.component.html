@@ -18,7 +18,7 @@
 			<span>{{ commentStats ? commentStats.count : 0 }}</span>
 		</button>
 
-		<i (click)="toggleHeatVision()" class="icon-heatvision" ></i>
+		<i (click)="toggleHeatVision()" class="icon-heatvision" [ngClass]="[!currentProject.heat_vision ? 'inactive' : '']" ></i>
 
 		<div *ngIf="user.isLoggedIn" class="side-bar__user" [ngClass]="{ 'side-bar__user__show' : mNavShow }">
 			<a class="side-bar__link" id="logOutButton" (click)="logout()" [innerHtml]="'Log Out &nbsp; :runner:' | emojione"></a>

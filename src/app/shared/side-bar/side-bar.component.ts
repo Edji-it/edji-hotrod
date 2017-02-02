@@ -64,12 +64,13 @@ export class SideBarComponent implements OnInit, OnDestroy {
     }
 
     toggleCommentCounts() {
-      this._socket.toggleHeatVision({
-        all: !this.currentProject.heat_vision
-      });
     }
 
     private toggleHeatVision() {
+      this._socket.toggleHeatVision({
+        all: !this.currentProject.heat_vision
+      });
+      // this._project.create(this.currentProject.reading_id, this.currentProject);
     }
 
     logout() {
