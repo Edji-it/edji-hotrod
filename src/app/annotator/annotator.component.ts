@@ -130,7 +130,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // (Used for super speedy rendering!)
         this.project.comments.forEach(comment => {
             // Show comments if in heat mode, 
-            if (this.project.heat_vision || comment.user_id === this.user._id || this.user._id === this.project.teacher_id || comment.user_id === this.project.teacher_id) {
+            // if (this.project.heat_vision || comment.user_id === this.user._id || this.user._id === this.project.teacher_id || comment.user_id === this.project.teacher_id) {
                 if (!this.commentsByIndex[comment.start]) {
                     this.commentsByIndex[comment.start] = [];
                 }
@@ -140,7 +140,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 
                 // Add highlights
                 this.incrementHighlights(comment.start, comment.end);
-            }
+            // }
 
             // Populate Stats
             this.updateCommentStats(comment.user_id, 1, comment.author);
