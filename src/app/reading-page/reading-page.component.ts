@@ -95,7 +95,7 @@ export class ReadingPageComponent implements OnInit, OnDestroy {
         newProject['teacher_id'] = this._auth.getUser()._id;
 
         this._projects.create(this.readingId, newProject)
-            .then(data => {
+            .subscribe(data => {
                 if (data && data.project) {
                     this.angulartics.eventTrack.next({ action: 'createNewProject', properties: { category: 'contentManagement', label: 'success' }});
                     this.addingNew = false;
@@ -110,7 +110,7 @@ export class ReadingPageComponent implements OnInit, OnDestroy {
             }, error => {
                 this.angulartics.eventTrack.next({ action: 'createNewProject', properties: { category: 'contentManagement', label: 'failure' }});
                 this.addingNew = false;
-                console.log(error);
+                console.error(error);
             });
 
     }

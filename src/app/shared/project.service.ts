@@ -105,6 +105,7 @@ export class ProjectService {
                     // Update local Project object if returned
                     if (data.json().project && data.json().project._id) {
                         this.project = data.json().project;
+                        this.currentProjectSource.next(this.project);
                     }
                     return data.json().project;
                 });
@@ -120,8 +121,11 @@ export class ProjectService {
 
         return this.http
             .post(this._auth.getUrl() + '/projects/', { 'project' : project }, this._auth.getOptions())
-            .toPromise()
-            .then(this._auth.extractData);
+            .map((data) => {
+                if (data && data.json()) {
+                    return data.json();
+                }
+            })
     }
 
     /**

@@ -21,7 +21,7 @@ export class SideBarComponent implements OnInit, OnDestroy {
     private mNavShow: boolean = false;
     private isMobile: boolean = false;
 
-    constructor(private _auth: AuthService, private _socket: SocketService, private _router: Router, private _project: ProjectService) {
+    constructor(private _auth: AuthService, private _socket: SocketService, private _router: Router, private _projects: ProjectService) {
 
     }
     
@@ -35,7 +35,7 @@ export class SideBarComponent implements OnInit, OnDestroy {
 
       if (this.hasCommentCount) {
         this.subscriptions.push(
-          this._project.currentCommentStats.subscribe(data => {
+          this._projects.currentCommentStats.subscribe(data => {
             // this.commentStats.users = [];
             this.commentStats = data;
           }, error => {
@@ -43,7 +43,7 @@ export class SideBarComponent implements OnInit, OnDestroy {
           })
         );
 
-        this._project.currentProject.subscribe(project => {
+        this._projects.currentProject.subscribe(project => {
           this.currentProject = project;
         }, error => {
           console.error(error)
@@ -70,7 +70,10 @@ export class SideBarComponent implements OnInit, OnDestroy {
       this._socket.toggleHeatVision({
         all: !this.currentProject.heat_vision
       });
-      // this._project.create(this.currentProject.reading_id, this.currentProject);
+      let updatedProject = Object.assign({}, this.currentProject);
+      updatedProject.heat_vision = !updatedProject.head_vision;      
+
+      this._projects.create(this.currentProject.reading_id, this.currentProject);
     }
 
     logout() {
