@@ -24,7 +24,7 @@ export class SocketService {
      * Handles the live reading count on the project page
      */
     public joinLiveCount(projectId, userId): Observable<any> {
-        this.socket.emit('newSession', { id: projectId, user: userId });
+        this.socket.emit('openProject', { id: projectId, user: userId });
 
         return this.liveUsersCount();
     }
