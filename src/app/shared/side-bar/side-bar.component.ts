@@ -3,7 +3,7 @@ import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/Rx';
 
 import { AuthService } from '../auth.service';
-import { ProjectService, SocketService, HeatToggle } from '..';
+import { ProjectService, SocketService, PowerToggle } from '..';
 
 @Component({
   selector: 'side-bar',
