@@ -44,6 +44,7 @@ export class SideBarComponent implements OnInit, OnDestroy {
         );
 
         this._projects.currentProject.subscribe(project => {
+          console.log("got updated project");
           this.currentProject = project;
         }, error => {
           console.error(error)
@@ -71,9 +72,10 @@ export class SideBarComponent implements OnInit, OnDestroy {
         all: !this.currentProject.heat_vision
       });
       let updatedProject = Object.assign({}, this.currentProject);
-      updatedProject.heat_vision = !updatedProject.head_vision;      
+      updatedProject.heat_vision = !updatedProject.head_vision;
+      console.log(updatedProject);  
 
-      this._projects.create(this.currentProject.reading_id, this.currentProject);
+      this._projects.create(this.currentProject.reading_id, updatedProject);
     }
 
     logout() {

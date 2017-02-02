@@ -118,12 +118,15 @@ export class ProjectService {
      */
     public create(readingId: string, project: any) {
         project.reading_id = readingId;
+        console.log("create called");
 
         return this.http
             .post(this._auth.getUrl() + '/projects/', { 'project' : project }, this._auth.getOptions())
             .map((data) => {
                 if (data && data.json()) {
-                    return data.json();
+                    this.project = data.json().project;
+                    this.currentProjectSource.next(this.project);
+                    return this.project;
                 }
             })
     }
