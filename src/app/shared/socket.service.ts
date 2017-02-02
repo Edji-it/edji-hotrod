@@ -54,6 +54,21 @@ export class SocketService {
     }
 
     /**
+     * Tell Student Views, Heat Vision has been toggled
+     */
+    public heatVisionUpdates(): Observable<any> {
+        let observable = new Observable(observer => {
+            this.socket.on('heatVision', (heatToggle) => {
+                observer.next(heatToggle);    
+            });
+            return () => {
+                this.socket.disconnect();
+            };  
+        })     
+        return observable;
+    }
+
+    /**
      * Tell Teacher View to update comment
      * @param comment Comment Object
      * @param updateType 'CREATE', 'DELETE', or 'UPDATE'
@@ -65,12 +80,16 @@ export class SocketService {
         }
     }
 
-    public toggleHeatVision(value: HeatToggle) {
-        this.socket.emit('heatVision', value);
+    public toggleHeatVision(heatToggle: PowerToggle, projectId: string) {
+        let projectPowers = {
+            'heatVision' : heatToggle,
+            'projectId' : projectId
+        };
+        this.socket.emit('heatVision', projectPowers);
     }
 }
 
-export interface HeatToggle {
+export interface PowerToggle {
     all?: boolean;
     userId?: string;
 }

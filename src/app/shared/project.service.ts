@@ -118,7 +118,6 @@ export class ProjectService {
      */
     public create(readingId: string, project: any) {
         project.reading_id = readingId;
-        console.log("create called");
 
         return this.http
             .post(this._auth.getUrl() + '/projects/', { 'project' : project }, this._auth.getOptions())
@@ -130,7 +129,7 @@ export class ProjectService {
                 }
             })
     }
-
+    
     /**
      * Delete a Project
      * @param Requires a Project ID

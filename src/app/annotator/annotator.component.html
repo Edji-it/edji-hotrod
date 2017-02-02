@@ -41,7 +41,7 @@
 				[attr.index]="i"
 				(click)="onTouch(i)">
 				<edji-comment *ngFor="let comment of commentsByIndex[i]; let ci = index" 
-					[class.hidden]="!project.heat_vision && (comment.user_id !== user._id || comment.user_id !== project.owner_id)"
+					[class.hidden]="(!project.heat_vision && user._id !== project.teacher_id) && comment.user_id !== user._id && comment.user_id !== project.teacher_id"
 					[comment]="comment"
 					(mouseenter)='focusHighlight(comment.start, comment.end)'
 					(mouseleave)='unfocusHighlight(comment.start, comment.end)' 

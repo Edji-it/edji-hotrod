@@ -166,7 +166,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                     }
                 }
 
-                if (this.project.heat_vision || this.user._id === this.project.teacher_id || comment.user_id === this.project.teacher_id) {
+                if (this.user._id === this.project.teacher_id || comment.user_id === this.project.teacher_id) {
                     // Process different live comment updates
                     if (commentUpdate.action === 'DELETE') {
                         if (cIndex > -1) {
@@ -194,6 +194,13 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 }
             }, (error) => {
                 console.warn(error);
+            })
+        );
+
+        // Subscribe to Heat Vision toggle updates
+        this.subscriptions.push(
+            this._socket.heatVisionUpdates().subscribe((heatToggle) => {
+                this.project.heat_vision = heatToggle.heatVision.all;
             })
         );
 

@@ -77,9 +77,7 @@ export class SideBarComponent implements OnInit, OnDestroy {
         .take(1)
         .subscribe((project) => {
           // Live update users once save is successful
-          this._socket.toggleHeatVision({
-            all: project.heat_vision
-          });
+          this._socket.toggleHeatVision({ all: project.heat_vision }, project._id);
         });
     }
 

@@ -48,8 +48,8 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
             })
         );
 
+        // Set current project AND subscribe to updates from that project
         this._projects.setCurrentProject(idParam)
-            .take(1)
             .subscribe(
             (project) => {
                 if (project) {
