@@ -109,6 +109,10 @@ $tablet-width: 768px;
   }
 }
 
+.mobile-comment-button {
+  display: none;
+}
+
 /* Mobile Optimization */
 @include phone {
 	.comment {
@@ -175,5 +179,15 @@ $tablet-width: 768px;
     cursor: pointer;
     opacity: 0.8;
     filter: grayscale(100%);
+  }
+
+
+  .mobile-comment-button {
+    width: 25px;
+    height: auto;
+    display:block;
+    opacity: 0.5;
+    position: absolute;
+    left: -40px;
   }
 }
