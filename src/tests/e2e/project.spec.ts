@@ -18,8 +18,8 @@ describe('Project Page without a login: ', () => {
 
     /* ---- Variable Initialization --------------- */
     let project = new Project();
-    let loginModal = new LoginModal();
     let sidebar = new Sidebar();
+    let loginModal = new LoginModal();
     let EC      = protractor.ExpectedConditions; // vital
     
 
@@ -27,8 +27,6 @@ describe('Project Page without a login: ', () => {
 
     beforeEach(() => {
         project.getPage();
-        
-        // clears all the storage so that we will always get guest login modal
     });
 
     /* ---- Project Tests ------------------------- */
@@ -40,6 +38,8 @@ describe('Project Page without a login: ', () => {
      * - Make sure that the guest name is on the account button
      */
 
+     loginModal.testLoginModal();
+    
     // it("it should login as a guest", () => {
     //     // initial validation
     //     browser.wait(EC.presenceOf(loginModal.guestLoginHeader), 5000, "never saw the login modal's header");

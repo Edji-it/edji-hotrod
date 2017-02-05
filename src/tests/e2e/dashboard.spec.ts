@@ -42,6 +42,7 @@ describe('Dashboard Page', () => {
         browser.wait(EC.urlContains("dashboard"), 5000, "never arrived at dashboard");
     });
 
+    // this test relies on the user having at least one project - could do more verification of the project card itself
     it("should see a list of projects", () => {
         browser.wait(EC.presenceOf(dashboard.firstProject), 5000, "never saw a project");
         expect(dashboard.projectCards.count()).toBeGreaterThan(0);
