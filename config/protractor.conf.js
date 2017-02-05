@@ -14,6 +14,7 @@ require('ts-node/register');
 var helpers;
 
 helpers = require('./helpers.js'); // Helps us get the root file reference.
+SpecReporter = require('jasmine-spec-reporter').SpecReporter;
 
 exports.config = {
   
@@ -58,12 +59,20 @@ exports.config = {
     showColors: true,
     isVerbose: false,
     includeStackTrace: false,
-    defaultTimeoutInterval: 400000
+    defaultTimeoutInterval: 400000,
+    print: () => {} // take out the dot logging when tests are run
   },
   directConnect: true,
 
   onPrepare: function() {
     browser.ignoreSynchronization = true;
+
+    // add test log output configuration
+    jasmine.getEnv().addReporter(new SpecReporter({
+      spec: {
+        displayStacktrace: true
+      }
+    }));
   },
 
   /**
