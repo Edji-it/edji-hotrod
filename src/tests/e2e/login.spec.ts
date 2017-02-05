@@ -30,7 +30,9 @@ describe('Login Page', () => {
 /* ---- Generic Login Tests ---------------------------- */
 
     // test all the errors
-    loginForm.testLoginErrors();
+    describe("Login errors", () => {
+        loginForm.testLoginErrors();
+    });
 
     describe("Successful login", () => {
         afterEach(() => {
