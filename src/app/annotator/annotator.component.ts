@@ -571,7 +571,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // Get selection indices
         let span = this.getSelectionSpan();
         
-        if (!span.start || !span.end) {
+        if (span.start > -1 || span.end > -1) {
             return;
         }
         
@@ -592,7 +592,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // Get selection indices
         let span = this.getSelectionSpan();
 
-        if (!span.start || !span.end) {
+        if (span.start > -1 || span.end > -1) {
             return;
         }
         
