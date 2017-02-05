@@ -62,7 +62,6 @@ export class SocketService {
         console.log("got a subscriber");
         let observable = new Observable(observer => {
             this.socket.on('heatVision', (heatToggle) => {
-                console.log("got heat toggle");
                 observer.next(heatToggle);    
             });
             return () => {
