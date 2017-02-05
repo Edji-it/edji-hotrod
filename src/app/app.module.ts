@@ -10,6 +10,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 // import { CoolStorageModule } from 'angular2-cool-storage';
 import {LockerModule, Locker, LockerConfig} from 'angular2-locker';
 import { Angulartics2Module, Angulartics2GoogleAnalytics } from 'angulartics2';
+import { HotkeyModule } from 'angular2-hotkeys';
 
 /*
  * Platform and Environment providers/directives/pipes
@@ -132,6 +133,7 @@ type StoreType = {
     RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
     Angulartics2Module.forRoot([ Angulartics2GoogleAnalytics ]),
     NgbModule.forRoot(), // Ng Bootstrap Import
+    HotkeyModule.forRoot()
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     ENV_PROVIDERS,

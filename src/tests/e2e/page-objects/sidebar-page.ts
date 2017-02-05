@@ -16,6 +16,7 @@ export class Sidebar {
     // Public Instance Variables
     public logOutButton     = element(by.id("logOutButton"));
     public accountButton    = element(by.id("accountButton"));
+    public heatButton       = element(by.id("toggleHeatVision"));
     public accountButtonSpan = this.accountButton.element(by.css('span'));
 
     // Click the log out button.

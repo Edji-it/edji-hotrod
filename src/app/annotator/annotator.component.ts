@@ -9,6 +9,7 @@ import { Component, Input, OnDestroy, OnInit, ViewChildren, QueryList, EventEmit
 import { Subscription } from 'rxjs/Rx';
 import * as Rangy from 'rangy';
 import { Angulartics2 } from 'angulartics2';
+import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 
 import { ReadingService } from '../shared/reading.service';
 import { ProjectService } from '../shared/project.service';
@@ -46,7 +47,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     private showCommentCounts: boolean = false;
     private showAllComments: boolean = false;
 
-    private highlightY = '100px'; 
+    private highlightY = '200px'; 
     private highlightX = '20px'; 
     private optionLeft = true;
     private isMobile = false;
@@ -79,8 +80,17 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         private _projects: ProjectService,
         private _auth: AuthService,
         private _socket: SocketService,
-        private angulartics: Angulartics2
+        private angulartics: Angulartics2,
+        private _hotkeysService: HotkeysService
     ) {
+        this._hotkeysService.add(new Hotkey('t', (event: KeyboardEvent): boolean => {
+             this.addTextComment({ name: 'Hotkey'});
+            return false; // Prevent bubbling
+        }));
+        this._hotkeysService.add(new Hotkey('e', (event: KeyboardEvent): boolean => {
+             this.addEmojiComment({ name: 'Hotkey'});
+            return false; // Prevent bubbling
+        }));
     }
  
     ngOnInit() {
@@ -214,6 +224,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         window.onresize = () => {
             this.updateAllLineCounts();
         }
+
+        // Fallback for tooltip: Continuous text selection check
+        this.loopCheckTextSelection();
     }
 
     ngOnDestroy() {
@@ -244,7 +257,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     /**
      * Show tooltip to the side with buttons for adding comment types
      */
-    showCommentOptions(event): void {
+    showCommentOptions(event, doNotDismiss ?: boolean): void {
         // Only show options if text selected
         if (Rangy.getSelection() && Rangy.getSelection().toString().length > 0) {
             let scrollOffset = document.getElementById('emojiAnnotator').getBoundingClientRect().top;
@@ -286,10 +299,16 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 }
             }
             this.optionsShow = true;
-        } 
-        // else if (!doNotDismiss) {
-        //     this.optionsShow = false;
-        // }
+        } else if (!doNotDismiss) {
+            this.optionsShow = false;
+        }
+    }
+
+    loopCheckTextSelection(): void {
+        setTimeout(() => {
+            this.showCommentOptions({ name: 'timeout'});
+            this.loopCheckTextSelection();
+        }, 500);
     }
 
     updateAllLineCounts(): void {
@@ -553,7 +572,11 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     addEmojiComment(event): void {
         // Get selection indices
         let span = this.getSelectionSpan();
-
+        
+        if (!span.start || !span.end) {
+            return;
+        }
+        
         if (span.start > -1 && span.end > -1) {
             // Increment highlight array
             this.incrementHighlights(true, span.start, span.end);
@@ -570,6 +593,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     addTextComment(event): void {
         // Get selection indices
         let span = this.getSelectionSpan();
+
+        if (!span.start || !span.end) {
+            return;
+        }
         
         // Increment highlight array
         this.incrementHighlights(true, span.start, span.end);
