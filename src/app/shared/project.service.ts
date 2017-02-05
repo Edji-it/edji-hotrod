@@ -118,10 +118,26 @@ export class ProjectService {
      */
     public create(readingId: string, project: any) {
         project.reading_id = readingId;
-        console.log("create called");
 
         return this.http
             .post(this._auth.getUrl() + '/projects/', { 'project' : project }, this._auth.getOptions())
+            .map((data) => {
+                if (data && data.json()) {
+                    this.project = data.json().project;
+                    this.currentProjectSource.next(this.project);
+                    return this.project;
+                }
+            })
+    }
+
+    /**
+     * Update a project's fields
+     * @param updateObj Object which contains all of the parameters to update
+     * @param projectId Project id's string
+     */
+    public updateProject(updateObj: any, projectId: string) {
+        return this.http
+            .put([this._auth.getUrl(), 'projects', projectId].join("/"), { project: updateObj }, this._auth.getOptions())
             .map((data) => {
                 if (data && data.json()) {
                     this.project = data.json().project;

@@ -44,7 +44,6 @@ export class SideBarComponent implements OnInit, OnDestroy {
         );
 
         this._projects.currentProject.subscribe(project => {
-          console.log("got updated project");
           this.currentProject = project;
         }, error => {
           console.error(error)
