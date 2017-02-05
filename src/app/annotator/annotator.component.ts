@@ -571,17 +571,15 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // Get selection indices
         let span = this.getSelectionSpan();
         
-        if (span.start > -1 || span.end > -1) {
+        if ( !(span.start >= 0) || !(span.end >= 0)) {
             return;
         }
         
-        if (span.start > -1 && span.end > -1) {
-            // Increment highlight array
-            this.incrementHighlights(true, span.start, span.end);
+        // Increment highlight array
+        this.incrementHighlights(true, span.start, span.end);
 
-            // Tell the server we've got a comment!
-            this.createComment(span.start, span.end, 'emoji');
-        }
+        // Tell the server we've got a comment!
+        this.createComment(span.start, span.end, 'emoji');
     }
 
     /** 
@@ -592,7 +590,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // Get selection indices
         let span = this.getSelectionSpan();
 
-        if (span.start > -1 || span.end > -1) {
+        if ( !(span.start >= 0) || !(span.end >= 0)) {
             return;
         }
         
