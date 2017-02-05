@@ -18,7 +18,10 @@
 			<span>{{ commentStats ? commentStats.count : 0 }}</span>
 		</button>
 
-		<i *ngIf="currentProject" (click)="toggleHeatVision()" class="icon-heatvision" [ngClass]="[!currentProject.heat_vision ? 'inactive' : '']" ></i>
+		<!--Heat Vision toggle-->
+		<button *ngIf="currentProject && user._id == currentProject.teacher_id" type="button" class="btn btn-clear side-bar__icon-button"  placement="right" ngbTooltip="Turn on Heat Vision to let readers see comments from other readers, turn it off to make comments private!">
+			<i *ngIf="currentProject" (click)="toggleHeatVision()" class="icon-heatvision" [ngClass]="[!currentProject.heat_vision ? 'inactive' : 'active']" ></i>
+		</button>
 
 		<div *ngIf="user.isLoggedIn" class="side-bar__user" [ngClass]="{ 'side-bar__user__show' : mNavShow }">
 			<a class="side-bar__link" id="logOutButton" (click)="logout()" [innerHtml]="'Log Out &nbsp; :runner:' | emojione"></a>

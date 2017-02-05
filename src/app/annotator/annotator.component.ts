@@ -32,7 +32,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     private reading: any = {};
     
     private commentsByIndex: any[] = [];
+
     private highlightArray: number[] = [];
+    private alwaysHighlightArray: number[] = [];
+    
     // An array of arrays!
     private lineCountArray: any[][] = [];
     private lineCountRunning: boolean = false;
@@ -130,7 +133,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // (Used for super speedy rendering!)
         this.project.comments.forEach(comment => {
             // Show comments if in heat mode, 
-            if (this.project.heat_vision || comment.user_id === this.user._id || this.user._id === this.project.teacher_id || comment.user_id === this.project.teacher_id) {
+            // if (this.project.heat_vision || comment.user_id === this.user._id || this.user._id === this.project.teacher_id || comment.user_id === this.project.teacher_id) {
                 if (!this.commentsByIndex[comment.start]) {
                     this.commentsByIndex[comment.start] = [];
                 }
@@ -139,8 +142,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 this.commentsByIndex[comment.start].push(comment);
                 
                 // Add highlights
-                this.incrementHighlights(comment.start, comment.end);
-            }
+                this.incrementHighlights(this.user._id === comment.user_id || this.project.teacher_id == comment.user_id, comment.start, comment.end);
+            // }
 
             // Populate Stats
             this.updateCommentStats(comment.user_id, 1, comment.author);
@@ -166,12 +169,12 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                     }
                 }
 
-                if (this.project.heat_vision || this.user._id === this.project.teacher_id || comment.user_id === this.project.teacher_id) {
+                if (this.user._id === this.project.teacher_id || comment.user_id === this.project.teacher_id) {
                     // Process different live comment updates
                     if (commentUpdate.action === 'DELETE') {
                         if (cIndex > -1) {
                             // Remove highlights from local array
-                            this.decrementHighlights(comment.start, comment.end);
+                            this.decrementHighlights(this.user._id === comment.user_id || this.project.teacher_id == comment.user_id, comment.start, comment.end);
                             this.commentsByIndexRemove(comment._id, wIndex, cIndex);
                             this.updateCommentStats(comment.user_id, -1, comment.author);
                         }
@@ -181,19 +184,27 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                         } else {
                             // Sometimes an UPDATE comes through for comment not yet created
                             // Add highlights to local array
-                            this.incrementHighlights(comment.start, comment.end);
+                            this.incrementHighlights(this.user._id === comment.user_id || this.project.teacher_id == comment.user_id, comment.start, comment.end);
                             this.commentsByIndexAdd(comment, wIndex, true);
                             this.updateCommentStats(comment.user_id, 1, comment.author);
                         }
                     } else if (commentUpdate.action === 'CREATE') {
                         // Add highlights to local array
-                        this.incrementHighlights(comment.start, comment.end);
+                        this.incrementHighlights(this.user._id === comment.user_id || this.project.teacher_id == comment.user_id, comment.start, comment.end);
                         this.commentsByIndexAdd(comment, wIndex, true);
                         this.updateCommentStats(comment.user_id, 1, comment.author);
                     }
                 }
             }, (error) => {
                 console.warn(error);
+            })
+        );
+
+        // Subscribe to Heat Vision toggle updates
+        this.subscriptions.push(
+            this._socket.heatVisionUpdates().subscribe((heatToggle) => {
+                this.project.heat_vision = heatToggle.heatVision.all;
+                this.updateAllLineCounts();
             })
         );
 
@@ -323,12 +334,22 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     /**
      * Add new highlights to local array
      */
-    incrementHighlights(start: number, end: number): void {
-        for (var i = start; i <= end; i ++) {
-            if (this.highlightArray[i]) {
-                this.highlightArray[i]++;
-            } else {
-                this.highlightArray[i] = 1;
+    incrementHighlights(alwaysHighlight: boolean, start: number, end: number): void {
+        if (alwaysHighlight) {
+            for (var i = start; i <= end; i ++) {
+                if (this.alwaysHighlightArray[i]) {
+                    this.alwaysHighlightArray[i]++;
+                } else {
+                    this.alwaysHighlightArray[i] = 1;
+                }
+            }
+        } else {
+            for (var i = start; i <= end; i ++) {
+                if (this.highlightArray[i]) {
+                    this.highlightArray[i]++;
+                } else {
+                    this.highlightArray[i] = 1;
+                }
             }
         }
     }
@@ -336,19 +357,35 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     /**
      * Removes highlights from local array
      */
-    decrementHighlights(start: number, end: number): void {
-        for (var i = start; i <= end; i ++) {
-            // Any time we decrement, we should ensure we remove the 1000 focus
-            if (this.highlightArray[i] >= 1000) {
-                this.highlightArray[i] -= 1000;
-            }
+    decrementHighlights(alwaysHighlight: boolean, start: number, end: number): void {
+        if (alwaysHighlight) {
+            for (var i = start; i <= end; i ++) {
+                // Any time we decrement, we should ensure we remove the 1000 focus
+                if (this.alwaysHighlightArray[i] >= 1000) {
+                    this.alwaysHighlightArray[i] -= 1000;
+                }
 
-            if (this.highlightArray[i] && this.highlightArray[i] > 0) {
-                this.highlightArray[i]--;
-            } else {
-                this.highlightArray[i] = 0;
+                if (this.alwaysHighlightArray[i] && this.alwaysHighlightArray[i] > 0) {
+                    this.alwaysHighlightArray[i]--;
+                } else {
+                    this.alwaysHighlightArray[i] = 0;
+                }
+            }
+        } else {
+            for (var i = start; i <= end; i ++) {
+                // Any time we decrement, we should ensure we remove the 1000 focus
+                if (this.highlightArray[i] >= 1000) {
+                    this.highlightArray[i] -= 1000;
+                }
+
+                if (this.highlightArray[i] && this.highlightArray[i] > 0) {
+                    this.highlightArray[i]--;
+                } else {
+                    this.highlightArray[i] = 0;
+                }
             }
         }
+        
     }
 
     /**
@@ -443,7 +480,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      */
     removeComment(comment, index: number, commentIndex: number) {
         // Remove Highlights
-        this.decrementHighlights(comment.start, comment.end);
+        this.decrementHighlights(this.user._id === comment.user_id, comment.start, comment.end);
         // Remove local comment object
         this.commentsByIndexRemove(comment.id, index, commentIndex);
     }
@@ -519,7 +556,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
         if (span.start > -1 && span.end > -1) {
             // Increment highlight array
-            this.incrementHighlights(span.start, span.end);
+            this.incrementHighlights(true, span.start, span.end);
 
             // Tell the server we've got a comment!
             this.createComment(span.start, span.end, 'emoji');
@@ -535,7 +572,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         let span = this.getSelectionSpan();
         
         // Increment highlight array
-        this.incrementHighlights(span.start, span.end);
+        this.incrementHighlights(true, span.start, span.end);
 
         // Tell the server we've got a comment!
         this.createComment(span.start, span.end, 'text');
@@ -666,15 +703,29 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      */
     private getHighlightClass(i: number): string {
         let classString = '';
-        if (this.highlightArray[i]) {
+        let highlightCount = 0;
+        let focusHighlight = false;
+
+        if ((this.project.heat_vision || this.user._id == this.project.teacher_id) && this.highlightArray[i]) {
             if (this.highlightArray[i] >= 1000) {
                 // Focus style
-                classString = 'highlight-f highlight-' + (this.highlightArray[i] - 1000);
+                highlightCount += (this.highlightArray[i] - 1000);
             } else {
-                classString = 'highlight-' + this.highlightArray[i];
+                highlightCount += this.highlightArray[i];
             }
         }
-        return classString;
+        if (this.alwaysHighlightArray[i]) {
+            if (this.alwaysHighlightArray[i] >= 1000) {
+                // Focus style
+                highlightCount += (this.alwaysHighlightArray[i] - 1000);
+            } else {
+                highlightCount += this.alwaysHighlightArray[i];
+            }
+        }
+        if (focusHighlight) {
+            classString = 'highlight-f';
+        }
+        return classString + ' highlight-' + highlightCount;
     }
 
     /**

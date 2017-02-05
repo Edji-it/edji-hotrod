@@ -15,6 +15,7 @@ export class SocketService {
         if (this._auth.getEnv() === "prod") {
             this.url = "http://bluestreak.edji.it";
         } else {
+            // this.url = 'http://localhost:7899';
             this.url = "http://bluestreak-dev.edji.it";
         }
         this.socket = io(this.url);
@@ -24,7 +25,7 @@ export class SocketService {
      * Handles the live reading count on the project page
      */
     public joinLiveCount(projectId, userId): Observable<any> {
-        this.socket.emit('newSession', { id: projectId, user: userId });
+        this.socket.emit('openProject', { id: projectId, user: userId });
 
         return this.liveUsersCount();
     }
@@ -54,6 +55,21 @@ export class SocketService {
     }
 
     /**
+     * Tell Student Views, Heat Vision has been toggled
+     */
+    public heatVisionUpdates(): Observable<any> {
+        let observable = new Observable(observer => {
+            this.socket.on('heatVision', (heatToggle) => {
+                observer.next(heatToggle);    
+            });
+            return () => {
+                this.socket.disconnect();
+            };  
+        })     
+        return observable;
+    }
+
+    /**
      * Tell Teacher View to update comment
      * @param comment Comment Object
      * @param updateType 'CREATE', 'DELETE', or 'UPDATE'
@@ -65,12 +81,16 @@ export class SocketService {
         }
     }
 
-    public toggleHeatVision(value: HeatToggle) {
-        this.socket.emit('heatVision', value);
+    public toggleHeatVision(heatToggle: PowerToggle, projectId: string) {
+        let projectPowers = {
+            'heatVision' : heatToggle,
+            'projectId' : projectId
+        };
+        this.socket.emit('heatVision', projectPowers);
     }
 }
 
-export interface HeatToggle {
+export interface PowerToggle {
     all?: boolean;
     userId?: string;
 }

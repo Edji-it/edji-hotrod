@@ -3,7 +3,7 @@ import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/Rx';
 
 import { AuthService } from '../auth.service';
-import { ProjectService, SocketService, HeatToggle } from '..';
+import { ProjectService, SocketService, PowerToggle } from '..';
 
 @Component({
   selector: 'side-bar',
@@ -67,14 +67,17 @@ export class SideBarComponent implements OnInit, OnDestroy {
     }
 
     private toggleHeatVision() {
-      this._socket.toggleHeatVision({
-        all: !this.currentProject.heat_vision
-      });
+      // Create a copy of the project to post
       let updatedProject = Object.assign({}, this.currentProject);
-      updatedProject.heat_vision = !updatedProject.head_vision;
-      console.log(updatedProject);  
+      // Toggle the Heat Vision boolean
+      updatedProject.heat_vision = !updatedProject.heat_vision;
 
-      this._projects.create(this.currentProject.reading_id, updatedProject);
+      this._projects.create(this.currentProject.reading_id, updatedProject)
+        .take(1)
+        .subscribe((project) => {
+          // Live update users once save is successful
+          this._socket.toggleHeatVision({ all: project.heat_vision }, project._id);
+        });
     }
 
     logout() {

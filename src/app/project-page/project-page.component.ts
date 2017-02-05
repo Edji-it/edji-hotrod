@@ -48,8 +48,8 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
             })
         );
 
+        // Set current project AND subscribe to updates from that project
         this._projects.setCurrentProject(idParam)
-            .take(1)
             .subscribe(
             (project) => {
                 if (project) {
@@ -63,8 +63,8 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
 
         // Join and update live user count
         this.subscriptions.push(
-            this._socket.joinLiveCount(idParam, this.user._id).subscribe((count) => {
-                this.liveCount = count;
+            this._socket.joinLiveCount(idParam, this.user._id).subscribe((users) => {
+                this.liveCount = users.length;
             }, (error) => {
                 console.warn(error);
             })

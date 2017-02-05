@@ -129,7 +129,7 @@ export class ProjectService {
                 }
             })
     }
-
+    
     /**
      * Update a project's fields
      * @param updateObj Object which contains all of the parameters to update

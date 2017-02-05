@@ -15,6 +15,11 @@ edji-comment {
 	height:1em;
 	width: 0px;
 	@extend %noSelect;
+
+	&.hidden {
+		pointer-events: none;
+		display: none;
+	}
 }
 
 // Primary comment block
