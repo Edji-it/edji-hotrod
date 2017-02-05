@@ -66,17 +66,19 @@ export class SideBarComponent implements OnInit, OnDestroy {
     toggleCommentCounts() {
     }
 
-    private toggleHeatVision() {
+    private togglePower(powerName: string, value: boolean) {
       // Create a copy of the project to post
-      let updatedProject = Object.assign({}, this.currentProject);
+      // let updatedProject = Object.assign({}, this.currentProject);
       // Toggle the Heat Vision boolean
-      updatedProject.heat_vision = !updatedProject.heat_vision;
+      let updateObj: any = {};
+      updateObj[powerName] = value;
 
-      this._projects.create(this.currentProject.reading_id, updatedProject)
+      this._projects.update(updateObj, this.currentProject._id)
         .take(1)
         .subscribe((project) => {
           // Live update users once save is successful
-          this._socket.toggleHeatVision({ all: project.heat_vision }, project._id);
+          console.log("success in getting projects");
+          this._socket.toggleHeatVision({ all: value });
         });
     }
 

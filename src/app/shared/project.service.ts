@@ -135,7 +135,7 @@ export class ProjectService {
      * @param updateObj Object which contains all of the parameters to update
      * @param projectId Project id's string
      */
-    public updateProject(updateObj: any, projectId: string) {
+    public update(updateObj: any, projectId: string) {
         return this.http
             .put([this._auth.getUrl(), 'projects', projectId].join("/"), { project: updateObj }, this._auth.getOptions())
             .map((data) => {

@@ -203,6 +203,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // Subscribe to Heat Vision toggle updates
         this.subscriptions.push(
             this._socket.heatVisionUpdates().subscribe((heatToggle) => {
+                console.log("annotator got the socket call");
                 this.project.heat_vision = heatToggle.heatVision.all;
                 this.updateAllLineCounts();
             })

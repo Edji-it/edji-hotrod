@@ -15,8 +15,8 @@ export class SocketService {
         if (this._auth.getEnv() === "prod") {
             this.url = "http://bluestreak.edji.it";
         } else {
-            // this.url = 'http://localhost:7899';
-            this.url = "http://bluestreak-dev.edji.it";
+            this.url = 'http://localhost:7899';
+            // this.url = "http://bluestreak-dev.edji.it";
         }
         this.socket = io(this.url);
     }
@@ -45,6 +45,7 @@ export class SocketService {
     public commentUpdates(): Observable<any> {
         let observable = new Observable(observer => {
             this.socket.on('updateComment', (commentUpdate) => {
+                console.log("got updated comment");
                 observer.next(commentUpdate);    
             });
             return () => {
@@ -58,8 +59,10 @@ export class SocketService {
      * Tell Student Views, Heat Vision has been toggled
      */
     public heatVisionUpdates(): Observable<any> {
+        console.log("got a subscriber");
         let observable = new Observable(observer => {
             this.socket.on('heatVision', (heatToggle) => {
+                console.log("got heat toggle");
                 observer.next(heatToggle);    
             });
             return () => {
@@ -81,10 +84,9 @@ export class SocketService {
         }
     }
 
-    public toggleHeatVision(heatToggle: PowerToggle, projectId: string) {
+    public toggleHeatVision(heatToggle: PowerToggle) {
         let projectPowers = {
-            'heatVision' : heatToggle,
-            'projectId' : projectId
+            'heatVision' : heatToggle
         };
         this.socket.emit('heatVision', projectPowers);
     }
