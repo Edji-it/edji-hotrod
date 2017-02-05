@@ -1,5 +1,5 @@
 import { browser, by, element, protractor } from 'protractor';
-import Dashboard = require('./page-objects/dashboard-page');
+import { Dashboard, Login } from './page-objects';
 
 /*
     27 Jan 2017
@@ -15,14 +15,22 @@ import Dashboard = require('./page-objects/dashboard-page');
 describe('Dashboard Page', () => {
 
     /* ---- Variable Initialization --------------- */
-    
+    let login = new Login();
     let dashboard   = new Dashboard();
     let EC          = protractor.ExpectedConditions; // vital
 
-    /* ---- beforeEach ---------------------------- */
-    // Does this before each test.
-    beforeEach(() => {
-        
+    beforeAll(() => {
+        // make sure the user is logged in before the suite runs
+        login.getPage();
+        browser.wait(EC.elementToBeClickable(login.loginButton), 5000);
+        login.enterTeacherAccountCredentials();
+        browser.wait(EC.elementToBeClickable(login.loginButton), 5000);
+        login.loginButton.click();
+    })
+
+    afterEach(() => {
+        // navigate back to the dashboard after every test
+        dashboard.getPage();
     });
 
     /* ---- Vital Super Basic Test  --------------- */
@@ -30,10 +38,8 @@ describe('Dashboard Page', () => {
     /* Test: Extremely Basic Test.
     - IF THIS FAILS: You are not running Protractor correctly;
     */
-    it('Extremely Basic Test FAILED', () => {
-        let subject = browser.getTitle();
-        let result  = 'Edji';
-        browser.wait(EC.titleContains(result), 5000, 'Title should contain "Edji".');
+    it('should arrive at dashboard', () => {
+        browser.wait(EC.urlContains("dashboard"), 5000, "never arrived at dashboard");
     });
 
     /* ---- Dashboard Tests ------------------------ */

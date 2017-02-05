@@ -1,7 +1,7 @@
 import { browser, by, element, protractor } from 'protractor';
 import { PageObjectInterface } from './PageObjectInterface';
 
-class Dashboard implements PageObjectInterface
+export class Dashboard implements PageObjectInterface
 {
     /*
     28 Jan 2017
@@ -22,5 +22,3 @@ class Dashboard implements PageObjectInterface
 
 
 } // class Login
-
-export = Dashboard;
