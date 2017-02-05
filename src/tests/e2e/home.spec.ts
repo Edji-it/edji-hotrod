@@ -86,30 +86,30 @@ describe('Home Page', () => {
         - Click on join as guest field and type in valid not vulgar name hit enter or click join project button
         - Redirect to project
     */
-    it('user should be able to get to a project through quick code, enter as guest', () => {
+    // it('user should be able to get to a project through quick code, enter as guest', () => {
 
-        // Home Page
-        browser.wait(home.projectCodeInput.isDisplayed, 5000, ('Never loaded Project Code input box'));
+    //     // Home Page
+    //     browser.wait(home.projectCodeInput.isDisplayed, 5000, ('Never loaded Project Code input box'));
         
-        home.enterProjectCode(login.validProjectCode);
-        home.clickJoinProjectButton();
+    //     home.enterProjectCode(login.validProjectCode);
+    //     home.clickJoinProjectButton();
 
-        // Get to Project Page
-        browser.wait(EC.urlContains("project"), 5000, ('Never arrived at the url containing: "project".'));
+    //     // Get to Project Page
+    //     browser.wait(EC.urlContains("project"), 5000, ('Never arrived at the url containing: "project".'));
 
-        // Make sure they see guest modal
-        browser.wait(EC.elementToBeClickable(loginModal.gotoAccountLoginButton));
-        expect(loginModal.gotoAccountLoginButton.isPresent()).toBeTruthy();
+    //     // Make sure they see guest modal
+    //     browser.wait(EC.elementToBeClickable(loginModal.gotoAccountLoginButton));
+    //     expect(loginModal.gotoAccountLoginButton.isPresent()).toBeTruthy();
         
-        // Join as guest
-        browser.wait(EC.elementToBeClickable(loginModal.guestNameInput), 6000, "never saw a guest name input box");
-        loginModal.guestNameInput.sendKeys("Guest");
-        browser.wait(EC.elementToBeClickable(loginModal.guestLoginButton), 5000, "never found the guest login button");
-        loginModal.guestLoginButton.click();
+    //     // Join as guest
+    //     browser.wait(EC.elementToBeClickable(loginModal.guestNameInput), 6000, "never saw a guest name input box");
+    //     loginModal.guestNameInput.sendKeys("Guest");
+    //     browser.wait(EC.elementToBeClickable(loginModal.guestLoginButton), 5000, "never found the guest login button");
+    //     loginModal.guestLoginButton.click();
 
-        // log out
-        browser.wait(EC.elementToBeClickable(sidebar.logOutButton), 5000, "never found the logout button");
-        sidebar.logOutButton.click();
-    });
+    //     // log out
+    //     browser.wait(EC.elementToBeClickable(sidebar.logOutButton), 5000, "never found the logout button");
+    //     sidebar.logOutButton.click();
+    // });
 
 }); // describe 'Home Page'

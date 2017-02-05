@@ -48,11 +48,24 @@ describe('Dashboard Page', () => {
     });
 
     describe("Navigation from project dashboard", () => {
-        it("should go to a project", () => {
+        it("should get to a project by clicking a card", () => {
             browser.wait(EC.presenceOf(dashboard.firstProject), 5000, "never saw a project");
             dashboard.firstProject.click();
             browser.wait(EC.urlContains("project"), 5000, "clicking on project card did not bring me to a project");
-        })
+        });
+
+        it("should get to a project by entering a code", () => {
+            // initial validation
+            browser.wait(EC.presenceOf(dashboard.projectCodeInput), 5000, "never saw a project");
+
+            // form handling
+            dashboard.projectCodeInput.sendKeys(login.validProjectCode);
+            browser.wait(EC.elementToBeClickable(dashboard.projectJoinButton), 5000, "project code input was never clickable");
+            dashboard.projectJoinButton.submit();
+
+            // verification
+            browser.wait(EC.urlContains("project"), 5000, "entering a project code did not bring me to a project");
+        });
     });
 
     /* ---- Dashboard Tests ------------------------ */
