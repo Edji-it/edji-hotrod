@@ -9,7 +9,7 @@ import { Component, Input, OnDestroy, OnInit, ViewChildren, QueryList, EventEmit
 import { Subscription } from 'rxjs/Rx';
 import * as Rangy from 'rangy';
 import { Angulartics2 } from 'angulartics2';
-import { HotkeysService, Hotkey } from 'angular2-hotkeys';
+// import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 
 import { ReadingService } from '../shared/reading.service';
 import { ProjectService } from '../shared/project.service';
@@ -80,17 +80,17 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         private _projects: ProjectService,
         private _auth: AuthService,
         private _socket: SocketService,
-        private angulartics: Angulartics2,
-        private _hotkeysService: HotkeysService
+        private angulartics: Angulartics2
+        // private _hotkeysService: HotkeysService
     ) {
-        this._hotkeysService.add(new Hotkey('t', (event: KeyboardEvent): boolean => {
-             this.addTextComment({ name: 'Hotkey'});
-            return false; // Prevent bubbling
-        }));
-        this._hotkeysService.add(new Hotkey('e', (event: KeyboardEvent): boolean => {
-             this.addEmojiComment({ name: 'Hotkey'});
-            return false; // Prevent bubbling
-        }));
+        // this._hotkeysService.add(new Hotkey('t', (event: KeyboardEvent): boolean => {
+        //      this.addTextComment({ name: 'Hotkey'});
+        //     return false; // Prevent bubbling
+        // }));
+        // this._hotkeysService.add(new Hotkey('e', (event: KeyboardEvent): boolean => {
+        //      this.addEmojiComment({ name: 'Hotkey'});
+        //     return false; // Prevent bubbling
+        // }));
     }
  
     ngOnInit() {

@@ -94,10 +94,6 @@
   version "2.0.29"
   resolved "https://registry.yarnpkg.com/@types/minimatch/-/minimatch-2.0.29.tgz#5002e14f75e2d71e564281df0431c8c1b4a2a36a"
 
-"@types/mousetrap@^1.5.32":
-  version "1.5.33"
-  resolved "https://registry.yarnpkg.com/@types/mousetrap/-/mousetrap-1.5.33.tgz#a0804505e76a6b4e597f35430c57fbe2a67794ef"
-
 "@types/node@*", "@types/node@^6.0.38", "@types/node@^6.0.46":
   version "6.0.62"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-6.0.62.tgz#85222c077b54f25b57417bb708b9f877bda37f89"
@@ -212,13 +208,6 @@ angular2-autosize@^1.0.1:
 angular2-click-outside@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/angular2-click-outside/-/angular2-click-outside-0.1.0.tgz#fa156b0f7893311cfbbbaba1ba02127afcf7db87"
-
-angular2-hotkeys@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/angular2-hotkeys/-/angular2-hotkeys-1.0.2.tgz#93d899be8e6ef4a1ca382ad942aad81abf145937"
-  dependencies:
-    "@types/mousetrap" "^1.5.32"
-    mousetrap "^1.6.0"
 
 angular2-locker@^0.5.0:
   version "0.5.0"
@@ -3228,10 +3217,6 @@ mkdirp@0.5.x, "mkdirp@>=0.5 0", mkdirp@^0.5.0, mkdirp@^0.5.1, mkdirp@~0.5.0, mkd
   resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-0.5.1.tgz#30057438eac6cf7f8c4767f38648d6697d75c903"
   dependencies:
     minimist "0.0.8"
-
-mousetrap@^1.6.0:
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/mousetrap/-/mousetrap-1.6.0.tgz#0168fcabb11d07669e87490324c981208121ac4d"
 
 ms@0.7.1:
   version "0.7.1"
