@@ -2,6 +2,8 @@ import { browser, by, element, protractor } from 'protractor';
 
 export class Sidebar {
 
+    private EC = protractor.ExpectedConditions; // vital
+
     // constructor() {}
     /*
     28 Jan 2017
@@ -31,4 +33,8 @@ export class Sidebar {
         this.accountButton.click();
     } // clickAccountButton () : void
 
+    public logout(): void {
+        browser.wait(this.EC.elementToBeClickable(this.logOutButton), 5000, "logout button never became clickable");
+        this.logOutButton.click();
+    }
 } // class Sidebar

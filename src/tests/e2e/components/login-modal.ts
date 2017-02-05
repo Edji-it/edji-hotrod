@@ -29,22 +29,26 @@ export class LoginModal {
   public username = "student";
   public password = "student";
 
-  public testLoginModal() {
-    describe("Login modal", () => {
+  public testLoginModalErrors() {
+    describe("Login modal errors", () => {
       it("should initialize on the guest login form", () => {
         browser.wait(this.EC.presenceOf(this.guestLoginHeader), 5000, "did not initialize on the guest login form");
       });
 
-      describe("Account login", () => {
-
-        // go to the account login form before each test
+      describe("Account login errors", () => {
         beforeEach(() => {
+          // go to the account login form before each test
           browser.wait(this.EC.elementToBeClickable(this.gotoAccountLoginButton));
           this.gotoAccountLoginButton.click();
         });
 
         this.loginForm.testLoginErrors();
       });
+        // this.loginForm.testLoginErrors(() => {
+        //   // go to the account login form before each test
+        //   browser.wait(this.EC.elementToBeClickable(this.gotoAccountLoginButton));
+        //   this.gotoAccountLoginButton.click();
+        // });
     });
   }
 }

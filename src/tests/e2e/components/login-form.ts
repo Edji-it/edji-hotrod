@@ -22,11 +22,11 @@ export class LoginForm {
 
   /** Tests all login errors on the login form */
   public testLoginErrors(): void {
-    describe("Login form errors", () => {
 
       beforeEach(() => {
+
         // wait for login button to be clickable - this validates that test may proceed
-        browser.wait(this.EC.elementToBeClickable(this.loginButton), 5000, "login button never became clickable");
+        browser.wait(this.EC.elementToBeClickable(this.loginButton), 5000, "login button never became clickable after page load");
 
         // clear the login fields - just to make sure that they're clean
         this.usernameInput.clear();
@@ -39,7 +39,7 @@ export class LoginForm {
 
         // form handling
         this.usernameInput.sendKeys(this.studentUser);
-        browser.wait(this.EC.elementToBeClickable(this.loginButton), 5000, "login button never became clickable");
+        browser.wait(this.EC.elementToBeClickable(this.loginButton), 5000, "login button never became clickable after login form entry");
         this.loginButton.submit();
         
         // test verification
@@ -51,7 +51,7 @@ export class LoginForm {
 
         // form handling
         this.passwordInput.sendKeys(this.studentPassword);
-        browser.wait(this.EC.elementToBeClickable(this.loginButton), 5000, "login button never became clickable");
+        browser.wait(this.EC.elementToBeClickable(this.loginButton), 5000, "login button never became clickable after login form entry");
         this.loginButton.submit();
         
         // test verification
@@ -64,7 +64,7 @@ export class LoginForm {
         // form handling
         this.usernameInput.sendKeys(this.studentUser);
         this.passwordInput.sendKeys(this.invalidEntry);
-        browser.wait(this.EC.elementToBeClickable(this.loginButton), 5000, "login button never became clickable");
+        browser.wait(this.EC.elementToBeClickable(this.loginButton), 5000, "login button never became clickable after login form entry");
         this.loginButton.submit();
         
         // test verification
@@ -77,14 +77,13 @@ export class LoginForm {
         this.usernameInput.sendKeys(this.invalidEntry);
         this.passwordInput.sendKeys(this.studentPassword);
 
-        browser.wait(this.EC.elementToBeClickable(this.loginButton), 5000, "login button never became clickable");
+        browser.wait(this.EC.elementToBeClickable(this.loginButton), 5000, "login button never became clickable after login form entry");
         this.loginButton.submit();
         
         // test verification
         browser.wait(this.EC.presenceOf(this.msgError), 5000, 'never saw incorrect username/password error');
       });
 
-    });
   }
 
   /**
@@ -100,5 +99,9 @@ export class LoginForm {
     this.passwordInput.clear();
     this.usernameInput.sendKeys(this.teacherUser);
     this.passwordInput.sendKeys(this.teacherPassword);
+    
+    // log them in
+    browser.wait(this.EC.elementToBeClickable(this.loginButton), 5000, "login button never became clickable after login form entry");
+    this.loginButton.submit();
   }
 }
