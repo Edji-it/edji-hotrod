@@ -1,13 +1,15 @@
 import { browser, by, element, protractor } from 'protractor';
 
-import { LoginForm } from '.';
+import { LoginForm, GuestLoginForm } from '.';
 
 export class LoginModal {
   private EC = protractor.ExpectedConditions; // vital
   private loginForm: LoginForm;
+  private guestForm: GuestLoginForm;
 
   constructor() {
     this.loginForm = new LoginForm();
+    this.guestForm = new GuestLoginForm;
   }
 
   // html elements for guest login
@@ -38,17 +40,16 @@ export class LoginModal {
       describe("Account login errors", () => {
         beforeEach(() => {
           // go to the account login form before each test
-          browser.wait(this.EC.elementToBeClickable(this.gotoAccountLoginButton));
+          browser.wait(this.EC.elementToBeClickable(this.gotoAccountLoginButton), 5000, "button to navigate to account login never became clickable");
           this.gotoAccountLoginButton.click();
         });
 
         this.loginForm.testLoginErrors();
       });
-        // this.loginForm.testLoginErrors(() => {
-        //   // go to the account login form before each test
-        //   browser.wait(this.EC.elementToBeClickable(this.gotoAccountLoginButton));
-        //   this.gotoAccountLoginButton.click();
-        // });
+
+      describe("Guest login errors", () => {
+        this.guestForm.testGuestLoginErrors();
+      });
     });
   }
 }

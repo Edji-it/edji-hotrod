@@ -14,7 +14,7 @@ import { LoginModal } from './components';
 */
 
 // Now into the testing.
-describe('Project Page without a login: ', () => {
+describe('Project Page', () => {
 
     /* ---- Variable Initialization --------------- */
     let project = new Project();
@@ -40,7 +40,7 @@ describe('Project Page without a login: ', () => {
 
     loginModal.testLoginModalErrors();
 
-    it("it should login as a user with an account", () => {
+    it("should login as a user with an account", () => {
         // initial validation
         browser.wait(EC.presenceOf(loginModal.guestLoginHeader), 5000, "never saw the login modal's header");
         expect(loginModal.guestLoginHeader.isPresent()).toBeTruthy();

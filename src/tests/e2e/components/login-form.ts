@@ -22,67 +22,67 @@ export class LoginForm {
 
   /** Tests all login errors on the login form */
   public testLoginErrors(): void {
+    // don't worry, this beforeEach hook can coexist with another beforeEach hook from the calling module
+    beforeEach(() => {
 
-      beforeEach(() => {
+      // wait for login button to be clickable - this validates that test may proceed
+      browser.wait(this.EC.elementToBeClickable(this.loginButton), 5000, "login button never became clickable after page load");
 
-        // wait for login button to be clickable - this validates that test may proceed
-        browser.wait(this.EC.elementToBeClickable(this.loginButton), 5000, "login button never became clickable after page load");
+      // clear the login fields - just to make sure that they're clean
+      this.usernameInput.clear();
+      this.passwordInput.clear();
+      
+    });
 
-        // clear the login fields - just to make sure that they're clean
-        this.usernameInput.clear();
-        this.passwordInput.clear();
-        
-      });
+    // Test: Not typing in a password on log in should throw an error message.
+    it('should give an error message when they don\'t enter a password', () => {
 
-      // Test: Not typing in a password on log in should throw an error message.
-      it('should give an error message when they don\'t enter a password', () => {
+      // form handling
+      this.usernameInput.sendKeys(this.studentUser);
+      browser.wait(this.EC.elementToBeClickable(this.loginButton), 5000, "login button never became clickable after login form entry");
+      this.loginButton.submit();
+      
+      // test verification
+      browser.wait(this.EC.presenceOf(this.msgError), 5000, 'never saw password error message');
+    });
 
-        // form handling
-        this.usernameInput.sendKeys(this.studentUser);
-        browser.wait(this.EC.elementToBeClickable(this.loginButton), 5000, "login button never became clickable after login form entry");
-        this.loginButton.submit();
-        
-        // test verification
-        browser.wait(this.EC.presenceOf(this.msgError), 5000, 'never saw password error message');
-      });
+    // Test: Not typing in a password on log in should throw an error message.
+    it('should give an error message when they don\'t enter a username', () => {
 
-      // Test: Not typing in a password on log in should throw an error message.
-      it('should give an error message when they don\'t enter a username', () => {
+      // form handling
+      this.passwordInput.sendKeys(this.studentPassword);
+      browser.wait(this.EC.elementToBeClickable(this.loginButton), 5000, "login button never became clickable after login form entry");
+      this.loginButton.submit();
+      
+      // test verification
+      browser.wait(this.EC.presenceOf(this.msgError), 5000, 'never saw username error message');
+    });
 
-        // form handling
-        this.passwordInput.sendKeys(this.studentPassword);
-        browser.wait(this.EC.elementToBeClickable(this.loginButton), 5000, "login button never became clickable after login form entry");
-        this.loginButton.submit();
-        
-        // test verification
-        browser.wait(this.EC.presenceOf(this.msgError), 5000, 'never saw username error message');
-      });
+    // Test: enter a correct user, but an invalid password
+    it('should give an error message when they enter an incorrect password', () => {
 
-      // Test: enter a correct user, but an invalid password
-      it('should give an error message when they enter an incorrect password', () => {
+      // form handling
+      this.usernameInput.sendKeys(this.studentUser);
+      this.passwordInput.sendKeys(this.invalidEntry);
+      browser.wait(this.EC.elementToBeClickable(this.loginButton), 5000, "login button never became clickable after login form entry");
+      this.loginButton.submit();
+      
+      // test verification
+      browser.wait(this.EC.presenceOf(this.msgError), 5000, 'never saw incorrect username/password error');
+    });
 
-        // form handling
-        this.usernameInput.sendKeys(this.studentUser);
-        this.passwordInput.sendKeys(this.invalidEntry);
-        browser.wait(this.EC.elementToBeClickable(this.loginButton), 5000, "login button never became clickable after login form entry");
-        this.loginButton.submit();
-        
-        // test verification
-        browser.wait(this.EC.presenceOf(this.msgError), 5000, 'never saw incorrect username/password error');
-      });
+    // Test: enter an invalid user, but a correct password
+    it('should give an error message when they enter an incorrect username', () => {
 
-      // Test: enter an invalid user, but a correct password
-      it('should give an error message when they enter an incorrect username', () => {
+      this.usernameInput.sendKeys(this.invalidEntry);
+      this.passwordInput.sendKeys(this.studentPassword);
 
-        this.usernameInput.sendKeys(this.invalidEntry);
-        this.passwordInput.sendKeys(this.studentPassword);
-
-        browser.wait(this.EC.elementToBeClickable(this.loginButton), 5000, "login button never became clickable after login form entry");
-        this.loginButton.submit();
-        
-        // test verification
-        browser.wait(this.EC.presenceOf(this.msgError), 5000, 'never saw incorrect username/password error');
-      });
+      browser.wait(this.EC.elementToBeClickable(this.loginButton), 5000, "login button never became clickable after login form entry");
+      this.loginButton.submit();
+      
+      // test verification
+      browser.wait(this.EC.presenceOf(this.msgError), 5000, 'never saw incorrect username/password error');
+    });
 
   }
 
