@@ -148,24 +148,3 @@ describe('Project Page as a Project Owner: ', () => {
      
 }); // describe 'Dashboard Page'
   
-
-// Code for making a comment
-// Find text to select
-// browser.wait(EC.elementToBeClickable(element(by.css(".word[index='18']"))), 5000, "never found words to click on");
-
-// Select Text to comment on (should select 'Lorem Ipsum')
-// let selection = browser.executeScript(function () {
-//     var range = document.createRange();
-//     range.setStart(document.body.querySelector(".word[index='18']"), 0);
-//     range.setEnd(document.body.querySelector(".word[index='21']"), 0);
-//     var sel = window.getSelection();
-//     sel.addRange(range);
-// });
-// browser.sleep(1000);
-
-// Add text comment
-// browser.wait(EC.elementToBeClickable(project.addTextBtn), 5000, "never found the add text comment button");
-// browser.sleep(500);
-
-// element(by.id('emojiAnnotator')).sendKeys('t');
-// element(by.css('body')).sendKeys('t');
