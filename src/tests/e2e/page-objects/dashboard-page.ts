@@ -12,7 +12,8 @@ export class Dashboard implements PageObjectInterface
     */
 
     // Public Instance Variables
-   
+    public projectCards = element.all(by.css('.project-card'));
+    public firstProject = element(by.className('project-card'));
 
     // get the login page
     getPage() : void 

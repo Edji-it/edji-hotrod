@@ -42,6 +42,19 @@ describe('Dashboard Page', () => {
         browser.wait(EC.urlContains("dashboard"), 5000, "never arrived at dashboard");
     });
 
+    it("should see a list of projects", () => {
+        browser.wait(EC.presenceOf(dashboard.firstProject), 5000, "never saw a project");
+        expect(dashboard.projectCards.count()).toBeGreaterThan(0);
+    });
+
+    describe("Navigation from project dashboard", () => {
+        it("should go to a project", () => {
+            browser.wait(EC.presenceOf(dashboard.firstProject), 5000, "never saw a project");
+            dashboard.firstProject.click();
+            browser.wait(EC.urlContains("project"), 5000, "clicking on project card did not bring me to a project");
+        })
+    });
+
     /* ---- Dashboard Tests ------------------------ */
 
      /* Test: Student account can log out successfully
