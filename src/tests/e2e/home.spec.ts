@@ -100,6 +100,16 @@ describe('Home Page', () => {
         // Make sure they see guest modal
         browser.wait(EC.elementToBeClickable(loginModal.gotoAccountLoginButton));
         expect(loginModal.gotoAccountLoginButton.isPresent()).toBeTruthy();
+        
+        // Join as guest
+        browser.wait(EC.elementToBeClickable(loginModal.guestNameInput), 6000, "never saw a guest name input box");
+        loginModal.guestNameInput.sendKeys("Guest");
+        browser.wait(EC.elementToBeClickable(loginModal.guestLoginButton), 5000, "never found the guest login button");
+        loginModal.guestLoginButton.click();
+
+        // log out
+        browser.wait(EC.elementToBeClickable(sidebar.logOutButton), 5000, "never found the logout button");
+        sidebar.logOutButton.click();
     });
 
 }); // describe 'Home Page'

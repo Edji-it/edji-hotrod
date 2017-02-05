@@ -21,6 +21,7 @@ describe('Project Page without a login: ', () => {
     let loginModal = new LoginModal();
     let sidebar = new Sidebar();
     let EC      = protractor.ExpectedConditions; // vital
+    
 
     /* ---- beforeEach ---------------------------- */
 
@@ -39,40 +40,40 @@ describe('Project Page without a login: ', () => {
      * - Make sure that the guest name is on the account button
      */
 
-    it("it should login as a guest", () => {
-        // initial validation
-        browser.wait(EC.presenceOf(loginModal.guestLoginHeader), 5000, "never saw the login modal's header");
-        expect(loginModal.guestLoginHeader.isPresent()).toBeTruthy();
-        expect(loginModal.accountLoginHeader.isPresent()).toBeFalsy();
+    // it("it should login as a guest", () => {
+    //     // initial validation
+    //     browser.wait(EC.presenceOf(loginModal.guestLoginHeader), 5000, "never saw the login modal's header");
+    //     expect(loginModal.guestLoginHeader.isPresent()).toBeTruthy();
+    //     expect(loginModal.accountLoginHeader.isPresent()).toBeFalsy();
 
-        // logging in
-        loginModal.guestNameInput.sendKeys(loginModal.guestLogin);
-        browser.wait(EC.elementToBeClickable(loginModal.guestLoginButton), 5000, "never found the guest login button");
-        loginModal.guestLoginButton.click();
+    //     // logging in
+    //     loginModal.guestNameInput.sendKeys(loginModal.guestLogin);
+    //     browser.wait(EC.elementToBeClickable(loginModal.guestLoginButton), 5000, "never found the guest login button");
+    //     loginModal.guestLoginButton.click();
 
-        // account button validation
-        browser.wait(EC.elementToBeClickable(sidebar.accountButton), 5000, "never found the account button on the sidebar");
-        expect(sidebar.accountButtonSpan.getText()).toBe(loginModal.guestLogin);
+    //     // account button validation
+    //     browser.wait(EC.elementToBeClickable(sidebar.accountButton), 5000, "never found the account button on the sidebar");
+    //     expect(sidebar.accountButtonSpan.getText()).toBe(loginModal.guestLogin);
 
-        // log out
-        browser.wait(EC.elementToBeClickable(sidebar.logOutButton), 5000, "never found the logout button");
-        sidebar.logOutButton.click();
-    });
+    //     // log out
+    //     browser.wait(EC.elementToBeClickable(sidebar.logOutButton), 5000, "never found the logout button");
+    //     sidebar.logOutButton.click();
+    // });
 
-    it("it should be rejected for a vulgar guest name", () => {
-        // initial validation
-        browser.wait(EC.presenceOf(loginModal.guestLoginHeader), 5000, "never saw the login modal's header");
-        expect(loginModal.guestLoginHeader.isPresent()).toBeTruthy();
-        expect(loginModal.accountLoginHeader.isPresent()).toBeFalsy();
+    // it("it should be rejected for a vulgar guest name", () => {
+    //     // initial validation
+    //     browser.wait(EC.presenceOf(loginModal.guestLoginHeader), 5000, "never saw the login modal's header");
+    //     expect(loginModal.guestLoginHeader.isPresent()).toBeTruthy();
+    //     expect(loginModal.accountLoginHeader.isPresent()).toBeFalsy();
 
-        // enter vulgar name and submit to guest login
-        loginModal.guestNameInput.sendKeys("Fucking Fucks");
-        browser.wait(EC.elementToBeClickable(loginModal.guestLoginButton), 5000, "guest login button never became clickable");
-        loginModal.guestLoginButton.click();
+    //     // enter vulgar name and submit to guest login
+    //     loginModal.guestNameInput.sendKeys("Fucking Fucks");
+    //     browser.wait(EC.elementToBeClickable(loginModal.guestLoginButton), 5000, "guest login button never became clickable");
+    //     loginModal.guestLoginButton.click();
 
-        // validate error
-        browser.wait(EC.presenceOf(loginModal.guestBadNameErr));
-    });
+    //     // validate error
+    //     browser.wait(EC.presenceOf(loginModal.guestBadNameErr));
+    // });
 
     it("it should login as a user with an account", () => {
         // initial validation
@@ -95,6 +96,43 @@ describe('Project Page without a login: ', () => {
         // account button validation
         browser.wait(EC.elementToBeClickable(sidebar.accountButton), 5000, "never found the account button on the sidebar");
         expect(sidebar.accountButtonSpan.getText()).toBe("student");
+    });
+
+    it("should make emoji comment as logged in user", () => {
+        let emojiKeyboard = element(by.css('emoji-keyboard'));
+        let emojiCommentSave = element(by.css('.comment.active .comment__save'));
+        let grinningEmoji = emojiKeyboard.element(by.css("[dataname=':grinning:'"));
+
+        // Code for making a comment
+        // Find text to select
+        browser.wait(EC.elementToBeClickable(element(by.css(".word[index='18']"))), 5000, "never found words to click on");
+
+        // Select Text to comment on (should select 'Lorem Ipsum')
+        browser.executeScript(function () {
+            let range = document.createRange();
+            let sel = window.getSelection();
+            range.setStart(document.body.querySelector(".word[index='18']").childNodes[0], 0);
+            range.setEnd(document.body.querySelector(".word[index='21']").childNodes[0], 0);
+            sel.removeAllRanges();
+            sel.addRange(range);
+        });
+
+        // Add emoji comment
+        browser.wait(EC.elementToBeClickable(project.addEmojiBtn), 5000, "never found the add emoji comment button");
+        project.addEmojiBtn.click();
+
+        // Type emojis
+        browser.wait(EC.elementToBeClickable(grinningEmoji), 5000, "never found the emoji keyboard");
+        grinningEmoji.click();
+        emojiKeyboard.element(by.css("[dataname=':heart_eyes:'")).click();
+        emojiKeyboard.element(by.css(".emojionearea-filter[title='Objects']")).click();
+
+        // Use emoji keyboard filter, and type an emoji from further down
+        browser.wait(EC.elementToBeClickable(emojiKeyboard.element(by.css("[dataname=':dollar:'"))), 5000, "never scrolled to the dollars emoji");
+        emojiKeyboard.element(by.css("[dataname=':dollar:'")).click();
+
+        // Save emoji comment
+        emojiCommentSave.click();
 
         // log out
         browser.wait(EC.elementToBeClickable(sidebar.logOutButton), 5000, "never found the logout button");

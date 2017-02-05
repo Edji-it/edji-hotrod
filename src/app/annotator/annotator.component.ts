@@ -9,7 +9,7 @@ import { Component, Input, OnDestroy, OnInit, ViewChildren, QueryList, EventEmit
 import { Subscription } from 'rxjs/Rx';
 import * as Rangy from 'rangy';
 import { Angulartics2 } from 'angulartics2';
-import { HotkeysService, Hotkey } from 'angular2-hotkeys';
+// import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 
 import { ReadingService } from '../shared/reading.service';
 import { ProjectService } from '../shared/project.service';
@@ -80,17 +80,17 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         private _projects: ProjectService,
         private _auth: AuthService,
         private _socket: SocketService,
-        private angulartics: Angulartics2,
-        private _hotkeysService: HotkeysService
+        private angulartics: Angulartics2
+        // private _hotkeysService: HotkeysService
     ) {
-        this._hotkeysService.add(new Hotkey('t', (event: KeyboardEvent): boolean => {
-             this.addTextComment({ name: 'Hotkey'});
-            return false; // Prevent bubbling
-        }));
-        this._hotkeysService.add(new Hotkey('e', (event: KeyboardEvent): boolean => {
-             this.addEmojiComment({ name: 'Hotkey'});
-            return false; // Prevent bubbling
-        }));
+        // this._hotkeysService.add(new Hotkey('t', (event: KeyboardEvent): boolean => {
+        //      this.addTextComment({ name: 'Hotkey'});
+        //     return false; // Prevent bubbling
+        // }));
+        // this._hotkeysService.add(new Hotkey('e', (event: KeyboardEvent): boolean => {
+        //      this.addEmojiComment({ name: 'Hotkey'});
+        //     return false; // Prevent bubbling
+        // }));
     }
  
     ngOnInit() {
@@ -178,32 +178,30 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                         }
                     }
                 }
-
-                if (this.user._id === this.project.teacher_id || comment.user_id === this.project.teacher_id) {
-                    // Process different live comment updates
-                    if (commentUpdate.action === 'DELETE') {
-                        if (cIndex > -1) {
-                            // Remove highlights from local array
-                            this.decrementHighlights(this.user._id === comment.user_id || this.project.teacher_id == comment.user_id, comment.start, comment.end);
-                            this.commentsByIndexRemove(comment._id, wIndex, cIndex);
-                            this.updateCommentStats(comment.user_id, -1, comment.author);
-                        }
-                    } else if (commentUpdate.action === 'UPDATE') {
-                        if (cIndex > -1 && this.commentsByIndex[wIndex] && this.commentsByIndex[wIndex][cIndex]) {
-                            this.commentsByIndex[wIndex][cIndex].data = comment.data;
-                        } else {
-                            // Sometimes an UPDATE comes through for comment not yet created
-                            // Add highlights to local array
-                            this.incrementHighlights(this.user._id === comment.user_id || this.project.teacher_id == comment.user_id, comment.start, comment.end);
-                            this.commentsByIndexAdd(comment, wIndex, true);
-                            this.updateCommentStats(comment.user_id, 1, comment.author);
-                        }
-                    } else if (commentUpdate.action === 'CREATE') {
+                
+                // Process different live comment updates
+                if (commentUpdate.action === 'DELETE') {
+                    if (cIndex > -1) {
+                        // Remove highlights from local array
+                        this.decrementHighlights(this.user._id === comment.user_id || this.project.teacher_id == comment.user_id, comment.start, comment.end);
+                        this.commentsByIndexRemove(comment._id, wIndex, cIndex);
+                        this.updateCommentStats(comment.user_id, -1, comment.author);
+                    }
+                } else if (commentUpdate.action === 'UPDATE') {
+                    if (cIndex > -1 && this.commentsByIndex[wIndex] && this.commentsByIndex[wIndex][cIndex]) {
+                        this.commentsByIndex[wIndex][cIndex].data = comment.data;
+                    } else {
+                        // Sometimes an UPDATE comes through for comment not yet created
                         // Add highlights to local array
                         this.incrementHighlights(this.user._id === comment.user_id || this.project.teacher_id == comment.user_id, comment.start, comment.end);
                         this.commentsByIndexAdd(comment, wIndex, true);
                         this.updateCommentStats(comment.user_id, 1, comment.author);
                     }
+                } else if (commentUpdate.action === 'CREATE') {
+                    // Add highlights to local array
+                    this.incrementHighlights(this.user._id === comment.user_id || this.project.teacher_id == comment.user_id, comment.start, comment.end);
+                    this.commentsByIndexAdd(comment, wIndex, true);
+                    this.updateCommentStats(comment.user_id, 1, comment.author);
                 }
             }, (error) => {
                 console.warn(error);
@@ -573,17 +571,15 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // Get selection indices
         let span = this.getSelectionSpan();
         
-        if (!span.start || !span.end) {
+        if ( !(span.start >= 0) || !(span.end >= 0)) {
             return;
         }
         
-        if (span.start > -1 && span.end > -1) {
-            // Increment highlight array
-            this.incrementHighlights(true, span.start, span.end);
+        // Increment highlight array
+        this.incrementHighlights(true, span.start, span.end);
 
-            // Tell the server we've got a comment!
-            this.createComment(span.start, span.end, 'emoji');
-        }
+        // Tell the server we've got a comment!
+        this.createComment(span.start, span.end, 'emoji');
     }
 
     /** 
@@ -594,7 +590,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // Get selection indices
         let span = this.getSelectionSpan();
 
-        if (!span.start || !span.end) {
+        if ( !(span.start >= 0) || !(span.end >= 0)) {
             return;
         }
         

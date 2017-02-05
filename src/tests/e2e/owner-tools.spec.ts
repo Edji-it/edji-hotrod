@@ -144,45 +144,7 @@ describe('Project Page as a Project Owner: ', () => {
         // log out
         browser.wait(EC.elementToBeClickable(sidebar.logOutButton), 5000, "never found the logout button");
         sidebar.logOutButton.click();
-    });
-
-    // it("it should be rejected for a vulgar guest name", () => {
-    //     // initial validation
-    //     browser.wait(EC.presenceOf(loginModal.guestLoginHeader), 5000, "never saw the login modal's header");
-    //     expect(loginModal.guestLoginHeader.isPresent()).toBeTruthy();
-    //     expect(loginModal.accountLoginHeader.isPresent()).toBeFalsy();
-
-    //     // enter vulgar name and submit to guest login
-    //     loginModal.guestNameInput.sendKeys("Fucking Fucks");
-    //     browser.wait(EC.elementToBeClickable(loginModal.guestLoginButton), 5000, "guest login button never became clickable");
-    //     loginModal.guestLoginButton.click();
-
-    //     // validate error
-    //     browser.wait(EC.presenceOf(loginModal.guestBadNameErr));
-    // });
-
-    
+    });    
      
 }); // describe 'Dashboard Page'
   
-
-// Code for making a comment
-// Find text to select
-// browser.wait(EC.elementToBeClickable(element(by.css(".word[index='18']"))), 5000, "never found words to click on");
-
-// Select Text to comment on (should select 'Lorem Ipsum')
-// let selection = browser.executeScript(function () {
-//     var range = document.createRange();
-//     range.setStart(document.body.querySelector(".word[index='18']"), 0);
-//     range.setEnd(document.body.querySelector(".word[index='21']"), 0);
-//     var sel = window.getSelection();
-//     sel.addRange(range);
-// });
-// browser.sleep(1000);
-
-// Add text comment
-// browser.wait(EC.elementToBeClickable(project.addTextBtn), 5000, "never found the add text comment button");
-// browser.sleep(500);
-
-// element(by.id('emojiAnnotator')).sendKeys('t');
-// element(by.css('body')).sendKeys('t');

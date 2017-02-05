@@ -4,6 +4,7 @@
           <div class="emojionearea-filters">
               <i *ngFor="let category of emojifilters; let i = index" 
                   class="emojionearea-filter" 
+                  [attr.title]="category.title"
                   [innerHtml]="category.icon | emojione" (tap)="goToCategory(i)"
                   [ngClass]="{ 'below-scroll' : category['scrollY'] >= scrollAreaOffset }"></i>
               <i (tap)="makeInactive()" class="keyboard-btn" style="float: right;">
