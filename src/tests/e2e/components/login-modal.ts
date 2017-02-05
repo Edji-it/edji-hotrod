@@ -33,14 +33,11 @@ export class LoginModal {
 
   public testLoginModalErrors() {
     describe("Login modal errors", () => {
-      it("should initialize on the guest login form", () => {
-        browser.wait(this.EC.presenceOf(this.guestLoginHeader), 5000, "did not initialize on the guest login form");
-      });
 
       describe("Account login errors", () => {
         beforeEach(() => {
           // go to the account login form before each test
-          browser.wait(this.EC.elementToBeClickable(this.gotoAccountLoginButton), 5000, "button to navigate to account login never became clickable");
+          browser.wait(this.EC.elementToBeClickable(this.gotoAccountLoginButton), 5000, "button to navigate to account login never became clickable after component init");
           this.gotoAccountLoginButton.click();
         });
 
@@ -50,6 +47,31 @@ export class LoginModal {
       describe("Guest login errors", () => {
         this.guestForm.testGuestLoginErrors();
       });
+    });
+  }
+
+  /**
+   * This is only for testing the success of the guest and account login from the modal
+   * It should be wrapped in a describe block which has an afterEach hook. That afterEach should log the user out and bring the user back to the login modal
+   * @param validate A function which will validate that the user arrives at the correct place
+   */
+  public testLoginSuccess(validate: () => void) {
+    beforeEach(() => {
+      // make sure we're on the right component
+      browser.wait(this.EC.elementToBeClickable(this.gotoAccountLoginButton), 5000, "button to navigate to account login never became clickable after component init");
+    });
+
+    it("should log in a guest user", () => {
+      this.guestForm.loginAsGuest();
+      validate();
+    });
+
+    it("should log in as a user", () => {
+      // navigate to account login form
+      this.gotoAccountLoginButton.click();
+
+      this.loginForm.login();
+      validate();
     });
   }
 }

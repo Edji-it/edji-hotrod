@@ -40,6 +40,17 @@ describe('Project Page', () => {
 
     loginModal.testLoginModalErrors();
 
+    describe("Login modal success", () => {
+        afterEach(() => {
+            // we're going to be logged in on the project page after each of the tests, so log out
+            sidebar.logout();
+        });
+
+        loginModal.testLoginSuccess(() => {
+            browser.wait(EC.elementToBeClickable(sidebar.logOutButton));
+        });
+    });
+
     it("should login as a user with an account", () => {
         // initial validation
         browser.wait(EC.presenceOf(loginModal.guestLoginHeader), 5000, "never saw the login modal's header");

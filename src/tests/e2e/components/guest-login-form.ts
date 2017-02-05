@@ -19,6 +19,7 @@ export class GuestLoginForm {
       // make sure the guest login button is going to be clickable
       browser.wait(this.EC.visibilityOf(this.guestLoginButton), 5000, "guest login button never became clickable after form init");
 
+      // clear the input just in case
       this.guestNameInput.clear();
     });
 
@@ -31,5 +32,18 @@ export class GuestLoginForm {
       // test validation
       browser.wait(this.EC.presenceOf(this.guestBadNameErr), 5000, "bad name error never showed to the user");
     });
+  }
+
+  public loginAsGuest() {
+    // make sure the guest login button is going to be clickable
+    browser.wait(this.EC.visibilityOf(this.guestLoginButton), 5000, "guest login button never became clickable after form init");
+
+    // clear the input just in case
+    this.guestNameInput.clear();
+
+    // form handling
+    this.guestNameInput.sendKeys(this.guestLoginName);
+    browser.wait(this.EC.elementToBeClickable(this.guestLoginButton), 5000, "guest login button never became clickable after entering text");
+    this.guestLoginButton.submit();
   }
 }
