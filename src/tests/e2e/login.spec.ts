@@ -34,7 +34,7 @@ describe('Login Page', () => {
 
     describe("Successful login", () => {
         afterEach(() => {
-            
+            sidebar.logout();
         });
 
         it("should login and navigate to the dashboard", () => {

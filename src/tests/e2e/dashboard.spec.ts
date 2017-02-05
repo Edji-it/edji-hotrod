@@ -1,5 +1,5 @@
 import { browser, by, element, protractor } from 'protractor';
-import { Dashboard, Login } from './page-objects';
+import { Dashboard, Login, Sidebar } from './page-objects';
 
 /*
     27 Jan 2017
@@ -16,8 +16,9 @@ describe('Dashboard Page', () => {
 
     /* ---- Variable Initialization --------------- */
     let login = new Login();
-    let dashboard   = new Dashboard();
-    let EC          = protractor.ExpectedConditions; // vital
+    let dashboard = new Dashboard();
+    let sidebar = new Sidebar();
+    let EC = protractor.ExpectedConditions; // vital
 
     beforeAll(() => {
         // make sure the user is logged in before the suite runs
@@ -32,6 +33,10 @@ describe('Dashboard Page', () => {
         // navigate back to the dashboard after every test
         dashboard.getPage();
     });
+
+    afterAll(() => {
+        sidebar.logout();
+    })
 
     /* ---- Vital Super Basic Test  --------------- */
     
