@@ -1,7 +1,7 @@
 import { browser, by, element, protractor } from 'protractor';
 
 import { Project, Sidebar } from './page-objects';
-import { LoginModal } from './components';
+import { LoginModal, GuestLoginForm } from './components';
 
 /*
     27 Jan 2017
@@ -21,6 +21,7 @@ describe('Project Page', () => {
     let sidebar = new Sidebar();
     let loginModal = new LoginModal();
     let EC      = protractor.ExpectedConditions; // vital
+    let guestForm = new GuestLoginForm();
     
 
     /* ---- beforeEach ---------------------------- */
@@ -52,6 +53,10 @@ describe('Project Page', () => {
     });
 
     it("should make emoji comment as logged in user", () => {
+        // Login 
+        guestForm.loginAsGuest();
+        browser.wait(EC.elementToBeClickable(sidebar.logOutButton));
+
         let emojiKeyboard = element(by.css('emoji-keyboard'));
         let emojiCommentSave = element(by.css('.comment.active .comment__save'));
         let grinningEmoji = emojiKeyboard.element(by.css("[dataname=':grinning:'"));
