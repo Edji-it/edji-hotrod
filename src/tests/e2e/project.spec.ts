@@ -51,29 +51,6 @@ describe('Project Page', () => {
         });
     });
 
-    it("should login as a user with an account", () => {
-        // initial validation
-        browser.wait(EC.presenceOf(loginModal.guestLoginHeader), 5000, "never saw the login modal's header");
-        expect(loginModal.guestLoginHeader.isPresent()).toBeTruthy();
-        expect(loginModal.accountLoginHeader.isPresent()).toBeFalsy();
-
-        // switch to login section and validate
-        browser.wait(EC.elementToBeClickable(loginModal.gotoAccountLoginButton), 5000, "never found button to go to account login");
-        loginModal.gotoAccountLoginButton.click();
-        expect(loginModal.accountLoginHeader.isPresent()).toBeTruthy();
-        loginModal.usernameInput.sendKeys(loginModal.username);
-        loginModal.passwordInput.sendKeys(loginModal.password);
-        browser.wait(EC.elementToBeClickable(loginModal.accountLoginButton), 5000, "never found the account login button on modal");
-        
-        // loginModal.accountLoginButton.click();
-        
-        loginModal.accountLoginButton.submit();
-
-        // account button validation
-        browser.wait(EC.elementToBeClickable(sidebar.accountButton), 5000, "never found the account button on the sidebar");
-        expect(sidebar.accountButtonSpan.getText()).toBe("student");
-    });
-
     it("should make emoji comment as logged in user", () => {
         let emojiKeyboard = element(by.css('emoji-keyboard'));
         let emojiCommentSave = element(by.css('.comment.active .comment__save'));
