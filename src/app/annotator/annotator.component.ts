@@ -702,20 +702,31 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Adds focus text highlighted for the relevant comment
+     * @param start Index for first word
+     * @param end Index for last word
+     */
     private focusHighlight(start, end): void {
+        console.log("Focus highlight");
         for (var i = start; i <= end; i ++) {
-            if (this.highlightArray[i]) {
-                this.highlightArray[i] += 1000;
+            if (this.alwaysHighlightArray[i]) {
+                this.alwaysHighlightArray[i] += 1000;
             } else {
-                this.highlightArray[i] = 1000;
+                this.alwaysHighlightArray[i] = 1000;
             }
         }
     }
 
+    /**
+     * Removes a class to focus text highlighted for the relevant comment
+     * @param start Index for first word
+     * @param end Index for last word
+     */
     private unfocusHighlight(start, end): void {
         for (var i = start; i <= end; i ++) {
-            if (this.highlightArray[i] >= 1000) {
-                this.highlightArray[i] -= 1000;
+            if (this.alwaysHighlightArray[i] >= 1000) {
+                this.alwaysHighlightArray[i] -= 1000;
             } 
         }
     }
@@ -730,16 +741,13 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         let focusHighlight = false;
 
         if ((this.project.heat_vision || this.user._id == this.project.teacher_id) && this.highlightArray[i]) {
-            if (this.highlightArray[i] >= 1000) {
-                // Focus style
-                highlightCount += (this.highlightArray[i] - 1000);
-            } else {
-                highlightCount += this.highlightArray[i];
-            }
+            highlightCount += this.highlightArray[i];
         }
         if (this.alwaysHighlightArray[i]) {
+            // AlwaysHighlight also tracks focused words
             if (this.alwaysHighlightArray[i] >= 1000) {
                 // Focus style
+                focusHighlight = true;
                 highlightCount += (this.alwaysHighlightArray[i] - 1000);
             } else {
                 highlightCount += this.alwaysHighlightArray[i];
