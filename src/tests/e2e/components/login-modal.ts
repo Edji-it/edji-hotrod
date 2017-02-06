@@ -12,11 +12,24 @@ export class LoginModal {
     this.guestForm = new GuestLoginForm;
   }
 
-  // html elements
+  // html elements for guest login
   public guestLoginHeader = element(by.id("guestLoginHeader"));
+  public guestNameInput = element(by.id("guestNameInput"));
+  public guestLoginButton = element(by.id("guestLoginButton"));
   public gotoAccountLoginButton = element(by.id("gotoAccountLoginButton"));
+  public guestBadNameErr = element(by.id("msgBadName"));
+
+  // html elements for user login
   public accountLoginHeader = element(by.id("accountLoginHeader"));
+  public usernameInput = element(by.id("usernameInput"));
+  public passwordInput = element(by.id("passwordInput"));
+  public accountLoginButton = element(by.id("buttonLogin"));
   public gotoGuestLoginButton = element(by.id("gotoGuestLoginButton"));
+
+  // other variables
+  public guestLogin = "cake eater";
+  public username = "student";
+  public password = "student";
 
   public testLoginModalErrors() {
     describe("Login modal errors", () => {
