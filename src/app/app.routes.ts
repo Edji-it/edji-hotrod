@@ -27,5 +27,6 @@ export const ROUTES: Routes = [
   { path: 'project/:id',  component: ProjectPageComponent },
   { path: 'reading/:id',  component: ReadingPageComponent, canActivate: [AuthService] },
   { path: 'new-reading', component: NewReadingPage, canActivate: [AuthService] },
+  { path: ':projectId', redirectTo: '/project/:projectId', pathMatch: 'full'},
   { path: '**',    component: NoContentComponent }
 ];

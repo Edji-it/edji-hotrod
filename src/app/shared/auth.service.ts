@@ -1,4 +1,4 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Observable, BehaviorSubject } from 'rxjs/Rx';
@@ -6,7 +6,7 @@ import 'rxjs/add/operator/toPromise';
 import { Locker } from 'angular2-locker';
 
 @Injectable()
-export class AuthService implements CanActivate, OnInit {
+export class AuthService implements CanActivate {
     private baseUrl = "http://localhost:3354";
     public protocol = window.location.protocol ? window.location.protocol : '';
     private locker: Locker;
@@ -51,10 +51,6 @@ export class AuthService implements CanActivate, OnInit {
             withCredentials: true
         }); // Create a request option
         return options;
-    }
-
-    ngOnInit(): void {
-        
     }
 
     public getUrl(): string {
