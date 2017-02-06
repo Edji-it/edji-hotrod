@@ -8,6 +8,7 @@ export class Project implements PageObjectInterface {
   public addTextBtn = element(by.id("addTextComment"));
 
   public getPage(): void {
-    browser.get("/#/project/587982a88345010011338c05")
+    browser.get("/#");
+    browser.get("/#/project/587982a88345010011338c05");
   }
 }
