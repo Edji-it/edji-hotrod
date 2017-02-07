@@ -5,7 +5,8 @@
     <div class="row">
 
         <div class="col-lg-9 col-md-8 col-sm-7 header-padding" [ngClass]="{ loading: isLoading }">
-            <h3>Reading | Created {{ reading.createdAt | date:'longDate' }}</h3>
+            <h3>Reading </h3>
+            <!--| Created {{ reading.createdAt | date:'longDate' }}-->
             <div *ngIf="reading.source" class="sub-heading">
                 <span [innerHtml]="':book:' | emojione"></span>
                 <a title="Source" class="break" href="{{reading.source}}" target="_blank">{{reading.source}}</a>
