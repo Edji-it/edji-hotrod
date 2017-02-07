@@ -237,3 +237,16 @@ div.sliding-pane.from-left.slide-in {
 		box-shadow: 2px 2px 20px rgba(0,0,0,0.1);
 	}
 }
+
+.power__loading {
+	position: absolute;
+	top: 15px;
+	left: 15px;
+	pointer-events: none;
+	opacity: 0;
+	transition: opacity 0.5s linear;
+
+	&.is-loading {
+		opacity: 1;
+	}
+}

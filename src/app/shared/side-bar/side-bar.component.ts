@@ -20,12 +20,17 @@ export class SideBarComponent implements OnInit, OnDestroy {
     private showCommentCounts: boolean = false;
     private mNavShow: boolean = false;
     private isMobile: boolean = false;
+    private powersLoading: {
+      heatVision?: boolean
+    } = { };
 
     constructor(private _auth: AuthService, private _socket: SocketService, private _router: Router, private _projects: ProjectService) {
 
     }
     
     ngOnInit() {
+      console.log(this.powersLoading.heatVision);
+
       /** Set the current user every time it changes */
       this.subscriptions.push(
           this._auth.getCurrentUser().subscribe((user) => {
@@ -67,8 +72,13 @@ export class SideBarComponent implements OnInit, OnDestroy {
     }
 
     private togglePower(powerName: string, value: boolean) {
-      // Create a copy of the project to post
-      // let updatedProject = Object.assign({}, this.currentProject);
+      // set heat vision to loading
+      this.powersLoading.heatVision = true;
+      setTimeout(() => {
+        // stop heat vision loading
+        this.powersLoading.heatVision = false;
+      }, 1000);
+
       // Toggle the Heat Vision boolean
       let updateObj: any = {};
       updateObj[powerName] = value;
@@ -77,7 +87,6 @@ export class SideBarComponent implements OnInit, OnDestroy {
         .take(1)
         .subscribe((project) => {
           // Live update users once save is successful
-          console.log("success in getting projects");
           this._socket.toggleHeatVision({ all: value });
         });
     }
