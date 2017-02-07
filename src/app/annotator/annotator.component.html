@@ -29,7 +29,7 @@
 
 	<div class="article-wrap">
         <!--Create components after load for reading-->
-		<article class="content" (mouseup)="showCommentOptions($event)" (touchend)="showCommentOptions($event)" (clickOutside)="hideCommentOptions()">
+		<article id="annotatorContent" class="content" (mouseup)="showCommentOptions($event)" (touchend)="showCommentOptions($event)" (clickOutside)="hideCommentOptions()">
 			<span *ngFor="let word of reading.words; let i = index" class="word"
 				[ngClass]="[ word.styles.join(' '), getHighlightClass(i) ]" 
 				[attr.index]="i">
