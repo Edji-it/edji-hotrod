@@ -257,44 +257,36 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      */
     showCommentOptions(event, doNotDismiss ?: boolean): void {
         // Only show options if text selected
-        if (Rangy.getSelection() && Rangy.getSelection().toString().length > 0) {
-            let scrollOffset = document.getElementById('emojiAnnotator').getBoundingClientRect().top;
+        let annotatorPaper = document.getElementById('emojiAnnotator');
+        let annotatorContent = document.getElementById('annotatorContent');
+        let sel = Rangy.getSelection();
+        
+        // Make sure selection exists, and is within highlightable content
+        if (sel && sel.toString().length > 0 
+                && Rangy.dom.isAncestorOf(annotatorContent, sel.focusNode)
+                && Rangy.dom.isAncestorOf(annotatorContent, sel.anchorNode)
+            ) {
+            let scrollOffset = annotatorPaper.getBoundingClientRect().top;
             const readingPad = 52;
-
-            if (event.changedTouches) {
-                let touchobj = event.changedTouches[0]; // reference first touch point for this event
-                let touchY = parseInt(touchobj.clientY);
-                // Account for page scroll offset
-                this.highlightY = (touchY - scrollOffset + readingPad) + 'px';
-                // If in mobile
-                if (window.screen.availWidth < 768) {
-                    this.isMobile = true;
-                    let touchX = parseInt(touchobj.clientX);
-                    if (touchX < 120) {
-                        this.optionLeft = false;
-                        this.highlightX = (180 - touchX) + 'px';
-                    } else {
-                        this.optionLeft = true;
-                        this.highlightX = (touchX + readingPad - 80) + 'px';
-                    }
+            let focusY;
+            if (sel.focusNode.hasOwnProperty('getBoundingClientRect')) {
+                focusY = sel.focusNode.getBoundingClientRect().top;
+            } else {
+                focusY = sel.focusNode.parentNode.getBoundingClientRect().top;
+            }
+            this.highlightY = (focusY - scrollOffset + readingPad) + 'px';
+            // If in mobile
+            if (window.screen.availWidth < 768) {
+                this.isMobile = true;
+                if (event.clientX < 120) {
+                    this.optionLeft = false;
+                    this.highlightX = (180 - event.clientX) + 'px';
                 } else {
-                    this.isMobile = false;
+                    this.optionLeft = true;
+                    this.highlightX = (event.clientX + readingPad - 80) + 'px';
                 }
             } else {
-                this.highlightY = (event.clientY - scrollOffset + readingPad) + 'px';
-                // If in mobile
-                if (window.screen.availWidth < 768) {
-                    this.isMobile = true;
-                    if (event.clientX < 120) {
-                        this.optionLeft = false;
-                        this.highlightX = (180 - event.clientX) + 'px';
-                    } else {
-                        this.optionLeft = true;
-                        this.highlightX = (event.clientX + readingPad - 80) + 'px';
-                    }
-                } else {
-                    this.isMobile = false;
-                }
+                this.isMobile = false;
             }
             this.optionsShow = true;
         } else if (!doNotDismiss) {
