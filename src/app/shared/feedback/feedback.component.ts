@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Http } from '@angular/http';
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
@@ -33,7 +33,13 @@ import { AuthService, Copy } from './..';
   `]
 })
 export class FeedbackComponent implements OnInit {
-  private showFeedbackModal: true;
+  @Output()
+  private openModal: EventEmitter<any> = new EventEmitter();
+
+  @Output()
+  private closeModal: EventEmitter<any> = new EventEmitter();
+
+  private showFeedbackModal: boolean = false;
   private feedbackForm: FormGroup;
   private feedbackSuccess: boolean = false;
   private user: any;
@@ -70,6 +76,22 @@ export class FeedbackComponent implements OnInit {
   private emailValidator(control: FormControl): any {
     let emailRe: RegExp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     return emailRe.test(control.value) ? null : { 'emailIncorrect': true };
+  }
+
+  private open(): void {
+    this.openModal.emit();
+    this.showFeedbackModal = true;
+
+    // Workaround: This modal is long enough that it needs to scroll and we don't want two scrollbars
+    document.body.style.overflow = 'hidden';
+  }
+
+  private close(): void {
+    this.closeModal.emit();
+    this.showFeedbackModal = false;
+    
+    // Workaround: This modal is long enough that it needs to scroll and we don't want two scrollbars
+    document.body.style.overflow = '';
   }
 
   /** Sends feedback to bumblebee */

@@ -25,6 +25,7 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
     private commentCount: number = 0;
     private createdDate: Date;
     private createDate: string;
+    private showLoginModal: boolean = false;
     
     constructor(
         private _router: Router,
@@ -47,6 +48,7 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
         this.subscriptions.push(
             this._auth.getCurrentUser().subscribe((user) => {
                 this.user = user;
+                if (!this.user.isLoggedIn) { this.showLoginModal = true; }
             })
         );
 

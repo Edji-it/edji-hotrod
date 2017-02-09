@@ -28,7 +28,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
     @ViewChildren(CommentComponent) commentComponents: QueryList<CommentComponent>;
 
-    private showLoginModal: boolean = false;
 
     private reading: any = {};
     
@@ -100,7 +99,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.subscriptions.push(
             this._auth.getCurrentUser().subscribe((user) => {
                 this.user = user;
-                if (!this.user.isLoggedIn) { this.showLoginModal = true; }
             })
         );
 

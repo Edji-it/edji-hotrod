@@ -27,7 +27,7 @@ export class ProjectDashComponent implements OnInit, OnDestroy {
   private isLoading: boolean = false;
 
   private codeForm: FormGroup;
-
+  
   // TypeScript public modifiers
   constructor(
     public router: Router,

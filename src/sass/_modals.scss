@@ -8,12 +8,12 @@ $modalBorderRadius: 8px;
   .modal {
     opacity: 0;
     pointer-events: none;
-    transition: opacity linear 0.3s;
+    transition: opacity ease-in 0.3s;
   }
 
   .modal-content {
-    transform: scale(0.9);
-    transition: transform linear 0.3s;
+    transform: scale(1.1) translateZ(0px);
+    transition: transform ease-in 0.3s;
   }
 
   &.show {
@@ -23,37 +23,39 @@ $modalBorderRadius: 8px;
     }
 
     .modal-content {
-      transform: scale(1);
+      transform: scale(1) translateZ(0px);
     }
   }
 }
 
 .modal {
   z-index: 9000;
-  background: rgba(255,255,255,0.1);
+  background: rgba(0,0,0,0.3);
   overflow: auto;
   // display: block;
   display: flex;
   align-items: center;
-  transition: background linear 0.3s;
+  transition: background ease-in 0.3s;
 }
 
 .modal-dialog {
   min-width: calc(100% - 20px);
+  max-height: calc(100% - 100px);
 
   @media (min-width: $phone) {
     min-width: 400px;
   }
 }
 
-.modal-transition {
-  transition: filter linear 0.3s;
-}
-// Applied to element wrapping content
-// Modal has to sit outside this element
-.modal-blur {
-  filter: blur(2px);
-}
+// An idea for later
+// .modal-transition {
+//   transition: filter linear 0.3s;
+// }
+// // Applied to element wrapping content
+// // Modal has to sit outside this element
+// .modal-blur {
+//   filter: blur(2px);
+// }
 
 .modal-header {
   border: $modalBorder;
@@ -81,4 +83,7 @@ $modalBorderRadius: 8px;
   border: $modalBorder;
   box-shadow: 0px 3px 25px 0px rgba(0,0,0,0.3);
   border-radius: $modalBorderRadius;
+
+  // Required for scrolling modals
+  margin-bottom: 100px;
 }
