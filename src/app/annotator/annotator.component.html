@@ -51,6 +51,5 @@
 		
 	</div>
 </div>
-<div [ngClass]="{ 'mobile__comment-background' : mobileCommentShow }"></div>
 <emoji-keyboard [isActive]="activeComment.active && (!activeComment.type || activeComment.type === 'emoji') && activeComment.user_id === user._id" [currentComment]="activeComment.data" (commentChange)="updateActiveComment($event)" (dismissKeyboard)="inactivateComment()"></emoji-keyboard>
 <hot-login-modal *ngIf="showLoginModal" (closeModal)="showLoginModal = false"></hot-login-modal>

@@ -3,8 +3,27 @@
 
 <div class="container-fluid container--side-bar">
 
-   <div id="InfoHud" class="reading__hud">
+   <!--<div id="InfoHud" class="reading__hud">
     <label id="projectTitle" >{{ project.label }}</label>
+    
+    <div class="hud__info"> 
+      <pre class="project-code--inline">{{project.code || 'none'}}</pre>
+      <span [innerHtml]="':key:' | emojione"></span>
+      <br/>
+      {{liveCount}} Readers 
+      <span [innerHtml]="':fire:' | emojione"></span>
+    </div>
+  </div>-->
+
+  <div id="InfoHud" class="reading__hud">
+    <div class="prj">
+      <span class="prj-label">Project: </span>
+      <label id="projectTitle" class="prj-name">{{ project.label }}</label>
+      <br/>
+      <label id="projectCreate" class="prj-label">Started {{ createDate }}</label>
+      <br/>
+      <label id="projectComments" class="prj-label">{{ commentCount }} Comments</label>
+    </div>
     
     <div class="hud__info"> 
       <pre class="project-code--inline">{{project.code || 'none'}}</pre>

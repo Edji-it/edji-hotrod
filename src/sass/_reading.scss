@@ -3,6 +3,8 @@
  * -- Concerned with the display of the core text in Readings and Projects
  */
 
+/*styles for dashboard content only*/
+@import './base/variables';
 
 $focusUnderlineWidth: 3px;
 
@@ -454,4 +456,12 @@ header.header {
 	margin-top: 0px; //48px;
     font-size: 32px;
     color: #333;
+}
+
+/* Mobile Optimization */
+@media (max-width: #{$tablet - 1px}) {
+	#emojiAnnotator {
+		position: relative;
+		top: 60px;
+	}
 }

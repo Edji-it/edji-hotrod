@@ -158,6 +158,8 @@ a.side-bar__link {
 	.side-bar__logo {
 		width: 48px;
 		padding: 4px;
+		left: 5%;
+		position: absolute;
 	}
 	.side-bar {
 		height: 66px;
@@ -184,6 +186,10 @@ div.sliding-pane.from-left.slide-in {
 
 /* On Click Display Logout & User */
 @include phone {
+	.side-bar {
+		-webkit-box-shadow: 0 4px 6px -4px #777;
+    	box-shadow: 0 4px 6px -4px #777;
+	}
 	.side-bar__user__show {
 		display: block;
 	}
@@ -192,7 +198,8 @@ div.sliding-pane.from-left.slide-in {
 		font-weight: 700;
 		position: absolute;
 		top: 32px;
-		left: 28px;
+		//left: 28px;
+		left: 82%;
 		height: 18px;
 		width: 26px;
 		background: none;
@@ -235,6 +242,12 @@ div.sliding-pane.from-left.slide-in {
 	div.sliding-pane.from-left.slide-in {
 		left: 0;
 		box-shadow: 2px 2px 20px rgba(0,0,0,0.1);
+	}
+	.btn-cmt {
+		left: 28%;
+	}
+	.btn-hv {
+		left: 55%
 	}
 }
 
