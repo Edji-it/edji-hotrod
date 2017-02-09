@@ -205,12 +205,19 @@ button, .button, .btn { //, [class*='btn']
 .btn-icon {
   cursor: pointer;
   padding: 5px;
+  text-shadow: none;
 
   &:hover, &:active, &:focus {
+    text-shadow: none;
     &:before {
       // color: $purple;
     }
   }
+}
+
+.btn-icon--round {
+  @extend .btn-icon;
+  border-radius: 50%;
 }
 
 
