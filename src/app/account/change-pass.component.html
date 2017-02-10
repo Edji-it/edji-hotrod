@@ -1,32 +1,32 @@
-<div id="passwordModal" class="modal fade-in show">
+<div id="passwordModal" class="modal">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button (click)="closeModal.emit()" type="button" class="close">&times;</button>
                 <h4 class="modal-title">Reset Password</h4>
+                <button (click)="closeModal.emit()" type="button" class="close btn-icon--round">&times;</button>
             </div>
-            <form class="modal-body form-group" (ngSubmit)="onSubmit(passwordForm.value)" [formGroup]="passwordForm">
-                <label for="old-password-input">Old Password</label>
-                <input type="password" id="old-password-input" class="form-control" [formControl]="passwordForm.controls['oldPassword']" />
-                <div *ngIf="passwordForm.controls['oldPassword'].hasError('required') && passwordForm.controls['oldPassword'].dirty" class="alert alert-info">You must have a password</div>
+            <form (ngSubmit)="onSubmit(passwordForm.value)" [formGroup]="passwordForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="old-password-input">Old Password</label>
+                        <input type="password" id="old-password-input" class="form-control" [formControl]="passwordForm.controls['oldPassword']" />
+                        <div *ngIf="passwordForm.controls['oldPassword'].hasError('required') && passwordForm.controls['oldPassword'].dirty" class="alert alert-info">You must have a password</div>
 
-                <label for="new-password-input">New Password</label>
-                <input type="password" id="new-password-input" class="form-control" [formControl]="passwordForm.controls['newPassword']" />
-                <div *ngIf="passwordForm.controls['newPassword'].hasError('required') && passwordForm.controls['newPassword'].dirty" class="alert alert-info">A new password is required</div>
-                
-                <label for="new-password-confirm-input">New Confirm New Password</label>
-                <input type="password" id="new-password-confirm-input" class="form-control" [formControl]="passwordForm.controls['newPasswordConfirm']" />
-                <div *ngIf="passwordForm.controls['newPasswordConfirm'].hasError('required')  && passwordForm.controls['newPasswordConfirm'].dirty" class="alert alert-info">Please confirm your new password</div>
-                <div *ngIf="passwordForm.hasError('mismatch')" class="alert alert-danger">Please make sure your passwords match</div>
-                
-                <!--<div class="alert alert-danger" ng-if="!passwordModal.sent && errorObject.failed" ng-bind="errorObject.failed"></div>
-                <div class="banner-success" ng-if="passwordModal.sent && passwordModal.success" ng-bind="passwordModal.success"></div>-->
+                        <label for="new-password-input">New Password</label>
+                        <input type="password" id="new-password-input" class="form-control" [formControl]="passwordForm.controls['newPassword']" />
+                        <div *ngIf="passwordForm.controls['newPassword'].hasError('required') && passwordForm.controls['newPassword'].dirty" class="alert alert-info">A new password is required</div>
+                        
+                        <label for="new-password-confirm-input">New Confirm New Password</label>
+                        <input type="password" id="new-password-confirm-input" class="form-control" [formControl]="passwordForm.controls['newPasswordConfirm']" />
+                        <div *ngIf="passwordForm.controls['newPasswordConfirm'].hasError('required')  && passwordForm.controls['newPasswordConfirm'].dirty" class="alert alert-info">Please confirm your new password</div>
+                        <div *ngIf="passwordForm.hasError('mismatch')" class="alert alert-danger">Please make sure your passwords match</div>
+                    </div>
+                </div>
                 <div class="modal-footer">
                     <button (click)="closeModal.emit()" type="button" class="btn" data-dismiss="modal">Close</button><!--not sure what data-dismiss does-->
                     <button type="submit" class="btn btn-primary" [disabled]="!passwordForm.valid">Reset Password</button>
                 </div>
             </form>
-            
         </div>
     </div>
 </div>
