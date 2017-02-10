@@ -1,4 +1,5 @@
 
+$mobileNavHeight: 66px;
 
 .containter-fluid {
   overflow-x: hidden;
@@ -37,7 +38,7 @@ footer {
   padding-left: 15px + 100px;
 
   @media(max-width: $tablet) {
-    padding-top: 0px;
+    padding-top: $mobileNavHeight;
     padding-left: 15px;
   }
 } 
