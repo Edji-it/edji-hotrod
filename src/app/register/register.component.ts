@@ -133,7 +133,8 @@ export class RegisterComponent implements OnInit {
       .subscribe((data) => {
         this.registerLoading = false;
         if (data.user) {
-          if (this._auth.getEnv() === "prod") { this.bumblebee.sendUserDetails(data.user); }
+          // if (this._auth.getEnv() === "prod") { this.bumblebee.sendUserDetails(data.user); }
+          this.bumblebee.sendUserDetails(data.user);
           data.user.username && this.angulartics.setUsername.next(data.user.username);
           data.user.email && this.angulartics.setUserProperties.next({ email: data.user.email});
           if (data.user.identities) {

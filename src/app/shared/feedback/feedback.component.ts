@@ -4,7 +4,7 @@ import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_di
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { Angulartics2 } from 'angulartics2';
 
-import { AuthService, Copy } from './..';
+import { AuthService, Copy, BumblebeeService } from './..';
 
 @Component({
   selector: 'edji-feedback',
@@ -51,6 +51,7 @@ export class FeedbackComponent implements OnInit {
 
   constructor(
     private _auth: AuthService,
+    private _bumblebee: BumblebeeService,
     private http: Http,
     private angulartics: Angulartics2,
     fb: FormBuilder
@@ -105,12 +106,7 @@ export class FeedbackComponent implements OnInit {
       user: this.user
     };
 
-    this.http.post(
-      "http://bumblebee-prod-1.us-west-2.elasticbeanstalk.com/newform",
-      // "http://localhost:8333/newform",
-      data,
-      this._auth.getOptions()
-    ).take(1).subscribe(
+    this._bumblebee.sendFeedback(data).take(1).subscribe(
       (res) => {
         if (res.status === 204) {
           this.angulartics.eventTrack.next({ action: 'sendFeedback', properties: { category: 'accountManagement', label: 'success' }});

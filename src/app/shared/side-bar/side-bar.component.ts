@@ -30,8 +30,6 @@ export class SideBarComponent implements OnInit, OnDestroy {
     }
     
     ngOnInit() {
-      console.log(this.powersLoading.heatVision);
-
       /** Set the current user every time it changes */
       this.subscriptions.push(
           this._auth.getCurrentUser().subscribe((user) => {
