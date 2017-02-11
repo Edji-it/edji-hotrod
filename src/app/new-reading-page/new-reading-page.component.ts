@@ -4,6 +4,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Angulartics2 } from 'angulartics2';
 
 import { ReadingService } from '../shared/reading.service';
+import { ProjectService } from '../shared/project.service';
 
 @Component({
     selector: 'new-reading-page',
@@ -23,6 +24,7 @@ export class NewReadingPage implements OnInit {
     
     constructor(
         private _readings: ReadingService,
+        private _projects: ProjectService,
         private router: Router,
         private angulartics: Angulartics2,
         fb: FormBuilder,
@@ -145,11 +147,17 @@ export class NewReadingPage implements OnInit {
         this._readings.save(reading)
             .subscribe(
                 data => {
-                    console.log(data);
-                    this.addLoading = false;
                     if (data._id) {
                         this.angulartics.eventTrack.next({ action: 'createNewReading', properties: { category: 'contentManagement', label: 'success' }});
-                        this.router.navigate(['reading', data._id]);
+                        
+                        // Create default Project
+                        this._projects.create(data._id, { 'label' : 'Group 1'})
+                            .subscribe( (project) => {
+                                this.addLoading = false;
+                                this.router.navigate(['project', project._id]);
+                            }, (error) => {
+                                console.log(error);
+                            })
                     }
                 },
                 error => {
