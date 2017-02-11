@@ -89,6 +89,22 @@ $phone: 576px;
     }
 }
 
+.project-card--new {
+    float: left !important;
+    background: transparent;
+    box-shadow: none;
+    border-top: none;
+}
+
+.add-project-icon {
+    background: #fafafa;
+    border: 0px solid transparent;
+
+    &:hover, &:active {
+        background: #ccc;
+    }
+}
+
 .reading-card, .project-card {
     margin-bottom: $projectCardGutter;
 }
