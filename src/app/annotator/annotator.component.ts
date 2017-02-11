@@ -117,6 +117,11 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                     } else {
                         this.reading = reading;
                     }
+                        console.log(reading);
+
+                    // Set custom OGP header based on this reading
+                    document.querySelector('meta[name="twitter:title"]').setAttribute('content', reading.title);
+                    document.querySelector('meta[property="og:title"]').setAttribute('content', reading.title);
                 },
                 error => {
                     console.error(error);
