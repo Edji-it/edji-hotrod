@@ -7,6 +7,10 @@ $tablet-width: 768px;
     padding-left:210px;
 }
 
+.prj {
+    height: 18px;
+}
+
 .prj-label {
     display: none;
 }
@@ -49,6 +53,7 @@ $tablet-width: 768px;
         float: left;
         text-align: left;
         line-height: 1.25em;
+        height: initial;
     }
     .prj-label {
         display: inline-block;

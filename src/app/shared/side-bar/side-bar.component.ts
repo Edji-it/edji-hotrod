@@ -23,6 +23,7 @@ export class SideBarComponent implements OnInit, OnDestroy {
     private powersLoading: {
       heatVision?: boolean
     } = { };
+    private tooltipPlacement: string = 'right';
 
     constructor(private _auth: AuthService, private _socket: SocketService, private _router: Router, private _projects: ProjectService) {
 
@@ -58,6 +59,7 @@ export class SideBarComponent implements OnInit, OnDestroy {
 
       if (window.screen.availWidth < 768) {
         this.isMobile = true;
+        this.tooltipPlacement = 'bottom'
       } else {
         this.isMobile = false;
       }

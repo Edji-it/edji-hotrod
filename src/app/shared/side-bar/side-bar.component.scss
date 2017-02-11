@@ -127,6 +127,23 @@ a.side-bar__link {
 	display: none;
 }
 
+div.sliding-pane.from-left.slide-in {
+	box-shadow: 2px 2px 20px rgba(0,0,0,0.1);
+}
+
+.power__loading {
+	position: absolute;
+	top: 15px;
+	left: 15px;
+	pointer-events: none;
+	opacity: 0;
+	transition: opacity 0.5s linear;
+
+	&.is-loading {
+		opacity: 1;
+	}
+}
+
 @mixin phone {
   @media (min-width: #{$phone-width-min}) and (max-width: #{$tablet-width - 1px}) {
     @content;
@@ -178,14 +195,6 @@ a.side-bar__link {
 	img.icn-cmt {
 		width: 50px;
 	}
-}
-
-div.sliding-pane.from-left.slide-in {
-	box-shadow: 2px 2px 20px rgba(0,0,0,0.1);
-}
-
-/* On Click Display Logout & User */
-@include phone {
 	.side-bar {
 		-webkit-box-shadow: 0 4px 6px -4px #777;
     	box-shadow: 0 4px 6px -4px #777;
@@ -249,17 +258,8 @@ div.sliding-pane.from-left.slide-in {
 	.btn-hv {
 		left: 55%
 	}
-}
-
-.power__loading {
-	position: absolute;
-	top: 15px;
-	left: 15px;
-	pointer-events: none;
-	opacity: 0;
-	transition: opacity 0.5s linear;
-
-	&.is-loading {
-		opacity: 1;
+	.power__loading {
+		top: 5px;
+		left: 5px;
 	}
 }
