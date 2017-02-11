@@ -70,11 +70,16 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
                             console.warn(error);
                         })
                     );
+
+                    // Set custom OGP header based on this reading
+                    document.querySelector('meta[property="og:title"]').setAttribute('content', this.project.title);
                 }
             },
             (error) => {
                 // TRACK EXCEPTION
             });
+
+        
     }
 
     ngOnDestroy() {
