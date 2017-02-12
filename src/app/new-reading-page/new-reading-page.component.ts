@@ -32,11 +32,13 @@ export class NewReadingPage implements OnInit {
     ) {
         this.readingForm = fb.group({
             title: [null, Validators.required],
-            source: [null, null]
+            source: [null, null],
+            label: ['Group 1', Validators.required]
         });
     }
 
-    ngOnInit() { }
+    ngOnInit() {
+     }
 
     /**
      * Loops through child elements to find textnodes
@@ -119,7 +121,7 @@ export class NewReadingPage implements OnInit {
         this.error = '';
 
         // This would be better handled by formcontrols
-        if (!form.title || form.title.length < 1 || this.readingHtml.length < 1) {
+        if (!form.title || form.title.length < 1 || this.readingHtml.length < 1 || form.label.length < 1) {
             this.addLoading = false;
             this.error = 'Not quite, please check all the fields!';
             return;
@@ -143,7 +145,7 @@ export class NewReadingPage implements OnInit {
         let reading: any = form;
         reading.html = this.readingHtml;
         reading.words = this.words;
-
+        
         this._readings.save(reading)
             .subscribe(
                 data => {
@@ -151,12 +153,13 @@ export class NewReadingPage implements OnInit {
                         this.angulartics.eventTrack.next({ action: 'createNewReading', properties: { category: 'contentManagement', label: 'success' }});
                         
                         // Create default Project
-                        this._projects.create(data._id, { 'label' : 'Group 1'})
+                        this._projects.create(data._id, { 'label' : form.label })
                             .subscribe( (project) => {
                                 this.addLoading = false;
                                 this.router.navigate(['project', project._id]);
                             }, (error) => {
                                 console.log(error);
+                                this.addLoading = false;
                             })
                     }
                 },
