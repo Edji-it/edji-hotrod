@@ -18,6 +18,8 @@ export class CommentComponent implements OnInit {
   private yPos: number = 0;
   private justSaved: boolean = false;
   private isLoading: boolean = false;
+  // Hold the current scroll position for the iOS fix
+  private currentScroll: number;
   // Is fully visible, focused, and editable
   private active = false;
   // Is fully visible, focused, but not editable
@@ -68,6 +70,13 @@ export class CommentComponent implements OnInit {
 
   activate(): void {
     if (!this.readOnly) {
+      if (!this.active && this.isMobile) {
+        // iOS scroll fix enable
+        this.currentScroll = document.body.scrollTop;
+        document.getElementsByTagName("body")[0].classList.add('disablePane');
+        document.getElementsByTagName("body")[0].style["top"] = "-" + this.currentScroll + "px";
+        console.log('activate');
+      }
       this.active = true;
       this.commentActivation.emit(true);
     } else {
@@ -82,6 +91,7 @@ export class CommentComponent implements OnInit {
         this.commentActivation.emit(false);
       } else {
         this.active = true;
+        
       }
     } else {
       if (this.preview === true) {
@@ -99,6 +109,11 @@ export class CommentComponent implements OnInit {
     // Save when comment is toggled away from
     this.updateComment(this.comment.data);
     if (this.isMobile) {
+      // iOS scroll fix disable
+      document.getElementsByTagName("body")[0].classList.remove('disablePane');
+      document.getElementsByTagName("body")[0].removeAttribute("style");
+      document.body.scrollTop = this.currentScroll;
+      // Dismiss the keyboard in mobile
       this.dismissKeyboard.emit();
     }
   }
