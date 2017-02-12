@@ -7,8 +7,8 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 })
 export class UploadModalComponent implements OnInit {
 
-  @Output()
-  closeModal: EventEmitter<any> = new EventEmitter();
+  @Output() closeModal: EventEmitter<any> = new EventEmitter();
+  @Output() returnImage: EventEmitter<any> = new EventEmitter();
   
   private uploadedUrl: string = '';
 
@@ -52,6 +52,9 @@ export class UploadModalComponent implements OnInit {
       if(xhr.readyState === 4){
         if(xhr.status === 200){
           this.uploadedUrl = url;
+
+          this.returnImage.emit(this.uploadedUrl);
+          this.closeModal.emit();
         }
         else{
           alert('Could not upload file.');

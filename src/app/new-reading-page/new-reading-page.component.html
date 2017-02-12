@@ -66,4 +66,4 @@
         </div>
     </div>
 </div>
-<upload-modal class="modal-will-fade" [class.show]="showUploadModal" (closeModal)="showUploadModal = false"></upload-modal>
+<upload-modal class="modal-will-fade" [class.show]="showUploadModal" (returnImage)="addImage($event)" (closeModal)="showUploadModal = false"></upload-modal>

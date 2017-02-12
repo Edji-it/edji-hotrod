@@ -420,10 +420,15 @@ $readingH3Size: 18px;
 	}
 	
 	& > img {
-		max-width: 50%;
-		float: right;
-		margin: 15px;
+		// max-width: 50%;
+		// float: right;
+		// margin: 15px;
+		// margin-bottom: 24px;
+		max-width: calc(100% - 30px);
+		float: none;
+		margin: 15px auto;
 		margin-bottom: 24px;
+		display: block;
 	}
 
 	/*& * {

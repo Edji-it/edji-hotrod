@@ -61,6 +61,14 @@ export class NewReadingPage implements OnInit {
             ancestorTags.push(tagName);
         }
 
+        if (tagName === 'img') {
+            this.words.push({
+                str: '', // to be used for image title
+                url: element.getAttribute('src'), 
+                styles: ['img']
+            });
+        }
+
         nodes.forEach((node, index) => {
             // Copy tags array to variable local to loop instance
             let inheritedTags = ancestorTags.slice();
@@ -171,5 +179,10 @@ export class NewReadingPage implements OnInit {
                     this.angulartics.eventTrack.next({ action: 'createNewReading', properties: { category: 'contentManagement', label: 'failure' }});
                 }
             );
+    }
+
+    private addImage(imageUrl: string) {
+        console.log(imageUrl);
+        this.readingHtml += '<img src="' + imageUrl + '" /><p></p>';
     }
 }
