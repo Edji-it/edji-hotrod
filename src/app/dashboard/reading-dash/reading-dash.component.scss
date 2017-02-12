@@ -96,6 +96,32 @@ $phone: 576px;
     border-top: none;
 }
 
+.project-title-input__save {
+    display: none;
+    font-size: 23px;
+    position: absolute;
+    top: 3px;
+    right: -1px;
+    line-height: 1em;
+    cursor: pointer;
+}
+
+.project-title-input {
+    float: left;
+    width: calc(100% - 170px);
+    position: relative;
+
+    & input {
+        line-height: 2em;
+
+        &:active, &:focus {
+            & + .project-title-input__save {
+                display: block;
+            }
+        }
+    }
+}
+
 .add-project-icon {
     background: #fafafa;
     border: 0px solid transparent;
