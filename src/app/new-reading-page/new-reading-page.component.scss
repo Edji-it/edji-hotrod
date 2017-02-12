@@ -1,0 +1,13 @@
+.editor-button-bar {
+    position: absolute;
+    left: 0px;
+    width: 85px;
+    top: 0;
+    display: block;
+    text-align: right;
+    padding: 15px;
+
+    & .btn {
+        margin: 12px 0px;
+    }
+}

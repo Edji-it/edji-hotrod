@@ -8,6 +8,7 @@ import { ProjectService } from '../shared/project.service';
 
 @Component({
     selector: 'new-reading-page',
+    styleUrls: ['new-reading-page.component.scss'],
     templateUrl: 'new-reading-page.component.html'
 })
 export class NewReadingPage implements OnInit {
@@ -18,6 +19,7 @@ export class NewReadingPage implements OnInit {
     private readingPlaceholder: string = 'Type or paste your reading...';
     private addLoading: boolean = false;
     private error: string = '';
+    private showUploadModal: boolean = false;
 
     // Used for processing reading
     private words: any[] = [];

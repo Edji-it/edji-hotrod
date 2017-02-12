@@ -186,6 +186,7 @@ label input, label textarea {
 
 .offset-label {
 	padding-left: 90px;
+  position: relative;
 
 	& label span {
 		display: block; //inline-block;

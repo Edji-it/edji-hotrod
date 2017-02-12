@@ -24,6 +24,11 @@
                                 class="content"></medium-editor>
                             <div *ngIf="submitted && readingHtml.length < 1"  class="alert alert-info">Please give your Reading some text!</div>
                         </label>
+                        <div class="editor-button-bar">
+                            <a class="btn btn-icon--plain" (click)="showUploadModal = true">
+                                <img title="Add Picture" class src="/assets/images/icon-picture.svg" />
+                            </a>
+                        </div>
                     </div>
                     <div class="form-group offset-label">
                         <label class="border-wrap ">
@@ -61,3 +66,4 @@
         </div>
     </div>
 </div>
+<upload-modal class="modal-will-fade" [class.show]="showUploadModal" (closeModal)="showUploadModal = false"></upload-modal>
