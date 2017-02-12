@@ -1,6 +1,4 @@
-$phone-width-min: 0px;
-$phone-width: 480px;
-$tablet-width: 768px;
+@import '../../../sass/base/variables';
 
 .emojionearea-picker {
     opacity: 0;
@@ -113,14 +111,8 @@ $tablet-width: 768px;
     width: calc(100% - 15px); //room for scrollbar
 }
 
-@mixin phone {
-  @media (min-width: #{$phone-width-min}) and (max-width: #{$tablet-width - 1px}) {
-    @content;
-  }
-}
-
 /* Mobile Optimization */
-@include phone {
+@media (max-width: #{$tablet - 1px}) {
 	.emojionearea-picker {
         width: 100%;
         left: 0;

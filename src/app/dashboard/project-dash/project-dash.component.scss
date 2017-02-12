@@ -1,28 +1,30 @@
+@import '../../../sass/base/variables';
+
 /*styles for dashboard content only*/
 /* Push and Pull styles that aren't loading in for some reason */
-@media (min-width: 768px) {
+@media (min-width: #{$tablet - 1px}) {
     .col-sm-push-6 {
         left: 50%;
     }
 }
-@media (min-width: 768px) {
+@media (min-width: #{$tablet - 1px}) {
     .col-sm-6 {
         width: 50%;
     }
 }
-@media (min-width: 768px) {
+@media (min-width: #{$tablet - 1px}) {
     .col-sm-pull-6 {
         right: 50%;
     }
 }
-@media (min-width: 768px) {
+@media (min-width: #{$tablet - 1px}) {
     .col-sm-6 {
         width: 50%;
     }
 }
 
 /* Adding margin to spread out the two columns */
-@media (max-width: 768px) {
+@media (max-width: #{$tablet - 1px}) {
     .col-sm-pull-6 {
         margin-top: 50px;
     }

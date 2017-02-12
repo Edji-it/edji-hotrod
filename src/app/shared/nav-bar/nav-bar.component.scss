@@ -1,12 +1,8 @@
-
 @import '../../../sass/base/variables';
 
 $navBarHeight: 100px;
 $navBarLargeHeight: 95px;
 $sideBarWidth: 100px;
-$phone-width-min: 0px;
-$phone-width: 480px;
-$tablet-width: 768px;
 
 .nav-bar {
 	position: relative;
@@ -50,14 +46,8 @@ a.nav-bar__link {
 	display: inline-block;
 }
 
-@mixin phone {
-  @media (min-width: #{$phone-width-min}) and (max-width: #{$tablet-width - 1px}) {
-    @content;
-  }
-}
-
 /* Mobile Optimization */
-@include phone {
+@media (max-width: #{$tablet - 1px}) {
 	.nav__center-logo {
 		left: 10%;
     	position: absolute;
