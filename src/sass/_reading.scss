@@ -124,7 +124,7 @@ article.content {
 
 // Styles for commenting
 .active-content {
-	& img {
+	& .word.img img {
 		cursor: pointer; 
 		outline: 6px solid transparent;
 		border: 2px solid #fff;
@@ -348,7 +348,7 @@ $nextB: 68;
 			background: none;
 		}
 		& img {
-			outline-color: rgba($thisR, $thisG, $thisB, $thisA);
+			outline-color: rgba($thisR, $thisG, $thisB, $thisA) !important;
 		}
 	}
 }
@@ -364,7 +364,7 @@ $nextB: 68;
 			background: none;
 		}
 		& img {
-			outline-color: rgba($thisR, $thisG, $thisB, $thisA);
+			outline-color: rgba($thisR, $thisG, $thisB, $thisA)  !important;
 		}
 	}
 }
