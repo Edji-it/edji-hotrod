@@ -779,5 +779,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             }
         }
     }
+
+    private imageCommentOptions(imageIndex: number) : void {
+        console.log(imageIndex)
+    }
 }
 

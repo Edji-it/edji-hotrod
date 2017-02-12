@@ -122,6 +122,19 @@ article.content {
 	} 
 }
 
+// Styles for commenting
+.active-content {
+	& img {
+		cursor: pointer; 
+		outline: 6px solid transparent;
+		border: 2px solid #fff;
+		border-radius: 3px;
+
+		&:hover, &:active {
+			outline: 6px solid rgba(253, 228, 104, 0.45);
+		}
+	}
+}
 
 
 header {
@@ -331,6 +344,12 @@ $nextB: 68;
 		background: rgba($thisR, $thisG, $thisB, $thisA);
 		// padding: 0px 4px;
 		// margin: 0px -4px;
+		&.img {
+			background: none;
+		}
+		& img {
+			outline-color: rgba($thisR, $thisG, $thisB, $thisA);
+		}
 	}
 }
 
@@ -341,6 +360,12 @@ $nextB: 68;
 		$thisB: $endB + ((($nextB - $endB)/$nextLevelSteps) * $n);
 		$thisA: 0.4 + (0.05 * 8);
 		background: rgba($thisR, $thisG, $thisB, $thisA);
+		&.img {
+			background: none;
+		}
+		& img {
+			outline-color: rgba($thisR, $thisG, $thisB, $thisA);
+		}
 	}
 }
 
