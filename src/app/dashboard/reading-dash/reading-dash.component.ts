@@ -78,7 +78,7 @@ export class ReadingDashComponent implements OnInit, OnDestroy {
    * Create a fresh Project for a given Reading, then push it back to the dashboard
    */
   private addProject(readingId: string, projectLabel: string) : void {
-    this._projects.create(readingId, { 'label' : projectLabel } )
+    this._projects.create(readingId, { 'label' : projectLabel, 'types' : ['emoji','text'] } )
       .subscribe( project => {
         if (project._id) {
           // Push the project back into the dashboard

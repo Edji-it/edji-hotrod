@@ -153,7 +153,7 @@ export class NewReadingPage implements OnInit {
                         this.angulartics.eventTrack.next({ action: 'createNewReading', properties: { category: 'contentManagement', label: 'success' }});
                         
                         // Create default Project
-                        this._projects.create(data._id, { 'label' : form.label })
+                        this._projects.create(data._id, { 'label' : form.label, 'types' : ['emoji','text'] })
                             .subscribe( (project) => {
                                 this.addLoading = false;
                                 this.router.navigate(['project', project._id]);
