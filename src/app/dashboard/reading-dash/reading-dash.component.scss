@@ -101,14 +101,15 @@ $phone: 576px;
     font-size: 23px;
     position: absolute;
     top: 3px;
-    right: -1px;
+    right: -30px;
     line-height: 1em;
     cursor: pointer;
 }
 
 .project-title-input {
     float: left;
-    width: calc(100% - 170px);
+    //width: calc(100% - 170px);
+    width: 100%;
     position: relative;
 
     & input {
@@ -145,11 +146,29 @@ button.new-reading-btn {
     float: right;
 }
 
+.prj-btns {
+    padding-top: 7px;
+}
+
+.prj-code {
+    float:right; 
+    margin-top: 6px;
+}
+
+.reading-project--label{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.reading-title--center-row h1 {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 @media (max-width: #{$tablet - 1px}) {
     .reading-title--center-row h1 {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
         max-width: 250px;
         font-size: 16px;
     }
@@ -175,6 +194,15 @@ button.new-reading-btn {
     }
     button.new-reading-btn {
         float: right;
+    }
+    .project-title-input__save {
+
+    }
+    .project-title-input {
+
+    }
+    .prj-code {
+        float: left;
     }
 }
 

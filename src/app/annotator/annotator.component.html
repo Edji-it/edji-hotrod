@@ -44,7 +44,6 @@
 					(commentActivation)="setActiveCommentByIndex($event, i, ci)" 
 					(commentDeleted)="removeComment(comment, i, ci)"
 					(expandLine)="expandLine($event)"
-					[isMobile]="isMobile"
 					(mobileDeactivate)="inactivateComment()">
 				</edji-comment>{{ word.str.trim() ? word.str : '&nbsp;' }}</span>
 		</article>
