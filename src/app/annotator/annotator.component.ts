@@ -796,6 +796,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // this makes sure there are no other selections made
         sel.setSingleRange(range);
         this.showCommentOptions(event);
+        console.log(this.reading.words);
     }
 }
 
