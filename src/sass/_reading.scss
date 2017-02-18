@@ -494,4 +494,9 @@ header.header {
 		position: relative;
 		top: 60px;
 	}
+	header.header {
+		font-size: 28px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
 }

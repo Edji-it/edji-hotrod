@@ -1,6 +1,4 @@
-$phone-width-min: 0px;
-$phone-width: 480px;
-$tablet-width: 768px;
+@import '../../sass/base/variables';
 
 .project-column {
     max-width: 1000px;
@@ -15,25 +13,9 @@ $tablet-width: 768px;
     display: none;
 }
 
-@mixin phone {
-  @media (min-width: #{$phone-width-min}) and (max-width: #{$tablet-width - 1px}) {
-    @content;
-  }
-}
-
 /* Mobile Optimization */
-@include phone {
+@media (max-width: #{$tablet - 1px}) {
 	.reading__hud {
-		// padding: 6px 2px;
-        // position: relative;
-        // width: 100%;
-        // background: none;
-        // z-index: 0;
-        // left: 0;
-        // right: 0;
-        // text-align: center;
-        // padding-bottom: 25px;
-        
         font-family: "Open Sans";
         position: absolute;
         top: 36px;
@@ -66,11 +48,16 @@ $tablet-width: 768px;
         color: #222;
         font-size: 14px;
         font-weight: 500;
+        max-width: 150px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        vertical-align: middle;
     }
     .project-column {
         padding: 0;
     }
 	.container--side-bar {
-		padding: 100px 15px 0px 15px;
+		padding: 100px 0px 0px 0px;
 	}
 }
