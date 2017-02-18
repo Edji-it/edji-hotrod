@@ -258,6 +258,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         let annotatorPaper = document.getElementById('emojiAnnotator');
         let annotatorContent = document.getElementById('annotatorContent');
         let sel = Rangy.getSelection();
+        // console.log(sel);
         
         // Make sure selection exists, and is within highlightable content
         if (sel && sel.toString().length > 0 
@@ -526,9 +527,11 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         let comment: any;
         
         let getNodeIndex = function(node: any) : number {
+
             // Selections often happen at the text node level, inside the actual element
             // In which case we need to reference its parent node
-            if(node.hasOwnProperty('className') && node.className.indexOf('word') > -1) {
+            // Note: we tried node.hasOwnProperty here and would sometimes get a false true resolution of the if statement... not sure how that is possible
+            if(!!node.className && node.className.indexOf('word') > -1) {
                 return parseInt(node.getAttribute('index'));
             } else {
                 return parseInt(node.parentNode.getAttribute('index'));
@@ -558,6 +561,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      * - Fired from comment options tooltip
      */
     addEmojiComment(event): void {
+    // console.log(Rangy.getSelection().anchorNode);
+
         // Get selection indices
         let span = this.getSelectionSpan();
         
@@ -780,8 +785,17 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         }
     }
 
-    private imageCommentOptions(imageIndex: number) : void {
-        console.log(imageIndex)
+    private imageCommentOptions(imageIndex: number, word: any, event: Event) : void {
+
+        // when they click the picture, we need to create the selection for them
+        let target = event.target || event.srcElement || event.currentTarget;
+        let range = Rangy.createRange();
+        range.selectNodeContents(target['parentNode']);
+        let sel = Rangy.getSelection();
+
+        // this makes sure there are no other selections made
+        sel.setSingleRange(range);
+        this.showCommentOptions(event);
     }
 }
 
