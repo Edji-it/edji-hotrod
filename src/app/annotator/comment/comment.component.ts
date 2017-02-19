@@ -4,6 +4,7 @@ import { Component, EventEmitter, Input, OnInit, Output, SimpleChange, ElementRe
 import { Angulartics2 } from 'angulartics2';
 
 import { ProjectService } from '../../shared/project.service';
+import { CommentPermissions } from '.';
 
 @Component({
   selector: 'edji-comment',
@@ -26,7 +27,8 @@ export class CommentComponent implements OnInit {
   private preview = false;
 
   @Input() public comment: any;
-  @Input() private readOnly: false; 
+  @Input() private readOnly: boolean = false;
+  @Input() private userPermission: number = CommentPermissions.READ;
   @Input()
   set isActive(isActive: boolean) {
     if (typeof(isActive) !== 'undefined' && this.active !== isActive) {
@@ -48,6 +50,7 @@ export class CommentComponent implements OnInit {
 
   ngOnInit() {
     // If comment is newly added, focus on it when created!
+    console.log(this.userPermission);
   }
 
   toggleActive( ): void {

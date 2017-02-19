@@ -16,6 +16,7 @@ import { ProjectService } from '../shared/project.service';
 import { CommentComponent } from './comment';
 import { AuthService } from '../shared/auth.service';
 import { SocketService } from '../shared/socket.service';
+import { CommentPermissions } from './comment';
 
 @Component({
     selector: 'annotator',
@@ -795,7 +796,19 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // this makes sure there are no other selections made
         sel.setSingleRange(range);
         this.showCommentOptions(event);
-        console.log(this.reading.words);
+    }
+
+    /** Used to determine which level of permission the user has for a specific comment
+     * @param comment A comment object
+     */
+    private getCommentPermissions(comment: any): number {
+        if (this.user._id == comment.user_id) {
+            return CommentPermissions.EDIT;
+        } else if (this.user._id == this.project.teacher_id) {
+            return CommentPermissions.DELETE;
+        } else {
+            return CommentPermissions.READ;
+        }
     }
 }
 
