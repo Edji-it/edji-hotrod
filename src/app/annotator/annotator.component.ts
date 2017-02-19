@@ -268,7 +268,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             let scrollOffset = annotatorPaper.getBoundingClientRect().top;
             const readingPad = 52;
             let focusY;
-            if (sel.focusNode.hasOwnProperty('getBoundingClientRect')) {
+            if (!!sel.focusNode.getBoundingClientRect) {
                 focusY = sel.focusNode.getBoundingClientRect().top;
             } else {
                 focusY = sel.focusNode.parentNode.getBoundingClientRect().top;
@@ -703,7 +703,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      * @param end Index for last word
      */
     private focusHighlight(start, end): void {
-        console.log("Focus highlight");
         for (var i = start; i <= end; i ++) {
             if (this.alwaysHighlightArray[i]) {
                 this.alwaysHighlightArray[i] += 1000;
