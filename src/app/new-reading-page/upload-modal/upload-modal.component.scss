@@ -1,14 +1,59 @@
+@import '../../../sass/base/variables';
 
 .upload-list-item {
     cursor: pointer;
-    outline: 1px solid transparent;
-    border: 2px solid transparent;
+    transition: transform 0.2s linear;
 
     &:hover, &:active {
-        outline-color: rgba(0,0,0,0.1);
+        transform: scale(1.02);
     }
 
     &.selected {
-        outline-color: rgba(0,0,0,0.3);
+        // opacity: 1;
+    }
+}
+
+.btn.btn--center-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%, -50%, 0); 
+
+  &, &:hover, &:active {
+      color: #fff;
+      background: $darkBlue;
+  }
+}
+
+.overlay-on-hover {
+  opacity: 0;
+
+  &:hover, &:focus {
+    opacity: 1;
+  }
+}
+
+.file-name {
+    background: #fff;
+    font-size: 16px;
+    padding: 0.75em 1.5em;
+    display: inline-block;
+    line-height: 1em;
+    min-height: 40px;
+    vertical-align: middle;
+    margin-bottom: 7px;
+    border-radius: 3px;
+    width: calc(100% - 220px);
+    overflow-y:hidden;
+    overflow-x:hidden;
+    text-overflow: ellipsis;
+
+    & .placeholder {
+        color: #dcdcdc;
+        font-style: italic;
+    }
+
+    & + .btn {
+        margin-bottom: 8px;
     }
 }
