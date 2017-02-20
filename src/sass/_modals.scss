@@ -1,45 +1,77 @@
 // // Bootstrap modal overrides
 
-.modal {
-  z-index: 9000;
-  background: rgba(0,0,0,0.1);
-  overflow: auto;
-  display: block;
+$modalBorder: 0px solid transparent;
+$modalHeaderColor: #555;
+$modalBorderRadius: 8px;
+
+.modal-will-fade {
+  .modal {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity ease-in 0.3s;
+  }
+
+  .modal-content {
+    transform: scale(1.1) translateZ(0px);
+    transition: transform ease-in 0.3s;
+  }
+
+  &.show {
+    .modal {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal-content {
+      transform: scale(1) translateZ(0px);
+    }
+  }
 }
 
-// .modal {
-//     z-index: 9000;
-//     background: transparent !important;
-//     height: auto !important;
-//     color: #000 !important;
-//     overflow: visible;
+.modal {
+  z-index: 9000;
+  background: rgba(0,0,0,0.3);
+  overflow: auto;
+  // display: block;
+  display: flex;
+  align-items: center;
+  transition: background ease-in 0.3s;
+}
 
-//     & div {
-//         margin: 0 !important;
-//     }
+.modal-dialog {
+  min-width: calc(100% - 20px);
+  max-height: calc(100% - 100px);
+
+  @media (min-width: $phone) {
+    min-width: 400px;
+  }
+}
+
+// An idea for later
+// .modal-transition {
+//   transition: filter linear 0.3s;
+// }
+// // Applied to element wrapping content
+// // Modal has to sit outside this element
+// .modal-blur {
+//   filter: blur(2px);
 // }
 
-// .modal.start-in {
-//     display: block;
-// }
+.modal-header {
+  border: $modalBorder;
+  &, & h4 {
+    color: $modalHeaderColor;
+  }
 
-// // .modal-bg {
-// //     position: fixed;
-// //     top:0;
-// //     left: 0;
-// //     min-width: 100%;
-// //     min-height: 100%;
-// //     z-index: 8999;
-// //     background: rgba(0,0,0,0.3);
-// //     display: block;
-// //     margin: 0 !important;
-// // }
+  & button {
+    min-width: 30px;
+    min-height: 30px;
+  }
+}
 
-// .modal-content {
-//     z-index: 9000;
-//     margin-top: 20% !important;
-//     box-shadow: none !important;
-// }
+.modal-footer {
+  border: $modalBorder;
+}
 
 .modal-body {
     background: #f1f1f1;
@@ -47,21 +79,11 @@
     padding-bottom: 30px;
 }
 
-// .form-group {
-//     margin-bottom: 0;
-// }
+.modal-content {
+  border: $modalBorder;
+  box-shadow: 0px 3px 25px 0px rgba(0,0,0,0.3);
+  border-radius: $modalBorderRadius;
 
-// form label {
-//     margin: 15px 0 3px 0;
-// }
-
-// // .modal.fade {
-// //    @include transition(opacity 300 linear);
-   
-// //    opacity: 0;
-   
-// //    &.fade-in {
-// //      display: block;
-// //      opacity: 1;
-// //    }
-// // }
+  // Required for scrolling modals
+  margin-bottom: 100px;
+}

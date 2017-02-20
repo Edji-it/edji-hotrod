@@ -35,6 +35,7 @@ export class ReadingDashComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private _auth: AuthService, 
     private _readings: ReadingService,
+    private _projects: ProjectService,
     private angulartics: Angulartics2
   ) {
   }
@@ -62,5 +63,34 @@ export class ReadingDashComponent implements OnInit, OnDestroy {
 
   private deleteReading(reading) {
 
+  }
+
+  private updateProjectLabel(projectId: string, projectLabel: string) {
+    this._projects.update({ 'label' : projectLabel }, projectId)
+      .subscribe( project => {
+        console.log('Project label saved!');
+      }, error => {
+        console.log(error);
+      });
+  }
+
+  /**
+   * Create a fresh Project for a given Reading, then push it back to the dashboard
+   */
+  private addProject(readingId: string, projectLabel: string) : void {
+    this._projects.create(readingId, { 'label' : projectLabel, 'types' : ['emoji','text'] } )
+      .subscribe( project => {
+        if (project._id) {
+          // Push the project back into the dashboard
+          this.readings.forEach(reading => {
+            if (reading._id === readingId) {
+              reading.projects.push(project);
+              reading.newLabel = '';
+            }
+          })
+        }
+      }, error => {
+        console.log(error);
+      });
   }
 }

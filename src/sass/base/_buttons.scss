@@ -205,12 +205,38 @@ button, .button, .btn { //, [class*='btn']
 .btn-icon {
   cursor: pointer;
   padding: 5px;
+  text-shadow: none;
 
   &:hover, &:active, &:focus {
+    text-shadow: none;
     &:before {
       // color: $purple;
     }
   }
+}
+
+.btn-icon--plain {
+  background: none;
+  text-shadow: none;
+  opacity: 0.9;
+  cursor: pointer;
+  padding: 5px;
+  
+  & img {
+    height: 25px;
+    width: auto;
+  }
+
+  &:hover, &:active, &:focus {
+    text-shadow: none;
+    background: rgba(0,0,0,0.1);
+    opacity: 1;
+  }
+}
+
+.btn-icon--round {
+  @extend .btn-icon;
+  border-radius: 50%;
 }
 
 

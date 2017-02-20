@@ -1,19 +1,22 @@
 <div id="passwordModal" class="modal">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Password Reset</h4>
-                <button (click)="closeModal.emit()" type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form class="modal-body form-group" (ngSubmit)="onSubmit(passwordForm.value)" [formGroup]="passwordForm">
-                <label for="usernameInput">Username</label>
-                <input type="text" id="usernameInput" class="form-control" [formControl]="passwordForm.controls['username']" />
-                <div *ngIf="passwordForm.controls['username'].hasError('required') && passwordForm.controls['username'].dirty" class="alert alert-info">You must enter a username</div>
-                <div *ngIf="submissionSuccess">If this account exists, we've just sent you an email!</div>
-                <div *ngIf="errorObject.unsuccessful" class="alert alert-danger">{{errorObject.unsuccessful}}</div>
-
+            <form (ngSubmit)="onSubmit(passwordForm.value)" [formGroup]="passwordForm">
+                <div class="modal-header">
+                    <h4 class="modal-title">Password Reset</h4>
+                    <button (click)="closeModal.emit()" type="button" class="close btn-icon--round" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="usernameInput">Username</label>
+                        <input type="text" id="usernameInput" class="form-control" [formControl]="passwordForm.controls['username']" />
+                        <div *ngIf="passwordForm.controls['username'].hasError('required') && passwordForm.controls['username'].dirty" class="alert alert-info">You must enter a username</div>
+                        <div *ngIf="submissionSuccess">If this account exists, we've just sent you an email!</div>
+                        <div *ngIf="errorObject.unsuccessful" class="alert alert-danger">{{errorObject.unsuccessful}}</div>
+                    </div>
+                </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary" [disabled]="!passwordForm.valid">Reset Password</button>
                 </div>

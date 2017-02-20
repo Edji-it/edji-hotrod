@@ -1,38 +1,40 @@
 <side-bar></side-bar>
 
-<div class="container">
-
-  <div class="full-row gray">
+<div class="container--side-bar">
   <div class="row">
-      <div class="col-sm-1"></div>
-      <div class="col-sm-6 col-pad">
-          <h2 class="center">Account Details</h2>
+      <div class="col-sm-2"></div>
+      <div class="col-sm-8">
+          <h1>Account Details</h1>
 
           <div class="card">
-              <div class="card-block">
-                  <h4 class="card-title">User Information</h4>
-              </div>
-              <ul class="list-group list-group-flush">
-                  <li class="list-group-item">
-                      <label>Name</label>
-                      {{currentUser.fullname}}
-                  </li>
-                  <li class="list-group-item">
-                      <label>Username</label>
-                      {{currentUser.username}}
-                  </li>
-                  <li class="list-group-item">
-                      <label>Email</label>
-                      {{currentUser.email}}
-                  </li>
-              </ul>
-              <div class="card-block">
-                  <button type="button" (click)="showPassModal = !showPassModal" class="btn btn-primary">Change Password</button>
-              </div>
+            <div class="card-block">
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">Name</label>
+                    <div class="col-sm-8">
+                        <p class="form-control-static">{{currentUser.fullname}}</p>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="inputPassword" class="col-sm-4 col-form-label">Username</label>
+                    <div class="col-sm-8">
+                        <p class="form-control-static">{{currentUser.username}}</p>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="inputPassword" class="col-sm-4 col-form-label">Email</label>
+                    <div class="col-sm-8">
+                        <p class="form-control-static">{{currentUser.email}}</p>
+                    </div>
+                </div>
+            </div><!--card-block-->
+          </div>
+          <div class="card text-center">
+                <div class="card-block">
+                    <button type="button" (click)="showPassModal = !showPassModal" class="btn btn-primary">Change Password</button>
+                </div>
           </div>
       </div>
-      <div class="col-3"></div>
-  </div>
+      <div class="col-sm-2"></div>
   </div>
 </div>
-<edji-change-pass *ngIf="showPassModal" (closeModal)="showPassModal = !showPassModal"></edji-change-pass>
+<edji-change-pass class="modal-will-fade" [class.show]="showPassModal" (closeModal)="showPassModal = !showPassModal"></edji-change-pass>

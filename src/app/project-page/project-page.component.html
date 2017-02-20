@@ -1,10 +1,16 @@
-<!--<hot-project-info></hot-project-info>-->
 <side-bar [hasCommentCount]="true"></side-bar>
 
 <div class="container-fluid container--side-bar">
 
-   <div id="InfoHud" class="reading__hud">
-    <label id="projectTitle" >{{ project.label }}</label>
+  <div id="InfoHud" class="reading__hud">
+    <div class="prj">
+      <span class="prj-label">Project: </span>
+      <label id="projectTitle" class="prj-name">{{ project.label }}</label>
+      <br/>
+      <label id="projectCreate" class="prj-label">Started {{ createDate }}</label>
+      <br/>
+      <label id="projectComments" class="prj-label">{{ commentCount }} Comments</label>
+    </div>
     
     <div class="hud__info"> 
       <pre class="project-code--inline">{{project.code || 'none'}}</pre>
@@ -22,5 +28,6 @@
   </div>
 
 </div>
-
+  
 <edji-feedback></edji-feedback>
+<hot-login-modal class="modal-will-fade" [class.show]="showLoginModal" (closeModal)="showLoginModal = false"></hot-login-modal>

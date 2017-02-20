@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Http } from '@angular/http';
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { Angulartics2 } from 'angulartics2';
 
-import { AuthService, Copy } from './..';
+import { AuthService, Copy, BumblebeeService } from './..';
 
 @Component({
   selector: 'edji-feedback',
@@ -33,7 +33,13 @@ import { AuthService, Copy } from './..';
   `]
 })
 export class FeedbackComponent implements OnInit {
-  private showFeedbackModal: true;
+  @Output()
+  private openModal: EventEmitter<any> = new EventEmitter();
+
+  @Output()
+  private closeModal: EventEmitter<any> = new EventEmitter();
+
+  private showFeedbackModal: boolean = false;
   private feedbackForm: FormGroup;
   private feedbackSuccess: boolean = false;
   private user: any;
@@ -45,6 +51,7 @@ export class FeedbackComponent implements OnInit {
 
   constructor(
     private _auth: AuthService,
+    private _bumblebee: BumblebeeService,
     private http: Http,
     private angulartics: Angulartics2,
     fb: FormBuilder
@@ -72,6 +79,22 @@ export class FeedbackComponent implements OnInit {
     return emailRe.test(control.value) ? null : { 'emailIncorrect': true };
   }
 
+  private open(): void {
+    this.openModal.emit();
+    this.showFeedbackModal = true;
+
+    // Workaround: This modal is long enough that it needs to scroll and we don't want two scrollbars
+    document.body.style.overflow = 'hidden';
+  }
+
+  private close(): void {
+    this.closeModal.emit();
+    this.showFeedbackModal = false;
+    
+    // Workaround: This modal is long enough that it needs to scroll and we don't want two scrollbars
+    document.body.style.overflow = '';
+  }
+
   /** Sends feedback to bumblebee */
   private sendFeedback(formValue: any): void {
     this.angulartics.eventTrack.next({ action: 'sendFeedback', properties: { category: 'accountManagement', label: 'attempt' }});
@@ -83,12 +106,7 @@ export class FeedbackComponent implements OnInit {
       user: this.user
     };
 
-    this.http.post(
-      "http://bumblebee-prod-1.us-west-2.elasticbeanstalk.com/newform",
-      // "http://localhost:8333/newform",
-      data,
-      this._auth.getOptions()
-    ).take(1).subscribe(
+    this._bumblebee.sendFeedback(data).take(1).subscribe(
       (res) => {
         if (res.status === 204) {
           this.angulartics.eventTrack.next({ action: 'sendFeedback', properties: { category: 'accountManagement', label: 'success' }});

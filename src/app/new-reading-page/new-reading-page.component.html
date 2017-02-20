@@ -9,7 +9,7 @@
                     <div class="form-group offset-label">
                         <label class="border-wrap">
                             <span>Title</span>
-                            <input type="text" id="readingTitle" class="form-control form-item--seamless h1 input-noborder" placeholder="Reading Title..." [formControl]="readingForm.controls['title']" />
+                            <input type="text" id="readingTitle" class="form-control form-item--seamless h1 input-noborder" placeholder="Reading Title..." [formControl]="readingForm.controls['title']"/>
                             <div *ngIf="readingForm.controls['title'].hasError('required') && (readingForm.controls['title'].dirty || submitted)"  class="alert alert-info">Please give your Reading a title!</div>
                         </label>
                     </div>
@@ -18,12 +18,17 @@
                             <span>Content</span>
                             <medium-editor
                                 [(editorModel)]="readingHtml"
-                                [editorOptions]="{'toolbar': {'buttons': ['bold', 'italic', 'underline', 'h1', 'h2', 'h3']}}"
+                                [editorOptions]="{'imageDragging': false, extensions: { 'imageDragging': {} }, 'toolbar': {'buttons': ['bold', 'italic', 'underline', 'h1', 'h2', 'h3']}}"
                                 [editorPlaceholder]="readingPlaceholder"
                                 id="newReading"
                                 class="content"></medium-editor>
                             <div *ngIf="submitted && readingHtml.length < 1"  class="alert alert-info">Please give your Reading some text!</div>
                         </label>
+                        <div class="editor-button-bar">
+                            <a class="btn btn-icon--plain" (click)="showUploadModal = true">
+                                <img title="Add Picture" class src="/assets/images/icon-picture.svg" />
+                            </a>
+                        </div>
                     </div>
                     <div class="form-group offset-label">
                         <label class="border-wrap ">
@@ -31,12 +36,26 @@
                             </span>
                             <div class="input-group">
                                 <input type="url" id="readingSource" class="form-control form-item--seamless h3" placeholder="New Reading Source..." [formControl]="readingForm.controls['source']" />
-                                <i class="input-group-tooltip icon__tooltip" placement="left" ngbTooltip="Keep a link to the source, so you don't lose it!'">
+                                <i class="input-group-tooltip icon__tooltip" placement="left" ngbTooltip="Keep a link to the source, so you don't lose it!">
                                     <i class="icon icon-circle icon-info">i</i>
                                 </i>
                             </div>
                         </label>
                     </div>
+                    <div class="form-group offset-label">
+                        <label class="border-wrap ">
+                            <span title="We share ">Name the First Copy
+                            </span>
+                            <div class="input-group">
+                                <input type="text" id="firstProjectLabel" class="form-control form-item--seamless h3" placeholder="eg. First Period, Peer review..." [formControl]="readingForm.controls['label']" />
+                                <i class="input-group-tooltip icon__tooltip" placement="left" ngbTooltip="What should the first copy you share be labeled?">
+                                    <i class="icon icon-circle icon-info">i</i>
+                                </i>
+                            </div>
+                            <div *ngIf="readingForm.controls['label'].hasError('required') && (readingForm.controls['label'].dirty || submitted)"  class="alert alert-info">Please give your reading a first copy label!</div>
+                        </label>
+                    </div>
+
                     <p class="alert alert-warning" *ngIf="error.length > 0">{{ error }}</p>
 
                     <div class="button__row">   
@@ -47,3 +66,4 @@
         </div>
     </div>
 </div>
+<upload-modal class="modal-will-fade" [class.show]="showUploadModal" (returnImage)="addImage($event)" (closeModal)="showUploadModal = false"></upload-modal>

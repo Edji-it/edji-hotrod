@@ -4,9 +4,11 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Angulartics2 } from 'angulartics2';
 
 import { ReadingService } from '../shared/reading.service';
+import { ProjectService } from '../shared/project.service';
 
 @Component({
     selector: 'new-reading-page',
+    styleUrls: ['new-reading-page.component.scss'],
     templateUrl: 'new-reading-page.component.html'
 })
 export class NewReadingPage implements OnInit {
@@ -17,12 +19,14 @@ export class NewReadingPage implements OnInit {
     private readingPlaceholder: string = 'Type or paste your reading...';
     private addLoading: boolean = false;
     private error: string = '';
+    private showUploadModal: boolean = false;
 
     // Used for processing reading
     private words: any[] = [];
     
     constructor(
         private _readings: ReadingService,
+        private _projects: ProjectService,
         private router: Router,
         private angulartics: Angulartics2,
         fb: FormBuilder,
@@ -30,11 +34,13 @@ export class NewReadingPage implements OnInit {
     ) {
         this.readingForm = fb.group({
             title: [null, Validators.required],
-            source: [null, null]
+            source: [null, null],
+            label: ['Group 1', Validators.required]
         });
     }
 
-    ngOnInit() { }
+    ngOnInit() {
+     }
 
     /**
      * Loops through child elements to find textnodes
@@ -53,6 +59,14 @@ export class NewReadingPage implements OnInit {
 
         if (ancestorTags.indexOf(tagName) < 0) {
             ancestorTags.push(tagName);
+        }
+
+        if (tagName === 'img') {
+            this.words.push({
+                str: '', // to be used for image title
+                url: element.getAttribute('src'), 
+                styles: ['img']
+            });
         }
 
         nodes.forEach((node, index) => {
@@ -117,7 +131,7 @@ export class NewReadingPage implements OnInit {
         this.error = '';
 
         // This would be better handled by formcontrols
-        if (!form.title || form.title.length < 1 || this.readingHtml.length < 1) {
+        if (!form.title || form.title.length < 1 || this.readingHtml.length < 1 || form.label.length < 1) {
             this.addLoading = false;
             this.error = 'Not quite, please check all the fields!';
             return;
@@ -141,15 +155,22 @@ export class NewReadingPage implements OnInit {
         let reading: any = form;
         reading.html = this.readingHtml;
         reading.words = this.words;
-
+        
         this._readings.save(reading)
             .subscribe(
                 data => {
-                    console.log(data);
-                    this.addLoading = false;
                     if (data._id) {
                         this.angulartics.eventTrack.next({ action: 'createNewReading', properties: { category: 'contentManagement', label: 'success' }});
-                        this.router.navigate(['reading', data._id]);
+                        
+                        // Create default Project
+                        this._projects.create(data._id, { 'label' : form.label, 'types' : ['emoji','text'] })
+                            .subscribe( (project) => {
+                                this.addLoading = false;
+                                this.router.navigate(['project', project._id]);
+                            }, (error) => {
+                                console.log(error);
+                                this.addLoading = false;
+                            })
                     }
                 },
                 error => {
@@ -158,5 +179,10 @@ export class NewReadingPage implements OnInit {
                     this.angulartics.eventTrack.next({ action: 'createNewReading', properties: { category: 'contentManagement', label: 'failure' }});
                 }
             );
+    }
+
+    private addImage(imageUrl: string) {
+        console.log(imageUrl);
+        this.readingHtml += '<img src="' + imageUrl + '" /><p></p>';
     }
 }

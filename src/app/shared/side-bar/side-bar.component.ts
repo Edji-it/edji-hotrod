@@ -23,14 +23,13 @@ export class SideBarComponent implements OnInit, OnDestroy {
     private powersLoading: {
       heatVision?: boolean
     } = { };
+    private tooltipPlacement: string = 'right';
 
     constructor(private _auth: AuthService, private _socket: SocketService, private _router: Router, private _projects: ProjectService) {
 
     }
     
     ngOnInit() {
-      console.log(this.powersLoading.heatVision);
-
       /** Set the current user every time it changes */
       this.subscriptions.push(
           this._auth.getCurrentUser().subscribe((user) => {
@@ -58,6 +57,7 @@ export class SideBarComponent implements OnInit, OnDestroy {
 
       if (window.screen.availWidth < 768) {
         this.isMobile = true;
+        this.tooltipPlacement = 'bottom'
       } else {
         this.isMobile = false;
       }

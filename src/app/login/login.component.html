@@ -21,4 +21,4 @@
   </div>
 </div>
 
-<edji-reset-pass *ngIf="showPassModal"  (closeModal)="showPassModal = !showPassModal"></edji-reset-pass>
+<edji-reset-pass class="modal-will-fade" [class.show]="showPassModal" (closeModal)="showPassModal = !showPassModal"></edji-reset-pass>

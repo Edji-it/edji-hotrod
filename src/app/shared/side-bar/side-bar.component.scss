@@ -1,10 +1,8 @@
+@import '../../../sass/base/variables';
 
 $sideBarWidth: 100px;
 $lightBorder: 1px solid #f1f1f1;
 $purple: rgb(150, 40, 255);
-$phone-width-min: 0px;
-$phone-width: 480px;
-$tablet-width: 768px;
 
 .side-bar__wrap {
 	float: left;
@@ -127,14 +125,25 @@ a.side-bar__link {
 	display: none;
 }
 
-@mixin phone {
-  @media (min-width: #{$phone-width-min}) and (max-width: #{$tablet-width - 1px}) {
-    @content;
-  }
+div.sliding-pane.from-left.slide-in {
+	box-shadow: 2px 2px 20px rgba(0,0,0,0.1);
+}
+
+.power__loading {
+	position: absolute;
+	top: 15px;
+	left: 15px;
+	pointer-events: none;
+	opacity: 0;
+	transition: opacity 0.5s linear;
+
+	&.is-loading {
+		opacity: 1;
+	}
 }
 
 /* Mobile Optimization */
-@include phone {
+@media (max-width: #{$tablet - 1px}) {
 	.side-bar__user {
 		display: none;
         -webkit-transition: rotate(0deg);
@@ -158,6 +167,8 @@ a.side-bar__link {
 	.side-bar__logo {
 		width: 48px;
 		padding: 4px;
+		left: 5%;
+		position: absolute;
 	}
 	.side-bar {
 		height: 66px;
@@ -176,14 +187,10 @@ a.side-bar__link {
 	img.icn-cmt {
 		width: 50px;
 	}
-}
-
-div.sliding-pane.from-left.slide-in {
-	box-shadow: 2px 2px 20px rgba(0,0,0,0.1);
-}
-
-/* On Click Display Logout & User */
-@include phone {
+	.side-bar {
+		-webkit-box-shadow: 0 4px 6px -4px #777;
+    	box-shadow: 0 4px 6px -4px #777;
+	}
 	.side-bar__user__show {
 		display: block;
 	}
@@ -192,7 +199,8 @@ div.sliding-pane.from-left.slide-in {
 		font-weight: 700;
 		position: absolute;
 		top: 32px;
-		left: 28px;
+		//left: 28px;
+		left: 82%;
 		height: 18px;
 		width: 26px;
 		background: none;
@@ -236,17 +244,15 @@ div.sliding-pane.from-left.slide-in {
 		left: 0;
 		box-shadow: 2px 2px 20px rgba(0,0,0,0.1);
 	}
-}
-
-.power__loading {
-	position: absolute;
-	top: 15px;
-	left: 15px;
-	pointer-events: none;
-	opacity: 0;
-	transition: opacity 0.5s linear;
-
-	&.is-loading {
-		opacity: 1;
+	.btn-cmt {
+		left: 28%;
+	}
+	.btn-hv {
+		left: 55%;
+		width: 50px;
+	}
+	.power__loading {
+		top: 5px;
+		left: 5px;
 	}
 }

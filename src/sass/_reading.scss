@@ -3,6 +3,8 @@
  * -- Concerned with the display of the core text in Readings and Projects
  */
 
+/*styles for dashboard content only*/
+@import './base/variables';
 
 $focusUnderlineWidth: 3px;
 
@@ -120,6 +122,19 @@ article.content {
 	} 
 }
 
+// Styles for commenting
+.active-content {
+	& .word.img > img {
+		cursor: pointer; 
+		outline: 6px solid transparent;
+		border: 2px solid #fff;
+		border-radius: 3px;
+
+		&:hover, &:active {
+			outline: 6px solid rgba(253, 228, 104, 0.45);
+		}
+	}
+}
 
 
 header {
@@ -256,7 +271,7 @@ section.search {
 
 .medium-editor-element {
 	display:block;
-	min-height: 500px;
+	min-height: 350px;
 	padding: 6px 0px;
 	cursor: text;
 }
@@ -329,6 +344,12 @@ $nextB: 68;
 		background: rgba($thisR, $thisG, $thisB, $thisA);
 		// padding: 0px 4px;
 		// margin: 0px -4px;
+		&.img {
+			background: none;
+		}
+		& img {
+			outline-color: rgba($thisR, $thisG, $thisB, $thisA) !important;
+		}
 	}
 }
 
@@ -339,6 +360,12 @@ $nextB: 68;
 		$thisB: $endB + ((($nextB - $endB)/$nextLevelSteps) * $n);
 		$thisA: 0.4 + (0.05 * 8);
 		background: rgba($thisR, $thisG, $thisB, $thisA);
+		&.img {
+			background: none;
+		}
+		& img {
+			outline-color: rgba($thisR, $thisG, $thisB, $thisA)  !important;
+		}
 	}
 }
 
@@ -418,10 +445,15 @@ $readingH3Size: 18px;
 	}
 	
 	& > img {
-		max-width: 50%;
-		float: right;
-		margin: 15px;
+		// max-width: 50%;
+		// float: right;
+		// margin: 15px;
+		// margin-bottom: 24px;
+		max-width: calc(100% - 30px);
+		float: none;
+		margin: 15px auto;
 		margin-bottom: 24px;
+		display: block;
 	}
 
 	/*& * {
@@ -454,4 +486,17 @@ header.header {
 	margin-top: 0px; //48px;
     font-size: 32px;
     color: #333;
+}
+
+/* Mobile Optimization */
+@media (max-width: #{$tablet - 1px}) {
+	#emojiAnnotator {
+		position: relative;
+		top: 60px;
+	}
+	header.header {
+		font-size: 28px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
 }

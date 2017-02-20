@@ -4,6 +4,7 @@ import { Component, EventEmitter, Input, OnInit, Output, SimpleChange, ElementRe
 import { Angulartics2 } from 'angulartics2';
 
 import { ProjectService } from '../../shared/project.service';
+import { CommentPermissions } from '.';
 
 @Component({
   selector: 'edji-comment',
@@ -18,13 +19,16 @@ export class CommentComponent implements OnInit {
   private yPos: number = 0;
   private justSaved: boolean = false;
   private isLoading: boolean = false;
+  // Hold the current scroll position for the iOS fix
+  private currentScroll: number;
   // Is fully visible, focused, and editable
   private active = false;
   // Is fully visible, focused, but not editable
   private preview = false;
 
   @Input() public comment: any;
-  @Input() private readOnly: false; 
+  @Input() private readOnly: boolean = false;
+  @Input() private userPermission: number = CommentPermissions.READ;
   @Input()
   set isActive(isActive: boolean) {
     if (typeof(isActive) !== 'undefined' && this.active !== isActive) {
@@ -32,7 +36,6 @@ export class CommentComponent implements OnInit {
     }
   }
   get isActive(): boolean { return this.active; }
-  @Input() private isMobile: boolean;
 
   @Output() commentDeleted = new EventEmitter<string>();
   @Output() commentActivation = new EventEmitter<boolean>();
@@ -47,16 +50,23 @@ export class CommentComponent implements OnInit {
 
   ngOnInit() {
     // If comment is newly added, focus on it when created!
+    console.log(this.userPermission);
   }
 
   toggleActive( ): void {
       if (!this.readOnly) {
         if (this.active === true) {
+            if (window.screen.availWidth < 768) {
+              this.mobileCommentDone();
+            }
             this.active = false;
             this.commentActivation.emit(false);
             // Save when comment is toggled away from
             this.updateComment(this.comment.data);
         } else {
+            if (window.screen.availWidth < 768) {
+              this.mobileCommentFix();
+            }
             this.active = true; 
             this.commentActivation.emit(true);
         }
@@ -68,6 +78,9 @@ export class CommentComponent implements OnInit {
 
   activate(): void {
     if (!this.readOnly) {
+      if (!this.active && window.screen.availWidth < 768) {
+        this.mobileCommentFix();
+      }
       this.active = true;
       this.commentActivation.emit(true);
     } else {
@@ -76,12 +89,13 @@ export class CommentComponent implements OnInit {
   }
 
   togglePreview(): void {
-    if (this.isMobile && this.readOnly) {
+    if (window.screen.availWidth < 768 && this.readOnly) {
       if (this.active == true) {
         this.active = false;
         this.commentActivation.emit(false);
       } else {
         this.active = true;
+        
       }
     } else {
       if (this.preview === true) {
@@ -98,8 +112,8 @@ export class CommentComponent implements OnInit {
     this.commentActivation.emit(false);
     // Save when comment is toggled away from
     this.updateComment(this.comment.data);
-    if (this.isMobile) {
-      this.dismissKeyboard.emit();
+    if (window.screen.availWidth < 768) {
+      this.mobileCommentDone();
     }
   }
 
@@ -155,6 +169,28 @@ export class CommentComponent implements OnInit {
    */
   toggleExpand(): void {
     this.expandLine.emit(this.yPos);
+  }
+
+  /**
+   * iOS Text Comment Correction Activate
+   */
+  mobileCommentFix(): void {
+    // iOS scroll fix enable
+    this.currentScroll = document.body.scrollTop;
+    document.getElementsByTagName("body")[0].classList.add('disablePane');
+    document.getElementsByTagName("body")[0].style["top"] = "-" + this.currentScroll + "px";
+  }
+
+  /**
+   * iOS Text Comment Correction Deactivate
+   */
+  mobileCommentDone(): void {
+    // iOS scroll fix disable
+    document.getElementsByTagName("body")[0].classList.remove('disablePane');
+    document.getElementsByTagName("body")[0].removeAttribute("style");
+    document.body.scrollTop = this.currentScroll;
+    // Dismiss the keyboard in mobile
+    this.dismissKeyboard.emit();
   }
 
 }

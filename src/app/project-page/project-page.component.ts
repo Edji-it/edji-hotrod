@@ -23,6 +23,9 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
     private user: any;
     private liveCount: number = 1;
     private commentCount: number = 0;
+    private createdDate: Date;
+    private createDate: string;
+    private showLoginModal: boolean = false;
     
     constructor(
         private _router: Router,
@@ -45,6 +48,7 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
         this.subscriptions.push(
             this._auth.getCurrentUser().subscribe((user) => {
                 this.user = user;
+                if (!this.user.isLoggedIn) { this.showLoginModal = true; }
             })
         );
 
@@ -55,6 +59,8 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
                 if (project) {
                     this.project = project;
                     this.commentCount = this.project.comments.length;
+                    this.createdDate = new Date(project.createdAt);
+                    this.createDate = this.createdDate.toDateString();
 
                     // Join and update live user count
                     this.subscriptions.push(
@@ -69,6 +75,8 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
             (error) => {
                 // TRACK EXCEPTION
             });
+
+        
     }
 
     ngOnDestroy() {

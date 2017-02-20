@@ -29,7 +29,7 @@
 
 	<div class="article-wrap">
         <!--Create components after load for reading-->
-		<article id="annotatorContent" class="content" (mouseup)="showCommentOptions($event)" (touchend)="showCommentOptions($event)" (clickOutside)="hideCommentOptions()">
+		<article id="annotatorContent" class="content active-content" (mouseup)="showCommentOptions($event)" (touchend)="showCommentOptions($event)" (clickOutside)="hideCommentOptions()">
 			<span *ngFor="let word of reading.words; let i = index" class="word"
 				[ngClass]="[ word.styles.join(' '), getHighlightClass(i) ]" 
 				[attr.index]="i">
@@ -40,17 +40,15 @@
 					(mouseenter)='focusHighlight(comment.start, comment.end)'
 					(mouseleave)='unfocusHighlight(comment.start, comment.end)' 
 					[readOnly]="comment.user_id !== user._id"
+					[userPermission]="getCommentPermissions(comment)"
 					[isActive]="comment.active" 
 					(commentActivation)="setActiveCommentByIndex($event, i, ci)" 
 					(commentDeleted)="removeComment(comment, i, ci)"
 					(expandLine)="expandLine($event)"
-					[isMobile]="isMobile"
 					(mobileDeactivate)="inactivateComment()">
-				</edji-comment>{{ word.str.trim() ? word.str : '&nbsp;' }}</span>
+				</edji-comment>{{ word.styles.indexOf("space") > -1 ? '&nbsp;' : word.str }}<img *ngIf="word.styles.indexOf('img') > -1" [src]="word.url" (click)="imageCommentOptions(i, word, $event)" /></span>
 		</article>
 		
 	</div>
 </div>
-<div [ngClass]="{ 'mobile__comment-background' : mobileCommentShow }"></div>
 <emoji-keyboard [isActive]="activeComment.active && (!activeComment.type || activeComment.type === 'emoji') && activeComment.user_id === user._id" [currentComment]="activeComment.data" (commentChange)="updateActiveComment($event)" (dismissKeyboard)="inactivateComment()"></emoji-keyboard>
-<hot-login-modal *ngIf="showLoginModal" (closeModal)="showLoginModal = false"></hot-login-modal>

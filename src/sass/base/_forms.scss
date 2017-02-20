@@ -186,6 +186,7 @@ label input, label textarea {
 
 .offset-label {
 	padding-left: 90px;
+  position: relative;
 
 	& label span {
 		display: block; //inline-block;
@@ -226,4 +227,30 @@ input.form-item--seamless {
 		transform: scale(1);
 		box-shadow: none;
 	}
+}
+
+input.form-item--underline {
+	background: transparent;
+	border: none;
+	box-shadow: none;
+	padding: 0px;
+	margin: 0px;
+	border-radius: 0px;
+  border-bottom: 1px solid #cdcdcd;
+
+	@include placeholder {
+		color: $seamlessPlaceholderColor;
+	}
+	
+	&:hover, &:active, &:focus, &.active {
+		transform: scale(1);
+		box-shadow: none;
+    border-bottom: 1px solid #aaa;
+	}
+}
+
+.col-form-label {
+  font-size: 14px;
+  line-height: 28px;
+  color: #888;
 }
