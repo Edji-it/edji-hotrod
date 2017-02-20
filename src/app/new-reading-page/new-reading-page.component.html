@@ -18,7 +18,7 @@
                             <span>Content</span>
                             <medium-editor
                                 [(editorModel)]="readingHtml"
-                                [editorOptions]="{'imageDragging': false, 'toolbar': {'buttons': ['bold', 'italic', 'underline', 'h1', 'h2', 'h3']}}"
+                                [editorOptions]="{'imageDragging': false, extensions: { 'imageDragging': {} }, 'toolbar': {'buttons': ['bold', 'italic', 'underline', 'h1', 'h2', 'h3']}}"
                                 [editorPlaceholder]="readingPlaceholder"
                                 id="newReading"
                                 class="content"></medium-editor>
