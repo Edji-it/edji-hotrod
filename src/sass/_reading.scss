@@ -124,7 +124,7 @@ article.content {
 
 // Styles for commenting
 .active-content {
-	& .word.img img {
+	& .word.img > img {
 		cursor: pointer; 
 		outline: 6px solid transparent;
 		border: 2px solid #fff;
