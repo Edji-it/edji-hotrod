@@ -1,5 +1,6 @@
 
 $listItemShadowSize: 3px;
+$listItemBorder: 1px solid rgb(220, 227, 234);
 
 .item-list {
 
@@ -17,6 +18,7 @@ $listItemShadowSize: 3px;
 .list-item {
   font-size: 0.8em;
   color: #000;
+  border: $listItemBorder;
   
   & [class*="col-"] {
     padding: 0;
@@ -48,7 +50,7 @@ $listItemShadowSize: 3px;
   padding: 15px;
   position: relative; 
   overflow:hidden;
-  border-top: 1px solid #f9f9f9;
+  // border-top: 1px solid #f9f9f9;
   margin-bottom: 15px;
   cursor: pointer;
   transition: transform 0.2s linear;

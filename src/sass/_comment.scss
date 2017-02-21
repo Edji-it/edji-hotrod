@@ -2,6 +2,7 @@
 $commentHeight: 32px;
 $commentWidth: 175px;
 $commentPad: 4px;
+$commentBorder: 1px solid rgb(220, 227, 234);
 
 %noSelect {
 	-webkit-touch-callout: none; /* iOS Safari */
@@ -50,7 +51,7 @@ edji-comment {
 	}
 
 	.comment-input-wrapper{
-		border: 1px solid rgb(220, 227, 234); // 1px solid #cdcdcd;
+		border: $commentBorder; // 1px solid #cdcdcd;
 		border-radius: 4px;
 		overflow: hidden;
 		position: relative;

@@ -36,7 +36,7 @@
             <div *ngIf="errorObject.projectError && projects.length < 1" class="alert alert-danger"><strong>Oh no!</strong> {{errorObject.projectError}}</div>
             <div *ngFor="let project of projects" [routerLink]="['/project', project._id]" class="list-item list-item--button" [class.hide]="!project.createdAt">
                 <!--Implement: | orderBy:'-createdAt'-->
-                <div class="list-item project-card">
+                <div class="project-card">
                     <div class="col-sm-12">
                         <div class="list-item-title">
                             {{ project.label }}
