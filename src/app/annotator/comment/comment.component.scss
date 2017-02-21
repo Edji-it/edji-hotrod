@@ -168,14 +168,17 @@ $tablet-width: 768px;
   }
 
   .comment__dismiss {
-    pointer-events: auto;
-    display: block;
     position: absolute;
-    top: 0;
-    right: -20px;
+    top: 34%;
+    right: 5%;
     cursor: pointer;
     opacity: 0.8;
     filter: grayscale(100%);
+
+      &:hover, &:active {
+          opacity: 1;
+          filter: none;
+      }
   }
 
 
@@ -186,5 +189,15 @@ $tablet-width: 768px;
     opacity: 0.5;
     position: absolute;
     left: -40px;
+  }
+
+  .comment__save {
+    top: 34%;
+    right: 5%;
+  }
+
+  .comment__saved {
+    top: 34%;
+    right: 5%;
   }
 }

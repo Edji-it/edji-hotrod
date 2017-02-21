@@ -9,9 +9,8 @@
         <emoji-comment (tap)="toggleActive()" *ngIf="comment.type == 'emoji' || !comment.type" #commentInput [comment]="comment"></emoji-comment>
         <text-comment (tap)="activate()" [readOnly]="readOnly" [preview]="preview" *ngIf="comment.type == 'text'" [comment]="comment" #commentInput (blur)="deactivate()"></text-comment>
         <button *ngIf="userPermission >= 3" (tap)="userPermission > 3 ? deleteComment(comment) : showDeleteModal = true" class='inline-delete'>+</button>
-        <div *ngIf="comment.active && !readOnly" class="comment__save" [ngClass]="{ 'commentMobileCheck' : isMobile }" (tap)="deactivate()" [innerHtml]="':white_check_mark:' | emojione"></div>
-        <div *ngIf="comment.active && readOnly && isMobile" class="comment__dismiss" [ngClass]="{ 'commentMobileCheck' : isMobile }" (tap)="togglePreview()" [innerHtml]="':white_check_mark:' | emojione"></div>
     </div>
+    <div *ngIf="comment.active" class="comment__save" (tap)="deactivate()" [innerHtml]="':white_check_mark:' | emojione"></div>
     <i class="comment__saved" [innerHtml]='":ok_hand:" | emojione'></i>
 </div>
 
