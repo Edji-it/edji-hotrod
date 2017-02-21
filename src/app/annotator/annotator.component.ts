@@ -217,6 +217,14 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // After comments are added to the array
         this.updateAllLineCounts();
 
+        // Hacky McHackFace since comments render later (especially lots of comments)
+        for (var i = 0; i <= 5; i++) {
+             setTimeout(() => {
+                this.updateAllLineCounts();
+             }, 1000*i);
+        }
+       
+
         window.onresize = () => {
             this.updateAllLineCounts();
         }
@@ -304,26 +312,24 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.lineCountArray = [];
         if (!this.lineCountRunning) {
             this.lineCountRunning = true;
-            // TEMPORARY: Add delay so element is rendered
-            setTimeout(() => {
-                if (this.commentComponents) {
-                    this.commentComponents.toArray().forEach(
-                        (commentComp: CommentComponent, index: number) => {
-                            let yPos = commentComp.getVerticalPosition();
-                            
-                            if (yPos > 0) { // 0 is returned as the default
-                                if (this.lineCountArray[yPos]) {
-                                    this.lineCountArray[yPos].push(commentComp);
-                                } else {
-                                    this.lineCountArray[yPos] = [commentComp];
-                                }
-                                commentComp.lineCount = this.lineCountArray[yPos].length;
+            if (this.commentComponents) {
+                this.commentComponents.toArray().forEach(
+                    (commentComp: CommentComponent, index: number) => {
+                        let yPos = commentComp.getVerticalPosition();
+                        
+                        if (yPos > 0) { // 0 is returned as the default
+                            if (this.lineCountArray[yPos]) {
+                                this.lineCountArray[yPos].push(commentComp);
+                            } else {
+                                this.lineCountArray[yPos] = [commentComp];
                             }
+                            commentComp.lineCount = this.lineCountArray[yPos].length;
                         }
-                    );
-                }
-                this.lineCountRunning = false;
-            }, 2000);
+                    }
+                );
+            } 
+
+            this.lineCountRunning = false;
         }
     }
 
