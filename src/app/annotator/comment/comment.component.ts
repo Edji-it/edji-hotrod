@@ -42,6 +42,8 @@ export class CommentComponent implements OnInit {
   @Output() expandLine = new EventEmitter<number>();
   @Output() dismissKeyboard = new EventEmitter();
 
+  private showDeleteModal: boolean = false;
+
   constructor(
         private _projects: ProjectService,
         private angulartics: Angulartics2,
@@ -147,6 +149,7 @@ export class CommentComponent implements OnInit {
         this.angulartics.eventTrack.next({ action: 'deleteComment', properties: { category: 'projectAction', label: 'success' }});
         // Tell Annotator to destroy this comment element!
         this.commentDeleted.emit(comment._id);
+        this.showDeleteModal = false;
       })
       .catch(error => {
         // TRACK EXCEPTION
