@@ -25,6 +25,10 @@ article.content {
 	margin-top: 0px;
 	margin-left: 253px;
 	
+	@media(max-width: $tablet) {
+		margin-left: 40px;
+  	}
+	
 	&, & p, & span {
 		// Prevent word breaks since "span" wrapped words don't match behavior
 		// white-space: pre-wrap;
@@ -403,7 +407,7 @@ article.content .word.highlight-f {
 	// box-shadow: 0 3px 9px 0 rgba(0,0,0,0.2), 0 0 0 1px rgba(0,0,0,0.04); //0px 2px 3px 0px rgba(0,0,0, 0.1);
 	padding: 40px 60px 50px 35px; 
 
-	@media(max-width: 576px) {
+	@media(max-width: $phone) {
 		padding: 40px 60px 50px 60px;
   	}
 }
