@@ -1,5 +1,7 @@
 
 $commentHeight: 32px;
+$commentWidth: 175px;
+$commentPad: 4px;
 
 %noSelect {
 	-webkit-touch-callout: none; /* iOS Safari */
@@ -118,22 +120,22 @@ edji-comment {
 	}
 }
 
-.comment-line {
-	position: relative;
-	display: inline-block;
-	height: 1em;
-	/*to do: fix*/
-	top: -3px;
-}
-
-.comment-line:before {
-	position: absolute;
-	right: 0px;
-	content: ' ';
-	width: 1000px;
-	height: 1px;
-	background: #cdcdcd; /*rgba(238,247,50,0.7);*/
-	display: block;
+.comment--placeholder {
+	@extend .comment;
+	cursor: default;
+	padding: 8px 10px 8px 10px !important;
+    line-height: 16px !important;
+    font-size: 12px !important;
+    font-family: 'Open Sans', Arial !important;
+    color: #222;
+	color: #cdcdcd;
+	height: $commentHeight;
+	max-height: $commentHeight;
+	width: $commentWidth;
+	padding: $commentPad;
+	overflow: hidden;
+	border-radius: 4px;
+	border: 1px dashed rgb(220, 227, 234);
 }
 
 /*
@@ -147,9 +149,9 @@ input.emojiComment {
 	font-size: 14px;
 	letter-spacing: 3px;
 	padding: 4px;
-	min-width: 175px;
+	min-width: $commentWidth;
 	width: auto;
-	max-width: 175px;
+	max-width: $commentWidth;
 	margin: 1px 0px 0px;
 	height: 30px;
 }
@@ -161,9 +163,9 @@ input.emojiComment {
 	font-size: 14px;
 	letter-spacing: 3px;
 	padding: 4px;
-	min-width: 175px;
+	min-width: $commentWidth;
 	width: auto;
-	max-width: 175px;
+	max-width: $commentWidth;
 	margin: 1px 0px 0px;
 	height: 30px;
 	cursor: pointer;
