@@ -1,5 +1,7 @@
 <div class="comment" [class.saved]="justSaved" [class.active]="active" [class.readonly]="readOnly" [ngClass]="[ 'line-count-' + lineCount, expanded ? 'expanded' : '', active ? 'comment__show' : '' ]">
-    <div class='expand-comments' (tap)='toggleExpand($event)'></div>
+    <div class='expand-comments' (tap)='toggleExpand($event)'>
+        <div *ngIf="lineCount == 1 && expanded" class='expand__arrow-right'></div>
+    </div>
     <div *ngIf='comment.author' class='comment-username'>{{comment.author}}</div>
     <div *ngIf="comment.author" [class.show]="comment.showAvatar" class="comment__avatar">{{comment.author.substr(0,2).toUpperCase()}}</div>
     <div class='comment-input-wrapper'>

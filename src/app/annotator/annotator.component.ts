@@ -55,8 +55,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     private mobileIndex = 0;
     private hideKeyboard = false;
 
-    private loadingReading = true;
-
     private subscriptions: Subscription[] = [];
 
     // For converting old Readings
