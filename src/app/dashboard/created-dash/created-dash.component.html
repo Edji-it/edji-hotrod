@@ -55,7 +55,7 @@
                     <div class="col-sm-7">
                         <div class="title"> 
                             <div class="project-title-input">
-                                <span class="reading-project--label">{{project.label}}</span>
+                                <span class="reading-project--label"><span style="color: #cdcdcd;">Group:</span> {{project.label}}</span>
                                 <!--<input class="form-item--underline reading-project--label" type="text" minlength="1" [(ngModel)]="project.label" (blur)="updateProjectLabel(project._id, project.label)" />-->
                                 <span class="project-title-input__save" (click)="updateProjectLabel(reading._id, reading.newLabel)" [innerHtml]="':white_check_mark:' | emojione"></span>
                             </div>
