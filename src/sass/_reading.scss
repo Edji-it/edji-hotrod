@@ -406,10 +406,6 @@ article.content .word.highlight-f {
 	// background: #fff;
 	// box-shadow: 0 3px 9px 0 rgba(0,0,0,0.2), 0 0 0 1px rgba(0,0,0,0.04); //0px 2px 3px 0px rgba(0,0,0, 0.1);
 	padding: 40px 60px 50px 35px; 
-
-	@media(max-width: $phone) {
-		padding: 40px 60px 50px 60px;
-  	}
 }
 
 /**
@@ -526,5 +522,11 @@ header.header {
 	}
 	article.content {
 		margin-left: 0px;
+	}
+	.reading-page {
+		padding: 0;
+	}
+	.offset-label {
+		padding-left: 25%;
 	}
 }

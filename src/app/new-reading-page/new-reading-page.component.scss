@@ -1,3 +1,5 @@
+@import '../../sass/base/variables';
+
 .editor-button-bar {
     position: absolute;
     left: 0px;
@@ -9,5 +11,21 @@
 
     & .btn {
         margin: 12px 0px;
+    }
+}
+
+/* Mobile Optimization */
+@media (max-width: #{$tablet - 1px}) {
+	.editor-button-bar {
+		width: inherit;
+	}
+    .mTitle {
+        font-size: 26px;
+    }
+    .mSource {
+        font-size: 14px;
+    }
+    .mGroup {
+        font-size: 14px;
     }
 }

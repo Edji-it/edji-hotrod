@@ -1,3 +1,5 @@
+@import './base/variables';
+
 // Medium Editor Overrides
 
 $editorToolbarRadius: 10px;
@@ -66,4 +68,11 @@ $editorToolbarBg: #fff;
 
 .medium-toolbar-arrow-over:before {
   border-color: transparent transparent $editorToolbarBg transparent; 
+}
+
+/* Mobile Optimization */
+@media (max-width: #{$tablet - 1px}) {
+  .medium-editor-placeholder {
+    font-size: 14px;
+  }
 }
