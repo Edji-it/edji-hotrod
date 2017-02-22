@@ -1,12 +1,19 @@
 <side-bar></side-bar>
 
-<div class="dashboard-toolbar">
+<!--<div class="dashboard-toolbar">
     <a class="tab-2 h1" [routerLink]="['/dashboard/projects']" routerLinkActive="active">Joined</a>
     <a class="tab-2 h1" [routerLink]="['/dashboard/readings']" routerLinkActive="active">Created</a>
-</div>
+</div>-->
 <!--Dashboard uses the *fluid* container, for maximum space use-->
 <div class="container-fluid container--side-bar dashboard-container">
-    <router-outlet></router-outlet>
+    <div class="row">
+        <div class="col-md-6 pb-5">
+            <edji-joined-dash></edji-joined-dash>
+        </div>
+        <div class="col-md-6">
+            <edji-created-dash></edji-created-dash>
+        </div>
+    </div>
 </div>
 
 <edji-feedback></edji-feedback>

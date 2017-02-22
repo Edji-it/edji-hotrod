@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
 
-import { ReadingDashComponent, ProjectDashComponent } from '.';
+import { CreatedDashComponent, JoinedDashComponent } from '.';
 
 export const DashboardRoutes: Routes = [
-  { path: '', redirectTo: 'projects', pathMatch: 'full'},
-  { path: 'projects', component: ProjectDashComponent },
-  { path: 'readings', component: ReadingDashComponent }
+  { path: '', redirectTo: 'readings', pathMatch: 'full'},
+  { path: 'projects', redirectTo: '' },
+  { path: 'readings', redirectTo: '' }
 ];

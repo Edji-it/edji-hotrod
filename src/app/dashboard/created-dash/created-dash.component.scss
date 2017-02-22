@@ -54,17 +54,24 @@ $projectCardGutter: 4px;
 $phone: 576px;
 
 .project-card-wrap {
-    width: calc(100% - #{ $projectCardGutter });
+    width: 100%; //calc(100% - #{ $projectCardGutter });
 
-    @media (max-width: $phone) {
-        width: 100%;
-    }
+    // @media (max-width: $phone) {
+    //     width: 100%;
+    // }
 }
 
 .project-card {
     float: left !important;
-    box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.2);
+    margin-bottom: 0px !important;
+    border-top: none !important;
+    // box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.2);
 
+    border-bottom-style: dashed;
+    
+    &:last-of-type {
+        border-bottom-style: solid;
+    }
 
     & .title {
         display: block;
@@ -75,12 +82,12 @@ $phone: 576px;
         font-size: 10px;
     }
 
-    @media (min-width: $phone) {
-        &:nth-of-type(2n) {
-            margin-right: -1* $projectCardGutter;
-            margin-left: $projectCardGutter;
-        }
-    }
+    // @media (min-width: $phone) {
+    //     &:nth-of-type(2n) {
+    //         margin-right: -1* $projectCardGutter;
+    //         margin-left: $projectCardGutter;
+    //     }
+    // }
     
 
     &:hover, &:active {
@@ -132,6 +139,13 @@ $phone: 576px;
     }
 }
 
+.reading-card {
+    margin-bottom: 0px !important;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-bottom-style: dashed;
+}
+
 .reading-card, .project-card {
     margin-bottom: $projectCardGutter;
 }
@@ -139,7 +153,7 @@ $phone: 576px;
 .reading-item-row {
     display: flex;
     flex-wrap: wrap;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 }
 
 button.new-reading-btn {
