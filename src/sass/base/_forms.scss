@@ -62,7 +62,7 @@ input:not([type]), textarea, select[multiple],
 
   @include placeholder {
     color: #dedede;
-    font-style: italic;
+    // font-style: italic;
   }
 
   &.h1 {
@@ -119,7 +119,7 @@ input:not([type]), textarea, select[multiple],
     font-weight: normal;
     // border-radius: (32px + 2*$inputVPadding)/2;
   }
-}
+} 
 
 .input-group input:focus {
   transform: scale(1.0);

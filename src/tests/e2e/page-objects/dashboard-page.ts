@@ -15,7 +15,7 @@ export class Dashboard implements PageObjectInterface
     public projectCards = element.all(by.css('.project-card'));
     public firstProject = this.projectCards.first();
     public projectCodeInput = element(by.css('#projectCodeInput'));
-    public projectJoinButton = element(by.css('#projectJoinButton'));
+    public projectJoinButton = element(by.css('#buttonJoinProject'));
 
     // get the login page
     getPage() : void 

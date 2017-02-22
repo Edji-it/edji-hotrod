@@ -48,6 +48,7 @@
 					[isActive]="comment.active" 
 					(commentActivation)="setActiveCommentByIndex($event, i, ci)" 
 					(commentDeleted)="removeComment(comment, i, ci)"
+					(commentDeactivate)="unfocusHighlight($event.start, $event.end)"
 					(expandLine)="expandLine($event)"
 					(mobileDeactivate)="inactivateComment()">
 				</edji-comment>{{ word.styles.indexOf("space") > -1 ? '&nbsp;' : word.str }}<img *ngIf="word.styles.indexOf('img') > -1" [src]="word.url" (click)="imageCommentOptions(i, word, $event)" /></span>
