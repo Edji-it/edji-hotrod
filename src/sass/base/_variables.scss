@@ -22,9 +22,6 @@ $base-font-size: 16px;
 $base-line-height: 1.5;
 $heading-line-height: 1.2;
 
-// Grid Sizes
-$grid-gutter-width-base: 60px;
-
 // Other Sizes
 $base-border-radius: 3px;
 $base-spacing: $base-line-height * 1em;
@@ -91,7 +88,7 @@ $lightBorder: 1px solid #f1f1f1;
 
 $icon-font-path: "../../vendor/bootstrap-sass/assets/fonts/bootstrap/";
 
-$grid-gutter-width-base: 30px;
+$grid-gutter-width-base: 60px;
 $grid-gutter-width: $grid-gutter-width-base;
 
 // Small screen / tablet

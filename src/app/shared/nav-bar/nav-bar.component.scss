@@ -17,8 +17,13 @@ $sideBarWidth: 100px;
 	border-bottom:1px solid #f1f1f1;
 }
 
-.nav__center-logo {
+.nav__anchor-logo {
 	display: inline-block;
+}
+
+.nav__logo-wrap {
+	padding-left: $grid-gutter-width - 10px;
+	text-align: left;
 }
 
 .logo-button {
@@ -40,6 +45,10 @@ nav.large, .large .nav-bar {
 	top: 50%;
 	transform: translateY(-50%);
 	white-space: nowrap;
+
+	@media (min-width: $tablet) {
+		right: $grid-gutter-width - 10px;
+	}
 }
 
 a.nav-bar__link {
@@ -48,7 +57,7 @@ a.nav-bar__link {
 
 /* Mobile Optimization */
 @media (max-width: #{$tablet - 1px}) {
-	.nav__center-logo {
+	.nav__anchor-logo {
 		left: 10%;
     	position: absolute;
 	}
