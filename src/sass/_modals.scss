@@ -3,6 +3,7 @@
 $modalBorder: 0px solid transparent;
 $modalHeaderColor: #555;
 $modalBorderRadius: 8px;
+$modalBodyBg: #fff;
 
 .modal-will-fade {
   .modal {
@@ -74,7 +75,7 @@ $modalBorderRadius: 8px;
 }
 
 .modal-body {
-    background: #f1f1f1;
+    background: $modalBodyBg;
     padding-top: 30px;
     padding-bottom: 30px;
 }
