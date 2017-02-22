@@ -14,7 +14,8 @@ import { ProjectService } from '../shared/project.service';
 export class NewReadingPage implements OnInit {
     
     private readingForm: FormGroup;
-    private readingHtml: string = "";
+    // Seed string fixes Firefox line return issue
+    private readingHtml: string = "<div>&nbsp;</div>";
     private submitted: boolean = false;
     private readingPlaceholder: string = 'Type or paste your reading...';
     private addLoading: boolean = false;
