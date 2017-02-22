@@ -218,10 +218,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.updateAllLineCounts();
 
         // Hacky McHackFace since comments render later (especially lots of comments)
-        for (var i = 0; i <= 5; i++) {
+        for (var i = 0; i <= 3; i++) {
              setTimeout(() => {
                 this.updateAllLineCounts();
-             }, 1000*i);
+             }, ( 1000*i - 1000) );
         }
        
 
@@ -329,6 +329,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 );
             } 
 
+            // Sometimes comments render late
+            setTimeout(() => {
+                this.updateAllLineCounts();
+            }, 2000);
             this.lineCountRunning = false;
         }
     }
