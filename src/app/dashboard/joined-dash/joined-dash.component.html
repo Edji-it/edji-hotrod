@@ -1,0 +1,55 @@
+<form class="pb-4" [formGroup]="codeForm" (ngSubmit)="addSession(codeForm.value)">
+    <h1 for="projectCodeInput">Joined
+         <i class="icon__tooltip" placement="bottom" ngbTooltip="These are Readings that someone else made, and you joined!">
+            <span class="icon icon-circle icon-info">i</span>
+        </i>
+    </h1>
+    <!--<input id="projectCodeInput" [formControl]="codeForm.controls['projectCode']" type="text" class="big-field lowercase-field on-white"  placeholder="Lightning Code" />-->
+    <div class="input-group input-group-lg pb-2">
+        <input id="projectCodeInput" name="ProjectCodeInput" [formControl]="codeForm.controls['projectCode']" type="text" class="form-control" style="text-align: center;" maxlength="4" (keyup.enter)="joinSession(projectCode)" [(ngModel)]="projectCode"  placeholder="⚡️ Code" aria-describedby="add-project-code" />
+        <span class="input-group-btn">
+            <button id="projectJoinButton" class="btn btn-primary" [class.loading]="joinLoading" type="submit" id="buttonJoinProject" name="Join" href="#">Join</button>
+        </span>
+    </div>
+    <div *ngIf="!codeForm.controls['projectCode'].pristine && codeForm.controls['projectCode'].hasError('required')" class="alert alert-info"><strong [innerHtml]="':zap: Code' | emojione"></strong> Enter a lightning code to quickly join a project!</div>
+    <div *ngIf="codeForm.controls['projectCode'].hasError('minlength') || codeForm.controls['projectCode'].hasError('maxlength')" class="alert alert-info">We like 4-character codes at Edji</div>
+    <div *ngIf="errorObject.wrongCode" class="alert alert-danger">{{errorObject.wrongCode}}</div>
+</form>
+
+    <!--Temp-->
+<div class="item-list">
+    <!--Show messaging if no Projects exist-->
+    <div class="alert alert-info" role="alert" *ngIf="!isLoading && projects.length < 1 && !errorObject.projectError">
+        <h4 class="alert-heading">No Projects Yet!</h4>
+        <p>Once you've joined a Project, it will show here.</p>
+        <p class="mb-0">Anyone with an Edji account can create a Project from a Reading and share it. Why don't you head over to the <a [routerLink]="['/dashboard/readings']">Reading Dashboard</a> and give it a try?</p>
+    </div>
+    <!--Show loading until Projects call gets back-->
+    <div *ngIf="isLoading" class="row loading"></div>
+    <div *ngIf="errorObject.projectError && projects.length < 1" class="alert alert-danger"><strong>Oh no!</strong> {{errorObject.projectError}}</div>
+    <div *ngFor="let project of projects" [routerLink]="['/project', project._id]" class="list-item list-item--button" [class.hide]="!project.createdAt">
+        <!--Implement: | orderBy:'-createdAt'-->
+                <div class="reading-icon">
+                    <span>{{ project.reading_id.title.substring(0,2) }}</span>
+                </div>
+                <div class="reading-title">
+                    <div class="reading-title--center-row">
+                        <h1 class="small">{{ project.reading_id.title}} <span *ngIf="!project.reading_id.title"><i>Untitled</i></span>
+                            <span class="reading-project--label">{{project.label}}</span>
+                        </h1>
+                        <!--<p *ngIf="reading.createdAt" class="readings-date">
+                            Created: {{ reading.createdAt | date:'mediumDate' }} 
+                        </p>-->
+                        
+                    </div>
+                </div>
+                <div style="clear:both; line-height: 18px; padding: 10px 0px 0px;">
+                    <span style="color: #cdcdcd;">Created by:</span>
+                    <span>{{ project.teacher_id.fullname }}</span><span *ngIf="!project.teacher_id.fullname ">{{ project.teacher_id.username }}</span>
+                    <!--<div class="prj-btns">-->
+                        <!--<a style="float:right; margin-left: 8px;" [routerLink]="['/project', project._id]" class="btn btn-secondary">Open</a>-->
+                        <pre class="prj-code" style="margin-top: -5px; margin-bottom: 0px;">{{project.code || 'none'}}</pre>
+                    <!--</div>-->
+                </div>
+    </div>
+</div>

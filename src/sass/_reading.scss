@@ -6,6 +6,8 @@
 /*styles for dashboard content only*/
 @import './base/variables';
 
+$readingBorder: 1px solid #dcdcdc;
+
 $focusUnderlineWidth: 3px;
 
 article {
@@ -21,6 +23,11 @@ article {
 
 article.content {
 	margin-top: 0px;
+	margin-left: 253px;
+	
+	@media(max-width: $tablet) {
+		margin-left: 40px;
+  	}
 	
 	&, & p, & span {
 		// Prevent word breaks since "span" wrapped words don't match behavior
@@ -124,22 +131,38 @@ article.content {
 
 // Styles for commenting
 .active-content {
+	& .word.img {
+		display: block;
+		margin: 6px 0;
+	}
 	& .word.img > img {
+		$highlightWidth: 4px;
 		cursor: pointer; 
-		outline: 6px solid transparent;
-		border: 2px solid #fff;
+		outline: $highlightWidth solid transparent;
+		border: 3px solid #fff;
 		border-radius: 3px;
+		width: calc(100% - #{ $highlightWidth*2 });
+		margin: $highlightWidth;
 
 		&:hover, &:active {
-			outline: 6px solid rgba(253, 228, 104, 0.45);
+			outline: 6px solid rgba(253, 228, 104, 0.45) !important;
 		}
 	}
 }
 
 
 header {
-	font-weight: bold;
-	font-size: 38px;
+	padding-bottom: 36px;
+	margin-bottom: 42px;
+	border-bottom: $readingBorder;
+
+	& h1 {
+		margin-bottom: 6px;
+	}
+
+	& .sub-title {
+		color: #c8ced4;
+	}
 }
 
 
@@ -150,6 +173,8 @@ header {
 .article-wrap {
 	position: relative;
 	margin-top: 20px;
+	margin-bottom: 20px;
+	border-bottom: $readingBorder;
 }
 
 #annotatorText {
@@ -378,13 +403,9 @@ article.content .word.highlight-f {
 }
 
 .reading-page {
-	background: #fafafa;
-	box-shadow: 0 3px 9px 0 rgba(0,0,0,0.2), 0 0 0 1px rgba(0,0,0,0.04); //0px 2px 3px 0px rgba(0,0,0, 0.1);
+	// background: #fff;
+	// box-shadow: 0 3px 9px 0 rgba(0,0,0,0.2), 0 0 0 1px rgba(0,0,0,0.04); //0px 2px 3px 0px rgba(0,0,0, 0.1);
 	padding: 40px 60px 50px 35px; 
-
-	@media(max-width: 576px) {
-		padding: 40px 60px 50px 60px;
-  	}
 }
 
 /**
@@ -499,4 +520,137 @@ header.header {
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
+	.reading-page {
+		padding: 0px 20px;
+	}
+	.offset-label {
+		padding-left: 25%;
+	}
+}
+
+
+$readingIconHeight: 60px;
+
+.reading-icon {
+    height: $readingIconHeight;
+    width: $readingIconHeight;
+    border-radius: 50%;
+    background: #fa9b5c;
+    text-align: center;
+    float:left;
+    margin-right: 15px;
+    // border: 1px solid #ededed;
+
+    & span {
+        text-transform: capitalize;
+        font-family: 'Open Sans';
+        font-weight: bold;
+        color: #fff;
+        line-height: $readingIconHeight;
+        font-size: $readingIconHeight/2;
+        vertical-align: middle;
+    }
+}
+
+.reading-title {
+    height: $readingIconHeight;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    line-height: $readingIconHeight;
+    vertical-align: middle;
+    position: relative;
+    float: left;
+    width: calc(100% - #{ $readingIconHeight + 15px });
+}
+
+.reading-project--label{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+	font-size: 14px;
+	display: block;
+}
+
+
+.reading-title--center-row h1 {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.reading-title--center-row {
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    text-overflow: ellipsis;
+
+    & h1 {
+        margin-bottom: 0px;
+    }
+
+    & p {
+        line-height: 18px;
+        margin-bottom: 0px;
+    }
+}
+
+
+@media (max-width: #{$tablet - 1px}) {
+    .reading-title--center-row h1 {
+        max-width: 250px;
+        font-size: 16px;
+    }
+    .reading-icon {
+        height: 40px;
+        width: 40px;
+        margin-right: 8px;
+        margin-top: 10px;
+    }
+    .reading-icon span {
+        line-height: 40px;
+        font-size: 25px;
+    }
+    .readings-header {
+        font-size: 26px;
+        margin-bottom: 50px;
+    }
+    .readings-header button {
+        font-size: 12px;
+    }
+    .readings-date {
+        font-size: 10px;
+    }
+    button.new-reading-btn {
+        float: right;
+    }
+    .project-title-input__save {
+
+    }
+    .project-title-input {
+
+    }
+    .prj-code {
+        float: left;
+    }
+}
+
+@media (max-width: #{$xsphone}) {
+    .reading-title--center-row h1 {
+        max-width: 200px;
+    }
+    button.new-reading-btn {
+        float: left;
+        margin-top: 10px;
+    }
+}
+ 
+
+.prj-btns {
+    padding-top: 7px;
+}
+
+.prj-code {
+    float:right; 
+    margin-top: 6px;
 }

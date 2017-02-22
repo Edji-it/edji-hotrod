@@ -1,3 +1,3 @@
 export * from './dashboard.component';
-export * from './project-dash/project-dash.component';
-export * from './reading-dash/reading-dash.component';
+export * from './joined-dash/joined-dash.component';
+export * from './created-dash/created-dash.component';

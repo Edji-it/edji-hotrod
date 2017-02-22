@@ -36,6 +36,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
     private highlightArray: number[] = [];
     private alwaysHighlightArray: number[] = [];
+    private focusArray: boolean[] = [];
     
     // An array of arrays!
     private lineCountArray: any[][] = [];
@@ -54,8 +55,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     private optionsShow = false;
     private mobileIndex = 0;
     private hideKeyboard = false;
-
-    private loadingReading = true;
 
     private subscriptions: Subscription[] = [];
 
@@ -218,6 +217,14 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // After comments are added to the array
         this.updateAllLineCounts();
 
+        // Hacky McHackFace since comments render later (especially lots of comments)
+        for (var i = 0; i <= 3; i++) {
+             setTimeout(() => {
+                this.updateAllLineCounts();
+             }, ( 1000*i - 1000) );
+        }
+       
+
         window.onresize = () => {
             this.updateAllLineCounts();
         }
@@ -305,26 +312,28 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.lineCountArray = [];
         if (!this.lineCountRunning) {
             this.lineCountRunning = true;
-            // TEMPORARY: Add delay so element is rendered
-            setTimeout(() => {
-                if (this.commentComponents) {
-                    this.commentComponents.toArray().forEach(
-                        (commentComp: CommentComponent, index: number) => {
-                            let yPos = commentComp.getVerticalPosition();
-                            
-                            if (yPos > 0) { // 0 is returned as the default
-                                if (this.lineCountArray[yPos]) {
-                                    this.lineCountArray[yPos].push(commentComp);
-                                } else {
-                                    this.lineCountArray[yPos] = [commentComp];
-                                }
-                                commentComp.lineCount = this.lineCountArray[yPos].length;
+            if (this.commentComponents) {
+                this.commentComponents.toArray().forEach(
+                    (commentComp: CommentComponent, index: number) => {
+                        let yPos = commentComp.getVerticalPosition();
+                        
+                        if (yPos > 0) { // 0 is returned as the default
+                            if (this.lineCountArray[yPos]) {
+                                this.lineCountArray[yPos].push(commentComp);
+                            } else {
+                                this.lineCountArray[yPos] = [commentComp];
                             }
+                            commentComp.lineCount = this.lineCountArray[yPos].length;
                         }
-                    );
-                }
-                this.lineCountRunning = false;
+                    }
+                );
+            } 
+
+            // Sometimes comments render late
+            setTimeout(() => {
+                this.updateAllLineCounts();
             }, 2000);
+            this.lineCountRunning = false;
         }
     }
 
@@ -492,6 +501,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.decrementHighlights(this.user._id === comment.user_id, comment.start, comment.end);
         // Remove local comment object
         this.commentsByIndexRemove(comment.id, index, commentIndex);
+        this.unfocusHighlight(comment.start, comment.end)
     }
 
     setActiveCommentByIndex(isActive: boolean, wordIndex: number, commentIndex: number): void {
@@ -705,11 +715,11 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      */
     private focusHighlight(start, end): void {
         for (var i = start; i <= end; i ++) {
-            if (this.alwaysHighlightArray[i]) {
-                this.alwaysHighlightArray[i] += 1000;
-            } else {
-                this.alwaysHighlightArray[i] = 1000;
-            }
+            // if (this.focusArray[i]) {
+                this.focusArray[i] = true;
+            // } else {
+            //     this.focusArray[i] = false;
+            // }
         }
     }
 
@@ -720,9 +730,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      */
     private unfocusHighlight(start, end): void {
         for (var i = start; i <= end; i ++) {
-            if (this.alwaysHighlightArray[i] >= 1000) {
-                this.alwaysHighlightArray[i] -= 1000;
-            } 
+            // if (this.focusArray[i] = true) {
+                this.focusArray[i] = false;
+            // } 
         }
     }
 
@@ -740,15 +750,15 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         }
         if (this.alwaysHighlightArray[i]) {
             // AlwaysHighlight also tracks focused words
-            if (this.alwaysHighlightArray[i] >= 1000) {
-                // Focus style
-                focusHighlight = true;
-                highlightCount += (this.alwaysHighlightArray[i] - 1000);
-            } else {
+            // if (this.alwaysHighlightArray[i] >= 1000) {
+            //     // Focus style
+            //     focusHighlight = true;
+            //     highlightCount += (this.alwaysHighlightArray[i] - 1000);
+            // } else {
                 highlightCount += this.alwaysHighlightArray[i];
-            }
+            // }
         }
-        if (focusHighlight) {
+        if (this.focusArray[i]) {
             classString = 'highlight-f';
         }
         return classString + ' highlight-' + highlightCount;

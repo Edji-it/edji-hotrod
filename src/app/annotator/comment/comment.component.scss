@@ -147,8 +147,9 @@ $tablet-width: 768px;
   }
 
   .comment-username {
-    top: 15px;
-    left: 50px;
+    top: 27px;
+    left: 11px;
+    position: relative;
   }
 
 	.mobile__comment-background {
@@ -167,14 +168,17 @@ $tablet-width: 768px;
   }
 
   .comment__dismiss {
-    pointer-events: auto;
-    display: block;
     position: absolute;
-    top: 0;
-    right: -20px;
+    top: 34%;
+    right: 5%;
     cursor: pointer;
     opacity: 0.8;
     filter: grayscale(100%);
+
+      &:hover, &:active {
+          opacity: 1;
+          filter: none;
+      }
   }
 
 
@@ -185,5 +189,15 @@ $tablet-width: 768px;
     opacity: 0.5;
     position: absolute;
     left: -40px;
+  }
+
+  .comment__save {
+    top: 34%;
+    right: 5%;
+  }
+
+  .comment__saved {
+    top: 34%;
+    right: 5%;
   }
 }

@@ -39,8 +39,12 @@ export class CommentComponent implements OnInit {
 
   @Output() commentDeleted = new EventEmitter<string>();
   @Output() commentActivation = new EventEmitter<boolean>();
+  @Output() commentDeactivate: EventEmitter<any> = new EventEmitter<any>();
   @Output() expandLine = new EventEmitter<number>();
   @Output() dismissKeyboard = new EventEmitter();
+  @Output() commentUpdated: EventEmitter<any> = new EventEmitter();
+
+  private showDeleteModal: boolean = false;
 
   constructor(
         private _projects: ProjectService,
@@ -127,6 +131,7 @@ export class CommentComponent implements OnInit {
         this.isLoading = false;
         this.angulartics.eventTrack.next({ action: 'updateComment', properties: { category: 'projectAction', label: 'success' }});
         this.justSaved = true;
+        this.commentUpdated.emit();
         setTimeout(() => {
           this.justSaved = false;
         }, 1000);
@@ -147,6 +152,7 @@ export class CommentComponent implements OnInit {
         this.angulartics.eventTrack.next({ action: 'deleteComment', properties: { category: 'projectAction', label: 'success' }});
         // Tell Annotator to destroy this comment element!
         this.commentDeleted.emit(comment._id);
+        this.showDeleteModal = false;
       })
       .catch(error => {
         // TRACK EXCEPTION

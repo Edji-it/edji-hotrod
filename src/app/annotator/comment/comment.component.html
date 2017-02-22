@@ -1,17 +1,19 @@
 <div class="comment" [class.saved]="justSaved" [class.active]="active" [class.readonly]="readOnly" [ngClass]="[ 'line-count-' + lineCount, expanded ? 'expanded' : '', active ? 'comment__show' : '' ]">
-    <div class='expand-comments' (tap)='toggleExpand($event)'></div>
+    <div class='expand-comments' (tap)='toggleExpand($event)'>
+        <div *ngIf="lineCount == 1 && expanded" class='expand__arrow-right'></div>
+    </div>
     <div *ngIf='comment.author' class='comment-username'>{{comment.author}}</div>
     <div *ngIf="comment.author" [class.show]="comment.showAvatar" class="comment__avatar">{{comment.author.substr(0,2).toUpperCase()}}</div>
     <div class='comment-input-wrapper'>
         <!--Swap between different comment types-->
         <emoji-comment (tap)="toggleActive()" *ngIf="comment.type == 'emoji' || !comment.type" #commentInput [comment]="comment"></emoji-comment>
         <text-comment (tap)="activate()" [readOnly]="readOnly" [preview]="preview" *ngIf="comment.type == 'text'" [comment]="comment" #commentInput (blur)="deactivate()"></text-comment>
-        <button *ngIf="userPermission >= 3" (tap)="deleteComment(comment)" class='inline-delete'>+</button>
-        <div *ngIf="comment.active && !readOnly" class="comment__save" [ngClass]="{ 'commentMobileCheck' : isMobile }" (tap)="deactivate()" [innerHtml]="':white_check_mark:' | emojione"></div>
-        <div *ngIf="comment.active && readOnly && isMobile" class="comment__dismiss" [ngClass]="{ 'commentMobileCheck' : isMobile }" (tap)="togglePreview()" [innerHtml]="':white_check_mark:' | emojione"></div>
+        <button *ngIf="userPermission >= 3" (tap)="userPermission > 3 ? deleteComment(comment) : showDeleteModal = true" class='inline-delete'>+</button>
     </div>
+    <div *ngIf="comment.active" class="comment__save" (tap)="deactivate()" [innerHtml]="':white_check_mark:' | emojione"></div>
     <i class="comment__saved" [innerHtml]='":ok_hand:" | emojione'></i>
 </div>
 
 <!--Mobile icon-->
 <img (tap)="activate()" class="mobile-comment-button" src="assets/images/icon-comment.svg" />
+<hot-del-comment *ngIf="showDeleteModal" [comment]="comment" (delete)="deleteComment(comment)" (closeModal)="showDeleteModal = false; commentDeactivate.emit(comment)"></hot-del-comment>

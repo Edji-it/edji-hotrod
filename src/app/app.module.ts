@@ -43,12 +43,12 @@ import { HomeComponent } from './home';
 import { RegisterComponent } from './register';
 import { JoinComponent } from './join/join.component';
 import { LoginForm, GuestForm } from './forms';
-import { LoginModal, ResetPassComponent } from './modals';
+import { LoginModal, ResetPassComponent, DeleteCommentModal } from './modals';
 import { AnnotatorComponent, CommentComponent, TextCommentComponent, EmojiCommentComponent, EmojiKeyboardComponent } from './annotator';
 import { ProjectPageComponent, ProjectInfoComponent } from './project-page';
 import { ReadingPageComponent, DeleteProjectComponent } from './reading-page';
 import { NewReadingPage, UploadModalComponent } from './new-reading-page';
-import { DashboardComponent, ProjectDashComponent, ReadingDashComponent } from './dashboard';
+import { DashboardComponent, JoinedDashComponent, CreatedDashComponent } from './dashboard';
 import { NoContentComponent } from './no-content';
 import { AccountComponent, ChangePassComponent } from './account';
 import { FeedbackComponent } from './shared/feedback/feedback.component';
@@ -108,6 +108,7 @@ type StoreType = {
     LoginModal,
     ChangePassComponent,
     ResetPassComponent,
+    DeleteCommentModal,
     AnnotatorComponent,
     NewReadingPage,
     UploadModalComponent,
@@ -116,8 +117,8 @@ type StoreType = {
     ReadingPageComponent,
     DeleteProjectComponent,
     DashboardComponent,
-    ProjectDashComponent,
-    ReadingDashComponent,
+    JoinedDashComponent,
+    CreatedDashComponent,
     LoginComponent,
     HomeComponent,
     JoinComponent,

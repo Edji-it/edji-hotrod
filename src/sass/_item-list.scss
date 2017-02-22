@@ -1,5 +1,6 @@
 
 $listItemShadowSize: 3px;
+$listItemBorder: 1px solid rgb(220, 227, 234);
 
 .item-list {
 
@@ -17,11 +18,12 @@ $listItemShadowSize: 3px;
 .list-item {
   font-size: 0.8em;
   color: #000;
+  border: $listItemBorder;
   
-  & [class*="col-"] {
-    padding: 0;
-    padding-right: 5px;
-  }
+  // & [class*="col-"] {
+  //   padding: 0;
+  //   padding-right: 5px;
+  // }
 
   .list-item-title{
     font-weight: bold;
@@ -48,20 +50,24 @@ $listItemShadowSize: 3px;
   padding: 15px;
   position: relative; 
   overflow:hidden;
-  border-top: 1px solid #f9f9f9;
-  margin-bottom: 15px;
+  // border-top: 1px solid #f9f9f9;
+  margin-bottom: 30px;
   cursor: pointer;
-  transition: transform 0.2s linear;
+  // transition: transform 0.2s linear;
  
   // @include box-shadow(0px 2px 4px 0px rgba(0,0,0,0.15));
   
   &:hover, &:focus, &:active {
+    & h1, & .reading-project--label {
+      color: $blue;
+    }
+    background: $gray-light;
     // @include box-shadow(none);
     // transform: translate3d(3px, 0, 0);
-    transform: translateX(0px) scale(1.01);
+    // transform: translateX(0px) scale(1.01);
     z-index: 1000;
     // transform: scale(1.025);
-    box-shadow: $inputFocusHalfShadow;
+    // box-shadow: $inputFocusHalfShadow;
   }
 }
 

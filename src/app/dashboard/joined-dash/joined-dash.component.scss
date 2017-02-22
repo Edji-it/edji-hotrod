@@ -29,3 +29,27 @@
         margin-top: 50px;
     }
 }
+
+#projectCodeInput {
+    &::-webkit-input-placeholder {
+        color: #cdcdcd;
+    }
+    &:-moz-placeholder {
+        color: #cdcdcd;
+    }
+    &::-moz-placeholder {
+        color: #cdcdcd;
+    }
+    &:-ms-input-placeholder {
+        color: #cdcdcd;
+    }
+}
+
+// Differentiate joined icons
+.reading-icon {
+    background: #8ed9ff;
+
+    // & span {
+    //     color: #fa9b5c;
+    // }
+}

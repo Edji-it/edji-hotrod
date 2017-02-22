@@ -1,3 +1,9 @@
+@import './base/variables';
+
+$commentHeight: 32px;
+$commentWidth: 175px;
+$commentPad: 4px;
+$commentBorder: 1px solid rgb(220, 227, 234);
 
 %noSelect {
 	-webkit-touch-callout: none; /* iOS Safari */
@@ -46,9 +52,9 @@ edji-comment {
 	}
 
 	.comment-input-wrapper{
-		border: none; // 1px solid #cdcdcd;
-		border-radius: 5px;
-		// overflow: hidden;
+		border: $commentBorder; // 1px solid #cdcdcd;
+		border-radius: 4px;
+		overflow: hidden;
 		position: relative;
 		transition: transform linear 0.2s;
 	}
@@ -69,7 +75,7 @@ edji-comment {
 		border-top-right-radius: 8px;
 		top: -20px;
 		border: 1px solid #efefef;
-		height: 29px;
+		height: $commentHeight - 2px;
 		min-width: 30px;
 		font-weight: 700;
 		text-transform: uppercase;
@@ -116,22 +122,22 @@ edji-comment {
 	}
 }
 
-.comment-line {
-	position: relative;
-	display: inline-block;
-	height: 1em;
-	/*to do: fix*/
-	top: -3px;
-}
-
-.comment-line:before {
-	position: absolute;
-	right: 0px;
-	content: ' ';
-	width: 1000px;
-	height: 1px;
-	background: #cdcdcd; /*rgba(238,247,50,0.7);*/
-	display: block;
+.comment--placeholder {
+	@extend .comment;
+	cursor: default;
+	padding: 8px 10px 8px 10px !important;
+    line-height: 16px !important;
+    font-size: 12px !important;
+    font-family: 'Open Sans', Arial !important;
+    color: #222;
+	color: #cdcdcd;
+	height: $commentHeight;
+	max-height: $commentHeight;
+	width: $commentWidth;
+	padding: $commentPad;
+	overflow: hidden;
+	border-radius: 4px;
+	border: 1px dashed rgb(220, 227, 234);
 }
 
 /*
@@ -145,9 +151,9 @@ input.emojiComment {
 	font-size: 14px;
 	letter-spacing: 3px;
 	padding: 4px;
-	min-width: 175px;
+	min-width: $commentWidth;
 	width: auto;
-	max-width: 175px;
+	max-width: $commentWidth;
 	margin: 1px 0px 0px;
 	height: 30px;
 }
@@ -159,9 +165,9 @@ input.emojiComment {
 	font-size: 14px;
 	letter-spacing: 3px;
 	padding: 4px;
-	min-width: 175px;
+	min-width: $commentWidth;
 	width: auto;
-	max-width: 175px;
+	max-width: $commentWidth;
 	margin: 1px 0px 0px;
 	height: 30px;
 	cursor: pointer;
@@ -222,7 +228,6 @@ input.emojiComment {
 
 .emojionearea {
 	border: none;
-	border-radius: 9px;
 	width: 180px;
     overflow: hidden;
 	// min-height: 30px;
@@ -295,6 +300,8 @@ input.emojiComment {
 	}
 }
 
+$expandBg: #e0e4e8;
+
 @for $n from 1 through 30 {
 	div.line-count-#{$n} {
 
@@ -323,32 +330,57 @@ input.emojiComment {
 			// z-index: $n*10;
 
 			& input {
-				height: 28px + $n;
+				height: $commentHeight + $n;
 			}
 
 			&.expanded {
-				margin-top: (29px * $n) - 28;
+				margin-top: ($commentHeight * $n) - $commentHeight;
 
 				& input {
-					height: 28px;
+					height: $commentHeight;
 				}
 
 				& .expand-comments {
+
+					width: 22px;
+					pointer-events: none;
+
+					&:before {
+						width: 238px;
+						right: -3px;
+						border-radius: 0px;
+						top: 0px;
+						height: $commentHeight;
+						background: $expandBg;
+					}
+
+					@if ($n == 1) {
+						pointer-events: all;
+
+						&:before {
+							height: $commentHeight + 5px;
+							top: -5px;
+							border-top-left-radius: 5px;
+							border-top-right-radius: 5px;
+						}
+					}
+
 					@if ($n != 1) {
 						// If not line-count-1, it should be part of the "line" showing the selection
 						// display: none;
-						width: 22px;
-						pointer-events: none;
-						&:before {
-							width: 12px;
-							right: 4px;
-							border-radius: 0px;
-							top: -5px;
-							height: 35px;
-							border-bottom-right-radius: 5px;
-						}
 						&:after {
-							display: none;
+							display: block;
+							content: ' ';
+							position: absolute;
+							width: 238px;
+							right: -3px;
+							border-radius: 0px;
+							top: 100%;
+							height: 5px;
+							background: $expandBg;
+							transform: none;
+							border-bottom-left-radius: 5px;
+							border-bottom-right-radius: 5px;
 						}
 					}
 					
@@ -361,6 +393,15 @@ input.emojiComment {
 	}
 }
 
+.expand__arrow-right {
+	width: 20px;
+    height: 0;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-left: 10px solid #e0e4e8;
+    position: absolute;
+    right: -22px;
+}
 
 div.line-count-1 {
 	//background: rgba(red,0.25) !important;
@@ -397,7 +438,7 @@ $expandShadowSize: 3px;
 	background-size:100% !important;
 	content: ' ';
 	width: 46px;
-	height: 30px;
+	height: $commentHeight;
 	z-index: 0; // 6000;
 
 	&:before {
@@ -408,8 +449,8 @@ $expandShadowSize: 3px;
 		top: 0;
 		right: -4px;
 		width: 46px;
-		height: 30px;
-		background: #cdcdcd;
+		height: $commentHeight;
+		background: $expandBg;
 		border-radius: 5px;
 		pointer-events:none;
 	}
@@ -510,4 +551,11 @@ $expandShadowSize: 3px;
 	height: 32px;
 	width: 25px;
 	border: 0px;
+}
+
+/* Mobile Optimization */
+@media (max-width: #{$tablet - 1px}) {
+	.expand-comments {
+		display: none;
+	}
 }

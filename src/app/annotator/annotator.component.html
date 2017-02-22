@@ -13,7 +13,7 @@
 				<span>{{ comments[0].author }}</span> 
 				<b style="float:right;">{{ comments.length }}</b>
 			</div>-->
-		</div>
+			</div>
     </div>
 
     <div *ngIf="project.types.length > 0" class="text-options" (blur)="hideCommentOptions($event)" [style.top]="highlightY" [ngStyle]="isMobile && optionLeft && { 'left': highlightX } || { 'right': highlightX }" [ngClass]="{ 'active' : optionsShow }">
@@ -24,12 +24,16 @@
 	</div>
 
     <header id="annotatorTitle" class="header">
-		{{ reading.title }}
+		<h1>{{ reading.title }}</h1>
+		<h3 class="sub-title">{{ project.label }}</h3>
 	</header>  
 
 	<div class="article-wrap">
         <!--Create components after load for reading-->
 		<article id="annotatorContent" class="content active-content" (mouseup)="showCommentOptions($event)" (touchend)="showCommentOptions($event)" (clickOutside)="hideCommentOptions()">
+			<span *ngIf="project && project.comments.length < 1 && project.types.length > 0" class="comment--placeholder">
+				Select text, add comments!
+			</span>
 			<span *ngFor="let word of reading.words; let i = index" class="word"
 				[ngClass]="[ word.styles.join(' '), getHighlightClass(i) ]" 
 				[attr.index]="i">
@@ -44,6 +48,8 @@
 					[isActive]="comment.active" 
 					(commentActivation)="setActiveCommentByIndex($event, i, ci)" 
 					(commentDeleted)="removeComment(comment, i, ci)"
+					(commentDeactivate)="unfocusHighlight($event.start, $event.end)"
+					(commentUpdated)="updateAllLineCounts()"
 					(expandLine)="expandLine($event)"
 					(mobileDeactivate)="inactivateComment()">
 				</edji-comment>{{ word.styles.indexOf("space") > -1 ? '&nbsp;' : word.str }}<img *ngIf="word.styles.indexOf('img') > -1" [src]="word.url" (click)="imageCommentOptions(i, word, $event)" /></span>
