@@ -30,22 +30,18 @@
     <div *ngFor="let project of projects" [routerLink]="['/project', project._id]" class="list-item list-item--button" [class.hide]="!project.createdAt">
         <!--Implement: | orderBy:'-createdAt'-->
                 <div class="reading-icon">
-                    <span>{{ project.reading_id.title.substring(0,2) }}</span>
+                    <span>{{ project.reading_id && project.reading_id.title ? project.reading_id.title.substring(0,2) : '' }}</span>
                 </div>
                 <div class="reading-title">
-                    <div class="reading-title--center-row">
-                        <h1 class="small">{{ project.reading_id.title}} <span *ngIf="!project.reading_id.title"><i>Untitled</i></span>
+                    <div class="reading-title--center-row"> 
+                        <h1 class="small">{{ project.reading_id ? project.reading_id.title : ''}} <span *ngIf="project.reading_id && !project.reading_id.title"><i>Untitled</i></span>
                             <span class="reading-project--label">{{project.label}}</span>
                         </h1>
-                        <!--<p *ngIf="reading.createdAt" class="readings-date">
-                            Created: {{ reading.createdAt | date:'mediumDate' }} 
-                        </p>-->
-                        
                     </div>
                 </div>
                 <div style="clear:both; line-height: 18px; padding: 10px 0px 0px;">
                     <span style="color: #cdcdcd;">Created by:</span>
-                    <span>{{ project.teacher_id.fullname }}</span><span *ngIf="!project.teacher_id.fullname ">{{ project.teacher_id.username }}</span>
+                    <span>{{ project.teacher_id ? project.teacher_id.fullname : '' }}</span><span *ngIf="project.teacher_id && !project.teacher_id.fullname ">{{ project.teacher_id.username }}</span>
                     <!--<div class="prj-btns">-->
                         <!--<a style="float:right; margin-left: 8px;" [routerLink]="['/project', project._id]" class="btn btn-secondary">Open</a>-->
                         <pre class="prj-code" style="margin-top: -5px; margin-bottom: 0px;">{{project.code || 'none'}}</pre>
