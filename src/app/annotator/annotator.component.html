@@ -13,7 +13,7 @@
 				<span>{{ comments[0].author }}</span> 
 				<b style="float:right;">{{ comments.length }}</b>
 			</div>-->
-		</div>
+			</div>
     </div>
 
     <div *ngIf="project.types.length > 0" class="text-options" (blur)="hideCommentOptions($event)" [style.top]="highlightY" [ngStyle]="isMobile && optionLeft && { 'left': highlightX } || { 'right': highlightX }" [ngClass]="{ 'active' : optionsShow }">
@@ -49,6 +49,7 @@
 					(commentActivation)="setActiveCommentByIndex($event, i, ci)" 
 					(commentDeleted)="removeComment(comment, i, ci)"
 					(commentDeactivate)="unfocusHighlight($event.start, $event.end)"
+					(commentUpdated)="updateAllLineCounts()"
 					(expandLine)="expandLine($event)"
 					(mobileDeactivate)="inactivateComment()">
 				</edji-comment>{{ word.styles.indexOf("space") > -1 ? '&nbsp;' : word.str }}<img *ngIf="word.styles.indexOf('img') > -1" [src]="word.url" (click)="imageCommentOptions(i, word, $event)" /></span>
