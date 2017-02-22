@@ -1,4 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Locker } from 'angular2-locker';
 
 @Component({
   selector: 'upload-modal',
@@ -10,23 +11,38 @@ export class UploadModalComponent implements OnInit {
   @Output() closeModal: EventEmitter<any> = new EventEmitter();
   @Output() returnImage: EventEmitter<any> = new EventEmitter();
   
-  private uploadedUrl: string = '';
+  private uploadedUrls: string[] = [];
+  private selectedIndex: number = 0;
+  private locker: any;
+  private file: any = {};
+  private uploading: boolean = false;
 
-  constructor() { }
+  constructor(private _locker: Locker) {
+    this.locker = _locker.useDriver(Locker.DRIVERS.LOCAL);
+  }
 
   ngOnInit() {
-    
+    if (this.locker.get('uploadedImageUrls')) {
+      this.uploadedUrls = this.locker.get('uploadedImageUrls');
+    }
+  }
+
+  updateUploadFile() {
+    console.log("UPDATE UPLOAD");
+    const files = document.getElementById('file-input')['files'];
+    this.file = files[0];
   }
 
   beginUpload() {
+    this.uploading = true;
     const files = document.getElementById('file-input')['files'];
-    const file = files[0];
-    if(file == null){
+    this.file = files[0];
+    if(this.file == null){
       return alert('No file selected.');
     } else {
-      console.log(file);
+      console.log(this.file);
     }
-    this.getSignedRequest(file);
+    this.getSignedRequest(this.file);
   }
 
   getSignedRequest(file) {
@@ -36,9 +52,10 @@ export class UploadModalComponent implements OnInit {
       if(xhr.readyState === 4){
         if(xhr.status === 200){
           const response = JSON.parse(xhr.responseText);
-          this.uploadFile(file, response.signedRequest, response.url);
+          this.uploadFile(this.file, response.signedRequest, response.url);
         } else{
           alert('Could not get signed URL.');
+          this.uploading = false;
         }
       }
     };
@@ -51,16 +68,32 @@ export class UploadModalComponent implements OnInit {
     xhr.onreadystatechange = () => {
       if(xhr.readyState === 4){
         if(xhr.status === 200){
-          this.uploadedUrl = url;
-
-          this.returnImage.emit(this.uploadedUrl);
-          this.closeModal.emit();
+          this.addUploadUrl(url);
+          this.uploading = false;
         }
         else{
           alert('Could not upload file.');
+          this.uploading = false;
         }
       }
     };
-    xhr.send(file);
+    xhr.send(this.file);
+  }
+
+  /**
+   * Add upload URL to array and localStorage
+   */
+  addUploadUrl(url: string) : void {
+    this.file = {};
+    this.uploadedUrls.unshift(url);
+    while(this.uploadedUrls.length > 5) {
+      this.uploadedUrls.pop();
+    }
+    this.locker.set('uploadedImageUrls', this.uploadedUrls);
+  }
+
+  insertImage(imageIndex: number) : void {
+    this.returnImage.emit(this.uploadedUrls[imageIndex]);
+    this.closeModal.emit();
   }
 }

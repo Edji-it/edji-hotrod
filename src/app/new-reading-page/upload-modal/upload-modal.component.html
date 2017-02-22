@@ -9,14 +9,39 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    <!--<label class="custom-file">
+                        <input type="file" id="file-input" class="file-input">
+                        <span class="custom-file-control"></span>
+                    </label>-->
 
-                    <input type="file" id="file-input" />
-                    <p id="status">Please select a file</p>
-                    <img [src]="uploadedUrl" />
+                    <label class="btn btn-default btn-file">
+                        Browse <input id="file-input" type="file" style="display: none;" (change)="updateUploadFile()">
+                    </label>
+
+                    <div class="file-name">
+                        <span *ngIf="!this.file.name || this.file.name.length < 1" class="placeholder">Select image to upload...</span>
+                        {{ this.file.name }}
+                    </div>
+                    
+                    <button (click)="beginUpload()" type="submit" class="btn btn-primary" [class.loading]="uploading">Upload</button>
+
+                    <hr />
+                    
+                    <p id="status">Select an image to insert into your Reading</p>
+
+                    <div class="card-columns">
+                        <div *ngFor="let uploadedUrl of uploadedUrls; let i = index" (click)="insertImage(i)" class="card upload-list-item">
+                            <img class="card-img-top img-fluid" [src]="uploadedUrl" />
+                            <div class="card-img-overlay overlay-on-hover">
+                                <button class="btn btn-primary btn--center-overlay">Insert</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="modal-footer">
-                    <button (click)="beginUpload()" type="submit" class="btn btn-primary">Upload</button>
-                </div>
+                <!--<div class="modal-footer">
+                    <button (click)="insertImage()" [disabled]="!uploadedUrls[0]" type="submit" class="btn btn-primary">Insert</button>
+                    <button (click)="insertImage()" [disabled]="!uploadedUrls[0]" type="submit" class="btn btn-primary">Cancel</button>
+                </div>-->
             </form>
         </div>
     </div>
