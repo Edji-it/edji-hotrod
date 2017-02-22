@@ -8,7 +8,7 @@
     <div class="input-group input-group-lg pb-2">
         <input id="projectCodeInput" name="ProjectCodeInput" [formControl]="codeForm.controls['projectCode']" type="text" class="form-control" style="text-align: center;" maxlength="4" (keyup.enter)="joinSession(projectCode)" [(ngModel)]="projectCode"  placeholder="⚡️ Code" aria-describedby="add-project-code" />
         <span class="input-group-btn">
-            <button class="btn btn-primary" [class.loading]="joinLoading" type="button" id="buttonJoinProject" name="Join" href="#">Join</button>
+            <button id="projectJoinButton" class="btn btn-primary" [class.loading]="joinLoading" type="submit" id="buttonJoinProject" name="Join" href="#">Join</button>
         </span>
     </div>
     <div *ngIf="!codeForm.controls['projectCode'].pristine && codeForm.controls['projectCode'].hasError('required')" class="alert alert-info"><strong [innerHtml]="':zap: Code' | emojione"></strong> Enter a lightning code to quickly join a project!</div>
