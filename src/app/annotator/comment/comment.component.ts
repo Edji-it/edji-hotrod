@@ -39,6 +39,7 @@ export class CommentComponent implements OnInit {
 
   @Output() commentDeleted = new EventEmitter<string>();
   @Output() commentActivation = new EventEmitter<boolean>();
+  @Output() commentDeactivate: EventEmitter<any> = new EventEmitter<any>();
   @Output() expandLine = new EventEmitter<number>();
   @Output() dismissKeyboard = new EventEmitter();
 
