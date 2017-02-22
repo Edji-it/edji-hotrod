@@ -42,6 +42,7 @@ export class CommentComponent implements OnInit {
   @Output() commentDeactivate: EventEmitter<any> = new EventEmitter<any>();
   @Output() expandLine = new EventEmitter<number>();
   @Output() dismissKeyboard = new EventEmitter();
+  @Output() commentUpdated: EventEmitter<any> = new EventEmitter();
 
   private showDeleteModal: boolean = false;
 
@@ -130,6 +131,7 @@ export class CommentComponent implements OnInit {
         this.isLoading = false;
         this.angulartics.eventTrack.next({ action: 'updateComment', properties: { category: 'projectAction', label: 'success' }});
         this.justSaved = true;
+        this.commentUpdated.emit();
         setTimeout(() => {
           this.justSaved = false;
         }, 1000);
