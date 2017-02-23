@@ -12,9 +12,9 @@
 <div class="item-list ">
     <!--Show readings with date values-->
     <div class="alert alert-info" role="alert" *ngIf="!isLoading && readings.length < 1 && !errorObject.readingError">
-        <h4 class="alert-heading">Welcome to your Reading Dashboard</h4>
-        <p>Readings you add will show here, along with the Projects you create to share those Readings.</p>
-        <p class="mb-0">Hit that "New" button in the top right to add a Reading now! From a Reading you can create a Project&mdash;it's an easy way to share the same content with different groups of people.</p>
+        <h4 class="alert-heading">Share some text or something you wrote!</h4>
+        <p>Readings are a great way to explore a piece of text together, or get feedback on your own writing.</p>
+        <!--<p [innerHtml]="'Those you create will show here, with the :zap: code for quickly sharing it with someone else.' | emojione"></p>-->
     </div>
     <div class="alert alert-danger" role="alert" *ngIf="errorObject.readingError">
         {{ errorObject.readingError }}
