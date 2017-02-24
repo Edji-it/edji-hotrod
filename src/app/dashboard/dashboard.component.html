@@ -4,13 +4,17 @@
     <a class="tab-2 h1" [routerLink]="['/dashboard/projects']" routerLinkActive="active">Joined</a>
     <a class="tab-2 h1" [routerLink]="['/dashboard/readings']" routerLinkActive="active">Created</a>
 </div>-->
+<div class="dashboard-toolbar">
+    <a class="tab-2 h1" (click)="mobileShowJoined=true" [class.active]="mobileShowJoined">Joined</a>
+    <a class="tab-2 h1" (click)="mobileShowJoined=false" [class.active]="!mobileShowJoined">Created</a>
+</div>
 <!--Dashboard uses the *fluid* container, for maximum space use-->
 <div class="container-fluid container--side-bar dashboard-container">
     <div class="row">
-        <div class="col-md-6 pb-5 large-gutter">
+        <div [class.mnHide]="!mobileShowJoined" class="col-md-6 pb-5 large-gutter">
             <edji-joined-dash></edji-joined-dash>
         </div>
-        <div class="col-md-6 large-gutter">
+        <div [class.mnHide]="mobileShowJoined" class="col-md-6 large-gutter mnActive">
             <edji-created-dash></edji-created-dash>
         </div>
     </div>

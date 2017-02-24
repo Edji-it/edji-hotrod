@@ -112,3 +112,10 @@ $phone: 576px;
 button.new-reading-btn {
     float: right;
 }
+
+/* Mobile Optimization */
+@media (max-width: #{$tablet - 1px}) {
+    .readings-header {
+        display: none;
+    }
+}

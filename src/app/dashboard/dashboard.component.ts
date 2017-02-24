@@ -25,6 +25,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   // Set our default values
   private currentUser: any; 
   private subscriptions: Subscription[] = [];
+  private mobileShowJoined:boolean = true;
 
   // TypeScript public modifiers
   constructor(

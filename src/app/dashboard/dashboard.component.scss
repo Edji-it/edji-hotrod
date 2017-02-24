@@ -46,6 +46,9 @@ $dashToolbarHeight: 60px;
         color: $blue;
     }
 }
+.dashboard-toolbar {
+    display: none;
+}
 
 @media (max-width: #{$tablet - 1px}) {
     .tab-2 {
@@ -53,5 +56,11 @@ $dashToolbarHeight: 60px;
     }
     .dashboard-container {
         margin: #{$navBarHeight + $dashToolbarHeight + $base-pad} 10px 0px 10px;
+    }
+    .dashboard-toolbar {
+        display: block;
+    }
+    .mnHide {
+        display: none;
     }
 }

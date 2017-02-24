@@ -38,7 +38,6 @@ footer {
   padding-left: 15px + 100px;
 
   @media(max-width: $tablet) {
-    padding-top: $mobileNavHeight;
     padding-left: 15px;
   }
 } 

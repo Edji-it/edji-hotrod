@@ -53,3 +53,10 @@
     //     color: #fa9b5c;
     // }
 }
+
+/* Mobile Optimization */
+@media (max-width: #{$tablet - 1px}) {
+    .joined-header {
+        display: none;
+    }
+}

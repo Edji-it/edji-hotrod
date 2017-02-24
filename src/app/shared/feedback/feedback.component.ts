@@ -30,6 +30,18 @@ import { AuthService, Copy, BumblebeeService } from './..';
       width: 30px;
       height: auto;
     }
+
+    /* Mobile Optimization */
+    @media (max-width: 767px) {
+      .fixed-feedback-button {
+        right: 10px;
+        bottom: 8px;
+      }
+
+      .fixed-feedback-button img {
+        width: 24px;
+      }
+    }
   `]
 })
 export class FeedbackComponent implements OnInit {
