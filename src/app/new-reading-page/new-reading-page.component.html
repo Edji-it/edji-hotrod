@@ -6,16 +6,16 @@
             <h1>New Reading</h1> 
              <form [formGroup]="readingForm" (ngSubmit)="onSubmit(readingForm.value)">
                 <div  class="reading-page">
-                    <div class="form-group offset-label">
+                    <div class="form-group offset-label--wrap">
                         <label class="border-wrap">
-                            <span>Title</span>
+                            <span class="offset-label">Title</span>
                             <input type="text" id="readingTitle" class="form-control form-item--seamless h1 input-noborder mTitle" placeholder="Reading Title..." [formControl]="readingForm.controls['title']"/>
                             <div *ngIf="readingForm.controls['title'].hasError('required') && (readingForm.controls['title'].dirty || submitted)"  class="alert alert-info">Please give your Reading a title!</div>
                         </label>
                     </div>
-                    <div class="form-group offset-label">
+                    <div class="form-group offset-label--wrap">
                         <label class="border-wrap">
-                            <span>Content</span>
+                            <span class="offset-label">Content</span>
                             <medium-editor
                                 [(editorModel)]="readingHtml"
                                 [editorOptions]="{'imageDragging': false, extensions: { 'imageDragging': {} }, 'toolbar': {'buttons': ['bold', 'italic', 'underline', 'h1', 'h2', 'h3']}}"
@@ -30,9 +30,9 @@
                             </a>
                         </div>
                     </div>
-                    <div class="form-group offset-label">
+                    <div class="form-group offset-label--wrap">
                         <label class="border-wrap ">
-                            <span title="Optionally link to where this Reading came from!">Link to Source
+                            <span class="offset-label" title="Optionally link to where this Reading came from!">Link to Source
                             </span>
                             <div class="input-group">
                                 <input type="url" id="readingSource" class="form-control form-item--seamless h3 mSource" placeholder="New Reading Source..." [formControl]="readingForm.controls['source']" />
@@ -42,9 +42,9 @@
                             </div>
                         </label>
                     </div>
-                    <div class="form-group offset-label">
+                    <div class="form-group offset-label--wrap">
                         <label class="border-wrap ">
-                            <span title="We share ">Name the First Copy
+                            <span class="offset-label" title="We share ">Name the First Copy
                             </span>
                             <div class="input-group">
                                 <input type="text" id="firstProjectLabel" class="form-control form-item--seamless h3 mGroup" placeholder="eg. First Period, Peer review..." [formControl]="readingForm.controls['label']" />
