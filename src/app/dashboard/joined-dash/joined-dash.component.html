@@ -20,9 +20,8 @@
 <div class="item-list">
     <!--Show messaging if no Projects exist-->
     <div class="alert alert-info" role="alert" *ngIf="!isLoading && projects.length < 1 && !errorObject.projectError">
-        <h4 class="alert-heading">No Projects Yet!</h4>
-        <p>Once you've joined a Project, it will show here.</p>
-        <p class="mb-0">Anyone with an Edji account can create a Project from a Reading and share it. Why don't you head over to the <a [routerLink]="['/dashboard/readings']">Reading Dashboard</a> and give it a try?</p>
+        <h4 class="alert-heading">No Joined Readings Yet...</h4>
+        <p>Once you've joined someone else's Reading, it will show here.</p>
     </div>
     <!--Show loading until Projects call gets back-->
     <div *ngIf="isLoading" class="row loading"></div>
