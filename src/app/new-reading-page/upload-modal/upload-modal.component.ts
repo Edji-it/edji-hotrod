@@ -12,6 +12,7 @@ export class UploadModalComponent implements OnInit {
   @Output() returnImage: EventEmitter<any> = new EventEmitter();
   
   private uploadedUrls: string[] = [];
+  private newImgUrls: string[] = [];
   private selectedIndex: number = 0;
   private locker: any;
   private file: any = {};
@@ -29,13 +30,13 @@ export class UploadModalComponent implements OnInit {
 
   updateUploadFile() {
     console.log("UPDATE UPLOAD");
-    const files = document.getElementById('file-input')['files'];
+    const files = document.getElementById('imageFileInput')['files'];
     this.file = files[0];
   }
 
   beginUpload() {
     this.uploading = true;
-    const files = document.getElementById('file-input')['files'];
+    const files = document.getElementById('imageFileInput')['files'];
     this.file = files[0];
     if(this.file == null){
       return alert('No file selected.');
@@ -84,7 +85,7 @@ export class UploadModalComponent implements OnInit {
    * Add upload URL to array and localStorage
    */
   addUploadUrl(url: string) : void {
-    this.file = {};
+    this.newImgUrls.unshift(url);
     this.uploadedUrls.unshift(url);
     while(this.uploadedUrls.length > 5) {
       this.uploadedUrls.pop();

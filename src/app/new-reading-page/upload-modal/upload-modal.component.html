@@ -13,9 +13,9 @@
                         <input type="file" id="file-input" class="file-input">
                         <span class="custom-file-control"></span>
                     </label>-->
-
+                    <form>
                     <label class="btn btn-default btn-file">
-                        Browse <input id="file-input" type="file" style="display: none;" (change)="updateUploadFile()">
+                        Browse <input id="imageFileInput" type="file" (change)="updateUploadFile()" style="display:none;">
                     </label>
 
                     <div class="file-name">
@@ -23,14 +23,14 @@
                         {{ this.file ? this.file.name : '' }}
                     </div>
                     
-                    <button (click)="beginUpload()" type="submit" class="btn btn-primary" [class.loading]="uploading">Upload</button>
-
+                    <button id="buttonBeginImageUpload" (click)="beginUpload()" type="submit" class="btn btn-primary" [class.loading]="uploading">Upload</button>
+                    </form>
                     <hr />
                     
                     <p id="status">Select an image to insert into your Reading</p>
 
                     <div class="card-columns">
-                        <div *ngFor="let uploadedUrl of uploadedUrls; let i = index" (click)="insertImage(i)" class="card upload-list-item">
+                        <div *ngFor="let uploadedUrl of uploadedUrls; let i = index" (click)="insertImage(i)" [class.new]="newImgUrls.indexOf(uploadedUrl) > -1" class="card upload-list-item">
                             <img class="card-img-top img-fluid" [src]="uploadedUrl" />
                             <div class="card-img-overlay overlay-on-hover">
                                 <button class="btn btn-primary btn--center-overlay">Insert</button>

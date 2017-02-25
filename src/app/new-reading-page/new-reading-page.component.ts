@@ -152,7 +152,7 @@ export class NewReadingPage implements OnInit {
         this.error = '';
 
         // Custom empty validation for reading content
-        if (this.el.nativeElement.querySelector('medium-editor').innerText.trim().length > 0) {
+        if (this.el.nativeElement.querySelector('medium-editor').innerText.trim().length > 0 || this.el.nativeElement.querySelectorAll('medium-editor img').length > 0) {
             this.readingIsBlank = false;
         } else {
             this.readingIsBlank = true;
