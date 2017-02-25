@@ -44,7 +44,7 @@
                     </div>
                     <div class="form-group offset-label--wrap">
                         <label class="border-wrap ">
-                            <span class="offset-label" title="We share ">Name the First Copy
+                            <span class="offset-label" title="We share ">Name the First Group
                             </span>
                             <div class="input-group">
                                 <input type="text" id="firstProjectLabel" class="form-control form-item--seamless h3 mGroup" placeholder="eg. First Period, Peer review..." [formControl]="readingForm.controls['label']" />
@@ -52,7 +52,7 @@
                                     <i class="icon icon-circle icon-info">i</i>
                                 </i>
                             </div>
-                            <div id="errorGroupLabel" *ngIf="readingForm.controls['label'].hasError('required') && (readingForm.controls['label'].dirty || submitted)"  class="alert alert-info">Please give your reading a first copy label!</div>
+                            <div id="errorGroupLabel" *ngIf="readingForm.controls['label'].hasError('required') && (readingForm.controls['label'].dirty || submitted)"  class="alert alert-info">Please pick a name for your first Reading Group!</div>
                         </label>
                     </div>
 
