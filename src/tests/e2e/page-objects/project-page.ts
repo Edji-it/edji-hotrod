@@ -10,7 +10,7 @@ export class Project implements PageObjectInterface {
   public getPage(): void {
     // First we clear out the url (sometimes page is preserved if the url stays the same)
     browser.get("/#");
-    // Load a good sample Project with Emoji and Text commenting
-    browser.get("/#/project/587982a88345010011338c05");
+    // Load a good sample Project with Emoji and Text commenting (owned by teach/teach)
+    browser.get("/#/project/58b102f181126c4be2165ee2");
   }
 }

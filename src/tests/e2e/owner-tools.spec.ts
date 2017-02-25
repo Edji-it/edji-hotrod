@@ -26,7 +26,7 @@ describe('Project Page as a Project Owner: ', () => {
 
     beforeEach(() => {
         // Id for Owner Tools Test Reading owned by Teach/Teach
-        browser.get("/#/project/589647da6358727b6301efc8");
+        browser.get("/#/project/58b1015881126c4be2165edc");
     });
 
     /* ---- Project Tests ------------------------- */
