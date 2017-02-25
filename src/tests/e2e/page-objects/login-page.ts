@@ -28,6 +28,8 @@ export class Login implements PageObjectInterface
     public studentPassword  = 'student';
     public teacherUser      = 'teach';
     public teacherPassword  = 'teach';
+    public botUser          = 'testbot';
+    public botPassword      = 'testbot';
     public invalidEntry     = 'HitlerHatesEDJI_666_420';
     public validProjectCode = '35jz';
     public testGuestName    = "Queen Elizabeth II";
