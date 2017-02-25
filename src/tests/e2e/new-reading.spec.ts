@@ -60,7 +60,7 @@ describe('New Reading Page', () => {
         - Tab and hit enter/ click on “Add reading button”
         - Redirect to reading page of newly created reading
     */
-    it('should be able to add a new reading', () => {
+    it('should add reading when all fields are filled and submitted', () => {
         // Open and wait for New Reading page
         newReading.getPage();
         browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000);
@@ -81,25 +81,78 @@ describe('New Reading Page', () => {
     });
 
 
-    /* Test: Add reading, don’t enter title
-        - Go to Teacher Dashboard
-        - Click add a reading button
-        - Redirect to Add a Reading page
-        - Tab/click to source url, enter URL
-        - Tab/click to contact, paste content or type in content
+    /* Test: Add reading, don’t enter title and see error
+        - Open New Reading page
+        - Fill all fields *but* title
         - Tab and hit enter/ click on “Add reading button”
         - Receive error message asking to give reading a title
     */
+    it('should display an error if the title is not filled', () => {
+        // Open and wait for New Reading page
+        newReading.getPage();
+        browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000);
 
-    /* Test: Add reading, don’t enter content
-        - Go to Teacher Dashboard
-        - Click add a reading button
-        - Redirect to Add a Reading page
-        - Click on new title box, enter title
-        - Tab/click to source url, enter URL
+        // Enter sample Reading into form, excluding title
+        newReading.titleInput.clear();
+        newReading.contentInput.sendKeys(newReading.contentShortString);
+        newReading.sourceInput.sendKeys(newReading.sourceString);
+
+        // Submit New Reading
+        browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "login button never became clickable after login form entry");
+        newReading.addButton.submit();
+
+        // Should see error for empty title
+        browser.wait(EC.presenceOf(newReading.titleError), 5000, "never saw an error for empty title");
+    });
+
+     /* Test: Add reading, don’t enter content and see error
+        - Open New Reading page
+        - Fill all fields *but* content
         - Tab and hit enter/ click on “Add reading button”
-        - Receive error message asking to give reading some content
+        - Receive error message asking to give reading content
     */
+    it('should display an error if no content is entered', () => {
+        // Open and wait for New Reading page
+        newReading.getPage();
+        browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000);
+
+        // Enter sample Reading data into form, but clear content
+        newReading.titleInput.sendKeys(newReading.titleString);
+        newReading.contentInput.clear();
+        newReading.sourceInput.sendKeys(newReading.sourceString);
+
+        // Submit New Reading
+        browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "login button never became clickable after login form entry");
+        newReading.addButton.submit();
+
+        // Should see error for empty content
+        browser.wait(EC.presenceOf(newReading.contentError), 5000, "never saw an error for empty content");
+    });
+
+    /* Test: Add reading, but clear Group Label and see error
+        - Open New Reading page
+        - Fill all fields *but* group label
+        - Tab and hit enter/ click on “Add reading button”
+        - Receive error message asking to give reading a group label
+    */
+    it('should display an error if no group label is entered', () => {
+        // Open and wait for New Reading page
+        newReading.getPage();
+        browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000);
+
+        // Enter sample Reading into form, but clear group label
+        newReading.titleInput.sendKeys(newReading.titleString);
+        newReading.contentInput.sendKeys(newReading.contentShortString);
+        newReading.sourceInput.sendKeys(newReading.sourceString);
+        newReading.groupInput.clear();
+
+        // Submit New Reading
+        browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "login button never became clickable after login form entry");
+        newReading.addButton.submit();
+
+        // Should see error for empty group label
+        browser.wait(EC.presenceOf(newReading.groupError), 5000, "never saw an error for empty group label");
+    });
 
     /* Test: Add reading, then adjust with editing buttons. (Headers, bold, underlines, italixs, text size)
         - Log in with Teacher account

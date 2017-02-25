@@ -16,8 +16,9 @@ export class NewReadingPage implements OnInit {
     private readingForm: FormGroup;
     // Seed string fixes Firefox line return issue
     private readingHtml: string = "<div>&nbsp;</div>";
-    private submitted: boolean = false;
+    private readingIsBlank: boolean = false;
     private readingPlaceholder: string = 'Type or paste your reading...';
+    private submitted: boolean = false;
     private addLoading: boolean = false;
     private error: string = '';
     private showUploadModal: boolean = false;
@@ -150,8 +151,15 @@ export class NewReadingPage implements OnInit {
         this.addLoading = true;
         this.error = '';
 
+        // Custom empty validation for reading content
+        if (this.el.nativeElement.querySelector('medium-editor').innerText.trim().length > 0) {
+            this.readingIsBlank = false;
+        } else {
+            this.readingIsBlank = true;
+        }
+
         // This would be better handled by formcontrols
-        if (!form.title || form.title.length < 1 || this.readingHtml.length < 1 || form.label.length < 1) {
+        if (!form.title || form.title.length < 1 || this.readingIsBlank || form.label.length < 1) {
             this.addLoading = false;
             this.error = 'Not quite, please check all the fields!';
             return;
