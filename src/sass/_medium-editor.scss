@@ -76,3 +76,27 @@ $editorToolbarBg: #fff;
     font-size: 14px;
   }
 }
+
+// Override Pasted Styles
+
+.medium-editor-element {
+  & * {
+    position: static !important;
+  }
+
+  & .modal {
+    display: none !important;
+  }
+
+  & img {
+    display: block !important;
+    margin: 0 auto !important;
+  }
+}
+
+[class*='medium-editor-pastebin'] {
+  & * {
+    display: none !important;
+    pointer-events: none !important;
+  }
+}
