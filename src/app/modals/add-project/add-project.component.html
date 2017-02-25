@@ -6,7 +6,31 @@
                 <button (click)="closeModal.emit()" type="button" class="close">&times;</button>
             </div>
             <div class="modal-body">
-              Add a new group reading
+              <form [formGroup]="projectForm" (ngSubmit)="addProject(projectForm.value)">
+                <div class="form-group">
+                    <label for="newProjectLabel">Group Name</label>
+                    <input tabindex="0" id="newProjectLabel" type="text" placeholder="What will you call the group?" [formControl]="projectForm.controls['label']" />
+
+                </div>
+                <div class="form-group">
+                    <label class="custom-control custom-checkbox">
+                        <input type="checkbox" [formControl]="projectForm.controls['emojiType']" class="custom-control-input">
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description">Emoji Commenting</span>
+                    </label> 
+                </div>
+                <div class="form-group">
+                    <label class="custom-control custom-checkbox">
+                        <input type="checkbox" [formControl]="projectForm.controls['textType']" class="custom-control-input">
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description">Text Commenting</span>
+                    </label>
+                </div>
+                <!--</label>-->
+                <div class="button__row" style="padding-top:0px;">
+                    <button tabindex="0" class="btn btn-primary" type="submit" [class.loading]="isLoading" name="Add Project" style="margin: 5px 3px; width:100%;">Add Project</button>
+                </div>
+              </form>
             </div>
             <div class="modal-footer">
                 <div *ngIf="showError" class="alert alert-danger" role="alert">
