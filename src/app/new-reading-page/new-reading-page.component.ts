@@ -24,6 +24,23 @@ export class NewReadingPage implements OnInit {
 
     // Used for processing reading
     private words: any[] = [];
+
+    // Configuration Options for Medium Editor
+    private mediumEditorConfig: any = {
+        imageDragging: false, 
+        paste : { 
+            forcePlainText : true  
+            // cleanPastedHTML: true,
+            // cleanAttrs: ['class', 'style', 'dir'],
+            // cleanTags: ['meta', 'button', 'input', 'form']
+        }, 
+        extensions: { 
+            imageDragging: {}
+        }, 
+        toolbar: {
+            buttons: ['bold', 'italic', 'underline', 'h1', 'h2', 'h3']
+        }
+    };
     
     constructor(
         private _readings: ReadingService,
