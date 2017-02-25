@@ -8,7 +8,8 @@ import { Component, OnInit, Input } from '@angular/core';
 export class ReadingCardComponent implements OnInit {
   @Input() reading: any;
 
-  private showoptions: boolean = false;
+  private showOptions: boolean = false;
+  private showAddModal: boolean = false;
 
   constructor() { }
 

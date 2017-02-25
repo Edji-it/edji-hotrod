@@ -33,7 +33,7 @@
                 <i class="icon icon-more"></i>
             </button>
             <div class="dropdown-menu dropdown-menu-right">
-                <button class="dropdown-item">Create New Group</button>
+                <button (click)="showAddModal = true" class="dropdown-item">Create New Group</button>
             </div>
         </div>
     </div>
@@ -74,3 +74,4 @@
     </div>-->
 <!--</div>-->
 <!--</div>-->
+<hot-add-project-modal *ngIf="showAddModal" [reading]="reading" (closeModal)="showAddModal = false"></hot-add-project-modal>
