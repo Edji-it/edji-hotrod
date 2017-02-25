@@ -43,7 +43,7 @@ import { HomeComponent } from './home';
 import { RegisterComponent } from './register';
 import { JoinComponent } from './join/join.component';
 import { LoginForm, GuestForm } from './forms';
-import { LoginModal, ResetPassComponent, DeleteCommentModal } from './modals';
+import { LoginModal, ResetPassComponent, DeleteCommentModal, AddProjectModal } from './modals';
 import { AnnotatorComponent, CommentComponent, TextCommentComponent, EmojiCommentComponent, EmojiKeyboardComponent } from './annotator';
 import { ProjectPageComponent, ProjectInfoComponent } from './project-page';
 import { ReadingPageComponent, DeleteProjectComponent } from './reading-page';
@@ -106,6 +106,7 @@ type StoreType = {
     LoginForm,
     GuestForm,
     LoginModal,
+    AddProjectModal,
     ChangePassComponent,
     ResetPassComponent,
     DeleteCommentModal,
