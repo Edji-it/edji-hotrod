@@ -103,7 +103,9 @@ export class NewReadingPage implements OnInit {
                     }
                     if (index == nodes.length - 1 && wIndex == nodeWords.length - 1) {
                         word.styles.push(tagName + '-last');
-                        addBr = true;
+                        if (tagName == 'p' || tagName == 'h1' || tagName == 'h2' || tagName == 'h3') {
+                            addBr = true;
+                        }
                     }
                     this.words.push(word);
                     if (addBr) {
