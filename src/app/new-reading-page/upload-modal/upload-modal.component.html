@@ -19,8 +19,8 @@
                     </label>
 
                     <div class="file-name">
-                        <span *ngIf="!this.file.name || this.file.name.length < 1" class="placeholder">Select image to upload...</span>
-                        {{ this.file.name }}
+                        <span *ngIf="!this.file || !this.file.name || this.file.name.length < 1" class="placeholder">Select image to upload...</span>
+                        {{ this.file ? this.file.name : '' }}
                     </div>
                     
                     <button (click)="beginUpload()" type="submit" class="btn btn-primary" [class.loading]="uploading">Upload</button>
