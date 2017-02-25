@@ -69,6 +69,7 @@ describe('New Reading Page', () => {
         newReading.titleInput.sendKeys(newReading.titleString);
         newReading.contentInput.sendKeys(newReading.contentString);
         newReading.sourceInput.sendKeys(newReading.sourceString);
+        // Group Label has content prefilled, so we clear it
         newReading.groupInput.clear();
         newReading.groupInput.sendKeys(newReading.groupString);
 
@@ -145,11 +146,14 @@ describe('New Reading Page', () => {
         newReading.contentInput.sendKeys(newReading.contentShortString);
         newReading.sourceInput.sendKeys(newReading.sourceString);
         newReading.groupInput.clear();
+        // This field needs special attention to trigger the required
+        newReading.groupInput.sendKeys(' ');
+        newReading.groupInput.sendKeys(protractor.Key.BACK_SPACE); 
 
         // Submit New Reading
         browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "login button never became clickable after login form entry");
         newReading.addButton.submit();
-
+        
         // Should see error for empty group label
         browser.wait(EC.presenceOf(newReading.groupError), 5000, "never saw an error for empty group label");
     });
