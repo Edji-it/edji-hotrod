@@ -37,6 +37,7 @@
                     <button class="btn-secondary" (click)="confirmDelete = false">Cancel</button>
                 </div>
             </div>-->
+
             <div class="reading-icon">
                 <span>{{reading.title.substring(0,2)}}</span>
             </div>
@@ -46,6 +47,16 @@
                     <!--<p *ngIf="reading.createdAt" class="readings-date">
                         Created: {{ reading.createdAt | date:'mediumDate' }} 
                     </p>-->
+                </div>
+            </div>
+            <div>
+                <button class="btn btn-icon--plain reading-options">
+                    <img class="icon" src="/assets/icon/icon-more.svg">
+                </button>
+                <div class="dropdown-menu">
+                    <button class="dropdown-item">Action - 1</button>
+                    <button class="dropdown-item">Another Action</button>
+                    <button class="dropdown-item">Something else is here</button>
                 </div>
             </div>
         </div> 

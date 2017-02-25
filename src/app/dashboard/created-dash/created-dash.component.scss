@@ -101,6 +101,8 @@ $phone: 576px;
 
 .reading-card, .project-card {
     margin-bottom: $projectCardGutter;
+    padding-left: 15px;
+    padding-right: 15px;
 }
 
 .reading-item-row {
@@ -118,4 +120,15 @@ button.new-reading-btn {
     .readings-header {
         display: none;
     }
+}
+
+.reading-options {
+    float: right;
+    // position: absolute;
+    // top: 10px;
+    // right: 3px;
+
+    // &:hover {
+    //     cursor: pointer;
+    // }
 }
