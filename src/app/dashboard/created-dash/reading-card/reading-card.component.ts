@@ -8,6 +8,8 @@ import { Component, OnInit, Input } from '@angular/core';
 export class ReadingCardComponent implements OnInit {
   @Input() reading: any;
 
+  private showoptions: boolean = false;
+
   constructor() { }
 
   ngOnInit() { }

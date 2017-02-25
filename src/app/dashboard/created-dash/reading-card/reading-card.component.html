@@ -1,43 +1,46 @@
-<div class="list-item list-item--block reading-card">
-        <!--<div class="offset-buttons">
-        <a class="icon-button" (click)="confirmDelete = !confirmDelete">
-            <img alt="❌" class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/274c.png">
-        </a>
-        <a class="icon-button" href="#/reading/{{reading._id}}">
-            <span [innerHtml]="':eyes:' | emojione"></span>
-        </a>
-    </div>-->
-    <!--Implement: | orderBy:'-createdAt'-->
-    <!--<div class="list-item__message" [ngClass]="{ 'slide-down' : confirmDelete }">
-        Delete "{{reading.title}}"?
-        <div class="button-row--right">
-            <button class="btn-danger" (click)="deleteReading(reading)">Delete</button>
-            <button class="btn-secondary" (click)="confirmDelete = false">Cancel</button>
-        </div>
-    </div>-->
+<!--<div class="reading-card-wrap">-->
+    <div class="list-item list-item--block reading-card">
+            <!--<div class="offset-buttons">
+            <a class="icon-button" (click)="confirmDelete = !confirmDelete">
+                <img alt="❌" class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/274c.png">
+            </a>
+            <a class="icon-button" href="#/reading/{{reading._id}}">
+                <span [innerHtml]="':eyes:' | emojione"></span>
+            </a>
+        </div>-->
+        <!--Implement: | orderBy:'-createdAt'-->
+        <!--<div class="list-item__message" [ngClass]="{ 'slide-down' : confirmDelete }">
+            Delete "{{reading.title}}"?
+            <div class="button-row--right">
+                <button class="btn-danger" (click)="deleteReading(reading)">Delete</button>
+                <button class="btn-secondary" (click)="confirmDelete = false">Cancel</button>
+            </div>
+        </div>-->
 
-    <div class="reading-icon">
-        <span>{{reading.title.substring(0,2)}}</span>
-    </div>
-    <div class="reading-title">
-        <div class="reading-title--center-row">
-            <h1 class="small">{{reading.title}} <span *ngIf="!reading.title"><i>Untitled</i></span></h1>
-            <!--<p *ngIf="reading.createdAt" class="readings-date">
-                Created: {{ reading.createdAt | date:'mediumDate' }} 
-            </p>-->
+        <div class="reading-icon">
+            <span>{{reading.title.substring(0,2)}}</span>
+        </div>
+        <div class="reading-title">
+            <div class="reading-title--center-row">
+                <h1 class="small">{{reading.title}} <span *ngIf="!reading.title"><i>Untitled</i></span></h1>
+                <!--<p *ngIf="reading.createdAt" class="readings-date">
+                    Created: {{ reading.createdAt | date:'mediumDate' }} 
+                </p>-->
+            </div>
+        </div>
+        <div id="optionsWrap" class="dropdown reading-options" [class.show]="showOptions">
+            <button class="btn btn-icon--plain" (click)="showOptions = !showOptions">
+                <i class="icon icon-more"></i>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right">
+                <button class="dropdown-item">Action - 1</button>
+                <button class="dropdown-item">Another Action</button>
+                <button class="dropdown-item">Something else is here</button>
+            </div>
         </div>
     </div>
-    <div>
-        <button class="btn btn-icon--plain reading-options">
-            <i class="icon icon-more"></i>
-        </button>
-        <div class="dropdown-menu">
-            <button class="dropdown-item">Action - 1</button>
-            <button class="dropdown-item">Another Action</button>
-            <button class="dropdown-item">Something else is here</button>
-        </div>
-    </div>
-</div> 
+    
+<!--</div>-->
 <!--<div>-->
 <a class="list-item list-item--button project-card" [routerLink]="['/project', project._id]" *ngFor="let project of reading.projects">
     <div class="row">

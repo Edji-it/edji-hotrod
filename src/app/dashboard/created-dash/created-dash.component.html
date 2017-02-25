@@ -19,5 +19,5 @@
     <div class="alert alert-danger" role="alert" *ngIf="errorObject.readingError">
         {{ errorObject.readingError }}
     </div>
-    <hot-reading-card *ngFor="let reading of readings" style="margin-bottom: 30px; display:block;" [reading]="reading"></hot-reading-card>
+    <hot-reading-card *ngFor="let reading of readings" style="margin-bottom: 30px; float:left; width:100%;" [reading]="reading"></hot-reading-card>
 </div>
