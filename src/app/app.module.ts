@@ -48,7 +48,7 @@ import { AnnotatorComponent, CommentComponent, TextCommentComponent, EmojiCommen
 import { ProjectPageComponent, ProjectInfoComponent } from './project-page';
 import { ReadingPageComponent, DeleteProjectComponent } from './reading-page';
 import { NewReadingPage, UploadModalComponent } from './new-reading-page';
-import { DashboardComponent, JoinedDashComponent, CreatedDashComponent } from './dashboard';
+import { DashboardComponent, JoinedDashComponent, CreatedDashComponent, ReadingCardComponent } from './dashboard';
 import { NoContentComponent } from './no-content';
 import { AccountComponent, ChangePassComponent } from './account';
 import { FeedbackComponent } from './shared/feedback/feedback.component';
@@ -124,7 +124,8 @@ type StoreType = {
     JoinComponent,
     FeedbackComponent,
     NoContentComponent,
-    Autosize
+    Autosize,
+    ReadingCardComponent
 ],
   imports: [ // import Angular's modules
     BrowserModule,
