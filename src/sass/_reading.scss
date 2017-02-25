@@ -562,7 +562,7 @@ $readingIconHeight: 60px;
     vertical-align: middle;
     position: relative;
     float: left;
-    width: calc(100% - #{ $readingIconHeight + 45px });
+    width: calc(100% - #{ $readingIconHeight + 50px });
 }
 
 .reading-project--label{

@@ -1,11 +1,6 @@
 /*styles for dashboard content only*/
 @import '../../../sass/base/variables';
 
-
-
-$projectCardGutter: 4px;
-$phone: 576px;
-
 .project-card-wrap {
     width: 100%; //calc(100% - #{ $projectCardGutter });
 
@@ -92,14 +87,14 @@ $phone: 576px;
     }
 }
 
-.reading-card {
-    margin-bottom: 0px !important;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    border-bottom-style: dashed;
-}
+// .reading-card {
+//     margin-bottom: 0px !important;
+//     padding-top: 10px;
+//     padding-bottom: 10px;
+//     border-bottom-style: dashed;
+// }
 
-.reading-card, .project-card {
+.project-card {
     margin-bottom: $projectCardGutter;
     padding-left: 15px;
     padding-right: 15px;
@@ -122,13 +117,13 @@ button.new-reading-btn {
     }
 }
 
-.reading-options {
-    float: right;
-    // position: absolute;
-    // top: 10px;
-    // right: 3px;
+// .reading-options {
+//     float: right;
+//     // position: absolute;
+//     // top: 10px;
+//     // right: 3px;
 
-    // &:hover {
-    //     cursor: pointer;
-    // }
-}
+//     // &:hover {
+//     //     cursor: pointer;
+//     // }
+// }

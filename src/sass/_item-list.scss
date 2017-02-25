@@ -71,6 +71,16 @@ $listItemBorder: 1px solid rgb(220, 227, 234);
   }
 }
 
+.list-item--block {
+  background: #fff;
+  display: block;
+  padding: 15px;
+  position: relative; 
+  overflow:hidden;
+  // border-top: 1px solid #f9f9f9;
+  margin-bottom: 30px;
+}
+
 .list-item-data {
   font-size: 1.1em;
 
