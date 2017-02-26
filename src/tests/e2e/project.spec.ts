@@ -105,21 +105,27 @@ describe('Project Page', () => {
         });
 
         it("should make a comment on an image", () => {
+            // click the image
             browser.wait(EC.elementToBeClickable(project.image), 5000, "never found the image");
             project.image.click();
 
+            // click the tool tip
             browser.wait(EC.elementToBeClickable(project.addTextBtn), 5000, "couldn't click the text comment button");
             project.addTextBtn.click();
 
+            // add some text to the comment
             browser.wait(EC.elementToBeClickable(project.textComment), 5000, "couldn't click the text comment");
             project.textComment.sendKeys('some test text');
             
+            // save the comment
             browser.wait(EC.elementToBeClickable(project.commentSave), 5000, "could not click the save button on the comment");
             project.commentSave.click();
 
+            // delete the comment
             browser.wait(EC.elementToBeClickable(project.commentDelete), 5000, "could not find delete button");
             project.commentDelete.click();
 
+            // make sure it's deleted
             browser.wait(EC.invisibilityOf(project.textComment), 5000, "text comment never went away after deleting it");
         });
     });
