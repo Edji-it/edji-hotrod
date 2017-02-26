@@ -40,7 +40,7 @@
     
 <!--</div>-->
 <!--<div>-->
-<a class="list-item list-item--button project-card" [routerLink]="['/project', project._id]" *ngFor="let project of reading.projects">
+<a class="list-item list-item--button project-card" [class.new-project]="project.new" [routerLink]="['/project', project._id]" *ngFor="let project of reading.projects">
     <div class="row">
         <div class="col-sm-7">
             <div class="title"> 
