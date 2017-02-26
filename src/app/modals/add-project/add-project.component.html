@@ -10,7 +10,7 @@
                   <div class="form-group">
                       <label for="newProjectLabel">Group Name</label>
                       <input tabindex="0" id="newProjectLabel" type="text" placeholder="What will you call the group?" [formControl]="projectForm.controls['label']" />
-                      <div id="msgLabelRequired" *ngIf="formSubmitted && projectForm.controls['label'].hasError('required')" class="alert alert-info">Groups like to have names!</div>
+                      <div id="msgLabelRequired" *ngIf="formSubmitted && projectForm.controls['label'].hasError('required')" class="alert alert-warning" role="alert">Groups like to have names!</div>
                   </div>
                   <div class="form-group">
                       <label class="custom-control custom-checkbox">
@@ -30,7 +30,7 @@
                   <div class="button__row" style="padding-top:0px;">
                       <button tabindex="0" class="btn btn-primary" type="submit" [class.loading]="isLoading" name="Add Project" style="margin: 5px 3px; width:100%;">Create Group</button>
                   </div>
-                
+                  <div id="msgServiceError" *ngIf="formSubmitted && errors.serviceError" class="alert alert-warning" role="alert">Uh oh! We messed up and we don't know what to do!</div>
               </div>
               <!--<div class="modal-footer">
                 <div class="btn-row right">

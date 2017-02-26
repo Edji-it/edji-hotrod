@@ -14,6 +14,7 @@ export class AddProjectModal implements OnInit {
   @Input() reading: any;
   private projectForm: FormGroup
   private formSubmitted: boolean = false;
+  private errors: { serviceError ?: boolean } = {};
 
   constructor(private _projects: ProjectService, _fb: FormBuilder) {
     this.projectForm = _fb.group({
@@ -29,6 +30,10 @@ export class AddProjectModal implements OnInit {
    * Create a fresh Project for a given Reading, then push it back to the dashboard
    */
   addProject(formValue: any) {
+    // reset errors
+    this.errors.serviceError = false;
+
+    // trigger form submission and check for form errors
     this.formSubmitted = true;
     if (!this.projectForm.valid) { return; }
 
@@ -45,6 +50,7 @@ export class AddProjectModal implements OnInit {
         }
       }, error => {
         console.log(error);
+        this.errors.serviceError = true;
       });
   }
 }

@@ -66,7 +66,7 @@
 
         <div id="msgDuplicateUser" *ngIf="errorObject.duplicateUser" class="alert alert-info" [innerHtml]="errorObject.duplicateUser | emojione"></div>
         <div id="msgBadName" *ngIf="errorObject.badName" class="alert alert-warn" [innerHtml]="errorObject.badName | emojione"></div>
-        <div id="msgBadUsername" *ngIf="errorObject.badUsername" class="alert alert-warn" [innerHtml]="errorObject.badUsername | emojione"></div>
+        <div id="msgBadUsername" *ngIf="errorObject.badUsername" class="alert alert-warning" [innerHtml]="errorObject.badUsername | emojione"></div>
         <div id="msgServerError" *ngIf="errorObject.serverError" class="alert alert-danger">{{errorObject.serverError}}</div>
 
         <div class="button__row">
