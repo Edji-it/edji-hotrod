@@ -119,7 +119,10 @@ describe('Project Page', () => {
         });
 
         it("should delete a comment", () => {
-            
+            browser.wait(EC.elementToBeClickable(project.commentDelete), 5000, "could not find delete button");
+            project.commentDelete.click();
+
+            expect(EC.presenceOf(project.textComment)).toBeFalsy("saw text comment after trying to delete it");
         });
     });
 
