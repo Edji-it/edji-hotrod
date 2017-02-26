@@ -43,6 +43,8 @@ export class CommentComponent implements OnInit {
   @Output() expandLine = new EventEmitter<number>();
   @Output() dismissKeyboard = new EventEmitter();
   @Output() commentUpdated: EventEmitter<any> = new EventEmitter();
+  @Output() mobileActivation = new EventEmitter();
+  @Output() mobileDeactivation = new EventEmitter();
 
   private showDeleteModal: boolean = false;
 
@@ -60,17 +62,18 @@ export class CommentComponent implements OnInit {
   toggleActive( ): void {
       if (!this.readOnly) {
         if (this.active === true) {
-            if (window.screen.availWidth < 768) {
-              this.mobileCommentDone();
-            }
+            //if (window.screen.availWidth < 768) {
+              //this.mobileCommentDone();
+            //}
             this.active = false;
             this.commentActivation.emit(false);
             // Save when comment is toggled away from
             this.updateComment(this.comment.data);
         } else {
-            if (window.screen.availWidth < 768) {
-              this.mobileCommentFix();
-            }
+            //if (window.screen.availWidth < 768) {
+              //this.mobileCommentFix();
+              //console.log('toggleActivate');
+            //}
             this.active = true; 
             this.commentActivation.emit(true);
         }
@@ -82,9 +85,10 @@ export class CommentComponent implements OnInit {
 
   activate(): void {
     if (!this.readOnly) {
-      if (!this.active && window.screen.availWidth < 768) {
-        this.mobileCommentFix();
-      }
+      //if (!this.active && window.screen.availWidth < 768) {
+        //this.mobileCommentFix();
+        //console.log('activate');
+      //}
       this.active = true;
       this.commentActivation.emit(true);
     } else {
@@ -93,22 +97,27 @@ export class CommentComponent implements OnInit {
   }
 
   togglePreview(): void {
-    if (window.screen.availWidth < 768 && this.readOnly) {
-      if (this.active == true) {
-        this.active = false;
-        this.commentActivation.emit(false);
-      } else {
-        this.active = true;
-        
-      }
-    } else {
+    // if (window.screen.availWidth < 768 && this.readOnly) {
+    //   if (this.active == true) {
+    //     this.active = false;
+    //     this.commentActivation.emit(false);
+    //     //this.mobileCommentDone();
+    //   } else {
+    //     this.active = true;
+    //     //this.mobileCommentFix();
+    //     //console.log('togglePreview1');
+    //   }
+    //} else {
       if (this.preview === true) {
         this.preview = false;
         this.commentActivation.emit(false);
+        //this.mobileCommentDone();
       } else {
         this.preview = true;
+        //this.mobileCommentFix();
+        //console.log('togglePreview2');
       }
-    }
+    //}
   }
 
   deactivate(): void {
@@ -116,9 +125,9 @@ export class CommentComponent implements OnInit {
     this.commentActivation.emit(false);
     // Save when comment is toggled away from
     this.updateComment(this.comment.data);
-    if (window.screen.availWidth < 768) {
-      this.mobileCommentDone();
-    }
+    //if (window.screen.availWidth < 768) {
+      //this.mobileCommentDone();
+    //}
   }
 
   // Updates comment in db
@@ -177,26 +186,30 @@ export class CommentComponent implements OnInit {
     this.expandLine.emit(this.yPos);
   }
 
-  /**
-   * iOS Text Comment Correction Activate
-   */
-  mobileCommentFix(): void {
-    // iOS scroll fix enable
-    this.currentScroll = document.body.scrollTop;
-    document.getElementsByTagName("body")[0].classList.add('disablePane');
-    document.getElementsByTagName("body")[0].style["top"] = "-" + this.currentScroll + "px";
-  }
+  // /**
+  //  * iOS Text Comment Correction Activate
+  //  */
+  // mobileCommentFix(): void {
+  //   // iOS scroll fix enable
+  //   console.log('mcmt-active');
+  //   this.currentScroll = document.body.scrollTop;
+  //   document.getElementsByTagName("body")[0].classList.add('disablePane');
+  //   document.getElementsByTagName("body")[0].style["top"] = "-" + this.currentScroll + "px";
+  //   this.mobileActivation.emit(this.yPos);
+  // }
 
-  /**
-   * iOS Text Comment Correction Deactivate
-   */
-  mobileCommentDone(): void {
-    // iOS scroll fix disable
-    document.getElementsByTagName("body")[0].classList.remove('disablePane');
-    document.getElementsByTagName("body")[0].removeAttribute("style");
-    document.body.scrollTop = this.currentScroll;
-    // Dismiss the keyboard in mobile
-    this.dismissKeyboard.emit();
-  }
+  // /**
+  //  * iOS Text Comment Correction Deactivate
+  //  */
+  // mobileCommentDone(): void {
+  //   // iOS scroll fix disable
+  //   document.getElementsByTagName("body")[0].classList.remove('disablePane');
+  //   document.getElementsByTagName("body")[0].removeAttribute("style");
+  //   document.body.scrollTop = this.currentScroll;
+  //   this.mobileDeactivation.emit(this.yPos);
+  //   // Dismiss the keyboard in mobile
+  //   this.dismissKeyboard.emit();
+  //   console.log('mcmt-nactive');
+  // }
 
 }

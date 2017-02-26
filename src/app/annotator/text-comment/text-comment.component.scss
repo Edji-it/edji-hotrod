@@ -104,11 +104,3 @@ textarea.text-comment-input,
         display: none;
     }
 }
-
-/* Mobile Optimization */
-@media (max-width: #{$tablet - 1px}) {
-    textarea.text-comment-input,
-    .text-comment-input {
-        width: 100%;
-    }
-}
