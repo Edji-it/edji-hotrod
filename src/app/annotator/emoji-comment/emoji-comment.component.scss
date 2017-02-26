@@ -6,9 +6,9 @@
 }
 
 /* Mobile Optimization */
-@media (max-width: #{$tablet - 1px}) {
+@media (max-width: $tablet) {
     .emojionearea {
-        width: 100%;
+        //width: 100%;
     }
 }
 
