@@ -1,5 +1,6 @@
+import * as path from 'path';
 import { SideBarComponent } from '../../app/shared/side-bar';
-import { browser, by, element, protractor } from 'protractor';
+import { browser, by, element, protractor} from 'protractor';
 import { NewReading, Login, Sidebar } from './page-objects';
 
 /*
@@ -157,6 +158,46 @@ describe('New Reading Page', () => {
         // Should see error for empty group label
         browser.wait(EC.presenceOf(newReading.groupError), 5000, "never saw an error for empty group label");
     });
+
+    describe("Image upload", () => {
+        /**
+         * Test: Add reading with an image
+         */
+        it('should upload an image to a reading and save it to the reading', function() {
+            // Open and wait for New Reading page
+            newReading.getPage();
+            browser.wait(EC.elementToBeClickable(newReading.uploadModalButton), 5000);
+            newReading.uploadModalButton.click();
+            browser.wait(EC.elementToBeClickable(newReading.imageUploadTrigger), 5000);
+            
+            // Select File to upload
+            let fileToUpload = '../../assets/test/titration.jpg';
+            let absolutePath = path.resolve(__dirname, fileToUpload);
+            newReading.imageFileInput.sendKeys(absolutePath);
+
+            // Begin upload 
+            browser.wait(EC.elementToBeClickable(newReading.imageUploadTrigger), 5000, "button to upload an image never became clickable");
+            newReading.imageUploadTrigger.click();
+
+            // Image was uploaded! Insert it
+            browser.wait(EC.elementToBeClickable(newReading.uploadedImage), 10000, "never saw the image uploaded");
+            newReading.uploadedImage.click();
+
+            // Complete rest of reading
+            newReading.titleInput.sendKeys(newReading.titleImageString);
+
+            // Submit New Reading
+            browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "login button never became clickable after login form entry");
+            newReading.addButton.submit();
+
+            // Should create a new Reading
+            browser.wait(EC.urlContains("project"), 5000, "never arrived at new reading");
+
+            // Should see image in new reading
+            browser.wait(EC.presenceOf(newReading.imageInReading), 5000, "never saw an image in the new reading");
+        });
+    });
+
 
     /* Test: Add reading, then adjust with editing buttons. (Headers, bold, underlines, italixs, text size)
         - Log in with Teacher account
