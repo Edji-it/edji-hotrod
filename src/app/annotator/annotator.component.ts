@@ -436,6 +436,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 if (comment._id) {
                     this.angulartics.eventTrack.next({ action: type + 'CommentCreate', properties: { category: 'projectAction', label: 'attempt' }});
                     // Add setting to trigger focus on new comment
+                    comment.new = true; // this is basically to tell our test cases which comment was just made
                     this.inactivateComment();
                     this.commentsByIndexAdd(comment, start);
                 } else {
