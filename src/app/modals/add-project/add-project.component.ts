@@ -2,6 +2,8 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 
+import { ProjectService } from './../../shared';
+
 @Component({
   selector: 'hot-add-project-modal',
   templateUrl: 'add-project.component.html'
@@ -13,7 +15,7 @@ export class AddProjectModal implements OnInit {
   private projectForm: FormGroup
   private formSubmitted: boolean = false;
 
-  constructor(_fb: FormBuilder) {
+  constructor(private _projects: ProjectService, _fb: FormBuilder) {
     this.projectForm = _fb.group({
       label: [null, Validators.required],
       emojiType: null,
@@ -21,10 +23,27 @@ export class AddProjectModal implements OnInit {
     });
   }
 
-  ngOnInit() { }
+  ngOnInit() { console.log(this.reading); }
 
+  /**
+   * Create a fresh Project for a given Reading, then push it back to the dashboard
+   */
   addProject(formValue: any) {
     this.formSubmitted = true;
-    console.log(formValue);
+    if (!this.projectForm.valid) { return; }
+
+    let types = [];
+    if (formValue.emojiType) { types.push("emoji"); }
+    if (formValue.textType) { types.push("text"); }
+
+    this._projects.create(this.reading._id, { 'label' : formValue.label, 'types' : types } )
+      .subscribe( project => {
+        if (project._id) {
+          this.reading.projects.push(project);
+          this.closeModal.emit();
+        }
+      }, error => {
+        console.log(error);
+      });
   }
 }
