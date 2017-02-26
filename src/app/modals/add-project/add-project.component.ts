@@ -19,8 +19,8 @@ export class AddProjectModal implements OnInit {
   constructor(private _projects: ProjectService, _fb: FormBuilder) {
     this.projectForm = _fb.group({
       label: [null, Validators.required],
-      emojiType: null,
-      textType: null
+      emojiType: true,
+      textType: true
     });
   }
 

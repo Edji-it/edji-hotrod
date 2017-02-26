@@ -27,17 +27,13 @@
                       </label>
                   </div>
                   <!--</label>-->
+              </div>
+              <div class="modal-footer">
                   <div class="button__row" style="padding-top:0px;">
-                      <button tabindex="0" class="btn btn-primary" type="submit" [class.loading]="isLoading" name="Add Project" style="margin: 5px 3px; width:100%;">Create Group</button>
+                      <button id="buttonCreateGroup" tabindex="0" class="btn btn-primary" type="submit" [class.loading]="isLoading" name="Add Project" style="margin: 5px 3px; width:100%;">Create Group</button>
                   </div>
                   <div id="msgServiceError" *ngIf="formSubmitted && errors.serviceError" class="alert alert-warning" role="alert">Uh oh! We messed up and we don't know what to do!</div>
               </div>
-              <!--<div class="modal-footer">
-                <div class="btn-row right">
-                  <button (click)="closeModal.emit()" type="button" class="btn" data-dismiss="modal">Cancel</button><!--not sure what data-dismiss does-->
-                  <!--<button type="submit" [class.loading]="isLoading" class="btn btn-primary" name="Add project">Create</button>
-                </div>
-              </div>-->
             </form>
         </div>
     </div>
