@@ -116,13 +116,11 @@ describe('Project Page', () => {
             
             browser.wait(EC.elementToBeClickable(project.commentSave), 5000, "could not click the save button on the comment");
             project.commentSave.click();
-        });
 
-        it("should delete a comment", () => {
             browser.wait(EC.elementToBeClickable(project.commentDelete), 5000, "could not find delete button");
             project.commentDelete.click();
 
-            expect(EC.presenceOf(project.textComment)).toBeFalsy("saw text comment after trying to delete it");
+            browser.wait(EC.invisibilityOf(project.textComment), 5000, "text comment never went away after deleting it");
         });
     });
 
