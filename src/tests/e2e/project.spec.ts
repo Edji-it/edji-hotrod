@@ -52,50 +52,64 @@ describe('Project Page', () => {
         });
     });
 
-    it("should make emoji comment as logged in user", () => {
-        // Login 
-        guestForm.loginAsGuest();
-        browser.wait(EC.elementToBeClickable(sidebar.logOutButton));
-
-        let emojiKeyboard = element(by.css('emoji-keyboard'));
-        let emojiCommentSave = element(by.css('.comment.active .comment__save'));
-        let grinningEmoji = emojiKeyboard.element(by.css("[dataname=':grinning:'"));
-
-        // Code for making a comment
-        // Find text to select
-        browser.wait(EC.elementToBeClickable(element(by.css(".word[index='18']"))), 5000, "never found words to click on");
-
-        // Select Text to comment on (should select 'Lorem Ipsum')
-        browser.executeScript(function () {
-            let range = document.createRange();
-            let sel = window.getSelection();
-            range.setStart(document.body.querySelector(".word[index='18']").childNodes[0], 0);
-            range.setEnd(document.body.querySelector(".word[index='21']").childNodes[0], 0);
-            sel.removeAllRanges();
-            sel.addRange(range);
+    describe("Commenting", () => {
+        beforeAll(() => {
+            project.getPage();
+            // Login
+            guestForm.loginAsGuest();
+            browser.wait(EC.elementToBeClickable(sidebar.logOutButton));
         });
 
-        // Add emoji comment
-        browser.wait(EC.elementToBeClickable(project.addEmojiBtn), 5000, "never found the add emoji comment button");
-        project.addEmojiBtn.click();
+        afterAll(() => {
+            // log out
+            browser.wait(EC.elementToBeClickable(sidebar.logOutButton), 5000, "never found the logout button");
+            sidebar.logOutButton.click();
+        });
 
-        // Type emojis
-        browser.wait(EC.elementToBeClickable(grinningEmoji), 5000, "never found the emoji keyboard");
-        grinningEmoji.click();
-        emojiKeyboard.element(by.css("[dataname=':heart_eyes:'")).click();
-        emojiKeyboard.element(by.css(".emojionearea-filter[title='Objects']")).click();
+        it("should make emoji comment as logged in user", () => {
 
-        // Use emoji keyboard filter, and type an emoji from further down
-        browser.wait(EC.elementToBeClickable(emojiKeyboard.element(by.css("[dataname=':dollar:'"))), 5000, "never scrolled to the dollars emoji");
-        emojiKeyboard.element(by.css("[dataname=':dollar:'")).click();
+            let emojiKeyboard = element(by.css('emoji-keyboard'));
+            let emojiCommentSave = element(by.css('.comment.active .comment__save'));
+            let grinningEmoji = emojiKeyboard.element(by.css("[dataname=':grinning:'"));
 
-        // Save emoji comment
-        emojiCommentSave.click();
+            // Code for making a comment
+            // Find text to select
+            browser.wait(EC.elementToBeClickable(element(by.css(".word[index='18']"))), 5000, "never found words to click on");
 
-        // log out
-        browser.wait(EC.elementToBeClickable(sidebar.logOutButton), 5000, "never found the logout button");
-        sidebar.logOutButton.click();
+            // Select Text to comment on (should select 'Lorem Ipsum')
+            browser.executeScript(function () {
+                let range = document.createRange();
+                let sel = window.getSelection();
+                range.setStart(document.body.querySelector(".word[index='18']").childNodes[0], 0);
+                range.setEnd(document.body.querySelector(".word[index='21']").childNodes[0], 0);
+                sel.removeAllRanges();
+                sel.addRange(range);
+            });
+
+            // Add emoji comment
+            browser.wait(EC.elementToBeClickable(project.addEmojiBtn), 5000, "never found the add emoji comment button");
+            project.addEmojiBtn.click();
+
+            // Type emojis
+            browser.wait(EC.elementToBeClickable(grinningEmoji), 5000, "never found the emoji keyboard");
+            grinningEmoji.click();
+            emojiKeyboard.element(by.css("[dataname=':heart_eyes:'")).click();
+            emojiKeyboard.element(by.css(".emojionearea-filter[title='Objects']")).click();
+
+            // Use emoji keyboard filter, and type an emoji from further down
+            browser.wait(EC.elementToBeClickable(emojiKeyboard.element(by.css("[dataname=':dollar:'"))), 5000, "never scrolled to the dollars emoji");
+            emojiKeyboard.element(by.css("[dataname=':dollar:'")).click();
+
+            // Save emoji comment
+            emojiCommentSave.click();
+        });
+
+        // it("should make a comment on an image", () => {
+
+        // });
     });
+
+
      
 }); // describe 'Dashboard Page'
   
