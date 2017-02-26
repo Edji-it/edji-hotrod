@@ -10,7 +10,7 @@
                   <div class="form-group">
                       <label for="newProjectLabel">Group Name</label>
                       <input tabindex="0" id="newProjectLabel" type="text" placeholder="What will you call the group?" [formControl]="projectForm.controls['label']" />
-
+                      <div id="msgLabelRequired" *ngIf="formSubmitted && projectForm.controls['label'].hasError('required')" class="alert alert-info">Groups like to have names!</div>
                   </div>
                   <div class="form-group">
                       <label class="custom-control custom-checkbox">

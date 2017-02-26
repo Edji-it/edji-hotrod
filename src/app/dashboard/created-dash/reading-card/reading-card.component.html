@@ -28,7 +28,7 @@
                 </p>-->
             </div>
         </div>
-        <div id="optionsWrap" class="dropdown reading-options" [class.show]="showOptions">
+        <div id="optionsWrap" (clickOutside)="showOptions = false" class="dropdown reading-options" [class.show]="showOptions">
             <button class="btn btn-icon--plain" (click)="showOptions = !showOptions">
                 <i class="icon icon-more"></i>
             </button>

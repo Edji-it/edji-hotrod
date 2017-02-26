@@ -39,6 +39,7 @@ export class AddProjectModal implements OnInit {
     this._projects.create(this.reading._id, { 'label' : formValue.label, 'types' : types } )
       .subscribe( project => {
         if (project._id) {
+          project.new = true;
           this.reading.projects.push(project);
           this.closeModal.emit();
         }
