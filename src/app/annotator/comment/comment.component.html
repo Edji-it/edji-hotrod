@@ -1,4 +1,4 @@
-<div class="comment" [class.saved]="justSaved" [class.active]="active" [class.readonly]="readOnly" [ngClass]="[ 'line-count-' + lineCount, expanded ? 'expanded' : '', active ? 'comment__show' : '' ]">
+<div class="comment" [class.new]="comment.new" [class.saved]="justSaved" [class.active]="active" [class.readonly]="readOnly" [ngClass]="[ 'line-count-' + lineCount, expanded ? 'expanded' : '', active ? 'comment__show' : '' ]">
     <div class='expand-comments' (tap)='toggleExpand($event)'>
         <div *ngIf="lineCount == 1 && expanded" class='expand__arrow-right'></div>
     </div>

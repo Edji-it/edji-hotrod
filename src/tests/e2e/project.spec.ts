@@ -104,9 +104,23 @@ describe('Project Page', () => {
             emojiCommentSave.click();
         });
 
-        // it("should make a comment on an image", () => {
+        it("should make a comment on an image", () => {
+            browser.wait(EC.elementToBeClickable(project.image), 5000, "never found the image");
+            project.image.click();
 
-        // });
+            browser.wait(EC.elementToBeClickable(project.addTextBtn), 5000, "couldn't click the text comment button");
+            project.addTextBtn.click();
+
+            browser.wait(EC.elementToBeClickable(project.textComment), 5000, "couldn't click the text comment");
+            project.textComment.sendKeys('some test text');
+            
+            browser.wait(EC.elementToBeClickable(project.commentSave), 5000, "could not click the save button on the comment");
+            project.commentSave.click();
+        });
+
+        it("should delete a comment", () => {
+            
+        });
     });
 
 
