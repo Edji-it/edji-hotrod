@@ -213,7 +213,7 @@ article.content p {
 }
 
 /* Mobile Optimization */
-@media (max-width: #{$tablet - 1px}) {
+@media (max-width: $tablet) {
 	.options {
 		position: fixed;
 		bottom: 0;
@@ -222,6 +222,7 @@ article.content p {
 		border-radius: 0;
 		text-align: center;
     	height: 50px;
+		box-shadow: 0px 1px 15px 0px rgba(0,0,0,0.4);
 	}
 	#addEmojiComment {
 		margin-right: 50px;
@@ -263,9 +264,5 @@ article.content p {
 		font-size: 42px;
 		top: 5px;
 		right: 5px;
-	}
-
-	.mobile-cmts {
-		
 	}
 }
