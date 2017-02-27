@@ -309,8 +309,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     }
 
     updateAllLineCounts(): void {
-        this.lineCountArray = [];
         if (!this.lineCountRunning) {
+            this.lineCountArray = [];
             this.lineCountRunning = true;
             if (this.commentComponents) {
                 this.commentComponents.toArray().forEach(
