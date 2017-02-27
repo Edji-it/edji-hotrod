@@ -4,6 +4,7 @@ $commentHeight: 32px;
 $commentWidth: 175px;
 $commentPad: 4px;
 $commentBorder: 1px solid rgb(220, 227, 234);
+$expandBg: #e0e4e8;
 
 %noSelect {
 	-webkit-touch-callout: none; /* iOS Safari */
@@ -42,6 +43,42 @@ edji-comment {
 
 	@extend %noSelect;
 
+	&:not(.expanded) {
+		& .expand-comments {
+			@media (max-width: $tablet) {
+				&:before {
+					content: ' ';
+					position: absolute;
+					display: block;
+					z-index: 5000;
+					width: 261px;
+					right: -25px;
+					border-radius: 0px;
+					top: 0px;
+					background: $expandBg;
+					height: $commentHeight + 10px;
+					top: -5px;
+					border-top-left-radius: 5px;
+					border-top-right-radius: 5px;
+				}
+			}
+		}
+		& .cmtEmoji {
+			@media (max-width: $tablet) {
+				&:before {
+					height: $commentHeight + 10px;
+				}
+			}
+		}
+		& .cmtText {
+			@media (max-width: $tablet) {
+				&:before {
+					height: $commentHeight + 30px;
+				}
+			}
+		}
+	}
+	
 	&.expanded {
 		z-index: 5000;
 
@@ -307,27 +344,27 @@ input.emojiComment {
 	}
 }
 
-$expandBg: #e0e4e8;
-
 @for $n from 1 through 30 {
 	div.line-count-#{$n} {
 
 			@include transition(margin linear 0.3s);
 
-			&:after {
-				color: #fff;
-				content: '#{$n}';
-				background: transparent;
-				padding: 5px;
-				position: absolute;
-				right: -9px;
-				top: -7px;
-				font-size: 10px;
-				font-family: 'Open Sans';
-				text-align: center;
-				transform: translateX(50%);
-				pointer-events: none;
-				display: block;
+			@media (min-width: $tablet) {
+				&:after {
+					color: #fff;
+					content: '#{$n}';
+					background: transparent;
+					padding: 5px;
+					position: absolute;
+					right: -9px;
+					top: -7px;
+					font-size: 10px;
+					font-family: 'Open Sans';
+					text-align: center;
+					transform: translateX(50%);
+					pointer-events: none;
+					display: block;
+				}
 			}
 
 			& .expand-comments {
@@ -365,7 +402,7 @@ $expandBg: #e0e4e8;
 						pointer-events: all;
 
 						&:before {
-							height: $commentHeight + 10px;
+							height: $commentHeight + 6px;
 							top: -5px;
 							border-top-left-radius: 5px;
 							border-top-right-radius: 5px;
@@ -428,6 +465,9 @@ div.line-count-1 {
 	
 	& .expand-comments {
 		display: none;
+		@media (max-width: $tablet) {
+			display: block;
+		}
 	}
 	
 	&.expanded {
@@ -462,19 +502,19 @@ $expandShadowSize: 3px;
 	height: $commentHeight;
 	z-index: 0; // 6000;
 
-	&:before {
-		content: ' ';
-		display: block;
-		position: absolute;
-		z-index: 0;
-		top: 0;
-		right: -4px;
-		width: 46px;
-		height: $commentHeight;
-		background: $expandBg;
-		border-radius: 5px;
-		pointer-events:none;
-	}
+		&:before {
+			content: ' ';
+			display: block;
+			position: absolute;
+			z-index: 0;
+			top: 0;
+			right: -4px;
+			width: 46px;
+			height: $commentHeight;
+			background: $expandBg;
+			border-radius: 5px;
+			pointer-events:none;
+		}
 
 	&:after {
 		content: ' ';

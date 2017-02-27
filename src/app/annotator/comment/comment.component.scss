@@ -118,7 +118,6 @@ $tablet-width: 768px;
 @media (max-width: $tablet) {
 	.comment {
     display: none;
-    //display: block !important;
     position: absolute !important;
     top: none !important;
     left: 30px;
@@ -178,7 +177,7 @@ $tablet-width: 768px;
   .mobile-comment-button {
     width: 25px;
     height: auto;
-    display:block;
+    display: block;
     opacity: 0.5;
     position: absolute;
     left: -40px;
