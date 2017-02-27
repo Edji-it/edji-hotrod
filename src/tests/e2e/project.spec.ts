@@ -105,8 +105,11 @@ describe('Project Page', () => {
         });
 
         it("should make a comment on an image", () => {
-            // click the image
-            browser.wait(EC.elementToBeClickable(project.image), 5000, "never found the image");
+            // Find and click on image
+            browser.wait(EC.presenceOf(project.image), 10000, "never found the image");
+            browser.executeScript('window.scrollTo(0,10000);').then(function () {
+                browser.wait(EC.elementToBeClickable(project.image), 5000, "never scrolled and saw the image");
+            });
             project.image.click();
 
             // click the tool tip
