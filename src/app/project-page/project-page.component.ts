@@ -58,7 +58,7 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
             (project) => {
                 if (project) {
                     this.project = project;
-                    this.commentCount = this.project.comments.length;
+                    this.commentCount = project.comments.length;
                     this.createdDate = new Date(project.createdAt);
                     this.createDate = this.createdDate.toDateString();
 
@@ -68,6 +68,15 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
                             this.liveCount = users.length;
                         }, (error) => {
                             console.warn(error);
+                        })
+                    );
+
+                    this.subscriptions.push(
+                        this._projects.currentCommentStats.subscribe(data => {
+                            // this.commentStats.users = [];
+                            this.commentCount = data;
+                        }, error => {
+                            console.error(error);
                         })
                     );
                 }

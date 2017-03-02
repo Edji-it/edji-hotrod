@@ -6,7 +6,7 @@
     <div class="prj">
       <label id="projectCreate" class="prj-label">Started {{ createDate }}</label>
       <br/>
-      <label id="projectComments" class="prj-label">{{ commentCount }} Comments</label>
+      <label id="projectComments" class="prj-label">{{ commentCount ? commentCount.count : 0 }} Comments</label>
     </div>
     
     <div class="hud__info"> 

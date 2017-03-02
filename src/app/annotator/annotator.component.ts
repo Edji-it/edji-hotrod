@@ -183,7 +183,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                         // Remove highlights from local array
                         this.decrementHighlights(this.user._id === comment.user_id || this.project.teacher_id == comment.user_id, comment.start, comment.end);
                         this.commentsByIndexRemove(comment._id, wIndex, cIndex);
-                        this.updateCommentStats(comment.user_id, -1, comment.author);
+                        //this.updateCommentStats(comment.user_id, -1, comment.author);
                     }
                 } else if (commentUpdate.action === 'UPDATE') {
                     if (cIndex > -1 && this.commentsByIndex[wIndex] && this.commentsByIndex[wIndex][cIndex]) {
@@ -193,13 +193,13 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                         // Add highlights to local array
                         this.incrementHighlights(this.user._id === comment.user_id || this.project.teacher_id == comment.user_id, comment.start, comment.end);
                         this.commentsByIndexAdd(comment, wIndex, true);
-                        this.updateCommentStats(comment.user_id, 1, comment.author);
+                        //this.updateCommentStats(comment.user_id, 1, comment.author);
                     }
                 } else if (commentUpdate.action === 'CREATE') {
                     // Add highlights to local array
                     this.incrementHighlights(this.user._id === comment.user_id || this.project.teacher_id == comment.user_id, comment.start, comment.end);
                     this.commentsByIndexAdd(comment, wIndex, true);
-                    this.updateCommentStats(comment.user_id, 1, comment.author);
+                    //this.updateCommentStats(comment.user_id, 1, comment.author);
                 }
             }, (error) => {
                 console.warn(error);
@@ -470,6 +470,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             }
         }
         this.updateAllLineCounts();
+        this.updateCommentStats(comment.user_id, 1, comment.author);
     }
 
     private decorateComment(comment: any) {
@@ -494,6 +495,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.commentsByIndex[index].splice(commentIndex,1);
         // Update line counts
         this.updateAllLineCounts();
+        this.updateCommentStats(comment.user_id, -1, comment.author);
     }
 
      /**
