@@ -15,9 +15,10 @@
 }
 
 /* Mobile Optimization */
-@media (max-width: #{$tablet - 1px}) {
+@media (max-width: $tablet) {
 	.editor-button-bar {
 		width: inherit;
+        padding: 12px 0;
 	}
     .mTitle {
         font-size: 26px;
@@ -27,5 +28,12 @@
     }
     .mGroup {
         font-size: 14px;
+    }
+    .groupLabel {
+        width: 70px;
+        left: -70px;
+    }
+    .container--side-bar {
+        padding: 70px 20px 0 20px;
     }
 }

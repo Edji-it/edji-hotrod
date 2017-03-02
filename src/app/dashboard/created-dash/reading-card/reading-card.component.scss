@@ -108,7 +108,7 @@ button.new-reading-btn {
 }
 
 /* Mobile Optimization */
-@media (max-width: #{$tablet - 1px}) {
+@media (max-width: $tablet) {
     .readings-header {
         display: none;
     }

@@ -1,3 +1,4 @@
+@import './variables';
 
 $inputVPadding: 10px;
 $inputHPadding: 20px;
@@ -197,6 +198,10 @@ label input, label textarea {
 		padding-right: 10px;
 		// color: $blue;
 	}
+
+  @media (max-width: $tablet) {
+    padding-left: 60px;
+  }
 }
 
 label.border-wrap {

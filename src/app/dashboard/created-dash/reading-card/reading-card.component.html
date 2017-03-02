@@ -42,7 +42,7 @@
 <!--<div>-->
 <a class="list-item list-item--button project-card" [class.new-project]="project.new" [routerLink]="['/project', project._id]" *ngFor="let project of reading.projects">
     <div class="row">
-        <div class="col-sm-7">
+        <div class="col-9">
             <div class="title"> 
                 <div class="project-title-input">
                     <span class="reading-project--label"><span style="color: #cdcdcd;">Group:</span> {{project.label}}</span>
@@ -56,7 +56,7 @@
                 <span class="metadata">{{ project.student_count ? project.student_count : 0 }} Students</span>
             </div>
         </div>
-        <div class="col-sm-5 prj-btns">
+        <div class="col-3 prj-btns pull-right">
             <!--<a style="float:right; margin-left: 8px;" [routerLink]="['/project', project._id]" class="btn btn-secondary">Open</a>-->
             <pre class="prj-code">{{project.code || 'none'}}</pre>
         </div>
