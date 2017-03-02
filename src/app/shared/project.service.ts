@@ -167,7 +167,7 @@ export class ProjectService {
      * @param text (optional) Selection of text comment was made on. Left as optional, but SHOULD be passed.
      * @param commentId (optional) If passed, will update comment with that ID
      */
-    public saveComment(projectId: string, commentText: string, start: number, end: number, type: string, text ?: string, commentId ?: string) : Promise<any> {
+    public saveComment(projectId: string, commentText: string, start: number, end: number, type: string, text ?: string, commentId ?: string, location ?: any) : Promise<any> {
         let url = this._auth.getUrl() + '/projects/' + projectId + '/comments';
         let data = {
             'comment' : {
@@ -182,6 +182,10 @@ export class ProjectService {
 
         if (text) {
             data.comment['text'] = text;
+        }
+
+        if (location && location.x && location.y) {
+            data.comment['loc'] = location;
         }
 
         // Add comment ID if passed

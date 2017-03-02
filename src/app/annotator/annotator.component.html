@@ -37,6 +37,9 @@
 			<span *ngFor="let word of reading.words; let i = index" class="word"
 				[ngClass]="[ word.styles.join(' '), getHighlightClass(i) ]" 
 				[attr.index]="i">
+				<div *ngFor="let comment of commentsByIndex[i]" class="hotspot" 
+					[style.top]="comment['loc'] ? comment['loc']['y'] + '%' : ''" 
+					[style.left]="comment['loc'] ? comment['loc']['x'] + '%' : ''"></div>
 				<edji-comment *ngFor="let comment of commentsByIndex[i]; let ci = index" 
 					[class.hidden]="(!project.heat_vision && user._id !== project.teacher_id) && comment.user_id !== user._id && comment.user_id !== project.teacher_id"
 					[class.owner]="comment.user_id === project.teacher_id"

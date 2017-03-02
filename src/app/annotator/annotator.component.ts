@@ -56,6 +56,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     private mobileIndex = 0;
     private hideKeyboard = false;
 
+    private imageCoords = {};
+
     private subscriptions: Subscription[] = [];
 
     // For converting old Readings
@@ -430,7 +432,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.angulartics.eventTrack.next({ action: type + 'CommentCreate', properties: { category: 'projectAction', label: 'attempt' }});
 
         // Tell server we've added a comment
-        this._projects.saveComment(projectId, '', start, end, type, text)
+        this._projects.saveComment(projectId, '', start, end, type, text, null, this.imageCoords)
             .then(comment => {
                 // We add the comment from the service because it has an Id
                 if (comment._id) {
@@ -770,9 +772,14 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     }
 
     private imageCommentOptions(imageIndex: number, word: any, event: Event) : void {
-
         // when they click the picture, we need to create the selection for them
         let target = event.target || event.srcElement || event.currentTarget;
+        let coords = this.getRelativeCoords(event);
+        
+        // Set aside image coords
+        this.imageCoords = coords;
+        console.log(coords);
+
         let range = Rangy.createRange();
         range.selectNodeContents(target['parentNode']);
         let sel = Rangy.getSelection();
@@ -793,6 +800,50 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         } else {
             return CommentPermissions.READ;
         }
+    }
+
+    /**
+     * For image comments: Determines relative location of hotspot
+     */
+    private getRelativeCoords(e: Event): any {
+        let target = e.target;
+        let PosX = 0;
+        let PosY = 0;
+        let ImgPos;
+
+         function FindPosition(oElement) {
+            if(typeof( oElement.offsetParent ) != "undefined")
+            {
+                for(var posX = 0, posY = 0; oElement; oElement = oElement.offsetParent)
+                {
+                posX += oElement.offsetLeft;
+                posY += oElement.offsetTop;
+                }
+                return [ posX, posY ];
+                }
+                else
+                {
+                return [ oElement.x, oElement.y ];
+                }
+        }
+        ImgPos = FindPosition(target);
+        
+        if (e['pageX'] || e['pageY'])
+        {
+            PosX = e['pageX'];
+            PosY = e['pageY'];
+        }
+        else if (e['clientX'] || e['clientY'])
+            {
+            PosX = e['clientX'] + document.body.scrollLeft
+                + document.documentElement.scrollLeft;
+            PosY = e['clientY'] + document.body.scrollTop
+                + document.documentElement.scrollTop;
+            }
+        return {
+            x: ((PosX - ImgPos[0]) / target['clientWidth'] * 100).toFixed(3),
+            y: ((PosY = (PosY - ImgPos[1])) / target['clientHeight'] * 100).toFixed(3)
+        };
     }
 }
 
