@@ -1,5 +1,5 @@
 <!--Teacher View-->
-<h1 class="readings-header">Created
+<h1 class="readings-header hidden-sm-down">Created
     <i class="icon__tooltip" placement="bottom" ngbTooltip="Readings are how you share content on Edji!">
         <span class="icon icon-circle icon-info">i</span>
     </i>
@@ -9,6 +9,9 @@
 </h1>
 
 <div *ngIf="isLoading" class="row loading"></div>
+<button class="btn btn-primary new-reading-btn hidden-md-up" [routerLink]="[ '/new-reading' ]">
+    New Reading
+</button>
 <div class="item-list ">
     <!--Show readings with date values-->
     <div class="alert alert-info" role="alert" *ngIf="!isLoading && readings.length < 1 && !errorObject.readingError">

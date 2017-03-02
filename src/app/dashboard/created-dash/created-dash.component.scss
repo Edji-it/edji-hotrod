@@ -108,22 +108,9 @@
 
 button.new-reading-btn {
     float: right;
-}
 
-/* Mobile Optimization */
-@media (max-width: #{$tablet - 1px}) {
-    .readings-header {
-        display: none;
+    @media (max-width: $tablet) {
+        margin: -10px 0 14px 0;
+        padding: 8px 14px;
     }
 }
-
-// .reading-options {
-//     float: right;
-//     // position: absolute;
-//     // top: 10px;
-//     // right: 3px;
-
-//     // &:hover {
-//     //     cursor: pointer;
-//     // }
-// }
