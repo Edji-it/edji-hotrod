@@ -114,3 +114,9 @@ button.new-reading-btn {
         padding: 8px 14px;
     }
 }
+
+.alert-readings {
+    @media (max-width: $tablet){
+        margin-top: 35px;
+    }
+}
