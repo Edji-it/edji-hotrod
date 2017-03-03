@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'hot-reset-pass-page',
@@ -8,15 +9,21 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 export class ResetPassPage implements OnInit {
   private resetForm: FormGroup;
   private isLoading: boolean = false;
+  private resetToken: string;
 
-  constructor(_fb: FormBuilder) {
+  constructor(private _router: Router, private route: ActivatedRoute, _fb: FormBuilder) {
     this.resetForm = _fb.group({
       password: [null, Validators.required],
       passwordConfirm: [null, Validators.required]
     }, { validator: this.passwordsEqual });
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.resetToken = this.route.snapshot.queryParams['token'];
+    if (!this.resetToken) {
+      this._router.navigate(['/login']);
+    }
+  }
 
   //https://angular.io/docs/ts/latest/api/forms/index/FormGroup-class.html
   /** Validates that the passwords are equal and assigns error if not
