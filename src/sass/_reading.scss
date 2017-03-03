@@ -136,10 +136,25 @@ article.content {
 		margin: 6px auto;
 		text-align: center;
 		position: relative;
+
+		&::-moz-selection {
+			background: transparent;
+		}
+
+		&::selection {
+			background: transparent;
+		} 
 	}
+
+	& .img-wrap {
+		display:inline-block;
+		position: relative;
+		cursor: crosshair; //url('/assets/images/cursor-image.png'), pointer; 
+	}
+
 	& .word.img > img {
 		$highlightWidth: 4px;
-		cursor: pointer; 
+		cursor: crosshair; //url('/assets/images/cursor-image.png'), pointer; 
 		outline: $highlightWidth solid transparent;
 		border: 3px solid #fff;
 		border-radius: 3px;
@@ -151,6 +166,7 @@ article.content {
 			outline: 6px solid rgba(253, 228, 104, 0.45) !important;
 		}
 	}
+	
 }
 
 
@@ -403,6 +419,14 @@ $commentFadeOpacity: 0.35;
 article.content .word.highlight-f {
 	// background: blue;
 	border-bottom: $focusUnderlineWidth solid #969696; 
+
+	&.img {
+		border-bottom: none;
+
+		& .hotspot:not(.focused) {
+			opacity: 0.2;
+		}
+	}
 }
 
 .reading-page {
@@ -663,10 +687,20 @@ $readingIconHeight: 60px;
 
 .hotspot {
 	display: block;
-	width: 20px;
-	height: 20px;
+	min-width: 20px;
+	min-height: 20px;
+	margin-top: -10px;
+	margin-left: -10px;
 	border-radius: 50%;
 	position: absolute;
-	background: rgba(orange, 0.4);
+	background: rgba(orange, 0.8);
 	box-shadow: 0px 0px 3px 0px rgba(255,255,255,0.5);
+	transition: all linear 0.2s;
+
+	&.focused {
+		min-width: 30px;
+		min-height: 30px;
+		margin-top: -15px;
+		margin-left: -15px;
+	}
 }

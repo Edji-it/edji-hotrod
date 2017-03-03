@@ -57,6 +57,13 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     private hideKeyboard = false;
 
     private imageCoords = {};
+    private imageHotspotPlaceholder = {
+        index: -1,
+        x: 0,
+        y: 0,
+        focus: false,
+        preview: false
+    };
 
     private subscriptions: Subscription[] = [];
 
@@ -300,6 +307,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             this.optionsShow = true;
         } else if (!doNotDismiss) {
             this.optionsShow = false;
+            this.imageHotspotPlaceholder.preview = false;
         }
     }
 
@@ -720,13 +728,21 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      * @param start Index for first word
      * @param end Index for last word
      */
-    private focusHighlight(start, end): void {
+    private focusHighlight(start, end, location ?: any): void {
         for (var i = start; i <= end; i ++) {
             // if (this.focusArray[i]) {
                 this.focusArray[i] = true;
             // } else {
             //     this.focusArray[i] = false;
             // }
+            if (location && location.x && location.y) {
+                this.imageHotspotPlaceholder = {
+                    index: start,
+                    x: location.x,
+                    y: location.y,
+                    focus: true
+                };
+            }
         }
     }
 
@@ -735,11 +751,19 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      * @param start Index for first word
      * @param end Index for last word
      */
-    private unfocusHighlight(start, end): void {
+    private unfocusHighlight(start, end, location ?: any): void {
         for (var i = start; i <= end; i ++) {
             // if (this.focusArray[i] = true) {
                 this.focusArray[i] = false;
             // } 
+            // if (location && location.x && location.y) {
+            //     this.imageHotspotPlaceholder = {
+            //         index: start,
+            //         x: location.x,
+            //         y: location.y,
+            //         focus: false
+            //     };
+            // }
         }
     }
 
@@ -775,15 +799,23 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // when they click the picture, we need to create the selection for them
         let target = event.target || event.srcElement || event.currentTarget;
         let coords = this.getRelativeCoords(event);
-        
+
         // Set aside image coords
         this.imageCoords = coords;
-        console.log(coords);
+        console.log(target);
 
         let range = Rangy.createRange();
         range.selectNodeContents(target['parentNode']);
         let sel = Rangy.getSelection();
 
+
+        // Create placeholder spot
+        this.imageHotspotPlaceholder = {
+            index: target['parentNode']['parentNode'].getAttribute('index'),
+            x: coords.x,
+            y: coords.y,
+            preview: true
+        };
         // this makes sure there are no other selections made
         sel.setSingleRange(range);
         this.showCommentOptions(event);
