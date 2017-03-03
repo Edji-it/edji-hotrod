@@ -35,14 +35,14 @@ export class UploadModalComponent implements OnInit {
   }
 
   beginUpload() {
-    this.uploading = true;
     const files = document.getElementById('imageFileInput')['files'];
     this.file = files[0];
     if(this.file == null){
-      return alert('No file selected.');
-    } else {
-      console.log(this.file);
+      alert('No file selected.');
+      return;
     }
+
+    this.uploading = true;
     this.getSignedRequest(this.file);
   }
 
