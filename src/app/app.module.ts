@@ -53,6 +53,7 @@ import { NoContentComponent } from './no-content';
 import { AccountComponent, ChangePassComponent } from './account';
 import { FeedbackComponent } from './shared/feedback/feedback.component';
 import { LoginComponent } from './login';
+import { ResetPassPage } from './reset-pass/reset-pass-page.component';
 
 // Configure Hammer.js
 export class MyHammerConfig extends HammerGestureConfig  {
@@ -92,6 +93,7 @@ type StoreType = {
     MediumEditorDirective,
     ClickOutsideDirective,
     EmojiOnePipe,
+    ResetPassPage,
     AddClassPipe,
     RegisterComponent,
     NavBarComponent,

@@ -176,6 +176,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                         }
                     }
                 }
+                console.log(this.project.comments);
                 
                 // Process different live comment updates
                 if (commentUpdate.action === 'DELETE') {

@@ -10,6 +10,7 @@ import { AccountComponent } from './account';
 import { DashboardComponent } from './dashboard';
 import { NoContentComponent } from './no-content';
 import { LoginComponent } from './login';
+import { ResetPassPage } from './reset-pass/reset-pass-page.component';
 
 import { DataResolver } from './app.resolver';
 import { AuthService } from './shared';
@@ -27,6 +28,7 @@ export const ROUTES: Routes = [
   { path: 'project/:id',  component: ProjectPageComponent },
   { path: 'reading/:id',  component: ReadingPageComponent, canActivate: [AuthService] },
   { path: 'new-reading', component: NewReadingPage, canActivate: [AuthService] },
+  { path: 'reset-password', component: ResetPassPage },
   { path: ':projectId', redirectTo: '/project/:projectId', pathMatch: 'full'},
   { path: '**',    component: NoContentComponent }
 ];
