@@ -9,7 +9,7 @@ export class NewReading implements PageObjectInterface
 
     // Public Instance Variables
     public titleInput = element(by.id('readingTitle'));
-    public contentInput = element(by.id('readingContent'));
+    public contentInput = element(by.id('angularMediumEditor'));
     public sourceInput = element(by.id('readingSource'));
     public groupInput = element(by.id('firstProjectLabel'));
     public addButton = element(by.id('addReadingButton'));
