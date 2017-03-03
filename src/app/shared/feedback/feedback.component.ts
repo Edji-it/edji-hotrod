@@ -18,6 +18,7 @@ import { AuthService, Copy, BumblebeeService } from './..';
       transition: transform 0.2s linear;
       padding: 8px;
       opacity: 0.8;
+      z-index: 1050;
     }
 
     .fixed-feedback-button:hover {
@@ -52,6 +53,7 @@ export class FeedbackComponent implements OnInit {
   private closeModal: EventEmitter<any> = new EventEmitter();
 
   private showFeedbackModal: boolean = false;
+  private showFeedbackSuccess: boolean = false;
   private feedbackForm: FormGroup;
   private feedbackSuccess: boolean = false;
   private user: any;
@@ -99,12 +101,16 @@ export class FeedbackComponent implements OnInit {
     document.body.style.overflow = 'hidden';
   }
 
-  private close(): void {
+  private feedbackClose(): void {
     this.closeModal.emit();
     this.showFeedbackModal = false;
     
     // Workaround: This modal is long enough that it needs to scroll and we don't want two scrollbars
     document.body.style.overflow = '';
+  }
+
+  private successClose(): void {
+    this.showFeedbackSuccess = false;
   }
 
   /** Sends feedback to bumblebee */
@@ -124,6 +130,8 @@ export class FeedbackComponent implements OnInit {
           this.angulartics.eventTrack.next({ action: 'sendFeedback', properties: { category: 'accountManagement', label: 'success' }});
           this.feedbackSuccess = true;
           this._auth.deleteFromStorage("feedbackFormData");
+          this.feedbackClose();
+          this.showFeedbackSuccess = true;
         }
       },
       (err) => {
