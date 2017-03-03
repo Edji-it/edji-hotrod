@@ -22,7 +22,9 @@
             <div id="msgServerError" class="alert alert-danger" *ngIf="errorObject.serverError">{{errorObject.serverError}}</div>-->
           </div>
           <div class="button__row">
-            <button id="buttonLogin" type="submit" [class.loading]="isLoading" class="btn btn-primary" name="Login" tabindex="0">Log In</button>
+            <div id="msgFailure" class="alert alert-danger" *ngIf="serviceResponse.failure">Please request another password link. The link used was invalid. Remember, they only last one hour.</div>
+            <div id="msgSuccess" class="alert alert-success" *ngIf="serviceResponse.success">You've successfully changed your password! <a [routerLink]="['/dashboard']">Go to your dashboard</a></div>
+            <button id="buttonLogin" type="submit" [class.loading]="isLoading" [disabled]="serviceResponse.success" class="btn btn-primary" name="Login" tabindex="0">Log In</button>
           </div>
         </form>
       </div>

@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Angulartics2 } from 'angulartics2';
+
+import { AuthService } from './../shared';
 
 @Component({
   selector: 'hot-reset-pass-page',
@@ -10,8 +13,18 @@ export class ResetPassPage implements OnInit {
   private resetForm: FormGroup;
   private isLoading: boolean = false;
   private resetToken: string;
+  private serviceResponse: {
+    success?: boolean,
+    failure?: boolean
+  } = {};
 
-  constructor(private _router: Router, private route: ActivatedRoute, _fb: FormBuilder) {
+  constructor(
+    private _auth: AuthService,
+    private _router: Router,
+    private route: ActivatedRoute,
+    private angulartics: Angulartics2,
+    _fb: FormBuilder
+  ) {
     this.resetForm = _fb.group({
       password: [null, Validators.required],
       passwordConfirm: [null, Validators.required]
@@ -39,6 +52,19 @@ export class ResetPassPage implements OnInit {
       return;
     }
 
-    console.log(formValue);
+    this._auth.resetPassword({ newPassword: formValue.password, token: this.resetToken })
+      .then((res) => {
+        if (res.user && res.token) {
+          this.serviceResponse.success = true;
+          res.user.username && this.angulartics.setUsername.next(res.user.username);
+          res.user.email && this.angulartics.setUserProperties.next({ email: res.user.email});
+        } else {
+          this.serviceResponse.failure = true;
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        this.serviceResponse.failure = true;
+      });
   }
 }

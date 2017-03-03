@@ -232,7 +232,14 @@ export class AuthService implements CanActivate {
                 this.getOptions()
             )
             .toPromise()
-            .then(this.extractData);
+            .then(this.extractData)
+            .then((res) => {
+                if (res.token && res.user) {
+                    this.setUser(res.user);
+                    this.setToken(res.token);
+                }
+                return res;
+            });
     };
 
     public recoverPassword(username: string): Observable < boolean > {
