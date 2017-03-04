@@ -56,6 +56,15 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     private mobileIndex = 0;
     private hideKeyboard = false;
 
+    private imageCoords = {};
+    private imageHotspotPlaceholder: any = {
+        index: -1,
+        x: 0,
+        y: 0,
+        focus: false,
+        preview: false
+    };
+
     private subscriptions: Subscription[] = [];
 
     // For converting old Readings
@@ -299,6 +308,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             this.optionsShow = true;
         } else if (!doNotDismiss) {
             this.optionsShow = false;
+            this.imageHotspotPlaceholder.preview = false;
         }
     }
 
@@ -429,13 +439,22 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         }
 
         this.angulartics.eventTrack.next({ action: type + 'CommentCreate', properties: { category: 'projectAction', label: 'attempt' }});
-
+        
         // Tell server we've added a comment
-        this._projects.saveComment(projectId, '', start, end, type, text)
+        this._projects.saveComment(projectId, '', start, end, type, text, null, this.imageCoords)
             .then(comment => {
                 // We add the comment from the service because it has an Id
                 if (comment._id) {
                     this.angulartics.eventTrack.next({ action: type + 'CommentCreate', properties: { category: 'projectAction', label: 'attempt' }});
+                    // Check if comment should start expanded
+                    if (document.querySelector('.word[index="' + start + '"] .comment')) {
+                        let commentY = document.querySelector('.word[index="' + start + '"] .comment')['offsetTop'];
+
+                        if (this.lineCountArray[commentY] && this.lineCountArray[commentY][0].expanded) {
+                            comment.expanded = true;
+                            comment.lineCount = this.lineCountArray[commentY].length + 1;
+                        }
+                    }
                     // Add setting to trigger focus on new comment
                     comment.new = true; // this is basically to tell our test cases which comment was just made
                     this.inactivateComment();
@@ -721,13 +740,21 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      * @param start Index for first word
      * @param end Index for last word
      */
-    private focusHighlight(start, end): void {
+    private focusHighlight(start, end, location ?: any): void {
         for (var i = start; i <= end; i ++) {
             // if (this.focusArray[i]) {
                 this.focusArray[i] = true;
             // } else {
             //     this.focusArray[i] = false;
             // }
+        }
+        if (location && location.x && location.y) {
+            this.imageHotspotPlaceholder = {
+                index: start,
+                x: location.x,
+                y: location.y,
+                focus: true
+            };
         }
     }
 
@@ -736,12 +763,13 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      * @param start Index for first word
      * @param end Index for last word
      */
-    private unfocusHighlight(start, end): void {
+    private unfocusHighlight(start, end, location ?: any): void {
         for (var i = start; i <= end; i ++) {
             // if (this.focusArray[i] = true) {
                 this.focusArray[i] = false;
             // } 
         }
+            this.imageHotspotPlaceholder['focus'] = false;
     }
 
     /**
@@ -773,13 +801,26 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     }
 
     private imageCommentOptions(imageIndex: number, word: any, event: Event) : void {
-
         // when they click the picture, we need to create the selection for them
         let target = event.target || event.srcElement || event.currentTarget;
+        let coords = this.getRelativeCoords(event);
+
+        // Set aside image coords
+        this.imageCoords = coords;
+        console.log(target);
+
         let range = Rangy.createRange();
         range.selectNodeContents(target['parentNode']);
         let sel = Rangy.getSelection();
 
+
+        // Create placeholder spot
+        this.imageHotspotPlaceholder = {
+            index: target['parentNode']['parentNode'].getAttribute('index'),
+            x: coords.x,
+            y: coords.y,
+            preview: true
+        };
         // this makes sure there are no other selections made
         sel.setSingleRange(range);
         this.showCommentOptions(event);
@@ -796,6 +837,50 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         } else {
             return CommentPermissions.READ;
         }
+    }
+
+    /**
+     * For image comments: Determines relative location of hotspot
+     */
+    private getRelativeCoords(e: Event): any {
+        let target = e.target;
+        let PosX = 0;
+        let PosY = 0;
+        let ImgPos;
+
+         function FindPosition(oElement) {
+            if(typeof( oElement.offsetParent ) != "undefined")
+            {
+                for(var posX = 0, posY = 0; oElement; oElement = oElement.offsetParent)
+                {
+                posX += oElement.offsetLeft;
+                posY += oElement.offsetTop;
+                }
+                return [ posX, posY ];
+                }
+                else
+                {
+                return [ oElement.x, oElement.y ];
+                }
+        }
+        ImgPos = FindPosition(target);
+        
+        if (e['pageX'] || e['pageY'])
+        {
+            PosX = e['pageX'];
+            PosY = e['pageY'];
+        }
+        else if (e['clientX'] || e['clientY'])
+            {
+            PosX = e['clientX'] + document.body.scrollLeft
+                + document.documentElement.scrollLeft;
+            PosY = e['clientY'] + document.body.scrollTop
+                + document.documentElement.scrollTop;
+            }
+        return {
+            x: ((PosX - ImgPos[0]) / target['clientWidth'] * 100).toFixed(3),
+            y: ((PosY = (PosY - ImgPos[1])) / target['clientHeight'] * 100).toFixed(3)
+        };
     }
 }
 

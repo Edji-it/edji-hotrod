@@ -41,8 +41,8 @@
 					[class.hidden]="(!project.heat_vision && user._id !== project.teacher_id) && comment.user_id !== user._id && comment.user_id !== project.teacher_id"
 					[class.owner]="comment.user_id === project.teacher_id"
 					[comment]="comment"
-					(mouseenter)='focusHighlight(comment.start, comment.end)'
-					(mouseleave)='unfocusHighlight(comment.start, comment.end)' 
+					(mouseenter)='focusHighlight(comment.start, comment.end, comment.loc)'
+					(mouseleave)='unfocusHighlight(comment.start, comment.end, comment.loc)' 
 					[readOnly]="comment.user_id !== user._id"
 					[userPermission]="getCommentPermissions(comment)"
 					[isActive]="comment.active" 
@@ -50,11 +50,18 @@
 					(commentDeleted)="removeComment(comment, i, ci)"
 					(commentDeactivate)="unfocusHighlight($event.start, $event.end)"
 					(commentUpdated)="updateAllLineCounts()"
-					(expandLine)="expandLine($event)"
+					(expandLine)="expandLine($event, true)"
+					(collapseLine)="expandLine($event, false)"
 					(mobileActivation)="expandLine($event, true)"
 					(mobileDeactivation)="expandLine($event, false)"
 					(mobileDeactivate)="inactivateComment()">
-				</edji-comment>{{ word.styles.indexOf("space") > -1 ? '&nbsp;' : word.str }}<img *ngIf="word.styles.indexOf('img') > -1" [src]="word.url" (click)="imageCommentOptions(i, word, $event)" /></span>
+				</edji-comment>{{ word.styles.indexOf("space") > -1 ? '&nbsp;' : word.str }}<div *ngIf="word.styles.indexOf('img') > -1" class="img-wrap">
+						<div *ngIf="imageHotspotPlaceholder.index == i && (imageHotspotPlaceholder.focus || imageHotspotPlaceholder.preview)" class="hotspot" [class.focused]="imageHotspotPlaceholder.focus" [style.left]="imageHotspotPlaceholder.x  + '%' " [style.top]="imageHotspotPlaceholder.y + '%' "></div>
+						<div *ngFor="let comment of commentsByIndex[i]" class="hotspot" 
+						[style.top]="comment['loc'] ? comment['loc']['y'] + '%' : '0%'" 
+						[style.left]="comment['loc'] ? comment['loc']['x'] + '%' : '0%'"></div>
+						<img [src]="word.url" (click)="imageCommentOptions(i, word, $event)" />
+					</div></span>
 		</article>
 		
 	</div>

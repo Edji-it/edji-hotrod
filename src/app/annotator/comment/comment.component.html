@@ -1,5 +1,5 @@
 <div class="comment" [class.new]="comment.new" [class.saved]="justSaved" [class.active]="active" [class.readonly]="readOnly" [ngClass]="[ 'line-count-' + lineCount, expanded ? 'expanded' : '', active ? 'comment__show' : '' ]">
-    <div class='expand-comments' (tap)='toggleExpand($event)' [ngClass]="comment.type == 'emoji' ? 'cmtEmoji' : 'cmtText'">
+    <div class='expand-comments' (tap)='expanded ? collapse() : expand()' [ngClass]="comment.type == 'emoji' ? 'cmtEmoji' : 'cmtText'">
         <div *ngIf="lineCount == 1 && expanded" class='expand__arrow-right hidden-sm-down'></div>
         <div *ngIf="lineCount == 1 && expanded" class='expand__arrow-left hidden-md-up'></div>
     </div>
@@ -16,5 +16,5 @@
 </div>
 
 <!--Mobile icon-->
-<img (tap)='toggleExpand($event)' class="mobile-comment-button" src="assets/images/icon-comment.svg" />
+<img (tap)='expand($event)' class="mobile-comment-button" src="assets/images/icon-comment.svg" />
 <hot-del-comment *ngIf="showDeleteModal" [comment]="comment" (delete)="deleteComment(comment)" (closeModal)="showDeleteModal = false; commentDeactivate.emit(comment)"></hot-del-comment>
