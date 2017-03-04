@@ -55,11 +55,12 @@
 					(mobileDeactivation)="expandLine($event, false)"
 					(mobileDeactivate)="inactivateComment()">
 				</edji-comment>{{ word.styles.indexOf("space") > -1 ? '&nbsp;' : word.str }}<div *ngIf="word.styles.indexOf('img') > -1" class="img-wrap">
-					<div *ngIf="imageHotspotPlaceholder.index == i && (imageHotspotPlaceholder.focus || imageHotspotPlaceholder.preview)" class="hotspot" [class.focused]="imageHotspotPlaceholder.focus" [style.left]="imageHotspotPlaceholder.x  + '%' " [style.top]="imageHotspotPlaceholder.y  + '%' "></div>
-					<div *ngFor="let comment of commentsByIndex[i]" class="hotspot" 
-					[style.top]="comment['loc'] ? comment['loc']['y'] + '%' : ''" 
-					[style.left]="comment['loc'] ? comment['loc']['x'] + '%' : ''"></div>
-					<img [src]="word.url" (click)="imageCommentOptions(i, word, $event)" /></div></span>
+						<div *ngIf="imageHotspotPlaceholder.index == i && (imageHotspotPlaceholder.focus || imageHotspotPlaceholder.preview)" class="hotspot" [class.focused]="imageHotspotPlaceholder.focus" [style.left]="imageHotspotPlaceholder.x  + '%' " [style.top]="imageHotspotPlaceholder.y + '%' "></div>
+						<div *ngFor="let comment of commentsByIndex[i]" class="hotspot" 
+						[style.top]="comment['loc'] ? comment['loc']['y'] + '%' : '0%'" 
+						[style.left]="comment['loc'] ? comment['loc']['x'] + '%' : '0%'"></div>
+						<img [src]="word.url" (click)="imageCommentOptions(i, word, $event)" />
+					</div></span>
 		</article>
 		
 	</div>

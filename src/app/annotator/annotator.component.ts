@@ -57,7 +57,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     private hideKeyboard = false;
 
     private imageCoords = {};
-    private imageHotspotPlaceholder = {
+    private imageHotspotPlaceholder: any = {
         index: -1,
         x: 0,
         y: 0,
@@ -735,14 +735,14 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             // } else {
             //     this.focusArray[i] = false;
             // }
-            if (location && location.x && location.y) {
-                this.imageHotspotPlaceholder = {
-                    index: start,
-                    x: location.x,
-                    y: location.y,
-                    focus: true
-                };
-            }
+        }
+        if (location && location.x && location.y) {
+            this.imageHotspotPlaceholder = {
+                index: start,
+                x: location.x,
+                y: location.y,
+                focus: true
+            };
         }
     }
 
@@ -756,15 +756,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             // if (this.focusArray[i] = true) {
                 this.focusArray[i] = false;
             // } 
-            // if (location && location.x && location.y) {
-            //     this.imageHotspotPlaceholder = {
-            //         index: start,
-            //         x: location.x,
-            //         y: location.y,
-            //         focus: false
-            //     };
-            // }
         }
+            this.imageHotspotPlaceholder['focus'] = false;
     }
 
     /**
