@@ -50,7 +50,8 @@
 					(commentDeleted)="removeComment(comment, i, ci)"
 					(commentDeactivate)="unfocusHighlight($event.start, $event.end)"
 					(commentUpdated)="updateAllLineCounts()"
-					(expandLine)="expandLine($event)"
+					(expandLine)="expandLine($event, true)"
+					(collapseLine)="expandLine($event, false)"
 					(mobileActivation)="expandLine($event, true)"
 					(mobileDeactivation)="expandLine($event, false)"
 					(mobileDeactivate)="inactivateComment()">

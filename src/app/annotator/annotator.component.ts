@@ -438,13 +438,22 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         }
 
         this.angulartics.eventTrack.next({ action: type + 'CommentCreate', properties: { category: 'projectAction', label: 'attempt' }});
-
+        
         // Tell server we've added a comment
         this._projects.saveComment(projectId, '', start, end, type, text, null, this.imageCoords)
             .then(comment => {
                 // We add the comment from the service because it has an Id
                 if (comment._id) {
                     this.angulartics.eventTrack.next({ action: type + 'CommentCreate', properties: { category: 'projectAction', label: 'attempt' }});
+                    // Check if comment should start expanded
+                    if (document.querySelector('.word[index="' + start + '"] .comment')) {
+                        let commentY = document.querySelector('.word[index="' + start + '"] .comment')['offsetTop'];
+
+                        if (this.lineCountArray[commentY] && this.lineCountArray[commentY][0].expanded) {
+                            comment.expanded = true;
+                            comment.lineCount = this.lineCountArray[commentY].length + 1;
+                        }
+                    }
                     // Add setting to trigger focus on new comment
                     comment.new = true; // this is basically to tell our test cases which comment was just made
                     this.inactivateComment();

@@ -41,6 +41,7 @@ export class CommentComponent implements OnInit {
   @Output() commentActivation = new EventEmitter<boolean>();
   @Output() commentDeactivate: EventEmitter<any> = new EventEmitter<any>();
   @Output() expandLine = new EventEmitter<number>();
+  @Output() collapseLine = new EventEmitter<number>();
   @Output() dismissKeyboard = new EventEmitter();
   @Output() commentUpdated: EventEmitter<any> = new EventEmitter();
   @Output() mobileActivation = new EventEmitter();
@@ -55,8 +56,13 @@ export class CommentComponent implements OnInit {
       ) { }
 
   ngOnInit() {
-    // If comment is newly added, focus on it when created!
-    console.log(this.userPermission);
+    // Set initial values if passed
+    if (this.comment.lineCount) {
+      this.lineCount = this.comment.lineCount;
+    } 
+    if (this.comment.expanded) {
+      this.expanded = this.comment.expanded;
+    } 
   }
 
   toggleActive( ): void {
@@ -180,9 +186,16 @@ export class CommentComponent implements OnInit {
   }
 
   /**
+   * Collapse all stacked comments on the same line
+   */
+  collapse(): void {
+    this.collapseLine.emit(this.yPos);
+  }
+
+  /**
    * Expand all stacked comments on the same line
    */
-  toggleExpand(): void {
+  expand(): void {
     this.expandLine.emit(this.yPos);
   }
 
