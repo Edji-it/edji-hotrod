@@ -694,6 +694,11 @@ $readingIconHeight: 60px;
 	transition: all linear 200ms;
 	border: 0px solid rgba(orange, 0.8);
 
+	&.hidden {
+		pointer-events: none;
+		display: none;
+	}
+
 	&.focused {
 		min-width: 30px;
 		min-height: 30px;
