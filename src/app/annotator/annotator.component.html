@@ -34,8 +34,7 @@
 			<span *ngIf="project && project.comments.length < 1 && project.types.length > 0" class="comment--placeholder">
 				Select text, add comments!
 			</span>
-			<span *ngFor="let word of reading.words; let i = index" class="word"
-				[ngClass]="[ word.styles.join(' '), getHighlightClass(i) ]" 
+			<span *ngFor="let w of reading.words; trackBy:index; let i = index" class="w" [ngClass]="[ w.styles.join(' '), getHighlightClass(i) ]" 
 				[attr.index]="i">
 				<edji-comment *ngFor="let comment of commentsByIndex[i]; let ci = index" 
 					[class.hidden]="(!project.heat_vision && user._id !== project.teacher_id) && comment.user_id !== user._id && comment.user_id !== project.teacher_id"
@@ -55,12 +54,12 @@
 					(mobileActivation)="expandLine($event, true)"
 					(mobileDeactivation)="expandLine($event, false)"
 					(mobileDeactivate)="inactivateComment()">
-				</edji-comment>{{ word.styles.indexOf("space") > -1 ? '&nbsp;' : word.str }}<div *ngIf="word.styles.indexOf('img') > -1" class="img-wrap">
+				</edji-comment>{{ w.styles.indexOf("space") > -1 ? '&nbsp;' : w.str }}<div *ngIf="w.styles.indexOf('img') > -1" class="img-wrap">
 						<div *ngIf="imageHotspotPlaceholder.index == i && (imageHotspotPlaceholder.focus || imageHotspotPlaceholder.preview)" class="hotspot" [class.focused]="imageHotspotPlaceholder.focus" [style.left]="imageHotspotPlaceholder.x  + '%' " [style.top]="imageHotspotPlaceholder.y + '%' "></div>
 						<div *ngFor="let comment of commentsByIndex[i]" [class.hidden]="(!project.heat_vision && user._id !== project.teacher_id) && comment.user_id !== user._id && comment.user_id !== project.teacher_id" class="hotspot" 
 						[style.top]="comment['loc'] ? comment['loc']['y'] + '%' : '0%'" 
 						[style.left]="comment['loc'] ? comment['loc']['x'] + '%' : '0%'"></div>
-						<img [src]="word.url" (click)="imageCommentOptions(i, word, $event)" />
+						<img [src]="w.url" (click)="imageCommentOptions(i, w, $event)" />
 					</div></span>
 		</article>
 		

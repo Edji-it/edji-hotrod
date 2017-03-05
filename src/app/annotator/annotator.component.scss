@@ -4,49 +4,6 @@ $sessionAccent: #FF7583;
 $sessionPanelWidth: 150px;
 $midGray: #f7f7f7;
 
-.session-pane{
-	width: $sessionPanelWidth;
-	position: fixed;
-	top: 0;
-	height: 100%;
-	right: 0;
-	background: $midGray;
-	padding-top: 40px;
-	overflow-y: auto;
-}
-
-article.content p {
-  user-select: none !important;
-  -webkit-user-select: none !important;
-	-moz-user-select: none !important;
-}
-
-// .word.b {
-//     font-weight: bold;
-// }
-
-// .word.i {
-//     font-style: italic;
-// }
-
-// u word, u .word {
-//   text-decoration: underline;
-// }
-
-// word, .word {
-//   user-select: text;
-//   -webkit-user-select: text;
-// 	-moz-user-select: text;
-
-//   display: inline-block;
-//   // &.spacer {
-//   //   &:before {
-//   //     display: none;
-//   //   }
-//   // }
-  
-// }
-
 
 .text-options {
 

@@ -100,7 +100,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         //     return false; // Prevent bubbling
         // }));
     }
- 
+    
     ngOnInit() {
         // this.user = this._auth.getUser();
 
@@ -795,9 +795,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             // }
         }
         if (this.focusArray[i]) {
-            classString = 'highlight-f';
+            classString = 'h-f';
         }
-        return classString + ' highlight-' + highlightCount;
+        return classString + ' h-' + highlightCount;
     }
 
     private imageCommentOptions(imageIndex: number, word: any, event: Event) : void {

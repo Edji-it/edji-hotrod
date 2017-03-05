@@ -28,14 +28,6 @@ article.content {
 	@media(max-width: $tablet) {
 		margin-left: 40px;
   	}
-	
-	&, & p, & span {
-		// Prevent word breaks since "span" wrapped words don't match behavior
-		// white-space: pre-wrap;
-
-		// Disable iOS copy/paste popup
-		// -webkit-touch-callout: none !important;
-	}
 
 	&.hidden-text {
 		color: transparent; //mediumvioletred;//red;
@@ -55,83 +47,59 @@ article.content {
 		-webkit-user-select: none;
 		-moz-user-select: none;
 	}
-
-	& .word {
-		// Styles applied by word
-		user-select: text;
-		-webkit-user-select: text;
-		-moz-user-select: text;
-		display: inline-block;
-		margin: 0;
-
-		// Swaps to color border on hover
-		border-bottom: $focusUnderlineWidth solid transparent;
-
-		&:after {
-			display: inline-block;
-			content: '';
-			clear: both;
-		}
-
-		&.space {
-			min-height: 1em;
-			min-width: 0.2em;
-			// &:after {
-			// 	// Corrects issue with comments positioning on the wrong line
-			// 	display: inline-block;
-			// 	content: '';
-			// 	clear:both;
-			// 	@extend %noSelect;
-			// }
-		}
-
-		&.b, &.B {
-			font-weight: bold;
-		}
-
-		&.i {
-			font-style: italic;
-		}
-
-		&.u {
-			text-decoration: underline;
-		}
-
-		&.br {
-			display: block;
-			background: transparent !important;
-			// Override focus border
-			border-bottom: $focusUnderlineWidth solid transparent !important;
-		}
-
-		&.H1, &.h1, &.H2, &.h2, &.H3, &.h3, &.P, &.p {
-			
-			&-first {
-				// Beginning of style
-			}
-
-			&-last {
-				// End of style
-			}
-		}
-
-		&.H1, &.h1 {
-			font-size: 32px;
-		}
-
-		&.H2, &.h2 {
-			font-size: 24px;
-		}
-
-		&.h3, &.h3 {
-			font-weight: bold;
-		}
-	} 
 }
+
+.w {
+	// Styles applied by word
+	user-select: text;
+	-webkit-user-select: text;
+	-moz-user-select: text;
+	display: inline-block;
+	margin: 0;
+	// Swaps to color border on hover
+	border-bottom: $focusUnderlineWidth solid transparent;
+
+	&:after {
+		display: inline-block;
+		content: '';
+		clear: both;
+	}
+
+	&.b, &.B {
+		font-weight: bold;
+	}
+
+	&.i {
+		font-style: italic;
+	}
+
+	&.u {
+		text-decoration: underline;
+	}
+
+	&.br {
+		display: block;
+		background: transparent !important;
+		// Override focus border
+		border-bottom: $focusUnderlineWidth solid transparent !important;
+	}
+
+	&.H1, &.h1 {
+		font-size: 32px;
+	}
+
+	&.H2, &.h2 {
+		font-size: 24px;
+	}
+
+	&.h3, &.h3 {
+		font-weight: bold;
+	}
+} 
 
 // Styles for commenting
 .active-content {
-	& .word.img {
+	& .w.img {
 		display: block;
 		margin: 6px auto;
 		text-align: center;
@@ -152,7 +120,7 @@ article.content {
 		cursor: crosshair; //url('/assets/images/cursor-image.png'), pointer; 
 	}
 
-	& .word.img > img {
+	& .w.img > img {
 		$highlightWidth: 4px;
 		cursor: crosshair; //url('/assets/images/cursor-image.png'), pointer; 
 		outline: $highlightWidth solid transparent;
@@ -369,18 +337,18 @@ $nextG: 36;
 $nextB: 68;
 
 // Default to deepest Red
-[class*='highlight-'] {
+[class*='h-'] {
 	$thisA: 0.4 + (0.05 * $highlightSteps);
 	background: rgba($nextR, $nextG, $nextB, $thisA);
 }
 
-.highlight-0 {
+.h-0 {
 	background: transparent;
 }
 
 // Process different gradient steps
 @for $n from 1 through $highlightSteps {
-	.highlight-#{$n} {
+	.h-#{$n} {
 		$thisR: $startR + ((($endR - $startR)/$highlightSteps) * $n);
 		$thisG: $startG + ((($endG - $startG)/$highlightSteps) * $n);
 		$thisB: $startB + ((($endB - $startB)/$highlightSteps) * $n);
@@ -398,7 +366,7 @@ $nextB: 68;
 }
 
 @for $n from ($highlightSteps + 1) through $nextLevelSteps {
-	.highlight-#{$n} { 
+	.h-#{$n} { 
 		$thisR: $endR + ((($nextR - $endR)/$nextLevelSteps) * $n);
 		$thisG: $endG + ((($nextG - $endG)/$nextLevelSteps) * $n);
 		$thisB: $endB + ((($nextB - $endB)/$nextLevelSteps) * $n);
@@ -416,7 +384,7 @@ $nextB: 68;
 $commentFadeOpacity: 0.35;
 
 // Focus Highlight styles (for on comment hover)
-article.content .word.highlight-f {
+article.content .w.h-f {
 	// background: blue;
 	border-bottom: $focusUnderlineWidth solid #969696; 
 
