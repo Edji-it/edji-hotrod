@@ -74,14 +74,14 @@ describe('Project Page', () => {
 
             // Code for making a comment
             // Find text to select
-            browser.wait(EC.elementToBeClickable(element(by.css(".word[index='18']"))), 5000, "never found words to click on");
+            browser.wait(EC.elementToBeClickable(element(by.css(".w[index='18']"))), 5000, "never found words to click on");
 
             // Select Text to comment on (should select 'Lorem Ipsum')
             browser.executeScript(function () {
                 let range = document.createRange();
                 let sel = window.getSelection();
-                range.setStart(document.body.querySelector(".word[index='18']").childNodes[0], 0);
-                range.setEnd(document.body.querySelector(".word[index='21']").childNodes[0], 0);
+                range.setStart(document.body.querySelector(".w[index='18']").childNodes[0], 0);
+                range.setEnd(document.body.querySelector(".w[index='21']").childNodes[0], 0);
                 sel.removeAllRanges();
                 sel.addRange(range);
             });
