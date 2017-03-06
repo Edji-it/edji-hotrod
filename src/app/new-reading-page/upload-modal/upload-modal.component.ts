@@ -17,6 +17,7 @@ export class UploadModalComponent implements OnInit {
   private locker: any;
   private file: any = {};
   private uploading: boolean = false;
+  private uploadUrl: string = '//grapple-dev.edji.it';
 
   constructor(private _locker: Locker) {
     this.locker = _locker.useDriver(Locker.DRIVERS.LOCAL);
@@ -26,6 +27,13 @@ export class UploadModalComponent implements OnInit {
     if (this.locker.get('uploadedImageUrls')) {
       this.uploadedUrls = this.locker.get('uploadedImageUrls');
     }
+
+    // Check to see if prod or dev environment
+      if (window.location.host.indexOf('dev.edji.it') > -1) {
+        this.uploadUrl = '//grapple-dev.edji.it';
+      } else if (window.location.host.indexOf('edji.it') > -1 || window.location.host.indexOf('dvscf5tf91syg.cloudfront.net') > -1) {
+        this.uploadUrl = '//grapple.edji.it';
+      }
   }
 
   updateUploadFile() {
@@ -48,7 +56,7 @@ export class UploadModalComponent implements OnInit {
 
   getSignedRequest(file) {
      const xhr = new XMLHttpRequest();
-    xhr.open('GET', `//grapple-dev.edji.it/sign-s3?file-name=${file.name}&file-type=${file.type}`);
+    xhr.open('GET', this.uploadUrl + '/sign-s3?file-name=' + file.name + '&file-type=' + file.type);
     xhr.onreadystatechange = () => {
       if(xhr.readyState === 4){
         if(xhr.status === 200){
