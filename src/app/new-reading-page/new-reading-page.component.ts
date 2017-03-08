@@ -65,7 +65,7 @@ export class NewReadingPage implements OnInit {
      * Pushes text nodes as formatted objects into this.words
      * @param element Root element to start crawling from
      */
-    private extractTextNodes(element: any, ancestorTags ?: string[]) {
+    private extractTextNodes(element: any, ancestorTags ?: string[], lastInBlock ?: boolean) {
         let tagName = element.tagName.toLowerCase();
         let nodes = element.childNodes;
         
@@ -90,9 +90,19 @@ export class NewReadingPage implements OnInit {
         nodes.forEach((node, index) => {
             // Copy tags array to variable local to loop instance
             let inheritedTags = ancestorTags.slice();
-
+            
+            // If the node is just a break
+            if ('tagName' in node && node.tagName.toLowerCase() == 'br') {
+                console.log('break found!');
+                // Add break element
+                this.words.push({
+                    str: '',
+                    styles: ['br']
+                });
+            }
+            
+            // Found a text node!
             if (node.nodeType === 3) {
-                // Found a text node!
 
                 // Split text inside child nodes
                 let nodeWords = node.textContent.split(/(?:([^a-zA-Z0-9]))/).filter(function(el){ return el.replace(/([\n])/g, ''); } );  
@@ -116,11 +126,14 @@ export class NewReadingPage implements OnInit {
                         word.styles.push('space');
                     }
                     if (index == 0 && wIndex == 0) {
-                        word.styles.push(tagName + '-first');
+                        word.styles.push(tagName + '-a');
                     }
                     if (index == nodes.length - 1 && wIndex == nodeWords.length - 1) {
-                        word.styles.push(tagName + '-last');
+                        word.styles.push(tagName + '-z');
                         if (tagName == 'p' || tagName == 'h1' || tagName == 'h2' || tagName == 'h3') {
+                            addBr = true;
+                        }
+                        if (lastInBlock === true) {
                             addBr = true;
                         }
                     }
@@ -135,7 +148,13 @@ export class NewReadingPage implements OnInit {
                 });
             } else {
                 // If not a text node, dig deeper for text nodes
-                this.extractTextNodes(node, inheritedTags);
+                if ( index == nodes.length - 1 && (tagName == 'p' || tagName == 'h1' || tagName == 'h2' || tagName == 'h3')) {
+                    console.log("Last in block");
+                    console.log(node);
+                    this.extractTextNodes(node, inheritedTags, true);
+                } else {
+                    this.extractTextNodes(node, inheritedTags);
+                }
             }
         });
     }
