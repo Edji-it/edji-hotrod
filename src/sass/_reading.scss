@@ -58,6 +58,7 @@ article.content {
 	margin: 0;
 	// Swaps to color border on hover
 	border-bottom: $focusUnderlineWidth solid transparent;
+	padding-top: 3px !important;
 
 	&:after {
 		display: inline-block;
@@ -81,7 +82,10 @@ article.content {
 		display: block;
 		background: transparent !important;
 		// Override focus border
-		border-bottom: $focusUnderlineWidth solid transparent !important;
+		border-bottom: 0px solid transparent !important;
+		pointer-events: none;
+		line-height: 6px !important;
+		margin: 0px;
 	}
 
 	&.H1, &.h1 {
@@ -409,7 +413,7 @@ article.content .w.h-f {
 
 
 $readingFontSize: 16px;
-$readingLineHeight: 29px;
+$readingLineHeight: 18px;
 $readingH1Size: 24px;
 $readingH2Size: 20px;
 $readingH3Size: 18px;
