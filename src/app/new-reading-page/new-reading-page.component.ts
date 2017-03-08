@@ -14,8 +14,7 @@ import { ProjectService } from '../shared/project.service';
 export class NewReadingPage implements OnInit {
     
     private readingForm: FormGroup;
-    // Seed string fixes Firefox line return issue
-    private readingHtml: string = "<div>&nbsp;</div>";
+    private readingHtml: string = "";
     private readingIsBlank: boolean = false;
     private readingPlaceholder: string = 'Type or paste your reading...';
     private submitted: boolean = false;
@@ -171,8 +170,8 @@ export class NewReadingPage implements OnInit {
         this.words = [];
 
         // Process reading html into useful Words Array
-        let readingHtml = this.el.nativeElement.querySelector('medium-editor');
-        let childEls = readingHtml.childNodes;
+        let editorHtml = this.el.nativeElement.querySelector('#angularMediumEditor');
+        let childEls = editorHtml.childNodes;
 
         // Loop through all Reading html elements
         for (let childEl of childEls) {
@@ -211,6 +210,6 @@ export class NewReadingPage implements OnInit {
 
     private addImage(imageUrl: string) {
         console.log(imageUrl);
-        this.readingHtml += '<img src="' + imageUrl + '" /><p></p>';
+        this.readingHtml += '<img src="' + imageUrl + '" /><br/><p></p>';
     }
 }
