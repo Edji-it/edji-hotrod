@@ -351,15 +351,16 @@ input.emojiComment {
 
 			@media (min-width: $tablet) {
 				&:after {
-					color: #fff;
+					color: #888;
 					content: '#{$n}';
 					background: transparent;
 					padding: 5px;
 					position: absolute;
 					right: -9px;
-					top: -7px;
+					top: -2px;
 					font-size: 10px;
 					font-family: 'Open Sans';
+					font-weight: bold;
 					text-align: center;
 					transform: translateX(50%);
 					pointer-events: none;
@@ -520,7 +521,7 @@ $expandShadowSize: 3px;
 		content: ' ';
 		display: block;
 		position: absolute;
-		top: 19px;
+		top: 21px;
 		right: 3px;
 		background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAYAAADEUlfTAAAAG0lEQVR42mNgwAfKy8v/48I4FeA0AacVDFQBAP9wJkE/KhUMAAAAAElFTkSuQmCC");
 		background-repeat: no-repeat;
