@@ -684,7 +684,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             ancestorTags.push(tagName);
         }
 
-        nodes.forEach((node, index) => {
+        for (let index = 0; index < nodes.length; index++) {
+
+            let node = nodes[index];
             // Copy tags array to variable local to loop instance
             let inheritedTags = ancestorTags.slice();
 
@@ -703,7 +705,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 }
 
                 // Otherwise loop through words, and process into array
-                nodeWords.forEach((nodeWord, wIndex) => {
+                for (let wIndex = 0; wIndex < nodes.length; wIndex++) {
+                   let nodeWord = nodeWords[wIndex];
                    let word = {
                         str : nodeWord,
                         styles: [].concat(inheritedTags)
