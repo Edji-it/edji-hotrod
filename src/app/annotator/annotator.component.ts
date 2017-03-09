@@ -730,12 +730,12 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                             styles: ['br']
                         });
                     }
-                });
+                }
             } else {
                 // If not a text node, dig deeper for text nodes
                 this.extractTextNodes(node, inheritedTags);
             }
-        });
+        }
     }
 
     /**
