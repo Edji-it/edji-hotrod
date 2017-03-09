@@ -87,7 +87,9 @@ export class NewReadingPage implements OnInit {
             });
         }
 
-        nodes.forEach((node, index) => {
+        for (let index = 0; index < nodes.length; index++) {
+
+            let node = nodes[index];
             // Copy tags array to variable local to loop instance
             let inheritedTags = ancestorTags.slice();
             
@@ -116,7 +118,8 @@ export class NewReadingPage implements OnInit {
                 }
 
                 // Otherwise loop through words, and process into array
-                nodeWords.forEach((nodeWord, wIndex) => {
+                for (let wIndex = 0; wIndex < nodes.length; wIndex++) {
+                   let nodeWord = nodeWords[wIndex];
                     let word = {
                         str : nodeWord,
                         styles: [].concat(inheritedTags)
@@ -145,7 +148,7 @@ export class NewReadingPage implements OnInit {
                             styles: ['br']
                         });
                     }
-                });
+                }
             } else {
                 // If not a text node, dig deeper for text nodes
                 if ( index == nodes.length - 1 && (tagName == 'p' || tagName == 'h1' || tagName == 'h2' || tagName == 'h3')) {
@@ -156,7 +159,7 @@ export class NewReadingPage implements OnInit {
                     this.extractTextNodes(node, inheritedTags);
                 }
             }
-        });
+        }
     }
 
     /**
