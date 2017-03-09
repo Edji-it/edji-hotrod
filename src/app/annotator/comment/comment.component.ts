@@ -181,7 +181,8 @@ export class CommentComponent implements OnInit {
    * - Used for collapse/expand multiple comments
    */
   public getVerticalPosition(): number {
-    this.yPos = Math.round(this.el.nativeElement.offsetTop);
+    // The parentNode offsetTop addition fixes the occasional issue where diferrent images have comments registering on the same line
+    this.yPos = Math.round(this.el.nativeElement.offsetTop) + Math.round(this.el.nativeElement.parentNode.offsetTop);
     return this.yPos;
   }
 
