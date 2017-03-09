@@ -14,7 +14,7 @@ import { ProjectService } from '../shared/project.service';
 export class NewReadingPage implements OnInit {
     
     private readingForm: FormGroup;
-    private readingHtml: string = "";
+    private readingHtml: string = "<div>&nbsp;</div>";
     private readingIsBlank: boolean = false;
     private readingPlaceholder: string = 'Type or paste your reading...';
     private submitted: boolean = false;
@@ -66,7 +66,7 @@ export class NewReadingPage implements OnInit {
      * @param element Root element to start crawling from
      */
     private extractTextNodes(element: any, ancestorTags ?: string[], lastInBlock ?: boolean) {
-        let tagName = element.tagName.toLowerCase();
+        let tagName = 'tagName' in element && element.tagName.toLowerCase();
         let nodes = element.childNodes;
         
         // Children should inherit tags from several elements up
