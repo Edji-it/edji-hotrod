@@ -47,7 +47,7 @@ import { LoginModal, ResetPassComponent, DeleteCommentModal, AddProjectModal } f
 import { AnnotatorComponent, CommentComponent, TextCommentComponent, EmojiCommentComponent, EmojiKeyboardComponent } from './annotator';
 import { ProjectPageComponent, ProjectInfoComponent } from './project-page';
 import { ReadingPageComponent, DeleteProjectComponent } from './reading-page';
-import { NewReadingPage, UploadModalComponent } from './new-reading-page';
+import { NewReadingPage, UploadModalComponent, UploadPdfModalComponent } from './new-reading-page';
 import { DashboardComponent, JoinedDashComponent, CreatedDashComponent, ReadingCardComponent } from './dashboard';
 import { NoContentComponent } from './no-content';
 import { AccountComponent, ChangePassComponent } from './account';

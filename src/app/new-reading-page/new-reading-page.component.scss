@@ -10,7 +10,12 @@
     padding: 15px;
 
     & .btn {
-        margin: 12px 0px;
+        margin: 12px 0px 0px 0px;
+
+        & img {
+            height: auto;
+            width: 25px;
+        }
     }
 }
 

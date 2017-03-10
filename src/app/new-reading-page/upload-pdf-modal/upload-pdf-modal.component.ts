@@ -2,11 +2,11 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Locker } from 'angular2-locker';
 
 @Component({
-  selector: 'upload-modal',
-  templateUrl: './upload-modal.component.html',
-  styleUrls: ['./upload-modal.component.scss']
+  selector: 'upload-pdf-modal',
+  templateUrl: './upload-pdf-modal.component.html',
+  styleUrls: ['./upload-pdf-modal.component.scss']
 })
-export class UploadModalComponent implements OnInit {
+export class UploadPdfModalComponent implements OnInit {
 
   @Output() closeModal: EventEmitter<any> = new EventEmitter();
   @Output() returnImage: EventEmitter<any> = new EventEmitter();
