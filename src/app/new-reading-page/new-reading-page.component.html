@@ -28,7 +28,7 @@
                             <a id="buttonUploadImage" class="btn btn-icon--plain" (click)="showUploadModal = true">
                                 <img title="Add Picture" class src="/assets/images/icon-picture.svg" />
                             </a>
-                            <a id="buttonUploadPdf" class="btn btn-icon--plain" (click)="showUploadModal = true">
+                            <a id="buttonUploadPdf" class="btn btn-icon--plain" (click)="showPdfUploadModal = true">
                                 <img title="Add PDF" class src="/assets/images/icon-pdf.svg" />
                             </a>
                         </div>
@@ -72,3 +72,4 @@
     </div>
 </div>
 <upload-picture-modal class="modal-will-fade" [class.show]="showUploadModal" (returnImage)="addImage($event)" (closeModal)="showUploadModal = false"></upload-picture-modal>
+<upload-pdf-modal class="modal-will-fade" [class.show]="showPdfUploadModal" (returnImage)="addImage($event)" (closeModal)="showPdfUploadModal = false"></upload-pdf-modal>

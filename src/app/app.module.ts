@@ -115,6 +115,7 @@ type StoreType = {
     AnnotatorComponent,
     NewReadingPage,
     UploadModalComponent,
+    UploadPdfModalComponent,
     ProjectPageComponent,
     ProjectInfoComponent,
     ReadingPageComponent,

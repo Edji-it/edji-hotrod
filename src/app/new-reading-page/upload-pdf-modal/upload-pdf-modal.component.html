@@ -3,7 +3,7 @@
         <div class="modal-content">
             <form>   <!--(ngSubmit)=""-->
                 <div class="modal-header">
-                    <h4 class="modal-title">Add a Picture</h4>
+                    <h4 class="modal-title">Upload a PDF</h4>
                     <button (click)="closeModal.emit()" type="button" class="close btn-icon--round" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -30,7 +30,7 @@
                     <p id="status">Select an image to insert into your Reading</p>
 
                     <div class="card-columns">
-                        <div *ngFor="let uploadedUrl of uploadedUrls; let i = index" (click)="insertImage(i)" [class.new]="newImgUrls.indexOf(uploadedUrl) > -1" class="card upload-list-item">
+                        <div *ngFor="let uploadedUrl of uploadedPdfUrls; let i = index" (click)="insertImage(i)" [class.new]="newImgUrls.indexOf(uploadedUrl) > -1" class="card upload-list-item">
                             <img class="card-img-top img-fluid" [src]="uploadedUrl" />
                             <div class="card-img-overlay overlay-on-hover">
                                 <button class="btn btn-primary btn--center-overlay">Insert</button>

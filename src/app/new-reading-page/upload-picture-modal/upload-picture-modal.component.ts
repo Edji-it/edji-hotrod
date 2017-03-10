@@ -1,10 +1,14 @@
+import { MediaService } from '../../shared/media.service';
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Locker } from 'angular2-locker';
 
 @Component({
   selector: 'upload-picture-modal',
   templateUrl: './upload-picture-modal.component.html',
-  styleUrls: ['./upload-picture-modal.component.scss']
+  styleUrls: ['./upload-picture-modal.component.scss'],
+  providers: [
+    MediaService
+  ]
 })
 export class UploadModalComponent implements OnInit {
 
@@ -19,75 +23,48 @@ export class UploadModalComponent implements OnInit {
   private uploading: boolean = false;
   private uploadUrl: string = '//grapple-dev.edji.it';
 
-  constructor(private _locker: Locker) {
+  constructor(private _locker: Locker, private _media: MediaService) {
     this.locker = _locker.useDriver(Locker.DRIVERS.LOCAL);
   }
 
   ngOnInit() {
+    // Load previously uploaded images
     if (this.locker.get('uploadedImageUrls')) {
       this.uploadedUrls = this.locker.get('uploadedImageUrls');
     }
-
-    // Check to see if prod or dev environment
-      if (window.location.host.indexOf('dev.edji.it') > -1) {
-        this.uploadUrl = '//grapple-dev.edji.it';
-      } else if (window.location.host.indexOf('edji.it') > -1 || window.location.host.indexOf('dvscf5tf91syg.cloudfront.net') > -1) {
-        this.uploadUrl = '//grapple.edji.it';
-      }
   }
 
+  /**
+   * Set 'file' variable
+   */
   updateUploadFile() {
-    console.log("UPDATE UPLOAD");
     const files = document.getElementById('imageFileInput')['files'];
     this.file = files[0];
   }
 
+  /**
+   * Upload image and add image to modal for selection
+   */
   beginUpload() {
-    const files = document.getElementById('imageFileInput')['files'];
-    this.file = files[0];
+    this.updateUploadFile();
+
     if(this.file == null){
       alert('No file selected.');
       return;
     }
 
     this.uploading = true;
-    this.getSignedRequest(this.file);
+
+    this._media.uploadImage(this.file)
+      .subscribe(data => {
+        this.uploading = false;
+        this.addUploadUrl(data.url);
+      }, error => {
+        this.uploading = false;
+      });
   }
 
-  getSignedRequest(file) {
-     const xhr = new XMLHttpRequest();
-    xhr.open('GET', this.uploadUrl + '/sign-s3?file-name=' + file.name + '&file-type=' + file.type);
-    xhr.onreadystatechange = () => {
-      if(xhr.readyState === 4){
-        if(xhr.status === 200){
-          const response = JSON.parse(xhr.responseText);
-          this.uploadFile(this.file, response.signedRequest, response.url);
-        } else{
-          alert('Could not get signed URL.');
-          this.uploading = false;
-        }
-      }
-    };
-    xhr.send();
-  }
-
-  uploadFile(file, signedRequest, url){
-    const xhr = new XMLHttpRequest();
-    xhr.open('PUT', signedRequest);
-    xhr.onreadystatechange = () => {
-      if(xhr.readyState === 4){
-        if(xhr.status === 200){
-          this.addUploadUrl(url);
-          this.uploading = false;
-        }
-        else{
-          alert('Could not upload file.');
-          this.uploading = false;
-        }
-      }
-    };
-    xhr.send(this.file);
-  }
+  
 
   /**
    * Add upload URL to array and localStorage
