@@ -29,10 +29,10 @@ export class NewReadingPage implements OnInit {
     private mediumEditorConfig: any = {
         imageDragging: false, 
         paste : { 
-            forcePlainText : true  
-            // cleanPastedHTML: true,
-            // cleanAttrs: ['class', 'style', 'dir'],
-            // cleanTags: ['meta', 'button', 'input', 'form']
+            forcePlainText : true,
+            cleanPastedHTML: true,
+            cleanAttrs: ['class', 'style', 'dir'],
+            cleanTags: ['meta', 'button', 'input', 'form']
         }, 
         extensions: { 
             imageDragging: {}
