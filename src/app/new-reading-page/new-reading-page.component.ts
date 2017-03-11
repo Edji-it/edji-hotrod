@@ -32,7 +32,7 @@ export class NewReadingPage implements OnInit {
             forcePlainText : true,
             cleanPastedHTML: true,
             cleanAttrs: ['class', 'style', 'dir', 'href'],
-            cleanTags: ['meta', 'button', 'input', 'form', 'img', 'label']
+            cleanTags: ['meta', 'button', 'input', 'form', 'img', 'label', 'pre']
         }, 
         extensions: { 
             imageDragging: {}
