@@ -32,7 +32,7 @@ export class NewReadingPage implements OnInit {
             forcePlainText : true,
             cleanPastedHTML: true,
             cleanAttrs: ['class', 'style', 'dir', 'href'],
-            cleanTags: ['meta', 'button', 'input', 'form', 'img', 'label', 'pre']
+            cleanTags: ['meta', 'button', 'input', 'form', 'img', 'label', 'pre', 'figure']
         }, 
         extensions: { 
             imageDragging: {}
@@ -108,7 +108,6 @@ export class NewReadingPage implements OnInit {
 
                 // Split text inside child nodes
                 let nodeWords = node.textContent.split(/(?:([^a-zA-Z0-9]))/).filter(function(el){ return el.replace(/([\n])/g, ''); } );  
-                
                 // If empty element, push a spacer word to reflect that
                 if (nodeWords.length < 1) {
                     this.words.push({
@@ -118,14 +117,14 @@ export class NewReadingPage implements OnInit {
                 }
 
                 // Otherwise loop through words, and process into array
-                for (let wIndex = 0; wIndex < nodes.length; wIndex++) {
+                for (let wIndex = 0; wIndex < nodeWords.length; wIndex++) {
                    let nodeWord = nodeWords[wIndex];
                     let word = {
                         str : nodeWord,
                         styles: [].concat(inheritedTags)
                     };
                     let addBr = false;
-                    if ('str' in word && word.str.trim().length < 1) {
+                    if (typeof(word.str) == 'string' && word.str.trim().length < 1) {
                         word.styles.push('space');
                     }
                     if (index == 0 && wIndex == 0) {
@@ -152,8 +151,6 @@ export class NewReadingPage implements OnInit {
             } else {
                 // If not a text node, dig deeper for text nodes
                 if ( index == nodes.length - 1 && (tagName == 'p' || tagName == 'h1' || tagName == 'h2' || tagName == 'h3')) {
-                    console.log("Last in block");
-                    console.log(node);
                     this.extractTextNodes(node, inheritedTags, true);
                 } else {
                     this.extractTextNodes(node, inheritedTags);
