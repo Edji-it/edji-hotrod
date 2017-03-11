@@ -63,8 +63,9 @@
 
                     <p class="alert alert-warning" *ngIf="error.length > 0">{{ error }}</p>
 
-                    <div class="button__row">   
-                        <button id="addReadingButton" type="submit" class="btn btn-primary" [class.loading]="addLoading" title="Add Reading">Add Reading</button>
+                    <div class="button__row">
+                        <button id="saveDraftButton" type="submit" class="btn btn-info btn_row" [class.loading]="addLoading" title="Save as Draft">Save as Draft</button>
+                        <button id="addReadingButton" type="button" class="btn btn-primary btn_row" [class.loading]="addLoading" title="Add Reading" (click)="this.isDraft=false;onSubmit(readingForm.value)">Add Reading</button>
                     </div>
                 </div>
              </form>

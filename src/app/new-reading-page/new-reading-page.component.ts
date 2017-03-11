@@ -21,6 +21,7 @@ export class NewReadingPage implements OnInit {
     private addLoading: boolean = false;
     private error: string = '';
     private showUploadModal: boolean = false;
+    private isDraft: boolean = true;
 
     // Used for processing reading
     private words: any[] = [];
@@ -201,6 +202,11 @@ export class NewReadingPage implements OnInit {
         let reading: any = form;
         reading.html = this.readingHtml;
         reading.words = this.words;
+
+        // If the reading is not being saved as a draft (A.K.A. it's a final version)
+        if (this.isDraft===false) {
+            reading.draft = false;
+        }
         
         this._readings.save(reading)
             .subscribe(
