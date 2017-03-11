@@ -125,7 +125,7 @@ export class NewReadingPage implements OnInit {
                         styles: [].concat(inheritedTags)
                     };
                     let addBr = false;
-                    if (word.str.trim().length < 1) {
+                    if ('str' in word && word.str.trim().length < 1) {
                         word.styles.push('space');
                     }
                     if (index == 0 && wIndex == 0) {
