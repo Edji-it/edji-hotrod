@@ -192,6 +192,29 @@ export class AuthService implements CanActivate {
     }
 
     /**
+     * Call to update user object
+     * - Used primarily to update user preferences and documents
+     * - Cannot be passed password
+     */
+    public updateUser(user: any): Observable<any> {
+        return this.http
+            .put([this.baseUrl, 'users'].join('/'), {
+                user: user
+            }, this.getOptions())
+            .map((data) => {
+                let object = data.json();
+
+                // if the response has a token, the user should be successfully registered and logged in
+                if (object.user) {
+                    this.setUser(object.user);
+                    this.setToken(object.token);
+                }
+
+                return data.json();
+            });
+    }
+
+    /**
      * Calls to server, which creates a temp user object
      * @param username String value for the temp user's username, gets assigned to fullname property of TempUser model
      * @returns Observable object with user and token properties

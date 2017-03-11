@@ -185,7 +185,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                         }
                     }
                 }
-                console.log(this.project.comments);
                 
                 // Process different live comment updates
                 if (commentUpdate.action === 'DELETE') {
@@ -810,7 +809,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
         // Set aside image coords
         this.imageCoords = coords;
-        console.log(target);
 
         let range = Rangy.createRange();
         range.selectNodeContents(target['parentNode']);
