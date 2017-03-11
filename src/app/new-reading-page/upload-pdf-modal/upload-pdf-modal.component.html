@@ -15,7 +15,7 @@
                     </label>-->
                     <form>
                     <label class="btn btn-default btn-file">
-                        Browse <input id="imageFileInput" type="file" (change)="updateUploadFile()" style="display:none;">
+                        Browse <input id="pdfFileInput" type="file" (change)="updateUploadFile()" style="display:none;">
                     </label>
 
                     <div class="file-name">
@@ -27,7 +27,7 @@
                     </form>
                     <hr />
                     
-                    <p id="status">Select an image to insert into your Reading</p>
+                    <p id="status">Select a pdf to insert into your Reading</p>
 
                     <div class="card-columns">
                         <div *ngFor="let uploadedUrl of uploadedPdfUrls; let i = index" (click)="insertImage(i)" [class.new]="newImgUrls.indexOf(uploadedUrl) > -1" class="card upload-list-item">

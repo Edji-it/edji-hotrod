@@ -7,7 +7,10 @@ import { MediaService } from '../../shared/media.service';
 @Component({
   selector: 'upload-pdf-modal',
   templateUrl: './upload-pdf-modal.component.html',
-  styleUrls: ['./upload-pdf-modal.component.scss']
+  styleUrls: ['./upload-pdf-modal.component.scss'],
+  providers: [
+    MediaService
+  ]
 })
 export class UploadPdfModalComponent implements OnInit {
 
@@ -37,7 +40,7 @@ export class UploadPdfModalComponent implements OnInit {
    * Set 'file' variable
    */
   updateUploadFile() {
-    const files = document.getElementById('imageFileInput')['files'];
+    const files = document.getElementById('pdfFileInput')['files'];
     this.file = files[0];
   }
 
@@ -54,7 +57,7 @@ export class UploadPdfModalComponent implements OnInit {
 
     this.uploading = true;
 
-    this._media.uploadImage(this.file)
+    this._media.uploadPdf(this.file)
       .subscribe(data => {
         this.uploading = false;
         this.addUploadUrl(data.url);

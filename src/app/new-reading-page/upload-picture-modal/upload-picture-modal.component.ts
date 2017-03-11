@@ -1,6 +1,8 @@
-import { MediaService } from '../../shared/media.service';
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Locker } from 'angular2-locker';
+
+// Project Dependencies
+import { MediaService } from '../../shared/media.service';
 
 @Component({
   selector: 'upload-picture-modal',

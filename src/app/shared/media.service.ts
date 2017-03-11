@@ -39,5 +39,18 @@ export class MediaService {
         return uploadSource.asObservable();
     }
 
+    uploadPdf(file: File): Observable<any> {
+        let uploadSource = new Subject();
+     
+        this.http.put(this.pdfService + '/v1/pdf', file )
+            .subscribe(res => {
+                uploadSource.next({ url: '' });
+            }, error => {
+                uploadSource.error(error);
+            });
+
+        return uploadSource.asObservable();
+    }
+
     
 }
