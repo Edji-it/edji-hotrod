@@ -2,7 +2,7 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Locker } from 'angular2-locker';
 
 // Project Dependencies
-import { MediaService } from '../../shared/media.service';
+import { AuthService, MediaService } from '../../shared';
 
 @Component({
   selector: 'upload-picture-modal',
@@ -17,7 +17,7 @@ export class UploadModalComponent implements OnInit {
   @Output() closeModal: EventEmitter<any> = new EventEmitter();
   @Output() returnImage: EventEmitter<any> = new EventEmitter();
   
-  private uploadedUrls: string[] = [];
+  private uploadedImages: any[] = [];
   private newImgUrls: string[] = [];
   private selectedIndex: number = 0;
   private locker: any;
@@ -25,14 +25,16 @@ export class UploadModalComponent implements OnInit {
   private uploading: boolean = false;
   private uploadUrl: string = '//grapple-dev.edji.it';
 
-  constructor(private _locker: Locker, private _media: MediaService) {
+  constructor(private _locker: Locker, private _media: MediaService, private _auth: AuthService) {
     this.locker = _locker.useDriver(Locker.DRIVERS.LOCAL);
   }
 
   ngOnInit() {
     // Load previously uploaded images
-    if (this.locker.get('uploadedImageUrls')) {
-      this.uploadedUrls = this.locker.get('uploadedImageUrls');
+    if (this.locker.get('uploadedImages')) {
+      this.uploadedImages = this.locker.get('uploadedImages');
+    } else if (this._auth.getUser().media && this._auth.getUser().media.images) {
+      this.uploadedImages = this._auth.getUser().media.images;
     }
   }
 
@@ -61,6 +63,7 @@ export class UploadModalComponent implements OnInit {
       .subscribe(data => {
         this.uploading = false;
         this.addUploadUrl(data.url);
+        this.file = {};
       }, error => {
         this.uploading = false;
       });
@@ -71,17 +74,31 @@ export class UploadModalComponent implements OnInit {
   /**
    * Add upload URL to array and localStorage
    */
-  addUploadUrl(url: string) : void {
+  addUploadUrl(url: string, title ?: string) : void {
+    let imgObj = {
+      url: url,
+      title: title
+    };
+
     this.newImgUrls.unshift(url);
-    this.uploadedUrls.unshift(url);
-    while(this.uploadedUrls.length > 5) {
-      this.uploadedUrls.pop();
+    this.uploadedImages.unshift(imgObj);
+    this.locker.set('uploadedImages', this.uploadedImages);
+
+    let user = this._auth.getUser();
+    if (!user.media) {
+        user.media = {};
     }
-    this.locker.set('uploadedImageUrls', this.uploadedUrls);
+    if (!user.media.images) {
+        user.media.images = [];
+    }
+    user.media.images = this.uploadedImages;
+    this._auth.updateUser( user )
+        .take(1)
+        .subscribe();
   }
 
   insertImage(imageIndex: number) : void {
-    this.returnImage.emit(this.uploadedUrls[imageIndex]);
+    this.returnImage.emit(this.uploadedImages[imageIndex]);
     this.closeModal.emit();
   }
 }

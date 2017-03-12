@@ -30,8 +30,8 @@
                     <p id="status">Select an image to insert into your Reading</p>
 
                     <div class="card-columns">
-                        <div *ngFor="let uploadedUrl of uploadedUrls; let i = index" (click)="insertImage(i)" [class.new]="newImgUrls.indexOf(uploadedUrl) > -1" class="card upload-list-item">
-                            <img class="card-img-top img-fluid" [src]="uploadedUrl" />
+                        <div *ngFor="let image of uploadedImages; let i = index" (click)="insertImage(i)" [class.new]="newImgUrls.indexOf(image.url) > -1" class="card upload-list-item">
+                            <img class="card-img-top img-fluid" [src]="image.url" [title]="image.title" />
                             <div class="card-img-overlay overlay-on-hover">
                                 <button class="btn btn-primary btn--center-overlay">Insert</button>
                             </div>

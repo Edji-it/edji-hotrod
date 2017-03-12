@@ -233,8 +233,7 @@ export class NewReadingPage implements OnInit {
             );
     }
 
-    private addImage(imageUrl: string) {
-        console.log(imageUrl);
-        this.readingHtml += '<img src="' + imageUrl + '" /><br/><p></p>';
+    private addImage(image: any) {
+        this.readingHtml += '<img src="' + image.url + '" title="' + image.title + '" /><br/><p></p>';
     }
 }

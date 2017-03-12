@@ -90,6 +90,8 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
   ngOnInit() {
       if( this._locker.get('recentEmojis') ) {
         this.emojifilters[0].emoji = this._locker.get('recentEmojis');
+      } else if (this._auth.getUser().prefs && this._auth.getUser().prefs.recentEmoji) {
+        this.emojifilters[0].emoji = this._auth.getUser().prefs.recentEmoji;
       }
   }
 
