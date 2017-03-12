@@ -198,7 +198,7 @@ export class AuthService implements CanActivate {
      */
     public updateUser(user: any): Observable<any> {
         return this.http
-            .put([this.baseUrl, 'users'].join('/'), {
+            .put( this.baseUrl + '/users', {
                 user: user
             }, this.getOptions())
             .map((data) => {

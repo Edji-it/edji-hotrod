@@ -3,6 +3,9 @@ import {
   Locker
 } from 'angular2-locker';
 
+// Project Dependencies
+import { AuthService } from '../../shared';
+
 @Component({
   selector: 'emoji-keyboard',
   templateUrl: './emoji-keyboard.component.html',
@@ -79,18 +82,34 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
     }
   ];
 
-  constructor(private _locker: Locker) {}
+  constructor(
+        private _locker: Locker,
+        private _auth: AuthService
+    ) {}
 
   ngOnInit() {
-    this.emojifilters[0].emoji = this._locker.get('recentEmojis');
+      if( this._locker.get('recentEmojis') ) {
+        this.emojifilters[0].emoji = this._locker.get('recentEmojis');
+      }
   }
 
   ngAfterViewInit() {
     this.updateScrollValues();
   }
 
+  /**
+   * Fired when active state of Keyboard is toggle on/off
+   */
   onActiveChange() {
-    console.log('Active changes!')
+    // Update user object with recent emoji
+    let user = this._auth.getUser();
+    if (!user.prefs) {
+        user.prefs = {};
+    }
+    user.prefs.recentEmoji = this.emojifilters[0].emoji;
+    this._auth.updateUser(user)
+        .take(1)
+        .subscribe();
   }
 
   // When clicking a category, jump to that section
@@ -124,7 +143,7 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
         this.emojifilters[0].emoji.pop();
       }
     } else {
-      this.emojifilters[0].emoji.splice(index);
+      this.emojifilters[0].emoji.splice(index, 1);
       this.emojifilters[0].emoji.unshift(emojiLabel);
     }
     // Save to localstorage (which is then saved to the user object)
