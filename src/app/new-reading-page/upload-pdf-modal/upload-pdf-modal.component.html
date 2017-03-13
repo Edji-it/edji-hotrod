@@ -26,7 +26,7 @@
                         {{ this.file ? this.file.name : '' }}
                     </div>
                     
-                    <button id="buttonBeginImageUpload" (click)="beginUpload()" type="submit" class="btn btn-primary" 
+                    <button id="buttonBeginPdfUpload" (click)="beginUpload()" type="submit" class="btn btn-primary" 
                         [disabled]="noUploadAllowed"
                         [class.loading]="uploading">Upload</button>
                     </form>
