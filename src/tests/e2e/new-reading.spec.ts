@@ -194,7 +194,7 @@ describe('New Reading Page', () => {
             browser.wait(EC.urlContains("project"), 5000, "never arrived at new reading");
 
             // Should see image in new reading
-            browser.wait(EC.presenceOf(newReading.imageInReading), 5000, "never saw an image in the new reading");
+            browser.wait(EC.presenceOf(newReading.imageInReading), 10000, "never saw an image in the new reading");
         });
     });
 
