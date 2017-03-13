@@ -38,7 +38,7 @@
                     <p id="status">Select a PDF to insert into your Reading</p>
 
                     <!--<div class="card-columns">-->
-                        <div *ngFor="let doc of uploadedDocs; let i = index"  class="card-group" [class.hidden]="!doc.pages">
+                        <div *ngFor="let doc of uploadedDocs; let i = index"  class="card-group" [class.hidden]="!doc.pages || !doc.pages[0]">
                             <div *ngIf="doc.pages" class="card title-card" (click)="insertPages(doc.pages)">
                                 <button class="btn btn-primary btn--center-overlay">Insert {{ doc.pages.length }} Page<span *ngIf="doc.pages.length > 1">s</span></button>
                             </div>

@@ -2,7 +2,7 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Locker } from 'angular2-locker';
 
 // Project Dependencies
-import { MediaService } from '../../shared/media.service';
+import { MediaService, AuthService } from '../../shared';
 
 @Component({
   selector: 'upload-pdf-modal',
@@ -28,14 +28,16 @@ export class UploadPdfModalComponent implements OnInit {
   private noUploadAllowed: boolean = true;
   private errorMsg: string = '';
 
-  constructor(private _locker: Locker, private _media: MediaService) {
+  constructor(private _locker: Locker, private _media: MediaService, private _auth: AuthService) {
     this.locker = _locker.useDriver(Locker.DRIVERS.LOCAL);
   }
 
   ngOnInit() {
-    // Load previously uploaded images
+    // Load previously uploaded docs
     if (this.locker.get('uploadedDocs')) {
       this.uploadedDocs = this.locker.get('uploadedDocs');
+    } else if (this._auth.getUser().media && this._auth.getUser().media.documents) {
+      this.uploadedDocs = this._auth.getUser().media.documents;
     }
   }
 
@@ -86,6 +88,18 @@ export class UploadPdfModalComponent implements OnInit {
     // this.newImgUrls.unshift(url);
     this.uploadedDocs.unshift(data);
     this.locker.set('uploadedDocs', this.uploadedDocs);
+
+    let user = this._auth.getUser();
+    if (!user.media) {
+        user.media = {};
+    }
+    if (!user.media.documents) {
+        user.media.documents = [];
+    }
+    user.media.documents = this.uploadedDocs;
+    this._auth.updateUser( user )
+        .take(1)
+        .subscribe();
   }
 
   insertPages(pages: any[]) : void {
