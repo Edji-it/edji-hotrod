@@ -43,7 +43,8 @@ export class MediaService {
      
         this.http.put(this.pdfService + '/v1/pdf', file )
             .subscribe(res => {
-                uploadSource.next({ url: '' });
+                let doc = res.json() || {};
+                uploadSource.next(doc);
             }, error => {
                 uploadSource.error(error);
             });

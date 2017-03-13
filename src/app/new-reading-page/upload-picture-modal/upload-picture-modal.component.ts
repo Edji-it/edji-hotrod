@@ -42,7 +42,7 @@ export class UploadModalComponent implements OnInit {
   }
 
   /**
-   * Set 'file' variable
+   * Set 'file' variable and validate file
    */
   updateUploadFile() {
     const files = document.getElementById('imageFileInput')['files'];

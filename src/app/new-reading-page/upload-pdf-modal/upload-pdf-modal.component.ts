@@ -17,13 +17,16 @@ export class UploadPdfModalComponent implements OnInit {
   @Output() closeModal: EventEmitter<any> = new EventEmitter();
   @Output() returnImage: EventEmitter<any> = new EventEmitter();
   
-  private uploadedPdfUrls: string[] = [];
-  private newImgUrls: string[] = [];
+  private uploadedDocs: any[] = [];
+  // private newImgUrls: string[] = [];
   private selectedIndex: number = 0;
   private locker: any;
   private file: any = {};
+  private selectedFiles: any[] = [];
   private uploading: boolean = false;
   private uploadUrl: string = '//grapple-dev.edji.it';
+  private noUploadAllowed: boolean = true;
+  private errorMsg: string = '';
 
   constructor(private _locker: Locker, private _media: MediaService) {
     this.locker = _locker.useDriver(Locker.DRIVERS.LOCAL);
@@ -31,19 +34,26 @@ export class UploadPdfModalComponent implements OnInit {
 
   ngOnInit() {
     // Load previously uploaded images
-    if (this.locker.get('uploadedPdfUrls')) {
-      this.uploadedPdfUrls = this.locker.get('uploadedPdfUrls');
+    if (this.locker.get('uploadedDocs')) {
+      this.uploadedDocs = this.locker.get('uploadedDocs');
     }
   }
 
   /**
-   * Set 'file' variable
+   * Set 'file' variable and validate file
    */
   updateUploadFile() {
     const files = document.getElementById('pdfFileInput')['files'];
     this.file = files[0];
+    // Limit file size to 5mb
+    if (this.file && this.file.size > 5 * Math.pow(10, 6) ) {
+      this.noUploadAllowed = true;
+      this.errorMsg = 'Pdf uploads are limited to 5mb, please select a smaller pdf';
+    } else {
+      this.noUploadAllowed = false;
+      this.errorMsg = '';
+    }
   }
-
   /**
    * Upload image and add image to modal for selection
    */
@@ -60,7 +70,7 @@ export class UploadPdfModalComponent implements OnInit {
     this._media.uploadPdf(this.file)
       .subscribe(data => {
         this.uploading = false;
-        this.addUploadUrl(data.url);
+        this.addUpload(data);
       }, error => {
         this.uploading = false;
       });
@@ -71,17 +81,14 @@ export class UploadPdfModalComponent implements OnInit {
   /**
    * Add upload URL to array and localStorage
    */
-  addUploadUrl(url: string) : void {
-    this.newImgUrls.unshift(url);
-    this.uploadedPdfUrls.unshift(url);
-    while(this.uploadedPdfUrls.length > 5) {
-      this.uploadedPdfUrls.pop();
-    }
-    this.locker.set('uploadedPdfUrls', this.uploadedPdfUrls);
+  addUpload(data: any) : void {
+    // this.newImgUrls.unshift(url);
+    this.uploadedDocs.unshift(data);
+    this.locker.set('uploadedDocs', this.uploadedDocs);
   }
 
-  insertImage(imageIndex: number) : void {
-    this.returnImage.emit(this.uploadedPdfUrls[imageIndex]);
+  insertImage(url: string) : void {
+    this.returnImage.emit({ 'url': url });
     this.closeModal.emit();
   }
 }

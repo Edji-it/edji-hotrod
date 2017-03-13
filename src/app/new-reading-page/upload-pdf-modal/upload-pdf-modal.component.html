@@ -1,5 +1,5 @@
 <div id="uploadModal" class="modal">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <form>   <!--(ngSubmit)=""-->
                 <div class="modal-header">
@@ -15,7 +15,10 @@
                     </label>-->
                     <form>
                     <label class="btn btn-default btn-file">
-                        Browse <input id="pdfFileInput" type="file" (change)="updateUploadFile()" style="display:none;">
+                        Browse <input id="pdfFileInput" type="file" 
+                            accept=".pdf"
+                            (change)="updateUploadFile()"
+                            style="display:none;">
                     </label>
 
                     <div class="file-name">
@@ -23,20 +26,29 @@
                         {{ this.file ? this.file.name : '' }}
                     </div>
                     
-                    <button id="buttonBeginImageUpload" (click)="beginUpload()" type="submit" class="btn btn-primary" [class.loading]="uploading">Upload</button>
+                    <button id="buttonBeginImageUpload" (click)="beginUpload()" type="submit" class="btn btn-primary" 
+                        [disabled]="noUploadAllowed"
+                        [class.loading]="uploading">Upload</button>
                     </form>
+
+                    <div *ngIf="errorMsg" class="alert alert-warning">
+                        {{ errorMsg }}
+                    </div>
+
                     <hr />
                     
                     <p id="status">Select a pdf to insert into your Reading</p>
 
-                    <div class="card-columns">
-                        <div *ngFor="let uploadedUrl of uploadedPdfUrls; let i = index" (click)="insertImage(i)" [class.new]="newImgUrls.indexOf(uploadedUrl) > -1" class="card upload-list-item">
-                            <img class="card-img-top img-fluid" [src]="uploadedUrl" />
-                            <div class="card-img-overlay overlay-on-hover">
-                                <button class="btn btn-primary btn--center-overlay">Insert</button>
+                    <!--<div class="card-columns">-->
+                        <div *ngFor="let doc of uploadedDocs; let i = index"  class="card-group">
+                            <div *ngFor="let url of doc.pages" (click)="insertImage(url)" class="card">
+                                <img class="card-img-top img-fluid" [src]="url" />
+                                <div class="card-img-overlay overlay-on-hover">
+                                    <button class="btn btn-primary btn--center-overlay">Insert</button>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    <!--</div>-->
                 </div>
                 <div class="modal-footer">
                     <!--<button (click)="insertImage()" [disabled]="!uploadedUrls[0]" type="submit" class="btn btn-primary">Insert</button>
