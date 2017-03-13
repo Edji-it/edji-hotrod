@@ -47,10 +47,10 @@ export class UploadPdfModalComponent implements OnInit {
   updateUploadFile() {
     const files = document.getElementById('pdfFileInput')['files'];
     this.file = files[0];
-    // Limit file size to 5mb
-    if (this.file && this.file.size > 5 * Math.pow(10, 6) ) {
+    // Limit file size to 10mb
+    if (this.file && this.file.size > 10 * Math.pow(10, 6) ) {
       this.noUploadAllowed = true;
-      this.errorMsg = 'PDF uploads are limited to 5mb, please select a smaller PDF.';
+      this.errorMsg = 'PDF uploads are limited to 10mb, please select a smaller PDF.';
     } else {
       this.noUploadAllowed = false;
       this.errorMsg = '';
