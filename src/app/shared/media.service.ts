@@ -19,7 +19,6 @@ export class MediaService {
 
     uploadImage(file: File): Observable<any> {
         let uploadSource = new Subject();
-        
         this.http.get(this.imageService + '/sign-s3?file-name=' + file.name + '&file-type=' + file.type)
             .subscribe((res) => {
                 let s3data = res.json();

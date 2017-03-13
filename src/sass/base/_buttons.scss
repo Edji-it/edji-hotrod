@@ -38,13 +38,15 @@ button, .button, .btn { //, [class*='btn']
     color: #fff;
   }
 
-  &:disabled {
+  &:disabled, &[disabled] {
     // cursor: not-allowed;
     opacity: 0.5;
+    color: #777 !important;
+    background-color: #eaeaea !important;
 
     &:hover {
       transform: translate3d(0,0,0);
-      background-color: $btnBg;
+      // background-color: $btnBg;
     }
   }
 
@@ -151,10 +153,10 @@ button, .button, .btn { //, [class*='btn']
   }
 
   &:disabled {
-    background: $btnPrimaryBg !important;
+    // background: $btnPrimaryBg !important;
 
     &:hover, &:active, &:focus {
-      background: $btnPrimaryBg;
+      // background: $btnPrimaryBg;
     }
   }
 }

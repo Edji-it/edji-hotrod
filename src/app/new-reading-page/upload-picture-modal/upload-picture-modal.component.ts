@@ -25,6 +25,9 @@ export class UploadModalComponent implements OnInit {
   private uploading: boolean = false;
   private uploadUrl: string = '//grapple-dev.edji.it';
 
+  private noUploadAllowed: boolean = true;
+  private errorMsg: string = '';
+
   constructor(private _locker: Locker, private _media: MediaService, private _auth: AuthService) {
     this.locker = _locker.useDriver(Locker.DRIVERS.LOCAL);
   }
@@ -44,6 +47,14 @@ export class UploadModalComponent implements OnInit {
   updateUploadFile() {
     const files = document.getElementById('imageFileInput')['files'];
     this.file = files[0];
+    // Limit file size to 5mb
+    if (this.file && this.file.size > 5 * Math.pow(10, 6) ) {
+      this.noUploadAllowed = true;
+      this.errorMsg = 'Image uploads are limited to 5mb, please select a smaller image';
+    } else {
+      this.noUploadAllowed = false;
+      this.errorMsg = '';
+    }
   }
 
   /**
@@ -52,7 +63,7 @@ export class UploadModalComponent implements OnInit {
   beginUpload() {
     this.updateUploadFile();
 
-    if(this.file == null){
+    if(this.file == null || this.noUploadAllowed){
       alert('No file selected.');
       return;
     }

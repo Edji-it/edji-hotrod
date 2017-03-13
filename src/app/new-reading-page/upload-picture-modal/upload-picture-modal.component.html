@@ -14,17 +14,26 @@
                         <span class="custom-file-control"></span>
                     </label>-->
                     <form>
-                    <label class="btn btn-default btn-file">
-                        Browse <input id="imageFileInput" type="file" (change)="updateUploadFile()" style="display:none;">
+                    <label #browseBtn class="btn btn-default btn-file">
+                        Browse <input id="imageFileInput" type="file" 
+                            accept=".jpg,.png,.gif,.jpeg,.svg"
+                            (change)="updateUploadFile()" style="display:none;">
                     </label>
 
-                    <div class="file-name">
+                    <div class="file-name" (click)="browseBtn.click()">
                         <span *ngIf="!this.file || !this.file.name || this.file.name.length < 1" class="placeholder">Select image to upload...</span>
                         {{ this.file ? this.file.name : '' }}
                     </div>
                     
-                    <button id="buttonBeginImageUpload" (click)="beginUpload()" type="submit" class="btn btn-primary" [class.loading]="uploading">Upload</button>
+                    <button id="buttonBeginImageUpload" (click)="beginUpload()" type="submit" class="btn btn-primary" 
+                        [class.loading]="uploading"
+                        [disabled]="noUploadAllowed">Upload</button>
                     </form>
+
+                    <div *ngIf="errorMsg" class="alert alert-warning">
+                        {{ errorMsg }}
+                    </div>
+
                     <hr />
                     
                     <p id="status">Select an image to insert into your Reading</p>

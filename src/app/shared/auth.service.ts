@@ -206,7 +206,9 @@ export class AuthService implements CanActivate {
                 // if the response has a token, the user should be successfully registered and logged in
                 if (object.user) {
                     this.setUser(object.user);
-                    this.setToken(object.token);
+                }
+                if (object.token) {
+                    this.setUser(object.token);
                 }
 
                 return data.json();
