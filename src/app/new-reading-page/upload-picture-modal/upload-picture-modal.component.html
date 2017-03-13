@@ -25,9 +25,9 @@
                         {{ this.file ? this.file.name : '' }}
                     </div>
                     
+                    <!--Breaks test: [disabled]="noUploadAllowed"-->
                     <button id="buttonBeginImageUpload" (click)="beginUpload()" type="submit" class="btn btn-primary" 
-                        [class.loading]="uploading"
-                        [disabled]="noUploadAllowed">Upload</button>
+                        [class.loading]="uploading">Upload</button>
                     </form>
 
                     <div *ngIf="errorMsg" class="alert alert-warning">
