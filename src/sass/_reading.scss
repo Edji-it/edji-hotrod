@@ -124,7 +124,7 @@ article.content {
 		cursor: crosshair; //url('/assets/images/cursor-image.png'), pointer; 
 	}
 
-	& .w.img img {
+	& .w .img-wrap > img {
 		$highlightWidth: 4px;
 		cursor: crosshair; //url('/assets/images/cursor-image.png'), pointer; 
 		// outline: $highlightWidth solid transparent;
