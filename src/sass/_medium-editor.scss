@@ -89,8 +89,10 @@ $editorToolbarBg: #fff;
   }
 
   & img {
+		border: 1px solid #efefef !important;
     display: block !important;
     margin: 0 auto !important;
+    cursor: move;
   }
 }
 
