@@ -48,7 +48,7 @@ export class UploadPdfModalComponent implements OnInit {
     // Limit file size to 5mb
     if (this.file && this.file.size > 5 * Math.pow(10, 6) ) {
       this.noUploadAllowed = true;
-      this.errorMsg = 'Pdf uploads are limited to 5mb, please select a smaller pdf';
+      this.errorMsg = 'PDF uploads are limited to 5mb, please select a smaller PDF.';
     } else {
       this.noUploadAllowed = false;
       this.errorMsg = '';
@@ -73,6 +73,7 @@ export class UploadPdfModalComponent implements OnInit {
         this.addUpload(data);
       }, error => {
         this.uploading = false;
+        this.errorMsg = '<b>Upload failed!</b> Please try again later, or with a different file. If this problem persists, please <a href="mailto:brennen@edji.it">contact us</a>.';
       });
   }
 

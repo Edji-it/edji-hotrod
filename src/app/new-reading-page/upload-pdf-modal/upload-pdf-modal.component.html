@@ -22,7 +22,7 @@
                     </label>
 
                     <div class="file-name">
-                        <span *ngIf="!this.file || !this.file.name || this.file.name.length < 1" class="placeholder">Select image to upload...</span>
+                        <span *ngIf="!this.file || !this.file.name || this.file.name.length < 1" class="placeholder">Select a PDF to upload...</span>
                         {{ this.file ? this.file.name : '' }}
                     </div>
                     
@@ -31,18 +31,16 @@
                         [class.loading]="uploading">Upload</button>
                     </form>
 
-                    <div *ngIf="errorMsg" class="alert alert-warning">
-                        {{ errorMsg }}
-                    </div>
+                    <div *ngIf="errorMsg" class="alert alert-warning" [innerHtml]="errorMsg"></div>
 
                     <hr />
                     
-                    <p id="status">Select a pdf to insert into your Reading</p>
+                    <p id="status">Select a PDF to insert into your Reading</p>
 
                     <!--<div class="card-columns">-->
                         <div *ngFor="let doc of uploadedDocs; let i = index"  class="card-group" [class.hidden]="!doc.pages">
                             <div *ngIf="doc.pages" class="card title-card" (click)="insertPages(doc.pages)">
-                                <button class="btn btn-primary btn--center-overlay">Insert {{ doc.pages.length }} Pages</button>
+                                <button class="btn btn-primary btn--center-overlay">Insert {{ doc.pages.length }} Page<span *ngIf="doc.pages.length > 1">s</span></button>
                             </div>
                             <div *ngFor="let url of doc.pages" (click)="insertImage(url)" class="card">
                                 <img class="card-img-top img-fluid" [src]="url" />
