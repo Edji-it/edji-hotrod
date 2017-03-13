@@ -87,8 +87,17 @@ export class UploadPdfModalComponent implements OnInit {
     this.locker.set('uploadedDocs', this.uploadedDocs);
   }
 
+  insertPages(pages: any[]) : void {
+    let images = [];
+    pages.forEach(page => {
+      images.push({ 'url': page } );
+    });
+    this.returnImage.emit(images);
+    this.closeModal.emit();
+  }
+
   insertImage(url: string) : void {
-    this.returnImage.emit({ 'url': url });
+    this.returnImage.emit([{ 'url': url }]);
     this.closeModal.emit();
   }
 }

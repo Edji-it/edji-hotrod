@@ -109,7 +109,7 @@ export class UploadModalComponent implements OnInit {
   }
 
   insertImage(imageIndex: number) : void {
-    this.returnImage.emit(this.uploadedImages[imageIndex]);
+    this.returnImage.emit([this.uploadedImages[imageIndex]]);
     this.closeModal.emit();
   }
 }

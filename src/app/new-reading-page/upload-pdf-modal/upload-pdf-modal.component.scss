@@ -57,3 +57,35 @@
         margin-bottom: 8px;
     }
 }
+
+// PDF Cards
+$pdfThumbHeight: 250px;
+.card-group {
+    height: $pdfThumbHeight;
+    overflow-y: visible;
+    overflow-x: auto;
+    flex-flow: row nowrap;
+    margin-bottom: 20px;
+
+    &.hidden {
+        display: none;
+    }
+}
+.card {
+    flex: none !important;
+    overflow: hidden;
+    text-align: center;
+}
+.title-card {
+    border: none !important;
+    min-width: 180px;
+
+    & + .card {
+        border-left:1px solid rgba(0,0,0,0.125);
+    }
+}
+.card img {
+    height: $pdfThumbHeight;
+    width: auto !important;
+    max-width: none;
+}
