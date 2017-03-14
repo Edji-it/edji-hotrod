@@ -14,28 +14,33 @@
                         <span class="custom-file-control"></span>
                     </label>-->
                     <form>
-                    <label class="btn btn-default btn-file">
-                        Browse <input id="pdfFileInput" type="file" 
-                            accept=".pdf"
-                            (change)="updateUploadFile()"
-                            style="display:none;">
-                    </label>
-
-                    <div class="file-name">
-                        <span *ngIf="!this.file || !this.file.name || this.file.name.length < 1" class="placeholder">Select a PDF to upload...</span>
-                        {{ this.file ? this.file.name : '' }}
-                    </div>
-                    
-                    <button id="buttonBeginPdfUpload" (click)="beginUpload()" type="submit" class="btn btn-primary" 
-                        [disabled]="noUploadAllowed"
-                        [class.loading]="uploading">Upload</button>
+                        <div class="form-group">
+                            <label>File</label>
+                            <div (click)="browseBtn.click()" class="file-name">
+                                <span *ngIf="!file || !file.name || file.name.length < 1" class="placeholder">Select a PDF to upload...</span>
+                                {{ file ? file.name : '' }}
+                            </div>
+                            <label #browseBtn class="btn btn-default btn-file" style="float:right;">
+                                Browse <input id="pdfFileInput" type="file" 
+                                    accept=".pdf"
+                                    (change)="updateUploadFile()"
+                                    style="display:none;">
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label>Title</label>
+                            <input name="title" class="form-control" [(ngModel)]="title" type="text" />
+                        </div>
+                        <div class="button__row">
+                            <button id="buttonBeginPdfUpload" (click)="beginUpload()" type="submit" class="btn btn-primary" 
+                                [disabled]="noUploadAllowed"
+                                [class.loading]="uploading">Upload</button>
+                        </div>
                     </form>
-
-                    <div *ngIf="errorMsg" class="alert alert-warning" [innerHtml]="errorMsg"></div>
-
+                        <div *ngIf="errorMsg" class="alert alert-warning" [innerHtml]="errorMsg"></div>
                     <hr />
                     
-                    <p id="status">Select a PDF to insert into your Reading</p>
+                    <p class="text-center pb-2">Select a PDF to insert into your Reading</p>
 
                     <!--<div class="card-columns">-->
                         <div *ngFor="let doc of uploadedDocs; let i = index">
@@ -52,10 +57,17 @@
                                 </div>
                             </div>
                             <!--Display conversion message if doc isn't ready-->
-                            <div *ngIf="doc.converted === false" class="card-group card-group--placeholder">
-                                <div class="alert alert-info group-alert">
+                            <div *ngIf="doc.converted == false" class="card-group card-group--placeholder">
+                                <div *ngIf="!doc.expired" class="alert alert-info group-alert">
                                     <b>Document being converted</b><br/>
                                     Thank you for your patience! Some documents, especially those with many pages, can take several minutes.
+                                </div>
+                                <div *ngIf="doc.expired" class="alert alert-warning group-alert">
+                                    <button (click)="removeUploadedDoc(doc)" type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    <b>Document conversion timed out</b><br/>
+                                    Please try again later, or with a different file. If this problem persists, please <a href="mailto:brennen@edji.it">contact us</a>.
                                 </div>
                                 <div class="card title-card">
                                     <button class="btn btn-primary btn--center-overlay" [disabled]="true">Insert X Pages</button>

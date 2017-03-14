@@ -43,10 +43,13 @@
     vertical-align: middle;
     margin-bottom: 7px;
     border-radius: 3px;
-    width: calc(100% - 220px);
+    width: calc(100% - 100px);
+    margin-right: -10px;
     overflow-y:hidden;
     overflow-x:hidden;
     text-overflow: ellipsis;
+    border: 1px solid #dce3ea;
+    cursor: pointer;
 
     & .placeholder {
         color: #dcdcdc;
@@ -79,7 +82,7 @@ $pdfThumbHeight: 250px;
 }
 .title-card {
     border: none !important;
-    min-width: 180px;
+    width: 180px;
 
     & + .card {
         border-left:1px solid rgba(0,0,0,0.125);
@@ -104,9 +107,9 @@ $pdfThumbHeight: 250px;
 .group-alert {
     position: absolute;
     top: 50%;
-    left: 50%;
-    width: 80%;
-    transform: translate3d(-50%, -50%, 0);
+    left: 200px;
+    width: calc(95% - 200px);
+    transform: translate3d(0, -50%, 0);
     opacity: 0.95;
     z-index: 3000;
 }

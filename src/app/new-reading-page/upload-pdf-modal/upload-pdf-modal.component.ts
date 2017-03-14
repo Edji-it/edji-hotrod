@@ -22,6 +22,7 @@ export class UploadPdfModalComponent implements OnInit {
   private selectedIndex: number = 0;
   private locker: any;
   private file: any = {};
+  private title: string = '';
   private selectedFiles: any[] = [];
   private uploading: boolean = false;
   private uploadUrl: string = '//grapple-dev.edji.it';
@@ -54,6 +55,9 @@ export class UploadPdfModalComponent implements OnInit {
   updateUploadFile() {
     const files = document.getElementById('pdfFileInput')['files'];
     this.file = files[0];
+    if (this.file.name) {
+      this.title = this.file.name;
+    }
     // Limit file size to 10mb
     if (this.file && this.file.size > 10 * Math.pow(10, 6) ) {
       this.noUploadAllowed = true;
@@ -74,12 +78,21 @@ export class UploadPdfModalComponent implements OnInit {
       return;
     }
 
+    if(!this.title || this.title.length < 1) {
+      this.errorMsg = 'Please give your document a title.';
+      return;
+    }
+
     this.uploading = true;
 
     this._media.uploadPdf(this.file)
       .subscribe(data => {
         this.uploading = false;
+        // Set converted property
         data.converted = false;
+        // Set document title
+        data.title = this.title;
+        // Add document to user's uploaded documents
         this.addUpload(data);
       }, error => {
         this.uploading = false;
@@ -106,7 +119,8 @@ export class UploadPdfModalComponent implements OnInit {
             this.updateUploadedDoc(data);
           } else if ( !data.requestedTime || (Date.now() - data.requestedTime) > ONE_HOUR) {
             // If this is old, expire the document
-            this.removeUploadedDoc(data);
+            data.expired = true;
+            this.updateUploadedDoc(data);
           } else {
             // Check again later
             setTimeout(() => {
