@@ -38,14 +38,33 @@
                     <p id="status">Select a PDF to insert into your Reading</p>
 
                     <!--<div class="card-columns">-->
-                        <div *ngFor="let doc of uploadedDocs; let i = index"  class="card-group" [class.hidden]="!doc.pages || !doc.pages[0]">
-                            <div *ngIf="doc.pages" class="card title-card" (click)="insertPages(doc.pages)">
-                                <button class="btn btn-primary btn--center-overlay">Insert {{ doc.pages.length }} Page<span *ngIf="doc.pages.length > 1">s</span></button>
+                        <div *ngFor="let doc of uploadedDocs; let i = index">
+                            <!--Display doc pages if available-->
+                            <div *ngIf="doc.pages && doc.pages[0]" class="card-group">
+                                <div class="card title-card" (click)="insertPages(doc.pages)">
+                                    <button class="btn btn-primary btn--center-overlay">Insert {{ doc.pages.length }} Page<span *ngIf="doc.pages.length > 1">s</span></button>
+                                </div>
+                                <div *ngFor="let url of doc.pages" (click)="insertImage(url)" class="card">
+                                    <img class="card-img-top img-fluid" [src]="url" />
+                                    <div class="card-img-overlay overlay-on-hover">
+                                        <button class="btn btn-primary btn--center-overlay">Insert</button>
+                                    </div>
+                                </div>
                             </div>
-                            <div *ngFor="let url of doc.pages" (click)="insertImage(url)" class="card">
-                                <img class="card-img-top img-fluid" [src]="url" />
-                                <div class="card-img-overlay overlay-on-hover">
-                                    <button class="btn btn-primary btn--center-overlay">Insert</button>
+                            <!--Display conversion message if doc isn't ready-->
+                            <div *ngIf="doc.converted === false" class="card-group card-group--placeholder">
+                                <div class="alert alert-info group-alert">
+                                    <b>Document being converted</b><br/>
+                                    Thank you for your patience! Some documents, especially those with many pages, can take several minutes.
+                                </div>
+                                <div class="card title-card">
+                                    <button class="btn btn-primary btn--center-overlay" [disabled]="true">Insert X Pages</button>
+                                </div>
+                                <div class="card card-placeholder">
+                                    <div class="card-img-top">&nbsp;</div>
+                                </div>
+                                <div class="card card-placeholder">
+                                    <div class="card-img-top">&nbsp;</div>
                                 </div>
                             </div>
                         </div>

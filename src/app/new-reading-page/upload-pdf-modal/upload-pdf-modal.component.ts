@@ -39,6 +39,13 @@ export class UploadPdfModalComponent implements OnInit {
     } else if (this._auth.getUser().media && this._auth.getUser().media.documents) {
       this.uploadedDocs = this._auth.getUser().media.documents;
     }
+    // Check existing Uploaded Docs for any not yet marked as converted
+    // So we can check on them!
+    this.uploadedDocs.forEach(doc => {
+      if (doc.converted === false) {
+        this.checkConversion(doc.uuid);
+      }
+    })
   }
 
   /**
@@ -72,6 +79,7 @@ export class UploadPdfModalComponent implements OnInit {
     this._media.uploadPdf(this.file)
       .subscribe(data => {
         this.uploading = false;
+        data.converted = false;
         this.addUpload(data);
       }, error => {
         this.uploading = false;
@@ -79,16 +87,80 @@ export class UploadPdfModalComponent implements OnInit {
       });
   }
 
-  
+  /** 
+   * Run check until document is confirmed as processed
+   */
+  checkConversion(fileId): void {
+    let ONE_HOUR = 60 * 60 * 1000;
+
+    this._media.pdfCheck(fileId)
+      .take(1)
+      .subscribe(
+        data => {
+          console.log(data);
+          if (data.converted === true) {
+            // Mark document as converted
+            this.updateUploadedDoc(data);
+          } else if (data.error) {
+            // Pass doc with error
+            this.updateUploadedDoc(data);
+          } else if ( !data.requestedTime || (Date.now() - data.requestedTime) > ONE_HOUR) {
+            // If this is old, expire the document
+            this.removeUploadedDoc(data);
+          } else {
+            // Check again later
+            setTimeout(() => {
+              this.checkConversion(fileId);
+            }, 1500)
+          }
+        }, error => {
+          // Handle this?
+        });
+  }
+
+  /**
+   * Update a single document, and propagate changes
+   */
+  updateUploadedDoc(updatedDoc: any) {
+    this.uploadedDocs.forEach( (doc, index) => {
+      if (updatedDoc.uuid === doc.uuid) {
+        // Replace doc with updated version
+        this.uploadedDocs.splice(index, 1, updatedDoc);
+      }
+    });
+    this.saveUploadedDocs();
+  }
+
+  /**
+   * Update a single document, and propagate changes
+   */
+  removeUploadedDoc(docToDelete: any) {
+    this.uploadedDocs.forEach( (doc, index) => {
+      if (docToDelete.uuid === doc.uuid) {
+        // Remove doc 
+        this.uploadedDocs.splice(index, 1);
+      }
+    });
+    this.saveUploadedDocs();
+  }
 
   /**
    * Add upload URL to array and localStorage
    */
   addUpload(data: any) : void {
-    // this.newImgUrls.unshift(url);
+    // Add document object
     this.uploadedDocs.unshift(data);
-    this.locker.set('uploadedDocs', this.uploadedDocs);
+    // Save document object
+    this.saveUploadedDocs();
+    // Check if document is done converting
+    this.checkConversion(data.uuid);
+  }
 
+  /**
+   * Save Uploaded Doc list to localStorage AND user object
+   */
+  saveUploadedDocs(): void {
+    this.locker.set('uploadedDocs', this.uploadedDocs);
     let user = this._auth.getUser();
     if (!user.media) {
         user.media = {};

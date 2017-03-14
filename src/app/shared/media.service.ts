@@ -7,13 +7,16 @@ export class MediaService {
 
     private imageService: string = '//grapple-dev.edji.it';
     private pdfService: string = '//sunstreaker.edji.it';
+    private pdfBucket: string = '//image-dev.edji.it/pdf';
 
     constructor(private http: Http) { 
         // Check to see if prod or dev environment
         if (window.location.host.indexOf('dev.edji.it') > -1) {
             this.imageService = '//grapple-dev.edji.it';
+            this.pdfBucket = '//image-dev.edji.it/pdf';
         } else if (window.location.host.indexOf('edji.it') > -1 || window.location.host.indexOf('dvscf5tf91syg.cloudfront.net') > -1) {
             this.imageService = '//grapple.edji.it';
+            this.pdfBucket = '//image.edji.it/pdf';
         }
     }
 
@@ -52,5 +55,11 @@ export class MediaService {
         return uploadSource.asObservable();
     }
 
+    pdfCheck(fileId: string): Observable<any> {
+        return this.http.get(this.pdfBucket + '/' + fileId + '/spark.json')
+            .map(data => {
+                return data.json() || {};
+            });
+    }
     
 }
