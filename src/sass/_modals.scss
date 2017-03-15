@@ -60,6 +60,8 @@ $modalBodyBg: #fff;
 
 .modal-header {
   border: $modalBorder;
+  background: #f7f7f7;
+  
   &, & h4 {
     color: $modalHeaderColor;
   }
@@ -84,6 +86,7 @@ $modalBodyBg: #fff;
   border: $modalBorder;
   box-shadow: 0px 3px 25px 0px rgba(0,0,0,0.3);
   border-radius: $modalBorderRadius;
+  overflow: hidden;
 
   // Required for scrolling modals
   margin-bottom: 100px;

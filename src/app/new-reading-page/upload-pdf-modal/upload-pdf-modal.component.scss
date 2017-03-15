@@ -13,17 +13,17 @@
     }
 }
 
-.btn.btn--center-overlay {
+.card__center-overlay {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate3d(-50%, -50%, 0); 
 
   &, &:hover, &:active {
-      color: #fff;
-      background: $darkBlue;
+    //   color: #fff;
+    //   background: $darkBlue;
   }
-}
+} 
 
 .overlay-on-hover {
   opacity: 0;
@@ -41,10 +41,10 @@
     line-height: 1em;
     min-height: 40px;
     vertical-align: middle;
-    margin-bottom: 7px;
+    // margin-bottom: 7px;
     border-radius: 3px;
-    width: calc(100% - 100px);
-    margin-right: -10px;
+    // width: calc(100% - 100px);
+    // margin-right: -10px;
     overflow-y:hidden;
     overflow-x:hidden;
     text-overflow: ellipsis;
@@ -68,11 +68,18 @@ $pdfThumbHeight: 250px;
     overflow-y: visible;
     overflow-x: auto;
     flex-flow: row nowrap;
-    margin-bottom: 20px;
     position: relative;
+    margin: 15px 0px;
+    // border: 1px solid #eee;
+    // padding: 5px 0 3px 0;
+    // border-radius: 3px;
 
     &.hidden {
         display: none;
+    }
+
+    &:hover, &:active {
+        border-color: #aaa;
     }
 }
 .card {
@@ -82,6 +89,9 @@ $pdfThumbHeight: 250px;
 }
 .title-card {
     border: none !important;
+    border-top: 1px solid #ededed !important;
+    border-bottom: 1px solid #ededed !important;
+    margin-right: 10px;
     width: 180px;
 
     & + .card {
@@ -92,6 +102,10 @@ $pdfThumbHeight: 250px;
     height: $pdfThumbHeight;
     width: auto !important;
     max-width: none;
+}
+
+.document-card {
+    min-width: 180px;
 }
 
 .card-group--placeholder {
@@ -107,9 +121,33 @@ $pdfThumbHeight: 250px;
 .group-alert {
     position: absolute;
     top: 50%;
-    left: 200px;
-    width: calc(95% - 200px);
+    left: 210px;
+    width: calc(95% - 210px);
+    max-width: 500px;
     transform: translate3d(0, -50%, 0);
     opacity: 0.95;
     z-index: 3000;
+
+    &.has-icon {
+        padding-left: 3em;
+        text-indent: -2.5em;
+    }
+}
+
+.group-alert__icon {
+    height: 2em;
+    width: 2em;
+    margin: 0px 3px;
+    vertical-align: middle;
+}
+
+.doc-title {
+    display: block;
+    width: 100%;
+    padding-bottom: 20px;
+    max-height: 5.5em;
+    line-height: 1.25em;
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
 }
