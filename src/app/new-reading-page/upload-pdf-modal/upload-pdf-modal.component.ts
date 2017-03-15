@@ -55,7 +55,7 @@ export class UploadPdfModalComponent implements OnInit {
   updateUploadFile() {
     const files = document.getElementById('pdfFileInput')['files'];
     this.file = files[0];
-    if (this.file.name) {
+    if (this.file.name && this.title.length < 1) {
       this.title = this.file.name;
     }
     // Limit file size to 10mb
@@ -90,10 +90,13 @@ export class UploadPdfModalComponent implements OnInit {
         this.uploading = false;
         // Set converted property
         data.converted = false;
-        // Set document title
-        data.title = this.title;
+        // Set document title to copy
+        data.title =  (' ' + this.title).slice(1);
         // Add document to user's uploaded documents
         this.addUpload(data);
+        // Clear fields
+        this.file = {};
+        this.title = '';
       }, error => {
         this.uploading = false;
         this.errorMsg = '<b>Upload failed!</b> Please try again later, or with a different file. If this problem persists, please <a href="mailto:brennen@edji.it">contact us</a>.';
@@ -138,8 +141,9 @@ export class UploadPdfModalComponent implements OnInit {
   updateUploadedDoc(updatedDoc: any) {
     this.uploadedDocs.forEach( (doc, index) => {
       if (updatedDoc.uuid === doc.uuid) {
+        let newDoc = Object.assign(updatedDoc, doc);
         // Replace doc with updated version
-        this.uploadedDocs.splice(index, 1, updatedDoc);
+        this.uploadedDocs.splice(index, 1, newDoc);
       }
     });
     this.saveUploadedDocs();
