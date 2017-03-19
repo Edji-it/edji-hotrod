@@ -131,3 +131,12 @@ button.new-reading-btn {
 .reading-card-wrap {
     position: relative;
 }
+
+.draft-edit {
+    cursor: pointer;
+    background: #FFFFE0;
+}
+
+.draft-edit:hover {
+    background: #FFFFCD;
+}

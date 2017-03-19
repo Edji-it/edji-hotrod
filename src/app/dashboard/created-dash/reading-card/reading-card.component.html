@@ -1,5 +1,5 @@
 <!--<div class="reading-card-wrap">-->
-    <div class="list-item list-item--block reading-card">
+    <div class="list-item list-item--block reading-card" [ngClass]="{'draft-edit' : reading.draft===true}" [routerLink]="reading.draft===true ? ['/new-reading/' + reading._id] : []">
             <!--<div class="offset-buttons">
             <a class="icon-button" (click)="confirmDelete = !confirmDelete">
                 <img alt="❌" class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/274c.png">
@@ -28,7 +28,7 @@
                 </p>-->
             </div>
         </div>
-        <div id="optionsWrap" (clickOutside)="showOptions = false" class="dropdown reading-options" [class.show]="showOptions">
+        <div *ngIf="reading.draft===false" id="optionsWrap" (clickOutside)="showOptions = false" class="dropdown reading-options" [class.show]="showOptions">
             <button class="btn btn-icon--plain" (click)="showOptions = !showOptions">
                 <i class="icon icon-more"></i>
             </button>

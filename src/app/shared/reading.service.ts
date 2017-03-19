@@ -40,11 +40,19 @@ export class ReadingService {
       reading['owner_id'] = this._auth.getUser()._id;
     }
     let readingObj = { 'reading': reading };
-    return this.http
-            .post(this._auth.getUrl() + '/readings', readingObj, this._auth.getOptions())
-            .map(data => {
-              return data.json().reading;
-            });
+    if(reading['_id']) {
+      return this.http
+              .put(this._auth.getUrl() + '/readings/' + reading['_id'], readingObj, this._auth.getOptions())
+              .map(data => {
+                return data.json().reading;
+              });
+    } else {
+      return this.http
+              .post(this._auth.getUrl() + '/readings', readingObj, this._auth.getOptions())
+              .map(data => {
+                return data.json().reading;
+              });
+    }
   }
 
 }

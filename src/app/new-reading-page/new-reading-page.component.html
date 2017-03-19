@@ -3,7 +3,17 @@
 <div class="container container--side-bar">
     <div class="row">
         <div class="col-sm-12">
-            <h1>New Reading</h1> 
+            <h1>{{ reading._id ? 'Edit Reading' : 'New Reading' }}</h1>
+
+            <!--<div class="alert alert-success alert-readings alert-dismissable" role="alert" *ngIf="successObject.readingSuccess">-->
+            <div class="alert alert-success alert-readings alert-dismissable" role="alert" *ngIf="showAlert">
+                <a href="#" class="close" (click)="showAlert=false">×</a>
+                {{ successObject.readingSuccess }}
+            </div>
+            <div class="alert alert-danger alert-readings" role="alert" *ngIf="errorObject.readingError">
+                {{ errorObject.readingError }}
+            </div>
+
              <form [formGroup]="readingForm" (ngSubmit)="onSubmit(readingForm.value)">
                 <div  class="reading-page">
                     <div class="form-group offset-label--wrap">
@@ -64,7 +74,7 @@
                     <p class="alert alert-warning" *ngIf="error.length > 0">{{ error }}</p>
 
                     <div class="button__row">
-                        <!--<button id="saveDraftButton" type="submit" class="btn btn-info btn_row" [class.loading]="addLoading" title="Save as Draft">Save as Draft</button>-->
+                        <button id="saveDraftButton" type="submit" class="btn btn-info btn_row" [class.loading]="addLoading" title="Save as Draft">{{ reading._id ? 'Update Draft' : 'Save as Draft' }}</button>
                         <button id="addReadingButton" type="button" class="btn btn-primary btn_row" [class.loading]="addLoading" title="Add Reading" (click)="this.isDraft=false;onSubmit(readingForm.value)">Add Reading</button>
                     </div>
                 </div>

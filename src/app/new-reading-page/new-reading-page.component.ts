@@ -1,4 +1,4 @@
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router, Params } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Angulartics2 } from 'angulartics2';
@@ -22,6 +22,18 @@ export class NewReadingPage implements OnInit {
     private error: string = '';
     private showUploadModal: boolean = false;
     private isDraft: boolean = true;
+    private readingId: any = "";
+    private reading: any = {};
+    private projects: any[] = [];
+    private errorObject = {
+        readingError: ""
+    };
+    private successObject = {
+        readingSuccess: ""
+    };
+    private successAlert: string = "Nice work! This reading draft was successfully saved!";
+    private alert: string = '';
+    private showAlert: boolean = false;
 
     // Used for processing reading
     private words: any[] = [];
@@ -44,6 +56,7 @@ export class NewReadingPage implements OnInit {
     };
     
     constructor(
+        private _route: ActivatedRoute,
         private _readings: ReadingService,
         private _projects: ProjectService,
         private router: Router,
@@ -59,7 +72,41 @@ export class NewReadingPage implements OnInit {
     }
 
     ngOnInit() {
+        this.readingId = this._route.snapshot.params['id'];
+        
+        this.alert = this._route.snapshot.queryParams['successAlert'];
+        if (this.alert) {
+            this.successObject.readingSuccess = this.alert;
+            this.showAlert = true;
+        }
+        
+        if (this.readingId) {
+            this.getReading(this.readingId);
+        }
      }
+
+     private getReading(readingId: string) {
+
+        this._readings.get(readingId)
+            .take(1)
+            .subscribe(
+                data => {
+                    this.reading = data;
+                    if (this.reading.html) {
+                        this.readingHtml = this.reading.html;
+                        //this.readingHtml = '<div>' + this.reading.html + '&nbsp;</div>';
+                        //this.el.nativeElement.querySelector('#readingTitle').value = this.reading.title;
+                        this.readingForm.patchValue({
+                            title: this.reading.title,
+                            source: this.reading.source,
+                        });
+                    }
+                },
+                err => {
+                    // TRACK EXCEPTION
+                    console.log(err);
+                })
+    }
 
     /**
      * Loops through child elements to find textnodes
@@ -206,29 +253,45 @@ export class NewReadingPage implements OnInit {
         // If the reading is not being saved as a draft (A.K.A. it's a final version)
         if (this.isDraft===false) {
             reading.draft = false;
+        } else {
+            //reading.html = reading.html.replace('<div>','').replace('&nbsp;','').replace('<div>&nbsp;','').replace('&nbsp;</div>','').replace('</div>','');
         }
-        
+        if (this.readingId!=='') {
+            reading._id = this.readingId;
+        } 
+
+        console.log(reading);
+
         this._readings.save(reading)
             .subscribe(
                 data => {
                     if (data._id) {
                         this.angulartics.eventTrack.next({ action: 'createNewReading', properties: { category: 'contentManagement', label: 'success' }});
                         
-                        // Create default Project
-                        this._projects.create(data._id, { 'label' : form.label, 'types' : ['emoji','text'] })
-                            .subscribe( (project) => {
-                                this.addLoading = false;
-                                this.router.navigate(['project', project._id]);
-                            }, (error) => {
-                                console.log(error);
-                                this.addLoading = false;
-                            })
+                        // Create default Project if it is in final version
+                        if (reading.draft===false) {
+                            this._projects.create(data._id, { 'label' : form.label, 'types' : ['emoji','text'] })
+                                .subscribe( (project) => {
+                                    this.addLoading = false;
+                                    this.router.navigate(['project', project._id]);
+                                }, (error) => {
+                                    console.log(error);
+                                    this.addLoading = false;
+                                })
+                        } else {
+                            this.addLoading = false;
+                            this.router.navigate(['new-reading/' + data._id], { queryParams: { successAlert: this.successAlert } });
+                            this.successObject.readingSuccess = this.successAlert;
+                            this.showAlert = true;
+                            console.log('updated');
+                        }
                     }
                 },
                 error => {
                     console.log(error);
                     this.addLoading = false;
                     this.angulartics.eventTrack.next({ action: 'createNewReading', properties: { category: 'contentManagement', label: 'failure' }});
+                    this.errorObject.readingError = "There was an issue saving your reading. It may be our fault; please try again";
                 }
             );
     }
