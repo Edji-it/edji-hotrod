@@ -28,7 +28,7 @@
                 </p>-->
             </div>
         </div>
-        <div *ngIf="reading.draft===false" id="optionsWrap" (clickOutside)="showOptions = false" class="dropdown reading-options" [class.show]="showOptions">
+        <div *ngIf="reading.draft !== true" id="optionsWrap" (clickOutside)="showOptions = false" class="dropdown reading-options" [class.show]="showOptions">
             <button class="btn btn-icon--plain" (click)="showOptions = !showOptions">
                 <i class="icon icon-more"></i>
             </button>
