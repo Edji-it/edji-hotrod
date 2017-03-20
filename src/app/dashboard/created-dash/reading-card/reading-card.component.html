@@ -32,8 +32,9 @@
             <button class="btn btn-icon--plain" (click)="showOptions = !showOptions">
                 <i class="icon icon-more"></i>
             </button>
-            <div class="dropdown-menu dropdown-menu-right">
+            <div class="dropdown-menu dropdown-menu-right reading-card-menu">
                 <button (click)="showAddModal = true; showOptions = false;" class="dropdown-item">Create New Group</button>
+                <button (click)="showOptions=false;" [routerLink]="reading.draft===false ? ['/new-reading/' + reading._id] : []" [queryParams]="reading.draft===false ? { version: 'new' } : ''" class="dropdown-item">Copy and Edit</button>
             </div>
         </div>
     </div>

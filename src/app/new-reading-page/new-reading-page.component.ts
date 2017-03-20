@@ -21,10 +21,11 @@ export class NewReadingPage implements OnInit {
     private addLoading: boolean = false;
     private error: string = '';
     private showUploadModal: boolean = false;
-    private isDraft: boolean = true;
     private readingId: any = "";
     private reading: any = {};
     private projects: any[] = [];
+
+    // Alert messages
     private errorObject = {
         readingError: ""
     };
@@ -34,6 +35,10 @@ export class NewReadingPage implements OnInit {
     private successAlert: string = "Nice work! This reading draft was successfully saved!";
     private alert: string = '';
     private showAlert: boolean = false;
+
+    // Draft and Version control
+    private isDraft: boolean = true;
+    private newVersion: boolean = false;
 
     // Used for processing reading
     private words: any[] = [];
@@ -78,6 +83,10 @@ export class NewReadingPage implements OnInit {
         if (this.alert) {
             this.successObject.readingSuccess = this.alert;
             this.showAlert = true;
+        }
+
+        if (this._route.snapshot.queryParams['version']==='new') {
+            this.newVersion = true;
         }
         
         if (this.readingId) {
@@ -253,14 +262,24 @@ export class NewReadingPage implements OnInit {
         // If the reading is not being saved as a draft (A.K.A. it's a final version)
         if (this.isDraft===false) {
             reading.draft = false;
-        } else {
-            //reading.html = reading.html.replace('<div>','').replace('&nbsp;','').replace('<div>&nbsp;','').replace('&nbsp;</div>','').replace('</div>','');
-        }
-        if (this.readingId!=='') {
-            reading._id = this.readingId;
         } 
-
-        console.log(reading);
+        
+        // Version property handling
+        if (this.newVersion = true) {
+            // Update the previous reading ID field for grouping purposes
+            if (this.reading.version===0) {
+                reading.prev_id = this.readingId;
+            } else {
+                reading.prev_id = this.reading.prev_id;
+            }
+            // Increment the version of the reading by 1
+            reading.version = this.reading.version + 1;
+        } else {
+            // If this is not a new version and already contains an ID, we want to make sure the service knows it
+            if (this.readingId!=='') {
+                reading._id = this.readingId;
+            }
+        }
 
         this._readings.save(reading)
             .subscribe(
