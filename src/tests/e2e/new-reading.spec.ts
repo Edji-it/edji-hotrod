@@ -76,7 +76,8 @@ describe('New Reading Page', () => {
 
         // Submit New Reading
         browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "login button never became clickable after login form entry");
-        newReading.addButton.submit();
+        //newReading.addButton.submit();
+        newReading.addButton.click();
 
         // Should redirect to Project page for new reading
         browser.wait(EC.urlContains("project"), 5000, "never arrived at new reading");
@@ -101,7 +102,8 @@ describe('New Reading Page', () => {
 
         // Submit New Reading
         browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "login button never became clickable after login form entry");
-        newReading.addButton.submit();
+        //newReading.addButton.submit();
+        newReading.addButton.click();
 
         // Should see error for empty title
         browser.wait(EC.presenceOf(newReading.titleError), 5000, "never saw an error for empty title");
@@ -125,7 +127,8 @@ describe('New Reading Page', () => {
 
         // Submit New Reading
         browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "login button never became clickable after login form entry");
-        newReading.addButton.submit();
+        //newReading.addButton.submit();
+        newReading.addButton.click();
 
         // Should see error for empty content
         browser.wait(EC.presenceOf(newReading.contentError), 5000, "never saw an error for empty content");
@@ -153,7 +156,8 @@ describe('New Reading Page', () => {
 
         // Submit New Reading
         browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "login button never became clickable after login form entry");
-        newReading.addButton.submit();
+        //newReading.addButton.submit();
+        newReading.addButton.click();
         
         // Should see error for empty group label
         browser.wait(EC.presenceOf(newReading.groupError), 5000, "never saw an error for empty group label");
@@ -188,7 +192,8 @@ describe('New Reading Page', () => {
 
             // Submit New Reading
             browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "login button never became clickable after login form entry");
-            newReading.addButton.submit();
+            //newReading.addButton.submit();
+            newReading.addButton.click();
 
             // Should create a new Reading
             browser.wait(EC.urlContains("project"), 5000, "never arrived at new reading");
