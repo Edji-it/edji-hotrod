@@ -134,9 +134,10 @@ button.new-reading-btn {
 
 .draft-edit {
     cursor: pointer;
-    background: #FFFFE0;
+    border: 1px dotted #B3DCEE !important;
 }
 
 .draft-edit:hover {
-    background: #FFFFCD;
+    background: #fafafa;
+    color: #00a2f5;
 }

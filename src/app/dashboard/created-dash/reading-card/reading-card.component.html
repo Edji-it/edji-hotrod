@@ -28,6 +28,7 @@
                 </p>-->
             </div>
         </div>
+        <i *ngIf="reading.draft === true" class="icon icon-draft"></i>
         <div *ngIf="reading.draft !== true" id="optionsWrap" (clickOutside)="showOptions = false" class="dropdown reading-options" [class.show]="showOptions">
             <button class="btn btn-icon--plain" (click)="showOptions = !showOptions">
                 <i class="icon icon-more"></i>
