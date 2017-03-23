@@ -134,14 +134,10 @@ button.new-reading-btn {
 
 .draft-edit {
     cursor: pointer;
-    background: #FFFFE0;
+    border: 1px dotted #B3DCEE !important;
 }
 
 .draft-edit:hover {
-    background: #FFFFCD;
-}
-
-.reading-card-menu {
-    z-index: 1001;
-    box-shadow: 0px -2px 20px 2px rgba(0,0,0,0.1);
+    background: #fafafa;
+    color: #00a2f5;
 }

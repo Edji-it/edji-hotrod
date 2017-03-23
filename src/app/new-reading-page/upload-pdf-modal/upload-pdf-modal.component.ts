@@ -113,7 +113,6 @@ export class UploadPdfModalComponent implements OnInit {
       .take(1)
       .subscribe(
         data => {
-          console.log(data);
           if (data.converted === true) {
             // Mark document as converted
             this.updateUploadedDoc(data);
