@@ -265,7 +265,7 @@ export class NewReadingPage implements OnInit {
         } 
         
         // Version property handling
-        if (this.newVersion = true) {
+        if (this.newVersion===true) {
             // Update the previous reading ID field for grouping purposes
             if (this.reading.version===0) {
                 reading.prev_id = this.readingId;
