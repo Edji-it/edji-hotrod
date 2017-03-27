@@ -23,6 +23,7 @@
         <div class="reading-title">
             <div class="reading-title--center-row">
                 <h1 class="small">{{reading.title}} <span *ngIf="!reading.title"><i>Untitled</i></span></h1>
+                <p class="blockquote-footer" *ngIf="reading.version && reading.version > 0"><cite title="Source Title">Version {{reading.version > 0 ? reading.version : '' }}</cite></p>
                 <!--<p *ngIf="reading.createdAt" class="readings-date">
                     Created: {{ reading.createdAt | date:'mediumDate' }} 
                 </p>-->
