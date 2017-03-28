@@ -5,14 +5,6 @@
         <div class="col-sm-12">
             <h1>{{ newVersion ? 'Update Version' : reading._id ? 'Edit Reading' : 'New Reading' }}</h1>
 
-            <!--<div class="alert alert-success alert-readings alert-dismissable" role="alert" *ngIf="successObject.readingSuccess">-->
-            <div class="alert alert-success alert-readings alert-dismissable" role="alert" *ngIf="showAlert">
-                <a href="#" class="close" (click)="showAlert=false">×</a>
-                {{ successObject.readingSuccess }}
-            </div>
-            <div class="alert alert-danger alert-readings" role="alert" *ngIf="errorObject.readingError">
-                {{ errorObject.readingError }}
-            </div>
 
              <form [formGroup]="readingForm" (ngSubmit)="onSubmit(readingForm.value)">
                 <div  class="reading-page">
@@ -71,7 +63,18 @@
                         </label>
                     </div>
 
+                    <!--Error and Success messaging-->
                     <p class="alert alert-warning" *ngIf="error.length > 0">{{ error }}</p>
+                    <div class="alert alert-success alert-readings alert-dismissable" role="alert" *ngIf="showAlert">
+                        <a href="#" class="close" (click)="showAlert=false">×</a>
+                        {{ successObject.readingSuccess }}
+                    </div>
+                    <div class="alert alert-danger alert-readings" role="alert" *ngIf="errorObject.readingError">
+                        {{ errorObject.readingError }}
+                    </div>
+
+                    <!--Show time last saved-->
+                    <div class="reading-time" *ngIf="reading._id && reading.updatedAt" [innerHtml]="showDate(reading.updatedAt)"></div>
 
                     <div class="button__row">
                         <button id="saveDraftButton" type="submit" class="btn btn-info btn_row" [class.loading]="addLoading" title="Save as Draft">{{ newVersion? 'Save as Draft' : reading._id ? 'Update Draft' : 'Save as Draft' }}</button>

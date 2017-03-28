@@ -45,8 +45,13 @@
         padding: 8px 0px;
         width: 100%;
     }
-    .btn-pdf {
-        position: absolute;
-        left: 0;
-    }
+}
+
+.reading-time {
+    width: 100%;
+    text-align: center;
+    font-style: italic;
+    font-size: 11px;
+    padding: 1em;
+    color: #555;
 }
