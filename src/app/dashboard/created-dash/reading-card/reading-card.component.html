@@ -28,8 +28,8 @@
                 </p>-->
             </div>
         </div>
-        <i *ngIf="reading.draft === true" class="icon icon-draft"></i>
-        <div *ngIf="reading.draft !== true" id="optionsWrap" (clickOutside)="showOptions = false" class="dropdown reading-options" [class.show]="showOptions">
+        <i *ngIf="reading['draft'] && reading.draft === true && !reading.projects[0]" class="icon icon-draft"></i>
+        <div *ngIf="!reading['draft'] || reading.draft !== true || reading.projects[0]" id="optionsWrap" (clickOutside)="showOptions = false" class="dropdown reading-options" [class.show]="showOptions">
             <button class="btn btn-icon--plain" (click)="showOptions = !showOptions">
                 <i class="icon icon-more"></i>
             </button>

@@ -254,7 +254,7 @@ export class NewReadingPage implements OnInit {
         if (this.isDraft===false) {
             reading.draft = false;
         } else {
-            //reading.html = reading.html.replace('<div>','').replace('&nbsp;','').replace('<div>&nbsp;','').replace('&nbsp;</div>','').replace('</div>','');
+            reading.draft = true;
         }
         if (this.readingId!=='') {
             reading._id = this.readingId;
