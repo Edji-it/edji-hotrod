@@ -74,7 +74,7 @@
                     </div>
 
                     <!--Show time last saved-->
-                    <div class="reading-time" *ngIf="reading._id && reading.updatedAt" [innerHtml]="showDate(reading.updatedAt)"></div>
+                    <!--<div class="reading-time" *ngIf="reading._id && reading.updatedAt" [innerHtml]="showDate(reading.updatedAt)"></div>-->
 
                     <div class="button__row">
                         <button id="saveDraftButton" type="submit" class="btn btn-info btn_row" [class.loading]="addLoading" title="Save as Draft">{{ reading._id ? 'Update Draft' : 'Save as Draft' }}</button>

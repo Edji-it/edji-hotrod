@@ -260,8 +260,6 @@ export class NewReadingPage implements OnInit {
             reading._id = this.readingId;
         } 
 
-        console.log(reading);
-
         this._readings.save(reading)
             .subscribe(
                 data => {
