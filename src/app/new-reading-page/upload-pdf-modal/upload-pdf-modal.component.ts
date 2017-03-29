@@ -140,9 +140,7 @@ export class UploadPdfModalComponent implements OnInit {
   updateUploadedDoc(updatedDoc: any) {
     this.uploadedDocs.forEach( (doc, index) => {
       if (updatedDoc.uuid === doc.uuid) {
-        let newDoc = Object.assign(updatedDoc, doc);
-        // Replace doc with updated version
-        this.uploadedDocs.splice(index, 1, newDoc);
+        Object.assign(this.uploadedDocs[index], updatedDoc);
       }
     });
     this.saveUploadedDocs();
