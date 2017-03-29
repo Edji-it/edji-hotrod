@@ -283,7 +283,7 @@ export class NewReadingPage implements OnInit {
                             this.router.navigate(['new-reading/' + data._id], { queryParams: { successAlert: this.successAlert } });
                             this.successObject.readingSuccess = this.successAlert;
                             this.showAlert = true;
-                            this.reading.updatedAt = Date.now();
+                            this.reading.updatedAt = data.updatedAt;
                         }
                     }
                 },
