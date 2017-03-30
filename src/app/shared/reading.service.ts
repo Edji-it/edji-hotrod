@@ -39,6 +39,9 @@ export class ReadingService {
     if (!reading['owner_id']) {
       reading['owner_id'] = this._auth.getUser()._id;
     }
+    if (!reading['teacher_ids'] || reading['teacher_ids'].length < 1) {
+      reading['teacher_ids'] = [this._auth.getUser()._id];
+    }
     let readingObj = { 'reading': reading };
     if(reading['_id']) {
       return this.http

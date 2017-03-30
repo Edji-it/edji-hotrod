@@ -275,7 +275,7 @@ export class NewReadingPage implements OnInit {
                                 }, (error) => {
                                     console.log(error);
                                     this.addLoading = false;
-                                })
+                                });
                         } else {
                             this.addLoading = false;
                             this.router.navigate(['new-reading/' + data._id], { queryParams: { successAlert: this.successAlert } });
