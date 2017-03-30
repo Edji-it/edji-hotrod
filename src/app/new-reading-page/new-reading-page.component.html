@@ -78,7 +78,7 @@
 
                     <div class="button__row">
                         <button id="saveDraftButton" type="submit" class="btn btn-info btn_row" [class.loading]="addLoading" title="Save as Draft">{{ reading._id ? 'Update Draft' : 'Save as Draft' }}</button>
-                        <button id="addReadingButton" type="button" class="btn btn-primary btn_row" [class.loading]="addLoading" title="Add Reading" (click)="this.isDraft=false;onSubmit(readingForm.value)">Add Reading</button>
+                        <button id="addReadingButton" type="button" class="btn btn-primary btn_row" [class.loading]="addLoading" title="Add Reading" (click)="this.isDraft=false;onSubmit(readingForm.value)">Publish</button>
                     </div>
                 </div>
              </form>
