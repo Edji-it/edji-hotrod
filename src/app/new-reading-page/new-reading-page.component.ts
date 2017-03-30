@@ -18,7 +18,8 @@ export class NewReadingPage implements OnInit {
     private readingIsBlank: boolean = false;
     private readingPlaceholder: string = 'Type or paste your reading...';
     private submitted: boolean = false;
-    private addLoading: boolean = false;
+    private addLoadingD: boolean = false;
+    private addLoadingP: boolean = false;
     private error: string = '';
     private showUploadModal: boolean = false;
     private isDraft: boolean = true;
@@ -214,7 +215,11 @@ export class NewReadingPage implements OnInit {
     private onSubmit(form) {
         // Set submitted to show form errors
         this.submitted = true;
-        this.addLoading = true;
+        if (this.isDraft===false) {
+            this.addLoadingP = true;
+        } else {
+            this.addLoadingD = true;
+        }
         this.error = '';
 
         // Custom empty validation for reading content
@@ -226,7 +231,8 @@ export class NewReadingPage implements OnInit {
 
         // This would be better handled by formcontrols
         if (!form.title || form.title.length < 1 || this.readingIsBlank || form.label.length < 1) {
-            this.addLoading = false;
+            this.addLoadingD = false;
+            this.addLoadingP = false;
             this.error = 'Not quite, please check all the fields!';
             return;
         }
@@ -270,14 +276,17 @@ export class NewReadingPage implements OnInit {
                         if (reading.draft===false) {
                             this._projects.create(data._id, { 'label' : form.label, 'types' : ['emoji','text'] })
                                 .subscribe( (project) => {
-                                    this.addLoading = false;
+                                    this.addLoadingD = false;
+                                    this.addLoadingP = false;
                                     this.router.navigate(['project', project._id]);
                                 }, (error) => {
                                     console.log(error);
-                                    this.addLoading = false;
+                                    this.addLoadingD = false;
+                                    this.addLoadingP = false;
                                 });
                         } else {
-                            this.addLoading = false;
+                            this.addLoadingD = false;
+                            this.addLoadingP = false;
                             this.router.navigate(['new-reading/' + data._id], { queryParams: { successAlert: this.successAlert } });
                             this.successObject.readingSuccess = this.successAlert;
                             this.showAlert = true;
@@ -287,7 +296,8 @@ export class NewReadingPage implements OnInit {
                 },
                 error => {
                     console.log(error);
-                    this.addLoading = false;
+                    this.addLoadingD = false;
+                    this.addLoadingP = false;
                     this.angulartics.eventTrack.next({ action: 'createNewReading', properties: { category: 'contentManagement', label: 'failure' }});
                     this.errorObject.readingError = "There was an issue saving your reading. It may be our fault; please try again";
                 }
