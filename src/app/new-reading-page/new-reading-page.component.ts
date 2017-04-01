@@ -197,7 +197,19 @@ export class NewReadingPage implements OnInit {
                         });
                     }
                 }
+                if (lastInBlock === true && ( this.words.slice(-1) && this.words.slice(-1)['styles'] && this.words.slice(-1)['styles'].indexOf('br') < 0)) {
+                    this.words.push({
+                        str: '',
+                        styles: ['br']
+                    });
+                }
             } else {
+                if (lastInBlock === true && ( this.words.slice(-1) && this.words.slice(-1)['styles'] && this.words.slice(-1)['styles'].indexOf('br') < 0)) {
+                    this.words.push({
+                        str: '',
+                        styles: ['br']
+                    });
+                }
                 // If not a text node, dig deeper for text nodes
                 if ( index == nodes.length - 1 && (tagName == 'p' || tagName == 'h1' || tagName == 'h2' || tagName == 'h3')) {
                     this.extractTextNodes(node, inheritedTags, true);

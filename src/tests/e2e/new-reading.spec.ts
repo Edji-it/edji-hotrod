@@ -75,7 +75,7 @@ describe('New Reading Page', () => {
         newReading.groupInput.sendKeys(newReading.groupString);
 
         // Submit New Reading
-        browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "add reading button never became clickable after reading form entry");
+        browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "login button never became clickable after login form entry");
         //newReading.addButton.submit();
         newReading.addButton.click();
 
@@ -101,7 +101,7 @@ describe('New Reading Page', () => {
         newReading.sourceInput.sendKeys(newReading.sourceString);
 
         // Submit New Reading
-        browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "add reading button never became clickable after reading form entry");
+        browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "login button never became clickable after login form entry");
         //newReading.addButton.submit();
         newReading.addButton.click();
 
@@ -126,7 +126,7 @@ describe('New Reading Page', () => {
         newReading.sourceInput.sendKeys(newReading.sourceString);
 
         // Submit New Reading
-        browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "add reading button never became clickable after reading form entry");
+        browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "login button never became clickable after login form entry");
         //newReading.addButton.submit();
         newReading.addButton.click();
 
@@ -155,12 +155,57 @@ describe('New Reading Page', () => {
         newReading.groupInput.sendKeys(protractor.Key.BACK_SPACE); 
 
         // Submit New Reading
-        browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "add reading button never became clickable after reading form entry");
+        browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "login button never became clickable after login form entry");
         //newReading.addButton.submit();
         newReading.addButton.click();
         
         // Should see error for empty group label
         browser.wait(EC.presenceOf(newReading.groupError), 5000, "never saw an error for empty group label");
+    });
+
+    /* Test: Upload a PDF and create a Reading with
+        - Open New Reading page
+        - Open PDF upload modal
+        - Select and upload a PDF
+        - Insert PDF into the Reading
+        - Create the Reading
+    */
+    describe("PDF upload", () => {
+        /**
+         * Test: Add reading with pages from a PDF
+         */
+        it('should upload a PDF to a reading and save it to the reading', function() {
+            // Open and wait for New Reading page
+            newReading.getPage();
+            browser.wait(EC.elementToBeClickable(newReading.uploadPDfModalButton), 5000);
+            newReading.uploadPDfModalButton.click();
+            
+            // Select File to upload
+            let fileToUpload = '../../assets/test/2-pages.pdf';
+            let absolutePath = path.resolve(__dirname, fileToUpload);
+            newReading.pdfFileInput.sendKeys(absolutePath);
+
+            // Begin upload 
+            browser.wait(EC.elementToBeClickable(newReading.pdfUploadTrigger), 5000, "button to upload a PDF never became clickable");
+            newReading.pdfUploadTrigger.click();
+
+            // Image was uploaded! Insert it
+            browser.wait(EC.elementToBeClickable(newReading.insertUploadedPdf), 15000, "the pdf never became available to insert");
+            newReading.insertUploadedPdf.click();
+
+            // Complete rest of reading
+            newReading.titleInput.sendKeys(newReading.titleImageString);
+
+            // Submit New Reading
+            browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "add new reading button never became clickable");
+            newReading.addButton.click();
+
+            // Should create a new Reading
+            browser.wait(EC.urlContains("project"), 5000, "never arrived at new reading");
+
+            // Should see image in new reading
+            browser.wait(EC.presenceOf(newReading.imageInReading), 10000, "never saw an image in the new reading");
+        });
     });
 
     describe("Image upload", () => {
@@ -191,7 +236,7 @@ describe('New Reading Page', () => {
             newReading.titleInput.sendKeys(newReading.titleImageString);
 
             // Submit New Reading
-            browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "add reading button never became clickable after reading form entry");
+            browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "login button never became clickable after login form entry");
             //newReading.addButton.submit();
             newReading.addButton.click();
 
@@ -203,59 +248,7 @@ describe('New Reading Page', () => {
         });
     });
 
-    describe("Reading draft", () => {
-        /**
-         * Test: Add reading as a draft
-            - Click on new title box and Enter title
-            - Tab/click to source url, enter URL
-            - Tab/click to contact, paste content or type in content
-            - Click on "Save as Draft" button
-            - Make sure the success alert shows up
-            - Check to make sure the returned content matches what went in
-            - Click on “Publish” button
-            - Redirect to reading page of newly created reading
-         */
-        it('should add a reading as a draft and return to the same screen with a reading id', function() {
-            // Open and wait for New Reading page
-            newReading.getPage();
-            browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000);
-
-            // Enter sample Reading into form
-            newReading.titleInput.sendKeys(newReading.titleString);
-            newReading.contentInput.sendKeys(newReading.contentString);
-            newReading.sourceInput.sendKeys(newReading.sourceString);
-            // Group Label has content prefilled, so we clear it
-            newReading.groupInput.clear();
-            newReading.groupInput.sendKeys(newReading.groupString);
-
-            // Submit New Draft for Reading
-            browser.wait(EC.elementToBeClickable(newReading.draftButton), 5000, "add draft button never became clickable after form entry");
-            newReading.draftButton.click();
-
-            // Draft should be created in this block
-            // Should redirect to new reading page with same inputs and a success alert
-            browser.wait(EC.urlContains("new-reading"), 5000, "never created the draft");
-            browser.wait(EC.presenceOf(newReading.successAlert), 5000, "never saw the success alert");
-
-            // Should return the content that was entered above
-            // expect(element(newReading.titleInput).getAttribute('value')).toEqual(newReading.titleString);
-            // expect(element(newReading.contentInput).getAttribute('value')).toEqual(newReading.contentString);
-            // expect(element(newReading.sourceInput).getAttribute('value')).toEqual(newReading.sourceString);
-
-            // Add reading should take place after this block
-            // Replace the text because the form gets confused
-            newReading.contentInput.clear();
-            newReading.contentInput.sendKeys(newReading.contentString);
-            // Submit New Draft for Reading
-            browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "publish button never became clickable after form entry");
-            newReading.addButton.click();
-            
-            // Should redirect to Project page for new reading
-            browser.wait(EC.urlContains("project"), 5000, "never arrived at new reading");
-        });
-    });
-
-
+    
     /* Test: Add reading, then adjust with editing buttons. (Headers, bold, underlines, italixs, text size)
         - Log in with Teacher account
         - Arrive at Dashboard

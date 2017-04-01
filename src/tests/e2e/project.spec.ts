@@ -20,7 +20,7 @@ describe('Project Page', () => {
     let project = new Project();
     let sidebar = new Sidebar();
     let loginModal = new LoginModal();
-    let EC      = protractor.ExpectedConditions; // vital
+    let EC = protractor.ExpectedConditions; // vital
     let guestForm = new GuestLoginForm();
     
 

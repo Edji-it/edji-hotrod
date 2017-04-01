@@ -6,7 +6,6 @@ import { Observable, Subject } from 'rxjs/Rx';
 export class MediaService {
 
     private imageService: string = '//grapple-dev.edji.it';
-    private pdfService: string = '//sunstreaker.edji.it';
     private pdfBucket: string = '//image-dev.edji.it/pdf';
 
     constructor(private http: Http) { 
@@ -44,7 +43,7 @@ export class MediaService {
     uploadPdf(file: File): Observable<any> {
         let uploadSource = new Subject();
      
-        this.http.put(this.pdfService + '/v1/pdf', file )
+        this.http.put(this.imageService + '/v1/pdf', file )
             .subscribe(res => {
                 let doc = res.json() || {};
                 uploadSource.next(doc);
