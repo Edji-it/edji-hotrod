@@ -204,7 +204,7 @@ export class NewReadingPage implements OnInit {
                     });
                 }
             } else {
-                if (lastInBlock === true) {
+                if (lastInBlock === true && ( this.words.slice(-1) && this.words.slice(-1)['styles'] && this.words.slice(-1)['styles'].indexOf('br') < 0)) {
                     this.words.push({
                         str: '',
                         styles: ['br']
