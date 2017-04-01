@@ -24,7 +24,7 @@
                                     {{ file ? file.name : '' }}
                                 </div>
                                 <span class="input-group-btn">    
-                                    <button class="btn btn-default btn-file" type="button" (click)="browseInput.click()">
+                                    <button id="pdfBrowseButton" class="btn btn-default btn-file" type="button" (click)="browseInput.click()">
                                         Browse <input #browseInput id="pdfFileInput" type="file" 
                                             accept=".pdf"
                                             (change)="updateUploadFile()"
@@ -49,14 +49,14 @@
                     <h3 class="pb-2">Select an uploaded PDF to add to your Reading</h3>
 
                     <!--<div class="card-columns">-->
-                        <div *ngFor="let doc of uploadedDocs; let i = index">
+                        <div *ngFor="let doc of uploadedDocs; let i = index" class="upload-list-item" [class.new]="newDocsIds.indexOf(doc.uuid) > -1">
                             <!--Display doc pages if available-->
                             <div *ngIf="doc.pages && doc.pages[0]" class="card-group">
                                 <div class="card title-card" (click)="insertPages(doc.pages)">
                                     <div class="card__center-overlay">
                                         <span class="doc-title" *ngIf="doc.title">{{ doc.title }}</span>
                                         <span class="doc-title" *ngIf="!doc.title"><i>Untitled</i></span>
-                                        <button class="btn btn-primary">Insert {{ doc.pages.length }} Page<span *ngIf="doc.pages.length > 1">s</span></button>
+                                        <button class="btn btn-primary e2e-insert-doc">Insert {{ doc.pages.length }} Page<span *ngIf="doc.pages.length > 1">s</span></button>
                                     </div>
                                 </div>
                                 <div *ngFor="let url of doc.pages; let i = index" (click)="insertImage(url)" class="card document-card">
@@ -77,7 +77,7 @@
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                     <b>Document conversion timed out</b><br/>
-                                    Please try again later, or with a different file. If this problem persists, please <a href="mailto:brennen@edji.it">contact us</a>.
+                                    Please try again later, or with a different file. If this problem persists, please <a href="mailto:support@edji.it">contact us</a>.
                                 </div>
                                 <div class="card title-card">
                                     <div class="card__center-overlay">

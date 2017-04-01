@@ -163,6 +163,51 @@ describe('New Reading Page', () => {
         browser.wait(EC.presenceOf(newReading.groupError), 5000, "never saw an error for empty group label");
     });
 
+    /* Test: Upload a PDF and create a Reading with
+        - Open New Reading page
+        - Open PDF upload modal
+        - Select and upload a PDF
+        - Insert PDF into the Reading
+        - Create the Reading
+    */
+    describe("PDF upload", () => {
+        /**
+         * Test: Add reading with pages from a PDF
+         */
+        it('should upload a PDF to a reading and save it to the reading', function() {
+            // Open and wait for New Reading page
+            newReading.getPage();
+            browser.wait(EC.elementToBeClickable(newReading.uploadPDfModalButton), 5000);
+            newReading.uploadPDfModalButton.click();
+            
+            // Select File to upload
+            let fileToUpload = '../../assets/test/2-pages.pdf';
+            let absolutePath = path.resolve(__dirname, fileToUpload);
+            newReading.pdfFileInput.sendKeys(absolutePath);
+
+            // Begin upload 
+            browser.wait(EC.elementToBeClickable(newReading.pdfUploadTrigger), 5000, "button to upload a PDF never became clickable");
+            newReading.pdfUploadTrigger.click();
+
+            // Image was uploaded! Insert it
+            browser.wait(EC.elementToBeClickable(newReading.insertUploadedPdf), 15000, "the pdf never became available to insert");
+            newReading.insertUploadedPdf.click();
+
+            // Complete rest of reading
+            newReading.titleInput.sendKeys(newReading.titleImageString);
+
+            // Submit New Reading
+            browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "add new reading button never became clickable");
+            newReading.addButton.click();
+
+            // Should create a new Reading
+            browser.wait(EC.urlContains("project"), 5000, "never arrived at new reading");
+
+            // Should see image in new reading
+            browser.wait(EC.presenceOf(newReading.imageInReading), 10000, "never saw an image in the new reading");
+        });
+    });
+
     describe("Image upload", () => {
         /**
          * Test: Add reading with an image
@@ -203,7 +248,7 @@ describe('New Reading Page', () => {
         });
     });
 
-
+    
     /* Test: Add reading, then adjust with editing buttons. (Headers, bold, underlines, italixs, text size)
         - Log in with Teacher account
         - Arrive at Dashboard

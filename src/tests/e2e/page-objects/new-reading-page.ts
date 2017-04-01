@@ -19,6 +19,11 @@ export class NewReading implements PageObjectInterface
     public imageFileInput = element(by.css('#imageFileInput'));
     public uploadedImage = element(by.css(".upload-list-item.new"));
 
+    public uploadPDfModalButton = element(by.css('#buttonUploadPdf'));
+    public pdfUploadTrigger = element(by.id('buttonBeginPdfUpload'));
+    public pdfFileInput = element(by.css('#pdfFileInput'));
+    public insertUploadedPdf = element(by.css(".upload-list-item.new .e2e-insert-doc"));
+    
     public imageInReading = element(by.css(".content .img img"));
     // public imageUploadList = element.all(by.css('.upload-list-item'));
     

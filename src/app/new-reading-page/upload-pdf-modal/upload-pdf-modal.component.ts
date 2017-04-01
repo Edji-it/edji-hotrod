@@ -18,6 +18,7 @@ export class UploadPdfModalComponent implements OnInit {
   @Output() returnImage: EventEmitter<any> = new EventEmitter();
   
   private uploadedDocs: any[] = [];
+  private newDocsIds: string[] = []; 
   // private newImgUrls: string[] = [];
   private selectedIndex: number = 0;
   private locker: any;
@@ -115,6 +116,7 @@ export class UploadPdfModalComponent implements OnInit {
         data => {
           if (data.converted === true) {
             // Mark document as converted
+            this.newDocsIds.push(data.uuid);
             this.updateUploadedDoc(data);
           } else if (data.error) {
             // Pass doc with error
