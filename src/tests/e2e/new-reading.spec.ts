@@ -248,7 +248,58 @@ describe('New Reading Page', () => {
         });
     });
 
-    
+    describe("Reading draft", () => {
+        /**
+         * Test: Add reading as a draft
+            - Click on new title box and Enter title
+            - Tab/click to source url, enter URL
+            - Tab/click to contact, paste content or type in content
+            - Click on "Save as Draft" button
+            - Make sure the success alert shows up
+            - Check to make sure the returned content matches what went in
+            - Click on “Publish” button
+            - Redirect to reading page of newly created reading
+         */
+        it('should add a reading as a draft and return to the same screen with a reading id', function() {
+            // Open and wait for New Reading page
+            newReading.getPage();
+            browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000);
+
+            // Enter sample Reading into form
+            newReading.titleInput.sendKeys(newReading.titleString);
+            newReading.contentInput.sendKeys(newReading.contentString);
+            newReading.sourceInput.sendKeys(newReading.sourceString);
+            // Group Label has content prefilled, so we clear it
+            newReading.groupInput.clear();
+            newReading.groupInput.sendKeys(newReading.groupString);
+
+            // Submit New Draft for Reading
+            browser.wait(EC.elementToBeClickable(newReading.draftButton), 5000, "add draft button never became clickable after form entry");
+            newReading.draftButton.click();
+
+            // Draft should be created in this block
+            // Should redirect to new reading page with same inputs and a success alert
+            browser.wait(EC.urlContains("new-reading"), 5000, "never created the draft");
+            browser.wait(EC.presenceOf(newReading.successAlert), 5000, "never saw the success alert");
+
+            // Should return the content that was entered above
+            // expect(element(newReading.titleInput).getAttribute('value')).toEqual(newReading.titleString);
+            // expect(element(newReading.contentInput).getAttribute('value')).toEqual(newReading.contentString);
+            // expect(element(newReading.sourceInput).getAttribute('value')).toEqual(newReading.sourceString);
+
+            // Add reading should take place after this block
+            // Replace the text because the form gets confused
+            newReading.contentInput.clear();
+            newReading.contentInput.sendKeys(newReading.contentString);
+            // Submit New Draft for Reading
+            browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "publish button never became clickable after form entry");
+            newReading.addButton.click();
+            
+            // Should redirect to Project page for new reading
+            browser.wait(EC.urlContains("project"), 5000, "never arrived at new reading");
+        });
+    });
+
     /* Test: Add reading, then adjust with editing buttons. (Headers, bold, underlines, italixs, text size)
         - Log in with Teacher account
         - Arrive at Dashboard
