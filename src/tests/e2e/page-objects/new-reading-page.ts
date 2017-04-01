@@ -13,6 +13,7 @@ export class NewReading implements PageObjectInterface
     public sourceInput = element(by.id('readingSource'));
     public groupInput = element(by.id('firstProjectLabel'));
     public addButton = element(by.id('addReadingButton'));
+    public draftButton = element(by.id('saveDraftButton'));
     
     public uploadModalButton = element(by.css('#buttonUploadImage'));
     public imageUploadTrigger = element(by.id('buttonBeginImageUpload'));
@@ -25,6 +26,7 @@ export class NewReading implements PageObjectInterface
     public titleError = element(by.id('errorTitle'));
     public contentError = element(by.id('errorContent'));
     public groupError = element(by.id('errorGroupLabel'));
+    public successAlert = element(by.css('.alert-success'));
 
     public titleString = 'Test: Early Beginnings of Robots';
     public titleImageString = 'Test: Image';
