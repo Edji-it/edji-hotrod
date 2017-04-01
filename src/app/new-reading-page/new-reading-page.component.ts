@@ -1,3 +1,4 @@
+import { REPLServer } from 'repl';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
@@ -178,6 +179,14 @@ export class NewReadingPage implements OnInit {
                     }
                     if (index == 0 && wIndex == 0) {
                         word.styles.push(tagName + '-a');
+                        if ( this.words.slice(-1) && this.words.slice(-1)['styles'] && this.words.slice(-1)['styles'].indexOf('br') >= 0 ) {
+                            // Do nothing
+                        } else {
+                            this.words.push({
+                                str: '',
+                                styles: ['br']
+                            });
+                        }
                     }
                     if (index == nodes.length - 1 && wIndex == nodeWords.length - 1) {
                         word.styles.push(tagName + '-z');
@@ -197,14 +206,14 @@ export class NewReadingPage implements OnInit {
                         });
                     }
                 }
-                if (lastInBlock === true && ( this.words.slice(-1) && this.words.slice(-1)['styles'] && this.words.slice(-1)['styles'].indexOf('br') < 0)) {
+                if (lastInBlock === true) {
                     this.words.push({
                         str: '',
                         styles: ['br']
                     });
                 }
             } else {
-                if (lastInBlock === true && ( this.words.slice(-1) && this.words.slice(-1)['styles'] && this.words.slice(-1)['styles'].indexOf('br') < 0)) {
+                if (lastInBlock === true ) {
                     this.words.push({
                         str: '',
                         styles: ['br']
