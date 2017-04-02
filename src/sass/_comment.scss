@@ -27,6 +27,10 @@ edji-comment {
 		pointer-events: none;
 		display: none;
 	}
+
+	&.imageComment {
+		position: absolute;
+	}
 }
 
 // Primary comment block

@@ -64,6 +64,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         focus: false,
         preview: false
     };
+    private imageHeight: number[] = [];
 
     private subscriptions: Subscription[] = [];
 
@@ -225,6 +226,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
         // After comments are added to the array
         this.updateAllLineCounts();
+        this.updateImageHeights();
 
         // Hacky McHackFace since comments render later (especially lots of comments)
         for (var i = 0; i <= 3; i++) {
@@ -236,6 +238,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
         window.onresize = () => {
             this.updateAllLineCounts();
+            this.updateImageHeights();
         }
 
         // Fallback for tooltip: Continuous text selection check
@@ -345,6 +348,13 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             }, 2000);
             this.lineCountRunning = false;
         }
+    }
+
+    updateImageHeights(): void {
+        let images: any[] = Array.from(document.querySelectorAll('#annotatorContent .img-wrap img'));
+        images.forEach( (img, index) => {
+            this.imageHeight[ img.getAttribute('index') ] = img.clientHeight;
+        });
     }
 
     /** 
@@ -882,6 +892,13 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             x: ((PosX - ImgPos[0]) / target['clientWidth'] * 100).toFixed(3),
             y: ((PosY = (PosY - ImgPos[1])) / target['clientHeight'] * 100).toFixed(3)
         };
+    }
+
+    /**
+     * Magically snap the row for image comments
+     */
+    private getClosestRowY(yValue: number) : number {
+        return yValue - (yValue - 16)%32;
     }
 }
 
