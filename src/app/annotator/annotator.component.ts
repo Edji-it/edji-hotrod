@@ -763,6 +763,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      * @param end Index for last word
      */
     private focusHighlight(start, end, location ?: any): void {
+        if (this.optionsShow == true) {
+            return;
+        }
         for (var i = start; i <= end; i ++) {
             // if (this.focusArray[i]) {
                 this.focusArray[i] = true;
