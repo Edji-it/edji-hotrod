@@ -108,6 +108,7 @@ article.content {
 		margin: 6px auto;
 		text-align: center;
 		position: relative;
+		background: transparent !important;
 
 		&::-moz-selection {
 			background: transparent;

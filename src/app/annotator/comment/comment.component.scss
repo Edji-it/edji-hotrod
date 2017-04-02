@@ -112,6 +112,8 @@ $tablet-width: 768px;
 
 .mobile-comment-button {
   display: none;
+  max-width: auto !important;
+  min-width: 15px;
 }
 
 /* Mobile Optimization */
