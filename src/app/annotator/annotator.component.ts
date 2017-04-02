@@ -48,8 +48,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     private showCommentCounts: boolean = false;
     private showAllComments: boolean = false;
 
-    private highlightY = '200px'; 
-    private highlightX = '20px'; 
+    private highlightY = 200; 
+    private highlightX = 20; 
     private optionLeft = true;
     private isMobile = false;
     private optionsShow = false;
@@ -293,19 +293,24 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             } else {
                 focusY = sel.focusNode.parentNode.getBoundingClientRect().top;
             }
-            this.highlightY = (focusY - scrollOffset + readingPad) + 'px';
+            this.highlightY = (focusY - scrollOffset + readingPad);
             // If in mobile
             if (window.screen.availWidth < 768) {
                 this.isMobile = true;
                 if (event.clientX < 120) {
                     this.optionLeft = false;
-                    this.highlightX = (180 - event.clientX) + 'px';
+                    this.highlightX = (180 - event.clientX);
                 } else {
                     this.optionLeft = true;
-                    this.highlightX = (event.clientX + readingPad - 80) + 'px';
+                    this.highlightX = (event.clientX + readingPad - 80);
                 }
             } else {
                 this.isMobile = false;
+            }
+            if (this.imageHotspotPlaceholder.preview === true) {
+                let yOnImage = this.imageHeight[sel.focusNode.querySelector('img').getAttribute('index')];
+                // Offset 10px to line up with hotspot
+                this.highlightY = this.highlightY + (this.imageHotspotPlaceholder.y/100 * yOnImage) - 10;
             }
             this.optionsShow = true;
         } else if (!doNotDismiss) {
@@ -898,7 +903,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      * Magically snap the row for image comments
      */
     private getClosestRowY(yValue: number) : number {
-        return yValue - (yValue - 16)%32;
+        return yValue + 16 - (yValue)%32;
     }
 }
 
