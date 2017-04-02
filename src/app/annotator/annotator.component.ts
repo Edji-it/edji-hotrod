@@ -604,6 +604,14 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             // Clear selections
             selection.removeAllRanges();
         }
+
+        // Fix for commenting on images in Safari
+        if (!start) {
+            start = end;
+        }
+        if (!end) {
+            end = start;
+        }
         
         return { 'start': start, 'end': end };
     }
@@ -613,11 +621,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      * - Fired from comment options tooltip
      */
     addEmojiComment(event): void {
-    // console.log(Rangy.getSelection().anchorNode);
-
         // Get selection indices
         let span = this.getSelectionSpan();
-        
         if ( !(span.start >= 0) || !(span.end >= 0)) {
             return;
         }
