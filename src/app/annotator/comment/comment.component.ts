@@ -91,10 +91,6 @@ export class CommentComponent implements OnInit {
 
   activate(): void {
     if (!this.readOnly) {
-      //if (!this.active && window.screen.availWidth < 768) {
-        //this.mobileCommentFix();
-        //console.log('activate');
-      //}
       this.active = true;
       this.commentActivation.emit(true);
     } else {
@@ -103,27 +99,12 @@ export class CommentComponent implements OnInit {
   }
 
   togglePreview(): void {
-    // if (window.screen.availWidth < 768 && this.readOnly) {
-    //   if (this.active == true) {
-    //     this.active = false;
-    //     this.commentActivation.emit(false);
-    //     //this.mobileCommentDone();
-    //   } else {
-    //     this.active = true;
-    //     //this.mobileCommentFix();
-    //     //console.log('togglePreview1');
-    //   }
-    //} else {
       if (this.preview === true) {
         this.preview = false;
         this.commentActivation.emit(false);
-        //this.mobileCommentDone();
       } else {
         this.preview = true;
-        //this.mobileCommentFix();
-        //console.log('togglePreview2');
       }
-    //}
   }
 
   deactivate(): void {
@@ -131,9 +112,6 @@ export class CommentComponent implements OnInit {
     this.commentActivation.emit(false);
     // Save when comment is toggled away from
     this.updateComment(this.comment.data);
-    //if (window.screen.availWidth < 768) {
-      //this.mobileCommentDone();
-    //}
   }
 
   // Updates comment in db

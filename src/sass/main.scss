@@ -105,6 +105,9 @@ $seamlessPlaceholderColor: #cdcdcd;
 
 }
 
+.disabled {
+	pointer-events: none;
+}
   
 .useicons {
 	-webkit-font-smoothing: antialiased;
