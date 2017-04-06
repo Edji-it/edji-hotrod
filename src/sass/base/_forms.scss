@@ -224,6 +224,10 @@ input.form-item--seamless {
 	margin: 0px;
 	border-radius: 0px;
 
+  &.h1 {
+    line-height: 1.25em;
+  }
+
 	@include placeholder {
 		color: $seamlessPlaceholderColor;
 	}
