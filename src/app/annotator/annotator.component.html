@@ -18,8 +18,17 @@
 
     <div *ngIf="project.types.length > 0" class="text-options" (blur)="hideCommentOptions($event)" [style.top]="highlightY + 'px'" [ngStyle]="isMobile && optionLeft && { 'left': highlightX + 'px'} || { 'right': highlightX + 'px' }" [ngClass]="{ 'active' : optionsShow }">
 		<div class="options">
-			<button *ngIf="project.types.indexOf('emoji') > -1" id="addEmojiComment" class="emoji" (click)="addEmojiComment($event)" [innerHtml]="':thinking_face:' | emojione"></button>
-			<button *ngIf="project.types.indexOf('text') > -1" id="addTextComment" class="emoji" (click)="addTextComment($event)" [innerHtml]="':writing_hand:' | emojione"></button>
+			<button *ngIf="project.types.indexOf('emoji') > -1" id="addEmojiComment" class="emoji" 
+				(click)="addEmojiComment($event)" 
+				[innerHtml]="':thinking_face:' | emojione"
+				placement="top" 
+				ngbTooltip="Emoji comment"></button>
+			<button *ngIf="project.types.indexOf('text') > -1" 
+				id="addTextComment" class="emoji" 
+				(click)="addTextComment($event)" 
+				[innerHtml]="':writing_hand:' | emojione"
+				placement="top" 
+				ngbTooltip="Text comment"></button>
 		</div>
 	</div>
 

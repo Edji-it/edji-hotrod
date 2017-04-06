@@ -205,8 +205,13 @@ input[type=text].input-noborder, input[type=password].input-noborder, input[type
 	border: 0;
 }
 
+// Bootstrap tooltip styles need a little help
 .side-bar .tooltip {
 	width: 400px !important;
+}
+
+.options .tooltip-top {
+	width: 130px !important;
 }
 
 .disablePane {
