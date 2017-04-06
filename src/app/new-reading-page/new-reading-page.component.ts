@@ -47,7 +47,8 @@ export class NewReadingPage implements OnInit {
             forcePlainText : true,
             cleanPastedHTML: true,
             cleanAttrs: ['class', 'style', 'dir', 'href', 'id'],
-            cleanTags: ['meta', 'button', 'input', 'form', 'img', 'label', 'pre', 'figure', 'strong', 'center', 'hr']
+            cleanTags: ['meta', 'button', 'input', 'form', 'img', 'label', 'pre', 'figure', 'hr'],
+            unwrapTags: [ 'strong', 'center' ]
         }, 
         extensions: { 
             imageDragging: {}
