@@ -16,5 +16,5 @@
 </div>
 
 <!--Mobile icon-->
-<img (tap)='expand($event)' class="mobile-comment-button" src="assets/images/icon-comment.svg" />
+<img (tap)='expanded ? collapse($event) : expand($event)' class="mobile-comment-button" src="assets/images/icon-comment.svg" />
 <hot-del-comment *ngIf="showDeleteModal" [comment]="comment" (delete)="deleteComment(comment)" (closeModal)="showDeleteModal = false; commentDeactivate.emit(comment)"></hot-del-comment>

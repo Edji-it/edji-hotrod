@@ -113,7 +113,10 @@ $tablet-width: 768px;
 .mobile-comment-button {
   display: none;
   max-width: auto !important;
-  min-width: 25px;
+  min-width: 30px;
+  cursor: pointer;
+  padding: 5px;
+  margin-top: -5px
 }
 
 /* Mobile Optimization */
