@@ -46,8 +46,8 @@ export class NewReadingPage implements OnInit {
         paste : { 
             forcePlainText : true,
             cleanPastedHTML: true,
-            cleanAttrs: ['class', 'style', 'dir', 'href'],
-            cleanTags: ['meta', 'button', 'input', 'form', 'img', 'label', 'pre', 'figure']
+            cleanAttrs: ['class', 'style', 'dir', 'href', 'id'],
+            cleanTags: ['meta', 'button', 'input', 'form', 'img', 'label', 'pre', 'figure', 'strong', 'center', 'hr']
         }, 
         extensions: { 
             imageDragging: {}
