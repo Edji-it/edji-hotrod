@@ -42,16 +42,23 @@ export class ReadingService {
     if (!reading['teacher_ids'] || reading['teacher_ids'].length < 1) {
       reading['teacher_ids'] = [this._auth.getUser()._id];
     }
-    let readingObj = { 'reading': reading };
-    if(reading['_id']) {
+
+    if (reading['_id']) {
+      let putReading = {
+        title: reading.title,
+        words: reading.words,
+        html: reading.html,
+        source: reading.source
+      }
+
       return this.http
-              .put(this._auth.getUrl() + '/readings/' + reading['_id'], readingObj, this._auth.getOptions())
+              .put(this._auth.getUrl() + '/readings/' + reading['_id'], { reading: putReading }, this._auth.getOptions())
               .map(data => {
                 return data.json().reading;
               });
     } else {
       return this.http
-              .post(this._auth.getUrl() + '/readings', readingObj, this._auth.getOptions())
+              .post(this._auth.getUrl() + '/readings', { reading: reading }, this._auth.getOptions())
               .map(data => {
                 return data.json().reading;
               });
