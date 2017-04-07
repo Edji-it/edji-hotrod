@@ -267,7 +267,7 @@ describe('New Reading Page', () => {
 
             // Enter sample Reading into form
             newReading.titleInput.sendKeys(newReading.titleString);
-            newReading.contentInput.sendKeys(newReading.contentString);
+            newReading.contentInput.sendKeys(newReading.contentShortString);
             newReading.sourceInput.sendKeys(newReading.sourceString);
             // Group Label has content prefilled, so we clear it
             newReading.groupInput.clear();
@@ -284,13 +284,13 @@ describe('New Reading Page', () => {
 
             // Should return the content that was entered above
             // expect(element(newReading.titleInput).getAttribute('value')).toEqual(newReading.titleString);
-            // expect(element(newReading.contentInput).getAttribute('value')).toEqual(newReading.contentString);
+            // expect(element(newReading.contentInput).getAttribute('value')).toEqual(newReading.contentShortString);
             // expect(element(newReading.sourceInput).getAttribute('value')).toEqual(newReading.sourceString);
 
             // Add reading should take place after this block
             // Replace the text because the form gets confused
             newReading.contentInput.clear();
-            newReading.contentInput.sendKeys(newReading.contentString);
+            newReading.contentInput.sendKeys(newReading.contentShortStringB);
             // Submit New Draft for Reading
             browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "publish button never became clickable after form entry");
             newReading.addButton.click();
