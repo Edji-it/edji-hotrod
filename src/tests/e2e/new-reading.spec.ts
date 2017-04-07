@@ -282,20 +282,14 @@ describe('New Reading Page', () => {
             browser.wait(EC.urlContains("new-reading"), 5000, "never created the draft");
             browser.wait(EC.presenceOf(newReading.successAlert), 5000, "never saw the success alert");
 
-            // Should return the content that was entered above
-            // expect(element(newReading.titleInput).getAttribute('value')).toEqual(newReading.titleString);
-            // expect(element(newReading.contentInput).getAttribute('value')).toEqual(newReading.contentShortString);
-            // expect(element(newReading.sourceInput).getAttribute('value')).toEqual(newReading.sourceString);
-
-            // Add reading should take place after this block
-            // Replace the text because the form gets confused
-            newReading.contentInput.clear();
+            // Add more text
             newReading.contentInput.sendKeys(newReading.contentShortStringB);
-            // Submit New Draft for Reading
-            browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "publish button never became clickable after form entry");
+
+            // Submit New Reading
+            browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "add new reading button never became clickable");
             newReading.addButton.click();
-            
-            // Should redirect to Project page for new reading
+
+            // Should create a new Reading
             browser.wait(EC.urlContains("project"), 5000, "never arrived at new reading");
         });
     });
