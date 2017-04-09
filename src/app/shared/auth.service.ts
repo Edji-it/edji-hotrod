@@ -117,6 +117,23 @@ export class AuthService implements CanActivate {
         return this.currentUser;
     }
 
+    /**
+     * Updates User object
+     * This pulls the latest user object in case a user has multiple sessions at once
+     */
+    public refreshUser(): Observable<any> {
+        return this.http.get(this.baseUrl + '/users/' + this.user._id)
+            .map( res => {
+                let data = res.json() || {}
+                let user = data.user
+                // If we get a user object, update our local copy
+                if (user._id) {
+                    this.setUser(user)
+                }
+                return user
+            })
+    }
+
     public setToken(token: any) {
         return this.locker.set('token', token);
     }
@@ -195,24 +212,79 @@ export class AuthService implements CanActivate {
      * - Used primarily to update user preferences and documents
      * - Cannot be passed password
      */
-    public updateUser(user: any): Observable<any> {
-        return this.http
-            .put( this.baseUrl + '/users', {
-                user: user
-            }, this.getOptions())
-            .map((data) => {
-                let object = data.json();
+    public updateUser(updatedUser: any): Observable<any> {
+        console.log('updated user', updatedUser)
+        return new Observable(observer => {
+            //observer.next(true);  
+            // Before we update the user, make sure we have the latest copy
+            this.refreshUser().take(1)
+                .subscribe(currentUser =>{
+                    let mergedUser = Object.assign({}, currentUser)
+                    
+                    // Loop through and merge arrays
+                    for (let propA in ['prefs', 'media']) {
+                        for (let prop in mergedUser[propA]) {
+                            console.log(prop)
+                            console.log(mergedUser[propA][prop])
+                            if (Object.prototype.toString.call(mergedUser[propA][prop]) === '[object Array]') {
+                                console.log("found prop thats array")
+                                if (updatedUser[propA][prop]) {
+                                    console.log('fresh', updatedUser[propA][prop])
+                                    mergedUser[propA][prop] = mergedUser[propA][prop].concat(updatedUser[propA][prop])
+                                    let a = mergedUser[propA][prop]
+                                    console.log(typeof(mergedUser[propA][prop][0]))
+                                    let isObj = typeof(mergedUser[propA][prop][0]) === 'object'
 
-                // if the response has a token, the user should be successfully registered and logged in
-                if (object.user) {
-                    this.setUser(object.user);
-                }
-                if (object.token) {
-                    this.setUser(object.token);
-                }
+                                    // Clean out the duplicates we probably just concat'd in
+                                    for(var i=0; i<a.length; i++) {
+                                        for(var j = i + 1; j<a.length; j++) {
+                                            if (isObj) {
+                                                if (a[i]._id === a[j]._id) {
+                                                    a.splice(j--, 1);
+                                                }
+                                            } else {
+                                                if (a[i] === a[j]) {
+                                                    console.log('delete duplicate')
+                                                    a.splice(j--, 1);
+                                                }
+                                            }
+                                        }
+                                    }
+                                    console.log("done: ", a)
+                                }
+                            }
+                        }
+                    }
+                    console.log(mergedUser)
 
-                return data.json();
-            });
+                    this.http.put( this.baseUrl + '/users', {
+                            user: mergedUser
+                        }, this.getOptions())
+                        .map((data) => {
+                            let object = data.json();
+
+                            // if the response has a token, the user should be successfully registered and logged in
+                            if (object.user) {
+                                this.setUser(object.user);
+                            }
+                            if (object.token) {
+                                this.setUser(object.token);
+                            }
+
+                            return data.json();
+                        })
+                        .toPromise()
+                        .then( user => {
+                            observer.next(user)
+                        }, error => {
+                            observer.error(error)
+                        })
+                }, 
+                error => {
+                    observer.error(error)
+                    console.log(error)
+                })
+        });
     }
 
     /**
