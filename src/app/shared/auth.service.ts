@@ -122,7 +122,7 @@ export class AuthService implements CanActivate {
      * This pulls the latest user object in case a user has multiple sessions at once
      */
     public refreshUser(): Observable<any> {
-        return this.http.get(this.baseUrl + '/users/' + this.user._id)
+        return this.http.get(this.baseUrl + '/users/' + this.user._id, this.getOptions())
             .map( res => {
                 let data = res.json() || {}
                 let user = data.user
@@ -222,17 +222,15 @@ export class AuthService implements CanActivate {
                     let mergedUser = Object.assign({}, currentUser)
                     
                     // Loop through and merge arrays
-                    for (let propA in ['prefs', 'media']) {
+                    let propsToCheck = ['prefs', 'media']
+                    for (let n = 0; n < propsToCheck.length; n++) {
+                        let propA = propsToCheck[n]
                         for (let prop in mergedUser[propA]) {
-                            console.log(prop)
-                            console.log(mergedUser[propA][prop])
-                            if (Object.prototype.toString.call(mergedUser[propA][prop]) === '[object Array]') {
+                            if (mergedUser[propA][prop] && Object.prototype.toString.call(mergedUser[propA][prop]) === '[object Array]') {
                                 console.log("found prop thats array")
-                                if (updatedUser[propA][prop]) {
-                                    console.log('fresh', updatedUser[propA][prop])
-                                    mergedUser[propA][prop] = mergedUser[propA][prop].concat(updatedUser[propA][prop])
+                                if (updatedUser[propA] && updatedUser[propA][prop]) {
+                                    mergedUser[propA][prop] = updatedUser[propA][prop].concat(mergedUser[propA][prop])
                                     let a = mergedUser[propA][prop]
-                                    console.log(typeof(mergedUser[propA][prop][0]))
                                     let isObj = typeof(mergedUser[propA][prop][0]) === 'object'
 
                                     // Clean out the duplicates we probably just concat'd in
