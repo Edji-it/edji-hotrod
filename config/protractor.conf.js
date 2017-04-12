@@ -39,10 +39,10 @@ exports.config = {
     // Example suite: homepage: 'tests/e2e/homepage/**/*Spec.js',
 
     // To test the entire site:
+    login:    helpers.root('src/tests/e2e/login.spec.ts'),
     home:     helpers.root('src/tests/e2e/home.spec.ts'),
     ownerTools:  helpers.root('src/tests/e2e/owner-tools.spec.ts'),
     newReading:  helpers.root('src/tests/e2e/new-reading.spec.ts'),
-    login:    helpers.root('src/tests/e2e/login.spec.ts'),
     dashboard: helpers.root('src/tests/e2e/dashboard.spec.ts'),
     project: helpers.root('src/tests/e2e/project.spec.ts'),
     all:      [helpers.root('src/tests/e2e/home.spec.ts'),  helpers.root('src/tests/e2e/login.spec.ts')]
