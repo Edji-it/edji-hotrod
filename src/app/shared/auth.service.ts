@@ -144,7 +144,8 @@ export class AuthService implements CanActivate {
 
     private destroyCredentials() {
         this.locker.clear();
-        this.currentUserSource.next({ isLoggedIn: false });
+        this.user = { isLoggedIn: false };
+        this.currentUserSource.next(this.user);
     }
 
     /** Stores an object in local storage for you - your welcome */
