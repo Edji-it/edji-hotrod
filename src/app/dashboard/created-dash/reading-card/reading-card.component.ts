@@ -9,6 +9,8 @@ export class ReadingCardComponent implements OnInit {
   @Input() reading: any;
 
   private showOptions: boolean = false;
+  private showOptionsV: boolean = false;
+  private showVersions: boolean = false;
   private showAddModal: boolean = false;
 
   constructor() { }
