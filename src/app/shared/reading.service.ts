@@ -34,6 +34,15 @@ export class ReadingService {
       });
   }
 
+  // Pull all versions of a particular reading
+  public getAllVersions(versionId : string) : Observable<any> {
+      return this.http
+          .get(this._auth.getUrl() + '/readings/versions/' + versionId, this._auth.getOptions())
+          .map(data => {
+            return data.json()
+          });
+  }
+
   // Push new or update Reading
   public save(reading: any): Observable<any> {
     if (!reading['owner_id']) {
