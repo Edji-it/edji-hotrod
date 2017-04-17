@@ -35,10 +35,11 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
   }
 
   getVersions(versionId : string) {
-    this.isLoading = true;
+    if (this.showVersions) {
+      this.isLoading = true;
 
-    this._readings.getAllVersions(versionId)
-      .subscribe(
+      this._readings.getAllVersions(versionId)
+        .subscribe(
           data => {
             console.log(data);
             // console.log(data.readings);
@@ -50,6 +51,7 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
             // this.angulartics.eventTrack.next({ action: "getAllVersions", properties: { category: "serviceCalls", label: "failure" }});
             this.errorObject.readingError = "We had some trouble getting the versions for this reading, it might be our fault";
           })
+    }
   }
 
 }

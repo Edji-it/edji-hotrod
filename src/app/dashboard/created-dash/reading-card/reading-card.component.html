@@ -67,7 +67,7 @@
 </a>
 <!-- Handle the version control -->
 <!--<a class="list-item list-item--button version-card" [routerLink]="['/version', reading._id]">-->
-<div class="list-item version-card" [class.show]="showVersions" *ngIf="reading.versionCount > 1">
+<div class="list-item version-card" [class.show]="showVersions" [ngClass]="(reading['draft'] && reading.draft === true && !reading.projects[0]) ? 'draftyFix' : ''" *ngIf="reading.versionCount > 1">
     <button type="button" class="btn btn-clear btn-showVersion" (click)="showVersions = !showVersions; getVersions(reading.version_id)" aria-label="Show Previous Versions">
         <i class="icon icon-carrot"></i>
     </button>
@@ -82,16 +82,17 @@
             <div class="reading-title">
                 <div class="reading-title--center-row">
                     <h1 class="small">{{version.title}} <span *ngIf="!version.title"><i>Untitled</i></span></h1>
-                    <p class="blockquote-footer"><cite title="Source Title">Version {{ i }}</cite></p>
+                    <p class="blockquote-footer"><cite title="Source Title">Version {{ i + 1 }}</cite></p>
                 </div>
             </div>
             <i *ngIf="version['draft'] && version.draft === true && !version.projects[0]" class="icon icon-draft"></i>
-            <div *ngIf="!version['draft'] || version.draft !== true || version.projects[0]" id="optionsWrap" (clickOutside)="showOptionsV = false" class="dropdown reading-options" [class.show]="showOptionsV">
-                <button class="btn btn-icon--plain" (click)="showOptionsV = !showOptionsV">
+            <div *ngIf="!version['draft'] || version.draft !== true || version.projects[0]" id="optionsWrapV" (clickOutside)="version.showOptionsV = false" class="dropdown reading-options" [class.show]="version.showOptionsV">
+                <button class="btn btn-icon--plain" (click)="version.showOptionsV = !version.showOptionsV">
                     <i class="icon icon-more"></i>
                 </button>
                 <div class="dropdown-menu dropdown-menu-right reading-card-menu">
-                    <button (click)="showAddModal = true; showOptionsV = false;" class="dropdown-item">Create New Group</button>
+                    <button (click)="showAddModal = true; version.showOptionsV = false;" class="dropdown-item">Create New Group</button>
+                    <button (click)="version.showOptionsV=false;" [routerLink]="version.draft===false ? ['/new-reading/'] : []" [queryParams]="version.draft===false ? { copyId: version._id } : ''" class="dropdown-item">Copy and Edit</button>
                 </div>
             </div>
         </div>

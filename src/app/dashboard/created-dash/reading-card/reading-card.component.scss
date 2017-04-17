@@ -159,7 +159,11 @@ button.new-reading-btn {
     margin-bottom: 30px;
     &.show {
         padding-bottom: 0;
+         &.draftyFix {
+            padding-bottom: 30px;
+        }
     }
+   
 }
 
 .btn-showVersion {
@@ -186,4 +190,8 @@ button.new-reading-btn {
     &.show {
         margin-bottom: 1em;
     }
+}
+
+.dropdown-menu {
+    z-index: 1001;
 }
