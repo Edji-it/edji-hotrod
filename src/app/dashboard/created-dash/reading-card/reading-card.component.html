@@ -36,7 +36,7 @@
             </button>
             <div class="dropdown-menu dropdown-menu-right reading-card-menu">
                 <button (click)="relevantReading = reading; showAddModal = true; showOptions = false;" class="dropdown-item">Create New Group</button>
-                <button (click)="showOptions=false;" [routerLink]="reading.draft===false ? ['/new-reading/'] : []" [queryParams]="reading.draft===false ? { copyId: reading._id } : ''" class="dropdown-item">Copy and Edit</button>
+                <button (click)="showOptions=false;" [routerLink]="['/new-reading/']" [queryParams]="{ copyId: reading._id }" class="dropdown-item">Copy and Edit</button>
             </div>
         </div>
     </div>
