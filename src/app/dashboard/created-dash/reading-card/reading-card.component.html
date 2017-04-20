@@ -67,7 +67,7 @@
 </a>
 <!-- Handle the version control -->
     <div [class.gone]="reading.versionCount <= 1" class="version-card--block" [class.show]="showVersions" [style.maxHeight.px]="versionsHeight()">
-        <div id="{{ reading._id }}" class="list-item version-card" [class.show]="showVersions" [ngClass]="(reading['draft'] && reading.draft === true && !reading.projects[0]) ? 'draftyFix' : ''" >
+        <div id="{{ reading._id }}" class="list-item version-card" [class.show]="showVersions" >
             <div [class.show]="showVersions" class="versions" *ngFor="let version of versions.reverse(); let i = index" [class.hidden]="version._id === reading._id">
                 <div class="version-number">{{ versions.length - i }}</div>
                 <!-- Handle the sub-readings (readings under version) -->

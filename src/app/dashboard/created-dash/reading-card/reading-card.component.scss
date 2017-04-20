@@ -248,6 +248,10 @@ button.new-reading-btn {
         // background: #fff;
     }
 
+    &:not(.show):before {
+        display: none;
+    }
+
     & .version-number {
         display: none;
         position: absolute;
