@@ -21,6 +21,7 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
   private showOptions: boolean = false;
   private showOptionsV: boolean = false;
   private showVersions: boolean = false;
+  private relevantReading: any = {};
   private showAddModal: boolean = false;
 
   constructor(

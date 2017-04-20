@@ -35,7 +35,7 @@
                 <i class="icon icon-more"></i>
             </button>
             <div class="dropdown-menu dropdown-menu-right reading-card-menu">
-                <button (click)="showAddModal = true; showOptions = false;" class="dropdown-item">Create New Group</button>
+                <button (click)="relevantReading = reading; showAddModal = true; showOptions = false;" class="dropdown-item">Create New Group</button>
                 <button (click)="showOptions=false;" [routerLink]="reading.draft===false ? ['/new-reading/'] : []" [queryParams]="reading.draft===false ? { copyId: reading._id } : ''" class="dropdown-item">Copy and Edit</button>
             </div>
         </div>
@@ -88,7 +88,7 @@
                             <i class="icon icon-more"></i>
                         </button>
                         <div class="dropdown-menu dropdown-menu-right reading-card-menu">
-                            <button (click)="showAddModal = true; version.showOptionsV = false;" class="dropdown-item">Create New Group</button>
+                            <button (click)="relevantReading = version; showAddModal = true; version.showOptionsV = false;" class="dropdown-item">Create New Group</button>
                             <button *ngIf="!version.draft" (click)="version.showOptionsV=false;" [routerLink]="['/new-reading/']" [queryParams]="{ copyId: version._id }" class="dropdown-item">Copy and Edit</button>
                         </div>
                     </div>
@@ -139,4 +139,4 @@
     </div>-->
 <!--</div>-->
 <!--</div>-->
-<hot-add-project-modal *ngIf="showAddModal" [reading]="reading" (closeModal)="showAddModal = false"></hot-add-project-modal>
+<hot-add-project-modal *ngIf="showAddModal" [reading]="relevantReading" (closeModal)="showAddModal = false"></hot-add-project-modal>
