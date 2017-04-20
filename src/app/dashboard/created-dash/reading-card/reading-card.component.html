@@ -68,8 +68,8 @@
 <!-- Handle the version control -->
     <div [class.gone]="reading.versionCount <= 1" class="version-card--block" [class.show]="showVersions" [style.maxHeight.px]="versionsHeight()">
         <div id="{{ reading._id }}" class="list-item version-card" [class.show]="showVersions" >
-            <div [class.show]="showVersions" class="versions" *ngFor="let version of versions.reverse(); let i = index" [class.hidden]="version._id === reading._id">
-                <div class="version-number">{{ versions.length - i }}</div>
+            <div [class.show]="showVersions" class="versions" *ngFor="let version of getOldVersions(); let i = index" [class.hidden]="version._id === reading._id">
+                <div class="version-number">{{ getOldVersions().length - i }}</div>
                 <!-- Handle the sub-readings (readings under version) -->
                 <div class="list-item list-item--block reading-card" [ngClass]="{'draft-edit' : (version['draft'] && version.draft === true && !version.projects[0])}" [routerLink]="(version['draft'] && version.draft === true && !version.projects[0]) ? ['/new-reading/' + version._id] : []">
                 <!--<div class="list-item list-item--block reading-card" [ngClass]="{'draft-edit' : (version['draft'] && version.draft === true && !version.projects[0])}" [routerLink]="['/project/' + version._id]">-->
@@ -79,7 +79,7 @@
                     <div class="reading-title">
                         <div class="reading-title--center-row">
                             <h1 class="small">{{version.title}} <span *ngIf="!version.title"><i>Untitled</i></span></h1>
-                            <p class="blockquote-footer"><cite title="Source Title">Version {{ versions.length - i }}</cite></p>
+                            <p class="blockquote-footer"><cite title="Source Title">Version {{ getOldVersions().length - i }}</cite></p>
                         </div>
                     </div>
                     <i *ngIf="version['draft'] && version.draft === true && !version.projects[0]" class="icon icon-draft"></i>
