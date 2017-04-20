@@ -3,11 +3,7 @@ import { Angulartics2 } from 'angulartics2';
 
 @Component({
   selector: 'no-content',
-  template: `
-    <div>
-      <h1>404: page missing</h1>
-    </div>
-  `
+  templateUrl: 'no-content.component.html'
 })
 export class NoContentComponent implements OnInit {
   constructor(private angulartics: Angulartics2) {}

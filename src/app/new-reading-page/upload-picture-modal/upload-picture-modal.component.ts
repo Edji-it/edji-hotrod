@@ -34,11 +34,14 @@ export class UploadModalComponent implements OnInit {
 
   ngOnInit() {
     // Load previously uploaded images
-    if (this.locker.get('uploadedImages')) {
-      this.uploadedImages = this.locker.get('uploadedImages');
-    } else if (this._auth.getUser().media && this._auth.getUser().media.images) {
-      this.uploadedImages = this._auth.getUser().media.images;
+    if (this._auth.getUser().media && this._auth.getUser().media.images) {
+      this.uploadedImages = this._auth.getUser().media.images
     }
+
+    // Get the latest uploaded pics
+    this._auth.refreshUser().take(1).subscribe(user => {
+      this.uploadedImages = user.media.images
+    })
   }
 
   /**
@@ -102,10 +105,19 @@ export class UploadModalComponent implements OnInit {
     if (!user.media.images) {
         user.media.images = [];
     }
-    user.media.images = this.uploadedImages;
+    user.media.images = this.uploadedImages
     this._auth.updateUser( user )
         .take(1)
-        .subscribe();
+        .subscribe(
+          (user) => {
+            if (user.media) {
+              this.uploadedImages = user.media.images
+            }
+          },
+          (error) => {
+            console.log(error)
+          }
+        );
   }
 
   insertImage(imageIndex: number) : void {

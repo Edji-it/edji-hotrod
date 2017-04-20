@@ -36,6 +36,8 @@ export class NewReadingPage implements OnInit {
     private successAlert: string = "Nice work! This reading draft was successfully saved!";
     private alert: string = '';
     private showAlert: boolean = false;
+    private versionId: string = '';
+    private copyId: string = '';
 
     // Used for processing reading
     private words: any[] = [];
@@ -82,9 +84,13 @@ export class NewReadingPage implements OnInit {
             this.successObject.readingSuccess = this.alert;
             this.showAlert = true;
         }
+
+        this.copyId = this._route.snapshot.queryParams['copyId'];
         
         if (this.readingId) {
             this.getReading(this.readingId);
+        } else if (this.copyId) {
+            this.getReading(this.copyId);
         }
      }
 
@@ -103,6 +109,7 @@ export class NewReadingPage implements OnInit {
                             title: this.reading.title,
                             source: this.reading.source,
                         });
+                        this.versionId = this.reading.version_id;
                     }
                 },
                 err => {
@@ -286,7 +293,10 @@ export class NewReadingPage implements OnInit {
         }
         if (this.readingId!=='') {
             reading._id = this.readingId;
-        } 
+        }
+        if (this.versionId) {
+            reading.version_id = this.versionId;
+        }
 
         this._readings.save(reading)
             .subscribe(

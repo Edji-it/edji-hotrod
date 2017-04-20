@@ -1,6 +1,10 @@
 {
   "name": "edji-hotrod",
+<<<<<<< HEAD
   "version": "2.2.62",
+=======
+  "version": "2.3.3",
+>>>>>>> origin/dev
   "description": "Hot Rod is Edji's roaring Front End!",
   "keywords": [
     "edji",

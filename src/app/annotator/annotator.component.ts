@@ -126,6 +126,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                         this.reading = this.processOldReading(reading);
                     } else {
                         this.reading = reading;
+                        this.updateMetaTags();
                     }
                 },
                 error => {
@@ -249,6 +250,28 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
     }
     
+
+    // Updates OGP
+    private updateMetaTags() : void {
+        document.querySelector('meta[property="og:title"]').setAttribute('content', this.reading.title);
+        // let blurb: string;
+        // this.reading.words.slice(0, 20).forEach((word) => {
+        //     if (word.str) {
+        //         if (word.str == '&nbsp;') {
+        //             blurb += ' ';
+        //         } else {
+        //             blurb += word.str;
+        //         }
+        //     }
+        // });
+        // blurb += '...';
+        // document.querySelector('meta[property="og:description"]').setAttribute('content', blurb);
+        // let firstImage = document.querySelector('.img-wrap img');
+        // if (firstImage) {
+        //     document.querySelector('meta[property="og:image"]').setAttribute('content', firstImage.getAttribute('src'));
+        // }
+    }
+
     hideCommentOptions(event ?): void {
         this.optionsShow = false;
     }

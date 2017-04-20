@@ -45,7 +45,14 @@ export class UploadPdfModalComponent implements OnInit {
     // So we can check on them!
     this.uploadedDocs.forEach(doc => {
       if (doc.converted === false) {
-        this.checkConversion(doc.uuid);
+        this.checkConversion(doc.uuid)
+      }
+    })
+
+    // Get the latest uploaded docs
+    this._auth.refreshUser().take(1).subscribe(user => {
+      if (user.media && user.media.documents) {
+        this.uploadedDocs = user.media.documents
       }
     })
   }
@@ -188,7 +195,16 @@ export class UploadPdfModalComponent implements OnInit {
     user.media.documents = this.uploadedDocs;
     this._auth.updateUser( user )
         .take(1)
-        .subscribe();
+        .subscribe(
+          (user) => {
+            if (user.documents) {
+              this.uploadedDocs = user.media.documents
+            }
+          },
+          (error) => {
+            console.log(error)
+          }
+        );
   }
 
   insertPages(pages: any[]) : void {

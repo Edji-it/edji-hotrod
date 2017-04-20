@@ -30,6 +30,7 @@ export const ROUTES: Routes = [
   { path: 'new-reading', component: NewReadingPage, canActivate: [AuthService] },
   { path: 'new-reading/:id', component: NewReadingPage, canActivate: [AuthService] },
   { path: 'reset-password', component: ResetPassPage },
+  { path: 'not-found',    component: NoContentComponent, pathMatch: 'full' },
   { path: ':projectId', redirectTo: '/project/:projectId', pathMatch: 'full'},
   { path: '**',    component: NoContentComponent }
 ];

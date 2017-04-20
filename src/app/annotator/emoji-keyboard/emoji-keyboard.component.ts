@@ -88,9 +88,7 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
     ) {}
 
   ngOnInit() {
-      if( this._locker.get('recentEmojis') ) {
-        this.emojifilters[0].emoji = this._locker.get('recentEmojis');
-      } else if (this._auth.getUser().prefs && this._auth.getUser().prefs.recentEmoji) {
+      if (this._auth.getUser().prefs && this._auth.getUser().prefs.recentEmoji) {
         this.emojifilters[0].emoji = this._auth.getUser().prefs.recentEmoji;
       }
   }
@@ -111,7 +109,15 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
     user.prefs.recentEmoji = this.emojifilters[0].emoji;
     this._auth.updateUser(user)
         .take(1)
-        .subscribe();
+        .subscribe(
+          (data) => {
+            let user = data.user
+            // UpdateUser does merging magic, bring back the merges!
+            if (user && user.prefs && user.prefs.recentEmoji) {
+              this.emojifilters[0].emoji = user.prefs.recentEmoji
+            }
+          }
+        )
   }
 
   // When clicking a category, jump to that section

@@ -145,3 +145,136 @@ button.new-reading-btn {
 .blockquote-footer {
     color: inherit;
 }
+
+.version-card {
+    border: none;
+    display: block;
+    padding: 15px;
+    padding-left: 30px;
+    position: relative;
+    overflow: hidden;
+    padding-bottom: 50px;
+
+    height: 50px;
+    max-height: 50px;
+
+    &.show {
+        height: auto;
+        min-height: 50px;
+        max-height: none !important;
+
+        &.draftyFix {
+            padding-bottom: 30px;
+        }
+    }
+   
+}
+
+.version-card--block {
+    display: block;
+    min-height: 50px;
+    transition: max-height linear 0.3s, min-height linear 0.3s;
+    position: relative;
+
+    &.gone {
+        display: none !important;
+
+        & .version-card {
+            height: 50px !important;
+        }
+    }
+
+    &.hidden {
+        min-height: 50px;
+        max-height: 50px !important;
+        overflow: hidden;
+    }
+}
+
+.btn-showVersion {
+    display: inline-block;
+    transition: transform linear 0.2s;
+    transform: rotate(-90deg) translate3d(0,0,0) !important;
+    height: 48px;
+
+    .show > .version-toggle > & {
+        transform: rotate(-180deg) translate3d(0,0,0) !important;
+    }
+}
+
+.version-toggle {
+    position: absolute;
+    bottom: 0px;
+    background: #fff;
+    height: 50px;
+    width: 100%;
+    font-size: 12px;
+    
+    cursor: pointer;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none;
+}
+
+.blockquote-footer {
+    font-size: 12px;
+}
+
+.versions {
+    display: block;
+    margin-bottom: $base-pad/2;
+    // Do not make relative
+    // position: relative;
+
+    &.hidden {
+        display: none;
+        pointer-events: none;
+    }
+
+    &:before {
+        content: ' ';
+        display: block;
+        position: absolute;
+        // bottom: 50%;
+        left: 15px;
+        transform: translate3d(0, calc(-100% + 45px), 0);
+        width: 40px;
+        height: 100%;
+        border-left: 1px solid #cdcdcd;
+        border-bottom: 1px solid #cdcdcd;
+        // background: #fff;
+    }
+
+    & .version-number {
+        display: none;
+        position: absolute;
+        left: 5px;
+        height: 20px;
+        width: 20px;
+        text-align: center;
+        background: #fff;
+        border-radius: 50%;
+        border: 1px solid #cdcdcd;
+        transform: translate3d(0,33px,0);
+        z-index: 9000;
+    }
+
+    &.show .version-number {
+        display: block;
+    }
+}
+
+.versionShowText {
+    padding-left: 30px;
+    margin: 0;
+    &.show {
+        margin-bottom: 1em;
+    }
+}
+
+.dropdown-menu {
+    z-index: 1001;
+}
