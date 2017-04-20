@@ -23,7 +23,7 @@
         <div class="reading-title">
             <div class="reading-title--center-row">
                 <h1 class="small">{{reading.title}} <span *ngIf="!reading.title"><i>Untitled</i></span></h1>
-                <p class="blockquote-footer" *ngIf="reading.versionCount && reading.versionCount > 0"><cite title="Source Title">Version {{reading.versionCount > 0 ? reading.versionCount : '' }}</cite></p>
+                <!--<p class="blockquote-footer" *ngIf="reading.versionCount && reading.versionCount > 0"><cite title="Source Title">Version {{reading.versionCount > 0 ? reading.versionCount : '' }}</cite></p>-->
                 <!--<p *ngIf="reading.createdAt" class="readings-date">
                     Created: {{ reading.createdAt | date:'mediumDate' }}
                 </p>-->
@@ -36,7 +36,7 @@
             </button>
             <div class="dropdown-menu dropdown-menu-right reading-card-menu">
                 <button (click)="showAddModal = true; showOptions = false;" class="dropdown-item">Create New Group</button>
-                <button (click)="showOptions=false;" [routerLink]="reading.draft===false ? ['/new-reading/'] : []" [queryParams]="reading.draft===false ? { copyId: reading._id } : ''" class="dropdown-item">Copy and Edit</button>
+                <!--<button (click)="showOptions=false;" [routerLink]="reading.draft===false ? ['/new-reading/'] : []" [queryParams]="reading.draft===false ? { copyId: reading._id } : ''" class="dropdown-item">Copy and Edit</button>-->
             </div>
         </div>
     </div>
@@ -66,67 +66,67 @@
     </div>
 </a>
 <!-- Handle the version control -->
-    <div [class.gone]="reading.versionCount <= 1" class="version-card--block" [class.show]="showVersions" [class.hidden]="!showVersions" [style.maxHeight.px]="versionsHeight()">
-        <div id="{{ reading._id }}" class="list-item version-card" [class.show]="showVersions" [ngClass]="(reading['draft'] && reading.draft === true && !reading.projects[0]) ? 'draftyFix' : ''" >
-            <div [class.show]="showVersions" class="versions" *ngFor="let version of versions.reverse(); let i = index" [class.hidden]="version._id === reading._id">
-                <div class="version-number">{{ versions.length - i }}</div>
-                <!-- Handle the sub-readings (readings under version) -->
-                <div class="list-item list-item--block reading-card" [ngClass]="{'draft-edit' : (version['draft'] && version.draft === true && !version.projects[0])}" [routerLink]="(version['draft'] && version.draft === true && !version.projects[0]) ? ['/new-reading/' + version._id] : []">
-                <!--<div class="list-item list-item--block reading-card" [ngClass]="{'draft-edit' : (version['draft'] && version.draft === true && !version.projects[0])}" [routerLink]="['/project/' + version._id]">-->
-                    <div class="reading-icon">
-                        <span>{{version.title.substring(0,2)}}</span>
-                    </div>
-                    <div class="reading-title">
-                        <div class="reading-title--center-row">
-                            <h1 class="small">{{version.title}} <span *ngIf="!version.title"><i>Untitled</i></span></h1>
-                            <p class="blockquote-footer"><cite title="Source Title">Version {{ versions.length - i }}</cite></p>
-                        </div>
-                    </div>
-                    <i *ngIf="version['draft'] && version.draft === true && !version.projects[0]" class="icon icon-draft"></i>
-                    <div *ngIf="!version['draft'] || version.draft !== true || version.projects[0]" id="optionsWrapV" (clickOutside)="version.showOptionsV = false" class="dropdown reading-options" [class.show]="version.showOptionsV">
-                        <button class="btn btn-icon--plain" (click)="version.showOptionsV = !version.showOptionsV">
-                            <i class="icon icon-more"></i>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-right reading-card-menu">
-                            <button (click)="showAddModal = true; version.showOptionsV = false;" class="dropdown-item">Create New Group</button>
-                            <button (click)="version.showOptionsV=false;" [routerLink]="version.draft===false ? ['/new-reading/'] : []" [queryParams]="version.draft===false ? { copyId: version._id } : ''" class="dropdown-item">Copy and Edit</button>
-                        </div>
-                    </div>
-                </div>
-                <!-- Handle the sub-projects (projects under the readings that are under the version) -->
-                <a class="list-item list-item--button project-card" [class.new-project]="versionProject.new" [routerLink]="['/project', versionProject._id]" *ngFor="let versionProject of version.projects">
-                    <div class="row">
-                        <div class="col-9">
-                            <div class="title"> 
-                                <div class="project-title-input">
-                                    <span class="reading-project--label"><span style="color: #cdcdcd;">Group:</span> {{versionProject.label}}</span>
-                                    <span class="project-title-input__save" (click)="updateProjectLabel(version._id, version.newLabel)" [innerHtml]="':white_check_mark:' | emojione"></span>
-                                </div>
-                            </div>
-                            <div style="clear:both;">
-                                <span class="metadata">{{ versionProject.comment_count ? versionProject.comment_count : 0 }} Comments</span>
-                                <span>|</span>
-                                <span class="metadata">{{ versionProject.student_count ? versionProject.student_count : 0 }} Students</span>
-                            </div>
-                        </div>
-                        <div class="col-3 prj-btns pull-right">
-                            <pre class="prj-code">{{versionProject.code || 'none'}}</pre>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            <div *ngIf="isLoading" class="row loading" style="position:absolute;z-index:9999;width:100%; background: #fff;"></div>
-            <div class="alert alert-danger alert-readings" role="alert" *ngIf="errorObject.readingError">
-                {{ errorObject.readingError }}
-            </div>
-        </div>
-        <div class="version-toggle" [class.show]="showVersions" (click)="showVersions = !showVersions; getVersions(reading.version_id)">
-            <button type="button" class="btn btn-clear btn-showVersion" aria-label="Show Previous Versions">
-                <i class="icon icon-carrot"></i>
-            </button>
-            Past Versions
-        </div>
-    </div>
+   <!--  <div [class.gone]="reading.versionCount <= 1" class="version-card--block" [class.show]="showVersions" [class.hidden]="!showVersions" [style.maxHeight.px]="versionsHeight()">
+       <div id="{{ reading._id }}" class="list-item version-card" [class.show]="showVersions" [ngClass]="(reading['draft'] && reading.draft === true && !reading.projects[0]) ? 'draftyFix' : ''" >
+           <div [class.show]="showVersions" class="versions" *ngFor="let version of versions.reverse(); let i = index" [class.hidden]="version._id === reading._id">
+               <div class="version-number">{{ versions.length - i }}</div>
+               Handle the sub-readings (readings under version)
+               <div class="list-item list-item--block reading-card" [ngClass]="{'draft-edit' : (version['draft'] && version.draft === true && !version.projects[0])}" [routerLink]="(version['draft'] && version.draft === true && !version.projects[0]) ? ['/new-reading/' + version._id] : []">
+               <div class="list-item list-item--block reading-card" [ngClass]="{'draft-edit' : (version['draft'] && version.draft === true && !version.projects[0])}" [routerLink]="['/project/' + version._id]">
+                   <div class="reading-icon">
+                       <span>{{version.title.substring(0,2)}}</span>
+                   </div>
+                   <div class="reading-title">
+                       <div class="reading-title--center-row">
+                           <h1 class="small">{{version.title}} <span *ngIf="!version.title"><i>Untitled</i></span></h1>
+                           <p class="blockquote-footer"><cite title="Source Title">Version {{ versions.length - i }}</cite></p>
+                       </div>
+                   </div>
+                   <i *ngIf="version['draft'] && version.draft === true && !version.projects[0]" class="icon icon-draft"></i>
+                   <div *ngIf="!version['draft'] || version.draft !== true || version.projects[0]" id="optionsWrapV" (clickOutside)="version.showOptionsV = false" class="dropdown reading-options" [class.show]="version.showOptionsV">
+                       <button class="btn btn-icon--plain" (click)="version.showOptionsV = !version.showOptionsV">
+                           <i class="icon icon-more"></i>
+                       </button>
+                       <div class="dropdown-menu dropdown-menu-right reading-card-menu">
+                           <button (click)="showAddModal = true; version.showOptionsV = false;" class="dropdown-item">Create New Group</button>
+                           <button (click)="version.showOptionsV=false;" [routerLink]="version.draft===false ? ['/new-reading/'] : []" [queryParams]="version.draft===false ? { copyId: version._id } : ''" class="dropdown-item">Copy and Edit</button>
+                       </div>
+                   </div>
+               </div>
+               Handle the sub-projects (projects under the readings that are under the version)
+               <a class="list-item list-item--button project-card" [class.new-project]="versionProject.new" [routerLink]="['/project', versionProject._id]" *ngFor="let versionProject of version.projects">
+                   <div class="row">
+                       <div class="col-9">
+                           <div class="title"> 
+                               <div class="project-title-input">
+                                   <span class="reading-project--label"><span style="color: #cdcdcd;">Group:</span> {{versionProject.label}}</span>
+                                   <span class="project-title-input__save" (click)="updateProjectLabel(version._id, version.newLabel)" [innerHtml]="':white_check_mark:' | emojione"></span>
+                               </div>
+                           </div>
+                           <div style="clear:both;">
+                               <span class="metadata">{{ versionProject.comment_count ? versionProject.comment_count : 0 }} Comments</span>
+                               <span>|</span>
+                               <span class="metadata">{{ versionProject.student_count ? versionProject.student_count : 0 }} Students</span>
+                           </div>
+                       </div>
+                       <div class="col-3 prj-btns pull-right">
+                           <pre class="prj-code">{{versionProject.code || 'none'}}</pre>
+                       </div>
+                   </div>
+               </a>
+           </div>
+           <div *ngIf="isLoading" class="row loading" style="position:absolute;z-index:9999;width:100%; background: #fff;"></div>
+           <div class="alert alert-danger alert-readings" role="alert" *ngIf="errorObject.readingError">
+               {{ errorObject.readingError }}
+           </div>
+       </div>
+       <div class="version-toggle" [class.show]="showVersions" (click)="showVersions = !showVersions; getVersions(reading.version_id)">
+           <button type="button" class="btn btn-clear btn-showVersion" aria-label="Show Previous Versions">
+               <i class="icon icon-carrot"></i>
+           </button>
+           Past Versions
+       </div>
+   </div> -->
         <!--<div class="list-item-wrapper list-item--button col-sm-6 project-card--new">
         <div class="input-group">
             <input type="text" [(ngModel)]="reading.newLabel" class="form-control" placeholder="Share label..."/>
