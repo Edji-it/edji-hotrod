@@ -35,14 +35,12 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
   }
 
   getVersions(versionId : string) {
-    if (this.showVersions) {
+    if (this.showVersions && this.versions.length < 1) {
       this.isLoading = true;
 
       this._readings.getAllVersions(versionId)
         .subscribe(
           data => {
-            console.log(data);
-            // console.log(data.readings);
             this.isLoading = false;
             this.versions = data.readings || [];
           },
@@ -52,6 +50,16 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
             this.errorObject.readingError = "We had some trouble getting the versions for this reading, it might be our fault";
           })
     }
+  }
+
+  private versionHeight = 50;
+
+  versionsHeight() : number {
+    if (document.getElementById(this.reading._id) && document.getElementById(this.reading._id).clientHeight > 66 && !this.isLoading && this.versionHeight == 50) {
+      this.versionHeight = document.getElementById(this.reading._id).clientHeight;
+    } 
+    return this.versionHeight;
+    
   }
 
 }
