@@ -286,10 +286,10 @@ export class NewReadingPage implements OnInit {
         reading.words = this.words;
 
         // If the reading is not being saved as a draft (A.K.A. it's a final version)
-        if (this.isDraft===false) {
-            reading.draft = false;
-        } else {
+        if (this.isDraft === true) {
             reading.draft = true;
+        } else {
+            reading.draft = false;
         }
         if (this.readingId!=='') {
             reading._id = this.readingId;

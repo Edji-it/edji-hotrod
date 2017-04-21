@@ -21,6 +21,7 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
   private showOptions: boolean = false;
   private showOptionsV: boolean = false;
   private showVersions: boolean = false;
+  private relevantReading: any = {};
   private showAddModal: boolean = false;
 
   constructor(
@@ -53,6 +54,15 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
   }
 
   private versionHeight = 50;
+
+  getOldVersions() : any[] {
+    // Put newest first
+    let oldVersions = this.versions.reverse();
+    // Remove most recent version (current)
+    return oldVersions.filter( (version) => {
+      return this.reading._id !== version._id;
+    });
+  }
 
   versionsHeight() : number {
     if (document.getElementById(this.reading._id) && document.getElementById(this.reading._id).clientHeight > 66 && !this.isLoading && this.versionHeight == 50) {

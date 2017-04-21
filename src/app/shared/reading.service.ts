@@ -57,7 +57,8 @@ export class ReadingService {
         title: reading.title,
         words: reading.words,
         html: reading.html,
-        source: reading.source
+        source: reading.source,
+        draft: reading.draft
       }
 
       return this.http
