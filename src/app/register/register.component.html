@@ -6,6 +6,7 @@
     <div class="col-sm-6 col-pad on-dark">
       <h1 class="on-dark" style="margin-bottom:0.5em;" [innerHtml]="'Welcome :tada:' | emojione"></h1>
       <h4 style="margin-bottom:2em;">Your Edji adventure is about to begin!</h4>
+      <p>Your reading will be on your dashboard after you sign up!</p>
       <form id="registerForm" [formGroup]="registerForm" (ngSubmit)="register(registerForm.value)">
         <div class="form-group">
           <label for="usernameInput">Username</label>

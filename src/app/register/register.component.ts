@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { PRIMARY_OUTLET, Router } from '@angular/router';
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
@@ -25,7 +25,7 @@ import { AuthService, BumblebeeService, Copy } from './../shared';
     }
   `]
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements OnInit, OnDestroy {
   private registerForm: FormGroup;
   private registerLoading: boolean = false;
   private errorObject: any = {
@@ -35,7 +35,7 @@ export class RegisterComponent implements OnInit {
   };
 
   // private copy: Copy = new Copy();
-  private userCopy: any;
+  private userCopy: any
 
   private checkboxCopy = {
     student: "As a student! :writing_hand:",
@@ -46,17 +46,15 @@ export class RegisterComponent implements OnInit {
     other: "Some reason we haven't listed here! :sparkles:"
   }
 
-  constructor(
+  private subscriptions: Subscription[] = []
+
+  constructor (
     private _auth: AuthService,
-    private router: Router,
+    private _router: Router,
     private angulartics: Angulartics2,
     private bumblebee: BumblebeeService,
     private _fb: FormBuilder
   ) {
-    // this makes the window always render scrolled to the top
-    this.router.events.subscribe(() => {
-      window.scrollTo(0, 0);
-    });
 
     this.userCopy = new Copy().getUserCopy();
 
@@ -78,6 +76,12 @@ export class RegisterComponent implements OnInit {
   }
 
   ngOnInit() {
+    // this makes the window always render scrolled to the top
+    this.subscriptions.push(
+        this._router.events.subscribe(() => {
+        window.scrollTo(0, 0);
+        })
+    )
   }
 
   //https://angular.io/docs/ts/latest/api/forms/index/FormGroup-class.html
@@ -144,7 +148,7 @@ export class RegisterComponent implements OnInit {
             })
           }
           this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'success' }});
-          this.router.navigate(['dashboard']);
+          this._router.navigate(['dashboard']);
         } else {
           // TRACK EXCEPTION... there was no data
           this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'failure' }});
@@ -189,5 +193,9 @@ export class RegisterComponent implements OnInit {
         this.errorObject[property] = null;
       }
     }
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }
 }

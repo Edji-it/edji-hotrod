@@ -76,4 +76,10 @@
 		
 	</div>
 </div>
+
+<div class="button__row">
+	<button *ngIf="user.type == 'temp'" [routerLink]="['/register']" class="btn btn-secondary">Save this reading</button>
+	<button [routerLink]="['/register']" [queryParams]="{ reading: reading._id}" class="btn btn-primary">Copy and edit</button>
+</div>
+
 <emoji-keyboard [isActive]="activeComment.active && (!activeComment.type || activeComment.type === 'emoji') && activeComment.user_id === user._id" [currentComment]="activeComment.data" (commentChange)="updateActiveComment($event)" (dismissKeyboard)="inactivateComment()"></emoji-keyboard>
