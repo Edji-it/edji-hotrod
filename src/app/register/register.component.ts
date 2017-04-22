@@ -1,11 +1,11 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { PRIMARY_OUTLET, Router } from '@angular/router';
-import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
-import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs/Subscription';
-import { Angulartics2 } from 'angulartics2';
+import { Component, OnInit, OnDestroy } from '@angular/core'
+import { PRIMARY_OUTLET, Router, ActivatedRoute } from '@angular/router'
+import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
+import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
+import { Subscription } from 'rxjs/Subscription'
+import { Angulartics2 } from 'angulartics2'
 
-import { AuthService, BumblebeeService, Copy } from './../shared';
+import { AuthService, BumblebeeService, Copy } from './../shared'
 
 @Component({
   selector: 'edji-register',
@@ -26,15 +26,17 @@ import { AuthService, BumblebeeService, Copy } from './../shared';
   `]
 })
 export class RegisterComponent implements OnInit, OnDestroy {
-  private registerForm: FormGroup;
-  private registerLoading: boolean = false;
+  private subscriptions: Subscription[] = []
+
+  private registerForm: FormGroup
+  private registerLoading: boolean = false
   private errorObject: any = {
     duplicateUser: "",
     serverError: "",
     badName: ""
-  };
+  }
 
-  // private copy: Copy = new Copy();
+  // private copy: Copy = new Copy()
   private userCopy: any
 
   private checkboxCopy = {
@@ -46,17 +48,21 @@ export class RegisterComponent implements OnInit, OnDestroy {
     other: "Some reason we haven't listed here! :sparkles:"
   }
 
-  private subscriptions: Subscription[] = []
+  /** The reading id that the user wanted to make a copy of */
+  private readingToAdd: string
+  /** The project id that the user wanted to add to the dashboard */
+  private projectToAdd: string
 
   constructor (
     private _auth: AuthService,
     private _router: Router,
+    private route: ActivatedRoute,
     private angulartics: Angulartics2,
     private bumblebee: BumblebeeService,
     private _fb: FormBuilder
   ) {
 
-    this.userCopy = new Copy().getUserCopy();
+    this.userCopy = new Copy().getUserCopy()
 
     this.registerForm = _fb.group({
       username: [null, Validators.required],
@@ -72,15 +78,20 @@ export class RegisterComponent implements OnInit, OnDestroy {
       }, { validator: this.checkboxValidator }),
       password: [null, Validators.compose([Validators.required, Validators.minLength(6)])],
       passwordConfirm: [null, Validators.required],
-    }, { validator: this.passwordsEqual });
+    }, { validator: this.passwordsEqual })
   }
 
   ngOnInit() {
     // this makes the window always render scrolled to the top
+    this._router.events.subscribe(() => {
+      window.scrollTo(0, 0)
+    })
+
     this.subscriptions.push(
-        this._router.events.subscribe(() => {
-        window.scrollTo(0, 0);
-        })
+      this.route.queryParams.subscribe((queryParams) => {
+        this.readingToAdd = queryParams.reading
+        this.projectToAdd = queryParams.project
+      })
     )
   }
 
@@ -90,7 +101,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
    */
   private passwordsEqual(group: FormGroup): any {
     return group.get('password').value === group.get('passwordConfirm').value
-      ? null : { mismatch: true };
+      ? null : { mismatch: true }
   }
 
   /**
@@ -98,88 +109,89 @@ export class RegisterComponent implements OnInit, OnDestroy {
    * @returns error to FormGroup called 'identity'
    */
   private checkboxValidator(group: FormGroup): any {
-    let valid = false;
+    let valid = false
     for(let control in group.controls) {
       if (group.controls[control].value === true) {
-        valid = true;
+        valid = true
       }
     }
-    return valid ? null : { identity: true };
+    return valid ? null : { identity: true }
   }
 
   /** Validates email against the same regex used on the server
    * @returns error which should be assigned to the email input
    */
   private emailValidator(control: FormControl): any {
-    let emailRe: RegExp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    return emailRe.test(control.value) ? null : { 'emailIncorrect': true };
+    let emailRe: RegExp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+    return emailRe.test(control.value) ? null : { 'emailIncorrect': true }
   }
 
   /** Makes call to register the user */
   private register(formValue: any): void {
-    this.clearErrors();
+    this.clearErrors()
 
-    this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'attempt' }});
+    this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'attempt' }})
 
-    this.registerLoading = true;
+    this.registerLoading = true
 
-    formValue.identities = [];
+    formValue.identities = []
     for(let field in formValue.checkboxes) {
       if (formValue.checkboxes[field]) {
-        formValue.identities.push(field); // the name of the field gets added to the array, making it important to name the fields properly
+        formValue.identities.push(field) // the name of the field gets added to the array, making it important to name the fields properly
       }
     }
 
-    delete formValue.checkboxes; // we don't want to store the checkboxes object
+    delete formValue.checkboxes // we don't want to store the checkboxes object
 
     this._auth.register(formValue)
       .take(1)
       .subscribe((data) => {
-        this.registerLoading = false;
+        this.registerLoading = false
         if (data.user) {
-          if (this._auth.getEnv() === "prod") { this.bumblebee.sendUserDetails(data.user); }
-          data.user.username && this.angulartics.setUsername.next(data.user.username);
-          data.user.email && this.angulartics.setUserProperties.next({ email: data.user.email});
+          if (this._auth.getEnv() === "prod") { this.bumblebee.sendUserDetails(data.user) }
+          data.user.username && this.angulartics.setUsername.next(data.user.username)
+          data.user.email && this.angulartics.setUserProperties.next({ email: data.user.email})
           if (data.user.identities) {
             data.user.identities.forEach((identity) => {
-              let userProperty: any = {};
-              userProperty[identity] = true;
-              this.angulartics.setUserProperties.next(userProperty);
+              let userProperty: any = {}
+              userProperty[identity] = true
+              this.angulartics.setUserProperties.next(userProperty)
             })
           }
-          this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'success' }});
-          this._router.navigate(['dashboard']);
+          this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'success' }})
+          this._router.navigate(['dashboard'])
         } else {
           // TRACK EXCEPTION... there was no data
-          this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'failure' }});
+          this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'failure' }})
         }
       }, (err) => {
-        this.registerLoading = false;
+        this.registerLoading = false
 
         switch (err.status) {
           case 406:
-            let error = err.json() || {};
+            let error = err.json() || {}
             if (error.validationErrors) {
-              let errorCaught: boolean = false;
+              let errorCaught: boolean = false
               if (error.validationErrors.fullname === "badWords") {
-                this.errorObject.badName = ":anguished: Would you mind choosing another name?";
-                errorCaught = true;
+                this.errorObject.badName = ":anguished: Would you mind choosing another name?"
+                errorCaught = true
               } 
               if (error.validationErrors.username === "badWords") {
-                this.errorObject.badUsername = ":anguished: Would you mind choosing another username?";
-                errorCaught = true;
+                this.errorObject.badUsername = ":anguished: Would you mind choosing another username?"
+                errorCaught = true
               }
               if (!errorCaught) {
-                this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'failure' }});
+                this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'failure' }})
                 // form validation should have caught any other errors
               }
             }
-            break;
+            break
           case 409:
-            this.errorObject.duplicateUser = "<strong>Wow!</strong> :grin: Somebody else liked your username so much that they already took it."; break;
+            this.errorObject.duplicateUser = "<strong>Wow!</strong> :grin: Somebody else liked your username so much that they already took it."
+            break
           default:
-            this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'failure' }});
-            console.log(err);
+            this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'failure' }})
+            console.log(err)
         }
       });
   }
@@ -190,12 +202,12 @@ export class RegisterComponent implements OnInit, OnDestroy {
   private clearErrors(): void {
     for (let property in this.errorObject) {
       if (this.errorObject.hasOwnProperty(property) && typeof this.errorObject[property] === 'string') {
-        this.errorObject[property] = null;
+        this.errorObject[property] = null
       }
     }
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
+    this.subscriptions.forEach((sub) => { sub.unsubscribe() })
   }
 }

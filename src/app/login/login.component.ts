@@ -34,11 +34,10 @@ export class LoginComponent implements OnInit, OnDestroy {
     private _router: Router,
   ) {
     // this makes the window always render scrolled to the top
-    this.subscriptions.push(
-        this._router.events.subscribe(() => {
-          window.scrollTo(0, 0)
-        })
-    )
+    this._router.events.subscribe(() => {
+      window.scrollTo(0, 0)
+    })
+    
   }
 
   ngOnInit() {

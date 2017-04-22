@@ -37,11 +37,10 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         // this makes the window always render scrolled to the top
-        this.subscriptions.push(
-            this._router.events.subscribe(() => {
-            window.scrollTo(0, 0);
-            })
-        )
+        this._router.events.subscribe(() => {
+        window.scrollTo(0, 0);
+        })
+        
 
 
         // gets id from route to compare to currentProject from projects.service
