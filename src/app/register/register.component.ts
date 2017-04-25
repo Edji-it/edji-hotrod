@@ -89,8 +89,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(
       this.route.queryParams.subscribe((queryParams) => {
-        this.readingToAdd = queryParams.reading
-        this.projectToAdd = queryParams.project
+        this.readingToAdd = queryParams['reading']
+        this.projectToAdd = queryParams['project']
       })
     )
   }
@@ -159,7 +159,14 @@ export class RegisterComponent implements OnInit, OnDestroy {
             })
           }
           this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'success' }})
-          this._router.navigate(['dashboard'])
+          if (this.readingToAdd) {
+            this._router.navigate(['/new-reading'], { queryParams: { copyId: this.readingToAdd } })
+          } else if (this.projectToAdd) {
+            this._router.navigate(['/dashboard'])
+          } else {
+            this._router.navigate(['/dashboard'])
+          }
+          
         } else {
           // TRACK EXCEPTION... there was no data
           this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'failure' }})
