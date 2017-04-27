@@ -1,0 +1,15 @@
+<div class="right-margin-tooltip">
+    <h2>{{ pageObjs[index].title }}</h2>
+    <p>{{ pageObjs[index].body }}</p>
+    <img [src]="pageObjs[index].image" class="tooltip__guide-image" />
+    <div *ngIf="pageObjs.length > 1" class="tooltip-pager">
+        <div (click)="index = index - 1" [class.disabled]="index < 1" class="tooltip-pager__left">&larr;</div>
+        <div class="tooltip-pager__dot-wrap">
+            <div *ngFor="let page of pageObjs; let i = index" class="tooltip-pager__dot" [class.active]="i == index" (click)="index = i"></div>
+        </div>
+        <div (click)="index = index + 1" [class.disabled]="index >= pageObjs.length - 1" class="tooltip-pager__right">&rarr;</div>
+    </div>
+    <div class="tooltip__skip">
+        Skip Guide
+    </div>
+</div>

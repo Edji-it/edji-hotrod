@@ -40,9 +40,9 @@
 	<div class="article-wrap">
         <!--Create components after load for reading-->
 		<article id="annotatorContent" class="content active-content" (mouseup)="showCommentOptions($event)" (touchend)="showCommentOptions($event)" (clickOutside)="hideCommentOptions()">
-			<span *ngIf="project && project.comments.length < 1 && project.types.length > 0" class="comment--placeholder">
+			<!--<span *ngIf="project && project.comments.length < 1 && project.types.length > 0" class="comment--placeholder">
 				Select text, add comments!
-			</span>
+			</span>-->
 			<span *ngFor="let w of reading.words; trackBy:index; let i = index" class="w" [ngClass]="[ w.styles.join(' '), getHighlightClass(i) ]" 
 				[attr.index]="i">
 				<edji-comment *ngFor="let comment of commentsByIndex[i]; let ci = index" 
@@ -73,7 +73,7 @@
 						<img id="readingImage{{i}}" [attr.index]="i" [src]="w.url" (click)="imageCommentOptions(i, w, $event)" (load)="updateImageHeights()" />
 					</div></span>
 		</article>
-		
+    	<right-margin-tooltip [pageObjs]="guideContent"></right-margin-tooltip>
 	</div>
 </div>
 <emoji-keyboard [isActive]="activeComment.active && (!activeComment.type || activeComment.type === 'emoji') && activeComment.user_id === user._id" [currentComment]="activeComment.data" (commentChange)="updateActiveComment($event)" (dismissKeyboard)="inactivateComment()"></emoji-keyboard>

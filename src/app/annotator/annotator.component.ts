@@ -84,6 +84,20 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         userRef: {}
     };
 
+    private guideContent = [
+        {
+            title: "1. Try Highlighting!",
+            image: "/assets/guide/highlight-text.gif",
+            body: "Simply select text to see comment options."
+        },
+        {
+            title: "2. Add a Comment",
+            image: "/assets/guide/highlight-text.gif",
+            body: "Select a comment type from the tooltip."
+        }
+    ];
+    private guideStepNo = 0;
+
     constructor(
         private _readings: ReadingService,
         private _projects: ProjectService,
