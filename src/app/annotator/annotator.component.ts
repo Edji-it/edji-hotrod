@@ -92,8 +92,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         },
         {
             title: "2. Add a Comment",
-            image: "/assets/guide/highlight-text.gif",
-            body: "Select a comment type from the tooltip."
+            image: "/assets/guide/add-comment-type.gif",
+            body: "Select a comment type, such as Text or Emoji."
         }
     ];
     private guideStepNo = 0;

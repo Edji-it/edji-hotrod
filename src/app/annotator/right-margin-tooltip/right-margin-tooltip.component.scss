@@ -9,7 +9,7 @@ $tooltipColor: #000;
     display: block;
     bottom: 11px;
     right: 84px;
-    width: 200px;
+    width: 250px;
     min-height: 20px;
     // padding: 15px;
     background: $tooltipBg;
@@ -27,7 +27,7 @@ $tooltipColor: #000;
 
     & p {
         font-size: 14px;
-        line-height: 1em;
+        line-height: 1.25em;
         padding: 0px $tooltipPad 5px;
     }
 
