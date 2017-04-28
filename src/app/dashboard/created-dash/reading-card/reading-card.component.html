@@ -31,7 +31,7 @@
         </div>
         <i *ngIf="reading['draft'] && reading.draft === true && !reading.projects[0]" class="icon icon-draft"></i>
         <div *ngIf="!reading['draft'] || reading.draft !== true || reading.projects[0]" id="optionsWrap" (clickOutside)="showOptions = false" class="dropdown reading-options" [class.show]="showOptions">
-            <button class="btn btn-icon--plain" (click)="showOptions = !showOptions">
+            <button class="btn btn-icon--plain" (click)="showOptions = !showOptions" [attr.testFindOptions]="reading.title">
                 <i class="icon icon-more"></i>
             </button>
             <div class="dropdown-menu dropdown-menu-right reading-card-menu">

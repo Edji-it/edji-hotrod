@@ -41,6 +41,8 @@ export class NewReading implements PageObjectInterface
     public sourceString = 'https://en.wikipedia.org/wiki/Robot';
     public groupString = 'Test Group 001';
 
+    public findIdExp = new RegExp(/([A-Za-z0-9]){24}/);
+
     // get the login page
     getPage() : void 
     {
