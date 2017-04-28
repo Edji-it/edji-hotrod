@@ -5,6 +5,8 @@ $btnPrimaryColor: #fff;
 $btnSecondaryBg: #fff;
 $btnSecondaryColor: $blue;
 $btnSecondaryBorder: 1px solid rgba(0,0,0,0.05);
+$btnSuccessBg: #46c78e; //#7fd9fc;
+$btnSuccessColor: #fff;
 
 button, .button, .btn { //, [class*='btn']
   appearance: none;
@@ -158,6 +160,15 @@ button, .button, .btn { //, [class*='btn']
     &:hover, &:active, &:focus {
       // background: $btnPrimaryBg;
     }
+  }
+}
+
+.btn.btn-success {
+  background: $btnSuccessBg;
+  color: $btnSuccessColor;
+
+  &:hover, &:active, &:focus {
+    background: darken($btnSuccessBg, 20%);
   }
 }
 

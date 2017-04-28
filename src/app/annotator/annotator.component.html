@@ -73,7 +73,7 @@
 						<img id="readingImage{{i}}" [attr.index]="i" [src]="w.url" (click)="imageCommentOptions(i, w, $event)" (load)="updateImageHeights()" />
 					</div></span>
 		</article>
-    	<right-margin-tooltip [pageObjs]="guideContent"></right-margin-tooltip>
+    	<right-margin-tooltip *ngIf="!guideComplete" [pageObjs]="guideContent" [pager]="guideStepNo" (pageChange)="guideStepNo = $event" (dismiss)="guideCompleted()"></right-margin-tooltip>
 	</div>
 </div>
 <emoji-keyboard [isActive]="activeComment.active && (!activeComment.type || activeComment.type === 'emoji') && activeComment.user_id === user._id" [currentComment]="activeComment.data" (commentChange)="updateActiveComment($event)" (dismissKeyboard)="inactivateComment()"></emoji-keyboard>

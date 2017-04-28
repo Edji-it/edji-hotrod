@@ -251,6 +251,8 @@ export class AuthService implements CanActivate {
                                     }
                                     console.log("done: ", a)
                                 }
+                            } else if (mergedUser[propA][prop] && updatedUser[propA]) {
+                                mergedUser[propA][prop] = updatedUser[propA][prop]
                             }
                         }
                     }
