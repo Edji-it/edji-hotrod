@@ -85,6 +85,7 @@ describe("Create Reading Tests", () => {
         it('should go to new reading page with existing reading and validate the reading; then save it as a draft', () => {
             // Make a new version of that reading
             // Click the options, then copy and edit button
+            console.log(uniqueTitle);
             browser.wait(EC.elementToBeClickable(element(by.css('button[testFindOptions="' + uniqueTitle + '"]'))), 5000, "options button never became clickable after load");
             element(by.css('button[testFindOptions="' + uniqueTitle + '"]')).click();
 
@@ -119,8 +120,8 @@ describe("Create Reading Tests", () => {
         });
 
         it('should make sure the version number increments by 1', () => {
-        // Make sure the version number is greater than beforeAll
-        
+            // Make sure the version number is greater than beforeAll
+            //browser.wait(EC.elementToBeClickable(element(by.css('cite[testVersionNumber="' + uniqueTitle + '"]'))), 5000, "options button never became clickable after load");
         });
 
         it('should open up the latest version that is a draft and publish the draft', () => {  

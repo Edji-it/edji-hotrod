@@ -23,7 +23,7 @@
         <div class="reading-title">
             <div class="reading-title--center-row">
                 <h1 class="small">{{reading.title}} <span *ngIf="!reading.title"><i>Untitled</i></span></h1>
-                <p class="blockquote-footer" *ngIf="reading.versionCount && reading.versionCount > 0"><cite title="Source Title">Version {{reading.versionCount > 0 ? reading.versionCount : '' }}</cite></p>
+                <p class="blockquote-footer" *ngIf="reading.versionCount && reading.versionCount > 0"><cite title="Source Title" [attr.testVersionNumber]="reading.title">Version {{reading.versionCount > 0 ? reading.versionCount : '' }}</cite></p>
                 <!--<p *ngIf="reading.createdAt" class="readings-date">
                     Created: {{ reading.createdAt | date:'mediumDate' }}
                 </p>-->
@@ -79,12 +79,12 @@
                     <div class="reading-title">
                         <div class="reading-title--center-row">
                             <h1 class="small">{{version.title}} <span *ngIf="!version.title"><i>Untitled</i></span></h1>
-                            <p class="blockquote-footer"><cite title="Source Title">Version {{ versions.length - i }}</cite></p>
+                            <p class="blockquote-footer"><cite title="Source Title" [attr.testVersionNumberV]="version.title">Version {{ versions.length - i }}</cite></p>
                         </div>
                     </div>
                     <i *ngIf="version['draft'] && version.draft === true && !version.projects[0]" class="icon icon-draft"></i>
                     <div *ngIf="!version['draft'] || version.draft !== true || version.projects[0]" id="optionsWrapV" (clickOutside)="version.showOptionsV = false" class="dropdown reading-options" [class.show]="version.showOptionsV">
-                        <button class="btn btn-icon--plain" (click)="version.showOptionsV = !version.showOptionsV">
+                        <button class="btn btn-icon--plain" (click)="version.showOptionsV = !version.showOptionsV" [attr.testFindOptionsV]="version.title">
                             <i class="icon icon-more"></i>
                         </button>
                         <div class="dropdown-menu dropdown-menu-right reading-card-menu">
