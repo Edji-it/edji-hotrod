@@ -84,6 +84,26 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         userRef: {}
     };
 
+    private guideContent = [
+        {
+            title: ":round_pushpin: Try Highlighting!",
+            image: "/assets/guide/highlight-text.gif",
+            body: "Highlight text see the comment types."
+        },
+        {
+            title: ":pencil: Add a Comment!",
+            image: "/assets/guide/add-comment-type.gif",
+            body: "Choose to leave a Text or Emoji comment."
+        },
+        {
+            title: ":eyes: Who sees my comment?",
+            // image: "/assets/guide/add-comment-type.gif",
+            body: "Your comment can be seen by the reading creator. If they turn Heat Vision on, everyone can see it!"
+        }
+    ];
+    private guideStepNo = 1;
+    private guideComplete = false;
+
     constructor(
         private _readings: ReadingService,
         private _projects: ProjectService,
@@ -109,6 +129,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.subscriptions.push(
             this._auth.getCurrentUser().subscribe((user) => {
                 this.user = user;
+
+                if (user.prefs && user.prefs.onboarding && user.prefs.onboarding.highlighting && user.prefs.onboarding.highlighting.firstDone) {
+                    this.guideComplete = true;
+                }
             })
         );
 
@@ -236,7 +260,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
              }, ( 1000*i - 1000) );
         }
        
-
+        // Line counts need to be re-rendered when text reflows
         window.onresize = () => {
             this.updateAllLineCounts();
             this.updateImageHeights();
@@ -270,6 +294,37 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // if (firstImage) {
         //     document.querySelector('meta[property="og:image"]').setAttribute('content', firstImage.getAttribute('src'));
         // }
+    }
+
+    private guideCompleted(): void {
+        this.guideComplete = true;
+
+        // save completed guide to user object
+        let user = this._auth.getUser();
+        if (!user.prefs) {
+            user.prefs = {};
+        }
+        if (!user.prefs.onboarding) {
+            user.prefs.onboarding = {};
+        }
+        if (!user.prefs.onboarding.highlighting) {
+            user.prefs.onboarding.highlighting = {
+                firstDone: Date.now(),
+                lastDone: Date.now()
+            };
+        } else {
+            user.prefs.onboarding.highlighting['lastDone'] = Date.now();
+            if (!user.prefs.onboarding.highlighting['firstDone']) {
+                user.prefs.onboarding.highlighting['firstDone'] = Date.now();
+            }
+        }
+        this._auth.updateUser(user)
+            .take(1)
+            .subscribe(
+                (data) => {
+                    let user = data.user
+                }
+            )
     }
 
     hideCommentOptions(event ?): void {
@@ -336,6 +391,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 this.highlightY = this.highlightY + (this.imageHotspotPlaceholder.y/100 * yOnImage) - 10;
             }
             this.optionsShow = true;
+            // Guide content
+            if (this.guideStepNo < 2) {
+                this.guideStepNo = 2;
+            }
         } else if (!doNotDismiss) {
             this.optionsShow = false;
             this.imageHotspotPlaceholder.preview = false;
@@ -498,6 +557,11 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                     this.commentsByIndexAdd(comment, start);
                 } else {
                     console.warn('Didn\'t get a comment back from server!');
+                }
+
+                // Guide content
+                if (this.guideStepNo < 3) {
+                    this.guideStepNo = 3;
                 }
             })
             .catch(error => {
@@ -935,6 +999,13 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      */
     private getClosestRowY(yValue: number) : number {
         return yValue + 16 - (yValue)%32;
+    }
+
+    /**
+     * Decides if the Emoji Keyboard is active
+     */
+    private isEmojiKeyboardActive() : boolean {
+        return this.activeComment.active && (!this.activeComment.type || this.activeComment.type === 'emoji') && this.activeComment.user_id === this.user._id;
     }
 }
 

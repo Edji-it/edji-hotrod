@@ -44,7 +44,7 @@ import { RegisterComponent } from './register';
 import { JoinComponent } from './join/join.component';
 import { LoginForm, GuestForm } from './forms';
 import { LoginModal, ResetPassComponent, DeleteCommentModal, AddProjectModal } from './modals';
-import { AnnotatorComponent, CommentComponent, TextCommentComponent, EmojiCommentComponent, EmojiKeyboardComponent } from './annotator';
+import { AnnotatorComponent, CommentComponent, TextCommentComponent, EmojiCommentComponent, EmojiKeyboardComponent, RightMarginTooltipComponent } from './annotator';
 import { ProjectPageComponent, ProjectInfoComponent } from './project-page';
 import { ReadingPageComponent, DeleteProjectComponent } from './reading-page';
 import { NewReadingPage, UploadModalComponent, UploadPdfModalComponent } from './new-reading-page';
@@ -118,6 +118,7 @@ type StoreType = {
     UploadPdfModalComponent,
     ProjectPageComponent,
     ProjectInfoComponent,
+    RightMarginTooltipComponent,
     ReadingPageComponent,
     DeleteProjectComponent,
     DashboardComponent,
