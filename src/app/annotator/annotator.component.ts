@@ -88,17 +88,17 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         {
             title: ":round_pushpin: Try Highlighting!",
             image: "/assets/guide/highlight-text.gif",
-            body: "Simply select text to see comment options."
+            body: "Highlight text see the comment types."
         },
         {
             title: ":pencil: Add a Comment!",
             image: "/assets/guide/add-comment-type.gif",
-            body: "Select a comment type, such as Text or Emoji."
+            body: "Choose to leave a Text or Emoji comment."
         },
         {
             title: ":eyes: Who sees my comment?",
             // image: "/assets/guide/add-comment-type.gif",
-            body: "Comments can be seen by the reading owner. And if the reading owner has Heat Vision turned on, other readers can see the comment."
+            body: "Your comment can be seen by the reading creator. If they turn Heat Vision on, everyone can see it!"
         }
     ];
     private guideStepNo = 1;
@@ -999,6 +999,13 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      */
     private getClosestRowY(yValue: number) : number {
         return yValue + 16 - (yValue)%32;
+    }
+
+    /**
+     * Decides if the Emoji Keyboard is active
+     */
+    private isEmojiKeyboardActive() : boolean {
+        return this.activeComment.active && (!this.activeComment.type || this.activeComment.type === 'emoji') && this.activeComment.user_id === this.user._id;
     }
 }
 

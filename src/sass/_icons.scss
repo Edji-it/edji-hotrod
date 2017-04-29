@@ -64,6 +64,29 @@
     background-repeat: no-repeat;
 }
 
+.icon-caret {
+    display:inline-block;
+    width: 1em;
+    height: 1em;
+    background: url('/assets/images/icon-caret-right.svg');
+    background-size: auto 100%;
+    background-position: center center;
+    background-repeat: no-repeat;
+    opacity: 0.6;
+
+    &.left {
+        transform: rotate(180deg);
+    }
+
+    &.down {
+        transform: rotate(90deg);
+    }
+
+    &.up {
+        transform: rotate(-90deg);
+    }
+}
+
 .icon-more {
     display:inline-block;
     width: 1.5em;

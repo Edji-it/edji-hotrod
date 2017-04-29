@@ -1,0 +1,10 @@
+.keyboard-offset .right-margin-tooltip {
+	bottom: 280px !important;
+    right: 6px !important;
+}
+
+.mobile-toolbar-offset .right-margin-tooltip {
+    @media(max-width: $phone) {
+        bottom: 50px !important;
+    }
+}

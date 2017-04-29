@@ -1,28 +1,40 @@
+@import '../../../sass/base/variables';
 
 $tooltipPad: 15px;
 $tooltipBg: #fff;
 $tooltipColor: #000;
 
 .right-margin-tooltip {
-    // position: sticky;
     position: fixed;
     display: block;
     bottom: 11px;
     right: 84px;
     width: 275px;
     min-height: 20px;
-    // padding: 15px;
     background: $tooltipBg;
     border-radius: 5px;
     box-shadow: 0px 3px 12px 0px rgba(0, 0, 0, 0.15);
     color: $tooltipColor;
     overflow:hidden;
+    transition: all linear 0.3s;
+    z-index: 1000;
+
+    & i {
+        float: left;
+        margin: $tooltipPad;
+        margin-right: 5px;
+
+        @media(min-width: $phone) {
+            display: none;
+        }
+    }
 
     & h2 {
         line-height: 1em;
         font-size: 16px;
         padding: $tooltipPad;
         padding-bottom: 5px;
+        display: inline-block;
     }
 
     & p {
@@ -31,19 +43,13 @@ $tooltipColor: #000;
         padding: 0px $tooltipPad 5px;
     }
 
-    &:before {
-        // content: "";
-        // border-top: 10px solid transparent;
-        // border-bottom: 10px solid transparent;
-        // border-left: 10px solid transparent;
-        // border-right: 10px solid $tooltipBg;
-        // position: absolute;
-        // margin-top: -10px;
-        // left: -20px;
-        // height: 0px;
-        // width: 10px;
-        // top: 50%;
-        // box-shadow: -5px 3px 5px 0px rgba(0, 0, 0, 0.15);
+    @media(max-width: $phone) {
+        bottom: 5px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: calc(100% - 10px);
+        max-width: 275px;
+        box-shadow: 0px -3px 12px 0px rgba(0, 0, 0, 0.15);
     }
 }
 
@@ -141,4 +147,26 @@ $tooltipColor: #000;
 
 .btn-row {
     margin: 5px 0px;
+}
+
+.mobile-toggle {
+    @media(max-width: $phone) {
+        cursor: pointer;
+
+        &:hover, &:active, &:focus {
+            background: rgba(0,0,0,0.1);
+        }
+    }
+}
+
+.collapsible {
+    max-height: 600px;
+    transition: max-height linear 0.3s;
+
+    @media(max-width: $phone) {
+        &.mobile-collapse {
+            max-height: 0px;
+            overflow: hidden;
+        }
+    }
 }
