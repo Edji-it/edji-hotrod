@@ -17,11 +17,14 @@ describe("Create Reading Tests", () => {
     var uniqueTitle: string = '';
 
     beforeAll(() => {
-        // make sure the user is logged in before the suite runs
+        // Login as test account that we can fill with junk data
         login.getPage();
         browser.wait(EC.elementToBeClickable(login.loginButton), 5000);
-        // log in a user
-        loginForm.login();
+        login.enterUsername(login.botUser);
+        login.enterPassword(login.botPassword);
+        browser.wait(EC.elementToBeClickable(login.loginButton), 5000);
+        login.loginButton.click();
+        browser.wait(EC.urlContains("dashboard"), 5000, "never arrived at dashboard");
     })
 
     afterEach(() => {
@@ -52,7 +55,6 @@ describe("Create Reading Tests", () => {
     // 
     describe("Versioning", () => {
         it('should create a new reading', () => {
-            dashboard.getPage();
             // Create a new reading to control it properly thru the process
             // Open and wait for New Reading page
             newReading.getPage();
@@ -85,7 +87,6 @@ describe("Create Reading Tests", () => {
         it('should go to new reading page with existing reading and validate the reading; then save it as a draft', () => {
             // Make a new version of that reading
             // Click the options, then copy and edit button
-            console.log(uniqueTitle);
             browser.wait(EC.elementToBeClickable(element(by.css('button[testFindOptions="' + uniqueTitle + '"]'))), 5000, "options button never became clickable after load");
             element(by.css('button[testFindOptions="' + uniqueTitle + '"]')).click();
 
