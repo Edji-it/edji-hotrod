@@ -1,0 +1,172 @@
+@import '../../../sass/base/variables';
+
+$tooltipPad: 15px;
+$tooltipBg: #fff;
+$tooltipColor: #000;
+
+.right-margin-tooltip {
+    position: fixed;
+    display: block;
+    bottom: 11px;
+    right: 84px;
+    width: 275px;
+    min-height: 20px;
+    background: $tooltipBg;
+    border-radius: 5px;
+    box-shadow: 0px 3px 12px 0px rgba(0, 0, 0, 0.15);
+    color: $tooltipColor;
+    overflow:hidden;
+    transition: all linear 0.3s;
+    z-index: 1000;
+
+    & i {
+        float: left;
+        margin: $tooltipPad;
+        margin-right: 5px;
+
+        @media(min-width: $phone) {
+            display: none;
+        }
+    }
+
+    & h2 {
+        line-height: 1em;
+        font-size: 16px;
+        padding: $tooltipPad;
+        padding-bottom: 5px;
+        display: inline-block;
+    }
+
+    & p {
+        font-size: 14px;
+        line-height: 1.25em;
+        padding: 0px $tooltipPad 5px;
+    }
+
+    @media(max-width: $phone) {
+        bottom: 5px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: calc(100% - 10px);
+        max-width: 275px;
+        box-shadow: 0px -3px 12px 0px rgba(0, 0, 0, 0.15);
+    }
+}
+
+.tooltip__guide-image {
+    width: 100%;
+    height: auto;
+    border-radius: 0px;
+    border-top: 5px solid #cacaca;
+    border-bottom: 5px solid #cacaca;
+    margin: 0px -1px;
+}
+
+.tooltip-pager {
+    display: block;
+    position: relative;
+    height: 30px;
+    width: 100%;
+
+    &__dot-wrap {
+        height: 100%;
+        width: 60%;
+        float: left;
+        text-align: center;
+    }
+
+    &__dot {
+        width: 20px;
+        height: 30px;
+        display: inline-block;
+        cursor: pointer;
+        vertical-align: middle;
+        line-height: 30px;
+        position: relative;
+        background: transparent;
+
+        &:before {
+            content: ' ';
+            display: block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            position: absolute;
+            background: rgba($tooltipColor,0.2);
+            top: 10px;
+            left: 5px;
+        }
+
+        &:hover, &:focus {
+            background: rgba($tooltipColor,0.1);
+
+            &:before {
+                background: rgba($tooltipColor,0.6);
+            }
+            
+        }
+
+        &.active {
+            &:before {
+                background: $tooltipColor;
+            }
+        }
+    }
+
+    &__left, &__right {
+        height: 100%;
+        width: 20%;
+        cursor: pointer;
+        float: left;
+        text-align: center;
+        vertical-align: middle;
+        line-height: 30px;
+
+        &.disabled {
+            pointer-events: none;
+            opacity: 0.05;
+        }
+        
+        &:hover {
+            background: rgba(0,0,0,0.1);
+        }
+    }
+}
+
+.tooltip__skip {
+    width: 100%;
+    font-size: 11px;
+    text-align: center;
+    cursor: pointer;
+    padding: 4px $tooltipPad;
+
+    &:hover {
+        background: rgba(0,0,0,0.1);
+    }
+}
+
+.btn-row {
+    margin: 5px 0px;
+}
+
+.mobile-toggle {
+    @media(max-width: $phone) {
+        cursor: pointer;
+
+        &:hover, &:active, &:focus {
+            background: rgba(0,0,0,0.1);
+        }
+    }
+}
+
+.collapsible {
+    max-height: 600px;
+    transition: max-height linear 0.3s;
+
+    @media(max-width: $phone) {
+        &.mobile-collapse {
+            max-height: 0px;
+            overflow: hidden;
+        }
+    }
+}

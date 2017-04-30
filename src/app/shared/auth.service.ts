@@ -122,7 +122,7 @@ export class AuthService implements CanActivate {
      * This pulls the latest user object in case a user has multiple sessions at once
      */
     public refreshUser(): Observable<any> {
-        return this.http.get(this.baseUrl + '/users/' + this.user._id, this.getOptions())
+        return this.http.get(this.baseUrl + '/users/' + this.getUser()._id, this.getOptions())
             .map( res => {
                 let data = res.json() || {}
                 let user = data.user
@@ -251,6 +251,8 @@ export class AuthService implements CanActivate {
                                     }
                                     console.log("done: ", a)
                                 }
+                            } else if (mergedUser[propA][prop] && updatedUser[propA]) {
+                                mergedUser[propA][prop] = updatedUser[propA][prop]
                             }
                         }
                     }

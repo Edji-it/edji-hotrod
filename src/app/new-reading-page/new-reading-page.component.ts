@@ -50,9 +50,10 @@ export class NewReadingPage implements OnInit {
             cleanPastedHTML: true,
             cleanAttrs: ['class', 'style', 'dir', 'href', 'id'],
             cleanTags: ['meta', 'button', 'input', 'form', 'img', 'label', 'pre', 'figure', 'hr'],
-            unwrapTags: [ 'strong', 'center' ]
+            unwrapTags: [ 'strong', 'center', 'a', 'sup', 'sub', 'span', 'small', 'div', 'em', 'footer' ]
         }, 
         extensions: { 
+            // Disables Medium Editor handled image dragging
             imageDragging: {}
         }, 
         toolbar: {
@@ -189,7 +190,7 @@ export class NewReadingPage implements OnInit {
                         word.styles.push(tagName + '-a');
                         if ( this.words.slice(-1) && this.words.slice(-1)['styles'] && this.words.slice(-1)['styles'].indexOf('br') >= 0 ) {
                             // Do nothing
-                        } else {
+                        } else if (tagName == 'p' || tagName == 'h1' || tagName == 'h2' || tagName == 'h3') {
                             this.words.push({
                                 str: '',
                                 styles: ['br']

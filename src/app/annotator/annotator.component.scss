@@ -69,6 +69,11 @@ $bubbleColor: rgb(255,255,255);
 		border-left-color: $bubbleColor !important;
 	}
 
+	@media(max-width: $phone) {
+		& button {
+			float: none !important;
+		}
+	}
 }
 
 .options.url-mode {
