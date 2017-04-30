@@ -73,9 +73,10 @@
 
         <div class="button__row">
           <!--ngHide loginLoading-->
-          <button title="Make sure you've completed all the fields!" id="buttonRegister" type="submit" class="btn btn-primary" [class.loading]="registerLoading" [disabled]="!registerForm.valid" name="Register" tabindex="0">Register!</button>
+          <button title="Make sure you've completed all the fields!" id="buttonRegister" type="submit" class="btn btn-primary" [class.loading]="registerLoading" [disabled]="!registerForm.valid" tabindex="0">Register!</button>
         </div>
       </form>
+      <button class="btn btn-primary" (click)="testSomething()"></button>
     </div>
   </div>
 </div>

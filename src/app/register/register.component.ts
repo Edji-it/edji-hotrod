@@ -5,7 +5,7 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { Subscription } from 'rxjs/Subscription'
 import { Angulartics2 } from 'angulartics2'
 
-import { AuthService, BumblebeeService, Copy } from './../shared'
+import { AuthService, BumblebeeService, Copy, ProjectService } from './../shared'
 
 @Component({
   selector: 'edji-register',
@@ -30,11 +30,12 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   private registerForm: FormGroup
   private registerLoading: boolean = false
-  private errorObject: any = {
-    duplicateUser: "",
-    serverError: "",
-    badName: ""
-  }
+  private errorObject: {
+    duplicateUser?: string
+    serverError?: string,
+    badName?: string,
+    badUsername?: string
+  } = {}
 
   // private copy: Copy = new Copy()
   private userCopy: any
@@ -51,11 +52,12 @@ export class RegisterComponent implements OnInit, OnDestroy {
   /** The reading id that the user wanted to make a copy of */
   private readingToAdd: string
   /** The project id that the user wanted to add to the dashboard */
-  private projectToAdd: string
+  private tempUserId: string
 
   constructor (
     private _auth: AuthService,
     private _router: Router,
+    private _project: ProjectService,
     private route: ActivatedRoute,
     private angulartics: Angulartics2,
     private bumblebee: BumblebeeService,
@@ -90,7 +92,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.route.queryParams.subscribe((queryParams) => {
         this.readingToAdd = queryParams['reading']
-        this.projectToAdd = queryParams['project']
+        this.tempUserId = queryParams['userId']
       })
     )
   }
@@ -126,9 +128,22 @@ export class RegisterComponent implements OnInit, OnDestroy {
     return emailRe.test(control.value) ? null : { 'emailIncorrect': true }
   }
 
+  private testSomething() {
+    this._project.transitionUserComments(this.tempUserId, "57ba2b02dad01317006f2d0e")
+      .take(1)
+      .subscribe((project) => {
+        // as far as I know, we don't really need to do anything other than wait for the server to return a successful response
+        // this._router.navigate(['/project', this.tempUserId])
+      }, (err) => {
+        console.error(err)
+        this.errorObject.serverError = "Oh no! Something went wrong, and we aren't sure exactly what."
+      })
+  }
+
   /** Makes call to register the user */
   private register(formValue: any): void {
-    this.clearErrors()
+    // this.clearErrors()
+    console.log("trying to register")
 
     this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'attempt' }})
 
@@ -160,11 +175,22 @@ export class RegisterComponent implements OnInit, OnDestroy {
           }
           this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'success' }})
           if (this.readingToAdd) {
-            this._router.navigate(['/new-reading'], { queryParams: { copyId: this.readingToAdd } })
-          } else if (this.projectToAdd) {
-            this._router.navigate(['/dashboard'])
+            console.log("trying to add reading")
+            // this._router.navigate(['/new-reading'], { queryParams: { copyId: this.readingToAdd } })
+          } else if (this.tempUserId) {
+            console.log("trying to add project")
+            this._project.transitionUserComments(this.tempUserId, data.user._id)
+              .take(1)
+              .subscribe((project) => {
+                // as far as I know, we don't really need to do anything other than wait for the server to return a successful response
+                // this._router.navigate(['/project', this.tempUserId])
+              }, (err) => {
+                console.error(err)
+                this.errorObject.serverError = "Oh no! Something went wrong, and we aren't sure exactly what."
+              })
           } else {
-            this._router.navigate(['/dashboard'])
+            console.log("don't know what to do!")
+            // this._router.navigate(['/dashboard'])
           }
           
         } else {
@@ -198,21 +224,22 @@ export class RegisterComponent implements OnInit, OnDestroy {
             break
           default:
             this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'failure' }})
+            this.errorObject.serverError = "Oh no! Something went wrong, and we aren't sure exactly what."
             console.log(err)
         }
       });
   }
 
-  /**
-   * Clears all errorObject strings to equal empty strings
-   */
-  private clearErrors(): void {
-    for (let property in this.errorObject) {
-      if (this.errorObject.hasOwnProperty(property) && typeof this.errorObject[property] === 'string') {
-        this.errorObject[property] = null
-      }
-    }
-  }
+  // /**
+  //  * Clears all errorObject strings to equal empty strings
+  //  */
+  // private clearErrors(): void {
+  //   for (let property in this.errorObject) {
+  //     if (this.errorObject.hasOwnProperty(property) && typeof this.errorObject[property] === 'string') {
+  //       this.errorObject[property] = null
+  //     }
+  //   }
+  // }
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe() })

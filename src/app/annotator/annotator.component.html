@@ -78,7 +78,7 @@
 </div>
 
 <div class="button__row">
-	<button *ngIf="user.type == 'temp'" [routerLink]="['/register']" class="btn btn-secondary">Save this reading</button>
+	<button *ngIf="user.type == 'temp'" [routerLink]="['/register']" [queryParams]="{ userId: user._id }" class="btn btn-secondary">Save this reading</button>
 	<button *ngIf="user._id != reading._id" [routerLink]="['/register']" [queryParams]="{ reading: reading._id}" class="btn btn-primary">Copy and edit</button>
 </div>
 
