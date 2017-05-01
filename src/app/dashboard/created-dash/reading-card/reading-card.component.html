@@ -23,7 +23,7 @@
         <div class="reading-title">
             <div class="reading-title--center-row">
                 <h1 class="small">{{reading.title}} <span *ngIf="!reading.title"><i>Untitled</i></span></h1>
-                <p class="blockquote-footer" *ngIf="reading.versionCount && reading.versionCount > 0"><cite title="Source Title" [attr.testVersionNumber]="reading.title">Version {{reading.versionCount > 0 ? reading.versionCount : '' }}</cite></p>
+                <p class="blockquote-footer" *ngIf="reading.versionCount && reading.versionCount > 0" [attr.testVersionNumber]="reading.title">Version {{reading.versionCount > 0 ? reading.versionCount : '' }}</p>
                 <!--<p *ngIf="reading.createdAt" class="readings-date">
                     Created: {{ reading.createdAt | date:'mediumDate' }}
                 </p>-->
@@ -35,8 +35,8 @@
                 <i class="icon icon-more"></i>
             </button>
             <div class="dropdown-menu dropdown-menu-right reading-card-menu">
-                <button (click)="relevantReading = reading; showAddModal = true; showOptions = false;" class="dropdown-item">Create New Group</button>
-                <button (click)="showOptions=false;" [routerLink]="['/new-reading/']" [queryParams]="{ copyId: reading._id }" class="dropdown-item">Copy and Edit</button>
+                <button (click)="relevantReading = reading; showAddModal = true; showOptions = false;" class="dropdown-item" [attr.testFindCreateNewGroup]="reading.title">Create New Group</button>
+                <button (click)="showOptions=false;" [routerLink]="['/new-reading/']" [queryParams]="{ copyId: reading._id }" class="dropdown-item" [attr.testFindCopyAndEdit]="reading.title">Copy and Edit</button>
             </div>
         </div>
     </div>
@@ -48,7 +48,7 @@
         <div class="col-9">
             <div class="title"> 
                 <div class="project-title-input">
-                    <span class="reading-project--label"><span style="color: #cdcdcd;">Group:</span> {{project.label}}</span>
+                    <span class="reading-project--label"><span style="color: #cdcdcd;" [attr.testFindGroup]="reading.title">Group:</span> {{project.label}}</span>
                     <!--<input class="form-item--underline reading-project--label" type="text" minlength="1" [(ngModel)]="project.label" (blur)="updateProjectLabel(project._id, project.label)" />-->
                     <span class="project-title-input__save" (click)="updateProjectLabel(reading._id, reading.newLabel)" [innerHtml]="':white_check_mark:' | emojione"></span>
                 </div>
@@ -79,7 +79,7 @@
                     <div class="reading-title">
                         <div class="reading-title--center-row">
                             <h1 class="small">{{version.title}} <span *ngIf="!version.title"><i>Untitled</i></span></h1>
-                            <p class="blockquote-footer"><cite title="Source Title" [attr.testVersionNumberV]="version.title">Version {{ versions.length - i }}</cite></p>
+                            <p class="blockquote-footer" [attr.testVersionNumberV]="version.title">Version {{ versions.length - i }}</p>
                         </div>
                     </div>
                     <i *ngIf="version['draft'] && version.draft === true && !version.projects[0]" class="icon icon-draft"></i>
@@ -88,8 +88,8 @@
                             <i class="icon icon-more"></i>
                         </button>
                         <div class="dropdown-menu dropdown-menu-right reading-card-menu">
-                            <button (click)="relevantReading = version; showAddModal = true; version.showOptionsV = false;" class="dropdown-item">Create New Group</button>
-                            <button *ngIf="!version.draft" (click)="version.showOptionsV=false;" [routerLink]="['/new-reading/']" [queryParams]="{ copyId: version._id }" class="dropdown-item">Copy and Edit</button>
+                            <button (click)="relevantReading = version; showAddModal = true; version.showOptionsV = false;" class="dropdown-item" [attr.testFindCreateNewGroupV]="version.title">Create New Group</button>
+                            <button *ngIf="!version.draft" (click)="version.showOptionsV=false;" [routerLink]="['/new-reading/']" [queryParams]="{ copyId: version._id }" class="dropdown-item" [attr.testFindCopyAndEditV]="version.title">Copy and Edit</button>
                         </div>
                     </div>
                 </div>
@@ -99,7 +99,7 @@
                         <div class="col-9">
                             <div class="title"> 
                                 <div class="project-title-input">
-                                    <span class="reading-project--label"><span style="color: #cdcdcd;">Group:</span> {{versionProject.label}}</span>
+                                    <span class="reading-project--label"><span style="color: #cdcdcd;" [attr.testFindGroupV]="versionProject.label">Group:</span> {{versionProject.label}}</span>
                                     <span class="project-title-input__save" (click)="updateProjectLabel(version._id, version.newLabel)" [innerHtml]="':white_check_mark:' | emojione"></span>
                                 </div>
                             </div>
@@ -120,7 +120,7 @@
                 {{ errorObject.readingError }}
             </div>
         </div>
-        <div class="version-toggle" [class.show]="showVersions" (click)="showVersions = !showVersions; getVersions(reading.version_id)">
+        <div class="version-toggle" [class.show]="showVersions" (click)="showVersions = !showVersions; getVersions(reading.version_id)" [attr.testFindVersionToggle]="reading.title">
             <button type="button" class="btn btn-clear btn-showVersion" aria-label="Show Previous Versions">
                 <i class="icon icon-carrot"></i>
             </button>
