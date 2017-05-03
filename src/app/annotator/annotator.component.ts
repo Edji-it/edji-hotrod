@@ -87,8 +87,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     private guideContent = [
         {
             title: ":round_pushpin: Try Highlighting!",
-            image: "/assets/guide/highlight-text.gif",
-            body: "Highlight text see the comment types."
+            image: "/assets/guide/add-highlight.gif",
+            body: "Highlight text or click on an image to see the comment types."
         },
         {
             title: ":pencil: Add a Comment!",
