@@ -142,7 +142,7 @@ describe("Versioning - ", () => {
 
     it('should open up the latest version that is a draft and publish the draft', () => {  
         // Go back in to that drafted reading
-        browser.wait(EC.elementToBeClickable(element(by.cssContainingText('.draft-edit', titleUpdate))), 5000, "draft never became clickable after loading of reading cards");
+        browser.wait(EC.elementToBeClickable(element(by.cssContainingText('.draft-edit', titleUpdate))), 8000, "draft never became clickable after loading of reading cards");
         element(by.cssContainingText('.draft-edit', titleUpdate)).click();
 
         // Make sure the site arrives at the new reading page with the copyId query param

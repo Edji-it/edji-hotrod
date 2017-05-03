@@ -10,6 +10,8 @@ export class Project implements PageObjectInterface {
   public textComment = element(by.css('.comment.new textarea.text-comment-input'));
   public commentSave = element(by.css('.comment__save'));
   public commentDelete = element(by.css('.comment.new button.inline-delete'));
+  public imageRight = 25;
+  public imageDown = 25;
 
   public getPage(): void {
     // First we clear out the url (sometimes page is preserved if the url stays the same)

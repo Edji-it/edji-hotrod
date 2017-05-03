@@ -45,25 +45,25 @@ describe('Dashboard Page', () => {
     - IF THIS FAILS: You are not running Protractor correctly;
     */
     it('should arrive at dashboard', () => {
-        browser.wait(EC.urlContains("dashboard"), 5000, "never arrived at dashboard");
+        browser.wait(EC.urlContains("dashboard"), 15000, "never arrived at dashboard");
     });
 
     // this test relies on the user having at least one project - could do more verification of the project card itself
     it("should see a list of projects", () => {
-        browser.wait(EC.presenceOf(dashboard.firstProject), 5000, "never saw a project");
+        browser.wait(EC.presenceOf(dashboard.firstProject), 8000, "never saw a project");
         expect(dashboard.projectCards.count()).toBeGreaterThan(0);
     });
 
     describe("Navigation from project dashboard", () => {
         it("should get to a project by clicking a card", () => {
-            browser.wait(EC.presenceOf(dashboard.firstProject), 5000, "never saw a project");
+            browser.wait(EC.presenceOf(dashboard.firstProject), 8000, "never saw a project");
             dashboard.firstProject.click();
             browser.wait(EC.urlContains("project"), 5000, "clicking on project card did not bring me to a project");
         });
 
         it("should get to a project by entering a code", () => {
             // initial validation
-            browser.wait(EC.presenceOf(dashboard.projectCodeInput), 5000, "never saw a project");
+            browser.wait(EC.presenceOf(dashboard.projectCodeInput), 8000, "never saw a project");
 
             // form handling
             dashboard.projectCodeInput.sendKeys(login.validProjectCode);
