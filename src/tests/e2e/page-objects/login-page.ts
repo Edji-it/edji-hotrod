@@ -26,8 +26,8 @@ export class Login implements PageObjectInterface
 
     public studentUser      = 'student';
     public studentPassword  = 'student';
-    public teacherUser      = 'teach';
-    public teacherPassword  = 'teach';
+    public teacherUser      = 'testowner';
+    public teacherPassword  = 'testowner16';
     public botUser          = 'testbot';
     public botPassword      = 'testbot';
     public invalidEntry     = 'HitlerHatesEDJI_666_420';
