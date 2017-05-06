@@ -50,7 +50,7 @@ $dashToolbarHeight: 60px;
     display: none;
 }
 
-@media (max-width: #{$tablet - 1px}) {
+@media (max-width: #{$tablet}) {
     .tab-2 {
         font-size: 18px;
     }

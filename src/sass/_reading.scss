@@ -597,7 +597,7 @@ $readingIconHeight: 60px;
 }
 
 
-@media (max-width: #{$tablet - 1px}) {
+@media (max-width: #{$tablet}) {
     .reading-title--center-row h1 {
         max-width: 250px;
         font-size: 16px;

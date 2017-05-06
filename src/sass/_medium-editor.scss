@@ -71,7 +71,7 @@ $editorToolbarBg: #fff;
 }
 
 /* Mobile Optimization */
-@media (max-width: #{$tablet - 1px}) {
+@media (max-width: #{$tablet}) {
   .medium-editor-placeholder {
     font-size: 14px;
   }
