@@ -712,7 +712,7 @@ $image-map: () !default;
 }
 
 @mixin phone {
-  @media (min-width: #{$phone-width-min}) and (max-width: #{$tablet-width - 1px}) {
+  @media (min-width: #{$phone-width-min}) and (max-width: #{$tablet-width}) {
     @content;
   }
 }

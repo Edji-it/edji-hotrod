@@ -10,11 +10,13 @@ export class Project implements PageObjectInterface {
   public textComment = element(by.css('.comment.new textarea.text-comment-input'));
   public commentSave = element(by.css('.comment__save'));
   public commentDelete = element(by.css('.comment.new button.inline-delete'));
+  public imageRight = 25;
+  public imageDown = 25;
 
   public getPage(): void {
     // First we clear out the url (sometimes page is preserved if the url stays the same)
     browser.get("/#");
     // Load a good sample Project with Emoji and Text commenting (owned by teach/teach)
-    browser.get("/#/project/58b102f181126c4be2165ee2");
+    browser.get("/#/project/hjb2");
   }
 }

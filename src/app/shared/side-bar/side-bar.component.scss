@@ -146,7 +146,7 @@ div.sliding-pane.from-left.slide-in {
 }
 
 /* Mobile Optimization */
-@media (max-width: #{$tablet - 1px}) {
+@media (max-width: #{$tablet}) {
 	.side-bar__user {
 		display: none;
         -webkit-transition: rotate(0deg);

@@ -1,11 +1,15 @@
 <!--Teacher View-->
 <h1 class="readings-header hidden-sm-down">Created
-    <i class="icon__tooltip" placement="bottom" ngbTooltip="Readings are how you share content on Edji!">
-        <span class="icon icon-circle icon-info">i</span>
-    </i>
-    <button class="btn btn-primary new-reading-btn" [routerLink]="[ '/new-reading' ]">
-        New Reading
-    </button>
+            <i class="icon__tooltip" placement="bottom" ngbTooltip="Readings are how you share content on Edji!">
+                <span class="icon icon-circle icon-info">i</span>
+            </i>
+    <div class="row new-reading--btn">
+        <div class="col-xs-6 col-xs-offset-6">
+            <button class="btn btn-primary new-reading-btn" [routerLink]="[ '/new-reading' ]">
+                New Reading
+            </button>
+        </div>
+    </div>
 </h1>
 
 <div *ngIf="isLoading" class="row loading"></div>

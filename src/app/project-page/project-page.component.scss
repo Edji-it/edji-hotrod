@@ -14,7 +14,7 @@
 }
 
 /* Mobile Optimization */
-@media (max-width: #{$tablet - 1px}) {
+@media (max-width: #{$tablet}) {
 	.reading__hud {
         font-family: "Open Sans";
         position: absolute;

@@ -69,7 +69,7 @@ $bubbleColor: rgb(255,255,255);
 		border-left-color: $bubbleColor !important;
 	}
 
-	@media(max-width: $phone) {
+	@media(max-width: $tablet) {
 		& button {
 			float: none !important;
 		}

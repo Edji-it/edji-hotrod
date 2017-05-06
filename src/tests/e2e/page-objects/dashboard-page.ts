@@ -20,6 +20,9 @@ export class Dashboard implements PageObjectInterface
     public optionsButton = element(by.css('.btn-icon--plain'));
     //public optionsList = element.all(by.css('.reading-card-menu'))
     public copyAndEditButton = element(by.cssContainingText('.dropdown-item', 'Copy and Edit'));
+    public createNewGroupButton = element(by.cssContainingText('.dropdown-item', 'Create New Group'));
+    public projectLabel = element(by.css('#newProjectLabel'));
+    public groupCreate = element(by.css('#buttonCreateGroup'));
 
     // get the dashboard page
     getPage() : void {

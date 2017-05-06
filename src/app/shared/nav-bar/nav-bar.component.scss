@@ -56,7 +56,7 @@ a.nav-bar__link {
 }
 
 /* Mobile Optimization */
-@media (max-width: #{$tablet - 1px}) {
+@media (max-width: #{$tablet}) {
 	.nav__anchor-logo {
 		left: 10%;
     	position: absolute;
