@@ -32,7 +32,7 @@ describe('Dashboard Page', () => {
 
     afterEach(() => {
         // navigate back to the dashboard after every test
-        dashboard.getPage();
+        // dashboard.getPage();
     });
 
     afterAll(() => {

@@ -36,5 +36,6 @@ export class Sidebar {
     public logout(): void {
         browser.wait(this.EC.elementToBeClickable(this.logOutButton), 5000, "logout button never became clickable");
         this.logOutButton.click();
+        browser.wait(this.EC.urlContains("home"), 5000, "never arrived home after logging out");
     }
 } // class Sidebar
