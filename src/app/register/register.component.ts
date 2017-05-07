@@ -129,15 +129,23 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   private testSomething() {
-    this._project.transitionUserComments(this.tempUserId, "57ba2b02dad01317006f2d0e")
+    this._auth.convertTempUser(this.tempUserId)
       .take(1)
-      .subscribe((project) => {
-        // as far as I know, we don't really need to do anything other than wait for the server to return a successful response
-        // this._router.navigate(['/project', this.tempUserId])
+      .subscribe(() => {
+        // this._router.navigate(['/dashboard'])
       }, (err) => {
         console.error(err)
-        this.errorObject.serverError = "Oh no! Something went wrong, and we aren't sure exactly what."
+        // this._router.navigate(['/dashboard'])
       })
+    // this._project.transitionUserComments(this.tempUserId, "57ba2b02dad01317006f2d0e")
+    //   .take(1)
+    //   .subscribe((project) => {
+    //     // as far as I know, we don't really need to do anything other than wait for the server to return a successful response
+    //     // this._router.navigate(['/project', this.tempUserId])
+    //   }, (err) => {
+    //     console.error(err)
+    //     this.errorObject.serverError = "Oh no! Something went wrong, and we aren't sure exactly what."
+    //   })
   }
 
   /** Makes call to register the user */
@@ -174,20 +182,35 @@ export class RegisterComponent implements OnInit, OnDestroy {
             })
           }
           this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'success' }})
-          if (this.readingToAdd) {
+          if (this.readingToAdd && this.tempUserId) {
             console.log("trying to add reading")
-            // this._router.navigate(['/new-reading'], { queryParams: { copyId: this.readingToAdd } })
-          } else if (this.tempUserId) {
-            console.log("trying to add project")
-            this._project.transitionUserComments(this.tempUserId, data.user._id)
+            this._auth.convertTempUser(this.tempUserId)
               .take(1)
-              .subscribe((project) => {
-                // as far as I know, we don't really need to do anything other than wait for the server to return a successful response
-                // this._router.navigate(['/project', this.tempUserId])
+              .subscribe(() => {
+                this._router.navigate(['/new-reading'], { queryParams: { copyId: this.readingToAdd } })
               }, (err) => {
                 console.error(err)
-                this.errorObject.serverError = "Oh no! Something went wrong, and we aren't sure exactly what."
+                this._router.navigate(['/new-reading'], { queryParams: { copyId: this.readingToAdd } })
               })
+          } else if (this.tempUserId) {
+            console.log("trying to add project")
+            this._auth.convertTempUser(this.tempUserId)
+              .take(1)
+              .subscribe(() => {
+                this._router.navigate(['/dashboard'])
+              }, (err) => {
+                console.error(err)
+                this._router.navigate(['/dashboard'])
+              })
+            // this._project.transitionUserComments(this.tempUserId, data.user._id)
+            //   .take(1)
+            //   .subscribe((project) => {
+            //     // as far as I know, we don't really need to do anything other than wait for the server to return a successful response
+            //     // this._router.navigate(['/project', this.tempUserId])
+            //   }, (err) => {
+            //     console.error(err)
+            //     this.errorObject.serverError = "Oh no! Something went wrong, and we aren't sure exactly what."
+            //   })
           } else {
             console.log("don't know what to do!")
             // this._router.navigate(['/dashboard'])
