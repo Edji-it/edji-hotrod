@@ -232,29 +232,4 @@ export class ProjectService {
             .toPromise()
             .then(this._auth.extractData);
     }
-
-    public transitionUserComments(oldId: string, newId: string): Observable<any> {
-        if (this.project && this.project.comments) {
-            let project = Object.assign({}, this.project)
-            console.log(project)
-            project.comments.forEach((comment) => {
-                if (comment.user_id == oldId) {
-                    comment.user_id = newId
-                }
-            })
-
-            // return this.update(this.project, this.project._id)
-            return this.http.post([this._auth.getUrl(), 'projects', project._id].join("/"), { project: { comments: project.comments }}, this._auth.getOptions())
-                .map((res) => {
-                    if (res && res.json()) {
-                        this.project = res.json().project
-                        this.currentProjectSource.next(this.project)
-                        return this.project
-                    }
-                })
-
-        } else {
-            throw new Error("No project currently available in memory")
-        }
-    }
 }
