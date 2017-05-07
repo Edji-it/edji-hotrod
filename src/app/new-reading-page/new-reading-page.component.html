@@ -5,19 +5,18 @@
         <div class="col-sm-12">
             <h1>{{ reading._id ? 'Edit Reading' : 'New Reading' }}</h1>
 
-
              <form [formGroup]="readingForm" (ngSubmit)="onSubmit(readingForm.value)">
-                <div  class="reading-page">
-                    <div class="form-group offset-label--wrap">
-                        <label class="border-wrap">
-                            <span class="offset-label">Title</span>
-                            <input type="text" id="readingTitle" class="form-control form-item--seamless h1 input-noborder mTitle" placeholder="Reading Title..." [formControl]="readingForm.controls['title']"/>
+                <div class="reading-page">
+                    <div class="form-group">
+                        <label>
+                            <span>Title</span>
+                            <input type="text" id="readingTitle" class="form-control h1 form-item--editor mTitle" placeholder="Reading Title..." [formControl]="readingForm.controls['title']"/>
                             <div id="errorTitle" *ngIf="readingForm.controls['title'].hasError('required') && (readingForm.controls['title'].dirty || submitted)"  class="alert alert-info">Please give your Reading a title!</div>
                         </label>
                     </div>
-                    <div class="form-group offset-label--wrap">
-                        <label class="border-wrap">
-                            <span class="offset-label">Content</span>
+                    <div class="form-group" style="position:relative;">
+                        <label>
+                            <span>Content</span>
                             <medium-editor
                                 [(editorModel)]="readingHtml"
                                 [editorOptions]="mediumEditorConfig"
@@ -27,6 +26,7 @@
                             <div id="errorContent" *ngIf="submitted && readingIsBlank"  class="alert alert-info">Please give your Reading some text!</div>
                         </label>
                         <div class="editor-button-bar">
+                            <!--<span class="editor-button-bar__title">Insert</span>-->
                             <a id="buttonUploadImage" class="btn btn-icon--plain" (click)="showUploadModal = true">
                                 <img title="Add Picture" class src="/assets/images/icon-picture.svg" />
                             </a>
@@ -35,29 +35,21 @@
                             </a>
                         </div>
                     </div>
-                    <div class="form-group offset-label--wrap">
-                        <label class="border-wrap ">
-                            <span class="offset-label" title="Optionally link to where this Reading came from!">Link to Source
-                            </span>
+                    <div class="form-group">
+                        <label>
+                            Source
+                            <p class="sub-label">(Optional) Provide a link or title for the source this text came from</p>
                             <div class="input-group">
-                                <input type="url" id="readingSource" class="form-control form-item--seamless h3 mSource" placeholder="New Reading Source..." [formControl]="readingForm.controls['source']" />
-                                <i class="input-group-tooltip icon__tooltip" placement="left" ngbTooltip="Keep a link to the source, so you don't lose it!">
-                                    <i class="icon icon-circle icon-info">i</i>
-                                </i>
+                                <input type="text" id="readingSource" class="form-control form-item--editor h3 mSource" placeholder="New Reading Source..." [formControl]="readingForm.controls['source']" />
                             </div>
                         </label>
                     </div>
-                    <div class="form-group offset-label--wrap">
-                        <label class="border-wrap ">
-                            <span class="offset-label hidden-sm-down" title="First Group you will share this Reading with ">First Group
-                            </span>
-                            <span class="offset-label hidden-md-up groupLabel" title="First Group you will share this Reading with ">Group Name
-                            </span>
+                    <div class="form-group">
+                        <label>
+                            First Group
+                            <p class="sub-label">Name for the first Group you will share this Reading with</p>
                             <div class="input-group">
-                                <input type="text" id="firstProjectLabel" class="form-control form-item--seamless h3 mGroup" placeholder="eg. First Period, Peer review..." [formControl]="readingForm.controls['label']" />
-                                <i class="input-group-tooltip icon__tooltip" placement="left" ngbTooltip="What should the first copy you share be labeled?">
-                                    <i class="icon icon-circle icon-info">i</i>
-                                </i>
+                                <input type="text" id="firstProjectLabel" class="form-control form-item--editor h3 mGroup" placeholder="eg. First Period, Peer review..." [formControl]="readingForm.controls['label']" />
                             </div>
                             <div id="errorGroupLabel" *ngIf="readingForm.controls['label'].hasError('required') && (readingForm.controls['label'].dirty || submitted)"  class="alert alert-info">Please pick a name for your first Reading Group!</div>
                         </label>

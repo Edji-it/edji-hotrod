@@ -238,6 +238,32 @@ input.form-item--seamless {
 	}
 }
 
+input.form-item--editor {
+  background: $editorBg;
+  border: $editorBorder;
+  color: #000;
+  border-radius: 0px;
+
+  &:hover {
+    background: mix($editorBg, $editorActiveBg);
+    border: $editorBorder;
+  }
+
+  &:active, &:focus, &.active  {
+    border: $editorActiveBorder;
+    background: $editorActiveBg;
+  }
+
+  &:hover, &:active, &:focus, &.active {
+		transform: scale(1);
+		box-shadow: none;
+	}
+
+  @include placeholder {
+		color: #999;
+	}
+}
+
 input.form-item--underline {
 	background: transparent;
 	border: none;
