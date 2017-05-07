@@ -32,7 +32,7 @@ $base-z-index: 0;
 $blue: rgb(0, 162, 245);
 $dark-gray: #333;
 $medium-gray: #999;
-$light-gray: #ddd;
+$light-gray: #f9f9f9;
 
 // Font Colors
 $base-font-color: $dark-gray;
@@ -61,6 +61,19 @@ $secondary-background-color: tint($base-border-color, 75%);
 // Forms
 $form-box-shadow: inset 0 1px 3px rgba(#000, 0.06);
 $form-box-shadow-focus: $form-box-shadow, 0 0 5px adjust-color($action-color, $lightness: -5%, $alpha: -0.3);
+
+// Reading Typography
+$readingFontSize: 16px;
+$readingLineHeight: 30px;
+$readingH1Size: 24px;
+$readingH2Size: 20px;
+$readingH3Size: 18px;
+
+// Reading Editor 
+$editorBg: #f5f5f5;
+$editorActiveBg: #fafafa;
+$editorBorder: 1px solid transparent;
+$editorActiveBorder: 1px solid $gray;
 
 // Animations
 $base-duration: 150ms;

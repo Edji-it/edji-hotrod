@@ -2,15 +2,37 @@
 
 .editor-button-bar {
     position: absolute;
-    left: 0px;
-    width: 85px;
-    top: 0;
+    // left: 0px;
+    right: calc(100% + 10px);
+    width: 50px;
+    top: 34px;
     display: block;
-    text-align: right;
-    padding: 15px;
+    text-align: center;
+    padding: 0px;
+    border: 1px solid $midGray;
+
+    @media(max-width: $medium-screen) {
+		padding-left: 60px;
+	}
+
+    & .editor-button-bar__title {
+        font-family: $base-font-family;
+        font-size: 10px;
+        line-height: 1em;
+        letter-spacing: 1px;
+        color: #c0c0c0;
+        padding: 5px 0px;
+    }
 
     & .btn {
-        margin: 12px 0px 0px 0px;
+        border-radius: 0px;
+        width: 100%;
+        padding: 10px 5px;
+        border-top:  1px solid $midGray;
+
+        &:first-of-type {
+            border-top: none;
+        }
 
         & img {
             height: auto;
@@ -19,10 +41,14 @@
     }
 }
 
+.form-item--editor {
+  margin-bottom: 0px !important;
+}
+
 /* Mobile Optimization */
 @media (max-width: $tablet) {
 	.editor-button-bar {
-		width: inherit;
+		width: 35px;
         padding: 12px 0;
 	}
     .mTitle {

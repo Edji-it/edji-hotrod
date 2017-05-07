@@ -14,8 +14,8 @@ export class LoginForm {
   // other variables
   public studentUser      = 'student';
   public studentPassword  = 'student';
-  public teacherUser      = 'teach';
-  public teacherPassword  = 'teach';
+  public teacherUser      = 'testowner';
+  public teacherPassword  = 'testowner16';
   public invalidEntry     = 'HitlerHatesEDJI_666_420';
   public validProjectCode = '35jz';
   public testGuestName    = "Queen Elizabeth II";

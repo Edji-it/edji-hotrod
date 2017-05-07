@@ -94,7 +94,7 @@ $tablet-width: 768px;
 
 
 @mixin phone {
-  @media (min-width: #{$phone-width-min}) and (max-width: #{$tablet-width - 1px}) {
+  @media (min-width: #{$phone-width-min}) and (max-width: #{$tablet-width}) {
     @content;
   }
 }

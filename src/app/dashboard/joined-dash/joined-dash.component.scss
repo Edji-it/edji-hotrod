@@ -2,29 +2,29 @@
 
 /*styles for dashboard content only*/
 /* Push and Pull styles that aren't loading in for some reason */
-@media (min-width: #{$tablet - 1px}) {
+@media (min-width: #{$tablet}) {
     .col-sm-push-6 {
         left: 50%;
     }
 }
-@media (min-width: #{$tablet - 1px}) {
+@media (min-width: #{$tablet}) {
     .col-sm-6 {
         width: 50%;
     }
 }
-@media (min-width: #{$tablet - 1px}) {
+@media (min-width: #{$tablet}) {
     .col-sm-pull-6 {
         right: 50%;
     }
 }
-@media (min-width: #{$tablet - 1px}) {
+@media (min-width: #{$tablet}) {
     .col-sm-6 {
         width: 50%;
     }
 }
 
 /* Adding margin to spread out the two columns */
-@media (max-width: #{$tablet - 1px}) {
+@media (max-width: #{$tablet}) {
     .col-sm-pull-6 {
         margin-top: 50px;
     }
@@ -55,7 +55,7 @@
 }
 
 /* Mobile Optimization */
-@media (max-width: #{$tablet - 1px}) {
+@media (max-width: #{$tablet}) {
     .joined-header {
         display: none;
     }

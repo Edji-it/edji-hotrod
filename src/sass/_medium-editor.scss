@@ -37,7 +37,14 @@ $editorToolbarBg: #fff;
 }
 
 .medium-editor-placeholder {
-	color: $seamlessPlaceholderColor;
+	color: #999;
+
+  &:after {
+    font-style: normal;
+    font-weight: 400;
+    font-size: $readingFontSize;
+    line-height: $readingLineHeight;
+  }
 }
 
 .medium-toolbar-arrow-under:after, .medium-toolbar-arrow-over:before {
@@ -71,7 +78,7 @@ $editorToolbarBg: #fff;
 }
 
 /* Mobile Optimization */
-@media (max-width: #{$tablet - 1px}) {
+@media (max-width: #{$tablet}) {
   .medium-editor-placeholder {
     font-size: 14px;
   }
@@ -80,6 +87,13 @@ $editorToolbarBg: #fff;
 // Override Pasted Styles
 
 .medium-editor-element {
+  background: $editorBg;
+  padding: 20px;
+  margin-top: 4px;
+  font-size: $readingFontSize;
+	line-height: $readingLineHeight;
+  border: $editorBorder;
+
   & * {
     position: static !important;
   }
@@ -93,6 +107,15 @@ $editorToolbarBg: #fff;
     display: block !important;
     margin: 0 auto !important;
     cursor: move;
+  }
+
+  &:hover {
+    background: mix($editorBg, $editorActiveBg);
+  }
+
+  &:active, &:focus  {
+    border: $editorActiveBorder;
+    background: $editorActiveBg;
   }
 }
 
