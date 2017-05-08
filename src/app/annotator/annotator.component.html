@@ -35,12 +35,12 @@
 			<!--Mobile buttons-->
 			<button *ngIf="project.types.indexOf('emoji') > -1" id="addEmojiComment" 
 				class="emoji hidden-lg-up" 
-				(click)="addEmojiComment($event)" 
+				(tap)="addEmojiComment($event)" 
 				[innerHtml]="':thinking_face:' | emojione"></button>
 			<button *ngIf="project.types.indexOf('text') > -1" 
 				class="emoji hidden-lg-up" 
 				id="addTextComment" 
-				(click)="addTextComment($event)" 
+				(tap)="addTextComment($event)" 
 				[innerHtml]="':writing_hand:' | emojione"></button>
 		</div>
 	</div>
