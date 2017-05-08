@@ -128,26 +128,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
     return emailRe.test(control.value) ? null : { 'emailIncorrect': true }
   }
 
-  private testSomething() {
-    this._auth.convertTempUser(this.tempUserId)
-      .take(1)
-      .subscribe(() => {
-        // this._router.navigate(['/dashboard'])
-      }, (err) => {
-        console.error(err)
-        // this._router.navigate(['/dashboard'])
-      })
-    // this._project.transitionUserComments(this.tempUserId, "57ba2b02dad01317006f2d0e")
-    //   .take(1)
-    //   .subscribe((project) => {
-    //     // as far as I know, we don't really need to do anything other than wait for the server to return a successful response
-    //     // this._router.navigate(['/project', this.tempUserId])
-    //   }, (err) => {
-    //     console.error(err)
-    //     this.errorObject.serverError = "Oh no! Something went wrong, and we aren't sure exactly what."
-    //   })
-  }
-
   /** Makes call to register the user */
   private register(formValue: any): void {
     // this.clearErrors()
