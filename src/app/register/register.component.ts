@@ -200,20 +200,12 @@ export class RegisterComponent implements OnInit, OnDestroy {
                 this._router.navigate(['/dashboard'])
               }, (err) => {
                 console.error(err)
+                // should also have an error put on the dashboard
                 this._router.navigate(['/dashboard'])
               })
-            // this._project.transitionUserComments(this.tempUserId, data.user._id)
-            //   .take(1)
-            //   .subscribe((project) => {
-            //     // as far as I know, we don't really need to do anything other than wait for the server to return a successful response
-            //     // this._router.navigate(['/project', this.tempUserId])
-            //   }, (err) => {
-            //     console.error(err)
-            //     this.errorObject.serverError = "Oh no! Something went wrong, and we aren't sure exactly what."
-            //   })
           } else {
             console.log("don't know what to do!")
-            // this._router.navigate(['/dashboard'])
+            this._router.navigate(['/dashboard'])
           }
           
         } else {

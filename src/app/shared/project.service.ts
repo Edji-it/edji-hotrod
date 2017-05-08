@@ -241,7 +241,7 @@ export class ProjectService {
      */
     public addUserToProject(projectId: string): Observable<any> {
         return this.http.put(
-            [this._auth.getUrl, 'projects', projectId, 'user_id'].join('/'),
+            [this._auth.getUrl(), 'projects', projectId, 'user_id'].join('/'),
             {},
             this._auth.getOptions()
         )
