@@ -232,4 +232,18 @@ export class ProjectService {
             .toPromise()
             .then(this._auth.extractData);
     }
+
+    /**
+     * API call to add a user (of any type) to the project
+     *  the call can add only the current user to the project
+     * @param projectId The id of the project to which the current user should be added
+     * @returns Observable which will not contain any data
+     */
+    public addUserToProject(projectId: string): Observable<any> {
+        return this.http.put(
+            [this._auth.getUrl, 'projects', projectId, 'user_id'].join('/'),
+            {},
+            this._auth.getOptions()
+        )
+    }
 }
