@@ -1,0 +1,33 @@
+.fixed-feedback-button {
+  position: fixed;
+  right: 25px;
+  bottom: 10px;
+  background: #b7b7b7;
+  transition: transform 0.2s linear;
+  padding: 8px;
+  opacity: 0.8;
+  z-index: 1050;
+}
+
+.fixed-feedback-button:hover {
+  box-shadow: 0px 1px 8px 0px rgba(0,0,0,0.1);
+  transform: scale(1.05);
+  opacity: 1;
+}
+
+.fixed-feedback-button img {
+  width: 30px;
+  height: auto;
+}
+
+/* Mobile Optimization */
+@media (max-width: 767px) {
+  .fixed-feedback-button {
+    right: 10px;
+    bottom: 8px;
+  }
+
+  .fixed-feedback-button img {
+    width: 24px;
+  }
+}
