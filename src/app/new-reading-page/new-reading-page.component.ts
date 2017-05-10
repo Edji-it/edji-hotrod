@@ -127,17 +127,26 @@ export class NewReadingPage implements OnInit {
                 })
     }
 
+    /**
+     * Checks on the content field's cursor position
+     * - Enables inserting images at cursor position
+     */
     private contentChange() {
         let sel = Rangy.getSelection()
         
         if (sel.focusNode) {
             let focusNode = sel.focusNode
-            
-            if (focusNode && focusNode.getAttribute && focusNode.getAttribute('id') == 'angularMediumEditor' && focusNode.querySelector('img')) {
+
+            if (focusNode && focusNode.getAttribute && focusNode.id == 'angularMediumEditor' && focusNode.querySelector('img')) {
+                // If focus is generically on medium editor, it's often caused by cursor inline with a single image, so if there is an image, focus that
                 focusNode = focusNode.querySelector('img')
+            } else if(focusNode && focusNode.getAttribute && focusNode.id == 'angularMediumEditor') {
+                // Otherwise, set focus to the inside of the start of the editor
+                focusNode = focusNode.childNodes[0]
             }
 
             if (typeof focusNode.offsetTop === 'undefined' ) {
+                // Text nodes don't provide an offset, so we need to get the parent
                 focusNode = focusNode.parentNode
             }
 
