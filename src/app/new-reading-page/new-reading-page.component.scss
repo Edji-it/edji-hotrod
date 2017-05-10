@@ -4,7 +4,7 @@
     position: absolute;
     // left: 0px;
     right: calc(100% + 4px);
-    margin-top: -8px;
+    margin-top: 4px;
     width: 50px;
     top: 35px;
     display: block;
@@ -21,7 +21,7 @@
         font-size: 10px;
         line-height: 1em;
         letter-spacing: 1px;
-        color: #c0c0c0;
+        color: #868484;
         padding: 5px 0px;
     }
 
@@ -31,9 +31,9 @@
         padding: 10px 5px;
         border-top:  1px solid $midGray;
 
-        &:first-of-type {
-            border-top: none;
-        }
+        // &:first-of-type {
+        //     border-top: none;
+        // }
 
         & img {
             height: auto;
@@ -45,7 +45,7 @@
         content: '';
         display: block;  
         position: absolute;
-        top: 15px;
+        top: 4px;
         left: calc(100% + 1px);
         width: 0;
         height: 0;
