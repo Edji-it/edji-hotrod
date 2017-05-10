@@ -372,10 +372,15 @@ export class NewReadingPage implements OnInit {
         let imgString = '';
         
         images.forEach(image => {
-            imgString += '<img src="' + image.url + '" title="' + image.title + '" /><br/><p></p>';
+            imgString += '<img src="' + image.url + '" title="' + image.title + '" /><br/><p></p>'
         });
 
-        this.insertAfter(this.insertNode.parentNode, imgString, this.insertNode)
+        if (this.insertNode && this.insertNode.parentNode) {
+            this.insertAfter(this.insertNode.parentNode, imgString, this.insertNode)
+        } else {
+            this.readingHtml += imgString
+        }
+        
     }
 
     /**
