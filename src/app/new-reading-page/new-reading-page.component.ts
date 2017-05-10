@@ -37,6 +37,7 @@ export class NewReadingPage implements OnInit {
     private alert: string = '';
     private showAlert: boolean = false;
     private versionId: string = '';
+    private ownerId: string;
     private copyId: string = '';
 
     // Used for processing reading
@@ -111,6 +112,9 @@ export class NewReadingPage implements OnInit {
                             source: this.reading.source,
                         });
                         this.versionId = this.reading.version_id;
+                        if (this.reading.owner_id) {
+                            this.ownerId = this.reading.owner_id;
+                        }
                     }
                 },
                 err => {
@@ -297,6 +301,9 @@ export class NewReadingPage implements OnInit {
         }
         if (this.versionId) {
             reading.version_id = this.versionId;
+        }
+        if (this.ownerId) {
+            reading.owner_id = this.ownerId;
         }
 
         this._readings.save(reading)
