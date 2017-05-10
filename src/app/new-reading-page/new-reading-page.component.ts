@@ -6,6 +6,7 @@ import { Angulartics2 } from 'angulartics2';
 
 import { ReadingService } from '../shared/reading.service';
 import { ProjectService } from '../shared/project.service';
+import * as Rangy from 'rangy';
 
 @Component({
     selector: 'new-reading-page',
@@ -39,6 +40,9 @@ export class NewReadingPage implements OnInit {
     private versionId: string = '';
     private ownerId: string;
     private copyId: string = '';
+    private static readonly EDITOR_TOOLBAR_Y = 54;
+    private editorToolbarY: number = 54;
+    private insertNode: any;
 
     // Used for processing reading
     private words: any[] = [];
@@ -123,6 +127,19 @@ export class NewReadingPage implements OnInit {
                 })
     }
 
+    private contentChange() {
+        let sel = Rangy.getSelection()
+        
+        if (sel.focusNode) {
+            let focusNode = sel.focusNode
+            if (typeof focusNode.offsetTop === 'undefined' ) {
+                focusNode = focusNode.parentNode
+            }
+            this.insertNode = focusNode
+            this.editorToolbarY = NewReadingPage.EDITOR_TOOLBAR_Y > focusNode.offsetTop ? NewReadingPage.EDITOR_TOOLBAR_Y : focusNode.offsetTop
+        }
+    }
+
     /**
      * Loops through child elements to find textnodes
      * Pushes text nodes as formatted objects into this.words
@@ -158,7 +175,6 @@ export class NewReadingPage implements OnInit {
             
             // If the node is just a break
             if ('tagName' in node && node.tagName.toLowerCase() == 'br') {
-                console.log('break found!');
                 // Add break element
                 this.words.push({
                     str: '',
@@ -344,6 +360,14 @@ export class NewReadingPage implements OnInit {
             );
     }
 
+
+    private insertAfter(parent, htmlString, referenceNode) {
+        var template = document.createElement('template');
+        template.innerHTML = htmlString;
+        parent.insertBefore(template.content.firstChild, referenceNode.nextSibling);
+    }
+
+
     private addImages(images: any[]) {
         let imgString = '';
         
@@ -351,7 +375,7 @@ export class NewReadingPage implements OnInit {
             imgString += '<img src="' + image.url + '" title="' + image.title + '" /><br/><p></p>';
         });
 
-        this.readingHtml += imgString;
+        this.insertAfter(this.insertNode.parentNode, imgString, this.insertNode)
     }
 
     /**

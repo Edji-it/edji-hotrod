@@ -3,9 +3,10 @@
 .editor-button-bar {
     position: absolute;
     // left: 0px;
-    right: calc(100% + 10px);
+    right: calc(100% + 4px);
+    margin-top: -8px;
     width: 50px;
-    top: 34px;
+    top: 35px;
     display: block;
     text-align: center;
     padding: 0px;
@@ -38,6 +39,22 @@
             height: auto;
             width: 25px;
         }
+    }
+
+    &:after, &:before {
+        content: '';
+        display: block;  
+        position: absolute;
+        top: 15px;
+        left: calc(100% + 1px);
+        width: 0;
+        height: 0;
+        border: 8px solid transparent;
+        border-left-color: $midGray;
+    }
+    &:after {
+        left: calc(100% + 0px);
+        border-left-color: white;
     }
 }
 
