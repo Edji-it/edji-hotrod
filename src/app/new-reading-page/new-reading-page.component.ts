@@ -132,9 +132,15 @@ export class NewReadingPage implements OnInit {
         
         if (sel.focusNode) {
             let focusNode = sel.focusNode
+            
+            if (focusNode && focusNode.getAttribute && focusNode.getAttribute('id') == 'angularMediumEditor' && focusNode.querySelector('img')) {
+                focusNode = focusNode.querySelector('img')
+            }
+
             if (typeof focusNode.offsetTop === 'undefined' ) {
                 focusNode = focusNode.parentNode
             }
+
             this.insertNode = focusNode
             this.editorToolbarY = NewReadingPage.EDITOR_TOOLBAR_Y > focusNode.offsetTop ? NewReadingPage.EDITOR_TOOLBAR_Y : focusNode.offsetTop
         }
@@ -369,18 +375,18 @@ export class NewReadingPage implements OnInit {
 
 
     private addImages(images: any[]) {
-        let imgString = '';
-        
-        images.forEach(image => {
-            imgString += '<img src="' + image.url + '" title="' + image.title + '" /><br/><p></p>'
-        });
-
         if (this.insertNode && this.insertNode.parentNode) {
-            this.insertAfter(this.insertNode.parentNode, imgString, this.insertNode)
+            images.forEach(image => {
+                let imgString = '<img src="' + image.url + '" title="' + image.title + '" /><br/><p></p>'
+                this.insertAfter(this.insertNode.parentNode, imgString, this.insertNode)
+            });
         } else {
+            let imgString = '';
+            images.forEach(image => {
+                imgString += '<img src="' + image.url + '" title="' + image.title + '" /><br/><p></p>'
+            });
             this.readingHtml += imgString
         }
-        
     }
 
     /**

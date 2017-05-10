@@ -12,10 +12,6 @@
     padding: 0px;
     border: 1px solid $midGray;
 
-    @media(max-width: $medium-screen) {
-		padding-left: 60px;
-	}
-
     & .editor-button-bar__title {
         font-family: $base-font-family;
         font-size: 10px;
@@ -62,12 +58,18 @@
   margin-bottom: 0px !important;
 }
 
+.medium-wrap {
+    @media (max-width: $tablet) {
+        width: calc(100% - 50px);
+        margin-left: 50px;
+    }
+}
 /* Mobile Optimization */
 @media (max-width: $tablet) {
-	.editor-button-bar {
-		width: 35px;
-        padding: 12px 0;
-	}
+	// .editor-button-bar {
+	// 	width: 35px;
+    //     padding: 12px 0;
+	// }
     .mTitle {
         font-size: 26px;
     }
