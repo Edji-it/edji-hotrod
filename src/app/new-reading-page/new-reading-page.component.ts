@@ -375,21 +375,34 @@ export class NewReadingPage implements OnInit {
             );
     }
 
-
-    private insertAfter(parent, htmlString, referenceNode) {
-        var template = document.createElement('template');
-        template.innerHTML = htmlString;
-        parent.insertBefore(template.content.firstChild, referenceNode.nextSibling);
+    /**
+     * Takes an html string, and inserts it after a given element
+     * @param parent Parent element of referenceNode
+     * @param htmlString String of html content
+     * @param referenceNode Element to insert after
+     */
+    private insertAfter(parent: Element, htmlString: string, referenceNode: Element) {
+        // Create elements from html string
+        let template = document.createElement('template')
+        template.innerHTML = htmlString
+        // Insert elements after referenceNode
+        parent.insertBefore(template.content.firstChild, referenceNode.nextSibling)
+        this.insertNode = referenceNode.nextSibling
     }
 
-
-    private addImages(images: any[]) {
+    /**
+     * Takes an array of objects with a title and a url for an Image, formats, then inserts into reading
+     * @param images Array of image objects to be inserted
+     */
+    private addImages(images: { title: string, url: string }[]) {
         if (this.insertNode && this.insertNode.parentNode) {
+            // If there is a reference node for cursor position, insert at cursor
             images.forEach(image => {
                 let imgString = '<img src="' + image.url + '" title="' + image.title + '" /><br/><p></p>'
                 this.insertAfter(this.insertNode.parentNode, imgString, this.insertNode)
             });
         } else {
+            // If no reference node (field has not been interacted with) insert image at end
             let imgString = '';
             images.forEach(image => {
                 imgString += '<img src="' + image.url + '" title="' + image.title + '" /><br/><p></p>'
