@@ -398,7 +398,9 @@ export class NewReadingPage implements OnInit {
         if (this.insertNode && this.insertNode.parentNode) {
             // If there is a reference node for cursor position, insert at cursor
             images.forEach(image => {
-                let imgString = '<img src="' + image.url + '" title="' + image.title + '" /><br/><p></p>'
+                let imgString = '<img src="' + image.url + '" title="' + image.title + '" />'
+                this.insertAfter(this.insertNode.parentNode, '<p></p>', this.insertNode)
+                this.insertAfter(this.insertNode.parentNode, '<br/>', this.insertNode)
                 this.insertAfter(this.insertNode.parentNode, imgString, this.insertNode)
             });
         } else {
