@@ -99,6 +99,14 @@ label {
   margin-bottom: 8px;
 }
 
+.sub-label {
+  color: $gray;
+  font-family: $base-font-family;
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
 p, h1, h2, h3, h4 {
   &.center {
     text-align: center;

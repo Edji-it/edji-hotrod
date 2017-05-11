@@ -17,7 +17,9 @@ import { AuthService, ProjectService } from '../shared';
   providers: [],
   templateUrl: './login.component.html'
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
+  private subscriptions: Subscription[] = [];
+
   // Set our default values
   private sessionCode: String;
   private loginLoading: Boolean = false;
@@ -33,18 +35,22 @@ export class LoginComponent implements OnInit {
   ) {
     // this makes the window always render scrolled to the top
     this._router.events.subscribe(() => {
-      window.scrollTo(0, 0);
-    });
+      window.scrollTo(0, 0)
+    })
+    
   }
 
   ngOnInit() {
     if (this._auth.getUser().isLoggedIn) {
-      this._router.navigate(['/dashboard']);
+      this._router.navigate(['/dashboard'])
     }
   }
 
   private loginSuccess(): void {
-    this._router.navigate(['/dashboard']);
+    this._router.navigate(['/dashboard'])
   }
 
+  ngOnDestroy() {
+      this.subscriptions.forEach((sub) => { sub.unsubscribe() })
+  }
 }

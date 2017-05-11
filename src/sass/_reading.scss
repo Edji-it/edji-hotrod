@@ -12,10 +12,10 @@ $focusUnderlineWidth: 3px;
 
 article {
 	padding-bottom: 50px;
-	line-height: 30px;
+	line-height: $readingLineHeight;
 	margin-top: 22px;
 	min-height: 90%;
-	font-size: 22px;
+	font-size: $readingFontSize;
 	display: block;
 	position: relative;
 	max-width: 100%;
@@ -406,19 +406,16 @@ article.content .w.h-f {
 .reading-page {
 	// background: #fff;
 	// box-shadow: 0 3px 9px 0 rgba(0,0,0,0.2), 0 0 0 1px rgba(0,0,0,0.04); //0px 2px 3px 0px rgba(0,0,0, 0.1);
-	padding: 40px 60px 50px 35px; 
+	// padding: 40px 60px 50px 35px; 
+	@media(max-width: $medium-screen) {
+		padding-left: 60px;
+	}
 }
 
 /**
  * Reading text styles
  */
 
-
-$readingFontSize: 16px;
-$readingLineHeight: 18px;
-$readingH1Size: 24px;
-$readingH2Size: 20px;
-$readingH3Size: 18px;
 
 /* Each word styling */
 .content p span {
@@ -428,7 +425,7 @@ $readingH3Size: 18px;
 	line-height: 29px;
 } 
 
-.content, article.content {
+.content, article.content, .medium-editor-element {
 	//font-family: 'Georgia', serif;
 	font-family: $base-font-family;
 	font-size: $readingFontSize;

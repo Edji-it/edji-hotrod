@@ -95,4 +95,11 @@
 			[class.mobile-toolbar-offset]="optionsShow"></right-margin-tooltip>
 	</div>
 </div>
+
+<div class="button__row">
+	<button *ngIf="user.type == 'temp'" [routerLink]="['/register']" [queryParams]="{ userId: user._id }" class="btn btn-secondary">Save this reading</button>
+	<button *ngIf="reading && user.type == 'temp'" [routerLink]="['/register']" [queryParams]="{ reading: reading._id, userId: user._id }" class="btn btn-primary">Copy and edit</button>
+	<button *ngIf="reading && user.type != 'temp' && user._id != reading.owner_id" [routerLink]="['/new-reading']" [queryParams]="{ copyId: reading._id }" class="btn btn-primary">Copy and edit</button>
+</div>
+
 <emoji-keyboard [isActive]="isEmojiKeyboardActive()" [currentComment]="activeComment.data" (commentChange)="updateActiveComment($event)" (dismissKeyboard)="inactivateComment()"></emoji-keyboard>

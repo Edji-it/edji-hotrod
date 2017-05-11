@@ -50,7 +50,6 @@ export class ProjectService {
    * @returns observable with project data
    */
   public setCurrentProject(projectCode: string): Observable<any> {
-      console.log( this._auth.getOptions() );
     return this.http.get(this._auth.getUrl() + '/projects/' + projectCode, this._auth.getOptions())
         .map(
             (data) => {
@@ -135,7 +134,7 @@ export class ProjectService {
      * @param updateObj Object which contains all of the parameters to update
      * @param projectId Project id's string
      */
-    public update(updateObj: any, projectId: string) {
+    public update(updateObj: any, projectId: string): Observable<any> {
         return this.http
             .put([this._auth.getUrl(), 'projects', projectId].join("/"), { project: updateObj }, this._auth.getOptions())
             .map((data) => {
@@ -232,5 +231,19 @@ export class ProjectService {
             })
             .toPromise()
             .then(this._auth.extractData);
+    }
+
+    /**
+     * API call to add a user (of any type) to the project
+     *  the call can add only the current user to the project
+     * @param projectId The id of the project to which the current user should be added
+     * @returns Observable which will not contain any data
+     */
+    public addUserToProject(projectId: string): Observable<any> {
+        return this.http.put(
+            [this._auth.getUrl(), 'projects', projectId, 'user_id'].join('/'),
+            {},
+            this._auth.getOptions()
+        )
     }
 }

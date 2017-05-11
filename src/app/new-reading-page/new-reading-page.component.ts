@@ -6,6 +6,7 @@ import { Angulartics2 } from 'angulartics2';
 
 import { ReadingService } from '../shared/reading.service';
 import { ProjectService } from '../shared/project.service';
+import * as Rangy from 'rangy';
 
 @Component({
     selector: 'new-reading-page',
@@ -37,7 +38,11 @@ export class NewReadingPage implements OnInit {
     private alert: string = '';
     private showAlert: boolean = false;
     private versionId: string = '';
+    private ownerId: string;
     private copyId: string = '';
+    private static readonly EDITOR_TOOLBAR_Y = 54;
+    private editorToolbarY: number = 54;
+    private insertNode: any;
 
     // Used for processing reading
     private words: any[] = [];
@@ -111,12 +116,43 @@ export class NewReadingPage implements OnInit {
                             source: this.reading.source,
                         });
                         this.versionId = this.reading.version_id;
+                        if (this.reading.owner_id) {
+                            this.ownerId = this.reading.owner_id;
+                        }
                     }
                 },
                 err => {
                     // TRACK EXCEPTION
                     console.log(err);
                 })
+    }
+
+    /**
+     * Checks on the content field's cursor position
+     * - Enables inserting images at cursor position
+     */
+    private contentChange() {
+        let sel = Rangy.getSelection()
+        
+        if (sel.focusNode) {
+            let focusNode = sel.focusNode
+
+            if (focusNode && focusNode.getAttribute && focusNode.id == 'angularMediumEditor' && focusNode.querySelector('img')) {
+                // If focus is generically on medium editor, it's often caused by cursor inline with a single image, so if there is an image, focus that
+                focusNode = focusNode.querySelector('img')
+            } else if(focusNode && focusNode.getAttribute && focusNode.id == 'angularMediumEditor') {
+                // Otherwise, set focus to the inside of the start of the editor
+                focusNode = focusNode.childNodes[0]
+            }
+
+            if (typeof focusNode.offsetTop === 'undefined' ) {
+                // Text nodes don't provide an offset, so we need to get the parent
+                focusNode = focusNode.parentNode
+            }
+
+            this.insertNode = focusNode
+            this.editorToolbarY = NewReadingPage.EDITOR_TOOLBAR_Y > focusNode.offsetTop ? NewReadingPage.EDITOR_TOOLBAR_Y : focusNode.offsetTop
+        }
     }
 
     /**
@@ -154,7 +190,6 @@ export class NewReadingPage implements OnInit {
             
             // If the node is just a break
             if ('tagName' in node && node.tagName.toLowerCase() == 'br') {
-                console.log('break found!');
                 // Add break element
                 this.words.push({
                     str: '',
@@ -298,6 +333,9 @@ export class NewReadingPage implements OnInit {
         if (this.versionId) {
             reading.version_id = this.versionId;
         }
+        if (this.ownerId) {
+            reading.owner_id = this.ownerId;
+        }
 
         this._readings.save(reading)
             .subscribe(
@@ -337,14 +375,42 @@ export class NewReadingPage implements OnInit {
             );
     }
 
-    private addImages(images: any[]) {
-        let imgString = '';
-        
-        images.forEach(image => {
-            imgString += '<img src="' + image.url + '" title="' + image.title + '" /><br/><p></p>';
-        });
+    /**
+     * Takes an html string, and inserts it after a given element
+     * @param parent Parent element of referenceNode
+     * @param htmlString String of html content
+     * @param referenceNode Element to insert after
+     */
+    private insertAfter(parent: Element, htmlString: string, referenceNode: Element) {
+        // Create elements from html string
+        let template = document.createElement('template')
+        template.innerHTML = htmlString
+        // Insert elements after referenceNode
+        parent.insertBefore(template.content.firstChild, referenceNode.nextSibling)
+        this.insertNode = referenceNode.nextSibling
+    }
 
-        this.readingHtml += imgString;
+    /**
+     * Takes an array of objects with a title and a url for an Image, formats, then inserts into reading
+     * @param images Array of image objects to be inserted
+     */
+    private addImages(images: { title: string, url: string }[]) {
+        if (this.insertNode && this.insertNode.parentNode) {
+            // If there is a reference node for cursor position, insert at cursor
+            images.forEach(image => {
+                let imgString = '<img src="' + image.url + '" title="' + image.title + '" />'
+                this.insertAfter(this.insertNode.parentNode, imgString, this.insertNode)
+                this.insertAfter(this.insertNode.parentNode, '<br/>', this.insertNode)
+                this.insertAfter(this.insertNode.parentNode, '<p></p>', this.insertNode)
+            });
+        } else {
+            // If no reference node (field has not been interacted with) insert image at end
+            let imgString = '';
+            images.forEach(image => {
+                imgString += '<img src="' + image.url + '" title="' + image.title + '" /><br/><p></p>'
+            });
+            this.readingHtml += imgString
+        }
     }
 
     /**

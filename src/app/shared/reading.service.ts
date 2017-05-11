@@ -45,12 +45,8 @@ export class ReadingService {
 
   // Push new or update Reading
   public save(reading: any): Observable<any> {
-    if (!reading['owner_id']) {
-      reading['owner_id'] = this._auth.getUser()._id;
-    }
-    if (!reading['teacher_ids'] || reading['teacher_ids'].length < 1) {
-      reading['teacher_ids'] = [this._auth.getUser()._id];
-    }
+    // DO NOT ADD OWNER_ID OR TEACHER_IDS
+    // The server takes care of all of that by itself
 
     if (reading['_id']) {
       let putReading = {

@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { PRIMARY_OUTLET, Router } from '@angular/router';
-import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
-import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs/Subscription';
-import { Angulartics2 } from 'angulartics2';
+import { Component, OnInit, OnDestroy } from '@angular/core'
+import { PRIMARY_OUTLET, Router, ActivatedRoute } from '@angular/router'
+import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
+import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
+import { Subscription } from 'rxjs/Subscription'
+import { Angulartics2 } from 'angulartics2'
 
-import { AuthService, BumblebeeService, Copy } from './../shared';
+import { AuthService, BumblebeeService, Copy, ProjectService } from './../shared'
 
 @Component({
   selector: 'edji-register',
@@ -25,17 +25,20 @@ import { AuthService, BumblebeeService, Copy } from './../shared';
     }
   `]
 })
-export class RegisterComponent implements OnInit {
-  private registerForm: FormGroup;
-  private registerLoading: boolean = false;
-  private errorObject: any = {
-    duplicateUser: "",
-    serverError: "",
-    badName: ""
-  };
+export class RegisterComponent implements OnInit, OnDestroy {
+  private subscriptions: Subscription[] = []
 
-  // private copy: Copy = new Copy();
-  private userCopy: any;
+  private registerForm: FormGroup
+  private registerLoading: boolean = false
+  private errorObject: {
+    duplicateUser?: string
+    serverError?: string,
+    badName?: string,
+    badUsername?: string
+  } = {}
+
+  // private copy: Copy = new Copy()
+  private userCopy: any
 
   private checkboxCopy = {
     student: "As a student! :writing_hand:",
@@ -46,19 +49,22 @@ export class RegisterComponent implements OnInit {
     other: "Some reason we haven't listed here! :sparkles:"
   }
 
-  constructor(
+  /** The reading id that the user wanted to make a copy of */
+  private readingToAdd: string
+  /** The project id that the user wanted to add to the dashboard */
+  private tempUserId: string
+
+  constructor (
     private _auth: AuthService,
-    private router: Router,
+    private _router: Router,
+    private _project: ProjectService,
+    private route: ActivatedRoute,
     private angulartics: Angulartics2,
     private bumblebee: BumblebeeService,
     private _fb: FormBuilder
   ) {
-    // this makes the window always render scrolled to the top
-    this.router.events.subscribe(() => {
-      window.scrollTo(0, 0);
-    });
 
-    this.userCopy = new Copy().getUserCopy();
+    this.userCopy = new Copy().getUserCopy()
 
     this.registerForm = _fb.group({
       username: [null, Validators.required],
@@ -74,10 +80,21 @@ export class RegisterComponent implements OnInit {
       }, { validator: this.checkboxValidator }),
       password: [null, Validators.compose([Validators.required, Validators.minLength(6)])],
       passwordConfirm: [null, Validators.required],
-    }, { validator: this.passwordsEqual });
+    }, { validator: this.passwordsEqual })
   }
 
   ngOnInit() {
+    // this makes the window always render scrolled to the top
+    this._router.events.subscribe(() => {
+      window.scrollTo(0, 0)
+    })
+
+    this.subscriptions.push(
+      this.route.queryParams.subscribe((queryParams) => {
+        this.readingToAdd = queryParams['reading']
+        this.tempUserId = queryParams['userId']
+      })
+    )
   }
 
   //https://angular.io/docs/ts/latest/api/forms/index/FormGroup-class.html
@@ -86,7 +103,7 @@ export class RegisterComponent implements OnInit {
    */
   private passwordsEqual(group: FormGroup): any {
     return group.get('password').value === group.get('passwordConfirm').value
-      ? null : { mismatch: true };
+      ? null : { mismatch: true }
   }
 
   /**
@@ -94,100 +111,132 @@ export class RegisterComponent implements OnInit {
    * @returns error to FormGroup called 'identity'
    */
   private checkboxValidator(group: FormGroup): any {
-    let valid = false;
+    let valid = false
     for(let control in group.controls) {
       if (group.controls[control].value === true) {
-        valid = true;
+        valid = true
       }
     }
-    return valid ? null : { identity: true };
+    return valid ? null : { identity: true }
   }
 
   /** Validates email against the same regex used on the server
    * @returns error which should be assigned to the email input
    */
   private emailValidator(control: FormControl): any {
-    let emailRe: RegExp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    return emailRe.test(control.value) ? null : { 'emailIncorrect': true };
+    let emailRe: RegExp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+    return emailRe.test(control.value) ? null : { 'emailIncorrect': true }
   }
 
   /** Makes call to register the user */
   private register(formValue: any): void {
-    this.clearErrors();
+    // this.clearErrors()
+    console.log("trying to register")
 
-    this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'attempt' }});
+    this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'attempt' }})
 
-    this.registerLoading = true;
+    this.registerLoading = true
 
-    formValue.identities = [];
+    formValue.identities = []
     for(let field in formValue.checkboxes) {
       if (formValue.checkboxes[field]) {
-        formValue.identities.push(field); // the name of the field gets added to the array, making it important to name the fields properly
+        formValue.identities.push(field) // the name of the field gets added to the array, making it important to name the fields properly
       }
     }
 
-    delete formValue.checkboxes; // we don't want to store the checkboxes object
+    delete formValue.checkboxes // we don't want to store the checkboxes object
 
     this._auth.register(formValue)
       .take(1)
       .subscribe((data) => {
-        this.registerLoading = false;
+        this.registerLoading = false
         if (data.user) {
-          if (this._auth.getEnv() === "prod") { this.bumblebee.sendUserDetails(data.user); }
-          data.user.username && this.angulartics.setUsername.next(data.user.username);
-          data.user.email && this.angulartics.setUserProperties.next({ email: data.user.email});
+          if (this._auth.getEnv() === "prod") { this.bumblebee.sendUserDetails(data.user) }
+          data.user.username && this.angulartics.setUsername.next(data.user.username)
+          data.user.email && this.angulartics.setUserProperties.next({ email: data.user.email})
           if (data.user.identities) {
             data.user.identities.forEach((identity) => {
-              let userProperty: any = {};
-              userProperty[identity] = true;
-              this.angulartics.setUserProperties.next(userProperty);
+              let userProperty: any = {}
+              userProperty[identity] = true
+              this.angulartics.setUserProperties.next(userProperty)
             })
           }
-          this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'success' }});
-          this.router.navigate(['dashboard']);
+          this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'success' }})
+          if (this.readingToAdd && this.tempUserId) {
+            console.log("trying to add reading")
+            this._auth.convertTempUser(this.tempUserId)
+              .take(1)
+              .subscribe(() => {
+                this._router.navigate(['/new-reading'], { queryParams: { copyId: this.readingToAdd } })
+              }, (err) => {
+                console.error(err)
+                this._router.navigate(['/new-reading'], { queryParams: { copyId: this.readingToAdd } })
+              })
+          } else if (this.tempUserId) {
+            console.log("trying to add project")
+            this._auth.convertTempUser(this.tempUserId)
+              .take(1)
+              .subscribe(() => {
+                this._router.navigate(['/dashboard'])
+              }, (err) => {
+                console.error(err)
+                // should also have an error put on the dashboard
+                this._router.navigate(['/dashboard'])
+              })
+          } else {
+            console.log("don't know what to do!")
+            this._router.navigate(['/dashboard'])
+          }
+          
         } else {
           // TRACK EXCEPTION... there was no data
-          this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'failure' }});
+          this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'failure' }})
         }
       }, (err) => {
-        this.registerLoading = false;
+        this.registerLoading = false
 
         switch (err.status) {
           case 406:
-            let error = err.json() || {};
+            let error = err.json() || {}
             if (error.validationErrors) {
-              let errorCaught: boolean = false;
+              let errorCaught: boolean = false
               if (error.validationErrors.fullname === "badWords") {
-                this.errorObject.badName = ":anguished: Would you mind choosing another name?";
-                errorCaught = true;
+                this.errorObject.badName = ":anguished: Would you mind choosing another name?"
+                errorCaught = true
               } 
               if (error.validationErrors.username === "badWords") {
-                this.errorObject.badUsername = ":anguished: Would you mind choosing another username?";
-                errorCaught = true;
+                this.errorObject.badUsername = ":anguished: Would you mind choosing another username?"
+                errorCaught = true
               }
               if (!errorCaught) {
-                this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'failure' }});
+                this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'failure' }})
                 // form validation should have caught any other errors
               }
             }
-            break;
+            break
           case 409:
-            this.errorObject.duplicateUser = "<strong>Wow!</strong> :grin: Somebody else liked your username so much that they already took it."; break;
+            this.errorObject.duplicateUser = "<strong>Wow!</strong> :grin: Somebody else liked your username so much that they already took it."
+            break
           default:
-            this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'failure' }});
-            console.log(err);
+            this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'failure' }})
+            this.errorObject.serverError = "Oh no! Something went wrong, and we aren't sure exactly what."
+            console.log(err)
         }
       });
   }
 
-  /**
-   * Clears all errorObject strings to equal empty strings
-   */
-  private clearErrors(): void {
-    for (let property in this.errorObject) {
-      if (this.errorObject.hasOwnProperty(property) && typeof this.errorObject[property] === 'string') {
-        this.errorObject[property] = null;
-      }
-    }
+  // /**
+  //  * Clears all errorObject strings to equal empty strings
+  //  */
+  // private clearErrors(): void {
+  //   for (let property in this.errorObject) {
+  //     if (this.errorObject.hasOwnProperty(property) && typeof this.errorObject[property] === 'string') {
+  //       this.errorObject[property] = null
+  //     }
+  //   }
+  // }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((sub) => { sub.unsubscribe() })
   }
 }

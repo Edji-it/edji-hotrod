@@ -32,7 +32,7 @@ describe('Dashboard Page', () => {
 
     afterEach(() => {
         // navigate back to the dashboard after every test
-        dashboard.getPage();
+        // dashboard.getPage();
     });
 
     afterAll(() => {
@@ -62,6 +62,7 @@ describe('Dashboard Page', () => {
         });
 
         it("should get to a project by entering a code", () => {
+            dashboard.getPage();
             // initial validation
             browser.wait(EC.presenceOf(dashboard.projectCodeInput), 8000, "never saw a project");
 
