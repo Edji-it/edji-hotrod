@@ -41,7 +41,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    if (this._auth.getUser().isLoggedIn) {
+    let user = this._auth.getUser()
+    if (user && user.isLoggedIn) {
       this._router.navigate(['/dashboard'])
     }
   }

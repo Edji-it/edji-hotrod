@@ -313,9 +313,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 lastDone: Date.now()
             };
         } else {
-            user.prefs.onboarding.highlighting['lastDone'] = Date.now();
-            if (!user.prefs.onboarding.highlighting['firstDone']) {
-                user.prefs.onboarding.highlighting['firstDone'] = Date.now();
+            user.prefs.onboarding.highlighting.lastDone = Date.now();
+            if (!user.prefs.onboarding.highlighting.firstDone) {
+                user.prefs.onboarding.highlighting.firstDone = Date.now();
             }
         }
         this._auth.updateUser(user)

@@ -5,6 +5,8 @@ import { Observable, BehaviorSubject } from 'rxjs/Rx';
 import 'rxjs/add/operator/toPromise';
 import { Locker } from 'angular2-locker';
 
+import { User } from './datatypes'
+
 @Injectable()
 export class AuthService implements CanActivate {
     private baseUrl = "http://localhost:3354";
@@ -12,7 +14,7 @@ export class AuthService implements CanActivate {
     private locker: Locker;
     private ENV: string = "dev";
 
-    private user: any;
+    private user: User;
     private currentUserSource: BehaviorSubject<any>;
     private currentUser: Observable<any>;
 
@@ -96,10 +98,11 @@ export class AuthService implements CanActivate {
     /**
      * Gets user object from local storage
      */
-    public getUser(): any {
-        let user: any = this.locker.get('user');
+    public getUser(): User {
+        let user: User = this.locker.get('user');
         if (!user) {
-            user = {
+            // this kind of navigates around our interface... but oh well
+            user = <User>{
                 _id: "",
                 fullname: "guest",
                 isLoggedIn: false
@@ -144,7 +147,7 @@ export class AuthService implements CanActivate {
 
     private destroyCredentials() {
         this.locker.clear();
-        this.user = { isLoggedIn: false };
+        this.user = <User>{ isLoggedIn: false }
         this.currentUserSource.next(this.user);
     }
 
