@@ -1,4 +1,10 @@
-export interface Comment {
+/** Comment properties we add on the front end */
+export interface Comment extends BaseComment {
+
+}
+
+/** Comment properties we get from the server */
+export interface BaseComment {
   _id: string,
   user_id: string,
   start: number,

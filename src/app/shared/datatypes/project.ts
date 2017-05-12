@@ -1,6 +1,12 @@
 import { Comment } from '.'
 
-export interface Project {
+/** Project properties we add on the front end */
+export interface Project extends BaseProject {
+
+}
+
+/** The project object as it is returned from the server */
+export interface BaseProject {
   _id: string,
   reading_id: string,
   teacher_id: string,
