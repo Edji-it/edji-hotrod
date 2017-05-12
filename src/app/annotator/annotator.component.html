@@ -20,13 +20,13 @@
 		<div class="options">
 			<!--Desktop buttons-->
 			<button *ngIf="project.types.indexOf('emoji') > -1" id="addEmojiComment" 
-				class="emoji hidden-md-down" 
+				class="emoji hidden-md-down hidden-ipad-landscape" 
 				(click)="addEmojiComment($event)" 
 				[innerHtml]="':thinking_face:' | emojione"
 				placement="top" 
 				ngbTooltip="Emoji comment"></button>
 			<button *ngIf="project.types.indexOf('text') > -1" 
-				class="emoji hidden-md-down" 
+				class="emoji hidden-md-down hidden-ipad-landscape" 
 				id="addTextComment" 
 				(click)="addTextComment($event)" 
 				[innerHtml]="':writing_hand:' | emojione"
@@ -34,11 +34,11 @@
 				ngbTooltip="Text comment"></button>
 			<!--Mobile buttons-->
 			<button *ngIf="project.types.indexOf('emoji') > -1" id="addEmojiComment" 
-				class="emoji hidden-lg-up" 
+				class="emoji hidden-lg-up shown-ipad-landscape" 
 				(tap)="addEmojiComment($event)" 
 				[innerHtml]="':thinking_face:' | emojione"></button>
 			<button *ngIf="project.types.indexOf('text') > -1" 
-				class="emoji hidden-lg-up" 
+				class="emoji  hidden-lg-up shown-ipad-landscape" 
 				id="addTextComment" 
 				(tap)="addTextComment($event)" 
 				[innerHtml]="':writing_hand:' | emojione"></button>
