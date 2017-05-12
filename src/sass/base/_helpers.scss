@@ -45,3 +45,21 @@
     overflow:hidden;
     position: relative;
 }
+
+.hidden-ipad-landscape {
+    &, &[class^='hidden-'] {
+        @media only screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape) {
+            /* For landscape layouts only */
+            display: none !important;
+        }
+    }
+}
+
+.shown-ipad-landscape {
+    &, &[class^='hidden-'] {
+        @media only screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape) {
+            /* For landscape layouts only */
+            display: block !important;
+        }
+    }
+}
