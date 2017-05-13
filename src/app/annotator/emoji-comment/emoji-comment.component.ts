@@ -1,5 +1,7 @@
-import { document } from '@angular/platform-browser/src/facade/browser';
-import { Component, EventEmitter, HostListener, Input, OnInit, Output, ViewChild, ViewRef } from '@angular/core';
+import { document } from '@angular/platform-browser/src/facade/browser'
+import { Component, EventEmitter, HostListener, Input, OnInit, Output, ViewChild, ViewRef } from '@angular/core'
+
+import { Comment } from './../../shared/datatypes'
 
 @Component({
     selector: 'emoji-comment',
@@ -8,11 +10,10 @@ import { Component, EventEmitter, HostListener, Input, OnInit, Output, ViewChild
 })
 export class EmojiCommentComponent implements OnInit {
 
-    @Input() private comment: any;
-    // @Input() private isActive: boolean;
+    @Input() private comment: any
     
     constructor() { 
-        // console.log(emojiA);
+        // console.log(emojiA)
     }
 
     ngOnInit() { 

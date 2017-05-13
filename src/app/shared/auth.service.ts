@@ -116,7 +116,6 @@ export class AuthService implements CanActivate {
     }
 
     public getCurrentUser(): Observable<any> {
-        console.log(this.user);
         return this.currentUser;
     }
 
@@ -217,7 +216,6 @@ export class AuthService implements CanActivate {
      * - Cannot be passed password
      */
     public updateUser(updatedUser: any): Observable<any> {
-        console.log('updated user', updatedUser)
         return new Observable(observer => {
             //observer.next(true);  
             // Before we update the user, make sure we have the latest copy
@@ -231,7 +229,6 @@ export class AuthService implements CanActivate {
                         let propA = propsToCheck[n]
                         for (let prop in mergedUser[propA]) {
                             if (mergedUser[propA][prop] && Object.prototype.toString.call(mergedUser[propA][prop]) === '[object Array]') {
-                                console.log("found prop thats array")
                                 if (updatedUser[propA] && updatedUser[propA][prop]) {
                                     mergedUser[propA][prop] = updatedUser[propA][prop].concat(mergedUser[propA][prop])
                                     let a = mergedUser[propA][prop]
@@ -246,20 +243,17 @@ export class AuthService implements CanActivate {
                                                 }
                                             } else {
                                                 if (a[i] === a[j]) {
-                                                    console.log('delete duplicate')
                                                     a.splice(j--, 1);
                                                 }
                                             }
                                         }
                                     }
-                                    console.log("done: ", a)
                                 }
                             } else if (mergedUser[propA][prop] && updatedUser[propA]) {
                                 mergedUser[propA][prop] = updatedUser[propA][prop]
                             }
                         }
                     }
-                    console.log(mergedUser)
 
                     this.http.put( this.baseUrl + '/users', {
                             user: mergedUser
@@ -286,7 +280,7 @@ export class AuthService implements CanActivate {
                 }, 
                 error => {
                     observer.error(error)
-                    console.log(error)
+                    console.error(error)
                 })
         });
     }

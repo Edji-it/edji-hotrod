@@ -1,6 +1,9 @@
 /** Comment properties we add on the front end */
 export interface Comment extends BaseComment {
-
+  lineCount: number,
+  expanded: boolean,
+  project_id: string,
+  active: boolean
 }
 
 /** Comment properties we get from the server */
@@ -21,3 +24,11 @@ export interface BaseComment {
 //   emojiComment = 0,
 //   textComment
 // }
+
+/** Used to control permissions on altering comment data */
+export enum CommentPermissions {
+  READ = 1,
+  DELETE = 3,
+  EDIT = 5,
+  ADMIN = 10
+}
