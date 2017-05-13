@@ -1,12 +1,22 @@
-<side-bar></side-bar>
+<side-bar [pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'" [canPublish]="true" (saveAction)="saveReading($event, readingForm.value)" (shareAction)="shareReading($event, readingForm.value)"></side-bar>
 
 <div class="container container--side-bar">
     <div class="row">
         <div class="col-sm-12">
-            <h1>{{ reading._id ? 'Edit Reading' : 'New Reading' }}</h1>
+            <!--<h1>{{ reading._id ? 'Edit Reading' : 'New Reading' }}</h1>-->
 
-             <form [formGroup]="readingForm" (ngSubmit)="onSubmit(readingForm.value)">
+             <form [formGroup]="readingForm" >
                 <div class="reading-page">
+                    <!--Error and Success messaging-->
+                    <p class="alert alert-warning" *ngIf="error.length > 0">{{ error }}</p>
+                    <div class="alert alert-success alert-readings alert-dismissable" role="alert" *ngIf="showAlert">
+                        <a href="#" class="close" (click)="showAlert=false">×</a>
+                        {{ successObject.readingSuccess }}
+                    </div>
+                    <div class="alert alert-danger alert-readings" role="alert" *ngIf="errorObject.readingError">
+                        {{ errorObject.readingError }}
+                    </div>
+
                     <div class="form-group">
                         <label>
                             <span>Title</span>
@@ -57,24 +67,13 @@
                             <div id="errorGroupLabel" *ngIf="readingForm.controls['label'].hasError('required') && (readingForm.controls['label'].dirty || submitted)"  class="alert alert-info">Please pick a name for your first Reading Group!</div>
                         </label>
                     </div>
-
-                    <!--Error and Success messaging-->
-                    <p class="alert alert-warning" *ngIf="error.length > 0">{{ error }}</p>
-                    <div class="alert alert-success alert-readings alert-dismissable" role="alert" *ngIf="showAlert">
-                        <a href="#" class="close" (click)="showAlert=false">×</a>
-                        {{ successObject.readingSuccess }}
-                    </div>
-                    <div class="alert alert-danger alert-readings" role="alert" *ngIf="errorObject.readingError">
-                        {{ errorObject.readingError }}
-                    </div>
-
                     <!--Show time last saved-->
                     <!--<div class="reading-time" *ngIf="reading._id && reading.updatedAt" [innerHtml]="showDate(reading.updatedAt)"></div>-->
 
-                    <div class="button__row">
+                    <!--<div class="button__row">
                         <button id="saveDraftButton" type="submit" class="btn btn-info btn_row" [class.loading]="addLoadingD" [class.disabled]="addLoadingP" title="Save as Draft">{{ reading._id && !reading.version_id ? 'Update Draft' : 'Save as Draft' }}</button>
                         <button id="addReadingButton" type="button" class="btn btn-primary btn_row" [class.loading]="addLoadingP" [class.disabled]="addLoadingD" title="Add Reading" (click)="this.isDraft=false;onSubmit(readingForm.value)">Publish</button>
-                    </div>
+                    </div>-->
                 </div>
              </form>
         </div>

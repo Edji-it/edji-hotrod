@@ -273,6 +273,19 @@ export class NewReadingPage implements OnInit {
         }
     }
 
+    private saveReading(event, form) {
+        this.isDraft = true
+        this.onSubmit(form)
+    }
+
+    private shareReading(groupOptions, form) {
+        // Handle group options passed back from Nav
+
+        // No longer draft!
+        this.isDraft = false
+        this.onSubmit(form)
+    }
+
     /**
      * Runs on form submit, and processes reading before calling service
      *  @param form Passed from the HTML form element

@@ -1,9 +1,11 @@
 
 $btnBg: #969696;
-$btnPrimaryBg: $green; //#7fd9fc;
-$btnPrimaryColor: $dark-gray;
+$btnActionBg: $green;
+$btnActionColor: #606060;
+$btnPrimaryBg: $blue; //#7fd9fc;
+$btnPrimaryColor: #fff;
 $btnSecondaryBg: #E6E6E6;
-$btnSecondaryColor: $dark-gray;
+$btnSecondaryColor: #606060;
 $btnSecondaryBorder: none; //1px solid rgba(0,0,0,0.05);
 $btnSuccessBg: #46c78e; //#7fd9fc;
 $btnSuccessColor: #fff;
@@ -152,13 +154,14 @@ button, .button, .btn { //, [class*='btn']
   &:hover, &:active, &:focus {
     background: desaturate(darken($btnPrimaryBg, 20%), 20%); 
   }
+}
 
-  &:disabled {
-    // background: $btnPrimaryBg !important;
+.btn.btn-action {
+  background: $btnActionBg;
+  color: $btnActionColor;
 
-    &:hover, &:active, &:focus {
-      // background: $btnPrimaryBg;
-    }
+  &:hover, &:active, &:focus {
+    background: desaturate(darken($btnActionBg, 20%), 20%); 
   }
 }
 

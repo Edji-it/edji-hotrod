@@ -11,6 +11,11 @@
 			<!--<img id="logoPressed" src="assets/images/logo-pressed.svg" />-->
 		</a>
 
+		<!--Optional Title-->
+		<div class="side-bar__heading">
+			<h1 *ngIf="pageTitle" class="hidden-sm-down">{{ pageTitle }}</h1>
+		</div>
+
 		<!--Comment Stats pane-->
 		<button *ngIf="currentProject && user._id == currentProject.teacher_id && hasCommentCount" type="button" class="btn btn-clear side-bar__icon-button btn-cmt" aria-label="Comment Counts" (click)="showCommentCounts = !showCommentCounts" style="width: 70px;">
 			<img *ngIf="isMobile" style="width: 50px;" src="assets/images/icon-comment.svg" />
@@ -33,9 +38,9 @@
 			<a class="link" tabindex="1" id="logOutButton" (click)="logout()" [innerHtml]="'Log Out'"></a>
 		</div>
 
-		<button class="btn btn-primary side-bar__btn">Share</button>
+		<button *ngIf="canPublish" class="btn btn-action side-bar__btn" (click)="shareAction.emit()">Share</button>
 
-		<button class="btn btn-secondary side-bar__btn">Save</button>
+		<button *ngIf="canPublish" class="btn btn-secondary side-bar__btn"  (click)="saveAction.emit()">Save</button>
 	</div>
 
 	<div class="sliding-pane mid-bar from-left" [ngClass]="{ 'slide-in' : showCommentCounts }">
@@ -54,4 +59,7 @@
 			</div>
 		</div>
 	</div>
+
+	<!--Mobile display for title-->
+	<h1 *ngIf="pageTitle" class="hidden-md-up mobile-heading">{{ pageTitle }}</h1>
 </div>

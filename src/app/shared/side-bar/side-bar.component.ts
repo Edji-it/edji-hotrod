@@ -1,6 +1,7 @@
 import { Router } from '@angular/router';
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Subscription } from 'rxjs/Rx';
+import { EventEmitter } from '@angular/forms/src/facade/async';
 
 import { AuthService } from '../auth.service';
 import { ProjectService, SocketService, PowerToggle } from '..';
@@ -12,7 +13,12 @@ import { ProjectService, SocketService, PowerToggle } from '..';
 })
 export class SideBarComponent implements OnInit, OnDestroy {
     @Input() hasCommentCount: boolean;
+    @Input() canPublish: boolean;
+    @Input() pageTitle: string;
     
+    @Output() saveAction: EventEmitter<any> = new EventEmitter()
+    @Output() shareAction: EventEmitter<any> = new EventEmitter()
+
     private user: any;
     private currentProject: any;
     private commentStats: any = {};
