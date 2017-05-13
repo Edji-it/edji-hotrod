@@ -3,8 +3,7 @@ import { Component, EventEmitter, Input, OnInit, Output, SimpleChange, ElementRe
 import { Angulartics2 } from 'angulartics2'
 
 import { ProjectService } from '../../shared/project.service'
-import { CommentPermissions } from '.'
-import { Comment } from './../../shared/datatypes'
+import { Comment, CommentPermissions } from './../../shared/datatypes'
 
 @Component({
   selector: 'edji-comment',
