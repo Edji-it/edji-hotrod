@@ -13,10 +13,10 @@ import { Angulartics2 } from 'angulartics2';
 
 import { ReadingService } from '../shared/reading.service';
 import { ProjectService } from '../shared/project.service';
-import { CommentComponent } from './comment';
+import { CommentComponent } from './comment/comment.component';
 import { AuthService } from '../shared/auth.service';
 import { SocketService } from '../shared/socket.service';
-import { CommentPermissions } from './comment';
+import { CommentPermissions } from './../shared/datatypes';
 
 @Component({
     selector: 'annotator',

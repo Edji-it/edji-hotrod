@@ -41,7 +41,7 @@ export class TextCommentComponent implements OnInit, AfterViewInit {
             console.log('focus')
             // event.preventDefault();
             //this.textComment.nativeElement.value = 'hi'
-            this.textComment.nativeElement.select();
+            this.element.nativeElement.select();
             // this.element.nativeElement.querySelector('#textComment').value = 'hi'
         // }, 3000);
     }
