@@ -27,7 +27,7 @@
                     <div class="form-group medium-wrap" style="position:relative;">
                         <label>
                             <span>Reading Content</span>
-                            <p class="sub-label">Select text to see formatting options, such as bold and italic. Use the insert buttons on the left to add images and PDFs.</p>
+                            <p class="sub-label">Select text to see formatting options. Use the insert buttons on the left to add images and PDFs.</p>
                             <medium-editor
                                 [(editorModel)]="readingHtml"
                                 [editorOptions]="mediumEditorConfig"
@@ -51,7 +51,7 @@
                     <div class="form-group">
                         <label>
                             Source
-                            <p class="sub-label">(Optional) Provide a link or title for the source this text came from.</p>
+                            <p class="sub-label">(Optional) Provide a link or title for the source of the text.</p>
                             <div class="input-group">
                                 <input type="text" id="readingSource" class="form-control form-item--editor h3 mSource" placeholder="New Reading Source..." [formControl]="readingForm.controls['source']" />
                             </div>
