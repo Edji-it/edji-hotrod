@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
-import { Observable } from 'rxjs/Rx';
+import { BehaviorSubject, Observable } from 'rxjs/Rx';
 import 'rxjs/add/operator/toPromise';
 
 import { AuthService } from './auth.service';
+import { Reading } from './datatypes/reading';
 
 @Injectable()
 export class ReadingService {
@@ -14,6 +15,12 @@ export class ReadingService {
   ngOnInit() {
       
   }
+
+  //set up thumbnail observables
+  private readingValue: Reading = <Reading>{};
+  // BehaviorSubjects push last value on subscribe
+  private readingSource: BehaviorSubject<Reading> = new BehaviorSubject(this.readingValue);
+  public currentReading: Observable<Reading> = this.readingSource.asObservable();
 
     // Pull all readings for a user
   public getAll() {
@@ -30,6 +37,10 @@ export class ReadingService {
     return this.http
       .get(this._auth.getUrl() + '/readings/' + id, this._auth.getOptions())
       .map(data => {
+        if (data.json() && data.json()._id) {
+          this.readingValue = data.json()
+          this.readingSource.next(this.readingValue)
+        }
         return data.json()
       });
   }
@@ -60,12 +71,20 @@ export class ReadingService {
       return this.http
               .put(this._auth.getUrl() + '/readings/' + reading['_id'], { reading: putReading }, this._auth.getOptions())
               .map(data => {
+                if (data.json() && data.json().reading) {
+                  this.readingValue = data.json().reading
+                  this.readingSource.next(this.readingValue)
+                }
                 return data.json().reading;
               });
     } else {
       return this.http
               .post(this._auth.getUrl() + '/readings', { reading: reading }, this._auth.getOptions())
               .map(data => {
+                if (data.json() && data.json().reading) {
+                  this.readingValue = data.json().reading
+                  this.readingSource.next(this.readingValue)
+                }
                 return data.json().reading;
               });
     }
