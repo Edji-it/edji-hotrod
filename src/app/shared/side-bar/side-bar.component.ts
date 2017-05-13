@@ -3,8 +3,9 @@ import { Component, Input, OnDestroy, OnInit, Output } from '@angular/core'
 import { Subscription } from 'rxjs/Rx'
 import { EventEmitter } from '@angular/forms/src/facade/async'
 
+import { Project, Reading } from '../datatypes'
 import { AuthService } from '../auth.service'
-import { ProjectService, SocketService, PowerToggle } from '..'
+import { ProjectService, SocketService, PowerToggle, ReadingService } from '..'
 
 @Component({
   selector: 'side-bar',
@@ -21,6 +22,7 @@ export class SideBarComponent implements OnInit, OnDestroy {
 
     private user: any
     private currentProject: any
+    private currentReading: any
     private commentStats: any = {}
     private subscriptions: Subscription[] = []
     private showCommentCounts: boolean = false
@@ -36,7 +38,13 @@ export class SideBarComponent implements OnInit, OnDestroy {
     private groupLabel: string = "Group 1"
     private shareLoading: boolean = false
 
-    constructor(private _auth: AuthService, private _socket: SocketService, private _router: Router, private _projects: ProjectService) {
+    constructor(
+          private _auth: AuthService, 
+          private _socket: SocketService, 
+          private _router: Router, 
+          private _projects: ProjectService,
+          private _readings: ReadingService
+        ) {
 
     }
     
@@ -72,6 +80,18 @@ export class SideBarComponent implements OnInit, OnDestroy {
       } else {
         this.isMobile = false
       }
+
+      this._readings.currentReading.subscribe(
+            reading => {
+                this.currentReading = reading;
+                if (!this.pageTitle) {
+                  this.pageTitle = this.currentReading.title
+                }
+            },
+            error => {
+                console.error(error);
+            }
+        )
 
     }
 
