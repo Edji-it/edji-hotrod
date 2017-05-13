@@ -77,8 +77,8 @@ export class NewReadingPage implements OnInit {
     ) {
         this.readingForm = fb.group({
             title: [null, Validators.required],
-            source: [null, null],
-            label: ['Group 1', Validators.required]
+            source: [null, null]
+            // label: ['Group 1', Validators.required]
         });
     }
 
@@ -278,9 +278,9 @@ export class NewReadingPage implements OnInit {
         this.onSubmit(form)
     }
 
-    private shareReading(groupOptions, form) {
+    private shareReading(groupLabel: string, form) {
         // Handle group options passed back from Nav
-
+        form.label = groupLabel
         // No longer draft!
         this.isDraft = false
         this.onSubmit(form)
@@ -308,7 +308,7 @@ export class NewReadingPage implements OnInit {
         }
 
         // This would be better handled by formcontrols
-        if (!form.title || form.title.length < 1 || this.readingIsBlank || form.label.length < 1) {
+        if (!form.title || form.title.length < 1 || this.readingIsBlank) {
             this.addLoadingD = false;
             this.addLoadingP = false;
             this.error = 'Not quite, please check all the fields!';
@@ -330,7 +330,8 @@ export class NewReadingPage implements OnInit {
         }
 
         // Create reading object to submit based on form object parameter
-        let reading: any = form;
+        let reading: any = Object.assign({},form);
+        delete reading.label
         reading.html = this.readingHtml;
         reading.words = this.words;
 

@@ -1,10 +1,10 @@
-import { Router } from '@angular/router';
-import { Component, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { Subscription } from 'rxjs/Rx';
-import { EventEmitter } from '@angular/forms/src/facade/async';
+import { Router } from '@angular/router'
+import { Component, Input, OnDestroy, OnInit, Output } from '@angular/core'
+import { Subscription } from 'rxjs/Rx'
+import { EventEmitter } from '@angular/forms/src/facade/async'
 
-import { AuthService } from '../auth.service';
-import { ProjectService, SocketService, PowerToggle } from '..';
+import { AuthService } from '../auth.service'
+import { ProjectService, SocketService, PowerToggle } from '..'
 
 @Component({
   selector: 'side-bar',
@@ -12,24 +12,29 @@ import { ProjectService, SocketService, PowerToggle } from '..';
   templateUrl: './side-bar.component.html'
 })
 export class SideBarComponent implements OnInit, OnDestroy {
-    @Input() hasCommentCount: boolean;
-    @Input() canPublish: boolean;
-    @Input() pageTitle: string;
+    @Input() hasCommentCount: boolean
+    @Input() canPublish: boolean
+    @Input() pageTitle: string
     
     @Output() saveAction: EventEmitter<any> = new EventEmitter()
     @Output() shareAction: EventEmitter<any> = new EventEmitter()
 
-    private user: any;
-    private currentProject: any;
-    private commentStats: any = {};
-    private subscriptions: Subscription[] = [];
-    private showCommentCounts: boolean = false;
-    private mNavShow: boolean = false;
-    private isMobile: boolean = false;
+    private user: any
+    private currentProject: any
+    private commentStats: any = {}
+    private subscriptions: Subscription[] = []
+    private showCommentCounts: boolean = false
+    private mNavShow: boolean = false
+    private isMobile: boolean = false
     private powersLoading: {
       heatVision?: boolean
-    } = { };
-    private tooltipPlacement: string = 'right';
+    } = { }
+    private tooltipPlacement: string = 'right'
+    
+    // Group/Share form
+    private submitted: boolean = false
+    private groupLabel: string = "Group 1"
+    private shareLoading: boolean = false
 
     constructor(private _auth: AuthService, private _socket: SocketService, private _router: Router, private _projects: ProjectService) {
 
@@ -39,39 +44,39 @@ export class SideBarComponent implements OnInit, OnDestroy {
       /** Set the current user every time it changes */
       this.subscriptions.push(
           this._auth.getCurrentUser().subscribe((user) => {
-              this.user = user;
+              this.user = user
           })
-      );
+      )
 
       if (this.hasCommentCount) {
         this.subscriptions.push(
           this._projects.currentCommentStats.subscribe(data => {
-            // this.commentStats.users = [];
-            this.commentStats = data;
+            // this.commentStats.users = []
+            this.commentStats = data
           }, error => {
-            console.error(error);
+            console.error(error)
           })
-        );
+        )
 
         this._projects.currentProject.subscribe(project => {
-          this.currentProject = project;
+          this.currentProject = project
         }, error => {
           console.error(error)
-        });
+        })
         
       }
 
       if (window.screen.availWidth < 768) {
-        this.isMobile = true;
+        this.isMobile = true
         this.tooltipPlacement = 'bottom'
       } else {
-        this.isMobile = false;
+        this.isMobile = false
       }
 
     }
 
     ngOnDestroy() {
-      this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
+      this.subscriptions.forEach((sub) => { sub.unsubscribe() })
     }
 
     toggleCommentCounts() {
@@ -79,34 +84,44 @@ export class SideBarComponent implements OnInit, OnDestroy {
 
     private togglePower(powerName: string, value: boolean) {
       // set heat vision to loading
-      this.powersLoading.heatVision = true;
+      this.powersLoading.heatVision = true
       setTimeout(() => {
         // stop heat vision loading
-        this.powersLoading.heatVision = false;
-      }, 1000);
+        this.powersLoading.heatVision = false
+      }, 1000)
 
       // Toggle the Heat Vision boolean
-      let updateObj: any = {};
-      updateObj[powerName] = value;
+      let updateObj: any = {}
+      updateObj[powerName] = value
 
       this._projects.update(updateObj, this.currentProject._id)
         .take(1)
         .subscribe((project) => {
           // Live update users once save is successful
-          this._socket.toggleHeatVision({ all: value });
-        });
+          this._socket.toggleHeatVision({ all: value })
+        })
     }
 
     logout() {
-        this._auth.logout();
-        this._router.navigate(['/home']);
+        this._auth.logout()
+        this._router.navigate(['/home'])
     }
 
     mNavShowFlip() {
       if (this.mNavShow === false) {
-        this.mNavShow = true;
+        this.mNavShow = true
       } else {
-        this.mNavShow = false;
+        this.mNavShow = false
       }
+    }
+
+    finalizeReadingAndShare(groupLabel: string) {
+      this.submitted = true
+      this.shareLoading = true
+      if (groupLabel.length < 1) {
+        this.shareLoading = false
+        return
+      }
+      this.shareAction.emit(groupLabel)
     }
 }

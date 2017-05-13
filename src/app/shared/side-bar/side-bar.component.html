@@ -38,7 +38,28 @@
 			<a class="link" tabindex="1" id="logOutButton" (click)="logout()" [innerHtml]="'Log Out'"></a>
 		</div>
 
-		<button *ngIf="canPublish" class="btn btn-action side-bar__btn" (click)="shareAction.emit()">Share</button>
+		<div style="float:right; position: relative; height: 100%;">
+			<button *ngIf="canPublish" class="btn btn-action side-bar__btn" (click)="showShareTooltip = !showShareTooltip" [class.active]="showShareTooltip">
+				Share
+			</button>
+			<div *ngIf="showShareTooltip" class="publish-tooltip">
+					<h1 class="publish-tooltip__title">Publish and Share</h1>
+					<p class="sub-label pb-2">If you think this reading is ready, then publish and share a Group Code!</p>
+					<div class="form-group" style="margin-bottom: 0px;">
+						<label>
+							Group
+							<!--<p class="sub-label">Name for the first Group you will share this Reading with.</p>-->
+							<div class="input-group">
+								<input [ngModel]="groupLabel" type="text" id="firstProjectLabel" class="form-control form-item--editor h3 mGroup" placeholder="eg. First Period, Peer review..."  />
+							</div>
+							<div id="errorGroupLabel" *ngIf="groupLabel.length < 1 && submitted" class="alert alert-info">Please pick a name for your first Reading Group!</div>
+						</label>
+					</div>
+					<button class="btn btn-action" (click)="finalizeReadingAndShare(groupLabel)" [class.loading]="shareLoading">
+						Finalize and Share
+					</button>
+				</div>
+			</div>
 
 		<button *ngIf="canPublish" class="btn btn-secondary side-bar__btn"  (click)="saveAction.emit()">Save</button>
 	</div>

@@ -12,24 +12,22 @@
 .prj-label {
     display: none;
 }
-
-/* Mobile Optimization */
-@media (max-width: #{$tablet}) {
-	.reading__hud {
+.reading__hud {
         font-family: "Open Sans";
-        position: absolute;
-        top: 36px;
-        right: 0px;
+        position: relative;
+        // top: 36px;
+        // right: 0px;
+        border-bottom: $base-border;
         width: 100%;
         height: auto;
         text-align: right;
-        padding: 15px 20px;
-        background: rgba(255, 255, 255, 0.2);
+        padding: 15px 0px;
+        // background: rgba(255, 255, 255, 0.2);
         line-height: 28px;
         z-index: 4000;
-        -moz-box-shadow: inset 0 6px 6px -9px #777, inset 0 -6px 6px -7px #777;
-        -webkit-box-shadow: inset 0 6px 6px -9px #777, inset 0 -6px 6px -7px #777;
-        box-shadow: inset 0 6px 6px -9px #777, inset 0 -6px 6px -7px #777;
+        // -moz-box-shadow: inset 0 6px 6px -9px #777, inset 0 -6px 6px -7px #777;
+        // -webkit-box-shadow: inset 0 6px 6px -9px #777, inset 0 -6px 6px -7px #777;
+        // box-shadow: inset 0 6px 6px -9px #777, inset 0 -6px 6px -7px #777;
 	}
     .prj {
         float: left;
@@ -54,6 +52,10 @@
         text-overflow: ellipsis;
         vertical-align: middle;
     }
+
+/* Mobile Optimization */
+@media (max-width: #{$tablet}) {
+	
     .project-column {
         padding: 0;
     }

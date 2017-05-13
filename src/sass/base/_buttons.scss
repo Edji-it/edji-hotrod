@@ -30,6 +30,7 @@ button, .button, .btn { //, [class*='btn']
   vertical-align: middle;
   white-space: nowrap;
   -webkit-appearance: inherit;
+  position: relative;
 
   &.btn-lg {
     line-height: 1.25em;
@@ -160,7 +161,7 @@ button, .button, .btn { //, [class*='btn']
   background: $btnActionBg;
   color: $btnActionColor;
 
-  &:hover, &:active, &:focus {
+  &:hover, &:active, &:focus, &.active {
     background: desaturate(darken($btnActionBg, 20%), 20%); 
   }
 }
@@ -169,7 +170,7 @@ button, .button, .btn { //, [class*='btn']
   background: $btnSuccessBg;
   color: $btnSuccessColor;
 
-  &:hover, &:active, &:focus {
+  &:hover, &:active, &:focus, &.active {
     background: darken($btnSuccessBg, 20%);
   }
 }

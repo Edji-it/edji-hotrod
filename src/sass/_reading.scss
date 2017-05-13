@@ -155,6 +155,7 @@ header {
 
 	& .sub-title {
 		color: #c8ced4;
+		margin-bottom: 0px;
 	}
 }
 
@@ -343,7 +344,7 @@ $nextG: 36;
 $nextB: 68;
 
 // Default to deepest Red
-[class*='h-'] {
+[class^='h-'] { 
 	$thisA: 0.4 + (0.05 * $highlightSteps);
 	background: rgba($nextR, $nextG, $nextB, $thisA);
 }
