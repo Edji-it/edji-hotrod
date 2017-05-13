@@ -35,4 +35,14 @@ export class TextCommentComponent implements OnInit, AfterViewInit {
         event.preventDefault();
         this.element.nativeElement.querySelector('textarea').blur();
     }
+
+    focusField(event) {
+        // setTimeout( function(event) {
+            console.log('focus')
+            // event.preventDefault();
+            //this.textComment.nativeElement.value = 'hi'
+            this.textComment.nativeElement.select();
+            // this.element.nativeElement.querySelector('#textComment').value = 'hi'
+        // }, 3000);
+    }
 }
