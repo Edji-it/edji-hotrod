@@ -2,7 +2,8 @@
 export interface Comment extends BaseComment {
   lineCount: number,
   expanded: boolean,
-  project_id: string
+  project_id: string,
+  active: boolean
 }
 
 /** Comment properties we get from the server */
