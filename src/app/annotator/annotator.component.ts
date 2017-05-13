@@ -144,19 +144,17 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // Get Reading via Observable
         this._readings.get(this.project.reading_id)
             .take(1)
-            .subscribe(
-                reading => {
-                    if (!reading.words || reading.words.length < 1) {
-                        this.reading = this.processOldReading(reading);
-                    } else {
-                        this.reading = reading;
-                        this.updateMetaTags();
-                    }
-                },
-                error => {
-                    console.error(error);
-                }
-            )
+            .subscribe()
+
+        this._readings.currentReading.subscribe(
+            reading => {
+                this.reading = reading;
+                this.updateMetaTags();
+            },
+            error => {
+                console.error(error);
+            }
+        )
 
         // Establish Users array
         if (this.project.student_ids) {
@@ -738,37 +736,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
         // Tell the server we've got a comment!
         this.createComment(span.start, span.end, 'text');
-    }
-
-    /** 
-     * Process Readings that don't yet have a Words array!
-     * - Can be deprecated eventually
-     */
-    processOldReading(reading: any) : any {
-        // Clear parsed words array
-        this.words = [];
-
-        // Process reading html into useful Words Array
-        let el = document.createElement('div');
-        el.innerHTML = reading.html;
-        let readingHtml = el;
-        let childEls = readingHtml.childNodes;
-
-        // Loop through all Reading html elements
-        for (let i = 0; i < childEls.length; i++) {
-            this.extractTextNodes(childEls[i]);
-        }
-
-        reading.words = this.words;
-
-        // Save processed reading with Words array
-        this._readings.save(reading)
-            .toPromise()
-            .then(data => {
-                // we don't really care if we get data back
-            });
-
-        return reading;
     }
 
     /**
