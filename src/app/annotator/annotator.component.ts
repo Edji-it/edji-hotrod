@@ -16,7 +16,7 @@ import { ProjectService } from '../shared/project.service';
 import { CommentComponent } from './comment/comment.component';
 import { AuthService } from '../shared/auth.service';
 import { SocketService } from '../shared/socket.service';
-import { Comment, CommentPermissions } from './../shared/datatypes';
+import { EdjiComment, CommentPermissions } from './../shared/datatypes';
 
 @Component({
     selector: 'annotator',
@@ -42,7 +42,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     private lineCountArray: any[][] = [];
     private lineCountRunning: boolean = false;
 
-    private activeComment: Comment = <Comment>{};
+    private activeComment: EdjiComment = <EdjiComment>{};
     
     private lineExpanded: boolean = false;
     private showCommentCounts: boolean = false;
@@ -645,7 +645,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     inactivateComment():void {
         this.unfocusHighlight(this.activeComment.start, this.activeComment.end);
         this.activeComment.active = false;
-        this.activeComment = <Comment>{};
+        this.activeComment = <EdjiComment>{};
     }
 
     /**

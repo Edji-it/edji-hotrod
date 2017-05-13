@@ -1,7 +1,6 @@
-import { Comment } from '../../shared/datatypes';
 import { Component, Input } from '@angular/core'
 
-// import { Comment } from './../../shared/datatypes';
+import { EdjiComment } from '../../shared/datatypes'
 
 @Component({
     selector: 'emoji-comment',
@@ -11,7 +10,7 @@ import { Component, Input } from '@angular/core'
 export class EmojiCommentComponent {
 
     // for some reason, if you add type Comment to comment, it crashes the whole site
-    @Input() private comment: any
+    @Input() private comment: EdjiComment
     
     constructor() { 
         // console.log(emojiA)

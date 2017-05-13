@@ -1,4 +1,4 @@
-import { Comment } from '.'
+import { EdjiComment } from '.'
 
 /** Project properties we add on the front end */
 export interface Project extends BaseProject {
@@ -10,7 +10,7 @@ export interface BaseProject {
   _id: string,
   reading_id: string,
   teacher_id: string,
-  comments: Comment[],
+  comments: EdjiComment[],
   students_ids: string[],
   temp_ids: string[],
   label: string,
