@@ -72,14 +72,16 @@ a {
 }
 
 a.link {
-  color: $purple;
+  font-weight: normal;
+  color: $medium-gray;
   cursor: pointer;
   font-family: $base-font-family;
+  text-decoration: underline;
 
   &:active,
   &:focus,
   &:hover {
-    color: shade($purple, 25%);
+    color: $blue;
   }
 }
 

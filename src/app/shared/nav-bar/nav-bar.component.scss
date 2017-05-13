@@ -1,6 +1,6 @@
 @import '../../../sass/base/variables';
 
-$navBarHeight: 100px;
+$navBarHeight: 75px;
 $navBarLargeHeight: 95px;
 $sideBarWidth: 100px;
 
@@ -8,13 +8,13 @@ $sideBarWidth: 100px;
 	position: relative;
 	top: 0;
 	left: 0;
-	padding: 10px;
 	height: $navBarHeight;
 	width: 100%;
 	text-align: center;
 	background:#fff;
 	z-index: 9000;
 	border-bottom:1px solid #f1f1f1;
+	padding: 0px;
 }
 
 .nav__anchor-logo {
@@ -37,6 +37,7 @@ nav {
 
 nav.large, .large .nav-bar {
 	height: $navBarLargeHeight;
+	padding: 10px;
 }
 
 .nav-bar__links {
