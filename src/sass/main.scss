@@ -59,6 +59,7 @@ $seamlessPlaceholderColor: #cdcdcd;
 @import 'codes';
 @import 'print';
 @import 'guides';
+@import './base/variables';
 
 /**
  * ----------------------------------------------------------
@@ -213,6 +214,13 @@ input[type=text].input-noborder, input[type=password].input-noborder, input[type
 
 .options .tooltip-top {
 	width: 130px !important;
+}
+
+.options {
+	@media (max-width: $tablet) {
+		bottom: 75px;
+        right: 0;
+	}
 }
 
 .disablePane {

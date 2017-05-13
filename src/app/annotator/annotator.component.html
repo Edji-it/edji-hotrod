@@ -33,15 +33,23 @@
 				placement="top" 
 				ngbTooltip="Text comment"></button>
 			<!--Mobile buttons-->
-			<button *ngIf="project.types.indexOf('emoji') > -1" id="addEmojiComment" 
-				class="emoji hidden-lg-up shown-ipad-landscape" 
-				(tap)="addEmojiComment($event)" 
-				[innerHtml]="':thinking_face:' | emojione"></button>
-			<button *ngIf="project.types.indexOf('text') > -1" 
-				class="emoji  hidden-lg-up shown-ipad-landscape" 
-				id="addTextComment" 
-				(tap)="addTextComment($event)" 
-				[innerHtml]="':writing_hand:' | emojione"></button>
+			<div class="container hidden-lg-up shown-ipad-landscape">
+				<div class="row">
+					<div class="col-6">
+						<button *ngIf="project.types.indexOf('emoji') > -1" id="addEmojiComment" 
+							class="emoji comment__options--mobile" 
+							(tap)="addEmojiComment($event)" 
+							[innerHtml]="':thinking_face:' | emojione"></button>
+					</div>
+					<div class="col-6">
+						<button *ngIf="project.types.indexOf('text') > -1" 
+							class="emoji comment__options--mobile" 
+							id="addTextComment" 
+							(tap)="addTextComment($event)" 
+							[innerHtml]="':writing_hand:' | emojione"></button>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 
