@@ -42,9 +42,10 @@
 			<button *ngIf="canPublish" class="btn btn-action side-bar__btn" (click)="showShareTooltip = !showShareTooltip" [class.active]="showShareTooltip">
 				Share
 			</button>
+			<!--Publish Tooltip-->
 			<div *ngIf="showShareTooltip" class="publish-tooltip">
 					<h1 class="publish-tooltip__title">Publish and Share</h1>
-					<p class="sub-label pb-2">If you think this reading is ready, then publish and share a Group Code!</p>
+					<p class="sub-label pb-2">Finished with your reading? Give it a group name, Finalize and get your group code to share with your readers!</p>
 					<div class="form-group" style="margin-bottom: 0px;">
 						<label>
 							Group
