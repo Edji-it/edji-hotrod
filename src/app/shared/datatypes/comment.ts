@@ -1,6 +1,8 @@
 /** Comment properties we add on the front end */
 export interface Comment extends BaseComment {
-
+  lineCount: number,
+  expanded: boolean,
+  project_id: string
 }
 
 /** Comment properties we get from the server */

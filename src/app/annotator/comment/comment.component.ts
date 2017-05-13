@@ -25,7 +25,7 @@ export class CommentComponent implements OnInit {
   // Is fully visible, focused, but not editable
   private preview = false
 
-  @Input() public comment: any
+  @Input() public comment: Comment
   @Input() private readOnly: boolean = false
   @Input() private userPermission: number = CommentPermissions.READ
   @Input()
