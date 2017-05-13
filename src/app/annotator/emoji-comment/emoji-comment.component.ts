@@ -10,7 +10,7 @@ import { Comment } from './../../shared/datatypes'
 })
 export class EmojiCommentComponent implements OnInit {
 
-    @Input() private comment: Comment
+    @Input() private comment: any
     
     constructor() { 
         // console.log(emojiA)

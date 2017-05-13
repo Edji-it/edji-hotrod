@@ -1,7 +1,7 @@
 import { document } from '@angular/platform-browser/src/facade/browser'
 import { Component, EventEmitter, ElementRef, Input, Output, OnInit, AfterViewInit } from '@angular/core'
 
-import { Comment } from './../../shared/datatypes'
+import { Comment } from './../../shared/datatypes/comment'
 
 @Component({
     selector: 'text-comment',
@@ -10,10 +10,10 @@ import { Comment } from './../../shared/datatypes'
 })
 export class TextCommentComponent implements OnInit, AfterViewInit {
 
-    @Input() private comment: Comment
+    @Input() private comment: any
     @Input() private readOnly: boolean
     @Input() private preview: boolean
-    @Output() blur = new EventEmitter<string>() 
+    @Output() blur: EventEmitter<string> = new EventEmitter<string>() 
 
     constructor(private element: ElementRef) { 
         
