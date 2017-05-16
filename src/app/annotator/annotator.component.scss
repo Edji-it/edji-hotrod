@@ -183,7 +183,7 @@ $bubbleColor: rgb(255,255,255);
 }
 
 /* Mobile Optimization */
-@media (max-width: $tablet) {
+@media only screen and (min-device-width: $phone) and (max-device-width: $xldesktop) {
 	.options {
 		position: fixed;
 		bottom: 0;
@@ -235,4 +235,10 @@ $bubbleColor: rgb(255,255,255);
 		top: 5px;
 		right: 5px;
 	}
+}
+
+.comment__options--mobile {
+	margin: 0 !important;
+	width: 100% !important;
+	height: 100% !important;
 }

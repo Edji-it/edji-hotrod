@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, OnInit, Output, SimpleChange, ElementRe
 import { Angulartics2 } from 'angulartics2'
 
 import { ProjectService } from '../../shared/project.service'
-import { Comment, CommentPermissions } from './../../shared/datatypes'
+import { EdjiComment, CommentPermissions } from './../../shared/datatypes'
 
 @Component({
   selector: 'edji-comment',
@@ -25,7 +25,7 @@ export class CommentComponent implements OnInit {
   // Is fully visible, focused, but not editable
   private preview = false
 
-  @Input() public comment: Comment
+  @Input() public comment: EdjiComment
   @Input() private readOnly: boolean = false
   @Input() private userPermission: number = CommentPermissions.READ
   @Input()

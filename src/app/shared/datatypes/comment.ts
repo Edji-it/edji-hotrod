@@ -1,5 +1,5 @@
 /** Comment properties we add on the front end */
-export interface Comment extends BaseComment {
+export interface EdjiComment extends BaseComment {
   lineCount: number,
   expanded: boolean,
   project_id: string,
