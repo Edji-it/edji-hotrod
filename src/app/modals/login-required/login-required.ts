@@ -4,7 +4,7 @@ import { AuthService } from '../../shared'
 import { User } from '../../shared/datatypes'
 
 @Component({
-  selector: 'got-login-req',
+  selector: 'hot-login-req',
   templateUrl: 'login-required.html'
 })
 export class LoginRequiredModal implements OnInit {

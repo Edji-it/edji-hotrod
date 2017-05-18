@@ -5,7 +5,10 @@
             </i>
     <div class="row new-reading--btn">
         <div class="col-xs-6 col-xs-offset-6">
-            <button class="btn btn-primary new-reading-btn" [routerLink]="[ '/new-reading' ]">
+            <button *ngIf="user.type == 'temp'" class="btn btn-primary new-reading-btn" (click)="showLoginReqModal = true">
+                New Reading
+            </button>
+            <button *ngIf="user.type != 'temp'" class="btn btn-primary new-reading-btn" [routerLink]="['/new-reading']">
                 New Reading
             </button>
         </div>
@@ -28,3 +31,5 @@
     </div>
     <hot-reading-card *ngFor="let reading of readings" style="margin-bottom: 30px; float:left; width:100%;" [reading]="reading"></hot-reading-card>
 </div>
+
+<hot-login-req *ngIf="showLoginReqModal" (closeModal)="showLoginReqModal = false"></hot-login-req>

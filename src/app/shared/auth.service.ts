@@ -115,7 +115,7 @@ export class AuthService implements CanActivate {
         return user;
     }
 
-    public getCurrentUser(): Observable<any> {
+    public getCurrentUser(): Observable<User> {
         return this.currentUser;
     }
 
