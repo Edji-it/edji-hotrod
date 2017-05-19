@@ -16,6 +16,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
     @Input() hasCommentCount: boolean
     @Input() canPublish: boolean
     @Input() pageTitle: string
+    @Input() showProjectInfo: boolean
     
     @Output() saveAction: EventEmitter<any> = new EventEmitter()
     @Output() shareAction: EventEmitter<any> = new EventEmitter()

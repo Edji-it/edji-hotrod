@@ -12,8 +12,12 @@
 		</a>
 
 		<!--Optional Title-->
-		<div class="nav-bar__heading">
-			<h1 *ngIf="pageTitle" class="hidden-sm-down">{{ currentReading.title }}</h1>
+		<div *ngIf="!showProjectInfo" class="nav-bar__heading">
+			<h1 *ngIf="pageTitle" class="hidden-sm-down">{{ pageTitle }}</h1>
+			<!--<span *ngIf="createdDate">{{ createdDate }}</span>-->
+		</div>
+		<div *ngIf="showProjectInfo" class="nav-bar__heading">
+			<h1 *ngIf="currentReading.title" class="hidden-sm-down">{{ currentReading.title }}</h1>
 			<!--<span *ngIf="createdDate">{{ createdDate }}</span>-->
 		</div>
 		
@@ -33,13 +37,13 @@
 		</div>
 
 		<!--Project Info-->
-		<div *ngIf="currentProject && currentProject._id" class="nav-bar__project-data ">
+		<div *ngIf="showProjectInfo && currentProject && currentProject._id" class="nav-bar__project-data ">
 			<div class="group-label">
 				<!--<span [innerHtml]="':fire:' | emojione"></span> -->
 				{{ liveCount }} Readers</div>
 			<pre><span [innerHtml]="':key:' | emojione"></span> {{ currentProject.code }}</pre>
 		</div>
-		<div *ngIf="currentProject && currentProject._id" class="nav-bar__project">
+		<div *ngIf="showProjectInfo && currentProject && currentProject._id" class="nav-bar__project">
 			<label>Group</label>
 			<div class="group-label">{{ currentProject.label }}</div>
 		</div>
@@ -73,5 +77,7 @@
 	</div>
 
 	<!--Mobile display for title-->
-	<h1 *ngIf="pageTitle" class="hidden-md-up mobile-heading">{{ pageTitle }}</h1>
+	<h1 *ngIf="pageTitle && !showProjectInfo" class="hidden-md-up mobile-heading">{{ pageTitle }}</h1>
+	<h1 *ngIf="showProjectInfo" class="hidden-md-up mobile-heading">{{ currentReading.title }}</h1>
+	
 </div>
