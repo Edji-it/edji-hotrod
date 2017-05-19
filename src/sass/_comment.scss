@@ -51,7 +51,7 @@ edji-comment {
 
 	&:not(.expanded) {
 		& .expand-comments {
-			@media (max-width: $tablet) {
+			@media only screen and (max-width: $xldesktop) {
 				&:before {
 					content: ' ';
 					position: absolute;
@@ -70,14 +70,14 @@ edji-comment {
 			}
 		}
 		& .cmtEmoji {
-			@media (max-width: $tablet) {
+			@media only screen and (max-width: $xldesktop) {
 				&:before {
 					height: $commentHeight + 10px;
 				}
 			}
 		}
 		& .cmtText {
-			@media (max-width: $tablet) {
+			@media only screen and (max-width: $xldesktop) {
 				&:before {
 					height: $commentHeight + 30px;
 				}
@@ -88,7 +88,7 @@ edji-comment {
 	&.expanded {
 		z-index: 5000;
 
-		@media (max-width: $tablet) {
+		@media only screen and (max-width: $xldesktop) {
 			display: block !important;
 			position: absolute !important;
 			top: none !important;
@@ -356,7 +356,7 @@ input.emojiComment {
 
 			@include transition(margin linear 0.3s);
 
-			@media (min-width: $tablet) {
+			@media only screen and (max-width: $xldesktop) {
 				&:after {
 					color: #888;
 					content: '#{$n}';
