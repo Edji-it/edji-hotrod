@@ -116,6 +116,7 @@ type StoreType = {
     UploadPdfModalComponent,
     ProjectPageComponent,
     ProjectInfoComponent,
+    OwnerToolsComponent,
     LoginRequiredModal,
     RightMarginTooltipComponent,
     ReadingPageComponent,

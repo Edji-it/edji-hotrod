@@ -49,4 +49,25 @@ export class OwnerToolsComponent implements OnInit {
     )
   }
 
+  private togglePower(powerName: string, turnOn: boolean) {
+    // set heat vision to loading
+      this.powersLoading.heatVision = true
+      setTimeout(() => {
+        // stop heat vision loading
+        this.powersLoading.heatVision = false
+      }, 1000)
+
+      // Toggle the Heat Vision boolean
+      let updateObj: any = {}
+      updateObj[powerName] = turnOn
+
+      this._projects.update(updateObj, this.currentProject._id)
+        .take(1)
+        .subscribe((project) => {
+          // Live update users once save is successful
+          this._socket.toggleHeatVision({ all: turnOn })
+        })
+
+  }
+
 }

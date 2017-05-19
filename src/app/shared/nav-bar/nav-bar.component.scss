@@ -3,6 +3,7 @@
 $navHeight: 70px;
 $sideBarBg: #fff;
 $navBorder: 1px solid #DEDEDE;
+$navShadow: 0px 1px 10px 3px rgba(0,0,0,0.075);
 
 $lightBorder: 1px solid #f1f1f1;
 $purple: rgb(150, 40, 255);
@@ -29,7 +30,7 @@ $purple: rgb(150, 40, 255);
 	z-index: 6001;
 	// border-right: none;
 	border: $navBorder;
-	box-shadow: 0px 1px 10px 3px rgba(0,0,0,0.075);
+	box-shadow: $navShadow;
 
 	& .logo-button {
 		width: 80px;
@@ -125,6 +126,8 @@ a.nav-bar__link {
 	float: right;
 	min-width: 120px;
 	position: relative;
+	line-height: 45px;
+	vertical-align: middle;
 }
 
 .nav-bar__icon-button {
