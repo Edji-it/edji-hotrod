@@ -69,9 +69,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
         this._readings.currentReading.subscribe(
             reading => {
                 this.currentReading = reading;
-                if (!this.pageTitle) {
-                  this.pageTitle = this.currentReading.title
-                }
             },
             error => {
                 console.error(error);

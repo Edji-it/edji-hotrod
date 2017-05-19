@@ -13,7 +13,7 @@
 
 		<!--Optional Title-->
 		<div class="nav-bar__heading">
-			<h1 *ngIf="pageTitle" class="hidden-sm-down">{{ pageTitle }}</h1>
+			<h1 *ngIf="pageTitle" class="hidden-sm-down">{{ currentReading.title }}</h1>
 			<!--<span *ngIf="createdDate">{{ createdDate }}</span>-->
 		</div>
 		
@@ -66,6 +66,8 @@
 					Finalize and Share
 				</button>
 			</div>
+		</div>
+		<div class="nav__btn-wrap">
 			<button *ngIf="canPublish" class="btn btn-secondary nav-bar__btn"  (click)="saveAction.emit()">Save</button>
 		</div>
 	</div>
