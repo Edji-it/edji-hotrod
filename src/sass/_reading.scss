@@ -125,6 +125,21 @@ article.content {
 		cursor: crosshair; //url('/assets/images/cursor-image.png'), pointer; 
 	}
 
+	// & img[id*="readingImage"] {
+	// 	-webkit-user-select: none;  
+	// 	-moz-user-select: none;    
+	// 	-ms-user-select: none;      
+	// 	user-select: none;
+	// }
+
+	& div.img-wrap::selection {
+		background-color: rgba(0, 0, 0, 0);
+	}
+
+	& img::selection {
+		background-color: rgba(0, 0, 0, 0);
+	}
+
 	& .w .img-wrap > img {
 		$highlightWidth: 4px;
 		cursor: crosshair; //url('/assets/images/cursor-image.png'), pointer; 
