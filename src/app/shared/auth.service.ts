@@ -355,14 +355,13 @@ export class AuthService implements CanActivate {
 
     /** Call to convert a temp user's properties to the current user (who should already have credentials) */
     public convertTempUser(oldId: string): Observable<boolean> {
-        console.log("oldId", oldId)
         return this.http.put(
             [this.baseUrl, 'users', 'convert', oldId].join("/"),
             {},
             this.getOptions()
             )
         .map((res) => {
-            if (res && res.json()) {
+            if (res) {
                 return true
             } else {
                 throw new Error("Did not get json response from convertTempUser")
