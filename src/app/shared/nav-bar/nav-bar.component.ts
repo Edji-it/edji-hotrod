@@ -22,6 +22,8 @@ export class NavBarComponent implements OnInit, OnDestroy {
 
     private user: any
     private currentProject: any
+    private createdDate: string
+    private liveCount: number = 1
     private currentReading: any
     private commentStats: any = {}
     private subscriptions: Subscription[] = []
@@ -82,6 +84,16 @@ export class NavBarComponent implements OnInit, OnDestroy {
               project => {
                 console.log(project)
                   this.currentProject = project;
+                  this.createdDate = new Date(project.createdAt).toDateString()
+
+                  // Join and update live user count
+                  this.subscriptions.push(
+                      this._socket.joinLiveCount(project._id, this.user._id).subscribe((users) => {
+                          this.liveCount = users.length
+                      }, (error) => {
+                          console.warn(error)
+                      })
+                  )
               },
               error => {
                   console.error(error);

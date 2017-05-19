@@ -14,16 +14,12 @@
 		<!--Optional Title-->
 		<div class="nav-bar__heading">
 			<h1 *ngIf="pageTitle" class="hidden-sm-down">{{ pageTitle }}</h1>
+			<!--<span *ngIf="createdDate">{{ createdDate }}</span>-->
 		</div>
 		
 		<div *ngIf="!user.isLoggedIn" class="nav__btn-wrap">
 			<a class="btn btn-primary nav-bar__btn"  [routerLink]="['/login']">Log In</a>
 			<a class="btn btn-secondary nav-bar__btn" [routerLink]="['/register']">Register</a>
-		</div>
-
-		<!--Project Info-->
-		<div *ngIf="currentProject && currentProject.code" class="nav-bar__project" >
-			<pre>{{currentProject.code}}</pre>
 		</div>
 
 		<!--User Info-->
@@ -34,6 +30,18 @@
 				<span *ngIf="!user.fullname">{{ user.username }}</span>
 			</a>
 			<a class="link" tabindex="1" id="logOutButton" (click)="logout()" [innerHtml]="'Log Out'"></a>
+		</div>
+
+		<!--Project Info-->
+		<div *ngIf="currentProject && currentProject._id" class="nav-bar__project-data ">
+			<div class="group-label">
+				<!--<span [innerHtml]="':fire:' | emojione"></span> -->
+				{{ liveCount }} Readers</div>
+			<pre><span [innerHtml]="':key:' | emojione"></span> {{ currentProject.code }}</pre>
+		</div>
+		<div *ngIf="currentProject && currentProject._id" class="nav-bar__project">
+			<label>Group</label>
+			<div class="group-label">{{ currentProject.label }}</div>
 		</div>
 
 		<div class="nav__btn-wrap">
