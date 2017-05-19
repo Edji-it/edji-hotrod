@@ -2,7 +2,7 @@ import { Subscription } from 'rxjs/Rx'
 import { Component, OnInit } from '@angular/core'
 
 // Project Dependencies
-import { AuthService, ProjectService } from '../../shared';
+import { AuthService, ProjectService, SocketService } from '../../shared';
 
 @Component({
   selector: 'owner-tools',
@@ -21,7 +21,8 @@ export class OwnerToolsComponent implements OnInit {
 
   constructor(
     private _projects: ProjectService,
-    private _auth: AuthService
+    private _auth: AuthService,
+    private _socket: SocketService
   ) { }
 
   ngOnInit() {

@@ -39,7 +39,7 @@ $ownerToolsWidth: 60px;
     transform: translate3d(-50%, -50%, 0);
     transition: opacity linear 0.2s;
 
-    & .is-loading {
+    &.is-loading {
         opacity: 1;
     }
 }
@@ -51,6 +51,8 @@ $ownerToolsWidth: 60px;
     margin: 0px;
     position: relative;
     border-top: $ownerToolsBorder;
+    outline: none !important;
+
 
 }
 
