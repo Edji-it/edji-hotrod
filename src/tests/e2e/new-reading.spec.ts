@@ -186,7 +186,7 @@ describe('New Reading Page', () => {
             newReading.pdfFileInput.sendKeys(absolutePath);
 
             // Begin upload 
-            browser.wait(EC.elementToBeClickable(newReading.pdfUploadTrigger), 6000, "button to upload a PDF never became clickable");
+            browser.wait(EC.elementToBeClickable(newReading.pdfUploadTrigger), 7000, "button to upload a PDF never became clickable");
             newReading.pdfUploadTrigger.click();
 
             // Image was uploaded! Insert it
@@ -217,7 +217,7 @@ describe('New Reading Page', () => {
             newReading.getPage();
             browser.wait(EC.elementToBeClickable(newReading.uploadModalButton), 5000, "image upload modal button never became clickable");
             newReading.uploadModalButton.click();
-            browser.wait(EC.elementToBeClickable(newReading.imageUploadTrigger), 5000, "image uploade trigger never became clickable");
+            browser.wait(EC.elementToBeClickable(newReading.imageUploadTrigger), 6000, "image uploade trigger never became clickable");
             
             // Select File to upload
             let fileToUpload = '../../assets/test/titration.jpg';

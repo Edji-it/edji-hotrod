@@ -22,7 +22,7 @@ export class BumblebeeService {
       )
       .take(1)
       .subscribe(
-        (success) => { console.log("bumblebee posted to slack!"); },
+        (success) => {  },
         (error) => { console.error(error); } //don't think this can ever happen... bumblebee doesn't return errors
       )
   }

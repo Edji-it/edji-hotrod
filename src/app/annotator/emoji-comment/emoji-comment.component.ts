@@ -1,21 +1,18 @@
-import { document } from '@angular/platform-browser/src/facade/browser';
-import { Component, EventEmitter, HostListener, Input, OnInit, Output, ViewChild, ViewRef } from '@angular/core';
+import { Component, Input } from '@angular/core'
+
+import { EdjiComment } from '../../shared/datatypes'
 
 @Component({
     selector: 'emoji-comment',
     templateUrl: 'emoji-comment.component.html',
     styleUrls: ['./emoji-comment.component.scss']
 })
-export class EmojiCommentComponent implements OnInit {
+export class EmojiCommentComponent {
 
-    @Input() private comment: any;
-    // @Input() private isActive: boolean;
+    // for some reason, if you add type Comment to comment, it crashes the whole site
+    @Input() private comment: EdjiComment
     
     constructor() { 
-        // console.log(emojiA);
-    }
-
-    ngOnInit() { 
-        
+        // console.log(emojiA)
     }
 }

@@ -25,7 +25,7 @@ article.content {
 	margin-top: 0px;
 	margin-left: 253px;
 	
-	@media(max-width: $tablet) {
+	@media only screen and (max-device-width: $xldesktop) {
 		margin-left: 40px;
   	}
 
@@ -123,6 +123,21 @@ article.content {
 		display:inline-block;
 		position: relative;
 		cursor: crosshair; //url('/assets/images/cursor-image.png'), pointer; 
+	}
+
+	// & img[id*="readingImage"] {
+	// 	-webkit-user-select: none;  
+	// 	-moz-user-select: none;    
+	// 	-ms-user-select: none;      
+	// 	user-select: none;
+	// }
+
+	& div.img-wrap::selection {
+		background-color: rgba(0, 0, 0, 0);
+	}
+
+	& img::selection {
+		background-color: rgba(0, 0, 0, 0);
 	}
 
 	& .w .img-wrap > img {

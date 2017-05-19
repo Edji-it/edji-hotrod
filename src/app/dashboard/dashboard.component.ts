@@ -4,10 +4,8 @@ import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_di
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
 
-import { AppState } from '../app.service';
-import { AuthService } from '../shared/auth.service';
-import { ReadingService } from '../shared/reading.service';
-import { ProjectService } from '../shared/project.service';
+import { AuthService, ReadingService, ProjectService } from '../shared';
+import { User } from './../shared/datatypes'
 
 @Component({
   // The selector is what angular internally uses
@@ -23,13 +21,12 @@ import { ProjectService } from '../shared/project.service';
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   // Set our default values
-  private currentUser: any; 
+  private currentUser: User; 
   private subscriptions: Subscription[] = [];
   private mobileShowJoined:boolean = true;
 
   // TypeScript public modifiers
-  constructor(
-    public appState: AppState, 
+  constructor (
     public _router: Router,
     private _auth: AuthService,
     private route: ActivatedRoute

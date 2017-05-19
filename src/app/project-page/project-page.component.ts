@@ -85,6 +85,10 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
             },
             (error) => {
                 // TRACK EXCEPTION
+                if (error.status == 404) {
+                    // this means that we didn't get the project, so we'll direct them to the 404 page
+                    this._router.navigate(['/not-found'])
+                }
             })
 
         

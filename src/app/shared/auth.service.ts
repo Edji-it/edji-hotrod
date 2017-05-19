@@ -5,6 +5,8 @@ import { Observable, BehaviorSubject } from 'rxjs/Rx';
 import 'rxjs/add/operator/toPromise';
 import { Locker } from 'angular2-locker';
 
+import { User } from './datatypes'
+
 @Injectable()
 export class AuthService implements CanActivate {
     private baseUrl = "http://localhost:3354";
@@ -12,7 +14,7 @@ export class AuthService implements CanActivate {
     private locker: Locker;
     private ENV: string = "dev";
 
-    private user: any;
+    private user: User;
     private currentUserSource: BehaviorSubject<any>;
     private currentUser: Observable<any>;
 
@@ -96,10 +98,11 @@ export class AuthService implements CanActivate {
     /**
      * Gets user object from local storage
      */
-    public getUser(): any {
-        let user: any = this.locker.get('user');
+    public getUser(): User {
+        let user: User = this.locker.get('user');
         if (!user) {
-            user = {
+            // this kind of navigates around our interface... but oh well
+            user = <User>{
                 _id: "",
                 fullname: "guest",
                 isLoggedIn: false
@@ -112,8 +115,7 @@ export class AuthService implements CanActivate {
         return user;
     }
 
-    public getCurrentUser(): Observable<any> {
-        console.log(this.user);
+    public getCurrentUser(): Observable<User> {
         return this.currentUser;
     }
 
@@ -144,7 +146,7 @@ export class AuthService implements CanActivate {
 
     private destroyCredentials() {
         this.locker.clear();
-        this.user = { isLoggedIn: false };
+        this.user = <User>{ isLoggedIn: false }
         this.currentUserSource.next(this.user);
     }
 
@@ -214,7 +216,6 @@ export class AuthService implements CanActivate {
      * - Cannot be passed password
      */
     public updateUser(updatedUser: any): Observable<any> {
-        console.log('updated user', updatedUser)
         return new Observable(observer => {
             //observer.next(true);  
             // Before we update the user, make sure we have the latest copy
@@ -228,7 +229,6 @@ export class AuthService implements CanActivate {
                         let propA = propsToCheck[n]
                         for (let prop in mergedUser[propA]) {
                             if (mergedUser[propA][prop] && Object.prototype.toString.call(mergedUser[propA][prop]) === '[object Array]') {
-                                console.log("found prop thats array")
                                 if (updatedUser[propA] && updatedUser[propA][prop]) {
                                     mergedUser[propA][prop] = updatedUser[propA][prop].concat(mergedUser[propA][prop])
                                     let a = mergedUser[propA][prop]
@@ -243,20 +243,17 @@ export class AuthService implements CanActivate {
                                                 }
                                             } else {
                                                 if (a[i] === a[j]) {
-                                                    console.log('delete duplicate')
                                                     a.splice(j--, 1);
                                                 }
                                             }
                                         }
                                     }
-                                    console.log("done: ", a)
                                 }
                             } else if (mergedUser[propA][prop] && updatedUser[propA]) {
                                 mergedUser[propA][prop] = updatedUser[propA][prop]
                             }
                         }
                     }
-                    console.log(mergedUser)
 
                     this.http.put( this.baseUrl + '/users', {
                             user: mergedUser
@@ -283,7 +280,7 @@ export class AuthService implements CanActivate {
                 }, 
                 error => {
                     observer.error(error)
-                    console.log(error)
+                    console.error(error)
                 })
         });
     }
@@ -358,14 +355,13 @@ export class AuthService implements CanActivate {
 
     /** Call to convert a temp user's properties to the current user (who should already have credentials) */
     public convertTempUser(oldId: string): Observable<boolean> {
-        console.log("oldId", oldId)
         return this.http.put(
             [this.baseUrl, 'users', 'convert', oldId].join("/"),
             {},
             this.getOptions()
             )
         .map((res) => {
-            if (res && res.json()) {
+            if (res) {
                 return true
             } else {
                 throw new Error("Did not get json response from convertTempUser")

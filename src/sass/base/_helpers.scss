@@ -2,6 +2,7 @@
  * Helper classes
  * -- Apply one or a few styles in a 100% generic fashion
  */
+@import '/variables';
 
 .hide {
 	display: none !important;
@@ -44,4 +45,29 @@
 .has-sparks {
     overflow:hidden;
     position: relative;
+}
+
+.dashboard__container--iPadwidth {
+    @media only screen and (max-device-width: $tablet) and (orientation:portrait) {
+        max-width: 100%;
+        flex: inherit;
+    }
+}
+
+.hidden-ipad-landscape {
+    &, &[class^='hidden-'] {
+        @media only screen and (min-device-width: $phone) and (max-device-width: $xldesktop) and (orientation:landscape) {
+            /* For landscape layouts only */
+            display: none !important;
+        }
+    }
+}
+
+.shown-ipad-landscape {
+    &, &[class^='hidden-'] {
+        @media only screen and (min-device-width: $phone) and (max-device-width: $xldesktop) and (orientation:landscape) {
+            /* For landscape layouts only */
+            display: block !important;
+        }
+    }
 }

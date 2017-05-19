@@ -1,11 +1,12 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs/Subscription';
-import { Angulartics2 } from 'angulartics2';
+import { Component, OnInit, OnDestroy } from '@angular/core'
+import { Router, ActivatedRoute } from '@angular/router'
+import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
+import { FormGroup, FormBuilder, Validators } from '@angular/forms'
+import { Subscription } from 'rxjs/Subscription'
+import { Angulartics2 } from 'angulartics2'
 
-import { AuthService, ReadingService, ProjectService } from '../../shared';
+import { AuthService, ReadingService, ProjectService } from '../../shared'
+import { User } from '../../shared/datatypes'
 
 @Component({
   // The selector is what angular internally uses
@@ -28,6 +29,8 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   private isLoading: boolean = false;
 
+  private showLoginReqModal: boolean = false
+  private user: User
 
   // TypeScript public modifiers
   constructor(
@@ -42,6 +45,12 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.isLoading = true;
+
+    this.subscriptions.push(
+      this._auth.getCurrentUser().subscribe((user) => {
+        this.user = user
+      })
+    )
 
     this._readings.getAll()
       .then(
