@@ -42,7 +42,7 @@ import { HomeComponent } from './home';
 import { RegisterComponent } from './register';
 import { JoinComponent } from './join/join.component';
 import { LoginForm, GuestForm } from './forms';
-import { LoginModal, ResetPassComponent, DeleteCommentModal, AddProjectModal } from './modals';
+import { LoginModal, ResetPassComponent, DeleteCommentModal, AddProjectModal, LoginRequiredModal } from './modals';
 import { AnnotatorComponent, CommentComponent, TextCommentComponent, EmojiCommentComponent, EmojiKeyboardComponent, RightMarginTooltipComponent } from './annotator';
 import { ProjectPageComponent, ProjectInfoComponent, OwnerToolsComponent } from './project-page';
 import { ReadingPageComponent, DeleteProjectComponent } from './reading-page';
@@ -116,7 +116,7 @@ type StoreType = {
     UploadPdfModalComponent,
     ProjectPageComponent,
     ProjectInfoComponent,
-    OwnerToolsComponent,
+    LoginRequiredModal,
     RightMarginTooltipComponent,
     ReadingPageComponent,
     DeleteProjectComponent,
