@@ -37,7 +37,6 @@ import { AddClassPipe } from './shared/addclass.pipe.ts';
 
 // Components
 import { NavBarComponent } from './shared/nav-bar';
-import { SideBarComponent } from './shared/side-bar';
 import { FooterComponent } from './shared/footer';
 import { HomeComponent } from './home';
 import { RegisterComponent } from './register';
@@ -45,7 +44,7 @@ import { JoinComponent } from './join/join.component';
 import { LoginForm, GuestForm } from './forms';
 import { LoginModal, ResetPassComponent, DeleteCommentModal, AddProjectModal } from './modals';
 import { AnnotatorComponent, CommentComponent, TextCommentComponent, EmojiCommentComponent, EmojiKeyboardComponent, RightMarginTooltipComponent } from './annotator';
-import { ProjectPageComponent, ProjectInfoComponent } from './project-page';
+import { ProjectPageComponent, ProjectInfoComponent, OwnerToolsComponent } from './project-page';
 import { ReadingPageComponent, DeleteProjectComponent } from './reading-page';
 import { NewReadingPage, UploadModalComponent, UploadPdfModalComponent } from './new-reading-page';
 import { DashboardComponent, JoinedDashComponent, CreatedDashComponent, ReadingCardComponent } from './dashboard';
@@ -97,7 +96,6 @@ type StoreType = {
     AddClassPipe,
     RegisterComponent,
     NavBarComponent,
-    SideBarComponent,
     FooterComponent,
     CommentComponent,
     TextCommentComponent,
@@ -118,6 +116,7 @@ type StoreType = {
     UploadPdfModalComponent,
     ProjectPageComponent,
     ProjectInfoComponent,
+    OwnerToolsComponent,
     RightMarginTooltipComponent,
     ReadingPageComponent,
     DeleteProjectComponent,

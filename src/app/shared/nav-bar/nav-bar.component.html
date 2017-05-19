@@ -1,32 +1,60 @@
-<nav [ngClass]="{ 'large' : isLarge }">
-	<div class="nav-bar">
-		<div class="row">
-			<!--<div class="col-sm-4">
-				&nbsp;
-			</div>-->
+<div class="nav-bar__wrap">
+	<div id="sideBar" class="nav-bar">
+		<!--<a class="logo-button" href="#/dashboard">
+			<img id="logomark" src="assets/images/logo-mark.svg" />
+			<img id="logo" src="assets/images/logo.svg" />
+			<img id="logoPressed" src="assets/images/logo-pressed.svg" />
+		</a>-->
+		<button class="mNav" class="mNavIcon mNav" [ngClass]="{ 'mNavShowing' : mNavShow }" (click)="mNavShowFlip()">^</button>
+		<a [routerLink]="['/dashboard']" class="nav-bar__logo-wrap">
+			<img id="logo" class="nav-bar__logo" src="assets/images/logo-3.2-mark.svg" />
+			<!--<img id="logoPressed" src="assets/images/logo-pressed.svg" />-->
+		</a>
 
-			<div class="col-sm-3 nav__logo-wrap">
-				<a *ngIf="isLarge" class="nav__anchor-logo logo-button" [routerLink]="['/home']">
-					<!--<img id="logo" src="assets/images/logo.svg" />-->
-					<img class="hidden-sm-down" id="logo" src="assets/images/logo-3.2-full.svg" />
-					<img class="hidden-md-up" id="logo" src="assets/images/logo-3.2-mark.svg" />
-				</a>
-				<a *ngIf="!isLarge" class="nav__anchor-logo logo-button" [routerLink]="['/home']">
-					<img id="logo" src="assets/images/logo-3.2-mark.svg" />
-				</a>
-			</div>
-			<div class="col-sm-5"></div>
+		<!--Optional Title-->
+		<div class="nav-bar__heading">
+			<h1 *ngIf="pageTitle" class="hidden-sm-down">{{ pageTitle }}</h1>
+		</div>
+		
+		<div *ngIf="!user.isLoggedIn" class="nav__btn-wrap">
+			<a class="btn btn-primary nav-bar__btn"  [routerLink]="['/login']">Log In</a>
+			<a class="btn btn-secondary nav-bar__btn" [routerLink]="['/register']">Register</a>
+		</div>
+		<div *ngIf="user.isLoggedIn" class="nav-bar__user" [ngClass]="{ 'nav-bar__user__show' : mNavShow }">
+			
+			<a class="nav-bar__link" tabindex="1" id="accountButton" [routerLink]="['/account']">
+				<span *ngIf="user.fullname">{{ user.fullname }}</span>
+				<span *ngIf="!user.fullname">{{ user.username }}</span>
+			</a>
+			<a class="link" tabindex="1" id="logOutButton" (click)="logout()" [innerHtml]="'Log Out'"></a>
+		</div>
 
-			<div *ngIf="showLinks" class="col-sm-4">
-				<div class="nav-bar__links nav-btns">
-					<a class="nav-bar__link btn btn-secondary nav-btn-reg" id="registerLink" [routerLink]="['/register']">
-						<span>Register</span>
-					</a>
-					<a class="nav-bar__link btn btn-primary nav-btn-login" id="loginLink" [routerLink]="['/login']">
-						<span>Log In</span>
-					</a>
+		<div class="nav__btn-wrap">
+			<button *ngIf="canPublish" class="btn btn-action nav-bar__btn" (click)="showShareTooltip = !showShareTooltip" [class.active]="showShareTooltip">
+				Share
+			</button>
+			<!--Publish Tooltip-->
+			<div *ngIf="showShareTooltip" class="publish-tooltip">
+				<h1 class="publish-tooltip__title">Publish and Share</h1>
+				<p class="sub-label pb-2">Finished with your reading? Give it a group name, Finalize and get your group code to share with your readers!</p>
+				<div class="form-group" style="margin-bottom: 0px;">
+					<label>
+						Group
+						<!--<p class="sub-label">Name for the first Group you will share this Reading with.</p>-->
+						<div class="input-group">
+							<input [ngModel]="groupLabel" type="text" id="firstProjectLabel" class="form-control form-item--editor h3 mGroup" placeholder="eg. First Period, Peer review..."  />
+						</div>
+						<div id="errorGroupLabel" *ngIf="groupLabel.length < 1 && submitted" class="alert alert-info">Please pick a name for your first Reading Group!</div>
+					</label>
 				</div>
+				<button class="btn btn-action" (click)="finalizeReadingAndShare(groupLabel)" [class.loading]="shareLoading">
+					Finalize and Share
+				</button>
 			</div>
-		</div><!--.row-->
+			<button *ngIf="canPublish" class="btn btn-secondary nav-bar__btn"  (click)="saveAction.emit()">Save</button>
+		</div>
 	</div>
-</nav>
+
+	<!--Mobile display for title-->
+	<h1 *ngIf="pageTitle" class="hidden-md-up mobile-heading">{{ pageTitle }}</h1>
+</div>

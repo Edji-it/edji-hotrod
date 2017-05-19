@@ -1,4 +1,4 @@
-<side-bar [pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'" [canPublish]="true" (saveAction)="saveReading($event, readingForm.value)" (shareAction)="shareReading($event, readingForm.value)"></side-bar>
+<nav-bar [pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'" [canPublish]="true" (saveAction)="saveReading($event, readingForm.value)" (shareAction)="shareReading($event, readingForm.value)"></nav-bar>
 
 <div class="container">
     <div class="row">

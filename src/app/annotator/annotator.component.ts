@@ -141,13 +141,14 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             this.isMobile = true;
         }
 
-        // Get Reading via Observable
         this._readings.get(this.project.reading_id)
             .take(1)
             .subscribe()
 
+        // Get Reading via Observable
         this._readings.currentReading.subscribe(
             reading => {
+                console.log(reading)
                 this.reading = reading;
                 this.updateMetaTags();
             },
