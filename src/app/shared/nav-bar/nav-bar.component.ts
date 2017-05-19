@@ -63,7 +63,8 @@ export class NavBarComponent implements OnInit, OnDestroy {
         this.isMobile = false
       }
 
-      this._readings.currentReading.subscribe(
+      this.subscriptions.push(
+        this._readings.currentReading.subscribe(
             reading => {
                 this.currentReading = reading;
                 if (!this.pageTitle) {
@@ -74,6 +75,19 @@ export class NavBarComponent implements OnInit, OnDestroy {
                 console.error(error);
             }
         )
+      )
+      
+      this.subscriptions.push(
+        this._projects.currentProject.subscribe(
+              project => {
+                console.log(project)
+                  this.currentProject = project;
+              },
+              error => {
+                  console.error(error);
+              }
+          )
+      )
 
     }
 

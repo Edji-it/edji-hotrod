@@ -20,6 +20,13 @@
 			<a class="btn btn-primary nav-bar__btn"  [routerLink]="['/login']">Log In</a>
 			<a class="btn btn-secondary nav-bar__btn" [routerLink]="['/register']">Register</a>
 		</div>
+
+		<!--Project Info-->
+		<div *ngIf="currentProject && currentProject.code" class="nav-bar__project" >
+			<pre>{{currentProject.code}}</pre>
+		</div>
+
+		<!--User Info-->
 		<div *ngIf="user.isLoggedIn" class="nav-bar__user" [ngClass]="{ 'nav-bar__user__show' : mNavShow }">
 			
 			<a class="nav-bar__link" tabindex="1" id="accountButton" [routerLink]="['/account']">
