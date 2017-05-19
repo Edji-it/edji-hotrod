@@ -26,15 +26,15 @@ export class AuthService implements CanActivate {
         this.currentUser = this.currentUserSource.asObservable();
         
         // Check to see if prod or dev environment
-        // if (window.location.host.indexOf('dev.edji.it') > -1) {
+        if (window.location.host.indexOf('dev.edji.it') > -1) {
             //   baseUrl = "http://edji-dev.herokuapp.com";
             this.baseUrl = this.protocol + "//optimus-dev.edji.it";
             this.ENV = "dev";
-        // } else if (window.location.host.indexOf('edji.it') > -1 || window.location.host.indexOf('dvscf5tf91syg.cloudfront.net') > -1) {
+        } else if (window.location.host.indexOf('edji.it') > -1 || window.location.host.indexOf('dvscf5tf91syg.cloudfront.net') > -1) {
             //   this.baseUrl = "http://edji-prod.herokuapp.com";
             this.baseUrl = this.protocol + "//optimus.edji.it";
             this.ENV = "prod";
-        // }
+        }
     }
 
     /** Provides environment variable to the rest of the app */
