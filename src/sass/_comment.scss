@@ -356,23 +356,21 @@ input.emojiComment {
 
 			@include transition(margin linear 0.3s);
 
-			@media only screen and (max-width: $xldesktop) {
-				&:after {
-					color: #888;
-					content: '#{$n}';
-					background: transparent;
-					padding: 0px;
-					position: absolute;
-					right: -9px;
-					top: -2px;
-					font-size: 10px;
-					font-family: 'Open Sans';
-					font-weight: bold;
-					text-align: center;
-					transform: translateX(50%);
-					pointer-events: none;
-					display: block;
-				}
+			&:after {
+				color: #888;
+				content: '#{$n}';
+				background: transparent;
+				padding: 0px;
+				position: absolute;
+				right: -9px;
+				top: -2px;
+				font-size: 10px;
+				font-family: 'Open Sans';
+				font-weight: bold;
+				text-align: center;
+				transform: translateX(50%);
+				pointer-events: none;
+				display: block;
 			}
 
 			& .expand-comments {
