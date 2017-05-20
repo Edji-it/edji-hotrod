@@ -358,9 +358,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         let sel = Rangy.getSelection()
         let target = event.target || event.srcElement || event.currentTarget
         let targetTag = event.target && event.target.tagName ? event.target.tagName.toLowerCase() : ''
-        // let isImageComment = false
-
-        console.log("before image check")
+        
         /**
          * Handle creating selection and coordinates for comments on images
          */
