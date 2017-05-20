@@ -32,3 +32,8 @@ export enum CommentPermissions {
   EDIT = 5,
   ADMIN = 10
 }
+
+/** Keep the comment stats reliable and defined */
+export interface CommentStats {
+  count: number
+}

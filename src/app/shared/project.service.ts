@@ -1,29 +1,30 @@
-import { ActivatedRoute, Params } from '@angular/router';
-import { Injectable } from '@angular/core';
-import { Http, Response, Headers, RequestOptions } from '@angular/http';
-import { Observable, BehaviorSubject } from 'rxjs/Rx';
-import 'rxjs/add/operator/toPromise';
+import { ActivatedRoute, Params } from '@angular/router'
+import { Injectable } from '@angular/core'
+import { Http, Response, Headers, RequestOptions } from '@angular/http'
+import { Observable, BehaviorSubject } from 'rxjs/Rx'
+import 'rxjs/add/operator/toPromise'
 
-import { AuthService } from './auth.service';
-import { SocketService } from './socket.service';
+import { AuthService } from './auth.service'
+import { SocketService } from './socket.service'
+import { CommentStats, Project } from './datatypes'
 
 @Injectable()
 export class ProjectService {
-  private targetProjectId: string = '';
+  private targetProjectId: string = ''
 
   /** project will be given out as observable */
-  private project: any = { title: "initial value" };
-  private currentProjectSource: BehaviorSubject<any> = new BehaviorSubject<any>(this.project);
-  public currentProject: Observable<any> = this.currentProjectSource.asObservable();
+  private project: any = { title: "initial value" }
+  private currentProjectSource: BehaviorSubject<any> = new BehaviorSubject<any>(this.project)
+  public currentProject: Observable<any> = this.currentProjectSource.asObservable()
   // Maintain local Project data and its updates in this service
   
   private commentStats: any = {
     count: 0,
     users: [],
     userRef: {}
-  };
-  private commentStatsSource: BehaviorSubject<any> = new BehaviorSubject<any>(this.commentStats);
-  public currentCommentStats: Observable<any> = this.commentStatsSource.asObservable();
+  }
+  private commentStatsSource: BehaviorSubject<any> = new BehaviorSubject<any>(this.commentStats)
+  public currentCommentStats: Observable<any> = this.commentStatsSource.asObservable()
 
   constructor(
         private http: Http, 
@@ -60,6 +61,11 @@ export class ProjectService {
                 return this.project;
             });
   }
+
+//   /** Take a project and return the curated CommentStats object */
+//   private processCommentStats(project: Project): CommentStats {
+
+//   }
 
   /**
    * Update the CommentStats object to be shared between components

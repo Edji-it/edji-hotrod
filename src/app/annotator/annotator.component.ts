@@ -16,7 +16,7 @@ import { ProjectService } from '../shared/project.service';
 import { CommentComponent } from './comment/comment.component';
 import { AuthService } from '../shared/auth.service';
 import { SocketService } from '../shared/socket.service';
-import { EdjiComment, CommentPermissions } from './../shared/datatypes';
+import { CommentPermissions, CommentStats, EdjiComment, Project, Reading } from './../shared/datatypes';
 
 @Component({
     selector: 'annotator',
@@ -30,7 +30,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     @ViewChildren(CommentComponent) commentComponents: QueryList<CommentComponent>;
 
 
-    private reading: any = {};
+    private reading: Reading = <Reading>{};
     
     private commentsByIndex: any[] = [];
 
@@ -78,7 +78,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     private foundArray: any[] = [];
 
     // Publically available stats
-    public commentStats = {
+    public commentStats: any = {
         count: 0,
         users: [],
         userRef: {}
