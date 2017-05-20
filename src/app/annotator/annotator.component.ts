@@ -270,6 +270,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
+        this._readings.clear()
         this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
     }
     

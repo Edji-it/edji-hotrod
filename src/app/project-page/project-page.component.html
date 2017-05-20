@@ -1,4 +1,4 @@
-<nav-bar [showProjectInfo]="true"></nav-bar>
+<nav-bar [showProjectInfo]="!!project._id"></nav-bar>
 <owner-tools></owner-tools>
 <div class="container-fluid">
   <div class="project-column" [ngClass]="{ loading: !project._id }">
