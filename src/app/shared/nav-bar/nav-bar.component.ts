@@ -13,7 +13,6 @@ import { ProjectService, SocketService, PowerToggle, ReadingService } from '..'
   templateUrl: './nav-bar.component.html'
 })
 export class NavBarComponent implements OnInit, OnDestroy {
-    @Input() hasCommentCount: boolean
     @Input() canPublish: boolean
     @Input() pageTitle: string
     @Input() showProjectInfo: boolean

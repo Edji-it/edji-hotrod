@@ -16,20 +16,34 @@ $ownerToolsWidth: 60px;
     color: $medium-gray;
     box-shadow: $ownerToolsShadow;
 
-    @media(max-width: $tablet) {
-        bottom: 0;
-        left: 0;
-        right: 0;
-        top: none !important;
-        width: 100%;
-        height: $ownerToolsWidth;
-    }
-
     & label {
         width: 100%;
         text-align: center;
         margin: 5px 0px;
         font-size: 11px;
+    }
+
+    @media(max-width: $tablet) {
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: calc(100% - #{ $ownerToolsWidth });
+        width: 100%;
+        height: $ownerToolsWidth;
+        overflow: hidden;
+        text-align: center;
+        transform: translateY(0%);
+
+        & .bar-title {
+            display:none;
+            // width: $ownerToolsWidth;
+            // height: 12px;
+            // transform: rotate(-90deg);
+            // position: absolute;
+            // left: 0;
+            // top: 0;
+            // text-align: left;
+        }
     }
 }
 
@@ -54,8 +68,27 @@ $ownerToolsWidth: 60px;
     position: relative;
     border-top: $ownerToolsBorder;
     outline: none !important;
+    margin-bottom: 14px;
 
+    & label {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        margin: 0;
+    }
 
+    @media(max-width: $tablet) {
+        height: $ownerToolsWidth - 15px;
+        border-top: none;
+        display: inline-block;
+        margin: 0 10px;
+        & i {
+            height: 35px;
+            width: 35px;
+        }
+    }
 }
 
 // Comment button specific styles
