@@ -1,0 +1,37 @@
+<div *ngIf="currentProject && user._id == currentProject.teacher_id" class="owner-bar">
+  <label>Owner</label>
+  <!--Comment Stats pane-->
+  <button type="button" class="btn owner-tools__btn btn-cmt" aria-label="Comment Counts" (click)="showCommentCounts = !showCommentCounts">
+    <img *ngIf="isMobile" style="width: 50px;" src="assets/images/icon-comment.svg" />
+    <img *ngIf="!isMobile" src="assets/images/icon-comment.svg" />
+    <div class="comment-count">{{ commentStats ? commentStats.count : 0 }}</div>
+  </button>
+  <label>Students</label>
+
+  <!--Heat Vision toggle-->
+  <button type="button" class="btn owner-tools__btn btn-hv" (click)="togglePower('heat_vision', !this.currentProject.heat_vision)" >
+      <!--placement={{tooltipPlacement}} ngbTooltip="Turn on Heat Vision to let readers see comments from other readers, turn it off to make comments private!"-->
+    <i id="toggleHeatVision" *ngIf="currentProject" class="icon-heatvision" [ngClass]="[!currentProject.heat_vision ? 'inactive' : 'active']" ></i>
+    <i [class.is-loading]="powersLoading.heatVision" class="power__loading loading"></i>
+  </button>
+  <label>Vision</label>
+</div>
+
+
+<!--Comments Pane-->
+<div class="sliding-pane from-left" [ngClass]="{ 'slide-in' : showCommentCounts }">
+  <div class="container-fluid">
+    <h4>
+    <i class="fa fa-chevron-left btn-icon"></i>
+    {{ commentStats && commentStats.users ? commentStats.users.length : 0 }} Students
+    </h4> 
+    <div class="user-list-item" style="opacity: 0.3; margin-bottom: 14px;">
+      <span>Username</span> 
+      <b style="float:right;">Comments</b>
+    </div>
+    <div *ngFor="let commentUser of commentStats.users" class="user-list-item">
+      <span>{{ commentUser.name }}</span> 
+      <b style="float:right;">{{ commentUser.count }}</b>
+    </div>
+  </div>
+</div>

@@ -5,8 +5,9 @@
 $dashToolbarHeight: 60px;
 
 .dashboard-container {
-    margin: $base-pad;
+    // margin: $base-pad;
     // margin-top: $dashToolbarHeight + $base-pad;
+    margin-top: $base-pad;
 }
 
 .dashboard-toolbar {

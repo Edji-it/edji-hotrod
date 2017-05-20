@@ -1,4 +1,4 @@
-<side-bar></side-bar>
+<nav-bar></nav-bar>
 
 <!--<div class="dashboard-toolbar">
     <a class="tab-2 h1" [routerLink]="['/dashboard/projects']" routerLinkActive="active">Joined</a>
@@ -9,7 +9,7 @@
     <a class="tab-2 h1" (click)="mobileShowJoined=false" [class.active]="!mobileShowJoined">Created</a>
 </div>
 <!--Dashboard uses the *fluid* container, for maximum space use-->
-<div class="container-fluid container--side-bar dashboard-container">
+<div class="container-fluid dashboard-container">
     <div class="row">
         <div [class.mnHide]="!mobileShowJoined" class="col-md-6 pb-5 large-gutter dashboard__container--iPadwidth">
             <edji-joined-dash></edji-joined-dash>

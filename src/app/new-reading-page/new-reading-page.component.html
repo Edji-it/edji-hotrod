@@ -1,12 +1,22 @@
-<side-bar></side-bar>
+<nav-bar [pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'" [canPublish]="true" (saveAction)="saveReading($event, readingForm.value)" (shareAction)="shareReading($event, readingForm.value)"></nav-bar>
 
-<div class="container container--side-bar">
+<div class="container  pt-4">
     <div class="row">
         <div class="col-sm-12">
-            <h1>{{ reading._id ? 'Edit Reading' : 'New Reading' }}</h1>
+            <!--<h1>{{ reading._id ? 'Edit Reading' : 'New Reading' }}</h1>-->
 
-             <form [formGroup]="readingForm" (ngSubmit)="onSubmit(readingForm.value)">
+             <form [formGroup]="readingForm" >
                 <div class="reading-page">
+                    <!--Error and Success messaging-->
+                    <p class="alert alert-warning" *ngIf="error.length > 0">{{ error }}</p>
+                    <div class="alert alert-success alert-readings alert-dismissable" role="alert" *ngIf="showAlert">
+                        <a href="#" class="close" (click)="showAlert=false">×</a>
+                        {{ successObject.readingSuccess }}
+                    </div>
+                    <div class="alert alert-danger alert-readings" role="alert" *ngIf="errorObject.readingError">
+                        {{ errorObject.readingError }}
+                    </div>
+
                     <div class="form-group">
                         <label>
                             <span>Title</span>
@@ -17,7 +27,7 @@
                     <div class="form-group medium-wrap" style="position:relative;">
                         <label>
                             <span>Reading Content</span>
-                            <p class="sub-label">Select text to see formatting options, such as bold and italic. Use the insert buttons on the left to add images and PDFs.</p>
+                            <p class="sub-label">Select text to see formatting options. Use the insert buttons on the left to add images and PDFs.</p>
                             <medium-editor
                                 [(editorModel)]="readingHtml"
                                 [editorOptions]="mediumEditorConfig"
@@ -41,39 +51,11 @@
                     <div class="form-group">
                         <label>
                             Source
-                            <p class="sub-label">(Optional) Provide a link or title for the source this text came from.</p>
+                            <p class="sub-label">(Optional) Provide a link or title for the source of the text.</p>
                             <div class="input-group">
                                 <input type="text" id="readingSource" class="form-control form-item--editor h3 mSource" placeholder="New Reading Source..." [formControl]="readingForm.controls['source']" />
                             </div>
                         </label>
-                    </div>
-                    <div class="form-group">
-                        <label>
-                            First Group
-                            <p class="sub-label">Name for the first Group you will share this Reading with.</p>
-                            <div class="input-group">
-                                <input type="text" id="firstProjectLabel" class="form-control form-item--editor h3 mGroup" placeholder="eg. First Period, Peer review..." [formControl]="readingForm.controls['label']" />
-                            </div>
-                            <div id="errorGroupLabel" *ngIf="readingForm.controls['label'].hasError('required') && (readingForm.controls['label'].dirty || submitted)"  class="alert alert-info">Please pick a name for your first Reading Group!</div>
-                        </label>
-                    </div>
-
-                    <!--Error and Success messaging-->
-                    <p class="alert alert-warning" *ngIf="error.length > 0">{{ error }}</p>
-                    <div class="alert alert-success alert-readings alert-dismissable" role="alert" *ngIf="showAlert">
-                        <a href="#" class="close" (click)="showAlert=false">×</a>
-                        {{ successObject.readingSuccess }}
-                    </div>
-                    <div class="alert alert-danger alert-readings" role="alert" *ngIf="errorObject.readingError">
-                        {{ errorObject.readingError }}
-                    </div>
-
-                    <!--Show time last saved-->
-                    <!--<div class="reading-time" *ngIf="reading._id && reading.updatedAt" [innerHtml]="showDate(reading.updatedAt)"></div>-->
-
-                    <div class="button__row">
-                        <button id="saveDraftButton" type="submit" class="btn btn-info btn_row" [class.loading]="addLoadingD" [class.disabled]="addLoadingP" title="Save as Draft">{{ reading._id && !reading.version_id ? 'Update Draft' : 'Save as Draft' }}</button>
-                        <button id="addReadingButton" type="button" class="btn btn-primary btn_row" [class.loading]="addLoadingP" [class.disabled]="addLoadingD" title="Add Reading" (click)="this.isDraft=false;onSubmit(readingForm.value)">Publish</button>
                     </div>
                 </div>
              </form>

@@ -1,25 +1,27 @@
 
 $btnBg: #969696;
+$btnActionBg: $green;
+$btnActionColor: #606060;
 $btnPrimaryBg: $blue; //#7fd9fc;
 $btnPrimaryColor: #fff;
-$btnSecondaryBg: #fff;
-$btnSecondaryColor: $blue;
-$btnSecondaryBorder: 1px solid rgba(0,0,0,0.05);
+$btnSecondaryBg: #E6E6E6;
+$btnSecondaryColor: #606060;
+$btnSecondaryBorder: none; //1px solid rgba(0,0,0,0.05);
 $btnSuccessBg: #46c78e; //#7fd9fc;
 $btnSuccessColor: #fff;
 
 button, .button, .btn { //, [class*='btn']
   appearance: none;
-  background-color: $btnBg;
+  background-color: $btnSecondaryBg;
   border: 0;
-  border-radius: $base-border-radius;
-  color: #fff;
+  border-radius: 0px;
+  color: $dark-gray;
   cursor: pointer;
   display: inline-block;
   font-family: $base-font-family;
   font-size: $base-font-size;
   -webkit-font-smoothing: antialiased;
-  font-weight: 700;
+  font-weight: 500;
   line-height: 1;
   padding: $small-spacing $base-spacing;
   text-decoration: none;
@@ -28,16 +30,16 @@ button, .button, .btn { //, [class*='btn']
   vertical-align: middle;
   white-space: nowrap;
   -webkit-appearance: inherit;
+  position: relative;
 
   &.btn-lg {
     line-height: 1.25em;
     font-size: 1.25*$base-font-size;
   }
 
-  &:hover,
-  &:focus {
-    background-color: shade($btnBg, 20%);
-    color: #fff;
+  &:hover, &:active, &:focus {
+    background: darken($btnSecondaryBg, 10%);
+    color: $btnSecondaryColor;
   }
 
   &:disabled, &[disabled] {
@@ -151,15 +153,16 @@ button, .button, .btn { //, [class*='btn']
   color: $btnPrimaryColor;
 
   &:hover, &:active, &:focus {
-    background: darken($btnPrimaryBg, 20%);
+    background: desaturate(darken($btnPrimaryBg, 20%), 20%); 
   }
+}
 
-  &:disabled {
-    // background: $btnPrimaryBg !important;
+.btn.btn-action {
+  background: $btnActionBg;
+  color: $btnActionColor;
 
-    &:hover, &:active, &:focus {
-      // background: $btnPrimaryBg;
-    }
+  &:hover, &:active, &:focus, &.active {
+    background: desaturate(darken($btnActionBg, 20%), 20%); 
   }
 }
 
@@ -167,7 +170,7 @@ button, .button, .btn { //, [class*='btn']
   background: $btnSuccessBg;
   color: $btnSuccessColor;
 
-  &:hover, &:active, &:focus {
+  &:hover, &:active, &:focus, &.active {
     background: darken($btnSuccessBg, 20%);
   }
 }
