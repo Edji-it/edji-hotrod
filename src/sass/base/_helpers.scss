@@ -48,7 +48,7 @@
 }
 
 .dashboard__container--iPadwidth {
-    @media only screen and (max-device-width: $tablet) {
+    @media only screen and (max-device-width: $tablet) and (orientation:portrait) {
         max-width: 100%;
         flex: inherit;
     }

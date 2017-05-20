@@ -35,16 +35,15 @@
 			<!--Mobile buttons-->
 			<div class="container hidden-lg-up shown-ipad-landscape">
 				<div class="row">
-					<div class="col-6">
-						<button *ngIf="project.types.indexOf('emoji') > -1" id="addEmojiComment" 
+					<div class="col-6" *ngIf="project.types.indexOf('emoji') > -1" [ngClass]="project.types.indexOf('emoji') > -1 && project.types.indexOf('text') > -1 ? 'col-6' : 'col-12'">
+						<button id="addEmojiComment" 
 							class="emoji comment__options--mobile" 
 							(tap)="addEmojiComment($event)" 
 							[innerHtml]="':thinking_face:' | emojione"></button>
 					</div>
-					<div class="col-6">
-						<button *ngIf="project.types.indexOf('text') > -1" 
+					<div class="col-6" *ngIf="project.types.indexOf('text') > -1" [ngClass]="project.types.indexOf('emoji') > -1 && project.types.indexOf('text') > -1 ? 'col-6' : 'col-12'">
+						<button id="addTextComment"
 							class="emoji comment__options--mobile" 
-							id="addTextComment" 
 							(tap)="addTextComment($event)" 
 							[innerHtml]="':writing_hand:' | emojione"></button>
 					</div>
