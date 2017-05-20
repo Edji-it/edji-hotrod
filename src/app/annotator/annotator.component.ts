@@ -381,7 +381,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         }
 
         // Make sure selection exists, and is within highlightable content
-        if (sel && sel.toString()
+        if (sel && sel.toString() && sel.toString().length > 0
                 && Rangy.dom.isAncestorOf(annotatorContent, sel.focusNode)
                 && Rangy.dom.isAncestorOf(annotatorContent, sel.anchorNode)
             ) {
