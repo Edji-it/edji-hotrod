@@ -105,6 +105,10 @@ button, .button, .btn { //, [class*='btn']
   text-align: center;
   // padding: $base-pad/2 0;
 
+  @media screen and (max-device-width: $tablet) {
+    margin-top: 80px;
+  }
+
   & .button, & .btn {
     margin: 0px 5px;
   }
