@@ -353,13 +353,37 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      */
     showCommentOptions(event, doNotDismiss ?: boolean): void {
         // Only show options if text selected
-        let annotatorPaper = document.getElementById('emojiAnnotator');
-        let annotatorContent = document.getElementById('annotatorContent');
-        let sel = Rangy.getSelection();
-        // console.log(sel);
-        
+        let annotatorPaper = document.getElementById('emojiAnnotator')
+        let annotatorContent = document.getElementById('annotatorContent')
+        let sel = Rangy.getSelection()
+        let target = event.target || event.srcElement || event.currentTarget
+        let targetTag = event.target && event.target.tagName ? event.target.tagName.toLowerCase() : ''
+        // let isImageComment = false
+
+        console.log("before image check")
+        /**
+         * Handle creating selection and coordinates for comments on images
+         */
+        if (targetTag == 'img') {
+            // when they click the picture, we need to create the selection for them
+            this.imageCoords = this.getRelativeCoords(event)
+            
+            let range = Rangy.createRange()
+            range.selectNodeContents(target['parentNode'])
+
+            // Create placeholder spot
+            this.imageHotspotPlaceholder = {
+                index: target.getAttribute('index'),
+                x: this.imageCoords['x'],
+                y: this.imageCoords['y'],
+                preview: true
+            }
+            // this makes sure there are no other selections made
+            sel.setSingleRange(range)
+        }
+
         // Make sure selection exists, and is within highlightable content
-        if (sel && sel.toString().length > 0 
+        if (sel && sel.toString()
                 && Rangy.dom.isAncestorOf(annotatorContent, sel.focusNode)
                 && Rangy.dom.isAncestorOf(annotatorContent, sel.anchorNode)
             ) {
@@ -367,43 +391,33 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             const readingPad = 52;
             let focusY;
             if (!!sel.focusNode.getBoundingClientRect) {
-                focusY = sel.focusNode.getBoundingClientRect().top;
+                focusY = sel.focusNode.getBoundingClientRect().top
             } else {
-                focusY = sel.focusNode.parentNode.getBoundingClientRect().top;
+                focusY = sel.focusNode.parentNode.getBoundingClientRect().top
             }
-            this.highlightY = (focusY - scrollOffset + readingPad);
-            // If in mobile
-            if (window.screen.availWidth < 768) {
-                this.isMobile = true;
-                if (event.clientX < 120) {
-                    this.optionLeft = false;
-                    this.highlightX = (180 - event.clientX);
-                } else {
-                    this.optionLeft = true;
-                    this.highlightX = (event.clientX + readingPad - 80);
-                }
-            } else {
-                this.isMobile = false;
-            }
-            if (this.imageHotspotPlaceholder.preview === true) {
-                let yOnImage = this.imageHeight[sel.focusNode.querySelector('img').getAttribute('index')];
+
+            // Set y position of comment options
+            this.highlightY = (focusY - scrollOffset + readingPad)
+            
+            if (this.imageHotspotPlaceholder.preview == true) {
+                let yOnImage = this.imageHeight[this.imageHotspotPlaceholder.index]
                 // Offset 10px to line up with hotspot
-                this.highlightY = this.highlightY + (this.imageHotspotPlaceholder.y/100 * yOnImage) - 10;
+                this.highlightY = this.highlightY + (this.imageHotspotPlaceholder.y/100 * yOnImage) - 10
             }
             this.optionsShow = true;
             // Guide content
             if (this.guideStepNo < 2) {
-                this.guideStepNo = 2;
+                this.guideStepNo = 2
             }
         } else if (!doNotDismiss) {
-            this.optionsShow = false;
-            this.imageHotspotPlaceholder.preview = false;
+            this.optionsShow = false
+            this.imageHotspotPlaceholder.preview = false
         }
     }
 
     loopCheckTextSelection(): void {
         setTimeout(() => {
-            this.showCommentOptions({ name: 'timeout'});
+            this.showCommentOptions({ name: 'timeout', target: document });
             this.loopCheckTextSelection();
         }, 500);
     }
@@ -881,30 +895,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         return classString + ' h-' + highlightCount;
     }
 
-    private imageCommentOptions(imageIndex: number, word: any, event: Event) : void {
-        // when they click the picture, we need to create the selection for them
-        let target = event.target || event.srcElement || event.currentTarget;
-        let coords = this.getRelativeCoords(event);
-
-        // Set aside image coords
-        this.imageCoords = coords;
-
-        let range = Rangy.createRange();
-        range.selectNodeContents(target['parentNode']);
-        let sel = Rangy.getSelection();
-
-
-        // Create placeholder spot
-        this.imageHotspotPlaceholder = {
-            index: target['parentNode']['parentNode'].getAttribute('index'),
-            x: coords.x,
-            y: coords.y,
-            preview: true
-        };
-        // this makes sure there are no other selections made
-        sel.setSingleRange(range);
-        this.showCommentOptions(event);
-    }
+    // private imageCommentOptions(imageIndex: number, event: Event) : void {
+        
+    //     this.showCommentOptions(event);
+    // }
 
     /** Used to determine which level of permission the user has for a specific comment
      * @param comment A comment object
