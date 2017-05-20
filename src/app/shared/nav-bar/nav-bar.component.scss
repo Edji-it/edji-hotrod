@@ -86,6 +86,14 @@ $purple: rgb(150, 40, 255);
     font-size: 16px;
 	overflow: hidden;
 
+	@media(max-width: $tablet) {
+		text-align: left;
+		width: 50%;
+		background: #fff;
+		border-bottom: $navBorder;
+		margin-bottom: $base-pad;
+	}
+
 	& label {
 		font-family: 'Open Sans';
 		font-size: 12px;
@@ -241,119 +249,119 @@ div.sliding-pane.from-left.slide-in {
 }
 
 /* Mobile Optimization */
-@media (max-width: #{$tablet}) {
-	.nav-bar__user {
-		display: none;
-        -webkit-transition: rotate(0deg);
-		-webkit-transform: rotate(0deg); /* Safari and Chrome */
-		-moz-transform: rotate(0deg); /* Firefox */
-		-ms-transform: rotate(0deg); /* IE 9 */
-		-o-transform: rotate(0deg); /* Opera */
-		transform: rotate(0deg); /* W3C */
-		position: fixed;
-		top: 66px;
-		position: absolute;
-		height: 40px;
-		background-color: #F0F0F0;
-		width: 100%;
-		left: 0;
-		padding-top: 6px;
-		-webkit-box-shadow: 0 5px 10px -5px #777;
-    	box-shadow: 0 5px 10px -5px #777;
-	}
+// @media (max-width: #{$tablet}) {
+// 	.nav-bar__user {
+// 		display: none;
+//         -webkit-transition: rotate(0deg);
+// 		-webkit-transform: rotate(0deg); /* Safari and Chrome */
+// 		-moz-transform: rotate(0deg); /* Firefox */
+// 		-ms-transform: rotate(0deg); /* IE 9 */
+// 		-o-transform: rotate(0deg); /* Opera */
+// 		transform: rotate(0deg); /* W3C */
+// 		position: fixed;
+// 		top: 66px;
+// 		position: absolute;
+// 		height: 40px;
+// 		background-color: #F0F0F0;
+// 		width: 100%;
+// 		left: 0;
+// 		padding-top: 6px;
+// 		-webkit-box-shadow: 0 5px 10px -5px #777;
+//     	box-shadow: 0 5px 10px -5px #777;
+// 	}
 
-	.nav-bar__logo {
-		width: 48px;
-		padding: 4px;
-		left: 5%;
-		position: absolute;
-	}
-	.nav-bar {
-		height: 66px;
-		width: 100%;
-		overflow: inherit;
-	}
-	.mNavIcon {
-		display: block;
-	}
-	.nav-bar__icon-button {
-		position: absolute;
-		padding: 10px;
-		top: 0;
-		right: 10px;
-	}
-	img.icn-cmt {
-		width: 50px;
-	}
-	.nav-bar {
-		-webkit-box-shadow: 0 4px 6px -4px #777;
-    	box-shadow: 0 4px 6px -4px #777;
-	}
-	.nav-bar__user__show {
-		display: block;
-	}
-	.mNav {
-		font-family: 'Open Sans';
-		font-weight: 700;
-		position: absolute;
-		top: 32px;
-		//left: 28px;
-		left: 82%;
-		height: 18px;
-		width: 26px;
-		background: none;
-		border: none;
-		outline: none;
-		color: rgba(0, 0, 0, 0.3);
-		transition: opacity 0.3s;
-		padding: 0px;
-		border-radius: 50%;
-		content: '^';
-		touch-action: none; 
-		user-select: none; 
-		-webkit-user-drag: none; 
-		-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-		font-size: 42px;
-		-webkit-transform: scale(2,1) rotate(180deg); /* Safari and Chrome */
-		-moz-transform: scale(2,1) rotate(180deg); /* Firefox */
-		-ms-transform: scale(2,1) rotate(180deg); /* IE 9 */
-		-o-transform: scale(2,1) rotate(180deg); /* Opera */
-		transform: scale(2,1) rotate(180deg); /* W3C */
-		transition:         transform 550ms ease;
-        -moz-transition:    -moz-transform 550ms ease;
-        -ms-transition:     -ms-transform 550ms ease;
-        -o-transition:      -o-transform 550ms ease;
-        -webkit-transition: -webkit-transform 550ms ease;
-	}
-	.mNavShowing {
-		top: 16px;
-		-webkit-transform: scale(2,1); /* Safari and Chrome */
-		-moz-transform: scale(2,1); /* Firefox */
-		-ms-transform: scale(2,1); /* IE 9 */
-		-o-transform: scale(2,1); /* Opera */
-		transform: scale(2,1); /* W3C */
-		transition:         transform 550ms ease;
-        -moz-transition:    -moz-transform 550ms ease;
-        -ms-transition:     -ms-transform 550ms ease;
-        -o-transition:      -o-transform 550ms ease;
-        -webkit-transition: -webkit-transform 550ms ease;
-	}
-	div.sliding-pane.from-left.slide-in {
-		left: 0;
-		box-shadow: 2px 2px 20px rgba(0,0,0,0.1);
-	}
-	.btn-cmt {
-		left: 28%;
-	}
-	.btn-hv {
-		left: 55%;
-		width: 50px;
-	}
-	.power__loading {
-		top: 5px;
-		left: 5px;
-	}
-}
+// 	.nav-bar__logo {
+// 		width: 48px;
+// 		padding: 4px;
+// 		left: 5%;
+// 		position: absolute;
+// 	}
+// 	.nav-bar {
+// 		height: 66px;
+// 		width: 100%;
+// 		overflow: inherit;
+// 	}
+// 	.mNavIcon {
+// 		display: block;
+// 	}
+// 	.nav-bar__icon-button {
+// 		position: absolute;
+// 		padding: 10px;
+// 		top: 0;
+// 		right: 10px;
+// 	}
+// 	img.icn-cmt {
+// 		width: 50px;
+// 	}
+// 	.nav-bar {
+// 		-webkit-box-shadow: 0 4px 6px -4px #777;
+//     	box-shadow: 0 4px 6px -4px #777;
+// 	}
+// 	.nav-bar__user__show {
+// 		display: block;
+// 	}
+// 	.mNav {
+// 		font-family: 'Open Sans';
+// 		font-weight: 700;
+// 		position: absolute;
+// 		top: 32px;
+// 		//left: 28px;
+// 		left: 82%;
+// 		height: 18px;
+// 		width: 26px;
+// 		background: none;
+// 		border: none;
+// 		outline: none;
+// 		color: rgba(0, 0, 0, 0.3);
+// 		transition: opacity 0.3s;
+// 		padding: 0px;
+// 		border-radius: 50%;
+// 		content: '^';
+// 		touch-action: none; 
+// 		user-select: none; 
+// 		-webkit-user-drag: none; 
+// 		-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+// 		font-size: 42px;
+// 		-webkit-transform: scale(2,1) rotate(180deg); /* Safari and Chrome */
+// 		-moz-transform: scale(2,1) rotate(180deg); /* Firefox */
+// 		-ms-transform: scale(2,1) rotate(180deg); /* IE 9 */
+// 		-o-transform: scale(2,1) rotate(180deg); /* Opera */
+// 		transform: scale(2,1) rotate(180deg); /* W3C */
+// 		transition:         transform 550ms ease;
+//         -moz-transition:    -moz-transform 550ms ease;
+//         -ms-transition:     -ms-transform 550ms ease;
+//         -o-transition:      -o-transform 550ms ease;
+//         -webkit-transition: -webkit-transform 550ms ease;
+// 	}
+// 	.mNavShowing {
+// 		top: 16px;
+// 		-webkit-transform: scale(2,1); /* Safari and Chrome */
+// 		-moz-transform: scale(2,1); /* Firefox */
+// 		-ms-transform: scale(2,1); /* IE 9 */
+// 		-o-transform: scale(2,1); /* Opera */
+// 		transform: scale(2,1); /* W3C */
+// 		transition:         transform 550ms ease;
+//         -moz-transition:    -moz-transform 550ms ease;
+//         -ms-transition:     -ms-transform 550ms ease;
+//         -o-transition:      -o-transform 550ms ease;
+//         -webkit-transition: -webkit-transform 550ms ease;
+// 	}
+// 	div.sliding-pane.from-left.slide-in {
+// 		left: 0;
+// 		box-shadow: 2px 2px 20px rgba(0,0,0,0.1);
+// 	}
+// 	.btn-cmt {
+// 		left: 28%;
+// 	}
+// 	.btn-hv {
+// 		left: 55%;
+// 		width: 50px;
+// 	}
+// 	.power__loading {
+// 		top: 5px;
+// 		left: 5px;
+// 	}
+// }
 
 // Publish tooltip
 .publish-tooltip {
