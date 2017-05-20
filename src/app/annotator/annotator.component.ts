@@ -32,7 +32,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
     private reading: Reading = <Reading>{};
     
-    private commentsByIndex: any[] = [];
+    private commentsByIndex: EdjiComment[][] = [];
 
     private highlightArray: number[] = [];
     private alwaysHighlightArray: number[] = [];
