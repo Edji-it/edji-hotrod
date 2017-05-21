@@ -1,20 +1,20 @@
 <div *ngIf="currentProject && user._id == currentProject.teacher_id" class="owner-bar">
-  <label>Owner</label>
+  <label class="bar-title">Owner</label>
   <!--Comment Stats pane-->
   <button type="button" class="btn owner-tools__btn btn-cmt" aria-label="Comment Counts" (click)="showCommentCounts = !showCommentCounts">
     <img *ngIf="isMobile" style="width: 50px;" src="assets/images/icon-comment.svg" />
     <img *ngIf="!isMobile" src="assets/images/icon-comment.svg" />
     <div class="comment-count">{{ commentStats ? commentStats.count : 0 }}</div>
+    <label>Students</label>
   </button>
-  <label>Students</label>
 
   <!--Heat Vision toggle-->
   <button type="button" class="btn owner-tools__btn btn-hv" (click)="togglePower('heat_vision', !this.currentProject.heat_vision)" >
       <!--placement={{tooltipPlacement}} ngbTooltip="Turn on Heat Vision to let readers see comments from other readers, turn it off to make comments private!"-->
     <i id="toggleHeatVision" *ngIf="currentProject" class="icon-heatvision" [ngClass]="[!currentProject.heat_vision ? 'inactive' : 'active']" ></i>
     <i [class.is-loading]="powersLoading.heatVision" class="power__loading loading"></i>
+    <label>Vision</label>
   </button>
-  <label>Vision</label>
 </div>
 
 
