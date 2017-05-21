@@ -13,6 +13,7 @@ export class NewReading implements PageObjectInterface
     public sourceInput = element(by.id('readingSource'));
     public groupInput = element(by.id('firstProjectLabel'));
     public addButton = element(by.id('addReadingButton'));
+    public finalizeButton = element(by.id('addReadingFinalizeButton'));
     public draftButton = element(by.id('saveDraftButton'));
     
     public uploadModalButton = element(by.css('#buttonUploadImage'));

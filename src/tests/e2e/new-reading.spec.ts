@@ -70,14 +70,17 @@ describe('New Reading Page', () => {
         newReading.titleInput.sendKeys(newReading.titleString);
         newReading.contentInput.sendKeys(newReading.contentString);
         newReading.sourceInput.sendKeys(newReading.sourceString);
+
+        // Submit New Reading
+        browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "login button never became clickable after login form entry");
+        newReading.addButton.click();
+        
         // Group Label has content prefilled, so we clear it
         newReading.groupInput.clear();
         newReading.groupInput.sendKeys(newReading.groupString);
 
-        // Submit New Reading
-        browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "login button never became clickable after login form entry");
-        //newReading.addButton.submit();
-        newReading.addButton.click();
+        browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
+        newReading.finalizeButton.click();
 
         // Should redirect to Project page for new reading
         browser.wait(EC.urlContains("project"), 5000, "never arrived at new reading");
@@ -104,6 +107,8 @@ describe('New Reading Page', () => {
         browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "login button never became clickable after login form entry");
         //newReading.addButton.submit();
         newReading.addButton.click();
+        browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
+        newReading.finalizeButton.click();
 
         // Should see error for empty title
         browser.wait(EC.presenceOf(newReading.titleError), 5000, "never saw an error for empty title");
@@ -129,6 +134,8 @@ describe('New Reading Page', () => {
         browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "login button never became clickable after login form entry");
         //newReading.addButton.submit();
         newReading.addButton.click();
+        browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
+        newReading.finalizeButton.click();
 
         // Should see error for empty content
         browser.wait(EC.presenceOf(newReading.contentError), 5000, "never saw an error for empty content");
@@ -149,15 +156,18 @@ describe('New Reading Page', () => {
         newReading.titleInput.sendKeys(newReading.titleString);
         newReading.contentInput.sendKeys(newReading.contentShortString);
         newReading.sourceInput.sendKeys(newReading.sourceString);
+
+        browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "login button never became clickable after login form entry");
+        newReading.addButton.click();
+
         newReading.groupInput.clear();
         // This field needs special attention to trigger the required
         newReading.groupInput.sendKeys(' ');
         newReading.groupInput.sendKeys(protractor.Key.BACK_SPACE); 
 
         // Submit New Reading
-        browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "login button never became clickable after login form entry");
-        //newReading.addButton.submit();
-        newReading.addButton.click();
+        browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "login button never became clickable after login form entry");
+        newReading.finalizeButton.click();
         
         // Should see error for empty group label
         browser.wait(EC.presenceOf(newReading.groupError), 5000, "never saw an error for empty group label");
@@ -199,6 +209,8 @@ describe('New Reading Page', () => {
             // Submit New Reading
             browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "add new reading button never became clickable");
             newReading.addButton.click();
+            browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
+            newReading.finalizeButton.click();
 
             // Should create a new Reading
             browser.wait(EC.urlContains("project"), 5000, "never arrived at new reading");
@@ -239,6 +251,8 @@ describe('New Reading Page', () => {
             browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "login button never became clickable after login form entry");
             //newReading.addButton.submit();
             newReading.addButton.click();
+            browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
+            newReading.finalizeButton.click();
 
             // Should create a new Reading
             browser.wait(EC.urlContains("project"), 5000, "never arrived at new reading");
@@ -269,10 +283,7 @@ describe('New Reading Page', () => {
             newReading.titleInput.sendKeys(newReading.titleString);
             newReading.contentInput.sendKeys(newReading.contentShortString);
             newReading.sourceInput.sendKeys(newReading.sourceString);
-            // Group Label has content prefilled, so we clear it
-            newReading.groupInput.clear();
-            newReading.groupInput.sendKeys(newReading.groupString);
-
+            
             // Submit New Draft for Reading
             browser.wait(EC.elementToBeClickable(newReading.draftButton), 5000, "add draft button never became clickable after form entry");
             newReading.draftButton.click();
@@ -288,6 +299,8 @@ describe('New Reading Page', () => {
             // Submit New Reading
             browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "add new reading button never became clickable");
             newReading.addButton.click();
+            browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
+            newReading.finalizeButton.click();
 
             // Should create a new Reading
             browser.wait(EC.urlContains("project"), 5000, "never arrived at new reading");
