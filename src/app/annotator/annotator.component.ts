@@ -162,27 +162,12 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             }
         )
 
-        // // Establish Users array
-        // if (this.project.students_ids) {
-        //     this.project.students_ids.forEach(student => {
-        //         this.commentStats.userRef[student._id] = this.commentStats.users.length;
-        //         this.commentStats.users.push(  { _id: student._id, type: 'user', name: (student.fullname ? student.fullname : student.username), count: 0 } );
-        //     });
-        // }
-        // if (this.project.temp_ids) {
-        //     this.project.temp_ids.forEach(temp => {
-        //         this.commentStats.userRef[temp._id] = this.commentStats.users.length;
-        //         this.commentStats.users.push({ _id: temp._id, type: 'temp', name: temp.fullname, count: 0 });
-        //     });
-        // }
-
         /** Run-once logic to initialize the comment-based arrays and stats */
         let processedCommentData = this._projects.processComments(this.project)
         this.commentsByIndex = processedCommentData.commentsByIndex
         this.alwaysHighlightArray = processedCommentData.highlightArrays.alwaysHighlightArray
         this.highlightArray = processedCommentData.highlightArrays.highlightArray
         this.commentStats = processedCommentData.commentStats
-        console.log(this.commentStats)
 
         // Share updated CommentStats
         this._projects.setCommentStats(this.commentStats);
