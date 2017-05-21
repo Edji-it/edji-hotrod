@@ -5,6 +5,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ProjectService } from '../shared/project.service';
 import { SocketService } from '../shared/socket.service';
 import { AuthService } from '../shared/auth.service';
+import { Project, User } from './../shared/datatypes'
 
 @Component({
     // moduleId: module.id,
@@ -17,10 +18,10 @@ import { AuthService } from '../shared/auth.service';
     ]
 })
 export class ProjectPageComponent implements OnInit, OnDestroy {
-    private project: any = {}
+    private project: Project = <Project>{}
     private subscriptions: Subscription[] = []
     private error: string
-    private user: any
+    private user: User
     // private liveCount: number = 1
     private commentCount: number = 0
     private createdDate: Date
@@ -40,11 +41,6 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
         this._router.events.subscribe(() => {
         window.scrollTo(0, 0);
         })
-        
-
-
-        // gets id from route to compare to currentProject from projects.service
-        let idParam: string = this.route.snapshot.params['id']
 
         /** Set the current user every time it changes */
         this.subscriptions.push(
@@ -53,6 +49,9 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
                 if (!this.user.isLoggedIn) { this.showLoginModal = true }
             })
         )
+
+        // gets id from route
+        let idParam: string = this.route.snapshot.params['id']
 
         // Set current project AND subscribe to updates from that project
         this._projects.setCurrentProject(idParam)

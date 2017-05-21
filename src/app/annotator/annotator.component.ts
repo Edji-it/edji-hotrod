@@ -16,7 +16,7 @@ import { ProjectService } from '../shared/project.service';
 import { CommentComponent } from './comment/comment.component';
 import { AuthService } from '../shared/auth.service';
 import { SocketService } from '../shared/socket.service';
-import { EdjiComment, CommentPermissions } from './../shared/datatypes';
+import { CommentPermissions, CommentStats, EdjiComment, Project, Reading } from './../shared/datatypes';
 
 @Component({
     selector: 'annotator',
@@ -30,9 +30,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     @ViewChildren(CommentComponent) commentComponents: QueryList<CommentComponent>;
 
 
-    private reading: any = {};
+    private reading: Reading = <Reading>{};
     
-    private commentsByIndex: any[] = [];
+    private commentsByIndex: EdjiComment[][] = [];
 
     private highlightArray: number[] = [];
     private alwaysHighlightArray: number[] = [];
@@ -78,7 +78,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     private foundArray: any[] = [];
 
     // Publically available stats
-    public commentStats = {
+    public commentStats: any = {
         count: 0,
         users: [],
         userRef: {}
@@ -152,7 +152,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // Get Reading via Observable
         this._readings.currentReading.subscribe(
             reading => {
-                console.log(reading)
                 this.reading = reading;
                 this.updateMetaTags();
             },
@@ -173,27 +172,14 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 this.commentStats.userRef[temp._id] = this.commentStats.users.length;
                 this.commentStats.users.push({ _id: temp._id, type: 'temp', name: temp.fullname, count: 0 });
             });
-        }  
+        }
 
-        // Populate local Comment and Highlight arrays
-        // (Used for super speedy rendering!)
-        this.project.comments.forEach(comment => {
-            // Show comments if in heat mode, 
-            // if (this.project.heat_vision || comment.user_id === this.user._id || this.user._id === this.project.teacher_id || comment.user_id === this.project.teacher_id) {
-                if (!this.commentsByIndex[comment.start]) {
-                    this.commentsByIndex[comment.start] = [];
-                }
-                // Populate local comments array by start index
-                this.decorateComment(comment);
-                this.commentsByIndex[comment.start].push(comment);
-                
-                // Add highlights
-                this.incrementHighlights(this.user._id === comment.user_id || this.project.teacher_id == comment.user_id, comment.start, comment.end);
-            // }
-
-            // Populate Stats
-            this.updateCommentStats(comment.user_id, 1, comment.author);
-        });
+        /** Run-once logic to initialize the comment-based arrays and stats */
+        let processedCommentData = this._projects.processComments(this.project)
+        this.commentsByIndex = processedCommentData.commentsByIndex
+        this.alwaysHighlightArray = processedCommentData.highlightArrays.alwaysHighlightArray
+        this.highlightArray = processedCommentData.highlightArrays.highlightArray
+        this.commentStats = processedCommentData.commentStats
 
         // Share updated CommentStats
         this._projects.setCommentStats(this.commentStats);

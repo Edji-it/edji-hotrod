@@ -3,7 +3,8 @@ export interface EdjiComment extends BaseComment {
   lineCount: number,
   expanded: boolean,
   project_id: string,
-  active: boolean
+  active: boolean,
+  showAvatar: boolean
 }
 
 /** Comment properties we get from the server */
@@ -31,4 +32,9 @@ export enum CommentPermissions {
   DELETE = 3,
   EDIT = 5,
   ADMIN = 10
+}
+
+/** Keep the comment stats reliable and defined */
+export interface CommentStats {
+  count: number
 }
