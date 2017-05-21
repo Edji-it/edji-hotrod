@@ -192,13 +192,12 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
         let processedCommentData = this._projects.processComments(this.project)
         this.commentsByIndex = processedCommentData.commentsByIndex
-        // this.alwaysHighlightArray = processedCommentData.highlightArrays.alwaysHighlightArray
-        // this.highlightArray = processedCommentData.highlightArrays.highlightArray
-        // this.commentStats = processedCommentData.commentStats
+        this.alwaysHighlightArray = processedCommentData.highlightArrays.alwaysHighlightArray
+        this.highlightArray = processedCommentData.highlightArrays.highlightArray
+        this.commentStats = processedCommentData.commentStats
 
         // Share updated CommentStats
         this._projects.setCommentStats(this.commentStats);
-        console.log(this.commentStats)
 
         // Subscribe to comment comment updates
         this.subscriptions.push(

@@ -77,12 +77,13 @@ export class ProjectService {
         // these empty arrays will be passed into their modifier functions throughout this function
         let commentsByIndex: EdjiComment[][] = []
         let alwaysHighlightArray: number[] = []
-        let highlighArray: number[] = []
+        let highlightArray: number[] = []
         let commentStats: any = {
             count: 0,
             users: [],
             userRef: {}
         }
+        let user = this._auth.getUser()
 
         // using a cached-length for loop for speediness
         // doing my best to only loop through this once for efficiency
@@ -90,22 +91,21 @@ export class ProjectService {
         // you can look in any one of those funcitons if you want to change what is returning
         let len = project.comments.length
         for (let i = 0; i < len; i++) {
-            let user = this._auth.getUser()
             let comment = project.comments[i]
 
             // decorate the comment and push it into the array
             this.addCommentToArray(comment, project, user, commentsByIndex)
 
             // create and return the highlight array
-            this.prepareHighlighArrays(comment, user._id, project, alwaysHighlightArray, highlighArray)
+            this.prepareHighlightArrays(comment, user._id, project, alwaysHighlightArray, highlightArray)
 
             // add the comment to the stats object
             this.addCommentToStats(comment, true, commentStats)
         }
-        
+
         return {
             commentsByIndex: commentsByIndex,
-            highlightArrays: { alwaysHighlightArray: alwaysHighlightArray, highlightArray: highlighArray },
+            highlightArrays: { alwaysHighlightArray: alwaysHighlightArray, highlightArray: highlightArray },
             commentStats: commentStats
         }
     }
@@ -142,7 +142,7 @@ export class ProjectService {
      * @param highlightArray the heat_vision = false highlight array, which will also be modified through the function
      * @returns the two arrays, which now are modified
      */
-    private prepareHighlighArrays(comment: EdjiComment, userId: string, project: Project, alwaysHighlightArray: number[], highlightArray: number[] ): {
+    private prepareHighlightArrays(comment: EdjiComment, userId: string, project: Project, alwaysHighlightArray: number[], highlightArray: number[] ): {
         alwaysHighlightArray: number[], highlightArray: number[]
     } {
         // conditional determines which array we'll sort to - students only see highlightArray w/o heat vision on
