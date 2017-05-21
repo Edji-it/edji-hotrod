@@ -61,7 +61,7 @@
 						Group
 						<!--<p class="sub-label">Name for the first Group you will share this Reading with.</p>-->
 						<div class="input-group">
-							<input [ngModel]="groupLabel" type="text" id="firstProjectLabel" class="form-control form-item--editor h3 mGroup" placeholder="eg. First Period, Peer review..."  />
+							<input [(ngModel)]="groupLabel" type="text" id="firstProjectLabel" class="form-control form-item--editor h3 mGroup" placeholder="eg. First Period, Peer review..."  />
 						</div>
 						<div id="errorGroupLabel" *ngIf="groupLabel.length < 1 && submitted" class="alert alert-info">Please pick a name for your first Reading Group!</div>
 					</label>

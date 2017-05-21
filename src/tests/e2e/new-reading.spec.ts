@@ -160,6 +160,7 @@ describe('New Reading Page', () => {
         browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "login button never became clickable after login form entry");
         newReading.addButton.click();
 
+        browser.wait(EC.elementToBeClickable(newReading.groupInput), 5000, "group input became clickable");
         newReading.groupInput.clear();
         // This field needs special attention to trigger the required
         newReading.groupInput.sendKeys(' ');
@@ -283,7 +284,7 @@ describe('New Reading Page', () => {
             newReading.titleInput.sendKeys(newReading.titleString);
             newReading.contentInput.sendKeys(newReading.contentShortString);
             newReading.sourceInput.sendKeys(newReading.sourceString);
-            
+
             // Submit New Draft for Reading
             browser.wait(EC.elementToBeClickable(newReading.draftButton), 5000, "add draft button never became clickable after form entry");
             newReading.draftButton.click();
