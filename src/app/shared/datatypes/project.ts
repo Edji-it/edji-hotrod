@@ -11,8 +11,8 @@ export interface BaseProject {
   reading_id: string,
   teacher_id: string,
   comments: EdjiComment[],
-  students_ids: string[],
-  temp_ids: string[],
+  students_ids: { _id: string, fullname: string }[], // server populates the ids with this object
+  temp_ids: { _id: string, fullname: string }[], // same as above with temp_ids
   label: string,
   code: string,
   types: string, // can currently be 'emoji' and 'text'

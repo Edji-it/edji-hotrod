@@ -79,10 +79,7 @@ export class ProjectService {
         let commentsByIndex: EdjiComment[][] = []
         let alwaysHighlightArray: number[] = []
         let highlightArray: number[] = []
-        let commentStats: CommentStats = {
-            count: 0,
-            userRef: {}
-        }
+        let commentStats: CommentStats = this.initCommentStats(project)
         let user = this._auth.getUser()
 
         // using a cached-length for loop for speediness
@@ -171,6 +168,43 @@ export class ProjectService {
         return { alwaysHighlightArray: alwaysHighlightArray, highlightArray: highlightArray }
     }
 
+    /** 
+     * ONLY inits the CommentStats object. DOES NOT add to comment counts
+     * @param project The project to get the stats for
+     * @returns A comment stats object with count: 0 and a dictionary full of students
+     */
+    private initCommentStats(project: Project): CommentStats {
+        let commentStats: CommentStats = {
+            count: 0,
+            userRef: {}
+        }
+
+        // loop through student ids and add them to dictionary
+        // we have to do this because some students won't make a comment, so this is their only data on the project
+        // looping through addCommentToStats will later increment the count
+        let len = project.students_ids.length
+        for(let i = 0; i < len; i++) {
+            let student = project.students_ids[i]
+
+            commentStats.userRef[student._id] = {
+                count: 0,
+                fullname: student.fullname
+            }
+        }
+
+        len = project.temp_ids.length
+        for(let i = 0; i < len; i++) {
+            let student = project.temp_ids[i]
+            
+            commentStats.userRef[student._id] = {
+                count: 0,
+                fullname: student.fullname
+            }
+        }
+
+        return commentStats
+    }
+
     /**
      * Take a comment into account in the comment stats for a project
      * @param comment The comment which needs to be taken into account in the stats
@@ -179,6 +213,8 @@ export class ProjectService {
      */
     private addCommentToStats(comment: EdjiComment, add: boolean, commentStats: CommentStats): CommentStats {
         let difference = add ? 1 : -1
+
+        // increment the total reading comment count by the difference
         commentStats.count += difference
 
         // if the user doesn't have a spot in the userRef dictionary, make one for them
