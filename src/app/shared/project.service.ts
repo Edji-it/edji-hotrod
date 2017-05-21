@@ -1,3 +1,4 @@
+import { SELENIUM_PORT } from 'webdriver-manager/built/lib/cmds';
 import { ActivatedRoute, Params } from '@angular/router'
 import { Injectable } from '@angular/core'
 import { Http, Response, Headers, RequestOptions } from '@angular/http'
@@ -72,15 +73,14 @@ export class ProjectService {
      * @param project The project that was just updated
      */
     public processComments(project: Project): {
-        commentsByIndex: EdjiComment[][], highlightArrays: { alwaysHighlightArray: number[], highlightArray: number[] }, commentStats: any
+        commentsByIndex: EdjiComment[][], highlightArrays: { alwaysHighlightArray: number[], highlightArray: number[] }, commentStats: CommentStats
     } {
         // these empty arrays will be passed into their modifier functions throughout this function
         let commentsByIndex: EdjiComment[][] = []
         let alwaysHighlightArray: number[] = []
         let highlightArray: number[] = []
-        let commentStats: any = {
+        let commentStats: CommentStats = {
             count: 0,
-            users: [],
             userRef: {}
         }
         let user = this._auth.getUser()
@@ -177,42 +177,22 @@ export class ProjectService {
      * @param add If true, it will add the comment to stats, if false it subtracts
      * @param commentStats The comment stats object which will be modified and returned
      */
-    private addCommentToStats(comment: EdjiComment, add: boolean, commentStats: any): any {
-        let i = commentStats.userRef[comment.user_id]
+    private addCommentToStats(comment: EdjiComment, add: boolean, commentStats: CommentStats): CommentStats {
         let difference = add ? 1 : -1
-        if (i > -1) {
-            commentStats.users[i].count += difference
-        } else {
-            // Add user ref index
-            commentStats.userRef[comment.user_id] = commentStats.users.length;
-            // Add user stat object
-            commentStats.users.push(  { _id: comment.user_id, name: name, count: add ? 1 : 0 } );
-        }
         commentStats.count += difference
+
+        // if the user doesn't have a spot in the userRef dictionary, make one for them
+        if (!commentStats.userRef[comment.user_id]) {
+            commentStats.userRef[comment.user_id] = {
+                count: 0,
+                fullname: comment.author
+            }
+        }
+
+        commentStats.userRef[comment.user_id].count += difference
+
         return commentStats
     }
-
-    // /**
-    //  * This is the source of our CommentStats object!
-    //  */
-    // fupdateCommentStats(user_id: string, difference: number, name ?: string): void {
-    //     let i = this.commentStats.userRef[user_id];
-    //     if (i > -1) {
-    //         this.commentStats.users[i].count += difference;
-    //     } else {
-    //         // Add user ref index
-    //         this.commentStats.userRef[user_id] = this.commentStats.users.length;
-    //         // Add user stat object
-    //         this.commentStats.users.push(  { _id: user_id, name: name, count: difference > 0 ? 1 : 0 } );
-    //     }
-    //     this.commentStats.count += difference;
-    //     this._projects.setCommentStats(this.commentStats);
-    // }
-
-//   /** Take a project and return the curated CommentStats object */
-//   private processCommentStats(project: Project): CommentStats {
-
-//   }
 
   /**
    * Update the CommentStats object to be shared between components
