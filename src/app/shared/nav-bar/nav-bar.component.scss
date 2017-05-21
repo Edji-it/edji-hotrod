@@ -201,6 +201,11 @@ a.nav-bar__link {
 	position: relative;
 	line-height: 45px;
 	vertical-align: middle;
+	@media only screen and (max-device-width: $xsphone) {
+		min-width: 95px;
+		max-width: 95px;
+		padding: 12px 16px;
+	}
 }
 
 .nav-bar__icon-button {
