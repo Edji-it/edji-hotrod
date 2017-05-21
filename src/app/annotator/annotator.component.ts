@@ -329,6 +329,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
     hideCommentOptions(event ?): void {
         this.optionsShow = false;
+        this.imageHotspotPlaceholder['preview'] = false;
     }
 
     /**
@@ -357,12 +358,12 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         let annotatorContent = document.getElementById('annotatorContent')
         let sel = Rangy.getSelection()
         let target = event.target || event.srcElement || event.currentTarget
-        let targetTag = event.target && event.target.tagName ? event.target.tagName.toLowerCase() : ''
+        // let targetTag = event.target && event.target.tagName ? event.target.tagName.toLowerCase() : ''
         
         /**
          * Handle creating selection and coordinates for comments on images
          */
-        if (targetTag == 'img') {
+        if (target.classList && target.classList.contains('reading-image') && target['parentNode']) {
             // when they click the picture, we need to create the selection for them
             this.imageCoords = this.getRelativeCoords(event)
             
@@ -378,6 +379,11 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             }
             // this makes sure there are no other selections made
             sel.setSingleRange(range)
+        } else {
+            // Functions as "click outside" for images
+            if (event.name != 'timeout') {
+                this.hideCommentOptions()
+            }
         }
 
         // Make sure selection exists, and is within highlightable content
@@ -391,7 +397,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             if (!!sel.focusNode.getBoundingClientRect) {
                 focusY = sel.focusNode.getBoundingClientRect().top
             } else {
-                focusY = sel.focusNode.parentNode.getBoundingClientRect().top
+                focusY = sel.focusNode.parentNode && sel.focusNode.parentNode.getBoundingClientRect().top
             }
 
             // Set y position of comment options
@@ -401,7 +407,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 let yOnImage = this.imageHeight[this.imageHotspotPlaceholder.index]
                 // Offset 10px to line up with hotspot
                 this.highlightY = this.highlightY + (this.imageHotspotPlaceholder.y/100 * yOnImage) - 10
-            }
+            } 
             this.optionsShow = true;
             // Guide content
             if (this.guideStepNo < 2) {
