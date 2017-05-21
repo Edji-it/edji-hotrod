@@ -101,12 +101,12 @@ export class ProjectService {
 
             // add the comment to the stats object
             this.addCommentToStats(comment, true, commentStats)
-
-            return {
-                commentsByIndex: commentsByIndex,
-                highlightArrays: { alwaysHighlightArray: alwaysHighlightArray, highlightArray: highlighArray },
-                commentStats: commentStats
-            }
+        }
+        
+        return {
+            commentsByIndex: commentsByIndex,
+            highlightArrays: { alwaysHighlightArray: alwaysHighlightArray, highlightArray: highlighArray },
+            commentStats: commentStats
         }
     }
 
@@ -126,7 +126,8 @@ export class ProjectService {
             comment.showAvatar = true;
         }
 
-        // add the comment in place of the comment's starting word
+        // add the comment at the index of the comment's starting word
+        if (!arr[comment.start]) { arr[comment.start] = [] }
         arr[comment.start].push(comment)
         return arr
     }

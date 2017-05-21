@@ -170,25 +170,31 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             });
         }  
 
-        // Populate local Comment and Highlight arrays
-        // (Used for super speedy rendering!)
-        this.project.comments.forEach(comment => {
-            // Show comments if in heat mode, 
-            // if (this.project.heat_vision || comment.user_id === this.user._id || this.user._id === this.project.teacher_id || comment.user_id === this.project.teacher_id) {
-                if (!this.commentsByIndex[comment.start]) {
-                    this.commentsByIndex[comment.start] = [];
-                }
-                // Populate local comments array by start index
-                this.decorateComment(comment);
-                this.commentsByIndex[comment.start].push(comment);
+        // // Populate local Comment and Highlight arrays
+        // // (Used for super speedy rendering!)
+        // this.project.comments.forEach(comment => {
+        //     // Show comments if in heat mode, 
+        //     // if (this.project.heat_vision || comment.user_id === this.user._id || this.user._id === this.project.teacher_id || comment.user_id === this.project.teacher_id) {
+        //         if (!this.commentsByIndex[comment.start]) {
+        //             this.commentsByIndex[comment.start] = [];
+        //         }
+        //         // Populate local comments array by start index
+        //         this.decorateComment(comment);
+        //         this.commentsByIndex[comment.start].push(comment);
                 
-                // Add highlights
-                this.incrementHighlights(this.user._id === comment.user_id || this.project.teacher_id == comment.user_id, comment.start, comment.end);
-            // }
+        //         // Add highlights
+        //         this.incrementHighlights(this.user._id === comment.user_id || this.project.teacher_id == comment.user_id, comment.start, comment.end);
+        //     // }
 
-            // Populate Stats
-            this.updateCommentStats(comment.user_id, 1, comment.author);
-        });
+        //     // Populate Stats
+        //     this.updateCommentStats(comment.user_id, 1, comment.author);
+        // });
+
+        let processedCommentData = this._projects.processComments(this.project)
+        this.commentsByIndex = processedCommentData.commentsByIndex
+        // this.alwaysHighlightArray = processedCommentData.highlightArrays.alwaysHighlightArray
+        // this.highlightArray = processedCommentData.highlightArrays.highlightArray
+        // this.commentStats = processedCommentData.commentStats
 
         // Share updated CommentStats
         this._projects.setCommentStats(this.commentStats);
