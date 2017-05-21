@@ -75,7 +75,7 @@ describe('Project Page', () => {
 
             // Code for making a comment
             // Find text to select
-            browser.wait(EC.elementToBeClickable(element(by.css(".w[index='18']"))), 6000, "never found words to click on");
+            browser.wait(EC.elementToBeClickable(element(by.css(".w[index='18']"))), 10000, "never found words to click on");
 
             // Select Text to comment on (should select 'Lorem Ipsum')
             browser.executeScript(function () {

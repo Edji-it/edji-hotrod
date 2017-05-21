@@ -145,6 +145,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             this.isMobile = true;
         }
 
+        this._readings.clear()
+        
         this._readings.get(this.project.reading_id)
             .take(1)
             .subscribe()
