@@ -104,6 +104,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     private guideStepNo = 1;
     private guideComplete = false;
 
+    private annotatorPaper: Element;
+    private annotatorContent: Element;
+
     constructor(
         private _readings: ReadingService,
         private _projects: ProjectService,
@@ -123,7 +126,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     }
     
     ngOnInit() {
-        // this.user = this._auth.getUser();
+        this.annotatorPaper = document.getElementById('emojiAnnotator')
+        this.annotatorContent = document.getElementById('annotatorContent')
 
         /** Set the current user every time it changes */
         this.subscriptions.push(
@@ -354,8 +358,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      */
     showCommentOptions(event, doNotDismiss ?: boolean): void {
         // Only show options if text selected
-        let annotatorPaper = document.getElementById('emojiAnnotator')
-        let annotatorContent = document.getElementById('annotatorContent')
         let sel = Rangy.getSelection()
         let target = event.target || event.srcElement || event.currentTarget
         // let targetTag = event.target && event.target.tagName ? event.target.tagName.toLowerCase() : ''
@@ -388,10 +390,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
         // Make sure selection exists, and is within highlightable content
         if (sel && (this.imageHotspotPlaceholder.preview || sel.toString())
-                && Rangy.dom.isAncestorOf(annotatorContent, sel.focusNode)
-                && Rangy.dom.isAncestorOf(annotatorContent, sel.anchorNode)
+                && Rangy.dom.isAncestorOf(this.annotatorContent, sel.focusNode)
+                && Rangy.dom.isAncestorOf(this.annotatorContent, sel.anchorNode)
             ) {
-            let scrollOffset = annotatorPaper.getBoundingClientRect().top;
+            let scrollOffset = this.annotatorPaper.getBoundingClientRect().top;
             const readingPad = 52;
             let focusY;
             if (!!sel.focusNode.getBoundingClientRect) {
