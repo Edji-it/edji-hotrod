@@ -148,7 +148,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // Get Reading via Observable
         this._readings.currentReading.subscribe(
             reading => {
-                console.log(reading)
                 this.reading = reading;
                 this.updateMetaTags();
             },
@@ -193,6 +192,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
         // Share updated CommentStats
         this._projects.setCommentStats(this.commentStats);
+        console.log(this.commentStats)
 
         // Subscribe to comment comment updates
         this.subscriptions.push(

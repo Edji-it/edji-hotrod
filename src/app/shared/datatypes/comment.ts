@@ -3,7 +3,8 @@ export interface EdjiComment extends BaseComment {
   lineCount: number,
   expanded: boolean,
   project_id: string,
-  active: boolean
+  active: boolean,
+  showAvatar: boolean
 }
 
 /** Comment properties we get from the server */
