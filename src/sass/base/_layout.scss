@@ -5,6 +5,11 @@ $mobileNavHeight: 66px;
   overflow-x: hidden;
 }
 
+.container--less-pad {
+  padding-left: $base-pad/2;
+  padding-right: $base-pad/2;
+}
+
 body > .main {
 	overflow: visible;
 	position:-webkit-sticky;
