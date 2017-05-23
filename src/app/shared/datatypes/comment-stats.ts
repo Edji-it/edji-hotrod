@@ -90,6 +90,8 @@ export class CommentStats {
             // if we're trying to subtract from a non-existant student, then log this error... we don't want to do that.
             console.error("We tried subtracting a comment from a student who doesn't exist!")
         }
+
+        this._stats.userStats.sort(this.compareStudents)
     }
 
     /** 
@@ -101,5 +103,17 @@ export class CommentStats {
         return this._stats.userStats.find((student) => {
             return student._id == _id
         })
+    }
+
+    /**
+     * Compares two students' counts together and returns number to match API of Array.prototype.sort()
+     *  used to sort the array of students
+     */
+    private compareStudents(
+        stu1: { _id: string, fullname: string, count: number }, stu2: { _id: string, fullname: string, count: number }
+    ): number {
+        if (stu1.count < stu2.count) { return 1 }
+        if (stu1.count > stu2.count) { return -1 }
+        return 0
     }
 }
