@@ -62,12 +62,14 @@ export class ProjectService {
                     this.project = data.json().project; //can later have local setter to do validation/data manipulation before passing through observable
                     this.currentProjectSource.next(this.project);
                     // Clear stats object
-                    // this.commentStatsSource.next({ count: 0, userRef: {} });
                     this._commentStats.resetStats()
                     return this.project;
                 });
     }
 
+    /** 
+     * Provide a getter for the private commentStats object
+     */
     get commentStats(): CommentStats {
         return this._commentStats
     }
@@ -86,7 +88,6 @@ export class ProjectService {
         let commentsByIndex: EdjiComment[][] = []
         let alwaysHighlightArray: number[] = []
         let highlightArray: number[] = []
-        // let commentStats: iCommentStats = this.initCommentStats(project)
         this._commentStats.initStats(project)
         let user = this._auth.getUser()
 
@@ -105,7 +106,6 @@ export class ProjectService {
             this.prepareHighlightArrays(comment, user._id, project, alwaysHighlightArray, highlightArray)
 
             // add the comment to the stats object
-            // this.addCommentToStats(comment, true, commentStats)
             this._commentStats.addCommentToStats(comment, true)
         }
 

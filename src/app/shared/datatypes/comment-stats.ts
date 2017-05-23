@@ -69,7 +69,7 @@ export class CommentStats {
      * @param add If true, it will add the comment to stats, if false it subtracts
      * @param commentStats The comment stats object which will be modified and returned
      */
-    public addCommentToStats(comment: EdjiComment, add: boolean): iCommentStats {
+    public addCommentToStats(comment: EdjiComment, add: boolean): void {
         let difference = add ? 1 : -1
 
         // increment the total reading comment count by the difference
@@ -90,8 +90,6 @@ export class CommentStats {
             // if we're trying to subtract from a non-existant student, then log this error... we don't want to do that.
             console.error("We tried subtracting a comment from a student who doesn't exist!")
         }
-
-        return this._stats
     }
 
     /** 
