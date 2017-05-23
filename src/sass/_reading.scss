@@ -359,7 +359,7 @@ $nextG: 36;
 $nextB: 68;
 
 // Default to deepest Red
-[class^='h-'] { 
+[class^="h-"], [class*=" h-"] { 
 	$thisA: 0.4 + (0.05 * $highlightSteps);
 	background: rgba($nextR, $nextG, $nextB, $thisA);
 }
