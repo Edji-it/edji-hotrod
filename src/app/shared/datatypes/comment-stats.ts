@@ -3,7 +3,7 @@ import { EdjiComment, iCommentStats, Project } from './'
 export class CommentStats {
   private _stats: iCommentStats = {
     count: 0,
-    userRef: {}
+    userStats: []
   }
 
   constructor(project?: Project) {
@@ -20,7 +20,7 @@ export class CommentStats {
   public initStats(project?: Project): iCommentStats {
     let commentStats: iCommentStats = {
         count: 0,
-        userRef: {}
+        userStats: []
     }
 
     // if there's not a project, just return the default commentStats
@@ -35,27 +35,38 @@ export class CommentStats {
     for(let i = 0; i < len; i++) {
         let student = project.students_ids[i]
 
-        commentStats.userRef[student._id] = {
+        // commentStats.userRef[student._id] = {
+        //     count: 0,
+        //     fullname: student.fullname
+        // }
+        commentStats.userStats.push({
+            _id: student._id,
             count: 0,
             fullname: student.fullname
-        }
+        })
     }
 
     len = project.temp_ids.length
     for(let i = 0; i < len; i++) {
         let student = project.temp_ids[i]
         
-        commentStats.userRef[student._id] = {
+        // commentStats.userRef[student._id] = {
+        //     count: 0,
+        //     fullname: student.fullname
+        // }
+
+        commentStats.userStats.push({
+            _id: student._id,
             count: 0,
             fullname: student.fullname
-        }
+        })
     }
 
     return commentStats
   }
 
   public resetStats(): void {
-    this._stats = { count: 0, userRef: {} }
+    this._stats = { count: 0, userStats: [] }
   }
 
     /**
@@ -71,15 +82,42 @@ export class CommentStats {
         this._stats.count += difference
 
         // if the user doesn't have a spot in the userRef dictionary, make one for them
-        if (!this._stats.userRef[comment.user_id]) {
-            this._stats.userRef[comment.user_id] = {
-                count: 0,
-                fullname: comment.author
-            }
+        // if (!this._stats.userRef[comment.user_id]) {
+        //     this._stats.userRef[comment.user_id] = {
+        //         count: 0,
+        //         fullname: comment.author
+        //     }
+        // }
+
+        // this._stats.userRef[comment.user_id].count += difference
+
+        // find the student in the array. if they don't exist and are adding a comment, then add to the count
+        //  if they don't exist and are deleting a comment, log an error... we're not sure why that's happenning...
+        let student = this.findStudent(comment.user_id)
+        if (!student && difference > 0) {
+            this._stats.userStats.push({
+                _id: comment.user_id,
+                fullname: comment.author,
+                count: 1
+            })
+        } else if (student) {
+            student.count += difference
+        } else {
+            // if we're trying to subtract from a non-existant student, then log this error... we don't want to do that.
+            console.error("We tried subtracting a comment from a student who doesn't exist!")
         }
 
-        this._stats.userRef[comment.user_id].count += difference
-
         return this._stats
+    }
+
+    /** 
+     * Get a student from the _stats.userStats array by _id
+     * @param _id the _id from the student that you want to find
+     * @returns the object in the array that matches that id
+     */
+    private findStudent(_id: string): { _id: string, fullname: string, count: number } {
+        return this._stats.userStats.find((student) => {
+            return student._id == _id
+        })
     }
 }

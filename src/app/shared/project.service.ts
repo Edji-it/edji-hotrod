@@ -37,6 +37,7 @@ export class ProjectService {
         private _route: ActivatedRoute,
         private _socket: SocketService
     ) {
+        // needs to be constructed here or else it returns undefined
         this._commentStats = new CommentStats()
     }
   

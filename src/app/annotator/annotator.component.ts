@@ -77,11 +77,12 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     // For mobile display of comments
     private foundArray: any[] = [];
 
-    // Publically available stats
-    public commentStats: iCommentStats = {
-        count: 0,
-        userRef: {}
-    };
+    // abstracted to its own object in _projects
+    // // Publically available stats
+    // public commentStats: iCommentStats = {
+    //     count: 0,
+    //     userRef: {}
+    // };
 
     private guideContent = [
         {
@@ -167,7 +168,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.alwaysHighlightArray = processedCommentData.highlightArrays.alwaysHighlightArray
         this.highlightArray = processedCommentData.highlightArrays.highlightArray
         // this.commentStats = processedCommentData.commentStats
-        this.commentStats = this._projects.commentStats.stats
+        // this.commentStats = this._projects.commentStats.stats
 
         // Share updated CommentStats
         // this._projects.setCommentStats(this.commentStats);
@@ -612,7 +613,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // Update line counts
         this.updateAllLineCounts();
         // this.updateCommentStats(comment.user_id, -1, comment.author);
-        this._projects.commentStats.addCommentToStats(comment, true)
+        this._projects.commentStats.addCommentToStats(comment, false)
     }
 
      /**

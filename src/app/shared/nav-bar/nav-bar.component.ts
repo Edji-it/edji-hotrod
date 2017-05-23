@@ -25,7 +25,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
     private createdDate: string
     private liveCount: number = 1
     private currentReading: any
-    private commentStats: any = {}
     private subscriptions: Subscription[] = []
     private showCommentCounts: boolean = false
     private mNavShow: boolean = false
