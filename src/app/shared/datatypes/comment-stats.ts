@@ -28,17 +28,13 @@ export class CommentStats {
       return commentStats
     }
 
-    // loop through student ids and add them to dictionary
-    // we have to do this because some students won't make a comment, so this is their only data on the project
-    // looping through addCommentToStats will later increment the count
+    // loop through student ids and add them to the array
+    //  we have to do this because some students won't make a comment, so this is their only data on the project
+    //  looping through addCommentToStats will later increment the count
     let len = project.students_ids.length
     for(let i = 0; i < len; i++) {
         let student = project.students_ids[i]
 
-        // commentStats.userRef[student._id] = {
-        //     count: 0,
-        //     fullname: student.fullname
-        // }
         commentStats.userStats.push({
             _id: student._id,
             count: 0,
@@ -49,11 +45,6 @@ export class CommentStats {
     len = project.temp_ids.length
     for(let i = 0; i < len; i++) {
         let student = project.temp_ids[i]
-        
-        // commentStats.userRef[student._id] = {
-        //     count: 0,
-        //     fullname: student.fullname
-        // }
 
         commentStats.userStats.push({
             _id: student._id,
@@ -65,6 +56,9 @@ export class CommentStats {
     return commentStats
   }
 
+  /**
+   * Sets the stats back to a blank object
+   */
   public resetStats(): void {
     this._stats = { count: 0, userStats: [] }
   }
@@ -80,16 +74,6 @@ export class CommentStats {
 
         // increment the total reading comment count by the difference
         this._stats.count += difference
-
-        // if the user doesn't have a spot in the userRef dictionary, make one for them
-        // if (!this._stats.userRef[comment.user_id]) {
-        //     this._stats.userRef[comment.user_id] = {
-        //         count: 0,
-        //         fullname: comment.author
-        //     }
-        // }
-
-        // this._stats.userRef[comment.user_id].count += difference
 
         // find the student in the array. if they don't exist and are adding a comment, then add to the count
         //  if they don't exist and are deleting a comment, log an error... we're not sure why that's happenning...

@@ -16,7 +16,7 @@ import { ProjectService } from '../shared/project.service';
 import { CommentComponent } from './comment/comment.component';
 import { AuthService } from '../shared/auth.service';
 import { SocketService } from '../shared/socket.service';
-import { CommentPermissions, iCommentStats, EdjiComment, Project, Reading } from './../shared/datatypes';
+import { CommentPermissions, EdjiComment, Project, Reading } from './../shared/datatypes';
 
 @Component({
     selector: 'annotator',
@@ -76,13 +76,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
     // For mobile display of comments
     private foundArray: any[] = [];
-
-    // abstracted to its own object in _projects
-    // // Publically available stats
-    // public commentStats: iCommentStats = {
-    //     count: 0,
-    //     userRef: {}
-    // };
 
     private guideContent = [
         {
@@ -167,11 +160,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.commentsByIndex = processedCommentData.commentsByIndex
         this.alwaysHighlightArray = processedCommentData.highlightArrays.alwaysHighlightArray
         this.highlightArray = processedCommentData.highlightArrays.highlightArray
-        // this.commentStats = processedCommentData.commentStats
-        // this.commentStats = this._projects.commentStats.stats
-
-        // Share updated CommentStats
-        // this._projects.setCommentStats(this.commentStats);
 
         // Subscribe to comment comment updates
         this.subscriptions.push(
@@ -196,7 +184,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                         // Remove highlights from local array
                         this.decrementHighlights(this.user._id === comment.user_id || this.project.teacher_id == comment.user_id, comment.start, comment.end);
                         this.commentsByIndexRemove(comment._id, wIndex, cIndex);
-                        //this.updateCommentStats(comment.user_id, -1, comment.author);
                     }
                 } else if (commentUpdate.action === 'UPDATE') {
                     if (cIndex > -1 && this.commentsByIndex[wIndex] && this.commentsByIndex[wIndex][cIndex]) {
@@ -206,13 +193,11 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                         // Add highlights to local array
                         this.incrementHighlights(this.user._id === comment.user_id || this.project.teacher_id == comment.user_id, comment.start, comment.end);
                         this.commentsByIndexAdd(comment, wIndex, true);
-                        //this.updateCommentStats(comment.user_id, 1, comment.author);
                     }
                 } else if (commentUpdate.action === 'CREATE') {
                     // Add highlights to local array
                     this.incrementHighlights(this.user._id === comment.user_id || this.project.teacher_id == comment.user_id, comment.start, comment.end);
                     this.commentsByIndexAdd(comment, wIndex, true);
-                    //this.updateCommentStats(comment.user_id, 1, comment.author);
                 }
             }, (error) => {
                 console.warn(error);
@@ -310,23 +295,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.optionsShow = false;
         this.imageHotspotPlaceholder['preview'] = false;
     }
-
-    // /**
-    //  * This is the source of our CommentStats object!
-    //  */
-    // updateCommentStats(user_id: string, difference: number, name ?: string): void {
-    //     let i = this.commentStats.userRef[user_id];
-    //     if (i > -1) {
-    //         this.commentStats.users[i].count += difference;
-    //     } else {
-    //         // Add user ref index
-    //         this.commentStats.userRef[user_id] = this.commentStats.users.length;
-    //         // Add user stat object
-    //         this.commentStats.users.push(  { _id: user_id, name: name, count: difference > 0 ? 1 : 0 } );
-    //     }
-    //     this.commentStats.count += difference;
-    //     this._projects.setCommentStats(this.commentStats);
-    // }
 
     /**
      * Show tooltip to the side with buttons for adding comment types
@@ -586,7 +554,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             }
         }
         this.updateAllLineCounts();
-        // this.updateCommentStats(comment.user_id, 1, comment.author);
         this._projects.commentStats.addCommentToStats(comment, true)
     }
 
@@ -612,7 +579,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.commentsByIndex[index].splice(commentIndex,1);
         // Update line counts
         this.updateAllLineCounts();
-        // this.updateCommentStats(comment.user_id, -1, comment.author);
         this._projects.commentStats.addCommentToStats(comment, false)
     }
 
