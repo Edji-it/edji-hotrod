@@ -21,8 +21,18 @@ $navOffset: 60px;
     box-shadow: $slidingPaneShadow;
     border-right: $slidingPaneBorder;
 
-    @media(min-width: 1000px) {
-        width: calc(48% - #{ $slidingPaneWidth } ) !important;
+    @media(max-width: $tablet) {
+        width: calc(100% - 30px);
+        padding-left: $base-pad;
+    }
+    @media(min-width: $tablet) {
+        width:  273px !important;
+    }
+    // @media(min-width: $desktop and max-width: 1060px) {
+
+    // }
+    @media(min-width: 1060px) {
+        width: calc( (100% - 530px) / 2 ) !important;
     }
 
     // &.mid-bar {

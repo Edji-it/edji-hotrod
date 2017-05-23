@@ -115,14 +115,7 @@ $ownerToolsWidth: 60px;
         }
     }
 }
-
-.sliding-pane {
-    @media(max-width: $tablet) {
-        width: calc(100% - 30px);
-        padding-left: $base-pad;
-    }
-}
-
+ 
 .stats-close-btn {
     margin-top: -4px;
     margin-right: -6px;
