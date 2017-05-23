@@ -257,6 +257,8 @@ button, .button, .btn { //, [class*='btn']
 .btn-icon--round {
   @extend .btn-icon;
   border-radius: 50%;
+  width: 30px;
+  height: 30px;
 }
 
 
