@@ -20,20 +20,16 @@
 		<div class="options">
 			<!--Desktop buttons-->
 			<button *ngIf="project.types.indexOf('emoji') > -1" id="addEmojiComment" 
-				class="emoji hidden-md-down hidden-ipad-landscape" 
+				class="emoji hidden-sm-down" 
 				(click)="addEmojiComment($event)" 
-				[innerHtml]="':thinking_face:' | emojione"
-				placement="top" 
-				ngbTooltip="Emoji comment"></button>
+				[innerHtml]="':thinking_face:' | emojione"></button>
 			<button *ngIf="project.types.indexOf('text') > -1" 
-				class="emoji hidden-md-down hidden-ipad-landscape" 
+				class="emoji hidden-sm-down" 
 				id="addTextComment" 
 				(click)="addTextComment($event)" 
-				[innerHtml]="':writing_hand:' | emojione"
-				placement="top" 
-				ngbTooltip="Text comment"></button>
+				[innerHtml]="':writing_hand:' | emojione"></button>
 			<!--Mobile buttons-->
-			<div class="container hidden-lg-up shown-ipad-landscape">
+			<div class="container hidden-md-up">
 				<div class="row">
 					<div class="col-6" *ngIf="project.types.indexOf('emoji') > -1" [ngClass]="project.types.indexOf('emoji') > -1 && project.types.indexOf('text') > -1 ? 'col-6' : 'col-12'">
 						<button id="addEmojiComment" 
