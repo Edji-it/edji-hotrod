@@ -50,6 +50,12 @@ h3, .h3 {
   color: #5f5f5f;
 }
 
+.no-flow {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 p {
   font-family: $base-font-family;
   margin: 0 0 $small-spacing;

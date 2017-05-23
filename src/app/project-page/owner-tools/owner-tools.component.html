@@ -2,8 +2,8 @@
   <label class="bar-title">Owner</label>
   <!--Comment Stats pane-->
   <button type="button" class="btn owner-tools__btn btn-cmt" aria-label="Comment Counts" (click)="showCommentCounts = !showCommentCounts">
-    <img *ngIf="isMobile" style="width: 50px;" src="assets/images/icon-comment.svg" />
-    <img *ngIf="!isMobile" src="assets/images/icon-comment.svg" />
+    <!--<img *ngIf="isMobile" style="width: 50px;" src="assets/images/icon-comment.svg" />-->
+    <img src="assets/images/icon-comment.svg" />
     <div class="comment-count">{{ commentStats.stats.count }}</div>
     <label>Students</label>
   </button>

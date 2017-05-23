@@ -120,7 +120,7 @@ $tablet-width: 768px;
 }
 
 /* Mobile Optimization */
-@media only screen and (max-device-width: $xldesktop) {
+@media screen and (max-width: $tablet), all and (device-width: $xldesktop) and (device-height: $tablet) {
 	.comment {
     display: none;
     position: absolute !important;

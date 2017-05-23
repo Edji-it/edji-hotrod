@@ -115,3 +115,10 @@ $ownerToolsWidth: 60px;
         }
     }
 }
+
+.sliding-pane {
+    @media(max-width: $tablet) {
+        width: calc(100% - 30px);
+        padding-left: $base-pad;
+    }
+}

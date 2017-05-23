@@ -148,6 +148,15 @@ $purple: rgb(150, 40, 255);
 	float: left;
 	height: 100%;
 	padding: 0 $base-pad;
+	width: 50%;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow-x: hidden;
+	text-align: left;
+
+	@media(min-width: $tablet) {
+		width: 50%;
+	}
 
 	& h1 {
 		display: inline-block;

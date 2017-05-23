@@ -183,7 +183,7 @@ $bubbleColor: rgb(255,255,255);
 }
 
 /* Mobile Optimization */
-@media only screen and (max-device-width: $xldesktop) {
+@media screen and (max-width: $tablet), all and (device-width: $xldesktop) and (device-height: $tablet) {
 	.options {
 		position: fixed;
 		bottom: 0;
