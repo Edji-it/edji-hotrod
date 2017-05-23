@@ -35,7 +35,7 @@ export enum CommentPermissions {
 }
 
 /** Keep the comment stats reliable and defined */
-export interface CommentStats {
+export interface iCommentStats {
   count: number,
   userRef: {
     [_id: string]: {

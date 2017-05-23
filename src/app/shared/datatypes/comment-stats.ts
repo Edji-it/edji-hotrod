@@ -1,0 +1,85 @@
+import { EdjiComment, iCommentStats, Project } from './'
+
+export class CommentStats {
+  private _stats: iCommentStats = {
+    count: 0,
+    userRef: {}
+  }
+
+  constructor(project?: Project) {
+    this._stats = this.initStats(project)
+  }
+
+  get stats(): iCommentStats {
+    return this._stats
+  }
+  set stats(stats: iCommentStats) {
+    this._stats = stats
+  }
+
+  public initStats(project?: Project): iCommentStats {
+    let commentStats: iCommentStats = {
+        count: 0,
+        userRef: {}
+    }
+
+    // if there's not a project, just return the default commentStats
+    if (!project) {
+      return commentStats
+    }
+
+    // loop through student ids and add them to dictionary
+    // we have to do this because some students won't make a comment, so this is their only data on the project
+    // looping through addCommentToStats will later increment the count
+    let len = project.students_ids.length
+    for(let i = 0; i < len; i++) {
+        let student = project.students_ids[i]
+
+        commentStats.userRef[student._id] = {
+            count: 0,
+            fullname: student.fullname
+        }
+    }
+
+    len = project.temp_ids.length
+    for(let i = 0; i < len; i++) {
+        let student = project.temp_ids[i]
+        
+        commentStats.userRef[student._id] = {
+            count: 0,
+            fullname: student.fullname
+        }
+    }
+
+    return commentStats
+  }
+
+  public resetStats(): void {
+    this._stats = { count: 0, userRef: {} }
+  }
+
+    /**
+     * Take a comment into account in the comment stats for a project
+     * @param comment The comment which needs to be taken into account in the stats
+     * @param add If true, it will add the comment to stats, if false it subtracts
+     * @param commentStats The comment stats object which will be modified and returned
+     */
+    public addCommentToStats(comment: EdjiComment, add: boolean): iCommentStats {
+        let difference = add ? 1 : -1
+
+        // increment the total reading comment count by the difference
+        this._stats.count += difference
+
+        // if the user doesn't have a spot in the userRef dictionary, make one for them
+        if (!this._stats.userRef[comment.user_id]) {
+            this._stats.userRef[comment.user_id] = {
+                count: 0,
+                fullname: comment.author
+            }
+        }
+
+        this._stats.userRef[comment.user_id].count += difference
+
+        return this._stats
+    }
+}

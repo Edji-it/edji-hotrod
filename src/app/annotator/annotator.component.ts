@@ -16,7 +16,7 @@ import { ProjectService } from '../shared/project.service';
 import { CommentComponent } from './comment/comment.component';
 import { AuthService } from '../shared/auth.service';
 import { SocketService } from '../shared/socket.service';
-import { CommentPermissions, CommentStats, EdjiComment, Project, Reading } from './../shared/datatypes';
+import { CommentPermissions, iCommentStats, EdjiComment, Project, Reading } from './../shared/datatypes';
 
 @Component({
     selector: 'annotator',
@@ -78,9 +78,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     private foundArray: any[] = [];
 
     // Publically available stats
-    public commentStats: any = {
+    public commentStats: iCommentStats = {
         count: 0,
-        users: [],
         userRef: {}
     };
 
@@ -167,10 +166,11 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.commentsByIndex = processedCommentData.commentsByIndex
         this.alwaysHighlightArray = processedCommentData.highlightArrays.alwaysHighlightArray
         this.highlightArray = processedCommentData.highlightArrays.highlightArray
-        this.commentStats = processedCommentData.commentStats
+        // this.commentStats = processedCommentData.commentStats
+        this.commentStats = this._projects.commentStats.stats
 
         // Share updated CommentStats
-        this._projects.setCommentStats(this.commentStats);
+        // this._projects.setCommentStats(this.commentStats);
 
         // Subscribe to comment comment updates
         this.subscriptions.push(
@@ -310,22 +310,22 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.imageHotspotPlaceholder['preview'] = false;
     }
 
-    /**
-     * This is the source of our CommentStats object!
-     */
-    updateCommentStats(user_id: string, difference: number, name ?: string): void {
-        let i = this.commentStats.userRef[user_id];
-        if (i > -1) {
-            this.commentStats.users[i].count += difference;
-        } else {
-            // Add user ref index
-            this.commentStats.userRef[user_id] = this.commentStats.users.length;
-            // Add user stat object
-            this.commentStats.users.push(  { _id: user_id, name: name, count: difference > 0 ? 1 : 0 } );
-        }
-        this.commentStats.count += difference;
-        this._projects.setCommentStats(this.commentStats);
-    }
+    // /**
+    //  * This is the source of our CommentStats object!
+    //  */
+    // updateCommentStats(user_id: string, difference: number, name ?: string): void {
+    //     let i = this.commentStats.userRef[user_id];
+    //     if (i > -1) {
+    //         this.commentStats.users[i].count += difference;
+    //     } else {
+    //         // Add user ref index
+    //         this.commentStats.userRef[user_id] = this.commentStats.users.length;
+    //         // Add user stat object
+    //         this.commentStats.users.push(  { _id: user_id, name: name, count: difference > 0 ? 1 : 0 } );
+    //     }
+    //     this.commentStats.count += difference;
+    //     this._projects.setCommentStats(this.commentStats);
+    // }
 
     /**
      * Show tooltip to the side with buttons for adding comment types
@@ -585,7 +585,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             }
         }
         this.updateAllLineCounts();
-        this.updateCommentStats(comment.user_id, 1, comment.author);
+        // this.updateCommentStats(comment.user_id, 1, comment.author);
+        this._projects.commentStats.addCommentToStats(comment, true)
     }
 
     private decorateComment(comment: any) {
@@ -610,7 +611,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.commentsByIndex[index].splice(commentIndex,1);
         // Update line counts
         this.updateAllLineCounts();
-        this.updateCommentStats(comment.user_id, -1, comment.author);
+        // this.updateCommentStats(comment.user_id, -1, comment.author);
+        this._projects.commentStats.addCommentToStats(comment, true)
     }
 
      /**

@@ -7,7 +7,7 @@ import 'rxjs/add/operator/toPromise'
 
 import { AuthService } from './auth.service'
 import { SocketService } from './socket.service'
-import { CommentStats, EdjiComment, Project, User } from './datatypes';
+import { CommentStats, iCommentStats, EdjiComment, Project, User } from './datatypes';
 
 @Injectable()
 export class ProjectService {
@@ -19,23 +19,26 @@ export class ProjectService {
     public currentProject: Observable<any> = this.currentProjectSource.asObservable()
     // Maintain local Project data and its updates in this service
     
-    private commentStats: any = {
-        count: 0,
-        users: [],
-        userRef: {}
-    }
-    private commentStatsSource: BehaviorSubject<any> = new BehaviorSubject<any>(this.commentStats)
-    public currentCommentStats: Observable<any> = this.commentStatsSource.asObservable()
+    // private commentStats: iCommentStats = {
+    //     count: 0,
+    //     userRef: {}
+    // }
+    // private commentStatsSource: BehaviorSubject<iCommentStats> = new BehaviorSubject<iCommentStats>(this.commentStats)
+    // public currentCommentStats: Observable<iCommentStats> = this.commentStatsSource.asObservable()
+
+    _commentStats: CommentStats
 
     private commentsByIndexSubject: BehaviorSubject<EdjiComment[][]> = new BehaviorSubject<EdjiComment[][]>([])
     public commentsByIndex: Observable<EdjiComment[][]> = this.commentsByIndexSubject.asObservable()
 
     constructor(
-            private http: Http, 
-            private _auth: AuthService, 
-            private _route: ActivatedRoute,
-            private _socket: SocketService
-    ) {}
+        private http: Http, 
+        private _auth: AuthService, 
+        private _route: ActivatedRoute,
+        private _socket: SocketService
+    ) {
+        this._commentStats = new CommentStats()
+    }
   
   /**
    * Pulls all projects for a single user
@@ -60,9 +63,14 @@ export class ProjectService {
                     this.project = data.json().project; //can later have local setter to do validation/data manipulation before passing through observable
                     this.currentProjectSource.next(this.project);
                     // Clear stats object
-                    this.commentStatsSource.next({});
+                    // this.commentStatsSource.next({ count: 0, userRef: {} });
+                    this._commentStats.resetStats()
                     return this.project;
                 });
+    }
+
+    get commentStats(): CommentStats {
+        return this._commentStats
     }
 
     /**
@@ -73,13 +81,14 @@ export class ProjectService {
      * @param project The project that was just updated
      */
     public processComments(project: Project): {
-        commentsByIndex: EdjiComment[][], highlightArrays: { alwaysHighlightArray: number[], highlightArray: number[] }, commentStats: CommentStats
+        commentsByIndex: EdjiComment[][], highlightArrays: { alwaysHighlightArray: number[], highlightArray: number[] }
     } {
         // these empty arrays will be passed into their modifier functions throughout this function
         let commentsByIndex: EdjiComment[][] = []
         let alwaysHighlightArray: number[] = []
         let highlightArray: number[] = []
-        let commentStats: CommentStats = this.initCommentStats(project)
+        // let commentStats: iCommentStats = this.initCommentStats(project)
+        this._commentStats.initStats(project)
         let user = this._auth.getUser()
 
         // using a cached-length for loop for speediness
@@ -97,13 +106,13 @@ export class ProjectService {
             this.prepareHighlightArrays(comment, user._id, project, alwaysHighlightArray, highlightArray)
 
             // add the comment to the stats object
-            this.addCommentToStats(comment, true, commentStats)
+            // this.addCommentToStats(comment, true, commentStats)
+            this._commentStats.addCommentToStats(comment, true)
         }
 
         return {
             commentsByIndex: commentsByIndex,
-            highlightArrays: { alwaysHighlightArray: alwaysHighlightArray, highlightArray: highlightArray },
-            commentStats: commentStats
+            highlightArrays: { alwaysHighlightArray: alwaysHighlightArray, highlightArray: highlightArray }
         }
     }
 
@@ -168,75 +177,75 @@ export class ProjectService {
         return { alwaysHighlightArray: alwaysHighlightArray, highlightArray: highlightArray }
     }
 
-    /** 
-     * ONLY inits the CommentStats object. DOES NOT add to comment counts
-     * @param project The project to get the stats for
-     * @returns A comment stats object with count: 0 and a dictionary full of students
-     */
-    private initCommentStats(project: Project): CommentStats {
-        let commentStats: CommentStats = {
-            count: 0,
-            userRef: {}
-        }
+    // /** 
+    //  * ONLY inits the CommentStats object. DOES NOT add to comment counts
+    //  * @param project The project to get the stats for
+    //  * @returns A comment stats object with count: 0 and a dictionary full of students
+    //  */
+    // private initCommentStats(project: Project): iCommentStats {
+    //     let commentStats: iCommentStats = {
+    //         count: 0,
+    //         userRef: {}
+    //     }
 
-        // loop through student ids and add them to dictionary
-        // we have to do this because some students won't make a comment, so this is their only data on the project
-        // looping through addCommentToStats will later increment the count
-        let len = project.students_ids.length
-        for(let i = 0; i < len; i++) {
-            let student = project.students_ids[i]
+    //     // loop through student ids and add them to dictionary
+    //     // we have to do this because some students won't make a comment, so this is their only data on the project
+    //     // looping through addCommentToStats will later increment the count
+    //     let len = project.students_ids.length
+    //     for(let i = 0; i < len; i++) {
+    //         let student = project.students_ids[i]
 
-            commentStats.userRef[student._id] = {
-                count: 0,
-                fullname: student.fullname
-            }
-        }
+    //         commentStats.userRef[student._id] = {
+    //             count: 0,
+    //             fullname: student.fullname
+    //         }
+    //     }
 
-        len = project.temp_ids.length
-        for(let i = 0; i < len; i++) {
-            let student = project.temp_ids[i]
+    //     len = project.temp_ids.length
+    //     for(let i = 0; i < len; i++) {
+    //         let student = project.temp_ids[i]
             
-            commentStats.userRef[student._id] = {
-                count: 0,
-                fullname: student.fullname
-            }
-        }
+    //         commentStats.userRef[student._id] = {
+    //             count: 0,
+    //             fullname: student.fullname
+    //         }
+    //     }
 
-        return commentStats
-    }
+    //     return commentStats
+    // }
 
-    /**
-     * Take a comment into account in the comment stats for a project
-     * @param comment The comment which needs to be taken into account in the stats
-     * @param add If true, it will add the comment to stats, if false it subtracts
-     * @param commentStats The comment stats object which will be modified and returned
-     */
-    private addCommentToStats(comment: EdjiComment, add: boolean, commentStats: CommentStats): CommentStats {
-        let difference = add ? 1 : -1
+    // /**
+    //  * Take a comment into account in the comment stats for a project
+    //  * @param comment The comment which needs to be taken into account in the stats
+    //  * @param add If true, it will add the comment to stats, if false it subtracts
+    //  * @param commentStats The comment stats object which will be modified and returned
+    //  */
+    // private addCommentToStats(comment: EdjiComment, add: boolean, commentStats: iCommentStats): iCommentStats {
+    //     let difference = add ? 1 : -1
 
-        // increment the total reading comment count by the difference
-        commentStats.count += difference
+    //     // increment the total reading comment count by the difference
+    //     commentStats.count += difference
 
-        // if the user doesn't have a spot in the userRef dictionary, make one for them
-        if (!commentStats.userRef[comment.user_id]) {
-            commentStats.userRef[comment.user_id] = {
-                count: 0,
-                fullname: comment.author
-            }
-        }
+    //     // if the user doesn't have a spot in the userRef dictionary, make one for them
+    //     if (!commentStats.userRef[comment.user_id]) {
+    //         commentStats.userRef[comment.user_id] = {
+    //             count: 0,
+    //             fullname: comment.author
+    //         }
+    //     }
 
-        commentStats.userRef[comment.user_id].count += difference
+    //     commentStats.userRef[comment.user_id].count += difference
 
-        return commentStats
-    }
+    //     return commentStats
+    // }
 
-  /**
-   * Update the CommentStats object to be shared between components
-   */
-  public setCommentStats(commentStats: any): void {
-      this.commentStats = commentStats;
-      this.commentStatsSource.next(this.commentStats);
-  }
+//   /**
+//    * Update the CommentStats object to be shared between components
+//    */
+//   public setCommentStats(commentStats: any): void {
+//       this.commentStats = commentStats;
+//       this.commentStatsSource.next(this.commentStats);
+//   }
 
   /**
    * Gets all of a teacher's projects for a reading

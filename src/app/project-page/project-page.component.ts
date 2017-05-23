@@ -1,10 +1,8 @@
-import { Observable, Subscription } from 'rxjs/Rx';
-import { Router, ActivatedRoute, Params } from '@angular/router';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Observable, Subscription } from 'rxjs/Rx'
+import { Router, ActivatedRoute, Params } from '@angular/router'
+import { Component, OnDestroy, OnInit } from '@angular/core'
 
-import { ProjectService } from '../shared/project.service';
-import { SocketService } from '../shared/socket.service';
-import { AuthService } from '../shared/auth.service';
+import { ProjectService, SocketService, AuthService } from '../shared'
 import { Project, User } from './../shared/datatypes'
 
 @Component({
@@ -23,7 +21,6 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
     private error: string
     private user: User
     // private liveCount: number = 1
-    private commentCount: number = 0
     private createdDate: Date
     private createDate: string
     private showLoginModal: boolean = false
@@ -39,7 +36,7 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
     ngOnInit() {
         // this makes the window always render scrolled to the top
         this._router.events.subscribe(() => {
-        window.scrollTo(0, 0);
+            window.scrollTo(0, 0);
         })
 
         /** Set the current user every time it changes */
@@ -59,18 +56,9 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
             (project) => {
                 if (project) {
                     this.project = project
-                    this.commentCount = project.comments.length
                     // this.createdDate = new Date(project.createdAt)
                     // this.createDate = this.createdDate.toDateString()
 
-                    this.subscriptions.push(
-                        this._projects.currentCommentStats.subscribe(data => {
-                            // this.commentStats.users = []
-                            this.commentCount = data
-                        }, error => {
-                            console.error(error)
-                        })
-                    )
                 }
             },
             (error) => {
