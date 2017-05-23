@@ -37,6 +37,9 @@ export class ProjectService {
     ) {
         // needs to be constructed here or else it returns undefined
         this._commentStats = new CommentStats()
+        this._socket.commentUpdates().subscribe((update) => {
+            console.log(update)
+        })
     }
   
   /**
@@ -106,7 +109,7 @@ export class ProjectService {
             this.prepareHighlightArrays(comment, user._id, project, alwaysHighlightArray, highlightArray)
 
             // add the comment to the stats object
-            this._commentStats.addCommentToStats(comment, true)
+            this._commentStats.addCommentToStats(comment, 1)
         }
 
         return {

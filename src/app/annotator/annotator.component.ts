@@ -554,7 +554,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             }
         }
         this.updateAllLineCounts();
-        this._projects.commentStats.addCommentToStats(comment, true)
+        this._projects.commentStats.addCommentToStats(comment, 1)
     }
 
     private decorateComment(comment: any) {
@@ -579,7 +579,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.commentsByIndex[index].splice(commentIndex,1);
         // Update line counts
         this.updateAllLineCounts();
-        this._projects.commentStats.addCommentToStats(comment, false)
+        this._projects.commentStats.addCommentToStats(comment, -1)
     }
 
      /**

@@ -42,6 +42,7 @@ export class CommentStats {
         })
     }
 
+    // do the same for temp student ids
     len = project.temp_ids.length
     for(let i = 0; i < len; i++) {
         let student = project.temp_ids[i]
@@ -66,12 +67,10 @@ export class CommentStats {
     /**
      * Take a comment into account in the comment stats for a project
      * @param comment The comment which needs to be taken into account in the stats
-     * @param add If true, it will add the comment to stats, if false it subtracts
+     * @param difference The number to add/subtract. Should be 1, 0 or -1
      * @param commentStats The comment stats object which will be modified and returned
      */
-    public addCommentToStats(comment: EdjiComment, add: boolean): void {
-        let difference = add ? 1 : -1
-
+    public addCommentToStats(comment: EdjiComment, difference: number): void {
         // increment the total reading comment count by the difference
         this._stats.count += difference
 
