@@ -25,7 +25,7 @@ article.content {
 	margin-top: 0px;
 	margin-left: 253px;
 	
-	@media screen and (max-device-width: $tablet), all and (device-width: $xldesktop) and (device-height: $tablet) {
+	@media screen and (max-width: $tablet), all and (device-width: $xldesktop) and (device-height: $tablet) {
 		margin-left: 40px;
   	}
 
