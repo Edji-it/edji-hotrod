@@ -23,10 +23,10 @@ article {
 
 article.content {
 	margin-top: 0px;
-	margin-left: 253px;
+	margin-left: 40px;
 	
-	@media screen and (max-width: $tablet), all and (device-width: $xldesktop) and (device-height: $tablet) {
-		margin-left: 40px;
+	@media all and (min-width: $desktop) {
+		margin-left: 253px;
   	}
 
 	&.hidden-text {

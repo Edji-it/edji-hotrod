@@ -35,33 +35,7 @@ $tablet-width: 768px;
   height: 1.3em;
   font-size: 1.2em;
   padding: 0 2px;
-
-  // &.loading {
-  //   position: absolute;
-  //   pointer-events: none;
-  //   color: transparent;
-  //   filter: grayscale(80%);
-
-  //   &:after {
-  //     position: absolute;
-  //     top: 50%;
-  //     left: 50%;
-  //     transform: translate3d(-50%, -50%, 0);
-  //     width: 2em;
-  //     height: 2em;
-  //     background-color:transparent;
-  //     background-image: url('/assets/images/loading-smaller.svg') !important;
-  //     background-size: 100% 100% !important;
-  //   }
-  // }
 }
-
-// .readonly {
-//   & .inline-delete {
-//     display: none;
-//   }
-// }
-
 
 .comment__save {
     position: absolute;
@@ -119,48 +93,11 @@ $tablet-width: 768px;
   margin-top: -5px
 }
 
-/* Mobile Optimization */
-@media screen and (max-width: $tablet), all and (device-width: $xldesktop) and (device-height: $tablet) {
-	.comment {
-    display: none;
-    position: absolute !important;
-    top: none !important;
-    left: 30px;
-  }
-  
-  .inline-delete {
-    right: 0;
-  }
-
-	.comment__show {
-    display: block;
-    pointer-events: all;
-  }
-
-  .readonly.comment-input-wrapper { 
-      pointer-events: all;
-  }
-
-  .comment__dismiss {
-    position: absolute;
-    top: 34%;
-    right: 5%;
-    cursor: pointer;
-    opacity: 0.8;
-    filter: grayscale(100%);
-
-      &:hover, &:active {
-          opacity: 1;
-          filter: none;
-      }
-  }
-
-  .mobile-comment-button {
-    width: 25px;
-    height: auto;
-    display: block;
-    opacity: 0.5;
-    position: absolute;
-    left: -40px;
-  }
+.comment__button--mobile {
+  width: 25px;
+  height: auto;
+  display: block;
+  opacity: 0.5;
+  position: absolute;
+  left: -40px;
 }
