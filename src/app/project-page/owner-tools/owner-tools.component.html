@@ -1,0 +1,39 @@
+<div *ngIf="currentProject && user._id == currentProject.teacher_id" class="owner-bar">
+  <label class="bar-title">Owner</label>
+  <!--Comment Stats pane-->
+  <button type="button" class="btn owner-tools__btn btn-cmt" aria-label="Comment Counts" (click)="showCommentCounts = !showCommentCounts">
+    <!--<img *ngIf="isMobile" style="width: 50px;" src="assets/images/icon-comment.svg" />-->
+    <img src="assets/images/icon-comment.svg" />
+    <div class="comment-count">{{ commentStats.stats.count }}</div>
+    <label>Students</label>
+  </button>
+
+  <!--Heat Vision toggle-->
+  <button type="button" class="btn owner-tools__btn btn-hv" (click)="togglePower('heat_vision', !this.currentProject.heat_vision)" >
+      <!--placement={{tooltipPlacement}} ngbTooltip="Turn on Heat Vision to let readers see comments from other readers, turn it off to make comments private!"-->
+    <i id="toggleHeatVision" *ngIf="currentProject" class="icon-heatvision" [ngClass]="[!currentProject.heat_vision ? 'inactive' : 'active']" ></i>
+    <i [class.is-loading]="powersLoading.heatVision" class="power__loading loading"></i>
+    <label>Vision</label>
+  </button>
+</div>
+
+
+<!--Comments Pane-->
+<div class="sliding-pane from-left" [ngClass]="{ 'slide-in' : showCommentCounts }">
+  <div class="container-fluid container--less-pad">
+    <h4>{{ commentStats.stats.userStats.length }} Students 
+      <button (click)="showCommentCounts = false" class="close stats-close-btn btn-icon--round" type="button">
+            <span aria-hidden="true">×</span>
+      </button>
+    </h4> 
+    <div class="user-list-item" style="opacity: 0.3; margin-bottom: 14px; white-space: nowrap; border-bottom: 1px solid #cdcdcd;">
+      <span>Reader</span> 
+      <img style="height: 1em; width: auto; float: right" src="assets/images/icon-comment.svg" />
+      <!--<b style="float:right;">Comments</b>-->
+    </div>
+    <div *ngFor="let commentUser of commentStats.stats.userStats" class="user-list-item">
+      <span>{{ commentUser.fullname }}</span> 
+      <b style="float:right;">{{ commentUser.count }}</b>
+    </div>
+  </div>
+</div>

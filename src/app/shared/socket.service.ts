@@ -11,6 +11,19 @@ export class SocketService {
     private url;  
     private socket;
 
+    // User count observable
+    private userCount: Subject<any> = new Subject()
+    public liveUsersCount: Observable<any> = this.userCount.asObservable()
+
+    // Comment Update observable
+    private commentSubject: Subject<any> = new Subject()
+    public commentUpdates: Observable<any> = this.commentSubject.asObservable()
+
+    // Heat vision observable
+    private heatVision: Subject<any> = new Subject()
+    public heatVisionUpdates: Observable<any> = this.heatVision.asObservable()
+
+
     constructor(private _auth: AuthService) {
         if (this._auth.getEnv() === "prod") {
             this.url = "http://bluestreak.edji.it";
@@ -18,59 +31,44 @@ export class SocketService {
             // this.url = 'http://localhost:7899';
             this.url = "http://bluestreak-dev.edji.it";
         }
-        this.socket = io(this.url);
+
+        // Ensure we have a socket available
+        this.createSocketAndWatch()
     }
 
     /**
-     * Handles the live reading count on the project page
+     * Join the Socket room based on the Project ID
      */
-    public joinLiveCount(projectId, userId): Observable<any> {
-        this.socket.emit('openProject', { id: projectId, user: userId });
-
-        return this.liveUsersCount();
+    public joinSocketRoom(projectId, userId): void {
+        this.createSocketAndWatch()
+        this.socket.emit('openProject', { id: projectId, user: userId })
     }
 
-    public liveUsersCount(): Observable<any> {
-        let observable = new Observable(observer => {
-            this.socket.on('liveUsers', (liveCount) => {
-                observer.next(liveCount);    
-            });
-            return () => {
-                this.socket.disconnect();
-            };  
-        })     
-        return observable;
+    public leaveRoom(): void {
+        this.socket && this.socket.disconnect && this.socket.disconnect()
     }
 
-    public commentUpdates(): Observable<any> {
-        let observable = new Observable(observer => {
-            this.socket.on('updateComment', (commentUpdate) => {
-                console.log("got updated comment");
-                observer.next(commentUpdate);    
-            });
-            return () => {
-                this.socket.disconnect();
-            };  
-        })     
-        return observable;
-    }
+    private createSocketAndWatch() : void {
+        this.leaveRoom()
+        // Sockets are destroyed on disconnect, make sure we have a fresh one!
+        this.socket = io(this.url)
 
-    /**
-     * Tell Student Views, Heat Vision has been toggled
-     */
-    public heatVisionUpdates(): Observable<any> {
-        console.log("got a subscriber");
-        let observable = new Observable(observer => {
-            this.socket.on('heatVision', (heatToggle) => {
-                observer.next(heatToggle);    
-            });
-            return () => {
-                this.socket.disconnect();
-            };  
-        })     
-        return observable;
-    }
+        // Watch user count
+        this.socket.on('liveUsers', (liveCount) => {
+            this.userCount.next(liveCount)    
+        })
 
+        // Watch comment udpates
+        this.socket.on('updateComment', (commentUpdate) => {
+            this.commentSubject.next(commentUpdate)    
+        })
+
+        // Watch heat vision updates
+        this.socket.on('heatVision', (heatToggle) => {
+            this.heatVision.next(heatToggle)    
+        })
+    }
+    
     /**
      * Tell Teacher View to update comment
      * @param comment Comment Object

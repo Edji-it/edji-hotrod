@@ -1,69 +1,44 @@
 <div id="emojiAnnotator" class="annotator reading-page" [ngClass]="{ 'comment-expanded' : lineExpanded }">
     <div *ngIf="showAllComments" class="sliding-pane mid-bar from-left" [ngClass]="{ 'slide-in' : showCommentCounts }">
         <div class="container-fluid">
-			<!--<h4>
-				<i class="fa fa-chevron-left btn-icon" ng-click="toggleCommentCounts()"></i>
-				{{ studentCount() }} Students
-			</h4> 
-			<div class="user-list-item" style="opacity: 0.3; margin-bottom: 14px;">
-				<span>Username</span> 
-				<b style="float:right;">Comments</b>
-			</div>
-			<div class="user-list-item" ng-repeat="comments in commentsByUser | orderObjectBy:'length':true">
-				<span>{{ comments[0].author }}</span> 
-				<b style="float:right;">{{ comments.length }}</b>
-			</div>-->
 			</div>
     </div>
-
-    <div *ngIf="project.types.length > 0" class="text-options" (blur)="hideCommentOptions($event)" [style.top]="highlightY + 'px'" [ngStyle]="isMobile && optionLeft && { 'left': highlightX + 'px'} || { 'right': highlightX + 'px' }" [ngClass]="{ 'active' : optionsShow }">
-		<div class="options">
+    <div *ngIf="project.types.length > 0" class="text-options" (blur)="hideCommentOptions($event)" [style.top]="highlightY + 'px'" [ngClass]="{ 'active' : optionsShow }">
+		<div class="options hidden-md-down">
 			<!--Desktop buttons-->
 			<button *ngIf="project.types.indexOf('emoji') > -1" id="addEmojiComment" 
-				class="emoji hidden-md-down hidden-ipad-landscape" 
+				class="emoji" 
 				(click)="addEmojiComment($event)" 
-				[innerHtml]="':thinking_face:' | emojione"
-				placement="top" 
-				ngbTooltip="Emoji comment"></button>
+				[innerHtml]="':thinking_face:' | emojione"></button>
 			<button *ngIf="project.types.indexOf('text') > -1" 
-				class="emoji hidden-md-down hidden-ipad-landscape" 
+				class="emoji" 
 				id="addTextComment" 
 				(click)="addTextComment($event)" 
-				[innerHtml]="':writing_hand:' | emojione"
-				placement="top" 
-				ngbTooltip="Text comment"></button>
-			<!--Mobile buttons-->
-			<div class="container hidden-lg-up shown-ipad-landscape">
-				<div class="row">
-					<div class="col-6" *ngIf="project.types.indexOf('emoji') > -1" [ngClass]="project.types.indexOf('emoji') > -1 && project.types.indexOf('text') > -1 ? 'col-6' : 'col-12'">
-						<button id="addEmojiComment" 
-							class="emoji comment__options--mobile" 
-							(tap)="addEmojiComment($event)" 
-							[innerHtml]="':thinking_face:' | emojione"></button>
-					</div>
-					<div class="col-6" *ngIf="project.types.indexOf('text') > -1" [ngClass]="project.types.indexOf('emoji') > -1 && project.types.indexOf('text') > -1 ? 'col-6' : 'col-12'">
-						<button id="addTextComment"
-							class="emoji comment__options--mobile" 
-							(tap)="addTextComment($event)" 
-							[innerHtml]="':writing_hand:' | emojione"></button>
-					</div>
+				[innerHtml]="':writing_hand:' | emojione"></button>
+		</div>
+		<!--Mobile buttons-->
+		<div class="comment-options__mobile-wrap hidden-lg-up">
+			<div class="row comment__options--mobileRow">
+				<div class="col-6 comment__options--mobileCol" *ngIf="project.types.indexOf('emoji') > -1" [ngClass]="project.types.indexOf('emoji') > -1 && project.types.indexOf('text') > -1 ? 'col-6' : 'col-12'">
+					<button id="addEmojiComment" 
+						class="emoji comment__options--mobileButton" 
+						(tap)="addEmojiComment($event)" 
+						[innerHtml]="':thinking_face:' | emojione"></button>
+				</div>
+				<div class="col-6 comment__options--mobileCol" *ngIf="project.types.indexOf('text') > -1" [ngClass]="project.types.indexOf('emoji') > -1 && project.types.indexOf('text') > -1 ? 'col-6' : 'col-12'">
+					<button id="addTextComment"
+						class="emoji comment__options--mobileButton" 
+						(tap)="addTextComment($event)" 
+						[innerHtml]="':writing_hand:' | emojione"></button>
 				</div>
 			</div>
 		</div>
 	</div>
 
-    <header id="annotatorTitle" class="header">
-		<h1>{{ reading.title }}</h1>
-		<h3 class="sub-title">{{ project.label }}</h3>
-	</header>  
-
 	<div class="article-wrap">
         <!--Create components after load for reading-->
-		<article id="annotatorContent" class="content active-content" (mouseup)="showCommentOptions($event)" (touchend)="showCommentOptions($event)" (clickOutside)="hideCommentOptions()">
-			<!--<span *ngIf="project && project.comments.length < 1 && project.types.length > 0" class="comment--placeholder">
-				Select text, add comments!
-			</span>-->
-			<span *ngFor="let w of reading.words; trackBy:index; let i = index" class="w" [ngClass]="[ w.styles.join(' '), getHighlightClass(i) ]" 
+		<article id="annotatorContent" class="content active-content pt-4" (mouseup)="showCommentOptions($event)" (touchend)="showCommentOptions($event)" (clickOutside)="hideCommentOptions()">
+			<span *ngFor="let w of reading.words; let i = index" class="w" [ngClass]="[ w.styles.join(' '), getHighlightClass(i) ]" 
 				[attr.index]="i">
 				<edji-comment *ngFor="let comment of commentsByIndex[i]; let ci = index" 
 					[class.hidden]="(!project.heat_vision && user._id !== project.teacher_id) && comment.user_id !== user._id && comment.user_id !== project.teacher_id"
@@ -90,7 +65,7 @@
 						<div *ngFor="let comment of commentsByIndex[i]" [class.hidden]="(!project.heat_vision && user._id !== project.teacher_id) && comment.user_id !== user._id && comment.user_id !== project.teacher_id" class="hotspot" 
 						[style.top]="comment['loc'] ? comment['loc']['y'] + '%' : '0%'" 
 						[style.left]="comment['loc'] ? comment['loc']['x'] + '%' : '0%'"></div>
-						<img id="readingImage{{i}}" [attr.index]="i" [src]="w.url" (click)="imageCommentOptions(i, w, $event)" (load)="updateImageHeights()" />
+						<img class="reading-image" id="readingImage{{i}}" [attr.index]="i" [src]="w.url" (load)="updateImageHeights()" />
 					</div></span>
 		</article>
     	<right-margin-tooltip *ngIf="!guideComplete" 

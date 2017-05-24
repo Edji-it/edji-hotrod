@@ -1,21 +1,44 @@
 
+$slidingPaneShadow: 0px 1px 8px 3px rgba(0,0,0,0.05);
+$slidingPaneBorder: 1px solid $gray;
+$slidingPaneWidth: 250px;
+$navOffset: 60px;
+
 .sliding-pane {
     position: fixed;
     display: block;
     height: 100%;
-    width: calc( 100% - #{ $sideBarWidth });
+    width: $slidingPaneWidth;
     top: 0;
-    left: $sideBarWidth;
+    left: 0;
     background: #fff; //$midGray; //$gray;
-    padding: $base-pad 0;
+    padding: $base-pad 5px;
     z-index: $zMid + 1000;
     overflow-y:auto;
     transition: transform 0.3s linear;
+    padding-left: 60px;
+    padding-top: $navOffset + $base-pad;
+    box-shadow: $slidingPaneShadow;
+    border-right: $slidingPaneBorder;
 
-    &.mid-bar {
-        width: 250px;
-        // box-shadow: 0px 3px 3px 2px rgba(0,0,0,0.2);
+    @media(max-width: $tablet) {
+        width: calc(100% - 30px);
+        padding-left: $base-pad;
     }
+    @media(min-width: $tablet) {
+        width:  273px !important;
+    }
+    // @media(min-width: $desktop and max-width: 1060px) {
+
+    // }
+    @media(min-width: 1060px) {
+        width: calc( (100% - 530px) / 2 ) !important;
+    }
+
+    // &.mid-bar {
+    //     width: 250px;
+    //     // box-shadow: 0px 3px 3px 2px rgba(0,0,0,0.2);
+    // }
 
     &.from-right {
         transform: translate3d(100%, 0, 0);
@@ -24,10 +47,6 @@
     &.from-left {
         transform: translate3d(-105%, 0, 0);
         left: 0;
-
-        &.slide-in {
-            left: $sideBarWidth;
-        }
     }
     
     &.slide-in {

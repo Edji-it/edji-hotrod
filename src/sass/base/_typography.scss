@@ -31,7 +31,7 @@ h1, .h1 {
   font-weight: 100;
   font-size: 32px;
   margin-bottom: 40px;
-  color: #444444;
+  color: $medium-gray;
 
   &.small {
     font-size: 24px;
@@ -48,6 +48,12 @@ h3, .h3 {
   font-size: $base-font-size;
   font-weight: bold;
   color: #5f5f5f;
+}
+
+.no-flow {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 p {
@@ -72,14 +78,16 @@ a {
 }
 
 a.link {
-  color: $purple;
+  font-weight: normal;
+  color: $medium-gray;
   cursor: pointer;
   font-family: $base-font-family;
+  text-decoration: underline;
 
   &:active,
   &:focus,
   &:hover {
-    color: shade($purple, 25%);
+    color: $blue;
   }
 }
 

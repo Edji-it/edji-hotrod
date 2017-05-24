@@ -4,6 +4,9 @@ $sessionAccent: #FF7583;
 $sessionPanelWidth: 150px;
 $midGray: #f7f7f7;
 
+.header {
+	margin-top: $base-pad;
+}
 
 .text-options {
 
@@ -175,67 +178,31 @@ $bubbleColor: rgb(255,255,255);
 	top: 50%;
 }
 
-.mobile-comment {
-	display: none;
+$commentOptionsMobileHeight: 50px;
+
+.comment-options__mobile-wrap {
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+	left: 0;
+	border-radius: 0;
+	text-align: center;
+	height: $commentOptionsMobileHeight;
+	box-shadow: 0px 1px 15px 0px rgba(0,0,0,0.4);
+	background-color: $bubbleColor;
 }
 
-/* Mobile Optimization */
-@media only screen and (max-device-width: $xldesktop) {
-	.options {
-		position: fixed;
-		bottom: 0;
-		width: 100%;
-		left: 0;
-		border-radius: 0;
-		text-align: center;
-    	height: 50px;
-		box-shadow: 0px 1px 15px 0px rgba(0,0,0,0.4);
-	}
-	#addEmojiComment {
-		margin-right: 50px;
-	}
-	.text-options {
-		left: initial;
-	}
-
-	.mobile-comment {
-		display: none;
-	}
-
-	.mobile-comment.active {
-		display: block;
-		height: 180px;
-		width: 100%;
-		z-index: 5000;
-		position: fixed;
-		bottom: 0;
-		opacity: 1;
-		background-color: white;
-		left: 0;
-		text-align: center;
-		-webkit-box-shadow: 0 -5px 10px -5px #777;
-    	box-shadow: 0 -5px 10px -5px #777;
-	}
-
-	.eSize {
-		font-size: 25px;
-		top: 20px;
-		position: relative;
-	}
-
-	.eCmtRemove {
-		touch-action: none; 
-		user-select: none; 
-		-webkit-user-drag: none; 
-		-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-		font-size: 42px;
-		top: 5px;
-		right: 5px;
-	}
-}
-
-.comment__options--mobile {
+.comment__options--mobileButton {
 	margin: 0 !important;
 	width: 100% !important;
-	height: 100% !important;
+	height: $commentOptionsMobileHeight !important;
+}
+
+.comment__options--mobileRow {
+	height: 100%;
+}
+
+.comment__options--mobileCol {
+	padding: 0;
+	position: relative;
 }

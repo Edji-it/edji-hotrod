@@ -227,3 +227,10 @@ input[type=text].input-noborder, input[type=password].input-noborder, input[type
 	overflow-y: hidden !important;
 	position: fixed;
 }
+
+.container-fluid {
+	@media only screen and (max-device-width: $xsphone) {
+		padding-right: 5px;
+		padding-left: 5px;
+	}
+}

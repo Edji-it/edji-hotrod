@@ -1,26 +1,8 @@
-<side-bar [hasCommentCount]="true"></side-bar>
-
-<div class="container-fluid container--side-bar">
-
-  <div id="InfoHud" class="reading__hud">
-    <div class="prj">
-      <label id="projectCreate" class="prj-label">Started {{ createDate }}</label>
-      <br/>
-      <label id="projectComments" class="prj-label">{{ commentCount ? commentCount.count : 0 }} Comments</label>
-    </div>
-    
-    <div class="hud__info"> 
-      <pre class="project-code--inline">{{project.code || 'none'}}</pre>
-      <span [innerHtml]="':key:' | emojione"></span>
-      <br/>
-      {{liveCount}} Readers 
-      <span [innerHtml]="':fire:' | emojione"></span>
-    </div>
-  </div>
-
-  <div class="project-column header-padding" [ngClass]="{ loading: !project._id }">
+<nav-bar [showProjectInfo]="true"></nav-bar>
+<owner-tools></owner-tools>
+<div class="container-fluid">
+  <div class="project-column" [ngClass]="{ loading: !project._id }">
     <p class="alert alert-danger" *ngIf="error">{{ error }}</p>
-    <!--<emoji-annotator project-fn="getSession()"></emoji-annotator>-->
     <annotator #annotator *ngIf="project._id" [project]="project"></annotator>
   </div>
 

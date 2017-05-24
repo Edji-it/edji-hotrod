@@ -66,13 +66,15 @@ describe("Versioning - ", () => {
         newReading.sourceInput.sendKeys(newReading.sourceString);
 
         // Group Label has content prefilled, so we clear it
-        newReading.groupInput.clear();
-        newReading.groupInput.sendKeys(newReading.groupString);
+        // newReading.groupInput.clear();
+        // newReading.groupInput.sendKeys(newReading.groupString);
 
         // Submit New Reading
         browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "publish reading button never became clickable after new reading form entry");
         //newReading.addButton.submit();
         newReading.addButton.click();
+        browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
+        newReading.finalizeButton.click();
 
         // Should redirect to Project page for new reading
         browser.wait(EC.urlContains("project"), 7500, "never arrived at the reading page after published");
@@ -152,6 +154,8 @@ describe("Versioning - ", () => {
         browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "publish reading button never became clickable after loading draft");
         //newReading.addButton.submit();
         newReading.addButton.click();
+        browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
+        newReading.finalizeButton.click();
 
         // Reading should be published
         browser.wait(EC.urlContains("project"), 15000, "never arrived at the finished reading");

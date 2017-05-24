@@ -16,7 +16,7 @@ import { ProjectService } from '../shared/project.service';
 import { CommentComponent } from './comment/comment.component';
 import { AuthService } from '../shared/auth.service';
 import { SocketService } from '../shared/socket.service';
-import { EdjiComment, CommentPermissions } from './../shared/datatypes';
+import { CommentPermissions, EdjiComment, Project, Reading } from './../shared/datatypes';
 
 @Component({
     selector: 'annotator',
@@ -30,9 +30,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     @ViewChildren(CommentComponent) commentComponents: QueryList<CommentComponent>;
 
 
-    private reading: any = {};
+    private reading: Reading = <Reading>{};
     
-    private commentsByIndex: any[] = [];
+    private commentsByIndex: EdjiComment[][] = [];
 
     private highlightArray: number[] = [];
     private alwaysHighlightArray: number[] = [];
@@ -77,13 +77,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     // For mobile display of comments
     private foundArray: any[] = [];
 
-    // Publically available stats
-    public commentStats = {
-        count: 0,
-        users: [],
-        userRef: {}
-    };
-
     private guideContent = [
         {
             title: ":round_pushpin: Try Highlighting!",
@@ -104,6 +97,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     private guideStepNo = 1;
     private guideComplete = false;
 
+    private annotatorPaper: Element;
+    private annotatorContent: Element;
+
     constructor(
         private _readings: ReadingService,
         private _projects: ProjectService,
@@ -123,7 +119,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     }
     
     ngOnInit() {
-        // this.user = this._auth.getUser();
+        this.annotatorPaper = document.getElementById('emojiAnnotator')
+        this.annotatorContent = document.getElementById('annotatorContent')
 
         /** Set the current user every time it changes */
         this.subscriptions.push(
@@ -136,68 +133,32 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             })
         );
 
-        // Check if mobile
-        if (window.screen.availWidth < 768) {
-            this.isMobile = true;
-        }
-
-        // Get Reading via Observable
+        this._readings.clear()
+        
         this._readings.get(this.project.reading_id)
             .take(1)
-            .subscribe(
-                reading => {
-                    if (!reading.words || reading.words.length < 1) {
-                        this.reading = this.processOldReading(reading);
-                    } else {
-                        this.reading = reading;
-                        this.updateMetaTags();
-                    }
-                },
-                error => {
-                    console.error(error);
-                }
-            )
+            .subscribe()
 
-        // Establish Users array
-        if (this.project.student_ids) {
-            this.project.student_ids.forEach(student => {
-                this.commentStats.userRef[student._id] = this.commentStats.users.length;
-                this.commentStats.users.push(  { _id: student._id, type: 'user', name: (student.fullname ? student.fullname : student.username), count: 0 } );
-            });
-        }
-        if (this.project.temp_ids) {
-            this.project.temp_ids.forEach(temp => {
-                this.commentStats.userRef[temp._id] = this.commentStats.users.length;
-                this.commentStats.users.push({ _id: temp._id, type: 'temp', name: temp.fullname, count: 0 });
-            });
-        }  
+        // Get Reading via Observable
+        this._readings.currentReading.subscribe(
+            reading => {
+                this.reading = reading;
+                this.updateMetaTags();
+            },
+            error => {
+                console.error(error);
+            }
+        )
 
-        // Populate local Comment and Highlight arrays
-        // (Used for super speedy rendering!)
-        this.project.comments.forEach(comment => {
-            // Show comments if in heat mode, 
-            // if (this.project.heat_vision || comment.user_id === this.user._id || this.user._id === this.project.teacher_id || comment.user_id === this.project.teacher_id) {
-                if (!this.commentsByIndex[comment.start]) {
-                    this.commentsByIndex[comment.start] = [];
-                }
-                // Populate local comments array by start index
-                this.decorateComment(comment);
-                this.commentsByIndex[comment.start].push(comment);
-                
-                // Add highlights
-                this.incrementHighlights(this.user._id === comment.user_id || this.project.teacher_id == comment.user_id, comment.start, comment.end);
-            // }
-
-            // Populate Stats
-            this.updateCommentStats(comment.user_id, 1, comment.author);
-        });
-
-        // Share updated CommentStats
-        this._projects.setCommentStats(this.commentStats);
+        /** Run-once logic to initialize the comment-based arrays and stats */
+        let processedCommentData = this._projects.processComments(this.project)
+        this.commentsByIndex = processedCommentData.commentsByIndex
+        this.alwaysHighlightArray = processedCommentData.highlightArrays.alwaysHighlightArray
+        this.highlightArray = processedCommentData.highlightArrays.highlightArray
 
         // Subscribe to comment comment updates
         this.subscriptions.push(
-            this._socket.commentUpdates().subscribe((commentUpdate) => {
+            this._socket.commentUpdates.subscribe((commentUpdate) => {
                 let comment = commentUpdate.comment;
                 let wIndex = comment.start;
                 let cIndex = -1;
@@ -218,7 +179,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                         // Remove highlights from local array
                         this.decrementHighlights(this.user._id === comment.user_id || this.project.teacher_id == comment.user_id, comment.start, comment.end);
                         this.commentsByIndexRemove(comment._id, wIndex, cIndex);
-                        //this.updateCommentStats(comment.user_id, -1, comment.author);
                     }
                 } else if (commentUpdate.action === 'UPDATE') {
                     if (cIndex > -1 && this.commentsByIndex[wIndex] && this.commentsByIndex[wIndex][cIndex]) {
@@ -228,13 +188,11 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                         // Add highlights to local array
                         this.incrementHighlights(this.user._id === comment.user_id || this.project.teacher_id == comment.user_id, comment.start, comment.end);
                         this.commentsByIndexAdd(comment, wIndex, true);
-                        //this.updateCommentStats(comment.user_id, 1, comment.author);
                     }
                 } else if (commentUpdate.action === 'CREATE') {
                     // Add highlights to local array
                     this.incrementHighlights(this.user._id === comment.user_id || this.project.teacher_id == comment.user_id, comment.start, comment.end);
                     this.commentsByIndexAdd(comment, wIndex, true);
-                    //this.updateCommentStats(comment.user_id, 1, comment.author);
                 }
             }, (error) => {
                 console.warn(error);
@@ -243,7 +201,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
         // Subscribe to Heat Vision toggle updates
         this.subscriptions.push(
-            this._socket.heatVisionUpdates().subscribe((heatToggle) => {
+            this._socket.heatVisionUpdates.subscribe((heatToggle) => {
                 this.project.heat_vision = heatToggle.heatVision.all;
                 this.updateAllLineCounts();
             })
@@ -271,6 +229,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
+        this._readings.clear()
         this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
     }
     
@@ -329,23 +288,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
     hideCommentOptions(event ?): void {
         this.optionsShow = false;
-    }
-
-    /**
-     * This is the source of our CommentStats object!
-     */
-    updateCommentStats(user_id: string, difference: number, name ?: string): void {
-        let i = this.commentStats.userRef[user_id];
-        if (i > -1) {
-            this.commentStats.users[i].count += difference;
-        } else {
-            // Add user ref index
-            this.commentStats.userRef[user_id] = this.commentStats.users.length;
-            // Add user stat object
-            this.commentStats.users.push(  { _id: user_id, name: name, count: difference > 0 ? 1 : 0 } );
-        }
-        this.commentStats.count += difference;
-        this._projects.setCommentStats(this.commentStats);
+        this.imageHotspotPlaceholder['preview'] = false;
     }
 
     /**
@@ -353,57 +296,72 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      */
     showCommentOptions(event, doNotDismiss ?: boolean): void {
         // Only show options if text selected
-        let annotatorPaper = document.getElementById('emojiAnnotator');
-        let annotatorContent = document.getElementById('annotatorContent');
-        let sel = Rangy.getSelection();
-        // console.log(sel);
+        let sel = Rangy.getSelection()
+        let target = event.target || event.srcElement || event.currentTarget
+        // let targetTag = event.target && event.target.tagName ? event.target.tagName.toLowerCase() : ''
         
+        /**
+         * Handle creating selection and coordinates for comments on images
+         */
+        if (target.classList && target.classList.contains('reading-image') && target['parentNode']) {
+            // when they click the picture, we need to create the selection for them
+            this.imageCoords = this.getRelativeCoords(event)
+            
+            let range = Rangy.createRange()
+            range.selectNodeContents(target['parentNode'])
+
+            // Create placeholder spot
+            this.imageHotspotPlaceholder = {
+                index: target.getAttribute('index'),
+                x: this.imageCoords['x'],
+                y: this.imageCoords['y'],
+                preview: true
+            }
+            // this makes sure there are no other selections made
+            sel.setSingleRange(range)
+        } else {
+            // Functions as "click outside" for images
+            if (event.name != 'timeout') {
+                this.hideCommentOptions()
+            }
+        }
+
         // Make sure selection exists, and is within highlightable content
-        if (sel && sel.toString().length > 0 
-                && Rangy.dom.isAncestorOf(annotatorContent, sel.focusNode)
-                && Rangy.dom.isAncestorOf(annotatorContent, sel.anchorNode)
+        if (sel && (this.imageHotspotPlaceholder.preview || sel.toString())
+                && Rangy.dom.isAncestorOf(this.annotatorContent, sel.focusNode)
+                && Rangy.dom.isAncestorOf(this.annotatorContent, sel.anchorNode)
             ) {
-            let scrollOffset = annotatorPaper.getBoundingClientRect().top;
+            let scrollOffset = this.annotatorPaper.getBoundingClientRect().top;
             const readingPad = 52;
             let focusY;
             if (!!sel.focusNode.getBoundingClientRect) {
-                focusY = sel.focusNode.getBoundingClientRect().top;
+                focusY = sel.focusNode.getBoundingClientRect().top
             } else {
-                focusY = sel.focusNode.parentNode.getBoundingClientRect().top;
+                focusY = sel.focusNode.parentNode && sel.focusNode.parentNode.getBoundingClientRect().top
             }
-            this.highlightY = (focusY - scrollOffset + readingPad);
-            // If in mobile
-            if (window.screen.availWidth < 768) {
-                this.isMobile = true;
-                if (event.clientX < 120) {
-                    this.optionLeft = false;
-                    this.highlightX = (180 - event.clientX);
-                } else {
-                    this.optionLeft = true;
-                    this.highlightX = (event.clientX + readingPad - 80);
-                }
-            } else {
-                this.isMobile = false;
-            }
-            if (this.imageHotspotPlaceholder.preview === true) {
-                let yOnImage = this.imageHeight[sel.focusNode.querySelector('img').getAttribute('index')];
+
+            // Set y position of comment options
+            this.highlightY = (focusY - scrollOffset + readingPad)
+            
+            if (this.imageHotspotPlaceholder.preview == true) {
+                let yOnImage = this.imageHeight[this.imageHotspotPlaceholder.index]
                 // Offset 10px to line up with hotspot
-                this.highlightY = this.highlightY + (this.imageHotspotPlaceholder.y/100 * yOnImage) - 10;
-            }
+                this.highlightY = this.highlightY + (this.imageHotspotPlaceholder.y/100 * yOnImage) - 10
+            } 
             this.optionsShow = true;
             // Guide content
             if (this.guideStepNo < 2) {
-                this.guideStepNo = 2;
+                this.guideStepNo = 2
             }
         } else if (!doNotDismiss) {
-            this.optionsShow = false;
-            this.imageHotspotPlaceholder.preview = false;
+            this.optionsShow = false
+            this.imageHotspotPlaceholder.preview = false
         }
     }
 
     loopCheckTextSelection(): void {
         setTimeout(() => {
-            this.showCommentOptions({ name: 'timeout'});
+            this.showCommentOptions({ name: 'timeout', target: document });
             this.loopCheckTextSelection();
         }, 500);
     }
@@ -591,7 +549,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             }
         }
         this.updateAllLineCounts();
-        this.updateCommentStats(comment.user_id, 1, comment.author);
+        this._projects.commentStats.addCommentToStats(comment, 1)
     }
 
     private decorateComment(comment: any) {
@@ -616,7 +574,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.commentsByIndex[index].splice(commentIndex,1);
         // Update line counts
         this.updateAllLineCounts();
-        this.updateCommentStats(comment.user_id, -1, comment.author);
+        this._projects.commentStats.addCommentToStats(comment, -1)
     }
 
      /**
@@ -738,37 +696,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
         // Tell the server we've got a comment!
         this.createComment(span.start, span.end, 'text');
-    }
-
-    /** 
-     * Process Readings that don't yet have a Words array!
-     * - Can be deprecated eventually
-     */
-    processOldReading(reading: any) : any {
-        // Clear parsed words array
-        this.words = [];
-
-        // Process reading html into useful Words Array
-        let el = document.createElement('div');
-        el.innerHTML = reading.html;
-        let readingHtml = el;
-        let childEls = readingHtml.childNodes;
-
-        // Loop through all Reading html elements
-        for (let i = 0; i < childEls.length; i++) {
-            this.extractTextNodes(childEls[i]);
-        }
-
-        reading.words = this.words;
-
-        // Save processed reading with Words array
-        this._readings.save(reading)
-            .toPromise()
-            .then(data => {
-                // we don't really care if we get data back
-            });
-
-        return reading;
     }
 
     /**
@@ -912,30 +839,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         return classString + ' h-' + highlightCount;
     }
 
-    private imageCommentOptions(imageIndex: number, word: any, event: Event) : void {
-        // when they click the picture, we need to create the selection for them
-        let target = event.target || event.srcElement || event.currentTarget;
-        let coords = this.getRelativeCoords(event);
-
-        // Set aside image coords
-        this.imageCoords = coords;
-
-        let range = Rangy.createRange();
-        range.selectNodeContents(target['parentNode']);
-        let sel = Rangy.getSelection();
-
-
-        // Create placeholder spot
-        this.imageHotspotPlaceholder = {
-            index: target['parentNode']['parentNode'].getAttribute('index'),
-            x: coords.x,
-            y: coords.y,
-            preview: true
-        };
-        // this makes sure there are no other selections made
-        sel.setSingleRange(range);
-        this.showCommentOptions(event);
-    }
+    // private imageCommentOptions(imageIndex: number, event: Event) : void {
+        
+    //     this.showCommentOptions(event);
+    // }
 
     /** Used to determine which level of permission the user has for a specific comment
      * @param comment A comment object

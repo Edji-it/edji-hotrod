@@ -6,4 +6,4 @@ export * from './socket.service';
 export * from './media.service';
 export * from './bumblebee.service';
 export * from './copy';
-export * from './side-bar';
+export * from './nav-bar';

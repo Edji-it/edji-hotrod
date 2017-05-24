@@ -44,6 +44,9 @@ $editorToolbarBg: #fff;
     font-weight: 400;
     font-size: $readingFontSize;
     line-height: $readingLineHeight;
+    @media only screen and (max-width: $xsphone) {
+			font-size: 12px;
+		}
   }
 }
 
@@ -80,7 +83,7 @@ $editorToolbarBg: #fff;
 /* Mobile Optimization */
 @media (max-width: #{$tablet}) {
   .medium-editor-placeholder {
-    font-size: 14px;
+    font-size: 12px;
   }
 }
 

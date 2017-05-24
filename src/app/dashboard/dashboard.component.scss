@@ -5,8 +5,9 @@
 $dashToolbarHeight: 60px;
 
 .dashboard-container {
-    margin: $base-pad;
+    // margin: $base-pad;
     // margin-top: $dashToolbarHeight + $base-pad;
+    margin-top: $base-pad;
 }
 
 .dashboard-toolbar {
@@ -55,7 +56,7 @@ $dashToolbarHeight: 60px;
         font-size: 18px;
     }
     .dashboard-container {
-        margin: #{$navBarHeight + $dashToolbarHeight + $base-pad} 10px 0px 10px;
+        margin: 100px 10px 0px 10px;
     }
     .dashboard-toolbar {
         display: block;
