@@ -158,7 +158,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
         // Subscribe to comment comment updates
         this.subscriptions.push(
-            this._socket.commentUpdates().subscribe((commentUpdate) => {
+            this._socket.commentUpdates.subscribe((commentUpdate) => {
                 let comment = commentUpdate.comment;
                 let wIndex = comment.start;
                 let cIndex = -1;
@@ -201,7 +201,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
         // Subscribe to Heat Vision toggle updates
         this.subscriptions.push(
-            this._socket.heatVisionUpdates().subscribe((heatToggle) => {
+            this._socket.heatVisionUpdates.subscribe((heatToggle) => {
                 this.project.heat_vision = heatToggle.heatVision.all;
                 this.updateAllLineCounts();
             })

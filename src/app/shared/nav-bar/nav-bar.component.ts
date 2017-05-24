@@ -93,7 +93,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
 
         // Subscribe to user count updates       
         this.subscriptions.push(
-          this._socket.liveUsersCount().subscribe((users) => {
+          this._socket.liveUsersCount.subscribe((users) => {
                   this.liveCount = users.length
               }, (error) => {
                   console.warn(error)

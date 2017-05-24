@@ -37,7 +37,7 @@ export class ProjectService {
     ) {
         // needs to be constructed here or else it returns undefined
         this._commentStats = new CommentStats()
-        this._socket.commentUpdates().subscribe((update) => {
+        this._socket.commentUpdates.subscribe((update) => {
             console.log(update)
         })
     }

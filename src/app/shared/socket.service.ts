@@ -11,6 +11,19 @@ export class SocketService {
     private url;  
     private socket;
 
+    // User count observable
+    private userCount: Subject<any> = new Subject()
+    public liveUsersCount: Observable<any> = this.userCount.asObservable()
+
+    // Comment Update observable
+    private commentSubject: Subject<any> = new Subject()
+    public commentUpdates: Observable<any> = this.commentSubject.asObservable()
+
+    // Heat vision observable
+    private heatVision: Subject<any> = new Subject()
+    public heatVisionUpdates: Observable<any> = this.heatVision.asObservable()
+
+
     constructor(private _auth: AuthService) {
         if (this._auth.getEnv() === "prod") {
             this.url = "http://bluestreak.edji.it";
@@ -20,61 +33,42 @@ export class SocketService {
         }
 
         // Ensure we have a socket available
-        this.socket = io(this.url)
+        this.createSocketAndWatch()
     }
 
     /**
      * Join the Socket room based on the Project ID
      */
     public joinSocketRoom(projectId, userId): void {
-        // Sockets are destroyed on disconnect, make sure we have a fresh one!
-        this.socket = io(this.url)
+        this.createSocketAndWatch()
         this.socket.emit('openProject', { id: projectId, user: userId })
     }
 
     public leaveRoom(): void {
-        this.socket.disconnect()
+        this.socket && this.socket.disconnect && this.socket.disconnect()
     }
 
-    public liveUsersCount(): Observable<any> {
-        let observable = new Observable(observer => {
-            this.socket.on('liveUsers', (liveCount) => {
-                observer.next(liveCount);    
-            });
-            return () => {
-                
-            };  
+    private createSocketAndWatch() : void {
+        this.leaveRoom()
+        // Sockets are destroyed on disconnect, make sure we have a fresh one!
+        this.socket = io(this.url)
+
+        // Watch user count
+        this.socket.on('liveUsers', (liveCount) => {
+            this.userCount.next(liveCount)    
         })
-        return observable;
-    }
 
-    public commentUpdates(): Observable<any> {
-        let observable = new Observable(observer => {
-            this.socket.on('updateComment', (commentUpdate) => {
-                observer.next(commentUpdate);    
-            });
-            return () => {
-                
-            };  
-        })     
-        return observable;
-    }
+        // Watch comment udpates
+        this.socket.on('updateComment', (commentUpdate) => {
+            this.commentSubject.next(commentUpdate)    
+        })
 
-    /**
-     * Tell Student Views, Heat Vision has been toggled
-     */
-    public heatVisionUpdates(): Observable<any> {
-        let observable = new Observable(observer => {
-            this.socket.on('heatVision', (heatToggle) => {
-                observer.next(heatToggle);    
-            });
-            return () => {
-                
-            };  
-        })     
-        return observable;
+        // Watch heat vision updates
+        this.socket.on('heatVision', (heatToggle) => {
+            this.heatVision.next(heatToggle)    
+        })
     }
-
+    
     /**
      * Tell Teacher View to update comment
      * @param comment Comment Object
