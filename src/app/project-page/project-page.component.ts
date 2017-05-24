@@ -9,11 +9,7 @@ import { Project, User } from './../shared/datatypes'
     // moduleId: module.id,
     selector: 'edji-project-page',
     styleUrls: ['project-page.component.scss'],
-    templateUrl: 'project-page.component.html',
-    providers: [
-        // We want SocketService to be an instance per component
-        SocketService
-    ]
+    templateUrl: 'project-page.component.html'
 })
 export class ProjectPageComponent implements OnInit, OnDestroy {
     private project: Project = <Project>{}
