@@ -178,14 +178,16 @@ $bubbleColor: rgb(255,255,255);
 	top: 50%;
 }
 
-.comment__options--mobile {
+$commentOptionsMobileHeight: 50px;
+
+.comment-options__mobile-wrap {
 	position: fixed;
 	bottom: 0;
 	width: 100%;
 	left: 0;
 	border-radius: 0;
 	text-align: center;
-	height: 50px;
+	height: $commentOptionsMobileHeight;
 	box-shadow: 0px 1px 15px 0px rgba(0,0,0,0.4);
 	background-color: $bubbleColor;
 }
@@ -193,7 +195,7 @@ $bubbleColor: rgb(255,255,255);
 .comment__options--mobileButton {
 	margin: 0 !important;
 	width: 100% !important;
-	height: 100% !important;
+	height: $commentOptionsMobileHeight !important;
 }
 
 .comment__options--mobileRow {
@@ -202,4 +204,5 @@ $bubbleColor: rgb(255,255,255);
 
 .comment__options--mobileCol {
 	padding: 0;
+	position: relative;
 }
