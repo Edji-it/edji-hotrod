@@ -45,9 +45,9 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
                 this.user = user
                 if (!this.user.isLoggedIn) { this.showLoginModal = true }
 
-                if (user._id && !this.joinedRoom) {
+                if (this.user._id && this.project._id && !this.joinedRoom) {
                     // Join Socket Room based on ID param
-                    this._socket.joinSocketRoom(idParam, this.user._id)
+                    this._socket.joinSocketRoom(this.project._id, this.user._id)
                     this.joinedRoom = true
                 }
             })
@@ -59,9 +59,12 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
             (project) => {
                 if (project) {
                     this.project = project
-                    // this.createdDate = new Date(project.createdAt)
-                    // this.createDate = this.createdDate.toDateString()
 
+                    if (this.user._id && this.project._id && !this.joinedRoom) {
+                        // Join Socket Room based on ID param
+                        this._socket.joinSocketRoom(this.project._id, this.user._id)
+                        this.joinedRoom = true
+                    }
                 }
             },
             (error) => {
