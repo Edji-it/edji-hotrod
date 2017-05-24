@@ -45,7 +45,6 @@ $purple: rgb(150, 40, 255);
 		// swap to nav along top
     	height: $navHeight;
 		width: 100%;
-		overflow: hidden;
   	}
 }
 .sliding-pane {
@@ -66,6 +65,12 @@ $purple: rgb(150, 40, 255);
 	padding: 15px;
 	text-align: center;
 	border-left: $navBorder;
+	white-space: nowrap;
+
+	@media(max-width: $phone) {
+		min-width: 80px;
+		max-width: 100px;
+	}
 	
 	& .link {
 		font-size: 12px;
@@ -155,7 +160,11 @@ $purple: rgb(150, 40, 255);
 	text-align: left;
 	overflow-y: hidden; // a scroll bar was coming up sometimes
 
-	@media(min-width: $tablet) {
+	@media(max-width: $desktop) {
+		width: 40%;
+	}
+
+	@media(min-width: $desktop) {
 		width: 50%;
 	}
 
@@ -211,10 +220,12 @@ a.nav-bar__link {
 	position: relative;
 	line-height: 45px;
 	vertical-align: middle;
-	@media only screen and (max-device-width: $phone) {
-		min-width: 95px;
+
+	@media(max-width: $phone) {
+		font-size: 14px;
+		min-width: 80px;
 		max-width: 95px;
-		padding: 12px 16px;
+		padding: 12px 5px;
 	}
 }
 
@@ -427,6 +438,11 @@ div.sliding-pane.from-left.slide-in {
         bottom: calc(100% + 0px);
         border-bottom-color: white;
     }
+
+	@media(max-width: $phone) {
+		left: 20px;
+		right: 20px;
+	}
 }
 
 .nav__btn-wrap {
