@@ -133,11 +133,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             })
         );
 
-        // Check if mobile
-        if (window.screen.availWidth < 768) {
-            this.isMobile = true;
-        }
-
         this._readings.clear()
         
         this._readings.get(this.project.reading_id)
