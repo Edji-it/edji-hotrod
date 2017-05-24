@@ -53,21 +53,3 @@
         flex: inherit;
     }
 }
-
-.hidden-ipad-landscape {
-    &, &[class^='hidden-'] {
-        @media screen and (max-width: $tablet), all and (device-width: $xldesktop) and (device-height: $tablet) {
-            /* For landscape layouts only */
-            display: none !important;
-        }
-    }
-}
-
-.shown-ipad-landscape {
-    &, &[class^='hidden-'] {
-        @media screen and (max-width: $tablet), all and (device-width: $xldesktop) and (device-height: $tablet) {
-            /* For landscape layouts only */
-            display: block !important;
-        }
-    }
-}
