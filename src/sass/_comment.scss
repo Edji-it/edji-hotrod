@@ -90,7 +90,9 @@ edji-comment {
 		display: block !important;
 		position: absolute !important;
 		top: none !important;
-		left: 30px;
+		@media (max-width: $desktop) {
+			left: 30px;
+		}
 	}
 
 	&.fade-out {
