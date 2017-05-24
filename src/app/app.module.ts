@@ -40,7 +40,6 @@ import { NavBarComponent } from './shared/nav-bar';
 import { FooterComponent } from './shared/footer';
 import { HomeComponent } from './home';
 import { RegisterComponent } from './register';
-import { JoinComponent } from './join/join.component';
 import { LoginForm, GuestForm } from './forms';
 import { LoginModal, ResetPassComponent, DeleteCommentModal, AddProjectModal, LoginRequiredModal } from './modals';
 import { AnnotatorComponent, CommentComponent, TextCommentComponent, EmojiCommentComponent, EmojiKeyboardComponent, RightMarginTooltipComponent } from './annotator';
@@ -126,7 +125,6 @@ type StoreType = {
     CreatedDashComponent,
     LoginComponent,
     HomeComponent,
-    JoinComponent,
     FeedbackComponent,
     NoContentComponent,
     Autosize,
