@@ -26,6 +26,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
     private liveCount: number = 1
     private currentReading: any
     private subscriptions: Subscription[] = []
+    private liveCountSubscription: Subscription
     private showCommentCounts: boolean = false
     private mNavShow: boolean = false
     private isMobile: boolean = false
@@ -64,6 +65,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
         this.isMobile = false
       }
 
+      // Subscribe to current Reading data
       this.subscriptions.push(
         this._readings.currentReading.subscribe(
             reading => {
@@ -75,27 +77,29 @@ export class NavBarComponent implements OnInit, OnDestroy {
         )
       )
       
-      this.subscriptions.push(
-        this._projects.currentProject.subscribe(
-              project => {
-                console.log(project)
-                  this.currentProject = project;
-                  this.createdDate = new Date(project.createdAt).toDateString()
+      if (this.showProjectInfo) {
+        // Subscribe to current Project data
+        this.subscriptions.push(
+          this._projects.currentProject.subscribe(
+                project => {
+                    this.currentProject = project;
+                    this.createdDate = new Date(project.createdAt).toDateString()
+                },
+                error => {
+                    console.error(error);
+                }
+            )
+        )
 
-                  // Join and update live user count
-                  this.subscriptions.push(
-                      this._socket.joinLiveCount(project._id, this.user._id).subscribe((users) => {
-                          this.liveCount = users.length
-                      }, (error) => {
-                          console.warn(error)
-                      })
-                  )
-              },
-              error => {
-                  console.error(error);
-              }
-          )
-      )
+        // Subscribe to user count updates       
+        this.subscriptions.push(
+          this._socket.liveUsersCount().subscribe((users) => {
+                  this.liveCount = users.length
+              }, (error) => {
+                  console.warn(error)
+              })
+        )
+      }
 
     }
 

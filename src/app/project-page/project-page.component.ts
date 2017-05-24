@@ -14,6 +14,7 @@ import { Project, User } from './../shared/datatypes'
 export class ProjectPageComponent implements OnInit, OnDestroy {
     private project: Project = <Project>{}
     private subscriptions: Subscription[] = []
+    private joinedRoom: boolean = false
     private error: string
     private user: User
     // private liveCount: number = 1
@@ -35,16 +36,22 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
             window.scrollTo(0, 0);
         })
 
+        // gets id from route
+        let idParam: string = this.route.snapshot.params['id']
+
         /** Set the current user every time it changes */
         this.subscriptions.push(
             this._auth.getCurrentUser().subscribe((user) => {
                 this.user = user
                 if (!this.user.isLoggedIn) { this.showLoginModal = true }
+
+                if (user._id && !this.joinedRoom) {
+                    // Join Socket Room based on ID param
+                    this._socket.joinSocketRoom(idParam, this.user._id)
+                    this.joinedRoom = true
+                }
             })
         )
-
-        // gets id from route
-        let idParam: string = this.route.snapshot.params['id']
 
         // Set current project AND subscribe to updates from that project
         this._projects.setCurrentProject(idParam)
@@ -64,11 +71,11 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
                     this._router.navigate(['/not-found'])
                 }
             })
-
-        
     }
 
     ngOnDestroy() {
         this.subscriptions.forEach((sub) => { sub.unsubscribe() })
+        // End socket connections
+        this._socket.leaveRoom()
     }
 }

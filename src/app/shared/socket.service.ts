@@ -18,16 +18,22 @@ export class SocketService {
             // this.url = 'http://localhost:7899';
             this.url = "http://bluestreak-dev.edji.it";
         }
-        this.socket = io(this.url);
+
+        // Ensure we have a socket available
+        this.socket = io(this.url)
     }
 
     /**
-     * Handles the live reading count on the project page
+     * Join the Socket room based on the Project ID
      */
-    public joinLiveCount(projectId, userId): Observable<any> {
-        this.socket.emit('openProject', { id: projectId, user: userId });
+    public joinSocketRoom(projectId, userId): void {
+        // Sockets are destroyed on disconnect, make sure we have a fresh one!
+        this.socket = io(this.url)
+        this.socket.emit('openProject', { id: projectId, user: userId })
+    }
 
-        return this.liveUsersCount();
+    public leaveRoom(): void {
+        this.socket.disconnect()
     }
 
     public liveUsersCount(): Observable<any> {
@@ -36,7 +42,7 @@ export class SocketService {
                 observer.next(liveCount);    
             });
             return () => {
-                this.socket.disconnect();
+                
             };  
         })
         return observable;
@@ -45,11 +51,10 @@ export class SocketService {
     public commentUpdates(): Observable<any> {
         let observable = new Observable(observer => {
             this.socket.on('updateComment', (commentUpdate) => {
-                console.log("got updated comment");
                 observer.next(commentUpdate);    
             });
             return () => {
-                this.socket.disconnect();
+                
             };  
         })     
         return observable;
@@ -59,13 +64,12 @@ export class SocketService {
      * Tell Student Views, Heat Vision has been toggled
      */
     public heatVisionUpdates(): Observable<any> {
-        console.log("got a subscriber");
         let observable = new Observable(observer => {
             this.socket.on('heatVision', (heatToggle) => {
                 observer.next(heatToggle);    
             });
             return () => {
-                this.socket.disconnect();
+                
             };  
         })     
         return observable;
