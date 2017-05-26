@@ -9,6 +9,10 @@ import { Reading } from './datatypes/reading';
 @Injectable()
 export class ReadingService {
 
+  /*
+  Last Modified: 26 May 2017
+  */
+
   constructor(private http: Http, private _auth: AuthService) {
   }
 
@@ -57,7 +61,11 @@ export class ReadingService {
   public clear(): void {
     this.readingValue = <Reading>{}
     this.readingSource.next(this.readingValue)
-  }
+  } // public clear(): void 
+
+  public delete(): void {
+    console.log("Deleting a reading!");
+  } // public delete(): void
 
   // Push new or update Reading
   public save(reading: any): Observable<any> {

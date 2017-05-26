@@ -37,6 +37,7 @@
             <div class="dropdown-menu dropdown-menu-right reading-card-menu">
                 <button (click)="relevantReading = reading; showAddModal = true; showOptions = false;" class="dropdown-item" [attr.testFindCreateNewGroup]="reading.title">Create New Group</button>
                 <button (click)="showOptions=false;" [routerLink]="['/new-reading/']" [queryParams]="{ copyId: reading._id }" class="dropdown-item" [attr.testFindCopyAndEdit]="reading.title">Copy and Edit</button>
+                <button class="dropdown-item">Delete</button>
             </div>
         </div>
     </div>
@@ -90,6 +91,7 @@
                         <div class="dropdown-menu dropdown-menu-right reading-card-menu">
                             <button (click)="relevantReading = version; showAddModal = true; version.showOptionsV = false;" class="dropdown-item" [attr.testFindCreateNewGroupV]="version.title">Create New Group</button>
                             <button *ngIf="!version.draft" (click)="version.showOptionsV=false;" [routerLink]="['/new-reading/']" [queryParams]="{ copyId: version._id }" class="dropdown-item" [attr.testFindCopyAndEditV]="version.title">Copy and Edit</button>
+                            <button class="dropdown-item">Delete</button>
                         </div>
                     </div>
                 </div>

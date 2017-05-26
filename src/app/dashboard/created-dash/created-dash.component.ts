@@ -70,10 +70,6 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }
 
-  private deleteReading(reading) {
-
-  }
-
   private updateProjectLabel(projectId: string, projectLabel: string) {
     this._projects.update({ 'label' : projectLabel }, projectId)
       .subscribe( project => {
