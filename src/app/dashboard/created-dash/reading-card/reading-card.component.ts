@@ -1,6 +1,7 @@
 import { Subscription } from 'rxjs/Rx';
 import { Angulartics2 } from 'angulartics2/dist';
 import { ReadingService } from '../../../shared';
+import { Reading }      from '../../../shared/datatypes';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 
 @Component({
@@ -23,6 +24,8 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
   private showVersions: boolean = false;
   private relevantReading: any = {};
   private showAddModal: boolean = false;
+
+  private versionHeight = 50;
 
   constructor(
     private _readings: ReadingService,
@@ -50,10 +53,14 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
             // this.angulartics.eventTrack.next({ action: "getAllVersions", properties: { category: "serviceCalls", label: "failure" }});
             this.errorObject.readingError = "We had some trouble getting the versions for this reading, it might be our fault";
           })
-    }
-  }
+    } // if
+  } // getVersions(versionId : string)
 
-  private versionHeight = 50;
+  // clicking the delete button
+  deleteReading(reading : Reading) {
+    // console.log("[reading-card.component.ts] deleteReading() worked!");
+    this._readings.delete(reading);
+  } // deleteButton(reading : any)
   
   versionsHeight() : number {
     if (document.getElementById(this.reading._id) && document.getElementById(this.reading._id).clientHeight > 66 && !this.isLoading && this.versionHeight == 50) {
@@ -61,6 +68,6 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
     } 
     return this.versionHeight;
     
-  }
+  } // versionsHeight() : number
 
-}
+} // @Component

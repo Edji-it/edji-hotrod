@@ -47,7 +47,7 @@ export class ReadingService {
         }
         return data.json()
       });
-  }
+  } // public get(id : string) : Observable<any>
 
   // Pull all versions of a particular reading
   public getAllVersions(versionId : string) : Observable<any> {
@@ -56,15 +56,16 @@ export class ReadingService {
           .map(data => {
             return data.json()
           });
-  }
+  } // public getAllVersions(versionId : string) : Observable<any>
 
   public clear(): void {
     this.readingValue = <Reading>{}
     this.readingSource.next(this.readingValue)
   } // public clear(): void 
 
-  public delete(): void {
-    console.log("Deleting a reading!");
+  // It deletes the reading. Fairly straightforward.
+  public delete(reading: any): void {
+    console.log("Deleting '" + reading.title + "' the version id of " + reading.versionId);
   } // public delete(): void
 
   // Push new or update Reading

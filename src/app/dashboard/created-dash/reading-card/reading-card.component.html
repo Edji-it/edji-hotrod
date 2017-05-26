@@ -30,6 +30,7 @@
             </div>
         </div>
         <i *ngIf="reading['draft'] && reading.draft === true && !reading.projects[0]" class="icon icon-draft"></i>
+        <!-- The Dropdown Options Menu -->
         <div *ngIf="!reading['draft'] || reading.draft !== true || reading.projects[0]" id="optionsWrap" (clickOutside)="showOptions = false" class="dropdown reading-options" [class.show]="showOptions">
             <button class="btn btn-icon--plain" (click)="showOptions = !showOptions" [attr.testFindOptions]="reading.title">
                 <i class="icon icon-more"></i>
@@ -37,16 +38,18 @@
             <div class="dropdown-menu dropdown-menu-right reading-card-menu">
                 <button (click)="relevantReading = reading; showAddModal = true; showOptions = false;" class="dropdown-item" [attr.testFindCreateNewGroup]="reading.title">Create New Group</button>
                 <button (click)="showOptions=false;" [routerLink]="['/new-reading/']" [queryParams]="{ copyId: reading._id }" class="dropdown-item" [attr.testFindCopyAndEdit]="reading.title">Copy and Edit</button>
-                <button class="dropdown-item">Delete</button>
+                <button (click)="deleteReading(reading)" class="dropdown-item">Delete</button>
             </div>
         </div>
     </div>
     
 <!--</div>-->
 <!--<div>-->
+<!-- The Project Card -->
 <a class="list-item list-item--button project-card" [class.new-project]="project.new" [routerLink]="['/project', project._id]" *ngFor="let project of reading.projects">
     <div class="row">
         <div class="col-9">
+            <!-- The Title -->
             <div class="title"> 
                 <div class="project-title-input">
                     <span class="reading-project--label"><span style="color: #cdcdcd;" [attr.testFindGroup]="reading.title">Group:</span> {{project.label}}</span>
@@ -61,8 +64,8 @@
             </div>
         </div>
         <div class="col-3 prj-btns pull-right">
-            <!--<a style="float:right; margin-left: 8px;" [routerLink]="['/project', project._id]" class="btn btn-secondary">Open</a>-->
-            <pre class="prj-code">{{project.code || 'none'}}</pre>
+            <!-- the project code -->
+            <pre style="float:right" class="prj-code">{{project.code || 'none'}}</pre>
         </div>
     </div>
 </a>

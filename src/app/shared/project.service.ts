@@ -40,18 +40,18 @@ export class ProjectService {
         this._socket.commentUpdates.subscribe((update) => {
             console.log(update)
         })
-    }
-  
-  /**
-   * Pulls all projects for a single user
-   * @returns chainable promise resolved with reading data
-   */
-  public getAll() {
-        return this.http
-            .get(this._auth.getUrl() + '/projects', this._auth.getOptions())
-            .toPromise()
-            .then(this._auth.extractData);
-  }
+    } // constructor
+    
+    /**
+     * Pulls all projects for a single user
+     * @returns chainable promise resolved with reading data
+     */
+    public getAll() {
+            return this.http
+                .get(this._auth.getUrl() + '/projects', this._auth.getOptions())
+                .toPromise()
+                .then(this._auth.extractData);
+    } // public getAll()
 
     /**
      * Adds a user to a project code and updates currentProject observable
@@ -179,46 +179,46 @@ export class ProjectService {
         return { alwaysHighlightArray: alwaysHighlightArray, highlightArray: highlightArray }
     }
 
-  /**
-   * Gets all of a teacher's projects for a reading
-   */
-  public getForReading(readingId: string): Observable<any> {
-    let userId = this._auth.getUser()._id;
-    
-    // return this.http.get(this._auth.getUrl() + '/readings/' + readingId + '/projects/' + userId , this._auth.getOptions() );
-    return this.http.get(this._auth.getUrl() + "/projects/reading/" + readingId, this._auth.getOptions())
-        .map((data) => { return data.json() || {}; });
-  }
-
-  /**
-   * Validates whether or not a project code exists
-   * @param projectCode Short project code
-   * @returns Observable which will have error if response is invalid
-   */
-  public validateProject(projectCode: string): Observable<any> {
-
-      return this.http.get(this._auth.getUrl() + '/projects/' + projectCode + "/validate", this._auth.getOptions())
-        .map((data) => { return data.json() || {}; });
+    /**
+     * Gets all of a teacher's projects for a reading
+     */
+    public getForReading(readingId: string): Observable<any> {
+        let userId = this._auth.getUser()._id;
         
-  }
+        // return this.http.get(this._auth.getUrl() + '/readings/' + readingId + '/projects/' + userId , this._auth.getOptions() );
+        return this.http.get(this._auth.getUrl() + "/projects/reading/" + readingId, this._auth.getOptions())
+            .map((data) => { return data.json() || {}; });
+    }
 
-    /** 
-    * Pull a Project object
-    * @param projectId
-    */
-  public get(projectId: string) : Observable<any> {
-        return this.http
-            .get(this._auth.getUrl() + '/projects/' + projectId, this._auth.getOptions())
-            .map(
-                data => {
-                    // Update local Project object if returned
-                    if (data.json().project && data.json().project._id) {
-                        this.project = data.json().project;
-                        this.currentProjectSource.next(this.project);
-                    }
-                    return data.json().project;
-                });
-  }
+    /**
+     * Validates whether or not a project code exists
+     * @param projectCode Short project code
+     * @returns Observable which will have error if response is invalid
+     */
+    public validateProject(projectCode: string): Observable<any> {
+
+        return this.http.get(this._auth.getUrl() + '/projects/' + projectCode + "/validate", this._auth.getOptions())
+            .map((data) => { return data.json() || {}; });
+            
+    } // public validateProject(projectCode: string): Observable<any>
+
+        /** 
+        * Pull a Project object
+        * @param projectId
+        */
+    public get(projectId: string) : Observable<any> {
+            return this.http
+                .get(this._auth.getUrl() + '/projects/' + projectId, this._auth.getOptions())
+                .map(
+                    data => {
+                        // Update local Project object if returned
+                        if (data.json().project && data.json().project._id) {
+                            this.project = data.json().project;
+                            this.currentProjectSource.next(this.project);
+                        }
+                        return data.json().project;
+                    });
+    }
 
     /**
      * Create a new Project
@@ -256,7 +256,7 @@ export class ProjectService {
             })
     }
 
-    /**
+    /** . 
      * Delete a Project
      * @param Requires a Project ID
      */
@@ -265,7 +265,7 @@ export class ProjectService {
             .delete(this._auth.getUrl() + '/projects/' + projectId, this._auth.getOptions())
             .toPromise()
             .then(this._auth.extractData);
-    }
+    } // public delete(projectId)
 
     /** 
      * Update or Create a comment on a project

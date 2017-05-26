@@ -63,12 +63,11 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
           this.angulartics.eventTrack.next({ action: "getAllReadings", properties: { category: "serviceCalls", label: "failure" }});
           this.errorObject.readingError = "We had some trouble getting your readings, it might be our fault";
         });
-
-  }
+  } //  ngOnInit()
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
-  }
+  } // ngOnDestroy()
 
   private updateProjectLabel(projectId: string, projectLabel: string) {
     this._projects.update({ 'label' : projectLabel }, projectId)
