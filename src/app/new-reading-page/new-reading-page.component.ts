@@ -70,17 +70,17 @@ export class NewReadingPage implements OnInit {
     private guideContent: any[] = [
         {
             title: ":pen_fountain: Use Formatting Styles",
-            image: "/assets/guide/add-comment-type.gif",
+            image: "/assets/guide/newReading__format.gif",
             body: "Select text in your Reading Content to use the formatting bar. Add bold, italic, or header styles to make your content pop!"
         },
         {
             title: ":camera: Add Images and PDFs",
-            image: "/assets/guide/add-comment-type.gif",
-            body: "PDFs and Images can be inserted into Readings. Learn more in <a class='link' href='http://guide.edji.it/index.php/2017/05/09/customizing-your-lessons-with-edji-pdf-uploads/' target='_blank'>our PDF guide</a> and in <a class='link' href='http://guide.edji.it/index.php/2017/05/06/customizing-your-lessons-with-edji-images/' target='_blank'>our Image guide</a>."
+            image: "/assets/guide/newReading__insert.png",
+            body: "PDFs and Images can be inserted into Readings, simply use the Insert bar on the left. Learn more in <a class='link' href='http://guide.edji.it/index.php/2017/05/09/customizing-your-lessons-with-edji-pdf-uploads/' target='_blank'>our PDF guide</a> and in <a class='link' href='http://guide.edji.it/index.php/2017/05/06/customizing-your-lessons-with-edji-images/' target='_blank'>our Image guide</a>."
         },
         {
             title: ":mega: Share your Reading!",
-            image: "/assets/guide/add-comment-type.gif",
+            image: "/assets/guide/newReading__share.gif",
             body: "Click the Share button when your Reading is completed and name your first Group&mdash;you can create more Groups later! <br/><br/>Finalize and Share to get your first Group's code."
         }
     ]
