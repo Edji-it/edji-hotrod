@@ -35,10 +35,14 @@
             <button class="btn btn-icon--plain" (click)="showOptions = !showOptions" [attr.testFindOptions]="reading.title">
                 <i class="icon icon-more"></i>
             </button>
+            <!-- dropdown buttons -->
             <div class="dropdown-menu dropdown-menu-right reading-card-menu">
+                <!-- Create New Group dropdown button -->
                 <button (click)="relevantReading = reading; showAddModal = true; showOptions = false;" class="dropdown-item" [attr.testFindCreateNewGroup]="reading.title">Create New Group</button>
+                <!-- Copy & Edit dropdown button -->
                 <button (click)="showOptions=false;" [routerLink]="['/new-reading/']" [queryParams]="{ copyId: reading._id }" class="dropdown-item" [attr.testFindCopyAndEdit]="reading.title">Copy and Edit</button>
-                <button (click)="deleteReading(reading)" class="dropdown-item">Delete</button>
+                <!-- Delete dropdown button -->
+                <button (click)="relevantReading = reading; showDeleteModal = true; showOptions = false;" class="dropdown-item">Delete</button>
             </div>
         </div>
     </div>
@@ -94,7 +98,8 @@
                         <div class="dropdown-menu dropdown-menu-right reading-card-menu">
                             <button (click)="relevantReading = version; showAddModal = true; version.showOptionsV = false;" class="dropdown-item" [attr.testFindCreateNewGroupV]="version.title">Create New Group</button>
                             <button *ngIf="!version.draft" (click)="version.showOptionsV=false;" [routerLink]="['/new-reading/']" [queryParams]="{ copyId: version._id }" class="dropdown-item" [attr.testFindCopyAndEditV]="version.title">Copy and Edit</button>
-                            <button class="dropdown-item">Delete</button>
+                            <!-- Delete dropdown button -->
+                            <button (click)="relevantReading = reading; showDeleteModal = true; showOptions = false;" class="dropdown-item">Delete</button>
                         </div>
                     </div>
                 </div>
@@ -144,4 +149,9 @@
     </div>-->
 <!--</div>-->
 <!--</div>-->
+
+<!-- Modals -->
+<!-- hot-add-project-modal is opens when "Create New Group" under the dropdown is clicked -->
 <hot-add-project-modal *ngIf="showAddModal" [reading]="relevantReading" (closeModal)="showAddModal = false"></hot-add-project-modal>
+<!-- hot-del-reading pops up when "Delete" is clicked underneath a Reading's dropdown menu-->
+<hot-del-reading *ngIf="showDeleteModal" [reading]="relevantReading" (closeModal)="showDeleteModal = false" (delete)="deleteReading(relevantReading)"></hot-del-reading>

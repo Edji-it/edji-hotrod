@@ -19,11 +19,12 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
 
   @Input() reading: any;
 
-  private showOptions: boolean = false;
-  private showOptionsV: boolean = false;
-  private showVersions: boolean = false;
-  private relevantReading: any = {};
-  private showAddModal: boolean = false;
+  private showOptions     : boolean = false;
+  private showOptionsV    : boolean = false;
+  private showVersions    : boolean = false;
+  private relevantReading : any = {};
+  private showAddModal    : boolean = false;
+  private showDeleteModal : boolean = false;
 
   private versionHeight = 50;
 
@@ -36,7 +37,7 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
-  }
+  } //ngOnDestroy
 
   getVersions(versionId : string) {
     if (this.showVersions && this.versions.length < 1) {

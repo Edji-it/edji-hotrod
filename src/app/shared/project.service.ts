@@ -295,7 +295,7 @@ export class ProjectService {
 
         if (location && location.x && location.y) {
             data.comment['loc'] = location;
-        }
+        } // if
 
         // Add comment ID if passed
         if (commentId) {
@@ -315,7 +315,7 @@ export class ProjectService {
             .toPromise()
             .then(this._auth.extractData)
             .then((data) => { return data.comment; })
-    }
+    } // public saveComment
 
     /**
      * Deletes comment via service, then updates local Project object 

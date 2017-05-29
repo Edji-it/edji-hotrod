@@ -33,7 +33,7 @@ export class ReadingService {
             .toPromise()
             .then(this._auth.extractData)
             .then((data) => { return data.readings })
-  }
+  } //getAll()
 
   // Pull one reading by ID
   public get(id : string) : Observable<any> {
@@ -80,7 +80,7 @@ export class ReadingService {
         html: reading.html,
         source: reading.source,
         draft: reading.draft
-      }
+      } // let
 
       return this.http
               .put(this._auth.getUrl() + '/readings/' + reading['_id'], { reading: putReading }, this._auth.getOptions())
@@ -101,7 +101,7 @@ export class ReadingService {
                 }
                 return data.json().reading;
               });
-    }
-  }
+    } // if
+  } // public save()
 
 }
