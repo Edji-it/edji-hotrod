@@ -6,4 +6,6 @@ export * from './socket.service';
 export * from './media.service';
 export * from './bumblebee.service';
 export * from './copy';
-export * from './nav-bar';
+export * from './nav-bar/nav-bar.component';
+export * from './footer/footer.component';
+export * from './tutorial-box/tutorial-box.component';
