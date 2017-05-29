@@ -250,10 +250,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // }
     }
 
-    private guideCompleted(): void {
-        this.guideComplete = true
-    }
-
     hideCommentOptions(event ?): void {
         this.optionsShow = false;
         this.imageHotspotPlaceholder['preview'] = false;
