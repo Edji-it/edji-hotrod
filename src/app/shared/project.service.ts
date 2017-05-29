@@ -287,11 +287,11 @@ export class ProjectService {
                 'author' : this._auth.getUser().fullname ? this._auth.getUser().fullname : this._auth.getUser().username,
                 'type' : type
             }
-        } // let data
+        }
 
         if (text) {
             data.comment['text'] = text;
-        } // if (text)
+        }
 
         if (location && location.x && location.y) {
             data.comment['loc'] = location;
@@ -300,7 +300,7 @@ export class ProjectService {
         // Add comment ID if passed
         if (commentId) {
             data.comment['_id'] = commentId;
-        } // if (commentId)
+        }
 
         // Tell other Project viewers comment changed, using Socket
         // TO-DO: Move to after service responds

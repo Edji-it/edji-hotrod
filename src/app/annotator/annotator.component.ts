@@ -11,12 +11,11 @@ import * as Rangy from 'rangy';
 import { Angulartics2 } from 'angulartics2';
 // import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 
-import { FireFeedComponent } from '../shared/fire-feed/fire-feed.component';
-import { ReadingService }   from '../shared/reading.service';
-import { ProjectService }   from '../shared/project.service';
+import { ReadingService } from '../shared/reading.service';
+import { ProjectService } from '../shared/project.service';
 import { CommentComponent } from './comment/comment.component';
-import { AuthService }      from '../shared/auth.service';
-import { SocketService }    from '../shared/socket.service';
+import { AuthService } from '../shared/auth.service';
+import { SocketService } from '../shared/socket.service';
 import { CommentPermissions, EdjiComment, Project, Reading } from './../shared/datatypes';
 
 @Component({
