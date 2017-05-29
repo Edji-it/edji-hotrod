@@ -65,6 +65,26 @@ export class NewReadingPage implements OnInit {
             buttons: ['bold', 'italic', 'underline', 'h1', 'h2', 'h3']
         }
     };
+
+    // Tutorial variables
+    private guideContent: any[] = [
+        {
+            title: ":pen_fountain: Use Formatting Styles",
+            image: "/assets/guide/add-comment-type.gif",
+            body: "Select text in your Reading Content to use the formatting bar. Add bold, italic, or header styles to make your content pop!"
+        },
+        {
+            title: ":camera: Add Images and PDFs",
+            image: "/assets/guide/add-comment-type.gif",
+            body: "PDFs and Images can be inserted into Readings. Learn more in <a class='link' href='http://guide.edji.it/index.php/2017/05/09/customizing-your-lessons-with-edji-pdf-uploads/' target='_blank'>our PDF guide</a> and in <a class='link' href='http://guide.edji.it/index.php/2017/05/06/customizing-your-lessons-with-edji-images/' target='_blank'>our Image guide</a>."
+        },
+        {
+            title: ":mega: Share your Reading!",
+            image: "/assets/guide/add-comment-type.gif",
+            body: "Click the Share button when your Reading is completed and name your first Group&mdash;you can create more Groups later! <br/><br/>Finalize and Share to get your first Group's code."
+        }
+    ]
+    private guideStepNo: number = 1
     
     constructor(
         private _route: ActivatedRoute,
