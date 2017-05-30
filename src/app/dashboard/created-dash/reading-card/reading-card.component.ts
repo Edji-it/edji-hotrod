@@ -1,8 +1,8 @@
 import { Subscription } from 'rxjs/Rx';
 import { Angulartics2 } from 'angulartics2/dist';
-import { ReadingService } from '../../../shared';
-import { Reading }      from '../../../shared/datatypes';
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ReadingService, ProjectService } from '../../../shared';
+import { Reading, Project }      from '../../../shared/datatypes';
+import { Component, Input, Output, OnDestroy, OnInit } from '@angular/core';
 
 @Component({
   selector: 'hot-reading-card',
@@ -19,17 +19,23 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
 
   @Input() reading: any;
 
+  @Output() 
+  deleteReadingCard : ReadingCardComponent;
+
   private showOptions     : boolean = false;
   private showOptionsV    : boolean = false;
   private showVersions    : boolean = false;
   private relevantReading : any = {};
+  private relevantProject : Project;
   private showAddModal    : boolean = false;
-  private showDeleteModal : boolean = false;
+  private showDeleteReadingModal : boolean = false;
+  private showDeleteProjectModal : boolean = false;
 
   private versionHeight = 50;
 
   constructor(
     private _readings: ReadingService,
+    private _projects: ProjectService,
     private angulartics: Angulartics2
   ) { }
 
@@ -57,12 +63,36 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
     } // if
   } // getVersions(versionId : string)
 
-  // clicking the delete button
+  // upon recieving a deleteReading event, our del-reading modal will trigger this
   deleteReading(reading : Reading) {
+    // Listen for an Observable from reading.service.ts
+    this._readings.delete(reading)
+      .take(1) // so we don't need to unsubscribe
+      .subscribe(
+      data => { 
+        
+      },
+      err => {
+        // TODO: Add a delete unsucessful modal here.
+    })
     // console.log("[reading-card.component.ts] deleteReading() worked!");
-    this._readings.delete(reading);
   } // deleteButton(reading : any)
-  
+
+  // upon recieving a deleteReading event, our del-project modal will trigger this
+  deleteProject(project : Project) {
+    // Listen for an Observable from project.service.ts
+    // Listen for an Observable from reading.service.ts
+    this._projects.delete(project)
+      .take(1) // so we don't need to unsubscribe
+      .subscribe(
+      data => { 
+        
+      },
+      err => {
+        // TODO: Add a delete unsucessful modal here.
+    })
+  } // deleteProject(project : Project)
+
   versionsHeight() : number {
     if (document.getElementById(this.reading._id) && document.getElementById(this.reading._id).clientHeight > 66 && !this.isLoading && this.versionHeight == 50) {
       this.versionHeight = document.getElementById(this.reading._id).clientHeight;

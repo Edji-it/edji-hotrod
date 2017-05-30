@@ -202,10 +202,10 @@ export class ProjectService {
             
     } // public validateProject(projectCode: string): Observable<any>
 
-        /** 
-        * Pull a Project object
-        * @param projectId
-        */
+    /** 
+    * Pull a Project object
+    * @param projectId
+    */
     public get(projectId: string) : Observable<any> {
             return this.http
                 .get(this._auth.getUrl() + '/projects/' + projectId, this._auth.getOptions())
@@ -252,19 +252,16 @@ export class ProjectService {
                     this.project = data.json().project;
                     this.currentProjectSource.next(this.project);
                     return this.project;
-                }
-            })
-    }
+                } // if
+            }) //.map
+    } // public update (updateObj: any, projectId: string): Observable<any> 
 
     /** . 
      * Delete a Project
      * @param Requires a Project ID
      */
-    public delete(projectId) {
-        return this.http
-            .delete(this._auth.getUrl() + '/projects/' + projectId, this._auth.getOptions())
-            .toPromise()
-            .then(this._auth.extractData);
+    public delete(targetProject : Project) : Observable<any> {
+        return this.http.delete(this._auth.getUrl() + '/projects/' +  targetProject._id, this._auth.getOptions());
     } // public delete(projectId)
 
     /** 
@@ -286,12 +283,12 @@ export class ProjectService {
                 'user_id' : this._auth.getUser()._id,
                 'author' : this._auth.getUser().fullname ? this._auth.getUser().fullname : this._auth.getUser().username,
                 'type' : type
-            }
-        }
+            } // 'comment'
+        } // let data
 
         if (text) {
             data.comment['text'] = text;
-        }
+        } // if (text)
 
         if (location && location.x && location.y) {
             data.comment['loc'] = location;
@@ -300,7 +297,7 @@ export class ProjectService {
         // Add comment ID if passed
         if (commentId) {
             data.comment['_id'] = commentId;
-        }
+        } // if (commentId)
 
         // Tell other Project viewers comment changed, using Socket
         // TO-DO: Move to after service responds
@@ -308,7 +305,7 @@ export class ProjectService {
             this._socket.updateComment(data.comment, 'UPDATE', this.project._id);
         } else {
             this._socket.updateComment(data.comment, 'CREATE', this.project._id);
-        }        
+        } // else
 
         return this.http
             .post(url, data, this._auth.getOptions())
@@ -341,7 +338,7 @@ export class ProjectService {
             })
             .toPromise()
             .then(this._auth.extractData);
-    }
+    }//  public deleteComment(comment): Promise<any>
 
     /**
      * API call to add a user (of any type) to the project
@@ -354,6 +351,6 @@ export class ProjectService {
             [this._auth.getUrl(), 'projects', projectId, 'user_id'].join('/'),
             {},
             this._auth.getOptions()
-        )
-    }
-}
+        ) //this.http.put
+    } // public addUserToProject(projectId: string): Observable<any>
+} // class

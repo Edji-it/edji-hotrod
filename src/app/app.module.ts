@@ -41,7 +41,7 @@ import { FooterComponent } from './shared/footer';
 import { HomeComponent } from './home';
 import { RegisterComponent } from './register';
 import { LoginForm, GuestForm } from './forms';
-import { LoginModal, ResetPassComponent, DeleteCommentModal, DeleteReadingModal, AddProjectModal, LoginRequiredModal } from './modals';
+import { LoginModal, ResetPassComponent, DeleteCommentModal, DeleteReadingModal, DeleteProjectModal, AddProjectModal, LoginRequiredModal } from './modals';
 import { AnnotatorComponent, CommentComponent, TextCommentComponent, EmojiCommentComponent, EmojiKeyboardComponent, RightMarginTooltipComponent } from './annotator';
 import { ProjectPageComponent, ProjectInfoComponent, OwnerToolsComponent } from './project-page';
 import { ReadingPageComponent, DeleteProjectComponent } from './reading-page';
@@ -110,6 +110,7 @@ type StoreType = {
     ResetPassComponent,
     DeleteCommentModal,
     DeleteReadingModal,
+    DeleteProjectModal,
     AnnotatorComponent,
     NewReadingPage,
     UploadModalComponent,

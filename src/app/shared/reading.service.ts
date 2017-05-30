@@ -64,8 +64,10 @@ export class ReadingService {
   } // public clear(): void 
 
   // It deletes the reading. Fairly straightforward.
-  public delete(reading: any): void {
-    console.log("Deleting '" + reading.title + "' the version id of " + reading.versionId);
+  // No need to return an Observable<Reading> since we don't need to use it after the fact.
+  public delete(targetReading: Reading): Observable<any> {
+    console.log("Deleting '" + targetReading.title);
+    return this.http.delete(this._auth.getUrl() + '/readings/' +  targetReading._id, this._auth.getOptions());
   } // public delete(): void
 
   // Push new or update Reading
