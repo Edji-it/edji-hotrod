@@ -54,7 +54,7 @@
     <div class="row">
         <div class="col-9">
             <!-- The Title -->
-            <!-- I had to move the project link here so that the delete project sbutton would work. Otherwise it overlapped and both buttons pressed. -->
+            <!-- IMPORTANT NOTE: had to move the project link here so that the delete project button would work. Otherwise it overlapped and both buttons pressed. -->
             <div class="title"  [routerLink]="['/project', project._id]"> 
                 <div class="project-title-input">
                     <span class="reading-project--label"><span style="color: #cdcdcd;" [attr.testFindGroup]="reading.title">Group:</span> {{project.label}}</span>
@@ -104,15 +104,15 @@
                             <button (click)="relevantReading = version; showAddModal = true; version.showOptionsV = false;" class="dropdown-item" [attr.testFindCreateNewGroupV]="version.title">Create New Group</button>
                             <button *ngIf="!version.draft" (click)="version.showOptionsV=false;" [routerLink]="['/new-reading/']" [queryParams]="{ copyId: version._id }" class="dropdown-item" [attr.testFindCopyAndEditV]="version.title">Copy and Edit</button>
                             <!-- Delete dropdown button (DOES NOT WORK BECAUSE serverside deletes ALL of that reading) -->
-                            <!-- <button (click)="relevantReading = reading; showDeleteReadingModal = true; showOptions = false;" class="dropdown-item">Delete</button> -->
+                            <!-- <button (click)="relevantReading = version; showDeleteReadingModal = true; showOptions = false;" class="dropdown-item">Delete</button> -->
                         </div>
                     </div>
                 </div>
                 <!-- Handle the sub-projects (projects under the readings that are under the version) -->
-                <a class="list-item list-item--button project-card" [class.new-project]="versionProject.new" [routerLink]="['/project', versionProject._id]" *ngFor="let versionProject of version.projects">
+                <a class="list-item list-item--button project-card" [class.new-project]="versionProject.new" *ngFor="let versionProject of version.projects">
                     <div class="row">
                         <div class="col-9">
-                            <div class="title"> 
+                            <div class="title" [routerLink]="['/project', versionProject._id]"> 
                                 <div class="project-title-input">
                                     <span class="reading-project--label"><span style="color: #cdcdcd;" [attr.testFindGroupV]="versionProject.label">Group:</span> {{versionProject.label}}</span>
                                     <span class="project-title-input__save" (click)="updateProjectLabel(version._id, version.newLabel)" [innerHtml]="':white_check_mark:' | emojione"></span>
@@ -126,7 +126,11 @@
                         </div>
                         <div class="col-3 prj-btns pull-right">
                             <!-- Project Code -->
-                            <pre class="prj-code">{{versionProject.code || 'none'}}</pre>
+                            <pre style="float:right" class="prj-code">{{versionProject.code || 'none'}}</pre>
+                            <!-- Delete Project Button -->
+                            <a class="icon-button">
+                                <img (click)="relevantProject = versionProject; showDeleteProjectModal = true;" alt="❌" class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/274c.png">
+                            </a>
                         </div>
                     </div>
                 </a>
