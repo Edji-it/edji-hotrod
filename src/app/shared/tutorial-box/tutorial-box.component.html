@@ -1,13 +1,13 @@
-<div class="right-margin-tooltip">
+<div *ngIf="!isCompleted" class="right-margin-tooltip">
     <div class="mobile-toggle" (click)="mobileExpanded = !mobileExpanded">
         <i class="icon-caret" [class.down]="mobileExpanded"></i>
-        <h2 [innerHtml]="pageObjs[pageNo - 1].title | emojione"></h2>
+        <h2 [innerHtml]="pageObjs && pageObjs[pageNo - 1].title | emojione"></h2>
     </div>
-    <div class="collapsible" [class.mobile-collapse]="!mobileExpanded">
-        <p>{{ pageObjs[pageNo - 1].body }}</p>
+    <div *ngIf="pageObjs" class="collapsible" [class.mobile-collapse]="!mobileExpanded">
+        <p [innerHtml]="pageObjs[pageNo - 1].body"></p>
         <img *ngIf="pageObjs[pageNo - 1] && pageObjs[pageNo - 1].image" [src]="pageObjs[pageNo - 1].image" class="tooltip__guide-image" />
         <div *ngIf="pageNo == pageObjs.length" class="btn-row">
-            <button class="btn btn-success" (click)="dismiss.emit()">Got it!</button>
+            <button class="btn btn-success" (click)="completeAndDismiss()">Got it!</button>
         </div>
         <div *ngIf="pageObjs.length > 1" class="tooltip-pager">
             <div (click)="decrement()" [class.disabled]="pageNo < 2" class="tooltip-pager__left">&larr;</div>
@@ -16,7 +16,7 @@
             </div>
             <div (click)="increment()" [class.disabled]="pageNo >= pageObjs.length" class="tooltip-pager__right">&rarr;</div>
         </div>
-        <div class="tooltip__skip" (click)="dismiss.emit()">
+        <div class="tooltip__skip" (click)="completeAndDismiss()">
             Skip Guide
         </div>
     </div>
