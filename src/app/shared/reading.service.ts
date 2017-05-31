@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
-import { Http, Response, Headers, RequestOptions } from '@angular/http';
-import { BehaviorSubject, Observable } from 'rxjs/Rx';
-import 'rxjs/add/operator/toPromise';
+import { Injectable } from '@angular/core'
+import { Http, Response, Headers, RequestOptions } from '@angular/http'
+import { BehaviorSubject, Observable } from 'rxjs/Rx'
+import 'rxjs/add/operator/toPromise'
 
-import { AuthService } from './auth.service';
-import { Reading } from './datatypes/reading';
+import { AuthService } from './auth.service'
+import { Reading } from './datatypes/reading'
 
 @Injectable()
 export class ReadingService {
