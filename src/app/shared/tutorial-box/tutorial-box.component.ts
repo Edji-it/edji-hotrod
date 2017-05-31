@@ -10,36 +10,37 @@ import { AuthService } from '../'
 })
 export class TutorialBoxComponent implements OnInit {
 
-  @Input() private pageObjs: any[];
-  @Input() private tutorialName: string;
+  @Input() private pageObjs: any[]
+  @Input() private tutorialName: string
+  @Input() private forceShow: boolean
 
   private pageNo: number = 1
   private subscriptions: Subscription[] = []
   private isCompleted: boolean = false
 
-  @Output() pageChange :  EventEmitter<any>;
-  @Output() dismiss :  EventEmitter<any>;
+  @Output() pageChange :  EventEmitter<any>
+  @Output() dismiss :  EventEmitter<any>
      
   @Input() set pager(pageNo: number) {
-    this.pageNo = pageNo;
+    this.pageNo = pageNo
   }
   get pager(){
-      return this.pageNo; 
+      return this.pageNo 
   }
 
   public increment(){
-      this.pageNo = this.pageNo+1; 
-      this.pageChange.emit(this.pageNo);
+      this.pageNo = this.pageNo+1 
+      this.pageChange.emit(this.pageNo)
   }
 
   public decrement(){
-      this.pageNo = this.pageNo - 1; 
-      this.pageChange.emit(this.pageNo);
+      this.pageNo = this.pageNo - 1 
+      this.pageChange.emit(this.pageNo)
   }
 
   constructor(private _auth: AuthService){
-      this.pageChange = new EventEmitter();
-      this.dismiss = new EventEmitter();
+      this.pageChange = new EventEmitter()
+      this.dismiss = new EventEmitter()
   }
 
   private completeAndDismiss() : void {
@@ -48,6 +49,7 @@ export class TutorialBoxComponent implements OnInit {
       }
       // Hide and emit output for closing box
       this.isCompleted = true
+      this.forceShow = false
       this.dismiss.emit()
       // save completed guide to user object
         let user = this._auth.getUser();
