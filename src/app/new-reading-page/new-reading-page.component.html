@@ -62,15 +62,10 @@
         </div>
     </div>
 </div>
-
-
-<div class="fixed-btn-row--SE">
-    <tutorial-box [tutorialName]="'newReading'"
+<tutorial-box [tutorialName]="'newReading'"
 			[pageObjs]="guideContent" 
 			[pager]="guideStepNo" 
 			(pageChange)="guideStepNo = $event"></tutorial-box>
-    <edji-feedback></edji-feedback>
-</div>
-
+<edji-feedback></edji-feedback>
 <upload-picture-modal class="modal-will-fade" [class.show]="showUploadModal" (returnImage)="addImages($event)" (closeModal)="showUploadModal = false"></upload-picture-modal>
 <upload-pdf-modal class="modal-will-fade" [class.show]="showPdfUploadModal" (returnImage)="addImages($event)" (closeModal)="showPdfUploadModal = false"></upload-pdf-modal>

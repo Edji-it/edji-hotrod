@@ -68,6 +68,12 @@
 						<img class="reading-image" id="readingImage{{i}}" [attr.index]="i" [src]="w.url" (load)="updateImageHeights()" />
 					</div></span>
 		</article>
+    	<tutorial-box [tutorialName]="'highlighting'"
+			[pageObjs]="guideContent" 
+			[pager]="guideStepNo" 
+			(pageChange)="guideStepNo = $event" 
+			[class.keyboard-offset]="isEmojiKeyboardActive()"
+			[class.mobile-toolbar-offset]="optionsShow"></tutorial-box>
 	</div>
 </div>
 
@@ -75,16 +81,6 @@
 	<button *ngIf="user.type == 'temp'" [routerLink]="['/register']" [queryParams]="{ userId: user._id }" class="btn btn-secondary">Save this reading</button>
 	<button *ngIf="reading && user.type == 'temp'" [routerLink]="['/register']" [queryParams]="{ reading: reading._id, userId: user._id }" class="btn btn-primary">Copy and edit</button>
 	<button *ngIf="reading && user.type != 'temp' && user._id != reading.owner_id" [routerLink]="['/new-reading']" [queryParams]="{ copyId: reading._id }" class="btn btn-primary">Copy and edit</button>
-</div>
-
-<div class="fixed-btn-row--SE">
-    <tutorial-box [tutorialName]="'highlighting'"
-			[pageObjs]="guideContent" 
-			[pager]="guideStepNo" 
-			(pageChange)="guideStepNo = $event" 
-			[class.keyboard-offset]="isEmojiKeyboardActive()"
-			[class.mobile-toolbar-offset]="optionsShow"></tutorial-box>
-    <edji-feedback></edji-feedback>
 </div>
 
 <emoji-keyboard [isActive]="isEmojiKeyboardActive()" [currentComment]="activeComment.data" (commentChange)="updateActiveComment($event)" (dismissKeyboard)="inactivateComment()"></emoji-keyboard>
