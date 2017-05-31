@@ -374,7 +374,7 @@ export class NewReadingPage implements OnInit {
                                     this.addLoadingP = false;
                                     this.router.navigate(['project', project._id]);
                                 }, (error) => {
-                                    console.log(error);
+                                    console.error(error);
                                     this.addLoadingD = false;
                                     this.addLoadingP = false;
                                 });
