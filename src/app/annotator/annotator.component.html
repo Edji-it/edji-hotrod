@@ -68,13 +68,12 @@
 						<img class="reading-image" id="readingImage{{i}}" [attr.index]="i" [src]="w.url" (load)="updateImageHeights()" />
 					</div></span>
 		</article>
-    	<right-margin-tooltip *ngIf="!guideComplete" 
+    	<tutorial-box [tutorialName]="'highlighting'"
 			[pageObjs]="guideContent" 
 			[pager]="guideStepNo" 
 			(pageChange)="guideStepNo = $event" 
-			(dismiss)="guideCompleted()"
 			[class.keyboard-offset]="isEmojiKeyboardActive()"
-			[class.mobile-toolbar-offset]="optionsShow"></right-margin-tooltip>
+			[class.mobile-toolbar-offset]="optionsShow"></tutorial-box>
 	</div>
 </div>
 
