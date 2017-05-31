@@ -3,6 +3,10 @@ export interface Reading extends BaseReading {
 
 }
 
+/*
+  Last modified: 29 May 2017
+*/
+
 /** The reading as it is returned from the server */
 export interface BaseReading {
   html: string,
@@ -15,5 +19,6 @@ export interface BaseReading {
   source?: string,
   cover_img?: string,
   draft: boolean,
-  version_id: string
+  version_id: string,
+  _id: string
 }

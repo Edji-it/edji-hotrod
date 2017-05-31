@@ -40,7 +40,8 @@ import { NavBarComponent, FooterComponent, TutorialBoxComponent } from './shared
 import { HomeComponent } from './home';
 import { RegisterComponent } from './register';
 import { LoginForm, GuestForm } from './forms';
-import { LoginModal, ResetPassComponent, DeleteCommentModal, AddProjectModal, LoginRequiredModal } from './modals';
+
+import { LoginModal, ResetPassComponent, DeleteCommentModal, DeleteReadingModal, DeleteProjectModal, AddProjectModal, LoginRequiredModal } from './modals';
 import { AnnotatorComponent, CommentComponent, TextCommentComponent, EmojiCommentComponent, EmojiKeyboardComponent } from './annotator';
 import { ProjectPageComponent, ProjectInfoComponent, OwnerToolsComponent } from './project-page';
 import { ReadingPageComponent, DeleteProjectComponent } from './reading-page';
@@ -57,7 +58,7 @@ export class MyHammerConfig extends HammerGestureConfig  {
   overrides = <any>{
       'swipe': {velocity: 0.4, threshold: 20} // override default settings
   }
-}
+} // export class MyHammerConfig extends HammerGestureConfig 
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -73,13 +74,13 @@ const APP_PROVIDERS = [
       useClass: MyHammerConfig 
   }
   // { provide: RouteReuseStrategy, useClass: ReuseStrategy }
-];
+]; // const APP_PROVIDERS
 
 type StoreType = {
   state: InternalStateType,
   restoreInputValues: () => void,
   disposeOldHosts: () => void
-};
+}; // tyep StoreType
 
 /**
  * `AppModule` is the main entry point into Angular2's bootstraping process
@@ -108,6 +109,8 @@ type StoreType = {
     ChangePassComponent,
     ResetPassComponent,
     DeleteCommentModal,
+    DeleteReadingModal,
+    DeleteProjectModal,
     AnnotatorComponent,
     NewReadingPage,
     UploadModalComponent,
@@ -144,7 +147,8 @@ type StoreType = {
     ENV_PROVIDERS,
     APP_PROVIDERS
   ]
-})
+}) //@NgModule
+
 export class AppModule {
   constructor(public appRef: ApplicationRef, public appState: AppState) {}
 
@@ -157,12 +161,12 @@ export class AppModule {
     if ('restoreInputValues' in store) {
       let restoreInputValues = store.restoreInputValues;
       setTimeout(restoreInputValues);
-    }
+    } // if
 
     this.appRef.tick();
     delete store.state;
     delete store.restoreInputValues;
-  }
+  } //hmrOnInit()
 
   hmrOnDestroy(store: StoreType) {
     const cmpLocation = this.appRef.components.map(cmp => cmp.location.nativeElement);
@@ -175,13 +179,13 @@ export class AppModule {
     store.restoreInputValues  = createInputTransfer();
     // remove styles
     removeNgStyles();
-  }
+  } // hmrOnDestroy
 
   hmrAfterDestroy(store: StoreType) {
     // display new elements
     store.disposeOldHosts();
     delete store.disposeOldHosts;
-  }
+  } // hmrAfterDestroy
 
-}
+} // export class AppModule
 
