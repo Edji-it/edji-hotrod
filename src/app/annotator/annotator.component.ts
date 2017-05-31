@@ -95,7 +95,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         }
     ];
     private guideStepNo = 1;
-    private guideComplete = false;
 
     private annotatorPaper: Element;
     private annotatorContent: Element;
@@ -126,10 +125,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.subscriptions.push(
             this._auth.getCurrentUser().subscribe((user) => {
                 this.user = user;
-
-                if (user.prefs && user.prefs.onboarding && user.prefs.onboarding.highlighting && user.prefs.onboarding.highlighting.firstDone) {
-                    this.guideComplete = true;
-                }
             })
         );
 
@@ -253,37 +248,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // if (firstImage) {
         //     document.querySelector('meta[property="og:image"]').setAttribute('content', firstImage.getAttribute('src'));
         // }
-    }
-
-    private guideCompleted(): void {
-        this.guideComplete = true;
-
-        // save completed guide to user object
-        let user = this._auth.getUser();
-        if (!user.prefs) {
-            user.prefs = {};
-        }
-        if (!user.prefs.onboarding) {
-            user.prefs.onboarding = {};
-        }
-        if (!user.prefs.onboarding.highlighting) {
-            user.prefs.onboarding.highlighting = {
-                firstDone: Date.now(),
-                lastDone: Date.now()
-            };
-        } else {
-            user.prefs.onboarding.highlighting.lastDone = Date.now();
-            if (!user.prefs.onboarding.highlighting.firstDone) {
-                user.prefs.onboarding.highlighting.firstDone = Date.now();
-            }
-        }
-        this._auth.updateUser(user)
-            .take(1)
-            .subscribe(
-                (data) => {
-                    let user = data.user
-                }
-            )
     }
 
     hideCommentOptions(event ?): void {
