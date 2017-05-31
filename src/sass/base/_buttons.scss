@@ -302,3 +302,29 @@ button, .button, .btn { //, [class*='btn']
 		margin-bottom: 5px;
 	}
 }
+
+.fixed-btn-row--SE {
+  position: fixed;
+  right: 25px;
+  bottom: 10px;
+  z-index: $zMid;
+}
+
+.feedback-button {
+  background: rgba(0,0,0,0.1);
+  transition: transform 0.2s linear;
+  padding: 8px;
+  opacity: 0.8;
+  z-index: 1050;
+
+  &:hover {
+    box-shadow: 0px 1px 8px 0px rgba(0,0,0,0.1);
+    // transform: scale(1.05);
+    opacity: 1;
+  }
+
+  &  img {
+    width: 30px;
+    height: auto;
+  }
+}

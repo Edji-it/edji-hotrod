@@ -79,17 +79,17 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
     private guideContent = [
         {
-            title: ":round_pushpin: Try Highlighting!",
+            title: "Try Highlighting!",
             image: "/assets/guide/add-highlight.gif",
             body: "Highlight text or click on an image to see the comment types."
         },
         {
-            title: ":pencil: Add a Comment!",
+            title: "Add a Comment!",
             image: "/assets/guide/add-comment-type.gif",
             body: "Choose to leave a Text or Emoji comment."
         },
         {
-            title: ":eyes: Who sees my comment?",
+            title: "Who sees my comment?",
             // image: "/assets/guide/add-comment-type.gif",
             body: "Your comment can be seen by the reading creator. If they turn Heat Vision on, everyone can see it!"
         }
