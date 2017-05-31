@@ -81,13 +81,11 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
       }
     );
 
-    for (let reading of this.readings)
-    {
-      console.log("Found the reading: " + reading.title);
-    }
+    this.refreshReadings(); // DUCT TAPE fix
   } // renewReadings : void ()
 
   // Refresh the reading listing in case anything changed.
+  // DOES not actually refresh the page. Just the element.
   public refreshReadings () : void {
     console.log("Refreshing the readings!");
     this._readings.getAll()

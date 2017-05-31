@@ -30,7 +30,7 @@ export class DeleteProjectModal implements OnInit {
   public showError : boolean = false;
 
   constructor( 
-    private _projects : ProjectService;
+    private _projects : ProjectService
   ) { }
 
   ngOnInit() { }
@@ -47,7 +47,7 @@ export class DeleteProjectModal implements OnInit {
         this.refreshReadings.emit();
       },
       err => {
-        
+        this.showError = true;
     })
   } // deleteProject(project : Project)
 

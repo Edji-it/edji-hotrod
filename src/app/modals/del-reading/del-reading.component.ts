@@ -31,7 +31,7 @@ export class DeleteReadingModal implements OnInit {
   public showError : boolean = false;
 
   constructor(
-   private _readings : ReadingService;
+   private _readings : ReadingService
   ) { }
 
   ngOnInit() { }

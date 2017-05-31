@@ -104,7 +104,7 @@
                             <button (click)="relevantReading = version; showAddModal = true; version.showOptionsV = false;" class="dropdown-item" [attr.testFindCreateNewGroupV]="version.title">Create New Group</button>
                             <button *ngIf="!version.draft" (click)="version.showOptionsV=false;" [routerLink]="['/new-reading/']" [queryParams]="{ copyId: version._id }" class="dropdown-item" [attr.testFindCopyAndEditV]="version.title">Copy and Edit</button>
                             <!-- Delete dropdown button (DOES NOT WORK BECAUSE serverside deletes ALL of that reading) -->
-                            <!-- <button (click)="relevantReading = version; showDeleteReadingModal = true; showOptions = false;" class="dropdown-item">Delete</button> -->
+                            <button (click)="relevantReading = version; showDeleteReadingModal = true; showOptions = false;" class="dropdown-item">Delete</button>
                         </div>
                     </div>
                 </div>
