@@ -161,6 +161,6 @@
 <!-- hot-add-project-modal is opens when "Create New Group" under the dropdown is clicked -->
 <hot-add-project-modal *ngIf="showAddModal" [reading]="relevantReading" (closeModal)="showAddModal = false"></hot-add-project-modal>
 <!-- hot-del-reading pops up when "Delete" is clicked underneath a Reading's dropdown menu-->
-<hot-del-reading *ngIf="showDeleteReadingModal" [reading]="relevantReading" (closeModal)="showDeleteReadingModal = false" (deleteReading)="deleteReading(relevantReading);"></hot-del-reading>
+<hot-del-reading *ngIf="showDeleteReadingModal" [reading]="relevantReading" (closeModal)="showDeleteReadingModal = false" (renewReadings)="removeThisReading()"></hot-del-reading>
 <!-- hot-del-project pops up when you cliock the delete button for a group -->
-<hot-del-project *ngIf="showDeleteProjectModal" [project]="relevantProject" (closeModal)="showDeleteProjectModal = false" (deleteProject)="deleteProject(relevantProject);"></hot-del-project>
+<hot-del-project *ngIf="showDeleteProjectModal" [project]="relevantProject" (closeModal)="showDeleteProjectModal = false" (refreshReadings)="refreshAllReadings();"></hot-del-project>

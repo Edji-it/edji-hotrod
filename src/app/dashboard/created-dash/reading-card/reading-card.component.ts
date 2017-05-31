@@ -17,12 +17,12 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   private isLoading: boolean = false;
 
-  @Input() reading: any;
+  @Input() reading: Reading;
 
   @Output() 
   renewReadings : EventEmitter<string> = new EventEmitter<string>();
   @Output()
-  refreshReadings : EventEmitter<any> = new EventEmitter();
+  refreshReadings : EventEmitter<any> = new EventEmitter(); // Pass up to created-dash.component
 
   private showOptions     : boolean = false;
   private showOptionsV    : boolean = false;
@@ -65,37 +65,15 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
     } // if
   } // getVersions(versionId : string)
 
-  // upon recieving a deleteReading event, our del-reading modal will trigger this
-  deleteReading(reading : Reading) : void {
-    // Listen for an Observable from reading.service.ts
-    this._readings.delete(reading)
-      .take(1) // so we don't need to unsubscribe
-      .subscribe(
-      data => { 
-        console.log("Deleting the reading was successful.");
-        this.renewReadings.emit(reading._id);
-      },
-      err => {
-        
-    })
-    // console.log("[reading-card.component.ts] deleteReading() worked!");
-  } // deleteButton(reading : any)
+  // Calls up to created-dash to get this reading card removed
+  public removeThisReading () : void {
+    this.renewReadings.emit(this.reading._id);
+  }
 
-  // upon recieving a deleteReading event, our del-project modal will trigger this
-  deleteProject(project : Project) : void {
-    // Listen for an Observable from project.service.ts
-    this._projects.delete(project)
-      .take(1) // so we don't need to unsubscribe
-      .subscribe(
-      data => { 
-        // I'm just gonna ask created-dash to refresh the readings
-        // instead of refreshing the project listing.
-        this.refreshReadings.emit();
-      },
-      err => {
-        
-    })
-  } // deleteProject(project : Project)
+  // Call up to created-dash to refresh all readings. Like after we remove a project.
+  public refreshAllReadings () : void {
+    this.refreshReadings.emit();
+  }
 
   versionsHeight() : number {
     if (document.getElementById(this.reading._id) && document.getElementById(this.reading._id).clientHeight > 66 && !this.isLoading && this.versionHeight == 50) {
