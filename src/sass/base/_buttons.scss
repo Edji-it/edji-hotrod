@@ -307,6 +307,7 @@ button, .button, .btn { //, [class*='btn']
   position: fixed;
   right: 25px;
   bottom: 10px;
+  z-index: $zMid;
 }
 
 .feedback-button {
