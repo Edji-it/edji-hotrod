@@ -218,7 +218,7 @@ export class ProjectService {
                         }
                         return data.json().project;
                     });
-    }
+    } // public get(projectId: string)
 
     /**
      * Create a new Project

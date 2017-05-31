@@ -2,7 +2,7 @@ import { Subscription } from 'rxjs/Rx';
 import { Angulartics2 } from 'angulartics2/dist';
 import { ReadingService, ProjectService } from '../../../shared';
 import { Reading, Project }      from '../../../shared/datatypes';
-import { Component, Input, Output, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, Output, OnDestroy, OnInit, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'hot-reading-card',
@@ -20,7 +20,9 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
   @Input() reading: any;
 
   @Output() 
-  deleteReadingCard : ReadingCardComponent;
+  renewReadings : EventEmitter<string> = new EventEmitter<string>();
+  @Output()
+  refreshReadings : EventEmitter<any> = new EventEmitter();
 
   private showOptions     : boolean = false;
   private showOptionsV    : boolean = false;
@@ -64,32 +66,34 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
   } // getVersions(versionId : string)
 
   // upon recieving a deleteReading event, our del-reading modal will trigger this
-  deleteReading(reading : Reading) {
+  deleteReading(reading : Reading) : void {
     // Listen for an Observable from reading.service.ts
     this._readings.delete(reading)
       .take(1) // so we don't need to unsubscribe
       .subscribe(
       data => { 
-        
+        console.log("Deleting the reading was successful.");
+        this.renewReadings.emit(reading._id);
       },
       err => {
-        // TODO: Add a delete unsucessful modal here.
+        
     })
     // console.log("[reading-card.component.ts] deleteReading() worked!");
   } // deleteButton(reading : any)
 
   // upon recieving a deleteReading event, our del-project modal will trigger this
-  deleteProject(project : Project) {
+  deleteProject(project : Project) : void {
     // Listen for an Observable from project.service.ts
-    // Listen for an Observable from reading.service.ts
     this._projects.delete(project)
       .take(1) // so we don't need to unsubscribe
       .subscribe(
       data => { 
-        
+        // I'm just gonna ask created-dash to refresh the readings
+        // instead of refreshing the project listing.
+        this.refreshReadings.emit();
       },
       err => {
-        // TODO: Add a delete unsucessful modal here.
+        
     })
   } // deleteProject(project : Project)
 
