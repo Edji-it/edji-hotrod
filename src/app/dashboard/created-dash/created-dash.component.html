@@ -21,7 +21,8 @@
 <button class="btn btn-primary new-reading-btn hidden-md-up" [routerLink]="[ '/new-reading' ]">
     New Reading
 </button>
-<div class="item-list ">
+<!-- Our Readings! -->
+<div class="item-list">
     <!--Show readings with date values-->
     <div class="alert alert-info" role="alert" *ngIf="!isLoading && readings.length < 1 && !errorObject.readingError">
         <h4 class="alert-heading">Share some text or something you wrote!</h4>
@@ -31,7 +32,7 @@
     <div class="alert alert-danger alert-readings" role="alert" *ngIf="errorObject.readingError">
         {{ errorObject.readingError }}
     </div>
-    <hot-reading-card *ngFor="let reading of readings" style="margin-bottom: 30px; float:left; width:100%;" [reading]="reading"></hot-reading-card>
+    <hot-reading-card *ngFor="let reading of readings" style="margin-bottom: 30px; float:left; width:100%;" [reading]="reading" (renewReadings)="removeReadingFromListing($event)" (refreshReadings)="refreshReadings()"></hot-reading-card>
 </div>
 
 <hot-login-req *ngIf="showLoginReqModal" (closeModal)="showLoginReqModal = false"></hot-login-req>

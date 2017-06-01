@@ -23,7 +23,7 @@ export class DeleteProjectComponent implements OnInit {
 
   deleteProject() {
     this.angulartics.eventTrack.next({ action: 'deleteProject', properties: { category: 'contentManagement', label: 'attempt' }});
-    this._projects.delete(this.project._id)
+    /*this._projects.delete(this.project._id)
       .then(data => {
         this.angulartics.eventTrack.next({ action: 'enterLightningCode', properties: { category: 'joinProject', label: 'success' }});
         console.log(data);
@@ -32,7 +32,7 @@ export class DeleteProjectComponent implements OnInit {
         this.angulartics.eventTrack.next({ action: 'enterLightningCode', properties: { category: 'joinProject', label: 'failure' }});
         console.log(error);
         this.showError = true;
-      });
+      });*/
     
   }
 

@@ -29,7 +29,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
     @ViewChildren(CommentComponent) commentComponents: QueryList<CommentComponent>;
 
-
     private reading: Reading = <Reading>{};
     
     private commentsByIndex: EdjiComment[][] = [];
