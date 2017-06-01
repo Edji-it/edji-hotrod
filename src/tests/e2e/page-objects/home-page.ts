@@ -19,6 +19,7 @@ export class Home implements PageObjectInterface
     public projectCodeInput  = element(by.id("projectCodeInput"));
     public footerGuidesLink  = element(by.id("footerGuidesLink"));
     public footerTwitterLink = element(by.id("footerTwitterLink"));
+    public footerSupportLink = element(by.id("footerTwitterLink"));
 
     // get the home page
     getPage() : void 
@@ -69,4 +70,14 @@ export class Home implements PageObjectInterface
 
         this.footerTwitterLink.click();
     } // clickTwitterLink() : void 
+
+    // click the footer twitter link
+    clickSupportLink() : void 
+    {
+        browser.get('#footerSupportLink');  // Little trick to scroll to ID
+
+        this.footerSupportLink.click();
+    } // clickSupportLink() : void 
 } // class Home
+
+    
