@@ -52,7 +52,7 @@
 <!-- The Project Card -->
 <a class="list-item list-item--button project-card" [class.new-project]="project.new" *ngFor="let project of reading.projects" >
     <div class="row">
-        <div class="col-9">
+        <div class="col-8">
             <!-- The Title -->
             <!-- IMPORTANT NOTE: had to move the project link here so that the delete project button would work. Otherwise it overlapped and both buttons pressed. -->
             <div class="title"  [routerLink]="['/project', project._id]"> 
@@ -68,13 +68,13 @@
                 <span class="metadata">{{ project.student_count ? project.student_count : 0 }} Students</span>
             </div>
         </div>
-        <div class="col-3 prj-btns pull-right">
-            <!-- the project code -->
-            <pre style="float:right" class="prj-code">{{project.code || 'none'}}</pre>
+        <div class="col-4 prj-btns pull-right">
             <!-- Delete Project Button -->
-            <a class="icon-button">
-                <img (click)="relevantProject = project; showDeleteProjectModal = true;" alt="❌" class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/274c.png">
+            <a title="Delete Group" (click)="relevantProject = project; showDeleteProjectModal = true;" class="btn--delete-project icon-button">
+                <span [innerHtml]="':x:' | emojione"></span>
             </a>
+            <!-- the project code -->
+            <pre style="float:right;" class="prj-code">{{project.code || 'none'}}</pre>
         </div>
     </div>
 </a>
@@ -129,7 +129,7 @@
                             <pre style="float:right" class="prj-code">{{versionProject.code || 'none'}}</pre>
                             <!-- Delete Project Button -->
                             <a class="icon-button">
-                                <img (click)="relevantProject = versionProject; showDeleteProjectModal = true;" alt="❌" class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/274c.png">
+                                <img  alt="❌" class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/274c.png">
                             </a>
                         </div>
                     </div>

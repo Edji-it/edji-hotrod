@@ -285,3 +285,19 @@ button.new-reading-btn {
 .dropdown-menu {
     z-index: 1001;
 }
+
+.btn--delete-project {
+    opacity: 0.5;
+    filter: grayscale(100%);
+    margin: 5px -5px 5px 10px;
+    float: right;
+
+    & span {
+        pointer-events: none;
+    }
+
+    &:hover, &:focus, &:active {
+        filter: grayscale(0%);
+        opacity: 1;
+    }
+}
