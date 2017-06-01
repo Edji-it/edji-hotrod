@@ -399,7 +399,6 @@ export class NewReadingPage implements OnInit {
                                     this.addLoadingP = false;
                                 });
                         } else {
-                            this.angulartics.eventTrack.next({ action: submitAction, properties: { category: 'contentManagement', label: 'failure' }})
                             this.addLoadingD = false;
                             this.addLoadingP = false;
                             this.router.navigate(['new-reading/' + data._id], { queryParams: { successAlert: this.successAlert } });
@@ -413,7 +412,7 @@ export class NewReadingPage implements OnInit {
                     console.log(error);
                     this.addLoadingD = false;
                     this.addLoadingP = false;
-                    this.angulartics.eventTrack.next({ action: 'createNewReading', properties: { category: 'contentManagement', label: 'failure' }});
+                    this.angulartics.eventTrack.next({ action: submitAction, properties: { category: 'contentManagement', label: 'failure' }})
                     this.errorObject.readingError = "There was an issue saving your reading. It may be our fault; please try again";
                 }
             );
