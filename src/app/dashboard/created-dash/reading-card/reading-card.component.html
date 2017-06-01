@@ -50,12 +50,12 @@
 <!--</div>-->
 <!--<div>-->
 <!-- The Project Card -->
-<a class="list-item list-item--button project-card" [class.new-project]="project.new" *ngFor="let project of reading.projects" >
-    <div class="row">
+<div class="list-item list-item--button project-card" [class.new-project]="project.new" *ngFor="let project of reading.projects" >
+    <a [routerLink]="['/project', project._id]" class="row project-row--right-pad">
         <div class="col-8">
             <!-- The Title -->
             <!-- IMPORTANT NOTE: had to move the project link here so that the delete project button would work. Otherwise it overlapped and both buttons pressed. -->
-            <div class="title"  [routerLink]="['/project', project._id]"> 
+            <div class="title"> 
                 <div class="project-title-input">
                     <span class="reading-project--label"><span style="color: #cdcdcd;" [attr.testFindGroup]="reading.title">Group:</span> {{project.label}}</span>
                     <!--<input class="form-item--underline reading-project--label" type="text" minlength="1" [(ngModel)]="project.label" (blur)="updateProjectLabel(project._id, project.label)" />-->
@@ -69,15 +69,15 @@
             </div>
         </div>
         <div class="col-4 prj-btns pull-right">
-            <!-- Delete Project Button -->
-            <a title="Delete Group" (click)="relevantProject = project; showDeleteProjectModal = true;" class="btn--delete-project icon-button">
-                <span [innerHtml]="':x:' | emojione"></span>
-            </a>
             <!-- the project code -->
             <pre style="float:right;" class="prj-code">{{project.code || 'none'}}</pre>
         </div>
+    </a>
+    <!-- Delete Project Button -->
+    <div title="Delete Group" (click)="relevantProject = project; showDeleteProjectModal = true;" class="btn--delete-project icon-button">
+        <span [innerHtml]="':x:' | emojione"></span>
     </div>
-</a>
+</div>
 <!-- Handle the version control -->
     <div [class.gone]="reading.versionCount <= 1" class="version-card--block" [class.show]="showVersions" [style.maxHeight.px]="versionsHeight()">
         <div id="{{ reading._id }}" class="list-item version-card" [class.show]="showVersions" >
