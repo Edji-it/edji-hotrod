@@ -56,8 +56,9 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
     )
 
     this._readings.getAll()
-      .then(
-        (data)  => {
+
+    this._readings.currentUserReadings.subscribe(
+      (data)  => {
           this.isLoading = false;
           this.readings = data || [];
         },
@@ -65,41 +66,11 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
           this.isLoading = false;
           this.angulartics.eventTrack.next({ action: "getAllReadings", properties: { category: "serviceCalls", label: "failure" }});
           this.errorObject.readingError = "We had some trouble getting your readings, it might be our fault";
-        });
+        }
+    )
   } //  ngOnInit()
 
   ngOnDestroy () {}
-
-  // remove a reading from the list of readings.
-  // Typically removed AFTER the reading is deleted.
-  // 30 May 2017
-  public removeReadingFromListing (readingId : string) : void {
-    console.log("Renewing the readings!");
-    this.readings = this.readings.filter(
-      function(reading) {
-        return reading._id != readingId;
-      }
-    );
-
-    this.refreshReadings(); // DUCT TAPE fix
-  } // renewReadings : void ()
-
-  // Refresh the reading listing in case anything changed.
-  // DOES not actually refresh the page. Just the element.
-  public refreshReadings () : void {
-    console.log("Refreshing the readings!");
-    this._readings.getAll()
-      .then(
-        (data)  => {
-          this.isLoading = false;
-          this.readings = data || [];
-        },
-        (error) => {
-          this.isLoading = false;
-          this.angulartics.eventTrack.next({ action: "getAllReadings", properties: { category: "serviceCalls", label: "failure" }});
-          this.errorObject.readingError = "We had some trouble getting your readings, it might be our fault";
-        });
-  } // refreshReadings ()
 
   private updateProjectLabel(projectId: string, projectLabel: string) {
     this._projects.update({ 'label' : projectLabel }, projectId)

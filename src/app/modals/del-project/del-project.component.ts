@@ -20,8 +20,6 @@ export class DeleteProjectModal implements OnInit {
   closeModal: EventEmitter<any> = new EventEmitter(); // Tell the listening page to close the darned thing.
   @Output()
   deleteProject: EventEmitter<any> = new EventEmitter(); // Tell the listening page to enact the delete procedures. This is done in reading-card and reading.service
-  @Output()
-  refreshReadings : EventEmitter<any> = new EventEmitter(); // Pass up to created-dash.component
 
   @Input()
   // We need the project info because we want to say the project title in the prompt
@@ -42,9 +40,7 @@ export class DeleteProjectModal implements OnInit {
       .take(1) // so we don't need to unsubscribe
       .subscribe(
       data => { 
-        // I'm just gonna ask created-dash to refresh the readings
-        // instead of refreshing the project listing.
-        this.refreshReadings.emit();
+        // Data is updated through observables on the Reading service
       },
       err => {
         this.showError = true;

@@ -8,6 +8,7 @@ import 'rxjs/add/operator/toPromise'
 import { AuthService } from './auth.service'
 import { SocketService } from './socket.service'
 import { CommentStats, iCommentStats, EdjiComment, Project, User } from './datatypes';
+import { ReadingService } from "./reading.service";
 
 @Injectable()
 export class ProjectService {
@@ -33,7 +34,8 @@ export class ProjectService {
         private http: Http, 
         private _auth: AuthService, 
         private _route: ActivatedRoute,
-        private _socket: SocketService
+        private _socket: SocketService,
+        private _readings: ReadingService
     ) {
         // needs to be constructed here or else it returns undefined
         this._commentStats = new CommentStats()
@@ -261,7 +263,10 @@ export class ProjectService {
      * @param Requires a Project ID
      */
     public delete(targetProject : Project) : Observable<any> {
-        return this.http.delete(this._auth.getUrl() + '/projects/' +  targetProject._id, this._auth.getOptions());
+        return this.http.delete(this._auth.getUrl() + '/projects/' +  targetProject._id, this._auth.getOptions())
+            .map( data => {
+                this._readings.removeProject(targetProject)
+            })
     } // public delete(projectId)
 
     /** 

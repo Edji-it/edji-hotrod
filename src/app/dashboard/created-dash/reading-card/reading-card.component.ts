@@ -19,11 +19,6 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
 
   @Input() reading: Reading;
 
-  @Output() 
-  renewReadings : EventEmitter<string> = new EventEmitter<string>();
-  @Output()
-  refreshReadings : EventEmitter<any> = new EventEmitter(); // Pass up to created-dash.component
-
   private showOptions     : boolean = false;
   private showOptionsV    : boolean = false;
   private showVersions    : boolean = false;
@@ -66,16 +61,6 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
           })
     } // if
   } // getVersions(versionId : string)
-
-  // Calls up to created-dash to get this reading card removed
-  public removeThisReading () : void {
-    this.renewReadings.emit(this.reading._id);
-  }
-
-  // Call up to created-dash to refresh all readings. Like after we remove a project.
-  public refreshAllReadings () : void {
-    this.refreshReadings.emit();
-  }
 
   versionsHeight() : number {
     if (document.getElementById(this.reading._id) && document.getElementById(this.reading._id).clientHeight > 66 && !this.isLoading && this.versionHeight == 50) {

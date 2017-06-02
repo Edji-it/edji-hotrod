@@ -21,8 +21,6 @@ export class DeleteReadingModal implements OnInit {
   closeModal: EventEmitter<any> = new EventEmitter(); // Tell the listening page to close the darned thing.
   @Output()
   deleteReading: EventEmitter<any> = new EventEmitter(); // Tell the listening page to enact the delete procedures. This is done in reading-card and reading.service
-  @Output() 
-  renewReadings : EventEmitter<string> = new EventEmitter<string>(); // pass up to reading-card.component
 
   @Input()
   // We need the reading info because we want to say the reading title in the prompt
@@ -44,7 +42,7 @@ export class DeleteReadingModal implements OnInit {
       .subscribe(
       data => { 
         console.log("Deleting the reading was successful.");
-        this.renewReadings.emit(reading._id);
+        // Data is updated through observables on the Reading service
       },
       err => {
         this.showError = true;
