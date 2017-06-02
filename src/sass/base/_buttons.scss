@@ -308,9 +308,12 @@ button, .button, .btn { //, [class*='btn']
   right: 25px;
   bottom: 10px;
 
-  @media(max-width: $tablet) {
-    bottom: 70px;
+  &.bottom-bar-offset {
+    @media(max-width: $tablet) {
+      bottom: 70px;
+    }
   }
+  
 }
 
 .feedback-button {
