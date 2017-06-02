@@ -307,7 +307,7 @@ button, .button, .btn { //, [class*='btn']
   position: fixed;
   right: 25px;
   bottom: 10px;
-  z-index: 6000;
+  z-index: 9000;
 
   &.bottom-bar-offset {
     @media(max-width: $tablet) {
