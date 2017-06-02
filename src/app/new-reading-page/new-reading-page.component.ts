@@ -371,12 +371,21 @@ export class NewReadingPage implements OnInit {
             reading.owner_id = this.ownerId;
         }
 
+        // having an _id controls whether it is a put or post call
+        let submitAction: string
+        if (reading['_id']) {
+            submitAction = "updateReading"
+        } else {
+            submitAction = "createNewReading"
+        }
+        this.angulartics.eventTrack.next({ action: submitAction, properties: { category: 'contentManagement', label: 'attempt' }})
+
         this._readings.save(reading)
             .subscribe(
                 data => {
                     if (data._id) {
-                        this.angulartics.eventTrack.next({ action: 'createNewReading', properties: { category: 'contentManagement', label: 'success' }});
-                        
+                        this.angulartics.eventTrack.next({ action: submitAction, properties: { category: 'contentManagement', label: 'success' }})
+
                         // Create default Project if it is in final version
                         if (reading.draft===false) {
                             this._projects.create(data._id, { 'label' : form.label, 'types' : ['emoji','text'] })
@@ -385,7 +394,7 @@ export class NewReadingPage implements OnInit {
                                     this.addLoadingP = false;
                                     this.router.navigate(['project', project._id]);
                                 }, (error) => {
-                                    console.log(error);
+                                    console.error(error);
                                     this.addLoadingD = false;
                                     this.addLoadingP = false;
                                 });
@@ -403,7 +412,7 @@ export class NewReadingPage implements OnInit {
                     console.log(error);
                     this.addLoadingD = false;
                     this.addLoadingP = false;
-                    this.angulartics.eventTrack.next({ action: 'createNewReading', properties: { category: 'contentManagement', label: 'failure' }});
+                    this.angulartics.eventTrack.next({ action: submitAction, properties: { category: 'contentManagement', label: 'failure' }})
                     this.errorObject.readingError = "There was an issue saving your reading. It may be our fault; please try again";
                 }
             );

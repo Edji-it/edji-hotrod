@@ -289,8 +289,10 @@ button.new-reading-btn {
 .btn--delete-project {
     opacity: 0.5;
     filter: grayscale(100%);
-    margin: 5px -5px 5px 10px;
-    float: right;
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
 
     & span {
         pointer-events: none;
@@ -300,4 +302,8 @@ button.new-reading-btn {
         filter: grayscale(0%);
         opacity: 1;
     }
+}
+
+.project-row--right-pad {
+    padding-right: 50px;
 }
