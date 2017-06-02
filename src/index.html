@@ -62,7 +62,7 @@
   </app>
   <!--<span style="color: #aaa;">{{ appVersion }}</span>
   -->
-  <div style="padding: 9px; font-size: 10px; display:block; width: 100%; font-family:'Open Sans'; text-align: center; color: #ccc;">
+  <div id="buildNumber" style="padding: 9px; font-size: 10px; display:block; width: 100%; font-family:'Open Sans'; text-align: center; color: #ccc;">
     Build <%= htmlWebpackPlugin.options.metadata.version %></div>
   <% if (htmlWebpackPlugin.options.metadata.isDevServer && htmlWebpackPlugin.options.metadata.HMR !== true) { %>
   <!-- Webpack Dev Server reload -->
