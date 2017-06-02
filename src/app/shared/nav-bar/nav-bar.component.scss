@@ -12,6 +12,11 @@ $purple: rgb(150, 40, 255);
 	// float: left;
 	width: 100%;
 	height: $navHeight;
+
+	@media(max-width: $phone) {
+		height: auto;
+		min-height: $navHeight;
+	}
 }
 	.mobile-heading {
 		margin-top: $navHeight;
