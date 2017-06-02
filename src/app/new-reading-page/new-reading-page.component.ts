@@ -69,17 +69,17 @@ export class NewReadingPage implements OnInit {
     // Tutorial variables
     private guideContent: any[] = [
         {
-            title: ":pen_fountain: Use Formatting Styles",
+            title: "Use Formatting Styles",
             image: "/assets/guide/newReading__format.gif",
             body: "Select text in your Reading Content to use the formatting bar. Add bold, italic, or header styles to make your content pop!"
         },
         {
-            title: ":camera: Add Images and PDFs",
+            title: "Add Images and PDFs",
             image: "/assets/guide/newReading__insert.png",
             body: "PDFs and Images can be inserted into Readings, simply use the Insert bar on the left. Learn more in <a class='link' href='http://guide.edji.it/index.php/2017/05/09/customizing-your-lessons-with-edji-pdf-uploads/' target='_blank'>our PDF guide</a> and in <a class='link' href='http://guide.edji.it/index.php/2017/05/06/customizing-your-lessons-with-edji-images/' target='_blank'>our Image guide</a>."
         },
         {
-            title: ":mega: Share your Reading",
+            title: "Share your Reading",
             image: "/assets/guide/newReading__share.gif",
             body: "Click Share when finished and name your first Group to get a code&mdash;don't worry, you can create more Groups later!"
         }
@@ -371,12 +371,21 @@ export class NewReadingPage implements OnInit {
             reading.owner_id = this.ownerId;
         }
 
+        // having an _id controls whether it is a put or post call
+        let submitAction: string
+        if (reading['_id']) {
+            submitAction = "updateReading"
+        } else {
+            submitAction = "createNewReading"
+        }
+        this.angulartics.eventTrack.next({ action: submitAction, properties: { category: 'contentManagement', label: 'attempt' }})
+
         this._readings.save(reading)
             .subscribe(
                 data => {
                     if (data._id) {
-                        this.angulartics.eventTrack.next({ action: 'createNewReading', properties: { category: 'contentManagement', label: 'success' }});
-                        
+                        this.angulartics.eventTrack.next({ action: submitAction, properties: { category: 'contentManagement', label: 'success' }})
+
                         // Create default Project if it is in final version
                         if (reading.draft===false) {
                             this._projects.create(data._id, { 'label' : form.label, 'types' : ['emoji','text'] })
@@ -385,7 +394,7 @@ export class NewReadingPage implements OnInit {
                                     this.addLoadingP = false;
                                     this.router.navigate(['project', project._id]);
                                 }, (error) => {
-                                    console.log(error);
+                                    console.error(error);
                                     this.addLoadingD = false;
                                     this.addLoadingP = false;
                                 });
@@ -403,7 +412,7 @@ export class NewReadingPage implements OnInit {
                     console.log(error);
                     this.addLoadingD = false;
                     this.addLoadingP = false;
-                    this.angulartics.eventTrack.next({ action: 'createNewReading', properties: { category: 'contentManagement', label: 'failure' }});
+                    this.angulartics.eventTrack.next({ action: submitAction, properties: { category: 'contentManagement', label: 'failure' }})
                     this.errorObject.readingError = "There was an issue saving your reading. It may be our fault; please try again";
                 }
             );

@@ -8,6 +8,7 @@ import 'rxjs/add/operator/toPromise'
 import { AuthService } from './auth.service'
 import { SocketService } from './socket.service'
 import { CommentStats, iCommentStats, EdjiComment, Project, User } from './datatypes';
+import { ReadingService } from "./reading.service";
 
 @Injectable()
 export class ProjectService {
@@ -33,25 +34,26 @@ export class ProjectService {
         private http: Http, 
         private _auth: AuthService, 
         private _route: ActivatedRoute,
-        private _socket: SocketService
+        private _socket: SocketService,
+        private _readings: ReadingService
     ) {
         // needs to be constructed here or else it returns undefined
         this._commentStats = new CommentStats()
         this._socket.commentUpdates.subscribe((update) => {
             console.log(update)
         })
-    }
-  
-  /**
-   * Pulls all projects for a single user
-   * @returns chainable promise resolved with reading data
-   */
-  public getAll() {
-        return this.http
-            .get(this._auth.getUrl() + '/projects', this._auth.getOptions())
-            .toPromise()
-            .then(this._auth.extractData);
-  }
+    } // constructor
+    
+    /**
+     * Pulls all projects for a single user
+     * @returns chainable promise resolved with reading data
+     */
+    public getAll() {
+            return this.http
+                .get(this._auth.getUrl() + '/projects', this._auth.getOptions())
+                .toPromise()
+                .then(this._auth.extractData);
+    } // public getAll()
 
     /**
      * Adds a user to a project code and updates currentProject observable
@@ -179,46 +181,46 @@ export class ProjectService {
         return { alwaysHighlightArray: alwaysHighlightArray, highlightArray: highlightArray }
     }
 
-  /**
-   * Gets all of a teacher's projects for a reading
-   */
-  public getForReading(readingId: string): Observable<any> {
-    let userId = this._auth.getUser()._id;
-    
-    // return this.http.get(this._auth.getUrl() + '/readings/' + readingId + '/projects/' + userId , this._auth.getOptions() );
-    return this.http.get(this._auth.getUrl() + "/projects/reading/" + readingId, this._auth.getOptions())
-        .map((data) => { return data.json() || {}; });
-  }
-
-  /**
-   * Validates whether or not a project code exists
-   * @param projectCode Short project code
-   * @returns Observable which will have error if response is invalid
-   */
-  public validateProject(projectCode: string): Observable<any> {
-
-      return this.http.get(this._auth.getUrl() + '/projects/' + projectCode + "/validate", this._auth.getOptions())
-        .map((data) => { return data.json() || {}; });
+    /**
+     * Gets all of a teacher's projects for a reading
+     */
+    public getForReading(readingId: string): Observable<any> {
+        let userId = this._auth.getUser()._id;
         
-  }
+        // return this.http.get(this._auth.getUrl() + '/readings/' + readingId + '/projects/' + userId , this._auth.getOptions() );
+        return this.http.get(this._auth.getUrl() + "/projects/reading/" + readingId, this._auth.getOptions())
+            .map((data) => { return data.json() || {}; });
+    }
+
+    /**
+     * Validates whether or not a project code exists
+     * @param projectCode Short project code
+     * @returns Observable which will have error if response is invalid
+     */
+    public validateProject(projectCode: string): Observable<any> {
+
+        return this.http.get(this._auth.getUrl() + '/projects/' + projectCode + "/validate", this._auth.getOptions())
+            .map((data) => { return data.json() || {}; });
+            
+    } // public validateProject(projectCode: string): Observable<any>
 
     /** 
     * Pull a Project object
     * @param projectId
     */
-  public get(projectId: string) : Observable<any> {
-        return this.http
-            .get(this._auth.getUrl() + '/projects/' + projectId, this._auth.getOptions())
-            .map(
-                data => {
-                    // Update local Project object if returned
-                    if (data.json().project && data.json().project._id) {
-                        this.project = data.json().project;
-                        this.currentProjectSource.next(this.project);
-                    }
-                    return data.json().project;
-                });
-  }
+    public get(projectId: string) : Observable<any> {
+            return this.http
+                .get(this._auth.getUrl() + '/projects/' + projectId, this._auth.getOptions())
+                .map(
+                    data => {
+                        // Update local Project object if returned
+                        if (data.json().project && data.json().project._id) {
+                            this.project = data.json().project;
+                            this.currentProjectSource.next(this.project);
+                        }
+                        return data.json().project;
+                    });
+    } // public get(projectId: string)
 
     /**
      * Create a new Project
@@ -252,20 +254,20 @@ export class ProjectService {
                     this.project = data.json().project;
                     this.currentProjectSource.next(this.project);
                     return this.project;
-                }
-            })
-    }
+                } // if
+            }) //.map
+    } // public update (updateObj: any, projectId: string): Observable<any> 
 
-    /**
+    /** . 
      * Delete a Project
      * @param Requires a Project ID
      */
-    public delete(projectId) {
-        return this.http
-            .delete(this._auth.getUrl() + '/projects/' + projectId, this._auth.getOptions())
-            .toPromise()
-            .then(this._auth.extractData);
-    }
+    public delete(targetProject : Project) : Observable<any> {
+        return this.http.delete(this._auth.getUrl() + '/projects/' +  targetProject._id, this._auth.getOptions())
+            .map( data => {
+                this._readings.removeProject(targetProject)
+            })
+    } // public delete(projectId)
 
     /** 
      * Update or Create a comment on a project
@@ -286,21 +288,21 @@ export class ProjectService {
                 'user_id' : this._auth.getUser()._id,
                 'author' : this._auth.getUser().fullname ? this._auth.getUser().fullname : this._auth.getUser().username,
                 'type' : type
-            }
-        }
+            } // 'comment'
+        } // let data
 
         if (text) {
             data.comment['text'] = text;
-        }
+        } // if (text)
 
         if (location && location.x && location.y) {
             data.comment['loc'] = location;
-        }
+        } // if
 
         // Add comment ID if passed
         if (commentId) {
             data.comment['_id'] = commentId;
-        }
+        } // if (commentId)
 
         // Tell other Project viewers comment changed, using Socket
         // TO-DO: Move to after service responds
@@ -308,14 +310,14 @@ export class ProjectService {
             this._socket.updateComment(data.comment, 'UPDATE', this.project._id);
         } else {
             this._socket.updateComment(data.comment, 'CREATE', this.project._id);
-        }        
+        } // else
 
         return this.http
             .post(url, data, this._auth.getOptions())
             .toPromise()
             .then(this._auth.extractData)
             .then((data) => { return data.comment; })
-    }
+    } // public saveComment
 
     /**
      * Deletes comment via service, then updates local Project object 
@@ -341,7 +343,7 @@ export class ProjectService {
             })
             .toPromise()
             .then(this._auth.extractData);
-    }
+    }//  public deleteComment(comment): Promise<any>
 
     /**
      * API call to add a user (of any type) to the project
@@ -354,6 +356,6 @@ export class ProjectService {
             [this._auth.getUrl(), 'projects', projectId, 'user_id'].join('/'),
             {},
             this._auth.getOptions()
-        )
-    }
-}
+        ) //this.http.put
+    } // public addUserToProject(projectId: string): Observable<any>
+} // class

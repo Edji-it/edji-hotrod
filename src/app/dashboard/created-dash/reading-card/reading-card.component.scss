@@ -65,7 +65,7 @@
 .project-title-input {
     float: left;
     //width: calc(100% - 170px);
-    width: 100%;
+    width: 75%;
     position: relative;
 
     & input {
@@ -284,4 +284,26 @@ button.new-reading-btn {
 
 .dropdown-menu {
     z-index: 1001;
+}
+
+.btn--delete-project {
+    opacity: 0.5;
+    filter: grayscale(100%);
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+
+    & span {
+        pointer-events: none;
+    }
+
+    &:hover, &:focus, &:active {
+        filter: grayscale(0%);
+        opacity: 1;
+    }
+}
+
+.project-row--right-pad {
+    padding-right: 50px;
 }

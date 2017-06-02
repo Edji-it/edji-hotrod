@@ -30,22 +30,31 @@
             </div>
         </div>
         <i *ngIf="reading['draft'] && reading.draft === true && !reading.projects[0]" class="icon icon-draft"></i>
+        <!-- The Dropdown Options Menu -->
         <div *ngIf="!reading['draft'] || reading.draft !== true || reading.projects[0]" id="optionsWrap" (clickOutside)="showOptions = false" class="dropdown reading-options" [class.show]="showOptions">
             <button class="btn btn-icon--plain" (click)="showOptions = !showOptions" [attr.testFindOptions]="reading.title">
                 <i class="icon icon-more"></i>
             </button>
+            <!-- dropdown buttons -->
             <div class="dropdown-menu dropdown-menu-right reading-card-menu">
+                <!-- Create New Group dropdown button -->
                 <button (click)="relevantReading = reading; showAddModal = true; showOptions = false;" class="dropdown-item" [attr.testFindCreateNewGroup]="reading.title">Create New Group</button>
+                <!-- Copy & Edit dropdown button -->
                 <button (click)="showOptions=false;" [routerLink]="['/new-reading/']" [queryParams]="{ copyId: reading._id }" class="dropdown-item" [attr.testFindCopyAndEdit]="reading.title">Copy and Edit</button>
+                <!-- Delete dropdown button -->
+                <button (click)="relevantReading = reading; showDeleteReadingModal = true; showOptions = false;" class="dropdown-item">Delete</button>
             </div>
         </div>
     </div>
     
 <!--</div>-->
 <!--<div>-->
-<a class="list-item list-item--button project-card" [class.new-project]="project.new" [routerLink]="['/project', project._id]" *ngFor="let project of reading.projects">
-    <div class="row">
-        <div class="col-9">
+<!-- The Project Card -->
+<div class="list-item list-item--button project-card" [class.new-project]="project.new" *ngFor="let project of reading.projects" >
+    <a [routerLink]="['/project', project._id]" class="row project-row--right-pad">
+        <div class="col-8">
+            <!-- The Title -->
+            <!-- IMPORTANT NOTE: had to move the project link here so that the delete project button would work. Otherwise it overlapped and both buttons pressed. -->
             <div class="title"> 
                 <div class="project-title-input">
                     <span class="reading-project--label"><span style="color: #cdcdcd;" [attr.testFindGroup]="reading.title">Group:</span> {{project.label}}</span>
@@ -59,12 +68,16 @@
                 <span class="metadata">{{ project.student_count ? project.student_count : 0 }} Students</span>
             </div>
         </div>
-        <div class="col-3 prj-btns pull-right">
-            <!--<a style="float:right; margin-left: 8px;" [routerLink]="['/project', project._id]" class="btn btn-secondary">Open</a>-->
-            <pre class="prj-code">{{project.code || 'none'}}</pre>
+        <div class="col-4 prj-btns pull-right">
+            <!-- the project code -->
+            <pre style="float:right;" class="prj-code">{{project.code || 'none'}}</pre>
         </div>
+    </a>
+    <!-- Delete Project Button -->
+    <div title="Delete Group" (click)="relevantProject = project; showDeleteProjectModal = true;" class="btn--delete-project icon-button">
+        <span [innerHtml]="':x:' | emojione"></span>
     </div>
-</a>
+</div>
 <!-- Handle the version control -->
     <div [class.gone]="reading.versionCount <= 1" class="version-card--block" [class.show]="showVersions" [style.maxHeight.px]="versionsHeight()">
         <div id="{{ reading._id }}" class="list-item version-card" [class.show]="showVersions" >
@@ -90,14 +103,16 @@
                         <div class="dropdown-menu dropdown-menu-right reading-card-menu">
                             <button (click)="relevantReading = version; showAddModal = true; version.showOptionsV = false;" class="dropdown-item" [attr.testFindCreateNewGroupV]="version.title">Create New Group</button>
                             <button *ngIf="!version.draft" (click)="version.showOptionsV=false;" [routerLink]="['/new-reading/']" [queryParams]="{ copyId: version._id }" class="dropdown-item" [attr.testFindCopyAndEditV]="version.title">Copy and Edit</button>
+                            <!-- Delete dropdown button (DOES NOT WORK BECAUSE serverside deletes ALL of that reading) -->
+                            <button (click)="relevantReading = version; showDeleteReadingModal = true; showOptions = false;" class="dropdown-item">Delete</button>
                         </div>
                     </div>
                 </div>
                 <!-- Handle the sub-projects (projects under the readings that are under the version) -->
-                <a class="list-item list-item--button project-card" [class.new-project]="versionProject.new" [routerLink]="['/project', versionProject._id]" *ngFor="let versionProject of version.projects">
+                <a class="list-item list-item--button project-card" [class.new-project]="versionProject.new" *ngFor="let versionProject of version.projects">
                     <div class="row">
                         <div class="col-9">
-                            <div class="title"> 
+                            <div class="title" [routerLink]="['/project', versionProject._id]"> 
                                 <div class="project-title-input">
                                     <span class="reading-project--label"><span style="color: #cdcdcd;" [attr.testFindGroupV]="versionProject.label">Group:</span> {{versionProject.label}}</span>
                                     <span class="project-title-input__save" (click)="updateProjectLabel(version._id, version.newLabel)" [innerHtml]="':white_check_mark:' | emojione"></span>
@@ -110,7 +125,12 @@
                             </div>
                         </div>
                         <div class="col-3 prj-btns pull-right">
-                            <pre class="prj-code">{{versionProject.code || 'none'}}</pre>
+                            <!-- Project Code -->
+                            <pre style="float:right" class="prj-code">{{versionProject.code || 'none'}}</pre>
+                            <!-- Delete Project Button -->
+                            <a class="icon-button">
+                                <img  alt="❌" class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/274c.png">
+                            </a>
                         </div>
                     </div>
                 </a>
@@ -139,4 +159,12 @@
     </div>-->
 <!--</div>-->
 <!--</div>-->
+
+<!-- Modals -->
+
+<!-- hot-add-project-modal is opens when "Create New Group" under the dropdown is clicked -->
 <hot-add-project-modal *ngIf="showAddModal" [reading]="relevantReading" (closeModal)="showAddModal = false"></hot-add-project-modal>
+<!-- hot-del-reading pops up when "Delete" is clicked underneath a Reading's dropdown menu-->
+<hot-del-reading *ngIf="showDeleteReadingModal" [reading]="relevantReading" (closeModal)="showDeleteReadingModal = false"></hot-del-reading>
+<!-- hot-del-project pops up when you cliock the delete button for a group -->
+<hot-del-project *ngIf="showDeleteProjectModal" [project]="relevantProject" (closeModal)="showDeleteProjectModal = false"></hot-del-project>

@@ -4,6 +4,7 @@ import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_di
 import { FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { Subscription } from 'rxjs/Subscription'
 import { Angulartics2 } from 'angulartics2'
+import { Reading }      from '../../shared/datatypes';
 
 import { AuthService, ReadingService, ProjectService } from '../../shared'
 import { User } from '../../shared/datatypes'
@@ -22,7 +23,7 @@ import { User } from '../../shared/datatypes'
 })
 export class CreatedDashComponent implements OnInit, OnDestroy {
   // Set our default values
-  private readings: any[] = [];
+  private readings: Reading[] = [];
   private errorObject = {
     readingError: ""
   };
@@ -31,6 +32,8 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
 
   private showLoginReqModal: boolean = false
   private user: User
+
+  private readingToBeRemoved : Reading;
 
   // TypeScript public modifiers
   constructor(
@@ -53,8 +56,9 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
     )
 
     this._readings.getAll()
-      .then(
-        (data)  => {
+
+    this._readings.currentUserReadings.subscribe(
+      (data)  => {
           this.isLoading = false;
           this.readings = data || [];
         },
@@ -62,17 +66,11 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
           this.isLoading = false;
           this.angulartics.eventTrack.next({ action: "getAllReadings", properties: { category: "serviceCalls", label: "failure" }});
           this.errorObject.readingError = "We had some trouble getting your readings, it might be our fault";
-        });
+        }
+    )
+  } //  ngOnInit()
 
-  }
-
-  ngOnDestroy() {
-    this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
-  }
-
-  private deleteReading(reading) {
-
-  }
+  ngOnDestroy () {}
 
   private updateProjectLabel(projectId: string, projectLabel: string) {
     this._projects.update({ 'label' : projectLabel }, projectId)

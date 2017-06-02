@@ -21,7 +21,8 @@
 <button class="btn btn-primary new-reading-btn hidden-md-up" [routerLink]="[ '/new-reading' ]">
     New Reading
 </button>
-<div class="item-list ">
+<!-- Our Readings! -->
+<div class="item-list">
     <!--Show readings with date values-->
     <div class="alert alert-info" role="alert" *ngIf="!isLoading && readings.length < 1 && !errorObject.readingError">
         <h4 class="alert-heading">Share some text or something you wrote!</h4>
