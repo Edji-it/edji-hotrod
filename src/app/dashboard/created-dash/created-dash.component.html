@@ -32,8 +32,8 @@
     <div class="alert alert-danger alert-readings" role="alert" *ngIf="errorObject.readingError">
         {{ errorObject.readingError }}
     </div>
-    <hot-tutorial-reading></hot-tutorial-reading>
     <hot-reading-card *ngFor="let reading of readings" style="margin-bottom: 30px; float:left; width:100%;" [reading]="reading"></hot-reading-card>
+    <hot-tutorial-reading *ngIf="showTutorialReading"></hot-tutorial-reading>
 </div>
 
 <hot-login-req *ngIf="showLoginReqModal" (closeModal)="showLoginReqModal = false"></hot-login-req>

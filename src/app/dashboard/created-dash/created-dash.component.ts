@@ -24,6 +24,7 @@ import { User } from '../../shared/datatypes'
 export class CreatedDashComponent implements OnInit, OnDestroy {
   // Set our default values
   private readings: Reading[] = [];
+  /** Boolean to control whether or not the tutorial reading is shown */
   private showTutorialReading: boolean = false
   private errorObject = {
     readingError: ""
