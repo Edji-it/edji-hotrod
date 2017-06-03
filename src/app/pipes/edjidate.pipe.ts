@@ -4,6 +4,9 @@ import { NgModule, Pipe, PipeTransform } from '@angular/core';
   name: 'edjidate'
 })
 
+// Available displayType: timeAgo, timeStamp
+// Available timeFormat for timeStamp: longDate, mediumDate, shortDate
+
 export class EdjiDatePipe implements PipeTransform {
   transform(isoTime:string, displayType?:string, timeFormat?:string):string {
     let time = new Date(isoTime);
