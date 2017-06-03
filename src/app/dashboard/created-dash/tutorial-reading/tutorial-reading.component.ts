@@ -4,7 +4,8 @@ import { Reading } from './../../../shared/datatypes'
 
 @Component({
   selector: 'hot-tutorial-reading',
-  templateUrl: 'tutorial-reading.component.html'
+  templateUrl: 'tutorial-reading.component.html',
+  styleUrls: ['./tutorial-reading.component.scss']
 })
 
 export class TutorialReadingComponent implements OnInit {
