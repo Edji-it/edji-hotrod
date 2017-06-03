@@ -79,9 +79,16 @@ export class ReadingService {
       .map(value => {
         // Delete was successful
         let readings = this.userReadingsSource.value
-        readings = readings.filter(
-          (reading) => {
-            return reading._id != targetReading._id
+        
+        readings.forEach(
+          (reading, index) => {
+            if (reading.versionCount > 1) {
+              // Reload content (slower but simpler)
+              this.getAll()
+            } else if (reading._id == targetReading._id) {
+              // Single version readings we can remove instantly
+              readings.splice(index)
+            }
           }
         )
         this.userReadingsSource.next(readings)
