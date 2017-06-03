@@ -19,4 +19,4 @@
 
 
 <!--Leaderboard goes here-->
-<hot-leaderboard [commentStats]="commentStats" [visible]="showCommentCounts"></hot-leaderboard>
+<hot-leaderboard (hide)="showCommentCounts=false" [commentStats]="commentStats" [visible]="showCommentCounts"></hot-leaderboard>
