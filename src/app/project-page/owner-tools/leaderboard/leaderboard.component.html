@@ -1,0 +1,18 @@
+<!--Comments Pane-->
+<div class="sliding-pane from-left" [ngClass]="{ 'slide-in' : visible }">
+  <div class="container-fluid container--less-pad">
+    <h4>Comment Tally
+      <button (click)="hide.emit()" class="close stats-close-btn btn-icon--round" type="button">
+            <span aria-hidden="true">×</span>
+      </button>
+    </h4> 
+    <div class="user-list-item" style="opacity: 0.3; margin-bottom: 14px; white-space: nowrap; border-bottom: 1px solid #cdcdcd;">
+      <span>{{ commentStats.stats.userStats.length }} Readers</span> 
+      <img style="height: 1em; width: auto; float: right" src="assets/images/icon-comment.svg" />
+    </div>
+    <div *ngFor="let commentUser of commentStats.stats.userStats" class="user-list-item">
+      <span>{{ commentUser.fullname }}</span> 
+      <b style="float:right;">{{ commentUser.count }}</b>
+    </div>
+  </div>
+</div>

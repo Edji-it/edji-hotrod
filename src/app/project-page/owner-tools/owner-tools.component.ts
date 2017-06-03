@@ -26,18 +26,9 @@ export class OwnerToolsComponent implements OnInit {
     private _socket: SocketService
   ) {
     this.commentStats = this._projects.commentStats
-    console.log(this.commentStats)
   }
 
   ngOnInit() {
-    // this.subscriptions.push(
-    //   this._projects.currentCommentStats.subscribe(data => {
-    //     // this.commentStats.users = []
-    //     this.commentStats = data
-    //   }, error => {
-    //     console.error(error)
-    //   })
-    // )
 
     this.subscriptions.push(
       this._projects.currentProject.subscribe(project => {
