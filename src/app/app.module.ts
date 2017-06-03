@@ -43,7 +43,7 @@ import { LoginForm, GuestForm } from './forms';
 
 import { LoginModal, ResetPassComponent, DeleteCommentModal, DeleteReadingModal, DeleteProjectModal, AddProjectModal, LoginRequiredModal } from './modals';
 import { AnnotatorComponent, CommentComponent, TextCommentComponent, EmojiCommentComponent, EmojiKeyboardComponent } from './annotator';
-import { ProjectPageComponent, ProjectInfoComponent, OwnerToolsComponent } from './project-page';
+import { ProjectPageComponent, ProjectInfoComponent, OwnerToolsComponent, LeaderboardComponent } from './project-page';
 import { ReadingPageComponent, DeleteProjectComponent } from './reading-page';
 import { NewReadingPage, UploadModalComponent, UploadPdfModalComponent } from './new-reading-page';
 import { DashboardComponent, JoinedDashComponent, CreatedDashComponent, ReadingCardComponent } from './dashboard';
@@ -113,6 +113,7 @@ type StoreType = {
     DeleteProjectModal,
     AnnotatorComponent,
     NewReadingPage,
+    LeaderboardComponent,
     UploadModalComponent,
     UploadPdfModalComponent,
     ProjectPageComponent,
