@@ -36,7 +36,27 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
     private angulartics: Angulartics2
   ) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.subscriptions.push(
+      // Sometimes versions are updated, but the component maintains the version array, so we need to listen for updates
+      this._readings.refreshVersions.subscribe(
+        projectId => {
+          console.log('refreshversions!', projectId)
+          this.versions.forEach( readingVersion => {
+            readingVersion.projects && readingVersion.projects.forEach(
+              versionProject => {
+                if (versionProject._id == projectId) {
+                  // If the targeted Project is here, let's refresh our versions
+                  this.versions = []
+                  this.getVersions(this.reading.version_id)
+                }
+              }
+            )
+          })
+        }
+      )
+    )
+  }
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
