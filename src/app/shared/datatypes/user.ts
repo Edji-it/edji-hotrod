@@ -24,7 +24,7 @@ interface BaseUser {
         firstDone: number, // this is really a date
         lastDone: number // also a date
       },
-      createReadingFromDash: {
+      createReadingFromDash?: {
         firstDone: number, // this is really a date
         lastDone: number // also a date
       }

@@ -61,6 +61,10 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
       (data)  => {
           this.isLoading = false;
           this.readings = data || [];
+          if (!this.user || !this.user.prefs || !this.user.prefs.onboarding || !this.user.prefs.onboarding.createReadingFromDash || !this.user.prefs.onboarding.createReadingFromDash.firstDone) {
+            console.log("adding me a reading!")
+            this.readings.push(this.getTutorialReading())
+          }
         },
         (error) => {
           this.isLoading = false;
@@ -68,12 +72,6 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
           this.errorObject.readingError = "We had some trouble getting your readings, it might be our fault";
         }
     )
-
-    // if (this.user && this.user.prefs && this.user.prefs.onboarding && !this.user.prefs.onboarding.createReadingFromDash) {
-    //   this.readings.push({
-        
-    //   })
-    // }
   } //  ngOnInit()
 
   ngOnDestroy () {}
@@ -85,5 +83,18 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
       }, error => {
         console.log(error);
       });
+  }
+
+  /**
+   * Returns the tutorial reading which can be added to the dashboard
+   * @returns an object which points to the tutorial reading
+   */
+  private getTutorialReading(): Reading {
+    return {
+      _id: "58be15b2ab0b2900111652cc",
+      title: "How to Make a Reading",
+      draft: true,
+      projects: []
+    }
   }
 }
