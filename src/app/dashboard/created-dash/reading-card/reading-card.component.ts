@@ -41,7 +41,6 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
       // Sometimes versions are updated, but the component maintains the version array, so we need to listen for updates
       this._readings.refreshVersions.subscribe(
         projectId => {
-          console.log('refreshversions!', projectId)
           this.versions.forEach( readingVersion => {
             readingVersion.projects && readingVersion.projects.forEach(
               versionProject => {

@@ -47,7 +47,7 @@ import { AnnotatorComponent, CommentComponent, TextCommentComponent, EmojiCommen
 import { ProjectPageComponent, ProjectInfoComponent, OwnerToolsComponent, LeaderboardComponent } from './project-page';
 import { ReadingPageComponent, DeleteProjectComponent } from './reading-page';
 import { NewReadingPage, UploadModalComponent, UploadPdfModalComponent } from './new-reading-page';
-import { DashboardComponent, JoinedDashComponent, CreatedDashComponent, ReadingCardComponent } from './dashboard';
+import { DashboardComponent, JoinedDashComponent, CreatedDashComponent, TutorialReadingComponent, ReadingCardComponent } from './dashboard';
 import { NoContentComponent } from './no-content';
 import { AccountComponent, ChangePassComponent } from './account';
 import { FeedbackComponent } from './shared/feedback/feedback.component';
@@ -117,6 +117,7 @@ type StoreType = {
     NewReadingPage,
     LeaderboardComponent,
     UploadModalComponent,
+    TutorialReadingComponent,
     UploadPdfModalComponent,
     ProjectPageComponent,
     ProjectInfoComponent,
