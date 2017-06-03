@@ -9,3 +9,4 @@ export * from './copy';
 export * from './nav-bar/nav-bar.component';
 export * from './footer/footer.component';
 export * from './tutorial-box/tutorial-box.component';
+export * from '../../app/pipes/edjidate.pipe'

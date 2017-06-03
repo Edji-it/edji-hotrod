@@ -56,11 +56,8 @@ describe('Home Page', () => {
     */
     it('user should be able to view guides/FAQ', () => {
         browser.wait(EC.elementToBeClickable(home.footerGuidesLink), 5000);
-        // Click to open the link
-        home.footerGuidesLink.click();
-
-        // Did we make it to the Guides page?
-        browser.wait(EC.urlContains("guide"), 5000, ('Never arrived at the url containing: guide.'));
+        // Verify where link points
+        expect(home.footerGuidesLink.getAttribute('href')).toContain('guide');
     });
 
     /* Test: View Edji twitter page
@@ -70,11 +67,16 @@ describe('Home Page', () => {
     */
     it('user should be able to go to the EDJI twitter page', () => {
         browser.wait(EC.elementToBeClickable(home.footerTwitterLink), 5000);
-        // Click to open the link
-        home.footerTwitterLink.click();
+        // Verify where link points
+        expect(home.footerTwitterLink.getAttribute('href')).toContain('twitter');
+    });
 
-        // Did we make it to the Twitter page?
-        browser.wait(EC.urlContains("twitter"), 10000, ('Never arrived at the url containing: Twitter.'));
+    /* Test: Linking to Terms in footer
+    */
+    it('user should be able to go to the EDJI Terms page', () => {
+        browser.wait(EC.elementToBeClickable(home.footerTermsLink), 5000);
+        // Verify where link points
+        expect(home.footerTermsLink.getAttribute('href')).toContain('terms');
     });
 
 /* ---- Project Code Login Tests ---------------------------- */

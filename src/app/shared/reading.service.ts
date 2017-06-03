@@ -31,6 +31,10 @@ export class ReadingService {
   private userReadingsSource = new BehaviorSubject([])
   public currentUserReadings: Observable<any> = this.userReadingsSource.asObservable()
 
+  // Version refresh observable
+  private refreshVersionSource = new Subject()
+  public  refreshVersions: Observable<any> = this.refreshVersionSource.asObservable()
+
     // Pull all readings for a user
   public getAll() {
         return this.http
@@ -79,9 +83,16 @@ export class ReadingService {
       .map(value => {
         // Delete was successful
         let readings = this.userReadingsSource.value
-        readings = readings.filter(
-          (reading) => {
-            return reading._id != targetReading._id
+        
+        readings.forEach(
+          (reading, index) => {
+            if (reading.versionCount > 1) {
+              // Reload content (slower but simpler)
+              this.getAll()
+            } else if (reading._id == targetReading._id) {
+              // Single version readings we can remove instantly
+              readings.splice(index)
+            }
           }
         )
         this.userReadingsSource.next(readings)
@@ -94,13 +105,24 @@ export class ReadingService {
    */
   public removeProject(targetProject: Project) {
     let readings = this.userReadingsSource.value
+    let projectFound = false
+
     readings.forEach( reading => {
       reading.projects = reading.projects.filter(
           (project) => {
+            if (project._id == targetProject._id) {
+              projectFound = true
+            }
             return project._id != targetProject._id
           }
         )
     })
+
+    // If we didn't find the project, it's hiding in a version
+    if (!projectFound) {
+      console.log("PROJECT NOT FOUND")
+      this.refreshVersionSource.next(targetProject._id)
+    }
     this.userReadingsSource.next(readings)
   }
 

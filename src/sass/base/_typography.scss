@@ -91,6 +91,19 @@ a.link {
   }
 }
 
+a.link--light {
+  @extend a.link;
+
+  color: #fff;
+  text-decoration: underline;
+
+  &:active,
+  &:focus,
+  &:hover {
+    color: $blue;
+  }
+}
+
 hr {
   border-bottom: $base-border;
   border-left: 0;

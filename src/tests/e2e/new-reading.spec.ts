@@ -72,7 +72,7 @@ describe('New Reading Page', () => {
         newReading.sourceInput.sendKeys(newReading.sourceString);
 
         // Submit New Reading
-        browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "login button never became clickable after login form entry");
+        browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "save reading button never became clickable after content add");
         newReading.addButton.click();
         
         // Group Label has content prefilled, so we clear it
@@ -104,7 +104,7 @@ describe('New Reading Page', () => {
         newReading.sourceInput.sendKeys(newReading.sourceString);
 
         // Submit New Reading
-        browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "login button never became clickable after login form entry");
+        browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "save reading button never became clickable after content add");
         //newReading.addButton.submit();
         newReading.addButton.click();
         browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
@@ -131,7 +131,7 @@ describe('New Reading Page', () => {
         newReading.sourceInput.sendKeys(newReading.sourceString);
 
         // Submit New Reading
-        browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "login button never became clickable after login form entry");
+        browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "save reading button never became clickable after content add");
         //newReading.addButton.submit();
         newReading.addButton.click();
         browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
@@ -157,7 +157,7 @@ describe('New Reading Page', () => {
         newReading.contentInput.sendKeys(newReading.contentShortString);
         newReading.sourceInput.sendKeys(newReading.sourceString);
 
-        browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "login button never became clickable after login form entry");
+        browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "save reading button never became clickable after content add");
         newReading.addButton.click();
 
         browser.wait(EC.elementToBeClickable(newReading.groupInput), 5000, "group input became clickable");
@@ -167,7 +167,7 @@ describe('New Reading Page', () => {
         newReading.groupInput.sendKeys(protractor.Key.BACK_SPACE); 
 
         // Submit New Reading
-        browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "login button never became clickable after login form entry");
+        browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "save reading button never became clickable after content add");
         newReading.finalizeButton.click();
         
         // Should see error for empty group label
