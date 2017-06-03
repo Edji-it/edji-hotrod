@@ -68,6 +68,12 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
           this.errorObject.readingError = "We had some trouble getting your readings, it might be our fault";
         }
     )
+
+    // if (this.user && this.user.prefs && this.user.prefs.onboarding && !this.user.prefs.onboarding.createReadingFromDash) {
+    //   this.readings.push({
+        
+    //   })
+    // }
   } //  ngOnInit()
 
   ngOnDestroy () {}
