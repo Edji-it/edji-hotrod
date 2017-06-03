@@ -26,7 +26,6 @@ export class OwnerToolsComponent implements OnInit {
     private _socket: SocketService
   ) {
     this.commentStats = this._projects.commentStats
-    console.log(this.commentStats)
   }
 
   ngOnInit() {
