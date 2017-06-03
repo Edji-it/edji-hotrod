@@ -126,21 +126,21 @@ describe("Versioning - ", () => {
         browser.wait(EC.presenceOf(newReading.successAlert), 5000, "never saw the success alert");
     });
 
-    it('should make sure latest version is 2, past versions show, and find a version 1', () => {
-        // Make sure the version number is greater than beforeAll
-        // Make sure the reading cards load before moving on to the next step
-        browser.wait(EC.elementToBeClickable(dashboard.firstProject), 15000, "reading cards never loaded");
+    // it('should make sure latest version is 2, past versions show, and find a version 1', () => {
+    //     // Make sure the version number is greater than beforeAll
+    //     // Make sure the reading cards load before moving on to the next step
+    //     browser.wait(EC.elementToBeClickable(dashboard.firstProject), 15000, "reading cards never loaded");
 
-        // Verify the version number is '2' for the updated version
-        expect(element(by.css('p[testVersionNumber*="' + uniqueTitle + '"]')).getText()).toBe('Version 2');
+    //     // Verify the version number is '2' for the updated version
+    //     expect(element(by.css('p[testVersionNumber*="' + uniqueTitle + '"]')).getText()).toBe('Version 2');
 
-        // Expand the past versions
-        element(by.css('[testFindVersionToggle="' + titleUpdate + '"]')).click();
+    //     // Expand the past versions
+    //     element(by.css('[testFindVersionToggle="' + titleUpdate + '"]')).click();
 
-        // Verify version 1 of this reading is in the list
-        browser.wait(EC.elementToBeClickable(element(by.css('p[testVersionNumberV="' + uniqueTitle + '"]'))), 5000, "past versions never loaded");
-        expect(element(by.css('p[testVersionNumberV="' + uniqueTitle + '"]')).getText()).toBe('Version 1');
-    });
+    //     // Verify version 1 of this reading is in the list
+    //     browser.wait(EC.elementToBeClickable(element(by.css('p[testVersionNumberV="' + uniqueTitle + '"]'))), 5000, "past versions never loaded");
+    //     expect(element(by.css('p[testVersionNumberV="' + uniqueTitle + '"]')).getText()).toBe('Version 1');
+    // });
 
     it('should open up the latest version that is a draft and publish the draft', () => {  
         // Go back in to that drafted reading
