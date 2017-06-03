@@ -24,8 +24,6 @@ import { User } from '../../shared/datatypes'
 export class CreatedDashComponent implements OnInit, OnDestroy {
   // Set our default values
   private readings: Reading[] = [];
-  /** Boolean to control whether or not the tutorial reading is shown */
-  private showTutorialReading: boolean = false
   private errorObject = {
     readingError: ""
   };
@@ -63,9 +61,6 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
       (data)  => {
           this.isLoading = false;
           this.readings = data || [];
-          if (!this.user || !this.user.prefs || !this.user.prefs.onboarding || !this.user.prefs.onboarding.createReadingFromDash || !this.user.prefs.onboarding.createReadingFromDash.firstDone) {
-            this.showTutorialReading = true
-          }
         },
         (error) => {
           this.isLoading = false;

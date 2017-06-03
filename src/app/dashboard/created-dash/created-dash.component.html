@@ -33,7 +33,7 @@
         {{ errorObject.readingError }}
     </div>
     <hot-reading-card *ngFor="let reading of readings" style="margin-bottom: 30px; float:left; width:100%;" [reading]="reading"></hot-reading-card>
-    <hot-tutorial-reading *ngIf="showTutorialReading"></hot-tutorial-reading>
+    <hot-tutorial-reading *ngIf="!isLoading && readings.length < 1 && !errorObject.readingError"></hot-tutorial-reading>
 </div>
 
 <hot-login-req *ngIf="showLoginReqModal" (closeModal)="showLoginReqModal = false"></hot-login-req>
