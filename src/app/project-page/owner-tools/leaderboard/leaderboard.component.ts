@@ -11,6 +11,7 @@ export class LeaderboardComponent implements OnInit {
   @Input() visible: boolean = false
   @Output() hide: EventEmitter<any> = new EventEmitter()
 
+  /** This is a reference to the actual commentStats object which has methods for modification of properties */
   @Input() commentStats: CommentStats
 
   constructor() { }
