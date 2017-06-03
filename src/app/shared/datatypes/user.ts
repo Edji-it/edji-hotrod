@@ -19,6 +19,14 @@ interface BaseUser {
       highlighting?: {
         firstDone: number, // this is really a date
         lastDone: number // also a date
+      },
+      newReading?: {
+        firstDone: number, // this is really a date
+        lastDone: number // also a date
+      },
+      createReadingFromDash: {
+        firstDone: number, // this is really a date
+        lastDone: number // also a date
       }
     }
   },
