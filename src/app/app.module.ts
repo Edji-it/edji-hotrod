@@ -34,6 +34,7 @@ import { Autosize } from 'angular2-autosize';
 // Pipes
 import { EmojiOnePipe } from './shared/emojione.pipe.ts';
 import { AddClassPipe } from './shared/addclass.pipe.ts';
+import { EdjiDatePipe } from './pipes/edjidate.pipe.ts';
 
 // Components
 import { NavBarComponent, FooterComponent, TutorialBoxComponent } from './shared';
@@ -91,6 +92,7 @@ type StoreType = {
     MediumEditorDirective,
     ClickOutsideDirective,
     EmojiOnePipe,
+    EdjiDatePipe,
     ResetPassPage,
     AddClassPipe,
     RegisterComponent,
