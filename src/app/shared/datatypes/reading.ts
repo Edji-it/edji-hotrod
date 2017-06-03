@@ -2,7 +2,8 @@ import { Project } from '.'
 
 /** Reading with any additional properties we add on the front end */
 export interface Reading extends BaseReading {
-  projects?: Project[]
+  projects?: Project[],
+  versionCount?: number
 }
 
 /*
