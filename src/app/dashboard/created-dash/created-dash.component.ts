@@ -24,6 +24,7 @@ import { User } from '../../shared/datatypes'
 export class CreatedDashComponent implements OnInit, OnDestroy {
   // Set our default values
   private readings: Reading[] = [];
+  private showTutorialReading: boolean = false
   private errorObject = {
     readingError: ""
   };
@@ -62,8 +63,7 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
           this.isLoading = false;
           this.readings = data || [];
           if (!this.user || !this.user.prefs || !this.user.prefs.onboarding || !this.user.prefs.onboarding.createReadingFromDash || !this.user.prefs.onboarding.createReadingFromDash.firstDone) {
-            console.log("adding me a reading!")
-            this.readings.push(this.getTutorialReading())
+            this.showTutorialReading = true
           }
         },
         (error) => {
@@ -83,18 +83,5 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
       }, error => {
         console.log(error);
       });
-  }
-
-  /**
-   * Returns the tutorial reading which can be added to the dashboard
-   * @returns an object which points to the tutorial reading
-   */
-  private getTutorialReading(): Reading {
-    return {
-      _id: "58be15b2ab0b2900111652cc",
-      title: "How to Make a Reading",
-      draft: true,
-      projects: []
-    }
   }
 }

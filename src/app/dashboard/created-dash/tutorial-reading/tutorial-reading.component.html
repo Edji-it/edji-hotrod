@@ -1,0 +1,13 @@
+<div class="list-item list-item--block reading-card draft-edit" [routerLink]="['/new-reading']" [queryParams]="{ copyId: reading._id }">
+
+    <div class="reading-icon">
+        <span>{{reading.title.substring(0,2)}}</span>
+    </div>
+    <div class="reading-title">
+        <div class="reading-title--center-row">
+            <h1 class="small">{{reading.title}} <span *ngIf="!reading.title"><i>Untitled</i></span></h1>
+            <p class="blockquote-footer" *ngIf="reading.versionCount && reading.versionCount > 0" [attr.testVersionNumber]="reading.title">Version {{reading.versionCount > 0 ? reading.versionCount : '' }}</p>
+        </div>
+    </div>
+    <i class="icon icon-draft"></i>
+</div>
