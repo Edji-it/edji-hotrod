@@ -20,6 +20,7 @@ export class Home implements PageObjectInterface
     public footerGuidesLink  = element(by.id("footerGuidesLink"));
     public footerTwitterLink = element(by.id("footerTwitterLink"));
     public footerSupportLink = element(by.id("footerTwitterLink"));
+    public footerTermsLink = element(by.id("footerTermsLink"));
 
     // get the home page
     getPage() : void 

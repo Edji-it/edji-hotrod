@@ -66,11 +66,13 @@
           <div id="msgMismatch" *ngIf="registerForm.hasError('mismatch')" class="alert alert-info">After your passwords match, you can Edji!</div>
         </div>
 
+        <p id="termsText" class="text-center pb-2">By registering for Edji, you agree to our <a id="registerTermsLink" class="link--light" href="http://guide.edji.it/index.php/back-to-edji-it/privacy-terms/" target="_blank">Terms of Use</a>.
+
         <div id="msgDuplicateUser" *ngIf="errorObject.duplicateUser" class="alert alert-info" [innerHtml]="errorObject.duplicateUser | emojione"></div>
         <div id="msgBadName" *ngIf="errorObject.badName" class="alert alert-warn" [innerHtml]="errorObject.badName | emojione"></div>
         <div id="msgBadUsername" *ngIf="errorObject.badUsername" class="alert alert-warning" [innerHtml]="errorObject.badUsername | emojione"></div>
         <div id="msgServerError" *ngIf="errorObject.serverError" class="alert alert-danger">{{errorObject.serverError}}</div>
-
+        
         <div class="button__row">
           <!--ngHide loginLoading-->
           <button title="Make sure you've completed all the fields!" id="buttonRegister" type="submit" class="btn btn-primary" [class.loading]="registerLoading" [disabled]="!registerForm.valid" tabindex="0">Register!</button>
