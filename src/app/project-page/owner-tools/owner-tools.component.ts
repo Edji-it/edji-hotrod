@@ -29,14 +29,6 @@ export class OwnerToolsComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.subscriptions.push(
-    //   this._projects.currentCommentStats.subscribe(data => {
-    //     // this.commentStats.users = []
-    //     this.commentStats = data
-    //   }, error => {
-    //     console.error(error)
-    //   })
-    // )
 
     this.subscriptions.push(
       this._projects.currentProject.subscribe(project => {
