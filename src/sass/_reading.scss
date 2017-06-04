@@ -364,6 +364,12 @@ $nextB: 68;
 	background: rgba($nextR, $nextG, $nextB, $thisA);
 }
 
+.w.a {
+	text-decoration: underline;
+	color: $blue;
+	cursor: pointer;
+}
+
 .h-0 {
 	background: transparent;
 }
@@ -457,6 +463,11 @@ article.content .w.h-f {
 		margin: 0px;
 		margin-bottom: 0.5em;
 		height: auto;
+	}
+
+	& a {
+		text-decoration: underline;
+		color: $blue;
 	}
 
 	& h1 {

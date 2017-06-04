@@ -18,6 +18,8 @@ import { AuthService } from '../shared/auth.service';
 import { SocketService } from '../shared/socket.service';
 import { CommentPermissions, EdjiComment, Project, Reading } from './../shared/datatypes';
 
+declare var window: any;
+
 @Component({
     selector: 'annotator',
     templateUrl: 'annotator.component.html',
@@ -98,6 +100,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     private annotatorPaper: Element;
     private annotatorContent: Element;
 
+    private window: any
+
     constructor(
         private _readings: ReadingService,
         private _projects: ProjectService,
@@ -114,6 +118,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         //      this.addEmojiComment({ name: 'Hotkey'});
         //     return false; // Prevent bubbling
         // }));
+        this.window = window
     }
     
     ngOnInit() {

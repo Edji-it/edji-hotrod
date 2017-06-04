@@ -53,16 +53,16 @@ export class NewReadingPage implements OnInit {
         paste : { 
             forcePlainText : true,
             cleanPastedHTML: true,
-            cleanAttrs: ['class', 'style', 'dir', 'href', 'id'],
+            cleanAttrs: ['class', 'style', 'dir', 'id'],
             cleanTags: ['meta', 'button', 'input', 'form', 'img', 'label', 'pre', 'figure', 'hr'],
-            unwrapTags: [ 'strong', 'center', 'a', 'sup', 'sub', 'span', 'small', 'div', 'em', 'footer' ]
+            unwrapTags: [ 'strong', 'center', 'sup', 'sub', 'span', 'small', 'div', 'em', 'footer' ]
         }, 
         extensions: { 
             // Disables Medium Editor handled image dragging
             imageDragging: {}
         }, 
         toolbar: {
-            buttons: ['bold', 'italic', 'underline', 'h1', 'h2', 'h3']
+            buttons: ['bold', 'italic', 'underline', 'h1', 'h2', 'h3', 'anchor']
         }
     };
 
@@ -200,6 +200,15 @@ export class NewReadingPage implements OnInit {
                 url: element.getAttribute('src'), 
                 styles: ['img']
             });
+        }
+
+        if (tagName === 'a') {
+            this.words.push({
+                str: element.innerText, // to be used for image title
+                url: element.getAttribute('href'), 
+                styles: ['a']
+            });
+            nodes = []
         }
 
         for (let index = 0; index < nodes.length; index++) {
