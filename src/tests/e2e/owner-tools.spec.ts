@@ -48,7 +48,7 @@ describe('Project Page as a Project Owner: ', () => {
         loginModal.accountLoginButton.submit();
 
         // account button validation
-        browser.wait(EC.elementToBeClickable(sidebar.heatButton), 5000, "never found the account button on the sidebar");
+        browser.wait(EC.elementToBeClickable(sidebar.heatButton), 5000, "never found the heat vision button");
         
         // Conditionally toggle the Heat Vision to make Active
         sidebar.heatButton.getAttribute('class').then(classes => {
@@ -106,7 +106,7 @@ describe('Project Page as a Project Owner: ', () => {
         loginModal.accountLoginButton.submit();
 
         // account button validation
-        browser.wait(EC.elementToBeClickable(sidebar.heatButton), 5000, "never found the account button on the sidebar");
+        browser.wait(EC.elementToBeClickable(sidebar.heatButton), 5000, "never found the heat vision button on the sidebar");
         
         // Conditionally toggle the Heat Vision to make Active
         sidebar.heatButton.getAttribute('class').then(classes => {
