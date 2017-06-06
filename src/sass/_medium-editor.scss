@@ -103,24 +103,6 @@ $editorToolbarShadow: 0px 1px 3px 0px rgba(0,0,0,0.2);
   }
 }
 
-.medium-toolbar-arrow-over:before {
-  border-color: transparent transparent #797979 transparent;
-}
-
-.medium-editor-anchor-preview a {
-  text-decoration: underline;
-  color: #797979;
-  cursor: pointer;
-
-  &:active, &:visited {
-    color: #797979;
-  }
-
-  &:hover {
-    color: $blue;
-  }
-}
-
 // Override Pasted Styles
 
 .medium-editor-element {
