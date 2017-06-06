@@ -77,7 +77,7 @@
 	<button *ngIf="reading && user.type != 'temp' && user._id != reading.owner_id" [routerLink]="['/new-reading']" [queryParams]="{ copyId: reading._id }" class="btn btn-primary">Copy and edit</button>
 </div>
 
-<div class="fixed-btn-row--SE" [class.bottom-bar-offset]="user._id == project.teacher_id">
+<div class="fixed-btn-row--SE" [class.hidden-sm-down]="optionsShow || isEmojiKeyboardActive()" [class.bottom-bar-offset]="user._id == project.teacher_id">
     <tutorial-box [tutorialName]="'highlighting'"
 			[pageObjs]="guideContent" 
 			[pager]="guideStepNo" 
