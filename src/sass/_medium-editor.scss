@@ -17,7 +17,6 @@ $editorToolbarBg: #fff;
 
 	&:hover, &:active, &:focus {
 		background-color: #efefef;
-		color: $purple;
 	}
 }
 
@@ -84,6 +83,22 @@ $editorToolbarBg: #fff;
 @media (max-width: #{$tablet}) {
   .medium-editor-placeholder {
     font-size: 12px;
+  }
+}
+
+.medium-editor-action-anchor {
+    background-image: url('/assets/images/icon-link.png');
+    background-size: auto 1.25em;
+    background-position: center center;
+    background-repeat: no-repeat;
+	&:hover, &:active, &:focus {
+    background-image: url('/assets/images/icon-link.png');
+    background-size: auto 1.25em;
+    background-position: center center;
+    background-repeat: no-repeat;
+	}
+  &:hover, &:active, &:focus {
+		background-color: #efefef;
   }
 }
 
