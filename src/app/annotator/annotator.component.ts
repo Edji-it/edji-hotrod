@@ -18,6 +18,8 @@ import { AuthService } from '../shared/auth.service';
 import { SocketService } from '../shared/socket.service';
 import { CommentPermissions, EdjiComment, Project, Reading } from './../shared/datatypes';
 
+declare var window: any;
+
 @Component({
     selector: 'annotator',
     templateUrl: 'annotator.component.html',
@@ -98,6 +100,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     private annotatorPaper: Element;
     private annotatorContent: Element;
 
+    private window: any
+
     constructor(
         private _readings: ReadingService,
         private _projects: ProjectService,
@@ -114,6 +118,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         //      this.addEmojiComment({ name: 'Hotkey'});
         //     return false; // Prevent bubbling
         // }));
+        this.window = window
     }
     
     ngOnInit() {
@@ -464,14 +469,15 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 if (comment._id) {
                     this.angulartics.eventTrack.next({ action: type + 'CommentCreate', properties: { category: 'projectAction', label: 'attempt' }});
                     // Check if comment should start expanded
-                    if (document.querySelector('.word[index="' + start + '"] .comment')) {
-                        let commentY = document.querySelector('.word[index="' + start + '"] .comment')['offsetTop'];
+                    // Needs to be moved to commentsByIndexAdd or comment component ngOnInit
+                    // if (document.querySelector('.w[index="' + start + '"] .comment')) {
+                    //     let commentY = document.querySelector('.w[index="' + start + '"] .comment')['offsetTop'];
 
-                        if (this.lineCountArray[commentY] && this.lineCountArray[commentY][0].expanded) {
-                            comment.expanded = true;
-                            comment.lineCount = this.lineCountArray[commentY].length + 1;
-                        }
-                    }
+                    //     if (this.lineCountArray[commentY] && this.lineCountArray[commentY][0].expanded) {
+                    //         comment.expanded = true;
+                    //         comment.lineCount = this.lineCountArray[commentY].length + 1;
+                    //     }
+                    // }
                     // Add setting to trigger focus on new comment
                     comment.new = true; // this is basically to tell our test cases which comment was just made
                     this.inactivateComment();
@@ -591,7 +597,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             // Selections often happen at the text node level, inside the actual element
             // In which case we need to reference its parent node
             // Note: we tried node.hasOwnProperty here and would sometimes get a false true resolution of the if statement... not sure how that is possible
-            if(!!node.className && node.className.indexOf('word') > -1) {
+            if(!!node.className && node.className == 'w') {
                 return parseInt(node.getAttribute('index'));
             } else {
                 return parseInt(node.parentNode.getAttribute('index'));
@@ -614,10 +620,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         }
 
         // Fix for commenting on images in Safari
-        if (!start) {
+        if (!start && start != 0) {
             start = end;
         }
-        if (!end) {
+        if (!end && end != 0) {
             end = start;
         }
         

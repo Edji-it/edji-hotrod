@@ -217,7 +217,7 @@ describe('New Reading Page', () => {
             browser.wait(EC.urlContains("project"), 5000, "never arrived at new reading");
 
             // Should see image in new reading
-            browser.wait(EC.presenceOf(newReading.imageInReading), 10000, "never saw an image in the new reading");
+            browser.wait(EC.presenceOf(newReading.imageInReading), 10000, "never saw PDF in the new reading");
         });
     });
 
@@ -230,7 +230,7 @@ describe('New Reading Page', () => {
             newReading.getPage();
             browser.wait(EC.elementToBeClickable(newReading.uploadModalButton), 5000, "image upload modal button never became clickable");
             newReading.uploadModalButton.click();
-            browser.wait(EC.elementToBeClickable(newReading.imageUploadTrigger), 6000, "image uploade trigger never became clickable");
+            browser.wait(EC.elementToBeClickable(newReading.imageUploadTrigger), 6000, "image upload trigger never became clickable");
             
             // Select File to upload
             let fileToUpload = '../../assets/test/titration.jpg';
