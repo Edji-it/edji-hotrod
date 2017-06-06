@@ -168,9 +168,16 @@ $editorToolbarShadow: 0px 1px 3px 0px rgba(0,0,0,0.2);
   color: #6bdb5d;
 }
 
+.medium-editor-toolbar-close {
+  color: #ea5959;
+}
+
+.medium-editor-toolbar-form {
+  padding-left: 5px;
+}
+
 .medium-editor-toolbar-form a {
   text-decoration: none !important;
-  padding-left: 5px;
 
   &:hover, &:active {
     text-decoration: none !important;
@@ -182,7 +189,7 @@ $editorToolbarShadow: 0px 1px 3px 0px rgba(0,0,0,0.2);
   margin: 5px 0px !important;
 
   &:focus, &:active {
-    transform: scale(1);
+    transform: scale(1) !important;
   }
 }
 
