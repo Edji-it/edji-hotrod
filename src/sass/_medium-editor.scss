@@ -2,11 +2,12 @@
 
 // Medium Editor Overrides
 
-$editorToolbarRadius: 10px;
+$editorToolbarRadius: 0px;
 $editorToolbarBg: #fff;
+$editorToolbarShadow: 0px 1px 3px 0px rgba(0,0,0,0.2);
 
 .medium-editor-toolbar-actions {
-	box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.2);
+	box-shadow: $editorToolbarShadow;
 	border-radius: $editorToolbarRadius;
 }
 
@@ -17,7 +18,6 @@ $editorToolbarBg: #fff;
 
 	&:hover, &:active, &:focus {
 		background-color: #efefef;
-		color: $purple;
 	}
 }
 
@@ -87,6 +87,22 @@ $editorToolbarBg: #fff;
   }
 }
 
+.medium-editor-action-anchor {
+    background-image: url('/assets/images/icon-link.png');
+    background-size: auto 1.25em;
+    background-position: center center;
+    background-repeat: no-repeat;
+	&:hover, &:active, &:focus {
+    background-image: url('/assets/images/icon-link.png');
+    background-size: auto 1.25em;
+    background-position: center center;
+    background-repeat: no-repeat;
+	}
+  &:hover, &:active, &:focus {
+		background-color: #efefef;
+  }
+}
+
 // Override Pasted Styles
 
 .medium-editor-element {
@@ -127,4 +143,56 @@ $editorToolbarBg: #fff;
     display: none !important;
     pointer-events: none !important;
   }
+}
+
+// Override link tooltip styles
+.medium-editor-toolbar {
+  background: #fff;
+  box-shadow:$editorToolbarShadow;
+}
+
+.medium-editor-anchor-preview {
+  color: $blue;
+  background: #fff;
+  box-shadow:$editorToolbarShadow;
+  padding: 5px 20px 2px;
+  border-radius: $editorToolbarRadius;
+
+  & a {
+    color: $blue;
+  }
+}
+
+.medium-editor-toolbar-save {
+  font-family: Courier New, Courier, monospace;
+  color: #6bdb5d;
+}
+
+.medium-editor-toolbar-close {
+  color: #ea5959;
+}
+
+.medium-editor-toolbar-form {
+  padding-left: 5px;
+}
+
+.medium-editor-toolbar-form a {
+  text-decoration: none !important;
+
+  &:hover, &:active {
+    text-decoration: none !important;
+  }
+}
+
+.medium-editor-toolbar-input {
+  background: #f5f5f5 !important;
+  margin: 5px 0px !important;
+
+  &:focus, &:active {
+    transform: scale(1) !important;
+  }
+}
+
+.medium-toolbar-arrow-under:after {
+  top: 43px;
 }
