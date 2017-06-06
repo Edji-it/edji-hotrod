@@ -459,6 +459,20 @@ article.content .w.h-f {
 		height: auto;
 	}
 
+	& a {
+		text-decoration: underline;
+		color: #797979;
+		cursor: pointer;
+
+		&:active, &:visited {
+			color: #797979;
+		}
+
+		&:hover {
+			color: $blue;
+		}
+	}
+
 	& h1 {
 		font-size: $readingH1Size;
 	}
