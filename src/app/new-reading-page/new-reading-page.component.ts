@@ -62,7 +62,10 @@ export class NewReadingPage implements OnInit {
             imageDragging: {}
         }, 
         toolbar: {
-            buttons: ['bold', 'italic', 'underline', 'h1', 'h2', 'h3', 'anchor']
+            buttons: ['bold', 'italic', 'underline', 'h1', 'h2', 'h3', {
+                'name' : 'anchor',
+                'contentDefault' : '&nbsp;'
+                }]
         }
     };
 
