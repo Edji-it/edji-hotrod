@@ -469,8 +469,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 if (comment._id) {
                     this.angulartics.eventTrack.next({ action: type + 'CommentCreate', properties: { category: 'projectAction', label: 'attempt' }});
                     // Check if comment should start expanded
-                    if (document.querySelector('.word[index="' + start + '"] .comment')) {
-                        let commentY = document.querySelector('.word[index="' + start + '"] .comment')['offsetTop'];
+                    if (document.querySelector('.w[index="' + start + '"] .comment')) {
+                        let commentY = document.querySelector('.w[index="' + start + '"] .comment')['offsetTop'];
 
                         if (this.lineCountArray[commentY] && this.lineCountArray[commentY][0].expanded) {
                             comment.expanded = true;
