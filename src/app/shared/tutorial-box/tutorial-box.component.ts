@@ -83,7 +83,6 @@ export class TutorialBoxComponent implements OnInit {
   ngOnInit() {
       this.subscriptions.push(
             this._auth.getCurrentUser().subscribe((user) => {
-                console.log(user)
                 if (user.prefs && user.prefs.onboarding && user.prefs.onboarding[this.tutorialName] && user.prefs.onboarding[this.tutorialName].firstDone) {
                     this.isCompleted = true;
                 }
