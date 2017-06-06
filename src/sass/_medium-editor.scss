@@ -170,6 +170,7 @@ $editorToolbarShadow: 0px 1px 3px 0px rgba(0,0,0,0.2);
 
 .medium-editor-toolbar-form a {
   text-decoration: none !important;
+  padding-left: 5px;
 
   &:hover, &:active {
     text-decoration: none !important;
@@ -179,6 +180,10 @@ $editorToolbarShadow: 0px 1px 3px 0px rgba(0,0,0,0.2);
 .medium-editor-toolbar-input {
   background: #f5f5f5 !important;
   margin: 5px 0px !important;
+
+  &:focus, &:active {
+    transform: scale(1);
+  }
 }
 
 .medium-toolbar-arrow-under:after {
