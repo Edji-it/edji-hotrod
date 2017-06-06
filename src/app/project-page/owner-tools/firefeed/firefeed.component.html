@@ -1,0 +1,54 @@
+<!--Fire Feed Pane-->
+<div class="sliding-pane from-left" [ngClass]="{ 'slide-in' : visible }">
+  <div class="container-fluid container--less-pad">
+    <h4>Group Activity
+      <button (click)="hide.emit()" class="close stats-close-btn btn-icon--round" type="button">
+            <span aria-hidden="true">×</span>
+      </button>
+    </h4>
+    <!--<hot-firecard *ngFor="let fireComment of fireComments" [comment]="comment"></hot-firecard>-->
+    <div class="fireBound"><!-- This will be the hot-firecard-->
+        <div class="fire-icon">
+            <span>{{fireComment.user.substring(0,2)}}</span>
+        </div>
+        <div class="fireBlock">
+            <div class="list-item list-item--block fireTime-card">
+                {{ 'Fri Jun 02 2017 07:58:36 GMT-0500 (CDT)' | edjidate:'timeAgo' }}
+            </div>
+            <div class="list-item list-item--block fireComment-card">
+                {{fireComment.comment}}
+            </div>
+            <div class="list-item list-item fireHighlight-card h-1">
+                {{fireComment.words}}
+            </div>
+        </div>
+    </div>
+    <div class="fireBound"><!-- This will be the hot-firecard-->
+        <div class="fire-icon">
+            <span>{{fireComment.user.substring(0,2)}}</span>
+        </div>
+        <div class="fireBlock">
+            <div class="list-item list-item--block fireTime-card">
+                {{ 'Thu Jun 01 2017 06:58:36 GMT-0500 (CDT)' | edjidate:'timeAgo' }}
+            </div>
+            <div class="list-item list-item--block fireComment-card">
+                {{fireComment.comment}}
+            </div>
+            <div class="list-item list-item fireHighlight-card h-1">
+                {{fireComment.words}}
+            </div>
+        </div>
+    </div>
+    <div class="fireBound"><!-- This will be the hot-firecard-->
+        <div class="fire-icon">
+            <span>{{fireComment.user.substring(0,2)}}</span>
+        </div>
+        <div class="fireBlock">
+            <div class="list-item list-item--block fireTime-card">
+                {{ 'Wed May 31 2017 02:58:36 GMT-0500 (CDT)' | edjidate:'timeAgo' }}
+            </div>
+            {{fireComment.title}}
+        </div>
+    </div>
+  </div>
+</div>

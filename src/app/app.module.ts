@@ -45,6 +45,7 @@ import { LoginForm, GuestForm } from './forms';
 import { LoginModal, ResetPassComponent, DeleteCommentModal, DeleteReadingModal, DeleteProjectModal, AddProjectModal, LoginRequiredModal } from './modals';
 import { AnnotatorComponent, CommentComponent, TextCommentComponent, EmojiCommentComponent, EmojiKeyboardComponent } from './annotator';
 import { ProjectPageComponent, ProjectInfoComponent, OwnerToolsComponent, LeaderboardComponent } from './project-page';
+import { FirefeedComponent } from './project-page/owner-tools/firefeed/firefeed.component';
 import { ReadingPageComponent, DeleteProjectComponent } from './reading-page';
 import { NewReadingPage, UploadModalComponent, UploadPdfModalComponent } from './new-reading-page';
 import { DashboardComponent, JoinedDashComponent, CreatedDashComponent, TutorialReadingComponent, ReadingCardComponent } from './dashboard';
@@ -116,6 +117,7 @@ type StoreType = {
     AnnotatorComponent,
     NewReadingPage,
     LeaderboardComponent,
+    FirefeedComponent,
     UploadModalComponent,
     TutorialReadingComponent,
     UploadPdfModalComponent,
