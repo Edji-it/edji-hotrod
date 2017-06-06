@@ -364,12 +364,6 @@ $nextB: 68;
 	background: rgba($nextR, $nextG, $nextB, $thisA);
 }
 
-.w.a {
-	text-decoration: underline;
-	color: $blue;
-	cursor: pointer;
-}
-
 .h-0 {
 	background: transparent;
 }
@@ -467,7 +461,16 @@ article.content .w.h-f {
 
 	& a {
 		text-decoration: underline;
-		color: $blue;
+		color: #797979;
+		cursor: pointer;
+
+		&:active, &:visited {
+			color: #797979;
+		}
+
+		&:hover {
+			color: $blue;
+		}
 	}
 
 	& h1 {

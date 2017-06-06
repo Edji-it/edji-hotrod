@@ -60,7 +60,7 @@
 					(mobileDeactivate)="inactivateComment()"
 					[class.imageComment]="comment['loc']"
 					[style.top]="comment['loc'] ? getClosestRowY(comment['loc']['y']/100 * imageHeight[i]) + 'px' : '0px'">
-				</edji-comment><a *ngIf="w.styles.indexOf('a') > -1" [href]="(w.url && w.url.indexOf('http')) ? w.url.replace('https//', '//') : ('//' + w.url)">{{w.str}}</a>{{ w.styles.indexOf("space") > -1 ? '&nbsp;' : w.str }}<div *ngIf="w.styles.indexOf('img') > -1" class="img-wrap">
+				</edji-comment><a *ngIf="w.styles.indexOf('a') > -1" [attr.index]="i" [href]="(w.url && w.url.indexOf('//')) ? w.url : ('//' + w.url)" target="_blank">{{w.str}}</a>{{ w.styles.indexOf('a') > -1 ? '' : w.styles.indexOf('space') > -1 ? '&nbsp;' : w.str }}<div *ngIf="w.styles.indexOf('img') > -1" class="img-wrap">
 						<div *ngIf="imageHotspotPlaceholder.index == i && (imageHotspotPlaceholder.focus || imageHotspotPlaceholder.preview)" class="hotspot" [class.focused]="imageHotspotPlaceholder.focus" [style.left]="imageHotspotPlaceholder.x  + '%' " [style.top]="imageHotspotPlaceholder.y + '%' "></div>
 						<div *ngFor="let comment of commentsByIndex[i]" [class.hidden]="(!project.heat_vision && user._id !== project.teacher_id) && comment.user_id !== user._id && comment.user_id !== project.teacher_id" class="hotspot" 
 						[style.top]="comment['loc'] ? comment['loc']['y'] + '%' : '0%'" 
