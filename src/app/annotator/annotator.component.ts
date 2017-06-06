@@ -596,7 +596,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             // Selections often happen at the text node level, inside the actual element
             // In which case we need to reference its parent node
             // Note: we tried node.hasOwnProperty here and would sometimes get a false true resolution of the if statement... not sure how that is possible
-            if(!!node.className && node.className.indexOf('word') > -1) {
+            if(!!node.className && node.className.indexOf('w') > -1) {
                 return parseInt(node.getAttribute('index'));
             } else {
                 return parseInt(node.parentNode.getAttribute('index'));
@@ -619,10 +619,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         }
 
         // Fix for commenting on images in Safari
-        if (!start) {
+        if (!start && start != 0) {
             start = end;
         }
-        if (!end) {
+        if (!end && end != 0) {
             end = start;
         }
         
