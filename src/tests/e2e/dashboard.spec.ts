@@ -115,16 +115,21 @@ describe('Dashboard Page', () => {
             let readingTitle = element(by.cssContainingText('.reading-title-text', uniqueTitle));
             browser.wait(EC.presenceOf(readingTitle), 5000, "never saw a unique readingTitle");
 
-            let allReadings = element.all(by.css(".reading-card"));
-            browser.wait(EC.presenceOf(allReadings.first()), 5000, "never saw a readingCard");
-            let targetDropdown = allReadings.filter(function(elem, index) {
-                return elem.element(by.cssContainingText('.reading-title-text', uniqueTitle)) ===  readingTitle;
-            }).toElementFinder_().element(by.id('optionsWrap'));
-            targetDropdown.click();
+            browser.wait(EC.elementToBeClickable(element(by.css('button[testFindOptions="' + uniqueTitle + '"]'))), 8000, "reading card options button never became clickable after load");
+            element(by.css('button[testFindOptions="' + uniqueTitle + '"]')).click();
 
-            let targetDelButton = targetDropdown.element(by.cssContainingText('.dropdown-item', 'Delete'));
-            browser.wait(EC.presenceOf(targetDelButton), 5000, "never saw a targetDelButton");
-            targetDelButton.click();
+            browser.wait(EC.elementToBeClickable(element(by.css('button[testDelete="' + uniqueTitle + '"]'))), 5000, "copy and edit button never became clicakble after options dropdown click");
+            element(by.css('button[testDelete="' + uniqueTitle + '"]')).click();
+
+            // browser.wait(EC.presenceOf(dashboard.readingCards.first()), 5000, "never saw a readingCard");
+            // let targetDropdown = dashboard.readingCards.filter(function(elem, index) {
+            //     return elem.element(by.cssContainingText('.reading-title-text', uniqueTitle)) ===  readingTitle;
+            // }).toElementFinder_().element(by.id('optionsWrap'));
+            // targetDropdown.click();
+
+            // let targetDelButton = targetDropdown.element(by.cssContainingText('.dropdown-item', 'Delete'));
+            // browser.wait(EC.presenceOf(targetDelButton), 5000, "never saw a targetDelButton");
+            // targetDelButton.click();
             browser.sleep(3000);
 
             browser.wait(EC.invisibilityOf(readingTitle), 5000, "saw the unique readingTitle (END). We aren't supposed to.");

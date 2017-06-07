@@ -42,7 +42,7 @@
                 <!-- Copy & Edit dropdown button -->
                 <button (click)="showOptions=false;" [routerLink]="['/new-reading/']" [queryParams]="{ copyId: reading._id }" class="dropdown-item" [attr.testFindCopyAndEdit]="reading.title">Copy and Edit</button>
                 <!-- Delete dropdown button -->
-                <button (click)="relevantReading = reading; showDeleteReadingModal = true; showOptions = false;" class="dropdown-item">Delete</button>
+                <button (click)="relevantReading = reading; showDeleteReadingModal = true; showOptions = false;" class="dropdown-item" [attr.testDelete]="reading.title">Delete</button>
             </div>
         </div>
     </div>
