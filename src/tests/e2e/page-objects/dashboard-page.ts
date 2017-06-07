@@ -23,7 +23,8 @@ export class Dashboard implements PageObjectInterface
      //public optionsList = element.all(by.css('.reading-card-menu'))
 
     // Dropdown buttons
-    public dropDownMenu     = element(by.id('optionsWrap'));
+    public dropDownMenu     = element(by.css('.btn-icon--plain'));
+    public firstDropdownMenu = element.all(by.css('.btn-icon--plain')).first();
     public copyAndEditButton = element(by.cssContainingText('.dropdown-item', 'Copy and Edit'));
     public createNewGroupButton = element(by.cssContainingText('.dropdown-item', 'Create New Group'));
     public deleteButton     = element(by.cssContainingText('.dropdown-item', 'Delete'));

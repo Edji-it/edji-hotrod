@@ -115,6 +115,7 @@ describe('Dashboard Page', () => {
             let readingTitle = element(by.cssContainingText('.reading-title-text', uniqueTitle));
             browser.wait(EC.presenceOf(readingTitle), 5000, "never saw a unique readingTitle");
 
+<<<<<<< Updated upstream
             browser.wait(EC.elementToBeClickable(element(by.css('button[testFindOptions="' + uniqueTitle + '"]'))), 8000, "reading card options button never became clickable after load");
             element(by.css('button[testFindOptions="' + uniqueTitle + '"]')).click();
 
@@ -130,6 +131,17 @@ describe('Dashboard Page', () => {
             // let targetDelButton = targetDropdown.element(by.cssContainingText('.dropdown-item', 'Delete'));
             // browser.wait(EC.presenceOf(targetDelButton), 5000, "never saw a targetDelButton");
             // targetDelButton.click();
+=======
+            browser.wait(EC.presenceOf(dashboard.readingCards.first()), 5000, "never saw a readingCard");
+            let targetDropdown = dashboard.readingCards.filter(function(elem, index) {
+                return elem.element(by.cssContainingText('.reading-title-text', uniqueTitle)) ===  readingTitle;
+            }).toElementFinder_().element(by.id('optionsWrap'));
+            targetDropdown.click();
+
+            let targetDelButton = targetDropdown.element(by.cssContainingText('.dropdown-item', 'Delete'));
+            browser.wait(EC.presenceOf(targetDelButton), 5000, "never saw a targetDelButton");
+            targetDelButton.click();
+>>>>>>> Stashed changes
             browser.sleep(3000);
 
             browser.wait(EC.invisibilityOf(readingTitle), 5000, "saw the unique readingTitle (END). We aren't supposed to.");
@@ -147,9 +159,9 @@ describe('Dashboard Page', () => {
             dashboard.getPage();
 
             // Click the dropdown menu
-            browser.wait(EC.presenceOf(dashboard.dropDownMenu), 5000, "never saw a dropdownMenu");
-            browser.wait(EC.elementToBeClickable(dashboard.dropDownMenu), 5000, "create new group button was never clickable");
-            dashboard.dropDownMenu.click();
+            browser.wait(EC.presenceOf(dashboard.firstDropdownMenu), 5000, "never saw a dropdownMenu");
+            browser.wait(EC.elementToBeClickable(dashboard.firstDropdownMenu), 5000, "create new group button was never clickable");
+            dashboard.firstDropdownMenu.click();
 
             // Click the create new group button & create a new project
             dashboard.createNewGroupButton.click();
