@@ -33,35 +33,7 @@
     border: none;
 }
 
-.fireComment-card {
-    margin: 0;
-    max-width: 100%;
-    border-bottom: none;
-    -moz-border-radius: 0px;
-    -webkit-border-radius: 4px 4px 0px 0px;
-    border-radius: 4px 4px 0px 0px;
-    padding: 5px;
-}
-
-.fireHighlight-card {
-    margin: 0;
-    max-width: 100%;
-    border-top: none;
-    padding: 5px;
-}
-
 .fireBound {
     margin: 20px 0px;
     overflow: hidden;
-}
-
-.fireBlock:before {
-    content: ' ';
-    display: block;
-    position: absolute;
-    left: 27px;
-    width: 0px;
-    height: 61%;
-    top: 68px;
-    border-left: 1px dashed #CFCFCF;
 }
