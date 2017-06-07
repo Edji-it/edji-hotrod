@@ -4,6 +4,7 @@ import { PageObjectInterface } from './PageObjectInterface';
 export class NewReading implements PageObjectInterface
 {
     /*
+        Last Modified: 6.1.17
         Page Object for the New Reading page.
     */
 
@@ -43,6 +44,36 @@ export class NewReading implements PageObjectInterface
     public groupString = 'Test Group 001';
 
     public findIdExp = new RegExp(/([A-Za-z0-9]){24}/);
+
+    public enterSampleReading = function() {
+
+        let EC = protractor.ExpectedConditions;
+
+        // Open and wait for New Reading page
+        this.getPage();
+        browser.wait(EC.elementToBeClickable(this.titleInput), 5000);
+
+        // Enter sample Reading into form, but clear group label
+        this.titleInput.sendKeys(this.titleString);
+        this.contentInput.sendKeys(this.contentShortString);
+        this.sourceInput.sendKeys(this.sourceString);
+
+        browser.wait(EC.elementToBeClickable(this.addButton), 5000, "login button never became clickable after login form entry");
+        this.addButton.click();
+
+        browser.wait(EC.elementToBeClickable(this.groupInput), 5000, "group input became clickable");
+        this.groupInput.clear();
+        // This field needs special attention to trigger the required
+        this.groupInput.sendKeys(' ');
+        this.groupInput.sendKeys(protractor.Key.BACK_SPACE); 
+
+        // Submit New Reading
+        browser.wait(EC.elementToBeClickable(this.finalizeButton), 5000, "login button never became clickable after login form entry");
+        this.finalizeButton.click();
+        
+        // Should see error for empty group label
+        browser.wait(EC.presenceOf(this.groupError), 5000, "never saw an error for empty group label");
+    }; // enterSampleReading ()
 
     // get the login page
     getPage() : void 
