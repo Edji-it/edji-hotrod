@@ -113,18 +113,11 @@ describe('Dashboard Page', () => {
             // Go to the dashboard
             dashboard.getPage();
 
-            let readingTitle = element(by.cssContainingText('.reading-title-text', uniqueTitle));
-            browser.wait(EC.presenceOf(readingTitle), 5000, "never saw a unique readingTitle");
-
             browser.wait(EC.elementToBeClickable(element(by.css('button[testFindOptions="' + uniqueTitle + '"]'))), 8000, "reading card options button never became clickable after load");
             element(by.css('button[testFindOptions="' + uniqueTitle + '"]')).click();
 
             browser.wait(EC.elementToBeClickable(element(by.css('button[testDelete="' + uniqueTitle + '"]'))), 5000, "copy and edit button never became clicakble after options dropdown click");
             element(by.css('button[testDelete="' + uniqueTitle + '"]')).click();
-
-            let targetDelButton = element(by.cssContainingText('.dropdown-item', 'Delete'));
-            browser.wait(EC.presenceOf(targetDelButton), 5000, "never saw a targetDelButton");
-            targetDelButton.click();
 
             let deleteModal = element(by.id('deleteReadingModal'));
             browser.wait(EC.presenceOf(deleteModal), 5000, "never saw a deleteModal");
@@ -135,17 +128,12 @@ describe('Dashboard Page', () => {
 
             dashboard.getPage();
 
-            browser.wait(EC.invisibilityOf(readingTitle), 5000, "saw the unique readingTitle (END). We aren't supposed to.");
-
+            browser.wait(EC.invisibilityOf(element(by.cssContainingText('.reading-title-text', uniqueTitle))), 5000, "saw the unique readingTitle (END). We aren't supposed to.");
         }); // it ("Make a new reading then delete it")
 
         it ("Delete a project off of a new reading.", () => {
 
             let uniqueGroupTitle = "Cynder is such a cool dog";
-
-            dashboard.getPage();
-
-            newReading.enterSampleReading();
 
             dashboard.getPage();
 
@@ -155,8 +143,21 @@ describe('Dashboard Page', () => {
             dashboard.firstDropdownMenu.click();
 
             // Click the create new group button & create a new project
-            dashboard.createNewGroupButton.click();
-            dashboard.createNewGroupModalInput(uniqueGroupTitle);
+            let newGroupButton = element(by.buttonText('Create New Group'));
+            newGroupButton.click();
+
+            // Use the modal.
+            let groupNameInput      = element(by.id('newProjectLabel'));
+            let createGroupButton   = element(by.id("buttonCreateGroup")); 
+            browser.wait(EC.presenceOf(groupNameInput), 5000, "never saw a groupNameInput");
+            browser.wait(EC.elementToBeClickable(groupNameInput), 5000, "groupNameInput was never clickable");
+
+            groupNameInput.sendKeys(uniqueGroupTitle);
+            
+            browser.wait(EC.presenceOf(newGroupButton), 5000, "never saw a createGroupButton");
+            // browser.wait(EC.elementToBeClickable(newGroupButton), 5000, "createGroupButton was never clickable");
+
+            createGroupButton.click();
 
             // We're gonna identify the new project by it's new group class since it was just created. 
             let newProjectCard = element(by.css('.new-project'));
