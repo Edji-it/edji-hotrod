@@ -19,8 +19,44 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
 
   @Input() reading: Reading;
 
-  ngOnInit() { }
-  
+  private showOptions     : boolean = false;
+  private showOptionsV    : boolean = false;
+  private showVersions    : boolean = false;
+  private relevantReading : any = {};
+  private relevantProject : Project;
+  private showAddModal    : boolean = false;
+  private showDeleteReadingModal : boolean = false;
+  private showDeleteProjectModal : boolean = false;
+
+  private versionHeight = 50;
+
+  constructor(
+    private _readings: ReadingService,
+    private _projects: ProjectService,
+    private angulartics: Angulartics2
+  ) { }
+
+  ngOnInit() {
+    this.subscriptions.push(
+      // Sometimes versions are updated, but the component maintains the version array, so we need to listen for updates
+      this._readings.refreshVersions.subscribe(
+        projectId => {
+          this.versions.forEach( readingVersion => {
+            readingVersion.projects && readingVersion.projects.forEach(
+              versionProject => {
+                if (versionProject._id == projectId) {
+                  // If the targeted Project is here, let's refresh our versions
+                  this.versions = []
+                  this.getVersions(this.reading.version_id)
+                }
+              }
+            )
+          })
+        }
+      )
+    )
+  }
+
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   } //ngOnDestroy
