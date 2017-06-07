@@ -16,24 +16,22 @@ import { Dashboard, Login, NewReading, Sidebar } from './page-objects';
 describe('Dashboard Page', () => {
 
     /* ---- Variable Initialization --------------- */
-    let login = new Login();
-    let dashboard = new Dashboard();
-    let sidebar = new Sidebar();
+    let login       = new Login();
+    let dashboard   = new Dashboard();
+    let sidebar     = new Sidebar();
+    let newReading  = new NewReading();
     let EC = protractor.ExpectedConditions; // vital
 
     beforeAll(() => {
-        // make sure the user is logged in before the suite runs
+         // Login as test account that we can fill with junk data
         login.getPage();
         browser.wait(EC.elementToBeClickable(login.loginButton), 5000);
-        login.enterTeacherAccountCredentials();
+        login.enterUsername(login.botUser);
+        login.enterPassword(login.botPassword);
         browser.wait(EC.elementToBeClickable(login.loginButton), 5000);
         login.loginButton.click();
+        browser.wait(EC.urlContains("dashboard"), 5000, "never arrived at dashboard");
     })
-
-    afterEach(() => {
-        // navigate back to the dashboard after every test
-        // dashboard.getPage();
-    });
 
     afterAll(() => {
         sidebar.logout();
@@ -78,11 +76,109 @@ describe('Dashboard Page', () => {
 
     /* ---- Dashboard Tests ------------------------ */
 
-     /* Test: Student account can log out successfully
-        - Log in with Student account
-        - Arrive at Dashboard
-        - Log out and arrive at home page
+    /* Test: Can delete a project
+    6.1.17
     */
+    // describe("Delete Readings & Projects", () => {
+    //     it("Make a new reading then delete it.", () => {
+
+    //         // Approach 2
+    //         let uniqueTitle: string = new Date().valueOf().toString();
+
+    //         // Create a new reading to control it properly thru the process
+    //         // Open and wait for New Reading page
+    //         newReading.getPage();
+    //         browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000);
+
+    //         // Enter sample Reading into form
+    //         newReading.titleInput.sendKeys(uniqueTitle);
+    //         newReading.contentInput.sendKeys(newReading.contentShortString);
+    //         newReading.sourceInput.sendKeys(newReading.sourceString);
+
+    //         // Group Label has content prefilled, so we clear it
+    //         // newReading.groupInput.clear();
+    //         // newReading.groupInput.sendKeys(newReading.groupString);
+
+    //         // Submit New Reading
+    //         browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "publish reading button never became clickable after new reading form entry");
+    //         //newReading.addButton.submit();
+    //         newReading.addButton.click();
+    //         browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
+    //         newReading.finalizeButton.click();
+
+    //         // Should redirect to Project page for new reading
+    //         browser.wait(EC.urlContains("project"), 7500, "never arrived at the reading page after published");
+
+    //         // Go to the dashboard
+    //         dashboard.getPage();
+
+    //         let readingTitle = element(by.cssContainingText('.reading-title-text', uniqueTitle));
+    //         browser.wait(EC.presenceOf(readingTitle), 5000, "never saw a unique readingTitle");
+
+    //         // browser.wait(EC.elementToBeClickable(element(by.css('button[testFindOptions="' + uniqueTitle + '"]'))), 8000, "reading card options button never became clickable after load");
+    //         // element(by.css('button[testFindOptions="' + uniqueTitle + '"]')).click();
+
+    //         // browser.wait(EC.elementToBeClickable(element(by.css('button[testDelete="' + uniqueTitle + '"]'))), 5000, "copy and edit button never became clicakble after options dropdown click");
+    //         // element(by.css('button[testDelete="' + uniqueTitle + '"]')).click();
+
+    //         // // browser.wait(EC.presenceOf(dashboard.readingCards.first()), 5000, "never saw a readingCard");
+    //         // // let targetDropdown = dashboard.readingCards.filter(function(elem, index) {
+    //         // //     return elem.element(by.cssContainingText('.reading-title-text', uniqueTitle)) ===  readingTitle;
+    //         // // }).toElementFinder_().element(by.id('optionsWrap'));
+    //         // // targetDropdown.click();
+
+    //         // // let targetDelButton = targetDropdown.element(by.cssContainingText('.dropdown-item', 'Delete'));
+    //         // // browser.wait(EC.presenceOf(targetDelButton), 5000, "never saw a targetDelButton");
+    //         // // targetDelButton.click();
+    //         // browser.sleep(3000);
+
+    //         // browser.wait(EC.invisibilityOf(readingTitle), 5000, "saw the unique readingTitle (END). We aren't supposed to.");
+
+    //     }); // it ("Make a new reading then delete it")
+
+    //     // it ("Delete a project off of a new reading.", () => {
+
+    //     //     let uniqueGroupTitle = "Cynder is such a cool dog";
+
+    //     //     dashboard.getPage();
+
+    //     //     newReading.enterSampleReading();
+
+    //     //     dashboard.getPage();
+
+    //     //     // Click the dropdown menu
+    //     //     browser.wait(EC.presenceOf(dashboard.firstDropdownMenu), 5000, "never saw a dropdownMenu");
+    //     //     browser.wait(EC.elementToBeClickable(dashboard.firstDropdownMenu), 5000, "create new group button was never clickable");
+    //     //     dashboard.firstDropdownMenu.click();
+
+    //     //     // Click the create new group button & create a new project
+    //     //     dashboard.createNewGroupButton.click();
+    //     //     dashboard.createNewGroupModalInput(uniqueGroupTitle);
+
+    //     //     // We're gonna identify the new project by it's new group class since it was just created. 
+    //     //     let newProjectCard = element(by.css('.new-project'));
+    //     //     browser.wait(EC.presenceOf(newProjectCard), 5000, "never saw a newProjectCard");
+
+    //     //     // Now click that delete button, baby
+    //     //     let newProjectCardDelBtn = newProjectCard.element(by.css(".btn--delete-project"));
+    //     //     newProjectCardDelBtn.click();
+
+    //     //     // Click ok on that there delete modal
+    //     //     let delProjectModal = element(by.id('deleteProjectModal'));
+    //     //     browser.wait(EC.presenceOf(delProjectModal), 5000, "never saw a delProjectModal");
+    //     //     let delProjectBtnModal = element(by.id("delProjectBtnModal"));
+    //     //     browser.wait(EC.presenceOf(delProjectBtnModal), 5000, "never saw a delProjectBtn on the delProjectModal");
+    //     //     browser.wait(EC.elementToBeClickable(delProjectBtnModal), 5000, "delProjectBtn on the delProjectModal was never clickable");
+    //     //     delProjectBtnModal.click();
+
+    //     //     // expect((newProjectCard.isPresent())).toEqual(false);
+    //     //     browser.sleep(3000);
+    //     //     browser.wait(EC.invisibilityOf(newProjectCard), 5000, "saw a newProjectCard (END). We aren't supposed to.");
+
+    //     //     // False Positive
+    //     //     // browser.wait(EC.visibilityOf(newProjectCard), 5000, "saw a newProjectCard (END). We aren't supposed to.");
+    //     // }); // it ("Delete a project off of a new reading.", () => {
+    // });
 
     /* Test: Teacher account can log out successfully
         - Log in with Teacher account

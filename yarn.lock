@@ -201,10 +201,6 @@ angular-router-loader@^0.4.0:
   dependencies:
     loader-utils "^0.2.15"
 
-angular2-autosize@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/angular2-autosize/-/angular2-autosize-1.0.1.tgz#df9d34231eef1d49f306b29ab353c8d9e9b0930f"
-
 angular2-click-outside@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/angular2-click-outside/-/angular2-click-outside-0.1.0.tgz#fa156b0f7893311cfbbbaba1ba02127afcf7db87"

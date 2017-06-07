@@ -66,9 +66,26 @@ textarea.text-comment-input,
     @extend %noSelect;
 
     .active & {
+        min-height: 90px;
         max-height: none !important;
         padding: 8px 23px 8px 10px !important;
+        cursor: text;
         @extend %textSelect;
+        &::-moz-selection {
+        background-color: #cdcdcd;
+        }
+
+        &::selection {
+        background-color: #cdcdcd;
+        }
+
+        &::-moz-selection {
+        background-color: #cdcdcd;
+        }
+
+        &::selection {
+        background-color: #cdcdcd;
+        }
     }
 
     &:disabled {
