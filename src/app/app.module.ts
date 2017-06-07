@@ -24,6 +24,7 @@ import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 // Services
 import { AppState, InternalStateType } from './app.service';
 import { AuthService, BumblebeeService, ReadingService, ProjectService, SocketService } from './shared';
+import { CommentService } from './shared/comment.service';
 import { ReuseStrategy } from './route-reuse-strategy';
 
 // Directives
@@ -70,6 +71,7 @@ const APP_PROVIDERS = [
   AuthService,
   ReadingService,
   ProjectService,
+  CommentService,
   SocketService,
   BumblebeeService,
   { 
