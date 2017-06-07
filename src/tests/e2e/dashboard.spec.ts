@@ -22,6 +22,7 @@ describe('Dashboard Page', () => {
     let newReading  = new NewReading();
     let EC = protractor.ExpectedConditions; // vital
 
+
     beforeAll(() => {
          // Login as test account that we can fill with junk data
         login.getPage();
@@ -121,16 +122,18 @@ describe('Dashboard Page', () => {
             browser.wait(EC.elementToBeClickable(element(by.css('button[testDelete="' + uniqueTitle + '"]'))), 5000, "copy and edit button never became clicakble after options dropdown click");
             element(by.css('button[testDelete="' + uniqueTitle + '"]')).click();
 
-            // browser.wait(EC.presenceOf(dashboard.readingCards.first()), 5000, "never saw a readingCard");
-            // let targetDropdown = dashboard.readingCards.filter(function(elem, index) {
-            //     return elem.element(by.cssContainingText('.reading-title-text', uniqueTitle)) ===  readingTitle;
-            // }).toElementFinder_().element(by.id('optionsWrap'));
-            // targetDropdown.click();
+            let targetDelButton = element(by.cssContainingText('.dropdown-item', 'Delete'));
+            browser.wait(EC.presenceOf(targetDelButton), 5000, "never saw a targetDelButton");
+            targetDelButton.click();
 
-            // let targetDelButton = targetDropdown.element(by.cssContainingText('.dropdown-item', 'Delete'));
-            // browser.wait(EC.presenceOf(targetDelButton), 5000, "never saw a targetDelButton");
-            // targetDelButton.click();
-            browser.sleep(3000);
+            let deleteModal = element(by.id('deleteReadingModal'));
+            browser.wait(EC.presenceOf(deleteModal), 5000, "never saw a deleteModal");
+            let deleteConfirm = element(by.id('delBtnModal'));
+            browser.wait(EC.presenceOf(deleteConfirm), 5000, "never saw a deleteConfirm on the deleteModal");
+            browser.wait(EC.elementToBeClickable(deleteConfirm), 5000, "deleteConfirm on the deleteModal was never clickable");
+            deleteConfirm.click();
+
+            dashboard.getPage();
 
             browser.wait(EC.invisibilityOf(readingTitle), 5000, "saw the unique readingTitle (END). We aren't supposed to.");
 
