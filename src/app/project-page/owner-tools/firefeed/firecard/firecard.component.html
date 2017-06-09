@@ -13,7 +13,7 @@
             {{ fireComment.data }}
         </div>
         <div class="list-item list-item fireHighlight-card h-1">
-            {{fireComment.text}}
+            {{ fireComment.text ? fireComment.text : '...'}}
         </div>
     </div>
 </div>

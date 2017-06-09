@@ -14,10 +14,17 @@ export class EdjiDatePipe implements PipeTransform {
       // Convert the passed in timestamp to a time ago format
       let now = new Date()
       let one_minute = 1000 * 60
+      let one_second = 1000
+      let secDiff = Math.abs(Math.ceil((time.getTime() - now.getTime())/(one_second)))
       let minDiff = Math.abs(Math.ceil((time.getTime() - now.getTime())/(one_minute)))
       let hourDiff
       let dayDiff
       let diffText = ''
+
+      if (secDiff > 59) {
+          minDiff = Math.floor(secDiff/60)
+          secDiff = secDiff%60
+      }
 
       if (minDiff > 59) {
           hourDiff = Math.floor(minDiff/60)
