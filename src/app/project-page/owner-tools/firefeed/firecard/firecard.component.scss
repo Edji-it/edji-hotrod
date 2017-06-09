@@ -29,8 +29,12 @@
     padding: 0;
     color: #ADADAD;
     font-size: 11px;
-    font-style: italic;
     border: none;
+}
+
+.fireTime-card__time {
+    font-style: italic;
+    padding-left: 0.25em;
 }
 
 .fireComment-card {

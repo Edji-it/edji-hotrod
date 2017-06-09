@@ -4,8 +4,9 @@
     </div>
     <div class="fireBlock">
         <div class="list-item list-item--block fireTime-card">
-            {{ fireComment.createdAt | edjidate:'timeAgo' }}
+            {{fireComment.author}}<span class="fireTime-card__time">&nbsp;{{ fireComment.createdAt | edjidate:'timeAgo' }}</span>
         </div>
+        
         <div class="list-item list-item--block fireComment-card" *ngIf="fireComment.type == 'emoji' || !fireComment.type">
             <div *ngIf="fireComment.data.length > 0" class="emoji-comment-input" [innerHtml]="fireComment.data | emojione"></div>
         </div>

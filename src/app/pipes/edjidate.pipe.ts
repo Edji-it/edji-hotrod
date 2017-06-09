@@ -43,7 +43,11 @@ export class EdjiDatePipe implements PipeTransform {
             diffText += dayDiff + " days"
           }
       } else if ( typeof(hourDiff) !== 'undefined' ) {
-          diffText += hourDiff + " hours"
+          if (hourDiff === 1) {
+            diffText += hourDiff + " hour"
+          } else {
+            diffText += hourDiff + " hours"
+          }
       } else if (minDiff < 1) {
           diffText += "less than 1 min"
       } else if (minDiff < 1) {
