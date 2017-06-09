@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 // Project dependencies
 import { ProjectService } from '../../../shared/project.service';
+import { ReadingService } from '../../../shared/reading.service';
 
 @Component({
   selector: 'hot-firefeed',
@@ -14,9 +15,11 @@ export class FirefeedComponent implements OnInit {
   @Output() hide: EventEmitter<any> = new EventEmitter()
 
   private project: any
+  private currentReading: any
 
   constructor(
-        private _projects: ProjectService
+        private _projects: ProjectService, 
+        private _readings: ReadingService
   ) { }
 
   ngOnInit() {
@@ -31,5 +34,14 @@ export class FirefeedComponent implements OnInit {
             // Show error
             console.log('cannot subscribe to project')
           })
+
+      this._readings.currentReading.subscribe(
+            reading => {
+                this.currentReading = reading;
+            },
+            error => {
+                console.error(error);
+            }
+        )
    }
 }

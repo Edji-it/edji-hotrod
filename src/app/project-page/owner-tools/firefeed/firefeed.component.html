@@ -13,9 +13,9 @@
         </div>
         <div class="fireBlock">
             <div class="list-item list-item--block fireTime-card">
-                {{ 'Wed May 31 2017 02:58:36 GMT-0500 (CDT)' | edjidate:'timeAgo' }}
+                {{ currentReading.createdAt | edjidate:'timeAgo' }}
             </div>
-            Reading Title Goes Here
+            {{currentReading.title}}
         </div>
     </div>
   </div>
