@@ -92,11 +92,11 @@ export class ReadingService {
               this.getAll()
             } else if (reading._id == targetReading._id) {
               // Single version readings we can remove instantly
-              readings.splice(index)
+              readings.splice(index, 1)
             }
 
-          }
-        )
+          } // (reading, index) =>
+        ) // readings.forEach
         this.userReadingsSource.next(readings)
         return value
       });
