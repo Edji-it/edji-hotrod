@@ -540,7 +540,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // Clear active comment
         this.inactivateComment();
         // Remove comment form local Comments array
-        let commentsLength = this.project.comments
+        let commentsLength: number = this.project.comments.length
         for (let i=0; i < commentsLength; i++) {
             if (this.project.comments[i]._id == commentId) {
                 this.project.comments.splice(i, 1)
