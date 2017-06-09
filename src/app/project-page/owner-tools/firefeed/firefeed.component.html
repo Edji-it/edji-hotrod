@@ -6,7 +6,7 @@
             <span aria-hidden="true">×</span>
       </button>
     </h4>
-    <!--<hot-firecard *ngFor="let fireComment of fireComments" [fireComments]="fireComments"></hot-firecard>-->
+    <hot-firecard *ngFor="let fireComment of project.comments && project.comments.reverse()" [fireComment]="fireComment"></hot-firecard>
     <div class="fireBound"><!-- This will be the hot-firecard-->
         <div class="fire-icon">
             <span>JK</span>

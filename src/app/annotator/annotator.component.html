@@ -71,6 +71,30 @@
 	</div>
 </div>
 
+<!--<div class="sliding-pane from-left slide-in">
+	<div class="container-fluid container--less-pad">
+		<div class="fireBound" *ngFor="let fireComment of project.comments">
+			<div class="fire-icon">
+				<span>{{fireComment.author.substring(0,2)}}</span>
+			</div>
+			<div class="fireBlock">
+				<div class="list-item list-item--block fireTime-card">
+					{{ fireComment.createdAt | edjidate:'timeAgo' }}
+				</div>
+				<div class="list-item list-item--block fireComment-card" *ngIf="fireComment.type == 'emoji' || !fireComment.type">
+					<div *ngIf="fireComment.data.length > 0" class="emoji-comment-input" [innerHtml]="fireComment.data | emojione"></div>
+				</div>
+				<div class="list-item list-item--block fireComment-card" *ngIf="fireComment.type == 'text'">
+					{{ fireComment.data }}
+				</div>
+				<div class="list-item list-item fireHighlight-card h-1">
+					{{ fireComment.text ? fireComment.text : '...'}}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>-->
+
 <div class="button__row">
 	<button *ngIf="user.type == 'temp'" [routerLink]="['/register']" [queryParams]="{ userId: user._id }" class="btn btn-secondary">Save this reading</button>
 	<button *ngIf="reading && user.type == 'temp'" [routerLink]="['/register']" [queryParams]="{ reading: reading._id, userId: user._id }" class="btn btn-primary">Copy and edit</button>

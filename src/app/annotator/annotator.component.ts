@@ -34,6 +34,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     private reading: Reading = <Reading>{};
     
     private commentsByIndex: EdjiComment[][] = [];
+    private fireComments: EdjiComment[] = [];
 
     private highlightArray: number[] = [];
     private alwaysHighlightArray: number[] = [];
@@ -504,21 +505,25 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         let start = comment.start;
         // Give it the Project Id to pass down to the Comment Component
         this.decorateComment(comment);
+
+        // Add comment to local project array
+        this.project.comments.push(comment)
+        let commentPointer = this.project.comments[this.project.comments.length - 1]
         
         // Add Comment to local array
         if (this.commentsByIndex[start]) {
-            this.commentsByIndex[start].push(comment);
+            this.commentsByIndex[start].push(commentPointer);
             if (addQuietly !== true) { 
                 this.setActiveCommentByIndex(true, start, this.commentsByIndex[start].length - 1);
             }
         } else {
-            this.commentsByIndex[start] = [ comment ];
+            this.commentsByIndex[start] = [ commentPointer ];
             if (addQuietly !== true) { 
                 this.setActiveCommentByIndex(true, start, 0);
             }
         }
         this.updateAllLineCounts();
-        this._projects.commentStats.addCommentToStats(comment, 1)
+        this._projects.commentStats.addCommentToStats(commentPointer, 1)
     }
 
     private decorateComment(comment: any) {
@@ -540,6 +545,13 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // Clear active comment
         this.inactivateComment();
         // Remove comment form local Comments array
+        let commentsLength = this.project.comments
+        for (let i=0; i < commentsLength; i++) {
+            if (this.project.comments[i]._id == commentId) {
+                this.project.comments.splice(i, 1)
+                break
+            }
+        }
         this.commentsByIndex[index].splice(commentIndex,1);
         // Update line counts
         this.updateAllLineCounts();
@@ -881,7 +893,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      * Decides if the Emoji Keyboard is active
      */
     private isEmojiKeyboardActive() : boolean {
-        return this.activeComment.active && (!this.activeComment.type || this.activeComment.type === 'emoji') && this.activeComment.user_id === this.user._id;
+        return this.activeComment && this.activeComment.active && (!this.activeComment.type || this.activeComment.type === 'emoji') && this.activeComment.user_id === this.user._id;
     }
 }
 

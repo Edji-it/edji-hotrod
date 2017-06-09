@@ -1,16 +1,19 @@
-<!--<div class="fireBound">
+<div class="fireBound">
     <div class="fire-icon">
-        <span>{{fireComment.user.substring(0,2)}}</span>
+        <span>{{fireComment.author.substring(0,2)}}</span>
     </div>
     <div class="fireBlock">
         <div class="list-item list-item--block fireTime-card">
-            {{ fireComment.createAt | edjidate:'timeAgo' }}
+            {{ fireComment.createdAt | edjidate:'timeAgo' }}
         </div>
-        <div class="list-item list-item--block fireComment-card">
-            {{fireComment.comment}}
+        <div class="list-item list-item--block fireComment-card" *ngIf="fireComment.type == 'emoji' || !fireComment.type">
+            <div *ngIf="fireComment.data.length > 0" class="emoji-comment-input" [innerHtml]="fireComment.data | emojione"></div>
+        </div>
+        <div class="list-item list-item--block fireComment-card" *ngIf="fireComment.type == 'text'">
+            {{ fireComment.data }}
         </div>
         <div class="list-item list-item fireHighlight-card h-1">
-            {{fireComment.words}}
+            {{fireComment.text}}
         </div>
     </div>
-</div>-->
+</div>

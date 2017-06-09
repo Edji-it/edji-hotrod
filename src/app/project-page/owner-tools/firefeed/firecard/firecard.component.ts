@@ -8,6 +8,8 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 export class FirecardComponent implements OnInit {
 
+  @Input() fireComment: Comment
+
   constructor() { }
 
   ngOnInit() { }
