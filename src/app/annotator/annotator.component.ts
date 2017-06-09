@@ -165,7 +165,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
                 // Get local array index
                 if (this.commentsByIndex[wIndex]) {
-                    for (var i = 0; i < this.commentsByIndex[wIndex].length; i++) {
+                    // faster to cache length
+                    let commentsByIndexLength = this.commentsByIndex[wIndex].length
+                    for (var i = 0; i < commentsByIndexLength; i++) {
                         let commentRef = this.commentsByIndex[wIndex][i];
                         if (commentRef._id === comment._id) {
                             cIndex = i;
@@ -238,15 +240,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     private updateMetaTags() : void {
         document.querySelector('meta[property="og:title"]').setAttribute('content', this.reading.title);
         // let blurb: string;
-        // this.reading.words.slice(0, 20).forEach((word) => {
-        //     if (word.str) {
-        //         if (word.str == '&nbsp;') {
-        //             blurb += ' ';
-        //         } else {
-        //             blurb += word.str;
-        //         }
-        //     }
-        // });
         // blurb += '...';
         // document.querySelector('meta[property="og:description"]').setAttribute('content', blurb);
         // let firstImage = document.querySelector('.img-wrap img');
@@ -340,20 +333,20 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             this.lineCountArray = [];
             this.lineCountRunning = true;
             if (this.commentComponents) {
-                this.commentComponents.toArray().forEach(
-                    (commentComp: CommentComponent, index: number) => {
-                        let yPos = commentComp.getVerticalPosition();
-                        
-                        if (yPos > 0) { // 0 is returned as the default
-                            if (this.lineCountArray[yPos]) {
-                                this.lineCountArray[yPos].push(commentComp);
-                            } else {
-                                this.lineCountArray[yPos] = [commentComp];
-                            }
-                            commentComp.lineCount = this.lineCountArray[yPos].length;
+                let commentsArray = this.commentComponents.toArray()
+                for (let i = 0; i < commentsArray.length; i++) {
+                    let commentComp = commentsArray[i]
+                    let yPos = commentComp.getVerticalPosition();
+                    
+                    if (yPos > 0) { // 0 is returned as the default
+                        if (this.lineCountArray[yPos]) {
+                            this.lineCountArray[yPos].push(commentComp);
+                        } else {
+                            this.lineCountArray[yPos] = [commentComp];
                         }
+                        commentComp.lineCount = this.lineCountArray[yPos].length;
                     }
-                );
+                }
             } 
 
             // Sometimes comments render late
@@ -366,9 +359,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
     updateImageHeights(): void {
         let images: any[] = Array.from(document.querySelectorAll('#annotatorContent .img-wrap img'));
-        images.forEach( (img, index) => {
-            this.imageHeight[ img.getAttribute('index') ] = img.clientHeight;
-        });
+        for (let i = 0; i < images.length; i++) {
+            this.imageHeight[ images[i].getAttribute('index') ] = images[i].clientHeight;
+        }
     }
 
     /** 
@@ -377,13 +370,15 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      */
     expandLine(yPosToExpand: number, forceSet ?: boolean) {
         if (this.lineCountArray[yPosToExpand]) {
-            this.lineCountArray[yPosToExpand].forEach( (comment, index) => {
+            this.lineCountArray[yPosToExpand]
+            for (let i = 0; i < this.lineCountArray[yPosToExpand].length; i++) {
+                let comment = this.lineCountArray[yPosToExpand][i]
                 if (typeof(forceSet) !== 'undefined') {
                     comment.expanded = forceSet;
                 } else {
                     comment.expanded = !comment.expanded;
                 }
-            });
+            }
         }
     }
 
