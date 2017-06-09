@@ -86,6 +86,7 @@ export class ReadingService {
         
         readings.forEach(
           (reading, index) => {
+            
             if (reading.versionCount > 1) {
               // Reload content (slower but simpler)
               this.getAll()
@@ -93,6 +94,7 @@ export class ReadingService {
               // Single version readings we can remove instantly
               readings.splice(index)
             }
+
           }
         )
         this.userReadingsSource.next(readings)
