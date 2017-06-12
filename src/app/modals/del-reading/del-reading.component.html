@@ -14,7 +14,7 @@
                 </div>
               <div class="btn-row right">
                 <button (click)="closeModal.emit()" type="button" class="btn" data-dismiss="modal">No</button><!--not sure what data-dismiss does-->
-                <button (click)="closeModal.emit(); deleteThisReading(reading);" class="btn btn-primary">Yes, Delete It</button>
+                <button id="delBtnModal" (click)="closeModal.emit(); deleteThisReading(reading);" class="btn btn-primary">Yes, Delete It</button>
               </div>
             </div>
         </div>
