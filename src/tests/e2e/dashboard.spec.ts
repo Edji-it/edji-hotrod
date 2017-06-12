@@ -80,44 +80,44 @@ describe('Dashboard Page', () => {
     /* Test: Can delete a project
     6.1.17
     */
-    // describe("Delete Readings & Projects", () => {
-    //     it("Make a new reading then delete it.", () => {
+    describe("Delete Readings & Projects", () => {
+        it("Make a new reading then delete it.", () => {
 
-    //         // Approach 2
-    //         let uniqueTitle: string = new Date().valueOf().toString();
+            // Approach 2
+            let uniqueTitle: string = new Date().valueOf().toString();
 
-    //         // Create a new reading to control it properly thru the process
-    //         // Open and wait for New Reading page
-    //         newReading.getPage();
-    //         browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000);
+            // Create a new reading to control it properly thru the process
+            // Open and wait for New Reading page
+            newReading.getPage();
+            browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000);
 
-    //         // Enter sample Reading into form
-    //         newReading.titleInput.sendKeys(uniqueTitle);
-    //         newReading.contentInput.sendKeys(newReading.contentShortString);
-    //         newReading.sourceInput.sendKeys(newReading.sourceString);
+            // Enter sample Reading into form
+            newReading.titleInput.sendKeys(uniqueTitle);
+            newReading.contentInput.sendKeys(newReading.contentShortString);
+            newReading.sourceInput.sendKeys(newReading.sourceString);
 
-    //         // Group Label has content prefilled, so we clear it
-    //         // newReading.groupInput.clear();
-    //         // newReading.groupInput.sendKeys(newReading.groupString);
+            // Group Label has content prefilled, so we clear it
+            // newReading.groupInput.clear();
+            // newReading.groupInput.sendKeys(newReading.groupString);
 
-    //         // Submit New Reading
-    //         browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "publish reading button never became clickable after new reading form entry");
-    //         //newReading.addButton.submit();
-    //         newReading.addButton.click();
-    //         browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
-    //         newReading.finalizeButton.click();
+            // Submit New Reading
+            browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "publish reading button never became clickable after new reading form entry");
+            //newReading.addButton.submit();
+            newReading.addButton.click();
+            browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
+            newReading.finalizeButton.click();
 
-    //         // Should redirect to Project page for new reading
-    //         browser.wait(EC.urlContains("project"), 7500, "never arrived at the reading page after published");
+            // Should redirect to Project page for new reading
+            browser.wait(EC.urlContains("project"), 7500, "never arrived at the reading page after published");
 
-    //         // Go to the dashboard
-    //         dashboard.getPage();
+            // Go to the dashboard
+            dashboard.getPage();
 
             browser.wait(EC.elementToBeClickable(element(by.css('button[testFindOptions="' + uniqueTitle + '"]'))), 8000, "reading card options button never became clickable after load");
             element(by.css('button[testFindOptions="' + uniqueTitle + '"]')).click();
 
-    //         // browser.wait(EC.elementToBeClickable(element(by.css('button[testDelete="' + uniqueTitle + '"]'))), 5000, "copy and edit button never became clicakble after options dropdown click");
-    //         // element(by.css('button[testDelete="' + uniqueTitle + '"]')).click();
+            browser.wait(EC.elementToBeClickable(element(by.css('button[testDelete="' + uniqueTitle + '"]'))), 5000, "copy and edit button never became clicakble after options dropdown click");
+            element(by.css('button[testDelete="' + uniqueTitle + '"]')).click();
 
             let deleteModal = element(by.id('deleteReadingModal'));
             browser.wait(EC.presenceOf(deleteModal), 5000, "never saw a deleteModal");
@@ -131,11 +131,11 @@ describe('Dashboard Page', () => {
             browser.wait(EC.invisibilityOf(element(by.cssContainingText('.reading-title-text', uniqueTitle))), 5000, "saw the unique readingTitle (END). We aren't supposed to.");
         }); // it ("Make a new reading then delete it")
 
-    //     // it ("Delete a project off of a new reading.", () => {
+        it ("Delete a project off of a new reading.", () => {
 
-    //     //     let uniqueGroupTitle = "Cynder is such a cool dog";
+            let uniqueGroupTitle = "Cynder is such a cool dog";
 
-    //     //     dashboard.getPage();
+            dashboard.getPage();
 
             // Click the dropdown menu
             browser.wait(EC.presenceOf(dashboard.firstDropdownMenu), 5000, "never saw a dropdownMenu");
