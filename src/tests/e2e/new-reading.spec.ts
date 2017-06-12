@@ -1,4 +1,4 @@
-  import * as path from 'path';
+import * as path from 'path';
 import { SideBarComponent } from '../../app/shared/side-bar';
 import { browser, by, element, protractor} from 'protractor';
 import { NewReading, Login, Sidebar } from './page-objects';
@@ -62,7 +62,28 @@ describe('New Reading Page', () => {
         - Redirect to reading page of newly created reading
     */
     it('should add reading when all fields are filled and submitted', () => {
-        newReading.enterSampleReading();
+        // Open and wait for New Reading page
+        newReading.getPage();
+        browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000);
+
+        // Enter sample Reading into form
+        newReading.titleInput.sendKeys(newReading.titleString);
+        newReading.contentInput.sendKeys(newReading.contentString);
+        newReading.sourceInput.sendKeys(newReading.sourceString);
+
+        // Submit New Reading
+        browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "save reading button never became clickable after content add");
+        newReading.addButton.click();
+        
+        // Group Label has content prefilled, so we clear it
+        newReading.groupInput.clear();
+        newReading.groupInput.sendKeys(newReading.groupString);
+
+        browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
+        newReading.finalizeButton.click();
+
+        // Should redirect to Project page for new reading
+        browser.wait(EC.urlContains("project"), 5000, "never arrived at new reading");
     });
 
 
