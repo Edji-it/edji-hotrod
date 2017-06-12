@@ -113,21 +113,12 @@ describe('Dashboard Page', () => {
     //         // Go to the dashboard
     //         dashboard.getPage();
 
-<<<<<<< HEAD
             browser.wait(EC.elementToBeClickable(element(by.css('button[testFindOptions="' + uniqueTitle + '"]'))), 8000, "reading card options button never became clickable after load");
             element(by.css('button[testFindOptions="' + uniqueTitle + '"]')).click();
-=======
-    //         let readingTitle = element(by.cssContainingText('.reading-title-text', uniqueTitle));
-    //         browser.wait(EC.presenceOf(readingTitle), 5000, "never saw a unique readingTitle");
-
-    //         // browser.wait(EC.elementToBeClickable(element(by.css('button[testFindOptions="' + uniqueTitle + '"]'))), 8000, "reading card options button never became clickable after load");
-    //         // element(by.css('button[testFindOptions="' + uniqueTitle + '"]')).click();
->>>>>>> origin/dev
 
     //         // browser.wait(EC.elementToBeClickable(element(by.css('button[testDelete="' + uniqueTitle + '"]'))), 5000, "copy and edit button never became clicakble after options dropdown click");
     //         // element(by.css('button[testDelete="' + uniqueTitle + '"]')).click();
 
-<<<<<<< HEAD
             let deleteModal = element(by.id('deleteReadingModal'));
             browser.wait(EC.presenceOf(deleteModal), 5000, "never saw a deleteModal");
             let deleteConfirm = element(by.id('delBtnModal'));
@@ -139,22 +130,6 @@ describe('Dashboard Page', () => {
 
             browser.wait(EC.invisibilityOf(element(by.cssContainingText('.reading-title-text', uniqueTitle))), 5000, "saw the unique readingTitle (END). We aren't supposed to.");
         }); // it ("Make a new reading then delete it")
-=======
-    //         // // browser.wait(EC.presenceOf(dashboard.readingCards.first()), 5000, "never saw a readingCard");
-    //         // // let targetDropdown = dashboard.readingCards.filter(function(elem, index) {
-    //         // //     return elem.element(by.cssContainingText('.reading-title-text', uniqueTitle)) ===  readingTitle;
-    //         // // }).toElementFinder_().element(by.id('optionsWrap'));
-    //         // // targetDropdown.click();
-
-    //         // // let targetDelButton = targetDropdown.element(by.cssContainingText('.dropdown-item', 'Delete'));
-    //         // // browser.wait(EC.presenceOf(targetDelButton), 5000, "never saw a targetDelButton");
-    //         // // targetDelButton.click();
-    //         // browser.sleep(3000);
-
-    //         // browser.wait(EC.invisibilityOf(readingTitle), 5000, "saw the unique readingTitle (END). We aren't supposed to.");
-
-    //     }); // it ("Make a new reading then delete it")
->>>>>>> origin/dev
 
     //     // it ("Delete a project off of a new reading.", () => {
 
@@ -162,7 +137,6 @@ describe('Dashboard Page', () => {
 
     //     //     dashboard.getPage();
 
-<<<<<<< HEAD
             // Click the dropdown menu
             browser.wait(EC.presenceOf(dashboard.firstDropdownMenu), 5000, "never saw a dropdownMenu");
             browser.wait(EC.elementToBeClickable(dashboard.firstDropdownMenu), 5000, "create new group button was never clickable");
@@ -209,45 +183,6 @@ describe('Dashboard Page', () => {
             // browser.wait(EC.visibilityOf(newProjectCard), 5000, "saw a newProjectCard (END). We aren't supposed to.");
         }); // it ("Delete a project off of a new reading.", () => {
     });
-=======
-    //     //     newReading.enterSampleReading();
-
-    //     //     dashboard.getPage();
-
-    //     //     // Click the dropdown menu
-    //     //     browser.wait(EC.presenceOf(dashboard.firstDropdownMenu), 5000, "never saw a dropdownMenu");
-    //     //     browser.wait(EC.elementToBeClickable(dashboard.firstDropdownMenu), 5000, "create new group button was never clickable");
-    //     //     dashboard.firstDropdownMenu.click();
-
-    //     //     // Click the create new group button & create a new project
-    //     //     dashboard.createNewGroupButton.click();
-    //     //     dashboard.createNewGroupModalInput(uniqueGroupTitle);
-
-    //     //     // We're gonna identify the new project by it's new group class since it was just created. 
-    //     //     let newProjectCard = element(by.css('.new-project'));
-    //     //     browser.wait(EC.presenceOf(newProjectCard), 5000, "never saw a newProjectCard");
-
-    //     //     // Now click that delete button, baby
-    //     //     let newProjectCardDelBtn = newProjectCard.element(by.css(".btn--delete-project"));
-    //     //     newProjectCardDelBtn.click();
-
-    //     //     // Click ok on that there delete modal
-    //     //     let delProjectModal = element(by.id('deleteProjectModal'));
-    //     //     browser.wait(EC.presenceOf(delProjectModal), 5000, "never saw a delProjectModal");
-    //     //     let delProjectBtnModal = element(by.id("delProjectBtnModal"));
-    //     //     browser.wait(EC.presenceOf(delProjectBtnModal), 5000, "never saw a delProjectBtn on the delProjectModal");
-    //     //     browser.wait(EC.elementToBeClickable(delProjectBtnModal), 5000, "delProjectBtn on the delProjectModal was never clickable");
-    //     //     delProjectBtnModal.click();
-
-    //     //     // expect((newProjectCard.isPresent())).toEqual(false);
-    //     //     browser.sleep(3000);
-    //     //     browser.wait(EC.invisibilityOf(newProjectCard), 5000, "saw a newProjectCard (END). We aren't supposed to.");
-
-    //     //     // False Positive
-    //     //     // browser.wait(EC.visibilityOf(newProjectCard), 5000, "saw a newProjectCard (END). We aren't supposed to.");
-    //     // }); // it ("Delete a project off of a new reading.", () => {
-    // });
->>>>>>> origin/dev
 
     /* Test: Teacher account can log out successfully
         - Log in with Teacher account
