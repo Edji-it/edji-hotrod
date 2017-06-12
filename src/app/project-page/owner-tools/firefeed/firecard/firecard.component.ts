@@ -1,4 +1,7 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { EdjiComment, Reading } from '../../../../shared/datatypes';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ReadingService } from '../../../../shared/reading.service';
+
 
 @Component({
   selector: 'hot-firecard',
@@ -8,9 +11,44 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 export class FirecardComponent implements OnInit {
 
-  @Input() fireComment: Comment
+  @Input() fireComment: EdjiComment
+  // @Input() currentReading: Reading
 
-  constructor() { }
+  private yPos: number = 0
+  private isImage: boolean = false
+  private currentReading: Reading
 
-  ngOnInit() { }
+  constructor(
+    public el: ElementRef,
+    private _readings: ReadingService
+  ) { }
+
+  ngOnInit() { 
+    this._readings.currentReading.subscribe(
+      reading => {
+        this.currentReading = reading
+        if (this.currentReading.words[this.fireComment.start].styles[0]==='img') {
+          this.isImage = true
+        }
+      },
+      error => {
+        console.error(error);
+      }
+    )
+  }
+
+  public getOffset(el) {
+    el = el.getBoundingClientRect();
+    return {
+      left: el.left + window.scrollX,
+      top: el.top + window.scrollY
+    }
+  }
+
+  public getImagePos(imageIndex) {
+    let yOffset = 100
+    let imageElement = document.getElementById("readingImage" + imageIndex)
+    this.yPos = this.getOffset(imageElement).top
+    window.scrollTo(0, this.yPos - yOffset)
+  }
 }

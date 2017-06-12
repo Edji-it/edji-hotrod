@@ -1,15 +1,15 @@
 <!--Fire Feed Pane-->
-<div class="sliding-pane from-left" [ngClass]="{ 'slide-in' : visible }">
+<div *ngIf="currentReading && currentReading.words" class="sliding-pane from-left" [ngClass]="{ 'slide-in' : visible }">
   <div class="container-fluid container--less-pad">
     <h4>Group Activity
       <button (click)="hide.emit()" class="close stats-close-btn btn-icon--round" type="button">
             <span aria-hidden="true">×</span>
       </button>
     </h4>
-    <hot-firecard *ngFor="let fireComment of project.comments && project.comments.reverse()" [fireComment]="fireComment"></hot-firecard>
-    <div class="fireBound"><!-- This will be the hot-firecard-->
+    <hot-firecard *ngFor="let fireComment of project.comments" [fireComment]="fireComment"></hot-firecard>
+    <div class="fireBound">
         <div class="fire-icon">
-            <span>JK</span>
+            <span>{{currentReading.title.substring(0,2)}}</span>
         </div>
         <div class="fireBlock">
             <div class="list-item list-item--block fireTime-card">
