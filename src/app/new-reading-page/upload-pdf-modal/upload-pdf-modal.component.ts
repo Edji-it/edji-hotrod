@@ -21,7 +21,7 @@ export class UploadPdfModalComponent implements OnInit {
   private newDocsIds: string[] = []; 
   // private newImgUrls: string[] = [];
   private selectedIndex: number = 0;
-  private locker: any;
+  private locker: Locker;
   private file: any = {};
   private title: string = '';
   private selectedFiles: any[] = [];
@@ -105,6 +105,7 @@ export class UploadPdfModalComponent implements OnInit {
         // Clear fields
         this.file = {};
         this.title = '';
+        console.log("[upload-pdf-modal] made it this far.");
       }, error => {
         this.uploading = false;
         this.errorMsg = '<b>Upload failed!</b> Please try again later, or with a different file. If this problem persists, please <a href="mailto:brennen@edji.it">contact us</a>.';
@@ -140,7 +141,7 @@ export class UploadPdfModalComponent implements OnInit {
           }
         }, error => {
           // Handle this?
-        });
+      });
   }
 
   /**
@@ -159,12 +160,26 @@ export class UploadPdfModalComponent implements OnInit {
    * Update a single document, and propagate changes
    */
   removeUploadedDoc(docToDelete: any) {
+
+    // this.uploadedDocs.forEach(doc => {
+      
+    // }); 
+
+    // console.log("Removed the PDF: " + docToDelete.title + " with the uuid of " + docToDelete.uuid);
+    // this._media.removePdf(docToDelete);
+
+    // this.uploadedDocs = this.locker.get('uploadedDocs');
+
+     console.log(docToDelete.title);
+    this._media.removePdf(docToDelete.uuid);
+
     this.uploadedDocs.forEach( (doc, index) => {
       if (docToDelete.uuid === doc.uuid) {
         // Remove doc 
         this.uploadedDocs.splice(index, 1);
       }
     });
+
     this.saveUploadedDocs();
   }
 
