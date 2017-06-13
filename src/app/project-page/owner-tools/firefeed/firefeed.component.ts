@@ -1,6 +1,6 @@
 import { Project, Reading } from '../../../shared/datatypes';
 import { Subscription } from 'rxjs/Rx';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 
 // Project dependencies
 import { ProjectService } from '../../../shared/project.service';
@@ -12,7 +12,7 @@ import { ReadingService } from '../../../shared/reading.service';
   styleUrls: ['./firefeed.component.scss']
 })
 
-export class FirefeedComponent implements OnInit {
+export class FirefeedComponent implements OnInit, OnDestroy {
   @Input() visible: boolean = false
   @Output() hide: EventEmitter<any> = new EventEmitter()
 

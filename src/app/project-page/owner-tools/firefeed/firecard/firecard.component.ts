@@ -1,5 +1,5 @@
 import { EdjiComment, Reading } from '../../../../shared/datatypes';
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { ReadingService } from '../../../../shared/reading.service';
 
 
@@ -9,7 +9,7 @@ import { ReadingService } from '../../../../shared/reading.service';
   styleUrls: ['firecard.component.scss']
 })
 
-export class FirecardComponent implements OnInit {
+export class FirecardComponent implements OnInit, OnDestroy {
 
   @Input() fireComment: EdjiComment
   // @Input() currentReading: Reading
@@ -50,5 +50,9 @@ export class FirecardComponent implements OnInit {
     let imageElement = document.getElementById("readingImage" + imageIndex)
     this.yPos = this.getOffset(imageElement).top
     window.scrollTo(0, this.yPos - yOffset)
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((sub) => { sub.unsubscribe() })
   }
 }
