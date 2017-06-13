@@ -40,7 +40,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       {
           title: "Created Readings",
           image: "/assets/dashboard-tooltips/reading.png",
-          body: 'You can create Readings to share with others. Click "New Reading" to get started! Any rRadings you create will be housed under "Created".'
+          body: 'You can create Readings to share with others. Click "New Reading" to get started! Any readings you create will be housed under "Created".'
       },
       {
           title: "Create A New Group",
