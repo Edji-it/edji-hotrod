@@ -161,21 +161,15 @@ export class UploadPdfModalComponent implements OnInit {
    */
   removeUploadedDoc(docToDelete: any) {
 
-    // this.uploadedDocs.forEach(doc => {
-      
-    // }); 
-
-    // console.log("Removed the PDF: " + docToDelete.title + " with the uuid of " + docToDelete.uuid);
-    // this._media.removePdf(docToDelete);
-
     // this.uploadedDocs = this.locker.get('uploadedDocs');
 
-     console.log(docToDelete.title);
-    this._media.removePdf(docToDelete.uuid);
-
+    console.log(docToDelete.title);
+    // this._media.removePdf(docToDelete.uuid); // This is supposed to work. Like my pickup lines.
     this.uploadedDocs.forEach( (doc, index) => {
       if (docToDelete.uuid === doc.uuid) {
         // Remove doc 
+        console.log("comparing " + docToDelete.title + " and " + doc.title+ ". Are they the same? " + (docToDelete.uuid === doc.uuid));
+        console.log("gonna splice " + doc.title + " at " + index + " with the id of " + doc.uuid);
         this.uploadedDocs.splice(index, 1);
       }
     });
