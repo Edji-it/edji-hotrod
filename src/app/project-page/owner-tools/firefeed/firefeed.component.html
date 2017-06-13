@@ -8,14 +8,14 @@
     </h4>
     <hot-firecard *ngFor="let fireComment of project.comments" [fireComment]="fireComment"></hot-firecard>
     <div class="fireBound">
-        <div class="fire-icon">
-            <span>{{currentReading.title.substring(0,2)}}</span>
+        <div class="fire-icon--light">
+            <span class="is-emoji" [innerHtml]="':seedling:' | emojione"></span>
         </div>
         <div class="fireBlock">
             <div class="list-item list-item--block fireTime-card">
                 {{ currentReading.createdAt | edjidate:'timeAgo' }}
             </div>
-            {{currentReading.title}}
+            <p class="small">Group <b>{{currentReading.title}}</b> was created.</p>
         </div>
     </div>
   </div>
