@@ -27,16 +27,16 @@ export class FirefeedComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // Subscribe to the reading
-    this._readings.currentReading.subscribe(
+    this.subscriptions.push( this._readings.currentReading.subscribe(
       reading => {
         this.currentReading = reading;
       },
       error => {
         console.error(error);
       }
-    )
+    ) )
     // Subscribe to updates from that project once we're subscribed to the reading
-    this._projects.currentProject.subscribe(
+    this.subscriptions.push( this._projects.currentProject.subscribe(
       (project) => {
         if (project) {
           this.project = project
@@ -44,7 +44,8 @@ export class FirefeedComponent implements OnInit, OnDestroy {
       },
       (error) => {
         console.error(error)
-      })
+      }
+    ) )
   }
 
   ngOnDestroy() {

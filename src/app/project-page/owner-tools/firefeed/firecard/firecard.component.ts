@@ -1,3 +1,4 @@
+import { Subscription } from 'rxjs/Rx';
 import { EdjiComment, Reading } from '../../../../shared/datatypes';
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { ReadingService } from '../../../../shared/reading.service';
@@ -17,6 +18,7 @@ export class FirecardComponent implements OnInit, OnDestroy {
   private yPos: number = 0
   private isImage: boolean = false
   private currentReading: Reading
+  private subscriptions: Subscription[] = []
 
   constructor(
     public el: ElementRef,
@@ -24,16 +26,18 @@ export class FirecardComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() { 
-    this._readings.currentReading.subscribe(
-      reading => {
-        this.currentReading = reading
-        if (this.currentReading.words[this.fireComment.start].styles[0]==='img') {
-          this.isImage = true
+    this.subscriptions.push(
+      this._readings.currentReading.subscribe(
+        reading => {
+          this.currentReading = reading
+          if (this.currentReading.words[this.fireComment.start].styles[0]==='img') {
+            this.isImage = true
+          }
+        },
+        error => {
+          console.error(error);
         }
-      },
-      error => {
-        console.error(error);
-      }
+      )
     )
   }
 
