@@ -337,7 +337,7 @@ export class ProjectService {
                 for (var i = 0; i <= this.project.comments.length; i++) {
                     if (this.project.comments[i] && this.project.comments[i]._id === comment._id) {
                         // Remove comment from local object
-                        this.project.comments.splice(i);
+                        this.project.comments.splice(i, 1);
                     }
                 }
                 return data;
