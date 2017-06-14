@@ -30,27 +30,27 @@ export class DashboardComponent implements OnInit, OnDestroy {
       {
           title: "The Dashboard",
           image: "/assets/dashboard-tooltips/logo.png",
-          body: "It houses all of your Readings. Click the logo to come back anytime."
+          body: "This is The Dashboard, your hub to Edji. You can find all the Readings you have Created or Joined here!"
       },
       {
           title: "Joined Readings",
           image: "/assets/dashboard-tooltips/lightning-code.png",
-          body: 'Readings you have joined will be housed under "Joined". To join a new one, type in a Lightning Code.'
+          body: 'These are Readings that you join to read and comment on. Join a new one by using a Lightning Code!'
       },
       {
           title: "Created Readings",
           image: "/assets/dashboard-tooltips/reading.png",
-          body: 'You can create Readings to share with others. Click "New Reading" to get started! Any readings you create will be housed under "Created".'
+          body: 'These are Readings that you created yourself. Each reading will have Groups, and each Group has a Lightning Code!'
       },
       {
           title: "Create A New Group",
           image: "/assets/dashboard-tooltips/groups.png",
-          body: 'Create an exact copy of a Reading to immediately share with a new Group of users.'
+          body: 'This creates an exact copy of a Reading that you can immediately share with a new Group of users.'
       },
       {
           title: "Copy & Edit",
           image: "/assets/dashboard-tooltips/versioning.png",
-          body: 'Edit an existing Reading to create a new version.'
+          body: 'This will create a new Version of your reading. This lets you simply add to, or edit a Reading you have already made.'
       }
   ]
   private toolTipStepNo: number = 1
