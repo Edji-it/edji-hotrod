@@ -29,9 +29,11 @@ export class FirecardComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this._readings.currentReading.subscribe(
         reading => {
-          this.currentReading = reading
-          if (this.currentReading.words[this.fireComment.start].styles[0]==='img') {
-            this.isImage = true
+          if (reading._id) {
+             this.currentReading = reading
+            if (this.currentReading.words[this.fireComment.start].styles[0]==='img') {
+              this.isImage = true
+            }
           }
         },
         error => {
