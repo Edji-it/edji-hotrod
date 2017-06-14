@@ -26,12 +26,13 @@ declare var window: any;
     styleUrls: ['annotator.component.scss']
 })
 export class AnnotatorComponent implements OnInit, OnDestroy {
-    @Input() private project: any;
+    // @Input() private project: any;
     @Input() private mobileCommentActive: boolean;
 
     @ViewChildren(CommentComponent) commentComponents: QueryList<CommentComponent>;
 
     private reading: Reading = <Reading>{};
+    private project: Project = <Project>{};
     
     private commentsByIndex: EdjiComment[][] = [];
     private fireComments: EdjiComment[] = [];
@@ -134,21 +135,38 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         );
 
         this._readings.clear()
-        
-        this._readings.get(this.project.reading_id)
-            .take(1)
-            .subscribe()
 
         // Get Reading via Observable
-        this._readings.currentReading.subscribe(
-            reading => {
-                this.reading = reading;
-                this.updateMetaTags();
-            },
-            error => {
-                console.error(error);
-            }
+        this.subscriptions.push(
+            this._readings.currentReading.subscribe(
+                reading => {
+                    this.reading = reading;
+                    this.updateMetaTags();
+                },
+                error => {
+                    console.error(error);
+                }
+            )
         )
+
+        // Get Project via Observable
+        this.subscriptions.push( this._projects.currentProject.subscribe(
+            (project) => {
+                if (project) {
+                    this.project = project
+
+                    // Get Reading once we know this Project's reading ID
+                    if (this.reading._id != this.project.reading_id) {
+                        this._readings.get(this.project.reading_id)
+                            .take(1)
+                            .subscribe()
+                    }
+                }
+            },
+            (error) => {
+                console.error(error)
+            }
+        ) )
 
         /** Run-once logic to initialize the comment-based arrays and stats */
         let processedCommentData = this._projects.processComments(this.project)
@@ -184,7 +202,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                     }
                 } else if (commentUpdate.action === 'UPDATE') {
                     if (cIndex > -1 && this.commentsByIndex[wIndex] && this.commentsByIndex[wIndex][cIndex]) {
-                        this.commentsByIndex[wIndex][cIndex].data = comment.data;
+                        // this.commentsByIndex[wIndex][cIndex].data = comment.data;
                     } else {
                         // Socket updates don't come through with a timestamp
                         comment.createdAt = Date.now()
@@ -537,24 +555,35 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      */
     commentsByIndexRemove(commentId, index: number, commentIndex: number) {
         let comment = this.commentsByIndex[index][commentIndex];
-        
-        if (!comment) {
-            return;
-        }
-        // Clear active comment
-        this.inactivateComment();
-        // Remove comment form local Comments array
+        let commentPointer
+        let commentCopy
+        // Find comment in local Comments array
         let commentsLength: number = this.project.comments.length
+        // Some comments are removed from this array by the Project service, so don't expect to find one
         for (let i=0; i < commentsLength; i++) {
             if (this.project.comments[i]._id == commentId) {
+                commentPointer = this.project.comments[i]
+                commentCopy = Object.assign({}, commentPointer)
                 this.project.comments.splice(i, 1)
                 break
             }
         }
-        this.commentsByIndex[index].splice(commentIndex,1);
+        // Project service handles stats updates as well, but we need to handle socket updates
+        if (commentCopy) {
+            this._projects.commentStats.addCommentToStats(commentCopy, -1)
+        }
+        // Clear active comment
+        this.inactivateComment();
+        // Remove from index reference object
+        for (let i=0; i < this.commentsByIndex[index].length; i++) {
+            if (this.commentsByIndex[index][i]._id == commentId) {
+                this.commentsByIndex[index].splice(i, 1)
+                break
+            }
+        }
         // Update line counts
         this.updateAllLineCounts();
-        this._projects.commentStats.addCommentToStats(comment, -1)
+        
     }
 
      /**
@@ -566,7 +595,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // Remove Highlights
         this.decrementHighlights(this.user._id === comment.user_id, comment.start, comment.end);
         // Remove local comment object
-        this.commentsByIndexRemove(comment.id, index, commentIndex);
+        this.commentsByIndexRemove(comment._id, index, commentIndex);
         this.unfocusHighlight(comment.start, comment.end)
     }
 

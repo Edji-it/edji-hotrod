@@ -333,6 +333,8 @@ export class ProjectService {
             .map(data => {
                 // Tell other Project views that the comment is gone
                  this._socket.updateComment(comment, 'DELETE', this.project._id);
+                 // Update stats
+                 this.commentStats.addCommentToStats(comment, -1)
 
                 for (var i = 0; i <= this.project.comments.length; i++) {
                     if (this.project.comments[i] && this.project.comments[i]._id === comment._id) {
