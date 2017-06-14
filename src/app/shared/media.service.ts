@@ -52,7 +52,7 @@ export class MediaService {
             });
 
         return uploadSource.asObservable();
-    }
+    } // uploadPdf
 
     pdfCheck(fileId: string): Observable<any> {
         return this.http.get(this.pdfBucket + '/' + fileId + '/spark.json')

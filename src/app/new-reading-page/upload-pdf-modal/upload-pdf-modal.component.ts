@@ -170,7 +170,10 @@ export class UploadPdfModalComponent implements OnInit {
         // Remove doc
         // console.log("id's are the same? " + (docToDelete._id === doc._id));
         this.uploadedDocs.splice(index, 1);
-        this._auth.getUser().media.documents.splice(index, 1);
+
+        console.log("In docs, found:");
+
+        console.log(this._auth.getUser().media.documents[index]);
       }
     });
 
