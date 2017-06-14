@@ -503,7 +503,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
         // Add comment to local project array
         this.project.comments.unshift(comment)
-        let commentPointer = this.project.comments[this.project.comments.length - 1]
+        let commentPointer = this.project.comments[0]
         
         // Add Comment to local array
         if (this.commentsByIndex[start]) {
