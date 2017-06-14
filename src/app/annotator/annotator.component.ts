@@ -502,7 +502,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.decorateComment(comment);
 
         // Add comment to local project array
-        this.project.comments.push(comment)
+        this.project.comments.unshift(comment)
         let commentPointer = this.project.comments[this.project.comments.length - 1]
         
         // Add Comment to local array
