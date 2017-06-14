@@ -2,7 +2,6 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { NewReadingPage } from './new-reading-page';
 import { ProjectPageComponent } from './project-page';
-import { ReadingPageComponent } from './reading-page';
 import { HomeComponent } from './home';
 import { RegisterComponent } from './register';
 import { AccountComponent } from './account';
@@ -24,7 +23,6 @@ export const ROUTES: Routes = [
   { path: 'account', component: AccountComponent, canActivate: [AuthService] },
   { path: 'dashboard',  component: DashboardComponent, canActivate: [AuthService], children: DashboardRoutes },
   { path: 'project/:id',  component: ProjectPageComponent },
-  { path: 'reading/:id',  component: ReadingPageComponent, canActivate: [AuthService] },
   { path: 'new-reading', component: NewReadingPage, canActivate: [AuthService] },
   { path: 'new-reading/:id', component: NewReadingPage, canActivate: [AuthService] },
   { path: 'reset-password', component: ResetPassPage },
