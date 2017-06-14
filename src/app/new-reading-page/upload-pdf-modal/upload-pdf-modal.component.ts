@@ -36,9 +36,8 @@ export class UploadPdfModalComponent implements OnInit {
 
   ngOnInit() {
     // Load previously uploaded docs
-    if (this.locker.get('uploadedDocs')) {
-      this.uploadedDocs = this.locker.get('uploadedDocs');
-    } else if (this._auth.getUser().media && this._auth.getUser().media.documents) {
+    // get the media from the user object which is already loaded
+    if (this._auth.getUser().media && this._auth.getUser().media.documents) {
       this.uploadedDocs = this._auth.getUser().media.documents;
     }
     // Check existing Uploaded Docs for any not yet marked as converted
@@ -162,15 +161,16 @@ export class UploadPdfModalComponent implements OnInit {
   removeUploadedDoc(docToDelete: any) {
 
     // this.uploadedDocs = this.locker.get('uploadedDocs');
-
-    console.log(docToDelete.title);
-    // this._media.removePdf(docToDelete.uuid); // This is supposed to work. Like my pickup lines.
+     // console.log("Deleting:")
+    // console.log(docToDelete);
+    
     this.uploadedDocs.forEach( (doc, index) => {
-      if (docToDelete.uuid === doc.uuid) {
-        // Remove doc 
-        console.log("comparing " + docToDelete.title + " and " + doc.title+ ". Are they the same? " + (docToDelete.uuid === doc.uuid));
-        console.log("gonna splice " + doc.title + " at " + index + " with the id of " + doc.uuid);
+      // console.log(doc);
+      if (docToDelete._id === doc._id) {
+        // Remove doc
+        // console.log("id's are the same? " + (docToDelete._id === doc._id));
         this.uploadedDocs.splice(index, 1);
+        this._auth.getUser().media.documents.splice(index, 1);
       }
     });
 
@@ -228,5 +228,9 @@ export class UploadPdfModalComponent implements OnInit {
   insertImage(url: string) : void {
     this.returnImage.emit([{ 'url': url }]);
     this.closeModal.emit();
+  }
+
+  private removePdf(uuid: string) {
+
   }
 }

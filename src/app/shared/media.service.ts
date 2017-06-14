@@ -54,25 +54,6 @@ export class MediaService {
         return uploadSource.asObservable();
     }
 
-    removePdf(fileId : String) : Observable<any> {
-        let source = new Subject();
-
-        this.http.get(this.pdfBucket + '/' + fileId + '/spark.json')
-            .subscribe(res => {
-                let s3data = res.json();
-
-                console.log("made it here!"); // We don't make it past here
-                s3data.deleteObject(s3data.signedRequest, function(err,data) {
-                    if (err) console.log(err)
-                    else console.log("Successfully deleted.");
-                });
-            });
-
-        
-
-        return new Observable<any>();
-    } // removePdf
-
     pdfCheck(fileId: string): Observable<any> {
         return this.http.get(this.pdfBucket + '/' + fileId + '/spark.json')
             .map(data => {
