@@ -130,7 +130,6 @@ type StoreType = {
     LoginRequiredModal,
     TutorialBoxComponent,
     ReadingPageComponent,
-    DeleteProjectComponent,
     DashboardComponent,
     JoinedDashComponent,
     CreatedDashComponent,

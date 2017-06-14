@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, ElementRef, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -24,6 +24,36 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private currentUser: User; 
   private subscriptions: Subscription[] = [];
   private mobileShowJoined:boolean = true;
+
+  // Tool Tip variables
+  private toolTipsContent: any[] = [
+      {
+          title: "The Dashboard",
+          image: "/assets/dashboard-tooltips/logo.png",
+          body: "It houses all of your Readings. Click the logo to come back anytime."
+      },
+      {
+          title: "Joined Readings",
+          image: "/assets/dashboard-tooltips/lightning-code.png",
+          body: 'Readings you have joined will be housed under "Joined". To join a new one, type in a Lightning Code.'
+      },
+      {
+          title: "Created Readings",
+          image: "/assets/dashboard-tooltips/reading.png",
+          body: 'You can create Readings to share with others. Click "New Reading" to get started! Any readings you create will be housed under "Created".'
+      },
+      {
+          title: "Create A New Group",
+          image: "/assets/dashboard-tooltips/groups.png",
+          body: 'Create an exact copy of a Reading to immediately share with a new Group of users.'
+      },
+      {
+          title: "Copy & Edit",
+          image: "/assets/dashboard-tooltips/versioning.png",
+          body: 'Edit an existing Reading to create a new version.'
+      }
+  ]
+  private toolTipStepNo: number = 1
 
   // TypeScript public modifiers
   constructor (
