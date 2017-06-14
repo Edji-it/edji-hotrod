@@ -26,14 +26,16 @@ declare var window: any;
     styleUrls: ['annotator.component.scss']
 })
 export class AnnotatorComponent implements OnInit, OnDestroy {
-    @Input() private project: any;
+    // @Input() private project: any;
     @Input() private mobileCommentActive: boolean;
 
     @ViewChildren(CommentComponent) commentComponents: QueryList<CommentComponent>;
 
     private reading: Reading = <Reading>{};
+    private project: Project = <Project>{};
     
     private commentsByIndex: EdjiComment[][] = [];
+    private fireComments: EdjiComment[] = [];
 
     private highlightArray: number[] = [];
     private alwaysHighlightArray: number[] = [];
@@ -133,21 +135,38 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         );
 
         this._readings.clear()
-        
-        this._readings.get(this.project.reading_id)
-            .take(1)
-            .subscribe()
 
         // Get Reading via Observable
-        this._readings.currentReading.subscribe(
-            reading => {
-                this.reading = reading;
-                this.updateMetaTags();
-            },
-            error => {
-                console.error(error);
-            }
+        this.subscriptions.push(
+            this._readings.currentReading.subscribe(
+                reading => {
+                    this.reading = reading;
+                    this.updateMetaTags();
+                },
+                error => {
+                    console.error(error);
+                }
+            )
         )
+
+        // Get Project via Observable
+        this.subscriptions.push( this._projects.currentProject.subscribe(
+            (project) => {
+                if (project) {
+                    this.project = project
+
+                    // Get Reading once we know this Project's reading ID
+                    if (this.reading._id != this.project.reading_id) {
+                        this._readings.get(this.project.reading_id)
+                            .take(1)
+                            .subscribe()
+                    }
+                }
+            },
+            (error) => {
+                console.error(error)
+            }
+        ) )
 
         /** Run-once logic to initialize the comment-based arrays and stats */
         let processedCommentData = this._projects.processComments(this.project)
@@ -164,7 +183,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
                 // Get local array index
                 if (this.commentsByIndex[wIndex]) {
-                    for (var i = 0; i < this.commentsByIndex[wIndex].length; i++) {
+                    // faster to cache length
+                    let commentsByIndexLength = this.commentsByIndex[wIndex].length
+                    for (var i = 0; i < commentsByIndexLength; i++) {
                         let commentRef = this.commentsByIndex[wIndex][i];
                         if (commentRef._id === comment._id) {
                             cIndex = i;
@@ -181,14 +202,18 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                     }
                 } else if (commentUpdate.action === 'UPDATE') {
                     if (cIndex > -1 && this.commentsByIndex[wIndex] && this.commentsByIndex[wIndex][cIndex]) {
-                        this.commentsByIndex[wIndex][cIndex].data = comment.data;
+                        // this.commentsByIndex[wIndex][cIndex].data = comment.data;
                     } else {
+                        // Socket updates don't come through with a timestamp
+                        comment.createdAt = Date.now()
                         // Sometimes an UPDATE comes through for comment not yet created
                         // Add highlights to local array
                         this.incrementHighlights(this.user._id === comment.user_id || this.project.teacher_id == comment.user_id, comment.start, comment.end);
                         this.commentsByIndexAdd(comment, wIndex, true);
                     }
                 } else if (commentUpdate.action === 'CREATE') {
+                    // Socket updates don't come through with a timestamp
+                    comment.createdAt = Date.now()
                     // Add highlights to local array
                     this.incrementHighlights(this.user._id === comment.user_id || this.project.teacher_id == comment.user_id, comment.start, comment.end);
                     this.commentsByIndexAdd(comment, wIndex, true);
@@ -237,15 +262,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     private updateMetaTags() : void {
         document.querySelector('meta[property="og:title"]').setAttribute('content', this.reading.title);
         // let blurb: string;
-        // this.reading.words.slice(0, 20).forEach((word) => {
-        //     if (word.str) {
-        //         if (word.str == '&nbsp;') {
-        //             blurb += ' ';
-        //         } else {
-        //             blurb += word.str;
-        //         }
-        //     }
-        // });
         // blurb += '...';
         // document.querySelector('meta[property="og:description"]').setAttribute('content', blurb);
         // let firstImage = document.querySelector('.img-wrap img');
@@ -339,20 +355,20 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             this.lineCountArray = [];
             this.lineCountRunning = true;
             if (this.commentComponents) {
-                this.commentComponents.toArray().forEach(
-                    (commentComp: CommentComponent, index: number) => {
-                        let yPos = commentComp.getVerticalPosition();
-                        
-                        if (yPos > 0) { // 0 is returned as the default
-                            if (this.lineCountArray[yPos]) {
-                                this.lineCountArray[yPos].push(commentComp);
-                            } else {
-                                this.lineCountArray[yPos] = [commentComp];
-                            }
-                            commentComp.lineCount = this.lineCountArray[yPos].length;
+                let commentsArray = this.commentComponents.toArray()
+                for (let i = 0; i < commentsArray.length; i++) {
+                    let commentComp = commentsArray[i]
+                    let yPos = commentComp.getVerticalPosition();
+                    
+                    if (yPos > 0) { // 0 is returned as the default
+                        if (this.lineCountArray[yPos]) {
+                            this.lineCountArray[yPos].push(commentComp);
+                        } else {
+                            this.lineCountArray[yPos] = [commentComp];
                         }
+                        commentComp.lineCount = this.lineCountArray[yPos].length;
                     }
-                );
+                }
             } 
 
             // Sometimes comments render late
@@ -365,9 +381,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
     updateImageHeights(): void {
         let images: any[] = Array.from(document.querySelectorAll('#annotatorContent .img-wrap img'));
-        images.forEach( (img, index) => {
-            this.imageHeight[ img.getAttribute('index') ] = img.clientHeight;
-        });
+        for (let i = 0; i < images.length; i++) {
+            this.imageHeight[ images[i].getAttribute('index') ] = images[i].clientHeight;
+        }
     }
 
     /** 
@@ -376,13 +392,15 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      */
     expandLine(yPosToExpand: number, forceSet ?: boolean) {
         if (this.lineCountArray[yPosToExpand]) {
-            this.lineCountArray[yPosToExpand].forEach( (comment, index) => {
+            this.lineCountArray[yPosToExpand]
+            for (let i = 0; i < this.lineCountArray[yPosToExpand].length; i++) {
+                let comment = this.lineCountArray[yPosToExpand][i]
                 if (typeof(forceSet) !== 'undefined') {
                     comment.expanded = forceSet;
                 } else {
                     comment.expanded = !comment.expanded;
                 }
-            });
+            }
         }
     }
 
@@ -504,21 +522,25 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         let start = comment.start;
         // Give it the Project Id to pass down to the Comment Component
         this.decorateComment(comment);
+
+        // Add comment to local project array
+        this.project.comments.unshift(comment)
+        let commentPointer = this.project.comments[0]
         
         // Add Comment to local array
         if (this.commentsByIndex[start]) {
-            this.commentsByIndex[start].push(comment);
+            this.commentsByIndex[start].push(commentPointer);
             if (addQuietly !== true) { 
                 this.setActiveCommentByIndex(true, start, this.commentsByIndex[start].length - 1);
             }
         } else {
-            this.commentsByIndex[start] = [ comment ];
+            this.commentsByIndex[start] = [ commentPointer ];
             if (addQuietly !== true) { 
                 this.setActiveCommentByIndex(true, start, 0);
             }
         }
         this.updateAllLineCounts();
-        this._projects.commentStats.addCommentToStats(comment, 1)
+        this._projects.commentStats.addCommentToStats(commentPointer, 1)
     }
 
     private decorateComment(comment: any) {
@@ -533,17 +555,35 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      */
     commentsByIndexRemove(commentId, index: number, commentIndex: number) {
         let comment = this.commentsByIndex[index][commentIndex];
-        
-        if (!comment) {
-            return;
+        let commentPointer
+        let commentCopy
+        // Find comment in local Comments array
+        let commentsLength: number = this.project.comments.length
+        // Some comments are removed from this array by the Project service, so don't expect to find one
+        for (let i=0; i < commentsLength; i++) {
+            if (this.project.comments[i]._id == commentId) {
+                commentPointer = this.project.comments[i]
+                commentCopy = Object.assign({}, commentPointer)
+                this.project.comments.splice(i, 1)
+                break
+            }
+        }
+        // Project service handles stats updates as well, but we need to handle socket updates
+        if (commentCopy) {
+            this._projects.commentStats.addCommentToStats(commentCopy, -1)
         }
         // Clear active comment
         this.inactivateComment();
-        // Remove comment form local Comments array
-        this.commentsByIndex[index].splice(commentIndex,1);
+        // Remove from index reference object
+        for (let i=0; i < this.commentsByIndex[index].length; i++) {
+            if (this.commentsByIndex[index][i]._id == commentId) {
+                this.commentsByIndex[index].splice(i, 1)
+                break
+            }
+        }
         // Update line counts
         this.updateAllLineCounts();
-        this._projects.commentStats.addCommentToStats(comment, -1)
+        
     }
 
      /**
@@ -555,7 +595,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // Remove Highlights
         this.decrementHighlights(this.user._id === comment.user_id, comment.start, comment.end);
         // Remove local comment object
-        this.commentsByIndexRemove(comment.id, index, commentIndex);
+        this.commentsByIndexRemove(comment._id, index, commentIndex);
         this.unfocusHighlight(comment.start, comment.end)
     }
 
@@ -881,7 +921,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      * Decides if the Emoji Keyboard is active
      */
     private isEmojiKeyboardActive() : boolean {
-        return this.activeComment.active && (!this.activeComment.type || this.activeComment.type === 'emoji') && this.activeComment.user_id === this.user._id;
+        return this.activeComment && this.activeComment.active && (!this.activeComment.type || this.activeComment.type === 'emoji') && this.activeComment.user_id === this.user._id;
     }
 }
 

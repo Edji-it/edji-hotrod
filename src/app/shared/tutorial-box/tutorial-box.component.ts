@@ -10,6 +10,10 @@ import { AuthService } from '../'
 })
 export class TutorialBoxComponent implements OnInit {
 
+    /*
+    NOTE: IF there is no image, the TutorialBox will not display properly at all.
+    */
+
   @Input() private pageObjs: any[]
   @Input() private tutorialName: string
   @Input() private forceShow: boolean

@@ -1,0 +1,22 @@
+<!--Fire Feed Pane-->
+<div *ngIf="currentReading && currentReading.words" class="sliding-pane from-left" [ngClass]="{ 'slide-in' : visible }">
+  <div class="container-fluid container--less-pad">
+    <h4>Fire Feed
+      <button (click)="hide.emit()" class="close stats-close-btn btn-icon--round" type="button">
+            <span aria-hidden="true">×</span>
+      </button>
+    </h4>
+    <hot-firecard *ngFor="let fireComment of project.comments" [fireComment]="fireComment"></hot-firecard>
+    <div class="fireBound">
+        <div class="fire-icon--light">
+            <span class="is-emoji" [innerHtml]="':seedling:' | emojione"></span>
+        </div>
+        <div class="fireBlock">
+            <div class="list-item list-item--block fireTime-card">
+                {{ currentReading.createdAt | edjidate:'timeAgo' }}
+            </div>
+            <p class="small">Group <b>{{currentReading.title}}</b> was created.</p>
+        </div>
+    </div>
+  </div>
+</div>

@@ -24,6 +24,7 @@ import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 // Services
 import { AppState, InternalStateType } from './app.service';
 import { AuthService, BumblebeeService, ReadingService, ProjectService, SocketService } from './shared';
+import { CommentService } from './shared/comment.service';
 import { ReuseStrategy } from './route-reuse-strategy';
 
 // Directives
@@ -44,7 +45,8 @@ import { LoginForm, GuestForm } from './forms';
 import { LoginModal, ResetPassComponent, DeleteCommentModal, DeleteReadingModal, DeleteProjectModal, AddProjectModal, LoginRequiredModal } from './modals';
 import { AnnotatorComponent, CommentComponent, TextCommentComponent, EmojiCommentComponent, EmojiKeyboardComponent } from './annotator';
 import { ProjectPageComponent, ProjectInfoComponent, OwnerToolsComponent, LeaderboardComponent } from './project-page';
-import { ReadingPageComponent, DeleteProjectComponent } from './reading-page';
+import { FirefeedComponent } from './project-page/owner-tools/firefeed/firefeed.component';
+import { FirecardComponent } from './project-page/owner-tools/firefeed/firecard/firecard.component';
 import { NewReadingPage, UploadModalComponent, UploadPdfModalComponent } from './new-reading-page';
 import { DashboardComponent, JoinedDashComponent, CreatedDashComponent, TutorialReadingComponent, ReadingCardComponent } from './dashboard';
 import { NoContentComponent } from './no-content';
@@ -67,6 +69,7 @@ const APP_PROVIDERS = [
   AuthService,
   ReadingService,
   ProjectService,
+  CommentService,
   SocketService,
   BumblebeeService,
   { 
@@ -115,6 +118,8 @@ type StoreType = {
     AnnotatorComponent,
     NewReadingPage,
     LeaderboardComponent,
+    FirefeedComponent,
+    FirecardComponent,
     UploadModalComponent,
     TutorialReadingComponent,
     UploadPdfModalComponent,
@@ -123,8 +128,6 @@ type StoreType = {
     OwnerToolsComponent,
     LoginRequiredModal,
     TutorialBoxComponent,
-    ReadingPageComponent,
-    DeleteProjectComponent,
     DashboardComponent,
     JoinedDashComponent,
     CreatedDashComponent,
