@@ -68,6 +68,7 @@ export class ProjectService {
                     this.currentProjectSource.next(this.project);
                     // Clear stats object
                     this._commentStats.resetStats()
+                    this.project.comments.reverse()
                     return this.project;
                 });
     }
