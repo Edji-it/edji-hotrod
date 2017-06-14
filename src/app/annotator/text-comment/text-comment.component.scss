@@ -61,6 +61,7 @@ textarea.text-comment-input,
 
     .text-comment & {
         max-height: 30px !important;
+        overflow: hidden;
     }
 
     @extend %noSelect;
@@ -70,6 +71,7 @@ textarea.text-comment-input,
         max-height: none !important;
         padding: 8px 23px 8px 10px !important;
         cursor: text;
+        overflow-y: auto;
         @extend %textSelect;
         &::-moz-selection {
         background-color: #cdcdcd;
