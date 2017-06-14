@@ -120,7 +120,6 @@ export class CommentComponent implements OnInit {
 
     this._projects.saveComment(this.comment.project_id, commentData, this.comment.start, this.comment.end, this.comment.type, this.comment.text, this.comment._id, this.comment.loc)
       .then(comment => {
-        console.log(comment)
         this.isLoading = false
         this.angulartics.eventTrack.next({ action: 'updateComment', properties: { category: 'projectAction', label: 'success' }})
         this.justSaved = true
