@@ -21,7 +21,7 @@ export class UploadPdfModalComponent implements OnInit {
   private newDocsIds: string[] = []; 
   // private newImgUrls: string[] = [];
   private selectedIndex: number = 0;
-  private locker: any; 
+  private locker: Locker; 
   private file: any = {};
   private title: string = '';
   private selectedFiles: any[] = [];
@@ -29,6 +29,7 @@ export class UploadPdfModalComponent implements OnInit {
   private uploadUrl: string = '//grapple-dev.edji.it';
   private noUploadAllowed: boolean = true;
   private errorMsg: string = '';
+  private pdfFileInputId : string  = "pdfFileInput";
 
   constructor(private _locker: Locker, private _media: MediaService, private _auth: AuthService) {
     this.locker = _locker.useDriver(Locker.DRIVERS.LOCAL);
@@ -62,7 +63,14 @@ export class UploadPdfModalComponent implements OnInit {
    * Set 'file' variable and validate file
    */
   updateUploadFile() {
-    const files = document.getElementById('pdfFileInput')['files'];
+
+    // 6.15
+    if (document.getElementById(this.pdfFileInputId) == null)
+    {
+      console.error("Could not find the pdfFileInput element!");
+    } // if
+
+    const files = document.getElementById(this.pdfFileInputId)['files'];
     this.file = files[0];
     if (this.file.name && this.title.length < 1) {
       this.title = this.file.name;
@@ -106,6 +114,7 @@ export class UploadPdfModalComponent implements OnInit {
         // Clear fields
         this.file = {};
         this.title = '';
+        this.noUploadAllowed = true;
       }, error => {
         this.uploading = false;
         this.errorMsg = '<b>Upload failed!</b> Please try again later, or with a different file. If this problem persists, please <a href="mailto:brennen@edji.it">contact us</a>.';

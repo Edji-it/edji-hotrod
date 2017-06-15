@@ -9,6 +9,12 @@ import { User } from './datatypes'
 
 @Injectable()
 export class AuthService implements CanActivate {
+
+    /*
+    Last Mod: 6.15.17
+    Edit user prefs from here. Everything under the datatype User should be edited through here.
+    */
+
     private baseUrl = "http://localhost:3354";
     public protocol = window.location.protocol ? window.location.protocol : '';
     private locker: Locker;

@@ -56,6 +56,7 @@
                                     <div title="Delete Group" class="icon-button" (click)="removeUploadedDoc(doc)">
                                       <span [innerHtml]="':x:' | emojione"></span>
                                    </div>
+                                   <!-- The rest of the card -->
                                     <div class="card__center-overlay">
                                         <span class="doc-title" *ngIf="doc.title">{{ doc.title }}</span>
                                         <span class="doc-title" *ngIf="!doc.title"><i>Untitled</i></span>
