@@ -164,46 +164,22 @@ export class UploadPdfModalComponent implements OnInit {
     // Since the PDF's are just stored locally, deleting an uploaded PDF is mostly 
     // gonna be front end magic. We're gonna dive into the user prefs as found in
     // auth.service.ts and remove that sucker.
+
+    console.log()
     
     this.uploadedDocs.forEach( (doc, index) => {
       // console.log(doc);
       if (docToDelete._id === doc._id) {
         // Remove doc
-        // console.log("id's are the same? " + (docToDelete._id === doc._id));
 
-        /*
-        console.log("uploadedDocs (pre-Delete)");
-        this.uploadedDocs.forEach((doc) => {
-          console.log(doc);
-        });
-        */
-
-        console.log("TARGETING:");
-        console.log(doc);
+        // console.log("TARGETING:");
+        // console.log(doc);
         this.uploadedDocs.splice(index, 1);
 
-        /*
-        console.log("The following documents exist in uploadedDocs post-delete:")
-
-        this.uploadedDocs.forEach((doc) => {
-          console.log(doc);
-        });
-        */
-
-        console.log("DELETED:");
-
-        console.log(this._auth.getUser().media.documents[index]);
-
+        // console.log("DELETED:");
+        // console.log(this._auth.getUser().media.documents[index]);
       }
     });
-    /*
-    console.log("These documents remain: ")
-    this._auth.getUser().media.documents.forEach((doc) =>
-    {
-      console.log(doc);
-    });
-    */
-
     // Here is the process for updating the user prefs as found in auth.service.ts
     this.locker.set('uploadedDocs', this.uploadedDocs);
     let user = this._auth.getUser();
@@ -220,6 +196,8 @@ export class UploadPdfModalComponent implements OnInit {
             console.log(error)
           }
         );
+
+    this.saveUploadedDocs();
     
   }
 
