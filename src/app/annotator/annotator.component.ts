@@ -134,8 +134,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             })
         );
 
-        this._readings.clear()
-
         // Get Reading via Observable
         this.subscriptions.push(
             this._readings.currentReading.subscribe(
@@ -154,13 +152,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             (project) => {
                 if (project) {
                     this.project = project
-
-                    // Get Reading once we know this Project's reading ID
-                    if (this.reading._id != this.project.reading_id) {
-                        this._readings.get(this.project.reading_id)
-                            .take(1)
-                            .subscribe()
-                    }
                 }
             },
             (error) => {
