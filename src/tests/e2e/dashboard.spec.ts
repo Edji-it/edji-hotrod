@@ -63,7 +63,7 @@ describe('Dashboard Page', () => {
         it("should get to a project by entering a code", () => {
             dashboard.getPage();
             // initial validation
-            browser.wait(EC.presenceOf(dashboard.projectCodeInput), 8000, "never saw a project");
+            browser.wait(EC.presenceOf(dashboard.projectCodeInput), 8000, "never saw lightning code input");
 
             // form handling
             dashboard.projectCodeInput.sendKeys(login.validProjectCode);

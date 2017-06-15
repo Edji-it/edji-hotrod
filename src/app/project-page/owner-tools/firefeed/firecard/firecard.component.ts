@@ -31,7 +31,7 @@ export class FirecardComponent implements OnInit, OnDestroy {
         reading => {
           if (reading._id) {
              this.currentReading = reading
-            if (this.currentReading.words[this.fireComment.start].styles[0]==='img') {
+            if (this.currentReading.words[this.fireComment.start] && this.currentReading.words[this.fireComment.start].styles[0]==='img') {
               this.isImage = true
             }
           }
