@@ -21,7 +21,7 @@ export class UploadPdfModalComponent implements OnInit {
   private newDocsIds: string[] = []; 
   // private newImgUrls: string[] = [];
   private selectedIndex: number = 0;
-  private locker: any;
+  private locker: any; 
   private file: any = {};
   private title: string = '';
   private selectedFiles: any[] = [];
@@ -36,6 +36,7 @@ export class UploadPdfModalComponent implements OnInit {
 
   ngOnInit() {
     // Load previously uploaded docs
+    // (6.15.17) NOTE: We tried changing this here first if tree and everything went to hell. Be careful.
     if (this.locker.get('uploadedDocs')) {
       this.uploadedDocs = this.locker.get('uploadedDocs');
     } else if (this._auth.getUser().media && this._auth.getUser().media.documents) {
@@ -156,9 +157,16 @@ export class UploadPdfModalComponent implements OnInit {
   }
 
   /**
-   * Update a single document, and propagate changes
+   * 6.15.17
+   * Delete a PDF through front end magic. Since things are stored locally and through AWS, no need to do a server call.
    */
   removeUploadedDoc(docToDelete: any) {
+
+    // Since the PDF's are just stored locally, deleting an uploaded PDF is mostly 
+    // gonna be front end magic. We're gonna dive into the user prefs as found in
+    // auth.service.ts and remove that sucker.
+
+    // Edit our front-end listing...
     this.uploadedDocs.forEach( (doc, index) => {
       if (docToDelete._id === doc._id) {
         // Remove doc 
@@ -166,13 +174,14 @@ export class UploadPdfModalComponent implements OnInit {
       }
     });
 
+    // and now overwrite the list of docs in user prefs so that this carries across page loads.
     this._auth.forceUpdateDocuments(this.uploadedDocs)
       .subscribe(() => {
         this.uploadedDocs = this._auth.getUser().media.documents;
         // console.log("Deleting a PDF should be done now.");
       });
-  }
-
+  } //  removeUploadedDoc(docToDelete: any) 
+ 
   /**
    * Add upload URL to array and localStorage
    */
