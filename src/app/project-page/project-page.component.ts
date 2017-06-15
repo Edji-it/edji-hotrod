@@ -2,8 +2,8 @@ import { Observable, Subscription } from 'rxjs/Rx'
 import { Router, ActivatedRoute, Params } from '@angular/router'
 import { Component, OnDestroy, OnInit } from '@angular/core'
 
-import { AuthService, ProjectService, ReadingService, SocketService } from '../shared';
-import { Project, Reading, User } from './../shared/datatypes';
+import { ProjectService, SocketService, AuthService } from '../shared'
+import { Project, User } from './../shared/datatypes'
 
 @Component({
     // moduleId: module.id,
@@ -13,7 +13,6 @@ import { Project, Reading, User } from './../shared/datatypes';
 })
 export class ProjectPageComponent implements OnInit, OnDestroy {
     private project: Project = <Project>{}
-    private reading: Reading = <Reading>{}
     private subscriptions: Subscription[] = []
     private joinedRoom: boolean = false
     private error: string
@@ -28,8 +27,7 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
         private _projects: ProjectService,
         private _socket: SocketService,
         private _auth: AuthService,
-        private route: ActivatedRoute,
-        private _readings: ReadingService
+        private route: ActivatedRoute
     ) {}
 
     ngOnInit() {
@@ -66,22 +64,6 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
                         // Join Socket Room based on ID param
                         this._socket.joinSocketRoom(this.project._id, this.user._id)
                         this.joinedRoom = true
-                    }
-
-                    // Get Reading once we know this Project's reading ID
-                    if (this.reading._id != this.project.reading_id) {
-                        // Make sure we're fresh
-                        this._readings.clear()
-                        // Call for the new reading
-                        this._readings.get(this.project.reading_id)
-                            .take(1)
-                            .subscribe( 
-                                reading => {
-                                    this.reading = reading
-                                },
-                                error => {
-                                    
-                                })
                     }
                 }
             },
