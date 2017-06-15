@@ -256,7 +256,6 @@ export class AuthService implements CanActivate {
                         }
                     }
 
-                    // Save it!
                     // This is repeated code from forceUpdateDocuments() we could consolidate these. 6.14.
                     this.http.put( this.baseUrl + '/users', {
                             user: mergedUser
@@ -295,21 +294,28 @@ export class AuthService implements CanActivate {
     - Insert the new set that you want to replace media.documents with.
     */
     public forceUpdateDocuments (newDocs : any[]) : Observable<any> {
+        console.log("ran the baby");
         return new Observable(observer => {
             // Get the latest copy of the user object. The user object must always be fresh.
             this.refreshUser().take(1)
                 .subscribe(currentUser =>{
-                    let mergedUser = Object.assign({}, currentUser) // Oh hey look we have it now
+                    let mergedUser = Object.assign({}, currentUser)// Oh hey look we have it now
                     mergedUser.media.documents = newDocs; // let's just shove those in there
 
-                    // Save it!
+                    this.user = mergedUser;
+                    
+                    this.user.media.documents.forEach((doc) => {
+                        console.log(doc);
+                    });
+
+                    console.log("User is: " + mergedUser.username);
+                    
                     // This is repeated code from updateUser() we could consolidate these. 6.14.17
                     this.http.put( this.baseUrl + '/users', {
                             user: mergedUser
                         }, this.getOptions())
                         .map((data) => {
                             let object = data.json();
-
                             // if the response has a token, the user should be successfully registered and logged in
                             if (object.user) {
                                 this.setUser(object.user);
@@ -327,6 +333,8 @@ export class AuthService implements CanActivate {
                             observer.error(error)
                             console.error("Failed in forceUpdateDocuments in auth.service.ts when trying to save the user.");
                         })
+                    console.log("got over here");
+                    // this.user = mergedUser;
                 },
                 error => {
                     observer.error(error)

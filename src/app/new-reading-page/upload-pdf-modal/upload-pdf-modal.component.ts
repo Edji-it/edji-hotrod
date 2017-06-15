@@ -104,7 +104,7 @@ export class UploadPdfModalComponent implements OnInit {
         // Clear fields
         this.file = {};
         this.title = '';
-        console.log("[upload-pdf-modal] made it this far.");
+        console.log("[upload-pdf-modal] finished upload.");
       }, error => {
         this.uploading = false;
         this.errorMsg = '<b>Upload failed!</b> Please try again later, or with a different file. If this problem persists, please <a href="mailto:brennen@edji.it">contact us</a>.';
@@ -164,13 +164,10 @@ export class UploadPdfModalComponent implements OnInit {
     // Since the PDF's are just stored locally, deleting an uploaded PDF is mostly 
     // gonna be front end magic. We're gonna dive into the user prefs as found in
     // auth.service.ts and remove that sucker.
-
-    console.log()
     
     this.uploadedDocs.forEach( (doc, index) => {
       // console.log(doc);
       if (docToDelete._id === doc._id) {
-        // Remove doc
 
         // console.log("TARGETING:");
         // console.log(doc);
@@ -186,19 +183,17 @@ export class UploadPdfModalComponent implements OnInit {
 
     this._auth.forceUpdateDocuments( this.uploadedDocs )
         .take(1)
-        .subscribe(
-          (user) => {
-            if (user.documents) {
-              this.uploadedDocs = user.media.documents
-            }
+        .subscribe(() => {
+
+            this._auth.getUser().media.documents.forEach((doc) => {
+                console.log(doc);
+            });
+            this.uploadedDocs = this._auth.getUser().media.documents;
           },
           (error) => {
             console.log(error)
           }
         );
-
-    this.saveUploadedDocs();
-    
   }
 
   /**
@@ -217,6 +212,7 @@ export class UploadPdfModalComponent implements OnInit {
    * Save Uploaded Doc list to localStorage AND user object
    */
   saveUploadedDocs(): void {
+    console.log("Saved the uploadedDocs")
     this.locker.set('uploadedDocs', this.uploadedDocs);
     let user = this._auth.getUser();
     if (!user.media) {
@@ -252,9 +248,5 @@ export class UploadPdfModalComponent implements OnInit {
   insertImage(url: string) : void {
     this.returnImage.emit([{ 'url': url }]);
     this.closeModal.emit();
-  }
-
-  private removePdf(uuid: string) {
-
   }
 }

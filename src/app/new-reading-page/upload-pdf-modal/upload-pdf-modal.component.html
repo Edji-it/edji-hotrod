@@ -59,7 +59,7 @@
                                     <div class="card__center-overlay">
                                         <span class="doc-title" *ngIf="doc.title">{{ doc.title }}</span>
                                         <span class="doc-title" *ngIf="!doc.title"><i>Untitled</i></span>
-                                        <button class="btn btn-primary e2e-insert-doc" (click)="insertPages(doc)">Insert {{ doc.pages.length }} Page<span *ngIf="doc.pages.length > 1" >s</span></button>
+                                        <button class="btn btn-primary e2e-insert-doc" (click)="insertPages(doc.pages)">Insert {{ doc.pages.length }} Page<span *ngIf="doc.pages.length > 1" >s</span></button>
                                     </div>
                                 </div>
                                 <div *ngFor="let url of doc.pages; let i = index" (click)="insertImage(url)" class="card document-card">
