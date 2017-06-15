@@ -294,7 +294,7 @@ export class AuthService implements CanActivate {
     - Insert the new set that you want to replace media.documents with.
     */
     public forceUpdateDocuments (newDocs : any[]) : Observable<any> {
-        console.log("ran the baby");
+        // console.log("ran the baby");
         return new Observable(observer => {
             // Get the latest copy of the user object. The user object must always be fresh.
             this.refreshUser().take(1)
@@ -303,12 +303,14 @@ export class AuthService implements CanActivate {
                     mergedUser.media.documents = newDocs; // let's just shove those in there
 
                     this.user = mergedUser;
-                    
+                
+                    /*
                     this.user.media.documents.forEach((doc) => {
                         console.log(doc);
                     });
+                    */
 
-                    console.log("User is: " + mergedUser.username);
+                    // console.log("User is: " + mergedUser.username);
                     
                     // This is repeated code from updateUser() we could consolidate these. 6.14.17
                     this.http.put( this.baseUrl + '/users', {
@@ -333,7 +335,7 @@ export class AuthService implements CanActivate {
                             observer.error(error)
                             console.error("Failed in forceUpdateDocuments in auth.service.ts when trying to save the user.");
                         })
-                    console.log("got over here");
+                    // console.log("got over here");
                     // this.user = mergedUser;
                 },
                 error => {

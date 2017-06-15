@@ -21,7 +21,7 @@ export class UploadPdfModalComponent implements OnInit {
   private newDocsIds: string[] = []; 
   // private newImgUrls: string[] = [];
   private selectedIndex: number = 0;
-  private locker: Locker;
+  private locker: any;
   private file: any = {};
   private title: string = '';
   private selectedFiles: any[] = [];
@@ -36,8 +36,9 @@ export class UploadPdfModalComponent implements OnInit {
 
   ngOnInit() {
     // Load previously uploaded docs
-    // get the media from the user object which is already loaded
-    if (this._auth.getUser().media && this._auth.getUser().media.documents) {
+    if (this.locker.get('uploadedDocs')) {
+      this.uploadedDocs = this.locker.get('uploadedDocs');
+    } else if (this._auth.getUser().media && this._auth.getUser().media.documents) {
       this.uploadedDocs = this._auth.getUser().media.documents;
     }
     // Check existing Uploaded Docs for any not yet marked as converted
@@ -104,7 +105,6 @@ export class UploadPdfModalComponent implements OnInit {
         // Clear fields
         this.file = {};
         this.title = '';
-        console.log("[upload-pdf-modal] finished upload.");
       }, error => {
         this.uploading = false;
         this.errorMsg = '<b>Upload failed!</b> Please try again later, or with a different file. If this problem persists, please <a href="mailto:brennen@edji.it">contact us</a>.';
@@ -140,7 +140,7 @@ export class UploadPdfModalComponent implements OnInit {
           }
         }, error => {
           // Handle this?
-      });
+        });
   }
 
   /**
@@ -156,44 +156,21 @@ export class UploadPdfModalComponent implements OnInit {
   }
 
   /**
-   * Remove an uploaded document from our list of avaiable documents
-   * 6.14.17
+   * Update a single document, and propagate changes
    */
   removeUploadedDoc(docToDelete: any) {
-
-    // Since the PDF's are just stored locally, deleting an uploaded PDF is mostly 
-    // gonna be front end magic. We're gonna dive into the user prefs as found in
-    // auth.service.ts and remove that sucker.
-    
     this.uploadedDocs.forEach( (doc, index) => {
-      // console.log(doc);
       if (docToDelete._id === doc._id) {
-
-        // console.log("TARGETING:");
-        // console.log(doc);
+        // Remove doc 
         this.uploadedDocs.splice(index, 1);
-
-        // console.log("DELETED:");
-        // console.log(this._auth.getUser().media.documents[index]);
       }
     });
-    // Here is the process for updating the user prefs as found in auth.service.ts
-    this.locker.set('uploadedDocs', this.uploadedDocs);
-    let user = this._auth.getUser();
 
-    this._auth.forceUpdateDocuments( this.uploadedDocs )
-        .take(1)
-        .subscribe(() => {
-
-            this._auth.getUser().media.documents.forEach((doc) => {
-                console.log(doc);
-            });
-            this.uploadedDocs = this._auth.getUser().media.documents;
-          },
-          (error) => {
-            console.log(error)
-          }
-        );
+    this._auth.forceUpdateDocuments(this.uploadedDocs)
+      .subscribe(() => {
+        this.uploadedDocs = this._auth.getUser().media.documents;
+        // console.log("Deleting a PDF should be done now.");
+      });
   }
 
   /**
@@ -212,7 +189,6 @@ export class UploadPdfModalComponent implements OnInit {
    * Save Uploaded Doc list to localStorage AND user object
    */
   saveUploadedDocs(): void {
-    console.log("Saved the uploadedDocs")
     this.locker.set('uploadedDocs', this.uploadedDocs);
     let user = this._auth.getUser();
     if (!user.media) {
@@ -221,7 +197,7 @@ export class UploadPdfModalComponent implements OnInit {
     if (!user.media.documents) {
         user.media.documents = [];
     }
-
+    user.media.documents = this.uploadedDocs;
     this._auth.updateUser( user )
         .take(1)
         .subscribe(
