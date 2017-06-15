@@ -134,14 +134,15 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             })
         );
 
-        this._readings.clear()
-
         // Get Reading via Observable
         this.subscriptions.push(
             this._readings.currentReading.subscribe(
                 reading => {
-                    this.reading = reading;
-                    this.updateMetaTags();
+                    // Avoid onChange cycles if the reading is the same
+                    if (this.reading._id != reading._id) {
+                        this.reading = reading;
+                        this.updateMetaTags();
+                    }
                 },
                 error => {
                     console.error(error);
@@ -150,23 +151,18 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         )
 
         // Get Project via Observable
-        this.subscriptions.push( this._projects.currentProject.subscribe(
-            (project) => {
-                if (project) {
-                    this.project = project
-
-                    // Get Reading once we know this Project's reading ID
-                    if (this.reading._id != this.project.reading_id) {
-                        this._readings.get(this.project.reading_id)
-                            .take(1)
-                            .subscribe()
+        this.subscriptions.push( 
+            this._projects.currentProject.subscribe(
+                (project) => {
+                    if (project) {
+                        this.project = project
                     }
+                },
+                (error) => {
+                    console.error(error)
                 }
-            },
-            (error) => {
-                console.error(error)
-            }
-        ) )
+            ) 
+        )
 
         /** Run-once logic to initialize the comment-based arrays and stats */
         let processedCommentData = this._projects.processComments(this.project)
