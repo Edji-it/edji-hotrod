@@ -156,28 +156,71 @@ export class UploadPdfModalComponent implements OnInit {
   }
 
   /**
-   * Update a single document, and propagate changes
+   * Remove an uploaded document from our list of avaiable documents
+   * 6.14.17
    */
   removeUploadedDoc(docToDelete: any) {
 
-    // this.uploadedDocs = this.locker.get('uploadedDocs');
-     // console.log("Deleting:")
-    // console.log(docToDelete);
+    // Since the PDF's are just stored locally, deleting an uploaded PDF is mostly 
+    // gonna be front end magic. We're gonna dive into the user prefs as found in
+    // auth.service.ts and remove that sucker.
     
     this.uploadedDocs.forEach( (doc, index) => {
       // console.log(doc);
       if (docToDelete._id === doc._id) {
         // Remove doc
         // console.log("id's are the same? " + (docToDelete._id === doc._id));
+
+        /*
+        console.log("uploadedDocs (pre-Delete)");
+        this.uploadedDocs.forEach((doc) => {
+          console.log(doc);
+        });
+        */
+
+        console.log("TARGETING:");
+        console.log(doc);
         this.uploadedDocs.splice(index, 1);
 
-        console.log("In docs, found:");
+        /*
+        console.log("The following documents exist in uploadedDocs post-delete:")
+
+        this.uploadedDocs.forEach((doc) => {
+          console.log(doc);
+        });
+        */
+
+        console.log("DELETED:");
 
         console.log(this._auth.getUser().media.documents[index]);
+
       }
     });
+    /*
+    console.log("These documents remain: ")
+    this._auth.getUser().media.documents.forEach((doc) =>
+    {
+      console.log(doc);
+    });
+    */
 
-    this.saveUploadedDocs();
+    // Here is the process for updating the user prefs as found in auth.service.ts
+    this.locker.set('uploadedDocs', this.uploadedDocs);
+    let user = this._auth.getUser();
+
+    this._auth.forceUpdateDocuments( this.uploadedDocs )
+        .take(1)
+        .subscribe(
+          (user) => {
+            if (user.documents) {
+              this.uploadedDocs = user.media.documents
+            }
+          },
+          (error) => {
+            console.log(error)
+          }
+        );
+    
   }
 
   /**
@@ -204,7 +247,7 @@ export class UploadPdfModalComponent implements OnInit {
     if (!user.media.documents) {
         user.media.documents = [];
     }
-    user.media.documents = this.uploadedDocs;
+
     this._auth.updateUser( user )
         .take(1)
         .subscribe(

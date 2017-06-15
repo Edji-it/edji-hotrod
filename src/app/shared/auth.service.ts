@@ -214,6 +214,7 @@ export class AuthService implements CanActivate {
      * Call to update user object
      * - Used primarily to update user preferences and documents
      * - Cannot be passed password
+     * - Prevents user from being replaced, and merges instead of assigns.
      */
     public updateUser(updatedUser: any): Observable<any> {
         return new Observable(observer => {
@@ -255,6 +256,8 @@ export class AuthService implements CanActivate {
                         }
                     }
 
+                    // Save it!
+                    // This is repeated code from forceUpdateDocuments() we could consolidate these. 6.14.
                     this.http.put( this.baseUrl + '/users', {
                             user: mergedUser
                         }, this.getOptions())
@@ -284,6 +287,54 @@ export class AuthService implements CanActivate {
                 })
         });
     }
+
+    /*
+    Update media.documents in user, returns a User object.
+    - We use this to update it since updateUser only merges things together.
+    - This properly replaces the contents of user, but ONLY the media.documents.
+    - Insert the new set that you want to replace media.documents with.
+    */
+    public forceUpdateDocuments (newDocs : any[]) : Observable<any> {
+        return new Observable(observer => {
+            // Get the latest copy of the user object. The user object must always be fresh.
+            this.refreshUser().take(1)
+                .subscribe(currentUser =>{
+                    let mergedUser = Object.assign({}, currentUser) // Oh hey look we have it now
+                    mergedUser.media.documents = newDocs; // let's just shove those in there
+
+                    // Save it!
+                    // This is repeated code from updateUser() we could consolidate these. 6.14.17
+                    this.http.put( this.baseUrl + '/users', {
+                            user: mergedUser
+                        }, this.getOptions())
+                        .map((data) => {
+                            let object = data.json();
+
+                            // if the response has a token, the user should be successfully registered and logged in
+                            if (object.user) {
+                                this.setUser(object.user);
+                            }
+                            if (object.token) {
+                                this.setUser(object.token);
+                            }
+
+                            return data.json();
+                        })
+                        .toPromise()
+                        .then( user => {
+                            observer.next(user)
+                        }, error => {
+                            observer.error(error)
+                            console.error("Failed in forceUpdateDocuments in auth.service.ts when trying to save the user.");
+                        })
+                },
+                error => {
+                    observer.error(error)
+                    console.error(error)
+                    console.error("Failed in forceUpdateDocuments in auth.service.ts");
+                })
+        });
+    } // public forceUpdatedDocuments (any[] : newDocs) : Observable<any>
 
     /**
      * Calls to server, which creates a temp user object
