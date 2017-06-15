@@ -151,3 +151,18 @@ $pdfThumbHeight: 250px;
     font-weight: bold;
     color: #333;
 }
+
+// Added 6.15.17
+.btn--delete-pdf {
+    opacity: 0.5;
+    filter: grayscale(100%);
+
+    & span {
+        pointer-events: none;
+    }
+
+    &:hover, &:focus, &:active {
+        filter: grayscale(0%);
+        opacity: 1;
+    }
+}

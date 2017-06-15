@@ -53,7 +53,7 @@
                             <div *ngIf="doc.pages && doc.pages[0]" class="card-group">
                                 <div class="card title-card">
                                     <!-- Delete Button -->
-                                    <div title="Delete Group" class="icon-button" (click)="removeUploadedDoc(doc)">
+                                    <div title="Delete Group" class="icon-button btn--delete-pdf" (click)="removeUploadedDoc(doc)">
                                       <span [innerHtml]="':x:' | emojione"></span>
                                    </div>
                                    <!-- The rest of the card -->
