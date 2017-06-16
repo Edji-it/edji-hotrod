@@ -8,7 +8,7 @@ import { NgModule, Pipe, PipeTransform } from '@angular/core'
 // Available timeFormat for timeStamp: longDate, mediumDate, shortDate
 
 export class EdjiDatePipe implements PipeTransform {
-  transform(isoTime:string, displayType?:string, timeFormat?:string):string {
+  transform(isoTime:string, displayType?:string, timeFormat?:string, triggerChange?:number):string {
     let time = new Date(isoTime)
     if (displayType==='timeAgo') {
       // Convert the passed in timestamp to a time ago format
@@ -50,7 +50,7 @@ export class EdjiDatePipe implements PipeTransform {
           }
       } else if (minDiff < 1) {
           diffText += "less than 1 min"
-      } else if (minDiff < 1) {
+      } else if (minDiff == 1) {
           diffText += minDiff + " min"
       } else {
           diffText += minDiff + " mins"
