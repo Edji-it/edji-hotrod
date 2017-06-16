@@ -193,7 +193,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                     }
                 } else if (commentUpdate.action === 'UPDATE') {
                     if (cIndex > -1 && this.commentsByIndex[wIndex] && this.commentsByIndex[wIndex][cIndex]) {
-                        // this.commentsByIndex[wIndex][cIndex].data = comment.data;
+                        this.commentsByIndexUpdate(comment, wIndex, cIndex)
                     } else {
                         // Socket updates don't come through with a timestamp
                         comment.createdAt = Date.now()
@@ -507,6 +507,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 // Maybe show a warning icon?
                 console.warn(error);
             });
+    }
+
+    commentsByIndexUpdate(comment, wordIndex: number, commentIndex: number) {
+        this.commentsByIndex[wordIndex][commentIndex].data = comment.data;
     }
 
     commentsByIndexAdd(comment, index: number, addQuietly ?: boolean): void {
