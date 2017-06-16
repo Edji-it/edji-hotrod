@@ -51,9 +51,9 @@
                         <div *ngFor="let doc of uploadedDocs; let i = index" class="upload-list-item" [class.new]="newDocsIds.indexOf(doc.uuid) > -1">
                             <!--Display doc pages if available-->
                             <div *ngIf="doc.pages && doc.pages[0]" class="card-group">
-                                <div class="card title-card">
+                                <div class="card title-card" id="titleCard">
                                     <!-- Delete Button -->
-                                    <div title="Delete Group" class="icon-button btn--delete-pdf" (click)="removeUploadedDoc(doc)">
+                                    <div title="Delete Group" id="pdfDelBtn" class="icon-button btn--delete-pdf" (click)="removeUploadedDoc(doc)">
                                       <span [innerHtml]="':x:' | emojione"></span>
                                    </div>
                                    <!-- The rest of the card -->

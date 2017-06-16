@@ -219,6 +219,25 @@ describe('New Reading Page', () => {
             // Should see image in new reading
             browser.wait(EC.presenceOf(newReading.imageInReading), 10000, "never saw PDF in the new reading");
         });
+
+        // This following test relies on the previous one for a PDF to delete.
+        it('should delete a PDF that was uploaded', function() {
+           // Open and wait for New Reading page
+            newReading.getPage();
+            browser.wait(EC.elementToBeClickable(newReading.uploadPDfModalButton), 5000);
+            newReading.uploadPDfModalButton.click();
+           
+            // Click the delete button
+            let allPdfCards = element.all(by.id("titleCard"));
+            let pdfCard = element(by.id("titleCard"));
+
+            let delBtn = element(by.id("pdfDelBtn"));
+
+            browser.wait(EC.elementToBeClickable(delBtn), 5000, "delBtn never became clickable");
+            delBtn.click();
+
+            browser.wait(EC.invisibilityOf(delBtn), 5000, 'delete button should not be visible.');
+        });
     });
 
     describe("Image upload", () => {
