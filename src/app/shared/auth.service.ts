@@ -9,12 +9,19 @@ import { User } from './datatypes'
 
 @Injectable()
 export class AuthService implements CanActivate {
+
+    /*
+    Last Mod: 6.15.17
+    Edit user prefs from here. Everything under the datatype User should be edited through here.
+    */
+
     private baseUrl = "http://localhost:3354";
     public protocol = window.location.protocol ? window.location.protocol : '';
     private locker: Locker;
     private ENV: string = "dev";
 
-    private user: User;
+    //NOTE: (6/15/17) If this.user ever needs to be edited it, make a copy, edit the copy, THEN assign it so this.user is always fresh.
+    private user: User; 
     private currentUserSource: BehaviorSubject<any>;
     private currentUser: Observable<any>;
 
@@ -212,8 +219,9 @@ export class AuthService implements CanActivate {
 
     /**
      * Call to update user object
-     * - Used primarily to update user preferences and documents
+     * - Used primarily to update user preferences and document
      * - Cannot be passed password
+     * - NOTE: Prevents user from being outright replaced, and merges instead of overwrites.
      */
     public updateUser(updatedUser: any): Observable<any> {
         return new Observable(observer => {
@@ -255,6 +263,7 @@ export class AuthService implements CanActivate {
                         }
                     }
 
+                    // This is repeated code from forceUpdateDocuments() we could consolidate these. 6.14.
                     this.http.put( this.baseUrl + '/users', {
                             user: mergedUser
                         }, this.getOptions())
@@ -284,6 +293,67 @@ export class AuthService implements CanActivate {
                 })
         });
     }
+
+    /*
+    6.15.17
+    Update media.documents in user, returns a User object. Use for deleting PDF's in upload-pfd.modal.component
+    We delete a PDF through front end magic. Since things are stored locally and through AWS, no need to do a server call.
+    - We use this to update it since updateUser only merges things together.
+    - This properly replaces the contents of user, but ONLY the media.documents.
+    - Insert the new set that you want to replace media.documents with.
+    */
+    public forceUpdateDocuments (newDocs : any[]) : Observable<any> {
+        // console.log("ran the baby");
+
+        // We want to return an Observable because those are handy for timing's sake, so let's do that.
+        return new Observable(observer => {
+            this.refreshUser().take(1)
+                .subscribe(currentUser =>{
+                    // Make a copy of the user object, edit it, and shove it in.
+                    let mergedUser = Object.assign({}, currentUser)// Get the latest copy of the user object.
+                    mergedUser.media.documents = newDocs; // let's just shove those in there
+                    this.user = mergedUser; // NOTE: We make a new object and assign it so that the user object is always nice and fresh.
+                
+                    /* some handy console logs in case everything dies
+                    console.log("User is: " + mergedUser.username);
+                    this.user.media.documents.forEach((doc) => {
+                        console.log(doc);
+                    });
+                    */
+                    
+                    // This is repeated code from updateUser() we could consolidate these. (6.14.17)
+                    this.http.put( this.baseUrl + '/users', {
+                            user: mergedUser
+                        }, this.getOptions())
+                        .map((data) => {
+                            let object = data.json();
+                            // if the response has a token, the user should be successfully registered and logged in
+                            if (object.user) {
+                                this.setUser(object.user);
+                            }
+                            if (object.token) {
+                                this.setUser(object.token);
+                            }
+
+                            return data.json();
+                        })
+                        .toPromise()
+                        .then( user => {
+                            observer.next(user)
+                        }, error => {
+                            observer.error(error)
+                            console.error("Failed in forceUpdateDocuments in auth.service.ts when trying to save the user.");
+                        })
+                    // console.log("got over here");
+                    // this.user = mergedUser;
+                },
+                error => {
+                    observer.error(error)
+                    console.error(error)
+                    console.error("Failed in forceUpdateDocuments in auth.service.ts");
+                })
+        });
+    } // public forceUpdatedDocuments (any[] : newDocs) : Observable<any>
 
     /**
      * Calls to server, which creates a temp user object

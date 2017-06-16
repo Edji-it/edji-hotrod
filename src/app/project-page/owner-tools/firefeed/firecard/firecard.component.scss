@@ -54,19 +54,22 @@
     padding: 5px;
 }
 
+$fireBoundVPad: 40px;
+
 .fireBound {
-    margin: 20px 0px;
+    padding: 0px 0px $fireBoundVPad;
     overflow: hidden;
+    position: relative;
 }
 
 .fireBlock:before {
     content: ' ';
     display: block;
     position: absolute;
-    left: 27px;
+    left: 12px;
     width: 0px;
     height: 99%;
-    top: 68px;
+    top: 0px;
     border-left: 1px dashed #CFCFCF;
     z-index: -1;
 }

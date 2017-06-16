@@ -5,7 +5,7 @@
     transition: transform 0.2s linear;
 
     &:hover, &:active {
-        transform: scale(1.02);
+        
     }
 
     &.selected {
@@ -89,10 +89,9 @@ $pdfThumbHeight: 250px;
 }
 .title-card {
     border: none !important;
-    border-top: 1px solid #ededed !important;
-    border-bottom: 1px solid #ededed !important;
     margin-right: 10px;
     width: 180px;
+    background: #fafafa;
 
     & + .card {
         border-left:1px solid rgba(0,0,0,0.125);
@@ -150,4 +149,20 @@ $pdfThumbHeight: 250px;
     font-size: 14px;
     font-weight: bold;
     color: #333;
+}
+
+// Added 6.15.17
+.btn--delete-pdf {
+    opacity: 0.5;
+    filter: grayscale(100%);
+    margin-top: 10px;
+
+    & span {
+        pointer-events: none;
+    }
+
+    &:hover, &:focus, &:active {
+        filter: grayscale(0%);
+        opacity: 1;
+    }
 }

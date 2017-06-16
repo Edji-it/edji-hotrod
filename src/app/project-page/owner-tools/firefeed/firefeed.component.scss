@@ -45,7 +45,10 @@
     border: none;
 }
 
+$fireBoundVPad: 40px;
+
 .fireBound {
-    margin: 20px 0px;
+    padding: 0px 0px $fireBoundVPad;
     overflow: hidden;
+    position: relative;
 }

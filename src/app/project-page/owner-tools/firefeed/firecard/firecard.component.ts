@@ -19,6 +19,7 @@ export class FirecardComponent implements OnInit, OnDestroy {
   private isImage: boolean = false
   private currentReading: Reading
   private subscriptions: Subscription[] = []
+  private secondsAgo: number = 0
 
   constructor(
     public el: ElementRef,
@@ -31,7 +32,7 @@ export class FirecardComponent implements OnInit, OnDestroy {
         reading => {
           if (reading._id) {
              this.currentReading = reading
-            if (this.currentReading.words[this.fireComment.start].styles[0]==='img') {
+            if (this.currentReading.words[this.fireComment.start] && this.currentReading.words[this.fireComment.start].styles[0]==='img') {
               this.isImage = true
             }
           }
@@ -40,7 +41,12 @@ export class FirecardComponent implements OnInit, OnDestroy {
           console.error(error);
         }
       )
-    )
+    ) 
+
+    // Refresh time ago date every minute
+    setInterval(()=> {
+      this.secondsAgo++
+    }, 60 * 1000)
   }
 
   public getOffset(el) {
