@@ -106,7 +106,7 @@ edji-comment {
 		overflow: hidden;
 		position: relative;
 		transform: scale(1.0) translateZ(0px);
-		transition: transform linear 0.2s;
+		transition:  transform linear 0.2s;
 	}
 
 	.comment-username {
@@ -174,7 +174,6 @@ edji-comment {
 
 	.comment-username{
 		opacity:0;
-		transition: opacity 0.3s;
 	}
 }
 
@@ -253,7 +252,7 @@ input.emojiComment {
 	border: none; 
 	outline: none;
 	color: rgba(0,0,0,0.3);
-	transition:opacity 0.3s;
+	transition: opacity 0.3s;
 	padding: 0px;
 	border-radius: 50%;
 	content: '+';
@@ -347,6 +346,9 @@ input.emojiComment {
 }
 
 [class*='line-count'] {
+	// Optimization translateZ value
+	transform: translateY(0px) translateZ(0px);
+
 	&:after {
 		display: none;
 	}
@@ -359,7 +361,7 @@ input.emojiComment {
 @for $n from 1 through 30 {
 	div.line-count-#{$n} {
 
-			@include transition(margin linear 0.3s);
+			@include transition(transform linear 0.3s);
 
 			&:after {
 				color: #888;
@@ -389,7 +391,7 @@ input.emojiComment {
 			}
 
 			&.expanded {
-				margin-top: ($commentHeight * $n) - $commentHeight;
+				transform: translateY(#{ ($commentHeight * $n) - $commentHeight }) translateZ(0px);
 
 				& input {
 					height: $commentHeight;
@@ -610,10 +612,6 @@ $expandShadowSize: 3px;
 
 .ui button, .text-options button {
 
-	-webkit-transition: opacity 400ms;
-	-moz-transition: opacity 400ms;
-	-ms-transition: opacity 400ms;
-	-o-transition: opacity 400ms;
 	transition: opacity 400ms;
 
 	font-family: inherit;
