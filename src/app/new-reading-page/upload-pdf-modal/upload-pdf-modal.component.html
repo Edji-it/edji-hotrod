@@ -52,11 +52,11 @@
                             <!--Display doc pages if available-->
                             <div *ngIf="doc.pages && doc.pages[0]" class="card-group">
                                 <!-- Delete PDF Mini Modal -->
-                                <delete-pdf-mini-modal></delete-pdf-mini-modal>
+                                <delete-pdf-mini-modal *ngIf="doc.confirmDelete" (confirm)="removeUploadedDoc(doc)" (dismiss)="doc.confirmDelete = false"></delete-pdf-mini-modal>
                                 <!-- Title Card -->
                                 <div class="card title-card" id="titleCard">
                                     <!-- Delete Button -->
-                                    <div title="Delete PDF" id="pdfDelBtn" class="icon-button btn--delete-pdf" (click)="confirmDeleteMiniModal()">
+                                    <div title="Delete PDF" id="pdfDelBtn" class="icon-button btn--delete-pdf" (click)="doc.confirmDelete = !doc.confirmDelete">
                                       <span [innerHtml]="':x:' | emojione"></span>
                                    </div>
                                    <!-- Title & Insert Button -->
