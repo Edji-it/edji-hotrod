@@ -133,9 +133,10 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
   // Runs on view init and onresize, to keep scroll event light
   updateScrollValues() {
     // Get Y values for categories
-    this.emojifilters.forEach((value, index) => {
-      this.emojifilters[index]['scrollY'] = this.emojiScrollArea.nativeElement.querySelector('#category' + index).offsetTop;
-    });
+    let filtersLength = this.emojifilters.length
+    for (let i = 0; i < filtersLength; i++) {
+      this.emojifilters[i]['scrollY'] = this.emojiScrollArea.nativeElement.querySelector('#category' + i).offsetTop;
+    }
   }
 
   addEmoji(emoji: string): void {

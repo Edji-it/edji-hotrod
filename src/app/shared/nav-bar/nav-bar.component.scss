@@ -152,6 +152,10 @@ $purple: rgb(150, 40, 255);
 		margin-top: -2px;
 		margin-right: 3px;
 	}
+
+	& pre {
+		overflow: hidden;
+	}
 }
 
 .nav-bar__heading {

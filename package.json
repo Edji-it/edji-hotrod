@@ -1,6 +1,6 @@
 {
   "name": "edji-hotrod",
-  "version": "2.5.14",
+  "version": "2.6.5",
   "description": "Hot Rod is Edji's roaring Front End!",
   "keywords": [
     "edji",
@@ -19,6 +19,7 @@
     "clean:start": "npm start",
     "clean": "npm cache clean && npm run rimraf -- node_modules doc coverage dist",
     "deploy:dev": "npm run protractor && grunt bump && npm run build:prod && grunt push:dev && grunt cloudfront:dev",
+    "deploy:dev:minor": "npm run protractor && grunt bump:minor && npm run build:prod && grunt push:dev && grunt cloudfront:dev",
     "deploy:prod": "grunt checkbranch:master:true && npm run protractor && npm run build:prod && grunt push:prod && grunt cloudfront:prod",
     "dev": "npm run server:dev",
     "docker": "docker",
@@ -74,7 +75,6 @@
     "@angularclass/hmr": "~1.2.2",
     "@angularclass/hmr-loader": "~3.0.2",
     "@ng-bootstrap/ng-bootstrap": "^1.0.0-alpha.16",
-    "angular2-autosize": "^1.0.1",
     "angular2-click-outside": "^0.1.0",
     "angular2-locker": "^0.5.0",
     "angular2-medium-editor": "^1.0.6",

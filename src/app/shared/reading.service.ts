@@ -86,15 +86,17 @@ export class ReadingService {
         
         readings.forEach(
           (reading, index) => {
+            
             if (reading.versionCount > 1) {
               // Reload content (slower but simpler)
               this.getAll()
             } else if (reading._id == targetReading._id) {
               // Single version readings we can remove instantly
-              readings.splice(index)
+              readings.splice(index, 1)
             }
-          }
-        )
+
+          } // (reading, index) =>
+        ) // readings.forEach
         this.userReadingsSource.next(readings)
         return value
       });

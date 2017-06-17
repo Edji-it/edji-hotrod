@@ -1,3 +1,4 @@
+import * as path from 'path';
 import { browser, by, element, protractor } from 'protractor';
 import { PageObjectInterface } from './PageObjectInterface';
 
@@ -49,6 +50,5 @@ export class NewReading implements PageObjectInterface
     {
         browser.get('/#/new-reading');
     } // getPage() : void
-
 
 } // class Login
