@@ -178,7 +178,7 @@ $bubbleColor: rgb(255,255,255);
 	top: 50%;
 }
 
-$commentOptionsMobileHeight: 50px;
+$commentOptionsMobileHeight: 60px;
 
 .comment-options__mobile-wrap {
 	position: fixed;
@@ -188,8 +188,15 @@ $commentOptionsMobileHeight: 50px;
 	border-radius: 0;
 	text-align: center;
 	height: $commentOptionsMobileHeight;
-	box-shadow: 0px 1px 15px 0px rgba(0,0,0,0.4);
+	border-top: $base-border;
 	background-color: $bubbleColor;
+	z-index: 8000;
+
+	&.bottom-bar-offset {
+		@media(max-width: $tablet) {
+		bottom: 60px;
+		}
+	}
 }
 
 .comment__options--mobileButton {

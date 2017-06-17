@@ -1,5 +1,5 @@
 <div *ngIf="!isCompleted || forceShow" class="right-margin-tooltip">
-    <div class="mobile-toggle" (click)="mobileExpanded = !mobileExpanded">
+    <div class="mobile-toggle" (tap)="mobileExpanded = !mobileExpanded">
         <i class="icon-caret" [class.down]="mobileExpanded"></i>
         <h2 [innerHtml]="pageObjs && pageObjs[pageNo - 1].title | emojione"></h2>
         <img class="header-icon" title="Tutorial" src="assets/images/icon-tutorial.svg" />
@@ -17,10 +17,7 @@
             </div>
             <div (click)="increment()" [class.disabled]="pageNo >= pageObjs.length" class="tooltip-pager__right">&rarr;</div>
         </div>
-        <div class="tooltip__skip" (click)="completeAndDismiss()">
-            Skip
-        </div>
-        
+        <div class="tooltip__skip" (click)="completeAndDismiss()">Skip</div>
     </div>
 </div>
 <button *ngIf="isCompleted && !forceShow" (click)="forceShow = true" class="button-lg-round feedback-button">
