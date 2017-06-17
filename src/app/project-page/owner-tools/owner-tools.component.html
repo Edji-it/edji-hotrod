@@ -9,7 +9,7 @@
   </button>
 
   <!--Heat Vision toggle-->
-  <button type="button" class="btn owner-tools__btn btn-hv" (click)="togglePower('heat_vision', !this.currentProject.heat_vision)" >
+  <button type="button" class="btn owner-tools__btn btn-hv" (tap)="togglePower('heat_vision', !this.currentProject.heat_vision)" >
       <!--placement={{tooltipPlacement}} ngbTooltip="Turn on Heat Vision to let readers see comments from other readers, turn it off to make comments private!"-->
     <i id="toggleHeatVision" *ngIf="currentProject" class="icon-heatvision" [ngClass]="[!currentProject.heat_vision ? 'inactive' : 'active']" ></i>
     <i [class.is-loading]="powersLoading.heatVision" class="power__loading loading"></i>
@@ -17,7 +17,7 @@
   </button>
 
   <!--Fire Feed toggle-->
-  <button type="button" class="btn owner-tools__btn btn-hv" (click)="showFireFeed = !showFireFeed; showCommentCounts=false">
+  <button type="button" class="btn owner-tools__btn btn-hv" (tap)="showFireFeed = !showFireFeed; showCommentCounts=false">
     <i id="toggleFirefeed" *ngIf="currentProject" class="icon-fire-feed"></i>
     <label>Feed</label>
   </button>

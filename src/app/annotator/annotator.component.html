@@ -17,7 +17,7 @@
 				[innerHtml]="':writing_hand:' | emojione"></button>
 		</div>
 		<!--Mobile buttons-->
-		<div class="comment-options__mobile-wrap hidden-lg-up">
+		<div class="comment-options__mobile-wrap hidden-lg-up" [class.bottom-bar-offset]="user._id == project.teacher_id">
 			<div class="row comment__options--mobileRow">
 				<div class="col-6 comment__options--mobileCol" *ngIf="project.types.indexOf('emoji') > -1" [ngClass]="project.types.indexOf('emoji') > -1 && project.types.indexOf('text') > -1 ? 'col-6' : 'col-12'">
 					<button id="addEmojiComment" 
