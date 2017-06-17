@@ -51,23 +51,8 @@
                         <div *ngFor="let doc of uploadedDocs; let i = index" class="upload-list-item" [class.new]="newDocsIds.indexOf(doc.uuid) > -1">
                             <!--Display doc pages if available-->
                             <div *ngIf="doc.pages && doc.pages[0]" class="card-group">
-                                <!-- Confirm Delete Mini Modal (6.17.17) -->
-                                <div *ngIf="confirmDelete" class="confirm-delete-mini-modal" id="confirmDelete">
-                                    <div class="confirm-delete-dialog">
-                                        <div class="modal-content">
-                                            <div class="confirm-delete-header">
-                                                <h4 class="confirm-delete-title">Are you sure you want to delete this PDF?</h4>
-                                            </div>
-                                            <div class="confirm-delete-body"> 
-                                                <div>If you do, you'll need to re-upload it.</div>
-                                                <div class="btn-row" style="padding-top: 15px;">
-                                                    <button type="button" class="btn">Yes</button>
-                                                    <button type="button" class="btn">No</button>
-                                                </div>
-                                            </div>
-                                        </div>               
-                                    </div>
-                                </div>
+                                <!-- Delete PDF Mini Modal -->
+                                <delete-pdf-mini-modal></delete-pdf-mini-modal>
                                 <!-- Title Card -->
                                 <div class="card title-card" id="titleCard">
                                     <!-- Delete Button -->

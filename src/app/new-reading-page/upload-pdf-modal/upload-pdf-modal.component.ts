@@ -1,5 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Locker } from 'angular2-locker';
+import { DeletePdfMiniModal } from "./delete-pdf-mini-modal/delete-pdf-mini-modal.component";
 
 // Project Dependencies
 import { MediaService, AuthService } from '../../shared';
