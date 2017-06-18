@@ -232,9 +232,13 @@ describe('New Reading Page', () => {
             let pdfCard = element(by.id("titleCard"));
 
             let delBtn = element(by.id("pdfDelBtn"));
+            let confirmDelBtn = element(by.id("pdfDelBtnConfirm"));
 
             browser.wait(EC.elementToBeClickable(delBtn), 5000, "delBtn never became clickable");
             delBtn.click();
+
+            browser.wait(EC.elementToBeClickable(confirmDelBtn), 5000, "confirm delete button never became clickable");
+            confirmDelBtn.click();
 
             browser.wait(EC.invisibilityOf(delBtn), 5000, 'delete button should not be visible.');
         });
