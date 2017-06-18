@@ -42,7 +42,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
     serverError?: string,
     badName?: string,
     badUsername?: string,
-    whitespacedUsername?: string
   } = {}
 
   // private copy: Copy = new Copy()
@@ -250,7 +249,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
             console.log(err)
         }
       });
-  }
+  } // private register(formValue: any): void 
 
   // /**
   //  * Clears all errorObject strings to equal empty strings

@@ -68,6 +68,7 @@
 
         <p id="termsText" class="text-center pb-2">By registering for Edji, you agree to our <a id="registerTermsLink" class="link--light" href="http://guide.edji.it/index.php/back-to-edji-it/privacy-terms/" target="_blank">Terms of Use</a>.
 
+        <!-- Error Messages -->
         <div id="msgDuplicateUser" *ngIf="errorObject.duplicateUser" class="alert alert-info" [innerHtml]="errorObject.duplicateUser | emojione"></div>
         <div id="msgBadName" *ngIf="errorObject.badName" class="alert alert-warn" [innerHtml]="errorObject.badName | emojione"></div>
         <div id="msgBadUsername" *ngIf="errorObject.badUsername" class="alert alert-warning" [innerHtml]="errorObject.badUsername | emojione"></div>
