@@ -26,15 +26,23 @@ import { AuthService, BumblebeeService, Copy, ProjectService } from './../shared
   `]
 })
 export class RegisterComponent implements OnInit, OnDestroy {
+
+  /*
+  Last Mod: 17 June 2017
+
+  The page for registering a user.
+  */
+
   private subscriptions: Subscription[] = []
 
   private registerForm: FormGroup
   private registerLoading: boolean = false
   private errorObject: {
-    duplicateUser?: string
+    duplicateUser?: string,
     serverError?: string,
     badName?: string,
-    badUsername?: string
+    badUsername?: string,
+    whitespacedUsername?: string
   } = {}
 
   // private copy: Copy = new Copy()
@@ -146,6 +154,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
     delete formValue.checkboxes // we don't want to store the checkboxes object
 
+    // Attempt to register this user.
     this._auth.register(formValue)
       .take(1)
       .subscribe((data) => {
@@ -192,22 +201,40 @@ export class RegisterComponent implements OnInit, OnDestroy {
           // TRACK EXCEPTION... there was no data
           this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'failure' }})
         }
+
+      // If there is a failure with registering the user...
       }, (err) => {
         this.registerLoading = false
 
+        // ...then let's throw an error
         switch (err.status) {
           case 406:
             let error = err.json() || {}
             if (error.validationErrors) {
+              // Use these print statements to see what's goin on
+              //console.log("[register.component.ts] ");
+              //console.log( error.validationErrors.username);
+
               let errorCaught: boolean = false
+              // If the full name has bad words
               if (error.validationErrors.fullname === "badWords") {
                 this.errorObject.badName = ":anguished: Would you mind choosing another name?"
                 errorCaught = true
               } 
+              // if the username has bad words
               if (error.validationErrors.username === "badWords") {
                 this.errorObject.badUsername = ":anguished: Would you mind choosing another username?"
                 errorCaught = true
               }
+
+              // if the username has whitespace
+              if (error.validationErrors.username === "whitespace")
+              {
+                this.errorObject.badUsername = "Usernames cannot have whitespace. Please clean that up!"
+                errorCaught = true
+              } // if whitespaced username
+              
+              // If we havent caught an error that we know about yet...
               if (!errorCaught) {
                 this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'failure' }})
                 // form validation should have caught any other errors
