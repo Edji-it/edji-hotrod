@@ -11,7 +11,8 @@ import { User } from './datatypes'
 export class AuthService implements CanActivate {
 
     /*
-    Last Mod: 6.15.17
+    Last Mod: 6.17.17
+
     Edit user prefs from here. Everything under the datatype User should be edited through here.
     */
 
