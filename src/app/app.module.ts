@@ -47,7 +47,7 @@ import { AnnotatorComponent, CommentComponent, TextCommentComponent, EmojiCommen
 import { ProjectPageComponent, ProjectInfoComponent, OwnerToolsComponent, LeaderboardComponent } from './project-page';
 import { FirefeedComponent } from './project-page/owner-tools/firefeed/firefeed.component';
 import { FirecardComponent } from './project-page/owner-tools/firefeed/firecard/firecard.component';
-import { NewReadingPage, UploadModalComponent, UploadPdfModalComponent } from './new-reading-page';
+import { NewReadingPage, UploadModalComponent, UploadPdfModalComponent, DeletePdfMiniModal } from './new-reading-page';
 import { DashboardComponent, JoinedDashComponent, CreatedDashComponent, TutorialReadingComponent, ReadingCardComponent } from './dashboard';
 import { NoContentComponent } from './no-content';
 import { AccountComponent, ChangePassComponent } from './account';
@@ -123,6 +123,7 @@ type StoreType = {
     UploadModalComponent,
     TutorialReadingComponent,
     UploadPdfModalComponent,
+    DeletePdfMiniModal,
     ProjectPageComponent,
     ProjectInfoComponent,
     OwnerToolsComponent,

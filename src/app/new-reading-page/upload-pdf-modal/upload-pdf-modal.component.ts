@@ -1,5 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Locker } from 'angular2-locker';
+import { DeletePdfMiniModal } from "./delete-pdf-mini-modal/delete-pdf-mini-modal.component";
 
 // Project Dependencies
 import { MediaService, AuthService } from '../../shared';
@@ -13,6 +14,12 @@ import { MediaService, AuthService } from '../../shared';
   ]
 })
 export class UploadPdfModalComponent implements OnInit {
+
+  /*
+  Last modified: 17 June 2017
+  
+  Upload a PDF with this modal!
+  */
 
   @Output() closeModal: EventEmitter<any> = new EventEmitter();
   @Output() returnImage: EventEmitter<any> = new EventEmitter();
@@ -30,6 +37,7 @@ export class UploadPdfModalComponent implements OnInit {
   private noUploadAllowed: boolean = true;
   private errorMsg: string = '';
   private pdfFileInputId : string  = "pdfFileInput";
+  private confirmDelete : boolean = false;
 
   constructor(private _locker: Locker, private _media: MediaService, private _auth: AuthService) {
     this.locker = _locker.useDriver(Locker.DRIVERS.LOCAL);
@@ -164,6 +172,15 @@ export class UploadPdfModalComponent implements OnInit {
     });
     this.saveUploadedDocs();
   }
+
+  /*
+  6.17.17
+  Trigger the process for the user to confirm that they want to delete a PDF.
+  */
+  confirmDeleteMiniModal () : void
+  {
+      this.confirmDelete = true;
+  } // confirmDeleteMiniModal ()
 
   /**
    * 6.15.17
