@@ -229,7 +229,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
               // if the username has whitespace
               if (error.validationErrors.username === "whitespace")
               {
-                this.errorObject.badUsername = "Usernames cannot have whitespace. Please clean that up!"
+                this.errorObject.badUsername = "Whoops! Usernames can not have spaces."
                 errorCaught = true
               } // if whitespaced username
               
