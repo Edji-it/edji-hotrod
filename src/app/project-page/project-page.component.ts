@@ -13,7 +13,7 @@ import { Project, Reading, User } from './../shared/datatypes';
 })
 export class ProjectPageComponent implements OnInit, OnDestroy {
     private project: Project = <Project>{}
-    private reading: Reading = <Reading>{}
+    private reading: any = {}
     private subscriptions: Subscription[] = []
     private joinedRoom: boolean = false
     private error: string
@@ -68,19 +68,23 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
                         this.joinedRoom = true
                     }
 
-                    // Get Reading once we know this Project's reading ID
-                    if (this.reading._id != this.project.reading_id) {
-                        // Clear reading
-                        this._readings.clear()
-                        // Tell service to load correct reading
-                        this._readings.get(this.project.reading_id)
-                            .take(1)
-                            .subscribe(
-                                reading => {
-                                    this.reading = reading
-                                }
-                            )
+                    if (this.project.reading_id && this.project.reading_id['_id']) {
+                        this.reading = this.project.reading_id
+                        this._readings.setReadingObj(this.project.reading_id)
                     }
+                    // Manually Get Reading once we know this Project's reading ID
+                    // else if (this.reading._id != this.project.reading_id) {
+                    //     // Clear reading
+                    //     this._readings.clear()
+                    //     // Tell service to load correct reading
+                    //     this._readings.get(this.project.reading_id)
+                    //         .take(1)
+                    //         .subscribe(
+                    //             reading => {
+                    //                 this.reading = reading
+                    //             }
+                    //         )
+                    // }
                 }
             },
             (error) => {

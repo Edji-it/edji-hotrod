@@ -51,18 +51,22 @@
                         <div *ngFor="let doc of uploadedDocs; let i = index" class="upload-list-item" [class.new]="newDocsIds.indexOf(doc.uuid) > -1">
                             <!--Display doc pages if available-->
                             <div *ngIf="doc.pages && doc.pages[0]" class="card-group">
+                                <!-- Delete PDF Mini Modal -->
+                                <delete-pdf-mini-modal *ngIf="doc.confirmDelete" (confirm)="removeUploadedDoc(doc)" (dismiss)="doc.confirmDelete = false"></delete-pdf-mini-modal>
+                                <!-- Title Card -->
                                 <div class="card title-card" id="titleCard">
                                     <!-- Delete Button -->
-                                    <div title="Delete PDF" id="pdfDelBtn" class="icon-button btn--delete-pdf" (click)="removeUploadedDoc(doc)">
+                                    <div title="Delete PDF" id="pdfDelBtn" class="icon-button btn--delete-pdf" (click)="doc.confirmDelete = !doc.confirmDelete">
                                       <span [innerHtml]="':x:' | emojione"></span>
                                    </div>
-                                   <!-- The rest of the card -->
+                                   <!-- Title & Insert Button -->
                                     <div class="card__center-overlay">
                                         <span class="doc-title" *ngIf="doc.title">{{ doc.title }}</span>
                                         <span class="doc-title" *ngIf="!doc.title"><i>Untitled</i></span>
                                         <button class="btn btn-primary e2e-insert-doc" (click)="insertPages(doc.pages)">Insert {{ doc.pages.length }} Page<span *ngIf="doc.pages.length > 1" >s</span></button>
                                     </div>
                                 </div>
+                                <!-- The pages of the PDF -->
                                 <div *ngFor="let url of doc.pages; let i = index" (click)="insertImage(url)" class="card document-card">
                                     <img class="card-img-top img-fluid" [src]="url" [alt]="'Page ' + (i + 1)" />
                                     <div class="card-img-overlay overlay-on-hover">

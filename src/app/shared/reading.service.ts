@@ -53,13 +53,20 @@ export class ReadingService {
     return this.http
       .get(this._auth.getUrl() + '/readings/' + id, this._auth.getOptions())
       .map(data => {
-        if (data.json() && data.json()._id) {
-          this.readingValue = data.json()
-          this.readingSource.next(this.readingValue)
+        if (data.json()) {
+          this.setReadingObj(data.json())
         }
         return data.json()
       });
   } // public get(id : string) : Observable<any>
+
+  public setReadingObj(reading: any) : void {
+    console.log("Set", reading)
+    if (reading._id) {
+      this.readingValue = reading
+      this.readingSource.next(this.readingValue)
+    }
+  }
 
   // Pull all versions of a particular reading
   public getAllVersions(versionId : string) : Observable<any> {
