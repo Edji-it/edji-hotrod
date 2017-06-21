@@ -703,6 +703,40 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.createComment(span.start, span.end, 'text')
     }
 
+    /** 
+     * Add Comment of Audio type
+     * - Fired from comment options tooltip
+     */
+    addAudioComment(event): void {
+        // Get selection indices
+        let span = this.getSelectionSpan()
+
+        if ( !(span.start >= 0) || !(span.end >= 0)) {
+            return
+        }
+        
+        // Increment highlight array
+        this.incrementHighlights(true, span.start, span.end)
+
+        // Tell the server we've got a comment!
+
+        // jzk7 - start temporary code
+        console.log("audio comment created from " + span.start + " to " + span.end)
+        let comment = {
+                'data' : '',
+                'start' : span.start,
+                'end' : span.end,
+                'user_id' : this._auth.getUser()._id,
+                'author' : this._auth.getUser().fullname ? this._auth.getUser().fullname : this._auth.getUser().username,
+                'type' : 'audio'
+            }
+        this.commentsByIndexAdd(comment, span.start)
+        // jzk7 - end temporary code
+
+        // jzk7 - Turn this next line on once we're ready to accept audio comments. For now we'll log it to make sure it works
+        // this.createComment(span.start, span.end, 'audio')
+    }
+
     /**
      * Loops through child elements to find textnodes
      * Pushes text nodes as formatted objects into this.words

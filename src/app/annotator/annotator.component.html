@@ -15,6 +15,12 @@
 				id="addTextComment" 
 				(click)="addTextComment($event)" 
 				[innerHtml]="':writing_hand:' | emojione"></button>
+			<!-- jzk7 - audio comment button: make sure to change the types to look for audio once we're ready! -->
+			<button *ngIf="project.types.indexOf('text') > -1" 
+				class="emoji" 
+				id="addAudioComment" 
+				(click)="addAudioComment($event)" 
+				[innerHtml]="':microphone:' | emojione"></button>
 		</div>
 		<!--Mobile buttons-->
 		<div class="comment-options__mobile-wrap hidden-lg-up" [class.bottom-bar-offset]="user._id == project.teacher_id">
