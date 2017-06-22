@@ -1,30 +1,37 @@
 <nav-bar></nav-bar>
 <!--  Account Page -->
-<div class="container pt-4">
-  <div class="row">
-        <div class="col-sm-8 account-row">
-            <h1 style="font-size: 35px; color: #DCDCDC;">Profile</h1>
+<div class="container-fluid page-header">
+    <!-- Profile Pic Column -->
+    <div class="column" style="width: 25%;">
+        <h1 class="profile-title">Profile</h1>
+        <img class="profile-pic" [src]="profileImage">
+    </div>
 
-            <!-- Name -->
-            <div class="info-group">
-                <div class="name-label">{{currentUser.fullname}}</div>
-                <div class="info-label">Name</div>
-            </div>
-            
-            <!-- user name -->
-            <div>
-                <p class="info">{{currentUser.username}}</p>
-                <label class="info-label" for="inputPassword">Username</label>
-            </div>
-            <div class="form-group row">
-                <label for="inputPassword" class="col-sm-4 col-form-label">Email</label>
-                <div class="col-sm-8">
-                    <p class="form-control-static">{{currentUser.email}}</p>
-                </div>
-            </div>
-            <button type="button"  (click)="showPassModal = !showPassModal" class="btn btn-primary">Change Password</button>
-      </div>
-      <div class="col-sm-2"></div>
-  </div>
+    <!-- Text Body -->
+    <div class="column" style="width: 60%;">
+        <!-- Name -->
+        <div class="info-group">
+                <!-- Change Password Button -->
+            <button style="float: right;" type="button" (click)="showPassModal = !showPassModal" class="btn btn-primary">Change Password</button>
+            <div class="name-label">{{currentUser.fullname}}</div>
+            <div class="info-label">Name</div>
+        </div>
+        
+        
+        <!-- user name -->
+        <div class="info-group">
+            <p class="info">{{currentUser.username}}</p>
+            <label class="info-label" for="inputPassword">Username</label>
+        </div>
+        <!-- email -->
+        <div class="info-group">
+            <p class="info">{{currentUser.email}}</p>
+            <label for="inputPassword" class="info-label">Email</label>
+        </div>
+        <!-- Reading on Edji since -->
+        <div class="info-group">
+            <h4 class="faded">Reading on Edji since 1775</h4>
+        </div>  
+    </div>
 </div>
 <edji-change-pass class="modal-will-fade" [class.show]="showPassModal" (closeModal)="showPassModal = !showPassModal"></edji-change-pass>
