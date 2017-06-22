@@ -4,9 +4,17 @@ import { AuthService } from '../shared/auth.service';
 
 @Component({
   selector: 'edji-account',
+  styleUrls: ['./account.component.scss'],
   templateUrl: './account.component.html'
 })
 export class AccountComponent implements OnInit {
+
+  /*
+  Last Mod: 20 June 2017
+
+  The page for the user's account info. A profile page.
+  */
+  
   private currentUser: any;
   private showPassModal: boolean = false;
   

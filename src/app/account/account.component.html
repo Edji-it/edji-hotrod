@@ -1,38 +1,28 @@
 <nav-bar></nav-bar>
-
+<!--  Account Page -->
 <div class="container pt-4">
   <div class="row">
-      <div class="col-sm-2"></div>
-      <div class="col-sm-8">
-          <h1>Account Details</h1>
+        <div class="col-sm-8 account-row">
+            <h1 style="font-size: 35px; color: #DCDCDC;">Profile</h1>
 
-          <div class="card">
-            <div class="card-block">
-                <div class="form-group row">
-                    <label class="col-sm-4 col-form-label">Name</label>
-                    <div class="col-sm-8">
-                        <p class="form-control-static">{{currentUser.fullname}}</p>
-                    </div>
+            <!-- Name -->
+            <div class="info-group">
+                <div class="name-label">{{currentUser.fullname}}</div>
+                <div class="info-label">Name</div>
+            </div>
+            
+            <!-- user name -->
+            <div>
+                <p class="info">{{currentUser.username}}</p>
+                <label class="info-label" for="inputPassword">Username</label>
+            </div>
+            <div class="form-group row">
+                <label for="inputPassword" class="col-sm-4 col-form-label">Email</label>
+                <div class="col-sm-8">
+                    <p class="form-control-static">{{currentUser.email}}</p>
                 </div>
-                <div class="form-group row">
-                    <label for="inputPassword" class="col-sm-4 col-form-label">Username</label>
-                    <div class="col-sm-8">
-                        <p class="form-control-static">{{currentUser.username}}</p>
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label for="inputPassword" class="col-sm-4 col-form-label">Email</label>
-                    <div class="col-sm-8">
-                        <p class="form-control-static">{{currentUser.email}}</p>
-                    </div>
-                </div>
-            </div><!--card-block-->
-          </div>
-          <div class="card text-center">
-                <div class="card-block">
-                    <button type="button" (click)="showPassModal = !showPassModal" class="btn btn-primary">Change Password</button>
-                </div>
-          </div>
+            </div>
+            <button type="button"  (click)="showPassModal = !showPassModal" class="btn btn-primary">Change Password</button>
       </div>
       <div class="col-sm-2"></div>
   </div>
