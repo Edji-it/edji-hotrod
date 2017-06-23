@@ -1,6 +1,8 @@
+@import '../../sass/base/variables';
+
 // 20 June 2017
 // Nicholas Pumper
-// Last Mod: 20 June 2017
+// Last Mod: 23 June 2017
 
 .container-line {
     border-bottom-width: 2px;
@@ -15,6 +17,21 @@
 .profile-container {
     margin:     auto;
     display:    block; 
+}
+
+// Primarily for keeping things centered on mobile
+.profile-pic-container {
+    margin:     auto;
+    display:    block; 
+
+    @media(max-width: $phone) {
+        transform: translateX(-25%);
+	}
+
+    @media(max-width: $xsphone) {
+        min-width: $xsphone;
+        transform: translate(-10%);
+	}
 }
 
 $profilePicIconHeight: 60px;
@@ -47,6 +64,12 @@ $profilePicIconHeight: 60px;
     color:      #DCDCDC;
     text-align:    center;
     margin-bottom: 35px;
+
+    @media(max-width: $phone) {
+        display: inline-block;
+        vertical-align: middle;
+        margin-left: 50px;
+	}
 }
 
 .edit-btn-container {
@@ -69,9 +92,33 @@ $profilePicIconHeight: 60px;
     color: #FAF9F9;
 }
 
+.spacer-mobile-collapse {
+
+    height: 9em;
+
+    @media(max-width: $phone) {
+        height: 0em;
+    }
+}
+
 .column {
     vertical-align: middle;
     display:    inline-block;
+
+    @media(max-width: $tablet) {
+		margin-left: 40px;
+        min-width: 50%;
+	}
+
+    @media(max-width: $phone) {
+        margin-left: 5px;
+        min-width: $phone;
+	}
+
+    @media(max-width: $xsphone) {
+        margin-left: 10px;
+        min-width: $xsphone;
+	}
 }
 
 .name-label {

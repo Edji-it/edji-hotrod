@@ -4,17 +4,21 @@
     <!-- Profile Pic Column -->
     <div class="column col-sm-3" style="width: 24%;">
         <h1 class="profile-title">Profile</h1>
-        <span class="profile-pic"> <!-- just name this an img in order to do a profile pic -->
-            <span>{{nameInitials}}</span>
-        </span>
-        <button type="button" class="btn btn-sm edit-btn">Edit</button>
+
+        <!-- Profile Pic block -->
+        <div class="profile-pic-container">
+            <span class="profile-pic"> <!-- just name this an img in order to do a profile pic -->
+                <span>{{nameInitials}}</span>
+            </span>
+            <button type="button" class="btn btn-sm edit-btn">Edit</button>
+        </div>
     </div>
 
     <!-- Text Column -->
     <div class="column col-sm-6">
         
         <!-- spacer div -->
-        <div style="height: 9em;"></div>
+        <div class="spacer-mobile-collapse"></div>
 
         <!-- Name -->
         <div class="info-group">
