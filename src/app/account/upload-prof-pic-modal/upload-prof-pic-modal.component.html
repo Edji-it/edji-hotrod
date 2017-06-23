@@ -17,8 +17,15 @@
 
             <!-- Body -->
             <div class="row modal-body">
-                <img class="col-sm-6">
-                <div class="col-sm-6"></div>
+                <!-- Column 1 -->
+                <div class="col-sm-6">
+                    <img class="profile-pic" [src]="image">
+                </div>
+                <!-- Column 2 -->
+                <div class="col-sm-6">
+                    <button id="uploadBtn" class="btn modal-button">Upload New</button>
+                    <button id="removePicBtn" class="btn remove-button">Remove</button>
+                </div>
             </div>
 
             <!-- Footer -->
@@ -31,7 +38,7 @@
                 <!-- Cancel & Save Buttons -->
                 <div class="btn-row">
                     <!-- Cancel Button -->
-                    <button (click)="closeModal.emit()" type="button" class="btn" data-dismiss="modal">Cancel</button><!--not sure what data-dismiss does-->
+                    <button (click)="closeModal.emit()" type="button" class="btn modal-button" data-dismiss="modal">Cancel</button><!--not sure what data-dismiss does-->
                     <!-- Save Button -->
                     <button id="saveProfPicBtn" (click)="closeModal.emit();" class="btn btn-primary save-button">Save</button>
                 </div>

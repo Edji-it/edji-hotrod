@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'hot-upload-prof-pic',
+  styleUrls: ['./upload-prof-pic-modal.scss'],
   templateUrl: 'upload-prof-pic-modal.component.html'
 })
 export class UploadProfPicModal implements OnInit {
@@ -18,11 +19,11 @@ export class UploadProfPicModal implements OnInit {
   // For closing this modal.
   @Output() closeModal: EventEmitter<any> = new EventEmitter();
 
-  public image      : any; // The image we want to upload;
+  public image      : any = "./../../assets/test-profile-pic/Rick-astley.jpg"; // The image we want to upload;
   public showError  : boolean = false;
 
   constructor() {
-    this.image = "/assets/test-profile-pic/Rick-astley.jpg";
+    
   } // constructor
 
   ngOnInit() { }
