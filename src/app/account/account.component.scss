@@ -2,48 +2,71 @@
 // Nicholas Pumper
 // Last Mod: 20 June 2017
 
+.container-line {
+    border-bottom-width: 2px;
+    border-bottom-style: solid;
+    border-bottom-color: #DCDCDC;
+    width:  90%;
+    height: 100px;
+    margin:     auto;
+    display:    block; 
+}
+
+.profile-container {
+    margin:     auto;
+    display:    block; 
+}
+
 .profile-pic {
-    border-radius: 50%;
+    border-radius:  50%;
     object-fit: cover;
-    min-width: 150px;
-    width: 150px;
-    height: 150px;
-    margin: auto;
-    display: block;
+    min-width:  150px;
+    min-height: 150px;
+    width:      150px;
+    height:     150px;
+    margin:     auto;
+    display:    block;
 }
 
 .profile-title {
     font-size: 50px; 
-    color: #DCDCDC;
-    text-align: center;
-    margin-bottom: 25px;
+    color:      #DCDCDC;
+    text-align:    center;
+    margin-bottom: 35px;
 }
 
-.edit-profile-pic-btn {
-    display: block;
-    margin: auto;
+.edit-btn-container {
     margin-top: 10px;
-    height: 20px;
-    font-size: 12px;
-    text-align: center;    
+    height:     20px;
+    width: 10px;
+}
+
+.edit-btn {
+    color: #FAF9F9;
+    background-color: #D4D1D1;
+    display:    block;
+    margin:     auto;
+    margin-top: 10px;
 }
 
 .change-password-btn {
-    display: block;
-    //float: right;
+    margin-top: -75px;
+    align-content: right;
+    background-color: #898383;
+    color: #FAF9F9;
 }
 
 .column {
     vertical-align: middle;
-    display: inline-block;
-    height: 100%;
+    display:    inline-block;
+    height:     100%;
 }
 
 .name-label {
-    font-family: "Open Sans";
-    font-size: 40px;
+    font-family:    "Open Sans";
+    font-size:      40px;
     margin-bottom: -7px;
-    font-weight: 500;
+    font-weight:    500;
 }
 
 .info-group {
@@ -51,17 +74,16 @@
 }
 
 .info {
-    font-family: "Open Sans";
-    font-size: 20px;
+    font-family:    "Open Sans";
+    font-size:      20px;
     margin-bottom: -2px;
-    font-weight: 500;
+    font-weight:    500;
 }
 
 .info-label {
-    font-family: "Open Sans";
-    font-size: 15px;
-    // line-height: 1;
-    color: #D2CECE;
+    font-family:    "Open Sans";
+    font-size:      15px;
+    color:        #D2CECE;
 }
 
 .faded {

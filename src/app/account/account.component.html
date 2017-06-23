@@ -1,15 +1,15 @@
 <nav-bar></nav-bar>
 <!--  Account Page -->
-<div class="container-fluid">
+<div class="container-fluid profile-container row">
     <!-- Profile Pic Column -->
-    <div class="column" style="width: 24%;">
+    <div class="column col-sm-3" style="width: 24%;">
         <h1 class="profile-title">Profile</h1>
         <img class="profile-pic" [src]="profileImage">
-        <button type="button" class="btn edit-profile-pic-btn">Edit</button>
+        <button type="button" class="btn btn-sm edit-btn">Edit</button>
     </div>
 
     <!-- Text Column -->
-    <div class="column" style="width: 49%;">
+    <div class="column col-sm-6" style="width: 49%;">
         
         <!-- spacer div -->
         <div style="height: 150px;"></div>
@@ -39,9 +39,12 @@
     </div>
 
     <!-- Third Column -->
-    <!-- Change Password Button -->
-    <div class="column" style="width: 25%;">
-        <button class="change-password-btn" type="button" (click)="showPassModal = !showPassModal" class="btn">Change Password</button>
+    <div class="column col-sm-3" style="width: 25%;">
+        <!-- Change Password Button -->
+        <button type="button" (click)="showPassModal = !showPassModal" class="btn change-password-btn">Change Password</button>
     </div>
+
+    <!-- buffer before the footer. Includes a nice border line. -->
+    <div class="row container-line"></div>
 </div>
 <edji-change-pass class="modal-will-fade" [class.show]="showPassModal" (closeModal)="showPassModal = !showPassModal"></edji-change-pass>

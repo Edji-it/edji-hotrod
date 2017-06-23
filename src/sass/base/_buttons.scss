@@ -37,6 +37,11 @@ button, .button, .btn { //, [class*='btn']
     font-size: 1.25*$base-font-size;
   }
 
+  &.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: .75*$base-font-size;
+  }
+
   &:hover, &:active, &:focus {
     background: darken($btnSecondaryBg, 10%);
     color: $btnSecondaryColor;
