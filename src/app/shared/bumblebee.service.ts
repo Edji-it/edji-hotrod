@@ -7,7 +7,7 @@ import { AuthService } from '.';
 @Injectable()
 export class BumblebeeService {
 
-  private url: string = "//edji-bumblebee.herokuapp.com";
+  private url: string = "//bumblebee.edji.it";
   // private url: string = "http://localhost:8333";
 
   constructor(private _auth: AuthService, private http: Http) {
