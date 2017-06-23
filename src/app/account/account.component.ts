@@ -22,10 +22,11 @@ export class AccountComponent implements OnInit {
   private showPassModal : boolean = false;
   
   constructor(private _auth: AuthService) {
+    var firstInitialPos;
+
+    firstInitialPos = 0; // needed for creating name initials
+
     this.currentUser = this._auth.getUser();
-    
-    this.currentUser.fullname = "B";
-    var firstInitialPos = 0; // needed for creating name initials
 
     // Let's create the name initials.
     for (var i = 0; i < this.currentUser.fullname.length; i++)
