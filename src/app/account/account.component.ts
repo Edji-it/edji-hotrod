@@ -10,19 +10,58 @@ import { AuthService } from '../shared/auth.service';
 export class AccountComponent implements OnInit {
 
   /*
-  Last Mod: 20 June 2017
+  Last Mod: 22 June 2017 - Nick Pumper
 
   The page for the user's account info. A profile page.
   */
 
   public profileImage : any = "/assets/test-profile-pic/Rick-astley.jpg";
 
-  private currentUser: any;
-  private showPassModal: boolean = false;
+  private nameInitials  : string = ""; // we gonna use these for 
+  private currentUser   : any;
+  private showPassModal : boolean = false;
   
   constructor(private _auth: AuthService) {
     this.currentUser = this._auth.getUser();
-  }
+    
+    this.currentUser.fullname = "B";
+    var firstInitialPos = 0; // needed for creating name initials
+
+    // Let's create the name initials.
+    for (var i = 0; i < this.currentUser.fullname.length; i++)
+    {
+      if  (this.nameInitials.length != 0 && this.nameInitials.length < 2 && this.currentUser.fullname[i] == " ")
+      {
+        this.nameInitials = this.nameInitials + this.currentUser.fullname[i + 1];
+      } // if
+
+      if (this.nameInitials.length == 0 && this.currentUser.fullname[i] != " ")
+      {
+        this.nameInitials = this.currentUser.fullname[i] + "";
+        firstInitialPos = i;
+      } // if
+
+      // If at the end, the name initials are less then two characters, then pull the next available character.
+      if (this.nameInitials.length < 2 && i === (this.currentUser.fullname.length - 1))
+      {
+        // Find the next available character.
+        for (var n = firstInitialPos + 1; n < this.currentUser.fullname.length; n++)
+        {
+          if  (this.nameInitials.length < 2 && this.currentUser.fullname[i] != " ")
+          {
+            this.nameInitials = this.nameInitials + this.currentUser.fullname[n];
+          } // if
+        } // for n
+
+        // If nameInitials is STILL not equal to two characters, add "!"
+        if (this.nameInitials.length < 2)
+        {
+          this.nameInitials = this.nameInitials + "!";
+        }
+      } // if
+    } // for i
+
+  } // constructor
 
   ngOnInit() {
 

@@ -4,7 +4,9 @@
     <!-- Profile Pic Column -->
     <div class="column col-sm-3" style="width: 24%;">
         <h1 class="profile-title">Profile</h1>
-        <img class="profile-pic" [src]="profileImage">
+        <span class="profile-pic"> <!-- just name this an img in order to do a profile pic -->
+            <span>{{nameInitials}}</span>
+        </span>
         <button type="button" class="btn btn-sm edit-btn">Edit</button>
     </div>
 

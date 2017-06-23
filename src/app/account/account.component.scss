@@ -17,15 +17,29 @@
     display:    block; 
 }
 
+$profilePicIconHeight: 60px;
 .profile-pic {
     border-radius:  50%;
-    object-fit: cover;
+    object-fit: cover; // Needed for images
     min-width:  150px;
     min-height: 150px;
     width:      150px;
     height:     150px;
     margin:     auto;
     display:    block;
+    background-color: #D4D1D1;
+
+    // For the temp profile pic
+     & span {
+        text-transform: capitalize;
+        font-family: 'Open Sans';
+        font-weight: bold;
+        color: #fff;
+        line-height: 2.5;
+        font-size: $profilePicIconHeight;
+        display: inline-block;
+        margin-left: 22%;
+    }
 }
 
 .profile-title {
