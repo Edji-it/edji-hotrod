@@ -1,0 +1,41 @@
+<!--
+    23 June 2017
+    Nicholas Pumper
+    Last Mod: 23 June 17
+
+    A modal for uploading the user's profile picture through.
+    Initially made tethered to the Account page.
+    -->
+<div id="uploadProfPicModal" class="modal fade-in show">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Change Avatar</h4>
+                <button (click)="closeModal.emit()" type="button" class="close">&times;</button>
+            </div>
+
+            <!-- Body -->
+            <div class="row modal-body">
+                <img class="col-sm-6">
+                <div class="col-sm-6"></div>
+            </div>
+
+            <!-- Footer -->
+            <div class="row modal-footer footer-border">
+                <!-- Error -->
+                <div *ngIf="showError" class="alert alert-danger" role="alert">
+                  <strong>Oh snap!</strong> Unable to upload profile picture. Either your file is invalid, or we did something wrong.
+                </div>
+
+                <!-- Cancel & Save Buttons -->
+                <div class="btn-row">
+                    <!-- Cancel Button -->
+                    <button (click)="closeModal.emit()" type="button" class="btn" data-dismiss="modal">Cancel</button><!--not sure what data-dismiss does-->
+                    <!-- Save Button -->
+                    <button id="saveProfPicBtn" (click)="closeModal.emit();" class="btn btn-primary save-button">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

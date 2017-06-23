@@ -17,9 +17,10 @@ export class AccountComponent implements OnInit {
 
   public profileImage : any = "/assets/test-profile-pic/Rick-astley.jpg";
 
-  private nameInitials  : string = ""; // we gonna use these for 
+  private nameInitials  : string = ""; // we gonna use these for the temp profile pic
   private currentUser   : any;
   private showPassModal : boolean = false;
+  private showUploadProfPicModal : boolean = false;
   
   constructor(private _auth: AuthService) {
     var firstInitialPos;
@@ -28,7 +29,8 @@ export class AccountComponent implements OnInit {
 
     this.currentUser = this._auth.getUser();
 
-    // Let's create the name initials.
+    // 6.22.17 - Nick Pumper
+    // STEP: Let's create the name initials.
     for (var i = 0; i < this.currentUser.fullname.length; i++)
     {
       if  (this.nameInitials.length != 0 && this.nameInitials.length < 2 && this.currentUser.fullname[i] == " ")

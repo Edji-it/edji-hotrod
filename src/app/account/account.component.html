@@ -10,7 +10,9 @@
             <span class="profile-pic"> <!-- just name this an img in order to do a profile pic -->
                 <span>{{nameInitials}}</span>
             </span>
-            <button type="button" class="btn btn-sm edit-btn">Edit</button>
+            <!-- Edit Profile Picture Button 
+                - Opens UploadProfPicModal -->
+            <button type="button" class="btn btn-sm edit-btn" (click)="showUploadProfPicModal= true;">Edit</button>
         </div>
     </div>
 
@@ -56,3 +58,4 @@
     <div class="row container-line"></div>
 </div>
 <edji-change-pass class="modal-will-fade" [class.show]="showPassModal" (closeModal)="showPassModal = !showPassModal"></edji-change-pass>
+<hot-upload-prof-pic class="modal-will-fade" [class.show]="showUploadProfPicModal" (closeModal)="showUploadProfPicModal = !showUploadProfPicModal"></hot-upload-prof-pic>
