@@ -15,7 +15,7 @@ export class AccountComponent implements OnInit {
   The page for the user's account info. A profile page.
   */
 
-  public profileImage : any = "/assets/test-profile-pic/Rick-astley.jpg";
+  public profileImage : any = "/assets/test-profile-pic/tdr.jpg";
 
   private currentUser: any;
   private showPassModal: boolean = false;
@@ -27,4 +27,4 @@ export class AccountComponent implements OnInit {
   ngOnInit() {
 
   }
-}
+} // class

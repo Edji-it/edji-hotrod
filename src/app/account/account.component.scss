@@ -5,8 +5,9 @@
 .profile-pic {
     border-radius: 50%;
     object-fit: cover;
-    width: 200px;
-    height: 200px;
+    min-width: 150px;
+    width: 150px;
+    height: 150px;
     margin: auto;
     display: block;
 }
@@ -15,26 +16,33 @@
     font-size: 50px; 
     color: #DCDCDC;
     text-align: center;
-    margin-bottom: 50px;
+    margin-bottom: 25px;
 }
 
 .edit-profile-pic-btn {
     display: block;
     margin: auto;
     margin-top: 10px;
+    height: 20px;
+    font-size: 12px;
+    text-align: center;    
+}
+
+.change-password-btn {
+    display: block;
+    //float: right;
 }
 
 .column {
     vertical-align: middle;
     display: inline-block;
-    margin-left: 75px;
+    height: 100%;
 }
 
 .name-label {
     font-family: "Open Sans";
-    font-size: 30px;
+    font-size: 40px;
     margin-bottom: -7px;
-    margin-top: 150px;
     font-weight: 500;
 }
 

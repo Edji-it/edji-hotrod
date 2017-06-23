@@ -1,38 +1,47 @@
 <nav-bar></nav-bar>
 <!--  Account Page -->
-<div style="margin-top: 20;" class="container-fluid">
+<div class="container-fluid">
     <!-- Profile Pic Column -->
-    <div class="column" style="width: 25%;">
+    <div class="column" style="width: 24%;">
         <h1 class="profile-title">Profile</h1>
         <img class="profile-pic" [src]="profileImage">
         <button type="button" class="btn edit-profile-pic-btn">Edit</button>
     </div>
 
-    <!-- Text Body -->
-    <div class="column" style="width: 55%;">
+    <!-- Text Column -->
+    <div class="column" style="width: 49%;">
+        
+        <!-- spacer div -->
+        <div style="height: 150px;"></div>
+
         <!-- Name -->
         <div class="info-group">
-                <!-- Change Password Button -->
-            <button style="float: right;" type="button" (click)="showPassModal = !showPassModal" class="btn">Change Password</button>
             <div class="name-label">{{currentUser.fullname}}</div>
             <div class="info-label">Name</div>
         </div>
-        
         
         <!-- user name -->
         <div class="info-group">
             <p class="info">{{currentUser.username}}</p>
             <label class="info-label" for="inputPassword">Username</label>
         </div>
+
         <!-- email -->
         <div class="info-group">
             <p class="info">{{currentUser.email}}</p>
             <label for="inputPassword" class="info-label">Email</label>
         </div>
+
         <!-- Reading on Edji since -->
         <div class="info-group">
             <h4 class="faded">Reading on Edji since 1775</h4>
         </div>  
+    </div>
+
+    <!-- Third Column -->
+    <!-- Change Password Button -->
+    <div class="column" style="width: 25%;">
+        <button class="change-password-btn" type="button" (click)="showPassModal = !showPassModal" class="btn">Change Password</button>
     </div>
 </div>
 <edji-change-pass class="modal-will-fade" [class.show]="showPassModal" (closeModal)="showPassModal = !showPassModal"></edji-change-pass>
