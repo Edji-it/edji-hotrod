@@ -11,7 +11,7 @@ export class AudioCommentComponent implements OnInit{
     @Input() private comment: EdjiComment
     private isPlaying: boolean = false
     private isRecording: boolean = false
-    private playTime: string = "24%"
+    private playTime: string = "75px"
     private myCanvas
     private options
     private canvas
