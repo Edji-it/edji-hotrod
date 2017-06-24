@@ -33,3 +33,48 @@
     -webkit-transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
+
+.btn-audio {
+    padding: 4px 2px 2px 2px;
+}
+
+button {
+    vertical-align: inherit;
+    margin: 0px -2px;    
+    top: -4px;
+}
+
+.wave-form {
+    width: 74px;
+    height: $readingLineHeight - 2px;
+    background-color: #fff;
+    padding: 1px 0px 3px 0px;
+    border-radius: 4px;
+}
+
+.playing {
+    height: $readingLineHeight - 2px;
+    background-color: rgba(142,217,255,0.8);
+    top: 0px;
+    left: 50px;
+    position: absolute;
+    border-radius: 4px 0px 0px 4px;
+    border-right: solid #6bdb5d;
+}
+
+.recording {
+    height: $readingLineHeight - 2px;
+    background-color: rgba(255,100,100,0.8);
+    top: 0px;
+    left: 50px;
+    position: absolute;
+    border-radius: 4px 0px 0px 4px;
+    border-right: solid #FF2424;
+}
+
+.btn-record {
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    left: 130px;
+}
