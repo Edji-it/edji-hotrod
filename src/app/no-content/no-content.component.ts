@@ -1,3 +1,4 @@
+import { Title } from '@angular/platform-browser';
 import { Component, OnInit } from '@angular/core';
 import { Angulartics2 } from 'angulartics2';
 
@@ -6,8 +7,9 @@ import { Angulartics2 } from 'angulartics2';
   templateUrl: 'no-content.component.html'
 })
 export class NoContentComponent implements OnInit {
-  constructor(private angulartics: Angulartics2) {}
+  constructor(private angulartics: Angulartics2, private _title: Title) {}
 
   ngOnInit() {
+    this._title.setTitle('Edji | 404')
   }
 }

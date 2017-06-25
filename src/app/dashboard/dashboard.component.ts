@@ -1,3 +1,4 @@
+import { Title } from '@angular/platform-browser';
 import { Component, ElementRef, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
@@ -59,7 +60,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   constructor (
     public _router: Router,
     private _auth: AuthService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private _title: Title
   ) {
     // this makes the window always render scrolled to the top
     this._router.events.subscribe(() => {
@@ -69,6 +71,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.currentUser = this._auth.getUser();
+
+    this._title.setTitle( 'Edji | Dashboard' )
   }
 
   ngOnDestroy() {

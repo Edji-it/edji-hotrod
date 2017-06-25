@@ -1,3 +1,4 @@
+import { Title } from '@angular/platform-browser';
 import { Observable, Subscription } from 'rxjs/Rx'
 import { Router, ActivatedRoute, Params } from '@angular/router'
 import { Component, OnDestroy, OnInit } from '@angular/core'
@@ -29,7 +30,8 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
         private _socket: SocketService,
         private _auth: AuthService,
         private route: ActivatedRoute,
-        private _readings: ReadingService
+        private _readings: ReadingService,
+        private _title: Title
     ) {}
 
     ngOnInit() {
@@ -71,6 +73,8 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
                     if (this.project.reading_id && this.project.reading_id['_id']) {
                         this.reading = this.project.reading_id
                         this._readings.setReadingObj(this.project.reading_id)
+
+                        this._title.setTitle( 'Edji | ' + this.reading.title )
                     }
                     // Manually Get Reading once we know this Project's reading ID
                     // else if (this.reading._id != this.project.reading_id) {
