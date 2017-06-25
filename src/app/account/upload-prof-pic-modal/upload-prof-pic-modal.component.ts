@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { AuthService } from '../../shared';
 
 @Component({
   selector: 'hot-upload-prof-pic',
@@ -19,13 +20,20 @@ export class UploadProfPicModal implements OnInit {
   // For closing this modal.
   @Output() closeModal: EventEmitter<any> = new EventEmitter();
 
+  public uploadedFile : File;
+
   public image      : any = "./../../assets/test-profile-pic/Rick-astley.jpg"; // The image we want to upload;
   public showError  : boolean = false;
 
-  constructor() {
+  constructor(private _auth : AuthService) {
     
   } // constructor
-
+ 
   ngOnInit() { }
+
+  public updateUploadFile() : void
+  {
+
+  } // public updateUploadFile() void
 
 } // class UploadProfPicModal

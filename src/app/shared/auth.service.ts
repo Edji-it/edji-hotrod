@@ -11,7 +11,7 @@ import { User } from './datatypes'
 export class AuthService implements CanActivate {
 
     /*
-    Last Mod: 6.17.17
+    Last Mod: 6.25.17
 
     Edit user prefs from here. Everything under the datatype User should be edited through here.
     */
@@ -298,7 +298,7 @@ export class AuthService implements CanActivate {
     /*
     6.15.17
     Update media.documents in user, returns a User object. Use for deleting PDF's in upload-pfd.modal.component
-    We delete a PDF through front end magic. Since things are stored locally and through AWS, no need to do a server call.
+    We delete a PDF through front end magic since things are stored in AWS, no need to do a server call.
     - We use this to update it since updateUser only merges things together.
     - This properly replaces the contents of user, but ONLY the media.documents.
     - Insert the new set that you want to replace media.documents with.
@@ -355,6 +355,16 @@ export class AuthService implements CanActivate {
                 })
         });
     } // public forceUpdatedDocuments (any[] : newDocs) : Observable<any>
+
+    /*
+    25 June 2017
+    Nick Pumper
+
+    Overwrite the current avatar stored under the user object.
+    */
+    public forceUpdateAvatar (newAvatar : File) : Observable<any> {
+        return new Observable();
+    } // public forceUpdateAvatar (newAvatar : File) 
 
     /**
      * Calls to server, which creates a temp user object
