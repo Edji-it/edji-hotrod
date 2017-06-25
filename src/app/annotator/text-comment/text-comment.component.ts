@@ -15,6 +15,8 @@ export class TextCommentComponent implements OnInit, AfterViewInit {
     @Input() private preview: boolean
     @Output() blur: EventEmitter<string> = new EventEmitter<string>() 
 
+    private editing: boolean = false;
+
     constructor(private element: ElementRef) { 
         
     }
@@ -30,10 +32,12 @@ export class TextCommentComponent implements OnInit, AfterViewInit {
     }
 
     updateComment(commentData: string) {
+        this.editing = false;
         this.blur.emit(commentData)
     }
 
     blurField(event) {
+        this.editing = false;
         event.preventDefault()
         this.element.nativeElement.querySelector('textarea').blur()
     }
