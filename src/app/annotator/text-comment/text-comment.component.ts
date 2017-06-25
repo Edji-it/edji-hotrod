@@ -16,6 +16,16 @@ export class TextCommentComponent implements OnInit, AfterViewInit {
     @Output() blur: EventEmitter<string> = new EventEmitter<string>() 
 
     private editing: boolean = false;
+    private activated: boolean = false;
+
+    // We need to know when changes to inactive to clear the editing variable
+    @Input() set active(active){
+        this.editing = false;
+        this.activated = active;
+    }
+    get active() {
+        return this.activated;
+    }
 
     constructor(private element: ElementRef) { 
         
