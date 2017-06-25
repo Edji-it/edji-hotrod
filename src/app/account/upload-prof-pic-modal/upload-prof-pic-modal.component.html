@@ -16,15 +16,17 @@
             </div>
 
             <!-- Body -->
-            <div class="row modal-body">
+            <div class="row modal-body body no-gutter">
                 <!-- Column 1 -->
-                <div class="col-sm-6">
+                <div class="col-md-6">
                     <img class="profile-pic" [src]="image">
                 </div>
                 <!-- Column 2 -->
-                <div class="col-sm-6">
-                    <button id="uploadBtn" class="btn modal-button">Upload New</button>
-                    <button id="removePicBtn" class="btn remove-button">Remove</button>
+                <div class="col-md-6">
+                    <div class="btn-container">
+                        <button id="uploadBtn" class="btn modal-button col-btn">Upload New</button>
+                        <button id="removePicBtn" class="btn col-btn remove-button">Remove</button>
+                    </div>
                 </div>
             </div>
 
@@ -38,9 +40,9 @@
                 <!-- Cancel & Save Buttons -->
                 <div class="btn-row">
                     <!-- Cancel Button -->
-                    <button (click)="closeModal.emit()" type="button" class="btn modal-button" data-dismiss="modal">Cancel</button><!--not sure what data-dismiss does-->
+                    <button (click)="closeModal.emit()" type="button" class="btn modal-button row-btn" data-dismiss="modal">Cancel</button><!--not sure what data-dismiss does-->
                     <!-- Save Button -->
-                    <button id="saveProfPicBtn" (click)="closeModal.emit();" class="btn btn-primary save-button">Save</button>
+                    <button id="saveProfPicBtn" (click)="closeModal.emit();" class="btn btn-primary save-button row-btn">Save</button>
                 </div>
             </div>
         </div>
