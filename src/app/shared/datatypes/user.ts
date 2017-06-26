@@ -13,7 +13,7 @@ interface BaseUser {
   fullname: string,
   email: string,
   identities?: string[],
-  avatar : File,
+  avatar : string, 
   prefs?: {
     recentEmoji?: string[],
     onboarding?: {

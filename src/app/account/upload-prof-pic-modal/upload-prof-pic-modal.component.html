@@ -27,7 +27,8 @@
                         <!-- Upload Button -->
                         <label id="uploadBtn" class="btn modal-button col-btn">
                             Upload New <input id="uploadImageInput" type="file" 
-                                accept=".jpg,.png,.gif,.jpeg,.svg">
+                                accept=".jpg,.png,.gif,.jpeg,.svg"
+                                (change)="updateUploadFile()"  style="display:none;">
                         </label>
                         <!-- Remove Button -->
                         <button id="removePicBtn" class="btn col-btn remove-button">Remove</button>

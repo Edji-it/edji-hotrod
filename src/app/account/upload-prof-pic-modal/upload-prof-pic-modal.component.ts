@@ -20,13 +20,14 @@ export class UploadProfPicModal implements OnInit {
   // For closing this modal.
   @Output() closeModal: EventEmitter<any> = new EventEmitter();
 
-  public uploadedFile : File;
+  public uploadedFile : any;
 
   public image      : any = "./../../assets/test-profile-pic/Rick-astley.jpg"; // The image we want to upload;
   public showError  : boolean = false;
 
   constructor(private _auth : AuthService) {
-    
+    this.uploadedFile = this.image;
+    console.log(this.image.constructor.name);
   } // constructor
  
   ngOnInit() { }
