@@ -1,10 +1,9 @@
-<script src="//cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/1.3.7/wavesurfer.min.js"></script>
 <div [ngClass]="{'active' : comment.active}" class='audio-comment-input-wrapper input-wrap'>
     <button style="margin-left: 2px;" class="btn-audio"><i class="icon-play" (click)="isPlaying = !isPlaying; isRecording=false"></i></button>
-    <button class="btn-audio"><i class="icon-restart" (click)="isRecording=false; isPlaying=false"></i></button>
-    <canvas class="wave-form" id="myCanvas"></canvas>
+    <button class="btn-audio" (click)="isRecording=false; isPlaying=false; stop()"><i class="icon-restart"></i></button>
+    <!--<canvas class="wave-form" id="{{comment._id}}"></canvas>-->
+    <canvas class="wave-form" id="0001"></canvas>
     <div [ngClass]="[ isPlaying ? 'playing' : '' ]" [style.width]="playTime"></div>
     <div [ngClass]="[ isRecording ? 'recording' : '' ]" [style.width]="playTime"></div>
-    <button class="btn-audio btn-record"><i class="icon icon-mic" (click)="isRecording = !isRecording; isPlaying=false"></i></button>
-    <span *ngIf="comment.data.length < 1" class="audio-comment-placeholder"></span>
+    <button class="btn-audio btn-record" (click)="isRecording = !isRecording; isPlaying=false; intializeAudio()"><i class="icon icon-mic"></i></button>
 </div>
