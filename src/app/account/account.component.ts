@@ -1,3 +1,4 @@
+import { Title } from '@angular/platform-browser';
 import { Component, OnInit } from '@angular/core';
 
 import { AuthService } from '../shared/auth.service';
@@ -10,11 +11,11 @@ export class AccountComponent implements OnInit {
   private currentUser: any;
   private showPassModal: boolean = false;
   
-  constructor(private _auth: AuthService) {
+  constructor(private _auth: AuthService, private _title: Title) {
     this.currentUser = this._auth.getUser();
   }
 
   ngOnInit() {
-
+    this._title.setTitle('Edji | "' + this.currentUser['fullname'] + '"')
   }
 }

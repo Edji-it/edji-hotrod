@@ -1,3 +1,4 @@
+import { Title } from '@angular/platform-browser';
 import { Component, OnInit, OnDestroy } from '@angular/core'
 import { PRIMARY_OUTLET, Router, ActivatedRoute } from '@angular/router'
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
@@ -68,7 +69,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private angulartics: Angulartics2,
     private bumblebee: BumblebeeService,
-    private _fb: FormBuilder
+    private _fb: FormBuilder,
+    private _title: Title
   ) {
 
     this.userCopy = new Copy().getUserCopy()
@@ -102,6 +104,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
         this.tempUserId = queryParams['userId']
       })
     )
+
+    this._title.setTitle( 'Edji | Register' )
   }
 
   //https://angular.io/docs/ts/latest/api/forms/index/FormGroup-class.html
