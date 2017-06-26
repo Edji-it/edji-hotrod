@@ -148,12 +148,17 @@
 
 .icon-mic {
     display: inline-block;
-    width: 20px;
-    height: 20px;
+    width: 1em;
+    height: 1em;
     background: url('/assets/images/icon-mic.svg');
     background-size: 100% 100%;
     background-position: center center;
     cursor: pointer;
+}
+
+.icon-mic--white {
+    @extend .icon-mic;
+    background: url('/assets/images/icon-mic--white.svg');
 }
 
 .icon-pause {

@@ -5,6 +5,6 @@
     <canvas class="wave-form" id="myCanvas"></canvas>
     <div [ngClass]="[ isPlaying ? 'playing' : '' ]" [style.width]="playTime"></div>
     <div [ngClass]="[ isRecording ? 'recording' : '' ]" [style.width]="playTime"></div>
-    <button class="btn-audio btn-record"><i class="icon-mic" (click)="isRecording = !isRecording; isPlaying=false"></i></button>
+    <button class="btn-audio btn-record"><i class="icon icon-mic" (click)="isRecording = !isRecording; isPlaying=false"></i></button>
     <span *ngIf="comment.data.length < 1" class="audio-comment-placeholder"></span>
 </div>

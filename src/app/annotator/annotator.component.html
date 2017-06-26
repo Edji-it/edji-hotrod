@@ -20,7 +20,7 @@
 				class="emoji" 
 				id="addAudioComment" 
 				(click)="addAudioComment($event)" 
-				[innerHtml]="':microphone:' | emojione"></button>
+				[innerHtml]="'<i class=\'icon icon-mic\'></i>'"></button>
 		</div>
 		<!--Mobile buttons-->
 		<div class="comment-options__mobile-wrap hidden-lg-up" [class.bottom-bar-offset]="user._id == project.teacher_id">
