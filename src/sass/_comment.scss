@@ -257,11 +257,10 @@ input.emojiComment {
 	border-radius: 50%;
 	content: '+';
 	transform: rotate(45deg);
-	//  input.emojiComment.active + & {
-	// 	 display: block;
-	//  }
+	
 	&:hover, &:active, &:focus {
 		background: $red;
+		color: #fff;
 	}
 
 	.focused ~ & {
