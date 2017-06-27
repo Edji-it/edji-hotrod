@@ -2,6 +2,8 @@ import { Component, Input, OnInit } from '@angular/core'
 
 import { EdjiComment } from '../../shared/datatypes'
 
+declare var MediaRecorder: any
+
 @Component({
   selector: 'audio-comment',
   templateUrl: 'audio-comment.component.html',
@@ -24,6 +26,19 @@ export class AudioCommentComponent implements OnInit{
   constructor() {
     
   }
+  
+  ngOnInit() {
+    // Set the canvas properties and write temporary data
+    var waves = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,10,12,14,22,32,10,12,28,46,89,10,12,14,22,32,10,12,28,46,89,10,12,14,22,32,10,12,28,46,89,0,0,0,0,0,0,0,0,0,0]
+    this.myCanvas = document.getElementById("0001")
+    //this.myCanvas = document.getElementById(this.comment._id)
+
+    // Build the waveform
+    this.waveForm(waves, this.myCanvas)
+    //this.waveForm(comment.waveform, comment.)
+
+    this.intializeAudio()
+  }
 
   public intializeAudio() {
     const onSuccess = stream => {
@@ -40,52 +55,43 @@ export class AudioCommentComponent implements OnInit{
         this.chunks.length = 0
         this.audio.src = window.URL.createObjectURL(blob)
         this.audio.load()
-        this.audio.play()
+        // this.audio.play()
         console.log('recording has successfully stopped')
         // stream.getTracks()[0].stop()
       }
 
       this.mediaRecorder.ondataavailable = e => this.chunks.push(e.data)
-      this.record()
     };
 
     navigator.getUserMedia = (navigator.getUserMedia ||
-      navigator.webkitGetUserMedia ||
-      navigator.mozGetUserMedia ||
-      navigator.msGetUserMedia)
+      navigator['webkitGetUserMedia'] ||
+      navigator['mozGetUserMedia'] ||
+      navigator['msGetUserMedia'])
 
     navigator.getUserMedia({ audio: true }, onSuccess, e => console.log(e))
   }
 
-  public record() {
+  private record() {
     this.isRecording = true
     this.isPlaying = false
     this.mediaRecorder.start()
   }
 
-  public stop() {
+  private stopRecord() {
     this.isRecording = false
     this.isPlaying = false
     this.mediaRecorder.stop()
   }
 
+  private pause() {
+    this.isPlaying = false
+    this.audio.pause()
+  }
+
   private play() {
-      this.isPlaying = !this.isPlaying
+      this.isPlaying = true
       this.isRecording=false
       this.audio.play()
-  }
-  
-  ngOnInit() {
-    // Set the canvas properties and write temporary data
-    var waves = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,10,12,14,22,32,10,12,28,46,89,10,12,14,22,32,10,12,28,46,89,10,12,14,22,32,10,12,28,46,89,0,0,0,0,0,0,0,0,0,0]
-    this.myCanvas = document.getElementById("0001")
-    //this.myCanvas = document.getElementById(this.comment._id)
-
-    // Build the waveform
-    this.waveForm(waves, this.myCanvas)
-    //this.waveForm(comment.waveform, comment.)
-
-    this.intializeAudio()
   }
 
   private loadAudio() {
