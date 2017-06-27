@@ -813,7 +813,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 this.focusArray[i] = false
             // } 
         }
-            this.imageHotspotPlaceholder['focus'] = false
+        this.imageHotspotPlaceholder['focus'] = false
     }
 
     /**
