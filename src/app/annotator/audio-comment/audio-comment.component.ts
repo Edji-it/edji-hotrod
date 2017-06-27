@@ -19,6 +19,7 @@ export class AudioCommentComponent implements OnInit{
   private colors
   private chunks: any = []
   private mediaRecorder: any
+  private audio
 
   constructor() {
     
@@ -33,14 +34,15 @@ export class AudioCommentComponent implements OnInit{
         console.log('recording has successfully started')
       }
       this.mediaRecorder.onstop = e => {
-        const audio = new Audio()
+        this.audio = new Audio()
+        console.log(this.audio)
         const blob = new Blob(this.chunks, { 'type': 'audio/ogg; codecs=opus' })
         this.chunks.length = 0
-        // audio.src = window.URL.createObjectURL(blob)
-        audio.load()
-        audio.play()
+        this.audio.src = window.URL.createObjectURL(blob)
+        this.audio.load()
+        this.audio.play()
         console.log('recording has successfully stopped')
-        stream.getTracks()[0].stop()
+        // stream.getTracks()[0].stop()
       }
 
       this.mediaRecorder.ondataavailable = e => this.chunks.push(e.data)
@@ -57,12 +59,20 @@ export class AudioCommentComponent implements OnInit{
 
   public record() {
     this.isRecording = true
+    this.isPlaying = false
     this.mediaRecorder.start()
   }
 
   public stop() {
     this.isRecording = false
+    this.isPlaying = false
     this.mediaRecorder.stop()
+  }
+
+  private play() {
+      this.isPlaying = !this.isPlaying
+      this.isRecording=false
+      this.audio.play()
   }
   
   ngOnInit() {
@@ -74,6 +84,8 @@ export class AudioCommentComponent implements OnInit{
     // Build the waveform
     this.waveForm(waves, this.myCanvas)
     //this.waveForm(comment.waveform, comment.)
+
+    this.intializeAudio()
   }
 
   private loadAudio() {
