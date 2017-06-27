@@ -1,4 +1,12 @@
 <div [ngClass]="{'active' : comment.active || preview }" class='text-comment input-wrap'>
-    <textarea type='text' placeholder="Text comment..." class="text-comment-input" [class.disabled]="readOnly" [(ngModel)]="comment.data" (blur)='updateComment(comment.data)' (keydown.enter)='blurField($event)' (keyup.esc)='blurField($event)' maxlength="140"></textarea>
-    <div class="text-comment__countdown" [class.hidden]="comment.active !== true" [class.danger]="comment.data.length > 120">{{ -1*(140 - comment.data.length) }}</div>
+    <!--Comment Input-->
+    <textarea *ngIf="editing" type='text' placeholder="Text comment..." class="text-comment-input" [class.disabled]="readOnly" [(ngModel)]="comment.data" (blur)='updateComment(comment.data)' (keydown.enter)='blurField($event)' (keyup.esc)='blurField($event)' maxlength="140"></textarea>
+    <!--Comment Display-->
+    <div *ngIf="!editing" class="text-comment-input" [innerHtml]="comment.data | linkify | emojione"></div>
+
+    <div *ngIf="(preview || comment.active) && !editing && !readOnly" class="text-comment__edit-btn" (click)="editing = true">
+        <span class="label--abs-left">Edit</span>
+        <i class="icon-text-comment"></i>
+    </div>
+    <div class="text-comment__countdown" [class.hidden]="editing !== true" [class.danger]="comment.data.length > 120">{{ -1*(140 - comment.data.length) }}</div>
 </div>
