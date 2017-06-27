@@ -22,6 +22,8 @@ export class AudioCommentComponent implements OnInit{
   private chunks: any = []
   private mediaRecorder: any
   private audio
+  private playAble: boolean = false
+  private recordAble: boolean = false
 
   constructor() {
     
@@ -37,67 +39,107 @@ export class AudioCommentComponent implements OnInit{
     this.waveForm(waves, this.myCanvas)
     //this.waveForm(comment.waveform, comment.)
 
+    /** 
+     * Initialize the audio access request & setup once this component loads
+     * Will only load if the user creates an audio comment, or loads text with audio comments in it already
+     * Both of which we need to get access granted in order to run 
+     */
     this.intializeAudio()
   }
 
   public intializeAudio() {
     const onSuccess = stream => {
+      // Initialize a MediaRecorder if access to the microphone is granted
       this.mediaRecorder = new MediaRecorder(stream)
-      // stream.getTracks()[0].stop()
       this.mediaRecorder.onstart = e => {
-        // stream.addTrack()
         console.log('recording has successfully started')
       }
       this.mediaRecorder.onstop = e => {
+        // Initialize an audio object after the recording has stopped
         this.audio = new Audio()
         console.log(this.audio)
+
+        // Set the audio for playback via the blob object from the stored chunks
         const blob = new Blob(this.chunks, { 'type': 'audio/ogg; codecs=opus' })
-        this.chunks.length = 0
         this.audio.src = window.URL.createObjectURL(blob)
         this.audio.load()
-        // this.audio.play()
+
         console.log('recording has successfully stopped')
-        // stream.getTracks()[0].stop()
+        
+        // Clear the playing element and allow recording once audio clip has finished playing
+        this.audio.onended = e => {
+          this.recordAble = true
+          this.isPlaying = false
+        }
+        // Get the audio duration 
+        // (only is accurate if the track is played at least once right now)
+        this.audio.onloadedmetadata = e => {
+          console.log(this.audio.duration)
+        }
       }
 
+      // Send "chunks" to the array as they are recorded
       this.mediaRecorder.ondataavailable = e => this.chunks.push(e.data)
+      console.log('audio initialized')
     };
 
+    // Request access to the microphone from the user
     navigator.getUserMedia = (navigator.getUserMedia ||
       navigator['webkitGetUserMedia'] ||
       navigator['mozGetUserMedia'] ||
       navigator['msGetUserMedia'])
 
+    // If the user allows access to the microphone, run the onSuccess function and enable the record button
     navigator.getUserMedia({ audio: true }, onSuccess, e => console.log(e))
+    this.recordAble = true
   }
 
+  /** 
+   * Record Audio from the user's microphone
+   */
   private record() {
+    this.playAble = false
     this.isRecording = true
     this.isPlaying = false
     this.mediaRecorder.start()
   }
 
+  /** 
+   * Stop recording audio
+   */
   private stopRecord() {
+    this.playAble = true
     this.isRecording = false
     this.isPlaying = false
     this.mediaRecorder.stop()
   }
 
+  /** 
+   * Pause playback of the audio track
+   */
   private pause() {
     this.isPlaying = false
     this.audio.pause()
   }
 
+  /** 
+   * Start playback of the audio track
+   */
   private play() {
-      this.isPlaying = true
-      this.isRecording=false
-      this.audio.play()
+    this.recordAble = false
+    this.isPlaying = true
+    this.isRecording=false
+    this.audio.play()
+    console.log(this.audio.duration)
   }
 
   private loadAudio() {
       
   }
 
+  /** 
+   * Create the waveform based on the audio comment's amplitude per 0.5 second interval of the comment
+   */
   private waveForm(waves, canvas) {
     // Prepare the canvas
     this.ctx = canvas.getContext("2d")
