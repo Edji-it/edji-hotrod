@@ -19,6 +19,7 @@ export class MediaService {
         }
     }
 
+    // Upload an image to the bucket to be locally stored.
     uploadImage(file: File): Observable<any> {
         let uploadSource = new Subject();
         this.http.get(this.imageService + '/sign-s3?file-name=' + file.name + '&file-type=' + file.type)
@@ -38,7 +39,7 @@ export class MediaService {
         );
 
         return uploadSource.asObservable();
-    }
+    } // uploadImage(file: File): Observable<any>
 
     uploadPdf(file: File): Observable<any> {
         let uploadSource = new Subject();
@@ -59,6 +60,6 @@ export class MediaService {
             .map(data => {
                 return data.json() || {};
             });
-    }
+    } // pdfCheck(fileId: string): Observable<any>
     
-}
+} // class
