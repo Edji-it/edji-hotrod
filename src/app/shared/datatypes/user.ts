@@ -13,7 +13,7 @@ interface BaseUser {
   fullname: string,
   email: string,
   identities?: string[],
-  avatar : string, 
+  avatar : string, // The url to the avatar image
   prefs?: {
     recentEmoji?: string[],
     onboarding?: {

@@ -21,10 +21,20 @@ export class AccountComponent implements OnInit {
   private currentUser   : any;
   private showPassModal : boolean = false;
   private showUploadProfPicModal : boolean = false;
-  
-  constructor(private _auth: AuthService) {
-    var firstInitialPos;
 
+  constructor(private _auth: AuthService) {
+    this.nameInitials = this.getUserInitials();
+    
+  } // constructor
+
+  ngOnInit() { }
+
+  public getUserInitials() : string 
+  {
+    var firstInitialPos;
+    var result;
+
+    result = "";
     firstInitialPos = 0; // needed for creating name initials
 
     this.currentUser = this._auth.getUser();
@@ -33,40 +43,37 @@ export class AccountComponent implements OnInit {
     // STEP: Let's create the name initials.
     for (var i = 0; i < this.currentUser.fullname.length; i++)
     {
-      if  (this.nameInitials.length != 0 && this.nameInitials.length < 2 && this.currentUser.fullname[i] == " ")
+      if  (result.length != 0 && result.length < 2 && this.currentUser.fullname[i] == " ")
       {
-        this.nameInitials = this.nameInitials + this.currentUser.fullname[i + 1];
+        result = result + this.currentUser.fullname[i + 1];
       } // if
 
-      if (this.nameInitials.length == 0 && this.currentUser.fullname[i] != " ")
+      if (result.length == 0 && this.currentUser.fullname[i] != " ")
       {
-        this.nameInitials = this.currentUser.fullname[i] + "";
+        result = this.currentUser.fullname[i] + "";
         firstInitialPos = i;
       } // if
 
       // If at the end, the name initials are less then two characters, then pull the next available character.
-      if (this.nameInitials.length < 2 && i === (this.currentUser.fullname.length - 1))
+      if (result.length < 2 && i === (this.currentUser.fullname.length - 1))
       {
         // Find the next available character.
         for (var n = firstInitialPos + 1; n < this.currentUser.fullname.length; n++)
         {
-          if  (this.nameInitials.length < 2 && this.currentUser.fullname[i] != " ")
+          if  (result.length < 2 && this.currentUser.fullname[i] != " ")
           {
-            this.nameInitials = this.nameInitials + this.currentUser.fullname[n];
+            result = result + this.currentUser.fullname[n];
           } // if
         } // for n
 
         // If nameInitials is STILL not equal to two characters, add "!"
-        if (this.nameInitials.length < 2)
+        if (result.length < 2)
         {
-          this.nameInitials = this.nameInitials + "!";
+          result = result + "!";
         }
       } // if
     } // for i
 
-  } // constructor
-
-  ngOnInit() {
-
-  }
+    return result;
+  } // public getUserInitials : ()
 } // class

@@ -11,7 +11,7 @@ import { User } from './datatypes'
 export class AuthService implements CanActivate {
 
     /*
-    Last Mod: 6.25.17
+    Last Mod: 6.27.17
 
     Edit user prefs from here. Everything under the datatype User should be edited through here.
     */
@@ -322,6 +322,7 @@ export class AuthService implements CanActivate {
                     });
                     */
                     
+                    // Let's save this here user object.
                     // This is repeated code from updateUser() we could consolidate these. (6.14.17)
                     this.http.put( this.baseUrl + '/users', {
                             user: mergedUser
@@ -362,8 +363,47 @@ export class AuthService implements CanActivate {
 
     Overwrite the current avatar stored under the user object.
     */
-    public forceUpdateAvatar (newAvatar : File) : Observable<any> {
-        return new Observable();
+    public forceUpdateAvatar (newAvatar : string) : Observable<any> {
+        // We want to return an Observable because those are handy for timing's sake, so let's do that.
+        return new Observable(observer => {
+            this.refreshUser().take(1)
+            .subscribe(currentUser =>{
+                // Make a copy of the user object, edit it, and shove it in.
+                let mergedUser = Object.assign({}, currentUser);// Get the latest copy of the user object.
+                mergedUser.avatar = newAvatar; // let's just shove those in there
+                this.user = mergedUser; // NOTE: We make a new object and assign it so that the user object is always nice and fresh.
+                
+                // Let's save this here user object.
+                // This is repeated code from updateUser() we could consolidate these. (6.27.17)
+                this.http.put( this.baseUrl + '/users', {
+                    user: mergedUser
+                }, this.getOptions())
+                .map((data) => {
+                    let object = data.json();
+                    // if the response has a token, the user should be successfully registered and logged in
+                    if (object.user) {
+                        this.setUser(object.user);
+                    }
+                    if (object.token) {
+                        this.setUser(object.token);
+                    }
+
+                    return data.json();
+                })
+                .toPromise()
+                .then( user => {
+                    observer.next(user)
+                }, error => {
+                    observer.error(error)
+                    console.error("Failed in forceUpdateDocuments in auth.service.ts when trying to save the user.");
+                })
+            },
+            error => {
+                observer.error(error)
+                console.error(error)
+                console.error("Failed in forceUpdateAvatar in auth.service.ts");
+            }) // subscribe / error
+        });
     } // public forceUpdateAvatar (newAvatar : File) 
 
     /**

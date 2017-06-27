@@ -5,7 +5,7 @@ import { AuthService, MediaService } from '../../shared';
 
 @Component({
   selector: 'hot-upload-prof-pic',
-  styleUrls: ['./upload-prof-pic-modal.scss'],
+  styleUrls: ['./upload-prof-pic-modal.scss', '../account.component.scss'],
   templateUrl: 'upload-prof-pic-modal.component.html',
   providers: [
     MediaService
@@ -27,14 +27,15 @@ export class UploadProfPicModal implements OnInit {
   // For closing this modal.
   @Output() closeModal: EventEmitter<any> = new EventEmitter();
 
-  public uploadedFile : any;
+  public uploadedFile : string;
 
   public image      : any = "./../../assets/test-profile-pic/Rick-astley.jpg"; // The image we want to upload;
   public showError  : boolean = false;
+  public imageUploaded : boolean = false;
 
   constructor(private _media: MediaService, private _auth: AuthService) {
-    this.uploadedFile = this.image;
-    console.log(this.image.constructor.name);
+    this.uploadedFile = this._auth.getUser().avatar;
+    // console.log(this.image.constructor.name);
   } // constructor
  
   ngOnInit() { }
@@ -58,6 +59,7 @@ export class UploadProfPicModal implements OnInit {
         .subscribe(data => {
           // Begin Upload of the image's URL
           this.uploadedFile = data.url;
+          this.imageUploaded = true;
         }, error => {
           console.log("Upload failure (2)");
         });
@@ -70,5 +72,23 @@ export class UploadProfPicModal implements OnInit {
   {
     return this.uploadedFile;
   } // public getSelectedImage () : any 
+
+  public confirmNewAvatar () : void
+  {
+    this._auth.forceUpdateAvatar(this.uploadedFile)
+      .take(1).subscribe(() => {
+        console.log("Saved!");
+      },
+      (error) => {
+        console.log("ERROR");
+        console.log(error);
+      });
+  } //  public confirmNewAvatar () : void
+
+  public removeAvatar () : void 
+  {
+    this.uploadedFile = null;
+    this.imageUploaded = true;
+  } /// public removeAvatar () : void 
 
 } // class UploadProfPicModal

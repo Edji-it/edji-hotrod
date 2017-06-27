@@ -20,7 +20,9 @@
                 <!-- Column 1 -->
                 <div class="col-md-6">
                     <!-- Profile Pic -->
-                    <img class="profile-pic" [src]="getSelectedImage()">
+                    <span class="profile-pic">
+                        <img class="profile-pic" *ngIf="imageUploaded" [src]="getSelectedImage()">
+                    </span>
                 </div>
                 <!-- Column 2 -->
                 <div class="col-md-6">
@@ -30,10 +32,10 @@
                             Upload New 
                             <input id="uploadImageInput" type="file" 
                                 accept=".jpg,.png,.gif,.jpeg,.svg"
-                                (change)="updateUploadedFile()"  style="display:none;">
+                                (change)="updateUploadedFile();"  style="display:none;">
                         </label>
                         <!-- Remove Button -->
-                        <button id="removePicBtn" class="btn col-btn remove-button">Remove</button>
+                        <button id="removePicBtn" class="btn col-btn remove-button" (click)="removeAvatar();">Remove</button>
                     </div>
                 </div>
             </div>
@@ -50,7 +52,7 @@
                     <!-- Cancel Button -->
                     <button (click)="closeModal.emit()" type="button" class="btn modal-button row-btn" data-dismiss="modal">Cancel</button><!--not sure what data-dismiss does-->
                     <!-- Save Button -->
-                    <button id="saveProfPicBtn" (click)="closeModal.emit();" class="btn btn-primary save-button row-btn">Save</button>
+                    <button id="saveProfPicBtn" (click)="closeModal.emit(); confirmNewAvatar();" class="btn btn-primary save-button row-btn">Save</button>
                 </div>
             </div>
         </div>
