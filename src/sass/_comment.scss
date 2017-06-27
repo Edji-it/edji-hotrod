@@ -46,6 +46,9 @@ edji-comment {
 	pointer-events: all;
 	cursor: pointer;
 	opacity: 1;
+	font-size: $base-font-size;
+	font-weight: normal;
+	font-style: normal;
 
 	@extend %noSelect;
 
