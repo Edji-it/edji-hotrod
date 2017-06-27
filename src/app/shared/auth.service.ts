@@ -385,7 +385,7 @@ export class AuthService implements CanActivate {
                         this.setUser(object.user);
                     }
                     if (object.token) {
-                        this.setUser(object.token);
+                        this.setToken(object.token);
                     }
 
                     return data.json();

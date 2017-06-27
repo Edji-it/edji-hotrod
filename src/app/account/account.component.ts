@@ -21,10 +21,14 @@ export class AccountComponent implements OnInit {
   private currentUser   : any;
   private showPassModal : boolean = false;
   private showUploadProfPicModal : boolean = false;
+  private hasAvatar : boolean = false;
 
   constructor(private _auth: AuthService) {
     this.nameInitials = this.getUserInitials();
     
+    // See if there's an avatar.
+    let avatar = _auth.getUser().avatar;
+    // ... TODO finish this later.
   } // constructor
 
   ngOnInit() { }
@@ -76,4 +80,6 @@ export class AccountComponent implements OnInit {
 
     return result;
   } // public getUserInitials : ()
+
+  
 } // class
