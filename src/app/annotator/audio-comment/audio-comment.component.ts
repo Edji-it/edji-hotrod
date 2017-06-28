@@ -26,6 +26,10 @@ export class AudioCommentComponent implements OnInit{
   private playAble: boolean = false
   private recordAble: boolean = false
   private activated: boolean = false
+  private startAt: any
+  private duration: number = 0
+  private timeLimit: number = 5000
+  private interval: any
 
   // We need to know when changes to inactive to clear the editing variable
   @Input() set active(active){
@@ -67,8 +71,21 @@ export class AudioCommentComponent implements OnInit{
       this.mediaRecorder = new MediaRecorder(stream)
       this.mediaRecorder.onstart = e => {
         console.log('recording has successfully started')
+        // While recording, check the duration of the recording total and stop it once it hits the limit
+        this.interval = setInterval(()=> {
+          if((new Date().getTime() - this.startAt + (this.duration * 1000)) > this.timeLimit - 1) {
+            this.stopRecord()
+            clearInterval(this.interval)
+            return
+          }
+        }, 500)
       }
       this.mediaRecorder.onstop = e => {
+        // If the audio is at the limit, restrict the ability to record
+        if (this.duration > this.timeLimit / 1000) {
+          this.recordAble = false
+        }
+
         // Initialize an audio object after the recording has stopped
         this.audio = new Audio()
         console.log(this.audio)
@@ -84,11 +101,6 @@ export class AudioCommentComponent implements OnInit{
         this.audio.onended = e => {
           this.recordAble = true
           this.isPlaying = false
-        }
-        // Get the audio duration 
-        // (only is accurate if the track is played at least once right now)
-        this.audio.onloadedmetadata = e => {
-          console.log(this.audio.duration)
         }
       }
 
@@ -115,6 +127,7 @@ export class AudioCommentComponent implements OnInit{
     this.playAble = false
     this.isRecording = true
     this.isPlaying = false
+    this.startAt = new Date()
     this.mediaRecorder.start()
   }
 
@@ -125,6 +138,10 @@ export class AudioCommentComponent implements OnInit{
     this.playAble = true
     this.isRecording = false
     this.isPlaying = false
+    // Get the duration of the audio track
+    this.duration = this.duration + (new Date().getTime() - this.startAt) / 1000
+    clearInterval(this.interval)
+    console.log(this.duration)
     this.mediaRecorder.stop()
   }
 
@@ -144,7 +161,6 @@ export class AudioCommentComponent implements OnInit{
     this.isPlaying = true
     this.isRecording=false
     this.audio.play()
-    console.log(this.audio.duration)
   }
 
   private loadAudio() {
@@ -162,11 +178,11 @@ export class AudioCommentComponent implements OnInit{
     barchart(
       {
         canvas: canvas,
-        padding:2,
-        gridScale:5,
-        gridColor:"transparent",
+        padding: 2,
+        gridScale: 5,
+        gridColor: "transparent",
         data: waves,
-        colors:["#000"],
+        colors: ["#000"],
         ctx: this.ctx
       }
     )
