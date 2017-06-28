@@ -88,13 +88,18 @@ export class CommentComponent implements OnInit {
       
   }
 
-  activate(): void {
-    if (!this.readOnly) {
-      this.active = true
-      this.commentActivation.emit(true)
-    } else {
-      this.togglePreview()
-    }
+  activate(event): void {
+      // Ignore if user is just clicking a link
+      if (this.preview && ['a','i'].indexOf(event.target.tagName.toLowerCase()) > -1) {
+        // Let click open link
+      } else {
+         if (!this.readOnly) {
+            this.active = true
+            this.commentActivation.emit(true)
+          } else {
+              this.togglePreview()
+          }
+      }
   }
 
   togglePreview(): void {
