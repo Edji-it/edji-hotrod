@@ -11,6 +11,7 @@ declare var MediaRecorder: any
 })
 export class AudioCommentComponent implements OnInit{
   @Input() private comment: EdjiComment
+
   private isPlaying: boolean = false
   private isRecording: boolean = false
   private playTime: string = "75px"
@@ -24,6 +25,19 @@ export class AudioCommentComponent implements OnInit{
   private audio
   private playAble: boolean = false
   private recordAble: boolean = false
+  private activated: boolean = false
+
+  // We need to know when changes to inactive to clear the editing variable
+  @Input() set active(active){
+    this.activated = active
+    if (active == false) {
+      // Comment saved! Save audio file
+      
+    }
+  }
+  get active() {
+    return this.activated
+  }
 
   constructor() {
     
