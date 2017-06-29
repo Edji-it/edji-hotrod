@@ -14,7 +14,8 @@ export class AudioCommentComponent implements OnInit{
 
   private isPlaying: boolean = false
   private isRecording: boolean = false
-  private playTime: string = "75px"
+  private playTime: string = "0px"
+  private playWidth: number = 82
   private myCanvas
   private options
   private canvas
@@ -26,10 +27,13 @@ export class AudioCommentComponent implements OnInit{
   private playAble: boolean = false
   private recordAble: boolean = false
   private activated: boolean = false
-  private startAt: any
-  private duration: number = 0
+  private rStartAt: any
+  private rDuration: number = 0
+  private pStartAt: any
+  private pDuration: number = 0
   private timeLimit: number = 5000
-  private interval: any
+  private rInterval: any
+  private pInterval: any
 
   // We need to know when changes to inactive to clear the editing variable
   @Input() set active(active){
@@ -72,17 +76,19 @@ export class AudioCommentComponent implements OnInit{
       this.mediaRecorder.onstart = e => {
         console.log('recording has successfully started')
         // While recording, check the duration of the recording total and stop it once it hits the limit
-        this.interval = setInterval(()=> {
-          if((new Date().getTime() - this.startAt + (this.duration * 1000)) > this.timeLimit - 1) {
+        this.rInterval = setInterval(()=> {
+          if((new Date().getTime() - this.rStartAt + (this.rDuration * 1000)) > this.timeLimit - 1) {
             this.stopRecord()
-            clearInterval(this.interval)
+            clearInterval(this.rInterval)
             return
           }
-        }, 500)
+          // While recording, set the playTime to indicate current % progress of recording
+          this.playTime = (((this.rDuration * 1000 + (new Date().getTime() - this.rStartAt)) / this.timeLimit) * this.playWidth) + 'px'
+        }, 50)
       }
       this.mediaRecorder.onstop = e => {
         // If the audio is at the limit, restrict the ability to record
-        if (this.duration > this.timeLimit / 1000) {
+        if (this.rDuration > this.timeLimit / 1000) {
           this.recordAble = false
         }
 
@@ -96,6 +102,19 @@ export class AudioCommentComponent implements OnInit{
         this.audio.load()
 
         console.log('recording has successfully stopped')
+
+        // Set the playTime to indicate current % progress of playback
+        this.audio.onplay = e => {
+          this.playTime = '0px'
+          this.pInterval = setInterval(()=> {
+            if((new Date().getTime() - this.pStartAt) > this.rDuration * 1000 - 1) {
+              // this.pause()
+              clearInterval(this.pInterval)
+              return
+            }
+            this.playTime = (((new Date().getTime() - this.pStartAt) / this.timeLimit) * this.playWidth) + 'px'
+          }, 50)
+        }
         
         // Clear the playing element and allow recording once audio clip has finished playing
         this.audio.onended = e => {
@@ -127,7 +146,7 @@ export class AudioCommentComponent implements OnInit{
     this.playAble = false
     this.isRecording = true
     this.isPlaying = false
-    this.startAt = new Date()
+    this.rStartAt = new Date()
     this.mediaRecorder.start()
   }
 
@@ -139,9 +158,9 @@ export class AudioCommentComponent implements OnInit{
     this.isRecording = false
     this.isPlaying = false
     // Get the duration of the audio track
-    this.duration = this.duration + (new Date().getTime() - this.startAt) / 1000
-    clearInterval(this.interval)
-    console.log(this.duration)
+    this.rDuration = this.rDuration + (new Date().getTime() - this.rStartAt) / 1000
+    clearInterval(this.rInterval)
+    console.log(this.rDuration)
     this.mediaRecorder.stop()
   }
 
@@ -150,6 +169,7 @@ export class AudioCommentComponent implements OnInit{
    */
   private pause() {
     this.isPlaying = false
+    clearInterval(this.pInterval)
     this.audio.pause()
   }
 
@@ -160,6 +180,7 @@ export class AudioCommentComponent implements OnInit{
     this.recordAble = false
     this.isPlaying = true
     this.isRecording=false
+    this.pStartAt = new Date()
     this.audio.play()
   }
 
