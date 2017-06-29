@@ -7,8 +7,9 @@
 
         <!-- Profile Pic block -->
         <div class="profile-pic-container" (newAvatarConfirmed)="fetchAvatar()">
-            <span class="profile-pic"> 
-                <span *ngIf="hasAvatar === false">{{getUserInitials()}}</span>
+            <img *ngIf="hasAvatar" lass="profile-pic" [attr.src]="profileImage">
+            <span *ngIf="hasAvatar === false" class="profile-pic"> 
+                <span>{{getUserInitials()}}</span>
             </span>
             <!-- Edit Profile Picture Button 
                 - Opens UploadProfPicModal -->

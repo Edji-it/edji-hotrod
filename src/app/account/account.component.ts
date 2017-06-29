@@ -15,7 +15,7 @@ export class AccountComponent implements OnInit {
   The page for the user's account info. A profile page.
   */
   
-  public profileImage : any = "/assets/test-profile-pic/Rick-astley.jpg";
+  public profileImage : string = "/assets/test-profile-pic/Rick-astley.jpg";
 
   private nameInitials  : string = ""; // we gonna use these for the temp profile pic
   private currentUser   : any;
@@ -24,7 +24,7 @@ export class AccountComponent implements OnInit {
   private hasAvatar : boolean = false;
 
   constructor(private _auth: AuthService) {
-    this.fetchAvatar();
+    this.profileImage = this.fetchAvatar();
     this.nameInitials = this.getUserInitials();
   } // constructor
 
@@ -79,7 +79,7 @@ export class AccountComponent implements OnInit {
   } // public getUserInitials : ()
 
   // Get the avatar from the user object and assign it to the image object. WIP
-  public fetchAvatar () : any 
+  public fetchAvatar () : string 
   {
     let avatar = this._auth.getUser().avatar;
     console.log("[account.component.ts]" + avatar);
