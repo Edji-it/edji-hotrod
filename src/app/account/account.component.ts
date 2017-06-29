@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
 import { AuthService } from '../shared/auth.service';
 
@@ -14,7 +14,7 @@ export class AccountComponent implements OnInit {
 
   The page for the user's account info. A profile page.
   */
-
+  
   public profileImage : any = "/assets/test-profile-pic/Rick-astley.jpg";
 
   private nameInitials  : string = ""; // we gonna use these for the temp profile pic
@@ -24,11 +24,8 @@ export class AccountComponent implements OnInit {
   private hasAvatar : boolean = false;
 
   constructor(private _auth: AuthService) {
+    this.fetchAvatar();
     this.nameInitials = this.getUserInitials();
-    
-    // See if there's an avatar.
-    let avatar = _auth.getUser().avatar;
-    // ... TODO finish this later.
   } // constructor
 
   ngOnInit() { }
@@ -81,5 +78,17 @@ export class AccountComponent implements OnInit {
     return result;
   } // public getUserInitials : ()
 
+  // Get the avatar from the user object and assign it to the image object. WIP
+  public fetchAvatar () : any 
+  {
+    let avatar = this._auth.getUser().avatar;
+    console.log("[account.component.ts]" + avatar);
+    if (avatar)
+    {
+      this.hasAvatar = true;
+    }
+
+    return avatar;
+  } // public getAvatar () : any 
   
 } // class

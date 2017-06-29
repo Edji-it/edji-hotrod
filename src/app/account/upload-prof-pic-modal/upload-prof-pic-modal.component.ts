@@ -26,6 +26,9 @@ export class UploadProfPicModal implements OnInit {
 
   // For closing this modal.
   @Output() closeModal: EventEmitter<any> = new EventEmitter();
+  // Tell the account page to refresh the avatar plz.
+  @Output() newAvatarConfirmed: EventEmitter<any> = new EventEmitter(); // Tell the listening page to close the darned thing.
+
 
   public uploadedFile : string;
 
@@ -35,6 +38,8 @@ export class UploadProfPicModal implements OnInit {
 
   constructor(private _media: MediaService, private _auth: AuthService) {
     this.uploadedFile = this._auth.getUser().avatar;
+
+    console.log(this.uploadedFile);
     // console.log(this.image.constructor.name);
   } // constructor
  
@@ -46,11 +51,11 @@ export class UploadProfPicModal implements OnInit {
     // in media.service
 
     const files = document.getElementById('uploadImageInput')['files'];
-    console.log("We are uploading.");
+    // console.log("We are uploading.");
 
     let file = files[0];
     console.log(file);
-    console.log(file.size + " is being compared to " + (5 * Math.pow(10, 6)));
+    // console.log(file.size + " is being compared to " + (5 * Math.pow(10, 6)));
 
     // Limit file size to 5mb
     if (file && file.size < 5 * Math.pow(10, 6) ) {
@@ -78,6 +83,7 @@ export class UploadProfPicModal implements OnInit {
     this._auth.forceUpdateAvatar(this.uploadedFile)
       .take(1).subscribe(() => {
         console.log("Saved!");
+        console.log(this._auth.getUser().avatar);
       },
       (error) => {
         console.log("ERROR");

@@ -6,8 +6,8 @@
         <h1 class="profile-title">Profile</h1>
 
         <!-- Profile Pic block -->
-        <div class="profile-pic-container">
-            <span class="profile-pic"> <!-- just name this an img in order to do a profile pic -->
+        <div class="profile-pic-container" (newAvatarConfirmed)="fetchAvatar()">
+            <span class="profile-pic"> 
                 <span *ngIf="hasAvatar === false">{{getUserInitials()}}</span>
             </span>
             <!-- Edit Profile Picture Button 

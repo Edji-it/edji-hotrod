@@ -373,7 +373,10 @@ export class AuthService implements CanActivate {
                 mergedUser.avatar = newAvatar; // let's just shove those in there
                 this.user = mergedUser; // NOTE: We make a new object and assign it so that the user object is always nice and fresh.
                 
-                // Let's save this here user object.
+                console.log(newAvatar);
+                console.log(this.user.avatar);
+
+                // This code saves this here user object.
                 // This is repeated code from updateUser() we could consolidate these. (6.27.17)
                 this.http.put( this.baseUrl + '/users', {
                     user: mergedUser
@@ -387,6 +390,8 @@ export class AuthService implements CanActivate {
                     if (object.token) {
                         this.setToken(object.token);
                     }
+
+                    console.log(this.user.avatar);
 
                     return data.json();
                 })
