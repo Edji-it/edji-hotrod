@@ -1,4 +1,3 @@
-import { Title } from '@angular/platform-browser';
 import { REPLServer } from 'repl';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -97,8 +96,7 @@ export class NewReadingPage implements OnInit {
         private router: Router,
         private angulartics: Angulartics2,
         fb: FormBuilder,
-        private el: ElementRef,
-        private _title: Title
+        private el: ElementRef
     ) {
         this.readingForm = fb.group({
             title: [null, Validators.required],
@@ -123,8 +121,6 @@ export class NewReadingPage implements OnInit {
         } else if (this.copyId) {
             this.getReading(this.copyId);
         }
-
-        this._title.setTitle('Edji | New Reading')
      }
 
      private getReading(readingId: string) {
@@ -146,8 +142,6 @@ export class NewReadingPage implements OnInit {
                         if (this.reading.owner_id) {
                             this.ownerId = this.reading.owner_id;
                         }
-
-                        this._title.setTitle('Edji | Editing: '+ this.reading.title)
                     }
                 },
                 err => {

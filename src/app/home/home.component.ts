@@ -1,4 +1,3 @@
-import { Title } from '@angular/platform-browser';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
@@ -7,6 +6,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { Angulartics2 } from 'angulartics2';
 
 import { AppState } from '../app.service';
+import { Title } from './title';
 import { AuthService } from '../shared/auth.service';
 import { ProjectService } from './../shared/project.service';
 
@@ -43,12 +43,12 @@ export class HomeComponent implements OnInit, OnDestroy {
   // TypeScript public modifiers
   constructor(
     private appState: AppState,
+    private title: Title,
     private _auth: AuthService,
     private _project: ProjectService,
     private router: Router,
     private angulartics: Angulartics2,
-    fb: FormBuilder,
-    private _title: Title
+    fb: FormBuilder
   ) {
     this.loginForm = fb.group({
       username: [null, Validators.required],
@@ -57,7 +57,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this._title.setTitle('Edji')
   }
 
   ngOnDestroy() {

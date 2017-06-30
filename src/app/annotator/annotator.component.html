@@ -65,7 +65,7 @@
 						<div *ngFor="let comment of commentsByIndex[i]" [class.hidden]="(!project.heat_vision && user._id !== project.teacher_id) && comment.user_id !== user._id && comment.user_id !== project.teacher_id" class="hotspot" 
 						[style.top]="comment['loc'] ? comment['loc']['y'] + '%' : '0%'" 
 						[style.left]="comment['loc'] ? comment['loc']['x'] + '%' : '0%'"></div>
-						<img class="reading-image" id="readingImage{{i}}" [attr.index]="i" [src]="w.url.replace('http://','//')" (load)="updateImageHeights()" />
+						<img class="reading-image" id="readingImage{{i}}" [attr.index]="i" [src]="w.url" (load)="updateImageHeights()" />
 					</div></span>
 		</article>
 	</div>

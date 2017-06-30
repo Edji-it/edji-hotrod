@@ -1,4 +1,3 @@
-import { Title } from '@angular/platform-browser';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
@@ -33,7 +32,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     private _auth: AuthService,
     private _project: ProjectService,
     private _router: Router,
-    private _title: Title
   ) {
     // this makes the window always render scrolled to the top
     this._router.events.subscribe(() => {
@@ -47,8 +45,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     if (user && user.isLoggedIn) {
       this._router.navigate(['/dashboard'])
     }
-
-    this._title.setTitle( 'Edji | Login' )
   }
 
   private loginSuccess(): void {
