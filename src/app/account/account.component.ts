@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 
 import { AuthService } from '../shared/auth.service';
 
@@ -15,22 +15,20 @@ export class AccountComponent implements OnInit {
   The page for the user's account info. A profile page.
   */
   
-  public profileImage : string = "/assets/test-profile-pic/Rick-astley.jpg";
-
   private nameInitials  : string = ""; // we gonna use these for the temp profile pic
   private currentUser   : any;
   private showPassModal : boolean = false;
   private showUploadProfPicModal : boolean = false;
   private hasAvatar : boolean = false;
 
-  constructor(private _auth: AuthService, private _title: Title) {
+  constructor(private _auth: AuthService /*, private _title: Title*/) {
     this.currentUser = this._auth.getUser();
-    this.profileImage = this.fetchAvatar();
+    this.getAvatar(); // use this to set hasAvatar initially
     this.nameInitials = this.getUserInitials();
-  }
+  } // constructor
 
   ngOnInit() { 
-    this._title.setTitle('Edji | "' + this.currentUser['fullname'] + '"');
+    // this._title.setTitle('Edji | "' + this.currentUser['fullname'] + '"');
   }
 
   public getUserInitials() : string 
@@ -81,13 +79,20 @@ export class AccountComponent implements OnInit {
     return result;
   } // public getUserInitials : ()
 
-  // Get the avatar from the user object and assign it to the image object. WIP
-  public fetchAvatar () : string 
+  // Accessor for user.avatar
+  // Get the avatar from the user object
+  public getAvatar () : string
   {
-    let avatar = this.currentUser.avatar;
-    console.log("[account.component.ts]" + avatar);
-    if (avatar)
+    let avatar;
+
+    this.hasAvatar = false;
+    this.currentUser = this._auth.getUser();
+
+    // console.log("[account.component.ts] Called getAvatar()!");
+    // console.log("[account.component.ts]" + this.profileImage);
+    if (this.currentUser.avatar)
     {
+      avatar = this.currentUser.avatar;
       this.hasAvatar = true;
     }
 

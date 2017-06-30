@@ -6,8 +6,8 @@
         <h1 class="profile-title">Profile</h1>
 
         <!-- Profile Pic block -->
-        <div class="profile-pic-container" (newAvatarConfirmed)="this.profileImage = fetchAvatar()">
-            <img *ngIf="hasAvatar" lass="profile-pic" [attr.src]="profileImage">
+        <div class="profile-pic-container">
+            <img *ngIf="hasAvatar" class="profile-pic" [src]="getAvatar()">
             <span *ngIf="hasAvatar === false" class="profile-pic"> 
                 <span>{{getUserInitials()}}</span>
             </span>

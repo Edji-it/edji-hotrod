@@ -21,7 +21,7 @@
                 <div class="col-md-6">
                     <!-- Profile Pic -->
                     <span class="profile-pic">
-                        <img class="profile-pic" *ngIf="imageUploaded" [src]="getSelectedImage()">
+                        <img class="profile-pic" *ngIf="imageUploaded" [src]="getUploadedFile()">
                     </span>
                 </div>
                 <!-- Column 2 -->
@@ -50,7 +50,7 @@
                 <!-- Cancel & Save Buttons -->
                 <div class="btn-row">
                     <!-- Cancel Button -->
-                    <button (click)="closeModal.emit()" type="button" class="btn modal-button row-btn" data-dismiss="modal">Cancel</button><!--not sure what data-dismiss does-->
+                    <button (click)="closeModal.emit();" type="button" class="btn modal-button row-btn" data-dismiss="modal">Cancel</button><!--not sure what data-dismiss does-->
                     <!-- Save Button -->
                     <button id="saveProfPicBtn" (click)="closeModal.emit();  confirmNewAvatar(); newAvatarConfirmed.emit();" class="btn btn-primary save-button row-btn">Save</button>
                 </div>

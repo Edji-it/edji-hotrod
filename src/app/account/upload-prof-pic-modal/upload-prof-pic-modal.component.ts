@@ -30,16 +30,20 @@ export class UploadProfPicModal implements OnInit {
   @Output() newAvatarConfirmed: EventEmitter<any> = new EventEmitter(); // Tell the listening page to close the darned thing.
 
 
-  public uploadedFile : string;
-
   public image      : any = "./../../assets/test-profile-pic/Rick-astley.jpg"; // The image we want to upload;
   public showError  : boolean = false;
   public imageUploaded : boolean = false;
 
+  private uploadedFile : string;
+
   constructor(private _media: MediaService, private _auth: AuthService) {
     this.uploadedFile = this._auth.getUser().avatar;
 
-    console.log(this.uploadedFile);
+    if (this.uploadedFile)
+    {
+      this.imageUploaded = true;
+    } // if
+
     // console.log(this.image.constructor.name);
   } // constructor
  
@@ -65,6 +69,8 @@ export class UploadProfPicModal implements OnInit {
           // Begin Upload of the image's URL
           this.uploadedFile = data.url;
           this.imageUploaded = true;
+
+          this.getUploadedFile(); // Do this to refresh imageUploaded
         }, error => {
           console.log("Upload failure (2)");
         });
@@ -73,8 +79,17 @@ export class UploadProfPicModal implements OnInit {
     }
   } // public updateUploadFile() void
 
-  public getSelectedImage () : any 
+  // accessor for this.uploadedFile
+  // adjusts the bool, imageUploaded, as to whether or not an image has been uplaoded
+  public getUploadedFile () : string 
   {
+    this.imageUploaded = false;
+
+    if (this.uploadedFile)
+    {
+      this.imageUploaded = true;
+    }
+
     return this.uploadedFile;
   } // public getSelectedImage () : any 
 
@@ -83,7 +98,7 @@ export class UploadProfPicModal implements OnInit {
     this._auth.forceUpdateAvatar(this.uploadedFile)
       .take(1).subscribe(() => {
         console.log("Saved!");
-        console.log(this._auth.getUser().avatar);
+        // console.log(this._auth.getUser().avatar);
       },
       (error) => {
         console.log("ERROR");
@@ -94,7 +109,9 @@ export class UploadProfPicModal implements OnInit {
   public removeAvatar () : void 
   {
     this.uploadedFile = null;
-    this.imageUploaded = true;
+    this.getUploadedFile(); // Do this to refresh imageUploaded
+
+    this.imageUploaded = false;
   } /// public removeAvatar () : void 
 
 } // class UploadProfPicModal
