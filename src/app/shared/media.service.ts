@@ -40,6 +40,48 @@ export class MediaService {
         return uploadSource.asObservable();
     }
 
+    uploadAudio(file: File): Observable<any> {
+        let uploadSource = new Subject();
+        this.http.get(this.imageService + '/sign-s3?file-name=' + file.name + '&file-type=' + file.type + '&file-path=audio')
+            .subscribe((res) => {
+                let s3data = res.json();
+                
+                this.http.put(s3data.signedRequest, file)
+                    .subscribe(res => {
+                        uploadSource.next({ url: s3data.url });
+                    }, error => {
+                        uploadSource.error(error);
+                    });
+            },
+            (error) => {
+                uploadSource.error(error);
+            }
+        );
+
+        return uploadSource.asObservable();
+    }
+
+    uploadAvatar(file: File): Observable<any> {
+        let uploadSource = new Subject();
+        this.http.get(this.imageService + '/sign-s3?file-name=' + file.name + '&file-type=' + file.type + '&file-path=avatars')
+            .subscribe((res) => {
+                let s3data = res.json();
+                
+                this.http.put(s3data.signedRequest, file)
+                    .subscribe(res => {
+                        uploadSource.next({ url: s3data.url });
+                    }, error => {
+                        uploadSource.error(error);
+                    });
+            },
+            (error) => {
+                uploadSource.error(error);
+            }
+        );
+
+        return uploadSource.asObservable();
+    }
+
     uploadPdf(file: File): Observable<any> {
         let uploadSource = new Subject();
      
