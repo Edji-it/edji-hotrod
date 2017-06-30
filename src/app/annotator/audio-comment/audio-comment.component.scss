@@ -54,6 +54,8 @@ button {
     background-color: #fff;
     padding: 1px 0px 3px 0px;
     border-radius: 4px;
+    transition: 75ms linear;
+    -webkit-transition: 75ms linear;
 }
 
 $progressStart: 51px;

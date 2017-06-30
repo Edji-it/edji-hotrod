@@ -31,9 +31,15 @@ export class AudioCommentComponent implements OnInit{
   private rDuration: number = 0
   private pStartAt: any
   private pDuration: number = 0
-  private timeLimit: number = 5000
   private rInterval: any
   private pInterval: any
+  // private waves = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,10,12,14,22,32,10,12,28,46,89,10,12,14,22,32,10,12,28,46,89,10,12,14,22,32,10,12,28,46,89,0,0,0,0,0,0,0,0,0,0]
+  private waves = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+  private wavePos: number = 0
+  // Change the next variable to control maximum audio comment length in milliseconds
+  private timeLimit: number = 30000
+  // Change the next variable to control the frequency at which the playback/recording currentTime evaluates
+  private intervalGap: number = 100
 
   // We need to know when changes to inactive to clear the editing variable
   @Input() set active(active){
@@ -53,12 +59,12 @@ export class AudioCommentComponent implements OnInit{
   
   ngOnInit() {
     // Set the canvas properties and write temporary data
-    var waves = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,10,12,14,22,32,10,12,28,46,89,10,12,14,22,32,10,12,28,46,89,10,12,14,22,32,10,12,28,46,89,0,0,0,0,0,0,0,0,0,0]
+    
     this.myCanvas = document.getElementById("0001")
     //this.myCanvas = document.getElementById(this.comment._id)
 
     // Build the waveform
-    this.waveForm(waves, this.myCanvas)
+    // this.waveForm(this.waves, this.myCanvas)
     //this.waveForm(comment.waveform, comment.)
 
     /** 
@@ -84,7 +90,7 @@ export class AudioCommentComponent implements OnInit{
           }
           // While recording, set the playTime to indicate current % progress of recording
           this.playTime = (((this.rDuration * 1000 + (new Date().getTime() - this.rStartAt)) / this.timeLimit) * this.playWidth) + 'px'
-        }, 50)
+        }, this.intervalGap)
       }
       this.mediaRecorder.onstop = e => {
         // If the audio is at the limit, restrict the ability to record
@@ -94,7 +100,6 @@ export class AudioCommentComponent implements OnInit{
 
         // Initialize an audio object after the recording has stopped
         this.audio = new Audio()
-        console.log(this.audio)
 
         // Set the audio for playback via the blob object from the stored chunks
         const blob = new Blob(this.chunks, { 'type': 'audio/ogg; codecs=opus' })
@@ -113,7 +118,7 @@ export class AudioCommentComponent implements OnInit{
               return
             }
             this.playTime = (((new Date().getTime() - this.pStartAt) / this.timeLimit) * this.playWidth) + 'px'
-          }, 50)
+          }, this.intervalGap)
         }
         
         // Clear the playing element and allow recording once audio clip has finished playing
@@ -124,9 +129,15 @@ export class AudioCommentComponent implements OnInit{
       }
 
       // Send "chunks" to the array as they are recorded
-      this.mediaRecorder.ondataavailable = e => this.chunks.push(e.data)
+      this.mediaRecorder.ondataavailable = e => {
+        this.chunks.push(e.data)
+        console.log(e.data.size - 3000)
+        this.waves[this.wavePos] = e.data.size - 3200
+        this.wavePos ++
+        this.waveForm(this.waves, this.myCanvas)
+      }
       console.log('audio initialized')
-    };
+    }
 
     // Request access to the microphone from the user
     navigator.getUserMedia = (navigator.getUserMedia ||
@@ -135,7 +146,7 @@ export class AudioCommentComponent implements OnInit{
       navigator['msGetUserMedia'])
 
     // If the user allows access to the microphone, run the onSuccess function and enable the record button
-    navigator.getUserMedia({ audio: true }, onSuccess, e => console.log(e))
+    navigator.getUserMedia({ audio: true }, onSuccess, e => {})
     this.recordAble = true
   }
 
@@ -147,7 +158,7 @@ export class AudioCommentComponent implements OnInit{
     this.isRecording = true
     this.isPlaying = false
     this.rStartAt = new Date()
-    this.mediaRecorder.start()
+    this.mediaRecorder.start(500)
   }
 
   /** 
@@ -160,6 +171,7 @@ export class AudioCommentComponent implements OnInit{
     // Get the duration of the audio track
     this.rDuration = this.rDuration + (new Date().getTime() - this.rStartAt) / 1000
     clearInterval(this.rInterval)
+    this.playTime = '0px'
     console.log(this.rDuration)
     this.mediaRecorder.stop()
   }
@@ -170,6 +182,7 @@ export class AudioCommentComponent implements OnInit{
   private pause() {
     this.isPlaying = false
     clearInterval(this.pInterval)
+    this.playTime = '0px'
     this.audio.pause()
   }
 
@@ -209,7 +222,12 @@ export class AudioCommentComponent implements OnInit{
     )
     
     // Write the waveform in a barchart style
-    function barchart(options){
+    function barchart(options) {
+      // Reset the canvas
+      for (bar in options.data) {
+        options.ctx.clearRect(0, 0, options.canvas.width - options.padding * 2, options.canvas.height - options.padding * 2)
+      }
+
       var maxValue = 0
 
       for (var bar in options.data){
@@ -223,7 +241,7 @@ export class AudioCommentComponent implements OnInit{
       var numberOfBars = Object.keys(options.data).length
       var barSize = (canvasActualWidth)/numberOfBars
 
-      for (bar in options.data){
+      for (bar in options.data) {
         var val = options.data[bar]
         if (val===0) {
             val = 2
@@ -242,7 +260,7 @@ export class AudioCommentComponent implements OnInit{
     }
 
     // Draw the individual bar at the specific part of chart with the specific height. It will be mirrored vertically about the middle of the chart
-    function drawBar(ctx, upperLeftCornerX, upperLeftCornerY, width, height,color){
+    function drawBar(ctx, upperLeftCornerX, upperLeftCornerY, width, height,color) {
       ctx.save()
       ctx.fillStyle=color
       ctx.fillRect(upperLeftCornerX,upperLeftCornerY - height,width,2*height)
