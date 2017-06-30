@@ -23,12 +23,15 @@ export class AccountComponent implements OnInit {
   private showUploadProfPicModal : boolean = false;
   private hasAvatar : boolean = false;
 
-  constructor(private _auth: AuthService) {
+  constructor(private _auth: AuthService, private _title: Title) {
+    this.currentUser = this._auth.getUser();
     this.profileImage = this.fetchAvatar();
     this.nameInitials = this.getUserInitials();
-  } // constructor
+  }
 
-  ngOnInit() { }
+  ngOnInit() { 
+    this._title.setTitle('Edji | "' + this.currentUser['fullname'] + '"');
+  }
 
   public getUserInitials() : string 
   {
@@ -81,7 +84,7 @@ export class AccountComponent implements OnInit {
   // Get the avatar from the user object and assign it to the image object. WIP
   public fetchAvatar () : string 
   {
-    let avatar = this._auth.getUser().avatar;
+    let avatar = this.currentUser.avatar;
     console.log("[account.component.ts]" + avatar);
     if (avatar)
     {
