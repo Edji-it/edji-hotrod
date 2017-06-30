@@ -7,13 +7,15 @@
 
         <!-- Profile Pic block -->
         <div class="profile-pic-container">
-            <img *ngIf="hasAvatar" class="profile-pic" [src]="getAvatar()">
+            <!-- Avatar picture -->
+            <img id="avatarImg" *ngIf="hasAvatar" class="profile-pic" [src]="getAvatar()">
+            <!-- User Initials -->
             <span *ngIf="hasAvatar === false" class="profile-pic"> 
-                <span>{{getUserInitials()}}</span>
+                <span id="userInitials">{{getUserInitials()}}</span>
             </span>
             <!-- Edit Profile Picture Button 
                 - Opens UploadProfPicModal -->
-            <button type="button" class="btn btn-sm edit-btn" (click)="showUploadProfPicModal= true;">Edit</button>
+            <button id="editAvatarBtn" type="button" class="btn btn-sm edit-btn" (click)="showUploadProfPicModal= true;">Edit</button>
         </div>
     </div>
 
