@@ -123,11 +123,19 @@ export class CommentComponent implements OnInit {
   }
 
   // Updates comment in db
-  public updateComment(commentData: string): void {
+  public updateComment(commentData: any): void {
+    if (commentData._id) {
+      // this.comment.project_id, commentData, this.comment.start, this.comment.end, this.comment.type, this.comment.text, this.comment._id, this.comment.loc
+      this.comment.data = commentData.data
+      this.comment.url = commentData.url
+    } else {
+      this.comment.data = commentData
+    }
+
     this.angulartics.eventTrack.next({ action: 'updateComment', properties: { category: 'projectAction', label: 'attempt' }})
     this.isLoading = true
 
-    this._projects.saveComment(this.comment.project_id, commentData, this.comment.start, this.comment.end, this.comment.type, this.comment.text, this.comment._id, this.comment.loc)
+    this._projects.saveComment(this.comment)
       .then(comment => {
         this.isLoading = false
         this.angulartics.eventTrack.next({ action: 'updateComment', properties: { category: 'projectAction', label: 'success' }})
@@ -154,6 +162,11 @@ export class CommentComponent implements OnInit {
         // Tell Annotator to destroy this comment element!
         this.commentDeleted.emit(comment._id)
         this.showDeleteModal = false
+
+        // If comment has associated file, delete file
+        if (comment.type == 'audio' && comment.data.length > 0) {
+          
+        }
       })
       .catch(error => {
         // TRACK EXCEPTION

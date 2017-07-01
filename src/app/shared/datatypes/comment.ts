@@ -13,9 +13,11 @@ export interface BaseComment {
   user_id: string,
   start: number,
   end: number,
-  data: string,
+  data: any,
   author: string,
   type: string,
+  dataArray?: any[],
+  url?: string,
   text?: string,
   loc?: { x: number, y: number }
 }

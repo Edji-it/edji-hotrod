@@ -279,42 +279,31 @@ export class ProjectService {
      * @param text (optional) Selection of text comment was made on. Left as optional, but SHOULD be passed.
      * @param commentId (optional) If passed, will update comment with that ID
      */
-    public saveComment(projectId: string, commentText: string, start: number, end: number, type: string, text ?: string, commentId ?: string, location ?: any) : Promise<any> {
-        let url = this._auth.getUrl() + '/projects/' + projectId + '/comments';
-        let data = {
-            'comment' : {
-                'data' : commentText,
-                'start' : start,
-                'end' : end,
-                'user_id' : this._auth.getUser()._id,
-                'author' : this._auth.getUser().fullname ? this._auth.getUser().fullname : this._auth.getUser().username,
-                'type' : type
-            } // 'comment'
-        } // let data
-
-        if (text) {
-            data.comment['text'] = text;
-        } // if (text)
-
-        if (location && location.x && location.y) {
-            data.comment['loc'] = location;
-        } // if
-
-        // Add comment ID if passed
-        if (commentId) {
-            data.comment['_id'] = commentId;
-        } // if (commentId)
-
+    public saveComment(commentObj: EdjiComment) : Promise<any> {
+        let comment = Object.assign({}, commentObj)
+        // Clean frontend only properties
+        delete comment['active']
+        delete comment['new']
+        delete comment['showAvatar']
+        
+        let url = this._auth.getUrl() + '/projects/' + comment.project_id + '/comments';
+        if (!comment.user_id) {
+            comment.user_id = this._auth.getUser()._id
+        }
+        if (!comment.author) {
+            comment.author = this._auth.getUser().fullname ? this._auth.getUser().fullname : this._auth.getUser().username
+        }
+        
         // Tell other Project viewers comment changed, using Socket
         // TO-DO: Move to after service responds
-        if (data.comment['_id']) {
-            this._socket.updateComment(data.comment, 'UPDATE', this.project._id);
+        if (comment['_id']) {
+            this._socket.updateComment(comment, 'UPDATE', comment.project_id);
         } else {
-            this._socket.updateComment(data.comment, 'CREATE', this.project._id);
+            this._socket.updateComment(comment, 'CREATE', comment.project_id);
         } // else
 
         return this.http
-            .post(url, data, this._auth.getOptions())
+            .post(url, { comment: comment }, this._auth.getOptions())
             .toPromise()
             .then(this._auth.extractData)
             .then((data) => { return data.comment; })

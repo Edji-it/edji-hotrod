@@ -12,7 +12,7 @@ declare var MediaRecorder: any
 })
 export class AudioCommentComponent implements OnInit{
   @Input() private comment: EdjiComment
-  @Output() save: EventEmitter<string> = new EventEmitter<string>() 
+  @Output() save: EventEmitter<any> = new EventEmitter<any>() 
 
   private isPlaying: boolean = false
   private isRecording: boolean = false
@@ -26,7 +26,7 @@ export class AudioCommentComponent implements OnInit{
   private chunks: any = []
   private mediaRecorder: any
   private audio
-  private audioBlob
+  private audioFile
   private playAble: boolean = false
   private recordAble: boolean = false
   private activated: boolean = false
@@ -36,7 +36,6 @@ export class AudioCommentComponent implements OnInit{
   private pDuration: number = 0
   private rInterval: any
   private pInterval: any
-  // private waves = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,10,12,14,22,32,10,12,28,46,89,10,12,14,22,32,10,12,28,46,89,10,12,14,22,32,10,12,28,46,89,0,0,0,0,0,0,0,0,0,0]
   private waves = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
   private wavePos: number = 0
   // Change the next variable to control maximum audio comment length in milliseconds
@@ -47,18 +46,18 @@ export class AudioCommentComponent implements OnInit{
   // We need to know when changes to inactive to clear the editing variable
   @Input() set active(active){
     this.activated = active
-    if (active == false && this.audioBlob) {
-      console.log(this.audioBlob)
+    if (active == false && this.audioFile) {
       // Comment saved! Save audio file
-      this._media.uploadAudio(this.audioBlob)
+      this._media.uploadAudio(this.audioFile)
         .take(1)
         .subscribe(data => {
           console.log(data)
           this.audio.src = data.url
 
           // Save to comment
-          this.comment.data = data.url
-          this.save.emit(this.comment.data)
+          this.comment.url = data.url
+          this.comment.dataArray = this.waves
+          this.save.emit(this.comment)
         })
     }
   }
@@ -71,23 +70,20 @@ export class AudioCommentComponent implements OnInit{
   }
   
   ngOnInit() {
+    this.myCanvas = document.getElementById("0001")
     // If comment already has uploaded audio, load it
-    if (this.comment.data && this.comment.data.length > 0) {
-      console.log(this.comment.data)
+    if (this.comment.url && this.comment.url.length > 0) {
+      console.log(this.comment.url)
       this.audio = new Audio()
-      this.audio.src = this.comment.data
+      this.audio.src = this.comment.url
       this.audio.load()
       this.playAble = true
+      // Build the waveform
+      this.waveForm(this.comment.dataArray, this.myCanvas)
+    } else {
+      // Set the canvas properties and write temporary data
+      this.waveForm(this.waves, this.myCanvas)
     }
-    // Set the canvas properties and write temporary data
-    
-    this.myCanvas = document.getElementById("0001")
-    //this.myCanvas = document.getElementById(this.comment._id)
-
-    // Build the waveform
-    // this.waveForm(this.waves, this.myCanvas)
-    //this.waveForm(comment.waveform, comment.)
-
     /** 
      * Initialize the audio access request & setup once this component loads
      * Will only load if the user creates an audio comment, or loads text with audio comments in it already
@@ -124,27 +120,13 @@ export class AudioCommentComponent implements OnInit{
 
         // Set the audio for playback via the blob object from the stored chunks
         const blob = new Blob(this.chunks, { 'type': 'audio/ogg; codecs=opus' })
-
-
-        // var fd = new FormData()
-        // fd.append('fname', 'test.ogg')
-        // fd.append('data', blob)
+        
         var file = new File([blob], 'my-audio.ogg', {
             type: 'audio/ogg'
         });
-
-        // var formData = new FormData();
-        // formData.append('file', file);
-
-        this.audioBlob = file
-
-
-        this.audio.src = window.URL.createObjectURL(blob)
         
-
-
-        // this.audioBlob = fd
-
+        this.audioFile = file
+        this.audio.src = window.URL.createObjectURL(blob)
         this.audio.load()
 
         console.log('recording has successfully stopped')

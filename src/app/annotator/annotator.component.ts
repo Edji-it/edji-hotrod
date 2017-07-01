@@ -472,8 +472,17 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
         this.angulartics.eventTrack.next({ action: type + 'CommentCreate', properties: { category: 'projectAction', label: 'attempt' }})
         
+        let comment = <EdjiComment>{
+            project_id: projectId,
+            data: '',
+            start: start,
+            end: end,
+            type: type,
+            loc: this.imageCoords
+        }
+
         // Tell server we've added a comment
-        this._projects.saveComment(projectId, '', start, end, type, text, null, this.imageCoords)
+        this._projects.saveComment(comment)
             .then(comment => {
                 // We add the comment from the service because it has an Id
                 if (comment._id) {
