@@ -1,5 +1,5 @@
 import { MediaService } from '../../shared/media.service';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 import { EdjiComment } from '../../shared/datatypes'
 
@@ -36,12 +36,12 @@ export class AudioCommentComponent implements OnInit{
   private pDuration: number = 0
   private rInterval: any
   private pInterval: any
-  private waves = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+  private waves = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
   private wavePos: number = 0
   // Change the next variable to control maximum audio comment length in milliseconds
   private timeLimit: number = 30000
   // Change the next variable to control the frequency at which the playback/recording currentTime evaluates
-  private intervalGap: number = 100
+  private intervalGap: number = 500
 
   // We need to know when changes to inactive to clear the editing variable
   @Input() set active(active){
@@ -65,12 +65,15 @@ export class AudioCommentComponent implements OnInit{
     return this.activated
   }
 
-  constructor(private _media: MediaService) {
+  constructor(
+    private _media: MediaService,
+    private el: ElementRef
+  ) {
     
   }
   
   ngOnInit() {
-    this.myCanvas = document.getElementById("0001")
+    this.myCanvas = this.el.nativeElement.querySelector('.wave-form')
     // If comment already has uploaded audio, load it
     if (this.comment.url && this.comment.url.length > 0) {
       console.log(this.comment.url)
@@ -154,7 +157,6 @@ export class AudioCommentComponent implements OnInit{
       // Send "chunks" to the array as they are recorded
       this.mediaRecorder.ondataavailable = e => {
         this.chunks.push(e.data)
-        console.log(e.data.size - 3000)
         this.waves[this.wavePos] = e.data.size - 3200
         this.wavePos ++
         this.waveForm(this.waves, this.myCanvas)
@@ -181,7 +183,7 @@ export class AudioCommentComponent implements OnInit{
     this.isRecording = true
     this.isPlaying = false
     this.rStartAt = new Date()
-    this.mediaRecorder.start(500)
+    this.mediaRecorder.start(this.intervalGap)
   }
 
   /** 
@@ -218,10 +220,6 @@ export class AudioCommentComponent implements OnInit{
     this.isRecording=false
     this.pStartAt = new Date()
     this.audio.play()
-  }
-
-  private loadAudio() {
-      
   }
 
   /** 

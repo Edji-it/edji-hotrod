@@ -5,7 +5,7 @@
     </button>
     <button class="btn-audio" (click)="isRecording=false; isPlaying=false; pause()"><i class="icon-restart"></i></button>
     <!--<canvas class="wave-form" id="{{comment._id}}"></canvas>-->
-    <canvas class="wave-form" id="0001"></canvas>
+    <canvas class="wave-form"></canvas>
     <div [ngClass]="[ isPlaying ? 'playing' : '' ]" [style.width]="playTime"></div>
     <div [ngClass]="[ isRecording ? 'recording' : '' ]" [style.width]="playTime"></div>
     <button class="btn-audio btn-record" (click)="isRecording ? stopRecord() : record()" [class.disabled]="!recordAble"><i class="icon icon-mic"></i></button>
