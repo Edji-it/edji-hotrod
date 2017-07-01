@@ -667,10 +667,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     }
 
     /** 
-     * Add Comment of Emoji type
+     * Add Comment of type
      * - Fired from comment options tooltip
      */
-    addEmojiComment(event): void {
+    addCommentOfType(type: string): void {
         // Get selection indices
         let span = this.getSelectionSpan()
         if ( !(span.start >= 0) || !(span.end >= 0)) {
@@ -681,45 +681,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.incrementHighlights(true, span.start, span.end)
 
         // Tell the server we've got a comment!
-        this.createComment(span.start, span.end, 'emoji')
-    }
-
-    /** 
-     * Add Comment of Emoji type
-     * - Fired from comment options tooltip
-     */
-    addTextComment(event): void {
-        // Get selection indices
-        let span = this.getSelectionSpan()
-
-        if ( !(span.start >= 0) || !(span.end >= 0)) {
-            return
-        }
-        
-        // Increment highlight array
-        this.incrementHighlights(true, span.start, span.end)
-
-        // Tell the server we've got a comment!
-        this.createComment(span.start, span.end, 'text')
-    }
-
-    /** 
-     * Add Comment of Audio type
-     * - Fired from comment options tooltip
-     */
-    addAudioComment(event): void {
-        // Get selection indices
-        let span = this.getSelectionSpan()
-
-        if ( !(span.start >= 0) || !(span.end >= 0)) {
-            return
-        }
-        
-        // Increment highlight array
-        this.incrementHighlights(true, span.start, span.end)
-
-        // Tell the server we've got a comment!
-        this.createComment(span.start, span.end, 'audio')
+        this.createComment(span.start, span.end, type)
     }
 
     /**

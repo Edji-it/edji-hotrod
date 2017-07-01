@@ -8,18 +8,18 @@
 			<!--Desktop buttons-->
 			<button *ngIf="project.types.indexOf('emoji') > -1" id="addEmojiComment" 
 				class="emoji" 
-				(click)="addEmojiComment($event)" 
+				(click)="addCommentOfType('emoji')" 
 				[innerHtml]="':thinking_face:' | emojione"></button>
 			<button *ngIf="project.types.indexOf('text') > -1" 
 				class="emoji" 
 				id="addTextComment" 
-				(click)="addTextComment($event)" 
+				(click)="addCommentOfType('text')" 
 				[innerHtml]="':writing_hand:' | emojione"></button>
 			<!-- jzk7 - audio comment button: make sure to change the types to look for audio once we're ready! -->
 			<button *ngIf="project.types.indexOf('text') > -1" 
 				class="emoji" 
 				id="addAudioComment" 
-				(click)="addAudioComment($event)" 
+				(click)="addCommentOfType('audio')" 
 				[innerHtml]="'<i class=\'icon icon-mic\'></i>'"></button>
 		</div>
 		<!--Mobile buttons-->
@@ -28,13 +28,13 @@
 				<div class="col-6 comment__options--mobileCol" *ngIf="project.types.indexOf('emoji') > -1" [ngClass]="project.types.indexOf('emoji') > -1 && project.types.indexOf('text') > -1 ? 'col-6' : 'col-12'">
 					<button id="addEmojiComment" 
 						class="emoji comment__options--mobileButton" 
-						(tap)="addEmojiComment($event)" 
+						(tap)="addCommentOfType('emoji')" 
 						[innerHtml]="':thinking_face:' | emojione"></button>
 				</div>
 				<div class="col-6 comment__options--mobileCol" *ngIf="project.types.indexOf('text') > -1" [ngClass]="project.types.indexOf('emoji') > -1 && project.types.indexOf('text') > -1 ? 'col-6' : 'col-12'">
 					<button id="addTextComment"
 						class="emoji comment__options--mobileButton" 
-						(tap)="addTextComment($event)" 
+						(tap)="addCommentOfType('text')" 
 						[innerHtml]="':writing_hand:' | emojione"></button>
 				</div>
 			</div>
