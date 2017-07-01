@@ -719,22 +719,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.incrementHighlights(true, span.start, span.end)
 
         // Tell the server we've got a comment!
-
-        // jzk7 - start temporary code
-        console.log("audio comment created from " + span.start + " to " + span.end)
-        let comment = {
-                'data' : '',
-                'start' : span.start,
-                'end' : span.end,
-                'user_id' : this._auth.getUser()._id,
-                'author' : this._auth.getUser().fullname ? this._auth.getUser().fullname : this._auth.getUser().username,
-                'type' : 'audio'
-            }
-        this.commentsByIndexAdd(comment, span.start)
-        // jzk7 - end temporary code
-
-        // jzk7 - Turn this next line on once we're ready to accept audio comments. For now we'll log it to make sure it works
-        // this.createComment(span.start, span.end, 'audio')
+        this.createComment(span.start, span.end, 'audio')
     }
 
     /**

@@ -111,11 +111,15 @@ export class CommentComponent implements OnInit {
       }
   }
 
-  deactivate(): void {
+  deactivate(commentData ?: string): void {
     this.active = false
     this.commentActivation.emit(false)
     // Save when comment is toggled away from
-    this.updateComment(this.comment.data)
+    if (commentData) {
+      this.updateComment(commentData)
+    } else {
+      this.updateComment(this.comment.data)
+    }
   }
 
   // Updates comment in db

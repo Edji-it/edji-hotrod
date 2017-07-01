@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core'
+import { MediaService } from '../../shared/media.service';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 import { EdjiComment } from '../../shared/datatypes'
 
@@ -11,6 +12,7 @@ declare var MediaRecorder: any
 })
 export class AudioCommentComponent implements OnInit{
   @Input() private comment: EdjiComment
+  @Output() save: EventEmitter<string> = new EventEmitter<string>() 
 
   private isPlaying: boolean = false
   private isRecording: boolean = false
@@ -24,6 +26,7 @@ export class AudioCommentComponent implements OnInit{
   private chunks: any = []
   private mediaRecorder: any
   private audio
+  private audioBlob
   private playAble: boolean = false
   private recordAble: boolean = false
   private activated: boolean = false
@@ -44,20 +47,38 @@ export class AudioCommentComponent implements OnInit{
   // We need to know when changes to inactive to clear the editing variable
   @Input() set active(active){
     this.activated = active
-    if (active == false) {
+    if (active == false && this.audioBlob) {
+      console.log(this.audioBlob)
       // Comment saved! Save audio file
-      
+      this._media.uploadAudio(this.audioBlob)
+        .take(1)
+        .subscribe(data => {
+          console.log(data)
+          this.audio.src = data.url
+
+          // Save to comment
+          this.comment.data = data.url
+          this.save.emit(this.comment.data)
+        })
     }
   }
   get active() {
     return this.activated
   }
 
-  constructor() {
+  constructor(private _media: MediaService) {
     
   }
   
   ngOnInit() {
+    // If comment already has uploaded audio, load it
+    if (this.comment.data && this.comment.data.length > 0) {
+      console.log(this.comment.data)
+      this.audio = new Audio()
+      this.audio.src = this.comment.data
+      this.audio.load()
+      this.playAble = true
+    }
     // Set the canvas properties and write temporary data
     
     this.myCanvas = document.getElementById("0001")
@@ -103,7 +124,27 @@ export class AudioCommentComponent implements OnInit{
 
         // Set the audio for playback via the blob object from the stored chunks
         const blob = new Blob(this.chunks, { 'type': 'audio/ogg; codecs=opus' })
+
+
+        // var fd = new FormData()
+        // fd.append('fname', 'test.ogg')
+        // fd.append('data', blob)
+        var file = new File([blob], 'my-audio.ogg', {
+            type: 'audio/ogg'
+        });
+
+        // var formData = new FormData();
+        // formData.append('file', file);
+
+        this.audioBlob = file
+
+
         this.audio.src = window.URL.createObjectURL(blob)
+        
+
+
+        // this.audioBlob = fd
+
         this.audio.load()
 
         console.log('recording has successfully stopped')

@@ -7,10 +7,7 @@ import { AuthService, MediaService } from '../../shared';
 @Component({
   selector: 'upload-picture-modal',
   templateUrl: './upload-picture-modal.component.html',
-  styleUrls: ['./upload-picture-modal.component.scss'],
-  providers: [
-    MediaService
-  ]
+  styleUrls: ['./upload-picture-modal.component.scss']
 })
 export class UploadModalComponent implements OnInit {
 

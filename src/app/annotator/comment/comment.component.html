@@ -9,7 +9,7 @@
         <!--Swap between different comment types-->
         <emoji-comment (tap)="toggleActive()" *ngIf="comment.type == 'emoji' || !comment.type" #commentInput [comment]="comment"></emoji-comment>
         <text-comment (tap)="activate()" [readOnly]="readOnly" [preview]="preview" *ngIf="comment.type == 'text'" [comment]="comment" #commentInput (blur)="deactivate()" [active]="comment.active"></text-comment>
-        <audio-comment (tap)="activate()" *ngIf="comment.type == 'audio'" [comment]="comment" #commentInput (blur)="deactivate()" [active]="comment.active"></audio-comment>
+        <audio-comment (tap)="activate()" *ngIf="comment.type == 'audio'" [comment]="comment" #commentInput (save)="deactivate($event)" [active]="comment.active"></audio-comment>
         <button *ngIf="userPermission >= 3" (tap)="userPermission > 3 ? deleteComment(comment) : showDeleteModal = true" class='inline-delete'>+</button>
     </div>
     <div *ngIf="comment.active" class="comment__save" (tap)="deactivate()" [innerHtml]="':white_check_mark:' | emojione"></div>
