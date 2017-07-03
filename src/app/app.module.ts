@@ -35,6 +35,7 @@ import { ClickOutsideDirective } from 'angular2-click-outside/clickOutside.direc
 import { EmojiOnePipe } from './shared/emojione.pipe.ts';
 import { AddClassPipe } from './shared/addclass.pipe.ts';
 import { EdjiDatePipe } from './pipes/edjidate.pipe.ts';
+import { LinkifyPipe } from './pipes/linkify.pipe';
 
 // Components
 import { NavBarComponent, FooterComponent, TutorialBoxComponent } from './shared';
@@ -94,6 +95,7 @@ type StoreType = {
     MediumEditorDirective,
     ClickOutsideDirective,
     EmojiOnePipe,
+    LinkifyPipe,
     EdjiDatePipe,
     ResetPassPage,
     AddClassPipe,

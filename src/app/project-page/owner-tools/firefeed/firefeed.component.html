@@ -13,9 +13,9 @@
         </div>
         <div class="fireBlock">
             <div class="list-item list-item--block fireTime-card">
-                {{ project.createdAt | edjidate:'timeAgo':null:secondsAgo }}
+                {{ currentReading.createdAt | edjidate:'timeAgo' }}
             </div>
-            <p class="small"><b>{{project.label}}</b> group was created for <i>{{currentReading.title}}</i>.</p>
+            <p class="small">Group <b>{{currentReading.title}}</b> was created.</p>
         </div>
     </div>
   </div>

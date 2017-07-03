@@ -6,16 +6,14 @@
         <h1 class="profile-title">Profile</h1>
 
         <!-- Profile Pic block -->
-        <div class="profile-pic-container">
-            <!-- Avatar picture -->
-            <img id="avatarImg" *ngIf="hasAvatar" class="profile-pic" [src]="getAvatar()">
-            <!-- User Initials -->
+        <div class="profile-pic-container" (newAvatarConfirmed)="fetchAvatar()">
+            <img *ngIf="hasAvatar" lass="profile-pic" [attr.src]="profileImage">
             <span *ngIf="hasAvatar === false" class="profile-pic"> 
-                <span id="userInitials">{{getUserInitials()}}</span>
+                <span>{{getUserInitials()}}</span>
             </span>
             <!-- Edit Profile Picture Button 
                 - Opens UploadProfPicModal -->
-            <button id="editAvatarBtn" type="button" class="btn btn-sm edit-btn" (click)="showUploadProfPicModal= true;">Edit</button>
+            <button type="button" class="btn btn-sm edit-btn" (click)="showUploadProfPicModal= true;">Edit</button>
         </div>
     </div>
 

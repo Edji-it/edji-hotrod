@@ -15,25 +15,42 @@ export class TextCommentComponent implements OnInit, AfterViewInit {
     @Input() private preview: boolean
     @Output() blur: EventEmitter<string> = new EventEmitter<string>() 
 
+    private editing: boolean
+    private activated: boolean = false
+
+    // We need to know when changes to inactive to clear the editing variable
+    @Input() set active(active){
+        this.editing = false;
+        this.activated = active;
+    }
+    get active() {
+        return this.activated;
+    }
+
     constructor(private element: ElementRef) { 
         
     }
 
     ngOnInit() {
-
-    }
-
-    ngAfterViewInit() {
         if (this.comment.active == true) {
-            this.element.nativeElement.querySelector('textarea').focus()
+            this.editing = true
+            setTimeout(() => {
+                this.element.nativeElement.querySelector('textarea').focus()
+            }, 100)
         }
     }
 
+    ngAfterViewInit() {
+        
+    }
+
     updateComment(commentData: string) {
+        this.editing = false;
         this.blur.emit(commentData)
     }
 
     blurField(event) {
+        this.editing = false;
         event.preventDefault()
         this.element.nativeElement.querySelector('textarea').blur()
     }
