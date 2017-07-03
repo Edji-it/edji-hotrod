@@ -60,7 +60,7 @@ export class UploadProfPicModal implements OnInit {
     // Limit file size to 5mb
     if (file && file.size < 5 * Math.pow(10, 6) ) {
       // Begin the image upload to the bucket
-      this._media.uploadImage(file)
+      this._media.uploadAvatar(file)
         .subscribe(data => {
           // Begin Upload of the image's URL
           this.uploadedFile = data.url;
