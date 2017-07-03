@@ -42,7 +42,6 @@ exports.config = {
 
     // To test the entire site:
     home:       helpers.root('src/tests/e2e/home.spec.ts'),
-    account:    helpers.root('src/tests/e2e/account.spec.ts'),
     login:      helpers.root('src/tests/e2e/login.spec.ts'),
     ownerTools: helpers.root('src/tests/e2e/owner-tools.spec.ts'),
     newReading: helpers.root('src/tests/e2e/new-reading.spec.ts'),
