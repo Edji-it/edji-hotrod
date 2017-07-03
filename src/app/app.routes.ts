@@ -9,7 +9,7 @@ import { DashboardComponent } from './dashboard';
 import { NoContentComponent } from './no-content';
 import { LoginComponent } from './login';
 import { ResetPassPage } from './reset-pass/reset-pass-page.component';
-import { HeroCountdownComponent } from './hero-countdown/hero-countdown.component';
+import { HeroPromoComponent } from './hero-promo/hero-promo.component';
 
 import { DataResolver } from './app.resolver';
 import { AuthService } from './shared';
@@ -27,7 +27,7 @@ export const ROUTES: Routes = [
   { path: 'new-reading', component: NewReadingPage, canActivate: [AuthService] },
   { path: 'new-reading/:id', component: NewReadingPage, canActivate: [AuthService] },
   { path: 'reset-password', component: ResetPassPage },
-  { path: 'hero-countdown',    component: HeroCountdownComponent, pathMatch: 'full' },
+  { path: 'hero', component: HeroPromoComponent, pathMatch: 'full' },
   { path: 'not-found',    component: NoContentComponent, pathMatch: 'full' },
   { path: ':projectId', redirectTo: '/project/:projectId', pathMatch: 'full'},
   { path: '**',    component: NoContentComponent }
