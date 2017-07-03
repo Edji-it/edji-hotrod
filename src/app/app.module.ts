@@ -55,6 +55,7 @@ import { AccountComponent, ChangePassComponent } from './account';
 import { FeedbackComponent } from './shared/feedback/feedback.component';
 import { LoginComponent } from './login';
 import { ResetPassPage } from './reset-pass/reset-pass-page.component';
+import { HeroCountdownComponent } from './hero-countdown/hero-countdown.component';
 
 // Configure Hammer.js
 export class MyHammerConfig extends HammerGestureConfig  {
@@ -119,6 +120,7 @@ type StoreType = {
     DeleteProjectModal,
     AnnotatorComponent,
     NewReadingPage,
+    HeroCountdownComponent,
     LeaderboardComponent,
     FirefeedComponent,
     FirecardComponent,
@@ -138,7 +140,8 @@ type StoreType = {
     HomeComponent,
     FeedbackComponent,
     NoContentComponent,
-    ReadingCardComponent
+    ReadingCardComponent,
+    HeroCountdownComponent
 ],
   imports: [ // import Angular's modules
     BrowserModule,
