@@ -47,13 +47,11 @@ export class AccountComponent implements OnInit {
   public getAvatar () : string
   {
     let avatar;
-
-    console.log("[account.component.ts] Called getAvatar()!");
+    //console.log("[account.component.ts] Called getAvatar()!");
 
     this.currentUser = this._auth.getUser();
     avatar = this.currentUser.avatar;
 
     return avatar;
   } // public getAvatar () : any 
-  
 } // class
