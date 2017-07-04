@@ -32,7 +32,7 @@ export class UploadProfPicModal implements OnInit {
 
   public uploadedFile : string;
 
-  public image      : any = "./../../assets/test-profile-pic/Rick-astley.jpg"; // The image we want to upload;
+  public image      : any = "./../../assets/test-avatar/Rick-astley.jpg"; // The image we want to upload;
   public showError  : boolean = false;
   public imageUploaded : boolean = false;
 
@@ -50,7 +50,7 @@ export class UploadProfPicModal implements OnInit {
     // In our upload process, we're just gonna use the s3 bucket
     // in media.service
 
-    const files = document.getElementById('uploadImageInput')['files'];
+    const files = document.getElementById('imageFileInput')['files'];
     // console.log("We are uploading.");
 
     let file = files[0];

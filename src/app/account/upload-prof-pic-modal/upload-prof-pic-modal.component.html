@@ -1,12 +1,12 @@
 <!--
     23 June 2017
     Nicholas Pumper
-    Last Mod: 25 June 17
+    Last Mod: 3 July 17
 
     A modal for uploading the user's profile picture through.
     Initially made tethered to the Account page.
     -->
-<div id="uploadProfPicModal" class="modal fade-in show">
+<div id="uploadAvatarModal" class="modal fade-in show">
     <div class="modal-dialog">
         <div class="modal-content">
             <!-- Header -->
@@ -21,7 +21,7 @@
                 <div class="col-md-6">
                     <!-- Profile Pic -->
                     <span class="profile-pic">
-                        <img class="profile-pic" *ngIf="imageUploaded" [src]="getSelectedImage()">
+                        <img id="uploadedPic" class="profile-pic" *ngIf="imageUploaded" [src]="getSelectedImage()">
                     </span>
                 </div>
                 <!-- Column 2 -->
@@ -30,7 +30,7 @@
                         <!-- Upload Button -->
                         <label id="uploadBtn" class="btn modal-button col-btn">
                             Upload New 
-                            <input id="uploadImageInput" type="file" 
+                            <input id="imageFileInput" type="file" 
                                 accept=".jpg,.png,.gif,.jpeg,.svg"
                                 (change)="updateUploadedFile();"  style="display:none;">
                         </label>
@@ -50,9 +50,9 @@
                 <!-- Cancel & Save Buttons -->
                 <div class="btn-row">
                     <!-- Cancel Button -->
-                    <button (click)="closeModal.emit()" type="button" class="btn modal-button row-btn" data-dismiss="modal">Cancel</button><!--not sure what data-dismiss does-->
+                    <button id="cancelUploadBtn" (click)="closeModal.emit()" type="button" class="btn modal-button row-btn" data-dismiss="modal">Cancel</button><!--not sure what data-dismiss does-->
                     <!-- Save Button -->
-                    <button id="saveProfPicBtn" (click)="closeModal.emit();  confirmNewAvatar(); newAvatarConfirmed.emit();" class="btn btn-primary save-button row-btn">Save</button>
+                    <button id="saveAvatarBtn" (click)="closeModal.emit();  confirmNewAvatar(); newAvatarConfirmed.emit();" class="btn btn-primary save-button row-btn">Save</button>
                 </div>
             </div>
         </div>
