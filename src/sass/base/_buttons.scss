@@ -9,6 +9,8 @@ $btnSecondaryColor: #606060;
 $btnSecondaryBorder: none; //1px solid rgba(0,0,0,0.05);
 $btnSuccessBg: #46c78e; //#7fd9fc;
 $btnSuccessColor: #fff;
+$btnHeroBg: #f86464;
+$btnHeroColor: #fff;
 
 button, .button, .btn { //, [class*='btn']
   appearance: none;
@@ -167,6 +169,15 @@ button, .button, .btn { //, [class*='btn']
 
   &:hover, &:active, &:focus, &.active {
     background: desaturate(darken($btnActionBg, 20%), 20%); 
+  }
+}
+
+.btn.btn-hero {
+  background: $btnHeroBg;
+  color: $btnHeroColor;
+
+  &:hover, &:active, &:focus, &.active {
+    background: desaturate(darken($btnHeroBg, 20%), 20%); 
   }
 }
 

@@ -141,7 +141,6 @@ type StoreType = {
     FeedbackComponent,
     NoContentComponent,
     ReadingCardComponent,
-    HeroCountdownComponent,
     HeroPromoComponent
 ],
   imports: [ // import Angular's modules

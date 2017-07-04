@@ -1,12 +1,35 @@
 <nav-bar></nav-bar>
 <div class="container-fluid">
   <div class="row navy has-sparks">
-    <div class="sparks"></div>
+    <div class="sparks" style="z-index:0;"></div>
     <div class="col-sm-12">
+
+      <img class="hero-background" src="/assets/images/hero-lg.png" />
+
       <div class="call-to-action">
-        <h1>Hero is Landing in __ days and __ hours.</h1>
-        <button class="btn btn-primary btn-lg" [routerLink]="['/register']">Tell Me When Hero is Here</button>
+        <h1 class="promo-header center">Hero is Launching</h1>
+        <h3 class="countdown-clock">{{ countDownText }}</h3>
+      </div>
+
+    </div>
+  </div><!--row navy-->
+    <!-- Begin MailChimp Signup Form -->
+    <div id="mc_embed_signup" class="row hero-promo-form">
+      <div class="col-md-6 offset-md-3">
+        <!--<h3>Powerful Lessons</h3>-->
+        <p>We took all the great features of Edji, and we turned up the volume <span [innerHtml]="':loudspeaker:' | emojione"></span> Come back August 15th to find out how, and become a Hero!</p>
+        <p>To be notified when Hero launches&mdash;the first to sign up will receive an exclusive offer&mdash;enter your email below.</p>
+        <form action="//edji.us14.list-manage.com/subscribe/post?u=6ad50fc39faeeb38e0381429f&amp;id=e8ff5b5e49" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate pt-2" target="_blank" novalidate>
+            <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+            <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_6ad50fc39faeeb38e0381429f_e8ff5b5e49" tabindex="-1" value=""></div>
+            <div class="input-group">
+              <input type="email" value="" name="EMAIL" class="form-control" id="mce-EMAIL" placeholder="Email address..." required>
+              <span class="input-group-btn">
+                <input class="btn btn-hero" type="submit" value="Notify Me" name="subscribe" id="mc-embedded-subscribe" />
+              </span>
+            </div>
+        </form>
       </div>
     </div>
-  </div>
+    <!--End mc_embed_signup-->
 </div><!--container-fluid-->

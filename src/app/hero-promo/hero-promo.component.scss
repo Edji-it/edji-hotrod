@@ -1,0 +1,39 @@
+
+.countdown-clock {
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+    font-size: 2em;
+    position: absolute;
+    top: 420px;
+    width: 100%;
+    font-weight: 300;
+    letter-spacing: 5px;
+    text-shadow: 1px 1px 5px rgba(0,0,0,0.5);
+}
+
+.promo-header {
+    color: #fff;
+    font-size: 5.5em;
+    width: 100%;
+    position: absolute;
+    top: 159px;
+    text-shadow: 1px 1px 10px rgba(0,0,0,0.5);
+}
+
+.hero-background {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 40px;
+}
+
+.call-to-action {
+    min-height: 500px;
+    z-index: 1;
+    position: relative;
+}
+
+.hero-promo-form {
+    padding: 40px 0px;
+}
