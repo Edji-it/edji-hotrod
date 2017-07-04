@@ -19,11 +19,9 @@ export class AccountComponent implements OnInit {
   private currentUser   : any;
   private showPassModal : boolean = false;
   private showUploadProfPicModal : boolean = false;
-  private hasAvatar : boolean = false;
 
   constructor(private _auth: AuthService /*, private _title: Title*/) {
     this.currentUser = this._auth.getUser();
-    this.getAvatar(); // use this to set hasAvatar initially
     this.nameInitials = this.getUserInitials();
   } // constructor
 
@@ -85,16 +83,11 @@ export class AccountComponent implements OnInit {
   {
     let avatar;
 
-    this.hasAvatar = false;
-    this.currentUser = this._auth.getUser();
-
     console.log("[account.component.ts] Called getAvatar()!");
-    // console.log("[account.component.ts]" + this.profileImage);
-    if (this.currentUser.avatar)
-    {
-      avatar = this.currentUser.avatar;
-      this.hasAvatar = true;
-    }
+
+    this.currentUser = this._auth.getUser();
+    avatar = this.currentUser.avatar;
+
     return avatar;
   } // public getAvatar () : any 
   
