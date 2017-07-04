@@ -12,9 +12,8 @@
             <!-- Header -->
             <div class="modal-header">
                 <h4 class="modal-title">Change Avatar</h4>
-                <button (click)="closeModal.emit()" type="button" class="close">&times;</button>
+                <button id="closeModalBtn" (click)="closeModal.emit()" type="button" class="close">&times;</button>
             </div>
-
             <!-- Body -->
             <div class="row modal-body body no-gutter">
                 <!-- Column 1 -->
@@ -35,7 +34,7 @@
                                 (change)="updateUploadedFile();"  style="display:none;">
                         </label>
                         <!-- Remove Button -->
-                        <button id="removePicBtn" class="btn col-btn remove-button" (click)="removeAvatar();">Remove</button>
+                        <button id="removeBtn" class="btn col-btn remove-button" (click)="removeAvatar();">Remove</button>
                     </div>
                 </div>
             </div>
