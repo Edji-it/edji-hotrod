@@ -72,6 +72,7 @@ describe('Account Page', () => {
             account.cancelUploadBtn.click();
 
             // I want to see the modal gone like my ex-wife
+            browser.wait(EC.invisibilityOf(account.avatarModal), 5000, "should not be able to see the upload avatar modal.");
             browser.wait(EC.visibilityOf(account.avatarModal), 5000, "should not be able to see the upload avatar modal.");
         });
         }); // describe Changing Avatars

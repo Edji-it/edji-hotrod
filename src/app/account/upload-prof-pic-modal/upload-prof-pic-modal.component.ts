@@ -94,7 +94,7 @@ export class UploadProfPicModal implements OnInit {
   public removeAvatar () : void 
   {
     this.uploadedFile = null;
-    this.imageUploaded = true;
+    this.imageUploaded = false;
   } /// public removeAvatar () : void 
 
 } // class UploadProfPicModal
