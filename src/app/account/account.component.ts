@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
-
+import { UserInitialsPipe } from '../pipes';
 import { AuthService } from '../shared/auth.service';
 
 @Component({
@@ -20,9 +20,9 @@ export class AccountComponent implements OnInit {
   private showPassModal : boolean = false;
   private showUploadProfPicModal : boolean = false;
 
-  constructor(private _auth: AuthService /*, private _title: Title*/) {
+  constructor(private _auth: AuthService  /*, private _title: Title*/) {
     this.currentUser = this._auth.getUser();
-    this.nameInitials = this.getUserInitials();
+    this.nameInitials = "";
   } // constructor
 
   ngOnInit() { 

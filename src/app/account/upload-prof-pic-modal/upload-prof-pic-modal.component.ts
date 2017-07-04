@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 // Dependencies
 import { AuthService, MediaService } from '../../shared';
+import { User } from '../../shared/datatypes';
 
 @Component({
   selector: 'hot-upload-prof-pic',
@@ -29,16 +30,14 @@ export class UploadProfPicModal implements OnInit {
   // Tell the account page to refresh the avatar plz.
   @Output() newAvatarConfirmed: EventEmitter<any> = new EventEmitter(); // Tell the listening page to close the darned thing.
 
-  public uploadedFile : string;
-  public image      : any = "./../../assets/test-avatar/Rick-astley.jpg"; // The image we want to upload;
-  public showError  : boolean = false;
-  public imageUploaded : boolean = false;
+  public uploadedFile   : string;
+  public showError      : boolean = false;
+  public imageUploaded  : boolean = false;
+  public currentUser    : User;
 
   constructor(private _media: MediaService, private _auth: AuthService) {
-    this.uploadedFile = this._auth.getUser().avatar;
-
-    console.log(this.uploadedFile);
-    // console.log(this.image.constructor.name);
+    this.currentUser  = this._auth.getUser();
+    this.uploadedFile = this.currentUser.avatar;
   } // constructor
  
   ngOnInit() { }
