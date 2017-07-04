@@ -16,7 +16,7 @@ export class UploadProfPicModal implements OnInit {
   /*
   23 June 2017
   by Nick Pumper
-  Last Mod: 27 June 2017
+  Last Mod: July 4th, 2017 - INDEPENDENCE DAY - Nick Pumper
   
   A prompt asking if we really want to delete a project.
   If no, it closes. Otherwise. it deletes it.
@@ -29,9 +29,7 @@ export class UploadProfPicModal implements OnInit {
   // Tell the account page to refresh the avatar plz.
   @Output() newAvatarConfirmed: EventEmitter<any> = new EventEmitter(); // Tell the listening page to close the darned thing.
 
-
   public uploadedFile : string;
-
   public image      : any = "./../../assets/test-avatar/Rick-astley.jpg"; // The image we want to upload;
   public showError  : boolean = false;
   public imageUploaded : boolean = false;
