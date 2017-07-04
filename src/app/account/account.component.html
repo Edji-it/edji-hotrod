@@ -8,9 +8,9 @@
         <!-- Profile Pic block -->
         <div class="profile-pic-container">
             <!-- Avatar picture -->
-            <img id="avatarImg" *ngIf="hasAvatar" class="profile-pic" [src]="getAvatar()">
+            <img id="avatarImg" *ngIf="getAvatar()" class="profile-pic" [src]="getAvatar()" >
             <!-- User Initials -->
-            <span *ngIf="hasAvatar === false" class="profile-pic"> 
+            <span *ngIf="!getAvatar()" class="profile-pic"> 
                 <span id="userInitials">{{getUserInitials()}}</span>
             </span>
             <!-- Edit Profile Picture Button 

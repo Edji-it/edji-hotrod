@@ -51,7 +51,7 @@
                     <!-- Cancel Button -->
                     <button id="cancelUploadBtn" (click)="closeModal.emit()" type="button" class="btn modal-button row-btn" data-dismiss="modal">Cancel</button><!--not sure what data-dismiss does-->
                     <!-- Save Button -->
-                    <button id="saveAvatarBtn" (click)="closeModal.emit();  confirmNewAvatar(); newAvatarConfirmed.emit();" class="btn btn-primary save-button row-btn">Save</button>
+                    <button id="saveAvatarBtn" (click)="confirmNewAvatar();" class="btn btn-primary save-button row-btn">Save</button>
                 </div>
             </div>
         </div>

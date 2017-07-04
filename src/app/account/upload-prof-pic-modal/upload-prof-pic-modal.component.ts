@@ -71,7 +71,7 @@ export class UploadProfPicModal implements OnInit {
     } else {
       console.log("Upload failure. Either the image was null or too big.");
     }
-  } // public updateUploadFile() void
+  } // public updateUploadFile() voi
 
   public getSelectedImage () : any 
   {
@@ -84,6 +84,8 @@ export class UploadProfPicModal implements OnInit {
       .take(1).subscribe(() => {
         console.log("Saved!");
         console.log(this._auth.getUser().avatar);
+        this.newAvatarConfirmed.emit();
+        this.closeModal.emit();
       },
       (error) => {
         console.log("ERROR");

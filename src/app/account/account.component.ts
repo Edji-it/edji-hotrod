@@ -88,14 +88,13 @@ export class AccountComponent implements OnInit {
     this.hasAvatar = false;
     this.currentUser = this._auth.getUser();
 
-    // console.log("[account.component.ts] Called getAvatar()!");
+    console.log("[account.component.ts] Called getAvatar()!");
     // console.log("[account.component.ts]" + this.profileImage);
     if (this.currentUser.avatar)
     {
       avatar = this.currentUser.avatar;
       this.hasAvatar = true;
     }
-
     return avatar;
   } // public getAvatar () : any 
   
