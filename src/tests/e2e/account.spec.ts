@@ -89,7 +89,6 @@ describe('Account Page', () => {
 
                 // Wait for the image to upload
                 browser.wait(EC.visibilityOf(account.uploadedPic), 10000, "should be able to see uploaded avatar.");
-                browser.sleep(3000);
 
                 // now remove that thing off the face of the Earth
                 browser.wait(EC.presenceOf(account.removeBtn), 5000, "should be able to see the remove button.");
@@ -118,7 +117,6 @@ describe('Account Page', () => {
 
                 // Wait for the image to upload
                 browser.wait(EC.visibilityOf(account.uploadedPic), 10000, "should be able to see uploaded avatar.");
-                browser.sleep(3000);
 
                 // hit it, Fergie
                 browser.wait(EC.visibilityOf(account.saveAvatarBtn), 7000, "should be able to see the saveAvatarBtn.");

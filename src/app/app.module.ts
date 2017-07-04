@@ -36,6 +36,7 @@ import { EmojiOnePipe } from './shared/emojione.pipe.ts';
 import { AddClassPipe } from './shared/addclass.pipe.ts';
 import { EdjiDatePipe } from './pipes/edjidate.pipe.ts';
 import { LinkifyPipe } from './pipes/linkify.pipe';
+import { UserInitialsPipe } from './pipes/userinitials.pipe.ts';
 
 // Components
 import { NavBarComponent, FooterComponent, TutorialBoxComponent } from './shared';
@@ -97,6 +98,7 @@ type StoreType = {
     EmojiOnePipe,
     LinkifyPipe,
     EdjiDatePipe,
+    UserInitialsPipe,
     ResetPassPage,
     AddClassPipe,
     RegisterComponent,

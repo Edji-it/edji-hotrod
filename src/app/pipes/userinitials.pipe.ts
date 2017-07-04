@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 
-@Pipe({name: 'userInitials'})
+@Pipe({name: 'userinitials'})
 export class UserInitialsPipe implements PipeTransform {
   /*
   July 4th, 2017 - ~~~~~ INDEPENDENCE DAY ~~~~
