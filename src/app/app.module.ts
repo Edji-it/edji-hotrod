@@ -52,7 +52,7 @@ import { FirecardComponent } from './project-page/owner-tools/firefeed/firecard/
 import { NewReadingPage, UploadModalComponent, UploadPdfModalComponent, DeletePdfMiniModal } from './new-reading-page';
 import { DashboardComponent, JoinedDashComponent, CreatedDashComponent, TutorialReadingComponent, ReadingCardComponent } from './dashboard';
 import { NoContentComponent } from './no-content';
-import { AccountComponent, ChangePassComponent, UploadProfPicModal } from './account';
+import { AccountComponent, ChangePassComponent, UploadAvatarModal } from './account';
 import { FeedbackComponent } from './shared/feedback/feedback.component';
 import { LoginComponent } from './login';
 import { ResetPassPage } from './reset-pass/reset-pass-page.component';
@@ -119,7 +119,7 @@ type StoreType = {
     DeleteCommentModal,
     DeleteReadingModal,
     DeleteProjectModal,
-    UploadProfPicModal,
+    UploadAvatarModal,
     AnnotatorComponent,
     NewReadingPage,
     LeaderboardComponent,

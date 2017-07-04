@@ -5,14 +5,14 @@ import { AuthService, MediaService } from '../../shared';
 import { User } from '../../shared/datatypes';
 
 @Component({
-  selector: 'hot-upload-prof-pic',
-  styleUrls: ['./upload-prof-pic-modal.scss', '../account.component.scss'],
-  templateUrl: 'upload-prof-pic-modal.component.html',
+  selector: 'hot-upload-avatar',
+  styleUrls: ['./upload-avatar-modal.scss', '../account.component.scss'],
+  templateUrl: 'upload-avatar-modal.component.html',
   providers: [
     MediaService
   ]
 })
-export class UploadProfPicModal implements OnInit {
+export class UploadAvatarModal implements OnInit {
 
   /*
   23 June 2017

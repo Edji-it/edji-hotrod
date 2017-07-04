@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
-import { UserInitialsPipe } from '../pipes';
 import { AuthService } from '../shared/auth.service';
+import { User } from '../shared/datatypes';
 
 @Component({
   selector: 'edji-account',
