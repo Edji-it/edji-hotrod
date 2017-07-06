@@ -1,3 +1,4 @@
+import { AuthService } from '../shared';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -9,8 +10,11 @@ export class HeroPromoComponent implements OnInit {
 
   private countDownDate
   private countDownText: string
+  private subMsg : string
+  private subError: boolean
+  private subSuccess: boolean
 
-  constructor() { }
+  constructor(private _auth: AuthService) { }
 
   ngOnInit() {
     this.countDownDate = new Date("Aug 1, 2017 05:00:00").getTime()
@@ -43,6 +47,28 @@ export class HeroPromoComponent implements OnInit {
     }
   }
 
+  onSubmit(newHeroEmail) {
+    this.subError = false
+    this.subSuccess = false
+    this.subMsg = ''
 
+    this._auth.addToHeroList({ email : newHeroEmail }).take(1)
+      .subscribe( 
+        data => {
+          console.log(data)
+          this.subSuccess = true
+          this.subMsg = 'We\'ll let you know when Hero launches!';
+      },
+        error => {
+          this.subError = true
+          console.log(error)
+          if (error.status == 400) {
+            this.subMsg = 'That email has already been added!';
+          } else {
+            this.subMsg = 'There was a server error adding your email.';
+          }
+        }
+      )
+  }
 
 }

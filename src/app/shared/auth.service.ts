@@ -440,6 +440,15 @@ export class AuthService implements CanActivate {
         })
     }
 
+    public addToHeroList(user) {
+        let body = user
+        body['list'] = 'hero'
+        return this.http.post( this.baseUrl + '/mailchimp/add', body, this.getOptions())
+            .map( res => {
+                return res.json()
+            })
+    }
+
     /** Provides logic for sending user back to home if they are not authorized */
     public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
         if (!this.getUser().isLoggedIn) {
