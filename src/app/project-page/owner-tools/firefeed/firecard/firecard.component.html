@@ -6,12 +6,14 @@
         <div class="list-item list-item--block fireTime-card">
             {{fireComment.author}}<span class="fireTime-card__time">&nbsp;{{ fireComment.createdAt | edjidate:'timeAgo':null:secondsAgo }}</span>
         </div>
+        <!--Emoji comment display-->
         <div class="list-item list-item--block fireComment-card" *ngIf="fireComment.type == 'emoji' || !fireComment.type">
             <div class="emoji-comment-input" 
                 [innerHtml]="fireComment.data && fireComment.data.length > 0 ? (fireComment.data | emojione) : '<span class=\'sample-placeholder\'>Empty...</span>'"></div>
         </div>
+        <!--Text comment display-->
         <div class="list-item list-item--block fireComment-card" *ngIf="fireComment.type == 'text'" 
-            [innerHtml]="fireComment.data && fireComment.data.length > 0 ? fireComment.data : '<span class=\'sample-placeholder\'>Empty...</span>'"></div>
+            [innerHtml]="fireComment.data && fireComment.data.length > 0 ? (fireComment.data | linkify | emojione) : '<span class=\'sample-placeholder\'>Empty...</span>'"></div>
         <div class="list-item list-item fireHighlight-card h-1" *ngIf="!isImage">
             {{ fireComment.text ? fireComment.text : '...'}}
         </div>
