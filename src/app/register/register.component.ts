@@ -163,7 +163,13 @@ export class RegisterComponent implements OnInit, OnDestroy {
       .subscribe((data) => {
         this.registerLoading = false
         if (data.user) {
-          if (this._auth.getEnv() === "prod") { this.bumblebee.sendUserDetails(data.user) }
+          if (this._auth.getEnv() === "prod") { 
+            this.bumblebee.sendUserDetails(data.user) 
+            if(data.user.identities.indexOf('teacher') > -1) {
+              this._auth.addToNewUsersList({ 'email' : data.user.email })
+            }
+          }
+
           data.user.username && this.angulartics.setUsername.next(data.user.username)
           data.user.email && this.angulartics.setUserProperties.next({ email: data.user.email})
           if (data.user.identities) {
