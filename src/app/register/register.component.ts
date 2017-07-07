@@ -166,7 +166,10 @@ export class RegisterComponent implements OnInit, OnDestroy {
           if (this._auth.getEnv() === "prod") { 
             this.bumblebee.sendUserDetails(data.user) 
             if(data.user.identities.indexOf('teacher') > -1) {
-              this._auth.addToNewUsersList({ 'email' : data.user.email })
+              let spaceIndex = data.user.fullname.indexOf(' ')
+              let fname = data.user.fullname.substr(0,spaceIndex)
+              let lname = data.user.fullname.substr(spaceIndex + 1)
+              this._auth.addToNewUsersList({ 'email' : data.user.email, 'fname' : fname, 'lname' : lname })
             }
           }
 
