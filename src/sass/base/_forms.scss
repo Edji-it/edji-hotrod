@@ -167,6 +167,10 @@ label input, label textarea {
   text-transform: lowercase !important;
 }
 
+.form-control {
+  color: $base-font-color;
+}
+
 .form-control.form-text {
   min-height: 34px;
   height: auto;
