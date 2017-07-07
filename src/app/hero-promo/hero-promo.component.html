@@ -17,12 +17,12 @@
     <div id="mc_embed_signup" class="row hero-promo-form">
       <div class="col-md-6 offset-md-3">
         <!--<h3>Powerful Lessons</h3>-->
-        <p>We took all the great features of Edji, and we turned up the volume <span [innerHtml]="':loudspeaker:' | emojione"></span> Come back August 15th to find out how, and become a Hero!</p>
-        <p>To be notified when Hero launches&mdash;the first to sign up will receive an exclusive offer&mdash;enter your email below.</p>
+        <p>We took all the great features of Edji, and we turned up the volume <span [innerHtml]="':loudspeaker:' | emojione"></span> Come back August 1st to find out how, and become a Hero.</p>
+        <p>To be notified when Hero launches, enter your email below&mdash;the first Heroes will get an exclusive offer!</p>
 
         <div class="form-group pt-2" [class.has-danger]="subError" [class.has-success]="subSuccess">
            <div class="input-group">
-             <input [(ngModel)]="newHeroEmail" type="email" value="" name="EMAIL" class="form-control form-control-success" id="mce-EMAIL" placeholder="email address">
+             <input [(ngModel)]="newHeroEmail" type="email" value="" name="EMAIL" class="form-control form-control-success" id="mce-EMAIL" placeholder="Email address...">
             <span class="input-group-btn">
               <button (click)="onSubmit(newHeroEmail)" class="btn btn-secondary" type="button">Notify Me!</button>
             </span>

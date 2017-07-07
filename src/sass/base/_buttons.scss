@@ -224,12 +224,17 @@ button, .button, .btn { //, [class*='btn']
       transform: translate3d(0,0,0) !important;
       background-color: transparent !important;
       outline: none;
+      color: $blue;
 
       & i.fa {
         &:before {
           // color: $purple;
         }
       }
+    }
+
+    &.active {
+      color: $blue;
     }
 }
 
