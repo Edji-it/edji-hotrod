@@ -1,5 +1,5 @@
-import { MediaService } from '../../shared/media.service';
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { MediaService } from '../../shared/media.service'
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core'
 
 import { EdjiComment } from '../../shared/datatypes'
 
@@ -13,6 +13,8 @@ declare var MediaRecorder: any
 export class AudioCommentComponent implements OnInit{
   @Input() private comment: EdjiComment
   @Output() save: EventEmitter<any> = new EventEmitter<any>() 
+  @Output() showDeleteAudioModal: EventEmitter<any> = new EventEmitter<boolean>()
+  // @Output() reRecord_Audio: EventEmitter<any> = new EventEmitter<boolean>()
 
   private isPlaying: boolean = false
   private isRecording: boolean = false
@@ -42,27 +44,41 @@ export class AudioCommentComponent implements OnInit{
   private timeLimit: number = 30000
   // Change the next variable to control the frequency at which the playback/recording currentTime evaluates
   private intervalGap: number = 500
+  private isInitialized: boolean = false
 
   // We need to know when changes to inactive to clear the editing variable
   @Input() set active(active){
     this.activated = active
-    if (active == false && this.audioFile) {
-      // Comment saved! Save audio file
-      this._media.uploadAudio(this.audioFile)
-        .take(1)
-        .subscribe(data => {
-          console.log(data)
-          this.audio.src = data.url
+    if (!active && this.audioFile) {
+      // this.reRecord_Audio.emit(false)
+      console.log('clear the track')
 
-          // Save to comment
-          this.comment.url = data.url
-          this.comment.dataArray = this.waves
-          this.save.emit(this.comment)
-        })
+      // var tracks = this.mediaRecorder.stream.getTracks();
+      // for (var i = 0; i < tracks.length; i++) {
+      //   tracks[i].stop();
+      // }
+    }
+    if (!active && this.isRecording) {
+      this.stopRecord()
     }
   }
   get active() {
     return this.activated
+  }
+
+  // Once we confirm that we're ready to delete and record new audio, let's do it
+  @Input() set reRecord(active) {
+    if (this.isInitialized && active) {
+      // this.intializeAudio()
+      console.log('re re re')
+      console.log(this.mediaRecorder.stream.getAudioTracks())
+      // if (this.mediaRecorder.stream.hasTrack()) {
+      //   this.mediaRecorder.stream.removeTrack()
+      // }
+      this.freshRecord()
+    } else {
+      this.isInitialized = true
+    }
   }
 
   constructor(
@@ -76,7 +92,6 @@ export class AudioCommentComponent implements OnInit{
     this.myCanvas = this.el.nativeElement.querySelector('.wave-form')
     // If comment already has uploaded audio, load it
     if (this.comment.url && this.comment.url.length > 0) {
-      console.log(this.comment.url)
       this.audio = new Audio()
       this.audio.src = this.comment.url
       this.audio.load()
@@ -102,15 +117,15 @@ export class AudioCommentComponent implements OnInit{
       this.mediaRecorder.onstart = e => {
         console.log('recording has successfully started')
         // While recording, check the duration of the recording total and stop it once it hits the limit
-        this.rInterval = setInterval(()=> {
-          if((new Date().getTime() - this.rStartAt + (this.rDuration * 1000)) > this.timeLimit - 1) {
-            this.stopRecord()
-            clearInterval(this.rInterval)
-            return
-          }
-          // While recording, set the playTime to indicate current % progress of recording
-          this.playTime = (((this.rDuration * 1000 + (new Date().getTime() - this.rStartAt)) / this.timeLimit) * this.playWidth) + 'px'
-        }, this.intervalGap)
+        // this.rInterval = setInterval(()=> {
+        //   if((new Date().getTime() - this.rStartAt + (this.rDuration * 1000)) > this.timeLimit - 1) {
+        //     this.stopRecord()
+        //     clearInterval(this.rInterval)
+        //     return
+        //   }
+        //   // While recording, set the playTime to indicate current % progress of recording
+        //   this.playTime = (((this.rDuration * 1000 + (new Date().getTime() - this.rStartAt)) / this.timeLimit) * this.playWidth) + 'px'
+        // }, this.intervalGap)
       }
       this.mediaRecorder.onstop = e => {
         // If the audio is at the limit, restrict the ability to record
@@ -132,20 +147,35 @@ export class AudioCommentComponent implements OnInit{
         this.audio.src = window.URL.createObjectURL(blob)
         this.audio.load()
 
+        // Comment saved! Save audio file
+        this._media.uploadAudio(this.audioFile)
+          .take(1)
+          .subscribe(data => {
+            console.log(data)
+            this.audio.src = data.url
+
+            // Save to comment
+            this.comment.url = data.url
+            this.comment.dataArray = this.waves
+            this.save.emit(this.comment)
+          })
+
         console.log('recording has successfully stopped')
 
         // Set the playTime to indicate current % progress of playback
-        this.audio.onplay = e => {
-          this.playTime = '0px'
-          this.pInterval = setInterval(()=> {
-            if((new Date().getTime() - this.pStartAt) > this.rDuration * 1000 - 1) {
-              // this.pause()
-              clearInterval(this.pInterval)
-              return
-            }
-            this.playTime = (((new Date().getTime() - this.pStartAt) / this.timeLimit) * this.playWidth) + 'px'
-          }, this.intervalGap)
-        }
+        // this.audio.onplay = e => {
+        //   console.log('onplay')
+        //   this.playTime = '0px'
+        //   this.pInterval = setInterval(()=> {
+        //     if((new Date().getTime() - this.pStartAt) > this.rDuration * 1000 - 1) {
+        //       // this.pause()
+        //       clearInterval(this.pInterval)
+        //       return
+        //     }
+        //     this.playTime = (((new Date().getTime() - this.pStartAt) / this.timeLimit) * this.playWidth) + 'px'
+        //     console.log('play')
+        //   }, this.intervalGap)
+        // }
         
         // Clear the playing element and allow recording once audio clip has finished playing
         this.audio.onended = e => {
@@ -161,7 +191,6 @@ export class AudioCommentComponent implements OnInit{
         this.wavePos ++
         this.waveForm(this.waves, this.myCanvas)
       }
-      console.log('audio initialized')
     }
 
     // Request access to the microphone from the user
@@ -176,9 +205,20 @@ export class AudioCommentComponent implements OnInit{
   }
 
   /** 
-   * Record Audio from the user's microphone
+   * Call for audio deletion or call for a fresh recording sesh
    */
   private record() {
+    if (this.audio && this.audio.src && this.audio.src.length > 0) {
+      this.showDeleteAudioModal.emit(true)
+    } else {
+      this.freshRecord()
+    }
+  }
+
+  /** 
+   * Record Audio from the user's microphone
+   */
+  private freshRecord() {
     this.playAble = false
     this.isRecording = true
     this.isPlaying = false
@@ -194,11 +234,11 @@ export class AudioCommentComponent implements OnInit{
     this.isRecording = false
     this.isPlaying = false
     // Get the duration of the audio track
-    this.rDuration = this.rDuration + (new Date().getTime() - this.rStartAt) / 1000
-    clearInterval(this.rInterval)
-    this.playTime = '0px'
-    console.log(this.rDuration)
+    // this.rDuration = this.rDuration + (new Date().getTime() - this.rStartAt) / 1000
+    // clearInterval(this.rInterval)
+    // this.playTime = '0px'
     this.mediaRecorder.stop()
+    console.log(this.mediaRecorder.stream)
   }
 
   /** 
@@ -206,8 +246,8 @@ export class AudioCommentComponent implements OnInit{
    */
   private pause() {
     this.isPlaying = false
-    clearInterval(this.pInterval)
-    this.playTime = '0px'
+    // clearInterval(this.pInterval)
+    // this.playTime = '0px'
     this.audio.pause()
   }
 
@@ -218,7 +258,7 @@ export class AudioCommentComponent implements OnInit{
     this.recordAble = false
     this.isPlaying = true
     this.isRecording=false
-    this.pStartAt = new Date()
+    // this.pStartAt = new Date()
     this.audio.play()
   }
 
@@ -257,7 +297,7 @@ export class AudioCommentComponent implements OnInit{
       var canvasActualHeight = options.canvas.height - options.padding * 2
       var canvasActualWidth = options.canvas.width - options.padding * 2
 
-      //drawing the bars
+      // drawing the bars
       var barIndex = 0
       var numberOfBars = Object.keys(options.data).length
       var barSize = (canvasActualWidth)/numberOfBars
@@ -265,7 +305,7 @@ export class AudioCommentComponent implements OnInit{
       for (bar in options.data) {
         var val = options.data[bar]
         if (val===0) {
-            val = 2
+            val = 4
         }
         var barHeight = Math.round( canvasActualHeight * val/maxValue) 
         drawBar(
@@ -287,5 +327,11 @@ export class AudioCommentComponent implements OnInit{
       ctx.fillRect(upperLeftCornerX,upperLeftCornerY - height,width,2*height)
       ctx.restore()
     }
+  }
+
+  /**
+   * Save the audio comment
+   */
+  saveAudioComment() {
   }
 }

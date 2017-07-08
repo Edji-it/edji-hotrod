@@ -24,6 +24,7 @@ export class CommentComponent implements OnInit {
   private active = false
   // Is fully visible, focused, but not editable
   private preview = false
+  private reRecord_Audio = false
 
   @Input() public comment: EdjiComment
   @Input() private readOnly: boolean = false
@@ -34,6 +35,7 @@ export class CommentComponent implements OnInit {
       this.toggleActive()
     }
   }
+  @Input() private showDeleteAudioModal: boolean = false
   get isActive(): boolean { return this.active }
 
   @Output() commentDeleted = new EventEmitter<string>()
@@ -124,6 +126,7 @@ export class CommentComponent implements OnInit {
 
   // Updates comment in db
   public updateComment(commentData: any): void {
+    this.reRecord_Audio = false
     if (commentData._id) {
       // this.comment.project_id, commentData, this.comment.start, this.comment.end, this.comment.type, this.comment.text, this.comment._id, this.comment.loc
       this.comment.data = commentData.data
@@ -199,30 +202,7 @@ export class CommentComponent implements OnInit {
     this.expandLine.emit(this.yPos)
   }
 
-  // /**
-  //  * iOS Text Comment Correction Activate
-  //  */
-  // mobileCommentFix(): void {
-  //   // iOS scroll fix enable
-  //   console.log('mcmt-active')
-  //   this.currentScroll = document.body.scrollTop
-  //   document.getElementsByTagName("body")[0].classList.add('disablePane');
-  //   document.getElementsByTagName("body")[0].style["top"] = "-" + this.currentScroll + "px";
-  //   this.mobileActivation.emit(this.yPos);
-  // }
-
-  // /**
-  //  * iOS Text Comment Correction Deactivate
-  //  */
-  // mobileCommentDone(): void {
-  //   // iOS scroll fix disable
-  //   document.getElementsByTagName("body")[0].classList.remove('disablePane');
-  //   document.getElementsByTagName("body")[0].removeAttribute("style");
-  //   document.body.scrollTop = this.currentScroll;
-  //   this.mobileDeactivation.emit(this.yPos);
-  //   // Dismiss the keyboard in mobile
-  //   this.dismissKeyboard.emit();
-  //   console.log('mcmt-nactive');
-  // }
-
+  reRecordAudio(): void {
+    this.reRecord_Audio = true
+  }
 }

@@ -9,7 +9,7 @@
         <!--Swap between different comment types-->
         <emoji-comment (tap)="toggleActive()" *ngIf="comment.type == 'emoji' || !comment.type" #commentInput [comment]="comment"></emoji-comment>
         <text-comment (tap)="activate()" [readOnly]="readOnly" [preview]="preview" *ngIf="comment.type == 'text'" [comment]="comment" #commentInput (blur)="deactivate()" [active]="comment.active"></text-comment>
-        <audio-comment (tap)="activate()" *ngIf="comment.type == 'audio'" [comment]="comment" #commentInput (save)="deactivate($event)" [active]="comment.active"></audio-comment>
+        <audio-comment (tap)="activate()" *ngIf="comment.type == 'audio'" [comment]="comment" #commentInput (save)="deactivate($event)" [active]="comment.active" [reRecord]="reRecord_Audio" (showDeleteAudioModal)="showDeleteAudioModal = true"></audio-comment>
         <button *ngIf="userPermission >= 3" (tap)="userPermission > 3 ? deleteComment(comment) : showDeleteModal = true" class='inline-delete'>+</button>
     </div>
     <div *ngIf="comment.active" class="comment__save" (tap)="deactivate()" [innerHtml]="':white_check_mark:' | emojione"></div>
@@ -19,3 +19,5 @@
 <!--Mobile icon-->
 <img (tap)='expanded ? collapse($event) : expand($event)' class="hidden-lg-up comment__button--mobile" src="assets/images/icon-comment.svg" />
 <hot-del-comment *ngIf="showDeleteModal" [comment]="comment" (delete)="deleteComment(comment)" (closeModal)="showDeleteModal = false; commentDeactivate.emit(comment)"></hot-del-comment>
+
+<hot-del-audio *ngIf="showDeleteAudioModal" [comment]="comment" (delete)="reRecordAudio(); showDeleteAudioModal = false" (closeModal)="showDeleteAudioModal = false"></hot-del-audio>
