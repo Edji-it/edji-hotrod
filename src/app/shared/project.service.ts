@@ -300,21 +300,24 @@ export class ProjectService {
             data.comment['loc'] = location;
         } // if
 
+        let options = this._auth.getOptions()
+
         // Add comment ID if passed
+        // Tell other Project viewers comment changed, using Socket
         if (commentId) {
             data.comment['_id'] = commentId;
-        } // if (commentId)
-
-        // Tell other Project viewers comment changed, using Socket
-        // TO-DO: Move to after service responds
-        if (data.comment['_id']) {
+            url = url + '/' + commentId
+            options['method'] = 'PUT'
             this._socket.updateComment(data.comment, 'UPDATE', this.project._id);
         } else {
+            options['method'] = 'POST'
             this._socket.updateComment(data.comment, 'CREATE', this.project._id);
-        } // else
+        }
+
+        options['body'] = data
 
         return this.http
-            .post(url, data, this._auth.getOptions())
+            .request(url, options)
             .toPromise()
             .then(this._auth.extractData)
             .then((data) => { return data.comment; })
