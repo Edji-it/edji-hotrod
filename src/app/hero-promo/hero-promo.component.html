@@ -1,0 +1,35 @@
+<nav-bar></nav-bar>
+<div class="container-fluid">
+  <div class="row navy has-sparks">
+    <div class="sparks" style="z-index:0;"></div>
+    <div class="col-sm-12">
+
+      <img class="hero-background" src="/assets/images/hero-lg.png" />
+
+      <div class="call-to-action">
+        <h1 class="promo-header center">Hero is Launching</h1>
+        <h3 class="countdown-clock">{{ countDownText }}</h3>
+      </div>
+
+    </div>
+  </div><!--row navy-->
+    <!-- Begin MailChimp Signup Form -->
+    <div id="mc_embed_signup" class="row hero-promo-form">
+      <div class="col-md-6 offset-md-3">
+        <!--<h3>Powerful Lessons</h3>-->
+        <p>We took all the great features of Edji, and we turned up the volume <span [innerHtml]="':loudspeaker:' | emojione"></span> Come back August 1st to find out how, and become a Hero.</p>
+        <p>To be notified when Hero launches, enter your email below&mdash;the first Heroes will get an exclusive offer!</p>
+
+        <div class="form-group pt-2" [class.has-danger]="subError" [class.has-success]="subSuccess">
+           <div class="input-group">
+             <input [(ngModel)]="newHeroEmail" type="email" value="" name="EMAIL" class="form-control form-control-success" id="mce-EMAIL" placeholder="Email address...">
+            <span class="input-group-btn">
+              <button (click)="onSubmit(newHeroEmail)" class="btn btn-hero" type="button">Notify Me!</button>
+            </span>
+          </div>
+          <div class="form-control-feedback">{{ subMsg }}</div>
+          <!--<small class="form-text text-muted">Example help text that remains unchanged.</small>-->
+        </div>
+      </div>
+    </div>
+</div><!--container-fluid-->
