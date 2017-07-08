@@ -3,7 +3,7 @@
         <i [class.hide]="isPlaying" class="icon-play" (click)="play()"></i>
         <i [class.hide]="!isPlaying" class="icon-pause" (click)="pause()"></i>
     </button>
-    <button class="btn-audio" (click)="isRecording=false; isPlaying=false; pause()"><i class="icon-restart"></i></button>
+    <button class="btn-audio" (click)="isRecording=false; isPlaying=false; restartPlayback()"><i class="icon-restart"></i></button>
     <!--<canvas class="wave-form" id="{{comment._id}}"></canvas>-->
     <canvas class="wave-form"></canvas>
     <!--<div [ngClass]="[ isPlaying ? 'playing' : '' ]" [style.width]="playTime"></div>-->

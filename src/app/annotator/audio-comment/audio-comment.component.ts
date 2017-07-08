@@ -117,15 +117,15 @@ export class AudioCommentComponent implements OnInit{
       this.mediaRecorder.onstart = e => {
         console.log('recording has successfully started')
         // While recording, check the duration of the recording total and stop it once it hits the limit
-        // this.rInterval = setInterval(()=> {
-        //   if((new Date().getTime() - this.rStartAt + (this.rDuration * 1000)) > this.timeLimit - 1) {
-        //     this.stopRecord()
-        //     clearInterval(this.rInterval)
-        //     return
-        //   }
-        //   // While recording, set the playTime to indicate current % progress of recording
-        //   this.playTime = (((this.rDuration * 1000 + (new Date().getTime() - this.rStartAt)) / this.timeLimit) * this.playWidth) + 'px'
-        // }, this.intervalGap)
+        this.rInterval = setInterval(()=> {
+          if((new Date().getTime() - this.rStartAt + (this.rDuration * 1000)) > this.timeLimit - 1) {
+            this.stopRecord()
+            clearInterval(this.rInterval)
+            return
+          }
+          // While recording, set the playTime to indicate current % progress of recording
+          // this.playTime = (((this.rDuration * 1000 + (new Date().getTime() - this.rStartAt)) / this.timeLimit) * this.playWidth) + 'px'
+        }, this.intervalGap)
       }
       this.mediaRecorder.onstop = e => {
         // If the audio is at the limit, restrict the ability to record
@@ -262,71 +262,11 @@ export class AudioCommentComponent implements OnInit{
     this.audio.play()
   }
 
-  /** 
-   * Create the waveform based on the audio comment's amplitude per 0.5 second interval of the comment
+  /**
+   * Set the playback back to the beginning #back2basics
    */
-  private waveForm(waves, canvas) {
-    // Prepare the canvas
-    this.ctx = canvas.getContext("2d")
-
-    // Set the properties for this waveform and write it in the barchart function
-    barchart(
-      {
-        canvas: canvas,
-        padding: 2,
-        gridScale: 5,
-        gridColor: "transparent",
-        data: waves,
-        colors: ["#000"],
-        ctx: this.ctx
-      }
-    )
-    
-    // Write the waveform in a barchart style
-    function barchart(options) {
-      // Reset the canvas
-      for (bar in options.data) {
-        options.ctx.clearRect(0, 0, options.canvas.width - options.padding * 2, options.canvas.height - options.padding * 2)
-      }
-
-      var maxValue = 0
-
-      for (var bar in options.data){
-        maxValue = Math.max(maxValue,options.data[bar])
-      }
-      var canvasActualHeight = options.canvas.height - options.padding * 2
-      var canvasActualWidth = options.canvas.width - options.padding * 2
-
-      // drawing the bars
-      var barIndex = 0
-      var numberOfBars = Object.keys(options.data).length
-      var barSize = (canvasActualWidth)/numberOfBars
-
-      for (bar in options.data) {
-        var val = options.data[bar]
-        if (val===0) {
-            val = 4
-        }
-        var barHeight = Math.round( canvasActualHeight * val/maxValue) 
-        drawBar(
-          options.ctx,
-          options.padding + barIndex * barSize,
-          options.canvas.height/2,
-          barSize,
-          barHeight,
-          options.colors[barIndex%options.colors.length]
-        )
-        barIndex++
-      }
-    }
-
-    // Draw the individual bar at the specific part of chart with the specific height. It will be mirrored vertically about the middle of the chart
-    function drawBar(ctx, upperLeftCornerX, upperLeftCornerY, width, height,color) {
-      ctx.save()
-      ctx.fillStyle=color
-      ctx.fillRect(upperLeftCornerX,upperLeftCornerY - height,width,2*height)
-      ctx.restore()
-    }
+  private restartPlayback() {
+    this.audio.load()
   }
 
   /**
