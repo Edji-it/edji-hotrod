@@ -1,3 +1,4 @@
+import { CommentService } from '../../shared/comment.service';
 import { MediaService } from '../../shared/media.service'
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core'
 
@@ -21,10 +22,6 @@ export class AudioCommentComponent implements OnInit{
   private playTime: string = "0px"
   private playWidth: number = 82
   private myCanvas
-  private options
-  private canvas
-  private ctx
-  private colors
   private chunks: any = []
   private mediaRecorder: any
   private audio
@@ -83,7 +80,8 @@ export class AudioCommentComponent implements OnInit{
 
   constructor(
     private _media: MediaService,
-    private el: ElementRef
+    private el: ElementRef,
+    private _comments: CommentService
   ) {
     
   }
@@ -97,10 +95,10 @@ export class AudioCommentComponent implements OnInit{
       this.audio.load()
       this.playAble = true
       // Build the waveform
-      this.waveForm(this.comment.dataArray, this.myCanvas)
+      this._comments.waveForm(this.comment.dataArray, this.myCanvas)
     } else {
       // Set the canvas properties and write temporary data
-      this.waveForm(this.waves, this.myCanvas)
+      this._comments.waveForm(this.waves, this.myCanvas)
     }
     /** 
      * Initialize the audio access request & setup once this component loads
@@ -189,7 +187,7 @@ export class AudioCommentComponent implements OnInit{
         this.chunks.push(e.data)
         this.waves[this.wavePos] = e.data.size - 3200
         this.wavePos ++
-        this.waveForm(this.waves, this.myCanvas)
+        this._comments.waveForm(this.waves, this.myCanvas)
       }
     }
 
@@ -235,7 +233,7 @@ export class AudioCommentComponent implements OnInit{
     this.isPlaying = false
     // Get the duration of the audio track
     // this.rDuration = this.rDuration + (new Date().getTime() - this.rStartAt) / 1000
-    // clearInterval(this.rInterval)
+    clearInterval(this.rInterval)
     // this.playTime = '0px'
     this.mediaRecorder.stop()
     console.log(this.mediaRecorder.stream)

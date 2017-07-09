@@ -632,3 +632,42 @@ $expandShadowSize: 3px;
     color: #cdcdcd;
     font-style: italic;
 }
+
+.wave-form {
+    width: 75px;
+    height: $readingLineHeight - 2px;
+    background-color: #fff;
+    padding: 1px 0px 3px 0px;
+    border-radius: 4px;
+    transition: 75ms linear;
+    -webkit-transition: 75ms linear;
+}
+
+$progressStart: 51px;
+
+.playing {
+    height: $readingLineHeight - 2px;
+    background-color: rgba(142,217,255,0.8);
+    top: 0px;
+    left: $progressStart;
+    position: absolute;
+    border-radius: 4px 0px 0px 4px;
+    border-right: solid #6bdb5d;
+}
+
+.recording {
+    height: $readingLineHeight - 2px;
+    background-color: rgba(255,100,100,0.8);
+    top: 0px;
+    left: $progressStart;
+    position: absolute;
+    border-radius: 4px 0px 0px 4px;
+    border-right: solid #FF2424;
+}
+
+.btn-record {
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    left: 130px;
+}
