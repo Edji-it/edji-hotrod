@@ -59,18 +59,3 @@ button {
     text-align: center;
     padding: 0;
 }
-
-.audio-btn-wrap {
-    position: relative;
-    height: 100%;
-    min-height: 32px;
-    transition: opacity linear 0.2s;
-    display: block;
-    float: left;
-}
-
-.wave-wrap {
-    position: relative;
-    display: inline-block;
-    overflow: hidden;
-}

@@ -16,12 +16,15 @@
             [innerHtml]="fireComment.data && fireComment.data.length > 0 ? (fireComment.data | linkify | emojione) : '<span class=\'sample-placeholder\'>Empty...</span>'"></div>
         <!--Audio comment display-->
         <div class="list-item list-item--block fireComment-card fireCard-audio" *ngIf="fireComment.type == 'audio'">
-            <button style="margin-left: 2px;" class="btn-audio btn-fc-audio" [class.disabled]="!playAble">
+            <button class="btn-audio btn-fc-audio" [class.disabled]="!playAble">
                 <i [class.hide]="isPlaying" class="icon-play" (click)="play()"></i>
                 <i [class.hide]="!isPlaying" class="icon-pause" (click)="pause()"></i>
             </button>
             <button class="btn-audio btn-fc-audio" (click)="isRecording=false; isPlaying=false; restartPlayback()"><i class="icon-restart"></i></button>
-            <canvas class="wave-form"></canvas>
+            <div class="wave-wrap">
+                <canvas (click)="setPlaybackTime($event)"  class="wave-form"></canvas>
+                <div [class.hide]="!audio || !audio.currentTime" class="playing" [style.width]="getPlayhead() + '%'"></div>
+            </div>
         </div>
         <div class="list-item list-item fireHighlight-card h-1" *ngIf="!isImage">
             {{ fireComment.text ? fireComment.text : '...'}}

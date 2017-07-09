@@ -133,4 +133,18 @@ export class FirecardComponent implements OnInit, OnDestroy {
   private restartPlayback() {
     this.audio.load()
   }
+
+
+  private getPlayhead() : number {
+    if (this.audio) {
+      return Math.round(this.audio.currentTime / 30 * 100)
+    } else {
+      return 0
+    }
+  }
+
+  private setPlaybackTime(event) {
+    let percentLeftClicked = event.offsetX/event.target.clientWidth
+    this.audio.currentTime = 30 * percentLeftClicked
+  }
 }

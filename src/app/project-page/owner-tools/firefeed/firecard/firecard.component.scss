@@ -97,15 +97,14 @@ $fireBoundVPad: 40px;
 }
 
 .fireCard-audio {
-    height: 36px;
+    height: 32px;
+    padding: 0px !important;
 }
 
 .btn-fc-audio {
-    top: -12px;
+    float: left;
 }
 
-.wave-form {
-    margin-left: 5px;
-    width: calc(100% - 62px);
-    border: 1px solid #dce3ea;
+.wave-wrap {
+    width: calc(100% - 48px);
 }
