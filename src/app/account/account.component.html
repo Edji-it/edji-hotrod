@@ -18,7 +18,7 @@
             </span>
             <!-- Edit Profile Picture Button 
                 - Opens UploadProfPicModal -->
-            <button *ngIf="currentUser.hero.status === 'subscribed'" id="editAvatarBtn" type="button" class="btn btn-sm edit-btn" (click)="showUploadProfPicModal= true;">Edit</button>
+            <button *ngIf="currentUser.hero && currentUser.hero.status === 'subscribed'" id="editAvatarBtn" type="button" class="btn btn-sm edit-btn" (click)="showUploadProfPicModal= true;">Edit</button>
         </div>
     </div>
 
