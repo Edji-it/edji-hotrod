@@ -27,18 +27,25 @@
 		<!--Mobile buttons-->
 		<div class="comment-options__mobile-wrap hidden-lg-up" [class.bottom-bar-offset]="user._id == project.teacher_id">
 			<div class="row comment__options--mobileRow">
-				<div class="col-6 comment__options--mobileCol" *ngIf="project.types.indexOf('emoji') > -1" [ngClass]="project.types.indexOf('emoji') > -1 && project.types.indexOf('text') > -1 ? 'col-6' : 'col-12'">
+				<div class="comment__options--mobileCol" *ngIf="project.types.indexOf('emoji') > -1" [ngClass]="'col-' + (12 / project.types.length)">
 					<button id="addEmojiComment" 
 						class="emoji comment__options--mobileButton" 
 						(tap)="addCommentOfType('emoji')">
 							<i class="icon icon-emoji-comment"></i>
 						</button>
 				</div>
-				<div class="col-6 comment__options--mobileCol" *ngIf="project.types.indexOf('text') > -1" [ngClass]="project.types.indexOf('emoji') > -1 && project.types.indexOf('text') > -1 ? 'col-6' : 'col-12'">
+				<div class="comment__options--mobileCol" *ngIf="project.types.indexOf('text') > -1" [ngClass]="'col-' + (12 / project.types.length)">
 					<button id="addTextComment"
 						class="emoji comment__options--mobileButton" 
 						(tap)="addCommentOfType('text')">
 							<i class="icon icon-text-comment"></i>
+						</button>
+				</div>
+				<div class="comment__options--mobileCol" *ngIf="project.types.indexOf('audio') > -1" [ngClass]="'col-' + (12 / project.types.length)">
+					<button id="addAudioComment"
+						class="emoji comment__options--mobileButton" 
+						(tap)="addCommentOfType('audio')">
+							<i class="icon icon-mic"></i>
 						</button>
 				</div>
 			</div>
