@@ -39,3 +39,16 @@ button {
     margin: 0px -2px;    
     top: -4px;
 }
+
+.countdown {
+    width: 75px;
+    height: $readingLineHeight - 2px;
+    background-color: indianred;
+    padding: 1px 0px 3px 0px;
+    border-radius: 4px;
+    position: absolute;
+    top: 0px;
+    left: 51px;
+    text-align: center;
+    padding: 0;
+}

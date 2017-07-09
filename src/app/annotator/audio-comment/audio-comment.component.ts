@@ -42,6 +42,10 @@ export class AudioCommentComponent implements OnInit{
   // Change the next variable to control the frequency at which the playback/recording currentTime evaluates
   private intervalGap: number = 500
   private isInitialized: boolean = false
+  private countdown: boolean = false
+  private countdownText: string = ''
+  private countdownI: number = 3
+  private countdownInterval: any
 
   // We need to know when changes to inactive to clear the editing variable
   @Input() set active(active){
@@ -74,7 +78,7 @@ export class AudioCommentComponent implements OnInit{
       // }
       this.freshRecord()
     } else {
-      this.isInitialized = true
+      
     }
   }
 
@@ -96,6 +100,8 @@ export class AudioCommentComponent implements OnInit{
       this.playAble = true
       // Build the waveform
       this._comments.waveForm(this.comment.dataArray, this.myCanvas)
+      this.isInitialized = true
+      console.log('initializing')
     } else {
       // Set the canvas properties and write temporary data
       this._comments.waveForm(this.waves, this.myCanvas)
@@ -217,6 +223,13 @@ export class AudioCommentComponent implements OnInit{
    * Record Audio from the user's microphone
    */
   private freshRecord() {
+    this.countdownText = '----- 3 -----'
+    this.countdown = true
+    this.countdownInterval = setInterval(()=> {
+      this.countdownText = '----- ' + this.countdownI + ' -----'
+      this.countdownI--
+    }, 1000)
+    this.countdown = false
     this.playAble = false
     this.isRecording = true
     this.isPlaying = false

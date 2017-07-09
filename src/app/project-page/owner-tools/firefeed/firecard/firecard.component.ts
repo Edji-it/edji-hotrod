@@ -71,8 +71,6 @@ export class FirecardComponent implements OnInit, OnDestroy {
   public buildAudioView() {
     this.myCanvas = this.el.nativeElement.querySelector('.wave-form')
       if (this.myCanvas) {
-        console.log(this.fireComment.type)
-        console.log(this.myCanvas)
         this.audio = new Audio()
         this.audio.src = this.fireComment.url
         this.audio.load()
