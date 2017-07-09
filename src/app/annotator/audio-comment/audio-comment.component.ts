@@ -187,7 +187,9 @@ export class AudioCommentComponent implements OnInit{
     navigator.getUserMedia = (navigator.getUserMedia ||
       navigator['webkitGetUserMedia'] ||
       navigator['mozGetUserMedia'] ||
-      navigator['msGetUserMedia'])
+      navigator['msGetUserMedia']) || 
+      navigator.webkitGetUserMedia || 
+      navigator.mozGetUserMedia
 
     // If the user allows access to the microphone, run the onSuccess function and enable the record button
     navigator.getUserMedia({ audio: true }, onSuccess, e => {})
@@ -280,6 +282,8 @@ export class AudioCommentComponent implements OnInit{
   private setPlaybackTime(event) {
     console.log(event)
     let percentLeftClicked = event.offsetX/75
-    this.audio.currentTime = 30 * percentLeftClicked
+    if (this.audio) {
+      this.audio.currentTime = 30 * percentLeftClicked
+    }
   }
 }
