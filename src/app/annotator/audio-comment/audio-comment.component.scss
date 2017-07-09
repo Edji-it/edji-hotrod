@@ -34,14 +34,6 @@
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
-.btn-audio {
-    padding: 4px 2px 2px 2px;
-    & i, & .icon {
-        width: 20px;
-        height: 20px;
-    }
-}
-
 button {
     vertical-align: inherit;
     margin: 0px -2px;    

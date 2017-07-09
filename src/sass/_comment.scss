@@ -671,3 +671,11 @@ $progressStart: 51px;
     top: 0;
     left: 130px;
 }
+
+.btn-audio {
+    padding: 4px 2px 2px 2px;
+    & i, & .icon {
+        width: 20px;
+        height: 20px;
+    }
+}
