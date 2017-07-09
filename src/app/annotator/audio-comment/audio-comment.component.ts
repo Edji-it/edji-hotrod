@@ -36,7 +36,8 @@ export class AudioCommentComponent implements OnInit{
   private pDuration: number = 0
   private rInterval: any
   private pInterval: any
-  private waves = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+  private initWaves = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+  private waves;
   private wavePos: number = 0
   // Change the next variable to control maximum audio comment length in milliseconds
   private timeLimit: number = 30000
@@ -53,17 +54,11 @@ export class AudioCommentComponent implements OnInit{
     this.activated = active
     if (!active && this.audioFile) {
       // this.reRecord_Audio.emit(false)
-      console.log('clear the track')
-
-      var track = this.mediaRecorder.stream.getTracks()[0]
-      console.log(track)
-      track.stop()
-      console.log(track)
+      
+      this.waves = [].concat(this.initWaves)
       this.chunks = []
-      // this.mediaRecorder.stream
-      // this.mediaRecorder.stream.removeTrack(track)
-      // var newTrack = new MediaStreamTrack
-      // this.mediaRecorder.stream.addTrack(newTrack)
+      this.wavePos = 0
+      
       this.initializeAudio()
     }
     if (!active && this.isRecording) {
@@ -92,6 +87,7 @@ export class AudioCommentComponent implements OnInit{
   }
   
   ngOnInit() {
+    this.waves = [].concat(this.initWaves)
     this.myCanvas = this.el.nativeElement.querySelector('.wave-form')
     // If comment already has uploaded audio, load it
     if (this.comment.url && this.comment.url.length > 0) {
