@@ -1,13 +1,13 @@
 <div [ngClass]="{'active' : comment.active}" class='audio-comment-input-wrapper input-wrap'>
-    <button style="margin-left: 2px;" class="btn-audio" [class.disabled]="!playAble">
+    <button [class.hide]="!comment.active" style="margin-left: 2px;" class="btn-audio" [class.disabled]="!playAble">
         <i [class.hide]="isPlaying" class="icon-play" (click)="play()"></i>
         <i [class.hide]="!isPlaying" class="icon-pause" (click)="pause()"></i>
     </button>
-    <button class="btn-audio" (click)="isRecording=false; isPlaying=false; restartPlayback()"><i class="icon-restart"></i></button>
+    <button [class.hide]="!comment.active" class="btn-audio" (click)="isRecording=false; isPlaying=false; restartPlayback()"><i class="icon-restart"></i></button>
     <!--<canvas class="wave-form" id="{{comment._id}}"></canvas>-->
     <canvas class="wave-form"></canvas>
     <div class="countdown" *ngIf="countdown" [innerHtml]="countdownText"></div>
-    <div [class.hide]="isRecording || !audio.currentTime" class="playing" [style.width]="getPlayhead() + 'px'"></div>
+    <div [class.hide]="!comment.active && (isRecording || !audio.currentTime)" class="playing" [style.width]="getPlayhead() + 'px'"></div>
     <!--<div [ngClass]="[ isRecording ? 'recording' : '' ]" [style.width]="playTime"></div>-->
-    <button class="btn-audio btn-record" (click)="isRecording ? stopRecord() : record()" [class.disabled]="!recordAble"><i class="icon icon-mic"></i></button>
+    <button [class.hide]="userPermission >= 3 && !comment.active" class="btn-audio btn-record" (click)="isRecording ? stopRecord() : record()" [class.disabled]="!recordAble"><i class="icon icon-mic"></i></button>
 </div>
