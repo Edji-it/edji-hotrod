@@ -1,40 +1,67 @@
 <nav-bar></nav-bar>
+<!--  Account Page 
+    Last Mod: July 4th, 2017 - INDEPENDENCE DAY - Nick Pumper
+-->
+<div class="container-fluid profile-container row">
+    <!-- Profile Pic Column -->
+    <div class="column col-sm-3" style="width: 24%;">
+        <h1 class="profile-title">Profile</h1>
 
-<div class="container pt-4">
-  <div class="row">
-      <div class="col-sm-2"></div>
-      <div class="col-sm-8">
-          <h1>Account Details</h1>
+        <!-- Profile Pic block -->
+        <div class="profile-pic-container">
+            
+            <!-- User Profile Pic -->
+            <span class="profile-pic"> 
+                <!-- Avatar picture -->
+                <img id="avatarImg" *ngIf="getAvatar()" class="profile-pic" [src]="getAvatar()" > 
+                <span id="userInitials" *ngIf="!getAvatar()">{{currentUser.fullname | userinitials}}</span>
+            </span>
+            <!-- Edit Profile Picture Button 
+                - Opens UploadProfPicModal -->
+            <button *ngIf="currentUser.hero.status === 'subscribed'" id="editAvatarBtn" type="button" class="btn btn-sm edit-btn" (click)="showUploadProfPicModal= true;">Edit</button>
+        </div>
+    </div>
 
-          <div class="card">
-            <div class="card-block">
-                <div class="form-group row">
-                    <label class="col-sm-4 col-form-label">Name</label>
-                    <div class="col-sm-8">
-                        <p class="form-control-static">{{currentUser.fullname}}</p>
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label for="inputPassword" class="col-sm-4 col-form-label">Username</label>
-                    <div class="col-sm-8">
-                        <p class="form-control-static">{{currentUser.username}}</p>
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label for="inputPassword" class="col-sm-4 col-form-label">Email</label>
-                    <div class="col-sm-8">
-                        <p class="form-control-static">{{currentUser.email}}</p>
-                    </div>
-                </div>
-            </div><!--card-block-->
-          </div>
-          <div class="card text-center">
-                <div class="card-block">
-                    <button type="button" (click)="showPassModal = !showPassModal" class="btn btn-primary">Change Password</button>
-                </div>
-          </div>
-      </div>
-      <div class="col-sm-2"></div>
-  </div>
+    <!-- Text Column -->
+    <div class="column col-sm-6">
+        
+        <!-- spacer div -->
+        <div class="spacer-mobile-collapse"></div>
+
+        <!-- Name -->
+        <div class="info-group">
+            <div class="name-label">{{currentUser.fullname}}</div>
+            <div class="info-label">Name</div>
+        </div>
+        
+        <!-- user name -->
+        <div class="info-group">
+            <p class="info">{{currentUser.username}}</p>
+            <label class="info-label" for="inputPassword">Username</label>
+        </div>
+
+        <!-- email -->
+        <div class="info-group">
+            <p class="info">{{currentUser.email}}</p>
+            <label for="inputPassword" class="info-label">Email</label>
+        </div>
+
+        <!-- Reading on Edji since -->
+        <div class="info-group">
+            <h4 class="faded">Reading on Edji since {{currentUser.createdAt | edjidate:'timeStamp':'mediumDate'}}</h4>
+        </div>  
+    </div>
+
+    <!-- Third Column -->
+    <div class="column col-sm-3" style="width: 25%;">
+        <!-- Buffer div -->
+        <div style="height:5%;"></div>
+        <!-- Change Password Button -->
+        <button type="button" (click)="showPassModal = !showPassModal" class="btn change-password-btn">Change Password</button>
+    </div>
+
+    <!-- buffer before the footer. Includes a nice border line. -->
+    <div class="row container-line"></div>
 </div>
 <edji-change-pass class="modal-will-fade" [class.show]="showPassModal" (closeModal)="showPassModal = !showPassModal"></edji-change-pass>
+<hot-upload-avatar class="modal-will-fade" [class.show]="showUploadProfPicModal" (closeModal)="showUploadProfPicModal = !showUploadProfPicModal"></hot-upload-avatar>

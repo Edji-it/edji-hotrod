@@ -36,6 +36,7 @@ import { EmojiOnePipe } from './shared/emojione.pipe.ts';
 import { AddClassPipe } from './shared/addclass.pipe.ts';
 import { EdjiDatePipe } from './pipes/edjidate.pipe.ts';
 import { LinkifyPipe } from './pipes/linkify.pipe';
+import { UserInitialsPipe } from './pipes/userinitials.pipe.ts';
 
 // Components
 import { NavBarComponent, FooterComponent, TutorialBoxComponent } from './shared';
@@ -51,7 +52,7 @@ import { FirecardComponent } from './project-page/owner-tools/firefeed/firecard/
 import { NewReadingPage, UploadModalComponent, UploadPdfModalComponent, DeletePdfMiniModal } from './new-reading-page';
 import { DashboardComponent, JoinedDashComponent, CreatedDashComponent, TutorialReadingComponent, ReadingCardComponent } from './dashboard';
 import { NoContentComponent } from './no-content';
-import { AccountComponent, ChangePassComponent } from './account';
+import { AccountComponent, ChangePassComponent, UploadAvatarModal } from './account';
 import { FeedbackComponent } from './shared/feedback/feedback.component';
 import { LoginComponent } from './login';
 import { ResetPassPage } from './reset-pass/reset-pass-page.component';
@@ -98,6 +99,7 @@ type StoreType = {
     EmojiOnePipe,
     LinkifyPipe,
     EdjiDatePipe,
+    UserInitialsPipe,
     ResetPassPage,
     AddClassPipe,
     RegisterComponent,
@@ -118,6 +120,7 @@ type StoreType = {
     DeleteCommentModal,
     DeleteReadingModal,
     DeleteProjectModal,
+    UploadAvatarModal,
     AnnotatorComponent,
     NewReadingPage,
     HeroPromoComponent,
