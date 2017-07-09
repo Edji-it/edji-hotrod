@@ -104,4 +104,4 @@
     <edji-feedback></edji-feedback>
 </div>
 
-<emoji-keyboard [isActive]="isEmojiKeyboardActive()" [currentComment]="activeComment.data" (commentChange)="updateActiveComment($event)" (dismissKeyboard)="inactivateComment()"></emoji-keyboard>
+<emoji-keyboard [isActive]="isEmojiKeyboardActive()" [currentComment]="activeComment && activeComment.data ? activeComment.data : ''" (commentChange)="updateActiveComment($event)" (dismissKeyboard)="inactivateComment()"></emoji-keyboard>
