@@ -11,7 +11,7 @@ import { User } from './datatypes'
 export class AuthService implements CanActivate {
 
     /*
-    Last Mod: 6.17.17
+    Last Mod: 6.27.17
 
     Edit user prefs from here. Everything under the datatype User should be edited through here.
     */
@@ -298,7 +298,7 @@ export class AuthService implements CanActivate {
     /*
     6.15.17
     Update media.documents in user, returns a User object. Use for deleting PDF's in upload-pfd.modal.component
-    We delete a PDF through front end magic. Since things are stored locally and through AWS, no need to do a server call.
+    We delete a PDF through front end magic since things are stored in AWS, no need to do a server call.
     - We use this to update it since updateUser only merges things together.
     - This properly replaces the contents of user, but ONLY the media.documents.
     - Insert the new set that you want to replace media.documents with.
@@ -322,6 +322,7 @@ export class AuthService implements CanActivate {
                     });
                     */
                     
+                    // Let's save this here user object.
                     // This is repeated code from updateUser() we could consolidate these. (6.14.17)
                     this.http.put( this.baseUrl + '/users', {
                             user: mergedUser
@@ -355,6 +356,60 @@ export class AuthService implements CanActivate {
                 })
         });
     } // public forceUpdatedDocuments (any[] : newDocs) : Observable<any>
+
+    /*
+    25 June 2017
+    Nick Pumper
+
+    Overwrite the current avatar stored under the user object.
+    */
+    public forceUpdateAvatar (newAvatar : string) : Observable<any> {
+        // We want to return an Observable because those are handy for timing's sake, so let's do that.
+        return new Observable(observer => {
+            this.refreshUser().take(1)
+            .subscribe(currentUser =>{
+                // Make a copy of the user object, edit it, and shove it in.
+                let mergedUser = Object.assign({}, currentUser);// Get the latest copy of the user object.
+                mergedUser.avatar = newAvatar; // let's just shove those in there
+                this.user = mergedUser; // NOTE: We make a new object and assign it so that the user object is always nice and fresh.
+                
+                console.log(newAvatar);
+                console.log(this.user.avatar);
+
+                // This code saves this here user object.
+                // This is repeated code from updateUser() we could consolidate these. (6.27.17)
+                this.http.put( this.baseUrl + '/users', {
+                    user: mergedUser
+                }, this.getOptions())
+                .map((data) => {
+                    let object = data.json();
+                    // if the response has a token, the user should be successfully registered and logged in
+                    if (object.user) {
+                        this.setUser(object.user);
+                    }
+                    if (object.token) {
+                        this.setToken(object.token);
+                    }
+
+                    console.log(this.user.avatar);
+
+                    return data.json();
+                })
+                .toPromise()
+                .then( user => {
+                    observer.next(user)
+                }, error => {
+                    observer.error(error)
+                    console.error("Failed in forceUpdateDocuments in auth.service.ts when trying to save the user.");
+                })
+            },
+            error => {
+                observer.error(error)
+                console.error(error)
+                console.error("Failed in forceUpdateAvatar in auth.service.ts");
+            }) // subscribe / error
+        });
+    } // public forceUpdateAvatar (newAvatar : File) 
 
     /**
      * Calls to server, which creates a temp user object

@@ -103,7 +103,7 @@
                         <div class="dropdown-menu dropdown-menu-right reading-card-menu">
                             <button (click)="relevantReading = version; showAddModal = true; version.showOptionsV = false; versionHeight = versionHeight + 66" class="dropdown-item" [attr.testFindCreateNewGroupV]="version.title">Create New Group</button>
                             <button *ngIf="!version.draft" (click)="version.showOptionsV=false;" [routerLink]="['/new-reading/']" [queryParams]="{ copyId: version._id }" class="dropdown-item" [attr.testFindCopyAndEditV]="version.title">Copy and Edit</button>
-                            <!-- Delete dropdown button (DOES NOT WORK BECAUSE serverside deletes ALL of that reading) -->
+                            <!-- Delete dropdown button -->
                             <button (click)="relevantReading = version; showDeleteReadingModal = true; showOptions = false;" class="dropdown-item">Delete</button>
                         </div>
                     </div>

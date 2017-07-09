@@ -1,0 +1,150 @@
+@import '../../sass/base/variables';
+
+// 20 June 2017
+// Nicholas Pumper
+// Last Mod: 23 June 2017
+
+.container-line {
+    border-bottom-width: 2px;
+    border-bottom-style: solid;
+    border-bottom-color: #DCDCDC;
+    width:  90%;
+    height: 100px;
+    margin:     auto;
+    display:    block; 
+}
+
+.profile-container {
+    margin:     auto;
+    display:    block; 
+}
+
+// Primarily for keeping things centered on mobile
+.profile-pic-container {
+    margin:     auto;
+    display:    block; 
+
+    @media(max-width: $phone) {
+        transform: translateX(-25%);
+	}
+
+    @media(max-width: $xsphone) {
+        min-width: $xsphone;
+        transform: translate(-10%);
+	}
+}
+
+$profilePicIconHeight: 60px;
+.profile-pic {
+    border-radius:  50%;
+    object-fit: cover; // Needed for images
+    min-width:  150px;
+    min-height: 150px;
+    width:      150px;
+    height:     150px;
+    margin:     auto;
+    display:    block;
+    background-color: #D4D1D1;
+
+    // For the temp profile pic
+     & span {
+        text-transform: capitalize;
+        font-family: 'Open Sans';
+        font-weight: bold;
+        color: #fff;
+        line-height: 2.5;
+        font-size: $profilePicIconHeight;
+        display: inline-block;
+        margin-left: 22%;
+    }
+}
+
+.profile-title {
+    font-size: 50px; 
+    color:      #DCDCDC;
+    text-align:    center;
+    margin-bottom: 35px;
+
+    @media(max-width: $phone) {
+        display: inline-block;
+        vertical-align: middle;
+        margin-left: 50px;
+	}
+}
+
+.edit-btn-container {
+    margin-top: 10px;
+    height:     20px;
+    width: 10px;
+}
+
+.edit-btn {
+    color: #FAF9F9;
+    background-color: #D4D1D1;
+    display:    block;
+    margin:     auto;
+    margin-top: 10px;
+}
+
+.change-password-btn {
+    align-content: right;
+    background-color: #898383;
+    color: #FAF9F9;
+}
+
+.spacer-mobile-collapse {
+
+    height: 9em;
+
+    @media(max-width: $phone) {
+        height: 0em;
+    }
+}
+
+.column {
+    vertical-align: middle;
+    display:    inline-block;
+
+    @media(max-width: $tablet) {
+		margin-left: 40px;
+        min-width: 50%;
+	}
+
+    @media(max-width: $phone) {
+        margin-left: 5px;
+        min-width: $phone;
+	}
+
+    @media(max-width: $xsphone) {
+        margin-left: 10px;
+        min-width: $xsphone;
+	}
+}
+
+.name-label {
+    font-family:    "Open Sans";
+    font-size:      40px;
+    margin-bottom: -7px;
+    font-weight:    500;
+}
+
+.info-group {
+    margin-bottom: 20px;
+}
+
+.info {
+    font-family:    "Open Sans";
+    font-size:      20px;
+    margin-bottom: -2px;
+    font-weight:    500;
+}
+
+.info-label {
+    font-family:    "Open Sans";
+    font-size:      15px;
+    color:        #D2CECE;
+}
+
+.faded {
+    color: #949494;
+}

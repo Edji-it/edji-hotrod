@@ -293,17 +293,25 @@ export class ProjectService {
         if (!comment.author) {
             comment.author = this._auth.getUser().fullname ? this._auth.getUser().fullname : this._auth.getUser().username
         }
-        
+
+        let options = this._auth.getOptions()
+        let data = { comment: comment }
+        // Add comment ID if passed
         // Tell other Project viewers comment changed, using Socket
-        // TO-DO: Move to after service responds
-        if (comment['_id']) {
-            this._socket.updateComment(comment, 'UPDATE', comment.project_id);
+        if (comment._id) {
+            data.comment['_id'] = comment._id;
+            url = url + '/' + comment._id
+            options['method'] = 'PUT'
+            this._socket.updateComment(data.comment, 'UPDATE', this.project._id);
         } else {
-            this._socket.updateComment(comment, 'CREATE', comment.project_id);
-        } // else
+            options['method'] = 'POST'
+            this._socket.updateComment(data.comment, 'CREATE', this.project._id);
+        }
+
+        options['body'] = data
 
         return this.http
-            .post(url, { comment: comment }, this._auth.getOptions())
+            .request(url, options)
             .toPromise()
             .then(this._auth.extractData)
             .then((data) => { return data.comment; })

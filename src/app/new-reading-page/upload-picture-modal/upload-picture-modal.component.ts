@@ -78,7 +78,7 @@ export class UploadModalComponent implements OnInit {
       }, error => {
         this.uploading = false;
       });
-  }
+  } // beginUpload() 
 
   
 
@@ -115,10 +115,10 @@ export class UploadModalComponent implements OnInit {
             console.log(error)
           }
         );
-  }
+  } // addUploadUrl
 
   insertImage(imageIndex: number) : void {
     this.returnImage.emit([this.uploadedImages[imageIndex]]);
     this.closeModal.emit();
-  }
+  } // insertImage
 }
