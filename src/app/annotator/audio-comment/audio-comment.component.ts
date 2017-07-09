@@ -266,6 +266,10 @@ export class AudioCommentComponent implements OnInit{
     this.audio.play()
   }
 
+  private getPlayhead() {
+    return Math.round((this.audio.currentTime / 30) * 75)
+  }
+  
   /**
    * Set the playback back to the beginning #back2basics
    */
