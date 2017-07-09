@@ -104,6 +104,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     private annotatorContent: Element
 
     private window: any
+    private audioSupportError: boolean = false
 
     constructor(
         private _readings: ReadingService,
@@ -153,6 +154,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             (project) => {
                 if (project) {
                     this.project = project
+                    // Check if audio is supported
+                    if (this.project.types.indexOf('audio') > -1 && !navigator.getUserMedia) {
+                        this.audioSupportError = true
+                    }
                 }
             },
             (error) => {

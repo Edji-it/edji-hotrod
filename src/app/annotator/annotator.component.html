@@ -53,6 +53,9 @@
 	</div>
 
 	<div class="article-wrap">
+		<div class="alert alert-warning alert-dismissible fade show" role="alert" *ngIf="audioSupportError">
+				The browser you are currently on does not currently support recording audio. However, your browser should still be able to playback existing audio comments.
+		</div>
         <!--Create components after load for reading-->
 		<article id="annotatorContent" class="content active-content pt-4" (mouseup)="showCommentOptions($event)" (touchend)="showCommentOptions($event)" (clickOutside)="hideCommentOptions()">
 			<span *ngFor="let w of reading.words; let i = index" class="w" [ngClass]="[ w.styles.join(' '), getHighlightClass(i) ]" 

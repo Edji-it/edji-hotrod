@@ -189,6 +189,9 @@ export class AudioCommentComponent implements OnInit{
         this._comments.waveForm(this.waves, this.myCanvas)
       }
     }
+    const onError = e => {
+      this.audioError()
+    }
 
     // Request access to the microphone from the user
     navigator.getUserMedia = (navigator['getUserMedia'] ||
@@ -197,7 +200,11 @@ export class AudioCommentComponent implements OnInit{
       navigator['msGetUserMedia'])
 
     // If the user allows access to the microphone, run the onSuccess function and enable the record button
-    navigator.getUserMedia({ audio: true }, onSuccess, e => {})
+    if (navigator.getUserMedia) {
+     navigator.getUserMedia({ audio: true }, onSuccess, onError)
+    } else {
+      this.audioError()
+    }
     this.recordAble = true
   }
 
@@ -289,5 +296,9 @@ export class AudioCommentComponent implements OnInit{
     if (this.audio) {
       this.audio.currentTime = 30 * percentLeftClicked
     }
+  }
+
+  private audioError() {
+    console.log('this device is not supported for audio recording')
   }
 }
