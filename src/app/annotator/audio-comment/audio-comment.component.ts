@@ -191,12 +191,10 @@ export class AudioCommentComponent implements OnInit{
     }
 
     // Request access to the microphone from the user
-    navigator.getUserMedia = (navigator.getUserMedia ||
+    navigator.getUserMedia = (navigator['getUserMedia'] ||
       navigator['webkitGetUserMedia'] ||
       navigator['mozGetUserMedia'] ||
-      navigator['msGetUserMedia']) || 
-      navigator.webkitGetUserMedia || 
-      navigator.mozGetUserMedia
+      navigator['msGetUserMedia'])
 
     // If the user allows access to the microphone, run the onSuccess function and enable the record button
     navigator.getUserMedia({ audio: true }, onSuccess, e => {})
