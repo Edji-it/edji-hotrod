@@ -12,7 +12,6 @@ declare var window: any
 })
 export class FooterComponent implements OnInit {
   private appVersion;
-  private emojiOneAttribution: string = 'Emoji supplied by <a style=\'padding-left:0px;padding-right:0px;color:#999;\' href=\'http://emojione.com/\'>EmojiOne :unicorn:</a>';
   private window
   private browserProperties: any
 
