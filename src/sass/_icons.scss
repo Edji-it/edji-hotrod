@@ -112,6 +112,26 @@
     background-repeat: no-repeat;
 }
 
+.icon-emoji-comment {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    background: url('/assets/images/icon-emoji-comment.png');
+    background-size: auto 100%;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+
+.icon-audio-comment {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    background: url('/assets/images/icon-mic.svg');
+    background-size: auto 100%;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+
 .icon-right_arrow {
     display:inline-block;
     width: 1em;

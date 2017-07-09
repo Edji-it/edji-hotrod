@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="22px" height="29px" viewBox="0 0 22 29" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="31px" height="40px" viewBox="0 0 31 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
     <title>icon-text-comment</title>
     <desc>Created with Sketch.</desc>
     <defs></defs>
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="icon-text-comment" transform="translate(0.500000, -1.000000)">
+        <g id="icon-text-comment" transform="translate(0.292787, 0.000000)">
             <g id="Group-4">
                 <g id="Page-1">
-                    <g id="Group-4" transform="translate(0.028426, 0.737570)">
-                        <polygon id="T" fill="#333333" points="9.06036476 24.8792807 5.98618434 24.8792807 5.98618434 8.71089245 0.455232115 8.71089245 0.455232115 6.07404314 14.591317 6.07404314 14.591317 8.71089245 9.06036476 8.71089245"></polygon>
-                        <polygon id="Path-3" fill="#898989" points="17.0063476 15.5332814 19.4668296 15.5332814 19.4668296 26.1595655 21.2275734 26.1595655 21.2275734 28.6200475 15.2456038 28.6200475 15.2456038 26.1595655 17.0063476 26.1595655"></polygon>
-                        <polygon id="Path-3-Copy" fill="#898989" transform="translate(18.236589, 8.258155) scale(1, -1) translate(-18.236589, -8.258155) " points="17.0063476 0.9830286 19.4668296 0.9830286 19.4668296 13.0727998 21.2275734 13.0727998 21.2275734 15.5332819 15.2456038 15.5332819 15.2456038 13.0727998 17.0063476 13.0727998"></polygon>
+                    <g id="Group-4" transform="translate(0.039947, 0.036498)">
+                        <polygon id="T" fill="#333333" points="12.732423 33.9625578 8.41231378 33.9625578 8.41231378 11.2413137 0.639732286 11.2413137 0.639732286 7.53578071 20.5050045 7.53578071 20.5050045 11.2413137 12.732423 11.2413137"></polygon>
+                        <polygon id="Path-3" fill="#898989" points="23.8988184 20.8287359 27.3565045 20.8287359 27.3565045 35.7617268 29.8308569 35.7617268 29.8308569 39.219413 21.424466 39.219413 21.424466 35.7617268 23.8988184 35.7617268"></polygon>
+                        <polygon id="Path-3-Copy" fill="#898989" transform="translate(25.627661, 10.605088) scale(1, -1) translate(-25.627661, -10.605088) " points="23.8988184 0.38143842 27.3565045 0.38143842 27.3565045 17.3710503 29.8308569 17.3710503 29.8308569 20.8287366 21.424466 20.8287366 21.424466 17.3710503 23.8988184 17.3710503"></polygon>
                     </g>
                 </g>
             </g>

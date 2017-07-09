@@ -4,23 +4,25 @@
 			</div>
     </div>
     <div *ngIf="project.types.length > 0" class="text-options" (blur)="hideCommentOptions($event)" [style.top]="highlightY + 'px'" [ngClass]="{ 'active' : optionsShow }">
+		<!--Desktop buttons-->
 		<div class="options hidden-md-down">
-			<!--Desktop buttons-->
 			<button *ngIf="project.types.indexOf('emoji') > -1" id="addEmojiComment" 
 				class="emoji" 
-				(click)="addCommentOfType('emoji')" 
-				[innerHtml]="':thinking_face:' | emojione"></button>
+				(click)="addCommentOfType('emoji')">
+					<i class="icon icon-emoji-comment"></i>
+				</button>
 			<button *ngIf="project.types.indexOf('text') > -1" 
 				class="emoji" 
 				id="addTextComment" 
-				(click)="addCommentOfType('text')" 
-				[innerHtml]="':writing_hand:' | emojione"></button>
-			<!-- jzk7 - audio comment button: make sure to change the types to look for audio once we're ready! -->
-			<button *ngIf="project.types.indexOf('text') > -1" 
+				(click)="addCommentOfType('text')">
+					<i class="icon icon-text-comment"></i>
+				</button>
+			<button *ngIf="project.types.indexOf('audio') > -1" 
 				class="emoji" 
 				id="addAudioComment" 
-				(click)="addCommentOfType('audio')" 
-				[innerHtml]="'<i class=\'icon icon-mic\'></i>'"></button>
+				(click)="addCommentOfType('audio')">
+					<i class="icon icon-mic"></i>
+				</button>
 		</div>
 		<!--Mobile buttons-->
 		<div class="comment-options__mobile-wrap hidden-lg-up" [class.bottom-bar-offset]="user._id == project.teacher_id">
@@ -28,14 +30,16 @@
 				<div class="col-6 comment__options--mobileCol" *ngIf="project.types.indexOf('emoji') > -1" [ngClass]="project.types.indexOf('emoji') > -1 && project.types.indexOf('text') > -1 ? 'col-6' : 'col-12'">
 					<button id="addEmojiComment" 
 						class="emoji comment__options--mobileButton" 
-						(tap)="addCommentOfType('emoji')" 
-						[innerHtml]="':thinking_face:' | emojione"></button>
+						(tap)="addCommentOfType('emoji')">
+							<i class="icon icon-emoji-comment"></i>
+						</button>
 				</div>
 				<div class="col-6 comment__options--mobileCol" *ngIf="project.types.indexOf('text') > -1" [ngClass]="project.types.indexOf('emoji') > -1 && project.types.indexOf('text') > -1 ? 'col-6' : 'col-12'">
 					<button id="addTextComment"
 						class="emoji comment__options--mobileButton" 
-						(tap)="addCommentOfType('text')" 
-						[innerHtml]="':writing_hand:' | emojione"></button>
+						(tap)="addCommentOfType('text')">
+							<i class="icon icon-text-comment"></i>
+						</button>
 				</div>
 			</div>
 		</div>
