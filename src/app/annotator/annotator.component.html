@@ -4,17 +4,19 @@
 			</div>
     </div>
     <div *ngIf="project.types.length > 0" class="text-options" (blur)="hideCommentOptions($event)" [style.top]="highlightY + 'px'" [ngClass]="{ 'active' : optionsShow }">
+		<!--Desktop buttons-->
 		<div class="options hidden-md-down">
-			<!--Desktop buttons-->
 			<button *ngIf="project.types.indexOf('emoji') > -1" id="addEmojiComment" 
 				class="emoji" 
-				(click)="addEmojiComment($event)" 
-				[innerHtml]="':thinking_face:' | emojione"></button>
+				(click)="addEmojiComment($event)">
+					<i class="icon icon-emoji-comment"></i>
+				</button>
 			<button *ngIf="project.types.indexOf('text') > -1" 
 				class="emoji" 
 				id="addTextComment" 
-				(click)="addTextComment($event)" 
-				[innerHtml]="':writing_hand:' | emojione"></button>
+				(click)="addTextComment($event)">
+					<i class="icon icon-text-comment"></i>
+				</button>
 		</div>
 		<!--Mobile buttons-->
 		<div class="comment-options__mobile-wrap hidden-lg-up" [class.bottom-bar-offset]="user._id == project.teacher_id">
@@ -22,14 +24,16 @@
 				<div class="col-6 comment__options--mobileCol" *ngIf="project.types.indexOf('emoji') > -1" [ngClass]="project.types.indexOf('emoji') > -1 && project.types.indexOf('text') > -1 ? 'col-6' : 'col-12'">
 					<button id="addEmojiComment" 
 						class="emoji comment__options--mobileButton" 
-						(tap)="addEmojiComment($event)" 
-						[innerHtml]="':thinking_face:' | emojione"></button>
+						(tap)="addEmojiComment($event)">
+							<i class="icon icon-emoji-comment"></i>
+						</button>
 				</div>
 				<div class="col-6 comment__options--mobileCol" *ngIf="project.types.indexOf('text') > -1" [ngClass]="project.types.indexOf('emoji') > -1 && project.types.indexOf('text') > -1 ? 'col-6' : 'col-12'">
 					<button id="addTextComment"
 						class="emoji comment__options--mobileButton" 
-						(tap)="addTextComment($event)" 
-						[innerHtml]="':writing_hand:' | emojione"></button>
+						(tap)="addTextComment($event)">
+							<i class="icon icon-text-comment"></i>
+						</button>
 				</div>
 			</div>
 		</div>
