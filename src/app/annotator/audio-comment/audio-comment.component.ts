@@ -13,6 +13,7 @@ declare var MediaRecorder: any
 })
 export class AudioCommentComponent implements OnInit{
   @Input() private comment: EdjiComment
+  @Input() private userPermission: number
   @Output() save: EventEmitter<any> = new EventEmitter<any>() 
   @Output() showDeleteAudioModal: EventEmitter<any> = new EventEmitter<boolean>()
 
@@ -20,7 +21,7 @@ export class AudioCommentComponent implements OnInit{
   private isRecording: boolean = false
   private recordOverConfirmed: boolean = false
   private playTime: string = "0px"
-  private playWidth: number = 82
+  private playWidth: number = 130
   private myCanvas
   private chunks: any = []
   private mediaRecorder: any
@@ -97,6 +98,12 @@ export class AudioCommentComponent implements OnInit{
     } else {
       // Set the canvas properties and write temporary data
       this._comments.waveForm(this.waves, this.myCanvas)
+    }
+
+    if (this.userPermission > 3) {
+      this.playWidth = this.playWidth - 55
+    } else if (this.userPermission == 3) {
+      this.playWidth = this.playWidth - 30
     }
     /** 
      * Initialize the audio access request & setup once this component loads
@@ -267,7 +274,7 @@ export class AudioCommentComponent implements OnInit{
   }
 
   private getPlayhead() {
-    return Math.round((this.audio.currentTime / 30) * 75)
+    return Math.round((this.audio.currentTime / 30) * this.playWidth)
   }
   
   /**
@@ -278,8 +285,7 @@ export class AudioCommentComponent implements OnInit{
   }
 
   private setPlaybackTime(event) {
-    console.log(event)
-    let percentLeftClicked = event.offsetX/75
+    let percentLeftClicked = event.offsetX/this.playWidth
     this.audio.currentTime = 30 * percentLeftClicked
   }
 }

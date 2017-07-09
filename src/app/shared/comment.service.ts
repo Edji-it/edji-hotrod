@@ -44,7 +44,7 @@ export class CommentService {
         gridScale: 5,
         gridColor: "transparent",
         data: waves,
-        colors: ["#555"],
+        colors: ["#666"],
         ctx: this.ctx
       }
     )
