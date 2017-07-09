@@ -907,7 +907,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      * Decides if the Emoji Keyboard is active
      */
     private isEmojiKeyboardActive() : boolean {
-        return this.activeComment && this.activeComment.active && (!this.activeComment.type || this.activeComment.type === 'emoji') && this.activeComment.user_id === this.user._id
+        return this.activeComment && (!this.activeComment.type || this.activeComment.type === 'emoji') && this.activeComment.active && this.activeComment.user_id === this.user._id
     }
 }
 

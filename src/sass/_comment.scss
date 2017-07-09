@@ -653,6 +653,7 @@ $progressStart: 51px;
     position: absolute;
     border-radius: 4px 0px 0px 4px;
     border-right: solid #6bdb5d;
+	pointer-events: none;
 }
 
 .recording {

@@ -276,4 +276,10 @@ export class AudioCommentComponent implements OnInit{
   private restartPlayback() {
     this.audio.load()
   }
+
+  private setPlaybackTime(event) {
+    console.log(event)
+    let percentLeftClicked = event.offsetX/75
+    this.audio.currentTime = 30 * percentLeftClicked
+  }
 }
