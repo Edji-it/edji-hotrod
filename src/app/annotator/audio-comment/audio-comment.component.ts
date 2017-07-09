@@ -15,7 +15,6 @@ export class AudioCommentComponent implements OnInit{
   @Input() private comment: EdjiComment
   @Output() save: EventEmitter<any> = new EventEmitter<any>() 
   @Output() showDeleteAudioModal: EventEmitter<any> = new EventEmitter<boolean>()
-  // @Output() reRecord_Audio: EventEmitter<any> = new EventEmitter<boolean>()
 
   private isPlaying: boolean = false
   private isRecording: boolean = false
@@ -53,12 +52,9 @@ export class AudioCommentComponent implements OnInit{
   @Input() set active(active){
     this.activated = active
     if (!active && this.audioFile) {
-      // this.reRecord_Audio.emit(false)
-      
       this.waves = [].concat(this.initWaves)
       this.chunks = []
       this.wavePos = 0
-      
       this.initializeAudio()
     }
     if (!active && this.isRecording) {
@@ -115,7 +111,6 @@ export class AudioCommentComponent implements OnInit{
       // Initialize a MediaRecorder if access to the microphone is granted
       this.mediaRecorder = new MediaRecorder(stream)
       this.mediaRecorder.onstart = e => {
-        console.log('recording has successfully started')
         // While recording, check the duration of the recording total and stop it once it hits the limit
         this.rInterval = setInterval(()=> {
           if((new Date().getTime() - this.rStartAt + (this.rDuration * 1000)) > this.timeLimit - 1) {
@@ -151,7 +146,6 @@ export class AudioCommentComponent implements OnInit{
         this._media.uploadAudio(this.audioFile)
           .take(1)
           .subscribe(data => {
-            console.log(data)
             this.audio.src = data.url
 
             // Save to comment
@@ -160,11 +154,8 @@ export class AudioCommentComponent implements OnInit{
             this.save.emit(this.comment)
           })
 
-        console.log('recording has successfully stopped')
-
         // Set the playTime to indicate current % progress of playback
         // this.audio.onplay = e => {
-        //   console.log('onplay')
         //   this.playTime = '0px'
         //   this.pInterval = setInterval(()=> {
         //     if((new Date().getTime() - this.pStartAt) > this.rDuration * 1000 - 1) {
@@ -173,7 +164,6 @@ export class AudioCommentComponent implements OnInit{
         //       return
         //     }
         //     this.playTime = (((new Date().getTime() - this.pStartAt) / this.timeLimit) * this.playWidth) + 'px'
-        //     console.log('play')
         //   }, this.intervalGap)
         // }
         
@@ -209,13 +199,10 @@ export class AudioCommentComponent implements OnInit{
    */
   private record() {
     if (this.recordOverConfirmed) {
-      console.log('record over confirmed! fresh record!')
       this.freshRecord()
     } else if (this.audio && this.audio.src && this.audio.src.length > 0) {
-      console.log('show record over modal')
       this.showDeleteAudioModal.emit(true)
     } else {
-      console.log('default fresh record!')
       this.freshRecord()
     }
   }
@@ -230,12 +217,18 @@ export class AudioCommentComponent implements OnInit{
       this.countdownText = '----- ' + this.countdownI + ' -----'
       this.countdownI--
     }, 1000)
-    this.countdown = false
-    this.playAble = false
-    this.isRecording = true
-    this.isPlaying = false
-    this.rStartAt = new Date()
-    this.mediaRecorder.start(this.intervalGap)
+    setTimeout(() => {
+      clearInterval(this.countdownInterval)
+      this.countdownInterval = ''
+      this.countdownI = 3
+      this.countdown = false
+      this.playAble = false
+      this.isRecording = true
+      this.isPlaying = false
+      this.rStartAt = new Date()
+      this.mediaRecorder.start(this.intervalGap)
+    }, 3000)
+    
   }
 
   /** 
@@ -246,7 +239,7 @@ export class AudioCommentComponent implements OnInit{
     this.isRecording = false
     this.isPlaying = false
     // Get the duration of the audio track
-    // this.rDuration = this.rDuration + (new Date().getTime() - this.rStartAt) / 1000
+    this.rDuration = this.rDuration + (new Date().getTime() - this.rStartAt) / 1000
     clearInterval(this.rInterval)
     // this.playTime = '0px'
     this.mediaRecorder.stop()
