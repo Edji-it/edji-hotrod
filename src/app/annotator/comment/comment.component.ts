@@ -24,7 +24,8 @@ export class CommentComponent implements OnInit {
   private active = false
   // Is fully visible, focused, but not editable
   private preview = false
-  private reRecord_Audio = false
+  private reRecordAudio = false
+  private showDeleteModal: boolean = false
 
   @Input() public comment: EdjiComment
   @Input() private readOnly: boolean = false
@@ -47,8 +48,6 @@ export class CommentComponent implements OnInit {
   @Output() commentUpdated: EventEmitter<any> = new EventEmitter()
   @Output() mobileActivation = new EventEmitter()
   @Output() mobileDeactivation = new EventEmitter()
-
-  private showDeleteModal: boolean = false
 
   constructor(
         private _projects: ProjectService,
@@ -126,7 +125,7 @@ export class CommentComponent implements OnInit {
 
   // Updates comment in db
   public updateComment(commentData: any): void {
-    this.reRecord_Audio = false
+    this.reRecordAudio = false
     if (commentData._id) {
       // this.comment.project_id, commentData, this.comment.start, this.comment.end, this.comment.type, this.comment.text, this.comment._id, this.comment.loc
       this.comment.data = commentData.data
@@ -202,7 +201,7 @@ export class CommentComponent implements OnInit {
     this.expandLine.emit(this.yPos)
   }
 
-  reRecordAudio(): void {
-    this.reRecord_Audio = true
-  }
+  // recordAudio(): void {
+  //   this.reRecordAudio = true
+  // }
 }

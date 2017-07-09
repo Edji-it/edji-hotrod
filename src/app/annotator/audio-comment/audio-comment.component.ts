@@ -19,6 +19,7 @@ export class AudioCommentComponent implements OnInit{
 
   private isPlaying: boolean = false
   private isRecording: boolean = false
+  private recordOverConfirmed: boolean = false
   private playTime: string = "0px"
   private playWidth: number = 82
   private myCanvas
@@ -54,10 +55,16 @@ export class AudioCommentComponent implements OnInit{
       // this.reRecord_Audio.emit(false)
       console.log('clear the track')
 
-      // var tracks = this.mediaRecorder.stream.getTracks();
-      // for (var i = 0; i < tracks.length; i++) {
-      //   tracks[i].stop();
-      // }
+      var track = this.mediaRecorder.stream.getTracks()[0]
+      console.log(track)
+      track.stop()
+      console.log(track)
+      this.chunks = []
+      // this.mediaRecorder.stream
+      // this.mediaRecorder.stream.removeTrack(track)
+      // var newTrack = new MediaStreamTrack
+      // this.mediaRecorder.stream.addTrack(newTrack)
+      this.initializeAudio()
     }
     if (!active && this.isRecording) {
       this.stopRecord()
@@ -68,17 +75,11 @@ export class AudioCommentComponent implements OnInit{
   }
 
   // Once we confirm that we're ready to delete and record new audio, let's do it
-  @Input() set reRecord(active) {
-    if (this.isInitialized && active) {
-      // this.intializeAudio()
-      console.log('re re re')
-      console.log(this.mediaRecorder.stream.getAudioTracks())
-      // if (this.mediaRecorder.stream.hasTrack()) {
-      //   this.mediaRecorder.stream.removeTrack()
-      // }
-      this.freshRecord()
-    } else {
-      
+  @Input() set recordNewAudio(confirmed) {
+    this.recordOverConfirmed = confirmed
+
+    if (this.isInitialized && this.recordOverConfirmed) {
+      this.record()
     }
   }
 
@@ -101,7 +102,6 @@ export class AudioCommentComponent implements OnInit{
       // Build the waveform
       this._comments.waveForm(this.comment.dataArray, this.myCanvas)
       this.isInitialized = true
-      console.log('initializing')
     } else {
       // Set the canvas properties and write temporary data
       this._comments.waveForm(this.waves, this.myCanvas)
@@ -111,10 +111,10 @@ export class AudioCommentComponent implements OnInit{
      * Will only load if the user creates an audio comment, or loads text with audio comments in it already
      * Both of which we need to get access granted in order to run 
      */
-    this.intializeAudio()
+    this.initializeAudio()
   }
 
-  public intializeAudio() {
+  public initializeAudio() {
     const onSuccess = stream => {
       // Initialize a MediaRecorder if access to the microphone is granted
       this.mediaRecorder = new MediaRecorder(stream)
@@ -212,9 +212,14 @@ export class AudioCommentComponent implements OnInit{
    * Call for audio deletion or call for a fresh recording sesh
    */
   private record() {
-    if (this.audio && this.audio.src && this.audio.src.length > 0) {
+    if (this.recordOverConfirmed) {
+      console.log('record over confirmed! fresh record!')
+      this.freshRecord()
+    } else if (this.audio && this.audio.src && this.audio.src.length > 0) {
+      console.log('show record over modal')
       this.showDeleteAudioModal.emit(true)
     } else {
+      console.log('default fresh record!')
       this.freshRecord()
     }
   }
@@ -249,7 +254,6 @@ export class AudioCommentComponent implements OnInit{
     clearInterval(this.rInterval)
     // this.playTime = '0px'
     this.mediaRecorder.stop()
-    console.log(this.mediaRecorder.stream)
   }
 
   /** 
@@ -278,11 +282,5 @@ export class AudioCommentComponent implements OnInit{
    */
   private restartPlayback() {
     this.audio.load()
-  }
-
-  /**
-   * Save the audio comment
-   */
-  saveAudioComment() {
   }
 }
