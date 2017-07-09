@@ -44,7 +44,7 @@ export class CommentService {
         gridScale: 5,
         gridColor: "transparent",
         data: waves,
-        colors: ["#000"],
+        colors: ["#555"],
         ctx: this.ctx
       }
     )
@@ -57,10 +57,20 @@ export class CommentService {
       }
 
       var maxValue = 0
+      var minValue = 0
 
       for (var bar in options.data){
-        maxValue = Math.max(maxValue,options.data[bar])
+        if (options.data[bar] < 0) {
+          options.data[bar] = Math.abs(options.data[bar])
+        }
+        maxValue = Math.max(maxValue, options.data[bar])
+        minValue = Math.min(minValue, options.data[bar])
       }
+
+      // let avgValue = (minValue + maxValue)/2
+      let lowerThird = (minValue + maxValue)/3
+      let midThird = lowerThird*2
+      
       var canvasActualHeight = options.canvas.height - options.padding * 2
       var canvasActualWidth = options.canvas.width - options.padding * 2
 
@@ -74,7 +84,13 @@ export class CommentService {
         if (val===0) {
             val = 4
         }
-        var barHeight = Math.round( canvasActualHeight * val/maxValue) 
+        if (val < lowerThird) {
+          val = val/2
+        } else if (val < midThird) {
+          val = val/1.5
+        }
+        var barHeight = Math.round( canvasActualHeight * (val/maxValue)) 
+        
         drawBar(
           options.ctx,
           options.padding + barIndex * barSize,
