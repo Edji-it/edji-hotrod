@@ -48,6 +48,10 @@ export class AudioCommentComponent implements OnInit{
   private countdownText: string = ''
   private countdownI: number = 3
   private countdownInterval: any
+  // private audioType: string = 'ogg'
+  // private audioTypeExt: string = 'ogg'
+  private audioType: string = 'mpeg'
+  private audioTypeExt: string = 'mp3'
 
   // We need to know when changes to inactive to clear the editing variable
   @Input() set active(active){
@@ -90,6 +94,7 @@ export class AudioCommentComponent implements OnInit{
     if (this.comment.url && this.comment.url.length > 0) {
       this.audio = new Audio()
       this.audio.src = this.comment.url
+      this.audio.preload = 'none'
       this.audio.load()
       this.playAble = true
       // Build the waveform
@@ -139,10 +144,10 @@ export class AudioCommentComponent implements OnInit{
         this.audio = new Audio()
 
         // Set the audio for playback via the blob object from the stored chunks
-        const blob = new Blob(this.chunks, { 'type': 'audio/ogg; codecs=opus' })
+        const blob = new Blob(this.chunks, { 'type': 'audio/' + this.audioType + '; codecs=opus' })
         
-        var file = new File([blob], 'my-audio.ogg', {
-            type: 'audio/ogg'
+        var file = new File([blob], 'my-audio.' + this.audioTypeExt, {
+            type: 'audio/' + this.audioType
         });
         
         this.audioFile = file

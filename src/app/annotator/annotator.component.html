@@ -54,6 +54,9 @@
 
 	<div class="article-wrap">
 		<div class="alert alert-warning alert-dismissible fade show" role="alert" *ngIf="audioSupportError">
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="audioSupportError = !audioSupportError">
+			<span aria-hidden="true">&times;</span>
+		</button>
 				The browser you are currently on does not currently support recording audio. However, your browser should still be able to playback existing audio comments.
 		</div>
         <!--Create components after load for reading-->

@@ -43,8 +43,10 @@ export class MediaService {
 
     uploadAudio(formData: any): Observable<any> {
         let uploadSource = new Subject();
-        let type = 'audio/ogg';
-        let name = 'my-audio.ogg';
+        // let type = 'audio/ogg';
+        // let name = 'my-audio.ogg';
+        let type = 'audio/mpeg';
+        let name = 'my-audio.mp3';
 
         this.http.get(this.imageService + '/sign-s3?file-name=' + name + '&file-type=' + type + '&file-path=audio')
             .subscribe((res) => {
