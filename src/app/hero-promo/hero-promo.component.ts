@@ -17,7 +17,7 @@ export class HeroPromoComponent implements OnInit {
   constructor(private _auth: AuthService) { }
 
   ngOnInit() {
-    this.countDownDate = new Date("Aug 1, 2017 05:00:00").getTime()
+    this.countDownDate = new Date("Aug 15, 2017 05:00:00").getTime()
 
     // kick off countdown
     this.incrementer()
