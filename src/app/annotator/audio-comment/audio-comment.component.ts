@@ -48,10 +48,10 @@ export class AudioCommentComponent implements OnInit{
   private countdownText: string = ''
   private countdownI: number = 3
   private countdownInterval: any
-  // private audioType: string = 'ogg'
-  // private audioTypeExt: string = 'ogg'
-  private audioType: string = 'mpeg'
-  private audioTypeExt: string = 'mp3'
+  private audioType: string = 'ogg'
+  private audioTypeExt: string = 'ogg'
+  // private audioType: string = 'aac'
+  // private audioTypeExt: string = 'aac'
 
   // We need to know when changes to inactive to clear the editing variable
   @Input() set active(active){
@@ -96,6 +96,7 @@ export class AudioCommentComponent implements OnInit{
       this.audio.src = this.comment.url
       this.audio.preload = 'none'
       this.audio.load()
+      console.log(this.audio)
       this.playAble = true
       // Build the waveform
       this._comments.waveForm(this.comment.dataArray, this.myCanvas)
@@ -144,7 +145,8 @@ export class AudioCommentComponent implements OnInit{
         this.audio = new Audio()
 
         // Set the audio for playback via the blob object from the stored chunks
-        const blob = new Blob(this.chunks, { 'type': 'audio/' + this.audioType + '; codecs=opus' })
+        //var binary = this.convertDataURIToBinary(this.chunks)
+        const blob = new Blob(this.chunks, { 'type': 'audio/' + this.audioType + '; codecs="aac"' })
         
         var file = new File([blob], 'my-audio.' + this.audioTypeExt, {
             type: 'audio/' + this.audioType
