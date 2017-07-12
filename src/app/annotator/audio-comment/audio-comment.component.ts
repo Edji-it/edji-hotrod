@@ -96,7 +96,6 @@ export class AudioCommentComponent implements OnInit{
       this.audio.src = this.comment.url
       this.audio.preload = 'none'
       this.audio.load()
-      console.log(this.audio)
       this.playAble = true
       // Build the waveform
       this._comments.waveForm(this.comment.dataArray, this.myCanvas)
@@ -306,6 +305,6 @@ export class AudioCommentComponent implements OnInit{
   }
 
   private audioError() {
-    console.log('this device is not supported for audio recording')
+    // console.log('this device is not supported for audio recording')
   }
 }

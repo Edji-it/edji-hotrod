@@ -57,7 +57,9 @@
 		<button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="audioSupportError = !audioSupportError">
 			<span aria-hidden="true">&times;</span>
 		</button>
-				The browser you are currently on does not currently support recording audio. However, your browser should still be able to playback existing audio comments.
+				The browser you are on does not currently support recording audio. Audio comment playback may also be affected on some browsers. 
+				The recommended browser for audio comments is the <a href="https://www.google.com/chrome/browser/desktop/" target="_blank">Google Chrome Web Browser</a> 
+				for your desktop device.
 		</div>
         <!--Create components after load for reading-->
 		<article id="annotatorContent" class="content active-content pt-4" (mouseup)="showCommentOptions($event)" (touchend)="showCommentOptions($event)" (clickOutside)="hideCommentOptions()">
