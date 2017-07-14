@@ -157,6 +157,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                     // Check if audio is supported
                     if (this.project.types.indexOf('audio') > -1 && !navigator.getUserMedia) {
                         this.audioSupportError = true
+                        // if audio is not supported, let analytics know
+                        this.angulartics.eventTrack.next({ action: 'audioSupport', properties: { category: 'heroFeature', label: 'failure' }})
                     }
                 }
             },

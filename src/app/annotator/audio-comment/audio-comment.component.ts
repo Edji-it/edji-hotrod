@@ -1,3 +1,4 @@
+import { Angulartics2 } from 'angulartics2/dist';
 import { CommentService } from '../../shared/comment.service';
 import { MediaService } from '../../shared/media.service'
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core'
@@ -82,7 +83,8 @@ export class AudioCommentComponent implements OnInit{
   constructor(
     private _media: MediaService,
     private el: ElementRef,
-    private _comments: CommentService
+    private _comments: CommentService,
+    private angulartics: Angulartics2
   ) {
     
   }
@@ -231,6 +233,8 @@ export class AudioCommentComponent implements OnInit{
    * Record Audio from the user's microphone
    */
   private freshRecord() {
+    // Let analytics know a recording started
+    this.angulartics.eventTrack.next({ action: 'audioRecord', properties: { category: 'heroFeature', label: 'success' }})
     this.countdownText = '----- 3 -----'
     this.countdown = true
     this.countdownInterval = setInterval(()=> {
@@ -269,6 +273,8 @@ export class AudioCommentComponent implements OnInit{
    * Pause playback of the audio track
    */
   private pause() {
+    // Let analytics know user paused playback
+    this.angulartics.eventTrack.next({ action: 'audioPause', properties: { category: 'heroFeature', label: 'success' }})
     this.isPlaying = false
     // clearInterval(this.pInterval)
     // this.playTime = '0px'
@@ -279,6 +285,8 @@ export class AudioCommentComponent implements OnInit{
    * Start playback of the audio track
    */
   private play() {
+    // Let analytics know user started playback
+    this.angulartics.eventTrack.next({ action: 'audioPlay', properties: { category: 'heroFeature', label: 'success' }})
     this.recordAble = false
     this.isPlaying = true
     this.isRecording=false
@@ -294,6 +302,8 @@ export class AudioCommentComponent implements OnInit{
    * Set the playback back to the beginning #back2basics
    */
   private restartPlayback() {
+    // Let analytics know user restarted playback
+    this.angulartics.eventTrack.next({ action: 'audioRestart', properties: { category: 'heroFeature', label: 'success' }})
     this.audio.load()
   }
 
