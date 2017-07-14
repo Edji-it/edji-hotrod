@@ -1,11 +1,11 @@
 <div [ngClass]="{'active' : comment.active}" class='audio-comment-input-wrapper input-wrap'>
     <div class="audio-btn-wrap" [class.fade-out]="!comment.active">
         <button class="btn-audio" [class.disabled]="!playAble">
-            <i [class.hide]="isPlaying" class="icon-play" (click)="play()"></i>
-            <i [class.hide]="!isPlaying" class="icon-pause" (click)="pause()"></i>
+            <i id="audioPlay" [class.hide]="isPlaying" class="icon-play" (click)="play()"></i>
+            <i id="audioPause" [class.hide]="!isPlaying" class="icon-pause" (click)="pause()"></i>
         </button>
-        <button class="btn-audio" (click)="isRecording=false; isPlaying=false; restartPlayback()"><i class="icon-restart"></i></button>
-        <button [class.hide]="userPermission < 5" class="btn-audio btn-record" (click)="isRecording ? stopRecord() : record()" [class.disabled]="!recordAble"><i class="icon icon-mic"></i></button>
+        <button id="audioRestart" class="btn-audio" (click)="isRecording=false; isPlaying=false; restartPlayback()"><i class="icon-restart"></i></button>
+        <button id="audioRecord" [class.hide]="userPermission < 5" class="btn-audio btn-record" (click)="isRecording ? stopRecord() : record()" [class.disabled]="!recordAble"><i class="icon icon-mic"></i></button>
     </div>
     <!--<canvas class="wave-form" id="{{comment._id}}"></canvas>-->
     <div class="wave-wrap" [style.width]="playWidth + 'px'">
