@@ -48,6 +48,7 @@ export class CommentComponent implements OnInit {
   @Output() commentUpdated: EventEmitter<any> = new EventEmitter()
   @Output() mobileActivation = new EventEmitter()
   @Output() mobileDeactivation = new EventEmitter()
+  @Output() commentReply = new EventEmitter()
 
   constructor(
         private _projects: ProjectService,
@@ -68,18 +69,11 @@ export class CommentComponent implements OnInit {
   toggleActive( ): void {
       if (!this.readOnly) {
         if (this.active === true) {
-            //if (window.screen.availWidth < 768) {
-              //this.mobileCommentDone()
-            //}
             this.active = false
             this.commentActivation.emit(false)
             // Save when comment is toggled away from
             this.updateComment(this.comment.data)
         } else {
-            //if (window.screen.availWidth < 768) {
-              //this.mobileCommentFix()
-              //console.log('toggleActivate')
-            //}
             this.active = true 
             this.commentActivation.emit(true)
         }
@@ -200,8 +194,4 @@ export class CommentComponent implements OnInit {
   expand(): void {
     this.expandLine.emit(this.yPos)
   }
-
-  // recordAudio(): void {
-  //   this.reRecordAudio = true
-  // }
 }

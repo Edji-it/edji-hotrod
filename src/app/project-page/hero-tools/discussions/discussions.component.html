@@ -1,0 +1,11 @@
+<!--Discussions Pane-->
+<div *ngIf="currentReading && currentReading.words" class="sliding-pane from-left" [ngClass]="{ 'slide-in' : visible }">
+  <div class="container-fluid container--less-pad">
+    <h4>Discussions
+      <button (click)="hide.emit()" class="close stats-close-btn btn-icon--round" type="button">
+            <span aria-hidden="true">×</span>
+      </button>
+    </h4>
+    <!--<hot-firecard *ngFor="let fireComment of project.comments" [fireComment]="fireComment"></hot-firecard>-->
+  </div>
+</div>

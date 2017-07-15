@@ -11,7 +11,7 @@
         <text-comment (tap)="activate()" [readOnly]="readOnly" [preview]="preview" *ngIf="comment.type == 'text'" [comment]="comment" #commentInput (blur)="deactivate()" [active]="comment.active"></text-comment>
         <audio-comment (tap)="activate()" *ngIf="comment.type == 'audio'" [comment]="comment" #commentInput (save)="deactivate($event)" [active]="comment.active" [recordNewAudio]="reRecordAudio" (showDeleteAudioModal)="showDeleteAudioModal = true" [userPermission]="userPermission"></audio-comment>
         <button *ngIf="userPermission >= 3" (tap)="userPermission > 3 ? deleteComment(comment) : showDeleteModal = true" class='inline-delete'>+</button>
-        <div class="reply" (click)="replyAlert()"><p class="text-left reply-text-left">Reply</p><span class="text-right "><p class="reply-text-right">4</p><img class="reply-icon" src="assets/images/icon-comment-white.svg"/></span></div>
+        <div class="reply" (click)="commentReply.emit()"><p class="text-left reply-text-left">Reply</p><span class="text-right "><p class="reply-text-right">4</p><img class="reply-icon" src="assets/images/icon-comment-white.svg"/></span></div>
     </div>
     <div *ngIf="comment.active" class="comment__save" (tap)="deactivate()" [innerHtml]="':white_check_mark:' | emojione"></div>
     <i class="comment__saved" [innerHtml]='":ok_hand:" | emojione'></i>

@@ -37,6 +37,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     
     private commentsByIndex: EdjiComment[][] = []
     private fireComments: EdjiComment[] = []
+    private showDiscussions = false
 
     private highlightArray: number[] = []
     private alwaysHighlightArray: number[] = []
@@ -919,6 +920,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         } else {
             return this.activeComment && (!this.activeComment.type || this.activeComment.type === 'emoji') && this.activeComment.active && this.activeComment.user_id === this.user._id
         }
+    }
+
+    private discReplyFire() {
+        console.log("discussions")
     }
 }
 

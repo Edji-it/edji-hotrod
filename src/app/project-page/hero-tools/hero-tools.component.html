@@ -1,0 +1,10 @@
+<div *ngIf="currentProject && user['hero']" class="hero-bar">
+  <label class="bar-title">Hero</label>
+
+  <!--Discussions toggle-->
+  <button type="button" class="btn hero-tools__btn btn-hv" (tap)="showDiscussions = !showDiscussions">
+    <i id="toggleDiscussions" *ngIf="currentProject" class="icon-fire-feed"></i>
+    <label>Feed</label>
+  </button>
+</div>
+
