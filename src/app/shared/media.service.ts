@@ -41,13 +41,18 @@ export class MediaService {
         return uploadSource.asObservable();
     } // uploadImage(file: File): Observable<any>
 
-    uploadAudio(file: File): Observable<any> {
+    uploadAudio(formData: any): Observable<any> {
         let uploadSource = new Subject();
-        this.http.get(this.imageService + '/sign-s3?file-name=' + file.name + '&file-type=' + file.type + '&file-path=audio')
+        let type = 'audio/ogg';
+        let name = 'my-audio.ogg';
+        // let type = 'audio/aac';
+        // let name = 'my-audio.aac';
+
+        this.http.get(this.imageService + '/sign-s3?file-name=' + name + '&file-type=' + type + '&file-path=audio')
             .subscribe((res) => {
                 let s3data = res.json();
                 
-                this.http.put(s3data.signedRequest, file)
+                this.http.put(s3data.signedRequest, formData)
                     .subscribe(res => {
                         uploadSource.next({ url: s3data.url });
                     }, error => {

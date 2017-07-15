@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 
-import { ProjectService } from './../../shared';
+import { AuthService, ProjectService } from './../../shared';
 
 @Component({
   selector: 'hot-add-project-modal',
@@ -15,16 +15,26 @@ export class AddProjectModal implements OnInit {
   private projectForm: FormGroup
   private formSubmitted: boolean = false;
   private errors: { serviceError ?: boolean } = {};
+  private commentTypes: any = []
 
-  constructor(private _projects: ProjectService, _fb: FormBuilder) {
+  constructor(
+    private _projects: ProjectService, 
+    _fb: FormBuilder,
+    private _auth: AuthService
+    ) {
     this.projectForm = _fb.group({
       label: [null, Validators.required],
       emojiType: true,
-      textType: true
+      textType: true,
+      audioType: true
     });
   }
 
-  ngOnInit() { console.log(this.reading); }
+  ngOnInit() { 
+    console.log(this.reading); 
+    // Get authorized comment types
+    this.commentTypes = this._auth.getAllowedCommentTypes()
+  }
 
   /**
    * Create a fresh Project for a given Reading, then push it back to the dashboard
@@ -40,6 +50,7 @@ export class AddProjectModal implements OnInit {
     let types = [];
     if (formValue.emojiType) { types.push("emoji"); }
     if (formValue.textType) { types.push("text"); }
+    if (formValue.audioType) { types.push("audio"); }
 
     this._projects.create(this.reading._id, { 'label' : formValue.label, 'types' : types } )
       .subscribe( project => {

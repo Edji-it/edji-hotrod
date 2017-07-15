@@ -175,3 +175,58 @@
     background-image: url('/assets/images/loading-smaller-dark.svg') !important;
     background-size: 100% 100% !important;
 }
+
+.icon-mic {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    background: url('/assets/images/icon-mic.svg');
+    background-size: 100% 100%;
+    background-position: center center;
+    cursor: pointer;
+}
+
+.icon-mic--white {
+    @extend .icon-mic;
+    background: url('/assets/images/icon-mic--white.svg');
+}
+
+.icon-pause {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background: url('/assets/images/icon-pause.svg');
+    background-size: 100% 100%;
+    background-position: center center;
+    cursor: pointer;
+}
+
+.icon-play {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background: url('/assets/images/icon-play.svg');
+    background-size: 100% 100%;
+    background-position: center center;
+    cursor: pointer;
+}
+
+.icon-rec-text {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background: url('/assets/images/icon-rec-text.svg');
+    background-size: 100% 100%;
+    background-position: center center;
+    cursor: pointer;
+}
+
+.icon-restart {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background: url('/assets/images/icon-restart.svg');
+    background-size: 100% 100%;
+    background-position: center center;
+    cursor: pointer;
+}

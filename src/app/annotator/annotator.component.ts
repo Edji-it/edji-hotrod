@@ -104,6 +104,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     private annotatorContent: Element
 
     private window: any
+    private audioSupportError: boolean = false
 
     constructor(
         private _readings: ReadingService,
@@ -153,6 +154,12 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             (project) => {
                 if (project) {
                     this.project = project
+                    // Check if audio is supported
+                    if (this.project.types.indexOf('audio') > -1 && !navigator.getUserMedia) {
+                        this.audioSupportError = true
+                        // if audio is not supported, let analytics know
+                        this.angulartics.eventTrack.next({ action: 'audioSupport', properties: { category: 'heroFeature', label: 'failure' }})
+                    }
                 }
             },
             (error) => {
@@ -472,8 +479,17 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
         this.angulartics.eventTrack.next({ action: type + 'CommentCreate', properties: { category: 'projectAction', label: 'attempt' }})
         
+        let comment = <EdjiComment>{
+            project_id: projectId,
+            data: '',
+            start: start,
+            end: end,
+            type: type,
+            loc: this.imageCoords
+        }
+
         // Tell server we've added a comment
-        this._projects.saveComment(projectId, '', start, end, type, text, null, this.imageCoords)
+        this._projects.saveComment(comment)
             .then(comment => {
                 // We add the comment from the service because it has an Id
                 if (comment._id) {
@@ -667,10 +683,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     }
 
     /** 
-     * Add Comment of Emoji type
+     * Add Comment of type
      * - Fired from comment options tooltip
      */
-    addEmojiComment(event): void {
+    addCommentOfType(type: string): void {
         // Get selection indices
         let span = this.getSelectionSpan()
         if ( !(span.start >= 0) || !(span.end >= 0)) {
@@ -681,26 +697,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.incrementHighlights(true, span.start, span.end)
 
         // Tell the server we've got a comment!
-        this.createComment(span.start, span.end, 'emoji')
-    }
-
-    /** 
-     * Add Comment of Emoji type
-     * - Fired from comment options tooltip
-     */
-    addTextComment(event): void {
-        // Get selection indices
-        let span = this.getSelectionSpan()
-
-        if ( !(span.start >= 0) || !(span.end >= 0)) {
-            return
-        }
-        
-        // Increment highlight array
-        this.incrementHighlights(true, span.start, span.end)
-
-        // Tell the server we've got a comment!
-        this.createComment(span.start, span.end, 'text')
+        this.createComment(span.start, span.end, type)
     }
 
     /**
@@ -917,7 +914,11 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      * Decides if the Emoji Keyboard is active
      */
     private isEmojiKeyboardActive() : boolean {
-        return this.activeComment && this.activeComment.active && (!this.activeComment.type || this.activeComment.type === 'emoji') && this.activeComment.user_id === this.user._id
+        if (this.activeComment.type !== 'emoji') {
+            return false
+        } else {
+            return this.activeComment && (!this.activeComment.type || this.activeComment.type === 'emoji') && this.activeComment.active && this.activeComment.user_id === this.user._id
+        }
     }
 }
 
