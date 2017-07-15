@@ -1,6 +1,5 @@
 <nav-bar [showProjectInfo]="true"></nav-bar>
 <owner-tools></owner-tools>
-<hero-tools></hero-tools>
 <div class="container-fluid">
   <div class="project-column" [ngClass]="{ loading: !project._id }">
     <p class="alert alert-danger" *ngIf="error">{{ error }}</p>

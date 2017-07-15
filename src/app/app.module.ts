@@ -47,7 +47,7 @@ import { LoginForm, GuestForm } from './forms';
 
 import { LoginModal, ResetPassComponent, DeleteCommentModal, DeleteAudioModal, DeleteReadingModal, DeleteProjectModal, AddProjectModal, LoginRequiredModal } from './modals';
 import { AnnotatorComponent, CommentComponent, TextCommentComponent, EmojiCommentComponent, EmojiKeyboardComponent, AudioCommentComponent } from './annotator';
-import { ProjectPageComponent, ProjectInfoComponent, OwnerToolsComponent, LeaderboardComponent, HeroToolsComponent } from './project-page';
+import { ProjectPageComponent, ProjectInfoComponent, OwnerToolsComponent, LeaderboardComponent } from './project-page';
 import { FirefeedComponent } from './project-page/owner-tools/firefeed/firefeed.component';
 import { FirecardComponent } from './project-page/owner-tools/firefeed/firecard/firecard.component';
 import { DiscussionsComponent } from './project-page/hero-tools/discussions/discussions.component';
@@ -140,7 +140,6 @@ type StoreType = {
     ProjectPageComponent,
     ProjectInfoComponent,
     OwnerToolsComponent,
-    HeroToolsComponent,
     LoginRequiredModal,
     TutorialBoxComponent,
     DashboardComponent,
