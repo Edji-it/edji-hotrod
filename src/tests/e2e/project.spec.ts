@@ -70,7 +70,6 @@ describe('Project Page', () => {
         it("should make emoji comment as logged in user", () => {
 
             let emojiKeyboard = element(by.css('emoji-keyboard'));
-            let emojiCommentSave = element(by.css('.comment.active .comment__save'));
             let grinningEmoji = emojiKeyboard.element(by.css("[dataname=':grinning:'"));
 
             // Code for making a comment
@@ -102,7 +101,7 @@ describe('Project Page', () => {
             emojiKeyboard.element(by.css("[dataname=':dollar:'")).click();
 
             // Save emoji comment
-            emojiCommentSave.click();
+            project.emojiCommentSave.click();
         });
 
         it("should make a comment on an image", () => {
@@ -134,7 +133,69 @@ describe('Project Page', () => {
         });
     });
 
+    describe("AudioCommenting", () => {
+        beforeAll(() => {
+            project.getAudioPage();
+            // Login
+            guestForm.loginAsGuest();
+            browser.wait(EC.elementToBeClickable(sidebar.logOutButton));
+        });
 
+        afterAll(() => {
+            // log out
+            browser.wait(EC.elementToBeClickable(sidebar.logOutButton), 5000, "never found the logout button");
+            sidebar.logOutButton.click();
+        });
+
+        it("should make audio comment as logged in user", () => {
+            // need to navigate to the audio-specific page
+            project.getAudioPage();
+            // Code for making an audio comment
+            // Find text to select
+            browser.wait(EC.elementToBeClickable(element(by.css(".w[index='18']"))), 10000, "never found words to click on");
+
+            // Select Text to comment on (should select 'world is')
+            browser.executeScript(function () {
+                let range = document.createRange();
+                let sel = window.getSelection();
+                range.setStart(document.body.querySelector(".w[index='12']").childNodes[0], 0);
+                range.setEnd(document.body.querySelector(".w[index='14']").childNodes[0], 0);
+                sel.removeAllRanges();
+                sel.addRange(range);
+            });
+
+            // Add audio comment
+            browser.wait(EC.elementToBeClickable(project.addAudioBtn), 5000, "never found the add audio comment button");
+            project.addAudioBtn.click();
+
+            // Wait 5 seconds for record button to become clickable and click the record audio button to start recording
+            browser.wait(EC.elementToBeClickable(project.audioRecord), 5000, "never found the record audio button");
+            project.audioRecord.click();
+
+            // wait 5 seconds for the audio to record
+            browser.sleep(5000)
+
+            // click the record audio button to end recording
+            browser.wait(EC.elementToBeClickable(project.audioRecord), 5000, "never found the record audio button");
+            project.audioRecord.click();
+
+            // wait 5 seconds for the play audio button to become clickable
+            browser.wait(EC.elementToBeClickable(project.audioPlay), 5000, "never found the play audio button");
+            project.audioPlay.click();
+
+            // wait 5 seconds for the pause button to become active
+            browser.wait(EC.elementToBeClickable(project.audioPause), 5000, "could not pause the audio comment");
+            project.audioPause.click();
+
+            // wait 5 seconds for the restart button to become active
+            browser.wait(EC.elementToBeClickable(project.audioRestart), 5000, "could not restart the audio comment");
+            project.audioRestart.click();
+
+            // Delete the audio comment
+            browser.wait(EC.elementToBeClickable(project.commentDelete), 5000, "could not find delete button");
+            project.commentDelete.click();
+        });
+    });
      
 }); // describe 'Dashboard Page'
   

@@ -3,5 +3,6 @@ export * from './reset-pass/reset-pass.component'
 export * from './del-comment/del-comment.component'
 export * from './add-project/add-project.component'
 export * from './login-required/login-required'
-export * from './del-reading/del-reading.component';
-export * from './del-project/del-project.component';
+export * from './del-reading/del-reading.component'
+export * from './del-project/del-project.component'
+export * from './del-audio/del-audio.component'

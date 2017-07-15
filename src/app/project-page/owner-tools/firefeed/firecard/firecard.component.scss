@@ -95,3 +95,16 @@ $fireBoundVPad: 40px;
     border-top: none;
     padding: 0px;
 }
+
+.fireCard-audio {
+    height: 32px;
+    padding: 0px !important;
+}
+
+.btn-fc-audio {
+    float: left;
+}
+
+.wave-wrap {
+    width: calc(100% - 48px);
+}

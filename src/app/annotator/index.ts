@@ -1,5 +1,6 @@
 export * from './annotator.component'
 export * from './text-comment'
 export * from './emoji-comment'
+export * from './audio-comment'
 export * from './emoji-keyboard'
 export * from './comment/comment.component'
