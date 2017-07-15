@@ -5,3 +5,4 @@ export * from './add-project/add-project.component'
 export * from './login-required/login-required'
 export * from './del-reading/del-reading.component';
 export * from './del-project/del-project.component';
+export * from './hero-subscribe/hero-subscribe.component';

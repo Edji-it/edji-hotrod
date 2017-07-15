@@ -46,10 +46,21 @@
             <label for="inputPassword" class="info-label">Email</label>
         </div>
 
+        <!--Hero Subscription Mgmt-->
+        <div class="info-group">
+            <p class="info">
+                <span class="text-capitalize">{{currentUser.hero.status ? currentUser.hero.status : 'Unsubscribed'}}</span>
+                <button *ngIf="currentUser.hero.status !== 'unsubscribed'" class="btn btn-secondary ml-4">Modify Subscription</button>
+                <button *ngIf="currentUser.hero.status == 'unsubscribed'" class="btn btn-hero ml-4" (click)="showHeroSubModal = true">Go Hero</button>
+            </p>
+            <label for="inputPassword" class="info-label">Hero Subscription</label>
+        </div>
+
         <!-- Reading on Edji since -->
         <div class="info-group">
             <h4 class="faded">Reading on Edji since {{currentUser.createdAt | edjidate:'timeStamp':'mediumDate'}}</h4>
         </div>  
+        
     </div>
 
     <!-- Third Column -->
@@ -65,3 +76,4 @@
 </div>
 <edji-change-pass class="modal-will-fade" [class.show]="showPassModal" (closeModal)="showPassModal = !showPassModal"></edji-change-pass>
 <hot-upload-avatar class="modal-will-fade" [class.show]="showUploadProfPicModal" (closeModal)="showUploadProfPicModal = !showUploadProfPicModal"></hot-upload-avatar>
+<hero-subscribe-modal class="modal-will-fade" [class.show]="showHeroSubModal" (closeModal)="showHeroSubModal = !showHeroSubModal"></hero-subscribe-modal>
