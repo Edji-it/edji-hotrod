@@ -48,6 +48,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     private lineCountRunning: boolean = false
 
     private activeComment: EdjiComment = <EdjiComment>{}
+    private replyComment: EdjiComment = <EdjiComment>{}
     
     private lineExpanded: boolean = false
     private showCommentCounts: boolean = false
@@ -922,8 +923,13 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         }
     }
 
-    private discReplyFire() {
-        console.log("discussions")
+    private discReplyFire(comment) {
+        setTimeout(() => {
+            // comment.active = true
+        }, 500)
+        console.log(comment)
+        this.replyComment = comment
+        this.showDiscussions = true
     }
 }
 

@@ -27,6 +27,10 @@ $navOffset: 60px;
     }
     @media(min-width: $tablet) {
         width:  273px !important;
+
+        &.replies {
+            min-width: 308px !important;
+        }
     }
     // @media(min-width: $desktop and max-width: 1060px) {
 
@@ -52,9 +56,38 @@ $navOffset: 60px;
     &.slide-in {
         transform: translate3d(0, 0, 0);
     }
+
+    &.replies {
+        overflow-y: hidden;
+    }
 }
 
 .user-list-item {
     font-family: 'Open Sans';
     margin: 6px 0px;
+}
+
+.user-icon {
+    height: 25px;
+    width: 25px;
+    border-radius: 50%;
+    background: #CFCFCF;
+    text-align: center;
+    float: left;
+    margin-right: 10px;
+
+    &--light {
+        @extend .user-icon;
+        background: #f0f0f0;
+    }
+}
+
+.user-icon span {
+    font-family: 'Open Sans';
+    font-weight: 500;
+    color: #fff;
+    line-height: 25px;
+    font-size: 10px;
+    vertical-align: middle;
+    text-transform: uppercase;
 }

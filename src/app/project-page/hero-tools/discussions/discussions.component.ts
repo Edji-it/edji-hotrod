@@ -1,4 +1,4 @@
-import { Project, Reading } from '../../../shared/datatypes';
+import { EdjiComment, Project, Reading } from '../../../shared/datatypes';
 import { Subscription } from 'rxjs/Rx';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 
@@ -14,6 +14,7 @@ import { ReadingService } from '../../../shared/reading.service';
 
 export class DiscussionsComponent implements OnInit, OnDestroy {
   @Input() visible: boolean = false
+  @Input() comment: EdjiComment
   @Output() hide: EventEmitter<any> = new EventEmitter()
 
   private project: Project
@@ -30,6 +31,7 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
     this.subscriptions.push( this._readings.currentReading.subscribe(
       reading => {
         this.currentReading = reading;
+        console.log(this.currentReading)
       },
       error => {
         console.error(error);
@@ -46,6 +48,7 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
         console.error(error)
       }
     ) )
+    console.log(this.comment)
   }
 
   ngOnDestroy() {
