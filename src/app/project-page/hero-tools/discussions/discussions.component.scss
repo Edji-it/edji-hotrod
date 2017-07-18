@@ -47,9 +47,17 @@
   width: calc(100% - 66px);
 }
 
+.replyCommentInputBlock {
+  bottom: 0;
+  position: absolute;
+  height: auto;
+  width: calc(100% - 108px);
+  left: -15px;
+}
+
 // $replyContainerHeight: 209px;
 // $replyContainerHeight: 250px;
-$replyContainerHeight: 200px;
+$replyContainerHeight: 203px;
 
 .replyOverflow {
   overflow-y: auto;

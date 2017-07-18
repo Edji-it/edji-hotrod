@@ -31,6 +31,7 @@ export class CommentComponent implements OnInit {
   @Input() private readOnly: boolean = false
   @Input() private replyRef: boolean = false
   @Input() private reply: boolean = false
+  @Input() private commentLite: boolean = false
   @Input() private userPermission: number = CommentPermissions.READ
   @Input()
   set isActive(isActive: boolean) {

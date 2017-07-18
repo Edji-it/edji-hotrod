@@ -1,3 +1,4 @@
+import { Angulartics2 } from 'angulartics2/dist';
 import { EdjiComment, Project, Reading } from '../../../shared/datatypes';
 import { Subscription } from 'rxjs/Rx';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
@@ -23,7 +24,8 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
 
   constructor(
     private _projects: ProjectService, 
-    private _readings: ReadingService
+    private _readings: ReadingService,
+    private angulartics: Angulartics2
   ) { }
 
   ngOnInit() {
@@ -53,5 +55,69 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe() })
+  }
+
+  /** 
+   * Add Comment of type
+   * - Fired from comment options tooltip
+   */
+  addReplyOfType(type: string): void {
+    // Get original comment id
+    
+
+    // Tell the server we've got a comment!
+    this.createReplyComment(type)
+  }
+
+  /**
+   * Create a Comment of any Type
+   * Requires three parameters, and finds the other information it needs
+   * @param type What kind of reply comment: emoji, text...
+   */
+  createReplyComment(type: string): void {
+    // We need to make sure they aren't already editing a comment
+    // this.inactivateComment()
+
+    let projectId = this.project._id
+    let commentId = this.comment._id
+    // let text: string = ''
+    // for (var i = start; i <= end; i++) {
+    //   text += this.reading.words[i].str
+    // }
+
+    this.angulartics.eventTrack.next({ action: type + 'ReplyCreate', properties: { category: 'heroFeature', label: 'attempt' }})
+    
+    let replyComment = <EdjiComment>{
+      project_id: projectId,
+      // originalComment_id: commentId,
+      data: '',
+      type: type
+    }
+
+    console.log('Add new ' + type + ' comment')
+
+    // Tell server we've added a comment
+    this._projects.saveReply(replyComment)
+      .then(replyComment => {
+        // We add the comment from the service because it has an Id
+        if (replyComment._id) {
+          this.angulartics.eventTrack.next({ action: type + 'ReplyCreate', properties: { category: 'heroFeature', label: 'attempt' }})
+
+          // Add setting to trigger focus on new comment
+          replyComment.new = true // this is basically to tell our test cases which comment was just made
+          console.log(replyComment)
+          // this.inactivateComment()
+          // this.commentsByIndexAdd(comment, start)
+        } else {
+          console.warn('Didn\'t get a reply comment back from server!')
+        }
+      })
+      .catch(error => {
+        // TRACK EXCEPTION
+        this.angulartics.eventTrack.next({ action: type + 'ReplyCreate', properties: { category: 'heroFeature', label: 'failure' }})
+        // We should figure out how to handle this properly!
+        // Maybe show a warning icon?
+        console.warn(error)
+      })
   }
 }

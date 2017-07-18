@@ -1,9 +1,9 @@
 <!--Desktop Comment Rendering-->
 <div class="comment" [class.new]="comment.new" [class.saved]="justSaved" [class.active]="active" [class.readonly]="readOnly" [ngClass]="[ expanded ? 'expanded' : '', active ? 'comment__show' : '', reply ? 'replyComment' : 'hidden-md-down line-count-' + lineCount ]">
-    <div class='expand-comments' (tap)='expanded ? collapse() : expand()' [ngClass]="comment.type == 'emoji' ? 'cmtEmoji' : 'cmtText'">
+    <div *ngIf="!commentLite" class='expand-comments' (tap)='expanded ? collapse() : expand()' [ngClass]="comment.type == 'emoji' ? 'cmtEmoji' : 'cmtText'">
         <div *ngIf="lineCount == 1 && expanded" class='hidden-lg-up expand__arrow-left'></div>
     </div>
-    <div *ngIf='comment.author' [ngClass]="[ reply ? 'replyUsername' : '' ]" class='comment-username'>{{comment.author}}
+    <div *ngIf='comment.author && !commentLite' [ngClass]="[ reply ? 'replyUsername' : '' ]" class='comment-username'>{{comment.author}}
         <span *ngIf="reply && replyRef" class="comment__time text-right">&nbsp;{{ comment.createdAt | edjidate:'timeAgo':null:secondsAgo }}</span>
         <span *ngIf="reply && !replyRef" class="comment__time text-right">&nbsp;{{ comment.updatedAt | edjidate:'timeAgo':null:secondsAgo }}</span>
     </div>

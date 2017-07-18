@@ -358,4 +358,52 @@ export class ProjectService {
             this._auth.getOptions()
         ) //this.http.put
     } // public addUserToProject(projectId: string): Observable<any>
+
+    /** 
+     * Update or Create a comment on a project
+     * @param projectId Id of project comment is on
+     * @param commentText Contents of the comment
+     * @param start Index of first word
+     * @param end Index of last word
+     * @param text (optional) Selection of text comment was made on. Left as optional, but SHOULD be passed.
+     * @param commentId (optional) If passed, will update comment with that ID
+     */
+    public saveReply(commentObj: EdjiComment) : Promise<any> {
+        let comment = Object.assign({}, commentObj)
+        // Clean frontend only properties
+        delete comment['active']
+        delete comment['new']
+        delete comment['showAvatar']
+        
+        let url = this._auth.getUrl() + '/projects/' + comment.project_id + '/comments';
+        if (!comment.user_id) {
+            comment.user_id = this._auth.getUser()._id
+        }
+        if (!comment.author) {
+            comment.author = this._auth.getUser().fullname ? this._auth.getUser().fullname : this._auth.getUser().username
+        }
+
+        let options = this._auth.getOptions()
+        let data = { comment: comment }
+        // Add comment ID if passed
+        // Tell other Project viewers comment changed, using Socket
+        if (comment._id) {
+            data.comment['_id'] = comment._id;
+            url = url + '/' + comment._id
+            options['method'] = 'PUT'
+            // this._socket.updateComment(data.comment, 'UPDATE', this.project._id);
+        } else {
+            options['method'] = 'POST'
+            // this._socket.updateComment(data.comment, 'CREATE', this.project._id);
+        }
+
+        options['body'] = data
+
+        // return this.http
+        //     .request(url, options)
+        //     .toPromise()
+        //     .then(this._auth.extractData)
+        //     .then((data) => { return data.comment; })
+        return Promise.resolve(data.comment)
+    } // public saveReply
 } // class
