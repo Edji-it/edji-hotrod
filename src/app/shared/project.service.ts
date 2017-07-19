@@ -368,7 +368,7 @@ export class ProjectService {
      * @param text (optional) Selection of text comment was made on. Left as optional, but SHOULD be passed.
      * @param commentId (optional) If passed, will update comment with that ID
      */
-    public saveReply(commentObj: EdjiComment) : Promise<any> {
+    public saveReplyHolder(commentObj: EdjiComment) : Promise<any> {
         let comment = Object.assign({}, commentObj)
         // Clean frontend only properties
         delete comment['active']
@@ -399,11 +399,24 @@ export class ProjectService {
 
         options['body'] = data
 
-        // return this.http
-        //     .request(url, options)
-        //     .toPromise()
-        //     .then(this._auth.extractData)
-        //     .then((data) => { return data.comment; })
-        return Promise.resolve(data.comment)
+        return this.http
+            .request(url, options)
+            .toPromise()
+            .then(this._auth.extractData)
+            .then((data) => { return data.comment; })
+
+        // 58f1243102424c0011e7aa96
+        
     } // public saveReply
+
+    public saveReply(commentObj: EdjiComment): any {
+        return {
+                    project: {
+                        _id: '123456789010394929',
+                        comments: [
+                            { _id: '123255634634562454362', replies: [ { _id: '342543626256565433345', reply_to: '123255634634562454362' } ] }
+                        ]
+                    }
+                }
+    }
 } // class

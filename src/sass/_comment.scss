@@ -170,10 +170,12 @@ edji-comment {
 	}
 
 	&.active {
-		z-index: 5500;
-		display: block !important;
-		position: absolute !important;
-		top: none !important;
+			z-index: 5500;
+			display: block !important;
+		&:not(.replyComment) {
+			position: absolute !important;
+			top: none !important;
+		}
 		@media (max-width: $desktop) {
 			left: 30px;
 		}

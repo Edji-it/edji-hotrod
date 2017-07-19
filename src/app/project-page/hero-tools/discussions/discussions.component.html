@@ -67,8 +67,8 @@
       <!--Reply input-->
       <!--<div *ngIf="comment.author" [class.show]="comment.showAvatar" class="comment__avatar reply__avatar">{{comment.author.substr(0,2).toUpperCase()}}</div>
       <div class="replyInput">Reply:</div>-->
-      <div class="comment-wrap-row">
-        <edji-comment class="replyCommentInputBlock" *ngIf="comment.author" [comment]="comment" [readOnly]="true" [reply]="true" [commentLite]="true"></edji-comment>
+      <div *ngIf="createReply" class="comment-wrap-row">
+        <edji-comment class="replyCommentInputBlock" *ngIf="replyComment.author" [comment]="replyComment" [isActive]="replyComment.active" [reply]="true" [commentLite]="true"></edji-comment>
       </div>
 
       <!--Add reply buttons-->

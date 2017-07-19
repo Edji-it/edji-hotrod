@@ -61,12 +61,14 @@ export class CommentComponent implements OnInit {
 
   ngOnInit() {
     // Set initial values if passed
-    if (this.comment.lineCount) {
-      this.lineCount = this.comment.lineCount
-    } 
-    if (this.comment.expanded) {
-      this.expanded = this.comment.expanded
-    } 
+    if (!this.reply) {
+      if (this.comment.lineCount) {
+        this.lineCount = this.comment.lineCount
+      } 
+      if (this.comment.expanded) {
+        this.expanded = this.comment.expanded
+      }
+    }
   }
 
   toggleActive( ): void {
@@ -131,28 +133,74 @@ export class CommentComponent implements OnInit {
       this.comment.data = commentData
     }
 
-    this.angulartics.eventTrack.next({ action: 'updateComment', properties: { category: 'projectAction', label: 'attempt' }})
-    this.isLoading = true
+    if (commentData.reply_to && commentData.reply_to !== '') {
+      // // If this is a reply comment
+      // this.angulartics.eventTrack.next({ action: 'updateReply', properties: { category: 'heroFeature', label: 'attempt' }})
+      // this.isLoading = true
 
-    this._projects.saveComment(this.comment)
-      .then(comment => {
-        this.isLoading = false
-        this.angulartics.eventTrack.next({ action: 'updateComment', properties: { category: 'projectAction', label: 'success' }})
-        this.justSaved = true
-        this.commentUpdated.emit()
-        setTimeout(() => {
-          this.justSaved = false
-        }, 1000)
-      })
-      .catch(error => {
-        // TRACK EXCEPTION
-        this.angulartics.eventTrack.next({ action: 'updateComment', properties: { category: 'projectAction', label: 'failure' }})
-        console.log(error)
-      })
+      // this._projects.saveReply(this.comment)
+      //   .then(comment => {
+      //     this.isLoading = false
+      //     this.angulartics.eventTrack.next({ action: 'updateReply', properties: { category: 'heroFeature', label: 'success' }})
+      //     this.justSaved = true
+      //     this.commentUpdated.emit()
+      //     setTimeout(() => {
+      //       this.justSaved = false
+      //     }, 1000)
+      //   })
+      //   .catch(error => {
+      //     // TRACK EXCEPTION
+      //     this.angulartics.eventTrack.next({ action: 'updateReply', properties: { category: 'heroFeature', label: 'failure' }})
+      //     console.log(error)
+      //   })
+    } else {
+      // if this is a regular plain old comment
+      this.angulartics.eventTrack.next({ action: 'updateComment', properties: { category: 'projectAction', label: 'attempt' }})
+      this.isLoading = true
+
+      this._projects.saveComment(this.comment)
+        .then(comment => {
+          this.isLoading = false
+          this.angulartics.eventTrack.next({ action: 'updateComment', properties: { category: 'projectAction', label: 'success' }})
+          this.justSaved = true
+          this.commentUpdated.emit()
+          setTimeout(() => {
+            this.justSaved = false
+          }, 1000)
+        })
+        .catch(error => {
+          // TRACK EXCEPTION
+          this.angulartics.eventTrack.next({ action: 'updateComment', properties: { category: 'projectAction', label: 'failure' }})
+          console.log(error)
+        })
+    }
   }
 
   // Deletes comment via Project service, which updates the local Project object
   deleteComment(comment: any):void {
+    this.angulartics.eventTrack.next({ action: 'deleteComment', properties: { category: 'projectAction', label: 'attempt' }})
+
+    this._projects.deleteComment(comment)
+      .then(data => {
+        this.angulartics.eventTrack.next({ action: 'deleteComment', properties: { category: 'projectAction', label: 'success' }})
+        // Tell Annotator to destroy this comment element!
+        this.commentDeleted.emit(comment._id)
+        this.showDeleteModal = false
+
+        // If comment has associated file, delete file
+        if (comment.type == 'audio' && comment.data.length > 0) {
+          
+        }
+      })
+      .catch(error => {
+        // TRACK EXCEPTION
+        this.angulartics.eventTrack.next({ action: 'deleteComment', properties: { category: 'projectAction', label: 'failure' }})
+        console.log(error)
+      })
+  }
+
+  // Deletes reply via Project service, which updates the local Project object
+  deleteReply(comment: any):void {
     this.angulartics.eventTrack.next({ action: 'deleteComment', properties: { category: 'projectAction', label: 'attempt' }})
 
     this._projects.deleteComment(comment)

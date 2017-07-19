@@ -6,6 +6,7 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 // Project dependencies
 import { ProjectService } from '../../../shared/project.service';
 import { ReadingService } from '../../../shared/reading.service';
+import { AuthService } from '../../../shared/auth.service';
 
 @Component({
   selector: 'hot-discussions',
@@ -22,9 +23,14 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
   private currentReading: Reading
   private subscriptions: Subscription[] = []
 
+  private replyComment: EdjiComment
+  private createReply: boolean = false
+  private user: any
+
   constructor(
     private _projects: ProjectService, 
     private _readings: ReadingService,
+    private _auth: AuthService,
     private angulartics: Angulartics2
   ) { }
 
@@ -39,6 +45,7 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
         console.error(error);
       }
     ) )
+
     // Subscribe to updates from that project once we're subscribed to the reading
     this.subscriptions.push( this._projects.currentProject.subscribe(
       (project) => {
@@ -51,6 +58,13 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
       }
     ) )
     console.log(this.comment)
+
+    /** Set the current user every time it changes */
+        this.subscriptions.push(
+            this._auth.getCurrentUser().subscribe((user) => {
+                this.user = user
+            })
+        )
   }
 
   ngOnDestroy() {
@@ -87,37 +101,24 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
 
     this.angulartics.eventTrack.next({ action: type + 'ReplyCreate', properties: { category: 'heroFeature', label: 'attempt' }})
     
-    let replyComment = <EdjiComment>{
+    var replyComment = <EdjiComment>{
       project_id: projectId,
-      // originalComment_id: commentId,
+      user_id: this.user._id,
+      author: this.user.fullname,
+      // reply_to: commentId,
       data: '',
       type: type
     }
 
     console.log('Add new ' + type + ' comment')
+    console.log(commentId)
 
-    // Tell server we've added a comment
-    this._projects.saveReply(replyComment)
-      .then(replyComment => {
-        // We add the comment from the service because it has an Id
-        if (replyComment._id) {
-          this.angulartics.eventTrack.next({ action: type + 'ReplyCreate', properties: { category: 'heroFeature', label: 'attempt' }})
+    console.log(replyComment)
 
-          // Add setting to trigger focus on new comment
-          replyComment.new = true // this is basically to tell our test cases which comment was just made
-          console.log(replyComment)
-          // this.inactivateComment()
-          // this.commentsByIndexAdd(comment, start)
-        } else {
-          console.warn('Didn\'t get a reply comment back from server!')
-        }
-      })
-      .catch(error => {
-        // TRACK EXCEPTION
-        this.angulartics.eventTrack.next({ action: type + 'ReplyCreate', properties: { category: 'heroFeature', label: 'failure' }})
-        // We should figure out how to handle this properly!
-        // Maybe show a warning icon?
-        console.warn(error)
-      })
+    replyComment.new = true
+    replyComment.active = true
+    this.replyComment = replyComment
+    this.createReply = true
+    
   }
 }

@@ -507,6 +507,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                     //     }
                     // }
                     // Add setting to trigger focus on new comment
+                    console.log(comment)
                     comment.new = true // this is basically to tell our test cases which comment was just made
                     this.inactivateComment()
                     this.commentsByIndexAdd(comment, start)
