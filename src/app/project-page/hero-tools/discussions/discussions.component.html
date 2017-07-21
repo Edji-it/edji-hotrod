@@ -28,35 +28,10 @@
 
     <div class="replyOverflow">
       <!--let replyComment of comments-->
-      <div class="comment-wrap-row">
-        <edji-comment class="replyCommentBlock" *ngIf="comment.author" [comment]="comment" [readOnly]="true" [reply]="true"></edji-comment>
-      </div>
-      <div class="comment-wrap-row">
-        <edji-comment class="replyCommentBlock" *ngIf="comment.author" [comment]="comment" [readOnly]="true" [reply]="true"></edji-comment>
-      </div>
-      <div class="comment-wrap-row">
-        <edji-comment class="replyCommentBlock" *ngIf="comment.author" [comment]="comment" [readOnly]="true" [reply]="true"></edji-comment>
-      </div>
-      <div class="comment-wrap-row">
-        <edji-comment class="replyCommentBlock" *ngIf="comment.author" [comment]="comment" [readOnly]="true" [reply]="true"></edji-comment>
-      </div>
-      <div class="comment-wrap-row">
-        <edji-comment class="replyCommentBlock" *ngIf="comment.author" [comment]="comment" [readOnly]="true" [reply]="true"></edji-comment>
-      </div>
-      <div class="comment-wrap-row">
-        <edji-comment class="replyCommentBlock" *ngIf="comment.author" [comment]="comment" [readOnly]="true" [reply]="true"></edji-comment>
-      </div>
-      <div class="comment-wrap-row">
-        <edji-comment class="replyCommentBlock" *ngIf="comment.author" [comment]="comment" [readOnly]="true" [reply]="true"></edji-comment>
-      </div>
-      <div class="comment-wrap-row">
-        <edji-comment class="replyCommentBlock" *ngIf="comment.author" [comment]="comment" [readOnly]="true" [reply]="true"></edji-comment>
-      </div>
-      <div class="comment-wrap-row">
-        <edji-comment class="replyCommentBlock" *ngIf="comment.author" [comment]="comment" [readOnly]="true" [reply]="true"></edji-comment>
-      </div>
-      <div class="comment-wrap-row">
-        <edji-comment class="replyCommentBlock" *ngIf="comment.author" [comment]="comment" [readOnly]="true" [reply]="true"></edji-comment>
+      <div *ngFor="let replyComment of project.comments">
+        <div *ngIf="replyComment.reply_to === comment._id" class="comment-wrap-row">
+          <edji-comment class="replyCommentBlock" *ngIf="comment.author" [comment]="replyComment" [readOnly]="true" [reply]="true"></edji-comment>
+        </div>
       </div>
     </div>
   </div>
@@ -68,7 +43,7 @@
       <!--<div *ngIf="comment.author" [class.show]="comment.showAvatar" class="comment__avatar reply__avatar">{{comment.author.substr(0,2).toUpperCase()}}</div>
       <div class="replyInput">Reply:</div>-->
       <div *ngIf="createReply" class="comment-wrap-row">
-        <edji-comment class="replyCommentInputBlock" *ngIf="replyComment.author" [comment]="replyComment" [isActive]="replyComment.active" [reply]="true" [commentLite]="true"></edji-comment>
+        <edji-comment class="replyCommentInputBlock" *ngIf="replyCommentNew.author" [comment]="replyCommentNew" [isActive]="replyCommentNew.active" [reply]="true" [commentLite]="true"></edji-comment>
       </div>
 
       <!--Add reply buttons-->

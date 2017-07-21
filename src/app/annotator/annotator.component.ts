@@ -29,6 +29,7 @@ declare var window: any
 export class AnnotatorComponent implements OnInit, OnDestroy {
     // @Input() private project: any
     @Input() private mobileCommentActive: boolean
+    @Input() private activeReply: any
 
     @ViewChildren(CommentComponent) commentComponents: QueryList<CommentComponent>
 
@@ -918,7 +919,13 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      */
     private isEmojiKeyboardActive() : boolean {
         if (this.activeComment.type !== 'emoji') {
-            return false
+            if (this.activeReply && this.activeReply.type === 'emoji') {
+                console.log('keyboard active')
+                // return this.activeReply && (!this.activeReply.type || this.activeReply.type === 'emoji') && this.activeReply.active && this.activeReply.user_id === this.user._id
+                return true
+            } else {
+                return false
+            }
         } else {
             return this.activeComment && (!this.activeComment.type || this.activeComment.type === 'emoji') && this.activeComment.active && this.activeComment.user_id === this.user._id
         }

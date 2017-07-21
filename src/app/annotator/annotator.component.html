@@ -115,7 +115,10 @@
     <edji-feedback></edji-feedback>
 </div>
 
+<!--Keyboard for comment-->
 <emoji-keyboard [isActive]="isEmojiKeyboardActive()" [currentComment]="activeComment && activeComment.data ? activeComment.data : ''" (commentChange)="updateActiveComment($event)" (dismissKeyboard)="inactivateComment()"></emoji-keyboard>
+<!--Keyboard for replies-->
+<emoji-keyboard [isActive]="isEmojiKeyboardActive()" [currentComment]="activeReply && activeReply.data ? activeReply.data : ''" (commentChange)="updateActiveComment($event)" (dismissKeyboard)="inactivateComment()"></emoji-keyboard>
 
 <!--Discussions goes here-->
 <hot-discussions (hide)="showDiscussions=false" [visible]="showDiscussions" [comment]="replyComment"></hot-discussions>

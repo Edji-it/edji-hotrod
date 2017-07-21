@@ -3,6 +3,7 @@ import { Component, EventEmitter, Input, OnInit, Output, SimpleChange, ElementRe
 import { Angulartics2 } from 'angulartics2'
 
 import { ProjectService } from '../../shared/project.service'
+import { CommentService } from '../../shared/comment.service';
 import { EdjiComment, CommentPermissions } from './../../shared/datatypes'
 
 @Component({
@@ -56,6 +57,7 @@ export class CommentComponent implements OnInit {
   constructor(
         private _projects: ProjectService,
         private angulartics: Angulartics2,
+        private _comments: CommentService,
         public el: ElementRef
       ) { }
 
@@ -124,6 +126,7 @@ export class CommentComponent implements OnInit {
 
   // Updates comment in db
   public updateComment(commentData: any): void {
+    console.log('updateComment')
     this.reRecordAudio = false
     if (commentData._id) {
       // this.comment.project_id, commentData, this.comment.start, this.comment.end, this.comment.type, this.comment.text, this.comment._id, this.comment.loc
@@ -134,7 +137,8 @@ export class CommentComponent implements OnInit {
     }
 
     if (commentData.reply_to && commentData.reply_to !== '') {
-      // // If this is a reply comment
+      console.log('updating reply')
+      // If this is a reply comment
       // this.angulartics.eventTrack.next({ action: 'updateReply', properties: { category: 'heroFeature', label: 'attempt' }})
       // this.isLoading = true
 

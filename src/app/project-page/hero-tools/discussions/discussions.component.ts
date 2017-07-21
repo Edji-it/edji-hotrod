@@ -6,6 +6,7 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 // Project dependencies
 import { ProjectService } from '../../../shared/project.service';
 import { ReadingService } from '../../../shared/reading.service';
+import { CommentService } from '../../../shared/comment.service';
 import { AuthService } from '../../../shared/auth.service';
 
 @Component({
@@ -18,12 +19,13 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
   @Input() visible: boolean = false
   @Input() comment: EdjiComment
   @Output() hide: EventEmitter<any> = new EventEmitter()
+  @Output() activeReply: EventEmitter<any> = new EventEmitter()
 
   private project: Project
   private currentReading: Reading
   private subscriptions: Subscription[] = []
 
-  private replyComment: EdjiComment
+  private replyCommentNew: EdjiComment
   private createReply: boolean = false
   private user: any
 
@@ -31,6 +33,7 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
     private _projects: ProjectService, 
     private _readings: ReadingService,
     private _auth: AuthService,
+    private _comments: CommentService,
     private angulartics: Angulartics2
   ) { }
 
@@ -39,7 +42,6 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
     this.subscriptions.push( this._readings.currentReading.subscribe(
       reading => {
         this.currentReading = reading;
-        console.log(this.currentReading)
       },
       error => {
         console.error(error);
@@ -51,6 +53,7 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
       (project) => {
         if (project) {
           this.project = project
+          console.log(this.project)
         }
       },
       (error) => {
@@ -81,6 +84,7 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
 
     // Tell the server we've got a comment!
     this.createReplyComment(type)
+    console.log('addReplyOfType')
   }
 
   /**
@@ -101,11 +105,11 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
 
     this.angulartics.eventTrack.next({ action: type + 'ReplyCreate', properties: { category: 'heroFeature', label: 'attempt' }})
     
-    var replyComment = <EdjiComment>{
+    var replyCommentNew = <EdjiComment>{
       project_id: projectId,
       user_id: this.user._id,
       author: this.user.fullname,
-      // reply_to: commentId,
+      reply_to: commentId,
       data: '',
       type: type
     }
@@ -113,12 +117,22 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
     console.log('Add new ' + type + ' comment')
     console.log(commentId)
 
-    console.log(replyComment)
+    console.log(replyCommentNew)
 
-    replyComment.new = true
-    replyComment.active = true
-    this.replyComment = replyComment
+    replyCommentNew.new = true
+    replyCommentNew.active = true
+    this.replyCommentNew = replyCommentNew
+
+    if (type=='emoji') {
+      this.activeReply.emit({
+        type: 'emoji',
+        active: true,
+        user_id: this.user._id
+      })
+    }
+
     this.createReply = true
+    console.log('createReplyComment')
     
   }
 }
