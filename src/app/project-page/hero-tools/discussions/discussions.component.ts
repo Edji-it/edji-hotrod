@@ -79,9 +79,6 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
    * - Fired from comment options tooltip
    */
   addReplyOfType(type: string): void {
-    // Get original comment id
-    
-
     // Tell the server we've got a comment!
     this.createReplyComment(type)
     console.log('addReplyOfType')
@@ -123,13 +120,13 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
     replyCommentNew.active = true
     this.replyCommentNew = replyCommentNew
 
-    if (type=='emoji') {
-      this.activeReply.emit({
-        type: 'emoji',
-        active: true,
-        user_id: this.user._id
-      })
-    }
+    // if (type=='emoji') {
+    //   this.activeReply.emit({
+    //     type: 'emoji',
+    //     active: true,
+    //     user_id: this.user._id
+    //   })
+    // }
 
     this.createReply = true
     console.log('createReplyComment')
