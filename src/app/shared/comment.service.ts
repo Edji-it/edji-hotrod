@@ -1,11 +1,11 @@
-import { EdjiComment } from './datatypes';
+import { EdjiComment, CommentPermissions, Project } from './datatypes';
 import { Injectable } from '@angular/core'
 import { BehaviorSubject, Observable, Subject } from 'rxjs/Rx';
 import 'rxjs/add/operator/toPromise';
 
 import { AuthService } from './auth.service'
 import { ProjectService, ReadingService, SocketService } from './';
-import { Angulartics2 } from 'angulartics2/dist';
+import { Angulartics2 } from 'angulartics2/dist'
 
 @Injectable()
 export class CommentService {
@@ -109,6 +109,21 @@ export class CommentService {
       ctx.fillStyle=color
       ctx.fillRect(upperLeftCornerX,upperLeftCornerY - height,width,2*height)
       ctx.restore()
+    }
+  }
+
+  /** Used to determine which level of permission the user has for a specific comment
+   * @param comment A comment object
+   * @param user A user object
+   * @param project A project object
+   */
+  public getCommentPermissions(comment: any, user: any, project: Project): number {
+    if (user._id == comment.user_id) {
+        return CommentPermissions.EDIT
+    } else if (user._id == project.teacher_id) {
+        return CommentPermissions.DELETE
+    } else {
+        return CommentPermissions.READ
     }
   }
 }

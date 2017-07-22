@@ -63,11 +63,11 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
     console.log(this.comment)
 
     /** Set the current user every time it changes */
-        this.subscriptions.push(
-            this._auth.getCurrentUser().subscribe((user) => {
-                this.user = user
-            })
-        )
+    this.subscriptions.push(
+        this._auth.getCurrentUser().subscribe((user) => {
+            this.user = user
+        })
+    )
   }
 
   ngOnDestroy() {
@@ -134,5 +134,12 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
     this.createReply = true
     console.log('createReplyComment')
     
+  }
+
+  /** Used to determine which level of permission the user has for a specific comment
+   * @param comment A comment object
+   */
+  private getCommentPermissions(comment: any): number {
+      return this._comments.getCommentPermissions(comment, this.user, this.project)
   }
 }

@@ -114,6 +114,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         private _projects: ProjectService,
         private _auth: AuthService,
         private _socket: SocketService,
+        private _comments: CommentService,
         private angulartics: Angulartics2
         // private _hotkeysService: HotkeysService
     ) {
@@ -854,13 +855,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      * @param comment A comment object
      */
     private getCommentPermissions(comment: any): number {
-        if (this.user._id == comment.user_id) {
-            return CommentPermissions.EDIT
-        } else if (this.user._id == this.project.teacher_id) {
-            return CommentPermissions.DELETE
-        } else {
-            return CommentPermissions.READ
-        }
+        return this._comments.getCommentPermissions(comment, this.user, this.project)
     }
 
     /**
