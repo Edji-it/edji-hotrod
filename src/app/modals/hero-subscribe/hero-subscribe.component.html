@@ -6,39 +6,45 @@
                 <button (click)="closeModal.emit()" type="button" class="close">&times;</button>
             </div>
             <div class="modal-body">
-                <p>Please select:</p>
-                <div class="row">
+                <div [class.hide]="userNowHero" class="row">
                     <div class="col-12">
+                        <p class="pb-1">
+                            Congratulations on deciding to go Hero! Simply pick your plan and provide a payment method, and 
+                        </p>
+                        <label>Hero Subscription Plan</label>
                         <table class="table table-hover">
                             <tbody>
-                                <tr [class.table-active]="subtype == 'monthly'" (click)="subtype = 'monthly'">
+                                <tr [class.table-info]="subtype == 'monthly'" (click)="subtype = 'monthly'" class="selectable">
                                     <th scope="row">
-                                        <div class="input-group">
+                                        <label class="form-check-label">
                                             <input [(ngModel)]="subtype" class="form-check-input" type="radio" name="subscriptionPlan" id="subPlan1" value="monthly" aria-label="Monthly Subscription">
                                             Monthly
-                                        </div>
+                                        </label>
                                     </th>
-                                    <td>$5/mo</td>
-                                    <td>Billed as $5 every month</td>
+                                    <td>
+                                        <p>$5/mo</p>    
+                                    </td>
+                                    <td>
+                                        <p>Billed as $5 every month</p>    
+                                    </td>
                                 </tr>
-                                <tr [class.table-active]="subtype == 'yearly'" (click)="subtype = 'yearly'">
+                                <tr [class.table-info]="subtype == 'yearly'" (click)="subtype = 'yearly'" class="selectable">
                                     <th scope="row">
-                                        <div class="input-group">
+                                        <label class="form-check-label">
                                             <input [(ngModel)]="subtype" class="form-check-input" type="radio" name="subscriptionPlan" id="subPlan2" value="yearly" aria-label="Annual Subscription">
-                                            Annual
-                                        </div>
+                                            Yearly
+                                        </label>
                                     </th>
-                                    <td>$4/mo</td>
-                                    <td>Billed as $48 every year</td>
+                                    <td>
+                                        <p>$4/mo</p>
+                                    </td>
+                                    <td>
+                                        <p>Billed as $48 every year</p>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
-
-
-
-
-
-
+                        
                         <form action="/charge" method="post" id="payment-form">
                             <div class="form-row">
                                 <label for="card-element">
@@ -54,16 +60,24 @@
 
                             <!--<button>Submit Payment</button>-->
                         </form>
-
-
-
-
-
                     </div><!--col-12-->
                 </div><!--row-->
-                <div *ngIf="success" class="row">
-                    <div class="alert alert-success">
-                        Payment succeeded!
+                <div *ngIf="userNowHero" class="row">
+                    <div class="col-12">
+                        <div class="hero-smash__wrap">
+                            <img class="hero-smash" src="/assets/images/hero-lg.png" />
+                        </div>
+                        <h4 class="center">You are now a Hero!</h4>
+                        <p>Give some of your new powers a try:</p>
+                        <p>
+                            <b>Create Questions</b><br/>Create a <a class="link" [routerLink]="['/new-reading']">New Reading</a> to add inline Questions!
+                        </p>
+                        <p>
+                            <b>Comment Replies</b><br/>Try enabling Comment Replies for a new Reading Group on your <a class="link" [routerLink]="['/dashboard']">Dashboard</a>
+                        </p>
+                        <p>
+                            <b>More About Hero</b><br/>Check out the <a class="link" [routerLink]="['/new-reading']">Edji Guide</a> to find out more about your Hero powers.
+                        </p>
                     </div>
                 </div>
             </div>
@@ -71,9 +85,12 @@
                 <!--<div class="alert alert-danger" role="alert">
                   <strong>Hero Subscription</strong> Couldn't process.
                 </div>-->
-              <div class="btn-row right">
+              <div *ngIf="!userNowHero" class="btn-row right">
                 <button (click)="closeModal.emit()" type="button" class="btn" data-dismiss="modal">Cancel</button>
-                <button id="subHero" (click)="checkout()" class="btn btn-primary">Subscribe</button>
+                <button [class.loading]="loading" id="subHero" (click)="checkout()" class="btn btn-primary">Subscribe</button>
+              </div>
+              <div *ngIf="userNowHero" class="btn-row right">
+                <button (click)="closeModal.emit()" type="button" class="btn" data-dismiss="modal">Awesome!</button>
               </div>
             </div>
         </div>

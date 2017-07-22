@@ -15,7 +15,8 @@ export class HeroSubscribeComponent implements OnInit {
   private tempHide: boolean
   private card: any
   private subtype: string = 'yearly'
-  private success: boolean
+  private loading: boolean = false
+  private userNowHero: boolean
   private stripe: any
 
   @Output()
@@ -85,18 +86,24 @@ export class HeroSubscribeComponent implements OnInit {
   }
 
   private checkout() {
+      this.loading = true
       this.stripe.createToken(this.card).then((result) => {
         if (result.error) {
           // Inform the user if there was an error
           var errorElement = document.getElementById('card-errors');
           errorElement.textContent = result.error.message;
         } else {
-          // Do something with result.token
-
-          this._auth.subscribeToHero(this.subtype, result.token)
-            .subscribe(data => {
-              console.log(data)
-            })
+          // Submit with payment token
+          this._auth.subscribeToHero(this.subtype, result.token.id)
+            .subscribe(
+              data => {
+                console.log(data)
+                this.userNowHero = true
+                this.loading = false
+              },
+              error => {
+                this.loading = false
+              })
 
         }
       });
