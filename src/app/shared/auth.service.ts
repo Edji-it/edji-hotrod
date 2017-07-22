@@ -506,6 +506,7 @@ export class AuthService implements CanActivate {
                 return res.json()
             })
     }
+    
 
     /**
      * Add newly registered users to the sign up Mailchimp list
@@ -532,5 +533,20 @@ export class AuthService implements CanActivate {
         } else {
             return true;
         }
+    }
+
+    /**
+     * Submit payment and subscription type to add plan to user
+     */
+    public subscribeToHero(subscriptionType, token): Observable<any> {
+        let data = {
+            subscriptionType : subscriptionType,
+            token: token
+        }
+        return this.http.post(this.baseUrl + '/subscription', data, this.getOptions())
+            .map( res => {
+                return res.json()
+            })
+
     }
 }

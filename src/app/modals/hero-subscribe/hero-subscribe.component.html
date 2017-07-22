@@ -1,4 +1,4 @@
-<div id="deleteReadingModal" class="modal fade-in show">
+<div id="upgradeHeroModal" class="modal fade-in" [class.hide]="tempHide">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -11,26 +11,61 @@
                     <div class="col-12">
                         <table class="table table-hover">
                             <tbody>
-                                <tr>
-                                <th scope="row">
-                                    Monthly
-                                    <!--<input class="form-check-input" type="radio" name="subscriptionPlan" id="blankRadio1" value="option1" aria-label="Monthly Subscription">-->
-                                </th>
-                                <td>$5/mo</td>
-                                <td>Billed as $5 every month</td>
+                                <tr [class.table-active]="subtype == 'monthly'" (click)="subtype = 'monthly'">
+                                    <th scope="row">
+                                        <div class="input-group">
+                                            <input [(ngModel)]="subtype" class="form-check-input" type="radio" name="subscriptionPlan" id="subPlan1" value="monthly" aria-label="Monthly Subscription">
+                                            Monthly
+                                        </div>
+                                    </th>
+                                    <td>$5/mo</td>
+                                    <td>Billed as $5 every month</td>
                                 </tr>
-                                <tr>
-                                <th scope="row">
-                                    Annual
-                                    <!--<input class="form-check-input" type="radio" name="subscriptionPlan" id="blankRadio2" value="option2" aria-label="Annual Subscription">-->
-                                </th>
-                                <td>$4/mo</td>
-                                <td>Billed as $48 every year</td>
-                            </tr>
+                                <tr [class.table-active]="subtype == 'yearly'" (click)="subtype = 'yearly'">
+                                    <th scope="row">
+                                        <div class="input-group">
+                                            <input [(ngModel)]="subtype" class="form-check-input" type="radio" name="subscriptionPlan" id="subPlan2" value="yearly" aria-label="Annual Subscription">
+                                            Annual
+                                        </div>
+                                    </th>
+                                    <td>$4/mo</td>
+                                    <td>Billed as $48 every year</td>
+                                </tr>
                             </tbody>
                         </table>
+
+
+
+
+
+
+                        <form action="/charge" method="post" id="payment-form">
+                            <div class="form-row">
+                                <label for="card-element">
+                                Credit or debit card
+                                </label>
+                                <div id="card-element">
+                                <!-- a Stripe Element will be inserted here. -->
+                                </div>
+
+                                <!-- Used to display form errors -->
+                                <div id="card-errors" role="alert"></div>
+                            </div>
+
+                            <!--<button>Submit Payment</button>-->
+                        </form>
+
+
+
+
+
                     </div><!--col-12-->
                 </div><!--row-->
+                <div *ngIf="success" class="row">
+                    <div class="alert alert-success">
+                        Payment succeeded!
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <!--<div class="alert alert-danger" role="alert">
@@ -38,7 +73,7 @@
                 </div>-->
               <div class="btn-row right">
                 <button (click)="closeModal.emit()" type="button" class="btn" data-dismiss="modal">Cancel</button>
-                <button id="subHero" (click)="alert('click')" class="btn btn-primary">Subscribe</button>
+                <button id="subHero" (click)="checkout()" class="btn btn-primary">Subscribe</button>
               </div>
             </div>
         </div>
