@@ -79,7 +79,11 @@ export class CommentComponent implements OnInit {
             this.active = false
             this.commentActivation.emit(false)
             // Save when comment is toggled away from
-            this.updateComment(this.comment.data)
+            if (this.comment.reply_to) {
+              this.updateComment(this.comment.data, true)
+            } else {
+              this.updateComment(this.comment.data)
+            }
         } else {
             this.active = true 
             this.commentActivation.emit(true)
@@ -118,15 +122,24 @@ export class CommentComponent implements OnInit {
     this.commentActivation.emit(false)
     // Save when comment is toggled away from
     if (commentData) {
-      this.updateComment(commentData)
+      if (this.comment.reply_to) {
+        this.updateComment(commentData.data, true)
+      } else {
+        this.updateComment(commentData.data)
+      }
     } else {
-      this.updateComment(this.comment.data)
+      if (this.comment.reply_to) {
+        this.updateComment(this.comment.data, true)
+      } else {
+        this.updateComment(this.comment.data)
+      }
     }
   }
 
   // Updates comment in db
-  public updateComment(commentData: any): void {
+  public updateComment(commentData: any, reply ?: boolean): void {
     console.log('updateComment')
+    console.log(commentData)
     this.reRecordAudio = false
     if (commentData._id) {
       // this.comment.project_id, commentData, this.comment.start, this.comment.end, this.comment.type, this.comment.text, this.comment._id, this.comment.loc
@@ -136,28 +149,30 @@ export class CommentComponent implements OnInit {
       this.comment.data = commentData
     }
 
-    if (commentData.reply_to && commentData.reply_to !== '') {
+    if (reply) {
       console.log('updating reply')
       // If this is a reply comment
-      // this.angulartics.eventTrack.next({ action: 'updateReply', properties: { category: 'heroFeature', label: 'attempt' }})
-      // this.isLoading = true
+      this.angulartics.eventTrack.next({ action: 'updateReply', properties: { category: 'heroFeature', label: 'attempt' }})
+      this.isLoading = true
 
-      // this._projects.saveReply(this.comment)
-      //   .then(comment => {
-      //     this.isLoading = false
-      //     this.angulartics.eventTrack.next({ action: 'updateReply', properties: { category: 'heroFeature', label: 'success' }})
-      //     this.justSaved = true
-      //     this.commentUpdated.emit()
-      //     setTimeout(() => {
-      //       this.justSaved = false
-      //     }, 1000)
-      //   })
-      //   .catch(error => {
-      //     // TRACK EXCEPTION
-      //     this.angulartics.eventTrack.next({ action: 'updateReply', properties: { category: 'heroFeature', label: 'failure' }})
-      //     console.log(error)
-      //   })
+      this._projects.saveReply(this.comment)
+        .then(comment => {
+          this.isLoading = false
+          this.angulartics.eventTrack.next({ action: 'updateReply', properties: { category: 'heroFeature', label: 'success' }})
+          this.justSaved = true
+          this.commentUpdated.emit()
+          setTimeout(() => {
+            this.justSaved = false
+            this.comment.active = false
+          }, 1000)
+        })
+        .catch(error => {
+          // TRACK EXCEPTION
+          this.angulartics.eventTrack.next({ action: 'updateReply', properties: { category: 'heroFeature', label: 'failure' }})
+          console.log(error)
+        })
     } else {
+      console.log('updating comment')
       // if this is a regular plain old comment
       this.angulartics.eventTrack.next({ action: 'updateComment', properties: { category: 'projectAction', label: 'attempt' }})
       this.isLoading = true

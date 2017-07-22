@@ -30,7 +30,7 @@
       <!--let replyComment of comments-->
       <div *ngFor="let replyComment of project.comments">
         <div *ngIf="replyComment.reply_to === comment._id" class="comment-wrap-row">
-          <edji-comment class="replyCommentBlock" *ngIf="comment.author" [comment]="replyComment" [readOnly]="true" [reply]="true"></edji-comment>
+          <edji-comment class="replyCommentBlock" *ngIf="comment.author" [comment]="replyComment" [reply]="true"></edji-comment>
         </div>
       </div>
     </div>
@@ -40,8 +40,10 @@
       <hr class="replyHeaderRow">
 
       <!--Reply input-->
-      <!--<div *ngIf="comment.author" [class.show]="comment.showAvatar" class="comment__avatar reply__avatar">{{comment.author.substr(0,2).toUpperCase()}}</div>
-      <div class="replyInput">Reply:</div>-->
+      <div *ngIf="!createReply">
+        <div *ngIf="comment.author" [class.show]="comment.showAvatar" class="comment__avatar reply__avatar">{{comment.author.substr(0,2).toUpperCase()}}</div>
+        <div class="replyInput">Reply:</div>
+      </div>
       <div *ngIf="createReply" class="comment-wrap-row">
         <edji-comment class="replyCommentInputBlock" *ngIf="replyCommentNew.author" [comment]="replyCommentNew" [isActive]="replyCommentNew.active" [reply]="true" [commentLite]="true"></edji-comment>
       </div>
