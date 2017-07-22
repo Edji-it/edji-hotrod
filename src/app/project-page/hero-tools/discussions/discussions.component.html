@@ -28,7 +28,7 @@
 
     <div class="replyOverflow">
       <!--let replyComment of comments-->
-      <div *ngFor="let replyComment of project.comments">
+      <div *ngFor="let replyComment of project.comments.reverse()">
         <div *ngIf="replyComment.reply_to === comment._id" class="comment-wrap-row">
           <edji-comment class="replyCommentBlock" *ngIf="comment.author" [comment]="replyComment" [reply]="true" [userPermission]="getCommentPermissions(replyComment)"></edji-comment>
         </div>
