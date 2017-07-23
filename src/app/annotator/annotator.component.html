@@ -75,8 +75,9 @@
 					(mouseleave)='unfocusHighlight(comment.start, comment.end, comment.loc)' 
 					[readOnly]="comment.user_id !== user._id"
 					[userPermission]="getCommentPermissions(comment)"
-					[isActive]="comment.active" 
-					(commentActivation)="setActiveCommentByIndex($event, i, ci)" 
+					[isActive]="comment.active"
+					(commentActivation)="setActiveCommentByIndex($event, i, ci)"
+					(replyActivation)="testReply()"
 					(commentDeleted)="removeComment(comment, i, ci)"
 					(commentDeactivate)="unfocusHighlight($event.start, $event.end)"
 					(commentUpdated)="updateAllLineCounts()"
@@ -117,8 +118,6 @@
 
 <!--Keyboard for comment-->
 <emoji-keyboard [isActive]="isEmojiKeyboardActive()" [currentComment]="activeComment && activeComment.data ? activeComment.data : ''" (commentChange)="updateActiveComment($event)" (dismissKeyboard)="inactivateComment()"></emoji-keyboard>
-<!--Keyboard for replies-->
-<emoji-keyboard [isActive]="isEmojiKeyboardActive()" [currentComment]="activeReply && activeReply.data ? activeReply.data : ''" (commentChange)="updateActiveComment($event)" (dismissKeyboard)="inactivateComment()"></emoji-keyboard>
 
 <!--Discussions goes here-->
 <hot-discussions (hide)="showDiscussions=false" [visible]="showDiscussions" [comment]="replyComment"></hot-discussions>

@@ -11,6 +11,8 @@ import { Angulartics2 } from 'angulartics2/dist'
 export class CommentService {
   private ctx
   private colors
+  public keyboardActive: boolean
+  public activeComment: EdjiComment = <EdjiComment>{}
 
   /*
   Last Modified: 6 June 2017
@@ -124,6 +126,17 @@ export class CommentService {
         return CommentPermissions.DELETE
     } else {
         return CommentPermissions.READ
+    }
+  }
+
+  /**
+   * Decides if the Emoji Keyboard is active
+   */
+  public isEmojiKeyboardActive(user: any): void {
+    if (this.activeComment.type !== 'emoji') {
+        this.keyboardActive = false
+    } else {
+        this.keyboardActive = this.activeComment && (!this.activeComment.type || this.activeComment.type === 'emoji') && this.activeComment.active && this.activeComment.user_id === user._id
     }
   }
 }

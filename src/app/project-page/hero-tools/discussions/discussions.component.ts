@@ -60,7 +60,6 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
         console.error(error)
       }
     ) )
-    console.log(this.comment)
 
     /** Set the current user every time it changes */
     this.subscriptions.push(
@@ -111,22 +110,13 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
       type: type
     }
 
-    console.log('Add new ' + type + ' comment')
-    console.log(commentId)
-
-    console.log(replyCommentNew)
-
     replyCommentNew.new = true
     replyCommentNew.active = true
     this.replyCommentNew = replyCommentNew
 
-    // if (type=='emoji') {
-    //   this.activeReply.emit({
-    //     type: 'emoji',
-    //     active: true,
-    //     user_id: this.user._id
-    //   })
-    // }
+    if (type=='emoji') {
+      this.activeEmojiKeyboardReply(this.replyCommentNew)
+    }
 
     this.createReply = true
     console.log('createReplyComment')
@@ -138,5 +128,10 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
    */
   private getCommentPermissions(comment: any): number {
       return this._comments.getCommentPermissions(comment, this.user, this.project)
+  }
+
+  private activeEmojiKeyboardReply(activeReply: any): void {
+    this._comments.activeComment = activeReply
+    this._comments.isEmojiKeyboardActive(this.user)
   }
 }

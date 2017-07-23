@@ -48,7 +48,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     private lineCountArray: any[][] = []
     private lineCountRunning: boolean = false
 
-    private activeComment: EdjiComment = <EdjiComment>{}
+    // private activeComment: EdjiComment = <EdjiComment>{}
     private replyComment: EdjiComment = <EdjiComment>{}
     
     private lineExpanded: boolean = false
@@ -509,7 +509,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                     //     }
                     // }
                     // Add setting to trigger focus on new comment
-                    console.log(comment)
                     comment.new = true // this is basically to tell our test cases which comment was just made
                     this.inactivateComment()
                     this.commentsByIndexAdd(comment, start)
@@ -617,19 +616,31 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     }
 
     setActiveCommentByIndex(isActive: boolean, wordIndex: number, commentIndex: number): void {
+        console.log('activate the keyboard from a non-reply - annotator')
         if (isActive) {
             this.inactivateComment()
-            this.activeComment = this.commentsByIndex[wordIndex][commentIndex]
-            this.activeComment.active = true
+            this._comments.activeComment = this.commentsByIndex[wordIndex][commentIndex]
+            this._comments.activeComment.active = true
         } else {
             this.inactivateComment()
         }
     }
 
+    setActiveReply(comment: any) {
+        console.log('intercepted the active reply')
+        // this.inactivateComment()
+        this._comments.activeComment = comment
+        this._comments.activeComment.active = true
+    }
+
+    private testReply(): void {
+        console.log('intercepted the active reply')
+    }
+
     inactivateComment():void {
-        this.unfocusHighlight(this.activeComment.start, this.activeComment.end)
-        this.activeComment.active = false
-        this.activeComment = <EdjiComment>{}
+        this.unfocusHighlight(this._comments.activeComment.start, this._comments.activeComment.end)
+        this._comments.activeComment.active = false
+        this._comments.activeComment = <EdjiComment>{}
     }
 
     /**
@@ -637,7 +648,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      * - Gets event from Emoji Keyboard
      */
     updateActiveComment(commentData: string) {
-        this.activeComment.data = commentData
+        this._comments.activeComment.data = commentData
     }
 
     /** 
@@ -913,24 +924,15 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      * Decides if the Emoji Keyboard is active
      */
     private isEmojiKeyboardActive() : boolean {
-        if (this.activeComment.type !== 'emoji') {
-            if (this.activeReply && this.activeReply.type === 'emoji') {
-                console.log('keyboard active')
-                // return this.activeReply && (!this.activeReply.type || this.activeReply.type === 'emoji') && this.activeReply.active && this.activeReply.user_id === this.user._id
-                return true
-            } else {
-                return false
-            }
-        } else {
-            return this.activeComment && (!this.activeComment.type || this.activeComment.type === 'emoji') && this.activeComment.active && this.activeComment.user_id === this.user._id
-        }
+        // return this._comments.isEmojiKeyboardActive(this.user)
+        this._comments.isEmojiKeyboardActive(this.user)
+        return this._comments.keyboardActive
     }
 
     private discReplyFire(comment) {
         setTimeout(() => {
             // comment.active = true
         }, 500)
-        console.log(comment)
         this.replyComment = comment
         this.showDiscussions = true
     }

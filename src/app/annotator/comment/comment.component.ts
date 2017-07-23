@@ -1,9 +1,11 @@
+import { Subscription } from 'rxjs/Rx';
 import { CommentStmt } from '@angular/compiler/src/output/output_ast'
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChange, ElementRef } from '@angular/core'
 import { Angulartics2 } from 'angulartics2'
 
 import { ProjectService } from '../../shared/project.service'
-import { CommentService } from '../../shared/comment.service';
+import { CommentService } from '../../shared/comment.service'
+import { AuthService } from '../../shared/auth.service'
 import { EdjiComment, CommentPermissions } from './../../shared/datatypes'
 
 @Component({
@@ -27,6 +29,8 @@ export class CommentComponent implements OnInit {
   private preview = false
   private reRecordAudio = false
   private showDeleteModal: boolean = false
+  private user: any
+  private subscriptions: Subscription[] = []
 
   @Input() public comment: EdjiComment
   @Input() private readOnly: boolean = false
@@ -45,6 +49,7 @@ export class CommentComponent implements OnInit {
 
   @Output() commentDeleted = new EventEmitter<string>()
   @Output() commentActivation = new EventEmitter<boolean>()
+  @Output() replyActivation = new EventEmitter()
   @Output() commentDeactivate: EventEmitter<any> = new EventEmitter<any>()
   @Output() expandLine = new EventEmitter<number>()
   @Output() collapseLine = new EventEmitter<number>()
@@ -58,6 +63,7 @@ export class CommentComponent implements OnInit {
         private _projects: ProjectService,
         private angulartics: Angulartics2,
         private _comments: CommentService,
+        private _auth: AuthService,
         public el: ElementRef
       ) { }
 
@@ -71,6 +77,13 @@ export class CommentComponent implements OnInit {
         this.expanded = this.comment.expanded
       }
     }
+
+    /** Set the current user every time it changes */
+    this.subscriptions.push(
+        this._auth.getCurrentUser().subscribe((user) => {
+            this.user = user
+        })
+    )
   }
 
   toggleActive( ): void {
@@ -85,8 +98,17 @@ export class CommentComponent implements OnInit {
               this.updateComment(this.comment.data)
             }
         } else {
+          if (this.reply) {
+            this.active = true
+            // this.replyActivation.emit()
+            console.log('I know this works')
+            // this._comments.activeComment = this.comment
+            // this._comments.isEmojiKeyboardActive(this.user)
+          } else {
+            console.log('activate the keyboard from a non-reply - comment')
             this.active = true 
             this.commentActivation.emit(true)
+          }
         }
       } else {
         this.togglePreview()
@@ -117,7 +139,7 @@ export class CommentComponent implements OnInit {
       }
   }
 
-  deactivate(commentData ?: string): void {
+  deactivate(commentData ?: any): void {
     this.active = false
     this.commentActivation.emit(false)
     // Save when comment is toggled away from
@@ -263,5 +285,9 @@ export class CommentComponent implements OnInit {
    */
   expand(): void {
     this.expandLine.emit(this.yPos)
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((sub) => { sub.unsubscribe() })
   }
 }
