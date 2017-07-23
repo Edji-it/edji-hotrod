@@ -116,7 +116,7 @@
 </div>
 
 <!--Keyboard for comment-->
-<emoji-keyboard [isActive]="isEmojiKeyboardActive()" [currentComment]="activeComment && activeComment.data ? activeComment.data : ''" (commentChange)="updateActiveComment($event)" (dismissKeyboard)="inactivateComment()"></emoji-keyboard>
+<emoji-keyboard [isActive]="isEmojiKeyboardActive()" [currentComment]="_comments.activeComment && _comments.activeComment.data ? _comments.activeComment.data : ''" (commentChange)="updateActiveComment($event)" (dismissKeyboard)="inactivateComment()"></emoji-keyboard>
 
 <!--Discussions goes here-->
 <hot-discussions (hide)="showDiscussions=false" [visible]="showDiscussions" [comment]="replyComment"></hot-discussions>
