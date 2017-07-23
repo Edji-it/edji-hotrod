@@ -626,17 +626,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         }
     }
 
-    setActiveReply(comment: any) {
-        console.log('intercepted the active reply')
-        // this.inactivateComment()
-        this._comments.activeComment = comment
-        this._comments.activeComment.active = true
-    }
-
-    private testReply(): void {
-        console.log('intercepted the active reply')
-    }
-
     inactivateComment():void {
         this.unfocusHighlight(this._comments.activeComment.start, this._comments.activeComment.end)
         this._comments.activeComment.active = false

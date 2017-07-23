@@ -77,7 +77,6 @@
 					[userPermission]="getCommentPermissions(comment)"
 					[isActive]="comment.active"
 					(commentActivation)="setActiveCommentByIndex($event, i, ci)"
-					(replyActivation)="testReply()"
 					(commentDeleted)="removeComment(comment, i, ci)"
 					(commentDeactivate)="unfocusHighlight($event.start, $event.end)"
 					(commentUpdated)="updateAllLineCounts()"

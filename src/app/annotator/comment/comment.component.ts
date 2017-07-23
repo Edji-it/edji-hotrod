@@ -49,7 +49,6 @@ export class CommentComponent implements OnInit {
 
   @Output() commentDeleted = new EventEmitter<string>()
   @Output() commentActivation = new EventEmitter<boolean>()
-  @Output() replyActivation = new EventEmitter()
   @Output() commentDeactivate: EventEmitter<any> = new EventEmitter<any>()
   @Output() expandLine = new EventEmitter<number>()
   @Output() collapseLine = new EventEmitter<number>()
@@ -91,6 +90,7 @@ export class CommentComponent implements OnInit {
         if (this.active === true) {
             this.active = false
             this.commentActivation.emit(false)
+            this._comments.activeComment.active = false
             // Save when comment is toggled away from
             if (this.comment.reply_to) {
               this.updateComment(this.comment.data, true)
@@ -100,10 +100,8 @@ export class CommentComponent implements OnInit {
         } else {
           if (this.reply) {
             this.active = true
-            // this.replyActivation.emit()
-            console.log('I know this works')
-            // this._comments.activeComment = this.comment
-            // this._comments.isEmojiKeyboardActive(this.user)
+            this._comments.activeComment = this.comment
+            this._comments.activeComment.active = true
           } else {
             console.log('activate the keyboard from a non-reply - comment')
             this.active = true 
@@ -134,6 +132,7 @@ export class CommentComponent implements OnInit {
       if (this.preview === true) {
         this.preview = false
         this.commentActivation.emit(false)
+        this._comments.activeComment.active = false
       } else {
         this.preview = true
       }
@@ -142,6 +141,7 @@ export class CommentComponent implements OnInit {
   deactivate(commentData ?: any): void {
     this.active = false
     this.commentActivation.emit(false)
+    this._comments.activeComment.active = false
     // Save when comment is toggled away from
     if (commentData) {
       if (this.comment.reply_to) {
@@ -219,29 +219,6 @@ export class CommentComponent implements OnInit {
 
   // Deletes comment via Project service, which updates the local Project object
   deleteComment(comment: any):void {
-    this.angulartics.eventTrack.next({ action: 'deleteComment', properties: { category: 'projectAction', label: 'attempt' }})
-
-    this._projects.deleteComment(comment)
-      .then(data => {
-        this.angulartics.eventTrack.next({ action: 'deleteComment', properties: { category: 'projectAction', label: 'success' }})
-        // Tell Annotator to destroy this comment element!
-        this.commentDeleted.emit(comment._id)
-        this.showDeleteModal = false
-
-        // If comment has associated file, delete file
-        if (comment.type == 'audio' && comment.data.length > 0) {
-          
-        }
-      })
-      .catch(error => {
-        // TRACK EXCEPTION
-        this.angulartics.eventTrack.next({ action: 'deleteComment', properties: { category: 'projectAction', label: 'failure' }})
-        console.log(error)
-      })
-  }
-
-  // Deletes reply via Project service, which updates the local Project object
-  deleteReply(comment: any):void {
     this.angulartics.eventTrack.next({ action: 'deleteComment', properties: { category: 'projectAction', label: 'attempt' }})
 
     this._projects.deleteComment(comment)

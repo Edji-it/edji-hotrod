@@ -136,7 +136,11 @@ export class CommentService {
     if (this.activeComment.type !== 'emoji') {
         this.keyboardActive = false
     } else {
-        this.keyboardActive = this.activeComment && (!this.activeComment.type || this.activeComment.type === 'emoji') && this.activeComment.active && this.activeComment.user_id === user._id
+        this.keyboardActive = this.activeComment && (!this.activeComment.type || this.activeComment.type === 'emoji') && 
+          this.activeComment.active && this.activeComment.user_id === user._id
+        // if (this.activeComment && (!this.activeComment.type || this.activeComment.type === 'emoji') && this.activeComment.user_id === user._id ) {
+        //     this.keyboardActive = true
+        // }
     }
   }
 }
