@@ -59,3 +59,11 @@ button {
     text-align: center;
     padding: 0;
 }
+
+.reply-audio-wrapper {
+    width: 100%;
+}
+
+.reply-wave {
+    width: calc(100% - 74px);
+}
