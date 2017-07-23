@@ -280,8 +280,6 @@ export class ProjectService {
      * @param commentId (optional) If passed, will update comment with that ID
      */
     public saveComment(commentObj: EdjiComment) : Promise<any> {
-        console.log('saveComment')
-        console.log(commentObj)
         let comment = Object.assign({}, commentObj)
         // Clean frontend only properties
         delete comment['active']
@@ -371,8 +369,6 @@ export class ProjectService {
      * @param commentId (optional) If passed, will update comment with that ID
      */
     public saveReply(commentObj: EdjiComment) : Promise<any> {
-        console.log('saveReply')
-        console.log(commentObj)
         let comment = Object.assign({}, commentObj)
         // Clean frontend only properties
         delete comment['active']

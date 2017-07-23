@@ -53,7 +53,6 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
       (project) => {
         if (project) {
           this.project = project
-          console.log(this.project)
         }
       },
       (error) => {
@@ -80,7 +79,6 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
   addReplyOfType(type: string): void {
     // Tell the server we've got a comment!
     this.createReplyComment(type)
-    console.log('addReplyOfType')
   }
 
   /**
@@ -119,7 +117,6 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
     }
 
     this.createReply = true
-    console.log('createReplyComment')
     
   }
 

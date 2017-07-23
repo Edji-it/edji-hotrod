@@ -103,7 +103,6 @@ export class CommentComponent implements OnInit {
             this._comments.activeComment = this.comment
             this._comments.activeComment.active = true
           } else {
-            console.log('activate the keyboard from a non-reply - comment')
             this.active = true 
             this.commentActivation.emit(true)
           }
@@ -160,8 +159,6 @@ export class CommentComponent implements OnInit {
 
   // Updates comment in db
   public updateComment(commentData: any, reply ?: boolean): void {
-    console.log('updateComment')
-    console.log(commentData)
     this.reRecordAudio = false
     if (commentData._id) {
       // this.comment.project_id, commentData, this.comment.start, this.comment.end, this.comment.type, this.comment.text, this.comment._id, this.comment.loc
@@ -172,7 +169,6 @@ export class CommentComponent implements OnInit {
     }
 
     if (reply) {
-      console.log('updating reply')
       // If this is a reply comment
       this.angulartics.eventTrack.next({ action: 'updateReply', properties: { category: 'heroFeature', label: 'attempt' }})
       this.isLoading = true
@@ -194,7 +190,6 @@ export class CommentComponent implements OnInit {
           console.log(error)
         })
     } else {
-      console.log('updating comment')
       // if this is a regular plain old comment
       this.angulartics.eventTrack.next({ action: 'updateComment', properties: { category: 'projectAction', label: 'attempt' }})
       this.isLoading = true

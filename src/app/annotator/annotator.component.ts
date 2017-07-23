@@ -616,7 +616,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     }
 
     setActiveCommentByIndex(isActive: boolean, wordIndex: number, commentIndex: number): void {
-        console.log('activate the keyboard from a non-reply - annotator')
         if (isActive) {
             this.inactivateComment()
             this._comments.activeComment = this.commentsByIndex[wordIndex][commentIndex]
