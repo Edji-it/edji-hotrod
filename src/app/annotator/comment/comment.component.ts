@@ -172,6 +172,7 @@ export class CommentComponent implements OnInit {
       // If this is a reply comment
       this.angulartics.eventTrack.next({ action: 'updateReply', properties: { category: 'heroFeature', label: 'attempt' }})
       this.isLoading = true
+      this._projects.addCommentToReplies(this.comment)
 
       this._projects.saveReply(this.comment)
         .then(comment => {
@@ -215,6 +216,10 @@ export class CommentComponent implements OnInit {
   // Deletes comment via Project service, which updates the local Project object
   deleteComment(comment: any):void {
     this.angulartics.eventTrack.next({ action: 'deleteComment', properties: { category: 'projectAction', label: 'attempt' }})
+
+    if (this.comment.reply_to) {
+        this._projects.removeCommentFromReplies(this.comment)
+      }
 
     this._projects.deleteComment(comment)
       .then(data => {

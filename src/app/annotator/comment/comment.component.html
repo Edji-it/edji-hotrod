@@ -20,7 +20,7 @@
         <div *ngIf="!reply" class="reply" (click)="commentReply.emit()">
             <p class="text-left reply-text-left">Reply</p>
             <span class="text-right ">
-                <p class="reply-text-right">{{comment.replies.length}}</p>
+                <p class="reply-text-right">{{ comment.replies && comment.replies.length}}</p>
                 <img class="reply-icon" src="assets/images/icon-comment-white.svg"/>
             </span>
         </div>

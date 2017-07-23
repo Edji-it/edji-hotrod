@@ -24,6 +24,7 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
   private project: Project
   private currentReading: Reading
   private subscriptions: Subscription[] = []
+  private repliesById: any = {}
 
   private replyCommentNew: EdjiComment
   private createReply: boolean = false
@@ -54,6 +55,16 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
         if (project) {
           this.project = project
         }
+      },
+      (error) => {
+        console.error(error)
+      }
+    ) )
+
+    // Subscribe to updates to the reply reference object
+    this.subscriptions.push( this._projects.repliesById.subscribe(
+      (repliesById) => {
+        this.repliesById = repliesById
       },
       (error) => {
         console.error(error)
@@ -116,7 +127,20 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
       this.activeEmojiKeyboardReply(this.replyCommentNew)
     }
 
-    this.createReply = true
+
+    this._projects.saveReply(this.replyCommentNew)
+      .then(comment => {
+        // this.isLoading = false
+        this.angulartics.eventTrack.next({ action: 'updateReply', properties: { category: 'heroFeature', label: 'success' }})
+        // this.justSaved = true
+        // this.commentUpdated.emit()
+        this._projects.addCommentToReplies(comment)
+      })
+      .catch(error => {
+        // TRACK EXCEPTION
+        this.angulartics.eventTrack.next({ action: 'updateReply', properties: { category: 'heroFeature', label: 'failure' }})
+        console.log(error)
+      })
     
   }
 

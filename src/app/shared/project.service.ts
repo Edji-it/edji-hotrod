@@ -26,9 +26,21 @@ export class ProjectService {
      * This stores all of the comment stats for a project and all of the logic to manipulate the stats
      */
     _commentStats: CommentStats
-
+    
+    /**
+     * Updated Reference Object
+     * Reference comments by word index
+     */
     private commentsByIndexSubject: BehaviorSubject<EdjiComment[][]> = new BehaviorSubject<EdjiComment[][]>([])
     public commentsByIndex: Observable<EdjiComment[][]> = this.commentsByIndexSubject.asObservable()
+
+    /**
+     *  Updated Reference Object
+     * Reference comment replies by comment id
+     */
+    private repliesByIdSource: any = {}
+    private repliesByIdSubject: BehaviorSubject<any> = new BehaviorSubject<any>(this.repliesByIdSource)
+    public repliesById: Observable<any> = this.repliesByIdSubject.asObservable()
 
     constructor(
         private http: Http, 
@@ -137,10 +149,44 @@ export class ProjectService {
             comment.showAvatar = true;
         }
 
+        this.addCommentToReplies(comment)
+
         // add the comment at the index of the comment's starting word
         if (!arr[comment.start]) { arr[comment.start] = [] }
         arr[comment.start].push(comment)
         return arr
+    }
+
+    public addCommentToReplies(comment: EdjiComment): void {
+        let skipAdd = false
+        if (comment.reply_to) {
+            if (!this.repliesByIdSource[comment.reply_to]) {
+                this.repliesByIdSource[comment.reply_to] = []
+            }
+            // Double check comment doesn't exist
+            for (let reply of this.repliesByIdSource[comment.reply_to]) {
+                if (reply._id == comment._id) {
+                    skipAdd = true
+                }
+            }
+            if (!skipAdd) {
+                this.repliesByIdSource[comment.reply_to].push(comment)
+                this.repliesByIdSubject.next(this.repliesByIdSource)
+            }
+        }
+    }
+
+    public removeCommentFromReplies(comment: EdjiComment) : void {
+        if (comment.reply_to) {
+            for (let commentId of this.repliesByIdSource) {
+                if (commentId == comment.reply_to) {
+                    for (let i = 0; i < this.repliesByIdSource[commentId].length; i++){
+                        this.repliesByIdSource[commentId].splice(i, 1)
+                        this.repliesByIdSubject.next(this.repliesByIdSource)
+                    }
+                }
+            }
+        }
     }
 
     /**
