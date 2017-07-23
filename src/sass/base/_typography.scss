@@ -166,3 +166,16 @@ p, h1, h2, h3, h4 {
       line-height: 1.3em;
   }
 }
+
+.hero-tag {
+  color: $btnHeroBg;
+  // background:$btnHeroBg;
+  vertical-align: super;
+  font-size: 0.75em;
+  width: 1em;
+  height: 1em;
+  font-family: Arial;
+  font-weight: bold;
+  margin: 0 2px;
+  text-shadow: -1px 1px 0px #bbbbbb;
+}

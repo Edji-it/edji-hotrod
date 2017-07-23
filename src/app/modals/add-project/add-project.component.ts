@@ -26,7 +26,8 @@ export class AddProjectModal implements OnInit {
       label: [null, Validators.required],
       emojiType: true,
       textType: true,
-      audioType: true
+      audioType: true,
+      replyType: true
     });
   }
 
@@ -51,6 +52,7 @@ export class AddProjectModal implements OnInit {
     if (formValue.emojiType) { types.push("emoji"); }
     if (formValue.textType) { types.push("text"); }
     if (formValue.audioType) { types.push("audio"); }
+    if (formValue.audioType) { types.push("reply"); }
 
     this._projects.create(this.reading._id, { 'label' : formValue.label, 'types' : types } )
       .subscribe( project => {
