@@ -100,6 +100,9 @@ export class HeroSubscribeComponent implements OnInit {
                 console.log(data)
                 this.userNowHero = true
                 this.loading = false
+                if (data.user) {
+                  this._auth.setUser(data.user)
+                }
               },
               error => {
                 this.loading = false
