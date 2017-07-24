@@ -178,12 +178,10 @@ export class ProjectService {
 
     public removeCommentFromReplies(comment: EdjiComment) : void {
         if (comment.reply_to) {
-            for (let commentId of this.repliesByIdSource) {
-                if (commentId == comment.reply_to) {
-                    for (let i = 0; i < this.repliesByIdSource[commentId].length; i++){
-                        this.repliesByIdSource[commentId].splice(i, 1)
-                        this.repliesByIdSubject.next(this.repliesByIdSource)
-                    }
+            for (let i = 0; i < this.repliesByIdSource[comment.reply_to].length; i++){
+                if (this.repliesByIdSource[comment.reply_to][i]._id === comment._id) {
+                    this.repliesByIdSource[comment.reply_to].splice(i, 1)
+                    this.repliesByIdSubject.next(this.repliesByIdSource)
                 }
             }
         }

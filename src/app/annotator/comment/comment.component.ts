@@ -226,29 +226,37 @@ export class CommentComponent implements OnInit {
 
   // Deletes comment via Project service, which updates the local Project object
   deleteComment(comment: any):void {
-    this.angulartics.eventTrack.next({ action: 'deleteComment', properties: { category: 'projectAction', label: 'attempt' }})
-
     if (this.comment.reply_to) {
-        this._projects.removeCommentFromReplies(this.comment)
-      }
+      this.angulartics.eventTrack.next({ action: 'deleteReply', properties: { category: 'heroFeature', label: 'attempt' }})
 
-    this._projects.deleteComment(comment)
+      this._projects.deleteComment(comment)
+      .then(data => {
+        this.angulartics.eventTrack.next({ action: 'deleteReply', properties: { category: 'heroFeature', label: 'success' }})
+        // Tell Annotator to destroy this comment element!
+        this._projects.removeCommentFromReplies(this.comment)
+        this.showDeleteModal = false
+      })
+      .catch(error => {
+        // TRACK EXCEPTION
+        this.angulartics.eventTrack.next({ action: 'deleteReply', properties: { category: 'heroFeature', label: 'failure' }})
+        console.log(error)
+      })
+    } else {
+      this.angulartics.eventTrack.next({ action: 'deleteComment', properties: { category: 'projectAction', label: 'attempt' }})
+
+      this._projects.deleteComment(comment)
       .then(data => {
         this.angulartics.eventTrack.next({ action: 'deleteComment', properties: { category: 'projectAction', label: 'success' }})
         // Tell Annotator to destroy this comment element!
         this.commentDeleted.emit(comment._id)
         this.showDeleteModal = false
-
-        // If comment has associated file, delete file
-        if (comment.type == 'audio' && comment.data.length > 0) {
-          
-        }
       })
       .catch(error => {
         // TRACK EXCEPTION
         this.angulartics.eventTrack.next({ action: 'deleteComment', properties: { category: 'projectAction', label: 'failure' }})
         console.log(error)
       })
+    }
   }
 
   /**
