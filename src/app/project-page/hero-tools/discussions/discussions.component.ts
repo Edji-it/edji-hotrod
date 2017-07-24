@@ -130,7 +130,7 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
 
     this._projects.saveReply(this.replyCommentNew)
       .then(comment => {
-        this.angulartics.eventTrack.next({ action: 'updateReply', properties: { category: 'heroFeature', label: 'success' }})
+        this.angulartics.eventTrack.next({ action: type + 'ReplyCreate', properties: { category: 'heroFeature', label: 'success' }})
         comment.active = true
         comment.project_id = projectId
         this._comments.activeComment = comment
@@ -141,7 +141,7 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
       })
       .catch(error => {
         // TRACK EXCEPTION
-        this.angulartics.eventTrack.next({ action: 'updateReply', properties: { category: 'heroFeature', label: 'failure' }})
+        this.angulartics.eventTrack.next({ action: type + 'ReplyCreate', properties: { category: 'heroFeature', label: 'failure' }})
         console.log(error)
       })
     
