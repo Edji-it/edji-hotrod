@@ -25,12 +25,11 @@
         <hr class="replyHeaderRow">
       </div>
 
-
-    <div class="replyOverflow">
+    <div class="replyOverflow" [ngClass]="[ _comments.activeComment.active && _comments.activeComment.type=='emoji' ? 'replyOverflow-eKey' : 'replyOverflow-normal' ]">
       <!--let replyComment of comments-->
       <div *ngFor="let replyComment of repliesById[comment._id]">
         <div class="comment-wrap-row">
-          <edji-comment class="replyCommentBlock" *ngIf="comment.author" [comment]="replyComment" [reply]="true" [userPermission]="getCommentPermissions(replyComment)"></edji-comment>
+          <edji-comment class="replyCommentBlock" *ngIf="comment.author" [comment]="replyComment" [isActive]="replyComment.active" [reply]="true" [userPermission]="getCommentPermissions(replyComment)"></edji-comment>
         </div>
       </div>
       <!--<div *ngIf="createReply" class="comment-wrap-row">

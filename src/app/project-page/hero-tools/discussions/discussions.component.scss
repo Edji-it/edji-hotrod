@@ -49,20 +49,23 @@
 
 .replyCommentInputBlock {
   width: calc(100% - 66px);
-  // bottom: 0;
-  // position: absolute;
-  // height: auto;
-  // width: calc(100% - 108px);
-  // left: -15px;
 }
 
 // $replyContainerHeight: 209px;
 // $replyContainerHeight: 250px;
-$replyContainerHeight: 203px;
+// $replyContainerHeight: 203px;
 
 .replyOverflow {
   overflow-y: auto;
-  height: calc(100% - #{$replyContainerHeight});
+  // height: calc(100% - $replyContainerHeight);
+}
+
+.replyOverflow-normal {
+  height: calc(100% - 203px)
+}
+
+.replyOverflow-eKey {
+  height: calc(100% - 430px)
 }
 
 .replyContainer {

@@ -39,13 +39,13 @@ export class CommentComponent implements OnInit {
   @Input() private reply: boolean = false
   @Input() private commentLite: boolean = false
   @Input() private userPermission: number = CommentPermissions.READ
+  @Input() private showDeleteAudioModal: boolean = false
   @Input()
   set isActive(isActive: boolean) {
     if (typeof(isActive) !== 'undefined' && this.active !== isActive) {
       this.toggleActive()
     }
   }
-  @Input() private showDeleteAudioModal: boolean = false
   get isActive(): boolean { return this.active }
 
   @Output() commentDeleted = new EventEmitter<string>()

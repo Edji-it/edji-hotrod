@@ -120,20 +120,19 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
     }
 
     replyCommentNew.new = true
-    replyCommentNew.active = true
+    // replyCommentNew.active = true
     this.replyCommentNew = replyCommentNew
 
     if (type=='emoji') {
       this.activeEmojiKeyboardReply(this.replyCommentNew)
     }
 
-
     this._projects.saveReply(this.replyCommentNew)
       .then(comment => {
-        // this.isLoading = false
         this.angulartics.eventTrack.next({ action: 'updateReply', properties: { category: 'heroFeature', label: 'success' }})
-        // this.justSaved = true
-        // this.commentUpdated.emit()
+        comment.active = true
+        comment.project_id = projectId
+        this._comments.activeComment = comment
         this._projects.addCommentToReplies(comment)
       })
       .catch(error => {
