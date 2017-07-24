@@ -49,8 +49,8 @@
         <!--Hero Subscription Mgmt-->
         <div class="info-group">
             <p class="info">
-                <span class="text-capitalize">{{currentUser.hero.status ? currentUser.hero.status : 'Unsubscribed'}}</span>
-                <button *ngIf="currentUser.hero.status !== 'unsubscribed'" class="btn btn-secondary ml-4">Modify Subscription</button>
+                <span class="text-capitalize">{{currentUser.hero.status ? currentUser.hero.status : 'Unsubscribed'}} ({{ currentUser.hero.type }})</span>
+                <button *ngIf="currentUser.hero.status !== 'unsubscribed'" class="btn btn-secondary ml-4" (click)="showHeroChangeModal = true">Modify Subscription</button>
                 <button *ngIf="currentUser.hero.status == 'unsubscribed'" class="btn btn-hero ml-4" (click)="showHeroSubModal = true">Go Hero</button>
             </p>
             <label for="inputPassword" class="info-label">Hero Subscription</label>
@@ -77,3 +77,4 @@
 <edji-change-pass class="modal-will-fade" [class.show]="showPassModal" (closeModal)="showPassModal = !showPassModal"></edji-change-pass>
 <hot-upload-avatar class="modal-will-fade" [class.show]="showUploadProfPicModal" (closeModal)="showUploadProfPicModal = !showUploadProfPicModal"></hot-upload-avatar>
 <hero-subscribe-modal class="modal-will-fade" [class.show]="showHeroSubModal" (closeModal)="showHeroSubModal = !showHeroSubModal"></hero-subscribe-modal>
+<hero-change-modal class="modal-will-fade" [class.show]="showHeroChangeModal" (closeModal)="showHeroChangeModal = !showHeroChangeModal"></hero-change-modal>

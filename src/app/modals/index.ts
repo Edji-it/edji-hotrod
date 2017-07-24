@@ -6,3 +6,4 @@ export * from './login-required/login-required'
 export * from './del-reading/del-reading.component';
 export * from './del-project/del-project.component';
 export * from './hero-subscribe/hero-subscribe.component';
+export * from './hero-change/hero-change.component';

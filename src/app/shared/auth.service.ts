@@ -550,4 +550,19 @@ export class AuthService implements CanActivate {
             })
 
     }
+
+    public updateHeroSub(subscriptionType: string, statusChange ?: string) {
+        if (!statusChange) {
+            statusChange = 'subscribed'
+        }
+        let data = {
+            subscription_type : subscriptionType,
+            status : statusChange
+        }
+
+        return this.http.put(this.baseUrl + '/subscription', data, this.getOptions())
+            .map( res => {
+                return res.json()
+            })
+    }
 }
