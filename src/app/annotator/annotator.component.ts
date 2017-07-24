@@ -927,6 +927,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.replyComment = comment
         this.focusOverride = true
         this.focusHighlight(comment.start, comment.end, comment.loc)
+        this.angulartics.eventTrack.next({ action: 'openDiscussionPanel', properties: { category: 'heroFeature', label: 'success' }})
         this.showDiscussions = true
     }
 
