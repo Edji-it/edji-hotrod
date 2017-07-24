@@ -196,6 +196,66 @@ describe('Project Page', () => {
             project.commentDelete.click();
         });
     });
+
+    describe("Discussions", () => {
+        beforeAll(() => {
+            project.getReplyPage();
+            // Login
+            guestForm.loginAsGuest();
+            browser.wait(EC.elementToBeClickable(sidebar.logOutButton));
+        });
+
+        afterAll(() => {
+            // log out
+            browser.wait(EC.elementToBeClickable(sidebar.logOutButton), 5000, "never found the logout button");
+            sidebar.logOutButton.click();
+        });
+
+        it("should make a reply comment as a logged in user", () => {
+            // need to navigate to the reply-comment page
+            project.getReplyPage();
+            // Code for making a reply
+            
+            // Wait 5 seconds for the reply button to become clickable
+
+
+            // Click on the reply button
+
+
+            // Wait 5 seconds for the add text reply button to become clickable
+
+
+            // Click on the add text reply button
+
+
+            // Wait 5 seconds for the text input to show up
+
+
+            // Add text to the text input field
+
+
+            // Blur/Inactivate the reply comment
+
+
+            // Wait 5 seconds for the delete button to become clickable
+
+
+            // Click the delete button
+
+
+            // Verify the reply comment is gone
+
+
+            // Wait 5 seconds for the dismiss button to become clickable
+
+
+            // Click the dismiss button
+
+
+            // Verify the discussions panel is dismissed
+            
+        });
+    });
      
 }); // describe 'Dashboard Page'
   

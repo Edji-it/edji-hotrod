@@ -30,7 +30,14 @@ export class Project implements PageObjectInterface {
   public getAudioPage(): void {
     // First we clear out the url (sometimes page is preserved if the url stays the same)
     browser.get("/#");
-    // Load a good sample Project with Emoji and Text commenting (owned by teach/teach)
+    // Load a good sample Project with Audio commenting (owned by teach/teach)
     browser.get("/#/project/mz9n");
+  }
+
+  public getReplyPage(): void {
+    // First we clear out the url (sometimes page is preserved if the url stays the same)
+    browser.get("/#");
+    // Load a good sample Project with reply functions (owned by teach/teach)
+    browser.get("/#/project/2zb5");
   }
 }
