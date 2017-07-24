@@ -49,9 +49,9 @@
         <!--Hero Subscription Mgmt-->
         <div class="info-group">
             <p class="info">
-                <span class="text-capitalize">{{currentUser.hero.status ? currentUser.hero.status : 'Unsubscribed'}} ({{ currentUser.hero.type }})</span>
-                <button *ngIf="currentUser.hero.status !== 'unsubscribed'" class="btn btn-secondary ml-4" (click)="showHeroChangeModal = true">Modify Subscription</button>
-                <button *ngIf="currentUser.hero.status == 'unsubscribed'" class="btn btn-hero ml-4" (click)="showHeroSubModal = true">Go Hero</button>
+                <span class="text-capitalize mr-4" style="display:inline-block;">{{currentUser.hero.status ? currentUser.hero.status : 'Unsubscribed'}} ({{ currentUser.hero.type }})</span>
+                <button *ngIf="currentUser.hero.status !== 'unsubscribed'" class="btn btn-secondary mr-4" (click)="showHeroChangeModal = true">Modify Subscription</button>
+                <button *ngIf="currentUser.hero.status == 'unsubscribed'" class="btn btn-hero mr-4" (click)="showHeroSubModal = true">Go Hero</button>
             </p>
             <label for="inputPassword" class="info-label">Hero Subscription</label>
         </div>
