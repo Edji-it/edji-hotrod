@@ -31,6 +31,7 @@ export class CommentComponent implements OnInit {
   private showDeleteModal: boolean = false
   private user: any
   private subscriptions: Subscription[] = []
+  private repliesById: any = {}
 
   @Input() public comment: EdjiComment
   @Input() private readOnly: boolean = false
@@ -83,6 +84,16 @@ export class CommentComponent implements OnInit {
             this.user = user
         })
     )
+
+    // Subscribe to updates to the reply reference object
+    this.subscriptions.push( this._projects.repliesById.subscribe(
+      (repliesById) => {
+        this.repliesById = repliesById
+      },
+      (error) => {
+        console.error(error)
+      }
+    ) )
   }
 
   toggleActive( ): void {

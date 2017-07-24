@@ -119,5 +119,5 @@
 <emoji-keyboard [isActive]="isEmojiKeyboardActive()" [currentComment]="_comments.activeComment && _comments.activeComment.data ? _comments.activeComment.data : ''" (commentChange)="updateActiveComment($event)" (dismissKeyboard)="inactivateComment()"></emoji-keyboard>
 
 <!--Discussions goes here-->
-<hot-discussions (hide)="showDiscussions=false" [visible]="showDiscussions" [comment]="replyComment"></hot-discussions>
+<hot-discussions (hide)="hideDiscussions(replyComment)" [visible]="showDiscussions" [comment]="replyComment"></hot-discussions>
 

@@ -38,7 +38,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     
     private commentsByIndex: EdjiComment[][] = []
     private fireComments: EdjiComment[] = []
-    private showDiscussions = false
+    private showDiscussions: boolean = false
+    private focusOverride: boolean = false
 
     private highlightArray: number[] = []
     private alwaysHighlightArray: number[] = []
@@ -809,12 +810,14 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      * @param end Index for last word
      */
     private unfocusHighlight(start, end, location ?: any): void {
-        for (var i = start; i <= end; i ++) {
-            // if (this.focusArray[i] = true) {
-                this.focusArray[i] = false
-            // } 
+        if (!this.focusOverride) {
+            for (var i = start; i <= end; i ++) {
+                // if (this.focusArray[i] = true) {
+                    this.focusArray[i] = false
+                // } 
+            }
+            this.imageHotspotPlaceholder['focus'] = false
         }
-        this.imageHotspotPlaceholder['focus'] = false
     }
 
     /**
@@ -922,7 +925,15 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             // comment.active = true
         }, 500)
         this.replyComment = comment
+        this.focusOverride = true
+        this.focusHighlight(comment.start, comment.end, comment.loc)
         this.showDiscussions = true
+    }
+
+    private hideDiscussions(comment: any) {
+        this.showDiscussions = false
+        this.focusOverride = false
+        this.unfocusHighlight(comment.start, comment.end, comment.loc)
     }
 }
 
