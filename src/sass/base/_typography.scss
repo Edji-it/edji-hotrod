@@ -120,6 +120,11 @@ label {
   margin-bottom: 8px;
 }
 
+.label--gray {
+  @extend label;
+  color: $medium-gray;
+}
+
 .sub-label {
   color: $medium-gray;
   font-family: $base-font-family;
@@ -140,4 +145,24 @@ p, h1, h2, h3, h4 {
 
 .on-dark {
   color: #fff;
+}
+ 
+.beta-tag {
+  color: #FA9B5C;
+  vertical-align: super;
+  font-size: 0.75em;
+
+  &--icon {
+      @extend .beta-tag;
+      font-size: 0.45em;
+      position: absolute;
+      top: 0px;
+      right: 0px;
+      background: #FA9B5C;
+      border-radius: 50%;
+      color: #fff;
+      width: 1.3em;
+      height: 1.3em;
+      line-height: 1.3em;
+  }
 }

@@ -24,6 +24,8 @@ export class CommentComponent implements OnInit {
   private active = false
   // Is fully visible, focused, but not editable
   private preview = false
+  private reRecordAudio = false
+  private showDeleteModal: boolean = false
 
   @Input() public comment: EdjiComment
   @Input() private readOnly: boolean = false
@@ -34,6 +36,7 @@ export class CommentComponent implements OnInit {
       this.toggleActive()
     }
   }
+  @Input() private showDeleteAudioModal: boolean = false
   get isActive(): boolean { return this.active }
 
   @Output() commentDeleted = new EventEmitter<string>()
@@ -45,8 +48,6 @@ export class CommentComponent implements OnInit {
   @Output() commentUpdated: EventEmitter<any> = new EventEmitter()
   @Output() mobileActivation = new EventEmitter()
   @Output() mobileDeactivation = new EventEmitter()
-
-  private showDeleteModal: boolean = false
 
   constructor(
         private _projects: ProjectService,
@@ -111,19 +112,32 @@ export class CommentComponent implements OnInit {
       }
   }
 
-  deactivate(): void {
+  deactivate(commentData ?: string): void {
     this.active = false
     this.commentActivation.emit(false)
     // Save when comment is toggled away from
-    this.updateComment(this.comment.data)
+    if (commentData) {
+      this.updateComment(commentData)
+    } else {
+      this.updateComment(this.comment.data)
+    }
   }
 
   // Updates comment in db
-  public updateComment(commentData: string): void {
+  public updateComment(commentData: any): void {
+    this.reRecordAudio = false
+    if (commentData._id) {
+      // this.comment.project_id, commentData, this.comment.start, this.comment.end, this.comment.type, this.comment.text, this.comment._id, this.comment.loc
+      this.comment.data = commentData.data
+      this.comment.url = commentData.url
+    } else {
+      this.comment.data = commentData
+    }
+
     this.angulartics.eventTrack.next({ action: 'updateComment', properties: { category: 'projectAction', label: 'attempt' }})
     this.isLoading = true
 
-    this._projects.saveComment(this.comment.project_id, commentData, this.comment.start, this.comment.end, this.comment.type, this.comment.text, this.comment._id, this.comment.loc)
+    this._projects.saveComment(this.comment)
       .then(comment => {
         this.isLoading = false
         this.angulartics.eventTrack.next({ action: 'updateComment', properties: { category: 'projectAction', label: 'success' }})
@@ -150,6 +164,11 @@ export class CommentComponent implements OnInit {
         // Tell Annotator to destroy this comment element!
         this.commentDeleted.emit(comment._id)
         this.showDeleteModal = false
+
+        // If comment has associated file, delete file
+        if (comment.type == 'audio' && comment.data.length > 0) {
+          
+        }
       })
       .catch(error => {
         // TRACK EXCEPTION
@@ -182,30 +201,7 @@ export class CommentComponent implements OnInit {
     this.expandLine.emit(this.yPos)
   }
 
-  // /**
-  //  * iOS Text Comment Correction Activate
-  //  */
-  // mobileCommentFix(): void {
-  //   // iOS scroll fix enable
-  //   console.log('mcmt-active')
-  //   this.currentScroll = document.body.scrollTop
-  //   document.getElementsByTagName("body")[0].classList.add('disablePane');
-  //   document.getElementsByTagName("body")[0].style["top"] = "-" + this.currentScroll + "px";
-  //   this.mobileActivation.emit(this.yPos);
+  // recordAudio(): void {
+  //   this.reRecordAudio = true
   // }
-
-  // /**
-  //  * iOS Text Comment Correction Deactivate
-  //  */
-  // mobileCommentDone(): void {
-  //   // iOS scroll fix disable
-  //   document.getElementsByTagName("body")[0].classList.remove('disablePane');
-  //   document.getElementsByTagName("body")[0].removeAttribute("style");
-  //   document.body.scrollTop = this.currentScroll;
-  //   this.mobileDeactivation.emit(this.yPos);
-  //   // Dismiss the keyboard in mobile
-  //   this.dismissKeyboard.emit();
-  //   console.log('mcmt-nactive');
-  // }
-
 }

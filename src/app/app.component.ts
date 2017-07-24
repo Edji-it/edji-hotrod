@@ -3,8 +3,10 @@
  */
 import { Component, ViewEncapsulation } from '@angular/core';
 import { Angulartics2GoogleAnalytics } from 'angulartics2';
+import { Angulartics2 } from 'angulartics2'
 
 import { AppState } from './app.service';
+import { AuthService } from './shared'
 
 /*
  * App Component
@@ -28,13 +30,17 @@ export class AppComponent {
 
   constructor(
     public appState: AppState,
-    angulartics2GoogleAnalytics: Angulartics2GoogleAnalytics
+    private angulartics: Angulartics2,
+    angulartics2GoogleAnalytics: Angulartics2GoogleAnalytics,
+    private _auth: AuthService
     ) {
 
   }
 
   ngOnInit() {
-    
+    if (this._auth.getUser().isLoggedIn) {
+      this.angulartics.eventTrack.next({ action: 'hasAccount', properties: { category: 'edjiUsage', label: 'success' }})
+    }
   }
 
 }

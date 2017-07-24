@@ -8,31 +8,45 @@
 		<div class="options hidden-md-down">
 			<button *ngIf="project.types.indexOf('emoji') > -1" id="addEmojiComment" 
 				class="emoji" 
-				(click)="addEmojiComment($event)">
+				(click)="addCommentOfType('emoji')">
 					<i class="icon icon-emoji-comment"></i>
 				</button>
 			<button *ngIf="project.types.indexOf('text') > -1" 
 				class="emoji" 
 				id="addTextComment" 
-				(click)="addTextComment($event)">
+				(click)="addCommentOfType('text')">
 					<i class="icon icon-text-comment"></i>
+				</button>
+			<button *ngIf="project.types.indexOf('audio') > -1" 
+				class="emoji" 
+				id="addAudioComment" 
+				(click)="addCommentOfType('audio')">
+					<i class="icon icon-mic"></i>
+					<span class="beta-tag--icon" title="Beta Feature: May not work on all devices.">B</span>
 				</button>
 		</div>
 		<!--Mobile buttons-->
 		<div class="comment-options__mobile-wrap hidden-lg-up" [class.bottom-bar-offset]="user._id == project.teacher_id">
 			<div class="row comment__options--mobileRow">
-				<div class="col-6 comment__options--mobileCol" *ngIf="project.types.indexOf('emoji') > -1" [ngClass]="project.types.indexOf('emoji') > -1 && project.types.indexOf('text') > -1 ? 'col-6' : 'col-12'">
+				<div class="comment__options--mobileCol" *ngIf="project.types.indexOf('emoji') > -1" [ngClass]="'col-' + (12 / project.types.length)">
 					<button id="addEmojiComment" 
 						class="emoji comment__options--mobileButton" 
-						(tap)="addEmojiComment($event)">
+						(tap)="addCommentOfType('emoji')">
 							<i class="icon icon-emoji-comment"></i>
 						</button>
 				</div>
-				<div class="col-6 comment__options--mobileCol" *ngIf="project.types.indexOf('text') > -1" [ngClass]="project.types.indexOf('emoji') > -1 && project.types.indexOf('text') > -1 ? 'col-6' : 'col-12'">
+				<div class="comment__options--mobileCol" *ngIf="project.types.indexOf('text') > -1" [ngClass]="'col-' + (12 / project.types.length)">
 					<button id="addTextComment"
 						class="emoji comment__options--mobileButton" 
-						(tap)="addTextComment($event)">
+						(tap)="addCommentOfType('text')">
 							<i class="icon icon-text-comment"></i>
+						</button>
+				</div>
+				<div class="comment__options--mobileCol" *ngIf="project.types.indexOf('audio') > -1" [ngClass]="'col-' + (12 / project.types.length)">
+					<button id="addAudioComment"
+						class="emoji comment__options--mobileButton" 
+						(tap)="addCommentOfType('audio')">
+							<i class="icon icon-mic"></i>
 						</button>
 				</div>
 			</div>
@@ -40,6 +54,14 @@
 	</div>
 
 	<div class="article-wrap">
+		<div class="alert alert-warning alert-dismissible fade show" role="alert" *ngIf="audioSupportError">
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="audioSupportError = !audioSupportError">
+			<span aria-hidden="true">&times;</span>
+		</button>
+				The browser you are on does not currently support recording audio. Audio comment playback may also be affected on some browsers. 
+				The recommended browser for audio comments is the <a href="https://www.google.com/chrome/browser/desktop/" target="_blank">Google Chrome Web Browser</a> 
+				for your desktop device.
+		</div>
         <!--Create components after load for reading-->
 		<article id="annotatorContent" class="content active-content pt-4" (mouseup)="showCommentOptions($event)" (touchend)="showCommentOptions($event)" (clickOutside)="hideCommentOptions()">
 			<span *ngFor="let w of reading.words; let i = index" class="w" [ngClass]="[ w.styles.join(' '), getHighlightClass(i) ]" 
@@ -91,4 +113,4 @@
     <edji-feedback></edji-feedback>
 </div>
 
-<emoji-keyboard [isActive]="isEmojiKeyboardActive()" [currentComment]="activeComment.data" (commentChange)="updateActiveComment($event)" (dismissKeyboard)="inactivateComment()"></emoji-keyboard>
+<emoji-keyboard [isActive]="isEmojiKeyboardActive()" [currentComment]="activeComment && activeComment.data ? activeComment.data : ''" (commentChange)="updateActiveComment($event)" (dismissKeyboard)="inactivateComment()"></emoji-keyboard>

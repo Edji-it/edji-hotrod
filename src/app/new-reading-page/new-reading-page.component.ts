@@ -7,6 +7,7 @@ import { Angulartics2 } from 'angulartics2';
 
 import { ReadingService } from '../shared/reading.service';
 import { ProjectService } from '../shared/project.service';
+import { AuthService } from '../shared';
 import * as Rangy from 'rangy';
 
 @Component({
@@ -98,7 +99,8 @@ export class NewReadingPage implements OnInit {
         private angulartics: Angulartics2,
         fb: FormBuilder,
         private el: ElementRef,
-        private _title: Title
+        private _title: Title,
+        private _auth: AuthService
     ) {
         this.readingForm = fb.group({
             title: [null, Validators.required],
@@ -406,7 +408,10 @@ export class NewReadingPage implements OnInit {
 
                         // Create default Project if it is in final version
                         if (reading.draft===false) {
-                            this._projects.create(data._id, { 'label' : form.label, 'types' : ['emoji','text'] })
+                            // Get authorized comment types
+                            let commentTypes = this._auth.getAllowedCommentTypes()
+
+                            this._projects.create(data._id, { 'label' : form.label, 'types' : commentTypes })
                                 .subscribe( (project) => {
                                     this.addLoadingD = false;
                                     this.addLoadingP = false;

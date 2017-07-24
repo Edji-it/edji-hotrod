@@ -7,3 +7,6 @@ export * from './del-reading/del-reading.component';
 export * from './del-project/del-project.component';
 export * from './hero-subscribe/hero-subscribe.component';
 export * from './hero-change/hero-change.component';
+export * from './del-reading/del-reading.component'
+export * from './del-project/del-project.component'
+export * from './del-audio/del-audio.component'

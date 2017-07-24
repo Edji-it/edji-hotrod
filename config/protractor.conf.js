@@ -27,7 +27,7 @@ exports.config = {
     'browserName': 'chrome',
     marionette: true,
     'chromeOptions': {
-      'args': ['show-fps-counter=true']
+      'args': ['show-fps-counter=true','use-fake-ui-for-media-stream']
     }, // chrome options
     shardTestFiles: true,
     maxInstances: 3

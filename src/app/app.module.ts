@@ -24,6 +24,7 @@ import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 import { AppState, InternalStateType } from './app.service';
 import { AuthService, BumblebeeService, ReadingService, ProjectService, SocketService } from './shared';
 import { CommentService } from './shared/comment.service';
+import { MediaService } from './shared/media.service';
 import { ReuseStrategy } from './route-reuse-strategy';
 
 // Directives
@@ -43,8 +44,8 @@ import { HomeComponent } from './home';
 import { RegisterComponent } from './register';
 import { LoginForm, GuestForm } from './forms';
 
-import { LoginModal, ResetPassComponent, DeleteCommentModal, DeleteReadingModal, DeleteProjectModal, AddProjectModal, LoginRequiredModal, HeroSubscribeComponent, HeroChangeComponent } from './modals';
-import { AnnotatorComponent, CommentComponent, TextCommentComponent, EmojiCommentComponent, EmojiKeyboardComponent } from './annotator';
+import { LoginModal, ResetPassComponent, DeleteCommentModal, DeleteAudioModal, DeleteReadingModal, DeleteProjectModal, AddProjectModal, LoginRequiredModal, HeroSubscribeComponent, HeroChangeComponent } from './modals';
+import { AnnotatorComponent, CommentComponent, TextCommentComponent, EmojiCommentComponent, EmojiKeyboardComponent, AudioCommentComponent } from './annotator';
 import { ProjectPageComponent, ProjectInfoComponent, OwnerToolsComponent, LeaderboardComponent } from './project-page';
 import { FirefeedComponent } from './project-page/owner-tools/firefeed/firefeed.component';
 import { FirecardComponent } from './project-page/owner-tools/firefeed/firecard/firecard.component';
@@ -70,6 +71,7 @@ const APP_PROVIDERS = [
   AppState,
   AuthService,
   ReadingService,
+  MediaService,
   ProjectService,
   CommentService,
   SocketService,
@@ -107,6 +109,7 @@ type StoreType = {
     CommentComponent,
     TextCommentComponent,
     EmojiCommentComponent,
+    AudioCommentComponent,
     EmojiKeyboardComponent,
     AppComponent,
     AccountComponent,
@@ -117,6 +120,7 @@ type StoreType = {
     ChangePassComponent,
     ResetPassComponent,
     DeleteCommentModal,
+    DeleteAudioModal,
     DeleteReadingModal,
     DeleteProjectModal,
     UploadAvatarModal,

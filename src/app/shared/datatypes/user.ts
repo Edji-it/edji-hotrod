@@ -13,7 +13,6 @@ interface BaseUser {
   fullname: string,
   email: string,
   identities?: string[],
-  avatar : string, // The url to the avatar image
   prefs?: {
     recentEmoji?: string[],
     onboarding?: {
@@ -34,5 +33,6 @@ interface BaseUser {
   media?: {
     images?: { title: string, url: string }[],
     documents?: { title: string, pages: string[] }[]
-  }
+  },
+  avatar?: string
 }

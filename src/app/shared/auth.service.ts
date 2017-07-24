@@ -525,6 +525,17 @@ export class AuthService implements CanActivate {
             )
     }
 
+    /**
+     * Return array of allowed comment types
+     */
+    public getAllowedCommentTypes() : string[] {
+        if (this.user['hero'] && this.user['hero']['status'] == 'subscribed') {
+            return ['emoji','text','audio']
+        } else {
+            return ['emoji','text']
+        }
+    }
+
     /** Provides logic for sending user back to home if they are not authorized */
     public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
         if (!this.getUser().isLoggedIn) {
