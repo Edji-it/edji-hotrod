@@ -17,7 +17,7 @@
         <audio-comment (tap)="activate()" *ngIf="comment.type == 'audio'" [comment]="comment" #commentInput (save)="deactivate($event)" [active]="comment.active" 
             [recordNewAudio]="reRecordAudio" (showDeleteAudioModal)="showDeleteAudioModal = true" [userPermission]="userPermission" [reply]="reply"></audio-comment>
         <button *ngIf="userPermission >= 3" (tap)="userPermission > 3 ? deleteComment(comment) : showDeleteModal = true" class='inline-delete'>+</button>
-        <div *ngIf="!reply" class="reply" (click)="commentReply.emit()">
+        <div *ngIf="!reply && project.types.indexOf('reply') > -1" class="reply" (click)="commentReply.emit()">
             <p class="text-left reply-text-left">Reply</p>
             <span class="text-right ">
                 <p class="reply-text-right">{{ repliesById[comment._id] && repliesById[comment._id].length }}</p>

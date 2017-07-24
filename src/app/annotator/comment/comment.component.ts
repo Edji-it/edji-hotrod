@@ -32,6 +32,7 @@ export class CommentComponent implements OnInit {
   private user: any
   private subscriptions: Subscription[] = []
   private repliesById: any = {}
+  private project: any
 
   @Input() public comment: EdjiComment
   @Input() private readOnly: boolean = false
@@ -89,6 +90,18 @@ export class CommentComponent implements OnInit {
     this.subscriptions.push( this._projects.repliesById.subscribe(
       (repliesById) => {
         this.repliesById = repliesById
+      },
+      (error) => {
+        console.error(error)
+      }
+    ) )
+
+    // Subscribe to updates from that project once we're subscribed to the reading
+    this.subscriptions.push( this._projects.currentProject.subscribe(
+      (project) => {
+        if (project) {
+          this.project = project
+        }
       },
       (error) => {
         console.error(error)
