@@ -7,8 +7,15 @@ export class Project implements PageObjectInterface {
   public addEmojiBtn = element(by.id("addEmojiComment"));
   public addTextBtn = element(by.id("addTextComment"));
   public addAudioBtn = element(by.id("addAudioComment"));
+  public addReplyBtn = element(by.id("addReply"));
+  public addTextReplyBtn = element(by.id("addTextReply"));
+  public addEmojiReplyBtn = element(by.id("addEmojiReply"));
+  public addAudioReplyBtn = element(by.id("addAudioReply"));
   public image = element(by.css('article .img-wrap > img'));
   public textComment = element(by.css('.comment.new textarea.text-comment-input'));
+  public textReplyComment = element(by.css('.comment.new textarea.text-comment-input .replyDisplay'));
+  public dismissReplyPanelBtn = element(by.css('button.close .stats-close-btn .btn-icon--round'));
+  public discussionPanel = element(by.css('div.sliding-pane .from-left .replies .slide-in'));
   public commentSave = element(by.css('.comment__save'));
   public commentDelete = element(by.css('.comment.new button.inline-delete'));
   public imageRight = 25;

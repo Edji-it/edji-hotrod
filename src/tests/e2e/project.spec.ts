@@ -216,44 +216,35 @@ describe('Project Page', () => {
             project.getReplyPage();
             // Code for making a reply
             
-            // Wait 5 seconds for the reply button to become clickable
+            // Wait 5 seconds for the reply button to become clickable and Click on the reply button
+            browser.wait(EC.elementToBeClickable(project.addReplyBtn), 5000, "never found the add reply comment button");
+            project.addReplyBtn.click();
 
-
-            // Click on the reply button
-
-
-            // Wait 5 seconds for the add text reply button to become clickable
-
-
-            // Click on the add text reply button
-
-
-            // Wait 5 seconds for the text input to show up
-
+            // Wait 5 seconds for the add text reply button to become clickable and Click on the add text reply button
+            browser.wait(EC.elementToBeClickable(project.addTextReplyBtn), 5000, "never found the add text reply comment button");
+            project.addTextReplyBtn.click();
 
             // Add text to the text input field
-
+            browser.wait(EC.elementToBeClickable(project.textReplyComment), 5000, "couldn't add text to the reply text comment");
+            project.textReplyComment.sendKeys('some test reply text');
 
             // Blur/Inactivate the reply comment
+            browser.wait(EC.elementToBeClickable(project.commentSave), 5000, "could not click the save button on the comment");
+            project.commentSave.click();
 
-
-            // Wait 5 seconds for the delete button to become clickable
-
-
-            // Click the delete button
-
+            // Wait 5 seconds for the delete button to become clickable and then delete the reply comment
+            browser.wait(EC.elementToBeClickable(project.commentDelete), 5000, "could not find delete button on the reply comment");
+            project.commentDelete.click();
 
             // Verify the reply comment is gone
+            browser.wait(EC.invisibilityOf(project.textReplyComment), 5000, "text reply comment never went away after deleting it");
 
-
-            // Wait 5 seconds for the dismiss button to become clickable
-
-
-            // Click the dismiss button
-
+            // Wait 5 seconds for the dismiss button to become clickable and then click it
+            browser.wait(EC.invisibilityOf(project.dismissReplyPanelBtn), 5000, "never found discussions panel dismiss button");
+            project.dismissReplyPanelBtn.click();
 
             // Verify the discussions panel is dismissed
-            
+            browser.wait(EC.invisibilityOf(project.discussionPanel), 5000, "discussion panel never went away after dismissal");
         });
     });
      
