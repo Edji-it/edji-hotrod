@@ -1,7 +1,7 @@
 import { Angulartics2 } from 'angulartics2/dist';
 import { EdjiComment, Project, Reading } from '../../../shared/datatypes';
 import { Subscription } from 'rxjs/Rx';
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 
 // Project dependencies
 import { ProjectService } from '../../../shared/project.service';
@@ -35,7 +35,8 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
     private _readings: ReadingService,
     private _auth: AuthService,
     private _comments: CommentService,
-    private angulartics: Angulartics2
+    private angulartics: Angulartics2,
+    private el: ElementRef
   ) { }
 
   ngOnInit() {
@@ -134,6 +135,9 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
         comment.project_id = projectId
         this._comments.activeComment = comment
         this._projects.addCommentToReplies(comment)
+        setTimeout(() => {
+          this.el.nativeElement.querySelector('.replyOverflow').scrollTop = this.el.nativeElement.querySelector('.replyOverflow').scrollHeight
+        }, 100)
       })
       .catch(error => {
         // TRACK EXCEPTION
