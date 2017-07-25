@@ -215,8 +215,12 @@ describe('Project Page', () => {
             // need to navigate to the reply-comment page
             project.getReplyPage();
             // Code for making a reply
+            // Wait for text to load
+            browser.wait(EC.elementToBeClickable(element(by.css(".w[index='18']"))), 10000, "never found words to click on");
             
             // Wait 5 seconds for the reply button to become clickable and Click on the reply button
+            browser.wait(EC.elementToBeClickable(project.existingTextComment), 5000, "never found the existing comment to reply to");
+            project.existingTextComment.click()
             browser.wait(EC.elementToBeClickable(project.addReplyBtn), 5000, "never found the add reply comment button");
             project.addReplyBtn.click();
 
@@ -233,14 +237,14 @@ describe('Project Page', () => {
             project.commentSave.click();
 
             // Wait 5 seconds for the delete button to become clickable and then delete the reply comment
-            browser.wait(EC.elementToBeClickable(project.commentDelete), 5000, "could not find delete button on the reply comment");
-            project.commentDelete.click();
+            browser.wait(EC.elementToBeClickable(project.replyDelete), 5000, "could not find delete button on the reply comment");
+            project.replyDelete.click();
 
             // Verify the reply comment is gone
             browser.wait(EC.invisibilityOf(project.textReplyComment), 5000, "text reply comment never went away after deleting it");
 
             // Wait 5 seconds for the dismiss button to become clickable and then click it
-            browser.wait(EC.invisibilityOf(project.dismissReplyPanelBtn), 5000, "never found discussions panel dismiss button");
+            browser.wait(EC.elementToBeClickable(project.dismissReplyPanelBtn), 5000, "never found discussions panel dismiss button");
             project.dismissReplyPanelBtn.click();
 
             // Verify the discussions panel is dismissed
