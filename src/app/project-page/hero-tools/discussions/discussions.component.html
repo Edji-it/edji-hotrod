@@ -2,7 +2,7 @@
 <div *ngIf="currentReading && currentReading.words" class="sliding-pane from-left replies" [ngClass]="{ 'slide-in' : visible }">
   <div class="container-fluid container--less-pad replyContainer">
     <h4>Discussions
-      <button (click)="hide.emit()" class="close stats-close-btn btn-icon--round" type="button">
+      <button (click)="hide.emit()" class="close stats-close-btn btn-icon--round" id="discussionClosePanel" type="button">
         <span aria-hidden="true">×</span>
       </button>
     </h4>
