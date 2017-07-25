@@ -26,6 +26,15 @@ export class AuthService implements CanActivate {
     private currentUserSource: BehaviorSubject<any>;
     private currentUser: Observable<any>;
 
+    /**
+     * Global Feature Flag object
+     * - Keep updated when flags are added or removed, for reference
+     * - Update via url param subscriptions inside of relevant components
+     */
+    public secretSwitches = {
+        heroAvailable : false
+    }
+
     constructor(private http: Http, private _router: Router, _locker: Locker) {
         this.locker = _locker.useDriver(Locker.DRIVERS.LOCAL);
 

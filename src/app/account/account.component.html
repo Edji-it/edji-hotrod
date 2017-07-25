@@ -47,7 +47,7 @@
         </div>
 
         <!--Hero Subscription Mgmt-->
-        <div class="info-group">
+        <div *ngIf="heroAvailable" class="info-group">
             <p class="info">
                 <span *ngIf="currentUser.hero.status && currentUser.hero.status != 'unsubscribed'" class="text-capitalize mr-4" style="display:inline-block;">{{currentUser.hero.status ? currentUser.hero.status : ''}} ({{ currentUser.hero.type }})</span>
                 <span *ngIf="!currentUser.hero.status || currentUser.hero.status == 'unsubscribed'" class="mr-4">Unsubscribed</span>

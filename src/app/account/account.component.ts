@@ -1,4 +1,5 @@
-import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { AuthService } from '../shared/auth.service';
 import { User } from '../shared/datatypes';
 
@@ -7,7 +8,7 @@ import { User } from '../shared/datatypes';
   styleUrls: ['./account.component.scss'],
   templateUrl: './account.component.html'
 })
-export class AccountComponent implements OnInit {
+export class AccountComponent implements OnInit, OnDestroy {
 
   /*
   Last Mod: July 4th, 2017 - INDEPENDENCE DAY - Nick Pumper
@@ -20,13 +21,34 @@ export class AccountComponent implements OnInit {
   private showPassModal : boolean = false;
   private showUploadProfPicModal : boolean = false;
 
-  constructor(private _auth: AuthService  /*, private _title: Title*/) {
+  private subscriptions : any[] = []
+
+  // Feature flags
+  private heroAvailable: boolean = false
+
+  constructor(private _auth: AuthService, private route: ActivatedRoute) {
     this.currentUser = this._auth.getUser();
     this.nameInitials = "";
   } // constructor
 
   ngOnInit() { 
     // this._title.setTitle('Edji | "' + this.currentUser['fullname'] + '"');
+
+    this.subscriptions.push(
+      this.route.params
+      .subscribe((params: any) => { 
+        if(params && params['secretSwitch']){
+            this._auth.secretSwitches[params['secretSwitch']] = true;
+            if (this._auth.secretSwitches['heroAvailable']) {
+                this.heroAvailable = true
+            }
+        }
+      })
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }
 
   public getUserInitials() : string 
