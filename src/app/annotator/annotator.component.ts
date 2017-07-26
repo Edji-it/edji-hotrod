@@ -490,6 +490,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             start: start,
             end: end,
             type: type,
+            text: text,
             loc: this.imageCoords
         }
 
