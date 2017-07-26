@@ -45,10 +45,6 @@ describe('Project Page', () => {
             project.getPage();
         });
 
-        afterEach(() => {
-            // we're going to be logged in on the project page after each of the tests, so log out
-            sidebar.logout();
-        });
 
         loginModal.testLoginModalErrors();
     })
