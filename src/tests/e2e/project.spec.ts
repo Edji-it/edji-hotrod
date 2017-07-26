@@ -184,14 +184,14 @@ describe('Project Page', () => {
             project.addAudioBtn.click();
 
             // Wait 5 seconds for record button to become clickable and click the record audio button to start recording
-            browser.wait(EC.elementToBeClickable(project.audioRecord), 5000, "never found the record audio button");
+            browser.wait(EC.elementToBeClickable(project.audioRecord), 7000, "never found the record audio button");
             project.audioRecord.click();
 
             // wait 5 seconds for the audio to record
             browser.sleep(5000)
 
             // click the record audio button to end recording
-            browser.wait(EC.elementToBeClickable(project.audioRecord), 5000, "never found the record audio button");
+            browser.wait(EC.elementToBeClickable(project.audioRecord), 7000, "never found the record audio button");
             project.audioRecord.click();
 
             // wait 5 seconds for the play audio button to become clickable
