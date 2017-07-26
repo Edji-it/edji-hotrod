@@ -40,7 +40,7 @@ export class AccountComponent implements OnInit, OnDestroy {
         user => {
           this.currentUser = user
           if (this.currentUser.hero && this.currentUser.hero.will_expire) {
-            console.log("found will expire", this.currentUser.hero.will_expire < Date.now())
+            console.log("found will expire", this.currentUser.hero.will_expire < new Date().getTime())
             let expireDate = new Date(this.currentUser.hero.will_expire)
             if ( expireDate.getTime() < Date.now()) {
               this.expired = true
