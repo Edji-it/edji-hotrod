@@ -19,6 +19,7 @@ export class Project implements PageObjectInterface {
   public discussionPanel = element(by.css('div.sliding-pane.from-left.replies.slide-in'));
   public commentSave = element(by.css('.comment__save'));
   public commentDelete = element(by.css('.comment.new button.inline-delete'));
+  public emojiCommentDelete = element(by.css('button.inline-delete'));
   public replyDelete = element(by.css('button.inline-delete'));
   public imageRight = 25;
   public imageDown = 25;

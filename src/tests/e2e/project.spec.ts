@@ -27,9 +27,9 @@ describe('Project Page', () => {
 
     /* ---- beforeEach ---------------------------- */
 
-    beforeEach(() => {
-        project.getPage();
-    });
+    // beforeAll(() => {
+    //     project.getPage();
+    // });
 
     /* ---- Project Tests ------------------------- */
 
@@ -40,9 +40,24 @@ describe('Project Page', () => {
      * - Make sure that the guest name is on the account button
      */
 
-    loginModal.testLoginModalErrors();
+    describe("Login modal error", () => {
+        beforeEach(() => {
+            project.getPage();
+        });
+
+        afterEach(() => {
+            // we're going to be logged in on the project page after each of the tests, so log out
+            sidebar.logout();
+        });
+
+        loginModal.testLoginModalErrors();
+    })
 
     describe("Login modal success", () => {
+        beforeEach(() => {
+            project.getPage();
+        });
+
         afterEach(() => {
             // we're going to be logged in on the project page after each of the tests, so log out
             sidebar.logout();
@@ -102,6 +117,10 @@ describe('Project Page', () => {
 
             // Save emoji comment
             project.emojiCommentSave.click();
+
+            // delete the comment
+            browser.wait(EC.elementToBeClickable(project.emojiCommentDelete), 5000, "could not find delete button");
+            project.emojiCommentDelete.click();
         });
 
         it("should make a comment on an image", () => {
@@ -125,8 +144,8 @@ describe('Project Page', () => {
             project.commentSave.click();
 
             // delete the comment
-            browser.wait(EC.elementToBeClickable(project.commentDelete), 5000, "could not find delete button");
-            project.commentDelete.click();
+            browser.wait(EC.elementToBeClickable(project.emojiCommentDelete), 5000, "could not find delete button");
+            project.emojiCommentDelete.click();
 
             // make sure it's deleted
             browser.wait(EC.invisibilityOf(project.textComment), 5000, "text comment never went away after deleting it");
@@ -149,7 +168,7 @@ describe('Project Page', () => {
 
         it("should make audio comment as logged in user", () => {
             // need to navigate to the audio-specific page
-            project.getAudioPage();
+        // project.getAudioPage();
             // Code for making an audio comment
             // Find text to select
             browser.wait(EC.elementToBeClickable(element(by.css(".w[index='18']"))), 10000, "never found words to click on");
@@ -213,7 +232,7 @@ describe('Project Page', () => {
 
         it("should make a reply comment as a logged in user", () => {
             // need to navigate to the reply-comment page
-            project.getReplyPage();
+        // project.getReplyPage();
             // Code for making a reply
             // Wait for text to load
             browser.wait(EC.elementToBeClickable(element(by.css(".w[index='18']"))), 10000, "never found words to click on");
