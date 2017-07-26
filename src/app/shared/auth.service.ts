@@ -24,7 +24,7 @@ export class AuthService implements CanActivate {
     //NOTE: (6/15/17) If this.user ever needs to be edited it, make a copy, edit the copy, THEN assign it so this.user is always fresh.
     private user: User; 
     private currentUserSource: BehaviorSubject<any>;
-    private currentUser: Observable<any>;
+    public currentUser: Observable<any>;
 
     /**
      * Global Feature Flag object
