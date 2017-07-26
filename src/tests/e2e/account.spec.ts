@@ -50,7 +50,7 @@ describe('Account Page', () => {
     describe('Hero Management', () => {
         it('Hero user should see subscription options', () => {
             // make sure there is no avatar
-            browser.wait(EC.invisibilityOf(account.heroModifyBtn), 5000, "should see modify subscription button");
+            browser.wait(EC.visibilityOf(account.heroModifyBtn), 5000, "should see modify subscription button");
         });
     });
 
