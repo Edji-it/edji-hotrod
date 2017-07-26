@@ -48,13 +48,16 @@
 
         <!--Hero Subscription Mgmt-->
         <div *ngIf="heroAvailable" class="info-group">
-            <p class="info">
-                <span *ngIf="currentUser.hero.status && currentUser.hero.status != 'unsubscribed'" class="text-capitalize mr-4" style="display:inline-block;">{{currentUser.hero.status ? currentUser.hero.status : ''}} ({{ currentUser.hero.type }})</span>
-                <span *ngIf="!currentUser.hero.status || currentUser.hero.status == 'unsubscribed'" class="mr-4">Unsubscribed</span>
+            <div class="info">
+                <span *ngIf="currentUser.hero.active" class="text-capitalize mr-4" style="display:inline-block;">Subscribed ({{ currentUser.hero.type }})</span>
+                <span *ngIf="!currentUser.hero.active" class="mr-4">Unsubscribed</span>
 
-                <button *ngIf="currentUser.hero.status !== 'unsubscribed'" class="btn btn-secondary mr-4" (click)="showHeroChangeModal = true">Modify Subscription</button>
-                <button *ngIf="currentUser.hero.status == 'unsubscribed'" class="btn btn-hero mr-4" (click)="showHeroSubModal = true">Go Hero</button>
-            </p>
+                <button *ngIf="currentUser.hero.active" class="btn btn-secondary mr-4" (click)="showHeroChangeModal = true">Modify</button>
+                <button *ngIf="!currentUser.hero.active" class="btn btn-hero mr-4" (click)="showHeroSubModal = true">Go Hero</button>
+
+                <div class="alert alert-warning my-1" *ngIf="expired">Your Hero subscription expired {{ currentUser.hero.will_expire | edjidate:'timeStamp':'mediumDate' }}</div>
+                <div class="alert alert-info my-1" *ngIf="expiring">Your Hero subscription will expire {{ currentUser.hero.will_expire | edjidate:'timeStamp':'mediumDate' }}</div>
+            </div>
             <label for="inputPassword" class="info-label">Hero Subscription</label>
         </div>
 

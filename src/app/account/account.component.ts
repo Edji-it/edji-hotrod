@@ -16,10 +16,12 @@ export class AccountComponent implements OnInit, OnDestroy {
   The page for the user's account info. A profile page.
   */
   
-  private nameInitials  : string = ""; // we gonna use these for the temp profile pic
-  private currentUser   : any;
-  private showPassModal : boolean = false;
-  private showUploadProfPicModal : boolean = false;
+  private nameInitials  : string = "" // we gonna use these for the temp profile pic
+  private currentUser   : any
+  private expiring : boolean = false
+  private expired : boolean = false
+  private showPassModal : boolean = false
+  private showUploadProfPicModal : boolean = false
 
   private subscriptions : any[] = []
 
@@ -28,6 +30,15 @@ export class AccountComponent implements OnInit, OnDestroy {
 
   constructor(private _auth: AuthService, private route: ActivatedRoute) {
     this.currentUser = this._auth.getUser();
+    if (this.currentUser.hero && this.currentUser.hero.will_expire) {
+      console.log("found will expire", this.currentUser.hero.will_expire < Date.now())
+      let expireDate = new Date(this.currentUser.hero.will_expire)
+      if ( expireDate.getTime() < Date.now()) {
+        this.expired = true
+      } else {
+        this.expiring = true
+      }
+    }
     this.nameInitials = "";
   } // constructor
 
@@ -36,14 +47,14 @@ export class AccountComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(
       this.route.params
-      .subscribe((params: any) => { 
-        if(params && params['secretSwitch']){
-            this._auth.secretSwitches[params['secretSwitch']] = true;
-            if (this._auth.secretSwitches['heroAvailable']) {
-                this.heroAvailable = true
-            }
-        }
-      })
+        .subscribe((params: any) => { 
+          if(params && params['secretSwitch']){
+              this._auth.secretSwitches[params['secretSwitch']] = true;
+              if (this._auth.secretSwitches['heroAvailable'] || (this.currentUser.hero && this.currentUser.hero.active)) {
+                  this.heroAvailable = true
+              }
+          }
+        })
     );
   }
 
