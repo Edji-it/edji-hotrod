@@ -46,6 +46,14 @@ describe('Account Page', () => {
         browser.wait(EC.titleContains(result), 5000, 'Title should contain "Edji".');
     });
 
+    // Created 7.25.17
+    describe('Hero Management', () => {
+        it('Hero user should see subscription options', () => {
+            // make sure there is no avatar
+            browser.wait(EC.invisibilityOf(account.heroModifyBtn), 5000, "should see modify subscription button");
+        });
+    });
+
     // Created 7.3.17
     describe('Avatars', () => {
 
