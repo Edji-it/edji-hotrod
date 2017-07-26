@@ -29,21 +29,28 @@ export class AccountComponent implements OnInit, OnDestroy {
   private heroAvailable: boolean = false
 
   constructor(private _auth: AuthService, private route: ActivatedRoute) {
-    this.currentUser = this._auth.getUser();
-    if (this.currentUser.hero && this.currentUser.hero.will_expire) {
-      console.log("found will expire", this.currentUser.hero.will_expire < Date.now())
-      let expireDate = new Date(this.currentUser.hero.will_expire)
-      if ( expireDate.getTime() < Date.now()) {
-        this.expired = true
-      } else {
-        this.expiring = true
-      }
-    }
+    
     this.nameInitials = "";
   } // constructor
 
   ngOnInit() { 
     // this._title.setTitle('Edji | "' + this.currentUser['fullname'] + '"');
+    this.subscriptions.push(
+      this._auth.currentUser.subscribe(
+        user => {
+          this.currentUser = user
+          if (this.currentUser.hero && this.currentUser.hero.will_expire) {
+            console.log("found will expire", this.currentUser.hero.will_expire < Date.now())
+            let expireDate = new Date(this.currentUser.hero.will_expire)
+            if ( expireDate.getTime() < Date.now()) {
+              this.expired = true
+            } else {
+              this.expiring = true
+            }
+          }
+        }
+      )
+    )
 
     this.subscriptions.push(
       this.route.params

@@ -6,7 +6,7 @@
                 <button (click)="close()" type="button" class="close">&times;</button>
             </div>
             <div class="modal-body">
-                <div *ngIf="!confirmCancel" class="row">
+                <div *ngIf="!confirmCancel && !isCanceled" class="row">
                     <div class="col-12">
                         <label>Hero Subscription Plan</label>
                         <table class="table table-hover">
@@ -54,7 +54,7 @@
                         <hr>
                     </div>
                 </div>
-                <div *ngIf="confirmCancel" class="row">
+                <div *ngIf="confirmCancel && !isCanceled" class="row">
                     <div class="col-12">
                         <p>Please confirm that you would like unsubscribe from Edji Hero.</p>
                         <p>You will remain a Hero until the end of your current payment period.</p>
@@ -62,6 +62,11 @@
                           <button [class.loading]="canceling" id="subHero" (click)="cancelSub()" class="btn btn-hero">Cancel Subscription</button>
                         </div>
                         <hr>
+                    </div>
+                </div>
+                <div *ngIf="isCanceled" class="row">
+                    <div class="col-12">
+                        <p>Your Hero subscription has been canceled.</p>
                     </div>
                 </div>
             </div>
