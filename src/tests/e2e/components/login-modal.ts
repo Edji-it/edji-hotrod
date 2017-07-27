@@ -58,7 +58,7 @@ export class LoginModal {
   public testLoginSuccess(validate: () => void) {
     beforeEach(() => {
       // make sure we're on the right component
-      browser.wait(this.EC.elementToBeClickable(this.gotoAccountLoginButton), 5000, "button to navigate to account login never became clickable after component init");
+      browser.wait(this.EC.elementToBeClickable(this.gotoAccountLoginButton), 7000, "button to navigate to account login never became clickable after component init");
     });
 
     it("should log in a guest user", () => {
