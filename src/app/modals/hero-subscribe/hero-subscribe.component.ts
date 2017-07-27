@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 // Project dependencies
 import { AuthService } from '../../shared';
@@ -19,12 +19,24 @@ export class HeroSubscribeComponent implements OnInit {
   private userNowHero: boolean
   private stripe: any
 
+  @Input()
+  monthlyAmountOff: number
+
+  @Input()
+  yearlyAmountOff: number
+
   @Output()
   closeModal: EventEmitter<any> = new EventEmitter(); // Tell the listening page to close the darned thing.
   
   constructor(private _auth: AuthService) { }
 
   ngOnInit() {
+    if (this.monthlyAmountOff) {
+      this.subtype = 'monthly'
+    }
+    if (this.yearlyAmountOff) {
+      this.subtype = 'yearly'
+    }
       // Create a Stripe client
     this.stripe = Stripe('pk_test_e2lOurNpSI745MOUdu2LgzOu');
 
@@ -93,8 +105,14 @@ export class HeroSubscribeComponent implements OnInit {
           var errorElement = document.getElementById('card-errors');
           errorElement.textContent = result.error.message;
         } else {
+          let amountOff
+          if (this.subtype == 'monthly' && this.monthlyAmountOff) {
+            amountOff = this.monthlyAmountOff
+          } else if (this.subtype == 'yearly' && this.yearlyAmountOff) {
+            amountOff = this.monthlyAmountOff
+          }
           // Submit with payment token
-          this._auth.subscribeToHero(this.subtype, result.token.id)
+          this._auth.subscribeToHero(this.subtype, result.token.id, amountOff)
             .subscribe(
               data => {
                 console.log(data)
@@ -126,6 +144,14 @@ export class HeroSubscribeComponent implements OnInit {
     //   description: 'Monthly Subscription',
     //   amount: 2000
     // });
+  }
+
+  getMonthlyPrice() : number {
+    return Math.round( (5 - this.monthlyAmountOff)*100 )/100
+  }
+
+  getYearlyPrice() : number {
+    return Math.round( (48 - this.yearlyAmountOff)*100 )/100
   }
   
 

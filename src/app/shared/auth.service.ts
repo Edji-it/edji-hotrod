@@ -558,7 +558,7 @@ export class AuthService implements CanActivate {
     /**
      * Submit payment and subscription type to add plan to user
      */
-    public subscribeToHero(subscriptionType, tokenId): Observable<any> {
+    public subscribeToHero(subscriptionType, tokenId, amountOff ?: number): Observable<any> {
         console.log(tokenId)
         let data = {
             subscriptionType : subscriptionType,

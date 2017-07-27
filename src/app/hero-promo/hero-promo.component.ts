@@ -14,12 +14,14 @@ export class HeroPromoComponent implements OnInit {
   private countdownDate
   private countdownText: string
   private countdownOver: boolean
-  private heroCount: number = 1
   private subMsg : string
   private subError: boolean
   private subSuccess: boolean
   private showLoginModal: boolean
   private showHeroSubModal: boolean
+
+
+  private heroCount: number = 1
 
   private subscriptions: Subscription[] = []
 
@@ -41,6 +43,10 @@ export class HeroPromoComponent implements OnInit {
     this.countdownDate = new Date("Aug 15, 2017 05:00:00").getTime()
     // kick off countdown
     this.incrementer()
+  }
+
+  private earlyAmountOff(): number {
+    return (500 - this.heroCount)/100
   }
 
   private incrementer() : void {

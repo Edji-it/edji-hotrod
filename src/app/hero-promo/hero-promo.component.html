@@ -40,9 +40,9 @@
     <!--Signup w/ leveraged offer-->
     <div *ngIf="countdownOver" class="row hero-promo-form">
       <div class="col-md-6 offset-md-3">
-        <p class="text-center">Your exclusive early signup offer:</p>
+        <p class="text-center">Exclusive early signup offer</p>
         <!--<span style="font-weight:bold;color:#d82727;">${{ heroCount/100 }}/mo</span>-->
-        <div class="button__row pt-1 pb-4">
+        <div class="button__row pb-4">
           <button class="btn btn-hero" (click)="goHero()">Go Hero for ${{ heroCount/100 }}/mo</button>
         </div>
 
@@ -60,4 +60,4 @@
 </div><!--container-fluid-->
 
 <hot-login-register [loginHeader]="'To go Hero, first you\'ll need an account'" class="modal-will-fade" [class.show]="showLoginModal" (closeModal)="showLoginModal = false" (loginSuccess)="showHeroSubModal = true"></hot-login-register>
-<hero-subscribe-modal class="modal-will-fade" [class.show]="showHeroSubModal" (closeModal)="showHeroSubModal = !showHeroSubModal"></hero-subscribe-modal>
+<hero-subscribe-modal [monthlyAmountOff]="earlyAmountOff()" class="modal-will-fade" [class.show]="showHeroSubModal" (closeModal)="showHeroSubModal = !showHeroSubModal"></hero-subscribe-modal>
