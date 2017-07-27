@@ -1,0 +1,73 @@
+<!--Discussions Pane-->
+<div *ngIf="currentReading && currentReading.words" class="sliding-pane from-left replies" [ngClass]="{ 'slide-in' : visible }">
+  <div class="container-fluid container--less-pad replyContainer">
+    <h4>Discussions
+      <button (click)="hide.emit()" class="close stats-close-btn btn-icon--round" id="discussionClosePanel" type="button">
+        <span aria-hidden="true">×</span>
+      </button>
+    </h4>
+
+    <div class="list-item list-item replyHighlight-card h-1" *ngIf="!isImage">
+      {{ comment.text ? '...' + comment.text + '...' : '...'}}
+    </div>
+    <div class="list-item list-item replyHighlight-card_liImage h-1" *ngIf="isImage">
+      <div class="replyHighlight-card_image">Image</div>
+      <button class="replyHighlight-card_button" (click)="getImagePos(comment.start)">View&nbsp;&#8594;</button>
+    </div>
+
+    <!--<div class="container">-->
+      <div class="comment-wrap-row">
+        <edji-comment class="replyCommentBlock" *ngIf="comment.author" [comment]="comment" [readOnly]="true" [replyRef]="true" [reply]="true"></edji-comment>
+      </div>
+
+      <div>
+        <p class="replyCountText">{{ repliesById[comment._id] && repliesById[comment._id].length }} Replies</p>
+        <hr class="replyHeaderRow">
+      </div>
+
+    <div class="replyOverflow" [ngClass]="[ _comments.activeComment.active && _comments.activeComment.type=='emoji' ? 'replyOverflow-eKey' : 'replyOverflow-normal' ]">
+      <!--let replyComment of comments-->
+      <div *ngFor="let replyComment of repliesById[comment._id]">
+        <div class="comment-wrap-row">
+          <edji-comment class="replyCommentBlock" *ngIf="comment.author" [comment]="replyComment" [isActive]="replyComment.active" [reply]="true" [userPermission]="getCommentPermissions(replyComment)"></edji-comment>
+        </div>
+      </div>
+      <!--<div *ngIf="createReply" class="comment-wrap-row">
+        <edji-comment class="replyCommentInputBlock" *ngIf="replyCommentNew.author" [comment]="replyCommentNew" [isActive]="replyCommentNew.active" [reply]="true" [commentLite]="true" [userPermission]="getCommentPermissions(replyCommentNew)"></edji-comment>
+      </div>-->
+    </div>
+  </div>
+
+    <div class="replyCommentAddSection">
+      <hr class="replyHeaderRow">
+
+      <!--Reply input-->
+      <!--<div *ngIf="!createReply">-->
+        <div *ngIf="comment.author" [class.show]="comment.showAvatar" class="comment__avatar reply__avatar">{{comment.author.substr(0,2).toUpperCase()}}</div>
+        <div class="replyInput">Reply:</div>
+      <!--</div>-->
+
+      <!--Add reply buttons-->
+      <div class="replyButtonGroup">
+        <button *ngIf="project.types.indexOf('emoji') > -1" 
+            class="emoji" 
+            id="addEmojiReply" 
+            (click)="addReplyOfType('emoji')">
+          <i class="icon icon-emoji-comment"></i>
+        </button>
+        <button *ngIf="project.types.indexOf('text') > -1" 
+            class="emoji" 
+            id="addTextReply" 
+            (click)="addReplyOfType('text')">
+          <i class="icon icon-text-comment"></i>
+        </button>
+        <button *ngIf="project.types.indexOf('audio') > -1" 
+            class="emoji" 
+            id="addAudioReply" 
+            (click)="addReplyOfType('audio')">
+          <i class="icon icon-mic"></i>
+          <span class="beta-tag--icon" title="Beta Feature: May not work on all devices.">B</span>
+        </button>
+      </div>
+    </div>
+</div>

@@ -50,6 +50,7 @@ import { AnnotatorComponent, CommentComponent, TextCommentComponent, EmojiCommen
 import { ProjectPageComponent, ProjectInfoComponent, OwnerToolsComponent, LeaderboardComponent } from './project-page';
 import { FirefeedComponent } from './project-page/owner-tools/firefeed/firefeed.component';
 import { FirecardComponent } from './project-page/owner-tools/firefeed/firecard/firecard.component';
+import { DiscussionsComponent } from './project-page/hero-tools/discussions/discussions.component';
 import { NewReadingPage, UploadModalComponent, UploadPdfModalComponent, DeletePdfMiniModal } from './new-reading-page';
 import { DashboardComponent, JoinedDashComponent, CreatedDashComponent, TutorialReadingComponent, ReadingCardComponent } from './dashboard';
 import { NoContentComponent } from './no-content';
@@ -131,6 +132,7 @@ type StoreType = {
     LeaderboardComponent,
     FirefeedComponent,
     FirecardComponent,
+    DiscussionsComponent,
     UploadModalComponent,
     TutorialReadingComponent,
     UploadPdfModalComponent,

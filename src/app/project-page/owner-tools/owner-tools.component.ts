@@ -1,5 +1,5 @@
 import { Subscription } from 'rxjs/Rx'
-import { Component, OnInit } from '@angular/core'
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
 // Project Dependencies
 import { AuthService, ProjectService, SocketService } from '../../shared';
@@ -11,6 +11,7 @@ import { CommentStats } from './../../shared/datatypes'
   styleUrls: ['./owner-tools.component.scss']
 })
 export class OwnerToolsComponent implements OnInit {
+  @Output() hide: EventEmitter<any> = new EventEmitter()
 
   private subscriptions: Subscription[] = []
   private commentStats: CommentStats

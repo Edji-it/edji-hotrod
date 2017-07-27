@@ -61,7 +61,7 @@ export class ReadingService {
   } // public get(id : string) : Observable<any>
 
   public setReadingObj(reading: any) : void {
-    console.log("Set", reading)
+    // console.log("Set", reading)
     if (reading._id) {
       this.readingValue = reading
       this.readingSource.next(this.readingValue)
@@ -85,7 +85,7 @@ export class ReadingService {
   // It deletes the reading. Fairly straightforward.
   // No need to return an Observable<Reading> since we don't need to use it after the fact.
   public delete(targetReading: Reading): Observable<any> {
-    console.log("Deleting '" + targetReading.title);
+    // console.log("Deleting '" + targetReading.title)
     return this.http.delete(this._auth.getUrl() + '/readings/' +  targetReading._id, this._auth.getOptions())
       .map(value => {
         // Delete was successful
@@ -129,7 +129,7 @@ export class ReadingService {
 
     // If we didn't find the project, it's hiding in a version
     if (!projectFound) {
-      console.log("PROJECT NOT FOUND")
+      console.error("PROJECT NOT FOUND")
       this.refreshVersionSource.next(targetProject._id)
     }
     this.userReadingsSource.next(readings)

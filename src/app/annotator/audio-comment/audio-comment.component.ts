@@ -15,6 +15,7 @@ declare var MediaRecorder: any
 export class AudioCommentComponent implements OnInit{
   @Input() private comment: EdjiComment
   @Input() private userPermission: number
+  @Input() private reply: boolean = false
   @Output() save: EventEmitter<any> = new EventEmitter<any>() 
   @Output() showDeleteAudioModal: EventEmitter<any> = new EventEmitter<boolean>()
 
@@ -316,5 +317,13 @@ export class AudioCommentComponent implements OnInit{
 
   private audioError() {
     // console.log('this device is not supported for audio recording')
+  }
+
+  private getPlayhead_exp() : number {
+    if (this.audio) {
+      return Math.round((this.audio.currentTime / 30) * this.playWidth)
+    } else {
+      return 0
+    }
   }
 }

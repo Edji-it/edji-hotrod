@@ -529,7 +529,7 @@ export class AuthService implements CanActivate {
      */
     public getAllowedCommentTypes() : string[] {
         if (this.user['hero'] && this.user['hero']['status'] == 'subscribed') {
-            return ['emoji','text','audio']
+            return ['emoji','text','audio','reply']
         } else {
             return ['emoji','text']
         }
