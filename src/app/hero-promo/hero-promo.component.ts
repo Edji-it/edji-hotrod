@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Rx';
 
 import { AuthService } from '../shared';
@@ -25,7 +25,7 @@ export class HeroPromoComponent implements OnInit {
 
   private subscriptions: Subscription[] = []
 
-  constructor(private _auth: AuthService, private route: ActivatedRoute) { }
+  constructor(private _auth: AuthService, private route: ActivatedRoute, private _router: Router) { }
 
   ngOnInit() {
     this.subscriptions.push(
@@ -99,7 +99,6 @@ export class HeroPromoComponent implements OnInit {
 
   private goHero() : void {
     // Is user logged in?
-    console.log(this._auth.getUser())
     if (this._auth.getUser().isLoggedIn != true) {
       this.showLoginModal = true
     } else {

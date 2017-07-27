@@ -26,7 +26,9 @@ export class HeroSubscribeComponent implements OnInit {
   yearlyAmountOff: number
 
   @Output()
-  closeModal: EventEmitter<any> = new EventEmitter(); // Tell the listening page to close the darned thing.
+  closeModal: EventEmitter<any> = new EventEmitter()
+  @Output()
+  heroWasBorn: EventEmitter<any> = new EventEmitter()
   
   constructor(private _auth: AuthService) { }
 

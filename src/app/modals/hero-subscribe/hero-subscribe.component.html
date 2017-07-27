@@ -94,7 +94,7 @@
                 <button [class.loading]="loading" id="subHero" (click)="checkout()" class="btn btn-primary">Subscribe</button>
               </div>
               <div *ngIf="userNowHero" class="btn-row right">
-                <button (click)="closeModal.emit()" type="button" class="btn" data-dismiss="modal">Awesome!</button>
+                <button (click)="heroWasBorn.emit(); closeModal.emit()" type="button" class="btn" data-dismiss="modal">Awesome!</button>
               </div>
             </div>
         </div>
