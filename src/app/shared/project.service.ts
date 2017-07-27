@@ -26,9 +26,21 @@ export class ProjectService {
      * This stores all of the comment stats for a project and all of the logic to manipulate the stats
      */
     _commentStats: CommentStats
-
+    
+    /**
+     * Updated Reference Object
+     * Reference comments by word index
+     */
     private commentsByIndexSubject: BehaviorSubject<EdjiComment[][]> = new BehaviorSubject<EdjiComment[][]>([])
     public commentsByIndex: Observable<EdjiComment[][]> = this.commentsByIndexSubject.asObservable()
+
+    /**
+     *  Updated Reference Object
+     * Reference comment replies by comment id
+     */
+    private repliesByIdSource: any = {}
+    private repliesByIdSubject: BehaviorSubject<any> = new BehaviorSubject<any>(this.repliesByIdSource)
+    public repliesById: Observable<any> = this.repliesByIdSubject.asObservable()
 
     constructor(
         private http: Http, 
@@ -137,10 +149,42 @@ export class ProjectService {
             comment.showAvatar = true;
         }
 
+        this.addCommentToReplies(comment)
+
         // add the comment at the index of the comment's starting word
         if (!arr[comment.start]) { arr[comment.start] = [] }
         arr[comment.start].push(comment)
         return arr
+    }
+
+    public addCommentToReplies(comment: EdjiComment): void {
+        let skipAdd = false
+        if (comment.reply_to) {
+            if (!this.repliesByIdSource[comment.reply_to]) {
+                this.repliesByIdSource[comment.reply_to] = []
+            }
+            // Double check comment doesn't exist
+            for (let reply of this.repliesByIdSource[comment.reply_to]) {
+                if (reply._id == comment._id) {
+                    skipAdd = true
+                }
+            }
+            if (!skipAdd) {
+                this.repliesByIdSource[comment.reply_to].push(comment)
+                this.repliesByIdSubject.next(this.repliesByIdSource)
+            }
+        }
+    }
+
+    public removeCommentFromReplies(comment: EdjiComment) : void {
+        if (comment.reply_to) {
+            for (let i = 0; i < this.repliesByIdSource[comment.reply_to].length; i++){
+                if (this.repliesByIdSource[comment.reply_to][i]._id === comment._id) {
+                    this.repliesByIdSource[comment.reply_to].splice(i, 1)
+                    this.repliesByIdSubject.next(this.repliesByIdSource)
+                }
+            }
+        }
     }
 
     /**
@@ -358,4 +402,54 @@ export class ProjectService {
             this._auth.getOptions()
         ) //this.http.put
     } // public addUserToProject(projectId: string): Observable<any>
+
+    /** 
+     * Update or Create a comment on a project
+     * @param projectId Id of project comment is on
+     * @param commentText Contents of the comment
+     * @param start Index of first word
+     * @param end Index of last word
+     * @param text (optional) Selection of text comment was made on. Left as optional, but SHOULD be passed.
+     * @param commentId (optional) If passed, will update comment with that ID
+     */
+    public saveReply(commentObj: EdjiComment) : Promise<any> {
+        let comment = Object.assign({}, commentObj)
+        // Clean frontend only properties
+        delete comment['active']
+        delete comment['new']
+        delete comment['showAvatar']
+        
+        let url = this._auth.getUrl() + '/projects/' + comment.project_id + '/comments';
+        if (!comment.user_id) {
+            comment.user_id = this._auth.getUser()._id
+        }
+        if (!comment.author) {
+            comment.author = this._auth.getUser().fullname ? this._auth.getUser().fullname : this._auth.getUser().username
+        }
+
+        let options = this._auth.getOptions()
+        let data = { comment: comment }
+        // Add comment ID if passed
+        // Tell other Project viewers comment changed, using Socket
+        if (comment._id) {
+            data.comment['_id'] = comment._id;
+            url = url + '/' + comment._id
+            options['method'] = 'PUT'
+            this._socket.updateComment(data.comment, 'UPDATE', this.project._id);
+        } else {
+            options['method'] = 'POST'
+            this._socket.updateComment(data.comment, 'CREATE', this.project._id);
+        }
+
+        options['body'] = data
+
+        return this.http
+            .request(url, options)
+            .toPromise()
+            .then(this._auth.extractData)
+            .then((data) => { return data.comment; })
+
+        // 58f1243102424c0011e7aa96
+        
+    } // public saveReply
 } // class

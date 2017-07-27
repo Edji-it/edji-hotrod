@@ -1,16 +1,18 @@
-import { EdjiComment } from './datatypes';
+import { EdjiComment, CommentPermissions, Project } from './datatypes';
 import { Injectable } from '@angular/core'
 import { BehaviorSubject, Observable, Subject } from 'rxjs/Rx';
 import 'rxjs/add/operator/toPromise';
 
 import { AuthService } from './auth.service'
 import { ProjectService, ReadingService, SocketService } from './';
-import { Angulartics2 } from 'angulartics2/dist';
+import { Angulartics2 } from 'angulartics2/dist'
 
 @Injectable()
 export class CommentService {
   private ctx
   private colors
+  public keyboardActive: boolean
+  public activeComment: EdjiComment = <EdjiComment>{}
 
   /*
   Last Modified: 6 June 2017
@@ -109,6 +111,33 @@ export class CommentService {
       ctx.fillStyle=color
       ctx.fillRect(upperLeftCornerX,upperLeftCornerY - height,width,2*height)
       ctx.restore()
+    }
+  }
+
+  /** Used to determine which level of permission the user has for a specific comment
+   * @param comment A comment object
+   * @param user A user object
+   * @param project A project object
+   */
+  public getCommentPermissions(comment: any, user: any, project: Project): number {
+    if (user._id == comment.user_id) {
+        return CommentPermissions.EDIT
+    } else if (user._id == project.teacher_id) {
+        return CommentPermissions.DELETE
+    } else {
+        return CommentPermissions.READ
+    }
+  }
+
+  /**
+   * Decides if the Emoji Keyboard is active
+   */
+  public isEmojiKeyboardActive(user: any): void {
+    if (this.activeComment.type !== 'emoji') {
+        this.keyboardActive = false
+    } else {
+        this.keyboardActive = this.activeComment && (!this.activeComment.type || this.activeComment.type === 'emoji') && 
+          this.activeComment.active && this.activeComment.user_id === user._id
     }
   }
 }

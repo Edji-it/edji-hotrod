@@ -538,8 +538,8 @@ export class AuthService implements CanActivate {
      * Return array of allowed comment types
      */
     public getAllowedCommentTypes() : string[] {
-        if (this.user['hero'] && this.user['hero']['status'] == 'subscribed') {
-            return ['emoji','text','audio']
+        if (this.user['hero'] && this.user['hero']['active']) {
+            return ['emoji','text','audio','reply']
         } else {
             return ['emoji','text']
         }

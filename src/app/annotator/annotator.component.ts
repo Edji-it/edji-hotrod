@@ -29,6 +29,7 @@ declare var window: any
 export class AnnotatorComponent implements OnInit, OnDestroy {
     // @Input() private project: any
     @Input() private mobileCommentActive: boolean
+    @Input() private activeReply: any
 
     @ViewChildren(CommentComponent) commentComponents: QueryList<CommentComponent>
 
@@ -37,6 +38,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     
     private commentsByIndex: EdjiComment[][] = []
     private fireComments: EdjiComment[] = []
+    private showDiscussions: boolean = false
+    private focusOverride: boolean = false
 
     private highlightArray: number[] = []
     private alwaysHighlightArray: number[] = []
@@ -46,7 +49,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     private lineCountArray: any[][] = []
     private lineCountRunning: boolean = false
 
-    private activeComment: EdjiComment = <EdjiComment>{}
+    // private activeComment: EdjiComment = <EdjiComment>{}
+    private replyComment: EdjiComment = <EdjiComment>{}
     
     private lineExpanded: boolean = false
     private showCommentCounts: boolean = false
@@ -111,6 +115,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         private _projects: ProjectService,
         private _auth: AuthService,
         private _socket: SocketService,
+        private _comments: CommentService,
         private angulartics: Angulartics2
         // private _hotkeysService: HotkeysService
     ) {
@@ -485,6 +490,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             start: start,
             end: end,
             type: type,
+            text: text,
             loc: this.imageCoords
         }
 
@@ -614,17 +620,17 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     setActiveCommentByIndex(isActive: boolean, wordIndex: number, commentIndex: number): void {
         if (isActive) {
             this.inactivateComment()
-            this.activeComment = this.commentsByIndex[wordIndex][commentIndex]
-            this.activeComment.active = true
+            this._comments.activeComment = this.commentsByIndex[wordIndex][commentIndex]
+            this._comments.activeComment.active = true
         } else {
             this.inactivateComment()
         }
     }
 
     inactivateComment():void {
-        this.unfocusHighlight(this.activeComment.start, this.activeComment.end)
-        this.activeComment.active = false
-        this.activeComment = <EdjiComment>{}
+        this.unfocusHighlight(this._comments.activeComment.start, this._comments.activeComment.end)
+        this._comments.activeComment.active = false
+        this._comments.activeComment = <EdjiComment>{}
     }
 
     /**
@@ -632,7 +638,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      * - Gets event from Emoji Keyboard
      */
     updateActiveComment(commentData: string) {
-        this.activeComment.data = commentData
+        this._comments.activeComment.data = commentData
     }
 
     /** 
@@ -805,12 +811,14 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      * @param end Index for last word
      */
     private unfocusHighlight(start, end, location ?: any): void {
-        for (var i = start; i <= end; i ++) {
-            // if (this.focusArray[i] = true) {
-                this.focusArray[i] = false
-            // } 
+        if (!this.focusOverride) {
+            for (var i = start; i <= end; i ++) {
+                // if (this.focusArray[i] = true) {
+                    this.focusArray[i] = false
+                // } 
+            }
+            this.imageHotspotPlaceholder['focus'] = false
         }
-        this.imageHotspotPlaceholder['focus'] = false
     }
 
     /**
@@ -850,13 +858,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      * @param comment A comment object
      */
     private getCommentPermissions(comment: any): number {
-        if (this.user._id == comment.user_id) {
-            return CommentPermissions.EDIT
-        } else if (this.user._id == this.project.teacher_id) {
-            return CommentPermissions.DELETE
-        } else {
-            return CommentPermissions.READ
-        }
+        return this._comments.getCommentPermissions(comment, this.user, this.project)
     }
 
     /**
@@ -914,11 +916,26 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      * Decides if the Emoji Keyboard is active
      */
     private isEmojiKeyboardActive() : boolean {
-        if (this.activeComment.type !== 'emoji') {
-            return false
-        } else {
-            return this.activeComment && (!this.activeComment.type || this.activeComment.type === 'emoji') && this.activeComment.active && this.activeComment.user_id === this.user._id
-        }
+        // return this._comments.isEmojiKeyboardActive(this.user)
+        this._comments.isEmojiKeyboardActive(this.user)
+        return this._comments.keyboardActive
+    }
+
+    private discReplyFire(comment) {
+        setTimeout(() => {
+            // comment.active = true
+        }, 500)
+        this.replyComment = comment
+        this.focusOverride = true
+        this.focusHighlight(comment.start, comment.end, comment.loc)
+        this.angulartics.eventTrack.next({ action: 'openDiscussionPanel', properties: { category: 'heroFeature', label: 'success' }})
+        this.showDiscussions = true
+    }
+
+    private hideDiscussions(comment: any) {
+        this.showDiscussions = false
+        this.focusOverride = false
+        this.unfocusHighlight(comment.start, comment.end, comment.loc)
     }
 }
 

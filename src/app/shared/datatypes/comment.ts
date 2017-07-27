@@ -19,7 +19,10 @@ export interface BaseComment {
   dataArray?: any[],
   url?: string,
   text?: string,
-  loc?: { x: number, y: number }
+  loc?: { x: number, y: number },
+  reply_to?: string,
+  replies?: any[],
+  new?: boolean
 }
 
 // how do you make an enum that can be used by an interface to specify string values?

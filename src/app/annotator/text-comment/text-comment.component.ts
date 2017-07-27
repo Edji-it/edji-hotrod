@@ -11,6 +11,7 @@ import { EdjiComment } from './../../shared/datatypes/comment'
 export class TextCommentComponent implements OnInit, AfterViewInit {
 
     @Input() private comment: EdjiComment
+    @Input() private reply: boolean = false
     @Input() private readOnly: boolean
     @Input() private preview: boolean
     @Output() blur: EventEmitter<string> = new EventEmitter<string>() 

@@ -1,8 +1,9 @@
-import { CommentService } from '../../../../shared/comment.service';
-import { Subscription } from 'rxjs/Rx';
-import { EdjiComment, Reading } from '../../../../shared/datatypes';
-import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, AfterViewInit } from '@angular/core';
-import { ReadingService } from '../../../../shared/reading.service';
+import { SocketService } from '../../../../shared';
+import { CommentService } from '../../../../shared/comment.service'
+import { Subscription } from 'rxjs/Rx'
+import { EdjiComment, Reading } from '../../../../shared/datatypes'
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, AfterViewInit } from '@angular/core'
+import { ReadingService } from '../../../../shared/reading.service'
 
 
 @Component({
@@ -30,6 +31,7 @@ export class FirecardComponent implements OnInit, OnDestroy {
   constructor(
     public el: ElementRef,
     private _readings: ReadingService,
+    private _socket: SocketService,
     private _comments: CommentService
   ) { }
 
@@ -50,6 +52,26 @@ export class FirecardComponent implements OnInit, OnDestroy {
       )
     )
 
+    // Subscribe to comment comment updates
+    this.subscriptions.push(
+      this._socket.commentUpdates.subscribe((commentUpdate) => {
+        let comment = commentUpdate.comment
+        
+        // Process different live comment updates
+        if (commentUpdate.action === 'DELETE') {
+          
+        } else if (commentUpdate.action === 'UPDATE') {
+          if (comment.type=='audio' && comment.url && comment.url.length > 0) {
+            this.buildAudioView()
+          }
+        } else if (commentUpdate.action === 'CREATE') {
+          
+        }
+      }, (error) => {
+        console.warn(error)
+      })
+    )
+
     // Refresh time ago date every minute
     setInterval(()=> {
       this.secondsAgo++
@@ -58,6 +80,7 @@ export class FirecardComponent implements OnInit, OnDestroy {
     if (this.fireComment.type=='audio' && this.fireComment.url && this.fireComment.url.length > 0) {
       this.buildAudioView()
     }
+
   }
 
   // ngAfterViewInit(): void {

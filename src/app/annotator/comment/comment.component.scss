@@ -56,34 +56,6 @@ $tablet-width: 768px;
     }
 }
 
-.comment__avatar {
-  background: #adadad;
-  width: 28px;
-  height: 28px;
-  line-height: 28px;
-  border-radius: 50%;
-  position: absolute;
-  left: -32px;
-  text-align: center;
-  top: 1px;
-  pointer-events: none;
-  opacity: 0;
-  color: white;
-  transition: opacity 0.2s linear;
-  font-size: 12px;
-  font-weight: bold;
-
-  &.show {
-    opacity: 1;
-  }
-}
-
-.comment:hover {
-  & .comment__avatar {
-    opacity: 1;
-  }
-}
-
 .comment__button--mobile {
   display: none;
   max-width: auto !important;
@@ -96,4 +68,20 @@ $tablet-width: 768px;
   opacity: 0.5;
   position: absolute;
   left: -40px;
+}
+
+.replyUsername {
+	opacity: 1;
+  border: none;
+  font-family: inherit;
+  text-transform: inherit;
+  font-weight: inherit;
+  width: 100%;
+}
+
+.comment__time {
+  font-style: italic;
+  padding-left: 0.25em;
+  font-size: 10px;
+  float: right;
 }

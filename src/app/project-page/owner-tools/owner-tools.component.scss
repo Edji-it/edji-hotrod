@@ -36,6 +36,7 @@ $ownerToolsWidth: 60px;
         border-left: none;
         border-right: none;
         border-bottom: none;
+        z-index: 6000;
 
         & .bar-title {
             display:none;
