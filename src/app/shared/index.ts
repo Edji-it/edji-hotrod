@@ -10,3 +10,4 @@ export * from './nav-bar/nav-bar.component';
 export * from './footer/footer.component';
 export * from './tutorial-box/tutorial-box.component';
 export * from '../../app/pipes/edjidate.pipe'
+export * from './avatar-display/avatar-display.component';

@@ -1,0 +1,13 @@
+<!--
+	27 July 2017
+	Nicholas Pumper
+	Last Mod: 27 July 2017
+
+
+	-->
+
+<span class="profile-pic"> 
+	<!-- Avatar picture -->
+	<img id="avatarImg" *ngIf="getAvatar()" class="profile-pic" [src]="getAvatar()" > 
+	<span id="userInitials" *ngIf="!getAvatar()">{{currentUser.fullname | userinitials}}</span>
+</span>
