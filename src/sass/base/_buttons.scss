@@ -333,6 +333,7 @@ button, .button, .btn { //, [class*='btn']
   &.bottom-bar-offset {
     @media(max-width: $tablet) {
       bottom: 70px;
+      z-index: 5999;
     }
   }
 }
