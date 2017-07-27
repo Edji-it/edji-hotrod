@@ -9,13 +9,14 @@
       </div>
       <div class="modal-body">
         <div *ngIf="guestLogin">
-          <h2 id="guestLoginHeader">Edji as a guest</h2>
+          <h3 id="guestLoginHeader">Edji as a guest</h3>
           <hot-guest-login (loginSuccess)="onLoginSuccess()"></hot-guest-login>
         </div>
         <div *ngIf="!guestLogin">
-          <h2 id="accountLoginHeader">Edji with your very own account</h2>
+          <h3 id="accountLoginHeader">{{ loginHeader }}</h3>
           <hot-login-form (loginSuccess)="onLoginSuccess()"></hot-login-form>
           <br>
+          
         </div>
       </div>
       <div *ngIf="guestLogin" class="modal-footer">
@@ -24,7 +25,7 @@
           <button id="gotoAccountLoginButton" (click)="guestLogin = false">Login with Account</button>
         </div>
       </div>
-      <div *ngIf="!guestLogin" class="modal-footer">
+      <div *ngIf="!guestLogin && !noGuestLogin" class="modal-footer">
         <p>Wait! I don't want to login, I just want to comment!</p>
         <div>
           <button id="gotoGuestLoginButton" (click)="guestLogin = true">Guest Login</button>

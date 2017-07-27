@@ -1,5 +1,8 @@
-import { AuthService } from '../shared';
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs/Rx';
+
+import { AuthService } from '../shared';
 
 @Component({
   selector: 'app-hero-promo',
@@ -8,17 +11,34 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HeroPromoComponent implements OnInit {
 
-  private countDownDate
-  private countDownText: string
+  private countdownDate
+  private countdownText: string
+  private countdownOver: boolean
+  private heroCount: number = 1
   private subMsg : string
   private subError: boolean
   private subSuccess: boolean
+  private showLoginModal: boolean
+  private showHeroSubModal: boolean
 
-  constructor(private _auth: AuthService) { }
+  private subscriptions: Subscription[] = []
+
+  constructor(private _auth: AuthService, private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.countDownDate = new Date("Aug 15, 2017 05:00:00").getTime()
-
+    this.subscriptions.push(
+      this.route.params
+        .subscribe((params: any) => { 
+          if(params && params['secretSwitch']){
+              this._auth.secretSwitches[params['secretSwitch']] = true;
+              if (this._auth.secretSwitches['countdownOver']) {
+                  this.countdownOver = true
+              }
+          }
+        })
+    );
+    
+    this.countdownDate = new Date("Aug 15, 2017 05:00:00").getTime()
     // kick off countdown
     this.incrementer()
   }
@@ -28,7 +48,7 @@ export class HeroPromoComponent implements OnInit {
     var now = new Date().getTime();
 
     // Find the distance between now an the count down date
-    var distance = this.countDownDate - now;
+    var distance = this.countdownDate - now;
 
     // Time calculations for days, hours, minutes and seconds
     let days = Math.floor(distance / (1000 * 60 * 60 * 24));
@@ -39,10 +59,10 @@ export class HeroPromoComponent implements OnInit {
     // If the count down is finished, handle it
     if (distance < 0) {
       // clearInterval(this.intervalVar);
-      this.countDownText = "0d 0h 0m 0s"
+      this.countdownText = "0d 0h 0m 0s"
     } else {
       // Display the result in the element with id="demo"
-      this.countDownText = days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+      this.countdownText = days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
       setTimeout(() => { this.incrementer() }, 1000)
     }
   }
@@ -69,6 +89,16 @@ export class HeroPromoComponent implements OnInit {
           }
         }
       )
+  }
+
+  private goHero() : void {
+    // Is user logged in?
+    console.log(this._auth.getUser())
+    if (this._auth.getUser().isLoggedIn != true) {
+      this.showLoginModal = true
+    } else {
+      this.showHeroSubModal = true
+    }
   }
 
 }
