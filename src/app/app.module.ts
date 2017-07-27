@@ -57,6 +57,7 @@ import { FeedbackComponent } from './shared/feedback/feedback.component';
 import { LoginComponent } from './login';
 import { ResetPassPage } from './reset-pass/reset-pass-page.component';
 import { HeroPromoComponent } from './hero-promo/hero-promo.component';
+import { HeroPricingComponent } from './hero-pricing/hero-pricing.component';
 
 // Configure Hammer.js
 export class MyHammerConfig extends HammerGestureConfig  {
@@ -128,6 +129,7 @@ type StoreType = {
     AnnotatorComponent,
     NewReadingPage,
     HeroPromoComponent,
+    HeroPricingComponent,
     LeaderboardComponent,
     FirefeedComponent,
     FirecardComponent,
@@ -150,7 +152,8 @@ type StoreType = {
     FeedbackComponent,
     NoContentComponent,
     ReadingCardComponent,
-    HeroPromoComponent
+    HeroPromoComponent,
+    HeroPricingComponent
 ],
   imports: [ // import Angular's modules
     BrowserModule,

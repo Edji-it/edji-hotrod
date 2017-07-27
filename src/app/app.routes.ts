@@ -10,6 +10,7 @@ import { NoContentComponent } from './no-content';
 import { LoginComponent } from './login';
 import { ResetPassPage } from './reset-pass/reset-pass-page.component';
 import { HeroPromoComponent } from './hero-promo/hero-promo.component';
+import { HeroPricingComponent } from './hero-pricing/hero-pricing.component';
 
 import { DataResolver } from './app.resolver';
 import { AuthService } from './shared';
@@ -28,6 +29,7 @@ export const ROUTES: Routes = [
   { path: 'new-reading/:id', component: NewReadingPage, canActivate: [AuthService] },
   { path: 'reset-password', component: ResetPassPage },
   { path: 'hero', component: HeroPromoComponent, pathMatch: 'full' },
+  { path: 'pricing', component: HeroPricingComponent, pathMatch: 'full'  },
   { path: 'not-found',    component: NoContentComponent, pathMatch: 'full' },
   { path: ':projectId', redirectTo: '/project/:projectId', pathMatch: 'full'},
   { path: '**',    component: NoContentComponent }
