@@ -1,5 +1,5 @@
-import { Angulartics2 } from 'angulartics2/dist';
-import { CommentService } from '../../shared/comment.service';
+import { Angulartics2 } from 'angulartics2/dist'
+import { CommentService } from '../../shared/comment.service'
 import { MediaService } from '../../shared/media.service'
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core'
 
