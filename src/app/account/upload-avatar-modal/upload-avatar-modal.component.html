@@ -19,7 +19,7 @@
                 <!-- Column 1 -->
                 <div class="col-md-6">
                     <!-- Profile Pic -->
-                    <avatar-display class="profile-size" [tempDisplay]="uploadedFile"></avatar-display> <!-- 7.28.17 Maybe not use the bare uploadedFile. Find a way to use a getter -->
+                    <avatar-display class="profile-size" [tempDisplayMode]="true" [tempDisplayPic]="getSelectedImage()"></avatar-display>
                 </div>
                 <!-- Column 2 -->
                 <div class="col-md-6">

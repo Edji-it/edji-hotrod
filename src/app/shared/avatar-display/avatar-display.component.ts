@@ -15,15 +15,22 @@ export class AvatarDisplayComponent implements OnInit {
   Last Mod: 28 July 2017
 
   This shows the user's avatar in a bubble.
+
+  ~ Temporary Pics ~ 7.28.17
+  Unless tempDisplayMode is set to true, it will always display the user's avatar.
+  Using tempDisplayMode, you can put any picture in the display without changing the user's avatar.
+  In HTML it will look like:
+    <avatar-display class="some-class" [tempDisplayMode]="true" [tempDisplayPic]="someImage"></avatar-display>
   */
 
   // Inputs
-  @Input() avatarSize : string = 'lg';
-  @Input() tempDisplay : string; // If we want a temp display in this avatar, then fill this input.
+  @Input() avatarSize       : string    = 'lg';
+  @Input() tempDisplayMode  : boolean   = false; // If we don't want this to reflect the user's actual, toggle this.
+  @Input() tempDisplayPic   : string; // If tempDisplayMode is on, this display will show this instead.
 
   private displayedAvatar : string;
-  private nameInitials  : string = ""; // we gonna use these for the non-Hero profile pic
-  private currentUser   : any; // We need data from this.
+  private nameInitials    : string = ""; // we gonna use these for the non-Hero profile pic
+  private currentUser     : any; // We need data from this.
 
   constructor(private _auth: AuthService) {
     this.currentUser = this._auth.getUser();
@@ -48,17 +55,14 @@ export class AvatarDisplayComponent implements OnInit {
   // Accessor for user.avatar
   public getAvatar () : string
   {
-
-    // If we are given a temp input, ignore the actual pic.
-    if (this.tempDisplay)
-    {
-      this.displayedAvatar = this.tempDisplay;
-    }
-    // If there isn't one, get one.
-    else
+    // If there isn't one, get one, unless this display is under tempDisplay mode
+    if (this.tempDisplayMode === false)
     {
       this.updateDisplayedAvatar();
-    } // if
+    }
+    else {
+      this.displayedAvatar = this.tempDisplayPic;
+    }
 
     return this.displayedAvatar;
   } // public getAvatar () : any 
