@@ -6,8 +6,8 @@
 
 	-->
 
-<span class="profile-pic"> 
+<div class="profile-pic" [ngClass]="'profile-pic-' + avatarSize"> 
 	<!-- Avatar picture -->
 	<img id="avatarImg" *ngIf="getAvatar()" class="profile-pic" [src]="getAvatar()" > 
 	<span id="userInitials" *ngIf="!getAvatar()">{{currentUser.fullname | userinitials}}</span>
-</span>
+</div>
