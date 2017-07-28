@@ -25,5 +25,5 @@ export class AccountComponent implements OnInit {
 
   ngOnInit() { 
     // this._title.setTitle('Edji | "' + this.currentUser['fullname'] + '"');
-  }  
+  } // ngOnInit  
 } // class
