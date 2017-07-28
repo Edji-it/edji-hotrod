@@ -28,6 +28,7 @@ export class AvatarDisplayComponent implements OnInit {
   @Input() tempDisplayMode  : boolean   = false; // If we don't want this to reflect the user's actual, toggle this.
   @Input() tempDisplayPic   : string; // If tempDisplayMode is on, this display will show this instead.
 
+  // Stored data
   private displayedAvatar : string;
   private nameInitials    : string = ""; // we gonna use these for the non-Hero profile pic
   private currentUser     : any; // We need data from this.
@@ -37,7 +38,9 @@ export class AvatarDisplayComponent implements OnInit {
     this.nameInitials = "";
   } // constructor
 
-  ngOnInit () {}
+  ngOnInit () {
+    console.log("avatarSize: " + this.avatarSize);
+  }
 
   public getUserInitials() : string 
   {
