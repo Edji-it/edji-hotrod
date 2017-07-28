@@ -10,7 +10,7 @@
         <span *ngIf="reply && !replyRef" class="comment__time text-right">&nbsp;{{ comment.updatedAt | edjidate:'timeAgo':null:secondsAgo }}</span>
     </div>
     <!-- Avatar -->
-    <div *ngIf="comment.author" [class.show]="comment.showAvatar || reply" class="comment__avatar">{{comment.author.substr(0,2).toUpperCase()}}</div>
+    <avatar-display *ngIf="comment.author" [class.show]="comment.showAvatar || reply" class="comment__avatar"></avatar-display>
     <!-- Input Box -->
     <div class='comment-input-wrapper' [ngClass]="[ replyRef ? 'replyCommentHandler' : '' ]">
         <!--Swap between different comment types-->
