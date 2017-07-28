@@ -1,7 +1,7 @@
 <!--
 	27 July 2017
 	Nicholas Pumper
-	Last Mod: 27 July 2017
+	Last Mod: 28 July 2017
 
 
 	-->
@@ -9,5 +9,12 @@
 <div class="profile-pic"> 
 	<!-- Avatar picture -->
 	<img id="avatarImg" *ngIf="getAvatar()" class="profile-pic" [src]="getAvatar()" > 
+
+	<!-- The User's Initials
+
+		7.28.17
+		NOTE: Resizing and the initials do not play friendly, so to choose either large or small initials, set avatarSize to either 'lg' or 'sm'.
+		Example: [avatarSize]="sm" 
+		-->
 	<span id="userInitials" *ngIf="!getAvatar()" [ngClass]="'profile-pic-' + avatarSize">{{currentUser.fullname | userinitials}}</span>
 </div>
