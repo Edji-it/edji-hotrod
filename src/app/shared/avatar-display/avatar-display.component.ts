@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter} from '@angular/core';
 import { AuthService } from '../auth.service';
 
 
@@ -12,13 +12,16 @@ export class AvatarDisplayComponent implements OnInit {
   /*
   27 July 2017
   Nicholas Pumper
-  Last Mod: 27 July 2017
+  Last Mod: 28 July 2017
 
   This shows the user's avatar in a bubble.
   */
 
-  @Input() avatarSize: string = 'lg';
+  // Inputs
+  @Input() avatarSize : string = 'lg';
+  @Input() tempDisplay : string; // If we want a temp display in this avatar, then fill this input.
 
+  private displayedAvatar : string;
   private nameInitials  : string = ""; // we gonna use these for the non-Hero profile pic
   private currentUser   : any; // We need data from this.
 
@@ -43,15 +46,29 @@ export class AvatarDisplayComponent implements OnInit {
   } // public getUserInitials : ()
 
   // Accessor for user.avatar
-  // Get the avatar from the user object
   public getAvatar () : string
   {
-    let avatar;
-    //console.log("[account.component.ts] Called getAvatar()!");
 
-    this.currentUser = this._auth.getUser();
-    avatar = this.currentUser.avatar;
+    // If we are given a temp input, ignore the actual pic.
+    if (this.tempDisplay)
+    {
+      this.displayedAvatar = this.tempDisplay;
+    }
+    // If there isn't one, get one.
+    else
+    {
+      this.updateDisplayedAvatar();
+    } // if
 
-    return avatar;
+    return this.displayedAvatar;
   } // public getAvatar () : any 
+
+  // update this.displayedAvatar
+  // Get the avatar from the user object
+  public updateDisplayedAvatar ()
+  {
+    //console.log("[account.component.ts] Called getAvatar()!");
+    this.currentUser = this._auth.getUser();
+    this.displayedAvatar = this.currentUser.avatar;
+  } // public updateDisplayedAvatar
 } // class
