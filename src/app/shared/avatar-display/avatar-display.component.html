@@ -16,5 +16,5 @@
 		NOTE: Resizing and the initials do not play friendly, so to choose either large or small initials, set avatarSize to either 'lg' or 'sm'.
 		Example: [avatarSize]="sm" 
 	-->
-	<span id="userInitials" *ngIf="!getAvatar()" [ngClass]="'profile-pic-' + avatarSize">{{currentUser.fullname | userinitials}}</span>
+	<span id="userInitials" *ngIf="!getAvatar()" [ngClass]="'user-initials-' + avatarSize">{{currentUser.fullname | userinitials}}</span>
 </div>
