@@ -4,11 +4,14 @@
     <div *ngIf="!commentLite" class='expand-comments' (tap)='expanded ? collapse() : expand()' [ngClass]="comment.type == 'emoji' ? 'cmtEmoji' : 'cmtText'">
         <div *ngIf="lineCount == 1 && expanded" class='hidden-lg-up expand__arrow-left'></div>
     </div>
+    <!-- Author Name Label -->
     <div *ngIf='comment.author && !commentLite' [ngClass]="[ reply ? 'replyUsername' : '' ]" class='comment-username'>{{comment.author}}
         <span *ngIf="reply && replyRef" class="comment__time text-right">&nbsp;{{ comment.createdAt | edjidate:'timeAgo':null:secondsAgo }}</span>
         <span *ngIf="reply && !replyRef" class="comment__time text-right">&nbsp;{{ comment.updatedAt | edjidate:'timeAgo':null:secondsAgo }}</span>
     </div>
+    <!-- Avatar -->
     <div *ngIf="comment.author" [class.show]="comment.showAvatar || reply" class="comment__avatar">{{comment.author.substr(0,2).toUpperCase()}}</div>
+    <!-- Input Box -->
     <div class='comment-input-wrapper' [ngClass]="[ replyRef ? 'replyCommentHandler' : '' ]">
         <!--Swap between different comment types-->
         <emoji-comment (tap)="toggleActive()" *ngIf="comment.type == 'emoji' || !comment.type" #commentInput [comment]="comment" [reply]="reply"></emoji-comment>
