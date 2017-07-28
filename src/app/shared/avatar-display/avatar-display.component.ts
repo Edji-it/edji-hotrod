@@ -17,7 +17,7 @@ export class AvatarDisplayComponent implements OnInit {
   This shows the user's avatar in a bubble.
   */
 
-  @Input() avatarSize: string = 'lg'
+  @Input() avatarSize: string = 'lg';
 
   private nameInitials  : string = ""; // we gonna use these for the non-Hero profile pic
   private currentUser   : any; // We need data from this.
