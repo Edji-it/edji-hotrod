@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { }
 
 @Component({
   selector: 'edji-question',
@@ -7,8 +8,16 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class QuestionComponent implements OnInit {
 
+  /*
+    19 July 2017
+    Nick Pumper
+    Last Mod: 29 July 2017
+
+    Handles display of the Question.
+  */
+  
   @Input()
-  private question: any
+  private question: EdjiQuestion;
 
   @Input()
   private answers: any[]
@@ -18,4 +27,4 @@ export class QuestionComponent implements OnInit {
   ngOnInit() {
   }
 
-}
+} // class
