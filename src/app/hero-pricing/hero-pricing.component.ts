@@ -1,3 +1,5 @@
+import { AuthService } from '../shared';
+import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,9 +9,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HeroPricingComponent implements OnInit {
 
-  constructor() { }
+  private showLoginModal: boolean
+  private showHeroSubModal: boolean
+
+  constructor(private _router: Router, private _auth: AuthService) { }
 
   ngOnInit() {
   }
 
+  goHero(): void {
+    if (this._auth.getUser().isLoggedIn) {
+      this.showHeroSubModal = true
+    } else {
+      this.showLoginModal = true
+    }
+  }
 }
