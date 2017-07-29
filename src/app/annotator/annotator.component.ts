@@ -1,10 +1,3 @@
-/**
- *  Annotator Component
- *  - Loads Reading text
- *  - Compiles word components
- *  - Triggers highlighting
- *  - Deletes highlights and comment components
- */
 import { Component, Input, OnDestroy, OnInit, ViewChildren, QueryList, EventEmitter } from '@angular/core'
 import { Subscription } from 'rxjs/Rx'
 import * as Rangy from 'rangy'
@@ -27,7 +20,19 @@ declare var window: any
     styleUrls: ['annotator.component.scss']
 })
 export class AnnotatorComponent implements OnInit, OnDestroy {
-    // @Input() private project: any
+    
+    /*
+        Annotator Component
+        Last Mod: 29 July 2017 - Nick Pumper
+
+        This does all the heavy lifting in a a reading.
+        - Loads Reading text
+        - Compiles word components
+        - Triggers highlighting
+        - Deletes highlights and comment components
+    */
+    
+    
     @Input() private mobileCommentActive: boolean
     @Input() private activeReply: any
 
@@ -36,33 +41,36 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     private reading: Reading = <Reading>{}
     private project: Project = <Project>{}
     
-    private commentsByIndex: EdjiComment[][] = []
-    private fireComments: EdjiComment[] = []
-    private showDiscussions: boolean = false
-    private focusOverride: boolean = false
+    private commentsByIndex : EdjiComment[][] = []
+    private fireComments    : EdjiComment[] = []
+    private focusOverride   : boolean = false
 
-    private highlightArray: number[] = []
+    private highlightArray      : number[] = []
     private alwaysHighlightArray: number[] = []
-    private focusArray: boolean[] = []
+    private focusArray          : boolean[] = []
     
-    // An array of arrays!
-    private lineCountArray: any[][] = []
+    // Line Count
+    private lineCountArray: any[][] = [] // 2D ARRAY
     private lineCountRunning: boolean = false
 
     // private activeComment: EdjiComment = <EdjiComment>{}
     private replyComment: EdjiComment = <EdjiComment>{}
-    
     private lineExpanded: boolean = false
+
+    // Trigger Booleans
     private showCommentCounts: boolean = false
     private showAllComments: boolean = false
+    private showDiscussions : boolean = false
+    private optionsShow = false
+    private hideKeyboard = false
+
+    // Status Booleans
+    private isMobile = false
 
     private highlightY = 200 
     private highlightX = 20 
     private optionLeft = true
-    private isMobile = false
-    private optionsShow = false
     private mobileIndex = 0
-    private hideKeyboard = false
 
     private imageCoords = {}
     private imageHotspotPlaceholder: any = {
@@ -254,7 +262,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
         // Fallback for tooltip: Continuous text selection check
         this.loopCheckTextSelection()
-    }
+    } // ngOnInit
 
     ngOnDestroy() {
         this._readings.clear()
