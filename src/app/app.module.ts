@@ -40,7 +40,7 @@ import { LinkifyPipe } from './pipes/linkify.pipe';
 import { UserInitialsPipe } from './pipes/userinitials.pipe.ts';
 
 // Components
-import { NavBarComponent, FooterComponent, TutorialBoxComponent } from './shared';
+import { NavBarComponent, FooterComponent, TutorialBoxComponent, QuestionComponent } from './shared';
 import { HomeComponent } from './home';
 import { RegisterComponent } from './register';
 import { LoginForm, GuestForm } from './forms';
@@ -113,6 +113,7 @@ type StoreType = {
     EmojiCommentComponent,
     AudioCommentComponent,
     EmojiKeyboardComponent,
+    QuestionComponent,
     AppComponent,
     AccountComponent,
     LoginForm,
