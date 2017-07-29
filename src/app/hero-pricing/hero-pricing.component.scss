@@ -21,10 +21,10 @@
 
 .feature-list {
     list-style-type: disc;
-    list-style-image: url('//emoji.edji.it/png/72x72/2714.png');
-
+    list-style-image: url('/assets/images/icon-check.svg');
+    padding-left: 28px;
     & li {
-        padding: 0 0 7px 12px;
+        padding: 0 0 7px 0px;
         line-height: 22px;
     }
 }
