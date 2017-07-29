@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { }
+import { EdjiComment, EdjiQuestion } from "../datatypes";
 
 @Component({
   selector: 'edji-question',
@@ -17,14 +17,27 @@ export class QuestionComponent implements OnInit {
   */
   
   @Input()
-  private question: EdjiQuestion;
+  public question: EdjiQuestion; // The question being asked, and all of it's data and logic.
 
   @Input()
-  private answers: any[]
+  private answers: EdjiComment[] 
 
-  constructor() { }
+  // TEMP
+  public tempQuestion : EdjiQuestion; //TEMP: Purely for testing.
+
+  public questionOrder = 0; // Is this the first question? Or the second? Etc.
+
+  constructor() {
+    // TEMP CODE
+    this.tempQuestion = new EdjiQuestion();
+    this.tempQuestion.prompt = "Who is the world's greatest Air Force?";
+  } // constructor
 
   ngOnInit() {
   }
+
+  public setQuestionOrder (input : string) : void {
+    // Make sure there is no whitespace.
+  } // setQuestionOrder
 
 } // class
