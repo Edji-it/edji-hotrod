@@ -1,3 +1,4 @@
+import { userInfo } from 'os';
 import { Component, OnInit, Input, EventEmitter} from '@angular/core';
 import { AuthService } from '../auth.service';
 
@@ -27,6 +28,7 @@ export class AvatarDisplayComponent implements OnInit {
   @Input() avatarSize       : string    = 'lg';
   @Input() tempDisplayMode  : boolean   = false; // If we don't want this to reflect the user's actual, toggle this.
   @Input() tempDisplayPic   : string; // If tempDisplayMode is on, this display will show this instead.
+  @Input() user             : any
 
   // Stored data
   private displayedAvatar : string;
@@ -34,12 +36,16 @@ export class AvatarDisplayComponent implements OnInit {
   private currentUser     : any; // We need data from this.
 
   constructor(private _auth: AuthService) {
-    this.currentUser = this._auth.getUser();
+    if (!this.user) {
+      this.currentUser = this._auth.getUser();
+    } else {
+      this.currentUser = this.user
+    }
     this.nameInitials = "";
   } // constructor
 
   ngOnInit () {
-    console.log("avatarSize: " + this.avatarSize);
+    
   }
 
   public getUserInitials() : string 
