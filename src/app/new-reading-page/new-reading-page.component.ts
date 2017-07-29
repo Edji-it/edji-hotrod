@@ -8,6 +8,7 @@ import { Angulartics2 } from 'angulartics2';
 import { ReadingService } from '../shared/reading.service';
 import { ProjectService } from '../shared/project.service';
 import { AuthService } from '../shared';
+import { User } from '../shared/datatypes';
 import * as Rangy from 'rangy';
 
 @Component({
@@ -17,34 +18,50 @@ import * as Rangy from 'rangy';
 })
 export class NewReadingPage implements OnInit {
     
-    private readingForm: FormGroup;
-    private readingHtml: string = "<div>&nbsp;</div>";
-    private readingIsBlank: boolean = false;
-    private readingPlaceholder: string = 'Type or paste your reading...';
-    private submitted: boolean = false;
-    private addLoadingD: boolean = false;
-    private addLoadingP: boolean = false;
-    private error: string = '';
-    private showUploadModal: boolean = false;
-    private isDraft: boolean = true;
-    private readingId: any = "";
-    private reading: any = {};
-    private projects: any[] = [];
+    /*
+        New Reading Page
+        Last Mod: 29 July 2017 - Nick Pumper
+
+        Create a new reading!
+    */
+
+    private readingForm     : FormGroup;
+    private readingHtml     : string = "<div>&nbsp;</div>";
+    private readingIsBlank  : boolean = false;
+    private submitted       : boolean = false;
+    private addLoadingD     : boolean = false;
+    private addLoadingP     : boolean = false;
+    private isDraft         : boolean = true;
+    private readingId       : any = "";
+    private reading         : any = {};
+    private projects        : any[] = [];
+
+    // Trigger booleans
+    private showAlert       : boolean = false;
+    private showUploadModal : boolean = false; // Should the modal appear?
+    
     private errorObject = {
         readingError: ""
     };
+    
     private successObject = {
         readingSuccess: ""
     };
-    private successAlert: string = "Nice work! This reading draft was successfully saved!";
-    private alert: string = '';
-    private showAlert: boolean = false;
-    private versionId: string = '';
-    private ownerId: string;
-    private copyId: string = '';
+
+    // Messages
+    private successAlert    : string = "Nice work! This reading draft was successfully saved!";
+    private readingPlaceholder: string = 'Type or paste your reading...';
+    private error           : string = ''; // Error message 
+    private alert           : string = '';
+
+    private versionId       : string = '';
+    private ownerId         : string;
+    private copyId          : string = '';
+    private editorToolbarY  : number = 54;
+    private insertNode      : any;
+    private currentUser     : User; // User data of the current user.
+
     private static readonly EDITOR_TOOLBAR_Y = 54;
-    private editorToolbarY: number = 54;
-    private insertNode: any;
 
     // Used for processing reading
     private words: any[] = [];
@@ -107,7 +124,10 @@ export class NewReadingPage implements OnInit {
             source: [null, null]
             // label: ['Group 1', Validators.required]
         });
-    }
+
+        // Define the user object.
+        this.currentUser = this._auth.getUser();
+    } // constructor
 
     ngOnInit() {
         this.readingId = this._route.snapshot.params['id'];
