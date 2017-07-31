@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { EdjiComment, EdjiQuestion } from "../datatypes";
+import { EdjiComment, EdjiQuestion, Project, Reading } from "../datatypes";
 
 @Component({
   selector: 'edji-question',
@@ -9,9 +9,9 @@ import { EdjiComment, EdjiQuestion } from "../datatypes";
 export class QuestionComponent implements OnInit {
 
   /*
-    19 July 2017
+    29 July 2017
     Nick Pumper
-    Last Mod: 29 July 2017
+    Last Mod: 31 July 2017
 
     Handles display of the Question.
   */
@@ -25,7 +25,10 @@ export class QuestionComponent implements OnInit {
   // TEMP
   public tempQuestion : EdjiQuestion; //TEMP: Purely for testing.
 
+  // State
   public questionOrder = 0; // Is this the first question? Or the second? Etc.
+
+  private project: Project = <Project>{}
 
   constructor() {
     // TEMP CODE
