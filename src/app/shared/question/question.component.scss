@@ -3,11 +3,14 @@
     29 July 17
     Nick Pumper
 
-    Last Mod: 29 July 17 - Nick Pumper
+    Last Mod: 31 July 17 - Nick Pumper
 */
 
 .question-container {
-    background: white;
+    display: block;
+    margin: 10px auto;
+    position: relative;
+    background: transparent !important;
 } // .question-container
 
 .prompt-section {
@@ -16,15 +19,30 @@
 
 .question-label {
     color: darkgray;
-    text-transform: capitalize;
 }
 
 .question-number {
     color: white;
     background-color: lightgray;
+    width:      30px;
+    height:     30px;
+    font-size:  20px;
+    text-align: center;
+    display:    inline-block;
+    border-radius:  50%;
 }
 
 .prompt {
     color: black;
-    font-weight: 700;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.answer-label {
+    color: darkgray;
+}
+
+// The list of answers
+.answers {
+    width: 100%;
 }
