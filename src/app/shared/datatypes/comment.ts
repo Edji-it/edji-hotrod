@@ -1,3 +1,5 @@
+import { EdjiQuestion } from './';
+
 /** Comment properties we add on the front end */
 export interface EdjiComment extends BaseComment {
   lineCount: number,
@@ -22,6 +24,7 @@ export interface BaseComment {
   loc?: { x: number, y: number },
   reply_to?: string,
   replies?: any[],
+  assignedQuestion? : EdjiQuestion,
   new?: boolean
 }
 

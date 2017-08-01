@@ -22,14 +22,13 @@ export class QuestionComponent implements OnInit {
   public question: EdjiQuestion; // The question being asked, and all of it's data and logic.
 
   @Input()
-  public answers: EdjiComment[] = [];
-
-  // TEMP
-  public tempQuestion : EdjiQuestion; //TEMP: Purely for testing.
+  public answers: EdjiComment[];
 
   // State
   public questionOrder = 0; // Is this the first question? Or the second? Etc.
-  
+  public emojiAnswers : boolean = true;
+  public textAnswers : boolean = true;
+
   private newAnswer : EdjiComment; // New answers will be loaded here.
   private currentReading: Reading;
   private user : User;
@@ -42,14 +41,15 @@ export class QuestionComponent implements OnInit {
   private project: Project;
 
   constructor(
-    private _projects: ProjectService, 
-    private _readings: ReadingService,
-    private _auth: AuthService,
-    private _comments: CommentService,
+    private _projects : ProjectService, 
+    private _readings : ReadingService,
+    private _auth     : AuthService,
+    private _comments : CommentService
   ) {
-    // TEMP CODE
-    this.tempQuestion = new EdjiQuestion();
-    this.tempQuestion.prompt = "Who is the world's greatest Air Force?";
+    // TEMP
+    this.question = new EdjiQuestion();
+    console.log(this.question);
+    console.log(this.answers);
   } // constructor
 
   ngOnInit() {
@@ -62,8 +62,8 @@ export class QuestionComponent implements OnInit {
       error => {
         console.error(error);
       }
-    ) )
-
+    ))
+    
     // Subscribe to updates from that project once we're subscribed to the reading
     this.subscriptions.push( this._projects.currentProject.subscribe(
       (project) => {
@@ -81,17 +81,6 @@ export class QuestionComponent implements OnInit {
             this.user = user
         })
     )
-
-    // TEMP CODE:
-    let newAnswer = <EdjiComment> {
-      project_id: this.project._id,
-      user_id: this.user._id,
-      author: this.user.fullname,
-      data: '',
-      type: 'emoji'
-    } // newAnswer
-
-    this.answers = [];
   } // ngOnInit
 
   public setQuestionOrder (input : string) : void {
@@ -104,6 +93,8 @@ export class QuestionComponent implements OnInit {
   } // public addAnswerOfType (type: string)
 
   public createAnswer (type: string) : void {
+    
+    let newAnswerArray : EdjiComment[];
     let projectId = this.project._id
     
     let newAnswer = <EdjiComment> {
@@ -130,15 +121,29 @@ export class QuestionComponent implements OnInit {
     this.newAnswer.project_id = projectId;
     this._comments.activeComment = this.newAnswer;
 
-    this.answers.push(this.newAnswer);
+    newAnswerArray = this.question.answers;
+
+    if (newAnswerArray === undefined)
+    {
+      newAnswerArray = [this.newAnswer];
+    } else {
+      newAnswerArray.push(this.newAnswer);
+    }
+
+    this.question.answers = newAnswerArray;
     // END of temp code.
   } // public createAnswer (type: string) : void
-  
+
   private activeEmojiKeyboardReply(activeReply: any): void {
     this._comments.activeComment = activeReply
     this._comments.isEmojiKeyboardActive(this.user)
   } // private activeEmojiKeyboardReply
 
+  public deleteAnswer (target : EdjiComment) : void {
+    console.log("Deleting!");
+    this.answers.splice(this.answers.indexOf(target), 1);
+  } // public deleteAnswer (target : EdjiComment)
+  
   /** Used to determine which level of permission the user has for a specific comment
    * @param comment A comment object
    */

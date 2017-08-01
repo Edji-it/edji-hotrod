@@ -17,7 +17,7 @@
     <!-- The Question Prompt Section -->
     <div class="prompt-section">
       <label class="question-label">QUESTION</label>
-      <div class="prompt">{{tempQuestion.prompt}}</div>
+      <div class="prompt">{{question.prompt}}</div>
     </div>
     <!-- Answers Section -->
     <div class="answers-section">
@@ -43,12 +43,14 @@
         </div>
         <!-- ANSWERS -->
         <div class="answer-list">
-          <div *ngFor="let answer of answers">
+          <div *ngFor="let answer of question.answers">
             <edji-comment class="answer list-item" 
               [comment]="answer" 
               [isActive]="answer.active" 
               [answer]=true
-              [userPermission]="getCommentPermissions(answer)"></edji-comment>
+              [assignedQuestion]="question"
+              [userPermission]="getCommentPermissions(answer)"
+              ></edji-comment>
           </div><!-- answers loop -->
         </div><!-- answer list -->
       </div><!-- answer block -->

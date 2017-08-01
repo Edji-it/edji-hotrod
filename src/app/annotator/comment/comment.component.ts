@@ -6,7 +6,7 @@ import { Angulartics2 } from 'angulartics2'
 import { ProjectService } from '../../shared/project.service'
 import { CommentService } from '../../shared/comment.service'
 import { AuthService } from '../../shared/auth.service'
-import { EdjiComment, CommentPermissions } from './../../shared/datatypes'
+import { EdjiComment, CommentPermissions, EdjiQuestion } from './../../shared/datatypes'
 
 @Component({
   selector: 'edji-comment',
@@ -44,6 +44,7 @@ export class CommentComponent implements OnInit {
   @Input() private replyRef: boolean = false
   @Input() private reply: boolean = false   // Is it a reply to another comment?
   @Input() private answer: boolean = false // Is it an answer to a HOT-question? (8.1.17)
+  @Input() private assignedQuestion : EdjiQuestion // If it is an answer, then this is it's assigned question.
   @Input() private commentLite: boolean = false
   @Input() private userPermission: number = CommentPermissions.READ
   @Input() private showDeleteAudioModal: boolean = false
@@ -245,6 +246,7 @@ export class CommentComponent implements OnInit {
 
   // Deletes comment via Project service, which updates the local Project object
   deleteComment(comment: any):void {
+    // console.log("Trying to delete.");
     if (this.comment.reply_to) {
       this.angulartics.eventTrack.next({ action: 'deleteReply', properties: { category: 'heroFeature', label: 'attempt' }})
 
@@ -260,6 +262,10 @@ export class CommentComponent implements OnInit {
         this.angulartics.eventTrack.next({ action: 'deleteReply', properties: { category: 'heroFeature', label: 'failure' }})
         console.log(error)
       })
+    } else if (this.answer) {
+      // As the question component to delete the comment since it's stored under it.
+      console.log("Delete this fucker.");
+      this.assignedQuestion.deleteAnswer(comment);
     } else {
       this.angulartics.eventTrack.next({ action: 'deleteComment', properties: { category: 'projectAction', label: 'attempt' }})
 
