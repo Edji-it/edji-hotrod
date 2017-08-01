@@ -15,6 +15,11 @@ import { EdjiComment, CommentPermissions } from './../../shared/datatypes'
 })
 export class CommentComponent implements OnInit {
 
+  /*
+  Front end implementation of a comment.
+  Last Mod: 1 Aug 2017
+  */
+
   public lineCount: number = 1
   public expanded: boolean = false
 
@@ -37,7 +42,8 @@ export class CommentComponent implements OnInit {
   @Input() public comment: EdjiComment
   @Input() private readOnly: boolean = false
   @Input() private replyRef: boolean = false
-  @Input() private reply: boolean = false
+  @Input() private reply: boolean = false   // Is it a reply to another comment?
+  @Input() private answer: boolean = false // Is it an answer to a HOT-question? (8.1.17)
   @Input() private commentLite: boolean = false
   @Input() private userPermission: number = CommentPermissions.READ
   @Input() private showDeleteAudioModal: boolean = false

@@ -699,7 +699,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     /** 
      * Add Comment of type
      * - Fired from comment options tooltip
-     */
+    */
     addCommentOfType(type: string): void {
         // Get selection indices
         let span = this.getSelectionSpan()

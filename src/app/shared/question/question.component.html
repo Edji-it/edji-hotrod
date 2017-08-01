@@ -26,15 +26,32 @@
         - If the user has answered, they can see the other answers.
         - Otherwise, give them options to answer.
       -->
-      <div class="answers-block">
+      <div class="answer-block">
         <div class="answer-options">
           <!-- Emoji Answer Button -->
-          <button class="btn">Emoji</button>
+          <button id="addEmojiComment" 
+						class="emoji comment__options--mobileButton" 
+						(tap)="addAnswerOfType('emoji')">
+							<i class="icon icon-emoji-comment"></i>
+					</button>
           <!-- Text Answer Button -->
-          <button class="btn">Text</button>
+          <button id="addTextComment"
+						class="emoji comment__options--mobileButton" 
+						(tap)="addAnswerOfType('text')">
+							<i class="icon icon-text-comment"></i>
+					</button>
         </div>
-        <div class="answer-list">Answers are listed here.</div>
-      </div>
+        <!-- ANSWERS -->
+        <div class="answer-list">
+          <div *ngFor="let answer of answers">
+            <edji-comment class="answer list-item" 
+              [comment]="answer" 
+              [isActive]="answer.active" 
+              [answer]=true
+              [userPermission]="getCommentPermissions(answer)"></edji-comment>
+          </div><!-- answers loop -->
+        </div><!-- answer list -->
+      </div><!-- answer block -->
     </div>
   </div>
 </div>

@@ -55,7 +55,16 @@
 }
 
 // The list of answers
-.answers-block {
+.answer-block {
     width: 100%;
+    height: 100%;
 }
 
+.answer-list {
+    height: 200px;
+}
+
+.answer {
+    height: 75px;
+    width: 200px;
+}
