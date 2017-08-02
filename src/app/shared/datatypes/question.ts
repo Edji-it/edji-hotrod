@@ -16,9 +16,9 @@ interface Question extends BaseQuestion {
 /** The reading as it is returned from the server */
 interface BaseQuestion {
   prompt        : string,
-  emojiAnswers  : boolean,
-  textAnswers   : boolean;
-  answers       : EdjiComment[];
+  answerType    : string,
+  answers?      : EdjiComment[],
+  new?          : boolean
 } //  interface BaseQuestion
 
 // Conduct the logic behind the question in this class
@@ -27,10 +27,10 @@ export class EdjiQuestion implements Question {
   // State
   public prompt   : string; // What is the question asking.
   public answers  : EdjiComment[] = []
+  public new      : boolean
 
   // Answer types.
-  public emojiAnswers : boolean;
-  public textAnswers : boolean;
+  public answerType : string;
 
   constructor () {
     // console.log(this.answers);

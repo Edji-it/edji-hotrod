@@ -1,4 +1,3 @@
-import { QuestionsComponent } from '../project-page/hero-tools/questions/questions.component';
 import { Title } from '@angular/platform-browser';
 import { REPLServer } from 'repl';
 import { ActivatedRoute, Router, Params } from '@angular/router';
@@ -9,7 +8,7 @@ import { Angulartics2 } from 'angulartics2';
 import { ReadingService } from '../shared/reading.service';
 import { ProjectService } from '../shared/project.service';
 import { AuthService } from '../shared';
-import { User } from '../shared/datatypes';
+import { EdjiComment, EdjiQuestion, User } from '../shared/datatypes';
 import * as Rangy from 'rangy';
 
 @Component({
@@ -506,7 +505,11 @@ export class NewReadingPage implements OnInit {
      */
     private addQuestion() {
         console.log('add a new question here')
-        let question
+        var question = <EdjiQuestion>{
+            prompt: '',
+            answerType: 'emoji',
+            new: true
+        }
         this.questions.push(question)
     }
 

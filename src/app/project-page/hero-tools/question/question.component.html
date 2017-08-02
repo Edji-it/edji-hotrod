@@ -13,15 +13,16 @@
     <div class="question-number">3</div>
   </div>
   <!-- Question Body - aka Everything else -->
-  <div class="question-body">
+  <div class="question-body" [ngClass]="[question.new ? 'question-body__new' : '']">
     <!-- The Question Prompt Section -->
     <div class="prompt-section">
       <label class="question-label">QUESTION</label>
-      <div class="prompt">{{question.prompt}}</div>
+      <div *ngIf="question && !question.new" class="prompt">{{question.prompt}}</div>
+      <textarea *ngIf="question && question.new" type='text' placeholder="Question text..." class="text-comment-input" [(ngModel)]="question.prompt"></textarea>
     </div>
     <!--<button (tap)="removeQuestion()" class='inline-delete'>+</button>-->
     <!-- Answers Section -->
-    <div class="answers-section">
+    <div *ngIf="question && question.answers" class="answers-section">
       <label class="answer-label">ANSWERS</label>
       <!-- The Answers.
         - If the user has answered, they can see the other answers.
@@ -56,12 +57,24 @@
         </div><!-- answer list -->
       </div><!-- answer block -->
     </div>
-    <!-- Answer Type Entry -->
-    <!--<div>
-      <div class="question__section-header">ANSWER TYPES</div>
-      <div>BLOCK</div>
-      <div class="question__section-header">OPTIONS</div>
-      <div>BLOCK</div>
-    </div>-->
+    <!-- Answer Type During Question Creation -->
+    <div class="answer-label">ANSWER TYPES</div>
+    <div class="answer-options">
+      <!-- Emoji Answer Button -->
+      <button *ngFor="let type of ['emoji', 'text', 'audio']" id="selectAnswer" 
+        class="emoji" 
+        (tap)="selectAnswerType(type)">
+          <i class="icon icon-{{type}}-comment"></i>
+      </button>
+    </div>
+    <div class="answer-label">OPTIONS</div>
+    <div class="answer-options">
+      <!-- Emoji Answer Button -->
+      <button *ngFor="let type of ['public', 'lock']" id="selectOption" 
+        class="emoji" 
+        (tap)="selectOptionType(type)">
+          <i class="icon icon-{{type}}-comment"></i>
+      </button>
+    </div>
   </div>
 </div>

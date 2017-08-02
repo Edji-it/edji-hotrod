@@ -1,7 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { EdjiComment, EdjiQuestion, Project, Reading, User } from "../../../shared/datatypes";
-import { CommentService, AuthService, ProjectService, ReadingService } from "../../../shared";
-import { Subscription } from 'rxjs/Rx';
+import { Component, Input, OnInit } from '@angular/core'
+import { EdjiComment, EdjiQuestion, Project, Reading, User } from "../../../shared/datatypes"
+import { CommentService, AuthService, ProjectService, ReadingService } from "../../../shared"
+import { Subscription } from 'rxjs/Rx'
 
 @Component({
   selector: 'edji-question',
@@ -19,29 +19,30 @@ export class QuestionComponent implements OnInit {
   */
   
   @Input()
-  public question: EdjiQuestion; // The question being asked, and all of it's data and logic.
+  public question: EdjiQuestion // The question being asked, and all of it's data and logic.
 
   @Input()
-  public answers: EdjiComment[];
+  public answers: EdjiComment[]
   
   // @Input() question: any
   // @Output() deleteQuestion: EventEmitter<any> = new EventEmitter()
 
   // State
-  public questionOrder = 0; // Is this the first question? Or the second? Etc.
-  public emojiAnswers : boolean = true;
-  public textAnswers : boolean = true;
+  public questionOrder = 0 // Is this the first question? Or the second? Etc.
+  public emojiAnswers : boolean = true
+  public textAnswers : boolean = true
 
-  private newAnswer : EdjiComment; // New answers will be loaded here.
-  private currentReading: Reading;
-  private user : User;
-  private subscriptions : Subscription[] = [];
+  private newAnswer : EdjiComment // New answers will be loaded here.
+  private currentReading: Reading
+  private user : User
+  private subscriptions : Subscription[] = []
 
   // Trigger Bools
-  public userHasAnswered = false;
+  public userHasAnswered = false
+  private editing
 
   // References
-  private project: Project;
+  private project: Project
 
   constructor(
     private _projects : ProjectService, 
@@ -50,9 +51,9 @@ export class QuestionComponent implements OnInit {
     private _comments : CommentService
   ) {
     // TEMP
-    this.question = new EdjiQuestion();
-    console.log(this.question);
-    console.log(this.answers);
+    // this.question = new EdjiQuestion()
+    // console.log(this.question)
+    // console.log(this.answers)
   } // constructor
 
   ngOnInit() {
@@ -60,10 +61,10 @@ export class QuestionComponent implements OnInit {
     // Subscribe to the reading
     this.subscriptions.push( this._readings.currentReading.subscribe(
       reading => {
-        this.currentReading = reading;
+        this.currentReading = reading
       },
       error => {
-        console.error(error);
+        console.error(error)
       }
     ))
     
@@ -84,6 +85,8 @@ export class QuestionComponent implements OnInit {
             this.user = user
         })
     )
+
+    console.log(this.question)
   } // ngOnInit
 
   public setQuestionOrder (input : string) : void {
@@ -92,12 +95,12 @@ export class QuestionComponent implements OnInit {
 
   public addAnswerOfType (type: string) : void {
     // Tell the server we've got ourselves a new answer.
-    this.createAnswer(type);
+    this.createAnswer(type)
   } // public addAnswerOfType (type: string)
 
   public createAnswer (type: string) : void {
     
-    let newAnswerArray : EdjiComment[];
+    let newAnswerArray : EdjiComment[]
     let projectId = this.project._id
     
     let newAnswer = <EdjiComment> {
@@ -108,10 +111,10 @@ export class QuestionComponent implements OnInit {
       type: type
     } // newAnswer
 
-    newAnswer.new = true; // Set the answer as new
+    newAnswer.new = true // Set the answer as new
 
     // Load the method-level comment into the object-level so it can be displayed.
-    this.newAnswer = newAnswer;
+    this.newAnswer = newAnswer
 
     if (type=='emoji') {
       this.activeEmojiKeyboardReply(this.newAnswer)
@@ -120,20 +123,20 @@ export class QuestionComponent implements OnInit {
     // ADD server level saving here.
     // Until that is done, this is temp code.
 
-    this.newAnswer.active = true;
-    this.newAnswer.project_id = projectId;
-    this._comments.activeComment = this.newAnswer;
+    this.newAnswer.active = true
+    this.newAnswer.project_id = projectId
+    this._comments.activeComment = this.newAnswer
 
-    newAnswerArray = this.question.answers;
+    newAnswerArray = this.question.answers
 
     if (newAnswerArray === undefined)
     {
-      newAnswerArray = [this.newAnswer];
+      newAnswerArray = [this.newAnswer]
     } else {
-      newAnswerArray.push(this.newAnswer);
+      newAnswerArray.push(this.newAnswer)
     }
 
-    this.question.answers = newAnswerArray;
+    this.question.answers = newAnswerArray
     // END of temp code.
   } // public createAnswer (type: string) : void
 
@@ -143,8 +146,8 @@ export class QuestionComponent implements OnInit {
   } // private activeEmojiKeyboardReply
 
   public deleteAnswer (target : EdjiComment) : void {
-    console.log("Deleting!");
-    this.answers.splice(this.answers.indexOf(target), 1);
+    console.log("Deleting!")
+    this.answers.splice(this.answers.indexOf(target), 1)
   } // public deleteAnswer (target : EdjiComment)
   
   /** Used to determine which level of permission the user has for a specific comment
