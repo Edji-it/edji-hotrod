@@ -538,7 +538,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 // Maybe show a warning icon?
                 console.warn(error)
             })
-    }
+    } // createComment
 
     commentsByIndexUpdate(comment, wordIndex: number, commentIndex: number) {
         this.commentsByIndex[wordIndex][commentIndex].data = comment.data

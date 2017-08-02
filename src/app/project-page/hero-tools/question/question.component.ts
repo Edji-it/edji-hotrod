@@ -93,23 +93,11 @@ export class QuestionComponent implements OnInit {
 
   // Creates a comment that is treated as an answer.
   public createAnswer (type: string) : void {
-    console.log();
+    console.log("Began creating an answer!");
+    
   } // public createAnswer (type: string) : void
-
-  private activeEmojiKeyboardReply(activeReply: any): void {
-    this._comments.activeComment = activeReply
-    this._comments.isEmojiKeyboardActive(this.user)
-  } // private activeEmojiKeyboardReply
 
   public deleteAnswer (target : EdjiComment) : void {
     console.log("Deleting!");
-    
   } // public deleteAnswer (target : EdjiComment)
-  
-  /** Used to determine which level of permission the user has for a specific comment
-   * @param comment A comment object
-   */
-  private getCommentPermissions(comment: any): number {
-      return this._comments.getCommentPermissions(comment, this.user, this.project)
-  } // private getCommentPermissions(comment: any): number
 } // class
