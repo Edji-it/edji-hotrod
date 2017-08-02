@@ -1,3 +1,4 @@
+import { QuestionsComponent } from '../project-page/hero-tools/questions/questions.component';
 import { Title } from '@angular/platform-browser';
 import { REPLServer } from 'repl';
 import { ActivatedRoute, Router, Params } from '@angular/router';
@@ -35,6 +36,7 @@ export class NewReadingPage implements OnInit {
     private readingId       : any = "";
     private reading         : any = {};
     private projects        : any[] = [];
+    private questions       : any[]= []
 
     // Trigger booleans
     private showAlert       : boolean = false;
@@ -497,5 +499,22 @@ export class NewReadingPage implements OnInit {
             });
             this.readingHtml += imgString
         }
+    }
+
+    /**
+     * Adds a question block to the new reading and then adds in a new medium editor
+     */
+    private addQuestion() {
+        console.log('add a new question here')
+        let question
+        this.questions.push(question)
+    }
+
+    /**
+     * Removes a question block to the new reading and then adds in a new medium editor
+     */
+    private deleteQuestion() {
+        console.log('remove the question here')
+        // this.questions.
     }
 }

@@ -23,6 +23,9 @@ export class QuestionComponent implements OnInit {
 
   @Input()
   public answers: EdjiComment[];
+  
+  // @Input() question: any
+  // @Output() deleteQuestion: EventEmitter<any> = new EventEmitter()
 
   // State
   public questionOrder = 0; // Is this the first question? Or the second? Etc.

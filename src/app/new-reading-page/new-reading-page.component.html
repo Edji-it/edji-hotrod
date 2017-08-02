@@ -49,6 +49,7 @@
                                 (mouseup)="contentChange($event)"
                                 id="readingContent"
                                 class="content"></medium-editor>
+                            <hot-questions *ngFor="let question of questions" (deleteQuestion)="deleteQuestion()" [question]="question"></hot-questions>
                             <div id="errorContent" *ngIf="submitted && readingIsBlank"  class="alert alert-info">Please give your Reading some text!</div>
                         </label>
                         <!-- Editor Insert Options - 7.29.17
@@ -73,7 +74,7 @@
                             <!-- Insert Question Button (Hero) - NOT DONE
                                 - Modal not needed.
                             -->
-                            <a id="buttonInsertQuestion" *ngIf="currentUser.hero && currentUser.hero.active" class="btn btn-icon--plain">
+                            <a id="buttonInsertQuestion" *ngIf="currentUser.hero && currentUser.hero.active" class="btn btn-icon--plain" (click)="addQuestion()">
                                 <img title="Add Question" class src="/assets/images/icon-pdf.svg" />
                             </a>
                         </div>
