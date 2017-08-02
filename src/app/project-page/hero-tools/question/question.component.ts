@@ -102,20 +102,34 @@ export class QuestionComponent implements OnInit {
       type: type
     } // var newAnswer = <EdjiComment>
 
+    newAnswer.new = true;
+    this.newAnswer = newAnswer;
+
     if (type=='emoji') {
-      this.activeEmojiKeyboardReply(newAnswer)
-    }
+      this.activeEmojiKeyboardReply(this.newAnswer)
+    } // if
 
     // Tell the server we've added a comment.
-    this._projects.saveComment(newAnswer)
+    this._projects.saveComment(this.newAnswer)
     .then(comment => {
       comment.active = true
       this._comments.activeComment = comment
+
+      // We're having an issue with questions.answers being undefined, so I put this here 8.2.17
+      if (this.question.answers ===  undefined)
+      {
+        this.question.answers = [comment];
+      } else {
+        this.question.answers.push(comment);
+      } // if else
+      
+      console.log("server said we made a comment.");
       setTimeout(() => {
       }, 100)
     })
     .catch(error => {
       // TRACK EXCEPTION
+      console.log("Making an answer has failed.");
       console.log(error)
     })
   } // public createAnswer (type: string) : void
@@ -123,6 +137,25 @@ export class QuestionComponent implements OnInit {
   public deleteAnswer (target : EdjiComment) : void {
     console.log("Deleting!");
   } // public deleteAnswer (target : EdjiComment)
+
+  // Has the current user already answered this question?
+  public hasUserAnswered () : boolean {
+
+    if (this.question.answers != undefined)
+    {
+      for (let i = 0; i < this.question.answers.length; i++)
+      {
+        if (this.question.answers[i].author === this.user.fullname)
+        {
+          return true;
+        } // if
+      } // for
+    } else {
+      return false
+    } // else
+
+    return false;
+  } // public hasCurrentUserAnswered () : boolean
 
   private activeEmojiKeyboardReply(activeReply: any): void {
     this._comments.activeComment = activeReply

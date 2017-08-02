@@ -28,7 +28,7 @@ export class EdjiQuestion implements Question {
   // State
   public _id      : string;
   public prompt   : string; // What is the question asking.
-  public answers  : EdjiComment[] = []
+  public answers  : EdjiComment[] = [] // the answers to the question.
   public new      : boolean
 
   // Answer types.

@@ -22,14 +22,16 @@
     </div>
     <!--<button (tap)="removeQuestion()" class='inline-delete'>+</button>-->
     <!-- Answer Type During Question Creation -->
-    <div class="answer-label">ANSWER TYPES</div>
-    <div class="answer-options">
-      <!-- Emoji Answer Button -->
-      <button *ngFor="let type of ['emoji', 'text', 'audio']" id="selectAnswer" 
-        class="emoji" 
-        (tap)="addAnswerOfType(type)">
-          <i class="icon icon-{{type}}-comment"></i>
-      </button>
+    <div *ngIf="!hasUserAnswered()">
+      <div class="answer-label">ANSWER TYPES</div>
+      <div class="answer-options">
+        <!-- Emoji Answer Button -->
+        <button *ngFor="let type of ['emoji', 'text', 'audio']" id="selectAnswer" 
+          class="emoji" 
+          (tap)="addAnswerOfType(type)">
+            <i class="icon icon-{{type}}-comment"></i>
+        </button>
+      </div>
     </div>
     <div class="answer-label">OPTIONS</div>
     <div class="answer-options">
@@ -42,7 +44,7 @@
     </div>
   </div>
   <!-- Answers Section -->
-    <div class="answers-section">
+    <div *ngIf="hasUserAnswered()" class="answers-section">
       <label class="answer-label">ANSWERS</label>
       <!-- The Answers.
         - If the user has answered, they can see the other answers.
@@ -54,7 +56,8 @@
             [comment]="answer" 
             [isActive]="answer.active" 
             [userPermission]="getCommentPermissions(answer)"
-            ></edji-comment>
+            >
+          </edji-comment>
         </div><!-- answers loop -->
       </div><!-- answer list -->
     </div>
