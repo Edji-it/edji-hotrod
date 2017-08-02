@@ -10,7 +10,7 @@ import { EdjiComment } from "./";
 
 /* Additional properties we add on the front end */
 interface Question extends BaseQuestion {
-  deleteAnswer(target: EdjiComment) : void;
+  
 } // interface Question
 
 /** The reading as it is returned from the server */
