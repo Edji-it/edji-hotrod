@@ -43,8 +43,6 @@ export class CommentComponent implements OnInit {
   @Input() private readOnly: boolean = false
   @Input() private replyRef: boolean = false
   @Input() private reply: boolean = false   // Is it a reply to another comment?
-  @Input() private answer: boolean = false // Is it an answer to a HOT-question? (8.1.17)
-  @Input() private assignedQuestion : EdjiQuestion // If it is an answer, then this is it's assigned question.
   @Input() private commentLite: boolean = false
   @Input() private userPermission: number = CommentPermissions.READ
   @Input() private showDeleteAudioModal: boolean = false
@@ -262,10 +260,6 @@ export class CommentComponent implements OnInit {
         this.angulartics.eventTrack.next({ action: 'deleteReply', properties: { category: 'heroFeature', label: 'failure' }})
         console.log(error)
       })
-    } else if (this.answer) {
-      // As the question component to delete the comment since it's stored under it.
-      console.log("Delete this fucker.");
-      this.assignedQuestion.deleteAnswer(comment);
     } else {
       this.angulartics.eventTrack.next({ action: 'deleteComment', properties: { category: 'projectAction', label: 'attempt' }})
 

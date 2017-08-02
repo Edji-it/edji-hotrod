@@ -5,7 +5,7 @@ import { EdjiComment } from "./";
   29 July 2017
   Nick Pumper
 
-  Last modified: 1 Aug 2017
+  Last modified: 2 Aug 2017
 */
 
 /* Additional properties we add on the front end */
@@ -35,9 +35,4 @@ export class EdjiQuestion implements Question {
   constructor () {
     // console.log(this.answers);
   } // constructor
-
-  public deleteAnswer (target : EdjiComment) : void {
-    console.log("Deleting!");
-    this.answers.splice(this.answers.indexOf(target), 1);
-  } // public deleteAnswer (target : EdjiComment)
 } // export class EdjiQuestion 
