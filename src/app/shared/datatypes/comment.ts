@@ -1,5 +1,9 @@
 import { EdjiQuestion } from './';
 
+/*  
+  Last Mod: 8.2.17
+*/
+
 /** Comment properties we add on the front end */
 export interface EdjiComment extends BaseComment {
   lineCount: number,
@@ -17,22 +21,23 @@ export interface BaseComment {
   end: number,
   data: any,
   author: string,
-  type: string,
+  type: string,   // emoji, text, or audio comment?
   dataArray?: any[],
   url?: string,
   text?: string,
   loc?: { x: number, y: number },
   reply_to?: string,
   replies?: any[],
-  assignedQuestion? : EdjiQuestion,
+  questionId? : string,
   new?: boolean
 }
 
-// how do you make an enum that can be used by an interface to specify string values?
-// export enum CommentType {
-//   emojiComment = 0,
-//   textComment
-// }
+// idk if we'll use this, but I made it anyways? 8.2.17 Nick Pumper
+export enum CommentType {
+  Normal, // A normal comment nested in the reading text.
+  Reply,  // A comment replying to another comment.
+  Answer  // A comment which is an answer to an EdjiQuestion.
+} // export enum CommentType
 
 /** Used to control permissions on altering comment data */
 export enum CommentPermissions {

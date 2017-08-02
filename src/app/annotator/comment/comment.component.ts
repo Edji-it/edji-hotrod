@@ -17,7 +17,7 @@ export class CommentComponent implements OnInit {
 
   /*
   Front end implementation of a comment.
-  Last Mod: 1 Aug 2017
+  Last Mod: 2 Aug 2017
   */
 
   public lineCount: number = 1

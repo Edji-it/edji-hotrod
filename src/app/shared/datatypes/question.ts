@@ -15,6 +15,7 @@ interface Question extends BaseQuestion {
 
 /** The reading as it is returned from the server */
 interface BaseQuestion {
+  _id           : string,
   prompt        : string,
   answerType    : string,
   answers?      : EdjiComment[],
@@ -25,6 +26,7 @@ interface BaseQuestion {
 export class EdjiQuestion implements Question {
 
   // State
+  public _id      : string;
   public prompt   : string; // What is the question asking.
   public answers  : EdjiComment[] = []
   public new      : boolean

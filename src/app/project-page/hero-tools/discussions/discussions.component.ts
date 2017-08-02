@@ -99,14 +99,11 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
    * @param type What kind of reply comment: emoji, text...
    */
   createReplyComment(type: string): void {
-
-    let projectId = this.project._id
     let commentId = this.comment._id
 
     this.angulartics.eventTrack.next({ action: type + 'ReplyCreate', properties: { category: 'heroFeature', label: 'attempt' }})
     
     var replyCommentNew = <EdjiComment>{
-      project_id: projectId,
       user_id: this.user._id,
       author: this.user.fullname,
       reply_to: commentId,
@@ -122,11 +119,11 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
       this.activeEmojiKeyboardReply(this.replyCommentNew)
     }
 
+    // Tell the server we've added a comment.
     this._projects.saveComment(this.replyCommentNew)
       .then(comment => {
         this.angulartics.eventTrack.next({ action: type + 'ReplyCreate', properties: { category: 'heroFeature', label: 'success' }})
         comment.active = true
-        comment.project_id = projectId
         this._comments.activeComment = comment
         this._projects.addCommentToReplies(comment)
         setTimeout(() => {

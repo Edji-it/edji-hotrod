@@ -10,7 +10,7 @@ import { CommentService } from '../shared/comment.service'
 import { CommentComponent } from './comment/comment.component'
 import { AuthService } from '../shared/auth.service' 
 import { SocketService } from '../shared/socket.service'
-import { CommentPermissions, EdjiComment, Project, Reading } from './../shared/datatypes'
+import { CommentPermissions, EdjiComment, Project, Reading, CommentType } from './../shared/datatypes'
 
 declare var window: any
 
@@ -485,7 +485,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // We need to make sure they aren't already editing a comment
         this.inactivateComment()
 
-        let projectId = this.project._id
+        // STEP: We're prepping a comment to send to ProjectService for saving.
+
         let text: string = ''
         for (var i = start; i <= end; i++) {
             text += this.reading.words[i].str
@@ -494,7 +495,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.angulartics.eventTrack.next({ action: type + 'CommentCreate', properties: { category: 'projectAction', label: 'attempt' }})
         
         let comment = <EdjiComment>{
-            project_id: projectId,
             data: '',
             start: start,
             end: end,

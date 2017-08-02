@@ -317,7 +317,7 @@ export class ProjectService {
     } // public delete(projectId)
 
     /** 
-     * Update or Create a comment on a project
+     * Save a comment on a project.
      * - Give this thing an EdjiComment object, and it will handle it from there
      *   It will save it as the right comment type, whether a normal comment, a reply, or question answer.
      *   It just needs to have the appropriate type assigned and the proper data.
@@ -329,7 +329,10 @@ export class ProjectService {
      * @param commentId (optional) If passed, will update comment with that ID
      */
     public saveComment(commentObj: EdjiComment) : Promise<any> {
+        let projectId : string = this.project._id;
         let comment = Object.assign({}, commentObj)
+
+        comment.project_id = projectId; // Tell the comment what project it's a part of
         
         // Clean frontend only properties
         delete comment['active']
@@ -337,7 +340,7 @@ export class ProjectService {
         delete comment['showAvatar']
         
         // Get the url of this project that we're saving to.
-        let url = this._auth.getUrl() + '/projects/' + comment.project_id + '/comments';
+        let url = this._auth.getUrl() + '/projects/' + projectId + '/comments';
         if (!comment.user_id) {
             comment.user_id = this._auth.getUser()._id
         }
@@ -372,7 +375,7 @@ export class ProjectService {
      * Deletes comment via service, then updates local Project object 
      * - Project page should subscribe to the currentProject Observable to receive these updates
      */
-    public deleteComment(comment): Promise<any> {
+    public deleteComment(comment : EdjiComment): Promise<any> {
         let projectId = this.project._id;
         let url = this._auth.getUrl() + '/projects/' + projectId + '/comments/' + comment._id;
 
