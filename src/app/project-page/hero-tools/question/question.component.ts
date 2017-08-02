@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { EdjiComment, EdjiQuestion, Project, Reading, User } from "../datatypes";
-import { CommentService, AuthService, ProjectService, ReadingService } from "./../";
+import { EdjiComment, EdjiQuestion, Project, Reading, User } from "../../../shared/datatypes";
+import { CommentService, AuthService, ProjectService, ReadingService } from "../../../shared";
 import { Subscription } from 'rxjs/Rx';
 
 @Component({
