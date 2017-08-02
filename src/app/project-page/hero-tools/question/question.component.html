@@ -21,47 +21,13 @@
       <textarea *ngIf="question && question.new" type='text' placeholder="Question text..." class="text-comment-input" [(ngModel)]="question.prompt"></textarea>
     </div>
     <!--<button (tap)="removeQuestion()" class='inline-delete'>+</button>-->
-    <!-- Answers Section -->
-    <div *ngIf="question && question.answers" class="answers-section">
-      <label class="answer-label">ANSWERS</label>
-      <!-- The Answers.
-        - If the user has answered, they can see the other answers.
-        - Otherwise, give them options to answer.
-      -->
-      <div class="answer-block">
-        <div class="answer-options">
-          <!-- Emoji Answer Button -->
-          <button id="addEmojiComment" 
-						class="emoji comment__options--mobileButton" 
-						(tap)="addAnswerOfType('emoji')">
-							<i class="icon icon-emoji-comment"></i>
-					</button>
-          <!-- Text Answer Button -->
-          <button id="addTextComment"
-						class="emoji comment__options--mobileButton" 
-						(tap)="addAnswerOfType('text')">
-							<i class="icon icon-text-comment"></i>
-					</button>
-        </div>
-        <!-- ANSWERS -->
-        <div class="answer-list">
-          <div *ngFor="let answer of question.answers">
-            <edji-comment class="answer list-item" 
-              [comment]="answer" 
-              [isActive]="answer.active" 
-              [userPermission]="getCommentPermissions(answer)"
-              ></edji-comment>
-          </div><!-- answers loop -->
-        </div><!-- answer list -->
-      </div><!-- answer block -->
-    </div>
     <!-- Answer Type During Question Creation -->
     <div class="answer-label">ANSWER TYPES</div>
     <div class="answer-options">
       <!-- Emoji Answer Button -->
       <button *ngFor="let type of ['emoji', 'text', 'audio']" id="selectAnswer" 
         class="emoji" 
-        (tap)="selectAnswerType(type)">
+        (tap)="addAnswerOfType(type)">
           <i class="icon icon-{{type}}-comment"></i>
       </button>
     </div>
@@ -75,4 +41,21 @@
       </button>
     </div>
   </div>
+  <!-- Answers Section -->
+    <div class="answers-section">
+      <label class="answer-label">ANSWERS</label>
+      <!-- The Answers.
+        - If the user has answered, they can see the other answers.
+        - Otherwise, give them options to answer.
+      -->
+      <div class="answer-list">
+        <div *ngFor="let answer of question.answers">
+          <edji-comment class="answer list-item" 
+            [comment]="answer" 
+            [isActive]="answer.active" 
+            [userPermission]="getCommentPermissions(answer)"
+            ></edji-comment>
+        </div><!-- answers loop -->
+      </div><!-- answer list -->
+    </div>
 </div>

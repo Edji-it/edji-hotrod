@@ -136,7 +136,7 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
         console.log(error)
       })
     
-  }
+  } // createReplyComment(type: string): void
 
   /** Used to determine which level of permission the user has for a specific comment
    * @param comment A comment object

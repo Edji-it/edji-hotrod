@@ -95,9 +95,37 @@ export class QuestionComponent implements OnInit {
   public createAnswer (type: string) : void {
     console.log("Began creating an answer!");
     
+    var newAnswer = <EdjiComment> {
+      user_id: this.user._id,
+      author: this.user.fullname,
+      data: '',
+      type: type
+    } // var newAnswer = <EdjiComment>
+
+    if (type=='emoji') {
+      this.activeEmojiKeyboardReply(newAnswer)
+    }
+
+    // Tell the server we've added a comment.
+    this._projects.saveComment(newAnswer)
+    .then(comment => {
+      comment.active = true
+      this._comments.activeComment = comment
+      setTimeout(() => {
+      }, 100)
+    })
+    .catch(error => {
+      // TRACK EXCEPTION
+      console.log(error)
+    })
   } // public createAnswer (type: string) : void
 
   public deleteAnswer (target : EdjiComment) : void {
     console.log("Deleting!");
   } // public deleteAnswer (target : EdjiComment)
+
+  private activeEmojiKeyboardReply(activeReply: any): void {
+    this._comments.activeComment = activeReply
+    this._comments.isEmojiKeyboardActive(this.user)
+  } // private activeEmojiKeyboardReply(activeReply: any): void
 } // class
