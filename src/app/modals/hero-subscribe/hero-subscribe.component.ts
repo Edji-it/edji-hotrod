@@ -25,6 +25,9 @@ export class HeroSubscribeComponent implements OnInit {
   @Input()
   yearlyAmountOff: number
 
+  @Input()
+  couponCode: string
+
   @Output()
   closeModal: EventEmitter<any> = new EventEmitter()
   @Output()
@@ -114,7 +117,7 @@ export class HeroSubscribeComponent implements OnInit {
             amountOff = this.monthlyAmountOff
           }
           // Submit with payment token
-          this._auth.subscribeToHero(this.subtype, result.token.id, amountOff)
+          this._auth.subscribeToHero(this.subtype, result.token.id, this.couponCode)
             .subscribe(
               data => {
                 console.log(data)

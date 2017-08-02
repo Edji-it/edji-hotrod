@@ -48,6 +48,17 @@
                                 </tr>
                             </tbody>
                         </table>
+                         <div *ngIf="!couponCode" class="form-row">
+                            <label for="promo-code">
+                            Promo Code
+                            </label>
+                            <div id="promo-code">
+                            <!-- a Stripe Element will be inserted here. -->
+                            </div>
+
+                            <!-- Used to display form errors -->
+                            <div id="card-errors" role="alert"></div>
+                        </div>
                         
                         <form action="/charge" method="post" id="payment-form">
                             <div class="form-row">

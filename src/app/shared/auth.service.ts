@@ -558,13 +558,16 @@ export class AuthService implements CanActivate {
     /**
      * Submit payment and subscription type to add plan to user
      */
-    public subscribeToHero(subscriptionType, tokenId, amountOff ?: number): Observable<any> {
+    public subscribeToHero(subscriptionType, tokenId, couponCode ?: string): Observable<any> {
         console.log(tokenId)
         let data = {
             subscriptionType : subscriptionType,
             token: tokenId
         }
-        return this.http.post(this.baseUrl + '/subscription', data, this.getOptions())
+        if (couponCode) {
+            data['couponCode'] = couponCode
+        }
+        return this.http.post(this.baseUrl + '/subscriptions', data, this.getOptions())
             .map( res => {
                 return res.json()
             })
@@ -580,7 +583,14 @@ export class AuthService implements CanActivate {
             status : statusChange
         }
 
-        return this.http.put(this.baseUrl + '/subscription', data, this.getOptions())
+        return this.http.put(this.baseUrl + '/subscriptions', data, this.getOptions())
+            .map( res => {
+                return res.json()
+            })
+    }
+
+    public getHeroCount() {
+        return this.http.get(this.baseUrl + '/users/hero/count', this.getOptions())
             .map( res => {
                 return res.json()
             })
