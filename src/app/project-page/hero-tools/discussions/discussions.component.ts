@@ -99,15 +99,9 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
    * @param type What kind of reply comment: emoji, text...
    */
   createReplyComment(type: string): void {
-    // We need to make sure they aren't already editing a comment
-    // this.inactivateComment()
 
     let projectId = this.project._id
     let commentId = this.comment._id
-    // let text: string = ''
-    // for (var i = start; i <= end; i++) {
-    //   text += this.reading.words[i].str
-    // }
 
     this.angulartics.eventTrack.next({ action: type + 'ReplyCreate', properties: { category: 'heroFeature', label: 'attempt' }})
     
@@ -128,7 +122,7 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
       this.activeEmojiKeyboardReply(this.replyCommentNew)
     }
 
-    this._projects.saveReply(this.replyCommentNew)
+    this._projects.saveComment(this.replyCommentNew)
       .then(comment => {
         this.angulartics.eventTrack.next({ action: type + 'ReplyCreate', properties: { category: 'heroFeature', label: 'success' }})
         comment.active = true

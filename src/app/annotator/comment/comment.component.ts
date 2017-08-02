@@ -202,81 +202,73 @@ export class CommentComponent implements OnInit {
       this.angulartics.eventTrack.next({ action: 'updateReply', properties: { category: 'heroFeature', label: 'attempt' }})
       this.isLoading = true
       this._projects.addCommentToReplies(this.comment)
-
-      this._projects.saveReply(this.comment)
-        .then(comment => {
-          this.isLoading = false
-          this.angulartics.eventTrack.next({ action: 'updateReply', properties: { category: 'heroFeature', label: 'success' }})
-          this.justSaved = true
-          this.commentUpdated.emit()
-          setTimeout(() => {
-            this.justSaved = false
-            this.comment.active = false
-          }, 1000)
-        })
-        .catch(error => {
-          // TRACK EXCEPTION
-          this.angulartics.eventTrack.next({ action: 'updateReply', properties: { category: 'heroFeature', label: 'failure' }})
-          console.log(error)
-        })
     } else {
-      // if this is a regular plain old comment
+      // If it is a regular comment.
       this.angulartics.eventTrack.next({ action: 'updateComment', properties: { category: 'projectAction', label: 'attempt' }})
       this.isLoading = true
+    } // else
 
-      this._projects.saveComment(this.comment)
-        .then(comment => {
-          this.isLoading = false
-          this.angulartics.eventTrack.next({ action: 'updateComment', properties: { category: 'projectAction', label: 'success' }})
-          this.justSaved = true
-          this.commentUpdated.emit()
-          setTimeout(() => {
-            this.justSaved = false
-          }, 1000)
-        })
-        .catch(error => {
-          // TRACK EXCEPTION
-          this.angulartics.eventTrack.next({ action: 'updateComment', properties: { category: 'projectAction', label: 'failure' }})
-          console.log(error)
-        })
-    }
-  }
+    this._projects.saveComment(this.comment)
+    .then(comment => {
+      // Appropriate post-delete action, sorted by comment type.
+      if (reply) {
+        this.angulartics.eventTrack.next({ action: 'updateReply', properties: { category: 'heroFeature', label: 'success' }})
+      } else {
+        this.angulartics.eventTrack.next({ action: 'updateComment', properties: { category: 'projectAction', label: 'success' }})
+      } // else
+
+      this.isLoading = false
+      
+      this.justSaved = true
+      this.commentUpdated.emit()
+      setTimeout(() => {
+        this.justSaved = false
+        this.comment.active = false
+      }, 1000)
+    })
+    .catch(error => { 
+      // Appropriate post-delete failure action, sorted by comment type.
+      if (reply) {
+        this.angulartics.eventTrack.next({ action: 'updateReply', properties: { category: 'heroFeature', label: 'failure' }})
+      } else {
+        this.angulartics.eventTrack.next({ action: 'updateComment', properties: { category: 'projectAction', label: 'failure' }})
+      } // else
+
+      console.log(error)
+    })
+  } // public updateComment(commentData: any, reply ?: boolean): void
 
   // Deletes comment via Project service, which updates the local Project object
-  deleteComment(comment: any):void {
+  public deleteComment(comment: any) : void {
     // console.log("Trying to delete.");
+
+    //// Sort through the comment types and do the apppropriate pre-delete action
     if (this.comment.reply_to) {
       this.angulartics.eventTrack.next({ action: 'deleteReply', properties: { category: 'heroFeature', label: 'attempt' }})
-
-      this._projects.deleteComment(comment)
-      .then(data => {
-        this.angulartics.eventTrack.next({ action: 'deleteReply', properties: { category: 'heroFeature', label: 'success' }})
-        // Tell Annotator to destroy this comment element!
-        this._projects.removeCommentFromReplies(this.comment)
-        this.showDeleteModal = false
-      })
-      .catch(error => {
-        // TRACK EXCEPTION
-        this.angulartics.eventTrack.next({ action: 'deleteReply', properties: { category: 'heroFeature', label: 'failure' }})
-        console.log(error)
-      })
     } else {
       this.angulartics.eventTrack.next({ action: 'deleteComment', properties: { category: 'projectAction', label: 'attempt' }})
-
-      this._projects.deleteComment(comment)
-      .then(data => {
-        this.angulartics.eventTrack.next({ action: 'deleteComment', properties: { category: 'projectAction', label: 'success' }})
-        // Tell Annotator to destroy this comment element!
-        this.commentDeleted.emit(comment._id)
-        this.showDeleteModal = false
-      })
-      .catch(error => {
-        // TRACK EXCEPTION
-        this.angulartics.eventTrack.next({ action: 'deleteComment', properties: { category: 'projectAction', label: 'failure' }})
-        console.log(error)
-      })
     }
-  }
+    
+    this._projects.deleteComment(comment)
+    .then(data => {
+
+      // Sort through the comment types and do the apppropriate post-delete action
+      if (this.comment.reply_to) {
+        this.angulartics.eventTrack.next({ action: 'deleteReply', properties: { category: 'heroFeature', label: 'success' }})
+      } else {
+        this.angulartics.eventTrack.next({ action: 'deleteComment', properties: { category: 'projectAction', label: 'success' }})
+      }
+      
+      // Tell Annotator to destroy this comment element!
+      this._projects.removeCommentFromReplies(this.comment)
+      this.showDeleteModal = false
+    })
+    .catch(error => {
+      // TRACK EXCEPTION
+      this.angulartics.eventTrack.next({ action: 'deleteReply', properties: { category: 'heroFeature', label: 'failure' }})
+      console.log(error)
+    })
+  } // deleteComment(comment: any) : void
 
   /**
    * Returns comment block's y position

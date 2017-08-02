@@ -23,13 +23,14 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     
     /*
         Annotator Component
-        Last Mod: 29 July 2017 - Nick Pumper
+        Last Mod: 2 Aug 2017 - Nick Pumper
 
         This does all the heavy lifting in a a reading.
         - Loads Reading text
         - Compiles word components
         - Triggers highlighting
         - Deletes highlights and comment components
+        - Asks ProjectService to save comments for us.
     */
     
     
@@ -507,7 +508,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             .then(comment => {
                 // We add the comment from the service because it has an Id
                 if (comment._id) {
-                    this.angulartics.eventTrack.next({ action: type + 'CommentCreate', properties: { category: 'projectAction', label: 'attempt' }})
+                    this.angulartics.eventTrack.next({ action: type + 'CommentCreate', properties: { category: 'projectAction', label: 'success' }})
                     // Check if comment should start expanded
                     // Needs to be moved to commentsByIndexAdd or comment component ngOnInit
                     // if (document.querySelector('.w[index="' + start + '"] .comment')) {
