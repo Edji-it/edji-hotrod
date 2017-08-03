@@ -33,6 +33,10 @@ export class QuestionComponent implements OnInit {
   private currentReading: Reading;
   private user : User;
   private subscriptions : Subscription[] = [];
+  private answerTypeStatus: any[] = []
+  private optionTypeStatus: any[] = []
+  private answerTypesAvailable: any[] = ['emoji', 'text', 'audio']
+  private optionTypesAvailable: any[] = [{'type':'public','text':'public answers'}, {'type':'lock','text':'lock next questions'}]
 
   // Trigger Bools
   public userHasAnswered = false;
@@ -80,6 +84,14 @@ export class QuestionComponent implements OnInit {
             this.user = user
         })
     )
+
+    for (let i = 0; i < this.answerTypesAvailable.length; i++) {
+      this.answerTypeStatus[this.answerTypesAvailable[i]]=false
+    }
+
+    for (let i = 0; i < this.optionTypesAvailable.length; i++) {
+      this.optionTypeStatus[this.optionTypesAvailable[i]]=false
+    }
   } // ngOnInit
 
   public setQuestionOrder (input : string) : void {
@@ -161,4 +173,16 @@ export class QuestionComponent implements OnInit {
     this._comments.activeComment = activeReply
     this._comments.isEmojiKeyboardActive(this.user)
   } // private activeEmojiKeyboardReply(activeReply: any): void
+
+  private enableAnswerOfType(type: string) {
+    console.log('enabled ' + type + ' answer')
+    this.answerTypeStatus[type] = !this.answerTypeStatus[type]
+    console.log(this.answerTypeStatus[type])
+  }
+
+  private enableOptionOfType(type: string) {
+    console.log('enabled ' + type + ' option')
+    this.optionTypeStatus[type] = !this.optionTypeStatus[type]
+    console.log(this.optionTypeStatus[type])
+  }
 } // class

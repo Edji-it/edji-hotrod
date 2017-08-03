@@ -41,15 +41,17 @@
                             <!-- Reading Content section -->
                             <span>Reading Content</span>
                             <p class="sub-label">Select text to see formatting options. Use the insert buttons on the left to add images and PDFs.</p>
-                            <medium-editor
-                                [(editorModel)]="readingHtml"
-                                [editorOptions]="mediumEditorConfig"
-                                [editorPlaceholder]="readingPlaceholder"
-                                (keyup)="contentChange($event)"
-                                (mouseup)="contentChange($event)"
-                                id="readingContent"
-                                class="content"></medium-editor>
-                            <edji-question *ngFor="let question of questions" (deleteQuestion)="deleteQuestion()" [question]="question" [answers]="answers"></edji-question>
+                            <div *ngFor="let readingPart of readingHtml; let i = index; trackBy:customTrackBy">
+                                <edji-question *ngIf="readingHtml[i].question" (deleteQuestion)="deleteQuestion()" [question]="readingHtml[i].question"></edji-question>
+                                <medium-editor  
+                                    [(editorModel)]="readingHtml[i].text"
+                                    [editorOptions]="mediumEditorConfig"
+                                    [editorPlaceholder]="readingPlaceholder"
+                                    (keyup)="contentChange($event)"
+                                    (mouseup)="contentChange($event)"
+                                    id="readingContent"
+                                    class="content"></medium-editor>
+                            </div>
                             <div id="errorContent" *ngIf="submitted && readingIsBlank"  class="alert alert-info">Please give your Reading some text!</div>
                         </label>
                         <!-- Editor Insert Options - 7.29.17

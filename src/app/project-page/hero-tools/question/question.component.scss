@@ -1,3 +1,5 @@
+@import '../../../../sass/base/variables';
+
 /*
     Question
     29 July 17
@@ -24,8 +26,9 @@
     //width: 100%;
     height: 100%;
     vertical-align: middle;
-    display:    block;
+    display: inline-block;
     margin: auto;
+    margin-bottom: 12%;
 }
 
 .question-number {
@@ -71,5 +74,51 @@
 }
 
 .question-body__new {
-    width: 100%;
+    width: calc(100% - 78px);
+    margin-left: 8px;
+}
+
+.button__answer-type {
+    background: transparent;
+    border: 1px solid darken($gray, 10%);
+    border-radius: 5px;
+    margin-right: 5px;
+    padding: 6px;
+    opacity: 0.6;
+    filter: grayscale(100%);
+    &.answer--enabled {
+        border: 1px solid #6bdb5d;
+        opacity: 1;
+        filter: grayscale(0%);
+    }
+}
+
+.button__answer-type:hover {
+    background: $gray-light;
+    opacity: 1;
+    filter: grayscale(0%);
+}
+
+.icon__answer-type {
+    width: 1.5em;
+    height: 1.5em;
+    vertical-align: middle;
+}
+
+.icon__answer-text {
+    text-transform: uppercase;
+    color: darken($gray, 10%);
+    vertical-align: middle;
+    display: inline-block;
+}
+
+.answer-options { 
+    margin: 7px 0 14px 0;
+}
+
+.question-delete {
+    margin-bottom: 12%;
+    right: 0;
+    position: relative; 
+    display: inline-block;
 }

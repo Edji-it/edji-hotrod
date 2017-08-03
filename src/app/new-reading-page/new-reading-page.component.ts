@@ -17,6 +17,12 @@ import * as Rangy from 'rangy';
     templateUrl: 'new-reading-page.component.html'
 })
 export class NewReadingPage implements OnInit {
+    customTrackBy(index: number, obj: any): any {
+        return index;
+    }
+    customTrackByQ(index: number, obj: any): any {
+        return index;
+    }
     
     /*
         New Reading Page
@@ -26,7 +32,7 @@ export class NewReadingPage implements OnInit {
     */
 
     private readingForm     : FormGroup;
-    private readingHtml     : string = "<div>&nbsp;</div>";
+    private readingHtml     : any[] = [{'text': "<div>&nbsp;</div>"}];
     private readingIsBlank  : boolean = false;
     private submitted       : boolean = false;
     private addLoadingD     : boolean = false;
@@ -35,7 +41,8 @@ export class NewReadingPage implements OnInit {
     private readingId       : any = "";
     private reading         : any = {};
     private projects        : any[] = [];
-    private questions       : any[]= []
+    private questions       : any[] = []
+    private readingParts    : any[] = []
 
     // Trigger booleans
     private showAlert       : boolean = false;
@@ -510,7 +517,8 @@ export class NewReadingPage implements OnInit {
             answerType: 'emoji',
             new: true
         }
-        this.questions.push(question)
+        let readingPart = ''
+        this.readingHtml.push({'text':readingPart,'question':question})
     }
 
     /**
