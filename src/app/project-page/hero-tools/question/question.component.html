@@ -46,12 +46,12 @@
       </button>
     </div>
     <!-- Answer Input -->
-    <div *ngIf="!question.new()">
+    <div *ngIf="!question.new">
       <open-ended-answers *ngIf="[answerType === 0]"></open-ended-answers>
     </div>
 
     <!-- Answers Section | If user is answering a question from the annotator -->
-    <div *ngIf="!question.new()" class="answers-section">
+    <div *ngIf="!question.new" class="answers-section">
       <label class="answer-label">ANSWERS</label>
       <!-- The Answers.
         - If the user has answered, they can see the other answers.
