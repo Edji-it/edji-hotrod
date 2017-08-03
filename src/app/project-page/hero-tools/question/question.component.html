@@ -2,8 +2,7 @@
   Question template
   29 July 17
   Nick Pumper
-
-  Last Mod: 31 July 17 - Nick Pumper
+  Last Mod: 3 Aug 2017
 -->
 <div class="question-container row">
   <!-- Question Number
@@ -37,7 +36,6 @@
     </div>
     <div class="answer-label">OPTIONS</div>
     <div class="answer-options">
-      <!-- Emoji Answer Button -->
       <button *ngFor="let type of optionTypesAvailable" id="selectOption" 
         class="emoji button__answer-type" 
         [ngClass]="[optionTypeStatus[type.type] ? 'answer--enabled' : '']"
@@ -47,9 +45,13 @@
           <div class="icon__answer-text">{{type.text}}</div>
       </button>
     </div>
+    <!-- Answer Input -->
+    <div *ngIf="!question.new()">
+      <open-ended-answers *ngIf="[answerType === 0]"></open-ended-answers>
+    </div>
 
     <!-- Answers Section | If user is answering a question from the annotator -->
-    <div *ngIf="!question.new" class="answers-section">
+    <div *ngIf="!question.new()" class="answers-section">
       <label class="answer-label">ANSWERS</label>
       <!-- The Answers.
         - If the user has answered, they can see the other answers.

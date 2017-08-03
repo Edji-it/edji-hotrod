@@ -1,0 +1,79 @@
+@import '../../../../../sass/base/variables';
+
+/*
+    OpenEndedAnswers
+    3 Aug 2017
+    Nick Pumper
+
+    Last Mod: 3 Aug 2017
+*/
+
+.answer-label {
+    color: darkgray;
+}
+
+// The list of answers
+.answer-block {
+    width: 100%;
+    height: 100%;
+}
+
+.answer-list {
+    height: 200px;
+}
+
+.answer {
+    height: 100%;
+    width: 200px;
+    left: 0px !important;
+}
+
+.question-body__new {
+    width: calc(100% - 78px);
+    margin-left: 8px;
+}
+
+.button__answer-type {
+    background: transparent;
+    border: 1px solid darken($gray, 10%);
+    border-radius: 5px;
+    margin-right: 5px;
+    padding: 6px;
+    opacity: 0.6;
+    filter: grayscale(100%);
+    &.answer--enabled {
+        border: 1px solid #6bdb5d;
+        opacity: 1;
+        filter: grayscale(0%);
+    }
+}
+
+.button__answer-type:hover {
+    background: $gray-light;
+    opacity: 1;
+    filter: grayscale(0%);
+}
+
+.icon__answer-type {
+    width: 1.5em;
+    height: 1.5em;
+    vertical-align: middle;
+}
+
+.icon__answer-text {
+    text-transform: uppercase;
+    color: darken($gray, 10%);
+    vertical-align: middle;
+    display: inline-block;
+}
+
+.answer-options { 
+    margin: 7px 0 14px 0;
+}
+
+.question-delete {
+    margin-bottom: 12%;
+    right: 0;
+    position: relative; 
+    display: inline-block;
+}

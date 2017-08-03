@@ -3,6 +3,11 @@ import { EdjiComment, EdjiQuestion, Project, Reading, User } from "../../../shar
 import { CommentService, AuthService, ProjectService, ReadingService } from "../../../shared";
 import { Subscription } from 'rxjs/Rx';
 
+enum AnswerType {
+  OpenEnded = 0,
+  MultipleChoice = 1
+} // 
+
 @Component({
   selector: 'edji-question',
   templateUrl: './question.component.html',
@@ -12,7 +17,7 @@ export class QuestionComponent implements OnInit {
 
   /*
     29 July 2017
-    Last Mod: 2 Aug 2017
+    Last Mod: 3 Aug 2017
 
     Handles display of the Question.
   */
@@ -22,6 +27,9 @@ export class QuestionComponent implements OnInit {
 
   @Input()
   public answers: EdjiComment[];
+
+  @Input() // What kind of answers is this question given?
+  public answerType : AnswerType = AnswerType.OpenEnded;
   
   // @Input() question: any
   // @Output() deleteQuestion: EventEmitter<any> = new EventEmitter()
@@ -33,7 +41,7 @@ export class QuestionComponent implements OnInit {
   private currentReading: Reading;
   private user : User;
   private subscriptions : Subscription[] = [];
-  private answerTypeStatus: any[] = []
+  public answerTypeStatus: any[] = []
   private optionTypeStatus: any[] = []
   private answerTypesAvailable: any[] = ['emoji', 'text', 'audio']
   private optionTypesAvailable: any[] = [{'type':'public','text':'public answers'}, {'type':'lock','text':'lock next questions'}]
@@ -50,6 +58,8 @@ export class QuestionComponent implements OnInit {
     private _auth     : AuthService,
     private _comments : CommentService
   ) {
+    this.user = this._auth.getUser();
+
     // TEMP
     this.question = new EdjiQuestion();
     console.log(this.question, this.question.prompt);
@@ -98,26 +108,11 @@ export class QuestionComponent implements OnInit {
     // Make sure there is no whitespace.
   } // setQuestionOrder
 
-  public addAnswerOfType (type: string) : void {
-    // Tell the server we've got ourselves a new answer.
-    this.createAnswer(type);
-  } // public addAnswerOfType (type: string)
+  // Tell the server we've got ourselves a new answer, aka a new EdjiComment
+  public createAnswer (newAnswer : EdjiComment) : void {
+    console.log("Began saving an answer!");
 
-  // Creates a comment that is treated as an answer.
-  public createAnswer (type: string) : void {
-    console.log("Began creating an answer!");
-    
-    var newAnswer = <EdjiComment> {
-      user_id: this.user._id,
-      author: this.user.fullname,
-      data: '',
-      type: type
-    } // var newAnswer = <EdjiComment>
-
-    newAnswer.new = true;
-    this.newAnswer = newAnswer;
-
-    if (type=='emoji') {
+    if (newAnswer.type === 'emoji') {
       this.activeEmojiKeyboardReply(this.newAnswer)
     } // if
 
