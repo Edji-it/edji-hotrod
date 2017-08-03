@@ -13,7 +13,7 @@
       class="emoji button__answer-type" 
       [ngClass]="[answerTypeStatus[type] ? 'answer--enabled' : '']"
       (tap)="enableAnswerOfType(type)"
-      (click)="createAnswer(type)">
+      (click)="outputAnswer(type)">
         <!-- Icon & Label -->
         <i class="icon icon-{{type}}-comment icon__answer-type"></i>
         <div class="icon__answer-text">{{type}}</div>

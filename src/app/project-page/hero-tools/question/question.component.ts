@@ -1,9 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, EventEmitter } from '@angular/core';
 import { EdjiComment, EdjiQuestion, Project, Reading, User } from "../../../shared/datatypes";
 import { CommentService, AuthService, ProjectService, ReadingService } from "../../../shared";
 import { Subscription } from 'rxjs/Rx';
 
-enum AnswerType {
+enum ResponseType {
   OpenEnded = 0,
   MultipleChoice = 1
 } // 
@@ -22,17 +22,19 @@ export class QuestionComponent implements OnInit {
     Handles display of the Question.
   */
   
+  // These inputs are added into the template
   @Input()
   public question: EdjiQuestion; // The question being asked, and all of it's data and logic.
-
   @Input()
   public answers: EdjiComment[];
-
   @Input() // What kind of answers is this question given?
-  public answerType : AnswerType = AnswerType.OpenEnded;
+  public responseType : ResponseType = ResponseType.OpenEnded;
   
-  // @Input() question: any
-  // @Output() deleteQuestion: EventEmitter<any> = new EventEmitter()
+  // These inputs are caught events.
+  @Input()
+  public answerSubmitted : EventEmitter<EdjiComment> = new EventEmitter();
+  @Input()
+  public answerDeleted : EventEmitter<EdjiComment> = new EventEmitter();
 
   // State
   public questionOrder = 0; // Is this the first question? Or the second? Etc.
