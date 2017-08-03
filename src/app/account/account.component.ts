@@ -1,4 +1,5 @@
-import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { AuthService } from '../shared/auth.service';
 import { User } from '../shared/datatypes';
 
@@ -7,7 +8,7 @@ import { User } from '../shared/datatypes';
   styleUrls: ['./account.component.scss'],
   templateUrl: './account.component.html'
 })
-export class AccountComponent implements OnInit {
+export class AccountComponent implements OnInit, OnDestroy {
 
   /*
   Last Mod: 29 July 2017 - Nick Pumper
@@ -15,18 +16,57 @@ export class AccountComponent implements OnInit {
   The page for the user's account info. A profile page.
   */
   
-  private nameInitials  : string = ""; // we gonna use these for the temp profile pic
-  private currentUser   : any;
-  private showPassModal : boolean = false;
-  private showUploadProfPicModal : boolean = false;
+  private nameInitials  : string = "" // we gonna use these for the temp profile pic
+  private currentUser   : any
+  private expiring : boolean = false
+  private expired : boolean = false
+  private showPassModal : boolean = false
+  private showUploadProfPicModal : boolean = false
 
-  constructor(private _auth: AuthService  /*, private _title: Title*/) {
-    this.currentUser = this._auth.getUser();
+  private subscriptions : any[] = []
+
+  // Feature flags
+  private heroAvailable: boolean = false
+
+  constructor(private _auth: AuthService, private route: ActivatedRoute) {
+    
     this.nameInitials = "";
   } // constructor
 
   ngOnInit() { 
     // this._title.setTitle('Edji | "' + this.currentUser['fullname'] + '"');
+    this.subscriptions.push(
+      this._auth.currentUser.subscribe(
+        user => {
+          this.currentUser = user
+          if (this.currentUser.hero && this.currentUser.hero.will_expire) {
+            console.log("found will expire", this.currentUser.hero.will_expire < new Date().getTime())
+            let expireDate = new Date(this.currentUser.hero.will_expire)
+            if ( expireDate.getTime() < Date.now()) {
+              this.expired = true
+            } else {
+              this.expiring = true
+            }
+          }
+        }
+      )
+    )
+
+    this.subscriptions.push(
+      this.route.params
+        .subscribe((params: any) => { 
+          if(params && params['secretSwitch']){
+              this._auth.secretSwitches[params['secretSwitch']] = true;
+              if (this._auth.secretSwitches['heroAvailable'] || (this.currentUser.hero && this.currentUser.hero.active)) {
+                  this.heroAvailable = true
+              }
+          }
+        })
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }
 
   public getUserInitials() : string 

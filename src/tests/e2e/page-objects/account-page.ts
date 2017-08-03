@@ -25,7 +25,10 @@ export class Account implements PageObjectInterface
     public saveAvatarBtn    = element(by.id("saveAvatarBtn"));
     public removeBtn        = element(by.id("removeBtn"));  
     public imageFileInput   = element(by.id("imageFileInput")); 
-    public uploadedPic      = element(by.id("uploadedPic"));     
+    public uploadedPic      = element(by.id("uploadedPic"));  
+
+    // Hero Management
+    public heroModifyBtn    = element(by.id("heroModifyBtn"));
 
     public testAvatarToUpload : string = '../../assets/test-avatar/shia.jpg';
 

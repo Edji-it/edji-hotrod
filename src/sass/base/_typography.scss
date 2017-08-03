@@ -31,7 +31,7 @@ h1, .h1 {
   font-weight: 100;
   font-size: 32px;
   margin-bottom: 40px;
-  color: $medium-gray;
+  color: #333;
 
   &.small {
     font-size: 24px;
@@ -59,6 +59,10 @@ h3, .h3 {
 p {
   font-family: $base-font-family;
   margin: 0 0 $small-spacing;
+}
+
+.lead {
+  font-weight: 400;
 }
 
 a {
@@ -178,4 +182,5 @@ p, h1, h2, h3, h4 {
   font-weight: bold;
   margin: 0 2px;
   text-shadow: -1px 1px 0px #bbbbbb;
+  text-decoration: none !important;
 }

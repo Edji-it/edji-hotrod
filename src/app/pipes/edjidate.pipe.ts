@@ -69,26 +69,26 @@ export class EdjiDatePipe implements PipeTransform {
         switch(timeFormat) {
             case "longDate":
                 // Converts the date to the following format: Friday April 21, 2017
-								newTime = days[time.getDay()] + ' ' + months[time.getMonth()] + ' ' + time.getDay() + ', ' + time.getFullYear()
+								newTime = days[time.getDay()] + ' ' + months[time.getMonth()] + ' ' + time.getDate() + ', ' + time.getFullYear()
                 break
             case "mediumDate":
                 // Converts the date to the following format: Fri Apr 21, 2017
-								newTime = shortDays[time.getDay()] + ' ' + shortMonths[time.getMonth()] + ' ' + time.getDay() + ', ' + time.getFullYear()
+								newTime = shortDays[time.getDay()] + ' ' + shortMonths[time.getMonth()] + ' ' + time.getDate() + ', ' + time.getFullYear()
                 break
             case "shortDate":
                 // Converts the date to the following format: m/d/yyyy
-								newTime = time.getMonth() + '/' + time.getDay() + '/' + time.getFullYear()
+								newTime = time.getMonth() + '/' + time.getDate() + '/' + time.getFullYear()
                 break
         }
       } else {
         // If no format is specified, convert the date to the following format: m/d/yyyy
-				newTime = time.getMonth() + '/' + time.getDay() + '/' + time.getFullYear()
+				newTime = time.getMonth() + '/' + time.getDate() + '/' + time.getFullYear()
       }
 
       return newTime
     } else {
 			// Default case if the type of time format update is not selected, convert the date to the following format: m/d/yyyy
-			return time.getMonth() + '/' + time.getDay() + '/' + time.getFullYear()
+			return time.getMonth() + '/' + time.getDate() + '/' + time.getFullYear()
 		}
   }
 }

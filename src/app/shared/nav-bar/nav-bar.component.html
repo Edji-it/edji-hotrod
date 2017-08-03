@@ -24,8 +24,6 @@
 		<div *ngIf="!user.isLoggedIn" class="nav__btn-wrap">
 			<a id="loginLink" class="btn btn-primary nav-bar__btn"  [routerLink]="['/login']">Log In</a>
 			<a id="registerLink" class="btn btn-secondary nav-bar__btn" [routerLink]="['/register']">Register</a>
-			<a id="heroLink" class="btn btn-clear nav-bar__btn hidden-sm-down link"  [routerLink]="['/hero']" routerLinkActive="active">Become a Hero</a>
-			<a id="heroLink" class="btn btn-clear nav-bar__btn hidden-md-up link"  [routerLink]="['/hero']" routerLinkActive="active">Hero</a>
 		</div>
 
 		<!--User Info-->
@@ -37,6 +35,12 @@
 				<span *ngIf="user.hero && user.hero.active" class="hero-tag" title="Hero Powers Activated">H</span>
 			</a>
 			<a class="link" tabindex="1" id="logOutButton" (click)="logout()" [innerHtml]="'Log Out'"></a>
+		</div>
+
+		
+		<div *ngIf="!showProjectInfo && (!user.hero || !user.hero.active)" class="nav__btn-wrap">
+			<a id="heroLink" class="btn btn-clear nav-bar__btn hidden-sm-down link"  [routerLink]="['/hero']" routerLinkActive="active">Go Hero!</a>
+			<a id="heroLink" class="btn btn-clear nav-bar__btn hidden-md-up link"  [routerLink]="['/hero']" routerLinkActive="active">Hero</a>
 		</div>
 
 		<!--Project Info-->
