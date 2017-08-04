@@ -54,6 +54,8 @@ export class OpenEndedAnswersComponent implements OnInit {
 
     this.activeEmojiKeyboardReply(newResponse);
 
+    console.log("PRE-SEND: " + newResponse.type);
+
     this.answerSubmitted.emit(newResponse);
   } // public createAnswer (type: string) : void
 

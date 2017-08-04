@@ -121,21 +121,20 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
 
     // Tell the server we've added a comment.
     this._projects.saveComment(this.replyCommentNew)
-      .then(comment => {
-        this.angulartics.eventTrack.next({ action: type + 'ReplyCreate', properties: { category: 'heroFeature', label: 'success' }})
-        comment.active = true
-        this._comments.activeComment = comment
-        this._projects.addCommentToReplies(comment)
-        setTimeout(() => {
-          this.el.nativeElement.querySelector('.replyOverflow').scrollTop = this.el.nativeElement.querySelector('.replyOverflow').scrollHeight
-        }, 100)
-      })
-      .catch(error => {
-        // TRACK EXCEPTION
-        this.angulartics.eventTrack.next({ action: type + 'ReplyCreate', properties: { category: 'heroFeature', label: 'failure' }})
-        console.log(error)
-      })
-    
+    .then(comment => {
+      this.angulartics.eventTrack.next({ action: type + 'ReplyCreate', properties: { category: 'heroFeature', label: 'success' }})
+      comment.active = true
+      this._comments.activeComment = comment
+      this._projects.addCommentToReplies(comment)
+      setTimeout(() => {
+        this.el.nativeElement.querySelector('.replyOverflow').scrollTop = this.el.nativeElement.querySelector('.replyOverflow').scrollHeight
+      }, 100)
+    })
+    .catch(error => {
+      // TRACK EXCEPTION
+      this.angulartics.eventTrack.next({ action: type + 'ReplyCreate', properties: { category: 'heroFeature', label: 'failure' }})
+      console.log(error)
+    })
   } // createReplyComment(type: string): void
 
   /** Used to determine which level of permission the user has for a specific comment

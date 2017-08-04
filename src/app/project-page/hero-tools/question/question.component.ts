@@ -111,11 +111,12 @@ export class QuestionComponent implements OnInit {
   } // setQuestionOrder
 
   // Tell the server we've got ourselves a new answer, aka a new EdjiComment
-  public createAnswer (answer : any) : void {
+  public createAnswer (newAnswer : any) : void {
     console.log("Began saving an answer!");
 
-    let newAnswer : EdjiComment = answer as EdjiComment;
+    // let newAnswer : EdjiComment = answer as EdjiComment;
 
+    console.log("LOOK HERE: " + newAnswer.type);
     // Tell the server we've added a comment.
     this._projects.saveComment(newAnswer)
     .then(comment => {
