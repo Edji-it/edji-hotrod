@@ -18,21 +18,27 @@ export abstract class BaseAnswerComponent {
 
   // State
   public user : User;
-  
-  // References
-  public _projects : ProjectService;
-  public _auth : AuthService;
-  public _comments : CommentService;
 
-  constructor() {
+  constructor(
+    private _projects : ProjectService,
+    private _readings : ReadingService,
+    private _auth     : AuthService,
+    private _comments : CommentService
+  ) {
+    console.log("HEY IS AUTH NULL?!?!?" + this._auth);
     this.user = this._auth.getUser();
   } // constructor
 
-  ngOnInit () {}
+  ngOnInit () {
+
+  }
 
   // Ask ProjectService to tell the server to save this comment.
   public saveAnswer (newAnswer : EdjiComment) : void {
     newAnswer.new = true;
+
+    newAnswer.user_id = this.user._id;
+    newAnswer.author = this.user.fullname;
 
     // Tell the server we've added a comment.
     this._projects.saveComment(newAnswer)
@@ -64,4 +70,8 @@ export abstract class BaseAnswerComponent {
     this._projects.deleteComment(target);
   } // public deleteAnswer (target : EdjiComment)
 
+  public activeEmojiKeyboardReply(comment: EdjiComment): void {
+    this._comments.activeComment = comment
+    this._comments.isEmojiKeyboardActive(this.user)
+  } // public activeEmojiKeyboardReply(activeReply: any): void
 } // class

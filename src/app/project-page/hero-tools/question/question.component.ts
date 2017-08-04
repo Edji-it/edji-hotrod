@@ -60,8 +60,6 @@ export class QuestionComponent implements OnInit {
     private _auth     : AuthService,
     private _comments : CommentService
   ) {
-    this.user = this._auth.getUser();
-
     // TEMP
     this.question = new EdjiQuestion();
     console.log(this.question, this.question.prompt);
@@ -104,6 +102,8 @@ export class QuestionComponent implements OnInit {
     for (let i = 0; i < this.optionTypesAvailable.length; i++) {
       this.optionTypeStatus[this.optionTypesAvailable[i]]=false
     } // for
+
+    this.user = this._auth.getUser();
   } // ngOnInit
 
   public setQuestionOrder (input : string) : void {

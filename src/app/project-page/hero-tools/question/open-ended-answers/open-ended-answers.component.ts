@@ -41,7 +41,7 @@ export class OpenEndedAnswersComponent extends BaseAnswerComponent { // (BaseAns
       this.answerTypeStatus[this.answerTypesAvailable[i]]=false
     }
 
-    console.log("OpenEnded question prompt is: " + this.questionCopy.prompt);
+    console.log("OpenEnded question prompt is: " + this.baseQuestionReference.prompt);
   } // ngOnInit
 
   // Tell the server we've got ourselves a new answer, aka a new EdjiComment
@@ -49,8 +49,6 @@ export class OpenEndedAnswersComponent extends BaseAnswerComponent { // (BaseAns
     
     // Make the comment to provide as the answer.
     var newResponse = <EdjiComment> {
-      user_id: this.user._id,
-      author: this.user.fullname,
       data: '',
       type: type
     } // var newResponse = <EdjiComment>
@@ -63,11 +61,6 @@ export class OpenEndedAnswersComponent extends BaseAnswerComponent { // (BaseAns
     // Ask the base class to send the comment to the server.
     this.saveAnswer(newResponse);
   } // public createAnswer (type: string) : void
-
-  private activeEmojiKeyboardReply(comment: EdjiComment): void {
-    this._comments.activeComment = comment
-    this._comments.isEmojiKeyboardActive(this.user)
-  } // private activeEmojiKeyboardReply(activeReply: any): void
 
   private enableAnswerOfType(type: string) {
     console.log('enabled ' + type + ' answer')
