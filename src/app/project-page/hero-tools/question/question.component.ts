@@ -99,11 +99,11 @@ export class QuestionComponent implements OnInit {
 
     for (let i = 0; i < this.answerTypesAvailable.length; i++) {
       this.answerTypeStatus[this.answerTypesAvailable[i]]=false
-    }
+    } // for
 
     for (let i = 0; i < this.optionTypesAvailable.length; i++) {
       this.optionTypeStatus[this.optionTypesAvailable[i]]=false
-    }
+    } // for
   } // ngOnInit
 
   public setQuestionOrder (input : string) : void {
@@ -113,8 +113,6 @@ export class QuestionComponent implements OnInit {
   // Tell the server we've got ourselves a new answer, aka a new EdjiComment
   public createAnswer (newAnswer : any) : void {
     console.log("Began saving an answer! Answers.length is now " + this.question.answers.length);
-
-    
   } // public createAnswer (type: string) : void
 
   public deleteAnswer (target : EdjiComment) : void {

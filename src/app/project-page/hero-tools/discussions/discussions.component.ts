@@ -78,11 +78,11 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
             this.user = user
         })
     )
-  }
+  } // ngOnInit() 
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe() })
-  }
+  } // ngOnDestroy()
 
   /** 
    * Add Comment of type
@@ -91,7 +91,7 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
   addReplyOfType(type: string): void {
     // Tell the server we've got a comment!
     this.createReplyComment(type)
-  }
+  } // addReplyOfType
 
   /**
    * Create a Comment of any Type
