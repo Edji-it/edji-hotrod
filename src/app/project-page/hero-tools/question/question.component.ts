@@ -32,9 +32,9 @@ export class QuestionComponent implements OnInit {
   
   // These inputs are caught events.
   @Input()
-  public answerSubmitted : EventEmitter<EdjiComment> = new EventEmitter();
+  public answerSubmitted : EventEmitter<any> = new EventEmitter();
   @Input()
-  public answerDeleted : EventEmitter<EdjiComment> = new EventEmitter();
+  public answerDeleted : EventEmitter<any> = new EventEmitter();
 
   // State
   public questionOrder = 0; // Is this the first question? Or the second? Etc.
@@ -111,15 +111,13 @@ export class QuestionComponent implements OnInit {
   } // setQuestionOrder
 
   // Tell the server we've got ourselves a new answer, aka a new EdjiComment
-  public createAnswer (newAnswer : EdjiComment) : void {
+  public createAnswer (answer : any) : void {
     console.log("Began saving an answer!");
 
-    if (newAnswer.type === 'emoji') {
-      this.activeEmojiKeyboardReply(this.newAnswer)
-    } // if
+    let newAnswer : EdjiComment = answer as EdjiComment;
 
     // Tell the server we've added a comment.
-    this._projects.saveComment(this.newAnswer)
+    this._projects.saveComment(newAnswer)
     .then(comment => {
       comment.active = true
       this._comments.activeComment = comment
@@ -166,20 +164,22 @@ export class QuestionComponent implements OnInit {
     return false;
   } // public hasCurrentUserAnswered () : boolean
 
-  private activeEmojiKeyboardReply(activeReply: any): void {
-    this._comments.activeComment = activeReply
-    this._comments.isEmojiKeyboardActive(this.user)
-  } // private activeEmojiKeyboardReply(activeReply: any): void
-
   private enableAnswerOfType(type: string) {
     console.log('enabled ' + type + ' answer')
     this.answerTypeStatus[type] = !this.answerTypeStatus[type]
     console.log(this.answerTypeStatus[type])
-  }
+  } // private enableAnswerOfType(type: string) 
 
   private enableOptionOfType(type: string) {
     console.log('enabled ' + type + ' option')
     this.optionTypeStatus[type] = !this.optionTypeStatus[type]
     console.log(this.optionTypeStatus[type])
-  }
+  } // private enableOptionOfType(type: string)
+
+  /** Used to determine which level of permission the user has for a specific comment
+   * @param comment A comment object
+   */
+  private getCommentPermissions(comment: any): number {
+      return this._comments.getCommentPermissions(comment, this.user, this.project)
+  } //  private getCommentPermissions(comment: any): number
 } // class

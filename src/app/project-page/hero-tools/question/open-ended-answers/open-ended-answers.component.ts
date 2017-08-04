@@ -20,8 +20,8 @@ export class OpenEndedAnswersComponent implements OnInit {
   @Input() public answerTypesAvailable: any[] = ['emoji', 'text', 'audio']
 
   // The EdjiComment that holds this answer will catch these.
-  @Output() public answerSubmitted: EventEmitter<EdjiComment> = new EventEmitter()
-  @Output() public answerDeleted  : EventEmitter<EdjiComment> = new EventEmitter()
+  @Output() public answerSubmitted: EventEmitter<any> = new EventEmitter();
+  @Output() public answerDeleted  : EventEmitter<any> = new EventEmitter();
   
   private answerTypeStatus: any[] = []
   private user : User;
@@ -42,18 +42,19 @@ export class OpenEndedAnswersComponent implements OnInit {
 
   // Tell the server we've got ourselves a new answer, aka a new EdjiComment
   public outputAnswer (type: string) : void {
-    console.log("Began creating an answer!");
     
-    var newAnswer = <EdjiComment> {
+    var newResponse = <EdjiComment> {
       user_id: this.user._id,
       author: this.user.fullname,
       data: '',
       type: type
-    } // var newAnswer = <EdjiComment>
+    } // var newResponse = <EdjiComment>
 
-    newAnswer.new = true;
+    newResponse.new = true;
 
-    this.answerSubmitted.emit(newAnswer);
+    this.activeEmojiKeyboardReply(newResponse);
+
+    this.answerSubmitted.emit(newResponse);
   } // public createAnswer (type: string) : void
 
   public deleteAnswer (target : EdjiComment) : void {
@@ -61,8 +62,8 @@ export class OpenEndedAnswersComponent implements OnInit {
     this.answerDeleted.emit(target);
   } // public deleteAnswer (target : EdjiComment)
 
-  private activeEmojiKeyboardReply(activeReply: any): void {
-    this._comments.activeComment = activeReply
+  private activeEmojiKeyboardReply(comment: EdjiComment): void {
+    this._comments.activeComment = comment
     this._comments.isEmojiKeyboardActive(this.user)
   } // private activeEmojiKeyboardReply(activeReply: any): void
 

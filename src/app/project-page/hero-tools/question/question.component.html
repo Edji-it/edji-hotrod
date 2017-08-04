@@ -36,7 +36,8 @@
     </div>
     <div class="answer-label">OPTIONS</div>
     <div class="answer-options">
-      <button *ngFor="let type of optionTypesAvailable" id="selectOption" 
+      <button
+        *ngFor="let type of optionTypesAvailable" id="selectOption" 
         class="emoji button__answer-type" 
         [ngClass]="[optionTypeStatus[type.type] ? 'answer--enabled' : '']"
         (tap)="enableOptionOfType(type.type)"
@@ -46,8 +47,8 @@
       </button>
     </div>
     <!-- Answer Input -->
-    <div *ngIf="!question.new" >
-      <open-ended-answers *ngIf="[responseType === 0]"></open-ended-answers>
+    <div *ngIf="!question.new">
+      <open-ended-answers *ngIf="[responseType === 0]" (answerSubmitted)="createAnswer(answerSubmitted)" (answerDeleted)="createAnswer(answerDeleted)"></open-ended-answers>
     </div>
 
     <!-- Answers Section | If user is answering a question from the annotator -->
