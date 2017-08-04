@@ -48,7 +48,7 @@
     </div>
     <!-- Answer Input -->
     <div *ngIf="!question.new">
-      <open-ended-answers *ngIf="[responseType === 0]" (answerSubmitted)="createAnswer(answerSubmitted)" (answerDeleted)="createAnswer(answerDeleted)"></open-ended-answers>
+      <open-ended-answers *ngIf="[responseType === 0]" [questionCopy]="this.question" (answerSubmitted)="createAnswer(answerSubmitted)" (answerDeleted)="createAnswer(answerDeleted)"></open-ended-answers>
     </div>
 
     <!-- Answers Section | If user is answering a question from the annotator -->

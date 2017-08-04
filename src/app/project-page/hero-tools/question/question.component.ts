@@ -112,34 +112,9 @@ export class QuestionComponent implements OnInit {
 
   // Tell the server we've got ourselves a new answer, aka a new EdjiComment
   public createAnswer (newAnswer : any) : void {
-    console.log("Began saving an answer!");
+    console.log("Began saving an answer! Answers.length is now " + this.question.answers.length);
 
-    // let newAnswer : EdjiComment = answer as EdjiComment;
-
-    console.log("LOOK HERE: " + newAnswer.type);
-    // Tell the server we've added a comment.
-    this._projects.saveComment(newAnswer)
-    .then(comment => {
-      comment.active = true
-      this._comments.activeComment = comment
-
-      // We're having an issue with questions.answers being undefined, so I put this here 8.2.17
-      if (this.question.answers ===  undefined)
-      {
-        this.question.answers = [comment];
-      } else {
-        this.question.answers.push(comment);
-      } // if else
-      
-      console.log("server said we made a comment.");
-      setTimeout(() => {
-      }, 100)
-    })
-    .catch(error => {
-      // TRACK EXCEPTION
-      console.log("Making an answer has failed.");
-      console.log(error)
-    })
+    
   } // public createAnswer (type: string) : void
 
   public deleteAnswer (target : EdjiComment) : void {
