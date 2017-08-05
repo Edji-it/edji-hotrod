@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import { EdjiComment, EdjiQuestion, Project, Reading, User } from "../../../../shared/datatypes";
-import { CommentService, AuthService, ProjectService } from "../../../../shared";
+import { CommentService, AuthService, ProjectService, ReadingService } from "../../../../shared";
 import { BaseAnswerComponent } from "./../base-answer.component";
 import { Subscription } from 'rxjs/Rx';
 
@@ -30,8 +30,12 @@ export class OpenEndedAnswersComponent extends BaseAnswerComponent { // (BaseAns
 
   private answerTypeStatus: any[] = []
 
-  constructor () {
-    super();
+  constructor (
+    private projects : ProjectService,
+    private readings : ReadingService,
+    private auth     : AuthService,
+    private comments : CommentService) {
+    super(projects, readings, auth, comments);
   } // constructor
 
   ngOnInit() {
