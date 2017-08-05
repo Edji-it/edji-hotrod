@@ -26,7 +26,6 @@ export class HeroChangeComponent implements OnInit {
 
   ngOnInit() {
     this.user = this._auth.getUser()
-    console.log(this.user)
     this.subtype = this.user.hero.type + ''
   }
 
@@ -50,7 +49,6 @@ export class HeroChangeComponent implements OnInit {
     this._auth.updateHeroSub(type)
       .subscribe(
         data => {
-          console.log(data)
           this.updating = false
           this.isUpdated = true
           if (data.user) {
@@ -59,7 +57,6 @@ export class HeroChangeComponent implements OnInit {
         },
         err => {
           this.updating = false
-          console.log(err)
         }
       )
   }
