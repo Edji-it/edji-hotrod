@@ -436,6 +436,7 @@ export class NewReadingPage implements OnInit {
                         if (reading.draft===false) {
                             // Get authorized comment types
                             let commentTypes = this._auth.getAllowedCommentTypes()
+                            console.log(commentTypes)
 
                             this._projects.create(data._id, { 'label' : form.label, 'types' : commentTypes })
                                 .subscribe( (project) => {
