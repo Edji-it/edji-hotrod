@@ -11,6 +11,8 @@ export abstract class BaseAnswerComponent {
     Last Mod: 4 Aug 2017
 
     The base class for handling display of answers for a QuestionComponent.
+    - If you want to make a new Answer component for QuestionComponent to use,
+      start by inheriting from this. It'll save you a lot of work.
   */
 
   @Input()
@@ -39,7 +41,7 @@ export abstract class BaseAnswerComponent {
 
     newAnswer.user_id = this.user._id;
     newAnswer.author = this.user.fullname;
-
+    
     // Tell the server we've added a comment.
     this._projects.saveComment(newAnswer)
     .then(comment => {

@@ -17,7 +17,17 @@ export class CommentComponent implements OnInit {
 
   /*
   Front end implementation of a comment.
-  Last Mod: 2 Aug 2017
+  Last Mod: 5 Aug 2017
+
+  NOTES:
+    commentContext : string - 8.5.17
+      For saying what context the comment is used in. Use 'normal' for normal comments,
+      'reply' for comment replies, and 'answer' for answers to questions.
+
+  What you'll need for:
+    - making comment as an answer
+      - commentContext
+      - assignedQuestion
   */
 
   public lineCount: number = 1
@@ -42,8 +52,10 @@ export class CommentComponent implements OnInit {
   @Input() public comment: EdjiComment
   @Input() private readOnly: boolean = false
   @Input() private replyRef: boolean = false
-  @Input() private reply: boolean = false   // Is it a reply to another comment?
+  @Input() private reply: boolean = false   // Is it a reply to another comment? 
   @Input() private commentLite: boolean = false
+  @Input() private commentContext : string = 'normal'; // See NOTES in summary.
+  @Input() private assignedQuestion : EdjiQuestion; // If this is an answer, it'll need this.
   @Input() private userPermission: number = CommentPermissions.READ
   @Input() private showDeleteAudioModal: boolean = false
   @Input()
@@ -121,13 +133,9 @@ export class CommentComponent implements OnInit {
             this.commentActivation.emit(false)
             this._comments.activeComment.active = false
             // Save when comment is toggled away from
-            if (this.comment.reply_to) {
-              this.updateComment(this.comment.data, true)
-            } else {
-              this.updateComment(this.comment.data)
-            }
+            this.updateComment(this.comment.data)
         } else {
-          if (this.reply) {
+          if (this.commentContext === 'reply') {
             this.active = true
             this._comments.activeComment = this.comment
             this._comments.activeComment.active = true
@@ -172,22 +180,12 @@ export class CommentComponent implements OnInit {
     this._comments.activeComment.active = false
     // Save when comment is toggled away from
     if (commentData) {
-      if (this.comment.reply_to) {
-        this.updateComment(commentData.data, true)
-      } else {
-        this.updateComment(commentData.data)
-      }
-    } else {
-      if (this.comment.reply_to) {
-        this.updateComment(this.comment.data, true)
-      } else {
-        this.updateComment(this.comment.data)
-      }
-    }
-  }
+      this.updateComment(commentData.data);
+    } // if
+  } // deactivate(commentData ?: any): void
 
   // Updates comment in db
-  public updateComment(commentData: any, reply ?: boolean): void {
+  public updateComment(commentData: EdjiComment): void {
     this.reRecordAudio = false
     if (commentData._id) {
       // this.comment.project_id, commentData, this.comment.start, this.comment.end, this.comment.type, this.comment.text, this.comment._id, this.comment.loc
@@ -195,9 +193,9 @@ export class CommentComponent implements OnInit {
       this.comment.url = commentData.url
     } else {
       this.comment.data = commentData
-    }
+    } // else
 
-    if (reply) {
+    if (this.commentContext === "reply") {
       // If this is a reply comment
       this.angulartics.eventTrack.next({ action: 'updateReply', properties: { category: 'heroFeature', label: 'attempt' }})
       this.isLoading = true
@@ -211,7 +209,7 @@ export class CommentComponent implements OnInit {
     this._projects.saveComment(this.comment)
     .then(comment => {
       // Appropriate post-delete action, sorted by comment type.
-      if (reply) {
+      if (this.commentContext === 'reply') {
         this.angulartics.eventTrack.next({ action: 'updateReply', properties: { category: 'heroFeature', label: 'success' }})
       } else {
         this.angulartics.eventTrack.next({ action: 'updateComment', properties: { category: 'projectAction', label: 'success' }})
@@ -228,7 +226,7 @@ export class CommentComponent implements OnInit {
     })
     .catch(error => { 
       // Appropriate post-delete failure action, sorted by comment type.
-      if (reply) {
+      if (this.commentContext === 'reply' || this.commentContext === 'answer') {
         this.angulartics.eventTrack.next({ action: 'updateReply', properties: { category: 'heroFeature', label: 'failure' }})
       } else {
         this.angulartics.eventTrack.next({ action: 'updateComment', properties: { category: 'projectAction', label: 'failure' }})
@@ -254,13 +252,16 @@ export class CommentComponent implements OnInit {
 
       // Sort through the comment types and do the apppropriate post-delete action
       if (this.comment.reply_to) {
+        this._projects.removeCommentFromReplies(this.comment)
+
         this.angulartics.eventTrack.next({ action: 'deleteReply', properties: { category: 'heroFeature', label: 'success' }})
+      } else if (this.commentContext === 'answer') {
+        this.assignedQuestion.answers.splice(comment, 1);
       } else {
         this.angulartics.eventTrack.next({ action: 'deleteComment', properties: { category: 'projectAction', label: 'success' }})
       }
       
       // Tell Annotator to destroy this comment element!
-      this._projects.removeCommentFromReplies(this.comment)
       this.showDeleteModal = false
     })
     .catch(error => {
@@ -278,7 +279,7 @@ export class CommentComponent implements OnInit {
     // The parentNode offsetTop addition fixes the occasional issue where diferrent images have comments registering on the same line
     this.yPos = Math.round(this.el.nativeElement.offsetTop) + Math.round(this.el.nativeElement.parentNode.offsetTop)
     return this.yPos
-  }
+  } // public getVerticalPosition(): number
 
   /**
    * Collapse all stacked comments on the same line
