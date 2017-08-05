@@ -116,7 +116,8 @@
 							<!-- Display image for an Image Word -->
 							<img class="reading-image" id="readingImage{{i}}" [attr.index]="i" [src]="w.url.replace('http://','//')" (load)="updateImageHeights()" />
 						</div><!-- 
-						Question Words: Display question component--><edji-question *ngIf="w.styles.indexOf('question') > -1" [question]="reading.questions[w.index]" [answers]="project.answers[reading.questions[w.index]._id]"></edji-question></span><!--end of word span-->
+						Question Words: Display question component--><edji-question *ngIf="w.styles.indexOf('question') > -1 && reading.questions" [question]="reading.questions[w.index]" ></edji-question></span><!--end of word span--> 
+						<!--[answers]="project.answers[reading.questions[w.index]._id]"-->
 		</article>
 	</div>
 </div>

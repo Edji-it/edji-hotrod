@@ -155,6 +155,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             this._readings.currentReading.subscribe(
                 reading => {
                     this.reading = reading
+                    console.log(reading)
                     this.updateMetaTags()
                 },
                 error => {
