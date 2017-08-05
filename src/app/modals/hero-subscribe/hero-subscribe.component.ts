@@ -36,14 +36,7 @@ export class HeroSubscribeComponent implements OnInit {
   constructor(private _auth: AuthService) { }
 
   ngOnInit() {
-    console.log(this.yearlyAmountOff)
-    // if (this.monthlyAmountOff) {
-    //   this.subtype = 'monthly'
-    // }
-    if (this.yearlyAmountOff) {
-      this.subtype = 'yearly'
-    }
-      // Create a Stripe client
+    // Create a Stripe client
     this.stripe = Stripe('pk_test_e2lOurNpSI745MOUdu2LgzOu');
 
     // Create an instance of Elements
@@ -83,23 +76,6 @@ export class HeroSubscribeComponent implements OnInit {
         displayError.textContent = '';
       }
     });
-
-    // // Handle form submission
-    // var form = document.getElementById('payment-form');
-    // form.addEventListener('submit', function(event) {
-    //   event.preventDefault();
-
-    //   stripe.createToken(card).then(function(result) {
-    //     if (result.error) {
-    //       // Inform the user if there was an error
-    //       var errorElement = document.getElementById('card-errors');
-    //       errorElement.textContent = result.error.message;
-    //     } else {
-    //       // Send the token to your server
-    //       stripeTokenHandler(result.token);
-    //     }
-    //   });
-    // });
     
   }
 
@@ -110,18 +86,11 @@ export class HeroSubscribeComponent implements OnInit {
           // Inform the user if there was an error
           var errorElement = document.getElementById('card-errors');
           errorElement.textContent = result.error.message;
+          this.loading = false
         } else {
-          // let amountOff
-          // if (this.subtype == 'monthly' && this.monthlyAmountOff) {
-          //   amountOff = this.monthlyAmountOff
-          // } else if (this.subtype == 'yearly' && this.yearlyAmountOff) {
-          //   amountOff = this.monthlyAmountOff
-          // }
-          // Submit with payment token
           this._auth.subscribeToHero(this.subtype, result.token.id, this.couponCode)
             .subscribe(
               data => {
-                console.log(data)
                 this.userNowHero = true
                 this.loading = false
                 if (data.user) {
