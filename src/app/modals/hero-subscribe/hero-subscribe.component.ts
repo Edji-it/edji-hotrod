@@ -37,7 +37,11 @@ export class HeroSubscribeComponent implements OnInit {
 
   ngOnInit() {
     // Create a Stripe client
-    this.stripe = Stripe('pk_test_e2lOurNpSI745MOUdu2LgzOu');
+    if (this._auth.getEnv() === 'dev') {
+      this.stripe = Stripe('pk_test_e2lOurNpSI745MOUdu2LgzOu')
+    } else {
+      this.stripe = Stripe('pk_live_IOwqaYAERP6biScBTFk3Csrm')
+    }
 
     // Create an instance of Elements
     var elements = this.stripe.elements();
