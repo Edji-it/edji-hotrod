@@ -155,10 +155,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             this._readings.currentReading.subscribe(
                 reading => {
                     this.reading = reading
+                    console.log(reading)
                     this.updateMetaTags()
-                    if (reading.questions) {
-                        this.updateQuestionNumbers(reading.questions)
-                    }
                 },
                 error => {
                     console.error(error)
@@ -284,13 +282,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // if (firstImage) {
         //     document.querySelector('meta[property="og:image"]').setAttribute('content', firstImage.getAttribute('src'))
         // }
-    }
-
-    // Adds the question number to each question for proper rendering
-    private updateQuestionNumbers(questions) {
-        for (let i=0;i<questions.length;i++) {
-            questions[i].question_number = i+1
-        }
     }
 
     hideCommentOptions(event ?): void {

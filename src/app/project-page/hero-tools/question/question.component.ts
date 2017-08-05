@@ -73,7 +73,7 @@ export class QuestionComponent implements OnInit {
   ) {
     // TEMP
     this.question = new EdjiQuestion();
-    // console.log(this.question, this.question.prompt);
+    console.log(this.question, this.question.prompt);
   } // constructor
 
   ngOnInit() {
@@ -82,7 +82,6 @@ export class QuestionComponent implements OnInit {
     this.subscriptions.push( this._readings.currentReading.subscribe(
       reading => {
         this.currentReading = reading;
-        this.updateSelections()
       },
       error => {
         console.error(error);
@@ -106,37 +105,18 @@ export class QuestionComponent implements OnInit {
         this._auth.getCurrentUser().subscribe((user) => {
             this.user = user
         })
-    )
+    ) // this.subscriptions.push
 
-    this.user = this._auth.getUser();
-  } // ngOnInit
-
-  private updateSelections() {
-    // Initialize the answers for questions
-    for (let i = 0; i < this.answerTypesAvailable.length; i++) {
-      this.answerTypeStatus[this.answerTypesAvailable[i]]=false
-    }
-
-    // Select the answers if we're making an edit to the reading
-    for (let i=0; i<this.question.answer_types.length; i++) {
-      this.answerTypeStatus[this.question.answer_types[i]]=true
-    }
-
-    // Initialize the options for questions
+    // Set what options are available on this Question (Display purposes, set in newReading)
     for (let i = 0; i < this.optionTypesAvailable.length; i++) {
-      this.optionTypeStatus[this.optionTypesAvailable[i].type]=false
-    }
+      this.optionTypeStatus[this.optionTypesAvailable[i]]=false
+    } // for
 
     // Set what comment types are allowed on this Question (set in newReading))
     for (let i = 0; i < this.answerTypesAvailable.length; i++) {
       this.answerTypeStatus[this.answerTypesAvailable[i]]=false
     } // for
-   
-    // Select the options if we're making an edit to the reading
-    for (let i=0; i<this.question.option_types.length; i++) {
-      this.optionTypeStatus[this.question.option_types[i]]=true
-    }
-  }
+  } // ngOnInit
 
   public setQuestionOrder (input : string) : void {
     // Make sure there is no whitespace.
@@ -185,7 +165,6 @@ export class QuestionComponent implements OnInit {
   } // private enableAnswerOfType(type: string) 
 
   private enableOptionOfType(type: string) {
-    console.log(type)
     this.optionTypeStatus[type] = !this.optionTypeStatus[type]
     if (this.optionTypeStatus[type]) {
       this.question.option_types.push(type)
@@ -197,7 +176,6 @@ export class QuestionComponent implements OnInit {
         }
       }
     }
-    console.log(this.question)
   } // private enableOptionOfType(type: string)
 
   /** Used to determine which level of permission the user has for a specific comment
