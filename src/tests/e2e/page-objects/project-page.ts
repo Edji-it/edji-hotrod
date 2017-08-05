@@ -48,6 +48,6 @@ export class Project implements PageObjectInterface {
     // First we clear out the url (sometimes page is preserved if the url stays the same)
     browser.get("/#");
     // Load a good sample Project with reply functions (owned by teach/teach)
-    browser.get("/#/project/2zb5");
+    browser.get("/#/project/smkp");
   }
 }
