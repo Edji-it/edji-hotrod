@@ -532,7 +532,7 @@ export class NewReadingPage implements OnInit {
             images.forEach(image => {
                 imgString += '<img src="' + image.url + '" title="' + image.title + '" /><br/><p></p>'
             });
-            this.readingHtml += imgString
+            this.readingHtml[this.readingHtml.length-1].text += imgString
         }
     }
 
