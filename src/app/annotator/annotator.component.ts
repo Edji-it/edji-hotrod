@@ -10,7 +10,7 @@ import { CommentService } from '../shared/comment.service'
 import { CommentComponent } from './comment/comment.component'
 import { AuthService } from '../shared/auth.service' 
 import { SocketService } from '../shared/socket.service'
-import { CommentPermissions, EdjiComment, Project, Reading, CommentType } from './../shared/datatypes'
+import { CommentPermissions, EdjiComment, Project, Reading } from './../shared/datatypes'
 
 declare var window: any
 

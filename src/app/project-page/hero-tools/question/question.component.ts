@@ -17,17 +17,22 @@ export class QuestionComponent implements OnInit {
 
   /*
     29 July 2017
-    Last Mod: 3 Aug 2017
+    Last Mod: 5 Aug 2017
 
     Handles display of the Question.
   */
   
-  // These inputs are added into the template
+  // INPUTS
+
+  // The question being asked, and all of it's data and logic.
+  // This reference is passed onto the Answer Component
   @Input()
-  public question: EdjiQuestion; // The question being asked, and all of it's data and logic.
+  public question: EdjiQuestion; 
   @Input()
   public answers: EdjiComment[];
-  @Input() // What kind of answers is this question given?
+  // What kind of answers is this question given?
+  // The corresponding one is toggled in the template.
+  @Input() 
   public responseType : ResponseType = ResponseType.OpenEnded;
   
   // These inputs are caught events.
@@ -43,13 +48,19 @@ export class QuestionComponent implements OnInit {
   private currentReading: Reading;
   private user : User;
   private subscriptions : Subscription[] = [];
+
+  // Set which answer types are allowed and which options to toggle.
+  // Answer types are passed onto which ever Answer component
   public answerTypeStatus: any[] = []
   private optionTypeStatus: any[] = []
-  private answerTypesAvailable: any[] = ['emoji', 'text', 'audio']
-  private optionTypesAvailable: any[] = [{'type':'public','text':'public answers'}, {'type':'lock','text':'lock next questions'}]
-
-  // Trigger Bools
-  public userHasAnswered = false;
+  private answerTypesAvailable: any[] = [
+    'emoji', 'text', 'audio'
+  ]
+  private optionTypesAvailable: any[] = [{
+      'type':'public','text':'public answers'
+    }, {
+      'type':'lock','text':'lock next questions'
+  }]
 
   // References
   private project: Project;
@@ -89,21 +100,22 @@ export class QuestionComponent implements OnInit {
       }
     ) )
 
+    // Make sure we have the most current User object
     this.subscriptions.push(
         this._auth.getCurrentUser().subscribe((user) => {
             this.user = user
         })
-    )
+    ) // this.subscriptions.push
 
-    for (let i = 0; i < this.answerTypesAvailable.length; i++) {
-      this.answerTypeStatus[this.answerTypesAvailable[i]]=false
-    } // for
-
+    // Set what options are available on this Question (Display purposes, set in newReading)
     for (let i = 0; i < this.optionTypesAvailable.length; i++) {
       this.optionTypeStatus[this.optionTypesAvailable[i]]=false
     } // for
 
-    this.user = this._auth.getUser();
+    // Set what comment types are allowed on this Question (set in newReading))
+    for (let i = 0; i < this.answerTypesAvailable.length; i++) {
+      this.answerTypeStatus[this.answerTypesAvailable[i]]=false
+    } // for
   } // ngOnInit
 
   public setQuestionOrder (input : string) : void {
@@ -136,7 +148,7 @@ export class QuestionComponent implements OnInit {
     } // else
 
     return false;
-  } // public hasCurrentUserAnswered () : boolean
+  } // public hasUserAnswered () : boolean
 
   private enableAnswerOfType(type: string) {
     this.answerTypeStatus[type] = !this.answerTypeStatus[type]

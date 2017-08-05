@@ -17,6 +17,9 @@ export abstract class BaseAnswerComponent {
 
   @Input()
   public baseQuestionReference : EdjiQuestion // Provided by the EdjiQuestion hosting this.
+  @Input()
+  enabledAnswerTypes : any[] = ['text'];
+
 
   // State
   public user : User;
@@ -27,7 +30,6 @@ export abstract class BaseAnswerComponent {
     private _auth     : AuthService,
     private _comments : CommentService
   ) {
-    console.log("HEY IS AUTH NULL?!?!?" + this._auth);
     this.user = this._auth.getUser();
   } // constructor
 
@@ -55,8 +57,7 @@ export abstract class BaseAnswerComponent {
       } else {
         this.baseQuestionReference.answers.push(comment);
       } // if else
-      
-      console.log("server said we made a comment.");
+    
       setTimeout(() => {
       }, 100)
     })
