@@ -107,27 +107,8 @@ export class HeroSubscribeComponent implements OnInit {
 
         }
       });
-    // this.tempHide = true
-    
-    // var handler = (<any>window).StripeCheckout.configure({
-    //   key: 'pk_test_e2lOurNpSI745MOUdu2LgzOu',
-    //   locale: 'auto',
-    //   token: function (token: any) {
-    //     // You can access the token ID with `token.id`.
-    //     // Get the token ID to your server-side code for use.
-    //   }
-    // });
 
-    // handler.open({
-    //   name: 'Demo Site',
-    //   description: 'Monthly Subscription',
-    //   amount: 2000
-    // });
   }
-
-  // getMonthlyPrice() : number {
-  //   return Math.round( (5 - this.monthlyAmountOff)*100 )/100
-  // }
 
   getYearlyPrice() : number {
     return Math.round(6000 - this.yearlyAmountOff)/100
