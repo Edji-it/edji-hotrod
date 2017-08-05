@@ -19,8 +19,8 @@ export class HeroSubscribeComponent implements OnInit {
   private userNowHero: boolean
   private stripe: any
 
-  @Input()
-  monthlyAmountOff: number
+  // @Input()
+  // monthlyAmountOff: number
 
   @Input()
   yearlyAmountOff: number
@@ -36,9 +36,10 @@ export class HeroSubscribeComponent implements OnInit {
   constructor(private _auth: AuthService) { }
 
   ngOnInit() {
-    if (this.monthlyAmountOff) {
-      this.subtype = 'monthly'
-    }
+    console.log(this.yearlyAmountOff)
+    // if (this.monthlyAmountOff) {
+    //   this.subtype = 'monthly'
+    // }
     if (this.yearlyAmountOff) {
       this.subtype = 'yearly'
     }
@@ -110,12 +111,12 @@ export class HeroSubscribeComponent implements OnInit {
           var errorElement = document.getElementById('card-errors');
           errorElement.textContent = result.error.message;
         } else {
-          let amountOff
-          if (this.subtype == 'monthly' && this.monthlyAmountOff) {
-            amountOff = this.monthlyAmountOff
-          } else if (this.subtype == 'yearly' && this.yearlyAmountOff) {
-            amountOff = this.monthlyAmountOff
-          }
+          // let amountOff
+          // if (this.subtype == 'monthly' && this.monthlyAmountOff) {
+          //   amountOff = this.monthlyAmountOff
+          // } else if (this.subtype == 'yearly' && this.yearlyAmountOff) {
+          //   amountOff = this.monthlyAmountOff
+          // }
           // Submit with payment token
           this._auth.subscribeToHero(this.subtype, result.token.id, this.couponCode)
             .subscribe(
@@ -151,12 +152,12 @@ export class HeroSubscribeComponent implements OnInit {
     // });
   }
 
-  getMonthlyPrice() : number {
-    return Math.round( (5 - this.monthlyAmountOff)*100 )/100
-  }
+  // getMonthlyPrice() : number {
+  //   return Math.round( (5 - this.monthlyAmountOff)*100 )/100
+  // }
 
   getYearlyPrice() : number {
-    return Math.round( (48 - this.yearlyAmountOff)*100 )/100
+    return Math.round(6000 - this.yearlyAmountOff)/100
   }
   
 
