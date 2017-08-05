@@ -597,7 +597,7 @@ export class AuthService implements CanActivate {
     }
 
     public getHeroCount() {
-        return this.http.get(this.baseUrl + '/users/hero/count', this.getOptions())
+        return this.http.get(this.baseUrl + '/users/heroes/count', this.getOptions())
             .map( res => {
                 return res.json()
             })
