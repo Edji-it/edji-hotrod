@@ -139,15 +139,31 @@ export class QuestionComponent implements OnInit {
   } // public hasCurrentUserAnswered () : boolean
 
   private enableAnswerOfType(type: string) {
-    console.log('enabled ' + type + ' answer')
     this.answerTypeStatus[type] = !this.answerTypeStatus[type]
-    console.log(this.answerTypeStatus[type])
+    if (this.answerTypeStatus[type]) {
+      this.question.answer_types.push(type)
+    } else {
+      for (let i=0;i<this.question.answer_types.length;i++) {
+        if (this.question.answer_types[i]===type) {
+          this.question.answer_types.splice(i,1)
+          break
+        }
+      }
+    }
   } // private enableAnswerOfType(type: string) 
 
   private enableOptionOfType(type: string) {
-    console.log('enabled ' + type + ' option')
     this.optionTypeStatus[type] = !this.optionTypeStatus[type]
-    console.log(this.optionTypeStatus[type])
+    if (this.optionTypeStatus[type]) {
+      this.question.option_types.push(type)
+    } else {
+      for (let i=0;i<this.question.option_types.length;i++) {
+        if (this.question.option_types[i]===type) {
+          this.question.option_types.splice(i,1)
+          break
+        }
+      }
+    }
   } // private enableOptionOfType(type: string)
 
   /** Used to determine which level of permission the user has for a specific comment

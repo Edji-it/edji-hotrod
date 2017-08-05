@@ -23,5 +23,6 @@ export interface BaseReading {
   cover_img?: string,
   draft: boolean,
   version_id?: string,
-  _id: string
+  _id: string,
+  questions?: any[]
 }

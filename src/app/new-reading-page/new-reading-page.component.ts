@@ -30,7 +30,8 @@ export class NewReadingPage implements OnInit {
 
     private readingForm     : FormGroup;
     private newReadingInner : string = "<div>&nbsp;</div>"
-    private readingHtml     : any[] = [{'text': this.newReadingInner}];
+    private readingHtml     : any[] = [{'text': this.newReadingInner}]
+    private concatHtml      : string = ""
     private readingIsBlank  : boolean = false;
     private submitted       : boolean = false;
     private addLoadingD     : boolean = false;
@@ -40,7 +41,6 @@ export class NewReadingPage implements OnInit {
     private reading         : any = {};
     private projects        : any[] = [];
     private questions       : any[] = []
-    private readingParts    : any[] = []
 
     // Trigger booleans
     private showAlert       : boolean = false;
@@ -387,12 +387,31 @@ export class NewReadingPage implements OnInit {
         this.words = [];
 
         // Process reading html into useful Words Array
-        let editorHtml = this.el.nativeElement.querySelector('#angularMediumEditor');
-        let childEls = editorHtml.childNodes;
+        let editorHtml = this.el.nativeElement.querySelectorAll('#angularMediumEditor');
 
-        // Loop through all Reading html elements
-        for (let childEl of childEls) {
-            this.extractTextNodes(childEl);
+        for (let i=0; i<editorHtml.length; i++) {
+            // Add question "word"
+            if (this.readingHtml[i].question) {
+                this.words.push({
+                    styles: ['question'],
+                    index: i - 1
+                })
+            }
+
+            // Add question to questions
+            if (this.readingHtml[i].question) {
+                this.questions.push(this.readingHtml[i].question)
+            }
+
+            // Concatenate the html to 1 string [not currently using with current config]
+            this.concatHtml += editorHtml[i]
+
+            let childEls = editorHtml[i].childNodes;
+
+            // Loop through all Reading html elements
+            for (let childEl of childEls) {
+                this.extractTextNodes(childEl);
+            }
         }
 
         // Create reading object to submit based on form object parameter
@@ -400,6 +419,7 @@ export class NewReadingPage implements OnInit {
         delete reading.label
         reading.html = this.readingHtml;
         reading.words = this.words;
+        reading.questions = this.questions
 
         // If the reading is not being saved as a draft (A.K.A. it's a final version)
         if (this.isDraft === true) {
@@ -436,7 +456,6 @@ export class NewReadingPage implements OnInit {
                         if (reading.draft===false) {
                             // Get authorized comment types
                             let commentTypes = this._auth.getAllowedCommentTypes()
-                            console.log(commentTypes)
 
                             this._projects.create(data._id, { 'label' : form.label, 'types' : commentTypes })
                                 .subscribe( (project) => {
@@ -513,9 +532,11 @@ export class NewReadingPage implements OnInit {
         console.log('add a new question here')
         var question = <EdjiQuestion>{
             prompt: '',
-            answerType: 'emoji',
+            answer_types: [],
+            option_types: [],
             new: true
         }
+        console.log(question)
         this.readingHtml.push({'text':this.newReadingInner,'question':question})
     }
 
