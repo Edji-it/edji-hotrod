@@ -107,16 +107,6 @@ export class QuestionComponent implements OnInit {
             this.user = user
         })
     ) // this.subscriptions.push
-
-    // Set what options are available on this Question (Display purposes, set in newReading)
-    for (let i = 0; i < this.optionTypesAvailable.length; i++) {
-      this.optionTypeStatus[this.optionTypesAvailable[i]]=false
-    } // for
-
-    // Set what comment types are allowed on this Question (set in newReading))
-    for (let i = 0; i < this.answerTypesAvailable.length; i++) {
-      this.answerTypeStatus[this.answerTypesAvailable[i]]=false
-    } // for
   } // ngOnInit
 
   public setQuestionOrder (input : string) : void {
