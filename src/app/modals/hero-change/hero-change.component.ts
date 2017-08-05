@@ -47,6 +47,7 @@ export class HeroChangeComponent implements OnInit {
   updateType(type: string) {
     this.updating = true
     this._auth.updateHeroSub(type)
+      .take(1)
       .subscribe(
         data => {
           this.updating = false
@@ -66,10 +67,10 @@ export class HeroChangeComponent implements OnInit {
    */
   cancelSub() {
     this.canceling = true
-    this._auth.updateHeroSub(this.user.hero.type, 'unsubscribed')
+    this._auth.cancelHeroSubscription(this.user.hero.type)
+      .take(1)
       .subscribe(
         data => {
-          console.log(data)
           this.canceling = false
           this.isCanceled = true
           if (data.user) {

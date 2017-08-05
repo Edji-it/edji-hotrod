@@ -589,6 +589,13 @@ export class AuthService implements CanActivate {
             })
     }
 
+    public cancelHeroSubscription(subscriptionId: string) {
+        return this.http.delete([this.baseUrl, 'subscriptions', subscriptionId].join("/"))
+            .map((res) => {
+                return res.json() || {}
+            })
+    }
+
     public getHeroCount() {
         return this.http.get(this.baseUrl + '/users/hero/count', this.getOptions())
             .map( res => {
