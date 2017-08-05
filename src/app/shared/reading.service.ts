@@ -61,7 +61,7 @@ export class ReadingService {
   } // public get(id : string) : Observable<any>
 
   public setReadingObj(reading: any) : void {
-    console.log("Set", reading)
+    // console.log("Set", reading)
     if (reading._id) {
       this.readingValue = reading
       this.readingSource.next(this.readingValue)
@@ -146,7 +146,8 @@ export class ReadingService {
         words: reading.words,
         html: reading.html,
         source: reading.source,
-        draft: reading.draft
+        draft: reading.draft,
+        questions: reading.questions
       } // let
 
       return this.http

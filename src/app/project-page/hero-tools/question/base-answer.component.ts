@@ -26,7 +26,7 @@ export abstract class BaseAnswerComponent {
     private _comments : CommentService
   ) {
     console.log("HEY IS AUTH NULL?!?!?" + this._auth);
-    this.user = this._auth.getUser();
+    // this.user = this._auth.getUser();
   } // constructor
 
   ngOnInit () {

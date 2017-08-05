@@ -163,7 +163,11 @@ export class NewReadingPage implements OnInit {
                 data => {
                     this.reading = data;
                     if (this.reading.html) {
-                        this.readingHtml = this.reading.html;
+                        if (this.reading.html.indexOf("<$question$>") !== -1) {
+                            this.populateDraftContent(this.reading.html)
+                        } else {
+                            this.readingHtml[0].text = this.reading.html
+                        }
                         //this.readingHtml = '<div>' + this.reading.html + '&nbsp;</div>';
                         //this.el.nativeElement.querySelector('#readingTitle').value = this.reading.title;
                         this.readingForm.patchValue({
@@ -392,6 +396,8 @@ export class NewReadingPage implements OnInit {
         for (let i=0; i<editorHtml.length; i++) {
             // Add question "word"
             if (this.readingHtml[i].question) {
+                // Concatenate the 
+                this.concatHtml += "<$question$>"
                 this.words.push({
                     styles: ['question'],
                     index: i - 1
@@ -404,7 +410,8 @@ export class NewReadingPage implements OnInit {
             }
 
             // Concatenate the html to 1 string [not currently using with current config]
-            this.concatHtml += editorHtml[i]
+            // this.concatHtml += editorHtml[i]
+            this.concatHtml += this.readingHtml[i].text
 
             let childEls = editorHtml[i].childNodes;
 
@@ -417,8 +424,9 @@ export class NewReadingPage implements OnInit {
         // Create reading object to submit based on form object parameter
         let reading: any = Object.assign({},form);
         delete reading.label
-        reading.html = this.readingHtml;
-        reading.words = this.words;
+        // reading.html = this.readingHtml
+        reading.html = this.concatHtml
+        reading.words = this.words
         reading.questions = this.questions
 
         // If the reading is not being saved as a draft (A.K.A. it's a final version)
@@ -436,6 +444,9 @@ export class NewReadingPage implements OnInit {
         if (this.ownerId) {
             reading.owner_id = this.ownerId;
         }
+        // if (this.readingHtml[1]) {
+        //     reading.questions = this.questions
+        // }
 
         // having an _id controls whether it is a put or post call
         let submitAction: string
@@ -445,7 +456,7 @@ export class NewReadingPage implements OnInit {
             submitAction = "createNewReading"
         }
         this.angulartics.eventTrack.next({ action: submitAction, properties: { category: 'contentManagement', label: 'attempt' }})
-
+        console.log(reading)
         this._readings.save(reading)
             .subscribe(
                 data => {
@@ -468,6 +479,7 @@ export class NewReadingPage implements OnInit {
                                     this.addLoadingP = false;
                                 });
                         } else {
+                            console.log(data)
                             this.addLoadingD = false;
                             this.addLoadingP = false;
                             this.router.navigate(['new-reading/' + data._id], { queryParams: { successAlert: this.successAlert } });
@@ -484,7 +496,7 @@ export class NewReadingPage implements OnInit {
                     this.angulartics.eventTrack.next({ action: submitAction, properties: { category: 'contentManagement', label: 'failure' }})
                     this.errorObject.readingError = "There was an issue saving your reading. It may be our fault; please try again";
                 }
-            );
+            )
     }
 
     /**
@@ -529,14 +541,13 @@ export class NewReadingPage implements OnInit {
      * Adds a question block to the new reading and then adds in a new medium editor
      */
     private addQuestion() {
-        console.log('add a new question here')
         var question = <EdjiQuestion>{
             prompt: '',
             answer_types: [],
             option_types: [],
-            new: true
+            new: true,
+            question_number: this.readingHtml.length
         }
-        console.log(question)
         this.readingHtml.push({'text':this.newReadingInner,'question':question})
     }
 
@@ -546,5 +557,18 @@ export class NewReadingPage implements OnInit {
     private deleteQuestion() {
         console.log('remove the question here')
         // this.questions.
+    }
+
+    /**
+     * Sets up the reading draft if it contains questions
+     */
+    private populateDraftContent(html) {
+        let tmpArray = html.split("<$question$>")
+        this.readingHtml[0].text = tmpArray[0]
+        for (let i=1;i<tmpArray.length;i++) {
+            this.readingHtml.push({'text':tmpArray[i],'question':this.reading.questions[i-1]})
+            this.readingHtml[i].question.new = true
+            this.readingHtml[i].question.question_number = i
+        }
     }
 }
