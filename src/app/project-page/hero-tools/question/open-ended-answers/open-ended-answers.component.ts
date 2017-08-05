@@ -9,12 +9,12 @@ import { Subscription } from 'rxjs/Rx';
   templateUrl: './open-ended-answers.component.html',
   styleUrls: ['./open-ended-answers.component.scss']
 })
-export class OpenEndedAnswersComponent extends BaseAnswerComponent { // (BaseAnswerComponent as {new(); any;}) {
+export class OpenEndedAnswersComponent extends BaseAnswerComponent {
 
   /*
     3 Aug 2017
     Nick Pumper
-    Last Mod: 4 Aug 2017
+    Last Mod: 5 Aug 2017
 
     Handles the display and processing of open ended answers for EdjiQuestion's.
     - A child of BaseAnswerComponent.
@@ -31,6 +31,7 @@ export class OpenEndedAnswersComponent extends BaseAnswerComponent { // (BaseAns
   private answerTypeStatus: any[] = []
 
   constructor (
+    // This needs to be here because of inheritance from BaseAnswerComponent.
     private projects : ProjectService,
     private readings : ReadingService,
     private auth     : AuthService,

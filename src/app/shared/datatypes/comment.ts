@@ -1,16 +1,14 @@
-import { EdjiQuestion } from './';
-
 /*  
-  Last Mod: 8.2.17
+  Last Mod: 8.5.17
 */
 
 /** Comment properties we add on the front end */
 export interface EdjiComment extends BaseComment {
-  lineCount: number,
-  expanded: boolean,
-  project_id: string,
-  active: boolean,
-  showAvatar: boolean
+  lineCount       : number,
+  expanded        : boolean,
+  project_id      : string,
+  active          : boolean,
+  showAvatar      : boolean,
 }
 
 /** Comment properties we get from the server */
@@ -31,13 +29,6 @@ export interface BaseComment {
   questionId? : string,
   new?: boolean
 }
-
-// idk if we'll use this, but I made it anyways? 8.2.17 Nick Pumper
-export enum CommentType {
-  Normal, // A normal comment nested in the reading text.
-  Reply,  // A comment replying to another comment.
-  Answer  // A comment which is an answer to an EdjiQuestion.
-} // export enum CommentType
 
 /** Used to control permissions on altering comment data */
 export enum CommentPermissions {

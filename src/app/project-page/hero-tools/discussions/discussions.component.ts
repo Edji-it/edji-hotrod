@@ -107,8 +107,8 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
       user_id: this.user._id,
       author: this.user.fullname,
       reply_to: commentId,
-      data: '',
-      type: type
+      data  : '',
+      type  : type
     }
 
     replyCommentNew.new = true

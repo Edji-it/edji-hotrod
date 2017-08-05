@@ -2,7 +2,7 @@
   Question template
   29 July 17
   Nick Pumper
-  Last Mod: 3 Aug 2017
+  Last Mod: 4 Aug 2017
 -->
 <div class="question-container row">
   <!-- Question Number
@@ -64,12 +64,13 @@
             [comment]="answer" 
             [isActive]="answer.active" 
             [userPermission]="getCommentPermissions(answer)"
-            >
+            [commentContext]="'answer'"
+            [assignedQuestion]="question"
+          >
           </edji-comment>
         </div><!-- answers loop -->
       </div><!-- answer list -->
     </div>
-
   </div>
   <button *ngIf="question && question.new" (tap)="removeQuestion()" class='inline-delete question-delete'>+</button>
 </div>
