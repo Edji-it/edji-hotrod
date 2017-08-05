@@ -23,8 +23,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     
     /*
         Annotator Component
-        Last Mod: 2 Aug 2017 - Nick Pumper
-
+        Last Mod: 5 Aug 2017 - Josh Kyburz
+        
         This does all the heavy lifting in a a reading.
         - Loads Reading text
         - Compiles word components
@@ -155,8 +155,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             this._readings.currentReading.subscribe(
                 reading => {
                     this.reading = reading
-                    console.log(reading)
                     this.updateMetaTags()
+                    if (reading.questions) {
+                        this.updateQuestionNumbers(reading.questions)
+                    }
                 },
                 error => {
                     console.error(error)
@@ -282,6 +284,13 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // if (firstImage) {
         //     document.querySelector('meta[property="og:image"]').setAttribute('content', firstImage.getAttribute('src'))
         // }
+    }
+
+    // Adds the question number to each question for proper rendering
+    private updateQuestionNumbers(questions) {
+        for (let i=0;i<questions.length;i++) {
+            questions[i].question_number = i+1
+        }
     }
 
     hideCommentOptions(event ?): void {
@@ -948,4 +957,3 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.unfocusHighlight(comment.start, comment.end, comment.loc)
     }
 }
-

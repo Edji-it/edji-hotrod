@@ -10,7 +10,7 @@ import { EdjiComment } from "./";
 
 /* Additional properties we add on the front end */
 interface Question extends BaseQuestion {
-  
+  question_number: number
 } // interface Question
 
 /** The reading as it is returned from the server */
@@ -33,6 +33,7 @@ export class EdjiQuestion implements Question {
   public option_types   : any[] = []
   public answers        : EdjiComment[] = [] // the answers to the question.
   public new            : boolean
+  public question_number: number
 
   // Answer types.
   public answerType : string;

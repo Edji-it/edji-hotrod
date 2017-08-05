@@ -9,7 +9,7 @@
       - Everything is spaced to the right of this.
   -->
   <div class="number-container">
-    <div class="question-number">3</div>
+    <div class="question-number">{{question.question_number}}</div>
   </div>
   <!-- Question Body - aka Everything else -->
   <div class="question-body" [ngClass]="[question.new ? 'question-body__new' : '']">
