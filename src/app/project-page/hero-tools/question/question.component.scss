@@ -14,8 +14,17 @@
     background: transparent !important;
 } // .question-container
 
+.question-container__new {
+    background: $editorBg !important;
+    margin: -10px auto;
+}
+
 .prompt-section {
     background: white;
+}
+
+.prompt-section__new {
+    background: $editorBg;
 }
 
 .question-label {

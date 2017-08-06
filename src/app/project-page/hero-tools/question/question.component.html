@@ -4,7 +4,7 @@
   Nick Pumper
   Last Mod: 4 Aug 2017
 -->
-<div class="question-container row">
+<div class="question-container row" [ngClass]="[question.new ? 'question-container__new' : '']">
   <!-- Question Number
       - Everything is spaced to the right of this.
   -->
@@ -14,7 +14,7 @@
   <!-- Question Body - aka Everything else -->
   <div class="question-body" [ngClass]="[question.new ? 'question-body__new' : '']">
     <!-- The Question Prompt Section -->
-    <div class="prompt-section">
+    <div class="prompt-section" [ngClass]="[question.new ? 'prompt-section__new' : '']">
       <label class="question-label">QUESTION</label>
       <div *ngIf="question && !question.new" class="prompt">{{question.prompt}}</div>
       <textarea *ngIf="question && question.new" type='text' placeholder="Question text..." class="text-comment-input" [(ngModel)]="question.prompt"></textarea>
