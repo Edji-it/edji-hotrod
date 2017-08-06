@@ -54,7 +54,7 @@ export class CommentComponent implements OnInit {
   @Input() private replyRef: boolean = false
   @Input() private reply: boolean = false   // Is it a reply to another comment? 
   @Input() private commentLite: boolean = false
-  @Input() private commentContext : string = 'normal'; // See NOTES in summary.
+  @Input() private commentContext: string = 'normal'; // See NOTES in summary.
   @Input() private assignedQuestion : EdjiQuestion; // If this is an answer, it'll need this.
   @Input() private userPermission: number = CommentPermissions.READ
   @Input() private showDeleteAudioModal: boolean = false
@@ -201,7 +201,6 @@ export class CommentComponent implements OnInit {
       this.angulartics.eventTrack.next({ action: 'updateComment', properties: { category: 'projectAction', label: 'attempt' }})
       this.isLoading = true
     } // else
-    console.log(this.commentContext)
     this._projects.saveComment(this.comment)
     .then(comment => {
       // Appropriate post-delete action, sorted by comment type.

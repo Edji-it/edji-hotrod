@@ -30,7 +30,7 @@
       <div *ngFor="let replyComment of repliesById[comment._id]">
         <div class="comment-wrap-row">
           <edji-comment class="replyCommentBlock" *ngIf="comment.author" 
-            [comment]="replyComment" [commentContext]="reply" [isActive]="replyComment.active" [reply]="true" [userPermission]="getCommentPermissions(replyComment)"></edji-comment>
+            [comment]="replyComment" [commentContext]="'reply'" [isActive]="replyComment.active" [reply]="true" [userPermission]="getCommentPermissions(replyComment)"></edji-comment>
         </div>
       </div>
     </div>
