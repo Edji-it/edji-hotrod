@@ -135,14 +135,10 @@ export class CommentComponent implements OnInit {
             // Save when comment is toggled away from
             this.updateComment(this.comment.data)
         } else {
-          if (this.commentContext === 'reply') {
-            this.active = true
-            this._comments.activeComment = this.comment
-            this._comments.activeComment.active = true
-          } else {
-            this.active = true 
-            this.commentActivation.emit(true)
-          }
+          this.active = true 
+          this._comments.activeComment = this.comment
+          this._comments.activeComment.active = true
+          this.commentActivation.emit(true)
         }
       } else {
         this.togglePreview()
@@ -205,7 +201,7 @@ export class CommentComponent implements OnInit {
       this.angulartics.eventTrack.next({ action: 'updateComment', properties: { category: 'projectAction', label: 'attempt' }})
       this.isLoading = true
     } // else
-
+    console.log(this.commentContext)
     this._projects.saveComment(this.comment)
     .then(comment => {
       // Appropriate post-delete action, sorted by comment type.

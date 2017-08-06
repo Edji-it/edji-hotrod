@@ -14,7 +14,7 @@
         <emoji-comment (tap)="toggleActive()" *ngIf="comment.type == 'emoji' || !comment.type" #commentInput [comment]="comment" [reply]="reply"></emoji-comment>
         <text-comment (tap)="activate()" [readOnly]="readOnly" [preview]="preview || active" *ngIf="comment.type == 'text'" [comment]="comment" #commentInput (blur)="deactivate(comment)" 
             [active]="comment.active" [reply]="reply"></text-comment>
-        <audio-comment (tap)="activate()" *ngIf="comment.type == 'audio'" [comment]="comment" #commentInput (save)="deactivate($event)" [active]="comment.active" 
+        <audio-comment (tap)="activate()" *ngIf="comment.type == 'audio'" [comment]="comment" #commentInput (save)="deactivate(comment)" [active]="comment.active" 
             [recordNewAudio]="reRecordAudio" (showDeleteAudioModal)="showDeleteAudioModal = true" [userPermission]="userPermission" [reply]="reply"></audio-comment>
         <button *ngIf="userPermission >= 3" (tap)="userPermission > 3 ? deleteComment(comment) : showDeleteModal = true" class='inline-delete'>+</button>
         <div *ngIf="!reply && project.types.indexOf('reply') > -1" class="reply" id="addReply" (click)="commentReply.emit()">
@@ -25,7 +25,7 @@
             </span>
         </div>
     </div>
-    <div *ngIf="comment.active" class="comment__save" (tap)="deactivate()" [innerHtml]="':white_check_mark:' | emojione"></div>
+    <div *ngIf="comment.active" class="comment__save" (tap)="deactivate(comment)" [innerHtml]="':white_check_mark:' | emojione"></div>
     <i class="comment__saved" [innerHtml]='":ok_hand:" | emojione'></i>
 </div>
 
