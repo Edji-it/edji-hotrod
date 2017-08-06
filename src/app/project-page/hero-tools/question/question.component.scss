@@ -12,7 +12,14 @@
     display: block;
     margin: 10px auto;
     background: transparent !important;
+    position: relative;
 } // .question-container
+
+.question-container__existing {
+    border: solid 1px lightgray;
+    border-radius: 16px;
+    padding: 8px;
+}
 
 .question-container__new {
     background: $editorBg !important;
@@ -29,15 +36,19 @@
 
 .question-label {
     color: darkgray;
+    font-size: large;
+    margin: 0;
 }
 
 .number-container {
     //width: 100%;
-    height: 100%;
+    height: calc(100%);
     vertical-align: middle;
     display: inline-block;
     margin: auto;
-    margin-bottom: 12%;
+    position: absolute;
+    height: 100%;
+    top: 46px;
 }
 
 .question-number {
@@ -53,7 +64,9 @@
 .question-body {
     // width: 100%;
     vertical-align: middle;
-    display:    inline-block;
+    display: inline-block;
+    width: calc(100% - 40px);
+    margin-left: 40px;
 }
 
 .prompt {
@@ -64,6 +77,7 @@
 
 .answer-label {
     color: darkgray;
+    margin-top: 5px;
 }
 
 // The list of answers

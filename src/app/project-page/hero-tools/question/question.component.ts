@@ -1,7 +1,8 @@
-import { Component, Input, OnInit, EventEmitter } from '@angular/core';
-import { EdjiComment, EdjiQuestion, Project, Reading, User } from "../../../shared/datatypes";
-import { CommentService, AuthService, ProjectService, ReadingService } from "../../../shared";
-import { Subscription } from 'rxjs/Rx';
+import { DeleteProjectInput } from 'aws-sdk/clients/codebuild';
+import { Component, Input, OnInit, EventEmitter } from '@angular/core'
+import { EdjiComment, EdjiQuestion, Project, Reading, User } from "../../../shared/datatypes"
+import { CommentService, AuthService, ProjectService, ReadingService } from "../../../shared"
+import { Subscription } from 'rxjs/Rx'
 
 enum ResponseType {
   OpenEnded = 0,
@@ -27,27 +28,28 @@ export class QuestionComponent implements OnInit {
   // The question being asked, and all of it's data and logic.
   // This reference is passed onto the Answer Component
   @Input()
-  public question: EdjiQuestion; 
+  public question: EdjiQuestion
   @Input()
-  public answers: EdjiComment[];
+  public answers: EdjiComment[]
   // What kind of answers is this question given?
   // The corresponding one is toggled in the template.
   @Input() 
-  public responseType : ResponseType = ResponseType.OpenEnded;
+  public responseType : ResponseType = ResponseType.OpenEnded
   
   // These inputs are caught events.
   @Input()
-  public answerSubmitted : EventEmitter<any> = new EventEmitter();
+  public answerSubmitted : EventEmitter<any> = new EventEmitter()
   @Input()
-  public answerDeleted : EventEmitter<any> = new EventEmitter();
+  public answerDeleted : EventEmitter<any> = new EventEmitter()
 
   // State
-  public questionOrder = 0; // Is this the first question? Or the second? Etc.
+  public questionOrder = 0 // Is this the first question? Or the second? Etc.
 
-  private newAnswer : EdjiComment; // New answers will be loaded here.
-  private currentReading: Reading;
-  private user : User;
-  private subscriptions : Subscription[] = [];
+  private newAnswer : EdjiComment // New answers will be loaded here.
+  private currentReading: Reading
+  private user : User
+  private subscriptions : Subscription[] = []
+  private questionOptionsStatus: boolean = false
 
   // Set which answer types are allowed and which options to toggle.
   // Answer types are passed onto which ever Answer component
@@ -63,7 +65,7 @@ export class QuestionComponent implements OnInit {
   }]
 
   // References
-  private project: Project;
+  private project: Project
 
   constructor(
     private _projects : ProjectService, 
@@ -72,8 +74,7 @@ export class QuestionComponent implements OnInit {
     private _comments : CommentService
   ) {
     // TEMP
-    this.question = new EdjiQuestion();
-    console.log(this.question, this.question.prompt);
+    this.question = new EdjiQuestion()
   } // constructor
 
   ngOnInit() {
@@ -81,11 +82,11 @@ export class QuestionComponent implements OnInit {
     // Subscribe to the reading
     this.subscriptions.push( this._readings.currentReading.subscribe(
       reading => {
-        this.currentReading = reading;
-        this.updateSelections();
+        this.currentReading = reading
+        this.updateSelections()
       },
       error => {
-        console.error(error);
+        console.error(error)
       }
     ))
     
@@ -115,11 +116,11 @@ export class QuestionComponent implements OnInit {
 
   // Tell the server we've got ourselves a new answer, aka a new EdjiComment
   public createAnswer (newAnswer : any) : void {
-    console.log("Began saving an answer! Answers.length is now " + this.question.answers.length);
+    console.log("Began saving an answer! Answers.length is now " + this.question.answers.length)
   } // public createAnswer (type: string) : void
 
   public deleteAnswer (target : EdjiComment) : void {
-    console.log("Deleting!");
+    console.log("Deleting!")
   } // public deleteAnswer (target : EdjiComment)
 
   // Has the current user already answered this question?

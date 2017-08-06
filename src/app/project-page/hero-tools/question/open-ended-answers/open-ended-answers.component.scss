@@ -10,6 +10,7 @@
 
 .answer-label {
     color: darkgray;
+    margin-top: 5px;
 }
 
 // The list of answers
@@ -42,7 +43,7 @@
     opacity: 0.6;
     filter: grayscale(100%);
     &.answer--enabled {
-        border: 1px solid #6bdb5d;
+        // border: 1px solid #6bdb5d;
         opacity: 1;
         filter: grayscale(0%);
     }

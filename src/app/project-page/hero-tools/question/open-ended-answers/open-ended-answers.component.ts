@@ -1,8 +1,8 @@
-import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
-import { EdjiComment, EdjiQuestion, Project, Reading, User } from "../../../../shared/datatypes";
-import { CommentService, AuthService, ProjectService, ReadingService } from "../../../../shared";
-import { BaseAnswerComponent } from "./../base-answer.component";
-import { Subscription } from 'rxjs/Rx';
+import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core'
+import { EdjiComment, EdjiQuestion, Project, Reading, User } from "../../../../shared/datatypes"
+import { CommentService, AuthService, ProjectService, ReadingService } from "../../../../shared"
+import { BaseAnswerComponent } from "./../base-answer.component"
+import { Subscription } from 'rxjs/Rx'
 
 @Component({
   selector: 'open-ended-answers',
@@ -26,9 +26,7 @@ export class OpenEndedAnswersComponent extends BaseAnswerComponent {
 
   // This variable will allow the user to pick their preferred comment type.
   @Input() 
-  public answerTypesAvailable : any[] = ['emoji', 'text', 'audio']
-
-  private answerTypeStatus: any[] = []
+  public enabledAnswerTypes: any[]
 
   constructor (
     // This needs to be here because of inheritance from BaseAnswerComponent.
@@ -36,17 +34,11 @@ export class OpenEndedAnswersComponent extends BaseAnswerComponent {
     private readings : ReadingService,
     private auth     : AuthService,
     private comments : CommentService) {
-    super(projects, readings, auth, comments);
+    super(projects, readings, auth, comments)
   } // constructor
 
   ngOnInit() {
 
-    // Logic for making certain comment types available
-    for (let i = 0; i < this.answerTypesAvailable.length; i++) {
-      this.answerTypeStatus[this.answerTypesAvailable[i]]=false
-    }
-
-    console.log("OpenEnded question prompt is: " + this.baseQuestionReference.prompt);
   } // ngOnInit
 
   // Tell the server we've got ourselves a new answer, aka a new EdjiComment
@@ -59,17 +51,11 @@ export class OpenEndedAnswersComponent extends BaseAnswerComponent {
     } // var newResponse = <EdjiComment>
 
     if (type=='emoji') {
-      this.activeEmojiKeyboardReply(newResponse);
+      this.activeEmojiKeyboardReply(newResponse)
     } // if
-    // console.log("PRE-SEND: " + newResponse.type);
+    // console.log("PRE-SEND: " + newResponse.type)
 
     // Ask the base class to send the comment to the server.
     this.saveAnswer(newResponse);
   } // public createAnswer (type: string) : void
-
-  private enableAnswerOfType(type: string) {
-    console.log('enabled ' + type + ' answer')
-    this.answerTypeStatus[type] = !this.answerTypeStatus[type]
-    console.log(this.answerTypeStatus[type])
-  } // private enableAnswerOfType(type: string)
 } // class
