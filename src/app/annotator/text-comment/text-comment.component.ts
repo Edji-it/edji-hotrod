@@ -14,7 +14,7 @@ export class TextCommentComponent implements OnInit, AfterViewInit {
     @Input() private reply: boolean = false
     @Input() private readOnly: boolean
     @Input() private preview: boolean
-    @Output() blur: EventEmitter<string> = new EventEmitter<string>() 
+    @Output() blur: EventEmitter<any> = new EventEmitter<any>() 
 
     private editing: boolean
     private activated: boolean = false
@@ -45,7 +45,8 @@ export class TextCommentComponent implements OnInit, AfterViewInit {
         
     }
 
-    updateComment(commentData: string) {
+    updateComment(commentData: any) {
+        console.log('text field blur: ', commentData)
         this.editing = false;
         this.blur.emit(commentData)
     }
