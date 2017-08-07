@@ -43,10 +43,26 @@
             <label for="inputPassword" class="info-label">Email</label>
         </div>
 
+        <!--Hero Subscription Mgmt-->
+        <div *ngIf="heroAvailable || (currentUser.hero && currentUser.hero.active)" class="info-group">
+            <div class="info">
+                <span *ngIf="currentUser.hero.active" class="text-capitalize mr-4" style="display:inline-block;">Subscribed ({{ currentUser.hero.subscription_type }})</span>
+                <span *ngIf="!currentUser.hero.active" class="mr-4">Unsubscribed</span>
+
+                <button *ngIf="currentUser.hero.active" id="heroModifyBtn" class="btn btn-secondary mr-4" (click)="showHeroChangeModal = true">Modify</button>
+                <button *ngIf="!currentUser.hero.active" class="btn btn-hero mr-4" (click)="showHeroSubModal = true">Go Hero</button>
+                
+                <div class="alert alert-warning my-1" *ngIf="expired">Your Hero subscription expired {{ currentUser.hero.will_expire | edjidate:'timeStamp':'mediumDate' }}</div>
+                <div class="alert alert-info my-1" *ngIf="expiring">Your Hero subscription will expire {{ currentUser.hero.will_expire | edjidate:'timeStamp':'mediumDate' }}</div>
+            </div>
+            <label for="inputPassword" class="info-label">Hero Subscription</label>
+        </div>
+
         <!-- Reading on Edji since -->
         <div class="info-group">
             <h4 class="faded">Reading on Edji since {{currentUser.createdAt | edjidate:'timeStamp':'mediumDate'}}</h4>
         </div>  
+        
     </div>
 
     <!-- Third Column -->
@@ -62,3 +78,5 @@
 </div>
 <edji-change-pass class="modal-will-fade" [class.show]="showPassModal" (closeModal)="showPassModal = !showPassModal"></edji-change-pass>
 <hot-upload-avatar class="modal-will-fade" [class.show]="showUploadProfPicModal" (closeModal)="showUploadProfPicModal = !showUploadProfPicModal"></hot-upload-avatar>
+<hero-subscribe-modal class="modal-will-fade" [class.show]="showHeroSubModal" (closeModal)="showHeroSubModal = !showHeroSubModal"></hero-subscribe-modal>
+<hero-change-modal class="modal-will-fade" [class.show]="showHeroChangeModal" (closeModal)="showHeroChangeModal = !showHeroChangeModal"></hero-change-modal>

@@ -24,7 +24,16 @@ export class AuthService implements CanActivate {
     //NOTE: (6/15/17) If this.user ever needs to be edited it, make a copy, edit the copy, THEN assign it so this.user is always fresh.
     private user: User; 
     private currentUserSource: BehaviorSubject<any>;
-    private currentUser: Observable<any>;
+    public currentUser: Observable<any>;
+
+    /**
+     * Global Feature Flag object
+     * - Keep updated when flags are added or removed, for reference
+     * - Update via url param subscriptions inside of relevant components
+     */
+    public secretSwitches = {
+        heroAvailable : false
+    }
 
     constructor(private http: Http, private _router: Router, _locker: Locker) {
         this.locker = _locker.useDriver(Locker.DRIVERS.LOCAL);
@@ -506,6 +515,7 @@ export class AuthService implements CanActivate {
                 return res.json()
             })
     }
+    
 
     /**
      * Add newly registered users to the sign up Mailchimp list
@@ -543,5 +553,46 @@ export class AuthService implements CanActivate {
         } else {
             return true;
         }
+    }
+
+    /**
+     * Submit payment and subscription type to add plan to user
+     */
+    public subscribeToHero(subscriptionType, tokenId, couponCode ?: string): Observable<any> {
+        console.log(tokenId)
+        let data = {
+            subscriptionType : subscriptionType,
+            token: tokenId
+        }
+        if (couponCode) {
+            data['couponCode'] = couponCode
+        }
+        return this.http.post(this.baseUrl + '/subscriptions', data, this.getOptions())
+            .map( res => {
+                return res.json()
+            })
+
+    }
+
+    public updateHeroSub(subscriptionType: string, statusChange ?: string) {
+        if (!statusChange) {
+            statusChange = 'subscribed'
+        }
+        let data = {
+            subscription_type : subscriptionType,
+            status : statusChange
+        }
+
+        return this.http.put(this.baseUrl + '/subscriptions', data, this.getOptions())
+            .map( res => {
+                return res.json()
+            })
+    }
+
+    public getHeroCount() {
+        return this.http.get(this.baseUrl + '/users/hero/count', this.getOptions())
+            .map( res => {
+                return res.json()
+            })
     }
 }

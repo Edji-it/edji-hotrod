@@ -1,0 +1,55 @@
+<nav-bar></nav-bar>
+<div class="jumbotron jumbotron-fluid jumbotron--sunny">
+  <div class="container">
+    <h1 class="display-3">Go Hero, <br/>Get More Edji </h1>
+    <p class="lead">Edji's core set of features will stay open and freely available, but a Hero subscription supports Edji and unlocks even more abilities <span [innerHtml]="':tada:' | emojione"></span></p>
+  </div>
+</div>
+<div class="container">
+  <div class="row align-items-center">
+    <div class="col-sm-4">
+      <div class="card card-outline-secondary">
+        <div class="card-block">
+          <h2 class="card-title">Sidekick</h2>
+          <span class="pricing">Free</span>
+          <hr/>
+          <p class="card-text">
+            With a free Edji account, you get:
+          </p>
+            <ul class="feature-list mb-4">
+              <li>Unlimited Readings</li>
+              <li>Unlimited Groups</li>
+              <li>Emoji and Text Comments</li>
+            </ul>
+          <a [routerLink]="['/register']" class="btn btn-primary btn-lg btn-block">Register</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="card card-outline-danger">
+        <div class="card-block">
+          <img class="card-img-top" src="/assets/images/hero-lg.png" />
+          <h2 class="card-title">Hero</h2>
+          <span class="pricing">$5<span class="small"> / month or </span>$48<span class="small"> / year</span></span>
+          <hr/>
+          <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+          <a tabindex="1" (click)="goHero()" class="btn btn-hero btn-lg btn-block">Go Hero</a>
+        </div>
+      </div> 
+    </div>
+    <div class="col-sm-4">
+      <div class="card card-outline-secondary">
+        <div class="card-block">
+          <h2 class="card-title">Hero Academy</h2>
+          <span class="pricing">Contact Us</span>
+          <hr/>
+          <p class="card-text">We work directly with institutions to determine an appropriate pricing plan to make all their teachers Heroes.</p>
+          <a href="mailto:support@edji.it" class="btn btn-primary btn-lg btn-block">Request More Info</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hot-login-register [loginHeader]="'To go Hero, first you\'ll need an account'" class="modal-will-fade" [class.show]="showLoginModal" (closeModal)="showLoginModal = false" (loginSuccess)="showHeroSubModal = true"></hot-login-register>
+<hero-subscribe-modal class="modal-will-fade" [class.show]="showHeroSubModal" (closeModal)="showHeroSubModal = !showHeroSubModal" (heroWasBorn)="_router.navigate(['/dashboard'])"></hero-subscribe-modal>

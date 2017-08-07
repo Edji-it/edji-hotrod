@@ -11,7 +11,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {LockerModule, Locker, LockerConfig} from 'angular2-locker';
 import { Angulartics2Module, Angulartics2GoogleAnalytics } from 'angulartics2';
 // import { HotkeyModule } from 'angular2-hotkeys';
-
 /*
  * Platform and Environment providers/directives/pipes
  */
@@ -45,7 +44,7 @@ import { HomeComponent } from './home';
 import { RegisterComponent } from './register';
 import { LoginForm, GuestForm } from './forms';
 
-import { LoginModal, ResetPassComponent, DeleteCommentModal, DeleteAudioModal, DeleteReadingModal, DeleteProjectModal, AddProjectModal, LoginRequiredModal } from './modals';
+import { LoginModal, ResetPassComponent, DeleteCommentModal, DeleteAudioModal, DeleteReadingModal, DeleteProjectModal, AddProjectModal, LoginRequiredModal, HeroSubscribeComponent, HeroChangeComponent, LoginRegisterModal } from './modals';
 import { AnnotatorComponent, CommentComponent, TextCommentComponent, EmojiCommentComponent, EmojiKeyboardComponent, AudioCommentComponent } from './annotator';
 import { ProjectPageComponent, ProjectInfoComponent, OwnerToolsComponent, LeaderboardComponent } from './project-page';
 import { FirefeedComponent } from './project-page/owner-tools/firefeed/firefeed.component';
@@ -60,6 +59,7 @@ import { AvatarDisplayComponent } from './shared/avatar-display/avatar-display.c
 import { LoginComponent } from './login';
 import { ResetPassPage } from './reset-pass/reset-pass-page.component';
 import { HeroPromoComponent } from './hero-promo/hero-promo.component';
+import { HeroPricingComponent } from './hero-pricing/hero-pricing.component';
 
 // Configure Hammer.js
 export class MyHammerConfig extends HammerGestureConfig  {
@@ -119,6 +119,7 @@ type StoreType = {
     LoginForm,
     GuestForm,
     LoginModal,
+    LoginRegisterModal,
     AddProjectModal,
     ChangePassComponent,
     ResetPassComponent,
@@ -130,6 +131,7 @@ type StoreType = {
     AnnotatorComponent,
     NewReadingPage,
     HeroPromoComponent,
+    HeroPricingComponent,
     LeaderboardComponent,
     FirefeedComponent,
     FirecardComponent,
@@ -142,6 +144,8 @@ type StoreType = {
     ProjectInfoComponent,
     OwnerToolsComponent,
     LoginRequiredModal,
+    HeroSubscribeComponent,
+    HeroChangeComponent,
     TutorialBoxComponent,
     DashboardComponent,
     JoinedDashComponent,
@@ -152,7 +156,11 @@ type StoreType = {
     NoContentComponent,
     ReadingCardComponent,
     HeroPromoComponent,
+<<<<<<< HEAD
     AvatarDisplayComponent
+=======
+    HeroPricingComponent
+>>>>>>> dev
 ],
   imports: [ // import Angular's modules
     BrowserModule,
@@ -163,7 +171,6 @@ type StoreType = {
     RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
     Angulartics2Module.forRoot([ Angulartics2GoogleAnalytics ]),
     NgbModule.forRoot() // Ng Bootstrap Import
-    // HotkeyModule.forRoot()
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     ENV_PROVIDERS,
