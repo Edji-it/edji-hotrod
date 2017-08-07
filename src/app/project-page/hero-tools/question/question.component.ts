@@ -36,12 +36,6 @@ export class QuestionComponent implements OnInit {
   @Input() 
   public responseType : ResponseType = ResponseType.OpenEnded
   
-  // These inputs are caught events.
-  @Input()
-  public answerSubmitted : EventEmitter<any> = new EventEmitter()
-  @Input()
-  public answerDeleted : EventEmitter<any> = new EventEmitter()
-
   // State
   public questionOrder = 0 // Is this the first question? Or the second? Etc.
 
@@ -125,15 +119,6 @@ export class QuestionComponent implements OnInit {
   public setQuestionOrder (input : string) : void {
     // Make sure there is no whitespace.
   } // setQuestionOrder
-
-  // Tell the server we've got ourselves a new answer, aka a new EdjiComment
-  public createAnswer (newAnswer : any) : void {
-    console.log("Began saving an answer! Answers.length is now " + this.answersById[this.question._id].length)
-  } // public createAnswer (type: string) : void
-
-  public deleteAnswer (target : EdjiComment) : void {
-    console.log("Deleting!")
-  } // public deleteAnswer (target : EdjiComment)
 
   // Has the current user already answered this question?
   public hasUserAnswered () : boolean {

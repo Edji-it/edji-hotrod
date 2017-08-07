@@ -149,7 +149,7 @@ export class ProjectService {
             commentsByIndex: commentsByIndex,
             highlightArrays: { alwaysHighlightArray: alwaysHighlightArray, highlightArray: highlightArray }
         }
-    }
+    } //  public processComments(project: Project): 
 
     /** 
      * Decorates the comment before adding it to the array
@@ -173,7 +173,7 @@ export class ProjectService {
         if (!arr[comment.start]) { arr[comment.start] = [] }
         arr[comment.start].push(comment)
         return arr
-    }
+    } // private addCommentToArray(comment: EdjiComment, project: Project, user: User, arr: EdjiComment[][]): EdjiComment[][]
 
     public addCommentToReplies(comment: EdjiComment): void {
         let skipAdd = false
@@ -192,7 +192,7 @@ export class ProjectService {
                 this.repliesByIdSubject.next(this.repliesByIdSource)
             }
         }
-    }
+    } // public addCommentToReplies(comment: EdjiComment): void 
 
     public removeCommentFromReplies(comment: EdjiComment) : void {
         if (comment.reply_to) {
@@ -203,7 +203,7 @@ export class ProjectService {
                 }
             }
         }
-    }
+    } // public removeCommentFromReplies(comment: EdjiComment) : void
 
     public addAnswerToAnswers(answer: EdjiComment): void {
         let skipAdd = false
@@ -222,18 +222,18 @@ export class ProjectService {
                 this.answersByIdSubject.next(this.answersByIdSource)
             }
         }
-    }
+    } // public addAnswerToAnswers(answer: EdjiComment): void
 
     public removeAnswerFromAnswers(answer: EdjiComment) : void {
         if (answer.questionId) {
             for (let i = 0; i < this.answersByIdSource[answer.questionId].length; i++){
-                if (this.answersByIdSource[comment.questionId][i]._id === answer._id) {
-                    this.answersByIdSource[comment.questionId].splice(i, 1)
+                if (this.answersByIdSource[answer.questionId][i]._id === answer._id) {
+                    this.answersByIdSource[answer.questionId].splice(i, 1)
                     this.answersByIdSubject.next(this.answersByIdSource)
                 }
-            }
+            } // for
         }
-    }
+    } //  public removeAnswerFromAnswers(answer: EdjiComment) : void 
 
     /**
      * Prepares two arrays, one containing numbers of all of the words that are highlighted

@@ -81,7 +81,12 @@
         <div *ngFor="let answer of answersById[question._id]">
           <div class="comment-wrap-row">
             <edji-comment class="answerCommentBlock"  
-              [comment]="answer" [commentContext]="'answer'" [isActive]="answer.active" [reply]="true" [userPermission]="getCommentPermissions(answer)"></edji-comment>
+              [comment]="answer" 
+              [commentContext]="'answer'" 
+              [isActive]="answer.active" 
+              [reply]="true" 
+              [userPermission]="getCommentPermissions(answer)"
+            ></edji-comment>
           </div>
         </div>
       </div>
