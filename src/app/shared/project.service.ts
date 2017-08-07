@@ -43,6 +43,14 @@ export class ProjectService {
     private repliesByIdSubject: BehaviorSubject<any> = new BehaviorSubject<any>(this.repliesByIdSource)
     public repliesById: Observable<any> = this.repliesByIdSubject.asObservable()
 
+    /**
+     *  Updated Reference Object
+     * Reference answers by question id
+     */
+    private answersByIdSource: any = {}
+    private answersByIdSubject: BehaviorSubject<any> = new BehaviorSubject<any>(this.answersByIdSource)
+    public answersById: Observable<any> = this.answersByIdSubject.asObservable()
+
     constructor(
         private http: Http, 
         private _auth: AuthService, 
@@ -129,6 +137,14 @@ export class ProjectService {
             this._commentStats.addCommentToStats(comment, 1)
         }
 
+        let ans = project.answers.length
+        for (let i = 0; i < ans; i++) {
+            let answer = project.answers[i]
+
+            // push the answer to the array
+            this.addAnswerToAnswers(answer)
+        }
+
         return {
             commentsByIndex: commentsByIndex,
             highlightArrays: { alwaysHighlightArray: alwaysHighlightArray, highlightArray: highlightArray }
@@ -184,6 +200,36 @@ export class ProjectService {
                 if (this.repliesByIdSource[comment.reply_to][i]._id === comment._id) {
                     this.repliesByIdSource[comment.reply_to].splice(i, 1)
                     this.repliesByIdSubject.next(this.repliesByIdSource)
+                }
+            }
+        }
+    }
+
+    public addAnswerToAnswers(answer: EdjiComment): void {
+        let skipAdd = false
+        if (answer.questionId) {
+            if (!this.answersByIdSource[answer.questionId]) {
+                this.answersByIdSource[answer.questionId] = []
+            }
+            // Double check comment doesn't exist
+            for (let answerExist of this.answersByIdSource[answer.questionId]) {
+                if (answerExist._id == answer._id) {
+                    skipAdd = true
+                }
+            }
+            if (!skipAdd) {
+                this.answersByIdSource[answer.questionId].push(answer)
+                this.answersByIdSubject.next(this.answersByIdSource)
+            }
+        }
+    }
+
+    public removeAnswerFromAnswers(answer: EdjiComment) : void {
+        if (answer.questionId) {
+            for (let i = 0; i < this.answersByIdSource[answer.questionId].length; i++){
+                if (this.answersByIdSource[comment.questionId][i]._id === answer._id) {
+                    this.answersByIdSource[comment.questionId].splice(i, 1)
+                    this.answersByIdSubject.next(this.answersByIdSource)
                 }
             }
         }
@@ -398,6 +444,84 @@ export class ProjectService {
             .toPromise()
             .then(this._auth.extractData);
     }//  public deleteComment(comment): Promise<any>
+
+    /** 
+     * Save an answer on a project.
+     * - Give this thing an EdjiComment object, and it will handle it from there
+     *   It will save it as the right answer type, whether a normal answer, a reply, or question answer.
+     *   It just needs to have the appropriate type assigned and the proper data.
+     * @param answerObj Answer of EdjiComment datatype
+     */
+    public saveAnswer(answerObj: EdjiComment) : Promise<any> {
+        let projectId : string = this.project._id;
+        let answer = Object.assign({}, answerObj)
+
+        answer.project_id = projectId; // Tell the answer what project it's a part of
+        
+        // Clean frontend only properties
+        delete answer['active']
+        delete answer['new']
+        delete answer['showAvatar']
+        
+        // Get the url of this project that we're saving to.
+        let url = this._auth.getUrl() + '/projects/' + projectId + '/answers';
+        if (!answer.user_id) {
+            answer.user_id = this._auth.getUser()._id
+        }
+        if (!answer.author) {
+            answer.author = this._auth.getUser().fullname ? this._auth.getUser().fullname : this._auth.getUser().username
+        }
+
+        let options = this._auth.getOptions()
+        let data = { answer: answer }
+        // Add comment ID if passed
+        // Tell other Project viewers comment changed, using Socket
+        if (answer._id) {
+            data.answer['_id'] = answer._id;
+            url = url + '/' + answer._id
+            options['method'] = 'PUT'
+            this._socket.updateComment(data.answer, 'UPDATE', this.project._id);
+        } else {
+            options['method'] = 'POST'
+            this._socket.updateComment(data.answer, 'CREATE', this.project._id);
+        }
+
+        options['body'] = data
+        console.log(answer)
+        return this.http
+            .request(url, options)
+            .toPromise()
+            .then(this._auth.extractData)
+            .then((data) => { return data.answer; })
+    } // public saveAnswer
+
+    /**
+     * Deletes answer via service, then updates local Project object 
+     * - Project page should subscribe to the currentProject Observable to receive these updates
+     */
+    public deleteAnswer(answer : EdjiComment): Promise<any> {
+        let projectId = this.project._id;
+        let url = this._auth.getUrl() + '/projects/' + projectId + '/answers/' + answer._id;
+
+        return this.http
+            .delete(url, this._auth.getOptions())
+            .map(data => {
+                // Tell other Project views that the answer is gone
+                 this._socket.updateComment(answer, 'DELETE', this.project._id);
+                 // Update stats
+                 this.commentStats.addCommentToStats(answer, -1)
+
+                for (var i = 0; i <= this.project.answers[answer.questionId].length; i++) {
+                    if (this.project.answers[answer.questionId][i] && this.project.answers[answer.questionId][i]._id === answer._id) {
+                        // Remove comment from local object
+                        this.project.answers[answer.questionId].splice(i, 1);
+                    }
+                }
+                return data;
+            })
+            .toPromise()
+            .then(this._auth.extractData);
+    }//  public deleteAnswer(answer): Promise<any>
 
     /**
      * API call to add a user (of any type) to the project

@@ -145,3 +145,16 @@
     position: relative; 
     display: inline-block;
 }
+
+.replyOverflow {
+  overflow-y: auto;
+}
+
+.replyOverflow-normal {
+  max-height: 200px
+}
+
+.answerCommentBlock {
+  height: 75px;
+  width: calc(100% - 66px);
+}

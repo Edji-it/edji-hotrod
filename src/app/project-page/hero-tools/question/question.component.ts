@@ -49,7 +49,9 @@ export class QuestionComponent implements OnInit {
   private currentReading: Reading
   private user : User
   private subscriptions : Subscription[] = []
+  private answersById: any = {}
   private questionOptionsStatus: boolean = false
+  private questionPos: number = 0
 
   // Set which answer types are allowed and which options to toggle.
   // Answer types are passed onto which ever Answer component
@@ -102,6 +104,16 @@ export class QuestionComponent implements OnInit {
       }
     ) )
 
+    // Subscribe to updates to the answer reference object
+    this.subscriptions.push( this._projects.answersById.subscribe(
+      (answersById) => {
+        this.answersById = answersById
+      },
+      (error) => {
+        console.error(error)
+      }
+    ) )
+
     // Make sure we have the most current User object
     this.subscriptions.push(
         this._auth.getCurrentUser().subscribe((user) => {
@@ -116,7 +128,7 @@ export class QuestionComponent implements OnInit {
 
   // Tell the server we've got ourselves a new answer, aka a new EdjiComment
   public createAnswer (newAnswer : any) : void {
-    console.log("Began saving an answer! Answers.length is now " + this.question.answers.length)
+    console.log("Began saving an answer! Answers.length is now " + this.answersById[this.question._id].length)
   } // public createAnswer (type: string) : void
 
   public deleteAnswer (target : EdjiComment) : void {
@@ -125,23 +137,22 @@ export class QuestionComponent implements OnInit {
 
   // Has the current user already answered this question?
   public hasUserAnswered () : boolean {
-
-    if (this.question.answers != undefined)
-    {
-      for (let i = 0; i < this.question.answers.length; i++)
-      {
-        if (this.question.answers[i].author === this.user.fullname)
-        {
-          return true;
-        } // if
-      } // for
+    if (this.answersById[this.question._id]) {
+      for (let i=0; i<this.answersById[this.question._id].length; i++) {
+        if (this.project.answers && this.answersById[this.question._id][i].user_id === this.user._id) {
+          return true
+        } else {
+          return false
+        }
+      }
     } else {
       return false
-    } // else
-
-    return false;
+    }
   } // public hasUserAnswered () : boolean
 
+  /** Toggles answer selection
+   * @param type A answer type
+   */
   private enableAnswerOfType(type: string) {
     this.answerTypeStatus[type] = !this.answerTypeStatus[type]
     if (this.answerTypeStatus[type]) {
@@ -156,8 +167,10 @@ export class QuestionComponent implements OnInit {
     }
   } // private enableAnswerOfType(type: string) 
 
+  /** Toggles option selection
+   * @param type A option type
+   */
   private enableOptionOfType(type: string) {
-    console.log(type)
     this.optionTypeStatus[type] = !this.optionTypeStatus[type]
     if (this.optionTypeStatus[type]) {
       this.question.option_types.push(type)
@@ -169,7 +182,6 @@ export class QuestionComponent implements OnInit {
         }
       }
     }
-    console.log(this.question)
   } // private enableOptionOfType(type: string)
 
   /** Used to determine which level of permission the user has for a specific comment
@@ -179,6 +191,9 @@ export class QuestionComponent implements OnInit {
       return this._comments.getCommentPermissions(comment, this.user, this.project)
   } //  private getCommentPermissions(comment: any): number
 
+  /** Used to set the available answer and option types and also to set the current question position
+   * 
+   */
   private updateSelections() {
     // Initialize the answers for questions
     for (let i = 0; i < this.answerTypesAvailable.length; i++) {
@@ -199,5 +214,8 @@ export class QuestionComponent implements OnInit {
     for (let i=0; i<this.question.option_types.length; i++) {
       this.optionTypeStatus[this.question.option_types[i]]=true
     }
+
+    // Also set the question position
+    this.questionPos = this.question.question_number - 1
   }
 } // class

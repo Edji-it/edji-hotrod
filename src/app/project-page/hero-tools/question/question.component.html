@@ -64,8 +64,8 @@
         - If the user has answered, they can see the other answers.
         - Otherwise, give them options to answer.
       -->
-      <div class="answer-list">
-        <div *ngFor="let answer of question.answers">
+      <!--<div class="answer-list">
+        <div *ngFor="let answer of answersById[question._id]">
           <edji-comment class="answer list-item" 
             [comment]="answer" 
             [isActive]="answer.active" 
@@ -74,8 +74,18 @@
             [assignedQuestion]="question"
           >
           </edji-comment>
-        </div><!-- answers loop -->
-      </div><!-- answer list -->
+        </div>
+      </div>-->
+
+      <div class="answerOverflow answerOverflow-normal">
+        <div *ngFor="let answer of answersById[question._id]">
+          <div class="comment-wrap-row">
+            <edji-comment class="answerCommentBlock"  
+              [comment]="answer" [commentContext]="'answer'" [isActive]="answer.active" [reply]="true" [userPermission]="getCommentPermissions(answer)"></edji-comment>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
   <button *ngIf="question && question.new" (tap)="removeQuestion()" class='inline-delete question-delete'>+</button>

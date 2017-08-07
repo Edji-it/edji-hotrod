@@ -1,7 +1,7 @@
-import { Component, Input, OnInit, EventEmitter } from '@angular/core';
-import { EdjiComment, EdjiQuestion, Project, Reading, User } from "../../../shared/datatypes";
-import { CommentService, AuthService, ProjectService, ReadingService } from "../../../shared";
-import { Subscription } from 'rxjs/Rx';
+import { Component, Input, OnInit, EventEmitter } from '@angular/core'
+import { EdjiComment, EdjiQuestion, Project, Reading, User } from "../../../shared/datatypes"
+import { CommentService, AuthService, ProjectService, ReadingService } from "../../../shared"
+import { Subscription } from 'rxjs/Rx'
 
 export abstract class BaseAnswerComponent {
 
@@ -18,7 +18,7 @@ export abstract class BaseAnswerComponent {
   @Input()
   public baseQuestionReference : EdjiQuestion // Provided by the EdjiQuestion hosting this.
   @Input()
-  enabledAnswerTypes : any[] = ['text'];
+  enabledAnswerTypes : any[] = ['text']
 
 
   // State
@@ -30,7 +30,7 @@ export abstract class BaseAnswerComponent {
     private _auth     : AuthService,
     private _comments : CommentService
   ) {
-    this.user = this._auth.getUser();
+    this.user = this._auth.getUser()
   } // constructor
 
   ngOnInit () {
@@ -38,39 +38,47 @@ export abstract class BaseAnswerComponent {
   }
 
   // Ask ProjectService to tell the server to save this comment.
-  public saveAnswer (newAnswer : EdjiComment) : void {
-    newAnswer.new = true;
+  public saveAnswer(newAnswer : EdjiComment) : void {
+    newAnswer.new = true
 
-    newAnswer.user_id = this.user._id;
-    newAnswer.author = this.user.fullname;
+    newAnswer.user_id = this.user._id
+    newAnswer.author = this.user.fullname
+
+    // Please make sure the questionId is added to the answer as a reference.. this will error out otherwise
+    newAnswer.questionId = this.baseQuestionReference._id
+
+    // questionId ~> comment
+    // questionPos ~> project.answers
+    console.log('referenceQuestion: ', this.baseQuestionReference)
+    console.log('saveAnswer: ', newAnswer)
     
-    // Tell the server we've added a comment.
-    this._projects.saveComment(newAnswer)
-    .then(comment => {
-      comment.active = true
-      this._comments.activeComment = comment
+    // Tell the server we've added an answer
+    this._projects.saveAnswer(newAnswer)
+    .then(answer => {
+      answer.active = true
+      this._comments.activeComment = answer
 
-      // We're having an issue with questions.answers being undefined, so I put this here
-      if (this.baseQuestionReference.answers ===  undefined)
-      {
-        this.baseQuestionReference.answers = [comment];
-      } else {
-        this.baseQuestionReference.answers.push(comment);
-      } // if else
+      // // We're having an issue with questions.answers being undefined, so I put this here
+      // if (this.baseQuestionReference.answers ===  undefined)
+      // {
+      //   this.baseQuestionReference.answers = [answer]
+      // } else {
+      //   this.baseQuestionReference.answers.push(answer)
+      // } // if else
     
       setTimeout(() => {
       }, 100)
     })
     .catch(error => {
       // TRACK EXCEPTION
-      console.log("Making an answer has failed.");
+      console.log("Making an answer has failed")
       console.log(error)
     })
-  } // public saveAnswer (comment : EdjiComment) : void
+  } // public saveAnswer (answer : EdjiComment) : void
 
   public deleteAnswer (target : EdjiComment) : void {
-    console.log("Deleting!");
-    this._projects.deleteComment(target);
+    console.log("Deleting!")
+    this._projects.deleteComment(target)
   } // public deleteAnswer (target : EdjiComment)
 
   public activeEmojiKeyboardReply(comment: EdjiComment): void {
