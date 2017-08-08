@@ -76,11 +76,6 @@ export abstract class BaseAnswerComponent {
     })
   } // public saveAnswer (answer : EdjiComment) : void
 
-  public deleteAnswer (target : EdjiComment) : void {
-    console.log("Deleting!")
-    this._projects.deleteComment(target)
-  } // public deleteAnswer (target : EdjiComment)
-
   public activeEmojiKeyboardReply(comment: EdjiComment): void {
     this._comments.activeComment = comment
     this._comments.isEmojiKeyboardActive(this.user)

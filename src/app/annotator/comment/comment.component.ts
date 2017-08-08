@@ -277,7 +277,8 @@ export class CommentComponent implements OnInit {
 
         this.angulartics.eventTrack.next({ action: 'deleteReply', properties: { category: 'heroFeature', label: 'success' }})
       } else if (this.commentContext === 'answer') {
-        this.assignedQuestion.answers.splice(comment, 1);
+        // this.assignedQuestion.answers.splice(comment, 1);
+        this._projects.removeAnswerFromAnswers(comment);
       } else {
         this.angulartics.eventTrack.next({ action: 'deleteComment', properties: { category: 'projectAction', label: 'success' }})
       }
