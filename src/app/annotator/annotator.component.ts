@@ -155,7 +155,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             this._readings.currentReading.subscribe(
                 reading => {
                     this.reading = reading
-                    console.log("reading: ", reading)
                     this.updateMetaTags()
                     if (reading.questions) {
                         this.updateQuestionNumbers(reading.questions)
@@ -172,7 +171,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             (project) => {
                 if (project) {
                     this.project = project
-                    console.log("project: ", project)
                     // Check if audio is supported
                     if (this.project.types.indexOf('audio') > -1 && !navigator.getUserMedia) {
                         this.audioSupportError = true

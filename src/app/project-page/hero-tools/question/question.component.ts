@@ -116,7 +116,6 @@ export class QuestionComponent implements OnInit, Input, Output, OnDestroy {
     this.subscriptions.push(
         this._auth.getCurrentUser().subscribe((user) => {
             this.user = user
-            console.log(user)
         })
     ) // this.subscriptions.push
   } // ngOnInit
