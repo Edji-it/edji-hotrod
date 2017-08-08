@@ -57,7 +57,14 @@
             [enabledAnswerTypes]="question.answer_types"></open-ended-answers>
         </div>
 
-        <div class="answerOverflow answerOverflow-normal">
+        <div *ngIf="answersById[question._id] && answersById[question._id].length > 0">
+          <div class="answer-label answers--nearButton">ANSWERS</div>
+          <button class="button-answers__hide btn btn-sm" (click)="ownerHidden = !ownerHidden" 
+            [class.hidden]="user._id !== project.teacher_id">
+              {{ownerHidden ? 'SHOW' : 'HIDE'}}
+          </button>
+        </div>
+        <div class="answerOverflow answerOverflow-normal" *ngIf="!ownerHidden">
           <div *ngFor="let answer of answersById[question._id]">
             <div class="comment-wrap-row">
               <edji-comment class="answerCommentBlock"  

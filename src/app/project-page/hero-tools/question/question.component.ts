@@ -48,6 +48,7 @@ export class QuestionComponent implements OnInit, Input, Output, OnDestroy {
   private subscriptions : Subscription[] = []
   private answersById: any = {}
   private questionOptionsStatus: boolean = false
+  private ownerHidden: boolean = false
   private questionPos: number = 0
 
   // Set which answer types are allowed and which options to toggle.
@@ -115,6 +116,7 @@ export class QuestionComponent implements OnInit, Input, Output, OnDestroy {
     this.subscriptions.push(
         this._auth.getCurrentUser().subscribe((user) => {
             this.user = user
+            console.log(user)
         })
     ) // this.subscriptions.push
   } // ngOnInit

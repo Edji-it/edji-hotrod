@@ -165,3 +165,24 @@
   height: 75px;
   width: calc(100% - 66px);
 }
+
+.button-answers__hide {
+    display: inline-block;
+    margin-left: 8px;
+    vertical-align: middle;
+    border-radius: 3px;
+    font-size: 14px;
+    padding: 0.3rem 0.6rem;
+    color: white;
+    font-weight: bold;
+}
+
+.answers--nearButton {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0;
+}
+
+.hidden {
+    display: none;
+}
