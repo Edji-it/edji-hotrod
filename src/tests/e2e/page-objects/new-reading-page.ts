@@ -11,8 +11,8 @@ export class NewReading implements PageObjectInterface
     // Public Instance Variables
     public titleInput = element(by.id('readingTitle'));
     public contentInput = element(by.id('angularMediumEditor'));
-    public contentInput1 = element.all(by.id('angularMediumEditor'))[0];
-    public contentInput2 = element.all(by.id('angularMediumEditor'))[1];
+    public contentInput1 = element.all(by.id('angularMediumEditor')).first();
+    public contentInput2 = element.all(by.id('angularMediumEditor')).last();
     public sourceInput = element(by.id('readingSource'));
     public groupInput = element(by.id('firstProjectLabel'));
     public addButton = element(by.id('addReadingButton'));
@@ -53,8 +53,8 @@ export class NewReading implements PageObjectInterface
     public contentShortStringB = '\nA robot must obey the orders given it by human beings except where such orders would conflict with the First Law.\nA robot must protect its own existence as long as such protection does not conflict with the First or Second Laws.\n';
     public sourceString = 'https://en.wikipedia.org/wiki/Robot';
     public groupString = 'Test Group 001';
-    public emojiAnswerButton = element(by.id('answerOptionemoji'));
-    public textAnswerButton = element(by.id('answerOptiontext'));
+    public emojiAnswerButton = element.all(by.id('answerOptionemoji')).last();
+    public textAnswerButton = element.all(by.id('answerOptiontext')).last();
 
     public findIdExp = new RegExp(/([A-Za-z0-9]){24}/);
 

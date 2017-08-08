@@ -48,7 +48,7 @@ exports.config = {
     newReading: helpers.root('src/tests/e2e/new-reading.spec.ts'),
     dashboard:  helpers.root('src/tests/e2e/dashboard.spec.ts'),
     project:    helpers.root('src/tests/e2e/project.spec.ts'),
-    question:   helpers.root('src/tests/e2e/question.spec.ts'),
+    question:   helpers.root('src/tests/e2e/questions.spec.ts'),
     version:    helpers.root('src/tests/e2e/version.spec.ts'),
     all:        [helpers.root('src/tests/e2e/home.spec.ts'),  helpers.root('src/tests/e2e/login.spec.ts')]
   }, // suites

@@ -14,7 +14,7 @@ import { NewReading, Login, Sidebar } from './page-objects'
 */
 
 // Now into the testing.
-describe('Questions - New', () => {
+describe('Questions - Create', () => {
 
     /* ---- Variable Initialization --------------- */
     
@@ -32,7 +32,6 @@ describe('Questions - New', () => {
         browser.wait(EC.elementToBeClickable(login.loginButton), 5000)
         login.loginButton.click()
         browser.wait(EC.urlContains("dashboard"), 5000, "never arrived at dashboard")
-        newReading.getPage()
     });
 
     afterAll(() => {
@@ -63,12 +62,13 @@ describe('Questions - New', () => {
         - 
     */
     it('should add reading when all fields are filled and submitted', () => {
+        newReading.getPage()
         // Wait for New Reading page
-        browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000)
+        browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000, "never found the new reading title");
 
         // Enter sample Reading into form
-        newReading.titleInput.sendKeys(newReading.qTitleString)
-        newReading.contentInput1.sendKeys(newReading.qContentString1)
+        newReading.titleInput.sendKeys(newReading.qTitleString);
+        newReading.contentInput1.sendKeys(newReading.qContentString1);
 
         // Add the 1st question after all text
         browser.wait(EC.elementToBeClickable(newReading.insertQuestionButton), 5000, "insert question button never became clickable");
@@ -84,10 +84,11 @@ describe('Questions - New', () => {
         newReading.textAnswerButton.click();
 
         // Enter some more content after we add the question before
-        // newReading.contentInput2.sendKeys(newReading.qContentString2)
+        newReading.contentInput2.sendKeys(newReading.qContentString2)
 
         // Add another question, but we will add it in the middle of existing text
-
+        browser.wait(EC.elementToBeClickable(newReading.insertQuestionButton), 5000, "insert question button never became clickable again");
+        newReading.insertQuestionButton.click();
 
         // Input the question prompt
 
