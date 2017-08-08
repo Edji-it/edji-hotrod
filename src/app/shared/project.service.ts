@@ -206,6 +206,7 @@ export class ProjectService {
     } // public removeCommentFromReplies(comment: EdjiComment) : void
 
     public addAnswerToAnswers(answer: EdjiComment): void {
+        console.log(answer)
         let skipAdd = false
         if (answer.questionId) {
             if (!this.answersByIdSource[answer.questionId]) {
@@ -487,7 +488,6 @@ export class ProjectService {
         }
 
         options['body'] = data
-        console.log(answer)
         return this.http
             .request(url, options)
             .toPromise()

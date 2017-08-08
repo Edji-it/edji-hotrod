@@ -242,6 +242,9 @@ export class CommentComponent implements OnInit {
         
         this.justSaved = true
         this.commentUpdated.emit()
+        answer.active = true
+        this._comments.activeComment = answer
+        this._projects.addAnswerToAnswers(answer)
         setTimeout(() => {
           this.justSaved = false
           this.comment.active = false

@@ -59,21 +59,20 @@
           </open-ended-answers>
         </div>
 
-      <div class="answerOverflow answerOverflow-normal">
-        <div *ngFor="let answer of answersById[question._id]">
-          <div class="comment-wrap-row">
-            <edji-comment class="answerCommentBlock"  
-              [comment]="answer" 
-              [commentContext]="'answer'" 
-              [isActive]="answer.active" 
-              [reply]="true" 
-              [userPermission]="getCommentPermissions(answer)"
-            ></edji-comment>
+        <div class="answerOverflow answerOverflow-normal">
+          <div *ngFor="let answer of answersById[question._id]">
+            <div class="comment-wrap-row">
+              <edji-comment class="answerCommentBlock"  
+                [comment]="answer" 
+                [commentContext]="'answer'" 
+                [isActive]="answer.active" 
+                [reply]="true" 
+                [userPermission]="getCommentPermissions(answer)"
+              ></edji-comment>
+            </div>
           </div>
-
         </div>
       </div>
-    </div>
     <button *ngIf="question && question.new" (tap)="questionDelete.emit()" class='inline-delete question-delete'>+</button>
   </div>
 </div>

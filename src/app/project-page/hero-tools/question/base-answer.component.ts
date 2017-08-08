@@ -57,6 +57,8 @@ export abstract class BaseAnswerComponent {
     .then(answer => {
       answer.active = true
       this._comments.activeComment = answer
+      this._projects.addAnswerToAnswers(answer)
+      this._projects.saveAnswer(answer)
 
       // // We're having an issue with questions.answers being undefined, so I put this here
       // if (this.baseQuestionReference.answers ===  undefined)
