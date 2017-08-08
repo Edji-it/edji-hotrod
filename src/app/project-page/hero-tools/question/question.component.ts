@@ -129,9 +129,7 @@ export class QuestionComponent implements OnInit, Input, Output, OnDestroy {
       for (let i=0; i<this.answersById[this.question._id].length; i++) {
         if (this.project.answers && this.answersById[this.question._id][i].user_id === this.user._id) {
           return true
-        } else {
-          return false
-        }
+        } 
       }
     } else {
       return false
