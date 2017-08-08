@@ -6,7 +6,7 @@ import { LoginModal, GuestLoginForm } from './components';
 
 /*
     27 Jan 2017
-    Last Modified: 27 Jan 2017
+    Last Modified: 8 Aug 2017
     Nicholas Pumper
 
     e2e test the Project page!
@@ -266,6 +266,27 @@ describe('Project Page', () => {
             browser.wait(EC.invisibilityOf(project.discussionPanel), 5000, "discussion panel never went away after dismissal");
         });
     });
+
+    describe("Questions: Making Answer Comments", () => {
+        beforeAll(() => {
+            project.getQuestionsPage();            
+
+            // Login
+            guestForm.loginAsGuest();
+            browser.wait(EC.elementToBeClickable(sidebar.logOutButton));
+        }); // beforeAll
+
+        afterAll(() => {
+            // log out
+            browser.wait(EC.elementToBeClickable(sidebar.logOutButton), 5000, "never found the logout button");
+            sidebar.logOutButton.click();
+        }); // afterAll
+
+        it("should make an answer to a question as a logged in user.", () => {
+            // make sure we got there.
+            browser.wait(EC.urlContains("vk29"), 5000, " failed to get to the Question test page!");
+        }); // it("should make an answer to a question as a logged...
+    }); // describe
      
 }); // describe 'Dashboard Page'
   

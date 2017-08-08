@@ -3,6 +3,12 @@ import { PageObjectInterface } from './PageObjectInterface';
 
 export class Project implements PageObjectInterface {
 
+  /*
+  Last Mod: 8 Aug 2017
+  
+  Easily reference parts of the project page test page.
+  */
+
   // Element References
   public addEmojiBtn = element(by.id("addEmojiComment"));
   public addTextBtn = element(by.id("addTextComment"));
@@ -23,12 +29,17 @@ export class Project implements PageObjectInterface {
   public replyDelete = element(by.css('button.inline-delete'));
   public imageRight = 25;
   public imageDown = 25;
+
+  // Audio Comment test variables
   public audioPlay = element(by.id('audioPlay'));
   public audioPause = element(by.id('audioPause'));
   public audioRestart = element(by.id('audioRestart'));
   public audioRecord = element(by.id('audioRecord'));
   public emojiCommentSave = element(by.css('.comment.active .comment__save'));
   public audioComment = element.all(by.css('.audio-comment-input-wrapper')).first();
+
+  // Questions test variables
+  
 
   public getPage(): void {
     // First we clear out the url (sometimes page is preserved if the url stays the same)
@@ -50,4 +61,11 @@ export class Project implements PageObjectInterface {
     // Load a good sample Project with reply functions (owned by teach/teach)
     browser.get("/#/project/smkp");
   }
-}
+
+  public getQuestionsPage() : void {
+    // First we clear out the url (sometimes page is preserved if the url stays the same)
+    browser.get("/#");
+    // Load a good sample Project with Questions
+    browser.get("/#/project/vk29");
+  } // public getQuestionsPage() : void {
+} // class

@@ -2,9 +2,9 @@
   Question template
   29 July 17
   Nick Pumper
-  Last Mod: 4 Aug 2017
+  Last Mod: 8 Aug 2017
 -->
-<div class="question-container row" [ngClass]="[question.new ? 'question-container__new' : 'question-container__existing']">
+<div class="question-container row" id="{{question._id}}" [ngClass]="[question.new ? 'question-container__new' : 'question-container__existing']">
   <!-- Question Number
       - Everything is spaced to the right of this.
   -->
@@ -29,7 +29,8 @@
           <button *ngFor="let type of answerTypesAvailable" 
             class="emoji button__answer-type" 
             [ngClass]="[answerTypeStatus[type] ? 'answer--enabled' : '']"
-            (tap)="enableAnswerOfType(type)" id="{{'answerOption' + type}}">
+            (tap)="enableAnswerOfType(type)" 
+            id="{{'answerOption' + type}}">
               <i class="icon icon-{{type}}-comment icon__answer-type"></i>
               <div class="icon__answer-text">{{type}}</div>
           </button>
@@ -54,7 +55,9 @@
         <div *ngIf="!hasUserAnswered()">
           <open-ended-answers *ngIf="[responseType === 0]" 
             [baseQuestionReference]="question"
-            [enabledAnswerTypes]="question.answer_types"></open-ended-answers>
+            [enabledAnswerTypes]="question.answer_types"
+            id="openEndedAnswers"
+            ></open-ended-answers>
         </div>
 
         <div *ngIf="answersById[question._id] && answersById[question._id].length > 0">

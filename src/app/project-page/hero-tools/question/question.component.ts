@@ -74,7 +74,7 @@ export class QuestionComponent implements OnInit, Input, Output, OnDestroy {
     private _comments : CommentService
   ) {
     // TEMP
-    this.question = new EdjiQuestion()
+    
   } // constructor
 
   ngOnInit() {
