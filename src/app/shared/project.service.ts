@@ -227,8 +227,8 @@ export class ProjectService {
     public removeAnswerFromAnswers(answer: EdjiComment) : void {
         if (answer.questionId) {
             for (let i = 0; i < this.answersByIdSource[answer.questionId].length; i++){
-                if (this.answersByIdSource[comment.questionId][i]._id === answer._id) {
-                    this.answersByIdSource[comment.questionId].splice(i, 1)
+                if (this.answersByIdSource[answer.questionId][i]._id === answer._id) {
+                    this.answersByIdSource[answer.questionId].splice(i, 1)
                     this.answersByIdSubject.next(this.answersByIdSource)
                 }
             }

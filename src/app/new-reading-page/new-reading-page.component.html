@@ -40,7 +40,10 @@
                             <!-- Reading Content section -->
                         <p class="sub-label">Select text to see formatting options. Use the insert buttons on the left to add images and PDFs.</p>
                         <div *ngFor="let readingPart of readingHtml; let i=index; trackBy:readingTracking">
-                            <edji-question *ngIf="readingHtml[i].question" (deleteQuestion)="deleteQuestion()" [question]="readingHtml[i].question"></edji-question>
+                            <edji-question 
+                                *ngIf="readingHtml[i].question" 
+                                (questionDelete)="deleteQuestion(i)"
+                                [question]="readingHtml[i].question"></edji-question>
                             <medium-editor  
                                 [(editorModel)]="readingHtml[i].text"
                                 [editorOptions]="mediumEditorConfig"
@@ -49,6 +52,7 @@
                                 (mouseup)="contentChange($event)"
                                 id="readingContent"
                                 class="content"
+                                [ngClass]="[i<readingHtml.length - 1 ? 'medium-editor__new-question' : '']"
                                 [attr.rIndex]="i"></medium-editor>
                         </div>
                         <div id="errorContent" *ngIf="submitted && readingIsBlank"  class="alert alert-info">Please give your Reading some text!</div>

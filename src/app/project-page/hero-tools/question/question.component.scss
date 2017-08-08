@@ -21,9 +21,16 @@
     padding: 8px;
 }
 
+.question-container__inner {
+    border: solid 1px lightgray;
+    border-radius: 16px;
+    padding: 8px;
+}
+
 .question-container__new {
     background: $editorBg !important;
     margin: -10px auto;
+    padding: 8px;
 }
 
 .prompt-section {
@@ -98,7 +105,6 @@
 
 .question-body__new {
     width: calc(100% - 78px);
-    margin-left: 8px;
 }
 
 .button__answer-type {

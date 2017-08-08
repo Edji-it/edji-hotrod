@@ -1,5 +1,5 @@
 import { DeleteProjectInput } from 'aws-sdk/clients/codebuild';
-import { Component, Input, OnInit, EventEmitter } from '@angular/core'
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { EdjiComment, EdjiQuestion, Project, Reading, User } from "../../../shared/datatypes"
 import { CommentService, AuthService, ProjectService, ReadingService } from "../../../shared"
 import { Subscription } from 'rxjs/Rx'
@@ -14,7 +14,7 @@ enum ResponseType {
   templateUrl: './question.component.html',
   styleUrls: ['./question.component.scss']
 })
-export class QuestionComponent implements OnInit {
+export class QuestionComponent implements OnInit, Input, Output, OnDestroy {
 
   /*
     29 July 2017
@@ -41,6 +41,9 @@ export class QuestionComponent implements OnInit {
   public answerSubmitted : EventEmitter<any> = new EventEmitter()
   @Input()
   public answerDeleted : EventEmitter<any> = new EventEmitter()
+
+  @Output() 
+  questionDelete= new EventEmitter()
 
   // State
   public questionOrder = 0 // Is this the first question? Or the second? Etc.
@@ -217,5 +220,9 @@ export class QuestionComponent implements OnInit {
 
     // Also set the question position
     this.questionPos = this.question.question_number - 1
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((sub) => { sub.unsubscribe() })
   }
 } // class

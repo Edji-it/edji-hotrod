@@ -622,9 +622,12 @@ export class NewReadingPage implements OnInit {
     /**
      * Removes a question block to the new reading and then adds in a new medium editor
      */
-    private deleteQuestion() {
-        console.log('remove the question here')
-        // this.questions.
+    private deleteQuestion(questionNum: number) {
+        // Append the text after the question to be deleted to the one before it
+        this.readingHtml[questionNum-1].text += this.readingHtml[questionNum].text
+
+        // Remove the question
+        this.readingHtml.splice(questionNum, 1)
     }
 
     /**
