@@ -39,7 +39,7 @@ export class Project implements PageObjectInterface {
   public audioComment = element.all(by.css('.audio-comment-input-wrapper')).first();
 
   // Questions test variables
-  
+  public testQuestion = element(by.id("598a2313fed26c49c90a278a")); // Get the testQuestion by it's id, which is it's question._id
 
   public getPage(): void {
     // First we clear out the url (sometimes page is preserved if the url stays the same)

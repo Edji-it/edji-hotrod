@@ -270,9 +270,9 @@ describe('Project Page', () => {
     describe("Questions: Making Answer Comments", () => {
         beforeAll(() => {
             project.getQuestionsPage();            
-
+  
             // Login
-            guestForm.loginAsGuest();
+            guestForm.loginAsGuest(); // 
             browser.wait(EC.elementToBeClickable(sidebar.logOutButton));
         }); // beforeAll
 
@@ -284,7 +284,7 @@ describe('Project Page', () => {
 
         it("should make an answer to a question as a logged in user.", () => {
             // make sure we got there.
-            browser.wait(EC.urlContains("vk29"), 5000, " failed to get to the Question test page!");
+            browser.wait(EC.presenceOf(project.testQuestion), 5000, " failed to find the test question!");
         }); // it("should make an answer to a question as a logged...
     }); // describe
      
