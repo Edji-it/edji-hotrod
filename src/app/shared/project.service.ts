@@ -206,7 +206,6 @@ export class ProjectService {
     } // public removeCommentFromReplies(comment: EdjiComment) : void
 
     public addAnswerToAnswers(answer: EdjiComment): void {
-        console.log(answer)
         let skipAdd = false
         if (answer.questionId) {
             if (!this.answersByIdSource[answer.questionId]) {
@@ -506,17 +505,7 @@ export class ProjectService {
         return this.http
             .delete(url, this._auth.getOptions())
             .map(data => {
-                // Tell other Project views that the answer is gone
-                 this._socket.updateComment(answer, 'DELETE', this.project._id);
-                 // Update stats
-                 this.commentStats.addCommentToStats(answer, -1)
-
-                for (var i = 0; i <= this.project.answers[answer.questionId].length; i++) {
-                    if (this.project.answers[answer.questionId][i] && this.project.answers[answer.questionId][i]._id === answer._id) {
-                        // Remove comment from local object
-                        this.project.answers[answer.questionId].splice(i, 1);
-                    }
-                }
+                this.removeAnswerFromAnswers(answer)
                 return data;
             })
             .toPromise()

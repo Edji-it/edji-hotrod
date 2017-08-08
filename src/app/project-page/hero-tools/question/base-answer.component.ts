@@ -46,11 +46,6 @@ export abstract class BaseAnswerComponent {
 
     // Please make sure the questionId is added to the answer as a reference.. this will error out otherwise
     newAnswer.questionId = this.baseQuestionReference._id
-
-    // questionId ~> comment
-    // questionPos ~> project.answers
-    console.log('referenceQuestion: ', this.baseQuestionReference)
-    console.log('saveAnswer: ', newAnswer)
     
     // Tell the server we've added an answer
     this._projects.saveAnswer(newAnswer)

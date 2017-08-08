@@ -46,7 +46,6 @@ export class TextCommentComponent implements OnInit, AfterViewInit {
     }
 
     updateComment(commentData: any) {
-        console.log('text field blur: ', commentData)
         this.editing = false;
         this.blur.emit(commentData)
     }
