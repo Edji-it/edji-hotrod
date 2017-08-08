@@ -146,10 +146,11 @@
 }
 
 .question-delete {
-    margin-bottom: 12%;
     right: 0;
-    position: relative; 
+    position: absolute; 
     display: inline-block;
+    top: 52px;
+    right: 18px;
 }
 
 .replyOverflow {
