@@ -19,8 +19,8 @@ export class HeroSubscribeComponent implements OnInit {
   private userNowHero: boolean
   private stripe: any
 
-  @Input()
-  monthlyAmountOff: number
+  // @Input()
+  // monthlyAmountOff: number
 
   @Input()
   yearlyAmountOff: number
@@ -36,14 +36,12 @@ export class HeroSubscribeComponent implements OnInit {
   constructor(private _auth: AuthService) { }
 
   ngOnInit() {
-    if (this.monthlyAmountOff) {
-      this.subtype = 'monthly'
+    // Create a Stripe client
+    if (this._auth.getEnv() === 'dev') {
+      this.stripe = Stripe('pk_test_e2lOurNpSI745MOUdu2LgzOu')
+    } else {
+      this.stripe = Stripe('pk_live_IOwqaYAERP6biScBTFk3Csrm')
     }
-    if (this.yearlyAmountOff) {
-      this.subtype = 'yearly'
-    }
-      // Create a Stripe client
-    this.stripe = Stripe('pk_test_e2lOurNpSI745MOUdu2LgzOu');
 
     // Create an instance of Elements
     var elements = this.stripe.elements();
@@ -82,23 +80,6 @@ export class HeroSubscribeComponent implements OnInit {
         displayError.textContent = '';
       }
     });
-
-    // // Handle form submission
-    // var form = document.getElementById('payment-form');
-    // form.addEventListener('submit', function(event) {
-    //   event.preventDefault();
-
-    //   stripe.createToken(card).then(function(result) {
-    //     if (result.error) {
-    //       // Inform the user if there was an error
-    //       var errorElement = document.getElementById('card-errors');
-    //       errorElement.textContent = result.error.message;
-    //     } else {
-    //       // Send the token to your server
-    //       stripeTokenHandler(result.token);
-    //     }
-    //   });
-    // });
     
   }
 
@@ -109,18 +90,11 @@ export class HeroSubscribeComponent implements OnInit {
           // Inform the user if there was an error
           var errorElement = document.getElementById('card-errors');
           errorElement.textContent = result.error.message;
+          this.loading = false
         } else {
-          let amountOff
-          if (this.subtype == 'monthly' && this.monthlyAmountOff) {
-            amountOff = this.monthlyAmountOff
-          } else if (this.subtype == 'yearly' && this.yearlyAmountOff) {
-            amountOff = this.monthlyAmountOff
-          }
-          // Submit with payment token
           this._auth.subscribeToHero(this.subtype, result.token.id, this.couponCode)
             .subscribe(
               data => {
-                console.log(data)
                 this.userNowHero = true
                 this.loading = false
                 if (data.user) {
@@ -133,30 +107,11 @@ export class HeroSubscribeComponent implements OnInit {
 
         }
       });
-    // this.tempHide = true
-    
-    // var handler = (<any>window).StripeCheckout.configure({
-    //   key: 'pk_test_e2lOurNpSI745MOUdu2LgzOu',
-    //   locale: 'auto',
-    //   token: function (token: any) {
-    //     // You can access the token ID with `token.id`.
-    //     // Get the token ID to your server-side code for use.
-    //   }
-    // });
 
-    // handler.open({
-    //   name: 'Demo Site',
-    //   description: 'Monthly Subscription',
-    //   amount: 2000
-    // });
-  }
-
-  getMonthlyPrice() : number {
-    return Math.round( (5 - this.monthlyAmountOff)*100 )/100
   }
 
   getYearlyPrice() : number {
-    return Math.round( (48 - this.yearlyAmountOff)*100 )/100
+    return Math.round(6000 - this.yearlyAmountOff)/100
   }
   
 

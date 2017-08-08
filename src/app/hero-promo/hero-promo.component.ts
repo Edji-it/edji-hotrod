@@ -21,7 +21,7 @@ export class HeroPromoComponent implements OnInit {
   private showHeroSubModal: boolean
 
 
-  private heroCount: number = 500
+  private heroCount: number = 2000
 
   private subscriptions: Subscription[] = []
 
@@ -30,9 +30,9 @@ export class HeroPromoComponent implements OnInit {
   ngOnInit() {
     this.subscriptions.push(
       this.route.params
-        .subscribe((params: any) => { 
+        .subscribe((params) => { 
           if(params && params['secretSwitch']){
-              this._auth.secretSwitches[params['secretSwitch']] = true;
+              this._auth.secretSwitches[params['secretSwitch']] = true
               if (this._auth.secretSwitches['countdownOver']) {
                   this.countdownOver = true
               }
@@ -48,7 +48,7 @@ export class HeroPromoComponent implements OnInit {
   }
 
   private earlyAmountOff(): number {
-    return (500 - this.heroCount)/100
+    return 5900 - this.heroCount * 3
   }
 
   private getHeroCount(): void {
@@ -63,7 +63,7 @@ export class HeroPromoComponent implements OnInit {
             this.getHeroCount()
           }, 2000)
         }, error => {
-          console.log(error)
+          console.error(error)
         })
   }
 
