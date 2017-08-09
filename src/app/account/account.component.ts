@@ -1,4 +1,4 @@
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { AuthService } from '../shared/auth.service';
 import { User } from '../shared/datatypes';
@@ -28,7 +28,7 @@ export class AccountComponent implements OnInit, OnDestroy {
   // Feature flags
   private heroAvailable: boolean = false
 
-  constructor(private _auth: AuthService, private route: ActivatedRoute) {
+  constructor(private _auth: AuthService, private route: ActivatedRoute, private _router: Router) {
     
     this.nameInitials = "";
   } // constructor
