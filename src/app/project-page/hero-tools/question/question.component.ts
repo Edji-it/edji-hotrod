@@ -119,7 +119,7 @@ export class QuestionComponent implements OnInit, Input, Output, OnDestroy {
         })
     ) // this.subscriptions.push
 
-    // console.log("QUESTION ID: " +  this.question._id);
+    console.log("QUESTION ID: " +  this.question._id);
   } // ngOnInit
 
   public setQuestionOrder (input : string) : void {

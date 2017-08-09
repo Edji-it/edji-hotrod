@@ -24,13 +24,13 @@
       <!-- Answer and Options Section | If the teacher is creating a question on the new reading page -->
       <div *ngIf="question.new">
         <div class="answer-label">ANSWER TYPES</div>
-        <div class="answer-options">
-          <!-- Emoji Answer Button -->
+        <div class="answer-options" id="answerOptions">
+          <!-- Answer Buttons -->
           <button *ngFor="let type of answerTypesAvailable" 
+            id="commentOption"
             class="emoji button__answer-type" 
             [ngClass]="[answerTypeStatus[type] ? 'answer--enabled' : '']"
-            (tap)="enableAnswerOfType(type)" 
-            id="{{'answerOption' + type}}">
+            (tap)="enableAnswerOfType(type)">
               <i class="icon icon-{{type}}-comment icon__answer-type"></i>
               <div class="icon__answer-text">{{type}}</div>
           </button>
