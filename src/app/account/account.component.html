@@ -82,5 +82,5 @@
 </div>
 <edji-change-pass class="modal-will-fade" [class.show]="showPassModal" (closeModal)="showPassModal = !showPassModal"></edji-change-pass>
 <hot-upload-avatar class="modal-will-fade" [class.show]="showUploadProfPicModal" (closeModal)="showUploadProfPicModal = !showUploadProfPicModal"></hot-upload-avatar>
-<hero-subscribe-modal class="modal-will-fade" [class.show]="showHeroSubModal" (closeModal)="showHeroSubModal = !showHeroSubModal"></hero-subscribe-modal>
+<hero-subscribe-modal class="modal-will-fade" [class.show]="showHeroSubModal" (closeModal)="showHeroSubModal = !showHeroSubModal" (heroWasBorn)="_router.navigate(['/dashboard'])"></hero-subscribe-modal>
 <hero-change-modal class="modal-will-fade" [class.show]="showHeroChangeModal" (closeModal)="showHeroChangeModal = !showHeroChangeModal"></hero-change-modal>
