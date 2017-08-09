@@ -26,7 +26,6 @@ export class HeroChangeComponent implements OnInit {
 
   ngOnInit() {
     this.user = this._auth.getUser()
-    console.log(this.user)
     this.subtype = this.user.hero.type + ''
   }
 
@@ -48,9 +47,9 @@ export class HeroChangeComponent implements OnInit {
   updateType(type: string) {
     this.updating = true
     this._auth.updateHeroSub(type)
+      .take(1)
       .subscribe(
         data => {
-          console.log(data)
           this.updating = false
           this.isUpdated = true
           if (data.user) {
@@ -59,7 +58,6 @@ export class HeroChangeComponent implements OnInit {
         },
         err => {
           this.updating = false
-          console.log(err)
         }
       )
   }
@@ -69,10 +67,10 @@ export class HeroChangeComponent implements OnInit {
    */
   cancelSub() {
     this.canceling = true
-    this._auth.updateHeroSub(this.user.hero.type, 'unsubscribed')
+    this._auth.cancelHeroSubscription(this.user.hero.type)
+      .take(1)
       .subscribe(
         data => {
-          console.log(data)
           this.canceling = false
           this.isCanceled = true
           if (data.user) {
