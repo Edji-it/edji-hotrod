@@ -1,7 +1,7 @@
 import * as path from 'path'
 import { SideBarComponent } from '../../app/shared/side-bar'
 import { browser, by, element, protractor} from 'protractor'
-import { NewReading, Login, Sidebar, Project } from './page-objects'
+import { NewReading, Login, Sidebar, Project, Questions } from './page-objects'
 import { LoginModal, GuestLoginForm } from './components';
 
 /*
@@ -18,12 +18,13 @@ describe('Reading Questions Tests', () => {
 
     /* ---- Variable Initialization --------------- */
         
-        let newReading  = new NewReading()
-        let login       = new Login()
-        let sidebar     = new Sidebar()
-        let EC          = protractor.ExpectedConditions
-        let project     = new Project();
-        let guestForm   = new GuestLoginForm();
+    let newReading  = new NewReading()
+    let login       = new Login()
+    let sidebar     = new Sidebar()
+    let EC          = protractor.ExpectedConditions;
+    let project     = new Project();
+    let guestForm   = new GuestLoginForm();
+    let question    = new Questions();
 
     // Testing the creation
     describe('Questions - Create', () => {
@@ -122,12 +123,12 @@ describe('Reading Questions Tests', () => {
             // Should redirect to Project page for new reading
             browser.wait(EC.urlContains("project"), 5000, "never arrived at new reading")
             // Save up to here this is the final z7jzk in this block
-        })
-    })
+        }) // it('should add reading when all fields are filled ...
+    }) // describe('Questions - Create'
 
     describe("Questions: Making Answer Comments", () => {
         beforeAll(() => {
-            project.getQuestionsPage();            
+            question.getPage();            
   
             // Login
             guestForm.loginAsGuest(); // 
@@ -140,9 +141,14 @@ describe('Reading Questions Tests', () => {
             sidebar.logOutButton.click();
         }); // afterAll
 
+        /*
+        Test: Make a comment on a question.
+        */
         it("should make an answer to a question as a logged in user.", () => {
             // make sure we got there.
-            browser.wait(EC.presenceOf(project.testQuestion), 5000, " failed to find the test question!");
+            browser.wait(EC.presenceOf(question.testQuestion), 5000, " failed to find the test question!");
+
+            
         }); // it("should make an answer to a question as a logged...
-    }); // describe
-});
+    }); //  describe("Questions: Making Answer Comments"
+}); // d
