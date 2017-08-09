@@ -34,6 +34,11 @@ export class NavBarComponent implements OnInit, OnDestroy {
       heatVision?: boolean
     } = { }
     private tooltipPlacement: string = 'right'
+    private messages: {
+      invalidCode?: boolean,
+      serviceError?: boolean,
+      groupNameLengthError?: boolean
+    } = { }
     
     // Group/Share form
     private submitted: boolean = false
@@ -145,13 +150,32 @@ export class NavBarComponent implements OnInit, OnDestroy {
     }
 
     finalizeReadingAndShare(shareObj: ReadingShareObject) {
+      this.messages = {}
       this.submitted = true
       this.shareLoading = true
       if (shareObj.groupLabel.length < 1) {
         this.shareLoading = false
-        return
+        this.messages.groupNameLengthError = true
+        return // we should give the user some sort of feedback here
       }
-      this.shareAction.emit(shareObj)
+
+      // does the project exist? this call will actually fail if it does
+      this._projects.validateProject(shareObj.customCode)
+        .take(1)
+        .subscribe((res) => {
+          // this is actually an error in this case! lol. If the code IS valid, we want them NOT to try and make a reading
+          this.shareLoading = false
+          this.messages.invalidCode = true
+        }, (err) => {
+          this.shareLoading = false
+
+          // this is actually the succcessful response :)
+          if (err.status == 404) {
+            this.shareAction.emit(shareObj)
+          } else {
+            this.messages.serviceError = true
+          }
+        })
     }
 }
 
