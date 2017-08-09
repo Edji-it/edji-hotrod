@@ -162,7 +162,44 @@ describe('Reading Questions Tests', () => {
         //     // make sure we got there.
         //     browser.wait(EC.presenceOf(question.testQuestion), 5000, " failed to find the test question!");
 
+            // make sure we can see the OpenEndedAnswers block
+            browser.wait(EC.visibilityOf(question.openEndedAnswerBlock), 5000, " failed to find the open ended answers block under the test question.!");
+                
+            // First, let's find the emoji comment button
+            browser.wait(EC.elementToBeClickable(question.emojiCommentBtn), 5000, " failed to find the emoji comment button!");
             
+<<<<<<< Updated upstream
         // }); // it("should make an answer to a question as a logged...
+=======
+            // Click on the emoji comment button
+            question.emojiCommentBtn.click();
+
+            // Confirm the comment and it's existence
+
+            // Make sure the answer options hide after the comment confirms.
+
+            // Delete the comment.
+
+            // and for my next trick, let's find the text comment button
+            browser.wait(EC.presenceOf(question.textCommentBtn), 5000, " failed to find the text comment button!");
+            
+            // Click on the text comment button
+
+            // Confirm the comment and it's existence
+
+            // Delete the comment.
+
+            // and for my next trick, let's find the audio comment button
+            
+            // Click on the text comment button
+
+            // Confirm the comment and it's existence
+
+            // Delete the comment.
+
+            // FINAL STEP: Make sure there are no comments remaining, and that the answer options are showing.
+
+        }); // it("should make an answer to a question as a logged...
+>>>>>>> Stashed changes
     }); //  describe("Questions: Making Answer Comments"
 }); // d
