@@ -2,6 +2,7 @@ import { Component, Input, OnInit, EventEmitter } from '@angular/core'
 import { EdjiComment, EdjiQuestion, Project, Reading, User } from "../../../shared/datatypes"
 import { CommentService, AuthService, ProjectService, ReadingService } from "../../../shared"
 import { Subscription } from 'rxjs/Rx'
+import { Angulartics2 } from 'angulartics2'
 
 export abstract class BaseAnswerComponent {
 
@@ -28,7 +29,8 @@ export abstract class BaseAnswerComponent {
     private _projects : ProjectService,
     private _readings : ReadingService,
     private _auth     : AuthService,
-    private _comments : CommentService
+    private _comments : CommentService,
+    private angulartics: Angulartics2
   ) {
     this.user = this._auth.getUser()
   } // constructor
@@ -47,6 +49,7 @@ export abstract class BaseAnswerComponent {
     // Please make sure the questionId is added to the answer as a reference.. this will error out otherwise
     newAnswer.questionId = this.baseQuestionReference._id
     
+    this.angulartics.eventTrack.next({ action: newAnswer.type + 'AnswerCreate', properties: { category: 'heroFeature', label: 'attempt' }})
     // Tell the server we've added an answer
     this._projects.saveAnswer(newAnswer)
     .then(answer => {
@@ -55,19 +58,14 @@ export abstract class BaseAnswerComponent {
       this._projects.addAnswerToAnswers(answer)
       this._projects.saveAnswer(answer)
 
-      // // We're having an issue with questions.answers being undefined, so I put this here
-      // if (this.baseQuestionReference.answers ===  undefined)
-      // {
-      //   this.baseQuestionReference.answers = [answer]
-      // } else {
-      //   this.baseQuestionReference.answers.push(answer)
-      // } // if else
+      this.angulartics.eventTrack.next({ action: newAnswer.type + 'AnswerCreate', properties: { category: 'heroFeature', label: 'success' }})
     
       setTimeout(() => {
       }, 100)
     })
     .catch(error => {
       // TRACK EXCEPTION
+      this.angulartics.eventTrack.next({ action: newAnswer.type + 'AnswerCreate', properties: { category: 'heroFeature', label: 'failure' }})
       console.log("Making an answer has failed")
       console.log(error)
     })

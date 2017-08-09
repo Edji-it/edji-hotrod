@@ -385,8 +385,6 @@ export class NewReadingPage implements OnInit {
             this.error = 'Not quite, please check all the fields!'
             return
         }
-        
-        this.angulartics.eventTrack.next({ action: 'createNewReading', properties: { category: 'contentManagement', label: 'attempt' }})
 
         // Clear parsed words array
         this.words = []
@@ -456,14 +454,21 @@ export class NewReadingPage implements OnInit {
         } else {
             submitAction = "createNewReading"
         }
-        this.angulartics.eventTrack.next({ action: submitAction, properties: { category: 'contentManagement', label: 'attempt' }})
+        if (reading.questions && reading.questions.length > 0) {
+            this.angulartics.eventTrack.next({ action: submitAction + 'WithQuestion', properties: { category: 'heroFeature', label: 'attempt' }})
+        } else {
+            this.angulartics.eventTrack.next({ action: submitAction, properties: { category: 'contentManagement', label: 'attempt' }})
+        }
         console.log(reading)
         this._readings.save(reading)
             .subscribe(
                 data => {
                     if (data._id) {
-                        this.angulartics.eventTrack.next({ action: submitAction, properties: { category: 'contentManagement', label: 'success' }})
-
+                        if (reading.questions.length > 0) {
+                            this.angulartics.eventTrack.next({ action: submitAction + 'WithQuestion', properties: { category: 'heroFeature', label: 'success' }})
+                        } else {
+                            this.angulartics.eventTrack.next({ action: submitAction, properties: { category: 'contentManagement', label: 'success' }})
+                        }
                         // Create default Project if it is in final version
                         if (reading.draft===false) {
                             // Get authorized comment types
@@ -494,7 +499,11 @@ export class NewReadingPage implements OnInit {
                     console.log(error)
                     this.addLoadingD = false
                     this.addLoadingP = false
-                    this.angulartics.eventTrack.next({ action: submitAction, properties: { category: 'contentManagement', label: 'failure' }})
+                    if (reading.questions.length > 0) {
+                        this.angulartics.eventTrack.next({ action: submitAction + 'WithQuestion', properties: { category: 'heroFeature', label: 'failure' }})
+                    } else {
+                        this.angulartics.eventTrack.next({ action: submitAction, properties: { category: 'contentManagement', label: 'failure' }})
+                    }
                     this.errorObject.readingError = "There was an issue saving your reading. It may be our fault; please try again"
                 }
             )

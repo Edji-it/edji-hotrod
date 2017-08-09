@@ -236,7 +236,7 @@ export class CommentComponent implements OnInit {
       this._projects.addAnswerToAnswers(this.comment)
       this._projects.saveAnswer(this.comment)
       .then(answer => {
-        this.angulartics.eventTrack.next({ action: 'updateAnswer', properties: { category: 'projectAction', label: 'success' }})
+        this.angulartics.eventTrack.next({ action: 'updateAnswer', properties: { category: 'heroFeature', label: 'success' }})
 
         this.isLoading = false
         
