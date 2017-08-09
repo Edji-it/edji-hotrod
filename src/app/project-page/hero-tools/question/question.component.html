@@ -67,7 +67,7 @@
               {{ownerHidden ? 'SHOW' : 'HIDE'}}
           </button>
         </div>
-        <div class="answerOverflow answerOverflow-normal" *ngIf="!ownerHidden">
+        <div class="answerOverflow answerOverflow-normal" id="answerBlock" *ngIf="!ownerHidden">
           <div *ngFor="let answer of answersById[question._id]">
             <div class="comment-wrap-row">
               <edji-comment class="answerCommentBlock"  

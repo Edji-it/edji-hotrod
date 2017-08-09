@@ -166,19 +166,23 @@ describe('Reading Questions Tests', () => {
             browser.wait(EC.visibilityOf(question.openEndedAnswerBlock), 5000, " failed to find the open ended answers block under the test question.!");
                 
             // First, let's find the emoji comment button
-            browser.wait(EC.invisibilityOf(question.emojiCommentBtn), 5000, " failed to clicj the emoji comment button!");
+            browser.wait(EC.elementToBeClickable(question.emojiCommentBtn), 5000, " failed to clicj the emoji comment button!");
 
             // Click on the emoji comment button
             question.emojiCommentBtn.click();
 
-            // now lets see if th e
-            browser.wait(EC.visibilityOf(question.emojiCommentInput), 5000, " failed to find the emoji comment input!");
+            // now lets see if the input is showing up
+            browser.wait(EC.invisibilityOf(question.emojiCommentInput), 5000, " failed to find the emoji comment input!");
 
             // Confirm the comment and it's existence
+            browser.wait(EC.visibilityOf(question.emojiCommentSave), 5000, " failed to find the comment confirm button!");
+            question.emojiCommentSave.click();
 
             // Make sure the answer options hide after the comment confirms.
+            browser.wait(EC.invisibilityOf(question.answerOptions), 5000, " we are seeing the answer options, and we shouldnt!");
 
             // Delete the comment.
+
 
             // and for my next trick, let's find the text comment button
             // browser.wait(EC.presenceOf(question.textCommentBtn), 5000, " failed to find the text comment button!");
