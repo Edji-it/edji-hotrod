@@ -55,9 +55,7 @@ export class QuestionComponent implements OnInit, Input, Output, OnDestroy {
   // Answer types are passed onto which ever Answer component
   public answerTypeStatus: any[] = []
   private optionTypeStatus: any[] = []
-  private answerTypesAvailable: any[] = [
-    'emoji', 'text', 'audio'
-  ]
+  private answerTypesAvailable: any[] = []
   private optionTypesAvailable: any[] = [{
       'type':'public','text':'public answers'
     }, {
@@ -83,7 +81,6 @@ export class QuestionComponent implements OnInit, Input, Output, OnDestroy {
     this.subscriptions.push( this._readings.currentReading.subscribe(
       reading => {
         this.currentReading = reading
-        this.updateSelections()
       },
       error => {
         console.error(error)
@@ -115,7 +112,9 @@ export class QuestionComponent implements OnInit, Input, Output, OnDestroy {
     // Make sure we have the most current User object
     this.subscriptions.push(
         this._auth.getCurrentUser().subscribe((user) => {
-            this.user = user
+          this.user = user
+          this.answerTypesAvailable = this._auth.getAllowedCommentTypes()
+          this.updateSelections()
         })
     ) // this.subscriptions.push
 
@@ -187,6 +186,10 @@ export class QuestionComponent implements OnInit, Input, Output, OnDestroy {
     // Initialize the answers for questions
     for (let i = 0; i < this.answerTypesAvailable.length; i++) {
       this.answerTypeStatus[this.answerTypesAvailable[i]]=false
+      if (this.answerTypesAvailable[i]==='reply') {
+        console.log('reply')
+        this.answerTypesAvailable.splice(i,1)
+      }
     }
 
     // Select the answers if we're making an edit to the reading
