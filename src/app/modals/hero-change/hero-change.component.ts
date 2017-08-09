@@ -15,9 +15,10 @@ export class HeroChangeComponent implements OnInit {
   private confirmCancel: boolean = false
   private isCanceled: boolean = false
   private canceling: boolean = false
+  private cancelMsg: string = ''
 
   // Form values
-  private subtype: string
+  private subtype: string = 'yearly'
 
   @Output()
   closeModal: EventEmitter<any> = new EventEmitter(); // Tell the listening page to close the darned thing.
@@ -26,7 +27,7 @@ export class HeroChangeComponent implements OnInit {
 
   ngOnInit() {
     this.user = this._auth.getUser()
-    this.subtype = this.user.hero.type + ''
+    this.subtype = this.user.hero.type ? this.user.hero.type : 'yearly'
   }
 
   /**
@@ -67,6 +68,7 @@ export class HeroChangeComponent implements OnInit {
    */
   cancelSub() {
     this.canceling = true
+    this.cancelMsg = ''
     this._auth.cancelHeroSubscription(this.user.hero.type)
       .take(1)
       .subscribe(
@@ -79,6 +81,7 @@ export class HeroChangeComponent implements OnInit {
         },
         err => {
           this.canceling = false
+          this.cancelMsg = "Sorry, canceling your subscription failed. <a class='link' href='mailto:support@edji.it'>Please contact support</a>."
           console.log(err)
         }
       )
