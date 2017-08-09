@@ -8,6 +8,7 @@ import { Angulartics2 } from 'angulartics2';
 import { ReadingService } from '../shared/reading.service';
 import { ProjectService } from '../shared/project.service';
 import { AuthService } from '../shared';
+import { ReadingShareObject } from './../shared/nav-bar'
 import * as Rangy from 'rangy';
 
 @Component({
@@ -318,9 +319,10 @@ export class NewReadingPage implements OnInit {
         this.onSubmit(form)
     }
 
-    private shareReading(groupLabel: string, form) {
+    private shareReading(shareObj: ReadingShareObject, form) {
         // Handle group options passed back from Nav
-        form.label = groupLabel
+        form.label = shareObj.groupLabel
+        form.customCode = shareObj.customCode
         // No longer draft!
         this.isDraft = false
         this.onSubmit(form)
@@ -410,9 +412,8 @@ export class NewReadingPage implements OnInit {
                         if (reading.draft===false) {
                             // Get authorized comment types
                             let commentTypes = this._auth.getAllowedCommentTypes()
-                            console.log(commentTypes)
 
-                            this._projects.create(data._id, { 'label' : form.label, 'types' : commentTypes })
+                            this._projects.create(data._id, { 'label' : form.label, 'types' : commentTypes, 'code': form.customCode })
                                 .subscribe( (project) => {
                                     this.addLoadingD = false;
                                     this.addLoadingP = false;

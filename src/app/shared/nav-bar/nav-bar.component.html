@@ -72,8 +72,11 @@
 						</div>
 						<div id="errorGroupLabel" *ngIf="groupLabel.length < 1 && submitted" class="alert alert-info">Please pick a name for your first Reading Group!</div>
 					</label>
+					<label  *ngIf="user.hero && user.hero.active" for="customCodeInput">Custom Code
+						<input [(ngModel)]="customCode" id="customCodeInput" type="text" class="form-control form-item--editor h3 mGroup" placeholder="(optional)"/>
+					</label>
 				</div>
-				<button id="addReadingFinalizeButton" class="btn btn-action" (click)="finalizeReadingAndShare(groupLabel)" [class.loading]="shareLoading">
+				<button id="addReadingFinalizeButton" class="btn btn-action" (click)="finalizeReadingAndShare({ groupLabel: groupLabel, customCode: customCode })" [class.loading]="shareLoading">
 					Finalize and Share
 				</button>
 			</div>

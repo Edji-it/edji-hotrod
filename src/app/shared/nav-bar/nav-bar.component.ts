@@ -18,7 +18,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
     @Input() showProjectInfo: boolean
     
     @Output() saveAction: EventEmitter<any> = new EventEmitter()
-    @Output() shareAction: EventEmitter<any> = new EventEmitter()
+    @Output() shareAction: EventEmitter<ReadingShareObject> = new EventEmitter()
 
     private user: any
     private currentProject: any
@@ -38,6 +38,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
     // Group/Share form
     private submitted: boolean = false
     private groupLabel: string = "Group 1"
+    private customCode: string = ""
     private shareLoading: boolean = false
 
     constructor(
@@ -143,13 +144,18 @@ export class NavBarComponent implements OnInit, OnDestroy {
       }
     }
 
-    finalizeReadingAndShare(groupLabel: string) {
+    finalizeReadingAndShare(shareObj: ReadingShareObject) {
       this.submitted = true
       this.shareLoading = true
-      if (groupLabel.length < 1) {
+      if (shareObj.groupLabel.length < 1) {
         this.shareLoading = false
         return
       }
-      this.shareAction.emit(groupLabel)
+      this.shareAction.emit(shareObj)
     }
+}
+
+export interface ReadingShareObject {
+  groupLabel: string
+  customCode?: string
 }
