@@ -30,7 +30,7 @@ export abstract class BaseAnswerComponent {
     private _readings : ReadingService,
     private _auth     : AuthService,
     private _comments : CommentService,
-    private angulartics: Angulartics2
+    private _angulartics: Angulartics2
   ) {
     this.user = this._auth.getUser()
   } // constructor
@@ -49,7 +49,7 @@ export abstract class BaseAnswerComponent {
     // Please make sure the questionId is added to the answer as a reference.. this will error out otherwise
     // newAnswer.questionId = this.baseQuestionReference._id
     
-    this.angulartics.eventTrack.next({ action: newAnswer.type + 'AnswerCreate', properties: { category: 'heroFeature', label: 'attempt' }})
+    this._angulartics.eventTrack.next({ action: newAnswer.type + 'AnswerCreate', properties: { category: 'heroFeature', label: 'attempt' }})
     // Tell the server we've added an answer
     this._projects.saveAnswer(newAnswer)
     .then(answer => {
@@ -58,14 +58,14 @@ export abstract class BaseAnswerComponent {
       this._projects.addAnswerToAnswers(answer)
       this._projects.saveAnswer(answer)
 
-      this.angulartics.eventTrack.next({ action: newAnswer.type + 'AnswerCreate', properties: { category: 'heroFeature', label: 'success' }})
+      this._angulartics.eventTrack.next({ action: newAnswer.type + 'AnswerCreate', properties: { category: 'heroFeature', label: 'success' }})
     
       setTimeout(() => {
       }, 100)
     })
     .catch(error => {
       // TRACK EXCEPTION
-      this.angulartics.eventTrack.next({ action: newAnswer.type + 'AnswerCreate', properties: { category: 'heroFeature', label: 'failure' }})
+      this._angulartics.eventTrack.next({ action: newAnswer.type + 'AnswerCreate', properties: { category: 'heroFeature', label: 'failure' }})
       console.log("Making an answer has failed")
       console.log(error)
     })
