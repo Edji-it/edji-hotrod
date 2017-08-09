@@ -189,10 +189,10 @@ export class QuestionComponent implements OnInit, Input, Output, OnDestroy {
     // Initialize the answers for questions
     for (let i = 0; i < this.answerTypesAvailable.length; i++) {
       this.answerTypeStatus[this.answerTypesAvailable[i]]=false
-      if (this.answerTypesAvailable[i]==='reply') {
+      /* if (this.answerTypesAvailable[i]==='reply') {
         console.log('reply')
         this.answerTypesAvailable.splice(i,1)
-      }
+      }*/
     }
 
     // Select the answers if we're making an edit to the reading

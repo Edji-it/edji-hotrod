@@ -16,7 +16,8 @@ export class Questions implements PageObjectInterface {
     public openEndedAnswerBlock = this.testQuestion.element(by.id("openEndedAnswers"));
     public answerOptions        = this.testQuestion.element(by.repeater("type of answerTypes"));
     public emojiCommentBtn      = element.all(by.css(".button__answer-type")).first();
-    public textCommentBtn       = this.openEndedAnswerBlock.element(by.id("answerOptiontext"));
+    public emojiCommentInput    = element(by.className("emoji-comment-input"));
+    public textCommentBtn       = element.all(by.css(".button__answer-type"))
 
     public getPage() : void {
         // First we clear out the url (sometimes page is preserved if the url stays the same)

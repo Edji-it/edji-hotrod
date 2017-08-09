@@ -166,10 +166,13 @@ describe('Reading Questions Tests', () => {
             browser.wait(EC.visibilityOf(question.openEndedAnswerBlock), 5000, " failed to find the open ended answers block under the test question.!");
                 
             // First, let's find the emoji comment button
-            browser.wait(EC.elementToBeClickable(question.emojiCommentBtn), 5000, " failed to clicj the emoji comment button!");
+            browser.wait(EC.invisibilityOf(question.emojiCommentBtn), 5000, " failed to clicj the emoji comment button!");
 
             // Click on the emoji comment button
             question.emojiCommentBtn.click();
+
+            // now lets see if th e
+            browser.wait(EC.visibilityOf(question.emojiCommentInput), 5000, " failed to find the emoji comment input!");
 
             // Confirm the comment and it's existence
 
@@ -178,7 +181,7 @@ describe('Reading Questions Tests', () => {
             // Delete the comment.
 
             // and for my next trick, let's find the text comment button
-            browser.wait(EC.presenceOf(question.textCommentBtn), 5000, " failed to find the text comment button!");
+            // browser.wait(EC.presenceOf(question.textCommentBtn), 5000, " failed to find the text comment button!");
             
             // Click on the text comment button
 

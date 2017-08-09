@@ -55,7 +55,8 @@ export class OpenEndedAnswersComponent extends BaseAnswerComponent {
     if (type=='emoji') {
       this.activeEmojiKeyboardReply(newResponse)
     } // if
-    // console.log("PRE-SEND: " + newResponse.type)
+    console.log("PRE-SEND:")
+    console.log(newResponse)
 
     // Ask the base class to send the comment to the server.
     this.saveAnswer(newResponse);
