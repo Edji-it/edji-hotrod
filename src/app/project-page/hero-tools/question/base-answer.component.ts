@@ -47,7 +47,7 @@ export abstract class BaseAnswerComponent {
     newAnswer.author = this.user.fullname
 
     // Please make sure the questionId is added to the answer as a reference.. this will error out otherwise
-    newAnswer.questionId = this.baseQuestionReference._id
+    // newAnswer.questionId = this.baseQuestionReference._id
     
     this.angulartics.eventTrack.next({ action: newAnswer.type + 'AnswerCreate', properties: { category: 'heroFeature', label: 'attempt' }})
     // Tell the server we've added an answer

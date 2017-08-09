@@ -3,6 +3,7 @@ import { EdjiComment, EdjiQuestion, Project, Reading, User } from "../../../../s
 import { CommentService, AuthService, ProjectService, ReadingService } from "../../../../shared"
 import { BaseAnswerComponent } from "./../base-answer.component"
 import { Subscription } from 'rxjs/Rx'
+import { Angulartics2 } from 'angulartics2'
 
 @Component({
   selector: 'open-ended-answers',
@@ -33,8 +34,9 @@ export class OpenEndedAnswersComponent extends BaseAnswerComponent {
     private projects : ProjectService,
     private readings : ReadingService,
     private auth     : AuthService,
-    private comments : CommentService) {
-    super(projects, readings, auth, comments)
+    private comments : CommentService,
+    private angulartics: Angulartics2) {
+    super(projects, readings, auth, comments, angulartics)
   } // constructor
 
   ngOnInit() {

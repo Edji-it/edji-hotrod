@@ -166,8 +166,8 @@ describe('Reading Questions Tests', () => {
             browser.wait(EC.visibilityOf(question.openEndedAnswerBlock), 5000, " failed to find the open ended answers block under the test question.!");
                 
             // First, let's find the emoji comment button
-            browser.wait(EC.elementToBeClickable(question.emojiCommentBtn), 5000, " failed to find the emoji comment button!");
-            
+            browser.wait(EC.elementToBeClickable(question.emojiCommentBtn), 5000, " failed to clicj the emoji comment button!");
+
             // Click on the emoji comment button
             question.emojiCommentBtn.click();
 

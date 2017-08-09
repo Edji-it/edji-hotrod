@@ -55,7 +55,9 @@ export class QuestionComponent implements OnInit, Input, Output, OnDestroy {
   // Answer types are passed onto which ever Answer component
   public answerTypeStatus: any[] = []
   private optionTypeStatus: any[] = []
-  private answerTypesAvailable: any[] = []
+  private answerTypesAvailable: any[] = [
+     'emoji', 'text', 'audio'
+  ]
   private optionTypesAvailable: any[] = [{
       'type':'public','text':'public answers'
     }, {
@@ -81,6 +83,7 @@ export class QuestionComponent implements OnInit, Input, Output, OnDestroy {
     this.subscriptions.push( this._readings.currentReading.subscribe(
       reading => {
         this.currentReading = reading
+        this.updateSelections()
       },
       error => {
         console.error(error)
