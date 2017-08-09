@@ -141,26 +141,26 @@ describe('Reading Questions Tests', () => {
     }) // describe('Questions - Create'
 
     describe("Questions: Making Answer Comments", () => {
-        // beforeAll(() => {
-        //     question.getPage();            
+        beforeAll(() => {
+            question.getPage();            
   
-        //     // Login
-        //     guestForm.loginAsGuest(); // 
-        //     browser.wait(EC.elementToBeClickable(sidebar.logOutButton));
-        // }); // beforeAll
+            // Login
+             guestForm.loginAsGuest(); // 
+            browser.wait(EC.elementToBeClickable(sidebar.logOutButton));
+        }); // beforeAll
 
-        // afterAll(() => {
-        //     // log out
-        //     browser.wait(EC.elementToBeClickable(sidebar.logOutButton), 5000, "never found the logout button");
-        //     sidebar.logOutButton.click();
-        // }); // afterAll
+        afterAll(() => {
+            // log out
+            browser.wait(EC.elementToBeClickable(sidebar.logOutButton), 5000, "never found the logout button");
+            sidebar.logOutButton.click();
+        }); // afterAll
 
-        // /*
-        // Test: Make a comment on a question.
-        // */
-        // it("should make an answer to a question as a logged in user.", () => {
-        //     // make sure we got there.
-        //     browser.wait(EC.presenceOf(question.testQuestion), 5000, " failed to find the test question!");
+        /*
+            Test: Make a comment on a question.
+        */
+        it("should make an answer to a question as a logged in user.", () => {
+            // make sure we got there.
+            browser.wait(EC.presenceOf(question.testQuestion), 5000, " failed to find the test question!");
 
             // make sure we can see the OpenEndedAnswers block
             browser.wait(EC.visibilityOf(question.openEndedAnswerBlock), 5000, " failed to find the open ended answers block under the test question.!");
@@ -168,9 +168,6 @@ describe('Reading Questions Tests', () => {
             // First, let's find the emoji comment button
             browser.wait(EC.elementToBeClickable(question.emojiCommentBtn), 5000, " failed to find the emoji comment button!");
             
-<<<<<<< Updated upstream
-        // }); // it("should make an answer to a question as a logged...
-=======
             // Click on the emoji comment button
             question.emojiCommentBtn.click();
 
@@ -200,6 +197,5 @@ describe('Reading Questions Tests', () => {
             // FINAL STEP: Make sure there are no comments remaining, and that the answer options are showing.
 
         }); // it("should make an answer to a question as a logged...
->>>>>>> Stashed changes
     }); //  describe("Questions: Making Answer Comments"
 }); // d
