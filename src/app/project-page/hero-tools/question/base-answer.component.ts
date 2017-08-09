@@ -47,7 +47,7 @@ export abstract class BaseAnswerComponent {
     newAnswer.author = this.user.fullname
 
     // Please make sure the questionId is added to the answer as a reference.. this will error out otherwise
-    newAnswer.questionId = this.baseQuestionReference._id
+    newAnswer.questionId = this.baseQuestionReference._id // Be careful. This line literally breaks the entire thing without errors sometimes. 8.8.17
     
     this._angulartics.eventTrack.next({ action: newAnswer.type + 'AnswerCreate', properties: { category: 'heroFeature', label: 'attempt' }})
     console.log(newAnswer)
@@ -62,6 +62,7 @@ export abstract class BaseAnswerComponent {
 
       this._angulartics.eventTrack.next({ action: newAnswer.type + 'AnswerCreate', properties: { category: 'heroFeature', label: 'success' }})
     
+      console.log(answer.questionId)
       setTimeout(() => {
       }, 100)
     })
