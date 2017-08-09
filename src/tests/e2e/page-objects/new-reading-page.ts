@@ -18,19 +18,22 @@ export class NewReading implements PageObjectInterface
     public addButton = element(by.id('addReadingButton'));
     public finalizeButton = element(by.id('addReadingFinalizeButton'));
     public draftButton = element(by.id('saveDraftButton'));
+    public questionDelete = element.all(by.css('button.inline-delete.question-delete')).last();
     
     public uploadModalButton = element(by.css('#buttonUploadImage'));
     public imageUploadTrigger = element(by.id('buttonBeginImageUpload'));
     public imageFileInput = element(by.css('#imageFileInput'));
     public uploadedImage = element(by.css(".upload-list-item.new"));
+    public emojiAnswerButton = element.all(by.id('answerOptionemoji')).last();
+    public textAnswerButton = element.all(by.id('answerOptiontext')).last();
 
     public uploadPDfModalButton = element(by.css('#buttonUploadPdf'));
     public pdfUploadTrigger = element(by.id('buttonBeginPdfUpload'));
     public pdfFileInput = element(by.css('#pdfFileInput'));
     public insertUploadedPdf = element(by.css(".upload-list-item.new .e2e-insert-doc"));
 
-    public insertQuestionButton = element(by.css('#buttonInsertQuestion'));
-    public insertQuestionPrompt = element(by.css('textarea.text-comment-input'));
+    public insertQuestionButton = element.all(by.id('buttonInsertQuestion')).last();
+    public insertQuestionPrompt = element.all(by.css('textarea.text-comment-input')).last();
     
     public imageInReading = element(by.css(".content .img img"));
     // public imageUploadList = element.all(by.css('.upload-list-item'));
@@ -53,8 +56,6 @@ export class NewReading implements PageObjectInterface
     public contentShortStringB = '\nA robot must obey the orders given it by human beings except where such orders would conflict with the First Law.\nA robot must protect its own existence as long as such protection does not conflict with the First or Second Laws.\n';
     public sourceString = 'https://en.wikipedia.org/wiki/Robot';
     public groupString = 'Test Group 001';
-    public emojiAnswerButton = element.all(by.id('answerOptionemoji')).last();
-    public textAnswerButton = element.all(by.id('answerOptiontext')).last();
 
     public findIdExp = new RegExp(/([A-Za-z0-9]){24}/);
 

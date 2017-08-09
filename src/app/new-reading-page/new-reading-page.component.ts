@@ -552,7 +552,11 @@ export class NewReadingPage implements OnInit {
         
         if (insertHtml) {
             question.question_number = insertPos
-            this.readingHtml.splice(insertPos,0,{'text':insertHtml,'question':question})
+            if (this.readingHtml.length > insertPos) {
+                this.readingHtml.splice(insertPos,0,{'text':insertHtml,'question':question})
+            } else {
+                this.readingHtml.push({'text':insertHtml,'question':question})
+            }
             this.updateQuestionNumbers()
         } else {
             this.readingHtml.push({'text':this.newReadingInner,'question':question})
