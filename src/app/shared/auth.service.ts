@@ -559,7 +559,6 @@ export class AuthService implements CanActivate {
      * Submit payment and subscription type to add plan to user
      */
     public subscribeToHero(subscriptionType, tokenId, couponCode ?: string): Observable<any> {
-        console.log(tokenId)
         let data = {
             subscriptionType : subscriptionType,
             token: tokenId
@@ -590,7 +589,7 @@ export class AuthService implements CanActivate {
     }
 
     public cancelHeroSubscription(subscriptionId: string) {
-        return this.http.delete([this.baseUrl, 'subscriptions', subscriptionId].join("/"))
+        return this.http.delete([this.baseUrl, 'subscriptions', subscriptionId].join("/"), this.getOptions())
             .map((res) => {
                 return res.json() || {}
             })

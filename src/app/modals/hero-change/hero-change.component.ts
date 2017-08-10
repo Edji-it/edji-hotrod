@@ -69,7 +69,7 @@ export class HeroChangeComponent implements OnInit {
   cancelSub() {
     this.canceling = true
     this.cancelMsg = ''
-    this._auth.cancelHeroSubscription(this.user.hero.type)
+    this._auth.cancelHeroSubscription(this.user.hero.subscription_id)
       .take(1)
       .subscribe(
         data => {
