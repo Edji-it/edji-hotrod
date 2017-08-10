@@ -20,11 +20,8 @@ export class HeroSubscribeComponent implements OnInit {
   private stripe: any
   private stripeMessage: string
 
-  // @Input()
-  // monthlyAmountOff: number
-
   @Input()
-  yearlyAmountOff: number
+  heroPrice: number
 
   @Input()
   couponCode: string
@@ -111,10 +108,4 @@ export class HeroSubscribeComponent implements OnInit {
       });
 
   }
-
-  getYearlyPrice() : number {
-    return Math.round(6000 - this.yearlyAmountOff)/100
-  }
-  
-
 }

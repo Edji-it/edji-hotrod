@@ -39,11 +39,11 @@
                                     </th>
                                     <td>
                                         <p *ngIf="!yearlyAmountOff">$60/yr</p> 
-                                        <p *ngIf="yearlyAmountOff"><del>$60/yr</del> ${{getYearlyPrice()}}/yr</p>    
+                                        <p *ngIf="yearlyAmountOff"><del>$60/yr</del> ${{ heroPrice/100 }}/yr</p>    
                                     </td>
                                     <td>
                                         <p *ngIf="!yearlyAmountOff">Billed as $60 every year</p>
-                                        <p *ngIf="yearlyAmountOff">Billed as ${{getYearlyPrice()}} every year</p>
+                                        <p *ngIf="yearlyAmountOff">Billed as ${{ heroPrice/100 }} every year</p>
                                     </td>
                                 </tr>
                             </tbody>

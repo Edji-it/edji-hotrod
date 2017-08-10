@@ -43,7 +43,7 @@
         <p class="text-center">Exclusive early signup offer</p>
         <!--<span style="font-weight:bold;color:#d82727;">${{ heroCount/100 }}/mo</span>-->
         <div class="button__row pb-4">
-          <button class="btn btn-hero" (click)="goHero()">Go Hero for ${{ getPrice() }}/yr</button>
+          <button class="btn btn-hero" (click)="goHero()">Go Hero for ${{ heroPrice/100 }}/yr</button>
         </div>
 
         <h3>Heroes Make Powerful Lessons</h3>
@@ -61,4 +61,4 @@
 </div><!--container-fluid-->
 
 <hot-login-register [loginHeader]="'To go Hero, first you\'ll need an account'" class="modal-will-fade" [class.show]="showLoginModal" (closeModal)="showLoginModal = false" (loginSuccess)="showHeroSubModal = true"></hot-login-register>
-<hero-subscribe-modal [couponCode]="'HERO_LAUNCH'" [yearlyAmountOff]="earlyAmountOff()" class="modal-will-fade" [class.show]="showHeroSubModal" (closeModal)="showHeroSubModal = !showHeroSubModal" (heroWasBorn)="_router.navigate(['/dashboard'])"></hero-subscribe-modal>
+<hero-subscribe-modal [couponCode]="'HERO_LAUNCH'" [heroPrice]="heroPrice" class="modal-will-fade" [class.show]="showHeroSubModal" (closeModal)="showHeroSubModal = !showHeroSubModal" (heroWasBorn)="_router.navigate(['/dashboard'])"></hero-subscribe-modal>
