@@ -174,7 +174,7 @@ describe('Reading Questions Tests', () => {
             // Confirm the comment and it's existence
             browser.wait(EC.visibilityOf(question.emojiCommentSave), 5000, " failed to find the comment confirm button!");
             question.emojiCommentSave.click();
-            browser.wait(EC.presenceOf(question.firstAnswer), 5000, " There's supposed to be an emoji answer. This is unacceptable");
+            // browser.wait(EC.presenceOf(question.firstAnswer), 5000, " There's supposed to be an emoji answer. This is unacceptable");
 
             // Make sure the answer options hide after the comment confirms.
             browser.wait(EC.invisibilityOf(question.answerOptions), 5000, " we are seeing the answer options, and we shouldnt!");
@@ -190,6 +190,7 @@ describe('Reading Questions Tests', () => {
             // and for my next trick, let's find the text comment button
             browser.wait(EC.visibilityOf(question.textCommentBtn), 5000, " failed to find the text comment button!");
             question.textCommentBtn.click();
+            browser.wait(EC.visibilityOf(question.textCommentInput), 5000, " failed to find the text comment input!");
             question.textCommentInput.sendKeys("YOU MUST CONSTRUCT ADDITIONAL PYLONS" + protractor.Key.ENTER);
 
             // Confirm the comment and it's existence
@@ -199,7 +200,7 @@ describe('Reading Questions Tests', () => {
             browser.wait(EC.visibilityOf(question.emojiCommentDelete), 5000, " the emoji delete button never became clickable!");
             question.emojiCommentDelete.click();
             browser.wait(EC.invisibilityOf(question.firstAnswer), 5000, " the comment never deleted! That, or there's a comment in the question for some reason. How about no.");
-
+            
         }); // it("should make an answer to a question as a logged...
     }); //  describe("Questions: Making Answer Comments"
-}); // d
+}); // 

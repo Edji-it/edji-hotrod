@@ -21,7 +21,7 @@ export class Questions implements PageObjectInterface {
     public emojiCommentBtn      = element.all(by.css(".button__answer-type")).first();
     public emojiCommentSave     = element(by.id('keyboardDoneBtn'));
     public textCommentBtn       = this.answerOptions.element(by.className("icon-text-comment"));
-    public textCommentInput     = element(by.css('.text-comment-input'));
+    public textCommentInput     = element(by.id('textCommentInput'));
     public firstAnswer          = this.answerBlock.element(by.id("comment"))
     public emojiCommentDelete   = element(by.css('.inline-delete')); // element(by.id('commentDelBtn'));
 
