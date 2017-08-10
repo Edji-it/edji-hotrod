@@ -54,7 +54,7 @@
                 <span *ngIf="!currentUser.hero.active" class="mr-4">Unsubscribed</span>
 
                 <button *ngIf="currentUser.hero.active" id="heroModifyBtn" class="btn btn-secondary mr-4" (click)="showHeroChangeModal = true">Modify</button>
-                <button *ngIf="!currentUser.hero.active" class="btn btn-hero mr-4" (click)="showHeroSubModal = true">Go Hero</button>
+                <button *ngIf="!currentUser.hero.active || expired || expiring" class="btn btn-hero mr-4" (click)="showHeroSubModal = true">Go Hero</button>
                 
                 <div class="alert alert-warning my-1" *ngIf="expired">Your Hero subscription expired {{ currentUser.hero.will_expire | edjidate:'timeStamp':'mediumDate' }}</div>
                 <div class="alert alert-info my-1" *ngIf="expiring">Your Hero subscription will expire {{ currentUser.hero.will_expire | edjidate:'timeStamp':'mediumDate' }}</div>
