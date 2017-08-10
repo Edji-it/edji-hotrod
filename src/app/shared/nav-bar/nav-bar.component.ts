@@ -18,7 +18,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
     @Input() showProjectInfo: boolean
     
     @Output() saveAction: EventEmitter<any> = new EventEmitter()
-    @Output() shareAction: EventEmitter<ReadingShareObject> = new EventEmitter()
+    @Output() shareAction: EventEmitter<ReadingShareObject> = new EventEmitter<ReadingShareObject>()
 
     private user: any
     private currentProject: any
