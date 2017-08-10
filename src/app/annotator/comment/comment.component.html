@@ -1,5 +1,5 @@
 <!--Desktop Comment Rendering-->
-<div class="comment" [class.new]="comment.new" [class.saved]="justSaved" [class.active]="active" 
+<div class="comment" id="comment" [class.new]="comment.new" [class.saved]="justSaved" [class.active]="active" 
     [class.readonly]="readOnly" [ngClass]="[ expanded ? 'expanded' : '', active ? 'comment__show' : '', reply ? 'replyComment' : 'hidden-md-down line-count-' + lineCount ]">
     <div *ngIf="!commentLite" class='expand-comments' (tap)='expanded ? collapse() : expand()' [ngClass]="comment.type == 'emoji' ? 'cmtEmoji' : 'cmtText'">
         <div *ngIf="lineCount == 1 && expanded" class='hidden-lg-up expand__arrow-left'></div>
@@ -16,7 +16,7 @@
             [active]="comment.active" [reply]="reply"></text-comment>
         <audio-comment (tap)="activate()" *ngIf="comment.type == 'audio'" [comment]="comment" #commentInput (save)="deactivate(comment)" [active]="comment.active" 
             [recordNewAudio]="reRecordAudio" (showDeleteAudioModal)="showDeleteAudioModal = true" [userPermission]="userPermission" [reply]="reply"></audio-comment>
-        <button *ngIf="userPermission >= 3" (tap)="userPermission > 3 ? deleteComment(comment) : showDeleteModal = true" class='inline-delete'>+</button>
+        <button id="commentDelBtn" *ngIf="userPermission >= 3" (tap)="userPermission > 3 ? deleteComment(comment) : showDeleteModal = true" class='inline-delete'>+</button>
         <div *ngIf="!reply && project.types.indexOf('reply') > -1" class="reply" id="addReply" (click)="commentReply.emit()">
             <p class="text-left reply-text-left">Reply</p>
             <span class="text-right ">

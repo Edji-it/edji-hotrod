@@ -6,7 +6,7 @@ import { LoginModal, GuestLoginForm } from './components';
 
 /*
     08 Aug 2017
-    Last Modified: 08 Aug 2017
+    Last Modified: 10 Aug 2017
     JZ Kyburz
 
     e2e test the dashboard page - for questions!
@@ -174,34 +174,31 @@ describe('Reading Questions Tests', () => {
             // Confirm the comment and it's existence
             browser.wait(EC.visibilityOf(question.emojiCommentSave), 5000, " failed to find the comment confirm button!");
             question.emojiCommentSave.click();
-            
+            browser.wait(EC.presenceOf(question.firstAnswer), 5000, " There's supposed to be an emoji answer. This is unacceptable");
+
             // Make sure the answer options hide after the comment confirms.
             browser.wait(EC.invisibilityOf(question.answerOptions), 5000, " we are seeing the answer options, and we shouldnt!");
             
             // Delete the comment.
-            browser.wait(EC.elementToBeClickable(question.emojiCommentDelete), 5000, " the emoji delete button never became clickable!");
+            browser.wait(EC.visibilityOf(question.emojiCommentDelete), 5000, " the emoji delete button never became clickable!");
             question.emojiCommentDelete.click();
-            browser.wait(EC.elementToBeClickable(question.delCommentModalBtn), 7000, " the emoji delete button in the modal never became clickable!");
-            question.delCommentModalBtn.click();
+            browser.wait(EC.invisibilityOf(question.firstAnswer), 5000, " the comment never deleted! That, or there's a comment in the question for some reason. How about no.");
+
+            // make sure the answer options are visible again
+            browser.wait(EC.visibilityOf(question.answerOptions), 5000, " we should be able to see the answer options!");
 
             // and for my next trick, let's find the text comment button
-            // browser.wait(EC.presenceOf(question.textCommentBtn), 5000, " failed to find the text comment button!");
-            
-            // Click on the text comment button
+            browser.wait(EC.visibilityOf(question.textCommentBtn), 5000, " failed to find the text comment button!");
+            question.textCommentBtn.click();
+            question.textCommentInput.sendKeys("YOU MUST CONSTRUCT ADDITIONAL PYLONS" + protractor.Key.ENTER);
 
             // Confirm the comment and it's existence
+            browser.wait(EC.visibilityOf(question.firstAnswer), 5000, " There's supposed to be a text answer. This is unacceptable");
 
             // Delete the comment.
-
-            // and for my next trick, let's find the audio comment button
-            
-            // Click on the text comment button
-
-            // Confirm the comment and it's existence
-
-            // Delete the comment.
-
-            // FINAL STEP: Make sure there are no comments remaining, and that the answer options are showing.
+            browser.wait(EC.visibilityOf(question.emojiCommentDelete), 5000, " the emoji delete button never became clickable!");
+            question.emojiCommentDelete.click();
+            browser.wait(EC.invisibilityOf(question.firstAnswer), 5000, " the comment never deleted! That, or there's a comment in the question for some reason. How about no.");
 
         }); // it("should make an answer to a question as a logged...
     }); //  describe("Questions: Making Answer Comments"
