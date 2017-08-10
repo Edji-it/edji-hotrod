@@ -55,102 +55,102 @@ describe('Account Page', () => {
     });
 
     // Created 7.3.17
-    describe('Avatars', () => {
+    // describe('Avatars', () => {
 
-        // 7.3.17
-        it('Avatar picture should not be visible, and user initials should be instead', () => {
-            // make sure there is no avatar
-            browser.wait(EC.invisibilityOf(account.avatarImg), 5000, "should not be able to see the avatar image");
-            browser.wait(EC.visibilityOf(account.userInitials), 5000, "should be able to see the user initials");
-        });
+    //     // 7.3.17
+    //     it('Avatar picture should not be visible, and user initials should be instead', () => {
+    //         // make sure there is no avatar
+    //         browser.wait(EC.invisibilityOf(account.avatarImg), 5000, "should not be able to see the avatar image");
+    //         browser.wait(EC.visibilityOf(account.userInitials), 5000, "should be able to see the user initials");
+    //     });
 
-        // 7.3.17
-        describe('Changing Avatars', () => {
-            it('Clicking "Cancel" on the modal should not set an avatar', () => {
-                // Make sure there is no avatar
-                browser.wait(EC.invisibilityOf(account.avatarImg), 2000, "should not be able to see the avatar image");
+    //     // 7.3.17
+    //     describe('Changing Avatars', () => {
+    //         it('Clicking "Cancel" on the modal should not set an avatar', () => {
+    //             // Make sure there is no avatar
+    //             browser.wait(EC.invisibilityOf(account.avatarImg), 2000, "should not be able to see the avatar image");
             
-                // open the upload modal
-                account.openModal();
+    //             // open the upload modal
+    //             account.openModal();
 
-                // In the modal...
-                browser.wait(EC.presenceOf(account.cancelUploadBtn), 5000, "should be able to see the cancel upload button.");
-                account.cancelUploadBtn.click();
+    //             // In the modal...
+    //             browser.wait(EC.presenceOf(account.cancelUploadBtn), 5000, "should be able to see the cancel upload button.");
+    //             account.cancelUploadBtn.click();
 
-                // I want to see the modal gone. like my ex-wife.
-                browser.wait(EC.invisibilityOf(account.avatarModal), 5000, "should not be able to see the upload avatar modal.");
-            }); // it('Clicking "Cancel" on...
+    //             // I want to see the modal gone. like my ex-wife.
+    //             browser.wait(EC.invisibilityOf(account.avatarModal), 5000, "should not be able to see the upload avatar modal.");
+    //         }); // it('Clicking "Cancel" on...
 
-            it('Upload an Avatar, then remove it from the modal.', () => {
-                // Make sure there is no avatar
-                browser.wait(EC.invisibilityOf(account.avatarImg), 2000, "should not be able to see the avatar image");
+    //         it('Upload an Avatar, then remove it from the modal.', () => {
+    //             // Make sure there is no avatar
+    //             browser.wait(EC.invisibilityOf(account.avatarImg), 2000, "should not be able to see the avatar image");
 
-                // open the upload modal
-                account.openModal();
+    //             // open the upload modal
+    //             account.openModal();
 
-                browser.wait(EC.invisibilityOf(account.uploadedPic), 7000, "should NOT be able to see an uploaded avatar.");
+    //             browser.wait(EC.invisibilityOf(account.uploadedPic), 7000, "should NOT be able to see an uploaded avatar.");
 
-                // upload the test image
-                // NOTE: consolidate this into one function in the page object.
-                let absolutePath = path.resolve(__dirname, account.testAvatarToUpload);
-                account.imageFileInput.sendKeys(absolutePath);
+    //             // upload the test image
+    //             // NOTE: consolidate this into one function in the page object.
+    //             let absolutePath = path.resolve(__dirname, account.testAvatarToUpload);
+    //             account.imageFileInput.sendKeys(absolutePath);
 
-                // Wait for the image to upload
-                browser.wait(EC.visibilityOf(account.uploadedPic), 10000, "should be able to see uploaded avatar.");
+    //             // Wait for the image to upload
+    //             browser.wait(EC.visibilityOf(account.uploadedPic), 10000, "should be able to see uploaded avatar.");
 
-                // now remove that thing off the face of the Earth
-                browser.wait(EC.presenceOf(account.removeBtn), 5000, "should be able to see the remove button.");
-                account.removeBtn.click();
-                browser.wait(EC.invisibilityOf(account.uploadedPic), 7000, "should NOT be able to see uploaded avatar.");
+    //             // now remove that thing off the face of the Earth
+    //             browser.wait(EC.presenceOf(account.removeBtn), 5000, "should be able to see the remove button.");
+    //             account.removeBtn.click();
+    //             browser.wait(EC.invisibilityOf(account.uploadedPic), 7000, "should NOT be able to see uploaded avatar.");
 
-                account.closeModal(); // close this for the next test
+    //             account.closeModal(); // close this for the next test
 
-                // Make sure there is no avatar
-                browser.wait(EC.invisibilityOf(account.avatarImg), 2000, "should not be able to see the avatar image");
-            }); // it('Upload an Avatar, then remove it from the modal...
+    //             // Make sure there is no avatar
+    //             browser.wait(EC.invisibilityOf(account.avatarImg), 2000, "should not be able to see the avatar image");
+    //         }); // it('Upload an Avatar, then remove it from the modal...
 
-            it('Upload an Avatar, save it, then remove it.', () => {
-                account.getPage();
+    //         it('Upload an Avatar, save it, then remove it.', () => {
+    //             account.getPage();
 
-                // open the upload modal
-                account.openModal();
+    //             // open the upload modal
+    //             account.openModal();
 
-                browser.wait(EC.invisibilityOf(account.uploadedPic), 5000, "should NOT be able to see an uploaded avatar.");
+    //             browser.wait(EC.invisibilityOf(account.uploadedPic), 5000, "should NOT be able to see an uploaded avatar.");
 
-                // upload the test image
-                // NOTE: consolidate this into one function in the page object.
-                browser.wait(EC.presenceOf(account.imageFileInput), 5000, "should NOT be able to see the imageFileInput.");
-                let absolutePath = path.resolve(__dirname, account.testAvatarToUpload);
-                account.imageFileInput.sendKeys(absolutePath);
+    //             // upload the test image
+    //             // NOTE: consolidate this into one function in the page object.
+    //             browser.wait(EC.presenceOf(account.imageFileInput), 5000, "should NOT be able to see the imageFileInput.");
+    //             let absolutePath = path.resolve(__dirname, account.testAvatarToUpload);
+    //             account.imageFileInput.sendKeys(absolutePath);
 
-                // Wait for the image to upload
-                browser.wait(EC.visibilityOf(account.uploadedPic), 10000, "should be able to see uploaded avatar.");
+    //             // Wait for the image to upload
+    //             browser.wait(EC.visibilityOf(account.uploadedPic), 10000, "should be able to see uploaded avatar.");
 
-                // hit it, Fergie
-                browser.wait(EC.visibilityOf(account.saveAvatarBtn), 7000, "should be able to see the saveAvatarBtn.");
-                account.saveAvatarBtn.click();
+    //             // hit it, Fergie
+    //             browser.wait(EC.visibilityOf(account.saveAvatarBtn), 7000, "should be able to see the saveAvatarBtn.");
+    //             account.saveAvatarBtn.click();
 
-                // I want to see the modal gone. like my ex-wife.
-                browser.wait(EC.invisibilityOf(account.avatarModal), 5000, "should not be able to see the upload avatar modal.");
+    //             // I want to see the modal gone. like my ex-wife.
+    //             browser.wait(EC.invisibilityOf(account.avatarModal), 5000, "should not be able to see the upload avatar modal.");
 
-                // I want to see a goddamn avatar
-                browser.wait(EC.visibilityOf(account.avatarImg), 5000, "should be able to see the avatar.");
+    //             // I want to see a goddamn avatar
+    //             browser.wait(EC.visibilityOf(account.avatarImg), 5000, "should be able to see the avatar.");
 
-                // open the upload modal
-                account.openModal();
+    //             // open the upload modal
+    //             account.openModal();
 
-                // now remove that pic off the face of the Earth
-                browser.wait(EC.presenceOf(account.removeBtn), 5000, "should be able to see the remove button.");
-                account.removeBtn.click();
-                browser.wait(EC.invisibilityOf(account.uploadedPic), 7000, "should NOT be able to see uploaded avatar.");
+    //             // now remove that pic off the face of the Earth
+    //             browser.wait(EC.presenceOf(account.removeBtn), 5000, "should be able to see the remove button.");
+    //             account.removeBtn.click();
+    //             browser.wait(EC.invisibilityOf(account.uploadedPic), 7000, "should NOT be able to see uploaded avatar.");
 
-                // hit it, Fergie
-                browser.wait(EC.visibilityOf(account.saveAvatarBtn), 7000, "should be able to see the saveAvatarBtn.");
-                account.saveAvatarBtn.click();
+    //             // hit it, Fergie
+    //             browser.wait(EC.visibilityOf(account.saveAvatarBtn), 7000, "should be able to see the saveAvatarBtn.");
+    //             account.saveAvatarBtn.click();
 
-                // I want to see the modal gone. like my ex-wife.
-                browser.wait(EC.invisibilityOf(account.avatarModal), 5000, "should not be able to see the upload avatar modal.");
-            }); // it('Upload an Avatar, save it, then remove it...
-        }); // describe Changing Avatars
-    }); // describe('Avatars', 
+    //             // I want to see the modal gone. like my ex-wife.
+    //             browser.wait(EC.invisibilityOf(account.avatarModal), 5000, "should not be able to see the upload avatar modal.");
+    //         }); // it('Upload an Avatar, save it, then remove it...
+    //     }); // describe Changing Avatars
+    // }); // describe('Avatars', 
 }); // describe 'Account Page'
