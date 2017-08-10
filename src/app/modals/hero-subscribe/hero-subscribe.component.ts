@@ -18,6 +18,7 @@ export class HeroSubscribeComponent implements OnInit {
   private loading: boolean = false
   private userNowHero: boolean
   private stripe: any
+  private stripeMessage: string
 
   // @Input()
   // monthlyAmountOff: number
@@ -103,6 +104,7 @@ export class HeroSubscribeComponent implements OnInit {
               },
               error => {
                 this.loading = false
+                this.stripeMessage = 'There was an error processing your payment. Please try correcting your payment information, or <a href="mailto:support@edji.it" class="link">contact our support team</a>.'
               })
 
         }
