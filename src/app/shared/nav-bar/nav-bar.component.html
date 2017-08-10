@@ -65,15 +65,22 @@
 				<p class="sub-label pb-2">Finished with your reading? Give it a group name, Finalize and get your group code to share with your readers!</p>
 				<div class="form-group" style="margin-bottom: 0px;">
 					<label>
-						Group
+						Group Name
 						<!--<p class="sub-label">Name for the first Group you will share this Reading with.</p>-->
 						<div class="input-group">
 							<input [(ngModel)]="groupLabel" type="text" id="firstProjectLabel" class="form-control form-item--editor h3 mGroup" placeholder="eg. First Period, Peer review..."  />
 						</div>
-						<div id="errorGroupLabel" *ngIf="groupLabel.length < 1 && submitted" class="alert alert-info">Please pick a name for your first Reading Group!</div>
+						<div id="errorGroupLabel" *ngIf="groupLabel.length < 1 && messages.groupNameLengthError" class="alert alert-info">Please pick a name for your first Reading Group!</div>
 					</label>
 				</div>
-				<button id="addReadingFinalizeButton" class="btn btn-action" (click)="finalizeReadingAndShare(groupLabel)" [class.loading]="shareLoading">
+				<div *ngIf="user.hero && user.hero.active" class="form-group">
+					<label for="customCodeInput">Custom Code
+						<input [(ngModel)]="customCode" id="customCodeInput" type="text" class="form-control form-item--editor h3 mGroup" placeholder="(optional)"/>
+					</label>
+					<div *ngIf="messages.invalidCode" id="errorInvalidCustomCode" class="alert alert-warning">Whoops, someone is already using that group code. Could you pick another?</div>
+					<div *ngIf="messages.serviceError" id="errorServiceResponse" class="alert alert-warning">Oh no! Something went wrong. If it keeps happening, let us know!</div>
+				</div>
+				<button id="addReadingFinalizeButton" class="btn btn-action" (click)="finalizeReadingAndShare({ groupLabel: groupLabel, customCode: customCode })" [class.loading]="shareLoading">
 					Finalize and Share
 				</button>
 			</div>

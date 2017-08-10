@@ -18,7 +18,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
     @Input() showProjectInfo: boolean
     
     @Output() saveAction: EventEmitter<any> = new EventEmitter()
-    @Output() shareAction: EventEmitter<any> = new EventEmitter()
+    @Output() shareAction: EventEmitter<ReadingShareObject> = new EventEmitter<ReadingShareObject>()
 
     private user: any
     private currentProject: any
@@ -34,10 +34,16 @@ export class NavBarComponent implements OnInit, OnDestroy {
       heatVision?: boolean
     } = { }
     private tooltipPlacement: string = 'right'
+    private messages: {
+      invalidCode?: boolean,
+      serviceError?: boolean,
+      groupNameLengthError?: boolean
+    } = { }
     
     // Group/Share form
     private submitted: boolean = false
     private groupLabel: string = "Group 1"
+    private customCode: string = ""
     private shareLoading: boolean = false
 
     constructor(
@@ -143,13 +149,37 @@ export class NavBarComponent implements OnInit, OnDestroy {
       }
     }
 
-    finalizeReadingAndShare(groupLabel: string) {
+    finalizeReadingAndShare(shareObj: ReadingShareObject) {
+      this.messages = {}
       this.submitted = true
       this.shareLoading = true
-      if (groupLabel.length < 1) {
+      if (shareObj.groupLabel.length < 1) {
         this.shareLoading = false
-        return
+        this.messages.groupNameLengthError = true
+        return // we should give the user some sort of feedback here
       }
-      this.shareAction.emit(groupLabel)
+
+      // does the project exist? this call will actually fail if it does
+      this._projects.validateProject(shareObj.customCode)
+        .take(1)
+        .subscribe((res) => {
+          // this is actually an error in this case! lol. If the code IS valid, we want them NOT to try and make a reading
+          this.shareLoading = false
+          this.messages.invalidCode = true
+        }, (err) => {
+          this.shareLoading = false
+
+          // this is actually the succcessful response :)
+          if (err.status == 404) {
+            this.shareAction.emit(shareObj)
+          } else {
+            this.messages.serviceError = true
+          }
+        })
     }
+}
+
+export interface ReadingShareObject {
+  groupLabel: string
+  customCode?: string
 }

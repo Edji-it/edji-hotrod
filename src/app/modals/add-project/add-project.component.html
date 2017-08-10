@@ -32,7 +32,7 @@
                           <input type="checkbox" [formControl]="projectForm.controls['audioType']" class="custom-control-input">
                           <span class="custom-control-indicator"></span>
                           <span class="custom-control-description">Audio Commenting <span class="hero-tag" title="Hero Power">H</span><span class="beta-tag">(BETA)</span></span>
-                          <p class="custom-control-description label--gray px-1">In Beta, may not work on all devices.</p>
+                          <!--<p class="custom-control-description label--gray px-1">In Beta, may not work on all devices.</p>-->
                       </label>
                   </div>
                   <div *ngIf="commentTypes.indexOf('reply') > -1" class="form-group">
@@ -42,6 +42,7 @@
                           <span class="custom-control-description">Comment Replies <span class="hero-tag" title="Hero Power">H</span></span>
                       </label>
                   </div>
+                  <p class="label--gray"><span class="beta-tag">(BETA)</span>&nbsp;Beta features may not work on all devices.</p>
                   <!--</label>-->
               </div>
               <div class="modal-footer">
