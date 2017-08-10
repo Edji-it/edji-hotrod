@@ -20,8 +20,11 @@ export class HeroPromoComponent implements OnInit {
   private showLoginModal: boolean
   private showHeroSubModal: boolean
 
-
-  private heroCount: number = 2000
+  // Default to count that offers $41/yr, approx end of promo
+  private heroCount: number = 1366
+  private heroFullPrice: number = 6000
+  private heroPromoStart: number = 100
+  private priceIncrement: number = 3
 
   private subscriptions: Subscription[] = []
 
@@ -47,8 +50,15 @@ export class HeroPromoComponent implements OnInit {
     this.getHeroCount()
   }
 
+  /**
+   * @returns amount off in cents
+   */
   private earlyAmountOff(): number {
-    return 5900 - this.heroCount * 3
+    return this.heroFullPrice - (this.heroCount * 3) - this.heroPromoStart
+  }
+
+  private getPrice(): number {
+    return (this.heroFullPrice - this.earlyAmountOff())/100
   }
 
   private getHeroCount(): void {

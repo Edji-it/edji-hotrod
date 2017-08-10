@@ -13,7 +13,7 @@
 
       <div *ngIf="countdownOver" class="call-to-action">
         <h1 class="promo-header center">Empower with Hero</h1>
-        <h3 class="countdown-clock">Be Hero #{{ heroCount }}!</h3>
+        <!--<h3 class="countdown-clock">Be Hero #{{ heroCount }}!</h3>-->
       </div>
 
     </div>
@@ -43,7 +43,7 @@
         <p class="text-center">Exclusive early signup offer</p>
         <!--<span style="font-weight:bold;color:#d82727;">${{ heroCount/100 }}/mo</span>-->
         <div class="button__row pb-4">
-          <button class="btn btn-hero" (click)="goHero()">Go Hero for ${{ heroCount/100 }}/mo</button>
+          <button class="btn btn-hero" (click)="goHero()">Go Hero for ${{ getPrice() }}/yr</button>
         </div>
 
         <h3>Heroes Make Powerful Lessons</h3>
