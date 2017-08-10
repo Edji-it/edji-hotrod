@@ -171,18 +171,18 @@ describe('Reading Questions Tests', () => {
             // Click on the emoji comment button
             question.emojiCommentBtn.click();
 
-            // now lets see if the input is showing up
-            browser.wait(EC.invisibilityOf(question.emojiCommentInput), 5000, " failed to find the emoji comment input!");
-
             // Confirm the comment and it's existence
             browser.wait(EC.visibilityOf(question.emojiCommentSave), 5000, " failed to find the comment confirm button!");
             question.emojiCommentSave.click();
-
+            
             // Make sure the answer options hide after the comment confirms.
             browser.wait(EC.invisibilityOf(question.answerOptions), 5000, " we are seeing the answer options, and we shouldnt!");
-
+            
             // Delete the comment.
-
+            browser.wait(EC.elementToBeClickable(question.emojiCommentDelete), 5000, " the emoji delete button never became clickable!");
+            question.emojiCommentDelete.click();
+            browser.wait(EC.elementToBeClickable(question.delCommentModalBtn), 7000, " the emoji delete button in the modal never became clickable!");
+            question.delCommentModalBtn.click();
 
             // and for my next trick, let's find the text comment button
             // browser.wait(EC.presenceOf(question.textCommentBtn), 5000, " failed to find the text comment button!");
