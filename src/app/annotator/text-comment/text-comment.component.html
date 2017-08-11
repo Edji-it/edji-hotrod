@@ -1,11 +1,13 @@
 <div [ngClass]="[comment.active || preview ? 'active' : '']" class='text-comment input-wrap'>
     <!--Comment Input-->
     <textarea *ngIf="editing" type='text' placeholder="Text comment..." class="text-comment-input" [class.disabled]="readOnly" [(ngModel)]="comment.data" (blur)='updateComment(comment.data)' 
-    (keydown.enter)='blurField($event)' (keyup.esc)='blurField($event)' maxlength="140" [ngClass]="[reply ? 'replyDisplay' : '']"></textarea>
+        (keydown.enter)='blurField($event)' (keyup.esc)='blurField($event)' maxlength="140" [ngClass]="[reply ? 'replyDisplay' : '']"
+    ></textarea>
     <!--Comment Display-->
     <div *ngIf="!editing" class="text-comment-input" [innerHtml]="comment.data | linkify | emojione" [ngClass]="[reply ? 'replyDisplay' : '']"></div>
 
-    <div *ngIf="(preview || comment.active) && !editing && !readOnly" class="text-comment__edit-btn" (click)="editing = true">
+    <!-- The edit button -->
+    <div *ngIf="(preview || comment.active) && !editing && !readOnly" class="text-comment__edit-btn" (click)="editing = true" (click)="onCommentDisplayClick()">
         <span class="label--abs-left">Edit</span>
         <i class="icon-text-comment"></i>
     </div>

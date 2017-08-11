@@ -39,11 +39,11 @@ export class TextCommentComponent implements OnInit, AfterViewInit {
                 this.element.nativeElement.querySelector('textarea').focus()
             }, 100)
         }
-    }
+    } // ngOnInit() 
 
     ngAfterViewInit() {
         
-    }
+    } // ngAfterViewInit()
 
     updateComment(commentData: string) {
         this.editing = false;
@@ -55,6 +55,12 @@ export class TextCommentComponent implements OnInit, AfterViewInit {
         event.preventDefault()
         this.element.nativeElement.querySelector('textarea').blur()
     }
+    
+    public onCommentDisplayClick () : void  {
+        if (!this.editing) {
+            this.activated = false;
+        }
+    } // public onCommentDisplayClick () : void
 
     focusField(event) {
         // setTimeout( function(event) {
@@ -65,4 +71,4 @@ export class TextCommentComponent implements OnInit, AfterViewInit {
             // this.element.nativeElement.querySelector('#textComment').value = 'hi'
         // }, 3000)
     }
-}
+} // class

@@ -134,8 +134,7 @@ export class CommentComponent implements OnInit {
       } else {
         this.togglePreview()
       }
-      
-  }
+  } // toggleActive( ): void 
 
   activate(event): void {
       // Ignore if user is just clicking a link
