@@ -159,10 +159,13 @@ edji-comment {
 	}
 
 	&:not(.active) .comment-input-wrapper:hover {
-		transform: scale(1.05) translateZ(0px);
-		& .input-wrap {
-			box-shadow: $inputFocusHalfShadow;
-		}
+		transform: scale(1.0) translateZ(0px);
+		box-shadow: $inputFocusHalfShadow;
+		border-color: #b8d4e2;
+		
+		// & .input-wrap {
+		// 	box-shadow: $inputFocusHalfShadow;
+		// }
 		
 		.reply {
 			display: block !important;
@@ -181,12 +184,14 @@ edji-comment {
 		}
 
 		& .comment-input-wrapper {
-			transform: scale(1.1) translateZ(0px);
+			box-shadow: $inputFocusShadow;
+			border-color: #00a2f5;
+			transform: scale(1) translateZ(0px);
 		}
 
-		& .input-wrap {
-			box-shadow: $inputFocusShadow;
-		}
+		// & .input-wrap {
+			
+		// }
 
 		.reply {
 			display: block !important;
