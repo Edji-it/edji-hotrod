@@ -69,8 +69,22 @@
                                 <!-- Used to display form errors -->
                                 <div id="card-errors" role="alert"></div>
                                 <div *ngIf="stripeMessage" class="alert alert-warning" [innerHtml]="stripeMessage"></div>
-                            </div>
 
+                                <div class="pt-2">
+                                    <a href="http://stripe.com" target="_blank">
+                                        <img src="/assets/images/powered_by_stripe.png"/>
+                                    </a>
+                                    <div style="float:right;">
+                                        <img class="card-icon" src="/assets/images/icon-amex.png"/>
+                                        <img class="card-icon" src="/assets/images/icon-mastercard.png"/>
+                                        <img class="card-icon" src="/assets/images/icon-visa.png"/>
+                                        <img class="card-icon" src="/assets/images/icon-discover.png"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row pt-4">
+                                <p class="small">By Subscribing to Hero, you agree to our <a class="link" target="_blank" href="http://guide.edji.it/index.php/hero-license-agreement/">License Terms</a> and <a class="link" target="_blank" href="http://guide.edji.it/index.php/back-to-edji-it/privacy-terms/">Privacy Policy</a>.
+                            </div>
                             <!--<button>Submit Payment</button>-->
                         </form>
                     </div><!--col-12-->

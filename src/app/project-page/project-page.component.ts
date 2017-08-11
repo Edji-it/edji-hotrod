@@ -13,6 +13,14 @@ import { Project, Reading, User } from './../shared/datatypes';
     templateUrl: 'project-page.component.html'
 })
 export class ProjectPageComponent implements OnInit, OnDestroy {
+
+    /*
+        Project Page
+        Last Mod: 29 July 2017 - Nick Pumper
+
+        The bones for where a project will sit inside of.
+    */
+
     private project: Project = <Project>{}
     private reading: any = {}
     private subscriptions: Subscription[] = []

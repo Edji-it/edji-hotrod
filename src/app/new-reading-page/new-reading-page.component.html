@@ -1,3 +1,9 @@
+<!--
+    New Reading Page
+    Last Mod: 5 Aug 2017 - Josh Kyburz
+    Create a new reading.
+-->
+
 <nav-bar [pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'" [canPublish]="true" (saveAction)="saveReading($event, readingForm.value)" (shareAction)="shareReading($event, readingForm.value)"></nav-bar>
 
 <div class="container  pt-4">
@@ -7,7 +13,7 @@
 
              <form [formGroup]="readingForm" >
                 <div class="reading-page">
-                    <!--Error and Success messaging-->
+                    <!--Error and Success Messaging-->
                     <p class="alert alert-warning" *ngIf="error.length > 0">{{ error }}</p>
                     <div class="alert alert-success alert-readings alert-dismissable" role="alert" *ngIf="showAlert">
                         <a href="#" class="close" (click)="showAlert=false">×</a>
@@ -17,6 +23,7 @@
                         {{ errorObject.readingError }}
                     </div>
 
+                    <!-- Title Section - 7.29.17 -->
                     <div class="form-group">
                         <label>
                             <span>Title</span>
@@ -24,31 +31,60 @@
                             <div id="errorTitle" *ngIf="readingForm.controls['title'].hasError('required') && (readingForm.controls['title'].dirty || submitted)"  class="alert alert-info">Please give your Reading a title!</div>
                         </label>
                     </div>
+
+                    <!-- Body Section - 7.29.17
+                        - Includes "reading content" and "source"
+                    -->
                     <div class="form-group medium-wrap" style="position:relative;">
-                        <label>
-                            <span>Reading Content</span>
-                            <p class="sub-label">Select text to see formatting options. Use the insert buttons on the left to add images and PDFs.</p>
-                            <medium-editor
-                                [(editorModel)]="readingHtml"
+                        <label>Reading Content</label>
+                            <!-- Reading Content section -->
+                        <p class="sub-label">Select text to see formatting options. Use the insert buttons on the left to add images and PDFs.</p>
+                        <div *ngFor="let readingPart of readingHtml; let i=index; trackBy:readingTracking">
+                            <edji-question 
+                                *ngIf="readingHtml[i].question" 
+                                (questionDelete)="deleteQuestion(i)"
+                                [question]="readingHtml[i].question"></edji-question>
+                            <medium-editor  
+                                [(editorModel)]="readingHtml[i].text"
                                 [editorOptions]="mediumEditorConfig"
                                 [editorPlaceholder]="readingPlaceholder"
                                 (keyup)="contentChange($event)"
                                 (mouseup)="contentChange($event)"
                                 id="readingContent"
-                                class="content"></medium-editor>
-                            <div id="errorContent" *ngIf="submitted && readingIsBlank"  class="alert alert-info">Please give your Reading some text!</div>
-                        </label>
+                                class="content"
+                                [ngClass]="[i<readingHtml.length - 1 ? 'medium-editor__new-question' : '']"
+                                [attr.rIndex]="i"></medium-editor>
+                        </div>
+                        <div id="errorContent" *ngIf="submitted && readingIsBlank"  class="alert alert-info">Please give your Reading some text!</div>
+                        <!-- Editor Insert Options - 7.29.17
+                            - Insert a Picture or Pdf
+                            - (Hero) Insert a Question
+                        -->
                         <div class="editor-button-bar" [style.top]="editorToolbarY + 'px'">
+                            <!-- Insert Label -->
                             <span class="editor-button-bar__title">Insert</span>
+                            <!-- Upload Image Button 
+                                - Opens Modal.
+                            -->
                             <a id="buttonUploadImage" class="btn btn-icon--plain" (click)="showUploadModal = true">
                                 <img title="Add Picture" class src="/assets/images/icon-picture.svg" />
                             </a>
+                            <!-- Upload PDF Button 
+                                - Opens Modal
+                            -->
                             <a id="buttonUploadPdf" class="btn btn-icon--plain" (click)="showPdfUploadModal = true">
                                 <img title="Add PDF" class src="/assets/images/icon-pdf.svg" />
+                            </a>
+                            <!-- Insert Question Button (Hero) - NOT DONE
+                                - Modal not needed.
+                            -->
+                            <a id="buttonInsertQuestion" *ngIf="currentUser.hero && currentUser.hero.active" class="btn btn-icon--plain" (click)="addQuestionInLine()">
+                                <img title="Add Question" class src="/assets/images/icon-question.svg" />
                             </a>
                         </div>
                     </div>
                     <div class="form-group">
+                        <!-- Source section -->
                         <label>
                             Source
                             <p class="sub-label">(Optional) Provide a link or title for the source of the text.</p>
@@ -72,5 +108,6 @@
     <edji-feedback></edji-feedback>
 </div>
 
+<!-- Modals -->
 <upload-picture-modal class="modal-will-fade" [class.show]="showUploadModal" (returnImage)="addImages($event)" (closeModal)="showUploadModal = false"></upload-picture-modal>
 <upload-pdf-modal class="modal-will-fade" [class.show]="showPdfUploadModal" (returnImage)="addImages($event)" (closeModal)="showPdfUploadModal = false"></upload-pdf-modal>

@@ -1,7 +1,9 @@
-/**
- * Reading
- * -- Concerned with the display of the core text in Readings and Projects
- */
+/*
+	Reading
+	Last Mod: 31 July 2017
+
+	- Concerned with the display of the core text in Readings and Projects
+*/
 
 /*styles for dashboard content only*/
 @import './base/variables';
@@ -709,4 +711,8 @@ $readingIconHeight: 60px;
 		background: rgba(orange, 0);
 		border-width: 5px;
 	}
+}
+
+.question {
+	width: 100%;
 }

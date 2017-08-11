@@ -1,10 +1,14 @@
+/*  
+  Last Mod: 8.5.17
+*/
+
 /** Comment properties we add on the front end */
 export interface EdjiComment extends BaseComment {
-  lineCount: number,
-  expanded: boolean,
-  project_id: string,
-  active: boolean,
-  showAvatar: boolean
+  lineCount       : number,
+  expanded        : boolean,
+  project_id      : string,
+  active          : boolean,
+  showAvatar      : boolean,
 }
 
 /** Comment properties we get from the server */
@@ -15,21 +19,16 @@ export interface BaseComment {
   end: number,
   data: any,
   author: string,
-  type: string,
+  type: string,   // emoji, text, or audio comment?
   dataArray?: any[],
   url?: string,
   text?: string,
   loc?: { x: number, y: number },
   reply_to?: string,
   replies?: any[],
+  questionId? : string,
   new?: boolean
 }
-
-// how do you make an enum that can be used by an interface to specify string values?
-// export enum CommentType {
-//   emojiComment = 0,
-//   textComment
-// }
 
 /** Used to control permissions on altering comment data */
 export enum CommentPermissions {
