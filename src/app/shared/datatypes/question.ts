@@ -10,7 +10,8 @@ import { EdjiComment } from "./";
 
 /* Additional properties we add on the front end */
 interface Question extends BaseQuestion {
-  question_number: number
+  question_number: number,
+  new?          : boolean
 } // interface Question
 
 /** The reading as it is returned from the server */
@@ -19,8 +20,7 @@ interface BaseQuestion {
   prompt        : string,
   answer_types  : any[],
   option_types  : any[],
-  answers?      : EdjiComment[],
-  new?          : boolean
+  answers?      : EdjiComment[]
 } //  interface BaseQuestion
 
 // Conduct the logic behind the question in this class
