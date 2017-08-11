@@ -80,7 +80,7 @@ export class NewReadingPage implements OnInit {
             forcePlainText : true,
             cleanPastedHTML: true,
             cleanAttrs: ['class', 'style', 'dir', 'id'],
-            cleanTags: ['meta', 'button', 'input', 'form', 'img', 'label', 'pre', 'figure', 'hr'],
+            cleanTags: ['meta', 'button', 'input', 'form', 'img', 'label', 'pre', 'figure', 'hr', 'iframe'],
             unwrapTags: [ 'strong', 'center', 'sup', 'sub', 'span', 'small', 'div', 'em', 'footer' ]
         }, 
         extensions: { 
@@ -627,7 +627,8 @@ export class NewReadingPage implements OnInit {
     private getBlockContainer(node) {
         while (node) {
             // Example block elements below, you may want to add more
-            if (node.nodeType == 1 && /^(P|H[1-6]|DIV)$/i.test(node.nodeName)) {
+            //&& /^(P|H[1-6]|DIV)$/i.test(node.nodeName)
+            if (node.nodeType == 1 ) {
                 return node
             }
             node = node.parentNode
