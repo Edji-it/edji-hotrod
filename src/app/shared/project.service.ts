@@ -205,6 +205,12 @@ export class ProjectService {
         }
     } // public removeCommentFromReplies(comment: EdjiComment) : void
 
+    /** 
+     * Adds the answer to the array by question ID
+     * If the user answers a question, add the answer to the array of that question by it's question ID
+     * This groups all answers together by the question ID for the project
+     * @param answer the answer you want added to the array
+     */
     public addAnswerToAnswers(answer: EdjiComment): void {
         let skipAdd = false
         if (answer.questionId) {

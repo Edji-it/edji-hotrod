@@ -50,7 +50,6 @@ export abstract class BaseAnswerComponent {
     newAnswer.questionId = this.baseQuestionReference._id // Be careful. This line literally breaks the entire thing without errors sometimes. 8.8.17
     
     this._angulartics.eventTrack.next({ action: newAnswer.type + 'AnswerCreate', properties: { category: 'heroFeature', label: 'attempt' }})
-    console.log(newAnswer)
 
     // Tell the server we've added an answer
     this._projects.saveAnswer(newAnswer)
@@ -62,14 +61,12 @@ export abstract class BaseAnswerComponent {
 
       this._angulartics.eventTrack.next({ action: newAnswer.type + 'AnswerCreate', properties: { category: 'heroFeature', label: 'success' }})
     
-      console.log(answer.questionId)
-      setTimeout(() => {
-      }, 100)
+      // setTimeout(() => {
+      // }, 100)
     })
     .catch(error => {
       // TRACK EXCEPTION
       this._angulartics.eventTrack.next({ action: newAnswer.type + 'AnswerCreate', properties: { category: 'heroFeature', label: 'failure' }})
-      console.log("Making an answer has failed")
       console.log(error)
     })
   } // public saveAnswer (answer : EdjiComment) : void

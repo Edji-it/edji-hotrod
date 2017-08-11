@@ -121,7 +121,6 @@ export class QuestionComponent implements OnInit, Input, Output, OnDestroy {
         })
     ) // this.subscriptions.push
 
-    console.log("QUESTION ID: " +  this.question._id);
   } // ngOnInit
 
   public setQuestionOrder (input : string) : void {
@@ -190,7 +189,6 @@ export class QuestionComponent implements OnInit, Input, Output, OnDestroy {
     for (let i = 0; i < this.answerTypesAvailable.length; i++) {
       this.answerTypeStatus[this.answerTypesAvailable[i]]=false
       /* if (this.answerTypesAvailable[i]==='reply') {
-        console.log('reply')
         this.answerTypesAvailable.splice(i,1)
       }*/
     }
