@@ -13,7 +13,7 @@
 
       <div *ngIf="countdownOver" class="call-to-action">
         <h1 class="promo-header center">Empower with Hero</h1>
-        <h3 class="countdown-clock">Be Hero #{{ heroCount }}!</h3>
+        <!--<h3 class="countdown-clock">Be Hero #{{ heroCount }}!</h3>-->
       </div>
 
     </div>
@@ -22,7 +22,7 @@
     <div *ngIf="!countdownOver" id="mc_embed_signup" class="row hero-promo-form">
       <div class="col-md-6 offset-md-3">
         <p>We took all the great features of Edji, and we turned up the volume <span [innerHtml]="':tada:' | emojione"></span> Come back August 15th to find out how, and become a Hero!</p>
-        <p>The first Hero scores a $0.01/mo rate. The second Hero scores $0.02/mo. The first 500 Heroes will lock in a unique rate for all our exciting new features.</p>
+        <p>The very first Hero will lock in at only $1/year&mdash;and the longer you wait, the price will climb.</p>
         <p>Enter your email below to be notified when Hero launches!</p>
 
         <div class="form-group pt-2" [class.has-danger]="subError" [class.has-success]="subSuccess">
@@ -43,7 +43,7 @@
         <p class="text-center">Exclusive early signup offer</p>
         <!--<span style="font-weight:bold;color:#d82727;">${{ heroCount/100 }}/mo</span>-->
         <div class="button__row pb-4">
-          <button class="btn btn-hero" (click)="goHero()">Go Hero for ${{ heroCount/100 }}/mo</button>
+          <button class="btn btn-hero" (click)="goHero()">Go Hero for ${{ heroPrice/100 }}/yr</button>
         </div>
 
         <h3>Heroes Make Powerful Lessons</h3>
@@ -61,4 +61,4 @@
 </div><!--container-fluid-->
 
 <hot-login-register [loginHeader]="'To go Hero, first you\'ll need an account'" class="modal-will-fade" [class.show]="showLoginModal" (closeModal)="showLoginModal = false" (loginSuccess)="showHeroSubModal = true"></hot-login-register>
-<hero-subscribe-modal [couponCode]="'HERO_LAUNCH'" [yearlyAmountOff]="earlyAmountOff()" class="modal-will-fade" [class.show]="showHeroSubModal" (closeModal)="showHeroSubModal = !showHeroSubModal" (heroWasBorn)="_router.navigate(['/dashboard'])"></hero-subscribe-modal>
+<hero-subscribe-modal [couponCode]="'HERO_LAUNCH'" [heroPrice]="heroPrice" class="modal-will-fade" [class.show]="showHeroSubModal" (closeModal)="showHeroSubModal = !showHeroSubModal" (heroWasBorn)="_router.navigate(['/dashboard'])"></hero-subscribe-modal>
