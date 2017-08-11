@@ -57,6 +57,7 @@ import { DashboardComponent, JoinedDashComponent, CreatedDashComponent, Tutorial
 import { NoContentComponent } from './no-content';
 import { AccountComponent, ChangePassComponent, UploadAvatarModal } from './account';
 import { FeedbackComponent } from './shared/feedback/feedback.component';
+import { AvatarDisplayComponent } from './shared/avatar-display/avatar-display.component';
 import { LoginComponent } from './login';
 import { ResetPassPage } from './reset-pass/reset-pass-page.component';
 import { HeroPromoComponent } from './hero-promo/hero-promo.component';
@@ -159,7 +160,11 @@ type StoreType = {
     NoContentComponent,
     ReadingCardComponent,
     HeroPromoComponent,
+<<<<<<< HEAD
+    AvatarDisplayComponent
+=======
     HeroPricingComponent
+>>>>>>> dev
 ],
   imports: [ // import Angular's modules
     BrowserModule,

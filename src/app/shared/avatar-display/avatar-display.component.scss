@@ -1,0 +1,36 @@
+@import '../../../sass/base/variables';
+
+
+// 27 July 2017	
+// Nicholas Pumper
+// Last Mod: 27 July 2017
+
+.profile-pic {
+    border-radius:  50%;
+    object-fit: cover; // Needed for images
+    display:    block;
+    background-color: #D4D1D1;
+    width: 100%;
+    height: 100%;
+
+    // For the temp profile pic
+    & span {
+        text-transform: capitalize;
+        font-family: 'Open Sans';
+        font-weight: bold;
+        color: #fff;
+        display: inline-block;
+        margin-left: 22%;
+        margin-top: 18%;
+    }
+
+    & .user-initials-lg {
+        font-size: 375%; // Define this in it's container
+    }
+
+    & .user-initials-sm {
+        font-size: 100%;
+        margin-top: -25%;
+        margin-left: 12%;
+    }
+} // .profile-pic

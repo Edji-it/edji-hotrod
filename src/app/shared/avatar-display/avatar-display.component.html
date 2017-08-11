@@ -1,0 +1,21 @@
+<!--
+	27 July 2017
+	Nicholas Pumper
+	Last Mod: 28 July 2017
+
+	The little circle with the user's avatar or initials.
+-->
+
+<div class="profile-pic"> 
+	<!-- Avatar picture -->
+	<img id="avatarImg" *ngIf="getAvatar()" class="profile-pic" [src]="getAvatar()" > 
+
+	<!-- The User's Initials
+
+		7.28.17
+		NOTE: Resizing and the initials do not play friendly, so to choose either large or small initials, set avatarSize to either 'lg' or 'sm'.
+		It will default to lg.
+		Example: [avatarSize]="sm" 
+	-->
+	<span id="userInitials" *ngIf="!getAvatar()" [ngClass]="'user-initials-' + avatarSize">{{currentUser.fullname | userinitials}}</span>
+</div>

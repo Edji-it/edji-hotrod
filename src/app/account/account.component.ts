@@ -16,6 +16,14 @@ export class AccountComponent implements OnInit, OnDestroy {
   The page for the user's account info. A profile page.
   */
   
+<<<<<<< HEAD
+  private currentUser   : any;
+  private showPassModal : boolean = false;
+  private showUploadProfPicModal : boolean = false;
+
+  constructor(private _auth: AuthService  /*, private _title: Title*/) {
+    this.currentUser = this._auth.getUser();
+=======
   private nameInitials  : string = "" // we gonna use these for the temp profile pic
   private currentUser   : any
   private expiring : boolean = false
@@ -31,10 +39,14 @@ export class AccountComponent implements OnInit, OnDestroy {
   constructor(private _auth: AuthService, private route: ActivatedRoute, private _router: Router) {
     
     this.nameInitials = "";
+>>>>>>> dev
   } // constructor
 
   ngOnInit() { 
     // this._title.setTitle('Edji | "' + this.currentUser['fullname'] + '"');
+<<<<<<< HEAD
+  } // ngOnInit  
+=======
     this.subscriptions.push(
       this._auth.currentUser.subscribe(
         user => {
@@ -94,4 +106,5 @@ export class AccountComponent implements OnInit, OnDestroy {
 
     return avatar;
   } // public getAvatar () : any 
+>>>>>>> dev
 } // class

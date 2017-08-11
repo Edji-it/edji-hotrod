@@ -67,10 +67,12 @@ export class UploadAvatarModal implements OnInit {
         });
     } else {
       console.log("Upload failure. Either the image was null or too big.");
+      this.uploadedFile = null;
+      this.imageUploaded = false;
     }
   } // public updateUploadFile() voi
 
-  public getSelectedImage () : any 
+  public getSelectedImage () : string 
   {
     return this.uploadedFile;
   } // public getSelectedImage () : any 

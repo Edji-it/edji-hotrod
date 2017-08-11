@@ -19,12 +19,7 @@
                 <!-- Column 1 -->
                 <div class="col-md-6">
                     <!-- Profile Pic -->
-                    <span class="profile-pic">
-                        <!-- Avatar -->
-                        <img id="uploadedPic" class="profile-pic" *ngIf="imageUploaded" [src]="getSelectedImage()">
-                        <!-- User Initials -->
-                        <span id="userInitials" *ngIf="imageUploaded === false">{{currentUser.fullname | userinitials}}</span>
-                    </span>
+                    <avatar-display class="profile-size" [tempDisplayMode]="true" [tempDisplayPic]="getSelectedImage()"></avatar-display>
                 </div>
                 <!-- Column 2 -->
                 <div class="col-md-6">

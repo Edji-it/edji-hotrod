@@ -11,11 +11,8 @@
         <div class="profile-pic-container">
             
             <!-- User Profile Pic -->
-            <span class="profile-pic"> 
-                <!-- Avatar picture -->
-                <img id="avatarImg" *ngIf="getAvatar()" class="profile-pic" [src]="getAvatar()" > 
-                <span id="userInitials" *ngIf="!getAvatar()">{{currentUser.fullname | userinitials}}</span>
-            </span>
+            <avatar-display class="profile-size"></avatar-display>
+
             <!-- Edit Profile Picture Button 
                 - Opens UploadProfPicModal -->
                 <!--THIS IS NOT READY TO EXPOSE-->
