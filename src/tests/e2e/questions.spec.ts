@@ -163,10 +163,13 @@ describe('Reading Questions Tests', () => {
             browser.wait(EC.presenceOf(question.testQuestion), 5000, " failed to find the test question!");
 
             // make sure we can see the OpenEndedAnswers block
-            browser.wait(EC.visibilityOf(question.openEndedAnswerBlock), 5000, " failed to find the open ended answers block under the test question.!");
-                
+            browser.wait(EC.presenceOf(question.openEndedAnswerBlock), 10000, "failed to find the open ended answers block under the test question!");
+            browser.executeScript('window.scrollTo(0, document.querySelector("article .button__answer-type").scrollTop);').then(function () {
+                browser.wait(EC.elementToBeClickable(question.openEndedAnswerBlock), 5000, "never scrolled and saw the question");
+            });
+
             // First, let's find the emoji comment button
-            browser.wait(EC.elementToBeClickable(question.emojiCommentBtn), 5000, " failed to clicj the emoji comment button!");
+            browser.wait(EC.elementToBeClickable(question.emojiCommentBtn), 5000, " failed to click the emoji comment button!");
 
             // Click on the emoji comment button
             question.emojiCommentBtn.click();
