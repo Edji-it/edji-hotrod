@@ -21,10 +21,9 @@ export class Questions implements PageObjectInterface {
     public emojiCommentBtn      = element.all(by.css(".button__answer-type")).first();
     public emojiCommentSave     = element(by.id('keyboardDoneBtn'));
     public textCommentBtn       = this.answerOptions.element(by.className("icon-text-comment"));
-    public textCommentInput     = element(by.id('textCommentInput'));
     public firstAnswer          = this.answerBlock.element(by.id("comment"))
     public emojiCommentDelete   = element(by.css('.inline-delete')); // element(by.id('commentDelBtn'));
-
+    public textCommentInput     = this.firstAnswer.element(by.css('.text-comment-input'));
 
     public getPage() : void {
         // First we clear out the url (sometimes page is preserved if the url stays the same)
