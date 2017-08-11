@@ -137,7 +137,7 @@ export class ProjectService {
             this._commentStats.addCommentToStats(comment, 1)
         }
 
-        let ans = project.answers.length
+        let ans = project.answers && project.answers.length
         for (let i = 0; i < ans; i++) {
             let answer = project.answers[i]
 
