@@ -1,14 +1,15 @@
-import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
+import { Injectable } from '@angular/core'
+import { Http } from '@angular/http'
+import { Observable } from 'rxjs/Observable'
 
-import { AuthService } from '.';
+import { AuthService } from '.'
+import { User } from './datatypes'
 
 @Injectable()
 export class BumblebeeService {
 
-  private url: string = "//bumblebee.edji.it";
-  // private url: string = "http://localhost:8333";
+  private url: string = "//bumblebee.edji.it"
+  // private url: string = "http://localhost:8333"
 
   constructor(private _auth: AuthService, private http: Http) {
   }
@@ -23,7 +24,7 @@ export class BumblebeeService {
       .take(1)
       .subscribe(
         (success) => {  },
-        (error) => { console.error(error); } //don't think this can ever happen... bumblebee doesn't return errors
+        (error) => { console.error(error) } //don't think this can ever happen... bumblebee doesn't return errors
       )
   }
 
@@ -31,6 +32,13 @@ export class BumblebeeService {
     return this.http.post(
       this.url + "/newform",
       data,
+      this._auth.getOptions()
+    )
+  }
+
+  public sendUserAction(user: User, action: string) {
+    return this.http.post(
+      this.url + "/hero",
       this._auth.getOptions()
     )
   }
