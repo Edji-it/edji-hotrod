@@ -24,17 +24,19 @@ export class NewReading implements PageObjectInterface
     public imageUploadTrigger = element(by.id('buttonBeginImageUpload'));
     public imageFileInput = element(by.css('#imageFileInput'));
     public uploadedImage = element(by.css(".upload-list-item.new"));
-    public emojiAnswerButton = element.all(by.id('answerOptionemoji')).last();
-    public textAnswerButton = element.all(by.id('answerOptiontext')).last();
+    public emojiAnswerButton = element(by.className('icon-emoji-comment'));
+    public textAnswerButton = element(by.className('icon-text-comment'));
 
     public uploadPDfModalButton = element(by.css('#buttonUploadPdf'));
     public pdfUploadTrigger = element(by.id('buttonBeginPdfUpload'));
     public pdfFileInput = element(by.css('#pdfFileInput'));
     public insertUploadedPdf = element(by.css(".upload-list-item.new .e2e-insert-doc"));
 
+    // Creating questions
     public insertQuestionButton = element.all(by.id('buttonInsertQuestion')).last();
     public insertQuestionPrompt = element.all(by.css('textarea.text-comment-input')).last();
-    
+    public 
+
     public imageInReading = element(by.css(".content .img img"));
     // public imageUploadList = element.all(by.css('.upload-list-item'));
     
