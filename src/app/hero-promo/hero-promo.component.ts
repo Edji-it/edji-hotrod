@@ -79,6 +79,7 @@ export class HeroPromoComponent implements OnInit {
     if (distance < 0) {
       // clearInterval(this.intervalVar);
       this.countdownText = "0d 0h 0m 0s"
+      this.countdownOver = true
     } else {
       // Display the result in the element with id="demo"
       this.countdownText = days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
@@ -94,7 +95,6 @@ export class HeroPromoComponent implements OnInit {
     this._auth.addToHeroList({ email : newHeroEmail }).take(1)
       .subscribe( 
         data => {
-          console.log(data)
           this.subSuccess = true
           this.subMsg = 'We\'ll let you know when Hero launches!';
       },
