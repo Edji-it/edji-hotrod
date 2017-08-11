@@ -6,7 +6,7 @@ import { LoginModal, GuestLoginForm } from './components';
 
 /*
     27 Jan 2017
-    Last Modified: 27 Jan 2017
+    Last Modified: 8 Aug 2017
     Nicholas Pumper
 
     e2e test the Project page!
@@ -266,6 +266,5 @@ describe('Project Page', () => {
             browser.wait(EC.invisibilityOf(project.discussionPanel), 5000, "discussion panel never went away after dismissal");
         });
     });
-     
 }); // describe 'Dashboard Page'
   

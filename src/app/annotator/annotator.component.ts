@@ -1,10 +1,3 @@
-/**
- *  Annotator Component
- *  - Loads Reading text
- *  - Compiles word components
- *  - Triggers highlighting
- *  - Deletes highlights and comment components
- */
 import { Component, Input, OnDestroy, OnInit, ViewChildren, QueryList, EventEmitter } from '@angular/core'
 import { Subscription } from 'rxjs/Rx'
 import * as Rangy from 'rangy'
@@ -27,7 +20,20 @@ declare var window: any
     styleUrls: ['annotator.component.scss']
 })
 export class AnnotatorComponent implements OnInit, OnDestroy {
-    // @Input() private project: any
+    
+    /*
+        Annotator Component
+        Last Mod: 5 Aug 2017 - Josh Kyburz
+        
+        This does all the heavy lifting in a a reading.
+        - Loads Reading text
+        - Compiles word components
+        - Triggers highlighting
+        - Deletes highlights and comment components
+        - Asks ProjectService to save comments for us.
+    */
+    
+    
     @Input() private mobileCommentActive: boolean
     @Input() private activeReply: any
 
@@ -36,33 +42,36 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     private reading: Reading = <Reading>{}
     private project: Project = <Project>{}
     
-    private commentsByIndex: EdjiComment[][] = []
-    private fireComments: EdjiComment[] = []
-    private showDiscussions: boolean = false
-    private focusOverride: boolean = false
+    private commentsByIndex : EdjiComment[][] = []
+    private fireComments    : EdjiComment[] = []
+    private focusOverride   : boolean = false
 
-    private highlightArray: number[] = []
+    private highlightArray      : number[] = []
     private alwaysHighlightArray: number[] = []
-    private focusArray: boolean[] = []
+    private focusArray          : boolean[] = []
     
-    // An array of arrays!
-    private lineCountArray: any[][] = []
+    // Line Count
+    private lineCountArray: any[][] = [] // 2D ARRAY
     private lineCountRunning: boolean = false
 
     // private activeComment: EdjiComment = <EdjiComment>{}
     private replyComment: EdjiComment = <EdjiComment>{}
-    
     private lineExpanded: boolean = false
+
+    // Trigger Booleans
     private showCommentCounts: boolean = false
     private showAllComments: boolean = false
+    private showDiscussions : boolean = false
+    private optionsShow = false
+    private hideKeyboard = false
+
+    // Status Booleans
+    private isMobile = false
 
     private highlightY = 200 
     private highlightX = 20 
     private optionLeft = true
-    private isMobile = false
-    private optionsShow = false
     private mobileIndex = 0
-    private hideKeyboard = false
 
     private imageCoords = {}
     private imageHotspotPlaceholder: any = {
@@ -147,6 +156,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 reading => {
                     this.reading = reading
                     this.updateMetaTags()
+                    if (reading.questions) {
+                        this.updateQuestionNumbers(reading.questions)
+                    }
                 },
                 error => {
                     console.error(error)
@@ -254,7 +266,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
         // Fallback for tooltip: Continuous text selection check
         this.loopCheckTextSelection()
-    }
+    } // ngOnInit
 
     ngOnDestroy() {
         this._readings.clear()
@@ -272,6 +284,13 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // if (firstImage) {
         //     document.querySelector('meta[property="og:image"]').setAttribute('content', firstImage.getAttribute('src'))
         // }
+    }
+
+    // Adds the question number to each question for proper rendering
+    private updateQuestionNumbers(questions) {
+        for (let i=0;i<questions.length;i++) {
+            questions[i].question_number = i+1
+        }
     }
 
     hideCommentOptions(event ?): void {
@@ -476,7 +495,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // We need to make sure they aren't already editing a comment
         this.inactivateComment()
 
-        let projectId = this.project._id
+        // STEP: We're prepping a comment to send to ProjectService for saving.
+
         let text: string = ''
         for (var i = start; i <= end; i++) {
             text += this.reading.words[i].str
@@ -485,7 +505,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.angulartics.eventTrack.next({ action: type + 'CommentCreate', properties: { category: 'projectAction', label: 'attempt' }})
         
         let comment = <EdjiComment>{
-            project_id: projectId,
             data: '',
             start: start,
             end: end,
@@ -499,7 +518,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             .then(comment => {
                 // We add the comment from the service because it has an Id
                 if (comment._id) {
-                    this.angulartics.eventTrack.next({ action: type + 'CommentCreate', properties: { category: 'projectAction', label: 'attempt' }})
+                    this.angulartics.eventTrack.next({ action: type + 'CommentCreate', properties: { category: 'projectAction', label: 'success' }})
                     // Check if comment should start expanded
                     // Needs to be moved to commentsByIndexAdd or comment component ngOnInit
                     // if (document.querySelector('.w[index="' + start + '"] .comment')) {
@@ -530,7 +549,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 // Maybe show a warning icon?
                 console.warn(error)
             })
-    }
+    } // createComment
 
     commentsByIndexUpdate(comment, wordIndex: number, commentIndex: number) {
         this.commentsByIndex[wordIndex][commentIndex].data = comment.data
@@ -691,7 +710,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     /** 
      * Add Comment of type
      * - Fired from comment options tooltip
-     */
+    */
     addCommentOfType(type: string): void {
         // Get selection indices
         let span = this.getSelectionSpan()
@@ -938,4 +957,3 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.unfocusHighlight(comment.start, comment.end, comment.loc)
     }
 }
-

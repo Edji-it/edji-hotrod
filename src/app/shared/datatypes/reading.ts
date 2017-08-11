@@ -1,4 +1,4 @@
-import { Project } from '.'
+import { Project, EdjiQuestion } from '.'
 
 /** Reading with any additional properties we add on the front end */
 export interface Reading extends BaseReading {
@@ -23,5 +23,6 @@ export interface BaseReading {
   cover_img?: string,
   draft: boolean,
   version_id?: string,
-  _id: string
+  _id: string,
+  questions?: EdjiQuestion[]
 }

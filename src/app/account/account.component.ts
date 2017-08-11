@@ -11,7 +11,7 @@ import { User } from '../shared/datatypes';
 export class AccountComponent implements OnInit, OnDestroy {
 
   /*
-  Last Mod: July 4th, 2017 - INDEPENDENCE DAY - Nick Pumper
+  Last Mod: 29 July 2017 - Nick Pumper
 
   The page for the user's account info. A profile page.
   */

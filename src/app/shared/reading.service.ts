@@ -11,7 +11,7 @@ import { Reading } from './datatypes/reading'
 export class ReadingService {
 
   /*
-  Last Modified: 26 May 2017
+    Last Modified: 5 Aug 2017
   */
 
   constructor(private http: Http, private _auth: AuthService) {
@@ -146,7 +146,8 @@ export class ReadingService {
         words: reading.words,
         html: reading.html,
         source: reading.source,
-        draft: reading.draft
+        draft: reading.draft,
+        questions: reading.questions
       } // let
 
       return this.http
