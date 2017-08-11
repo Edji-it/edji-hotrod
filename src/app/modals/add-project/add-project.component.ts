@@ -16,25 +16,28 @@ export class AddProjectModal implements OnInit {
   private formSubmitted: boolean = false;
   private errors: { serviceError ?: boolean } = {};
   private commentTypes: any = []
+  private canChooseTypes: boolean = false 
 
   constructor(
     private _projects: ProjectService, 
-    _fb: FormBuilder,
+    private _fb: FormBuilder,
     private _auth: AuthService
     ) {
-    this.projectForm = _fb.group({
-      label: [null, Validators.required],
-      emojiType: true,
-      textType: true,
-      audioType: true,
-      replyType: true
-    });
   }
 
   ngOnInit() { 
-    console.log(this.reading); 
     // Get authorized comment types
     this.commentTypes = this._auth.getAllowedCommentTypes()
+
+    this.projectForm = this._fb.group({
+      label: [null, Validators.required],
+      emojiType: true,
+      textType: true,
+      audioType: this.commentTypes.indexOf('audio') > -1 ? true : false,
+      replyType: this.commentTypes.indexOf('reply') > -1 ? true : false
+    });
+
+    this.canChooseTypes = this._auth.getUser().hero && this._auth.getUser().hero.active
   }
 
   /**
