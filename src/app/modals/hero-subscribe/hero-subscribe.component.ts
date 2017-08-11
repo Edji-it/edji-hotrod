@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 // Project dependencies
-import { AuthService } from '../../shared';
+import { AuthService, BumblebeeService } from '../../shared';
 
 declare var Stripe: any
 
@@ -31,7 +31,10 @@ export class HeroSubscribeComponent implements OnInit {
   @Output()
   heroWasBorn: EventEmitter<any> = new EventEmitter()
   
-  constructor(private _auth: AuthService) { }
+  constructor(
+    private _auth: AuthService,
+    private _bumblebee: BumblebeeService
+  ) { }
 
   ngOnInit() {
     // Create a Stripe client
@@ -97,6 +100,7 @@ export class HeroSubscribeComponent implements OnInit {
                 this.loading = false
                 if (data.user) {
                   this._auth.setUser(data.user)
+                  this._bumblebee.userHeroAction(data.user, "subscribed")
                 }
               },
               error => {

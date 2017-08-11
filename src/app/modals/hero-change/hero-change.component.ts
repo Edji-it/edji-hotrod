@@ -1,6 +1,8 @@
 import { AuthService } from '../../shared';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
+import { BumblebeeService } from './../../shared'
+
 @Component({
   selector: 'hero-change-modal',
   templateUrl: './hero-change.component.html',
@@ -23,7 +25,10 @@ export class HeroChangeComponent implements OnInit {
   @Output()
   closeModal: EventEmitter<any> = new EventEmitter(); // Tell the listening page to close the darned thing.
 
-  constructor(private _auth: AuthService) { }
+  constructor(
+    private _auth: AuthService,
+    private _bumblebee: BumblebeeService
+  ) { }
 
   ngOnInit() {
     this.user = this._auth.getUser()
@@ -54,6 +59,7 @@ export class HeroChangeComponent implements OnInit {
           this.updating = false
           this.isUpdated = true
           if (data.user) {
+            this._bumblebee.userHeroAction(data.user, "unsubscribed")
             this._auth.setUser(data.user)
           }
         },
@@ -73,6 +79,7 @@ export class HeroChangeComponent implements OnInit {
       .take(1)
       .subscribe(
         data => {
+
           this.canceling = false
           this.isCanceled = true
           if (data.user) {
