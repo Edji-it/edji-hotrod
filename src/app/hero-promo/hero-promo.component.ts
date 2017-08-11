@@ -20,8 +20,7 @@ export class HeroPromoComponent implements OnInit {
   private showLoginModal: boolean
   private showHeroSubModal: boolean
 
-
-  private heroCount: number = 2000
+  private heroPrice: number = 4000
 
   private subscriptions: Subscription[] = []
 
@@ -44,23 +43,19 @@ export class HeroPromoComponent implements OnInit {
     // kick off countdown
     this.incrementer()
     // Conitnuously check for Hero Count
-    this.getHeroCount()
+    this.getHeroPrice()
   }
 
-  private earlyAmountOff(): number {
-    return 5900 - this.heroCount * 3
-  }
-
-  private getHeroCount(): void {
-    this._auth.getHeroCount()
+  private getHeroPrice(): void {
+    this._auth.getHeroPrice()
       .toPromise()
       .then( 
         data => {
-          if (data.count) {
-            this.heroCount = data.count
+          if (data.cost) {
+            this.heroPrice = data.cost
           }
           setTimeout(() => {
-            this.getHeroCount()
+            this.getHeroPrice()
           }, 2000)
         }, error => {
           console.error(error)

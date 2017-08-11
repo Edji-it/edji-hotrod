@@ -18,12 +18,10 @@ export class HeroSubscribeComponent implements OnInit {
   private loading: boolean = false
   private userNowHero: boolean
   private stripe: any
-
-  // @Input()
-  // monthlyAmountOff: number
+  private stripeMessage: string
 
   @Input()
-  yearlyAmountOff: number
+  heroPrice: number
 
   @Input()
   couponCode: string
@@ -103,16 +101,11 @@ export class HeroSubscribeComponent implements OnInit {
               },
               error => {
                 this.loading = false
+                this.stripeMessage = 'There was an error processing your payment. Please try correcting your payment information, or <a href="mailto:support@edji.it" class="link">contact our support team</a>.'
               })
 
         }
       });
 
   }
-
-  getYearlyPrice() : number {
-    return Math.round(6000 - this.yearlyAmountOff)/100
-  }
-  
-
 }
