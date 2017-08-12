@@ -57,10 +57,15 @@ export class TextCommentComponent implements OnInit, AfterViewInit {
     }
     
     public onCommentDisplayClick () : void  {
+        console.log("That one function fired.");
         if (!this.editing) {
             this.activated = false;
         }
     } // public onCommentDisplayClick () : void
+
+    public OnEditButtonClick () : void {
+        this.editing = true;
+    } // public OnEditButtonClick () : void 
 
     focusField(event) {
         // setTimeout( function(event) {

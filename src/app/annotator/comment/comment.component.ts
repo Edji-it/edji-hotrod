@@ -107,60 +107,64 @@ export class CommentComponent implements OnInit {
         console.error(error)
       }
     ) )
-  }
+1  }
 
   toggleActive( ): void {
-      if (!this.readOnly) {
-        if (this.active === true) {
-            this.active = false
-            this.commentActivation.emit(false)
-            this._comments.activeComment.active = false
-            // Save when comment is toggled away from
-            if (this.comment.reply_to) {
-              this.updateComment(this.comment.data, true)
-            } else {
-              this.updateComment(this.comment.data)
-            }
-        } else {
-          if (this.reply) {
-            this.active = true
-            this._comments.activeComment = this.comment
-            this._comments.activeComment.active = true
+    console.log("active toggled!")
+    if (!this.readOnly) {
+      if (this.active === true) {
+          this.active = false
+          this.commentActivation.emit(false)
+          this._comments.activeComment.active = false
+          // Save when comment is toggled away from
+          if (this.comment.reply_to) {
+            this.updateComment(this.comment.data, true)
           } else {
-            this.active = true 
-            this.commentActivation.emit(true)
+            this.updateComment(this.comment.data)
           }
-        }
       } else {
-        this.togglePreview()
+        if (this.reply) {
+          this.active = true
+          this._comments.activeComment = this.comment
+          this._comments.activeComment.active = true
+        } else {
+          this.active = true 
+          this.commentActivation.emit(true)
+        }
       }
+    } else {
+      this.togglePreview()
+    }
   } // toggleActive( ): void 
 
   activate(event): void {
-      // Ignore if user is just clicking a link
-      if (this.preview && ['a','i'].indexOf(event.target.tagName.toLowerCase()) > -1) {
-        // Let click open link
-      } else {
-         if (!this.readOnly) {
-            this.active = true
-            this.commentActivation.emit(true)
-          } else {
-              this.togglePreview()
-          }
-      }
+    console.log("activate called")
+    // Ignore if user is just clicking a link
+    if (this.preview && ['a','i'].indexOf(event.target.tagName.toLowerCase()) > -1) {
+      // Let click open link
+    } else {
+        if (!this.readOnly) {
+          this.active = true
+          this.commentActivation.emit(true)
+        } else {
+            this.togglePreview()
+        }
+    }
   }
 
   togglePreview(): void {
-      if (this.preview === true) {
-        this.preview = false
-        this.commentActivation.emit(false)
-        this._comments.activeComment.active = false
-      } else {
-        this.preview = true
-      }
+    console.log("preview toggled!")
+    if (this.preview === true) {
+      this.preview = false
+      this.commentActivation.emit(false)
+      this._comments.activeComment.active = false
+    } else {
+      this.preview = true
+    }
   }
 
   deactivate(commentData ?: any): void {
+    console.log("deactivate toggled")
     this.active = false
     this.commentActivation.emit(false)
     this._comments.activeComment.active = false
