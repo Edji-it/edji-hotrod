@@ -2,8 +2,8 @@ import { SELENIUM_PORT } from 'webdriver-manager/built/lib/cmds';
 import { ActivatedRoute, Params } from '@angular/router'
 import { Injectable } from '@angular/core'
 import { Http, Response, Headers, RequestOptions } from '@angular/http'
-import { Observable, BehaviorSubject, Subject } from 'rxjs/Rx'
-import 'rxjs/add/operator/toPromise'
+import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs/Rx';
+import 'rxjs/add/operator/toPromise';
 import { Angulartics2 } from 'angulartics2'
 
 import { AuthService } from './auth.service'
@@ -27,6 +27,7 @@ export class ProjectService {
      * This stores all of the comment stats for a project and all of the logic to manipulate the stats
      */
     _commentStats: CommentStats
+    subscriptions: Subscription[] = []
     
     /**
      * Updated Reference Object
@@ -64,6 +65,38 @@ export class ProjectService {
         this._socket.commentUpdates.subscribe((update) => {
             // console.log(update)
         })
+
+        this.subscriptions.push(
+            this._socket.commentUpdates.subscribe((commentUpdate) => {
+                let comment = commentUpdate.comment
+                // Process different live comment updates
+                if (commentUpdate.action === 'DELETE') {
+                    if (comment.reply_to) {
+                        this.removeCommentFromReplies(comment)
+                    } else if (comment.questionId) {
+                        this.removeAnswerFromAnswers(comment)
+                    }
+                } else if (commentUpdate.action === 'UPDATE') {
+                    // Socket updates don't come through with a timestamp
+                    comment.createdAt = Date.now()
+                    if (comment.reply_to) {
+                        this.addCommentToReplies(comment)
+                    } else if (comment.questionId) {
+                        this.addAnswerToAnswers(comment)
+                    }
+                } else if (commentUpdate.action === 'CREATE') {
+                    // Socket updates don't come through with a timestamp
+                    comment.createdAt = Date.now()
+                    if (comment.reply_to) {
+                        this.addCommentToReplies(comment)
+                    } else if (comment.questionId) {
+                        this.addAnswerToAnswers(comment)
+                    }
+                }
+            }, (error) => {
+                console.warn(error)
+            })
+        )
     } // constructor
     
     /**
