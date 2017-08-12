@@ -55,9 +55,7 @@ export class QuestionComponent implements OnInit, Input, Output, OnDestroy {
   // Answer types are passed onto which ever Answer component
   public answerTypeStatus: any[] = []
   private optionTypeStatus: any[] = []
-  private answerTypesAvailable: any[] = [
-     'emoji', 'text', 'audio'
-  ]
+  private answerTypesAvailable: any[] = []
   private optionTypesAvailable: any[] = [{
       'type':'public','text':'public answers'
     }, {
@@ -116,7 +114,7 @@ export class QuestionComponent implements OnInit, Input, Output, OnDestroy {
     this.subscriptions.push(
         this._auth.getCurrentUser().subscribe((user) => {
           this.user = user
-          this.answerTypesAvailable = this._auth.getAllowedCommentTypes()
+          this.answerTypesAvailable = this._auth.getAllowedCommentMediaTypes()
           this.updateSelections()
         })
     ) // this.subscriptions.push

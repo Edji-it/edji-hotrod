@@ -210,7 +210,6 @@ export class CommentComponent implements OnInit {
         } else {
           this.angulartics.eventTrack.next({ action: 'updateComment', properties: { category: 'projectAction', label: 'success' }})
         } // else
-        console.log(comment)
         this.isLoading = false
         
         this.justSaved = true
