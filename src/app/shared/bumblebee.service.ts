@@ -37,6 +37,7 @@ export class BumblebeeService {
   }
 
   public userHeroAction(user: User, action: string): void {
+    console.log("firing hero action")
     this.http.post(
       this.url + "/hero",
       this._auth.getOptions()
