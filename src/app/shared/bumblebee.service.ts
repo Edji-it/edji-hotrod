@@ -40,6 +40,7 @@ export class BumblebeeService {
     console.log("firing hero action")
     this.http.post(
       this.url + "/hero",
+      { user: user, action: action },
       this._auth.getOptions()
     )
     .take(1)
