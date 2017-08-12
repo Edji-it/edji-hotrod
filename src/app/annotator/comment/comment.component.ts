@@ -148,7 +148,7 @@ export class CommentComponent implements OnInit {
 
   activate(event): void {
       // Ignore if user is just clicking a link
-      if (this.preview && ['a','i'].indexOf(event.target.tagName.toLowerCase()) > -1) {
+      if (this.preview && event && ['a','i'].indexOf(event.target.tagName.toLowerCase()) > -1) {
         // Let click open link
       } else {
          if (!this.readOnly) {
