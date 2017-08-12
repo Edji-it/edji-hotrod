@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Rx';
 
@@ -9,7 +9,7 @@ import { AuthService } from '../shared';
   templateUrl: './hero-promo.component.html',
   styleUrls: ['./hero-promo.component.scss']
 })
-export class HeroPromoComponent implements OnInit {
+export class HeroPromoComponent implements OnInit, OnDestroy {
 
   private countdownDate
   private countdownText: string
@@ -19,6 +19,7 @@ export class HeroPromoComponent implements OnInit {
   private subSuccess: boolean
   private showLoginModal: boolean
   private showHeroSubModal: boolean
+  private cancelGetPriceCall: boolean = false
 
   private heroPrice: number = 4000
 
@@ -46,6 +47,10 @@ export class HeroPromoComponent implements OnInit {
     this.getHeroPrice()
   }
 
+  ngOnDestroy() {
+    this.cancelGetPriceCall = true
+  }
+
   private getHeroPrice(): void {
     this._auth.getHeroPrice()
       .toPromise()
@@ -54,9 +59,15 @@ export class HeroPromoComponent implements OnInit {
           if (data.cost) {
             this.heroPrice = data.cost
           }
-          setTimeout(() => {
-            this.getHeroPrice()
-          }, 2000)
+
+          // this can be set to cancel the recursion
+          if (this.cancelGetPriceCall) {
+            return
+          } else {
+            setTimeout(() => {
+              this.getHeroPrice()
+            }, 2000)
+          }
         }, error => {
           console.error(error)
         })
