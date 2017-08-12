@@ -8,8 +8,8 @@ import { User } from './datatypes'
 @Injectable()
 export class BumblebeeService {
 
-  // private url: string = "//bumblebee.edji.it"
-  private url: string = "http://localhost:8333"
+  private url: string = "//bumblebee.edji.it"
+  // private url: string = "http://localhost:8333"
 
   constructor(private _auth: AuthService, private http: Http) {
   }
