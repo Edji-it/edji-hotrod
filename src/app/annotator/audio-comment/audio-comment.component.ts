@@ -243,14 +243,14 @@ export class AudioCommentComponent implements OnInit{
       this.countdownText = '----- ' + this.countdownI + ' -----'
       this.countdownI--
     }, 1000)
+    this.playAble = false
+    this.isPlaying = false
     setTimeout(() => {
       clearInterval(this.countdownInterval)
       this.countdownInterval = ''
       this.countdownI = 3
       this.countdown = false
-      this.playAble = false
       this.isRecording = true
-      this.isPlaying = false
       this.rStartAt = new Date()
       this.mediaRecorder.start(this.intervalGap)
     }, 3000)
