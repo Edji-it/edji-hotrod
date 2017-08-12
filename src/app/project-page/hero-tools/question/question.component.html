@@ -16,14 +16,14 @@
     <div class="question-body" [ngClass]="[question.new ? 'question-body__new' : '']">
       <!-- The Question Prompt Section -->
       <div class="prompt-section" [ngClass]="[question.new ? 'prompt-section__new' : '']">
-        <label class="question-label">QUESTION</label>
+        <label class="label--gray all-caps">Question</label>
         <div *ngIf="question && !question.new" class="prompt">{{question.prompt}}</div>
         <textarea *ngIf="question && question.new" type='text' placeholder="Question text..." class="text-comment-input" [(ngModel)]="question.prompt"></textarea>
       </div>
 
       <!-- Answer and Options Section | If the teacher is creating a question on the new reading page -->
       <div *ngIf="question.new">
-        <div class="answer-label">ANSWER TYPES</div>
+        <div class="label--gray all-caps">Answer Types</div>
         <div class="answer-options" id="answerOptions">
           <!-- Answer Buttons -->
           <button *ngFor="let type of answerTypesAvailable" 
@@ -36,7 +36,7 @@
           </button>
         </div>
         <div *ngIf="questionOptionsStatus">
-          <div id="answerOptions_block" class="answer-label">OPTIONS</div>
+          <div id="answerOptions_block" class="label--gray all-caps">Options</div>
           <div class="answer-options">
             <button
               *ngFor="let type of optionTypesAvailable" id="selectOption" 
@@ -61,7 +61,7 @@
         </div>
 
         <div *ngIf="answersById[question._id] && answersById[question._id].length > 0">
-          <div class="answer-label answers--nearButton">ANSWERS</div>
+          <div class="label--gray">ANSWERS<span *ngIf="!hasUserAnswered()" style="font-weight:normal;display:block;margin-top:-1em;">(Answer to see other readers' answers)</span></div>
           <button class="button-answers__hide btn btn-sm" (click)="ownerHidden = !ownerHidden" 
             [class.hidden]="user._id !== project.teacher_id">
               {{ownerHidden ? 'SHOW' : 'HIDE'}}

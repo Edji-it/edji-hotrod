@@ -116,7 +116,7 @@ hr {
   margin: $base-spacing 0;
 }
 
-label {
+label, .label {
   // color: 
   font-family: $base-font-family;
   font-size: 12px;
@@ -127,6 +127,10 @@ label {
 .label--gray {
   @extend label;
   color: $medium-gray;
+}
+
+.all-caps {
+  text-transform: uppercase;
 }
 
 .sub-label {
