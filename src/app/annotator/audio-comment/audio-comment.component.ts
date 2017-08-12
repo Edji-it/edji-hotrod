@@ -47,8 +47,8 @@ export class AudioCommentComponent implements OnInit{
   private intervalGap: number = 500
   private isInitialized: boolean = false
   private countdown: boolean = false
-  private countdownText: string = ''
   private countdownI: number = 3
+  private countdownText: string[] = ['--- Go! ---', '--- Set ---', '-- Ready --']
   private countdownInterval: any
   private audioType: string = 'ogg'
   private audioTypeExt: string = 'ogg'
@@ -237,18 +237,16 @@ export class AudioCommentComponent implements OnInit{
   private freshRecord() {
     // Let analytics know a recording started
     this.angulartics.eventTrack.next({ action: 'audioRecord', properties: { category: 'heroFeature', label: 'success' }})
-    this.countdownText = '----- 3 -----'
     this.countdown = true
     this.countdownInterval = setInterval(()=> {
-      this.countdownText = '----- ' + this.countdownI + ' -----'
       this.countdownI--
-    }, 1000)
+    }, 800)
     this.playAble = false
     this.isPlaying = false
     setTimeout(() => {
       clearInterval(this.countdownInterval)
       this.countdownInterval = ''
-      this.countdownI = 3
+      this.countdownI = 2
       this.countdown = false
       this.isRecording = true
       this.rStartAt = new Date()
