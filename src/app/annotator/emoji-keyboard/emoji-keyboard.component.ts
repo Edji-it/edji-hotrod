@@ -1,3 +1,4 @@
+import { CommentService } from '../../shared/comment.service';
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import {
   Locker
@@ -84,7 +85,8 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
 
   constructor(
         private _locker: Locker,
-        private _auth: AuthService
+        private _auth: AuthService,
+        private _comments: CommentService
     ) {}
 
   ngOnInit() {
@@ -133,9 +135,11 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
   // Runs on view init and onresize, to keep scroll event light
   updateScrollValues() {
     // Get Y values for categories
-    let filtersLength = this.emojifilters.length
-    for (let i = 0; i < filtersLength; i++) {
-      this.emojifilters[i]['scrollY'] = this.emojiScrollArea.nativeElement.querySelector('#category' + i).offsetTop;
+    if (this._comments.keyboardActive) {
+      let filtersLength = this.emojifilters.length
+      for (let i = 0; i < filtersLength; i++) {
+        this.emojifilters[i]['scrollY'] = this.emojiScrollArea.nativeElement.querySelector('#category' + i).offsetTop;
+      }
     }
   }
 
