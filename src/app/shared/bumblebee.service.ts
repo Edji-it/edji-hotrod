@@ -8,8 +8,8 @@ import { User } from './datatypes'
 @Injectable()
 export class BumblebeeService {
 
-  private url: string = "//bumblebee.edji.it"
-  // private url: string = "http://localhost:8333"
+  // private url: string = "//bumblebee.edji.it"
+  private url: string = "http://localhost:8333"
 
   constructor(private _auth: AuthService, private http: Http) {
   }
@@ -36,10 +36,15 @@ export class BumblebeeService {
     )
   }
 
-  public userHeroAction(user: User, action: string) {
-    return this.http.post(
+  public userHeroAction(user: User, action: string): void {
+    this.http.post(
       this.url + "/hero",
       this._auth.getOptions()
+    )
+    .take(1)
+    .subscribe(
+      (success) => {},
+      (error) => { console.error(error) }
     )
   }
 }
