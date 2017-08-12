@@ -4,7 +4,7 @@
             <i id="audioPlay" [class.hide]="isPlaying" class="icon-play" (click)="play()"></i>
             <i id="audioPause" [class.hide]="!isPlaying" class="icon-pause" (click)="pause()"></i>
         </button>
-        <button id="audioRestart" class="btn-audio" (click)="isRecording=false; isPlaying=false; restartPlayback()"><i class="icon-restart"></i></button>
+        <button id="audioRestart" class="btn-audio" [class.disabled]="!playAble" (click)="isRecording=false; isPlaying=false; restartPlayback()"><i class="icon-restart"></i></button>
         <button id="audioRecord" [class.hide]="" class="btn-audio btn-record" (click)="isRecording ? stopRecord() : record()" [class.disabled]="!recordAble"><i class="icon icon-mic"></i></button>
     </div>
     <div [ngClass]="[reply ? 'reply-wave' : '']" class="wave-wrap" [style.width]="playWidth + 'px'">
