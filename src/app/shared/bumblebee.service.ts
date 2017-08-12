@@ -36,10 +36,17 @@ export class BumblebeeService {
     )
   }
 
-  public userHeroAction(user: User, action: string) {
-    return this.http.post(
+  public userHeroAction(user: User, action: string): void {
+    console.log("firing hero action")
+    this.http.post(
       this.url + "/hero",
+      { user: user, action: action },
       this._auth.getOptions()
+    )
+    .take(1)
+    .subscribe(
+      (success) => {},
+      (error) => { console.error(error) }
     )
   }
 }

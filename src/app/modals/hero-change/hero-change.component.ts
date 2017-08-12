@@ -60,8 +60,6 @@ export class HeroChangeComponent implements OnInit {
           this.isUpdated = true
           if (data.user) {
             this._bumblebee.userHeroAction(data.user, "unsubscribed")
-              .take(1)
-              .subscribe((res) => { /** woohoo **/ }, (err) => { console.error("didn't get to bumblebee :(") })
             this._auth.setUser(data.user)
           }
         },

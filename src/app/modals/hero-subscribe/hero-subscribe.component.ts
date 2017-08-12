@@ -101,8 +101,6 @@ export class HeroSubscribeComponent implements OnInit {
                 if (data.user) {
                   this._auth.setUser(data.user)
                   this._bumblebee.userHeroAction(data.user, "subscribed")
-                    .take(1)
-                    .subscribe((res) => {}, (err) => { console.error("didn't get to bumblebee!") })
                 }
               },
               error => {
