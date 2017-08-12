@@ -463,7 +463,7 @@ export class ProjectService {
     public deleteComment(comment : EdjiComment): Promise<any> {
         let projectId = this.project._id;
         let url = this._auth.getUrl() + '/projects/' + projectId + '/comments/' + comment._id;
-
+        
         return this.http
             .delete(url, this._auth.getOptions())
             .map(data => {

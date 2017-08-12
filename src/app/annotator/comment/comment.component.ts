@@ -210,7 +210,7 @@ export class CommentComponent implements OnInit {
         } else {
           this.angulartics.eventTrack.next({ action: 'updateComment', properties: { category: 'projectAction', label: 'success' }})
         } // else
-
+        console.log(comment)
         this.isLoading = false
         
         this.justSaved = true
@@ -260,9 +260,7 @@ export class CommentComponent implements OnInit {
 
   // Deletes comment via Project service, which updates the local Project object
   public deleteComment(comment: any) : void {
-    // console.log("Trying to delete.");
-
-    //// Sort through the comment types and do the apppropriate pre-delete action
+    // Sort through the comment types and do the apppropriate pre-delete action
     if (this.comment.reply_to) {
       this.angulartics.eventTrack.next({ action: 'deleteReply', properties: { category: 'heroFeature', label: 'attempt' }})
     } else if (this.comment.questionId) {
@@ -274,7 +272,6 @@ export class CommentComponent implements OnInit {
     if (this.commentContext !== 'answer') {
       this._projects.deleteComment(comment)
       .then(data => {
-
         // Sort through the comment types and do the apppropriate post-delete action
         if (this.comment.reply_to) {
           this._projects.removeCommentFromReplies(this.comment)
