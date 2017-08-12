@@ -61,11 +61,13 @@
         </div>
 
         <div *ngIf="answersById[question._id] && answersById[question._id].length > 0">
-          <div class="label--gray">ANSWERS<span *ngIf="!hasUserAnswered()" style="font-weight:normal;display:block;margin-top:-1em;">(Answer to see other readers' answers)</span></div>
-          <button class="button-answers__hide btn btn-sm" (click)="ownerHidden = !ownerHidden" 
+          <div class="label--gray">ANSWERS
+            <span *ngIf="!hasUserAnswered()" style="font-weight:normal;display:block;margin-top:-1em;">(Answer to see other readers' answers)</span>
+            <button class="button-answers__hide btn btn-sm" (click)="ownerHidden = !ownerHidden" 
             [class.hidden]="user._id !== project.teacher_id">
-              {{ownerHidden ? 'SHOW' : 'HIDE'}}
-          </button>
+                {{ownerHidden ? 'SHOW' : 'HIDE'}}
+            </button>
+          </div>
         </div>
         <div class="answerOverflow answerOverflow-normal" id="answerBlock" *ngIf="!ownerHidden">
           <div *ngFor="let answer of answersById[question._id]">
