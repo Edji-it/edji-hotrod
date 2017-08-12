@@ -163,6 +163,7 @@ export class AudioCommentComponent implements OnInit{
           .take(1)
           .subscribe(data => {
             this.audio.src = data.url
+            this.isInitialized = true
 
             // Save to comment
             this.comment.url = data.url
