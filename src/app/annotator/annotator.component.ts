@@ -335,8 +335,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
         // Make sure selection exists, and is within highlightable content
         if (sel && (this.imageHotspotPlaceholder.preview || sel.toString())
-                && Rangy.dom.isAncestorOf(this.annotatorContent, sel.focusNode)
-                && Rangy.dom.isAncestorOf(this.annotatorContent, sel.anchorNode)
+                && (sel.focusNode.classList && sel.focusNode.classList.contains('w') || sel.focusNode.parentNode.classList.contains('w'))
+                && (sel.anchorNode.classList && sel.anchorNode.classList.contains('w') || sel.anchorNode.parentNode.classList.contains('w'))
             ) {
             let scrollOffset = this.annotatorPaper.getBoundingClientRect().top
             const readingPad = 52
