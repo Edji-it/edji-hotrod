@@ -6,7 +6,7 @@
     </h1>
     <!--<input id="projectCodeInput" [formControl]="codeForm.controls['projectCode']" type="text" class="big-field lowercase-field on-white"  placeholder="Lightning Code" />-->
     <div class="input-group input-group-lg pb-2">
-        <input id="projectCodeInput" name="ProjectCodeInput" [formControl]="codeForm.controls['projectCode']" type="text" class="form-control" style="text-align: center;" maxlength="4" [(ngModel)]="projectCode"  placeholder="⚡️ Code" aria-describedby="add-project-code" />
+        <input id="projectCodeInput" name="ProjectCodeInput" [formControl]="codeForm.controls['projectCode']" type="text" class="form-control" style="text-align: center;" [(ngModel)]="projectCode"  placeholder="⚡️ Code" aria-describedby="add-project-code" />
         <span class="input-group-btn">
             <button id="projectJoinButton" class="btn btn-primary" [class.loading]="joinLoading" type="submit" id="buttonJoinProject" name="Join" href="#">Join</button>
         </span>
