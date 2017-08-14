@@ -10,8 +10,10 @@ export class BumblebeeService {
 
   private url: string = "//bumblebee.edji.it"
   // private url: string = "http://localhost:8333"
+  private isProd: boolean = true
 
   constructor(private _auth: AuthService, private http: Http) {
+    this.isProd = this._auth.getUrl() == 'prod'
   }
 
   public sendUserDetails(userDetails: any): void {
@@ -37,16 +39,17 @@ export class BumblebeeService {
   }
 
   public userHeroAction(user: User, action: string): void {
-    console.log("firing hero action")
-    this.http.post(
-      this.url + "/hero",
-      { user: user, action: action },
-      this._auth.getOptions()
-    )
-    .take(1)
-    .subscribe(
-      (success) => {},
-      (error) => { console.error(error) }
-    )
+    if (this.isProd) {
+      this.http.post(
+        this.url + "/hero",
+        { user: user, action: action },
+        this._auth.getOptions()
+      )
+      .take(1)
+      .subscribe(
+        (success) => {},
+        (error) => { console.error(error) }
+      )
+    }
   }
 }
