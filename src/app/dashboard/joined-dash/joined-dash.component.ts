@@ -38,7 +38,7 @@ export class JoinedDashComponent implements OnInit, OnDestroy {
     fb: FormBuilder
   ) {
     this.codeForm = fb.group({
-      projectCode: [null, Validators.compose([Validators.required, Validators.minLength(4), Validators.maxLength(4)])]
+      projectCode: [null, Validators.compose([Validators.required])]
     });
   }
 
