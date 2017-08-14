@@ -516,6 +516,18 @@ export class AuthService implements CanActivate {
             })
     }
     
+    /**
+     * Add users who subscribe to Hero to the Mailchimp Hero Subscribed list
+     */
+    public addToActiveHeroList(user) {
+        let body = user
+        body['list'] = 'hero-subscribed'
+        return this.http.post( this.baseUrl + '/mailchimp/add', body, this.getOptions())
+            .map( res => {
+                return res.json()
+            })
+    }
+    
 
     /**
      * Add newly registered users to the sign up Mailchimp list
@@ -577,8 +589,17 @@ export class AuthService implements CanActivate {
         if (couponCode) {
             data['couponCode'] = couponCode
         }
+
         return this.http.post(this.baseUrl + '/subscriptions', data, this.getOptions())
             .map( res => {
+                if (res && res.json()) {
+                    // Add user to mailchimp list
+                    this.addToActiveHeroList(this.user)
+                    .toPromise()
+                    .then( res => {
+                        console.log(res)
+                    })
+                }
                 return res.json()
             })
 
