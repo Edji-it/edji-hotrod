@@ -43,11 +43,13 @@
                             <edji-question 
                                 *ngIf="readingHtml[i].question" 
                                 (questionDelete)="deleteQuestion(i)"
-                                [question]="readingHtml[i].question"></edji-question>
+                                [question]="readingHtml[i].question"
+                                (keyup)="contentChange($event)"
+                                (mouseup)="contentChange($event)"></edji-question>
                             <medium-editor  
                                 [(editorModel)]="readingHtml[i].text"
                                 [editorOptions]="mediumEditorConfig"
-                                [editorPlaceholder]="readingPlaceholder"
+                                [editorPlaceholder]="getReadingPlaceholder(i)"
                                 (keyup)="contentChange($event)"
                                 (mouseup)="contentChange($event)"
                                 id="readingContent"
@@ -60,7 +62,7 @@
                             - Insert a Picture or Pdf
                             - (Hero) Insert a Question
                         -->
-                        <div class="editor-button-bar" [style.top]="editorToolbarY + 'px'">
+                        <div class="editor-button-bar" [class.hide]="editorToolbarHidden" [style.top]="editorToolbarY + 'px'">
                             <!-- Insert Label -->
                             <span class="editor-button-bar__title">Insert</span>
                             <!-- Upload Image Button 

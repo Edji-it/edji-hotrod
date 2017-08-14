@@ -64,6 +64,7 @@ export class NewReadingPage implements OnInit {
     private ownerId         : string
     private copyId          : string = ''
     private editorToolbarY  : number = 54
+    private editorToolbarHidden : boolean
     private insertNode      : any
     private masterSelection : any
     private currentUser     : User // User data of the current user.
@@ -213,8 +214,28 @@ export class NewReadingPage implements OnInit {
                 focusNode = focusNode.parentNode
             }
 
+            if (focusNode.parentNode && focusNode.parentNode.id !== 'angularMediumEditor' 
+                && focusNode.parentNode.parentNode && focusNode.parentNode.parentNode.id !== 'angularMediumEditor') {
+                this.editorToolbarHidden = true
+            } else {
+                this.editorToolbarHidden = false
+            }
+
             this.insertNode = focusNode
             this.editorToolbarY = NewReadingPage.EDITOR_TOOLBAR_Y > focusNode.offsetTop ? NewReadingPage.EDITOR_TOOLBAR_Y : focusNode.offsetTop
+        } else {
+            this.editorToolbarHidden = true
+        }
+    }
+
+    /**
+     * Returns appropriate placeholder text based on ReadingHtml array index
+     */
+    private getReadingPlaceholder(textIndex: number) : string {
+        if (textIndex == 0) {
+            return this.readingPlaceholder
+        } else {
+            return ' '
         }
     }
 
