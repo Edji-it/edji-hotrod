@@ -520,7 +520,11 @@ export class AuthService implements CanActivate {
      * Add users who subscribe to Hero to the Mailchimp Hero Subscribed list
      */
     public addToActiveHeroList(user) {
-        let body = user
+        let spaceIndex = user.fullname.indexOf(' ')
+        if (spaceIndex < 0) { spaceIndex = user.fullname.length - 1 }
+        let fname = user.fullname.substr(0,spaceIndex)
+        let lname = user.fullname.substr(spaceIndex + 1)
+        let body = { 'email' : user.email, 'fname' : fname, 'lname' : lname }
         body['list'] = 'hero-subscribed'
         return this.http.post( this.baseUrl + '/mailchimp/add', body, this.getOptions())
             .map( res => {
