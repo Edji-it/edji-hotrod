@@ -48,14 +48,17 @@
                                 </tr>
                             </tbody>
                         </table>
-                         <!--<div *ngIf="!couponCode" class="form-row">
+                        <div *ngIf="!initWithCoupon" class="form-row">
                             <label for="promo-code">
                             Promo Code
                             </label>
                             <div id="promo-code">
-                                <input [(ngModel)]="couponCode" type="text" class="form-item" tabindex="0" />
+                                <input [(ngModel)]="customCouponCode" [class.is-valid]="validateCoupon()" type="text" class="form-item form-control text-uppercase" tabindex="0" />
+                                <div class="alert alert-success" *ngIf="validateCoupon()">
+                                    Welcome to Hero, Visionary! Your subscription will be <b>free</b>.
+                                </div>
                             </div>
-                        </div>-->
+                        </div>
                         
                         <form action="/charge" method="post" id="payment-form">
                             <div class="form-row">

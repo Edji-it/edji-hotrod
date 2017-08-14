@@ -19,6 +19,8 @@ export class HeroSubscribeComponent implements OnInit {
   private userNowHero: boolean
   private stripe: any
   private stripeMessage: string
+  private initWithCoupon: boolean = false
+  private customCouponCode: string = ''
 
   @Input()
   heroPrice: number
@@ -42,6 +44,10 @@ export class HeroSubscribeComponent implements OnInit {
       this.stripe = Stripe('pk_test_e2lOurNpSI745MOUdu2LgzOu')
     } else {
       this.stripe = Stripe('pk_live_IOwqaYAERP6biScBTFk3Csrm')
+    }
+
+    if (this.couponCode && this.couponCode.length > 0) {
+      this.initWithCoupon = true
     }
 
     // Create an instance of Elements
@@ -84,6 +90,11 @@ export class HeroSubscribeComponent implements OnInit {
     
   }
 
+  private validateCoupon() {
+    let validCoupons = ['HEROVISION']
+    return validCoupons.indexOf(this.customCouponCode.toUpperCase()) > -1
+  }
+
   private checkout() {
       this.loading = true
       this.stripe.createToken(this.card).then((result) => {
@@ -93,7 +104,7 @@ export class HeroSubscribeComponent implements OnInit {
           errorElement.textContent = result.error.message;
           this.loading = false
         } else {
-          this._auth.subscribeToHero(this.subtype, result.token.id, this.couponCode)
+          this._auth.subscribeToHero(this.subtype, result.token.id, this.initWithCoupon ? this.couponCode.toUpperCase() : this.validateCoupon() ? this.customCouponCode.toUpperCase() : '')
             .subscribe(
               data => {
                 this.userNowHero = true
