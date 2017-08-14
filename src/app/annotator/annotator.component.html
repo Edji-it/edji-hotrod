@@ -105,7 +105,7 @@
 					[style.top]="comment['loc'] ? getClosestRowY(comment['loc']['y']/100 * imageHeight[i]) + 'px' : '0px'">
 				</edji-comment><!-- 
 			** This portion of the template is indented ugly to avoid SPACE problems, do not "FIX" ** - 7.29.17
-				Link Words: If a word is actually a link, handle it differently --><a *ngIf="w.styles.indexOf('a') > -1" [attr.index]="i" [href]="(w.url && w.url.indexOf('//') > -1) ? w.url : ('//' + w.url)" target="_blank">{{w.str}}</a>{{ w.styles.indexOf('a') > -1 ? '' : w.styles.indexOf('space') > -1 ? '&nbsp;' : w.str }}<div *ngIf="w.styles.indexOf('img') > -1" class="img-wrap"><!--
+				Link Words: If a word is actually a link, handle it differently --><a *ngIf="w.styles.indexOf('a') > -1" [attr.index]="i" [href]="(w.url && w.url.indexOf('//') > -1) ? w.url : ('//' + w.url)" class="w" target="_blank">{{w.str}}</a>{{ w.styles.indexOf('a') > -1 ? '' : w.styles.indexOf('space') > -1 ? '&nbsp;' : w.str }}<div *ngIf="w.styles.indexOf('img') > -1" class="img-wrap"><!--
 						Placeholder image hotspot -->
 							<div *ngIf="imageHotspotPlaceholder.index == i && (imageHotspotPlaceholder.focus || imageHotspotPlaceholder.preview)" class="hotspot" [class.focused]="imageHotspotPlaceholder.focus" [style.left]="imageHotspotPlaceholder.x  + '%' " [style.top]="imageHotspotPlaceholder.y + '%' "></div>
 							<!-- Image Hotspots: Show hotspot for each comment --><div *ngFor="let comment of commentsByIndex[i]" [class.hidden]="(!project.heat_vision && user._id !== project.teacher_id) && comment.user_id !== user._id && comment.user_id !== project.teacher_id" class="hotspot" 

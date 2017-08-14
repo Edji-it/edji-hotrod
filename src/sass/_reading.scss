@@ -103,6 +103,15 @@ article.content {
 	}
 } 
 
+a.w {
+	padding-top: 0px !important;
+	border-bottom: none;
+	&:after {
+		display: none;
+	}
+}
+
+
 // Styles for commenting
 .active-content {
 	& .w.img {
