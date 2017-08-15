@@ -1,3 +1,4 @@
+import { Angulartics2 } from 'angulartics2';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 // Project dependencies
@@ -35,7 +36,8 @@ export class HeroSubscribeComponent implements OnInit {
   
   constructor(
     private _auth: AuthService,
-    private _bumblebee: BumblebeeService
+    private _bumblebee: BumblebeeService,
+    private angulartics: Angulartics2
   ) { }
 
   ngOnInit() {
@@ -87,7 +89,7 @@ export class HeroSubscribeComponent implements OnInit {
         displayError.textContent = '';
       }
     });
-    
+  
   }
 
   private validateCoupon() {
@@ -104,9 +106,21 @@ export class HeroSubscribeComponent implements OnInit {
           errorElement.textContent = result.error.message;
           this.loading = false
         } else {
+          // track user adding hero subscription in analytics
+          if (this.couponCode && this.couponCode.length > 0) {
+            this.angulartics.eventTrack.next({ action: 'addSubscription-' + this.couponCode, properties: { category: 'heroFeature', label: 'attempt' }})
+          } else {
+            this.angulartics.eventTrack.next({ action: 'addSubscription', properties: { category: 'heroFeature', label: 'attempt' }})
+          }
           this._auth.subscribeToHero(this.subtype, result.token.id, this.initWithCoupon ? this.couponCode.toUpperCase() : this.validateCoupon() ? this.customCouponCode.toUpperCase() : '')
             .subscribe(
               data => {
+                // track user adding hero subscription in analytics
+                if (this.couponCode && this.couponCode.length > 0) {
+                  this.angulartics.eventTrack.next({ action: 'addSubscription-' + this.couponCode, properties: { category: 'heroFeature', label: 'success' }})
+                } else {
+                  this.angulartics.eventTrack.next({ action: 'addSubscription', properties: { category: 'heroFeature', label: 'success' }})
+                }
                 this.userNowHero = true
                 this.loading = false
                 if (data.user) {
@@ -115,6 +129,12 @@ export class HeroSubscribeComponent implements OnInit {
                 }
               },
               error => {
+                // track user adding hero subscription in analytics
+                if (this.couponCode && this.couponCode.length > 0) {
+                  this.angulartics.eventTrack.next({ action: 'addSubscription-' + this.couponCode, properties: { category: 'heroFeature', label: 'failure' }})
+                } else {
+                  this.angulartics.eventTrack.next({ action: 'addSubscription', properties: { category: 'heroFeature', label: 'failure' }})
+                }
                 this.loading = false
                 this.stripeMessage = 'There was an error processing your payment. Please try correcting your payment information, or <a href="mailto:support@edji.it" class="link">contact our support team</a>.'
               })

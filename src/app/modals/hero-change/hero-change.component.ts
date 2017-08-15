@@ -1,3 +1,4 @@
+import { Angulartics2 } from 'angulartics2';
 import { AuthService } from '../../shared';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
@@ -27,7 +28,8 @@ export class HeroChangeComponent implements OnInit {
 
   constructor(
     private _auth: AuthService,
-    private _bumblebee: BumblebeeService
+    private _bumblebee: BumblebeeService,
+    private angulartics: Angulartics2
   ) { }
 
   ngOnInit() {
@@ -75,10 +77,14 @@ export class HeroChangeComponent implements OnInit {
   cancelSub() {
     this.canceling = true
     this.cancelMsg = ''
+    // track user cancelling hero subscription in analytics
+    this.angulartics.eventTrack.next({ action: 'cancelSubscription', properties: { category: 'heroFeature', label: 'attempt' }})
     this._auth.cancelHeroSubscription(this.user.hero.subscription_id)
       .take(1)
       .subscribe(
         data => {
+          // track user cancelling hero subscription in analytics
+          this.angulartics.eventTrack.next({ action: 'cancelSubscription', properties: { category: 'heroFeature', label: 'success' }})
 
           this.canceling = false
           this.isCanceled = true
@@ -87,6 +93,9 @@ export class HeroChangeComponent implements OnInit {
           }
         },
         err => {
+          // track user cancelling hero subscription in analytics
+          this.angulartics.eventTrack.next({ action: 'cancelSubscription', properties: { category: 'heroFeature', label: 'failure' }})
+
           this.canceling = false
           this.cancelMsg = "Sorry, canceling your subscription failed. <a class='link' href='mailto:support@edji.it'>Please contact support</a>."
           console.log(err)
