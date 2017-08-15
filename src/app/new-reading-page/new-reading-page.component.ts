@@ -603,7 +603,7 @@ export class NewReadingPage implements OnInit {
             // If there is a reference node for cursor position, insert at cursor
             // Get and clear all elements in the medium editor block after the cursor position
             let tmpHtml = this.extractBlockContentsFromCaret()
-
+            
             // Send the 'enter' key 
             const event = new KeyboardEvent("keypress",{
                 "key": "Enter"
@@ -617,6 +617,10 @@ export class NewReadingPage implements OnInit {
             var div = document.createElement('div')
             div.appendChild( tmpHtml.cloneNode(true) )
             var html = div.innerHTML
+            if (html.includes('angularMediumEditor')) {
+                let newDiv = div.firstElementChild
+                html = newDiv.innerHTML
+            }
 
             this.addQuestion(html,insertPos)
         } else {
