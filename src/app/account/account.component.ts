@@ -63,6 +63,16 @@ export class AccountComponent implements OnInit, OnDestroy {
         })
     );
 
+    if (this.route.snapshot.params) {
+      let params = this.route.snapshot.params
+      if(params && params['secretSwitch']){
+          this._auth.secretSwitches[params['secretSwitch']] = true;
+          if (this._auth.secretSwitches['heroAvailable'] || (this.currentUser.hero && this.currentUser.hero.active)) {
+              this.heroAvailable = true
+          }
+      }
+    }
+
     this.heroAvailable = new Date("Aug 15, 2017 05:00:00").getTime() < Date.now()
   }
 
