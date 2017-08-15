@@ -13,7 +13,7 @@ export class BumblebeeService {
   private isProd: boolean = true
 
   constructor(private _auth: AuthService, private http: Http) {
-    this.isProd = this._auth.getUrl() == 'prod'
+    this.isProd = this._auth.getEnv() == 'prod'
   }
 
   public sendUserDetails(userDetails: any): void {
