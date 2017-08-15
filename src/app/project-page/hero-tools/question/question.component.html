@@ -19,6 +19,7 @@
         <label class="label--gray all-caps">Question</label>
         <div *ngIf="question && !question.new" class="prompt">{{question.prompt}}</div>
         <textarea *ngIf="question && question.new" type='text' placeholder="Question text..." class="text-comment-input" [(ngModel)]="question.prompt"></textarea>
+        <div class="alert alert-warning" *ngIf="question && question.new && question.prompt.length < 1">Don't forget to ask your question!</div>
       </div>
 
       <!-- Answer and Options Section | If the teacher is creating a question on the new reading page -->
@@ -35,6 +36,7 @@
               <div class="icon__answer-text">{{type}}</div>
           </button>
         </div>
+        <div class="alert alert-warning" *ngIf="!answerTypeSelected()">Please choose which Answer Types you would like your readers to respond with.</div>
         <div *ngIf="questionOptionsStatus">
           <div id="answerOptions_block" class="label--gray all-caps">Options</div>
           <div class="answer-options">
