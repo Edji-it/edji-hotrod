@@ -52,7 +52,7 @@
                   <!--</label>-->
                 <div *ngIf="user.hero && user.hero.active" class="form-group">
                     <label for="customCodeInput">Custom Code
-                        <input [formControl]="projectForm.controls['customCode']" id="customCodeInput" type="text" class="form-control form-item--editor h3 mGroup" placeholder="(optional)"/>
+                        <input [formControl]="projectForm.controls['customCode']" id="customCodeInput" type="text" class="form-control form-item--editor h3 mGroup" placeholder="(optional)" style="text-transform:lowercase;"/>
                     </label>
                     <div *ngIf="errors.invalidCode" id="errorInvalidCustomCode" class="alert alert-warning">Whoops, someone is already using that group code. Could you pick another?</div>
                 </div>
