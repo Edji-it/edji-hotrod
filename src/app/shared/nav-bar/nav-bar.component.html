@@ -75,7 +75,7 @@
 				</div>
 				<div *ngIf="user.hero && user.hero.active" class="form-group">
 					<label for="customCodeInput">Custom Code
-						<input [(ngModel)]="customCode" id="customCodeInput" type="text" class="form-control form-item--editor h3 mGroup" placeholder="(optional)"/>
+						<input [(ngModel)]="customCode" id="customCodeInput" type="text" class="form-control form-item--editor h3 mGroup" placeholder="(optional)" style="text-transform:lowercase;"/>
 					</label>
 					<div *ngIf="messages.invalidCode" id="errorInvalidCustomCode" class="alert alert-warning">Whoops, someone is already using that group code. Could you pick another?</div>
 					<div *ngIf="messages.serviceError" id="errorServiceResponse" class="alert alert-warning">Oh no! Something went wrong. If it keeps happening, let us know!</div>

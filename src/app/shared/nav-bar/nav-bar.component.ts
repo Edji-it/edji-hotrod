@@ -159,6 +159,9 @@ export class NavBarComponent implements OnInit, OnDestroy {
         return // we should give the user some sort of feedback here
       }
 
+      // Make sure code is lowercase
+      shareObj.customCode = shareObj.customCode.toLowerCase()
+
       // does the project exist? this call will actually fail if it does
       this._projects.validateProject(shareObj.customCode)
         .take(1)
