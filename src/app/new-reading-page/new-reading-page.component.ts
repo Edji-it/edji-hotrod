@@ -582,7 +582,9 @@ export class NewReadingPage implements OnInit {
             question_number: this.readingHtml.length
         }
         
-        if (insertHtml) {
+        if (insertHtml.substring("angularMediumEditor")) {
+            this.readingHtml.push({'text':this.newReadingInner,'question':question})
+        } else {
             question.question_number = insertPos
             if (this.readingHtml.length > insertPos) {
                 this.readingHtml.splice(insertPos,0,{'text':insertHtml,'question':question})
@@ -590,8 +592,6 @@ export class NewReadingPage implements OnInit {
                 this.readingHtml.push({'text':insertHtml,'question':question})
             }
             this.updateQuestionNumbers()
-        } else {
-            this.readingHtml.push({'text':this.newReadingInner,'question':question})
         }
     }
 
@@ -607,16 +607,16 @@ export class NewReadingPage implements OnInit {
             // Send the 'enter' key 
             const event = new KeyboardEvent("keypress",{
                 "key": "Enter"
-            });
+            })
             document.dispatchEvent(event)
 
             // Create a new block and slice it in.. then add the stored text to that block
             let insertPos = Number(this.insertNode.parentNode.parentNode.getAttribute('rIndex')) + 1
 
             // Make the html fragment a real piece of html!
-            var div = document.createElement('div');
-            div.appendChild( tmpHtml.cloneNode(true) );
-            var html = div.innerHTML;
+            var div = document.createElement('div')
+            div.appendChild( tmpHtml.cloneNode(true) )
+            var html = div.innerHTML
 
             this.addQuestion(html,insertPos)
         } else {
