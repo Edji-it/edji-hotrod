@@ -78,6 +78,7 @@
                 [comment]="answer" 
                 [commentContext]="'answer'" 
                 [isActive]="answer.active" 
+                [readOnly]="answer.user_id !== user._id"
                 [reply]="true" 
                 [class.hidden]="(question.option_types.indexOf('public') === -1 && user._id !== project.teacher_id) && answer.user_id !== user._id && answer.user_id !== project.teacher_id"
                 [userPermission]="getCommentPermissions(answer)"></edji-comment>
