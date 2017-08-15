@@ -573,7 +573,7 @@ export class NewReadingPage implements OnInit {
     /**
      * Adds a question block to the new reading and then adds in a new medium editor
      */
-    private addQuestion(insertHtml?: any, insertPos?: number) {
+    private addQuestion(insertHtml?: string, insertPos?: number) {
         var question = <EdjiQuestion>{
             prompt: '',
             answer_types: [],
@@ -582,7 +582,7 @@ export class NewReadingPage implements OnInit {
             question_number: this.readingHtml.length
         }
         
-        if (insertHtml.substring("angularMediumEditor")) {
+        if (insertHtml.includes("angularMediumEditor")) {
             this.readingHtml.push({'text':this.newReadingInner,'question':question})
         } else {
             question.question_number = insertPos
