@@ -50,6 +50,12 @@
                   </div>
                   <p *ngIf="commentTypes.indexOf('audio') > -1" class="label--gray"><span class="beta-tag">(BETA)</span>&nbsp;Beta features may not work on all devices.</p>
                   <!--</label>-->
+                <div *ngIf="user.hero && user.hero.active" class="form-group">
+                    <label for="customCodeInput">Custom Code
+                        <input [formControl]="projectForm.controls['customCode']" id="customCodeInput" type="text" class="form-control form-item--editor h3 mGroup" placeholder="(optional)"/>
+                    </label>
+                    <div *ngIf="errors.invalidCode" id="errorInvalidCustomCode" class="alert alert-warning">Whoops, someone is already using that group code. Could you pick another?</div>
+                </div>
               </div>
               <div class="modal-footer">
                   <div class="button__row" style="padding-top:0px;">
