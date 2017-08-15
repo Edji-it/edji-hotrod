@@ -5,7 +5,7 @@
             <i id="audioPause" [class.hide]="!isPlaying" class="icon-pause" (click)="pause()"></i>
         </button>
         <button id="audioRestart" class="btn-audio" [class.disabled]="!playAble" (click)="isRecording=false; isPlaying=false; restartPlayback()"><i class="icon-restart"></i></button>
-        <button id="audioRecord" [class.hide]="" class="btn-audio btn-record" (click)="isRecording ? stopRecord() : record()" [class.disabled]="!recordAble"><i class="icon icon-mic"></i></button>
+        <button id="audioRecord" [class.hide]="userPermission <= 3" class="btn-audio btn-record" (click)="isRecording ? stopRecord() : record()" [class.disabled]="!recordAble"><i class="icon icon-mic"></i></button>
     </div>
     <div [ngClass]="[reply ? 'reply-wave' : '']" class="wave-wrap" [style.width]="playWidth + 'px'">
         <canvas (click)="setPlaybackTime($event)"  class="wave-form"></canvas>

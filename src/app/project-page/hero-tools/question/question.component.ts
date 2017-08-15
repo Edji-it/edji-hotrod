@@ -53,7 +53,7 @@ export class QuestionComponent implements OnInit, Input, Output, OnDestroy {
 
   // Set which answer types are allowed and which options to toggle.
   // Answer types are passed onto which ever Answer component
-  public answerTypeStatus: any[] = []
+  public answerTypeStatus: any = {}
   private optionTypeStatus: any[] = []
   private answerTypesAvailable: any[] = []
   private optionTypesAvailable: any[] = [{
@@ -178,6 +178,19 @@ export class QuestionComponent implements OnInit, Input, Output, OnDestroy {
   private getCommentPermissions(comment: any): number {
       return this._comments.getCommentPermissions(comment, this.user, this.project)
   } //  private getCommentPermissions(comment: any): number
+
+  /**
+   * Validate whether user has selected any answer types
+   */
+  private answerTypeSelected() {
+    let selected = false
+    for(let i = 0; i < this.answerTypesAvailable.length; i++) {
+      if (this.answerTypeStatus[this.answerTypesAvailable[i]]) {
+        selected = true
+      }
+    }
+    return selected
+  }
 
   /** Used to set the available answer and option types and also to set the current question position
    * 

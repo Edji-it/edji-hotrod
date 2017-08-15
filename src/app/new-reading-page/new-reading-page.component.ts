@@ -573,7 +573,7 @@ export class NewReadingPage implements OnInit {
     /**
      * Adds a question block to the new reading and then adds in a new medium editor
      */
-    private addQuestion(insertHtml?: any, insertPos?: number) {
+    private addQuestion(insertHtml?: string, insertPos?: number) {
         var question = <EdjiQuestion>{
             prompt: '',
             answer_types: [],
@@ -582,7 +582,7 @@ export class NewReadingPage implements OnInit {
             question_number: this.readingHtml.length
         }
         
-        if (insertHtml.substring("angularMediumEditor")) {
+        if (insertHtml.includes("angularMediumEditor")) {
             this.readingHtml.push({'text':this.newReadingInner,'question':question})
         } else {
             question.question_number = insertPos
@@ -603,7 +603,7 @@ export class NewReadingPage implements OnInit {
             // If there is a reference node for cursor position, insert at cursor
             // Get and clear all elements in the medium editor block after the cursor position
             let tmpHtml = this.extractBlockContentsFromCaret()
-
+            
             // Send the 'enter' key 
             const event = new KeyboardEvent("keypress",{
                 "key": "Enter"
@@ -617,6 +617,10 @@ export class NewReadingPage implements OnInit {
             var div = document.createElement('div')
             div.appendChild( tmpHtml.cloneNode(true) )
             var html = div.innerHTML
+            if (html.includes('angularMediumEditor')) {
+                let newDiv = div.firstElementChild
+                html = newDiv.innerHTML
+            }
 
             this.addQuestion(html,insertPos)
         } else {

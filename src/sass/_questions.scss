@@ -74,6 +74,13 @@
         border: 1px solid #6bdb5d;
         opacity: 1;
         filter: grayscale(0%);
+
+        & .icon__answer-text {
+            color: #333 !important;
+        }
+    }
+    &:active, &:focus {
+        background: #fff !important;
     }
 	&:hover {
 		background: $gray-light;

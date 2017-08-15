@@ -519,10 +519,10 @@ export class ProjectService {
             data.answer['_id'] = answer._id;
             url = url + '/' + answer._id
             options['method'] = 'PUT'
-            this._socket.updateComment(data.answer, 'UPDATE', this.project._id);
+            this._socket.updateComment(data.answer, 'UPDATE', this.project._id)
         } else {
             options['method'] = 'POST'
-            this._socket.updateComment(data.answer, 'CREATE', this.project._id);
+            this._socket.updateComment(data.answer, 'CREATE', this.project._id)
         }
 
         options['body'] = data
@@ -544,6 +544,9 @@ export class ProjectService {
         return this.http
             .delete(url, this._auth.getOptions())
             .map(data => {
+                // Tell other Project views that the comment is gone
+                 this._socket.updateComment(answer, 'DELETE', this.project._id);
+
                 this.removeAnswerFromAnswers(answer)
                 return data;
             })

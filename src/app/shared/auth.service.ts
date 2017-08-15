@@ -521,7 +521,7 @@ export class AuthService implements CanActivate {
      */
     public addToActiveHeroList(user) {
         let spaceIndex = user.fullname.indexOf(' ')
-        if (spaceIndex < 0) { spaceIndex = user.fullname.length - 1 }
+        if (spaceIndex < 0) { spaceIndex = user.fullname.length }
         let fname = user.fullname.substr(0,spaceIndex)
         let lname = user.fullname.substr(spaceIndex + 1)
         let body = { 'email' : user.email, 'fname' : fname, 'lname' : lname }

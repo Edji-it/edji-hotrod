@@ -1,3 +1,4 @@
+import { Angulartics2 } from 'angulartics2';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { AuthService } from '../shared/auth.service';
@@ -28,7 +29,12 @@ export class AccountComponent implements OnInit, OnDestroy {
   // Feature flags
   private heroAvailable: boolean = false
 
-  constructor(private _auth: AuthService, private route: ActivatedRoute, private _router: Router) {
+  constructor(
+    private _auth: AuthService, 
+    private route: ActivatedRoute, 
+    private _router: Router,
+    private angulartics: Angulartics2
+  ) {
     
     this.nameInitials = "";
   } // constructor
@@ -63,7 +69,17 @@ export class AccountComponent implements OnInit, OnDestroy {
         })
     );
 
-    this.heroAvailable = new Date("Aug 15, 2017 05:00:00").getTime() < Date.now()
+    if (this.route.snapshot.params) {
+      let params = this.route.snapshot.params
+      if(params && params['secretSwitch']){
+          this._auth.secretSwitches[params['secretSwitch']] = true;
+          if (this._auth.secretSwitches['heroAvailable'] || (this.currentUser.hero && this.currentUser.hero.active)) {
+              this.heroAvailable = true
+          }
+      }
+    }
+
+    this.heroAvailable = new Date("Aug 15, 2017 12:00:00").getTime() < Date.now()
   }
 
   ngOnDestroy() {
@@ -95,4 +111,8 @@ export class AccountComponent implements OnInit, OnDestroy {
 
     return avatar;
   } // public getAvatar () : any 
+
+  private trackHeroClick(): void {
+    this.angulartics.eventTrack.next({ action: 'heroSubInterest', properties: { category: 'heroFeature', label: 'attempt' }})
+  }
 } // class

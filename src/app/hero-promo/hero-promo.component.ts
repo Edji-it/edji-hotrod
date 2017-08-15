@@ -40,7 +40,7 @@ export class HeroPromoComponent implements OnInit, OnDestroy {
         })
     );
     
-    this.countdownDate = new Date("Aug 15, 2017 05:00:00").getTime()
+    this.countdownDate = new Date("Aug 15, 2017 12:00:00").getTime()
     // kick off countdown
     this.incrementer()
     // Conitnuously check for Hero Count
