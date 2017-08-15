@@ -73,7 +73,7 @@ export class AccountComponent implements OnInit, OnDestroy {
       }
     }
 
-    this.heroAvailable = new Date("Aug 15, 2017 05:00:00").getTime() < Date.now()
+    this.heroAvailable = new Date("Aug 15, 2017 12:00:00").getTime() < Date.now()
   }
 
   ngOnDestroy() {
