@@ -1,7 +1,7 @@
 <div *ngIf="currentProject && user._id == currentProject.teacher_id" class="owner-bar">
   <label class="bar-title">Owner</label>
   <!--Comment Stats pane-->
-  <button type="button" class="btn owner-tools__btn btn-cmt" aria-label="Comment Counts" (click)="showCommentCounts = !showCommentCounts; showFireFeed=false">
+  <button type="button" class="btn owner-tools__btn btn-cmt" aria-label="Comment Counts" (click)="showElseFalse('showCommentCounts')">
     <!--<img *ngIf="isMobile" style="width: 50px;" src="assets/images/icon-comment.svg" />-->
     <img src="assets/images/icon-comment.svg" />
     <div class="comment-count">{{ commentStats.stats.count }}</div>
@@ -17,10 +17,18 @@
   </button>
 
   <!--Fire Feed toggle-->
-  <button type="button" class="btn owner-tools__btn btn-hv" (tap)="showFireFeed = !showFireFeed; showCommentCounts=false">
+  <button type="button" class="btn owner-tools__btn btn-hv" (tap)="showElseFalse('showFireFeed')">
     <i id="toggleFirefeed" *ngIf="currentProject" class="icon-fire-feed"></i>
     <label>Feed</label>
   </button>
+
+  <!--Question Feed toggle-->
+  <div *ngIf="currentReading.questions && currentReading.questions.length>0">
+    <button type="button" class="btn owner-tools__btn btn-hv" (tap)="showElseFalse('showQuestionFeed')">
+      <i id="toggleFirefeed" *ngIf="currentProject" class="icon-question"></i>
+      <label>Feed</label>
+    </button>
+  </div>
 </div>
 
 
@@ -29,3 +37,6 @@
 
 <!--Fire Feed goes here-->
 <hot-firefeed (hide)="showFireFeed=false" [visible]="showFireFeed"></hot-firefeed>
+
+<!--Question Feed goes here-->
+<hot-questionfeed (hide)="showQuestionFeed=false" [visible]="showQuestionFeed"></hot-questionfeed>

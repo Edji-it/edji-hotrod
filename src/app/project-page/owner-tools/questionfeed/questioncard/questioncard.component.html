@@ -1,0 +1,11 @@
+<div class="questionBound">
+  <div class="user-icon">
+    <span>{{questionBlock.question_number}}</span>
+  </div>
+  <div class="questionBlock">
+    <div class="prompt">{{questionBlock.prompt}}</div>
+    <button class="button-answers__hide btn btn-sm" (click)="answersHidden = !answersHidden" [class.hidden]="">
+        {{answersHidden ? 'SHOW' : 'HIDE'}}
+    </button>
+  </div>
+</div>

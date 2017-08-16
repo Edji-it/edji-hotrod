@@ -49,6 +49,8 @@ import { AnnotatorComponent, CommentComponent, TextCommentComponent, EmojiCommen
 import { ProjectPageComponent, ProjectInfoComponent, OwnerToolsComponent, LeaderboardComponent } from './project-page';
 import { FirefeedComponent } from './project-page/owner-tools/firefeed/firefeed.component';
 import { FirecardComponent } from './project-page/owner-tools/firefeed/firecard/firecard.component';
+import { QuestionfeedComponent } from './project-page/owner-tools/questionfeed/questionfeed.component';
+import { QuestioncardComponent } from './project-page/owner-tools/questionfeed/questioncard/questioncard.component';
 import { QuestionComponent } from './project-page/hero-tools/question/question.component';
 import { OpenEndedAnswersComponent } from "./project-page/hero-tools/question/open-ended-answers/open-ended-answers.component"
 import { DiscussionsComponent } from './project-page/hero-tools/discussions/discussions.component';
@@ -138,6 +140,8 @@ type StoreType = {
     LeaderboardComponent,
     FirefeedComponent,
     FirecardComponent,
+    QuestionfeedComponent,
+    QuestioncardComponent,
     DiscussionsComponent,
     UploadModalComponent,
     TutorialReadingComponent,

@@ -1,0 +1,37 @@
+@import '../../../../../sass/base/variables';
+
+$questionBoundVPad: 40px;
+
+.questionBound {
+    padding: 0px 0px $questionBoundVPad;
+    overflow: hidden;
+    position: relative;
+    border-top: 1px solid #dcdcdc;
+    margin-top: 12px;
+    padding-top: 12px;
+}
+
+.questionBlock {
+    width: calc(100% - 35px);
+    float: right;
+}
+
+.prompt {
+    color: black;
+    font-weight: 500;
+    display: block;
+    font-size: 12px;
+    line-height: 16px;
+    border-bottom: 1px solid #dcdcdc;
+    padding-bottom: 8px;
+}
+
+.button-answers__hide {
+    display: inline-block;
+    vertical-align: middle;
+    border-radius: 3px;
+    font-size: 14px;
+    padding: 0.15rem 0.3rem;
+    color: white;
+    font-weight: bold;
+}
