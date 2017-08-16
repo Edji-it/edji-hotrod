@@ -13,6 +13,14 @@
     <div *ngFor="let commentUser of commentStats.stats.userStats" class="user-list-item">
       <span>{{ commentUser.fullname }}</span> 
       <b style="float:right;">{{ commentUser.count }}</b>
+      <div *ngIf="commentUser" class="question-answer-status__block">
+        <div class="answer-designate">A:</div>
+        <div class="answer-circle__group">
+          <div class="circle filled"></div>
+          <div class="circle filled"></div>
+          <div class="circle"></div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

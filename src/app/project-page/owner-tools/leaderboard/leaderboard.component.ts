@@ -4,7 +4,8 @@ import { CommentStats } from './../../../shared/datatypes'
 
 @Component({
   selector: 'hot-leaderboard',
-  templateUrl: 'leaderboard.component.html'
+  templateUrl: 'leaderboard.component.html',
+  styleUrls: ['./leaderboard.component.scss']
 })
 
 export class LeaderboardComponent implements OnInit {
