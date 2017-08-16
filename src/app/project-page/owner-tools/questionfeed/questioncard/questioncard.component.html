@@ -5,7 +5,18 @@
   <div class="questionBlock">
     <div class="prompt">{{questionBlock.prompt}}</div>
     <button class="button-answers__hide btn btn-sm" (click)="answersHidden = !answersHidden" [class.hidden]="">
-        {{answersHidden ? 'SHOW' : 'HIDE'}}
+        {{answersHidden ? 'HIDE' : 'SHOW'}}
     </button>
+    <div *ngIf="answersHidden">
+      <div *ngFor="let answer of answersById[questionBlock._id]">
+        <div class="comment-wrap-row">
+          <edji-comment class="answerCommentBlock" 
+            [comment]="answer" 
+            [commentContext]="'answer'" 
+            [isActive]="answer.active"
+            [reply]="true"></edji-comment>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

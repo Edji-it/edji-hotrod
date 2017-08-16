@@ -1,5 +1,6 @@
 import { SocketService } from '../../../../shared';
 import { CommentService } from '../../../../shared/comment.service'
+import { ProjectService } from '../../../../shared/project.service'
 import { Subscription } from 'rxjs/Rx'
 import { EdjiComment, Reading } from '../../../../shared/datatypes'
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, AfterViewInit } from '@angular/core'
@@ -20,8 +21,10 @@ export class QuestioncardComponent implements OnInit, OnDestroy {
   private currentReading: Reading
   private subscriptions: Subscription[] = []
   private answersHidden: boolean
+  private answersById: any = {}
 
   constructor(
+    private _projects : ProjectService,
     public el: ElementRef,
     private _readings: ReadingService,
     private _socket: SocketService
@@ -55,6 +58,16 @@ export class QuestioncardComponent implements OnInit, OnDestroy {
       }, (error) => {
         console.warn(error)
       })
+    )
+
+    // Subscribe to updates to the answer reference object
+    this.subscriptions.push( this._projects.answersById.subscribe(
+      (answersById) => {
+        this.answersById = answersById
+      },
+      (error) => {
+        console.error(error)
+      }) 
     )
   }
 
