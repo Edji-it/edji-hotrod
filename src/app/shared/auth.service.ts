@@ -381,9 +381,6 @@ export class AuthService implements CanActivate {
                 let mergedUser = Object.assign({}, currentUser);// Get the latest copy of the user object.
                 mergedUser.avatar = newAvatar; // let's just shove those in there
                 this.user = mergedUser; // NOTE: We make a new object and assign it so that the user object is always nice and fresh.
-                
-                console.log(newAvatar);
-                console.log(this.user.avatar);
 
                 // This code saves this here user object.
                 // This is repeated code from updateUser() we could consolidate these. (6.27.17)
@@ -524,7 +521,11 @@ export class AuthService implements CanActivate {
         if (spaceIndex < 0) { spaceIndex = user.fullname.length }
         let fname = user.fullname.substr(0,spaceIndex)
         let lname = user.fullname.substr(spaceIndex + 1)
-        let body = { 'email' : user.email, 'fname' : fname, 'lname' : lname }
+        let body = { 
+            'email' : user.email, 
+            'fname' : fname, 
+            'lname' : lname 
+        }
         body['list'] = 'hero-subscribed'
         return this.http.post( this.baseUrl + '/mailchimp/add', body, this.getOptions())
             .map( res => {
@@ -598,7 +599,7 @@ export class AuthService implements CanActivate {
             .map( res => {
                 if (res && res.json()) {
                     // Add user to mailchimp list
-                    this.addToActiveHeroList(this.user)
+                    this.addToActiveHeroList(this.getUser())
                     .toPromise()
                     .then( res => {
                         console.log(res)
