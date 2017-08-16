@@ -35,3 +35,8 @@ $questionBoundVPad: 40px;
     color: white;
     font-weight: bold;
 }
+
+.questionAnswerBlock {
+  height: 75px;
+  width: calc(100% - 32px);
+}

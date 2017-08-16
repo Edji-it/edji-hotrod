@@ -10,7 +10,7 @@
     <div *ngIf="answersHidden">
       <div *ngFor="let answer of answersById[questionBlock._id]">
         <div class="comment-wrap-row">
-          <edji-comment class="answerCommentBlock" 
+          <edji-comment class="questionAnswerBlock" 
             [comment]="answer" 
             [commentContext]="'answer'" 
             [isActive]="answer.active"
