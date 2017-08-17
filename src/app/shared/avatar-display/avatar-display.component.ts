@@ -13,7 +13,7 @@ export class AvatarDisplayComponent implements OnInit {
   /*
   27 July 2017
   Nicholas Pumper
-  Last Mod: 28 July 2017
+  Last Mod: 17 Aug 2017
 
   This shows the user's avatar in a bubble.
 

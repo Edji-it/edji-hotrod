@@ -406,7 +406,7 @@ export class AuthService implements CanActivate {
                     observer.next(user)
                 }, error => {
                     observer.error(error)
-                    console.error("Failed in forceUpdateDocuments in auth.service.ts when trying to save the user.");
+                    console.error("Failed in forceUpdateAvatar in auth.service.ts when trying to save the user.");
                 })
             },
             error => {

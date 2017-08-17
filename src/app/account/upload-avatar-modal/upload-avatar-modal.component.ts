@@ -17,7 +17,7 @@ export class UploadAvatarModal implements OnInit {
   /*
   23 June 2017
   by Nick Pumper
-  Last Mod: July 4th, 2017 - INDEPENDENCE DAY - Nick Pumper
+  Last Mod: 17 Aug 2017
   
   A prompt asking if we really want to delete a project.
   If no, it closes. Otherwise. it deletes it.
