@@ -13,12 +13,14 @@
     <div *ngFor="let commentUser of commentStats.stats.userStats" class="user-list-item">
       <span>{{ commentUser.fullname }}</span> 
       <b style="float:right;">{{ commentUser.count }}</b>
-      <div *ngIf="commentUser" class="question-answer-status__block">
+      <div *ngIf="commentUser && currentReading.questions && currentReading.questions.length > 0" class="question-answer-status__block" (click)="testAnswerFilter(commentUser)">
         <div class="answer-designate">A:</div>
-        <div class="answer-circle__group">
-          <div class="circle filled"></div>
-          <div class="circle filled"></div>
-          <div class="circle"></div>
+        <div *ngFor="let question of currentReading.questions" class="answer-circle__group">
+          <div *ngIf="answersById[question._id] && answersById[question._id].length > 0">
+            <div *ngFor="let answer of answersById[question._id]">
+              <div [ngClass]="[ answer.user_id===commentUser._id ? 'filled' : '']" class="circle"></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

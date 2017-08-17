@@ -33,8 +33,8 @@ export class QuestionfeedComponent implements OnInit, OnDestroy {
       },
       error => {
         console.error(error);
-      }
-    ) )
+      }) 
+    )
     // Subscribe to updates from that project once we're subscribed to the reading
     this.subscriptions.push( this._projects.currentProject.subscribe(
       (project) => {
@@ -44,8 +44,8 @@ export class QuestionfeedComponent implements OnInit, OnDestroy {
       },
       (error) => {
         console.error(error)
-      }
-    ) )
+      }) 
+    )
   }
 
   ngOnDestroy() {
