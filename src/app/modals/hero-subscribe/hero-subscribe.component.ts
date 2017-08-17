@@ -137,6 +137,7 @@ export class HeroSubscribeComponent implements OnInit {
                 }
                 this.loading = false
                 this.stripeMessage = 'There was an error processing your payment. Please try correcting your payment information, or <a href="mailto:support@edji.it" class="link">contact our support team</a>.'
+                this._bumblebee.reportError(error)
               })
 
         }
