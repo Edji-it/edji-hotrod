@@ -1,8 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs/Rx';
+import { Component, OnInit, OnDestroy } from '@angular/core'
+import { ActivatedRoute, Router } from '@angular/router'
+import { Subscription } from 'rxjs/Rx'
 
-import { AuthService } from '../shared';
+import { AuthService } from '../shared'
+import { Angulartics2 } from 'angulartics2'
 
 @Component({
   selector: 'app-hero-promo',
@@ -25,7 +26,12 @@ export class HeroPromoComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription[] = []
 
-  constructor(private _auth: AuthService, private route: ActivatedRoute, private _router: Router) { }
+  constructor(
+    private _auth: AuthService,
+    private route: ActivatedRoute,
+    private _router: Router,
+    private angulartics: Angulartics2
+  ) { }
 
   ngOnInit() {
     this.subscriptions.push(
