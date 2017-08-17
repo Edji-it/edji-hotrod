@@ -324,6 +324,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 y: this.imageCoords['y'],
                 preview: true
             }
+            
             // this makes sure there are no other selections made
             sel.setSingleRange(range)
         } else {
@@ -332,11 +333,11 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 this.hideCommentOptions()
             }
         }
-
+        
         // Make sure selection exists, and is within highlightable content
         if (sel && (this.imageHotspotPlaceholder.preview || sel.toString())
-                && (sel.focusNode.classList && sel.focusNode.classList.contains('w') || sel.focusNode.parentNode.classList.contains('w'))
-                && (sel.anchorNode.classList && sel.anchorNode.classList.contains('w') || sel.anchorNode.parentNode.classList.contains('w'))
+                && (sel.focusNode.classList && sel.focusNode.classList.contains('w') || (sel.focusNode.parentNode.classList.contains('w') || sel.focusNode.parentNode.classList.contains('img-wrap')))
+                && (sel.anchorNode.classList && sel.anchorNode.classList.contains('w') || (sel.anchorNode.parentNode.classList.contains('w') || sel.anchorNode.parentNode.classList.contains('img-wrap')))
             ) {
             let scrollOffset = this.annotatorPaper.getBoundingClientRect().top
             const readingPad = 52
