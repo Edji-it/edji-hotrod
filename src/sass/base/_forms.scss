@@ -88,10 +88,10 @@ input:not([type]), textarea, select[multiple],
     outline: none;
     border: $inputFocusBorder;
 
-    transform: scale(1.02);
+    // transform: scale(1.02);
 
     & + .input-group-btn {
-      transform: scale(1.02);
+      // transform: scale(1.02);
     }
   }
 
@@ -301,4 +301,11 @@ input.form-item--underline {
 
 tr.selectable {
   cursor: pointer;
+}
+
+.disabled .custom-checkbox {
+  pointer-events: none;
+  cursor: disabled;
+  color: #ccc;
+  filter:grayscale(1);
 }

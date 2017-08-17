@@ -60,6 +60,7 @@ $seamlessPlaceholderColor: #cdcdcd;
 @import 'codes';
 @import 'print';
 @import 'guides';
+@import 'questions';
 @import './base/variables';
 
 /**
@@ -110,6 +111,8 @@ $seamlessPlaceholderColor: #cdcdcd;
 
 .disabled {
 	pointer-events: none;
+	filter: grayscale(100%);
+	opacity: 0.4;
 }
   
 .useicons {

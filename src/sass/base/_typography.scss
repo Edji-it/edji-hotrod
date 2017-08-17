@@ -116,7 +116,7 @@ hr {
   margin: $base-spacing 0;
 }
 
-label {
+label, .label {
   // color: 
   font-family: $base-font-family;
   font-size: 12px;
@@ -127,6 +127,10 @@ label {
 .label--gray {
   @extend label;
   color: $medium-gray;
+}
+
+.all-caps {
+  text-transform: uppercase;
 }
 
 .sub-label {
@@ -141,6 +145,11 @@ p, h1, h2, h3, h4 {
   &.center {
     text-align: center;
   }
+}
+
+h2.card-title {
+  line-height: 48px;
+  margin: 0.5em 0;
 }
 
 .header-block {

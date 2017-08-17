@@ -1,0 +1,91 @@
+<!--
+  Question template
+  29 July 17
+  Nick Pumper
+  Last Mod: 8 Aug 2017
+-->
+<div class="question-container row" id="{{question._id}}" [ngClass]="[question.new ? 'question-container__new' : 'question-container__existing']">
+  <!-- Question Number
+      - Everything is spaced to the right of this.
+  -->
+  <div [ngClass]="[question.new ? 'question-container__inner' : '']">
+    <div class="number-container">
+      <div class="question-number">{{question.question_number}}</div>
+    </div>
+    <!-- Question Body - aka Everything else -->
+    <div class="question-body" [ngClass]="[question.new ? 'question-body__new' : '']">
+      <!-- The Question Prompt Section -->
+      <div class="prompt-section" [ngClass]="[question.new ? 'prompt-section__new' : '']">
+        <label class="label--gray all-caps">Question</label>
+        <div *ngIf="question && !question.new" class="prompt">{{question.prompt}}</div>
+        <textarea *ngIf="question && question.new" type='text' placeholder="Question text..." class="text-comment-input" [(ngModel)]="question.prompt"></textarea>
+        <div class="alert alert-warning" *ngIf="question && question.new && question.prompt.length < 1">Don't forget to ask your question!</div>
+      </div>
+
+      <!-- Answer and Options Section | If the teacher is creating a question on the new reading page -->
+      <div *ngIf="question.new">
+        <div class="label--gray all-caps">Answer Types</div>
+        <div class="answer-options" id="answerOptions">
+          <!-- Answer Buttons -->
+          <button *ngFor="let type of answerTypesAvailable" 
+            id="commentOption"
+            class="emoji button__answer-type" 
+            [ngClass]="[answerTypeStatus[type] ? 'answer--enabled' : '']"
+            (tap)="enableAnswerOfType(type)">
+              <i class="icon icon-{{type}}-comment icon__answer-type"></i>
+              <div class="icon__answer-text">{{type}}</div>
+          </button>
+        </div>
+        <div class="alert alert-warning" *ngIf="!answerTypeSelected()">Please choose which Answer Types you would like your readers to respond with.</div>
+        <div *ngIf="questionOptionsStatus">
+          <div id="answerOptions_block" class="label--gray all-caps">Options</div>
+          <div class="answer-options">
+            <button
+              *ngFor="let type of optionTypesAvailable" id="selectOption" 
+              class="emoji button__answer-type" 
+              [ngClass]="[optionTypeStatus[type.type] ? 'answer--enabled' : '']"
+              (tap)="enableOptionOfType(type.type)"
+              style="padding: 2px 6px;">
+                <!--<i class="icon icon-{{type.type}}-comment icon__answer-type"></i>-->
+                <div class="icon__answer-text">{{type.text}}</div>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="!question.new">
+        <!-- Answer Input  -->
+        <div *ngIf="!hasUserAnswered()">
+          <open-ended-answers *ngIf="[responseType === 0]" 
+            [baseQuestionReference]="question"
+            [enabledAnswerTypes]="question.answer_types"
+            id="openEndedAnswers"
+            ></open-ended-answers>
+        </div>
+
+        <div *ngIf="answersById[question._id] && answersById[question._id].length > 0">
+          <div class="label--gray">ANSWERS
+            <!--<span *ngIf="!hasUserAnswered()" style="font-weight:normal;display:block;margin-top:-1em;">(Answer to see other readers' answers)</span>-->
+            <button class="button-answers__hide btn btn-sm" (click)="ownerHidden = !ownerHidden" 
+            [class.hidden]="user._id !== project.teacher_id">
+                {{ownerHidden ? 'SHOW' : 'HIDE'}}
+            </button>
+          </div>
+        </div>
+        <div class="answerOverflow answerOverflow-normal" id="answerBlock" *ngIf="!ownerHidden">
+          <div *ngFor="let answer of answersById[question._id]">
+            <div class="comment-wrap-row">
+              <edji-comment class="answerCommentBlock"  
+                [comment]="answer" 
+                [commentContext]="'answer'" 
+                [isActive]="answer.active" 
+                [readOnly]="answer.user_id !== user._id"
+                [reply]="true" 
+                [class.hidden]="(question.option_types.indexOf('public') === -1 && user._id !== project.teacher_id) && answer.user_id !== user._id && answer.user_id !== project.teacher_id"
+                [userPermission]="getCommentPermissions(answer)"></edji-comment>
+            </div>
+          </div>
+        </div>
+      </div>
+    <button *ngIf="question && question.new" (tap)="questionDelete.emit()" class='inline-delete question-delete'>+</button>
+  </div>
+</div>

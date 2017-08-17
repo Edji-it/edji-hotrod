@@ -78,11 +78,11 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
             this.user = user
         })
     )
-  }
+  } // ngOnInit() 
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe() })
-  }
+  } // ngOnDestroy()
 
   /** 
    * Add Comment of type
@@ -91,7 +91,7 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
   addReplyOfType(type: string): void {
     // Tell the server we've got a comment!
     this.createReplyComment(type)
-  }
+  } // addReplyOfType
 
   /**
    * Create a Comment of any Type
@@ -99,25 +99,16 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
    * @param type What kind of reply comment: emoji, text...
    */
   createReplyComment(type: string): void {
-    // We need to make sure they aren't already editing a comment
-    // this.inactivateComment()
-
-    let projectId = this.project._id
     let commentId = this.comment._id
-    // let text: string = ''
-    // for (var i = start; i <= end; i++) {
-    //   text += this.reading.words[i].str
-    // }
 
     this.angulartics.eventTrack.next({ action: type + 'ReplyCreate', properties: { category: 'heroFeature', label: 'attempt' }})
     
     var replyCommentNew = <EdjiComment>{
-      project_id: projectId,
       user_id: this.user._id,
       author: this.user.fullname,
       reply_to: commentId,
-      data: '',
-      type: type
+      data  : '',
+      type  : type
     }
 
     replyCommentNew.new = true
@@ -128,24 +119,23 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
       this.activeEmojiKeyboardReply(this.replyCommentNew)
     }
 
-    this._projects.saveReply(this.replyCommentNew)
-      .then(comment => {
-        this.angulartics.eventTrack.next({ action: type + 'ReplyCreate', properties: { category: 'heroFeature', label: 'success' }})
-        comment.active = true
-        comment.project_id = projectId
-        this._comments.activeComment = comment
-        this._projects.addCommentToReplies(comment)
-        setTimeout(() => {
-          this.el.nativeElement.querySelector('.replyOverflow').scrollTop = this.el.nativeElement.querySelector('.replyOverflow').scrollHeight
-        }, 100)
-      })
-      .catch(error => {
-        // TRACK EXCEPTION
-        this.angulartics.eventTrack.next({ action: type + 'ReplyCreate', properties: { category: 'heroFeature', label: 'failure' }})
-        console.log(error)
-      })
-    
-  }
+    // Tell the server we've added a comment.
+    this._projects.saveComment(this.replyCommentNew)
+    .then(comment => {
+      this.angulartics.eventTrack.next({ action: type + 'ReplyCreate', properties: { category: 'heroFeature', label: 'success' }})
+      comment.active = true
+      this._comments.activeComment = comment
+      this._projects.addCommentToReplies(comment)
+      setTimeout(() => {
+        this.el.nativeElement.querySelector('.replyOverflow').scrollTop = this.el.nativeElement.querySelector('.replyOverflow').scrollHeight
+      }, 100)
+    })
+    .catch(error => {
+      // TRACK EXCEPTION
+      this.angulartics.eventTrack.next({ action: type + 'ReplyCreate', properties: { category: 'heroFeature', label: 'failure' }})
+      console.log(error)
+    })
+  } // createReplyComment(type: string): void
 
   /** Used to determine which level of permission the user has for a specific comment
    * @param comment A comment object

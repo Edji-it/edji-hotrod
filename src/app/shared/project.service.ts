@@ -2,8 +2,9 @@ import { SELENIUM_PORT } from 'webdriver-manager/built/lib/cmds';
 import { ActivatedRoute, Params } from '@angular/router'
 import { Injectable } from '@angular/core'
 import { Http, Response, Headers, RequestOptions } from '@angular/http'
-import { Observable, BehaviorSubject, Subject } from 'rxjs/Rx'
-import 'rxjs/add/operator/toPromise'
+import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs/Rx';
+import 'rxjs/add/operator/toPromise';
+import { Angulartics2 } from 'angulartics2'
 
 import { AuthService } from './auth.service'
 import { SocketService } from './socket.service'
@@ -26,6 +27,7 @@ export class ProjectService {
      * This stores all of the comment stats for a project and all of the logic to manipulate the stats
      */
     _commentStats: CommentStats
+    subscriptions: Subscription[] = []
     
     /**
      * Updated Reference Object
@@ -42,18 +44,59 @@ export class ProjectService {
     private repliesByIdSubject: BehaviorSubject<any> = new BehaviorSubject<any>(this.repliesByIdSource)
     public repliesById: Observable<any> = this.repliesByIdSubject.asObservable()
 
+    /**
+     *  Updated Reference Object
+     * Reference answers by question id
+     */
+    private answersByIdSource: any = {}
+    private answersByIdSubject: BehaviorSubject<any> = new BehaviorSubject<any>(this.answersByIdSource)
+    public answersById: Observable<any> = this.answersByIdSubject.asObservable()
+
     constructor(
         private http: Http, 
         private _auth: AuthService, 
         private _route: ActivatedRoute,
         private _socket: SocketService,
-        private _readings: ReadingService
+        private _readings: ReadingService,
+         private angulartics: Angulartics2
     ) {
         // needs to be constructed here or else it returns undefined
         this._commentStats = new CommentStats()
         this._socket.commentUpdates.subscribe((update) => {
             // console.log(update)
         })
+
+        this.subscriptions.push(
+            this._socket.commentUpdates.subscribe((commentUpdate) => {
+                let comment = commentUpdate.comment
+                // Process different live comment updates
+                if (commentUpdate.action === 'DELETE') {
+                    if (comment.reply_to) {
+                        this.removeCommentFromReplies(comment)
+                    } else if (comment.questionId) {
+                        this.removeAnswerFromAnswers(comment)
+                    }
+                } else if (commentUpdate.action === 'UPDATE') {
+                    // Socket updates don't come through with a timestamp
+                    comment.createdAt = Date.now()
+                    if (comment.reply_to) {
+                        this.addCommentToReplies(comment)
+                    } else if (comment.questionId) {
+                        this.addAnswerToAnswers(comment)
+                    }
+                } else if (commentUpdate.action === 'CREATE') {
+                    // Socket updates don't come through with a timestamp
+                    comment.createdAt = Date.now()
+                    if (comment.reply_to) {
+                        this.addCommentToReplies(comment)
+                    } else if (comment.questionId) {
+                        this.addAnswerToAnswers(comment)
+                    }
+                }
+            }, (error) => {
+                console.warn(error)
+            })
+        )
     } // constructor
     
     /**
@@ -127,11 +170,19 @@ export class ProjectService {
             this._commentStats.addCommentToStats(comment, 1)
         }
 
+        let ans = project.answers && project.answers.length
+        for (let i = 0; i < ans; i++) {
+            let answer = project.answers[i]
+
+            // push the answer to the array
+            this.addAnswerToAnswers(answer)
+        }
+
         return {
             commentsByIndex: commentsByIndex,
             highlightArrays: { alwaysHighlightArray: alwaysHighlightArray, highlightArray: highlightArray }
         }
-    }
+    } //  public processComments(project: Project): 
 
     /** 
      * Decorates the comment before adding it to the array
@@ -155,7 +206,7 @@ export class ProjectService {
         if (!arr[comment.start]) { arr[comment.start] = [] }
         arr[comment.start].push(comment)
         return arr
-    }
+    } // private addCommentToArray(comment: EdjiComment, project: Project, user: User, arr: EdjiComment[][]): EdjiComment[][]
 
     public addCommentToReplies(comment: EdjiComment): void {
         let skipAdd = false
@@ -174,7 +225,7 @@ export class ProjectService {
                 this.repliesByIdSubject.next(this.repliesByIdSource)
             }
         }
-    }
+    } // public addCommentToReplies(comment: EdjiComment): void 
 
     public removeCommentFromReplies(comment: EdjiComment) : void {
         if (comment.reply_to) {
@@ -185,7 +236,43 @@ export class ProjectService {
                 }
             }
         }
-    }
+    } // public removeCommentFromReplies(comment: EdjiComment) : void
+
+    /** 
+     * Adds the answer to the array by question ID
+     * If the user answers a question, add the answer to the array of that question by it's question ID
+     * This groups all answers together by the question ID for the project
+     * @param answer the answer you want added to the array
+     */
+    public addAnswerToAnswers(answer: EdjiComment): void {
+        let skipAdd = false
+        if (answer.questionId) {
+            if (!this.answersByIdSource[answer.questionId]) {
+                this.answersByIdSource[answer.questionId] = []
+            }
+            // Double check comment doesn't exist
+            for (let answerExist of this.answersByIdSource[answer.questionId]) {
+                if (answerExist._id == answer._id) {
+                    skipAdd = true
+                }
+            }
+            if (!skipAdd) {
+                this.answersByIdSource[answer.questionId].push(answer)
+                this.answersByIdSubject.next(this.answersByIdSource)
+            }
+        }
+    } // public addAnswerToAnswers(answer: EdjiComment): void
+
+    public removeAnswerFromAnswers(answer: EdjiComment) : void {
+        if (answer.questionId) {
+            for (let i = 0; i < this.answersByIdSource[answer.questionId].length; i++){
+                if (this.answersByIdSource[answer.questionId][i]._id === answer._id) {
+                    this.answersByIdSource[answer.questionId].splice(i, 1)
+                    this.answersByIdSubject.next(this.answersByIdSource)
+                }
+            } // for
+        }
+    } //  public removeAnswerFromAnswers(answer: EdjiComment) : void 
 
     /**
      * Prepares two arrays, one containing numbers of all of the words that are highlighted
@@ -243,6 +330,7 @@ export class ProjectService {
      * @returns Observable which will have error if response is invalid
      */
     public validateProject(projectCode: string): Observable<any> {
+        projectCode = projectCode.toLowerCase()
 
         return this.http.get(this._auth.getUrl() + '/projects/' + projectCode + "/validate", this._auth.getOptions())
             .map((data) => { return data.json() || {}; });
@@ -274,6 +362,8 @@ export class ProjectService {
      */
     public create(readingId: string, project: any) {
         project.reading_id = readingId;
+        if (project.code) { project.code = project.code.toLowerCase() }
+        
 
         return this.http
             .post(this._auth.getUrl() + '/projects/', { 'project' : project }, this._auth.getOptions())
@@ -315,7 +405,10 @@ export class ProjectService {
     } // public delete(projectId)
 
     /** 
-     * Update or Create a comment on a project
+     * Save a comment on a project.
+     * - Give this thing an EdjiComment object, and it will handle it from there
+     *   It will save it as the right comment type, whether a normal comment, a reply, or question answer.
+     *   It just needs to have the appropriate type assigned and the proper data.
      * @param projectId Id of project comment is on
      * @param commentText Contents of the comment
      * @param start Index of first word
@@ -324,13 +417,18 @@ export class ProjectService {
      * @param commentId (optional) If passed, will update comment with that ID
      */
     public saveComment(commentObj: EdjiComment) : Promise<any> {
+        let projectId : string = this.project._id;
         let comment = Object.assign({}, commentObj)
+
+        comment.project_id = projectId; // Tell the comment what project it's a part of
+        
         // Clean frontend only properties
         delete comment['active']
         delete comment['new']
         delete comment['showAvatar']
         
-        let url = this._auth.getUrl() + '/projects/' + comment.project_id + '/comments';
+        // Get the url of this project that we're saving to.
+        let url = this._auth.getUrl() + '/projects/' + projectId + '/comments';
         if (!comment.user_id) {
             comment.user_id = this._auth.getUser()._id
         }
@@ -365,10 +463,10 @@ export class ProjectService {
      * Deletes comment via service, then updates local Project object 
      * - Project page should subscribe to the currentProject Observable to receive these updates
      */
-    public deleteComment(comment): Promise<any> {
+    public deleteComment(comment : EdjiComment): Promise<any> {
         let projectId = this.project._id;
         let url = this._auth.getUrl() + '/projects/' + projectId + '/comments/' + comment._id;
-
+        
         return this.http
             .delete(url, this._auth.getOptions())
             .map(data => {
@@ -389,6 +487,76 @@ export class ProjectService {
             .then(this._auth.extractData);
     }//  public deleteComment(comment): Promise<any>
 
+    /** 
+     * Save an answer on a project.
+     * - Give this thing an EdjiComment object, and it will handle it from there
+     *   It will save it as the right answer type, whether a normal answer, a reply, or question answer.
+     *   It just needs to have the appropriate type assigned and the proper data.
+     * @param answerObj Answer of EdjiComment datatype
+     */
+    public saveAnswer(answerObj: EdjiComment) : Promise<any> {
+        let projectId : string = this.project._id;
+        let answer = Object.assign({}, answerObj)
+
+        answer.project_id = projectId; // Tell the answer what project it's a part of
+        
+        // Clean frontend only properties
+        delete answer['active']
+        delete answer['new']
+        delete answer['showAvatar']
+        
+        // Get the url of this project that we're saving to.
+        let url = this._auth.getUrl() + '/projects/' + projectId + '/answers';
+        if (!answer.user_id) {
+            answer.user_id = this._auth.getUser()._id
+        }
+        if (!answer.author) {
+            answer.author = this._auth.getUser().fullname ? this._auth.getUser().fullname : this._auth.getUser().username
+        }
+
+        let options = this._auth.getOptions()
+        let data = { answer: answer }
+        // Add comment ID if passed
+        // Tell other Project viewers comment changed, using Socket
+        if (answer._id) {
+            data.answer['_id'] = answer._id;
+            url = url + '/' + answer._id
+            options['method'] = 'PUT'
+            this._socket.updateComment(data.answer, 'UPDATE', this.project._id)
+        } else {
+            options['method'] = 'POST'
+            this._socket.updateComment(data.answer, 'CREATE', this.project._id)
+        }
+
+        options['body'] = data
+        return this.http
+            .request(url, options)
+            .toPromise()
+            .then(this._auth.extractData)
+            .then((data) => { return data.answer; })
+    } // public saveAnswer
+
+    /**
+     * Deletes answer via service, then updates local Project object 
+     * - Project page should subscribe to the currentProject Observable to receive these updates
+     */
+    public deleteAnswer(answer : EdjiComment): Promise<any> {
+        let projectId = this.project._id;
+        let url = this._auth.getUrl() + '/projects/' + projectId + '/answers/' + answer._id;
+
+        return this.http
+            .delete(url, this._auth.getOptions())
+            .map(data => {
+                // Tell other Project views that the comment is gone
+                 this._socket.updateComment(answer, 'DELETE', this.project._id);
+
+                this.removeAnswerFromAnswers(answer)
+                return data;
+            })
+            .toPromise()
+            .then(this._auth.extractData);
+    }//  public deleteAnswer(answer): Promise<any>
+
     /**
      * API call to add a user (of any type) to the project
      *  the call can add only the current user to the project
@@ -402,54 +570,4 @@ export class ProjectService {
             this._auth.getOptions()
         ) //this.http.put
     } // public addUserToProject(projectId: string): Observable<any>
-
-    /** 
-     * Update or Create a comment on a project
-     * @param projectId Id of project comment is on
-     * @param commentText Contents of the comment
-     * @param start Index of first word
-     * @param end Index of last word
-     * @param text (optional) Selection of text comment was made on. Left as optional, but SHOULD be passed.
-     * @param commentId (optional) If passed, will update comment with that ID
-     */
-    public saveReply(commentObj: EdjiComment) : Promise<any> {
-        let comment = Object.assign({}, commentObj)
-        // Clean frontend only properties
-        delete comment['active']
-        delete comment['new']
-        delete comment['showAvatar']
-        
-        let url = this._auth.getUrl() + '/projects/' + comment.project_id + '/comments';
-        if (!comment.user_id) {
-            comment.user_id = this._auth.getUser()._id
-        }
-        if (!comment.author) {
-            comment.author = this._auth.getUser().fullname ? this._auth.getUser().fullname : this._auth.getUser().username
-        }
-
-        let options = this._auth.getOptions()
-        let data = { comment: comment }
-        // Add comment ID if passed
-        // Tell other Project viewers comment changed, using Socket
-        if (comment._id) {
-            data.comment['_id'] = comment._id;
-            url = url + '/' + comment._id
-            options['method'] = 'PUT'
-            this._socket.updateComment(data.comment, 'UPDATE', this.project._id);
-        } else {
-            options['method'] = 'POST'
-            this._socket.updateComment(data.comment, 'CREATE', this.project._id);
-        }
-
-        options['body'] = data
-
-        return this.http
-            .request(url, options)
-            .toPromise()
-            .then(this._auth.extractData)
-            .then((data) => { return data.comment; })
-
-        // 58f1243102424c0011e7aa96
-        
-    } // public saveReply
 } // class

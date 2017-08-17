@@ -43,6 +43,7 @@ export class GuestLoginForm {
 
     // form handling
     this.guestNameInput.sendKeys(this.guestLoginName);
+    // Gets stuck here
     browser.wait(this.EC.elementToBeClickable(this.guestLoginButton), 5000, "guest login button never became clickable after entering text");
     this.guestLoginButton.submit();
   }

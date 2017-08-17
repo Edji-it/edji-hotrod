@@ -13,7 +13,7 @@
           <div class="col__center-content">
             <h1 class="center on-dark join-header">Join a Reading</h1>
             <div class="input-group input-group-lg">
-              <input id="projectCodeInput" name="ProjectCodeInput" type="text" class="form-control" style="text-align: center;" maxlength="4" (keyup.enter)="joinSession(projectCode)" [(ngModel)]="projectCode"  placeholder="⚡️ Code" aria-describedby="add-project-code" />
+              <input id="projectCodeInput" name="ProjectCodeInput" type="text" class="form-control" style="text-align: center;" (keyup.enter)="joinSession(projectCode)" [(ngModel)]="projectCode"  placeholder="⚡️ Code" aria-describedby="add-project-code" />
               <span class="input-group-btn">
                 <button class="btn btn-primary" [class.loading]="joinLoading" type="button" (click)="joinSession(projectCode)" id="buttonJoinProject" name="Join" href="#">Go!</button>
               </span>

@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Rx';
+import { Angulartics2 } from 'angulartics2';
 
 import { AuthService } from '../shared';
 
@@ -9,7 +10,7 @@ import { AuthService } from '../shared';
   templateUrl: './hero-promo.component.html',
   styleUrls: ['./hero-promo.component.scss']
 })
-export class HeroPromoComponent implements OnInit {
+export class HeroPromoComponent implements OnInit, OnDestroy {
 
   private countdownDate
   private countdownText: string
@@ -19,20 +20,20 @@ export class HeroPromoComponent implements OnInit {
   private subSuccess: boolean
   private showLoginModal: boolean
   private showHeroSubModal: boolean
+  private cancelGetPriceCall: boolean = false
 
-
-  private heroCount: number = 500
+  private heroPrice: number = 4000
 
   private subscriptions: Subscription[] = []
 
-  constructor(private _auth: AuthService, private route: ActivatedRoute, private _router: Router) { }
+  constructor(private _auth: AuthService, private route: ActivatedRoute, private _router: Router, private angulartics: Angulartics2) { }
 
   ngOnInit() {
     this.subscriptions.push(
       this.route.params
-        .subscribe((params: any) => { 
+        .subscribe((params) => { 
           if(params && params['secretSwitch']){
-              this._auth.secretSwitches[params['secretSwitch']] = true;
+              this._auth.secretSwitches[params['secretSwitch']] = true
               if (this._auth.secretSwitches['countdownOver']) {
                   this.countdownOver = true
               }
@@ -40,30 +41,36 @@ export class HeroPromoComponent implements OnInit {
         })
     );
     
-    this.countdownDate = new Date("Aug 15, 2017 05:00:00").getTime()
+    this.countdownDate = new Date("Aug 15, 2017 12:00:00").getTime()
     // kick off countdown
     this.incrementer()
     // Conitnuously check for Hero Count
-    this.getHeroCount()
+    this.getHeroPrice()
   }
 
-  private earlyAmountOff(): number {
-    return (500 - this.heroCount)/100
+  ngOnDestroy() {
+    this.cancelGetPriceCall = true
   }
 
-  private getHeroCount(): void {
-    this._auth.getHeroCount()
+  private getHeroPrice(): void {
+    this._auth.getHeroPrice()
       .toPromise()
       .then( 
         data => {
-          if (data.count) {
-            this.heroCount = data.count
+          if (data.cost) {
+            this.heroPrice = data.cost
           }
-          setTimeout(() => {
-            this.getHeroCount()
-          }, 2000)
+
+          // this can be set to cancel the recursion
+          if (this.cancelGetPriceCall) {
+            return
+          } else {
+            setTimeout(() => {
+              this.getHeroPrice()
+            }, 2000)
+          }
         }, error => {
-          console.log(error)
+          console.error(error)
         })
   }
 
@@ -84,6 +91,7 @@ export class HeroPromoComponent implements OnInit {
     if (distance < 0) {
       // clearInterval(this.intervalVar);
       this.countdownText = "0d 0h 0m 0s"
+      this.countdownOver = true
     } else {
       // Display the result in the element with id="demo"
       this.countdownText = days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
@@ -99,7 +107,6 @@ export class HeroPromoComponent implements OnInit {
     this._auth.addToHeroList({ email : newHeroEmail }).take(1)
       .subscribe( 
         data => {
-          console.log(data)
           this.subSuccess = true
           this.subMsg = 'We\'ll let you know when Hero launches!';
       },
@@ -121,6 +128,7 @@ export class HeroPromoComponent implements OnInit {
       this.showLoginModal = true
     } else {
       this.showHeroSubModal = true
+      this.angulartics.eventTrack.next({ action: 'heroSubInterest', properties: { category: 'heroFeature', label: 'attempt' }})
     }
   }
 }

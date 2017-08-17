@@ -381,9 +381,6 @@ export class AuthService implements CanActivate {
                 let mergedUser = Object.assign({}, currentUser);// Get the latest copy of the user object.
                 mergedUser.avatar = newAvatar; // let's just shove those in there
                 this.user = mergedUser; // NOTE: We make a new object and assign it so that the user object is always nice and fresh.
-                
-                console.log(newAvatar);
-                console.log(this.user.avatar);
 
                 // This code saves this here user object.
                 // This is repeated code from updateUser() we could consolidate these. (6.27.17)
@@ -516,6 +513,26 @@ export class AuthService implements CanActivate {
             })
     }
     
+    /**
+     * Add users who subscribe to Hero to the Mailchimp Hero Subscribed list
+     */
+    public addToActiveHeroList(user) {
+        let spaceIndex = user.fullname.indexOf(' ')
+        if (spaceIndex < 0) { spaceIndex = user.fullname.length }
+        let fname = user.fullname.substr(0,spaceIndex)
+        let lname = user.fullname.substr(spaceIndex + 1)
+        let body = { 
+            'email' : user.email, 
+            'fname' : fname, 
+            'lname' : lname 
+        }
+        body['list'] = 'hero-subscribed'
+        return this.http.post( this.baseUrl + '/mailchimp/add', body, this.getOptions())
+            .map( res => {
+                return res.json()
+            })
+    }
+    
 
     /**
      * Add newly registered users to the sign up Mailchimp list
@@ -545,6 +562,17 @@ export class AuthService implements CanActivate {
         }
     }
 
+    /**
+     * Return array of allowed comment media types
+     */
+    public getAllowedCommentMediaTypes() : string[] {
+        if (this.user['hero'] && this.user['hero']['active']) {
+            return ['emoji','text','audio']
+        } else {
+            return ['emoji','text']
+        }
+    }
+
     /** Provides logic for sending user back to home if they are not authorized */
     public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
         if (!this.getUser().isLoggedIn) {
@@ -559,7 +587,6 @@ export class AuthService implements CanActivate {
      * Submit payment and subscription type to add plan to user
      */
     public subscribeToHero(subscriptionType, tokenId, couponCode ?: string): Observable<any> {
-        console.log(tokenId)
         let data = {
             subscriptionType : subscriptionType,
             token: tokenId
@@ -567,8 +594,17 @@ export class AuthService implements CanActivate {
         if (couponCode) {
             data['couponCode'] = couponCode
         }
+
         return this.http.post(this.baseUrl + '/subscriptions', data, this.getOptions())
             .map( res => {
+                if (res && res.json()) {
+                    // Add user to mailchimp list
+                    this.addToActiveHeroList(this.getUser())
+                    .toPromise()
+                    .then( res => {
+                        console.log(res)
+                    })
+                }
                 return res.json()
             })
 
@@ -589,8 +625,15 @@ export class AuthService implements CanActivate {
             })
     }
 
-    public getHeroCount() {
-        return this.http.get(this.baseUrl + '/users/hero/count', this.getOptions())
+    public cancelHeroSubscription(subscriptionId: string) {
+        return this.http.delete([this.baseUrl, 'subscriptions', subscriptionId].join("/"), this.getOptions())
+            .map((res) => {
+                return res.json() || {}
+            })
+    }
+
+    public getHeroPrice() {
+        return this.http.get(this.baseUrl + '/subscriptions/coupons/HERO_LAUNCH', this.getOptions())
             .map( res => {
                 return res.json()
             })

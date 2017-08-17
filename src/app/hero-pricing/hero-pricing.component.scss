@@ -23,8 +23,9 @@
     list-style-type: disc;
     list-style-image: url('/assets/images/icon-check.svg');
     padding-left: 28px;
+    
     & li {
         padding: 0 0 7px 0px;
-        line-height: 22px;
+        line-height: 25px;
     }
 }

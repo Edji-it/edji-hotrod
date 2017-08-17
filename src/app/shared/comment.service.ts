@@ -103,7 +103,7 @@ export class CommentService {
         )
         barIndex++
       }
-    }
+    } // function barchart(options) 
 
     // Draw the individual bar at the specific part of chart with the specific height. It will be mirrored vertically about the middle of the chart
     function drawBar(ctx, upperLeftCornerX, upperLeftCornerY, width, height,color) {
@@ -111,8 +111,8 @@ export class CommentService {
       ctx.fillStyle=color
       ctx.fillRect(upperLeftCornerX,upperLeftCornerY - height,width,2*height)
       ctx.restore()
-    }
-  }
+    } // function drawBar(ctx, upperLeftCornerX, upperLeftCornerY, width, height,color)
+  } // // public waveForm(waves, canvas) 
 
   /** Used to determine which level of permission the user has for a specific comment
    * @param comment A comment object
@@ -127,7 +127,7 @@ export class CommentService {
     } else {
         return CommentPermissions.READ
     }
-  }
+  } // public getCommentPermissions
 
   /**
    * Decides if the Emoji Keyboard is active
@@ -140,4 +140,4 @@ export class CommentService {
           this.activeComment.active && this.activeComment.user_id === user._id
     }
   }
-}
+} // CommentService class

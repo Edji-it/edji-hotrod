@@ -1,5 +1,8 @@
+import { Angulartics2 } from 'angulartics2';
 import { AuthService } from '../../shared';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+
+import { BumblebeeService } from './../../shared'
 
 @Component({
   selector: 'hero-change-modal',
@@ -15,19 +18,23 @@ export class HeroChangeComponent implements OnInit {
   private confirmCancel: boolean = false
   private isCanceled: boolean = false
   private canceling: boolean = false
+  private cancelMsg: string = ''
 
   // Form values
-  private subtype: string
+  private subtype: string = 'yearly'
 
   @Output()
   closeModal: EventEmitter<any> = new EventEmitter(); // Tell the listening page to close the darned thing.
 
-  constructor(private _auth: AuthService) { }
+  constructor(
+    private _auth: AuthService,
+    private _bumblebee: BumblebeeService,
+    private angulartics: Angulartics2
+  ) { }
 
   ngOnInit() {
     this.user = this._auth.getUser()
-    console.log(this.user)
-    this.subtype = this.user.hero.type + ''
+    this.subtype = this.user.hero.type ? this.user.hero.type : 'yearly'
   }
 
   /**
@@ -48,18 +55,18 @@ export class HeroChangeComponent implements OnInit {
   updateType(type: string) {
     this.updating = true
     this._auth.updateHeroSub(type)
+      .take(1)
       .subscribe(
         data => {
-          console.log(data)
           this.updating = false
           this.isUpdated = true
           if (data.user) {
+            this._bumblebee.userHeroAction(data.user, "unsubscribed")
             this._auth.setUser(data.user)
           }
         },
         err => {
           this.updating = false
-          console.log(err)
         }
       )
   }
@@ -69,10 +76,16 @@ export class HeroChangeComponent implements OnInit {
    */
   cancelSub() {
     this.canceling = true
-    this._auth.updateHeroSub(this.user.hero.type, 'unsubscribed')
+    this.cancelMsg = ''
+    // track user cancelling hero subscription in analytics
+    this.angulartics.eventTrack.next({ action: 'cancelSubscription', properties: { category: 'heroFeature', label: 'attempt' }})
+    this._auth.cancelHeroSubscription(this.user.hero.subscription_id)
+      .take(1)
       .subscribe(
         data => {
-          console.log(data)
+          // track user cancelling hero subscription in analytics
+          this.angulartics.eventTrack.next({ action: 'cancelSubscription', properties: { category: 'heroFeature', label: 'success' }})
+
           this.canceling = false
           this.isCanceled = true
           if (data.user) {
@@ -80,7 +93,11 @@ export class HeroChangeComponent implements OnInit {
           }
         },
         err => {
+          // track user cancelling hero subscription in analytics
+          this.angulartics.eventTrack.next({ action: 'cancelSubscription', properties: { category: 'heroFeature', label: 'failure' }})
+
           this.canceling = false
+          this.cancelMsg = "Sorry, canceling your subscription failed. <a class='link' href='mailto:support@edji.it'>Please contact support</a>."
           console.log(err)
         }
       )

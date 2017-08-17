@@ -24,7 +24,9 @@ export class SocketService {
     public heatVisionUpdates: Observable<any> = this.heatVision.asObservable()
 
 
-    constructor(private _auth: AuthService) {
+    constructor(
+        private _auth: AuthService
+    ) {
         if (this._auth.getEnv() === "prod") {
             this.url = "//bluestreak.edji.it";
         } else {
