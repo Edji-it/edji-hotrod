@@ -52,4 +52,19 @@ export class BumblebeeService {
       )
     }
   }
+
+  public reportError(error: any): void {
+    if (this.isProd) {
+      this.http.post(
+        this.url + "/error",
+        { error: error },
+        this._auth.getOptions()
+      )
+      .take(1)
+      .subscribe(
+        (success) => {},
+        (error) => { console.error(error) }
+      )
+    }
+  }
 }
