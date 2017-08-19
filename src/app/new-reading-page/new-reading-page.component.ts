@@ -421,7 +421,6 @@ export class NewReadingPage implements OnInit {
         let concatHtml = ''
 
         for (let i=0; i<editorHtml.length; i++) {
-            console.log('editorHtml', this.readingHtml[i])
             // Add question "word"
             if (this.readingHtml[i].question) {
                 // Concatenate the 
@@ -488,7 +487,7 @@ export class NewReadingPage implements OnInit {
         } else {
             this.angulartics.eventTrack.next({ action: submitAction, properties: { category: 'contentManagement', label: 'attempt' }})
         }
-        console.log(reading)
+        // console.log(reading)
         this._readings.save(reading)
             .subscribe(
                 data => {
@@ -514,7 +513,7 @@ export class NewReadingPage implements OnInit {
                                     this.addLoadingP = false
                                 });
                         } else {
-                            console.log(data)
+                            // console.log(data)
                             this.addLoadingD = false
                             this.addLoadingP = false
                             this.router.navigate(['new-reading/' + data._id], { queryParams: { successAlert: this.successAlert } })
@@ -589,7 +588,16 @@ export class NewReadingPage implements OnInit {
         }
         
         if (insertHtml.includes("angularMediumEditor")) {
-            this.readingHtml.push({'text':this.newReadingInner,'question':question})
+            if (insertPos) {
+                question.question_number = insertPos
+                if (this.readingHtml.length > insertPos) {
+                    this.readingHtml.splice(insertPos,0,{'text':this.newReadingInner,'question':question})
+                } else {
+                    this.readingHtml.push({'text':this.newReadingInner,'question':question})
+                }
+            } else {
+                this.readingHtml.push({'text':this.newReadingInner,'question':question})
+            }
         } else {
             question.question_number = insertPos
             if (this.readingHtml.length > insertPos) {
