@@ -209,6 +209,8 @@ describe('Project Page', () => {
             // Delete the audio comment
             browser.wait(EC.elementToBeClickable(project.commentDelete), 5000, "could not find delete button");
             project.commentDelete.click();
+            // Needs a second to make sure comment is deleted
+            browser.sleep(1000);
         });
     });
 
