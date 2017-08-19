@@ -555,6 +555,7 @@ export class AuthService implements CanActivate {
      * Return array of allowed comment types
      */
     public getAllowedCommentTypes() : string[] {
+        this.user = this.getUser()
         if (this.user['hero'] && this.user['hero']['active']) {
             return ['emoji','text','audio','reply']
         } else {
@@ -566,6 +567,7 @@ export class AuthService implements CanActivate {
      * Return array of allowed comment media types
      */
     public getAllowedCommentMediaTypes() : string[] {
+        this.user = this.getUser()
         if (this.user['hero'] && this.user['hero']['active']) {
             return ['emoji','text','audio']
         } else {
