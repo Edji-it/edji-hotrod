@@ -420,7 +420,6 @@ export class NewReadingPage implements OnInit {
 
         // This would be better handled by formcontrols
         if (!form.title || form.title.length < 1 || this.readingIsBlank || !questionsValid) {
-            console.log('z7')
             this.addLoadingD = false
             this.addLoadingP = false
             this.error = 'Not quite, please check all the fields!'
@@ -593,7 +592,7 @@ export class NewReadingPage implements OnInit {
      * Adds a question block to the new reading and then adds in a new medium editor
      */
     private addQuestion(insertHtml?: string, insertPos?: number) {
-        var question = <EdjiQuestion>{
+        let question = <EdjiQuestion>{
             prompt: '',
             answer_types: [],
             option_types: [],
@@ -697,6 +696,7 @@ export class NewReadingPage implements OnInit {
 
         // Remove the question
         this.readingHtml.splice(questionNum, 1)
+        this.updateQuestionNumbers()
     }
 
     /**
