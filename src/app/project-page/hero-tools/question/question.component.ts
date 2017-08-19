@@ -85,8 +85,8 @@ export class QuestionComponent implements OnInit, Input, Output, OnDestroy {
       },
       error => {
         console.error(error)
-      }
-    ))
+      })
+    )
     
     // Subscribe to updates from that project once we're subscribed to the reading
     this.subscriptions.push( this._projects.currentProject.subscribe(
@@ -97,8 +97,8 @@ export class QuestionComponent implements OnInit, Input, Output, OnDestroy {
       },
       (error) => {
         console.error(error)
-      }
-    ) )
+      }) 
+    )
 
     // Subscribe to updates to the answer reference object
     this.subscriptions.push( this._projects.answersById.subscribe(
@@ -107,8 +107,8 @@ export class QuestionComponent implements OnInit, Input, Output, OnDestroy {
       },
       (error) => {
         console.error(error)
-      }
-    ) )
+      })
+    )
 
     // Make sure we have the most current User object
     this.subscriptions.push(
