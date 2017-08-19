@@ -39,7 +39,6 @@ export class OwnerToolsComponent implements OnInit {
     this.subscriptions.push( this._readings.currentReading.subscribe(
       reading => {
         this.currentReading = reading
-        console.log(reading)
       },
       error => {
         console.error(error)

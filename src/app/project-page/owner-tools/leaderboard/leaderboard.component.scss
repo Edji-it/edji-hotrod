@@ -38,8 +38,4 @@
 
 .question-answer-status__block {
   padding-left: 12px;
-	cursor: pointer;
-	&:hover {
-		background-color: lighten($gray, 4%);
-	}
 }
