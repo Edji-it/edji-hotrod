@@ -24,6 +24,7 @@ export class FeedbackComponent implements OnInit {
   private feedbackSuccess: boolean = false;
   private user: any;
   private userCopy: any;
+  public isLoading : boolean = false;
 
   private errorObject: {
     serverError?: string
@@ -90,6 +91,13 @@ export class FeedbackComponent implements OnInit {
       user: this.user
     };
 
+    this.isLoading = true;
+
+    // TEMP FOR TESTING
+    window.setTimeout(this.successfulFeedbackSend(), 3000, false);
+
+    // Disable this for testing purposes.
+    /* 
     this._bumblebee.sendFeedback(data).take(1).subscribe(
       (res) => {
         if (res.status === 204) {
@@ -98,6 +106,7 @@ export class FeedbackComponent implements OnInit {
           this._auth.deleteFromStorage("feedbackFormData");
           this.feedbackClose();
           this.showFeedbackSuccess = true;
+          this.isLoading = false;
         }
       },
       (err) => {
@@ -105,7 +114,22 @@ export class FeedbackComponent implements OnInit {
         console.log(err);
         this.errorObject.serverError = "Something has gone wrong. Please try submitting your feedback again later!";
         this._auth.store("feedbackFormData", formValue);
+        this.isLoading = false;
       }
     )
-  }
-}
+    */
+  } // private sendFeedback
+
+  private successfulFeedbackSend () : void {
+      this.angulartics.eventTrack.next({ action: 'sendFeedback', properties: { category: 'accountManagement', label: 'success' }});
+      this.feedbackSuccess = true;
+      this._auth.deleteFromStorage("feedbackFormData");
+      this.feedbackClose();
+      this.showFeedbackSuccess = true;
+      this.isLoading = false;
+  } //  private successfulFeedbackSend () : void
+
+  public getIsLoading () : boolean {
+    return this.isLoading;
+  } // public getIsLoading () : boolean 
+} // class

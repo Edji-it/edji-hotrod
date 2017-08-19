@@ -1,5 +1,4 @@
 <!--Teacher View-->
-<loading-component></loading-component>
 <div class="row hidden-sm-down">
     <div class="col-sm-6">
         <h1 class="no-flow">Created
@@ -18,7 +17,7 @@
     </div>
 </div>
 
-<div *ngIf="isLoading" class="row loading"></div>
+<loading-component *ngIf="getIsLoading()" (loadingStatus)="getIsLoading()"></loading-component>
 <button class="btn btn-primary new-reading-btn hidden-md-up" [routerLink]="[ '/new-reading' ]">
     New Reading
 </button>

@@ -5,7 +5,7 @@
 @include fontFace('Open Sans', '../assets/fonts/OpenSans-Regular-webfont', normal, normal );
 @include fontFace('Open Sans', '../assets/fonts/OpenSans-Semibold-webfont', normal, 500 );
 @include fontFace('Open Sans', '../assets/fonts/OpenSans-Bold-webfont', normal, 700 );
-
+@include fontFace('Birds of Paradise', '../assets/fonts/Birds of Paradise', normal, 700 );
 
 body {
   color: $base-font-color;
@@ -192,4 +192,8 @@ h2.card-title {
   margin: 0 2px;
   text-shadow: -1px 1px 0px #bbbbbb;
   text-decoration: none !important;
+}
+
+.loading-label {
+  font-family: 'Birds of Paradise';
 }

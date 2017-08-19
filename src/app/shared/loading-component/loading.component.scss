@@ -1,5 +1,12 @@
 @import '../../../sass/base/variables';
 
 .loading-text {
-    font-size: 12;
+    font-size: 20px;
+    text-align: center;
+    color: #494949;
+}
+
+.loading-container {
+    width: 100px;
+    height: 100px;
 }

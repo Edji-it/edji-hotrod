@@ -1,5 +1,5 @@
 import { Subscription } from 'rxjs/Rx';
-import { Component, EventEmitter, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'loading-component',
@@ -11,12 +11,13 @@ export class LoadingComponent implements OnInit {
     /*
         19 August 2017
         Nick Pumper
-        Last Mod:
+        Last Mod: 19 Aug 2017
 
         Insert this if you need a loading symbol.
     */
 
-    public loadingStatus : boolean = false; // should default to false;
+    @Input()
+    public loadingStatus : boolean = true;
 
     constructor () {}
 
@@ -24,12 +25,8 @@ export class LoadingComponent implements OnInit {
         
     } // ngOnInit() 
 
-    // Use this to tell this what in tarnation is happening.
-    public inputLoadingStatus (input : boolean) : void {
-        console.log("Are we loading? " + input);
-    } //  public inputLoadingStatus (input : boolean) : void
-
     public getLoadingStatus () : boolean {
+        // console.log("Are we loading? " + this.loadingStatus);
         return this.loadingStatus;
     }
 } // Loading class 

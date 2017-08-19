@@ -79,5 +79,9 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
       }, error => {
         console.log(error);
       });
+  } // private updateProjectLabel
+
+  public getIsLoading() : boolean {
+    return this.isLoading;
   }
-}
+} // class
