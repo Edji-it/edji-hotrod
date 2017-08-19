@@ -193,7 +193,7 @@ export class NewReadingPage implements OnInit {
      * Checks on the content field's cursor position
      * - Enables inserting images at cursor position
      */
-    private contentChange() {
+    private contentChange(event: Event) {
         let sel = Rangy.getSelection()
         this.masterSelection = sel
         
@@ -208,20 +208,25 @@ export class NewReadingPage implements OnInit {
                 focusNode = focusNode.childNodes[0]
             }
 
-            if (typeof focusNode.offsetTop === 'undefined' ) {
-                // Text nodes don't provide an offset, so we need to get the parent
-                focusNode = focusNode.parentNode
-            }
+            if (focusNode) {
+                if (typeof focusNode.offsetTop === 'undefined' ) {
+                    // Text nodes don't provide an offset, so we need to get the parent
+                    focusNode = focusNode.parentNode
+                }
 
-            if (focusNode.parentNode && focusNode.parentNode.id !== 'angularMediumEditor' 
-                && focusNode.parentNode.parentNode && focusNode.parentNode.parentNode.id !== 'angularMediumEditor') {
-                this.editorToolbarHidden = true
+                if (focusNode.parentNode && focusNode.parentNode.id !== 'angularMediumEditor' 
+                    && focusNode.parentNode.parentNode && focusNode.parentNode.parentNode.id !== 'angularMediumEditor') {
+                    this.editorToolbarHidden = true
+                } else {
+                    this.editorToolbarHidden = false
+                }
+
+                this.insertNode = focusNode
+                this.editorToolbarY = NewReadingPage.EDITOR_TOOLBAR_Y > focusNode.offsetTop ? NewReadingPage.EDITOR_TOOLBAR_Y : focusNode.offsetTop
             } else {
-                this.editorToolbarHidden = false
+                // don't move bar
             }
-
-            this.insertNode = focusNode
-            this.editorToolbarY = NewReadingPage.EDITOR_TOOLBAR_Y > focusNode.offsetTop ? NewReadingPage.EDITOR_TOOLBAR_Y : focusNode.offsetTop
+            
         } else {
             this.editorToolbarHidden = true
         }
