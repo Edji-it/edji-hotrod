@@ -57,6 +57,7 @@ import { DashboardComponent, JoinedDashComponent, CreatedDashComponent, Tutorial
 import { NoContentComponent } from './no-content';
 import { AccountComponent, ChangePassComponent, UploadAvatarModal } from './account';
 import { FeedbackComponent } from './shared/feedback/feedback.component';
+import { LoadingComponent } from './shared/loading-component/loading.component';
 import { LoginComponent } from './login';
 import { ResetPassPage } from './reset-pass/reset-pass-page.component';
 import { HeroPromoComponent } from './hero-promo/hero-promo.component';
@@ -150,6 +151,7 @@ type StoreType = {
     HeroSubscribeComponent,
     HeroChangeComponent,
     TutorialBoxComponent,
+    LoadingComponent,
     DashboardComponent,
     JoinedDashComponent,
     CreatedDashComponent,
