@@ -598,6 +598,7 @@ export class NewReadingPage implements OnInit {
      * Adds a question block to the new reading and then adds in a new medium editor
      */
     private addQuestion(insertHtml?: string, insertPos?: number) {
+        let answer_types = this._auth.getAllowedCommentMediaTypes()
         let question = <EdjiQuestion>{
             prompt: '',
             answer_types: answer_types,
