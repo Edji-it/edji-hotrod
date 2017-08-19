@@ -404,7 +404,7 @@ export class NewReadingPage implements OnInit {
 
         // Overall validation check that questions have been filled out properly
         let questionsValid: boolean = true
-        if (this.readingHtml.length>0 && this.readingHtml[1].question) {
+        if (this.readingHtml[1] && this.readingHtml[1].question) {
             for (let i=0;i<this.readingHtml.length;i++) {
                 if (this.readingHtml[i].question && 
                 (!this.readingHtml[i].question.prompt || 
