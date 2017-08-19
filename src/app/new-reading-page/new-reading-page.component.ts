@@ -598,8 +598,7 @@ export class NewReadingPage implements OnInit {
      * Adds a question block to the new reading and then adds in a new medium editor
      */
     private addQuestion(insertHtml?: string, insertPos?: number) {
-        let answer_types = this._auth.getAllowedCommentMediaTypes()
-        var question = <EdjiQuestion>{
+        let question = <EdjiQuestion>{
             prompt: '',
             answer_types: answer_types,
             option_types: [],
@@ -703,6 +702,7 @@ export class NewReadingPage implements OnInit {
 
         // Remove the question
         this.readingHtml.splice(questionNum, 1)
+        this.updateQuestionNumbers()
     }
 
     /**

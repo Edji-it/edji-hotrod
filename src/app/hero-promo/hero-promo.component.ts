@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Rx';
 import { Angulartics2 } from 'angulartics2';
 
-import { AuthService } from '../shared';
+import { AuthService } from '../shared'
 
 @Component({
   selector: 'app-hero-promo',
