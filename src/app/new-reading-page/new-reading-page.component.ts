@@ -31,7 +31,6 @@ export class NewReadingPage implements OnInit {
     private readingForm     : FormGroup
     private newReadingInner : string = "<div>&nbsp;</div>"
     private readingHtml     : any[] = [{'text': this.newReadingInner}]
-    private concatHtml      : string = ""
     private readingIsBlank  : boolean = false
     private submitted       : boolean = false
     private addLoadingD     : boolean = false
@@ -414,12 +413,14 @@ export class NewReadingPage implements OnInit {
 
         // Process reading html into useful Words Array
         let editorHtml = this.el.nativeElement.querySelectorAll('#angularMediumEditor')
+        let concatHtml = ''
 
         for (let i=0; i<editorHtml.length; i++) {
+            console.log('editorHtml', this.readingHtml[i])
             // Add question "word"
             if (this.readingHtml[i].question) {
                 // Concatenate the 
-                this.concatHtml += "<$question$>"
+                concatHtml += "<$question$>"
                 this.words.push({
                     styles: ['question'],
                     index: i - 1
@@ -433,7 +434,7 @@ export class NewReadingPage implements OnInit {
 
             // Concatenate the html to 1 string [not currently using with current config]
             // this.concatHtml += editorHtml[i]
-            this.concatHtml += this.readingHtml[i].text
+            concatHtml += this.readingHtml[i].text
 
             let childEls = editorHtml[i].childNodes
 
@@ -447,7 +448,7 @@ export class NewReadingPage implements OnInit {
         let reading: any = Object.assign({},form)
         delete reading.label
         // reading.html = this.readingHtml
-        reading.html = this.concatHtml
+        reading.html = concatHtml
         reading.words = this.words
         reading.questions = this.questions
 
