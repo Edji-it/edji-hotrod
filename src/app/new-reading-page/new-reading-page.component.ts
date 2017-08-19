@@ -405,8 +405,22 @@ export class NewReadingPage implements OnInit {
             this.readingIsBlank = true
         }
 
+        // Overall validation check that questions have been filled out properly
+        let questionsValid: boolean = true
+        if (this.readingHtml.length>0 && this.readingHtml[1].question) {
+            for (let i=0;i<this.readingHtml.length;i++) {
+                if (this.readingHtml[i].question && 
+                (!this.readingHtml[i].question.prompt || 
+                this.readingHtml[i].question.prompt==='' || 
+                (this.readingHtml[i].question.answer_types && this.readingHtml[i].question.answer_types.length < 1))) {
+                    questionsValid = false
+                }
+            }
+        }
+
         // This would be better handled by formcontrols
-        if (!form.title || form.title.length < 1 || this.readingIsBlank) {
+        if (!form.title || form.title.length < 1 || this.readingIsBlank || !questionsValid) {
+            console.log('z7')
             this.addLoadingD = false
             this.addLoadingP = false
             this.error = 'Not quite, please check all the fields!'
