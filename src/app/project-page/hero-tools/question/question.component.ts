@@ -39,6 +39,9 @@ export class QuestionComponent implements OnInit, Input, Output, OnDestroy {
   @Output() 
   questionDelete= new EventEmitter()
 
+  @Output()
+  questionUpdate = new EventEmitter()
+
   // State
   public questionOrder = 0 // Is this the first question? Or the second? Etc.
 
@@ -53,7 +56,7 @@ export class QuestionComponent implements OnInit, Input, Output, OnDestroy {
 
   // Set which answer types are allowed and which options to toggle.
   // Answer types are passed onto which ever Answer component
-  public answerTypesActive: string[] = []
+  // public answerTypesActive: string[] = []
   private optionTypeStatus: any[] = []
   private answerTypesAvailable: any[] = []
   private optionTypesAvailable: any[] = [{
@@ -142,11 +145,14 @@ export class QuestionComponent implements OnInit, Input, Output, OnDestroy {
    * @param type A answer type
    */
   private toggleAnswerOfType(type: string) {
-    if (this.answerTypesActive.indexOf(type) < 0) {
-      this.answerTypesActive.push(type)
+    if (this.question.answer_types.indexOf(type) < 0) {
+      this.question.answer_types.push(type)
     } else {
-      this.answerTypesActive.splice(this.answerTypesActive.indexOf(type), 1)
+      while (this.question.answer_types.indexOf(type) > -1) {
+        this.question.answer_types.splice(this.question.answer_types.indexOf(type), 1)
+      }
     }
+    this.questionUpdate.emit(this.question)
   } // private toggleAnswerOfType(type: string) 
 
   /** Toggles option selection
@@ -177,11 +183,6 @@ export class QuestionComponent implements OnInit, Input, Output, OnDestroy {
    * 
    */
   private updateSelections() {
-    // Initialize the answers for questions
-    for (let i = 0; i < this.answerTypesAvailable.length; i++) {
-      this.answerTypesActive.push(this.answerTypesAvailable[i])
-    }
-
     // Initialize the options for questions
     for (let i = 0; i < this.optionTypesAvailable.length; i++) {
       this.optionTypeStatus[this.optionTypesAvailable[i].type]=false

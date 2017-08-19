@@ -39,15 +39,16 @@
                         <label>Reading Content</label>
                             <!-- Reading Content section -->
                         <p class="sub-label">Select text to see formatting options. Use the insert buttons on the left to add images and PDFs.</p>
-                        <div *ngFor="let readingPart of readingHtml; let i=index; trackBy:readingTracking">
+                        <div *ngFor="let readingPart of readingHtml; let i=index">
                             <edji-question 
-                                *ngIf="readingHtml[i].question" 
+                                *ngIf="readingPart.question" 
                                 (questionDelete)="deleteQuestion(i)"
-                                [question]="readingHtml[i].question"
+                                [question]="readingPart.question"
+                                (questionUpdate)="updateQ(readingPart.question,$event)"
                                 (keyup)="contentChange($event)"
                                 (mouseup)="contentChange($event)"></edji-question>
                             <medium-editor  
-                                [(editorModel)]="readingHtml[i].text"
+                                [(editorModel)]="readingPart.text"
                                 [editorOptions]="mediumEditorConfig"
                                 [editorPlaceholder]="getReadingPlaceholder(i)"
                                 (keyup)="contentChange($event)"

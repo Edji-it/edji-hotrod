@@ -18,9 +18,6 @@ import * as Rangy from 'rangy';
     templateUrl: 'new-reading-page.component.html'
 })
 export class NewReadingPage implements OnInit {
-    readingTracking(index: any, item: any) {
-        return index
-    }
     
     /*
         New Reading Page
@@ -420,7 +417,6 @@ export class NewReadingPage implements OnInit {
 
         // This would be better handled by formcontrols
         if (!form.title || form.title.length < 1 || this.readingIsBlank || !questionsValid) {
-            console.log('z7')
             this.addLoadingD = false
             this.addLoadingP = false
             this.error = 'Not quite, please check all the fields!'
@@ -501,7 +497,7 @@ export class NewReadingPage implements OnInit {
         } else {
             this.angulartics.eventTrack.next({ action: submitAction, properties: { category: 'contentManagement', label: 'attempt' }})
         }
-        // console.log(reading)
+        
         this._readings.save(reading)
             .subscribe(
                 data => {
@@ -589,13 +585,23 @@ export class NewReadingPage implements OnInit {
         }
     }
 
+    private updateQ(question, freshQuestion) {
+        /* Whenever updates happen to the question component like..
+        *  adding an answer type
+        *  removing an answer type
+        *  ..then we will update the question array object here
+        */
+        question = freshQuestion
+    }
+
     /**
      * Adds a question block to the new reading and then adds in a new medium editor
      */
     private addQuestion(insertHtml?: string, insertPos?: number) {
+        let answer_types = this._auth.getAllowedCommentMediaTypes()
         var question = <EdjiQuestion>{
             prompt: '',
-            answer_types: [],
+            answer_types: answer_types,
             option_types: [],
             new: true,
             question_number: this.readingHtml.length
