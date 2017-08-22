@@ -214,6 +214,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                     if (cIndex > -1) {
                         // Remove highlights from local array
                         this.decrementHighlights(this.user._id === comment.user_id || this.project.teacher_id == comment.user_id, comment.start, comment.end)
+                        // Make sure we've removed the highlight focus
+                        this.unfocusHighlight(comment.start, comment.end)
                         this.commentsByIndexRemove(comment._id, wIndex, cIndex)
                     }
                 } else if (commentUpdate.action === 'UPDATE') {
@@ -457,11 +459,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     decrementHighlights(alwaysHighlight: boolean, start: number, end: number): void {
         if (alwaysHighlight) {
             for (var i = start; i <= end; i ++) {
-                // Any time we decrement, we should ensure we remove the 1000 focus
-                if (this.alwaysHighlightArray[i] >= 1000) {
-                    this.alwaysHighlightArray[i] -= 1000
-                }
-
                 if (this.alwaysHighlightArray[i] && this.alwaysHighlightArray[i] > 0) {
                     this.alwaysHighlightArray[i]--
                 } else {
@@ -470,11 +467,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             }
         } else {
             for (var i = start; i <= end; i ++) {
-                // Any time we decrement, we should ensure we remove the 1000 focus
-                if (this.highlightArray[i] >= 1000) {
-                    this.highlightArray[i] -= 1000
-                }
-
                 if (this.highlightArray[i] && this.highlightArray[i] > 0) {
                     this.highlightArray[i]--
                 } else {

@@ -18,9 +18,6 @@ import * as Rangy from 'rangy';
     templateUrl: 'new-reading-page.component.html'
 })
 export class NewReadingPage implements OnInit {
-    readingTracking(index: any, item: any) {
-        return index
-    }
     
     /*
         New Reading Page
@@ -31,7 +28,6 @@ export class NewReadingPage implements OnInit {
     private readingForm     : FormGroup
     private newReadingInner : string = "<div>&nbsp;</div>"
     private readingHtml     : any[] = [{'text': this.newReadingInner}]
-    private concatHtml      : string = ""
     private readingIsBlank  : boolean = false
     private submitted       : boolean = false
     private addLoadingD     : boolean = false
@@ -194,7 +190,7 @@ export class NewReadingPage implements OnInit {
      * Checks on the content field's cursor position
      * - Enables inserting images at cursor position
      */
-    private contentChange() {
+    private contentChange(event: Event) {
         let sel = Rangy.getSelection()
         this.masterSelection = sel
         
@@ -209,20 +205,25 @@ export class NewReadingPage implements OnInit {
                 focusNode = focusNode.childNodes[0]
             }
 
-            if (typeof focusNode.offsetTop === 'undefined' ) {
-                // Text nodes don't provide an offset, so we need to get the parent
-                focusNode = focusNode.parentNode
-            }
+            if (focusNode) {
+                if (typeof focusNode.offsetTop === 'undefined' ) {
+                    // Text nodes don't provide an offset, so we need to get the parent
+                    focusNode = focusNode.parentNode
+                }
 
-            if (focusNode.parentNode && focusNode.parentNode.id !== 'angularMediumEditor' 
-                && focusNode.parentNode.parentNode && focusNode.parentNode.parentNode.id !== 'angularMediumEditor') {
-                this.editorToolbarHidden = true
+                if (focusNode.parentNode && focusNode.parentNode.id !== 'angularMediumEditor' 
+                    && focusNode.parentNode.parentNode && focusNode.parentNode.parentNode.id !== 'angularMediumEditor') {
+                    this.editorToolbarHidden = true
+                } else {
+                    this.editorToolbarHidden = false
+                }
+
+                this.insertNode = focusNode
+                this.editorToolbarY = NewReadingPage.EDITOR_TOOLBAR_Y > focusNode.offsetTop ? NewReadingPage.EDITOR_TOOLBAR_Y : focusNode.offsetTop
             } else {
-                this.editorToolbarHidden = false
+                // don't move bar
             }
-
-            this.insertNode = focusNode
-            this.editorToolbarY = NewReadingPage.EDITOR_TOOLBAR_Y > focusNode.offsetTop ? NewReadingPage.EDITOR_TOOLBAR_Y : focusNode.offsetTop
+            
         } else {
             this.editorToolbarHidden = true
         }
@@ -401,8 +402,21 @@ export class NewReadingPage implements OnInit {
             this.readingIsBlank = true
         }
 
+        // Overall validation check that questions have been filled out properly
+        let questionsValid: boolean = true
+        if (this.readingHtml[1] && this.readingHtml[1].question) {
+            for (let i=0;i<this.readingHtml.length;i++) {
+                if (this.readingHtml[i].question && 
+                (!this.readingHtml[i].question.prompt || 
+                this.readingHtml[i].question.prompt==='' || 
+                (this.readingHtml[i].question.answer_types && this.readingHtml[i].question.answer_types.length < 1))) {
+                    questionsValid = false
+                }
+            }
+        }
+
         // This would be better handled by formcontrols
-        if (!form.title || form.title.length < 1 || this.readingIsBlank) {
+        if (!form.title || form.title.length < 1 || this.readingIsBlank || !questionsValid) {
             this.addLoadingD = false
             this.addLoadingP = false
             this.error = 'Not quite, please check all the fields!'
@@ -414,12 +428,13 @@ export class NewReadingPage implements OnInit {
 
         // Process reading html into useful Words Array
         let editorHtml = this.el.nativeElement.querySelectorAll('#angularMediumEditor')
+        let concatHtml = ''
 
         for (let i=0; i<editorHtml.length; i++) {
             // Add question "word"
             if (this.readingHtml[i].question) {
                 // Concatenate the 
-                this.concatHtml += "<$question$>"
+                concatHtml += "<$question$>"
                 this.words.push({
                     styles: ['question'],
                     index: i - 1
@@ -433,7 +448,7 @@ export class NewReadingPage implements OnInit {
 
             // Concatenate the html to 1 string [not currently using with current config]
             // this.concatHtml += editorHtml[i]
-            this.concatHtml += this.readingHtml[i].text
+            concatHtml += this.readingHtml[i].text
 
             let childEls = editorHtml[i].childNodes
 
@@ -447,7 +462,7 @@ export class NewReadingPage implements OnInit {
         let reading: any = Object.assign({},form)
         delete reading.label
         // reading.html = this.readingHtml
-        reading.html = this.concatHtml
+        reading.html = concatHtml
         reading.words = this.words
         reading.questions = this.questions
 
@@ -482,7 +497,7 @@ export class NewReadingPage implements OnInit {
         } else {
             this.angulartics.eventTrack.next({ action: submitAction, properties: { category: 'contentManagement', label: 'attempt' }})
         }
-        console.log(reading)
+        
         this._readings.save(reading)
             .subscribe(
                 data => {
@@ -508,7 +523,7 @@ export class NewReadingPage implements OnInit {
                                     this.addLoadingP = false
                                 });
                         } else {
-                            console.log(data)
+                            // console.log(data)
                             this.addLoadingD = false
                             this.addLoadingP = false
                             this.router.navigate(['new-reading/' + data._id], { queryParams: { successAlert: this.successAlert } })
@@ -570,20 +585,39 @@ export class NewReadingPage implements OnInit {
         }
     }
 
+    private updateQ(question, freshQuestion) {
+        /* Whenever updates happen to the question component like..
+        *  adding an answer type
+        *  removing an answer type
+        *  ..then we will update the question array object here
+        */
+        question = freshQuestion
+    }
+
     /**
      * Adds a question block to the new reading and then adds in a new medium editor
      */
     private addQuestion(insertHtml?: string, insertPos?: number) {
-        var question = <EdjiQuestion>{
+        let answer_types = this._auth.getAllowedCommentMediaTypes()
+        let question = <EdjiQuestion>{
             prompt: '',
-            answer_types: [],
+            answer_types: answer_types,
             option_types: [],
             new: true,
             question_number: this.readingHtml.length
         }
         
         if (insertHtml.includes("angularMediumEditor")) {
-            this.readingHtml.push({'text':this.newReadingInner,'question':question})
+            if (insertPos) {
+                question.question_number = insertPos
+                if (this.readingHtml.length > insertPos) {
+                    this.readingHtml.splice(insertPos,0,{'text':this.newReadingInner,'question':question})
+                } else {
+                    this.readingHtml.push({'text':this.newReadingInner,'question':question})
+                }
+            } else {
+                this.readingHtml.push({'text':this.newReadingInner,'question':question})
+            }
         } else {
             question.question_number = insertPos
             if (this.readingHtml.length > insertPos) {
@@ -669,6 +703,7 @@ export class NewReadingPage implements OnInit {
 
         // Remove the question
         this.readingHtml.splice(questionNum, 1)
+        this.updateQuestionNumbers()
     }
 
     /**
