@@ -1,7 +1,7 @@
 <!--Question Feed Pane-->
 <div *ngIf="currentReading && currentReading.questions" class="sliding-pane from-left" [ngClass]="{ 'slide-in' : visible }">
   <div class="container-fluid container--less-pad">
-    <h4>Question Feed
+    <h4>Questions
       <button (click)="hide.emit()" class="close stats-close-btn btn-icon--round" type="button">
             <span aria-hidden="true">×</span>
       </button>
