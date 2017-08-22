@@ -2,8 +2,8 @@ import { Subscription } from 'rxjs/Rx'
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
 // Project Dependencies
-import { AuthService, ProjectService, SocketService } from '../../shared';
-import { CommentStats } from './../../shared/datatypes'
+import { AuthService, ProjectService, ReadingService, SocketService } from '../../shared';
+import { CommentStats, Project, Reading } from './../../shared/datatypes';
 
 @Component({
   selector: 'owner-tools',
@@ -15,8 +15,12 @@ export class OwnerToolsComponent implements OnInit {
 
   private subscriptions: Subscription[] = []
   private commentStats: CommentStats
-  private currentProject: any = {}
+  private currentProject: Project
+  private currentReading: Reading
   private user: any = {}
+  private showFireFeed: boolean
+  private showCommentCounts: boolean
+  private showQuestionFeed: boolean
 
   // State vars
   private powersLoading: any = {}
@@ -24,13 +28,22 @@ export class OwnerToolsComponent implements OnInit {
   constructor(
     private _projects: ProjectService,
     private _auth: AuthService,
-    private _socket: SocketService
+    private _socket: SocketService, 
+    private _readings: ReadingService
   ) {
     this.commentStats = this._projects.commentStats
   }
 
   ngOnInit() {
-
+    // Subscribe to the reading
+    this.subscriptions.push( this._readings.currentReading.subscribe(
+      reading => {
+        this.currentReading = reading
+      },
+      error => {
+        console.error(error)
+      })
+    )
     this.subscriptions.push(
       this._projects.currentProject.subscribe(project => {
         this.currentProject = project
@@ -64,6 +77,30 @@ export class OwnerToolsComponent implements OnInit {
           // Live update users once save is successful
           this._socket.toggleHeatVision({ all: turnOn })
         })
+  }
+
+  private showElseFalse(displayPane: string) {
+    switch(displayPane) {
+      case 'showQuestionFeed':
+        this.showQuestionFeed = !this.showQuestionFeed
+        this.showFireFeed = false
+        this.showCommentCounts = false
+        break
+      case 'showFireFeed':
+        this.showQuestionFeed = false
+        this.showFireFeed = !this.showFireFeed
+        this.showCommentCounts = false
+        break
+      case 'showCommentCounts':
+        this.showQuestionFeed = false
+        this.showFireFeed = false
+        this.showCommentCounts = !this.showCommentCounts
+        break
+      default:
+        this.showCommentCounts = false
+        this.showFireFeed = false
+        this.showQuestionFeed = false
+    }
   }
 
   // private hackyGetCommentStats(): string[] {
