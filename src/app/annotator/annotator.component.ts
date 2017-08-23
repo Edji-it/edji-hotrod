@@ -43,7 +43,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     private project: Project = <Project>{}
     
     private commentsByIndex : EdjiComment[][] = []
-    private fireComments    : EdjiComment[] = []
     private focusOverride   : boolean = false
 
     private highlightArray      : number[] = []
