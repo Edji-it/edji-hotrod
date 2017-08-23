@@ -152,9 +152,8 @@ export class CommentComponent implements OnInit {
         // Let click open link
       } else {
          if (!this.readOnly) {
-            // this.active = true
-            // this.commentActivation.emit(true)
-            this.toggleActive()
+            this.active = true
+            this.commentActivation.emit(true)
           } else {
               this.togglePreview()
           }
