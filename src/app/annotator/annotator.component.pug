@@ -72,10 +72,10 @@
                 (click)="audioSupportError = !audioSupportError"
             )
                 span(aria-hidden="true") &times;
-                | The browser you are on does not currently support recording audio. Audio comment playback may also be affected on some browsers. The recommended browser for audio comments is the 
-                a(href="https://www.google.com/chrome/browser/desktop/", target="_blank")
-                    | Google Chrome Web Browser
-                | for your desktop device.
+            | The browser you are on does not currently support recording audio. Audio comment playback may also be affected on some browsers. The recommended browser for audio comments is the 
+            a(href="https://www.google.com/chrome/browser/desktop/", target="_blank")
+                | Google Chrome Web Browser
+            | for your desktop device.
         //- Create components after load for reading
         article#annotatorContent.content.active-content.pt-4(
             (mouseup)="showCommentOptions($event)",
