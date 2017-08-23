@@ -5,7 +5,6 @@
     - Tying in comments and comment creation methods
     
 #emojiAnnotator.annotator.reading-page([ngClass]="{ 'comment-expanded' : lineExpanded }")
-    | {{directCommentOptions}}
     .text-options(
         *ngIf="directCommentOptions.length > 0", 
         (blur)="hideCommentOptions($event)", 
