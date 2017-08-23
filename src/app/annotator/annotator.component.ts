@@ -16,7 +16,7 @@ declare var window: any
 
 @Component({
     selector: 'annotator',
-    templateUrl: 'annotator.component.html',
+    templateUrl: 'annotator.component.pug',
     styleUrls: ['annotator.component.scss']
 })
 export class AnnotatorComponent implements OnInit, OnDestroy {
@@ -57,10 +57,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     // private activeComment: EdjiComment = <EdjiComment>{}
     private replyComment: EdjiComment = <EdjiComment>{}
     private lineExpanded: boolean = false
+    // Comment options that can be made directly on a word
+    private directCommentOptions: string[] = []
 
     // Trigger Booleans
-    private showCommentCounts: boolean = false
-    private showAllComments: boolean = false
     private showDiscussions : boolean = false
     private optionsShow = false
     private hideKeyboard = false
@@ -176,6 +176,14 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                         this.audioSupportError = true
                         // if audio is not supported, let analytics know
                         this.angulartics.eventTrack.next({ action: 'audioSupport', properties: { category: 'heroFeature', label: 'failure' }})
+                    }
+                    this.directCommentOptions = []
+                    for (let i = 0; i < this.project.types.length; i++) {
+                        // Ignore comment types that can't be made on a word
+                        // - add other types not display in text-options to the array below
+                        if (['reply'].indexOf(this.project.types[i]) < 0) {
+                            this.directCommentOptions.push(this.project.types[i])
+                        }
                     }
                 }
             },
