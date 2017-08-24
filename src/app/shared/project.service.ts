@@ -330,7 +330,7 @@ export class ProjectService {
      * @returns Observable which will have error if response is invalid
      */
     public validateProject(projectCode: string): Observable<any> {
-        projectCode = projectCode.toLowerCase()
+        projectCode = encodeURIComponent(projectCode.toLowerCase())
 
         return this.http.get(this._auth.getUrl() + '/projects/' + projectCode + "/validate", this._auth.getOptions())
             .map((data) => { return data.json() || {}; });
