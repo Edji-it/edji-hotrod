@@ -159,8 +159,10 @@ export class NavBarComponent implements OnInit, OnDestroy {
         return // we should give the user some sort of feedback here
       }
 
-      // does the project exist? this call will actually fail if it does
-      this._projects.validateProject(shareObj.customCode)
+      // we only want to check the validate route if there is a custom code - otherwise let it go through
+      if (shareObj.customCode) {
+        // does the project exist? this call will actually fail if it does
+        this._projects.validateProject(shareObj.customCode)
         .take(1)
         .subscribe((res) => {
           // this is actually an error in this case! lol. If the code IS valid, we want them NOT to try and make a reading
@@ -176,6 +178,9 @@ export class NavBarComponent implements OnInit, OnDestroy {
             this.messages.serviceError = true
           }
         })
+      } else {
+        this.shareAction.emit(shareObj)
+      }
     }
 }
 
