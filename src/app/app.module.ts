@@ -22,7 +22,7 @@ import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 
 // Services
 import { AppState, InternalStateType } from './app.service';
-import { AuthService, BumblebeeService, ReadingService, ProjectService, SocketService } from './shared';
+import { AuthService, BumblebeeService, ReadingService, ProjectService, SocketService, UtilToolService} from './shared';
 import { CommentService } from './shared/comment.service';
 import { MediaService } from './shared/media.service';
 import { ReuseStrategy } from './route-reuse-strategy';
@@ -81,6 +81,7 @@ const APP_PROVIDERS = [
   ProjectService,
   CommentService,
   SocketService,
+  UtilToolService,
   BumblebeeService,
   { 
       provide: HAMMER_GESTURE_CONFIG, 
