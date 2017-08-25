@@ -118,9 +118,6 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
       comment.active = true
       this._comments.activeComment = comment
       this._projects.addCommentToReplies(comment)
-      setTimeout(() => {
-        this.el.nativeElement.querySelector('.replyOverflow').scrollTop = this.el.nativeElement.querySelector('.replyOverflow').scrollHeight
-      }, 100)
     })
     .catch(error => {
       // TRACK EXCEPTION
