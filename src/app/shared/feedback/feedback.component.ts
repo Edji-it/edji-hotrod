@@ -94,10 +94,10 @@ export class FeedbackComponent implements OnInit {
     // Browser Version
     // Edji Version
 
-    formValue.content = formValue.content + '\n\n\n\n' + this._util.getPlatform(w) 
-        + '\n' + this._util.getBrowser(w.userAgent) 
-        + '\n' + this._util.getBrowserVersion(w.userAgent) 
-        + '\n' + this._util.getEdjiVersion()
+    formValue.content = formValue.content + '<br><br>' + this._util.getPlatform(w) 
+        + '<br>' + this._util.getBrowser(w.userAgent) 
+        + '<br>' + this._util.getBrowserVersion(w.userAgent) 
+        + '<br>' + this._util.getEdjiVersion()
 
     let data: any = {
       emailSubject: "Feedback form submitted!",
