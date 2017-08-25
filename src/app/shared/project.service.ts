@@ -221,7 +221,7 @@ export class ProjectService {
                 }
             }
             if (!skipAdd) {
-                this.repliesByIdSource[comment.reply_to].push(comment)
+                this.repliesByIdSource[comment.reply_to].unshift(comment)
                 this.repliesByIdSubject.next(this.repliesByIdSource)
             }
         }
