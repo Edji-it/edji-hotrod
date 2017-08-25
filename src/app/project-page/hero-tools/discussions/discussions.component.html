@@ -25,7 +25,7 @@
         <hr class="replyHeaderRow">
       </div>
 
-    <div class="replyOverflow" [ngClass]="[ _comments.activeComment.active && _comments.activeComment.type=='emoji' ? 'replyOverflow-eKey' : 'replyOverflow-normal' ]">
+    <div class="replyOverflow" [ngClass]="[ _comments.activeComment.active && _comments.activeComment.type=='emoji' ? '' : 'replyOverflow-normal' ]">
       <!--let replyComment of comments-->
       <div *ngFor="let replyComment of repliesById[comment._id]">
         <div class="comment-wrap-row">
