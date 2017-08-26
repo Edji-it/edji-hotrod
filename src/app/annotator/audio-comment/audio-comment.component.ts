@@ -183,12 +183,6 @@ export class AudioCommentComponent implements OnInit{
         //     this.playTime = (((new Date().getTime() - this.pStartAt) / this.timeLimit) * this.playWidth) + 'px'
         //   }, this.intervalGap)
         // }
-        
-        // Clear the playing element and allow recording once audio clip has finished playing
-        this.audio.onended = e => {
-          this.recordAble = true
-          this.isPlaying = false
-        }
       }
 
       // Send "chunks" to the array as they are recorded
@@ -197,6 +191,12 @@ export class AudioCommentComponent implements OnInit{
         this.waves[this.wavePos] = e.data.size - 3200
         this.wavePos ++
         this._comments.waveForm(this.waves, this.myCanvas)
+      }
+
+      // Clear the playing element and allow recording once audio clip has finished playing
+      this.audio.onended = e => {
+        this.recordAble = true
+        this.isPlaying = false
       }
     }
     const onError = e => {
@@ -276,6 +276,7 @@ export class AudioCommentComponent implements OnInit{
     // Let analytics know user paused playback
     this.angulartics.eventTrack.next({ action: 'audioPause', properties: { category: 'heroFeature', label: 'success' }})
     this.isPlaying = false
+    this.recordAble = true
     // clearInterval(this.pInterval)
     // this.playTime = '0px'
     this.audio.pause()
