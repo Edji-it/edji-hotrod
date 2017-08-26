@@ -52,8 +52,11 @@ export class ResetPassPage implements OnInit {
       return;
     }
 
+    this.isLoading = true
+
     this._auth.resetPassword({ newPassword: formValue.password, token: this.resetToken })
       .then((res) => {
+        this.isLoading = false
         if (res.user && res.token) {
           this.serviceResponse.success = true;
           res.user.username && this.angulartics.setUsername.next(res.user.username);
@@ -64,6 +67,7 @@ export class ResetPassPage implements OnInit {
       })
       .catch((err) => {
         console.error(err);
+        this.isLoading = false
         this.serviceResponse.failure = true;
       });
   }
