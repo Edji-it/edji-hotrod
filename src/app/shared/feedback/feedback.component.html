@@ -34,7 +34,7 @@
           </div>
           <div class="modal-footer">
               <button type="button" class="btn btn-secondary" (click)="feedbackClose()">Cancel</button>
-              <button type="submit" [disabled]="!feedbackForm.valid || loading" [class.loading]="loading" class="btn btn-primary" name="send feedback" tabindex="0">Send Feedback</button>
+              <button type="submit" [disabled]="!feedbackForm.valid" [class.loading]="loading" class="btn btn-primary" name="send feedback" tabindex="0">Send Feedback</button>
           </div>
         </form>
       </div><!-- /.modal-content -->
