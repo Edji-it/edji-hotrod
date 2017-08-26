@@ -68,9 +68,7 @@ export class JoinedDashComponent implements OnInit, OnDestroy {
     this._projects.setCurrentProject(formValue.projectCode)
       .subscribe(
         (project) => {
-          if (project) {
-            this.router.navigate(['/project', project._id]);
-          }
+          this.router.navigate(['/project', project._id]);
         },
         (error) => {
           this.errorObject.wrongCode = "Unfortunately, we did not find that project";
