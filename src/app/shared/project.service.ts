@@ -221,7 +221,11 @@ export class ProjectService {
                 }
             }
             if (!skipAdd) {
-                this.repliesByIdSource[comment.reply_to].push(comment)
+                if (comment.active) {
+                    this.repliesByIdSource[comment.reply_to].unshift(comment)
+                } else {
+                    this.repliesByIdSource[comment.reply_to].push(comment)
+                }
                 this.repliesByIdSubject.next(this.repliesByIdSource)
             }
         }

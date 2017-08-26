@@ -84,21 +84,13 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((sub) => { sub.unsubscribe() })
   } // ngOnDestroy()
 
-  /** 
-   * Add Comment of type
-   * - Fired from comment options tooltip
-   */
-  addReplyOfType(type: string): void {
-    // Tell the server we've got a comment!
-    this.createReplyComment(type)
-  } // addReplyOfType
-
   /**
    * Create a Comment of any Type
+   * - Fired from comment options tooltip
    * Requires three parameters, and finds the other information it needs
    * @param type What kind of reply comment: emoji, text...
    */
-  createReplyComment(type: string): void {
+  addReplyOfType(type: string): void {
     let commentId = this.comment._id
 
     this.angulartics.eventTrack.next({ action: type + 'ReplyCreate', properties: { category: 'heroFeature', label: 'attempt' }})
@@ -126,9 +118,6 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
       comment.active = true
       this._comments.activeComment = comment
       this._projects.addCommentToReplies(comment)
-      setTimeout(() => {
-        this.el.nativeElement.querySelector('.replyOverflow').scrollTop = this.el.nativeElement.querySelector('.replyOverflow').scrollHeight
-      }, 100)
     })
     .catch(error => {
       // TRACK EXCEPTION
