@@ -116,7 +116,7 @@ export class ProjectService {
      * @returns observable with project data
      */
     public setCurrentProject(projectCode: string): Observable<any> {
-        return this.http.get(this._auth.getUrl() + '/projects/' + projectCode + '?pop=reading_id', this._auth.getOptions())
+        return this.http.get(this._auth.getUrl() + '/projects/' + encodeURIComponent(projectCode) + '?pop=reading_id', this._auth.getOptions())
             .map(
                 (data) => {
                     this.project = data.json().project; //can later have local setter to do validation/data manipulation before passing through observable
