@@ -24,6 +24,7 @@ export class FeedbackComponent implements OnInit {
   private feedbackSuccess: boolean = false;
   private user: any;
   private userCopy: any;
+  private loading: boolean = false
 
   private errorObject: {
     serverError?: string
@@ -82,6 +83,7 @@ export class FeedbackComponent implements OnInit {
   /** Sends feedback to bumblebee */
   private sendFeedback(formValue: any): void {
     this.angulartics.eventTrack.next({ action: 'sendFeedback', properties: { category: 'accountManagement', label: 'attempt' }});
+    this.loading = true
 
     let data: any = {
       emailSubject: "Feedback form submitted!",
@@ -92,17 +94,17 @@ export class FeedbackComponent implements OnInit {
 
     this._bumblebee.sendFeedback(data).take(1).subscribe(
       (res) => {
-        if (res.status === 204) {
-          this.angulartics.eventTrack.next({ action: 'sendFeedback', properties: { category: 'accountManagement', label: 'success' }});
-          this.feedbackSuccess = true;
-          this._auth.deleteFromStorage("feedbackFormData");
-          this.feedbackClose();
-          this.showFeedbackSuccess = true;
-        }
+        this.loading = false
+        this.angulartics.eventTrack.next({ action: 'sendFeedback', properties: { category: 'accountManagement', label: 'success' }});
+        this.feedbackSuccess = true;
+        this._auth.deleteFromStorage("feedbackFormData");
+        this.feedbackClose();
+        this.showFeedbackSuccess = true;
       },
       (err) => {
+        console.error(err);
+        this.loading = false
         this.angulartics.eventTrack.next({ action: 'sendFeedback', properties: { category: 'accountManagement', label: 'failure' }});
-        console.log(err);
         this.errorObject.serverError = "Something has gone wrong. Please try submitting your feedback again later!";
         this._auth.store("feedbackFormData", formValue);
       }
