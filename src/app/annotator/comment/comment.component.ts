@@ -147,17 +147,20 @@ export class CommentComponent implements OnInit {
   }
 
   activate(event): void {
+    setTimeout(() => {
       // Ignore if user is just clicking a link
-      if (this.preview && event && ['a','i'].indexOf(event.target.tagName.toLowerCase()) > -1) {
+      if ((this.preview && event && ['a','i'].indexOf(event.target.tagName.toLowerCase()) > -1) || this._comments.editing) {
         // Let click open link
       } else {
-         if (!this.readOnly) {
-            this.active = true
-            this.commentActivation.emit(true)
-          } else {
-              this.togglePreview()
-          }
+        if (!this.readOnly) {
+          // this.active = true
+          // this.commentActivation.emit(true)
+          this.toggleActive()
+        } else {
+          this.togglePreview()
+        }
       }
+    }, 1)
   }
 
   togglePreview(): void {

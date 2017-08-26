@@ -2,6 +2,7 @@ import { document } from '@angular/platform-browser/src/facade/browser'
 import { Component, EventEmitter, ElementRef, Input, Output, OnInit, AfterViewInit } from '@angular/core'
 
 import { EdjiComment } from './../../shared/datatypes/comment'
+import { CommentService } from '../../shared/comment.service'
 
 @Component({
     selector: 'text-comment',
@@ -21,20 +22,25 @@ export class TextCommentComponent implements OnInit, AfterViewInit {
 
     // We need to know when changes to inactive to clear the editing variable
     @Input() set active(active){
-        this.editing = false;
-        this.activated = active;
+        // this.editing = false
+        this._comments.editing = false
+        this.activated = active
     }
     get active() {
-        return this.activated;
+        return this.activated
     }
 
-    constructor(private element: ElementRef) { 
+    constructor(
+        private element: ElementRef,
+        private _comments: CommentService
+    ) { 
         
     }
 
     ngOnInit() {
         if (this.comment.active == true) {
-            this.editing = true
+            // this.editing = true
+            this._comments.editing = true
             setTimeout(() => {
                 this.element.nativeElement.querySelector('textarea').focus()
             }, 100)
@@ -46,12 +52,14 @@ export class TextCommentComponent implements OnInit, AfterViewInit {
     }
 
     updateComment(commentData: any) {
-        this.editing = false;
+        // this.editing = false
+        this._comments.editing = false
         this.blur.emit(commentData)
     }
 
     blurField(event) {
-        this.editing = false;
+        // this.editing = false
+        this._comments.editing = false
         event.preventDefault()
         this.element.nativeElement.querySelector('textarea').blur()
     }
