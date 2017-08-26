@@ -28,7 +28,8 @@
             //- Audio Comment
             button#addAudioComment.emoji(
                 *ngIf="project.types.indexOf('audio') > -1",
-                (click)="addCommentOfType('audio')"
+                (click)="addCommentOfType('audio')",
+                [class.super-disabled]="audioSupportError"
             )
                 i.icon.icon-mic
                 span.beta-tag--icon(title="Beta Feature: May not work on all devices.")
@@ -53,7 +54,8 @@
                 //-- Audio Comment
                 .comment__options--mobileCol(
                     *ngIf="project.types.indexOf('audio') > -1",
-                    [ngClass]="'col-' + (12 / directCommentOptions.length)"
+                    [ngClass]="'col-' + (12 / directCommentOptions.length)",
+                    [class.super-disabled]="audioSupportError"
                 )
                     button#addAudioComment.emoji.comment__options--mobileButton((tap)="addCommentOfType('audio')")
                         i.icon.icon-mic

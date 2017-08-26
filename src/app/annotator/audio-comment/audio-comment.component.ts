@@ -183,6 +183,8 @@ export class AudioCommentComponent implements OnInit{
         //     this.playTime = (((new Date().getTime() - this.pStartAt) / this.timeLimit) * this.playWidth) + 'px'
         //   }, this.intervalGap)
         // }
+
+        this.addOnEndEvent()
       }
 
       // Send "chunks" to the array as they are recorded
@@ -194,9 +196,8 @@ export class AudioCommentComponent implements OnInit{
       }
 
       // Clear the playing element and allow recording once audio clip has finished playing
-      this.audio.onended = e => {
-        this.recordAble = true
-        this.isPlaying = false
+      if (this.audio) {
+        this.addOnEndEvent()
       }
     }
     const onError = e => {
@@ -324,6 +325,13 @@ export class AudioCommentComponent implements OnInit{
       return Math.round((this.audio.currentTime / 30) * this.playWidth)
     } else {
       return 0
+    }
+  }
+
+  private addOnEndEvent(): void {
+    this.audio.onended = e => {
+      this.recordAble = true
+      this.isPlaying = false
     }
   }
 }

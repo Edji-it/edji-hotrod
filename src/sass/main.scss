@@ -114,6 +114,13 @@ $seamlessPlaceholderColor: #cdcdcd;
 	filter: grayscale(100%);
 	opacity: 0.4;
 }
+
+.super-disabled {
+	pointer-events: none;
+	filter: grayscale(100%);
+	opacity: 0.4;
+	background-color: #E6E6E6 !important;
+}
   
 .useicons {
 	-webkit-font-smoothing: antialiased;
