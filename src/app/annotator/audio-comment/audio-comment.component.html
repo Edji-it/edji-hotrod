@@ -10,7 +10,8 @@
     <div [ngClass]="[reply ? 'reply-wave' : '']" class="wave-wrap" [style.width]="playWidth + 'px'">
         <canvas (click)="setPlaybackTime($event)"  class="wave-form"></canvas>
         <div class="countdown" *ngIf="countdown" [innerHtml]="countdownText[countdownI]"></div>
-        <div *ngIf="audio" [class.hide]="!comment.active && (isRecording || !audio.currentTime)" class="playing" [style.width]="getPlayhead() + 'px'"></div>
+        <div *ngIf="audio && isPlaying" [class.hide]="!comment.active && (isRecording || !audio.currentTime)" class="playing" [style.width]="getPlayhead() + 'px'"></div>
+        <div *ngIf="audio && !isPlaying" [class.hide]="!comment.active && (isRecording || !audio.currentTime)" class="playing" [style.width]="pausedWidth + 'px'"></div>
         <!--<div [class.hide]="!comment.active && (isRecording || !audio || !audio.currentTime)" class="playing" [style.width]="getPlayhead() + '%'"></div>-->
     </div>
 </div>

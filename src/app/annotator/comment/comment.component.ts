@@ -128,7 +128,7 @@ export class CommentComponent implements OnInit {
 
   toggleActive( ): void {
       if (!this.readOnly) {
-        if (this.active === true) {
+        if (this.active) {
             this.active = false
             this.commentActivation.emit(false)
             this._comments.activeComment.active = false
@@ -182,6 +182,15 @@ export class CommentComponent implements OnInit {
       this.updateComment(commentData.data);
     } // if
   } // deactivate(commentData ?: any): void
+
+  alwaysActive(): void {
+    if (!this.active) {
+      this.active = true 
+      this._comments.activeComment = this.comment
+      this._comments.activeComment.active = true
+      this.commentActivation.emit(true)
+    }
+  }
 
   // Updates comment in db
   public updateComment(commentData: EdjiComment): void {

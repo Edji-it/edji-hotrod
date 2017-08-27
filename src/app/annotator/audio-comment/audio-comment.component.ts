@@ -1,7 +1,7 @@
 import { Angulartics2 } from 'angulartics2/dist'
 import { CommentService } from '../../shared/comment.service'
 import { MediaService } from '../../shared/media.service'
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 import { EdjiComment } from '../../shared/datatypes'
 
@@ -12,7 +12,7 @@ declare var MediaRecorder: any
   templateUrl: 'audio-comment.component.html',
   styleUrls: ['./audio-comment.component.scss']
 })
-export class AudioCommentComponent implements OnInit{
+export class AudioCommentComponent implements OnInit, AfterViewInit{
   @Input() private comment: EdjiComment
   @Input() private userPermission: number
   @Input() private reply: boolean = false
@@ -24,6 +24,8 @@ export class AudioCommentComponent implements OnInit{
   private recordOverConfirmed: boolean = false
   private playTime: string = "0px"
   private playWidth: number = 130
+  private playWidthVisual: number
+  private pausedWidth: number
   private myCanvas
   private chunks: any = []
   private mediaRecorder: any
@@ -38,7 +40,7 @@ export class AudioCommentComponent implements OnInit{
   private pDuration: number = 0
   private rInterval: any
   private pInterval: any
-  private initWaves = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+  private initWaves = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
   private waves;
   private wavePos: number = 0
   // Change the next variable to control maximum audio comment length in milliseconds
@@ -119,6 +121,10 @@ export class AudioCommentComponent implements OnInit{
      * Both of which we need to get access granted in order to run 
      */
     this.initializeAudio()
+  }
+
+  ngAfterViewInit(){
+    setTimeout(_=> this.setplayWidthVisual())
   }
 
   public initializeAudio() {
@@ -297,7 +303,8 @@ export class AudioCommentComponent implements OnInit{
   }
 
   private getPlayhead() {
-    return Math.round((this.audio.currentTime / 30) * this.playWidth)
+    this.pausedWidth = Math.round((this.audio.currentTime / 30) * this.playWidthVisual)
+    return Math.round((this.audio.currentTime / 30) * this.playWidthVisual)
   }
   
   /**
@@ -310,7 +317,7 @@ export class AudioCommentComponent implements OnInit{
   }
 
   private setPlaybackTime(event) {
-    let percentLeftClicked = event.offsetX/this.playWidth
+    let percentLeftClicked = event.offsetX/this.playWidthVisual
     if (this.audio) {
       this.audio.currentTime = 30 * percentLeftClicked
     }
@@ -322,7 +329,7 @@ export class AudioCommentComponent implements OnInit{
 
   private getPlayhead_exp() : number {
     if (this.audio) {
-      return Math.round((this.audio.currentTime / 30) * this.playWidth)
+      return Math.round((this.audio.currentTime / 30) * this.playWidthVisual)
     } else {
       return 0
     }
@@ -333,5 +340,14 @@ export class AudioCommentComponent implements OnInit{
       this.recordAble = true
       this.isPlaying = false
     }
+  }
+
+  private setplayWidthVisual() {
+    // Get the width of the audio canvas
+    if (this.el.nativeElement.querySelector('.reply-wave')) {
+      this.playWidthVisual = this.el.nativeElement.querySelector('.wave-form').getBoundingClientRect().width
+    } else {
+      this.playWidthVisual = this.playWidth
+    })
   }
 }

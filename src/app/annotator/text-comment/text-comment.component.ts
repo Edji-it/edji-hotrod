@@ -38,13 +38,15 @@ export class TextCommentComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit() {
-        if (this.comment.active == true) {
-            // this.editing = true
-            this._comments.editing = true
-            setTimeout(() => {
-                this.element.nativeElement.querySelector('textarea').focus()
-            }, 100)
-        }
+        setTimeout(() => {
+            if (this.comment.active == true) {
+                // this.editing = true
+                this._comments.editing = true
+                setTimeout(() => {
+                    this.element.nativeElement.querySelector('textarea').focus()
+                }, 100)
+            }
+        }, 1)
     }
 
     ngAfterViewInit() {
