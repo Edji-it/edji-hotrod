@@ -10,7 +10,7 @@ import { ProjectService, SocketService, PowerToggle, ReadingService } from '..'
 @Component({
   selector: 'nav-bar',
   styleUrls: [ './nav-bar.component.scss' ],
-  templateUrl: './nav-bar.component.html'
+  templateUrl: './nav-bar.component.pug'
 })
 export class NavBarComponent implements OnInit, OnDestroy {
     @Input() canPublish: boolean
