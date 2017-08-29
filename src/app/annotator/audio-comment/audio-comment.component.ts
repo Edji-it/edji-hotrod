@@ -348,6 +348,6 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
       this.playWidthVisual = this.el.nativeElement.querySelector('.wave-form').getBoundingClientRect().width
     } else {
       this.playWidthVisual = this.playWidth
-    })
+    }
   }
 }
