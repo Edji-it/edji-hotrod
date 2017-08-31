@@ -10,7 +10,7 @@ import { EdjiComment, CommentPermissions, EdjiQuestion } from './../../shared/da
 
 @Component({
   selector: 'edji-comment',
-  templateUrl: './comment.component.html',
+  templateUrl: './comment.component.pug',
   styleUrls: ['./comment.component.scss']
 })
 export class CommentComponent implements OnInit {
