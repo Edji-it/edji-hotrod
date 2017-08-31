@@ -160,7 +160,7 @@ export class CommentComponent implements OnInit {
           this.togglePreview()
         }
       }
-    }, 1)
+    }, 100)
   }
 
   togglePreview(): void {

@@ -1,0 +1,30 @@
+.text-comment.input-wrap([ngClass]="[comment.active || preview ? 'active' : '']")
+  //- Comment Input
+  textarea.text-comment-input(
+    *ngIf="_comments.editing", 
+    type='text', 
+    placeholder="Text comment...", 
+    [class.disabled]="readOnly", 
+    [(ngModel)]="comment.data", 
+    (blur)='updateComment(comment)', 
+    (keydown.enter)='blurField($event)', 
+    (keyup.esc)='blurField($event)', 
+    maxlength="140", 
+    [ngClass]="[reply ? 'replyDisplay' : '']"
+  )
+  //- Comment Display
+  #textCommentInput.text-comment-input(
+    *ngIf="!_comments.editing", 
+    [innerHtml]="comment.data | linkify | emojione", 
+    [ngClass]="[reply ? 'replyDisplay' : '']"
+  )
+  .text-comment__edit-btn(
+    *ngIf="(preview || comment.active) && !_comments.editing && !readOnly", 
+    (click)="_comments.editing = true"
+  )
+    span.label--abs-left Edit
+    i.icon-text-comment
+  .text-comment__countdown(
+    [class.hidden]="_comments.editing !== true", 
+    [class.danger]="comment.data.length > 120"
+  ) {{ -1*(140 - comment.data.length) }}

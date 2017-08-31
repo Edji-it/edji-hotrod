@@ -36,7 +36,7 @@ export class GuestLoginForm {
 
   public loginAsGuest() {
     // make sure the guest login button is going to be clickable
-    browser.wait(this.EC.visibilityOf(this.guestLoginButton), 5000, "guest login button never became visible after form init");
+    browser.wait(this.EC.visibilityOf(this.guestLoginButton), 7000, "guest login button never became visible after form init");
 
     // clear the input just in case
     this.guestNameInput.clear();

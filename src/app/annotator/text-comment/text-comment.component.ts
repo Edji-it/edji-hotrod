@@ -6,7 +6,7 @@ import { CommentService } from '../../shared/comment.service'
 
 @Component({
     selector: 'text-comment',
-    templateUrl: 'text-comment.component.html',
+    templateUrl: 'text-comment.component.pug',
     styleUrls: ['./text-comment.component.scss']
 })
 export class TextCommentComponent implements OnInit, AfterViewInit {
@@ -46,7 +46,7 @@ export class TextCommentComponent implements OnInit, AfterViewInit {
                     this.element.nativeElement.querySelector('textarea').focus()
                 }, 100)
             }
-        }, 1)
+        }, 100)
     }
 
     ngAfterViewInit() {
