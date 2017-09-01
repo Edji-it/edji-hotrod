@@ -15,7 +15,9 @@ export class TextCommentComponent implements OnInit, AfterViewInit {
     @Input() private reply: boolean = false
     @Input() private readOnly: boolean
     @Input() private preview: boolean
-    @Output() blur: EventEmitter<any> = new EventEmitter<any>() 
+
+    @Output() activate: EventEmitter<any> = new EventEmitter<any>() 
+    @Output() deactivate: EventEmitter<any> = new EventEmitter<any>() 
 
     private editing: boolean
     private activated: boolean = false
@@ -53,10 +55,23 @@ export class TextCommentComponent implements OnInit, AfterViewInit {
         
     }
 
+    toggleActive(event) {
+        if (this.activated) {
+            if (event && ['a','i'].indexOf(event.target.tagName.toLowerCase()) < 0) {
+                this.deactivate.emit()
+            } else {
+                // ignore event
+            }
+        } else {
+            this.activate.emit()
+        }
+    }
+
     updateComment(commentData: any) {
         // this.editing = false
         this._comments.editing = false
-        this.blur.emit(commentData)
+        // this.blur.emit(commentData)
+        this.deactivate.emit()
     }
 
     blurField(event) {
