@@ -1,0 +1,14 @@
+.audio-comment-input-wrapper.input-wrap([ngClass]="[comment.active ? 'active' : '', reply ? 'reply-audio-wrapper' : '']")
+  .audio-btn-wrap([class.fade-out]="!comment.active")
+    button.btn-audio([class.disabled]="!playAble")
+      i#audioPlay.icon-play([class.hide]="isPlaying", (click)="play()")
+      i#audioPause.icon-pause([class.hide]="!isPlaying", (click)="pause()")
+    button#audioRestart.btn-audio([class.disabled]="!playAble" (click)="isRecording=false; isPlaying=false; restartPlayback()")
+      i.icon-restart
+    button#audioRecord([class.hide]="userPermission <= 3" class="btn-audio btn-record" (click)="isRecording ? stopRecord() : record()" [class.disabled]="!recordAble")
+      i.icon.icon-mic
+  .wave-wrap([ngClass]="[reply ? 'reply-wave' : '']", [style.width]="playWidth + 'px'")
+    canvas.wave-form((click)="setPlaybackTime($event)")
+    .countdown(*ngIf="countdown", [innerHtml]="countdownText[countdownI]")
+    .playing(*ngIf="audio && isPlaying", [class.hide]="!comment.active && (isRecording || !audio.currentTime)", [style.width]="getPlayhead() + 'px'")
+    .playing(*ngIf="audio && !isPlaying", [class.hide]="!comment.active && (isRecording || !audio.currentTime)", [style.width]="pausedWidth + 'px'")

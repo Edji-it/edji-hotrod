@@ -9,7 +9,7 @@ declare var MediaRecorder: any
 
 @Component({
   selector: 'audio-comment',
-  templateUrl: 'audio-comment.component.html',
+  templateUrl: 'audio-comment.component.pug',
   styleUrls: ['./audio-comment.component.scss']
 })
 export class AudioCommentComponent implements OnInit, AfterViewInit{
