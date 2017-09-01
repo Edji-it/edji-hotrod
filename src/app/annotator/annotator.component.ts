@@ -638,7 +638,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
     setActiveCommentByIndex(isActive: boolean, wordIndex: number, commentIndex: number): void {
         if (isActive) {
-            this.inactivateComment()
             this._comments.activeComment = this.commentsByIndex[wordIndex][commentIndex]
             this._comments.activeComment.active = true
         } else {
@@ -941,9 +940,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     }
 
     private discReplyFire(comment) {
-        setTimeout(() => {
-            // comment.active = true
-        }, 500)
         this.replyComment = comment
         this.focusOverride = true
         this.focusHighlight(comment.start, comment.end, comment.loc)
