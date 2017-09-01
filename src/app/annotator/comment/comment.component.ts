@@ -61,7 +61,7 @@ export class CommentComponent implements OnInit {
   @Input()
   set isActive(isActive: boolean) {
     if (typeof(isActive) !== 'undefined' && this.active !== isActive) {
-      this.activate({}, true)
+      this.active = isActive
     }
   }
   get isActive(): boolean { return this.active }
@@ -126,13 +126,11 @@ export class CommentComponent implements OnInit {
     ) )
   }
 
-  activate(event?: any, fromInput?: boolean): void {
+  activate(event?: any): void {
       this.active = true 
       this._comments.activeComment = this.comment
       this._comments.activeComment.active = true
-      if (!fromInput) {
-        this.commentActivation.emit(true)
-      }
+      this.commentActivation.emit(true)
   }
 
   deactivate(commentData ?: any): void {
@@ -142,7 +140,7 @@ export class CommentComponent implements OnInit {
     // Save when comment is toggled away from
     if (commentData) {
       this.updateComment(commentData.data);
-    } // if
+    }
   } // deactivate(commentData ?: any): void
 
   // Updates comment in db
