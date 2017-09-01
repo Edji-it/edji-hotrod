@@ -61,7 +61,7 @@ export class CommentComponent implements OnInit {
   @Input()
   set isActive(isActive: boolean) {
     if (typeof(isActive) !== 'undefined' && this.active !== isActive) {
-      this.toggleActive()
+      this.activate()
     }
   }
   get isActive(): boolean { return this.active }
@@ -126,51 +126,11 @@ export class CommentComponent implements OnInit {
     ) )
   }
 
-  toggleActive( ): void {
-      if (!this.readOnly) {
-        if (this.active) {
-            this.active = false
-            this.commentActivation.emit(false)
-            this._comments.activeComment.active = false
-            // Save when comment is toggled away from
-            this.updateComment(this.comment.data)
-        } else {
-          this.active = true 
-          this._comments.activeComment = this.comment
-          this._comments.activeComment.active = true
-          this.commentActivation.emit(true)
-        }
-      } else {
-        this.togglePreview()
-      }
-      
-  }
-
-  activate(event): void {
-    setTimeout(() => {
-      // Ignore if user is just clicking a link
-      if ((this.preview && event && ['a','i'].indexOf(event.target.tagName.toLowerCase()) > -1) || this._comments.editing) {
-        // Let click open link
-      } else {
-        if (!this.readOnly) {
-          // this.active = true
-          // this.commentActivation.emit(true)
-          this.toggleActive()
-        } else {
-          this.togglePreview()
-        }
-      }
-    }, 100)
-  }
-
-  togglePreview(): void {
-      if (this.preview === true) {
-        this.preview = false
-        this.commentActivation.emit(false)
-        this._comments.activeComment.active = false
-      } else {
-        this.preview = true
-      }
+  activate(event?: Event): void {
+      this.active = true 
+      this._comments.activeComment = this.comment
+      this._comments.activeComment.active = true
+      this.commentActivation.emit(true)
   }
 
   deactivate(commentData ?: any): void {
@@ -182,15 +142,6 @@ export class CommentComponent implements OnInit {
       this.updateComment(commentData.data);
     } // if
   } // deactivate(commentData ?: any): void
-
-  alwaysActive(): void {
-    if (!this.active) {
-      this.active = true 
-      this._comments.activeComment = this.comment
-      this._comments.activeComment.active = true
-      this.commentActivation.emit(true)
-    }
-  }
 
   // Updates comment in db
   public updateComment(commentData: EdjiComment): void {

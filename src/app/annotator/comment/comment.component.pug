@@ -22,24 +22,24 @@
     .comment-input-wrapper([ngClass]="[ replyRef ? 'replyCommentHandler' : '' ]")
         //- Swap between different comment types
         emoji-comment(
-            (tap)="toggleActive()",
             *ngIf="comment.type == 'emoji' || !comment.type",
             [comment]="comment",
-            [reply]="reply"
+            [reply]="reply",
+            (activate)="activate()",
+            (deactivate)="deactivate()"
         )
         text-comment(
             *ngIf="comment.type == 'text'",
-            (tap)="activate()",
             [readOnly]="readOnly",
             [preview]="preview || active",
             [comment]="comment",
-            (blur)="deactivate(comment)",
             [active]="comment.active",
-            [reply]="reply"
+            [reply]="reply",
+            (activate)="activate()",
+            (deactivate)="deactivate()"
         )
         audio-comment(
             *ngIf="comment.type == 'audio'",
-            (tap)="alwaysActive()",
             [comment]="comment",
             (save)="deactivate(comment)",
             [active]="comment.active",

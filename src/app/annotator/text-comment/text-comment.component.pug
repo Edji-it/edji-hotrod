@@ -16,7 +16,8 @@
   #textCommentInput.text-comment-input(
     *ngIf="!_comments.editing", 
     [innerHtml]="comment.data | linkify | emojione", 
-    [ngClass]="[reply ? 'replyDisplay' : '']"
+    [ngClass]="[reply ? 'replyDisplay' : '']",
+    (tap)="toggleActive($event)"
   )
   .text-comment__edit-btn(
     *ngIf="(preview || comment.active) && !_comments.editing && !readOnly", 
