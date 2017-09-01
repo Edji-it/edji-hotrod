@@ -61,7 +61,7 @@ export class CommentComponent implements OnInit {
   @Input()
   set isActive(isActive: boolean) {
     if (typeof(isActive) !== 'undefined' && this.active !== isActive) {
-      this.activate()
+      this.activate({}, true)
     }
   }
   get isActive(): boolean { return this.active }
@@ -126,11 +126,13 @@ export class CommentComponent implements OnInit {
     ) )
   }
 
-  activate(event?: Event): void {
+  activate(event?: any, fromInput?: boolean): void {
       this.active = true 
       this._comments.activeComment = this.comment
       this._comments.activeComment.active = true
-      this.commentActivation.emit(true)
+      if (!fromInput) {
+        this.commentActivation.emit(true)
+      }
   }
 
   deactivate(commentData ?: any): void {
