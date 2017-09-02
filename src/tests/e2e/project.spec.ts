@@ -247,7 +247,7 @@ describe('Project Page', () => {
 
             // Add text to the text input field
             browser.wait(EC.elementToBeClickable(project.textReplyComment), 5000, "couldn't add text to the reply text comment");
-            project.textReplyComment.sendKeys('some test reply text');
+            browser.actions().sendKeys('some test reply text').perform();
 
             // Blur/Inactivate the reply comment
             browser.wait(EC.elementToBeClickable(project.commentSave), 5000, "could not click the save button on the comment");

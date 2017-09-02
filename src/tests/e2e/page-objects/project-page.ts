@@ -20,7 +20,7 @@ export class Project implements PageObjectInterface {
   public image = element(by.css('article .img-wrap > img'));
   public textComment = element(by.css('.comment.new textarea.text-comment-input'));
   public existingTextComment = element(by.css('div.text-comment-input'));
-  public textReplyComment = element(by.css('textarea.text-comment-input'));
+  public textReplyComment = element(by.css('.replyComment textarea.text-comment-input'));
   public dismissReplyPanelBtn = element(by.id('discussionClosePanel'));
   public discussionPanel = element(by.css('div.sliding-pane.from-left.replies.slide-in'));
   public commentSave = element(by.css('.comment__save'));
