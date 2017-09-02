@@ -10,7 +10,7 @@
   <div class="answer-options">
     <!-- Answer Buttons -->
     <button *ngFor="let type of enabledAnswerTypes" 
-      class="emoji button__answer-type answer--enabled"
+      class="{{ type }} button__answer-type answer--enabled"
       (click)="outputAnswer(type)">
         <!-- Icon & Label -->
         <i class="icon icon-{{type}}-comment icon__answer-type"></i>

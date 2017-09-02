@@ -8,7 +8,7 @@
   <!-- Question Number
       - Everything is spaced to the right of this.
   -->
-  <div [ngClass]="[question.new ? 'question-container__inner' : '']">
+  <div id="question-{{question.question_number}}" [ngClass]="[question.new ? 'question-container__inner' : '']">
     <div class="number-container">
       <div class="question-number">{{question.question_number}}</div>
     </div>
@@ -29,8 +29,8 @@
           <!-- Answer Buttons -->
           <button *ngFor="let type of answerTypesAvailable" 
             id="commentOption"
-            class="emoji button__answer-type" 
-            [ngClass]="[ question.answer_types.indexOf(type) > -1 ? 'answer--enabled' : '']"
+            class="button__answer-type" 
+            [ngClass]="[ type, question.answer_types.indexOf(type) > -1 ? 'answer--enabled' : '']"
             (tap)="toggleAnswerOfType(type)">
               <i class="icon icon-{{type}}-comment icon__answer-type"></i>
               <div class="icon__answer-text">{{type}}</div>
@@ -42,7 +42,7 @@
           <div class="answer-options">
             <button
               *ngFor="let type of optionTypesAvailable" id="selectOption" 
-              class="emoji button__answer-type" 
+              class="button__answer-type" 
               [ngClass]="[optionTypeStatus[type.type] ? 'answer--enabled' : '']"
               (tap)="enableOptionOfType(type.type)"
               style="padding: 2px 6px;">
@@ -73,14 +73,13 @@
         </div>
         <div class="answerOverflow answerOverflow-normal" id="answerBlock" *ngIf="!ownerHidden">
           <div *ngFor="let answer of answersById[question._id]">
-            <div class="comment-wrap-row">
+            <div *ngIf="!((question.option_types.indexOf('public') === -1 && user._id !== project.teacher_id) && answer.user_id !== user._id && answer.user_id !== project.teacher_id)" class="comment-wrap-row">
               <edji-comment class="answerCommentBlock"  
                 [comment]="answer" 
                 [commentContext]="'answer'" 
                 [isActive]="answer.active" 
                 [readOnly]="answer.user_id !== user._id"
-                [reply]="true" 
-                [class.hidden]="(question.option_types.indexOf('public') === -1 && user._id !== project.teacher_id) && answer.user_id !== user._id && answer.user_id !== project.teacher_id"
+                [reply]="true"
                 [userPermission]="getCommentPermissions(answer)"></edji-comment>
             </div>
           </div>
