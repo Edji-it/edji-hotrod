@@ -31,10 +31,10 @@ export class Project implements PageObjectInterface {
   public imageDown = 25;
 
   // Audio Comment test variables
-  public audioPlay = element(by.css('.active #audioPlay'));
-  public audioPause = element(by.css('.active #audioPause'));
-  public audioRestart = element(by.css('.active #audioRestart'));
-  public audioRecord = element(by.css('.active #audioRecord'));
+  public audioPlay = element(by.css('edji-comment:not(.hidden) #audioPlay'));
+  public audioPause = element(by.css('edji-comment:not(.hidden) #audioPause'));
+  public audioRestart = element(by.css('edji-comment:not(.hidden) #audioRestart'));
+  public audioRecord = element(by.css('edji-comment:not(.hidden) #audioRecord'));
   public emojiCommentSave = element(by.css('.comment.active .comment__save'));
   public audioComment = element.all(by.css('.audio-comment-input-wrapper')).first();
 
