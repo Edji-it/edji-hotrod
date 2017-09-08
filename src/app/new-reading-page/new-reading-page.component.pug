@@ -42,7 +42,8 @@ nav-bar([pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'", [canPublish]
             //- Editor Insert Options
                 - Insert a Picture or Pdf
                 - (Hero) Insert a Question
-            .editor-button-bar([class.hide]="editorToolbarHidden", [style.top]="editorToolbarY + 'px'")
+            //- Desktop Insert Buttons
+            .editor-button-bar.hidden-md-down([class.hide]="editorToolbarHidden", [style.top]="editorToolbarY + 'px'")
               //- Insert Label
               span.editor-button-bar__title Insert
               //- Upload Image Button 
@@ -57,6 +58,24 @@ nav-bar([pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'", [canPublish]
                   - Modal not needed.
               a#buttonInsertQuestion.btn.btn-icon--plain(*ngIf="currentUser.hero && currentUser.hero.active", (click)="addQuestionInLine()")
                 img(title="Add Question" src="/assets/images/icon-add-question.svg")
+            //- Mobile Insert Buttons
+            .editor-button-bar.hidden-lg-up([class.hide]="editorToolbarHidden")
+              //- Insert Label
+              //- Upload Image Button 
+                  - Opens Modal.
+              div([class.hide]="!insertOptionShow")
+                a#buttonUploadImage.btn.btn-icon--circle-shadow((click)="showUploadModal = true")
+                  img(title="Add Picture" src="/assets/images/icon-picture.svg")
+                //- Upload PDF Button 
+                    - Opens Modal
+                a#buttonUploadPdf.btn.btn-icon--circle-shadow((click)="showPdfUploadModal = true")
+                  img(title="Add PDF" src="/assets/images/icon-pdf.svg")
+                //- Insert Question Button (Hero) - NOT DONE
+                    - Modal not needed.
+                a#buttonInsertQuestion.btn.btn-icon--circle-shadow(*ngIf="currentUser.hero && currentUser.hero.active", (click)="addQuestionInLine()")
+                  img(title="Add Question" src="/assets/images/icon-add-question.svg")
+              a#button.btn.btn-icon--circle-shadow((click)="insertOptionShow=!insertOptionShow")
+                span(style="font-size: 11px;") Insert
           .form-group
             //- Source section
             label Source

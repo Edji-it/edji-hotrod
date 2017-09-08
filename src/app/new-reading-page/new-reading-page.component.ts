@@ -37,6 +37,7 @@ export class NewReadingPage implements OnInit {
     private reading         : any = {}
     private projects        : any[] = []
     private questions       : any[] = []
+    private insertOptionShow: boolean
 
     // Trigger booleans
     private showAlert       : boolean = false
