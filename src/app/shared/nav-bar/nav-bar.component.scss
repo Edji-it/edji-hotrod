@@ -449,8 +449,14 @@ div.sliding-pane.from-left.slide-in {
     }
 
 	@media(max-width: $phone) {
-		left: 20px;
-		right: 20px;
+		position: fixed;
+		top: 75px;
+		transform: translateX(-100%);
+		left: calc(100% - 20px);
+
+		&:after, &:before {
+			left: calc(100% - 125px);
+		}
 	}
 }
 
