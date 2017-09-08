@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 
 @Injectable() export class UtilToolService {
 
+    public showFeedbackModal: boolean
+
   constructor() {
       
   }
