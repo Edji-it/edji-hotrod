@@ -14,6 +14,8 @@
     border-top: none !important;
     // box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.2);
     border-bottom-style: dashed;
+    padding-top: 0;
+    padding-bottom: 0;
     
     &:last-of-type {
         border-bottom-style: solid;
@@ -306,4 +308,6 @@ button.new-reading-btn {
 
 .project-row--right-pad {
     padding-right: 50px;
+    padding-top: 15px;
+    padding-bottom: 15px;
 }

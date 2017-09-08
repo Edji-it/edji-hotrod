@@ -50,8 +50,8 @@
 <!--</div>-->
 <!--<div>-->
 <!-- The Project Card -->
-<div class="list-item list-item--button project-card" [class.new-project]="project.new" *ngFor="let project of reading.projects" [routerLink]="['/project', project._id]">
-    <div class="row project-row--right-pad">
+<div class="list-item list-item--button project-card" [class.new-project]="project.new" *ngFor="let project of reading.projects">
+    <div [routerLink]="['/project', project._id]" class="row project-row--right-pad">
         <div class="col-8">
             <!-- The Title -->
             <!-- IMPORTANT NOTE: had to move the project link here so that the delete project button would work. Otherwise it overlapped and both buttons pressed. -->
