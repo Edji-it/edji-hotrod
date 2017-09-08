@@ -1,0 +1,76 @@
+nav-bar([pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'", [canPublish]="true", (saveAction)="saveReading($event, readingForm.value)", (shareAction)="shareReading($event, readingForm.value)")
+.container.pt-4
+  .row
+    .col-sm-12
+      form([formGroup]="readingForm")
+        .reading-page
+          //- Error and Success Messaging
+          p.alert.alert-warning(*ngIf="error.length > 0") {{ error }}
+          .alert.alert-success.alert-readings.alert-dismissable(role="alert", *ngIf="showAlert")
+            a.close(href="#", (click)="showAlert=false") × {{ successObject.readingSuccess }}
+          .alert.alert-danger.alert-readings(role="alert", *ngIf="errorObject.readingError") {{ errorObject.readingError }}
+          //- Title Section
+          .form-group
+            label
+              span Title
+              input#readingTitle.form-control.h1.form-item--editor.mTitle(type="text", placeholder="Reading Title...", [formControl]="readingForm.controls['title']")
+              #errorTitle.alert.alert-info(*ngIf="readingForm.controls['title'].hasError('required') && (readingForm.controls['title'].dirty || submitted)") Please give your Reading a title!
+
+          //- Body Section
+              - Includes "reading content" and "source"
+          .form-group.medium-wrap(style="position:relative;")
+            label Reading Content
+            //- Reading Content section
+            p.sub-label Select text to see formatting options. Use the insert buttons on the left to add images and PDFs.
+            div(*ngFor="let readingPart of readingHtml; let i=index")
+              edji-question(
+                *ngIf="readingPart.question", 
+                (questionDelete)="deleteQuestion(i)",
+                [question]="readingPart.question",
+                (questionUpdate)="updateQ(readingPart.question,$event)",
+                (keyup)="contentChange($event)",
+                (mouseup)="contentChange($event)")
+              medium-editor#readingContent.content(
+                [(editorModel)]="readingPart.text",
+                [editorOptions]="mediumEditorConfig",
+                [editorPlaceholder]="getReadingPlaceholder(i)",
+                (keyup)="contentChange($event)",
+                (mouseup)="contentChange($event)",
+                [ngClass]="[i<readingHtml.length - 1 ? 'medium-editor__new-question' : '']",
+                [attr.rIndex]="i")
+            #errorContent.alert.alert-info(*ngIf="submitted && readingIsBlank") Please give your Reading some text!
+            //- Editor Insert Options
+                - Insert a Picture or Pdf
+                - (Hero) Insert a Question
+            .editor-button-bar([class.hide]="editorToolbarHidden", [style.top]="editorToolbarY + 'px'")
+              //- Insert Label
+              span.editor-button-bar__title Insert
+              //- Upload Image Button 
+                  - Opens Modal.
+              a#buttonUploadImage.btn.btn-icon--plain((click)="showUploadModal = true")
+                img(title="Add Picture" src="/assets/images/icon-picture.svg")
+              //- Upload PDF Button 
+                  - Opens Modal
+              a#buttonUploadPdf.btn.btn-icon--plain((click)="showPdfUploadModal = true")
+                img(title="Add PDF" src="/assets/images/icon-pdf.svg")
+              //- Insert Question Button (Hero) - NOT DONE
+                  - Modal not needed.
+              a#buttonInsertQuestion.btn.btn-icon--plain(*ngIf="currentUser.hero && currentUser.hero.active", (click)="addQuestionInLine()")
+                img(title="Add Question" src="/assets/images/icon-add-question.svg")
+          .form-group
+            //- Source section
+            label Source
+              p.sub-label (Optional) Provide a link or title for the source of the text.
+              .input-group
+                input#readingSource.form-control.form-item--editor.h3.mSource(type="text", placeholder="New Reading Source...", [formControl]="readingForm.controls['source']")
+
+.fixed-btn-row--SE
+  tutorial-box([tutorialName]="'newReading'",
+    [pageObjs]="guideContent", 
+    [pager]="guideStepNo", 
+    (pageChange)="guideStepNo = $event")
+  edji-feedback
+
+//- Modals
+upload-picture-modal.modal-will-fade([class.show]="showUploadModal", (returnImage)="addImages($event)", (closeModal)="showUploadModal = false")
+upload-pdf-modal.modal-will-fade([class.show]="showPdfUploadModal", (returnImage)="addImages($event)", (closeModal)="showPdfUploadModal = false")

@@ -15,7 +15,7 @@ import * as Rangy from 'rangy';
 @Component({
     selector: 'new-reading-page',
     styleUrls: ['new-reading-page.component.scss'],
-    templateUrl: 'new-reading-page.component.html'
+    templateUrl: 'new-reading-page.component.pug'
 })
 export class NewReadingPage implements OnInit {
     
