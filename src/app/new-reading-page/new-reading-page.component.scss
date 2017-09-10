@@ -58,7 +58,8 @@
         right: initial;
         top: initial;
         position: fixed;
-        left: 12px;
+        left: 6px;
+        width: 60px;
         bottom: 12px;
         z-index: 10;
         &:after, &:before {
@@ -71,7 +72,8 @@
             width: 50px;
             border: none;
             margin-bottom: 4px;
-            box-shadow: 0px 2px 2px $gray;
+            // box-shadow: 0px 2px 2px $gray;
+            box-shadow: 0px 1px 10px 3px rgba(0, 0, 0, 0.075);
         }
     }
 }
@@ -131,6 +133,40 @@
     background-color: white;
 }
 
+.insert-options-group--mobile {
+    &:not(.btn-group-show--animation) {
+        max-height: 0;
+        transition-property: all;
+        transition-duration: .75s;
+        transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+        // display: none;
+    }
+    &.btn-group-show--animation {
+        overflow-y: hidden;
+        max-height: 162px; /* approximate max height */
+
+        transition-property: all;
+        transition-duration: .75s;
+        transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+    }
+}
+
 .insert-options--mobile {
-    display: none;
+    &:not(.btn-show--animation) {
+        max-height: 0;
+        padding: 0 !important;
+        box-shadow: none !important;
+        transition-property: all;
+        transition-duration: .4s;
+        transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+        // display: none;
+    }
+    &.btn-show--animation {
+        overflow-y: hidden;
+        max-height: 50px; /* approximate max height */
+
+        transition-property: all;
+        transition-duration: .5s;
+        transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+    }
 }
