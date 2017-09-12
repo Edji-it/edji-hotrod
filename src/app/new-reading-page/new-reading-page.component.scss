@@ -138,23 +138,23 @@
     &:not(.btn-group-show--animation) {
         max-height: 0;
         transition-property: all;
-        transition-duration: .75s;
+        transition-duration: .4s;
         transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
         // display: none;
     }
     &.btn-group-show--animation {
         overflow-y: hidden;
-        max-height: 162px; /* approximate max height */
+        max-height: 162px;
 
         transition-property: all;
-        transition-duration: .75s;
+        transition-duration: .2s;
         transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
     }
 }
 
 .insert-options--mobile {
     &:not(.btn-show--animation) {
-        max-height: 0;
+        opacity: 0;
         padding: 0 !important;
         box-shadow: none !important;
         transition-property: all;
@@ -164,10 +164,10 @@
     }
     &.btn-show--animation {
         overflow-y: hidden;
-        max-height: 50px; /* approximate max height */
+        opacity: 1;
 
         transition-property: all;
-        transition-duration: .5s;
+        transition-duration: .2s;
         transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
     }
 }
