@@ -4,7 +4,6 @@
   <button type="button" class="btn owner-tools__btn btn-cmt" aria-label="Comment Counts" (click)="showElseFalse('showCommentCounts')">
     <!--<img *ngIf="isMobile" style="width: 50px;" src="assets/images/icon-comment.svg" />-->
     <img src="assets/images/icon-leaderboard.svg" />
-    <!--<div class="comment-count">{{ commentStats.stats.count }}</div>-->
     <label>Tally</label>
   </button>
 
@@ -23,6 +22,8 @@
   <!--Fire Feed toggle-->
   <button type="button" class="btn owner-tools__btn btn-hv" (tap)="showElseFalse('showFireFeed')">
     <i id="toggleFirefeed" *ngIf="currentProject" class="icon-fire-feed"></i>
+    <span *ngIf="commentStats.stats.count && commentStats.stats.count > 0" class="badge badge-pill badge-info">
+      {{ commentStats.stats.count }}</span>
     <label>Feed</label>
   </button>
 
