@@ -100,7 +100,7 @@ $ownerToolsWidth: 60px;
 .btn-cmt {
     & img {
         width: 90%;
-        opacity: 0.2;
+        // opacity: 0.2;
         height: auto;
     }
 
@@ -111,12 +111,6 @@ $ownerToolsWidth: 60px;
         width: $ownerToolsWidth - 10px;
         transform: translateY(-50%);
         font-weight: bold;
-    }
-
-    &:hover, &:active, &.active {
-        & img {
-            opacity: 0.3;
-        }
     }
 }
  
