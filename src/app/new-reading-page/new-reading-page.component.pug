@@ -64,16 +64,26 @@ nav-bar([pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'", [canPublish]
               //- Upload Image Button 
                   - Opens Modal.
               div([class.btn-group-show--animation]="insertOptionShow", class="insert-options-group--mobile")
-                a#buttonUploadImage.btn.btn-icon--circle-shadow((click)="showUploadModal = true", [class.btn-show--animation]="insertOptionShow", class="insert-options--mobile")
-                  img(title="Add Picture" src="/assets/images/icon-picture.svg", [class.hide]="!insertOptionShow")
+                a#buttonUploadImage.btn.btn-icon--circle-shadow.insert-options--mobile(
+                  (click)="showUploadModal = true; insertOptionShow=!insertOptionShow", 
+                  [class.btn-show--animation]="insertOptionShow"
+                )
+                  img(title="Add Picture", src="/assets/images/icon-picture.svg", [class.hide]="!insertOptionShow")
                 //- Upload PDF Button 
                     - Opens Modal
-                a#buttonUploadPdf.btn.btn-icon--circle-shadow((click)="showPdfUploadModal = true", [class.btn-show--animation]="insertOptionShow", class="insert-options--mobile")
-                  img(title="Add PDF" src="/assets/images/icon-pdf.svg", [class.hide]="!insertOptionShow")
+                a#buttonUploadPdf.btn.btn-icon--circle-shadow.insert-options--mobile(
+                  (click)="showPdfUploadModal = true; insertOptionShow=!insertOptionShow", 
+                  [class.btn-show--animation]="insertOptionShow"
+                )
+                  img(title="Add PDF", src="/assets/images/icon-pdf.svg", [class.hide]="!insertOptionShow")
                 //- Insert Question Button (Hero) - NOT DONE
                     - Modal not needed.
-                a#buttonInsertQuestion.btn.btn-icon--circle-shadow(*ngIf="currentUser.hero && currentUser.hero.active", (click)="addQuestionInLine()", [class.btn-show--animation]="insertOptionShow", class="insert-options--mobile")
-                  img(title="Add Question" src="/assets/images/icon-add-question.svg", [class.hide]="!insertOptionShow")
+                a#buttonInsertQuestion.btn.btn-icon--circle-shadow.insert-options--mobile(
+                  *ngIf="currentUser.hero && currentUser.hero.active", 
+                  (click)="addQuestionInLine(); insertOptionShow=!insertOptionShow", 
+                  [class.btn-show--animation]="insertOptionShow"
+                )
+                  img(title="Add Question", src="/assets/images/icon-add-question.svg", [class.hide]="!insertOptionShow")
               a#button.btn.btn-icon--circle-shadow((click)="insertOptionShow=!insertOptionShow")
                 span(style="font-size: 11px;") Insert
           .form-group

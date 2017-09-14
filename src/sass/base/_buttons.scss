@@ -356,3 +356,11 @@ button, .button, .btn { //, [class*='btn']
     height: auto;
   }
 }
+
+.btn-icon--circle-shadow {
+    background: none;
+    text-shadow: none;
+    opacity: 0.9;
+    cursor: pointer;
+    background-color: white;
+}

@@ -36,26 +36,30 @@
                     | B
         //- Mobile buttons
         .comment-options__mobile-wrap.hidden-lg-up([class.bottom-bar-offset]="user._id == project.teacher_id")
-            .row.comment__options--mobileRow
+            .mobile-carrot-pointer >
+            .comment__options--mobileRow.comment-options-group--mobile([class.btn-group-show--animation]="optionsShow")
                 //- Emoji Comment 
-                .comment__options--mobileCol(
+                .comment__options--mobileCol.btn.btn-icon--circle-shadow.comment-options--mobile(
                     *ngIf="project.types.indexOf('emoji') > -1",
-                    [ngClass]="'col-' + (12 / directCommentOptions.length)"
+                    [ngClass]="'col-' + (12 / directCommentOptions.length)", 
+                    [class.btn-show--animation]="optionsShow"
                 )
                     button#addEmojiComment.emoji.comment__options--mobileButton((tap)="addCommentOfType('emoji')")
                         i.icon.icon-emoji-comment
                 //-- Text Comment 
-                .comment__options--mobileCol(
+                .comment__options--mobileCol.btn.btn-icon--circle-shadow.comment-options--mobile(
                     *ngIf="project.types.indexOf('text') > -1",
-                    [ngClass]="'col-' + (12 / directCommentOptions.length)"
+                    [ngClass]="'col-' + (12 / directCommentOptions.length)", 
+                    [class.btn-show--animation]="optionsShow"
                 )
                     button#addTextComment.emoji.comment__options--mobileButton((tap)="addCommentOfType('text')")
                         i.icon.icon-text-comment
                 //-- Audio Comment
-                .comment__options--mobileCol(
+                .comment__options--mobileCol.btn.btn-icon--circle-shadow.comment-options--mobile(
                     *ngIf="project.types.indexOf('audio') > -1",
                     [ngClass]="'col-' + (12 / directCommentOptions.length)",
-                    [class.super-disabled]="audioSupportError"
+                    [class.super-disabled]="audioSupportError", 
+                    [class.btn-show--animation]="optionsShow"
                 )
                     button#addAudioComment.emoji.comment__options--mobileButton((tap)="addCommentOfType('audio')")
                         i.icon.icon-mic

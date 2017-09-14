@@ -52,7 +52,6 @@
         left: calc(100% + 0px);
         border-left-color: white;
     }
-
     &.hidden-lg-up {
         opacity: 1;
         border: none;
@@ -124,14 +123,6 @@
     font-size: 11px;
     padding: 1em;
     color: #555;
-}
-
-.btn-icon--circle-shadow {
-    background: none;
-    text-shadow: none;
-    opacity: 0.9;
-    cursor: pointer;
-    background-color: white;
 }
 
 .insert-options-group--mobile {
