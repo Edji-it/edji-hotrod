@@ -64,6 +64,14 @@ button, .button, .btn { //, [class*='btn']
   &:focus, &:active {
     outline: none;
   }
+
+  & .badge {
+    display: inline-block;
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    font-size: 12px;
+  }
 }
 
 .button, button {

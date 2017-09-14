@@ -257,7 +257,9 @@ export class UploadPdfModalComponent implements OnInit {
   }
 
   insertImage(url: string) : void {
-    this.returnImage.emit([{ 'url': url }]);
+    let page = [];
+    page.push( {  'url': url } );
+    this.returnImage.emit(page);
     this.closeModal.emit();
   }
 }
