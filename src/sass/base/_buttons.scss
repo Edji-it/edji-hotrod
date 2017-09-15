@@ -1,3 +1,4 @@
+@import "variables";
 
 $btnBg: #969696;
 $btnActionBg: $green;
@@ -249,6 +250,10 @@ button, .button, .btn { //, [class*='btn']
     &.active {
       color: $blue;
     }
+
+    @media(max-width: $phone) {
+      text-decoration: underline;
+	  }
 }
 
 .btn-icon {

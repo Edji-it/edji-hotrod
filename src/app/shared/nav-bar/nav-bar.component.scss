@@ -170,11 +170,11 @@ $purple: rgb(150, 40, 255);
 	overflow-y: hidden; // a scroll bar was coming up sometimes
 
 	@media(max-width: $desktop) {
-		width: 40%;
+		width: 35%;
 	}
 
 	@media(min-width: $desktop) {
-		width: 50%;
+		width: 45%;
 	}
 
 	& h1 {
@@ -230,10 +230,9 @@ a.nav-bar__link {
 	line-height: 45px;
 	vertical-align: middle;
 
-	@media(max-width: $phone) {
+	@media(max-width: $desktop) {
 		font-size: 14px;
-		min-width: 80px;
-		max-width: 95px;
+		min-width: 68px;
 		padding: 12px 5px;
 	}
 }
