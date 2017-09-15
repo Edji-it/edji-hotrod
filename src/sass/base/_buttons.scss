@@ -376,4 +376,21 @@ button, .button, .btn { //, [class*='btn']
     opacity: 0.9;
     cursor: pointer;
     background-color: white;
+
+    &:active, &:focus {
+      background-color: white;
+    }
+}
+
+.btn.mobile-menu-spot {
+  height: 50px !important;
+  width: 50px !important;
+
+  & span {
+    display: inline-block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%, -50%, 0);
+  }
 }

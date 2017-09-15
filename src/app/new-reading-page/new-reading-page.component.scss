@@ -60,7 +60,7 @@
         position: fixed;
         left: 6px;
         width: 60px;
-        bottom: 12px;
+        bottom: 6px;
         z-index: 10;
         &:after, &:before {
             display: none;
@@ -68,12 +68,21 @@
         & .btn {
             border-radius: 50%;
             // padding: 10px;
-            height: 50px;
-            width: 50px;
+            height: 40px;
+            width: 40px;
             border: none;
             margin-bottom: 4px;
             // box-shadow: 0px 2px 2px $gray;
             box-shadow: 0px 1px 10px 3px rgba(0, 0, 0, 0.075);
+            position: relative;
+
+            & img {
+                width: 22px;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate3d(-50%, -50%, 0);
+            }
         }
     }
 }
@@ -136,7 +145,8 @@
     &.btn-group-show--animation {
         overflow-y: hidden;
         max-height: 162px;
-
+        // Padding for full display of box-shadows
+        padding-top: 15px;
         transition-property: all;
         transition-duration: .2s;
         transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
