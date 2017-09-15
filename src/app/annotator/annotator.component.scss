@@ -43,35 +43,97 @@ $midGray: #f7f7f7;
 $commentOptionsMobileHeight: 60px;
 
 .comment-options__mobile-wrap {
-	position: fixed;
-	bottom: 0;
-	width: 100%;
-	left: 0;
-	border-radius: 0;
-	text-align: center;
-	height: $commentOptionsMobileHeight;
-	border-top: $base-border;
-	background-color: $bubbleColor;
-	z-index: 8000;
+// 	position: fixed;
+// 	bottom: 0;
+// 	width: 100%;
+// 	left: 0;
+// 	border-radius: 0;
+// 	text-align: center;
+// 	height: $commentOptionsMobileHeight;
+// 	border-top: $base-border;
+// 	background-color: $bubbleColor;
+// 	z-index: 8000;
 
-	&.bottom-bar-offset {
-		@media(max-width: $tablet) {
-		bottom: 60px;
-		}
-	}
+// 	&.bottom-bar-offset {
+// 		@media(max-width: $tablet) {
+// 		bottom: 60px;
+// 		}
+// 	}
+    &.hidden-lg-up {
+        opacity: 1;
+        border: none;
+        // right: initial;
+        // top: initial;
+        // position: fixed;
+        left: 6px;
+        width: 60px;
+        bottom: 12px;
+        z-index: 10;
+        margin-top: -54px;
+        &:after, &:before {
+            display: none;
+        }
+        & .btn {
+            border-radius: 50%;
+            // padding: 10px;
+            height: 50px;
+            width: 50px;
+            border: none;
+            margin-bottom: 4px;
+            // box-shadow: 0px 2px 2px $gray;
+            box-shadow: 0px 1px 10px 3px rgba(0, 0, 0, 0.075);
+        }
+    }
 }
 
 .comment__options--mobileButton {
-	margin: 0 !important;
-	width: 100% !important;
-	height: $commentOptionsMobileHeight !important;
+	// margin: 0 !important;
+	// width: 100% !important;
+	// height: $commentOptionsMobileHeight !important;
+    left: -12px;
+    top: -2px;
 }
 
-.comment__options--mobileRow {
-	height: 100%;
+// .comment__options--mobileRow {
+// 	height: 100%;
+// }
+
+// .comment__options--mobileCol {
+// 	padding: 0;
+// 	position: relative;
+// }
+
+.comment-options-group--mobile {
+    text-align: center;
+    padding: 4px 0;
+    &:not(.btn-group-show--animation) {
+        max-height: 0;
+        transition: max-height 0.25s ease-out;
+    }
+    &.btn-group-show--animation {
+        overflow-y: hidden;
+        max-height: 166px;
+        transition: max-height 0.25s ease-in;
+    }
 }
 
-.comment__options--mobileCol {
-	padding: 0;
-	position: relative;
+.comment-options--mobile {
+    &:not(.btn-show--animation) {
+        opacity: 0;
+        padding: 0 !important;
+        box-shadow: none !important;
+    }
+    &.btn-show--animation {
+        overflow-y: hidden;
+        opacity: 1;
+        transition: opacity 0.25s;
+    }
+}
+
+.mobile-carrot-pointer {
+    display: block;
+    left: 0;
+    color: black;
+    text-align: center;
+    font-size: 30px;
 }

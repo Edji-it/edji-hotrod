@@ -18,7 +18,7 @@ export class FeedbackComponent implements OnInit {
   @Output()
   private closeModal: EventEmitter<any> = new EventEmitter()
 
-  private showFeedbackModal: boolean = false
+  // private showFeedbackModal: boolean = false
   private showFeedbackSuccess: boolean = false
   private feedbackForm: FormGroup
   private feedbackSuccess: boolean = false
@@ -66,7 +66,7 @@ export class FeedbackComponent implements OnInit {
 
   private open(): void {
     this.openModal.emit()
-    this.showFeedbackModal = true
+    this._util.showFeedbackModal = true
 
     // Workaround: This modal is long enough that it needs to scroll and we don't want two scrollbars
     document.body.style.overflow = 'hidden'
@@ -74,7 +74,7 @@ export class FeedbackComponent implements OnInit {
 
   private feedbackClose(): void {
     this.closeModal.emit()
-    this.showFeedbackModal = false
+    this._util.showFeedbackModal = false
     
     // Workaround: This modal is long enough that it needs to scroll and we don't want two scrollbars
     document.body.style.overflow = ''

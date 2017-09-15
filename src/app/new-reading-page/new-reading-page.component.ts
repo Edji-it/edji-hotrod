@@ -15,7 +15,7 @@ import * as Rangy from 'rangy';
 @Component({
     selector: 'new-reading-page',
     styleUrls: ['new-reading-page.component.scss'],
-    templateUrl: 'new-reading-page.component.html'
+    templateUrl: 'new-reading-page.component.pug'
 })
 export class NewReadingPage implements OnInit {
     
@@ -37,6 +37,7 @@ export class NewReadingPage implements OnInit {
     private reading         : any = {}
     private projects        : any[] = []
     private questions       : any[] = []
+    private insertOptionShow: boolean
 
     // Trigger booleans
     private showAlert       : boolean = false
