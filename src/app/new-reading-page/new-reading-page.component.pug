@@ -84,7 +84,7 @@ nav-bar([pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'", [canPublish]
                   [class.btn-show--animation]="insertOptionShow"
                 )
                   img(title="Add Question", src="/assets/images/icon-add-question.svg", [class.hide]="!insertOptionShow")
-              a#button.btn.btn-icon--circle-shadow((click)="insertOptionShow=!insertOptionShow")
+              a#button.btn.btn-icon--circle-shadow.mobile-menu-spot((click)="insertOptionShow=!insertOptionShow")
                 span(style="font-size: 11px;") Insert
           .form-group
             //- Source section
