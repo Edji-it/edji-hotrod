@@ -62,7 +62,11 @@ export class CommentComponent implements OnInit {
   set isActive(isActive: boolean) {
     if (typeof(isActive) !== 'undefined' && this.active !== isActive) {
       this.active = isActive
-    }
+      if (!isActive) {
+        // Trigger save when deactivated externally i.e. emoji keyboard
+        this.deactivate(this.comment)
+      }
+    } 
   }
   get isActive(): boolean { return this.active }
 
@@ -133,25 +137,36 @@ export class CommentComponent implements OnInit {
       this.commentActivation.emit(true)
   }
 
-  deactivate(commentData ?: any): void {
+  /**
+   * Deactivates/unfocuses comment, and optionally triggers save
+   * @param comment (optional) Full EdjiComment object
+   * TO-DO: Clean out code for optionally passing JUST comment.data as comment parameter
+   */
+  deactivate(comment ?: any): void {
+    console.log("Deactivate!")
     this.active = false
     this.commentActivation.emit(false)
     this._comments.activeComment.active = false
     // Save when comment is toggled away from
-    if (commentData) {
-      this.updateComment(commentData.data);
+    if (comment) {
+      this.updateComment(comment);
     }
   } // deactivate(commentData ?: any): void
 
-  // Updates comment in db
-  public updateComment(commentData: EdjiComment): void {
+  /**
+   * Saves updates to comments
+   * @param comment Full EdjiComment object
+   */
+  public updateComment(comment: EdjiComment): void {
+    console.log("UPDATE COMMENT")
+
     this.reRecordAudio = false
-    if (commentData._id) {
-      // this.comment.project_id, commentData, this.comment.start, this.comment.end, this.comment.type, this.comment.text, this.comment._id, this.comment.loc
-      this.comment.data = commentData.data
-      this.comment.url = commentData.url
+    if (comment._id) {
+      // this.comment.project_id, comment, this.comment.start, this.comment.end, this.comment.type, this.comment.text, this.comment._id, this.comment.loc
+      this.comment.data = comment.data
+      this.comment.url = comment.url
     } else {
-      this.comment.data = commentData
+      this.comment.data = comment
     } // else
 
     if (this.commentContext !== "answer") {
@@ -218,7 +233,7 @@ export class CommentComponent implements OnInit {
     }
 
 
-  } // public updateComment(commentData: any, reply ?: boolean): void
+  } // public updateComment(comment: any, reply ?: boolean): void
 
   // Deletes comment via Project service, which updates the local Project object
   public deleteComment(comment: any) : void {
