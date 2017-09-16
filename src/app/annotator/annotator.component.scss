@@ -124,7 +124,7 @@ $commentOptionsMobileHeight: 60px;
         box-shadow: none !important;
     }
     &.btn-show--animation {
-        overflow-y: hidden;
+        overflow: hidden;
         opacity: 1;
         transition: opacity 0.25s;
     }
