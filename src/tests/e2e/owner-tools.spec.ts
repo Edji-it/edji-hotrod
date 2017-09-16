@@ -41,8 +41,8 @@ describe('Project Page as a Project Owner: ', () => {
         browser.wait(EC.elementToBeClickable(loginModal.gotoAccountLoginButton), 5000, "never found button to go to account login");
         loginModal.gotoAccountLoginButton.click();
         expect(loginModal.accountLoginHeader.isPresent()).toBeTruthy();
-        loginModal.usernameInput.sendKeys('testowner');
-        loginModal.passwordInput.sendKeys('testowner16');
+        loginModal.usernameInput.sendKeys('testsidekick');
+        loginModal.passwordInput.sendKeys('testsidekick16');
         browser.wait(EC.elementToBeClickable(loginModal.accountLoginButton), 5000, "never found the account login button on modal");
         
         loginModal.accountLoginButton.submit();
@@ -99,8 +99,8 @@ describe('Project Page as a Project Owner: ', () => {
         browser.wait(EC.elementToBeClickable(loginModal.gotoAccountLoginButton), 5000, "never found button to go to account login");
         loginModal.gotoAccountLoginButton.click();
         expect(loginModal.accountLoginHeader.isPresent()).toBeTruthy();
-        loginModal.usernameInput.sendKeys('testowner');
-        loginModal.passwordInput.sendKeys('testowner16');
+        loginModal.usernameInput.sendKeys('testsidekick');
+        loginModal.passwordInput.sendKeys('testsidekick16');
         browser.wait(EC.elementToBeClickable(loginModal.accountLoginButton), 5000, "never found the account login button on modal");
         
         loginModal.accountLoginButton.submit();
