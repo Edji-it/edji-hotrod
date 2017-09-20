@@ -223,18 +223,19 @@ button, .button, .btn { //, [class*='btn']
   }
 }
 
-.btn-clear {
+.btn-clear, .btn.btn-clear {
     border: none !important;
     box-shadow: none !important;
     background-color: transparent !important;
     color: #555;
+    text-decoration: underline;
 
     &:active, &:focus {
       outline: none;
       transform: translate3d(0,0,0) !important;
     }
 
-     &:hover {
+    &:hover {
       transform: translate3d(0,0,0) !important;
       background-color: transparent !important;
       outline: none;
@@ -247,13 +248,14 @@ button, .button, .btn { //, [class*='btn']
       }
     }
 
-    &.active {
-      color: $blue;
+    &:visited {
+      text-decoration: underline;
     }
 
-    @media(max-width: $phone) {
+    &.active {
+      color: $blue;
       text-decoration: underline;
-	  }
+    }
 }
 
 .btn-icon {
