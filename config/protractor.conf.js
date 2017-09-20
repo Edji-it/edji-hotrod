@@ -30,7 +30,7 @@ exports.config = {
       'args': ['show-fps-counter=true','use-fake-ui-for-media-stream']
     }, // chrome options
     shardTestFiles: true,
-    maxInstances: 3
+    maxInstances: 2
   }, // capabilities
 
   /*
