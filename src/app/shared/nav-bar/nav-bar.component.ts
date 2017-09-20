@@ -13,8 +13,9 @@ import { ProjectService, SocketService, PowerToggle, ReadingService } from '..'
   templateUrl: './nav-bar.component.pug'
 })
 export class NavBarComponent implements OnInit, OnDestroy {
-    @Input() canPublish: boolean
     @Input() pageTitle: string
+    // Static input to display Save/Share buttons
+    @Input() canPublish: boolean
     @Input() showProjectInfo: boolean
     
     @Output() saveAction: EventEmitter<any> = new EventEmitter()
@@ -112,30 +113,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
     ngOnDestroy() {
       this.subscriptions.forEach((sub) => { sub.unsubscribe() })
     }
-
-    toggleCommentCounts() {
-    }
-
-    private togglePower(powerName: string, value: boolean) {
-      // set heat vision to loading
-      this.powersLoading.heatVision = true
-      setTimeout(() => {
-        // stop heat vision loading
-        this.powersLoading.heatVision = false
-      }, 1000)
-
-      // Toggle the Heat Vision boolean
-      let updateObj: any = {}
-      updateObj[powerName] = value
-
-      this._projects.update(updateObj, this.currentProject._id)
-        .take(1)
-        .subscribe((project) => {
-          // Live update users once save is successful
-          this._socket.toggleHeatVision({ all: value })
-        })
-    }
-
+    
     logout() {
         this._auth.logout()
         this._router.navigate(['/home'])
@@ -180,6 +158,11 @@ export class NavBarComponent implements OnInit, OnDestroy {
         })
       } else {
         this.shareAction.emit(shareObj)
+        // Nav bar does not manage validation on New Reading, so we make sure the button doesn't get stuck loading
+        // Note: The above condition will clear shareLoading in both cases
+        setTimeout(() => {
+          this.shareLoading = false
+        }, 500)
       }
     }
 }
