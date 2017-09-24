@@ -21,6 +21,9 @@ $purple: rgb(150, 40, 255);
 	.mobile-heading {
 		margin-top: $navHeight;
 		padding: $base-pad/2 $base-pad;
+		&.hidden-md-up {
+			margin-bottom: 0;
+		}
 	}
 
 .nav-bar {
