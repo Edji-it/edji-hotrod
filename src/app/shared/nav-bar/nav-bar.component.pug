@@ -68,7 +68,8 @@
     .hidden-md-up.nav-bar__project-data(*ngIf="showProjectInfo && currentProject && currentProject._id")
       .group-label {{ liveCount }} Readers
       pre
-        span([innerHtml]="':key:' | emojione") {{ currentProject.code }}
+        span([innerHtml]="':key:' | emojione")
+        | &nbsp;{{ currentProject.code }}
     .hidden-md-up.nav-bar__project(*ngIf="showProjectInfo && currentProject && currentProject._id")
       label Group
       .group-label {{ currentProject.label }}

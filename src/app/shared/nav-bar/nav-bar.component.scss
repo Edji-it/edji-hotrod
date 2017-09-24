@@ -160,6 +160,13 @@ $purple: rgb(150, 40, 255);
 	& pre {
 		overflow: hidden;
 	}
+
+	&.hidden-md-up {
+		padding: 0;
+		& pre {
+			font-size: 74%;
+		}
+	}
 }
 
 .nav-bar__project, .nav-bar__project-data {
