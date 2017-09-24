@@ -118,6 +118,8 @@ $commentOptionsMobileHeight: 60px;
 }
 
 .comment-options--mobile {
+    overflow: hidden;
+
     &:not(.btn-show--animation) {
         opacity: 0;
         padding: 0 !important;
@@ -133,7 +135,7 @@ $commentOptionsMobileHeight: 60px;
 .mobile-carrot-pointer {
     display: block;
     left: 0;
-    color: black;
+    color: #cdcdcd;
     text-align: center;
     font-size: 30px;
 }

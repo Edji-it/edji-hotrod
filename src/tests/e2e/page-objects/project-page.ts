@@ -18,9 +18,9 @@ export class Project implements PageObjectInterface {
   public addEmojiReplyBtn = element(by.id("addEmojiReply"));
   public addAudioReplyBtn = element(by.id("addAudioReply"));
   public image = element(by.css('article .img-wrap > img'));
-  public textComment = element(by.css('.comment.new textarea.text-comment-input'));
+  public textComment = element(by.css('.comment.new .text-comment-input'));
   public existingTextComment = element(by.css('div.text-comment-input'));
-  public textReplyComment = element(by.css('.replyComment textarea.text-comment-input'));
+  public textReplyComment = element(by.css('.replyComment.new .text-comment-input'));
   public dismissReplyPanelBtn = element(by.id('discussionClosePanel'));
   public discussionPanel = element(by.css('div.sliding-pane.from-left.replies.slide-in'));
   public commentSave = element(by.css('.comment__save'));
@@ -42,20 +42,20 @@ export class Project implements PageObjectInterface {
     // First we clear out the url (sometimes page is preserved if the url stays the same)
     browser.get("/#");
     // Load a good sample Project with Emoji and Text commenting (owned by teach/teach)
-    browser.get("/#/project/hjb2");
+    browser.get("/#/project/test");
   }
 
   public getAudioPage(): void {
     // First we clear out the url (sometimes page is preserved if the url stays the same)
     browser.get("/#");
     // Load a good sample Project with Audio commenting (owned by testhero/testhero16)
-    browser.get("/#/project/mz9n");
+    browser.get("/#/project/audio");
   }
 
   public getReplyPage(): void {
     // First we clear out the url (sometimes page is preserved if the url stays the same)
     browser.get("/#");
     // Load a good sample Project with reply functions (owned by testhero/testhero16)
-    browser.get("/#/project/smkp");
+    browser.get("/#/project/reply");
   }
 } // class

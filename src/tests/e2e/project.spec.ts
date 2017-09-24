@@ -237,18 +237,21 @@ describe('Project Page', () => {
             
             // Wait 5 seconds for the reply button to become clickable and Click on the reply button
             browser.wait(EC.elementToBeClickable(project.existingTextComment), 5000, "never found the existing comment to reply to");
-            project.existingTextComment.click()
+            // project.existingTextComment.click()
+            browser.actions().mouseMove(project.existingTextComment).perform();
             browser.wait(EC.elementToBeClickable(project.addReplyBtn), 5000, "never found the add reply comment button");
             project.addReplyBtn.click();
 
             // Wait 5 seconds for the add text reply button to become clickable and Click on the add text reply button
             browser.wait(EC.elementToBeClickable(project.addTextReplyBtn), 5000, "never found the add text reply comment button");
+            
             project.addTextReplyBtn.click();
+            browser.sleep(3000);
 
             // Add text to the text input field
-            browser.wait(EC.elementToBeClickable(project.textReplyComment), 5000, "couldn't add text to the reply text comment");
+            // browser.wait(EC.elementToBeClickable(project.textReplyComment), 5000, "couldn't add text to the reply text comment");
             browser.actions().sendKeys('some test reply text').perform();
-
+            
             // Blur/Inactivate the reply comment
             browser.wait(EC.elementToBeClickable(project.commentSave), 5000, "could not click the save button on the comment");
             project.commentSave.click();

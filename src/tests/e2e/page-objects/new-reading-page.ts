@@ -33,7 +33,7 @@ export class NewReading implements PageObjectInterface
     public insertUploadedPdf = element(by.css(".upload-list-item.new .e2e-insert-doc"));
 
     // Creating questions
-    public insertQuestionButton = element.all(by.id('buttonInsertQuestion')).last();
+    public insertQuestionButton = element(by.id('buttonInsertQuestion'));
     public insertQuestionPrompt = element.all(by.css('textarea.text-comment-input')).last();
     public 
 

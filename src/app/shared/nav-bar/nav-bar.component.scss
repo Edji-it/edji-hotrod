@@ -102,6 +102,7 @@ $purple: rgb(150, 40, 255);
 		background: #fff;
 		border-bottom: $navBorder;
 		margin-bottom: $base-pad;
+		min-width: 50px;
 	}
 
 	& label {
@@ -155,6 +156,12 @@ $purple: rgb(150, 40, 255);
 
 	& pre {
 		overflow: hidden;
+	}
+}
+
+.nav-bar__project, .nav-bar__project-data {
+	@media(max-width: $tablet) {
+		max-width: 25%;
 	}
 }
 

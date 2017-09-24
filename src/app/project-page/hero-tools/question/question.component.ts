@@ -14,7 +14,7 @@ enum ResponseType {
   templateUrl: './question.component.html',
   styleUrls: ['./question.component.scss']
 })
-export class QuestionComponent implements OnInit, Input, Output, OnDestroy {
+export class QuestionComponent implements OnInit, OnDestroy {
 
   /*
     29 July 2017

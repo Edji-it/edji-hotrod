@@ -26,14 +26,14 @@ export class Login implements PageObjectInterface
 
     public studentUser      = 'student';
     public studentPassword  = 'student';
-    public teacherUser      = 'testowner';
-    public teacherPassword  = 'testowner16';
+    public teacherUser      = 'testsidekick';
+    public teacherPassword  = 'testsidekick16';
     public heroUser         = 'testhero';
     public heroPassword     = 'testhero16';
     public botUser          = 'testbot';
     public botPassword      = 'testbot';
     public invalidEntry     = 'HitlerHatesEDJI_666_420';
-    public validProjectCode = '35jz';
+    public validProjectCode = 'test';
     public testGuestName    = "Queen Elizabeth II";
 
     // get the login page

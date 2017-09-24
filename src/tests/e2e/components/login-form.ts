@@ -14,10 +14,10 @@ export class LoginForm {
   // other variables
   public studentUser      = 'student';
   public studentPassword  = 'student';
-  public teacherUser      = 'testowner';
-  public teacherPassword  = 'testowner16';
+  public teacherUser      = 'testsidekick';
+  public teacherPassword  = 'testsidekick16';
   public invalidEntry     = 'HitlerHatesEDJI_666_420';
-  public validProjectCode = '35jz';
+  public validProjectCode = 'test';
   public testGuestName    = "Queen Elizabeth II";
 
   /** Tests all login errors on the login form */
