@@ -35,7 +35,7 @@
       (tap)="showElseFalse('showCommentCounts'); ownerToolShow=!ownerToolShow", 
       [class.btn-show--animation]="ownerToolShow"
     )
-      img(src="assets/images/icon-leaderboard.svg", [class.hide]="!ownerToolShow")
+      img(src="assets/images/icon-leaderboard.svg", [class.hide]="!ownerToolShow", style="width: 32px;")
       //- label Tally
     //- Heat Vision toggle
     button.btn.btn-icon--circle-shadow.owner-options--mobile(
@@ -43,7 +43,7 @@
       (tap)="togglePower('heat_vision', !this.currentProject.heat_vision); ownerToolShow=!ownerToolShow", 
       [class.btn-show--animation]="ownerToolShow"
     )
-      i#toggleHeatVision.icon-heatvision(*ngIf="currentProject", [ngClass]="[!currentProject.heat_vision ? 'inactive' : 'active']")
+      i#toggleHeatVision.icon-heatvision.owner-tool-icon-mobile(*ngIf="currentProject", [ngClass]="[!currentProject.heat_vision ? 'inactive' : 'active']")
       i.power__loading.loading([class.is-loading]="powersLoading.heatVision")
       span.badge.badge-pill.badge-primary(*ngIf="currentProject.heat_vision") On
       span.badge.badge-pill.badge-secondary(*ngIf="!currentProject.heat_vision") Off
@@ -54,7 +54,7 @@
       (tap)="showElseFalse('showFireFeed'); ownerToolShow=!ownerToolShow", 
       [class.btn-show--animation]="ownerToolShow"
     )
-      i#toggleFirefeed.icon-fire-feed(*ngIf="currentProject")
+      i#toggleFirefeed.icon-fire-feed.owner-tool-icon-mobile(*ngIf="currentProject")
       span.badge.badge-pill.badge-info(*ngIf="commentStats.stats.count && commentStats.stats.count > 0") {{ commentStats.stats.count }}
       //- label Feed
     //- Question Feed toggle
@@ -64,7 +64,7 @@
         (tap)="showElseFalse('showQuestionFeed'); ownerToolShow=!ownerToolShow", 
         [class.btn-show--animation]="ownerToolShow"
       )
-        i#toggleQuestionfeed.icon-question(*ngIf="currentProject")
+        i#toggleQuestionfeed.icon-question.owner-tool-icon-mobile(*ngIf="currentProject")
         //- label Questions
   a#button.btn.btn-icon--circle-shadow.mobile-menu-spot((tap)="ownerToolShow=!ownerToolShow")
     span(style="font-size: 11px;") Tools
