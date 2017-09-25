@@ -21,6 +21,7 @@ export class OwnerToolsComponent implements OnInit {
   private showFireFeed: boolean
   private showCommentCounts: boolean
   private showQuestionFeed: boolean
+  private ownerToolBlockHeight: string
 
   // State vars
   private powersLoading: any = {}
@@ -39,6 +40,11 @@ export class OwnerToolsComponent implements OnInit {
     this.subscriptions.push( this._readings.currentReading.subscribe(
       reading => {
         this.currentReading = reading
+        if (this.currentReading.questions && this.currentReading.questions.length>0) {
+          this.ownerToolBlockHeight = '256px'
+        } else {
+          this.ownerToolBlockHeight = '192px'
+        }
       },
       error => {
         console.error(error)
