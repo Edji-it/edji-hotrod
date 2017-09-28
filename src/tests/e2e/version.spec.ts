@@ -161,7 +161,7 @@ describe("Versioning - ", () => {
         browser.wait(EC.urlContains("project"), 15000, "never arrived at the finished reading");
     });
 
-    it('should create a new group for an older version', () => {  
+    it('should create a new group for an older version', () => {
         // Create a new group for an older version
         // Make sure the reading cards load before moving on to the next step
         browser.wait(EC.elementToBeClickable(dashboard.firstProject), 15000, "reading cards never loaded");
