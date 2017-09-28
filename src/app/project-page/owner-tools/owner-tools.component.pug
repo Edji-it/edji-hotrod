@@ -43,7 +43,7 @@
       (tap)="togglePower('heat_vision', !this.currentProject.heat_vision); ownerToolShow=!ownerToolShow", 
       [class.btn-show--animation]="ownerToolShow"
     )
-      i#toggleHeatVision.icon-heatvision.owner-tool-icon-mobile(*ngIf="currentProject", [ngClass]="[!currentProject.heat_vision ? 'inactive' : 'active']")
+      i#toggleHeatVisionMobile.icon-heatvision.owner-tool-icon-mobile(*ngIf="currentProject", [ngClass]="[!currentProject.heat_vision ? 'inactive' : 'active']")
       i.power__loading.loading([class.is-loading]="powersLoading.heatVision")
       span.badge.badge-pill.badge-primary(*ngIf="currentProject.heat_vision") On
       span.badge.badge-pill.badge-secondary(*ngIf="!currentProject.heat_vision") Off
