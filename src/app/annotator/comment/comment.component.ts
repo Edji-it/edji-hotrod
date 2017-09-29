@@ -232,6 +232,8 @@ export class CommentComponent implements OnInit {
 
   // Deletes comment via Project service, which updates the local Project object
   public deleteComment(comment: any) : void {
+    // Stop the user from continuing to edit, and close emoji keyboard
+    this.deactivate(this.comment)
     // Sort through the comment types and do the apppropriate pre-delete action
     if (this.comment.reply_to) {
       this.angulartics.eventTrack.next({ action: 'deleteReply', properties: { category: 'heroFeature', label: 'attempt' }})

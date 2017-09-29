@@ -609,8 +609,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         if (commentCopy) {
             this._projects.commentStats.addCommentToStats(commentCopy, -1)
         }
-        // Clear active comment
-        this.inactivateComment()
         // Remove from index reference object
         for (let i=0; i < this.commentsByIndex[index].length; i++) {
             if (this.commentsByIndex[index][i]._id == commentId) {
