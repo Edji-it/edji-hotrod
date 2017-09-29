@@ -1,2 +1,21 @@
 @import '../../../sass/base/variables';
 
+.btn-share-footer {
+  width: 50%;
+}
+
+.title-share {
+  font-weight: 100;
+  color: darken($gray, 20%);
+  font-size: 1.5em;
+}
+
+.msg-share {
+  color: darken($gray, 20%);
+  font-size: 0.75em;
+}
+
+.modal-body-share {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
