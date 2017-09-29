@@ -13,9 +13,32 @@
 .msg-share {
   color: darken($gray, 20%);
   font-size: 0.75em;
+  margin: 0;
 }
 
 .modal-body-share {
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding: 20px 15px 0 15px;
+}
+
+.share-code--code {
+  text-align: center;
+  font-size: 86px;
+  line-height: 1.25;
+  color: darken($gray, 40%);
+  display: inline-block;
+  border-bottom: solid 8px;
+  padding-bottom: 16px;
+}
+
+.share-code--label {
+  text-align: center;
+  font-size: 22px;
+  line-height: 1.25;
+  color: darken($gray, 40%);
+  margin-top: 16px;
+}
+
+.share-code--block {
+  padding: 36px 0;
+  text-align: center;
 }

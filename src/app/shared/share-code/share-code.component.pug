@@ -5,8 +5,9 @@
         .modal-body.modal-body-share
           h4.modal-title.title-share Hand it out!
           p.msg-share To give students access to the reading, share the Group Code, and they can add it from the Edji.it homepage or their dashboard.
-          .share-code--code {{ _util.shareCodeDetail.code }}
-          .share-code--label {{ _util.shareCodeDetail.label }}
+          .share-code--block
+            .share-code--code {{ _util.shareCodeDetail.code }}
+            .share-code--label {{ _util.shareCodeDetail.label }}
         .modal-footer
           button.btn.btn-secondary.btn-share-footer(type="button", (click)="_util.showShareCode=false") Return to Dashboard
           button.btn.btn-secondary.btn-share-footer(type="button", (click)="_util.showShareCode=false") Go to Reading
