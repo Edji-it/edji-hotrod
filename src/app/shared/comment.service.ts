@@ -13,7 +13,6 @@ export class CommentService {
   private colors
   public keyboardActive: boolean
   public activeComment: EdjiComment = <EdjiComment>{}
-  public editing: boolean
 
   /*
   Last Modified: 6 June 2017

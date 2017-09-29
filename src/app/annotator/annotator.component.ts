@@ -377,10 +377,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     }
 
     loopCheckTextSelection(): void {
-        setTimeout(() => {
-            this.showCommentOptions({ name: 'timeout', target: document })
-            this.loopCheckTextSelection()
-        }, 500)
+        // setTimeout(() => {
+        //     this.showCommentOptions({ name: 'timeout', target: document })
+        //     this.loopCheckTextSelection()
+        // }, 500)
     }
 
     updateAllLineCounts(): void {
