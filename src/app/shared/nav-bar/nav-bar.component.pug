@@ -30,7 +30,7 @@
     //- Project Info
     .nav-bar__project-data.hidden-sm-down(*ngIf="showProjectInfo && currentProject && currentProject._id")
       .group-label {{ liveCount }} Readers
-      pre 
+      pre.project-code__text((click)="_util.showShareCode=true; _util.shareCodeDetail.code=currentProject.code; _util.shareCodeDetail.label=currentProject.label")
         span([innerHtml]="':key:' | emojione") 
         | &nbsp;{{ currentProject.code }}
     .nav-bar__project.hidden-sm-down(*ngIf="showProjectInfo && currentProject && currentProject._id")
@@ -74,3 +74,5 @@
       .group-label {{ currentProject.label }}
   h1.hidden-md-up.mobile-heading(*ngIf="pageTitle && !showProjectInfo") {{ pageTitle }}
   h1.hidden-md-up.mobile-heading(*ngIf="showProjectInfo") {{ currentReading.title }}
+
+share-code

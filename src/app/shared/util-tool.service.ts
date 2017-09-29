@@ -3,6 +3,11 @@ import { Injectable } from '@angular/core';
 @Injectable() export class UtilToolService {
 
     public showFeedbackModal: boolean
+    public showShareCode: boolean
+    public shareCodeDetail: any = {
+        code: '',
+        label: ''
+    }
 
   constructor() {
       

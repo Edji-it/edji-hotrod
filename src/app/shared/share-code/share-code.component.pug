@@ -1,0 +1,15 @@
+.modal-will-fade([class.show]="_util.showShareCode")
+  .modal
+    .modal-dialog(role="document")
+      .modal-content
+        .modal-header
+          h4.modal-titleHand it out!
+          p To give students access to the reading, share the Group Code, and they can add it from the Edji.it homepage or their dashboard.
+          button.close.btn-icon--round(type="button", (click)="_util.showShareCode=false", aria-label="Close")
+            span(aria-hidden="true") &times;
+        .modal-body
+          | {{ _util.shareCodeDetail.code }}
+          | {{ _util.shareCodeDetail.label }}
+        .modal-footer
+          button.btn.btn-secondary(type="button", (click)="_util.showShareCode=false") Cancel
+          button.btn.btn-primary(type="button", (click)="_util.showShareCode=false") Send Feedback

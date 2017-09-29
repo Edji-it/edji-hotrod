@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs/Rx'
 
 import { Project, Reading } from '../datatypes'
 import { AuthService } from '../auth.service'
-import { ProjectService, SocketService, PowerToggle, ReadingService } from '..'
+import { ProjectService, SocketService, PowerToggle, ReadingService, UtilToolService } from '..'
 
 @Component({
   selector: 'nav-bar',
@@ -52,7 +52,8 @@ export class NavBarComponent implements OnInit, OnDestroy {
           private _socket: SocketService, 
           private _router: Router, 
           private _projects: ProjectService,
-          private _readings: ReadingService
+          private _readings: ReadingService,
+          private _util: UtilToolService
         ) {
 
     }
