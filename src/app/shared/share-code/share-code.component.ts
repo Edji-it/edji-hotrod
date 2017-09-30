@@ -10,6 +10,8 @@ export class ShareCodeComponent implements OnInit {
 
   @Output()
   private closeModal: EventEmitter<any> = new EventEmitter()
+  
+  private codeLetters: any
 
   constructor(
     private _util: UtilToolService
@@ -19,5 +21,9 @@ export class ShareCodeComponent implements OnInit {
 
   ngOnInit() {
     
+  }
+
+  private isNumber(val) {
+    return !isNaN(parseFloat(val)) && isFinite(val)
   }
 }
