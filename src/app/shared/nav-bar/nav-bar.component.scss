@@ -100,7 +100,6 @@ $purple: rgb(150, 40, 255);
 		text-align: left;
 		width: 50%;
 		background: #fff;
-		border-bottom: $navBorder;
 		margin-bottom: $base-pad;
 		min-width: 50px;
 	}
@@ -112,7 +111,7 @@ $purple: rgb(150, 40, 255);
 		margin-bottom: 0px;
 	}
 
-	& label, & .group-label, & pre {
+	& label, & .group-label {
 		height: 50%;
 		line-height: 35px;
 		display: block;
@@ -126,27 +125,11 @@ $purple: rgb(150, 40, 255);
 		color: #333;
 		padding: 0px;
 	}
-
-	& pre {
-		margin: 0px;
-		border: none;
-		font-family: Courier New, Courier, monospace;
-		background: #f8f8f8;
-		letter-spacing: 1px;
-		padding: 0px 15px;
-		width: calc(100% + 30px);
-		margin-left: -15px;
-		border-radius: 0px;
-
-		& .emojioneemoji {
-			margin-top: -1px;
-		}
-	}
 }
 
 .nav-bar__project-data {
 	@extend .nav-bar__project;
-	text-align: center;
+	text-align: right;
 	border-right: none;
 
 	& .emojioneemoji {
@@ -161,7 +144,7 @@ $purple: rgb(150, 40, 255);
 
 .nav-bar__project, .nav-bar__project-data {
 	@media(max-width: $tablet) {
-		max-width: 25%;
+		max-width: 50%;
 	}
 }
 
