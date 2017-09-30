@@ -1,5 +1,5 @@
 import { Router } from '@angular/router';
-import { Component, OnInit, Output, EventEmitter } from '@angular/core'
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { UtilToolService } from './../../shared'
 
 @Component({
@@ -9,6 +9,9 @@ import { UtilToolService } from './../../shared'
 })
 export class ShareCodeComponent implements OnInit {
 
+  @Input()
+  private showOpenReading: boolean
+  
   @Output()
   private closeModal: EventEmitter<any> = new EventEmitter()
   

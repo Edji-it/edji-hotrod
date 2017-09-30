@@ -193,3 +193,8 @@ h2.card-title {
   text-shadow: -1px 1px 0px #bbbbbb;
   text-decoration: none !important;
 }
+
+// Text colors: Transitioning to latest Bootstrap v4 styles
+.text-secondary {
+  color: $medium-gray;
+}
