@@ -10,7 +10,7 @@
               span.sc--c([ngClass]="[ isNumber(codeLetter) ? 'sc--c__green' : '' ]") {{ codeLetter }}
             .share-code--label {{ _util.shareCodeDetail.label }}
         .modal-footer(*ngIf="_util.shareCodeDetail.proj_id")
-          button.btn.btn-secondary.btn-share-footer(type="button", (click)="navDashboard()") Return to Dashboard
-          button.btn.btn-secondary.btn-share-footer(type="button", (click)="navProject(_util.shareCodeDetail.proj_id)") Go to Reading
+          button#shareModalDashboardButton.btn.btn-secondary.btn-share-footer(type="button", (click)="navDashboard()") Return to Dashboard
+          button#shareModalReadingButton.btn.btn-secondary.btn-share-footer(type="button", (click)="navProject(_util.shareCodeDetail.proj_id)") Go to Reading
         .modal-footer(*ngIf="!_util.shareCodeDetail.proj_id")
           button.btn.btn-secondary.btn-share-footer__full(type="button", (click)="_util.shareCodeModalClose()") Close
