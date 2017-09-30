@@ -40,8 +40,8 @@ export class CommentComponent implements OnInit {
   private currentScroll: number
   // Is fully visible, focused, and editable
   private active = false
-  // Is fully visible, focused, but not editable
-  private preview = false
+  // // Is fully visible, focused, but not editable
+  // private preview = false
   private reRecordAudio = false
   private showDeleteModal: boolean = false
   private user: any
@@ -77,8 +77,6 @@ export class CommentComponent implements OnInit {
   @Output() collapseLine = new EventEmitter<number>()
   @Output() dismissKeyboard = new EventEmitter()
   @Output() commentUpdated: EventEmitter<any> = new EventEmitter()
-  @Output() mobileActivation = new EventEmitter()
-  @Output() mobileDeactivation = new EventEmitter()
   @Output() commentReply = new EventEmitter()
 
   constructor(
@@ -142,13 +140,12 @@ export class CommentComponent implements OnInit {
    * @param comment (optional) Full EdjiComment object
    * TO-DO: Clean out code for optionally passing JUST comment.data as comment parameter
    */
-  deactivate(comment ?: any): void {
-    console.log("Deactivate!")
+  deactivate(comment ?: any, noUpdate ?: boolean): void {
     this.active = false
     this.commentActivation.emit(false)
     this._comments.activeComment.active = false
     // Save when comment is toggled away from
-    if (comment) {
+    if (comment && !noUpdate) {
       this.updateComment(comment);
     }
   } // deactivate(commentData ?: any): void
@@ -158,8 +155,6 @@ export class CommentComponent implements OnInit {
    * @param comment Full EdjiComment object
    */
   public updateComment(comment: EdjiComment): void {
-    console.log("UPDATE COMMENT")
-
     this.reRecordAudio = false
     if (comment._id) {
       // this.comment.project_id, comment, this.comment.start, this.comment.end, this.comment.type, this.comment.text, this.comment._id, this.comment.loc
@@ -237,6 +232,8 @@ export class CommentComponent implements OnInit {
 
   // Deletes comment via Project service, which updates the local Project object
   public deleteComment(comment: any) : void {
+    // Stop the user from continuing to edit, and close emoji keyboard
+    this.deactivate(this.comment)
     // Sort through the comment types and do the apppropriate pre-delete action
     if (this.comment.reply_to) {
       this.angulartics.eventTrack.next({ action: 'deleteReply', properties: { category: 'heroFeature', label: 'attempt' }})

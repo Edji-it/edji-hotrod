@@ -31,12 +31,11 @@
         text-comment(
             *ngIf="comment.type == 'text'",
             [readOnly]="readOnly",
-            [preview]="preview || active",
             [comment]="comment",
             [active]="comment.active",
             [reply]="reply",
             (activate)="activate()",
-            (deactivate)="deactivate(comment)"
+            (deactivate)="deactivate(comment, $event)"
         )
         audio-comment(
             *ngIf="comment.type == 'audio'",
