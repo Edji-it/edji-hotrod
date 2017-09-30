@@ -59,7 +59,7 @@ import { DashboardComponent, JoinedDashComponent, CreatedDashComponent, Tutorial
 import { NoContentComponent } from './no-content';
 import { AccountComponent, ChangePassComponent, UploadAvatarModal } from './account';
 import { FeedbackComponent } from './shared/feedback/feedback.component';
-import { ShareCodeComponent } from './shared/share-code/share-code.component'
+import { ShareCodeComponent } from './modals/share-code/share-code.component'
 import { LoginComponent } from './login';
 import { ResetPassPage } from './reset-pass/reset-pass-page.component';
 import { HeroPromoComponent } from './hero-promo/hero-promo.component';

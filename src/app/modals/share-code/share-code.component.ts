@@ -1,6 +1,6 @@
 import { Router } from '@angular/router';
 import { Component, OnInit, Output, EventEmitter } from '@angular/core'
-import { UtilToolService } from './..'
+import { UtilToolService } from './../../shared'
 
 @Component({
   selector: 'share-code',
