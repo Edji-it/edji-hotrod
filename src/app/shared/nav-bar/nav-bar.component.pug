@@ -30,7 +30,7 @@
     //- Project Info
     .nav-bar__project-data.hidden-sm-down(*ngIf="showProjectInfo && currentProject && currentProject._id")
       .group-label {{ liveCount }} Readers
-      pre.project-code__text((click)="_util.showShareCode=true; _util.shareCodeDetail.code=currentProject.code; _util.shareCodeDetail.label=currentProject.label")
+      pre.project-code__text((click)="showShareCodeModal()")
         span([innerHtml]="':key:' | emojione") 
         | &nbsp;{{ currentProject.code }}
     .nav-bar__project.hidden-sm-down(*ngIf="showProjectInfo && currentProject && currentProject._id")
@@ -43,7 +43,7 @@
       //- Share button: Mobile
       button#addReadingButton.btn.btn-clear.nav-bar__btn.hidden-md-up(*ngIf="canPublish", (click)="showShareTooltip = !showShareTooltip", [class.active]="showShareTooltip") Share
       //- Publish Tooltip
-      .publish-tooltip(*ngIf="showShareTooltip")
+      .publish-tooltip(*ngIf="showShareTooltip && !_util.showShareCode")
         h1.publish-tooltip__title Publish and Share
         p.sub-label.pb-2F inished with your reading? Give it a group name, Finalize and get your group code to share with your readers!
         .form-group(style="margin-bottom: 0px;")

@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Component, OnInit, Output, EventEmitter } from '@angular/core'
 import { UtilToolService } from './..'
 
@@ -14,6 +15,7 @@ export class ShareCodeComponent implements OnInit {
   private codeLetters: any
 
   constructor(
+    private router: Router,
     private _util: UtilToolService
   ) {
     
@@ -25,5 +27,15 @@ export class ShareCodeComponent implements OnInit {
 
   private isNumber(val) {
     return !isNaN(parseFloat(val)) && isFinite(val)
+  }
+
+  private navProject(project_id) {
+    this._util.shareCodeModalClose()
+    this.router.navigate(['project', project_id])
+  }
+
+  private navDashboard() {
+    this._util.shareCodeModalClose()
+    this.router.navigate(['dashboard'])
   }
 }

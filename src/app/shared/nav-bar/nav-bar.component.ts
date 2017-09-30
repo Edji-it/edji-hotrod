@@ -166,6 +166,12 @@ export class NavBarComponent implements OnInit, OnDestroy {
         }, 500)
       }
     }
+
+    showShareCodeModal() {
+      this._util.shareCodeDetail.code=this.currentProject.code
+      this._util.shareCodeDetail.label=this.currentProject.label
+      this._util.showShareCode=true
+    }
 }
 
 export interface ReadingShareObject {

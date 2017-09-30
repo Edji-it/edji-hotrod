@@ -7,6 +7,7 @@ import { Angulartics2 } from 'angulartics2';
 
 import { ReadingService } from '../shared/reading.service';
 import { ProjectService } from '../shared/project.service';
+import { UtilToolService } from '../shared/util-tool.service';
 import { AuthService } from '../shared';
 import { EdjiComment, EdjiQuestion, User } from '../shared/datatypes'
 import { ReadingShareObject } from './../shared/nav-bar'
@@ -122,7 +123,8 @@ export class NewReadingPage implements OnInit {
         fb: FormBuilder,
         private el: ElementRef,
         private _title: Title,
-        private _auth: AuthService
+        private _auth: AuthService,
+        private _util: UtilToolService
     ) {
         this.readingForm = fb.group({
             title: [null, Validators.required],
@@ -517,7 +519,11 @@ export class NewReadingPage implements OnInit {
                                 .subscribe( (project) => {
                                     this.addLoadingD = false
                                     this.addLoadingP = false
-                                    this.router.navigate(['project', project._id])
+                                    // this.router.navigate(['project', project._id])
+                                    this._util.shareCodeDetail.code=project.code;
+                                    this._util.shareCodeDetail.label=project.label
+                                    this._util.shareCodeDetail.proj_id=project._id
+                                    this._util.showShareCode=true; 
                                 }, (error) => {
                                     console.error(error)
                                     this.addLoadingD = false

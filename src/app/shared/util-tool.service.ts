@@ -6,7 +6,8 @@ import { Injectable } from '@angular/core';
     public showShareCode: boolean
     public shareCodeDetail: any = {
         code: '',
-        label: ''
+        label: '',
+        proj_id: ''
     }
 
   constructor() {
@@ -67,5 +68,19 @@ import { Injectable } from '@angular/core';
    */
   public getEdjiVersion(): string {
     return document.getElementById('buildNumber').innerHTML.trim()
+  }
+
+  /**
+   * Reset the share code object and close the modal
+   */
+  public shareCodeModalClose(): void {
+    this.showShareCode = false
+    setTimeout(() => {
+        this.shareCodeDetail = {
+            code: '',
+            label: '',
+            proj_id: ''
+        }
+    }, 500)
   }
 }
