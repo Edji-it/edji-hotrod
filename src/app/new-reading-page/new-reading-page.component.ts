@@ -520,9 +520,6 @@ export class NewReadingPage implements OnInit {
                                     this.addLoadingD = false
                                     this.addLoadingP = false
                                     // this.router.navigate(['project', project._id])
-                                    this._util.shareCodeDetail.code=project.code;
-                                    this._util.shareCodeDetail.label=project.label
-                                    this._util.shareCodeDetail.proj_id=project._id
                                     this._util.showShareCode=true; 
                                 }, (error) => {
                                     console.error(error)

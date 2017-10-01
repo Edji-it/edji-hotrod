@@ -1,4 +1,4 @@
-.modal-will-fade([class.show]="_util.showShareCode")
+.modal-will-fade([class.show]="_util.showShareCode", *ngIf="currentProject && currentProject.code")
   .modal
     .modal-dialog(role="document")
       .modal-content
@@ -17,17 +17,17 @@
           p.text-secondary(*ngIf="showOpenReading") Students can access this reading using the group code.
           p.text-secondary 
             | Join this Reading by going to&ensp;
-            a.link([routerLink]="'/' + _util.shareCodeDetail.code", target="_blank") edji.it/{{_util.shareCodeDetail.code}}
+            a.link([routerLink]="'/' + currentProject.code", target="_blank") edji.it/{{ currentProject.code }}
             | &ensp;or entering the code on your dashboard.
           .share-code--block
-            .share-code--code(*ngFor="let codeLetter of _util.shareCodeDetail.code.split('')")
+            .share-code--code(*ngFor="let codeLetter of currentProject.code.split('')")
               span.sc--c([ngClass]="[ isNumber(codeLetter) ? 'sc--c__green' : '' ]") {{ codeLetter }}
             .share-code--label 
               span([innerHtml]="':key:' | emojione")
               | &nbsp;
-              | {{ _util.shareCodeDetail.label }}
+              | {{ currentProject.label }}
         .modal-footer(*ngIf="showOpenReading")
           button#shareModalDashboardButton.btn.btn-secondary.btn-share-footer(type="button", (click)="navDashboard()") Return to Dashboard
-          button#shareModalReadingButton.btn.btn-secondary.btn-share-footer(type="button", (click)="navProject(_util.shareCodeDetail.proj_id)") Go to Reading
+          button#shareModalReadingButton.btn.btn-secondary.btn-share-footer(type="button", (click)="navProject(currentProject._id)") Go to Reading
         .modal-footer(*ngIf="!showOpenReading")
           button.btn.btn-secondary.btn-share-footer__full(type="button", (click)="_util.shareCodeModalClose()") Close

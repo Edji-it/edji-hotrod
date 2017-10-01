@@ -1,13 +1,15 @@
+import { Subscription } from 'rxjs/Rx';
+import { Project } from '../../shared/datatypes';
 import { Router } from '@angular/router';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { UtilToolService } from './../../shared'
+import { UtilToolService, ProjectService } from './../../shared'
 
 @Component({
   selector: 'share-code',
   templateUrl: 'share-code.component.pug',
   styleUrls: ['./share-code.component.scss']
 })
-export class ShareCodeComponent implements OnInit {
+export class ShareCodeComponent implements OnInit, OnDestroy {
 
   @Input()
   private showOpenReading: boolean
@@ -16,16 +18,34 @@ export class ShareCodeComponent implements OnInit {
   private closeModal: EventEmitter<any> = new EventEmitter()
   
   private codeLetters: any
+  private subscriptions: Subscription[] = []
+    private currentProject: Project
 
   constructor(
     private router: Router,
-    private _util: UtilToolService
+    private _util: UtilToolService,
+    private _projects: ProjectService
   ) {
     
   }
 
   ngOnInit() {
-    
+    // Subscribe to current Project data
+    this.subscriptions.push(
+      this._projects.currentProject.subscribe(
+            project => {
+                this.currentProject = project;
+            },
+            error => {
+                console.error(error);
+            }
+        )
+    )
+    console.log(this.router.url)
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((sub) => { sub.unsubscribe() })
   }
 
   private isNumber(val) {

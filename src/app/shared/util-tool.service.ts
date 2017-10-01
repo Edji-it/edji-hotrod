@@ -4,11 +4,6 @@ import { Injectable } from '@angular/core';
 
     public showFeedbackModal: boolean
     public showShareCode: boolean
-    public shareCodeDetail: any = {
-        code: '',
-        label: '',
-        proj_id: ''
-    }
 
   constructor() {
       
@@ -75,12 +70,5 @@ import { Injectable } from '@angular/core';
    */
   public shareCodeModalClose(): void {
     this.showShareCode = false
-    setTimeout(() => {
-        this.shareCodeDetail = {
-            code: '',
-            label: '',
-            proj_id: ''
-        }
-    }, 500)
   }
 }
