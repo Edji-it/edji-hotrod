@@ -60,7 +60,7 @@ describe('Project Page', () => {
         });
 
         loginModal.testLoginSuccess(() => {
-            browser.wait(EC.elementToBeClickable(sidebar.logOutButton));
+            browser.wait(EC.elementToBeClickable(sidebar.logOutButton), 5000, "logout button never became clickable");
         });
     });
 
@@ -91,8 +91,8 @@ describe('Project Page', () => {
             browser.executeScript(function () {
                 let range = document.createRange();
                 let sel = window.getSelection();
-                range.setStart(document.body.querySelector(".w[index='18']").childNodes[0], 0);
-                range.setEnd(document.body.querySelector(".w[index='21']").childNodes[0], 0);
+                range.setStart(document.body.querySelector(".w[index='26']").childNodes[0], 0);
+                range.setEnd(document.body.querySelector(".w[index='30']").childNodes[0], 0);
                 sel.removeAllRanges();
                 sel.addRange(range);
             });

@@ -41,7 +41,6 @@ export class ShareCodeComponent implements OnInit, OnDestroy {
             }
         )
     )
-    console.log(this.router.url)
   }
 
   ngOnDestroy() {
