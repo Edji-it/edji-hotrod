@@ -1,7 +1,7 @@
 import { Subscription } from 'rxjs/Rx';
 import { Project } from '../../shared/datatypes';
 import { Router } from '@angular/router';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, OnDestroy } from '@angular/core';
 import { UtilToolService, ProjectService } from './../../shared'
 
 @Component({
