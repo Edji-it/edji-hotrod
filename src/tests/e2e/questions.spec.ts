@@ -135,6 +135,10 @@ describe('Reading Questions Tests', () => {
             browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable")
             newReading.finalizeButton.click()
 
+            // Click the 'Go to Reading' button on share button modal
+            browser.wait(EC.elementToBeClickable(newReading.goToReadingButton), 5000, "share code modal go to reading button never became clickable")
+            newReading.goToReadingButton.click();
+
             // Should redirect to Project page for new reading
             browser.wait(EC.urlContains("project"), 5000, "never arrived at new reading")
 
