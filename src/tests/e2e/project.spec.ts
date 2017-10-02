@@ -97,6 +97,10 @@ describe('Project Page', () => {
                 sel.addRange(range);
             });
 
+            browser.actions().mouseUp(element(by.css(".w[index='21']"))).perform();
+
+            // browser.actions().mouseMove(element(by.css(".w[index='18']"))).mouseDown().mouseMove(element(by.css(".w[index='21']"))).mouseUp().perform();
+
             // Add emoji comment
             browser.wait(EC.elementToBeClickable(project.addEmojiBtn), 5000, "never found the add emoji comment button");
             project.addEmojiBtn.click();
@@ -178,6 +182,10 @@ describe('Project Page', () => {
                 sel.removeAllRanges();
                 sel.addRange(range);
             });
+
+            browser.actions().mouseUp(element(by.css(".w[index='14']"))).perform();
+
+            // browser.actions().mouseMove(element(by.css(".w[index='12']"))).mouseDown().mouseMove(element(by.css(".w[index='14']"))).mouseUp().perform();
 
             // Add audio comment
             browser.wait(EC.elementToBeClickable(project.addAudioBtn), 5000, "never found the add audio comment button");
