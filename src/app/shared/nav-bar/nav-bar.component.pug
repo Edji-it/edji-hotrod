@@ -27,15 +27,13 @@
       a#heroLink.btn.btn-clear.nav-bar__btn.hidden-sm-down.link([routerLink]="['/hero']", routerLinkActive="active") Go Hero!
       a#heroLink.btn.btn-clear.nav-bar__btn.hidden-md-up.link(*ngIf="!canPublish", [routerLink]="['/hero']", routerLinkActive="active") Hero
 
-    //- Project Info
-    .nav-bar__project-data.hidden-sm-down(*ngIf="showProjectInfo && currentProject && currentProject._id")
-      .group-label {{ liveCount }} Readers
-      pre 
+    //- Project Info (Desktop & Mobile)
+    .nav-bar__project-data(*ngIf="showProjectInfo && currentProject && currentProject._id")
+      .group-label {{ currentProject.label }} &ensp;
+        span.badge.badge-pill([ngClass]="[ liveCount > 1 ? 'badge-primary' : 'badge-secondary']") {{ liveCount }} Reading
+      pre.btn((click)="showShareCodeModal()", title="Display group code")
         span([innerHtml]="':key:' | emojione") 
         | &nbsp;{{ currentProject.code }}
-    .nav-bar__project.hidden-sm-down(*ngIf="showProjectInfo && currentProject && currentProject._id")
-      label Group
-      .group-label {{ currentProject.label }}
 
     .nav__btn-wrap
       //- Share button: Desktop
@@ -43,7 +41,7 @@
       //- Share button: Mobile
       button#addReadingButton.btn.btn-clear.nav-bar__btn.hidden-md-up(*ngIf="canPublish", (click)="showShareTooltip = !showShareTooltip", [class.active]="showShareTooltip") Share
       //- Publish Tooltip
-      .publish-tooltip(*ngIf="showShareTooltip")
+      .publish-tooltip(*ngIf="showShareTooltip && !_util.showShareCode")
         h1.publish-tooltip__title Publish and Share
         p.sub-label.pb-2F inished with your reading? Give it a group name, Finalize and get your group code to share with your readers!
         .form-group(style="margin-bottom: 0px;")
@@ -63,15 +61,7 @@
       //- Save button: Mobile
       button#saveDraftButton.btn.btn-clear.nav-bar__btn.hidden-md-up(*ngIf="canPublish", (click)="saveAction.emit()") Save
 
-    //- Mobile display for title
-    //- Project Info
-    .hidden-md-up.nav-bar__project-data(*ngIf="showProjectInfo && currentProject && currentProject._id")
-      .group-label {{ liveCount }} Readers
-      pre
-        span([innerHtml]="':key:' | emojione")
-        | &nbsp;{{ currentProject.code }}
-    .hidden-md-up.nav-bar__project(*ngIf="showProjectInfo && currentProject && currentProject._id")
-      label Group
-      .group-label {{ currentProject.label }}
   h1.hidden-md-up.mobile-heading(*ngIf="pageTitle && !showProjectInfo") {{ pageTitle }}
   h1.hidden-md-up.mobile-heading(*ngIf="showProjectInfo") {{ currentReading.title }}
+
+share-code([showOpenReading]="canPublish")
