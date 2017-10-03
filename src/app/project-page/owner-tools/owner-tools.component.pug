@@ -51,7 +51,7 @@
     //- Fire Feed toggle
     button.btn.btn-icon--circle-shadow.owner-options--mobile(
       type="button",
-      (tap)="showElseFalse('showFireFeed'); ownerToolShow=!ownerToolShow", 
+      (tap)="showElseFalse('showFireFeed')", 
       [class.btn-show--animation]="ownerToolShow"
     )
       i#toggleFirefeedMobile.icon-fire-feed.owner-tool-icon-mobile(*ngIf="currentProject")
