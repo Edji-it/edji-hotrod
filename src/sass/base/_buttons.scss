@@ -378,9 +378,11 @@ button, .button, .btn { //, [class*='btn']
     opacity: 0.9;
     cursor: pointer;
     background-color: white;
+    background: white;
 
-    &:active, &:focus {
+    &:active, &:focus &:hover {
       background-color: white;
+      background: white;
     }
 }
 
@@ -395,4 +397,23 @@ button, .button, .btn { //, [class*='btn']
     left: 50%;
     transform: translate3d(-50%, -50%, 0);
   }
+}
+
+pre.btn {
+  width: auto;
+  max-width: 100%;
+  white-space: nowrap;
+  background: #fff;
+  border: 2px solid #f6f6f6;
+  border-radius: 3px;
+  margin: 0px;
+	font-family: Courier New, Courier, monospace;
+  font-weight: 600;
+  color: $dark-gray;
+	letter-spacing: 1px;
+	padding: 5px 15px;
+
+	& .emojioneemoji {
+		margin-top: -1px;
+	}
 }

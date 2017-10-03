@@ -76,6 +76,10 @@ describe("Versioning - ", () => {
         browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
         newReading.finalizeButton.click();
 
+        // Click the 'Go to Reading' button on share button modal
+        browser.wait(EC.elementToBeClickable(newReading.goToReadingButton), 5000, "share code modal go to reading button never became clickable")
+        newReading.goToReadingButton.click();
+
         // Should redirect to Project page for new reading
         browser.wait(EC.urlContains("project"), 7500, "never arrived at the reading page after published");
 
@@ -157,11 +161,15 @@ describe("Versioning - ", () => {
         browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
         newReading.finalizeButton.click();
 
+        // Click the 'Go to Reading' button on share button modal
+        browser.wait(EC.elementToBeClickable(newReading.goToReadingButton), 5000, "share code modal go to reading button never became clickable")
+        newReading.goToReadingButton.click();
+
         // Reading should be published
         browser.wait(EC.urlContains("project"), 15000, "never arrived at the finished reading");
     });
 
-    it('should create a new group for an older version', () => {  
+    it('should create a new group for an older version', () => {
         // Create a new group for an older version
         // Make sure the reading cards load before moving on to the next step
         browser.wait(EC.elementToBeClickable(dashboard.firstProject), 15000, "reading cards never loaded");
