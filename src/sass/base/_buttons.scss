@@ -378,9 +378,11 @@ button, .button, .btn { //, [class*='btn']
     opacity: 0.9;
     cursor: pointer;
     background-color: white;
+    background: white;
 
-    &:active, &:focus {
+    &:active, &:focus &:hover {
       background-color: white;
+      background: white;
     }
 }
 
