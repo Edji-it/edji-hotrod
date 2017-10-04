@@ -90,7 +90,7 @@ edji-comment {
 	
 	&.expanded {
 		z-index: 5000;
-		display: block !important;
+		display: block;
 		position: absolute !important;
 		top: none !important;
 		@media (max-width: $desktop) {

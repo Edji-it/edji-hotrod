@@ -1,4 +1,4 @@
-#comment.comment(
+#comment.comment.hidden-md-down(
     [class.new]="comment.new",
     [class.saved]="justSaved",
     [class.active]="active",
@@ -67,7 +67,17 @@
         [innerHtml]="':white_check_mark:' | emojione"
     )
     i.comment__saved([innerHtml]='":ok_hand:" | emojione')
-//- END .comment
+//- END .comment - desktop
+
+#commentMobile.comment.hidden-lg-up(
+    [class.new]="comment.new",
+    [class.saved]="justSaved",
+    [class.active]="active",
+    [class.readonly]="readOnly",
+    [ngClass]="[ active ? 'comment__show' : '', visible ? 'slide-in' : '' ]"
+)
+    .sliding-pane.from-left
+//- END .comment - mobile
 
 //- Mobile Icon
 img.comment__button--mobile(
