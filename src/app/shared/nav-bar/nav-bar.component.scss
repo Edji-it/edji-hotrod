@@ -223,17 +223,17 @@ a.nav-bar__link {
 }
 
 .nav-bar__btn {
-	height: 100%;
 	float: right;
 	min-width: 110px;
 	position: relative;
-	line-height: 45px;
+	// line-height: 45px;
 	vertical-align: middle;
+	margin: 15px 15px 15px 0px;
 
 	@media(max-width: $desktop) {
 		font-size: 14px;
 		min-width: 68px;
-		padding: 12px 5px;
+		padding: 12px 20px;
 	}
 }
 
