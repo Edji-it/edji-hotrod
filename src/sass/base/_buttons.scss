@@ -1,17 +1,18 @@
 @import "variables";
 
 $btnBg: #969696;
-$btnActionBg: $green;
-$btnActionColor: #606060;
-$btnPrimaryBg: $blue; //#7fd9fc;
-$btnPrimaryColor: #fff;
-$btnSecondaryBg: #E6E6E6;
-$btnSecondaryColor: #606060;
-$btnSecondaryBorder: none; //1px solid rgba(0,0,0,0.05);
+$btnActionBg: #deffda;
+$btnActionColor: #1db50a;
+$btnPrimaryBg: #e7faff;
+$btnPrimaryColor: #21c0f1;
+$btnSecondaryBg: #efefef;
+$btnSecondaryColor: #9a9a9a;
+$btnSecondaryBorder: 1px solid $btnSecondaryColor;
+//1px solid rgba(0,0,0,0.05);
 $btnSuccessBg: #46c78e; //#7fd9fc;
-$btnSuccessColor: #fff;
-$btnHeroBg: #f86464;
-$btnHeroColor: #fff;
+$btnSuccessColor: #1eb10c;
+$btnHeroBg: #fff0f0;
+$btnHeroColor: #ff5c5c;
 
 button, .button, .btn { //, [class*='btn']
   appearance: none;
@@ -51,10 +52,14 @@ button, .button, .btn { //, [class*='btn']
   }
 
   &:disabled, &[disabled] {
-    // cursor: not-allowed;
-    opacity: 0.5;
-    color: #777 !important;
+    /* Rectangle Copy 14: */
     background-color: #eaeaea !important;
+    background-image: radial-gradient(50% -88%, #F4F4F4 95%, #FFFFFF 100%) !important;
+    border: 1px solid #D3D3D3 !important;
+    box-shadow: -1px 1px 0 0 #FFFFFF;
+    border-radius: 1px;
+    // cursor: not-allowed;
+    color: #D1D1D1 !important;
 
     &:hover {
       transform: translate3d(0,0,0);
@@ -169,16 +174,23 @@ button, .button, .btn { //, [class*='btn']
 } 
 
 .btn.btn-primary {
-  background: $btnPrimaryBg;
+  background-color: $btnPrimaryBg;
+  background-image: linear-gradient(180deg, #FFFFFF 7%, $btnPrimaryBg 100%);
+  border: 1px solid $btnPrimaryColor;
+  border-radius: 1px;
   color: $btnPrimaryColor;
 
   &:hover, &:active, &:focus {
-    background: desaturate(darken($btnPrimaryBg, 20%), 20%); 
+    background: $btnPrimaryBg; 
+    box-shadow: 0px 0px 10px 0px #CFF1FF;
   }
 }
 
 .btn.btn-action {
-  background: $btnActionBg;
+  background-color: #ffffff;
+  background-image: linear-gradient(180deg, #FFFFFF 7%, $btnActionBg 100%);
+  border: 1px solid $btnActionColor;
+  border-radius: 1px;
   color: $btnActionColor;
 
   &:hover, &:active, &:focus, &.active {
@@ -187,16 +199,23 @@ button, .button, .btn { //, [class*='btn']
 }
 
 .btn.btn-hero {
-  background: $btnHeroBg;
+  background-color: #ffffff;
+  background-image: linear-gradient(180deg, #FFFFFF 7%, $btnHeroBg 100%);
+  border: 1px solid $btnHeroColor;
+  border-radius: 1px;
   color: $btnHeroColor;
 
   &:hover, &:active, &:focus, &.active {
-    background: desaturate(darken($btnHeroBg, 20%), 20%); 
+    background: $btnHeroBg; 
+    box-shadow: 0px 0px 10px 0px #ffe4e4;
   }
 }
 
 .btn.btn-success {
-  background: $btnSuccessBg;
+  background-color: #ffffff;
+  background-image: linear-gradient(180deg, #FFFFFF 7%, $btnSuccessBg 100%);
+  border: 1px solid $btnSuccessColor;
+  border-radius: 1px;
   color: $btnSuccessColor;
 
   &:hover, &:active, &:focus, &.active {
@@ -205,13 +224,15 @@ button, .button, .btn { //, [class*='btn']
 }
 
 .btn-secondary { 
-  background: $btnSecondaryBg;
   color: $btnSecondaryColor;
   border: $btnSecondaryBorder;
+  background-color: $btnSecondaryBg;
+  background-image: linear-gradient(180deg, #FFFFFF 7%, $btnSecondaryBg 100%);
 
   &:hover, &:active, &:focus {
-    background: darken($btnSecondaryBg, 10%);
+    background: $btnSecondaryBg;
     color: $btnSecondaryColor;
+    box-shadow: 0px 0px 10px 0px #E1E1E1;
   }
 
   &:disabled {
@@ -378,9 +399,11 @@ button, .button, .btn { //, [class*='btn']
     opacity: 0.9;
     cursor: pointer;
     background-color: white;
+    background: white;
 
-    &:active, &:focus {
+    &:active, &:focus &:hover {
       background-color: white;
+      background: white;
     }
 }
 
