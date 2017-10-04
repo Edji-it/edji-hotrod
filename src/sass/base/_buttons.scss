@@ -11,8 +11,8 @@ $btnSecondaryBorder: 1px solid $btnSecondaryColor;
 //1px solid rgba(0,0,0,0.05);
 $btnSuccessBg: #46c78e; //#7fd9fc;
 $btnSuccessColor: #1eb10c;
-$btnHeroBg: #f86464;
-$btnHeroColor: #fff;
+$btnHeroBg: #fff0f0;
+$btnHeroColor: #ff5c5c;
 
 button, .button, .btn { //, [class*='btn']
   appearance: none;
@@ -174,7 +174,7 @@ button, .button, .btn { //, [class*='btn']
 } 
 
 .btn.btn-primary {
-  background-color: #$btnPrimaryBg;
+  background-color: $btnPrimaryBg;
   background-image: linear-gradient(180deg, #FFFFFF 7%, $btnPrimaryBg 100%);
   border: 1px solid $btnPrimaryColor;
   border-radius: 1px;
@@ -182,6 +182,7 @@ button, .button, .btn { //, [class*='btn']
 
   &:hover, &:active, &:focus {
     background: $btnPrimaryBg; 
+    box-shadow: 0px 0px 10px 0px #CFF1FF;
   }
 }
 
@@ -205,7 +206,8 @@ button, .button, .btn { //, [class*='btn']
   color: $btnHeroColor;
 
   &:hover, &:active, &:focus, &.active {
-    background: desaturate(darken($btnHeroBg, 20%), 20%); 
+    background: $btnHeroBg; 
+    box-shadow: 0px 0px 10px 0px #ffe4e4;
   }
 }
 
@@ -224,14 +226,13 @@ button, .button, .btn { //, [class*='btn']
 .btn-secondary { 
   color: $btnSecondaryColor;
   border: $btnSecondaryBorder;
-
-
   background-color: $btnSecondaryBg;
   background-image: linear-gradient(180deg, #FFFFFF 7%, $btnSecondaryBg 100%);
 
   &:hover, &:active, &:focus {
     background: $btnSecondaryBg;
     color: $btnSecondaryColor;
+    box-shadow: 0px 0px 10px 0px #E1E1E1;
   }
 
   &:disabled {
