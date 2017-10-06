@@ -8,7 +8,7 @@
         <h1 class="center on-dark">Access your Edji Dashboard</h1>
         <hot-login-form (loginSuccess)="loginSuccess()"></hot-login-form>
         <div style="text-align:center; margin: 1em 0;">
-          <a id="linkForgotPassword" class="link" (click)="showPassModal = !showPassModal">Forgotten password?</a>
+          <a id="linkForgotPassword" class="link open-modal" tabindex="0" (click)="showPassModal = !showPassModal">Forgotten password?</a>
         </div>
         <br />
         <hr>
