@@ -180,6 +180,10 @@ button, .button, .btn { //, [class*='btn']
   border-radius: 1px;
   color: $btnPrimaryColor;
 
+  &.loading {
+    background: darken($btnPrimaryBg, 20%);
+  }
+
   &:hover, &:active, &:focus {
     background: $btnPrimaryBg; 
     box-shadow: 0px 0px 10px 0px #CFF1FF;
@@ -193,6 +197,10 @@ button, .button, .btn { //, [class*='btn']
   border-radius: 1px;
   color: $btnActionColor;
 
+  &.loading {
+    background: #cdcdcd;
+  }
+
   &:hover, &:active, &:focus, &.active {
     background: desaturate(darken($btnActionBg, 20%), 20%); 
   }
@@ -204,6 +212,10 @@ button, .button, .btn { //, [class*='btn']
   border: 1px solid $btnHeroColor;
   border-radius: 1px;
   color: $btnHeroColor;
+
+  &.loading {
+    background: $btnHeroBg;
+  }
 
   &:hover, &:active, &:focus, &.active {
     background: $btnHeroBg; 
@@ -218,6 +230,10 @@ button, .button, .btn { //, [class*='btn']
   border-radius: 1px;
   color: $btnSuccessColor;
 
+  &.loading {
+    background: darken($btnSuccessBg, 20%);
+  }
+
   &:hover, &:active, &:focus, &.active {
     background: darken($btnSuccessBg, 20%);
   }
@@ -228,6 +244,10 @@ button, .button, .btn { //, [class*='btn']
   border: $btnSecondaryBorder;
   background-color: $btnSecondaryBg;
   background-image: linear-gradient(180deg, #FFFFFF 7%, $btnSecondaryBg 100%);
+
+  &.loading {
+    background: darken($btnSecondaryBg, 20%);
+  }
 
   &:hover, &:active, &:focus {
     background: $btnSecondaryBg;
