@@ -174,8 +174,7 @@
     ) Copy and edit
 
 //- Bottom of the page Options
-.fixed-btn-row--SE(
-    [class.hidden-sm-down]="optionsShow || isEmojiKeyboardActive()",
+.fixed-btn-row--SE.hidden-sm-down(
     [class.bottom-bar-offset]="user._id == project.teacher_id"
 )
     tutorial-box(

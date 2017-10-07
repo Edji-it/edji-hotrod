@@ -15,8 +15,8 @@ import { AuthService, ProjectService } from '../shared';
   // where, in this case, selector is the string 'home'
   selector: 'hot-login',  // <home></home>
   // We need to tell Angular's Dependency Injection which providers are in our app.
-  providers: [],
-  templateUrl: './login.component.html'
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
