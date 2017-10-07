@@ -6,9 +6,15 @@
 
     //- Optional Title
     .nav-bar__heading.hidden-sm-down(*ngIf="!showProjectInfo")
-      h1(*ngIf="pageTitle") {{ pageTitle }}
+      h1(
+        *ngIf="pageTitle",
+        title="{{ pageTitle }}"
+        ) {{ pageTitle }}
     .nav-bar__heading.hidden-sm-down(*ngIf="showProjectInfo")
-      h1(*ngIf="currentReading.title") {{ currentReading.title }}
+      h1(
+        *ngIf="currentReading.title",
+        title="{{ currentReading.title }}"
+        ) {{ currentReading.title }}
 
     .nav__btn-wrap(*ngIf="!user.isLoggedIn")
       a#loginLink.btn.btn-primary.nav-bar__btn([routerLink]="['/login']") Log In
