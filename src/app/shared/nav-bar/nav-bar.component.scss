@@ -229,12 +229,13 @@ a.nav-bar__link {
 	position: relative;
 	// line-height: 45px;
 	vertical-align: middle;
-	margin: 15px 0px;
+	margin: 15px 8px 15px 0px;
 
 	@media(max-width: $desktop) {
 		font-size: 14px;
 		min-width: 10px;
 		padding: 12px 10px;
+		margin: 15px 3px;
 	}
 }
 
