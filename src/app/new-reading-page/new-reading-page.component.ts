@@ -315,9 +315,6 @@ export class NewReadingPage implements OnInit {
                         styles: [].concat(inheritedTags)
                     }
                     let addBr = false;
-                    if (typeof(word.str) == 'string' && word.str.trim().length < 1) {
-                        word.styles.push('space');
-                    }
                     if (index == 0 && wIndex == 0) {
                         word.styles.push(tagName + '-a');
                         if ( this.words.slice(-1) && this.words.slice(-1)['styles'] && this.words.slice(-1)['styles'].indexOf('br') >= 0 ) {
@@ -338,7 +335,12 @@ export class NewReadingPage implements OnInit {
                             addBr = true
                         }
                     }
-                    this.words.push(word);
+                    if (typeof(word.str) == 'string' && word.str.trim().length < 1) {
+                        // As a space saving technique, we save spaces as empty object
+                        this.words.push({})
+                    } else {
+                        this.words.push(word)
+                    }
                     if (addBr) {
                         // Add break element
                         this.words.push({
