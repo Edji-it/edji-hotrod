@@ -135,6 +135,8 @@ $purple: rgb(150, 40, 255);
 	@extend .nav-bar__project;
 	text-align: right;
 	border-right: none;
+	// account for logo and username width
+	max-width: calc(100% - #{ 100px + 70px });
 
 	& .emojioneemoji {
 		margin-top: -2px;
