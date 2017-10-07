@@ -339,26 +339,36 @@ export class NewReadingPage implements OnInit {
                         // As a space saving technique, we save spaces as empty object
                         this.words.push({})
                     } else {
+                        // Don't save the useless "div" style
+                        if (word.styles.indexOf('div')) {
+                            let i = word.styles.indexOf('div')
+                            word.styles.splice(i, 1)
+                        }
+                        // Don't save empty word strings
+                        if (word.str == '') {
+                            delete word.str
+                        }
+                        // Don't save empty styles arrays
+                        if (word.styles == []) {
+                            delete word.styles
+                        }
                         this.words.push(word)
                     }
                     if (addBr) {
                         // Add break element
                         this.words.push({
-                            str: '',
                             styles: ['br']
                         })
                     }
                 }
                 if (lastInBlock === true) {
                     this.words.push({
-                        str: '',
                         styles: ['br']
                     })
                 }
             } else {
                 if (lastInBlock === true ) {
                     this.words.push({
-                        str: '',
                         styles: ['br']
                     })
                 }
