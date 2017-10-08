@@ -6,6 +6,8 @@ import { Angulartics2 } from 'angulartics2'
 import { ProjectService } from '../../shared/project.service'
 import { CommentService } from '../../shared/comment.service'
 import { AuthService } from '../../shared/auth.service'
+import { UtilToolService } from '../../shared/util-tool.service'
+import { AnnotatorComponent } from '../annotator.component'
 import { EdjiComment, CommentPermissions, EdjiQuestion } from './../../shared/datatypes'
 
 @Component({
@@ -48,6 +50,7 @@ export class CommentComponent implements OnInit {
   private subscriptions: Subscription[] = []
   private repliesById: any = {}
   private project: any
+  private commentPane: boolean
 
   @Input() public comment: EdjiComment
   @Input() private readOnly: boolean = false
@@ -74,16 +77,19 @@ export class CommentComponent implements OnInit {
   @Output() commentActivation = new EventEmitter<boolean>()
   @Output() commentDeactivate: EventEmitter<any> = new EventEmitter<any>()
   @Output() expandLine = new EventEmitter<number>()
+  @Output() commentPaneExpand = new EventEmitter<number>()
   @Output() collapseLine = new EventEmitter<number>()
   @Output() dismissKeyboard = new EventEmitter()
   @Output() commentUpdated: EventEmitter<any> = new EventEmitter()
   @Output() commentReply = new EventEmitter()
+  @Output() getLineCount = new EventEmitter()
 
   constructor(
         private _projects: ProjectService,
         private angulartics: Angulartics2,
         private _comments: CommentService,
         private _auth: AuthService,
+        private _util: UtilToolService,
         public el: ElementRef
       ) { }
 
@@ -307,5 +313,14 @@ export class CommentComponent implements OnInit {
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe() })
+  }
+
+  expandCommentPane(comment): void {
+    this.commentPane = true
+    this.getLineCount.emit(comment.start)
+  }
+
+  collapseCommentPane(): void {
+    this.commentPane = false
   }
 }

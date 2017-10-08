@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit, ViewChildren, QueryList, EventEmitter } from '@angular/core'
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core'
 import { Subscription } from 'rxjs/Rx'
 import * as Rangy from 'rangy'
 import { Angulartics2 } from 'angulartics2'
@@ -10,6 +10,7 @@ import { CommentService } from '../shared/comment.service'
 import { CommentComponent } from './comment/comment.component'
 import { AuthService } from '../shared/auth.service' 
 import { SocketService } from '../shared/socket.service'
+import { UtilToolService } from '../shared/util-tool.service'
 import { CommentPermissions, EdjiComment, Project, Reading } from './../shared/datatypes'
 
 declare var window: any
@@ -119,10 +120,12 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     private audioSupportError: boolean = false
 
     constructor(
+        private element: ElementRef,
         private _readings: ReadingService,
         private _projects: ProjectService,
         private _auth: AuthService,
         private _socket: SocketService,
+        private _util: UtilToolService,
         private _comments: CommentService,
         private angulartics: Angulartics2
         // private _hotkeysService: HotkeysService
@@ -409,6 +412,21 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 this.updateAllLineCounts()
             }, 2000)
             this.lineCountRunning = false
+        }
+    }
+
+    getLineCount(): void {
+        let wordElements: any[] = Array.from(document.querySelectorAll('span.w:not(.img):not(.question)'))
+        this._util.lineNumberArray = []
+        var lineNum = 1
+        this._util.lineNumberArray[0] = lineNum
+        for (let i = 1; i < wordElements.length; i++) {
+            let elPosPrior = wordElements[i-1].getBoundingClientRect().top
+            let elPosCurrent = wordElements[i].getBoundingClientRect().top
+            if (elPosPrior!==elPosCurrent) {
+                lineNum++
+            }
+            this._util.lineNumberArray[i] = lineNum
         }
     }
 

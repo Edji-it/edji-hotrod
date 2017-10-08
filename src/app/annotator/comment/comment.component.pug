@@ -74,14 +74,23 @@
     [class.saved]="justSaved",
     [class.active]="active",
     [class.readonly]="readOnly",
-    [ngClass]="[ active ? 'comment__show' : '', visible ? 'slide-in' : '' ]"
+    [ngClass]="[ active ? 'comment__show' : '' ]"
 )
-    .sliding-pane.from-left
+    .sliding-pane.from-left([ngClass]="[ commentPane ? 'slide-in' : '' ]")
+        .container-fluid.container--less-pad
+            p Line {{ _util.lineNumberArray[comment.start] }}
+            h4 Comments
+            button.close.stats-close-btn.btn-icon--round((click)="commentPane=false", type="button")
+                span(aria-hidden="true") ×
+            //- hot-firecard(*ngFor="let fireComment of project.comments", [fireComment]="fireComment")
+            .fireBound
+                .fire-icon--light
+                    span.s-emoji([innerHtml]="':seedling:' | emojione")
 //- END .comment - mobile
 
 //- Mobile Icon
 img.comment__button--mobile(
-    (tap)='expanded ? collapse($event) : expand($event)',
+    (tap)='commentPane ? collapseCommentPane() : expandCommentPane(comment)',
     src="assets/images/icon-comment.svg",
     [ngClass]="[ reply ? 'icon-hidden' : 'hidden-lg-up']"
 )
