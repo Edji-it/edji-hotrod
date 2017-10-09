@@ -24,6 +24,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
 
     private user: any
     private currentProject: any
+    private projectOwner: any
     private createdDate: string
     private liveCount: number = 1
     private currentReading: any
@@ -91,7 +92,8 @@ export class NavBarComponent implements OnInit, OnDestroy {
         this.subscriptions.push(
           this._projects.currentProject.subscribe(
                 project => {
-                    this.currentProject = project;
+                    this.currentProject = project
+                    this.projectOwner = project.teacher_id
                     this.createdDate = new Date(project.createdAt).toDateString()
                 },
                 error => {

@@ -24,10 +24,10 @@
         *ngIf="currentReading.title",
         title="{{ currentReading.title }}"
         ) {{ currentReading.title }}
-      .nav-bar__author
-        | {{ currentReading.owner_id }} &nbsp;
-        span.badge.badge-pill.badge-button.badge-secondary(title="Click to unfollow!", (click)="followUser(currentReading.owner_id)", *ngIf="!user.following || user.following.indexOf(currentReading.owner_id) < 0") + Follow
-        span.badge.badge-pill.badge-button.badge-success(title="Click to follow!", (click)="unfollowUser(currentReading.owner_id)", *ngIf="user.following && user.following.indexOf(currentReading.owner_id) > -1") Following
+      .nav-bar__author(*ngIf="projectOwner && projectOwner._id")
+        | {{ projectOwner.fullname }} &nbsp;
+        span.badge.badge-pill.badge-button.badge-secondary(title="Click to unfollow!", (click)="followUser(projectOwner._id)", *ngIf="!user.following || user.following.indexOf(projectOwner._id) < 0") + Follow
+        span.badge.badge-pill.badge-button.badge-success(title="Click to follow!", (click)="unfollowUser(projectOwner._id)", *ngIf="user.following && user.following.indexOf(projectOwner._id) > -1") Following
 
     .nav__btn-wrap(*ngIf="!user.isLoggedIn")
       a#loginLink.btn.btn-primary.nav-bar__btn([routerLink]="['/login']") Log In
