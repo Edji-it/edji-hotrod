@@ -14,5 +14,12 @@ nav-bar([showDashboardOptions]="true")
                             //- .btn.btn-sm.btn-primary Preview
                             .btn.btn-sm.btn-primary([routerLink]="['/new-reading']", [queryParams]="{ copyId: reading._id }") Get this Reading
                     hot-reading-card([reading]="reading", [readOnly]="true")
+                    .feed__reading-preview
+                        span.w(
+                                *ngFor="let w of reading.words.slice(0,150)", 
+                                [ngClass]="[ w.styles.join(' ') ]"
+                            )
+                            | {{w.styles.indexOf('space') > -1 ? '&nbsp;' : w.str}}
+                        span.w &hellip;
         .col-md-2
             //- Righ margin

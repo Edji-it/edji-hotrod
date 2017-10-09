@@ -75,3 +75,10 @@
 .feed__reading-data {
     font-size: 12px;
 }
+
+.feed__reading-preview {
+    border-right: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+    border-bottom: 1px dashed #ddd;
+    padding: 15px;
+}
