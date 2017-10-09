@@ -51,6 +51,8 @@ export class CommentComponent implements OnInit {
   private repliesById: any = {}
   private project: any
   private commentPane: boolean
+  private lineNum: number = 0
+  private commentCount: number = 0
 
   @Input() public comment: EdjiComment
   @Input() private readOnly: boolean = false
@@ -316,8 +318,10 @@ export class CommentComponent implements OnInit {
   }
 
   expandCommentPane(comment): void {
+    this.getLineCount.emit()
+    this.lineNum = this._util.lineNumberArray[comment.start]
+    this.commentCount = this._util.commentPosArray[this.lineNum].length
     this.commentPane = true
-    this.getLineCount.emit(comment.start)
   }
 
   collapseCommentPane(): void {

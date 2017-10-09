@@ -416,12 +416,12 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     }
 
     getLineCount(): void {
-        let wordElements: any[] = Array.from(document.querySelectorAll('span.w:not(.img):not(.question)'))
+        let wordElements: any[] = Array.from(document.querySelectorAll('span.w:not(.question)'))
         let commentsArray = this.project.comments
-        console.log(this.project.comments)
 
         // Re-initialize the line number array
         this._util.lineNumberArray = []
+        this._util.commentPosArray = []
         var lineNum = 1
         this._util.lineNumberArray[0] = lineNum
 
@@ -433,14 +433,16 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 lineNum++
             }
             this._util.lineNumberArray[i] = lineNum
+            this._util.commentPosArray.push(new Array())
         }
 
-        let commentPosArray: any[][] = []
-        // Loop through each word element to store the line number of each span element
+        // Loop through each comment to group comments together by line number
         for (let i = 0; i < commentsArray.length; i++) {
-            let comment = commentsArray[i]
-            let lineNbr = this._util.lineNumberArray[comment.start]
-            commentPosArray[lineNbr][] = comment._id
+            if (commentsArray[i] && !commentsArray[i].reply_to) {
+                let comment = commentsArray[i]
+                let lineNbr = this._util.lineNumberArray[comment.start]
+                this._util.commentPosArray[lineNbr].push(comment)
+            }
         }
     }
 
