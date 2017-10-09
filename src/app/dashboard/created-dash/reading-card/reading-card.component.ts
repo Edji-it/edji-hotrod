@@ -18,6 +18,7 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
   private isLoading: boolean = false;
 
   @Input() reading: Reading;
+  @Input() readOnly: boolean;
 
   private showOptions     : boolean = false;
   private showOptionsV    : boolean = false;

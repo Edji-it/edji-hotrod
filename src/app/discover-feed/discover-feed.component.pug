@@ -5,7 +5,14 @@ nav-bar([showDashboardOptions]="true")
             //- Left margin
         .col-md-8
             .row(*ngFor="let reading of readings")
-                | {{ reading.title }}
-                | {{ reading.owner_id.fullname }}
+                .col-12.feed__reading
+                    .feed__reading-data
+                        .comment__avatar {{reading.owner_id.fullname.substr(0,2).toUpperCase()}}
+                        | {{ reading.owner_id.fullname }}
+                        i {{ ' shared ' + (reading.updatedAt | edjidate:'timeAgo':null:secondsAgo) }}
+                        .btn-group(style="float:right")
+                            .btn.btn-sm.btn-primary Preview
+                            .btn.btn-sm.btn-primary Save Copy
+                    hot-reading-card([reading]="reading", [readOnly]="true")
         .col-md-2
             //- Righ margin

@@ -58,3 +58,20 @@
   margin: 5px;
   width: 32px;
 }
+
+.feed__reading {
+    margin: 20px 0px;
+}
+
+.comment__avatar {
+    position: relative;
+    display:inline-block;
+    left: 0px;
+    top: 0px;
+    margin: 0px 15px 15px 0px;
+    opacity: 1;
+}
+
+.feed__reading-data {
+    font-size: 12px;
+}
