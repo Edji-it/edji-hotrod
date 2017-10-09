@@ -17,6 +17,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
     // Static input to display Save/Share buttons
     @Input() canPublish: boolean
     @Input() showProjectInfo: boolean
+    @Input() showDashboardOptions: boolean
     
     @Output() saveAction: EventEmitter<any> = new EventEmitter()
     @Output() shareAction: EventEmitter<ReadingShareObject> = new EventEmitter<ReadingShareObject>()

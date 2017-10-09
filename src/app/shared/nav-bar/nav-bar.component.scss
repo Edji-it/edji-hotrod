@@ -155,10 +155,21 @@ $purple: rgb(150, 40, 255);
 	}
 }
 
-.nav-bar__project, .nav-bar__project-data {
-	// @media(max-width: $tablet) {
-	// 	max-width: calc(50% - #{ $navUserWidth} );
-	// }
+.nav__center-btns {
+	position: absolute;
+	top: 0px;
+	height: 100%;
+	left: 50%;
+	transform: translateX(-50%);
+	line-height: $navHeight;
+
+	& .btn {
+		display: inline-block;
+		
+		& img.emojioneemoji {
+			margin-right: 5px;
+		}
+	}
 }
 
 .nav-bar__heading {

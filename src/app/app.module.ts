@@ -64,6 +64,7 @@ import { LoginComponent } from './login';
 import { ResetPassPage } from './reset-pass/reset-pass-page.component';
 import { HeroPromoComponent } from './hero-promo/hero-promo.component';
 import { HeroPricingComponent } from './hero-pricing/hero-pricing.component';
+import { DiscoverFeedComponent } from './discover-feed/discover-feed.component';
 
 // Configure Hammer.js
 export class MyHammerConfig extends HammerGestureConfig  {
@@ -139,6 +140,7 @@ type StoreType = {
     NewReadingPage,
     HeroPromoComponent,
     HeroPricingComponent,
+    DiscoverFeedComponent,
     LeaderboardComponent,
     FirefeedComponent,
     FirecardComponent,

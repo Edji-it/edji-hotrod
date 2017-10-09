@@ -11,6 +11,7 @@ import { LoginComponent } from './login';
 import { ResetPassPage } from './reset-pass/reset-pass-page.component';
 import { HeroPromoComponent } from './hero-promo/hero-promo.component';
 import { HeroPricingComponent } from './hero-pricing/hero-pricing.component';
+import { DiscoverFeedComponent } from "app/discover-feed/discover-feed.component";
 
 import { DataResolver } from './app.resolver';
 import { AuthService } from './shared';
@@ -23,6 +24,7 @@ export const ROUTES: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
   { path: 'account', component: AccountComponent, canActivate: [AuthService] },
+  { path: 'discover', component: DiscoverFeedComponent, canActivate: [AuthService] },
   { path: 'dashboard',  component: DashboardComponent, canActivate: [AuthService], children: DashboardRoutes },
   { path: 'project/:id',  component: ProjectPageComponent },
   { path: 'new-reading', component: NewReadingPage, canActivate: [AuthService] },
