@@ -649,7 +649,7 @@ export class AuthService implements CanActivate {
     public followUser(userId: string) : Observable<any> {
         return this.http.post(this.baseUrl + '/users/follow/' + userId, null, this.getOptions())
             .map( res => {
-                let user = res.json() || {}
+                let user = res.json().user || {}
                 if(user._id) {
                     this.setUser(user)
                 }
@@ -665,7 +665,7 @@ export class AuthService implements CanActivate {
     public unfollowUser(userId: string) : Observable<any> {
         return this.http.post(this.baseUrl + '/users/unfollow/' + userId, null, this.getOptions())
             .map( res => {
-                let user = res.json() || {}
+                let user = res.json().user  || {}
                 if(user._id) {
                     this.setUser(user)
                 }
