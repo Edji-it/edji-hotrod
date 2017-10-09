@@ -4,6 +4,8 @@ nav-bar([showDashboardOptions]="true")
         .col-md-2
             //- Left margin
         .col-md-8
-            | Hello
+            .row(*ngFor="let reading of readings")
+                | {{ reading.title }}
+                | {{ reading.owner_id.fullname }}
         .col-md-2
             //- Righ margin

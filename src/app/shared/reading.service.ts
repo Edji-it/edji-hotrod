@@ -171,5 +171,11 @@ export class ReadingService {
               });
     } // if
   } // public save()
-
+  
+  public getFeed(): Observable<any> {
+    return this.http.get(this._auth.getUrl() + '/readings/feed', this._auth.getOptions())
+      .map(data => {
+        return data.json().results || []
+      })
+  }
 }
