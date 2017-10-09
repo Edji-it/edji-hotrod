@@ -11,8 +11,8 @@ nav-bar([showDashboardOptions]="true")
                         | {{ reading.owner_id.fullname }}
                         i {{ ' shared ' + (reading.updatedAt | edjidate:'timeAgo':null:secondsAgo) }}
                         .btn-group(style="float:right")
-                            .btn.btn-sm.btn-primary Preview
-                            .btn.btn-sm.btn-primary Save Copy
+                            //- .btn.btn-sm.btn-primary Preview
+                            .btn.btn-sm.btn-primary([routerLink]="['/new-reading']", [queryParams]="{ copyId: reading._id }") Get this Reading
                     hot-reading-card([reading]="reading", [readOnly]="true")
         .col-md-2
             //- Righ margin
