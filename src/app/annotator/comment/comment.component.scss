@@ -85,3 +85,11 @@ $tablet-width: 768px;
   font-size: 10px;
   float: right;
 }
+
+.comment__count--mobile {
+  position: absolute;
+  left: -31px;
+  color: white;
+  font-size: 10px;
+  font-weight: 500;
+}

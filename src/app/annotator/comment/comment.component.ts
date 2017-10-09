@@ -1,6 +1,16 @@
 import { Subscription } from 'rxjs/Rx';
 import { CommentStmt } from '@angular/compiler/src/output/output_ast'
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChange, ElementRef } from '@angular/core'
+import {
+    AfterViewInit,
+    Component,
+    ElementRef,
+    EventEmitter,
+    Input,
+    OnDestroy,
+    OnInit,
+    Output,
+    SimpleChange,
+} from '@angular/core';
 import { Angulartics2 } from 'angulartics2'
 
 import { ProjectService } from '../../shared/project.service'
@@ -15,7 +25,7 @@ import { EdjiComment, CommentPermissions, EdjiQuestion } from './../../shared/da
   templateUrl: './comment.component.pug',
   styleUrls: ['./comment.component.scss']
 })
-export class CommentComponent implements OnInit {
+export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
 
   /*
   Front end implementation of a comment.
@@ -53,6 +63,8 @@ export class CommentComponent implements OnInit {
   private commentPane: boolean
   private lineNum: number = 0
   private commentCount: number = 0
+  private lineIconNum: number = 0
+  private iconNum: number = 0
 
   @Input() public comment: EdjiComment
   @Input() private readOnly: boolean = false
@@ -134,6 +146,11 @@ export class CommentComponent implements OnInit {
         console.error(error)
       }
     ) )
+  }
+
+  ngAfterViewInit() {
+    this.getLineCount.emit()
+    // this.getIconNumber(this.comment)
   }
 
   activate(event?: any): void {
@@ -326,5 +343,12 @@ export class CommentComponent implements OnInit {
 
   collapseCommentPane(): void {
     this.commentPane = false
+  }
+
+  getIconNumber(comment): void {
+    if (!comment.reply_to && !comment.questionId) {
+      this.lineIconNum = this._util.lineNumberArray[comment.start]
+      this.iconNum = this._util.commentPosArray[this.lineIconNum].length
+    }
   }
 }

@@ -417,6 +417,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
     getLineCount(): void {
         let wordElements: any[] = Array.from(document.querySelectorAll('span.w:not(.question)'))
+        // let wordElements: any[] = reading.words
         let commentsArray = this.project.comments
 
         // Re-initialize the line number array
@@ -438,7 +439,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
         // Loop through each comment to group comments together by line number
         for (let i = 0; i < commentsArray.length; i++) {
-            if (commentsArray[i] && !commentsArray[i].reply_to) {
+            if (commentsArray[i] && !commentsArray[i].reply_to && !commentsArray[i].questionId) {
                 let comment = commentsArray[i]
                 let lineNbr = this._util.lineNumberArray[comment.start]
                 this._util.commentPosArray[lineNbr].push(comment)
