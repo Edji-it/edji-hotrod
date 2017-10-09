@@ -166,7 +166,8 @@ $purple: rgb(150, 40, 255);
 	& .btn {
 		display: inline-block;
 		
-		& img.emojioneemoji {
+		& > span {
+			display:inline-block;
 			margin-right: 5px;
 		}
 	}
@@ -196,7 +197,18 @@ $purple: rgb(150, 40, 255);
 		line-height: $navHeight;
 		margin-bottom: 0px;
 		vertical-align: middle;
+		font-size: 25px;
+
+		&.with-nav-sub {
+			line-height: $navHeight - 25px;
+		}
 	}
+}
+
+.nav-bar__author {
+	line-height: 25px;
+	vertical-align: middle;
+	font-size: 12px;
 }
 
 a.nav-bar__link {

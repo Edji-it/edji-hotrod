@@ -171,6 +171,26 @@ export class NavBarComponent implements OnInit, OnDestroy {
     showShareCodeModal() {
       this._util.showShareCode=true
     }
+
+    followUser(userId: string) : void {
+      this._auth.followUser(userId)
+        .take(1)
+        .subscribe(
+          data => {
+            
+          }
+        )
+    }
+ 
+    unfollowUser(userId: string) : void {
+      this._auth.unfollowUser(userId)
+        .take(1)
+        .subscribe(
+          data => {
+            
+          }
+        )
+    }
 }
 
 export interface ReadingShareObject {

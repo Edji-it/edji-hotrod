@@ -640,4 +640,36 @@ export class AuthService implements CanActivate {
                 return res.json()
             })
     }
+
+    /**
+     * Follow
+     * - Add user to user's Following array
+     * - Updates user object
+     */
+    public followUser(userId: string) : Observable<any> {
+        return this.http.post(this.baseUrl + '/users/follow/' + userId, null, this.getOptions())
+            .map( res => {
+                let user = res.json() || {}
+                if(user._id) {
+                    this.setUser(user)
+                }
+                return user
+            })
+    }
+
+    /**
+     * Unfollow
+     * - Removes a user from user's Following array
+     * - Updates user object
+     */
+    public unfollowUser(userId: string) : Observable<any> {
+        return this.http.post(this.baseUrl + '/users/unfollow/' + userId, null, this.getOptions())
+            .map( res => {
+                let user = res.json() || {}
+                if(user._id) {
+                    this.setUser(user)
+                }
+                return user
+            })
+    }
 }

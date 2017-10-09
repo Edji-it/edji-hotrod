@@ -6,11 +6,11 @@
 
     //- Dashboard Nav
     .nav__center-btns(*ngIf="showDashboardOptions")
-      a.link([routerLink]="['/dashboard']") 
-        span([innerHtml]="':book:' | emojione")
+      a.btn.btn-link([routerLink]="['/dashboard']", routerLinkActive="active") 
+        //- span([innerHtml]="':book:' | emojione")
         | Readings
-      a.link([routerLink]="['/discover']")
-        span([innerHtml]="':book:' | emojione")
+      a.btn.btn-link([routerLink]="['/discover']", routerLinkActive="active")
+        //- span([innerHtml]="':triangular_flag_on_post:' | emojione")
         | Discover
 
     //- Optional Title
@@ -20,10 +20,14 @@
         title="{{ pageTitle }}"
         ) {{ pageTitle }}
     .nav-bar__heading.hidden-sm-down(*ngIf="showProjectInfo")
-      h1(
+      h1.with-nav-sub(
         *ngIf="currentReading.title",
         title="{{ currentReading.title }}"
         ) {{ currentReading.title }}
+      .nav-bar__author
+        | {{ currentReading.owner_id }} &nbsp;
+        span.badge.badge-pill.badge-secondary((click)="followUser(currentReading.owner_id)", *ngIf="!user.following || user.following.indexOf(currentReading.owner_id) < 0") + Follow
+        span.badge.badge-pill.badge-success((click)="unfollowUser(currentReading.owner_id)", *ngIf="user.following && user.following.indexOf(currentReading.owner_id) > -1") Following
 
     .nav__btn-wrap(*ngIf="!user.isLoggedIn")
       a#loginLink.btn.btn-primary.nav-bar__btn([routerLink]="['/login']") Log In

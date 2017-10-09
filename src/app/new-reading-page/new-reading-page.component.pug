@@ -92,6 +92,14 @@ nav-bar([pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'", [canPublish]
               p.sub-label (Optional) Provide a link or title for the source of the text.
               .input-group
                 input#readingSource.form-control.form-item--editor.h3.mSource(type="text", placeholder="New Reading Source...", [formControl]="readingForm.controls['source']")
+          .form-group
+            label Make Public
+              p.sub-label Share this Reading with your followers, and they'll see it in their Discover feed
+              .form-check
+                label.form-check-label
+                  input.form-check-input(type="checkbox", [formControl]="readingForm.controls['public']")
+                  | Share with Followers &nbsp;
+                  span([innerHtml]="':triangular_flag_on_post:' | emojione")
 
 .fixed-btn-row--SE
   tutorial-box([tutorialName]="'newReading'",

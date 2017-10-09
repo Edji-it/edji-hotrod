@@ -128,7 +128,8 @@ export class NewReadingPage implements OnInit {
     ) {
         this.readingForm = fb.group({
             title: [null, Validators.required],
-            source: [null, null]
+            source: [null, null],
+            public: [null, null]
             // label: ['Group 1', Validators.required]
         });
 
