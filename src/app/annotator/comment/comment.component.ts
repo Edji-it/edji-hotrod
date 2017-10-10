@@ -149,8 +149,7 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    this.getLineCount.emit()
-    // this.getIconNumber(this.comment)
+    
   }
 
   activate(event?: any): void {

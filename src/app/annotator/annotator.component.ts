@@ -53,6 +53,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     // Line Count
     private lineCountArray: any[][] = [] // 2D ARRAY
     private lineCountRunning: boolean = false
+    private lineNumRunning: boolean
 
     // private activeComment: EdjiComment = <EdjiComment>{}
     private replyComment: EdjiComment = <EdjiComment>{}
@@ -173,6 +174,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             (project) => {
                 if (project) {
                     this.project = project
+                    this.getLineCount()
                     // Check if audio is supported
                     if (this.project.types.indexOf('audio') > -1 && !navigator.getUserMedia) {
                         this.audioSupportError = true
@@ -417,34 +419,41 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
     getLineCount(): void {
         let wordElements: any[] = Array.from(document.querySelectorAll('span.w:not(.question)'))
-        // let wordElements: any[] = reading.words
-        let commentsArray = this.project.comments
+        if (!this.lineNumRunning && wordElements.length > 0) {
+            this.lineNumRunning = true
+            // let wordElements: any[] = reading.words
+            let commentsArray = this.project.comments
 
-        // Re-initialize the line number array
-        this._util.lineNumberArray = []
-        this._util.commentPosArray = []
-        var lineNum = 1
-        this._util.lineNumberArray[0] = lineNum
+            // Re-initialize the line number array
+            this._util.lineNumberArray = []
+            this._util.commentPosArray = []
+            var lineNum = 1
+            this._util.lineNumberArray[0] = lineNum
 
-        // Loop through each word element to store the line number of each span element
-        for (let i = 1; i < wordElements.length; i++) {
-            let elPosPrior = wordElements[i-1].getBoundingClientRect().top
-            let elPosCurrent = wordElements[i].getBoundingClientRect().top
-            if (elPosPrior!==elPosCurrent) {
-                lineNum++
+            // Loop through each word element to store the line number of each span element
+            for (let i = 1; i < wordElements.length; i++) {
+                let elPosPrior = wordElements[i-1].getBoundingClientRect().top
+                let elPosCurrent = wordElements[i].getBoundingClientRect().top
+                if (elPosPrior!==elPosCurrent) {
+                    lineNum++
+                }
+                this._util.lineNumberArray[i] = lineNum
+                this._util.commentPosArray.push(new Array())
             }
-            this._util.lineNumberArray[i] = lineNum
-            this._util.commentPosArray.push(new Array())
-        }
 
-        // Loop through each comment to group comments together by line number
-        for (let i = 0; i < commentsArray.length; i++) {
-            if (commentsArray[i] && !commentsArray[i].reply_to && !commentsArray[i].questionId) {
-                let comment = commentsArray[i]
-                let lineNbr = this._util.lineNumberArray[comment.start]
-                this._util.commentPosArray[lineNbr].push(comment)
+            // Loop through each comment to group comments together by line number
+            for (let i = 0; i < commentsArray.length; i++) {
+                if (commentsArray[i] && !commentsArray[i].reply_to && !commentsArray[i].questionId) {
+                    let comment = commentsArray[i]
+                    let lineNbr = this._util.lineNumberArray[comment.start]
+                    this._util.commentPosArray[lineNbr].push(comment)
+                }
             }
         }
+        setTimeout(() => {
+            this.getLineCount()
+        }, 2000)
+        this.lineNumRunning = false
     }
 
     updateImageHeights(): void {
