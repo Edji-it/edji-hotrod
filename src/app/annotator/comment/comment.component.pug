@@ -83,19 +83,21 @@
             h4(*ngIf="commentCount===1") {{ commentCount }} Comment
             button.close.stats-close-btn.btn-icon--round((click)="commentPane=false", type="button")
                 span(aria-hidden="true") ×
-            //- hot-firecard(*ngFor="let fireComment of project.comments", [fireComment]="fireComment")
+            hot-firecard(*ngFor="let fireComment of _util.commentPosArray[_util.lineNumberArray[comment.start]]", [fireComment]="fireComment")
             .fireBound
                 .fire-icon--light
                     span.s-emoji([innerHtml]="':seedling:' | emojione")
 //- END .comment - mobile
 
 //- Mobile Icon
-img.comment__button--mobile(
-    (tap)='commentPane ? collapseCommentPane() : expandCommentPane(comment)',
-    src="assets/images/icon-comment.svg",
-    [ngClass]="[ reply ? 'icon-hidden' : 'hidden-lg-up']"
-)
-.comment__count--mobile(*ngIf="_util.commentPosArray[_util.lineNumberArray[comment.start]]") {{ _util.commentPosArray[_util.lineNumberArray[comment.start]].length }}
+div((tap)='commentPane ? collapseCommentPane() : expandCommentPane(comment)')
+    img.comment__button--mobile(
+        src="assets/images/icon-comment.svg",
+        [ngClass]="[ reply ? 'icon-hidden' : 'hidden-lg-up']"
+    )
+    .comment__count--mobile(
+        *ngIf="_util.commentPosArray[_util.lineNumberArray[comment.start]]"
+    ) {{ _util.commentPosArray[_util.lineNumberArray[comment.start]].length }}
 hot-del-comment(
     *ngIf="showDeleteModal",
     [comment]="comment",

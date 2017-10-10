@@ -350,4 +350,8 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
       this.iconNum = this._util.commentPosArray[this.lineIconNum].length
     }
   }
+
+  getComments(comment): void {
+    console.log(this._util.commentPosArray[this._util.lineNumberArray[comment.start]])
+  }
 }
