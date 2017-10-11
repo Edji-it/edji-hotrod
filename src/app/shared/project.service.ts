@@ -52,6 +52,14 @@ export class ProjectService {
     private answersByIdSubject: BehaviorSubject<any> = new BehaviorSubject<any>(this.answersByIdSource)
     public answersById: Observable<any> = this.answersByIdSubject.asObservable()
 
+    /**
+     *  Mobile handling of comments
+     *      - Line Number Counter Array
+     *      - Comment Counter by Line Array
+     */
+    public lineNumberArray: any[] = []
+    public commentPosArray: any[][] = []
+
     constructor(
         private http: Http, 
         private _auth: AuthService, 

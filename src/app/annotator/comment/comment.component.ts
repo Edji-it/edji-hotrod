@@ -335,8 +335,8 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
 
   expandCommentPane(comment): void {
     this.getLineCount.emit()
-    this.lineNum = this._util.lineNumberArray[comment.start]
-    this.commentCount = this._util.commentPosArray[this.lineNum].length
+    this.lineNum = this._projects.lineNumberArray[comment.start]
+    this.commentCount = this._projects.commentPosArray[this.lineNum].length
     this.commentPane = true
   }
 
@@ -346,12 +346,12 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
 
   getIconNumber(comment): void {
     if (!comment.reply_to && !comment.questionId) {
-      this.lineIconNum = this._util.lineNumberArray[comment.start]
-      this.iconNum = this._util.commentPosArray[this.lineIconNum].length
+      this.lineIconNum = this._projects.lineNumberArray[comment.start]
+      this.iconNum = this._projects.commentPosArray[this.lineIconNum].length
     }
   }
 
   getComments(comment): void {
-    console.log(this._util.commentPosArray[this._util.lineNumberArray[comment.start]])
+    console.log(this._projects.commentPosArray[this._projects.lineNumberArray[comment.start]])
   }
 }

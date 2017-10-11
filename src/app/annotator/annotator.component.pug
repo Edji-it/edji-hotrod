@@ -89,11 +89,7 @@
             (clickOutside)="hideCommentOptions()"
         )
             //- Word Loop: reading.words is one big array of individual "words", which can also be puncuation or media
-            span.w(
-                *ngFor="let w of reading.words; let i = index",
-                [ngClass]="[ w.styles.join(' '), getHighlightClass(i) ]",
-                [attr.index]="i"
-            )
+            <span #words class="w" *ngFor="let w of reading.words; let i = index" [ngClass]="[ w.styles.join(' '), getHighlightClass(i) ]" [attr.index]="i">
                 //- Comment Loop: Display comments if they exist for this Word
                 edji-comment(
                     *ngFor="let comment of commentsByIndex[i]; let ci = index",
@@ -154,6 +150,7 @@
                     [question]="reading.questions[w.index]"
                 )
                 //- end Word span ".w"
+            </span>
 //- End of Reading options
 .button__row
     button.btn.btn-secondary(

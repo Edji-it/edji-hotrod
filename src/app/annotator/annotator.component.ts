@@ -39,6 +39,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     @Input() private activeReply: any
 
     @ViewChildren(CommentComponent) commentComponents: QueryList<CommentComponent>
+    @ViewChildren('words') wordEls
 
     private reading: Reading = <Reading>{}
     private project: Project = <Project>{}
@@ -418,35 +419,37 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     }
 
     getLineCount(): void {
-        let wordElements: any[] = Array.from(document.querySelectorAll('span.w:not(.question)'))
+        let wordElements = this.wordEls ? this.wordEls.toArray() : []
         if (!this.lineNumRunning && wordElements.length > 0) {
             this.lineNumRunning = true
             // let wordElements: any[] = reading.words
             let commentsArray = this.project.comments
 
             // Re-initialize the line number array
-            this._util.lineNumberArray = []
-            this._util.commentPosArray = []
+            this._projects.lineNumberArray = []
+            this._projects.commentPosArray = []
             var lineNum = 1
-            this._util.lineNumberArray[0] = lineNum
+            this._projects.lineNumberArray[0] = lineNum
 
             // Loop through each word element to store the line number of each span element
             for (let i = 1; i < wordElements.length; i++) {
-                let elPosPrior = wordElements[i-1].getBoundingClientRect().top
-                let elPosCurrent = wordElements[i].getBoundingClientRect().top
+                let elPosPrior = wordElements[i-1].nativeElement.getBoundingClientRect().top
+                let elPosCurrent = wordElements[i].nativeElement.getBoundingClientRect().top
                 if (elPosPrior!==elPosCurrent) {
                     lineNum++
                 }
-                this._util.lineNumberArray[i] = lineNum
-                this._util.commentPosArray.push(new Array())
+                this._projects.lineNumberArray[i] = lineNum
+                this._projects.commentPosArray.push(new Array())
             }
+
+            wordElements = []
 
             // Loop through each comment to group comments together by line number
             for (let i = 0; i < commentsArray.length; i++) {
                 if (commentsArray[i] && !commentsArray[i].reply_to && !commentsArray[i].questionId) {
                     let comment = commentsArray[i]
-                    let lineNbr = this._util.lineNumberArray[comment.start]
-                    this._util.commentPosArray[lineNbr].push(comment)
+                    let lineNbr = this._projects.lineNumberArray[comment.start]
+                    this._projects.commentPosArray[lineNbr].push(comment)
                 }
             }
         }

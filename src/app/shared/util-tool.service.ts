@@ -4,8 +4,6 @@ import { Injectable } from '@angular/core';
 
     public showFeedbackModal: boolean
     public showShareCode: boolean
-    public lineNumberArray: any[] = []
-    public commentPosArray: any[][] = []
 
   constructor() {
       
