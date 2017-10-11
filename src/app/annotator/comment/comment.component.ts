@@ -333,16 +333,13 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
     this.subscriptions.forEach((sub) => { sub.unsubscribe() })
   }
 
-  expandCommentPane(comment): void {
+  toggleCPane(comment?): void {
     this.toggleCommentPane.emit()
-    this.lineNum = this._projects.lineNumberArray[comment.start]
-    this.commentCount = this._projects.commentPosArray[this.lineNum].length
-    this.commentPane = true
-  }
-
-  collapseCommentPane(): void {
-    this.toggleCommentPane.emit()
-    this.commentPane = false
+    if (!this.commentPane) {
+      this.lineNum = this._projects.lineNumberArray[comment.start]
+      this.commentCount = this._projects.commentPosArray[this.lineNum].length
+    }
+    this.commentPane = !this.commentPane
   }
 
   getIconNumber(comment): void {

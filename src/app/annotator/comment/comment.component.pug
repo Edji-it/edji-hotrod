@@ -81,7 +81,7 @@
             p Line {{ lineNum }}
             h4(*ngIf="commentCount>1 || commentCount===0") {{ commentCount }} Comments
             h4(*ngIf="commentCount===1") {{ commentCount }} Comment
-            button.close.stats-close-btn.btn-icon--round((click)="collapseCommentPane()", type="button")
+            button.close.stats-close-btn.btn-icon--round((click)="toggleCPane()", type="button")
                 span(aria-hidden="true") ×
             hot-firecard(*ngFor="let fireComment of _projects.commentPosArray[_projects.lineNumberArray[comment.start]]", [fireComment]="fireComment")
             .fireBound
@@ -90,7 +90,7 @@
 //- END .comment - mobile
 
 //- Mobile Icon
-div((tap)='commentPane ? collapseCommentPane() : expandCommentPane(comment)')
+div((tap)='toggleCPane(comment)')
     img.comment__button--mobile(
         src="assets/images/icon-comment.svg",
         [ngClass]="[ reply ? 'icon-hidden' : 'hidden-lg-up']"
