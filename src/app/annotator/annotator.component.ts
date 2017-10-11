@@ -55,6 +55,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     private lineCountArray: any[][] = [] // 2D ARRAY
     private lineCountRunning: boolean = false
     private lineNumRunning: boolean
+    private commentPane: boolean
 
     // private activeComment: EdjiComment = <EdjiComment>{}
     private replyComment: EdjiComment = <EdjiComment>{}
@@ -416,47 +417,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             }, 2000)
             this.lineCountRunning = false
         }
-    }
-
-    getLineCount(): void {
-        let wordElements = this.wordEls ? this.wordEls.toArray() : []
-        if (!this.lineNumRunning && wordElements.length > 0) {
-            this.lineNumRunning = true
-            // let wordElements: any[] = reading.words
-            let commentsArray = this.project.comments
-
-            // Re-initialize the line number array
-            this._projects.lineNumberArray = []
-            this._projects.commentPosArray = []
-            var lineNum = 1
-            this._projects.lineNumberArray[0] = lineNum
-
-            // Loop through each word element to store the line number of each span element
-            for (let i = 1; i < wordElements.length; i++) {
-                let elPosPrior = wordElements[i-1].nativeElement.getBoundingClientRect().top
-                let elPosCurrent = wordElements[i].nativeElement.getBoundingClientRect().top
-                if (elPosPrior!==elPosCurrent) {
-                    lineNum++
-                }
-                this._projects.lineNumberArray[i] = lineNum
-                this._projects.commentPosArray.push(new Array())
-            }
-
-            wordElements = []
-
-            // Loop through each comment to group comments together by line number
-            for (let i = 0; i < commentsArray.length; i++) {
-                if (commentsArray[i] && !commentsArray[i].reply_to && !commentsArray[i].questionId) {
-                    let comment = commentsArray[i]
-                    let lineNbr = this._projects.lineNumberArray[comment.start]
-                    this._projects.commentPosArray[lineNbr].push(comment)
-                }
-            }
-        }
-        setTimeout(() => {
-            this.getLineCount()
-        }, 2000)
-        this.lineNumRunning = false
     }
 
     updateImageHeights(): void {
@@ -996,5 +956,52 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.showDiscussions = false
         this.focusOverride = false
         this.unfocusHighlight(comment.start, comment.end, comment.loc)
+    }
+    
+    getLineCount(): void {
+        let wordElements = this.wordEls ? this.wordEls.toArray() : []
+        if (!this.lineNumRunning && wordElements.length > 0) {
+            this.lineNumRunning = true
+            // let wordElements: any[] = reading.words
+            let commentsArray = this.project.comments
+
+            // Re-initialize the line number array
+            this._projects.lineNumberArray = []
+            this._projects.commentPosArray = []
+            var lineNum = 1
+            this._projects.lineNumberArray[0] = lineNum
+
+            // Loop through each word element to store the line number of each span element
+            for (let i = 1; i < wordElements.length; i++) {
+                let elPosPrior = wordElements[i-1].nativeElement.getBoundingClientRect().top
+                let elPosCurrent = wordElements[i].nativeElement.getBoundingClientRect().top
+                if (elPosPrior!==elPosCurrent) {
+                    lineNum++
+                }
+                this._projects.lineNumberArray[i] = lineNum
+                this._projects.commentPosArray.push(new Array())
+            }
+
+            wordElements = []
+
+            // Loop through each comment to group comments together by line number
+            for (let i = 0; i < commentsArray.length; i++) {
+                if (commentsArray[i] && !commentsArray[i].reply_to && !commentsArray[i].questionId) {
+                    let comment = commentsArray[i]
+                    let lineNbr = this._projects.lineNumberArray[comment.start]
+                    this._projects.commentPosArray[lineNbr].push(comment)
+                }
+            }
+        }
+        setTimeout(() => {
+            this.getLineCount()
+        }, 2000)
+        this.lineNumRunning = false
+    }
+
+    private toggleCommentPane(comment): void {
+        this.getLineCount()
+        this.commentPane = !this.commentPane
+        console.log(this.commentPane)
     }
 }

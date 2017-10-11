@@ -96,7 +96,7 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
   @Output() dismissKeyboard = new EventEmitter()
   @Output() commentUpdated: EventEmitter<any> = new EventEmitter()
   @Output() commentReply = new EventEmitter()
-  @Output() getLineCount = new EventEmitter()
+  @Output() toggleCommentPane = new EventEmitter()
 
   constructor(
         private _projects: ProjectService,
@@ -334,13 +334,14 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   expandCommentPane(comment): void {
-    this.getLineCount.emit()
+    this.toggleCommentPane.emit()
     this.lineNum = this._projects.lineNumberArray[comment.start]
     this.commentCount = this._projects.commentPosArray[this.lineNum].length
     this.commentPane = true
   }
 
   collapseCommentPane(): void {
+    this.toggleCommentPane.emit()
     this.commentPane = false
   }
 

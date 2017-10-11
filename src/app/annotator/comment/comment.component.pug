@@ -81,7 +81,7 @@
             p Line {{ lineNum }}
             h4(*ngIf="commentCount>1 || commentCount===0") {{ commentCount }} Comments
             h4(*ngIf="commentCount===1") {{ commentCount }} Comment
-            button.close.stats-close-btn.btn-icon--round((click)="commentPane=false", type="button")
+            button.close.stats-close-btn.btn-icon--round((click)="collapseCommentPane()", type="button")
                 span(aria-hidden="true") ×
             hot-firecard(*ngFor="let fireComment of _projects.commentPosArray[_projects.lineNumberArray[comment.start]]", [fireComment]="fireComment")
             .fireBound
