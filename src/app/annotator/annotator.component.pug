@@ -16,19 +16,19 @@
             //- Emoji Comment
             button#addEmojiComment.emoji(
                 *ngIf="project.types.indexOf('emoji') > -1",
-                (click)="addCommentOfType('emoji')"
+                (tap)="addCommentOfType('emoji')"
             )
                 i.icon.icon-emoji-comment
             //- Text Comment
             button#addTextComment.emoji(
                 *ngIf="project.types.indexOf('text') > -1",
-                (click)="addCommentOfType('text')"
+                (tap)="addCommentOfType('text')"
             )
                 i.icon.icon-text-comment
             //- Audio Comment
             button#addAudioComment.emoji(
                 *ngIf="project.types.indexOf('audio') > -1",
-                (click)="addCommentOfType('audio')",
+                (tap)="addCommentOfType('audio')",
                 [class.super-disabled]="audioSupportError"
             )
                 i.icon.icon-mic
