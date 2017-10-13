@@ -78,15 +78,12 @@
 )
     .sliding-pane.from-left([ngClass]="[ commentPane ? 'slide-in' : '' ]")
         .container-fluid.container--less-pad
+            button.close.stats-close-btn.btn-icon--round((click)="toggleCPane()", type="button")
+                span(aria-hidden="true") ×
             p Line {{ lineNum }}
             h4(*ngIf="commentCount>1 || commentCount===0") {{ commentCount }} Comments
             h4(*ngIf="commentCount===1") {{ commentCount }} Comment
-            button.close.stats-close-btn.btn-icon--round((click)="toggleCPane()", type="button")
-                span(aria-hidden="true") ×
-            hot-firecard(*ngFor="let fireComment of _projects.commentPosArray[_projects.lineNumberArray[comment.start]]", [fireComment]="fireComment")
-            .fireBound
-                .fire-icon--light
-                    span.s-emoji([innerHtml]="':seedling:' | emojione")
+            hot-firecard(*ngFor="let fireComment of _projects.commentPosArray[_projects.lineNumberArray[comment.start]]; let i = index", [fireComment]="fireComment", [commentMobile]="true", [commentMobileFirst]="i<1")
 //- END .comment - mobile
 
 //- Mobile Icon

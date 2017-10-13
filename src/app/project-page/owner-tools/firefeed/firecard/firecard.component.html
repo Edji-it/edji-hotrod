@@ -1,8 +1,9 @@
-<div class="fireBound">
-    <div class="user-icon">
+<hr class="fireBlock-hr" *ngIf="commentMobile && !commentMobileFirst">
+<div class="fireBound" [ngClass]="[ commentMobile ? 'fireBlock-mobile-comment' : '' ]">
+    <div class="user-icon" [ngClass]="[ commentMobile ? 'fireBlock-mobile-comment' : '' ]">
         <span>{{fireComment.author.substring(0,2)}}</span>
     </div>
-    <div class="fireBlock">
+    <div class="fireBlock" [ngClass]="[ commentMobile ? 'fireBlock-mobile-comment' : '' ]">
         <div class="list-item list-item--block fireTime-card">
             {{fireComment.author}}<span class="fireTime-card__time">&nbsp;{{ fireComment.createdAt | edjidate:'timeAgo':null:secondsAgo }}</span>
         </div>

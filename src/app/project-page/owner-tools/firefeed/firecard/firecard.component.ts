@@ -15,6 +15,8 @@ import { ReadingService } from '../../../../shared/reading.service'
 export class FirecardComponent implements OnInit, OnDestroy {
 
   @Input() fireComment: EdjiComment
+  @Input() private commentMobile: boolean = false
+  @Input() private commentMobileFirst: boolean = false
   // @Input() currentReading: Reading
 
   private yPos: number = 0
@@ -80,7 +82,6 @@ export class FirecardComponent implements OnInit, OnDestroy {
     if (this.fireComment.type=='audio' && this.fireComment.url && this.fireComment.url.length > 0) {
       this.buildAudioView()
     }
-
   }
 
   // ngAfterViewInit(): void {
