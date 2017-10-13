@@ -1002,6 +1002,5 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     private toggleCommentPane(comment): void {
         this.getLineCount()
         this.commentPane = !this.commentPane
-        console.log(this.commentPane)
     }
 }
