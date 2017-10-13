@@ -993,9 +993,12 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 }
             }
         }
-        setTimeout(() => {
+        let timer = setTimeout(() => {
             this.getLineCount()
         }, 2000)
+        if (this.lineNumRunning) {
+            clearTimeout(timer)
+        }
         this.lineNumRunning = false
     }
 
