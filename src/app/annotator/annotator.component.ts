@@ -273,6 +273,11 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             this.updateImageHeights()
         }
 
+        // Only supported by modern browsers, but very reliable in those cases
+        document.addEventListener("selectionchange", () => {
+            this.showCommentOptions({ name: 'selectionchange', target: document })
+        })
+
         // Fallback for tooltip: Continuous text selection check
         this.loopCheckTextSelection()
     } // ngOnInit
