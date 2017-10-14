@@ -16,20 +16,23 @@
             //- Emoji Comment
             button#addEmojiComment.emoji(
                 *ngIf="project.types.indexOf('emoji') > -1",
-                (tap)="addCommentOfType('emoji')"
+                (touchstart)="addCommentOfType('emoji')",
+                (mousedown)="addCommentOfType('emoji')"
             )
                 i.icon.icon-emoji-comment
             //- Text Comment
             button#addTextComment.emoji(
                 *ngIf="project.types.indexOf('text') > -1",
-                (tap)="addCommentOfType('text')"
+                (touchstart)="addCommentOfType('text')",
+                (mousedown)="addCommentOfType('text')"
             )
                 i.icon.icon-text-comment
             //- Audio Comment
             button#addAudioComment.emoji(
                 *ngIf="project.types.indexOf('audio') > -1",
-                (tap)="addCommentOfType('audio')",
-                [class.super-disabled]="audioSupportError"
+                [class.super-disabled]="audioSupportError",
+                (touchstart)="addCommentOfType('audio')",
+                (mousedown)="addCommentOfType('audio')",
             )
                 i.icon.icon-mic
                 span.beta-tag--icon(title="Beta Feature: May not work on all devices.")
@@ -42,26 +45,32 @@
                 .comment__options--mobileCol.btn.btn-icon--circle-shadow.comment-options--mobile(
                     *ngIf="project.types.indexOf('emoji') > -1",
                     [ngClass]="'col-' + (12 / directCommentOptions.length)", 
-                    [class.btn-show--animation]="optionsShow"
+                    [class.btn-show--animation]="optionsShow",
+                    (touchstart)="addCommentOfType('emoji')",
+                    (mousedown)="addCommentOfType('emoji')"
                 )
-                    button#addEmojiCommentMobile.emoji.comment__options--mobileButton((tap)="addCommentOfType('emoji')")
+                    button#addEmojiCommentMobile.emoji.comment__options--mobileButton()
                         i.icon.icon-emoji-comment
                 //-- Text Comment 
                 .comment__options--mobileCol.btn.btn-icon--circle-shadow.comment-options--mobile(
                     *ngIf="project.types.indexOf('text') > -1",
                     [ngClass]="'col-' + (12 / directCommentOptions.length)", 
-                    [class.btn-show--animation]="optionsShow"
+                    [class.btn-show--animation]="optionsShow",
+                    (touchstart)="addCommentOfType('text')",
+                    (mousedown)="addCommentOfType('text')"
                 )
-                    button#addTextCommentMobile.emoji.comment__options--mobileButton((tap)="addCommentOfType('text')")
+                    button#addTextCommentMobile.emoji.comment__options--mobileButton()
                         i.icon.icon-text-comment
                 //-- Audio Comment
                 .comment__options--mobileCol.btn.btn-icon--circle-shadow.comment-options--mobile(
                     *ngIf="project.types.indexOf('audio') > -1",
                     [ngClass]="'col-' + (12 / directCommentOptions.length)",
                     [class.super-disabled]="audioSupportError", 
-                    [class.btn-show--animation]="optionsShow"
+                    [class.btn-show--animation]="optionsShow",
+                    (touchstart)="addCommentOfType('audio')",
+                    (mousedown)="addCommentOfType('audio')"
                 )
-                    button#addAudioCommentMobile.emoji.comment__options--mobileButton((tap)="addCommentOfType('audio')")
+                    button#addAudioCommentMobile.emoji.comment__options--mobileButton()
                         i.icon.icon-mic
                         span.beta-tag--icon(title="Beta Feature: May not work on all devices.")
                             | B

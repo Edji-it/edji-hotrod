@@ -274,8 +274,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         }
 
         // Only supported by modern browsers, but very reliable in those cases
-        document.addEventListener("selectionchange", () => {
-            this.showCommentOptions({ name: 'selectionchange', target: document })
+        document.addEventListener("selectionchange", (event) => {
+            if(!this.optionsShow) {
+                this.showCommentOptions({ name: 'selectionchange', target: document })
+            }
         })
 
         // Fallback for tooltip: Continuous text selection check
