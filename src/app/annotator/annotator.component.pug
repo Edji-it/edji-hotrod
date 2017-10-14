@@ -91,7 +91,7 @@
             //- Word Loop: reading.words is one big array of individual "words", which can also be puncuation or media
             span.w(
                 *ngFor="let w of reading.words; let i = index",
-                [ngClass]="[ w.styles.join(' '), getHighlightClass(i) ]",
+                [ngClass]="[ (w && w.styles) ? w.styles.join(' ') : '', getHighlightClass(i) ]",
                 [attr.index]="i"
             )
                 //- Comment Loop: Display comments if they exist for this Word
@@ -117,15 +117,15 @@
                 ) <!-- edji-comment -->
                 //- Link Words: If a word is actually a link, handle it differently
                 a.w(
-                    *ngIf="w.styles.indexOf('a') > -1",
+                    *ngIf="w && w.styles && w.styles.indexOf('a') > -1",
                     [attr.index]="i",
                     [href]="(w.url && w.url.indexOf('//') > -1) ? w.url : ('//' + w.url)",
                     target="_blank"
                 )
-                    | {{w.str}}
+                    | {{ w && w.str}}
                 //- Non-link Words, show content
-                | {{ w.styles.indexOf('a') > -1 ? '' : w.styles.indexOf('space') > -1 ? '&nbsp;' : w.str }}
-                .img-wrap(*ngIf="w.styles.indexOf('img') > -1")
+                | {{ (w && w.styles.indexOf('a') > -1) ? '' : (!(w && w.styles) || (w && w.styles.indexOf('space')) > -1) ? '&nbsp;' : w && w.str }}
+                .img-wrap(*ngIf="w && w.styles.indexOf('img') > -1")
                     //- Placeholder image hotspot
                     .hotspot(
                         *ngIf="imageHotspotPlaceholder.index == i && (imageHotspotPlaceholder.focus || imageHotspotPlaceholder.preview)",
@@ -149,7 +149,7 @@
                     )
                 //- Question Words: Display question component
                 edji-question(
-                    *ngIf="w.styles.indexOf('question') > -1 && reading.questions",
+                    *ngIf="w && w.styles.indexOf('question') > -1 && reading.questions",
                     [question]="reading.questions[w.index]"
                 )
                 //- end Word span ".w"
