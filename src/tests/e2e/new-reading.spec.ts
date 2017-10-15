@@ -201,11 +201,11 @@ describe('New Reading Page', () => {
             newReading.pdfFileInput.sendKeys(absolutePath);
 
             // Begin upload 
-            browser.wait(EC.elementToBeClickable(newReading.pdfUploadTrigger), 7000, "button to upload a PDF never became clickable");
+            browser.wait(EC.elementToBeClickable(newReading.pdfUploadTrigger), 10000, "button to upload a PDF never became clickable");
             newReading.pdfUploadTrigger.click();
 
             // Image was uploaded! Insert it
-            browser.wait(EC.elementToBeClickable(newReading.insertUploadedPdf), 15000, "the pdf never became available to insert");
+            browser.wait(EC.elementToBeClickable(newReading.insertUploadedPdf), 20000, "the pdf never became available to insert");
             newReading.insertUploadedPdf.click();
 
             // Complete rest of reading

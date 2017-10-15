@@ -52,16 +52,20 @@ describe('Project Page', () => {
     describe("Login modal success", () => {
         beforeEach(() => {
             project.getPage();
+            // Login
+            guestForm.loginAsGuest();
+            browser.wait(EC.elementToBeClickable(sidebar.logOutButton));
         });
 
         afterEach(() => {
-            // we're going to be logged in on the project page after each of the tests, so log out
-            sidebar.logout();
+            // log out
+            browser.wait(EC.elementToBeClickable(sidebar.logOutButton), 5000, "never found the logout button");
+            sidebar.logOutButton.click();
         });
 
-        loginModal.testLoginSuccess(() => {
-            browser.wait(EC.elementToBeClickable(sidebar.logOutButton), 5000, "logout button never became clickable");
-        });
+        // loginModal.testLoginSuccess(() => {
+        //     browser.wait(EC.elementToBeClickable(sidebar.logOutButton), 5000, "logout button never became clickable");
+        // });
     });
 
     describe("Commenting", () => {

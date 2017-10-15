@@ -1,8 +1,8 @@
+import { Sidebar } from '../page-objects';
 import { browser, by, element, protractor } from 'protractor';
 
 export class GuestLoginForm {
   private EC = protractor.ExpectedConditions; // vital
-
 
   // html elements for guest login
   public guestLoginHeader = element(by.id("guestLoginHeader"));
