@@ -16,20 +16,23 @@
             //- Emoji Comment
             button#addEmojiComment.emoji(
                 *ngIf="project.types.indexOf('emoji') > -1",
-                (tap)="addCommentOfType('emoji')"
+                (touchstart)="addCommentOfType('emoji')",
+                (mousedown)="addCommentOfType('emoji')"
             )
                 i.icon.icon-emoji-comment
             //- Text Comment
             button#addTextComment.emoji(
                 *ngIf="project.types.indexOf('text') > -1",
-                (tap)="addCommentOfType('text')"
+                (touchstart)="addCommentOfType('text')",
+                (mousedown)="addCommentOfType('text')"
             )
                 i.icon.icon-text-comment
             //- Audio Comment
             button#addAudioComment.emoji(
                 *ngIf="project.types.indexOf('audio') > -1",
-                (tap)="addCommentOfType('audio')",
-                [class.super-disabled]="audioSupportError"
+                [class.super-disabled]="audioSupportError",
+                (touchstart)="addCommentOfType('audio')",
+                (mousedown)="addCommentOfType('audio')",
             )
                 i.icon.icon-mic
                 span.beta-tag--icon(title="Beta Feature: May not work on all devices.")
@@ -42,26 +45,32 @@
                 .comment__options--mobileCol.btn.btn-icon--circle-shadow.comment-options--mobile(
                     *ngIf="project.types.indexOf('emoji') > -1",
                     [ngClass]="'col-' + (12 / directCommentOptions.length)", 
-                    [class.btn-show--animation]="optionsShow"
+                    [class.btn-show--animation]="optionsShow",
+                    (touchstart)="addCommentOfType('emoji')",
+                    (mousedown)="addCommentOfType('emoji')"
                 )
-                    button#addEmojiCommentMobile.emoji.comment__options--mobileButton((tap)="addCommentOfType('emoji')")
+                    button#addEmojiCommentMobile.emoji.comment__options--mobileButton()
                         i.icon.icon-emoji-comment
                 //-- Text Comment 
                 .comment__options--mobileCol.btn.btn-icon--circle-shadow.comment-options--mobile(
                     *ngIf="project.types.indexOf('text') > -1",
                     [ngClass]="'col-' + (12 / directCommentOptions.length)", 
-                    [class.btn-show--animation]="optionsShow"
+                    [class.btn-show--animation]="optionsShow",
+                    (touchstart)="addCommentOfType('text')",
+                    (mousedown)="addCommentOfType('text')"
                 )
-                    button#addTextCommentMobile.emoji.comment__options--mobileButton((tap)="addCommentOfType('text')")
+                    button#addTextCommentMobile.emoji.comment__options--mobileButton()
                         i.icon.icon-text-comment
                 //-- Audio Comment
                 .comment__options--mobileCol.btn.btn-icon--circle-shadow.comment-options--mobile(
                     *ngIf="project.types.indexOf('audio') > -1",
                     [ngClass]="'col-' + (12 / directCommentOptions.length)",
                     [class.super-disabled]="audioSupportError", 
-                    [class.btn-show--animation]="optionsShow"
+                    [class.btn-show--animation]="optionsShow",
+                    (touchstart)="addCommentOfType('audio')",
+                    (mousedown)="addCommentOfType('audio')"
                 )
-                    button#addAudioCommentMobile.emoji.comment__options--mobileButton((tap)="addCommentOfType('audio')")
+                    button#addAudioCommentMobile.emoji.comment__options--mobileButton()
                         i.icon.icon-mic
                         span.beta-tag--icon(title="Beta Feature: May not work on all devices.")
                             | B
@@ -114,15 +123,15 @@
                 ) <!-- edji-comment -->
                 //- Link Words: If a word is actually a link, handle it differently
                 a.w(
-                    *ngIf="w.styles.indexOf('a') > -1",
+                    *ngIf="w && w.styles && w.styles.indexOf('a') > -1",
                     [attr.index]="i",
                     [href]="(w.url && w.url.indexOf('//') > -1) ? w.url : ('//' + w.url)",
                     target="_blank"
                 )
-                    | {{w.str}}
+                    | {{ w && w.str}}
                 //- Non-link Words, show content
-                | {{ w.styles.indexOf('a') > -1 ? '' : w.styles.indexOf('space') > -1 ? '&nbsp;' : w.str }}
-                .img-wrap(*ngIf="w.styles.indexOf('img') > -1")
+                | {{ (w && w.styles.indexOf('a') > -1) ? '' : (!(w && w.styles) || (w && w.styles.indexOf('space')) > -1) ? '&nbsp;' : w && w.str }}
+                .img-wrap(*ngIf="w && w.styles.indexOf('img') > -1")
                     //- Placeholder image hotspot
                     .hotspot(
                         *ngIf="imageHotspotPlaceholder.index == i && (imageHotspotPlaceholder.focus || imageHotspotPlaceholder.preview)",
@@ -146,7 +155,7 @@
                     )
                 //- Question Words: Display question component
                 edji-question(
-                    *ngIf="w.styles.indexOf('question') > -1 && reading.questions",
+                    *ngIf="w && w.styles.indexOf('question') > -1 && reading.questions",
                     [question]="reading.questions[w.index]"
                 )
                 //- end Word span ".w"

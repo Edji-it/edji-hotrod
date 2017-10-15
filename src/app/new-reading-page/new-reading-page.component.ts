@@ -315,9 +315,6 @@ export class NewReadingPage implements OnInit {
                         styles: [].concat(inheritedTags)
                     }
                     let addBr = false;
-                    if (typeof(word.str) == 'string' && word.str.trim().length < 1) {
-                        word.styles.push('space');
-                    }
                     if (index == 0 && wIndex == 0) {
                         word.styles.push(tagName + '-a');
                         if ( this.words.slice(-1) && this.words.slice(-1)['styles'] && this.words.slice(-1)['styles'].indexOf('br') >= 0 ) {
@@ -338,25 +335,40 @@ export class NewReadingPage implements OnInit {
                             addBr = true
                         }
                     }
-                    this.words.push(word);
+                    if (typeof(word.str) == 'string' && word.str.trim().length < 1) {
+                        // As a space saving technique, we save spaces as empty object
+                        this.words.push({})
+                    } else {
+                        // Don't save the useless "div" style
+                        if (word.styles.indexOf('div')) {
+                            let i = word.styles.indexOf('div')
+                            word.styles.splice(i, 1)
+                        }
+                        // Don't save empty word strings
+                        if (word.str == '') {
+                            delete word.str
+                        }
+                        // Don't save empty styles arrays
+                        if (word.styles == []) {
+                            delete word.styles
+                        }
+                        this.words.push(word)
+                    }
                     if (addBr) {
                         // Add break element
                         this.words.push({
-                            str: '',
                             styles: ['br']
                         })
                     }
                 }
                 if (lastInBlock === true) {
                     this.words.push({
-                        str: '',
                         styles: ['br']
                     })
                 }
             } else {
                 if (lastInBlock === true ) {
                     this.words.push({
-                        str: '',
                         styles: ['br']
                     })
                 }
@@ -519,8 +531,8 @@ export class NewReadingPage implements OnInit {
                                 .subscribe( (project) => {
                                     this.addLoadingD = false
                                     this.addLoadingP = false
-                                    // this.router.navigate(['project', project._id])
-                                    this._util.showShareCode=true; 
+                                    this.router.navigate(['project', project._id])
+                                    // this._util.showShareCode=true; 
                                 }, (error) => {
                                     console.error(error)
                                     this.addLoadingD = false

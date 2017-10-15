@@ -45,7 +45,7 @@
       //- Share button: Desktop
       button#addReadingButton.btn.btn-action.nav-bar__btn.hidden-sm-down(*ngIf="canPublish", (click)="showShareTooltip = !showShareTooltip", [class.active]="showShareTooltip") Share
       //- Share button: Mobile
-      button#addReadingButton.btn.btn-clear.nav-bar__btn.hidden-md-up(*ngIf="canPublish", (click)="showShareTooltip = !showShareTooltip", [class.active]="showShareTooltip") Share
+      button#addReadingButtonMobile.btn.btn-clear.nav-bar__btn.hidden-md-up(*ngIf="canPublish", (click)="showShareTooltip = !showShareTooltip", [class.active]="showShareTooltip") Share
       //- Publish Tooltip
       .publish-tooltip(*ngIf="showShareTooltip && !_util.showShareCode")
         h1.publish-tooltip__title Publish and Share

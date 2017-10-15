@@ -82,9 +82,9 @@ describe('New Reading Page', () => {
         browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
         newReading.finalizeButton.click();
 
-        // Click the 'Go to Reading' button on share button modal
-        browser.wait(EC.elementToBeClickable(newReading.goToReadingButton), 5000, "share code modal go to reading button never became clickable")
-        newReading.goToReadingButton.click();
+        // // Click the 'Go to Reading' button on share button modal
+        // browser.wait(EC.elementToBeClickable(newReading.goToReadingButton), 5000, "share code modal go to reading button never became clickable")
+        // newReading.goToReadingButton.click();
 
         // Should redirect to Project page for new reading
         browser.wait(EC.urlContains("project"), 5000, "never arrived at new reading");
@@ -201,11 +201,11 @@ describe('New Reading Page', () => {
             newReading.pdfFileInput.sendKeys(absolutePath);
 
             // Begin upload 
-            browser.wait(EC.elementToBeClickable(newReading.pdfUploadTrigger), 7000, "button to upload a PDF never became clickable");
+            browser.wait(EC.elementToBeClickable(newReading.pdfUploadTrigger), 10000, "button to upload a PDF never became clickable");
             newReading.pdfUploadTrigger.click();
 
             // Image was uploaded! Insert it
-            browser.wait(EC.elementToBeClickable(newReading.insertUploadedPdf), 15000, "the pdf never became available to insert");
+            browser.wait(EC.elementToBeClickable(newReading.insertUploadedPdf), 20000, "the pdf never became available to insert");
             newReading.insertUploadedPdf.click();
 
             // Complete rest of reading
@@ -217,9 +217,9 @@ describe('New Reading Page', () => {
             browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
             newReading.finalizeButton.click();
 
-            // Click the 'Go to Reading' button on share button modal
-            browser.wait(EC.elementToBeClickable(newReading.goToReadingButton), 5000, "share code modal go to reading button never became clickable")
-            newReading.goToReadingButton.click();
+            // // Click the 'Go to Reading' button on share button modal
+            // browser.wait(EC.elementToBeClickable(newReading.goToReadingButton), 5000, "share code modal go to reading button never became clickable")
+            // newReading.goToReadingButton.click();
 
             // Should create a new Reading
             browser.wait(EC.urlContains("project"), 5000, "never arrived at new reading");
@@ -287,9 +287,9 @@ describe('New Reading Page', () => {
             browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
             newReading.finalizeButton.click();
 
-            // Click the 'Go to Reading' button on share button modal
-            browser.wait(EC.elementToBeClickable(newReading.goToReadingButton), 5000, "share code modal go to reading button never became clickable")
-            newReading.goToReadingButton.click();
+            // // Click the 'Go to Reading' button on share button modal
+            // browser.wait(EC.elementToBeClickable(newReading.goToReadingButton), 5000, "share code modal go to reading button never became clickable")
+            // newReading.goToReadingButton.click();
 
             // Should create a new Reading
             browser.wait(EC.urlContains("project"), 5000, "never arrived at new reading");
@@ -339,9 +339,9 @@ describe('New Reading Page', () => {
             browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
             newReading.finalizeButton.click();
 
-            // Click the 'Go to Reading' button on share button modal
-            browser.wait(EC.elementToBeClickable(newReading.goToReadingButton), 5000, "share code modal go to reading button never became clickable")
-            newReading.goToReadingButton.click();
+            // // Click the 'Go to Reading' button on share button modal
+            // browser.wait(EC.elementToBeClickable(newReading.goToReadingButton), 5000, "share code modal go to reading button never became clickable")
+            // newReading.goToReadingButton.click();
 
             // Should create a new Reading
             browser.wait(EC.urlContains("project"), 5000, "never arrived at new reading");

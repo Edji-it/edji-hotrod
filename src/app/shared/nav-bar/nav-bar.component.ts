@@ -150,7 +150,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
         }, (err) => {
           this.shareLoading = false
 
-          // this is actually the succcessful response :)
+          // this is actually the successful response :)
           if (err.status == 404) {
             this.shareAction.emit(shareObj)
           } else {
