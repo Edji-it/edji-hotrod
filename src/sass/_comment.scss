@@ -173,8 +173,10 @@ edji-comment {
 	}
 
 	&.active {
+		&:not(.hidden-md-down) {
 			z-index: 5500;
 			display: block !important;
+		}
 		&:not(.replyComment) {
 			position: absolute !important;
 			top: none !important;

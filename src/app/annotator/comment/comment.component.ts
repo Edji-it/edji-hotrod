@@ -79,6 +79,7 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
   set isActive(isActive: boolean) {
     if (typeof(isActive) !== 'undefined' && this.active !== isActive) {
       this.active = isActive
+      this.toggleCPane(this.comment)
       if (!isActive) {
         // Trigger save when deactivated externally i.e. emoji keyboard
         this.deactivate(this.comment)

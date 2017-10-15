@@ -992,6 +992,13 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                     this._projects.commentPosArray[lineNbr].push(comment)
                 }
             }
+
+            // Flip the comment array
+            for (let i = 0; i < this._projects.commentPosArray.length; i++) {
+                if (this._projects.commentPosArray[i].length>0) {
+                    this._projects.commentPosArray[i].reverse()
+                }
+            }
         }
         let timer = setTimeout(() => {
             this.getLineCount()
@@ -1004,6 +1011,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
     private toggleCommentPane(comment): void {
         this.getLineCount()
-        this.commentPane = !this.commentPane
+        setTimeout(() => {
+            this.commentPane = !this.commentPane
+        }, 1)
     }
 }
