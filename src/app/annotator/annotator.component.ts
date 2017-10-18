@@ -1018,6 +1018,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
     private toggleCommentPane(comment): void {
         this.getLineCount()
+        // Need to give the app 1 millisecond to update all arrays when adding a new comment
         setTimeout(() => {
             this.commentPane = !this.commentPane
         }, 1)

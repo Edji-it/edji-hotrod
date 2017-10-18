@@ -76,7 +76,7 @@
     [class.readonly]="readOnly",
     [ngClass]="[ active ? 'comment__show' : '' ]"
 )
-    .sliding-pane.from-left([ngClass]="[ commentPane ? 'slide-in' : '' ]")
+    .sliding-pane.from-left.slide-slow([ngClass]="[ commentPane ? 'slide-in' : '' ]")
         .container-fluid.container--less-pad
             button.close.stats-close-btn.btn-icon--round((click)="toggleCPane()", type="button")
                 span(aria-hidden="true") ×

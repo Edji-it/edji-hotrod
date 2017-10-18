@@ -64,6 +64,10 @@ $navOffset: 60px;
     &.replies {
         overflow-y: hidden;
     }
+
+    &.slide-slow {
+        transition: margin 0.8s linear;
+    }
 }
 
 .user-list-item {

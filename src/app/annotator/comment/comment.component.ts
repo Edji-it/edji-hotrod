@@ -335,7 +335,10 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   toggleCPane(comment?): void {
-    this.toggleCommentPane.emit()
+    // Need to give the app 1 millisecond to update all arrays when adding a new comment
+    setTimeout(() => {
+      this.toggleCommentPane.emit()
+    }, 1)
     if (!this.commentPane) {
       this.lineNum = this._projects.lineNumberArray[comment.start]
       this.commentCount = this._projects.commentPosArray[this.lineNum].length
