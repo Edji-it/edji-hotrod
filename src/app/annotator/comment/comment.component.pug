@@ -77,13 +77,14 @@
     [ngClass]="[ active ? 'comment__show' : '' ]"
 )
     .sliding-pane.from-left.slide-slow([ngClass]="[ commentPane ? 'slide-in' : '' ]")
-        .container-fluid.container--less-pad
+        .container-fluid.container--less-pad(*ngIf="commentPane")
             button.close.stats-close-btn.btn-icon--round((click)="toggleCPane()", type="button")
                 span(aria-hidden="true") ×
             p Line {{ lineNum }}
             h4(*ngIf="commentCount>1 || commentCount===0") {{ commentCount }} Comments
             h4(*ngIf="commentCount===1") {{ commentCount }} Comment
-            hot-firecard(*ngFor="let fireComment of _projects.commentPosArray[_projects.lineNumberArray[comment.start]]; let i = index", [fireComment]="fireComment", [commentMobile]="true", [commentMobileFirst]="i<1")
+            div(class="comment-container-"+lineNum, [ngClass]="[ _comments.activeComment.active && _comments.activeComment.type=='emoji' ? 'commentOverflow-eKey' : 'commentOverflow-normal' ]")
+                hot-firecard(*ngFor="let fireComment of _projects.commentPosArray[_projects.lineNumberArray[comment.start]]; let i = index", [fireComment]="fireComment", [commentMobile]="true", [commentMobileFirst]="i<1")
 //- END .comment - mobile
 
 //- Mobile Icon
