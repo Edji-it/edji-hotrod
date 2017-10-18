@@ -147,6 +147,16 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
         console.error(error)
       }
     ) )
+
+    // Certain events require a top-down decision to deactivate comments
+    this.subscriptions.push( this._comments.clearActiveComments.subscribe(
+      (deactivate) => {
+        this.deactivate()
+      },
+      (error) => {
+        console.error(error)
+      }
+    ))
   }
 
   ngAfterViewInit() {
@@ -154,10 +164,14 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   activate(event?: any): void {
-      this.active = true 
-      this._comments.activeComment = this.comment
-      this._comments.activeComment.active = true
-      this.commentActivation.emit(true)
+    // Deactivate any active comments
+    this._comments.deactivateAllComments()
+
+    // Activate this comment
+    this.comment.active = this.active = true
+    this._comments.activeComment = this.comment
+    this._comments.activeComment.active = true
+    this.commentActivation.emit(true)
   }
 
   /**
@@ -166,7 +180,7 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
    * TO-DO: Clean out code for optionally passing JUST comment.data as comment parameter
    */
   deactivate(comment ?: any, noUpdate ?: boolean): void {
-    this.active = false
+    this.comment.active = this.active = false
     this.commentActivation.emit(false)
     this._comments.activeComment.active = false
     // Save when comment is toggled away from
@@ -313,6 +327,8 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
   public getVerticalPosition(): number {
     // The parentNode offsetTop addition fixes the occasional issue where diferrent images have comments registering on the same line
     this.yPos = Math.round(this.el.nativeElement.offsetTop) + Math.round(this.el.nativeElement.parentNode.offsetTop)
+    // Certain styles can cause the position to vary by up to 5 pixels, so we need to round further
+    this.yPos = Math.round(this.yPos/10) * 10
     return this.yPos
   } // public getVerticalPosition(): number
 
