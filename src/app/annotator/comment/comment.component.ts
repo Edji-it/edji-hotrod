@@ -126,13 +126,27 @@ export class CommentComponent implements OnInit {
         console.error(error)
       }
     ) )
+
+    // Certain events require a top-down decision to deactivate comments
+    this.subscriptions.push( this._comments.clearActiveComments.subscribe(
+      (deactivate) => {
+        this.deactivate()
+      },
+      (error) => {
+        console.error(error)
+      }
+    ))
   }
 
   activate(event?: any): void {
-      this.active = true 
-      this._comments.activeComment = this.comment
-      this._comments.activeComment.active = true
-      this.commentActivation.emit(true)
+    // Deactivate any active comments
+    this._comments.deactivateAllComments()
+
+    // Activate this comment
+    this.comment.active = this.active = true
+    this._comments.activeComment = this.comment
+    this._comments.activeComment.active = true
+    this.commentActivation.emit(true)
   }
 
   /**
@@ -141,7 +155,7 @@ export class CommentComponent implements OnInit {
    * TO-DO: Clean out code for optionally passing JUST comment.data as comment parameter
    */
   deactivate(comment ?: any, noUpdate ?: boolean): void {
-    this.active = false
+    this.comment.active = this.active = false
     this.commentActivation.emit(false)
     this._comments.activeComment.active = false
     // Save when comment is toggled away from

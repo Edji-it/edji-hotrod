@@ -431,6 +431,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      * - References lineCountArray
      */
     expandLine(yPosToExpand: number, forceSet ?: boolean) {
+        // If collapsing a line, make sure to deactivate all comments
+        if (forceSet === false) {
+            this._comments.deactivateAllComments()
+        }
         if (this.lineCountArray[yPosToExpand]) {
             this.lineCountArray[yPosToExpand]
             for (let i = 0; i < this.lineCountArray[yPosToExpand].length; i++) {
@@ -642,11 +646,11 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     }
 
     setActiveCommentByIndex(isActive: boolean, wordIndex: number, commentIndex: number): void {
+        // Any currrently active comments need to be deactivated
+        this.inactivateComment()
         if (isActive) {
             this._comments.activeComment = this.commentsByIndex[wordIndex][commentIndex]
             this._comments.activeComment.active = true
-        } else {
-            this.inactivateComment()
         }
     }
 
