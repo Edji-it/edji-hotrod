@@ -52,10 +52,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     // Line Count
     private lineCountArray: any[][] = [] // 2D ARRAY
     private lineCountRunning: boolean = false
+    private lineExpanded: number
 
     // private activeComment: EdjiComment = <EdjiComment>{}
     private replyComment: EdjiComment = <EdjiComment>{}
-    private lineExpanded: boolean = false
     // Comment options that can be made directly on a word
     private directCommentOptions: string[] = []
 
@@ -399,6 +399,11 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 for (let i = 0; i < commentsArray.length; i++) {
                     let commentComp = commentsArray[i]
                     let yPos = commentComp.getVerticalPosition()
+
+                    // See if comment should be already expanded
+                    if (this.lineExpanded == yPos) {
+                        commentComp.expanded = true
+                    }
                     
                     if (yPos > 0) { // 0 is returned as the default
                         if (this.lineCountArray[yPos]) {
@@ -434,9 +439,15 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // If collapsing a line, make sure to deactivate all comments
         if (forceSet === false) {
             this._comments.deactivateAllComments()
+            this.lineExpanded = 0
         }
         if (this.lineCountArray[yPosToExpand]) {
             this.lineCountArray[yPosToExpand]
+            // Keep track of which line is expanded
+            if (forceSet === true) {
+                this.lineExpanded = yPosToExpand
+            }
+            // Loop through comments on line and mark comments as expand
             for (let i = 0; i < this.lineCountArray[yPosToExpand].length; i++) {
                 let comment = this.lineCountArray[yPosToExpand][i]
                 if (typeof(forceSet) !== 'undefined') {
