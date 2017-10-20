@@ -521,7 +521,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
         let text: string = ''
         for (var i = start; i <= end; i++) {
-            text += this.reading.words[i].str
+            text += this.reading.words[i] ? this.reading.words[i].str : ' '
         }
 
         this.angulartics.eventTrack.next({ action: type + 'CommentCreate', properties: { category: 'projectAction', label: 'attempt' }})
@@ -791,7 +791,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                         styles: [].concat(inheritedTags)
                     }
                     let addBr = false
-                    if (word.str.trim().length < 1) {
+                    if (word.str && word.str.trim().length < 1) {
                         word.styles.push('space')
                     }
                     if (index == 0 && wIndex == 0) {
