@@ -3696,6 +3696,10 @@ options@>=0.0.5:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/options/-/options-0.0.6.tgz#ec22d312806bb53e731773e7cdaefcf1c643128f"
 
+opus-recorder@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/opus-recorder/-/opus-recorder-1.2.0.tgz#577a51e9c6385e4c6ef45e6d940a187858c93fc2"
+
 original@>=0.0.5:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/original/-/original-1.0.0.tgz#9147f93fa1696d04be61e01bd50baeaca656bd3b"

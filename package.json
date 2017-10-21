@@ -87,6 +87,7 @@
     "ie-shim": "^0.1.0",
     "linkifyjs": "^2.1.4",
     "medium-editor": "^5.22.1",
+    "opus-recorder": "^1.2.0",
     "pug-html-loader": "^1.1.5",
     "rangy": "^1.3.0",
     "raven-js": "^3.18.1",

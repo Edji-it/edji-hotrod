@@ -4,8 +4,9 @@ import { MediaService } from '../../shared/media.service'
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 import { EdjiComment } from '../../shared/datatypes'
+import * as Recorder from 'opus-recorder/dist/recorder.min.js'
 
-declare var MediaRecorder: any
+// declare var MediaRecorder: any
 
 @Component({
   selector: 'audio-comment',
@@ -28,7 +29,9 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
   private pausedWidth: number
   private myCanvas
   private chunks: any = []
-  private mediaRecorder: any
+  // private mediaRecorder: any
+  private recorder: any
+
   private audio
   private audioFile
   private playAble: boolean = false
@@ -52,8 +55,8 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
   private countdownI: number = 3
   private countdownText: string[] = ['--- Go! ---', '--- Set ---', '-- Ready --']
   private countdownInterval: any
-  private audioType: string = 'ogg'
-  private audioTypeExt: string = 'ogg'
+  private audioType: string = 'wav'
+  private audioTypeExt: string = 'wav'
   // private audioType: string = 'aac'
   // private audioTypeExt: string = 'aac'
 
@@ -120,7 +123,15 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
      * Will only load if the user creates an audio comment, or loads text with audio comments in it already
      * Both of which we need to get access granted in order to run 
      */
-    this.initializeAudio()
+    if (Recorder.isRecordingSupported()) {
+      this.recorder = new Recorder({
+        type: 'audio/wav',
+        encoderPath: '/assets/js/encoderWorker.min.js',
+        streamPages: true
+      })
+      this.recorder.initStream()
+      this.initializeAudio()
+    }
   }
 
   ngAfterViewInit(){
@@ -128,10 +139,13 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
   }
 
   public initializeAudio() {
-    const onSuccess = stream => {
-      // Initialize a MediaRecorder if access to the microphone is granted
-      this.mediaRecorder = new MediaRecorder(stream)
-      this.mediaRecorder.onstart = e => {
+    
+    console.log(this.recorder)
+    // const onSuccess = stream => {
+    //   // Initialize a MediaRecorder if access to the microphone is granted
+    //   this.mediaRecorder = new MediaRecorder(stream)
+      this.recorder.addEventListener('start', () => {
+        console.log("Recording started!")
         // While recording, check the duration of the recording total and stop it once it hits the limit
         this.rInterval = setInterval(()=> {
           if((new Date().getTime() - this.rStartAt + (this.rDuration * 1000)) > this.timeLimit - 1) {
@@ -140,10 +154,11 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
             return
           }
           // While recording, set the playTime to indicate current % progress of recording
-          // this.playTime = (((this.rDuration * 1000 + (new Date().getTime() - this.rStartAt)) / this.timeLimit) * this.playWidth) + 'px'
+          this.playTime = (((this.rDuration * 1000 + (new Date().getTime() - this.rStartAt)) / this.timeLimit) * this.playWidth) + 'px'
         }, this.intervalGap)
-      }
-      this.mediaRecorder.onstop = e => {
+      })
+
+      this.recorder.addEventListener('stop', () => {
         // If the audio is at the limit, restrict the ability to record
         if (this.rDuration > this.timeLimit / 1000) {
           this.recordAble = false
@@ -165,63 +180,54 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
         this.audio.load()
 
         // Comment saved! Save audio file
-        this._media.uploadAudio(this.audioFile)
-          .take(1)
-          .subscribe(data => {
-            this.audio.src = data.url
-            this.isInitialized = true
+        // this._media.uploadAudio(this.audioFile)
+        //   .take(1)
+        //   .subscribe(data => {
+        //     this.audio.src = data.url
+        //     this.isInitialized = true
 
-            // Save to comment
-            this.comment.url = data.url
-            this.comment.dataArray = this.waves
-            this.save.emit(this.comment)
-          })
+        //     // Save to comment
+        //     this.comment.url = data.url
+        //     this.comment.dataArray = this.waves
+        //     this.save.emit(this.comment)
+        //   })
 
         // Set the playTime to indicate current % progress of playback
-        // this.audio.onplay = e => {
-        //   this.playTime = '0px'
-        //   this.pInterval = setInterval(()=> {
-        //     if((new Date().getTime() - this.pStartAt) > this.rDuration * 1000 - 1) {
-        //       // this.pause()
-        //       clearInterval(this.pInterval)
-        //       return
-        //     }
-        //     this.playTime = (((new Date().getTime() - this.pStartAt) / this.timeLimit) * this.playWidth) + 'px'
-        //   }, this.intervalGap)
-        // }
+        this.audio.onplay = e => {
+          this.playTime = '0px'
+          this.pInterval = setInterval(()=> {
+            if((new Date().getTime() - this.pStartAt) > this.rDuration * 1000 - 1) {
+              // this.pause()
+              clearInterval(this.pInterval)
+              return
+            }
+            this.playTime = (((new Date().getTime() - this.pStartAt) / this.timeLimit) * this.playWidth) + 'px'
+          }, this.intervalGap)
+        }
 
         this.addOnEndEvent()
-      }
+      })
 
-      // Send "chunks" to the array as they are recorded
-      this.mediaRecorder.ondataavailable = e => {
-        this.chunks.push(e.data)
-        this.waves[this.wavePos] = e.data.size - 3200
-        this.wavePos ++
+    //   // Send "chunks" to the array as they are recorded
+      this.recorder.addEventListener('dataAvailable', (e) =>{
+        console.log('data available!')
+        console.log(e)
+        this.chunks.push(e.detail)
+        this.waves[this.wavePos] = e.detail.length - 3200
+        this.wavePos++
         this._comments.waveForm(this.waves, this.myCanvas)
-      }
+      })
+      
+      
 
-      // Clear the playing element and allow recording once audio clip has finished playing
-      if (this.audio) {
-        this.addOnEndEvent()
-      }
-    }
-    const onError = e => {
-      this.audioError()
-    }
-
-    // Request access to the microphone from the user
-    navigator.getUserMedia = (navigator['getUserMedia'] ||
-      navigator['webkitGetUserMedia'] ||
-      navigator['mozGetUserMedia'] ||
-      navigator['msGetUserMedia'])
-
-    // If the user allows access to the microphone, run the onSuccess function and enable the record button
-    if (navigator.getUserMedia) {
-     navigator.getUserMedia({ audio: true }, onSuccess, onError)
-    } else {
-      this.audioError()
-    }
+    //   // Clear the playing element and allow recording once audio clip has finished playing
+    //   if (this.audio) {
+    //     this.addOnEndEvent()
+    //   }
+    // }
+    // const onError = e => {
+    //   this.audioError()
+    
     this.recordAble = true
   }
 
@@ -242,23 +248,29 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
    * Record Audio from the user's microphone
    */
   private freshRecord() {
+    console.log("fresh record")
     // Let analytics know a recording started
-    this.angulartics.eventTrack.next({ action: 'audioRecord', properties: { category: 'heroFeature', label: 'success' }})
-    this.countdown = true
-    this.countdownInterval = setInterval(()=> {
-      this.countdownI--
-    }, 800)
+    // this.angulartics.eventTrack.next({ action: 'audioRecord', properties: { category: 'heroFeature', label: 'success' }})
+    if (this.isRecording) {
+      this.recorder.stop()
+    }
+   
+
+    // this.countdown = true
+    // this.countdownInterval = setInterval(()=> {
+    //   this.countdownI--
+    // }, 800)
     this.playAble = false
     this.isPlaying = false
-    setTimeout(() => {
-      clearInterval(this.countdownInterval)
+    // setTimeout(() => {
+    //   clearInterval(this.countdownInterval)
       this.countdownInterval = ''
       this.countdownI = 2
       this.countdown = false
       this.isRecording = true
       this.rStartAt = new Date()
-      this.mediaRecorder.start(this.intervalGap)
-    }, 3000)
+      this.recorder.start()
+    // }, 3000)
     
   }
 
@@ -266,14 +278,15 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
    * Stop recording audio
    */
   private stopRecord() {
-    this.playAble = true
-    this.isRecording = false
-    this.isPlaying = false
-    // Get the duration of the audio track
-    this.rDuration = this.rDuration + (new Date().getTime() - this.rStartAt) / 1000
-    clearInterval(this.rInterval)
-    // this.playTime = '0px'
-    this.mediaRecorder.stop()
+    this.recorder.stop()
+    // this.playAble = true
+    // this.isRecording = false
+    // this.isPlaying = false
+    // // Get the duration of the audio track
+    // this.rDuration = this.rDuration + (new Date().getTime() - this.rStartAt) / 1000
+    // clearInterval(this.rInterval)
+    // // this.playTime = '0px'
+    // this.mediaRecorder.stop()
   }
 
   /** 

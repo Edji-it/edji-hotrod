@@ -99,7 +99,7 @@ const APP_PROVIDERS = [
   SocketService,
   UtilToolService,
   BumblebeeService,
-  { provide: ErrorHandler, useClass: RavenErrorHandler },
+  // { provide: ErrorHandler, useClass: RavenErrorHandler },
   { 
       provide: HAMMER_GESTURE_CONFIG, 
       useClass: MyHammerConfig 
