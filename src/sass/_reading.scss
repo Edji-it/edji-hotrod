@@ -436,7 +436,7 @@ article.content .w.h-f {
 		transform: translateX(100%);
 	}
 	&:not(.sliding-out) {
-		transition: transform .8s linear;
+		transition: transform .9s linear;
 		transform: translateX(0%);
 	}
 	// background: #fff;

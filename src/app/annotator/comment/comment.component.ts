@@ -78,10 +78,11 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
   set isActive(isActive: boolean) {
     if (typeof(isActive) !== 'undefined' && this.active !== isActive) {
       this.active = isActive
-      this.toggleCPane(this.comment)
       if (!isActive) {
         // Trigger save when deactivated externally i.e. emoji keyboard
         this.deactivate(this.comment)
+      } else {
+        this.toggleCPane(this.comment)
       }
     } 
   }
@@ -364,14 +365,6 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
     setTimeout(() => {
       this.toggleCommentPane.emit()
     }, 1)
-    // if (!this.commentPane) {
-    //   this.lineNum = this._projects.lineNumberArray[comment.start]
-    //   this.commentCount = this._projects.commentPosArray[this.lineNum].length
-    // }
-    // this.commentPane = !this.commentPane
-    // setTimeout(() => {
-    //   this.el.nativeElement.querySelector('.comment-container').scrollTop = this.el.nativeElement.querySelector('.comment-container').scrollHeight
-    // }, 1)
   }
 
   getIconNumber(comment): void {

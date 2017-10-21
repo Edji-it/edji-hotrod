@@ -97,15 +97,3 @@ $tablet-width: 768px;
   text-align: center;
   width: 20px;
 }
-
-.comment-container {
-  overflow-y: auto;
-}
-
-.commentOverflow-normal {
-  height: calc(100% - 203px)
-}
-
-.commentOverflow-eKey {
-  height: calc(100% - 430px)
-}

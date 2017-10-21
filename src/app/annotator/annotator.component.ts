@@ -981,8 +981,17 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.unfocusHighlight(comment.start, comment.end, comment.loc)
     }
     
+    /**
+     * getLineCount gives us the number of lines in the project
+     * 
+     * If the height of the word element does not match the one before it, this counts as a new line
+     * We check this every time the comment pane is open in case the user adjusts screen width
+     */
     getLineCount(): void {
+        // Get all words and put them in to an array
         let wordElements = this.wordEls ? this.wordEls.toArray() : []
+
+        // Only run this if the words are rendered and if it isn't already running
         if (!this.lineNumRunning && wordElements.length > 0) {
             this.lineNumRunning = true
 
@@ -1001,28 +1010,32 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 this._projects.lineNumberArray[i] = lineNum
             }
 
+            // Clear the word elements array and let the project service generate an observable of all comments per line
             wordElements = []
             this._projects.getCommentsByLine()
         }
+        // Run a timer for the get linecount function until the words are rendered
         let timer = setTimeout(() => {
             this.getLineCount()
         }, 2000)
+        // This will clear the timer if it runs when words are rendered so we don't bog the browser down
         if (this.lineNumRunning) {
             clearTimeout(timer)
         }
+        // Set the check variable to false if it ran so we can run it later when needed
         this.lineNumRunning = false
     }
 
     private toggleCommentPane(comment?): void {
         // Make sure the line counts are up-to-date
-        // z7jzk - move this to the project service so it's automatic somehow?? - issue right now with word rendering though..
         this.getLineCount()
+
+        // Set the input comment to the comment pane if it is not currently open
         if (!this.commentPane) {
             this.selectedComment=comment
         }
-        // Need to give the app 1 millisecond to update all arrays when adding a new comment
-        setTimeout(() => {
-            this.commentPane = !this.commentPane
-        }, 1)
+
+        // Toggle the variable that controls comment pane open/close so we can add a class to "push" screen over
+        this.commentPane = !this.commentPane
     }
 }

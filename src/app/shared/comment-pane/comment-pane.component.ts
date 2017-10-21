@@ -10,19 +10,43 @@ import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output }
 })
 export class CommentPaneComponent implements OnInit, OnDestroy {
 
-  @Input() visible: boolean = false
-  @Input() comment: EdjiComment
-  @Output() hideComment = new EventEmitter()
-
+  // General variables for the comment pane component
   private commentPane: boolean
   private lineNum: number = 0
   private commentCount: number = 0
   private rowComments: EdjiComment[][] = []
+  // Is fully visible, focused, and editable
+  private active = false
 
   // Subscriptions and related
   private subscriptions: Subscription[] = []
   private commentByPos: any[] = []
   private lineNumArray: any[] = []
+
+  // Comment Pane Component Inputs
+  @Input() visible: boolean = false
+  @Input() comment: EdjiComment
+  @Input()
+  set isActive(isActive: boolean) {
+    if (typeof(isActive) !== 'undefined' && this.active !== isActive) {
+      this.active = isActive
+      
+      // if the comment is new, let's adjust the scroll position if there are a ton of comments
+      if (this.comment.new) {
+        setTimeout(() => {
+          this.el.nativeElement.querySelector('.comment-container').scrollTop = this.el.nativeElement.querySelector('.comment-container').scrollHeight
+        }, 1)
+      }
+
+      if (!isActive) {
+        // Trigger save when deactivated externally i.e. emoji keyboard
+        
+      }
+    } 
+  }
+
+  // Comment Pane Component Outputs
+  @Output() hideComment = new EventEmitter()
 
   constructor(
       private _projects: ProjectService,
@@ -40,13 +64,6 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
         console.error(error)
       }
     ))
-  }
-
-  toggleCommentPane(comment?): void {
-    this.commentPane = !this.commentPane
-    setTimeout(() => {
-      this.el.nativeElement.querySelector('.comment-container').scrollTop = this.el.nativeElement.querySelector('.comment-container').scrollHeight
-    }, 1)
   }
 
   dismissCommentPane() {

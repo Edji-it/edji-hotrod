@@ -1,1 +1,15 @@
 @import '../../../sass/base/variables';
+
+.comment-container {
+    overflow-y: auto;
+    position: fixed;
+    width: 75%;
+  }
+  
+  .commentOverflow-normal {
+    height: calc(100% - 203px)
+  }
+  
+  .commentOverflow-eKey {
+    height: calc(100% - 430px)
+  }
