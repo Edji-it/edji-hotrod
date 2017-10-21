@@ -59,10 +59,9 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
   private user: any
   private subscriptions: Subscription[] = []
   private repliesById: any = {}
+  private commentByPos: any = []
   private project: any
   private commentPane: boolean
-  private lineNum: number = 0
-  private commentCount: number = 0
   private lineIconNum: number = 0
   private iconNum: number = 0
 
@@ -134,7 +133,17 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
       (error) => {
         console.error(error)
       }
-    ) )
+    ))
+    
+    // Subscribe to updates to the comment by line number position array
+    this.subscriptions.push( this._projects.commentByPos.subscribe(
+      (commentByPos) => {
+        this.commentByPos = commentByPos
+      },
+      (error) => {
+        console.error(error)
+      }
+    ))
 
     // Subscribe to updates from that project once we're subscribed to the reading
     this.subscriptions.push( this._projects.currentProject.subscribe(
@@ -368,11 +377,11 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
   getIconNumber(comment): void {
     if (!comment.reply_to && !comment.questionId) {
       this.lineIconNum = this._projects.lineNumberArray[comment.start]
-      this.iconNum = this._projects.commentPosArray[this.lineIconNum].length
+      this.iconNum = this._projects.commentByPosSource[this.lineIconNum].length
     }
   }
 
   getComments(comment): void {
-    console.log(this._projects.commentPosArray[this._projects.lineNumberArray[comment.start]])
+    console.log(this._projects.commentByPosSource[this._projects.lineNumberArray[comment.start]])
   }
 }

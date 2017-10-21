@@ -5,14 +5,13 @@
 //-   [class.readonly]="readOnly",
 //-   [ngClass]="[ active ? 'comment__show' : '' ]"
 //- )
-.sliding-pane.from-left.slide-slow([ngClass]="[ commentPane ? 'slide-in' : '' ]")
-  p hi
-  .container-fluid.container--less-pad(*ngIf="commentPane")
-    button.close.stats-close-btn.btn-icon--round((click)="toggleCPane()", type="button")
+.sliding-pane.from-left.slide-slow([ngClass]="[ visible ? 'slide-in' : '' ]")
+  .container-fluid.container--less-pad(*ngIf="visible")
+    button.close.stats-close-btn.btn-icon--round((click)="dismissCommentPane()", type="button")
       span(aria-hidden="true") ×
-    //- p Line {{ lineNum }}
-    //- h4(*ngIf="commentCount>1 || commentCount===0") {{ commentCount }} Comments
-    //- h4(*ngIf="commentCount===1") {{ commentCount }} Comment
-    //- div(class="comment-container-"+lineNum, [ngClass]="[ _comments.activeComment.active && _comments.activeComment.type=='emoji' ? 'commentOverflow-eKey' : 'commentOverflow-normal' ]")
-    //-   hot-firecard(*ngFor="let fireComment of _projects.commentPosArray[_projects.lineNumberArray[comment.start]]; let i = index", [fireComment]="fireComment", [commentMobile]="true", [commentMobileFirst]="i<1")
+    p Line {{ lineNumArray[comment.start] }}
+    h4(*ngIf="commentByPos[lineNumArray[comment.start]].length>1 || commentByPos[lineNumArray[comment.start]].length===0") {{ commentByPos[lineNumArray[comment.start]].length }} Comments
+    h4(*ngIf="commentByPos[lineNumArray[comment.start]].length===1") {{ commentByPos[lineNumArray[comment.start]].length }} Comment
+    div(class="comment-container-"+lineNum, [ngClass]="[ comment.active && comment.type=='emoji' ? 'commentOverflow-eKey' : 'commentOverflow-normal' ]")
+      hot-firecard(*ngFor="let fireComment of commentByPos[lineNumArray[comment.start]]; let i = index", [fireComment]="fireComment", [commentMobile]="true", [commentMobileFirst]="i<1")
 //- END .comment - mobile

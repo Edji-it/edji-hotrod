@@ -116,7 +116,7 @@
                     (commentUpdated)="updateAllLineCounts()",
                     (expandLine)="expandLine($event, true)",
                     (collapseLine)="expandLine($event, false)",
-                    (toggleCommentPane)="toggleCommentPane($event)",
+                    (toggleCommentPane)="toggleCommentPane(comment)",
                     (commentReply)="discReplyFire(comment)",
                     [class.imageComment]="comment['loc']",
                     [style.top]="comment['loc'] ? getClosestRowY(comment['loc']['y']/100 * imageHeight[i]) + 'px' : '0px'"
@@ -210,4 +210,8 @@ hot-discussions(
 )
 
 //- comment-pane
-comment-pane(*ngIf="commentPane", (toggleCommentPane)="toggleCommentPane($event)")
+comment-pane(
+    [visible]="commentPane", 
+    [comment]="selectedComment",
+    (hideComment)="toggleCommentPane()"
+)

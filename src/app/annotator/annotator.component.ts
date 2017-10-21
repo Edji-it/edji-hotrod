@@ -60,6 +60,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
     // private activeComment: EdjiComment = <EdjiComment>{}
     private replyComment: EdjiComment = <EdjiComment>{}
+    private selectedComment: EdjiComment = <EdjiComment>{}
     // Comment options that can be made directly on a word
     private directCommentOptions: string[] = []
 
@@ -984,12 +985,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         let wordElements = this.wordEls ? this.wordEls.toArray() : []
         if (!this.lineNumRunning && wordElements.length > 0) {
             this.lineNumRunning = true
-            // let wordElements: any[] = reading.words
-            let commentsArray = this.project.comments
 
             // Re-initialize the line number array
             this._projects.lineNumberArray = []
-            this._projects.commentPosArray = []
             var lineNum = 1
             this._projects.lineNumberArray[0] = lineNum
 
@@ -1001,26 +999,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                     lineNum++
                 }
                 this._projects.lineNumberArray[i] = lineNum
-                this._projects.commentPosArray.push(new Array())
             }
 
             wordElements = []
-
-            // Loop through each comment to group comments together by line number
-            for (let i = 0; i < commentsArray.length; i++) {
-                if (commentsArray[i] && !commentsArray[i].reply_to && !commentsArray[i].questionId) {
-                    let comment = commentsArray[i]
-                    let lineNbr = this._projects.lineNumberArray[comment.start]
-                    this._projects.commentPosArray[lineNbr].push(comment)
-                }
-            }
-
-            // Flip the comment array
-            for (let i = 0; i < this._projects.commentPosArray.length; i++) {
-                if (this._projects.commentPosArray[i].length>0) {
-                    this._projects.commentPosArray[i].reverse()
-                }
-            }
+            this._projects.getCommentsByLine()
         }
         let timer = setTimeout(() => {
             this.getLineCount()
@@ -1031,8 +1013,13 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.lineNumRunning = false
     }
 
-    private toggleCommentPane(comment): void {
+    private toggleCommentPane(comment?): void {
+        // Make sure the line counts are up-to-date
+        // z7jzk - move this to the project service so it's automatic somehow?? - issue right now with word rendering though..
         this.getLineCount()
+        if (!this.commentPane) {
+            this.selectedComment=comment
+        }
         // Need to give the app 1 millisecond to update all arrays when adding a new comment
         setTimeout(() => {
             this.commentPane = !this.commentPane

@@ -58,7 +58,9 @@ export class ProjectService {
      *      - Comment Counter by Line Array
      */
     public lineNumberArray: any[] = []
-    public commentPosArray: any[][] = []
+    public commentByPosSource: any[][] = []
+    private commentByPosSubject: BehaviorSubject<any> = new BehaviorSubject<any>(this.commentByPosSource)
+    public commentByPos: Observable<any> = this.commentByPosSubject.asObservable()
 
     constructor(
         private http: Http, 
@@ -582,4 +584,35 @@ export class ProjectService {
             this._auth.getOptions()
         ) //this.http.put
     } // public addUserToProject(projectId: string): Observable<any>
+
+    public getCommentsByLine(): void {
+        let commentsArray = this.project.comments
+
+        // Re-initialize the comment by position array
+        this.commentByPosSource = []
+
+        // Loop through the line number array and initialize a new array for each word number
+        for (let i = 1; i < this.lineNumberArray.length; i++) {
+            this.commentByPosSource.push(new Array())
+        }
+
+        // Loop through each comment to group comments together by line number
+        for (let i = 0; i < commentsArray.length; i++) {
+            if (commentsArray[i] && !commentsArray[i].reply_to && !commentsArray[i].questionId) {
+                let comment = commentsArray[i]
+                let lineNbr = this.lineNumberArray[comment.start]
+                this.commentByPosSource[lineNbr].push(comment)
+            }
+        }
+
+        // Flip the comment array
+        for (let i = 0; i < this.commentByPosSource.length; i++) {
+            if (this.commentByPosSource[i].length>0) {
+                this.commentByPosSource[i].reverse()
+            }
+        }
+
+        this.commentByPosSubject.next(this.commentByPosSource)
+    }
 } // class
+
