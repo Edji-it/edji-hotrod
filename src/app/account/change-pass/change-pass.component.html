@@ -19,7 +19,7 @@
                         <label for="new-password-confirm-input">New Confirm New Password</label>
                         <input type="password" id="new-password-confirm-input" class="form-control" [formControl]="passwordForm.controls['newPasswordConfirm']" />
                         <div *ngIf="passwordForm.controls['newPasswordConfirm'].hasError('required')  && passwordForm.controls['newPasswordConfirm'].dirty" class="alert alert-info">Please confirm your new password</div>
-                        <div *ngIf="passwordForm.hasError('mismatch')" class="alert alert-danger">Please make sure your passwords match</div>
+                        <div *ngIf="passwordForm.hasError('mismatch')" class="alert alert-info">Please make sure your passwords match</div>
                     </div>
                 </div>
                 <div *ngIf="!messages.success" class="modal-footer">
