@@ -432,8 +432,12 @@ article.content .w.h-f {
 
 .reading-page {
 	&.sliding-out {
-		right: -100%;
-		transition: right 1s linear;
+		transition: transform .8s linear;
+		transform: translateX(100%);
+	}
+	&:not(.sliding-out) {
+		transition: transform .8s linear;
+		transform: translateX(0%);
 	}
 	// background: #fff;
 	// box-shadow: 0 3px 9px 0 rgba(0,0,0,0.2), 0 0 0 1px rgba(0,0,0,0.04); //0px 2px 3px 0px rgba(0,0,0, 0.1);
