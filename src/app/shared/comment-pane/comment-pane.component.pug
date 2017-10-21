@@ -10,8 +10,14 @@
     button.close.stats-close-btn.btn-icon--round((click)="dismissCommentPane()", type="button")
       span(aria-hidden="true") ×
     p Line {{ lineNumArray[comment.start] }}
-    h4(*ngIf="commentByPos[lineNumArray[comment.start]].length>1 || commentByPos[lineNumArray[comment.start]].length===0") {{ commentByPos[lineNumArray[comment.start]].length }} Comments
-    h4(*ngIf="commentByPos[lineNumArray[comment.start]].length===1") {{ commentByPos[lineNumArray[comment.start]].length }} Comment
-    div(class="comment-container", [ngClass]="[ comment.active && comment.type=='emoji' ? 'commentOverflow-eKey' : 'commentOverflow-normal' ]")
+    h4(
+      *ngIf="commentByPos[lineNumArray[comment.start]].length>1 || commentByPos[lineNumArray[comment.start]].length===0"
+    ) {{ commentByPos[lineNumArray[comment.start]].length }} Comments
+    h4(
+      *ngIf="commentByPos[lineNumArray[comment.start]].length===1"
+    ) {{ commentByPos[lineNumArray[comment.start]].length }} Comment
+    .comment-container.commentOverflow-normal(
+      [ngClass]="[ comment.active && comment.type=='emoji' ? 'commentOverflow-eKey' : '',  comment.active && comment.type=='text' ? 'commentOverflow-kKey' : '' ]"
+    )
       hot-firecard(*ngFor="let fireComment of commentByPos[lineNumArray[comment.start]]; let i = index", [fireComment]="fireComment", [commentMobile]="true", [commentMobileFirst]="i<1")
 //- END .comment - mobile

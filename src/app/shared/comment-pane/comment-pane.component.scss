@@ -13,3 +13,9 @@
   .commentOverflow-eKey {
     height: calc(100% - 430px)
   }
+
+  .commentOverflow-kKey {
+		@media(max-width: $tablet) {
+			height: calc(100% - 430px)
+		}
+  }
