@@ -1,6 +1,5 @@
 nav-bar([showProjectInfo]="true")
 owner-tools
-//- comment-pane
 .container-fluid
   .project-column([ngClass]="{ loading: !project._id }")
     p.alert.alert-danger(*ngIf="error") {{ error }}

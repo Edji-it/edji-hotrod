@@ -79,6 +79,7 @@ import { LoginComponent } from './login';
 import { ResetPassPage } from './reset-pass/reset-pass-page.component';
 import { HeroPromoComponent } from './hero-promo/hero-promo.component';
 import { HeroPricingComponent } from './hero-pricing/hero-pricing.component';
+import { CommentPaneComponent } from './shared/comment-pane/comment-pane.component';
 
 // Configure Hammer.js
 export class MyHammerConfig extends HammerGestureConfig  {
@@ -130,6 +131,7 @@ type StoreType = {
     RegisterComponent,
     NavBarComponent,
     FooterComponent,
+    CommentPaneComponent,
     CommentComponent,
     TextCommentComponent,
     EmojiCommentComponent,

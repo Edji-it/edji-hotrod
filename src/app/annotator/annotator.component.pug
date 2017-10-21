@@ -208,3 +208,6 @@ hot-discussions(
     [visible]="showDiscussions",
     [comment]="replyComment"
 )
+
+//- comment-pane
+comment-pane(*ngIf="commentPane", (toggleCommentPane)="toggleCommentPane($event)")

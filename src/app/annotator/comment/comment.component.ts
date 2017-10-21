@@ -355,14 +355,14 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
     setTimeout(() => {
       this.toggleCommentPane.emit()
     }, 1)
-    if (!this.commentPane) {
-      this.lineNum = this._projects.lineNumberArray[comment.start]
-      this.commentCount = this._projects.commentPosArray[this.lineNum].length
-    }
-    this.commentPane = !this.commentPane
-    setTimeout(() => {
-      this.el.nativeElement.querySelector('.comment-container').scrollTop = this.el.nativeElement.querySelector('.comment-container').scrollHeight
-    }, 1)
+    // if (!this.commentPane) {
+    //   this.lineNum = this._projects.lineNumberArray[comment.start]
+    //   this.commentCount = this._projects.commentPosArray[this.lineNum].length
+    // }
+    // this.commentPane = !this.commentPane
+    // setTimeout(() => {
+    //   this.el.nativeElement.querySelector('.comment-container').scrollTop = this.el.nativeElement.querySelector('.comment-container').scrollHeight
+    // }, 1)
   }
 
   getIconNumber(comment): void {
