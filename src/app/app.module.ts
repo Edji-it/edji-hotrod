@@ -25,15 +25,15 @@ const { version: appVersion } = require('../../package.json');
 // Error tracking utility for sentry.io
 import * as Raven from 'raven-js';
 
-Raven.config('https://f71b0ea0db5a4785b8ebee0b426b4bec@sentry.io/229527', {
-  release: appVersion
-}).install();
+// Raven.config('https://f71b0ea0db5a4785b8ebee0b426b4bec@sentry.io/229527', {
+//   release: appVersion
+// }).install();
 
-export class RavenErrorHandler implements ErrorHandler {
-  handleError(err:any) : void {
-    Raven.captureException(err);
-  }
-}
+// export class RavenErrorHandler implements ErrorHandler {
+//   handleError(err:any) : void {
+//     Raven.captureException(err);
+//   }
+// }
 
 // Services
 import { AppState, InternalStateType } from './app.service';

@@ -7,6 +7,7 @@ import { EdjiComment } from '../../shared/datatypes'
 import * as Recorder from 'opus-recorder/dist/recorder.min.js'
 
 // declare var MediaRecorder: any
+declare var window: any
 
 @Component({
   selector: 'audio-comment',
@@ -132,17 +133,55 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
       this.recorder.initStream()
       this.initializeAudio()
     }
+
+    // Safari needs warming
+    // this.warmUpAudioContext()
   }
 
   ngAfterViewInit(){
     setTimeout(_=> this.setplayWidthVisual())
   }
 
+  // warmUpAudioContext() {
+  //     window.AudioContext = window.AudioContext || window.webkitAudioContext;
+  //   if (window.AudioContext) {
+  //     window.audioContext = new window.AudioContext();
+  //   }
+  //   var fixAudioContext = function (e) {
+  //     if (window.audioContext) {
+  //       // Create empty buffer
+  //       var buffer = window.audioContext.createBuffer(1, 1, 22050);
+  //       var source = window.audioContext.createBufferSource();
+  //       source.buffer = buffer;
+  //       // Connect to output (speakers)
+  //       source.connect(window.audioContext.destination);
+  //       // Play sound
+  //       if (source.start) {
+  //         source.start(0);
+  //       } else if (source.play) {
+  //         source.play(0);
+  //       } else if (source.noteOn) {
+  //         source.noteOn(0);
+  //       }
+  //     }
+  //     // Remove events
+  //     document.removeEventListener('touchstart', fixAudioContext);
+  //     document.removeEventListener('touchend', fixAudioContext);
+  //   };
+  //   // iOS 6-8
+  //   document.addEventListener('touchstart', fixAudioContext);
+  //   // iOS 9
+  //   document.addEventListener('touchend', fixAudioContext);
+  // }
+
   public initializeAudio() {
     
     console.log(this.recorder)
     // const onSuccess = stream => {
     //   // Initialize a MediaRecorder if access to the microphone is granted
+    this.recorder.addEventListener('streamError', (err) => {
+      console.log(err)
+    })
     //   this.mediaRecorder = new MediaRecorder(stream)
       this.recorder.addEventListener('start', () => {
         console.log("Recording started!")
@@ -160,9 +199,9 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
 
       this.recorder.addEventListener('stop', () => {
         // If the audio is at the limit, restrict the ability to record
-        if (this.rDuration > this.timeLimit / 1000) {
+        // if (this.rDuration > this.timeLimit / 1000) {
           this.recordAble = false
-        }
+        // }
 
         // Initialize an audio object after the recording has stopped
         this.audio = new Audio()
@@ -176,8 +215,19 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
         });
         
         this.audioFile = file
-        this.audio.src = window.URL.createObjectURL(blob)
-        this.audio.load()
+        // this.audio.load()
+
+        // document.getElementById('audioPlay').onclick = (e) => {
+          this.audio.preload = 'none'
+          this.audio.src = window.URL.createObjectURL(blob)
+          // this.audio.play()
+          //   .then(data => {
+          //     console.log(data)
+          //   })
+          //   .catch(err => {
+          //     console.log(err)
+          //   })
+        // }
 
         // Comment saved! Save audio file
         // this._media.uploadAudio(this.audioFile)
@@ -278,15 +328,15 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
    * Stop recording audio
    */
   private stopRecord() {
-    this.recorder.stop()
-    // this.playAble = true
-    // this.isRecording = false
-    // this.isPlaying = false
+    console.log("STOP!")
+    this.playAble = true
+    this.isRecording = false
+    this.isPlaying = false
     // // Get the duration of the audio track
-    // this.rDuration = this.rDuration + (new Date().getTime() - this.rStartAt) / 1000
+    this.rDuration = this.rDuration + (new Date().getTime() - this.rStartAt) / 1000
     // clearInterval(this.rInterval)
-    // // this.playTime = '0px'
-    // this.mediaRecorder.stop()
+    this.playTime = '0px'
+    this.recorder.stop()
   }
 
   /** 
@@ -312,7 +362,13 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
     this.isPlaying = true
     this.isRecording=false
     // this.pStartAt = new Date()
-    this.audio.play()
+    console.log(this.audio)
+    
+    // this.audio.play().then( () => {
+            
+    //   }).catch((error) => {
+    //      console.log("auto play failed!")
+    //   })
   }
 
   private getPlayhead() {
