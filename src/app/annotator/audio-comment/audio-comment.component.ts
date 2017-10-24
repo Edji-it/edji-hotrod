@@ -209,7 +209,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
 
         // Set the audio for playback via the blob object from the stored chunks
         //var binary = this.convertDataURIToBinary(this.chunks)
-        const blob = new Blob(this.chunks, { 'type': 'audio/' + this.audioType + '; codecs="aac"' })
+        const blob = new Blob(this.chunks, { 'type': 'audio/' + this.audioType + '; codecs="wav"' })
         
         var file = new File([blob], 'my-audio.' + this.audioTypeExt, {
             type: 'audio/' + this.audioType
