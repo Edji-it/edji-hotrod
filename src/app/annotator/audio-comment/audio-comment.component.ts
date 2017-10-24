@@ -182,6 +182,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
     this.recorder.addEventListener('streamError', (err) => {
       console.log(err)
     })
+    
     //   this.mediaRecorder = new MediaRecorder(stream)
       this.recorder.addEventListener('start', () => {
         console.log("Recording started!")
@@ -219,7 +220,10 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
 
         // document.getElementById('audioPlay').onclick = (e) => {
           this.audio.preload = 'none'
-          this.audio.src = window.URL.createObjectURL(blob)
+          
+          // No longer loading blob, doesn't work in Safari and in other cases
+          // this.audio.src = window.URL.createObjectURL(blob)
+
           // this.audio.play()
           //   .then(data => {
           //     console.log(data)
@@ -230,17 +234,18 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
         // }
 
         // Comment saved! Save audio file
-        // this._media.uploadAudio(this.audioFile)
-        //   .take(1)
-        //   .subscribe(data => {
-        //     this.audio.src = data.url
-        //     this.isInitialized = true
+        this._media.uploadAudio(this.audioFile)
+          .take(1)
+          .subscribe(data => {
+            console.log(data)
+            this.audio.src = data.url
+            this.isInitialized = true
 
-        //     // Save to comment
-        //     this.comment.url = data.url
-        //     this.comment.dataArray = this.waves
-        //     this.save.emit(this.comment)
-        //   })
+            // Save to comment
+            this.comment.url = data.url
+            this.comment.dataArray = this.waves
+            this.save.emit(this.comment)
+          })
 
         // Set the playTime to indicate current % progress of playback
         this.audio.onplay = e => {
