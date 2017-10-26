@@ -8,7 +8,7 @@ import { ReadingService } from '../../../../shared/reading.service'
 
 @Component({
   selector: 'hot-firecard',
-  templateUrl: 'firecard.component.html',
+  templateUrl: 'firecard.component.pug',
   styleUrls: ['firecard.component.scss']
 })
 
