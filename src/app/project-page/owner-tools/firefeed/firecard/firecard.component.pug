@@ -14,15 +14,27 @@ hr.fireBlock-hr(*ngIf="commentMobile && !commentMobileFirst")
     //- Audio comment display
     .list-item.list-item--block.fireComment-card.fireCard-audio(*ngIf="fireComment.type == 'audio'")
       button.btn-audio.btn-fc-audio([class.disabled]="!playAble")
-        i.icon-play([class.hide]="isPlaying", (click)="play()")
-        i.icon-pause([class.hide]="!isPlaying", (click)="pause()")
-      button.btn-audio.btn-fc-audio((click)="isRecording=false; isPlaying=false; restartPlayback()")
+        i.icon-play([class.hide]="isPlaying", (tap)="play()")
+        i.icon-pause([class.hide]="!isPlaying", (tap)="pause()")
+      button.btn-audio.btn-fc-audio((tap)="isRecording=false; isPlaying=false; restartPlayback()")
         i.icon-restart
       .wave-wrap
-        canvas.wave-form((click)="setPlaybackTime($event)")
+        canvas.wave-form((tap)="setPlaybackTime($event)")
         .playing([class.hide]="!audio || !audio.currentTime", [style.width]="getPlayhead() + '%'")
     .list-item.list-item.fireHighlight-card.h-1(*ngIf="!isImage")
       | {{ fireComment.text ? fireComment.text : '...'}}
     .list-item.list-item.fireHighlight-card_liImage.h-1(*ngIf="isImage")
       .fireHighlight-card_image Image
-      button.fireHighlight-card_button((click)="getImagePos(fireComment.start)") View&nbsp;&#8594;
+      button.fireHighlight-card_button((tap)="getImagePos(fireComment.start)") View&nbsp;&#8594;
+.comment-action--block.row
+  .col-6.float-left
+    a.btn.btn-hero(*ngIf="userPermission >= 3", (tap)="userPermission > 3 ? deleteComment(fireComment) : showDeleteModal = true") Delete
+  .col-6.float-right
+    a.btn.btn-primary((tap)="commentReply.emit(fireComment)") Reply
+
+hot-del-comment(
+    *ngIf="showDeleteModal",
+    [comment]="fireComment",
+    (delete)="deleteComment(fireComment)",
+    (closeModal)="showDeleteModal = false; commentDeactivate.emit(fireComment)"
+)

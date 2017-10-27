@@ -6,16 +6,16 @@
     width: 75%;
   }
   
-  .commentOverflow-normal {
-    height: calc(100% - 203px)
-  }
-  
-  .commentOverflow-eKey {
+.commentOverflow-normal {
+  height: calc(100% - 203px)
+}
+
+.commentOverflow-eKey {
+  height: calc(100% - 430px)
+}
+
+.commentOverflow-kKey {
+  @media(max-width: $tablet) {
     height: calc(100% - 430px)
   }
-
-  .commentOverflow-kKey {
-		@media(max-width: $tablet) {
-			height: calc(100% - 430px)
-		}
-  }
+}

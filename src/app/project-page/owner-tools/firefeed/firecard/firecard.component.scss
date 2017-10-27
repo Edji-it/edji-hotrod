@@ -134,3 +134,8 @@ $fireBoundVPad: 40px;
 .fireBlock-hr {
     margin: 0.75em 0;
 }
+
+.comment-action--block {
+    width: calc(100% - 6px);
+    margin-left: 20px;
+}

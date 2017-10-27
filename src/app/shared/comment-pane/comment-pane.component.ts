@@ -47,6 +47,9 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
 
   // Comment Pane Component Outputs
   @Output() hideComment = new EventEmitter()
+  @Output() commentActivation = new EventEmitter<boolean>()
+  @Output() commentUpdated: EventEmitter<any> = new EventEmitter()
+  @Output() commentReply = new EventEmitter()
 
   constructor(
       private _projects: ProjectService,
@@ -73,5 +76,17 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
   
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe() })
+  }
+
+  commentActivationEmitter() {
+    this.commentActivation.emit(false)
+  }
+
+  commentUpdatedEmitter() {
+    this.commentUpdated.emit()
+  }
+
+  commentReplyEmitter(comment) {
+    this.commentReply.emit(comment)
   }
 }
