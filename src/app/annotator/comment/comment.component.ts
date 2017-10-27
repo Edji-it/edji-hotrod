@@ -156,7 +156,7 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
       (error) => {
         console.error(error)
       }
-    ) )
+    ))
 
     // Certain events require a top-down decision to deactivate comments
     this.subscriptions.push( this._comments.clearActiveComments.subscribe(

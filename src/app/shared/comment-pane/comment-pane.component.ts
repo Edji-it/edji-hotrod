@@ -1,7 +1,7 @@
 import { Subscription } from 'rxjs/Rx'
 import { ProjectService } from '../index'
-import { EdjiComment } from '../datatypes/index'
-import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { CommentPermissions, EdjiComment } from '../datatypes/index'
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core'
 
 @Component({
   selector: 'comment-pane',
@@ -78,8 +78,8 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((sub) => { sub.unsubscribe() })
   }
 
-  commentActivationEmitter() {
-    this.commentActivation.emit(false)
+  commentActivationEmitter(activate) {
+    this.commentActivation.emit(activate)
   }
 
   commentUpdatedEmitter() {

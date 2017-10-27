@@ -485,9 +485,9 @@ export class ProjectService {
             .delete(url, this._auth.getOptions())
             .map(data => {
                 // Tell other Project views that the comment is gone
-                 this._socket.updateComment(comment, 'DELETE', this.project._id)
-                 // Update stats
-                 this.commentStats.addCommentToStats(comment, -1)
+                this._socket.updateComment(comment, 'DELETE', this.project._id)
+                // Update stats
+                this.commentStats.addCommentToStats(comment, -1)
 
                 for (var i = 0; i <= this.project.comments.length; i++) {
                     if (this.project.comments[i] && this.project.comments[i]._id === comment._id) {
@@ -495,6 +495,9 @@ export class ProjectService {
                         this.project.comments.splice(i, 1)
                     }
                 }
+
+                this.getCommentsByLine()
+                console.log(url)
                 return data
             })
             .toPromise()

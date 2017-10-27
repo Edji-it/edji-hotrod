@@ -17,7 +17,7 @@
         [fireComment]="fireComment", 
         [commentMobile]="true", 
         [commentMobileFirst]="i<1",
-        (commentActivation)="commentActivationEmitter()",
+        (commentActivation)="commentActivationEmitter($event)",
         (commentUpdated)="commentUpdatedEmitter()",
         (commentReply)="commentReplyEmitter($event)"
       )

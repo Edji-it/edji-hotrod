@@ -1,5 +1,6 @@
+import { CommentPermissions } from '../../../../shared/datatypes/index';
 import { Angulartics2 } from 'angulartics2/dist'
-import { ProjectService } from '../../../../shared/index'
+import { AuthService, ProjectService } from '../../../../shared/index';
 import { SocketService } from '../../../../shared';
 import { CommentService } from '../../../../shared/comment.service'
 import { Subscription } from 'rxjs/Rx'
@@ -33,6 +34,8 @@ export class FirecardComponent implements OnInit, OnDestroy {
   // Is fully visible, focused, and editable
   private active = false
   private showDeleteModal: boolean
+  private user: any
+  private project: any
 
   @Input() fireComment: EdjiComment
   @Input() private commentMobile: boolean = false
@@ -59,7 +62,8 @@ export class FirecardComponent implements OnInit, OnDestroy {
     public el: ElementRef,
     private _readings: ReadingService,
     private _socket: SocketService,
-    private _comments: CommentService
+    private _comments: CommentService,
+    private _auth: AuthService
   ) { }
 
   ngOnInit() {
@@ -97,6 +101,25 @@ export class FirecardComponent implements OnInit, OnDestroy {
       }, (error) => {
         console.warn(error)
       })
+    )
+    
+    // Subscribe to updates from that project once we're subscribed to the reading
+    this.subscriptions.push( this._projects.currentProject.subscribe(
+      (project) => {
+        if (project) {
+          this.project = project
+        }
+      },
+      (error) => {
+        console.error(error)
+      }
+    ))
+    
+    /** Set the current user every time it changes */
+    this.subscriptions.push(
+        this._auth.getCurrentUser().subscribe((user) => {
+            this.user = user
+        })
     )
 
     // Refresh time ago date every minute
@@ -196,9 +219,12 @@ export class FirecardComponent implements OnInit, OnDestroy {
     let percentLeftClicked = event.offsetX/event.target.clientWidth
     this.audio.currentTime = 30 * percentLeftClicked
   }
-  
-  private replyCommentFire(fireComment) {
-    console.log('replied: ', fireComment)
+
+  /** Used to determine which level of permission the user has for a specific comment
+   * @param comment A comment object
+   */
+  private getCommentPermissions(comment: any): number {
+    return this._comments.getCommentPermissions(comment, this.user, this.project)
   }
 
   /**
@@ -248,7 +274,7 @@ export class FirecardComponent implements OnInit, OnDestroy {
     .catch(error => { 
       // Appropriate post-delete failure action, sorted by comment type.
       this.angulartics.eventTrack.next({ action: comment.type + 'updateComment', properties: { category: 'projectAction', label: 'failure' }})
-      console.log(error)
+      console.error(error)
     })
   }
 
@@ -257,7 +283,7 @@ export class FirecardComponent implements OnInit, OnDestroy {
     // Stop the user from continuing to edit, and close emoji keyboard
     this.deactivate(this.fireComment)
     this.angulartics.eventTrack.next({ action: comment.type + 'deleteComment', properties: { category: 'projectAction', label: 'attempt' }})
-
+    
     this._projects.deleteComment(comment)
     .then(data => {
       this.angulartics.eventTrack.next({ action: comment.type + 'deleteComment', properties: { category: 'projectAction', label: 'success' }})
@@ -267,7 +293,7 @@ export class FirecardComponent implements OnInit, OnDestroy {
     .catch(error => {
       // TRACK EXCEPTION
       this.angulartics.eventTrack.next({ action: comment.type + 'deleteComment', properties: { category: 'projectAction', label: 'failure' }})
-      console.log(error)
+      console.error(error)
     })
   }
 }
