@@ -85,7 +85,7 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
         // Trigger save when deactivated externally i.e. emoji keyboard
         this.deactivate(this.comment)
       } else {
-        this.toggleCPane(this.comment)
+        this.toggleCPane(this.comment, true)
       }
     } 
   }
@@ -363,11 +363,13 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
     this.subscriptions.forEach((sub) => { sub.unsubscribe() })
   }
 
-  toggleCPane(comment?): void {
+  toggleCPane(comment?, forceOpen?: boolean): void {
     // Need to give the app 1 millisecond to update all arrays when adding a new comment
-    setTimeout(() => {
-      this.toggleCommentPane.emit()
-    }, 1)
+    if (!forceOpen) {
+      setTimeout(() => {
+        this.toggleCommentPane.emit()
+      }, 1)
+    }
   }
 
   getIconNumber(comment): void {

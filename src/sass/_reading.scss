@@ -433,7 +433,7 @@ article.content .w.h-f {
 .reading-page {
 	&.sliding-out {
 		transition: transform .7s linear;
-		transform: translate3d(100%, 0%, 1px);
+		transform: translate3d(96%, 0%, 1px);
 	}
 	&:not(.sliding-out) {
 		transition: transform .6s linear;
