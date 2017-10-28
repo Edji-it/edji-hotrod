@@ -1,4 +1,3 @@
-hr.fireBlock-hr(*ngIf="commentMobile && !commentMobileFirst")
 .fireBound([ngClass]="[ commentMobile ? 'fireBlock-mobile-comment' : '' ]")
   .user-icon([ngClass]="[ commentMobile ? 'fireBlock-mobile-comment' : '' ]")
     span {{fireComment.author.substring(0,2)}}
@@ -26,15 +25,3 @@ hr.fireBlock-hr(*ngIf="commentMobile && !commentMobileFirst")
     .list-item.list-item.fireHighlight-card_liImage.h-1(*ngIf="isImage")
       .fireHighlight-card_image Image
       button.fireHighlight-card_button((tap)="getImagePos(fireComment.start)") View&nbsp;&#8594;
-.comment-action--block.row
-  .col-6.float-left
-    a.btn.btn-hero(*ngIf="getCommentPermissions(fireComment) >= 3", (tap)="getCommentPermissions(fireComment) > 3 ? deleteComment(fireComment) : showDeleteModal = true") Delete
-  .col-6.float-right
-    a.btn.btn-primary((tap)="commentReply.emit(fireComment)") Reply
-
-hot-del-comment(
-    *ngIf="showDeleteModal",
-    [comment]="fireComment",
-    (delete)="deleteComment(fireComment)",
-    (closeModal)="showDeleteModal = false; commentDeactivate.emit(fireComment)"
-)

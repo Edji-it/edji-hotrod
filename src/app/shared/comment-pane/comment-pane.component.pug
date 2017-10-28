@@ -1,4 +1,4 @@
-.sliding-pane.from-left.slide-slow([ngClass]="[ visible ? 'slide-in' : '' ]", style="z-index: 5999;")
+.sliding-pane-comment.from-left.slide-slow([ngClass]="[ visible ? 'slide-in' : '' ]", style="z-index: 5999;")
   .container-fluid.container--less-pad(*ngIf="visible")
     button.close.stats-close-btn.btn-icon--round((click)="dismissCommentPane()", type="button")
       span(aria-hidden="true") ×
@@ -12,13 +12,19 @@
     .comment-container.commentOverflow-normal(
       [ngClass]="[ comment.active && comment.type=='emoji' ? 'commentOverflow-eKey' : '',  comment.active && comment.type=='text' ? 'commentOverflow-kKey' : '' ]"
     )
-      hot-firecard(
-        *ngFor="let fireComment of commentByPos[lineNumArray[comment.start]]; let i = index", 
-        [fireComment]="fireComment", 
+      edji-comment(
+        *ngFor="let mobileComment of commentByPos[lineNumArray[comment.start]]; let i = index", 
+        [commentPaneActive]="true",
+        [comment]="mobileComment", 
         [commentMobile]="true", 
         [commentMobileFirst]="i<1",
         (commentActivation)="commentActivationEmitter($event)",
         (commentUpdated)="commentUpdatedEmitter()",
-        (commentReply)="commentReplyEmitter($event)"
+        (commentReply)="commentReplyEmitter($event)",
+        style="display: initial;"
       )
+      //- [class.hidden]="(!project.heat_vision && user._id !== project.teacher_id) && comment.user_id !== user._id && comment.user_id !== project.teacher_id",
+      //- [class.owner]="comment.user_id === project.teacher_id",
+      //- [readOnly]="comment.user_id !== user._id",
+      //- [userPermission]="getCommentPermissions(comment)",
 //- END .comment - mobile
