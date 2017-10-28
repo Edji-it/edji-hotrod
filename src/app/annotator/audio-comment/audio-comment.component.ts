@@ -130,7 +130,8 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
      */
     if (Recorder.isRecordingSupported()) {
       this.recorder = new Recorder({
-        type: 'audio/x-wav',
+        // Chrome does NOT like 'x-wav' mime type
+        type: 'audio/wav',
         encoderPath: '/assets/js/waveWorker.min.js',
         streamPages: true
       })
@@ -180,7 +181,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
         const blob = new Blob(this.chunks, { 'type': 'audio/' + this.audioType + '; codecs="wav"' })
         
         var file = new File([blob], 'my-audio.' + this.audioTypeExt, {
-            type: 'audio/x-wav'
+            type: 'audio/wav'
         });
         
         this.audioFile = file
