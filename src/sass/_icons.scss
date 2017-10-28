@@ -196,6 +196,15 @@
     background-size: 100% 100% !important;
 }
 
+.icon-loading--light {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    background-color:transparent;
+    background-image: url('/assets/images/loading-smaller.svg') !important;
+    background-size: 100% 100% !important;
+}
+
 .icon-mic {
     display: inline-block;
     width: 1em;

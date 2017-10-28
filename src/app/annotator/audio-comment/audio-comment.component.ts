@@ -9,6 +9,13 @@ import * as Recorder from 'opus-recorder/dist/recorder.min.js'
 // declare var MediaRecorder: any
 declare var window: any
 
+enum playState {
+  inactive, 
+  loading,
+  playing,
+  recording
+}
+
 @Component({
   selector: 'audio-comment',
   templateUrl: 'audio-comment.component.pug',
@@ -21,8 +28,10 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
   @Output() save: EventEmitter<any> = new EventEmitter<any>() 
   @Output() showDeleteAudioModal: EventEmitter<any> = new EventEmitter<boolean>()
 
-  private isPlaying: boolean = false
-  private isRecording: boolean = false
+  private currentState: playState = playState.inactive
+
+  // private isPlaying: boolean = false
+  // private isRecording: boolean = false
   private recordOverConfirmed: boolean = false
   private playTime: string = "0px"
   private playWidth: number = 130
@@ -35,8 +44,6 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
 
   private audio
   private audioFile
-  private playAble: boolean = false
-  private recordAble: boolean = false
   private activated: boolean = false
   private rStartAt: any
   private rDuration: number = 0
@@ -58,8 +65,6 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
   private countdownInterval: any
   private audioType: string = 'wav'
   private audioTypeExt: string = 'wav'
-  // private audioType: string = 'aac'
-  // private audioTypeExt: string = 'aac'
 
   // We need to know when changes to inactive to clear the editing variable
   @Input() set active(active){
@@ -70,7 +75,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
       this.wavePos = 0
       this.initializeAudio()
     }
-    if (!active && this.isRecording) {
+    if (!active && this.currentState == playState.recording) {
       this.stopRecord()
     }
   }
@@ -105,7 +110,6 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
       this.audio.src = this.comment.url
       this.audio.preload = 'none'
       this.audio.load()
-      this.playAble = true
       // Build the waveform
       this._comments.waveForm(this.comment.dataArray, this.myCanvas)
       this.isInitialized = true
@@ -150,6 +154,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
      * Start Recording event handling
      */
     this.recorder.addEventListener('start', () => {
+      this.currentState = playState.recording
       // While recording, check the duration of the recording total and stop it once it hits the limit
       this.rInterval = setInterval(()=> {
         if((new Date().getTime() - this.rStartAt + (this.rDuration * 1000)) > this.timeLimit - 1) {
@@ -159,7 +164,6 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
         }
         // While recording, set the playTime to indicate current % progress of recording
         this.playTime = (((this.rDuration * 1000 + (new Date().getTime() - this.rStartAt)) / this.timeLimit) * this.playWidth) + 'px'
-        console.log(this.rDuration, this.playWidth)
       }, this.intervalGap)
     })
 
@@ -167,11 +171,8 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
      * Stop Recording event handling
      */
       this.recorder.addEventListener('stop', () => {
-        // If the audio is at the limit, restrict the ability to record
-        // if (this.rDuration > this.timeLimit / 1000) {
-        //   this.recordAble = false
-        // }
-
+        // Player begins uploading recording on stop
+        this.currentState = playState.loading
         // Initialize an audio object after the recording has stopped
         this.audio = new Audio()
 
@@ -192,8 +193,12 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
         this._media.uploadAudio(this.audioFile)
           .take(1)
           .subscribe(data => {
-            this.audio.src = data.url
+            // Player no longer loading!
+            this.currentState = playState.inactive
+
             this.isInitialized = true
+            this.audio.src = data.url
+            this.audio.load()
 
             // Save to comment
             this.comment.url = data.url
@@ -203,6 +208,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
 
         // Set the playTime to indicate current % progress of playback
         this.audio.onplay = e => {
+          this.currentState = playState.playing
           this.playTime = '0px'
           this.pInterval = setInterval(()=> {
             if((new Date().getTime() - this.pStartAt) > this.rDuration * 1000 - 1) {
@@ -213,8 +219,6 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
             this.playTime = (((new Date().getTime() - this.pStartAt) / this.timeLimit) * this.playWidth) + 'px'
           }, this.intervalGap)
         }
-
-        this.addOnEndEvent()
       })
 
     /**
@@ -228,15 +232,6 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
       this.wavePos++
       this._comments.waveForm(this.waves, this.myCanvas)
     })
-    
-      
-
-    // Clear the playing element and allow recording once audio clip has finished playing
-    if (this.audio) {
-      this.addOnEndEvent()
-    }
-    
-    this.recordAble = true
   }
 
   /** 
@@ -256,22 +251,23 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
    * Record Audio from the user's microphone
    */
   private freshRecord() {
-    if (this.isRecording) {
+    if (this.currentState == playState.recording) {
       this.recorder.stop()
     }
 
+    this.recorder.initStream()
     // this.countdown = true
     // this.countdownInterval = setInterval(()=> {
     //   this.countdownI--
     // }, 800)
-    this.playAble = false
-    this.isPlaying = false
+    // this.playAble = false
+    // this.isPlaying = false
     // setTimeout(() => {
       clearInterval(this.countdownInterval)
       this.countdownInterval = ''
       this.countdownI = 2
       this.countdown = false
-      this.isRecording = true
+      // this.isRecording = true
       this.rStartAt = new Date()
       this.recorder.start()
     // }, 3000)
@@ -281,9 +277,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
    * Stop recording audio
    */
   private stopRecord() {
-    this.playAble = true
-    this.isRecording = false
-    this.isPlaying = false
+    this.currentState = playState.inactive
     // Get the duration of the audio track
     this.rDuration = this.rDuration + (new Date().getTime() - this.rStartAt) / 1000
     clearInterval(this.rInterval)
@@ -297,8 +291,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
   private pause() {
     // Let analytics know user paused playback
     this.angulartics.eventTrack.next({ action: 'audioPause', properties: { category: 'heroFeature', label: 'success' }})
-    this.isPlaying = false
-    this.recordAble = true
+    this.currentState = playState.inactive
     clearInterval(this.pInterval)
     this.playTime = '0px'
     this.audio.pause()
@@ -310,9 +303,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
   private play() {
     // Let analytics know user started playback
     this.angulartics.eventTrack.next({ action: 'audioPlay', properties: { category: 'heroFeature', label: 'success' }})
-    this.recordAble = false
-    this.isPlaying = true
-    this.isRecording = false
+    this.currentState = playState.playing
     this.audio.play()
   }
 
@@ -325,6 +316,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
    * Set the playback back to the beginning #back2basics
    */
   private restartPlayback() {
+    this.currentState = playState.playing
     // Let analytics know user restarted playback
     this.angulartics.eventTrack.next({ action: 'audioRestart', properties: { category: 'heroFeature', label: 'success' }})
     this.audio.load()
@@ -349,13 +341,6 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
     }
   }
 
-  private addOnEndEvent(): void {
-    this.audio.onended = e => {
-      this.recordAble = true
-      this.isPlaying = false
-    }
-  }
-
   private setplayWidthVisual() {
     // Get the width of the audio canvas
     if (this.el.nativeElement.querySelector('.reply-wave')) {
@@ -363,5 +348,24 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
     } else {
       this.playWidthVisual = this.playWidth
     }
+  }
+
+  /**
+   * Play state convenience functions
+   */
+  isPlayable(): boolean {
+    return this.currentState == playState.playing || this.currentState == playState.inactive
+  }
+  isInactive(): boolean {
+    return this.currentState == playState.inactive
+  }
+  isRecording(): boolean {
+    return this.currentState == playState.recording
+  }
+  isPlaying(): boolean {
+    return this.currentState == playState.playing
+  }
+  isLoading(): boolean {
+    return this.currentState == playState.loading
   }
 }
