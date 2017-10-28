@@ -17,6 +17,7 @@
 
 .audio-comment-input-wrapper {
     max-height: $readingLineHeight + 2px;
+    // Sit on top of comment box
     margin-top: -1px;
     margin-bottom: -1px;
     overflow: hidden;
