@@ -126,8 +126,8 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
      */
     if (Recorder.isRecordingSupported()) {
       this.recorder = new Recorder({
-        type: 'audio/wav',
-        encoderPath: '/assets/js/encoderWorker.min.js',
+        type: 'audio/x-wav',
+        encoderPath: '/assets/js/waveWorker.min.js',
         streamPages: true
       })
       this.recorder.initStream()
@@ -212,7 +212,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
         const blob = new Blob(this.chunks, { 'type': 'audio/' + this.audioType + '; codecs="wav"' })
         
         var file = new File([blob], 'my-audio.' + this.audioTypeExt, {
-            type: 'audio/' + this.audioType
+            type: 'audio/x-wav'
         });
         
         this.audioFile = file
@@ -325,6 +325,12 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
       this.isRecording = true
       this.rStartAt = new Date()
       this.recorder.start()
+        // .then( data => {
+        //   console.log(data)
+        // })
+        // .catch( err => {
+        //   console.log(err)
+        // })
     // }, 3000)
     
   }
@@ -369,11 +375,11 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
     // this.pStartAt = new Date()
     console.log(this.audio)
     
-    // this.audio.play().then( () => {
+    this.audio.play().then( () => {
             
-    //   }).catch((error) => {
-    //      console.log("auto play failed!")
-    //   })
+      }).catch((error) => {
+         console.log("auto play failed!")
+      })
   }
 
   private getPlayhead() {
