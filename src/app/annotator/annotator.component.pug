@@ -215,7 +215,7 @@ comment-pane(
     [isActive]="selectedComment.active",
     [comment]="selectedComment",
     (hideComment)="toggleCommentPane()",
-    (commentActivation)="setActiveCommentByIndex($event, i, ci)",
+    (commentActivationMobile)="setActiveCommentByIndex($event.activate, $event.wi, $event.ci)",
     (commentUpdated)="updateAllLineCounts()",
     (commentReply)="discReplyFire($event)"
 )

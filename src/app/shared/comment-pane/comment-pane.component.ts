@@ -1,3 +1,6 @@
+import { CommentService } from '../comment.service'
+import { AuthService } from '../auth.service' 
+import { Project, User } from '../datatypes'
 import { Subscription } from 'rxjs/Rx'
 import { ProjectService } from '../index'
 import { CommentPermissions, EdjiComment } from '../datatypes/index'
@@ -17,6 +20,8 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
   private rowComments: EdjiComment[][] = []
   // Is fully visible, focused, and editable
   private active = false
+  private user: User
+  private project: Project = <Project>{}
 
   // Subscriptions and related
   private subscriptions: Subscription[] = []
@@ -47,13 +52,15 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
 
   // Comment Pane Component Outputs
   @Output() hideComment = new EventEmitter()
-  @Output() commentActivation = new EventEmitter<boolean>()
+  @Output() commentActivationMobile = new EventEmitter<any>()
   @Output() commentUpdated: EventEmitter<any> = new EventEmitter()
   @Output() commentReply = new EventEmitter()
 
   constructor(
       private _projects: ProjectService,
-      public el: ElementRef
+      public el: ElementRef,
+      private _auth: AuthService,
+      private _comments: CommentService,
     ) { }
 
   ngOnInit() {
@@ -62,6 +69,25 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
       (commentByPos) => {
         this.commentByPos = commentByPos
         this.lineNumArray = this._projects.lineNumberArray
+      },
+      (error) => {
+        console.error(error)
+      }
+    ))
+
+    /** Set the current user every time it changes */
+    this.subscriptions.push(
+        this._auth.getCurrentUser().subscribe((user) => {
+            this.user = user
+        })
+    )
+
+    // Subscribe to updates from that project once we're subscribed to the reading
+    this.subscriptions.push( this._projects.currentProject.subscribe(
+      (project) => {
+        if (project) {
+          this.project = project
+        }
       },
       (error) => {
         console.error(error)
@@ -78,8 +104,25 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((sub) => { sub.unsubscribe() })
   }
 
-  commentActivationEmitter(activate) {
-    this.commentActivation.emit(activate)
+  commentActivationEmitter(shouldActivate, comment?: any) {
+    let wordIndex = comment.start
+    let processedCommentData = this._projects.processComments(this.project)
+    let commentsByIndex = processedCommentData.commentsByIndex
+
+    let commentIndex = 0
+
+    for (let i=0;i<commentsByIndex[wordIndex].length;i++) {
+      if (commentsByIndex[wordIndex][i]._id===comment._id) {
+        commentIndex = i
+        return
+      }
+    }
+    
+    if (shouldActivate===true) {
+      this.commentActivationMobile.emit({activate: shouldActivate, wi: wordIndex, ci: commentIndex})
+    } else {
+      this.commentActivationMobile.emit({activate: shouldActivate})
+    }
   }
 
   commentUpdatedEmitter() {
@@ -88,5 +131,12 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
 
   commentReplyEmitter(comment) {
     this.commentReply.emit(comment)
+  }
+
+  /** Used to determine which level of permission the user has for a specific comment
+   * @param comment A comment object
+   */
+  private getCommentPermissions(comment: any): number {
+      return this._comments.getCommentPermissions(comment, this.user, this.project)
   }
 }
