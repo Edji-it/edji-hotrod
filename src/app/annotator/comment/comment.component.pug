@@ -120,9 +120,9 @@ div(*ngIf="commentPaneActive")
             //- button.mobileHighlight-card_button((tap)="getImagePos(comment.start)") View&nbsp;&#8594;
     //- display here
     .comment-action--block.row
-        .col-6.float-left
+        .col-6.float-left.btn-float-left__sm
             button.btn.btn-sm.btn-hero(*ngIf="userPermission >= 3", (tap)="userPermission > 3 ? deleteComment(comment) : showDeleteModal = true") Delete
-        .col-6.float-right
+        .col-6.float-right.btn-float-right__sm
             //- button.btn.btn-sm.btn-primary(*ngIf="repliesById[comment._id] && repliesById[comment._id].length>0", (tap)="commentReply.emit(comment)") Replies ({{ repliesById[comment._id] && repliesById[comment._id].length }})
             button.btn.btn-sm.btn-primary((tap)="commentReply.emit(comment)") Replies ({{ repliesById[comment._id] && repliesById[comment._id].length || '0' }})
             //- button.btn.btn-sm.btn-primary(ngIf="!repliesById[comment._id]", (tap)="commentReply.emit(comment)") Reply

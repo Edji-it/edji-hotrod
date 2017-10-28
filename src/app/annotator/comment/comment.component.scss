@@ -112,7 +112,7 @@ $tablet-width: 768px;
     width: calc(100% - 50px);
   }
   &.mobileBound {
-    padding: 0px 0px 20px;
+    padding: 0px 0px 10px;
   }
 }
 
@@ -245,4 +245,16 @@ $mobileBoundVPad: 40px;
 
 .wave-wrap {
   width: calc(100% - 48px);
+}
+
+.btn-float-right__sm {
+  text-align: right;
+  padding-left: 15px;
+  padding-left: 15px;
+}
+
+.btn-float-left__sm {
+  text-align: left;
+  padding-left: 15px;
+  padding-left: 15px;
 }
