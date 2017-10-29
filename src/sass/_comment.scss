@@ -177,7 +177,7 @@ edji-comment {
 			z-index: 5500;
 			display: block !important;
 		}
-		&:not(.replyComment) {
+		&:not(.replyComment):not(.mobileBound) {
 			position: absolute !important;
 			top: none !important;
 		}

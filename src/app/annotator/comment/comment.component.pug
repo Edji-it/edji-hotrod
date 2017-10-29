@@ -3,7 +3,7 @@
     [class.saved]="justSaved",
     [class.active]="active",
     [class.readonly]="readOnly",
-    [ngClass]="[ expanded ? 'expanded' : '', active ? 'comment__show' : '', reply ? 'replyComment comment__force-display' : 'hidden-md-down line-count-' + lineCount ]"
+    [ngClass]="[ expanded ? 'expanded' : '', reply ? 'replyComment comment__force-display' : 'hidden-md-down line-count-' + lineCount ]"
 )
     .expand-comments(
         *ngIf="!commentLite",
@@ -76,7 +76,7 @@ div(*ngIf="commentPaneActive")
         [class.saved]="justSaved",
         [class.active]="active",
         [class.readonly]="readOnly",
-        [ngClass]="[ active ? 'comment__show' : '', commentMobile ? 'mobileBlock-mobile-comment' : '' ]"
+        [ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '' ]"
     )
         .user-icon([ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '' ]")
             span {{comment.author.substring(0,2)}}
