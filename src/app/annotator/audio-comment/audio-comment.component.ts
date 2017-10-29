@@ -108,10 +108,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
     this.myCanvas = this.el.nativeElement.querySelector('.wave-form')
     // If comment already has uploaded audio, load it
     if (this.comment.url && this.comment.url.length > 0) {
-      this.audio = new Audio()
-      this.audio.src = this.comment.url
-      this.audio.preload = 'none'
-      this.audio.load()
+      this.loadAudioPlayer(this.comment.url)
       // Build the waveform
       this._comments.waveForm(this.comment.dataArray, this.myCanvas)
       this.isInitialized = true
@@ -165,11 +162,6 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
       this.rInterval = setInterval(()=> {
         // While recording, update playTime value
         this.playTime += 0.5
-        // if((new Date().getTime() - this.rStartAt + (this.rDuration * 1000)) > this.timeLimit - 1) {
-        //   this.stopRecord()
-        //   clearInterval(this.rInterval)
-        //   return
-        // }
       }, this.INTERVAL_GAP)
     })
 
@@ -179,8 +171,8 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
       this.recorder.addEventListener('stop', () => {
         // Player begins uploading recording on stop
         this.currentState = playState.loading
-        // Initialize an audio object after the recording has stopped
-        this.audio = new Audio()
+        // Clear duration loop
+        this.rInterval.clearInterval()
 
         // Set the audio for playback via the blob object from the stored chunks
         const blob = new Blob(this.chunks, { 'type': 'audio/' + this.audioType + '; codecs="wav"' })
@@ -202,23 +194,13 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
             // Player no longer loading!
             this.currentState = playState.inactive
 
-            this.isInitialized = true
-            this.audio.src = data.url
-            this.audio.load()
+            this.loadAudioPlayer(data.url)
 
             // Save to comment
             this.comment.url = data.url
             this.comment.dataArray = this.waves
             this.save.emit(this.comment)
           })
-
-        this.audio.onplay = e => {
-          this.currentState = playState.playing
-          this.playTime = 0
-          this.pInterval = setInterval(()=> {
-            this.playTime = this.playTime + this.INTERVAL_GAP
-          }, this.INTERVAL_GAP)
-        }
       })
 
     /**
@@ -247,6 +229,29 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
       console.log("Avail", this.waves)
       this._comments.waveForm(this.waves, this.myCanvas)
     })
+  }
+
+  private loadAudioPlayer(url: string) {
+    // Fresh audio object
+    this.audio = new Audio()
+    this.isInitialized = true
+    this.audio.preload = 'none'
+    this.audio.src = url
+    this.audio.load()
+
+    this.audio.onplay = e => {
+      this.currentState = playState.playing
+      this.playTime = 0
+      this.pInterval = setInterval(()=> {
+        this.playTime = this.playTime + this.INTERVAL_GAP
+      }, this.INTERVAL_GAP)
+    }
+
+    this.audio.onended = e => {
+      this.currentState = playState.inactive
+      this.playTime = 0
+      this.pInterval.clearInterval()
+    }
   }
 
   /** 
