@@ -29,5 +29,9 @@
   .wave-wrap([ngClass]="[reply ? 'reply-wave' : '']", [style.width]="playWidth + 'px'")
     canvas.wave-form((click)="setPlaybackTime($event)")
     .countdown(*ngIf="countdown", [innerHtml]="countdownText[countdownI]")
-    .playing(*ngIf="audio && isPlaying()", [class.hide]="!comment.active && (isRecording() || !audio.currentTime)", [style.width]="getPlayhead() + 'px'")
-    .playing(*ngIf="audio && !isPlaying()", [class.hide]="!comment.active && (isRecording() || !audio.currentTime)", [style.width]="pausedWidth + 'px'")
+    .playhead(
+        *ngIf="audio && (isPlaying() || isRecording())",
+        [class.recording]="isRecording()",
+        [style.width]="getPlayhead() + 'px'"
+      )
+    //- .playing(*ngIf="audio && !isPlaying()", [class.hide]="!comment.active && (isRecording() || !audio.currentTime)", [style.width]="pausedWidth + 'px'")

@@ -674,16 +674,22 @@ $expandShadowSize: 3px;
 
 $progressStart: 51px;
 
-// .playing {
-//     height: 100%;
-//     background-color: rgba(142,217,255,0.8);
-//     top: 0px;
-//     left: 0px;
-//     position: absolute;
-//     border-radius: 0px;
-//     border-right: solid $green;
-// 	pointer-events: none;
-// }
+
+.playhead {
+	height: 100%;
+    top: 0px;
+    left: 0px;
+    position: absolute;
+    background-color: rgba(142,217,255,0.8);
+    border-radius: 0px;
+    border-right: solid $green;
+	pointer-events: none;
+
+	&.recording {
+		background-color: rgba(255,100,100,0.8);
+		border-right: solid #FF2424;
+	}
+}
 
 .btn-audio {
     padding: 5px 2px;

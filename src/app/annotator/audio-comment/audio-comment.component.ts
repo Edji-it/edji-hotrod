@@ -33,7 +33,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
   // private isPlaying: boolean = false
   // private isRecording: boolean = false
   private recordOverConfirmed: boolean = false
-  private playTime: string = "0px"
+  private playTime: number = 0
   private playWidth: number = 130
   private playWidthVisual: number
   private pausedWidth: number
@@ -57,7 +57,9 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
   // Change the next variable to control maximum audio comment length in milliseconds
   private timeLimit: number = 30000
   // Change the next variable to control the frequency at which the playback/recording currentTime evaluates
-  private intervalGap: number = 500
+  private INTERVAL_GAP: number = 500
+  private MAX_SECONDS: number = 30
+
   private isInitialized: boolean = false
   private countdown: boolean = false
   private countdownI: number = 3
@@ -121,7 +123,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
     if (this.userPermission > 3) {
       this.playWidth = this.playWidth - 55
     } else if (this.userPermission == 3) {
-      this.playWidth = this.playWidth - 30
+      this.playWidth = this.playWidth - this.MAX_SECONDS
     }
     /** 
      * Initialize the audio access request & setup once this component loads
@@ -132,7 +134,9 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
       this.recorder = new Recorder({
         // Chrome does NOT like 'x-wav' mime type
         type: 'audio/wav',
+        // Safari only plays well with the waveWorker
         encoderPath: '/assets/js/waveWorker.min.js',
+        // We process chunks of data as we go (see: dataAvailable event)
         streamPages: true
       })
       this.recorder.initStream()
@@ -155,17 +159,20 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
      * Start Recording event handling
      */
     this.recorder.addEventListener('start', () => {
+      console.log("Start recording!")
       this.currentState = playState.recording
       // While recording, check the duration of the recording total and stop it once it hits the limit
       this.rInterval = setInterval(()=> {
-        if((new Date().getTime() - this.rStartAt + (this.rDuration * 1000)) > this.timeLimit - 1) {
-          this.stopRecord()
-          clearInterval(this.rInterval)
-          return
-        }
+        this.playTime += 0.5
+        // if((new Date().getTime() - this.rStartAt + (this.rDuration * 1000)) > this.timeLimit - 1) {
+        //   this.stopRecord()
+        //   clearInterval(this.rInterval)
+        //   return
+        // }
         // While recording, set the playTime to indicate current % progress of recording
-        this.playTime = (((this.rDuration * 1000 + (new Date().getTime() - this.rStartAt)) / this.timeLimit) * this.playWidth) + 'px'
-      }, this.intervalGap)
+        // this.playTime = (((this.rDuration * 1000 + (new Date().getTime() - this.rStartAt)) / this.timeLimit) * this.playWidth) + 'px'
+        // this.playTime = (((this.rDuration * 1000 + (new Date().getTime() - this.rStartAt)) / this.timeLimit) * this.playWidth)
+      }, this.INTERVAL_GAP)
     })
 
     /**
@@ -210,15 +217,16 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
         // Set the playTime to indicate current % progress of playback
         this.audio.onplay = e => {
           this.currentState = playState.playing
-          this.playTime = '0px'
+          this.playTime = 0
           this.pInterval = setInterval(()=> {
-            if((new Date().getTime() - this.pStartAt) > this.rDuration * 1000 - 1) {
-              // this.pause()
-              clearInterval(this.pInterval)
-              return
-            }
-            this.playTime = (((new Date().getTime() - this.pStartAt) / this.timeLimit) * this.playWidth) + 'px'
-          }, this.intervalGap)
+
+            // if((new Date().getTime() - this.pStartAt) > this.rDuration * 1000 - 1) {
+            //   // this.pause()
+            //   clearInterval(this.pInterval)
+            //   return
+            // }
+            this.playTime = (((new Date().getTime() - this.pStartAt) / this.timeLimit) * this.playWidth)
+          }, this.INTERVAL_GAP)
         }
       })
 
@@ -282,7 +290,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
     // Get the duration of the audio track
     this.rDuration = this.rDuration + (new Date().getTime() - this.rStartAt) / 1000
     clearInterval(this.rInterval)
-    this.playTime = '0px'
+    this.playTime = 0
     this.recorder.stop()
   }
 
@@ -294,7 +302,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
     this.angulartics.eventTrack.next({ action: 'audioPause', properties: { category: 'heroFeature', label: 'success' }})
     this.currentState = playState.inactive
     clearInterval(this.pInterval)
-    this.playTime = '0px'
+    this.playTime = 0
     this.audio.pause()
   }
 
@@ -309,8 +317,13 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
   }
 
   private getPlayhead() {
-    this.pausedWidth = Math.round((this.audio.currentTime / 30) * this.playWidthVisual)
-    return Math.round((this.audio.currentTime / 30) * this.playWidthVisual)
+    console.log(this.audio.currentTime, this.playTime )
+    if (this.currentState == playState.recording) {
+      return Math.round((this.playTime / this.MAX_SECONDS) * this.playWidth)
+    } else {
+      return Math.round((this.audio.currentTime / this.MAX_SECONDS) * this.playWidth)
+    }
+    // this.pausedWidth = Math.round((this.audio.currentTime / 30) * this.playWidthVisual)
   }
   
   /**
@@ -326,7 +339,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
   private setPlaybackTime(event) {
     let percentLeftClicked = event.offsetX/this.playWidthVisual
     if (this.audio) {
-      this.audio.currentTime = 30 * percentLeftClicked
+      this.audio.currentTime = this.MAX_SECONDS * percentLeftClicked
     }
   }
 
