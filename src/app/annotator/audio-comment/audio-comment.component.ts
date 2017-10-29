@@ -187,7 +187,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
           
         // No longer loading blob, doesn't work in Safari and in other cases
         // this.audio.src = window.URL.createObjectURL(blob)
-        console.log(this.audioFile)
+        
         // Comment saved! Save audio file
         this._media.uploadAudio(this.audioFile)
           .take(1)
@@ -346,7 +346,10 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
     this.currentState = playState.playing
     // Let analytics know user restarted playback
     this.angulartics.eventTrack.next({ action: 'audioRestart', properties: { category: 'heroFeature', label: 'success' }})
+    // Reload
     this.audio.load()
+    // Play!
+    this.audio.play()
   }
 
   private setPlaybackTime(event) {
