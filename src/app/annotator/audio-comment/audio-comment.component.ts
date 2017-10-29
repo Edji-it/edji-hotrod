@@ -163,15 +163,13 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
       this.currentState = playState.recording
       // While recording, check the duration of the recording total and stop it once it hits the limit
       this.rInterval = setInterval(()=> {
+        // While recording, update playTime value
         this.playTime += 0.5
         // if((new Date().getTime() - this.rStartAt + (this.rDuration * 1000)) > this.timeLimit - 1) {
         //   this.stopRecord()
         //   clearInterval(this.rInterval)
         //   return
         // }
-        // While recording, set the playTime to indicate current % progress of recording
-        // this.playTime = (((this.rDuration * 1000 + (new Date().getTime() - this.rStartAt)) / this.timeLimit) * this.playWidth) + 'px'
-        // this.playTime = (((this.rDuration * 1000 + (new Date().getTime() - this.rStartAt)) / this.timeLimit) * this.playWidth)
       }, this.INTERVAL_GAP)
     })
 
@@ -214,18 +212,11 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
             this.save.emit(this.comment)
           })
 
-        // Set the playTime to indicate current % progress of playback
         this.audio.onplay = e => {
           this.currentState = playState.playing
           this.playTime = 0
           this.pInterval = setInterval(()=> {
-
-            // if((new Date().getTime() - this.pStartAt) > this.rDuration * 1000 - 1) {
-            //   // this.pause()
-            //   clearInterval(this.pInterval)
-            //   return
-            // }
-            this.playTime = (((new Date().getTime() - this.pStartAt) / this.timeLimit) * this.playWidth)
+            this.playTime = this.playTime + this.INTERVAL_GAP
           }, this.INTERVAL_GAP)
         }
       })
@@ -233,12 +224,27 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
     /**
      * Data Stream event handling
      * - Saves data to chunks array as it is received
-     * - Chunks are used to 
+     * - In Chrome, we receive all chunks at the end of recording
      */
     this.recorder.addEventListener('dataAvailable', (e) =>{
+      console.log(this.rDuration)
+      console.log(e.detail)
+      // Save data to create audio file on 'stop'
       this.chunks.push(e.detail)
-      this.waves[this.wavePos] = e.detail.length - 3200
-      this.wavePos++
+      // this.waves[this.wavePos] = e.detail.length - 3200
+      // this.wavePos++
+
+      // Sample for waves every 500ms
+      let sampleInterval = e.detail.length/(this.rDuration*2)
+      for (let i = 0; i < e.detail.length; i = i + sampleInterval) {
+        i = Math.floor(i)
+        // Sample wave
+        let neighborAvg = ((e.detail[i] || 0) + (e.detail[i+1] || 0) + (e.detail[i+2] || 0) + 1)/3
+        this.waves[this.wavePos] = Math.round(neighborAvg)
+        this.wavePos++
+      }      
+      
+      console.log("Avail", this.waves)
       this._comments.waveForm(this.waves, this.myCanvas)
     })
   }
@@ -288,8 +294,10 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
   private stopRecord() {
     this.currentState = playState.inactive
     // Get the duration of the audio track
-    this.rDuration = this.rDuration + (new Date().getTime() - this.rStartAt) / 1000
-    clearInterval(this.rInterval)
+    // this.rDuration = this.rDuration + (new Date().getTime() - this.rStartAt) / 1000
+    // clearInterval(this.rInterval)
+    // Clone playTime value
+    this.rDuration = this.playTime + 0
     this.playTime = 0
     this.recorder.stop()
   }
@@ -317,7 +325,6 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
   }
 
   private getPlayhead() {
-    console.log(this.audio.currentTime, this.playTime )
     if (this.currentState == playState.recording) {
       return Math.round((this.playTime / this.MAX_SECONDS) * this.playWidth)
     } else {
