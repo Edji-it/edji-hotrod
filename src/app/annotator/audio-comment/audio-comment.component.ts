@@ -169,6 +169,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
      * Stop Recording event handling
      */
       this.recorder.addEventListener('stop', () => {
+        console.log("Stop recording!")
         // Player begins uploading recording on stop
         this.currentState = playState.loading
         // Clear duration loop
@@ -186,7 +187,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
           
         // No longer loading blob, doesn't work in Safari and in other cases
         // this.audio.src = window.URL.createObjectURL(blob)
-
+        console.log(this.audioFile)
         // Comment saved! Save audio file
         this._media.uploadAudio(this.audioFile)
           .take(1)
@@ -200,6 +201,9 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
             this.comment.url = data.url
             this.comment.dataArray = this.waves
             this.save.emit(this.comment)
+          },
+          err => {
+            console.log(err)
           })
       })
 
@@ -209,8 +213,6 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
      * - In Chrome, we receive all chunks at the end of recording
      */
     this.recorder.addEventListener('dataAvailable', (e) =>{
-      console.log(this.rDuration)
-      console.log(e.detail)
       // Save data to create audio file on 'stop'
       this.chunks.push(e.detail)
       // this.waves[this.wavePos] = e.detail.length - 3200
@@ -226,7 +228,6 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
         this.wavePos++
       }      
       
-      console.log("Avail", this.waves)
       this._comments.waveForm(this.waves, this.myCanvas)
     })
   }
