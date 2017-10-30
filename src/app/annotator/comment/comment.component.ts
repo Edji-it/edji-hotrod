@@ -198,7 +198,7 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
     this._comments.activeComment.active = false
     // Save when comment is toggled away from
     if (comment && !noUpdate) {
-      this.updateComment(comment);
+      this.updateComment(comment)
     }
   } // deactivate(commentData ?: any): void
 

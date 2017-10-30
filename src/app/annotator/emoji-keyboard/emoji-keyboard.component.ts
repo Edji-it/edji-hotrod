@@ -16,15 +16,17 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
   private locker: Locker;
   
   private _isActive = false;
+  private currentComment: string;
 
   @Input()
   set isActive(active: boolean) {
+    this.currentComment = this._comments.activeComment.data
     this._isActive = active;
     this.onActiveChange();
   }
   get isActive(): boolean { return this._isActive; }
 
-  @Input() private currentComment: string;
+  // @Input() private currentComment: string;
 
   // We have to tell the parent the comment updated since the keyboard doesn't maintain the comment
   @Output() commentChange = new EventEmitter();

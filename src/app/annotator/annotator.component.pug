@@ -195,9 +195,9 @@
     edji-feedback
 
 //- Emoji Keyboard: Custom Emoji entry component
+    [currentComment]="_comments.activeComment && _comments.activeComment.data ? _comments.activeComment.data : ''",
 emoji-keyboard(
     [isActive]="isEmojiKeyboardActive()",
-    [currentComment]="_comments.activeComment && _comments.activeComment.data ? _comments.activeComment.data : ''",
     (commentChange)="updateActiveComment($event)",
     (dismissKeyboard)="inactivateComment()"
 )
