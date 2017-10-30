@@ -71,6 +71,11 @@
 
 div(*ngIf="commentPaneActive")
     hr.mobileBlock-hr(*ngIf="commentMobile && !commentMobileFirst")
+    .comment-action--save.comment-action--save__mobile.comment-action--save__mobile-btn(
+        *ngIf="comment.active",
+        (tap)="deactivate(comment)",
+        [innerHtml]="':white_check_mark:' | emojione"
+    )
     #comment.comment.hidden-lg-up.mobileBound(
         [class.new]="comment.new",
         [class.saved]="justSaved",
@@ -126,11 +131,6 @@ div(*ngIf="commentPaneActive")
             //- button.btn.btn-sm.btn-primary(*ngIf="repliesById[comment._id] && repliesById[comment._id].length>0", (tap)="commentReply.emit(comment)") Replies ({{ repliesById[comment._id] && repliesById[comment._id].length }})
             button.btn.btn-sm.btn-primary((tap)="commentReply.emit(comment)") Replies ({{ repliesById[comment._id] && repliesById[comment._id].length || '0' }})
             //- button.btn.btn-sm.btn-primary(ngIf="!repliesById[comment._id]", (tap)="commentReply.emit(comment)") Reply
-.comment-action--save.comment-action--save__mobile.comment-action--save__mobile-btn(
-    *ngIf="comment.active",
-    (tap)="deactivate(comment)",
-    [innerHtml]="':white_check_mark:' | emojione"
-)
 //- END .comment - mobile
 
 //- Mobile Icon
