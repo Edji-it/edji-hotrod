@@ -79,7 +79,7 @@ div(*ngIf="commentPaneActive")
     #comment.comment.hidden-lg-up.mobileBound(
         [class.new]="comment.new",
         [class.saved]="justSaved",
-        [class.active]="active",
+        [class.active]="comment.active",
         [class.readonly]="readOnly",
         [ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '' ]"
     )

@@ -38,9 +38,7 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
       
       // if the comment is new, let's adjust the scroll position if there are a ton of comments
       if (this.comment.new) {
-        setTimeout(() => {
-          this.el.nativeElement.querySelector('.comment-container').scrollTop = this.el.nativeElement.querySelector('.comment-container').scrollHeight
-        }, 1)
+        this.scrollAdjust(true)
       }
 
       if (!isActive) {
@@ -104,6 +102,17 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((sub) => { sub.unsubscribe() })
   }
 
+  scrollAdjust(isNew?: boolean) {
+    setTimeout(() => {
+      if (isNew) {
+        this.el.nativeElement.querySelector('.comment-container').scrollTop = this.el.nativeElement.querySelector('.comment-container').scrollHeight
+      } else {
+        // this.el.nativeElement.querySelector('.comment-container').scrollTop = this.el.nativeElement.querySelector('edji-comment:nth-child(2) .mobileBound').getBoundingClientRect().top
+        this.el.nativeElement.querySelector('.comment-container').scrollTop = this.el.nativeElement.querySelector('.mobileBound.active').getBoundingClientRect().top
+      }
+    }, 1)
+  }
+
   commentActivationEmitter(shouldActivate, comment?: any) {
     let wordIndex = comment.start
     let processedCommentData = this._projects.processComments(this.project)
@@ -114,11 +123,14 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
     for (let i=0;i<commentsByIndex[wordIndex].length;i++) {
       if (commentsByIndex[wordIndex][i]._id===comment._id) {
         commentIndex = i
-        return
+        break
       }
     }
     
-    if (shouldActivate===true) {
+    if (shouldActivate) {
+      if (comment && comment.type==='emoji' || comment.type==='text') {
+        this.scrollAdjust(false)
+      }
       this.commentActivationMobile.emit({activate: shouldActivate, wi: wordIndex, ci: commentIndex})
     } else {
       this.commentActivationMobile.emit({activate: shouldActivate})
