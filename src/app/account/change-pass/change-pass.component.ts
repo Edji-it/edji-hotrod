@@ -1,6 +1,6 @@
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { Angulartics2 } from 'angulartics2';
 
 import { AuthService } from './../../shared/auth.service';
@@ -9,10 +9,14 @@ import { AuthService } from './../../shared/auth.service';
   selector: 'edji-change-pass',
   templateUrl: 'change-pass.component.html'
 })
-export class ChangePassComponent {
+export class ChangePassComponent implements OnInit {
 
   private passwordForm: FormGroup;
-  private responseSuccess: boolean;
+  private messages: {
+    success?: boolean,
+    serviceError?: boolean
+  } = {}
+  private loading: boolean
   @Output() closeModal = new EventEmitter();
 
   constructor(private _auth: AuthService, private angulartics: Angulartics2, fb: FormBuilder) {
@@ -23,6 +27,9 @@ export class ChangePassComponent {
     }, { validator: this.passwordsEqual });
   }
 
+  ngOnInit() {
+  }
+
 //https://angular.io/docs/ts/latest/api/forms/index/FormGroup-class.html
   private passwordsEqual(group: FormGroup) {
     return group.get('newPassword').value === group.get('newPasswordConfirm').value
@@ -30,22 +37,26 @@ export class ChangePassComponent {
   }
 
   private onSubmit(value: any): void {
-    this.angulartics.eventTrack.next({ action: 'resetPasswordLoggedIn', properties: { category: 'accountManagement', label: 'attempt' }});
+    this.messages = {}
+    this.loading = true
+    this.angulartics.eventTrack.next({ action: 'resetPasswordLoggedIn', properties: { category: 'accountManagement', label: 'attempt' }})
 
     this._auth.resetPassword({
         oldPassword: this.passwordForm.get('oldPassword').value,
         newPassword: this.passwordForm.get('newPassword').value
       })
       .then((res) => {
-        this.angulartics.eventTrack.next({ action: 'resetPasswordLoggedIn', properties: { category: 'accountManagement', label: 'success' }});
-        this.responseSuccess = true;
-        this._auth.setToken(res.token);
+        this.messages.success = true
+        this.loading = false
+        this.angulartics.eventTrack.next({ action: 'resetPasswordLoggedIn', properties: { category: 'accountManagement', label: 'success' }})
+        this._auth.setToken(res.token)
       })
-      .catch((res) => {
+      .catch((err) => {
         // TRACK EXCEPTION
-        this.angulartics.eventTrack.next({ action: 'resetPasswordLoggedIn', properties: { category: 'accountManagement', label: 'failure' }});
-        this.responseSuccess = false;
-        console.log("no dice! 🎲");
+        console.error(err)
+        this.loading = false
+        this.angulartics.eventTrack.next({ action: 'resetPasswordLoggedIn', properties: { category: 'accountManagement', label: 'failure' }})
+        this.messages.serviceError = true
       });
   }
 }
