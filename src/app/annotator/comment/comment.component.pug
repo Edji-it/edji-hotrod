@@ -117,7 +117,7 @@ div(*ngIf="commentPaneActive")
                     [recordNewAudio]="reRecordAudio",
                     (showDeleteAudioModal)="showDeleteAudioModal = true",
                     [userPermission]="userPermission",
-                    [reply]="reply"
+                    [reply]="true"
                 )
             //- Text that was commented on
             .list-item.list-item.mobileHighlight-card.h-1(*ngIf="!isImage")
