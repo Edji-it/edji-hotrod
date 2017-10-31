@@ -195,6 +195,9 @@ $mobileBoundVPad: 40px;
     margin: 0;
     &.active {
       padding-right: 25px;
+      &.new {
+        padding-left: 12px;
+      }
     }
   }
 }
@@ -270,4 +273,27 @@ $mobileBoundVPad: 40px;
   left: 91%;
   text-align: right;
   z-index: 5501;
+}
+
+.comment-new-text__mobile {
+  color: #93DC4F;
+  width: 40px;
+  position: relative;
+  top: -12px;
+  font-size: 14px;
+  left: 16px;
+}
+
+.comment-new-highlight__mobile {
+  position: absolute;
+}
+
+.comment-new-dot__mobile {
+  height: 8px;
+  width: 8px;
+  border-radius: 50%;
+  position: relative;
+  top: 32px;
+  left: 0px;
+  background-color: #93DC4F;
 }

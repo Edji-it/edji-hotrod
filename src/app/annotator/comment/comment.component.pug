@@ -76,6 +76,9 @@ div(*ngIf="commentPaneActive")
         (tap)="deactivate(comment)",
         [innerHtml]="':white_check_mark:' | emojione"
     )
+    .comment-new-highlight__mobile(*ngIf="comment && comment.active  && comment.new")
+        .comment-new-dot__mobile
+        p.comment-new-text__mobile new
     #comment.comment.hidden-lg-up.mobileBound(
         [class.new]="comment.new",
         [class.saved]="justSaved",
