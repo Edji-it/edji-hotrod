@@ -1,10 +1,11 @@
+import { AudioService } from '../../shared/audio.service';
 import { Angulartics2 } from 'angulartics2/dist'
 import { CommentService } from '../../shared/comment.service'
 import { MediaService } from '../../shared/media.service'
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 import { EdjiComment } from '../../shared/datatypes'
-import * as Recorder from 'opus-recorder/dist/recorder.min.js'
+import * as Recorder from 'opus-recorder/dist/recorder.min.js';
 
 // declare var MediaRecorder: any
 declare var window: any
@@ -41,6 +42,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
   private chunks: any = []
   // private mediaRecorder: any
   private recorder: any
+  private recorderReady: boolean
 
   private audio
   private audioFile
@@ -98,9 +100,11 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
     private _media: MediaService,
     private el: ElementRef,
     private _comments: CommentService,
-    private angulartics: Angulartics2
+    private angulartics: Angulartics2,
+    // Note: The AudioService is provided at the page level (project page) to be lighter
+    private _audio: AudioService
   ) {
-    
+
   }
   
   ngOnInit() {
@@ -128,16 +132,18 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
      * Both of which we need to get access granted in order to run 
      */
     if (Recorder.isRecordingSupported()) {
-      this.recorder = new Recorder({
-        // Chrome does NOT like 'x-wav' mime type
-        type: 'audio/wav',
-        // Safari only plays well with the waveWorker
-        encoderPath: '/assets/js/waveWorker.min.js',
-        // We process chunks of data as we go (see: dataAvailable event)
-        streamPages: true
-      })
-      this.recorder.initStream()
-      this.initializeAudio()
+      // Use shared recorder
+      this.recorder = this._audio.recorder
+    //   new Recorder({
+    //     // Chrome does NOT like 'x-wav' mime type
+    //     type: 'audio/wav',
+    //     // Safari only plays well with the waveWorker
+    //     encoderPath: '/assets/js/waveWorker.min.js',
+    //     // We process chunks of data as we go (see: dataAvailable event)
+    //     streamPages: true
+    //   })
+    //   this.recorder.initStream()
+    //   this.initializeAudio()
     }
     
   }
@@ -147,15 +153,18 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
   }
   
   public initializeAudio() {
+    // Clears stream and event listeners from other comments
+    this._audio.freshRecorder()
+
     // Initialize a Recorder.js if access to the microphone is granted
-    this.recorder.addEventListener('streamError', (err) => {
+    this._audio.addRecorderListener('streamError', (err) => {
       console.log(err)
     })
 
     /**
      * Start Recording event handling
      */
-    this.recorder.addEventListener('start', () => {
+    this._audio.addRecorderListener('start', () => {
       console.log("Start recording!")
       this.currentState = playState.recording
       // While recording, check the duration of the recording total and stop it once it hits the limit
@@ -168,12 +177,13 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
     /**
      * Stop Recording event handling
      */
-      this.recorder.addEventListener('stop', () => {
+      this._audio.addRecorderListener('stop', () => {
         console.log("Stop recording!")
         // Player begins uploading recording on stop
         this.currentState = playState.loading
         // Clear duration loop
-        this.rInterval.clearInterval()
+        // this.rInterval.
+        clearInterval(this.rInterval)
 
         // Set the audio for playback via the blob object from the stored chunks
         const blob = new Blob(this.chunks, { 'type': 'audio/' + this.audioType + '; codecs="wav"' })
@@ -183,10 +193,6 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
         });
         
         this.audioFile = file
-        this.audio.preload = 'none'
-          
-        // No longer loading blob, doesn't work in Safari and in other cases
-        // this.audio.src = window.URL.createObjectURL(blob)
         
         // Comment saved! Save audio file
         this._media.uploadAudio(this.audioFile)
@@ -212,7 +218,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
      * - Saves data to chunks array as it is received
      * - In Chrome, we receive all chunks at the end of recording
      */
-    this.recorder.addEventListener('dataAvailable', (e) =>{
+    this._audio.addRecorderListener('dataAvailable', (e) =>{
       // Save data to create audio file on 'stop'
       this.chunks.push(e.detail)
       // this.waves[this.wavePos] = e.detail.length - 3200
@@ -230,6 +236,9 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
       
       this._comments.waveForm(this.waves, this.myCanvas)
     })
+    
+    // Intialize the recording stream
+    this.recorder.initStream()
   }
 
   private loadAudioPlayer(url: string) {
@@ -251,7 +260,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
     this.audio.onended = e => {
       this.currentState = playState.inactive
       this.playTime = 0
-      this.pInterval.clearInterval()
+      clearInterval(this.pInterval)
     }
   }
 
@@ -272,18 +281,21 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
    * Record Audio from the user's microphone
    */
   private freshRecord() {
+    console.log("FRESH RECORD")
     if (this.currentState == playState.recording) {
       this.recorder.stop()
     }
+    
+    // Assign recorder to this component
+    this.initializeAudio()
 
-    this.recorder.initStream()
-    // this.countdown = true
-    // this.countdownInterval = setInterval(()=> {
-    //   this.countdownI--
-    // }, 800)
+    this.countdown = true
+    this.countdownInterval = setInterval(()=> {
+      this.countdownI--
+    }, 800)
     // this.playAble = false
     // this.isPlaying = false
-    // setTimeout(() => {
+    setTimeout(() => {
       clearInterval(this.countdownInterval)
       this.countdownInterval = ''
       this.countdownI = 2
@@ -291,7 +303,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
       // this.isRecording = true
       this.rStartAt = new Date()
       this.recorder.start()
-    // }, 3000)
+    }, 3000)
   }
 
   /** 
