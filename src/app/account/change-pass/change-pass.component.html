@@ -19,12 +19,15 @@
                         <label for="new-password-confirm-input">New Confirm New Password</label>
                         <input type="password" id="new-password-confirm-input" class="form-control" [formControl]="passwordForm.controls['newPasswordConfirm']" />
                         <div *ngIf="passwordForm.controls['newPasswordConfirm'].hasError('required')  && passwordForm.controls['newPasswordConfirm'].dirty" class="alert alert-info">Please confirm your new password</div>
-                        <div *ngIf="passwordForm.hasError('mismatch')" class="alert alert-danger">Please make sure your passwords match</div>
+                        <div *ngIf="passwordForm.hasError('mismatch')" class="alert alert-info">Please make sure your passwords match</div>
                     </div>
                 </div>
-                <div class="modal-footer">
+                <div *ngIf="!messages.success" class="modal-footer">
                     <button (click)="closeModal.emit()" type="button" class="btn" data-dismiss="modal">Close</button><!--not sure what data-dismiss does-->
-                    <button type="submit" class="btn btn-primary" [disabled]="!passwordForm.valid">Reset Password</button>
+                    <button type="submit" class="btn btn-primary" [class.loading]="loading" [disabled]="!passwordForm.valid">Reset Password</button>
+                </div>
+                <div *ngIf="messages.success" class="modal-footer">
+                    <div class="alert alert-success">Way to go, you reset your password!</div>
                 </div>
             </form>
         </div>
