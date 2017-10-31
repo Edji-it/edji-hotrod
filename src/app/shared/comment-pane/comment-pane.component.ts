@@ -107,8 +107,21 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
       if (isNew) {
         this.el.nativeElement.querySelector('.comment-container').scrollTop = this.el.nativeElement.querySelector('.comment-container').scrollHeight
       } else {
-        // this.el.nativeElement.querySelector('.comment-container').scrollTop = this.el.nativeElement.querySelector('edji-comment:nth-child(2) .mobileBound').getBoundingClientRect().top
-        this.el.nativeElement.querySelector('.comment-container').scrollTop = this.el.nativeElement.querySelector('.mobileBound.active').getBoundingClientRect().top
+        // Get the comments that are currently in the pane
+        let comments: any[] = Array.from(document.querySelectorAll('.comment-container edji-comment'))
+
+        var commentIndex = 0
+
+        // Get the position of the active comment in the list of comments in comment pane
+        for (let i=0; i<this.commentByPos[this.lineNumArray[this.comment.start]].length; i++) {
+          if (this.commentByPos[this.lineNumArray[this.comment.start]][i]._id===this._comments.activeComment._id) {
+            commentIndex = i
+            break
+          }
+        }
+
+        // Set the scroll position to where the active comment is in view
+        this.el.nativeElement.querySelector('.comment-container').scrollTop = comments[commentIndex].offsetTop
       }
     }, 1)
   }
