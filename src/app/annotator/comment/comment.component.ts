@@ -79,6 +79,9 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() private showDeleteAudioModal: boolean = false
   @Input()
   set isActive(isActive: boolean) {
+    if (isActive && this.comment.new) {
+      this.toggleCPane(this.comment)
+    }
     if (typeof(isActive) !== 'undefined' && this.active !== isActive) {
       this.active = isActive
       if (!isActive) {
@@ -193,7 +196,7 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
    * TO-DO: Clean out code for optionally passing JUST comment.data as comment parameter
    */
   deactivate(comment ?: any, noUpdate ?: boolean): void {
-    this.comment.active = this.active = false)
+    this.comment.active = this.active = false
     this.commentActivation.emit(false)
     this._comments.activeComment.active = false
     // Save when comment is toggled away from
