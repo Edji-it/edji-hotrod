@@ -54,7 +54,7 @@
             | +
         .reply#addReply(
             *ngIf="!reply && project.types.indexOf('reply') > -1",
-            (click)="commentReply.emit()"
+            (tap)="commentReply.emit()"
         )
             p.text-left.reply-text-left Reply
             .text-right
