@@ -94,11 +94,7 @@ $navOffset: 60px;
         padding-left: $base-pad;
     }
     @media(min-width: $tablet) {
-        width:  273px !important;
-
-        &.replies {
-            min-width: 308px !important;
-        }
+        width: calc(100% - 50px);
     }
     // @media(min-width: $desktop and max-width: 1060px) {
 
