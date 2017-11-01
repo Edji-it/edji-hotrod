@@ -5,6 +5,18 @@ $medium-screen: 768px;
 $large-screen: 992px;
 $xl-screen: 1024px;
 
+// Breakpoints - matching bootstrap responsive utility breakpoints **max-width only!
+$xs-max-device: 543px;
+$sm-max-device: 767px;
+$md-max-device: 991px;
+$lg-max-device: 1199px;
+
+// Breakpoints - matching bootstrap responsive utility breakpoints **min-width only!
+$xs-min-device: 544px;
+$sm-min-device: 768px;
+$md-min-device: 992px;
+$lg-min-device: 1200px;
+
 // Nice References
 $xsphone: $xsmall-screen;
 $phone: $small-screen;
