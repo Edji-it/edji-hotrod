@@ -79,16 +79,14 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() private showDeleteAudioModal: boolean = false
   @Input()
   set isActive(isActive: boolean) {
-    if (isActive && this.comment.new) {
-      this.toggleCPane(this.comment)
-    }
     if (typeof(isActive) !== 'undefined' && this.active !== isActive) {
       this.active = isActive
       if (!isActive) {
+        console.log('z7')
         // Trigger save when deactivated externally i.e. emoji keyboard
         this.deactivate(this.comment)
       } else {
-        this.toggleCPane(this.comment, true)
+        this.toggleCPane(this.comment)
       }
     } 
   }
@@ -103,7 +101,7 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
   @Output() dismissKeyboard = new EventEmitter()
   @Output() commentUpdated: EventEmitter<any> = new EventEmitter()
   @Output() commentReply = new EventEmitter()
-  @Output() toggleCommentPane = new EventEmitter()
+  @Output() toggleCommentPane = new EventEmitter<boolean>()
 
   constructor(
         private _projects: ProjectService,
@@ -368,9 +366,13 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
 
   toggleCPane(comment?, forceOpen?: boolean): void {
     // Need to give the app 1 millisecond to update all arrays when adding a new comment
-    if (!forceOpen) {
+  if (!this.commentPaneActive || forceOpen) {
       setTimeout(() => {
-        this.toggleCommentPane.emit()
+        this.toggleCommentPane.emit(true)
+      }, 1)
+    } else {
+      setTimeout(() => {
+        this.toggleCommentPane.emit(false)
       }, 1)
     }
   }

@@ -116,7 +116,7 @@
                     (commentUpdated)="updateAllLineCounts()",
                     (expandLine)="expandLine($event, true)",
                     (collapseLine)="expandLine($event, false)",
-                    (toggleCommentPane)="toggleCommentPane(comment)",
+                    (toggleCommentPane)="toggleCommentPane($event, comment)",
                     (commentReply)="discReplyFire(comment)",
                     [class.imageComment]="comment['loc']",
                     [style.top]="comment['loc'] ? getClosestRowY(comment['loc']['y']/100 * imageHeight[i]) + 'px' : '0px'"
@@ -214,7 +214,7 @@ comment-pane(
     [visible]="commentPane", 
     [isActive]="selectedComment.active",
     [comment]="selectedComment",
-    (hideComment)="toggleCommentPane()",
+    (hideComment)="toggleCommentPane(false)",
     (commentActivationMobile)="setActiveCommentByIndex($event.activate, $event.wi, $event.ci)",
     (commentUpdated)="updateAllLineCounts()",
     (commentReply)="discReplyFire($event)"

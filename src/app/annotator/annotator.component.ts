@@ -1026,7 +1026,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.lineNumRunning = false
     }
 
-    private toggleCommentPane(comment?): void {
+    private toggleCommentPane(visible?: boolean, comment?): void {
         // Make sure the line counts are up-to-date
         this.getLineCount()
 
@@ -1036,6 +1036,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         }
 
         // Toggle the variable that controls comment pane open/close so we can add a class to "push" screen over
-        this.commentPane = !this.commentPane
+        if (visible) {
+            this.commentPane = true
+        } else {
+            this.commentPane = false
+        }
     }
 }
