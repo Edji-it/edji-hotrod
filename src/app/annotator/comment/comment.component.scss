@@ -194,7 +194,7 @@ $mobileBoundVPad: 40px;
     left: 0;
     margin: 0;
     &.active {
-      padding-right: 25px;
+      // padding-right: 25px;
       &.new {
         padding-left: 12px;
       }
@@ -268,9 +268,9 @@ $mobileBoundVPad: 40px;
 .comment-action--save__mobile {
   height: 25px;
   width: 25px;
-  top: 43px;
+  top: 18px;
   position: relative;
-  left: 91%;
+  float: right;
   text-align: right;
   z-index: 5501;
   padding-left: 5px;
