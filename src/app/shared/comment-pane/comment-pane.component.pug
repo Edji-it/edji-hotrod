@@ -10,7 +10,7 @@
       *ngIf="commentByPos[lineNumArray[comment.start]].length===1"
     ) {{ commentByPos[lineNumArray[comment.start]].length }} Comment
     .comment-container.commentOverflow-normal(
-      [ngClass]="[ _comments.activeComment.active && _comments.activeComment.type=='emoji' ? 'commentOverflow-eKey' : '',  _comments.activeComment.active && _comments.activeComment.type=='text' ? 'commentOverflow-kKey' : '' ]"
+      [ngClass]="[ _comments.activeComment.active && _comments.activeComment.type=='emoji' ? 'commentOverflow-eKey' : '' ]"
     )
       edji-comment(
         *ngFor="let mobileComment of commentByPos[lineNumArray[comment.start]]; let i = index", 
