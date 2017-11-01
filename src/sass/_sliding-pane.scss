@@ -122,7 +122,7 @@ $navOffset: 60px;
     &.slide-in {
         // transform: translate3d(0, 0, 0);
         transition: transform .7s linear;
-        transform: translate3d(105%, 0, 1px);
+        transform: translate3d(105%, 0, 0);
     }
 
     &.replies {

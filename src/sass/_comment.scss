@@ -820,6 +820,8 @@ $progressStart: 51px;
 	}
 }
 
-.mobileBound .audio-comment-input-wrapper {
+.mobileBound {
+	& .audio-comment-input-wrapper, .emojionearea, .text-comment-input {
     width: 100% !important;
+	}
 }
