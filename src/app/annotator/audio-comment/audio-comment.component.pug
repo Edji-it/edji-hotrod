@@ -32,6 +32,6 @@
     .playhead(
         *ngIf="audio && (isPlaying() || isRecording())",
         [class.recording]="isRecording()",
-        [style.width]="getPlayhead() + 'px'"
+        [style.width]="playheadPos + 'px'"
       )
     //- .playing(*ngIf="audio && !isPlaying()", [class.hide]="!comment.active && (isRecording() || !audio.currentTime)", [style.width]="pausedWidth + 'px'")

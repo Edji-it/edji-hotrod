@@ -37,7 +37,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
   private playTime: number = 0
   private playWidth: number = 130
   private playWidthVisual: number
-  private pausedWidth: number
+  private playheadPos: number
   private myCanvas
   private chunks: any = []
   // private mediaRecorder: any
@@ -73,12 +73,6 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
   // We need to know when changes to inactive to clear the editing variable
   @Input() set active(active){
     this.activated = active
-    if (!active && this.audioFile) {
-      this.waves = [].concat(this.initWaves)
-      this.chunks = []
-      this.wavePos = 0
-      this.initializeAudio()
-    }
     if (!active && this.currentState == playState.recording) {
       this.stopRecord()
     }
@@ -134,16 +128,6 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
     if (Recorder.isRecordingSupported()) {
       // Use shared recorder
       this.recorder = this._audio.recorder
-    //   new Recorder({
-    //     // Chrome does NOT like 'x-wav' mime type
-    //     type: 'audio/wav',
-    //     // Safari only plays well with the waveWorker
-    //     encoderPath: '/assets/js/waveWorker.min.js',
-    //     // We process chunks of data as we go (see: dataAvailable event)
-    //     streamPages: true
-    //   })
-    //   this.recorder.initStream()
-    //   this.initializeAudio()
     }
     
   }
@@ -171,6 +155,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
       this.rInterval = setInterval(()=> {
         // While recording, update playTime value
         this.playTime += 0.5
+        this.setPlayhead()
       }, this.INTERVAL_GAP)
     })
 
@@ -254,6 +239,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
       this.playTime = 0
       this.pInterval = setInterval(()=> {
         this.playTime = this.playTime + this.INTERVAL_GAP
+        this.setPlayhead()
       }, this.INTERVAL_GAP)
     }
 
@@ -311,9 +297,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
    */
   private stopRecord() {
     this.currentState = playState.inactive
-    // Get the duration of the audio track
-    // this.rDuration = this.rDuration + (new Date().getTime() - this.rStartAt) / 1000
-    // clearInterval(this.rInterval)
+    clearInterval(this.rInterval)
     // Clone playTime value
     this.rDuration = this.playTime + 0
     this.playTime = 0
@@ -342,13 +326,12 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
     this.audio.play()
   }
 
-  private getPlayhead() {
+  private setPlayhead() {
     if (this.currentState == playState.recording) {
-      return Math.round((this.playTime / this.MAX_SECONDS) * this.playWidth)
+      this.playheadPos =  Math.round((this.playTime / this.MAX_SECONDS) * this.playWidth)
     } else {
-      return Math.round((this.audio.currentTime / this.MAX_SECONDS) * this.playWidth)
+      this.playheadPos =  Math.round((this.audio.currentTime / this.MAX_SECONDS) * this.playWidth)
     }
-    // this.pausedWidth = Math.round((this.audio.currentTime / 30) * this.playWidthVisual)
   }
   
   /**
