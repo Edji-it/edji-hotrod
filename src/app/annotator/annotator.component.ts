@@ -161,6 +161,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             this._readings.currentReading.subscribe(
                 reading => {
                     this.reading = reading
+                    if (this.reading && this.reading.words && this.reading.words[0]===null) {
+                        this.reading.words.splice(0,1)
+                    }
                     this.updateMetaTags()
                     if (reading.questions) {
                         this.updateQuestionNumbers(reading.questions)
