@@ -67,8 +67,6 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
   private countdownI: number = 3
   private countdownText: string[] = ['--- Go! ---', '--- Set ---', '-- Ready --']
   private countdownInterval: any
-  private audioType: string = 'wav'
-  private audioTypeExt: string = 'wav'
 
   // We need to know when changes to inactive to clear the editing variable
   @Input() set active(active){
@@ -165,13 +163,12 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
         // Player begins uploading recording on stop
         this.currentState = playState.loading
         // Clear duration loop
-        // this.rInterval.
         clearInterval(this.rInterval)
 
         // Set the audio for playback via the blob object from the stored chunks
-        const blob = new Blob(this.chunks, { 'type': 'audio/' + this.audioType + '; codecs="wav"' })
+        const blob = new Blob(this.chunks, { 'type': 'audio/wav; codecs="wav"' })
         
-        var file = new File([blob], 'my-audio.' + this.audioTypeExt, {
+        var file = new File([blob], 'my-audio.wav', {
             type: 'audio/wav'
         });
         
@@ -204,14 +201,13 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
     this._audio.addRecorderListener('dataAvailable', (e) =>{
       // Save data to create audio file on 'stop'
       this.chunks.push(e.detail)
-      // this.waves[this.wavePos] = e.detail.length - 3200
-      // this.wavePos++
 
       // Sample for waves every 500ms
-      let sampleInterval = e.detail.length/(this.rDuration*2)
-      for (let i = 0; i < e.detail.length; i = i + sampleInterval) {
+      let detailLength = e.detail.length
+      let sampleInterval = detailLength/(this.rDuration*2)
+      for (let i = 0; i < detailLength; i = i + sampleInterval) {
         i = Math.floor(i)
-        // Sample wave
+        // Sample for the wave ~~~
         let neighborAvg = ((e.detail[i] || 0) + (e.detail[i+1] || 0) + (e.detail[i+2] || 0) + 1)/3
         this.waves[this.wavePos] = Math.round(neighborAvg)
         this.wavePos++
@@ -276,14 +272,11 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
     this.countdownInterval = setInterval(()=> {
       this.countdownI--
     }, 800)
-    // this.playAble = false
-    // this.isPlaying = false
     setTimeout(() => {
       clearInterval(this.countdownInterval)
       this.countdownInterval = ''
       this.countdownI = 2
       this.countdown = false
-      // this.isRecording = true
       this.rStartAt = new Date()
       this.recorder.start()
     }, 3000)
