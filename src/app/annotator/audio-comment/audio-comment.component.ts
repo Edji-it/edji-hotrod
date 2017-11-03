@@ -142,14 +142,13 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
 
     // Initialize a Recorder.js if access to the microphone is granted
     this._audio.addRecorderListener('streamError', (err) => {
-      console.log(err)
+      console.error(err)
     })
 
     /**
      * Start Recording event handling
      */
     this._audio.addRecorderListener('start', () => {
-      console.log("Start recording!")
       this.currentState = playState.recording
       // While recording, check the duration of the recording total and stop it once it hits the limit
       this.rInterval = setInterval(()=> {
@@ -163,7 +162,6 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
      * Stop Recording event handling
      */
       this._audio.addRecorderListener('stop', () => {
-        console.log("Stop recording!")
         // Player begins uploading recording on stop
         this.currentState = playState.loading
         // Clear duration loop
@@ -267,7 +265,6 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
    * Record Audio from the user's microphone
    */
   private freshRecord() {
-    console.log("FRESH RECORD")
     if (this.currentState == playState.recording) {
       this.recorder.stop()
     }
@@ -352,10 +349,6 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
     if (this.audio) {
       this.audio.currentTime = this.MAX_SECONDS * percentLeftClicked
     }
-  }
-
-  private audioError() {
-    // console.log('this device is not supported for audio recording')
   }
 
   private getPlayhead_exp() : number {
