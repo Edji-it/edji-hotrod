@@ -65,7 +65,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
   private isInitialized: boolean = false
   private countdown: boolean = false
   private countdownI: number = 3
-  private countdownText: string[] = ['--- Go! ---', '--- Set ---', '-- Ready --']
+  private countdownText: string[] = ['Go!', 'Set', 'Ready']
   private countdownInterval: any
 
   // We need to know when changes to inactive to clear the editing variable
@@ -192,7 +192,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
             this.save.emit(this.comment)
           },
           err => {
-            console.log(err)
+            console.error(err)
           })
       })
 
@@ -275,7 +275,8 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
     if (this.currentState == playState.recording) {
       this.recorder.stop()
     }
-    
+    // Clear existing recording
+    this.chunks = []
     // Assign recorder to this component
     this.initializeAudio()
 
