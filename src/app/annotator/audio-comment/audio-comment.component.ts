@@ -100,18 +100,18 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
   }
   
   ngOnInit() {
-    this.waves = [].concat(this.initWaves)
     this.myCanvas = this.el.nativeElement.querySelector('.wave-form')
+    // Initialize the wave!
+    this.newWave()
     // If comment already has uploaded audio, load it
     if (this.comment.url && this.comment.url.length > 0) {
       this.loadAudioPlayer(this.comment.url)
       // Build the waveform
-      this._comments.waveForm(this.comment.dataArray, this.myCanvas)
+      this.waves = this.comment.dataArray
       this.isInitialized = true
-    } else {
-      // Set the canvas properties and write temporary data
-      this._comments.waveForm(this.waves, this.myCanvas)
     }
+    // Render either initial or saved waveform
+    this._comments.waveForm(this.waves, this.myCanvas)
 
     if (this.userPermission > 3) {
       this.playWidth = this.playWidth - 55
@@ -147,6 +147,9 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
      * Start Recording event handling
      */
     this._audio.addRecorderListener('start', () => {
+      // Clear wave forms (we are assuming each recording is new/fresh)
+      this.newWave()
+      // Maintain state when we know for sure we are recording
       this.currentState = playState.recording
       // While recording, check the duration of the recording total and stop it once it hits the limit
       this.rInterval = setInterval(()=> {
@@ -218,6 +221,14 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
     
     // Intialize the recording stream
     this.recorder.initStream()
+  }
+
+  /**
+   * Refreshes the waveform data
+   */
+  private newWave() {
+    this.wavePos = 0
+    this.waves = [].concat(this.initWaves)
   }
 
   private loadAudioPlayer(url: string) {
