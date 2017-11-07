@@ -8,8 +8,7 @@ import { ReadingService } from '../shared/reading.service'
 import { ProjectService } from '../shared/project.service'
 import { CommentService } from '../shared/comment.service'
 import { CommentComponent } from './comment/comment.component'
-import { AuthService } from '../shared/auth.service' 
-import { SocketService } from '../shared/socket.service'
+import { AudioService, AuthService, SocketService } from '../shared' 
 import { CommentPermissions, EdjiComment, Project, Reading } from './../shared/datatypes'
 
 declare var window: any
@@ -124,7 +123,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         private _auth: AuthService,
         private _socket: SocketService,
         private _comments: CommentService,
-        private angulartics: Angulartics2
+        private angulartics: Angulartics2,
+        private _audio: AudioService
         // private _hotkeysService: HotkeysService
     ) {
         // this._hotkeysService.add(new Hotkey('t', (event: KeyboardEvent): boolean => {
@@ -171,7 +171,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 if (project) {
                     this.project = project
                     // Check if audio is supported
-                    if (this.project.types.indexOf('audio') > -1 && !navigator.getUserMedia) {
+                    if (this.project.types.indexOf('audio') > -1 && !this._audio.isSupported()) {
                         this.audioSupportError = true
                         // if audio is not supported, let analytics know
                         this.angulartics.eventTrack.next({ action: 'audioSupport', properties: { category: 'heroFeature', label: 'failure' }})

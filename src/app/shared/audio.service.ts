@@ -33,6 +33,10 @@ export class AudioService {
         }
     }
 
+    public isSupported(): boolean {
+        return Recorder.isRecordingSupported()
+    }
+
     public freshRecorder(): void {
         this.recorder.clearStream()
 
