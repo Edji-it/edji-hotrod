@@ -30,7 +30,7 @@
     canvas.wave-form((click)="setPlaybackTime($event)")
     .countdown(*ngIf="countdown", [innerHtml]="countdownText[countdownI]")
     .playhead(
-        *ngIf="audio && (isPlaying() || isRecording())",
+        *ngIf="isPlaying() || isRecording()",
         [class.recording]="isRecording()",
         [style.width]="playheadPos + 'px'"
       )
