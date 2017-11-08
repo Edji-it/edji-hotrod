@@ -7,6 +7,7 @@ export * from './util-tool.service';
 export * from './comment.service';
 export * from './media.service';
 export * from './bumblebee.service';
+export * from './audio.service';
 export * from './copy';
 export * from './nav-bar/nav-bar.component';
 export * from './footer/footer.component';
