@@ -28,7 +28,8 @@
       i.icon([ngClass]="[ isRecording() ? 'icon-stop' : 'icon-mic']")
   .wave-wrap([ngClass]="[reply ? 'reply-wave' : '']", [style.width]="playWidth + 'px'")
     canvas.wave-form((click)="setPlaybackTime($event)")
-    .countdown(*ngIf="countdown", [innerHtml]="countdownText[countdownI]")
+    //- Check for countdownText so "null" does not show in Edge
+    .countdown(*ngIf="countdown", [innerHtml]="countdownText[countdownI] ? countdownText[countdownI] : ''")
     .playhead(
         *ngIf="isPlaying() || isRecording()",
         [class.recording]="isRecording()",
