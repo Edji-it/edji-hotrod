@@ -79,6 +79,7 @@ import { LoginComponent } from './login';
 import { ResetPassPage } from './reset-pass/reset-pass-page.component';
 import { HeroPromoComponent } from './hero-promo/hero-promo.component';
 import { HeroPricingComponent } from './hero-pricing/hero-pricing.component';
+import { OAuthComponent } from './oauth-redirect/oauth-redirect.component';
 
 // Configure Hammer.js
 export class MyHammerConfig extends HammerGestureConfig  {
@@ -153,6 +154,7 @@ type StoreType = {
     UploadAvatarModal,
     AnnotatorComponent,
     NewReadingPage,
+    OAuthComponent,
     HeroPromoComponent,
     HeroPricingComponent,
     LeaderboardComponent,
