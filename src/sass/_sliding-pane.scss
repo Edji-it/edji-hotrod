@@ -89,7 +89,7 @@ $navOffset: 60px;
     transition: transform $slidingPaneTime linear;
     // transform: translate3d(0, 0, 0);
 
-    @media(max-width: $tablet) {
+    @media(max-width: $desktop) {
         width: calc(100% - 50px);
         padding-left: $base-pad;
     }
