@@ -8,13 +8,7 @@ import { ReadingService } from '../shared/reading.service'
 import { ProjectService } from '../shared/project.service'
 import { CommentService } from '../shared/comment.service'
 import { CommentComponent } from './comment/comment.component'
-<<<<<<< HEAD
-import { AuthService } from '../shared/auth.service' 
-import { SocketService } from '../shared/socket.service'
-import { UtilToolService } from '../shared/util-tool.service'
-=======
-import { AudioService, AuthService, SocketService } from '../shared' 
->>>>>>> dev
+import { AudioService, AuthService, SocketService, UtilToolService } from '../shared' 
 import { CommentPermissions, EdjiComment, Project, Reading } from './../shared/datatypes'
 
 declare var window: any

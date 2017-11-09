@@ -20,13 +20,10 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
 
   @Input()
   set isActive(active: boolean) {
-<<<<<<< HEAD
     this.currentComment = this._comments.activeComment.data
-=======
     if (this._isActive && active == false) {
       this.onInactivated();
     }
->>>>>>> dev
     this._isActive = active;
   }
   get isActive(): boolean { return this._isActive; }

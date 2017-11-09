@@ -17,15 +17,11 @@ import { Project, Reading, User } from './../shared/datatypes';
     // moduleId: module.id,
     selector: 'edji-project-page',
     styleUrls: ['project-page.component.scss'],
-<<<<<<< HEAD
-    templateUrl: 'project-page.component.pug'
-=======
-    templateUrl: 'project-page.component.html',
+    templateUrl: 'project-page.component.pug',
     providers: [
         // Provided for child audio comments
         AudioService
     ]
->>>>>>> dev
 })
 export class ProjectPageComponent implements OnInit, OnDestroy {
 
