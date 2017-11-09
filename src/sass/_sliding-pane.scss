@@ -15,7 +15,7 @@ $navOffset: 60px;
     padding: $base-pad 5px;
     z-index: $zMid + 1000;
     overflow-y:auto;
-    transition: margin 0.3s linear;
+    transition: margin $slidingPaneTime linear;
     padding-left: 60px;
     padding-top: $navOffset + $base-pad;
     box-shadow: $slidingPaneShadow;
@@ -86,8 +86,8 @@ $navOffset: 60px;
     padding-top: $navOffset + $base-pad;
     box-shadow: $slidingPaneShadow;
     border-right: $slidingPaneBorder;
-    transition: transform .6s linear;
-    transform: translate3d(0, 0, 0);
+    transition: transform $slidingPaneTime linear;
+    // transform: translate3d(0, 0, 0);
 
     @media(max-width: $tablet) {
         width: calc(100% - 30px);
@@ -121,7 +121,6 @@ $navOffset: 60px;
     
     &.slide-in {
         // transform: translate3d(0, 0, 0);
-        transition: transform .7s linear;
         transform: translate3d(105%, 0, 0);
     }
 

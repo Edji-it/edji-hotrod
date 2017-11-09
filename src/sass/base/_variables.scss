@@ -140,3 +140,6 @@ $container-large-desktop:      1200px; //(1140px + $grid-gutter-width) !default;
 $container-lg:                 $container-large-desktop !default;
 
 $fa-font-path: 'fonts';
+
+// Shared module variables
+$slidingPaneTime: .4s;
