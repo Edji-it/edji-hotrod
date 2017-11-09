@@ -1,5 +1,8 @@
-.audio-comment-input-wrapper.input-wrap([ngClass]="[comment.active ? 'active' : '', reply ? 'reply-audio-wrapper' : '']")
+.audio-comment-input-wrapper.input-wrap(
+  [ngClass]="[comment.active ? 'active' : '', reply ? 'reply-audio-wrapper' : '']"
+)
   .audio-btn-wrap([class.fade-out]="!comment.active")
+<<<<<<< HEAD
     button.btn-audio([class.disabled]="!playAble")
       i#audioPlay.icon-play([class.hide]="isPlaying", (tap)="play()")
       i#audioPause.icon-pause([class.hide]="!isPlaying", (tap)="pause()")
@@ -12,3 +15,39 @@
     .countdown(*ngIf="countdown", [innerHtml]="countdownText[countdownI]")
     .playing(*ngIf="audio && isPlaying", [class.hide]="!comment.active && (isRecording || !audio.currentTime)", [style.width]="getPlayhead() + 'px'")
     .playing(*ngIf="audio && !isPlaying", [class.hide]="!comment.active && (isRecording || !audio.currentTime)", [style.width]="pausedWidth + 'px'")
+=======
+    button.btn-audio([class.disabled]="isRecording() || isLoading()")
+      i#audioPlay.icon-play(
+        *ngIf="!isPlaying() && !isLoading()", 
+        (click)="play()"
+      )
+      i#audioPause.icon-pause(
+        *ngIf="isPlaying()", 
+        (click)="pause()"
+      )
+      i#audioPause.icon-loading(
+        *ngIf="isLoading()"
+      )
+    button#audioRestart.btn-audio(
+      [class.disabled]="!isPlayable()", 
+      (click)="restartPlayback()"
+    )
+      i.icon-restart
+    button#audioRecord.btn-audio.btn-record(
+      [class.hide]="userPermission <= 3", 
+      (click)="isRecording() ? stopRecord() : record()", 
+      [class.disabled]="!isInactive() && !isRecording()",
+      [class.active]="isRecording()"
+    )
+      i.icon([ngClass]="[ isRecording() ? 'icon-stop' : 'icon-mic']")
+  .wave-wrap([ngClass]="[reply ? 'reply-wave' : '']", [style.width]="playWidth + 'px'")
+    canvas.wave-form((click)="setPlaybackTime($event)")
+    //- Check for countdownText so "null" does not show in Edge
+    .countdown(*ngIf="countdown", [innerHtml]="countdownText[countdownI] ? countdownText[countdownI] : ''")
+    .playhead(
+        *ngIf="isPlaying() || isRecording()",
+        [class.recording]="isRecording()",
+        [style.width]="playheadPos + 'px'"
+      )
+    //- .playing(*ngIf="audio && !isPlaying()", [class.hide]="!comment.active && (isRecording() || !audio.currentTime)", [style.width]="pausedWidth + 'px'")
+>>>>>>> dev

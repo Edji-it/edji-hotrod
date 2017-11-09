@@ -103,15 +103,6 @@ edji-comment {
 		pointer-events: none;
 	}
 
-	.comment-input-wrapper{
-		border: $commentBorder; // 1px solid #cdcdcd;
-		border-radius: 4px;
-		overflow: hidden;
-		position: relative;
-		transform: scale(1.0) translateZ(0px);
-		transition:  transform linear 0.2s;
-	}
-
 	.comment-username {
 		position: absolute;
 		top: -22px;
@@ -209,6 +200,15 @@ edji-comment {
 			display: block !important;
 		}
 	}
+}
+
+.comment-input-wrapper {
+	border: $commentBorder;
+	border-radius: 4px;
+	overflow: hidden;
+	position: relative;
+	transform: scale(1.0) translateZ(0px);
+	transition:  transform linear 0.2s;
 }
 
 .comment--placeholder {
@@ -676,25 +676,21 @@ $expandShadowSize: 3px;
 
 $progressStart: 51px;
 
-.playing {
-    height: 100%;
-    background-color: rgba(142,217,255,0.8);
+
+.playhead {
+	height: 100%;
     top: 0px;
     left: 0px;
     position: absolute;
+    background-color: rgba(142,217,255,0.8);
     border-radius: 0px;
     border-right: solid $green;
 	pointer-events: none;
-}
 
-.recording {
-    height: $readingLineHeight;
-    background-color: rgba(255,100,100,0.8);
-    top: 0px;
-    left: $progressStart;
-    position: absolute;
-    border-radius: 4px 0px 0px 4px;
-    border-right: solid #FF2424;
+	&.recording {
+		background-color: rgba(255,100,100,0.6);
+		border-right: solid #FF2424;
+	}
 }
 
 .btn-audio {
@@ -710,9 +706,15 @@ $progressStart: 51px;
     }
 }
 
+@keyframes redPulse {
+	0% {background-color: #dca9a9;}
+	40% {background-color: $recordRed;}
+	80% {background-color: $recordRed;}
+	100% {background-color: #dca9a9;}
+}
 .btn-record {
-    &:hover, &:active, &.active {
-		// background: #FF2424;
+	&.active {
+		animation: redPulse 2s infinite;
 	}
 }
 
