@@ -2,7 +2,6 @@
 $slidingPaneShadow: 0px 1px 8px 3px rgba(0,0,0,0.05);
 $slidingPaneBorder: 1px solid $gray;
 $slidingPaneWidth: 250px;
-$navOffset: 60px;
 
 .sliding-pane {
     position: fixed;
@@ -78,12 +77,9 @@ $navOffset: 60px;
     top: 0;
     left: 0;
     background: #fff; //$midGray; //$gray;
-    padding: $base-pad 5px;
+    padding: 0px;
     z-index: $zMid + 1000;
-    overflow-y:auto;
-    // transition: margin 0.3s linear;
-    padding-left: 60px;
-    padding-top: $navOffset + $base-pad;
+    overflow:auto;
     box-shadow: $slidingPaneShadow;
     border-right: $slidingPaneBorder;
     transition: transform $slidingPaneTime linear;
@@ -91,12 +87,7 @@ $navOffset: 60px;
 
     @media(max-width: $desktop) {
         width: calc(100% - 50px);
-        padding-left: $base-pad;
     }
-    // @media(min-width: $tablet) {
-    //     width: calc(100% - 50px);
-    // }
-    // @media(min-width: $desktop and max-width: 1060px) {
 
     // }
     @media(min-width: 1060px) {
@@ -126,10 +117,6 @@ $navOffset: 60px;
 
     &.replies {
         overflow-y: hidden;
-    }
-
-    &.slide-slow {
-        // transition: margin 0.8s linear;
     }
 }
 
