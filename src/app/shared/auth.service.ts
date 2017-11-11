@@ -644,7 +644,7 @@ export class AuthService implements CanActivate {
             })
     }
 
-    public getUserWithAuthToken(type: string, token: string): Observable<User> {
+    public getUserWithAuthToken(type: string, token: string): Observable<LoginObject> {
         return this.http.get(this.baseUrl + "/users?oauth_type=" + type + "&oauth_token=" + token)
             .map((res) => {
                 return res.json()
@@ -658,4 +658,9 @@ export class AuthService implements CanActivate {
         // })
         window.location.href = [this.baseUrl, 'auth', 'google'].join("/")
     }
+}
+
+interface LoginObject {
+    user: User
+    token: string
 }

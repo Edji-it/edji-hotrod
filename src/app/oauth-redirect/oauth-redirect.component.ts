@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { ActivatedRoute } from '@angular/router'
+import { Router, ActivatedRoute } from '@angular/router'
 
 import { AuthService } from './../shared'
 
@@ -19,6 +19,7 @@ export class OAuthComponent implements OnInit {
 
   constructor(
     private _auth: AuthService,
+    private _router: Router,
     private route: ActivatedRoute
   ) { }
 
@@ -34,8 +35,10 @@ export class OAuthComponent implements OnInit {
       return this.messages.noToken = true
     }
 
-    this._auth.getUserWithAuthToken(type, token).take(1).subscribe((user) => {
-      console.log(user)
+    this._auth.getUserWithAuthToken(type, token).take(1).subscribe((res) => {
+      this._auth.setUser(res.user)
+      this._auth.setToken(res.token)
+      this._router.navigate(['/dashboard'])
     }, (err) => {
       console.error(err)
       switch (err.status) {
