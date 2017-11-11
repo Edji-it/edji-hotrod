@@ -12,7 +12,6 @@ export class OAuthComponent implements OnInit {
 
   private messages: {
     noToken?: boolean,
-    noType?: boolean,
     noUser?: boolean,
     serverError?: boolean
   } = {}
@@ -26,14 +25,14 @@ export class OAuthComponent implements OnInit {
   ngOnInit() {
     // grab that oauth token which is given by the server!
     const type = this.route.snapshot.params.type
-    const token = decodeURIComponent(this.route.snapshot.queryParams.token)
+    const encodedToken = this.route.snapshot.queryParams.token
 
     // tell them what's up if there's no token or oauth type...
-    if (!type) {
-      return this.messages.noType = true
-    } else if (!token) {
+    if (!encodedToken || encodedToken.length < 1) {
       return this.messages.noToken = true
     }
+
+    const token = decodeURIComponent(encodedToken)
 
     this._auth.getUserWithAuthToken(type, token).take(1).subscribe((res) => {
       this._auth.setUser(res.user)

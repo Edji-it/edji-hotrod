@@ -1,2 +1,4 @@
 nav-bar
-div We are fetching your oauth credentials
+.alert.alert-danger(*ngIf="messages.noUser") There was no user found with that token
+.alert.alert-danger(*ngIf="messages.serverError") There was an error while fetching the user information. Please try again or contact us.
+.alert.alert-danger(*ngIf="messages.noToken") Sorry! Looks like something went wrong with login. Please return to the Login page and try again!
