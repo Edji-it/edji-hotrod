@@ -24,8 +24,8 @@ export class OAuthComponent implements OnInit {
 
   ngOnInit() {
     // grab that oauth token which is given by the server!
-    const type = this.route.snapshot.params.type
-    const encodedToken = this.route.snapshot.queryParams.token
+    const type = this.route.snapshot.params['type']
+    const encodedToken = this.route.snapshot.queryParams['token']
 
     // tell them what's up if there's no token or oauth type...
     if (!encodedToken || encodedToken.length < 1) {

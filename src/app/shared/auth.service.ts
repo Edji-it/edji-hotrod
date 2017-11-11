@@ -33,7 +33,8 @@ export class AuthService implements CanActivate {
      * - Update via url param subscriptions inside of relevant components
      */
     public secretSwitches = {
-        heroAvailable : false
+        heroAvailable: false,
+        googleAuth: false
     }
 
     constructor(private http: Http, private _router: Router, _locker: Locker) {
