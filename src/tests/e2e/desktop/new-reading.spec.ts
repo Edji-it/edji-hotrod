@@ -1,7 +1,7 @@
 import * as path from 'path';
 import { SideBarComponent } from '../../app/shared/side-bar';
 import { browser, by, element, protractor} from 'protractor';
-import { NewReading, Login, Sidebar } from './page-objects';
+import { NewReading, Login, Sidebar } from '../page-objects';
 
 /*
     27 Jan 2017
@@ -196,7 +196,7 @@ describe('New Reading Page', () => {
             newReading.uploadPDfModalButton.click();
             
             // Select File to upload
-            let fileToUpload = '../../assets/test/2-pages.pdf';
+            let fileToUpload = '../../../assets/test/2-pages.pdf';
             let absolutePath = path.resolve(__dirname, fileToUpload);
             newReading.pdfFileInput.sendKeys(absolutePath);
 
@@ -265,7 +265,7 @@ describe('New Reading Page', () => {
             browser.wait(EC.elementToBeClickable(newReading.imageUploadTrigger), 6000, "image upload trigger never became clickable");
             
             // Select File to upload
-            let fileToUpload = '../../assets/test/titration.jpg';
+            let fileToUpload = '../../../assets/test/titration.jpg';
             let absolutePath = path.resolve(__dirname, fileToUpload);
             newReading.imageFileInput.sendKeys(absolutePath);
 

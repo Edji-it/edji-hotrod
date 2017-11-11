@@ -1,5 +1,5 @@
 import { browser, by, element, protractor } from 'protractor';
-import { Account, Login } from './page-objects';
+import { Account, Login } from '../page-objects';
 import * as path from 'path';
 
 /*

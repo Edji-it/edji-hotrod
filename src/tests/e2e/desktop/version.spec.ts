@@ -1,7 +1,7 @@
 //import * as webdriver from 'webdriver';
 import { browser, by, element, protractor } from 'protractor';
-import { Dashboard, Login, NewReading, Sidebar, Home } from './page-objects';
-import { LoginForm } from './components';
+import { Dashboard, Login, NewReading, Sidebar, Home } from '../page-objects';
+import { LoginForm } from '../components';
 
 /* ---- Versioning Tests ------------------------ */
 describe("Versioning - ", () => {

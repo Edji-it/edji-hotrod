@@ -1,7 +1,7 @@
 import { browser, by, element, protractor } from 'protractor';
 
-import { Project, Sidebar } from './page-objects';
-import { LoginModal } from './components';
+import { Project, Sidebar } from '../page-objects';
+import { LoginModal } from '../components';
 
 /*
     27 Jan 2017
