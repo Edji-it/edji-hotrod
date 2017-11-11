@@ -23,6 +23,7 @@
         //- Swap between different comment types
         emoji-comment(
             *ngIf="comment.type == 'emoji' || !comment.type",
+            [readOnly]="readOnly",
             [comment]="comment",
             [reply]="reply",
             (activate)="activate()",
