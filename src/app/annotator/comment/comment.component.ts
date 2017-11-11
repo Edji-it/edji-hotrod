@@ -62,6 +62,7 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
   private commentByPos: any = []
   private project: any
   private commentPane: boolean
+  private indicatesPane: boolean
   private lineIconNum: number = 0
   private iconNum: number = 0
 
@@ -169,6 +170,16 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       (error) => {
         console.error(error)
+      }
+    ))
+
+    // Change mobile icon state if pane closes
+    this.subscriptions.push(this._projects.commentPaneState.subscribe(
+      (paneState) => {
+        // We can ONLY use this subscription to CLEAR the indicatesPane var to *false*
+        if (paneState === false) {
+          this.indicatesPane = false
+        }
       }
     ))
   }
@@ -365,15 +376,19 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   toggleCPane(comment?, forceOpen?: boolean): void {
-    // Need to give the app 1 millisecond to update all arrays when adding a new comment
-  if (!this.commentPaneActive || forceOpen) {
-      setTimeout(() => {
-        this.toggleCommentPane.emit(true)
-      }, 1)
-    } else {
-      setTimeout(() => {
-        this.toggleCommentPane.emit(false)
-      }, 1)
+    if (!this.commentPaneActive) {
+       // Need to give the app 1 millisecond to update all arrays when adding a new comment
+      if (!this.indicatesPane || forceOpen) {
+        setTimeout(() => {
+          this.indicatesPane = true
+          this.toggleCommentPane.emit(true)
+        }, 1)
+      } else {
+        setTimeout(() => {
+          this.indicatesPane = false
+          this.toggleCommentPane.emit(false)
+        }, 1)
+      }
     }
   }
 

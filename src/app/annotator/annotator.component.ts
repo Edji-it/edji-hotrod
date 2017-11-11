@@ -1039,9 +1039,13 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
         // Toggle the variable that controls comment pane open/close so we can add a class to "push" screen over
         if (visible) {
+            // Tell pane to open
             this.commentPane = true
+            this._projects.commentPaneStateSubj.next(true)
         } else {
+            // Tell comments to close
             this.commentPane = false
+            this._projects.commentPaneStateSubj.next(false)
         }
     }
 }
