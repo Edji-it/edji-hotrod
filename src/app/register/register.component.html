@@ -77,7 +77,7 @@
         <div class="button__row">
           <!--ngHide loginLoading-->
           <button title="Make sure you've completed all the fields!" id="buttonRegister" type="submit" class="btn btn-primary" [class.loading]="registerLoading" [disabled]="!registerForm.valid" tabindex="0">Register!</button>
-          <button (click)="googleSignIn()" id="btnGoogleSignIn" type="button" class="btn btn-primary" tabindex="0">Google</button>
+          <hot-google-button></hot-google-button>
         </div>
       </form>
     </div>
