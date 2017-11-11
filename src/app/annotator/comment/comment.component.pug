@@ -138,9 +138,8 @@ div(*ngIf="commentPaneActive")
 
 //- Mobile Icon
 div((tap)='toggleCPane(comment)')
-    img.comment__button--mobile(
-        src="assets/images/icon-comment.svg",
-        [ngClass]="[ reply ? 'icon-hidden' : 'hidden-lg-up']"
+    .comment__button--mobile(
+        [ngClass]="[ reply ? 'icon-hidden' : 'hidden-lg-up', indicatesPane ? 'active' : '' ]"
     )
     .comment__count--mobile(
         *ngIf="commentByPos[_projects.lineNumberArray[comment.start]]"

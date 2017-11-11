@@ -43,8 +43,8 @@ export class MediaService {
 
     uploadAudio(formData: any): Observable<any> {
         let uploadSource = new Subject();
-        let type = 'audio/ogg';
-        let name = 'my-audio.ogg';
+        let type = 'audio/wav';
+        let name = 'my-audio.wav';
         // let type = 'audio/aac';
         // let name = 'my-audio.aac';
 

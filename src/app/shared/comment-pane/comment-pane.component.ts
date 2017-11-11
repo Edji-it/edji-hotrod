@@ -22,6 +22,7 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
   private active = false
   private user: User
   private project: Project = <Project>{}
+  private visible: boolean
 
   // Subscriptions and related
   private subscriptions: Subscription[] = []
@@ -29,7 +30,6 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
   private lineNumArray: any[] = []
 
   // Comment Pane Component Inputs
-  @Input() visible: boolean = false
   @Input() comment: EdjiComment
   @Input()
   set isActive(isActive: boolean) {
@@ -63,38 +63,41 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // Subscribe to updates to the comment by line number position array
-    this.subscriptions.push( this._projects.commentByPos.subscribe(
-      (commentByPos) => {
-        this.commentByPos = commentByPos
-        this.lineNumArray = this._projects.lineNumberArray
-      },
-      (error) => {
-        console.error(error)
-      }
-    ))
-
-    /** Set the current user every time it changes */
-    this.subscriptions.push(
-        this._auth.getCurrentUser().subscribe((user) => {
-            this.user = user
-        })
-    )
-
-    // Subscribe to updates from that project once we're subscribed to the reading
-    this.subscriptions.push( this._projects.currentProject.subscribe(
-      (project) => {
-        if (project) {
-          this.project = project
+    this.subscriptions.push( 
+      this._projects.commentByPos.subscribe(
+        (commentByPos) => {
+          this.commentByPos = commentByPos
+          this.lineNumArray = this._projects.lineNumberArray
+        },
+        (error) => {
+          console.error(error)
         }
-      },
-      (error) => {
-        console.error(error)
-      }
-    ))
+      ),
+      /** Set the current user every time it changes */
+      this._auth.getCurrentUser().subscribe((user) => {
+          this.user = user
+      }),
+      // Subscribe to updates from that project once we're subscribed to the reading
+      this._projects.currentProject.subscribe(
+        (project) => {
+          if (project) {
+            this.project = project
+          }
+        },
+        (error) => {
+          console.error(error)
+        }
+      ),
+      this._projects.commentPaneState.subscribe(
+        (paneState) => {
+          this.visible = paneState
+        }
+      )
+    )
   }
 
   dismissCommentPane() {
-    this.visible = false
+    this._projects.commentPaneStateSubj.next(false)
     this.hideComment.emit()
   }
   

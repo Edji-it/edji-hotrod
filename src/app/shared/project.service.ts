@@ -62,6 +62,10 @@ export class ProjectService {
     private commentByPosSubject: BehaviorSubject<any> = new BehaviorSubject<any>(this.commentByPosSource)
     public commentByPos: Observable<any> = this.commentByPosSubject.asObservable()
 
+    // Broadcast closing the comment pane
+    public commentPaneStateSubj: Subject<boolean> = new Subject<boolean>()
+    public commentPaneState: Observable<boolean> = this.commentPaneStateSubj.asObservable()
+
     constructor(
         private http: Http, 
         private _auth: AuthService, 

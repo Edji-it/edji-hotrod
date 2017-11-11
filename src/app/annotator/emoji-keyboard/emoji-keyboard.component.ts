@@ -21,8 +21,10 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
   @Input()
   set isActive(active: boolean) {
     this.currentComment = this._comments.activeComment.data
+    if (this._isActive && active == false) {
+      this.onInactivated();
+    }
     this._isActive = active;
-    this.onActiveChange();
   }
   get isActive(): boolean { return this._isActive; }
 
@@ -102,9 +104,9 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * Fired when active state of Keyboard is toggle on/off
+   * Fired when active state of Keyboard is toggled off
    */
-  onActiveChange() {
+  onInactivated() {
     // Update user object with recent emoji
     let user = this._auth.getUser();
     if (!user.prefs) {

@@ -43,7 +43,9 @@ export class AuthService implements CanActivate {
         this.currentUser = this.currentUserSource.asObservable();
         
         // Check to see if prod or dev environment
-        if (window.location.host.indexOf('dev.edji.it') > -1) {
+        if (window.location.host.indexOf('local.edji.it') > -1) {
+            // do nothing
+        }else if (window.location.host.indexOf('dev.edji.it') > -1) {
             //   baseUrl = "http://edji-dev.herokuapp.com";
             this.baseUrl = this.protocol + "//optimus-dev.edji.it";
             this.ENV = "dev";

@@ -62,6 +62,7 @@ $purple: rgb(150, 40, 255);
 $red: rgb(237, 76, 92);
 $darkBlue: rgb(0, 95, 143);
 $green: #B0F7A7;
+$recordRed: #ff595a;
 
 // Set colors
 $pageBg: $lightBg;
@@ -139,3 +140,7 @@ $container-large-desktop:      1200px; //(1140px + $grid-gutter-width) !default;
 $container-lg:                 $container-large-desktop !default;
 
 $fa-font-path: 'fonts';
+
+// Shared module variables
+$slidingPaneTime: .4s;
+$navOffset: 60px;

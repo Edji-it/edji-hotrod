@@ -1,30 +1,36 @@
-.sliding-pane-comment.from-left.slide-slow([ngClass]="[ visible ? 'slide-in' : '' ]", style="z-index: 5999;")
-  .container-fluid.container--less-pad(*ngIf="visible")
-    button.close.stats-close-btn.btn-icon--round((tap)="dismissCommentPane()", type="button")
-      span(aria-hidden="true") ×
-    p Line {{ lineNumArray[comment.start] }}
-    h4(
-      *ngIf="commentByPos[lineNumArray[comment.start]].length>1 || commentByPos[lineNumArray[comment.start]].length===0"
-    ) {{ commentByPos[lineNumArray[comment.start]].length }} Comments
-    h4(
-      *ngIf="commentByPos[lineNumArray[comment.start]].length===1"
-    ) {{ commentByPos[lineNumArray[comment.start]].length }} Comment
-    .comment-container.commentOverflow-normal(
-      [ngClass]="[ _comments.activeComment.active && _comments.activeComment.type=='emoji' ? 'commentOverflow-eKey' : '' ]"
-    )
-      edji-comment(
-        *ngFor="let mobileComment of commentByPos[lineNumArray[comment.start]]; let i = index", 
-        [class.hidden]="(!project.heat_vision && user._id !== project.teacher_id) && mobileComment.user_id !== user._id && mobileComment.user_id !== project.teacher_id",
-        [class.owner]="mobileComment.user_id === project.teacher_id",
-        [readOnly]="mobileComment.user_id !== user._id",
-        [userPermission]="getCommentPermissions(mobileComment)",
-        [commentPaneActive]="true",
-        [comment]="mobileComment", 
-        [commentMobile]="true", 
-        [commentMobileFirst]="i<1",
-        (commentActivation)="commentActivationEmitter($event, mobileComment)",
-        (commentUpdated)="commentUpdatedEmitter()",
-        (commentReply)="commentReplyEmitter($event)",
-        style="display: initial;"
-      )
+.sliding-pane-comment.from-left([ngClass]="[ visible ? 'slide-in' : '' ]", style="z-index: 5999;")
+  .sliding-pane-comment__header.container-fluid(*ngIf="visible")
+    .row
+      .col-12
+        .header-wrap
+          button.close.stats-close-btn.btn-icon--round((tap)="dismissCommentPane()", type="button")
+            span(aria-hidden="true") ×
+          p Line {{ lineNumArray[comment.start] }}
+          h4(
+            *ngIf="commentByPos[lineNumArray[comment.start]].length>1 || commentByPos[lineNumArray[comment.start]].length===0"
+          ) {{ commentByPos[lineNumArray[comment.start]].length }} Comments
+          h4(
+            *ngIf="commentByPos[lineNumArray[comment.start]].length===1"
+          ) {{ commentByPos[lineNumArray[comment.start]].length }} Comment
+  .comment-container.container-fluid(
+    [ngClass]="[ _comments.activeComment.active && _comments.activeComment.type=='emoji' ? 'commentOverflow-eKey' : '' ]"
+  )
+    .row
+      .col-12
+        edji-comment(
+          *ngFor="let mobileComment of commentByPos[lineNumArray[comment.start]]; let i = index", 
+          [class.hidden]="(!project.heat_vision && user._id !== project.teacher_id) && mobileComment.user_id !== user._id && mobileComment.user_id !== project.teacher_id",
+          [class.owner]="mobileComment.user_id === project.teacher_id",
+          [readOnly]="mobileComment.user_id !== user._id",
+          [userPermission]="getCommentPermissions(mobileComment)",
+          [commentPaneActive]="true",
+          [comment]="mobileComment", 
+          [commentMobile]="true", 
+          [commentMobileFirst]="i<1",
+          (commentActivation)="commentActivationEmitter($event, mobileComment)",
+          (commentUpdated)="commentUpdatedEmitter()",
+          (commentReply)="commentReplyEmitter($event)",
+          style="display: initial;"
+        )
+.exit-row(*ngIf="visible", (tap)="dismissCommentPane()")
 //- END .comment - mobile

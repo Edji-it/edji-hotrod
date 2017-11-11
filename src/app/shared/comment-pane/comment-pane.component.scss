@@ -1,22 +1,39 @@
 @import '../../../sass/base/variables';
 
+.sliding-pane-comment__header {
+  position: sticky;
+  top: $navOffset + 10px;
+  left: 0px;
+  z-index: 5000;
+  background: #fff;
+  width: 100%;
+}
+
+.header-wrap {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #cdcdcd;
+}
+
 .comment-container {
-    overflow-y: auto;
-    overflow-x: hidden;
-    position: fixed;
-    width: 75%;
+  overflow: visible;
+  height: auto;
+  position: relative;
+  width: 100%;
+  display: block;
+  padding-top: $navOffset + $base-pad;
+  z-index: 1000;
   }
-  
-.commentOverflow-normal {
-  height: calc(100% - 203px)
-}
 
-.commentOverflow-eKey {
-  height: calc(100% - 430px)
-}
-
-.commentOverflow-kKey {
-  @media(max-width: $tablet) {
-    height: calc(100% - 430px)
-  }
+.exit-row {
+  display: block;
+  position: fixed;
+  top: 0px;
+  right: 0px;
+  width: 100%;
+  height: 100vh;
+  pointer-events: all;
+  background: transparent;
+  z-index: 4000;
+  cursor: pointer;
 }

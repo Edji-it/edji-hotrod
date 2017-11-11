@@ -3,14 +3,25 @@ import { Observable, Subscription } from 'rxjs/Rx'
 import { Router, ActivatedRoute, Params } from '@angular/router'
 import { Component, OnDestroy, OnInit } from '@angular/core'
 
-import { AuthService, ProjectService, ReadingService, SocketService } from '../shared';
+import { 
+    AuthService, 
+    ProjectService, 
+    ReadingService, 
+    SocketService, 
+    AudioService 
+} from '../shared';
 import { Project, Reading, User } from './../shared/datatypes';
+
 
 @Component({
     // moduleId: module.id,
     selector: 'edji-project-page',
     styleUrls: ['project-page.component.scss'],
-    templateUrl: 'project-page.component.pug'
+    templateUrl: 'project-page.component.pug',
+    providers: [
+        // Provided for child audio comments
+        AudioService
+    ]
 })
 export class ProjectPageComponent implements OnInit, OnDestroy {
 

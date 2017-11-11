@@ -196,19 +196,35 @@
     background-size: 100% 100% !important;
 }
 
+.icon-loading--light {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    background-color:transparent;
+    background-image: url('/assets/images/loading-smaller.svg') !important;
+    background-size: 100% 100% !important;
+}
+
 .icon-mic {
     display: inline-block;
     width: 1em;
     height: 1em;
-    background: url('/assets/images/icon-mic.svg');
+    background-image: url('/assets/images/icon-mic.svg');
     background-size: 100% 100%;
     background-position: center center;
+    background-repeat: no-repeat;
     cursor: pointer;
 }
 
 .icon-mic--white {
     @extend .icon-mic;
-    background: url('/assets/images/icon-mic--white.svg');
+    background-image: url('/assets/images/icon-mic--white.svg');
+}
+
+.icon-stop {
+    @extend .icon-mic;
+    background-image: url('/assets/images/icon-stop.svg');
+    background-size: 70% 70%;
 }
 
 .icon-pause {
