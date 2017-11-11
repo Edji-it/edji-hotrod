@@ -6,6 +6,7 @@ import 'rxjs/add/operator/toPromise';
 import { Locker } from 'angular2-locker';
 
 import { User } from './datatypes'
+import { window } from '@angular/platform-browser/src/facade/browser';
 
 @Injectable()
 export class AuthService implements CanActivate {
@@ -648,5 +649,13 @@ export class AuthService implements CanActivate {
             .map((res) => {
                 return res.json()
             })
+    }
+
+    public oauthLogin(type: string): void {
+        // eventually we'll need to switch on type to determine different places to go, but for meow we'll just always do google
+        // this.http.get([this.baseUrl, 'auth', 'google'].join("/")).take(1).subscribe((res) => {
+        //     // shouldn't actually get this, should just be a redirect
+        // })
+        window.location.href = [this.baseUrl, 'auth', 'google'].join("/")
     }
 }

@@ -279,4 +279,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe() })
   }
+
+  private googleSignIn(): void {
+    this._auth.oauthLogin('google')
+  }
 }
