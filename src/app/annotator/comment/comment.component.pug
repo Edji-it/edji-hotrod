@@ -97,6 +97,7 @@ div(*ngIf="commentPaneActive")
                 emoji-comment(
                     *ngIf="comment.type == 'emoji' || !comment.type",
                     [comment]="comment",
+                    [readOnly]="readOnly",
                     [reply]="reply",
                     (activate)="activate()",
                     (deactivate)="deactivate(comment)"
