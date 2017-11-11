@@ -642,4 +642,11 @@ export class AuthService implements CanActivate {
                 return res.json()
             })
     }
+
+    public getUserWithAuthToken(type: string, token: string): Observable<User> {
+        return this.http.get(this.baseUrl + "/users?oauth_type=" + type + "&oauth_token=" + token)
+            .map((res) => {
+                return res.json()
+            })
+    }
 }
