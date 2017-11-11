@@ -142,12 +142,13 @@ export class CommentService {
   /**
    * Decides if the Emoji Keyboard is active
    */
-  public isEmojiKeyboardActive(user: any): void {
+  public setEmojiKeyboardActive(user: any): boolean {
     if (this.activeComment.type !== 'emoji') {
         this.keyboardActive = false
     } else {
         this.keyboardActive = this.activeComment && (!this.activeComment.type || this.activeComment.type === 'emoji') && 
           this.activeComment.active && this.activeComment.user_id === user._id
     }
+    return this.keyboardActive
   }
 } // CommentService class
