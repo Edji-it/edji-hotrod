@@ -8,7 +8,13 @@ import { AuthService } from './../../shared'
 })
 
 export class GoogleButton implements OnInit {
-  constructor() { }
+  constructor(
+    private _auth: AuthService
+  ) { }
 
   ngOnInit() { }
+
+  private googleSignIn(): void {
+    this._auth.oauthLogin('google')
+  }
 }
