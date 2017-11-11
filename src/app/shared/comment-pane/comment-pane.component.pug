@@ -1,5 +1,5 @@
 .sliding-pane-comment.from-left([ngClass]="[ visible ? 'slide-in' : '' ]", style="z-index: 5999;")
-  .sliding-pane-comment__header.container(*ngIf="visible")
+  .sliding-pane-comment__header.container-fluid(*ngIf="visible")
     .row
       .col-12
         .header-wrap
@@ -12,7 +12,7 @@
           h4(
             *ngIf="commentByPos[lineNumArray[comment.start]].length===1"
           ) {{ commentByPos[lineNumArray[comment.start]].length }} Comment
-  .comment-container.container(
+  .comment-container.container-fluid(
     [ngClass]="[ _comments.activeComment.active && _comments.activeComment.type=='emoji' ? 'commentOverflow-eKey' : '' ]"
   )
     .row
