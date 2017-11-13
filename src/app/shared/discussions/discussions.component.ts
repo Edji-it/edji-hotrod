@@ -8,7 +8,7 @@ import { AuthService, CommentService, ProjectService, ReadingService } from '../
 
 @Component({
   selector: 'hot-discussions',
-  templateUrl: 'discussions.component.html',
+  templateUrl: 'discussions.component.pug',
   styleUrls: ['./discussions.component.scss']
 })
 
