@@ -38,7 +38,7 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
       
       // if the comment is new, let's adjust the scroll position if there are a ton of comments
       if (this.comment.new) {
-        this.scrollAdjust(true)
+        this.scrollAdjust()
       }
 
       if (!isActive) {
@@ -107,25 +107,21 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
 
   scrollAdjust(isNew?: boolean) {
     setTimeout(() => {
-      if (isNew) {
-        this.el.nativeElement.querySelector('.comment-container').scrollTop = this.el.nativeElement.querySelector('.comment-container').scrollHeight
-      } else {
-        // Get the comments that are currently in the pane
-        let comments: any[] = Array.from(document.querySelectorAll('.comment-container edji-comment'))
+      // Get the comments that are currently in the pane
+      let comments: any[] = Array.from(document.querySelectorAll('.comment-container edji-comment'))
 
-        var commentIndex = 0
+      var commentIndex = 0
 
-        // Get the position of the active comment in the list of comments in comment pane
-        for (let i=0; i<this.commentByPos[this.lineNumArray[this.comment.start]].length; i++) {
-          if (this.commentByPos[this.lineNumArray[this.comment.start]][i]._id===this._comments.activeComment._id) {
-            commentIndex = i
-            break
-          }
+      // Get the position of the active comment in the list of comments in comment pane
+      for (let i=0; i<this.commentByPos[this.lineNumArray[this.comment.start]].length; i++) {
+        if (this.commentByPos[this.lineNumArray[this.comment.start]][i]._id===this._comments.activeComment._id) {
+          commentIndex = i
+          break
         }
-
-        // Set the scroll position to where the active comment is in view
-        this.el.nativeElement.querySelector('.comment-container').scrollTop = comments[commentIndex].offsetTop
       }
+
+      // Set the scroll position to where the active comment is in view
+      document.querySelector('.sliding-pane-comment').scrollTop = comments[commentIndex].offsetTop
     }, 1)
   }
 
@@ -144,8 +140,8 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
     }
     
     if (shouldActivate) {
-      if (comment && comment.type==='emoji' || comment.type==='text') {
-        this.scrollAdjust(false)
+      if (comment && (comment.type==='emoji' || comment.type==='text')) {
+        this.scrollAdjust()
       }
       this.commentActivationMobile.emit({activate: shouldActivate, wi: wordIndex, ci: commentIndex})
     } else {
