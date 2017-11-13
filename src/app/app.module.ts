@@ -54,7 +54,7 @@ import { LinkifyPipe } from './pipes/linkify.pipe';
 import { UserInitialsPipe } from './pipes/userinitials.pipe.ts';
 
 // Components
-import { NavBarComponent, FooterComponent, TutorialBoxComponent } from './shared';
+import { DiscussionsComponent, NavBarComponent, FooterComponent, OpenEndedAnswersComponent, TutorialBoxComponent, QuestionComponent } from './shared';
 import { HomeComponent } from './home';
 import { RegisterComponent } from './register';
 import { LoginForm, GuestForm } from './forms';
@@ -66,9 +66,6 @@ import { FirefeedComponent } from './project-page/owner-tools/firefeed/firefeed.
 import { FirecardComponent } from './project-page/owner-tools/firefeed/firecard/firecard.component';
 import { QuestionfeedComponent } from './project-page/owner-tools/questionfeed/questionfeed.component';
 import { QuestioncardComponent } from './project-page/owner-tools/questionfeed/questioncard/questioncard.component';
-import { QuestionComponent } from './project-page/hero-tools/question/question.component';
-import { OpenEndedAnswersComponent } from "./project-page/hero-tools/question/open-ended-answers/open-ended-answers.component"
-import { DiscussionsComponent } from './project-page/hero-tools/discussions/discussions.component';
 import { NewReadingPage, UploadModalComponent, UploadPdfModalComponent, DeletePdfMiniModal } from './new-reading-page';
 import { DashboardComponent, JoinedDashComponent, CreatedDashComponent, TutorialReadingComponent, ReadingCardComponent } from './dashboard';
 import { NoContentComponent } from './no-content';

@@ -1,9 +1,11 @@
 import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core'
-import { EdjiComment, EdjiQuestion, Project, Reading, User } from "../../../../shared/datatypes"
-import { CommentService, AuthService, ProjectService, ReadingService } from "../../../../shared"
-import { BaseAnswerComponent } from "./../base-answer.component"
 import { Subscription } from 'rxjs/Rx'
 import { Angulartics2 } from 'angulartics2'
+
+// Project Dependencies
+import { BaseAnswerComponent } from "../base-answer.component"
+import { EdjiComment, EdjiQuestion, Project, Reading, User } from "../../datatypes"
+import { CommentService, AuthService, ProjectService, ReadingService } from "../../"
 
 @Component({
   selector: 'open-ended-answers',
