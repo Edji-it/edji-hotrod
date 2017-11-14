@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit, ViewChildren, QueryList, EventEmitter } from '@angular/core'
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core'
 import { Subscription } from 'rxjs/Rx'
 import * as Rangy from 'rangy'
 import { Angulartics2 } from 'angulartics2'
@@ -8,7 +8,7 @@ import { ReadingService } from '../shared/reading.service'
 import { ProjectService } from '../shared/project.service'
 import { CommentService } from '../shared/comment.service'
 import { CommentComponent } from './comment/comment.component'
-import { AudioService, AuthService, SocketService } from '../shared' 
+import { AudioService, AuthService, SocketService, UtilToolService } from '../shared' 
 import { CommentPermissions, EdjiComment, Project, Reading } from './../shared/datatypes'
 
 declare var window: any
@@ -37,6 +37,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     @Input() private activeReply: any
 
     @ViewChildren(CommentComponent) commentComponents: QueryList<CommentComponent>
+    @ViewChildren('words') wordEls
 
     private reading: Reading = <Reading>{}
     private project: Project = <Project>{}
@@ -51,10 +52,13 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     // Line Count
     private lineCountArray: any[][] = [] // 2D ARRAY
     private lineCountRunning: boolean = false
+    private lineNumRunning: boolean
+    private commentPane: boolean
     private lineExpanded: number
 
     // private activeComment: EdjiComment = <EdjiComment>{}
     private replyComment: EdjiComment = <EdjiComment>{}
+    private selectedComment: EdjiComment = <EdjiComment>{}
     // Comment options that can be made directly on a word
     private directCommentOptions: string[] = []
 
@@ -118,10 +122,12 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     private audioSupportError: boolean = false
 
     constructor(
+        private element: ElementRef,
         private _readings: ReadingService,
         private _projects: ProjectService,
         private _auth: AuthService,
         private _socket: SocketService,
+        private _util: UtilToolService,
         private _comments: CommentService,
         private angulartics: Angulartics2,
         private _audio: AudioService
@@ -154,6 +160,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             this._readings.currentReading.subscribe(
                 reading => {
                     this.reading = reading
+                    if (this.reading && this.reading.words && this.reading.words[0]===null) {
+                        this.reading.words.splice(0,1)
+                    }
                     this.updateMetaTags()
                     if (reading.questions) {
                         this.updateQuestionNumbers(reading.questions)
@@ -170,6 +179,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             (project) => {
                 if (project) {
                     this.project = project
+                    this.getLineCount()
                     // Check if audio is supported
                     if (this.project.types.indexOf('audio') > -1 && !this._audio.isSupported()) {
                         this.audioSupportError = true
@@ -955,8 +965,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      */
     private isEmojiKeyboardActive() : boolean {
         // return this._comments.isEmojiKeyboardActive(this.user)
-        this._comments.isEmojiKeyboardActive(this.user)
-        return this._comments.keyboardActive
+        return this._comments.setEmojiKeyboardActive(this.user)
     }
 
     private discReplyFire(comment) {
@@ -971,5 +980,71 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.showDiscussions = false
         this.focusOverride = false
         this.unfocusHighlight(comment.start, comment.end, comment.loc)
+    }
+    
+    /**
+     * getLineCount gives us the number of lines in the project
+     * 
+     * If the height of the word element does not match the one before it, this counts as a new line
+     * We check this every time the comment pane is open in case the user adjusts screen width
+     */
+    getLineCount(): void {
+        // Get all words and put them in to an array
+        let wordElements = this.wordEls ? this.wordEls.toArray() : []
+
+        // Only run this if the words are rendered and if it isn't already running
+        if (!this.lineNumRunning && wordElements.length > 0) {
+            this.lineNumRunning = true
+
+            // Re-initialize the line number array
+            this._projects.lineNumberArray = []
+            var lineNum = 1
+            this._projects.lineNumberArray[0] = lineNum
+
+            // Loop through each word element to store the line number of each span element
+            for (let i = 1; i < wordElements.length; i++) {
+                let elPosPrior = wordElements[i-1].nativeElement.getBoundingClientRect().top
+                let elPosCurrent = wordElements[i].nativeElement.getBoundingClientRect().top
+                if (elPosPrior!==elPosCurrent) {
+                    lineNum++
+                }
+                this._projects.lineNumberArray[i] = lineNum
+            }
+
+            // Clear the word elements array and let the project service generate an observable of all comments per line
+            wordElements = []
+            this._projects.getCommentsByLine()
+        }
+        // Run a timer for the get linecount function until the words are rendered
+        let timer = setTimeout(() => {
+            this.getLineCount()
+        }, 2000)
+        // This will clear the timer if it runs when words are rendered so we don't bog the browser down
+        if (this.lineNumRunning) {
+            clearTimeout(timer)
+        }
+        // Set the check variable to false if it ran so we can run it later when needed
+        this.lineNumRunning = false
+    }
+
+    private toggleCommentPane(visible?: boolean, comment?): void {
+        // Make sure the line counts are up-to-date
+        this.getLineCount()
+
+        // Set the input comment to the comment pane if it is not currently open
+        if (!this.commentPane) {
+            this.selectedComment=comment
+        }
+
+        // Toggle the variable that controls comment pane open/close so we can add a class to "push" screen over
+        if (visible) {
+            // Tell pane to open
+            this.commentPane = true
+            this._projects.commentPaneStateSubj.next(true)
+        } else {
+            // Tell comments to close
+            this.commentPane = false
+            this._projects.commentPaneStateSubj.next(false)
+        }
     }
 }

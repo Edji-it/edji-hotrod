@@ -1,11 +1,23 @@
 import { Subscription } from 'rxjs/Rx';
 import { CommentStmt } from '@angular/compiler/src/output/output_ast'
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChange, ElementRef } from '@angular/core'
+import {
+    AfterViewInit,
+    Component,
+    ElementRef,
+    EventEmitter,
+    Input,
+    OnDestroy,
+    OnInit,
+    Output,
+    SimpleChange,
+} from '@angular/core';
 import { Angulartics2 } from 'angulartics2'
 
 import { ProjectService } from '../../shared/project.service'
 import { CommentService } from '../../shared/comment.service'
 import { AuthService } from '../../shared/auth.service'
+import { UtilToolService } from '../../shared/util-tool.service'
+import { AnnotatorComponent } from '../annotator.component'
 import { EdjiComment, CommentPermissions, EdjiQuestion } from './../../shared/datatypes'
 
 @Component({
@@ -13,7 +25,7 @@ import { EdjiComment, CommentPermissions, EdjiQuestion } from './../../shared/da
   templateUrl: './comment.component.pug',
   styleUrls: ['./comment.component.scss']
 })
-export class CommentComponent implements OnInit {
+export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
 
   /*
   Front end implementation of a comment.
@@ -47,7 +59,12 @@ export class CommentComponent implements OnInit {
   private user: any
   private subscriptions: Subscription[] = []
   private repliesById: any = {}
+  private commentByPos: any = []
   private project: any
+  private commentPane: boolean
+  private indicatesPane: boolean
+  private lineIconNum: number = 0
+  private iconNum: number = 0
 
   @Input() public comment: EdjiComment
   @Input() private readOnly: boolean = false
@@ -55,6 +72,9 @@ export class CommentComponent implements OnInit {
   @Input() private reply: boolean = false   // Is it a reply to another comment? 
   @Input() private commentLite: boolean = false
   @Input() private commentContext: string = 'normal'; // See NOTES in summary.
+  @Input() private commentMobile: boolean = false
+  @Input() private commentMobileFirst: boolean = false
+  @Input() private commentPaneActive: boolean = false
   @Input() private assignedQuestion : EdjiQuestion; // If this is an answer, it'll need this.
   @Input() private userPermission: number = CommentPermissions.READ
   @Input() private showDeleteAudioModal: boolean = false
@@ -63,8 +83,11 @@ export class CommentComponent implements OnInit {
     if (typeof(isActive) !== 'undefined' && this.active !== isActive) {
       this.active = isActive
       if (!isActive) {
+        console.log('z7')
         // Trigger save when deactivated externally i.e. emoji keyboard
         this.deactivate(this.comment)
+      } else {
+        this.toggleCPane(this.comment)
       }
     } 
   }
@@ -74,16 +97,19 @@ export class CommentComponent implements OnInit {
   @Output() commentActivation = new EventEmitter<boolean>()
   @Output() commentDeactivate: EventEmitter<any> = new EventEmitter<any>()
   @Output() expandLine = new EventEmitter<number>()
+  @Output() commentPaneExpand = new EventEmitter<number>()
   @Output() collapseLine = new EventEmitter<number>()
   @Output() dismissKeyboard = new EventEmitter()
   @Output() commentUpdated: EventEmitter<any> = new EventEmitter()
   @Output() commentReply = new EventEmitter()
+  @Output() toggleCommentPane = new EventEmitter<boolean>()
 
   constructor(
         private _projects: ProjectService,
         private angulartics: Angulartics2,
         private _comments: CommentService,
         private _auth: AuthService,
+        private _util: UtilToolService,
         public el: ElementRef
       ) { }
 
@@ -113,7 +139,17 @@ export class CommentComponent implements OnInit {
       (error) => {
         console.error(error)
       }
-    ) )
+    ))
+    
+    // Subscribe to updates to the comment by line number position array
+    this.subscriptions.push( this._projects.commentByPos.subscribe(
+      (commentByPos) => {
+        this.commentByPos = commentByPos
+      },
+      (error) => {
+        console.error(error)
+      }
+    ))
 
     // Subscribe to updates from that project once we're subscribed to the reading
     this.subscriptions.push( this._projects.currentProject.subscribe(
@@ -125,7 +161,7 @@ export class CommentComponent implements OnInit {
       (error) => {
         console.error(error)
       }
-    ) )
+    ))
 
     // Certain events require a top-down decision to deactivate comments
     this.subscriptions.push( this._comments.clearActiveComments.subscribe(
@@ -136,6 +172,20 @@ export class CommentComponent implements OnInit {
         console.error(error)
       }
     ))
+
+    // Change mobile icon state if pane closes
+    this.subscriptions.push(this._projects.commentPaneState.subscribe(
+      (paneState) => {
+        // We can ONLY use this subscription to CLEAR the indicatesPane var to *false*
+        if (paneState === false) {
+          this.indicatesPane = false
+        }
+      }
+    ))
+  }
+
+  ngAfterViewInit() {
+    
   }
 
   activate(event?: any): void {
@@ -156,11 +206,12 @@ export class CommentComponent implements OnInit {
    */
   deactivate(comment ?: any, noUpdate ?: boolean): void {
     this.comment.active = this.active = false
+    this.comment.new = false
     this.commentActivation.emit(false)
     this._comments.activeComment.active = false
     // Save when comment is toggled away from
     if (comment && !noUpdate) {
-      this.updateComment(comment);
+      this.updateComment(comment)
     }
   } // deactivate(commentData ?: any): void
 
@@ -323,5 +374,33 @@ export class CommentComponent implements OnInit {
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe() })
+  }
+
+  toggleCPane(comment?, forceOpen?: boolean): void {
+    if (!this.commentPaneActive) {
+       // Need to give the app 1 millisecond to update all arrays when adding a new comment
+      if (!this.indicatesPane || forceOpen) {
+        setTimeout(() => {
+          this.indicatesPane = true
+          this.toggleCommentPane.emit(true)
+        }, 1)
+      } else {
+        setTimeout(() => {
+          this.indicatesPane = false
+          this.toggleCommentPane.emit(false)
+        }, 1)
+      }
+    }
+  }
+
+  getIconNumber(comment): void {
+    if (!comment.reply_to && !comment.questionId) {
+      this.lineIconNum = this._projects.lineNumberArray[comment.start]
+      this.iconNum = this._projects.commentByPosSource[this.lineIconNum].length
+    }
+  }
+
+  getComments(comment): void {
+    console.log(this._projects.commentByPosSource[this._projects.lineNumberArray[comment.start]])
   }
 }

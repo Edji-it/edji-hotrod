@@ -12,4 +12,7 @@ export * from './copy';
 export * from './nav-bar/nav-bar.component';
 export * from './footer/footer.component';
 export * from './tutorial-box/tutorial-box.component';
+export * from './discussions/discussions.component';
+export * from './question/question.component';
+export * from './question/open-ended-answers/open-ended-answers.component';
 export * from '../../app/pipes/edjidate.pipe'
