@@ -12,7 +12,7 @@
           h4(
             *ngIf="commentByPos[lineNumArray[comment.start]].length===1"
           ) {{ commentByPos[lineNumArray[comment.start]].length }} Comment
-  .comment-container.container-fluid(
+  .comment-container.container-fluid.pb-4(
     [ngClass]="[ _comments.activeComment.active && _comments.activeComment.type=='emoji' ? 'commentOverflow-eKey' : '' ]"
   )
     .row

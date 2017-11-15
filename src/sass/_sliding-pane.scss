@@ -3,7 +3,9 @@ $slidingPaneShadow: 0px 1px 8px 3px rgba(0,0,0,0.05);
 $slidingPaneBorder: 1px solid $gray;
 $slidingPaneWidth: 250px;
 
-.sliding-pane {
+// Shared styles between panes
+.sliding-pane, 
+.sliding-pane-comment {
     position: fixed;
     display: block;
     height: 100%;
@@ -11,9 +13,16 @@ $slidingPaneWidth: 250px;
     top: 0;
     left: 0;
     background: #fff; //$midGray; //$gray;
-    padding: $base-pad 5px;
     z-index: $zMid + 1000;
     overflow-y:auto;
+
+    .keyboard-adjust & {
+        height: calc(70% - #{ $navBarHeight - 13px });
+    }
+}
+
+.sliding-pane {
+    padding: $base-pad 5px;
     transition: margin $slidingPaneTime linear;
     padding-left: 60px;
     padding-top: $navOffset + $base-pad;
@@ -67,23 +76,19 @@ $slidingPaneWidth: 250px;
     &.slide-slow {
         transition: margin 0.8s linear;
     }
+
+    .keyboard-adjust & {
+        height: 70%;
+    }
 }
 
 .sliding-pane-comment {
-    position: fixed;
-    display: block;
-    height: 100%;
-    width: $slidingPaneWidth;
-    top: 0;
-    left: 0;
-    background: #fff; //$midGray; //$gray;
     padding: 0px;
     z-index: $zMid + 1000;
     overflow:auto;
     box-shadow: $slidingPaneShadow;
     border-right: $slidingPaneBorder;
     transition: transform $slidingPaneTime linear;
-    // transform: translate3d(0, 0, 0);
 
     @media(max-width: $desktop) {
         width: calc(100% - 50px);

@@ -23,6 +23,8 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
     this.currentComment = this._comments.activeComment.data
     if (this._isActive && active == false) {
       this.onInactivated();
+    } else if (!this._isActive && active == true) {
+      this.onActivated();
     }
     this._isActive = active;
   }
@@ -124,6 +126,11 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
             }
           }
         )
+    document.querySelector('.main').className = 'main'
+  }
+
+  onActivated() {
+    document.querySelector('.main').className = 'main keyboard-adjust'
   }
 
   // When clicking a category, jump to that section
