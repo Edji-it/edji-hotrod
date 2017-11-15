@@ -91,3 +91,9 @@ blockquote:after {
 	right: 0;
 	font-size: 18px;
 }
+
+body {
+	&.body__lock-scroll {
+		overflow-y: hidden;
+	}
+}
