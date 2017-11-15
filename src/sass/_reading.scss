@@ -451,7 +451,7 @@ article.content .w.h-f {
 .article-wrap{
 	@media(max-width: $md-max-device) {
 		&.sliding-out {
-			transform: translate3d( calc(100% - 20px), 0%, 1px);
+			transform: translate3d( calc(100% - 20px), 0%, -1px);
 		}
 	}
 	&:not(.sliding-out) {
