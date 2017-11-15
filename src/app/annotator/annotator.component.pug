@@ -4,7 +4,7 @@
     - Highlighting functionality
     - Tying in comments and comment creation methods
     
-#emojiAnnotator.annotator.reading-page([ngClass]="[ lineExpanded ? 'comment-expanded' : '']")
+#emojiAnnotator.annotator.reading-page([ngClass]="[ lineExpanded ? 'comment-expanded' : '' , commentPane ? 'sliding-out' : '']")
     .text-options(
         *ngIf="directCommentOptions.length > 0", 
         (blur)="hideCommentOptions($event)", 
@@ -75,7 +75,7 @@
                         span.beta-tag--icon(title="Beta Feature: May not work on all devices.")
                             | B
     //- end .text-options
-    .article-wrap([ngClass]="[ lineExpanded ? 'comment-expanded' : '' , commentPane ? 'sliding-out' : '']")
+    .article-wrap
         .alert.alert-warning.alert-dismissible.fade.show(
             role="alert",
             *ngIf="audioSupportError"
