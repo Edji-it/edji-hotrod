@@ -17,7 +17,7 @@ $slidingPaneWidth: 250px;
     overflow-y:auto;
 
     .keyboard-adjust & {
-        height: calc(70% - #{ $navBarHeight - 13px });
+        height: 70%;// calc(70% - #{ $navBarHeight - 13px });
     }
 }
 
