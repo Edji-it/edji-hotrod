@@ -1,4 +1,4 @@
-import { ProjectService } from '../../app/shared';
+import { ProjectService } from '../../../app/shared';
 import { browser, by, element, protractor } from 'protractor';
 
 import { Project, Sidebar } from '../page-objects';

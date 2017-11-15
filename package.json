@@ -39,6 +39,7 @@
     "pree2e": "npm run webdriver:update -- --standalone",
     "preversion": "npm test",
     "protractor": "node ./node_modules/webdriver-manager update && protractor",
+    "protractor:test": "node ./node_modules/webdriver-manager update && protractor",
     "protractor:5": "node ./node_modules/webdriver-manager update && protractor --capabilities.maxInstances=5",
     "rimraf": "rimraf",
     "server:dev:hmr": "npm run server:dev -- --inline --hot",
