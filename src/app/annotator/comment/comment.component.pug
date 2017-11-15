@@ -123,7 +123,8 @@ div(*ngIf="commentPaneActive")
                 )
             //- Text that was commented on
             .list-item.list-item.mobileHighlight-card.h-1(*ngIf="!isImage")
-                | {{ comment.text ? comment.text : '...'}}
+                blockquote
+                    | {{ comment.text ? comment.text : '...'}}
             //- Image comment handling
             .list-item.list-item.mobileHighlight-card_liImage.h-1(*ngIf="isImage")
                 .mobileHighlight-card_image Image
