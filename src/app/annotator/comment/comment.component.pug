@@ -73,7 +73,7 @@
 div(*ngIf="commentPaneActive")
     hr.mobileBlock-hr(*ngIf="commentMobile && !commentMobileFirst")
     .comment-action--save.comment-action--save__mobile.comment-action--save__mobile-btn(
-        *ngIf="comment.active",
+        *ngIf="comment.active && !readOnly",
         (tap)="deactivate(comment)",
         [innerHtml]="':white_check_mark:' | emojione"
     )

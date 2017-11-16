@@ -83,7 +83,6 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
     if (typeof(isActive) !== 'undefined' && this.active !== isActive) {
       this.active = isActive
       if (!isActive) {
-        console.log('z7')
         // Trigger save when deactivated externally i.e. emoji keyboard
         this.deactivate(this.comment)
       } else {
@@ -249,12 +248,12 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
           this.angulartics.eventTrack.next({ action: comment.type + 'updateComment', properties: { category: 'projectAction', label: 'success' }})
         } // else
         this.isLoading = false
-        
-        this.justSaved = true
         this.commentUpdated.emit()
+
+        this.justSaved = true
         setTimeout(() => {
           this.justSaved = false
-          this.comment.active = false
+          // this.comment.active = false
         }, 1000)
       })
       .catch(error => { 
@@ -277,12 +276,13 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.isLoading = false
         
-        this.justSaved = true
         this.commentUpdated.emit()
         this._projects.addAnswerToAnswers(answer)
+
+        this.justSaved = true
         setTimeout(() => {
           this.justSaved = false
-          this.comment.active = false
+          // this.comment.active = false
         }, 1000)
       })
       .catch(error => { 
