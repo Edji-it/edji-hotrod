@@ -991,6 +991,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     getLineCount(): void {
         // Get all words and put them in to an array
         let wordElements = this.wordEls ? this.wordEls.toArray() : []
+        // let commentElements = document.querySelectorAll('edji-comment')
 
         // Only run this if the words are rendered and if it isn't already running
         if (!this.lineNumRunning && wordElements.length > 0) {
@@ -1009,14 +1010,11 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             for (let i = 0; i < len; i++) {
                 // The parentNode offsetTop addition fixes the occasional issue where diferrent images have comments registering on the same line
                 elPosBefore = Math.round(wordElements[i].nativeElement.getBoundingClientRect().bottom - firstWordTop)
-                // elPosCurrent = Math.round(wordElements[i].nativeElement.offsetTop) + Math.round(wordElements[i].nativeElement.parentNode.offsetTop)
+                // elPosCurrent = Math.round(commentElements[i].nativeElement.offsetTop) + Math.round(commentElements[i].nativeElement.parentNode.offsetTop)
                 // Certain styles can cause the position to vary by up to 5 pixels, so we need to round further
-                // console.log(elPosCurrent)
                 elPosAfter = Math.round(elPosBefore/10) * 10
-                console.log(elPosBefore, elPosAfter)
 
                 if (elPosPrior !== elPosAfter) {
-                    console.log('adding line number')
                     lineNum++
                     elPosPrior = elPosAfter
                 }
