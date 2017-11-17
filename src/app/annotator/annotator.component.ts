@@ -281,6 +281,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         window.onresize = () => {
             this.updateAllLineCounts()
             this.updateImageHeights()
+            this.getLineCount()
         }
 
         // Only supported by modern browsers, but very reliable in those cases
