@@ -1,8 +1,10 @@
 import { Component, Input, OnInit, EventEmitter } from '@angular/core'
-import { EdjiComment, EdjiQuestion, Project, Reading, User } from "../../../shared/datatypes"
-import { CommentService, AuthService, ProjectService, ReadingService } from "../../../shared"
 import { Subscription } from 'rxjs/Rx'
 import { Angulartics2 } from 'angulartics2'
+
+// Project Dependencies
+import { EdjiComment, EdjiQuestion, Project, Reading, User } from "../datatypes"
+import { CommentService, AuthService, ProjectService, ReadingService } from "../"
 
 export abstract class BaseAnswerComponent {
 
@@ -73,6 +75,6 @@ export abstract class BaseAnswerComponent {
 
   public activeEmojiKeyboardReply(comment: EdjiComment): void {
     this._comments.activeComment = comment
-    this._comments.isEmojiKeyboardActive(this.user)
+    this._comments.setEmojiKeyboardActive(this.user)
   } // public activeEmojiKeyboardReply(activeReply: any): void
 } // class

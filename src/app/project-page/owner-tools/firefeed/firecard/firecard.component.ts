@@ -8,15 +8,12 @@ import { ReadingService } from '../../../../shared/reading.service'
 
 @Component({
   selector: 'hot-firecard',
-  templateUrl: 'firecard.component.html',
+  templateUrl: 'firecard.component.pug',
   styleUrls: ['firecard.component.scss']
 })
 
 export class FirecardComponent implements OnInit, OnDestroy {
-
-  @Input() fireComment: EdjiComment
-  // @Input() currentReading: Reading
-
+  
   private yPos: number = 0
   private isImage: boolean = false
   private currentReading: Reading
@@ -27,6 +24,8 @@ export class FirecardComponent implements OnInit, OnDestroy {
   private playAble: boolean = false
   private isPlaying: boolean = false
   private viewInitRunOnce: boolean = false
+
+  @Input() fireComment: EdjiComment
 
   constructor(
     public el: ElementRef,
@@ -80,7 +79,6 @@ export class FirecardComponent implements OnInit, OnDestroy {
     if (this.fireComment.type=='audio' && this.fireComment.url && this.fireComment.url.length > 0) {
       this.buildAudioView()
     }
-
   }
 
   // ngAfterViewInit(): void {

@@ -17,7 +17,7 @@ import { Project, Reading, User } from './../shared/datatypes';
     // moduleId: module.id,
     selector: 'edji-project-page',
     styleUrls: ['project-page.component.scss'],
-    templateUrl: 'project-page.component.html',
+    templateUrl: 'project-page.component.pug',
     providers: [
         // Provided for child audio comments
         AudioService

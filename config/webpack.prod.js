@@ -63,7 +63,7 @@ module.exports = function (env) {
        *
        * See: http://webpack.github.io/docs/configuration.html#output-filename
        */
-      filename: '[name].[chunkhash].bundle.js',
+      filename: '[name].[hash].bundle.js',
 
       /**
        * The filename of the SourceMaps for the JavaScript files.
@@ -71,7 +71,7 @@ module.exports = function (env) {
        *
        * See: http://webpack.github.io/docs/configuration.html#output-sourcemapfilename
        */
-      sourceMapFilename: '[name].[chunkhash].bundle.map',
+      sourceMapFilename: '[name].[hash].bundle.map',
 
       /**
        * The filename of non-entry chunks as relative path
@@ -79,7 +79,7 @@ module.exports = function (env) {
        *
        * See: http://webpack.github.io/docs/configuration.html#output-chunkfilename
        */
-      chunkFilename: '[id].[chunkhash].chunk.js'
+      chunkFilename: '[id].[hash].chunk.js'
 
     },
 
@@ -92,7 +92,7 @@ module.exports = function (env) {
 
       /**
        * Plugin: WebpackMd5Hash
-       * Description: Plugin to replace a standard webpack chunkhash with md5.
+       * Description: Plugin to replace a standard webpack hash with md5.
        *
        * See: https://www.npmjs.com/package/webpack-md5-hash
        */

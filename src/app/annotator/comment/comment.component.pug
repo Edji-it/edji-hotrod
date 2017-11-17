@@ -1,9 +1,9 @@
-#comment.comment(
+#comment.comment.hidden-md-down(
     [class.new]="comment.new",
     [class.saved]="justSaved",
     [class.active]="active",
     [class.readonly]="readOnly",
-    [ngClass]="[ expanded ? 'expanded' : '', active ? 'comment__show' : '', reply ? 'replyComment' : 'hidden-md-down line-count-' + lineCount ]"
+    [ngClass]="[ expanded ? 'expanded' : '', reply ? 'replyComment comment__force-display' : 'hidden-md-down line-count-' + lineCount ]"
 )
     .expand-comments(
         *ngIf="!commentLite",
@@ -23,6 +23,7 @@
         //- Swap between different comment types
         emoji-comment(
             *ngIf="comment.type == 'emoji' || !comment.type",
+            [readOnly]="readOnly",
             [comment]="comment",
             [reply]="reply",
             (activate)="activate()",
@@ -54,7 +55,7 @@
             | +
         .reply#addReply(
             *ngIf="!reply && project.types.indexOf('reply') > -1",
-            (click)="commentReply.emit()"
+            (tap)="commentReply.emit()"
         )
             p.text-left.reply-text-left Reply
             .text-right
@@ -67,14 +68,85 @@
         [innerHtml]="':white_check_mark:' | emojione"
     )
     i.comment__saved([innerHtml]='":ok_hand:" | emojione')
-//- END .comment
+//- END .comment - desktop
+
+div(*ngIf="commentPaneActive")
+    hr.mobileBlock-hr(*ngIf="commentMobile && !commentMobileFirst")
+    .comment-action--save.comment-action--save__mobile.comment-action--save__mobile-btn(
+        *ngIf="comment.active && !readOnly",
+        (tap)="deactivate(comment)",
+        [innerHtml]="':white_check_mark:' | emojione"
+    )
+    .comment-new-highlight__mobile(*ngIf="comment && comment.active  && comment.new")
+        .comment-new-dot__mobile
+        p.comment-new-text__mobile new
+    #comment.comment.hidden-lg-up.mobileBound(
+        [class.new]="comment.new",
+        [class.saved]="justSaved",
+        [class.active]="comment.active",
+        [class.readonly]="readOnly",
+        [ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '' ]"
+    )
+        .user-icon([ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '' ]")
+            span {{comment.author.substring(0,2)}}
+        .mobileBlock([ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '' ]")
+            .list-item.list-item--block.mobileTime-card
+                | {{comment.author}}
+                span.mobileTime-card__time &nbsp;{{ comment.createdAt | edjidate:'timeAgo':null:secondsAgo }}
+            .comment-input-wrapper
+                emoji-comment(
+                    *ngIf="comment.type == 'emoji' || !comment.type",
+                    [comment]="comment",
+                    [readOnly]="readOnly",
+                    [reply]="reply",
+                    (activate)="activate()",
+                    (deactivate)="deactivate(comment)"
+                )
+                text-comment(
+                    *ngIf="comment.type == 'text'",
+                    [readOnly]="readOnly",
+                    [comment]="comment",
+                    [active]="comment.active",
+                    [reply]="reply",
+                    (activate)="activate()",
+                    (deactivate)="deactivate(comment, $event)"
+                )
+                audio-comment(
+                    *ngIf="comment.type == 'audio'",
+                    [comment]="comment",
+                    (save)="deactivate(comment)",
+                    [active]="comment.active",
+                    [recordNewAudio]="reRecordAudio",
+                    (showDeleteAudioModal)="showDeleteAudioModal = true",
+                    [userPermission]="userPermission",
+                    [reply]="true"
+                )
+            //- Text that was commented on
+            .list-item.list-item.mobileHighlight-card.h-1(*ngIf="!isImage")
+                blockquote
+                    | {{ comment.text ? comment.text : '...'}}
+            //- Image comment handling
+            .list-item.list-item.mobileHighlight-card_liImage.h-1(*ngIf="isImage")
+                .mobileHighlight-card_image Image
+            //- button.mobileHighlight-card_button((tap)="getImagePos(comment.start)") View&nbsp;&#8594;
+    //- Comment action buttons
+    .comment-action--block.row
+        .col-6.float-left.btn-float-left__sm
+            button.btn.btn-sm.btn-hero(*ngIf="userPermission >= 3", (tap)="userPermission > 3 ? deleteComment(comment) : showDeleteModal = true") Delete
+        .col-6.float-right.btn-float-right__sm
+            //- button.btn.btn-sm.btn-primary(*ngIf="repliesById[comment._id] && repliesById[comment._id].length>0", (tap)="commentReply.emit(comment)") Replies ({{ repliesById[comment._id] && repliesById[comment._id].length }})
+            button.btn.btn-sm.btn-primary(*ngIf="!reply && project.types.indexOf('reply') > -1", (tap)="commentReply.emit(comment)") Replies ({{ repliesById[comment._id] && repliesById[comment._id].length || '0' }})
+            //- button.btn.btn-sm.btn-primary(ngIf="!repliesById[comment._id]", (tap)="commentReply.emit(comment)") Reply
+//- END .comment - mobile
 
 //- Mobile Icon
-img.comment__button--mobile(
-    (tap)='expanded ? collapse($event) : expand($event)',
-    src="assets/images/icon-comment.svg",
-    [ngClass]="[ reply ? 'icon-hidden' : 'hidden-lg-up']"
-)
+div((tap)='toggleCPane(comment)')
+    .comment__button--mobile(
+        [ngClass]="[ reply ? 'icon-hidden' : 'hidden-lg-up', indicatesPane ? 'active' : '' ]"
+    )
+    .comment__count--mobile(
+        *ngIf="commentByPos[_projects.lineNumberArray[comment.start]]"
+    ) {{ commentByPos[_projects.lineNumberArray[comment.start]].length }}
 hot-del-comment(
     *ngIf="showDeleteModal",
     [comment]="comment",

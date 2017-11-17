@@ -65,3 +65,35 @@ body {
 	-o-transition: all 600ms;
 	transition: all 600ms;
 }
+
+blockquote {
+	padding: 6px 16px;
+	border: none;
+	quotes: "\201C" "\201D";
+	display: inline-block;
+	position: relative;
+	margin: 0;
+}
+
+blockquote:before { 
+	content: open-quote;
+	font-weight: bold;
+	position:absolute;
+	top: -4px;
+	left: 0;
+	font-size: 18px;
+} 
+blockquote:after { 
+	content: close-quote;
+	font-weight: bold;
+	position:absolute;
+	// bottom: 0;
+	right: 0;
+	font-size: 18px;
+}
+
+body {
+	&.body__lock-scroll {
+		overflow-y: hidden;
+	}
+}
