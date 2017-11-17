@@ -1012,7 +1012,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 // elPosCurrent = Math.round(wordElements[i].nativeElement.offsetTop) + Math.round(wordElements[i].nativeElement.parentNode.offsetTop)
                 // Certain styles can cause the position to vary by up to 5 pixels, so we need to round further
                 // console.log(elPosCurrent)
-                elPosAfter = Math.round(elPosBefore/10) * 10
+                elPosAfter = Math.round(elPosBefore/15) * 15
                 console.log(elPosBefore, elPosAfter)
 
                 if (elPosPrior !== elPosAfter) {
