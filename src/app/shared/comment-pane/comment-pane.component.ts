@@ -1,5 +1,6 @@
 import { CommentService } from '../comment.service'
 import { AuthService } from '../auth.service' 
+import { SocketService } from '../socket.service'
 import { Project, User } from '../datatypes'
 import { Subscription } from 'rxjs/Rx'
 import { ProjectService } from '../index'
@@ -56,6 +57,7 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
 
   constructor(
       private _projects: ProjectService,
+      private _socket: SocketService,
       public el: ElementRef,
       private _auth: AuthService,
       private _comments: CommentService,
@@ -98,6 +100,13 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
           }
         }
       )
+    )
+
+    // Subscribe to Heat Vision toggle updates
+    this.subscriptions.push(
+        this._socket.heatVisionUpdates.subscribe((heatToggle) => {
+            this.project.heat_vision = heatToggle.heatVision.all
+        })
     )
   }
 
