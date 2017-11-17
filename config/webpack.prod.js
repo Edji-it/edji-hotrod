@@ -30,6 +30,7 @@ const METADATA = webpackMerge(commonConfig({env: ENV}).metadata, {
   ENV: ENV,
   HMR: false
 });
+const { version: appVersion } = require('../package.json');
 
 module.exports = function (env) {
   return webpackMerge(commonConfig({env: ENV}), {
@@ -120,6 +121,7 @@ module.exports = function (env) {
       new DefinePlugin({
         'ENV': JSON.stringify(METADATA.ENV),
         'HMR': METADATA.HMR,
+        '__version__': JSON.stringify(appVersion),
         'process.env': {
           'ENV': JSON.stringify(METADATA.ENV),
           'NODE_ENV': JSON.stringify(METADATA.ENV),
