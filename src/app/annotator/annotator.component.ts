@@ -281,6 +281,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         window.onresize = () => {
             this.updateAllLineCounts()
             this.updateImageHeights()
+            this.getLineCount()
         }
 
         // Only supported by modern browsers, but very reliable in those cases
@@ -1012,7 +1013,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 elPosBefore = Math.round(wordElements[i].nativeElement.getBoundingClientRect().bottom - firstWordTop)
                 // elPosCurrent = Math.round(commentElements[i].nativeElement.offsetTop) + Math.round(commentElements[i].nativeElement.parentNode.offsetTop)
                 // Certain styles can cause the position to vary by up to 5 pixels, so we need to round further
-                elPosAfter = Math.round(elPosBefore/10) * 10
+
+                elPosAfter = Math.round(elPosBefore/15) * 15
 
                 if (elPosPrior !== elPosAfter) {
                     lineNum++
