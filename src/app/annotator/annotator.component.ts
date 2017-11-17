@@ -1001,13 +1001,19 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             var lineNum = 1
             this._projects.lineNumberArray[0] = lineNum
 
+            let elPosPrior
+            let elPosCurrent
             // Loop through each word element to store the line number of each span element
             for (let i = 1; i < wordElements.length; i++) {
-                let elPosPrior = wordElements[i-1].nativeElement.getBoundingClientRect().top
-                let elPosCurrent = wordElements[i].nativeElement.getBoundingClientRect().top
+                // The parentNode offsetTop addition fixes the occasional issue where diferrent images have comments registering on the same line
+                elPosCurrent = Math.round(wordElements[i].nativeElement.offsetTop) + Math.round(wordElements[i].nativeElement.parentNode.offsetTop)
+                // Certain styles can cause the position to vary by up to 5 pixels, so we need to round further
+                elPosCurrent = Math.round(elPosCurrent/12) * 12
+
                 if (elPosPrior!==elPosCurrent) {
                     lineNum++
                 }
+                elPosPrior = elPosCurrent
                 this._projects.lineNumberArray[i] = lineNum
             }
 
