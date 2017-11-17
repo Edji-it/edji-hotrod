@@ -1001,19 +1001,26 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             var lineNum = 1
             this._projects.lineNumberArray[0] = lineNum
 
-            let elPosPrior
-            let elPosCurrent
+            let elPosBefore, elPosAfter
             // Loop through each word element to store the line number of each span element
-            for (let i = 1; i < wordElements.length; i++) {
+            let len: number = wordElements.length
+            let firstWordTop: number = wordElements[0].nativeElement.getBoundingClientRect().top
+            let elPosPrior = 0
+            for (let i = 0; i < len; i++) {
                 // The parentNode offsetTop addition fixes the occasional issue where diferrent images have comments registering on the same line
-                elPosCurrent = Math.round(wordElements[i].nativeElement.offsetTop) + Math.round(wordElements[i].nativeElement.parentNode.offsetTop)
+                elPosBefore = Math.round(wordElements[i].nativeElement.getBoundingClientRect().top - firstWordTop)
+                // elPosCurrent = Math.round(wordElements[i].nativeElement.offsetTop) + Math.round(wordElements[i].nativeElement.parentNode.offsetTop)
                 // Certain styles can cause the position to vary by up to 5 pixels, so we need to round further
-                elPosCurrent = Math.round(elPosCurrent/12) * 12
+                // console.log(elPosCurrent)
+                elPosAfter = Math.round(elPosBefore/10) * 10
+                console.log(elPosBefore, elPosAfter)
 
-                if (elPosPrior!==elPosCurrent) {
+                if (elPosPrior !== elPosAfter) {
+                    console.log('adding line number')
                     lineNum++
+                    elPosPrior = elPosAfter
                 }
-                elPosPrior = elPosCurrent
+
                 this._projects.lineNumberArray[i] = lineNum
             }
 
