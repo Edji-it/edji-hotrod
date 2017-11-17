@@ -111,8 +111,8 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
   }
 
   dismissCommentPane() {
-    this._projects.commentPaneStateSubj.next(false)
     this.hideComment.emit()
+    this._projects.commentPaneStateSubj.next(false)
   }
   
   ngOnDestroy() {
