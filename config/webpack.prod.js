@@ -63,7 +63,7 @@ module.exports = function (env) {
        *
        * See: http://webpack.github.io/docs/configuration.html#output-filename
        */
-      filename: '[name].[hash].bundle.js',
+      filename: '[name].[hash].[__version__].bundle.js',
 
       /**
        * The filename of the SourceMaps for the JavaScript files.
