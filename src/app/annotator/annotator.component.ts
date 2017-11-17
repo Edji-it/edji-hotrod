@@ -1004,11 +1004,11 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             let elPosBefore, elPosAfter
             // Loop through each word element to store the line number of each span element
             let len: number = wordElements.length
-            let firstWordTop: number = wordElements[0].nativeElement.getBoundingClientRect().top
+            let firstWordTop: number = wordElements[0].nativeElement.getBoundingClientRect().bottom
             let elPosPrior = 0
             for (let i = 0; i < len; i++) {
                 // The parentNode offsetTop addition fixes the occasional issue where diferrent images have comments registering on the same line
-                elPosBefore = Math.round(wordElements[i].nativeElement.getBoundingClientRect().top - firstWordTop)
+                elPosBefore = Math.round(wordElements[i].nativeElement.getBoundingClientRect().bottom - firstWordTop)
                 // elPosCurrent = Math.round(wordElements[i].nativeElement.offsetTop) + Math.round(wordElements[i].nativeElement.parentNode.offsetTop)
                 // Certain styles can cause the position to vary by up to 5 pixels, so we need to round further
                 // console.log(elPosCurrent)
