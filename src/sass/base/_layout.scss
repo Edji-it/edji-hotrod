@@ -15,6 +15,20 @@ body > .main {
 	position:-webkit-sticky;
 }
 
+.main {
+  &.keyboard-adjust {
+    // Universal adjustment for emoji keyboard, but it breaks in Safari!
+    // position: fixed;
+    // height: 70%;
+    // overflow-y: auto;
+    // width: 100%;
+
+    & + footer {
+      display: none;
+    }
+  }
+}
+
 footer {
   @extend .row;
   // @include outer-container;

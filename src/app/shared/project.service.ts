@@ -52,6 +52,20 @@ export class ProjectService {
     private answersByIdSubject: BehaviorSubject<any> = new BehaviorSubject<any>(this.answersByIdSource)
     public answersById: Observable<any> = this.answersByIdSubject.asObservable()
 
+    /**
+     *  Mobile handling of comments
+     *      - Line Number Counter Array
+     *      - Comment Counter by Line Array
+     */
+    public lineNumberArray: any[] = []
+    public commentByPosSource: any[][] = []
+    private commentByPosSubject: BehaviorSubject<any> = new BehaviorSubject<any>(this.commentByPosSource)
+    public commentByPos: Observable<any> = this.commentByPosSubject.asObservable()
+
+    // Broadcast closing the comment pane
+    public commentPaneStateSubj: Subject<boolean> = new Subject<boolean>()
+    public commentPaneState: Observable<boolean> = this.commentPaneStateSubj.asObservable()
+
     constructor(
         private http: Http, 
         private _auth: AuthService, 
@@ -475,9 +489,9 @@ export class ProjectService {
             .delete(url, this._auth.getOptions())
             .map(data => {
                 // Tell other Project views that the comment is gone
-                 this._socket.updateComment(comment, 'DELETE', this.project._id)
-                 // Update stats
-                 this.commentStats.addCommentToStats(comment, -1)
+                this._socket.updateComment(comment, 'DELETE', this.project._id)
+                // Update stats
+                this.commentStats.addCommentToStats(comment, -1)
 
                 for (var i = 0; i <= this.project.comments.length; i++) {
                     if (this.project.comments[i] && this.project.comments[i]._id === comment._id) {
@@ -485,6 +499,9 @@ export class ProjectService {
                         this.project.comments.splice(i, 1)
                     }
                 }
+
+                this.getCommentsByLine()
+                console.log(url)
                 return data
             })
             .toPromise()
@@ -574,4 +591,38 @@ export class ProjectService {
             this._auth.getOptions()
         ) //this.http.put
     } // public addUserToProject(projectId: string): Observable<any>
+
+    public getCommentsByLine(): void {
+        let commentsArray = this.project.comments
+
+        // Re-initialize the comment by position array
+        this.commentByPosSource = []
+
+        // Loop through the line number array and initialize a new array for each word number
+        let len1 = this.lineNumberArray.length
+        for (let i = 0; i < len1; i++) {
+            this.commentByPosSource.push(new Array())
+        }
+
+        // Loop through each comment to group comments together by line number
+        let len2 = commentsArray.length
+        for (let i = 0; i < len2; i++) {
+            if (commentsArray[i] && !commentsArray[i].reply_to && !commentsArray[i].questionId) {
+                let comment = commentsArray[i]
+                let lineNbr = this.lineNumberArray[comment.start]
+                this.commentByPosSource[lineNbr].push(comment)
+            }
+        }
+
+        // Flip the comment array
+        let len3 = this.commentByPosSource.length
+        for (let i = 0; i < len3; i++) {
+            if (this.commentByPosSource[i].length>0) {
+                this.commentByPosSource[i].reverse()
+            }
+        }
+
+        this.commentByPosSubject.next(this.commentByPosSource)
+    }
 } // class
+

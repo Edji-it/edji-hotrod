@@ -16,6 +16,11 @@
     transition: bottom 0.3s, opacity 0.3s;
 }
 
+// Safari fix
+.emojionearea {
+    width: 100%;
+    height: 100%;
+}
 
 .emojionearea-button.active + .emojionearea-picker,
 .active .emojionearea-picker,

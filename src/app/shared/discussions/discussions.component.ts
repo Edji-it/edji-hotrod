@@ -1,17 +1,14 @@
 import { Angulartics2 } from 'angulartics2/dist';
-import { EdjiComment, Project, Reading } from '../../../shared/datatypes';
 import { Subscription } from 'rxjs/Rx';
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 
 // Project dependencies
-import { ProjectService } from '../../../shared/project.service';
-import { ReadingService } from '../../../shared/reading.service';
-import { CommentService } from '../../../shared/comment.service';
-import { AuthService } from '../../../shared/auth.service';
+import { EdjiComment, Project, Reading } from '../datatypes';
+import { AuthService, CommentService, ProjectService, ReadingService } from '../';
 
 @Component({
   selector: 'hot-discussions',
-  templateUrl: 'discussions.component.html',
+  templateUrl: 'discussions.component.pug',
   styleUrls: ['./discussions.component.scss']
 })
 
@@ -135,6 +132,6 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
 
   private activeEmojiKeyboardReply(activeReply: any): void {
     this._comments.activeComment = activeReply
-    this._comments.isEmojiKeyboardActive(this.user)
+    this._comments.setEmojiKeyboardActive(this.user)
   }
 }

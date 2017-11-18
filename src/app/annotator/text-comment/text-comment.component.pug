@@ -21,7 +21,7 @@
   )
   .text-comment__edit-btn(
     *ngIf="comment.active && !editing && !readOnly", 
-    (click)="editing = true"
+    (tap)="editing = true"
   )
     span.label--abs-left Edit
     i.icon-text-comment

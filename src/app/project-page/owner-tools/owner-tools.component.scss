@@ -1,20 +1,23 @@
 @import '../../../sass/base/variables';
 
-$ownerToolsBorder: 1px solid $gray;
-$ownerToolsShadow: 0px 1px 5px 3px rgba(0,0,0,0.025);
+$ownerToolsBorder: 1px solid rgba(0, 0, 0, 0.2);
+$ownerToolsShadow: 0px 1px 18px 2px rgba(0, 0, 0, 0.18);
 $ownerToolsWidth: 60px;
 
 .owner-bar {
     position: fixed;
-    z-index: $zMid + 1500;
-    left: 0;
+    // Owner bar should sit below sliding panes
+    z-index: $zMid + 1000;
+    left: 5px;
     top: 50%;
     transform: translateY(-50%);
     width: $ownerToolsWidth;
-    border: $ownerToolsBorder;
+    // border: $ownerToolsBorder;
     background: #fff;
     color: $medium-gray;
     box-shadow: $ownerToolsShadow;
+    border-radius: 10px;
+    padding-bottom: 5px;
 
     & label {
         width: 100%;

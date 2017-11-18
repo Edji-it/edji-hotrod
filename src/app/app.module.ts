@@ -23,17 +23,17 @@ import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 const { version: appVersion } = require('../../package.json');
 
 // Error tracking utility for sentry.io
-import * as Raven from 'raven-js';
+// import * as Raven from 'raven-js';
 
-Raven.config('https://f71b0ea0db5a4785b8ebee0b426b4bec@sentry.io/229527', {
-  release: appVersion
-}).install();
+// Raven.config('https://f71b0ea0db5a4785b8ebee0b426b4bec@sentry.io/229527', {
+//   release: appVersion
+// }).install();
 
-export class RavenErrorHandler implements ErrorHandler {
-  handleError(err:any) : void {
-    Raven.captureException(err);
-  }
-}
+// export class RavenErrorHandler implements ErrorHandler {
+//   handleError(err:any) : void {
+//     Raven.captureException(err);
+//   }
+// }
 
 // Services
 import { AppState, InternalStateType } from './app.service';
@@ -54,7 +54,7 @@ import { LinkifyPipe } from './pipes/linkify.pipe';
 import { UserInitialsPipe } from './pipes/userinitials.pipe.ts';
 
 // Components
-import { NavBarComponent, FooterComponent, TutorialBoxComponent } from './shared';
+import { DiscussionsComponent, NavBarComponent, FooterComponent, OpenEndedAnswersComponent, TutorialBoxComponent, QuestionComponent } from './shared';
 import { HomeComponent } from './home';
 import { RegisterComponent } from './register';
 import { LoginForm, GuestForm } from './forms';
@@ -66,9 +66,6 @@ import { FirefeedComponent } from './project-page/owner-tools/firefeed/firefeed.
 import { FirecardComponent } from './project-page/owner-tools/firefeed/firecard/firecard.component';
 import { QuestionfeedComponent } from './project-page/owner-tools/questionfeed/questionfeed.component';
 import { QuestioncardComponent } from './project-page/owner-tools/questionfeed/questioncard/questioncard.component';
-import { QuestionComponent } from './project-page/hero-tools/question/question.component';
-import { OpenEndedAnswersComponent } from "./project-page/hero-tools/question/open-ended-answers/open-ended-answers.component"
-import { DiscussionsComponent } from './project-page/hero-tools/discussions/discussions.component';
 import { NewReadingPage, UploadModalComponent, UploadPdfModalComponent, DeletePdfMiniModal } from './new-reading-page';
 import { DashboardComponent, JoinedDashComponent, CreatedDashComponent, TutorialReadingComponent, ReadingCardComponent } from './dashboard';
 import { NoContentComponent } from './no-content';
@@ -81,6 +78,7 @@ import { HeroPromoComponent } from './hero-promo/hero-promo.component';
 import { HeroPricingComponent } from './hero-pricing/hero-pricing.component';
 import { OAuthComponent } from './oauth-redirect/oauth-redirect.component';
 import { GoogleButton } from './buttons'
+import { CommentPaneComponent } from './shared/comment-pane/comment-pane.component';
 
 // Configure Hammer.js
 export class MyHammerConfig extends HammerGestureConfig  {
@@ -101,7 +99,7 @@ const APP_PROVIDERS = [
   SocketService,
   UtilToolService,
   BumblebeeService,
-  { provide: ErrorHandler, useClass: RavenErrorHandler },
+  // { provide: ErrorHandler, useClass: RavenErrorHandler },
   { 
       provide: HAMMER_GESTURE_CONFIG, 
       useClass: MyHammerConfig 
@@ -132,6 +130,7 @@ type StoreType = {
     RegisterComponent,
     NavBarComponent,
     FooterComponent,
+    CommentPaneComponent,
     CommentComponent,
     TextCommentComponent,
     EmojiCommentComponent,
