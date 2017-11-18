@@ -6,7 +6,8 @@ $ownerToolsWidth: 60px;
 
 .owner-bar {
     position: fixed;
-    z-index: $zMid + 1500;
+    // Owner bar should sit below sliding panes
+    z-index: $zMid + 1000;
     left: 5px;
     top: 50%;
     transform: translateY(-50%);
