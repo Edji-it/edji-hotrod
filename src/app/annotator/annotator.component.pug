@@ -214,7 +214,7 @@ comment-pane.hidden-lg-up(
     [isActive]="selectedComment.active",
     [comment]="selectedComment",
     (hideComment)="toggleCommentPane(false)",
-    (commentActivationMobile)="setActiveCommentByIndex($event.activate, $event.wi, $event.ci)",
+    (commentActivationMobile)="setActiveCommentByIndex($event.activate, $event.wi, $event.ci, $event.activatedComment)",
     (commentUpdated)="updateAllLineCounts()",
     (commentReply)="discReplyFire($event)"
 )

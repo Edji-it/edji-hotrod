@@ -667,12 +667,17 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.unfocusHighlight(comment.start, comment.end)
     }
 
-    setActiveCommentByIndex(isActive: boolean, wordIndex: number, commentIndex: number): void {
+    setActiveCommentByIndex(isActive: boolean, wordIndex: number, commentIndex: number, comment?: EdjiComment): void {
         // Any currrently active comments need to be deactivated
         this.inactivateComment()
         if (isActive) {
-            this._comments.activeComment = this.commentsByIndex[wordIndex][commentIndex]
-            this._comments.activeComment.active = true
+            if (typeof(comment) !== 'undefined') {
+                this._comments.activeComment = comment
+                this._comments.activeComment.active = true
+            } else {
+                this._comments.activeComment = this.commentsByIndex[wordIndex][commentIndex]
+                this._comments.activeComment.active = true
+            }
         }
     }
 
