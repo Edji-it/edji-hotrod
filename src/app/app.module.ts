@@ -22,19 +22,6 @@ import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 
 const { version: appVersion } = require('../../package.json');
 
-// Error tracking utility for sentry.io
-// import * as Raven from 'raven-js';
-
-// Raven.config('https://f71b0ea0db5a4785b8ebee0b426b4bec@sentry.io/229527', {
-//   release: appVersion
-// }).install();
-
-// export class RavenErrorHandler implements ErrorHandler {
-//   handleError(err:any) : void {
-//     Raven.captureException(err);
-//   }
-// }
-
 // Services
 import { AppState, InternalStateType } from './app.service';
 import { AuthService, BumblebeeService, ReadingService, ProjectService, SocketService, UtilToolService} from './shared';
@@ -99,7 +86,6 @@ const APP_PROVIDERS = [
   SocketService,
   UtilToolService,
   BumblebeeService,
-  // { provide: ErrorHandler, useClass: RavenErrorHandler },
   { 
       provide: HAMMER_GESTURE_CONFIG, 
       useClass: MyHammerConfig 
