@@ -1,0 +1,11 @@
+.modal.fade([class.show]="showModal")
+  .modal-dialog
+    .modal-content
+      .modal-header
+        h4.modal-title Modal title
+        button(type="button", class="close", aria-label="Close", (click)="closeModal.emit()")
+          span(aria-hidden="true") &times;
+      .modal-body
+        p One fine body
+      .modal-footer
+        button.btn.btn-primary(type="button", (click)="closeModal.emit()") Close

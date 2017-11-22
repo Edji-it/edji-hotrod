@@ -46,7 +46,7 @@ import { HomeComponent } from './home';
 import { RegisterComponent } from './register';
 import { LoginForm, GuestForm } from './forms';
 
-import { LoginModal, ResetPassComponent, DeleteCommentModal, DeleteAudioModal, DeleteReadingModal, DeleteProjectModal, AddProjectModal, LoginRequiredModal, HeroSubscribeComponent, HeroChangeComponent, LoginRegisterModal } from './modals';
+import { LoginModal, UserDetailsUpdateModal, ResetPassComponent, DeleteCommentModal, DeleteAudioModal, DeleteReadingModal, DeleteProjectModal, AddProjectModal, LoginRequiredModal, HeroSubscribeComponent, HeroChangeComponent, LoginRegisterModal } from './modals';
 import { AnnotatorComponent, CommentComponent, TextCommentComponent, EmojiCommentComponent, EmojiKeyboardComponent, AudioCommentComponent } from './annotator';
 import { ProjectPageComponent, ProjectInfoComponent, OwnerToolsComponent, LeaderboardComponent } from './project-page';
 import { FirefeedComponent } from './project-page/owner-tools/firefeed/firefeed.component';
@@ -169,10 +169,15 @@ type StoreType = {
     FeedbackComponent,
     ShareCodeComponent,
     NoContentComponent,
+    UserDetailsUpdateModal,
     ReadingCardComponent,
     HeroPromoComponent,
     HeroPricingComponent
-],
+  ],
+  /** Components which can be dynamically created */
+  entryComponents: [
+    UserDetailsUpdateModal
+  ],
   imports: [ // import Angular's modules
     BrowserModule,
     FormsModule,
