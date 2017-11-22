@@ -1,11 +1,36 @@
-.modal.fade([class.show]="showModal")
+.modal.fad([class.show]="showModal")
   .modal-dialog
-    .modal-content
+    form.modal-content([formGroup]="userDetailsForm", (ngSubmit)="formSubmit(userDetailsForm)")
       .modal-header
-        h4.modal-title Modal title
+        h4.modal-title Just a few more details...
         button(type="button", class="close", aria-label="Close", (click)="closeModal.emit()")
           span(aria-hidden="true") &times;
       .modal-body
-        p One fine body
+        h2 How will you use Edji?
+        #accountTypeGroup.form-group.list-group
+          .form-check.list-group-item
+            label.form-check-label
+              input.form-check-input(type="checkbox", [formControl]="userDetailsForm.controls['identities']['controls']['student']", value="")
+              div([innerHtml]="checkboxCopy.student | emojione")
+          .form-check.list-group-item
+            label.form-check-label
+              input.form-check-input(type="checkbox", [formControl]="userDetailsForm.controls['identities'].controls['teacher']", value="")
+              div([innerHtml]="checkboxCopy.teacher | emojione")
+          .form-check.list-group-item
+            label.form-check-label
+              input.form-check-input(type="checkbox", [formControl]="userDetailsForm.controls['identities'].controls['business']", value="")
+              div([innerHtml]="checkboxCopy.business | emojione")
+          .form-check.list-group-item
+            label.form-check-label
+              input.form-check-input(type="checkbox", [formControl]="userDetailsForm.controls['identities'].controls['personal']", value="")
+              div([innerHtml]="checkboxCopy.personal | emojione")
+          .form-check.list-group-item
+            label.form-check-label
+              input.form-check-input(type="checkbox", [formControl]="userDetailsForm.controls['identities'].controls['robot']", value="")
+              div([innerHtml]="checkboxCopy.robot | emojione")
+          .form-check.list-group-item
+            label.form-check-label
+              input.form-check-input(type="checkbox", [formControl]="userDetailsForm.controls['identities'].controls['other']", value="")
+              div([innerHtml]="checkboxCopy.other | emojione")
       .modal-footer
         button.btn.btn-primary(type="button", (click)="closeModal.emit()") Close
