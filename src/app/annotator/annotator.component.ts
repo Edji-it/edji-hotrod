@@ -995,9 +995,13 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      * We check this every time the comment pane is open in case the user adjusts screen width
      */
     getLineCount(): void {
+        // ToDo: 
+        // lineCountArray -> count of yPos delta by comments
+        // handle comment.expanded
+
         // Get all words and put them in to an array
         let wordElements = this.wordEls ? this.wordEls.toArray() : []
-        // let commentElements = document.querySelectorAll('edji-comment')
+        console.log(wordElements)
 
         // Only run this if the words are rendered and if it isn't already running
         if (!this.lineNumRunning && wordElements.length > 0) {
@@ -1006,7 +1010,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             // Re-initialize the line number array
             this._projects.lineNumberArray = []
             var lineNum = 1
-            this._projects.lineNumberArray[0] = lineNum
+            // this._projects.lineNumberArray[0] = lineNum
+            this._projects.lineNumberArray[0] = [[lineNum],[0]]
 
             let elPosBefore, elPosAfter
             // Loop through each word element to store the line number of each span element
@@ -1021,17 +1026,28 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
                 elPosAfter = Math.round(elPosBefore/15) * 15
 
+                // If the word is an image, then we need to index a secondary array to handle comments at different y positions on the image
+                if (wordElements[i].nativeElement.getAttribute('class').indexOf('img') > -1) {
+                    this.getImageLines(i, lineNum)
+                }
+
                 if (elPosPrior !== elPosAfter) {
                     lineNum++
                     elPosPrior = elPosAfter
                 }
 
-                this._projects.lineNumberArray[i] = lineNum
+                // this._projects.lineNumberArray[i] = lineNum
+                this._projects.lineNumberArray.push([[lineNum],[0]])
             }
+
+            console.log(this._projects.lineNumberArray)
+
+            // Use this to find out if the class contains img:
+            // wordElements[i].nativeElement.getAttribute('class').indexOf('img')
 
             // Clear the word elements array and let the project service generate an observable of all comments per line
             wordElements = []
-            this._projects.getCommentsByLine()
+            // this._projects.getCommentsByLine()
         }
         // Run a timer for the get linecount function until the words are rendered
         let timer = setTimeout(() => {
@@ -1043,6 +1059,36 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         }
         // Set the check variable to false if it ran so we can run it later when needed
         this.lineNumRunning = false
+    }
+
+    private getImageLines(arrayPos: number, lineNum: number) {
+        // let commentElements = this.commentComponents ? this.commentComponents.toArray() : []
+        let commentElements = this.commentComponents ? this.commentComponents.toArray() : []
+        console.log(commentElements)
+        // let commentElements = document.querySelectorAll('edji-comment')
+        let coPosPrior = 0
+        let len2
+        let coPosBefore, coPosAfter
+        let imgIndex = 0
+        
+        let len = commentElements.length
+        // Loop through the comment elements
+        for (let i = 0; i  < len; i++) {
+            // If the comment start position is the image (means the comment was made on an image)
+            if (commentElements[i].comment.start===arrayPos) {
+                // Get the vertical position of the comment on the comment component
+                coPosAfter = Math.round(commentElements[i].comment.loc.y/15) * 15
+                // If the comment before this one doesn't have the same vertical position then we need to index the image index for the array
+                // and push it up the array
+                if (coPosPrior !== coPosAfter) {
+                    imgIndex++
+                    coPosPrior = coPosAfter
+                    this._projects.lineNumberArray[arrayPos][1].push(imgIndex)
+                }
+            }
+        }
+        imgIndex = 0
+        coPosPrior = 0
     }
 
     private toggleCommentPane(visible?: boolean, comment?): void {
