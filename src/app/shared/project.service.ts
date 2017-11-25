@@ -601,24 +601,26 @@ export class ProjectService {
         // Loop through the line number array and initialize a new array for each word number
         let len1 = this.lineNumberArray.length
         for (let i = 0; i < len1; i++) {
-            this.commentByPosSource.push(new Array())
+            // this.commentByPosSource.push(new Array())
+            this.commentByPosSource.push([[0],[0]])
         }
-
+        
         // Loop through each comment to group comments together by line number
         let len2 = commentsArray.length
         for (let i = 0; i < len2; i++) {
             if (commentsArray[i] && !commentsArray[i].reply_to && !commentsArray[i].questionId) {
                 let comment = commentsArray[i]
-                let lineNbr = this.lineNumberArray[comment.start]
-                this.commentByPosSource[lineNbr].push(comment)
+                let lineNbr = this.lineNumberArray[comment.start][0]
+                // console.log(lineNbr, comment.start)
+                this.commentByPosSource[lineNbr][0].push(comment)
             }
         }
-
+        console.log(this.commentByPosSource)
         // Flip the comment array
         let len3 = this.commentByPosSource.length
         for (let i = 0; i < len3; i++) {
-            if (this.commentByPosSource[i].length>0) {
-                this.commentByPosSource[i].reverse()
+            if (this.commentByPosSource[i][1].length>0) {
+                this.commentByPosSource[i][1].reverse()
             }
         }
 

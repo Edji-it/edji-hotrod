@@ -128,8 +128,9 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
       var commentIndex = 0
 
       // Get the position of the active comment in the list of comments in comment pane
-      for (let i=0; i<this.commentByPos[this.lineNumArray[this.comment.start]].length; i++) {
-        if (this.commentByPos[this.lineNumArray[this.comment.start]][i]._id===this._comments.activeComment._id) {
+      let len = this.commentByPos[this.lineNumArray[this.comment.start][0][0]].length
+      for (let i=0; i<len; i++) {
+        if (this.commentByPos[this.lineNumArray[this.comment.start][0[0]]][i]._id===this._comments.activeComment._id) {
           commentIndex = i
           break
         }

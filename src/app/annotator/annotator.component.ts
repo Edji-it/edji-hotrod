@@ -995,13 +995,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      * We check this every time the comment pane is open in case the user adjusts screen width
      */
     getLineCount(): void {
-        // ToDo: 
-        // lineCountArray -> count of yPos delta by comments
-        // handle comment.expanded
-
         // Get all words and put them in to an array
         let wordElements = this.wordEls ? this.wordEls.toArray() : []
-        console.log(wordElements)
 
         // Only run this if the words are rendered and if it isn't already running
         if (!this.lineNumRunning && wordElements.length > 0) {
@@ -1010,7 +1005,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             // Re-initialize the line number array
             this._projects.lineNumberArray = []
             var lineNum = 1
-            // this._projects.lineNumberArray[0] = lineNum
             this._projects.lineNumberArray[0] = [[lineNum],[0]]
 
             let elPosBefore, elPosAfter
@@ -1021,9 +1015,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             for (let i = 0; i < len; i++) {
                 // The parentNode offsetTop addition fixes the occasional issue where diferrent images have comments registering on the same line
                 elPosBefore = Math.round(wordElements[i].nativeElement.getBoundingClientRect().bottom - firstWordTop)
-                // elPosCurrent = Math.round(commentElements[i].nativeElement.offsetTop) + Math.round(commentElements[i].nativeElement.parentNode.offsetTop)
-                // Certain styles can cause the position to vary by up to 5 pixels, so we need to round further
-
                 elPosAfter = Math.round(elPosBefore/15) * 15
 
                 // If the word is an image, then we need to index a secondary array to handle comments at different y positions on the image
@@ -1036,18 +1027,16 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                     elPosPrior = elPosAfter
                 }
 
-                // this._projects.lineNumberArray[i] = lineNum
+                // Add the line number to the current word index
+                // - second array position is reserved for image "line" indexing. length of 1 means no images
                 this._projects.lineNumberArray.push([[lineNum],[0]])
             }
 
-            console.log(this._projects.lineNumberArray)
-
-            // Use this to find out if the class contains img:
-            // wordElements[i].nativeElement.getAttribute('class').indexOf('img')
+            console.log(this._projects.lineNumberArray[4][0][0])
 
             // Clear the word elements array and let the project service generate an observable of all comments per line
             wordElements = []
-            // this._projects.getCommentsByLine()
+            this._projects.getCommentsByLine()
         }
         // Run a timer for the get linecount function until the words are rendered
         let timer = setTimeout(() => {
@@ -1064,7 +1053,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     private getImageLines(arrayPos: number, lineNum: number) {
         // let commentElements = this.commentComponents ? this.commentComponents.toArray() : []
         let commentElements = this.commentComponents ? this.commentComponents.toArray() : []
-        console.log(commentElements)
+
         // let commentElements = document.querySelectorAll('edji-comment')
         let coPosPrior = 0
         let len2
