@@ -612,10 +612,15 @@ export class ProjectService {
                 let comment = commentsArray[i]
                 let lineNbr = this.lineNumberArray[comment.start][0]
                 // console.log(lineNbr, comment.start)
-                this.commentByPosSource[lineNbr][0].push(comment)
+                if (this.commentByPosSource[lineNbr][0]!=0) {
+                    this.commentByPosSource[lineNbr][0].push(comment)
+                } else {
+                    console.log('z7')
+                    this.commentByPosSource[lineNbr][0] = comment
+                }
             }
         }
-        console.log(this.commentByPosSource)
+        
         // Flip the comment array
         let len3 = this.commentByPosSource.length
         for (let i = 0; i < len3; i++) {

@@ -18,7 +18,7 @@
     .row
       .col-12
         edji-comment(
-          *ngFor="let mobileComment of commentByPos[lineNumArray[comment.start][0][0]]; let i = index", 
+          *ngFor="let mobileComment of commentByPos[lineNumArray[comment.start][0][0]]; let i = index",
           [class.hidden]="(!project.heat_vision && user._id !== project.teacher_id) && mobileComment.user_id !== user._id && mobileComment.user_id !== project.teacher_id",
           [class.owner]="mobileComment.user_id === project.teacher_id",
           [readOnly]="mobileComment.user_id !== user._id",

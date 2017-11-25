@@ -1032,8 +1032,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 this._projects.lineNumberArray.push([[lineNum],[0]])
             }
 
-            console.log(this._projects.lineNumberArray[4][0][0])
-
             // Clear the word elements array and let the project service generate an observable of all comments per line
             wordElements = []
             this._projects.getCommentsByLine()
