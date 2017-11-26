@@ -214,6 +214,10 @@ export class ProjectService {
             comment.showAvatar = true;
         }
 
+        if (comment.loc && comment.loc.y && comment.text==="") {
+            comment.imagePos = Math.round(comment.loc.y/15)*15
+        }
+
         this.addCommentToReplies(comment)
 
         // add the comment at the index of the comment's starting word
@@ -596,6 +600,7 @@ export class ProjectService {
         // Re-initialize the comment by position array
         this.commentByPosSource = []
         let commentsArray = this.project.comments.reverse()
+        console.log(commentsArray)
         
         // Loop through each comment to group comments together by line number
         let len2 = commentsArray.length
@@ -630,7 +635,7 @@ export class ProjectService {
                 }
             }
         }
-        
+        console.log(this.commentByPosSource)
         this.commentByPosSubject.next(this.commentByPosSource)
     }
 } // class
