@@ -124,17 +124,28 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       // Get the comments that are currently in the pane
       let comments: any[] = Array.from(document.querySelectorAll('.comment-container edji-comment'))
-
+      let len
       var commentIndex = 0
 
       // Get the position of the active comment in the list of comments in comment pane
-      let len = this.commentByPos[this.lineNumArray[this.comment.start][0][0]].length
-      for (let i=0; i<len; i++) {
-        if (this.commentByPos[this.lineNumArray[this.comment.start][0[0]]][i]._id===this._comments.activeComment._id) {
-          commentIndex = i
-          break
+      if (this.comment.imagePos) {
+        len = this.commentByPos[this.lineNumArray[this.comment.start][0]][this.comment.imagePos].length
+        for (let i=0; i<len; i++) {
+          if (this.commentByPos[this.lineNumArray[this.comment.start][0]][this.comment.imagePos][i]._id===this._comments.activeComment._id) {
+            commentIndex = i
+            break
+          }
+        }
+      } else {
+        len = this.commentByPos[this.lineNumArray[this.comment.start][0]].length
+        for (let i=0; i<len; i++) {
+          if (this.commentByPos[this.lineNumArray[this.comment.start][0]][i]._id===this._comments.activeComment._id) {
+            commentIndex = i
+            break
+          }
         }
       }
+      
 
       // Set the scroll position to where the active comment is in view
       document.querySelector('.sliding-pane-comment').scrollTop = comments[commentIndex].offsetTop
