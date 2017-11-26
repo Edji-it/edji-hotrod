@@ -215,7 +215,7 @@ export class ProjectService {
         }
 
         if (comment.loc && comment.loc.y && comment.text==="") {
-            comment.imagePos = Math.round(comment.loc.y/15)*15
+            comment.imagePos = Math.round(comment.loc.y/8)*8
         }
 
         this.addCommentToReplies(comment)
@@ -620,7 +620,7 @@ export class ProjectService {
                     }
                 } else {
                     // Get the image position based on y location
-                    let imagePos = Math.round(comment.loc.y/15) * 15
+                    let imagePos = comment.imagePos
                     // Initialize the array position set for the image if it isn't already initialized
                     if (typeof(this.commentByPosSource[lineNbr])=='undefined') {
                         this.commentByPosSource[lineNbr] = []

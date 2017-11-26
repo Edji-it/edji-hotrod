@@ -1064,7 +1064,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             // If the comment start position is the image (means the comment was made on an image)
             if (commentElements[i].comment.start===arrayPos) {
                 // Get the vertical position of the comment on the comment component
-                coPosAfter = Math.round(commentElements[i].comment.loc.y/15) * 15
+                coPosAfter = Math.round(commentElements[i].comment.loc.y/8) * 8
                 // Push another array if we have an image 
                 // - keep indexing up if this additional array is in place (else condition)
                 if (typeof(this._projects.lineNumberArray[arrayPos][1])=='undefined') {

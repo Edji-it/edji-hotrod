@@ -9,6 +9,7 @@ export interface EdjiComment extends BaseComment {
   project_id      : string,
   active          : boolean,
   showAvatar      : boolean,
+  imagePos: number,
 }
 
 /** Comment properties we get from the server */
