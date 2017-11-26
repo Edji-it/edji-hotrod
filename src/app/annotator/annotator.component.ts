@@ -1005,7 +1005,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             // Re-initialize the line number array
             this._projects.lineNumberArray = []
             var lineNum = 1
-            this._projects.lineNumberArray[0] = [[lineNum],[0]]
+            // this._projects.lineNumberArray[0] = [[lineNum],[0]]
 
             let elPosBefore, elPosAfter
             // Loop through each word element to store the line number of each span element
@@ -1016,12 +1016,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 // The parentNode offsetTop addition fixes the occasional issue where diferrent images have comments registering on the same line
                 elPosBefore = Math.round(wordElements[i].nativeElement.getBoundingClientRect().bottom - firstWordTop)
                 elPosAfter = Math.round(elPosBefore/15) * 15
-
-                // If the word is an image, then we need to index a secondary array to handle comments at different y positions on the image
-                if (wordElements[i].nativeElement.getAttribute('class').indexOf('img') > -1) {
-                    this.getImageLines(i, lineNum)
-                }
-
+                
+                // If the element previously is a different height than the current element we're looking at, index up by 1
                 if (elPosPrior !== elPosAfter) {
                     lineNum++
                     elPosPrior = elPosAfter
@@ -1029,7 +1025,13 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
                 // Add the line number to the current word index
                 // - second array position is reserved for image "line" indexing. length of 1 means no images
-                this._projects.lineNumberArray.push([[lineNum],[0]])
+                // this._projects.lineNumberArray.push([[lineNum],[0]])
+                this._projects.lineNumberArray.push([lineNum])
+
+                // If the word is an image, then we need to index a secondary array to handle comments at different y positions on the image
+                if (wordElements[i].nativeElement.getAttribute('class').indexOf('img') > -1) {
+                    this.getImageLines(i, lineNum)
+                }
             }
 
             // Clear the word elements array and let the project service generate an observable of all comments per line
@@ -1049,33 +1051,53 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     }
 
     private getImageLines(arrayPos: number, lineNum: number) {
-        // let commentElements = this.commentComponents ? this.commentComponents.toArray() : []
         let commentElements = this.commentComponents ? this.commentComponents.toArray() : []
-
-        // let commentElements = document.querySelectorAll('edji-comment')
         let coPosPrior = 0
-        let len2
-        let coPosBefore, coPosAfter
-        let imgIndex = 0
-        
+        let coPosAfter
+        let arrIndex = 0
+        var written = false
         let len = commentElements.length
+
         // Loop through the comment elements
         for (let i = 0; i  < len; i++) {
             // If the comment start position is the image (means the comment was made on an image)
             if (commentElements[i].comment.start===arrayPos) {
                 // Get the vertical position of the comment on the comment component
                 coPosAfter = Math.round(commentElements[i].comment.loc.y/15) * 15
-                // If the comment before this one doesn't have the same vertical position then we need to index the image index for the array
-                // and push it up the array
-                if (coPosPrior !== coPosAfter) {
-                    imgIndex++
-                    coPosPrior = coPosAfter
-                    this._projects.lineNumberArray[arrayPos][1].push(imgIndex)
+                // Push another array if we have an image 
+                // - keep indexing up if this additional array is in place (else condition)
+                if (typeof(this._projects.lineNumberArray[arrayPos][1])=='undefined') {
+                    this._projects.lineNumberArray[arrayPos][1] = [coPosAfter]
+                } else {
+                    let len2 = this._projects.lineNumberArray[arrayPos][1].length
+                    // Loop through the image positions to look for duplicates
+                    // - also, make sure the y positioning is in order
+                    for (let j = 0; j  < len2; j++) {
+                        arrIndex = j
+                        // If the written value is the same as the current value, let's skip it
+                        if (this._projects.lineNumberArray[arrayPos][1][j] == coPosAfter) {
+                            // Mark it as already written to the array
+                            written = true
+                            break
+                        // If the written value is larger than the current comment y value, let's splice it in before 
+                        } else if (this._projects.lineNumberArray[arrayPos][1][j] > coPosAfter) {
+                            this._projects.lineNumberArray[arrayPos][1].splice(arrIndex,0,coPosAfter)
+                            // Mark it as already written to the array
+                            written = true
+                            break
+                        }
+                    }
+                    // If it is not already marked as written, that means the value is larger than all other written values
+                    // - in which case we'll need to add it to the end of the array
+                    if (!written) {
+                        this._projects.lineNumberArray[arrayPos][1].push(coPosAfter)
+                    }
+                    // Reset the critical loop variables
+                    arrIndex = 0
+                    written = false
                 }
             }
         }
-        imgIndex = 0
-        coPosPrior = 0
     }
 
     private toggleCommentPane(visible?: boolean, comment?): void {

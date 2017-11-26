@@ -5,20 +5,21 @@
         .header-wrap
           button.close.stats-close-btn.btn-icon--round((tap)="dismissCommentPane()", type="button")
             span(aria-hidden="true") ×
-          p Line {{ lineNumArray[comment.start][0][0] }}
+          p(*ngIf="lineNumArray[comment.start].length==1") Line {{ lineNumArray[comment.start][0] }}
+          p(*ngIf="lineNumArray[comment.start].length>1") Line {{ lineNumArray[comment.start][1] }}
           h4(
-            *ngIf="commentByPos[lineNumArray[comment.start][0][0]].length>1 || commentByPos[lineNumArray[comment.start][0][0]].length===0"
-          ) {{ commentByPos[lineNumArray[comment.start][0][0]].length }} Comments
+            *ngIf="commentByPos[lineNumArray[comment.start][lineNumArray[comment.start].length]].length>1 || commentByPos[lineNumArray[comment.start][0][0]].length===0"
+          ) {{ commentByPos[lineNumArray[comment.start][lineNumArray[comment.start].length]].length }} Comments
           h4(
-            *ngIf="commentByPos[lineNumArray[comment.start][0][0]].length===1"
-          ) {{ commentByPos[lineNumArray[comment.start][0][0]].length }} Comment
+            *ngIf="commentByPos[lineNumArray[comment.start][lineNumArray[comment.start].length]].length===1"
+          ) {{ commentByPos[lineNumArray[comment.start][lineNumArray[comment.start].length]].length }} Comment
   .comment-container.container-fluid.pb-4(
     [ngClass]="[ _comments.activeComment.active && _comments.activeComment.type=='emoji' ? 'commentOverflow-eKey' : '' ]"
   )
     .row
       .col-12
         edji-comment(
-          *ngFor="let mobileComment of commentByPos[lineNumArray[comment.start][0][0]]; let i = index",
+          *ngFor="let mobileComment of commentByPos[lineNumArray[comment.start][lineNumArray[comment.start].length]]; let i = index",
           [class.hidden]="(!project.heat_vision && user._id !== project.teacher_id) && mobileComment.user_id !== user._id && mobileComment.user_id !== project.teacher_id",
           [class.owner]="mobileComment.user_id === project.teacher_id",
           [readOnly]="mobileComment.user_id !== user._id",

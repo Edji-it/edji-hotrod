@@ -593,17 +593,9 @@ export class ProjectService {
     } // public addUserToProject(projectId: string): Observable<any>
 
     public getCommentsByLine(): void {
-        let commentsArray = this.project.comments
-
         // Re-initialize the comment by position array
         this.commentByPosSource = []
-
-        // Loop through the line number array and initialize a new array for each word number
-        let len1 = this.lineNumberArray.length
-        for (let i = 0; i < len1; i++) {
-            // this.commentByPosSource.push(new Array())
-            this.commentByPosSource.push([[0],[0]])
-        }
+        let commentsArray = this.project.comments.reverse()
         
         // Loop through each comment to group comments together by line number
         let len2 = commentsArray.length
@@ -611,25 +603,34 @@ export class ProjectService {
             if (commentsArray[i] && !commentsArray[i].reply_to && !commentsArray[i].questionId) {
                 let comment = commentsArray[i]
                 let lineNbr = this.lineNumberArray[comment.start][0]
-                // console.log(lineNbr, comment.start)
-                if (this.commentByPosSource[lineNbr][0]!=0) {
-                    this.commentByPosSource[lineNbr][0].push(comment)
+                
+                // If the comment is not on an image
+                // - If the comment is on an image (else condition)
+                if (typeof(this.lineNumberArray[comment.start][1])=='undefined') {
+                    if (typeof(this.commentByPosSource[lineNbr])=='undefined') {
+                        this.commentByPosSource[lineNbr] = [comment]
+                    } else {
+                        // Push a comment on the line number
+                        this.commentByPosSource[lineNbr].push(comment)
+                    }
                 } else {
-                    console.log('z7')
-                    this.commentByPosSource[lineNbr][0] = comment
+                    // Get the image position based on y location
+                    let imagePos = Math.round(comment.loc.y/15) * 15
+                    // Initialize the array position set for the image if it isn't already initialized
+                    if (typeof(this.commentByPosSource[lineNbr])=='undefined') {
+                        this.commentByPosSource[lineNbr] = []
+                    }
+                    // Initialize an array for the image position if it isn't already initialized
+                    if (typeof(this.commentByPosSource[lineNbr][imagePos])=='undefined') {
+                        this.commentByPosSource[lineNbr][imagePos] = [comment]
+                    } else {
+                        // Push a comment to the position on the image
+                        this.commentByPosSource[lineNbr][imagePos].push(comment)
+                    }
                 }
             }
         }
         
-        // Flip the comment array
-        let len3 = this.commentByPosSource.length
-        for (let i = 0; i < len3; i++) {
-            if (this.commentByPosSource[i][1].length>0) {
-                this.commentByPosSource[i][1].reverse()
-            }
-        }
-
         this.commentByPosSubject.next(this.commentByPosSource)
     }
 } // class
-
