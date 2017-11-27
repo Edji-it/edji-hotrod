@@ -600,7 +600,6 @@ export class ProjectService {
         // Re-initialize the comment by position array
         this.commentByPosSource = []
         let commentsArray = this.project.comments.reverse()
-        console.log(commentsArray)
         
         // Loop through each comment to group comments together by line number
         let len2 = commentsArray.length
@@ -635,7 +634,6 @@ export class ProjectService {
                 }
             }
         }
-        console.log(this.commentByPosSource)
         this.commentByPosSubject.next(this.commentByPosSource)
     }
 } // class

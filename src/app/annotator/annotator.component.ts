@@ -566,6 +566,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                     comment.new = true // this is basically to tell our test cases which comment was just made
                     this.inactivateComment()
                     this.commentsByIndexAdd(comment, start)
+                    this.getLineCount()
                 } else {
                     console.warn('Didn\'t get a comment back from server!')
                 }
@@ -617,6 +618,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         comment.project_id = this.project._id
         if (comment.user_id === this.user._id || comment.user_id === this.project.teacher_id) {
             comment.showAvatar = true
+        }
+        if (comment.loc && comment.loc.y && comment.text==="") {
+            comment.imagePos = Math.round(comment.loc.y/8)*8
         }
     }
 
@@ -1036,7 +1040,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
             // Clear the word elements array and let the project service generate an observable of all comments per line
             wordElements = []
-            console.log(this._projects.lineNumberArray)
             this._projects.getCommentsByLine()
         }
         // Run a timer for the get linecount function until the words are rendered
@@ -1052,50 +1055,54 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     }
 
     private getImageLines(arrayPos: number, lineNum: number) {
-        let commentElements = this.commentComponents ? this.commentComponents.toArray() : []
+        // let commentElements = this.commentComponents ? this.commentComponents.toArray() : []
+        let commentElements = this.commentsByIndex ? this.commentsByIndex[arrayPos] : []
         let coPosPrior = 0
         let coPosAfter
         let arrIndex = 0
         var written = false
-        let len = commentElements.length
 
-        // Loop through the comment elements
-        for (let i = 0; i  < len; i++) {
-            // If the comment start position is the image (means the comment was made on an image)
-            if (commentElements[i].comment.start===arrayPos) {
-                // Get the vertical position of the comment on the comment component
-                coPosAfter = Math.round(commentElements[i].comment.loc.y/8) * 8
-                // Push another array if we have an image 
-                // - keep indexing up if this additional array is in place (else condition)
-                if (typeof(this._projects.lineNumberArray[arrayPos][1])=='undefined') {
-                    this._projects.lineNumberArray[arrayPos][1] = [coPosAfter]
-                } else {
-                    let len2 = this._projects.lineNumberArray[arrayPos][1].length
-                    // Loop through the image positions to look for duplicates
-                    // - also, make sure the y positioning is in order
-                    for (let j = 0; j  < len2; j++) {
-                        arrIndex = j
-                        // If the written value is the same as the current value, let's skip it
-                        if (this._projects.lineNumberArray[arrayPos][1][j] == coPosAfter) {
-                            // Mark it as already written to the array
-                            written = true
-                            break
-                        // If the written value is larger than the current comment y value, let's splice it in before 
-                        } else if (this._projects.lineNumberArray[arrayPos][1][j] > coPosAfter) {
-                            this._projects.lineNumberArray[arrayPos][1].splice(arrIndex,0,coPosAfter)
-                            // Mark it as already written to the array
-                            written = true
-                            break
+        if (commentElements && commentElements.length > 0) {
+            let len = commentElements.length
+
+            // Loop through the comment elements
+            for (let i = 0; i  < len; i++) {
+                // If the comment start position is the image (means the comment was made on an image)
+                if (commentElements[i].start===arrayPos) {
+                    // Get the vertical position of the comment on the comment component
+                    coPosAfter = commentElements[i].imagePos
+                    // Push another array if we have an image 
+                    // - keep indexing up if this additional array is in place (else condition)
+                    if (typeof(this._projects.lineNumberArray[arrayPos][1])=='undefined') {
+                        this._projects.lineNumberArray[arrayPos][1] = [coPosAfter]
+                    } else {
+                        let len2 = this._projects.lineNumberArray[arrayPos][1].length
+                        // Loop through the image positions to look for duplicates
+                        // - also, make sure the y positioning is in order
+                        for (let j = 0; j  < len2; j++) {
+                            arrIndex = j
+                            // If the written value is the same as the current value, let's skip it
+                            if (this._projects.lineNumberArray[arrayPos][1][j] == coPosAfter) {
+                                // Mark it as already written to the array
+                                written = true
+                                break
+                            // If the written value is larger than the current comment y value, let's splice it in before 
+                            } else if (this._projects.lineNumberArray[arrayPos][1][j] > coPosAfter) {
+                                this._projects.lineNumberArray[arrayPos][1].splice(arrIndex,0,coPosAfter)
+                                // Mark it as already written to the array
+                                written = true
+                                break
+                            }
                         }
+                        // If it is not already marked as written, that means the value is larger than all other written values
+                        // - in which case we'll need to add it to the end of the array
+                        if (!written) {
+                            this._projects.lineNumberArray[arrayPos][1].push(coPosAfter)
+                        }
+                        // Reset the critical loop variables
+                        arrIndex = 0
+                        written = false
                     }
-                    // If it is not already marked as written, that means the value is larger than all other written values
-                    // - in which case we'll need to add it to the end of the array
-                    if (!written) {
-                        this._projects.lineNumberArray[arrayPos][1].push(coPosAfter)
-                    }
-                    // Reset the critical loop variables
-                    arrIndex = 0
-                    written = false
                 }
             }
         }
@@ -1103,7 +1110,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
     private toggleCommentPane(visible?: boolean, comment?): void {
         // Make sure the line counts are up-to-date
-        this.getLineCount()
+        // this.getLineCount()
 
         // Set the input comment to the comment pane if it is not currently open
         if (!this.commentPane) {
