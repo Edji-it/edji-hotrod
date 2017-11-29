@@ -1,5 +1,6 @@
 import { CommentService } from '../comment.service'
 import { AuthService } from '../auth.service' 
+import { SocketService } from '../socket.service'
 import { Project, User } from '../datatypes'
 import { Subscription } from 'rxjs/Rx'
 import { ProjectService } from '../index'
@@ -56,6 +57,7 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
 
   constructor(
       private _projects: ProjectService,
+      private _socket: SocketService,
       public el: ElementRef,
       private _auth: AuthService,
       private _comments: CommentService,
@@ -91,18 +93,32 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
       this._projects.commentPaneState.subscribe(
         (paneState) => {
           this.visible = paneState
+          if (paneState) {
+            document.body.classList.add("body__lock-scroll")
+          } else {
+            document.body.classList.remove("body__lock-scroll")
+          }
         }
       )
+    )
+
+    // Subscribe to Heat Vision toggle updates
+    this.subscriptions.push(
+        this._socket.heatVisionUpdates.subscribe((heatToggle) => {
+            this.project.heat_vision = heatToggle.heatVision.all
+        })
     )
   }
 
   dismissCommentPane() {
-    this._projects.commentPaneStateSubj.next(false)
     this.hideComment.emit()
+    this._projects.commentPaneStateSubj.next(false)
+    document.body.classList.remove("body__lock-scroll")
   }
   
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe() })
+    document.body.classList.remove("body__lock-scroll")
   }
 
   scrollAdjust(isNew?: boolean) {
@@ -143,7 +159,7 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
       if (comment && (comment.type==='emoji' || comment.type==='text')) {
         this.scrollAdjust()
       }
-      this.commentActivationMobile.emit({activate: shouldActivate, wi: wordIndex, ci: commentIndex})
+      this.commentActivationMobile.emit({activate: shouldActivate, wi: wordIndex, ci: commentIndex, activatedComment: comment})
     } else {
       this.commentActivationMobile.emit({activate: shouldActivate})
     }

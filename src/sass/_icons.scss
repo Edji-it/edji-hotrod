@@ -2,6 +2,13 @@
  * # Icons
  */
 
+@mixin icon($file) {
+    background-image: url('/assets/images/' + $file);
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain;
+}
+
 .icon {
     width: 1em;
     height: 1em;
@@ -70,43 +77,33 @@
 }
 
 .icon-add-question {
+    @include icon('icon-add-question.svg');
     display: inline-block;
     width: 40px;
     height: 40px;
-    background: url('/assets/images/icon-add-question.svg');
-    background-size: 100% 100%;
-    background-position: center center;
     cursor: pointer;
 }
 
 .icon-question {
+    @include icon('icon-question.svg');
     display: inline-block;
     width: 40px;
     height: 40px;
-    background: url('/assets/images/icon-question.svg');
-    background-size: 100% 100%;
-    background-position: center center;
     cursor: pointer;
 }
 
 .icon-carrot {
+    @include icon('carrot.svg');
     display:inline-block;
     width: 0.5em;
     height: 0.5em;
-    background: url('/assets/images/carrot.svg');
-    background-size: auto 100%;
-    background-position: center center;
-    background-repeat: no-repeat;
 }
 
 .icon-caret {
+    @include icon('icon-caret-right.svg');
     display:inline-block;
     width: 1em;
     height: 1em;
-    background: url('/assets/images/icon-caret-right.svg');
-    background-size: auto 100%;
-    background-position: center center;
-    background-repeat: no-repeat;
     opacity: 0.6;
 
     &.left {
@@ -123,67 +120,49 @@
 }
 
 .icon-text-comment {
+    @include icon('icon-text-comment.svg');
     display: inline-block;
     width: 1em;
     height: 1em;
-    background: url('/assets/images/icon-text-comment.svg');
-    background-size: auto 100%;
-    background-position: center center;
-    background-repeat: no-repeat;
 }
 
 .icon-emoji-comment {
+    @include icon('icon-emoji-comment.png');
     display: inline-block;
     width: 1em;
     height: 1em;
-    background: url('/assets/images/icon-emoji-comment.png');
-    background-size: auto 100%;
-    background-position: center center;
-    background-repeat: no-repeat;
 }
 
 .icon-audio-comment {
+    @include icon('icon-mic.svg');
     display: inline-block;
     width: 1em;
     height: 1em;
-    background: url('/assets/images/icon-mic.svg');
-    background-size: auto 100%;
-    background-position: center center;
-    background-repeat: no-repeat;
 }
 
 .icon-right_arrow {
+    @include icon('icon-right_arrow.png');
     display:inline-block;
     width: 1em;
     height: 1em;
-    background: url('/assets/images/icon-right_arrow.png');
-    background-size: auto 100%;
-    background-position: center center;
-    background-repeat: no-repeat;
     opacity: 0.6;
 }
 
 .icon-more {
+    @include icon('icon-more.png');
     display:inline-block;
     width: 1.5em;
     height: 1.5em;
-    background: url('/assets/images/icon-more.svg');
-    background-size: auto 100%;
-    background-position: center center;
-    background-repeat: no-repeat;
 }
 
 .icon-draft {
+    @include icon('icon-draft.svg');
     display: block;
     position: absolute;
     top: 50%;
     right: 20px;
     width: 100px;
     height: 50px;
-    background: url('/assets/images/icon-draft.svg');
-    background-size: 100px auto;
-    background-position: center center;
-    background-repeat: no-repeat;
     transform: rotate(20deg) translateY(-50%);
 }
 
@@ -206,13 +185,10 @@
 }
 
 .icon-mic {
+    @include icon('icon-mic.svg');
     display: inline-block;
     width: 1em;
     height: 1em;
-    background-image: url('/assets/images/icon-mic.svg');
-    background-size: 100% 100%;
-    background-position: center center;
-    background-repeat: no-repeat;
     cursor: pointer;
 }
 
@@ -228,42 +204,34 @@
 }
 
 .icon-pause {
+    @include icon('icon-pause.svg');
     display: inline-block;
     width: 20px;
     height: 20px;
-    background: url('/assets/images/icon-pause.svg');
-    background-size: 100% 100%;
-    background-position: center center;
     cursor: pointer;
 }
 
 .icon-play {
+    @include icon('icon-play.svg');
     display: inline-block;
     width: 20px;
     height: 20px;
-    background: url('/assets/images/icon-play.svg');
-    background-size: 100% 100%;
-    background-position: center center;
     cursor: pointer;
 }
 
 .icon-rec-text {
+    @include icon('icon-rec-text.svg');
     display: inline-block;
     width: 20px;
     height: 20px;
-    background: url('/assets/images/icon-rec-text.svg');
-    background-size: 100% 100%;
-    background-position: center center;
     cursor: pointer;
 }
 
 .icon-restart {
+    @include icon('icon-restart.svg');
     display: inline-block;
     width: 20px;
     height: 20px;
-    background: url('/assets/images/icon-restart.svg');
-    background-size: 100% 100%;
-    background-position: center center;
     cursor: pointer;
 }
 

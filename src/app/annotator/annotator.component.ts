@@ -281,6 +281,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         window.onresize = () => {
             this.updateAllLineCounts()
             this.updateImageHeights()
+            this.getLineCount()
         }
 
         // Only supported by modern browsers, but very reliable in those cases
@@ -666,12 +667,17 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.unfocusHighlight(comment.start, comment.end)
     }
 
-    setActiveCommentByIndex(isActive: boolean, wordIndex: number, commentIndex: number): void {
+    setActiveCommentByIndex(isActive: boolean, wordIndex: number, commentIndex: number, comment?: EdjiComment): void {
         // Any currrently active comments need to be deactivated
         this.inactivateComment()
         if (isActive) {
-            this._comments.activeComment = this.commentsByIndex[wordIndex][commentIndex]
-            this._comments.activeComment.active = true
+            if (typeof(comment) !== 'undefined') {
+                this._comments.activeComment = comment
+                this._comments.activeComment.active = true
+            } else {
+                this._comments.activeComment = this.commentsByIndex[wordIndex][commentIndex]
+                this._comments.activeComment.active = true
+            }
         }
     }
 
@@ -991,6 +997,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     getLineCount(): void {
         // Get all words and put them in to an array
         let wordElements = this.wordEls ? this.wordEls.toArray() : []
+        // let commentElements = document.querySelectorAll('edji-comment')
 
         // Only run this if the words are rendered and if it isn't already running
         if (!this.lineNumRunning && wordElements.length > 0) {
@@ -1001,13 +1008,24 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             var lineNum = 1
             this._projects.lineNumberArray[0] = lineNum
 
+            let elPosBefore, elPosAfter
             // Loop through each word element to store the line number of each span element
-            for (let i = 1; i < wordElements.length; i++) {
-                let elPosPrior = wordElements[i-1].nativeElement.getBoundingClientRect().top
-                let elPosCurrent = wordElements[i].nativeElement.getBoundingClientRect().top
-                if (elPosPrior!==elPosCurrent) {
+            let len: number = wordElements.length
+            let firstWordTop: number = wordElements[0].nativeElement.getBoundingClientRect().bottom
+            let elPosPrior = 0
+            for (let i = 0; i < len; i++) {
+                // The parentNode offsetTop addition fixes the occasional issue where diferrent images have comments registering on the same line
+                elPosBefore = Math.round(wordElements[i].nativeElement.getBoundingClientRect().bottom - firstWordTop)
+                // elPosCurrent = Math.round(commentElements[i].nativeElement.offsetTop) + Math.round(commentElements[i].nativeElement.parentNode.offsetTop)
+                // Certain styles can cause the position to vary by up to 5 pixels, so we need to round further
+
+                elPosAfter = Math.round(elPosBefore/15) * 15
+
+                if (elPosPrior !== elPosAfter) {
                     lineNum++
+                    elPosPrior = elPosAfter
                 }
+
                 this._projects.lineNumberArray[i] = lineNum
             }
 

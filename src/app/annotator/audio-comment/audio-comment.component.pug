@@ -2,18 +2,21 @@
   [ngClass]="[comment.active ? 'active' : '', reply ? 'reply-audio-wrapper' : '']"
 )
   .audio-btn-wrap([class.fade-out]="!comment.active")
-    button.btn-audio([class.disabled]="isRecording() || isLoading()")
-      i#audioPlay.icon-play(
+    //- [class.disabled]="isRecording() || isLoading()"
+    button#audioPlay.btn-audio(
         *ngIf="!isPlaying() && !isLoading()", 
         (click)="play()"
       )
-      i#audioPause.icon-pause(
-        *ngIf="isPlaying()", 
-        (click)="pause()"
-      )
-      i#audioPause.icon-loading(
-        *ngIf="isLoading()"
-      )
+      i.icon-play
+    button#audioPause.btn-audio(
+      *ngIf="isPlaying()", 
+      (click)="pause()"
+    )
+      i.icon-pause
+    button#audioPause.btn-audio(
+      *ngIf="isLoading()"
+    )
+      i.icon-loading
     button#audioRestart.btn-audio(
       [class.disabled]="!isPlayable()", 
       (click)="restartPlayback()"

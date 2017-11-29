@@ -73,7 +73,7 @@
 div(*ngIf="commentPaneActive")
     hr.mobileBlock-hr(*ngIf="commentMobile && !commentMobileFirst")
     .comment-action--save.comment-action--save__mobile.comment-action--save__mobile-btn(
-        *ngIf="comment.active",
+        *ngIf="comment.active && !readOnly",
         (tap)="deactivate(comment)",
         [innerHtml]="':white_check_mark:' | emojione"
     )
@@ -123,7 +123,8 @@ div(*ngIf="commentPaneActive")
                 )
             //- Text that was commented on
             .list-item.list-item.mobileHighlight-card.h-1(*ngIf="!isImage")
-                | {{ comment.text ? comment.text : '...'}}
+                blockquote
+                    | {{ comment.text ? comment.text : '...'}}
             //- Image comment handling
             .list-item.list-item.mobileHighlight-card_liImage.h-1(*ngIf="isImage")
                 .mobileHighlight-card_image Image
@@ -134,7 +135,7 @@ div(*ngIf="commentPaneActive")
             button.btn.btn-sm.btn-hero(*ngIf="userPermission >= 3", (tap)="userPermission > 3 ? deleteComment(comment) : showDeleteModal = true") Delete
         .col-6.float-right.btn-float-right__sm
             //- button.btn.btn-sm.btn-primary(*ngIf="repliesById[comment._id] && repliesById[comment._id].length>0", (tap)="commentReply.emit(comment)") Replies ({{ repliesById[comment._id] && repliesById[comment._id].length }})
-            button.btn.btn-sm.btn-primary((tap)="commentReply.emit(comment)") Replies ({{ repliesById[comment._id] && repliesById[comment._id].length || '0' }})
+            button.btn.btn-sm.btn-primary(*ngIf="!reply && project.types.indexOf('reply') > -1", (tap)="commentReply.emit(comment)") Replies ({{ repliesById[comment._id] && repliesById[comment._id].length || '0' }})
             //- button.btn.btn-sm.btn-primary(ngIf="!repliesById[comment._id]", (tap)="commentReply.emit(comment)") Reply
 //- END .comment - mobile
 

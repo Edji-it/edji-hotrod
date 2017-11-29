@@ -47,6 +47,9 @@ export class AudioService {
                 this.recorder.removeEventListener(eventName, this.listeners[eventName])
             }
         }
+
+        // iOS Safari fix
+        this.recorder.audioContext.resume()
     }
 
     public addRecorderListener(event: string, listener: Function): void {

@@ -1,0 +1,4 @@
+// There's a transform/z-index conflict that we can workaround by avoiding display:flex
+.modal {
+    display: block;
+}

@@ -83,7 +83,6 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
     if (typeof(isActive) !== 'undefined' && this.active !== isActive) {
       this.active = isActive
       if (!isActive) {
-        console.log('z7')
         // Trigger save when deactivated externally i.e. emoji keyboard
         this.deactivate(this.comment)
       } else {
@@ -249,12 +248,12 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
           this.angulartics.eventTrack.next({ action: comment.type + 'updateComment', properties: { category: 'projectAction', label: 'success' }})
         } // else
         this.isLoading = false
-        
-        this.justSaved = true
         this.commentUpdated.emit()
+
+        this.justSaved = true
         setTimeout(() => {
           this.justSaved = false
-          this.comment.active = false
+          // this.comment.active = false
         }, 1000)
       })
       .catch(error => { 
@@ -277,12 +276,13 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.isLoading = false
         
-        this.justSaved = true
         this.commentUpdated.emit()
         this._projects.addAnswerToAnswers(answer)
+
+        this.justSaved = true
         setTimeout(() => {
           this.justSaved = false
-          this.comment.active = false
+          // this.comment.active = false
         }, 1000)
       })
       .catch(error => { 
@@ -354,7 +354,7 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
     // The parentNode offsetTop addition fixes the occasional issue where diferrent images have comments registering on the same line
     this.yPos = Math.round(this.el.nativeElement.offsetTop) + Math.round(this.el.nativeElement.parentNode.offsetTop)
     // Certain styles can cause the position to vary by up to 5 pixels, so we need to round further
-    this.yPos = Math.round(this.yPos/10) * 10
+    this.yPos = Math.round(this.yPos/15) * 15
     return this.yPos
   } // public getVerticalPosition(): number
 

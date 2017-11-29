@@ -80,7 +80,7 @@ export class NewReadingPage implements OnInit {
             cleanPastedHTML: true,
             cleanAttrs: ['class', 'style', 'dir', 'id'],
             cleanTags: ['meta', 'button', 'input', 'form', 'img', 'label', 'pre', 'figure', 'hr', 'iframe'],
-            unwrapTags: [ 'strong', 'center', 'sup', 'sub', 'span', 'small', 'div', 'em', 'footer', 'ul', 'ol', 'li' ]
+            unwrapTags: [ 'strong', 'center', 'sup', 'sub', 'span', 'small', 'div', 'em', 'footer', 'ul', 'ol', 'li', 'blockquote']
         }, 
         extensions: { 
             // Disables Medium Editor handled image dragging
