@@ -93,7 +93,10 @@ blockquote:after {
 }
 
 body {
-	&.body__lock-scroll {
-		overflow-y: hidden;
+	// Lock scroll for mobile
+	@media(max-width: $desktop) {
+		&.body__lock-scroll {
+			overflow-y: hidden;
+		}
 	}
 }

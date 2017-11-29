@@ -96,7 +96,7 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
           if (paneState) {
             document.body.classList.add("body__lock-scroll")
           } else {
-            document.body.className = document.body.className.replace("body__lock-scroll","")
+            document.body.classList.remove("body__lock-scroll")
           }
         }
       )
@@ -113,11 +113,12 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
   dismissCommentPane() {
     this.hideComment.emit()
     this._projects.commentPaneStateSubj.next(false)
+    document.body.classList.remove("body__lock-scroll")
   }
   
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe() })
-    document.body.className = document.body.className.replace("body__lock-scroll","")
+    document.body.classList.remove("body__lock-scroll")
   }
 
   scrollAdjust(isNew?: boolean) {
