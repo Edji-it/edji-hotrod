@@ -113,6 +113,7 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
   dismissCommentPane() {
     this.hideComment.emit()
     this._projects.commentPaneStateSubj.next(false)
+    document.body.classList.remove("body__lock-scroll")
   }
   
   ngOnDestroy() {
