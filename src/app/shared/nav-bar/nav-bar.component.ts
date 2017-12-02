@@ -1,4 +1,4 @@
-import { Router } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router';
 import { Component, Input, OnDestroy, OnInit, Output, EventEmitter } from '@angular/core'
 import { Subscription } from 'rxjs/Rx'
 // import { EventEmitter } from '@angular/forms/src/facade/async'
@@ -48,6 +48,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
     private shareLoading: boolean = false
 
     constructor(
+          private _route: ActivatedRoute,
           private _auth: AuthService, 
           private _socket: SocketService, 
           private _router: Router, 
@@ -92,6 +93,9 @@ export class NavBarComponent implements OnInit, OnDestroy {
                 project => {
                     this.currentProject = project;
                     this.createdDate = new Date(project.createdAt).toDateString()
+                    if (this._route.snapshot.queryParams['readingCodeModal']) {
+                      this._util.showShareCode=true
+                    }
                 },
                 error => {
                     console.error(error);
