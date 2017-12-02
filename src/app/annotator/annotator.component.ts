@@ -1009,7 +1009,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             // Re-initialize the line number array
             this._projects.lineNumberArray = []
             var lineNum = 1
-            // this._projects.lineNumberArray[0] = [[lineNum],[0]]
 
             let elPosBefore, elPosAfter
             // Loop through each word element to store the line number of each span element
@@ -1029,7 +1028,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
                 // Add the line number to the current word index
                 // - second array position is reserved for image "line" indexing. length of 1 means no images
-                // this._projects.lineNumberArray.push([[lineNum],[0]])
                 this._projects.lineNumberArray.push([lineNum])
 
                 // If the word is an image, then we need to index a secondary array to handle comments at different y positions on the image
