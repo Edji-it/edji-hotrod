@@ -17,9 +17,10 @@ export class AudioService {
     public recorder
     // Reference listeners by event name
     private listeners: any = {}
-    
 
-    constructor() { 
+    constructor() {}
+
+    public initializeAudio(): void {
         if (Recorder.isRecordingSupported()) {
             this.recorder = new Recorder({
                 // Chrome does NOT like 'x-wav' mime type
@@ -57,4 +58,10 @@ export class AudioService {
         this.recorder.addEventListener(event, listener)
     }
 
+    public shutAudioDown() {
+        if (typeof(this.recorder)!=='undefined') {
+            this.recorder.clearStream()
+            this.recorder = undefined
+        }
+    }
 }
