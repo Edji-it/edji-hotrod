@@ -100,27 +100,46 @@
             //- Word Loop: reading.words is one big array of individual "words", which can also be puncuation or media
             <span #words class="w" *ngFor="let w of reading.words; let i = index" [ngClass]="[ w && w.styles ? w.styles.join(' ') : '', getHighlightClass(i) ]" [attr.index]="i">
                 //- Comment Loop: Display comments if they exist for this Word
-                edji-comment(
-                    *ngFor="let comment of commentsByIndex[i]; let ci = index",
+                //- edji-comment(
+                //-     *ngFor="let comment of commentsByIndex[i]; let ci = index",
+                //-     [class.hidden]="(!project.heat_vision && user._id !== project.teacher_id) && comment.user_id !== user._id && comment.user_id !== project.teacher_id",
+                //-     [class.owner]="comment.user_id === project.teacher_id",
+                //-     [comment]="comment",
+                //-     (mouseenter)='focusHighlight(comment.start, comment.end, comment.loc)',
+                //-     (mouseleave)='unfocusHighlight(comment.start, comment.end, comment.loc)',
+                //-     [readOnly]="comment.user_id !== user._id",
+                //-     [userPermission]="getCommentPermissions(comment)",
+                //-     [isActive]="comment.active",
+                //-     (commentActivation)="setActiveCommentByIndex($event, i, ci)",
+                //-     (commentDeleted)="removeComment(comment, i, ci)",
+                //-     (commentDeactivate)="unfocusHighlight($event.start, $event.end)",
+                //-     (commentUpdated)="updateAllLineCounts()",
+                //-     (expandLine)="expandLine($event, true)",
+                //-     (collapseLine)="expandLine($event, false)",
+                //-     (toggleCommentPane)="toggleCommentPane($event, comment)",
+                //-     (commentReply)="discReplyFire(comment)",
+                //-     [class.imageComment]="comment['loc']",
+                //-     [style.top]="comment['loc'] ? getClosestRowY(comment['loc']['y']/100 * imageHeight[i]) + 'px' : '0px'"
+                //- )
+                //- Mobile Icon
+                div(
+                    *ngFor="let comment of commentsByIndex[i]; let ci = index", 
+                    (tap)='toggleCommentPane(true, comment)', 
                     [class.hidden]="(!project.heat_vision && user._id !== project.teacher_id) && comment.user_id !== user._id && comment.user_id !== project.teacher_id",
                     [class.owner]="comment.user_id === project.teacher_id",
-                    [comment]="comment",
-                    (mouseenter)='focusHighlight(comment.start, comment.end, comment.loc)',
-                    (mouseleave)='unfocusHighlight(comment.start, comment.end, comment.loc)',
-                    [readOnly]="comment.user_id !== user._id",
-                    [userPermission]="getCommentPermissions(comment)",
-                    [isActive]="comment.active",
-                    (commentActivation)="setActiveCommentByIndex($event, i, ci)",
-                    (commentDeleted)="removeComment(comment, i, ci)",
-                    (commentDeactivate)="unfocusHighlight($event.start, $event.end)",
-                    (commentUpdated)="updateAllLineCounts()",
-                    (expandLine)="expandLine($event, true)",
-                    (collapseLine)="expandLine($event, false)",
-                    (toggleCommentPane)="toggleCommentPane($event, comment)",
-                    (commentReply)="discReplyFire(comment)",
                     [class.imageComment]="comment['loc']",
-                    [style.top]="comment['loc'] ? getClosestRowY(comment['loc']['y']/100 * imageHeight[i]) + 'px' : '0px'"
-                ) <!-- edji-comment -->
+                    [style.top]="comment['loc'] ? getClosestRowY((comment['loc']['y']/100 * imageHeight[i]), comment['loc']['y'], imageHeight[i], comment.imagePos) + 'px' : '0px'"
+                )
+                    .comment__button--mobile(
+                        [ngClass]="[ reply ? 'icon-hidden' : '' ]"
+                    )
+                        //- [ngClass]="[ reply ? 'icon-hidden' : 'hidden-lg-up', indicatesPane ? 'active' : '' ]"
+                    .comment__count--mobile(
+                        *ngIf="_projects.lineNumberArray && _projects.lineNumberArray[comment.start] && !comment.imagePos"
+                    ) {{ commentByPos[_projects.lineNumberArray[comment.start][0]].length }}
+                    .comment__count--mobile(
+                        *ngIf="_projects.lineNumberArray && _projects.lineNumberArray[comment.start] && comment.imagePos"
+                    ) {{ commentByPos[_projects.lineNumberArray[comment.start][0]][comment.imagePos].length }} <!-- edji-comment -->
                 //- Link Words: If a word is actually a link, handle it differently
                 a.w(
                     *ngIf="w && w.styles && w.styles.indexOf('a') > -1",

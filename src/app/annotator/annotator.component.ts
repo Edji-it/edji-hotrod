@@ -43,6 +43,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     private project: Project = <Project>{}
     
     private commentsByIndex : EdjiComment[][] = []
+    private commentByPos: any = []
     private focusOverride   : boolean = false
 
     private highlightArray      : number[] = []
@@ -265,6 +266,16 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 this.updateAllLineCounts()
             })
         )
+    
+        // Subscribe to updates to the comment by line number position array
+        this.subscriptions.push( this._projects.commentByPos.subscribe(
+        (commentByPos) => {
+            this.commentByPos = commentByPos
+        },
+        (error) => {
+            console.error(error)
+        }
+        ))
 
         // After comments are added to the array
         this.updateAllLineCounts()
@@ -966,7 +977,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     /**
      * Magically snap the row for image comments
      */
-    private getClosestRowY(yValue: number) : number {
+    private getClosestRowY(yValue: number, commentY?: number, imageH?: number, imagePos?: number) : number {
+        console.log(yValue, commentY, imageH, imagePos)
+        console.log(yValue + 16 - (yValue)%32)
         return yValue + 16 - (yValue)%32
     }
 

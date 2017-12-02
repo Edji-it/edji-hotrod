@@ -906,3 +906,39 @@ textarea.text-comment-input,
         -webkit-text-fill-color: #777;
     }
 }
+
+.comment__button--mobile {
+  display: none;
+  cursor: pointer;
+  max-width: auto !important;
+  min-width: 30px;
+  cursor: pointer;
+  padding: 3px;
+  width: 25px;
+  height: 25px;
+  display: block;
+  opacity: 0.5;
+  position: absolute;
+  left: -40px;
+  margin-top: -6px;
+
+  background-image: url('assets/images/icon-comment.svg');
+  background-size: 100% auto;
+
+  &.active {
+    opacity: 1;
+    background-image: url('assets/images/icon-comment--blue.svg');
+  }
+}
+
+.comment__count--mobile {
+  position: absolute;
+  left: -35px;
+  cursor: pointer;
+  color: white;
+  font-size: 10px;
+  font-weight: 500;
+  margin-top: -7px;
+  text-align: center;
+  width: 20px;
+}
