@@ -531,7 +531,7 @@ export class NewReadingPage implements OnInit {
                                 .subscribe( (project) => {
                                     this.addLoadingD = false
                                     this.addLoadingP = false
-                                    this.router.navigate(['project', project._id])
+                                    this.router.navigate(['project', project._id], { queryParams: { readingCodeModal: true }})
                                     // this._util.showShareCode=true; 
                                 }, (error) => {
                                     console.error(error)
