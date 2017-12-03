@@ -145,9 +145,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
       self.startRecording()
     }
     )
-    .catch(function(err) {
-      // we should trigger an alert to the user here to add mic access to the top
-    })
+    // we should trigger an alert to the user here to add mic access to the top
   }
 
   public startRecording() {
