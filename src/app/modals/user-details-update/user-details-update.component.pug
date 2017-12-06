@@ -32,5 +32,7 @@
             label.form-check-label
               input.form-check-input(type="checkbox", [formControl]="userDetailsForm.controls['identities'].controls['other']", value="")
               div([innerHtml]="checkboxCopy.other | emojione")
+        .alert.alert-info(*ngIf="userDetailsForm.controls['identities'].dirty && userDetailsForm.controls['identities'].invalid") Please select at least one box!
       .modal-footer
-        button.btn.btn-primary(type="button", (click)="closeModal.emit()") Close
+        button.btn.btn-primary(type="submit", [disabled]="!userDetailsForm.valid") Submit
+        button.btn.btn-secondary(type="button", (click)="closeModal.emit()") Close

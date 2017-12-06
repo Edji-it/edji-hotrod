@@ -33,7 +33,7 @@ export class UserDetailsUpdateModal implements OnInit {
         personal: null,
         robot: null,
         other: null
-      })
+      }, { validator: this.checkboxValidator })
     })
   }
 
@@ -41,6 +41,20 @@ export class UserDetailsUpdateModal implements OnInit {
   }
 
   private formSubmit(form: FormGroup) {
+    console.log('submitting form!')
+  }
 
+  /**
+   * Validates that at least one checkbox is checked, and assigns error if not
+   * @returns error to FormGroup called 'identity'
+   */
+  private checkboxValidator(group: FormGroup): any {
+    let valid = false
+    for(let control in group.controls) {
+      if (group.controls[control].value === true) {
+        valid = true
+      }
+    }
+    return valid ? null : { identity: true }
   }
 }
