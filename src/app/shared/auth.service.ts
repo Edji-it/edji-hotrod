@@ -277,6 +277,13 @@ export class AuthService implements CanActivate {
                         }
                     }
 
+                    // merge all the simpler properties
+                    for(let prop in updatedUser) {
+                        if (propsToCheck.indexOf(prop) < 0) {
+                            mergedUser[prop] = updatedUser[prop]
+                        }
+                    }
+
                     // This is repeated code from forceUpdateDocuments() we could consolidate these. 6.14.
                     this.http.put( this.baseUrl + '/users', {
                             user: mergedUser
