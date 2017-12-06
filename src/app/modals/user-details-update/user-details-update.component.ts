@@ -1,7 +1,10 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
-import { setTimeout } from 'timers';
+import { setTimeout } from 'timers'
+
+import { User } from './../../shared/datatypes'
+import { AuthService } from './../../shared'
 
 @Component({
   selector: 'hot-user-details-update',
@@ -23,6 +26,7 @@ export class UserDetailsUpdateModal implements OnInit {
   }
 
   constructor(
+    private _auth: AuthService,
     _fb: FormBuilder
   ) { 
     this.userDetailsForm = _fb.group({
@@ -42,6 +46,27 @@ export class UserDetailsUpdateModal implements OnInit {
 
   private formSubmit(form: FormGroup) {
     console.log('submitting form!')
+    let user: User = this._auth.getUser()
+
+    let identities = []
+    for(let field in form.value.identities) {
+      if (form.value.identities[field]) {
+        identities.push(field) // the name of the field gets added to the array, making it important to name the fields properly
+      }
+    }
+
+    // let newUser: User = Object.assign(Object.assign({},user), {identities: identities})
+
+    this._auth.updateUser({identities: identities})
+      .take(1)
+      .subscribe((res) => {
+        console.log(res)
+      }, (err) => {
+        console.error(err)
+
+      })
+
+    // console.log(user, identities, Object.assign(Object.assign({},user), {identities: identities}))
   }
 
   /**

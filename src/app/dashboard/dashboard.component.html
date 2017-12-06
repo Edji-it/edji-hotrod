@@ -29,4 +29,4 @@
     </tutorial-box>
     <edji-feedback></edji-feedback>
 </div>
-<hot-user-details-update [showModal]="showUserDetailsModal" (closeModal)="showUserDetailsModal = false"></hot-user-details-update>
+<hot-user-details-update *ngIf="showUserDetailsModal" [showModal]="showUserDetailsModal" (closeModal)="showUserDetailsModal = false"></hot-user-details-update>
