@@ -24,6 +24,10 @@ export class UserDetailsUpdateModal implements OnInit {
     robot: "I'm a robot. :robot_face:",
     other: "Some reason we haven't listed here! :sparkles:"
   }
+  private messages: {
+    success?: boolean,
+    serviceError?: boolean
+  } = {}
 
   constructor(
     private _auth: AuthService,
@@ -60,7 +64,7 @@ export class UserDetailsUpdateModal implements OnInit {
     this._auth.updateUser({identities: identities})
       .take(1)
       .subscribe((res) => {
-        console.log(res)
+        this.messages.success = true
       }, (err) => {
         console.error(err)
 

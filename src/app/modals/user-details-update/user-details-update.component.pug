@@ -33,6 +33,7 @@
               input.form-check-input(type="checkbox", [formControl]="userDetailsForm.controls['identities'].controls['other']", value="")
               div([innerHtml]="checkboxCopy.other | emojione")
         .alert.alert-info(*ngIf="userDetailsForm.controls['identities'].dirty && userDetailsForm.controls['identities'].invalid") Please select at least one box!
+        .alert.alert-success(*ngIf="messages.success", [innerHtml]=" ':heavy_check_mark:' | emojione ")
       .modal-footer
         button.btn.btn-primary(type="submit", [disabled]="!userDetailsForm.valid") Submit
         button.btn.btn-secondary(type="button", (click)="closeModal.emit()") Close
