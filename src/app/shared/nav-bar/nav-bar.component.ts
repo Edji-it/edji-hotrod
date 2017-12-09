@@ -21,6 +21,8 @@ export class NavBarComponent implements OnInit, OnDestroy {
     @Output() saveAction: EventEmitter<any> = new EventEmitter()
     @Output() shareAction: EventEmitter<ReadingShareObject> = new EventEmitter<ReadingShareObject>()
 
+
+    private showShareTooltip: boolean = false
     private user: any
     private currentProject: any
     private createdDate: string
@@ -79,9 +81,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
         this._readings.currentReading.subscribe(
             reading => {
                 this.currentReading = reading;
-                if (this._route.snapshot.queryParams['readingCodeModal']) {
-                  this._util.showShareCode=true
-                }
             },
             error => {
                 console.error(error);
@@ -172,7 +171,9 @@ export class NavBarComponent implements OnInit, OnDestroy {
     }
 
     showShareCodeModal() {
-      this._util.showShareCode=true
+      let currentParams = Object.assign({}, this._route.snapshot.queryParams)
+      let newParams = Object.assign(currentParams, { readingCodeModal: true })
+      this._router.navigate(['.'], { relativeTo: this._route, queryParams: newParams })
     }
 }
 
