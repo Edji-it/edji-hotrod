@@ -72,7 +72,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     this.currentUser = this._auth.getUser()
 
-    if (true) {
+    if (!this.currentUser.identities || this.currentUser.identities.length < 1) {
       this.showUserDetailsModal = true
     }
 

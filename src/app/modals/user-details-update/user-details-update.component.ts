@@ -48,8 +48,7 @@ export class UserDetailsUpdateModal implements OnInit {
   ngOnInit() {
   }
 
-  private formSubmit(form: FormGroup) {
-    console.log('submitting form!')
+  private formSubmit(form: FormGroup): void {
     let user: User = this._auth.getUser()
 
     let identities = []
@@ -59,18 +58,14 @@ export class UserDetailsUpdateModal implements OnInit {
       }
     }
 
-    // let newUser: User = Object.assign(Object.assign({},user), {identities: identities})
-
     this._auth.updateUser({identities: identities})
       .take(1)
       .subscribe((res) => {
         this.messages.success = true
+        this.triggerCloseTimeout()
       }, (err) => {
         console.error(err)
-
       })
-
-    // console.log(user, identities, Object.assign(Object.assign({},user), {identities: identities}))
   }
 
   /**
@@ -85,5 +80,12 @@ export class UserDetailsUpdateModal implements OnInit {
       }
     }
     return valid ? null : { identity: true }
+  }
+
+  /** Triggers the timeout which closes the modal */
+  private triggerCloseTimeout(): void {
+    setTimeout(() => {
+      this.closeModal.emit()
+    }, 3000)
   }
 }
