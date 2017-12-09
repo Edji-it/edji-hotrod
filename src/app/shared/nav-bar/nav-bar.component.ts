@@ -79,6 +79,9 @@ export class NavBarComponent implements OnInit, OnDestroy {
         this._readings.currentReading.subscribe(
             reading => {
                 this.currentReading = reading;
+                if (this._route.snapshot.queryParams['readingCodeModal']) {
+                  this._util.showShareCode=true
+                }
             },
             error => {
                 console.error(error);
@@ -93,9 +96,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
                 project => {
                     this.currentProject = project;
                     this.createdDate = new Date(project.createdAt).toDateString()
-                    if (this._route.snapshot.queryParams['readingCodeModal']) {
-                      this._util.showShareCode=true
-                    }
                 },
                 error => {
                     console.error(error);
