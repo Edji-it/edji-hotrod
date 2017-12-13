@@ -119,8 +119,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   /** Makes call to register the user */
   private register(formValue: any): void {
-    // this.clearErrors()
-    console.log("trying to register")
 
     this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'attempt' }})
 

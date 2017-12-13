@@ -3,6 +3,8 @@
     form.modal-content([formGroup]="userDetailsForm", (ngSubmit)="formSubmit(userDetailsForm)")
       .modal-header
         h4.modal-title Just a few more details...
+        button(*ngIf="messages.success", type="button", class="close", aria-label="Close", (click)="closeModal.emit()")
+          span(aria-hidden="true") &times;
       .modal-body
         h5 How will you use Edji?
         #accountTypeGroup.form-group.list-group
@@ -33,4 +35,5 @@
         .alert.alert-info(*ngIf="userDetailsForm.controls['identities'].dirty && userDetailsForm.controls['identities'].invalid") Please select at least one box!
         .alert.alert-success(*ngIf="messages.success", [innerHtml]=" ':heavy_check_mark: Thanks! Have fun reading with Edji!' | emojione ")
       .modal-footer
-        button.btn.btn-primary(type="submit", [disabled]="!userDetailsForm.valid") Submit
+        button.btn.btn-primary(type="submit", [disabled]="!userDetailsForm.valid", *ngIf="!messages.success") Submit
+        button.btn.btn-secondary(*ngIf="messages.success", type="button") Close
