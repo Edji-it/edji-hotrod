@@ -1,4 +1,4 @@
-import { Router } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router';
 import { Component, Input, OnDestroy, OnInit, Output, EventEmitter } from '@angular/core'
 import { Subscription } from 'rxjs/Rx'
 // import { EventEmitter } from '@angular/forms/src/facade/async'
@@ -21,6 +21,8 @@ export class NavBarComponent implements OnInit, OnDestroy {
     @Output() saveAction: EventEmitter<any> = new EventEmitter()
     @Output() shareAction: EventEmitter<ReadingShareObject> = new EventEmitter<ReadingShareObject>()
 
+
+    private showShareTooltip: boolean = false
     private user: any
     private currentProject: any
     private createdDate: string
@@ -48,6 +50,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
     private shareLoading: boolean = false
 
     constructor(
+          private _route: ActivatedRoute,
           private _auth: AuthService, 
           private _socket: SocketService, 
           private _router: Router, 
@@ -168,7 +171,9 @@ export class NavBarComponent implements OnInit, OnDestroy {
     }
 
     showShareCodeModal() {
-      this._util.showShareCode=true
+      let currentParams = Object.assign({}, this._route.snapshot.queryParams)
+      let newParams = Object.assign(currentParams, { readingCodeModal: true })
+      this._router.navigate(['.'], { relativeTo: this._route, queryParams: newParams })
     }
 }
 

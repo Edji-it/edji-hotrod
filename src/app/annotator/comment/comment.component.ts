@@ -298,7 +298,6 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
   // Deletes comment via Project service, which updates the local Project object
   public deleteComment(comment: any) : void {
     // Stop the user from continuing to edit, and close emoji keyboard
-    this.deactivate(this.comment)
     // Sort through the comment types and do the apppropriate pre-delete action
     if (this.comment.reply_to) {
       this.angulartics.eventTrack.next({ action: comment.type + 'deleteReply', properties: { category: 'heroFeature', label: 'attempt' }})
@@ -329,6 +328,7 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
         } else {
           this.angulartics.eventTrack.next({ action: comment.type + 'deleteComment', properties: { category: 'projectAction', label: 'failure' }})
         }
+        this.deactivate(this.comment)
         console.log(error)
       })
     } else {
@@ -341,6 +341,7 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
       .catch(error => {
         // TRACK EXCEPTION
         this.angulartics.eventTrack.next({ action: comment.type + 'deleteAnswer', properties: { category: 'heroFeature', label: 'failure' }})
+        this.deactivate(this.comment)
         console.log(error)
       })
     }

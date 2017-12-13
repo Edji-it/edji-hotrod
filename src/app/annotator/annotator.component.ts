@@ -1063,6 +1063,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             // Tell comments to close
             this.commentPane = false
             this._projects.commentPaneStateSubj.next(false)
+            // Run the standard comment inactivation to reset variables and do things like close the Keyboard
+            this.inactivateComment()
         }
     }
 }

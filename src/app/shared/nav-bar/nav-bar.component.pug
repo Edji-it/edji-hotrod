@@ -70,4 +70,4 @@
   h1.hidden-md-up.mobile-heading(*ngIf="pageTitle && !showProjectInfo") {{ pageTitle }}
   h1.hidden-md-up.mobile-heading(*ngIf="showProjectInfo") {{ currentReading.title }}
 
-share-code([showOpenReading]="canPublish")
+share-code([showOpenReading]="_route.snapshot.queryParams.readingCodeModal")
