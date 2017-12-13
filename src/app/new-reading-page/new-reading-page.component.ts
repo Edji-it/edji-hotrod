@@ -340,8 +340,8 @@ export class NewReadingPage implements OnInit {
                         this.words.push({})
                     } else {
                         // Don't save the useless "div" style
-                        if (word.styles.indexOf('div')) {
-                            let i = word.styles.indexOf('div')
+                        let i = word.styles.indexOf('div')
+                        if (i > -1) {
                             word.styles.splice(i, 1)
                         }
                         // Don't save empty word strings
