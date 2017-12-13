@@ -1,12 +1,10 @@
-.modal.fade([class.show]="showModal")
+.modal.fade([class.show]="showModal", *ngIf="showModal")
   .modal-dialog
     form.modal-content([formGroup]="userDetailsForm", (ngSubmit)="formSubmit(userDetailsForm)")
       .modal-header
         h4.modal-title Just a few more details...
-        button(type="button", class="close", aria-label="Close", (click)="closeModal.emit()")
-          span(aria-hidden="true") &times;
       .modal-body
-        h2 How will you use Edji?
+        h5 How will you use Edji?
         #accountTypeGroup.form-group.list-group
           .form-check.list-group-item
             label.form-check-label
@@ -36,4 +34,3 @@
         .alert.alert-success(*ngIf="messages.success", [innerHtml]=" ':heavy_check_mark: Thanks! Have fun reading with Edji!' | emojione ")
       .modal-footer
         button.btn.btn-primary(type="submit", [disabled]="!userDetailsForm.valid") Submit
-        button.btn.btn-secondary(type="button", (click)="closeModal.emit()") Close

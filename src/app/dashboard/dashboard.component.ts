@@ -77,5 +77,19 @@ export class DashboardComponent implements OnInit {
     }
 
     this._title.setTitle( 'Edji | Dashboard' )
+
+    if (this.userProfileIncomplete()) {
+      this.showUserDetailsModal = true
+    }
+  }
+
+  private userProfileIncomplete(): boolean {
+    // incomplete initialized as false and passed through filters until 
+    let incomplete: boolean = false
+    console.log(this.currentUser)
+    if (this.currentUser.identities.length < 1) {
+      incomplete = true
+    }
+    return incomplete
   }
 }

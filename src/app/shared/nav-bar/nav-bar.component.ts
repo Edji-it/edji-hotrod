@@ -50,14 +50,14 @@ export class NavBarComponent implements OnInit, OnDestroy {
     private shareLoading: boolean = false
 
     constructor(
-          private _route: ActivatedRoute,
-          private _auth: AuthService, 
-          private _socket: SocketService, 
-          private _router: Router, 
-          private _projects: ProjectService,
-          private _readings: ReadingService,
-          private _util: UtilToolService
-        ) {
+      private _route: ActivatedRoute,
+      private _auth: AuthService, 
+      private _socket: SocketService, 
+      private _router: Router, 
+      private _projects: ProjectService,
+      private _readings: ReadingService,
+      private _util: UtilToolService
+    ) {
 
     }
     
