@@ -1,6 +1,6 @@
 {
   "name": "edji-hotrod",
-  "version": "3.2.29",
+  "version": "3.2.28",
   "description": "Hot Rod is Edji's roaring Front End!",
   "keywords": [
     "edji",
@@ -19,7 +19,7 @@
     "clean:start": "npm start",
     "clean": "npm cache clean && npm run rimraf -- node_modules doc coverage dist",
     "deploy:dev": "npm run protractor && grunt bump && npm run build:prod && grunt push:dev && grunt cloudfront:dev",
-    "deploy:dev:unsafe": "grunt bump && npm run build:prod && grunt push:dev && grunt cloudfront:dev",
+    "deploy:dev:unsafe": "npm run build:prod && grunt push:dev && grunt cloudfront:dev",
     "deploy:dev:5": "npm run protractor:5 && grunt bump && npm run build:prod && grunt push:dev && grunt cloudfront:dev",
     "deploy:dev:minor": "npm run protractor && grunt bump:minor && npm run build:prod && grunt push:dev && grunt cloudfront:dev",
     "deploy:prod": "grunt checkbranch:master:true && npm run protractor && npm run build:prod && grunt push:prod && grunt cloudfront:prod",
