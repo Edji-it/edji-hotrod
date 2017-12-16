@@ -69,10 +69,11 @@
         <p id="termsText" class="text-center pb-2">By registering for Edji, you agree to our <a id="registerTermsLink" class="link--light" href="http://guide.edji.it/index.php/back-to-edji-it/privacy-terms/" target="_blank">Terms of Use</a>.
 
         <!-- Error Messages -->
-        <div id="msgDuplicateUser" *ngIf="errorObject.duplicateUser" class="alert alert-info" [innerHtml]="errorObject.duplicateUser | emojione"></div>
+        <div id="msgDuplicateUsername" *ngIf="errorObject.duplicateUsername" class="alert alert-info" [innerHtml]=" '<strong>Wow!</strong> :grin: Somebody else liked your username so much that they already took it.' | emojione"></div>
+        <div id="msgDuplicateEmail" *ngIf="errorObject.duplicateEmail" class="alert alert-info" [innerHtml]=" '<strong>Wow!</strong> :grin: Looks like that email is already signed up! Would you mind choosing another one?' | emojione"></div>
         <div id="msgBadName" *ngIf="errorObject.badName" class="alert alert-warn" [innerHtml]="errorObject.badName | emojione"></div>
         <div id="msgBadUsername" *ngIf="errorObject.badUsername" class="alert alert-warning" [innerHtml]="errorObject.badUsername | emojione"></div>
-        <div id="msgServerError" *ngIf="errorObject.serverError" class="alert alert-danger">{{errorObject.serverError}}</div>
+        <div id="msgServerError" *ngIf="errorObject.serverError" class="alert alert-danger">Oh no! Something went wrong, and we aren't sure exactly what.</div>
 
         <div class="button__row">
           <!--ngHide loginLoading-->
