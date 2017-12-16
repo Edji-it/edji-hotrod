@@ -18,6 +18,7 @@ export class NewReading implements PageObjectInterface
     public addButton = element(by.id('addReadingButton'));
     public finalizeButton = element(by.id('addReadingFinalizeButton'));
     public goToReadingButton = element(by.id('shareModalReadingButton'));
+    public shareCodeModalClose = element(by.id('shareCodeModalClose'));
     public draftButton = element(by.id('saveDraftButton'));
     public questionDelete = element.all(by.css('button.inline-delete.question-delete')).last();
     
