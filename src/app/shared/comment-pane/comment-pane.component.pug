@@ -3,7 +3,7 @@
     .row
       .col-12
         .header-wrap
-          button.close.stats-close-btn.btn-icon--round((tap)="dismissCommentPane()", type="button")
+          button.close.stats-close-btn.btn-icon--round((click)="dismissCommentPane()", type="button")
             span(aria-hidden="true") ×
           p Line {{ lineNumArray[comment.start][0] }}
           div(*ngIf="!comment.imagePos")

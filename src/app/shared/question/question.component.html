@@ -18,7 +18,13 @@
       <div class="prompt-section" [ngClass]="[question.new ? 'prompt-section__new' : '']">
         <label class="label--gray all-caps">Question</label>
         <div *ngIf="question && !question.new" class="prompt">{{question.prompt}}</div>
-        <textarea *ngIf="question && question.new" type='text' placeholder="Question text..." class="text-comment-input" [(ngModel)]="question.prompt" (change)="questionUpdate.emit(question)"></textarea>
+        <textarea *ngIf="question && question.new" 
+          type='text' 
+          placeholder="Question text..." 
+          class="text-comment-input question-input" 
+          [(ngModel)]="question.prompt" 
+          (change)="questionUpdate.emit(question)"
+          (mousedown)="$event.stopPropagation()"></textarea>
         <div class="alert alert-warning" *ngIf="question && question.new && question.prompt.length < 1">Don't forget to ask your question!</div>
       </div>
 
