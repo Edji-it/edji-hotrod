@@ -10,7 +10,7 @@ import { AuthService, BumblebeeService, Copy, ProjectService } from './../shared
 
 @Component({
   selector: 'edji-register',
-  templateUrl: 'register.component.html',
+  templateUrl: 'register.component.pug',
   styles: [`
     .btn-group-wrapper {
       width: 100%;
@@ -142,6 +142,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   /** Makes call to register the user */
   private register(formValue: any): void {
+    this.errorObject = {}
 
     this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'attempt' }})
 
