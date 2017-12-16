@@ -5,16 +5,17 @@
       img#logo.nav-bar__logo(src="assets/images/logo-3.2-mark.svg")
 
     //- Optional Title
-    .nav-bar__heading.hidden-sm-down(*ngIf="!showProjectInfo")
-      h1(
-        *ngIf="pageTitle",
-        title="{{ pageTitle }}"
-        ) {{ pageTitle }}
-    .nav-bar__heading.hidden-sm-down(*ngIf="showProjectInfo")
-      h1(
-        *ngIf="currentReading.title",
-        title="{{ currentReading.title }}"
-        ) {{ currentReading.title }}
+    div(*ngIf="!projectCodeShow")
+      .nav-bar__heading.hidden-sm-down(*ngIf="!showProjectInfo")
+        h1(
+          *ngIf="pageTitle",
+          title="{{ pageTitle }}"
+          ) {{ pageTitle }}
+      .nav-bar__heading.hidden-sm-down(*ngIf="showProjectInfo")
+        h1(
+          *ngIf="currentReading.title",
+          title="{{ currentReading.title }}"
+          ) {{ currentReading.title }}
 
     .nav__btn-wrap(*ngIf="!user.isLoggedIn")
       a#loginLink.btn.btn-primary.nav-bar__btn([routerLink]="['/login']") Log In
@@ -40,6 +41,25 @@
       pre.btn((click)="showShareCodeModal()", title="Display group code")
         span([innerHtml]="':key:' | emojione") 
         | &nbsp;{{ currentProject.code }}
+
+    //- Join Reading Code
+    .row.col-5.nav__join-code.hidden-sm-down(*ngIf="projectCodeShow")
+      .input-group.input-group-lg
+        input#projectCodeInput.form-control(
+          name="ProjectCodeInput", 
+          type="text", 
+          style="text-align: center;", 
+          (keyup.enter)="joinSession(projectCode)", 
+          [(ngModel)]="projectCode", 
+          placeholder="🔑 Code", 
+          aria-describedby="add-project-code")
+        span.input-group-btn
+          button#buttonJoinProject.btn.btn-primary(
+            [class.loading]="joinLoading", 
+            type="button", 
+            (click)="joinSession(projectCode)", 
+            name="Join", 
+            href="#") Go!
 
     .nav__btn-wrap
       //- Share button: Desktop
@@ -69,5 +89,25 @@
 
   h1.hidden-md-up.mobile-heading(*ngIf="pageTitle && !showProjectInfo") {{ pageTitle }}
   h1.hidden-md-up.mobile-heading(*ngIf="showProjectInfo") {{ currentReading.title }}
+
+//- Join Reading Code
+//- .container
+.col-12.nav__join-code--under.hidden-md-up(*ngIf="_router.url.indexOf('/home') > -1")
+  .input-group.input-group-lg
+    input#projectCodeInput.form-control(
+      name="ProjectCodeInput", 
+      type="text", 
+      style="text-align: center;", 
+      (keyup.enter)="joinSession(projectCode)", 
+      [(ngModel)]="projectCode", 
+      placeholder="🔑 Code", 
+      aria-describedby="add-project-code")
+    span.input-group-btn
+      button#buttonJoinProject.btn.btn-primary(
+        [class.loading]="joinLoading", 
+        type="button", 
+        (click)="joinSession(projectCode)", 
+        name="Join", 
+        href="#") Go!
 
 share-code([showOpenReading]="_route.snapshot.queryParams.readingCodeModal")
