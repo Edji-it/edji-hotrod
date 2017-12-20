@@ -5,45 +5,23 @@
         .header-wrap
           button.close.stats-close-btn.btn-icon--round((click)="dismissCommentPane()", type="button")
             span(aria-hidden="true") ×
-          p Line {{ lineNumArray[comment.start][0] }}
-          div(*ngIf="!comment.imagePos")
-            h4(
-              *ngIf="commentByPos[lineNumArray[comment.start][0]].length>1 || commentByPos[lineNumArray[comment.start][0]].length===0"
-            ) {{ commentByPos[lineNumArray[comment.start][0]].length }} Comments
-            h4(
-              *ngIf="commentByPos[lineNumArray[comment.start][0]].length===1"
-            ) {{ commentByPos[lineNumArray[comment.start][0]].length }} Comment
-          div(*ngIf="comment.imagePos")
-            h4(
-              *ngIf="commentByPos[lineNumArray[comment.start][0]][comment.imagePos].length>1 || commentByPos[lineNumArray[comment.start][0]][comment.imagePos].length===0"
-            ) {{ commentByPos[lineNumArray[comment.start][0]][comment.imagePos].length }} Comments
-            h4(
-              *ngIf="commentByPos[lineNumArray[comment.start][0]][comment.imagePos].length===1"
-            ) {{ commentByPos[lineNumArray[comment.start][0]][comment.imagePos].length }} Comment
+          p Line 
+          //- {{ lineNumArray[comment.lineY]}}
+          div
+            //- h4(
+            //-   *ngIf="lineNumArray[comment.lineY] > 1 || lineNumArray[comment.lineY] === 0"
+            //- ) {{ lineNumArray[comment.lineY] }} Comments
+            //- h4(
+            //-   *ngIf="lineNumArray[comment.lineY]] === 1"
+            //- ) 1 Comment
   .comment-container.container-fluid.pb-4(
     [ngClass]="[ _comments.activeComment.active && _comments.activeComment.type=='emoji' ? 'commentOverflow-eKey' : '' ]"
   )
     .row
       .col-12
-        div(*ngIf="!comment.imagePos")
-          edji-comment(
-            *ngFor="let mobileComment of commentByPos[lineNumArray[comment.start][0]]; let i = index",
-            [class.hidden]="(!project.heat_vision && user._id !== project.teacher_id) && mobileComment.user_id !== user._id && mobileComment.user_id !== project.teacher_id",
-            [class.owner]="mobileComment.user_id === project.teacher_id",
-            [readOnly]="mobileComment.user_id !== user._id",
-            [userPermission]="getCommentPermissions(mobileComment)",
-            [commentPaneActive]="true",
-            [comment]="mobileComment", 
-            [commentMobile]="true", 
-            [commentMobileFirst]="i<1",
-            (commentActivation)="commentActivationEmitter($event, mobileComment)",
-            (commentUpdated)="commentUpdatedEmitter()",
-            (commentReply)="commentReplyEmitter($event)",
-            style="display: initial;"
-          )
-        div(*ngIf="comment.imagePos")
-          edji-comment(
-            *ngFor="let mobileComment of commentByPos[lineNumArray[comment.start][0]][comment.imagePos]; let i = index",
+        div()
+          edji-comment( 
+            *ngFor="let mobileComment of commentByPos[comment.lineY]; let i = index",
             [class.hidden]="(!project.heat_vision && user._id !== project.teacher_id) && mobileComment.user_id !== user._id && mobileComment.user_id !== project.teacher_id",
             [class.owner]="mobileComment.user_id === project.teacher_id",
             [readOnly]="mobileComment.user_id !== user._id",

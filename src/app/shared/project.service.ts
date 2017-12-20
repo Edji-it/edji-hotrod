@@ -66,6 +66,11 @@ export class ProjectService {
     public commentPaneStateSubj: Subject<boolean> = new Subject<boolean>()
     public commentPaneState: Observable<boolean> = this.commentPaneStateSubj.asObservable()
 
+    // Tell comments to re-evaluate their y position
+    // use _project.refreshLineCountSubj.next() from any component
+    public refreshLineCountSubj: Subject<any> = new Subject<any>()
+    public refreshLineCount: Observable<any> = this.refreshLineCountSubj.asObservable()
+
     constructor(
         private http: Http, 
         private _auth: AuthService, 
@@ -207,6 +212,7 @@ export class ProjectService {
      * @param arr the array to which the comment will be added
      */
     private addCommentToArray(comment: EdjiComment, project: Project, user: User, arr: EdjiComment[][]): EdjiComment[][] {
+        console.log("Add comment to array")
         comment.project_id = project._id
 
         // get the user help decorate the comment
@@ -214,9 +220,11 @@ export class ProjectService {
             comment.showAvatar = true;
         }
 
-        if (comment.loc && comment.loc.y && comment.text==="") {
-            comment.imagePos = Math.round(comment.loc.y/8)*8
-        }
+        // if (comment.loc && comment.loc.y && comment.text==="") {
+        //     comment.imagePos = Math.round(comment.loc.y/8)*8
+        // }   
+
+        // this.decorateComment(comment)
 
         this.addCommentToReplies(comment)
 
@@ -599,39 +607,39 @@ export class ProjectService {
     public getCommentsByLine(): void {
         // Re-initialize the comment by position array
         this.commentByPosSource = []
-        let commentsArray = this.project.comments.reverse()
-        
+        // Copy then reverse the array
+        let commentsArray = this.project.comments.slice().reverse()
         // Loop through each comment to group comments together by line number
         let len2 = commentsArray.length
         for (let i = 0; i < len2; i++) {
-            if (commentsArray[i] && !commentsArray[i].reply_to && !commentsArray[i].questionId) {
-                let comment = commentsArray[i]
-                let lineNbr = this.lineNumberArray[comment.start][0]
+            let comment = commentsArray[i]
+            if (comment && !comment.reply_to && !comment.questionId && comment.lineY) {
+                let lineY = comment.lineY
                 
                 // If the comment is not on an image
                 // - If the comment is on an image (else condition)
-                if (typeof(this.lineNumberArray[comment.start][1])=='undefined') {
-                    if (typeof(this.commentByPosSource[lineNbr])=='undefined') {
-                        this.commentByPosSource[lineNbr] = [comment]
+                // if (typeof(this.lineNumberArray[comment.start][1])=='undefined') {
+                    if (typeof(this.commentByPosSource[lineY])=='undefined') {
+                        this.commentByPosSource[lineY] = [comment]
                     } else {
                         // Push a comment on the line number
-                        this.commentByPosSource[lineNbr].push(comment)
+                        this.commentByPosSource[lineY].push(comment)
                     }
-                } else {
-                    // Get the image position based on y location
-                    let imagePos = comment.imagePos
-                    // Initialize the array position set for the image if it isn't already initialized
-                    if (typeof(this.commentByPosSource[lineNbr])=='undefined') {
-                        this.commentByPosSource[lineNbr] = []
-                    }
-                    // Initialize an array for the image position if it isn't already initialized
-                    if (typeof(this.commentByPosSource[lineNbr][imagePos])=='undefined') {
-                        this.commentByPosSource[lineNbr][imagePos] = [comment]
-                    } else {
-                        // Push a comment to the position on the image
-                        this.commentByPosSource[lineNbr][imagePos].push(comment)
-                    }
-                }
+                // } else {
+                //     // Get the image position based on y location
+                //     let imagePos = comment.imagePos
+                //     // Initialize the array position set for the image if it isn't already initialized
+                //     // if (typeof(this.commentByPosSource[lineNbr])=='undefined') {
+                //     //     this.commentByPosSource[lineNbr] = []
+                //     // }
+                //     // Initialize an array for the image position if it isn't already initialized
+                //     if (typeof(this.commentByPosSource[lineNbr][imagePos])=='undefined') {
+                //         this.commentByPosSource[lineNbr][imagePos] = [comment]
+                //     } else {
+                //         // Push a comment to the position on the image
+                //         this.commentByPosSource[lineNbr][imagePos].push(comment)
+                //     }
+                // }
             }
         }
         this.commentByPosSubject.next(this.commentByPosSource)

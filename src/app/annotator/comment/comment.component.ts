@@ -59,7 +59,7 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
   private user: any
   private subscriptions: Subscription[] = []
   private repliesById: any = {}
-  private commentByPos: any = []
+  // private commentByPos: any = []
   private project: any
   private commentPane: boolean
   private indicatesPane: boolean
@@ -141,9 +141,9 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
     ))
     
     // Subscribe to updates to the comment by line number position array
-    this.subscriptions.push( this._projects.commentByPos.subscribe(
-      (commentByPos) => {
-        this.commentByPos = commentByPos
+    this.subscriptions.push( this._projects.refreshLineCount.subscribe(
+      () => {
+        this.setLineY()
       },
       (error) => {
         console.error(error)
@@ -181,10 +181,43 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       }
     ))
+
+    // window.addEventListener('resize', () => {
+    //     this.setLineY()
+    // }, true);
   }
 
   ngAfterViewInit() {
-    
+    this.setLineY()
+  }
+
+  setLineY() {
+    let firstWord = document.querySelector('.w[index="1"]')
+    let commentWord = document.querySelector( '.w[index="'+this.comment.start+'"]')
+    let commentImage = document.getElementById('readingImage' + this.comment.start)
+
+    if (firstWord && (commentWord || commentImage)) {
+      let firstWordTop: number = firstWord.getBoundingClientRect().bottom
+
+      // This will need to re-decorate on resize
+      if (this.comment.loc && this.comment.loc.y && this.comment.text === "") {
+          let imageTop: number = commentImage.getBoundingClientRect().top
+
+          let imageHeight = commentImage.clientHeight
+          let lineY = (this.comment.loc.y/100) * imageHeight
+          lineY = Math.round( imageTop + lineY - firstWordTop )
+          this.comment.lineY = lineY + 16 - (lineY)%32
+      } else {
+          // Math.round(allthis.Comments[i].nativeElement.getBoundingClientRect().bottom - firstWordTop)
+          let wordY = commentWord.getBoundingClientRect().bottom
+          wordY = Math.round(wordY - firstWordTop)
+          this.comment.lineY = wordY + 16 - (wordY)%32
+      }
+    } else {
+      setTimeout(()=> {
+        this.setLineY()
+      }, 1000)
+    }
   }
 
   activate(event?: any): void {
@@ -397,11 +430,11 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
   getIconNumber(comment): void {
     if (!comment.reply_to && !comment.questionId) {
       this.lineIconNum = this._projects.lineNumberArray[comment.start]
-      this.iconNum = this._projects.commentByPosSource[this.lineIconNum].length
+      // this.iconNum = this._projects.commentByPosSource[this.lineIconNum].length
     }
   }
 
   getComments(comment): void {
-    console.log(this._projects.commentByPosSource[this._projects.lineNumberArray[comment.start]])
+    // console.log(this._projects.commentByPosSource[this._projects.lineNumberArray[comment.start]])
   }
 }

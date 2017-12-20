@@ -25,6 +25,7 @@ export interface BaseComment {
   url?: string,
   text?: string,
   loc?: { x: number, y: number },
+  lineY?: number,
   reply_to?: string,
   replies?: any[],
   questionId? : string,
