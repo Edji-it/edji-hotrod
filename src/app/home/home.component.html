@@ -11,21 +11,9 @@
         <!--Lightning Code Row-->
         <div class="col__center-fix">
           <div class="col__center-content">
-            <h1 class="center on-dark join-header">Join a Reading</h1>
-            <div class="input-group input-group-lg">
-              <input id="projectCodeInput" name="ProjectCodeInput" type="text" class="form-control" style="text-align: center;" (keyup.enter)="joinSession(projectCode)" [(ngModel)]="projectCode"  placeholder="🔑 Code" aria-describedby="add-project-code" />
-              <span class="input-group-btn">
-                <button class="btn btn-primary" [class.loading]="joinLoading" type="button" (click)="joinSession(projectCode)" id="buttonJoinProject" name="Join" href="#">Go!</button>
-              </span>
-            </div>
-        
-            <div class="demo-copy" (click)="projectCode = 'd3m0'">
-                <span>No code? Try this:&nbsp;</span>
-                <pre>d3m0</pre>
-            </div>
-            <!--<input type="text" id="projectCodeInput" class="big-field lowercase-field on-white" placeholder="⚡️ Code" />-->
-            <!--<p class="center">Join a project without an account</p>-->
-            <div id="msgInvalidCode" *ngIf="errorObject.invalidCode" [innerHtml]="errorObject.invalidCode | emojione" class="alert alert-danger"></div>
+            <h1 class="center on-dark join-header" style="margin-bottom: 16px;">Make your readings engaging</h1>
+            <h1 class="center on-dark join-header">See student thoughts live</h1>
+            <h2 class="demo-copy">Try our demo reading <a class="link" href="/project/d3m0"><pre>here</pre></a></h2>
           </div>
         </div>
       </div>

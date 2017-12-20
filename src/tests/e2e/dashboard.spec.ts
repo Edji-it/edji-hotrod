@@ -68,7 +68,7 @@ describe('Dashboard Page', () => {
             // form handling
             dashboard.projectCodeInput.sendKeys(login.validProjectCode);
             browser.wait(EC.elementToBeClickable(dashboard.projectJoinButton), 5000, "project code input was never clickable");
-            dashboard.projectJoinButton.submit();
+            dashboard.projectJoinButton.click();
 
             // verification
             browser.wait(EC.urlContains("project"), 5000, "entering a project code did not bring me to a project");

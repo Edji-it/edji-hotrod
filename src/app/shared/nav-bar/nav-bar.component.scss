@@ -473,3 +473,17 @@ div.sliding-pane.from-left.slide-in {
 .project-code__text {
 	cursor: pointer;
 }
+
+.nav__join-code {
+	max-height: 60%;
+	margin-top: .75em;
+	margin-right: .5em;
+	float: right;
+}
+
+.nav__join-code--under {
+	max-height: 60%;
+	margin-top: .75em;
+	margin-right: .5em;
+	margin-bottom: .5em;
+}

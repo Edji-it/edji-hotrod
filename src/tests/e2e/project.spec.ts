@@ -254,6 +254,8 @@ describe('Project Page', () => {
             browser.wait(EC.elementToBeClickable(project.addReplyBtn), 5000, "never found the add reply comment button");
             project.addReplyBtn.click();
 
+            // Wait 5 seconds for the discussions pane to open
+            browser.wait(EC.visibilityOf(project.discussionsPane), 5000, "discussions pane never opened");
             // Wait 5 seconds for the add text reply button to become clickable and Click on the add text reply button
             browser.wait(EC.elementToBeClickable(project.addTextReplyBtn), 5000, "never found the add text reply comment button");
             
