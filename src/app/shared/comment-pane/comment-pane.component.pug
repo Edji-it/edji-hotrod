@@ -5,7 +5,7 @@
         .header-wrap
           button.close.stats-close-btn.btn-icon--round((click)="dismissCommentPane()", type="button")
             span(aria-hidden="true") ×
-          h4.pt-1 Comments on Line
+          p.pt-1 Comments on Line
   .comment-container.container-fluid.pb-4(
     [ngClass]="[ _comments.activeComment.active && _comments.activeComment.type=='emoji' ? 'commentOverflow-eKey' : '' ]"
   )
