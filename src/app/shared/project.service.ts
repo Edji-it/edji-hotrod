@@ -53,11 +53,10 @@ export class ProjectService {
     public answersById: Observable<any> = this.answersByIdSubject.asObservable()
 
     /**
-     *  Mobile handling of comments
-     *      - Line Number Counter Array
-     *      - Comment Counter by Line Array
+     *  Comments by Position
+     *  - position = lineY of a comment
+     *  - Comments are indexed by their "lineY" value
      */
-    public lineNumberArray: any[] = []
     public commentByPosSource: any[][] = []
     private commentByPosSubject: BehaviorSubject<any> = new BehaviorSubject<any>(this.commentByPosSource)
     public commentByPos: Observable<any> = this.commentByPosSubject.asObservable()
@@ -65,11 +64,6 @@ export class ProjectService {
     // Broadcast closing the comment pane
     public commentPaneStateSubj: Subject<boolean> = new Subject<boolean>()
     public commentPaneState: Observable<boolean> = this.commentPaneStateSubj.asObservable()
-
-    // Tell comments to re-evaluate their y position
-    // use _project.refreshLineCountSubj.next() from any component
-    public refreshLineCountSubj: Subject<any> = new Subject<any>()
-    public refreshLineCount: Observable<any> = this.refreshLineCountSubj.asObservable()
 
     constructor(
         private http: Http, 
@@ -512,7 +506,7 @@ export class ProjectService {
                     }
                 }
 
-                this.getCommentsByLine()
+                this.buildCommentsByPos()
                 console.log(url)
                 return data
             })
@@ -604,7 +598,11 @@ export class ProjectService {
         ) //this.http.put
     } // public addUserToProject(projectId: string): Observable<any>
 
-    public getCommentsByLine(): void {
+    /**
+     * Generates the "commentByPos" array, and pushes out to Subscribers
+     * - Uses lineY values on the comments as the "position" value
+     */
+    public buildCommentsByPos(): void {
         // Re-initialize the comment by position array
         this.commentByPosSource = []
         // Copy then reverse the array
@@ -614,32 +612,14 @@ export class ProjectService {
         for (let i = 0; i < len2; i++) {
             let comment = commentsArray[i]
             if (comment && !comment.reply_to && !comment.questionId && comment.lineY) {
+                // lineY is determined by each individual CommentComponent
                 let lineY = comment.lineY
-                
-                // If the comment is not on an image
-                // - If the comment is on an image (else condition)
-                // if (typeof(this.lineNumberArray[comment.start][1])=='undefined') {
-                    if (typeof(this.commentByPosSource[lineY])=='undefined') {
-                        this.commentByPosSource[lineY] = [comment]
-                    } else {
-                        // Push a comment on the line number
-                        this.commentByPosSource[lineY].push(comment)
-                    }
-                // } else {
-                //     // Get the image position based on y location
-                //     let imagePos = comment.imagePos
-                //     // Initialize the array position set for the image if it isn't already initialized
-                //     // if (typeof(this.commentByPosSource[lineNbr])=='undefined') {
-                //     //     this.commentByPosSource[lineNbr] = []
-                //     // }
-                //     // Initialize an array for the image position if it isn't already initialized
-                //     if (typeof(this.commentByPosSource[lineNbr][imagePos])=='undefined') {
-                //         this.commentByPosSource[lineNbr][imagePos] = [comment]
-                //     } else {
-                //         // Push a comment to the position on the image
-                //         this.commentByPosSource[lineNbr][imagePos].push(comment)
-                //     }
-                // }
+                // Push the comment into commentByPos based on the lineY number
+                if (typeof(this.commentByPosSource[lineY])=='undefined') {
+                    this.commentByPosSource[lineY] = [comment]
+                } else {
+                    this.commentByPosSource[lineY].push(comment)
+                }
             }
         }
         this.commentByPosSubject.next(this.commentByPosSource)

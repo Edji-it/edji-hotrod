@@ -1,7 +1,5 @@
 import { Subscription } from 'rxjs/Rx';
-import { CommentStmt } from '@angular/compiler/src/output/output_ast'
 import {
-    AfterViewInit,
     Component,
     ElementRef,
     EventEmitter,
@@ -25,7 +23,7 @@ import { EdjiComment, CommentPermissions, EdjiQuestion } from './../../shared/da
   templateUrl: './comment.component.pug',
   styleUrls: ['./comment.component.scss']
 })
-export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
+export class CommentComponent implements OnInit, OnDestroy {
 
   /*
   Front end implementation of a comment.
@@ -139,16 +137,6 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
         console.error(error)
       }
     ))
-    
-    // Subscribe to updates to the comment by line number position array
-    this.subscriptions.push( this._projects.refreshLineCount.subscribe(
-      () => {
-        this.setLineY()
-      },
-      (error) => {
-        console.error(error)
-      }
-    ))
 
     // Subscribe to updates from that project once we're subscribed to the reading
     this.subscriptions.push( this._projects.currentProject.subscribe(
@@ -187,10 +175,20 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
     // }, true);
   }
 
-  ngAfterViewInit() {
-    this.setLineY()
+  /**
+   * Get nearest baseline as integer
+   * @param vYalue: number The y position in pixels
+   * @returns number Nearest baseline Y value
+   */
+  private nearestLine(yValue: number) : number {
+    return yValue + 16 - yValue%32
   }
 
+  /**
+   * Calculates lineY and imageY values for rendering
+   * - lineY is required by commentByPos in ProjectService
+   * - imageY provides consistent and lighter comment positioning on images
+   */
   setLineY() {
     let firstWord = document.querySelector('.w[index="1"]')
     let commentWord = document.querySelector( '.w[index="'+this.comment.start+'"]')
@@ -202,18 +200,23 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
       // This will need to re-decorate on resize
       if (this.comment.loc && this.comment.loc.y && this.comment.text === "") {
           let imageTop: number = commentImage.getBoundingClientRect().top
-
           let imageHeight = commentImage.clientHeight
-          let lineY = (this.comment.loc.y/100) * imageHeight
-          lineY = Math.round( imageTop + lineY - firstWordTop )
-          this.comment.lineY = lineY + 16 - (lineY)%32
+          // Get nearest baseline (Y) of comment within image
+          let imageY = (this.comment.loc.y/100) * imageHeight
+          this.comment.imageY = imageY = this.nearestLine(imageY)
+
+          // Get image offset for Line Y value
+          let imageOffset = imageTop - firstWordTop 
+          imageOffset = this.nearestLine(imageOffset)
+          this.comment.lineY = imageY + imageOffset
       } else {
           // Math.round(allthis.Comments[i].nativeElement.getBoundingClientRect().bottom - firstWordTop)
           let wordY = commentWord.getBoundingClientRect().bottom
-          wordY = Math.round(wordY - firstWordTop)
-          this.comment.lineY = wordY + 16 - (wordY)%32
+          wordY = wordY - firstWordTop
+          this.comment.lineY = this.nearestLine(wordY)
       }
     } else {
+      console.log("Looking for y position of comment not yet rendered...")
       setTimeout(()=> {
         this.setLineY()
       }, 1000)
@@ -320,7 +323,6 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
       })
       .catch(error => { 
         this.angulartics.eventTrack.next({ action: comment.type + 'updateAnswer', properties: { category: 'heroFeature', label: 'failure' }})
-
         console.log(error)
       })
     }
@@ -427,14 +429,12 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  getIconNumber(comment): void {
-    if (!comment.reply_to && !comment.questionId) {
-      this.lineIconNum = this._projects.lineNumberArray[comment.start]
-      // this.iconNum = this._projects.commentByPosSource[this.lineIconNum].length
+  getLineCount(): number {
+    if (this.comment.lineY) {
+      let commentsOnLine = this._projects.commentByPosSource[this.comment.lineY]
+      return commentsOnLine && commentsOnLine.length
+    } else {
+      return 1
     }
-  }
-
-  getComments(comment): void {
-    // console.log(this._projects.commentByPosSource[this._projects.lineNumberArray[comment.start]])
   }
 }

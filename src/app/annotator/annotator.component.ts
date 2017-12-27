@@ -179,7 +179,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             (project) => {
                 if (project) {
                     this.project = project
-                    this.getLineCount()
+                    this.setLinePositions()
                     // Check if audio is supported
                     if (this.project.types.indexOf('audio') > -1 && !this._audio.isSupported()) {
                         this.audioSupportError = true
@@ -279,13 +279,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
        
         // Line counts need to be re-rendered when text reflows
         window.onresize = () => {
-            // this.updateAllLineCounts()
-            this._projects.refreshLineCountSubj.next()
             this.updateImageHeights()
-            // gAHAHHH
-            setTimeout(() => {
-                this.getLineCount()
-            }, 1500) 
+            this.setLinePositions()
         }
 
         // Only supported by modern browsers, but very reliable in those cases
@@ -570,7 +565,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                     comment.new = true // this is basically to tell our test cases which comment was just made
                     this.inactivateComment()
                     this.commentsByIndexAdd(comment, start)
-                    this.getLineCount()
                 } else {
                     console.warn('Didn\'t get a comment back from server!')
                 }
@@ -613,7 +607,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             }
         }
         // this.updateAllLineCounts()
-        this.getLineCount()
+        this.setLinePositions()
         this._projects.commentStats.addCommentToStats(commentPointer, 1)
     }
 
@@ -647,7 +641,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             }
         }
         // Update line counts
-        this.getLineCount()
+        this.setLinePositions()
     }
 
      /**
@@ -956,13 +950,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Magically snap the row for image comments
-     */
-    private getClosestRowY(yValue: number) : number {
-        return yValue + 16 - (yValue)%32
-    }
-
-    /**
      * Decides if the Emoji Keyboard is active
      */
     private isEmojiKeyboardActive() : boolean {
@@ -985,114 +972,41 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     }
     
     /**
-     * getLineCount gives us the number of lines in the project
+     * setLinePositions gives us the number of lines in the project
      * 
      * If the height of the word element does not match the one before it, this counts as a new line
      * We check this every time the comment pane is open in case the user adjusts screen width
      */
-    getLineCount(): void {
-        // console.log("GET LINE COUNT")
-        // Get all words and put them in to an array
-        // let wordElements = this.wordEls ? this.wordEls.toArray() : []
-        let allComments = this.project.comments
-
+    setLinePositions(): void {
+        if (typeof(this.commentComponents) == 'undefined') {
+            setTimeout(()=>{
+                this.setLinePositions()
+            }, 500)
+            return
+        }
+        // Let's do this!
+        let allComments = this.commentComponents.toArray()
         // Only run this if the words are rendered and if it isn't already running
         if (!this.lineNumRunning && allComments.length > 0) {
             this.lineNumRunning = true
-
-            // Re-initialize the line number array
-            this._projects.lineNumberArray = []
-            var lineNum = 1
-
-            let elPosBefore, elPosAfter
-            // Loop through each word element to store the line number of each span element
-            let len: number = allComments.length
-            // let firstWordTop: number = allComments[0].nativeElement.getBoundingClientRect().bottom
-            // let elPosPrior = 0
             
+            // Loop through each word element and tell comments to update line number
+            let len: number = allComments.length
             for (let i = 0; i < len; i++) {
-                let comment = allComments[i]
-                // Increment line counts
-                if (this._projects.lineNumberArray[comment['lineY']]) {
-                    this._projects.lineNumberArray[comment['lineY']]++
-                } else {
-                     this._projects.lineNumberArray[comment['lineY']] = 1
-                }
+                let commentComp = allComments[i]
+                // Tell comments to update lineY value
+                commentComp.setLineY()
             }
             // Set up comments by line for Comment Pane
-            this._projects.getCommentsByLine()
-        }
-        // Run a timer for the get linecount function until the words are rendered
-        let timer = setTimeout(() => {
-            this.getLineCount()
-        }, 2000)
-        // This will clear the timer if it runs when words are rendered so we don't bog the browser down
-        // if (this.lineNumRunning) {
-        //     clearTimeout(timer)
-        // }
-        // Set the check variable to false if it ran so we can run it later when needed
-        this.lineNumRunning = false
-    }
-
-    private getImageLines(arrayPos: number, lineNum: number) {
-        // let commentElements = this.commentComponents ? this.commentComponents.toArray() : []
-        let commentElements = this.commentsByIndex ? this.commentsByIndex[arrayPos] : []
-        let coPosPrior = 0
-        let coPosAfter
-        let arrIndex = 0
-        var written = false
-
-        if (commentElements && commentElements.length > 0) {
-            let len = commentElements.length
-
-            // Loop through the comment elements
-            for (let i = 0; i  < len; i++) {
-                // If the comment start position is the image (means the comment was made on an image)
-                if (commentElements[i].start===arrayPos) {
-                    // Get the vertical position of the comment on the comment component
-                    console.log(commentElements[i])
-                    let imageHeight = document.getElementById('readingImage' + commentElements[i].start).clientHeight
-                    coPosAfter = (commentElements[i].loc.y/100) * imageHeight
-                    // Push another array if we have an image 
-                    // - keep indexing up if this additional array is in place (else condition)
-                    if (typeof(this._projects.lineNumberArray[arrayPos][1])=='undefined') {
-                        this._projects.lineNumberArray[arrayPos][1] = [coPosAfter]
-                    } else {
-                        let len2 = this._projects.lineNumberArray[arrayPos][1].length
-                        // Loop through the image positions to look for duplicates
-                        // - also, make sure the y positioning is in order
-                        for (let j = 0; j  < len2; j++) {
-                            arrIndex = j
-                            // If the written value is the same as the current value, let's skip it
-                            if (this._projects.lineNumberArray[arrayPos][1][j] == coPosAfter) {
-                                // Mark it as already written to the array
-                                written = true
-                                break
-                            // If the written value is larger than the current comment y value, let's splice it in before 
-                            } else if (this._projects.lineNumberArray[arrayPos][1][j] > coPosAfter) {
-                                this._projects.lineNumberArray[arrayPos][1].splice(arrIndex,0,coPosAfter)
-                                // Mark it as already written to the array
-                                written = true
-                                break
-                            }
-                        }
-                        // If it is not already marked as written, that means the value is larger than all other written values
-                        // - in which case we'll need to add it to the end of the array
-                        if (!written) {
-                            this._projects.lineNumberArray[arrayPos][1].push(coPosAfter)
-                        }
-                        // Reset the critical loop variables
-                        arrIndex = 0
-                        written = false
-                    }
-                }
-            }
+            this._projects.buildCommentsByPos()
+            // Done!
+            this.lineNumRunning = false
         }
     }
 
     private toggleCommentPane(visible?: boolean, comment?): void {
         // Make sure the line counts are up-to-date
-        this.getLineCount()
+        this.setLinePositions()
 
         // Set the input comment to the comment pane if it is not currently open
         if (!this.commentPane) {

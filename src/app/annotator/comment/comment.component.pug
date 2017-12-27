@@ -144,10 +144,7 @@ div((tap)='toggleCPane(comment)')
     .comment__button--mobile(
         [ngClass]="[ reply ? 'icon-hidden' : 'hidden-lg-up', indicatesPane ? 'active' : '' ]"
     )
-    .comment__count--mobile {{ _projects.lineNumberArray[comment.lineY] }}
-    //- .comment__count--mobile(
-    //-     *ngIf="_projects.lineNumberArray && _projects.lineNumberArray[comment.lineY] && comment.imagePos"
-    //- ) {{ commentByPos[_projects.lineNumberArray[comment.lineY]] ? commentByPos[_projects.lineNumberArray[comment.lineY]].length : '' }}
+    .comment__count--mobile {{ getLineCount() }}
 hot-del-comment(
     *ngIf="showDeleteModal",
     [comment]="comment",

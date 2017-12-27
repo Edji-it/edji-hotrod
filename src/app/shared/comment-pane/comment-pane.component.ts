@@ -28,7 +28,6 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
   // Subscriptions and related
   private subscriptions: Subscription[] = []
   private commentByPos: any[] = []
-  private lineNumArray: any[] = []
 
   // Comment Pane Component Inputs
   @Input() comment: EdjiComment
@@ -69,7 +68,6 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
       this._projects.commentByPos.subscribe(
         (commentByPos) => {
           this.commentByPos = commentByPos
-          this.lineNumArray = this._projects.lineNumberArray
         },
         (error) => {
           console.error(error)
@@ -127,7 +125,7 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
       let comments: any[] = Array.from(document.querySelectorAll('.comment-container edji-comment'))
       let len
       let commentIndex = 0
-      let paneComments = this.commentByPos[this.lineNumArray[this.comment['lineY']]]
+      let paneComments = this.commentByPos[this.comment['lineY']]
 
       // Get the position of the active comment in the list of comments in comment pane
       if (this.comment.imagePos) {
