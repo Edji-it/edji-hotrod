@@ -5,15 +5,7 @@
         .header-wrap
           button.close.stats-close-btn.btn-icon--round((click)="dismissCommentPane()", type="button")
             span(aria-hidden="true") ×
-          p Line 
-          //- {{ lineNumArray[comment.lineY]}}
-          div
-            //- h4(
-            //-   *ngIf="lineNumArray[comment.lineY] > 1 || lineNumArray[comment.lineY] === 0"
-            //- ) {{ lineNumArray[comment.lineY] }} Comments
-            //- h4(
-            //-   *ngIf="lineNumArray[comment.lineY]] === 1"
-            //- ) 1 Comment
+          h4.pt-1 Comments on Line
   .comment-container.container-fluid.pb-4(
     [ngClass]="[ _comments.activeComment.active && _comments.activeComment.type=='emoji' ? 'commentOverflow-eKey' : '' ]"
   )
