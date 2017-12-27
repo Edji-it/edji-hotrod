@@ -50,7 +50,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     private focusArray          : boolean[] = []
     
     // Line Count
-    private lineCountArray: any[][] = [] // 2D ARRAY
     private lineCountRunning: boolean = false
     private lineNumRunning: boolean
     private commentPane: boolean
@@ -400,40 +399,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // }, 500)
     }
 
-    // updateAllLineCounts(): void {
-        // if (!this.lineCountRunning) {
-        //     this.lineCountArray = []
-        //     this.lineCountRunning = true
-        //     if (this.commentComponents) {
-        //         let commentsArray = this.commentComponents.toArray()
-        //         for (let i = 0; i < commentsArray.length; i++) {
-        //             let commentComp = commentsArray[i]
-        //             let yPos = commentComp.getVerticalPosition()
-
-        //             // See if comment should be already expanded
-        //             if (this.lineExpanded == yPos) {
-        //                 commentComp.expanded = true
-        //             }
-                    
-        //             if (yPos > 0) { // 0 is returned as the default
-        //                 if (this.lineCountArray[yPos]) {
-        //                     this.lineCountArray[yPos].push(commentComp)
-        //                 } else {
-        //                     this.lineCountArray[yPos] = [commentComp]
-        //                 }
-        //                 commentComp.lineCount = this.lineCountArray[yPos].length
-        //             }
-        //         }
-        //     } 
-
-        //     // Sometimes comments render late
-        //     setTimeout(() => {
-        //         this.updateAllLineCounts()
-        //     }, 2000)
-        //     this.lineCountRunning = false
-        // }
-    // }
-
     updateImageHeights(): void {
         let images: any[] = Array.from(document.querySelectorAll('#annotatorContent .img-wrap img'))
         for (let i = 0; i < images.length; i++) {
@@ -443,23 +408,23 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
     /** 
      * Fired by Output from the Comment Component
-     * - References lineCountArray
+     * - References _projects.commentByPos
      */
-    expandLine(yPosToExpand: number, forceSet ?: boolean) {
+    expandLine(lineY: number, forceSet ?: boolean) {
+        let commentsByPos = this._projects.commentByPosSource
         // If collapsing a line, make sure to deactivate all comments
         if (forceSet === false) {
             this._comments.deactivateAllComments()
             this.lineExpanded = 0
         }
-        if (this.lineCountArray[yPosToExpand]) {
-            this.lineCountArray[yPosToExpand]
+        if (commentsByPos[lineY]) {
             // Keep track of which line is expanded
             if (forceSet === true) {
-                this.lineExpanded = yPosToExpand
+                this.lineExpanded = lineY
             }
             // Loop through comments on line and mark comments as expand
-            for (let i = 0; i < this.lineCountArray[yPosToExpand].length; i++) {
-                let comment = this.lineCountArray[yPosToExpand][i]
+            for (let i = 0; i < commentsByPos[lineY].length; i++) {
+                let comment = commentsByPos[lineY][i]
                 if (typeof(forceSet) !== 'undefined') {
                     comment.expanded = forceSet
                 } else {
@@ -467,6 +432,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 }
             }
         }
+        console.log(commentsByPos, commentsByPos[lineY])
     }
 
     /**

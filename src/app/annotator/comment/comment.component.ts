@@ -41,28 +41,23 @@ export class CommentComponent implements OnInit, OnDestroy {
   */
 
   public lineCount: number = 1
-  public expanded: boolean = false
-
-  private yPos: number = 0
+  public indexOnLine: number = 1
+  
   private justSaved: boolean = false
   private isLoading: boolean = false
   // Hold the current scroll position for the iOS fix
   private currentScroll: number
   // Is fully visible, focused, and editable
   private active = false
-  // // Is fully visible, focused, but not editable
-  // private preview = false
   private reRecordAudio = false
   private showDeleteModal: boolean = false
   private user: any
   private subscriptions: Subscription[] = []
   private repliesById: any = {}
-  // private commentByPos: any = []
+  private commentsByPos: any = []
   private project: any
   private commentPane: boolean
   private indicatesPane: boolean
-  private lineIconNum: number = 0
-  private iconNum: number = 0
 
   @Input() public comment: EdjiComment
   @Input() private readOnly: boolean = false
@@ -116,9 +111,6 @@ export class CommentComponent implements OnInit, OnDestroy {
       if (this.comment.lineCount) {
         this.lineCount = this.comment.lineCount
       } 
-      if (this.comment.expanded) {
-        this.expanded = this.comment.expanded
-      }
     }
 
     /** Set the current user every time it changes */
@@ -170,9 +162,12 @@ export class CommentComponent implements OnInit, OnDestroy {
       }
     ))
 
-    // window.addEventListener('resize', () => {
-    //     this.setLineY()
-    // }, true);
+    this.subscriptions.push(this._projects.commentByPos.subscribe(
+      (commentsByPos) => {
+        this.commentsByPos = commentsByPos
+        this.updateLineCount()
+      }
+    ))
   }
 
   /**
@@ -383,29 +378,17 @@ export class CommentComponent implements OnInit, OnDestroy {
   } // deleteComment(comment: any) : void
 
   /**
-   * Returns comment block's y position
-   * - Used for collapse/expand multiple comments
-   */
-  public getVerticalPosition(): number {
-    // The parentNode offsetTop addition fixes the occasional issue where diferrent images have comments registering on the same line
-    this.yPos = Math.round(this.el.nativeElement.offsetTop) + Math.round(this.el.nativeElement.parentNode.offsetTop)
-    // Certain styles can cause the position to vary by up to 5 pixels, so we need to round further
-    this.yPos = Math.round(this.yPos/15) * 15
-    return this.yPos
-  } // public getVerticalPosition(): number
-
-  /**
    * Collapse all stacked comments on the same line
    */
   collapse(): void {
-    this.collapseLine.emit(this.yPos)
+    this.collapseLine.emit(this.comment.lineY)
   }
 
   /**
    * Expand all stacked comments on the same line
    */
   expand(): void {
-    this.expandLine.emit(this.yPos)
+    this.expandLine.emit(this.comment.lineY)
   }
 
   ngOnDestroy() {
@@ -429,12 +412,17 @@ export class CommentComponent implements OnInit, OnDestroy {
     }
   }
 
-  getLineCount(): number {
+  updateLineCount(): void {
     if (this.comment.lineY) {
-      let commentsOnLine = this._projects.commentByPosSource[this.comment.lineY]
-      return commentsOnLine && commentsOnLine.length
+      let commentsOnLine = this.commentsByPos[this.comment.lineY]
+      this.lineCount = commentsOnLine && commentsOnLine.length
+      for (let i = 0; i < this.lineCount; i++){
+        if (commentsOnLine[i]._id == this.comment._id) {
+          this.indexOnLine =  this.lineCount - i 
+        }
+      }
     } else {
-      return 1
+      this.lineCount = 1
     }
   }
 }
