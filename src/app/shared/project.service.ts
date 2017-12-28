@@ -206,7 +206,6 @@ export class ProjectService {
      * @param arr the array to which the comment will be added
      */
     private addCommentToArray(comment: EdjiComment, project: Project, user: User, arr: EdjiComment[][]): EdjiComment[][] {
-        console.log("Add comment to array")
         comment.project_id = project._id
 
         // get the user help decorate the comment
@@ -507,7 +506,6 @@ export class ProjectService {
                 }
 
                 this.buildCommentsByPos()
-                console.log(url)
                 return data
             })
             .toPromise()

@@ -432,7 +432,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 }
             }
         }
-        console.log(commentsByPos, commentsByPos[lineY])
     }
 
     /**
