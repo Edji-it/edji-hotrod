@@ -261,7 +261,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.subscriptions.push(
             this._socket.heatVisionUpdates.subscribe((heatToggle) => {
                 this.project.heat_vision = heatToggle.heatVision.all
-                // this.updateAllLineCounts()
+                this.setLinePositions()
             })
         )
 
@@ -269,12 +269,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // this.updateAllLineCounts()
         this.updateImageHeights()
 
-        // Hacky McHackFace since comments render later (especially lots of comments)
-        // for (var i = 0; i <= 3; i++) {
-        //      setTimeout(() => {
-        //         this.updateAllLineCounts()
-        //      }, ( 1000*i - 1000) )
-        // }
+        // Hacky McHackFace since images render later, and need to be rendered to determine comment position
+        setTimeout(() => {
+            this.setLinePositions()
+        }, 3000)
        
         // Line counts need to be re-rendered when text reflows
         window.onresize = () => {
@@ -288,9 +286,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 this.showCommentOptions({ name: 'selectionchange', target: document })
             }
         })
-
-        // Fallback for tooltip: Continuous text selection check
-        this.loopCheckTextSelection()
     } // ngOnInit
 
     ngOnDestroy() {
@@ -390,13 +385,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             this.optionsShow = false
             this.imageHotspotPlaceholder.preview = false
         }
-    }
-
-    loopCheckTextSelection(): void {
-        // setTimeout(() => {
-        //     this.showCommentOptions({ name: 'timeout', target: document })
-        //     this.loopCheckTextSelection()
-        // }, 500)
     }
 
     updateImageHeights(): void {
