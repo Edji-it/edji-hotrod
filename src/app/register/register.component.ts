@@ -80,14 +80,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
       username: [null, Validators.required],
       fullname: [null, Validators.required],
       email: [null, Validators.compose([Validators.required, this.emailValidator])],
-      checkboxes: this._fb.group({
-        student: true,
-        teacher: null,
-        business: null,
-        personal: null,
-        robot: null,
-        other: null
-      }, { validator: this.checkboxValidator }),
       password: [null, Validators.compose([Validators.required, Validators.minLength(6)])],
       passwordConfirm: [null, Validators.required],
     }, { validator: this.passwordsEqual })
@@ -116,20 +108,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
   private passwordsEqual(group: FormGroup): any {
     return group.get('password').value === group.get('passwordConfirm').value
       ? null : { mismatch: true }
-  }
-
-  /**
-   * Validates that at least one checkbox is checked, and assigns error if not
-   * @returns error to FormGroup called 'identity'
-   */
-  private checkboxValidator(group: FormGroup): any {
-    let valid = false
-    for(let control in group.controls) {
-      if (group.controls[control].value === true) {
-        valid = true
-      }
-    }
-    return valid ? null : { identity: true }
   }
 
   /** Validates email against the same regex used on the server
