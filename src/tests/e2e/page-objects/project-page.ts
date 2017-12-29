@@ -24,7 +24,7 @@ export class Project implements PageObjectInterface {
   public dismissReplyPanelBtn = element(by.id('discussionClosePanel'));
   public discussionPanel = element(by.css('div.sliding-pane.from-left.replies.slide-in'));
   public commentSave = element(by.css('.comment__save'));
-  public commentDelete = element(by.css('.comment.new button.inline-delete'));
+  public commentDelete = element(by.css('button.inline-delete'));
   public emojiCommentDelete = element(by.css('button.inline-delete'));
   public replyDelete = element(by.css('button.inline-delete'));
   public discussionsPane = element(by.css('.replies.slide-in'));
@@ -42,6 +42,7 @@ export class Project implements PageObjectInterface {
   public getPage(): void {
     // First we clear out the url (sometimes page is preserved if the url stays the same)
     browser.get("/#");
+    browser.refresh();
     // Load a good sample Project with Emoji and Text commenting (owned by teach/teach)
     browser.get("/#/project/test");
   }
