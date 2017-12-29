@@ -25,7 +25,7 @@ export class GuestLoginForm {
 
     it("should show an error if the user enters a vulgar name", () => {
       // form handling
-      this.guestNameInput.sendKeys("shit");
+      this.guestNameInput.sendKeys("fuck");
       browser.wait(this.EC.elementToBeClickable(this.guestLoginButton), 5000, "guest login button never became clickable after entering text");
       this.guestLoginButton.submit();
 
