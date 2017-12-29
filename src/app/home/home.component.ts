@@ -69,7 +69,6 @@ export class HomeComponent implements OnInit, OnDestroy {
    * @param code The project's short code
    */
   private joinSession(code: string): void {
-    console.log("first call", code);
     this.joinLoading = true;
     this.angulartics.eventTrack.next({ action: 'enterLightningCode', properties: { category: 'joinProject', label: 'attempt' }});
     this._project.validateProject(code)
