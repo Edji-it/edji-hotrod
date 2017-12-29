@@ -113,13 +113,13 @@
                     (commentActivation)="setActiveCommentByIndex($event, i, ci)",
                     (commentDeleted)="removeComment(comment, i, ci)",
                     (commentDeactivate)="unfocusHighlight($event.start, $event.end)",
-                    (commentUpdated)="updateAllLineCounts()",
+                    (commentUpdated)="setLinePositions()",
                     (expandLine)="expandLine($event, true)",
                     (collapseLine)="expandLine($event, false)",
                     (toggleCommentPane)="toggleCommentPane($event, comment)",
                     (commentReply)="discReplyFire(comment)",
                     [class.imageComment]="comment['loc']",
-                    [style.top]="comment['loc'] ? getClosestRowY(comment['loc']['y']/100 * imageHeight[i]) + 'px' : '0px'"
+                    [style.top]="comment['loc'] ? comment.imageY + 'px' : '0px'"
                 ) <!-- edji-comment -->
                 //- Link Words: If a word is actually a link, handle it differently
                 a.w(
@@ -215,6 +215,6 @@ comment-pane.hidden-lg-up(
     [comment]="selectedComment",
     (hideComment)="toggleCommentPane(false)",
     (commentActivationMobile)="setActiveCommentByIndex($event.activate, $event.wi, $event.ci, $event.activatedComment)",
-    (commentUpdated)="updateAllLineCounts()",
+    (commentUpdated)="setLinePositions()",
     (commentReply)="discReplyFire($event)"
 )
