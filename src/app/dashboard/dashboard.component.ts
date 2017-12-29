@@ -86,8 +86,7 @@ export class DashboardComponent implements OnInit {
   private userProfileIncomplete(): boolean {
     // incomplete initialized as false and passed through filters until 
     let incomplete: boolean = false
-    console.log(this.currentUser)
-    if (this.currentUser.identities.length < 1) {
+    if (!this.currentUser.identities || this.currentUser.identities.length < 1) {
       incomplete = true
     }
     return incomplete
