@@ -8,7 +8,7 @@ nav-bar
       h4.mb-2.font-weight-normal Your Edji adventure is about to begin!
       p(*ngIf="readingToAdd") Your reading will be ready to edit after you sign up!
       p(*ngIf="projectToAdd") Your reading will be on the dashboard after you sign up!
-      div.text-center.mt-4
+      div.text-center.mt-4(*ngIf="route.snapshot.queryParams.switch == 'google'")
         h4 Register with Google
         hot-google-button
         hr
