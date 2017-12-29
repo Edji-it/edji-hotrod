@@ -1,0 +1,71 @@
+nav-bar
+.container-fluid
+  .row.navy-gradient.has-sparks
+    .sparks
+    .col-sm-3
+    .col-sm-6.col-pad.on-dark
+      h1.on-dark(style="margin-bottom:0.5em;", [innerHtml]="'Welcome :tada:' | emojione")
+      h4(style="margin-bottom:2em;") Your Edji adventure is about to begin!
+      p(*ngIf="readingToAdd") Your reading will be ready to edit after you sign up!
+      p(*ngIf="projectToAdd") Your reading will be on the dashboard after you sign up!
+      form#registerForm([formGroup]="registerForm", (ngSubmit)="register(registerForm.value)")
+        .form-group
+          label(for="usernameInput") Username
+          input#usernameInput(type="text", [formControl]="registerForm.controls['username']", tabindex="0", [placeholder]="userCopy.username")
+          div#msgUsernameRequired.alert.alert-info(*ngIf="registerForm.controls['username'].hasError('required')") Enter a unique username! It should not contain spaces.
+        .form-group
+          label(for="fullnameInput") Full Name
+          input#fullnameInput(type="text", [formControl]="registerForm.controls['fullname']", tabindex="0", [placeholder]="userCopy.fullname")
+          #msgFullnameRequired.alert.alert-info(*ngIf="registerForm.controls['fullname'].hasError('required')") What should we call you?
+        .form-group
+          label(for="emailInput") Email
+          input#emailInput(type="text", [formControl]="registerForm.controls['email']", tabindex="0", [placeholder]="userCopy.email")
+          #msgEmailRequired.alertalert-info(*ngIf="registerForm.controls['email'].hasError('required')") Make sure the you can recover your password with a valid email!
+          #msgEmailIncorrect.alert.alert-info(*ngIf="registerForm.controls['email'].hasError('emailIncorrect') && registerForm.controls['email'].dirty") We don't think that's an email...
+        .form-group
+          label#accountTypeLabel(for="accountTypeGroup") Account Type (what are the great ways you'll use Edji?)
+          .form-check
+            label.form-check-label
+              input.form-check-input(type="checkbox", [formControl]="registerForm.controls['checkboxes'].controls['student']", value="")
+              div([innerHtml]="checkboxCopy.student | emojione")
+          .form-check
+            label.form-check-label
+              input.form-check-input(type="checkbox", [formControl]="registerForm.controls['checkboxes'].controls['teacher']", value="")
+              div([innerHtml]="checkboxCopy.teacher | emojione")
+          .form-check
+            label.form-check-label
+              input.form-check-input(type="checkbox", [formControl]="registerForm.controls['checkboxes'].controls['business']", value="")
+              div([innerHtml]="checkboxCopy.business | emojione")
+          .form-check
+            label.form-check-label
+              input.form-check-input(type="checkbox", [formControl]="registerForm.controls['checkboxes'].controls['personal']", value="")
+              div([innerHtml]="checkboxCopy.personal | emojione")
+          .form-check
+            label.form-check-label
+              input.form-check-input(type="checkbox", [formControl]="registerForm.controls['checkboxes'].controls['robot']", value="")
+              div([innerHtml]="checkboxCopy.robot | emojione")
+          .form-check
+            label.form-check-label
+              input.form-check-input(type="checkbox", [formControl]="registerForm.controls['checkboxes'].controls['other']", value="")
+              div([innerHtml]="checkboxCopy.other | emojione")
+        .form-group
+          label(for="passwordInput") Password
+          input#passwordInput(type="password", [formControl]="registerForm.controls['password']", tabindex="0", pattern=".{6,}", placeholder="Put a password here!")
+          #msgPasswordRequired.alert.alert-info(*ngIf="registerForm.controls['password'].invalid") Every good account has a password with 6 or more characters
+        .form-group
+          label(for="passwordConfirmInput") Password Confirm
+          input#passwordConfirmInput(type="password", [formControl]="registerForm.controls['passwordConfirm']", tabindex="0", placeholder="Type that password again!")
+          //- <!--<div id="msgPasswordConfirmRequired" *ngIf="registerForm.controls['passwordConfirm'].hasError('required') && registerForm.controls['passwordConfirm'].dirty" class="alert alert-info">After your passwords match, you can Edji!</div>-->
+          #msgMismatch.alert.alert-info(*ngIf="registerForm.hasError('mismatch')") After your passwords match, you can Edji!
+
+        p#termsText.text-center.pb-2 By registering for Edji, you agree to our #[a#registerTermsLink.link--light(href="http://guide.edji.it/index.php/back-to-edji-it/privacy-terms/", target="_blank") Terms of Use].
+
+        //- <!-- Error Messages -->
+        #msgDuplicateUsername.alert.alert-info(*ngIf="errorObject.duplicateUsername", [innerHtml]=" '<strong>Wow!</strong> :grin: Somebody else liked your username so much that they already took it.' | emojione")
+        #msgDuplicateEmail.alert.alert-info(*ngIf="errorObject.duplicateEmail", [innerHtml]=" '<strong>Wow!</strong> :grin: Looks like that email is already signed up! Would you mind choosing another one?' | emojione")
+        #msgBadName.alert.alert-warn(*ngIf="errorObject.badName", [innerHtml]="errorObject.badName | emojione")
+        #msgBadUsername.alert.alert-warning(*ngIf="errorObject.badUsername", [innerHtml]="errorObject.badUsername | emojione")
+        #msgServerError.alert.alert-danger(*ngIf="errorObject.serverError") Oh no! Something went wrong, and we aren't sure exactly what.
+
+        .button__row
+          button#buttonRegister.btn.btn-primary(title="Make sure you've completed all the fields!", type="submit", [class.loading]="registerLoading", [disabled]="!registerForm.valid", tabindex="0") Register!
