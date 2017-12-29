@@ -20,34 +20,8 @@ nav-bar
         .form-group
           label(for="emailInput") Email
           input#emailInput(type="text", [formControl]="registerForm.controls['email']", tabindex="0", [placeholder]="userCopy.email")
-          #msgEmailRequired.alertalert-info(*ngIf="registerForm.controls['email'].hasError('required')") Make sure the you can recover your password with a valid email!
+          #msgEmailRequired.alert.alert-info(*ngIf="registerForm.controls['email'].hasError('required')") Make sure the you can recover your password with a valid email!
           #msgEmailIncorrect.alert.alert-info(*ngIf="registerForm.controls['email'].hasError('emailIncorrect') && registerForm.controls['email'].dirty") We don't think that's an email...
-        .form-group
-          label#accountTypeLabel(for="accountTypeGroup") Account Type (what are the great ways you'll use Edji?)
-          .form-check
-            label.form-check-label
-              input.form-check-input(type="checkbox", [formControl]="registerForm.controls['checkboxes'].controls['student']", value="")
-              div([innerHtml]="checkboxCopy.student | emojione")
-          .form-check
-            label.form-check-label
-              input.form-check-input(type="checkbox", [formControl]="registerForm.controls['checkboxes'].controls['teacher']", value="")
-              div([innerHtml]="checkboxCopy.teacher | emojione")
-          .form-check
-            label.form-check-label
-              input.form-check-input(type="checkbox", [formControl]="registerForm.controls['checkboxes'].controls['business']", value="")
-              div([innerHtml]="checkboxCopy.business | emojione")
-          .form-check
-            label.form-check-label
-              input.form-check-input(type="checkbox", [formControl]="registerForm.controls['checkboxes'].controls['personal']", value="")
-              div([innerHtml]="checkboxCopy.personal | emojione")
-          .form-check
-            label.form-check-label
-              input.form-check-input(type="checkbox", [formControl]="registerForm.controls['checkboxes'].controls['robot']", value="")
-              div([innerHtml]="checkboxCopy.robot | emojione")
-          .form-check
-            label.form-check-label
-              input.form-check-input(type="checkbox", [formControl]="registerForm.controls['checkboxes'].controls['other']", value="")
-              div([innerHtml]="checkboxCopy.other | emojione")
         .form-group
           label(for="passwordInput") Password
           input#passwordInput(type="password", [formControl]="registerForm.controls['password']", tabindex="0", pattern=".{6,}", placeholder="Put a password here!")
