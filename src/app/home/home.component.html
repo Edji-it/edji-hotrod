@@ -2,18 +2,22 @@
 <div class="container-fluid">
   <div class="row navy has-sparks">
     <div class="sparks"></div>
-      <div class="col-md-7 promo-panel">
+      <div class="col-md-4 promo-panel">
         <div class="promo-image__wrap">
           <img src="/assets/images/promo-home.svg" />
         </div>
       </div>
-      <div class="col-md-5 col-pad join-panel">
+      <div class="col-md-8 col-pad join-panel">
         <!--Lightning Code Row-->
         <div class="col__center-fix">
           <div class="col__center-content">
-            <h1 class="center on-dark join-header" style="margin-bottom: 16px;">Make your readings engaging</h1>
-            <h1 class="center on-dark join-header">See student thoughts live</h1>
-            <h2 class="demo-copy">Try our demo reading <a class="link" href="/project/d3m0"><pre>here</pre></a></h2>
+            <h1 class="center on-dark join-header">Make your readings engaging</h1>
+            <div class="join-header__divider"></div>
+            <h1 class="center on-dark join-header">See student thoughts <span style="font-weight: 500">live!</span></h1>
+            <!-- <h2 class="demo-copy">Try our demo reading <a class="link" href="/project/d3m0"><pre>here</pre></a></h2> -->
+            <div class="button__row pt-2">
+              <a [routerLink]="['/project/d3m0']" class="btn btn-primary">Try Our Demo Reading</a>
+            </div>
           </div>
         </div>
       </div>
