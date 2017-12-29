@@ -51,6 +51,7 @@
           style="text-align: center;", 
           (keyup.enter)="joinSession(projectCode)", 
           [(ngModel)]="projectCode", 
+          [class.is-invalid]="errorObject.invalidCode"
           placeholder="🔑 Code", 
           aria-describedby="add-project-code")
         span.input-group-btn
@@ -60,6 +61,7 @@
             (click)="joinSession(projectCode)", 
             name="Join", 
             href="#") Go!
+      #projectCodeError.invalid-feedback(*ngIf="errorObject.invalidCode", [innerHtml]="errorObject.invalidCode | emojione")
 
     .nav__btn-wrap
       //- Share button: Desktop
@@ -97,7 +99,8 @@
     input#projectCodeInput.form-control(
       name="ProjectCodeInput", 
       type="text", 
-      style="text-align: center;", 
+      style="text-align: center;",
+      [class.is-invalid]="errorObject.invalidCode",
       (keyup.enter)="joinSession(projectCode)", 
       [(ngModel)]="projectCode", 
       placeholder="🔑 Code", 
@@ -109,5 +112,6 @@
         (click)="joinSession(projectCode)", 
         name="Join", 
         href="#") Go!
+  #projectCodeError.invalid-feedback(*ngIf="errorObject.invalidCode", [innerHtml]="errorObject.invalidCode | emojione")
 
 share-code([showOpenReading]="_route.snapshot.queryParams.readingCodeModal")
