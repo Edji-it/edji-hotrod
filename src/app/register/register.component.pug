@@ -5,9 +5,15 @@ nav-bar
     .col-sm-3
     .col-sm-6.col-pad.on-dark
       h1.on-dark(style="margin-bottom:0.5em;", [innerHtml]="'Welcome :tada:' | emojione")
-      h4(style="margin-bottom:2em;") Your Edji adventure is about to begin!
+      h4.mb-2.font-weight-normal Your Edji adventure is about to begin!
       p(*ngIf="readingToAdd") Your reading will be ready to edit after you sign up!
       p(*ngIf="projectToAdd") Your reading will be on the dashboard after you sign up!
+      div.text-center.mt-4
+        h4 Register with Google
+        hot-google-button
+        hr
+        p(style="margin: -38px auto 10px auto; background: #0f365a; width: 25px; padding-left: 1px;") or
+      h4.text-center Register with a username and password
       form#registerForm([formGroup]="registerForm", (ngSubmit)="register(registerForm.value)")
         .form-group
           label(for="usernameInput") Username
