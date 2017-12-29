@@ -1,0 +1,47 @@
+nav-bar
+.container-fluid
+  .row.navy.has-sparks
+    .sparks
+    .col-md-4.promo-panel
+      .promo-image__wrap
+        img(src='/assets/images/promo-home.svg')
+    .col-md-8.col-pad.join-panel
+      //- Lightning Code Row
+      .col__center-fix
+        .col__center-content
+          h1.center.on-dark.promo-header Make your readings engaging
+          .promo-header__divider
+          h1.center.on-dark.promo-header
+            | See student thoughts 
+            span(style='font-weight: 500') live!
+          .button__row.pt-2
+            a.btn.btn-primary([routerLink]="['/project/demo']") Try Our Demo Reading
+  //- Row below promo
+  .container
+    //- we don't want this content to be fluid, so we give it another container
+    .row.promo-row
+      .col-md-6
+        .col__center-fix
+          .col__center-content.promo-text
+            h1 Highlight to React
+            p
+              | With Edji, a Reading instantly becomes a platform for expression. By highlighting text, different types of comments are at your fingertips.
+      .col-md-6.center
+        img.promo-gif(loop='infinite', src='assets/images/promo-highlight-b.gif')
+    .row.promo-row
+      .col-md-6.center.home_vertical_fix
+        img.promo-gif(loop='infinite', src='assets/images/promo-heatmap.png')
+      .col-md-6
+        .col__center-fix
+          .col__center-content.promo-text
+            h1 Pinpoint with the Heatmap
+            p
+              | In the Teacher View, all comments and highlights overlap so you have an immediate understanding of where your students are in the reading.
+  .row.navy.has-sparks
+    .sparks
+    .col-sm-12
+      .call-to-action
+        h1 Share instantly. Read together. Learn loud.
+        button.btn.btn-primary.btn-lg([routerLink]="['/register']") Get Started
+//- container-fluid
+edji-reset-pass(*ngIf='showPassModal', (closeModal)='showPassModal = !showPassModal')
