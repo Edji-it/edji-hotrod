@@ -175,6 +175,7 @@ describe("Versioning - ", () => {
         browser.wait(EC.elementToBeClickable(dashboard.firstProject), 15000, "reading cards never loaded");
 
         // Expand the past versions
+        browser.wait(EC.elementToBeClickable(element(by.css('[testFindVersionToggle="' + titleUpdate + '"]'))), 5000, "past versions toggle never became clickable");
         element(by.css('[testFindVersionToggle="' + titleUpdate + '"]')).click();
 
         // Verify version 1 of this reading is in the list

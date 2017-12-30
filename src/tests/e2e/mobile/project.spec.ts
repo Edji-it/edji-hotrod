@@ -254,11 +254,16 @@ describe('Project Page', () => {
             browser.wait(EC.elementToBeClickable(project.addReplyBtn), 5000, "never found the add reply comment button");
             project.addReplyBtn.click();
 
+            // Wait 5 seconds for the discussions pane to open
+            browser.wait(EC.visibilityOf(project.discussionsPane), 5000, "discussions pane never opened");
             // Wait 5 seconds for the add text reply button to become clickable and Click on the add text reply button
             browser.wait(EC.elementToBeClickable(project.addTextReplyBtn), 5000, "never found the add text reply comment button");
             
+            // This lil browser sleep trick avoids issues where the add text reply button is intermittently unavailable on load
+            browser.sleep(1000);
             project.addTextReplyBtn.click();
-            browser.sleep(3000);
+            browser.sleep(1000);
+            browser.wait(EC.elementToBeClickable(element(by.css('textarea.text-comment-input'))), 5000, "wait for text reply input to show");
 
             // Add text to the text input field
             // browser.wait(EC.elementToBeClickable(project.textReplyComment), 5000, "couldn't add text to the reply text comment");

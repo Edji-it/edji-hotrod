@@ -53,11 +53,10 @@ export class ProjectService {
     public answersById: Observable<any> = this.answersByIdSubject.asObservable()
 
     /**
-     *  Mobile handling of comments
-     *      - Line Number Counter Array
-     *      - Comment Counter by Line Array
+     *  Comments by Position
+     *  - position = lineY of a comment
+     *  - Comments are indexed by their "lineY" value
      */
-    public lineNumberArray: any[] = []
     public commentByPosSource: any[][] = []
     private commentByPosSubject: BehaviorSubject<any> = new BehaviorSubject<any>(this.commentByPosSource)
     public commentByPos: Observable<any> = this.commentByPosSubject.asObservable()
@@ -213,6 +212,12 @@ export class ProjectService {
         if (comment.user_id === user._id || comment.user_id === this.project.teacher_id) {
             comment.showAvatar = true;
         }
+
+        // if (comment.loc && comment.loc.y && comment.text==="") {
+        //     comment.imagePos = Math.round(comment.loc.y/8)*8
+        // }   
+
+        // this.decorateComment(comment)
 
         this.addCommentToReplies(comment)
 
@@ -500,8 +505,7 @@ export class ProjectService {
                     }
                 }
 
-                this.getCommentsByLine()
-                console.log(url)
+                this.buildCommentsByPos()
                 return data
             })
             .toPromise()
@@ -592,34 +596,30 @@ export class ProjectService {
         ) //this.http.put
     } // public addUserToProject(projectId: string): Observable<any>
 
-    public getCommentsByLine(): void {
-        let commentsArray = this.project.comments
-
+    /**
+     * Generates the "commentByPos" array, and pushes out to Subscribers
+     * - Uses lineY values on the comments as the "position" value
+     */
+    public buildCommentsByPos(): void {
         // Re-initialize the comment by position array
         this.commentByPosSource = []
-
-        // Loop through the line number array and initialize a new array for each word number
-        for (let i = 1; i < this.lineNumberArray.length; i++) {
-            this.commentByPosSource.push(new Array())
-        }
-
+        // Copy then reverse the array
+        let commentsArray = this.project.comments.slice().reverse()
         // Loop through each comment to group comments together by line number
-        for (let i = 0; i < commentsArray.length; i++) {
-            if (commentsArray[i] && !commentsArray[i].reply_to && !commentsArray[i].questionId) {
-                let comment = commentsArray[i]
-                let lineNbr = this.lineNumberArray[comment.start]
-                this.commentByPosSource[lineNbr].push(comment)
+        let len2 = commentsArray.length
+        for (let i = 0; i < len2; i++) {
+            let comment = commentsArray[i]
+            if (comment && !comment.reply_to && !comment.questionId && comment.lineY) {
+                // lineY is determined by each individual CommentComponent
+                let lineY = comment.lineY
+                // Push the comment into commentByPos based on the lineY number
+                if (typeof(this.commentByPosSource[lineY])=='undefined') {
+                    this.commentByPosSource[lineY] = [comment]
+                } else {
+                    this.commentByPosSource[lineY].push(comment)
+                }
             }
         }
-
-        // Flip the comment array
-        for (let i = 0; i < this.commentByPosSource.length; i++) {
-            if (this.commentByPosSource[i].length>0) {
-                this.commentByPosSource[i].reverse()
-            }
-        }
-
         this.commentByPosSubject.next(this.commentByPosSource)
     }
 } // class
-

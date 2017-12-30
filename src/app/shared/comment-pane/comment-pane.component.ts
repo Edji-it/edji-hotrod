@@ -1,5 +1,6 @@
 import { CommentService } from '../comment.service'
 import { AuthService } from '../auth.service' 
+import { SocketService } from '../socket.service'
 import { Project, User } from '../datatypes'
 import { Subscription } from 'rxjs/Rx'
 import { ProjectService } from '../index'
@@ -27,7 +28,6 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
   // Subscriptions and related
   private subscriptions: Subscription[] = []
   private commentByPos: any[] = []
-  private lineNumArray: any[] = []
 
   // Comment Pane Component Inputs
   @Input() comment: EdjiComment
@@ -56,6 +56,7 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
 
   constructor(
       private _projects: ProjectService,
+      private _socket: SocketService,
       public el: ElementRef,
       private _auth: AuthService,
       private _comments: CommentService,
@@ -67,7 +68,6 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
       this._projects.commentByPos.subscribe(
         (commentByPos) => {
           this.commentByPos = commentByPos
-          this.lineNumArray = this._projects.lineNumberArray
         },
         (error) => {
           console.error(error)
@@ -91,37 +91,57 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
       this._projects.commentPaneState.subscribe(
         (paneState) => {
           this.visible = paneState
+          if (paneState) {
+            document.body.classList.add("body__lock-scroll")
+          } else {
+            document.body.classList.remove("body__lock-scroll")
+          }
         }
       )
+    )
+
+    // Subscribe to Heat Vision toggle updates
+    this.subscriptions.push(
+        this._socket.heatVisionUpdates.subscribe((heatToggle) => {
+            this.project.heat_vision = heatToggle.heatVision.all
+        })
     )
   }
 
   dismissCommentPane() {
-    this._projects.commentPaneStateSubj.next(false)
     this.hideComment.emit()
+    this._projects.commentPaneStateSubj.next(false)
+    document.body.classList.remove("body__lock-scroll")
   }
   
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe() })
+    document.body.classList.remove("body__lock-scroll")
   }
 
   scrollAdjust(isNew?: boolean) {
     setTimeout(() => {
       // Get the comments that are currently in the pane
       let comments: any[] = Array.from(document.querySelectorAll('.comment-container edji-comment'))
-
-      var commentIndex = 0
+      let len
+      let commentIndex = 0
+      let paneComments = this.commentByPos[this.comment['lineY']]
 
       // Get the position of the active comment in the list of comments in comment pane
-      for (let i=0; i<this.commentByPos[this.lineNumArray[this.comment.start]].length; i++) {
-        if (this.commentByPos[this.lineNumArray[this.comment.start]][i]._id===this._comments.activeComment._id) {
-          commentIndex = i
-          break
+      if (this.comment.imagePos) {
+        len = paneComments.length
+        for (let i=0; i<len; i++) {
+          if (paneComments[i]._id===this._comments.activeComment._id) {
+            commentIndex = i
+            break
+          }
         }
-      }
+      } 
 
       // Set the scroll position to where the active comment is in view
-      document.querySelector('.sliding-pane-comment').scrollTop = comments[commentIndex].offsetTop
+      if (comments[commentIndex]) { 
+        document.querySelector('.sliding-pane-comment').scrollTop = comments[commentIndex].offsetTop
+      }
     }, 1)
   }
 
@@ -143,7 +163,7 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
       if (comment && (comment.type==='emoji' || comment.type==='text')) {
         this.scrollAdjust()
       }
-      this.commentActivationMobile.emit({activate: shouldActivate, wi: wordIndex, ci: commentIndex})
+      this.commentActivationMobile.emit({activate: shouldActivate, wi: wordIndex, ci: commentIndex, activatedComment: comment})
     } else {
       this.commentActivationMobile.emit({activate: shouldActivate})
     }

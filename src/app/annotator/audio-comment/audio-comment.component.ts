@@ -9,6 +9,7 @@ import * as Recorder from 'opus-recorder/dist/recorder.min.js';
 
 // declare var MediaRecorder: any
 declare var window: any
+declare var navigator: any
 
 enum playState {
   inactive, 
@@ -118,22 +119,48 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
     } else if (this.userPermission == 3) {
       this.playWidth = this.playWidth - this.MAX_SECONDS
     }
-    /** 
-     * Initialize the audio access request & setup once this component loads
-     * Will only load if the user creates an audio comment, or loads text with audio comments in it already
-     * Both of which we need to get access granted in order to run 
-     */
-    if (Recorder.isRecordingSupported()) {
-      // Use shared recorder
-      this.recorder = this._audio.recorder
-    }
-    
   }
 
   ngAfterViewInit(){
     setTimeout(_=> this.setplayWidthVisual())
   }
   
+  public verifyAudio() {
+    // Verify the user has accepted access to the microphone
+    if (typeof(this._audio.recorder)==='undefined') {
+        this._audio.initializeAudio()
+    }
+
+    // First press on mic this session triggers mic access request
+    navigator.mediaDevices.getUserMedia({ audio: true })
+      .then((stream) => {
+          this.startRecording()
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }
+
+  public startRecording() {
+    // Use shared recorder
+    this.recorder = this._audio.recorder
+    // When we know we're ready to record, let's prep the audio recorder and start recording audio
+    this.initializeAudio()
+
+    this.countdown = true
+    this.countdownInterval = setInterval(()=> {
+      this.countdownI--
+    }, 800)
+    setTimeout(() => {
+      clearInterval(this.countdownInterval)
+      this.countdownInterval = ''
+      this.countdownI = 2
+      this.countdown = false
+      this.rStartAt = new Date()
+      this.recorder.start()
+    }, 3000)
+  }
+
   public initializeAudio() {
     // Clears stream and event listeners from other comments
     this._audio.freshRecorder()
@@ -278,20 +305,8 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
     // Clear existing recording
     this.chunks = []
     // Assign recorder to this component
-    this.initializeAudio()
-
-    this.countdown = true
-    this.countdownInterval = setInterval(()=> {
-      this.countdownI--
-    }, 800)
-    setTimeout(() => {
-      clearInterval(this.countdownInterval)
-      this.countdownInterval = ''
-      this.countdownI = 2
-      this.countdown = false
-      this.rStartAt = new Date()
-      this.recorder.start()
-    }, 3000)
+    // this.initializeAudio()
+    this.verifyAudio()
   }
 
   /** 
@@ -390,5 +405,9 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
   }
   isLoading(): boolean {
     return this.currentState == playState.loading
+  }
+
+  ngOnDestroy() {
+    this._audio.shutAudioDown()
   }
 }

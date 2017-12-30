@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
+import { ActivatedRoute } from '@angular/router/src/router_state'
 
 import { ProjectService } from './../../shared'
 
@@ -20,7 +21,8 @@ export class LoginModal implements OnInit {
   private guestLogin: boolean = true
 
   constructor(
-    private _project: ProjectService
+    private _project: ProjectService,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit() {

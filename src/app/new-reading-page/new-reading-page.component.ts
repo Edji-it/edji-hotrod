@@ -80,7 +80,7 @@ export class NewReadingPage implements OnInit {
             cleanPastedHTML: true,
             cleanAttrs: ['class', 'style', 'dir', 'id'],
             cleanTags: ['meta', 'button', 'input', 'form', 'img', 'label', 'pre', 'figure', 'hr', 'iframe'],
-            unwrapTags: [ 'strong', 'center', 'sup', 'sub', 'span', 'small', 'div', 'em', 'footer', 'ul', 'ol', 'li' ]
+            unwrapTags: [ 'strong', 'center', 'sup', 'sub', 'span', 'small', 'div', 'em', 'footer', 'ul', 'ol', 'li', 'blockquote']
         }, 
         extensions: { 
             // Disables Medium Editor handled image dragging
@@ -340,8 +340,8 @@ export class NewReadingPage implements OnInit {
                         this.words.push({})
                     } else {
                         // Don't save the useless "div" style
-                        if (word.styles.indexOf('div')) {
-                            let i = word.styles.indexOf('div')
+                        let i = word.styles.indexOf('div')
+                        if (i > -1) {
                             word.styles.splice(i, 1)
                         }
                         // Don't save empty word strings
@@ -531,7 +531,7 @@ export class NewReadingPage implements OnInit {
                                 .subscribe( (project) => {
                                     this.addLoadingD = false
                                     this.addLoadingP = false
-                                    this.router.navigate(['project', project._id])
+                                    this.router.navigate(['project', project._id], { queryParams: { readingCodeModal: true }})
                                     // this._util.showShareCode=true; 
                                 }, (error) => {
                                     console.error(error)

@@ -2,7 +2,8 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'hot-del-audio',
-  templateUrl: 'del-audio.component.html'
+  templateUrl: 'del-audio.component.html',
+  styleUrls: ['del-audio.component.scss']
 })
 export class DeleteAudioModal implements OnInit {
   @Output()

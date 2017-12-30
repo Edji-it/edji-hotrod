@@ -1,7 +1,5 @@
 import { Subscription } from 'rxjs/Rx';
-import { CommentStmt } from '@angular/compiler/src/output/output_ast'
 import {
-    AfterViewInit,
     Component,
     ElementRef,
     EventEmitter,
@@ -25,7 +23,7 @@ import { EdjiComment, CommentPermissions, EdjiQuestion } from './../../shared/da
   templateUrl: './comment.component.pug',
   styleUrls: ['./comment.component.scss']
 })
-export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
+export class CommentComponent implements OnInit, OnDestroy {
 
   /*
   Front end implementation of a comment.
@@ -43,28 +41,23 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
   */
 
   public lineCount: number = 1
-  public expanded: boolean = false
-
-  private yPos: number = 0
+  public indexOnLine: number = 1
+  
   private justSaved: boolean = false
   private isLoading: boolean = false
   // Hold the current scroll position for the iOS fix
   private currentScroll: number
   // Is fully visible, focused, and editable
   private active = false
-  // // Is fully visible, focused, but not editable
-  // private preview = false
   private reRecordAudio = false
   private showDeleteModal: boolean = false
   private user: any
   private subscriptions: Subscription[] = []
   private repliesById: any = {}
-  private commentByPos: any = []
+  private commentsByPos: any = []
   private project: any
   private commentPane: boolean
   private indicatesPane: boolean
-  private lineIconNum: number = 0
-  private iconNum: number = 0
 
   @Input() public comment: EdjiComment
   @Input() private readOnly: boolean = false
@@ -83,7 +76,6 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
     if (typeof(isActive) !== 'undefined' && this.active !== isActive) {
       this.active = isActive
       if (!isActive) {
-        console.log('z7')
         // Trigger save when deactivated externally i.e. emoji keyboard
         this.deactivate(this.comment)
       } else {
@@ -119,9 +111,6 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
       if (this.comment.lineCount) {
         this.lineCount = this.comment.lineCount
       } 
-      if (this.comment.expanded) {
-        this.expanded = this.comment.expanded
-      }
     }
 
     /** Set the current user every time it changes */
@@ -135,16 +124,6 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
     this.subscriptions.push( this._projects.repliesById.subscribe(
       (repliesById) => {
         this.repliesById = repliesById
-      },
-      (error) => {
-        console.error(error)
-      }
-    ))
-    
-    // Subscribe to updates to the comment by line number position array
-    this.subscriptions.push( this._projects.commentByPos.subscribe(
-      (commentByPos) => {
-        this.commentByPos = commentByPos
       },
       (error) => {
         console.error(error)
@@ -182,10 +161,61 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       }
     ))
+
+    this.subscriptions.push(this._projects.commentByPos.subscribe(
+      (commentsByPos) => {
+        this.commentsByPos = commentsByPos
+        this.updateLineCount()
+      }
+    ))
   }
 
-  ngAfterViewInit() {
-    
+  /**
+   * Get nearest baseline as integer
+   * @param vYalue: number The y position in pixels
+   * @returns number Nearest baseline Y value
+   */
+  private nearestLine(yValue: number) : number {
+    return yValue + 16 - yValue%32
+  }
+
+  /**
+   * Calculates lineY and imageY values for rendering
+   * - lineY is required by commentByPos in ProjectService
+   * - imageY provides consistent and lighter comment positioning on images
+   */
+  setLineY() {
+    let firstWord = document.querySelector('.w[index="1"]')
+    let commentWord = document.querySelector( '.w[index="'+this.comment.start+'"]')
+    let commentImage = document.getElementById('readingImage' + this.comment.start)
+
+    if (firstWord && (commentWord || commentImage)) {
+      let firstWordTop: number = firstWord.getBoundingClientRect().bottom
+
+      // This will need to re-decorate on resize
+      if (this.comment.loc && this.comment.loc.y && this.comment.text === "") {
+          let imageTop: number = commentImage.getBoundingClientRect().top
+          let imageHeight = commentImage.clientHeight
+          // Get nearest baseline (Y) of comment within image
+          let imageY = (this.comment.loc.y/100) * imageHeight
+          this.comment.imageY = imageY = this.nearestLine(imageY)
+
+          // Get image offset for Line Y value
+          let imageOffset = imageTop - firstWordTop 
+          imageOffset = this.nearestLine(imageOffset)
+          this.comment.lineY = imageY + imageOffset
+      } else {
+          // Math.round(allthis.Comments[i].nativeElement.getBoundingClientRect().bottom - firstWordTop)
+          let wordY = commentWord.getBoundingClientRect().bottom
+          wordY = wordY - firstWordTop
+          this.comment.lineY = this.nearestLine(wordY)
+      }
+    } else {
+      console.log("Looking for y position of comment not yet rendered...")
+      setTimeout(()=> {
+        this.setLineY()
+      }, 1000)
+    }
   }
 
   activate(event?: any): void {
@@ -249,12 +279,12 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
           this.angulartics.eventTrack.next({ action: comment.type + 'updateComment', properties: { category: 'projectAction', label: 'success' }})
         } // else
         this.isLoading = false
-        
-        this.justSaved = true
         this.commentUpdated.emit()
+
+        this.justSaved = true
         setTimeout(() => {
           this.justSaved = false
-          this.comment.active = false
+          // this.comment.active = false
         }, 1000)
       })
       .catch(error => { 
@@ -277,17 +307,17 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.isLoading = false
         
-        this.justSaved = true
         this.commentUpdated.emit()
         this._projects.addAnswerToAnswers(answer)
+
+        this.justSaved = true
         setTimeout(() => {
           this.justSaved = false
-          this.comment.active = false
+          // this.comment.active = false
         }, 1000)
       })
       .catch(error => { 
         this.angulartics.eventTrack.next({ action: comment.type + 'updateAnswer', properties: { category: 'heroFeature', label: 'failure' }})
-
         console.log(error)
       })
     }
@@ -298,7 +328,6 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
   // Deletes comment via Project service, which updates the local Project object
   public deleteComment(comment: any) : void {
     // Stop the user from continuing to edit, and close emoji keyboard
-    this.deactivate(this.comment)
     // Sort through the comment types and do the apppropriate pre-delete action
     if (this.comment.reply_to) {
       this.angulartics.eventTrack.next({ action: comment.type + 'deleteReply', properties: { category: 'heroFeature', label: 'attempt' }})
@@ -329,6 +358,7 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
         } else {
           this.angulartics.eventTrack.next({ action: comment.type + 'deleteComment', properties: { category: 'projectAction', label: 'failure' }})
         }
+        this.deactivate(this.comment)
         console.log(error)
       })
     } else {
@@ -341,35 +371,24 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
       .catch(error => {
         // TRACK EXCEPTION
         this.angulartics.eventTrack.next({ action: comment.type + 'deleteAnswer', properties: { category: 'heroFeature', label: 'failure' }})
+        this.deactivate(this.comment)
         console.log(error)
       })
     }
   } // deleteComment(comment: any) : void
 
   /**
-   * Returns comment block's y position
-   * - Used for collapse/expand multiple comments
-   */
-  public getVerticalPosition(): number {
-    // The parentNode offsetTop addition fixes the occasional issue where diferrent images have comments registering on the same line
-    this.yPos = Math.round(this.el.nativeElement.offsetTop) + Math.round(this.el.nativeElement.parentNode.offsetTop)
-    // Certain styles can cause the position to vary by up to 5 pixels, so we need to round further
-    this.yPos = Math.round(this.yPos/10) * 10
-    return this.yPos
-  } // public getVerticalPosition(): number
-
-  /**
    * Collapse all stacked comments on the same line
    */
   collapse(): void {
-    this.collapseLine.emit(this.yPos)
+    this.collapseLine.emit(this.comment.lineY)
   }
 
   /**
    * Expand all stacked comments on the same line
    */
   expand(): void {
-    this.expandLine.emit(this.yPos)
+    this.expandLine.emit(this.comment.lineY)
   }
 
   ngOnDestroy() {
@@ -393,14 +412,17 @@ export class CommentComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  getIconNumber(comment): void {
-    if (!comment.reply_to && !comment.questionId) {
-      this.lineIconNum = this._projects.lineNumberArray[comment.start]
-      this.iconNum = this._projects.commentByPosSource[this.lineIconNum].length
+  updateLineCount(): void {
+    if (this.comment.lineY) {
+      let commentsOnLine = this.commentsByPos[this.comment.lineY]
+      this.lineCount = commentsOnLine && commentsOnLine.length
+      for (let i = 0; i < this.lineCount; i++){
+        if (commentsOnLine[i]._id == this.comment._id) {
+          this.indexOnLine =  this.lineCount - i 
+        }
+      }
+    } else {
+      this.lineCount = 1
     }
-  }
-
-  getComments(comment): void {
-    console.log(this._projects.commentByPosSource[this._projects.lineNumberArray[comment.start]])
   }
 }

@@ -21,7 +21,6 @@ exports.config = {
   // The address of a running selenium server.
   baseUrl: 'http://localhost:3375/',        // Point it at localhost!
   //baseUrl: 'http://dev.edji.it/#/home',     // Point it at dev.edji.it!
-
   
   multiCapabilities: [
     // Android | Capabilities to be passed to the webdriver instance
