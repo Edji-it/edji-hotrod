@@ -80,7 +80,7 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
     {
       icon: ":heartpulse:",
       title: "Symbols",
-      emoji: ["heart", "broken_heart", "cupid", "peace", "cross", "star_and_crescent", "om_symbol", "wheel_of_dharma", "star_of_david", "six_pointed_star", "menorah", "yin_yang", "orthodox_cross", "place_of_worship", "no_entry_sign", "no_entry", "100"]
+      emoji: ["heart", "broken_heart", "cupid", "peace", "cross", "star_and_crescent", "om_symbol", "wheel_of_dharma", "star_of_david", "six_pointed_star", "menorah", "yin_yang", "orthodox_cross", "place_of_worship", "no_entry_sign", "no_entry", "exclamation", "question", "interrobang", "bangbang", "100"]
     },
     {
       icon: ":flag_eu:",

@@ -120,3 +120,16 @@
 .label, .label--gray, label {
     margin: 5px 0 0 0;
 }
+
+.question-input {
+    box-shadow: none;
+    width: 100%;
+    font-size: 18px;
+    cursor: initial;
+    -webkit-touch-callout: auto;
+    -webkit-user-select: auto;
+    -khtml-user-select: auto;
+    -moz-user-select: auto;
+    -ms-user-select: auto;
+    user-select: auto;
+}

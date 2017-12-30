@@ -22,7 +22,7 @@ import { ProjectService } from './../shared/project.service';
   // Our list of styles in our component. We may add more to compose many styles together
   styleUrls: [ './home.component.scss' ],
   // Every Angular template is first compiled by the browser before Angular runs it's compiler
-  templateUrl: './home.component.html'
+  templateUrl: './home.component.pug'
 })
 export class HomeComponent implements OnInit, OnDestroy {
   // Set our default values
@@ -69,7 +69,6 @@ export class HomeComponent implements OnInit, OnDestroy {
    * @param code The project's short code
    */
   private joinSession(code: string): void {
-    console.log("first call", code);
     this.joinLoading = true;
     this.angulartics.eventTrack.next({ action: 'enterLightningCode', properties: { category: 'joinProject', label: 'attempt' }});
     this._project.validateProject(code)

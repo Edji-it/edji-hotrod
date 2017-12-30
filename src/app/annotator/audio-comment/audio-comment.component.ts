@@ -9,6 +9,7 @@ import * as Recorder from 'opus-recorder/dist/recorder.min.js';
 
 // declare var MediaRecorder: any
 declare var window: any
+declare var navigator: any
 
 enum playState {
   inactive, 
@@ -118,16 +119,6 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
     } else if (this.userPermission == 3) {
       this.playWidth = this.playWidth - this.MAX_SECONDS
     }
-    /** 
-     * Initialize the audio access request & setup once this component loads
-     * Will only load if the user creates an audio comment, or loads text with audio comments in it already
-     * Both of which we need to get access granted in order to run 
-     */
-    // if (Recorder.isRecordingSupported()) {
-    //   // Use shared recorder
-    //   this.recorder = this._audio.recorder
-    // }
-    
   }
 
   ngAfterViewInit(){
@@ -139,15 +130,15 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
     if (typeof(this._audio.recorder)==='undefined') {
         this._audio.initializeAudio()
     }
-    var self = this
+
+    // First press on mic this session triggers mic access request
     navigator.mediaDevices.getUserMedia({ audio: true })
-    .then(function(stream) {
-      self.startRecording()
-    }
-    )
-    .catch(function(err) {
-      // we should trigger an alert to the user here to add mic access to the top
-    })
+      .then((stream) => {
+          this.startRecording()
+      })
+      .catch((error) => {
+        console.log(error)
+      })
   }
 
   public startRecording() {
