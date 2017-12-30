@@ -15,6 +15,8 @@ $tablet-width: 768px;
         // height: 100%;
             height: $topPromoMinHeight;
             max-width: none !important;
+            // offset image to give text space
+            margin-left: -120px;
     }
 }
 
@@ -43,21 +45,35 @@ $tablet-width: 768px;
         font-family: 'Open Sans', Arial;
         font-weight: normal;
     }
-    &:-moz-placeholder           {
-        color: #dedede;
-        font-family: 'Open Sans', Arial;
-        font-weight: normal;
+}
+
+$navy: #072649;
+
+.promo-header {
+    font-size: 48px;
+    font-weight: 200;
+    margin-bottom: 0px;
+    line-height: 1.5em;
+    text-shadow:-1px -1px 8px $navy,
+        1px -1px 8px $navy,
+        -1px 1px 8px $navy,
+        1px 1px 8px $navy;  
+
+    // Breakpoints need to be updated if copy changes!
+    @media(max-width: 1050px) {
+        font-size: 42px;
     }
-    &::-moz-placeholder          {
-        color: #dedede;
-        font-family: 'Open Sans', Arial;
-        font-weight: normal;
+    @media(max-width: 800px) {
+        font-size: 36px;
     }
-    &:-ms-input-placeholder      {
-        color: #dedede;
-        font-family: 'Open Sans', Arial;
-        font-weight: normal;
-    }
+}
+
+.promo-header__divider {
+    width: 60%;
+    height: 1px;
+    margin: 5px auto 0;
+    background-color: #fff;
+    background: radial-gradient(circle at center, rgba(255,255,255,1),rgba(255,255,255,0));
 }
 
 .demo-copy {

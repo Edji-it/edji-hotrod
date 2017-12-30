@@ -466,3 +466,8 @@ pre.btn {
 .btn-extrawide {
   width: 80% !important;
 }
+
+// Small padding/offset adjustments
+.input-group-lg > .input-group-btn > .btn {
+  padding: 0.5rem 1.5rem;
+}

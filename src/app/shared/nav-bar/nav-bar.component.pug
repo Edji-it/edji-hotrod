@@ -42,25 +42,6 @@
         span([innerHtml]="':key:' | emojione") 
         | &nbsp;{{ currentProject.code }}
 
-    //- Join Reading Code
-    .row.col-5.nav__join-code.hidden-sm-down(*ngIf="projectCodeShow")
-      .input-group.input-group-lg
-        input#projectCodeInput.form-control(
-          name="ProjectCodeInput", 
-          type="text", 
-          style="text-align: center;", 
-          (keyup.enter)="joinSession(projectCode)", 
-          [(ngModel)]="projectCode", 
-          placeholder="🔑 Code", 
-          aria-describedby="add-project-code")
-        span.input-group-btn
-          button#buttonJoinProject.btn.btn-primary(
-            [class.loading]="joinLoading", 
-            type="button", 
-            (click)="joinSession(projectCode)", 
-            name="Join", 
-            href="#") Go!
-
     .nav__btn-wrap
       //- Share button: Desktop
       button#addReadingButton.btn.btn-action.nav-bar__btn.hidden-sm-down(*ngIf="canPublish", (click)="showShareTooltip = !showShareTooltip", [class.active]="showShareTooltip") Share
@@ -87,6 +68,27 @@
       //- Save button: Mobile
       button#saveDraftButton.btn.btn-clear.nav-bar__btn.hidden-md-up(*ngIf="canPublish", (click)="saveAction.emit()") Save
 
+    //- Join Reading Code
+    .row.col-5.nav__join-code.hidden-sm-down(*ngIf="projectCodeShow && !canPublish")
+      .input-group.input-group-lg
+        input#projectCodeInput.form-control(
+          name="ProjectCodeInput", 
+          type="text", 
+          style="text-align: center;", 
+          (keyup.enter)="joinSession(projectCode)", 
+          [(ngModel)]="projectCode", 
+          [class.is-invalid]="errorObject.invalidCode"
+          placeholder="🔑 Code", 
+          aria-describedby="add-project-code")
+        span.input-group-btn
+          button#buttonJoinProject.btn.btn-primary(
+            [class.loading]="joinLoading", 
+            type="button", 
+            (click)="joinSession(projectCode)", 
+            name="Join", 
+            href="#") Go!
+      #projectCodeError.invalid-feedback(*ngIf="errorObject.invalidCode", [innerHtml]="errorObject.invalidCode | emojione")
+
   h1.hidden-md-up.mobile-heading(*ngIf="pageTitle && !showProjectInfo") {{ pageTitle }}
   h1.hidden-md-up.mobile-heading(*ngIf="showProjectInfo") {{ currentReading.title }}
 
@@ -97,7 +99,8 @@
     input#projectCodeInput.form-control(
       name="ProjectCodeInput", 
       type="text", 
-      style="text-align: center;", 
+      style="text-align: center;",
+      [class.is-invalid]="errorObject.invalidCode",
       (keyup.enter)="joinSession(projectCode)", 
       [(ngModel)]="projectCode", 
       placeholder="🔑 Code", 
@@ -109,5 +112,6 @@
         (click)="joinSession(projectCode)", 
         name="Join", 
         href="#") Go!
+  #projectCodeError.invalid-feedback(*ngIf="errorObject.invalidCode", [innerHtml]="errorObject.invalidCode | emojione")
 
 share-code([showOpenReading]="_route.snapshot.queryParams.readingCodeModal")

@@ -28,7 +28,6 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
   // Subscriptions and related
   private subscriptions: Subscription[] = []
   private commentByPos: any[] = []
-  private lineNumArray: any[] = []
 
   // Comment Pane Component Inputs
   @Input() comment: EdjiComment
@@ -69,7 +68,6 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
       this._projects.commentByPos.subscribe(
         (commentByPos) => {
           this.commentByPos = commentByPos
-          this.lineNumArray = this._projects.lineNumberArray
         },
         (error) => {
           console.error(error)
@@ -125,19 +123,25 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       // Get the comments that are currently in the pane
       let comments: any[] = Array.from(document.querySelectorAll('.comment-container edji-comment'))
-
-      var commentIndex = 0
+      let len
+      let commentIndex = 0
+      let paneComments = this.commentByPos[this.comment['lineY']]
 
       // Get the position of the active comment in the list of comments in comment pane
-      for (let i=0; i<this.commentByPos[this.lineNumArray[this.comment.start]].length; i++) {
-        if (this.commentByPos[this.lineNumArray[this.comment.start]][i]._id===this._comments.activeComment._id) {
-          commentIndex = i
-          break
+      if (this.comment.imagePos) {
+        len = paneComments.length
+        for (let i=0; i<len; i++) {
+          if (paneComments[i]._id===this._comments.activeComment._id) {
+            commentIndex = i
+            break
+          }
         }
-      }
+      } 
 
       // Set the scroll position to where the active comment is in view
-      document.querySelector('.sliding-pane-comment').scrollTop = comments[commentIndex].offsetTop
+      if (comments[commentIndex]) { 
+        document.querySelector('.sliding-pane-comment').scrollTop = comments[commentIndex].offsetTop
+      }
     }, 1)
   }
 
