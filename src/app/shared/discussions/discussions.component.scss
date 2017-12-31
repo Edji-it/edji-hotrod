@@ -30,7 +30,8 @@
 }
 
 .replyCommentBlock {
-  height: 75px
+  height: 75px;
+  width: calc(100% - 32px);
 }
 
 .replyHeaderRow {
@@ -43,10 +44,6 @@
   color: $gray;
 }
 
-.replyCommentBlock {
-  width: calc(100% - 66px);
-}
-
 .replyCommentInputBlock {
   width: calc(100% - 66px);
 }
@@ -57,11 +54,14 @@
 
 .replyOverflow {
   overflow-y: auto;
+  overflow-x: hidden;
+  margin-right: -20px;
+  padding-right: 20px;
   // height: calc(100% - $replyContainerHeight);
 }
 
 .replyOverflow-normal {
-  height: calc(100% - 203px)
+  height: calc(100% - 214px)
 }
 
 .replyOverflow-eKey {

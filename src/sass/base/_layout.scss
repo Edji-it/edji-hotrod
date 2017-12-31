@@ -31,6 +31,8 @@ body > .main {
 
 footer {
   @extend .row;
+  margin-left: 0px;
+  margin-right: 0px;
   // @include outer-container;
 } 
 

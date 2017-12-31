@@ -312,6 +312,17 @@ input.emojiComment {
 		top: 1px;
 		right: 1px;
 	}
+
+	.audio & {
+		background: #fff;
+		top: 2px;
+		right: 1px;
+
+		&:hover, &:active, &:focus {
+			background: $red;
+			color: #fff;
+		}
+	}
 }
 
 .emojiPickerIconWrap {
