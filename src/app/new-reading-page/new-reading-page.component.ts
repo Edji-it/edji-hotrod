@@ -531,7 +531,7 @@ export class NewReadingPage implements OnInit {
                     }
                 },
                 error => {
-                    console.log(error)
+                    console.error(error)
                     this.addLoadingD = false
                     this.addLoadingP = false
                     if (reading.questions.length > 0) {
