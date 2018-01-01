@@ -1,5 +1,5 @@
 .audio-comment-input-wrapper.input-wrap(
-  [ngClass]="[comment.active ? 'active' : '']"
+  [ngClass]="[comment.active ? 'active' : '', reply ? 'replyDisplay' : '']"
 )
   .audio-btn-wrap([class.fade-out]="!comment.active")
     //- [class.disabled]="isRecording() || isLoading()"
