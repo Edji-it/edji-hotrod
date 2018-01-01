@@ -22,8 +22,6 @@ export class HeroPromoComponent implements OnInit, OnDestroy {
   private showHeroSubModal: boolean
   private cancelGetPriceCall: boolean = false
 
-  private heroPrice: number = 4000
-
   private subscriptions: Subscription[] = []
 
   constructor(private _auth: AuthService, private route: ActivatedRoute, private _router: Router, private angulartics: Angulartics2) { }
