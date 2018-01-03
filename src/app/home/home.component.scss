@@ -130,7 +130,7 @@ $navy: #072649;
   }
 }
 
-.promo-gif {
+.promo-img__background {
 	// margin: 10px;
 	border-radius: 3px;
 	box-shadow: 0px 5px 5px 1px rgba(0, 0, 0, 0.2);
@@ -171,4 +171,37 @@ li.promo-list {
     margin: 5px auto 0;
     background-color: #000;
     background: radial-gradient(circle at center, rgba(0,0,0,1),rgba(255,255,255,0));
+}
+
+// Set the images in each component sass file
+.flexi-img {
+    &.promo-img-1 {
+        background-image: url('/assets/images/promo-heatmap.png');
+    }
+    &.promo-img-2 {
+        background-image: url('/assets/images/promo-heatmap.png');
+    }
+    &.promo-img-3 {
+        background-image: url('/assets/images/logo.png');
+    }
+    &.promo-img-4 {
+        background-image: url('/assets/images/promo-heatmap.png');
+    }
+}
+
+.nopadding__min-screen {
+    padding-left: 45px;
+    padding-right: 45px;
+    @media (max-width: $sm-max-device) {
+        padding: 0;
+    }
+}
+
+.full-width__min-screen {
+    height: 100%;
+    width: 100%;
+    @media (max-width: $sm-max-device) {
+        height: 250px;
+        width: initial;
+    }
 }
