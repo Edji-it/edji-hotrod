@@ -64,7 +64,7 @@ $navy: #072649;
         font-size: 42px;
     }
     @media(max-width: 800px) {
-        font-size: 36px;
+        font-size: 32px;
     }
 }
 
@@ -110,9 +110,11 @@ $navy: #072649;
     z-index: 6000;
     // Medium devices (tablets, less than 992px)
     @media (max-width: 767px) {
-        //position: absolute;
         background: rgba(0,0,0,0.5);
         height: $topPromoMinHeight;
+        position: absolute;
+        left: 0;
+        top: 0;
     }
 }
 
