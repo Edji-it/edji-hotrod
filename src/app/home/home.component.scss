@@ -13,10 +13,10 @@ $tablet-width: 768px;
 
     & img {
         // height: 100%;
-            height: $topPromoMinHeight;
-            max-width: none !important;
-            // offset image to give text space
-            margin-left: -120px;
+        height: $topPromoMinHeight;
+        max-width: none !important;
+        // offset image to give text space
+        margin-left: -120px;
     }
 }
 
@@ -126,22 +126,6 @@ $navy: #072649;
   @media (min-width: #{$phone-width-min}) and (max-width: #{$tablet-width}) {
     @content;
   }
-}
-
-/* Mobile Optimization */
-@include phone {
-    $topPromoMinHeight: 300px;
-    .join-panel {
-        position: absolute;
-        left: 0;
-        top: 0;
-    }
-    .promo-panel {
-        position: relative;
-    }
-    .home_vertical_fix {
-        padding-bottom: 40px;
-    }
 }
 
 .promo-gif {

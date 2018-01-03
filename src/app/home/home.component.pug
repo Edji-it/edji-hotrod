@@ -3,18 +3,17 @@ nav-bar
 .container-fluid
   .row.navy.has-sparks
       .sparks
-      .col-md-7.promo-panel
+      .col-md-4.promo-panel
         .promo-image__wrap
           img(src="/assets/images/promo-home.svg")
-      .col-md-5.col-pad.join-panel
+      .col-md-8.col-pad.join-panel
         .col__center-fix
           .col__center-content
-            h1.center.on-dark.join-header.join-header__top Make your readings engaging
-            .line-separator
-            h1.center.on-dark.join-header See student thoughts live
-            h2.demo-copy Try our demo reading 
-              a.link(href="/project/d3m0")
-                pre here
+            h1.center.on-dark.promo-header.join-header__top Make your readings engaging
+            .promo-header__divider
+            h1.center.on-dark.promo-header See student thoughts live
+            .button__row.pt-2
+              a.btn.btn-primary(href="/project/d3m0") Try Our Demo Reading
   //- Container with Commenting and Heat Map info & images
   .container
     .row.promo-row
@@ -29,7 +28,7 @@ nav-bar
       .col-md-6.center
         img.promo-gif(loop="infinite", src="assets/images/promo-highlight-b.gif")
     .row.promo-row
-      .col-md-6.center.home_vertical_fix
+      .col-md-6.center
         img.promo-gif(src="assets/images/promo-heatmap.png")
       .col-md-6
         .col__center-fix
@@ -71,7 +70,7 @@ nav-bar
       .col-md-6.center
         img.promo-gif(src="assets/images/logo.png")
     .row.promo-row
-      .col-md-6.center.home_vertical_fix
+      .col-md-6.center
         img.promo-gif(src="assets/images/promo-heatmap.png")
       .col-md-6
         .col__center-fix
