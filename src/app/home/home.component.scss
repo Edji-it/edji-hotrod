@@ -147,18 +147,28 @@ $navy: #072649;
 }
 
 ul.promo-list {
-    padding: 0px 0px 0px 24px;
+    padding: 0px 0px 0px 12px;
     margin-bottom: 1rem;
-    list-style-type: square;
+    // list-style-type: square;
 }
 
 li.promo-list {
     margin: 8px 0px;
     line-height: initial;
+    font-style: italic;
+    font-size: 14px;
 }
 
 .promo-row__no-btm-padding {
     @media (max-width: $sm-min-device) {
         padding-bottom: 0;
     }
+}
+
+.promo-content__divider {
+    width: 88%;
+    height: 1px;
+    margin: 5px auto 0;
+    background-color: #000;
+    background: radial-gradient(circle at center, rgba(0,0,0,1),rgba(255,255,255,0));
 }
