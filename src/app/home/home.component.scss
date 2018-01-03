@@ -139,3 +139,26 @@ $navy: #072649;
 .promo-gif__full {
     width: 100%;
 }
+
+.promo-button__row {
+    @media (max-width: $sm-max-device) {
+        margin-top: 60px;
+    }
+}
+
+ul.promo-list {
+    padding: 0px 0px 0px 24px;
+    margin-bottom: 1rem;
+    list-style-type: square;
+}
+
+li.promo-list {
+    margin: 8px 0px;
+    line-height: initial;
+}
+
+.promo-row__no-btm-padding {
+    @media (max-width: $sm-min-device) {
+        padding-bottom: 0;
+    }
+}
