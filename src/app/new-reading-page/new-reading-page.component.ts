@@ -253,8 +253,8 @@ export class NewReadingPage implements OnInit {
         let tagName = 'tagName' in element && element.tagName.toLowerCase()
         let nodes = element.childNodes
         // Detect line breaks
-        let currentTop = element.getBoundingClientRect().top
-        if ((currentTop - this.previousWordY) > 5 && this.previousWordY != 0) {
+        let currentTop = element.getBoundingClientRect ? element.getBoundingClientRect().top : this.previousWordY
+        if ((currentTop - this.previousWordY) > 10 && this.previousWordY != 0) {
             this.words.push({
                 str: '',
                 styles: ['br']
@@ -443,8 +443,22 @@ export class NewReadingPage implements OnInit {
             // Concatenate the html to 1 string [not currently using with current config]
             // this.concatHtml += editorHtml[i]
             concatHtml += this.readingHtml[i].text
+            if (!document.querySelector('#renderedReading')){
+                let div1 = document.createElement('div')
+                div1.setAttribute('id','renderedReading')
+                div1.style.width = '100000px'
+                div1.style.position = 'absolute'
+                div1.style.top = '100%'
+                div1.style.left = '100%'
+                div1.className = 'content'
+                document.body.appendChild( div1 )
+            }
+            let rendered: any = document.querySelector('#renderedReading')
+            let renderHtml
+            rendered['innerHTML'] = concatHtml
+            renderHtml = document.querySelector('#renderedReading')
 
-            let childEls = editorHtml[i].childNodes
+            let childEls = renderHtml.childNodes
 
             // Reset line break detection
             this.previousWordY = 0

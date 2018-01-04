@@ -810,6 +810,13 @@ $progressStart: 51px;
 	}
 }
 
+.audio-comment-input-wrapper {
+	&.replyDisplay {
+		width: 100% !important;
+		// overflow: visible;
+	}
+}
+
 .comment__avatar {
   background: #adadad;
   width: 28px;
