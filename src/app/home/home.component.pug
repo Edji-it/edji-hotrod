@@ -41,19 +41,23 @@ nav-bar
       .col-md-6.pull-md-6.center.nopadding__min-screen
         .row.has-sparks.full-width__min-screen.promo-img__background
           .flexi-img.img-fluid.promo-img-2
-  //- Sign-up button large and stand-alone
-  .row.navy.has-sparks
-    .sparks
-    .col-sm-12
-      .call-to-action
-        h1 Share instantly. Read together. Learn loud
-        button.btn.btn-primary.btn-extrawide([routerLink]="['/register']") Get Started
-  //- Site usage GIF
-  .row.nopadding
-    .col-12.nopadding
-      img.promo-gif.promo-gif__full(loop="infinite", src="assets/images/promo-class.gif")
-  //- Testimonial
-
+  //- Tweet Row
+  .container-fluid([class.hide]="!tweetsLoaded")
+    .row
+      .col-12
+        ng4-twitter-timeline([dataSrc]="{sourceType: 'collection', id: '947890483635851267'}", [opts]="{tweetLimit: 10, chrome: { noheader: true }}")
+  .container 
+    //- Sign-up button large and stand-alone
+    .row.navy.has-sparks
+      .sparks
+      .col-sm-12
+        .call-to-action
+          h1 Share instantly. Read together. Learn loud
+          button.btn.btn-primary.btn-extrawide([routerLink]="['/register']") Get Started
+    //- Site usage GIF
+    .row.nopadding
+      .col-12.nopadding
+        img.promo-gif.promo-gif__full(loop="infinite", src="assets/images/promo-class.gif")
   //- Row below promo
   .container
     //- we don't want this content to be fluid, so we give it another container
