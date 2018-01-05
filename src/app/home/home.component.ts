@@ -100,12 +100,18 @@ export class HomeComponent implements OnInit, OnDestroy {
       width: 500px;
       max-width: 100vw;
       vertical-align: top;
+      border-radius: 10px;
+      border-top: none !important;
     }
     .timeline-TweetList-tweet:nth-of-type(2n+1){
       background: rgba(160,200,220,.12);
+      border-radius: 10px;
     }
     .timeline-Footer {
       display: none;
+    }
+    .timeline-Body {
+      border-top: none;
     }
     `;
   
