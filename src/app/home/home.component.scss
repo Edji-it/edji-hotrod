@@ -68,6 +68,12 @@ $navy: #072649;
     }
 }
 
+.promo-text {
+    @media (max-width: $sm-max-device) {
+        margin-bottom: 25px;
+    }
+}
+
 .promo-header__divider {
     width: 60%;
     height: 1px;
