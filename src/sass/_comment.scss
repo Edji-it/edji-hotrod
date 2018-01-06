@@ -960,3 +960,103 @@ textarea.text-comment-input,
   text-align: center;
   width: 20px;
 }
+
+$avatarOffset: -18px;
+$avatarMargin: -10px;
+
+@for $z from 1 through 8 {
+	div.avatar-count-#{$z} {
+		position: absolute;
+		left: #{ ($avatarOffset * $z) + $avatarMargin }
+
+			// @include transition(transform linear 0.3s);
+
+			// &:after {
+			// 	color: #888;
+			// 	content: '#{$z}';
+			// 	background: transparent;
+			// 	padding: 0px;
+			// 	position: absolute;
+			// 	right: -9px;
+			// 	top: -2px;
+			// 	font-size: 10px;
+			// 	font-family: 'Open Sans';
+			// 	font-weight: bold;
+			// 	text-align: center;
+			// 	transform: translateX(50%);
+			// 	pointer-events: none;
+			// 	display: block;
+			// }
+
+			// & .expand-comments {
+			// 	display: block;
+			// }
+
+			// z-index: $z*10;
+
+			// & input {
+			// 	height: $commentHeight + $z;
+			// }
+
+			// &.expanded {
+			// 	transform: translateY(#{ ($commentHeight * $z) - $commentHeight }) translateZ(0px);
+
+			// 	& input {
+			// 		height: $commentHeight;
+			// 	}
+
+			// 	& .expand-comments {
+
+			// 		width: 22px;
+			// 		pointer-events: none;
+
+			// 		&:before {
+			// 			// width: 261px;
+			// 			// right: -25px;
+			// 			width: $multiLineBlockWidth;
+    	// 				right: $multiLineBlockOffset;
+
+			// 			border-radius: 0px;
+			// 			top: 0px;
+			// 			height: $commentHeight;
+			// 			background: $expandBg;
+			// 		}
+
+			// 		@if ($z == 1) {
+			// 			pointer-events: all;
+
+			// 			&:before {
+			// 				height: $commentHeight + 6px;
+			// 				top: -5px;
+			// 				border-top-left-radius: 5px;
+			// 				border-top-right-radius: 5px;
+			// 			}
+			// 		}
+
+			// 		@if ($z != 1) {
+			// 			// If not line-count-1, it should be part of the "line" showing the selection
+			// 			// display: none;
+			// 			&:after {
+			// 				display: block;
+			// 				content: ' ';
+			// 				position: absolute;
+			// 				width: $multiLineBlockWidth;
+			// 				right: $multiLineBlockOffset;
+			// 				border-radius: 0px;
+			// 				top: 100%;
+			// 				height: 5px;
+			// 				background: $expandBg;
+			// 				transform: none;
+			// 				border-bottom-left-radius: 5px;
+			// 				border-bottom-right-radius: 5px;
+			// 			}
+			// 		}
+					
+			// 	}
+
+			// 	&:after {
+			// 		display: none;
+			// 	}
+			// }
+	}
+}

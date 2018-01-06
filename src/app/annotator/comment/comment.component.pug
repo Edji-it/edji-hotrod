@@ -1,4 +1,6 @@
+//- Other components that use a comment display like questions use this block for display and logic
 #comment.comment.hidden-md-down(
+    *ngIf="reply",
     [class.new]="comment.new",
     [class.saved]="justSaved",
     [class.active]="active",
@@ -68,8 +70,9 @@
         [innerHtml]="':white_check_mark:' | emojione"
     )
     i.comment__saved([innerHtml]='":ok_hand:" | emojione')
-//- END .comment - desktop
+//- END the other component comment display
 
+//- Comments that are displayed in the comment pane
 div(*ngIf="commentPaneActive")
     hr.mobileBlock-hr(*ngIf="commentMobile && !commentMobileFirst")
     .comment-action--save.comment-action--save__mobile.comment-action--save__mobile-btn(
@@ -80,7 +83,7 @@ div(*ngIf="commentPaneActive")
     .comment-new-highlight__mobile(*ngIf="comment && comment.active  && comment.new")
         .comment-new-dot__mobile
         p.comment-new-text__mobile new
-    #comment.comment.hidden-lg-up.mobileBound(
+    #comment.comment.mobileBound(
         [class.new]="comment.new",
         [class.saved]="justSaved",
         [class.active]="comment.active",
@@ -137,14 +140,18 @@ div(*ngIf="commentPaneActive")
             //- button.btn.btn-sm.btn-primary(*ngIf="repliesById[comment._id] && repliesById[comment._id].length>0", (tap)="commentReply.emit(comment)") Replies ({{ repliesById[comment._id] && repliesById[comment._id].length }})
             button.btn.btn-sm.btn-primary(*ngIf="!reply && project.types.indexOf('reply') > -1", (tap)="commentReply.emit(comment)") Replies ({{ repliesById[comment._id] && repliesById[comment._id].length || '0' }})
             //- button.btn.btn-sm.btn-primary(ngIf="!repliesById[comment._id]", (tap)="commentReply.emit(comment)") Reply
-//- END .comment - mobile
+//- END comment pane display
 
-//- Mobile Icon
-div((tap)='toggleCPane(comment)')
-    .comment__button--mobile(
-        [ngClass]="[ reply ? 'icon-hidden' : 'hidden-lg-up', indicatesPane ? 'active' : '' ]"
-    )
-    .comment__count--mobile {{ lineCount }}
+//- Handle Desktop and Mobile Icons for activating comments
+avatar-portal(
+    *ngIf="!reply",
+    [comment]="comment",
+    [lineCount]="lineCount",
+    [indexOnLine]="indexOnLine",
+    [active]="indicatesPane",
+    [lineY]="comment.lineY",
+    (toggleCommentPane)="toggleCPane(comment)"
+)
 hot-del-comment(
     *ngIf="showDeleteModal",
     [comment]="comment",

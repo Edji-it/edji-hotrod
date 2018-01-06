@@ -1,0 +1,13 @@
+//- Desktop Avatar Icons
+.user-icon(
+  (tap)='toggleCommentPane.emit()',
+  [ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '','avatar-count-' + indexOnLine ]"
+)
+  span {{comment.author.substring(0,2)}}
+
+//- Mobile Icon
+.hidden-lg-up((tap)='toggleCommentPane.emit()')
+    .comment__button--mobile(
+        [ngClass]="[ active ? 'active' : '' ]"
+    )
+    .comment__count--mobile {{ lineCount }}
