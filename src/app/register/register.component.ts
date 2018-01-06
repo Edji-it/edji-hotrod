@@ -6,7 +6,7 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { Subscription } from 'rxjs/Subscription'
 import { Angulartics2 } from 'angulartics2'
 
-import { AuthService, BumblebeeService, Copy, ProjectService } from './../shared'
+import { AuthService, Copy, ProjectService } from './../shared'
 
 @Component({
   selector: 'edji-register',
@@ -69,7 +69,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
     private _project: ProjectService,
     private route: ActivatedRoute,
     private angulartics: Angulartics2,
-    private bumblebee: BumblebeeService,
     private _fb: FormBuilder,
     private _title: Title
   ) {
@@ -142,7 +141,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
         this.registerLoading = false
         if (data.user) {
           if (this._auth.getEnv() === "prod") { 
-            this.bumblebee.sendUserDetails(data.user) 
+            
             if(data.user.identities.indexOf('teacher') > -1) {
               let spaceIndex = data.user.fullname.indexOf(' ')
               if (spaceIndex < 0) { spaceIndex = data.user.fullname.length - 1 }
@@ -182,7 +181,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
                 this._router.navigate(['/dashboard'])
               })
           } else {
-            console.error("don't know what to do!")
+            // default case where nothing special happens
             this._router.navigate(['/dashboard'])
           }
           
