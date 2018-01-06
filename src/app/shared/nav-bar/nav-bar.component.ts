@@ -1,4 +1,5 @@
-import { Router } from '@angular/router'
+import { Angulartics2 } from 'angulartics2/dist';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Component, Input, OnDestroy, OnInit, Output, EventEmitter } from '@angular/core'
 import { Subscription } from 'rxjs/Rx'
 // import { EventEmitter } from '@angular/forms/src/facade/async'
@@ -22,6 +23,8 @@ export class NavBarComponent implements OnInit, OnDestroy {
     @Output() saveAction: EventEmitter<any> = new EventEmitter()
     @Output() shareAction: EventEmitter<ReadingShareObject> = new EventEmitter<ReadingShareObject>()
 
+
+    private showShareTooltip: boolean = false
     private user: any
     private currentProject: any
     private projectOwner: any
@@ -49,10 +52,21 @@ export class NavBarComponent implements OnInit, OnDestroy {
     private customCode: string = ""
     private shareLoading: boolean = false
 
+    private projectCode: string
+    private joinLoading: boolean = false
+    private errorObject: {
+      "invalidCode"?: string,
+      "loginFailed"?: string,
+      "serverError"?: string
+    } = {}
+    private projectCodeShow: boolean = true
+
     constructor(
+          private _route: ActivatedRoute,
           private _auth: AuthService, 
           private _socket: SocketService, 
-          private _router: Router, 
+          private _router: Router,
+          private angulartics: Angulartics2,
           private _projects: ProjectService,
           private _readings: ReadingService,
           private _util: UtilToolService
@@ -73,6 +87,12 @@ export class NavBarComponent implements OnInit, OnDestroy {
         this.tooltipPlacement = 'bottom'
       } else {
         this.isMobile = false
+      }
+
+      if (this._router.url.indexOf('/project') > -1) {
+        this.projectCodeShow = false
+      } else {
+        this.projectCodeShow = true
       }
 
       // Subscribe to current Reading data
@@ -153,7 +173,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
         }, (err) => {
           this.shareLoading = false
 
-          // this is actually the succcessful response :)
+          // this is actually the successful response :)
           if (err.status == 404) {
             this.shareAction.emit(shareObj)
           } else {
@@ -171,28 +191,53 @@ export class NavBarComponent implements OnInit, OnDestroy {
     }
 
     showShareCodeModal() {
-      this._util.showShareCode=true
+      let currentParams = Object.assign({}, this._route.snapshot.queryParams)
+      let newParams = Object.assign(currentParams, { readingCodeModal: true })
+      this._router.navigate(['.'], { relativeTo: this._route, queryParams: newParams })
     }
 
-    followUser(userId: string) : void {
-      this._auth.followUser(userId)
-        .take(1)
-        .subscribe(
-          data => {
-            
+    /**
+   * Validates project and then navigates to project if valid
+   * @param code The project's short code
+   */
+  private joinSession(code: string): void {
+    // console.log("first call", code);
+    this.joinLoading = true;
+    this.angulartics.eventTrack.next({ action: 'enterLightningCode', properties: { category: 'joinProject', label: 'attempt' }});
+    this._projects.validateProject(code)
+      .take(1)
+      .subscribe(
+        (data) => {
+          this.joinLoading = false;
+          this.angulartics.eventTrack.next({ action: 'enterLightningCode', properties: { category: 'joinProject', label: 'success' }});
+          if (data._id){
+            this._router.navigate(['/project', data._id]);
+          } else {
+            this._router.navigate(['/project', code]);
           }
-        )
-    }
- 
-    unfollowUser(userId: string) : void {
-      this._auth.unfollowUser(userId)
-        .take(1)
-        .subscribe(
-          data => {
-            
+        },
+        (error) => {
+          this.joinLoading = false;
+          if (error.status === 500) {
+            this.angulartics.eventTrack.next({ action: 'enterLightningCode', properties: { category: 'joinProject', label: 'failure' }});
+            this.errorObject.invalidCode = "Oh no! Something went wrong and we don't know what happened!";
+          } else {
+            this.errorObject.invalidCode = "We don't think that's a real code :confused:";
           }
-        )
+        }
+      );
+  }
+
+  /**
+   * Clears all errorObject strings to equal empty strings
+   */
+  private clearErrors(): void {
+    for (let property in this.errorObject) {
+      if (this.errorObject.hasOwnProperty(property) && typeof this.errorObject[property] === 'string') {
+        this.errorObject[property] = "";
+      }
     }
+  }
 }
 
 export interface ReadingShareObject {

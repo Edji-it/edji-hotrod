@@ -71,6 +71,7 @@ export class NewReadingPage implements OnInit {
 
     // Used for processing reading
     private words: any[] = []
+    private previousWordY: number = 0
 
     // Configuration Options for Medium Editor
     private mediumEditorConfig: any = {
@@ -80,7 +81,7 @@ export class NewReadingPage implements OnInit {
             cleanPastedHTML: true,
             cleanAttrs: ['class', 'style', 'dir', 'id'],
             cleanTags: ['meta', 'button', 'input', 'form', 'img', 'label', 'pre', 'figure', 'hr', 'iframe'],
-            unwrapTags: [ 'strong', 'center', 'sup', 'sub', 'span', 'small', 'div', 'em', 'footer', 'ul', 'ol', 'li' ]
+            unwrapTags: [ 'strong', 'center', 'sup', 'sub', 'span', 'small', 'div', 'em', 'footer', 'ul', 'ol', 'li', 'blockquote']
         }, 
         extensions: { 
             // Disables Medium Editor handled image dragging
@@ -249,10 +250,18 @@ export class NewReadingPage implements OnInit {
      * Pushes text nodes as formatted objects into this.words
      * @param element Root element to start crawling from
      */
-    private extractTextNodes(element: any, ancestorTags ?: string[], lastInBlock ?: boolean) {
+    private extractTextNodes(element: any, ancestorTags ?: string[]) {
         let tagName = 'tagName' in element && element.tagName.toLowerCase()
         let nodes = element.childNodes
-        
+        // Detect line breaks
+        let currentTop = element.getBoundingClientRect ? element.getBoundingClientRect().top : this.previousWordY
+        if ((currentTop - this.previousWordY) > 10 && this.previousWordY != 0) {
+            this.words.push({
+                str: '',
+                styles: ['br']
+            })
+        }
+        this.previousWordY = currentTop
         // Children should inherit tags from several elements up
         // eg. "B" style should propagate down
         if (!ancestorTags) {
@@ -272,20 +281,25 @@ export class NewReadingPage implements OnInit {
         }
 
         if (tagName === 'a') {
+            let aStyles = [].concat(ancestorTags)
+            for (let i = 0; i < nodes.length; i++) {
+                if (nodes[i].tagName) {
+                    aStyles.push(nodes[i].tagName.toLowerCase())
+                }
+            }
             this.words.push({
                 str: element.innerText, // to be used for image title
                 url: element.getAttribute('href'), 
-                styles: ['a']
+                styles: aStyles
             })
             nodes = []
         }
 
         for (let index = 0; index < nodes.length; index++) {
-
             let node = nodes[index]
             // Copy tags array to variable local to loop instance
             let inheritedTags = ancestorTags.slice();
-            
+
             // If the node is just a break
             if ('tagName' in node && node.tagName.toLowerCase() == 'br') {
                 // Add break element
@@ -316,57 +330,34 @@ export class NewReadingPage implements OnInit {
                         styles: [].concat(inheritedTags)
                     }
                     let addBr = false;
-                    if (typeof(word.str) == 'string' && word.str.trim().length < 1) {
-                        word.styles.push('space');
-                    }
                     if (index == 0 && wIndex == 0) {
                         word.styles.push(tagName + '-a');
-                        if ( this.words.slice(-1) && this.words.slice(-1)['styles'] && this.words.slice(-1)['styles'].indexOf('br') >= 0 ) {
-                            // Do nothing
-                        } else if (tagName == 'p' || tagName == 'h1' || tagName == 'h2' || tagName == 'h3') {
-                            this.words.push({
-                                str: '',
-                                styles: ['br']
-                            })
-                        }
                     }
                     if (index == nodes.length - 1 && wIndex == nodeWords.length - 1) {
                         word.styles.push(tagName + '-z')
-                        if (tagName == 'p' || tagName == 'h1' || tagName == 'h2' || tagName == 'h3') {
-                            addBr = true
-                        }
-                        if (lastInBlock === true) {
-                            addBr = true
-                        }
                     }
-                    this.words.push(word);
-                    if (addBr) {
-                        // Add break element
-                        this.words.push({
-                            str: '',
-                            styles: ['br']
-                        })
+                    if (typeof(word.str) == 'string' && word.str.trim().length < 1) {
+                        // As a space saving technique, we save spaces as empty object
+                        this.words.push({})
+                    } else {
+                        // Don't save the useless "div" style
+                        let i = word.styles.indexOf('div')
+                        if (i > -1) {
+                            word.styles.splice(i, 1)
+                        }
+                        // Don't save empty word strings
+                        if (word.str == '') {
+                            delete word.str
+                        }
+                        // Don't save empty styles arrays
+                        if (word.styles == []) {
+                            delete word.styles
+                        }
+                        this.words.push(word)
                     }
-                }
-                if (lastInBlock === true) {
-                    this.words.push({
-                        str: '',
-                        styles: ['br']
-                    })
                 }
             } else {
-                if (lastInBlock === true ) {
-                    this.words.push({
-                        str: '',
-                        styles: ['br']
-                    })
-                }
-                // If not a text node, dig deeper for text nodes
-                if ( index == nodes.length - 1 && (tagName == 'p' || tagName == 'h1' || tagName == 'h2' || tagName == 'h3')) {
-                    this.extractTextNodes(node, inheritedTags, true)
-                } else {
-                    this.extractTextNodes(node, inheritedTags)
-                }
+                this.extractTextNodes(node, inheritedTags)
             }
         }
     }
@@ -453,9 +444,25 @@ export class NewReadingPage implements OnInit {
             // Concatenate the html to 1 string [not currently using with current config]
             // this.concatHtml += editorHtml[i]
             concatHtml += this.readingHtml[i].text
+            if (!document.querySelector('#renderedReading')){
+                let div1 = document.createElement('div')
+                div1.setAttribute('id','renderedReading')
+                div1.style.width = '100000px'
+                div1.style.position = 'absolute'
+                div1.style.top = '100%'
+                div1.style.left = '100%'
+                div1.className = 'content'
+                document.body.appendChild( div1 )
+            }
+            let rendered: any = document.querySelector('#renderedReading')
+            let renderHtml
+            rendered['innerHTML'] = concatHtml
+            renderHtml = document.querySelector('#renderedReading')
 
-            let childEls = editorHtml[i].childNodes
+            let childEls = renderHtml.childNodes
 
+            // Reset line break detection
+            this.previousWordY = 0
             // Loop through all Reading html elements
             for (let childEl of childEls) {
                 this.extractTextNodes(childEl)
@@ -520,8 +527,8 @@ export class NewReadingPage implements OnInit {
                                 .subscribe( (project) => {
                                     this.addLoadingD = false
                                     this.addLoadingP = false
-                                    // this.router.navigate(['project', project._id])
-                                    this._util.showShareCode=true; 
+                                    this.router.navigate(['project', project._id], { queryParams: { readingCodeModal: true }})
+                                    // this._util.showShareCode=true; 
                                 }, (error) => {
                                     console.error(error)
                                     this.addLoadingD = false
@@ -539,7 +546,7 @@ export class NewReadingPage implements OnInit {
                     }
                 },
                 error => {
-                    console.log(error)
+                    console.error(error)
                     this.addLoadingD = false
                     this.addLoadingP = false
                     if (reading.questions.length > 0) {

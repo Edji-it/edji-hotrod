@@ -1,11 +1,23 @@
+import { DomSanitizer } from '@angular/platform-browser';
+import { AudioService } from '../../shared/audio.service';
 import { Angulartics2 } from 'angulartics2/dist'
 import { CommentService } from '../../shared/comment.service'
 import { MediaService } from '../../shared/media.service'
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 import { EdjiComment } from '../../shared/datatypes'
+import * as Recorder from 'opus-recorder/dist/recorder.min.js';
 
-declare var MediaRecorder: any
+// declare var MediaRecorder: any
+declare var window: any
+declare var navigator: any
+
+enum playState {
+  inactive, 
+  loading,
+  playing,
+  recording
+}
 
 @Component({
   selector: 'audio-comment',
@@ -19,20 +31,23 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
   @Output() save: EventEmitter<any> = new EventEmitter<any>() 
   @Output() showDeleteAudioModal: EventEmitter<any> = new EventEmitter<boolean>()
 
-  private isPlaying: boolean = false
-  private isRecording: boolean = false
+  private currentState: playState = playState.inactive
+
+  // private isPlaying: boolean = false
+  // private isRecording: boolean = false
   private recordOverConfirmed: boolean = false
-  private playTime: string = "0px"
-  private playWidth: number = 130
-  private playWidthVisual: number
-  private pausedWidth: number
+  private playTime: number = 0
+  private playWidth: number = 100
+  private playWidthOffset: number = 60
+  private playheadPos: number
   private myCanvas
   private chunks: any = []
-  private mediaRecorder: any
+  // private mediaRecorder: any
+  private recorder: any
+  private recorderReady: boolean
+
   private audio
   private audioFile
-  private playAble: boolean = false
-  private recordAble: boolean = false
   private activated: boolean = false
   private rStartAt: any
   private rDuration: number = 0
@@ -46,27 +61,19 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
   // Change the next variable to control maximum audio comment length in milliseconds
   private timeLimit: number = 30000
   // Change the next variable to control the frequency at which the playback/recording currentTime evaluates
-  private intervalGap: number = 500
+  private INTERVAL_GAP: number = 500
+  private MAX_SECONDS: number = 30
+
   private isInitialized: boolean = false
   private countdown: boolean = false
   private countdownI: number = 3
-  private countdownText: string[] = ['--- Go! ---', '--- Set ---', '-- Ready --']
+  private countdownText: string[] = ['Go!', 'Set', 'Ready']
   private countdownInterval: any
-  private audioType: string = 'ogg'
-  private audioTypeExt: string = 'ogg'
-  // private audioType: string = 'aac'
-  // private audioTypeExt: string = 'aac'
 
   // We need to know when changes to inactive to clear the editing variable
   @Input() set active(active){
     this.activated = active
-    if (!active && this.audioFile) {
-      this.waves = [].concat(this.initWaves)
-      this.chunks = []
-      this.wavePos = 0
-      this.initializeAudio()
-    }
-    if (!active && this.isRecording) {
+    if (!active && this.currentState == playState.recording) {
       this.stopRecord()
     }
   }
@@ -87,142 +94,188 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
     private _media: MediaService,
     private el: ElementRef,
     private _comments: CommentService,
-    private angulartics: Angulartics2
+    private angulartics: Angulartics2,
+    private sanitizer: DomSanitizer,
+    // Note: The AudioService is provided at the page level (project page) to be lighter
+    private _audio: AudioService
   ) {
-    
+
   }
   
   ngOnInit() {
-    this.waves = [].concat(this.initWaves)
     this.myCanvas = this.el.nativeElement.querySelector('.wave-form')
+    // Initialize the wave!
+    this.newWave()
     // If comment already has uploaded audio, load it
     if (this.comment.url && this.comment.url.length > 0) {
-      this.audio = new Audio()
-      this.audio.src = this.comment.url
-      this.audio.preload = 'none'
-      this.audio.load()
-      this.playAble = true
+      this.loadAudioPlayer(this.comment.url)
       // Build the waveform
-      this._comments.waveForm(this.comment.dataArray, this.myCanvas)
+      this.waves = this.comment.dataArray
       this.isInitialized = true
-    } else {
-      // Set the canvas properties and write temporary data
-      this._comments.waveForm(this.waves, this.myCanvas)
     }
-
-    if (this.userPermission > 3) {
-      this.playWidth = this.playWidth - 55
-    } else if (this.userPermission == 3) {
-      this.playWidth = this.playWidth - 30
-    }
-    /** 
-     * Initialize the audio access request & setup once this component loads
-     * Will only load if the user creates an audio comment, or loads text with audio comments in it already
-     * Both of which we need to get access granted in order to run 
-     */
-    this.initializeAudio()
+    // Render either initial or saved waveform
+    this._comments.waveForm(this.waves, this.myCanvas)
   }
 
   ngAfterViewInit(){
-    setTimeout(_=> this.setplayWidthVisual())
+    setTimeout(_=> this.setPlayWidth())
+  }
+  
+  public verifyAudio() {
+    // Verify the user has accepted access to the microphone
+    if (typeof(this._audio.recorder)==='undefined') {
+        this._audio.initializeAudio()
+    }
+
+    // First press on mic this session triggers mic access request
+    navigator.mediaDevices.getUserMedia({ audio: true })
+      .then((stream) => {
+          this.startRecording()
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }
+
+  public startRecording() {
+    // Use shared recorder
+    this.recorder = this._audio.recorder
+    // When we know we're ready to record, let's prep the audio recorder and start recording audio
+    this.initializeAudio()
+
+    this.countdown = true
+    this.countdownInterval = setInterval(()=> {
+      this.countdownI--
+    }, 800)
+    setTimeout(() => {
+      clearInterval(this.countdownInterval)
+      this.countdownInterval = ''
+      this.countdownI = 2
+      this.countdown = false
+      this.rStartAt = new Date()
+      this.recorder.start()
+    }, 3000)
   }
 
   public initializeAudio() {
-    const onSuccess = stream => {
-      // Initialize a MediaRecorder if access to the microphone is granted
-      this.mediaRecorder = new MediaRecorder(stream)
-      this.mediaRecorder.onstart = e => {
-        // While recording, check the duration of the recording total and stop it once it hits the limit
-        this.rInterval = setInterval(()=> {
-          if((new Date().getTime() - this.rStartAt + (this.rDuration * 1000)) > this.timeLimit - 1) {
-            this.stopRecord()
-            clearInterval(this.rInterval)
-            return
-          }
-          // While recording, set the playTime to indicate current % progress of recording
-          // this.playTime = (((this.rDuration * 1000 + (new Date().getTime() - this.rStartAt)) / this.timeLimit) * this.playWidth) + 'px'
-        }, this.intervalGap)
-      }
-      this.mediaRecorder.onstop = e => {
-        // If the audio is at the limit, restrict the ability to record
-        if (this.rDuration > this.timeLimit / 1000) {
-          this.recordAble = false
-        }
+    // Clears stream and event listeners from other comments
+    this._audio.freshRecorder()
 
-        // Initialize an audio object after the recording has stopped
-        this.audio = new Audio()
+    // Initialize a Recorder.js if access to the microphone is granted
+    this._audio.addRecorderListener('streamError', (err) => {
+      console.error(err)
+    })
+
+    /**
+     * Start Recording event handling
+     */
+    this._audio.addRecorderListener('start', () => {
+      // Clear wave forms (we are assuming each recording is new/fresh)
+      this.newWave()
+      // Maintain state when we know for sure we are recording
+      this.currentState = playState.recording
+      // While recording, check the duration of the recording total and stop it once it hits the limit
+      this.rInterval = setInterval(()=> {
+        // While recording, update playTime value
+        this.playTime += 0.5
+        this.setPlayhead()
+      }, this.INTERVAL_GAP)
+    })
+
+    /**
+     * Stop Recording event handling
+     */
+      this._audio.addRecorderListener('stop', () => {
+        // Player begins uploading recording on stop
+        this.currentState = playState.loading
+        // Clear duration loop
+        clearInterval(this.rInterval)
 
         // Set the audio for playback via the blob object from the stored chunks
-        //var binary = this.convertDataURIToBinary(this.chunks)
-        const blob = new Blob(this.chunks, { 'type': 'audio/' + this.audioType + '; codecs="aac"' })
+        const blob = new Blob(this.chunks, { 'type': 'audio/wav; codecs="wav"' })
         
-        var file = new File([blob], 'my-audio.' + this.audioTypeExt, {
-            type: 'audio/' + this.audioType
+        var file = new File([blob], 'my-audio.wav', {
+            type: 'audio/wav'
         });
         
         this.audioFile = file
-        this.audio.src = window.URL.createObjectURL(blob)
-        this.audio.load()
-
+        
         // Comment saved! Save audio file
         this._media.uploadAudio(this.audioFile)
           .take(1)
           .subscribe(data => {
-            this.audio.src = data.url
-            this.isInitialized = true
+            // Player no longer loading!
+            this.currentState = playState.inactive
+
+            this.loadAudioPlayer(data.url)
 
             // Save to comment
             this.comment.url = data.url
             this.comment.dataArray = this.waves
             this.save.emit(this.comment)
+          },
+          err => {
+            console.error(err)
           })
+      })
 
-        // Set the playTime to indicate current % progress of playback
-        // this.audio.onplay = e => {
-        //   this.playTime = '0px'
-        //   this.pInterval = setInterval(()=> {
-        //     if((new Date().getTime() - this.pStartAt) > this.rDuration * 1000 - 1) {
-        //       // this.pause()
-        //       clearInterval(this.pInterval)
-        //       return
-        //     }
-        //     this.playTime = (((new Date().getTime() - this.pStartAt) / this.timeLimit) * this.playWidth) + 'px'
-        //   }, this.intervalGap)
-        // }
+    /**
+     * Data Stream event handling
+     * - Saves data to chunks array as it is received
+     * - In Chrome, we receive all chunks at the end of recording
+     */
+    this._audio.addRecorderListener('dataAvailable', (e) =>{
+      // Save data to create audio file on 'stop'
+      this.chunks.push(e.detail)
 
-        this.addOnEndEvent()
-      }
+      // Sample for waves every 500ms
+      let detailLength = e.detail.length
+      let sampleInterval = detailLength/(this.rDuration*2)
+      for (let i = 0; i < detailLength; i = i + sampleInterval) {
+        i = Math.floor(i)
+        // Sample for the wave ~~~
+        let neighborAvg = ((e.detail[i] || 0) + (e.detail[i+1] || 0) + (e.detail[i+2] || 0) + 1)/3
+        this.waves[this.wavePos] = Math.round(neighborAvg)
+        this.wavePos++
+      }      
+      
+      this._comments.waveForm(this.waves, this.myCanvas)
+    })
+    
+    // Intialize the recording stream
+    this.recorder.initStream()
+  }
 
-      // Send "chunks" to the array as they are recorded
-      this.mediaRecorder.ondataavailable = e => {
-        this.chunks.push(e.data)
-        this.waves[this.wavePos] = e.data.size - 3200
-        this.wavePos ++
-        this._comments.waveForm(this.waves, this.myCanvas)
-      }
+  /**
+   * Refreshes the waveform data
+   */
+  private newWave() {
+    this.wavePos = 0
+    this.waves = [].concat(this.initWaves)
+  }
 
-      // Clear the playing element and allow recording once audio clip has finished playing
-      if (this.audio) {
-        this.addOnEndEvent()
-      }
+  private loadAudioPlayer(url: string) {
+    // Fresh audio object
+    this.audio = new Audio()
+    this.isInitialized = true
+    this.audio.preload = 'none'
+    this.audio.src = url
+    this.audio.load()
+
+    this.audio.onplay = e => {
+      this.currentState = playState.playing
+      this.playTime = 0
+      this.pInterval = setInterval(()=> {
+        this.playTime = this.playTime + this.INTERVAL_GAP
+        this.setPlayhead()
+      }, this.INTERVAL_GAP)
     }
-    const onError = e => {
-      this.audioError()
-    }
 
-    // Request access to the microphone from the user
-    navigator.getUserMedia = (navigator['getUserMedia'] ||
-      navigator['webkitGetUserMedia'] ||
-      navigator['mozGetUserMedia'] ||
-      navigator['msGetUserMedia'])
-
-    // If the user allows access to the microphone, run the onSuccess function and enable the record button
-    if (navigator.getUserMedia) {
-     navigator.getUserMedia({ audio: true }, onSuccess, onError)
-    } else {
-      this.audioError()
+    this.audio.onended = e => {
+      this.currentState = playState.inactive
+      this.playTime = 0
+      clearInterval(this.pInterval)
     }
-    this.recordAble = true
   }
 
   /** 
@@ -242,38 +295,26 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
    * Record Audio from the user's microphone
    */
   private freshRecord() {
-    // Let analytics know a recording started
-    this.angulartics.eventTrack.next({ action: 'audioRecord', properties: { category: 'heroFeature', label: 'success' }})
-    this.countdown = true
-    this.countdownInterval = setInterval(()=> {
-      this.countdownI--
-    }, 800)
-    this.playAble = false
-    this.isPlaying = false
-    setTimeout(() => {
-      clearInterval(this.countdownInterval)
-      this.countdownInterval = ''
-      this.countdownI = 2
-      this.countdown = false
-      this.isRecording = true
-      this.rStartAt = new Date()
-      this.mediaRecorder.start(this.intervalGap)
-    }, 3000)
-    
+    if (this.currentState == playState.recording) {
+      this.recorder.stop()
+    }
+    // Clear existing recording
+    this.chunks = []
+    // Assign recorder to this component
+    // this.initializeAudio()
+    this.verifyAudio()
   }
 
   /** 
    * Stop recording audio
    */
   private stopRecord() {
-    this.playAble = true
-    this.isRecording = false
-    this.isPlaying = false
-    // Get the duration of the audio track
-    this.rDuration = this.rDuration + (new Date().getTime() - this.rStartAt) / 1000
+    this.currentState = playState.inactive
     clearInterval(this.rInterval)
-    // this.playTime = '0px'
-    this.mediaRecorder.stop()
+    // Clone playTime value
+    this.rDuration = this.playTime + 0
+    this.playTime = 0
+    this.recorder.stop()
   }
 
   /** 
@@ -282,10 +323,9 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
   private pause() {
     // Let analytics know user paused playback
     this.angulartics.eventTrack.next({ action: 'audioPause', properties: { category: 'heroFeature', label: 'success' }})
-    this.isPlaying = false
-    this.recordAble = true
-    // clearInterval(this.pInterval)
-    // this.playTime = '0px'
+    this.currentState = playState.inactive
+    clearInterval(this.pInterval)
+    this.playTime = 0
     this.audio.pause()
   }
 
@@ -295,59 +335,77 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
   private play() {
     // Let analytics know user started playback
     this.angulartics.eventTrack.next({ action: 'audioPlay', properties: { category: 'heroFeature', label: 'success' }})
-    this.recordAble = false
-    this.isPlaying = true
-    this.isRecording=false
-    // this.pStartAt = new Date()
+    this.currentState = playState.playing
     this.audio.play()
   }
 
-  private getPlayhead() {
-    this.pausedWidth = Math.round((this.audio.currentTime / 30) * this.playWidthVisual)
-    return Math.round((this.audio.currentTime / 30) * this.playWidthVisual)
+  private setPlayhead() {
+    if (this.currentState == playState.recording) {
+      this.playheadPos =  Math.round((this.playTime / this.MAX_SECONDS) * this.playWidth)
+    } else {
+      this.playheadPos =  Math.round((this.audio.currentTime / this.MAX_SECONDS) * this.playWidth)
+    }
   }
   
   /**
    * Set the playback back to the beginning #back2basics
    */
   private restartPlayback() {
+    this.currentState = playState.playing
     // Let analytics know user restarted playback
     this.angulartics.eventTrack.next({ action: 'audioRestart', properties: { category: 'heroFeature', label: 'success' }})
+    // Reload
     this.audio.load()
+    // Play!
+    this.audio.play()
   }
 
   private setPlaybackTime(event) {
-    let percentLeftClicked = event.offsetX/this.playWidthVisual
+    let percentLeftClicked = event.offsetX/this.playWidth
     if (this.audio) {
-      this.audio.currentTime = 30 * percentLeftClicked
+      this.audio.currentTime = this.MAX_SECONDS * percentLeftClicked
     }
-  }
-
-  private audioError() {
-    // console.log('this device is not supported for audio recording')
   }
 
   private getPlayhead_exp() : number {
     if (this.audio) {
-      return Math.round((this.audio.currentTime / 30) * this.playWidthVisual)
+      return Math.round((this.audio.currentTime / 30) * this.playWidth)
     } else {
       return 0
     }
   }
 
-  private addOnEndEvent(): void {
-    this.audio.onended = e => {
-      this.recordAble = true
-      this.isPlaying = false
-    }
+  private setPlayWidth() {
+    let totalWidth = this.el.nativeElement.getBoundingClientRect().width
+    let btnWidth = this.el.nativeElement.querySelector('.audio-btn-wrap').getBoundingClientRect().width
+    this.playWidth = totalWidth - btnWidth - 2 // 2 pixels to account for borders
+    this.playWidthOffset = btnWidth
   }
 
-  private setplayWidthVisual() {
-    // Get the width of the audio canvas
-    if (this.el.nativeElement.querySelector('.reply-wave')) {
-      this.playWidthVisual = this.el.nativeElement.querySelector('.wave-form').getBoundingClientRect().width
-    } else {
-      this.playWidthVisual = this.playWidth
-    }
+  private getCalcWidth() {
+    return this.sanitizer.bypassSecurityTrustStyle('calc(100% - ' + this.playWidthOffset + 'px)')
+  }
+
+  /**
+   * Play state convenience functions
+   */
+  isPlayable(): boolean {
+    return this.currentState == playState.playing || this.currentState == playState.inactive
+  }
+  isInactive(): boolean {
+    return this.currentState == playState.inactive
+  }
+  isRecording(): boolean {
+    return this.currentState == playState.recording
+  }
+  isPlaying(): boolean {
+    return this.currentState == playState.playing
+  }
+  isLoading(): boolean {
+    return this.currentState == playState.loading
+  }
+
+  ngOnDestroy() {
+    this._audio.shutAudioDown()
   }
 }

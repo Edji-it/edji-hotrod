@@ -436,7 +436,7 @@ button, .button, .btn { //, [class*='btn']
 .btn-icon--circle-shadow {
     background: none;
     text-shadow: none;
-    opacity: 0.9;
+    opacity: 1;
     cursor: pointer;
     background-color: white;
     background: white;
@@ -477,4 +477,9 @@ pre.btn {
 	& .emojioneemoji {
 		margin-top: -1px;
 	}
+}
+
+// Small padding/offset adjustments
+.input-group-lg > .input-group-btn > .btn {
+  padding: 0.5rem 1.5rem;
 }

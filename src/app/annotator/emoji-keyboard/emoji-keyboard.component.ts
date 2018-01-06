@@ -16,15 +16,21 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
   private locker: Locker;
   
   private _isActive = false;
+  private currentComment: string;
 
   @Input()
   set isActive(active: boolean) {
+    this.currentComment = this._comments.activeComment.data
+    if (this._isActive && active == false) {
+      this.onInactivated();
+    } else if (!this._isActive && active == true) {
+      this.onActivated();
+    }
     this._isActive = active;
-    this.onActiveChange();
   }
   get isActive(): boolean { return this._isActive; }
 
-  @Input() private currentComment: string;
+  // @Input() private currentComment: string;
 
   // We have to tell the parent the comment updated since the keyboard doesn't maintain the comment
   @Output() commentChange = new EventEmitter();
@@ -74,7 +80,7 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
     {
       icon: ":heartpulse:",
       title: "Symbols",
-      emoji: ["heart", "broken_heart", "cupid", "peace", "cross", "star_and_crescent", "om_symbol", "wheel_of_dharma", "star_of_david", "six_pointed_star", "menorah", "yin_yang", "orthodox_cross", "place_of_worship", "no_entry_sign", "no_entry", "100"]
+      emoji: ["heart", "broken_heart", "cupid", "peace", "cross", "star_and_crescent", "om_symbol", "wheel_of_dharma", "star_of_david", "six_pointed_star", "menorah", "yin_yang", "orthodox_cross", "place_of_worship", "no_entry_sign", "no_entry", "exclamation", "question", "interrobang", "bangbang", "100"]
     },
     {
       icon: ":flag_eu:",
@@ -100,9 +106,9 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * Fired when active state of Keyboard is toggle on/off
+   * Fired when active state of Keyboard is toggled off
    */
-  onActiveChange() {
+  onInactivated() {
     // Update user object with recent emoji
     let user = this._auth.getUser();
     if (!user.prefs) {
@@ -120,6 +126,11 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
             }
           }
         )
+    document.querySelector('.main').className = 'main'
+  }
+
+  onActivated() {
+    document.querySelector('.main').className = 'main keyboard-adjust'
   }
 
   // When clicking a category, jump to that section

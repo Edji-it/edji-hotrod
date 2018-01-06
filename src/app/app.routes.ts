@@ -1,4 +1,4 @@
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule } from '@angular/router'
 
 import { NewReadingPage } from './new-reading-page';
 import { ProjectPageComponent } from './project-page';
@@ -12,27 +12,28 @@ import { ResetPassPage } from './reset-pass/reset-pass-page.component';
 import { HeroPromoComponent } from './hero-promo/hero-promo.component';
 import { HeroPricingComponent } from './hero-pricing/hero-pricing.component';
 import { DiscoverFeedComponent } from "app/discover-feed/discover-feed.component";
+import { OAuthComponent } from './oauth-redirect/oauth-redirect.component';
 
-import { DataResolver } from './app.resolver';
-import { AuthService } from './shared';
-
-import { DashboardRoutes } from './dashboard/dashboard.routes';
+// services
+import { DataResolver } from './app.resolver'
+import { AuthService } from './shared'
 
 export const ROUTES: Routes = [
-  { path: '', redirectTo: '/dashboard/projects', pathMatch: 'full', canActivate: [AuthService] },
+  { path: '', redirectTo: '/dashboard', pathMatch: 'full', canActivate: [AuthService] },
   { path: 'home',  component: HomeComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
   { path: 'account', component: AccountComponent, canActivate: [AuthService] },
   { path: 'discover', component: DiscoverFeedComponent, canActivate: [AuthService] },
-  { path: 'dashboard',  component: DashboardComponent, canActivate: [AuthService], children: DashboardRoutes },
+  { path: 'dashboard',  component: DashboardComponent, canActivate: [AuthService] },
   { path: 'project/:id',  component: ProjectPageComponent },
   { path: 'new-reading', component: NewReadingPage, canActivate: [AuthService] },
   { path: 'new-reading/:id', component: NewReadingPage, canActivate: [AuthService] },
   { path: 'reset-password', component: ResetPassPage },
   { path: 'hero', component: HeroPromoComponent, pathMatch: 'full' },
   { path: 'pricing', component: HeroPricingComponent, pathMatch: 'full'  },
+  { path: 'oauth/:type', component: OAuthComponent, pathMatch: 'full' },
   { path: 'not-found',    component: NoContentComponent, pathMatch: 'full' },
   { path: ':projectId', redirectTo: '/project/:projectId', pathMatch: 'full'},
   { path: '**',    component: NoContentComponent }
-];
+]

@@ -52,6 +52,19 @@ export class ProjectService {
     private answersByIdSubject: BehaviorSubject<any> = new BehaviorSubject<any>(this.answersByIdSource)
     public answersById: Observable<any> = this.answersByIdSubject.asObservable()
 
+    /**
+     *  Comments by Position
+     *  - position = lineY of a comment
+     *  - Comments are indexed by their "lineY" value
+     */
+    public commentByPosSource: any[][] = []
+    private commentByPosSubject: BehaviorSubject<any> = new BehaviorSubject<any>(this.commentByPosSource)
+    public commentByPos: Observable<any> = this.commentByPosSubject.asObservable()
+
+    // Broadcast closing the comment pane
+    public commentPaneStateSubj: Subject<boolean> = new Subject<boolean>()
+    public commentPaneState: Observable<boolean> = this.commentPaneStateSubj.asObservable()
+
     constructor(
         private http: Http, 
         private _auth: AuthService, 
@@ -199,6 +212,12 @@ export class ProjectService {
         if (comment.user_id === user._id || comment.user_id === this.project.teacher_id) {
             comment.showAvatar = true;
         }
+
+        // if (comment.loc && comment.loc.y && comment.text==="") {
+        //     comment.imagePos = Math.round(comment.loc.y/8)*8
+        // }   
+
+        // this.decorateComment(comment)
 
         this.addCommentToReplies(comment)
 
@@ -475,17 +494,19 @@ export class ProjectService {
             .delete(url, this._auth.getOptions())
             .map(data => {
                 // Tell other Project views that the comment is gone
-                 this._socket.updateComment(comment, 'DELETE', this.project._id);
-                 // Update stats
-                 this.commentStats.addCommentToStats(comment, -1)
+                this._socket.updateComment(comment, 'DELETE', this.project._id)
+                // Update stats
+                this.commentStats.addCommentToStats(comment, -1)
 
                 for (var i = 0; i <= this.project.comments.length; i++) {
                     if (this.project.comments[i] && this.project.comments[i]._id === comment._id) {
                         // Remove comment from local object
-                        this.project.comments.splice(i, 1);
+                        this.project.comments.splice(i, 1)
                     }
                 }
-                return data;
+
+                this.buildCommentsByPos()
+                return data
             })
             .toPromise()
             .then(this._auth.extractData);
@@ -574,4 +595,31 @@ export class ProjectService {
             this._auth.getOptions()
         ) //this.http.put
     } // public addUserToProject(projectId: string): Observable<any>
+
+    /**
+     * Generates the "commentByPos" array, and pushes out to Subscribers
+     * - Uses lineY values on the comments as the "position" value
+     */
+    public buildCommentsByPos(): void {
+        // Re-initialize the comment by position array
+        this.commentByPosSource = []
+        // Copy then reverse the array
+        let commentsArray = this.project.comments.slice().reverse()
+        // Loop through each comment to group comments together by line number
+        let len2 = commentsArray.length
+        for (let i = 0; i < len2; i++) {
+            let comment = commentsArray[i]
+            if (comment && !comment.reply_to && !comment.questionId && comment.lineY) {
+                // lineY is determined by each individual CommentComponent
+                let lineY = comment.lineY
+                // Push the comment into commentByPos based on the lineY number
+                if (typeof(this.commentByPosSource[lineY])=='undefined') {
+                    this.commentByPosSource[lineY] = [comment]
+                } else {
+                    this.commentByPosSource[lineY].push(comment)
+                }
+            }
+        }
+        this.commentByPosSubject.next(this.commentByPosSource)
+    }
 } // class

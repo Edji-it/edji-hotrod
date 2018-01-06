@@ -13,7 +13,13 @@
           <hot-guest-login (loginSuccess)="onLoginSuccess()"></hot-guest-login>
         </div>
         <div *ngIf="!guestLogin">
-          <h3 id="accountLoginHeader">{{ loginHeader }}</h3>
+          <!-- <div *ngIf="route.snapshot.queryParams['switch'] === 'google'" class="pb-2">
+            <h3 id="oauthLoginHeader">Log in with Google</h3>
+            <hot-google-button></hot-google-button>
+          </div> -->
+          <hot-oauth-row *ngIf="route.snapshot.queryParams.switch == 'google'"></hot-oauth-row>
+
+          <h3 id="accountLoginHeader">Log in with an Edji account</h3>
           <hot-login-form (loginSuccess)="onLoginSuccess()"></hot-login-form>
           <br>
           

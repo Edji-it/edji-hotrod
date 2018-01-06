@@ -76,9 +76,9 @@ describe("Versioning - ", () => {
         browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
         newReading.finalizeButton.click();
 
-        // Click the 'Go to Reading' button on share button modal
-        browser.wait(EC.elementToBeClickable(newReading.goToReadingButton), 5000, "share code modal go to reading button never became clickable")
-        newReading.goToReadingButton.click();
+        // // Click the 'Go to Reading' button on share button modal
+        // browser.wait(EC.elementToBeClickable(newReading.goToReadingButton), 5000, "share code modal go to reading button never became clickable")
+        // newReading.goToReadingButton.click();
 
         // Should redirect to Project page for new reading
         browser.wait(EC.urlContains("project"), 7500, "never arrived at the reading page after published");
@@ -161,9 +161,9 @@ describe("Versioning - ", () => {
         browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
         newReading.finalizeButton.click();
 
-        // Click the 'Go to Reading' button on share button modal
-        browser.wait(EC.elementToBeClickable(newReading.goToReadingButton), 5000, "share code modal go to reading button never became clickable")
-        newReading.goToReadingButton.click();
+        // // Click the 'Go to Reading' button on share button modal
+        // browser.wait(EC.elementToBeClickable(newReading.goToReadingButton), 5000, "share code modal go to reading button never became clickable")
+        // newReading.goToReadingButton.click();
 
         // Reading should be published
         browser.wait(EC.urlContains("project"), 15000, "never arrived at the finished reading");
@@ -175,6 +175,7 @@ describe("Versioning - ", () => {
         browser.wait(EC.elementToBeClickable(dashboard.firstProject), 15000, "reading cards never loaded");
 
         // Expand the past versions
+        browser.wait(EC.elementToBeClickable(element(by.css('[testFindVersionToggle="' + titleUpdate + '"]'))), 5000, "past versions toggle never became clickable");
         element(by.css('[testFindVersionToggle="' + titleUpdate + '"]')).click();
 
         // Verify version 1 of this reading is in the list

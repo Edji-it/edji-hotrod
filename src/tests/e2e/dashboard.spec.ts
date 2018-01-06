@@ -68,7 +68,7 @@ describe('Dashboard Page', () => {
             // form handling
             dashboard.projectCodeInput.sendKeys(login.validProjectCode);
             browser.wait(EC.elementToBeClickable(dashboard.projectJoinButton), 5000, "project code input was never clickable");
-            dashboard.projectJoinButton.submit();
+            dashboard.projectJoinButton.click();
 
             // verification
             browser.wait(EC.urlContains("project"), 5000, "entering a project code did not bring me to a project");
@@ -107,9 +107,9 @@ describe('Dashboard Page', () => {
             browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
             newReading.finalizeButton.click();
 
-            // Click the 'Go to Reading' button on share button modal
-            browser.wait(EC.elementToBeClickable(newReading.goToReadingButton), 5000, "share code modal go to reading button never became clickable")
-            newReading.goToReadingButton.click();
+            // // Click the 'Go to Reading' button on share button modal
+            // browser.wait(EC.elementToBeClickable(newReading.goToReadingButton), 5000, "share code modal go to reading button never became clickable")
+            // newReading.goToReadingButton.click();
 
             // Should redirect to Project page for new reading
             browser.wait(EC.urlContains("project"), 7500, "never arrived at the reading page after published");

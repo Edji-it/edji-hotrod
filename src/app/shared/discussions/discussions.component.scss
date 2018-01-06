@@ -1,4 +1,4 @@
-@import '../../../../sass/base/variables';
+@import '../../../sass/base/variables';
 
 .replyHighlight-card {
   margin: 0;
@@ -30,7 +30,8 @@
 }
 
 .replyCommentBlock {
-  height: 75px
+  height: 75px;
+  width: calc(100% - 32px);
 }
 
 .replyHeaderRow {
@@ -43,10 +44,6 @@
   color: $gray;
 }
 
-.replyCommentBlock {
-  width: calc(100% - 66px);
-}
-
 .replyCommentInputBlock {
   width: calc(100% - 66px);
 }
@@ -57,11 +54,14 @@
 
 .replyOverflow {
   overflow-y: auto;
+  overflow-x: hidden;
+  margin-right: -20px;
+  padding-right: 20px;
   // height: calc(100% - $replyContainerHeight);
 }
 
 .replyOverflow-normal {
-  height: calc(100% - 203px)
+  height: calc(100% - 214px)
 }
 
 .replyOverflow-eKey {
@@ -75,7 +75,7 @@
 .replyButtonGroup {
   float: right;
   margin-top: 5px;
-
+  
   & button {
     float: left;
     width: 36px !important;
@@ -84,6 +84,8 @@
     padding: 5px 2.5px !important;
     background-color: $bubbleColor !important;
     text-align:center;
+    z-index:1000;
+    
     &:hover {
       transform: scale(1.1);
     }

@@ -1,11 +1,11 @@
-import { Title } from '@angular/platform-browser';
-import { Component, ElementRef, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs/Subscription';
+import { Title } from '@angular/platform-browser'
+import { Component, ElementRef, OnInit } from '@angular/core'
+import { Router, ActivatedRoute } from '@angular/router'
+import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
+import { FormGroup, FormBuilder, Validators } from '@angular/forms'
+import { Subscription } from 'rxjs/Subscription'
 
-import { AuthService, ReadingService, ProjectService } from '../shared';
+import { AuthService, ReadingService, ProjectService } from '../shared'
 import { User } from './../shared/datatypes'
 
 @Component({
@@ -20,11 +20,11 @@ import { User } from './../shared/datatypes'
   // Every Angular template is first compiled by the browser before Angular runs it's compiler
   templateUrl: './dashboard.component.html'
 })
-export class DashboardComponent implements OnInit, OnDestroy {
+export class DashboardComponent implements OnInit {
   // Set our default values
-  private currentUser: User; 
-  private subscriptions: Subscription[] = [];
-  private mobileShowJoined:boolean = true;
+  private currentUser: User 
+  private mobileShowJoined:boolean = true
+  private showUserDetailsModal: boolean = false
 
   // Tool Tip variables
   private toolTipsContent: any[] = [
@@ -60,22 +60,35 @@ export class DashboardComponent implements OnInit, OnDestroy {
   constructor (
     public _router: Router,
     private _auth: AuthService,
-    private route: ActivatedRoute,
-    private _title: Title
+    private _title: Title,
+    private route: ActivatedRoute
   ) {
     // this makes the window always render scrolled to the top
     this._router.events.subscribe(() => {
-      window.scrollTo(0, 0);
-    });
+      window.scrollTo(0, 0)
+    })
   }
 
   ngOnInit() {
-    this.currentUser = this._auth.getUser();
+    this.currentUser = this._auth.getUser()
 
     this._title.setTitle( 'Edji | Dashboard' )
+
+    if (this.userProfileIncomplete()) {
+      this.showUserDetailsModal = true
+    }
   }
 
-  ngOnDestroy() {
-    this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
+  private userProfileIncomplete(): boolean {
+    if (this.currentUser.type === 'temp') {
+      return false
+    }
+
+    // incomplete initialized as false and passed through filters until 
+    let incomplete: boolean = false
+    if (!this.currentUser.identities || this.currentUser.identities.length < 1) {
+      incomplete = true
+    }
+    return incomplete
   }
 }

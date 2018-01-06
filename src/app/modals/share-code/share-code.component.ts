@@ -3,6 +3,7 @@ import { Project } from '../../shared/datatypes';
 import { Router } from '@angular/router';
 import { Component, EventEmitter, Input, OnInit, Output, OnDestroy } from '@angular/core';
 import { UtilToolService, ProjectService } from './../../shared'
+import { ActivatedRoute } from '@angular/router/src/router_state';
 
 @Component({
   selector: 'share-code',
@@ -14,15 +15,13 @@ export class ShareCodeComponent implements OnInit, OnDestroy {
   @Input()
   private showOpenReading: boolean
   
-  @Output()
-  private closeModal: EventEmitter<any> = new EventEmitter()
-  
   private codeLetters: any
   private subscriptions: Subscription[] = []
     private currentProject: Project
 
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
     private _util: UtilToolService,
     private _projects: ProjectService
   ) {
@@ -59,5 +58,9 @@ export class ShareCodeComponent implements OnInit, OnDestroy {
   private navDashboard() {
     this._util.shareCodeModalClose()
     this.router.navigate(['dashboard'])
+  }
+
+  private closeModal() {
+    this.router.navigate(['.'], { relativeTo: this.route, queryParams: {} })
   }
 }

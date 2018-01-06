@@ -18,6 +18,17 @@ $multiLineBlockOffset: -15px;
 									not supported by any browser */	
 }
 
+%textSelect {
+    // box-shadow: 0px 1px 2px 2px rgba(0,0,0,0.05);
+    -webkit-touch-callout: default; /* iOS Safari */
+    -webkit-user-select: text; /* Safari*/
+    -khtml-user-select: text; /* Konqueror */
+    -moz-user-select: text; /* Firefox */
+    -ms-user-select: text; /* Internet Explorer/Edge */
+    user-select: text; /* Non-prefixed version, currently
+                            supported by Chrome and Opera */
+}
+
 // Component wrapping element
 edji-comment {
 	display: inline-block;
@@ -90,7 +101,7 @@ edji-comment {
 	
 	&.expanded {
 		z-index: 5000;
-		display: block !important;
+		display: block;
 		position: absolute !important;
 		top: none !important;
 		@media (max-width: $desktop) {
@@ -101,15 +112,6 @@ edji-comment {
 	&.fade-out {
 		opacity: 0 !important;
 		pointer-events: none;
-	}
-
-	.comment-input-wrapper{
-		border: $commentBorder; // 1px solid #cdcdcd;
-		border-radius: 4px;
-		overflow: hidden;
-		position: relative;
-		transform: scale(1.0) translateZ(0px);
-		transition:  transform linear 0.2s;
 	}
 
 	.comment-username {
@@ -173,9 +175,11 @@ edji-comment {
 	}
 
 	&.active {
+		&:not(.hidden-md-down) {
 			z-index: 5500;
 			display: block !important;
-		&:not(.replyComment) {
+		}
+		&:not(.replyComment):not(.mobileBound) {
 			position: absolute !important;
 			top: none !important;
 		}
@@ -207,6 +211,15 @@ edji-comment {
 			display: block !important;
 		}
 	}
+}
+
+.comment-input-wrapper {
+	border: $commentBorder;
+	border-radius: 4px;
+	overflow: hidden;
+	position: relative;
+	transform: scale(1.0) translateZ(0px);
+	transition:  transform linear 0.2s;
 }
 
 .comment--placeholder {
@@ -298,6 +311,17 @@ input.emojiComment {
 	.focused ~ & {
 		top: 1px;
 		right: 1px;
+	}
+
+	.audio & {
+		background: #fff;
+		top: 2px;
+		right: 1px;
+
+		&:hover, &:active, &:focus {
+			background: $red;
+			color: #fff;
+		}
 	}
 }
 
@@ -674,25 +698,21 @@ $expandShadowSize: 3px;
 
 $progressStart: 51px;
 
-.playing {
-    height: 100%;
-    background-color: rgba(142,217,255,0.8);
+
+.playhead {
+	height: 100%;
     top: 0px;
     left: 0px;
     position: absolute;
+    background-color: rgba(142,217,255,0.8);
     border-radius: 0px;
     border-right: solid $green;
 	pointer-events: none;
-}
 
-.recording {
-    height: $readingLineHeight;
-    background-color: rgba(255,100,100,0.8);
-    top: 0px;
-    left: $progressStart;
-    position: absolute;
-    border-radius: 4px 0px 0px 4px;
-    border-right: solid #FF2424;
+	&.recording {
+		background-color: rgba(255,100,100,0.6);
+		border-right: solid #FF2424;
+	}
 }
 
 .btn-audio {
@@ -708,9 +728,15 @@ $progressStart: 51px;
     }
 }
 
+@keyframes redPulse {
+	0% {background-color: #dca9a9;}
+	40% {background-color: $recordRed;}
+	80% {background-color: $recordRed;}
+	100% {background-color: #dca9a9;}
+}
 .btn-record {
-    &:hover, &:active, &.active {
-		// background: #FF2424;
+	&.active {
+		animation: redPulse 2s infinite;
 	}
 }
 
@@ -784,6 +810,13 @@ $progressStart: 51px;
 	}
 }
 
+.audio-comment-input-wrapper {
+	&.replyDisplay {
+		width: 100% !important;
+		// overflow: visible;
+	}
+}
+
 .comment__avatar {
   background: #adadad;
   width: 28px;
@@ -810,4 +843,84 @@ $progressStart: 51px;
   & .comment__avatar {
     opacity: 1;
   }
+}
+
+.comment__force-display {
+	&.hidden-md-down {
+		display: block !important;
+	}
+}
+
+.mobileBound {
+	& .audio-comment-input-wrapper, .emojionearea, .text-comment-input {
+    width: 100% !important;
+	}
+}
+
+textarea.text-comment-input,
+.text-comment-input {
+    text-align: left;
+    background: #fff;
+    padding: 8px 23px 0px 10px;
+    width: 180px;
+    height: 30px;
+    line-height: 16px;
+    resize: none;
+    font-size: 12px;
+    font-family: 'Open Sans', Arial;
+    font-weight: normal !important;
+    font-style: normal !important;
+    color: #222;
+    margin: 0px;
+    cursor: pointer;
+    border: 0px solid transparent !important;
+
+    transition: all 0.2s;
+    -webkit-perspective: 1000;
+
+    .text-comment & {
+        max-height: 30px !important;
+        overflow: hidden;
+    }
+
+    .mobileBound .text-comment & {
+        max-height: none !important;
+        min-height: 30px;
+        padding-bottom: 8px;
+        height: auto;
+    }
+
+    @extend %noSelect;
+
+    .active & {
+        min-height: 90px;
+        max-height: none !important;
+        padding: 8px 23px 8px 10px !important;
+        cursor: text;
+        overflow-y: auto;
+        @extend %textSelect;
+        &::-moz-selection {
+        background-color: #cdcdcd;
+        }
+
+        &::selection {
+        background-color: #cdcdcd;
+        }
+
+        &::-moz-selection {
+        background-color: #cdcdcd;
+        }
+
+        &::selection {
+        background-color: #cdcdcd;
+        }
+    }
+
+    &:disabled {
+        background: #fff;
+        border: none !important;
+        opacity: 1 !important;
+        color: #777 !important;
+        -webkit-text-fill-color: #777;
+    }
 }

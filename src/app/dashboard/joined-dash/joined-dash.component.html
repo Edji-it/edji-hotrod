@@ -1,9 +1,9 @@
-<form class="pb-4" [formGroup]="codeForm" (ngSubmit)="addSession(codeForm.value)">
-    <h1 for="projectCodeInput" class="joined-header no-flow">Joined
-         <i class="icon__tooltip" placement="bottom" ngbTooltip="These are Readings that someone else made, and you joined!">
-            <span class="icon icon-circle icon-info">i</span>
-        </i>
-    </h1>
+<h1 for="projectCodeInput" class="joined-header no-flow">Joined
+        <i class="icon__tooltip" placement="bottom" ngbTooltip="These are Readings that someone else made, and you joined!">
+        <span class="icon icon-circle icon-info">i</span>
+    </i>
+</h1>
+<form class="pb-4 hidden-md-up" [formGroup]="codeForm" (ngSubmit)="addSession(codeForm.value)">
     <!--<input id="projectCodeInput" [formControl]="codeForm.controls['projectCode']" type="text" class="big-field lowercase-field on-white"  placeholder="Lightning Code" />-->
     <div class="input-group input-group-lg pb-2">
         <input id="projectCodeInput" name="ProjectCodeInput" [formControl]="codeForm.controls['projectCode']" type="text" class="form-control" style="text-align: center;" [(ngModel)]="projectCode"  placeholder="🔑 Code" aria-describedby="add-project-code" />
