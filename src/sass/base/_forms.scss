@@ -309,3 +309,14 @@ tr.selectable {
   color: #ccc;
   filter:grayscale(1);
 }
+
+.form-check-btn {
+  float: left;
+  margin-right: 5px;
+  border: 2px solid #cdcdcd;
+  border-radius: 15px;
+
+  &.active {
+    border-color: $green;
+  }
+}

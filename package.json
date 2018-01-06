@@ -77,7 +77,7 @@
     "@angularclass/conventions-loader": "^1.0.2",
     "@angularclass/hmr": "~1.2.2",
     "@angularclass/hmr-loader": "~3.0.2",
-    "@ng-bootstrap/ng-bootstrap": "^1.0.0-alpha.16",
+    "@ng-bootstrap/ng-bootstrap": "1.0.0-alpha.16",
     "angular2-click-outside": "^0.1.0",
     "angular2-locker": "^0.5.0",
     "angular2-medium-editor": "^1.0.6",

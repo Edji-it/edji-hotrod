@@ -11,7 +11,7 @@ import { UtilToolService } from '../shared/util-tool.service';
 import { AuthService } from '../shared';
 import { EdjiComment, EdjiQuestion, User } from '../shared/datatypes'
 import { ReadingShareObject } from './../shared/nav-bar'
-import * as Rangy from 'rangy';
+import * as Rangy from 'rangy'
 
 @Component({
     selector: 'new-reading-page',
@@ -130,8 +130,7 @@ export class NewReadingPage implements OnInit {
         this.readingForm = fb.group({
             title: [null, Validators.required],
             source: [null, null],
-            public: [null, null]
-            // label: ['Group 1', Validators.required]
+            public: ['true']
         });
 
         // Define the user object.
