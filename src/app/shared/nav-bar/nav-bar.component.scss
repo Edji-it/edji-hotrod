@@ -156,13 +156,10 @@ $purple: rgb(150, 40, 255);
 	}
 }
 
-.nav__center-btns {
-	position: absolute;
-	top: 0px;
-	height: 100%;
-	left: 50%;
-	transform: translateX(-50%);
+.nav__menu {
+	float: left;
 	line-height: $navHeight;
+	height: 100%;
 
 	& .btn {
 		display: inline-block;

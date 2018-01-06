@@ -5,7 +5,7 @@
       img#logo.nav-bar__logo(src="assets/images/logo-3.2-mark.svg")
 
     //- Dashboard Nav
-    .nav__center-btns(*ngIf="showDashboardOptions")
+    .nav__menu(*ngIf="showDashboardOptions")
       a.btn.btn-link([routerLink]="['/dashboard']", routerLinkActive="active") 
         //- span([innerHtml]="':book:' | emojione")
         | Readings
