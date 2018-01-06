@@ -1,3 +1,4 @@
+import { DomSanitizer } from '@angular/platform-browser';
 import { AudioService } from '../../shared/audio.service';
 import { Angulartics2 } from 'angulartics2/dist'
 import { CommentService } from '../../shared/comment.service'
@@ -36,8 +37,8 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
   // private isRecording: boolean = false
   private recordOverConfirmed: boolean = false
   private playTime: number = 0
-  private playWidth: number = 130
-  private playWidthVisual: number
+  private playWidth: number = 100
+  private playWidthOffset: number = 60
   private playheadPos: number
   private myCanvas
   private chunks: any = []
@@ -94,6 +95,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
     private el: ElementRef,
     private _comments: CommentService,
     private angulartics: Angulartics2,
+    private sanitizer: DomSanitizer,
     // Note: The AudioService is provided at the page level (project page) to be lighter
     private _audio: AudioService
   ) {
@@ -113,16 +115,10 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
     }
     // Render either initial or saved waveform
     this._comments.waveForm(this.waves, this.myCanvas)
-
-    if (this.userPermission > 3) {
-      this.playWidth = this.playWidth - 55
-    } else if (this.userPermission == 3) {
-      this.playWidth = this.playWidth - this.MAX_SECONDS
-    }
   }
 
   ngAfterViewInit(){
-    setTimeout(_=> this.setplayWidthVisual())
+    setTimeout(_=> this.setPlayWidth())
   }
   
   public verifyAudio() {
@@ -365,7 +361,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
   }
 
   private setPlaybackTime(event) {
-    let percentLeftClicked = event.offsetX/this.playWidthVisual
+    let percentLeftClicked = event.offsetX/this.playWidth
     if (this.audio) {
       this.audio.currentTime = this.MAX_SECONDS * percentLeftClicked
     }
@@ -373,19 +369,21 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
 
   private getPlayhead_exp() : number {
     if (this.audio) {
-      return Math.round((this.audio.currentTime / 30) * this.playWidthVisual)
+      return Math.round((this.audio.currentTime / 30) * this.playWidth)
     } else {
       return 0
     }
   }
 
-  private setplayWidthVisual() {
-    // Get the width of the audio canvas
-    if (this.el.nativeElement.querySelector('.reply-wave')) {
-      this.playWidthVisual = this.el.nativeElement.querySelector('.wave-form').getBoundingClientRect().width
-    } else {
-      this.playWidthVisual = this.playWidth
-    }
+  private setPlayWidth() {
+    let totalWidth = this.el.nativeElement.getBoundingClientRect().width
+    let btnWidth = this.el.nativeElement.querySelector('.audio-btn-wrap').getBoundingClientRect().width
+    this.playWidth = totalWidth - btnWidth - 2 // 2 pixels to account for borders
+    this.playWidthOffset = btnWidth
+  }
+
+  private getCalcWidth() {
+    return this.sanitizer.bypassSecurityTrustStyle('calc(100% - ' + this.playWidthOffset + 'px)')
   }
 
   /**

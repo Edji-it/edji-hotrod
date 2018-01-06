@@ -24,9 +24,6 @@ export class HeroSubscribeComponent implements OnInit {
   private customCouponCode: string = ''
 
   @Input()
-  heroPrice: number
-
-  @Input()
   couponCode: string
 
   @Output()

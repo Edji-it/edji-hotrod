@@ -312,6 +312,17 @@ input.emojiComment {
 		top: 1px;
 		right: 1px;
 	}
+
+	.audio & {
+		background: #fff;
+		top: 2px;
+		right: 1px;
+
+		&:hover, &:active, &:focus {
+			background: $red;
+			color: #fff;
+		}
+	}
 }
 
 .emojiPickerIconWrap {
@@ -793,6 +804,13 @@ $progressStart: 51px;
 }
 
 .text-comment-input {
+	&.replyDisplay {
+		width: 100% !important;
+		// overflow: visible;
+	}
+}
+
+.audio-comment-input-wrapper {
 	&.replyDisplay {
 		width: 100% !important;
 		// overflow: visible;

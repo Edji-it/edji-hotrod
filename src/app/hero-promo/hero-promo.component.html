@@ -18,32 +18,13 @@
 
     </div>
   </div><!--row navy-->
-  <!-- Begin MailChimp Signup Form -->
-  <div *ngIf="!countdownOver" id="mc_embed_signup" class="row hero-promo-form">
-    <div class="col-md-6 offset-md-3">
-      <p>We took all the great features of Edji, and we turned up the volume <span [innerHtml]="':tada:' | emojione"></span> Come back August 15th to find out how, and become a Hero!</p>
-      <p>The very first Hero will lock in at only $1/year&mdash;and the longer you wait, the price will climb.</p>
-      <p>Enter your email below to be notified when Hero launches!</p>
-
-      <div class="form-group pt-2" [class.has-danger]="subError" [class.has-success]="subSuccess">
-          <div class="input-group">
-            <input [(ngModel)]="newHeroEmail" type="email" value="" name="EMAIL" class="form-control form-control-success" id="mce-EMAIL" placeholder="Email address...">
-          <span class="input-group-btn">
-            <button (click)="onSubmit(newHeroEmail)" class="btn btn-hero" type="button">Notify Me!</button>
-          </span>
-        </div>
-        <div class="form-control-feedback">{{ subMsg }}</div>
-        <!--<small class="form-text text-muted">Example help text that remains unchanged.</small>-->
-      </div>
-    </div>
-  </div>
   <!--Signup w/ leveraged offer-->
-  <div *ngIf="countdownOver" class="row hero-promo-form">
+  <div class="row hero-promo-form">
     <div class="col-md-8 offset-md-2">
-      <p class="text-center">Exclusive early signup offer</p>
+      <!-- <p class="text-center">Exclusive early signup offer</p> -->
       <!--<span style="font-weight:bold;color:#d82727;">${{ heroCount/100 }}/mo</span>-->
       <div class="button__row pb-4">
-        <button class="btn btn-hero" (click)="goHero()">Go Hero for <span style="text-decoration:line-through">$60/yr</span> ${{ heroPrice/100 }}/yr</button>
+        <button class="btn btn-hero" (click)="goHero()">Go Hero for <span style="font-weight: 700;">$60/yr</span></button>
       </div>
 
       <h1 style="margin-bottom: 0.5em;">Heroes Make Powerful Lessons</h1>
@@ -101,4 +82,4 @@
 </div><!--container-fluid-->
 
 <hot-login-register [loginHeader]="'To go Hero, first you\'ll need an account'" class="modal-will-fade" [class.show]="showLoginModal" (closeModal)="showLoginModal = false" (loginSuccess)="showHeroSubModal = true"></hot-login-register>
-<hero-subscribe-modal [couponCode]="'HERO_LAUNCH'" [heroPrice]="heroPrice" class="modal-will-fade" [class.show]="showHeroSubModal" (closeModal)="showHeroSubModal = !showHeroSubModal" (heroWasBorn)="_router.navigate(['/dashboard'])"></hero-subscribe-modal>
+<hero-subscribe-modal class="modal-will-fade" [class.show]="showHeroSubModal" (closeModal)="showHeroSubModal = !showHeroSubModal" (heroWasBorn)="_router.navigate(['/dashboard'])"></hero-subscribe-modal>

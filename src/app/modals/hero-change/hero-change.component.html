@@ -11,20 +11,6 @@
                         <label>Hero Subscription Plan</label>
                         <table class="table table-hover">
                             <tbody>
-                                <!--<tr [class.table-info]="subtype == 'monthly'" (click)="subtype = 'monthly'" class="selectable">
-                                    <th scope="row">
-                                        <label class="form-check-label">
-                                            <input [(ngModel)]="subtype" class="form-check-input" type="radio" name="subscriptionPlan" id="subPlan1" value="monthly" aria-label="Monthly Subscription">
-                                            Monthly
-                                        </label>
-                                    </th>
-                                    <td>
-                                        <p>$5/mo</p>    
-                                    </td>
-                                    <td>
-                                        <p>Billed as $5 every month</p>    
-                                    </td>
-                                </tr>-->
                                 <tr [class.table-info]="subtype == 'yearly'" (click)="subtype = 'yearly'" class="selectable">
                                     <th scope="row">
                                         <label class="form-check-label">
@@ -32,21 +18,12 @@
                                             Yearly
                                         </label>
                                     </th>
-                                    <!-- <td>
-                                        <p>$60/yr</p>
-                                    </td>
-                                    <td>
-                                        <p>Billed as $48 every year</p>
-                                    </td> -->
                                 </tr>
                             </tbody>
                         </table>
                         <div class="alert alert-success" *ngIf="isUpdated">
                           <strong>Subscription Updated</strong> Your Hero Subscription was updated.
                         </div>
-                        <!--<div class="btn-row right">
-                          <button [class.loading]="updating" id="subHero" (click)="updateType(subtype)" class="btn btn-primary">Update</button>
-                        </div>-->
                         <div class="btn-row right">
                           <button [class.loading]="canceling" id="subHero" (click)="confirmCancel = true" class="btn btn-secondary">Cancel Subscription</button>
                         </div>

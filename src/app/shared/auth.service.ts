@@ -645,13 +645,6 @@ export class AuthService implements CanActivate {
             })
     }
 
-    public getHeroPrice() {
-        return this.http.get(this.baseUrl + '/subscriptions/coupons/HERO_LAUNCH', this.getOptions())
-            .map( res => {
-                return res.json()
-            })
-    }
-
     public getUserWithAuthToken(type: string, token: string): Observable<LoginObject> {
         return this.http.get(this.baseUrl + "/users?oauth_type=" + type + "&oauth_token=" + token)
             .map((res) => {

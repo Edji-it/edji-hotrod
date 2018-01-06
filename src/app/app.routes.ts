@@ -18,16 +18,13 @@ import { OAuthComponent } from './oauth-redirect/oauth-redirect.component'
 import { DataResolver } from './app.resolver'
 import { AuthService } from './shared'
 
-// routes
-import { DashboardRoutes } from './dashboard/dashboard.routes'
-
 export const ROUTES: Routes = [
-  { path: '', redirectTo: '/dashboard/projects', pathMatch: 'full', canActivate: [AuthService] },
+  { path: '', redirectTo: '/dashboard', pathMatch: 'full', canActivate: [AuthService] },
   { path: 'home',  component: HomeComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
   { path: 'account', component: AccountComponent, canActivate: [AuthService] },
-  { path: 'dashboard',  component: DashboardComponent, canActivate: [AuthService], children: DashboardRoutes },
+  { path: 'dashboard',  component: DashboardComponent, canActivate: [AuthService] },
   { path: 'project/:id',  component: ProjectPageComponent },
   { path: 'new-reading', component: NewReadingPage, canActivate: [AuthService] },
   { path: 'new-reading/:id', component: NewReadingPage, canActivate: [AuthService] },
