@@ -61,7 +61,7 @@ import { RegisterComponent } from './register'
 import { LoginForm, GuestForm } from './forms'
 
 import { LoginModal, UserDetailsUpdateModal, ResetPassComponent, DeleteCommentModal, DeleteAudioModal, DeleteReadingModal, DeleteProjectModal, AddProjectModal, LoginRequiredModal, HeroSubscribeComponent, HeroChangeComponent, LoginRegisterModal } from './modals'
-import { AnnotatorComponent, CommentComponent, TextCommentComponent, EmojiCommentComponent, EmojiKeyboardComponent, AudioCommentComponent } from './annotator'
+import { AnnotatorComponent, CommentComponent, TextCommentComponent, EmojiCommentComponent, EmojiKeyboardComponent, AudioCommentComponent, AvatarPortalComponent } from './annotator'
 import { ProjectPageComponent, ProjectInfoComponent, OwnerToolsComponent, LeaderboardComponent } from './project-page'
 import { FirefeedComponent } from './project-page/owner-tools/firefeed/firefeed.component'
 import { FirecardComponent } from './project-page/owner-tools/firefeed/firecard/firecard.component'
@@ -132,6 +132,7 @@ type StoreType = {
     FooterComponent,
     CommentPaneComponent,
     CommentComponent,
+    AvatarPortalComponent,
     TextCommentComponent,
     EmojiCommentComponent,
     AudioCommentComponent,
