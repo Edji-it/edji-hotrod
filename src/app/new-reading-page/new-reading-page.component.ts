@@ -114,6 +114,25 @@ export class NewReadingPage implements OnInit {
         }
     ]
     private guideStepNo: number = 1
+
+    // Form reference values
+    private gradeInitials: string[] = ['K','1','2','3','4','5','6','7','8','9','10','11','12','U']
+    private gradeNames: string[] = [
+        'Kindergarten',
+        '1st Grade',
+        '2nd Grade',
+        '3rd Grade',
+        '4th Grade',
+        '5th Grade',
+        '6th Grade',
+        '7th Grade',
+        '8th Grade',
+        '9th Grade',
+        '10th Grade',
+        '11th Grade',
+        '12th Grade',
+        'University/College'
+    ]
     
     constructor(
         private _route: ActivatedRoute,

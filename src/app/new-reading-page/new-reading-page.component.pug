@@ -18,17 +18,45 @@ nav-bar([pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'", [canPublish]
           //- Public Flag
           .form-group
             label Make Public
-              p.sub-label Share this Reading with your followers, and they'll see it in their Discover feed
+              p.sub-label Share this Reading with your followers, and let other find it in Discover
               .form-check
-                label.form-check-label.form-check-btn([class.active]="readingForm.controls['public'].value == 'true'")
-                  input.form-check-input(type="radio", name="publicFlag", value="true", [formControl]="readingForm.controls['public']", checked)
-                  | Public
-                label.form-check-label.form-check-btn([class.active]="readingForm.controls['public'].value == 'false'")
-                  input.form-check-input(type="radio", name="publicFlag", value="false", [formControl]="readingForm.controls['public']")
-                  | Private
+                //- Public option
+                label.form-check-label.form-check-btn(
+                    [class.active]="readingForm.controls['public'].value == 'true'",
+                    title="Allow anyone to find this Reading in Discover"
+                  )
+                  input.form-check-input(
+                      type="radio", 
+                      name="publicFlag", 
+                      value="true", 
+                      [formControl]="readingForm.controls['public']",
+                      checked
+                    )
+                  span([innerHTML]="':earth_americas: Public' | emojione")
+                //- Private option
+                label.form-check-label.form-check-btn(
+                    [class.active]="readingForm.controls['public'].value == 'false'",
+                    title="Hide this Reading from Discover"
+                  )
+                  input.form-check-input(
+                      type="radio",
+                      name="publicFlag", 
+                      value="false",
+                      [formControl]="readingForm.controls['public']"
+                    )
+                  span([innerHTML]="':lock: Private' | emojione")
+          //- Spacing fix
+          br
+          //- Grade level range selector
+          .form-group
+            label Grade Level
+              p.sub-label Select which grade levels this reading targets.
+            .range-wrap
+              .range__tile(*ngFor="let grade of gradeInitials; let i = index", [attr.title]="gradeNames[i]")
+                | {{ grade }}
           //- Body Section
               - Includes "reading content" and "source"
-          .form-group.medium-wrap(style="position:relative;")
+          .form-group.medium-wrap.pt-3(style="position:relative;")
             label Reading Content
             //- Reading Content section
             p.sub-label Select text to see formatting options. Use the insert buttons on the left to add images and PDFs.

@@ -313,10 +313,59 @@ tr.selectable {
 .form-check-btn {
   float: left;
   margin-right: 5px;
-  border: 2px solid #cdcdcd;
-  border-radius: 15px;
+  border: 2px solid $light-gray;
+  border-radius: 16px;
+  overflow: hidden;
+
+  & .emoji {
+    filter: grayscale(100%);
+  }
+
+  &.form-check-label {
+    padding: 0px 15px;
+    color: $gray;
+    line-height: 32px;
+  }
+
+  & input {
+    position: absolute !important;
+    left: -100%;
+  }
 
   &.active {
+    &.form-check-label {
+      color: #000;
+    }
+    & .emoji {
+      filter: none;
+    }
     border-color: $green;
+  }
+}
+
+// Grade range selector
+.range-wrap {
+  display: block;
+}
+
+.range__tile {
+  height: 2em;
+  width: 2em;
+  line-height: 2em;
+  float: left;
+  text-align: center;
+  font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+  font-weight: 300;
+  background: $light-gray;
+  border-bottom: 2px solid transparent;
+
+  &:hover {
+    cursor: pointer;
+    background: lighten($green,10%);
+  }
+
+  &.selected {
+    background: lighten($green,10%);
+    border-bottom: 2px solid $green;
   }
 }
