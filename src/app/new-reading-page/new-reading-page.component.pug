@@ -18,7 +18,7 @@ nav-bar([pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'", [canPublish]
           //- Public Flag
           .form-group
             label Make Public
-              p.sub-label Share this Reading with your followers, and let other find it in Discover
+              p.sub-label Share this Reading with other teachers looking for lessons.
               .form-check
                 //- Public option
                 label.form-check-label.form-check-btn(
@@ -48,19 +48,26 @@ nav-bar([pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'", [canPublish]
           //- Spacing fix
           br
           //- Grade level range selector
-          .form-group
+          .form-group.pt-2
             label Grade Level
               p.sub-label Select which grade levels this reading targets.
             .range-wrap
-              .range__tile(*ngFor="let grade of gradeInitials; let i = index", [attr.title]="gradeNames[i]")
+              .range__tile(
+                  *ngFor="let grade of gradeInitials; let i = index", 
+                  [attr.title]="gradeNames[i]",
+                  [class.selected]="gradeSelection.indexOf(i) > -1",
+                  (click)="selectGrade(i)"
+                )
                 | {{ grade }}
+              //- .range__clear(*ngIf="gradeSelection.length > 0", (click)="gradeSelection = []")
+              //-   | Clear
           //- Subject Selector
-          .form-group
+          .form-group.pt-2
             label Subject
             ss-multiselect-dropdown([options]="subjects", formControlName="subject", [settings]="subjectDropSettings")
           //- Body Section
               - Includes "reading content" and "source"
-          .form-group.medium-wrap.pt-3(style="position:relative;")
+          .form-group.medium-wrap(style="position:relative;")
             label Reading Content
             //- Reading Content section
             p.sub-label Select text to see formatting options. Use the insert buttons on the left to add images and PDFs.

@@ -134,6 +134,26 @@ export class NewReadingPage implements OnInit {
         '12th Grade',
         'University/College'
     ]
+    private gradeSelection: number[] = []
+
+    private selectGrade(gradeIndex: number): void {
+        if (this.gradeSelection.length == 1) {
+            let min = Math.min(...this.gradeSelection)
+            let max = Math.max(...this.gradeSelection)
+            if (gradeIndex < min) {
+                for (let i = gradeIndex; i < min; i++) {
+                    this.gradeSelection.push(i)
+                } 
+            } else if (gradeIndex > max) {
+                for (let i = max; i <= gradeIndex; i++) {
+                    this.gradeSelection.push(i)
+                }
+            }
+        } else {
+            this.gradeSelection = [gradeIndex]
+        }
+    }
+
     private subjects: IMultiSelectOption[] = [
         {id:'literature',name:'Literature'},
         {id:'math',name:'Mathematics'},

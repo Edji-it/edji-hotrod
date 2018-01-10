@@ -357,15 +357,16 @@ tr.selectable {
   font-family: 'Open Sans', Arial, Helvetica, sans-serif;
   font-weight: 300;
   background: $light-gray;
-  border-bottom: 2px solid transparent;
+  border: 2px solid transparent;
 
   &:hover {
     cursor: pointer;
-    background: lighten($green,10%);
+    border: 2px solid $green;
   }
 
   &.selected {
     background: lighten($green,10%);
     border-bottom: 2px solid $green;
+    font-weight: bold;
   }
 }
