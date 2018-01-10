@@ -6,7 +6,6 @@ import 'rxjs/add/operator/toPromise';
 import { Locker } from 'angular2-locker';
 
 import { User } from './datatypes'
-import { window } from '@angular/platform-browser/src/facade/browser';
 
 @Injectable()
 export class AuthService implements CanActivate {

@@ -1,6 +1,6 @@
 import { DomSanitizer } from '@angular/platform-browser';
 import { AudioService } from '../../shared/audio.service';
-import { Angulartics2 } from 'angulartics2/dist'
+import { Angulartics2 } from 'angulartics2'
 import { CommentService } from '../../shared/comment.service'
 import { MediaService } from '../../shared/media.service'
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';

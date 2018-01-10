@@ -54,6 +54,10 @@ nav-bar([pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'", [canPublish]
             .range-wrap
               .range__tile(*ngFor="let grade of gradeInitials; let i = index", [attr.title]="gradeNames[i]")
                 | {{ grade }}
+          //- Subject Selector
+          .form-group
+            label Subject
+            ss-multiselect-dropdown([options]="subjects", formControlName="subject", [settings]="subjectDropSettings")
           //- Body Section
               - Includes "reading content" and "source"
           .form-group.medium-wrap.pt-3(style="position:relative;")

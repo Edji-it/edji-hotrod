@@ -1,14 +1,15 @@
-import { Title } from '@angular/platform-browser';
-import { REPLServer } from 'repl';
-import { ActivatedRoute, Router, Params } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { Angulartics2 } from 'angulartics2';
+import { Title } from '@angular/platform-browser'
+import { REPLServer } from 'repl'
+import { ActivatedRoute, Router, Params } from '@angular/router'
+import { FormBuilder, FormGroup, Validators } from '@angular/forms'
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
+import { Angulartics2 } from 'angulartics2'
+import { IMultiSelectOption, IMultiSelectSettings } from 'angular-2-dropdown-multiselect'
 
-import { ReadingService } from '../shared/reading.service';
-import { ProjectService } from '../shared/project.service';
-import { UtilToolService } from '../shared/util-tool.service';
-import { AuthService } from '../shared';
+import { ReadingService } from '../shared/reading.service'
+import { ProjectService } from '../shared/project.service'
+import { UtilToolService } from '../shared/util-tool.service'
+import { AuthService } from '../shared'
 import { EdjiComment, EdjiQuestion, User } from '../shared/datatypes'
 import { ReadingShareObject } from './../shared/nav-bar'
 import * as Rangy from 'rangy'
@@ -133,6 +134,21 @@ export class NewReadingPage implements OnInit {
         '12th Grade',
         'University/College'
     ]
+    private subjects: IMultiSelectOption[] = [
+        {id:'literature',name:'Literature'},
+        {id:'math',name:'Mathematics'},
+        {id:'science',name:'Science'},
+        {id:'geography',name:'Geography'},
+        {id:'history',name:'History'},
+        {id:'government',name:'Government'},
+        {id:'health',name:'Health/Physical Education'},
+        {id:'languages',name:'Foreign Languages'},
+        {id:'art',name:'Art'},
+        {id:'computer',name:'Computers/Technical'}
+    ]
+    private subjectDropSettings: IMultiSelectSettings = {
+        displayAllSelectedText: true
+    }
     
     constructor(
         private _route: ActivatedRoute,
@@ -149,7 +165,8 @@ export class NewReadingPage implements OnInit {
         this.readingForm = fb.group({
             title: [null, Validators.required],
             source: [null, null],
-            public: ['true']
+            public: ['true'],
+            subject: [null, null]
         });
 
         // Define the user object.

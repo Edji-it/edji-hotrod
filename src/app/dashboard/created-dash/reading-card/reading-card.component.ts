@@ -1,5 +1,5 @@
 import { Subscription } from 'rxjs/Rx';
-import { Angulartics2 } from 'angulartics2/dist';
+import { Angulartics2 } from 'angulartics2';
 import { ReadingService, ProjectService } from '../../../shared';
 import { Reading, Project }      from '../../../shared/datatypes';
 import { Component, Input, Output, OnDestroy, OnInit, EventEmitter } from '@angular/core';

@@ -9,7 +9,8 @@ import { HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-br
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap'
 // import { CoolStorageModule } from 'angular2-cool-storage'
 import {LockerModule, Locker, LockerConfig} from 'angular2-locker'
-import { Angulartics2Module, Angulartics2GoogleAnalytics } from 'angulartics2'
+import { Angulartics2Module } from 'angulartics2'
+import { Angulartics2GoogleAnalytics } from 'angulartics2/ga'
 // import { HotkeyModule } from 'angular2-hotkeys'
 /*
  * Platform and Environment providers/directives/pipes
@@ -39,6 +40,7 @@ import { ReuseStrategy } from './route-reuse-strategy'
 // Directives
 import { MediumEditorDirective } from 'angular2-medium-editor/medium-editor.directive.ts'
 import { ClickOutsideDirective } from 'angular2-click-outside/clickOutside.directive.ts'
+import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect'
 
 // Pipes
 import { EmojiOnePipe, AddClassPipe } from './shared'
@@ -201,6 +203,7 @@ type StoreType = {
     ReactiveFormsModule,
     HttpModule,
     LockerModule,
+    MultiselectDropdownModule,
     RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
     Angulartics2Module.forRoot([ Angulartics2GoogleAnalytics ]),
     NgbModule.forRoot() // Ng Bootstrap Import
