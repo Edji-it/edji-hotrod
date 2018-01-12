@@ -1,0 +1,8 @@
+.range-wrap
+    .range__tile(
+        *ngFor="let grade of gradeInitials; let i = index", 
+        [attr.title]="gradeNames[i]",
+        [class.selected]="gradeSelection.indexOf(i) > -1",
+        (click)="selectGrade(i)"
+    )
+        | {{ grade }}

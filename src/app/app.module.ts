@@ -69,7 +69,7 @@ import { FirefeedComponent } from './project-page/owner-tools/firefeed/firefeed.
 import { FirecardComponent } from './project-page/owner-tools/firefeed/firecard/firecard.component'
 import { QuestionfeedComponent } from './project-page/owner-tools/questionfeed/questionfeed.component'
 import { QuestioncardComponent } from './project-page/owner-tools/questionfeed/questioncard/questioncard.component'
-import { NewReadingPage, UploadModalComponent, UploadPdfModalComponent, DeletePdfMiniModal } from './new-reading-page'
+import { NewReadingPage, UploadModalComponent, UploadPdfModalComponent, DeletePdfMiniModal, GradeSelector } from './new-reading-page'
 import { DashboardComponent, JoinedDashComponent, CreatedDashComponent, TutorialReadingComponent, ReadingCardComponent } from './dashboard'
 import { NoContentComponent } from './no-content'
 import { AccountComponent, ChangePassComponent, UploadAvatarModal } from './account'
@@ -159,6 +159,7 @@ type StoreType = {
     UploadAvatarModal,
     AnnotatorComponent,
     NewReadingPage,
+    GradeSelector,
     OAuthComponent,
     HeroPromoComponent,
     HeroPricingComponent,

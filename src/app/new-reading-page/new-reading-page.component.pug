@@ -51,16 +51,7 @@ nav-bar([pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'", [canPublish]
           .form-group.pt-2
             label Grade Level
               p.sub-label Select which grade levels this reading targets.
-            .range-wrap
-              .range__tile(
-                  *ngFor="let grade of gradeInitials; let i = index", 
-                  [attr.title]="gradeNames[i]",
-                  [class.selected]="gradeSelection.indexOf(i) > -1",
-                  (click)="selectGrade(i)"
-                )
-                | {{ grade }}
-              //- .range__clear(*ngIf="gradeSelection.length > 0", (click)="gradeSelection = []")
-              //-   | Clear
+            grade-selector(formControlName="grades")
           //- Subject Selector
           .form-group.pt-2
             label Subject

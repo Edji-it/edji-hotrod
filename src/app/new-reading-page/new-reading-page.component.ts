@@ -116,44 +116,6 @@ export class NewReadingPage implements OnInit {
     ]
     private guideStepNo: number = 1
 
-    // Form reference values
-    private gradeInitials: string[] = ['K','1','2','3','4','5','6','7','8','9','10','11','12','U']
-    private gradeNames: string[] = [
-        'Kindergarten',
-        '1st Grade',
-        '2nd Grade',
-        '3rd Grade',
-        '4th Grade',
-        '5th Grade',
-        '6th Grade',
-        '7th Grade',
-        '8th Grade',
-        '9th Grade',
-        '10th Grade',
-        '11th Grade',
-        '12th Grade',
-        'University/College'
-    ]
-    private gradeSelection: number[] = []
-
-    private selectGrade(gradeIndex: number): void {
-        if (this.gradeSelection.length == 1) {
-            let min = Math.min(...this.gradeSelection)
-            let max = Math.max(...this.gradeSelection)
-            if (gradeIndex < min) {
-                for (let i = gradeIndex; i < min; i++) {
-                    this.gradeSelection.push(i)
-                } 
-            } else if (gradeIndex > max) {
-                for (let i = max; i <= gradeIndex; i++) {
-                    this.gradeSelection.push(i)
-                }
-            }
-        } else {
-            this.gradeSelection = [gradeIndex]
-        }
-    }
-
     private subjects: IMultiSelectOption[] = [
         {id:'literature',name:'Literature'},
         {id:'math',name:'Mathematics'},
@@ -186,7 +148,8 @@ export class NewReadingPage implements OnInit {
             title: [null, Validators.required],
             source: [null, null],
             public: ['true'],
-            subject: [null, null]
+            subject: [null, null],
+            grades: [null, null]
         });
 
         // Define the user object.
@@ -418,6 +381,7 @@ export class NewReadingPage implements OnInit {
     }
 
     private saveReading(event, form) {
+        console.log(form)
         this.isDraft = true
         this.onSubmit(form)
     }
