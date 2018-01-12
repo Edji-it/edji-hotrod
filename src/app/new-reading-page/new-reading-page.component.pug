@@ -55,7 +55,7 @@ nav-bar([pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'", [canPublish]
           //- Subject Selector
           .form-group.pt-2
             label Subject
-            ss-multiselect-dropdown([options]="subjects", formControlName="subject", [settings]="subjectDropSettings")
+            ss-multiselect-dropdown([options]="subjects", formControlName="subjects", [settings]="subjectDropSettings")
           //- Body Section
               - Includes "reading content" and "source"
           .form-group.medium-wrap(style="position:relative;")

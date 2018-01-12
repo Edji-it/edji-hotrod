@@ -55,6 +55,8 @@ export class GradeSelector implements ControlValueAccessor {
         } else {
             this.gradeSelection = [gradeIndex]
         }
+        // Notify of change
+        this.onChangeCallback(this.gradeSelection)
     }
 
     //Placeholders for the callbacks which are later provided

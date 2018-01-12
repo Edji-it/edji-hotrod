@@ -129,7 +129,8 @@ export class NewReadingPage implements OnInit {
         {id:'computer',name:'Computers/Technical'}
     ]
     private subjectDropSettings: IMultiSelectSettings = {
-        displayAllSelectedText: true
+        displayAllSelectedText: true,
+        dynamicTitleMaxItems: 4
     }
     
     constructor(
@@ -148,8 +149,8 @@ export class NewReadingPage implements OnInit {
             title: [null, Validators.required],
             source: [null, null],
             public: ['true'],
-            subject: [null, null],
-            grades: [null, null]
+            subjects: [[], null],
+            grades: [[], null]
         });
 
         // Define the user object.
