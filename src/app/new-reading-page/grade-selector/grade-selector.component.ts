@@ -13,12 +13,14 @@ export const CUSTOM_INPUT_CONTROL_VALUE_ACCESSOR: any = {
 @Component({
     selector: 'grade-selector',
     templateUrl:'grade-selector.component.pug',
+    styleUrls: ['grade-selector.component.scss'],
     providers: [CUSTOM_INPUT_CONTROL_VALUE_ACCESSOR]
 })
 export class GradeSelector implements ControlValueAccessor {
 
     //The internal data model
-    private gradeSelection: number[] = [];
+    private gradeSelection: number[] = []
+    private gradePreview: number[] = []
 
     // Form reference values
     private gradeInitials: string[] = ['K','1','2','3','4','5','6','7','8','9','10','11','12','U']
@@ -41,14 +43,13 @@ export class GradeSelector implements ControlValueAccessor {
 
     private selectGrade(gradeIndex: number): void {
         if (this.gradeSelection.length == 1) {
-            let min = Math.min(...this.gradeSelection)
-            let max = Math.max(...this.gradeSelection)
-            if (gradeIndex < min) {
-                for (let i = gradeIndex; i < min; i++) {
+            let val = this.gradeSelection[0]
+            if (gradeIndex < val) {
+                for (let i = gradeIndex; i < val; i++) {
                     this.gradeSelection.push(i)
                 } 
-            } else if (gradeIndex > max) {
-                for (let i = gradeIndex; i > max; i--) {
+            } else if (gradeIndex > val) {
+                for (let i = gradeIndex; i > val; i--) {
                     this.gradeSelection.push(i)
                 } 
             }
@@ -57,6 +58,22 @@ export class GradeSelector implements ControlValueAccessor {
         }
         // Notify of change
         this.onChangeCallback(this.gradeSelection)
+    }
+
+    private previewRange(gradeIndex: number) : void {
+        this.gradePreview = []
+        if (this.gradeSelection.length == 1) {
+            let val = this.gradeSelection[0]
+            if (gradeIndex < val) {
+                for (let i = gradeIndex; i < val; i++) {
+                    this.gradePreview.push(i)
+                } 
+            } else if (gradeIndex > val) {
+                for (let i = gradeIndex; i > val; i--) {
+                    this.gradePreview.push(i)
+                } 
+            }
+        }
     }
 
     //Placeholders for the callbacks which are later provided

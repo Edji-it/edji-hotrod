@@ -3,6 +3,9 @@
         *ngFor="let grade of gradeInitials; let i = index", 
         [attr.title]="gradeNames[i]",
         [class.selected]="gradeSelection.indexOf(i) > -1",
-        (click)="selectGrade(i)"
+        [class.preview]="gradePreview.indexOf(i) > -1",
+        (click)="selectGrade(i)",
+        (mouseenter)="previewRange(i)",
+        (mouseleave)="gradePreview = []"
     )
         | {{ grade }}

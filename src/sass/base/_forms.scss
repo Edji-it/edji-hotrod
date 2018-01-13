@@ -342,31 +342,3 @@ tr.selectable {
     border-color: $green;
   }
 }
-
-// Grade range selector
-.range-wrap {
-  display: block;
-}
-
-.range__tile {
-  height: 2em;
-  width: 2em;
-  line-height: 2em;
-  float: left;
-  text-align: center;
-  font-family: 'Open Sans', Arial, Helvetica, sans-serif;
-  font-weight: 300;
-  background: $light-gray;
-  border: 2px solid transparent;
-
-  &:hover {
-    cursor: pointer;
-    border: 2px solid $green;
-  }
-
-  &.selected {
-    background: lighten($green,10%);
-    border-bottom: 2px solid $green;
-    font-weight: bold;
-  }
-}

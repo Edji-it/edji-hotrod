@@ -149,8 +149,8 @@ export class NewReadingPage implements OnInit {
             title: [null, Validators.required],
             source: [null, null],
             public: ['true'],
-            subjects: [[], null],
-            grades: [[], null]
+            subjects: [[], Validators.required],
+            grades: [[], Validators.required]
         });
 
         // Define the user object.
@@ -382,7 +382,6 @@ export class NewReadingPage implements OnInit {
     }
 
     private saveReading(event, form) {
-        console.log(form)
         this.isDraft = true
         this.onSubmit(form)
     }
