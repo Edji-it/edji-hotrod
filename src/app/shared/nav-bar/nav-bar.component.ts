@@ -228,6 +228,24 @@ export class NavBarComponent implements OnInit, OnDestroy {
       );
   }
 
+  followUser(userId: string) : void {
+    this._auth.followUser(userId)
+      .take(1)
+      .subscribe(
+        data => {
+
+        }
+      )
+  }
+
+  unfollowUser(userId: string) : void {
+    this._auth.unfollowUser(userId)
+      .take(1)
+      .subscribe(data => {
+        
+      })
+  }
+
   /**
    * Clears all errorObject strings to equal empty strings
    */

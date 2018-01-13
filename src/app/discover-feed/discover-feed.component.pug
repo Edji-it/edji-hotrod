@@ -1,12 +1,10 @@
 nav-bar([showDashboardOptions]="true")
 .container-fluid
     .row
-        .col-md-2
-            //- Left margin
         .col-md-8
             .row(*ngFor="let reading of readings")
                 .col-12.feed__reading
-                    .feed__reading-data
+                    .feed__reading-data(*ngIf="reading.owner_id")
                         .comment__avatar {{reading.owner_id.fullname.substr(0,2).toUpperCase()}}
                         | {{ reading.owner_id.fullname }}
                         i {{ ' shared ' + (reading.updatedAt | edjidate:'timeAgo':null:secondsAgo) }}
@@ -14,12 +12,33 @@ nav-bar([showDashboardOptions]="true")
                             //- .btn.btn-sm.btn-primary Preview
                             .btn.btn-sm.btn-primary([routerLink]="['/new-reading']", [queryParams]="{ copyId: reading._id }") Get this Reading
                     hot-reading-card([reading]="reading", [readOnly]="true")
-                    .feed__reading-preview
+                    .feed__reading-preview(*ngIf="reading.words")
                         span.w(
                                 *ngFor="let w of reading.words.slice(0,150)", 
                                 [ngClass]="[ w.styles.join(' ') ]"
                             )
                             | {{w.styles.indexOf('space') > -1 ? '&nbsp;' : w.str}}
                         span.w &hellip;
-        .col-md-2
-            //- Righ margin
+        .col-md-4  
+            h4.mt-2 Filters
+            .form-group
+                label Users
+                //- Public option
+                label.form-check-label.form-check-btn(
+                    [class.active]="readingForm.controls['public'].value == 'true'",
+                    title="Allow anyone to find this Reading in Discover"
+                  )
+                  input.form-check-input(
+                      type="radio", 
+                      name="publicFlag", 
+                      value="true", 
+                      [formControl]="readingForm.controls['public']",
+                      checked
+                    )
+                  span([innerHTML]="':earth_americas: Public' | emojione")
+            .form-group
+                label Grade Level
+                grade-selector([(ngModel)]="gradeFilter")
+            .form-group
+                label Subjects
+                //- ss-multiselect-dropdown([options]="subjects", [(ngModel)]="subjectFilter", [settings]="subjectDropSettings")

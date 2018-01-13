@@ -175,7 +175,7 @@ export class ReadingService {
   public getFeed(): Observable<any> {
     return this.http.get(this._auth.getUrl() + '/readings/feed', this._auth.getOptions())
       .map(data => {
-        return data.json().results || []
+        return data.json().readings || []
       })
   }
 }

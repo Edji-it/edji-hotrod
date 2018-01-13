@@ -15,12 +15,15 @@ export class DiscoverFeedComponent implements OnInit {
   private readings = []
   private subscriptions: Subscription[] = []
 
+  // Filters
+  private gradeFilter: number[] = []
+
   constructor(private _readings: ReadingService) { }
 
   ngOnInit() {
     this._readings.getFeed()
-      .subscribe(feed => {
-        this.readings = feed
+      .subscribe(readings => {
+        this.readings = readings
       })
   }
 
