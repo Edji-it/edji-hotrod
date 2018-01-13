@@ -18,9 +18,6 @@ import { OAuthComponent } from './oauth-redirect/oauth-redirect.component'
 import { DataResolver } from './app.resolver'
 import { AuthService } from './shared'
 
-// routes
-import { DashboardRoutes } from './dashboard/dashboard.routes'
-
 export const ROUTES: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full', canActivate: [AuthService] },
   { path: 'home',  component: HomeComponent },

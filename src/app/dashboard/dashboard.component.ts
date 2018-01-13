@@ -72,10 +72,6 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     this.currentUser = this._auth.getUser()
 
-    if (!this.currentUser.identities || this.currentUser.identities.length < 1) {
-      this.showUserDetailsModal = true
-    }
-
     this._title.setTitle( 'Edji | Dashboard' )
 
     if (this.userProfileIncomplete()) {
@@ -84,6 +80,10 @@ export class DashboardComponent implements OnInit {
   }
 
   private userProfileIncomplete(): boolean {
+    if (this.currentUser.type === 'temp') {
+      return false
+    }
+
     // incomplete initialized as false and passed through filters until 
     let incomplete: boolean = false
     if (!this.currentUser.identities || this.currentUser.identities.length < 1) {
