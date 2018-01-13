@@ -48,7 +48,8 @@ nav-bar
     .col-sm-12
       .call-to-action
         h1 Share instantly. Read together. Learn loud
-        button.btn.btn-primary.btn-extrawide([routerLink]="['/register']") Get Started
+        .btn-row
+          button.btn.btn-primary.btn-lg([routerLink]="['/register']") Get Started
   //- Tweet Row
   .container-fluid([class.hide]="!tweetsLoaded")
     .row
