@@ -56,6 +56,8 @@ export class GradeSelector implements ControlValueAccessor {
         } else {
             this.gradeSelection = [gradeIndex]
         }
+        // Sort array for cleanliness
+        this.gradeSelection.sort((a,b) => { return a- b })
         // Notify of change
         this.onChangeCallback(this.gradeSelection)
     }
