@@ -92,8 +92,9 @@ nav-bar
     .sparks
     .col-sm-12
       .call-to-action
-        h1 Share instantly. Read together. Learn loud
-        button.btn.btn-primary.btn-extrawide([routerLink]="['/register']") Get Started
+        h1 Want to see a reading on Edji?
+        .btn-row
+          button.btn.btn-primary.btn-lg([routerLink]="['/project','demo']") View Demo
     //- A catchy d3m0 reading button
 
 edji-reset-pass(*ngIf="showPassModal", (closeModal)="showPassModal = !showPassModal")
