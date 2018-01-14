@@ -4,6 +4,12 @@
   (tap)='toggleCommentPane.emit()',
   [ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '','avatar-count-' + indexOnLine ]"
 )
+  span.tooltipbody(*ngIf="indexOnLine<8")
+    span.tooltiptitle
+      | {{comment.author}}
+    span.tooltipemoji(*ngIf="comment.type == 'emoji' || !comment.type", [innerHtml]="comment.data | emojione")
+    p.tooltiptext.block-with-text(*ngIf="comment.type == 'text'", [innerHtml]="comment.data | linkify | emojione")
+    span.tooltipaudio(*ngIf="comment.type == 'audio'")
   span(*ngIf="indexOnLine<8") {{comment.author.substring(0,2)}}
   span(*ngIf="indexOnLine==8") +{{commentsByPos[this.comment.lineY].length - 7}}
 
