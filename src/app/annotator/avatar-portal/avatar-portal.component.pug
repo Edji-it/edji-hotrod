@@ -21,9 +21,9 @@
       )
         i.icon-pause
   span.tooltipbody(*ngIf="indexOnLine==8")
-    p.tooltiptext.tooltipcount {{commentsByPos[this.comment.lineY].length}} Comments
+    p.tooltiptext.tooltipcount {{commentsByPos[comment.lineY] && commentsByPos[comment.lineY].length}} Comments
   span(*ngIf="indexOnLine<8") {{comment.author.substring(0,2)}}
-  span(*ngIf="indexOnLine==8") +{{commentsByPos[this.comment.lineY].length - 7}}
+  span(*ngIf="indexOnLine==8") +{{commentsByPos[comment.lineY] && commentsByPos[comment.lineY].length - 7}}
   .comment__button--mobile.avatar__reply(*ngIf="comment.replies.length>0")
 
 //- Mobile Icon
