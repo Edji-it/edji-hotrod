@@ -21,6 +21,7 @@
 
 .user-icon .tooltipemoji {
   font-size: 16px;
+  display: inherit;
 }
 
 .user-icon .tooltiptext {
@@ -50,7 +51,7 @@
   color: #ECA736;
 }
 
-.tooltiptitle::after {
+.tooltiptitle::after:not( .tooltipaudio) {
   content: "\A";
   white-space: pre;
 }
@@ -81,4 +82,17 @@
 
 .block-with-text {
   @include multiLineEllipsis($lineHeight: 12px, $lineCount: 2, $bgColor: white);  
+}
+
+.btn-audio {
+  width: 20px;
+  height: 23px;
+  & i {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+.tooltipaudio {
+  float: right;
 }
