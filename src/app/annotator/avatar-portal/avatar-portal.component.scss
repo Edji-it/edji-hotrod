@@ -1,5 +1,9 @@
 @import '../../../sass/base/variables';
 
+.user-icon {
+  cursor: pointer;
+}
+
 .user-icon .tooltipbody {
   visibility: hidden;
   width: 160px;
@@ -29,6 +33,11 @@
   text-align: left;
   font-size: 9px;
   line-height: 12px;
+  &.tooltipcount {
+    text-align: center;
+    margin-bottom: 0;
+    font-size: 11px;
+  }
 }
 
 .user-icon .tooltipbody::after {
@@ -95,4 +104,12 @@
 
 .tooltipaudio {
   float: right;
+}
+
+.comment__button--mobile {
+  min-width: initial;
+  width: 12px;
+  height: 12px;
+  left: 5px;
+  bottom: -8px;
 }

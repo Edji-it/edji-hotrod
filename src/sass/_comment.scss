@@ -947,6 +947,12 @@ textarea.text-comment-input,
     opacity: 1;
     background-image: url('assets/images/icon-comment--blue.svg');
   }
+
+  &.avatar__reply {
+    opacity: 1;
+		background-image: url('assets/images/icon-comment--green.svg');
+		
+  }
 }
 
 .comment__count--mobile {
