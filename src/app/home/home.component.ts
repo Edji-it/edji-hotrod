@@ -5,6 +5,7 @@ import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_di
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
 import { Angulartics2 } from 'angulartics2';
+import { Ng4TwitterTimelineService } from 'ng4-twitter-timeline/lib/index';
 
 import { AppState } from '../app.service';
 import { AuthService } from '../shared/auth.service';
@@ -39,6 +40,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   } = {};
 
   private showPassModal: boolean = false;
+  private tweetsLoaded: boolean = false;
 
   // TypeScript public modifiers
   constructor(
@@ -48,7 +50,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     private router: Router,
     private angulartics: Angulartics2,
     fb: FormBuilder,
-    private _title: Title
+    private _title: Title,
+    private ng4TwitterTimelineService: Ng4TwitterTimelineService
   ) {
     this.loginForm = fb.group({
       username: [null, Validators.required],
@@ -58,7 +61,72 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this._title.setTitle('Edji')
+    this.paint()
   }
+ 
+  private widgetCSS = `
+    body{
+      font-family: 'Open Sans';
+    }
+    .timeline-Header{
+      display: none;
+      background-color: white; 
+      /** border-top-left-radius: 10px; border-top-right-radius: 10px; */
+    }
+    .timeline-Header-title{
+      color: white;
+    }
+    .timeline-Tweet-text{
+      color: #898989;
+      font-size: 24px !important;
+      line-height: 32px !important;
+    }
+    .timeline-Tweet {
+      padding: 30px 20px;
+    }
+    .timeline-Tweet:hover {
+      background: transparent !important;
+    }
+    .timeline-TweetList {
+      white-space: nowrap;
+      overflow-y: hidden;
+      overflow-x: auto;
+      display: block;
+      width: 100%;
+    }
+    .timeline-TweetList-tweet {
+      display: inline-block;
+      height: 400px;
+      width: 500px;
+      max-width: 100vw;
+      vertical-align: top;
+      border-radius: 10px;
+      border-top: none !important;
+    }
+    .timeline-TweetList-tweet:nth-of-type(2n+1){
+      background: rgba(160,200,220,.12);
+      border-radius: 10px;
+    }
+    .timeline-Footer {
+      display: none;
+    }
+    .timeline-Body {
+      border-top: none;
+    }
+    `;
+  
+  paint(){
+      setTimeout(()=> {
+        var w = document.getElementById("twitter-widget-0")['contentDocument'];
+        console.log(w)
+        var s = document.createElement("style");
+        s.innerHTML = this.widgetCSS;
+        s.type = "text/css";
+        w.head.appendChild(s);
+        this.tweetsLoaded = true;
+      },6000)
+      
+    }
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub: Subscription) => { sub.unsubscribe(); });

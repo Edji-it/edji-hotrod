@@ -19,6 +19,7 @@ import { ROUTES } from './app.routes'
 // App is our top level component
 import { AppComponent } from './app.component'
 import { APP_RESOLVER_PROVIDERS } from './app.resolver'
+import { Ng4TwitterTimelineModule } from 'ng4-twitter-timeline/lib/index';
 
 const { version: appVersion } = require('../../package.json')
 
@@ -202,7 +203,8 @@ type StoreType = {
     LockerModule,
     RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
     Angulartics2Module.forRoot([ Angulartics2GoogleAnalytics ]),
-    NgbModule.forRoot() // Ng Bootstrap Import
+    NgbModule.forRoot(), // Ng Bootstrap Import
+    Ng4TwitterTimelineModule
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     ENV_PROVIDERS,
