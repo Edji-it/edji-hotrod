@@ -1,6 +1,6 @@
 {
   "name": "edji-hotrod",
-  "version": "3.2.43",
+  "version": "3.2.45",
   "description": "Hot Rod is Edji's roaring Front End!",
   "keywords": [
     "edji",
@@ -97,6 +97,7 @@
     "rxjs": "^5.4.3",
     "socket.io-client": "^1.7.2",
     "ts-node": "^3.3.0",
+    "typescript": "2.2.0",
     "zone.js": "~0.6.26"
   },
   "devDependencies": {
