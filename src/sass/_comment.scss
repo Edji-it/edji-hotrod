@@ -963,11 +963,42 @@ textarea.text-comment-input,
 
 $avatarOffset: -18px;
 $avatarMargin: -10px;
+$avatarZIndexStart: 1000;
 
 @for $z from 1 through 8 {
 	div.avatar-count-#{$z} {
 		position: absolute;
-		left: #{ ($avatarOffset * $z) + $avatarMargin }
+		left: #{ ($avatarOffset * $z) + $avatarMargin };
+		z-index: $avatarZIndexStart - $z;
+
+		&.user-icon {
+			box-shadow: 0px 1px 2px 2px rgba(0,0,0,0.05);
+			border: 2px solid transparent;
+			span {
+				font-size: 12px;
+			}
+			&:hover {
+				border: 2px solid #ECA736;
+				z-index: 1001;
+				span {
+					// position: absolute;
+					// top: -2px;
+					// left: 6px;
+				}
+			}
+		}
+
+		@if ($z == 8) {
+			span {
+				content: '';
+				color: #CFCFCF;
+			}
+			background: #fff;
+			border: 1px solid #CFCFCF;
+			border-radius: 50%;
+			-moz-border-radius: 50%;
+			-webkit-border-radius: 50%;
+		}
 
 			// @include transition(transform linear 0.3s);
 
