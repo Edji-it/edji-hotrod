@@ -5,7 +5,7 @@
   [ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '','avatar-count-' + indexOnLine ]"
 )
   span(*ngIf="indexOnLine<8") {{comment.author.substring(0,2)}}
-  span(*ngIf="indexOnLine==8") + {{indexOnLine}}
+  span(*ngIf="indexOnLine==8") +{{commentsByPos[this.comment.lineY].length - 7}}
 
 //- Mobile Icon
 .hidden-lg-up((tap)='toggleCommentPane.emit()')

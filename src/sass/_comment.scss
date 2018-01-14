@@ -961,8 +961,8 @@ textarea.text-comment-input,
   width: 20px;
 }
 
-$avatarOffset: -18px;
-$avatarMargin: -10px;
+$avatarOffset: -20px;
+$avatarMargin: -15px;
 $avatarZIndexStart: 1000;
 
 @for $z from 1 through 8 {
@@ -975,7 +975,7 @@ $avatarZIndexStart: 1000;
 			box-shadow: 0px 1px 2px 2px rgba(0,0,0,0.05);
 			border: 2px solid transparent;
 			span {
-				font-size: 12px;
+				font-size: 11px;
 			}
 			&:hover {
 				border: 2px solid #ECA736;
