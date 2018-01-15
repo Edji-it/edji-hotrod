@@ -4,9 +4,9 @@ nav-bar([showDashboardOptions]="true")
         .col-md-8
             .row(*ngFor="let reading of readings")
                 .col-12.feed__reading
-                    .feed__reading-data(*ngIf="reading.owner_id")
-                        .comment__avatar {{reading.owner_id.fullname.substr(0,2).toUpperCase()}}
-                        | {{ reading.owner_id.fullname }}
+                    .feed__reading-data(*ngIf="reading.owner")
+                        .comment__avatar {{reading.owner.fullname.substr(0,2).toUpperCase()}}
+                        | {{ reading.owner.fullname }}
                         i {{ ' shared ' + (reading.updatedAt | edjidate:'timeAgo':null:secondsAgo) }}
                         .btn-group(style="float:right")
                             //- .btn.btn-sm.btn-primary Preview
@@ -25,14 +25,13 @@ nav-bar([showDashboardOptions]="true")
                 label Users
                 //- Public option
                 label.form-check-label.form-check-btn(
-                    [class.active]="readingForm.controls['public'].value == 'true'",
+                    [class.active]="false",
                     title="Allow anyone to find this Reading in Discover"
                   )
                   input.form-check-input(
                       type="radio", 
                       name="publicFlag", 
                       value="true", 
-                      [formControl]="readingForm.controls['public']",
                       checked
                     )
                   span([innerHTML]="':earth_americas: Public' | emojione")
