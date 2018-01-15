@@ -409,9 +409,20 @@ export class ProjectService {
             .put([this._auth.getUrl(), 'projects', projectId].join("/"), { project: updateObj }, this._auth.getOptions())
             .map((data) => {
                 if (data && data.json()) {
-                    this.project = data.json().project;
-                    this.currentProjectSource.next(this.project);
-                    return this.project;
+                    // Set the existing comments aside here temporarily
+                    let comments = this.project.comments
+                    // Get the project data back from the server
+                    this.project = data.json().project
+                    /**
+                     * If heat vision was toggled, lets bring the existing comments back in to the project
+                     * The reason we do this is because the lineY values get wiped out and will not reset on their own
+                    */
+                    let updateObjArray: any[] = Object.keys(updateObj)
+                    if (updateObjArray.includes("heat_vision")) {
+                        this.project.comments = comments
+                    }
+                    this.currentProjectSource.next(this.project)
+                    return this.project
                 } // if
             }) //.map
     } // public update (updateObj: any, projectId: string): Observable<any> 
