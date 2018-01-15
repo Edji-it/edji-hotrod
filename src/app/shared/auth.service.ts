@@ -6,6 +6,7 @@ import 'rxjs/add/operator/toPromise';
 import { Locker } from 'angular2-locker';
 
 import { User } from './datatypes'
+import { URLSearchParams } from '@angular/http/src/url_search_params';
 
 @Injectable()
 export class AuthService implements CanActivate {
@@ -63,14 +64,15 @@ export class AuthService implements CanActivate {
     }
 
     /** Give out options to any other http-using components or services */
-    public getOptions(): RequestOptions {
+    public getOptions(searchParams?: URLSearchParams): RequestOptions {
         let header = new Headers({
             'Content-Type': 'application/json',
             'Authorization': this.getToken()
         });
         let options = new RequestOptions({
             headers: header,
-            withCredentials: true
+            withCredentials: true,
+            search: searchParams
         }); // Create a request option
         return options;
     }

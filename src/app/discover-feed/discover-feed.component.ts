@@ -35,7 +35,7 @@ export class DiscoverFeedComponent implements OnInit {
       grades: this.gradeFilter
     }
 
-    this._readings.getFeed()
+    this._readings.getFeed(filters)
       .subscribe(readings => {
         this.readings = readings
       })

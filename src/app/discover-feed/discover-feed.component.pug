@@ -2,7 +2,7 @@ nav-bar([showDashboardOptions]="true")
 .container-fluid.mt-4
     .row
         .col-md-8
-            h1 Discover Readings
+            h1 Discover Feed
             .row(*ngFor="let reading of readings")
                 .col-12.feed__reading
                     .feed__reading-data(*ngIf="reading.owner")

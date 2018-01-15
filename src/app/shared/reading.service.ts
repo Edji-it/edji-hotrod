@@ -1,11 +1,16 @@
 import { Project } from './datatypes';
 import { Injectable } from '@angular/core'
-import { Http, Response, Headers, RequestOptions } from '@angular/http'
+import { Http, Response, Headers, RequestOptions, URLSearchParams } from '@angular/http'
 import { BehaviorSubject, Observable, Subject } from 'rxjs/Rx';
 import 'rxjs/add/operator/toPromise';
 
 import { AuthService } from './auth.service'
 import { Reading } from './datatypes/reading'
+
+interface FilterObj {
+  type: string,
+  grades: number[]
+}
 
 @Injectable()
 export class ReadingService {
@@ -13,6 +18,7 @@ export class ReadingService {
   /*
     Last Modified: 5 Aug 2017
   */
+
 
   constructor(private http: Http, private _auth: AuthService) {
   }
@@ -149,6 +155,7 @@ export class ReadingService {
         draft: reading.draft,
         questions: reading.questions
       } // let
+      
 
       return this.http
               .put(this._auth.getUrl() + '/readings/' + reading['_id'], { reading: putReading }, this._auth.getOptions())
@@ -172,9 +179,16 @@ export class ReadingService {
     } // if
   } // public save()
   
-  public getFeed(): Observable<any> {
+  public getFeed(filters?: FilterObj): Observable<any> {
+    let filterParams = new URLSearchParams()
+    if (filters) {
+      filterParams.set("grades", filters["grade"])
+    }
+    
+    let feedOptions: RequestOptions = this._auth.getOptions(filterParams)
+    
     //{{url}}/readings/feed?grades[]=1&grades[]=8&populate[]=words_preview&populate[]=owner&start=0
-    return this.http.get(this._auth.getUrl() + '/readings/feed?populate[]=owner&populate[]=words_preview', this._auth.getOptions())
+    return this.http.get(this._auth.getUrl() + '/readings/feed?populate[]=owner&populate[]=words_preview', feedOptions)
       .map(data => {
         return data.json().readings || []
       })
