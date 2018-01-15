@@ -75,7 +75,7 @@ nav-bar([pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'", [canPublish]
                 (keyup)="contentChange($event)",
                 (mouseup)="contentChange($event)",
                 (mousedown)="$event.preventDefault ? $event.preventDefault() : $event.returnValue = false")
-              medium-editor#readingContent.content(
+              medium-editor#angularMediumEditor.content(
                 [(editorModel)]="readingPart.text",
                 [editorOptions]="mediumEditorConfig",
                 [editorPlaceholder]="getReadingPlaceholder(i)",

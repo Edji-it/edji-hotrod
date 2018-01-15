@@ -1,7 +1,8 @@
 nav-bar([showDashboardOptions]="true")
-.container-fluid
+.container-fluid.mt-4
     .row
         .col-md-8
+            h1 Discover Readings
             .row(*ngFor="let reading of readings")
                 .col-12.feed__reading
                     .feed__reading-data(*ngIf="reading.owner")
@@ -12,9 +13,9 @@ nav-bar([showDashboardOptions]="true")
                             //- .btn.btn-sm.btn-primary Preview
                             .btn.btn-sm.btn-primary([routerLink]="['/new-reading']", [queryParams]="{ copyId: reading._id }") Get this Reading
                     hot-reading-card([reading]="reading", [readOnly]="true")
-                    .feed__reading-preview(*ngIf="reading.words")
+                    .feed__reading-preview(*ngIf="reading.words_preview")
                         span.w(
-                                *ngFor="let w of reading.words.slice(0,150)", 
+                                *ngFor="let w of reading.words_preview.slice(0,150)", 
                                 [ngClass]="[ w.styles.join(' ') ]"
                             )
                             | {{w.styles.indexOf('space') > -1 ? '&nbsp;' : w.str}}
@@ -23,21 +24,24 @@ nav-bar([showDashboardOptions]="true")
             h4.mt-2 Filters
             .form-group
                 label Users
+                //- Following users option
+                label.form-check-label.form-check-btn(
+                    [class.active]="followingFilter",
+                    title="Filter by users you follow",
+                    (click)="followingFilter = true; loadFeed()"
+                  )
+                  span([innerHTML]="':green_heart: Following' | emojione")
                 //- Public option
                 label.form-check-label.form-check-btn(
-                    [class.active]="false",
-                    title="Allow anyone to find this Reading in Discover"
-                  )
-                  input.form-check-input(
-                      type="radio", 
-                      name="publicFlag", 
-                      value="true", 
-                      checked
-                    )
-                  span([innerHTML]="':earth_americas: Public' | emojione")
+                    [class.active]="!followingFilter",
+                    title="See public readings from all users",
+                    (click)="followingFilter = false; loadFeed()"
+                )
+                    span([innerHTML]="':earth_americas: Public' | emojione")
+            br
             .form-group
                 label Grade Level
-                grade-selector([(ngModel)]="gradeFilter")
-            .form-group
-                label Subjects
+                grade-selector([(ngModel)]="gradeFilter", (ngModelChange)="loadFeed()")
+            //- .form-group
+            //-     label Subjects
                 //- ss-multiselect-dropdown([options]="subjects", [(ngModel)]="subjectFilter", [settings]="subjectDropSettings")

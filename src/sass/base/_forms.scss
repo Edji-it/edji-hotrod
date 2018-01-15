@@ -339,7 +339,8 @@ tr.selectable {
 
   & input {
     position: absolute !important;
-    left: -100%;
+    left: -2000px;
+    top: -100%;
   }
 
   &.active {

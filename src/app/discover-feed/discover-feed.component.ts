@@ -16,11 +16,25 @@ export class DiscoverFeedComponent implements OnInit {
   private subscriptions: Subscription[] = []
 
   // Filters
+  private followingFilter: boolean = true
   private gradeFilter: number[] = []
 
   constructor(private _readings: ReadingService) { }
 
   ngOnInit() {
+    this._readings.getFeed()
+      .subscribe(readings => {
+        this.readings = readings
+      })
+  }
+
+  loadFeed(){
+    console.log("Load feed!")
+    let filters = {
+      type: this.followingFilter ? "following" : "all",
+      grades: this.gradeFilter
+    }
+
     this._readings.getFeed()
       .subscribe(readings => {
         this.readings = readings

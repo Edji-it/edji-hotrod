@@ -173,7 +173,8 @@ export class ReadingService {
   } // public save()
   
   public getFeed(): Observable<any> {
-    return this.http.get(this._auth.getUrl() + '/readings/feed?populate[]=owner', this._auth.getOptions())
+    //{{url}}/readings/feed?grades[]=1&grades[]=8&populate[]=words_preview&populate[]=owner&start=0
+    return this.http.get(this._auth.getUrl() + '/readings/feed?populate[]=owner&populate[]=words_preview', this._auth.getOptions())
       .map(data => {
         return data.json().readings || []
       })
