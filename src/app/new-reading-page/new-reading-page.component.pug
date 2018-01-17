@@ -50,8 +50,8 @@ nav-bar([pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'", [canPublish]
           .form-group
             label Grade Level
               p.sub-label Select which grade levels this reading targets.
-            grade-selector(formControlName="grades")
-            #errorTitle.alert.alert-warning.mt-2(*ngIf="readingForm.controls['grades'].hasError('required') && (readingForm.controls['grades'].dirty || submitted)") 
+            grade-selector(formControlName="grade_levels")
+            #errorTitle.alert.alert-warning.mt-2(*ngIf="readingForm.controls['grade_levels'].hasError('required') && (readingForm.controls['grade_levels'].dirty || submitted)") 
               | Please select the range of grade levels this Reading is best suited for.
           //- Subject Selector
           .form-group

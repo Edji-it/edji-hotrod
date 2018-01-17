@@ -64,15 +64,14 @@ export class AuthService implements CanActivate {
     }
 
     /** Give out options to any other http-using components or services */
-    public getOptions(searchParams?: URLSearchParams): RequestOptions {
+    public getOptions(): RequestOptions {
         let header = new Headers({
             'Content-Type': 'application/json',
             'Authorization': this.getToken()
         });
         let options = new RequestOptions({
             headers: header,
-            withCredentials: true,
-            search: searchParams
+            withCredentials: true
         }); // Create a request option
         return options;
     }

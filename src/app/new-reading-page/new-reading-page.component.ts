@@ -150,7 +150,7 @@ export class NewReadingPage implements OnInit {
             source: [null, null],
             public: ['true'],
             subjects: [[], Validators.required],
-            grades: [[], Validators.required]
+            grade_levels: [[], Validators.required]
         });
 
         // Define the user object.

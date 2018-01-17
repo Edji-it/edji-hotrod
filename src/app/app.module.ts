@@ -83,6 +83,7 @@ import { DiscoverFeedComponent } from './discover-feed/discover-feed.component';
 import { OAuthComponent } from './oauth-redirect/oauth-redirect.component'
 import { GoogleButton } from './buttons'
 import { CommentPaneComponent } from './shared/comment-pane/comment-pane.component'
+import { HttpClientModule } from '@angular/common/http';
 
 // Configure Hammer.js
 export class MyHammerConfig extends HammerGestureConfig  {
@@ -203,6 +204,7 @@ type StoreType = {
     FormsModule,
     ReactiveFormsModule,
     HttpModule,
+    HttpClientModule,
     LockerModule,
     MultiselectDropdownModule,
     RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),

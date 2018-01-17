@@ -1,8 +1,9 @@
-import { Project } from './datatypes';
+import { Project } from './datatypes'
 import { Injectable } from '@angular/core'
-import { Http, Response, Headers, RequestOptions, URLSearchParams } from '@angular/http'
-import { BehaviorSubject, Observable, Subject } from 'rxjs/Rx';
-import 'rxjs/add/operator/toPromise';
+import { Http, Response, Headers, RequestOptions } from '@angular/http'
+import { BehaviorSubject, Observable, Subject } from 'rxjs/Rx'
+import 'rxjs/add/operator/toPromise'
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http'
 
 import { AuthService } from './auth.service'
 import { Reading } from './datatypes/reading'
@@ -20,7 +21,7 @@ export class ReadingService {
   */
 
 
-  constructor(private http: Http, private _auth: AuthService) {
+  constructor(private http: Http, private _http: HttpClient, private _auth: AuthService) {
   }
 
   ngOnInit() {
@@ -180,17 +181,27 @@ export class ReadingService {
   } // public save()
   
   public getFeed(filters?: FilterObj): Observable<any> {
-    let filterParams = new URLSearchParams()
-    if (filters) {
-      filterParams.set("grades", filters["grade"])
+    let feedParams = new HttpParams()
+    console.log(filters)
+    if (filters  && filters['grades']) {
+      let grades = filters['grades']
+      // filters['grades'].forEach( grade => { feedParams = feedParams.append("grades", grade + "")})
+      feedParams = feedParams.append("grades", Math.min(...grades) + "")
+      feedParams = feedParams.append("grades", Math.max(...grades) + "")
     }
-    
-    let feedOptions: RequestOptions = this._auth.getOptions(filterParams)
-    
+    feedParams = feedParams.append("populate", "owner").append("populate", "words_preview")
+
+    console.log(feedParams)
     //{{url}}/readings/feed?grades[]=1&grades[]=8&populate[]=words_preview&populate[]=owner&start=0
-    return this.http.get(this._auth.getUrl() + '/readings/feed?populate[]=owner&populate[]=words_preview', feedOptions)
+    return this._http.get(
+      this._auth.getUrl() + '/readings/feed', 
+        { headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          'Authorization': this._auth.getToken()
+        }), 
+        params: feedParams })
       .map(data => {
-        return data.json().readings || []
+        return data['readings'] || []
       })
   }
 }
