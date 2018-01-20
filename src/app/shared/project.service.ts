@@ -421,17 +421,20 @@ export class ProjectService {
                 if (data && data.json()) {
                     // Set the existing comments aside here temporarily
                     let comments = this.project.comments
-                    // Get the project data back from the server
-                    this.project = data.json().project
+
                     /**
                      * If heat vision was toggled, lets bring the existing comments back in to the project
                      * The reason we do this is because the lineY values get wiped out and will not reset on their own
                     */
                     let updateObjArray: string = JSON.stringify(updateObj)
-                    console.log(updateObjArray.indexOf("heat_vision"))
+                    let updatedProject = data.json() && data.json().project
+                    // Get the project data back from the server
                     if (updateObjArray.indexOf("heat_vision")>-1) {
-                        this.project.comments = comments
+                        updatedProject.comments = comments
                     }
+                    
+                    this.project = updatedProject
+                    
                     this.currentProjectSource.next(this.project)
                     return this.project
                 } // if
