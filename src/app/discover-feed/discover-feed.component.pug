@@ -18,7 +18,7 @@ nav-bar([showDashboardOptions]="true")
                                 *ngFor="let w of reading.words_preview.slice(0,150)", 
                                 [ngClass]="[ w ? w.styles.join(' ') : '' ]"
                             )
-                            | {{w && w.styles.indexOf('space') > -1 ? '&nbsp;' : w && w.str}}
+                            | {{ (!(w && w.styles) || (w && w.styles.indexOf('space')) > -1) ? '&nbsp;' : w && w.str }}
                         span.w &hellip;
         .col-md-4  
             h4.mt-2 Filters

@@ -31,8 +31,11 @@ export class DiscoverFeedComponent implements OnInit {
   loadFeed(){
     console.log("Load feed!")
     let filters = {
-      type: this.followingFilter ? "following" : "all",
-      grades: this.gradeFilter
+      type: this.followingFilter ? "following" : "global"
+    }
+    
+    if (this.gradeFilter.length > 0) {
+      filters['grades'] = this.gradeFilter
     }
 
     this._readings.getFeed(filters)

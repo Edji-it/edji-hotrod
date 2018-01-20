@@ -10,7 +10,7 @@ import { Reading } from './datatypes/reading'
 
 interface FilterObj {
   type: string,
-  grades: number[]
+  grades?: number[]
 }
 
 @Injectable()
