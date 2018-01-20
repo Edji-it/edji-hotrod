@@ -1,5 +1,5 @@
 //- Desktop Avatar Icons
-.user-icon(
+.user-icon.hidden-md-down(
   *ngIf="indexOnLine<9",
   (tap)='toggleCommentPane.emit()',
   [ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '','avatar-count-' + indexOnLine ]"
@@ -28,7 +28,5 @@
 
 //- Mobile Icon
 .hidden-lg-up((tap)='toggleCommentPane.emit()')
-    .comment__button--mobile(
-        [ngClass]="[ active ? 'active' : '' ]"
-    )
+    .comment__button--mobile([ngClass]="[ active ? 'active' : '' ]")
     .comment__count--mobile {{ lineCount }}
