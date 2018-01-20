@@ -19,6 +19,7 @@ enum playState {
 export class AvatarPortalComponent implements OnInit, OnDestroy {
   
   private subscriptions: Subscription[] = []
+  private repliesById: any = {}
   private commentsByPos: any = []
   private currentState: playState = playState.inactive
   private audio
@@ -48,6 +49,15 @@ export class AvatarPortalComponent implements OnInit, OnDestroy {
     if (this.comment.type=='audio' && this.comment.url && this.comment.url.length > 0) {
       this.loadAudioPlayer(this.comment.url)
     }
+    // Subscribe to updates to the reply reference object
+    this.subscriptions.push( this._projects.repliesById.subscribe(
+      (repliesById) => {
+        this.repliesById = repliesById
+      },
+      (error) => {
+        console.error(error)
+      }
+    ))
   }
 
   ngOnDestroy() {

@@ -24,7 +24,8 @@
     p.tooltiptext.tooltipcount {{commentsByPos[comment.lineY] && commentsByPos[comment.lineY].length}} Comments
   span(*ngIf="indexOnLine<8") {{comment.author.substring(0,2)}}
   span(*ngIf="indexOnLine==8") +{{commentsByPos[comment.lineY] && commentsByPos[comment.lineY].length - 7}}
-  .comment__button--mobile.avatar__reply(*ngIf="comment.replies.length>0")
+  //- .comment__button--mobile.avatar__reply(*ngIf="comment.replies.length>0")
+  .comment__button--mobile.avatar__reply(*ngIf="repliesById[comment._id] && repliesById[comment._id].length>0")
 
 //- Mobile Icon
 .hidden-lg-up((tap)='toggleCommentPane.emit()')
