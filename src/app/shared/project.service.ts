@@ -15,6 +15,9 @@ import { ReadingService } from "./reading.service";
 export class ProjectService {
     private targetProjectId: string = ''
 
+    // For verifying comment ownership on heat vision
+    private user: any
+
     /** project will be given out as observable */
     private project: any = { title: "initial value" }
     private currentProjectSource: BehaviorSubject<any> = new BehaviorSubject<any>(this.project)
@@ -78,6 +81,13 @@ export class ProjectService {
         this._socket.commentUpdates.subscribe((update) => {
             // console.log(update)
         })
+
+        /** Set the current user every time it changes */
+        this.subscriptions.push(
+            this._auth.getCurrentUser().subscribe((user) => {
+                this.user = user
+            })
+        )
 
         this.subscriptions.push(
             this._socket.commentUpdates.subscribe((commentUpdate) => {
@@ -417,8 +427,9 @@ export class ProjectService {
                      * If heat vision was toggled, lets bring the existing comments back in to the project
                      * The reason we do this is because the lineY values get wiped out and will not reset on their own
                     */
-                    let updateObjArray: any[] = Object.keys(updateObj)
-                    if (updateObjArray.includes("heat_vision")) {
+                    let updateObjArray: string = JSON.stringify(updateObj)
+                    console.log(updateObjArray.indexOf("heat_vision"))
+                    if (updateObjArray.indexOf("heat_vision")>-1) {
                         this.project.comments = comments
                     }
                     this.currentProjectSource.next(this.project)
@@ -620,7 +631,8 @@ export class ProjectService {
         let len2 = commentsArray.length
         for (let i = 0; i < len2; i++) {
             let comment = commentsArray[i]
-            if (comment && !comment.reply_to && !comment.questionId && comment.lineY) {
+            let heatVisionOn = (!this.project.heat_vision && this.user._id !== this.project.teacher_id) && comment.user_id !== this.user._id && comment.user_id !== this.project.teacher_id
+            if (comment && !comment.reply_to && !comment.questionId && comment.lineY && !heatVisionOn) {
                 // lineY is determined by each individual CommentComponent
                 let lineY = comment.lineY
                 // Push the comment into commentByPos based on the lineY number
