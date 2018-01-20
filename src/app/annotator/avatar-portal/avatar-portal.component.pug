@@ -2,7 +2,7 @@
 .user-icon.hidden-md-down(
   *ngIf="indexOnLine<9",
   (tap)='toggleCommentPane.emit()',
-  [ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '','avatar-count-' + indexOnLine ]"
+  [ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '','avatar-count-' + indexOnLine, 'avatar-' + comment.type ]"
 )
   span.tooltipbody(*ngIf="indexOnLine<8")
     span.tooltiptitle

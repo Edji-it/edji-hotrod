@@ -55,7 +55,7 @@
             (tap)="userPermission > 3 ? deleteComment(comment) : showDeleteModal = true"
         ) 
             | +
-        .reply#addReply(
+        .reply(
             *ngIf="!reply && project.types.indexOf('reply') > -1",
             (tap)="commentReply.emit()"
         )
@@ -135,10 +135,10 @@ div(*ngIf="commentPaneActive")
     //- Comment action buttons
     .comment-action--block.row
         .col-6.float-left.btn-float-left__sm
-            button.btn.btn-sm.btn-hero(*ngIf="userPermission >= 3", (tap)="userPermission > 3 ? deleteComment(comment) : showDeleteModal = true") Delete
+            button.btn.btn-sm.btn-hero.btn-delete(*ngIf="userPermission >= 3", (tap)="userPermission > 3 ? deleteComment(comment) : showDeleteModal = true") Delete
         .col-6.float-right.btn-float-right__sm
             //- button.btn.btn-sm.btn-primary(*ngIf="repliesById[comment._id] && repliesById[comment._id].length>0", (tap)="commentReply.emit(comment)") Replies ({{ repliesById[comment._id] && repliesById[comment._id].length }})
-            button.btn.btn-sm.btn-primary(*ngIf="!reply && project.types.indexOf('reply') > -1", (tap)="commentReply.emit(comment)") Replies ({{ repliesById[comment._id] && repliesById[comment._id].length || '0' }})
+            button#addReply.btn.btn-sm.btn-primary(*ngIf="!reply && project.types.indexOf('reply') > -1", (tap)="commentReply.emit(comment)") Replies ({{ repliesById[comment._id] && repliesById[comment._id].length || '0' }})
             //- button.btn.btn-sm.btn-primary(ngIf="!repliesById[comment._id]", (tap)="commentReply.emit(comment)") Reply
 //- END comment pane display
 
