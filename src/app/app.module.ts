@@ -84,6 +84,8 @@ import { OAuthComponent } from './oauth-redirect/oauth-redirect.component'
 import { GoogleButton } from './buttons'
 import { CommentPaneComponent } from './shared/comment-pane/comment-pane.component'
 import { HttpClientModule } from '@angular/common/http';
+import { DataListModule } from 'primeng/datalist';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 // Configure Hammer.js
 export class MyHammerConfig extends HammerGestureConfig  {
@@ -201,6 +203,7 @@ type StoreType = {
   ],
   imports: [ // import Angular's modules
     BrowserModule,
+    BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
     HttpModule,
@@ -209,7 +212,8 @@ type StoreType = {
     MultiselectDropdownModule,
     RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
     Angulartics2Module.forRoot([ Angulartics2GoogleAnalytics ]),
-    NgbModule.forRoot() // Ng Bootstrap Import
+    NgbModule.forRoot(), // Ng Bootstrap Import
+    DataListModule
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     ENV_PROVIDERS,

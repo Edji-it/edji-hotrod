@@ -189,8 +189,14 @@ export class ReadingService {
       feedParams = feedParams.append("grades", Math.min(...grades) + "")
       feedParams = feedParams.append("grades", Math.max(...grades) + "")
     }
+    if (filters && filters['size']) {
+      feedParams = feedParams.append("size", filters['size'])
+    }
+    if (filters && filters['start']) {
+      feedParams = feedParams.append("start", filters['start'])
+    }
     feedParams = feedParams.append("populate", "owner").append("populate", "words_preview")
-
+    
     console.log(feedParams)
     //{{url}}/readings/feed?grades[]=1&grades[]=8&populate[]=words_preview&populate[]=owner&start=0
     return this._http.get(

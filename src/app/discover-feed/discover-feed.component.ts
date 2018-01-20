@@ -19,6 +19,9 @@ export class DiscoverFeedComponent implements OnInit {
   private followingFilter: boolean = true
   private gradeFilter: number[] = []
 
+  private first: number = 0
+  private rows: number = 3
+
   constructor(private _readings: ReadingService) { }
 
   ngOnInit() {
@@ -28,11 +31,15 @@ export class DiscoverFeedComponent implements OnInit {
       })
   }
 
-  loadFeed(){
-    console.log("Load feed!")
+  loadFeed(paging: any){
+    console.log("Load feed!", event)
+
     let filters = {
       type: this.followingFilter ? "following" : "global"
     }
+    // Pagination values
+    filters['start'] = paging.first ? paging.first : this.first
+    filters['size'] = paging.rows ? paging.rows : this.first
     
     if (this.gradeFilter.length > 0) {
       filters['grades'] = this.gradeFilter
