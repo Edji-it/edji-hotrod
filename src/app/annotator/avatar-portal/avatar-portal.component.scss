@@ -10,8 +10,8 @@
   background-color: #fff;
   color: #000;
   text-align: left;
-  border-radius: 4px;
-  padding: 5px;
+  border-radius: 8px;
+  padding: 7px;
   position: absolute;
   z-index: 1;
   bottom: 168%;
@@ -20,7 +20,7 @@
   transition: opacity .4s;
   font-size: 9px;
   line-height: 12px;
-  filter: drop-shadow(rgba(0, 0, 0, 0.3) 0 2px 2px);
+  filter: drop-shadow(rgba(0, 0, 0, 0.2) 0 2px 6px);
 }
 
 .user-icon .tooltipemoji {
@@ -31,8 +31,9 @@
 .user-icon .tooltiptext {
   color: #000;
   text-align: left;
-  font-size: 9px;
-  line-height: 12px;
+  font-size: 10px;
+  line-height: 13px;
+
   &.tooltipcount {
     text-align: center;
     margin-bottom: 0;
@@ -57,7 +58,19 @@
 }
 
 .tooltiptitle {
+  display: inline-block;
   color: #ECA736;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+
+  &.inline-center {
+    line-height: 25px;
+    margin-bottom: 0px;
+  }
+}
+
+.tooltipbody {
+  font-size: 11px;
 }
 
 .tooltiptitle::after:not( .tooltipaudio) {
