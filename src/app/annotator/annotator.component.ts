@@ -32,7 +32,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         - Asks ProjectService to save comments for us.
     */
     
-    
     @Input() private mobileCommentActive: boolean
     @Input() private activeReply: any
 

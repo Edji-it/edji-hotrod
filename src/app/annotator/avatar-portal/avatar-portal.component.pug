@@ -1,0 +1,33 @@
+//- Desktop Avatar Icons
+.user-icon.hidden-md-down(
+  *ngIf="indexOnLine<9",
+  (tap)='toggleCommentPane.emit()',
+  [ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '','avatar-count-' + indexOnLine, 'avatar-' + comment.type ]"
+)
+  span.tooltipbody(*ngIf="indexOnLine<8")
+    .tooltiptitle([class.inline-center]="comment.type == 'audio'")
+      | {{comment.author}}
+    span.tooltipemoji(*ngIf="comment.type == 'emoji' || !comment.type", [innerHtml]="comment.data | emojione")
+    .tooltiptext.block-with-text(*ngIf="comment.type == 'text'", [innerHtml]="comment.data | linkify | emojione")
+    span.tooltipaudio(*ngIf="comment.type == 'audio'")
+      button#audioPlay.btn-audio(
+        *ngIf="!isPlaying()", 
+        (click)="play()"
+      )
+        i.icon-play
+      button#audioPause.btn-audio(
+        *ngIf="isPlaying()", 
+        (click)="pause()"
+      )
+        i.icon-pause
+  span.tooltipbody(*ngIf="indexOnLine==8")
+    .tooltiptext.tooltipcount {{commentsByPos[comment.lineY] && commentsByPos[comment.lineY].length}} Comments
+  span.user-icon__initials(*ngIf="indexOnLine<8") {{comment.author.substring(0,2)}}
+  span.user-icon__overflow(*ngIf="indexOnLine==8") +{{commentsByPos[comment.lineY] && commentsByPos[comment.lineY].length - 7}}
+  //- .comment__button--mobile.avatar__reply(*ngIf="comment.replies.length>0")
+  .comment__button--mobile.avatar__reply(*ngIf="repliesById[comment._id] && repliesById[comment._id].length>0")
+
+//- Mobile Icon
+.hidden-lg-up((tap)='toggleCommentPane.emit()')
+    .comment__button--mobile([ngClass]="[ active ? 'active' : '' ]")
+    .comment__count--mobile {{ lineCount }}

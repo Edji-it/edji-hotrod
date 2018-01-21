@@ -924,3 +924,90 @@ textarea.text-comment-input,
         -webkit-text-fill-color: #777;
     }
 }
+
+.comment__button--mobile {
+  display: none;
+  cursor: pointer;
+  max-width: auto !important;
+  min-width: 30px;
+  cursor: pointer;
+  padding: 3px;
+  width: 25px;
+  height: 25px;
+  display: block;
+  opacity: 0.5;
+  position: absolute;
+  left: -40px;
+  margin-top: -6px;
+
+  background-image: url('assets/images/icon-comment.svg');
+  background-size: 100% auto;
+
+  &.active {
+    opacity: 1;
+    background-image: url('assets/images/icon-comment--blue.svg');
+  }
+
+  &.avatar__reply {
+    opacity: 1;
+		background-image: url('assets/images/icon-comment--green.svg');
+		min-width: initial;
+		width: 12px;
+		height: 12px;
+		left: 5px;
+		bottom: -8px;
+  }
+}
+
+.comment__count--mobile {
+  position: absolute;
+  left: -35px;
+  cursor: pointer;
+  color: white;
+  font-size: 10px;
+  font-weight: 500;
+  margin-top: -7px;
+  text-align: center;
+  width: 20px;
+}
+
+$avatarOffset: -23px;
+$avatarMargin: -15px;
+$avatarZIndexStart: 1000;
+
+@for $z from 1 through 8 {
+	div.avatar-count-#{$z} {
+		position: absolute;
+		left: #{ ($avatarOffset * $z) + $avatarMargin };
+		z-index: $avatarZIndexStart - $z;
+
+		&.user-icon {
+			// & .tooltiptext {
+			// 	left: #{ ($avatarOffset * $z) + $avatarMargin };
+			// }
+			box-shadow: 0px 1px 2px 2px rgba(0,0,0,0.05);
+			border: 2px solid transparent;
+			// span {
+			// 	font-size: 11px;
+			// }
+			&:hover {
+				border: 2px solid #ECA736;
+				z-index: 1001;
+				span {
+					// position: absolute;
+					// top: -2px;
+					// left: 6px;
+				}
+			}
+		}
+	}
+}
+
+div.avatar-count-8 {
+	background: #fff;
+	border: 1px solid #CFCFCF;
+	border-radius: 50%;
+	-moz-border-radius: 50%;
+	-webkit-border-radius: 50%;
+	box-shadow: none;
+}
