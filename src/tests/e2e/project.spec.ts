@@ -254,13 +254,6 @@ describe('Project Page', () => {
             // Code for making a reply
             // Wait for text to load
             browser.wait(EC.elementToBeClickable(element(by.css(".w[index='2']"))), 12000, "never found words to click on");
-            
-            // // Wait 5 seconds for the reply button to become clickable and Click on the reply button
-            // browser.wait(EC.elementToBeClickable(project.existingTextComment), 5000, "never found the existing comment to reply to");
-            // // project.existingTextComment.click()
-            // browser.actions().mouseMove(project.existingTextComment).perform();
-            // browser.wait(EC.elementToBeClickable(project.addReplyBtn), 5000, "never found the add reply comment button");
-            // project.addReplyBtn.click();
 
             // Wait 5 seconds for the avatar with a reply to become clickable
             browser.wait(EC.elementToBeClickable(project.avatarTextReply), 5000, "never found the existing comment to reply to");
