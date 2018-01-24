@@ -90,8 +90,9 @@ export class HeroSubscribeComponent implements OnInit {
   }
 
   private validateCoupon() {
-    let validCoupons = ['HEROVISION']
-    return validCoupons.indexOf(this.customCouponCode.toUpperCase()) > -1
+    // let validCoupons = ['HEROVISION']
+    // return validCoupons.indexOf(this.customCouponCode.toUpperCase()) > -1
+    return true
   }
 
   private checkout() {
