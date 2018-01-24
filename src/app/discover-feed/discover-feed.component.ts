@@ -20,7 +20,8 @@ export class DiscoverFeedComponent implements OnInit {
   private gradeFilter: number[] = []
 
   private first: number = 0
-  private rows: number = 3
+  private rows: number = 20
+  private total: number = 21
 
   constructor(private _readings: ReadingService) { }
 
@@ -32,14 +33,14 @@ export class DiscoverFeedComponent implements OnInit {
   }
 
   loadFeed(paging: any){
-    console.log("Load feed!", event)
+    console.log("Load feed!", paging)
 
     let filters = {
       type: this.followingFilter ? "following" : "global"
     }
     // Pagination values
-    filters['start'] = paging.first ? paging.first : this.first
-    filters['size'] = paging.rows ? paging.rows : this.first
+    this.first = filters['start'] = paging ? parseInt(paging.first) : this.first
+    this.rows = filters['size'] = paging ? parseInt(paging.rows) : this.rows
     
     if (this.gradeFilter.length > 0) {
       filters['grades'] = this.gradeFilter
@@ -48,6 +49,13 @@ export class DiscoverFeedComponent implements OnInit {
     this._readings.getFeed(filters)
       .subscribe(readings => {
         this.readings = readings
+        // If service returns total
+        
+        // If service doesn't return total
+        this.total = this.first + readings.length
+        if (readings.length = this.rows) {
+          this.total++
+        }
       })
   }
 

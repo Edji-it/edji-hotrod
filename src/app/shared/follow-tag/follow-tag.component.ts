@@ -1,0 +1,53 @@
+import { Component, Input, OnInit } from '@angular/core';
+import { AuthService } from "app/shared";
+import { Subscription } from 'rxjs/Rx';
+
+@Component({
+  selector: 'follow-tag',
+  styleUrls: [ './follow-tag.component.scss' ],
+  templateUrl: './follow-tag.component.pug'
+})
+export class FollowTag implements OnInit {
+    @Input() userId: string
+
+    private user = {}
+    private userSub: Subscription
+  constructor(
+      private _auth: AuthService
+  ) {
+      
+  }
+
+  ngOnInit() {
+      this.userSub = this._auth.currentUser.subscribe(user => {
+          this.user = user
+          console.log(user)
+      })
+  }
+
+  ngOnDestroy() {
+    this.userSub.unsubscribe()
+  }
+
+  isFollowing(): boolean {
+    return this.user['following'] && this.user['following'].indexOf(this.userId) > -1
+  }
+
+  followUser(userId: string) : void {
+    this._auth.followUser(userId)
+      .take(1)
+      .subscribe(
+        data => {
+
+        }
+      )
+  }
+
+  unfollowUser(userId: string) : void {
+    this._auth.unfollowUser(userId)
+      .take(1)
+      .subscribe(data => {
+        
+      })
+  }
+}

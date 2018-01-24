@@ -56,6 +56,7 @@ import {
   OauthRowComponent,
   OpenEndedAnswersComponent,
   QuestionComponent,
+  FollowTag,
   TutorialBoxComponent
 } from './shared'
 import { HomeComponent } from './home'
@@ -143,6 +144,7 @@ type StoreType = {
     AudioCommentComponent,
     EmojiKeyboardComponent,
     QuestionComponent,
+    FollowTag,
     GoogleButton,
     OauthRowComponent,
     OpenEndedAnswersComponent,

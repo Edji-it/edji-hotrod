@@ -1,0 +1,13 @@
+span(*ngIf="user._id != userId")
+    span.badge.badge-pill.badge-button.badge-secondary(
+            title="Click to unfollow!", 
+            (click)="followUser(userId)", 
+            *ngIf="!isFollowing()"
+        )
+        |  + Follow		
+    span.badge.badge-pill.badge-button.badge-success(
+            title="Click to unfollow!", 
+            (click)="unfollowUser(userId)", 
+            *ngIf="isFollowing()"
+        ) 
+        | Following

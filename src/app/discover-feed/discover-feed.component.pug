@@ -3,13 +3,14 @@ nav-bar([showDashboardOptions]="true")
     .row
         .col-md-8
             h1 Discover Feed
-            <p-dataList [value]="readings" [paginator]="true" [rows]="rows" [lazy]="true" (onLazyLoad)="loadFeed($event)" [totalRecords]="100">
+            <p-dataList [value]="readings" [paginator]="true" [paginatorPosition]="'bottom'" [rows]="rows" [lazy]="true" (onLazyLoad)="loadFeed($event)" [totalRecords]="total" [emptyMessage]="'No more Readings to show.'">
                 <ng-template let-reading pTemplate="item">
-                    .col-12.feed__reading
+                    .col-12.feed__reading(*ngIf="reading")
                         div {{index}}
                         .feed__reading-data(*ngIf="reading.owner")
                             .comment__avatar {{reading.owner.fullname.substr(0,2).toUpperCase()}}
                             | {{ reading.owner.fullname }}
+                            follow-tag([userId]="reading.owner._id")
                             i {{ ' shared ' + (reading.updatedAt | edjidate:'timeAgo':null:secondsAgo) }}
                             .btn-group(style="float:right")
                                 //- .btn.btn-sm.btn-primary Preview
