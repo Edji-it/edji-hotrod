@@ -90,7 +90,7 @@ div(*ngIf="commentPaneActive")
         [class.readonly]="readOnly",
         [ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '' ]"
     )
-        .user-icon([ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '' ]")
+        .user-icon([class.active]="comment.active", [ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '' ]")
             span.user-icon__initials {{comment.author.substring(0,2)}}
         .mobileBlock([ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '' ]")
             .list-item.list-item--block.mobileTime-card

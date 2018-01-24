@@ -37,9 +37,9 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
       this.active = isActive
       
       // if the comment is new, let's adjust the scroll position if there are a ton of comments
-      if (this.comment.new) {
+      // if (this.comment.new) {
         this.scrollAdjust()
-      }
+      // }
 
       if (!isActive) {
         // Trigger save when deactivated externally i.e. emoji keyboard
@@ -131,13 +131,14 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
       if (this.comment.lineY) {
         len = paneComments.length
         for (let i=0; i<len; i++) {
-          if (paneComments[i]._id===this._comments.activeComment._id) {
+          // if (paneComments[i]._id===this._comments.activeComment._id) {
+          if (paneComments[i]._id===this.comment._id) {
             commentIndex = i
             break
           }
         }
       } 
-
+      
       // Set the scroll position to where the active comment is in view
       if (comments[commentIndex]) { 
         document.querySelector('.sliding-pane-comment').scrollTop = comments[commentIndex].offsetTop

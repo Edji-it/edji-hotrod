@@ -115,6 +115,9 @@ $defaultAvatarSize: 28px;
         @extend .user-icon;
         background: #f0f0f0;
     }
+    &.active {
+        border: 2px solid #ECA736;
+    }
 }
 
 .user-icon span {

@@ -963,6 +963,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // Set the input comment to the comment pane if it is not currently open
         if (!this.commentPane) {
             this.selectedComment=comment
+            this._comments.activeComment=comment
+            this.selectedComment.active=true
         }
 
         // Toggle the variable that controls comment pane open/close so we can add a class to "push" screen over
