@@ -66,6 +66,14 @@ export class UserDetailsUpdateModal implements OnInit {
         this._bumble.sendUserDetails(res.user)
         this.messages.success = true
         this.triggerCloseTimeout()
+        if (this._auth.getEnv() === "prod") { 
+          if(res.user.identities && res.user.identities.indexOf('teacher') > -1) {
+            let nameArr = res.user.fullname.split(" ")
+            let fname = nameArr[0]
+            let lname = nameArr[1]
+            this._auth.addToNewUsersList({ 'email' : res.user.email, 'fname' : fname, 'lname' : lname })
+          }
+        }
       }, (err) => {
         console.error(err)
       })
