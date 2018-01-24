@@ -37,9 +37,9 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
       this.active = isActive
       
       // if the comment is new, let's adjust the scroll position if there are a ton of comments
-      // if (this.comment.new) {
+      if (this.comment.scrollTo) {
         this.scrollAdjust()
-      // }
+      }
 
       if (!isActive) {
         // Trigger save when deactivated externally i.e. emoji keyboard

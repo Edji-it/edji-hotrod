@@ -60,6 +60,20 @@ export class AvatarPortalComponent implements OnInit, OnDestroy {
     ))
   }
 
+  private triggerCommentPane(scrollTo?: boolean) {
+    // If the avatar is the 8th where it shows '+' and number of comments
+    if (this.indexOnLine==8) {
+      scrollTo=false
+    }
+    // If scrollTo is true then we will have the comment pane scroll to the comment the user clicked on
+    if (scrollTo) {
+      this.comment.scrollTo=true
+    } else {
+      this.comment.scrollTo=false
+    }
+    this.toggleCommentPane.emit()
+  }
+
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe() })
   }  
