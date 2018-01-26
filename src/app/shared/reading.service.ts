@@ -182,7 +182,6 @@ export class ReadingService {
   
   public getFeed(filters?: FilterObj): Observable<any> {
     let feedParams = new HttpParams()
-    console.log(filters)
     if (filters  && filters['grades']) {
       let grades = filters['grades']
       // filters['grades'].forEach( grade => { feedParams = feedParams.append("grades", grade + "")})
@@ -195,9 +194,11 @@ export class ReadingService {
     if (filters && filters['start']) {
       feedParams = feedParams.append("start", filters['start'])
     }
+    if (filters && filters['type']) {
+      feedParams = feedParams.append("type", filters['type'])
+    }
     feedParams = feedParams.append("populate", "owner").append("populate", "words_preview")
     
-    console.log(feedParams)
     //{{url}}/readings/feed?grades[]=1&grades[]=8&populate[]=words_preview&populate[]=owner&start=0
     return this._http.get(
       this._auth.getUrl() + '/readings/feed', 

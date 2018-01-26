@@ -10,8 +10,9 @@ nav-bar([showDashboardOptions]="true")
                         .feed__reading-data(*ngIf="reading.owner")
                             .comment__avatar {{reading.owner.fullname.substr(0,2).toUpperCase()}}
                             | {{ reading.owner.fullname }}
-                            follow-tag([userId]="reading.owner._id")
                             i {{ ' shared ' + (reading.updatedAt | edjidate:'timeAgo':null:secondsAgo) }}
+                            = " "
+                            follow-tag([userId]="reading.owner._id")
                             .btn-group(style="float:right")
                                 //- .btn.btn-sm.btn-primary Preview
                                 .btn.btn-sm.btn-primary([routerLink]="['/new-reading']", [queryParams]="{ copyId: reading._id }") Get this Reading
