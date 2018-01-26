@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 import { AuthService } from "app/shared";
 import { Subscription } from 'rxjs/Rx';
 
@@ -9,6 +9,7 @@ import { Subscription } from 'rxjs/Rx';
 })
 export class FollowTag implements OnInit {
     @Input() userId: string
+    @Output() followEvent: EventEmitter<boolean> = new EventEmitter()
 
     private user = {}
     private userSub: Subscription
@@ -38,7 +39,7 @@ export class FollowTag implements OnInit {
       .take(1)
       .subscribe(
         data => {
-
+          this.followEvent.emit(true)
         }
       )
   }
@@ -47,7 +48,7 @@ export class FollowTag implements OnInit {
     this._auth.unfollowUser(userId)
       .take(1)
       .subscribe(data => {
-        
+        this.followEvent.emit(false)
       })
   }
 }

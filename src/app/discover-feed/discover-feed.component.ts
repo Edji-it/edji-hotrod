@@ -23,6 +23,9 @@ export class DiscoverFeedComponent implements OnInit {
   private rows: number = 20
   private total: number = 21
 
+  // State vars
+  private loading: boolean = true
+
   constructor(private _readings: ReadingService) { }
 
   ngOnInit() {
@@ -30,8 +33,8 @@ export class DiscoverFeedComponent implements OnInit {
     this.loadFeed({})
   }
 
-  loadFeed(paging: any){
-    console.log("Load feed!", paging)
+  loadFeed(paging?: any){
+    this.loading = true
 
     let filters = {
       type: this.followingFilter ? "following" : "global"
@@ -47,6 +50,7 @@ export class DiscoverFeedComponent implements OnInit {
     this._readings.getFeed(filters)
       .subscribe(readings => {
         this.readings = readings
+        this.loading = false
         // If service returns total
         
         // If service doesn't return total
@@ -56,6 +60,5 @@ export class DiscoverFeedComponent implements OnInit {
         }
       })
   }
-
  
 }
