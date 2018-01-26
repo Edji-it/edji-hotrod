@@ -402,6 +402,10 @@ export class CommentComponent implements OnInit, OnDestroy {
         setTimeout(() => {
           this.indicatesPane = true
           this.toggleCommentPane.emit(true)
+          // If we don't want the comment pane to scroll, lets not activate the comment either
+          if (!this.comment.scrollTo) {
+            this.deactivate(comment,true)
+          }
         }, 1)
       } else {
         setTimeout(() => {

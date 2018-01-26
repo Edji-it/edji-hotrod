@@ -125,6 +125,10 @@ describe('Project Page', () => {
             // delete the comment
             browser.wait(EC.elementToBeClickable(project.emojiCommentDelete), 5000, "could not find delete button");
             project.emojiCommentDelete.click();
+
+            // close the comment pane
+            browser.wait(EC.elementToBeClickable(project.closePane), 5000, "could not find close pane button");
+            project.closePane.click();
         });
 
         it("should make a comment on an image", () => {
@@ -144,8 +148,8 @@ describe('Project Page', () => {
             project.textComment.sendKeys('some test text');
             
             // save the comment
-            browser.wait(EC.elementToBeClickable(project.commentSave), 5000, "could not click the save button on the comment");
-            project.commentSave.click();
+            browser.wait(EC.elementToBeClickable(project.emojiCommentSave), 5000, "could not click the save button on the comment");
+            project.emojiCommentSave.click();
 
             // delete the comment
             browser.wait(EC.elementToBeClickable(project.emojiCommentDelete), 5000, "could not find delete button");
@@ -153,6 +157,10 @@ describe('Project Page', () => {
 
             // make sure it's deleted
             browser.wait(EC.invisibilityOf(project.textComment), 5000, "text comment never went away after deleting it");
+
+            // close the comment pane
+            browser.wait(EC.elementToBeClickable(project.closePane), 5000, "could not find close pane button");
+            project.closePane.click();
         });
     });
 
@@ -246,11 +254,10 @@ describe('Project Page', () => {
             // Code for making a reply
             // Wait for text to load
             browser.wait(EC.elementToBeClickable(element(by.css(".w[index='2']"))), 12000, "never found words to click on");
-            
-            // Wait 5 seconds for the reply button to become clickable and Click on the reply button
-            browser.wait(EC.elementToBeClickable(project.existingTextComment), 5000, "never found the existing comment to reply to");
-            // project.existingTextComment.click()
-            browser.actions().mouseMove(project.existingTextComment).perform();
+
+            // Wait 5 seconds for the avatar with a reply to become clickable
+            browser.wait(EC.elementToBeClickable(project.avatarTextReply), 5000, "never found the existing comment to reply to");
+            project.avatarTextReply.click()
             browser.wait(EC.elementToBeClickable(project.addReplyBtn), 5000, "never found the add reply comment button");
             project.addReplyBtn.click();
 

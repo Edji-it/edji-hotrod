@@ -37,7 +37,7 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
       this.active = isActive
       
       // if the comment is new, let's adjust the scroll position if there are a ton of comments
-      if (this.comment.new) {
+      if (this.comment.scrollTo) {
         this.scrollAdjust()
       }
 
@@ -122,22 +122,23 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
   scrollAdjust(isNew?: boolean) {
     setTimeout(() => {
       // Get the comments that are currently in the pane
-      let comments: any[] = Array.from(document.querySelectorAll('.comment-container edji-comment'))
+      let comments: any[] = Array.from(document.querySelectorAll('.sliding-pane-comment .comment-container edji-comment'))
       let len
       let commentIndex = 0
       let paneComments = this.commentByPos[this.comment['lineY']]
 
       // Get the position of the active comment in the list of comments in comment pane
-      if (this.comment.imagePos) {
+      if (this.comment.lineY) {
         len = paneComments.length
         for (let i=0; i<len; i++) {
-          if (paneComments[i]._id===this._comments.activeComment._id) {
+          // if (paneComments[i]._id===this._comments.activeComment._id) {
+          if (paneComments[i]._id===this.comment._id) {
             commentIndex = i
             break
           }
         }
       } 
-
+      
       // Set the scroll position to where the active comment is in view
       if (comments[commentIndex]) { 
         document.querySelector('.sliding-pane-comment').scrollTop = comments[commentIndex].offsetTop
