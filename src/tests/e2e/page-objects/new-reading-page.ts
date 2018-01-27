@@ -10,11 +10,15 @@ export class NewReading implements PageObjectInterface
 
     // Public Instance Variables
     public titleInput = element(by.id('readingTitle'));
-    public contentInput = element(by.id('angularMediumEditor'));
-    public contentInput1 = element.all(by.id('angularMediumEditor')).first();
-    public contentInput2 = element.all(by.id('angularMediumEditor')).last();
+    public contentInput = element.all(by.css('.medium-editor-element')).first();
+    public contentInput1 = element.all(by.css('.medium-editor-element')).first();
+    public contentInput2 = element.all(by.css('.medium-editor-element')).last();
     public sourceInput = element(by.id('readingSource'));
     public groupInput = element(by.id('firstProjectLabel'));
+    public gradeTileK = element(by.id('gradeTile0'));
+    public gradeTileU = element(by.id('gradeTile13'));
+    public subjectDropdown = element(by.id('subjectDropdown'));
+    public subjectFirstOption = element.all(by.css('#subjectDropdown .dropdown-item')).first();
     public addButton = element(by.id('addReadingButton'));
     public finalizeButton = element(by.id('addReadingFinalizeButton'));
     public goToReadingButton = element(by.id('shareModalReadingButton'));

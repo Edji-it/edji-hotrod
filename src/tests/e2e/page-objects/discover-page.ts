@@ -15,6 +15,10 @@ export class Discover implements PageObjectInterface
     public unfollowTags = element.all(by.css(".badge-unfollow"))
     public feedReadings = element.all(by.css(".feed__reading"))
     public firstFeedReading = this.feedReadings.first()
+
+    // Discover Filters
+    public filterPublic = element(by.id("discoverFilterPublic"))
+    public filterFollowing = element(by.id("discoverFilterFollowing"))
     
     // get the dashboard page
     getPage() : void {

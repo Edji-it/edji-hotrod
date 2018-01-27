@@ -2,6 +2,7 @@
     .range__tile(
         *ngFor="let grade of gradeInitials; let i = index", 
         [attr.title]="gradeNames[i]",
+        [attr.id]="'gradeTile'+i",
         [class.selected]="gradeSelection.indexOf(i) > -1",
         [class.preview]="gradePreview.indexOf(i) > -1",
         (click)="selectGrade(i)",

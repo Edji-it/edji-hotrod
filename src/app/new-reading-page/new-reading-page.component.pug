@@ -57,7 +57,7 @@ nav-bar([pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'", [canPublish]
           .form-group
             label Subject
             .input-group
-            ss-multiselect-dropdown([options]="subjects", formControlName="subjects", [settings]="subjectDropSettings")
+            ss-multiselect-dropdown(id="subjectDropdown",[options]="subjects", formControlName="subjects", [settings]="subjectDropSettings")
             #errorTitle.alert.alert-warning.mt-2(*ngIf="readingForm.controls['subjects'].hasError('required') && (readingForm.controls['subjects'].dirty || submitted)") 
               | Please select at least one Subject area that this Reading applies to.
           //- Body Section

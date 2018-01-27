@@ -43,6 +43,7 @@ nav-bar([showDashboardOptions]="true")
                 label Users
                 //- Following users option
                 label.form-check-label.form-check-btn(
+                    id="discoverFilterFollowing",
                     [class.active]="followingFilter",
                     title="Filter by users you follow",
                     (click)="followingFilter = true; loadFeed()"
@@ -50,6 +51,7 @@ nav-bar([showDashboardOptions]="true")
                   span([innerHTML]="':green_heart: Following' | emojione")
                 //- Public option
                 label.form-check-label.form-check-btn(
+                    id="discoverFilterPublic",
                     [class.active]="!followingFilter",
                     title="See public readings from all users",
                     (click)="followingFilter = false; loadFeed()"
