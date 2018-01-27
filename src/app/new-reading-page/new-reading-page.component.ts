@@ -442,7 +442,6 @@ export class NewReadingPage implements OnInit {
 
             // Concatenate the html to 1 string [not currently using with current config]
             // this.concatHtml += editorHtml[i]
-            concatHtml += this.readingHtml[i].text
             if (!document.querySelector('#renderedReading')){
                 let div1 = document.createElement('div')
                 div1.setAttribute('id','renderedReading')
@@ -455,7 +454,7 @@ export class NewReadingPage implements OnInit {
             }
             let rendered: any = document.querySelector('#renderedReading')
             let renderHtml
-            rendered['innerHTML'] = concatHtml
+            rendered['innerHTML'] = this.readingHtml[i].text
             renderHtml = document.querySelector('#renderedReading')
 
             let childEls = renderHtml.childNodes
