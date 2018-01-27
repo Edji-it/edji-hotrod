@@ -212,6 +212,7 @@ hot-discussions(
 //- comment-pane
 comment-pane(
     [isActive]="selectedComment.active",
+    [isSelected]="selectedComment.selected",
     [comment]="selectedComment",
     (hideComment)="toggleCommentPane(false)",
     (commentActivationMobile)="setActiveCommentByIndex($event.activate, $event.wi, $event.ci, $event.activatedComment)",

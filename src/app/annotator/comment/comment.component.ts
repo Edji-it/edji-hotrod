@@ -397,15 +397,14 @@ export class CommentComponent implements OnInit, OnDestroy {
 
   toggleCPane(comment?, forceOpen?: boolean): void {
     if (!this.commentPaneActive) {
+      if (comment.selected) {
+        this.comment.selected=true
+      }
        // Need to give the app 1 millisecond to update all arrays when adding a new comment
       if (!this.indicatesPane || forceOpen) {
         setTimeout(() => {
           this.indicatesPane = true
           this.toggleCommentPane.emit(true)
-          // If we don't want the comment pane to scroll, lets not activate the comment either
-          if (!this.comment.scrollTo) {
-            this.deactivate(comment,true)
-          }
         }, 1)
       } else {
         setTimeout(() => {

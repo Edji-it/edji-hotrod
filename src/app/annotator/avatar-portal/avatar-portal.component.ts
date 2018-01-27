@@ -60,16 +60,16 @@ export class AvatarPortalComponent implements OnInit, OnDestroy {
     ))
   }
 
-  private triggerCommentPane(scrollTo?: boolean) {
+  private triggerCommentPane(selected?: boolean) {
     // If the avatar is the 8th where it shows '+' and number of comments
     if (this.indexOnLine==8) {
-      scrollTo=false
+      selected=false
     }
-    // If scrollTo is true then we will have the comment pane scroll to the comment the user clicked on
-    if (scrollTo) {
-      this.comment.scrollTo=true
+    // If selected is true then we will have the comment pane scroll to the comment the user clicked on
+    if (selected) {
+      this.comment.selected=true
     } else {
-      this.comment.scrollTo=false
+      this.comment.selected=false
     }
     this.toggleCommentPane.emit()
   }
