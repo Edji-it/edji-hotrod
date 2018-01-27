@@ -54,19 +54,20 @@ export class NewReadingPage implements OnInit {
     };
 
     // Messages
-    private successAlert    : string = "Nice work! This reading draft was successfully saved!"
+    private successAlert : string = "Nice work! This reading draft was successfully saved!"
     private readingPlaceholder: string = 'Type or paste your reading...'
-    private error           : string = '' // Error message 
-    private alert           : string = ''
+    private error : string = '' // Error message 
+    private alert : string = ''
 
-    private versionId       : string = ''
-    private ownerId         : string
-    private copyId          : string = ''
-    private editorToolbarY  : number = 54
+    private versionId : string = ''
+    private ownerId : string
+    private copyId : string = ''
+    private copyCleanHeroMsg : boolean = false
+    private editorToolbarY : number = 54
     private editorToolbarHidden : boolean
-    private insertNode      : any
+    private insertNode : any
     private masterSelection : any
-    private currentUser     : User // User data of the current user.
+    private currentUser : User // User data of the current user.
 
     private static readonly EDITOR_TOOLBAR_Y = 54
 
@@ -171,18 +172,24 @@ export class NewReadingPage implements OnInit {
         if (this.readingId) {
             this.getReading(this.readingId)
         } else if (this.copyId) {
-            this.getReading(this.copyId)
+            this.getReading(this.copyId, !this._auth.getUser().hero || !this._auth.getUser().hero.active)
         }
 
         this._title.setTitle('Edji | New Reading')
      }
 
-     private getReading(readingId: string) {
+     private getReading(readingId: string, demoteHeroic?: boolean) {
 
         this._readings.get(readingId)
             .take(1)
             .subscribe(
                 data => {
+                    if (demoteHeroic && data.questions && data.questions.length > 0) {
+                        // Clean out features which require Hero, and tell the user it happened
+                        data.html = data.html.replace(/\<\$question\$\>/g, '')
+                        data.questions = []
+                        this.copyCleanHeroMsg = true
+                    }
                     this.reading = data;
                     if (this.reading.html) {
                         if (this.reading.html.indexOf("<$question$>") !== -1) {

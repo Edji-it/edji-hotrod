@@ -118,31 +118,4 @@ describe('Discover Feed', () => {
             expect(foundTitle).toEqual(true)
         })
     });
-
-
-    /**
-     * 
-     */
-    // describe("Navigation from project discover", () => {
-    //     it("should get to a project by clicking a card", () => {
-    //         browser.wait(EC.presenceOf(discover.firstProject), 8000, "never saw a project");
-    //         dashboard.firstProject.click();
-    //         browser.wait(EC.urlContains("project"), 5000, "clicking on project card did not bring me to a project");
-    //     });
-
-    //     it("should get to a project by entering a code", () => {
-    //         dashboard.getPage();
-    //         // initial validation
-    //         browser.wait(EC.presenceOf(dashboard.projectCodeInput), 8000, "never saw lightning code input");
-
-    //         // form handling
-    //         dashboard.projectCodeInput.sendKeys(login.validProjectCode);
-    //         browser.wait(EC.elementToBeClickable(dashboard.projectJoinButton), 5000, "project code input was never clickable");
-    //         dashboard.projectJoinButton.click();
-
-    //         // verification
-    //         browser.wait(EC.urlContains("project"), 5000, "entering a project code did not bring me to a project");
-    //     });
-    // });
-
 }); // describe 'Dashboard Page'

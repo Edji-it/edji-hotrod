@@ -22,11 +22,16 @@
         </div>
         <div class="reading-title">
             <div class="reading-title--center-row">
-                <h1 class="small reading-title__text">{{reading.title}} <span *ngIf="!reading.title"><i>Untitled</i></span></h1>
+                <h1 class="small reading-title__text">{{reading.title}} <span *ngIf="!reading.title"><i>Untitled</i></span>
+                    <span class="hero-tag" *ngIf="reading.heroic" title="Uses Hero features">H</span>
+                </h1>
                 <p class="blockquote-footer" *ngIf="reading.versionCount && reading.versionCount > 0" [attr.testVersionNumber]="reading.title">Version {{reading.versionCount > 0 ? reading.versionCount : '' }}</p>
                 <!--<p *ngIf="reading.createdAt" class="readings-date">
                     Created: {{ reading.createdAt | date:'mediumDate' }}
                 </p>-->
+                <div *ngIf="reading.subjects && reading.subjects.length > 0" style="height:14px;line-height:18px;">
+                    <span class="badge-pill badge-secondary badge-subject" *ngFor="let subject of reading.subjects">{{subject}}</span>
+                </div>
             </div>
         </div>
         <i *ngIf="reading['draft'] && reading.draft === true && !reading.projects[0]" class="icon icon-draft"></i>

@@ -5,6 +5,12 @@ nav-bar([pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'", [canPublish]
       form([formGroup]="readingForm")
         .reading-page
           //- Error and Success Messaging
+          .alert.alert-info.alert-reading.alert-dismissable(*ngIf="copyCleanHeroMsg",role="alert")
+            a.close(href="#", (click)="copyCleanHeroMsg=false") ×
+            b Hero features removed
+            p This reading was created with Hero features, such as questions, which have been removed. To copy readings and preserve Hero features, consider 
+              a.link([routerLink]="['/hero']") going Hero
+              |.
           p.alert.alert-warning(*ngIf="error.length > 0") {{ error }}
           .alert.alert-success.alert-readings.alert-dismissable(role="alert", *ngIf="showAlert") {{ successObject.readingSuccess }}
             a.close(href="#", (click)="showAlert=false") × 
