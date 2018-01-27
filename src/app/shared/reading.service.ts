@@ -154,7 +154,9 @@ export class ReadingService {
         html: reading.html,
         source: reading.source,
         draft: reading.draft,
-        questions: reading.questions
+        questions: reading.questions,
+        subjects: reading.subjects,
+        grade_levels: reading.grade_levels
       } // let
       
 
