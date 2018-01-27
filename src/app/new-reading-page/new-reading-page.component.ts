@@ -441,7 +441,7 @@ export class NewReadingPage implements OnInit {
             }
 
             // Concatenate the html to 1 string [not currently using with current config]
-            // this.concatHtml += editorHtml[i]
+            concatHtml += editorHtml[i].innerHTML
             if (!document.querySelector('#renderedReading')){
                 let div1 = document.createElement('div')
                 div1.setAttribute('id','renderedReading')
@@ -506,6 +506,8 @@ export class NewReadingPage implements OnInit {
         } else {
             this.angulartics.eventTrack.next({ action: submitAction, properties: { category: 'contentManagement', label: 'attempt' }})
         }
+
+        console.log(reading)
         
         this._readings.save(reading)
             .subscribe(
