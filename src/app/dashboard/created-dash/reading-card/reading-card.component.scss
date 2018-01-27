@@ -149,10 +149,14 @@ button.new-reading-btn {
 }
 
 .badge-subject {
+    display: inline-block;
     color: #fff;
     font-size: 10px;
+    height: 12px;
+    line-height: 12px;
     background: #79b1f3;
     text-transform:capitalize;
+    margin-right: 2px;
 }
 
 .version-card {

@@ -30,7 +30,7 @@ nav-bar([showDashboardOptions]="true")
                         hot-reading-card([reading]="reading", [readOnly]="true")
                         .feed__reading-preview(*ngIf="reading.words_preview")
                             span.w(
-                                    *ngFor="let w of reading.words_preview.slice(0,150)", 
+                                    *ngFor="let w of reading.words_preview", 
                                     [ngClass]="[ w ? w.styles.join(' ') : '' ]"
                                 )
                                 | {{ (!(w && w.styles) || (w && w.styles.indexOf('space')) > -1) ? '&nbsp;' : w && w.str }}
