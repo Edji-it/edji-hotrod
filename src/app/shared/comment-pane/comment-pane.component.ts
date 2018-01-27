@@ -163,19 +163,21 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
 
   commentActivationEmitter(shouldActivate, comment?: any) {
     let wordIndex = comment.start
-    let processedCommentData = this._projects.processComments(this.project)
-    let commentsByIndex = processedCommentData.commentsByIndex
+    // let processedCommentData = this._projects.processComments(this.project)
+    let commentsByIndex = this._projects.commentsByIndex
 
     let commentIndex = 0
 
-    for (let i=0;i<commentsByIndex[wordIndex].length;i++) {
-      if (commentsByIndex[wordIndex][i]._id===comment._id) {
-        commentIndex = i
-        break
-      }
-    }
+    
     
     if (shouldActivate) {
+      for (let i=0;i<commentsByIndex[wordIndex].length;i++) {
+        if (commentsByIndex[wordIndex][i]._id===comment._id) {
+          commentIndex = i
+          break
+        }
+      }
+
       if (comment && (comment.type==='emoji' || comment.type==='text')) {
         this.scrollAdjust()
       }
