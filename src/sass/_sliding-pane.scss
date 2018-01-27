@@ -110,6 +110,9 @@ $defaultAvatarSize: 28px;
     margin-right: 10px;
     // Center on line offset
     margin-top: -4px;
+    &.firefeed {
+        margin-top: initial;
+    }
 
     &--light {
         @extend .user-icon;
