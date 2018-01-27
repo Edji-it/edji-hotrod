@@ -41,6 +41,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     private reading: Reading = <Reading>{}
     private project: Project = <Project>{}
     private lastWord: number = 750
+    private lastWordImageOffset: number = 100
     
     private commentsByIndex : EdjiComment[][] = []
     private focusOverride   : boolean = false
@@ -156,9 +157,17 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         if (bottomOfArticle - distanceFromViewport < bottomOfView) {
             this.lastWord += 400
         }
+        // Make sure we broadcast lastWord position out to listening components
+        this._projects.lastWordUpdateSubj.next(this.lastWord)
+
+        // Re-run the line positions so comment avatars show up in the right spot
+        this.setLinePositions()
     }
     
     ngOnInit() {
+        // Make sure we broadcast lastWord position out to listening components
+        this._projects.lastWordUpdateSubj.next(this.lastWord)
+
         this.annotatorPaper = document.getElementById('emojiAnnotator')
         this.annotatorContent = document.getElementById('annotatorContent')
 
@@ -278,6 +287,15 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 this.project.heat_vision = heatToggle.heatVision.all
                 this.setLinePositions()
             })
+        )
+
+        // Subscribe to updates on where to move the lastWord for the infinity scroll
+        this.subscriptions.push(
+            this._projects.lastWordUpdateState.subscribe(
+                (lastWord) => {
+                    this.lastWord = lastWord + this.lastWordImageOffset
+                }
+            )
         )
 
         // After comments are added to the array

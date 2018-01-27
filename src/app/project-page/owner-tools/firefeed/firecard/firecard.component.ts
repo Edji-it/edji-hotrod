@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs/Rx'
 import { EdjiComment, Reading } from '../../../../shared/datatypes'
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, AfterViewInit } from '@angular/core'
 import { ReadingService } from '../../../../shared/reading.service'
+import { ProjectService } from '../../../../shared/project.service'
 
 
 @Component({
@@ -24,6 +25,7 @@ export class FirecardComponent implements OnInit, OnDestroy {
   private playAble: boolean = false
   private isPlaying: boolean = false
   private viewInitRunOnce: boolean = false
+  private lastWord: number = 0
 
   @Input() fireComment: EdjiComment
 
@@ -31,7 +33,8 @@ export class FirecardComponent implements OnInit, OnDestroy {
     public el: ElementRef,
     private _readings: ReadingService,
     private _socket: SocketService,
-    private _comments: CommentService
+    private _comments: CommentService,
+    private _projects: ProjectService
   ) { }
 
   ngOnInit() {
@@ -70,6 +73,15 @@ export class FirecardComponent implements OnInit, OnDestroy {
         console.warn(error)
       })
     )
+
+
+    this.subscriptions.push(
+      this._projects.lastWordUpdateState.subscribe(
+          (lastWord) => {
+            this.lastWord = lastWord
+          }
+        )
+      )
 
     // Refresh time ago date every minute
     setInterval(()=> {
@@ -115,6 +127,18 @@ export class FirecardComponent implements OnInit, OnDestroy {
   }
 
   public getImagePos(imageIndex) {
+    // If the image index is further down than the last word rendered, send out a request to update the lastWord
+    if (imageIndex > this.lastWord) {
+      this._projects.lastWordUpdateSubj.next(imageIndex)
+      setTimeout(()=>{
+        this.scrollToImage(imageIndex)
+      }, 1)
+    } else {
+      this.scrollToImage(imageIndex)
+    }
+  }
+
+  public scrollToImage(imageIndex) {
     let yOffset = 100
     let imageElement = document.getElementById("readingImage" + imageIndex)
     this.yPos = this.getOffset(imageElement).top
