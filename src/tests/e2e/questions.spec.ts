@@ -135,8 +135,17 @@ describe('Reading Questions Tests', () => {
             browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable")
             newReading.finalizeButton.click()
 
-            // Should redirect to Project page for new reading
+            // // Click the 'Go to Reading' button on share button modal
+            // browser.wait(EC.elementToBeClickable(newReading.goToReadingButton), 5000, "share code modal go to reading button never became clickable")
+            // newReading.goToReadingButton.click();
+
+            // Should close the reading share code modal after creating a new reading
             browser.wait(EC.urlContains("project"), 5000, "never arrived at new reading")
+
+            browser.wait(EC.elementToBeClickable(newReading.shareCodeModalClose), 5000, "reading share code modal never showed up")
+            newReading.shareCodeModalClose.click()
+
+            sidebar.logout();
         }) // it('should add reading when all fields are filled ...
     }) // describe('Questions - Create'
 
@@ -158,15 +167,15 @@ describe('Reading Questions Tests', () => {
         /*
             Test: Make a comment on a question.
         */
-        it("should make an answer to a question as a logged in user.", () => {
+        it("should make an answer to a question as a guest.", () => {
             // make sure we got there.
             browser.wait(EC.presenceOf(question.testQuestion), 5000, " failed to find the test question!");
 
             // make sure we can see the OpenEndedAnswers block
             browser.wait(EC.presenceOf(question.openEndedAnswerBlock), 10000, "failed to find the open ended answers block under the test question!");
-            browser.executeScript('window.scrollTo(0, document.querySelector("article .button__answer-type").scrollTop);').then(function () {
-                browser.wait(EC.elementToBeClickable(question.openEndedAnswerBlock), 5000, "never scrolled and saw the question");
-            });
+            // browser.executeScript('window.scrollTo(0, document.querySelector("article .button__answer-type").scrollTop + 400);').then(function () {
+            //     browser.wait(EC.elementToBeClickable(question.openEndedAnswerBlock), 5000, "never scrolled and saw the question");
+            // });
 
             // First, let's find the emoji comment button
             browser.wait(EC.elementToBeClickable(question.emojiCommentBtn), 5000, " failed to click the emoji comment button!");

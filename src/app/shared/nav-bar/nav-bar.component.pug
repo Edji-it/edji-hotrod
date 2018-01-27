@@ -5,10 +5,17 @@
       img#logo.nav-bar__logo(src="assets/images/logo-3.2-mark.svg")
 
     //- Optional Title
-    .nav-bar__heading.hidden-sm-down(*ngIf="!showProjectInfo")
-      h1(*ngIf="pageTitle") {{ pageTitle }}
-    .nav-bar__heading.hidden-sm-down(*ngIf="showProjectInfo")
-      h1(*ngIf="currentReading.title") {{ currentReading.title }}
+    div(*ngIf="!projectCodeShow")
+      .nav-bar__heading.hidden-sm-down(*ngIf="!showProjectInfo")
+        h1(
+          *ngIf="pageTitle",
+          title="{{ pageTitle }}"
+          ) {{ pageTitle }}
+      .nav-bar__heading.hidden-sm-down(*ngIf="showProjectInfo")
+        h1(
+          *ngIf="currentReading.title",
+          title="{{ currentReading.title }}"
+          ) {{ currentReading.title }}
 
     .nav__btn-wrap(*ngIf="!user.isLoggedIn")
       a#loginLink.btn.btn-primary.nav-bar__btn([routerLink]="['/login']") Log In
@@ -25,24 +32,25 @@
 
     .nav__btn-wrap(*ngIf="!showProjectInfo && (!user.hero || !user.hero.active)")
       a#heroLink.btn.btn-clear.nav-bar__btn.hidden-sm-down.link([routerLink]="['/hero']", routerLinkActive="active") Go Hero!
-      a#heroLink.btn.btn-clear.nav-bar__btn.hidden-md-up.link([routerLink]="['/hero']", routerLinkActive="active") Hero
+      a#heroLink.btn.btn-clear.nav-bar__btn.hidden-md-up.link(*ngIf="!canPublish", [routerLink]="['/hero']", routerLinkActive="active") Hero
 
-    //- Project Info
-    .nav-bar__project-data.hidden-sm-down(*ngIf="showProjectInfo && currentProject && currentProject._id")
-      .group-label {{ liveCount }} Readers
-      pre 
+    //- Project Info (Desktop & Mobile)
+    .nav-bar__project-data(*ngIf="showProjectInfo && currentProject && currentProject._id")
+      .group-label {{ currentProject.label }} &ensp;
+        span.badge.badge-pill([ngClass]="[ liveCount > 1 ? 'badge-primary' : 'badge-secondary']") {{ liveCount }} Reading
+      pre.btn((click)="showShareCodeModal()", title="Display group code")
         span([innerHtml]="':key:' | emojione") 
         | &nbsp;{{ currentProject.code }}
-    .nav-bar__project.hidden-sm-down(*ngIf="showProjectInfo && currentProject && currentProject._id")
-      label Group
-      .group-label {{ currentProject.label }}
 
     .nav__btn-wrap
-      button#addReadingButton.btn.btn-action.nav-bar__btn(*ngIf="canPublish", (click)="showShareTooltip = !showShareTooltip", [class.active]="showShareTooltip") Share
+      //- Share button: Desktop
+      button#addReadingButton.btn.btn-action.nav-bar__btn.hidden-sm-down(*ngIf="canPublish", (click)="showShareTooltip = !showShareTooltip", [class.active]="showShareTooltip") Share
+      //- Share button: Mobile
+      button#addReadingButtonMobile.btn.btn-clear.nav-bar__btn.hidden-md-up(*ngIf="canPublish", (click)="showShareTooltip = !showShareTooltip", [class.active]="showShareTooltip") Share
       //- Publish Tooltip
-      .publish-tooltip(*ngIf="showShareTooltip")
+      .publish-tooltip(*ngIf="showShareTooltip && !_util.showShareCode")
         h1.publish-tooltip__title Publish and Share
-        p.sub-label.pb-2F inished with your reading? Give it a group name, Finalize and get your group code to share with your readers!
+        p.sub-label.pb-2F Finished with your reading? Give it a group name, Finalize and get your group code to share with your readers!
         .form-group(style="margin-bottom: 0px;")
           label Group Name
             .input-group
@@ -55,16 +63,55 @@
           #errorServiceResponse.alert.alert-warning(*ngIf="messages.serviceError") Oh no! Something went wrong. If it keeps happening, let us know!
         button#addReadingFinalizeButton.btn.btn-action((click)="finalizeReadingAndShare({ groupLabel: groupLabel, customCode: customCode })", [class.loading]="shareLoading") Finalize and Share
       .nav__btn-wrap
-      button#saveDraftButton.btn.btn-secondary.nav-bar__btn(*ngIf="canPublish", (click)="saveAction.emit()") Save
+      //- Save button: Desktop
+      button#saveDraftButton.btn.btn-secondary.nav-bar__btn.hidden-sm-down(*ngIf="canPublish", (click)="saveAction.emit()") Save
+      //- Save button: Mobile
+      button#saveDraftButton.btn.btn-clear.nav-bar__btn.hidden-md-up(*ngIf="canPublish", (click)="saveAction.emit()") Save
 
-    //- Mobile display for title
-    //- Project Info
-    .hidden-md-up.nav-bar__project-data(*ngIf="showProjectInfo && currentProject && currentProject._id")
-      .group-label {{ liveCount }} Readers
-      pre
-        span([innerHtml]="':key:' | emojione") {{ currentProject.code }}
-    .hidden-md-up.nav-bar__project(*ngIf="showProjectInfo && currentProject && currentProject._id")
-      label Group
-      .group-label {{ currentProject.label }}
+    //- Join Reading Code
+    .row.col-5.nav__join-code.hidden-sm-down(*ngIf="projectCodeShow && !canPublish")
+      .input-group.input-group-lg
+        input#projectCodeInput.form-control(
+          name="ProjectCodeInput", 
+          type="text", 
+          style="text-align: center;", 
+          (keyup.enter)="joinSession(projectCode)", 
+          [(ngModel)]="projectCode", 
+          [class.is-invalid]="errorObject.invalidCode"
+          placeholder="🔑 Code", 
+          aria-describedby="add-project-code")
+        span.input-group-btn
+          button#buttonJoinProject.btn.btn-primary(
+            [class.loading]="joinLoading", 
+            type="button", 
+            (click)="joinSession(projectCode)", 
+            name="Join", 
+            href="#") Go!
+      #projectCodeError.invalid-feedback(*ngIf="errorObject.invalidCode", [innerHtml]="errorObject.invalidCode | emojione")
+
   h1.hidden-md-up.mobile-heading(*ngIf="pageTitle && !showProjectInfo") {{ pageTitle }}
   h1.hidden-md-up.mobile-heading(*ngIf="showProjectInfo") {{ currentReading.title }}
+
+//- Join Reading Code
+//- .container
+.col-12.nav__join-code--under.hidden-md-up(*ngIf="_router.url.indexOf('/home') > -1")
+  .input-group.input-group-lg
+    input#projectCodeInput.form-control(
+      name="ProjectCodeInput", 
+      type="text", 
+      style="text-align: center;",
+      [class.is-invalid]="errorObject.invalidCode",
+      (keyup.enter)="joinSession(projectCode)", 
+      [(ngModel)]="projectCode", 
+      placeholder="🔑 Code", 
+      aria-describedby="add-project-code")
+    span.input-group-btn
+      button#buttonJoinProject.btn.btn-primary(
+        [class.loading]="joinLoading", 
+        type="button", 
+        (click)="joinSession(projectCode)", 
+        name="Join", 
+        href="#") Go!
+  #projectCodeError.invalid-feedback(*ngIf="errorObject.invalidCode", [innerHtml]="errorObject.invalidCode | emojione")
+
+share-code([showOpenReading]="_route.snapshot.queryParams.readingCodeModal")

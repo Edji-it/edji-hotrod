@@ -4,6 +4,8 @@ $navHeight: 70px;
 $sideBarBg: #fff;
 $navBorder: 1px solid #DEDEDE;
 $navShadow: 0px 1px 10px 3px rgba(0,0,0,0.075);
+$navUserWidth: 120px;
+$navPadY: 15px;
 
 $lightBorder: 1px solid #f1f1f1;
 $purple: rgb(150, 40, 255);
@@ -21,6 +23,9 @@ $purple: rgb(150, 40, 255);
 	.mobile-heading {
 		margin-top: $navHeight;
 		padding: $base-pad/2 $base-pad;
+		&.hidden-md-up {
+			margin-bottom: 0;
+		}
 	}
 
 .nav-bar {
@@ -66,7 +71,7 @@ $purple: rgb(150, 40, 255);
 	color: $medium-gray;
 	float:right;
 	height: 100%;
-	min-width: 120px;
+	min-width: $navUserWidth;
 	padding: 15px;
 	text-align: center;
 	border-left: $navBorder;
@@ -85,7 +90,7 @@ $purple: rgb(150, 40, 255);
 .nav-bar__project {
 	float: right;
 	height: 100%;
-	min-width: 120px;
+	min-width: $navUserWidth;
 	padding: 0px 15px;
 	text-align: right;
 	// border-left: $navBorder;
@@ -98,10 +103,10 @@ $purple: rgb(150, 40, 255);
 
 	@media(max-width: $tablet) {
 		text-align: left;
-		width: 50%;
+		// width: 50%;
 		background: #fff;
-		border-bottom: $navBorder;
 		margin-bottom: $base-pad;
+		min-width: 50px;
 	}
 
 	& label {
@@ -111,7 +116,7 @@ $purple: rgb(150, 40, 255);
 		margin-bottom: 0px;
 	}
 
-	& label, & .group-label, & pre {
+	& label, & .group-label {
 		height: 50%;
 		line-height: 35px;
 		display: block;
@@ -125,28 +130,14 @@ $purple: rgb(150, 40, 255);
 		color: #333;
 		padding: 0px;
 	}
-
-	& pre {
-		margin: 0px;
-		border: none;
-		font-family: Courier New, Courier, monospace;
-		background: #f8f8f8;
-		letter-spacing: 1px;
-		padding: 0px 15px;
-		width: calc(100% + 30px);
-		margin-left: -15px;
-		border-radius: 0px;
-
-		& .emojioneemoji {
-			margin-top: -1px;
-		}
-	}
 }
 
 .nav-bar__project-data {
 	@extend .nav-bar__project;
-	text-align: center;
+	text-align: right;
 	border-right: none;
+	// account for logo and username width
+	max-width: calc(100% - #{ 100px + 70px });
 
 	& .emojioneemoji {
 		margin-top: -2px;
@@ -156,6 +147,19 @@ $purple: rgb(150, 40, 255);
 	& pre {
 		overflow: hidden;
 	}
+
+	&.hidden-md-up {
+		padding: 0;
+		& pre {
+			font-size: 74%;
+		}
+	}
+}
+
+.nav-bar__project, .nav-bar__project-data {
+	// @media(max-width: $tablet) {
+	// 	max-width: calc(50% - #{ $navUserWidth} );
+	// }
 }
 
 .nav-bar__heading {
@@ -170,11 +174,11 @@ $purple: rgb(150, 40, 255);
 	overflow-y: hidden; // a scroll bar was coming up sometimes
 
 	@media(max-width: $desktop) {
-		width: 40%;
+		width: 35%;
 	}
 
 	@media(min-width: $desktop) {
-		width: 50%;
+		width: 45%;
 	}
 
 	& h1 {
@@ -223,18 +227,18 @@ a.nav-bar__link {
 }
 
 .nav-bar__btn {
-	height: 100%;
 	float: right;
 	min-width: 110px;
 	position: relative;
-	line-height: 45px;
+	// line-height: 45px;
 	vertical-align: middle;
+	margin: 15px 8px 15px 0px;
 
-	@media(max-width: $phone) {
+	@media(max-width: $desktop) {
 		font-size: 14px;
-		min-width: 80px;
-		max-width: 95px;
-		padding: 12px 5px;
+		min-width: 10px;
+		padding: 12px 10px;
+		margin: 15px 3px;
 	}
 }
 
@@ -449,8 +453,14 @@ div.sliding-pane.from-left.slide-in {
     }
 
 	@media(max-width: $phone) {
-		left: 20px;
-		right: 20px;
+		position: fixed;
+		top: 75px;
+		transform: translateX(-100%);
+		left: calc(100% - 20px);
+
+		&:after, &:before {
+			left: calc(100% - 125px);
+		}
 	}
 }
 
@@ -458,4 +468,47 @@ div.sliding-pane.from-left.slide-in {
 	float:right; 
 	position: relative; 
 	height: 100%;
+	margin-right: 15px;
+}
+
+.project-code__text {
+	cursor: pointer;
+}
+
+.nav__join-code {
+	max-height: 60%;
+	margin-top: $navPadY;
+	margin-right: .5em;
+	float: right;
+}
+
+.nav__join-code--under {
+	max-height: 60%;
+	margin-top: $navPadY;
+	margin-right: .5em;
+	margin-bottom: .5em;
+}
+
+#projectCodeError {
+	position: absolute;
+	// Position the error box just under the code field, to fill the corner gaps
+	width: calc(100% - #{2 * $base-pad});
+	height: 2em;
+	line-height: 2em;
+	top: calc(100% + #{$navPadY - 2px});
+	background: $red;
+	color: #fff;
+	border-bottom-left-radius: 3px;
+	border-bottom-right-radius: 3px;
+	box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.3);
+	padding: 0 0.5em;
+	text-align: center;
+
+	@media(max-width: $phone) {
+		position: relative;
+		width: 100%;
+		box-shadow: none;
+		border-radius: 3px;
+		margin-top: 2px;
+	}
 }

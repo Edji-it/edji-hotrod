@@ -15,6 +15,9 @@ import { ReadingService } from "./reading.service";
 export class ProjectService {
     private targetProjectId: string = ''
 
+    // For verifying comment ownership on heat vision
+    private user: any
+
     /** project will be given out as observable */
     private project: any = { title: "initial value" }
     private currentProjectSource: BehaviorSubject<any> = new BehaviorSubject<any>(this.project)
@@ -52,6 +55,19 @@ export class ProjectService {
     private answersByIdSubject: BehaviorSubject<any> = new BehaviorSubject<any>(this.answersByIdSource)
     public answersById: Observable<any> = this.answersByIdSubject.asObservable()
 
+    /**
+     *  Comments by Position
+     *  - position = lineY of a comment
+     *  - Comments are indexed by their "lineY" value
+     */
+    public commentByPosSource: any[][] = []
+    private commentByPosSubject: BehaviorSubject<any> = new BehaviorSubject<any>(this.commentByPosSource)
+    public commentByPos: Observable<any> = this.commentByPosSubject.asObservable()
+
+    // Broadcast closing the comment pane
+    public commentPaneStateSubj: Subject<boolean> = new Subject<boolean>()
+    public commentPaneState: Observable<boolean> = this.commentPaneStateSubj.asObservable()
+
     constructor(
         private http: Http, 
         private _auth: AuthService, 
@@ -65,6 +81,13 @@ export class ProjectService {
         this._socket.commentUpdates.subscribe((update) => {
             // console.log(update)
         })
+
+        /** Set the current user every time it changes */
+        this.subscriptions.push(
+            this._auth.getCurrentUser().subscribe((user) => {
+                this.user = user
+            })
+        )
 
         this.subscriptions.push(
             this._socket.commentUpdates.subscribe((commentUpdate) => {
@@ -199,6 +222,12 @@ export class ProjectService {
         if (comment.user_id === user._id || comment.user_id === this.project.teacher_id) {
             comment.showAvatar = true;
         }
+
+        // if (comment.loc && comment.loc.y && comment.text==="") {
+        //     comment.imagePos = Math.round(comment.loc.y/8)*8
+        // }   
+
+        // this.decorateComment(comment)
 
         this.addCommentToReplies(comment)
 
@@ -390,9 +419,24 @@ export class ProjectService {
             .put([this._auth.getUrl(), 'projects', projectId].join("/"), { project: updateObj }, this._auth.getOptions())
             .map((data) => {
                 if (data && data.json()) {
-                    this.project = data.json().project;
-                    this.currentProjectSource.next(this.project);
-                    return this.project;
+                    // Set the existing comments aside here temporarily
+                    let comments = this.project.comments
+
+                    /**
+                     * If heat vision was toggled, lets bring the existing comments back in to the project
+                     * The reason we do this is because the lineY values get wiped out and will not reset on their own
+                    */
+                    let updateObjArray: string = JSON.stringify(updateObj)
+                    let updatedProject = data.json() && data.json().project
+                    // Get the project data back from the server
+                    if (updateObjArray.indexOf("heat_vision")>-1) {
+                        updatedProject.comments = comments
+                    }
+                    
+                    this.project = updatedProject
+                    
+                    this.currentProjectSource.next(this.project)
+                    return this.project
                 } // if
             }) //.map
     } // public update (updateObj: any, projectId: string): Observable<any> 
@@ -475,17 +519,19 @@ export class ProjectService {
             .delete(url, this._auth.getOptions())
             .map(data => {
                 // Tell other Project views that the comment is gone
-                 this._socket.updateComment(comment, 'DELETE', this.project._id);
-                 // Update stats
-                 this.commentStats.addCommentToStats(comment, -1)
+                this._socket.updateComment(comment, 'DELETE', this.project._id)
+                // Update stats
+                this.commentStats.addCommentToStats(comment, -1)
 
                 for (var i = 0; i <= this.project.comments.length; i++) {
                     if (this.project.comments[i] && this.project.comments[i]._id === comment._id) {
                         // Remove comment from local object
-                        this.project.comments.splice(i, 1);
+                        this.project.comments.splice(i, 1)
                     }
                 }
-                return data;
+
+                this.buildCommentsByPos()
+                return data
             })
             .toPromise()
             .then(this._auth.extractData);
@@ -574,4 +620,32 @@ export class ProjectService {
             this._auth.getOptions()
         ) //this.http.put
     } // public addUserToProject(projectId: string): Observable<any>
+
+    /**
+     * Generates the "commentByPos" array, and pushes out to Subscribers
+     * - Uses lineY values on the comments as the "position" value
+     */
+    public buildCommentsByPos(): void {
+        // Re-initialize the comment by position array
+        this.commentByPosSource = []
+        // Copy then reverse the array
+        let commentsArray = this.project.comments.slice().reverse()
+        // Loop through each comment to group comments together by line number
+        let len2 = commentsArray.length
+        for (let i = 0; i < len2; i++) {
+            let comment = commentsArray[i]
+            let heatVisionOn = (!this.project.heat_vision && this.user._id !== this.project.teacher_id) && comment.user_id !== this.user._id && comment.user_id !== this.project.teacher_id
+            if (comment && !comment.reply_to && !comment.questionId && comment.lineY && !heatVisionOn) {
+                // lineY is determined by each individual CommentComponent
+                let lineY = comment.lineY
+                // Push the comment into commentByPos based on the lineY number
+                if (typeof(this.commentByPosSource[lineY])=='undefined') {
+                    this.commentByPosSource[lineY] = [comment]
+                } else {
+                    this.commentByPosSource[lineY].push(comment)
+                }
+            }
+        }
+        this.commentByPosSubject.next(this.commentByPosSource)
+    }
 } // class

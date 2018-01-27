@@ -13,8 +13,10 @@ export class CommentService {
   private colors
   public keyboardActive: boolean
   public activeComment: EdjiComment = <EdjiComment>{}
-  public editing: boolean
 
+  public clearActiveCommentsSource: Subject<boolean> = new Subject()
+  public clearActiveComments: Observable<boolean> = this.clearActiveCommentsSource.asObservable()
+  
   /*
   Last Modified: 6 June 2017
   */
@@ -29,7 +31,14 @@ export class CommentService {
   }
 
   ngOnInit() {
-      
+  
+  }
+  /**
+   * Deactivates all Comment Components
+   * - Fires clearActiveComments observable
+   */
+  public deactivateAllComments() : void {
+    this.clearActiveCommentsSource.next(true)
   }
 
   /** 
@@ -133,12 +142,13 @@ export class CommentService {
   /**
    * Decides if the Emoji Keyboard is active
    */
-  public isEmojiKeyboardActive(user: any): void {
+  public setEmojiKeyboardActive(user: any): boolean {
     if (this.activeComment.type !== 'emoji') {
         this.keyboardActive = false
     } else {
         this.keyboardActive = this.activeComment && (!this.activeComment.type || this.activeComment.type === 'emoji') && 
           this.activeComment.active && this.activeComment.user_id === user._id
     }
+    return this.keyboardActive
   }
 } // CommentService class

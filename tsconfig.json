@@ -24,7 +24,8 @@
       "source-map",
       "uglify-js",
       "webpack"
-    ]
+    ],
+    "typeRoots" : ["node_modules/@types"]
   },
   "exclude": [
     "node_modules",

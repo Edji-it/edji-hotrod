@@ -20,12 +20,13 @@
     </div>
 </div>
 
-<div class="fixed-btn-row--SE">
+<div class="fixed-btn-row--SE ">
     <!-- TooltTips (added 6.8.17) -->
-    <tutorial-box [tutorialName]="'newReading'"
+    <tutorial-box class="hidden-sm-down" [tutorialName]="'newReading'"
         [pageObjs]="toolTipsContent" 
         [pager]="toolTipStepNo" 
         (pageChange)="toolTipStepNo = $event">
     </tutorial-box>
     <edji-feedback></edji-feedback>
 </div>
+<hot-user-details-update [showModal]="showUserDetailsModal" (closeModal)="showUserDetailsModal = false"></hot-user-details-update>

@@ -2,12 +2,15 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <form>   <!--(ngSubmit)=""-->
+                <!-- MODAL HEADER -->
                 <div class="modal-header">
                     <h4 class="modal-title">Add a PDF</h4>
                     <button (click)="closeModal.emit()" type="button" class="close btn-icon--round" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
+                
+                 <!-- MODAL BODY -->
                 <div class="modal-body">
                     <!--<label class="custom-file">
                         <input type="file" id="file-input" class="file-input">
@@ -45,7 +48,7 @@
                     </form>
                     <div *ngIf="errorMsg" class="alert alert-warning" [innerHtml]="errorMsg"></div>
                         
-                    
+                    <!-- LISTING OF ALL UPLOADED PDFS -->
                     <h3 class="pb-2">Select an uploaded PDF to add to your Reading</h3>
                     <!--<div class="card-columns">-->
                         <div *ngFor="let doc of uploadedDocs; let i = index" class="upload-list-item" [class.new]="newDocsIds.indexOf(doc.uuid) > -1">

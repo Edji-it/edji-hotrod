@@ -1,15 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="180px" height="180px" viewBox="0 0 180 180" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
-    <title>Group</title>
+<svg width="181px" height="181px" viewBox="0 0 181 181" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 46.2 (44496) - http://www.bohemiancoding.com/sketch -->
+    <title>icon-picture</title>
     <desc>Created with Sketch.</desc>
-    <defs></defs>
+    <defs>
+        <linearGradient x1="50%" y1="100%" x2="50%" y2="0%" id="linearGradient-1">
+            <stop stop-color="#FA9B5C" offset="0%"></stop>
+            <stop stop-color="#FA9C5D" offset="0%"></stop>
+            <stop stop-color="#FA9D5D" offset="0%"></stop>
+            <stop stop-color="#FCCB80" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="100%" x2="50%" y2="-98.9952338%" id="linearGradient-2">
+            <stop stop-color="#FA9B5C" offset="0%"></stop>
+            <stop stop-color="#FA9C5D" offset="0%"></stop>
+            <stop stop-color="#FA9D5D" offset="6.83973872%"></stop>
+            <stop stop-color="#FCCB80" offset="100%"></stop>
+        </linearGradient>
+    </defs>
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Group">
-            <rect id="Rectangle" fill="#ACACAC" x="0" y="0" width="180" height="180" rx="7"></rect>
+        <g id="icon-picture" transform="translate(0.144821, 0.923840)">
+            <rect id="Rectangle" fill="url(#linearGradient-1)" x="0" y="0" width="180" height="180" rx="7"></rect>
             <rect id="Rectangle-2" fill="#FFFFFF" x="9" y="9" width="162" height="133.583585"></rect>
-            <circle id="Oval" fill="#F6BE3D" cx="55.2685519" cy="50.0283085" r="18.4716915"></circle>
-            <polygon id="Path-2" fill="#8F8F8F" points="29 135.5 67 95 85 111.5 121 68.5 161.5 136"></polygon>
+            <circle id="Oval" fill="#FCDD7F" cx="55.2685519" cy="50.0283085" r="18.4716915"></circle>
+            <polygon id="Path-2" fill="url(#linearGradient-2)" points="29 135.5 67 95 85 111.5 121 68.5 161.5 136"></polygon>
         </g>
     </g>
 </svg>

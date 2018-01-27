@@ -9,6 +9,8 @@ export interface EdjiComment extends BaseComment {
   project_id      : string,
   active          : boolean,
   showAvatar      : boolean,
+  imagePos: number,
+  selected: boolean
 }
 
 /** Comment properties we get from the server */
@@ -24,6 +26,8 @@ export interface BaseComment {
   url?: string,
   text?: string,
   loc?: { x: number, y: number },
+  lineY?: number, // Used to get comments for a line (annotator, comment pane)
+  imageY?: number, // Used for positioning of comments in rows on images
   reply_to?: string,
   replies?: any[],
   questionId? : string,

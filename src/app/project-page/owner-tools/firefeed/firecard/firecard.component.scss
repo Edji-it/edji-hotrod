@@ -74,6 +74,10 @@ $fireBoundVPad: 40px;
     z-index: -1;
 }
 
+.fireBlock-mobile-comment:before {
+    content: none;
+}
+
 .fireHighlight-card_image {
     float: left;
     width: 50%;

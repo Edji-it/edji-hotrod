@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 
 @Injectable() export class UtilToolService {
 
+    public showFeedbackModal: boolean
+    public showShareCode: boolean
+
   constructor() {
       
   }
@@ -60,5 +63,12 @@ import { Injectable } from '@angular/core';
    */
   public getEdjiVersion(): string {
     return document.getElementById('buildNumber').innerHTML.trim()
+  }
+
+  /**
+   * Reset the share code object and close the modal
+   */
+  public shareCodeModalClose(): void {
+    this.showShareCode = false
   }
 }

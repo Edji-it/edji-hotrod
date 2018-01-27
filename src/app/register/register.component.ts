@@ -6,11 +6,11 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { Subscription } from 'rxjs/Subscription'
 import { Angulartics2 } from 'angulartics2'
 
-import { AuthService, BumblebeeService, Copy, ProjectService } from './../shared'
+import { AuthService, Copy, ProjectService } from './../shared'
 
 @Component({
   selector: 'edji-register',
-  templateUrl: 'register.component.html',
+  templateUrl: 'register.component.pug',
   styles: [`
     .btn-group-wrapper {
       width: 100%;
@@ -39,10 +39,11 @@ export class RegisterComponent implements OnInit, OnDestroy {
   private registerForm: FormGroup
   private registerLoading: boolean = false
   private errorObject: {
-    duplicateUser?: string,
-    serverError?: string,
+    duplicateUsername?: boolean,
+    duplicateEmail?: boolean,
+    serverError?: boolean,
     badName?: string,
-    badUsername?: string,
+    badUsername?: string
   } = {}
 
   // private copy: Copy = new Copy()
@@ -68,7 +69,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
     private _project: ProjectService,
     private route: ActivatedRoute,
     private angulartics: Angulartics2,
-    private bumblebee: BumblebeeService,
     private _fb: FormBuilder,
     private _title: Title
   ) {
@@ -79,14 +79,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
       username: [null, Validators.required],
       fullname: [null, Validators.required],
       email: [null, Validators.compose([Validators.required, this.emailValidator])],
-      checkboxes: this._fb.group({
-        student: true,
-        teacher: null,
-        business: null,
-        personal: null,
-        robot: null,
-        other: null
-      }, { validator: this.checkboxValidator }),
       password: [null, Validators.compose([Validators.required, Validators.minLength(6)])],
       passwordConfirm: [null, Validators.required],
     }, { validator: this.passwordsEqual })
@@ -117,20 +109,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
       ? null : { mismatch: true }
   }
 
-  /**
-   * Validates that at least one checkbox is checked, and assigns error if not
-   * @returns error to FormGroup called 'identity'
-   */
-  private checkboxValidator(group: FormGroup): any {
-    let valid = false
-    for(let control in group.controls) {
-      if (group.controls[control].value === true) {
-        valid = true
-      }
-    }
-    return valid ? null : { identity: true }
-  }
-
   /** Validates email against the same regex used on the server
    * @returns error which should be assigned to the email input
    */
@@ -141,8 +119,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   /** Makes call to register the user */
   private register(formValue: any): void {
-    // this.clearErrors()
-    console.log("trying to register")
+    this.errorObject = {}
 
     this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'attempt' }})
 
@@ -163,16 +140,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
       .subscribe((data) => {
         this.registerLoading = false
         if (data.user) {
-          if (this._auth.getEnv() === "prod") { 
-            this.bumblebee.sendUserDetails(data.user) 
-            if(data.user.identities.indexOf('teacher') > -1) {
-              let spaceIndex = data.user.fullname.indexOf(' ')
-              if (spaceIndex < 0) { spaceIndex = data.user.fullname.length - 1 }
-              let fname = data.user.fullname.substr(0,spaceIndex)
-              let lname = data.user.fullname.substr(spaceIndex + 1)
-              this._auth.addToNewUsersList({ 'email' : data.user.email, 'fname' : fname, 'lname' : lname })
-            }
-          }
 
           data.user.username && this.angulartics.setUsername.next(data.user.username)
           data.user.email && this.angulartics.setUserProperties.next({ email: data.user.email})
@@ -185,7 +152,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
           }
           this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'success' }})
           if (this.readingToAdd && this.tempUserId) {
-            console.log("trying to add reading")
             this._auth.convertTempUser(this.tempUserId)
               .take(1)
               .subscribe(() => {
@@ -195,7 +161,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
                 this._router.navigate(['/new-reading'], { queryParams: { copyId: this.readingToAdd } })
               })
           } else if (this.tempUserId) {
-            console.log("trying to add project")
             this._auth.convertTempUser(this.tempUserId)
               .take(1)
               .subscribe(() => {
@@ -206,7 +171,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
                 this._router.navigate(['/dashboard'])
               })
           } else {
-            console.log("don't know what to do!")
+            // default case where nothing special happens
             this._router.navigate(['/dashboard'])
           }
           
@@ -253,28 +218,25 @@ export class RegisterComponent implements OnInit, OnDestroy {
                 // form validation should have caught any other errors
               }
             }
-            break
-          case 409:
-            this.errorObject.duplicateUser = "<strong>Wow!</strong> :grin: Somebody else liked your username so much that they already took it."
+
+            if (error.duplicateFieldError) {
+              let field = error.duplicateFieldError.field
+              if (field === 'username') {
+                this.errorObject.duplicateUsername = true
+              } else if (field === 'email') {
+                this.errorObject.duplicateEmail = true
+              } else {
+                this.errorObject.serverError = true
+              }
+            }
             break
           default:
             this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'failure' }})
-            this.errorObject.serverError = "Oh no! Something went wrong, and we aren't sure exactly what."
-            console.log(err)
+            this.errorObject.serverError = true
+            console.error(err)
         }
       });
-  } // private register(formValue: any): void 
-
-  // /**
-  //  * Clears all errorObject strings to equal empty strings
-  //  */
-  // private clearErrors(): void {
-  //   for (let property in this.errorObject) {
-  //     if (this.errorObject.hasOwnProperty(property) && typeof this.errorObject[property] === 'string') {
-  //       this.errorObject[property] = null
-  //     }
-  //   }
-  // }
+  }
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe() })

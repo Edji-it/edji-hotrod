@@ -20,6 +20,6 @@
         <div class="tooltip__skip" (click)="completeAndDismiss()">Skip</div>
     </div>
 </div>
-<button *ngIf="isCompleted && !forceShow" (click)="forceShow = true" class="button-lg-round feedback-button">
+<button *ngIf="isCompleted && !forceShow" (click)="forceShow = true" class="button-lg-round feedback-button hidden-md-down">
     <img title="Tutorial" src="assets/images/icon-tutorial.svg" />
 </button>

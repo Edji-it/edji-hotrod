@@ -17,6 +17,8 @@ export class NewReading implements PageObjectInterface
     public groupInput = element(by.id('firstProjectLabel'));
     public addButton = element(by.id('addReadingButton'));
     public finalizeButton = element(by.id('addReadingFinalizeButton'));
+    public goToReadingButton = element(by.id('shareModalReadingButton'));
+    public shareCodeModalClose = element(by.id('shareCodeModalClose'));
     public draftButton = element(by.id('saveDraftButton'));
     public questionDelete = element.all(by.css('button.inline-delete.question-delete')).last();
     
@@ -33,9 +35,8 @@ export class NewReading implements PageObjectInterface
     public insertUploadedPdf = element(by.css(".upload-list-item.new .e2e-insert-doc"));
 
     // Creating questions
-    public insertQuestionButton = element.all(by.id('buttonInsertQuestion')).last();
+    public insertQuestionButton = element(by.id('buttonInsertQuestion'));
     public insertQuestionPrompt = element.all(by.css('textarea.text-comment-input')).last();
-    public 
 
     public imageInReading = element(by.css(".content .img img"));
     // public imageUploadList = element.all(by.css('.upload-list-item'));

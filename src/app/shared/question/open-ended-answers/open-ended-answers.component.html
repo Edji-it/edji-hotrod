@@ -1,0 +1,20 @@
+<!--
+  Open Ended Answers Input
+  29 July 17
+  Nick Pumper
+  Last Mod: 4 Aug 2017
+   
+  Answer Section -->
+<div id="answerInput">
+  <div class="label--gray all-caps">Add Answer</div>
+  <div class="answer-options">
+    <!-- Answer Buttons -->
+    <button *ngFor="let type of enabledAnswerTypes" 
+      class="{{ type }} button__answer-type answer--enabled"
+      (click)="outputAnswer(type)">
+        <!-- Icon & Label -->
+        <i class="icon icon-{{type}}-comment icon__answer-type"></i>
+        <div class="icon__answer-text">{{type}}</div>
+    </button>
+  </div>
+</div>

@@ -1,16 +1,18 @@
+@import "variables";
 
 $btnBg: #969696;
-$btnActionBg: $green;
-$btnActionColor: #606060;
-$btnPrimaryBg: $blue; //#7fd9fc;
-$btnPrimaryColor: #fff;
-$btnSecondaryBg: #E6E6E6;
-$btnSecondaryColor: #606060;
-$btnSecondaryBorder: none; //1px solid rgba(0,0,0,0.05);
+$btnActionBg: #deffda;
+$btnActionColor: #1db50a;
+$btnPrimaryBg: #e7faff;
+$btnPrimaryColor: #21c0f1;
+$btnSecondaryBg: #efefef;
+$btnSecondaryColor: #9a9a9a;
+$btnSecondaryBorder: 1px solid $btnSecondaryColor;
+//1px solid rgba(0,0,0,0.05);
 $btnSuccessBg: #46c78e; //#7fd9fc;
-$btnSuccessColor: #fff;
-$btnHeroBg: #f86464;
-$btnHeroColor: #fff;
+$btnSuccessColor: #1eb10c;
+$btnHeroBg: #fff0f0;
+$btnHeroColor: #ff5c5c;
 
 button, .button, .btn { //, [class*='btn']
   appearance: none;
@@ -50,10 +52,14 @@ button, .button, .btn { //, [class*='btn']
   }
 
   &:disabled, &[disabled] {
-    // cursor: not-allowed;
-    opacity: 0.5;
-    color: #777 !important;
+    /* Rectangle Copy 14: */
     background-color: #eaeaea !important;
+    background-image: radial-gradient(50% -88%, #F4F4F4 95%, #FFFFFF 100%) !important;
+    border: 1px solid #D3D3D3 !important;
+    box-shadow: -1px 1px 0 0 #FFFFFF;
+    border-radius: 1px;
+    // cursor: not-allowed;
+    color: #D1D1D1 !important;
 
     &:hover {
       transform: translate3d(0,0,0);
@@ -63,6 +69,14 @@ button, .button, .btn { //, [class*='btn']
 
   &:focus, &:active {
     outline: none;
+  }
+
+  & .badge {
+    display: inline-block;
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    font-size: 12px;
   }
 }
 
@@ -160,17 +174,32 @@ button, .button, .btn { //, [class*='btn']
 } 
 
 .btn.btn-primary {
-  background: $btnPrimaryBg;
+  background-color: $btnPrimaryBg;
+  background-image: linear-gradient(180deg, #FFFFFF 7%, $btnPrimaryBg 100%);
+  border: 1px solid $btnPrimaryColor;
+  border-radius: 1px;
   color: $btnPrimaryColor;
 
+  &.loading {
+    background: darken($btnPrimaryBg, 20%);
+  }
+
   &:hover, &:active, &:focus {
-    background: desaturate(darken($btnPrimaryBg, 20%), 20%); 
+    background: $btnPrimaryBg; 
+    box-shadow: 0px 0px 10px 0px #CFF1FF;
   }
 }
 
 .btn.btn-action {
-  background: $btnActionBg;
+  background-color: #ffffff;
+  background-image: linear-gradient(180deg, #FFFFFF 7%, $btnActionBg 100%);
+  border: 1px solid $btnActionColor;
+  border-radius: 1px;
   color: $btnActionColor;
+
+  &.loading {
+    background: #cdcdcd;
+  }
 
   &:hover, &:active, &:focus, &.active {
     background: desaturate(darken($btnActionBg, 20%), 20%); 
@@ -178,17 +207,32 @@ button, .button, .btn { //, [class*='btn']
 }
 
 .btn.btn-hero {
-  background: $btnHeroBg;
+  background-color: #ffffff;
+  background-image: linear-gradient(180deg, #FFFFFF 7%, $btnHeroBg 100%);
+  border: 1px solid $btnHeroColor;
+  border-radius: 1px;
   color: $btnHeroColor;
 
+  &.loading {
+    background: $btnHeroBg;
+  }
+
   &:hover, &:active, &:focus, &.active {
-    background: desaturate(darken($btnHeroBg, 20%), 20%); 
+    background: $btnHeroBg; 
+    box-shadow: 0px 0px 10px 0px #ffe4e4;
   }
 }
 
 .btn.btn-success {
-  background: $btnSuccessBg;
+  background-color: #ffffff;
+  background-image: linear-gradient(180deg, #FFFFFF 7%, $btnSuccessBg 100%);
+  border: 1px solid $btnSuccessColor;
+  border-radius: 1px;
   color: $btnSuccessColor;
+
+  &.loading {
+    background: darken($btnSuccessBg, 20%);
+  }
 
   &:hover, &:active, &:focus, &.active {
     background: darken($btnSuccessBg, 20%);
@@ -196,13 +240,19 @@ button, .button, .btn { //, [class*='btn']
 }
 
 .btn-secondary { 
-  background: $btnSecondaryBg;
   color: $btnSecondaryColor;
   border: $btnSecondaryBorder;
+  background-color: $btnSecondaryBg;
+  background-image: linear-gradient(180deg, #FFFFFF 7%, $btnSecondaryBg 100%);
+
+  &.loading {
+    background: darken($btnSecondaryBg, 20%);
+  }
 
   &:hover, &:active, &:focus {
-    background: darken($btnSecondaryBg, 10%);
+    background: $btnSecondaryBg;
     color: $btnSecondaryColor;
+    box-shadow: 0px 0px 10px 0px #E1E1E1;
   }
 
   &:disabled {
@@ -214,18 +264,19 @@ button, .button, .btn { //, [class*='btn']
   }
 }
 
-.btn-clear {
+.btn-clear, .btn.btn-clear {
     border: none !important;
     box-shadow: none !important;
     background-color: transparent !important;
     color: #555;
+    text-decoration: underline;
 
     &:active, &:focus {
       outline: none;
       transform: translate3d(0,0,0) !important;
     }
 
-     &:hover {
+    &:hover {
       transform: translate3d(0,0,0) !important;
       background-color: transparent !important;
       outline: none;
@@ -238,8 +289,13 @@ button, .button, .btn { //, [class*='btn']
       }
     }
 
+    &:visited {
+      text-decoration: underline;
+    }
+
     &.active {
       color: $blue;
+      text-decoration: underline;
     }
 }
 
@@ -355,4 +411,63 @@ button, .button, .btn { //, [class*='btn']
     width: 30px;
     height: auto;
   }
+}
+
+.btn-icon--circle-shadow {
+    background: none;
+    text-shadow: none;
+    opacity: 1;
+    cursor: pointer;
+    background-color: white;
+    background: white;
+
+    &:active, &:focus &:hover {
+      background-color: white;
+      background: white;
+    }
+}
+
+.btn.mobile-menu-spot {
+  height: 50px !important;
+  width: 50px !important;
+
+  & span {
+    display: inline-block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%, -50%, 0);
+  }
+}
+
+pre.btn {
+  width: auto;
+  max-width: 100%;
+  white-space: nowrap;
+  background: #fff;
+  border: 2px solid #f6f6f6;
+  border-radius: 3px;
+  margin: 0px;
+	font-family: Courier New, Courier, monospace;
+  font-weight: 600;
+  color: $dark-gray;
+	letter-spacing: 1px;
+	padding: 5px 15px;
+
+	& .emojioneemoji {
+		margin-top: -1px;
+	}
+}
+
+.btn-wide {
+  width: 60% !important;
+}
+
+.btn-extrawide {
+  width: 80% !important;
+}
+
+// Small padding/offset adjustments
+.input-group-lg > .input-group-btn > .btn {
+  padding: 0.5rem 1.5rem;
 }

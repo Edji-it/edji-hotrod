@@ -1,0 +1,49 @@
+@import '../../../sass/base/variables';
+
+.btn-share-footer {
+  width: 50%;
+  @media (max-width: $tablet) {
+    font-size: .65em;
+  }
+}
+
+.btn-share-footer__full {
+  width: 100%;
+}
+
+.modal-body-share {
+    padding: 20px 15px 0 15px;
+}
+
+.share-code--code {
+  text-align: center;
+  font-size: 86px;
+  line-height: 1.25;
+  color: darken($gray, 40%);
+  display: inline-block;
+  border-bottom: solid 4px;
+  padding-bottom: 16px;
+  font-weight: 600;
+}
+
+.share-code--label {
+  text-align: center;
+  font-size: 22px;
+  line-height: 1.25;
+  color: darken($gray, 40%);
+  margin-top: 16px;
+}
+
+.share-code--block {
+  padding: 36px 0;
+  text-align: center;
+}
+
+.sc--c {
+  display: inline-block;
+  padding: 0 6px;
+}
+
+.sc--c__green {
+  color: darken($green, 35%);
+}

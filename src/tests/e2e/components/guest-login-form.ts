@@ -1,8 +1,8 @@
+import { Sidebar } from '../page-objects';
 import { browser, by, element, protractor } from 'protractor';
 
 export class GuestLoginForm {
   private EC = protractor.ExpectedConditions; // vital
-
 
   // html elements for guest login
   public guestLoginHeader = element(by.id("guestLoginHeader"));
@@ -25,7 +25,7 @@ export class GuestLoginForm {
 
     it("should show an error if the user enters a vulgar name", () => {
       // form handling
-      this.guestNameInput.sendKeys("shit");
+      this.guestNameInput.sendKeys("fuck");
       browser.wait(this.EC.elementToBeClickable(this.guestLoginButton), 5000, "guest login button never became clickable after entering text");
       this.guestLoginButton.submit();
 
@@ -36,7 +36,7 @@ export class GuestLoginForm {
 
   public loginAsGuest() {
     // make sure the guest login button is going to be clickable
-    browser.wait(this.EC.visibilityOf(this.guestLoginButton), 5000, "guest login button never became visible after form init");
+    browser.wait(this.EC.visibilityOf(this.guestLoginButton), 7000, "guest login button never became visible after form init");
 
     // clear the input just in case
     this.guestNameInput.clear();

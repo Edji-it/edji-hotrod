@@ -52,16 +52,20 @@ describe('Project Page', () => {
     describe("Login modal success", () => {
         beforeEach(() => {
             project.getPage();
+            // Login
+            guestForm.loginAsGuest();
+            browser.wait(EC.elementToBeClickable(sidebar.logOutButton));
         });
 
         afterEach(() => {
-            // we're going to be logged in on the project page after each of the tests, so log out
-            sidebar.logout();
+            // log out
+            browser.wait(EC.elementToBeClickable(sidebar.logOutButton), 5000, "never found the logout button");
+            sidebar.logOutButton.click();
         });
 
-        loginModal.testLoginSuccess(() => {
-            browser.wait(EC.elementToBeClickable(sidebar.logOutButton));
-        });
+        // loginModal.testLoginSuccess(() => {
+        //     browser.wait(EC.elementToBeClickable(sidebar.logOutButton), 5000, "logout button never became clickable");
+        // });
     });
 
     describe("Commenting", () => {
@@ -91,11 +95,15 @@ describe('Project Page', () => {
             browser.executeScript(function () {
                 let range = document.createRange();
                 let sel = window.getSelection();
-                range.setStart(document.body.querySelector(".w[index='18']").childNodes[0], 0);
-                range.setEnd(document.body.querySelector(".w[index='21']").childNodes[0], 0);
+                range.setStart(document.body.querySelector(".w[index='26']").childNodes[0], 0);
+                range.setEnd(document.body.querySelector(".w[index='30']").childNodes[0], 0);
                 sel.removeAllRanges();
                 sel.addRange(range);
             });
+
+            browser.actions().mouseUp(element(by.css(".w[index='21']"))).perform();
+
+            // browser.actions().mouseMove(element(by.css(".w[index='18']"))).mouseDown().mouseMove(element(by.css(".w[index='21']"))).mouseUp().perform();
 
             // Add emoji comment
             browser.wait(EC.elementToBeClickable(project.addEmojiBtn), 5000, "never found the add emoji comment button");
@@ -117,6 +125,10 @@ describe('Project Page', () => {
             // delete the comment
             browser.wait(EC.elementToBeClickable(project.emojiCommentDelete), 5000, "could not find delete button");
             project.emojiCommentDelete.click();
+
+            // close the comment pane
+            browser.wait(EC.elementToBeClickable(project.closePane), 5000, "could not find close pane button");
+            project.closePane.click();
         });
 
         it("should make a comment on an image", () => {
@@ -136,8 +148,8 @@ describe('Project Page', () => {
             project.textComment.sendKeys('some test text');
             
             // save the comment
-            browser.wait(EC.elementToBeClickable(project.commentSave), 5000, "could not click the save button on the comment");
-            project.commentSave.click();
+            browser.wait(EC.elementToBeClickable(project.emojiCommentSave), 5000, "could not click the save button on the comment");
+            project.emojiCommentSave.click();
 
             // delete the comment
             browser.wait(EC.elementToBeClickable(project.emojiCommentDelete), 5000, "could not find delete button");
@@ -145,6 +157,10 @@ describe('Project Page', () => {
 
             // make sure it's deleted
             browser.wait(EC.invisibilityOf(project.textComment), 5000, "text comment never went away after deleting it");
+
+            // close the comment pane
+            browser.wait(EC.elementToBeClickable(project.closePane), 5000, "could not find close pane button");
+            project.closePane.click();
         });
     });
 
@@ -178,6 +194,10 @@ describe('Project Page', () => {
                 sel.removeAllRanges();
                 sel.addRange(range);
             });
+
+            browser.actions().mouseUp(element(by.css(".w[index='14']"))).perform();
+
+            // browser.actions().mouseMove(element(by.css(".w[index='12']"))).mouseDown().mouseMove(element(by.css(".w[index='14']"))).mouseUp().perform();
 
             // Add audio comment
             browser.wait(EC.elementToBeClickable(project.addAudioBtn), 5000, "never found the add audio comment button");
@@ -234,21 +254,28 @@ describe('Project Page', () => {
             // Code for making a reply
             // Wait for text to load
             browser.wait(EC.elementToBeClickable(element(by.css(".w[index='2']"))), 12000, "never found words to click on");
-            
-            // Wait 5 seconds for the reply button to become clickable and Click on the reply button
-            browser.wait(EC.elementToBeClickable(project.existingTextComment), 5000, "never found the existing comment to reply to");
-            project.existingTextComment.click()
+
+            // Wait 5 seconds for the avatar with a reply to become clickable
+            browser.wait(EC.elementToBeClickable(project.avatarTextReply), 5000, "never found the existing comment to reply to");
+            project.avatarTextReply.click()
             browser.wait(EC.elementToBeClickable(project.addReplyBtn), 5000, "never found the add reply comment button");
             project.addReplyBtn.click();
 
+            // Wait 5 seconds for the discussions pane to open
+            browser.wait(EC.visibilityOf(project.discussionsPane), 5000, "discussions pane never opened");
             // Wait 5 seconds for the add text reply button to become clickable and Click on the add text reply button
             browser.wait(EC.elementToBeClickable(project.addTextReplyBtn), 5000, "never found the add text reply comment button");
+            
+            // This lil browser sleep trick avoids issues where the add text reply button is intermittently unavailable on load
+            browser.sleep(1000);
             project.addTextReplyBtn.click();
+            browser.sleep(1000);
+            browser.wait(EC.elementToBeClickable(element(by.css('textarea.text-comment-input'))), 5000, "wait for text reply input to show");
 
             // Add text to the text input field
-            browser.wait(EC.elementToBeClickable(project.textReplyComment), 5000, "couldn't add text to the reply text comment");
-            project.textReplyComment.sendKeys('some test reply text');
-
+            // browser.wait(EC.elementToBeClickable(project.textReplyComment), 5000, "couldn't add text to the reply text comment");
+            browser.actions().sendKeys('some test reply text').perform();
+            
             // Blur/Inactivate the reply comment
             browser.wait(EC.elementToBeClickable(project.commentSave), 5000, "could not click the save button on the comment");
             project.commentSave.click();

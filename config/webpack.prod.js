@@ -30,6 +30,7 @@ const METADATA = webpackMerge(commonConfig({env: ENV}).metadata, {
   ENV: ENV,
   HMR: false
 });
+const { version: appVersion } = require('../package.json');
 
 module.exports = function (env) {
   return webpackMerge(commonConfig({env: ENV}), {
@@ -62,7 +63,7 @@ module.exports = function (env) {
        *
        * See: http://webpack.github.io/docs/configuration.html#output-filename
        */
-      filename: '[name].[chunkhash].bundle.js',
+      filename: '[name].[hash].v' + appVersion + '.bundle.js',
 
       /**
        * The filename of the SourceMaps for the JavaScript files.
@@ -70,7 +71,7 @@ module.exports = function (env) {
        *
        * See: http://webpack.github.io/docs/configuration.html#output-sourcemapfilename
        */
-      sourceMapFilename: '[name].[chunkhash].bundle.map',
+      sourceMapFilename: '[name].[hash].v' + appVersion + '.bundle.map',
 
       /**
        * The filename of non-entry chunks as relative path
@@ -78,7 +79,7 @@ module.exports = function (env) {
        *
        * See: http://webpack.github.io/docs/configuration.html#output-chunkfilename
        */
-      chunkFilename: '[id].[chunkhash].chunk.js'
+      chunkFilename: '[id].[hash].v' + appVersion + '.chunk.js'
 
     },
 
@@ -91,7 +92,7 @@ module.exports = function (env) {
 
       /**
        * Plugin: WebpackMd5Hash
-       * Description: Plugin to replace a standard webpack chunkhash with md5.
+       * Description: Plugin to replace a standard webpack hash with md5.
        *
        * See: https://www.npmjs.com/package/webpack-md5-hash
        */
@@ -120,6 +121,7 @@ module.exports = function (env) {
       new DefinePlugin({
         'ENV': JSON.stringify(METADATA.ENV),
         'HMR': METADATA.HMR,
+        '__version__': JSON.stringify(appVersion),
         'process.env': {
           'ENV': JSON.stringify(METADATA.ENV),
           'NODE_ENV': JSON.stringify(METADATA.ENV),

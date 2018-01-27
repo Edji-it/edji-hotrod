@@ -1,0 +1,45 @@
+//- Discussions Pane
+.sliding-pane.from-left.replies(*ngIf="currentReading && currentReading.words", [ngClass]="{ 'slide-in' : visible }")
+  .container-fluid.container--less-pad.replyContainer
+    button#discussionClosePanel.close.stats-close-btn.btn-icon--round((click)="hide.emit()", type="button")
+      span(aria-hidden="true") ×
+    h4 Replies
+    .list-item.list-item.replyHighlight-card.h-1(*ngIf="!isImage")
+      | {{ comment.text ? '...' + comment.text + '...' : '...'}}
+    .list-item.list-item.replyHighlight-card_liImage.h-1(*ngIf="isImage")
+      .replyHighlight-card_image Image
+      button.replyHighlight-card_button((click)="getImagePos(comment.start)")
+        | View&nbsp;&#8594;
+    .comment-wrap-row
+      edji-comment.replyCommentBlock(*ngIf="comment.author", [comment]="comment", [readOnly]="true", [replyRef]="true", [reply]="true")
+    div
+      p.replyCountText {{ repliesById[comment._id] && repliesById[comment._id].length }} Replies
+      hr.replyHeaderRow
+    .replyOverflow([ngClass]="[ _comments.activeComment.active && _comments.activeComment.type=='emoji' ? '' : 'replyOverflow-normal' ]")
+      //--let replyComment of comments--
+      div(*ngFor="let replyComment of repliesById[comment._id]")
+        .comment-wrap-row
+          edji-comment.replyCommentBlock(
+            *ngIf="comment.author", 
+            [readOnly]="replyComment.user_id !== user._id",
+            [comment]="replyComment",
+            [commentContext]="'reply'",
+            [isActive]="replyComment.active",
+            [reply]="true",
+            [userPermission]="getCommentPermissions(replyComment)"
+          )
+    .replyCommentAddSection
+      hr.replyHeaderRow
+      //--Reply input--
+      .comment__avatar.reply__avatar(*ngIf="comment.author", [class.show]="comment.showAvatar") {{comment.author.substr(0,2).toUpperCase()}}
+      .replyInput Reply:
+      //--Add reply buttons--
+      .replyButtonGroup
+        button#addEmojiReply.emoji(*ngIf="project.types.indexOf('emoji') > -1", (click)="addReplyOfType('emoji')")
+          i.icon.icon-emoji-comment
+        button#addTextReply.emoji(*ngIf="project.types.indexOf('text') > -1", (click)="addReplyOfType('text')")
+          i.icon.icon-text-comment
+        button#addAudioReply.emoji(*ngIf="project.types.indexOf('audio') > -1", (click)="addReplyOfType('audio')")
+          i.icon.icon-mic
+          span.beta-tag--icon(title="Beta Feature: May not work on all devices.")
+            | B
