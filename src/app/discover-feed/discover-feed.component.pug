@@ -3,17 +3,18 @@ nav-bar([showDashboardOptions]="true")
     .row
         .col-md-8
             h1 Discover Feed
-            .alert.alert-light(*ngIf="!loading && followingFilter")
+            #notFollowingMessage.alert.alert-light(*ngIf="!loading && followingFilter && readings.length < 1")
                 h4 Time to follow someone!
                 p Follow Edji to see some of our latest curated Readings.
                 .comment__avatar Ed
                 = "Edji  "
                 follow-tag(
+                    id="followEdjiTag",
                     [userId]="'5897f6314897db0011a48bb8'",
                     (followEvent)="loadFeed()"
                 )
             .row.loading(*ngIf="loading")
-            <p-dataList [value]="readings" [paginator]="true" [paginatorPosition]="'bottom'" [rows]="rows" [lazy]="true" (onLazyLoad)="loadFeed($event)" [totalRecords]="total" [emptyMessage]="'No more Readings to show.'">
+            <p-dataList [value]="readings" [paginator]="true" [paginatorPosition]="'bottom'" [rows]="rows" [lazy]="true" (onLazyLoad)="loadFeed($event)" [totalRecords]="total" [emptyMessage]="'No Readings to show.'">
                 <ng-template let-reading pTemplate="item">
                     .col-12.feed__reading(*ngIf="reading")
                         div {{index}}

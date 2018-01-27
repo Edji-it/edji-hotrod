@@ -9,9 +9,16 @@ export class Discover implements PageObjectInterface
     // // public firstReadingCard = this.readingCards.first();
     // public projectCards     = element.all(by.css('.project-card'));
     // public firstProject     = this.projectCards.first();
+    public followEdjiMsg = element(by.id("notFollowingMessage"))
+    public followEdjiTag = element(by.id("followEdjiTag"))
+    public followTags = element.all(by.css(".badge-follow"))
+    public unfollowTags = element.all(by.css(".badge-unfollow"))
+    public feedReadings = element.all(by.css(".feed__reading"))
+    public firstFeedReading = this.feedReadings.first()
     
     // get the dashboard page
     getPage() : void {
-        browser.get('/#/discover');
+        browser.get('/')
+        browser.get('/#/discover')
     } //getPage(): void
-} 
+}  

@@ -18,30 +18,37 @@ describe('Discover Feed', () => {
 
     beforeAll(() => {
          // Login as test account that we can fill with junk data
-        login.getPage()
-        browser.wait(EC.elementToBeClickable(login.loginButton), 5000)
-        login.enterUsername(login.botUser)
-        login.enterPassword(login.botPassword)
-        browser.wait(EC.elementToBeClickable(login.loginButton), 5000)
-        login.loginButton.click()
-        browser.wait(EC.urlContains("dashboard"), 5000, "never arrived at dashboard")
-        discover.getPage()
-    })
+        login.getPage();
+        browser.wait(EC.elementToBeClickable(login.loginButton), 5000);
+        login.enterUsername(login.botUser);
+        login.enterPassword(login.botPassword);
+        browser.wait(EC.elementToBeClickable(login.loginButton), 5000);
+        login.loginButton.click();
+        browser.wait(EC.urlContains("dashboard"), 5000, "never arrived at dashboard");
+    });
 
     afterAll(() => {
-        sidebar.logout()
-    })
+        sidebar.logout();
+    });
 
     /* ---- Vital Super Basic Test  --------------- */
     
     // Discover Feed should exist and load for every user
     it("should arrive at Discover Feed", () => {
-        browser.wait(EC.urlContains("discover"), 15000, "never arrived at Discover Feed");
+        discover.getPage();
+        browser.wait(EC.urlContains("discover"), 5000, "never arrived at Discover Feed");
     });
 
     // Testbot follows no one by default
     it("should not see readings in following feed if not following anyone", () => {
-        
+        browser.wait(EC.presenceOf(discover.followEdjiMsg), 5000, "never saw message to follow Edji");
+        browser.wait(EC.stalenessOf(discover.firstFeedReading), 5000, "should not see readings in following feed");
+    });
+
+    it("should see readings in following feed if following someone", () => {
+        browser.wait(EC.elementToBeClickable(discover.followEdjiTag), 5000, "never saw message to follow Edji");
+        discover.followEdjiTag.click();
+        browser.wait(EC.presenceOf(discover.firstFeedReading), 5000, "followed user reading not showing");
     });
 
     /**

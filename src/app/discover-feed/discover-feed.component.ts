@@ -40,8 +40,9 @@ export class DiscoverFeedComponent implements OnInit {
       type: this.followingFilter ? "following" : "global"
     }
     // Pagination values
-    this.first = filters['start'] = paging && paging.first ? parseInt(paging.first) : this.first
-    this.rows = filters['size'] = paging && paging.rows ? parseInt(paging.rows) : this.rows
+    this.first = filters['start'] = paging && paging.first != undefined ? (parseInt(paging.first) - 1) : this.first
+    if (this.first < 0) { this.first = filters['start'] = 0 }
+    this.rows = filters['size'] = paging && paging.rows != undefined ? parseInt(paging.rows) : this.rows
     
     if (this.gradeFilter.length > 0) {
       filters['grades'] = this.gradeFilter
@@ -52,13 +53,12 @@ export class DiscoverFeedComponent implements OnInit {
         this.readings = readings
         this.loading = false
         // If service returns total
-        
-        // If service doesn't return total
-        this.total = this.first + readings.length
-        if (readings.length = this.rows) {
+        // >>> Use service total
+        // Else when service doesn't return total
+        this.total = this.first + (this.first == 0 ? this.readings.length : this.rows)
+        if (readings.length == this.rows) {
           this.total++
         }
       })
   }
- 
 }
