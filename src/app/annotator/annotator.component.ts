@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core'
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, QueryList, ViewChildren, HostListener, ViewChild } from '@angular/core'
 import { Subscription } from 'rxjs/Rx'
 import * as Rangy from 'rangy'
 import { Angulartics2 } from 'angulartics2'
@@ -36,6 +36,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
     @ViewChildren(CommentComponent) commentComponents: QueryList<CommentComponent>
     @ViewChildren('words') wordEls
+    @ViewChild('article') articleEl: ElementRef
 
     private reading: Reading = <Reading>{}
     private project: Project = <Project>{}
