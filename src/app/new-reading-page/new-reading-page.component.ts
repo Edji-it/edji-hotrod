@@ -490,9 +490,6 @@ export class NewReadingPage implements OnInit {
         if (this.ownerId) {
             reading.owner_id = this.ownerId
         }
-        // if (this.readingHtml[1]) {
-        //     reading.questions = this.questions
-        // }
 
         // having an _id controls whether it is a put or post call
         let submitAction: string
@@ -506,8 +503,6 @@ export class NewReadingPage implements OnInit {
         } else {
             this.angulartics.eventTrack.next({ action: submitAction, properties: { category: 'contentManagement', label: 'attempt' }})
         }
-
-        console.log(reading)
         
         this._readings.save(reading)
             .subscribe(
