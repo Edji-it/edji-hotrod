@@ -454,7 +454,8 @@ export class NewReadingPage implements OnInit {
             }
             let rendered: any = document.querySelector('#renderedReading')
             let renderHtml
-            rendered['innerHTML'] = this.readingHtml[i].text
+            // rendered['innerHTML'] = this.readingHtml[i].text
+            rendered['innerHTML'] = editorHtml[i].innerHTML
             renderHtml = document.querySelector('#renderedReading')
 
             let childEls = renderHtml.childNodes
@@ -523,14 +524,12 @@ export class NewReadingPage implements OnInit {
                                     this.addLoadingD = false
                                     this.addLoadingP = false
                                     this.router.navigate(['project', project._id], { queryParams: { readingCodeModal: true }})
-                                    // this._util.showShareCode=true; 
                                 }, (error) => {
                                     console.error(error)
                                     this.addLoadingD = false
                                     this.addLoadingP = false
                                 });
                         } else {
-                            // console.log(data)
                             this.addLoadingD = false
                             this.addLoadingP = false
                             this.router.navigate(['new-reading/' + data._id], { queryParams: { successAlert: this.successAlert } })
