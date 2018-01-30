@@ -9,7 +9,7 @@ export interface Project extends BaseProject {
 interface BaseProject {
   _id: string,
   reading_id: string,
-  teacher_id: string,
+  teacher_id: any,
   comments: EdjiComment[],
   answers?: EdjiComment[],
   students_ids: { _id: string, fullname: string }[], // server populates the ids with this object

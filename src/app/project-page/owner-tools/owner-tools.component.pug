@@ -1,4 +1,4 @@
-.owner-bar.hidden-md-down(*ngIf="currentProject && user._id == currentProject.teacher_id")
+.owner-bar.hidden-md-down(*ngIf="currentProject && user._id == currentProject.owner_id")
   label.bar-title Owner
   //- Buttons for toggling panes and tools
     - Desktop Buttons
@@ -26,7 +26,7 @@
       i#toggleQuestionfeed.icon-question(*ngIf="currentProject")
       label Questions
 
-.owner-tools-button__mobile.hidden-lg-up(*ngIf="currentProject && user._id == currentProject.teacher_id")
+.owner-tools-button__mobile.hidden-lg-up(*ngIf="currentProject && user._id == currentProject.owner_id")
   //- Mobile Buttons
   .owner-options-group--mobile([class.btn-group-show--animation]="ownerToolShow", [style.max-height]="ownerToolBlockHeight")
     //- Comment Stats pane
