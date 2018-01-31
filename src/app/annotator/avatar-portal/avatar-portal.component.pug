@@ -1,7 +1,7 @@
 //- Desktop Avatar Icons
 .user-icon.hidden-md-down(
   *ngIf="indexOnLine<9",
-  (tap)='toggleCommentPane.emit()',
+  (tap)='triggerCommentPane(true)',
   [ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '','avatar-count-' + indexOnLine, 'avatar-' + comment.type ]"
 )
   span.tooltipbody(*ngIf="indexOnLine<8")
@@ -28,6 +28,6 @@
   .comment__button--mobile.avatar__reply(*ngIf="repliesById[comment._id] && repliesById[comment._id].length>0")
 
 //- Mobile Icon
-.hidden-lg-up((tap)='toggleCommentPane.emit()')
+.hidden-lg-up((tap)='triggerCommentPane(false)')
     .comment__button--mobile([ngClass]="[ active ? 'active' : '' ]")
     .comment__count--mobile {{ lineCount }}

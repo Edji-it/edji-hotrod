@@ -441,8 +441,7 @@ export class NewReadingPage implements OnInit {
             }
 
             // Concatenate the html to 1 string [not currently using with current config]
-            // this.concatHtml += editorHtml[i]
-            concatHtml += this.readingHtml[i].text
+            concatHtml += editorHtml[i].innerHTML
             if (!document.querySelector('#renderedReading')){
                 let div1 = document.createElement('div')
                 div1.setAttribute('id','renderedReading')
@@ -455,17 +454,14 @@ export class NewReadingPage implements OnInit {
             }
             let rendered: any = document.querySelector('#renderedReading')
             let renderHtml
-            rendered['innerHTML'] = concatHtml
+            // rendered['innerHTML'] = this.readingHtml[i].text
+            rendered['innerHTML'] = editorHtml[i].innerHTML
             renderHtml = document.querySelector('#renderedReading')
-
-            let childEls = renderHtml.childNodes
 
             // Reset line break detection
             this.previousWordY = 0
             // Loop through all Reading html elements
-            for (let childEl of childEls) {
-                this.extractTextNodes(childEl)
-            }
+            this.extractTextNodes(renderHtml)
         }
 
         // Create reading object to submit based on form object parameter
@@ -491,9 +487,6 @@ export class NewReadingPage implements OnInit {
         if (this.ownerId) {
             reading.owner_id = this.ownerId
         }
-        // if (this.readingHtml[1]) {
-        //     reading.questions = this.questions
-        // }
 
         // having an _id controls whether it is a put or post call
         let submitAction: string
@@ -527,14 +520,12 @@ export class NewReadingPage implements OnInit {
                                     this.addLoadingD = false
                                     this.addLoadingP = false
                                     this.router.navigate(['project', project._id], { queryParams: { readingCodeModal: true }})
-                                    // this._util.showShareCode=true; 
                                 }, (error) => {
                                     console.error(error)
                                     this.addLoadingD = false
                                     this.addLoadingP = false
                                 });
                         } else {
-                            // console.log(data)
                             this.addLoadingD = false
                             this.addLoadingP = false
                             this.router.navigate(['new-reading/' + data._id], { queryParams: { successAlert: this.successAlert } })

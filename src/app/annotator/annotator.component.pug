@@ -6,9 +6,9 @@
     
 #emojiAnnotator.annotator.reading-page([ngClass]="[ lineExpanded ? 'comment-expanded' : '' , commentPane ? 'sliding-out' : '']")
     .text-options(
-        *ngIf="directCommentOptions.length > 0", 
-        (blur)="hideCommentOptions($event)", 
-        [style.top]="highlightY + 'px'", 
+        *ngIf="directCommentOptions.length > 0",
+        (blur)="hideCommentOptions($event)",
+        [style.top]="highlightY + 'px'",
         [ngClass]="{ 'active' : optionsShow }"
     )
         //- Desktop buttons
@@ -212,6 +212,7 @@ hot-discussions(
 //- comment-pane
 comment-pane(
     [isActive]="selectedComment.active",
+    [isSelected]="selectedComment.selected",
     [comment]="selectedComment",
     (hideComment)="toggleCommentPane(false)",
     (commentActivationMobile)="setActiveCommentByIndex($event.activate, $event.wi, $event.ci, $event.activatedComment)",

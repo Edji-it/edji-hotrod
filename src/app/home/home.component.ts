@@ -41,6 +41,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   private showPassModal: boolean = false;
   private tweetsLoaded: boolean = false;
+  private twitterRestyleAttempts = 0;
 
   // TypeScript public modifiers
   constructor(
@@ -61,7 +62,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this._title.setTitle('Edji')
-    this.paint()
+    this.restyleTwitter()
   }
  
   private widgetCSS = `
@@ -115,18 +116,23 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
     `;
   
-  paint(){
+  restyleTwitter(){
+    if (this.twitterRestyleAttempts < 6) {
       setTimeout(()=> {
-        var w = document.getElementById("twitter-widget-0")['contentDocument'];
-        console.log(w)
-        var s = document.createElement("style");
-        s.innerHTML = this.widgetCSS;
-        s.type = "text/css";
-        w.head.appendChild(s);
-        this.tweetsLoaded = true;
-      },6000)
-      
+        if (document.getElementById("twitter-widget-0")) {
+          var w = document.getElementById("twitter-widget-0")['contentDocument'];
+          console.log(w)
+          var s = document.createElement("style");
+          s.innerHTML = this.widgetCSS;
+          s.type = "text/css";
+          w.head.appendChild(s);
+          this.tweetsLoaded = true;
+        } else {
+          this.restyleTwitter()
+        }
+      }, 1000)
     }
+  }
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub: Subscription) => { sub.unsubscribe(); });

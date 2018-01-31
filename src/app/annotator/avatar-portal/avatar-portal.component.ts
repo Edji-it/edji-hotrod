@@ -60,6 +60,20 @@ export class AvatarPortalComponent implements OnInit, OnDestroy {
     ))
   }
 
+  private triggerCommentPane(selected?: boolean) {
+    // If the avatar is the 8th where it shows '+' and number of comments
+    if (this.indexOnLine==8) {
+      selected=false
+    }
+    // If selected is true then we will have the comment pane scroll to the comment the user clicked on
+    if (selected) {
+      this.comment.selected=true
+    } else {
+      this.comment.selected=false
+    }
+    this.toggleCommentPane.emit()
+  }
+
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe() })
   }  

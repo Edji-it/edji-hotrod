@@ -52,6 +52,14 @@ export class OwnerToolsComponent implements OnInit {
     )
     this.subscriptions.push(
       this._projects.currentProject.subscribe(project => {
+        // For transitioning how the server handles teacher/owner ids
+        if (!project.owner_id || typeof(project.owner_id) != 'string') {
+          if (typeof(project.teacher_id) == 'string') {
+            project.owner_id = project.teacher_id
+          } else if (project.teacher_id) {
+            project.owner_id = project.teacher_id._id
+          }
+        }
         this.currentProject = project
       }, error => {
         console.error(error)
