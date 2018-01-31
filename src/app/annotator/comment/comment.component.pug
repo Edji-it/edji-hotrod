@@ -73,8 +73,8 @@
 //- END the other component comment display
 
 //- Comments that are displayed in the comment pane
-div(*ngIf="commentPaneActive")
-    hr.mobileBlock-hr(*ngIf="commentMobile && !commentMobileFirst")
+hr.mobileBlock-hr(*ngIf="commentMobile && !commentMobileFirst")
+div(*ngIf="commentPaneActive", [class.selected--block]="comment.selected")
     .comment-action--save.comment-action--save__mobile.comment-action--save__mobile-btn(
         *ngIf="comment.active && !readOnly",
         (tap)="deactivate(comment)",
@@ -83,6 +83,8 @@ div(*ngIf="commentPaneActive")
     .comment-new-highlight__mobile(*ngIf="comment && comment.active  && comment.new")
         .comment-new-dot__mobile
         p.comment-new-text__mobile new
+    .comment-selected-highlight(*ngIf="comment && comment.selected")
+        .comment-selected-dot__mobile
     #comment.comment.mobileBound(
         [class.new]="comment.new",
         [class.saved]="justSaved",
@@ -90,7 +92,7 @@ div(*ngIf="commentPaneActive")
         [class.readonly]="readOnly",
         [ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '' ]"
     )
-        .user-icon([class.active]="comment.active", [ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '' ]")
+        .user-icon([class.selected]="comment.selected", [ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '' ]")
             span.user-icon__initials {{comment.author.substring(0,2)}}
         .mobileBlock([ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '' ]")
             .list-item.list-item--block.mobileTime-card

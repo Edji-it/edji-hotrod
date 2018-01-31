@@ -272,3 +272,23 @@ $mobileBoundVPad: 40px;
   left: 0px;
   background-color: #93DC4F;
 }
+
+.comment-selected-highlight {
+  position: absolute;
+}
+
+.comment-selected-dot__mobile {
+  height: 8px;
+  width: 8px;
+  border-radius: 50%;
+  position: relative;
+  top: 32px;
+  left: -14px;
+  background-color: #ECA736;
+}
+
+.selected--block {
+  box-shadow: 0px 0px 22px 4px rgba(0, 0, 0, 0.06);
+  padding: 0px 5px 6px 3px;
+  border-radius: 8px;
+}

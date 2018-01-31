@@ -21,6 +21,7 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
   private rowComments: EdjiComment[][] = []
   // Is fully visible, focused, and editable
   private active = false
+  private selected = false
   private user: User
   private project: Project = <Project>{}
   private visible: boolean
@@ -37,13 +38,20 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
       this.active = isActive
       
       // if the comment is new, let's adjust the scroll position if there are a ton of comments
-      if (this.comment.scrollTo) {
+      if (this.comment.new) {
         this.scrollAdjust()
       }
-
-      if (!isActive) {
-        // Trigger save when deactivated externally i.e. emoji keyboard
-        
+    } 
+  }
+  // Checking for selected in the instances where a user clicks on the avatar and we want to scroll to that comment while adding the associated classes
+  @Input()
+  set isSelected(isSelected: boolean) {
+    if (typeof(isSelected) !== 'undefined' && this.selected !== isSelected) {
+      this.selected = isSelected
+      
+      // if the comment was selected then we'll need to scroll to it, but not activate it
+      if (this.comment.selected) {
+        this.scrollAdjust(this.comment)
       }
     } 
   }
@@ -109,6 +117,8 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
   }
 
   dismissCommentPane() {
+    this.selected=false
+    this.comment.selected=false
     this.hideComment.emit()
     this._projects.commentPaneStateSubj.next(false)
     document.body.classList.remove("body__lock-scroll")
@@ -119,7 +129,7 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
     document.body.classList.remove("body__lock-scroll")
   }
 
-  scrollAdjust(isNew?: boolean) {
+  scrollAdjust(iselected?: EdjiComment) {
     setTimeout(() => {
       // Get the comments that are currently in the pane
       let comments: any[] = Array.from(document.querySelectorAll('.sliding-pane-comment .comment-container edji-comment'))
@@ -131,8 +141,13 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
       if (this.comment.lineY) {
         len = paneComments.length
         for (let i=0; i<len; i++) {
-          // if (paneComments[i]._id===this._comments.activeComment._id) {
-          if (paneComments[i]._id===this.comment._id) {
+          // If comment is new and active, we'll scroll to it and add the associated active classes
+          if (paneComments[i]._id===this._comments.activeComment._id) {
+            commentIndex = i
+            break
+          }
+          // If the user selected the avatar, we'll scroll to it and add flair with a class that checks for comment.selected
+          if (iselected && paneComments[i]._id===this.comment._id) {
             commentIndex = i
             break
           }
@@ -148,19 +163,21 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
 
   commentActivationEmitter(shouldActivate, comment?: any) {
     let wordIndex = comment.start
-    let processedCommentData = this._projects.processComments(this.project)
-    let commentsByIndex = processedCommentData.commentsByIndex
+    // let processedCommentData = this._projects.processComments(this.project)
+    let commentsByIndex = this._projects.commentsByIndex
 
     let commentIndex = 0
 
-    for (let i=0;i<commentsByIndex[wordIndex].length;i++) {
-      if (commentsByIndex[wordIndex][i]._id===comment._id) {
-        commentIndex = i
-        break
-      }
-    }
+    
     
     if (shouldActivate) {
+      for (let i=0;i<commentsByIndex[wordIndex].length;i++) {
+        if (commentsByIndex[wordIndex][i]._id===comment._id) {
+          commentIndex = i
+          break
+        }
+      }
+
       if (comment && (comment.type==='emoji' || comment.type==='text')) {
         this.scrollAdjust()
       }
