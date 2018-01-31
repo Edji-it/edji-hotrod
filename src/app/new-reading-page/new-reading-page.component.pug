@@ -32,7 +32,7 @@ nav-bar([pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'", [canPublish]
                     [class.active]="readingForm.controls['public'].value == 'true'",
                     title="Allow anyone to find this Reading in Discover"
                   )
-                  input.form-check-input(
+                  input#readingMakePublic.form-check-input(
                       type="radio", 
                       name="publicFlag", 
                       value="true", 
@@ -45,7 +45,7 @@ nav-bar([pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'", [canPublish]
                     [class.active]="readingForm.controls['public'].value == 'false'",
                     title="Hide this Reading from Discover"
                   )
-                  input.form-check-input(
+                  input#readingMakePrivate.form-check-input(
                       type="radio",
                       name="publicFlag", 
                       value="false",

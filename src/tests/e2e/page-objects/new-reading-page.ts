@@ -14,6 +14,8 @@ export class NewReading implements PageObjectInterface
     public contentInput1 = element.all(by.css('.medium-editor-element')).first();
     public contentInput2 = element.all(by.css('.medium-editor-element')).last();
     public sourceInput = element(by.id('readingSource'));
+    public publicButton = element(by.id('readingMakePublic'));
+    public privateButton = element(by.id('readingMakePrivate'));
     public groupInput = element(by.id('firstProjectLabel'));
     public gradeTileK = element(by.id('gradeTile0'));
     public gradeTileU = element(by.id('gradeTile13'));
