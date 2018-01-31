@@ -458,14 +458,10 @@ export class NewReadingPage implements OnInit {
             rendered['innerHTML'] = editorHtml[i].innerHTML
             renderHtml = document.querySelector('#renderedReading')
 
-            let childEls = renderHtml.childNodes
-
             // Reset line break detection
             this.previousWordY = 0
             // Loop through all Reading html elements
-            for (let childEl of childEls) {
-                this.extractTextNodes(childEl)
-            }
+            this.extractTextNodes(renderHtml)
         }
 
         // Create reading object to submit based on form object parameter
