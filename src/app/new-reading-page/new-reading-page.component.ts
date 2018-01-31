@@ -437,7 +437,7 @@ export class NewReadingPage implements OnInit {
         }
 
         // This would be better handled by formcontrols
-        if (!form.title || form.title.length < 1 || this.readingIsBlank || !questionsValid) {
+        if (!form.title || form.title.length < 1 || this.readingIsBlank || !questionsValid || (form.public == 'true' && (form.grade_levels.length < 1 || form.subjects.length < 1))) {
             this.addLoadingD = false
             this.addLoadingP = false
             this.error = 'Not quite, please check all the fields!'
