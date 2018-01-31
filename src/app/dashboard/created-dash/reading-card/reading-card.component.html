@@ -1,5 +1,5 @@
 <!--<div class="reading-card-wrap">-->
-    <div class="list-item list-item--block reading-card" [ngClass]="{'draft-edit' : (reading['draft'] && reading.draft === true && !reading.projects[0])}" [routerLink]="(reading['draft'] && reading.draft === true && !reading.projects[0]) ? ['/new-reading/' + reading._id] : []">
+    <div class="list-item list-item--block reading-card" [ngClass]="{'draft-edit' : (reading['draft'] && reading.draft === true && hasProjects())}" [routerLink]="(reading['draft'] && reading.draft === true && hasProjects()) ? ['/new-reading/' + reading._id] : []">
             <!--<div class="offset-buttons">
             <a class="icon-button" (click)="confirmDelete = !confirmDelete">
                 <img alt="❌" class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/274c.png">
@@ -34,7 +34,7 @@
                 </div>
             </div>
         </div>
-        <i *ngIf="reading['draft'] && reading.draft === true && !reading.projects[0]" class="icon icon-draft"></i>
+        <i *ngIf="reading['draft'] && reading.draft === true && hasProjects()" class="icon icon-draft"></i>
         <!-- The Dropdown Options Menu -->
         <div *ngIf="!readOnly && (!reading['draft'] || reading.draft !== true || reading.projects[0])" id="optionsWrap" (clickOutside)="showOptions = false" class="dropdown reading-options" [class.show]="showOptions">
             <button class="btn btn-icon--plain" (click)="showOptions = !showOptions" [attr.testFindOptions]="reading.title">

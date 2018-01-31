@@ -82,6 +82,14 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
     } // if
   } // getVersions(versionId : string)
 
+  hasProjects() : boolean {
+    if (!this.reading.projects || !this.reading.projects[0]) {
+      return false
+    } else {
+      return true
+    }
+  }
+
   versionsHeight() : number {
     if (document.getElementById(this.reading._id) && document.getElementById(this.reading._id).clientHeight > 66 && !this.isLoading && this.versionHeight == 50) {
       this.versionHeight = document.getElementById(this.reading._id).clientHeight;
