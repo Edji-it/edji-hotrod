@@ -113,7 +113,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
           this._projects.currentProject.subscribe(
                 project => {
                     this.currentProject = project
-                    this.projectOwner = project.teacher_id
+                    this.projectOwner = project.teacher
                     this.createdDate = new Date(project.createdAt).toDateString()
                 },
                 error => {
