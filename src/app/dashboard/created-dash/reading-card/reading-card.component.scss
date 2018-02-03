@@ -99,6 +99,16 @@
     width: 100%;
 }
 
+.reading-access-icon {
+    float: right;
+    padding: 0 4px;
+
+    & i {
+        pointer-events: none;
+        border-radius: 50%;
+    }
+}
+
 .reading-data {
 	float: left;
 	width: 100%;

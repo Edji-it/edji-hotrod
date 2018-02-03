@@ -59,7 +59,7 @@ nav-bar([showDashboardOptions]="true")
                 )
                     span([innerHTML]="':earth_americas: Public' | emojione")
             br
-            .form-group
+            .form-group(style="clear:left;")
                 label Grade Level
                     button.btn-secondary.btn-sm.filter-clear(
                         *ngIf="gradeFilter.length > 0",

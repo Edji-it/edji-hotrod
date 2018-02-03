@@ -20,7 +20,7 @@
         <div class="reading-icon">
             <span>{{reading.title.substring(0,2)}}</span>
         </div>
-        <div class="reading-title">
+        <div class="reading-title" [class.no-version]="!reading.versionCount">
             <div class="reading-title--center-row">
                 <h1 class="small reading-title__text">{{reading.title}} <span *ngIf="!reading.title"><i>Untitled</i></span>
                     <span class="hero-tag" *ngIf="reading.heroic" title="Uses Hero features">H</span>
@@ -52,6 +52,10 @@
             <a *ngIf="reading.source" class="btn btn-icon--round" [attr.href]="reading.source" title="Source" target="_blank" style="float:right;margin-left:5px;">
                 <i class="icon icon-link"></i>
             </a>
+            <div class="reading-access-icon" [attr.title]="reading.public ? 'Public Reading' : 'Private Reading'">
+                <i *ngIf="reading.public" [innerHTML]="':earth_americas:' | emojione"></i>
+                <i *ngIf="!reading.public" [innerHTML]="':lock:' | emojione"></i>
+            </div>
             <div *ngIf="reading.subjects && reading.subjects.length > 0" style="float:right; margin-left:5px;">
                 <span class="badge-pill badge-secondary badge-subject" *ngFor="let subject of reading.subjects">{{subject}}</span>
             </div>

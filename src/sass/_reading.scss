@@ -608,6 +608,12 @@ $readingIconHeight: 60px;
     position: relative;
     float: left;
     width: calc(100% - #{ $readingIconHeight + 50px });
+
+	&.no-version {
+		@media (max-width: #{$phone}) {
+			height: 28px;
+		}
+	}
 }
 
 .reading-project--label{

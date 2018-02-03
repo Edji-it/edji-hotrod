@@ -169,6 +169,12 @@ $purple: rgb(150, 40, 255);
 			margin-right: 5px;
 		}
 	}
+
+	@media(max-width: $tablet) {
+		& .btn {
+			margin: 0px 7.5px !important;
+		}
+	}
 }
 
 .nav-bar__heading {
