@@ -94,9 +94,15 @@
     margin-bottom: 0px !important;
     border-bottom: 1px dashed #cdcdcd !important;
     overflow:visible;
-    min-height: 92px;
+    min-height: 115px;
     float: none;
     width: 100%;
+}
+
+.reading-data {
+	float: left;
+	width: 100%;
+    line-height: 30px;
 }
 
 .project-card {

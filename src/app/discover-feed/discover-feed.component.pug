@@ -2,7 +2,8 @@ nav-bar([showDashboardOptions]="true")
 .container.mt-4
     .row
         .col-md-8
-            h1 Discover Feed
+            h1.mb-1 Discover Readings
+            p.small.mt-2 Find readings created by others to use or modify for your class.
             #notFollowingMessage.alert.alert-light(*ngIf="!loading && followingFilter && readings.length < 1")
                 h4 Time to follow someone!
                 p Follow Edji to see some of our latest curated Readings.
@@ -60,9 +61,8 @@ nav-bar([showDashboardOptions]="true")
             br
             .form-group
                 label Grade Level
-                    a.link(
-                        *ngIf="gradeFilter.length > 0", 
-                        style="float:right; font-size:10px;",
+                    button.btn-secondary.btn-sm.filter-clear(
+                        *ngIf="gradeFilter.length > 0",
                         (click)="gradeFilter = []; loadFeed()"
                     ) Clear
                 grade-selector([(ngModel)]="gradeFilter", (ngModelChange)="loadFeed()")
