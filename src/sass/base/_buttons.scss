@@ -264,6 +264,26 @@ button, .button, .btn { //, [class*='btn']
   }
 }
 
+.btn-link, .btn.btn-link {
+    background-color: transparent !important;
+    padding: 4px 0px !important;
+    margin: 0px 15px !important;
+    text-decoration: none;
+    color: #333;
+    border-bottom: 1px solid transparent;
+
+    &:hover, &:active, &:focus {
+      border-bottom: 1px solid #333;
+      background-color: transparent !important;
+    }
+
+    &.active {
+      color: $btnPrimaryColor;
+      border-bottom: 1px solid $btnPrimaryColor;
+    }
+}
+
+// Deprecated button style
 .btn-clear, .btn.btn-clear {
     border: none !important;
     box-shadow: none !important;

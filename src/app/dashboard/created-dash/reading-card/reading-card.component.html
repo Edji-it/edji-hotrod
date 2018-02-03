@@ -1,5 +1,5 @@
 <!--<div class="reading-card-wrap">-->
-    <div class="list-item list-item--block reading-card" [ngClass]="{'draft-edit' : (reading['draft'] && reading.draft === true && !reading.projects[0])}" [routerLink]="(reading['draft'] && reading.draft === true && !reading.projects[0]) ? ['/new-reading/' + reading._id] : []">
+    <div class="list-item list-item--block reading-card" [ngClass]="{'draft-edit' : (reading['draft'] && reading.draft === true && hasProjects())}" [routerLink]="(reading['draft'] && reading.draft === true && hasProjects()) ? ['/new-reading/' + reading._id] : []">
             <!--<div class="offset-buttons">
             <a class="icon-button" (click)="confirmDelete = !confirmDelete">
                 <img alt="❌" class="emojioneemoji" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/274c.png">
@@ -22,16 +22,21 @@
         </div>
         <div class="reading-title">
             <div class="reading-title--center-row">
-                <h1 class="small">{{reading.title}} <span *ngIf="!reading.title"><i>Untitled</i></span></h1>
+                <h1 class="small reading-title__text">{{reading.title}} <span *ngIf="!reading.title"><i>Untitled</i></span>
+                    <span class="hero-tag" *ngIf="reading.heroic" title="Uses Hero features">H</span>
+                </h1>
                 <p class="blockquote-footer" *ngIf="reading.versionCount && reading.versionCount > 0" [attr.testVersionNumber]="reading.title">Version {{reading.versionCount > 0 ? reading.versionCount : '' }}</p>
                 <!--<p *ngIf="reading.createdAt" class="readings-date">
                     Created: {{ reading.createdAt | date:'mediumDate' }}
                 </p>-->
+                <div *ngIf="reading.subjects && reading.subjects.length > 0" style="height:14px;line-height:18px;">
+                    <span class="badge-pill badge-secondary badge-subject" *ngFor="let subject of reading.subjects">{{subject}}</span>
+                </div>
             </div>
         </div>
-        <i *ngIf="reading['draft'] && reading.draft === true && !reading.projects[0]" class="icon icon-draft"></i>
+        <i *ngIf="reading['draft'] && reading.draft === true && hasProjects()" class="icon icon-draft"></i>
         <!-- The Dropdown Options Menu -->
-        <div *ngIf="!reading['draft'] || reading.draft !== true || reading.projects[0]" id="optionsWrap" (clickOutside)="showOptions = false" class="dropdown reading-options" [class.show]="showOptions">
+        <div *ngIf="!readOnly && (!reading['draft'] || reading.draft !== true || reading.projects[0])" id="optionsWrap" (clickOutside)="showOptions = false" class="dropdown reading-options" [class.show]="showOptions">
             <button class="btn btn-icon--plain" (click)="showOptions = !showOptions" [attr.testFindOptions]="reading.title">
                 <i class="icon icon-more"></i>
             </button>

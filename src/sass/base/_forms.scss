@@ -297,6 +297,16 @@ input.form-item--underline {
 .form-check-label {
   font-size: 16px;
   line-height: 28px;
+
+  &, & span {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+  }
 }
 
 tr.selectable {
@@ -308,4 +318,38 @@ tr.selectable {
   cursor: disabled;
   color: #ccc;
   filter:grayscale(1);
+}
+
+.form-check-btn {
+  float: left;
+  margin-right: 5px;
+  border: 2px solid $light-gray;
+  border-radius: 16px;
+  overflow: hidden;
+
+  & .emoji {
+    filter: grayscale(100%);
+  }
+
+  &.form-check-label {
+    padding: 0px 15px;
+    color: $gray;
+    line-height: 32px;
+  }
+
+  & input {
+    position: absolute !important;
+    left: -2000px;
+    top: -100%;
+  }
+
+  &.active {
+    &.form-check-label {
+      color: #000;
+    }
+    & .emoji {
+      filter: none;
+    }
+    border-color: $green;
+  }
 }

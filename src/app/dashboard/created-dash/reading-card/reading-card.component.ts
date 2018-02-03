@@ -1,5 +1,5 @@
 import { Subscription } from 'rxjs/Rx';
-import { Angulartics2 } from 'angulartics2/dist';
+import { Angulartics2 } from 'angulartics2';
 import { ReadingService, ProjectService } from '../../../shared';
 import { Reading, Project }      from '../../../shared/datatypes';
 import { Component, Input, Output, OnDestroy, OnInit, EventEmitter } from '@angular/core';
@@ -18,6 +18,7 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
   private isLoading: boolean = false;
 
   @Input() reading: Reading;
+  @Input() readOnly: boolean;
 
   private showOptions     : boolean = false;
   private showOptionsV    : boolean = false;
@@ -80,6 +81,14 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
           })
     } // if
   } // getVersions(versionId : string)
+
+  hasProjects() : boolean {
+    if (!this.reading.projects || !this.reading.projects[0]) {
+      return false
+    } else {
+      return true
+    }
+  }
 
   versionsHeight() : number {
     if (document.getElementById(this.reading._id) && document.getElementById(this.reading._id).clientHeight > 66 && !this.isLoading && this.versionHeight == 50) {

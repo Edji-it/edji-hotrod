@@ -1,18 +1,18 @@
 import { Routes, RouterModule } from '@angular/router'
 
-// components
-import { NewReadingPage } from './new-reading-page'
-import { ProjectPageComponent } from './project-page'
-import { HomeComponent } from './home'
-import { RegisterComponent } from './register'
-import { AccountComponent } from './account'
-import { DashboardComponent } from './dashboard'
-import { NoContentComponent } from './no-content'
-import { LoginComponent } from './login'
-import { ResetPassPage } from './reset-pass/reset-pass-page.component'
-import { HeroPromoComponent } from './hero-promo/hero-promo.component'
-import { HeroPricingComponent } from './hero-pricing/hero-pricing.component'
-import { OAuthComponent } from './oauth-redirect/oauth-redirect.component'
+import { NewReadingPage } from './new-reading-page';
+import { ProjectPageComponent } from './project-page';
+import { HomeComponent } from './home';
+import { RegisterComponent } from './register';
+import { AccountComponent } from './account';
+import { DashboardComponent } from './dashboard';
+import { NoContentComponent } from './no-content';
+import { LoginComponent } from './login';
+import { ResetPassPage } from './reset-pass/reset-pass-page.component';
+import { HeroPromoComponent } from './hero-promo/hero-promo.component';
+import { HeroPricingComponent } from './hero-pricing/hero-pricing.component';
+import { DiscoverFeedComponent } from "app/discover-feed/discover-feed.component";
+import { OAuthComponent } from './oauth-redirect/oauth-redirect.component';
 
 // services
 import { DataResolver } from './app.resolver'
@@ -24,6 +24,7 @@ export const ROUTES: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
   { path: 'account', component: AccountComponent, canActivate: [AuthService] },
+  { path: 'discover', component: DiscoverFeedComponent, canActivate: [AuthService] },
   { path: 'dashboard',  component: DashboardComponent, canActivate: [AuthService] },
   { path: 'project/:id',  component: ProjectPageComponent },
   { path: 'new-reading', component: NewReadingPage, canActivate: [AuthService] },

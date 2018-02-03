@@ -5,6 +5,12 @@ nav-bar([pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'", [canPublish]
       form([formGroup]="readingForm")
         .reading-page
           //- Error and Success Messaging
+          .alert.alert-info.alert-reading.alert-dismissable(*ngIf="copyCleanHeroMsg",role="alert")
+            a.close(href="#", (click)="copyCleanHeroMsg=false") ×
+            b Hero features removed
+            p This reading was created with Hero features, such as questions, which have been removed. To copy readings and preserve Hero features, consider 
+              a.link([routerLink]="['/hero']") going Hero
+              |.
           p.alert.alert-warning(*ngIf="error.length > 0") {{ error }}
           .alert.alert-success.alert-readings.alert-dismissable(role="alert", *ngIf="showAlert") {{ successObject.readingSuccess }}
             a.close(href="#", (click)="showAlert=false") × 
@@ -14,8 +20,52 @@ nav-bar([pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'", [canPublish]
             label
               span Title
               input#readingTitle.form-control.h1.form-item--editor.mTitle(type="text", placeholder="Reading Title...", [formControl]="readingForm.controls['title']")
-              #errorTitle.alert.alert-info(*ngIf="readingForm.controls['title'].hasError('required') && (readingForm.controls['title'].dirty || submitted)") Please give your Reading a title!
-
+              #errorTitle.alert.alert-warning(*ngIf="readingForm.controls['title'].hasError('required') && (readingForm.controls['title'].dirty || submitted)") Please give your Reading a title!
+          //- Public Flag
+          .form-group
+            label Make Public
+              p.sub-label Share this Reading with other teachers looking for lessons.
+            .input-group
+              .form-check
+                //- Public option
+                label.form-check-label.form-check-btn(
+                    [class.active]="readingForm.controls['public'].value == 'true'",
+                    title="Allow anyone to find this Reading in Discover"
+                  )
+                  input#readingMakePublic.form-check-input(
+                      type="radio", 
+                      name="publicFlag", 
+                      value="true", 
+                      [formControl]="readingForm.controls['public']",
+                      checked
+                    )
+                  span([innerHTML]="':earth_americas: Public' | emojione")
+                //- Private option
+                label.form-check-label.form-check-btn(
+                    [class.active]="readingForm.controls['public'].value == 'false'",
+                    title="Hide this Reading from Discover"
+                  )
+                  input#readingMakePrivate.form-check-input(
+                      type="radio",
+                      name="publicFlag", 
+                      value="false",
+                      [formControl]="readingForm.controls['public']"
+                    )
+                  span([innerHTML]="':lock: Private' | emojione")
+          //- Grade level range selector
+          .form-group
+            label Grade Level
+              p.sub-label Select which grade levels this reading targets. (Click to select start of range, and click again to select end of range!)
+            grade-selector(formControlName="grade_levels")
+            #errorTitle.alert.alert-warning.mt-2(*ngIf="readingForm.controls['grade_levels'].hasError('required') && (readingForm.controls['grade_levels'].dirty || submitted)") 
+              | Please select the range of grade levels this Reading is best suited for.
+          //- Subject Selector
+          .form-group
+            label Subject
+            .input-group
+            ss-multiselect-dropdown(id="subjectDropdown",[options]="subjects", formControlName="subjects", [settings]="subjectDropSettings")
+            #errorTitle.alert.alert-warning.mt-2(*ngIf="readingForm.controls['subjects'].hasError('required') && (readingForm.controls['subjects'].dirty || submitted)") 
+              | Please select at least one Subject area that this Reading applies to.
           //- Body Section
               - Includes "reading content" and "source"
           .form-group.medium-wrap(style="position:relative;")
@@ -31,7 +81,7 @@ nav-bar([pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'", [canPublish]
                 (keyup)="contentChange($event)",
                 (mouseup)="contentChange($event)",
                 (mousedown)="$event.preventDefault ? $event.preventDefault() : $event.returnValue = false")
-              medium-editor#readingContent.content(
+              medium-editor#angularMediumEditor.content(
                 [(editorModel)]="readingPart.text",
                 [editorOptions]="mediumEditorConfig",
                 [editorPlaceholder]="getReadingPlaceholder(i)",
@@ -39,7 +89,7 @@ nav-bar([pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'", [canPublish]
                 (mouseup)="contentChange($event)",
                 [ngClass]="[i<readingHtml.length - 1 ? 'medium-editor__new-question' : '']",
                 [attr.rIndex]="i")
-            #errorContent.alert.alert-info(*ngIf="submitted && readingIsBlank") Please give your Reading some text!
+            #errorContent.alert.alert-warning(*ngIf="submitted && readingIsBlank") Please give your Reading some text!
             //- Editor Insert Options
                 - Insert a Picture or Pdf
                 - (Hero) Insert a Question

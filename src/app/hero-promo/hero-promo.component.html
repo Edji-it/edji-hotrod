@@ -6,14 +6,8 @@
 
       <img class="hero-background" src="/assets/images/hero-lg.png" />
 
-      <div *ngIf="!countdownOver" class="call-to-action">
-        <h1 class="promo-header center">Hero is Launching</h1>
-        <h3 class="countdown-clock">{{ countdownText }}</h3>
-      </div>
-
-      <div *ngIf="countdownOver" class="call-to-action">
+      <div class="call-to-action">
         <h1 class="promo-header center">Empower with Hero</h1>
-        <!--<h3 class="countdown-clock">Be Hero #{{ heroCount }}!</h3>-->
       </div>
 
     </div>

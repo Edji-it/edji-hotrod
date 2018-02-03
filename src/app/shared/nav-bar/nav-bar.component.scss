@@ -156,10 +156,19 @@ $purple: rgb(150, 40, 255);
 	}
 }
 
-.nav-bar__project, .nav-bar__project-data {
-	// @media(max-width: $tablet) {
-	// 	max-width: calc(50% - #{ $navUserWidth} );
-	// }
+.nav__menu {
+	float: left;
+	line-height: $navHeight;
+	height: 100%;
+
+	& .btn {
+		display: inline-block;
+		
+		& > span {
+			display:inline-block;
+			margin-right: 5px;
+		}
+	}
 }
 
 .nav-bar__heading {
@@ -186,7 +195,18 @@ $purple: rgb(150, 40, 255);
 		line-height: $navHeight;
 		margin-bottom: 0px;
 		vertical-align: middle;
+		font-size: 25px;
+
+		&.with-nav-sub {
+			line-height: $navHeight - 25px;
+		}
 	}
+}
+
+.nav-bar__author {
+	line-height: 13px;
+	vertical-align: middle;
+	font-size: 12px;
 }
 
 a.nav-bar__link {

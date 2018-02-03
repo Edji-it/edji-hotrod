@@ -1,0 +1,71 @@
+nav-bar([showDashboardOptions]="true")
+.container.mt-4
+    .row
+        .col-md-8
+            h1 Discover Feed
+            #notFollowingMessage.alert.alert-light(*ngIf="!loading && followingFilter && readings.length < 1")
+                h4 Time to follow someone!
+                p Follow Edji to see some of our latest curated Readings.
+                .comment__avatar Ed
+                = "Edji  "
+                follow-tag(
+                    id="followEdjiTag",
+                    [userId]="'5897f6314897db0011a48bb8'",
+                    (followEvent)="loadFeed()"
+                )
+            .row.loading(*ngIf="loading")
+            <p-dataList [value]="readings" [paginator]="true" [paginatorPosition]="'bottom'" [rows]="rows" [lazy]="true" (onLazyLoad)="loadFeed($event)" [totalRecords]="total" [emptyMessage]="'No Readings to show.'">
+                <ng-template let-reading pTemplate="item">
+                    .col-12.feed__reading(*ngIf="reading")
+                        div {{index}}
+                        .feed__reading-data(*ngIf="reading.owner")
+                            .comment__avatar {{reading.owner.fullname.substr(0,2).toUpperCase()}}
+                            | {{ reading.owner.fullname }}
+                            i {{ ' shared ' + (reading.updatedAt | edjidate:'timeAgo':null:secondsAgo) }}
+                            = " "
+                            follow-tag([userId]="reading.owner._id")
+                            .btn-group(style="float:right")
+                                //- .btn.btn-sm.btn-primary Preview
+                                .btn.btn-sm.btn-primary([routerLink]="['/new-reading']", [queryParams]="{ copyId: reading._id }") Get this Reading
+                        hot-reading-card([reading]="reading", [readOnly]="true")
+                        .feed__reading-preview(*ngIf="reading.words_preview")
+                            span.w(
+                                    *ngFor="let w of reading.words_preview", 
+                                    [ngClass]="[ w ? w.styles.join(' ') : '' ]"
+                                )
+                                | {{ (!(w && w.styles) || (w && w.styles.indexOf('space')) > -1) ? '&nbsp;' : w && w.str }}
+                            span.w &hellip;
+                </ng-template>
+            </p-dataList>
+        .col-md-4.hidden-sm-down
+            h4.mt-2 Filters
+            .form-group
+                label Users
+                //- Following users option
+                label.form-check-label.form-check-btn(
+                    id="discoverFilterFollowing",
+                    [class.active]="followingFilter",
+                    title="Filter by users you follow",
+                    (click)="followingFilter = true; loadFeed()"
+                  )
+                  span([innerHTML]="':green_heart: Following' | emojione")
+                //- Public option
+                label.form-check-label.form-check-btn(
+                    id="discoverFilterPublic",
+                    [class.active]="!followingFilter",
+                    title="See public readings from all users",
+                    (click)="followingFilter = false; loadFeed()"
+                )
+                    span([innerHTML]="':earth_americas: Public' | emojione")
+            br
+            .form-group
+                label Grade Level
+                    a.link(
+                        *ngIf="gradeFilter.length > 0", 
+                        style="float:right; font-size:10px;",
+                        (click)="gradeFilter = []; loadFeed()"
+                    ) Clear
+                grade-selector([(ngModel)]="gradeFilter", (ngModelChange)="loadFeed()")
+            //- .form-group
+            //-     label Subjects
+                //- ss-multiselect-dropdown([options]="subjects", [(ngModel)]="subjectFilter", [settings]="subjectDropSettings")
