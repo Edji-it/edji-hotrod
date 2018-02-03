@@ -4,6 +4,15 @@
     a.nav-bar__logo-wrap([routerLink]="['/dashboard']")
       img#logo.nav-bar__logo(src="assets/images/logo-3.2-mark.svg")
 
+    //- Dashboard Nav
+    .nav__menu(*ngIf="showDashboardOptions")
+      a.btn.btn-link([routerLink]="['/dashboard']", routerLinkActive="active") 
+        //- span([innerHtml]="':book:' | emojione")
+        | Readings
+      a.btn.btn-link([routerLink]="['/discover']", routerLinkActive="active")
+        //- span([innerHtml]="':triangular_flag_on_post:' | emojione")
+        | Discover
+
     //- Optional Title
     div(*ngIf="!projectCodeShow")
       .nav-bar__heading.hidden-sm-down(*ngIf="!showProjectInfo")
@@ -12,11 +21,13 @@
           title="{{ pageTitle }}"
           ) {{ pageTitle }}
       .nav-bar__heading.hidden-sm-down(*ngIf="showProjectInfo")
-        h1(
+        h1.with-nav-sub(
           *ngIf="currentReading.title",
           title="{{ currentReading.title }}"
           ) {{ currentReading.title }}
-
+        .nav-bar__author(*ngIf="projectOwner && projectOwner._id")
+          | {{ projectOwner.fullname }} &nbsp;		
+          follow-tag([userId]="projectOwner._id")
     .nav__btn-wrap(*ngIf="!user.isLoggedIn")
       a#loginLink.btn.btn-primary.nav-bar__btn([routerLink]="['/login']") Log In
       a#registerLink.btn.btn-secondary.nav-bar__btn([routerLink]="['/register']") Register

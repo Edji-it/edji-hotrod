@@ -6,7 +6,7 @@ import 'rxjs/add/operator/toPromise';
 import { Locker } from 'angular2-locker';
 
 import { User } from './datatypes'
-import { window } from '@angular/platform-browser/src/facade/browser';
+import { URLSearchParams } from '@angular/http/src/url_search_params';
 
 @Injectable()
 export class AuthService implements CanActivate {
@@ -652,6 +652,37 @@ export class AuthService implements CanActivate {
             })
     }
 
+    /**
+     * Follow
+     * - Add user to user's Following array
+     * - Updates user object
+     */
+    public followUser(userId: string) : Observable<any> {
+        return this.http.put(this.baseUrl + '/users/following', { 'user_id' : userId, 'action': 'follow' }, this.getOptions())
+            .map( res => {
+                let user = res.json().user || {}
+                if(user._id) {
+                    this.setUser(user)
+                }
+                return user
+            })
+    }
+
+    /**
+     * Unfollow
+     * - Removes a user from user's Following array
+     * - Updates user object
+     */
+    public unfollowUser(userId: string) : Observable<any> {
+        return this.http.put(this.baseUrl + '/users/following', { 'user_id' : userId, 'action': 'unfollow' }, this.getOptions())
+            .map( res => {
+                let user = res.json().user  || {}
+                if(user._id) {
+                    this.setUser(user)
+                }
+                return user
+            })
+    }
     public oauthLogin(type: string): void {
         // eventually we'll need to switch on type to determine different places to go, but for meow we'll just always do google
         // this.http.get([this.baseUrl, 'auth', 'google'].join("/")).take(1).subscribe((res) => {

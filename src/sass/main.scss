@@ -43,6 +43,7 @@ $seamlessPlaceholderColor: #cdcdcd;
  * ----------------------------------------------------------
  */
 
+@import 'primeng';
 @import 'reading';
 @import 'project';
 @import 'emojionearea';
@@ -311,4 +312,37 @@ input[type=text].input-noborder, input[type=password].input-noborder, input[type
 
 .badge-info {
 	background-color: #ef832e;
+}
+
+.badge-button {
+	cursor: pointer;
+}
+
+// Pagination overrides
+.ui-paginator-first, .ui-paginator-last {
+	display: none !important;
+}
+
+.ui-paginator a.ui-state-disabled {
+	opacity: 0.2;
+	pointer-events: none;
+}
+
+.ui-paginator-page, 
+.ui-paginator-element {
+	&, .ui-paginator & {
+		color: $blue;
+		padding-left: 8px;
+		padding-right: 8px;
+		margin: 0px 4px;
+
+		&:hover, &:focus {
+			background: $light-gray;
+		}
+	}
+}
+
+.ui-paginator-page.ui-state-active {
+	border: 1px solid $blue;
+	color: $blue; 
 }

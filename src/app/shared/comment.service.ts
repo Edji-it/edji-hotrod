@@ -5,7 +5,7 @@ import 'rxjs/add/operator/toPromise';
 
 import { AuthService } from './auth.service'
 import { ProjectService, ReadingService, SocketService } from './';
-import { Angulartics2 } from 'angulartics2/dist'
+import { Angulartics2 } from 'angulartics2'
 
 @Injectable()
 export class CommentService {

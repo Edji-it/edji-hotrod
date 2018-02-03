@@ -94,9 +94,25 @@
     margin-bottom: 0px !important;
     border-bottom: 1px dashed #cdcdcd !important;
     overflow:visible;
-    min-height: 92px;
+    min-height: 115px;
     float: none;
     width: 100%;
+}
+
+.reading-access-icon {
+    float: right;
+    padding: 0 4px;
+
+    & i {
+        pointer-events: none;
+        border-radius: 50%;
+    }
+}
+
+.reading-data {
+	float: left;
+	width: 100%;
+    line-height: 30px;
 }
 
 .project-card {
@@ -146,6 +162,17 @@ button.new-reading-btn {
 
 .blockquote-footer {
     color: inherit;
+}
+
+.badge-subject {
+    display: inline-block;
+    color: #fff;
+    font-size: 10px;
+    height: 12px;
+    line-height: 12px;
+    background: #79b1f3;
+    text-transform:capitalize;
+    margin-right: 2px;
 }
 
 .version-card {

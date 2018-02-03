@@ -1,17 +1,18 @@
-import { Title } from '@angular/platform-browser';
-import { REPLServer } from 'repl';
-import { ActivatedRoute, Router, Params } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { Angulartics2 } from 'angulartics2';
+import { Title } from '@angular/platform-browser'
+import { REPLServer } from 'repl'
+import { ActivatedRoute, Router, Params } from '@angular/router'
+import { FormBuilder, FormGroup, Validators } from '@angular/forms'
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
+import { Angulartics2 } from 'angulartics2'
+import { IMultiSelectOption, IMultiSelectSettings } from 'angular-2-dropdown-multiselect'
 
-import { ReadingService } from '../shared/reading.service';
-import { ProjectService } from '../shared/project.service';
-import { UtilToolService } from '../shared/util-tool.service';
-import { AuthService } from '../shared';
+import { ReadingService } from '../shared/reading.service'
+import { ProjectService } from '../shared/project.service'
+import { UtilToolService } from '../shared/util-tool.service'
+import { AuthService } from '../shared'
 import { EdjiComment, EdjiQuestion, User } from '../shared/datatypes'
 import { ReadingShareObject } from './../shared/nav-bar'
-import * as Rangy from 'rangy';
+import * as Rangy from 'rangy'
 
 @Component({
     selector: 'new-reading-page',
@@ -53,19 +54,20 @@ export class NewReadingPage implements OnInit {
     };
 
     // Messages
-    private successAlert    : string = "Nice work! This reading draft was successfully saved!"
+    private successAlert : string = "Nice work! This reading draft was successfully saved!"
     private readingPlaceholder: string = 'Type or paste your reading...'
-    private error           : string = '' // Error message 
-    private alert           : string = ''
+    private error : string = '' // Error message 
+    private alert : string = ''
 
-    private versionId       : string = ''
-    private ownerId         : string
-    private copyId          : string = ''
-    private editorToolbarY  : number = 54
+    private versionId : string = ''
+    private ownerId : string
+    private copyId : string = ''
+    private copyCleanHeroMsg : boolean = false
+    private editorToolbarY : number = 54
     private editorToolbarHidden : boolean
-    private insertNode      : any
+    private insertNode : any
     private masterSelection : any
-    private currentUser     : User // User data of the current user.
+    private currentUser : User // User data of the current user.
 
     private static readonly EDITOR_TOOLBAR_Y = 54
 
@@ -114,6 +116,23 @@ export class NewReadingPage implements OnInit {
         }
     ]
     private guideStepNo: number = 1
+
+    private subjects: IMultiSelectOption[] = [
+        {id:'literature',name:'Literature'},
+        {id:'math',name:'Mathematics'},
+        {id:'science',name:'Science'},
+        {id:'geography',name:'Geography'},
+        {id:'history',name:'History'},
+        {id:'government',name:'Government'},
+        {id:'health',name:'Health/Physical Education'},
+        {id:'languages',name:'Foreign Languages'},
+        {id:'art',name:'Art'},
+        {id:'computer',name:'Computers/Technical'}
+    ]
+    private subjectDropSettings: IMultiSelectSettings = {
+        displayAllSelectedText: true,
+        dynamicTitleMaxItems: 4
+    }
     
     constructor(
         private _route: ActivatedRoute,
@@ -129,8 +148,10 @@ export class NewReadingPage implements OnInit {
     ) {
         this.readingForm = fb.group({
             title: [null, Validators.required],
-            source: [null, null]
-            // label: ['Group 1', Validators.required]
+            source: [null, null],
+            public: ['true'],
+            subjects: [[], Validators.required],
+            grade_levels: [[], Validators.required]
         });
 
         // Define the user object.
@@ -151,18 +172,24 @@ export class NewReadingPage implements OnInit {
         if (this.readingId) {
             this.getReading(this.readingId)
         } else if (this.copyId) {
-            this.getReading(this.copyId)
+            this.getReading(this.copyId, !this._auth.getUser().hero || !this._auth.getUser().hero.active)
         }
 
         this._title.setTitle('Edji | New Reading')
      }
 
-     private getReading(readingId: string) {
+     private getReading(readingId: string, stripHero?: boolean) {
 
         this._readings.get(readingId)
             .take(1)
             .subscribe(
                 data => {
+                    if (stripHero && data.questions && data.questions.length > 0) {
+                        // Clean out features which require Hero, and tell the user it happened
+                        data.html = data.html.replace(/\<\$question\$\>/g, '')
+                        data.questions = []
+                        this.copyCleanHeroMsg = true
+                    }
                     this.reading = data;
                     if (this.reading.html) {
                         if (this.reading.html.indexOf("<$question$>") !== -1) {
@@ -410,7 +437,7 @@ export class NewReadingPage implements OnInit {
         }
 
         // This would be better handled by formcontrols
-        if (!form.title || form.title.length < 1 || this.readingIsBlank || !questionsValid) {
+        if (!form.title || form.title.length < 1 || this.readingIsBlank || !questionsValid || (form.public == 'true' && (form.grade_levels.length < 1 || form.subjects.length < 1))) {
             this.addLoadingD = false
             this.addLoadingP = false
             this.error = 'Not quite, please check all the fields!'

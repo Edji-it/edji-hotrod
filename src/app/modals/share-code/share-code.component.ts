@@ -3,7 +3,7 @@ import { Project } from '../../shared/datatypes';
 import { Router } from '@angular/router';
 import { Component, EventEmitter, Input, OnInit, Output, OnDestroy } from '@angular/core';
 import { UtilToolService, ProjectService } from './../../shared'
-import { ActivatedRoute } from '@angular/router/src/router_state';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'share-code',

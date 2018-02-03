@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
-import { ActivatedRoute } from '@angular/router/src/router_state'
+import { ActivatedRoute } from '@angular/router'
 
 import { ProjectService } from './../../shared'
 
