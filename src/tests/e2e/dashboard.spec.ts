@@ -93,6 +93,12 @@ describe('Dashboard Page', () => {
 
             // Enter sample Reading into form
             newReading.titleInput.sendKeys(uniqueTitle);
+            // Select Grade Range
+            newReading.gradeTileK.click();
+            newReading.gradeTileU.click();
+            // Select Subject
+            newReading.subjectDropdown.click();
+            newReading.subjectFirstOption.click();
             newReading.contentInput.sendKeys(newReading.contentShortString);
             newReading.sourceInput.sendKeys(newReading.sourceString);
 

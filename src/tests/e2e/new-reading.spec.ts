@@ -106,6 +106,12 @@ describe('New Reading Page', () => {
 
         // Enter sample Reading into form, excluding title
         newReading.titleInput.clear();
+        // Select Grade Range
+        newReading.gradeTileK.click();
+        newReading.gradeTileU.click();
+        // Select Subject
+        newReading.subjectDropdown.click();
+        newReading.subjectFirstOption.click();
         newReading.contentInput.sendKeys(newReading.contentShortString);
         newReading.sourceInput.sendKeys(newReading.sourceString);
         // Make private to avoid needing grade levels and subjecst
@@ -162,6 +168,12 @@ describe('New Reading Page', () => {
 
         // Enter sample Reading into form, but clear group label
         newReading.titleInput.sendKeys(newReading.titleString);
+        // Select Grade Range
+        newReading.gradeTileK.click();
+        newReading.gradeTileU.click();
+        // Select Subject
+        newReading.subjectDropdown.click();
+        newReading.subjectFirstOption.click();
         newReading.contentInput.sendKeys(newReading.contentShortString);
         newReading.sourceInput.sendKeys(newReading.sourceString);
         // Make private to avoid needing grade levels and subjecst
@@ -324,6 +336,12 @@ describe('New Reading Page', () => {
 
             // Enter sample Reading into form
             newReading.titleInput.sendKeys(newReading.titleString);
+            // Select Grade Range
+            newReading.gradeTileK.click();
+            newReading.gradeTileU.click();
+            // Select Subject
+            newReading.subjectDropdown.click();
+            newReading.subjectFirstOption.click();
             newReading.contentInput.sendKeys(newReading.contentShortString);
             newReading.sourceInput.sendKeys(newReading.sourceString);
             // Make private to avoid needing grade levels and subjecst
