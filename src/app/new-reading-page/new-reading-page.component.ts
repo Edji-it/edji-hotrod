@@ -201,6 +201,8 @@ export class NewReadingPage implements OnInit {
                         //this.el.nativeElement.querySelector('#readingTitle').value = this.reading.title
                         this.readingForm.patchValue({
                             title: this.reading.title,
+                            subjects: this.reading.subjects,
+                            grade_levels: this.reading.grade_levels,
                             source: this.reading.source,
                         });
                         this.versionId = this.reading.version_id;
@@ -242,8 +244,8 @@ export class NewReadingPage implements OnInit {
                     focusNode = focusNode.parentNode
                 }
 
-                if (focusNode.parentNode && focusNode.parentNode.id !== 'angularMediumEditor' 
-                    && focusNode.parentNode.parentNode && focusNode.parentNode.parentNode.id !== 'angularMediumEditor') {
+                if (focusNode.parentNode && focusNode.parentNode.contentEditable !== 'true' 
+                    && focusNode.parentNode.parentNode && focusNode.parentNode.parentNode.contentEditable !== 'true') {
                     this.editorToolbarHidden = true
                 } else {
                     this.editorToolbarHidden = false
@@ -448,10 +450,16 @@ export class NewReadingPage implements OnInit {
         this.words = []
 
         // Process reading html into useful Words Array
-        let editorHtml = this.el.nativeElement.querySelectorAll('#angularMediumEditor')
+        let editors = this.el.nativeElement.querySelectorAll('#angularMediumEditor')
         let concatHtml = ''
+        // Loop through Medium-Editor elements, and get child elements???
 
-        for (let i=0; i<editorHtml.length; i++) {
+        for (let i=0; i<editors.length; i++) {
+            let contentEl = editors[i]
+            // Make sure we aren't copying parts of the medium-editor
+            while (contentEl.childNodes.length == 1 && contentEl.firstChild.classList.contains('medium-editor-element')) {
+                contentEl = contentEl.firstChild
+            } 
             // Add question "word"
             if (this.readingHtml[i].question) {
                 // Concatenate the 
@@ -468,7 +476,7 @@ export class NewReadingPage implements OnInit {
             }
 
             // Concatenate the html to 1 string [not currently using with current config]
-            concatHtml += editorHtml[i].innerHTML
+            concatHtml += contentEl.innerHTML
             if (!document.querySelector('#renderedReading')){
                 let div1 = document.createElement('div')
                 div1.setAttribute('id','renderedReading')
@@ -482,7 +490,7 @@ export class NewReadingPage implements OnInit {
             let rendered: any = document.querySelector('#renderedReading')
             let renderHtml
             // rendered['innerHTML'] = this.readingHtml[i].text
-            rendered['innerHTML'] = editorHtml[i].innerHTML
+            rendered['innerHTML'] = contentEl.innerHTML
             renderHtml = document.querySelector('#renderedReading')
 
             // Reset line break detection
