@@ -244,13 +244,22 @@ export class NewReadingPage implements OnInit {
                     focusNode = focusNode.parentNode
                 }
 
-                if (focusNode.parentNode && focusNode.parentNode.contentEditable !== 'true' 
-                    && focusNode.parentNode.parentNode && focusNode.parentNode.parentNode.contentEditable !== 'true') {
-                    this.editorToolbarHidden = true
-                } else {
-                    this.editorToolbarHidden = false
+                // if (focusNode.parentNode && focusNode.parentNode.contentEditable !== 'true' 
+                //     && focusNode.parentNode.parentNode && focusNode.parentNode.parentNode.contentEditable !== 'true') {
+                //     this.editorToolbarHidden = true
+                // } else {
+                //     this.editorToolbarHidden = false
+                // }
+                this.editorToolbarHidden = true
+                let editors = document.querySelectorAll('medium-editor')
+                for (let i = 0; i < editors.length; i++) {
+                    if (editors[i] && editors[i].contains(focusNode)) {
+                        this.editorToolbarHidden = false
+                    }
                 }
-
+                if (focusNode && focusNode.className.indexOf('medium-editor-element') > -1) {
+                    focusNode = focusNode.childNodes[0]
+                }
                 this.insertNode = focusNode
                 this.editorToolbarY = NewReadingPage.EDITOR_TOOLBAR_Y > focusNode.offsetTop ? NewReadingPage.EDITOR_TOOLBAR_Y : focusNode.offsetTop
             } else {
@@ -635,6 +644,7 @@ export class NewReadingPage implements OnInit {
      * Adds a question block to the new reading and then adds in a new medium editor
      */
     private addQuestion(insertHtml?: string, insertPos?: number) {
+        console.log(insertHtml,insertPos )
         let answer_types = this._auth.getAllowedCommentMediaTypes()
         let question = <EdjiQuestion>{
             prompt: '',
@@ -682,8 +692,16 @@ export class NewReadingPage implements OnInit {
             document.dispatchEvent(event)
 
             // Create a new block and slice it in.. then add the stored text to that block
-            let insertPos = Number(this.insertNode.parentNode.parentNode.getAttribute('rIndex')) + 1
-
+            let insertPos = 1
+            let refNode = this.insertNode.parentNode
+            for (let i = 0; i < 5; i++) {
+                if (refNode.getAttribute('rindex')) {
+                    insertPos = Number(refNode.getAttribute('rindex')) + 1
+                    // Found it
+                    i = 5
+                }
+                refNode = refNode.parentNode
+            }
             // Make the html fragment a real piece of html!
             var div = document.createElement('div')
             div.appendChild( tmpHtml.cloneNode(true) )

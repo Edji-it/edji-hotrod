@@ -88,7 +88,7 @@ nav-bar([pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'", [canPublish]
                 (keyup)="contentChange($event)",
                 (mouseup)="contentChange($event)",
                 [ngClass]="[i<readingHtml.length - 1 ? 'medium-editor__new-question' : '']",
-                [attr.rIndex]="i")
+                [attr.rindex]="i")
             #errorContent.alert.alert-warning(*ngIf="submitted && readingIsBlank") Please give your Reading some text!
             //- Editor Insert Options
                 - Insert a Picture or Pdf
