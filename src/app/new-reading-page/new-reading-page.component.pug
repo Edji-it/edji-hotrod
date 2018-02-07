@@ -24,15 +24,15 @@ nav-bar([pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'", [canPublish]
           //- Public Flag
           .form-group
             label Make Public
-              p.sub-label Share this Reading with other teachers looking for lessons.
+              p.sub-label Share this Reading with other teachers looking for lessons. Public
             .input-group
               .form-check
                 //- Public option
-                label.form-check-label.form-check-btn(
+                label#readingMakePublic.form-check-label.form-check-btn(
                     [class.active]="readingForm.controls['public'].value == 'true'",
                     title="Allow anyone to find this Reading in Discover"
                   )
-                  input#readingMakePublic.form-check-input(
+                  input.form-check-input(
                       type="radio", 
                       name="publicFlag", 
                       value="true", 
@@ -41,11 +41,11 @@ nav-bar([pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'", [canPublish]
                     )
                   span([innerHTML]="':earth_americas: Public' | emojione")
                 //- Private option
-                label.form-check-label.form-check-btn(
+                label#readingMakePrivate.form-check-label.form-check-btn(
                     [class.active]="readingForm.controls['public'].value == 'false'",
                     title="Hide this Reading from Discover"
                   )
-                  input#readingMakePrivate.form-check-input(
+                  input.form-check-input(
                       type="radio",
                       name="publicFlag", 
                       value="false",
@@ -53,14 +53,14 @@ nav-bar([pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'", [canPublish]
                     )
                   span([innerHTML]="':lock: Private' | emojione")
           //- Grade level range selector
-          .form-group
+          .form-group(*ngIf="readingForm.controls['public'].value == 'true'")
             label Grade Level
               p.sub-label Select which grade levels this reading targets. (Click to select start of range, and click again to select end of range!)
             grade-selector(formControlName="grade_levels")
             #errorTitle.alert.alert-warning.mt-2(*ngIf="readingForm.controls['grade_levels'].hasError('required') && (readingForm.controls['grade_levels'].dirty || submitted)") 
               | Please select the range of grade levels this Reading is best suited for.
           //- Subject Selector
-          .form-group
+          .form-group(*ngIf="readingForm.controls['public'].value == 'true'")
             label Subject
             .input-group
             ss-multiselect-dropdown(id="subjectDropdown",[options]="subjects", formControlName="subjects", [settings]="subjectDropSettings")
