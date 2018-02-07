@@ -60,13 +60,15 @@ describe('Reading Questions Tests', () => {
         /* Test: Add a reading with questions
         * 
         */
-        it('should add reading when all fields are filled and submitted', () => {
+        it('should add reading with questions when all fields are filled and submitted', () => {
             newReading.getPage()
             // Wait for New Reading page
             browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000, "never found the new reading title");
 
             // Enter sample Reading into form
             newReading.titleInput.sendKeys(newReading.qTitleString);
+            // Make private to avoid needing grade levels and subjecst
+            newReading.privateButton.click();
             newReading.contentInput1.sendKeys(newReading.qContentString1);
 
             // Add the 1st question after all text
