@@ -10,4 +10,5 @@ span(*ngIf="user._id != userId")
             (click)="unfollowUser(userId)", 
             *ngIf="isFollowing()"
         ) 
-        | Following
+        span.static Following
+        span.on-hover Unfollow

@@ -68,10 +68,10 @@ describe('New Reading Page', () => {
 
         // Enter sample Reading into form
         newReading.titleInput.sendKeys(newReading.titleString);
-        newReading.contentInput.sendKeys(newReading.contentString);
-        newReading.sourceInput.sendKeys(newReading.sourceString);
         // Make private to avoid needing grade levels and subjecst
         newReading.privateButton.click();
+        newReading.contentInput.sendKeys(newReading.contentString);
+        newReading.sourceInput.sendKeys(newReading.sourceString);
 
         // Submit New Reading
         browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "save reading button never became clickable after content add");
@@ -106,10 +106,10 @@ describe('New Reading Page', () => {
 
         // Enter sample Reading into form, excluding title
         newReading.titleInput.clear();
+        // Make private to avoid needing grade levels and subjects
+        newReading.privateButton.click();
         newReading.contentInput.sendKeys(newReading.contentShortString);
         newReading.sourceInput.sendKeys(newReading.sourceString);
-        // Make private to avoid needing grade levels and subjecst
-        newReading.privateButton.click();
 
         // Submit New Reading
         browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "save reading button never became clickable after content add");
@@ -162,10 +162,10 @@ describe('New Reading Page', () => {
 
         // Enter sample Reading into form, but clear group label
         newReading.titleInput.sendKeys(newReading.titleString);
-        newReading.contentInput.sendKeys(newReading.contentShortString);
-        newReading.sourceInput.sendKeys(newReading.sourceString);
         // Make private to avoid needing grade levels and subjecst
         newReading.privateButton.click();
+        newReading.contentInput.sendKeys(newReading.contentShortString);
+        newReading.sourceInput.sendKeys(newReading.sourceString);
 
         browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "save reading button never became clickable after content add");
         newReading.addButton.click();
@@ -216,6 +216,8 @@ describe('New Reading Page', () => {
 
             // Complete rest of reading
             newReading.titleInput.sendKeys(newReading.titleImageString);
+            // Make private to avoid needing grade levels and subjecst
+            newReading.privateButton.click();
 
             // Submit New Reading
             browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "add new reading button never became clickable");
@@ -285,6 +287,8 @@ describe('New Reading Page', () => {
 
             // Complete rest of reading
             newReading.titleInput.sendKeys(newReading.titleImageString);
+            // Make private to avoid needing grade levels and subjecst
+            newReading.privateButton.click();
 
             // Submit New Reading
             browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "login button never became clickable after login form entry");
@@ -324,10 +328,10 @@ describe('New Reading Page', () => {
 
             // Enter sample Reading into form
             newReading.titleInput.sendKeys(newReading.titleString);
-            newReading.contentInput.sendKeys(newReading.contentShortString);
-            newReading.sourceInput.sendKeys(newReading.sourceString);
             // Make private to avoid needing grade levels and subjecst
             newReading.privateButton.click();
+            newReading.contentInput.sendKeys(newReading.contentShortString);
+            newReading.sourceInput.sendKeys(newReading.sourceString);
 
             // Submit New Draft for Reading
             browser.wait(EC.elementToBeClickable(newReading.draftButton), 5000, "add draft button never became clickable after form entry");
@@ -339,6 +343,7 @@ describe('New Reading Page', () => {
             browser.wait(EC.presenceOf(newReading.successAlert), 5000, "never saw the success alert");
 
             // Add more text
+            newReading.privateButton.click();
             newReading.contentInput.sendKeys(newReading.contentShortStringB);
 
             // Submit New Reading
