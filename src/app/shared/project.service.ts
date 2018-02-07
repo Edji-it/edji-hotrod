@@ -68,6 +68,10 @@ export class ProjectService {
     public commentPaneStateSubj: Subject<boolean> = new Subject<boolean>()
     public commentPaneState: Observable<boolean> = this.commentPaneStateSubj.asObservable()
 
+    // Broadcast rendering the lastword element if firefeed view image reference doesn't have the image rendered yet
+    public lastWordUpdateSubj: Subject<number> = new Subject<number>()
+    public lastWordUpdateState: Observable<number> = this.lastWordUpdateSubj.asObservable()
+
     constructor(
         private http: Http, 
         private _auth: AuthService, 

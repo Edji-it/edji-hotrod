@@ -1,3 +1,4 @@
+doctype html
 //-Annotator Component
     
     Provides:
@@ -95,10 +96,11 @@
         article#annotatorContent.content.active-content.pt-4(
             (mouseup)="showCommentOptions($event)",
             (touchend)="showCommentOptions($event)",
-            (clickOutside)="hideCommentOptions()"
+            (clickOutside)="hideCommentOptions()",
+            #article
         )
             //- Word Loop: reading.words is one big array of individual "words", which can also be puncuation or media
-            <span #words class="w" *ngFor="let w of reading.words; let i = index" [ngClass]="[ w && w.styles ? w.styles.join(' ') : '', getHighlightClass(i) ]" [attr.index]="i">
+            <span #words class="w" *ngFor="let w of reading.words | slice:0:lastWord ; let i = index" [ngClass]="[ w && w.styles ? w.styles.join(' ') : '', getHighlightClass(i) ]" [attr.index]="i">
                 //- Comment Loop: Display comments if they exist for this Word
                 edji-comment(
                     *ngFor="let comment of commentsByIndex[i]; let ci = index",

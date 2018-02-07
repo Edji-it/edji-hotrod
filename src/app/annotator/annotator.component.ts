@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core'
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, QueryList, ViewChildren, HostListener, ViewChild } from '@angular/core'
 import { Subscription } from 'rxjs/Rx'
 import * as Rangy from 'rangy'
 import { Angulartics2 } from 'angulartics2'
@@ -19,7 +19,6 @@ declare var window: any
     styleUrls: ['annotator.component.scss']
 })
 export class AnnotatorComponent implements OnInit, OnDestroy {
-    
     /*
         Annotator Component
         Last Mod: 5 Aug 2017 - Josh Kyburz
@@ -37,9 +36,12 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
     @ViewChildren(CommentComponent) commentComponents: QueryList<CommentComponent>
     @ViewChildren('words') wordEls
+    @ViewChild('article') articleEl: ElementRef
 
     private reading: Reading = <Reading>{}
     private project: Project = <Project>{}
+    private lastWord: number = 750
+    private lastWordImageOffset: number = 100
     
     private commentsByIndex : EdjiComment[][] = []
     private focusOverride   : boolean = false
@@ -141,8 +143,31 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // }))
         this.window = window
     }
+
+    /**
+     * This renders the next 400 words whenever the window gets a certain amount away from the bottom of the view,
+     *  which is determined by distanceFromViewport
+     */
+    @HostListener('window:scroll', ['$event'])
+    renderLastWord(event) {
+        let bottomOfArticle = this.articleEl.nativeElement.offsetTop + this.articleEl.nativeElement.clientHeight
+        let bottomOfView = window.innerHeight + document.scrollingElement.scrollTop
+        let distanceFromViewport = 500
+
+        if (bottomOfArticle - distanceFromViewport < bottomOfView) {
+            this.lastWord += 400
+        }
+        // Make sure we broadcast lastWord position out to listening components
+        this._projects.lastWordUpdateSubj.next(this.lastWord)
+
+        // Re-run the line positions so comment avatars show up in the right spot
+        this.setLinePositions()
+    }
     
     ngOnInit() {
+        // Make sure we broadcast lastWord position out to listening components
+        this._projects.lastWordUpdateSubj.next(this.lastWord)
+
         this.annotatorPaper = document.getElementById('emojiAnnotator')
         this.annotatorContent = document.getElementById('annotatorContent')
 
@@ -262,6 +287,15 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 this.project.heat_vision = heatToggle.heatVision.all
                 this.setLinePositions()
             })
+        )
+
+        // Subscribe to updates on where to move the lastWord for the infinity scroll
+        this.subscriptions.push(
+            this._projects.lastWordUpdateState.subscribe(
+                (lastWord) => {
+                    this.lastWord = lastWord + this.lastWordImageOffset
+                }
+            )
         )
 
         // After comments are added to the array
