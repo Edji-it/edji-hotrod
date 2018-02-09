@@ -24,7 +24,9 @@
           class="text-comment-input question-input" 
           [(ngModel)]="question.prompt" 
           (change)="questionUpdate.emit(question)"
+          (keyup)="textAreaAdjust($event, promptAutoSize)"
           (mousedown)="$event.stopPropagation()"></textarea>
+        <div #promptAutoSize class="text-comment-input question-input" style="opacity: 0; pointer-events: none; position: absolute; height:auto; width:auto" [innerHtml]="question.prompt"></div>
         <div class="alert alert-warning" *ngIf="question && question.new && question.prompt.length < 1">Don't forget to ask your question!</div>
       </div>
 

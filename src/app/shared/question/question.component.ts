@@ -199,6 +199,12 @@ export class QuestionComponent implements OnInit, OnDestroy {
     this.questionPos = this.question.question_number - 1
   }
 
+  private textAreaAdjust(el, height) {
+    let elHeight = height.offsetHeight * 1.2
+    let element = el.srcElement
+    element.style.height = elHeight+"px"
+  }
+
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe() })
   }
