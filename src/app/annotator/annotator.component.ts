@@ -121,9 +121,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     private window: any
     private audioSupportError: boolean = false
 
-    private scrollSubject = new Subject<any>();
-    private scrollObservable = this.scrollSubject.asObservable().throttleTime(400);
-
     constructor(
         private element: ElementRef,
         private _readings: ReadingService,
@@ -153,7 +150,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      */
     @HostListener('window:scroll', ['$event'])
     scrollUpdate(event) {
-        this.scrollSubject.next(event)
+        this.onScrollUpdate()
     }
     
     ngOnInit() {
@@ -165,10 +162,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         
         this.subscriptions
             .push(
-                // Debounced scroll event
-                this.scrollObservable.subscribe(
-                    () => { this.onScrollUpdate() }
-                ),
                 // Set the current user every time it changes 
                 this._auth.getCurrentUser().subscribe((user) => {
                     this.user = user
@@ -321,12 +314,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         let bottomOfArticle = this.articleEl.nativeElement.offsetTop + this.articleEl.nativeElement.clientHeight
         let bottomOfView = window.innerHeight + document.scrollingElement.scrollTop
         let distanceFromViewport = 500
-
         if (bottomOfArticle - distanceFromViewport < bottomOfView) {
-            this.lastWord += 400
+            this.lastWord += 800
             // Make sure we broadcast lastWord position out to listening components
             this._projects.lastWordUpdateSubj.next(this.lastWord)
-
             // Re-run the line positions so comment avatars show up in the right spot
             this.setLinePositions()
         }

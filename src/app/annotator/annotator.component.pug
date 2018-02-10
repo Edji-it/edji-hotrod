@@ -162,6 +162,8 @@ doctype html
                 )
                 //- end Word span ".w"
             </span>
+        .row.mb-4(*ngIf="lastWord < reading.words.length")
+            .loading(style="margin: 0 auto;")
 //- End of Reading options
 .button__row
     button.btn.btn-secondary(
