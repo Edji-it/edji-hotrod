@@ -104,7 +104,7 @@ doctype html
                 //- Comment Loop: Display comments if they exist for this Word
                 edji-comment(
                     *ngFor="let comment of commentsByIndex[i]; let ci = index",
-                    [class.hidden]="(!project.heat_vision && user._id !== project.teacher_id._id) && comment.user_id !== user._id && comment.user_id !== project.teacher_id._id",
+                    [class.hidden]="!isCommentVisible(comment)",
                     [class.owner]="comment.user_id === project.teacher_id._id",
                     [comment]="comment",
                     (mouseenter)='focusHighlight(comment.start, comment.end, comment.loc)',
@@ -144,7 +144,7 @@ doctype html
                     //- Image Hotspots: Show hotspot for each comment
                     .hotspot(
                         *ngFor="let comment of commentsByIndex[i]",
-                        [class.hidden]="(!project.heat_vision && user._id !== project.teacher_id._id) && comment.user_id !== user._id && comment.user_id !== project.teacher_id._id",
+                        [class.hidden]="!isCommentVisible(comment)",
                         [style.top]="comment['loc'] ? comment['loc']['y'] + '%' : '0%'",
                         [style.left]="comment['loc'] ? comment['loc']['x'] + '%' : '0%'"
                     )

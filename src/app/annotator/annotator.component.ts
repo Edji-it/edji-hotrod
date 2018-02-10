@@ -425,6 +425,14 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         }
     }
 
+    isCommentVisible(comment: any) : boolean {
+        // If current user is Owner/Teacher or heat vision is on
+        let heatVisible = this.project.heat_vision || this.user._id == this.project.teacher_id
+        // Otherwise visible if Owner/Teacher comment or current user's comment
+        let alwaysVisible = comment.user_id == this.user._id || comment.user_id == this.project.teacher_id
+        return heatVisible || alwaysVisible
+    }
+
     updateImageHeights(): void {
         let images: any[] = Array.from(document.querySelectorAll('#annotatorContent .img-wrap img'))
         for (let i = 0; i < images.length; i++) {
