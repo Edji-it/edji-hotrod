@@ -54,9 +54,38 @@
       style="float:right;margin-left:5px;"
     )
       i.icon.icon-link
-    .reading-access-icon([attr.title]="reading.public ? 'Public Reading' : 'Private Reading'")
+    .reading-access-icon([attr.title]="reading.public ? 'Public Reading' : 'Private Reading'", (click)="togglePublicFlag=!togglePublicFlag")
       i(*ngIf="reading.public", [innerHTML]="':earth_americas:' | emojione")
       i(*ngIf="!reading.public", [innerHTML]="':lock:' | emojione")
+      span.tooltipbody([class.show]="togglePublicFlag", [class.no-link]="!reading.source")
+        .tooltiptitle
+          | Make Reading Public?
+        .tooltiptext.block-with-text
+          //- Public option
+          label#readingMakePublic.form-check-label.form-check-btn(
+              [class.active]="",
+              title="Allow anyone to find this Reading in Discover"
+            )
+            input.form-check-input(
+                type="radio", 
+                name="publicFlag", 
+                value="true", 
+                [formControl]="",
+                checked
+              )
+            span([innerHTML]="':earth_americas: Public' | emojione")
+          //- Private option
+          label#readingMakePrivate.form-check-label.form-check-btn(
+              [class.active]="",
+              title="Hide this Reading from Discover"
+            )
+            input.form-check-input(
+                type="radio",
+                name="publicFlag", 
+                value="false",
+                [formControl]=""
+              )
+            span([innerHTML]="':lock: Private' | emojione")
     div(*ngIf="reading.subjects && reading.subjects.length > 0", style="float:right; margin-left:5px;")
       span.badge-pill.badge-secondary.badge-subject(*ngFor="let subject of reading.subjects") {{subject}}
 

@@ -350,3 +350,24 @@ input[type=text].input-noborder, input[type=password].input-noborder, input[type
 	border: 1px solid $blue;
 	color: $blue; 
 }
+
+.tooltiptitle {
+  display: inline-block;
+  color: #ECA736;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+
+  &.inline-center {
+    line-height: 25px;
+    margin-bottom: 0px;
+  }
+}
+
+.tooltipbody {
+  font-size: 11px;
+}
+
+.tooltiptitle::after:not( .tooltipaudio) {
+  content: "\A";
+  white-space: pre;
+}

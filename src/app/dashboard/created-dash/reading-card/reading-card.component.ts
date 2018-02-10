@@ -28,6 +28,7 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
   private showAddModal    : boolean = false;
   private showDeleteReadingModal : boolean = false;
   private showDeleteProjectModal : boolean = false;
+  private togglePublicFlag: boolean = false
 
   private versionHeight = 50;
 
