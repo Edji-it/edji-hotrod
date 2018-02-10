@@ -68,6 +68,10 @@ export class ProjectService {
     public commentPaneStateSubj: Subject<boolean> = new Subject<boolean>()
     public commentPaneState: Observable<boolean> = this.commentPaneStateSubj.asObservable()
 
+    // Broadcast rendering the lastword element if firefeed view image reference doesn't have the image rendered yet
+    public lastWordUpdateSubj: Subject<number> = new Subject<number>()
+    public lastWordUpdateState: Observable<number> = this.lastWordUpdateSubj.asObservable()
+
     constructor(
         private http: Http, 
         private _auth: AuthService, 
@@ -433,7 +437,8 @@ export class ProjectService {
                         updatedProject.comments = comments
                     }
                     
-                    this.project = updatedProject
+                    // this.project =
+                    Object.assign(this.project, updatedProject)
                     
                     this.currentProjectSource.next(this.project)
                     return this.project
@@ -634,8 +639,13 @@ export class ProjectService {
         let len2 = commentsArray.length
         for (let i = 0; i < len2; i++) {
             let comment = commentsArray[i]
-            let heatVisionOn = (!this.project.heat_vision && this.user._id !== this.project.teacher_id) && comment.user_id !== this.user._id && comment.user_id !== this.project.teacher_id
-            if (comment && !comment.reply_to && !comment.questionId && comment.lineY && !heatVisionOn) {
+            
+            // If user is current reading Owner/Teacher or Heat Vision is on, show all comments
+            let heatVisible = (this.project.heat_vision || this.user._id == this.project.teacher_id) 
+            // Your own comments and the Owner/Teacher's comments are ALWAYS visible
+            let alwaysVisible = comment.user_id == this.user._id || comment.user_id == this.project.teacher_id
+
+            if (comment && !comment.reply_to && !comment.questionId && comment.lineY && (heatVisible || alwaysVisible)) {
                 // lineY is determined by each individual CommentComponent
                 let lineY = comment.lineY
                 // Push the comment into commentByPos based on the lineY number

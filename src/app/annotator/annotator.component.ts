@@ -1,6 +1,6 @@
-import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core'
-import { Subscription } from 'rxjs/Rx'
-import * as Rangy from 'rangy'
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, QueryList, ViewChildren, HostListener, ViewChild } from '@angular/core'
+import { Subject, Subscription } from 'rxjs/Rx';
+import * as Rangy from 'rangy';
 import { Angulartics2 } from 'angulartics2'
 // import { HotkeysService, Hotkey } from 'angular2-hotkeys'
 
@@ -19,7 +19,6 @@ declare var window: any
     styleUrls: ['annotator.component.scss']
 })
 export class AnnotatorComponent implements OnInit, OnDestroy {
-    
     /*
         Annotator Component
         Last Mod: 5 Aug 2017 - Josh Kyburz
@@ -37,9 +36,12 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
     @ViewChildren(CommentComponent) commentComponents: QueryList<CommentComponent>
     @ViewChildren('words') wordEls
+    @ViewChild('article') articleEl: ElementRef
 
     private reading: Reading = <Reading>{}
     private project: Project = <Project>{}
+    private lastWord: number = 750
+    private lastWordImageOffset: number = 100
     
     private commentsByIndex : EdjiComment[][] = []
     private focusOverride   : boolean = false
@@ -141,64 +143,71 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // }))
         this.window = window
     }
+
+    /**
+     * This renders the next 400 words whenever the window gets a certain amount away from the bottom of the view,
+     *  which is determined by distanceFromViewport
+     */
+    @HostListener('window:scroll', ['$event'])
+    scrollUpdate(event) {
+        this.onScrollUpdate()
+    }
     
     ngOnInit() {
+        // Make sure we broadcast lastWord position out to listening components
+        this._projects.lastWordUpdateSubj.next(this.lastWord)
+
         this.annotatorPaper = document.getElementById('emojiAnnotator')
         this.annotatorContent = document.getElementById('annotatorContent')
-
-        /** Set the current user every time it changes */
-        this.subscriptions.push(
-            this._auth.getCurrentUser().subscribe((user) => {
-                this.user = user
-            })
-        )
-
-        // Get Reading via Observable
-        this.subscriptions.push(
-            this._readings.currentReading.subscribe(
-                reading => {
-                    this.reading = reading
-                    if (this.reading && this.reading.words && this.reading.words[0]===null) {
-                        this.reading.words.splice(0,1)
-                    }
-                    this.updateMetaTags()
-                    if (reading.questions) {
-                        this.updateQuestionNumbers(reading.questions)
-                    }
-                },
-                error => {
-                    console.error(error)
-                }
-            )
-        )
-
-        // Get Project via Observable
-        this.subscriptions.push( this._projects.currentProject.subscribe(
-            (project) => {
-                if (project) {
-                    this.project = project
-                    this.setLinePositions()
-                    // Check if audio is supported
-                    if (this.project.types.indexOf('audio') > -1 && !this._audio.isSupported()) {
-                        this.audioSupportError = true
-                        // if audio is not supported, let analytics know
-                        this.angulartics.eventTrack.next({ action: 'audioSupport', properties: { category: 'heroFeature', label: 'failure' }})
-                    }
-                    this.directCommentOptions = []
-                    for (let i = 0; i < this.project.types.length; i++) {
-                        // Ignore comment types that can't be made on a word
-                        // - add other types not display in text-options to the array below
-                        if (['reply'].indexOf(this.project.types[i]) < 0) {
-                            this.directCommentOptions.push(this.project.types[i])
+        
+        this.subscriptions
+            .push(
+                // Set the current user every time it changes 
+                this._auth.getCurrentUser().subscribe((user) => {
+                    this.user = user
+                }), 
+                // Get Reading via Observable
+                this._readings.currentReading.subscribe(
+                    reading => {
+                        this.reading = reading
+                        if (this.reading && this.reading.words && this.reading.words[0]===null) {
+                            this.reading.words.splice(0,1)
                         }
+                        this.updateMetaTags()
+                        if (reading.questions) {
+                            this.updateQuestionNumbers(reading.questions)
+                        }
+                    },
+                    error => {
+                        console.error(error)
                     }
-                }
-            },
-            (error) => {
-                console.error(error)
-            }
-        ) )
-
+                ),
+                // Get Project from project service
+                this._projects.currentProject.subscribe(
+                    (project) => {
+                        if (project) {
+                            this.project = project
+                            this.setLinePositions()
+                            // Check if audio is supported
+                            if (this.project.types.indexOf('audio') > -1 && !this._audio.isSupported()) {
+                                this.audioSupportError = true
+                                // if audio is not supported, let analytics know
+                                this.angulartics.eventTrack.next({ action: 'audioSupport', properties: { category: 'heroFeature', label: 'failure' }})
+                            }
+                            this.directCommentOptions = []
+                            for (let i = 0; i < this.project.types.length; i++) {
+                                // Ignore comment types that can't be made on a word
+                                // - add other types not display in text-options to the array below
+                                if (['reply'].indexOf(this.project.types[i]) < 0) {
+                                    this.directCommentOptions.push(this.project.types[i])
+                                }
+                            }
+                        }
+                    },
+                    (error) => {
+                        console.error(error)
+                    })
+            )
         /** Run-once logic to initialize the comment-based arrays and stats */
         let processedCommentData = this._projects.processComments(this.project)
         this.commentsByIndex = processedCommentData.commentsByIndex
@@ -264,6 +273,15 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             })
         )
 
+        // Subscribe to updates on where to move the lastWord for the infinity scroll
+        this.subscriptions.push(
+            this._projects.lastWordUpdateState.subscribe(
+                (lastWord) => {
+                    this.lastWord = lastWord + this.lastWordImageOffset
+                }
+            )
+        )
+
         // After comments are added to the array
         // this.updateAllLineCounts()
         this.updateImageHeights()
@@ -292,6 +310,18 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.subscriptions.forEach((sub) => { sub.unsubscribe() })
     }
     
+    private onScrollUpdate() : void {
+        let bottomOfArticle = this.articleEl.nativeElement.offsetTop + this.articleEl.nativeElement.clientHeight
+        let bottomOfView = window.innerHeight + document.scrollingElement.scrollTop
+        let distanceFromViewport = 500
+        if (bottomOfArticle - distanceFromViewport < bottomOfView) {
+            this.lastWord += 800
+            // Make sure we broadcast lastWord position out to listening components
+            this._projects.lastWordUpdateSubj.next(this.lastWord)
+            // Re-run the line positions so comment avatars show up in the right spot
+            this.setLinePositions()
+        }
+    }
 
     // Updates OGP
     private updateMetaTags() : void {
@@ -384,6 +414,14 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             this.optionsShow = false
             this.imageHotspotPlaceholder.preview = false
         }
+    }
+
+    isCommentVisible(comment: any) : boolean {
+        // If current user is Owner/Teacher or heat vision is on
+        let heatVisible = this.project.heat_vision || this.user._id == this.project.teacher_id
+        // Otherwise visible if Owner/Teacher comment or current user's comment
+        let alwaysVisible = comment.user_id == this.user._id || comment.user_id == this.project.teacher_id
+        return heatVisible || alwaysVisible
     }
 
     updateImageHeights(): void {

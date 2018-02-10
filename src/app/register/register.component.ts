@@ -76,7 +76,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.userCopy = new Copy().getUserCopy()
 
     this.registerForm = _fb.group({
-      username: [null, Validators.required],
+      username: [null, Validators.compose([Validators.required, this.usernameValidator])],
       fullname: [null, Validators.required],
       email: [null, Validators.compose([Validators.required, this.emailValidator])],
       password: [null, Validators.compose([Validators.required, Validators.minLength(6)])],
@@ -113,8 +113,15 @@ export class RegisterComponent implements OnInit, OnDestroy {
    * @returns error which should be assigned to the email input
    */
   private emailValidator(control: FormControl): any {
+    // If you change the RegExp for the email validator here, change it on the username validator as well
     let emailRe: RegExp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
     return emailRe.test(control.value) ? null : { 'emailIncorrect': true }
+  }
+
+  private usernameValidator(control: FormControl): any {
+    // If you change the RegExp for the username validator here, change it on the email validator as well
+    let usernameRe: RegExp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+    return !usernameRe.test(control.value) ? null : { 'usernameIncorrect': true }
   }
 
   /** Makes call to register the user */

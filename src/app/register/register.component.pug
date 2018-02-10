@@ -19,6 +19,7 @@ nav-bar
           label(for="usernameInput") Username
           input#usernameInput(type="text", [formControl]="registerForm.controls['username']", tabindex="0", [placeholder]="userCopy.username")
           div#msgUsernameRequired.alert.alert-info(*ngIf="registerForm.controls['username'].hasError('required')") Enter a unique username! It should not contain spaces.
+          #msgUsernameIncorrect.alert.alert-info(*ngIf="registerForm.controls['username'].hasError('usernameIncorrect') && registerForm.controls['username'].dirty") Your username cannot be an email address...
         .form-group
           label(for="fullnameInput") Full Name
           input#fullnameInput(type="text", [formControl]="registerForm.controls['fullname']", tabindex="0", [placeholder]="userCopy.fullname")
