@@ -437,7 +437,8 @@ export class ProjectService {
                         updatedProject.comments = comments
                     }
                     
-                    this.project = updatedProject
+                    // this.project =
+                    Object.assign(this.project, updatedProject)
                     
                     this.currentProjectSource.next(this.project)
                     return this.project
