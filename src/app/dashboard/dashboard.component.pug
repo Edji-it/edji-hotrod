@@ -1,0 +1,20 @@
+nav-bar([showDashboardOptions]="true")
+.dashboard-toolbar
+  a.tab-2.h1((click)="mobileShowJoined=true", [class.active]="mobileShowJoined") Joined
+  a.tab-2.h1((click)="mobileShowJoined=false", [class.active]="!mobileShowJoined") Created
+//- Dashboard uses the *fluid* container, for maximum space use
+.container-fluid.dashboard-container
+  .row
+    .col-md-6.pb-5.large-gutter.dashboard__container--iPadwidth([class.mnHide]="!mobileShowJoined")
+      edji-joined-dash
+    .col-md-6.large-gutter.mnActive.dashboard__container--iPadwidth([class.mnHide]="mobileShowJoined")
+      edji-created-dash
+.fixed-btn-row--SE
+  tutorial-box.hidden-sm-down(
+    [tutorialName]="'newReading'",
+    [pageObjs]="toolTipsContent", 
+    [pager]="toolTipStepNo", 
+    (pageChange)="toolTipStepNo = $event"
+  )
+  edji-feedback
+hot-user-details-update([showModal]="showUserDetailsModal", (closeModal)="showUserDetailsModal = false")

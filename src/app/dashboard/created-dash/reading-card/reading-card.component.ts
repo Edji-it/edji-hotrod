@@ -6,7 +6,7 @@ import { Component, Input, Output, OnDestroy, OnInit, EventEmitter } from '@angu
 
 @Component({
   selector: 'hot-reading-card',
-  templateUrl: 'reading-card.component.html',
+  templateUrl: 'reading-card.component.pug',
   styleUrls: ['./reading-card.component.scss']
 })
 export class ReadingCardComponent implements OnInit, OnDestroy {

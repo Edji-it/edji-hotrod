@@ -1,0 +1,182 @@
+.list-item.list-item--block.reading-card(
+  [ngClass]="{'draft-edit' : (reading['draft'])}", 
+  [routerLink]="(reading['draft']) ? ['/new-reading/' + reading._id] : []"
+)
+  .reading-icon
+    span {{reading.title.substring(0,2)}}
+  .reading-title([class.no-version]="!reading.versionCount")
+    .reading-title--center-row
+      h1.small.reading-title__text {{reading.title}} 
+        span(*ngIf="!reading.title")
+          i Untitled
+        span.hero-tag(*ngIf="reading.heroic", title="Uses Hero features") H
+      p.reading-version(
+        *ngIf="reading.versionCount && reading.versionCount > 0", 
+        [attr.testVersionNumber]="reading.title"
+      ) Version {{reading.versionCount > 0 ? reading.versionCount : '' }}
+  i.icon.icon-draft(*ngIf="reading['draft']")
+  //- The Dropdown Options Menu
+  #optionsWrap.dropdown.reading-options(
+    *ngIf="!readOnly && (!reading['draft'] || reading.draft !== true || reading.projects[0])", 
+    (clickOutside)="showOptions = false", 
+    [class.show]="showOptions"
+  )
+    button.btn.btn-icon--plain(
+      (click)="showOptions = !showOptions", 
+      [attr.testFindOptions]="reading.title"
+    )
+      i.icon.icon-more
+    //- dropdown buttons
+    .dropdown-menu.dropdown-menu-right.reading-card-menu
+      //- Create New Group dropdown button
+      button.dropdown-item(
+        (click)="relevantReading = reading; showAddModal = true; showOptions = false;",
+        [attr.testFindCreateNewGroup]="reading.title"
+      ) Create New Group
+      //- Copy & Edit dropdown button
+      button.dropdown-item(
+        (click)="showOptions=false;", 
+        [routerLink]="['/new-reading/']", 
+        [queryParams]="{ copyId: reading._id }",
+        [attr.testFindCopyAndEdit]="reading.title"
+      ) Copy and Edit
+      //- Delete dropdown button
+      button.dropdown-item(
+        (click)="relevantReading = reading; showDeleteReadingModal = true; showOptions = false;", 
+        [attr.testDelete]="reading.title"
+      ) Delete
+  .reading-data
+    a.btn.btn-icon--round(
+      *ngIf="reading.source", 
+      [attr.href]="reading.source", 
+      title="Source", 
+      target="_blank", 
+      style="float:right;margin-left:5px;"
+    )
+      i.icon.icon-link
+    .reading-access-icon([attr.title]="reading.public ? 'Public Reading' : 'Private Reading'")
+      i(*ngIf="reading.public", [innerHTML]="':earth_americas:' | emojione")
+      i(*ngIf="!reading.public", [innerHTML]="':lock:' | emojione")
+    div(*ngIf="reading.subjects && reading.subjects.length > 0", style="float:right; margin-left:5px;")
+      span.badge-pill.badge-secondary.badge-subject(*ngFor="let subject of reading.subjects") {{subject}}
+
+//- The Project Card
+.list-item.list-item--button.project-card(*ngFor="let project of reading.projects", [class.new-project]="project.new")
+  .row.project-row--right-pad([routerLink]="['/project', project._id]")
+    .col-8
+      //- Title
+      //- IMPORTANT NOTE: had to move the project link here so that the delete project button would work. Otherwise it overlapped and both buttons pressed.
+      .title
+        .project-title-input
+          span.reading-project--label
+            span(style="color: #cdcdcd;", [attr.testFindGroup]="reading.title") Group:
+            | &nbsp;{{project.label}}
+          span.project-title-input__save((click)="updateProjectLabel(reading._id, reading.newLabel)", [innerHtml]="':white_check_mark:' | emojione")
+      div(style="clear:both;")
+        span.metadata {{ project.comment_count ? project.comment_count : 0 }} Comments
+        span &nbsp;|&nbsp;
+        span.metadata {{ project.student_count ? project.student_count : 0 }} Students
+    .col-4.prj-btns.pull-right
+      //- Project Code
+      pre.prj-code(style="float:right;") {{project.code || 'none'}}
+  //- Delete Project Button
+  .btn--delete-project.icon-button(title="Delete Group", (click)="relevantProject = project; showDeleteProjectModal = true;")
+    span([innerHtml]="':x:' | emojione")
+//- Handle the version control
+.version-card--block(
+  [class.gone]="!reading.versionCount || reading.versionCount <= 1", 
+  [class.show]="showVersions", 
+  [style.maxHeight.px]="versionsHeight()"
+)
+  .list-item.version-card(id="{{ reading._id }}", [class.show]="showVersions")
+    .versions(
+      *ngFor="let version of versions; let i = index", 
+      [class.show]="showVersions", 
+      [class.hidden]="version._id === reading._id"
+    )
+      .version-number {{ versions.length - i }}
+      //- Handle the sub-readings (readings under version)
+      .list-item.list-item--block.reading-card(
+        [ngClass]="{'draft-edit' : (version['draft'] && version.draft === true && !version.projects[0])}", 
+        [routerLink]="(version['draft'] && version.draft === true && !version.projects[0]) ? ['/new-reading/' + version._id] : []"
+      )
+        .reading-icon
+          span {{version.title.substring(0,2)}}
+        .reading-title
+          .reading-title--center-row
+            h1.small {{version.title}} 
+              span(*ngIf="!version.title")
+                i Untitled
+            p.blockquote-footer([attr.testVersionNumberV]="version.title") Version {{ versions.length - i }}
+        i.icon.icon-draft(*ngIf="version['draft'] && version.draft === true && !version.projects[0]")
+        #optionsWrapV.dropdown.reading-options(
+          *ngIf="!version['draft'] || version.draft !== true || version.projects[0]", 
+          (clickOutside)="version.showOptionsV = false", 
+          [class.show]="version.showOptionsV"
+        )
+          button.btn.btn-icon--plain((click)="version.showOptionsV = !version.showOptionsV", [attr.testFindOptionsV]="version.title")
+            i.icon.icon-more
+          .dropdown-menu.dropdown-menu-right.reading-card-menu
+            button.dropdown-item(
+              (click)="relevantReading = version; showAddModal = true; version.showOptionsV = false; versionHeight = versionHeight + 66", 
+              [attr.testFindCreateNewGroupV]="version.title"
+            ) Create New Group
+            button.dropdown-item(
+              *ngIf="!version.draft", 
+              (click)="version.showOptionsV=false;", 
+              [routerLink]="['/new-reading/']", 
+              [queryParams]="{ copyId: version._id }",
+              [attr.testFindCopyAndEditV]="version.title"
+            ) Copy and Edit
+            //- Delete dropdown button
+            button.dropdown-item((click)="relevantReading = version; showDeleteReadingModal = true; showOptions = false;") Delete
+      //- Handle the sub-projects (projects under the readings that are under the version)
+      .list-item.list-item--button.project-card([class.new-project]="versionProject.new", *ngFor="let versionProject of version.projects")
+        a.row.project-row--right-pad([routerLink]="['/project', versionProject._id]")
+          .col-8
+            .title
+              .project-title-input
+                span.reading-project--label
+                  span(style="color: #cdcdcd;", [attr.testFindGroupV]="versionProject.label") Group:
+                  | &nbsp;{{versionProject.label}}
+                span.project-title-input__save((click)="updateProjectLabel(version._id, version.newLabel)", [innerHtml]="':white_check_mark:' | emojione")
+            div(style="clear:both;")
+              span.metadata {{ versionProject.comment_count ? versionProject.comment_count : 0 }} Comments
+              span &nbsp;|&nbsp;
+              span.metadata {{ versionProject.student_count ? versionProject.student_count : 0 }} Students
+          .col-4.prj-btns.pull-right
+            //- Project Code
+            pre.prj-code(style="float:right") {{versionProject.code || 'none'}}
+        //- Delete Project Button
+        .btn--delete-project.icon-button(title="Delete Group", (click)="relevantProject = versionProject; showDeleteProjectModal = true;")
+          span([innerHtml]="':x:' | emojione")
+    .row.loading(*ngIf="isLoading", style="position:absolute;z-index:9999;width:100%; background: #fff;")
+    .alert.alert-danger.alert-readings(role="alert", *ngIf="errorObject.readingError") {{ errorObject.readingError }}
+  .version-toggle(
+    [class.show]="showVersions", 
+    (click)="showVersions = !showVersions; getVersions(reading.version_id)", 
+    [attr.testFindVersionToggle]="reading.title"
+  )
+    button.btn.btn-clear.btn-showVersion(type="button", aria-label="Show Previous Versions")
+      i.icon.icon-carrot
+    | Past Versions
+//- Modals
+//- hot-add-project-modal is opens when "Create New Group" under the dropdown is clicked
+hot-add-project-modal(
+  *ngIf="showAddModal", 
+  [reading]="relevantReading", 
+  (closeModal)="showAddModal = false"
+)
+//- hot-del-reading pops up when "Delete" is clicked underneath a Reading's dropdown menu
+hot-del-reading(
+  *ngIf="showDeleteReadingModal", 
+  [reading]="relevantReading", 
+  (deleteReading)="removeReading(relevantReading)", 
+  (closeModal)="showDeleteReadingModal = false"
+)
+//- hot-del-project pops up when you cliock the delete button for a group
+hot-del-project(
+  *ngIf="showDeleteProjectModal",
+  [project]="relevantProject",
+  (closeModal)="showDeleteProjectModal = false"
+)

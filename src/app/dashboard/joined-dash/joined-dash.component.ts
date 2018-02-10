@@ -14,7 +14,7 @@ import { AuthService, ReadingService, ProjectService } from '../../shared';
   // Our list of styles in our component. We may add more to compose many styles together
   styleUrls: [ './joined-dash.component.scss' ],
   // Every Angular template is first compiled by the browser before Angular runs it's compiler
-  templateUrl: './joined-dash.component.html'
+  templateUrl: './joined-dash.component.pug'
 })
 export class JoinedDashComponent implements OnInit, OnDestroy {
   // Set our default values
