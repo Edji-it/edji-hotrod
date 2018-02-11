@@ -100,30 +100,44 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
     
   } // versionsHeight() : number
 
-  togglePublic(makePublic: boolean): void {
+  togglePublic(publicFlag: boolean): void {
     // Get the current public flag value from the reading; if none, assume false
     this.currentPublicFlag = false
     if (this.reading.public) {
       this.currentPublicFlag = true
     }
     // If the user picks the value of public flag that it already is, close the tooltip
-    if (this.currentPublicFlag==makePublic) {
+    if (this.currentPublicFlag==publicFlag) {
       this.togglePublicFlag=false
       return
     }
     // If user wishes to make a private reading public, make sure grade_levels and subjects exist on the reading
-    if (makePublic && (!this.reading.grade_levels || !this.reading.subjects)) {
+    if (publicFlag && (!this.reading.grade_levels || !this.reading.subjects)) {
       // Close the tooltip and toggle the grade_levels and subjects add modal
       this.togglePublicFlag=false
       console.log('open the grade_levels and subjects add modal')
       return
     }
 
-    if ((makePublic && (this.reading.grade_levels && this.reading.subjects)) || !makePublic) {
+    if ((publicFlag && (this.reading.grade_levels && this.reading.subjects)) || !publicFlag) {
       // Close the tooltip
       this.togglePublicFlag=false
-      // Make the call to PUT the reading public value
-      console.log('flip the reading public value to ', makePublic)
+
+      //
+      let updateReading = this.reading
+      updateReading.public = publicFlag
+      //  Make the call to PUT the reading public value
+      this._readings.save(updateReading)
+        .subscribe(
+          data => {
+            if (data._id) {
+              this.reading.public = data.public
+            }
+          },
+          error => {
+            console.error(error)
+          }
+        )
     }
   }
 
