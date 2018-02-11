@@ -99,4 +99,11 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
     
   } // versionsHeight() : number
 
+  togglePublic(makePublic: boolean): void {
+    console.log(this.reading)
+    if (makePublic && (!this.reading.grade_levels || !this.reading.subjects)) {
+      console.log('cannot flip to public without further info')
+    }
+  }
+
 } // @Component

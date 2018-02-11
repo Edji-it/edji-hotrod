@@ -63,28 +63,17 @@
         .tooltiptext.block-with-text
           //- Public option
           label#readingMakePublic.form-check-label.form-check-btn(
-              [class.active]="",
-              title="Allow anyone to find this Reading in Discover"
+              [class.active]="reading.public",
+              title="Allow anyone to find this Reading in Discover",
+              (click)="$event.stopPropagation(); togglePublic(true)"
             )
-            input.form-check-input(
-                type="radio", 
-                name="publicFlag", 
-                value="true", 
-                [formControl]="",
-                checked
-              )
             span([innerHTML]="':earth_americas: Public' | emojione")
           //- Private option
           label#readingMakePrivate.form-check-label.form-check-btn(
-              [class.active]="",
-              title="Hide this Reading from Discover"
+              [class.active]="!reading.public",
+              title="Hide this Reading from Discover",
+              (click)="$event.stopPropagation(); togglePublic(false)"
             )
-            input.form-check-input(
-                type="radio",
-                name="publicFlag", 
-                value="false",
-                [formControl]=""
-              )
             span([innerHTML]="':lock: Private' | emojione")
     div(*ngIf="reading.subjects && reading.subjects.length > 0", style="float:right; margin-left:5px;")
       span.badge-pill.badge-secondary.badge-subject(*ngFor="let subject of reading.subjects") {{subject}}

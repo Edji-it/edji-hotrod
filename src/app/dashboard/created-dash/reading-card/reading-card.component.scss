@@ -341,7 +341,7 @@ button.new-reading-btn {
 
 .reading-access-icon .tooltipbody {
     visibility: hidden;
-    width: 160px;
+    width: 230px;
     background-color: #fff;
     color: #000;
     text-align: left;
@@ -354,7 +354,7 @@ button.new-reading-btn {
     bottom: 42px;
     opacity: 0;
     transition: opacity .4s;
-    font-size: 9px;
+    font-size: 12px;
     line-height: 12px;
     filter: drop-shadow(rgba(0, 0, 0, 0.2) 0 2px 6px);
 }
@@ -363,7 +363,7 @@ button.new-reading-btn {
     content: "";
     position: absolute;
     top: 100%;
-    left: 59%;
+    left: 71.5%;
     margin-left: -5px;
     border-width: 10px;
     border-style: solid;
@@ -371,10 +371,18 @@ button.new-reading-btn {
 }
 
 .reading-access-icon .tooltipbody.no-link::after {
-    left: 81%;
+    left: 86.5%;
 }
 
 .reading-access-icon .tooltipbody.show {
     visibility: visible;
     opacity: 1;
+}
+
+.tooltiptitle {
+    margin-bottom: 12px;
+}
+
+#readingMakePrivate {
+    margin-right: 0;
 }
