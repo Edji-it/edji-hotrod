@@ -28,7 +28,8 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
   private showAddModal    : boolean = false;
   private showDeleteReadingModal : boolean = false;
   private showDeleteProjectModal : boolean = false;
-  private togglePublicFlag: boolean = false
+  private togglePublicFlag: boolean
+  private currentPublicFlag: boolean
 
   private versionHeight = 50;
 
@@ -100,9 +101,29 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
   } // versionsHeight() : number
 
   togglePublic(makePublic: boolean): void {
-    console.log(this.reading)
+    // Get the current public flag value from the reading; if none, assume false
+    this.currentPublicFlag = false
+    if (this.reading.public) {
+      this.currentPublicFlag = true
+    }
+    // If the user picks the value of public flag that it already is, close the tooltip
+    if (this.currentPublicFlag==makePublic) {
+      this.togglePublicFlag=false
+      return
+    }
+    // If user wishes to make a private reading public, make sure grade_levels and subjects exist on the reading
     if (makePublic && (!this.reading.grade_levels || !this.reading.subjects)) {
-      console.log('cannot flip to public without further info')
+      // Close the tooltip and toggle the grade_levels and subjects add modal
+      this.togglePublicFlag=false
+      console.log('open the grade_levels and subjects add modal')
+      return
+    }
+
+    if ((makePublic && (this.reading.grade_levels && this.reading.subjects)) || !makePublic) {
+      // Close the tooltip
+      this.togglePublicFlag=false
+      // Make the call to PUT the reading public value
+      console.log('flip the reading public value to ', makePublic)
     }
   }
 
