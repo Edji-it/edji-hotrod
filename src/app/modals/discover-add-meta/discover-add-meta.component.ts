@@ -1,0 +1,77 @@
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
+import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
+import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
+
+import { Reading } from './../../shared/datatypes'
+import { ReadingService } from './../../shared'
+import { IMultiSelectOption, IMultiSelectSettings } from 'angular-2-dropdown-multiselect';
+
+@Component({
+  selector: 'hot-discover-add-meta',
+  templateUrl: 'discover-add-meta.component.pug'
+})
+
+export class DiscoverAddMetaModal implements OnInit {
+  @Input() showModal: boolean
+  @Input() reading: Reading
+  @Output() closeModal: EventEmitter<any> = new EventEmitter()
+
+  private readingMetaForm: FormGroup
+  private messages: {
+    success?: boolean,
+    serviceError?: boolean
+  } = {}
+
+  private subjects: IMultiSelectOption[] = [
+    {id:'literature',name:'Literature'},
+    {id:'math',name:'Mathematics'},
+    {id:'science',name:'Science'},
+    {id:'geography',name:'Geography'},
+    {id:'history',name:'History'},
+    {id:'government',name:'Government'},
+    {id:'health',name:'Health/Physical Education'},
+    {id:'languages',name:'Foreign Languages'},
+    {id:'art',name:'Art'},
+    {id:'computer',name:'Computers/Technical'}
+  ]
+  private subjectDropSettings: IMultiSelectSettings = {
+    displayAllSelectedText: true,
+    dynamicTitleMaxItems: 4
+  } 
+
+  constructor(
+    private _readings: ReadingService,
+    _fb: FormBuilder
+  ) { 
+    this.readingMetaForm = _fb.group({
+      subjects: [[], Validators.required],
+      grade_levels: [[], Validators.required]
+    })
+  }
+
+  ngOnInit() {
+  }
+
+  private formSubmit(form: FormGroup): void {
+    // cache the reading since the server will return a reading stripped of projects, and we only want to update the public flag on return
+    let updateReading = this.reading
+    // Add subjects, grade levels, and make the reading public
+    updateReading.subjects = form.value.subjects
+    updateReading.grade_levels = form.value.grade_levels
+    updateReading.public = true
+    //  Make the call to PUT the reading public value
+    this._readings.save(updateReading)
+      .subscribe(
+        data => {
+          if (data._id) {
+            this.reading.subjects = data.subjects
+            this.reading.grade_levels = data.grade_levels
+            this.closeModal.emit()
+          }
+        },
+        error => {
+          console.error(error)
+        }
+      )
+  }
+}

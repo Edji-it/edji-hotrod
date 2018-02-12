@@ -30,6 +30,7 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
   private showDeleteProjectModal : boolean = false;
   private togglePublicFlag: boolean
   private currentPublicFlag: boolean
+  private showReadingDiscoverModal: boolean
 
   private versionHeight = 50;
 
@@ -115,7 +116,7 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
     if (publicFlag && (!this.reading.grade_levels || !this.reading.subjects)) {
       // Close the tooltip and toggle the grade_levels and subjects add modal
       this.togglePublicFlag=false
-      console.log('open the grade_levels and subjects add modal')
+      this.showReadingDiscoverModal=true
       return
     }
 
