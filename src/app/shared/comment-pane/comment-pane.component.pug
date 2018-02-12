@@ -15,7 +15,7 @@
           edji-comment( 
             *ngFor="let mobileComment of commentByPos[comment.lineY]; let i = index",
             [class.hidden]="(!project.heat_vision && user._id !== project.teacher_id) && mobileComment.user_id !== user._id && mobileComment.user_id !== project.teacher_id",
-            [class.owner]="mobileComment.user_id === project.teacher_id",
+            [class.spec-owner]="mobileComment.user_id === project.teacher_id",
             [readOnly]="mobileComment.user_id !== user._id",
             [userPermission]="getCommentPermissions(mobileComment)",
             [commentPaneActive]="true",
