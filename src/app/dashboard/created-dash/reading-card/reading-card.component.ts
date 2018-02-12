@@ -123,7 +123,7 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
       // Close the tooltip
       this.togglePublicFlag=false
 
-      //
+      // cache the reading since the server will return a reading stripped of projects, and we only want to update the public flag on return
       let updateReading = this.reading
       updateReading.public = publicFlag
       //  Make the call to PUT the reading public value
