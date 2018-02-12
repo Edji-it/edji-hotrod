@@ -23,6 +23,7 @@ export class DiscoverAddMetaModal implements OnInit {
     serviceError?: boolean
   } = {}
   private multiselectExpanded: boolean
+  private projectLink: string
 
   private subjects: IMultiSelectOption[] = [
     {id:'literature',name:'Literature'},
@@ -52,6 +53,9 @@ export class DiscoverAddMetaModal implements OnInit {
   }
 
   ngOnInit() {
+    if (this.reading.projects.length>0) {
+      this.projectLink = this.reading.projects[0]._id
+    }
   }
 
   private formSubmit(form: FormGroup): void {
