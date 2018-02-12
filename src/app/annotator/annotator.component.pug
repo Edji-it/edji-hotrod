@@ -105,7 +105,7 @@ doctype html
                 edji-comment(
                     *ngFor="let comment of commentsByIndex[i]; let ci = index",
                     [class.hidden]="!isCommentVisible(comment)",
-                    [class.owner]="comment.user_id === project.teacher_id._id",
+                    [class.spec-owner]="comment.user_id === project.teacher_id",
                     [comment]="comment",
                     (mouseenter)='focusHighlight(comment.start, comment.end, comment.loc)',
                     (mouseleave)='unfocusHighlight(comment.start, comment.end, comment.loc)',
