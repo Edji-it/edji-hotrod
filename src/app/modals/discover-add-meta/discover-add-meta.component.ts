@@ -8,7 +8,8 @@ import { IMultiSelectOption, IMultiSelectSettings } from 'angular-2-dropdown-mul
 
 @Component({
   selector: 'hot-discover-add-meta',
-  templateUrl: 'discover-add-meta.component.pug'
+  templateUrl: 'discover-add-meta.component.pug',
+  styleUrls: ['discover-add-meta.component.scss']
 })
 
 export class DiscoverAddMetaModal implements OnInit {
@@ -21,6 +22,7 @@ export class DiscoverAddMetaModal implements OnInit {
     success?: boolean,
     serviceError?: boolean
   } = {}
+  private multiselectExpanded: boolean
 
   private subjects: IMultiSelectOption[] = [
     {id:'literature',name:'Literature'},

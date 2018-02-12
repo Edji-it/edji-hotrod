@@ -1,26 +1,33 @@
 .modal.fade([class.show]="showModal", *ngIf="showModal")
   .modal-dialog
-    form.modal-content([formGroup]="readingMetaForm", (ngSubmit)="formSubmit(readingMetaForm)")
+    form.modal-content([class.expand]="multiselectExpanded" ,[formGroup]="readingMetaForm", (ngSubmit)="formSubmit(readingMetaForm)")
       .modal-header
         h4.modal-title To make this reading public, we just need a few more details...
-        button(*ngIf="messages.success", type="button", class="close", aria-label="Close", (click)="closeModal.emit()")
+        button(type="button", class="close", aria-label="Close", (click)="closeModal.emit()")
           span(aria-hidden="true") &times;
       .modal-body
         //- Grade level range selector
         .form-group
           label Grade Level
             p.sub-label Select which grade levels this reading targets. (Click to select start of range, and click again to select end of range!)
-          grade-selector(formControlName="grade_levels")
+          grade-selector.discover__add-meta(formControlName="grade_levels")
           #errorTitle.alert.alert-warning.mt-2(*ngIf="readingMetaForm.controls['grade_levels'].hasError('required') && (readingMetaForm.controls['grade_levels'].dirty || submitted)") 
             | Please select the range of grade levels this Reading is best suited for.
         //- Subject Selector
         .form-group
           label Subject
           .input-group
-          ss-multiselect-dropdown(id="subjectDropdown",[options]="subjects", formControlName="subjects", [settings]="subjectDropSettings")
+          ss-multiselect-dropdown(
+            id="subjectDropdown",
+            [options]="subjects", 
+            formControlName="subjects", 
+            [settings]="subjectDropSettings", 
+            (click)="multiselectExpanded=!multiselectExpanded",
+            (clickOutside)="multiselectExpanded=false"
+          )
           #errorTitle.alert.alert-warning.mt-2(*ngIf="readingMetaForm.controls['subjects'].hasError('required') && (readingMetaForm.controls['subjects'].dirty || submitted)") 
             | Please select at least one Subject area that this Reading applies to.
         //- .alert.alert-info(*ngIf="readingMetaForm.controls['identities'].dirty && readingMetaForm.controls['identities'].invalid") Please select at least one box!
       .modal-footer
         button.btn.btn-primary(type="submit", [disabled]="!readingMetaForm.valid", *ngIf="!messages.success") Submit
-        button.btn.btn-secondary(*ngIf="messages.success", type="button") Close
+        button.btn.btn-secondary(type="button", (click)="closeModal.emit()") Close
