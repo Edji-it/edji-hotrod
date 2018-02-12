@@ -100,6 +100,7 @@ export class FeedbackComponent implements OnInit {
         + '<br>' + this._util.getBrowser(w.userAgent) 
         + '<br>' + this._util.getBrowserVersion(w.userAgent) 
         + '<br>' + this._util.getEdjiVersion()
+        + '<br>' + window.location.href
 
     let data: any = {
       emailSubject: "Feedback form submitted!",
