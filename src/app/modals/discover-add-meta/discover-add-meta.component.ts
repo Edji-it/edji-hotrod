@@ -53,7 +53,7 @@ export class DiscoverAddMetaModal implements OnInit {
   }
 
   ngOnInit() {
-    if (this.reading.projects.length>0) {
+    if (this.reading && this.reading.projects && this.reading.projects.length>0) {
       this.projectLink = this.reading.projects[0]._id
     }
   }

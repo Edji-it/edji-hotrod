@@ -3,6 +3,7 @@ import { Angulartics2 } from 'angulartics2';
 import { ReadingService, ProjectService } from '../../../shared';
 import { Reading, Project }      from '../../../shared/datatypes';
 import { Component, Input, Output, OnDestroy, OnInit, EventEmitter } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'hot-reading-card',
@@ -35,12 +36,14 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
   private versionHeight = 50;
 
   constructor(
+    private _route: ActivatedRoute,
     private _readings: ReadingService,
     private _projects: ProjectService,
     private angulartics: Angulartics2
   ) { }
 
   ngOnInit() {
+    console.log(this._route.snapshot)
     this.subscriptions.push(
       // Sometimes versions are updated, but the component maintains the version array, so we need to listen for updates
       this._readings.refreshVersions.subscribe(
@@ -140,6 +143,10 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
           }
         )
     }
+  }
+
+  private togglePublicTooltip() {
+
   }
 
 } // @Component
