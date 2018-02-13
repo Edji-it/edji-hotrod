@@ -54,7 +54,7 @@
       style="float:right;margin-left:5px;"
     )
       i.icon.icon-link
-    .reading-access-icon([attr.title]="reading.public ? 'Public Reading' : 'Private Reading'", (click)="togglePublicFlag=!togglePublicFlag")
+    .reading-access-icon([attr.title]="reading.public ? 'Public Reading' : 'Private Reading'", (click)="togglePublicTooltip()")
       i(*ngIf="reading.public", [innerHTML]="':earth_americas:' | emojione")
       i(*ngIf="!reading.public", [innerHTML]="':lock:' | emojione")
       span.tooltipbody([class.show]="togglePublicFlag", [class.no-link]="!reading.source")

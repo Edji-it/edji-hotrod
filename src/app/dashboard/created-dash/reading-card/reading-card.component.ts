@@ -43,7 +43,6 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    console.log(this._route.snapshot)
     this.subscriptions.push(
       // Sometimes versions are updated, but the component maintains the version array, so we need to listen for updates
       this._readings.refreshVersions.subscribe(
@@ -146,7 +145,9 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
   }
 
   private togglePublicTooltip() {
-
+    if(this._route.snapshot.routeConfig.path!='discover') {
+      this.togglePublicFlag=!this.togglePublicFlag
+    }
   }
 
 } // @Component
