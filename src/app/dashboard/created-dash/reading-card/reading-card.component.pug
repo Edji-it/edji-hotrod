@@ -45,7 +45,7 @@
         (click)="relevantReading = reading; showDeleteReadingModal = true; showOptions = false;", 
         [attr.testDelete]="reading.title"
       ) Delete
-  .reading-data
+  .reading-data(*ngIf="!reading['draft']")
     a.btn.btn-icon--round(
       *ngIf="reading.source", 
       [attr.href]="reading.source", 
