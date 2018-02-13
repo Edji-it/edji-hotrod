@@ -115,7 +115,7 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
       return
     }
     // If user wishes to make a private reading public, make sure grade_levels and subjects exist on the reading
-    if (publicFlag && (!this.reading.grade_levels || !this.reading.subjects)) {
+    if (publicFlag && (!this.reading.grade_levels || !(this.reading.grade_levels.length>0) || !this.reading.subjects || !(this.reading.subjects.length>0))) {
       // Close the tooltip and toggle the grade_levels and subjects add modal
       this.togglePublicFlag=false
       this.showReadingDiscoverModal=true
