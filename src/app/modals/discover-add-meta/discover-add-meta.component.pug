@@ -10,7 +10,7 @@
         .form-group
           label Grade Level
             p.sub-label Select which grade levels this reading targets. (Click to select start of range, and click again to select end of range!)
-          grade-selector.discover__add-meta(formControlName="grade_levels")
+          grade-selector.discover__add-meta([classSmall]="true", formControlName="grade_levels")
           #errorTitle.alert.alert-warning.mt-2(*ngIf="readingMetaForm.controls['grade_levels'].hasError('required') && (readingMetaForm.controls['grade_levels'].dirty || submitted)") 
             | Please select the range of grade levels this Reading is best suited for.
         //- Subject Selector
