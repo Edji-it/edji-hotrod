@@ -656,7 +656,6 @@ export class ProjectService {
                 }
             }
         }
-        console.log(this.commentByPosSource)
         this.commentByPosSubject.next(this.commentByPosSource)
     }
 } // class
