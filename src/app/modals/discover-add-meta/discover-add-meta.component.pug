@@ -2,7 +2,7 @@
   .modal-dialog
     form.modal-content([class.expand]="multiselectExpanded" ,[formGroup]="readingMetaForm", (ngSubmit)="formSubmit(readingMetaForm)")
       .modal-header
-        h4.modal-title To make this reading public, we just need a few more details...
+        h4.modal-title Tell us more about your Reading first!
         button(type="button", class="close", aria-label="Close", (click)="closeModal.emit()")
           span(aria-hidden="true") &times;
       .modal-body
