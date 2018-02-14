@@ -118,13 +118,13 @@ export class NewReadingPage implements OnInit {
     private guideStepNo: number = 1
 
     private subjects: IMultiSelectOption[] = [
-        {id:'literature',name:'Literature'},
+        {id:'literature',name:'Language Arts'},
         {id:'math',name:'Mathematics'},
         {id:'science',name:'Science'},
         {id:'geography',name:'Geography'},
         {id:'history',name:'History'},
         {id:'government',name:'Government'},
-        {id:'health',name:'Health/Physical Education'},
+        {id:'health',name:'Health'},
         {id:'languages',name:'Foreign Languages'},
         {id:'art',name:'Art'},
         {id:'computer',name:'Computers/Technical'}
