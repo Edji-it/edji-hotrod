@@ -24,7 +24,6 @@
     .tooltiptext.tooltipcount {{commentsByPos[comment.lineY] && commentsByPos[comment.lineY].length}} Comments
   span.user-icon__initials(*ngIf="indexOnLine<8") {{comment.author.substring(0,2)}}
   span.user-icon__overflow(*ngIf="indexOnLine==8") +{{commentsByPos[comment.lineY] && commentsByPos[comment.lineY].length - 7}}
-  //- .comment__button--mobile.avatar__reply(*ngIf="comment.replies.length>0")
   .comment__button--mobile.avatar__reply(*ngIf="repliesById[comment._id] && repliesById[comment._id].length>0")
 
 //- Mobile Icon

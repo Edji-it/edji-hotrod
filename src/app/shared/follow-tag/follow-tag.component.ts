@@ -22,7 +22,6 @@ export class FollowTag implements OnInit {
   ngOnInit() {
       this.userSub = this._auth.currentUser.subscribe(user => {
           this.user = user
-          console.log(user)
       })
   }
 

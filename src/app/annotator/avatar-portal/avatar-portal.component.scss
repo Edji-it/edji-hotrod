@@ -57,27 +57,6 @@
   opacity: 1;
 }
 
-.tooltiptitle {
-  display: inline-block;
-  color: #ECA736;
-  text-transform: uppercase;
-  margin-bottom: 4px;
-
-  &.inline-center {
-    line-height: 25px;
-    margin-bottom: 0px;
-  }
-}
-
-.tooltipbody {
-  font-size: 11px;
-}
-
-.tooltiptitle::after:not( .tooltipaudio) {
-  content: "\A";
-  white-space: pre;
-}
-
 /* mixin for multiline */
 @mixin multiLineEllipsis($lineHeight: 12px, $lineCount: 1, $bgColor: white){
   overflow: hidden;

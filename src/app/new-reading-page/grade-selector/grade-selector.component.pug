@@ -7,6 +7,7 @@
         [class.preview]="gradePreview.indexOf(i) > -1",
         (click)="selectGrade(i)",
         (mouseenter)="previewRange(i)",
-        (mouseleave)="gradePreview = []"
+        (mouseleave)="gradePreview = []",
+        [class.small-tile]="classSmall"
     )
         | {{ grade }}
