@@ -47,6 +47,7 @@ import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect'
 import { EmojiOnePipe, AddClassPipe } from './shared'
 import { EdjiDatePipe } from './pipes/edjidate.pipe.ts'
 import { LinkifyPipe } from './pipes/linkify.pipe'
+import { SubjectPipe } from './pipes/subject.pipe'
 import { UserInitialsPipe } from './pipes/userinitials.pipe.ts'
 
 // Components
@@ -131,6 +132,7 @@ type StoreType = {
     ClickOutsideDirective,
     EmojiOnePipe,
     LinkifyPipe,
+    SubjectPipe,
     EdjiDatePipe,
     UserInitialsPipe,
     ResetPassPage,
