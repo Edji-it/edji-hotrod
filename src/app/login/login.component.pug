@@ -1,0 +1,21 @@
+nav-bar
+.gray
+  .container-fluid
+    .row.navy-gradient.has-sparks
+      .sparks
+      .col-sm-3
+      .col-sm-6.col-pad.on-dark
+        h1.center.on-dark This Way to Edji!
+        .button__row
+          hot-google-button([copy]="'Sign In with Google'")
+        hr
+        p.text-divider(style="background:#133d64;") or
+        hot-login-form((loginSuccess)="loginSuccess()")
+        div(style="text-align:center; margin: 1em 0;")
+          a#linkForgotPassword.link.on-dark(tabindex="0", (click)="showPassModal = !showPassModal") Forgotten password?
+        br
+        hr
+        br
+        .button__row
+          button#buttonGoRegister.btn.btn-secondary(name="Register", [routerLink]="['/register']", tabindex="0") Register
+edji-reset-pass(class="modal-will-fade", [class.show]="showPassModal", (closeModal)="showPassModal = !showPassModal")
