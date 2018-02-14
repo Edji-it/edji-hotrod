@@ -1,0 +1,37 @@
+.modal.fade([class.show]="showModal", *ngIf="showModal")
+  .modal-dialog
+    form.modal-content([class.expand]="multiselectExpanded" ,[formGroup]="readingMetaForm", (ngSubmit)="formSubmit(readingMetaForm)")
+      .modal-header
+        h4.modal-title Tell us more about your Reading first!
+        button(type="button", class="close", aria-label="Close", (click)="closeModal.emit()")
+          span(aria-hidden="true") &times;
+      .modal-body
+        //- Grade level range selector
+        .form-group
+          label Grade Level
+            p.sub-label Select which grade levels this reading targets. (Click to select start of range, and click again to select end of range!)
+          grade-selector.discover__add-meta([classSmall]="true", formControlName="grade_levels")
+          #errorTitle.alert.alert-warning.mt-2(*ngIf="readingMetaForm.controls['grade_levels'].hasError('required') && (readingMetaForm.controls['grade_levels'].dirty || submitted)") 
+            | Please select the range of grade levels this Reading is best suited for.
+        //- Subject Selector
+        .form-group
+          label Subject
+          .input-group
+          ss-multiselect-dropdown(
+            id="subjectDropdown",
+            [options]="subjects", 
+            formControlName="subjects", 
+            [settings]="subjectDropSettings", 
+            (click)="multiselectExpanded=!multiselectExpanded",
+            (clickOutside)="multiselectExpanded=false"
+          )
+          #errorTitle.alert.alert-warning.mt-2(*ngIf="readingMetaForm.controls['subjects'].hasError('required') && (readingMetaForm.controls['subjects'].dirty || submitted)") 
+            | Please select at least one Subject area that this Reading applies to.
+        //- Give the user a link to the first project in the reading list as a "preview" if they are unsure of the content for selecting grade levels and subjects
+        p(*ngIf="projectLink!=''") Need to check this reading again to evaluate grade level range and subjects? 
+          span 
+            a.add-underline([routerLink]="['/project', projectLink]") Click here
+          span &nbsp;to open the reading again
+      .modal-footer
+        button.btn.btn-primary(type="submit", [disabled]="!readingMetaForm.valid", *ngIf="!messages.success") Submit
+        button.btn.btn-secondary(type="button", (click)="closeModal.emit()") Close
