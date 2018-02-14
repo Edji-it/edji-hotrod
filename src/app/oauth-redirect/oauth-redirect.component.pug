@@ -1,4 +1,5 @@
 nav-bar
 .alert.alert-danger(*ngIf="messages.noUser") There was no user found with that token
+.alert.alert-danger(*ngIf="messages.duplicate_user") Whoops, a user already exists with that email address. If you'd like to log into that account, please sign in with a username and password
 .alert.alert-danger(*ngIf="messages.serverError") There was an error while fetching the user information. Please try again or contact us.
 .alert.alert-danger(*ngIf="messages.noToken") Sorry! Looks like something went wrong with login. Please return to the Login page and try again!

@@ -13,6 +13,7 @@ export class OAuthComponent implements OnInit {
   private messages: {
     noToken?: boolean,
     noUser?: boolean,
+    error?: boolean,
     serverError?: boolean
   } = {}
 
@@ -25,7 +26,12 @@ export class OAuthComponent implements OnInit {
   ngOnInit() {
     // grab that oauth token which is given by the server!
     const type = this.route.snapshot.params['type']
-    const encodedToken = this.route.snapshot.queryParams['token']
+    const encodedToken = this.route.snapshot.queryParams.token
+    const error = this.route.snapshot.queryParams.error
+
+    if (error) {
+      return this.messages[error] = true
+    }
 
     // tell them what's up if there's no token or oauth type...
     if (!encodedToken || encodedToken.length < 1) {
