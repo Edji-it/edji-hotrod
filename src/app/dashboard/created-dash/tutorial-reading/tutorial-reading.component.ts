@@ -4,7 +4,7 @@ import { Reading } from './../../../shared/datatypes'
 
 @Component({
   selector: 'hot-tutorial-reading',
-  templateUrl: 'tutorial-reading.component.html',
+  templateUrl: 'tutorial-reading.component.pug',
   styleUrls: ['./tutorial-reading.component.scss']
 })
 

@@ -1,0 +1,49 @@
+h1.joined-header.no-flow(for="projectCodeInput") Joined
+  i.icon__tooltip(placement="bottom", ngbTooltip="These are Readings that someone else made, and you joined!")
+    span.icon.icon-circle.icon-info i
+form.pb-4.hidden-md-up([formGroup]="codeForm", (ngSubmit)="addSession(codeForm.value)")
+  .input-group.input-group-lg.pb-2
+    input#projectCodeInput(
+      name="ProjectCodeInput", 
+      [formControl]="codeForm.controls['projectCode']", 
+      type="text", 
+      style="text-align: center;", 
+      [(ngModel)]="projectCode", 
+      placeholder="🔑 Code", 
+      aria-describedby="add-project-code"
+    )
+    span.input-group-btn
+      button#buttonJoinProject.btn.btn-primary(
+        [class.loading]="joinLoading", 
+        type="submit", 
+        name="Join", 
+        href="#"
+      ) Join
+  .alert.alert-info(*ngIf="!codeForm.controls['projectCode'].pristine && codeForm.controls['projectCode'].hasError('required')")
+    strong([innerHtml]="':zap: Code' | emojione")
+    | Enter a lightning code to quickly join a project!
+  .alert.alert-danger(*ngIf="errorObject.wrongCode") {{errorObject.wrongCode}}
+.item-list
+  //- Show messaging if no Projects exist
+  .alert.alert-info(role="alert", *ngIf="!isLoading && projects.length < 1 && !errorObject.projectError")
+    h4.alert-heading No Joined Readings Yet...
+    p Once you've joined someone else's Reading, it will show here.
+  //- Show loading until Projects call gets back
+  .row.loading(*ngIf="isLoading")
+  .alert.alert-danger(*ngIf="errorObject.projectError && projects.length < 1")
+    strong Oh no!
+    | {{errorObject.projectError}}
+  .list-item.list-item--button(*ngFor="let project of projects", [routerLink]="['/project', project._id]", [class.hide]="!project.createdAt")
+    .reading-icon
+      span {{ project.reading_id && project.reading_id.title ? project.reading_id.title.substring(0,2) : '' }}
+    .reading-title
+      .reading-title--center-row
+        h1.small {{ project.reading_id ? project.reading_id.title : ''}} 
+          span(*ngIf="project.reading_id && !project.reading_id.title") 
+            i Untitled
+          span.reading-project--label {{project.label}}
+    div(style="clear:both; line-height: 18px; padding: 10px 0px 0px;")
+      span(style="color: #cdcdcd;") Created by:
+      span {{ project.teacher_id ? project.teacher_id.fullname : '' }}
+        span(*ngIf="project.teacher_id && !project.teacher_id.fullname ") {{ project.teacher_id.username }}
+        pre.prj-code(style="margin-top: -5px; margin-bottom: 0px;") {{project.code || 'none'}}

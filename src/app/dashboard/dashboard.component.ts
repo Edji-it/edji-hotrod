@@ -18,7 +18,7 @@ import { User } from './../shared/datatypes'
   // Our list of styles in our component. We may add more to compose many styles together
   styleUrls: [ './dashboard.component.scss' ],
   // Every Angular template is first compiled by the browser before Angular runs it's compiler
-  templateUrl: './dashboard.component.html'
+  templateUrl: './dashboard.component.pug'
 })
 export class DashboardComponent implements OnInit {
   // Set our default values
