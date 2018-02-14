@@ -1,5 +1,5 @@
 .audio-comment-input-wrapper.input-wrap(
-  [ngClass]="[comment.active ? 'active' : '', reply ? 'reply-audio-wrapper' : '']"
+  [ngClass]="[comment.active ? 'active' : '', reply ? 'replyDisplay' : '']"
 )
   .audio-btn-wrap([class.fade-out]="!comment.active")
     //- [class.disabled]="isRecording() || isLoading()"
@@ -29,7 +29,7 @@
       [class.active]="isRecording()"
     )
       i.icon([ngClass]="[ isRecording() ? 'icon-stop' : 'icon-mic']")
-  .wave-wrap([ngClass]="[reply ? 'reply-wave' : '']", [style.width]="playWidth + 'px'")
+  .wave-wrap([style.width]="getCalcWidth()")
     canvas.wave-form((click)="setPlaybackTime($event)")
     //- Check for countdownText so "null" does not show in Edge
     .countdown(*ngIf="countdown", [innerHtml]="countdownText[countdownI] ? countdownText[countdownI] : ''")

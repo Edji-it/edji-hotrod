@@ -23,8 +23,8 @@ export class Questions implements PageObjectInterface {
     public textCommentBtn       = this.answerOptions.element(by.css(".text.button__answer-type"));
     public firstQuestion        = element(by.id("question-1"))
     public firstAnswer          = this.firstQuestion.element(by.css("edji-comment"))
-    public emojiCommentDelete   = this.firstQuestion.element(by.id("commentDelBtn")); // element(by.id('commentDelBtn'));
-    public textCommentInput     = this.firstQuestion.element(by.css('.text-comment-input:not(.disabled)'));
+    public firstAnswerDelete    = this.firstQuestion.element(by.id("commentDelBtn")); // element(by.id('commentDelBtn'));
+    public textCommentInput     = this.firstQuestion.element(by.css('.answerCommentBlock .text-comment-input:not(.disabled)'));
 
     public getPage() : void {
         // First we clear out the url (sometimes page is preserved if the url stays the same)

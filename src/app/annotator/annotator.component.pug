@@ -1,3 +1,4 @@
+doctype html
 //-Annotator Component
     
     Provides:
@@ -6,9 +7,9 @@
     
 #emojiAnnotator.annotator.reading-page([ngClass]="[ lineExpanded ? 'comment-expanded' : '' , commentPane ? 'sliding-out' : '']")
     .text-options(
-        *ngIf="directCommentOptions.length > 0", 
-        (blur)="hideCommentOptions($event)", 
-        [style.top]="highlightY + 'px'", 
+        *ngIf="directCommentOptions.length > 0",
+        (blur)="hideCommentOptions($event)",
+        [style.top]="highlightY + 'px'",
         [ngClass]="{ 'active' : optionsShow }"
     )
         //- Desktop buttons
@@ -95,15 +96,16 @@
         article#annotatorContent.content.active-content.pt-4(
             (mouseup)="showCommentOptions($event)",
             (touchend)="showCommentOptions($event)",
-            (clickOutside)="hideCommentOptions()"
+            (clickOutside)="hideCommentOptions()",
+            #article
         )
             //- Word Loop: reading.words is one big array of individual "words", which can also be puncuation or media
-            <span #words class="w" *ngFor="let w of reading.words; let i = index" [ngClass]="[ w && w.styles ? w.styles.join(' ') : '', getHighlightClass(i) ]" [attr.index]="i">
+            <span #words class="w" *ngFor="let w of reading.words | slice:0:lastWord ; let i = index" [ngClass]="[ w && w.styles ? w.styles.join(' ') : '', getHighlightClass(i) ]" [attr.index]="i">
                 //- Comment Loop: Display comments if they exist for this Word
                 edji-comment(
                     *ngFor="let comment of commentsByIndex[i]; let ci = index",
-                    [class.hidden]="(!project.heat_vision && user._id !== project.teacher_id) && comment.user_id !== user._id && comment.user_id !== project.teacher_id",
-                    [class.owner]="comment.user_id === project.teacher_id",
+                    [class.hidden]="!isCommentVisible(comment)",
+                    [class.spec-owner]="comment.user_id === project.teacher_id",
                     [comment]="comment",
                     (mouseenter)='focusHighlight(comment.start, comment.end, comment.loc)',
                     (mouseleave)='unfocusHighlight(comment.start, comment.end, comment.loc)',
@@ -142,7 +144,7 @@
                     //- Image Hotspots: Show hotspot for each comment
                     .hotspot(
                         *ngFor="let comment of commentsByIndex[i]",
-                        [class.hidden]="(!project.heat_vision && user._id !== project.teacher_id) && comment.user_id !== user._id && comment.user_id !== project.teacher_id",
+                        [class.hidden]="!isCommentVisible(comment)",
                         [style.top]="comment['loc'] ? comment['loc']['y'] + '%' : '0%'",
                         [style.left]="comment['loc'] ? comment['loc']['x'] + '%' : '0%'"
                     )
@@ -160,6 +162,8 @@
                 )
                 //- end Word span ".w"
             </span>
+        .row.mb-4(*ngIf="lastWord < reading.words.length")
+            .loading(style="margin: 0 auto;")
 //- End of Reading options
 .button__row
     button.btn.btn-secondary(
@@ -182,7 +186,7 @@
 
 //- Bottom of the page Options
 .fixed-btn-row--SE.hidden-sm-down(
-    [class.bottom-bar-offset]="user._id == project.teacher_id"
+    [class.bottom-bar-offset]="user._id == project.teacher_id._id"
 )
     tutorial-box(
         [tutorialName]="'highlighting'",
@@ -210,8 +214,9 @@ hot-discussions(
 )
 
 //- comment-pane
-comment-pane.hidden-lg-up(
+comment-pane(
     [isActive]="selectedComment.active",
+    [isSelected]="selectedComment.selected",
     [comment]="selectedComment",
     (hideComment)="toggleCommentPane(false)",
     (commentActivationMobile)="setActiveCommentByIndex($event.activate, $event.wi, $event.ci, $event.activatedComment)",

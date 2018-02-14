@@ -1,17 +1,18 @@
-import { Title } from '@angular/platform-browser';
-import { REPLServer } from 'repl';
-import { ActivatedRoute, Router, Params } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { Angulartics2 } from 'angulartics2';
+import { Title } from '@angular/platform-browser'
+import { REPLServer } from 'repl'
+import { ActivatedRoute, Router, Params } from '@angular/router'
+import { FormBuilder, FormGroup, Validators } from '@angular/forms'
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
+import { Angulartics2 } from 'angulartics2'
+import { IMultiSelectOption, IMultiSelectSettings } from 'angular-2-dropdown-multiselect'
 
-import { ReadingService } from '../shared/reading.service';
-import { ProjectService } from '../shared/project.service';
-import { UtilToolService } from '../shared/util-tool.service';
-import { AuthService } from '../shared';
+import { ReadingService } from '../shared/reading.service'
+import { ProjectService } from '../shared/project.service'
+import { UtilToolService } from '../shared/util-tool.service'
+import { AuthService } from '../shared'
 import { EdjiComment, EdjiQuestion, User } from '../shared/datatypes'
 import { ReadingShareObject } from './../shared/nav-bar'
-import * as Rangy from 'rangy';
+import * as Rangy from 'rangy'
 
 @Component({
     selector: 'new-reading-page',
@@ -53,24 +54,26 @@ export class NewReadingPage implements OnInit {
     };
 
     // Messages
-    private successAlert    : string = "Nice work! This reading draft was successfully saved!"
+    private successAlert : string = "Nice work! This reading draft was successfully saved!"
     private readingPlaceholder: string = 'Type or paste your reading...'
-    private error           : string = '' // Error message 
-    private alert           : string = ''
+    private error : string = '' // Error message 
+    private alert : string = ''
 
-    private versionId       : string = ''
-    private ownerId         : string
-    private copyId          : string = ''
-    private editorToolbarY  : number = 54
+    private versionId : string = ''
+    private ownerId : string
+    private copyId : string = ''
+    private copyCleanHeroMsg : boolean = false
+    private editorToolbarY : number = 54
     private editorToolbarHidden : boolean
-    private insertNode      : any
+    private insertNode : any
     private masterSelection : any
-    private currentUser     : User // User data of the current user.
+    private currentUser : User // User data of the current user.
 
     private static readonly EDITOR_TOOLBAR_Y = 54
 
     // Used for processing reading
     private words: any[] = []
+    private previousWordY: number = 0
 
     // Configuration Options for Medium Editor
     private mediumEditorConfig: any = {
@@ -113,6 +116,23 @@ export class NewReadingPage implements OnInit {
         }
     ]
     private guideStepNo: number = 1
+
+    private subjects: IMultiSelectOption[] = [
+        {id:'literature',name:'Language Arts'},
+        {id:'math',name:'Mathematics'},
+        {id:'science',name:'Science'},
+        {id:'geography',name:'Geography'},
+        {id:'history',name:'History'},
+        {id:'government',name:'Government'},
+        {id:'health',name:'Health'},
+        {id:'languages',name:'Foreign Languages'},
+        {id:'art',name:'Art'},
+        {id:'computer',name:'Computers/Technical'}
+    ]
+    private subjectDropSettings: IMultiSelectSettings = {
+        displayAllSelectedText: true,
+        dynamicTitleMaxItems: 4
+    }
     
     constructor(
         private _route: ActivatedRoute,
@@ -128,8 +148,10 @@ export class NewReadingPage implements OnInit {
     ) {
         this.readingForm = fb.group({
             title: [null, Validators.required],
-            source: [null, null]
-            // label: ['Group 1', Validators.required]
+            source: [null, null],
+            public: ['true'],
+            subjects: [[], Validators.required],
+            grade_levels: [[], Validators.required]
         });
 
         // Define the user object.
@@ -150,18 +172,24 @@ export class NewReadingPage implements OnInit {
         if (this.readingId) {
             this.getReading(this.readingId)
         } else if (this.copyId) {
-            this.getReading(this.copyId)
+            this.getReading(this.copyId, !this._auth.getUser().hero || !this._auth.getUser().hero.active)
         }
 
         this._title.setTitle('Edji | New Reading')
      }
 
-     private getReading(readingId: string) {
+     private getReading(readingId: string, stripHero?: boolean) {
 
         this._readings.get(readingId)
             .take(1)
             .subscribe(
                 data => {
+                    if (stripHero && data.questions && data.questions.length > 0) {
+                        // Clean out features which require Hero, and tell the user it happened
+                        data.html = data.html.replace(/\<\$question\$\>/g, '')
+                        data.questions = []
+                        this.copyCleanHeroMsg = true
+                    }
                     this.reading = data;
                     if (this.reading.html) {
                         if (this.reading.html.indexOf("<$question$>") !== -1) {
@@ -173,6 +201,8 @@ export class NewReadingPage implements OnInit {
                         //this.el.nativeElement.querySelector('#readingTitle').value = this.reading.title
                         this.readingForm.patchValue({
                             title: this.reading.title,
+                            subjects: this.reading.subjects,
+                            grade_levels: this.reading.grade_levels,
                             source: this.reading.source,
                         });
                         this.versionId = this.reading.version_id;
@@ -214,13 +244,22 @@ export class NewReadingPage implements OnInit {
                     focusNode = focusNode.parentNode
                 }
 
-                if (focusNode.parentNode && focusNode.parentNode.id !== 'angularMediumEditor' 
-                    && focusNode.parentNode.parentNode && focusNode.parentNode.parentNode.id !== 'angularMediumEditor') {
-                    this.editorToolbarHidden = true
-                } else {
-                    this.editorToolbarHidden = false
+                // if (focusNode.parentNode && focusNode.parentNode.contentEditable !== 'true' 
+                //     && focusNode.parentNode.parentNode && focusNode.parentNode.parentNode.contentEditable !== 'true') {
+                //     this.editorToolbarHidden = true
+                // } else {
+                //     this.editorToolbarHidden = false
+                // }
+                this.editorToolbarHidden = true
+                let editors = document.querySelectorAll('medium-editor')
+                for (let i = 0; i < editors.length; i++) {
+                    if (editors[i] && editors[i].contains(focusNode)) {
+                        this.editorToolbarHidden = false
+                    }
                 }
-
+                if (focusNode && focusNode.className.indexOf('medium-editor-element') > -1) {
+                    focusNode = focusNode.childNodes[0]
+                }
                 this.insertNode = focusNode
                 this.editorToolbarY = NewReadingPage.EDITOR_TOOLBAR_Y > focusNode.offsetTop ? NewReadingPage.EDITOR_TOOLBAR_Y : focusNode.offsetTop
             } else {
@@ -248,10 +287,18 @@ export class NewReadingPage implements OnInit {
      * Pushes text nodes as formatted objects into this.words
      * @param element Root element to start crawling from
      */
-    private extractTextNodes(element: any, ancestorTags ?: string[], lastInBlock ?: boolean) {
+    private extractTextNodes(element: any, ancestorTags ?: string[]) {
         let tagName = 'tagName' in element && element.tagName.toLowerCase()
         let nodes = element.childNodes
-        
+        // Detect line breaks
+        let currentTop = element.getBoundingClientRect ? element.getBoundingClientRect().top : this.previousWordY
+        if ((currentTop - this.previousWordY) > 10 && this.previousWordY != 0) {
+            this.words.push({
+                str: '',
+                styles: ['br']
+            })
+        }
+        this.previousWordY = currentTop
         // Children should inherit tags from several elements up
         // eg. "B" style should propagate down
         if (!ancestorTags) {
@@ -271,20 +318,25 @@ export class NewReadingPage implements OnInit {
         }
 
         if (tagName === 'a') {
+            let aStyles = [].concat(ancestorTags)
+            for (let i = 0; i < nodes.length; i++) {
+                if (nodes[i].tagName) {
+                    aStyles.push(nodes[i].tagName.toLowerCase())
+                }
+            }
             this.words.push({
                 str: element.innerText, // to be used for image title
                 url: element.getAttribute('href'), 
-                styles: ['a']
+                styles: aStyles
             })
             nodes = []
         }
 
         for (let index = 0; index < nodes.length; index++) {
-
             let node = nodes[index]
             // Copy tags array to variable local to loop instance
             let inheritedTags = ancestorTags.slice();
-            
+
             // If the node is just a break
             if ('tagName' in node && node.tagName.toLowerCase() == 'br') {
                 // Add break element
@@ -317,23 +369,9 @@ export class NewReadingPage implements OnInit {
                     let addBr = false;
                     if (index == 0 && wIndex == 0) {
                         word.styles.push(tagName + '-a');
-                        if ( this.words.slice(-1) && this.words.slice(-1)['styles'] && this.words.slice(-1)['styles'].indexOf('br') >= 0 ) {
-                            // Do nothing
-                        } else if (tagName == 'p' || tagName == 'h1' || tagName == 'h2' || tagName == 'h3') {
-                            this.words.push({
-                                str: '',
-                                styles: ['br']
-                            })
-                        }
                     }
                     if (index == nodes.length - 1 && wIndex == nodeWords.length - 1) {
                         word.styles.push(tagName + '-z')
-                        if (tagName == 'p' || tagName == 'h1' || tagName == 'h2' || tagName == 'h3') {
-                            addBr = true
-                        }
-                        if (lastInBlock === true) {
-                            addBr = true
-                        }
                     }
                     if (typeof(word.str) == 'string' && word.str.trim().length < 1) {
                         // As a space saving technique, we save spaces as empty object
@@ -354,30 +392,9 @@ export class NewReadingPage implements OnInit {
                         }
                         this.words.push(word)
                     }
-                    if (addBr) {
-                        // Add break element
-                        this.words.push({
-                            styles: ['br']
-                        })
-                    }
-                }
-                if (lastInBlock === true) {
-                    this.words.push({
-                        styles: ['br']
-                    })
                 }
             } else {
-                if (lastInBlock === true ) {
-                    this.words.push({
-                        styles: ['br']
-                    })
-                }
-                // If not a text node, dig deeper for text nodes
-                if ( index == nodes.length - 1 && (tagName == 'p' || tagName == 'h1' || tagName == 'h2' || tagName == 'h3')) {
-                    this.extractTextNodes(node, inheritedTags, true)
-                } else {
-                    this.extractTextNodes(node, inheritedTags)
-                }
+                this.extractTextNodes(node, inheritedTags)
             }
         }
     }
@@ -431,7 +448,7 @@ export class NewReadingPage implements OnInit {
         }
 
         // This would be better handled by formcontrols
-        if (!form.title || form.title.length < 1 || this.readingIsBlank || !questionsValid) {
+        if (!form.title || form.title.length < 1 || this.readingIsBlank || !questionsValid || (form.public == 'true' && (form.grade_levels.length < 1 || form.subjects.length < 1))) {
             this.addLoadingD = false
             this.addLoadingP = false
             this.error = 'Not quite, please check all the fields!'
@@ -442,10 +459,16 @@ export class NewReadingPage implements OnInit {
         this.words = []
 
         // Process reading html into useful Words Array
-        let editorHtml = this.el.nativeElement.querySelectorAll('#angularMediumEditor')
+        let editors = this.el.nativeElement.querySelectorAll('#angularMediumEditor')
         let concatHtml = ''
+        // Loop through Medium-Editor elements, and get child elements???
 
-        for (let i=0; i<editorHtml.length; i++) {
+        for (let i=0; i<editors.length; i++) {
+            let contentEl = editors[i]
+            // Make sure we aren't copying parts of the medium-editor
+            while (contentEl.childNodes.length == 1 && contentEl.firstChild.classList.contains('medium-editor-element')) {
+                contentEl = contentEl.firstChild
+            } 
             // Add question "word"
             if (this.readingHtml[i].question) {
                 // Concatenate the 
@@ -462,15 +485,27 @@ export class NewReadingPage implements OnInit {
             }
 
             // Concatenate the html to 1 string [not currently using with current config]
-            // this.concatHtml += editorHtml[i]
-            concatHtml += this.readingHtml[i].text
-
-            let childEls = editorHtml[i].childNodes
-
-            // Loop through all Reading html elements
-            for (let childEl of childEls) {
-                this.extractTextNodes(childEl)
+            concatHtml += contentEl.innerHTML
+            if (!document.querySelector('#renderedReading')){
+                let div1 = document.createElement('div')
+                div1.setAttribute('id','renderedReading')
+                div1.style.width = '100000px'
+                div1.style.position = 'absolute'
+                div1.style.top = '100%'
+                div1.style.left = '100%'
+                div1.className = 'content'
+                document.body.appendChild( div1 )
             }
+            let rendered: any = document.querySelector('#renderedReading')
+            let renderHtml
+            // rendered['innerHTML'] = this.readingHtml[i].text
+            rendered['innerHTML'] = contentEl.innerHTML
+            renderHtml = document.querySelector('#renderedReading')
+
+            // Reset line break detection
+            this.previousWordY = 0
+            // Loop through all Reading html elements
+            this.extractTextNodes(renderHtml)
         }
 
         // Create reading object to submit based on form object parameter
@@ -496,9 +531,6 @@ export class NewReadingPage implements OnInit {
         if (this.ownerId) {
             reading.owner_id = this.ownerId
         }
-        // if (this.readingHtml[1]) {
-        //     reading.questions = this.questions
-        // }
 
         // having an _id controls whether it is a put or post call
         let submitAction: string
@@ -532,14 +564,12 @@ export class NewReadingPage implements OnInit {
                                     this.addLoadingD = false
                                     this.addLoadingP = false
                                     this.router.navigate(['project', project._id], { queryParams: { readingCodeModal: true }})
-                                    // this._util.showShareCode=true; 
                                 }, (error) => {
                                     console.error(error)
                                     this.addLoadingD = false
                                     this.addLoadingP = false
                                 });
                         } else {
-                            // console.log(data)
                             this.addLoadingD = false
                             this.addLoadingP = false
                             this.router.navigate(['new-reading/' + data._id], { queryParams: { successAlert: this.successAlert } })
@@ -550,7 +580,7 @@ export class NewReadingPage implements OnInit {
                     }
                 },
                 error => {
-                    console.log(error)
+                    console.error(error)
                     this.addLoadingD = false
                     this.addLoadingP = false
                     if (reading.questions.length > 0) {
@@ -614,6 +644,7 @@ export class NewReadingPage implements OnInit {
      * Adds a question block to the new reading and then adds in a new medium editor
      */
     private addQuestion(insertHtml?: string, insertPos?: number) {
+        console.log(insertHtml,insertPos )
         let answer_types = this._auth.getAllowedCommentMediaTypes()
         let question = <EdjiQuestion>{
             prompt: '',
@@ -661,8 +692,16 @@ export class NewReadingPage implements OnInit {
             document.dispatchEvent(event)
 
             // Create a new block and slice it in.. then add the stored text to that block
-            let insertPos = Number(this.insertNode.parentNode.parentNode.getAttribute('rIndex')) + 1
-
+            let insertPos = 1
+            let refNode = this.insertNode.parentNode
+            for (let i = 0; i < 5; i++) {
+                if (refNode.getAttribute('rindex')) {
+                    insertPos = Number(refNode.getAttribute('rindex')) + 1
+                    // Found it
+                    i = 5
+                }
+                refNode = refNode.parentNode
+            }
             // Make the html fragment a real piece of html!
             var div = document.createElement('div')
             div.appendChild( tmpHtml.cloneNode(true) )

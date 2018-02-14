@@ -23,6 +23,7 @@
     overflow: hidden;
     border: none;
     width: 180px;
+    min-width: 180px;
     display: block;
     position: relative !important;
     padding: 0;
@@ -63,14 +64,10 @@ button {
     font-weight: 500;
 }
 
-.reply-audio-wrapper {
-    width: 100%;
-}
-
-.reply-wave {
-    width: calc(100% - 74px) !important;
-}
-
 #audioRecord:focus {
     background: #e0e4e8;
+}
+
+.wave-wrap {
+    float: left;
 }

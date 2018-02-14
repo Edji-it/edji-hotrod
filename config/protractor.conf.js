@@ -33,7 +33,7 @@ exports.config = {
           '--window-size=411,731'
           ]
       },
-      specs: [
+      // specs: [
         // 'src/tests/e2e/mobile/home.spec.ts',
         // 'src/tests/e2e/mobile/account.spec.ts',
         // 'src/tests/e2e/mobile/login.spec.ts',
@@ -43,7 +43,7 @@ exports.config = {
         // 'src/tests/e2e/mobile/dashboard.spec.ts',
         // 'src/tests/e2e/mobile/questions.spec.ts',
         // 'src/tests/e2e/mobile/version.spec.ts',
-      ],
+      // ],
       browserName: 'chrome',
       marionette: true,
       platformName: 'Android',
@@ -62,17 +62,17 @@ exports.config = {
           '--window-size=1680,1050'
           ]
       },
-      specs: [
+      // specs: [
         // 'src/tests/e2e/desktop/home.spec.ts',
         // 'src/tests/e2e/desktop/account.spec.ts',
         // 'src/tests/e2e/desktop/login.spec.ts',
         // 'src/tests/e2e/desktop/owner-tools.spec.ts',
         // 'src/tests/e2e/desktop/new-reading.spec.ts',
-        'src/tests/e2e/desktop/project.spec.ts',
+        // 'src/tests/e2e/desktop/project.spec.ts',
         // 'src/tests/e2e/desktop/dashboard.spec.ts',
         // 'src/tests/e2e/desktop/questions.spec.ts',
         // 'src/tests/e2e/desktop/version.spec.ts',
-      ],
+      // ],
       shardTestFiles: true,
       maxInstances: 1
     }
@@ -94,27 +94,28 @@ exports.config = {
   Run a suite of tests using 'yarn run protractor --suite suiteNameHere'
   - Spec patterns are relative to the location of the spec file. They may include glob patterns.
    */
-  // suites: {
-  //   // Example suite: homepage: 'tests/e2e/homepage/**/*Spec.js',
+  suites: {
+    // Example suite: homepage: 'tests/e2e/homepage/**/*Spec.js',
 
-  //   // To test the entire site:
-  //   home:       helpers.root('src/tests/e2e/home.spec.ts'),
-  //   account:    helpers.root('src/tests/e2e/account.spec.ts'),
-  //   login:      helpers.root('src/tests/e2e/login.spec.ts'),
-  //   ownerTools: helpers.root('src/tests/e2e/owner-tools.spec.ts'),
-  //   newReading: helpers.root('src/tests/e2e/new-reading.spec.ts'),
-  //   project:    helpers.root('src/tests/e2e/project.spec.ts'),
-  //   dashboard:  helpers.root('src/tests/e2e/dashboard.spec.ts'),
-  //   question:   helpers.root('src/tests/e2e/questions.spec.ts'),
-  //   version:    helpers.root('src/tests/e2e/version.spec.ts'),
-  //   all:        [helpers.root('src/tests/e2e/home.spec.ts'),  helpers.root('src/tests/e2e/login.spec.ts')]
-  // }, 
+    // To test the entire site:
+    home:       helpers.root('src/tests/e2e/home.spec.ts'),
+    account:    helpers.root('src/tests/e2e/account.spec.ts'),
+    login:      helpers.root('src/tests/e2e/login.spec.ts'),
+    ownerTools: helpers.root('src/tests/e2e/owner-tools.spec.ts'),
+    newReading: helpers.root('src/tests/e2e/new-reading.spec.ts'),
+    project:    helpers.root('src/tests/e2e/project.spec.ts'),
+    dashboard:  helpers.root('src/tests/e2e/dashboard.spec.ts'),
+    discover:   helpers.root('src/tests/e2e/discover.spec.ts'),
+    question:   helpers.root('src/tests/e2e/questions.spec.ts'),
+    version:    helpers.root('src/tests/e2e/version.spec.ts'),
+    all:        [helpers.root('src/tests/e2e/home.spec.ts'),  helpers.root('src/tests/e2e/login.spec.ts')]
+  }, // suites
 
   exclude: [],
 
   framework: 'jasmine2',
 
-  allScriptsTimeout: 110000,
+  allScriptsTimeout: 10000,
 
   // Options to be passed to Jasmine-node.
   jasmineNodeOpts: {

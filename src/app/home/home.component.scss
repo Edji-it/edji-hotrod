@@ -2,7 +2,7 @@
 
 @import '../../sass/base/variables';
 
-$topPromoMinHeight: 500px;
+$topPromoMinHeight: 360px;
 $phone-width-min: 0px;
 $phone-width: 480px;
 $tablet-width: 768px;
@@ -13,10 +13,37 @@ $tablet-width: 768px;
 
     & img {
         // height: 100%;
-            height: $topPromoMinHeight;
-            max-width: none !important;
-            // offset image to give text space
-            margin-left: -120px;
+        height: $topPromoMinHeight;
+        max-width: none !important;
+        // offset image to give text space
+        margin-left: -120px;
+    }
+}
+
+.join-header {
+    font-size: 32px;
+    font-weight: 400;
+    margin-bottom: 15px;
+    text-shadow: 0 0 4px #000;
+    &.join-header__top {
+        margin-bottom: 12px;
+    }
+}
+
+.line-separator {
+    border-bottom: thin solid white;
+    margin: 8px 0 8px 0;
+}
+
+#projectCodeInput {
+    color: #000;
+    font-family: Courier New, Courier, monospace;
+    font-weight: bold;
+
+    &::-webkit-input-placeholder {
+        color: #dedede;
+        font-family: 'Open Sans', Arial;
+        font-weight: normal;
     }
 }
 
@@ -37,7 +64,13 @@ $navy: #072649;
         font-size: 42px;
     }
     @media(max-width: 800px) {
-        font-size: 36px;
+        font-size: 32px;
+    }
+}
+
+.promo-text {
+    @media (max-width: $sm-max-device) {
+        margin-bottom: 25px;
     }
 }
 
@@ -83,9 +116,11 @@ $navy: #072649;
     z-index: 6000;
     // Medium devices (tablets, less than 992px)
     @media (max-width: 767px) {
-        //position: absolute;
         background: rgba(0,0,0,0.5);
         height: $topPromoMinHeight;
+        position: absolute;
+        left: 0;
+        top: 0;
     }
 }
 
@@ -101,24 +136,78 @@ $navy: #072649;
   }
 }
 
-/* Mobile Optimization */
-@include phone {
-    $topPromoMinHeight: 300px;
-    .join-panel {
-        position: absolute;
-        left: 0;
-        top: 0;
-    }
-    .promo-panel {
-        position: relative;
-    }
-    .home_vertical_fix {
-        padding-bottom: 40px;
+.promo-img__background {
+	// margin: 10px;
+	border-radius: 4px;
+	// box-shadow: 0px 5px 5px 1px rgba(0, 0, 0, 0.2);
+}
+
+.promo-gif__full {
+    width: 100%;
+}
+
+.promo-button__row {
+    @media (max-width: $sm-max-device) {
+        margin-top: 60px;
     }
 }
 
-.promo-gif {
-	// margin: 10px;
-	border-radius: 3px;
-	box-shadow: 0px 5px 5px 1px rgba(0, 0, 0, 0.2);
+ul.promo-list {
+    padding: 0px 0px 0px 12px;
+    margin-bottom: 1rem;
+    // list-style-type: square;
+}
+
+li.promo-list {
+    margin: 8px 0px;
+    line-height: initial;
+    font-style: italic;
+    font-size: 14px;
+}
+
+.promo-row__no-btm-padding {
+    @media (max-width: $sm-min-device) {
+        padding-bottom: 0;
+    }
+}
+
+.promo-content__divider {
+    width: 88%;
+    height: 1px;
+    margin: 5px auto 0;
+    background-color: #000;
+    background: radial-gradient(circle at center, rgba(0,0,0,1),rgba(255,255,255,0));
+}
+
+// Set the images in each component sass file
+.flexi-img {
+    &.promo-img-1 {
+        background-image: url('/assets/images/promo-reading_action.png');
+    }
+    &.promo-img-2 {
+        background-image: url('/assets/images/promo-heatmap_hot.png');
+    }
+    &.promo-img-3 {
+        background-image: url('/assets/images/promo-hero.png');
+    }
+    &.promo-img-4 {
+        background-image: url('/assets/images/promo-devices.png');
+    }
+}
+
+.nopadding__min-screen {
+    padding-left: 45px;
+    padding-right: 45px;
+    @media (max-width: $sm-max-device) {
+        padding: 0;
+    }
+}
+
+.full-width__min-screen {
+    height: 100%;
+    width: 100%;
+    @media (max-width: $sm-max-device) {
+        height: 250px;
+        width: initial;
+    }
 }

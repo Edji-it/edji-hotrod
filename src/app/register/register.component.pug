@@ -2,23 +2,22 @@ nav-bar
 .container-fluid
   .row.navy-gradient.has-sparks
     .sparks
-    .col-sm-3
-    .col-sm-6.col-pad.on-dark
-      h1.on-dark(style="margin-bottom:0.5em;", [innerHtml]="'Welcome :tada:' | emojione")
-      h4.mb-2.font-weight-normal Your Edji adventure is about to begin!
+    .col-sm-2
+    .col-sm-8.col-pad.on-dark
+      h1.on-dark.center([innerHtml]="'Your Edji Adventure Begins :tada:' | emojione")
       p(*ngIf="readingToAdd") Your reading will be ready to edit after you sign up!
       p(*ngIf="projectToAdd") Your reading will be on the dashboard after you sign up!
-      div.text-center.mt-4(*ngIf="route.snapshot.queryParams.switch == 'google'")
-        h4 Register with Google
-        hot-google-button
+      div.text-center.mt-4
+        hot-google-button([copy]="'Sign Up with Google'")
         hr
-        p(style="margin: -38px auto 10px auto; background: #0f365a; width: 25px; padding-left: 1px;") or
+        p.text-divider or
       h4.text-center Register with a username and password
       form#registerForm([formGroup]="registerForm", (ngSubmit)="register(registerForm.value)")
         .form-group
           label(for="usernameInput") Username
           input#usernameInput(type="text", [formControl]="registerForm.controls['username']", tabindex="0", [placeholder]="userCopy.username")
           div#msgUsernameRequired.alert.alert-info(*ngIf="registerForm.controls['username'].hasError('required')") Enter a unique username! It should not contain spaces.
+          #msgUsernameIncorrect.alert.alert-info(*ngIf="registerForm.controls['username'].hasError('usernameIncorrect') && registerForm.controls['username'].dirty") Your username cannot be an email address...
         .form-group
           label(for="fullnameInput") Full Name
           input#fullnameInput(type="text", [formControl]="registerForm.controls['fullname']", tabindex="0", [placeholder]="userCopy.fullname")

@@ -1,11 +1,17 @@
-import { Project } from './datatypes';
+import { Project } from './datatypes'
 import { Injectable } from '@angular/core'
 import { Http, Response, Headers, RequestOptions } from '@angular/http'
-import { BehaviorSubject, Observable, Subject } from 'rxjs/Rx';
-import 'rxjs/add/operator/toPromise';
+import { BehaviorSubject, Observable, Subject } from 'rxjs/Rx'
+import 'rxjs/add/operator/toPromise'
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http'
 
 import { AuthService } from './auth.service'
 import { Reading } from './datatypes/reading'
+
+interface FilterObj {
+  type: string,
+  grades?: number[]
+}
 
 @Injectable()
 export class ReadingService {
@@ -14,7 +20,8 @@ export class ReadingService {
     Last Modified: 5 Aug 2017
   */
 
-  constructor(private http: Http, private _auth: AuthService) {
+
+  constructor(private http: Http, private _http: HttpClient, private _auth: AuthService) {
   }
 
   ngOnInit() {
@@ -139,7 +146,7 @@ export class ReadingService {
   public save(reading: any): Observable<any> {
     // DO NOT ADD OWNER_ID OR TEACHER_IDS
     // The server takes care of all of that by itself
-
+    
     if (reading['_id']) {
       let putReading = {
         title: reading.title,
@@ -147,29 +154,63 @@ export class ReadingService {
         html: reading.html,
         source: reading.source,
         draft: reading.draft,
-        questions: reading.questions
+        questions: reading.questions,
+        public: reading.public,
+        subjects: reading.subjects,
+        grade_levels: reading.grade_levels
       } // let
 
       return this.http
-              .put(this._auth.getUrl() + '/readings/' + reading['_id'], { reading: putReading }, this._auth.getOptions())
-              .map(data => {
-                if (data.json() && data.json().reading) {
-                  this.readingValue = data.json().reading
-                  this.readingSource.next(this.readingValue)
-                }
-                return data.json().reading;
-              });
+        .put(this._auth.getUrl() + '/readings/' + reading['_id'], { reading: putReading }, this._auth.getOptions())
+        .map(data => {
+          if (data.json() && data.json().reading) {
+            this.readingValue = data.json().reading
+            this.readingSource.next(this.readingValue)
+          }
+          return data.json().reading;
+        });
     } else {
       return this.http
-              .post(this._auth.getUrl() + '/readings', { reading: reading }, this._auth.getOptions())
-              .map(data => {
-                if (data.json() && data.json().reading) {
-                  this.readingValue = data.json().reading
-                  this.readingSource.next(this.readingValue)
-                }
-                return data.json().reading;
-              });
+        .post(this._auth.getUrl() + '/readings', { reading: reading }, this._auth.getOptions())
+        .map(data => {
+          if (data.json() && data.json().reading) {
+            this.readingValue = data.json().reading
+            this.readingSource.next(this.readingValue)
+          }
+          return data.json().reading;
+        });
     } // if
   } // public save()
-
+  
+  public getFeed(filters?: FilterObj): Observable<any> {
+    let feedParams = new HttpParams()
+    if (filters  && filters['grades']) {
+      let grades = filters['grades']
+      // filters['grades'].forEach( grade => { feedParams = feedParams.append("grades", grade + "")})
+      feedParams = feedParams.append("grades", Math.min(...grades) + "")
+      feedParams = feedParams.append("grades", Math.max(...grades) + "")
+    }
+    if (filters && filters['size']) {
+      feedParams = feedParams.append("size", filters['size'])
+    }
+    if (filters && filters['start']) {
+      feedParams = feedParams.append("start", filters['start'])
+    }
+    if (filters && filters['type']) {
+      feedParams = feedParams.append("type", filters['type'])
+    }
+    feedParams = feedParams.append("populate", "owner").append("populate", "words_preview")
+    
+    //{{url}}/readings/feed?grades[]=1&grades[]=8&populate[]=words_preview&populate[]=owner&start=0
+    return this._http.get(
+      this._auth.getUrl() + '/readings/feed', 
+        { headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          'Authorization': this._auth.getToken()
+        }), 
+        params: feedParams })
+      .map(data => {
+        return data['readings'] || []
+      })
+  }
 }

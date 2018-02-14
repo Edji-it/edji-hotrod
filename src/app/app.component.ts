@@ -1,11 +1,11 @@
 /*
  * Angular 2 decorators and services
  */
-import { Component, ViewEncapsulation } from '@angular/core';
-import { Angulartics2GoogleAnalytics } from 'angulartics2';
+import { Component, ViewEncapsulation } from '@angular/core'
+import { Angulartics2GoogleAnalytics } from 'angulartics2/ga'
 import { Angulartics2 } from 'angulartics2'
 
-import { AppState } from './app.service';
+import { AppState } from './app.service'
 import { AuthService } from './shared'
 
 /*

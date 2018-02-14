@@ -56,30 +56,6 @@ $tablet-width: 768px;
     }
 }
 
-.comment__button--mobile {
-  display: none;
-  cursor: pointer;
-  max-width: auto !important;
-  min-width: 30px;
-  cursor: pointer;
-  padding: 3px;
-  width: 25px;
-  height: 25px;
-  display: block;
-  opacity: 0.5;
-  position: absolute;
-  left: -40px;
-  margin-top: -6px;
-
-  background-image: url('assets/images/icon-comment.svg');
-  background-size: 100% auto;
-
-  &.active {
-    opacity: 1;
-    background-image: url('assets/images/icon-comment--blue.svg');
-  }
-}
-
 .replyUsername {
 	opacity: 1;
   border: none;
@@ -94,17 +70,6 @@ $tablet-width: 768px;
   padding-left: 0.25em;
   font-size: 10px;
   float: right;
-}
-
-.comment__count--mobile {
-  position: absolute;
-  left: -35px;
-  color: white;
-  font-size: 10px;
-  font-weight: 500;
-  margin-top: -7px;
-  text-align: center;
-  width: 20px;
 }
 
 .mobileBlock-mobile-comment {
@@ -306,4 +271,24 @@ $mobileBoundVPad: 40px;
   top: 32px;
   left: 0px;
   background-color: #93DC4F;
+}
+
+.comment-selected-highlight {
+  position: absolute;
+}
+
+.comment-selected-dot__mobile {
+  height: 8px;
+  width: 8px;
+  border-radius: 50%;
+  position: relative;
+  top: 32px;
+  left: -14px;
+  background-color: #ECA736;
+}
+
+.selected--block {
+  box-shadow: 0px 0px 22px 4px rgba(0, 0, 0, 0.06);
+  padding: 0px 5px 6px 3px;
+  border-radius: 8px;
 }

@@ -1,0 +1,16 @@
+.badge-unfollow {
+    & .on-hover {
+        display: none;
+    }
+
+    &:hover {
+        background: #a81530;
+        
+        & .static {
+            display: none;
+        }
+        & .on-hover {
+            display: block;
+        }
+    }
+}

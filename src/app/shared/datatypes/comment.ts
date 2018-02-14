@@ -10,6 +10,7 @@ export interface EdjiComment extends BaseComment {
   active          : boolean,
   showAvatar      : boolean,
   imagePos: number,
+  selected: boolean
 }
 
 /** Comment properties we get from the server */

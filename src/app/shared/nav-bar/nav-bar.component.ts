@@ -1,4 +1,4 @@
-import { Angulartics2 } from 'angulartics2/dist';
+import { Angulartics2 } from 'angulartics2';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, Input, OnDestroy, OnInit, Output, EventEmitter } from '@angular/core'
 import { Subscription } from 'rxjs/Rx'
@@ -18,6 +18,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
     // Static input to display Save/Share buttons
     @Input() canPublish: boolean
     @Input() showProjectInfo: boolean
+    @Input() showDashboardOptions: boolean
     
     @Output() saveAction: EventEmitter<any> = new EventEmitter()
     @Output() shareAction: EventEmitter<ReadingShareObject> = new EventEmitter<ReadingShareObject>()
@@ -26,6 +27,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
     private showShareTooltip: boolean = false
     private user: any
     private currentProject: any
+    private projectOwner: any
     private createdDate: string
     private liveCount: number = 1
     private currentReading: any
@@ -110,7 +112,8 @@ export class NavBarComponent implements OnInit, OnDestroy {
         this.subscriptions.push(
           this._projects.currentProject.subscribe(
                 project => {
-                    this.currentProject = project;
+                    this.currentProject = project
+                    this.projectOwner = project.teacher
                     this.createdDate = new Date(project.createdAt).toDateString()
                 },
                 error => {

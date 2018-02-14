@@ -10,6 +10,7 @@
     "noEmitHelpers": true,
     "strictNullChecks": false,
     "baseUrl": "./src",
+    "skipLibCheck": true,
     "paths": {
     },
     "lib": [
@@ -24,8 +25,7 @@
       "source-map",
       "uglify-js",
       "webpack"
-    ],
-    "typeRoots" : ["node_modules/@types"]
+    ]
   },
   "exclude": [
     "node_modules",

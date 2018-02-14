@@ -6,7 +6,7 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { Subscription } from 'rxjs/Subscription'
 import { Angulartics2 } from 'angulartics2'
 
-import { AuthService, BumblebeeService, Copy, ProjectService } from './../shared'
+import { AuthService, Copy, ProjectService } from './../shared'
 
 @Component({
   selector: 'edji-register',
@@ -69,7 +69,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
     private _project: ProjectService,
     private route: ActivatedRoute,
     private angulartics: Angulartics2,
-    private bumblebee: BumblebeeService,
     private _fb: FormBuilder,
     private _title: Title
   ) {
@@ -77,7 +76,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.userCopy = new Copy().getUserCopy()
 
     this.registerForm = _fb.group({
-      username: [null, Validators.required],
+      username: [null, Validators.compose([Validators.required, this.usernameValidator])],
       fullname: [null, Validators.required],
       email: [null, Validators.compose([Validators.required, this.emailValidator])],
       password: [null, Validators.compose([Validators.required, Validators.minLength(6)])],
@@ -114,8 +113,15 @@ export class RegisterComponent implements OnInit, OnDestroy {
    * @returns error which should be assigned to the email input
    */
   private emailValidator(control: FormControl): any {
+    // If you change the RegExp for the email validator here, change it on the username validator as well
     let emailRe: RegExp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
     return emailRe.test(control.value) ? null : { 'emailIncorrect': true }
+  }
+
+  private usernameValidator(control: FormControl): any {
+    // If you change the RegExp for the username validator here, change it on the email validator as well
+    let usernameRe: RegExp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+    return !usernameRe.test(control.value) ? null : { 'usernameIncorrect': true }
   }
 
   /** Makes call to register the user */
@@ -141,16 +147,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
       .subscribe((data) => {
         this.registerLoading = false
         if (data.user) {
-          if (this._auth.getEnv() === "prod") { 
-            this.bumblebee.sendUserDetails(data.user) 
-            if(data.user.identities.indexOf('teacher') > -1) {
-              let spaceIndex = data.user.fullname.indexOf(' ')
-              if (spaceIndex < 0) { spaceIndex = data.user.fullname.length - 1 }
-              let fname = data.user.fullname.substr(0,spaceIndex)
-              let lname = data.user.fullname.substr(spaceIndex + 1)
-              this._auth.addToNewUsersList({ 'email' : data.user.email, 'fname' : fname, 'lname' : lname })
-            }
-          }
 
           data.user.username && this.angulartics.setUsername.next(data.user.username)
           data.user.email && this.angulartics.setUserProperties.next({ email: data.user.email})
@@ -182,7 +178,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
                 this._router.navigate(['/dashboard'])
               })
           } else {
-            console.error("don't know what to do!")
+            // default case where nothing special happens
             this._router.navigate(['/dashboard'])
           }
           

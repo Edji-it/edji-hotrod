@@ -43,6 +43,7 @@ $seamlessPlaceholderColor: #cdcdcd;
  * ----------------------------------------------------------
  */
 
+@import 'primeng';
 @import 'reading';
 @import 'project';
 @import 'emojionearea';
@@ -305,10 +306,76 @@ input[type=text].input-noborder, input[type=password].input-noborder, input[type
   background-color: #fefde5 !important;
 }
 
+.badge-success {
+	background-color: #87d87c;
+}
+
 .badge-secondary {
 	background-color: #aaa;
 }
 
 .badge-info {
 	background-color: #ef832e;
+}
+
+.badge-button {
+	cursor: pointer;
+}
+
+// Pagination overrides
+.ui-paginator-first, .ui-paginator-last {
+	display: none !important;
+}
+
+.ui-paginator a.ui-state-disabled {
+	opacity: 0.2;
+	pointer-events: none;
+}
+
+.ui-paginator-page, 
+.ui-paginator-element {
+	&, .ui-paginator & {
+		color: $blue;
+		padding-left: 8px;
+		padding-right: 8px;
+		margin: 0px 4px;
+
+		&:hover, &:focus {
+			background: $light-gray;
+		}
+	}
+}
+
+.ui-paginator-page.ui-state-active {
+	border: 1px solid $blue;
+	color: $blue; 
+}
+
+.text-divider {
+	margin: -38px auto 10px auto; 
+	background: #0f365a; 
+	width: 35px; 
+	text-align: center;
+	padding-left: 1px;
+}
+
+.tooltiptitle {
+  display: inline-block;
+  color: #ECA736;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+
+  &.inline-center {
+    line-height: 25px;
+    margin-bottom: 0px;
+  }
+}
+
+.tooltipbody {
+  font-size: 11px;
+}
+
+.tooltiptitle::after:not( .tooltipaudio) {
+  content: "\A";
+  white-space: pre;
 }

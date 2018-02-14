@@ -94,9 +94,30 @@
     margin-bottom: 0px !important;
     border-bottom: 1px dashed #cdcdcd !important;
     overflow:visible;
-    min-height: 92px;
+    min-height: 115px;
     float: none;
     width: 100%;
+}
+
+.reading-access-icon {
+    float: right;
+    padding: 0 4px;
+
+    & i {
+        pointer-events: none;
+        border-radius: 50%;
+    }
+    &.access-icon__hover:hover {
+        cursor: pointer;
+        background: #f2f2f2;
+        border-radius: 13px;
+    }
+}
+
+.reading-data {
+	float: left;
+	width: 100%;
+    line-height: 30px;
 }
 
 .project-card {
@@ -146,6 +167,17 @@ button.new-reading-btn {
 
 .blockquote-footer {
     color: inherit;
+}
+
+.badge-subject {
+    display: inline-block;
+    color: #fff;
+    font-size: 10px;
+    height: 12px;
+    line-height: 12px;
+    background: #79b1f3;
+    text-transform:capitalize;
+    margin-right: 2px;
 }
 
 .version-card {
@@ -310,4 +342,52 @@ button.new-reading-btn {
     padding-right: 50px;
     padding-top: 15px;
     padding-bottom: 15px;
+}
+
+.reading-access-icon .tooltipbody {
+    visibility: hidden;
+    width: 230px;
+    background-color: #fff;
+    color: #000;
+    text-align: left;
+    border-radius: 8px;
+    padding: 7px;
+    position: absolute;
+    z-index: 1;
+    bottom: 168%;
+    right: 0px;
+    bottom: 42px;
+    opacity: 0;
+    transition: opacity .4s;
+    font-size: 12px;
+    line-height: 12px;
+    filter: drop-shadow(rgba(0, 0, 0, 0.2) 0 2px 6px);
+}
+  
+.reading-access-icon .tooltipbody::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 71.5%;
+    margin-left: -5px;
+    border-width: 10px;
+    border-style: solid;
+    border-color: #fff transparent transparent transparent;
+}
+
+.reading-access-icon .tooltipbody.no-link::after {
+    left: 86.5%;
+}
+
+.reading-access-icon .tooltipbody.show {
+    visibility: visible;
+    opacity: 1;
+}
+
+.tooltiptitle {
+    margin-bottom: 12px;
+}
+
+#readingMakePrivate {
+    margin-right: 0;
 }

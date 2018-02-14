@@ -1,12 +1,13 @@
 import { Subscription } from 'rxjs/Rx';
-import { Angulartics2 } from 'angulartics2/dist';
+import { Angulartics2 } from 'angulartics2';
 import { ReadingService, ProjectService } from '../../../shared';
 import { Reading, Project }      from '../../../shared/datatypes';
 import { Component, Input, Output, OnDestroy, OnInit, EventEmitter } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'hot-reading-card',
-  templateUrl: 'reading-card.component.html',
+  templateUrl: 'reading-card.component.pug',
   styleUrls: ['./reading-card.component.scss']
 })
 export class ReadingCardComponent implements OnInit, OnDestroy {
@@ -18,6 +19,7 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
   private isLoading: boolean = false;
 
   @Input() reading: Reading;
+  @Input() readOnly: boolean;
 
   private showOptions     : boolean = false;
   private showOptionsV    : boolean = false;
@@ -27,10 +29,14 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
   private showAddModal    : boolean = false;
   private showDeleteReadingModal : boolean = false;
   private showDeleteProjectModal : boolean = false;
+  private togglePublicFlag: boolean
+  private currentPublicFlag: boolean
+  private showReadingDiscoverModal: boolean
 
   private versionHeight = 50;
 
   constructor(
+    private _route: ActivatedRoute,
     private _readings: ReadingService,
     private _projects: ProjectService,
     private angulartics: Angulartics2
@@ -81,6 +87,14 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
     } // if
   } // getVersions(versionId : string)
 
+  hasProjects() : boolean {
+    if (!this.reading.projects || !this.reading.projects[0]) {
+      return false
+    } else {
+      return true
+    }
+  }
+
   versionsHeight() : number {
     if (document.getElementById(this.reading._id) && document.getElementById(this.reading._id).clientHeight > 66 && !this.isLoading && this.versionHeight == 50) {
       this.versionHeight = document.getElementById(this.reading._id).clientHeight;
@@ -88,5 +102,52 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
     return this.versionHeight;
     
   } // versionsHeight() : number
+
+  togglePublic(publicFlag: boolean): void {
+    // Get the current public flag value from the reading; if none, assume false
+    this.currentPublicFlag = false
+    if (this.reading.public) {
+      this.currentPublicFlag = true
+    }
+    // If the user picks the value of public flag that it already is, close the tooltip
+    if (this.currentPublicFlag==publicFlag) {
+      this.togglePublicFlag=false
+      return
+    }
+    // If user wishes to make a private reading public, make sure grade_levels and subjects exist on the reading
+    if (publicFlag && (!this.reading.grade_levels || !(this.reading.grade_levels.length>0) || !this.reading.subjects || !(this.reading.subjects.length>0))) {
+      // Close the tooltip and toggle the grade_levels and subjects add modal
+      this.togglePublicFlag=false
+      this.showReadingDiscoverModal=true
+      return
+    }
+
+    if ((publicFlag && (this.reading.grade_levels && this.reading.subjects)) || !publicFlag) {
+      // Close the tooltip
+      this.togglePublicFlag=false
+
+      // cache the reading since the server will return a reading stripped of projects, and we only want to update the public flag on return
+      let updateReading = this.reading
+      updateReading.public = publicFlag
+      //  Make the call to PUT the reading public value
+      this._readings.save(updateReading)
+        .subscribe(
+          data => {
+            if (data._id) {
+              this.reading.public = data.public
+            }
+          },
+          error => {
+            console.error(error)
+          }
+        )
+    }
+  }
+
+  private togglePublicTooltip() {
+    if(this._route.snapshot.routeConfig.path!='discover') {
+      this.togglePublicFlag=!this.togglePublicFlag
+    }
+  }
 
 } // @Component

@@ -235,6 +235,7 @@ export class CommentComponent implements OnInit, OnDestroy {
    * TO-DO: Clean out code for optionally passing JUST comment.data as comment parameter
    */
   deactivate(comment ?: any, noUpdate ?: boolean): void {
+    this.comment.selected = false
     this.comment.active = this.active = false
     this.comment.new = false
     this.commentActivation.emit(false)
@@ -397,6 +398,9 @@ export class CommentComponent implements OnInit, OnDestroy {
 
   toggleCPane(comment?, forceOpen?: boolean): void {
     if (!this.commentPaneActive) {
+      if (comment.selected) {
+        this.comment.selected=true
+      }
        // Need to give the app 1 millisecond to update all arrays when adding a new comment
       if (!this.indicatesPane || forceOpen) {
         setTimeout(() => {

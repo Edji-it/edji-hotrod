@@ -26,7 +26,7 @@ export class BumblebeeService {
       .take(1)
       .subscribe(
         (success) => {  },
-        (error) => { console.error(error) } //don't think this can ever happen... bumblebee doesn't return errors
+        (error) => { console.error(error) }
       )
   }
 
