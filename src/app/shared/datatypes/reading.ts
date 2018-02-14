@@ -24,5 +24,7 @@ export interface BaseReading {
   draft: boolean,
   version_id?: string,
   _id: string,
-  questions?: EdjiQuestion[]
+  questions?: EdjiQuestion[],
+  grade_levels?: number[],
+  subjects?: string[],
 }

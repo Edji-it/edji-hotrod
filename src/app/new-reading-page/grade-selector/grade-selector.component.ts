@@ -1,4 +1,4 @@
-import { Component, forwardRef } from '@angular/core';
+import { Component, forwardRef, Input } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 
 const noop = () => {
@@ -17,6 +17,7 @@ export const CUSTOM_INPUT_CONTROL_VALUE_ACCESSOR: any = {
     providers: [CUSTOM_INPUT_CONTROL_VALUE_ACCESSOR]
 })
 export class GradeSelector implements ControlValueAccessor {
+    @Input() classSmall: boolean
 
     //The internal data model
     private gradeSelection: number[] = []
