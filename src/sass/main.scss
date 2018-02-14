@@ -350,3 +350,11 @@ input[type=text].input-noborder, input[type=password].input-noborder, input[type
 	border: 1px solid $blue;
 	color: $blue; 
 }
+
+.text-divider {
+	margin: -38px auto 10px auto; 
+	background: #0f365a; 
+	width: 35px; 
+	text-align: center;
+	padding-left: 1px;
+}
