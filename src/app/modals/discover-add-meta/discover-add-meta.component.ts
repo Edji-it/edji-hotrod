@@ -26,7 +26,7 @@ export class DiscoverAddMetaModal implements OnInit {
   private projectLink: string
 
   private subjects: IMultiSelectOption[] = [
-    {id:'literature',name:'Literature'},
+    {id:'literature',name:'Language Arts'},
     {id:'math',name:'Mathematics'},
     {id:'science',name:'Science'},
     {id:'geography',name:'Geography'},
