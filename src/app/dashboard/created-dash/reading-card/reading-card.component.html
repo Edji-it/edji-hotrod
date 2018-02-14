@@ -57,7 +57,7 @@
                 <i *ngIf="!reading.public" [innerHTML]="':lock:' | emojione"></i>
             </div>
             <div *ngIf="reading.subjects && reading.subjects.length > 0" style="float:right; margin-left:5px;">
-                <span class="badge-pill badge-secondary badge-subject" *ngFor="let subject of reading.subjects">{{subject}}</span>
+                <span class="badge-pill badge-secondary badge-subject" *ngFor="let subject of reading.subjects">{{subject | subjectName }}</span>
             </div>
         </div>
     </div>

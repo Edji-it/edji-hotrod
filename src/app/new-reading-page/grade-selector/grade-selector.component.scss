@@ -44,4 +44,10 @@
         -ms-user-select: none; /* Internet Explorer/Edge */
             user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome and Opera */
+
+    &.small-tile {
+        height: 1.8em;
+        width: 1.8em;
+        line-height: 1.75em;
+    }
 }

@@ -47,6 +47,7 @@ import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect'
 import { EmojiOnePipe, AddClassPipe } from './shared'
 import { EdjiDatePipe } from './pipes/edjidate.pipe.ts'
 import { LinkifyPipe } from './pipes/linkify.pipe'
+import { SubjectPipe } from './pipes/subject.pipe'
 import { UserInitialsPipe } from './pipes/userinitials.pipe.ts'
 
 // Components
@@ -64,7 +65,7 @@ import { HomeComponent } from './home'
 import { RegisterComponent } from './register'
 import { LoginForm, GuestForm } from './forms'
 
-import { LoginModal, UserDetailsUpdateModal, ResetPassComponent, DeleteCommentModal, DeleteAudioModal, DeleteReadingModal, DeleteProjectModal, AddProjectModal, LoginRequiredModal, HeroSubscribeComponent, HeroChangeComponent, LoginRegisterModal } from './modals'
+import { LoginModal, UserDetailsUpdateModal, ResetPassComponent, DeleteCommentModal, DeleteAudioModal, DeleteReadingModal, DeleteProjectModal, AddProjectModal, LoginRequiredModal, HeroSubscribeComponent, HeroChangeComponent, LoginRegisterModal, DiscoverAddMetaModal } from './modals'
 import { AnnotatorComponent, CommentComponent, TextCommentComponent, EmojiCommentComponent, EmojiKeyboardComponent, AudioCommentComponent, AvatarPortalComponent } from './annotator'
 import { ProjectPageComponent, ProjectInfoComponent, OwnerToolsComponent, LeaderboardComponent } from './project-page'
 import { FirefeedComponent } from './project-page/owner-tools/firefeed/firefeed.component'
@@ -131,6 +132,7 @@ type StoreType = {
     ClickOutsideDirective,
     EmojiOnePipe,
     LinkifyPipe,
+    SubjectPipe,
     EdjiDatePipe,
     UserInitialsPipe,
     ResetPassPage,
@@ -171,6 +173,7 @@ type StoreType = {
     HeroPromoComponent,
     HeroPricingComponent,
     DiscoverFeedComponent,
+    DiscoverAddMetaModal,
     LeaderboardComponent,
     FirefeedComponent,
     FirecardComponent,

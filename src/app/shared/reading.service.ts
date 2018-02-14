@@ -146,7 +146,7 @@ export class ReadingService {
   public save(reading: any): Observable<any> {
     // DO NOT ADD OWNER_ID OR TEACHER_IDS
     // The server takes care of all of that by itself
-
+    
     if (reading['_id']) {
       let putReading = {
         title: reading.title,
@@ -155,30 +155,30 @@ export class ReadingService {
         source: reading.source,
         draft: reading.draft,
         questions: reading.questions,
+        public: reading.public,
         subjects: reading.subjects,
         grade_levels: reading.grade_levels
       } // let
-      
 
       return this.http
-              .put(this._auth.getUrl() + '/readings/' + reading['_id'], { reading: putReading }, this._auth.getOptions())
-              .map(data => {
-                if (data.json() && data.json().reading) {
-                  this.readingValue = data.json().reading
-                  this.readingSource.next(this.readingValue)
-                }
-                return data.json().reading;
-              });
+        .put(this._auth.getUrl() + '/readings/' + reading['_id'], { reading: putReading }, this._auth.getOptions())
+        .map(data => {
+          if (data.json() && data.json().reading) {
+            this.readingValue = data.json().reading
+            this.readingSource.next(this.readingValue)
+          }
+          return data.json().reading;
+        });
     } else {
       return this.http
-              .post(this._auth.getUrl() + '/readings', { reading: reading }, this._auth.getOptions())
-              .map(data => {
-                if (data.json() && data.json().reading) {
-                  this.readingValue = data.json().reading
-                  this.readingSource.next(this.readingValue)
-                }
-                return data.json().reading;
-              });
+        .post(this._auth.getUrl() + '/readings', { reading: reading }, this._auth.getOptions())
+        .map(data => {
+          if (data.json() && data.json().reading) {
+            this.readingValue = data.json().reading
+            this.readingSource.next(this.readingValue)
+          }
+          return data.json().reading;
+        });
     } // if
   } // public save()
   
