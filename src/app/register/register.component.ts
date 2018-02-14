@@ -114,13 +114,13 @@ export class RegisterComponent implements OnInit, OnDestroy {
    */
   private emailValidator(control: FormControl): any {
     // If you change the RegExp for the email validator here, change it on the username validator as well
-    let emailRe: RegExp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+    let emailRe: RegExp = /^\w+([\.-]?\w+)*(\+[a-z0-9-]+)?@\w+([\.-]?\w+)*(\.\w{2,3})+$/
     return emailRe.test(control.value) ? null : { 'emailIncorrect': true }
   }
 
   private usernameValidator(control: FormControl): any {
     // If you change the RegExp for the username validator here, change it on the email validator as well
-    let usernameRe: RegExp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+    let usernameRe: RegExp = /^\w+([\.-]?\w+)*(\+[a-z0-9-]+)?@\w+([\.-]?\w+)*(\.\w{2,3})+$/
     return !usernameRe.test(control.value) ? null : { 'usernameIncorrect': true }
   }
 
