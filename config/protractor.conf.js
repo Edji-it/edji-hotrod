@@ -18,11 +18,7 @@ exports.config = {
     'browserName': 'chrome',
     marionette: true,
     'chromeOptions': {
-      'args': [
-        'show-fps-counter=true',
-        'use-fake-ui-for-media-stream',
-        'disable-web-security'
-      ]
+      'args': ['show-fps-counter=true','use-fake-ui-for-media-stream','disable-web-security']
     },
     shardTestFiles: true,
     maxInstances: 1
@@ -61,7 +57,7 @@ exports.config = {
   //     maxInstances: 1
   //   }
   // ],
-  // maxInstances: 1
+  // maxInstances: 1,
 
   /*
    Run a suite of tests using 'yarn run protractor --suite suiteNameHere'
@@ -107,7 +103,7 @@ exports.config = {
         displayStacktrace: true
       }
     }));
-    // browser.driver.manage().window().setSize(1680, 1050);
+    browser.driver.manage().window().setSize(1680, 1050);
   },
 
   /**
