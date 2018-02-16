@@ -12,40 +12,56 @@ SpecReporter = require('jasmine-spec-reporter').SpecReporter;
 exports.config = {
   // The address of a running selenium server.
   baseUrl: 'http://localhost:3375/',
-  
-  multiCapabilities: [
-    // Android | Capabilities to be passed to the webdriver instance
-    {
-      chromeOptions: {
-        args: [
-          'show-fps-counter=true',
-          'use-fake-ui-for-media-stream',
-          '--window-size=411,731'
-          ]
-      },
-      browserName: 'chrome',
-      marionette: true,
-      platformName: 'Android',
-      platformVersion: '7.0',
-      deviceName: 'Android Emulator',
-      shardTestFiles: true,
-      maxInstances: 1
+
+  // Capabilities to be passed to the webdriver instance.
+  capabilities: {
+    'browserName': 'chrome',
+    marionette: true,
+    'chromeOptions': {
+      'args': [
+        'show-fps-counter=true',
+        'use-fake-ui-for-media-stream',
+        'disable-web-security'
+      ]
     },
-    // Desktop | Capabilities to be passed to the webdriver instance
-    {
-      chromeOptions: {
-        args: [
-          'show-fps-counter=true',
-          'use-fake-ui-for-media-stream',
-          '--window-size=1680,1050'
-          ]
-      },
-      browserName: 'chrome',
-      marionette: true,
-      shardTestFiles: true,
-      maxInstances: 1
-    }
-  ],
+    shardTestFiles: true,
+    maxInstances: 1
+  },
+  
+  // multiCapabilities: [
+  //   // Android | Capabilities to be passed to the webdriver instance
+  //   {
+  //     chromeOptions: {
+  //       args: [
+  //         'show-fps-counter=true',
+  //         'use-fake-ui-for-media-stream',
+  //         '--window-size=411,731'
+  //         ]
+  //     },
+  //     browserName: 'chrome',
+  //     marionette: true,
+  //     platformName: 'Android',
+  //     platformVersion: '7.0',
+  //     deviceName: 'Android Emulator',
+  //     shardTestFiles: true,
+  //     maxInstances: 1
+  //   },
+  //   // Desktop | Capabilities to be passed to the webdriver instance
+  //   {
+  //     chromeOptions: {
+  //       args: [
+  //         'show-fps-counter=true',
+  //         'use-fake-ui-for-media-stream',
+  //         '--window-size=1680,1050'
+  //         ]
+  //     },
+  //     browserName: 'chrome',
+  //     marionette: true,
+  //     shardTestFiles: true,
+  //     maxInstances: 1
+  //   }
+  // ],
+  // maxInstances: 1
 
   /*
    Run a suite of tests using 'yarn run protractor --suite suiteNameHere'
