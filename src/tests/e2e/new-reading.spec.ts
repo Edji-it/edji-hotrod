@@ -1,7 +1,7 @@
 import * as path from 'path';
 import { SideBarComponent } from '../../app/shared/side-bar';
 import { browser, by, element, protractor} from 'protractor';
-import { NewReading, Login, Sidebar } from '../page-objects';
+import { NewReading, Login, Sidebar } from './page-objects';
 
 /*
     27 Jan 2017
@@ -68,6 +68,8 @@ describe('New Reading Page', () => {
 
         // Enter sample Reading into form
         newReading.titleInput.sendKeys(newReading.titleString);
+        // Make private to avoid needing grade levels and subjecst
+        newReading.privateButton.click();
         newReading.contentInput.sendKeys(newReading.contentString);
         newReading.sourceInput.sendKeys(newReading.sourceString);
 
@@ -104,6 +106,8 @@ describe('New Reading Page', () => {
 
         // Enter sample Reading into form, excluding title
         newReading.titleInput.clear();
+        // Make private to avoid needing grade levels and subjects
+        newReading.privateButton.click();
         newReading.contentInput.sendKeys(newReading.contentShortString);
         newReading.sourceInput.sendKeys(newReading.sourceString);
 
@@ -158,6 +162,8 @@ describe('New Reading Page', () => {
 
         // Enter sample Reading into form, but clear group label
         newReading.titleInput.sendKeys(newReading.titleString);
+        // Make private to avoid needing grade levels and subjecst
+        newReading.privateButton.click();
         newReading.contentInput.sendKeys(newReading.contentShortString);
         newReading.sourceInput.sendKeys(newReading.sourceString);
 
@@ -196,7 +202,7 @@ describe('New Reading Page', () => {
             newReading.uploadPDfModalButton.click();
             
             // Select File to upload
-            let fileToUpload = '../../../assets/test/2-pages.pdf';
+            let fileToUpload = '../../assets/test/2-pages.pdf';
             let absolutePath = path.resolve(__dirname, fileToUpload);
             newReading.pdfFileInput.sendKeys(absolutePath);
 
@@ -210,6 +216,8 @@ describe('New Reading Page', () => {
 
             // Complete rest of reading
             newReading.titleInput.sendKeys(newReading.titleImageString);
+            // Make private to avoid needing grade levels and subjecst
+            newReading.privateButton.click();
 
             // Submit New Reading
             browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "add new reading button never became clickable");
@@ -265,7 +273,7 @@ describe('New Reading Page', () => {
             browser.wait(EC.elementToBeClickable(newReading.imageUploadTrigger), 6000, "image upload trigger never became clickable");
             
             // Select File to upload
-            let fileToUpload = '../../../assets/test/titration.jpg';
+            let fileToUpload = '../../assets/test/titration.jpg';
             let absolutePath = path.resolve(__dirname, fileToUpload);
             newReading.imageFileInput.sendKeys(absolutePath);
 
@@ -279,6 +287,8 @@ describe('New Reading Page', () => {
 
             // Complete rest of reading
             newReading.titleInput.sendKeys(newReading.titleImageString);
+            // Make private to avoid needing grade levels and subjecst
+            newReading.privateButton.click();
 
             // Submit New Reading
             browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "login button never became clickable after login form entry");
@@ -318,6 +328,8 @@ describe('New Reading Page', () => {
 
             // Enter sample Reading into form
             newReading.titleInput.sendKeys(newReading.titleString);
+            // Make private to avoid needing grade levels and subjecst
+            newReading.privateButton.click();
             newReading.contentInput.sendKeys(newReading.contentShortString);
             newReading.sourceInput.sendKeys(newReading.sourceString);
 
@@ -331,6 +343,7 @@ describe('New Reading Page', () => {
             browser.wait(EC.presenceOf(newReading.successAlert), 5000, "never saw the success alert");
 
             // Add more text
+            newReading.privateButton.click();
             newReading.contentInput.sendKeys(newReading.contentShortStringB);
 
             // Submit New Reading

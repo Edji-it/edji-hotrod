@@ -1,7 +1,7 @@
 //import * as webdriver from 'webdriver';
 import { browser, by, element, protractor } from 'protractor';
-import { Dashboard, Login, NewReading, Sidebar, Home } from '../page-objects';
-import { LoginForm } from '../components';
+import { Dashboard, Login, NewReading, Sidebar, Home } from './page-objects';
+import { LoginForm } from './components';
 
 /* ---- Versioning Tests ------------------------ */
 describe("Versioning - ", () => {
@@ -62,6 +62,12 @@ describe("Versioning - ", () => {
 
         // Enter sample Reading into form
         newReading.titleInput.sendKeys(uniqueTitle);
+        // Select Grade Range
+        newReading.gradeTileK.click();
+        newReading.gradeTileU.click();
+        // Select Subject
+        newReading.subjectDropdown.click();
+        newReading.subjectFirstOption.click();
         newReading.contentInput.sendKeys(newReading.contentShortString);
         newReading.sourceInput.sendKeys(newReading.sourceString);
 
@@ -175,6 +181,7 @@ describe("Versioning - ", () => {
         browser.wait(EC.elementToBeClickable(dashboard.firstProject), 15000, "reading cards never loaded");
 
         // Expand the past versions
+        browser.wait(EC.elementToBeClickable(element(by.css('[testFindVersionToggle="' + titleUpdate + '"]'))), 5000, "past versions toggle never became clickable");
         element(by.css('[testFindVersionToggle="' + titleUpdate + '"]')).click();
 
         // Verify version 1 of this reading is in the list

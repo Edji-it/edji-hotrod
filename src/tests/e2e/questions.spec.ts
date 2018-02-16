@@ -1,8 +1,8 @@
 import * as path from 'path'
-import { SideBarComponent } from '../../../app/shared/side-bar'
+import { SideBarComponent } from '../../app/shared/side-bar'
 import { browser, by, element, protractor} from 'protractor'
-import { NewReading, Login, Sidebar, Project, Questions } from '../page-objects'
-import { LoginModal, GuestLoginForm } from '../components';
+import { NewReading, Login, Sidebar, Project, Questions } from './page-objects'
+import { LoginModal, GuestLoginForm } from './components';
 
 /*
     08 Aug 2017

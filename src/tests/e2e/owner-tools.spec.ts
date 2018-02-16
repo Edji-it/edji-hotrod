@@ -1,7 +1,7 @@
 import { browser, by, element, protractor } from 'protractor';
 
-import { Project, Sidebar } from '../page-objects';
-import { LoginModal } from '../components';
+import { Project, Sidebar } from './page-objects';
+import { LoginModal } from './components';
 
 /*
     27 Jan 2017
@@ -80,7 +80,7 @@ describe('Project Page as a Project Owner: ', () => {
 
         
         // Make sure the comment was created
-        let comments = element.all(by.css('edji-comment:not(.hidden):not(.owner)'));
+        let comments = element.all(by.css('edji-comment:not(.hidden):not(.spec-owner)'));
         browser.wait(EC.elementToBeClickable(comments.first()), 5000, "never found the added comment");
         expect(comments.count()).toBeGreaterThan(0);
 
@@ -138,7 +138,7 @@ describe('Project Page as a Project Owner: ', () => {
 
         
         // Make sure the comment was created
-        let comments = element.all(by.css('edji-comment:not(.hidden):not(.owner)'));
+        let comments = element.all(by.css('edji-comment:not(.hidden):not(.spec-owner)'));
         expect(comments.count()).toBe(0);
 
         // log out

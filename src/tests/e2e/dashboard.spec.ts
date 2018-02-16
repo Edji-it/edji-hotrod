@@ -1,6 +1,6 @@
 //import * as webdriver from 'webdriver';
 import { browser, by, element, protractor } from 'protractor';
-import { Dashboard, Login, NewReading, Sidebar } from '../page-objects';
+import { Dashboard, Login, NewReading, Sidebar } from './page-objects';
 
 /*
     27 Jan 2017

@@ -1,7 +1,7 @@
 import { browser, by, element, protractor } from 'protractor';
 
-import { Home, Login, Sidebar } from '../page-objects';
-import { LoginForm } from '../components';
+import { Home, Login, Sidebar } from './page-objects';
+import { LoginForm } from './components';
 
 /*
     23 Jan 2017
