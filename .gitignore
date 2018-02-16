@@ -62,3 +62,5 @@ npm-debug.log
 *.swp
 .vscode*
 /aws-keys.json
+
+/config/protractor-old.conf.js
