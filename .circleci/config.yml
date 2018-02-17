@@ -11,11 +11,6 @@ jobs:
         env:
           - DISPLAY=:99
           - CHROME_BIN=/usr/bin/google-chrome
-      - type: shell
-          name: Starting Xvfb (for Browser Tests)
-          command: Xvfb :99 -screen 0 1280x1024x24
-          background: true
-      
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
       # documented at https://circleci.com/docs/2.0/circleci-images/
