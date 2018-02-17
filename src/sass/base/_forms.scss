@@ -179,6 +179,9 @@ label input, label textarea {
   background: #fff;
   color: #000;
 }
+.has-success .form-control-feedback {
+  color: #79e883;
+}
 //boostrap override
 .banner-error {
   font-family: 'Open Sans', sans-serif;

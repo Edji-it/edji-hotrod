@@ -35,3 +35,11 @@
 .card-icon {
     height: 24px;
 }
+
+// Table styles specific to this modal
+th, td {
+    &, & label {
+        vertical-align: top;
+        font-size: 13px;
+    }
+}

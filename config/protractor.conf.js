@@ -74,6 +74,7 @@ exports.config = {
     discover:   helpers.root('src/tests/e2e/discover.spec.ts'),
     question:   helpers.root('src/tests/e2e/questions.spec.ts'),
     version:    helpers.root('src/tests/e2e/version.spec.ts'),
+    heroSubscribe: helpers.root('src/tests/e2e/hero-subscribe.spec.ts'),
     all:        [helpers.root('src/tests/e2e/home.spec.ts'),  helpers.root('src/tests/e2e/login.spec.ts')]
   },
 
