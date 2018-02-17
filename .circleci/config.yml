@@ -7,7 +7,14 @@ jobs:
   build:
     docker:
       # specify the version you desire here
-      - image: selenium/standalone-chrome:3.1.0
+      - image: circleci/node:8.3-browsers
+        env:
+          - DISPLAY=:99
+          - CHROME_BIN=/usr/bin/google-chrome
+      - type: shell
+          name: Starting Xvfb (for Browser Tests)
+          command: Xvfb :99 -screen 0 1280x1024x24
+          background: true
       
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -20,17 +27,18 @@ jobs:
       - checkout
 
       # Download and cache dependencies
-      # - restore_cache:
-      #     keys:
-      #     - v1-dependencies-{{ checksum "package.json" }}
-      #     # fallback to using the latest cache if no exact match is found
-      #     - v1-dependencies-
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
 
-      - run: yarn install
+      - run: sudo apt-get update && sudo apt-get install default-jre && sudo apt-get install libxss1 libappindicator1 libindicator7 fonts-liberation gconf-service libatk-bridge2.0-0 libgconf-2-4 libgtk-3-0 lsb-release xdg-utils && wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && sudo dpkg -i google-chrome-stable_current_amd64.deb && sudo apt-get -fy install && yarn install
 
       - save_cache:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
+      # display requirement for running the chrome driver
       # run tests!
       - run: yarn run protractor:ci
