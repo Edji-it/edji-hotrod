@@ -3,17 +3,14 @@
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 #
 version: 2
-executorType: docker
-containerInfo:
-    - image: ubuntu:14.04
-      env:
-        - DISPLAY=:99
-        - CHROME_BIN=/usr/bin/google-chrome
 jobs:
   build:
     docker:
       # specify the version you desire here
       - image: circleci/node:8.3-browsers
+        env:
+          - DISPLAY=:99
+          - CHROME_BIN=/usr/bin/google-chrome
       
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
