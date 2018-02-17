@@ -59,6 +59,7 @@ import {
   OpenEndedAnswersComponent,
   QuestionComponent,
   FollowTag,
+  ScrollProgressComponent,
   TutorialBoxComponent
 } from './shared'
 import { HomeComponent } from './home'
@@ -202,7 +203,8 @@ type StoreType = {
     UserDetailsUpdateModal,
     ReadingCardComponent,
     HeroPromoComponent,
-    HeroPricingComponent
+    HeroPricingComponent,
+    ScrollProgressComponent
   ],
   /** Components which can be dynamically created */
   entryComponents: [
