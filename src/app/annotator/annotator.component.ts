@@ -44,6 +44,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     private lastWordImageOffset: number = 100
     private currentDocHeight: number = 0
     private calcDocHeight: number = 0
+    private currentScroll: number = 0
     
     private commentsByIndex : EdjiComment[][] = []
     private focusOverride   : boolean = false
@@ -153,6 +154,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     @HostListener('window:scroll', ['$event'])
     scrollUpdate(event) {
         this.onScrollUpdate()
+        this.currentScroll = window.pageYOffset
     }
     
     ngOnInit() {
