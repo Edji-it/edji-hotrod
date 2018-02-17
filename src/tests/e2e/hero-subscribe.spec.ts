@@ -14,9 +14,8 @@ describe('Hero Subscription Management', () => {
     let home    = new Home();
     let sidebar = new Sidebar();
     let EC      = protractor.ExpectedConditions; // vital
-
-/* ---- beforeEach ---------------------------- */
-    afterEach (() => {
+    
+    afterAll (() => {
         sidebar.logout();
     });
 
@@ -42,6 +41,24 @@ describe('Hero Subscription Management', () => {
             // Verify modal popped up
             browser.wait(EC.elementToBeClickable(hero.subscribeModalHeader), 3000, "never saw Hero subscription modal");
         });
+
+        it("should test coupon code validation", () => {
+            // Valid coupon
+            browser.wait(EC.elementToBeClickable(hero.couponInput), 3000)
+            hero.couponInput.sendKeys(hero.validCoupon)
+            browser.wait(EC.presenceOf(hero.validCouponMsg), 5000, "never saw valid coupon success message")
+            // Academy coupon
+            hero.couponInput.clear()
+            hero.couponInput.sendKeys(hero.academyCoupon)
+            browser.wait(EC.presenceOf(hero.academyCouponMsg), 5000, "never saw academy coupon success message")
+            // Invalid coupon
+            hero.couponInput.clear()
+            hero.couponInput.sendKeys(hero.invalidCoupon)
+            hero.subscribeButton.click() // blur field
+            browser.wait(EC.presenceOf(hero.invalidCouponMsg), 5000, "never saw invalid coupon message")
+            // Close subscription modal
+            hero.subscribeModalClose.click()
+        })
     });
 
 }); // describe Login Page
