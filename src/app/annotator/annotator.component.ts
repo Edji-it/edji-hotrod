@@ -153,10 +153,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     @HostListener('window:scroll', ['$event'])
     scrollUpdate(event) {
         this.onScrollUpdate()
-        // Update the document minimum height for the scroll position user interface
-        if (this.currentDocHeight==0) {
-            this.preScrollHeightUpdate()
-        }
     }
     
     ngOnInit() {
@@ -1008,6 +1004,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         let allComments = this.commentComponents.toArray()
         // Only run this if the words are rendered and if it isn't already running
         if (!this.lineNumRunning && allComments.length > 0) {
+            // Update the document minimum height for the scroll position user interface
+            if (this.currentDocHeight==0) {
+                this.preScrollHeightUpdate()
+            }
             this.lineNumRunning = true
             
             // Loop through each word element and tell comments to update line number
