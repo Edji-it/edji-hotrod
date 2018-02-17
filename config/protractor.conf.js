@@ -104,7 +104,8 @@ exports.config = {
         displayStacktrace: true
       }
     }));
-    browser.driver.manage().window().setSize(1680, 1050);
+    browser.driver.manage().window().setSize(parseInt(browser.params.width), parseInt(browser.params.height));
+    console.log(browser.params)
   },
 
   /**
