@@ -34,4 +34,4 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
         
       # run tests!
-      - run: node ./node_modules/webdriver-manager update && protractor --capabilities.maxInstances=5 --disable-extensions --headless --disable-gpu --no-sandbox
+      - run: yarn run protractor:ci
