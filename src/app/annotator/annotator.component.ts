@@ -42,6 +42,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     private project: Project = <Project>{}
     private lastWord: number = 750
     private lastWordImageOffset: number = 100
+    private currentDocHeight: number = 0
+    private calcDocHeight: number = 0
     
     private commentsByIndex : EdjiComment[][] = []
     private focusOverride   : boolean = false
@@ -151,6 +153,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     @HostListener('window:scroll', ['$event'])
     scrollUpdate(event) {
         this.onScrollUpdate()
+        // Update the document minimum height for the scroll position user interface
+        if (this.currentDocHeight==0) {
+            this.preScrollHeightUpdate()
+        }
     }
     
     ngOnInit() {
@@ -310,6 +316,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.subscriptions.forEach((sub) => { sub.unsubscribe() })
     }
     
+    /**
+     * Updates the rendered words as the user scrolls through the reading
+     */
     private onScrollUpdate() : void {
         let bottomOfArticle = this.articleEl.nativeElement.offsetTop + this.articleEl.nativeElement.clientHeight
         let bottomOfView = window.innerHeight + document.scrollingElement.scrollTop
@@ -320,6 +329,27 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             this._projects.lastWordUpdateSubj.next(this.lastWord)
             // Re-run the line positions so comment avatars show up in the right spot
             this.setLinePositions()
+        }
+    }
+
+    /**
+     * Sets the minimum height of the document for better current scroll position rendering
+     */
+    private preScrollHeightUpdate(): void {
+        let body = document.body
+        let html = document.documentElement
+        // Find the maximum document height
+        let height = Math.max( 
+            body.scrollHeight, 
+            body.offsetHeight, 
+            html.clientHeight, 
+            html.scrollHeight, 
+            html.offsetHeight 
+        )
+        // Extrapolate a value for document height based on total words and words already rednered with the current height
+        this.calcDocHeight = (height*this.reading.words.length)/this.lastWord
+        if (this.currentDocHeight<this.calcDocHeight) {
+            this.currentDocHeight=this.calcDocHeight
         }
     }
 
