@@ -1,0 +1,28 @@
+import { browser, by, element, protractor } from 'protractor';
+import { PageObjectInterface } from './PageObjectInterface';
+
+export class Hero implements PageObjectInterface
+{
+    // Public Instance Variables
+    public CTAbutton = element(by.id("heroCTA"));
+    public subscribeModal = element(by.id("upgradeHeroModal"));
+    public subscribeModalHeader = element(by.css("#upgradeHeroModal .modal-header"));
+    public couponInput = element(by.id("couponCodeInput"));
+    // Validation messages
+    public validCouponMsg = element(by.id("validCouponMsg"));
+    public invalidCouponMsg = element(by.id("invalidCouponMsg"));
+    public academyCouponMsg = element(by.id("academyCouponMsg"));
+    // Coupon codes
+    public validCoupon = 'TEST50';
+    public invalidCoupon = 'FAKE_COUPON'
+    public academyCoupon = 'HA-TEST100'
+
+    // get the home page
+    getPage() : void 
+    {
+        browser.get('/#/hero');
+    } // getPage() : void
+
+} // class Home
+
+    
