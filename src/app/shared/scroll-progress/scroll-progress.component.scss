@@ -10,3 +10,12 @@
   height: 3px;
   box-shadow: 0px 1px 10px 3px rgba(0, 0, 0, 0.075);
 }
+
+.progress-bar {
+  background-color: $blue;
+  -webkit-transition: width 500ms ease-out;
+	-moz-transition: width 500ms ease-out;
+	-ms-transition: width 500ms ease-out;
+	-o-transition: width 500ms ease-out;
+	transition: width 500ms ease-out;
+}
