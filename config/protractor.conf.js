@@ -69,7 +69,6 @@ exports.config = {
         displayStacktrace: true
       }
     }));
-    // browser.driver.manage().window().setSize(parseInt(browser.params.width), parseInt(browser.params.height));
   },
 
   /**
