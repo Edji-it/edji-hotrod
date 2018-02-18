@@ -7,8 +7,10 @@ jobs:
   build:
     docker:
       # specify the version you desire here
-      - image: circleci/node:8.3
-      
+      - image: circleci/node:8.3-browsers
+        env:
+          - DISPLAY=:99
+          - CHROME_BIN=/usr/bin/google-chrome
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
       # documented at https://circleci.com/docs/2.0/circleci-images/
@@ -26,12 +28,12 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
-      - run: yarn install
+      - run: sudo apt-get update && sudo apt-get install default-jre && sudo apt-get install libxss1 libappindicator1 libindicator7 fonts-liberation gconf-service libatk-bridge2.0-0 libgconf-2-4 libgtk-3-0 lsb-release xdg-utils && wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && sudo dpkg -i google-chrome-stable_current_amd64.deb && sudo apt-get -fy install && yarn install
 
       - save_cache:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
-        
+      # display requirement for running the chrome driver
       # run tests!
-      - run: yarn run protractor:5
+      - run: yarn run protractor:ci

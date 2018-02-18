@@ -632,7 +632,7 @@ export class AuthService implements CanActivate {
         return this._http.get(this.baseUrl + "/subscriptions/coupons/" + couponCode,
             { headers: new HttpHeaders({
                 'Content-Type': 'application/json',
-                'Authorization': this.getToken()
+                'Authorization': this.getToken() ? this.getToken() : ""
             })
         })
     }
