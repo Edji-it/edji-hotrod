@@ -3,7 +3,7 @@
  * @author: @AngularClass
  */
 
-// require('ts-node/register');
+require('ts-node/register');
 var helpers;
 
 helpers = require('./helpers.js'); // Helps us get the root file reference.

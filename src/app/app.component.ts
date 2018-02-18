@@ -8,9 +8,6 @@ import { Angulartics2 } from 'angulartics2'
 import { AppState } from './app.service'
 import { AuthService } from './shared'
 
-var protractorMobileNewConfig = require('../../protractor-mobile.conf.js').config;
-var protractorGlobalConfig = require('../../config/protractor.conf.js').config;
-
 /*
  * App Component
  * Top Level Component
@@ -44,8 +41,6 @@ export class AppComponent {
     if (this._auth.getUser().isLoggedIn) {
       this.angulartics.eventTrack.next({ action: 'hasAccount', properties: { category: 'edjiUsage', label: 'success' }})
     }
-    console.log('Global Config: ', protractorGlobalConfig)
-    console.log('Mobile Config: ', protractorMobileNewConfig)
   }
 
 }
