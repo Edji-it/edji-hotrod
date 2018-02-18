@@ -36,7 +36,4 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
       # display requirement for running the chrome driver
       # run tests!
-      - run:
-          name: build-app
-          command: yarn run server:prod:ci
-      - run: yarn run protractor:ci
+      - run: (yarn run server:prod:ci &) && sleep 2 && yarn run protractor:ci
