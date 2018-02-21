@@ -302,9 +302,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             this.setLinePositions()
             // Update scroll progress on resize
             this.currentDocHeight = 0
-            if (this.currentDocHeight==0) {
-                this.preScrollHeightUpdate()
-            }
+            this.preScrollHeightUpdate()
         }
 
         // Only supported by modern browsers, but very reliable in those cases
