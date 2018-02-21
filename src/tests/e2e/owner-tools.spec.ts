@@ -138,8 +138,10 @@ describe('Project Page as a Project Owner: ', () => {
 
         
         // Make sure the comment was created
-        let comments = element.all(by.css('edji-comment:not(.hidden):not(.spec-owner)'));
-        expect(comments.count()).toBe(0);
+        let comments = element.all(by.css('edji-comment:not(.hidden):not(.spec-owner)'))
+            .then((comments) => {
+                expect(comments.length).toBe(0)
+            })
 
         // log out
         browser.wait(EC.elementToBeClickable(sidebar.logOutButton), 5000, "never found the logout button");
