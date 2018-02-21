@@ -54,11 +54,11 @@ describe('Home Page', () => {
         - Click guides button at bottom of page
         - Redirect to guide.edji.it
     */
-    it('user should be able to view guides/FAQ', () => {
-        browser.wait(EC.elementToBeClickable(home.footerGuidesLink), 5000);
-        // Verify where link points
-        expect(home.footerGuidesLink.getAttribute('href')).toContain('guide');
-    });
+    // it('user should be able to view guides/FAQ', () => {
+    //     browser.wait(EC.elementToBeClickable(home.footerGuidesLink), 5000);
+    //     // Verify where link points
+    //     expect(home.footerGuidesLink.getAttribute('href')).toContain('guide');
+    // });
 
     /* Test: View Edji twitter page
         - Be on any Edji page except guide.edji.it
