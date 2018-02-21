@@ -40,10 +40,11 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
     private reading: Reading = <Reading>{}
     private project: Project = <Project>{}
-    private lastWord: number = 750
+    // Determines when infinite scroll should begin 
+    private lastWord: number = 4000
     private lastWordImageOffset: number = 100
+    // Used to calculate max/progress for reading progress bar
     private currentDocHeight: number = 0
-    private calcDocHeight: number = 0
     private currentScroll: number = 0
     
     private commentsByIndex : EdjiComment[][] = []
@@ -154,7 +155,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     @HostListener('window:scroll', ['$event'])
     scrollUpdate(event) {
         this.onScrollUpdate()
-        this.currentScroll = window.pageYOffset
+        this.currentScroll = (document.documentElement.scrollTop / ( document.body.scrollHeight - window.innerHeight ) ) * 100
     }
     
     ngOnInit() {
@@ -299,6 +300,11 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         window.onresize = () => {
             this.updateImageHeights()
             this.setLinePositions()
+            // Update scroll progress on resize
+            this.currentDocHeight = 0
+            if (this.currentDocHeight==0) {
+                this.preScrollHeightUpdate()
+            }
         }
 
         // Only supported by modern browsers, but very reliable in those cases
@@ -345,10 +351,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             html.offsetHeight 
         )
         // Extrapolate a value for document height based on total words and words already rednered with the current height
-        this.calcDocHeight = (height*this.reading.words.length)/this.lastWord
-        if (this.currentDocHeight<this.calcDocHeight) {
-            this.currentDocHeight=this.calcDocHeight
-        }
+        this.currentDocHeight = (height*this.reading.words.length)/this.lastWord
     }
 
     // Updates OGP
@@ -1002,14 +1005,14 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             }, 500)
             return
         }
+        // We need majority of content loaded before checking the height
+        if (this.currentDocHeight==0) {
+            this.preScrollHeightUpdate()
+        }
         // Let's do this!
         let allComments = this.commentComponents.toArray()
         // Only run this if the words are rendered and if it isn't already running
         if (!this.lineNumRunning && allComments.length > 0) {
-            // Update the document minimum height for the scroll position user interface
-            if (this.currentDocHeight==0) {
-                this.preScrollHeightUpdate()
-            }
             this.lineNumRunning = true
             
             // Loop through each word element and tell comments to update line number

@@ -1,28 +1,25 @@
 import { Subscription } from 'rxjs/Rx'
 import { ProjectService } from '../index'
-import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, Input } from '@angular/core'
+import { Component, ElementRef, EventEmitter, OnInit, Input, HostListener } from '@angular/core'
 
 @Component({
   selector: 'scroll-progress',
   templateUrl: './scroll-progress.component.pug',
   styleUrls: ['./scroll-progress.component.scss']
 })
-export class ScrollProgressComponent implements OnInit, OnDestroy {
+export class ScrollProgressComponent implements OnInit {
 
   private subscriptions: Subscription[] = []
-  private lastWord: number = 0
-  private scrollPosition: number = 0
-  private scrollProgress: number = 0
+  // Scroll progress as a percent, 0-100
+  private _scrollProgress: number = 0
 
   // Scroll progress inputs for calculation
-  @Input() scrollMax: number
   @Input() 
-  set currentScrollPosition(currentScrollPosition: number) {
-    this.scrollPosition = currentScrollPosition
-    this.updateScroll()
+  set scrollProgress(progress: number) {
+    this._scrollProgress = Math.ceil(progress)
   }
-  get currentScrollPosition(): number {
-    return this.scrollPosition
+  get scrollProgress(): number {
+    return this._scrollProgress
   }
 
   constructor(
@@ -30,20 +27,5 @@ export class ScrollProgressComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.subscriptions.push(
-      this._projects.lastWordUpdateState.subscribe(
-          (lastWord) => {
-            this.lastWord = lastWord
-          }
-        )
-      )
-  }
-
-  private updateScroll() {
-    this.scrollProgress = Math.ceil((this.scrollPosition / (this.scrollMax - (window.innerHeight * .6)))*100)
-  }
-
-  ngOnDestroy() {
-    this.subscriptions.forEach((sub) => { sub.unsubscribe() })
   }
 }
