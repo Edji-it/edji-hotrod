@@ -110,12 +110,21 @@ describe('Discover Feed', () => {
             discover.filterPublic.click()
             browser.wait(EC.elementToBeClickable(discover.firstFeedReading), 5000)
             // Check title of most recent readings
+            let readingFound: boolean = false
             let foundTitle = element.all(by.css('.reading-title__text'))
-                .reduce((acc, el) => {
-                    return el.getText().then( text => {
-                        return acc || text.includes(newPublicReadingTitle)
-                    }) 
-                }, false)
+                .forEach((el) => {
+                    el.getText().then((text) => {
+                        if (text.includes(newPublicReadingTitle)) {
+                            readingFound = true
+                        }
+                    })
+                })
+            // let foundTitle = element.all(by.css('.reading-title__text'))
+            //     .reduce((acc, el) => {
+            //         return el.getText().then( text => {
+            //             return acc || text.includes(newPublicReadingTitle)
+            //         }) 
+            //     }, false)
             expect(foundTitle).toEqual(true)
         })
     });
