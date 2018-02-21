@@ -19,7 +19,7 @@ SpecReporter = require('jasmine-spec-reporter').SpecReporter;
 exports.config = {
   
   // The address of a running selenium server.
-  baseUrl: 'http://127.0.0.1:3375/',        // Point it at localhost!
+  baseUrl: 'http://localhost:3375/',        // Point it at localhost!
   //baseUrl: 'http://dev.edji.it/#/home',     // Point it at dev.edji.it!
 
   // Capabilities to be passed to the webdriver instance.
