@@ -67,13 +67,15 @@ exports.config = {
     showColors: true,
     isVerbose: false,
     includeStackTrace: false,
-    defaultTimeoutInterval: 400000,
+    // A longer default timeout makes our test suite unusable
+    defaultTimeoutInterval: 8000,
     print: () => {} // take out the dot logging when tests are run
   },
   directConnect: true,
 
   onPrepare: function() {
-    browser.ignoreSynchronization = true;
+    // We do not want to ignoreSynchronization, it defeats the purpose of protractor
+    // browser.ignoreSynchronization = true;
 
     // add test log output configuration
     jasmine.getEnv().addReporter(new SpecReporter({
