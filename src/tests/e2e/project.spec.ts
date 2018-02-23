@@ -41,7 +41,7 @@ describe('Project Page', () => {
      */
 
     describe("Login modal error", () => {
-        beforeEach(() => {
+        beforeAll(() => {
             project.getPage();
         });
 

@@ -24,7 +24,7 @@ describe('Home Page', () => {
     /* ---- beforeEach ---------------------------- */
     // Does this before each test.
     beforeEach(() => {
-        home.getPage();
+        // home.getPage();
     });
 
     /* ---- Vital Super Basic Test  --------------- */
@@ -33,6 +33,7 @@ describe('Home Page', () => {
     - IF THIS FAILS: You are not running Protractor correctly;
     */
     it('it should see Edji in the title', () => {
+        home.getPage();
         let subject = browser.getTitle();
         let result  = 'Edji';
         browser.wait(EC.titleContains(result), 5000, 'Title should contain "Edji".');

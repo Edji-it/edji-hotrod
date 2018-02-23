@@ -1,6 +1,7 @@
 import { browser, by, element, protractor } from 'protractor';
 import { Account, Login } from './page-objects';
 import * as path from 'path';
+import { Sidebar } from "./page-objects/sidebar-page";
 
 /*
     27 Jan 2017
@@ -21,6 +22,7 @@ describe('Account Page', () => {
     let EC = protractor.ExpectedConditions; // vital
     let account = new Account();
     let login = new Login();
+    let sidebar = new Sidebar();
 
     /* ---- beforeEach ---------------------------- */
     // Does this before each test.
@@ -32,7 +34,9 @@ describe('Account Page', () => {
         browser.wait(EC.elementToBeClickable(login.loginButton), 5000);
         login.loginButton.click();
         browser.wait(EC.urlContains("dashboard"), 5000, "never arrived at dashboard");
-        account.getPage();
+        // account.getPage();
+        sidebar.accountButton.click();
+        browser.wait(EC.urlContains("account"), 5000, "never arrived at account page");
     }); // beforeAll
 
     /* ---- Vital Super Basic Test  --------------- */

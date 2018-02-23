@@ -25,7 +25,7 @@ exports.config = {
   // Capabilities to be passed to the webdriver instance.
   capabilities: {
     'browserName': 'chrome',
-    marionette: true,
+    // marionette: true,
     'chromeOptions': {
       'args': ['show-fps-counter=true','use-fake-ui-for-media-stream','disable-web-security']
     }, // chrome options
@@ -59,7 +59,7 @@ exports.config = {
 
   framework: 'jasmine2',
 
-  allScriptsTimeout: 10000,
+  allScriptsTimeout: 15000,
 
   // Options to be passed to Jasmine-node.
   jasmineNodeOpts: {
@@ -68,14 +68,14 @@ exports.config = {
     isVerbose: false,
     includeStackTrace: false,
     // A longer default timeout makes our test suite unusable
-    defaultTimeoutInterval: 8000,
+    defaultTimeoutInterval: 12000,
     print: () => {} // take out the dot logging when tests are run
   },
   directConnect: true,
 
   onPrepare: function() {
     // We do not want to ignoreSynchronization, it defeats the purpose of protractor
-    // browser.ignoreSynchronization = true;
+    browser.ignoreSynchronization = true;
 
     // add test log output configuration
     jasmine.getEnv().addReporter(new SpecReporter({
