@@ -17,8 +17,11 @@ export class Sidebar {
 
     // Public Instance Variables
     public logOutButton     = element(by.css("a#logOutButton"));
+    public logInButton     = element(by.css("a#loginLink"));
     public accountButton    = element(by.id("accountButton"));
     public heatButton       = element(by.id("toggleHeatVision"));
+    public navReadings = element(by.id("navReadings"));
+    public navDiscover = element(by.id("navDiscover"));
     public accountButtonSpan = this.accountButton.element(by.css('span'));
     public logo = element(by.id("logo"));
 

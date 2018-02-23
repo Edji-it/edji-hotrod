@@ -1,6 +1,6 @@
 //import * as webdriver from 'webdriver';
 import { browser, by, element, protractor } from 'protractor';
-import { Discover, Login, NewReading, Sidebar } from './page-objects';
+import { Discover, Login, NewReading, Sidebar, Dashboard } from './page-objects';
 
 /*
     Discover Feed tests
@@ -12,6 +12,7 @@ describe('Discover Feed', () => {
     /* ---- Variable Initialization --------------- */
     let login       = new Login();
     let discover   = new Discover();
+    let dashboard = new Dashboard();
     let sidebar     = new Sidebar();
     let newReading  = new NewReading();
     let EC = protractor.ExpectedConditions; // vital
@@ -36,7 +37,7 @@ describe('Discover Feed', () => {
     
     // Discover Feed should exist and load for every user
     it("should arrive at Discover Feed", () => {
-        discover.getPage();
+        sidebar.navDiscover.click();
         browser.wait(EC.urlContains("discover"), 5000, "never arrived at Discover Feed");
     });
 
@@ -58,7 +59,9 @@ describe('Discover Feed', () => {
         let unfollowEdjiTag = discover.unfollowTags.first()
         browser.wait(EC.elementToBeClickable(unfollowEdjiTag), 5000, "never saw message to follow Edji");
         unfollowEdjiTag.click();
-        discover.getPage();
+        // Reload feed
+        sidebar.navReadings.click();
+        sidebar.navDiscover.click();
         browser.wait(EC.stalenessOf(discover.firstFeedReading), 5000, "followed user reading not showing");
     });
 
@@ -68,7 +71,8 @@ describe('Discover Feed', () => {
         // Discover Feed should exist and load for every user
         it("should create new public reading as testbot", () => {
             // Open New Reading page
-            newReading.getPage();
+            sidebar.navReadings.click();
+            dashboard.newReadingButton.click();
             browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000);
             // Enter Title
             newReading.titleInput.sendKeys(newPublicReadingTitle);
@@ -80,7 +84,7 @@ describe('Discover Feed', () => {
             newReading.subjectFirstOption.click();
             // Enter sample content
             browser.wait(EC.elementToBeClickable(newReading.contentInput), 5000, "should see reading content input");
-            newReading.contentInput.sendKeys(newReading.contentString);
+            newReading.contentInput.sendKeys(newReading.contentShortString);
             // Hit save
             browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "save reading button never became clickable after content add");
             newReading.addButton.click();
@@ -89,13 +93,12 @@ describe('Discover Feed', () => {
             newReading.finalizeButton.click();
             browser.wait(EC.urlContains("project"), 5000, "never arrived at published reading");
             newReading.shareCodeModalClose.click();
+            sidebar.logout();
         });
 
         it("should see testbot's new public reading in public feed", () => {
-            sidebar.logout();
-
             // Login as another user
-            login.getPage();
+            sidebar.logInButton.click();
             browser.wait(EC.elementToBeClickable(login.loginButton), 5000);
             login.enterUsername(login.teacherUser);
             login.enterPassword(login.teacherPassword);
@@ -104,27 +107,18 @@ describe('Discover Feed', () => {
             browser.wait(EC.urlContains("dashboard"), 5000, "never arrived at dashboard");
 
             // Got to Discover Feed
-            discover.getPage()
+            sidebar.navDiscover.click();
             browser.wait(EC.urlContains("discover"), 5000, "never arrived at discover feed as sidekick user");
             // View public/global feed
             discover.filterPublic.click()
             browser.wait(EC.elementToBeClickable(discover.firstFeedReading), 5000)
             // Check title of most recent readings
-            let readingFound: boolean = false
             let foundTitle = element.all(by.css('.reading-title__text'))
-                .forEach((el) => {
-                    el.getText().then((text) => {
-                        if (text.includes(newPublicReadingTitle)) {
-                            readingFound = true
-                        }
-                    })
-                })
-            // let foundTitle = element.all(by.css('.reading-title__text'))
-            //     .reduce((acc, el) => {
-            //         return el.getText().then( text => {
-            //             return acc || text.includes(newPublicReadingTitle)
-            //         }) 
-            //     }, false)
+                .reduce((acc, el) => {
+                    return el.getText().then( text => {
+                        return acc || text.includes(newPublicReadingTitle)
+                    }) 
+                }, false)
             expect(foundTitle).toEqual(true)
         })
     });
