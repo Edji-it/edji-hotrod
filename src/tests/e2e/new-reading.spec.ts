@@ -1,7 +1,7 @@
 import * as path from 'path';
 import { SideBarComponent } from '../../app/shared/side-bar';
 import { browser, by, element, protractor} from 'protractor';
-import { NewReading, Login, Sidebar } from './page-objects';
+import { NewReading, Login, Sidebar, Dashboard } from './page-objects';
 
 /*
     27 Jan 2017
@@ -21,6 +21,7 @@ describe('New Reading Page', () => {
     let newReading  = new NewReading();
     let login       = new Login();
     let sidebar     = new Sidebar();
+    let dashboard = new Dashboard();
     let EC          = protractor.ExpectedConditions;
 
     beforeAll(() => {
@@ -63,14 +64,13 @@ describe('New Reading Page', () => {
     */
     it('should add reading when all fields are filled and submitted', () => {
         // Open and wait for New Reading page
-        newReading.getPage();
-        browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000);
+        dashboard.openNewReading();
 
         // Enter sample Reading into form
         newReading.titleInput.sendKeys(newReading.titleString);
         // Make private to avoid needing grade levels and subjecst
         newReading.privateButton.click();
-        newReading.contentInput.sendKeys(newReading.contentString);
+        newReading.contentInput.sendKeys(newReading.contentShortString);
         newReading.sourceInput.sendKeys(newReading.sourceString);
 
         // Submit New Reading
@@ -90,6 +90,8 @@ describe('New Reading Page', () => {
 
         // Should redirect to Project page for new reading
         browser.wait(EC.urlContains("project"), 5000, "never arrived at new reading");
+        // Reset user to dashboard
+        sidebar.backToDash();
     });
 
 
@@ -101,8 +103,7 @@ describe('New Reading Page', () => {
     */
     it('should display an error if the title is not filled', () => {
         // Open and wait for New Reading page
-        newReading.getPage();
-        browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000);
+        dashboard.openNewReading();
 
         // Enter sample Reading into form, excluding title
         newReading.titleInput.clear();
@@ -120,6 +121,8 @@ describe('New Reading Page', () => {
 
         // Should see error for empty title
         browser.wait(EC.presenceOf(newReading.titleError), 5000, "never saw an error for empty title");
+        // Reset user to dashboard
+        sidebar.backToDash();
     });
 
      /* Test: Add reading, don’t enter content and see error
@@ -130,8 +133,7 @@ describe('New Reading Page', () => {
     */
     it('should display an error if no content is entered', () => {
         // Open and wait for New Reading page
-        newReading.getPage();
-        browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000);
+        dashboard.openNewReading();
 
         // Enter sample Reading data into form, but clear content
         newReading.titleInput.sendKeys(newReading.titleString);
@@ -147,6 +149,8 @@ describe('New Reading Page', () => {
 
         // Should see error for empty content
         browser.wait(EC.presenceOf(newReading.contentError), 5000, "never saw an error for empty content");
+        // Reset user to dashboard
+        sidebar.backToDash();
     });
 
     /* Test: Add reading, but clear Group Label and see error
@@ -157,8 +161,7 @@ describe('New Reading Page', () => {
     */
     it('should display an error if no group label is entered', () => {
         // Open and wait for New Reading page
-        newReading.getPage();
-        browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000);
+        dashboard.openNewReading();
 
         // Enter sample Reading into form, but clear group label
         newReading.titleInput.sendKeys(newReading.titleString);
@@ -182,6 +185,8 @@ describe('New Reading Page', () => {
         
         // Should see error for empty group label
         browser.wait(EC.presenceOf(newReading.groupError), 5000, "never saw an error for empty group label");
+        // Reset user to dashboard
+        sidebar.backToDash();
     });
 
     /* Test: Upload a PDF and create a Reading with
@@ -197,7 +202,7 @@ describe('New Reading Page', () => {
          */
         it('should upload a PDF to a reading and save it to the reading', function() {
             // Open and wait for New Reading page
-            newReading.getPage();
+            dashboard.openNewReading();
             browser.wait(EC.elementToBeClickable(newReading.uploadPDfModalButton), 5000);
             newReading.uploadPDfModalButton.click();
             
@@ -234,12 +239,14 @@ describe('New Reading Page', () => {
 
             // Should see image in new reading
             browser.wait(EC.presenceOf(newReading.imageInReading), 10000, "never saw PDF in the new reading");
+            // Reset user to dashboard
+            sidebar.backToDash();
         });
 
         // This following test relies on the previous one for a PDF to delete.
         it('should delete a PDF that was uploaded', function() {
            // Open and wait for New Reading page
-            newReading.getPage();
+            dashboard.openNewReading();
             browser.wait(EC.elementToBeClickable(newReading.uploadPDfModalButton), 5000);
             newReading.uploadPDfModalButton.click();
            
@@ -258,6 +265,9 @@ describe('New Reading Page', () => {
 
             // TO-DO: We've had issues tracking this via count
             // browser.wait(EC.invisibilityOf(delBtn), 5000, 'delete button should not be visible.');
+
+            // Reset user to dashboard
+            sidebar.backToDash();
         });
     });
 
@@ -267,7 +277,7 @@ describe('New Reading Page', () => {
          */
         it('should upload an image to a reading and save it to the reading', function() {
             // Open and wait for New Reading page
-            newReading.getPage();
+            dashboard.openNewReading();
             browser.wait(EC.elementToBeClickable(newReading.uploadModalButton), 5000, "image upload modal button never became clickable");
             newReading.uploadModalButton.click();
             browser.wait(EC.elementToBeClickable(newReading.imageUploadTrigger), 6000, "image upload trigger never became clickable");
@@ -306,6 +316,9 @@ describe('New Reading Page', () => {
 
             // Should see image in new reading
             browser.wait(EC.presenceOf(newReading.imageInReading), 10000, "never saw an image in the new reading");
+
+            // Reset user to dashboard
+            sidebar.backToDash();
         });
     });
 
@@ -323,7 +336,7 @@ describe('New Reading Page', () => {
          */
         it('should add a reading as a draft and return to the same screen with a reading id', function() {
             // Open and wait for New Reading page
-            newReading.getPage();
+            dashboard.openNewReading();
             browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000);
 
             // Enter sample Reading into form
@@ -358,6 +371,9 @@ describe('New Reading Page', () => {
 
             // Should create a new Reading
             browser.wait(EC.urlContains("project"), 5000, "never arrived at new reading");
+
+            // Reset user to dashboard
+            sidebar.backToDash();
         });
     });
 

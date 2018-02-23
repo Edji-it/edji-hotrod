@@ -20,6 +20,21 @@ export class Sidebar {
     public accountButton    = element(by.id("accountButton"));
     public heatButton       = element(by.id("toggleHeatVision"));
     public accountButtonSpan = this.accountButton.element(by.css('span'));
+    public logo = element(by.id("logo"));
+
+    public backToDash(): void {
+        let modalCloseBtn = element(by.css(".modal button.close"))
+        modalCloseBtn.isDisplayed().then((result) => {
+            if ( result ) {
+                //Whatever if it is true (displayed)
+                browser.wait(this.EC.elementToBeClickable(modalCloseBtn), 5000, "modal close button never became clickable")
+                modalCloseBtn.click()
+            }
+        });
+        browser.wait(this.EC.elementToBeClickable(this.logo), 5000, "logo never became clickable")
+        this.logo.click()
+        browser.wait(this.EC.urlContains("dashboard"), 5000, "never arrived at dashboard after clicking logo")
+    }
 
     // Click the log out button.
     public clickLogOutButton () : void

@@ -3,6 +3,8 @@ import { PageObjectInterface } from './PageObjectInterface';
 
 export class Dashboard implements PageObjectInterface
 {
+
+    private EC = protractor.ExpectedConditions; // vital
     /*
     28 Jan 2017
     Last Modified: 28 Jan 2017
@@ -18,6 +20,7 @@ export class Dashboard implements PageObjectInterface
     public firstProject     = this.projectCards.first();
     public projectCodeInput = element(by.css('#projectCodeInput'));
     public projectJoinButton = element(by.css('#buttonJoinProject'));
+    public newReadingButton = element(by.id('buttonNewReading'));
     // public optionsButton = element.all(by.css('.btn-icon--plain')).first();
     public optionsButton    = element(by.css('.btn-icon--plain'));
      //public optionsList = element.all(by.css('.reading-card-menu'))
@@ -33,6 +36,7 @@ export class Dashboard implements PageObjectInterface
     // public firstDeleteProjectButton = element(by.css("btn--delete-project")).first();
     public projectLabel     = element(by.css('#newProjectLabel'));
     public groupCreate      = element(by.css('#buttonCreateGroup'));
+    public titleInput = element(by.id('readingTitle'));
 
     // get the dashboard page
     getPage() : void {
@@ -40,8 +44,9 @@ export class Dashboard implements PageObjectInterface
     } //getPage(): void
 
     // get the new reading page
-    getNewReadingPage() : void {
-        browser.get('/#/new-reading');
+    openNewReading() : void {
+        this.newReadingButton.click();
+        browser.wait(this.EC.elementToBeClickable(this.titleInput), 5000);
     } // getNewReadingPage() : void
 
     // 6.3.17
@@ -49,17 +54,16 @@ export class Dashboard implements PageObjectInterface
         // The modal needs to have already appeared before you use this.
         // This tak groupName and hits the Create Group button on the modal.
 
-        let EC = protractor.ExpectedConditions;
         let groupNameInput      = element(by.id('newProjectLabel'));
         let createGroupButton   = element(by.id("buttonCreateGroup")); 
 
-        browser.wait(EC.presenceOf(groupNameInput), 5000, "never saw a groupNameInput");
-        browser.wait(EC.elementToBeClickable(groupNameInput), 5000, "groupNameInput was never clickable");
+        browser.wait(this.EC.presenceOf(groupNameInput), 5000, "never saw a groupNameInput");
+        browser.wait(this.EC.elementToBeClickable(groupNameInput), 5000, "groupNameInput was never clickable");
 
         groupNameInput.sendKeys(groupName);
         
-        browser.wait(EC.presenceOf(createGroupButton), 5000, "never saw a createGroupButton");
-        browser.wait(EC.elementToBeClickable(createGroupButton), 5000, "createGroupButton was never clickable");
+        browser.wait(this.EC.presenceOf(createGroupButton), 5000, "never saw a createGroupButton");
+        browser.wait(this.EC.elementToBeClickable(createGroupButton), 5000, "createGroupButton was never clickable");
 
         createGroupButton.click();
     } // createNewGroupModalInput (groupName : string) : void
