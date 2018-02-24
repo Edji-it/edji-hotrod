@@ -31,6 +31,7 @@ export class Dashboard implements PageObjectInterface
     public copyAndEditButton = element(by.cssContainingText('.dropdown-item', 'Copy and Edit'));
     public createNewGroupButton = element(by.cssContainingText('.dropdown-item', 'Create New Group'));
     public deleteButton     = element(by.cssContainingText('.dropdown-item', 'Delete'));
+    public deleteConfirm = element(by.id('delBtnModal'));
 
     public deleteProjectButton = element(by.css(".btn--delete-project"));
     // public firstDeleteProjectButton = element(by.css("btn--delete-project")).first();

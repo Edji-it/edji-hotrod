@@ -128,13 +128,13 @@ describe('Dashboard Page', () => {
 
             let deleteModal = element(by.id('deleteReadingModal'));
             browser.wait(EC.presenceOf(deleteModal), 5000, "never saw a deleteModal");
-            let deleteConfirm = element(by.id('delBtnModal'));
-            browser.wait(EC.presenceOf(deleteConfirm), 5000, "never saw a deleteConfirm on the deleteModal");
-            browser.wait(EC.elementToBeClickable(deleteConfirm), 5000, "deleteConfirm on the deleteModal was never clickable");
-            deleteConfirm.click();
-            
-            // Unable to confirm title
-            browser.wait(EC.invisibilityOf(element(by.cssContainingText('.reading-title-text', uniqueTitle))), 8000, "saw the unique readingTitle (END). We aren't supposed to.");
+            browser.wait(EC.presenceOf(dashboard.deleteConfirm), 5000, "never saw a deleteConfirm on the deleteModal");
+            browser.wait(EC.elementToBeClickable(dashboard.deleteConfirm), 5000, "deleteConfirm on the deleteModal was never clickable");
+            // Delete modal confirm click has promise issues, so treat it a bit differently
+            dashboard.deleteConfirm.click().then(function () {
+                // Unable to confirm title
+                browser.wait(EC.invisibilityOf(element(by.cssContainingText('.reading-title-text', uniqueTitle))), 8000, "saw the unique readingTitle (END). We aren't supposed to.");
+            });
 
             // Click propagates oddly after modal, and we need to click outside the reading card
             sidebar.logo.click();
