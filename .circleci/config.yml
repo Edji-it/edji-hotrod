@@ -37,5 +37,5 @@ jobs:
       # run tests!
       - run:
             name: build-app
-            command: yarn run build:prod:ci
-      - run: (yarn run server:prod:ci &) && sleep 2 && yarn run protractor:ci
+            command: yarn run build:ci
+      - run: (yarn run server:ci &) && sleep 2 && yarn run protractor:ci

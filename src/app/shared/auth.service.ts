@@ -19,7 +19,6 @@ export class AuthService implements CanActivate {
     */
 
     private baseUrl = "http://localhost:3354";
-    public protocol = window.location.protocol ? window.location.protocol : '';
     private locker: Locker;
     private ENV: string = "dev";
 
@@ -44,8 +43,9 @@ export class AuthService implements CanActivate {
             private _router: Router, 
             _locker: Locker
         ) {
+        let webpackEnv = process.env.ENV
+        
         this.locker = _locker.useDriver(Locker.DRIVERS.LOCAL);
-
         this.user = this.getUser();
         this.currentUserSource = new BehaviorSubject<any>(this.user);
         this.currentUser = this.currentUserSource.asObservable();
@@ -53,13 +53,13 @@ export class AuthService implements CanActivate {
         // Check to see if prod or dev environment
         if (window.location.host.indexOf('local.edji.it') > -1) {
             // do nothing
-        }else if (window.location.host.indexOf('dev.edji.it') > -1) {
+        }else if (window.location.host.indexOf('dev.edji.it') > -1 || webpackEnv === 'test') {
             //   baseUrl = "http://edji-dev.herokuapp.com";
-            this.baseUrl = this.protocol + "//optimus-dev.edji.it";
+            this.baseUrl = "//optimus-dev.edji.it";
             this.ENV = "dev";
         } else if (window.location.host.indexOf('edji.it') > -1 || window.location.host.indexOf('dvscf5tf91syg.cloudfront.net') > -1) {
             //   this.baseUrl = "http://edji-prod.herokuapp.com";
-            this.baseUrl = this.protocol + "//optimus.edji.it";
+            this.baseUrl = "//optimus.edji.it";
             this.ENV = "prod";
         }
     }
