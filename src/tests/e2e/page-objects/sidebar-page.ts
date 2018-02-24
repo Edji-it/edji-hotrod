@@ -27,7 +27,7 @@ export class Sidebar {
     public heroLink = element(by.id("heroLink"));
 
     public backToDash(): void {
-        let modalCloseBtn = element(by.css(".modal button.close"));
+        let modalCloseBtn = element(by.css(".show .modal button.close"));
         modalCloseBtn.isPresent().then((result) => {
             if (result) {
                  modalCloseBtn.isDisplayed().then((result) => {
