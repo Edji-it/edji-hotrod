@@ -43,7 +43,7 @@
     "preversion": "npm test",
     "protractor": "node ./node_modules/webdriver-manager update && protractor",
     "protractor:5": "node ./node_modules/webdriver-manager update && protractor --capabilities.maxInstances=5",
-    "protractor:ci" : "node ./node_modules/webdriver-manager update && protractor --disable-extensions --headless --disable-gpu --no-sandbox",
+    "protractor:ci" : "node ./node_modules/webdriver-manager update && protractor --disable-extensions --headless --disable-gpu --no-sandbox --capabilities.maxInstances=5",
     "rimraf": "rimraf",
     "server:dev:hmr": "npm run server:dev -- --inline --hot",
     "server:dev": "webpack-dev-server --config config/webpack.dev.js --progress --profile --watch --content-base src/",
