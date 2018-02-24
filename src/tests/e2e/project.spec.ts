@@ -268,10 +268,8 @@ describe('Project Page', () => {
             // Add text to the text input field
             // browser.wait(EC.elementToBeClickable(project.textReplyComment), 5000, "couldn't add text to the reply text comment");
             browser.actions().sendKeys('some test reply text').perform();
-            
-            // Blur/Inactivate the reply comment
-            browser.wait(EC.elementToBeClickable(project.commentSave), 5000, "could not click the save button on the comment");
-            project.commentSave.click();
+            // Press ENTER to save 
+            browser.actions().sendKeys(protractor.Key.ENTER).perform();
 
             // Wait 5 seconds for the delete button to become clickable and then delete the reply comment
             browser.wait(EC.elementToBeClickable(project.replyDelete), 5000, "could not find delete button on the reply comment");
