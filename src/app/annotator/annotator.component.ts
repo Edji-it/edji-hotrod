@@ -40,8 +40,12 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
     private reading: Reading = <Reading>{}
     private project: Project = <Project>{}
-    private lastWord: number = 750
+    // Determines when infinite scroll should begin 
+    private lastWord: number = 4000
     private lastWordImageOffset: number = 100
+    // Used to calculate max/progress for reading progress bar
+    private currentDocHeight: number = 0
+    private currentScroll: number = 0
     
     private commentsByIndex : EdjiComment[][] = []
     private focusOverride   : boolean = false
@@ -151,6 +155,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     @HostListener('window:scroll', ['$event'])
     scrollUpdate(event) {
         this.onScrollUpdate()
+        this.currentScroll = (document.documentElement.scrollTop / ( document.body.scrollHeight - window.innerHeight ) ) * 100
     }
     
     ngOnInit() {
@@ -295,6 +300,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         window.onresize = () => {
             this.updateImageHeights()
             this.setLinePositions()
+            // Update scroll progress on resize
+            this.currentDocHeight = 0
+            this.preScrollHeightUpdate()
         }
 
         // Only supported by modern browsers, but very reliable in those cases
@@ -310,6 +318,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.subscriptions.forEach((sub) => { sub.unsubscribe() })
     }
     
+    /**
+     * Updates the rendered words as the user scrolls through the reading
+     */
     private onScrollUpdate() : void {
         let bottomOfArticle = this.articleEl.nativeElement.offsetTop + this.articleEl.nativeElement.clientHeight
         let bottomOfView = window.innerHeight + document.scrollingElement.scrollTop
@@ -321,6 +332,24 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             // Re-run the line positions so comment avatars show up in the right spot
             this.setLinePositions()
         }
+    }
+
+    /**
+     * Sets the minimum height of the document for better current scroll position rendering
+     */
+    private preScrollHeightUpdate(): void {
+        let body = document.body
+        let html = document.documentElement
+        // Find the maximum document height
+        let height = Math.max( 
+            body.scrollHeight, 
+            body.offsetHeight, 
+            html.clientHeight, 
+            html.scrollHeight, 
+            html.offsetHeight 
+        )
+        // Extrapolate a value for document height based on total words and words already rednered with the current height
+        this.currentDocHeight = (height*this.reading.words.length)/this.lastWord
     }
 
     // Updates OGP
@@ -973,6 +1002,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 this.setLinePositions()
             }, 500)
             return
+        }
+        // We need majority of content loaded before checking the height
+        if (this.currentDocHeight==0) {
+            this.preScrollHeightUpdate()
         }
         // Let's do this!
         let allComments = this.commentComponents.toArray()

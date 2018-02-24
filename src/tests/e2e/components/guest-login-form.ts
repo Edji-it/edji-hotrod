@@ -9,6 +9,7 @@ export class GuestLoginForm {
   public guestNameInput = element(by.id("guestNameInput"));
   public guestLoginButton = element(by.id("guestLoginButton"));
   public guestBadNameErr = element(by.id("msgBadName"));
+  public gotoGuestLoginButton = element(by.id("gotoGuestLoginButton"));
 
   // other variables
   public guestLoginName = "cake eater";
@@ -16,9 +17,16 @@ export class GuestLoginForm {
   public testGuestLoginErrors() {
     // don't worry, this beforeEach hook can coexist with another beforeEach hook from the calling module
     beforeEach(() => {
+      // Ensure guest login form options are showing
+      this.gotoGuestLoginButton.isDisplayed().then((result) => {
+          if ( result ) {
+              //Whatever if it is true (displayed)
+              browser.wait(this.EC.elementToBeClickable(this.gotoGuestLoginButton), 5000, "modal close button never became clickable");
+              this.gotoGuestLoginButton.click();
+          }
+      });
       // make sure the guest login button is going to be clickable
       browser.wait(this.EC.visibilityOf(this.guestLoginButton), 5000, "guest login button never became clickable after form init");
-
       // clear the input just in case
       this.guestNameInput.clear();
     });
@@ -37,10 +45,8 @@ export class GuestLoginForm {
   public loginAsGuest() {
     // make sure the guest login button is going to be clickable
     browser.wait(this.EC.visibilityOf(this.guestLoginButton), 7000, "guest login button never became visible after form init");
-
     // clear the input just in case
     this.guestNameInput.clear();
-
     // form handling
     this.guestNameInput.sendKeys(this.guestLoginName);
     // Gets stuck here

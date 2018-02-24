@@ -35,7 +35,7 @@ export class LoginModal {
     describe("Login modal errors", () => {
 
       describe("Account login errors", () => {
-        beforeEach(() => {
+        beforeAll(() => {
           // go to the account login form before each test
           browser.wait(this.EC.elementToBeClickable(this.gotoAccountLoginButton), 5000, "button to navigate to account login never became clickable after component init");
           this.gotoAccountLoginButton.click();

@@ -30,7 +30,7 @@ describe('Hero Subscription Management', () => {
             // verify that we reach the dashboard after login
             browser.wait(EC.urlContains("dashboard"), 5000, "never reached the dashboard after loggin in");
             // Navigate to the Hero promo page
-            hero.getPage();
+            sidebar.clickHeroLink();
             // Verify we made it there
             browser.wait(EC.urlContains("hero"), 5000, "never reached the Hero promo page");
         });

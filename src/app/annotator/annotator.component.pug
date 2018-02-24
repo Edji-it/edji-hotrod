@@ -4,8 +4,11 @@ doctype html
     Provides:
     - Highlighting functionality
     - Tying in comments and comment creation methods
-    
-#emojiAnnotator.annotator.reading-page([ngClass]="[ lineExpanded ? 'comment-expanded' : '' , commentPane ? 'sliding-out' : '']")
+scroll-progress([scrollProgress]="currentScroll")
+#emojiAnnotator.annotator.reading-page(
+    [ngClass]="[ lineExpanded ? 'comment-expanded' : '' , commentPane ? 'sliding-out' : '']",
+    [style.min-height]="currentDocHeight + 'px'"
+)
     .text-options(
         *ngIf="directCommentOptions.length > 0",
         (blur)="hideCommentOptions($event)",

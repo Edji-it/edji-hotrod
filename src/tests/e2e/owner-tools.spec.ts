@@ -2,6 +2,7 @@ import { browser, by, element, protractor } from 'protractor';
 
 import { Project, Sidebar } from './page-objects';
 import { LoginModal } from './components';
+import { Home } from "./page-objects/home-page";
 
 /*
     27 Jan 2017
@@ -20,13 +21,21 @@ describe('Project Page as a Project Owner: ', () => {
     let project = new Project();
     let loginModal = new LoginModal();
     let sidebar = new Sidebar();
+    let home = new Home();
     let EC      = protractor.ExpectedConditions; // vital
 
     /* ---- beforeEach ---------------------------- */
 
     beforeEach(() => {
         // Id for Owner Tools Test Reading owned by Teach/Teach
-        browser.get("/#/project/test");
+        browser.get("/#/home");
+        // Open Test project
+        home.enterProjectCode('test')
+    });
+
+    afterEach(() => {
+        // log out
+        sidebar.logout();
     });
 
     /* ---- Project Tests ------------------------- */
@@ -59,10 +68,6 @@ describe('Project Page as a Project Owner: ', () => {
 
         browser.sleep(2000);
         expect(sidebar.heatButton.getAttribute('class')).toContain("active");
-
-        // log out
-        browser.wait(EC.elementToBeClickable(sidebar.logOutButton), 5000, "never found the logout button");
-        sidebar.logOutButton.click();
     });
 
     /**
@@ -83,10 +88,6 @@ describe('Project Page as a Project Owner: ', () => {
         let comments = element.all(by.css('edji-comment:not(.hidden):not(.spec-owner)'));
         browser.wait(EC.elementToBeClickable(comments.first()), 5000, "never found the added comment");
         expect(comments.count()).toBeGreaterThan(0);
-
-        // log out
-        browser.wait(EC.elementToBeClickable(sidebar.logOutButton), 5000, "never found the logout button");
-        sidebar.logOutButton.click();
     });
 
     it("should toggle off Heat Vision as Project Owner", () => {
@@ -117,10 +118,6 @@ describe('Project Page as a Project Owner: ', () => {
 
         browser.sleep(2000);
         expect(sidebar.heatButton.getAttribute('class')).toContain("inactive");
-
-        // log out
-        browser.wait(EC.elementToBeClickable(sidebar.logOutButton), 5000, "never found the logout button");
-        sidebar.logOutButton.click();
     });
 
     /**
@@ -138,12 +135,11 @@ describe('Project Page as a Project Owner: ', () => {
 
         
         // Make sure the comment was created
-        let comments = element.all(by.css('edji-comment:not(.hidden):not(.spec-owner)'));
-        expect(comments.count()).toBe(0);
-
-        // log out
-        browser.wait(EC.elementToBeClickable(sidebar.logOutButton), 5000, "never found the logout button");
-        sidebar.logOutButton.click();
+        let comments = element.all(by.css('edji-comment:not(.hidden):not(.spec-owner)'))
+            .count()
+            .then((count) => {
+                expect(count).toBe(0)
+            })
     });    
      
 }); // describe 'Dashboard Page'

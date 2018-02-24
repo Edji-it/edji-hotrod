@@ -1,7 +1,7 @@
 import * as path from 'path'
 import { SideBarComponent } from '../../app/shared/side-bar'
 import { browser, by, element, protractor} from 'protractor'
-import { NewReading, Login, Sidebar, Project, Questions } from './page-objects'
+import { NewReading, Login, Sidebar, Project, Questions, Dashboard, Home } from './page-objects'
 import { LoginModal, GuestLoginForm } from './components';
 
 /*
@@ -25,6 +25,8 @@ describe('Reading Questions Tests', () => {
     let project     = new Project();
     let guestForm   = new GuestLoginForm();
     let question    = new Questions();
+    let dashboard = new Dashboard();
+    let home = new Home();
 
     // Testing the creation
     describe('Questions - Create', () => {
@@ -61,7 +63,9 @@ describe('Reading Questions Tests', () => {
         * 
         */
         it('should add reading with questions when all fields are filled and submitted', () => {
-            newReading.getPage()
+            // Open and wait for New Reading page
+            dashboard.openNewReading();
+
             // Wait for New Reading page
             browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000, "never found the new reading title");
 
@@ -147,13 +151,15 @@ describe('Reading Questions Tests', () => {
             browser.wait(EC.elementToBeClickable(newReading.shareCodeModalClose), 5000, "reading share code modal never showed up")
             newReading.shareCodeModalClose.click()
 
-            sidebar.logout();
+            // Reset user to dashboard
+            sidebar.backToDash();
         }) // it('should add reading when all fields are filled ...
     }) // describe('Questions - Create'
 
     describe("Questions: Making Answer Comments", () => {
         beforeAll(() => {
-            question.getPage();            
+            // Join reply project from the homepage
+            home.enterProjectCode('questions');          
   
             // Login
              guestForm.loginAsGuest(); // 
@@ -163,7 +169,7 @@ describe('Reading Questions Tests', () => {
         afterAll(() => {
             // log out
             browser.wait(EC.elementToBeClickable(sidebar.logOutButton), 5000, "never found the logout button");
-            sidebar.logOutButton.click();
+            sidebar.logout();
         }); // afterAll
 
         /*

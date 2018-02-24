@@ -6,10 +6,10 @@
 
     //- Dashboard Nav
     .nav__menu(*ngIf="showDashboardOptions")
-      a.btn.btn-link([routerLink]="['/dashboard']", routerLinkActive="active") 
+      a#navReadings.btn.btn-link([routerLink]="['/dashboard']", routerLinkActive="active") 
         //- span([innerHtml]="':book:' | emojione")
         | Readings
-      a.btn.btn-link([routerLink]="['/discover']", routerLinkActive="active")
+      a#navDiscover.btn.btn-link([routerLink]="['/discover']", routerLinkActive="active")
         //- span([innerHtml]="':triangular_flag_on_post:' | emojione")
         | Discover
 

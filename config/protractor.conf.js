@@ -16,7 +16,7 @@ exports.config = {
   // Capabilities to be passed to the webdriver instance.
   capabilities: {
     'browserName': 'chrome',
-    marionette: true,
+    // marionette: true,
     'chromeOptions': {
       'args': ['show-fps-counter=true','use-fake-ui-for-media-stream','disable-web-security','--window-size=1680,1050']
     },
@@ -55,12 +55,14 @@ exports.config = {
     showColors: true,
     isVerbose: false,
     includeStackTrace: false,
-    defaultTimeoutInterval: 400000,
+    // A longer default timeout makes our test suite unusable
+    defaultTimeoutInterval: 30000,
     print: () => {} // take out the dot logging when tests are run
   },
   directConnect: true,
 
   onPrepare: function() {
+    // We do not want to ignoreSynchronization, it defeats the purpose of protractor
     browser.ignoreSynchronization = true;
 
     // add test log output configuration

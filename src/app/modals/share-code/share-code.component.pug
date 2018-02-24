@@ -5,8 +5,7 @@
         .modal-header
           h4.modal-title Reading Group Code
           button.close.btn-icon--round(
-              *ngIf="!showOpenReading",
-              (click)="_util.shareCodeModalClose()",
+              (click)="closeModal()",
               type="button",
               data-dismiss="modal",
               aria-label="Close"

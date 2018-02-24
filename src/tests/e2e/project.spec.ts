@@ -1,7 +1,7 @@
 import { ProjectService } from '../../app/shared';
 import { browser, by, element, protractor } from 'protractor';
 
-import { Project, Sidebar } from './page-objects';
+import { Project, Sidebar, Home } from './page-objects';
 import { LoginModal, GuestLoginForm } from './components';
 
 /*
@@ -19,6 +19,7 @@ describe('Project Page', () => {
 
     /* ---- Variable Initialization --------------- */
     let project = new Project();
+    let home = new Home();
     let sidebar = new Sidebar();
     let loginModal = new LoginModal();
     let EC = protractor.ExpectedConditions; // vital
@@ -40,18 +41,20 @@ describe('Project Page', () => {
      * - Make sure that the guest name is on the account button
      */
 
-    describe("Login modal error", () => {
-        beforeEach(() => {
-            project.getPage();
+    describe("Login modal errors", () => {
+        beforeAll(() => {
+            home.getPage();
+            // Go to project to see login modal
+            home.enterProjectCode('test');
         });
-
 
         loginModal.testLoginModalErrors();
     })
 
     describe("Login modal success", () => {
-        beforeEach(() => {
-            project.getPage();
+        beforeAll(() => {
+            // Should start on the homepage each time
+            home.enterProjectCode('test');
             // Login
             guestForm.loginAsGuest();
             browser.wait(EC.elementToBeClickable(sidebar.logOutButton));
@@ -59,30 +62,24 @@ describe('Project Page', () => {
 
         afterEach(() => {
             // log out
-            browser.wait(EC.elementToBeClickable(sidebar.logOutButton), 5000, "never found the logout button");
-            sidebar.logOutButton.click();
+            sidebar.logout();
         });
-
-        // loginModal.testLoginSuccess(() => {
-        //     browser.wait(EC.elementToBeClickable(sidebar.logOutButton), 5000, "logout button never became clickable");
-        // });
     });
 
     describe("Commenting", () => {
         beforeAll(() => {
-            project.getPage();
+            // Should start on the homepage each time
+            // home.enterProjectCode('test');
             // Login
             guestForm.loginAsGuest();
             browser.wait(EC.elementToBeClickable(sidebar.logOutButton));
         });
 
         afterAll(() => {
-            // log out
-            browser.wait(EC.elementToBeClickable(sidebar.logOutButton), 5000, "never found the logout button");
-            sidebar.logOutButton.click();
+            sidebar.logout();
         });
 
-        it("should make emoji comment as logged in user", () => {
+        it("should make an emoji comment", () => {
 
             let emojiKeyboard = element(by.css('emoji-keyboard'));
             let grinningEmoji = emojiKeyboard.element(by.css("[dataname=':grinning:'"));
@@ -166,7 +163,8 @@ describe('Project Page', () => {
 
     describe("AudioCommenting", () => {
         beforeAll(() => {
-            project.getAudioPage();
+            // Join project from the homepage
+            home.enterProjectCode('audio');
             // Login
             guestForm.loginAsGuest();
             browser.wait(EC.elementToBeClickable(sidebar.logOutButton));
@@ -179,9 +177,6 @@ describe('Project Page', () => {
         });
 
         it("should make audio comment as logged in user", () => {
-            // need to navigate to the audio-specific page
-        // project.getAudioPage();
-            // Code for making an audio comment
             // Find text to select
             browser.wait(EC.elementToBeClickable(element(by.css(".w[index='18']"))), 10000, "never found words to click on");
 
@@ -236,7 +231,8 @@ describe('Project Page', () => {
 
     describe("Discussions", () => {
         beforeAll(() => {
-            project.getReplyPage();
+            // Join reply project from the homepage
+            home.enterProjectCode('reply');
             // Login
             guestForm.loginAsGuest();
             browser.wait(EC.elementToBeClickable(sidebar.logOutButton));
@@ -249,9 +245,6 @@ describe('Project Page', () => {
         });
 
         it("should make a reply comment as a logged in user", () => {
-            // need to navigate to the reply-comment page
-        // project.getReplyPage();
-            // Code for making a reply
             // Wait for text to load
             browser.wait(EC.elementToBeClickable(element(by.css(".w[index='2']"))), 12000, "never found words to click on");
 
