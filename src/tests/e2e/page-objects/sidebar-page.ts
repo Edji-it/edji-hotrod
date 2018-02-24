@@ -17,9 +17,32 @@ export class Sidebar {
 
     // Public Instance Variables
     public logOutButton     = element(by.css("a#logOutButton"));
+    public logInButton     = element(by.css("a#loginLink"));
     public accountButton    = element(by.id("accountButton"));
     public heatButton       = element(by.id("toggleHeatVision"));
+    public navReadings = element(by.id("navReadings"));
+    public navDiscover = element(by.id("navDiscover"));
     public accountButtonSpan = this.accountButton.element(by.css('span'));
+    public logo = element(by.id("logo"));
+    public heroLink = element(by.id("heroLink"));
+
+    public backToDash(): void {
+        let modalCloseBtn = element(by.css(".show .modal button.close"));
+        modalCloseBtn.isPresent().then((result) => {
+            if (result) {
+                 modalCloseBtn.isDisplayed().then((result) => {
+                    if ( result ) {
+                        //Whatever if it is true (displayed)
+                        browser.wait(this.EC.elementToBeClickable(modalCloseBtn), 5000, "modal close button never became clickable")
+                        modalCloseBtn.click()
+                    }
+                });
+            }
+        });
+        browser.wait(this.EC.elementToBeClickable(this.logo), 5000, "logo never became clickable")
+        this.logo.click()
+        browser.wait(this.EC.urlContains("dashboard"), 5000, "never arrived at dashboard after clicking logo")
+    }
 
     // Click the log out button.
     public clickLogOutButton () : void
@@ -37,5 +60,11 @@ export class Sidebar {
         browser.wait(this.EC.elementToBeClickable(this.logOutButton), 5000, "logout button never became clickable");
         this.logOutButton.click();
         browser.wait(this.EC.urlContains("home"), 5000, "never arrived home after logging out");
+    }
+
+    public clickHeroLink(): void {
+        // this.logo.click();
+        // browser.wait(this.EC.elementToBeClickable(this.heroLink), 5000, "hero link never became clickable");
+        this.heroLink.click();
     }
 } // class Sidebar

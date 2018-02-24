@@ -1,3 +1,5 @@
+import { Observable } from 'rxjs/Rx';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Angulartics2 } from 'angulartics2'
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 
@@ -22,6 +24,11 @@ export class HeroSubscribeComponent implements OnInit {
   private stripeMessage: string
   private initWithCoupon: boolean = false
   private customCouponCode: string = ''
+  // Discount value used for DISPLAY ONLY
+  private percentOff: number = 0
+  private joiningAcademy: boolean = false
+
+  private sForm: FormGroup 
 
   @Input()
   couponCode: string
@@ -34,8 +41,18 @@ export class HeroSubscribeComponent implements OnInit {
   constructor(
     private _auth: AuthService,
     private _bumblebee: BumblebeeService,
-    private angulartics: Angulartics2
-  ) { }
+    private angulartics: Angulartics2,
+    private fb: FormBuilder,
+  ) { 
+    // Construct formgroup
+    this.sForm = this.fb.group({
+      couponCode: [
+        '',
+        [],
+        this.validateCoupon.bind(this)
+      ]
+    }, { updateOn: "submit" });
+  }
 
   ngOnInit() {
     // Create a Stripe client
@@ -89,10 +106,28 @@ export class HeroSubscribeComponent implements OnInit {
   
   }
 
-  private validateCoupon() {
-    // let validCoupons = ['HEROVISION']
-    // return validCoupons.indexOf(this.customCouponCode.toUpperCase()) > -1
-    return true
+  private validateCoupon(control: AbstractControl) : Observable<any> {
+    let coupon = control.value.toUpperCase()
+    // Reset variables
+    this.joiningAcademy = false
+    this.percentOff = 0
+    return this._auth.validateHeroCoupon(coupon)
+      .debounceTime(1000)
+      .map(
+        (res) => {
+          if (res.percent_off) {
+            this.percentOff = res.percent_off
+          }
+          // Hack for detecting Hero Academy teachers
+          if (coupon.indexOf('HA-') == 0) {
+            this.joiningAcademy = true
+          }
+          return null
+        },
+        (err) => {
+          return { invalid: true }
+        }
+      )
   }
 
   private checkout() {
@@ -104,16 +139,28 @@ export class HeroSubscribeComponent implements OnInit {
     }
 
     this.loading = true
-    this.stripe.createToken(this.card).then((result) => {
-      if (result.error) {
-        // Inform the user if there was an error
-        var errorElement = document.getElementById('card-errors')
-        errorElement.textContent = result.error.message;
-        this.loading = false
-      } else {
-        // track user adding hero subscription in analytics
+    
+    if (this.percentOff == 100) {
+      this.becomeHero()
+    } else {
+      this.stripe.createToken(this.card).then((result) => {
+        if (result.error) {
+          // Inform the user if there was an error
+          var errorElement = document.getElementById('card-errors')
+          errorElement.textContent = result.error.message;
+          this.loading = false
+        } else {
+          this.becomeHero(result.token.id)
+        }
+      })
+    }
+  }
+
+  private becomeHero(token ?: string) {
+    let eventAction = 'addSubscription'
+    // track user adding hero subscription in analytics
         this.angulartics.eventTrack.next({ action: eventAction, properties: { category: 'heroFeature', label: 'attempt' }})
-        this._auth.subscribeToHero(this.subtype, result.token.id, this.initWithCoupon ? this.couponCode.toUpperCase() : this.validateCoupon() ? this.customCouponCode.toUpperCase() : '')
+        this._auth.subscribeToHero(this.subtype, token ? token : "", this.initWithCoupon ? this.couponCode.toUpperCase() : this.sForm.valid ? this.sForm.controls["couponCode"].value.toUpperCase() : '')
           .subscribe(
             data => {
               // track user adding hero subscription in analytics
@@ -132,8 +179,5 @@ export class HeroSubscribeComponent implements OnInit {
               this.stripeMessage = 'There was an error processing your payment. Please try correcting your payment information, or <a href="mailto:support@edji.it" class="link">contact our support team</a>.'
               this._bumblebee.reportError(error)
             })
-
-      }
-    })
   }
 }

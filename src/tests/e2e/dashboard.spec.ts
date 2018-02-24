@@ -61,7 +61,7 @@ describe('Dashboard Page', () => {
         });
 
         it("should get to a project by entering a code", () => {
-            dashboard.getPage();
+            sidebar.backToDash();
             // initial validation
             browser.wait(EC.presenceOf(dashboard.projectCodeInput), 8000, "never saw lightning code input");
 
@@ -72,6 +72,9 @@ describe('Dashboard Page', () => {
 
             // verification
             browser.wait(EC.urlContains("project"), 5000, "entering a project code did not bring me to a project");
+
+            // Return to dashboard
+            sidebar.backToDash();
         });
     });
 
@@ -87,9 +90,7 @@ describe('Dashboard Page', () => {
             let uniqueTitle: string = new Date().valueOf().toString();
 
             // Create a new reading to control it properly thru the process
-            // Open and wait for New Reading page
-            newReading.getPage();
-            browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000);
+            dashboard.openNewReading();
 
             // Enter sample Reading into form
             newReading.titleInput.sendKeys(uniqueTitle);
@@ -113,15 +114,11 @@ describe('Dashboard Page', () => {
             browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
             newReading.finalizeButton.click();
 
-            // // Click the 'Go to Reading' button on share button modal
-            // browser.wait(EC.elementToBeClickable(newReading.goToReadingButton), 5000, "share code modal go to reading button never became clickable")
-            // newReading.goToReadingButton.click();
-
             // Should redirect to Project page for new reading
             browser.wait(EC.urlContains("project"), 7500, "never arrived at the reading page after published");
 
             // Go to the dashboard
-            dashboard.getPage();
+            sidebar.backToDash();
 
             browser.wait(EC.elementToBeClickable(element(by.css('button[testFindOptions="' + uniqueTitle + '"]'))), 8000, "reading card options button never became clickable after load");
             element(by.css('button[testFindOptions="' + uniqueTitle + '"]')).click();
@@ -131,42 +128,36 @@ describe('Dashboard Page', () => {
 
             let deleteModal = element(by.id('deleteReadingModal'));
             browser.wait(EC.presenceOf(deleteModal), 5000, "never saw a deleteModal");
-            let deleteConfirm = element(by.id('delBtnModal'));
-            browser.wait(EC.presenceOf(deleteConfirm), 5000, "never saw a deleteConfirm on the deleteModal");
-            browser.wait(EC.elementToBeClickable(deleteConfirm), 5000, "deleteConfirm on the deleteModal was never clickable");
-            deleteConfirm.click();
+            browser.wait(EC.presenceOf(dashboard.deleteConfirm), 5000, "never saw a deleteConfirm on the deleteModal");
+            browser.wait(EC.elementToBeClickable(dashboard.deleteConfirm), 5000, "deleteConfirm on the deleteModal was never clickable");
+            // Delete modal confirm click has promise issues, so treat it a bit differently
+            dashboard.deleteConfirm.click().then(function () {
+                // Unable to confirm title
+                browser.wait(EC.invisibilityOf(element(by.cssContainingText('.reading-title-text', uniqueTitle))), 8000, "saw the unique readingTitle (END). We aren't supposed to.");
+            });
 
-            dashboard.getPage();
-
-            browser.wait(EC.invisibilityOf(element(by.cssContainingText('.reading-title-text', uniqueTitle))), 5000, "saw the unique readingTitle (END). We aren't supposed to.");
+            // Click propagates oddly after modal, and we need to click outside the reading card
+            sidebar.logo.click();
         }); // it ("Make a new reading then delete it")
 
         it ("Delete a project off of a new reading.", () => {
 
             let uniqueGroupTitle = "Cynder is such a cool dog";
-
-            dashboard.getPage();
+            let newGroupButton = element.all(by.css('.dropdown-menu .e2e-new-group')).first();
 
             // Click the dropdown menu
-            browser.wait(EC.presenceOf(dashboard.firstDropdownMenu), 5000, "never saw a dropdownMenu");
-            browser.wait(EC.elementToBeClickable(dashboard.firstDropdownMenu), 5000, "create new group button was never clickable");
+            browser.wait(EC.elementToBeClickable(dashboard.firstDropdownMenu), 5000, "never saw a reading card dropdown menu");
             dashboard.firstDropdownMenu.click();
-
-            // Click the create new group button & create a new project
-            let newGroupButton = element(by.buttonText('Create New Group'));
+            // // Click the create new group button & create a new project
+            browser.wait(EC.elementToBeClickable(newGroupButton), 5000, "create new group button was never clickable");
             newGroupButton.click();
-
             // Use the modal.
             let groupNameInput      = element(by.id('newProjectLabel'));
-            let createGroupButton   = element(by.id("buttonCreateGroup")); 
-            browser.wait(EC.presenceOf(groupNameInput), 5000, "never saw a groupNameInput");
             browser.wait(EC.elementToBeClickable(groupNameInput), 5000, "groupNameInput was never clickable");
-
             groupNameInput.sendKeys(uniqueGroupTitle);
             
-            browser.wait(EC.presenceOf(newGroupButton), 5000, "never saw a createGroupButton");
-            // browser.wait(EC.elementToBeClickable(newGroupButton), 5000, "createGroupButton was never clickable");
-
+            let createGroupButton   = element(by.id("buttonCreateGroup")); 
+            browser.wait(EC.elementToBeClickable(createGroupButton), 5000, "never saw a createGroupButton");
             createGroupButton.click();
 
             // We're gonna identify the new project by it's new group class since it was just created. 
@@ -175,6 +166,7 @@ describe('Dashboard Page', () => {
 
             // Now click that delete button, baby
             let newProjectCardDelBtn = newProjectCard.element(by.css(".btn--delete-project"));
+            browser.wait(EC.elementToBeClickable(newProjectCardDelBtn), 5000, "never saw a project delete button");
             newProjectCardDelBtn.click();
 
             // Click ok on that there delete modal
@@ -184,7 +176,6 @@ describe('Dashboard Page', () => {
             browser.wait(EC.presenceOf(delProjectBtnModal), 5000, "never saw a delProjectBtn on the delProjectModal");
             browser.wait(EC.elementToBeClickable(delProjectBtnModal), 5000, "delProjectBtn on the delProjectModal was never clickable");
             delProjectBtnModal.click();
-
             // expect((newProjectCard.isPresent())).toEqual(false);
             browser.sleep(3000);
             browser.wait(EC.invisibilityOf(newProjectCard), 5000, "saw a newProjectCard (END). We aren't supposed to.");

@@ -14,29 +14,8 @@
                         <label>Hero Subscription Plan</label>
                         <table class="table table-hover">
                             <tbody>
-                                <!-- <tr *ngIf="monthlyAmountOff || !yearlyAmountOff" [class.table-info]="subtype == 'monthly'" (click)="subtype = 'monthly'" class="selectable">
-                                    <th scope="row">
-                                        <label class="form-check-label">
-                                            <input [(ngModel)]="subtype" class="form-check-input" type="radio" name="subscriptionPlan" id="subPlan1" value="monthly" aria-label="Monthly Subscription">
-                                            Monthly
-                                        </label>
-                                    </th>
-                                    <td>
-                                        <p *ngIf="!monthlyAmountOff">$5/mo</p> 
-                                        <p *ngIf="monthlyAmountOff"><del>$5/mo</del> ${{getMonthlyPrice()}}/mo</p>    
-                                    </td>
-                                    <td>
-                                        <p *ngIf="!monthlyAmountOff">Billed as $5 every month</p>    
-                                        <p *ngIf="monthlyAmountOff">Billed as ${{getMonthlyPrice()}} every month</p>    
-                                    </td>
-                                </tr> -->
-                                <tr [class.table-info]="subtype == 'yearly'" (click)="subtype = 'yearly'" class="selectable">
-                                    <th scope="row">
-                                        <label class="form-check-label">
-                                            <!--<input [(ngModel)]="subtype" class="form-check-input" type="radio" name="subscriptionPlan" id="subPlan2" value="yearly" aria-label="Annual Subscription" checked>-->
-                                            Yearly
-                                        </label>
-                                    </th>
+                                <tr *ngIf="!joiningAcademy" [class.table-info]="subtype == 'yearly'" (click)="subtype = 'yearly'" class="selectable">
+                                    <th scope="row">Yearly</th>
                                     <td>
                                         <p><b>$60/yr</b></p>    
                                     </td>
@@ -44,21 +23,28 @@
                                         <p>Billed as $60 every year</p>
                                     </td>
                                 </tr>
+                                <tr *ngIf="joiningAcademy == true" class="table-info">
+                                    <th scope="row" style="vertical-align:middle;">Hero Academy</th>
+                                    <td>
+                                        <img src="/assets/images/logo-academy.svg" />
+                                    </td>
+                                    <td style="vertical-align:middle;" [innerHtml]="'Provided by your Institution! :tada:' | emojione"></td>
+                                </tr>
                             </tbody>
                         </table>
-                        <div *ngIf="!initWithCoupon" class="form-row">
-                            <label for="promo-code">
-                            Promo Code
-                            </label>
-                            <div id="promo-code">
-                                <input [(ngModel)]="customCouponCode" [class.is-valid]="validateCoupon()" type="text" class="form-item form-control text-uppercase" tabindex="0" />
-                                <!--<div class="alert alert-success" *ngIf="validateCoupon()">
-                                    Welcome to Hero, Visionary! Your subscription will be <b>free</b>.
-                                </div>-->
+                        <form [formGroup]="sForm">
+                            <div *ngIf="!initWithCoupon" class="form-row">
+                                <label for="promo-code">Promo Code</label>
+                                <div id="promo-code" class="form-group" [class.has-success]="sForm.controls['couponCode'].valid" [class.has-danger]="sForm.controls['couponCode'].value.length > 0 && !sForm.controls['couponCode'].valid && sForm.controls['couponCode'].touched">
+                                    <input id="couponCodeInput" formControlName="couponCode" [class.form-control-success]="sForm.controls['couponCode'].valid" type="text" class="form-control text-uppercase" tabindex="0" />
+                                    <div id="invalidCouponMsg" class="form-control-feedback" *ngIf="sForm.controls['couponCode'].value.length > 0 && !sForm.controls['couponCode'].valid && sForm.controls['couponCode'].touched"><b>Uh-oh!</b> That code is invalid or expired.</div>
+                                    <div id="validCouponMsg" class="form-control-feedback" *ngIf="sForm.controls['couponCode'].valid && !joiningAcademy"><b>Applied!</b> {{percentOff}}% discount applied.</div>
+                                    <div id="academyCouponMsg" class="form-control-feedback" *ngIf="sForm.controls['couponCode'].valid && joiningAcademy"><b>Hero Academy License Applied!</b></div>
+                                </div>
                             </div>
-                        </div>
-                        
-                        <form action="/charge" method="post" id="payment-form">
+                        </form>
+                        <br/>
+                        <form [class.hide]="sForm.controls['couponCode'].valid && percentOff == 100" action="/charge" method="post" id="payment-form">
                             <div class="form-row">
                                 <label for="card-element">
                                 Credit or debit card
@@ -123,3 +109,4 @@
             </div>
         </div>
     </div>
+</div>

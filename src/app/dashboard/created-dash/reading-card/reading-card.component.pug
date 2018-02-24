@@ -29,7 +29,7 @@
     //- dropdown buttons
     .dropdown-menu.dropdown-menu-right.reading-card-menu
       //- Create New Group dropdown button
-      button.dropdown-item(
+      button.dropdown-item.e2e-new-group(
         (click)="relevantReading = reading; showAddModal = true; showOptions = false;",
         [attr.testFindCreateNewGroup]="reading.title"
       ) Create New Group
@@ -139,7 +139,7 @@
           button.btn.btn-icon--plain((click)="version.showOptionsV = !version.showOptionsV", [attr.testFindOptionsV]="version.title")
             i.icon.icon-more
           .dropdown-menu.dropdown-menu-right.reading-card-menu
-            button.dropdown-item(
+            button.dropdown-item.e2e-new-group(
               (click)="relevantReading = version; showAddModal = true; version.showOptionsV = false; versionHeight = versionHeight + 66", 
               [attr.testFindCreateNewGroupV]="version.title"
             ) Create New Group

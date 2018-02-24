@@ -379,3 +379,9 @@ input[type=text].input-noborder, input[type=password].input-noborder, input[type
   content: "\A";
   white-space: pre;
 }
+
+// Stripe override
+#card-errors {
+	margin-top: 0.25rem;
+	color: #ed4c5c;
+}

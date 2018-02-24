@@ -30,7 +30,7 @@ describe("Versioning - ", () => {
 
     afterEach(() => {
         // navigate back to the dashboard after every test
-        dashboard.getPage();
+        sidebar.backToDash();
     });
 
     afterAll(() => {
@@ -57,7 +57,7 @@ describe("Versioning - ", () => {
     it('should create a new reading with a specific title', () => {
         // Create a new reading to control it properly thru the process
         // Open and wait for New Reading page
-        newReading.getPage();
+        dashboard.openNewReading();
         browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000);
 
         // Enter sample Reading into form
@@ -90,7 +90,7 @@ describe("Versioning - ", () => {
         browser.wait(EC.urlContains("project"), 7500, "never arrived at the reading page after published");
 
         // Go to the dashboard
-        dashboard.getPage();
+        sidebar.backToDash();
     });
 
     it('should go to new reading page with existing reading and validate the reading; then save it as a draft', () => {
@@ -194,11 +194,7 @@ describe("Versioning - ", () => {
         element(by.css('button[testFindCreateNewGroupV="' + uniqueTitle + '"]')).click();
 
         // Wait for the input field for the group label to show and enter text
-        browser.wait(EC.elementToBeClickable(dashboard.projectLabel), 5000);
-        dashboard.projectLabel.sendKeys(uniqueTitle);
-
-        // Create the group
-        dashboard.groupCreate.click();
+        dashboard.createNewGroupModalInput(uniqueTitle);
 
         // Locate the group and confirm the name
         browser.wait(EC.elementToBeClickable(element(by.css('span[testFindGroupV="' + uniqueTitle + '"]'))), 5000, "new group label never showed up");

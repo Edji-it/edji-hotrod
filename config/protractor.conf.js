@@ -25,7 +25,7 @@ exports.config = {
   // Capabilities to be passed to the webdriver instance.
   capabilities: {
     'browserName': 'chrome',
-    marionette: true,
+    // marionette: true,
     'chromeOptions': {
       'args': ['show-fps-counter=true','use-fake-ui-for-media-stream','disable-web-security']
     }, // chrome options
@@ -51,6 +51,7 @@ exports.config = {
     discover:   helpers.root('src/tests/e2e/discover.spec.ts'),
     question:   helpers.root('src/tests/e2e/questions.spec.ts'),
     version:    helpers.root('src/tests/e2e/version.spec.ts'),
+    heroSubscribe: helpers.root('src/tests/e2e/hero-subscribe.spec.ts'),
     all:        [helpers.root('src/tests/e2e/home.spec.ts'),  helpers.root('src/tests/e2e/login.spec.ts')]
   }, // suites
 
@@ -58,20 +59,22 @@ exports.config = {
 
   framework: 'jasmine2',
 
-  allScriptsTimeout: 10000,
+  allScriptsTimeout: 40000,
 
   // Options to be passed to Jasmine-node.
   jasmineNodeOpts: {
     showTiming: true,
     showColors: true,
     isVerbose: false,
-    includeStackTrace: false,
-    defaultTimeoutInterval: 400000,
+    includeStackTrace: true,
+    // A longer default timeout makes our test suite unusable
+    defaultTimeoutInterval: 50000,
     print: () => {} // take out the dot logging when tests are run
   },
   directConnect: true,
 
   onPrepare: function() {
+    // We do not want to ignoreSynchronization, it defeats the purpose of protractor
     browser.ignoreSynchronization = true;
 
     // add test log output configuration

@@ -38,7 +38,9 @@ export class Home implements PageObjectInterface
     {
         // This line actually *breaks* being able to find the input
         // browser.get('#projectCodeInput');
+        browser.wait(this.projectCodeInput.isDisplayed, 5000, ('Never loaded Project Code input box'));
         this.projectCodeInput.sendKeys(input);
+        browser.actions().sendKeys(protractor.Key.ENTER).perform();
     } // enterProjectCode(input: string) : void
 
     clickJoinProjectButton () :  void
