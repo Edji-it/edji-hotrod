@@ -24,6 +24,7 @@ export class Sidebar {
     public navDiscover = element(by.id("navDiscover"));
     public accountButtonSpan = this.accountButton.element(by.css('span'));
     public logo = element(by.id("logo"));
+    public heroLink = element(by.id("heroLink"));
 
     public backToDash(): void {
         let modalCloseBtn = element(by.css(".modal button.close"));
@@ -59,5 +60,11 @@ export class Sidebar {
         browser.wait(this.EC.elementToBeClickable(this.logOutButton), 5000, "logout button never became clickable");
         this.logOutButton.click();
         browser.wait(this.EC.urlContains("home"), 5000, "never arrived home after logging out");
+    }
+
+    public clickHeroLink(): void {
+        // this.logo.click();
+        // browser.wait(this.EC.elementToBeClickable(this.heroLink), 5000, "hero link never became clickable");
+        this.heroLink.click();
     }
 } // class Sidebar
