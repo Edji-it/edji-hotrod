@@ -20,11 +20,13 @@ export class Sidebar {
     public logInButton     = element(by.css("a#loginLink"));
     public accountButton    = element(by.id("accountButton"));
     public heatButton       = element(by.id("toggleHeatVision"));
+    public heatButtonMobile = element(by.id("toggleHeatVisionMobile"));
     public navReadings = element(by.id("navReadings"));
     public navDiscover = element(by.id("navDiscover"));
     public accountButtonSpan = this.accountButton.element(by.css('span'));
     public logo = element(by.id("logo"));
     public heroLink = element(by.id("heroLink"));
+    public ownerToolToggleButton = element(by.id("buttonOwnerToolToggle"));
 
     public backToDash(): void {
         let modalCloseBtn = element(by.css(".show .modal button.close"));
@@ -42,6 +44,22 @@ export class Sidebar {
         browser.wait(this.EC.elementToBeClickable(this.logo), 5000, "logo never became clickable")
         this.logo.click()
         browser.wait(this.EC.urlContains("dashboard"), 5000, "never arrived at dashboard after clicking logo")
+    }
+
+    public ownerToolToggle(): void {
+        browser.wait(this.EC.elementToBeClickable(this.logOutButton), 5000, "logout button never became clickable");
+        // Toggle the owner tools on mobile if the Owner Tools button is present
+        this.ownerToolToggleButton.isPresent().then((result) => {
+            if (result) {
+                this.ownerToolToggleButton.isDisplayed().then((result) => {
+                    if (result) {
+                        // Click the Tools button to expand the owner tools options for mobile before proceeding
+                        browser.wait(this.EC.elementToBeClickable(this.ownerToolToggleButton), 5000, "never found the owner tool toggle");
+                        this.ownerToolToggleButton.click()
+                    } 
+                });
+            }
+        });
     }
 
     // Click the log out button.

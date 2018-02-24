@@ -82,7 +82,7 @@
     //- Join Reading Code
     .row.col-5.nav__join-code.hidden-sm-down(*ngIf="projectCodeShow && !canPublish")
       .input-group.input-group-lg
-        input#projectCodeInput.form-control(
+        input#projectCodeInputNav.form-control(
           name="ProjectCodeInput", 
           type="text", 
           style="text-align: center;", 
@@ -107,7 +107,7 @@
 //- .container
 .col-12.nav__join-code--under.hidden-md-up(*ngIf="_router.url.indexOf('/home') > -1")
   .input-group.input-group-lg
-    input#projectCodeInput.form-control(
+    input#projectCodeInputUnderNav.form-control(
       name="ProjectCodeInput", 
       type="text", 
       style="text-align: center;",

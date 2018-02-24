@@ -159,7 +159,7 @@ describe('Reading Questions Tests', () => {
     describe("Questions: Making Answer Comments", () => {
         beforeAll(() => {
             // Join reply project from the homepage
-            home.enterProjectCode('questions');          
+            home.enterProjectCodeFromHome('questions');          
   
             // Login
              guestForm.loginAsGuest(); // 

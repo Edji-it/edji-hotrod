@@ -18,7 +18,8 @@ export class Dashboard implements PageObjectInterface
     // public firstReadingCard = this.readingCards.first();
     public projectCards     = element.all(by.css('.project-card'));
     public firstProject     = this.projectCards.first();
-    public projectCodeInput = element(by.css('#projectCodeInput'));
+    public projectCodeInput  = element(by.id("projectCodeInput"));
+    public projectCodeInputNav  = element(by.id("projectCodeInputNav"));
     public projectJoinButton = element(by.css('#buttonJoinProject'));
     public newReadingButton = element(by.id('buttonNewReading'));
     // public optionsButton = element.all(by.css('.btn-icon--plain')).first();

@@ -18,5 +18,17 @@ localConf['capabilities']['chromeOptions']['args'] = [
   '--window-size=411,731'
 ];
 
+localConf['onPrepare'] = function() {
+  // We do not want to ignoreSynchronization, it defeats the purpose of protractor
+  browser.ignoreSynchronization = true;
+
+  // add test log output configuration
+  jasmine.getEnv().addReporter(new SpecReporter({
+    spec: {
+      displayStacktrace: true
+    }
+  }));
+};
+
 // Set the value of exports.config based on
 exports.config = localConf;

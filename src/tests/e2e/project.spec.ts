@@ -45,7 +45,7 @@ describe('Project Page', () => {
         beforeAll(() => {
             home.getPage();
             // Go to project to see login modal
-            home.enterProjectCode('test');
+            home.enterProjectCodeFromHome('test');
         });
 
         loginModal.testLoginModalErrors();
@@ -54,7 +54,7 @@ describe('Project Page', () => {
     describe("Login modal success", () => {
         beforeAll(() => {
             // Should start on the homepage each time
-            home.enterProjectCode('test');
+            home.enterProjectCodeFromHome('test');
             // Login
             guestForm.loginAsGuest();
             browser.wait(EC.elementToBeClickable(sidebar.logOutButton));
@@ -69,7 +69,7 @@ describe('Project Page', () => {
     describe("Commenting", () => {
         beforeAll(() => {
             // Should start on the homepage each time
-            // home.enterProjectCode('test');
+            // home.enterProjectCodeFromHome('test');
             // Login
             guestForm.loginAsGuest();
             browser.wait(EC.elementToBeClickable(sidebar.logOutButton));
@@ -164,7 +164,7 @@ describe('Project Page', () => {
     describe("AudioCommenting", () => {
         beforeAll(() => {
             // Join project from the homepage
-            home.enterProjectCode('audio');
+            home.enterProjectCodeFromHome('audio');
             // Login
             guestForm.loginAsGuest();
             browser.wait(EC.elementToBeClickable(sidebar.logOutButton));
@@ -232,7 +232,7 @@ describe('Project Page', () => {
     describe("Discussions", () => {
         beforeAll(() => {
             // Join reply project from the homepage
-            home.enterProjectCode('reply');
+            home.enterProjectCodeFromHome('reply');
             // Login
             guestForm.loginAsGuest();
             browser.wait(EC.elementToBeClickable(sidebar.logOutButton));
