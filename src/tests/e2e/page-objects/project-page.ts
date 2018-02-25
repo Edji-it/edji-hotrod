@@ -14,6 +14,9 @@ export class Project implements PageObjectInterface {
   public addEmojiBtn = element(by.id("addEmojiComment"));
   public addTextBtn = element(by.id("addTextComment"));
   public addAudioBtn = element(by.id("addAudioComment"));
+  public addEmojiBtnMobile = element(by.id("addEmojiCommentMobile"));
+  public addTextBtnMobile = element(by.id("addTextCommentMobile"));
+  public addAudioBtnMobile = element(by.id("addAudioCommentMobile"));
   public addTextReplyBtn = element(by.id("addTextReply"));
   public addEmojiReplyBtn = element(by.id("addEmojiReply"));
   public addAudioReplyBtn = element(by.id("addAudioReply"));
@@ -29,6 +32,8 @@ export class Project implements PageObjectInterface {
   public imageRight = 25;
   public imageDown = 25;
   public tutorialSkip = element(by.css('.tooltip__skip'));
+  public commentOptionsShow = element(by.css('.text-options.active'));
+  public commentNotHidden = element(by.css('edji-comment:not(.hidden)'));
 
   // Audio Comment test variables
   public audioPlay = element(by.css('edji-comment:not(.hidden) audio-comment #audioPlay'));
@@ -43,6 +48,7 @@ export class Project implements PageObjectInterface {
   public avatarEmoji = element(by.css('.user-icon.avatar-emoji'));
   public avatarAudio = element(by.css('.user-icon.avatar-audio'));
   public avatarTextReply = element(by.css('.user-icon.avatar-text .comment__button--mobile.avatar__reply'));
+  public mobileTextReply = element(by.css('edji-comment:not(.hidden) .hidden-lg-up.comment__button--mobile'));
   public commentDelete = element.all(by.css('edji-comment button.btn-delete')).last();
   public addReplyBtn = element(by.id("addReply"));
   public emojiCommentDelete = element(by.css('edji-comment button.btn-delete'));
@@ -73,16 +79,92 @@ export class Project implements PageObjectInterface {
   }
 
   public skipTutorial(): void {
-      // Click the share button for new reading no matter if it is on desktop or mobile
-      this.tutorialSkip.isPresent().then((result) => {
+    // Click the share button for new reading no matter if it is on desktop or mobile
+    this.tutorialSkip.isPresent().then((result) => {
+      if (result) {
+        this.tutorialSkip.isDisplayed().then((result) => {
           if (result) {
-              this.tutorialSkip.isDisplayed().then((result) => {
-                  if (result) {
-                      browser.wait(this.EC.elementToBeClickable(this.tutorialSkip), 5000, "failed to find the tutorial skip button");
-                      this.tutorialSkip.click()
-                  }
-              });
+            browser.wait(this.EC.elementToBeClickable(this.tutorialSkip), 5000, "failed to find the tutorial skip button");
+            this.tutorialSkip.click()
           }
-      });
+        });
+      }
+    });
+  }
+
+  public addEmojiComment(): void {
+    browser.wait(this.EC.presenceOf(this.commentOptionsShow), 5000, "never found comment options");
+    this.addEmojiBtn.isPresent().then((result) => {
+      if (result) {
+        this.addEmojiBtn.isDisplayed().then((result) => {
+          if (result) {
+            // Desktop clicking of the add emoji comment button
+            browser.wait(this.EC.elementToBeClickable(this.addEmojiBtn), 5000, "never found the add emoji comment button");
+            this.addEmojiBtn.click();
+          } else {
+            // Mobile clicking of the add emoji comment button
+            browser.wait(this.EC.elementToBeClickable(this.addEmojiBtnMobile), 5000, "never found the add emoji comment button");
+            this.addEmojiBtnMobile.click();
+          }
+        });
+      } 
+    });
+  }
+
+  public addTextComment(): void {
+    browser.wait(this.EC.presenceOf(this.commentOptionsShow), 5000, "never found comment options");
+    this.addTextBtn.isPresent().then((result) => {
+      if (result) {
+        this.addTextBtn.isDisplayed().then((result) => {
+          if (result) {
+            // Desktop clicking of the add emoji comment button
+            browser.wait(this.EC.elementToBeClickable(this.addTextBtn), 5000, "never found the add emoji comment button");
+            this.addTextBtn.click();
+          } else {
+            // Mobile clicking of the add emoji comment button
+            browser.wait(this.EC.elementToBeClickable(this.addTextBtnMobile), 5000, "never found the add emoji comment button");
+            this.addTextBtnMobile.click();
+          }
+        });
+      } 
+    });
+  }
+
+  public addAudioComment(): void {
+    browser.wait(this.EC.presenceOf(this.commentOptionsShow), 5000, "never found comment options");
+    this.addAudioBtn.isPresent().then((result) => {
+      if (result) {
+        this.addAudioBtn.isDisplayed().then((result) => {
+          if (result) {
+            // Desktop clicking of the add emoji comment button
+            browser.wait(this.EC.elementToBeClickable(this.addAudioBtn), 5000, "never found the add emoji comment button");
+            this.addAudioBtn.click();
+          } else {
+            // Mobile clicking of the add emoji comment button
+            browser.wait(this.EC.elementToBeClickable(this.addAudioBtnMobile), 5000, "never found the add emoji comment button");
+            this.addAudioBtnMobile.click();
+          }
+        });
+      } 
+    });
+  }
+
+  public openReplyPane(): void {
+    browser.wait(this.EC.presenceOf(this.commentNotHidden), 5000, "never found comment");
+    this.avatarTextReply.isPresent().then((result) => {
+      if (result) {
+        this.avatarTextReply.isDisplayed().then((result) => {
+          if (result) {
+            // Desktop clicking of the open reply pane
+            browser.wait(this.EC.elementToBeClickable(this.avatarTextReply), 5000, "never found the existing comment to reply to");
+            this.avatarTextReply.click()
+          } else {
+            // Mobile clicking of the open reply pane
+            browser.wait(this.EC.elementToBeClickable(this.mobileTextReply), 5000, "never found the existing comment to reply to");
+            this.mobileTextReply.click()
+          }
+        });
+      } 
+    });
   }
 } // class

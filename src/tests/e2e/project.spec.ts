@@ -103,8 +103,7 @@ describe('Project Page', () => {
             // browser.actions().mouseMove(element(by.css(".w[index='18']"))).mouseDown().mouseMove(element(by.css(".w[index='21']"))).mouseUp().perform();
 
             // Add emoji comment
-            browser.wait(EC.elementToBeClickable(project.addEmojiBtn), 5000, "never found the add emoji comment button");
-            project.addEmojiBtn.click();
+            project.addEmojiComment();
 
             // Type emojis
             browser.wait(EC.elementToBeClickable(grinningEmoji), 5000, "never found the emoji keyboard");
@@ -137,8 +136,7 @@ describe('Project Page', () => {
             project.image.click();
 
             // click the tool tip
-            browser.wait(EC.elementToBeClickable(project.addTextBtn), 5000, "couldn't click the text comment button");
-            project.addTextBtn.click();
+            project.addTextComment();
 
             // add some text to the comment
             browser.wait(EC.elementToBeClickable(project.textComment), 5000, "couldn't click the text comment");
@@ -195,8 +193,7 @@ describe('Project Page', () => {
             // browser.actions().mouseMove(element(by.css(".w[index='12']"))).mouseDown().mouseMove(element(by.css(".w[index='14']"))).mouseUp().perform();
 
             // Add audio comment
-            browser.wait(EC.elementToBeClickable(project.addAudioBtn), 5000, "never found the add audio comment button");
-            project.addAudioBtn.click();
+            project.addAudioComment();
 
             // Wait 5 seconds for record button to become clickable and click the record audio button to start recording
             browser.wait(EC.elementToBeClickable(project.audioRecord), 7000, "never found the record audio button");
@@ -249,8 +246,8 @@ describe('Project Page', () => {
             browser.wait(EC.elementToBeClickable(element(by.css(".w[index='2']"))), 12000, "never found words to click on");
 
             // Wait 5 seconds for the avatar with a reply to become clickable
-            browser.wait(EC.elementToBeClickable(project.avatarTextReply), 5000, "never found the existing comment to reply to");
-            project.avatarTextReply.click()
+            project.openReplyPane()
+            
             browser.wait(EC.elementToBeClickable(project.addReplyBtn), 5000, "never found the add reply comment button");
             project.addReplyBtn.click();
 
