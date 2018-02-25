@@ -100,4 +100,20 @@ export class Dashboard implements PageObjectInterface
 
         createGroupButton.click();
     } // createNewGroupModalInput (groupName : string) : void
+
+    // Switch to the created readings tab on mobile 
+    goToCreatedTab(): void {
+        browser.wait(this.EC.urlContains("dashboard"), 5000, "never reached the dashboard before clicking new reading button");
+        this.createdTab.isPresent().then((result) => {
+            if (result) {
+                this.createdTab.isDisplayed().then((result) => {
+                    if (result) {
+                        // Click the created tab first
+                        this.createdTab.click();
+                        browser.wait(this.EC.elementToBeClickable(this.firstReadingCard), 5000, "never found the first created reading");
+                    } 
+                });
+            }
+        });
+    }
 } 
