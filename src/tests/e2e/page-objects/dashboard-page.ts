@@ -15,16 +15,18 @@ export class Dashboard implements PageObjectInterface
 
     // Public Instance Variables
     public readingCards = element.all(by.css('.reading-card'));
-    // public firstReadingCard = this.readingCards.first();
+    public firstReadingCard = this.readingCards.first();
     public projectCards     = element.all(by.css('.project-card'));
     public firstProject     = this.projectCards.first();
     public projectCodeInput  = element(by.id("projectCodeInput"));
     public projectCodeInputNav  = element(by.id("projectCodeInputNav"));
     public projectJoinButton = element(by.css('#buttonJoinProject'));
     public newReadingButton = element(by.id('buttonNewReading'));
+    public newReadingMobileButton = element(by.id('buttonNewReadingMobile'));
     // public optionsButton = element.all(by.css('.btn-icon--plain')).first();
     public optionsButton    = element(by.css('.btn-icon--plain'));
      //public optionsList = element.all(by.css('.reading-card-menu'))
+    public createdTab    = element(by.id('createdTab'));
 
     // Dropdown buttons
     public dropDownMenu     = element(by.css('.btn-icon--plain'));
@@ -47,7 +49,36 @@ export class Dashboard implements PageObjectInterface
 
     // get the new reading page
     openNewReading() : void {
-        this.newReadingButton.click();
+        browser.wait(this.EC.urlContains("dashboard"), 5000, "never reached the dashboard before clicking new reading button");
+        // Click the new reading button on the dashboard for mobile
+        this.createdTab.isPresent().then((result) => {
+            if (result) {
+                this.createdTab.isDisplayed().then((result) => {
+                    if (result) {
+                        // Click the created tab first
+                        this.createdTab.click();
+                        browser.wait(this.EC.elementToBeClickable(this.firstReadingCard), 5000, "never found the first created reading");
+                        // Click the new reading button
+                        browser.wait(this.EC.elementToBeClickable(this.newReadingMobileButton), 5000, "never found the new reading button");
+                        this.newReadingMobileButton.click();
+                    } 
+                });
+            }
+        });
+
+        // Click the new reading button on the dashboard for desktop
+        this.newReadingButton.isPresent().then((result) => {
+            if (result) {
+                this.newReadingButton.isDisplayed().then((result) => {
+                    if (result) {
+                        // Click the new reading button
+                        browser.wait(this.EC.elementToBeClickable(this.newReadingButton), 5000, "never found the new reading button");
+                        this.newReadingButton.click();
+                    } 
+                });
+            }
+        });
+
         browser.wait(this.EC.elementToBeClickable(this.titleInput), 5000);
     } // getNewReadingPage() : void
 

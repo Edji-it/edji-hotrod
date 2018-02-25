@@ -115,27 +115,27 @@ nav-bar([pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'", [canPublish]
               //- Upload Image Button 
                   - Opens Modal.
               .insert-options-group--mobile([class.btn-group-show--animation]="insertOptionShow")
-                a#buttonUploadImage.btn.btn-icon--circle-shadow.insert-options--mobile(
+                a#buttonUploadImageMobile.btn.btn-icon--circle-shadow.insert-options--mobile(
                   (tap)="showUploadModal = true; insertOptionShow=!insertOptionShow", 
                   [class.btn-show--animation]="insertOptionShow"
                 )
                   img(title="Add Picture", src="/assets/images/icon-picture.svg", [class.hide]="!insertOptionShow")
                 //- Upload PDF Button 
                     - Opens Modal
-                a#buttonUploadPdf.btn.btn-icon--circle-shadow.insert-options--mobile(
+                a#buttonUploadPdfMobile.btn.btn-icon--circle-shadow.insert-options--mobile(
                   (tap)="showPdfUploadModal = true; insertOptionShow=!insertOptionShow", 
                   [class.btn-show--animation]="insertOptionShow"
                 )
                   img(title="Add PDF", src="/assets/images/icon-pdf.svg", [class.hide]="!insertOptionShow")
                 //- Insert Question Button (Hero) - NOT DONE
                     - Modal not needed.
-                a#buttonInsertQuestion.btn.btn-icon--circle-shadow.insert-options--mobile(
+                a#buttonInsertQuestionMobile.btn.btn-icon--circle-shadow.insert-options--mobile(
                   *ngIf="currentUser.hero && currentUser.hero.active", 
                   (tap)="addQuestionInLine(); insertOptionShow=!insertOptionShow", 
                   [class.btn-show--animation]="insertOptionShow"
                 )
                   img(title="Add Question", src="/assets/images/icon-add-question.svg", [class.hide]="!insertOptionShow")
-              a#button.btn.btn-icon--circle-shadow.mobile-menu-spot((tap)="insertOptionShow=!insertOptionShow")
+              a#buttonInsertToolToggle.btn.btn-icon--circle-shadow.mobile-menu-spot((tap)="insertOptionShow=!insertOptionShow")
                 span(style="font-size: 11px;") Insert
           .form-group
             //- Source section

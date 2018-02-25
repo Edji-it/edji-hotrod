@@ -43,7 +43,6 @@
 
     .nav__btn-wrap(*ngIf="!showProjectInfo && (!user.hero || !user.hero.active)")
       a#heroLink.btn.btn-clear.nav-bar__btn.hidden-sm-down.link([routerLink]="['/hero']", routerLinkActive="active") Go Hero!
-      a#heroLink.btn.btn-clear.nav-bar__btn.hidden-md-up.link(*ngIf="!canPublish", [routerLink]="['/hero']", routerLinkActive="active") Hero
 
     //- Project Info (Desktop & Mobile)
     .nav-bar__project-data(*ngIf="showProjectInfo && currentProject && currentProject._id")
@@ -77,7 +76,7 @@
       //- Save button: Desktop
       button#saveDraftButton.btn.btn-secondary.nav-bar__btn.hidden-sm-down(*ngIf="canPublish", (click)="saveAction.emit()") Save
       //- Save button: Mobile
-      button#saveDraftButton.btn.btn-clear.nav-bar__btn.hidden-md-up(*ngIf="canPublish", (click)="saveAction.emit()") Save
+      button#saveDraftButtonMobile.btn.btn-clear.nav-bar__btn.hidden-md-up(*ngIf="canPublish", (click)="saveAction.emit()") Save
 
     //- Join Reading Code
     .row.col-5.nav__join-code.hidden-sm-down(*ngIf="projectCodeShow && !canPublish")

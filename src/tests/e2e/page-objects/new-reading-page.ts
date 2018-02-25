@@ -7,6 +7,7 @@ export class NewReading implements PageObjectInterface
     /*
         Page Object for the New Reading page.
     */
+    private EC = protractor.ExpectedConditions;
 
     // Public Instance Variables
     public titleInput = element(by.id('readingTitle'));
@@ -22,13 +23,16 @@ export class NewReading implements PageObjectInterface
     public subjectDropdown = element(by.id('subjectDropdown'));
     public subjectFirstOption = element.all(by.css('#subjectDropdown .dropdown-item')).first();
     public addButton = element(by.id('addReadingButton'));
+    public addButtonMobile = element(by.id('addReadingButtonMobile'));
     public finalizeButton = element(by.id('addReadingFinalizeButton'));
     public goToReadingButton = element(by.id('shareModalReadingButton'));
     public shareCodeModalClose = element(by.id('shareCodeModalClose'));
     public draftButton = element(by.id('saveDraftButton'));
+    public draftButtonMobile = element(by.id('saveDraftButtonMobile'));
     public questionDelete = element.all(by.css('button.inline-delete.question-delete')).last();
     
-    public uploadModalButton = element(by.css('#buttonUploadImage'));
+    public uploadImageModalButton = element(by.css('#buttonUploadImage'));
+    public uploadImageModalButtonMobile = element(by.css('#buttonUploadImageMobile'));
     public imageUploadTrigger = element(by.id('buttonBeginImageUpload'));
     public imageFileInput = element(by.css('#imageFileInput'));
     public uploadedImage = element(by.css(".upload-list-item.new"));
@@ -39,6 +43,7 @@ export class NewReading implements PageObjectInterface
     public pdfUploadTrigger = element(by.id('buttonBeginPdfUpload'));
     public pdfFileInput = element(by.css('#pdfFileInput'));
     public insertUploadedPdf = element(by.css(".upload-list-item.new .e2e-insert-doc"));
+    public insertToolToggleButton = element(by.id('buttonInsertToolToggle'));
 
     // Creating questions
     public insertQuestionButton = element(by.id('buttonInsertQuestion'));
@@ -73,5 +78,65 @@ export class NewReading implements PageObjectInterface
     {
         browser.get('/#/new-reading');
     } // getPage() : void
+
+    public addNewReading(): void {
+        // Click the share button for new reading no matter if it is on desktop or mobile
+        this.addButton.isPresent().then((result) => {
+            if (result) {
+                this.addButton.isDisplayed().then((result) => {
+                    if (result) {
+                        browser.wait(this.EC.elementToBeClickable(this.addButton), 5000, "never found the share reading button");
+                        this.addButton.click()
+                    } else {
+                        browser.wait(this.EC.elementToBeClickable(this.addButtonMobile), 5000, "never found the share reading button");
+                        this.addButtonMobile.click()
+                    }
+                });
+            }
+        });
+    }
+
+    public saveDraftNewReading(): void {
+        // Click the share button for new reading no matter if it is on desktop or mobile
+        this.draftButton.isPresent().then((result) => {
+            if (result) {
+                this.draftButton.isDisplayed().then((result) => {
+                    if (result) {
+                        browser.wait(this.EC.elementToBeClickable(this.draftButton), 5000, "add draft button never became clickable after form entry");
+                        this.draftButton.click()
+                    } else {
+                        browser.wait(this.EC.elementToBeClickable(this.draftButtonMobile), 5000, "add draft button never became clickable after form entry");
+                        this.draftButtonMobile.click()
+                    }
+                });
+            }
+        });
+    }
+
+    // Click the insert button if we're on a mobile view
+    public insertImageButtonTap(): void {
+        // Toggle the owner tools on mobile if the Owner Tools button is present
+        this.insertToolToggleButton.isPresent().then((result) => {
+            if (result) {
+                this.insertToolToggleButton.isDisplayed().then((result) => {
+                    if (result) {
+                        // Click the Tools button to expand the insert tools options for mobile before proceeding
+                        browser.wait(this.EC.elementToBeClickable(this.insertToolToggleButton), 5000, "never found the insert tool button");
+                        this.insertToolToggleButton.click()
+
+                        // Click the image upload button for mobile
+                        browser.wait(this.EC.elementToBeClickable(this.uploadImageModalButtonMobile), 5000, "image upload modal button never became clickable");
+                        this.uploadImageModalButtonMobile.click();
+                    } else {
+                        // Click the image upload button for desktop
+                        browser.wait(this.EC.elementToBeClickable(this.uploadImageModalButton), 5000, "image upload modal button never became clickable");
+                        this.uploadImageModalButton.click();
+                    }
+                });
+            }
+        });
+
+        
+    }
 
 } // class Login
