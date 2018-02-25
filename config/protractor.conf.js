@@ -47,7 +47,7 @@ exports.config = {
 
   framework: 'jasmine2',
 
-  allScriptsTimeout: 20000,
+  allScriptsTimeout: 40000,
 
   // Options to be passed to Jasmine-node.
   jasmineNodeOpts: {
@@ -56,8 +56,8 @@ exports.config = {
     isVerbose: false,
     includeStackTrace: true,
     // A longer default timeout makes our test suite unusable
-    defaultTimeoutInterval: 40000
-    // print: () => {} // take out the dot logging when tests are run
+    defaultTimeoutInterval: 50000,
+    print: () => {} // take out the dot logging when tests are run
   },
   directConnect: true,
 
