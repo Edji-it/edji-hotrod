@@ -8,6 +8,7 @@ export class Project implements PageObjectInterface {
   
   Easily reference parts of the project page test page.
   */
+  private EC = protractor.ExpectedConditions;
 
   // Element References
   public addEmojiBtn = element(by.id("addEmojiComment"));
@@ -27,6 +28,7 @@ export class Project implements PageObjectInterface {
   public discussionsPane = element(by.css('.replies.slide-in'));
   public imageRight = 25;
   public imageDown = 25;
+  public tutorialSkip = element(by.css('.tooltip__skip'));
 
   // Audio Comment test variables
   public audioPlay = element(by.css('edji-comment:not(.hidden) audio-comment #audioPlay'));
@@ -68,5 +70,19 @@ export class Project implements PageObjectInterface {
     // browser.refresh();
     // Load a good sample Project with reply functions (owned by testhero/testhero16)
     browser.get("/#/project/reply");
+  }
+
+  public skipTutorial(): void {
+      // Click the share button for new reading no matter if it is on desktop or mobile
+      this.tutorialSkip.isPresent().then((result) => {
+          if (result) {
+              this.tutorialSkip.isDisplayed().then((result) => {
+                  if (result) {
+                      browser.wait(this.EC.elementToBeClickable(this.tutorialSkip), 5000, "failed to find the tutorial skip button");
+                      this.tutorialSkip.click()
+                  }
+              });
+          }
+      });
   }
 } // class

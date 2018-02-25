@@ -47,6 +47,7 @@ export class NewReading implements PageObjectInterface
 
     // Creating questions
     public insertQuestionButton = element(by.id('buttonInsertQuestion'));
+    public insertQuestionButtonMobile =  element(by.id('buttonInsertQuestionMobile'));
     public insertQuestionPrompt = element.all(by.css('textarea.text-comment-input')).last();
 
     public imageInReading = element(by.css(".content .img img"));
@@ -113,7 +114,7 @@ export class NewReading implements PageObjectInterface
         });
     }
 
-    // Click the insert button if we're on a mobile view
+    // Click the insert image button if we're on a mobile view
     public insertImageButtonTap(): void {
         // Toggle the owner tools on mobile if the Owner Tools button is present
         this.insertToolToggleButton.isPresent().then((result) => {
@@ -135,8 +136,30 @@ export class NewReading implements PageObjectInterface
                 });
             }
         });
+    }
 
-        
+    // Click the insert question button if we're on a mobile view
+    public insertQuestionButtonTap(): void {
+        // Toggle the owner tools on mobile if the Owner Tools button is present
+        this.insertToolToggleButton.isPresent().then((result) => {
+            if (result) {
+                this.insertToolToggleButton.isDisplayed().then((result) => {
+                    if (result) {
+                        // Click the Tools button to expand the insert tools options for mobile before proceeding
+                        browser.wait(this.EC.elementToBeClickable(this.insertToolToggleButton), 5000, "never found the insert tool button");
+                        this.insertToolToggleButton.click()
+
+                        // Click the question add button for mobile
+                        browser.wait(this.EC.elementToBeClickable(this.insertQuestionButtonMobile), 5000, "insert question button never became clickable");
+                        this.insertQuestionButtonMobile.click();
+                    } else {
+                        // Click the question add button for desktop
+                        browser.wait(this.EC.elementToBeClickable(this.insertQuestionButton), 5000, "insert question button never became clickable");
+                        this.insertQuestionButton.click();
+                    }
+                });
+            }
+        });
     }
 
 } // class Login
