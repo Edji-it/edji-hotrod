@@ -47,7 +47,7 @@ exports.config = {
 
   framework: 'jasmine2',
 
-  allScriptsTimeout: 40000,
+  allScriptsTimeout: 45000,
 
   // Options to be passed to Jasmine-node.
   jasmineNodeOpts: {

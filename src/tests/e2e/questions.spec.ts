@@ -98,7 +98,6 @@ describe('Reading Questions Tests', () => {
             newReading.contentInput2.sendKeys(protractor.Key.ARROW_LEFT)
             newReading.contentInput2.sendKeys(protractor.Key.ARROW_LEFT)
             newReading.contentInput2.sendKeys(protractor.Key.ARROW_LEFT)
-            newReading.contentInput2.sendKeys(protractor.Key.ARROW_LEFT)
 
             // Add another question, but we will add it in the middle of existing text
             newReading.insertQuestionButtonTap()

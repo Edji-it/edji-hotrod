@@ -64,8 +64,8 @@ export class NewReading implements PageObjectInterface
     public qPrompt2 = 'Are you willing to give up the information?';
     public titleImageString = 'Test: Image';
     public contentString = 'Many ancient mythologies, and most modern religions include artificial people, such as the mechanical servants built by the Greek god Hephaestus[16] (Vulcan to the Romans), the clay golems of Jewish legend and clay giants of Norse legend, and Galatea, the mythical statue of Pygmalion that came to life. Since circa 400 BC, myths of Crete include Talos, a man of bronze who guarded the Cretan island of Europa from pirates.\nWashstand automaton reconstruction, as described by Philo of Byzantium (Greece, 3rd century BC).';
-    public qContentString1 = "This is largely guesswork.  I suspect that this capacity had to develop very early for our ancestors to work in groups.  They'd need to be able to ask about whether or not another person counted as part of the group, a related group or a distant group that should be avoided or attacked.  This would put it at least in the range of 2 to 4 million years ago"
-    public qContentString2 = "The principal use of questions is to elicit information from the person being addressed by indicating the information which the speaker (or writer) desires."
+    public qContentString1 = "Text before first question."
+    public qContentString2 = "Text. AFTER Q"
     public qSourceString = "https://www.quora.com/When-and-how-in-early-human-development-did-the-capacity-to-ask-questions-develop"
     public contentShortString = 'Three Laws of Robotics\nA robot may not injure a human being or, through inaction, allow a human being to come to harm.';
     public contentShortStringB = '\nA robot must obey the orders given it by human beings except where such orders would conflict with the First Law.\nA robot must protect its own existence as long as such protection does not conflict with the First or Second Laws.\n';
