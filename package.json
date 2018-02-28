@@ -1,6 +1,6 @@
 {
   "name": "edji-hotrod",
-  "version": "3.3.9",
+  "version": "3.3.10",
   "description": "Hot Rod is Edji's roaring Front End!",
   "keywords": [
     "edji",
@@ -42,6 +42,8 @@
     "pree2e": "npm run webdriver:update -- --standalone",
     "preversion": "npm test",
     "protractor": "node ./node_modules/webdriver-manager update && protractor",
+    "protractor:mobile": "node ./node_modules/webdriver-manager update && protractor protractor-mobile.conf.js",
+    "protractor:test": "node ./node_modules/webdriver-manager update && protractor",
     "protractor:5": "node ./node_modules/webdriver-manager update && protractor --capabilities.maxInstances=5",
     "protractor:ci" : "node ./node_modules/webdriver-manager update && protractor --disable-extensions --headless --disable-gpu --no-sandbox --capabilities.maxInstances=5",
     "rimraf": "rimraf",

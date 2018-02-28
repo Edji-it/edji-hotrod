@@ -15,15 +15,18 @@ export class Dashboard implements PageObjectInterface
 
     // Public Instance Variables
     public readingCards = element.all(by.css('.reading-card'));
-    // public firstReadingCard = this.readingCards.first();
+    public firstReadingCard = this.readingCards.first();
     public projectCards     = element.all(by.css('.project-card'));
     public firstProject     = this.projectCards.first();
-    public projectCodeInput = element(by.css('#projectCodeInput'));
+    public projectCodeInput  = element(by.id("projectCodeInputJoinDash"));
+    public projectCodeInputNav  = element(by.id("projectCodeInputNav"));
     public projectJoinButton = element(by.css('#buttonJoinProject'));
     public newReadingButton = element(by.id('buttonNewReading'));
+    public newReadingMobileButton = element(by.id('buttonNewReadingMobile'));
     // public optionsButton = element.all(by.css('.btn-icon--plain')).first();
     public optionsButton    = element(by.css('.btn-icon--plain'));
      //public optionsList = element.all(by.css('.reading-card-menu'))
+    public createdTab    = element(by.id('createdTab'));
 
     // Dropdown buttons
     public dropDownMenu     = element(by.css('.btn-icon--plain'));
@@ -39,6 +42,9 @@ export class Dashboard implements PageObjectInterface
     public groupCreate      = element(by.css('#buttonCreateGroup'));
     public titleInput = element(by.id('readingTitle'));
 
+    public uniqueGroupTitle = "Cynder is such a cool dog";
+    public newGroupButton = element.all(by.css('.dropdown-menu .e2e-new-group')).first();
+
     // get the dashboard page
     getPage() : void {
         browser.get('/#/dashboard');
@@ -46,7 +52,36 @@ export class Dashboard implements PageObjectInterface
 
     // get the new reading page
     openNewReading() : void {
-        this.newReadingButton.click();
+        browser.wait(this.EC.urlContains("dashboard"), 5000, "never reached the dashboard before clicking new reading button");
+        // Click the new reading button on the dashboard for mobile
+        this.createdTab.isPresent().then((result) => {
+            if (result) {
+                this.createdTab.isDisplayed().then((result) => {
+                    if (result) {
+                        // Click the created tab first
+                        this.createdTab.click();
+                        browser.wait(this.EC.elementToBeClickable(this.firstReadingCard), 5000, "never found the first created reading");
+                        // Click the new reading button
+                        browser.wait(this.EC.elementToBeClickable(this.newReadingMobileButton), 5000, "never found the new reading button");
+                        this.newReadingMobileButton.click();
+                    } 
+                });
+            }
+        });
+
+        // Click the new reading button on the dashboard for desktop
+        this.newReadingButton.isPresent().then((result) => {
+            if (result) {
+                this.newReadingButton.isDisplayed().then((result) => {
+                    if (result) {
+                        // Click the new reading button
+                        browser.wait(this.EC.elementToBeClickable(this.newReadingButton), 5000, "never found the new reading button");
+                        this.newReadingButton.click();
+                    } 
+                });
+            }
+        });
+
         browser.wait(this.EC.elementToBeClickable(this.titleInput), 5000);
     } // getNewReadingPage() : void
 
@@ -68,4 +103,57 @@ export class Dashboard implements PageObjectInterface
 
         createGroupButton.click();
     } // createNewGroupModalInput (groupName : string) : void
+
+    // Switch to the created readings tab on mobile 
+    goToCreatedTab(): void {
+        browser.wait(this.EC.urlContains("dashboard"), 5000, "never reached the dashboard before clicking new reading button");
+        this.createdTab.isPresent().then((result) => {
+            if (result) {
+                this.createdTab.isDisplayed().then((result) => {
+                    if (result) {
+                        // Click the created tab first
+                        this.createdTab.click();
+                        browser.wait(this.EC.elementToBeClickable(this.firstReadingCard), 5000, "never found the first created reading");
+                    } 
+                });
+            }
+        });
+    }
+
+    // Entering the project code from the home page
+    enterProjectCodeFromNav(input: string) : void {
+        browser.wait(this.EC.urlContains("dashboard"), 5000, "never reached the dashboard before clicking new reading button");
+        // browser.wait(this.EC.elementToBeClickable(this.projectJoinButton), 5000, "never found the join project button");
+        this.projectCodeInputNav.isPresent().then((result) => {
+            if (result) {
+                this.projectCodeInputNav.isDisplayed().then((result) => {
+                    if (result) {
+                        // Project code input within the nav was visible, usually for destkop
+                        browser.wait(this.projectCodeInputNav.isDisplayed, 5000, ('Never loaded Project Code input box'));
+                        this.projectCodeInputNav.sendKeys(input);
+                        browser.actions().sendKeys(protractor.Key.ENTER).perform();
+                    } else {
+                        // Project code input just under the nav was visible, usually for mobile
+                        browser.wait(this.projectCodeInput.isDisplayed, 5000, ('Never loaded Project Code input box'));
+                        this.projectCodeInput.sendKeys(input);
+                        browser.actions().sendKeys(protractor.Key.ENTER).perform();
+                    }
+                });
+            } else {
+                this.projectCodeInputNav.isDisplayed().then((result) => {
+                    if (result) {
+                        // Project code input within the nav was visible, usually for destkop
+                        browser.wait(this.projectCodeInputNav.isDisplayed, 5000, ('Never loaded Project Code input box'));
+                        this.projectCodeInputNav.sendKeys(input);
+                        browser.actions().sendKeys(protractor.Key.ENTER).perform();
+                    } else {
+                        // Project code input just under the nav was visible, usually for mobile
+                        browser.wait(this.projectCodeInput.isDisplayed, 5000, ('Never loaded Project Code input box'));
+                        this.projectCodeInput.sendKeys(input);
+                        browser.actions().sendKeys(protractor.Key.ENTER).perform();
+                    }
+                });
+            }
+        });
+    }
 } 

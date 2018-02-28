@@ -30,7 +30,7 @@ describe('Project Page as a Project Owner: ', () => {
         // Id for Owner Tools Test Reading owned by Teach/Teach
         browser.get("/#/home");
         // Open Test project
-        home.enterProjectCode('test')
+        home.enterProjectCodeFromHome('test')
     });
 
     afterEach(() => {
@@ -56,18 +56,50 @@ describe('Project Page as a Project Owner: ', () => {
         
         loginModal.accountLoginButton.submit();
 
-        // account button validation
-        browser.wait(EC.elementToBeClickable(sidebar.heatButton), 5000, "never found the heat vision button");
+        // Need to check for and click the owner tools button if its showing
+        sidebar.ownerToolToggle();
         
-        // Conditionally toggle the Heat Vision to make Active
-        sidebar.heatButton.getAttribute('class').then(classes => {
-            if (classes.indexOf('inactive') > 0) {
-                sidebar.heatButton.click();
+        // Desktop Heat Vision Button toggle
+        sidebar.heatButton.isPresent().then((result) => {
+            if (result) {
+                sidebar.heatButton.isDisplayed().then((result) => {
+                    if (result) {
+                        browser.wait(EC.elementToBeClickable(sidebar.heatButton), 5000, "never found the heat vision button");
+
+                        // Conditionally toggle the Heat Vision to make Active
+                        sidebar.heatButton.getAttribute('class').then(classes => {
+                            if (classes.indexOf('inactive') > 0) {
+                                sidebar.heatButton.click();
+                            }
+                        });
+
+                        browser.sleep(2000);
+                        expect(sidebar.heatButton.getAttribute('class')).toContain("active");
+                    }
+                });
             }
         });
 
-        browser.sleep(2000);
-        expect(sidebar.heatButton.getAttribute('class')).toContain("active");
+        // Mobile Heat Vision button toggle
+        sidebar.heatButtonMobile.isPresent().then((result) => {
+            if (result) {
+                sidebar.heatButtonMobile.isDisplayed().then((result) => {
+                    if (result) {
+                        browser.wait(EC.elementToBeClickable(sidebar.heatButtonMobile), 5000, "never found the heat vision button");
+
+                        // Conditionally toggle the Heat Vision to make Active
+                        sidebar.heatButtonMobile.getAttribute('class').then(classes => {
+                            if (classes.indexOf('inactive') > 0) {
+                                sidebar.heatButtonMobile.click();
+                            }
+                        });
+
+                        browser.sleep(2000);
+                        expect(sidebar.heatButtonMobile.getAttribute('class')).toContain("active");
+                    }
+                });
+            }
+        });
     });
 
     /**
@@ -106,18 +138,50 @@ describe('Project Page as a Project Owner: ', () => {
         
         loginModal.accountLoginButton.submit();
 
-        // account button validation
-        browser.wait(EC.elementToBeClickable(sidebar.heatButton), 5000, "never found the heat vision button on the sidebar");
+        // Need to check for and click the owner tools button if its showing
+        sidebar.ownerToolToggle();
         
-        // Conditionally toggle the Heat Vision to make Active
-        sidebar.heatButton.getAttribute('class').then(classes => {
-            if (classes.indexOf('inactive') < 1) {
-                sidebar.heatButton.click();
+        // Desktop Heat Vision Button toggle
+        sidebar.heatButton.isPresent().then((result) => {
+            if (result) {
+                sidebar.heatButton.isDisplayed().then((result) => {
+                    if (result) {
+                        browser.wait(EC.elementToBeClickable(sidebar.heatButton), 5000, "never found the heat vision button");
+
+                        // Conditionally toggle the Heat Vision to make Active
+                        sidebar.heatButton.getAttribute('class').then(classes => {
+                            if (classes.indexOf('inactive') < 1) {
+                                sidebar.heatButton.click();
+                            }
+                        });
+
+                        browser.sleep(2000);
+                        expect(sidebar.heatButton.getAttribute('class')).toContain("inactive");
+                    }
+                });
             }
         });
 
-        browser.sleep(2000);
-        expect(sidebar.heatButton.getAttribute('class')).toContain("inactive");
+        // Mobile Heat Vision button toggle
+        sidebar.heatButtonMobile.isPresent().then((result) => {
+            if (result) {
+                sidebar.heatButtonMobile.isDisplayed().then((result) => {
+                    if (result) {
+                        browser.wait(EC.elementToBeClickable(sidebar.heatButtonMobile), 5000, "never found the heat vision button");
+
+                        // Conditionally toggle the Heat Vision to make Active
+                        sidebar.heatButtonMobile.getAttribute('class').then(classes => {
+                            if (classes.indexOf('inactive') < 1) {
+                                sidebar.heatButtonMobile.click();
+                            }
+                        });
+
+                        browser.sleep(2000);
+                        expect(sidebar.heatButtonMobile.getAttribute('class')).toContain("inactive");
+                    }
+                });
+            }
+        });
     });
 
     /**

@@ -46,27 +46,27 @@ scroll-progress([scrollProgress]="currentScroll")
             //- .mobile-carrot-pointer &#9654;
             .comment__options--mobileRow.comment-options-group--mobile([class.btn-group-show--animation]="optionsShow")
                 //- Emoji Comment 
-                .comment__options--mobileCol.btn.btn-icon--circle-shadow.comment-options--mobile(
+                #addEmojiCommentMobile.comment__options--mobileCol.btn.btn-icon--circle-shadow.comment-options--mobile(
                     *ngIf="project.types.indexOf('emoji') > -1",
                     [ngClass]="'col-' + (12 / directCommentOptions.length)", 
                     [class.btn-show--animation]="optionsShow",
                     (touchstart)="addCommentOfType('emoji')",
                     (mousedown)="addCommentOfType('emoji')"
                 )
-                    button#addEmojiCommentMobile.emoji.comment__options--mobileButton()
+                    button.emoji.comment__options--mobileButton()
                         i.icon.icon-emoji-comment
                 //-- Text Comment 
-                .comment__options--mobileCol.btn.btn-icon--circle-shadow.comment-options--mobile(
+                #addTextCommentMobile.comment__options--mobileCol.btn.btn-icon--circle-shadow.comment-options--mobile(
                     *ngIf="project.types.indexOf('text') > -1",
                     [ngClass]="'col-' + (12 / directCommentOptions.length)", 
                     [class.btn-show--animation]="optionsShow",
                     (touchstart)="addCommentOfType('text')",
                     (mousedown)="addCommentOfType('text')"
                 )
-                    button#addTextCommentMobile.emoji.comment__options--mobileButton()
+                    button.emoji.comment__options--mobileButton()
                         i.icon.icon-text-comment
                 //-- Audio Comment
-                .comment__options--mobileCol.btn.btn-icon--circle-shadow.comment-options--mobile(
+                #addAudioCommentMobile.comment__options--mobileCol.btn.btn-icon--circle-shadow.comment-options--mobile(
                     *ngIf="project.types.indexOf('audio') > -1",
                     [ngClass]="'col-' + (12 / directCommentOptions.length)",
                     [class.super-disabled]="audioSupportError", 
@@ -74,7 +74,7 @@ scroll-progress([scrollProgress]="currentScroll")
                     (touchstart)="addCommentOfType('audio')",
                     (mousedown)="addCommentOfType('audio')"
                 )
-                    button#addAudioCommentMobile.emoji.comment__options--mobileButton()
+                    button.emoji.comment__options--mobileButton()
                         i.icon.icon-mic
                         span.beta-tag--icon(title="Beta Feature: May not work on all devices.")
                             | B
@@ -130,7 +130,7 @@ scroll-progress([scrollProgress]="currentScroll")
                 a.w(
                     *ngIf="w && w.styles && w.styles.indexOf('a') > -1",
                     [attr.index]="i",
-                    [href]="(w.url && w.url.indexOf('//') > -1) ? w.url : ('//' + w.url)",
+                    [attr.href]="w.url ? ((w.url.indexOf('//') > -1) ? w.url : ('//' + w.url)) : null",
                     target="_blank"
                 )
                     | {{ w && w.str}}

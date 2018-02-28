@@ -3,7 +3,7 @@ h1.joined-header.no-flow(for="projectCodeInput") Joined
     span.icon.icon-circle.icon-info i
 form.pb-4.hidden-md-up([formGroup]="codeForm", (ngSubmit)="addSession(codeForm.value)")
   .input-group.input-group-lg.pb-2
-    input#projectCodeInput(
+    input#projectCodeInputJoinDash(
       name="ProjectCodeInput", 
       [formControl]="codeForm.controls['projectCode']", 
       type="text", 

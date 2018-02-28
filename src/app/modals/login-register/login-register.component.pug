@@ -1,0 +1,19 @@
+.modal
+  .modal-dialog(role="document")
+    #loginModal.modal-content
+      .modal-header
+        h5.modal-title Log In
+        button.close((click)="closeModal.emit()", type="button", data-dismiss="modal", aria-label="Close")
+          span(aria-hidden="true") &times;
+      .modal-body
+        div
+          h3#accountLoginHeader {{ loginHeader }}
+          br
+          .button__row
+            hot-google-button([copy]="'Sign In with Google'")
+          hr
+          p.text-divider(style="background:#fff;") or
+          hot-login-form((loginSuccess)="loginSuccess.emit(); closeModal.emit()")
+          hr
+          .button__row
+            button.btn.btn-secondary([routerLink]="['/register']") Register

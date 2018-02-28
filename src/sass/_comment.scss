@@ -968,7 +968,8 @@ textarea.text-comment-input,
   font-weight: 500;
   margin-top: -7px;
   text-align: center;
-  width: 20px;
+	width: 20px;
+	pointer-events: none;
 }
 
 $avatarOffset: -23px;

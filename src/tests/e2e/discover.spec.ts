@@ -72,7 +72,7 @@ describe('Discover Feed', () => {
         it("should create new public reading as testbot", () => {
             // Open New Reading page
             sidebar.navReadings.click();
-            dashboard.newReadingButton.click();
+            dashboard.openNewReading();
             browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000);
             // Enter Title
             newReading.titleInput.sendKeys(newPublicReadingTitle);
@@ -86,11 +86,11 @@ describe('Discover Feed', () => {
             browser.wait(EC.elementToBeClickable(newReading.contentInput), 5000, "should see reading content input");
             newReading.contentInput.sendKeys(newReading.contentShortString);
             // Hit save
-            browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "save reading button never became clickable after content add");
-            newReading.addButton.click();
+            newReading.addNewReading()
             // Finalize
             browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
             newReading.finalizeButton.click();
+            // Wait for navigation to hit project page after save
             browser.wait(EC.urlContains("project"), 5000, "never arrived at published reading");
             newReading.shareCodeModalClose.click();
             sidebar.logout();

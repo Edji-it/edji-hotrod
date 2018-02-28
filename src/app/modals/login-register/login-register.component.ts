@@ -4,7 +4,7 @@ import { ProjectService } from './../../shared'
 
 @Component({
   selector: 'hot-login-register',
-  templateUrl: 'login-register.component.html',
+  templateUrl: 'login-register.component.pug',
   styles: [`
     .modal-footer { flex-direction: column }
   `]
