@@ -5,6 +5,7 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { Angulartics2 } from 'angulartics2'
 
 import { AuthService, BumblebeeService, Copy, UtilToolService } from './..'
+import { ALLSPARK } from '../../app.constants';
 
 @Component({
   selector: 'edji-feedback',
@@ -60,7 +61,7 @@ export class FeedbackComponent implements OnInit {
    * @returns error which should be assigned to the email input
    */
   private emailValidator(control: FormControl): any {
-    let emailRe: RegExp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+    let emailRe: RegExp = ALLSPARK.EMAILREGEX
     return emailRe.test(control.value) ? null : { 'emailIncorrect': true }
   }
 
