@@ -1,5 +1,3 @@
-import { Title, ɵINTERNAL_BROWSER_PLATFORM_PROVIDERS } from '@angular/platform-browser';
-import { REPLServer } from 'repl'
 import { ActivatedRoute, Router, Params } from '@angular/router'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
@@ -320,7 +318,7 @@ export class NewReadingPage implements OnInit {
         if (tagName === 'a') {
             let aStyles = [].concat(ancestorTags)
             let aWord = {
-                str: element.innerText // to be used for image title
+                str: element.innerText
             }
             for (let i = 0; i < nodes.length; i++) {
                 if (nodes[i].tagName) {
