@@ -1,4 +1,4 @@
-import { Title } from '@angular/platform-browser'
+import { Title, ɵINTERNAL_BROWSER_PLATFORM_PROVIDERS } from '@angular/platform-browser';
 import { REPLServer } from 'repl'
 import { ActivatedRoute, Router, Params } from '@angular/router'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
@@ -81,7 +81,7 @@ export class NewReadingPage implements OnInit {
         paste : { 
             forcePlainText : true,
             cleanPastedHTML: true,
-            cleanAttrs: ['class', 'style', 'dir', 'id'],
+            cleanAttrs: ['class', 'style', 'dir', 'id', 'target'],
             cleanTags: ['meta', 'button', 'input', 'form', 'img', 'label', 'pre', 'figure', 'hr', 'iframe'],
             unwrapTags: [ 'strong', 'center', 'sup', 'sub', 'span', 'small', 'div', 'em', 'footer', 'ul', 'ol', 'li', 'blockquote']
         }, 
@@ -319,16 +319,19 @@ export class NewReadingPage implements OnInit {
 
         if (tagName === 'a') {
             let aStyles = [].concat(ancestorTags)
+            let aWord = {
+                str: element.innerText // to be used for image title
+            }
             for (let i = 0; i < nodes.length; i++) {
                 if (nodes[i].tagName) {
                     aStyles.push(nodes[i].tagName.toLowerCase())
                 }
             }
-            this.words.push({
-                str: element.innerText, // to be used for image title
-                url: element.getAttribute('href'), 
-                styles: aStyles
-            })
+            aWord["styles"] = aStyles
+            if (element.getAttribute('href')) {
+                aWord["url"] = element.getAttribute('href')
+            }
+            this.words.push(aWord)
             nodes = []
         }
 

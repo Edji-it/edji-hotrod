@@ -109,6 +109,15 @@ a.w {
 	&:after {
 		display: none;
 	}
+	&:not([href]) {
+		color: #333;
+		text-decoration: none;
+		cursor: default;
+		&:hover, &:focus, &:active {
+			color: #333;
+			text-decoration: none;
+		}
+	}
 }
 
 
