@@ -531,6 +531,9 @@ export class NewReadingPage implements OnInit {
         if (this.ownerId) {
             reading.owner_id = this.ownerId
         }
+        if (this.copyId) {
+            reading.parent_id = this.copyId
+        }
 
         // having an _id controls whether it is a put or post call
         let submitAction: string
