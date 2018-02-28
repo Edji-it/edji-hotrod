@@ -1,4 +1,5 @@
 import { ActivatedRoute, Router, Params } from '@angular/router'
+import { Title } from '@angular/platform-browser'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
 import { Angulartics2 } from 'angulartics2'
