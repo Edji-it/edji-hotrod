@@ -74,8 +74,7 @@ describe('New Reading Page', () => {
         newReading.sourceInput.sendKeys(newReading.sourceString);
 
         // Submit New Reading
-        browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "save reading button never became clickable after content add");
-        newReading.addButton.click();
+        newReading.addNewReading()
         
         // Group Label has content prefilled, so we clear it
         newReading.groupInput.clear();
@@ -113,9 +112,7 @@ describe('New Reading Page', () => {
         newReading.sourceInput.sendKeys(newReading.sourceString);
 
         // Submit New Reading
-        browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "save reading button never became clickable after content add");
-        //newReading.addButton.submit();
-        newReading.addButton.click();
+        newReading.addNewReading()
         browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
         newReading.finalizeButton.click();
 
@@ -141,9 +138,7 @@ describe('New Reading Page', () => {
         newReading.sourceInput.sendKeys(newReading.sourceString);
 
         // Submit New Reading
-        browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "save reading button never became clickable after content add");
-        //newReading.addButton.submit();
-        newReading.addButton.click();
+        newReading.addNewReading()
         browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
         newReading.finalizeButton.click();
 
@@ -170,8 +165,7 @@ describe('New Reading Page', () => {
         newReading.contentInput.sendKeys(newReading.contentShortString);
         newReading.sourceInput.sendKeys(newReading.sourceString);
 
-        browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "save reading button never became clickable after content add");
-        newReading.addButton.click();
+        newReading.addNewReading()
 
         browser.wait(EC.elementToBeClickable(newReading.groupInput), 5000, "group input became clickable");
         newReading.groupInput.clear();
@@ -225,8 +219,7 @@ describe('New Reading Page', () => {
     //         newReading.privateButton.click();
 
     //         // Submit New Reading
-    //         browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "add new reading button never became clickable");
-    //         newReading.addButton.click();
+    //         newReading.addNewReading()
     //         browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
     //         newReading.finalizeButton.click();
 
@@ -278,8 +271,7 @@ describe('New Reading Page', () => {
         it('should upload an image to a reading and save it to the reading', function() {
             // Open and wait for New Reading page
             dashboard.openNewReading();
-            browser.wait(EC.elementToBeClickable(newReading.uploadModalButton), 5000, "image upload modal button never became clickable");
-            newReading.uploadModalButton.click();
+            newReading.insertImageButtonTap();
             browser.wait(EC.elementToBeClickable(newReading.imageUploadTrigger), 6000, "image upload trigger never became clickable");
             
             // Select File to upload
@@ -301,15 +293,9 @@ describe('New Reading Page', () => {
             newReading.privateButton.click();
 
             // Submit New Reading
-            browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "login button never became clickable after login form entry");
-            //newReading.addButton.submit();
-            newReading.addButton.click();
+            newReading.addNewReading()
             browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
             newReading.finalizeButton.click();
-
-            // // Click the 'Go to Reading' button on share button modal
-            // browser.wait(EC.elementToBeClickable(newReading.goToReadingButton), 5000, "share code modal go to reading button never became clickable")
-            // newReading.goToReadingButton.click();
 
             // Should create a new Reading
             browser.wait(EC.urlContains("project"), 5000, "never arrived at new reading");
@@ -347,8 +333,7 @@ describe('New Reading Page', () => {
             newReading.sourceInput.sendKeys(newReading.sourceString);
 
             // Submit New Draft for Reading
-            browser.wait(EC.elementToBeClickable(newReading.draftButton), 5000, "add draft button never became clickable after form entry");
-            newReading.draftButton.click();
+            newReading.saveDraftNewReading()
 
             // Draft should be created in this block
             // Should redirect to new reading page with same inputs and a success alert
@@ -360,14 +345,9 @@ describe('New Reading Page', () => {
             newReading.contentInput.sendKeys(newReading.contentShortStringB);
 
             // Submit New Reading
-            browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "add new reading button never became clickable");
-            newReading.addButton.click();
+            newReading.addNewReading()
             browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
             newReading.finalizeButton.click();
-
-            // // Click the 'Go to Reading' button on share button modal
-            // browser.wait(EC.elementToBeClickable(newReading.goToReadingButton), 5000, "share code modal go to reading button never became clickable")
-            // newReading.goToReadingButton.click();
 
             // Should create a new Reading
             browser.wait(EC.urlContains("project"), 5000, "never arrived at new reading");

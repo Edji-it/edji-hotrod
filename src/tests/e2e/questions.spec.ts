@@ -76,8 +76,7 @@ describe('Reading Questions Tests', () => {
             newReading.contentInput1.sendKeys(newReading.qContentString1);
 
             // Add the 1st question after all text
-            browser.wait(EC.elementToBeClickable(newReading.insertQuestionButton), 5000, "insert question button never became clickable");
-            newReading.insertQuestionButton.click();
+            newReading.insertQuestionButtonTap()
 
             // Input the question prompt
             browser.wait(EC.elementToBeClickable(newReading.insertQuestionPrompt), 5000, "question prompt input never became clickable");
@@ -99,11 +98,9 @@ describe('Reading Questions Tests', () => {
             newReading.contentInput2.sendKeys(protractor.Key.ARROW_LEFT)
             newReading.contentInput2.sendKeys(protractor.Key.ARROW_LEFT)
             newReading.contentInput2.sendKeys(protractor.Key.ARROW_LEFT)
-            newReading.contentInput2.sendKeys(protractor.Key.ARROW_LEFT)
 
             // Add another question, but we will add it in the middle of existing text
-            browser.wait(EC.elementToBeClickable(newReading.insertQuestionButton), 5000, "insert question button never became clickable again");
-            newReading.insertQuestionButton.click();
+            newReading.insertQuestionButtonTap()
 
             // Input the question prompt
             browser.wait(EC.elementToBeClickable(newReading.insertQuestionPrompt), 5000, "question prompt input never became clickable");
@@ -117,33 +114,19 @@ describe('Reading Questions Tests', () => {
             newReading.contentInput2.sendKeys(newReading.qContentString2)
 
             // Add another question, but we will add it in the middle of existing text
-            browser.wait(EC.elementToBeClickable(newReading.insertQuestionButton), 5000, "insert question button never became clickable again for third time");
-            newReading.insertQuestionButton.click();
+            newReading.insertQuestionButtonTap()
 
             // Remove the last added question
             browser.wait(EC.elementToBeClickable(newReading.questionDelete), 5000, "delete question button never became clickable");
             newReading.questionDelete.click();
 
-            // Verify text made it to the following annotator block
-
-
             // Make sure we can add a source
             newReading.sourceInput.sendKeys(newReading.qSourceString)
 
             // Submit New Reading
-            browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "save reading button never became clickable after content add")
-            newReading.addButton.click()
-            
-            // Group Label has content prefilled, so we clear it
-            newReading.groupInput.clear()
-            newReading.groupInput.sendKeys(newReading.groupString)
-
-            browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable")
-            newReading.finalizeButton.click()
-
-            // // Click the 'Go to Reading' button on share button modal
-            // browser.wait(EC.elementToBeClickable(newReading.goToReadingButton), 5000, "share code modal go to reading button never became clickable")
-            // newReading.goToReadingButton.click();
+            newReading.addNewReading()
+            browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
+            newReading.finalizeButton.click();
 
             // Should close the reading share code modal after creating a new reading
             browser.wait(EC.urlContains("project"), 5000, "never arrived at new reading")
@@ -159,7 +142,7 @@ describe('Reading Questions Tests', () => {
     describe("Questions: Making Answer Comments", () => {
         beforeAll(() => {
             // Join reply project from the homepage
-            home.enterProjectCode('questions');          
+            home.enterProjectCodeFromHome('questions');          
   
             // Login
              guestForm.loginAsGuest(); // 
@@ -178,6 +161,9 @@ describe('Reading Questions Tests', () => {
         it("should make an emoji and text answer to a question as a guest.", () => {
             // make sure we got there.
             browser.wait(EC.presenceOf(question.testQuestion), 5000, " failed to find the test question!");
+
+            // Skip the tutorial because it gets in the way
+            project.skipTutorial();
 
             // make sure we can see the OpenEndedAnswers block
             browser.wait(EC.presenceOf(question.openEndedAnswerBlock), 10000, "failed to find the open ended answers block under the test question!");

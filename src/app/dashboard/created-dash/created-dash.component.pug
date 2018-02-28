@@ -8,7 +8,7 @@
     button#buttonNewReading.btn.btn-primary.new-reading-btn(*ngIf="user.type == 'temp'", (click)="showLoginReqModal = true") New Reading
     button#buttonNewReading.btn.btn-primary.new-reading-btn(*ngIf="user.type != 'temp'", [routerLink]="['/new-reading']") New Reading
 .row.loading(*ngIf="isLoading")
-button.btn.btn-primary.new-reading-btn.hidden-md-up([routerLink]="[ '/new-reading' ]") New Reading
+button#buttonNewReadingMobile.btn.btn-primary.new-reading-btn.hidden-md-up([routerLink]="[ '/new-reading' ]") New Reading
 //- Our Readings!
 .item-list
   //- Show readings with date values

@@ -71,20 +71,10 @@ describe("Versioning - ", () => {
         newReading.contentInput.sendKeys(newReading.contentShortString);
         newReading.sourceInput.sendKeys(newReading.sourceString);
 
-        // Group Label has content prefilled, so we clear it
-        // newReading.groupInput.clear();
-        // newReading.groupInput.sendKeys(newReading.groupString);
-
         // Submit New Reading
-        browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "publish reading button never became clickable after new reading form entry");
-        //newReading.addButton.submit();
-        newReading.addButton.click();
+        newReading.addNewReading()
         browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
         newReading.finalizeButton.click();
-
-        // // Click the 'Go to Reading' button on share button modal
-        // browser.wait(EC.elementToBeClickable(newReading.goToReadingButton), 5000, "share code modal go to reading button never became clickable")
-        // newReading.goToReadingButton.click();
 
         // Should redirect to Project page for new reading
         browser.wait(EC.urlContains("project"), 7500, "never arrived at the reading page after published");
@@ -94,6 +84,9 @@ describe("Versioning - ", () => {
     });
 
     it('should go to new reading page with existing reading and validate the reading; then save it as a draft', () => {
+        // Switch to the created readings tab on mobile (will simply skip if on desktop)
+        dashboard.goToCreatedTab()
+
         // Make a new version of that reading
         // Click the options, then copy and edit button
         browser.wait(EC.elementToBeClickable(element(by.css('button[testFindOptions="' + uniqueTitle + '"]'))), 8000, "reading card options button never became clickable after load");
@@ -113,12 +106,6 @@ describe("Versioning - ", () => {
             });
         }, 5000, "reading ID not valid");
 
-        // Check the data in the reading
-        //
-        // *** we need to resolve this later. the medium content editor dev wizard needs to figure this out
-        //
-        //expect(newReading.contentInput.getInnerHtml).toEqual(newReading.contentShortString);
-
         // Add more text
         newReading.contentInput.sendKeys(newReading.contentShortStringB);
 
@@ -127,8 +114,7 @@ describe("Versioning - ", () => {
         newReading.titleInput.sendKeys('update');
 
         // Save it as a draft
-        browser.wait(EC.elementToBeClickable(newReading.draftButton), 5000, "add draft button never became clickable after form entry");
-        newReading.draftButton.click();
+        newReading.saveDraftNewReading()
 
         // Draft should be created in this block
         // Should redirect to new reading page with same inputs and a success alert
@@ -136,23 +122,10 @@ describe("Versioning - ", () => {
         browser.wait(EC.presenceOf(newReading.successAlert), 5000, "never saw the success alert");
     });
 
-    // it('should make sure latest version is 2, past versions show, and find a version 1', () => {
-    //     // Make sure the version number is greater than beforeAll
-    //     // Make sure the reading cards load before moving on to the next step
-    //     browser.wait(EC.elementToBeClickable(dashboard.firstProject), 15000, "reading cards never loaded");
-
-    //     // Verify the version number is '2' for the updated version
-    //     expect(element(by.css('p[testVersionNumber*="' + uniqueTitle + '"]')).getText()).toBe('Version 2');
-
-    //     // Expand the past versions
-    //     element(by.css('[testFindVersionToggle="' + titleUpdate + '"]')).click();
-
-    //     // Verify version 1 of this reading is in the list
-    //     browser.wait(EC.elementToBeClickable(element(by.css('p[testVersionNumberV="' + uniqueTitle + '"]'))), 5000, "past versions never loaded");
-    //     expect(element(by.css('p[testVersionNumberV="' + uniqueTitle + '"]')).getText()).toBe('Version 1');
-    // });
-
     it('should open up the latest version that is a draft and publish the draft', () => {  
+        // Switch to the created readings tab on mobile (will simply skip if on desktop)
+        dashboard.goToCreatedTab()
+
         // Go back in to that drafted reading
         browser.wait(EC.elementToBeClickable(element(by.cssContainingText('.draft-edit', titleUpdate))), 8000, "draft never became clickable after loading of reading cards");
         element(by.cssContainingText('.draft-edit', titleUpdate)).click();
@@ -161,21 +134,18 @@ describe("Versioning - ", () => {
         browser.wait(EC.urlContains("new-reading"), 5000, "never arrived at the new reading page");
 
         // Publish the reading
-        browser.wait(EC.elementToBeClickable(newReading.addButton), 5000, "publish reading button never became clickable after loading draft");
-        //newReading.addButton.submit();
-        newReading.addButton.click();
+        newReading.addNewReading()
         browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
         newReading.finalizeButton.click();
-
-        // // Click the 'Go to Reading' button on share button modal
-        // browser.wait(EC.elementToBeClickable(newReading.goToReadingButton), 5000, "share code modal go to reading button never became clickable")
-        // newReading.goToReadingButton.click();
 
         // Reading should be published
         browser.wait(EC.urlContains("project"), 15000, "never arrived at the finished reading");
     });
 
     it('should create a new group for an older version', () => {
+        // Switch to the created readings tab on mobile (will simply skip if on desktop)
+        dashboard.goToCreatedTab()
+        
         // Create a new group for an older version
         // Make sure the reading cards load before moving on to the next step
         browser.wait(EC.elementToBeClickable(dashboard.firstProject), 15000, "reading cards never loaded");

@@ -16,7 +16,8 @@ export class Home implements PageObjectInterface
     public loginLink         = element(by.id("loginLink"));
     public registerButton    = element(by.id("registerLink"));
     public joinProjectButton = element(by.id("buttonJoinProject"));
-    public projectCodeInput  = element(by.id("projectCodeInput"));
+    public projectCodeInputNav  = element(by.id("projectCodeInputNav"));
+    public projectCodeInputUnderNav  = element(by.id("projectCodeInputUnderNav"));
     public footerGuidesLink  = element(by.id("footerGuidesLink"));
     public footerTwitterLink = element(by.id("footerTwitterLink"));
     public footerSupportLink = element(by.id("footerSupportLink"));
@@ -34,13 +35,42 @@ export class Home implements PageObjectInterface
         this.loginLink.click();
     } // clickLogin() : void
 
-    enterProjectCode(input: string) : void
+    // Entering the project code from the home page
+    enterProjectCodeFromHome(input: string) : void
     {
         // This line actually *breaks* being able to find the input
         // browser.get('#projectCodeInput');
-        browser.wait(this.projectCodeInput.isDisplayed, 5000, ('Never loaded Project Code input box'));
-        this.projectCodeInput.sendKeys(input);
-        browser.actions().sendKeys(protractor.Key.ENTER).perform();
+        this.projectCodeInputNav.isPresent().then((result) => {
+            if (result) {
+                this.projectCodeInputNav.isDisplayed().then((result) => {
+                    if (result) {
+                        // Project code input within the nav was visible, usually for destkop
+                        browser.wait(this.projectCodeInputNav.isDisplayed, 5000, ('Never loaded Project Code input box'));
+                        this.projectCodeInputNav.sendKeys(input);
+                        browser.actions().sendKeys(protractor.Key.ENTER).perform();
+                    } else {
+                        // Project code input just under the nav was visible, usually for mobile
+                        browser.wait(this.projectCodeInputUnderNav.isDisplayed, 5000, ('Never loaded Project Code input box'));
+                        this.projectCodeInputUnderNav.sendKeys(input);
+                        browser.actions().sendKeys(protractor.Key.ENTER).perform();
+                    }
+                });
+            } else {
+                this.projectCodeInputNav.isDisplayed().then((result) => {
+                    if (result) {
+                        // Project code input within the nav was visible, usually for destkop
+                        browser.wait(this.projectCodeInputNav.isDisplayed, 5000, ('Never loaded Project Code input box'));
+                        this.projectCodeInputNav.sendKeys(input);
+                        browser.actions().sendKeys(protractor.Key.ENTER).perform();
+                    } else {
+                        // Project code input just under the nav was visible, usually for mobile
+                        browser.wait(this.projectCodeInputUnderNav.isDisplayed, 5000, ('Never loaded Project Code input box'));
+                        this.projectCodeInputUnderNav.sendKeys(input);
+                        browser.actions().sendKeys(protractor.Key.ENTER).perform();
+                    }
+                });
+            }
+        });
     } // enterProjectCode(input: string) : void
 
     clickJoinProjectButton () :  void
