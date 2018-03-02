@@ -42,7 +42,7 @@ button.button-lg-round.feedback-button.hidden-md-down((click)="open()")
               button.btn.btn-primary(type="submit", [disabled]="!feedbackForm.valid", [class.loading]="loading", name="send feedback", tabindex="0") Send Feedback
 
 //- Success Modal
-.modal-will-fade[class.show]="showFeedbackSuccess")
+.modal-will-fade([class.show]="showFeedbackSuccess")
   .modal
     .modal-dialog(role="document")
       .modal-content
