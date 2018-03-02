@@ -1,0 +1,56 @@
+button.button-lg-round.feedback-button.hidden-md-down((click)="open()")
+  img(title="Feedback", src="assets/images/icon-feedback.svg")
+
+.modal-will-fade([class.show]="_util.showFeedbackModal")
+  .modal
+    .modal-dialog(role="document")
+      .modal-content
+        .modal-header
+          h4.modal-title How can we help?
+          button.close.btn-icon--round(type="button", (click)="feedbackClose()", aria-label="Close")
+            span(aria-hidden="true") &times;
+
+        form#feedbackForm([formGroup]="feedbackForm", (ngSubmit)="sendFeedback(feedbackForm.value)") 
+          .modal-body
+            p What's on your mind? Maybe you found a problem with our website? Or have questions about how to use Edji? Let us know below!
+            label(for="nameInput") Name
+              input#nameInput(type="text", [placeholder]="userCopy.fullname", [formControl]="feedbackForm.controls['name']", tabindex="0")
+              #msgNameRequired.alert.alert-info(*ngIf="feedbackForm.controls['name'].hasError('required')")
+                strong Info
+                | Let us know who you are!
+
+              label(for="emailInput") Email
+              input#emailInput(type="text", [placeholder]="userCopy.email", [formControl]="feedbackForm.controls['email']", tabindex="0")
+              #msgEmailRequired.alert.alert-info(*ngIf="feedbackForm.controls['email'].hasError('required')")
+                strong Info
+                | Let us know who to get back with!
+              #msgEmailIncorrect.alert.alert-info(*ngIf="feedbackForm.controls['email'].hasError('emailIncorrect') && feedbackForm.controls['email'].dirty")
+                strong Info
+                | We're not sure that's a real email
+
+              label(for="feedbackInput") Tell us what's up!
+              textarea#feedbackInput([formControl]="feedbackForm.controls['content']", maxlength="1000", rows="10", name="content", tabindex="0")
+              #msgContentRequired.alert.alert-info(*ngIf="feedbackForm.controls['content'].hasError('required')")
+                strong Info
+                | Put some content with it!
+              
+              #msgServerError.alert.alert-danger(*ngIf="errorObject.serverError")
+                strong Oh no!
+                | {{errorObject.serverError}}
+          .modal-footer
+              button.btn.btn-secondary(type="button", (click)="feedbackClose()") Cancel
+              button.btn.btn-primary(type="submit", [disabled]="!feedbackForm.valid", [class.loading]="loading", name="send feedback", tabindex="0") Send Feedback
+
+//- Success Modal
+.modal-will-fade[class.show]="showFeedbackSuccess")
+  .modal
+    .modal-dialog(role="document")
+      .modal-content
+        .modal-header
+          h4.modal-title Thanks for your feedback!
+          button.close.btn-icon--round(type="button", (click)="successClose()", aria-label="Close")
+            span(aria-hidden="true") &times;
+        .modal-body
+          p Thank you for your feedback{{ this.user.fullname ? ', ' + this.user.fullname : '' }}!
+        .modal-footer
+          button.btn.btn-secondary(type="button", (click)="successClose()") Dismiss

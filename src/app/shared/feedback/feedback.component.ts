@@ -9,7 +9,7 @@ import { ALLSPARK } from '../../app.constants';
 
 @Component({
   selector: 'edji-feedback',
-  templateUrl: 'feedback.component.html',
+  templateUrl: 'feedback.component.pug',
   styleUrls: ['./feedback.component.scss']
 })
 export class FeedbackComponent implements OnInit {
