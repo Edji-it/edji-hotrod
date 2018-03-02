@@ -119,7 +119,7 @@ describe('Discover Feed', () => {
                         return acc || text.includes(newPublicReadingTitle)
                     }) 
                 }, false)
-            expect(foundTitle).toEqual(true)
+            expect(foundTitle).toBeTruthy()
         })
     });
 }); // describe 'Dashboard Page'
