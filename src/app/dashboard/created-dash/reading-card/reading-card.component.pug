@@ -82,7 +82,7 @@
     div(*ngIf="reading.subjects && reading.subjects.length > 0", style="float:right; margin-left:5px;")
       span.badge-pill.badge-secondary.badge-subject(*ngFor="let subject of reading.subjects") {{ subject | subjectName }}
   //- Delete Reading if Draft Button
-  .btn--delete-project.icon-button(*ngIf="reading['draft']", title="Delete Draft", (click)="$event.stopPropagation(); relevantReading = reading; showDeleteReadingModal = true;")
+  .btn--delete-project.icon-button.btn--delete-draft(*ngIf="reading['draft']", title="Delete Draft", (click)="$event.stopPropagation(); relevantReading = reading; showDeleteReadingModal = true;")
     span([innerHtml]="':x:' | emojione")
 
 //- The Project Card
