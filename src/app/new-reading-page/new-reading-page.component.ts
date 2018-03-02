@@ -533,8 +533,10 @@ export class NewReadingPage implements OnInit {
         if (this.ownerId) {
             reading.owner_id = this.ownerId
         }
+        // Set "parent_id" for new copies/versions
         if (this.copyId) {
-            reading.parent_id = this.copyId
+            // Use OG "parent_id" (indicates the first version)
+            reading.parent_id = this.reading.parent_id ? this.reading.parent_id : this.copyId
         }
 
         // having an _id controls whether it is a put or post call
