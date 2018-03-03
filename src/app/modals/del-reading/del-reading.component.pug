@@ -1,0 +1,15 @@
+#deleteReadingModal.modal.fade-in.show
+  .modal-dialog
+    .modal-content
+      .modal-header
+        h4.modal-title Whoa there, partner!
+        button((click)="closeModal.emit()", type="button", class="close") &times;
+      .modal-body
+        p(style="margin: 0", [innerHtml]="'You are about to delete:<br><strong>' + reading.title + '</strong><br><br> If you do, it is gone forever, along with all of the associated groups. Are you sure?'")
+      .modal-footer
+        div(*ngIf="showError", class="alert alert-danger", role="alert")
+          strong Oh snap!
+          | Unable to delete Reading.
+        .btn-row.right
+          button.btn((click)="closeModal.emit()", type="button", data-dismiss="modal") No
+          button#delBtnModal.btn.btn-primary((click)="closeModal.emit(); deleteThisReading(reading);") Yes, Delete It
