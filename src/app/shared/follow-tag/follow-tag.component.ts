@@ -9,6 +9,7 @@ import { Subscription } from 'rxjs/Rx';
 })
 export class FollowTag implements OnInit {
     @Input() userId: string
+    @Input() userName: string
     @Output() followEvent: EventEmitter<boolean> = new EventEmitter()
 
     private user = {}
