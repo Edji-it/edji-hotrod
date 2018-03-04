@@ -23,7 +23,6 @@ export class TextCommentComponent implements OnInit, AfterViewInit {
 
     // We need to know when changes to inactive to clear the editing variable
     @Input() set active(active){
-        // this.editing = false
         this.editing = false
         this.activated = active
     }
