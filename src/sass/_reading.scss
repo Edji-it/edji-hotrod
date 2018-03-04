@@ -11,10 +11,11 @@
 $readingBorder: 1px solid #dcdcdc;
 
 $focusUnderlineWidth: 3px;
+$adjustedLineHeight: $readingLineHeight - $focusUnderlineWidth - 1px;
 
 article {
 	padding-bottom: 50px;
-	line-height: $readingLineHeight;
+	line-height: $adjustedLineHeight;
 	margin-top: 22px;
 	min-height: 90%;
 	font-size: $readingFontSize;
@@ -58,9 +59,9 @@ article.content {
 	-moz-user-select: text;
 	display: inline-block;
 	margin: 0;
+	padding: 0;
 	// Swaps to color border on hover
-	border-bottom: $focusUnderlineWidth solid transparent;
-	padding-top: 3px !important;
+	border-bottom: $focusUnderlineWidth solid #ffffff;
 
 	&:after {
 		display: inline-block;
@@ -88,6 +89,10 @@ article.content {
 		pointer-events: none;
 		line-height: 6px !important;
 		margin: 0px;
+
+		& + .br {
+			line-height: $readingLineHeight !important;
+		}
 	}
 
 	&.H1, &.h1 {
@@ -474,18 +479,22 @@ article.content .w.h-f {
 	//font-family: 'Georgia', serif;
 	font-family: $base-font-family;
 	font-size: $readingFontSize;
-    line-height: $readingLineHeight;
+    line-height: $adjustedLineHeight;
     color: #333;
 
 	& > * {
 		font-family: $base-font-family;
 		font-size: $readingFontSize;
-		line-height: $readingLineHeight;
+		line-height: $adjustedLineHeight;
 		max-width: 100%;
 		padding: 0px;
 		margin: 0px;
 		margin-bottom: 0.5em;
 		height: auto;
+	}
+
+	& > .w {
+		margin-bottom: 0px;
 	}
 
 	& a {
