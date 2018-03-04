@@ -68,7 +68,7 @@ export class NewReadingPage implements OnInit {
     private masterSelection : any
     private currentUser : User // User data of the current user.
 
-    private static readonly EDITOR_TOOLBAR_Y = 54
+    private static readonly EDITOR_TOOLBAR_Y = 40
 
     // Used for processing reading
     private words: any[] = []
@@ -81,7 +81,7 @@ export class NewReadingPage implements OnInit {
             forcePlainText : true,
             cleanPastedHTML: true,
             cleanAttrs: ['class', 'style', 'dir', 'id', 'target'],
-            cleanTags: ['meta', 'button', 'input', 'form', 'img', 'label', 'pre', 'figure', 'hr', 'iframe'],
+            cleanTags: ['meta', 'button', 'input', 'form', 'label', 'pre', 'figure', 'hr', 'iframe'],
             unwrapTags: [ 'strong', 'center', 'sup', 'sub', 'span', 'small', 'div', 'em', 'footer', 'ul', 'ol', 'li', 'blockquote']
         }, 
         extensions: { 
@@ -209,7 +209,7 @@ export class NewReadingPage implements OnInit {
                 },
                 err => {
                     // TRACK EXCEPTION
-                    console.log(err);
+                    console.error(err);
                 })
     }
 
@@ -233,29 +233,21 @@ export class NewReadingPage implements OnInit {
             }
 
             if (focusNode) {
-                if (typeof focusNode.offsetTop === 'undefined' ) {
-                    // Text nodes don't provide an offset, so we need to get the parent
-                    focusNode = focusNode.parentNode
-                }
-
-                // if (focusNode.parentNode && focusNode.parentNode.contentEditable !== 'true' 
-                //     && focusNode.parentNode.parentNode && focusNode.parentNode.parentNode.contentEditable !== 'true') {
-                //     this.editorToolbarHidden = true
-                // } else {
-                //     this.editorToolbarHidden = false
-                // }
                 this.editorToolbarHidden = true
                 let editors = document.querySelectorAll('medium-editor')
+                let editorOffset = this.getNodeY(editors[0]) - NewReadingPage.EDITOR_TOOLBAR_Y
+                let insertNodeY
                 for (let i = 0; i < editors.length; i++) {
                     if (editors[i] && editors[i].contains(focusNode)) {
                         this.editorToolbarHidden = false
                     }
                 }
-                if (focusNode && focusNode.className.indexOf('medium-editor-element') > -1) {
+                if (focusNode && focusNode.className && focusNode.className.indexOf('medium-editor-element') > -1) {
                     focusNode = focusNode.childNodes[0]
                 }
                 this.insertNode = focusNode
-                this.editorToolbarY = NewReadingPage.EDITOR_TOOLBAR_Y > focusNode.offsetTop ? NewReadingPage.EDITOR_TOOLBAR_Y : focusNode.offsetTop
+                insertNodeY = this.getNodeY(this.insertNode) - editorOffset
+                this.editorToolbarY = NewReadingPage.EDITOR_TOOLBAR_Y > insertNodeY ? NewReadingPage.EDITOR_TOOLBAR_Y : insertNodeY
             } else {
                 // don't move bar
             }
@@ -277,77 +269,107 @@ export class NewReadingPage implements OnInit {
     }
 
     /**
+     * Returns Element Y Value
+     * @argument node: any Html Element or Text node
+     */
+    private getNodeY(node: any) {
+        if (node.nodeType === 3) {
+            let range = document.createRange()
+            range.selectNodeContents(node)
+            var rects = range.getClientRects()
+            if (rects[0]) {
+                return rects[0].top + window.scrollY
+            } else {
+                return null
+            }
+        } else {
+            return node.getBoundingClientRect ? (node.getBoundingClientRect().top + window.scrollY) : null
+        }
+    }
+
+    /**
+     * Clean out Grammarly styles from HTML
+     */
+    private cleanGrammarly(element:any) {
+        // select element to unwrap
+        let els = element.querySelectorAll('g');
+        for (let i = 0; i < els.length; i++) {
+            let el = els[i]
+            let parent = el.parentNode;
+            // move all children out of the element
+            while (el.firstChild) parent.insertBefore(el.firstChild, el);
+            // remove the empty element
+            parent.removeChild(el);
+        }
+    }
+
+    /**
      * Loops through child elements to find textnodes
      * Pushes text nodes as formatted objects into this.words
      * @param element Root element to start crawling from
      */
-    private extractTextNodes(element: any, ancestorTags ?: string[]) {
-        let tagName = 'tagName' in element && element.tagName.toLowerCase()
-        let nodes = element.childNodes
-        // Detect line breaks
-        let currentTop = element.getBoundingClientRect ? element.getBoundingClientRect().top : this.previousWordY
-        if ((currentTop - this.previousWordY) > 10 && this.previousWordY != 0) {
-            this.words.push({
-                str: '',
-                styles: ['br']
-            })
-        }
-        this.previousWordY = currentTop
-        // Children should inherit tags from several elements up
-        // eg. "B" style should propagate down
-        if (!ancestorTags) {
-            ancestorTags = []
-        } 
-
-        if (ancestorTags.indexOf(tagName) < 0) {
-            ancestorTags.push(tagName)
+    private extractTextNodes(els: any, ancestorTags ?: string[], ignoreText?: boolean) {
+        // This functional can except an array for nodes or a singular node
+        // If singular, pop into an array
+        if (!els) {
+            els = []
+        } else if (!els[0]) {
+            els = [els]
         }
 
-        if (tagName === 'img') {
-            this.words.push({
-                str: '', // to be used for image title
-                url: element.getAttribute('src'), 
-                styles: ['img']
-            })
-        }
+        for (let index = 0; index < els.length; index++) {
+            let element = els[index]
+            let tagName = 'tagName' in element && element.tagName.toLowerCase()
+            // Children should inherit tags from several elements up
+            // eg. "B" style should propagate down
+            if (!ancestorTags) {
+                ancestorTags = []
+            } 
+            let inheritedTags = ancestorTags.slice()
 
-        if (tagName === 'a') {
-            let aStyles = [].concat(ancestorTags)
-            let aWord = {
-                str: element.innerText
-            }
-            for (let i = 0; i < nodes.length; i++) {
-                if (nodes[i].tagName) {
-                    aStyles.push(nodes[i].tagName.toLowerCase())
-                }
-            }
-            aWord["styles"] = aStyles
-            if (element.getAttribute('href')) {
-                aWord["url"] = element.getAttribute('href')
-            }
-            this.words.push(aWord)
-            nodes = []
-        }
-
-        for (let index = 0; index < nodes.length; index++) {
-            let node = nodes[index]
-            // Copy tags array to variable local to loop instance
-            let inheritedTags = ancestorTags.slice();
-
-            // If the node is just a break
-            if ('tagName' in node && node.tagName.toLowerCase() == 'br') {
-                // Add break element
+            // let nodes = element.childNodes
+            // Detect line breaks
+            let currentTop = this.getNodeY(element) ? this.getNodeY(element) : this.previousWordY
+            if ((currentTop - this.previousWordY) > 10 && this.previousWordY != 0) {
                 this.words.push({
                     str: '',
                     styles: ['br']
                 })
             }
+            this.previousWordY = currentTop
             
-            // Found a text node!
-            if (node.nodeType === 3) {
+            if (inheritedTags.indexOf(tagName) < 0 && tagName) {
+                inheritedTags.push(tagName)
+            }
 
+            if (tagName === 'img') {
+                this.words.push({
+                    str: '', // to be used for image title
+                    url: element.getAttribute('src'), 
+                    styles: ['img']
+                })
+            }
+
+            if (tagName === 'a' && !ignoreText) {
+                let aStyles = ['a'].concat(inheritedTags)
+                let aWord = {
+                    str: element.innerText
+                }
+                aWord["styles"] = aStyles
+                if (element.getAttribute('href')) {
+                    aWord["url"] = element.getAttribute('href')
+                }
+                this.words.push(aWord)
+                // Process any nested elements, except text since that was already saved to link
+                this.extractTextNodes(element.childNodes, inheritedTags, true)
+            } else if (element.nodeType === 3 && !ignoreText) {
+                 // Found a text node!
+                // Make sure we aren't processing line breaks within the text nodes
+                // Text nodes should rely on word wrap
+                let rootWordTags = inheritedTags.slice()
+                rootWordTags.indexOf('br') > -1 && rootWordTags.splice(rootWordTags.indexOf('br'), 1)
                 // Split text inside child nodes
-                let nodeWords = node.textContent.split(/(?:([^a-zA-Z0-9]))/).filter(function(el){ return el.replace(/([\n])/g, ''); } )
+                let nodeWords = element.textContent.split(/(?:([^a-zA-Z0-9]))/).filter(function(el){ return el.replace(/([\n])/g, ''); } )
                 // If empty element, push a spacer word to reflect that
                 if (nodeWords.length < 1) {
                     this.words.push({
@@ -367,7 +389,7 @@ export class NewReadingPage implements OnInit {
                     if (index == 0 && wIndex == 0) {
                         word.styles.push(tagName + '-a');
                     }
-                    if (index == nodes.length - 1 && wIndex == nodeWords.length - 1) {
+                    if (index == els.length - 1 && wIndex == nodeWords.length - 1) {
                         word.styles.push(tagName + '-z')
                     }
                     if (typeof(word.str) == 'string' && word.str.trim().length < 1) {
@@ -391,7 +413,7 @@ export class NewReadingPage implements OnInit {
                     }
                 }
             } else {
-                this.extractTextNodes(node, inheritedTags)
+                this.extractTextNodes(element.childNodes, inheritedTags, ignoreText)
             }
         }
     }
@@ -501,6 +523,8 @@ export class NewReadingPage implements OnInit {
 
             // Reset line break detection
             this.previousWordY = 0
+            // // Clean renderHtml
+            this.cleanGrammarly(renderHtml)
             // Loop through all Reading html elements
             this.extractTextNodes(renderHtml)
         }
@@ -620,14 +644,13 @@ export class NewReadingPage implements OnInit {
             images.forEach(image => {
                 let imgString = '<img src="' + image.url + '" title="' + image.title + '" />'
                 this.insertAfter(this.insertNode.parentNode, imgString, this.insertNode)
-                this.insertAfter(this.insertNode.parentNode, '<br/>', this.insertNode)
-                this.insertAfter(this.insertNode.parentNode, '<p></p>', this.insertNode)
+                this.insertAfter(this.insertNode.parentNode, '<p>&#65279;</p>', this.insertNode)
             });
         } else {
             // If no reference node (field has not been interacted with) insert image at end
             let imgString = ''
             images.forEach(image => {
-                imgString += '<img src="' + image.url + '" title="' + image.title + '" /><br/><p></p>'
+                imgString += '<img src="' + image.url + '" title="' + image.title + '" /><p>&#65279;</p>'
             })
             this.readingHtml[this.readingHtml.length-1].text += imgString
         }
@@ -646,7 +669,6 @@ export class NewReadingPage implements OnInit {
      * Adds a question block to the new reading and then adds in a new medium editor
      */
     private addQuestion(insertHtml?: string, insertPos?: number) {
-        console.log(insertHtml,insertPos )
         let answer_types = this._auth.getAllowedCommentMediaTypes()
         let question = <EdjiQuestion>{
             prompt: '',
