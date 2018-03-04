@@ -68,7 +68,7 @@ export class NewReadingPage implements OnInit {
     private masterSelection : any
     private currentUser : User // User data of the current user.
 
-    private static readonly EDITOR_TOOLBAR_Y = 54
+    private static readonly EDITOR_TOOLBAR_Y = 40
 
     // Used for processing reading
     private words: any[] = []
@@ -209,7 +209,7 @@ export class NewReadingPage implements OnInit {
                 },
                 err => {
                     // TRACK EXCEPTION
-                    console.log(err);
+                    console.error(err);
                 })
     }
 
@@ -233,29 +233,21 @@ export class NewReadingPage implements OnInit {
             }
 
             if (focusNode) {
-                if (typeof focusNode.offsetTop === 'undefined' ) {
-                    // Text nodes don't provide an offset, so we need to get the parent
-                    focusNode = focusNode.parentNode
-                }
-
-                // if (focusNode.parentNode && focusNode.parentNode.contentEditable !== 'true' 
-                //     && focusNode.parentNode.parentNode && focusNode.parentNode.parentNode.contentEditable !== 'true') {
-                //     this.editorToolbarHidden = true
-                // } else {
-                //     this.editorToolbarHidden = false
-                // }
                 this.editorToolbarHidden = true
                 let editors = document.querySelectorAll('medium-editor')
+                let editorOffset = this.getNodeY(editors[0]) - NewReadingPage.EDITOR_TOOLBAR_Y
+                let insertNodeY
                 for (let i = 0; i < editors.length; i++) {
                     if (editors[i] && editors[i].contains(focusNode)) {
                         this.editorToolbarHidden = false
                     }
                 }
-                if (focusNode && focusNode.className.indexOf('medium-editor-element') > -1) {
+                if (focusNode && focusNode.className && focusNode.className.indexOf('medium-editor-element') > -1) {
                     focusNode = focusNode.childNodes[0]
                 }
                 this.insertNode = focusNode
-                this.editorToolbarY = NewReadingPage.EDITOR_TOOLBAR_Y > focusNode.offsetTop ? NewReadingPage.EDITOR_TOOLBAR_Y : focusNode.offsetTop
+                insertNodeY = this.getNodeY(this.insertNode) - editorOffset
+                this.editorToolbarY = NewReadingPage.EDITOR_TOOLBAR_Y > insertNodeY ? NewReadingPage.EDITOR_TOOLBAR_Y : insertNodeY
             } else {
                 // don't move bar
             }
@@ -273,6 +265,25 @@ export class NewReadingPage implements OnInit {
             return this.readingPlaceholder
         } else {
             return ' '
+        }
+    }
+
+    /**
+     * Returns Element Y Value
+     * @argument node: any Html Element or Text node
+     */
+    private getNodeY(node: any) {
+        if (node.nodeType === 3) {
+            let range = document.createRange()
+            range.selectNodeContents(node)
+            var rects = range.getClientRects()
+            if (rects[0]) {
+                return rects[0].top + window.scrollY
+            } else {
+                return null
+            }
+        } else {
+            return node.getBoundingClientRect ? (node.getBoundingClientRect().top + window.scrollY) : null
         }
     }
 
@@ -300,20 +311,9 @@ export class NewReadingPage implements OnInit {
             } 
             let inheritedTags = ancestorTags.slice()
 
-            //
-            let otherValue = this.previousWordY
-            if (element.nodeType === 3) {
-                let range = document.createRange(); 
-                range.selectNodeContents(element);
-                var rects = range.getClientRects();
-                if (rects[0]) {
-                     otherValue = rects[0].top
-                }
-            }
-            
             // let nodes = element.childNodes
             // Detect line breaks
-            let currentTop = element.getBoundingClientRect ? element.getBoundingClientRect().top : otherValue
+            let currentTop = this.getNodeY(element) ? this.getNodeY(element) : this.previousWordY
             if ((currentTop - this.previousWordY) > 10 && this.previousWordY != 0) {
                 this.words.push({
                     str: '',
@@ -626,14 +626,13 @@ export class NewReadingPage implements OnInit {
             images.forEach(image => {
                 let imgString = '<img src="' + image.url + '" title="' + image.title + '" />'
                 this.insertAfter(this.insertNode.parentNode, imgString, this.insertNode)
-                this.insertAfter(this.insertNode.parentNode, '<br/>', this.insertNode)
-                this.insertAfter(this.insertNode.parentNode, '<p></p>', this.insertNode)
+                this.insertAfter(this.insertNode.parentNode, '<p>&#65279;</p>', this.insertNode)
             });
         } else {
             // If no reference node (field has not been interacted with) insert image at end
             let imgString = ''
             images.forEach(image => {
-                imgString += '<img src="' + image.url + '" title="' + image.title + '" /><br/><p></p>'
+                imgString += '<img src="' + image.url + '" title="' + image.title + '" /><p>&#65279;</p>'
             })
             this.readingHtml[this.readingHtml.length-1].text += imgString
         }
@@ -652,7 +651,6 @@ export class NewReadingPage implements OnInit {
      * Adds a question block to the new reading and then adds in a new medium editor
      */
     private addQuestion(insertHtml?: string, insertPos?: number) {
-        console.log(insertHtml,insertPos )
         let answer_types = this._auth.getAllowedCommentMediaTypes()
         let question = <EdjiQuestion>{
             prompt: '',
