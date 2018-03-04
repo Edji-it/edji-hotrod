@@ -29,10 +29,13 @@ export class DiscoverFeedComponent implements OnInit {
   constructor(private _readings: ReadingService) { }
 
   ngOnInit() {
-    // Load feed with defaults
-    this.loadFeed({})
+
   }
 
+  /**
+   * Load Feed with Params
+   * - This auto-runs on load and every change, called by p-dataList in the template
+   */
   loadFeed(paging?: any){
     this.loading = true
 
