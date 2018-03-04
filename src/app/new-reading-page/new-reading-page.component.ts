@@ -288,6 +288,22 @@ export class NewReadingPage implements OnInit {
     }
 
     /**
+     * Clean out Grammarly styles from HTML
+     */
+    private cleanGrammarly(element:any) {
+        // select element to unwrap
+        let els = element.querySelectorAll('g');
+        for (let i = 0; i < els.length; i++) {
+            let el = els[i]
+            let parent = el.parentNode;
+            // move all children out of the element
+            while (el.firstChild) parent.insertBefore(el.firstChild, el);
+            // remove the empty element
+            parent.removeChild(el);
+        }
+    }
+
+    /**
      * Loops through child elements to find textnodes
      * Pushes text nodes as formatted objects into this.words
      * @param element Root element to start crawling from
@@ -507,6 +523,8 @@ export class NewReadingPage implements OnInit {
 
             // Reset line break detection
             this.previousWordY = 0
+            // // Clean renderHtml
+            this.cleanGrammarly(renderHtml)
             // Loop through all Reading html elements
             this.extractTextNodes(renderHtml)
         }
