@@ -336,6 +336,10 @@ button.new-reading-btn {
         filter: grayscale(0%);
         opacity: 1;
     }
+
+    &.btn--delete-draft {
+        top: 25%;
+    }
 }
 
 .project-row--right-pad {
