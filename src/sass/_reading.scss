@@ -89,6 +89,10 @@ article.content {
 		pointer-events: none;
 		line-height: 6px !important;
 		margin: 0px;
+
+		& + .br {
+			line-height: $readingLineHeight !important;
+		}
 	}
 
 	&.H1, &.h1 {

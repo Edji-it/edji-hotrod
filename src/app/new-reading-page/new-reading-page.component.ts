@@ -281,73 +281,88 @@ export class NewReadingPage implements OnInit {
      * Pushes text nodes as formatted objects into this.words
      * @param element Root element to start crawling from
      */
-    private extractTextNodes(element: any, ancestorTags ?: string[]) {
-        let tagName = 'tagName' in element && element.tagName.toLowerCase()
-        let nodes = element.childNodes
-        // Detect line breaks
-        let currentTop = element.getBoundingClientRect ? element.getBoundingClientRect().top : this.previousWordY
-        if ((currentTop - this.previousWordY) > 10 && this.previousWordY != 0) {
-            this.words.push({
-                str: '',
-                styles: ['br']
-            })
-        }
-        this.previousWordY = currentTop
-        // Children should inherit tags from several elements up
-        // eg. "B" style should propagate down
-        if (!ancestorTags) {
-            ancestorTags = []
-        } 
-
-        if (ancestorTags.indexOf(tagName) < 0) {
-            ancestorTags.push(tagName)
+    private extractTextNodes(els: any, ancestorTags ?: string[]) {
+        // This functional can except an array for nodes or a singular node
+        // If singular, pop into an array
+        if (!els) {
+            els = []
+        } else if (!els[0]) {
+            els = [els]
         }
 
-        if (tagName === 'img') {
-            this.words.push({
-                str: '', // to be used for image title
-                url: element.getAttribute('src'), 
-                styles: ['img']
-            })
-        }
+        for (let index = 0; index < els.length; index++) {
+            let element = els[index]
+            let tagName = 'tagName' in element && element.tagName.toLowerCase()
+            // Children should inherit tags from several elements up
+            // eg. "B" style should propagate down
+            if (!ancestorTags) {
+                ancestorTags = []
+            } 
+            let inheritedTags = ancestorTags.slice()
 
-        if (tagName === 'a') {
-            let aStyles = [].concat(ancestorTags)
-            let aWord = {
-                str: element.innerText
-            }
-            for (let i = 0; i < nodes.length; i++) {
-                if (nodes[i].tagName) {
-                    aStyles.push(nodes[i].tagName.toLowerCase())
+            //
+            let otherValue = this.previousWordY
+            if (element.nodeType === 3) {
+                let range = document.createRange(); 
+                range.selectNodeContents(element);
+                var rects = range.getClientRects();
+                console.log("TEXT!", rects[0].top)
+                if (rects[0]) {
+                     otherValue = rects[0].top
                 }
             }
-            aWord["styles"] = aStyles
-            if (element.getAttribute('href')) {
-                aWord["url"] = element.getAttribute('href')
-            }
-            this.words.push(aWord)
-            nodes = []
-        }
-
-        for (let index = 0; index < nodes.length; index++) {
-            let node = nodes[index]
-            // Copy tags array to variable local to loop instance
-            let inheritedTags = ancestorTags.slice();
-
-            // If the node is just a break
-            if ('tagName' in node && node.tagName.toLowerCase() == 'br') {
-                // Add break element
+            
+            // let nodes = element.childNodes
+            // Detect line breaks
+            let currentTop = element.getBoundingClientRect ? element.getBoundingClientRect().top : otherValue
+            console.log(currentTop, this.previousWordY, currentTop - this.previousWordY)
+            if ((currentTop - this.previousWordY) > 10 && this.previousWordY != 0) {
+                console.log("BREAK")
                 this.words.push({
                     str: '',
                     styles: ['br']
                 })
             }
+            this.previousWordY = currentTop
             
-            // Found a text node!
-            if (node.nodeType === 3) {
 
+            if (inheritedTags.indexOf(tagName) < 0 && tagName) {
+                inheritedTags.push(tagName)
+            }
+
+            if (tagName === 'img') {
+                this.words.push({
+                    str: '', // to be used for image title
+                    url: element.getAttribute('src'), 
+                    styles: ['img']
+                })
+            }
+
+            if (tagName === 'a') {
+                let aStyles = ['a'].concat(inheritedTags)
+                let aWord = {
+                    str: element.innerText
+                }
+                // for (let i = 0; i < nodes.length; i++) {
+                //     if (nodes[i].tagName) {
+                //         aStyles.push(nodes[i].tagName.toLowerCase())
+                //     }
+                // }
+                aWord["styles"] = aStyles
+                if (element.getAttribute('href')) {
+                    aWord["url"] = element.getAttribute('href')
+                }
+                this.words.push(aWord)
+                // nodes = []
+            } else if (element.nodeType === 3) {
+                 // Found a text node!
+                // Make sure we aren't processing line breaks within the text nodes
+                // Text nodes should rely on word wrap
+                let rootWordTags = inheritedTags.slice()
+                rootWordTags.indexOf('br') > -1 && rootWordTags.splice(rootWordTags.indexOf('br'), 1)
+                console.log(rootWordTags)
                 // Split text inside child nodes
-                let nodeWords = node.textContent.split(/(?:([^a-zA-Z0-9]))/).filter(function(el){ return el.replace(/([\n])/g, ''); } )
+                let nodeWords = element.textContent.split(/(?:([^a-zA-Z0-9]))/).filter(function(el){ return el.replace(/([\n])/g, ''); } )
                 // If empty element, push a spacer word to reflect that
                 if (nodeWords.length < 1) {
                     this.words.push({
@@ -367,7 +382,7 @@ export class NewReadingPage implements OnInit {
                     if (index == 0 && wIndex == 0) {
                         word.styles.push(tagName + '-a');
                     }
-                    if (index == nodes.length - 1 && wIndex == nodeWords.length - 1) {
+                    if (index == els.length - 1 && wIndex == nodeWords.length - 1) {
                         word.styles.push(tagName + '-z')
                     }
                     if (typeof(word.str) == 'string' && word.str.trim().length < 1) {
@@ -391,7 +406,7 @@ export class NewReadingPage implements OnInit {
                     }
                 }
             } else {
-                this.extractTextNodes(node, inheritedTags)
+                this.extractTextNodes(element.childNodes, inheritedTags)
             }
         }
     }
