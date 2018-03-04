@@ -209,8 +209,5 @@ export class ReadingService {
           'Authorization': this._auth.getToken()
         }), 
         params: feedParams })
-      .map(data => {
-        return data['readings'] || []
-      })
   }
 }
