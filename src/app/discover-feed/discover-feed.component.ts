@@ -49,16 +49,10 @@ export class DiscoverFeedComponent implements OnInit {
     }
 
     this._readings.getFeed(filters)
-      .subscribe(readings => {
-        this.readings = readings
+      .subscribe(data => {
+        this.readings = data.readings || []
         this.loading = false
-        // If service returns total
-        // >>> Use service total
-        // Else when service doesn't return total
-        this.total = this.first + (this.first == 0 ? this.readings.length : this.rows)
-        if (readings.length == this.rows) {
-          this.total++
-        }
+        this.total = data.total
       })
   }
 }
