@@ -4,7 +4,7 @@ import { Reading }        from '../../shared/datatypes';
 
 @Component({
   selector: 'hot-del-reading',
-  templateUrl: 'del-reading.component.html'
+  templateUrl: 'del-reading.component.pug'
 })
 export class DeleteReadingModal implements OnInit {
 
