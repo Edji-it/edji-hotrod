@@ -81,7 +81,7 @@ export class NewReadingPage implements OnInit {
             forcePlainText : true,
             cleanPastedHTML: true,
             cleanAttrs: ['class', 'style', 'dir', 'id', 'target'],
-            cleanTags: ['meta', 'button', 'input', 'form', 'img', 'label', 'pre', 'figure', 'hr', 'iframe'],
+            cleanTags: ['meta', 'button', 'input', 'form', 'label', 'pre', 'figure', 'hr', 'iframe'],
             unwrapTags: [ 'strong', 'center', 'sup', 'sub', 'span', 'small', 'div', 'em', 'footer', 'ul', 'ol', 'li', 'blockquote']
         }, 
         extensions: { 
@@ -281,7 +281,7 @@ export class NewReadingPage implements OnInit {
      * Pushes text nodes as formatted objects into this.words
      * @param element Root element to start crawling from
      */
-    private extractTextNodes(els: any, ancestorTags ?: string[]) {
+    private extractTextNodes(els: any, ancestorTags ?: string[], ignoreText?: boolean) {
         // This functional can except an array for nodes or a singular node
         // If singular, pop into an array
         if (!els) {
@@ -306,7 +306,6 @@ export class NewReadingPage implements OnInit {
                 let range = document.createRange(); 
                 range.selectNodeContents(element);
                 var rects = range.getClientRects();
-                console.log("TEXT!", rects[0].top)
                 if (rects[0]) {
                      otherValue = rects[0].top
                 }
@@ -315,9 +314,7 @@ export class NewReadingPage implements OnInit {
             // let nodes = element.childNodes
             // Detect line breaks
             let currentTop = element.getBoundingClientRect ? element.getBoundingClientRect().top : otherValue
-            console.log(currentTop, this.previousWordY, currentTop - this.previousWordY)
             if ((currentTop - this.previousWordY) > 10 && this.previousWordY != 0) {
-                console.log("BREAK")
                 this.words.push({
                     str: '',
                     styles: ['br']
@@ -325,7 +322,6 @@ export class NewReadingPage implements OnInit {
             }
             this.previousWordY = currentTop
             
-
             if (inheritedTags.indexOf(tagName) < 0 && tagName) {
                 inheritedTags.push(tagName)
             }
@@ -338,29 +334,24 @@ export class NewReadingPage implements OnInit {
                 })
             }
 
-            if (tagName === 'a') {
+            if (tagName === 'a' && !ignoreText) {
                 let aStyles = ['a'].concat(inheritedTags)
                 let aWord = {
                     str: element.innerText
                 }
-                // for (let i = 0; i < nodes.length; i++) {
-                //     if (nodes[i].tagName) {
-                //         aStyles.push(nodes[i].tagName.toLowerCase())
-                //     }
-                // }
                 aWord["styles"] = aStyles
                 if (element.getAttribute('href')) {
                     aWord["url"] = element.getAttribute('href')
                 }
                 this.words.push(aWord)
-                // nodes = []
-            } else if (element.nodeType === 3) {
+                // Process any nested elements, except text since that was already saved to link
+                this.extractTextNodes(element.childNodes, inheritedTags, true)
+            } else if (element.nodeType === 3 && !ignoreText) {
                  // Found a text node!
                 // Make sure we aren't processing line breaks within the text nodes
                 // Text nodes should rely on word wrap
                 let rootWordTags = inheritedTags.slice()
                 rootWordTags.indexOf('br') > -1 && rootWordTags.splice(rootWordTags.indexOf('br'), 1)
-                console.log(rootWordTags)
                 // Split text inside child nodes
                 let nodeWords = element.textContent.split(/(?:([^a-zA-Z0-9]))/).filter(function(el){ return el.replace(/([\n])/g, ''); } )
                 // If empty element, push a spacer word to reflect that
@@ -406,7 +397,7 @@ export class NewReadingPage implements OnInit {
                     }
                 }
             } else {
-                this.extractTextNodes(element.childNodes, inheritedTags)
+                this.extractTextNodes(element.childNodes, inheritedTags, ignoreText)
             }
         }
     }
