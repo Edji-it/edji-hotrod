@@ -138,6 +138,20 @@ export class ProjectService {
     } // public getAll()
 
     /**
+     * Re-intializes observables that are referenced in multiple compontnes
+     * This is done because creating new groups and switching to them without refreshing leaves 'stagnant' data from the previous project the user was on
+     */
+    private initializeProjectObservables() {
+        // Reset the answers observable
+        this.answersByIdSource = {}
+        this.answersByIdSubject.next(this.answersByIdSource)
+
+        // Reset the replies observable
+        this.repliesByIdSource = {}
+        this.repliesByIdSubject.next(this.repliesByIdSource)
+    }
+
+    /**
      * Adds a user to a project code and updates currentProject observable
      * @param projectCode Short project code
      * @returns observable with project data
@@ -172,6 +186,7 @@ export class ProjectService {
     public processComments(project: Project): {
         commentsByIndex: EdjiComment[][], highlightArrays: { alwaysHighlightArray: number[], highlightArray: number[] }
     } {
+        this.initializeProjectObservables()
         // these empty arrays will be passed into their modifier functions throughout this function
         let commentsByIndex: EdjiComment[][] = []
         let alwaysHighlightArray: number[] = []
