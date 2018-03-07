@@ -105,7 +105,12 @@ export class FeedbackComponent implements OnInit {
 
     // Only send the user properties we need to bumblebee
     var userSend: any = {
-      username: this.user.username
+      username: this.user.username,
+      fullname: this.user.fullname,
+      email: this.user.email,
+      createdAt: this.user.createdAt,
+      updatedAt: this.user.updatedAt,
+      hero: this.user.hero
     }
 
     let data: any = {
