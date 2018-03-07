@@ -35,8 +35,7 @@ nav-bar([showDashboardOptions]="true")
         .col-md-8.pull-md-4
             h1.mb-1 Discover Readings
             p.small.mt-2 Find readings created by others to use or modify for your class.
-            //- #notFollowingMessage.alert.alert-light(*ngIf="!loading && followingFilter && readings.length < 1")
-            #notFollowingMessage.alert.alert-light
+            #notFollowingMessage.alert.alert-light(*ngIf="!loading && followingFilter && readings.length < 1")
                 h4 Time to follow someone!
                 p Follow Edji to see some of our latest curated Readings.
                 .comment__avatar Ed
