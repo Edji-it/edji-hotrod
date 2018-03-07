@@ -24,7 +24,6 @@ export class FollowTag implements OnInit {
       this.userSub = this._auth.currentUser.subscribe(user => {
           this.user = user
       })
-      console.log(this.owner)
   }
 
   ngOnDestroy() {
