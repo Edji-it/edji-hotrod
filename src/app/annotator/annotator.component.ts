@@ -245,7 +245,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                         this.decrementHighlights(this.user._id === comment.user_id || this.project.teacher_id == comment.user_id, comment.start, comment.end)
                         // Make sure we've removed the highlight focus
                         this.unfocusHighlight(comment.start, comment.end)
-                        this.commentsByIndexRemove(comment._id, wIndex, cIndex)
+                        this.commentsByIndexRemove(wIndex, cIndex, comment._id)
                     }
                 } else if (commentUpdate.action === 'UPDATE') {
                     if (cIndex > -1 && this.commentsByIndex[wIndex] && this.commentsByIndex[wIndex][cIndex]) {
@@ -561,45 +561,40 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             end: end,
             type: type,
             text: text,
-            loc: this.imageCoords
+            loc: this.imageCoords,
+            author: this.user.fullname,
+            user_id: this.user._id,
+            createdAt: new Date(),
         }
 
-        // Tell server we've added a comment
-        this._projects.saveComment(comment)
-            .then(comment => {
-                // We add the comment from the service because it has an Id
-                if (comment._id) {
-                    this.angulartics.eventTrack.next({ action: type + 'CommentCreate', properties: { category: 'projectAction', label: 'success' }})
-                    // Check if comment should start expanded
-                    // Needs to be moved to commentsByIndexAdd or comment component ngOnInit
-                    // if (document.querySelector('.w[index="' + start + '"] .comment')) {
-                    //     let commentY = document.querySelector('.w[index="' + start + '"] .comment')['offsetTop']
+        this.commentsByIndexAdd(comment, start)
 
-                    //     if (this.lineCountArray[commentY] && this.lineCountArray[commentY][0].expanded) {
-                    //         comment.expanded = true
-                    //         comment.lineCount = this.lineCountArray[commentY].length + 1
-                    //     }
-                    // }
-                    // Add setting to trigger focus on new comment
-                    comment.new = true // this is basically to tell our test cases which comment was just made
-                    this.inactivateComment()
-                    this.commentsByIndexAdd(comment, start)
-                } else {
-                    console.warn('Didn\'t get a comment back from server!')
-                }
+        // // Tell server we've added a comment
+        // this._projects.saveComment(comment)
+        //     .then(comment => {
+        //         // We add the comment from the service because it has an Id
+        //         if (comment._id) {
+        //             this.angulartics.eventTrack.next({ action: type + 'CommentCreate', properties: { category: 'projectAction', label: 'success' }})
+        //             // Add setting to trigger focus on new comment
+        //             comment.new = true // this is basically to tell our test cases which comment was just made
+        //             this.inactivateComment()
+        //             this.commentsByIndexAdd(comment, start)
+        //         } else {
+        //             console.warn('Didn\'t get a comment back from server!')
+        //         }
 
-                // Guide content
-                if (this.guideStepNo < 3) {
-                    this.guideStepNo = 3
-                }
-            })
-            .catch(error => {
-                // TRACK EXCEPTION
-                this.angulartics.eventTrack.next({ action: type + 'CommentCreate', properties: { category: 'projectAction', label: 'failure' }})
-                // We should figure out how to handle this properly!
-                // Maybe show a warning icon?
-                console.warn(error)
-            })
+        //         // Guide content
+        //         if (this.guideStepNo < 3) {
+        //             this.guideStepNo = 3
+        //         }
+        //     })
+        //     .catch(error => {
+        //         // TRACK EXCEPTION
+        //         this.angulartics.eventTrack.next({ action: type + 'CommentCreate', properties: { category: 'projectAction', label: 'failure' }})
+        //         // We should figure out how to handle this properly!
+        //         // Maybe show a warning icon?
+        //         console.warn(error)
+        //     })
     } // createComment
 
     commentsByIndexUpdate(comment, wordIndex: number, commentIndex: number) {
@@ -633,7 +628,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     /**
      * Removes comment from locally transformed array (commentsByIndex)
      */
-    commentsByIndexRemove(commentId, index: number, commentIndex: number) {
+    commentsByIndexRemove(index: number, commentIndex: number, commentId?) {
         let comment = this.commentsByIndex[index][commentIndex]
         let commentPointer
         let commentCopy
@@ -672,7 +667,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // Remove Highlights
         this.decrementHighlights(this.user._id === comment.user_id, comment.start, comment.end)
         // Remove local comment object
-        this.commentsByIndexRemove(comment._id, index, commentIndex)
+        this.commentsByIndexRemove(index, commentIndex, comment._id)
         this.unfocusHighlight(comment.start, comment.end)
     }
 

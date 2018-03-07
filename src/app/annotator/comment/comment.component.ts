@@ -242,8 +242,10 @@ export class CommentComponent implements OnInit, OnDestroy {
     this.commentActivation.emit(false)
     this._comments.activeComment.active = false
     // Save when comment is toggled away from
-    if (comment && !noUpdate) {
+    if (comment && (comment.data || comment.url) && !noUpdate) {
       this.updateComment(comment)
+    } else {
+      this.commentDeleted.emit()
     }
   } // deactivate(commentData ?: any): void
 
@@ -258,7 +260,7 @@ export class CommentComponent implements OnInit, OnDestroy {
       this.comment.data = comment.data
       this.comment.url = comment.url
     } else {
-      this.comment.data = comment
+      // this.comment.data = comment
     } // else
 
     if (this.commentContext !== "answer") {
