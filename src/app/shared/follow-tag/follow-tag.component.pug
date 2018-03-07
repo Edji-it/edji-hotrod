@@ -1,5 +1,5 @@
 .user-tag
-    .user-tag__name(title="Reading Creator") {{userName}}
+    .user-tag__name(title="Reading Creator") {{owner.username}}
     span(*ngIf="user._id != userId")
         span.badge.badge-pill.badge-button.badge-secondary.badge-follow(
                 title="Click to follow!", 

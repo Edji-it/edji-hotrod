@@ -1,6 +1,7 @@
 import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 import { AuthService } from "app/shared";
 import { Subscription } from 'rxjs/Rx';
+import { User } from '../datatypes';
 
 @Component({
   selector: 'follow-tag',
@@ -8,8 +9,7 @@ import { Subscription } from 'rxjs/Rx';
   templateUrl: './follow-tag.component.pug'
 })
 export class FollowTag implements OnInit {
-    @Input() userId: string
-    @Input() userName: string
+    @Input() owner: User
     @Output() followEvent: EventEmitter<boolean> = new EventEmitter()
 
     private user = {}
@@ -24,6 +24,7 @@ export class FollowTag implements OnInit {
       this.userSub = this._auth.currentUser.subscribe(user => {
           this.user = user
       })
+      console.log(this.owner)
   }
 
   ngOnDestroy() {
@@ -31,7 +32,7 @@ export class FollowTag implements OnInit {
   }
 
   isFollowing(): boolean {
-    return this.user['following'] && this.user['following'].indexOf(this.userId) > -1
+    return this.user['following'] && this.user['following'].indexOf(this.owner._id) > -1
   }
 
   followUser(userId: string) : void {
