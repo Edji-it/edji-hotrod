@@ -17,6 +17,7 @@ import { AuthService } from '../../shared/auth.service'
 import { UtilToolService } from '../../shared/util-tool.service'
 import { AnnotatorComponent } from '../annotator.component'
 import { EdjiComment, CommentPermissions, EdjiQuestion } from './../../shared/datatypes'
+import { ALLSPARK } from './../../app.constants'
 
 @Component({
   selector: 'edji-comment',
@@ -176,7 +177,7 @@ export class CommentComponent implements OnInit, OnDestroy {
    * @returns number Nearest baseline Y value
    */
   private nearestLine(yValue: number) : number {
-    return yValue + 16 - yValue%32
+    return yValue + (ALLSPARK.BASELINEHEIGHT/2) - yValue%ALLSPARK.BASELINEHEIGHT
   }
 
   /**
