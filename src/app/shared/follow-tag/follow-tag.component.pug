@@ -1,15 +1,15 @@
 .user-tag
     .user-tag__name(title="Reading Creator") {{owner.username}}
-    span(*ngIf="user._id != userId")
+    span(*ngIf="user._id != owner._id")
         span.badge.badge-pill.badge-button.badge-secondary.badge-follow(
                 title="Click to follow!", 
-                (click)="followUser(userId)", 
+                (click)="followUser(owner._id)", 
                 *ngIf="!isFollowing()"
             )
             |  + Follow		
         span.badge.badge-pill.badge-button.badge-success.badge-unfollow(
                 title="Click to unfollow!", 
-                (click)="unfollowUser(userId)", 
+                (click)="unfollowUser(owner._id)", 
                 *ngIf="isFollowing()"
             ) 
             span.static Following

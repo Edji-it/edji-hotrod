@@ -15,7 +15,7 @@ export class DiscoverFeedComponent implements OnInit {
   private readings = []
   private subscriptions: Subscription[] = []
   private edjiOwnerObj: any = {
-    id: '5897f6314897db0011a48bb8',
+    _id: '5897f6314897db0011a48bb8',
     username: 'Edji'
   }
 
