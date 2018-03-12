@@ -43,7 +43,6 @@ form.pb-4.hidden-md-up([formGroup]="codeForm", (ngSubmit)="addSession(codeForm.v
             i Untitled
           span.reading-project--label {{project.label}}
     div(style="clear:both; line-height: 18px; padding: 10px 0px 0px;")
-      span(style="color: #cdcdcd;") Created by:
-      span {{ project.teacher_id ? project.teacher_id.fullname : '' }}
-        span(*ngIf="project.teacher_id && !project.teacher_id.fullname ") {{ project.teacher_id.username }}
-        pre.prj-code(style="margin-top: -5px; margin-bottom: 0px;") {{project.code || 'none'}}
+      span(style="color: #cdcdcd; margin-right: 5px;") Created by:
+      follow-tag(*ngIf="project.teacher_id", [owner]="project.teacher_id")
+      pre.prj-code(style="margin-top: -5px; margin-bottom: 0px;") {{project.code || 'none'}}

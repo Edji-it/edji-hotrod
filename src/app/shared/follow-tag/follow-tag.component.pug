@@ -1,14 +1,16 @@
-span(*ngIf="user._id != userId")
-    span.badge.badge-pill.badge-button.badge-secondary.badge-follow(
-            title="Click to follow!", 
-            (click)="followUser(userId)", 
-            *ngIf="!isFollowing()"
-        )
-        |  + Follow		
-    span.badge.badge-pill.badge-button.badge-success.badge-unfollow(
-            title="Click to unfollow!", 
-            (click)="unfollowUser(userId)", 
-            *ngIf="isFollowing()"
-        ) 
-        span.static Following
-        span.on-hover Unfollow
+.user-tag
+    .user-tag__name(title="Reading Creator") {{owner.username}}
+    span(*ngIf="user._id != owner._id")
+        span.badge.badge-pill.badge-button.badge-secondary.badge-follow(
+                title="Click to follow!", 
+                (click)="followUser(owner._id)", 
+                *ngIf="!isFollowing()"
+            )
+            |  + Follow		
+        span.badge.badge-pill.badge-button.badge-success.badge-unfollow(
+                title="Click to unfollow!", 
+                (click)="unfollowUser(owner._id)", 
+                *ngIf="isFollowing()"
+            ) 
+            span.static Following
+            span.on-hover Unfollow
