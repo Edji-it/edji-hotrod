@@ -103,11 +103,21 @@ export class FeedbackComponent implements OnInit {
         + '<br>' + this._util.getEdjiVersion()
         + '<br>' + window.location.href
 
+    // Only send the user properties we need to bumblebee
+    var userSend: any = {
+      username: this.user.username,
+      fullname: this.user.fullname,
+      email: this.user.email,
+      createdAt: this.user.createdAt,
+      updatedAt: this.user.updatedAt,
+      hero: this.user.hero
+    }
+
     let data: any = {
       emailSubject: "Feedback form submitted!",
       formInfo: formValue,
       type: "feedback",
-      user: this.user
+      user: userSend
     }
 
     this._bumblebee.sendFeedback(data).take(1).subscribe(
