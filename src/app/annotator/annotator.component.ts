@@ -515,24 +515,25 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      * Removes highlights from local array
      */
     decrementHighlights(alwaysHighlight: boolean, start: number, end: number): void {
-        if (alwaysHighlight) {
-            for (var i = start; i <= end; i ++) {
-                if (this.alwaysHighlightArray[i] && this.alwaysHighlightArray[i] > 0) {
-                    this.alwaysHighlightArray[i]--
-                } else {
-                    this.alwaysHighlightArray[i] = 0
+        setTimeout(()=>{
+            if (alwaysHighlight) {
+                for (var i = start; i <= end; i ++) {
+                    if (this.alwaysHighlightArray[i] && this.alwaysHighlightArray[i] > 0) {
+                        this.alwaysHighlightArray[i]--
+                    } else {
+                        this.alwaysHighlightArray[i] = 0
+                    }
+                }
+            } else {
+                for (var i = start; i <= end; i ++) {
+                    if (this.highlightArray[i] && this.highlightArray[i] > 0) {
+                        this.highlightArray[i]--
+                    } else {
+                        this.highlightArray[i] = 0
+                    }
                 }
             }
-        } else {
-            for (var i = start; i <= end; i ++) {
-                if (this.highlightArray[i] && this.highlightArray[i] > 0) {
-                    this.highlightArray[i]--
-                } else {
-                    this.highlightArray[i] = 0
-                }
-            }
-        }
-        
+        }, 1)
     }
 
     /**
@@ -1036,11 +1037,13 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             this.commentPane = true
             this._projects.commentPaneStateSubj.next(true)
         } else {
-            // Tell comments to close
-            this.commentPane = false
-            this._projects.commentPaneStateSubj.next(false)
-            // Run the standard comment inactivation to reset variables and do things like close the Keyboard
-            this.inactivateComment()
+            setTimeout(()=>{
+                // Tell comments to close
+                this.commentPane = false
+                this._projects.commentPaneStateSubj.next(false)
+                // Run the standard comment inactivation to reset variables and do things like close the Keyboard
+                this.inactivateComment()
+            }, 1)
         }
     }
 }
