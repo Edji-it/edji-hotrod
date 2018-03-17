@@ -10,6 +10,7 @@ import { AuthService } from './auth.service'
 import { SocketService } from './socket.service'
 import { CommentStats, iCommentStats, EdjiComment, Project, User } from './datatypes';
 import { ReadingService } from "./reading.service";
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 @Injectable()
 export class ProjectService {
@@ -74,6 +75,7 @@ export class ProjectService {
 
     constructor(
         private http: Http, 
+        private _http: HttpClient,
         private _auth: AuthService, 
         private _route: ActivatedRoute,
         private _socket: SocketService,
@@ -136,6 +138,26 @@ export class ProjectService {
                 .toPromise()
                 .then(this._auth.extractData);
     } // public getAll()
+
+    
+    public getJoined(filters?: any) : Observable<any> {
+        let feedParams = new HttpParams()
+        if (filters && filters['size']) {
+        feedParams = feedParams.append("size", filters['size'])
+        }
+        if (filters && filters['start']) {
+        feedParams = feedParams.append("start", filters['start'])
+        }
+        feedParams = feedParams.append("pop", "reading")
+        feedParams = feedParams.append("pop", "teacher")
+        
+        return this._http.get(this._auth.getUrl() + '/api/v1/projects', 
+            { headers: new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Authorization': this._auth.getToken()
+            }), 
+            params: feedParams })
+    }
 
     /**
      * Re-intializes observables that are referenced in multiple compontnes
