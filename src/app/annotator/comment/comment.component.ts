@@ -286,6 +286,9 @@ export class CommentComponent implements OnInit, OnDestroy {
         this.isLoading = false
         this.commentUpdated.emit()
 
+        // Reference the comment from the server so properties like _id get added
+        this.comment = comment
+
         this.justSaved = true
         setTimeout(() => {
           this.justSaved = false
@@ -315,6 +318,9 @@ export class CommentComponent implements OnInit, OnDestroy {
         this.commentUpdated.emit()
         this._projects.addAnswerToAnswers(answer)
 
+        // Reference the answer from the server so properties like _id get added
+        this.comment = answer
+
         this.justSaved = true
         setTimeout(() => {
           this.justSaved = false
@@ -332,53 +338,59 @@ export class CommentComponent implements OnInit, OnDestroy {
 
   // Deletes comment via Project service, which updates the local Project object
   public deleteComment(comment: any) : void {
-    // Stop the user from continuing to edit, and close emoji keyboard
-    // Sort through the comment types and do the apppropriate pre-delete action
-    if (this.comment.reply_to) {
-      this.angulartics.eventTrack.next({ action: comment.type + 'deleteReply', properties: { category: 'heroFeature', label: 'attempt' }})
-    } else if (this.comment.questionId) {
-      this.angulartics.eventTrack.next({ action: comment.type + 'deleteAnswer', properties: { category: 'heroFeature', label: 'attempt' }})
-    } else {
-      this.angulartics.eventTrack.next({ action: comment.type + 'deleteComment', properties: { category: 'projectAction', label: 'attempt' }})
-    }
+    // Make sure we have a comment ID before proceeding
+    if (this.comment._id) {
+      // Stop the user from continuing to edit, and close emoji keyboard
+      // Sort through the comment types and do the apppropriate pre-delete action
+      if (this.comment.reply_to) {
+        this.angulartics.eventTrack.next({ action: comment.type + 'deleteReply', properties: { category: 'heroFeature', label: 'attempt' }})
+      } else if (this.comment.questionId) {
+        this.angulartics.eventTrack.next({ action: comment.type + 'deleteAnswer', properties: { category: 'heroFeature', label: 'attempt' }})
+      } else {
+        this.angulartics.eventTrack.next({ action: comment.type + 'deleteComment', properties: { category: 'projectAction', label: 'attempt' }})
+      }
 
-    if (this.commentContext !== 'answer') {
-      this._projects.deleteComment(comment)
-      .then(data => {
-        // Sort through the comment types and do the apppropriate post-delete action
-        if (this.comment.reply_to) {
-          this._projects.removeCommentFromReplies(this.comment)
-          this.angulartics.eventTrack.next({ action: comment.type + 'deleteReply', properties: { category: 'heroFeature', label: 'success' }})
-        } else {
-          this.angulartics.eventTrack.next({ action: comment.type + 'deleteComment', properties: { category: 'projectAction', label: 'success' }})
-        }
-        
-        // Tell Annotator to destroy this comment element!
-        this.showDeleteModal = false
-      })
-      .catch(error => {
-        // TRACK EXCEPTION
-        if (this.comment.reply_to) {
-          this.angulartics.eventTrack.next({ action: comment.type + 'deleteReply', properties: { category: 'heroFeature', label: 'failure' }})
-        } else {
-          this.angulartics.eventTrack.next({ action: comment.type + 'deleteComment', properties: { category: 'projectAction', label: 'failure' }})
-        }
-        this.deactivate(this.comment)
-        console.log(error)
-      })
+      if (this.commentContext !== 'answer') {
+        this._projects.deleteComment(comment)
+        .then(data => {
+          // Sort through the comment types and do the apppropriate post-delete action
+          if (this.comment.reply_to) {
+            this._projects.removeCommentFromReplies(this.comment)
+            this.angulartics.eventTrack.next({ action: comment.type + 'deleteReply', properties: { category: 'heroFeature', label: 'success' }})
+          } else {
+            this.angulartics.eventTrack.next({ action: comment.type + 'deleteComment', properties: { category: 'projectAction', label: 'success' }})
+          }
+          
+          // Tell Annotator to destroy this comment element!
+          this.showDeleteModal = false
+        })
+        .catch(error => {
+          // TRACK EXCEPTION
+          if (this.comment.reply_to) {
+            this.angulartics.eventTrack.next({ action: comment.type + 'deleteReply', properties: { category: 'heroFeature', label: 'failure' }})
+          } else {
+            this.angulartics.eventTrack.next({ action: comment.type + 'deleteComment', properties: { category: 'projectAction', label: 'failure' }})
+          }
+          this.deactivate(this.comment)
+          console.log(error)
+        })
+      } else {
+        this._projects.deleteAnswer(comment)
+        .then(data => {
+          this._projects.removeAnswerFromAnswers(this.comment)
+          this.angulartics.eventTrack.next({ action: comment.type + 'deleteAnswer', properties: { category: 'heroFeature', label: 'success' }})
+          this.showDeleteModal = false
+        })
+        .catch(error => {
+          // TRACK EXCEPTION
+          this.angulartics.eventTrack.next({ action: comment.type + 'deleteAnswer', properties: { category: 'heroFeature', label: 'failure' }})
+          this.deactivate(this.comment)
+          console.log(error)
+        })
+      }
     } else {
-      this._projects.deleteAnswer(comment)
-      .then(data => {
-        this._projects.removeAnswerFromAnswers(this.comment)
-        this.angulartics.eventTrack.next({ action: comment.type + 'deleteAnswer', properties: { category: 'heroFeature', label: 'success' }})
-        this.showDeleteModal = false
-      })
-      .catch(error => {
-        // TRACK EXCEPTION
-        this.angulartics.eventTrack.next({ action: comment.type + 'deleteAnswer', properties: { category: 'heroFeature', label: 'failure' }})
-        this.deactivate(this.comment)
-        console.log(error)
-      })
+      this.commentDeleted.emit()
+      // this.toggleCommentPane.emit(false)
     }
   } // deleteComment(comment: any) : void
 
