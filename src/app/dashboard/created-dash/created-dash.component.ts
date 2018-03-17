@@ -28,12 +28,17 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
     readingError: ""
   };
   private subscriptions: Subscription[] = [];
-  private isLoading: boolean = false;
 
   private showLoginReqModal: boolean = false
   private user: User
 
   private readingToBeRemoved : Reading;
+
+  // Joined Readings, p-datalist values
+  private loading: boolean = true
+  private first: number = 0 // first page 
+  private rows: number = 20 // number of Readings to return
+  private total: number = 20 // total Readings
 
   // TypeScript public modifiers
   constructor(
@@ -47,7 +52,7 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.isLoading = true;
+    this.loading = true;
 
     this.subscriptions.push(
       this._auth.getCurrentUser().subscribe((user) => {
@@ -55,15 +60,15 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
       })
     )
 
-    this._readings.getAll()
-
-    this._readings.currentUserReadings.subscribe(
+    this._readings.getCreated().subscribe(
       (data)  => {
-          this.isLoading = false;
-          this.readings = data || [];
+          console.log("current user readings!")
+          this.loading = false;
+          this.readings = data.readings || [];
+          this.total = data.total;
         },
         (error) => {
-          this.isLoading = false;
+          this.loading = false;
           this.angulartics.eventTrack.next({ action: "getAllReadings", properties: { category: "serviceCalls", label: "failure" }});
           this.errorObject.readingError = "We had some trouble getting your readings, it might be our fault";
         }
@@ -71,6 +76,22 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
   } //  ngOnInit()
 
   ngOnDestroy () {}
+
+  /**
+   * Load Created with Params
+   * - This auto-runs on load and every change, called by p-dataList in the template
+   */
+  loadCreatedFeed(paging?: any){
+    let filters = {}
+    this.loading = true
+
+    // Pagination values
+    this.first = filters['start'] = paging && paging.first != undefined ? (parseInt(paging.first) - 1) : this.first
+    if (this.first < 0) { this.first = filters['start'] = 0 }
+    this.rows = filters['size'] = paging && paging.rows != undefined ? parseInt(paging.rows) : this.rows
+
+    this._readings.getCreated(filters)
+  }
 
   private updateProjectLabel(projectId: string, projectLabel: string) {
     this._projects.update({ 'label' : projectLabel }, projectId)

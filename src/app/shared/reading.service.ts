@@ -9,8 +9,10 @@ import { AuthService } from './auth.service'
 import { Reading } from './datatypes/reading'
 
 interface FilterObj {
-  type: string,
-  grades?: number[]
+  type?: string,
+  grades?: number[],
+  start?: string,
+  size?: string
 }
 
 @Injectable()
@@ -42,17 +44,40 @@ export class ReadingService {
   private refreshVersionSource = new Subject()
   public  refreshVersions: Observable<any> = this.refreshVersionSource.asObservable()
 
-    // Pull all readings for a user
-  public getAll() {
-        return this.http
-            .get(this._auth.getUrl() + '/readings/all/projects', this._auth.getOptions())
-            .toPromise()
-            .then(this._auth.extractData)
-            .then((data) => { 
-              this.userReadingsSource.next(data.readings)
-              return data.readings
-            })
-  } //getAll()
+  // Pull all readings for a user
+  public getCreated(filters?: any) : Observable<any> {
+    let feedParams = new HttpParams()
+    if (filters && filters['size']) {
+      feedParams = feedParams.append("size", filters['size'])
+    }
+    if (filters && filters['start']) {
+      feedParams = feedParams.append("start", filters['start'])
+    }
+    feedParams = feedParams.append("pop", "projects")
+    // return this.http
+    //     .get(this._auth.getUrl() + '/readings/all/projects', this._auth.getOptions())
+    //     .toPromise()
+        // .then(this._auth.extractData)
+        // .then((data) => { 
+        //   this.userReadingsSource.next(data.readings)
+        //   return data.readings
+        // })
+
+    this._http.get(this._auth.getUrl() + '/api/v1/readings', 
+        { headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          'Authorization': this._auth.getToken()
+        }), 
+        params: feedParams })
+        .map((data: any) => { 
+          this.userReadingsSource.next(data)
+          return data
+        })
+        .take(1)
+        .subscribe()
+    return this.currentUserReadings   
+            
+  } //getCreated()
 
   // Pull one reading by ID
   public get(id : string) : Observable<any> {
@@ -103,7 +128,7 @@ export class ReadingService {
             
             if (reading.versionCount > 1) {
               // Reload content (slower but simpler)
-              this.getAll()
+              this.getCreated()
             } else if (reading._id == targetReading._id) {
               // Single version readings we can remove instantly
               readings.splice(index, 1)
