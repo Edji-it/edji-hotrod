@@ -387,7 +387,6 @@ export class CommentComponent implements OnInit, OnDestroy {
       }
     } else {
       this.commentDeleted.emit()
-      // this.toggleCommentPane.emit(false)
     }
   } // deleteComment(comment: any) : void
 
