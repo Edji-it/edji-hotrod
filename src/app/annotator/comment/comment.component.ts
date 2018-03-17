@@ -78,7 +78,7 @@ export class CommentComponent implements OnInit, OnDestroy {
       this.active = isActive
       if (!isActive) {
         // Trigger save when deactivated externally i.e. emoji keyboard
-        this.deactivate(this.comment)
+        this.deactivate(this.comment, false, true)
       } else {
         this.toggleCPane(this.comment, true)
       }
@@ -235,7 +235,7 @@ export class CommentComponent implements OnInit, OnDestroy {
    * @param comment (optional) Full EdjiComment object
    * TO-DO: Clean out code for optionally passing JUST comment.data as comment parameter
    */
-  deactivate(comment ?: any, noUpdate ?: boolean): void {
+  deactivate(comment ?: any, noUpdate ?: boolean, forcePaneOpen?: boolean): void {
     this.comment.selected = false
     this.comment.active = this.active = false
     this.comment.new = false
@@ -246,7 +246,9 @@ export class CommentComponent implements OnInit, OnDestroy {
       this.updateComment(comment)
     } else {
       this.commentDeleted.emit()
-      this.toggleCommentPane.emit(false)
+      if (!forcePaneOpen) {
+        this.toggleCommentPane.emit(false)
+      }
     }
   } // deactivate(commentData ?: any): void
 
@@ -389,8 +391,7 @@ export class CommentComponent implements OnInit, OnDestroy {
         })
       }
     } else {
-      this.commentDeleted.emit()
-      // this.toggleCommentPane.emit(false)
+      this.deactivate(this.comment, false, true)
     }
   } // deleteComment(comment: any) : void
 
