@@ -19,7 +19,7 @@ button#buttonNewReadingMobile.btn.btn-primary.new-reading-btn.hidden-md-up([rout
   //- hot-reading-card(*ngFor="let reading of readings", style="margin-bottom: 30px; float:left; width:100%;", [reading]="reading")
   <p-dataList [value]="readings" [paginator]="true" [paginatorPosition]="'bottom'" [rows]="rows" [lazy]="true" (onLazyLoad)="loadCreatedFeed($event)" [totalRecords]="total" [emptyMessage]="''" [pageLinks]="5">
       <ng-template let-reading pTemplate="item">
-        hot-reading-card([reading]="reading", [readOnly]="true")
+        hot-reading-card([reading]="reading")
       </ng-template>
   </p-dataList>
   hot-tutorial-reading(*ngIf="!loading && readings.length < 1 && !errorObject.readingError && user.type !=='temp'")
