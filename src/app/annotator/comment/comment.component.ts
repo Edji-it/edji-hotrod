@@ -227,7 +227,7 @@ export class CommentComponent implements OnInit, OnDestroy {
     this.comment.active = this.active = true
     this._comments.activeComment = this.comment
     this._comments.activeComment.active = true
-    this.commentActivation.emit(true)
+    // this.commentActivation.emit(true)
   }
 
   /**
@@ -244,9 +244,6 @@ export class CommentComponent implements OnInit, OnDestroy {
     // Save when comment is toggled away from
     if (comment && (comment.data || comment.url) && !noUpdate) {
       this.updateComment(comment)
-    } else {
-      this.commentDeleted.emit()
-      this.toggleCommentPane.emit(false)
     }
   } // deactivate(commentData ?: any): void
 
