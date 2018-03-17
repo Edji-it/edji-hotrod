@@ -17,7 +17,7 @@ button#buttonNewReadingMobile.btn.btn-primary.new-reading-btn.hidden-md-up([rout
     p Readings are a great way to explore a piece of text together, or get feedback on your own writing.
   .alert.alert-danger.alert-readings(*ngIf="errorObject.readingError", role="alert") {{ errorObject.readingError }}
   //- hot-reading-card(*ngFor="let reading of readings", style="margin-bottom: 30px; float:left; width:100%;", [reading]="reading")
-  <p-dataList [value]="readings" [paginator]="true" [paginatorPosition]="'bottom'" [rows]="rows" [lazy]="true" (onLazyLoad)="loadCreatedFeed($event)" [totalRecords]="total" [emptyMessage]="'No Readings to show.'">
+  <p-dataList [value]="readings" [paginator]="true" [paginatorPosition]="'bottom'" [rows]="rows" [lazy]="true" (onLazyLoad)="loadCreatedFeed($event)" [totalRecords]="total" [emptyMessage]="''" [pageLinks]="5">
       <ng-template let-reading pTemplate="item">
         hot-reading-card([reading]="reading", [readOnly]="true")
       </ng-template>

@@ -129,7 +129,7 @@ export class ProjectService {
     } // constructor
     
     /**
-     * Pulls all projects for a single user
+     * Get all Joined Projects for a single user
      * @returns chainable promise resolved with reading data
      */
     public getAll() {
@@ -139,16 +139,24 @@ export class ProjectService {
                 .then(this._auth.extractData);
     } // public getAll()
 
-    
+    /**
+     * Pulls projects user has joined, paginated
+     * @param filters object containing pagination values (to eventually include other filters)
+     */
     public getJoined(filters?: any) : Observable<any> {
         let feedParams = new HttpParams()
-        if (filters && filters['size']) {
-        feedParams = feedParams.append("size", filters['size'])
+        // Set Pagination values
+        if (filters) {
+            if (filters['size']) {
+            feedParams = feedParams.append("size", filters['size'])
+            }
+            if (filters['start']) {
+            feedParams = feedParams.append("start", filters['start'])
+            }
         }
-        if (filters && filters['start']) {
-        feedParams = feedParams.append("start", filters['start'])
-        }
+        // Populate Reading to show user Title
         feedParams = feedParams.append("pop", "reading")
+        // Populate Teacher to show Reading Creator
         feedParams = feedParams.append("pop", "teacher")
         
         return this._http.get(this._auth.getUrl() + '/api/v1/projects', 

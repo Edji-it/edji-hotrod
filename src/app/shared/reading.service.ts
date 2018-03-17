@@ -44,24 +44,23 @@ export class ReadingService {
   private refreshVersionSource = new Subject()
   public  refreshVersions: Observable<any> = this.refreshVersionSource.asObservable()
 
-  // Pull all readings for a user
+  /**
+   * Get all Created Readings for a user, paginated
+   * @param filters object containing pagination values (to eventually include other filters)
+   */
   public getCreated(filters?: any) : Observable<any> {
     let feedParams = new HttpParams()
-    if (filters && filters['size']) {
-      feedParams = feedParams.append("size", filters['size'])
+    // Set Pagination values
+    if (filters) {
+      if (filters['size']) {
+        feedParams = feedParams.append("size", filters['size'])
+      }
+      if (filters['start']) {
+        feedParams = feedParams.append("start", filters['start'])
+      }
     }
-    if (filters && filters['start']) {
-      feedParams = feedParams.append("start", filters['start'])
-    }
+    // Populate list of Projects user has created on Reading
     feedParams = feedParams.append("pop", "projects")
-    // return this.http
-    //     .get(this._auth.getUrl() + '/readings/all/projects', this._auth.getOptions())
-    //     .toPromise()
-        // .then(this._auth.extractData)
-        // .then((data) => { 
-        //   this.userReadingsSource.next(data.readings)
-        //   return data.readings
-        // })
 
     this._http.get(this._auth.getUrl() + '/api/v1/readings', 
         { headers: new HttpHeaders({

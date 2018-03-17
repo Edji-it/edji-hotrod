@@ -33,7 +33,7 @@ form.pb-4.hidden-md-up([formGroup]="codeForm", (ngSubmit)="addSession(codeForm.v
   .alert.alert-danger(*ngIf="errorObject.projectError && projects.length < 1")
     strong Oh no!
     | {{errorObject.projectError}}
-  <p-dataList [value]="projects" [paginator]="true" [paginatorPosition]="'bottom'" [rows]="rows" [lazy]="true" (onLazyLoad)="loadJoinedFeed($event)" [totalRecords]="total" [emptyMessage]="'No Readings to show.'">
+  <p-dataList [value]="projects" [paginator]="true" [paginatorPosition]="'bottom'" [rows]="rows" [lazy]="true" (onLazyLoad)="loadJoinedFeed($event)" [totalRecords]="total" [emptyMessage]="''" [pageLinks]="5">
       <ng-template let-project pTemplate="item">
           .list-item.list-item--button([routerLink]="['/project', project._id]", [class.hide]="!project.createdAt")
             .reading-icon

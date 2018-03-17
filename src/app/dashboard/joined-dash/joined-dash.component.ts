@@ -29,8 +29,8 @@ export class JoinedDashComponent implements OnInit, OnDestroy {
   // Joined Readings, p-datalist values
   private loading: boolean = true
   private first: number = 0 // first page 
-  private rows: number = 20 // number of Readings to return
-  private total: number = 20 // total Readings
+  private rows: number = 25 // number of Readings to return
+  private total: number = 25 // total Readings
   
   // TypeScript public modifiers
   constructor(
