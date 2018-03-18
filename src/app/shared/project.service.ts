@@ -512,11 +512,11 @@ export class ProjectService {
             data.comment['_id'] = comment._id;
             url = url + '/' + comment._id
             options['method'] = 'PUT'
-            this._socket.updateComment(data.comment, 'UPDATE', this.project._id);
         } else {
             options['method'] = 'POST'
-            this._socket.updateComment(data.comment, 'CREATE', this.project._id);
         }
+
+        console.log('saveComment: ',comment)
 
         options['body'] = data
 
@@ -524,7 +524,14 @@ export class ProjectService {
             .request(url, options)
             .toPromise()
             .then(this._auth.extractData)
-            .then((data) => { return data.comment; })
+            .then((data) => { 
+                if (options['method']=='PUT') {
+                    this._socket.updateComment(data.comment, 'UPDATE', this.project._id);
+                } else if (options['method']=='POST') {
+                    this._socket.updateComment(data.comment, 'CREATE', this.project._id);
+                }
+                return data.comment
+            })
     } // public saveComment
 
     /**
