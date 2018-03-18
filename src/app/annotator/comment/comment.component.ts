@@ -386,7 +386,8 @@ export class CommentComponent implements OnInit, OnDestroy {
         })
       }
     } else {
-      this.commentDeleted.emit()
+      // Remove the local comment
+      this._projects.deleteTempComment(comment)
     }
   } // deleteComment(comment: any) : void
 

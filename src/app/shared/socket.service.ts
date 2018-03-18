@@ -81,6 +81,10 @@ export class SocketService {
         if (comment._id) {
             this.socket.emit('updateComment', { comment: comment, action: updateType, projectId: projectId });
         }
+        // In the case of deleting the comments made locally, we need to verify they were only made locally
+        if (!comment._id && (!comment.data || (comment.data && comment.data=='')) && !comment.url) {
+            this.socket.emit('updateComment', { comment: comment, action: updateType, projectId: projectId })
+        }
     }
 
     public toggleHeatVision(heatToggle: PowerToggle) {
