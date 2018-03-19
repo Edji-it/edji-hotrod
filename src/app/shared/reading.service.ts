@@ -48,15 +48,15 @@ export class ReadingService {
    * Get all Created Readings for a user, paginated
    * @param filters object containing pagination values (to eventually include other filters)
    */
-  public getCreated(filters?: any) : Observable<any> {
+  public getCreated(filters?: ReadingFilters) : Observable<GetReadingsResponse> {
     let feedParams = new HttpParams()
     // Set Pagination values
     if (filters) {
-      if (filters['size']) {
-        feedParams = feedParams.append("size", filters['size'])
+      if (filters.size) {
+        feedParams = feedParams.append("size", filters.size.toString())
       }
-      if (filters['start']) {
-        feedParams = feedParams.append("start", filters['start'])
+      if (filters.start) {
+        feedParams = feedParams.append("start", filters.start.toString())
       }
     }
     // Populate list of Projects user has created on Reading
@@ -234,4 +234,17 @@ export class ReadingService {
         }), 
         params: feedParams })
   }
+}
+
+/**
+ * /api/v1/readings Response
+ */
+interface GetReadingsResponse {
+  readings: Reading[],
+  total: number
+}
+
+interface ReadingFilters {
+  size?: number,
+  start?: number
 }

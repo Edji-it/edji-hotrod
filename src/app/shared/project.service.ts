@@ -143,15 +143,15 @@ export class ProjectService {
      * Pulls projects user has joined, paginated
      * @param filters object containing pagination values (to eventually include other filters)
      */
-    public getJoined(filters?: any) : Observable<any> {
+    public getJoined(filters?: ProjectFilters) : Observable<GetProjectsResponse> {
         let feedParams = new HttpParams()
         // Set Pagination values
         if (filters) {
-            if (filters['size']) {
-            feedParams = feedParams.append("size", filters['size'])
+            if (filters.size) {
+                feedParams = feedParams.append("size", filters.size.toString())
             }
-            if (filters['start']) {
-            feedParams = feedParams.append("start", filters['start'])
+            if (filters.start) {
+                feedParams = feedParams.append("start", filters.start.toString())
             }
         }
         // Populate Reading to show user Title
@@ -159,7 +159,7 @@ export class ProjectService {
         // Populate Teacher to show Reading Creator
         feedParams = feedParams.append("pop", "teacher")
         
-        return this._http.get(this._auth.getUrl() + '/api/v1/projects', 
+        return this._http.get<GetProjectsResponse>(this._auth.getUrl() + '/api/v1/projects', 
             { headers: new HttpHeaders({
             'Content-Type': 'application/json',
             'Authorization': this._auth.getToken()
@@ -704,3 +704,16 @@ export class ProjectService {
         this.commentByPosSubject.next(this.commentByPosSource)
     }
 } // class
+
+/**
+ * /api/v1/projects Response
+ */
+interface GetProjectsResponse {
+    projects: Project[],
+    total: number
+}
+
+interface ProjectFilters {
+    size?: number,
+    start?: number
+  }
