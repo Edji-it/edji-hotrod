@@ -52,6 +52,7 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    // datalist component intializes by calling loadCreatedFeed()
     this.loading = true;
 
     this.subscriptions.push(
@@ -59,8 +60,6 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
         this.user = user
       })
     )
-
-    this.loadCreatedFeed()
   } //  ngOnInit()
 
   ngOnDestroy () {}

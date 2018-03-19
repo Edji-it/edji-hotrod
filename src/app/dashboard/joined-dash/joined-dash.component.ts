@@ -47,7 +47,7 @@ export class JoinedDashComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.loadJoinedFeed();
+    // datalist component intializes by calling laodJoinedFeed()
   }
 
   ngOnDestroy() {
