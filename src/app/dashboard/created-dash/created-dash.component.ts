@@ -69,6 +69,8 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
    * - This auto-runs on load and every change, called by p-dataList in the template
    */
   loadCreatedFeed(paging?: any): void{
+    window.scrollTo(0,0)
+    this.readings = []
     let filters = {}
     this.loading = true
 

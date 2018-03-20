@@ -16,6 +16,7 @@ export class Dashboard implements PageObjectInterface
     // Public Instance Variables
     public readingCards = element.all(by.css('.reading-card'));
     public firstReadingCard = this.readingCards.first();
+    public firstReadingTitle = element.all(by.css('.reading-title__text')).first()
     public projectCards     = element.all(by.css('.project-card'));
     public firstProject     = this.projectCards.first();
     public projectCodeInput  = element(by.id("projectCodeInputJoinDash"));
@@ -27,6 +28,8 @@ export class Dashboard implements PageObjectInterface
     public optionsButton    = element(by.css('.btn-icon--plain'));
      //public optionsList = element.all(by.css('.reading-card-menu'))
     public createdTab    = element(by.id('createdTab'));
+    public createdListNextPage = element(by.css('.created-list .ui-paginator-next'));
+    public createdListPrevPage = element(by.css('.created-list .ui-paginator-prev'));
 
     // Dropdown buttons
     public dropDownMenu     = element(by.css('.btn-icon--plain'));

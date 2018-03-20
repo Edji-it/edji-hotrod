@@ -23,7 +23,7 @@ form.pb-4.hidden-md-up([formGroup]="codeForm", (ngSubmit)="addSession(codeForm.v
     strong([innerHtml]="':zap: Code' | emojione")
     | Enter a lightning code to quickly join a project!
   .alert.alert-danger(*ngIf="errorObject.wrongCode") {{errorObject.wrongCode}}
-.item-list
+.item-list.joined-list
   //- Show messaging if no Projects exist
   .alert.alert-info(role="alert", *ngIf="!isLoading && projects.length < 1 && !errorObject.projectError")
     h4.alert-heading No Joined Readings Yet...

@@ -59,6 +59,8 @@ export class JoinedDashComponent implements OnInit, OnDestroy {
    * - This auto-runs on load and every change, called by p-dataList in the template
    */
   loadJoinedFeed(paging?: any){
+    window.scrollTo(0,0)
+    this.projects = []
     let filters = {}
     this.loading = true
 

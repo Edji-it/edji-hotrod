@@ -10,7 +10,7 @@
 .row.loading(*ngIf="loading")
 button#buttonNewReadingMobile.btn.btn-primary.new-reading-btn.hidden-md-up([routerLink]="[ '/new-reading' ]") New Reading
 //- Our Readings!
-.item-list
+.item-list.created-list
   //- Show readings with date values
   .alert.alert-info(role="alert", *ngIf="!loading && readings.length < 1 && !errorObject.readingError")
     h4.alert-heading Share some text or something you wrote!
