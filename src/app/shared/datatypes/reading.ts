@@ -3,7 +3,7 @@ import { Project, EdjiQuestion } from '.'
 /** Reading with any additional properties we add on the front end */
 export interface Reading extends BaseReading {
   projects?: Project[],
-  versionCount?: number
+  version_count?: number
 }
 
 /*

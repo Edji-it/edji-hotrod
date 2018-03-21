@@ -125,7 +125,7 @@ export class ReadingService {
         readings.forEach(
           (reading, index) => {
             
-            if (reading.versionCount > 1) {
+            if (reading.version_count > 1) {
               // Reload content (slower but simpler)
               this.getCreated()
             } else if (reading._id == targetReading._id) {
