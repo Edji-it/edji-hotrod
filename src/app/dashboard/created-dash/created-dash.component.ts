@@ -62,6 +62,7 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
       }),
       this._readings.currentUserReadings.subscribe(
         (data)  => {
+            console.log("Readings update!")
             this.loading = false;
             this.readings = data.readings || [];
             this.total = data.total;

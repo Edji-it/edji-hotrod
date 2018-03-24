@@ -24,6 +24,7 @@ export class ReadingService {
 
 
   constructor(private http: Http, private _http: HttpClient, private _auth: AuthService) {
+    
   }
 
   ngOnInit() {
@@ -37,7 +38,7 @@ export class ReadingService {
   public currentReading: Observable<Reading> = this.readingSource.asObservable();
 
   // User's Readings observable
-  private userReadingsSource = new BehaviorSubject([])
+  private userReadingsSource = new BehaviorSubject<GetReadingsResponse>({})
   public currentUserReadings: Observable<any> = this.userReadingsSource.asObservable()
 
   // Version refresh observable
@@ -118,9 +119,8 @@ export class ReadingService {
     return this.http.delete(this._auth.getUrl() + '/readings/' +  targetReading._id, this._auth.getOptions())
       .map(value => {
         // Delete was successful
-        let readings = this.userReadingsSource.value
-        
-        readings.forEach(
+        let readingResponse = this.userReadingsSource.value
+        readingResponse.readings.forEach(
           (reading, index) => {
             
             if (reading.version_count > 1) {
@@ -128,12 +128,13 @@ export class ReadingService {
               this.updateCreated()
             } else if (reading._id == targetReading._id) {
               // Single version readings we can remove instantly
-              readings.splice(index, 1)
+              readingResponse.readings.splice(index, 1)
+              readingResponse.total--
+              this.userReadingsSource.next(readingResponse)
             }
 
           } // (reading, index) =>
         ) // readings.forEach
-        this.userReadingsSource.next(readings)
         return value
       });
   } // public delete(): void
@@ -142,10 +143,10 @@ export class ReadingService {
    * Remove Project from service maintained list of Readings with nested Projects
    */
   public removeProject(targetProject: Project) {
-    let readings = this.userReadingsSource.value
+    let readingRes = this.userReadingsSource.value
     let projectFound = false
 
-    readings.forEach( reading => {
+    readingRes.readings.forEach( reading => {
       reading.projects = reading.projects.filter(
           (project) => {
             if (project._id == targetProject._id) {
@@ -161,7 +162,7 @@ export class ReadingService {
       console.error("PROJECT NOT FOUND")
       this.refreshVersionSource.next(targetProject._id)
     }
-    this.userReadingsSource.next(readings)
+    this.userReadingsSource.next(readingRes)
   }
 
   // Push new or update Reading
@@ -238,8 +239,8 @@ export class ReadingService {
  * /api/v1/readings Response
  */
 interface GetReadingsResponse {
-  readings: Reading[],
-  total: number
+  readings?: Reading[],
+  total?: number
 }
 
 interface ReadingFilters {

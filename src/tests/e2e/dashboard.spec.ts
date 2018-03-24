@@ -82,126 +82,126 @@ describe('Dashboard Page', () => {
     })
 
     // this test relies on the user having at least one project - could do more verification of the project card itself
-    // it("should see a list of projects", () => {
-    //     // Switch to the created readings tab on mobile (will simply skip if on desktop)
-    //     dashboard.goToCreatedTab()
+    it("should see a list of projects", () => {
+        // Switch to the created readings tab on mobile (will simply skip if on desktop)
+        dashboard.goToCreatedTab()
         
-    //     browser.wait(EC.presenceOf(dashboard.firstProject), 8000, "never saw a project");
-    //     expect(dashboard.projectCards.count()).toBeGreaterThan(0);
-    // });
+        browser.wait(EC.presenceOf(dashboard.firstProject), 8000, "never saw a project");
+        expect(dashboard.projectCards.count()).toBeGreaterThan(0);
+    });
 
-    // // describe("Navigation from project dashboard", () => {
-    //     it("should get to a project by clicking a card", () => {
-    //         // Switch to the created readings tab on mobile (will simply skip if on desktop)
-    //         dashboard.goToCreatedTab()
+    // describe("Navigation from project dashboard", () => {
+        it("should get to a project by clicking a card", () => {
+            // Switch to the created readings tab on mobile (will simply skip if on desktop)
+            dashboard.goToCreatedTab()
             
-    //         browser.wait(EC.presenceOf(dashboard.firstProject), 8000, "never saw a project");
-    //         dashboard.firstProject.click();
-    //         browser.wait(EC.urlContains("project"), 5000, "clicking on project card did not bring me to a project");
+            browser.wait(EC.presenceOf(dashboard.firstProject), 8000, "never saw a project");
+            dashboard.firstProject.click();
+            browser.wait(EC.urlContains("project"), 5000, "clicking on project card did not bring me to a project");
 
-    //         sidebar.backToDash();
-    //     });
+            sidebar.backToDash();
+        });
 
-    //     it("should get to a project by entering a code", () => {
-    //         // Use the function to check this as it can handle multiple display types (mobile/desktop/etc)
-    //         dashboard.enterProjectCodeFromNav(login.validProjectCode);
+        it("should get to a project by entering a code", () => {
+            // Use the function to check this as it can handle multiple display types (mobile/desktop/etc)
+            dashboard.enterProjectCodeFromNav(login.validProjectCode);
 
-    //         // verification
-    //         browser.wait(EC.urlContains("project"), 5000, "entering a project code did not bring me to a project");
+            // verification
+            browser.wait(EC.urlContains("project"), 5000, "entering a project code did not bring me to a project");
 
-    //         // Return to dashboard
-    //         sidebar.backToDash();
-    //     });
-    // // });
+            // Return to dashboard
+            sidebar.backToDash();
+        });
+    // });
 
     // /* ---- Dashboard Tests ------------------------ */
 
     // /* Test: Can delete a project
     // 6.1.17
     // */
-    // describe("Delete Readings & Projects", () => {
-    //     it ("Delete a project off of a new reading.", () => {
-    //         // Switch to the created readings tab on mobile (will simply skip if on desktop)
-    //         dashboard.goToCreatedTab()
+    describe("Delete Readings & Projects", () => {
+        it ("Delete a project off of a new reading.", () => {
+            // Switch to the created readings tab on mobile (will simply skip if on desktop)
+            dashboard.goToCreatedTab()
             
-    //         // Click the dropdown menu
-    //         browser.wait(EC.elementToBeClickable(dashboard.firstDropdownMenu), 5000, "never saw a reading card dropdown menu");
-    //         dashboard.firstDropdownMenu.click();
-    //         // // Click the create new group button & create a new project
-    //         browser.wait(EC.elementToBeClickable(dashboard.newGroupButton), 5000, "create new group button was never clickable from dropdown menu");
-    //         dashboard.newGroupButton.click();
+            // Click the dropdown menu
+            browser.wait(EC.elementToBeClickable(dashboard.firstDropdownMenu), 5000, "never saw a reading card dropdown menu");
+            dashboard.firstDropdownMenu.click();
+            // // Click the create new group button & create a new project
+            browser.wait(EC.elementToBeClickable(dashboard.newGroupButton), 5000, "create new group button was never clickable from dropdown menu");
+            dashboard.newGroupButton.click();
             
-    //         // Create a new group
-    //         dashboard.createNewGroupModalInput(dashboard.uniqueGroupTitle);
+            // Create a new group
+            dashboard.createNewGroupModalInput(dashboard.uniqueGroupTitle);
 
-    //         // We're gonna identify the new project by it's new group class since it was just created. 
-    //         let newProjectCard = element(by.css('.new-project'));
-    //         browser.wait(EC.presenceOf(newProjectCard), 5000, "never saw a newProjectCard");
+            // We're gonna identify the new project by it's new group class since it was just created. 
+            let newProjectCard = element(by.css('.new-project'));
+            browser.wait(EC.presenceOf(newProjectCard), 5000, "never saw a newProjectCard");
 
-    //         // Now click that delete button
-    //         let newProjectCardDelBtn = newProjectCard.element(by.css(".btn--delete-project"));
-    //         browser.wait(EC.elementToBeClickable(newProjectCardDelBtn), 5000, "never saw a project delete button");
-    //         newProjectCardDelBtn.click();
+            // Now click that delete button
+            let newProjectCardDelBtn = newProjectCard.element(by.css(".btn--delete-project"));
+            browser.wait(EC.elementToBeClickable(newProjectCardDelBtn), 5000, "never saw a project delete button");
+            newProjectCardDelBtn.click();
 
-    //         // Click ok on that there delete modal
-    //         let delProjectModal = element(by.id('deleteProjectModal'));
-    //         browser.wait(EC.presenceOf(delProjectModal), 5000, "never saw a delProjectModal");
-    //         let delProjectBtnModal = element(by.id("delProjectBtnModal"));
-    //         browser.wait(EC.presenceOf(delProjectBtnModal), 5000, "never saw a delProjectBtn on the delProjectModal");
-    //         browser.wait(EC.elementToBeClickable(delProjectBtnModal), 5000, "delProjectBtn on the delProjectModal was never clickable");
-    //         delProjectBtnModal.click();
-    //         // expect((newProjectCard.isPresent())).toEqual(false);
-    //         browser.sleep(3000);
-    //         browser.wait(EC.invisibilityOf(newProjectCard), 5000, "saw a newProjectCard (END). We aren't supposed to.");
-    //     }); // it ("Delete a project off of a new reading.", () => {
+            // Click ok on that there delete modal
+            let delProjectModal = element(by.id('deleteProjectModal'));
+            browser.wait(EC.presenceOf(delProjectModal), 5000, "never saw a delProjectModal");
+            let delProjectBtnModal = element(by.id("delProjectBtnModal"));
+            browser.wait(EC.presenceOf(delProjectBtnModal), 5000, "never saw a delProjectBtn on the delProjectModal");
+            browser.wait(EC.elementToBeClickable(delProjectBtnModal), 5000, "delProjectBtn on the delProjectModal was never clickable");
+            delProjectBtnModal.click();
+            // expect((newProjectCard.isPresent())).toEqual(false);
+            browser.sleep(3000);
+            browser.wait(EC.invisibilityOf(newProjectCard), 5000, "saw a newProjectCard (END). We aren't supposed to.");
+        }); // it ("Delete a project off of a new reading.", () => {
 
-    //     it("Make a new reading then delete it.", () => {
+        it("Make a new reading then delete it.", () => {
 
-    //         // Approach 2
-    //         let uniqueTitle: string = new Date().valueOf().toString();
+            // Approach 2
+            let uniqueTitle: string = new Date().valueOf().toString();
 
-    //         // Create a new reading to control it properly thru the process
-    //         dashboard.openNewReading();
+            // Create a new reading to control it properly thru the process
+            dashboard.openNewReading();
 
-    //         // Enter sample Reading into form
-    //         newReading.titleInput.sendKeys(uniqueTitle);
-    //         // Select Grade Range
-    //         newReading.gradeTileK.click();
-    //         newReading.gradeTileU.click();
-    //         // Select Subject
-    //         newReading.subjectDropdown.click();
-    //         newReading.subjectFirstOption.click();
-    //         newReading.contentInput.sendKeys(newReading.contentShortString);
-    //         newReading.sourceInput.sendKeys(newReading.sourceString);
+            // Enter sample Reading into form
+            newReading.titleInput.sendKeys(uniqueTitle);
+            // Select Grade Range
+            newReading.gradeTileK.click();
+            newReading.gradeTileU.click();
+            // Select Subject
+            newReading.subjectDropdown.click();
+            newReading.subjectFirstOption.click();
+            newReading.contentInput.sendKeys(newReading.contentShortString);
+            newReading.sourceInput.sendKeys(newReading.sourceString);
 
-    //         // Submit New Reading
-    //         newReading.addNewReading()
-    //         browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
-    //         newReading.finalizeButton.click();
+            // Submit New Reading
+            newReading.addNewReading()
+            browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
+            newReading.finalizeButton.click();
 
-    //         // Should redirect to Project page for new reading
-    //         browser.wait(EC.urlContains("project"), 7500, "never arrived at the reading page after published");
+            // Should redirect to Project page for new reading
+            browser.wait(EC.urlContains("project"), 7500, "never arrived at the reading page after published");
 
-    //         // Go to the dashboard
-    //         sidebar.backToDash();
+            // Go to the dashboard
+            sidebar.backToDash();
 
-    //         // Switch to the created readings tab on mobile (will simply skip if on desktop)
-    //         dashboard.goToCreatedTab()
+            // Switch to the created readings tab on mobile (will simply skip if on desktop)
+            dashboard.goToCreatedTab()
 
-    //         browser.wait(EC.elementToBeClickable(element(by.css('button[testFindOptions="' + uniqueTitle + '"]'))), 8000, "reading card options button never became clickable after load");
-    //         element(by.css('button[testFindOptions="' + uniqueTitle + '"]')).click();
+            browser.wait(EC.elementToBeClickable(element(by.css('button[testFindOptions="' + uniqueTitle + '"]'))), 8000, "reading card options button never became clickable after load");
+            element(by.css('button[testFindOptions="' + uniqueTitle + '"]')).click();
 
-    //         browser.wait(EC.elementToBeClickable(element(by.css('button[testDelete="' + uniqueTitle + '"]'))), 5000, "copy and edit button never became clicakble after options dropdown click");
-    //         element(by.css('button[testDelete="' + uniqueTitle + '"]')).click();
+            browser.wait(EC.elementToBeClickable(element(by.css('button[testDelete="' + uniqueTitle + '"]'))), 5000, "copy and edit button never became clicakble after options dropdown click");
+            element(by.css('button[testDelete="' + uniqueTitle + '"]')).click();
 
-    //         let deleteModal = element(by.id('deleteReadingModal'));
-    //         browser.wait(EC.presenceOf(deleteModal), 5000, "never saw a deleteModal");
-    //         browser.wait(EC.presenceOf(dashboard.deleteConfirm), 5000, "never saw a deleteConfirm on the deleteModal");
-    //         browser.wait(EC.elementToBeClickable(dashboard.deleteConfirm), 5000, "deleteConfirm on the deleteModal was never clickable");
-    //         // Delete modal confirm click has promise issues, so treat it a bit differently
-    //         dashboard.deleteConfirm.click()
-    //         // Unable to confirm title
-    //         browser.wait(EC.invisibilityOf(element(by.cssContainingText('.reading-title-text', uniqueTitle))), 8000, "saw the unique readingTitle (END). We aren't supposed to.");
-    //     }); // it ("Make a new reading then delete it")
-    // });
+            let deleteModal = element(by.id('deleteReadingModal'));
+            browser.wait(EC.presenceOf(deleteModal), 5000, "never saw a deleteModal");
+            browser.wait(EC.presenceOf(dashboard.deleteConfirm), 5000, "never saw a deleteConfirm on the deleteModal");
+            browser.wait(EC.elementToBeClickable(dashboard.deleteConfirm), 5000, "deleteConfirm on the deleteModal was never clickable");
+            // Delete modal confirm click has promise issues, so treat it a bit differently
+            dashboard.deleteConfirm.click()
+            // Unable to confirm title
+            browser.wait(EC.invisibilityOf(element(by.cssContainingText('.reading-title-text', uniqueTitle))), 8000, "saw the unique readingTitle (END). We aren't supposed to.");
+        }); // it ("Make a new reading then delete it")
+    });
 }); // describe 'Dashboard Page'
