@@ -119,7 +119,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   restyleTwitter(){
     if (this.twitterRestyleAttempts < 6) {
       setTimeout(()=> {
-        if (document.getElementById("twitter-widget-0")) {
+        if (document.getElementById("twitter-widget-0") && document.getElementById("twitter-widget-0")['contentDocument']) {
           var w = document.getElementById("twitter-widget-0")['contentDocument'];
           console.log(w)
           var s = document.createElement("style");

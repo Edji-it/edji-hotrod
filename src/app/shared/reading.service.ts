@@ -68,12 +68,12 @@ export class ReadingService {
           'Authorization': this._auth.getToken()
         }), 
         params: feedParams })
-        .map((data: any) => { 
-          this.userReadingsSource.next(data)
-          return data
-        })
         .take(1)
-        .subscribe()
+        .subscribe((data: any) => { 
+          this.userReadingsSource.next(data)
+        }, (error) => {
+          this.userReadingsSource.error(error)
+        })
   } //getCreated()
 
   // Pull one reading by ID
