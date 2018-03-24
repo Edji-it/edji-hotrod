@@ -15,7 +15,6 @@ button#buttonNewReadingMobile.btn.btn-primary.new-reading-btn.hidden-md-up([rout
     h4.alert-heading Share some text or something you wrote!
     p Readings are a great way to explore a piece of text together, or get feedback on your own writing.
   .alert.alert-danger.alert-readings(*ngIf="errorObject.readingError", role="alert") {{ errorObject.readingError }}
-  
   .row.loading.my-2(*ngIf="loading")
   hot-reading-card(*ngFor="let reading of readings", style="margin-bottom: 30px; float:left; width:100%;", [reading]="reading")
   <p-paginator [rows]="rows" [totalRecords]="total" (onPageChange)="loadCreatedFeed($event)"></p-paginator>

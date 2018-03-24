@@ -74,7 +74,7 @@ export class JoinedDashComponent implements OnInit, OnDestroy {
       .subscribe(data => {
         this.loading = false;
         this.total = data.total;
-        this.projects = data.projects;
+        this.projects = data.projects || [];
       },
       (error) => {
         this.loading = false;
