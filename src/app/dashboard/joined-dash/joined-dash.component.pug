@@ -33,20 +33,18 @@ form.pb-4.hidden-md-up([formGroup]="codeForm", (ngSubmit)="addSession(codeForm.v
   .alert.alert-danger(*ngIf="errorObject.projectError && projects.length < 1")
     strong Oh no!
     | {{errorObject.projectError}}
-  <p-dataList [value]="projects" [paginator]="true" [paginatorPosition]="'bottom'" [rows]="rows" [lazy]="true" (onLazyLoad)="loadJoinedFeed($event)" [totalRecords]="total" [emptyMessage]="''" [pageLinks]="5">
-      <ng-template let-project pTemplate="item">
-          .list-item.list-item--button([routerLink]="['/project', project._id]", [class.hide]="!project.createdAt")
-            .reading-icon
-              span {{ project.reading && project.reading.title ? project.reading.title.substring(0,2) : '' }}
-            .reading-title
-              .reading-title--center-row
-                h1.small {{ project.reading ? project.reading.title : ''}} 
-                  span(*ngIf="project.reading && !project.reading.title") 
-                    i Untitled
-                  span.reading-project--label {{project.label}}
-            div(style="clear:both; line-height: 18px; padding: 10px 0px 0px;")
-              span(style="color: #cdcdcd; margin-right: 5px;") Created by:
-              follow-tag(*ngIf="project.teacher", [owner]="project.teacher")
-              pre.prj-code(style="margin-top: -5px; margin-bottom: 0px;") {{project.code || 'none'}}
-      </ng-template>
-  </p-dataList>
+  ng-container(*ngFor="let project of projects")
+    .list-item.list-item--button([routerLink]="['/project', project._id]", [class.hide]="!project.createdAt")
+      .reading-icon
+        span {{ project.reading && project.reading.title ? project.reading.title.substring(0,2) : '' }}
+      .reading-title
+        .reading-title--center-row
+          h1.small {{ project.reading ? project.reading.title : ''}} 
+            span(*ngIf="project.reading && !project.reading.title") 
+              i Untitled
+            span.reading-project--label {{project.label}}
+      div(style="clear:both; line-height: 18px; padding: 10px 0px 0px;")
+        span(style="color: #cdcdcd; margin-right: 5px;") Created by:
+        follow-tag(*ngIf="project.teacher", [owner]="project.teacher")
+        pre.prj-code(style="margin-top: -5px; margin-bottom: 0px;") {{project.code || 'none'}}
+  <p-paginator [rows]="rows" [totalRecords]="total" (onPageChange)="loadJoinedFeed($event)"></p-paginator>
