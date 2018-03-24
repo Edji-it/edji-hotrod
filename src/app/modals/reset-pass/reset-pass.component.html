@@ -10,8 +10,8 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group" [ngClass]="{ 'has-success': submissionSuccess }">
-                        <label for="usernameInput">Username</label>
-                        <input type="text" id="usernameInput" class="form-control" [formControl]="passwordForm.controls['username']" />
+                        <label for="inputPassResetUsername">Username</label>
+                        <input type="text" id="inputPassResetUsername" class="form-control" [formControl]="passwordForm.controls['username']" />
                         <div *ngIf="passwordForm.controls['username'].hasError('required') && passwordForm.controls['username'].dirty" class="alert alert-info">You must enter a username</div>
                         <div *ngIf="submissionSuccess" class="alert alert-success">If this account exists, we've just sent you an email!</div>
                         <div *ngIf="errorObject.unsuccessful" class="alert alert-danger">{{errorObject.unsuccessful}}</div>
