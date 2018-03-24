@@ -55,26 +55,30 @@ describe('Dashboard Page', () => {
         // Wait for Readings to load into Dashboard
         browser.wait(EC.elementToBeClickable(dashboard.firstReadingTitle), 3000, "never found Created Readings on Dashboard")
         // Save title of first Reading on first page
-        let firstReadingTitleStr
-        dashboard.firstReadingTitle.getText().then((text) => { firstReadingTitleStr = text });
+        let firstReadingTitleStr = '';
+        dashboard.firstReadingTitle.getText().then((text) => { 
+            firstReadingTitleStr = text + "";
+            expect(text.length).toBeGreaterThan(1);
+        });
+        
         // Scroll to Joined pagination bar
         browser.executeScript('window.scrollTo(0, document.querySelector(".created-list .ui-paginator-element").scrollTop);').then(() => {
             browser.wait(EC.elementToBeClickable(dashboard.createdListNextPage), 3000, "next page arrow for Created Readings did not become clickable");
         });
         // Go to next page
         dashboard.createdListNextPage.click();
+        // Wait for second page load
+        browser.wait(EC.visibilityOf(dashboard.secondPageFirstReadingTitle), 3000, "did not load next page of Created Readings");
         // Verify First Reading Title has changed
-        browser.pause(1000);
-        expect(dashboard.firstReadingTitle.getText()).not.toBe(firstReadingTitleStr);
+        expect(dashboard.secondPageFirstReadingTitle.getText().then((text) => {console.log(text, firstReadingTitleStr); return text == firstReadingTitleStr})).toBeFalsy();
         // Scroll back to pagination
         browser.executeScript('window.scrollTo(0, document.querySelector(".created-list .ui-paginator-element").scrollTop);').then(() => {
             browser.wait(EC.elementToBeClickable(dashboard.createdListPrevPage), 3000, "prev page arrow for Created Readings did not become clickable");
         });
         // Go to previous page
         dashboard.createdListPrevPage.click();
-        // Verify we have the same first reading title again
-        browser.pause(1000);
-        expect(dashboard.firstReadingTitle.getText()).toBe(firstReadingTitleStr);
+        // Wait for first page load
+        browser.wait(EC.invisibilityOf(dashboard.secondPageFirstReadingTitle), 3000, "did not leave second page when trying to return to first page");
     })
 
     // this test relies on the user having at least one project - could do more verification of the project card itself

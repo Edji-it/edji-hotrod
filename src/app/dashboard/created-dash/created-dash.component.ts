@@ -39,6 +39,7 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
   private first: number = 0 // first page 
   private rows: number = 15 // number of Readings to return
   private total: number = 15 // total Readings
+  private pageNo: number = 1
 
   // TypeScript public modifiers
   constructor(
@@ -53,13 +54,28 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // datalist component intializes by calling loadCreatedFeed()
-    this.loading = true;
+    this.loading = true
 
     this.subscriptions.push(
       this._auth.getCurrentUser().subscribe((user) => {
         this.user = user
-      })
+      }),
+      this._readings.currentUserReadings.subscribe(
+        (data)  => {
+            this.loading = false;
+            this.readings = data.readings || [];
+            this.total = data.total;
+            this.pageNo = Math.floor((this.first+1)/this.rows) + 1;
+          },
+          (error) => {
+            this.loading = false;
+            this.angulartics.eventTrack.next({ action: "getAllReadings", properties: { category: "serviceCalls", label: "failure" }});
+            this.errorObject.readingError = "We had some trouble getting your readings, it might be our fault";
+          }
+      )
     )
+    
+    this.loadCreatedFeed()
   } //  ngOnInit()
 
   ngOnDestroy () {}
@@ -79,18 +95,7 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
     if (this.first < 0) { this.first = filters['start'] = 0 }
     this.rows = filters['size'] = paging && paging.rows != undefined ? parseInt(paging.rows) : this.rows
 
-    this._readings.getCreated(filters).subscribe(
-      (data)  => {
-          this.loading = false;
-          this.readings = data.readings || [];
-          this.total = data.total;
-        },
-        (error) => {
-          this.loading = false;
-          this.angulartics.eventTrack.next({ action: "getAllReadings", properties: { category: "serviceCalls", label: "failure" }});
-          this.errorObject.readingError = "We had some trouble getting your readings, it might be our fault";
-        }
-    )
+    this._readings.updateCreated(filters)
   }
 
   private updateProjectLabel(projectId: string, projectLabel: string) {

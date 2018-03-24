@@ -89,6 +89,8 @@ import { GoogleButton } from './buttons'
 import { CommentPaneComponent } from './shared/comment-pane/comment-pane.component'
 import { HttpClientModule } from '@angular/common/http';
 import { DataListModule } from 'primeng/datalist';
+import { DataViewModule } from 'primeng/dataview';
+import { PaginatorModule } from 'primeng/paginator';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 // Configure Hammer.js
@@ -223,6 +225,8 @@ type StoreType = {
     Angulartics2Module.forRoot([ Angulartics2GoogleAnalytics ]),
     NgbModule.forRoot(), // Ng Bootstrap Import
     DataListModule,
+    DataViewModule,
+    PaginatorModule,
     Ng4TwitterTimelineModule
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection

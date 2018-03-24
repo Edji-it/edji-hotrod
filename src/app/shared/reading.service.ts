@@ -48,7 +48,7 @@ export class ReadingService {
    * Get all Created Readings for a user, paginated
    * @param filters object containing pagination values (to eventually include other filters)
    */
-  public getCreated(filters?: ReadingFilters) : Observable<GetReadingsResponse> {
+  public updateCreated(filters?: ReadingFilters) : void {
     let feedParams = new HttpParams()
     // Set Pagination values
     if (filters) {
@@ -74,8 +74,6 @@ export class ReadingService {
         })
         .take(1)
         .subscribe()
-    return this.currentUserReadings   
-            
   } //getCreated()
 
   // Pull one reading by ID
@@ -127,7 +125,7 @@ export class ReadingService {
             
             if (reading.version_count > 1) {
               // Reload content (slower but simpler)
-              this.getCreated()
+              this.updateCreated()
             } else if (reading._id == targetReading._id) {
               // Single version readings we can remove instantly
               readings.splice(index, 1)
