@@ -8,7 +8,7 @@
         span(*ngIf="!reading.title")
           i Untitled
       p.blockquote-footer(
-        *ngIf="reading.versionCount && reading.versionCount > 0", 
+        *ngIf="reading.version_count && reading.version_count > 0", 
         [attr.testVersionNumber]="reading.title"
-      ) Version {{reading.versionCount > 0 ? reading.versionCount : '' }}
+      ) Version {{reading.version_count > 0 ? reading.version_count : '' }}
   i.icon.icon-draft

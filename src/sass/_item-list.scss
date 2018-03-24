@@ -15,6 +15,11 @@ $listItemBorder: 1px solid rgb(220, 227, 234);
   }
 } 
 
+.item-list .ui-datalist-data li {
+  display: block;
+  margin-bottom: 30px;
+}
+
 .list-item {
   font-size: 0.8em;
   color: #000;

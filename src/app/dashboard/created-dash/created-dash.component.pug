@@ -7,15 +7,17 @@
   .col-sm-6
     button#buttonNewReading.btn.btn-primary.new-reading-btn(*ngIf="user.type == 'temp'", (click)="showLoginReqModal = true") New Reading
     button#buttonNewReading.btn.btn-primary.new-reading-btn(*ngIf="user.type != 'temp'", [routerLink]="['/new-reading']") New Reading
-.row.loading(*ngIf="isLoading")
 button#buttonNewReadingMobile.btn.btn-primary.new-reading-btn.hidden-md-up([routerLink]="[ '/new-reading' ]") New Reading
 //- Our Readings!
-.item-list
+.item-list.created-list([ngClass]="['page-'+pageNo]")
   //- Show readings with date values
-  .alert.alert-info(role="alert", *ngIf="!isLoading && readings.length < 1 && !errorObject.readingError")
+  .alert.alert-info(role="alert", *ngIf="!loading && readings.length < 1 && !errorObject.readingError")
     h4.alert-heading Share some text or something you wrote!
     p Readings are a great way to explore a piece of text together, or get feedback on your own writing.
   .alert.alert-danger.alert-readings(*ngIf="errorObject.readingError", role="alert") {{ errorObject.readingError }}
+  
+  .row.loading.my-2(*ngIf="loading")
   hot-reading-card(*ngFor="let reading of readings", style="margin-bottom: 30px; float:left; width:100%;", [reading]="reading")
-  hot-tutorial-reading(*ngIf="!isLoading && readings.length < 1 && !errorObject.readingError && user.type !=='temp'")
+  <p-paginator [rows]="rows" [totalRecords]="total" (onPageChange)="loadCreatedFeed($event)"></p-paginator>
+  hot-tutorial-reading(*ngIf="!loading && readings.length < 1 && !errorObject.readingError && user.type !=='temp'")
 hot-login-req(*ngIf="showLoginReqModal", (closeModal)="showLoginReqModal = false")

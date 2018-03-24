@@ -142,31 +142,31 @@ describe("Versioning - ", () => {
         browser.wait(EC.urlContains("project"), 15000, "never arrived at the finished reading");
     });
 
-    // it('should create a new group for an older version', () => {
-    //     // Switch to the created readings tab on mobile (will simply skip if on desktop)
-    //     dashboard.goToCreatedTab()
+    it('should create a new group for an older version', () => {
+        // Switch to the created readings tab on mobile (will simply skip if on desktop)
+        dashboard.goToCreatedTab()
         
-    //     // Create a new group for an older version
-    //     // Make sure the reading cards load before moving on to the next step
-    //     browser.wait(EC.elementToBeClickable(dashboard.firstProject), 15000, "reading cards never loaded");
+        // Create a new group for an older version
+        // Make sure the reading cards load before moving on to the next step
+        browser.wait(EC.elementToBeClickable(dashboard.firstProject), 15000, "reading cards never loaded");
 
-    //     // Expand the past versions
-    //     browser.wait(EC.elementToBeClickable(element(by.css('[testFindVersionToggle="' + titleUpdate + '"]'))), 5000, "past versions toggle never became clickable");
-    //     element(by.css('[testFindVersionToggle="' + titleUpdate + '"]')).click();
+        // Expand the past versions
+        browser.wait(EC.elementToBeClickable(element(by.css('[testFindVersionToggle="' + titleUpdate + '"]'))), 5000, "past versions toggle never became clickable");
+        element(by.css('[testFindVersionToggle="' + titleUpdate + '"]')).click();
 
-    //     // Verify version 1 of this reading is in the list
-    //     browser.wait(EC.elementToBeClickable(element(by.css('p[testVersionNumberV="' + uniqueTitle + '"]'))), 5000, "past versions never loaded");
-    //     browser.wait(EC.elementToBeClickable(element(by.css('button[testFindOptionsV="' + uniqueTitle + '"]'))), 8000, "reading card options for versionbutton never became clickable after load");
-    //     element(by.css('button[testFindOptionsV="' + uniqueTitle + '"]')).click();
+        // Verify version 1 of this reading is in the list
+        browser.wait(EC.elementToBeClickable(element(by.css('p[testVersionNumberV="' + uniqueTitle + '"]'))), 5000, "past versions never loaded");
+        browser.wait(EC.elementToBeClickable(element(by.css('button[testFindOptionsV="' + uniqueTitle + '"]'))), 8000, "reading card options for versionbutton never became clickable after load");
+        element(by.css('button[testFindOptionsV="' + uniqueTitle + '"]')).click();
 
-    //     // Make sure the Create New Group button shows up and then click on it
-    //     browser.wait(EC.elementToBeClickable(element(by.css('button[testFindCreateNewGroupV="' + uniqueTitle + '"]'))), 5000, "create new group button never became clicakble after options dropdown click");
-    //     element(by.css('button[testFindCreateNewGroupV="' + uniqueTitle + '"]')).click();
+        // Make sure the Create New Group button shows up and then click on it
+        browser.wait(EC.elementToBeClickable(element(by.css('button[testFindCreateNewGroupV="' + uniqueTitle + '"]'))), 5000, "create new group button never became clicakble after options dropdown click");
+        element(by.css('button[testFindCreateNewGroupV="' + uniqueTitle + '"]')).click();
 
-    //     // Wait for the input field for the group label to show and enter text
-    //     dashboard.createNewGroupModalInput(uniqueTitle);
+        // Wait for the input field for the group label to show and enter text
+        dashboard.createNewGroupModalInput(uniqueTitle);
 
-    //     // Locate the group and confirm the name
-    //     browser.wait(EC.elementToBeClickable(element(by.css('span[testFindGroupV="' + uniqueTitle + '"]'))), 5000, "new group label never showed up");
-    // });
+        // Locate the group and confirm the name
+        browser.wait(EC.elementToBeClickable(element(by.css('span[testFindGroupV="' + uniqueTitle + '"]'))), 5000, "new group label never showed up");
+    });
 });

@@ -9,8 +9,10 @@ import { AuthService } from './auth.service'
 import { Reading } from './datatypes/reading'
 
 interface FilterObj {
-  type: string,
-  grades?: number[]
+  type?: string,
+  grades?: number[],
+  start?: string,
+  size?: string
 }
 
 @Injectable()
@@ -42,17 +44,37 @@ export class ReadingService {
   private refreshVersionSource = new Subject()
   public  refreshVersions: Observable<any> = this.refreshVersionSource.asObservable()
 
-    // Pull all readings for a user
-  public getAll() {
-        return this.http
-            .get(this._auth.getUrl() + '/readings/all/projects', this._auth.getOptions())
-            .toPromise()
-            .then(this._auth.extractData)
-            .then((data) => { 
-              this.userReadingsSource.next(data.readings)
-              return data.readings
-            })
-  } //getAll()
+  /**
+   * Get all Created Readings for a user, paginated
+   * @param filters object containing pagination values (to eventually include other filters)
+   */
+  public updateCreated(filters?: ReadingFilters) : void {
+    let feedParams = new HttpParams()
+    // Set Pagination values
+    if (filters) {
+      if (filters.size) {
+        feedParams = feedParams.append("size", filters.size.toString())
+      }
+      if (filters.start) {
+        feedParams = feedParams.append("start", filters.start.toString())
+      }
+    }
+    // Populate list of Projects user has created on Reading
+    feedParams = feedParams.append("pop", "projects")
+
+    this._http.get(this._auth.getUrl() + '/api/v1/readings', 
+        { headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          'Authorization': this._auth.getToken()
+        }), 
+        params: feedParams })
+        .map((data: any) => { 
+          this.userReadingsSource.next(data)
+          return data
+        })
+        .take(1)
+        .subscribe()
+  } //getCreated()
 
   // Pull one reading by ID
   public get(id : string) : Observable<any> {
@@ -101,9 +123,9 @@ export class ReadingService {
         readings.forEach(
           (reading, index) => {
             
-            if (reading.versionCount > 1) {
+            if (reading.version_count > 1) {
               // Reload content (slower but simpler)
-              this.getAll()
+              this.updateCreated()
             } else if (reading._id == targetReading._id) {
               // Single version readings we can remove instantly
               readings.splice(index, 1)
@@ -210,4 +232,17 @@ export class ReadingService {
         }), 
         params: feedParams })
   }
+}
+
+/**
+ * /api/v1/readings Response
+ */
+interface GetReadingsResponse {
+  readings: Reading[],
+  total: number
+}
+
+interface ReadingFilters {
+  size?: number,
+  start?: number
 }

@@ -4,16 +4,16 @@
 )
   .reading-icon
     span {{reading.title.substring(0,2)}}
-  .reading-title([class.no-version]="!reading.versionCount")
+  .reading-title([class.no-version]="!reading.version_count")
     .reading-title--center-row
       h1.small.reading-title__text {{reading.title}} 
         span(*ngIf="!reading.title")
           i Untitled
         span.hero-tag(*ngIf="reading.heroic", title="Uses Hero features") H
       p.reading-version(
-        *ngIf="reading.versionCount && reading.versionCount > 0", 
+        *ngIf="reading.version_count && reading.version_count > 0", 
         [attr.testVersionNumber]="reading.title"
-      ) Version {{reading.versionCount > 0 ? reading.versionCount : '' }}
+      ) Version {{reading.version_count > 0 ? reading.version_count : '' }}
   i.icon.icon-draft(*ngIf="reading['draft']")
   //- The Dropdown Options Menu
   #optionsWrap.dropdown.reading-options(
@@ -109,7 +109,7 @@
     span([innerHtml]="':x:' | emojione")
 //- Handle the version control
 .version-card--block(
-  [class.gone]="!reading.versionCount || reading.versionCount <= 1", 
+  [class.gone]="!reading.version_count || reading.version_count <= 1", 
   [class.show]="showVersions", 
   [style.maxHeight.px]="versionsHeight()"
 )

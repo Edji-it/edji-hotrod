@@ -25,7 +25,7 @@ export class DiscoverFeedComponent implements OnInit {
 
   private first: number = 0
   private rows: number = 20
-  private total: number = 21
+  private total: number = 20
 
   // State vars
   private loading: boolean = true

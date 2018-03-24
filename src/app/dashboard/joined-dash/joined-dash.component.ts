@@ -24,9 +24,13 @@ export class JoinedDashComponent implements OnInit, OnDestroy {
     projectError: ""
   };
   private subscriptions: Subscription[] = [];
-  private isLoading: boolean = false;
-
   private codeForm: FormGroup;
+
+  // Joined Readings, p-datalist values
+  private loading: boolean = true
+  private first: number = 0 // first page 
+  private rows: number = 25 // number of Readings to return
+  private total: number = 25 // total Readings
   
   // TypeScript public modifiers
   constructor(
@@ -43,23 +47,40 @@ export class JoinedDashComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.isLoading = true;
-
-    this._projects.getAll()
-      .then(
-        (data)  => {
-          this.isLoading = false;
-          this.projects = data;
-        },
-        (error) => {
-          this.isLoading = false;
-          this.angulartics.eventTrack.next({ action: "getAllProjects", properties: { category: "serviceCalls", label: "failure" }});
-          this.errorObject.projectError = "We had some trouble getting your projects, it might be our fault";
-        });
+    // Initialize list of Joined Projects
+    this.loadJoinedFeed()
   }
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
+  }
+
+  /**
+   * Load Created with Params
+   * - This auto-runs on load and every change, called by p-dataList in the template
+   */
+  loadJoinedFeed(paging?: any){
+    window.scrollTo(0,0)
+    this.projects = []
+    let filters = {}
+    this.loading = true
+
+    // Pagination values
+    this.first = filters['start'] = paging && paging.first != undefined ? (parseInt(paging.first) - 1) : this.first
+    if (this.first < 0) { this.first = filters['start'] = 0 }
+    this.rows = filters['size'] = paging && paging.rows != undefined ? parseInt(paging.rows) : this.rows
+
+    this._projects.getJoined(filters)
+      .subscribe(data => {
+        this.loading = false;
+        this.total = data.total;
+        this.projects = data.projects;
+      },
+      (error) => {
+        this.loading = false;
+        this.angulartics.eventTrack.next({ action: "getAllProjects", properties: { category: "serviceCalls", label: "failure" }});
+        this.errorObject.projectError = "We had some trouble getting your projects, it might be our fault";
+      })
   }
 
   /** attempts to navigate to the session */
