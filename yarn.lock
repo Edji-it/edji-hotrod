@@ -2527,6 +2527,10 @@ get-stdin@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/get-stdin/-/get-stdin-4.0.1.tgz#b968c6b0a04384324902e8bf1a5df32579a450fe"
 
+get-user-media-promise@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/get-user-media-promise/-/get-user-media-promise-1.1.1.tgz#35574d1718e73a163dd2401865b44cedfd9395f8"
+
 get-value@^2.0.3, get-value@^2.0.6:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/get-value/-/get-value-2.0.6.tgz#dc15ca1c672387ca76bd37ac0a395ba2042a2c28"
@@ -4670,9 +4674,11 @@ options@>=0.0.5:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/options/-/options-0.0.6.tgz#ec22d312806bb53e731773e7cdaefcf1c643128f"
 
-opus-recorder@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/opus-recorder/-/opus-recorder-1.2.0.tgz#577a51e9c6385e4c6ef45e6d940a187858c93fc2"
+opus-recorder@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/opus-recorder/-/opus-recorder-2.1.2.tgz#750a92539b97caf693245eeefac43886d8a87efd"
+  dependencies:
+    get-user-media-promise "^1.1.1"
 
 original@>=0.0.5:
   version "1.0.0"
