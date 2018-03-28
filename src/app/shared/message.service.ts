@@ -31,7 +31,7 @@ export class MessageService {
    * Gets messages (notifications) from the server
    */
   public getMessages(): Observable<any> {
-    return this._http.get(this._auth.getUrl() + '/api/v1/users/messages', 
+    return this._http.get(this._auth.getUrl() + '/api/v1/users/' + this._auth.getUser()._id + '/messages', 
       {
         headers: new HttpHeaders({
           'Content-Type': 'application/json',
@@ -42,7 +42,7 @@ export class MessageService {
 
   private subscribeToRefresh(): void {
     this.timerSubscription = Observable.timer(0, 60000).subscribe(() => 
-      this.getMessages()
+      this.getMessages().subscribe(data => {})
     )
   }
 }
