@@ -30,8 +30,8 @@ export class MessageService {
   /**
    * Gets messages (notifications) from the server
    */
-  public getMessages(): Observable<any> {
-    return this._http.get(this._auth.getUrl() + '/api/v1/users/' + this._auth.getUser()._id + '/messages', 
+  public getMessages(): Observable<GetMessagesResponse> {
+    return this._http.get<GetMessagesResponse>(this._auth.getUrl() + '/api/v1/users/' + this._auth.getUser()._id + '/messages', 
       {
         headers: new HttpHeaders({
           'Content-Type': 'application/json',
@@ -40,9 +40,35 @@ export class MessageService {
       })
   }
 
+  /**
+   * Calls getMessages every minute and checks for messages that are returned from the server
+   */
   private subscribeToRefresh(): void {
+    // Subscribe to the timer and run it every minute
     this.timerSubscription = Observable.timer(0, 60000).subscribe(() => 
-      this.getMessages().subscribe(data => {})
+      // Make the call to getMessages and subscribe to its observable
+      this.getMessages().subscribe(data => {
+        let messages = data.messages
+        let msgLen = messages.length
+        // Check through the messages
+        for(var i=0; i < msgLen; i++) {
+          let message = messages[i]
+          // Refresh the user if message is 'user_refresh_required'
+          if (message.key==='user_refresh_required') {
+            this._auth.refreshUser()
+          }
+        }
+      })
     )
   }
+}
+
+/**
+ * /api/v1/users/:id/messages Response
+ */
+interface GetMessagesResponse {
+  messages: {
+    key: String, 
+    added_at_time: String
+  }[]
 }
