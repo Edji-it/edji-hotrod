@@ -47,7 +47,7 @@ export class MessageService {
     // Subscribe to the timer and run it every minute
     this.timerSubscription = Observable.timer(0, 60000).subscribe(() => 
       // Make the call to getMessages and subscribe to its observable
-      this.getMessages().subscribe(data => {
+      this.getMessages().subscribe((data: any) => {
         let messages = data.messages
         let msgLen = messages.length
         // Check through the messages
@@ -58,6 +58,8 @@ export class MessageService {
             this._auth.refreshUser()
           }
         }
+      }, (err) => {
+        // Future error handling
       })
     )
   }
