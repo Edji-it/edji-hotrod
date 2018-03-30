@@ -40,8 +40,16 @@
     //-     span(*ngIf="!user.fullname") {{ user.username }}
     //-     span.hero-tag(*ngIf="user.hero && user.hero.active", title="Hero Powers Activated") H
     //-   a#logOutButton.link(tabindex="1", (click)="logout()", [innerHtml]="'Log Out'")
-    .user-icon--large.pointer.float-right
-      span.user-icon__initials {{user.fullname.substring(0,2)}}
+    .outer-circle--large.float-right([class.active]="showAvatarDropdown")
+      .user-icon--large.pointer.float-right((click)="showAvatarDropdown=!showAvatarDropdown", (clickOutside)="showAvatarDropdown=false")
+        span.user-icon__initials {{user.fullname.substring(0,2)}}
+          .avatar__drop-down.list-group([class.visible]="showAvatarDropdown")
+            button.list-group-item.list-group-item-action(type="button", [routerLink]="['/account']") Josh Kyburz
+            button.list-group-item.list-group-item-action(type="button" Disabled) Refer Teachers
+            button.list-group-item.list-group-item-action(type="button", (click)="_util.showFeedbackModal=true") Help & Feedback
+            button.list-group-item.list-group-item-action(type="button", (click)="window.location.href='http://guide.edji.it'") Guides
+            button.list-group-item.list-group-item-action(type="button", (click)="logout()") Log Out
+
 
     //- Go hero action (non-existent if already a hero)
     .nav__btn-wrap(*ngIf="!showProjectInfo && (!user.hero || !user.hero.active)")

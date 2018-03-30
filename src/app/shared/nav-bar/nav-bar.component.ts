@@ -24,6 +24,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
     @Output() shareAction: EventEmitter<ReadingShareObject> = new EventEmitter<ReadingShareObject>()
 
 
+    private showAvatarDropdown: boolean = false
     private showShareTooltip: boolean = false
     private user: any
     private currentProject: any
@@ -60,6 +61,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
       "serverError"?: string
     } = {}
     private projectCodeShow: boolean = true
+    private window
 
     constructor(
           private _route: ActivatedRoute,
@@ -131,7 +133,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
               })
         )
       }
-
+      this.window = window
     }
 
     ngOnDestroy() {

@@ -32,10 +32,12 @@ $largeAvatarSize: 50px;
     height: $largeAvatarSize;
     width: $largeAvatarSize;
     line-height: $largeAvatarSize - 8px;
-    margin-top: .5em;
     & span {
       font-size: 26px;
     }
+  }
+  &.nav-avatar {
+    margin-top: .5em;
   }
   &.pointer {
     cursor: pointer;
@@ -112,5 +114,23 @@ $largeAvatarSize: 50px;
   &.user-icon span {
     line-height: 40px;
     font-size: 20px;
+  }
+}
+
+.outer-circle {
+  border-radius: 50%;
+  border: rgba(0,0,0,0.075) solid 1px;
+  &--large {
+    @extend .outer-circle;
+    height: 54px;
+    width: 54px;
+    margin-top: .4em;
+    margin-right: .4em;
+  }
+  & .user-icon {
+    margin: 1px;
+  }
+  &.active {
+    border-color: $btnPrimaryColor;
   }
 }
