@@ -292,3 +292,12 @@ $mobileBoundVPad: 40px;
   padding: 0px 5px 6px 3px;
   border-radius: 8px;
 }
+
+.icon-draft__comment {
+  transform: rotate(0deg) translateY(0%);
+  top: 0;
+  right: auto;
+  width: 42px;
+  height: 18px;
+  z-index: 1;
+}
