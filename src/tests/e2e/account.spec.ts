@@ -35,7 +35,7 @@ describe('Account Page', () => {
         login.loginButton.click();
         browser.wait(EC.urlContains("dashboard"), 5000, "never arrived at dashboard");
         // account.getPage();
-        sidebar.accountButton.click();
+        sidebar.clickAccountButton();
         browser.wait(EC.urlContains("account"), 5000, "never arrived at account page");
     }); // beforeAll
 

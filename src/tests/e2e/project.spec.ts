@@ -57,7 +57,7 @@ describe('Project Page', () => {
             home.enterProjectCodeFromHome('test');
             // Login
             guestForm.loginAsGuest();
-            browser.wait(EC.elementToBeClickable(sidebar.logOutButton));
+            browser.wait(EC.elementToBeClickable(sidebar.avatarActionIcon));
         });
 
         afterEach(() => {
@@ -72,7 +72,7 @@ describe('Project Page', () => {
             // home.enterProjectCodeFromHome('test');
             // Login
             guestForm.loginAsGuest();
-            browser.wait(EC.elementToBeClickable(sidebar.logOutButton));
+            browser.wait(EC.elementToBeClickable(sidebar.avatarActionIcon));
         });
 
         afterAll(() => {
@@ -165,13 +165,13 @@ describe('Project Page', () => {
             home.enterProjectCodeFromHome('audio');
             // Login
             guestForm.loginAsGuest();
-            browser.wait(EC.elementToBeClickable(sidebar.logOutButton));
+            browser.wait(EC.elementToBeClickable(sidebar.avatarActionIcon));
         });
 
         afterAll(() => {
             // log out
-            browser.wait(EC.elementToBeClickable(sidebar.logOutButton), 5000, "never found the logout button");
-            sidebar.logOutButton.click();
+            browser.wait(EC.elementToBeClickable(sidebar.avatarActionIcon), 5000, "never found the avatar dropdown button");
+            sidebar.clickLogOutButton();
         });
 
         it("should make audio comment as logged in user", () => {
@@ -232,13 +232,13 @@ describe('Project Page', () => {
             home.enterProjectCodeFromHome('reply');
             // Login
             guestForm.loginAsGuest();
-            browser.wait(EC.elementToBeClickable(sidebar.logOutButton));
+            browser.wait(EC.elementToBeClickable(sidebar.avatarActionIcon));
         });
 
         afterAll(() => {
             // log out
-            browser.wait(EC.elementToBeClickable(sidebar.logOutButton), 5000, "never found the logout button");
-            sidebar.logOutButton.click();
+            browser.wait(EC.elementToBeClickable(sidebar.avatarActionIcon), 5000, "never found the avatar dropdown button");
+            sidebar.clickLogOutButton();
         });
 
         it("should make a reply comment as a logged in user", () => {
