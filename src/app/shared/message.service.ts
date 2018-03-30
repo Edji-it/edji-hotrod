@@ -60,7 +60,7 @@ export class MessageService {
           }
         }
       }, (err) => {
-        // Future error handling
+        console.error(err)
       })
     )
   }
