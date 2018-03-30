@@ -40,7 +40,7 @@
     //-     span(*ngIf="!user.fullname") {{ user.username }}
     //-     span.hero-tag(*ngIf="user.hero && user.hero.active", title="Hero Powers Activated") H
     //-   a#logOutButton.link(tabindex="1", (click)="logout()", [innerHtml]="'Log Out'")
-    .user-icon--large.float-right
+    .user-icon--large.pointer.float-right
       span.user-icon__initials {{user.fullname.substring(0,2)}}
 
     //- Go hero action (non-existent if already a hero)
