@@ -16,15 +16,16 @@ export class MessageService {
     private angulartics: Angulartics2, 
     private _auth: AuthService
   ) {
-    // Start the interval call to the server to retrieve messages every set interval (1 minute right now)
-    this.subscribeToRefresh()
+    
   }
 
   /**
    * This method only exists to initialize the service
+   * Startup Logic
    */
   public init(): void {
-    // Startup Logic
+    // Start the interval call to the server to retrieve messages every set interval (1 minute right now)
+    this.subscribeToRefresh()
   }
 
   /**
