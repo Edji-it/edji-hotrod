@@ -107,7 +107,7 @@ scroll-progress([scrollProgress]="currentScroll")
                 //- Comment Loop: Display comments if they exist for this Word
                 edji-comment(
                     *ngFor="let comment of commentsByIndex[i]; let ci = index",
-                    [class.hidden]="!isCommentVisible(comment)",
+                    [class.hidden]="!_projects.isCommentVisible(comment)",
                     [class.spec-owner]="comment.user_id === project.teacher_id",
                     [comment]="comment",
                     (mouseenter)='focusHighlight(comment.start, comment.end, comment.loc)',
@@ -147,7 +147,7 @@ scroll-progress([scrollProgress]="currentScroll")
                     //- Image Hotspots: Show hotspot for each comment
                     .hotspot(
                         *ngFor="let comment of commentsByIndex[i]",
-                        [class.hidden]="!isCommentVisible(comment)",
+                        [class.hidden]="!_projects.isCommentVisible(comment)",
                         [style.top]="comment['loc'] ? comment['loc']['y'] + '%' : '0%'",
                         [style.left]="comment['loc'] ? comment['loc']['x'] + '%' : '0%'"
                     )
