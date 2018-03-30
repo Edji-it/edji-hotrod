@@ -16,7 +16,7 @@ export class Sidebar {
     */
 
     // Public Instance Variables
-    public logOutButton     = element(by.css("a#logOutButton"));
+    public logOutButton     = element(by.css("#logOutButton"));
     public logInButton     = element(by.css("a#loginLink"));
     public avatarActionIcon = element(by.css("#avatarActionIcon"));
     public accountButton    = element(by.id("accountButton"));
