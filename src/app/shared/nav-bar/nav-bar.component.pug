@@ -34,7 +34,7 @@
       a#registerLink.btn.btn-secondary.nav-bar__btn([routerLink]="['/register']") Register
 
     //- Logged in Actions
-    .outer-circle--large.float-right([class.active]="showAvatarDropdown")
+    .outer-circle--large.float-right(*ngIf="user.isLoggedIn", [class.active]="showAvatarDropdown")
       .user-icon--large.pointer.float-right((click)="showAvatarDropdown=!showAvatarDropdown", (clickOutside)="showAvatarDropdown=false")
         span.user-icon__initials {{user.fullname.substring(0,2)}}
         span.hero-tag.avatar-bottom(*ngIf="user.hero && user.hero.active", title="Hero Powers Activated") H
