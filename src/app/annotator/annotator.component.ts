@@ -219,6 +219,12 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.alwaysHighlightArray = processedCommentData.highlightArrays.alwaysHighlightArray
         this.highlightArray = processedCommentData.highlightArrays.highlightArray
 
+        // Initialize highlight classes on words
+        let wordLength = this.reading.words.length
+        for (let i = 0; i <= wordLength; i++) {
+            this.setHighlightClass(i)
+        }
+
         // Subscribe to comment comment updates
         this.subscriptions.push(
             this._socket.commentUpdates.subscribe((commentUpdate) => {
@@ -245,7 +251,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                         this.decrementHighlights(this.user._id === comment.user_id || this.project.teacher_id == comment.user_id, comment.start, comment.end)
                         // Make sure we've removed the highlight focus
                         this.unfocusHighlight(comment.start, comment.end)
-                        this.commentsByIndexRemove(comment._id, wIndex, cIndex)
+                        this.commentsByIndexRemove(wIndex, cIndex, comment._id)
                     }
                 } else if (commentUpdate.action === 'UPDATE') {
                     if (cIndex > -1 && this.commentsByIndex[wIndex] && this.commentsByIndex[wIndex][cIndex]) {
@@ -492,22 +498,15 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      * Add new highlights to local array
      */
     incrementHighlights(alwaysHighlight: boolean, start: number, end: number): void {
-        if (alwaysHighlight) {
-            for (var i = start; i <= end; i ++) {
-                if (this.alwaysHighlightArray[i]) {
-                    this.alwaysHighlightArray[i]++
-                } else {
-                    this.alwaysHighlightArray[i] = 1
-                }
+        // setHighlightClass
+        let highlightArray = alwaysHighlight ? this.alwaysHighlightArray : this.highlightArray
+        for (var i = start; i <= end; i ++) {
+            if (highlightArray[i]) {
+                highlightArray[i]++
+            } else {
+                highlightArray[i] = 1
             }
-        } else {
-            for (var i = start; i <= end; i ++) {
-                if (this.highlightArray[i]) {
-                    this.highlightArray[i]++
-                } else {
-                    this.highlightArray[i] = 1
-                }
-            }
+            this.setHighlightClass(i)
         }
     }
 
@@ -515,24 +514,15 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      * Removes highlights from local array
      */
     decrementHighlights(alwaysHighlight: boolean, start: number, end: number): void {
-        if (alwaysHighlight) {
-            for (var i = start; i <= end; i ++) {
-                if (this.alwaysHighlightArray[i] && this.alwaysHighlightArray[i] > 0) {
-                    this.alwaysHighlightArray[i]--
-                } else {
-                    this.alwaysHighlightArray[i] = 0
-                }
+        let highlightArray = alwaysHighlight ? this.alwaysHighlightArray : this.highlightArray
+        for (var i = start; i <= end; i ++) {
+            if (highlightArray[i]) {
+                highlightArray[i]--
+            } else {
+                highlightArray[i] = 1
             }
-        } else {
-            for (var i = start; i <= end; i ++) {
-                if (this.highlightArray[i] && this.highlightArray[i] > 0) {
-                    this.highlightArray[i]--
-                } else {
-                    this.highlightArray[i] = 0
-                }
-            }
+            this.setHighlightClass(i)
         }
-        
     }
 
     /**
@@ -561,45 +551,40 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             end: end,
             type: type,
             text: text,
-            loc: this.imageCoords
+            loc: this.imageCoords,
+            author: this.user.fullname,
+            user_id: this.user._id,
+            createdAt: new Date(),
         }
 
-        // Tell server we've added a comment
-        this._projects.saveComment(comment)
-            .then(comment => {
-                // We add the comment from the service because it has an Id
-                if (comment._id) {
-                    this.angulartics.eventTrack.next({ action: type + 'CommentCreate', properties: { category: 'projectAction', label: 'success' }})
-                    // Check if comment should start expanded
-                    // Needs to be moved to commentsByIndexAdd or comment component ngOnInit
-                    // if (document.querySelector('.w[index="' + start + '"] .comment')) {
-                    //     let commentY = document.querySelector('.w[index="' + start + '"] .comment')['offsetTop']
+        this.commentsByIndexAdd(comment, start)
 
-                    //     if (this.lineCountArray[commentY] && this.lineCountArray[commentY][0].expanded) {
-                    //         comment.expanded = true
-                    //         comment.lineCount = this.lineCountArray[commentY].length + 1
-                    //     }
-                    // }
-                    // Add setting to trigger focus on new comment
-                    comment.new = true // this is basically to tell our test cases which comment was just made
-                    this.inactivateComment()
-                    this.commentsByIndexAdd(comment, start)
-                } else {
-                    console.warn('Didn\'t get a comment back from server!')
-                }
+        // // Tell server we've added a comment
+        // this._projects.saveComment(comment)
+        //     .then(comment => {
+        //         // We add the comment from the service because it has an Id
+        //         if (comment._id) {
+        //             this.angulartics.eventTrack.next({ action: type + 'CommentCreate', properties: { category: 'projectAction', label: 'success' }})
+        //             // Add setting to trigger focus on new comment
+        //             comment.new = true // this is basically to tell our test cases which comment was just made
+        //             this.inactivateComment()
+        //             this.commentsByIndexAdd(comment, start)
+        //         } else {
+        //             console.warn('Didn\'t get a comment back from server!')
+        //         }
 
-                // Guide content
-                if (this.guideStepNo < 3) {
-                    this.guideStepNo = 3
-                }
-            })
-            .catch(error => {
-                // TRACK EXCEPTION
-                this.angulartics.eventTrack.next({ action: type + 'CommentCreate', properties: { category: 'projectAction', label: 'failure' }})
-                // We should figure out how to handle this properly!
-                // Maybe show a warning icon?
-                console.warn(error)
-            })
+        //         // Guide content
+        //         if (this.guideStepNo < 3) {
+        //             this.guideStepNo = 3
+        //         }
+        //     })
+        //     .catch(error => {
+        //         // TRACK EXCEPTION
+        //         this.angulartics.eventTrack.next({ action: type + 'CommentCreate', properties: { category: 'projectAction', label: 'failure' }})
+        //         // We should figure out how to handle this properly!
+        //         // Maybe show a warning icon?
+        //         console.warn(error)
+        //     })
     } // createComment
 
     commentsByIndexUpdate(comment, wordIndex: number, commentIndex: number) {
@@ -633,7 +618,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     /**
      * Removes comment from locally transformed array (commentsByIndex)
      */
-    commentsByIndexRemove(commentId, index: number, commentIndex: number) {
+    commentsByIndexRemove(index: number, commentIndex: number, commentId?) {
         let comment = this.commentsByIndex[index][commentIndex]
         let commentPointer
         let commentCopy
@@ -672,7 +657,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // Remove Highlights
         this.decrementHighlights(this.user._id === comment.user_id, comment.start, comment.end)
         // Remove local comment object
-        this.commentsByIndexRemove(comment._id, index, commentIndex)
+        this.commentsByIndexRemove(index, commentIndex, comment._id)
         this.unfocusHighlight(comment.start, comment.end)
     }
 
@@ -770,79 +755,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Loops through child elements to find textnodes
-     * Pushes text nodes as formatted objects into this.words
-     * @param element Root element to start crawling from
-     */
-    private extractTextNodes(element: any, ancestorTags ?: string[]) {
-        let tagName = element.tagName.toLowerCase()
-        let nodes = element.childNodes
-        
-        // Children should inherit tags from several elements up
-        // eg. "B" style should propagate down
-        if (!ancestorTags) {
-            ancestorTags = []
-        } 
-
-        if (ancestorTags.indexOf(tagName) < 0) {
-            ancestorTags.push(tagName)
-        }
-
-        for (let index = 0; index < nodes.length; index++) {
-
-            let node = nodes[index]
-            // Copy tags array to variable local to loop instance
-            let inheritedTags = ancestorTags.slice()
-
-            if (node.nodeType === 3) {
-                // Found a text node!
-
-                // Split text inside child nodes
-                let nodeWords = node.textContent.split(/(?:([^a-zA-Z0-9]))/).filter(function(el){ return el.replace(/([\n])/g, '') } )  
-                
-                // If empty element, push a spacer word to reflect that
-                if (nodeWords.length < 1) {
-                    this.words.push({
-                        str: '',
-                        styles: ['space', 'space-first', 'space-last'].concat(inheritedTags)
-                    })
-                }
-
-                // Otherwise loop through words, and process into array
-                for (let wIndex = 0; wIndex < nodes.length; wIndex++) {
-                   let nodeWord = nodeWords[wIndex]
-                   let word = {
-                        str : nodeWord,
-                        styles: [].concat(inheritedTags)
-                    }
-                    let addBr = false
-                    if (word.str && word.str.trim().length < 1) {
-                        word.styles.push('space')
-                    }
-                    if (index == 0 && wIndex == 0) {
-                        word.styles.push(tagName + '-first')
-                    }
-                    if (index == nodes.length - 1 && wIndex == nodeWords.length - 1) {
-                        word.styles.push(tagName + '-last')
-                        addBr = true
-                    }
-                    this.words.push(word)
-                    if (addBr) {
-                        // Add break element
-                        this.words.push({
-                            str: '',
-                            styles: ['br']
-                        })
-                    }
-                }
-            } else {
-                // If not a text node, dig deeper for text nodes
-                this.extractTextNodes(node, inheritedTags)
-            }
-        }
-    }
-
-    /**
      * Adds focus text highlighted for the relevant comment
      * @param start Index for first word
      * @param end Index for last word
@@ -888,28 +800,35 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      * Keep this light! It runs for every word instance
      * @param i is the word index
      */
-    private getHighlightClass(i: number): string {
-        let classString = ''
-        let highlightCount = 0
-        let focusHighlight = false
+    private setHighlightClass(i: number): void {
+        if (this.reading.words) {
+            if (!this.reading.words[i]) {
+                this.reading.words[i] = {}
+            }
+            if(!this.reading.words[i].styles) {
+                this.reading.words[i].styles = ['space']
+            }
+            let classString = ''
+            let highlightCount = 0
+            let focusHighlight = false
 
-        if ((this.project.heat_vision || this.user._id == this.project.teacher_id) && this.highlightArray[i]) {
-            highlightCount += this.highlightArray[i]
-        }
-        if (this.alwaysHighlightArray[i]) {
-            // AlwaysHighlight also tracks focused words
-            // if (this.alwaysHighlightArray[i] >= 1000) {
-            //     // Focus style
-            //     focusHighlight = true
-            //     highlightCount += (this.alwaysHighlightArray[i] - 1000)
-            // } else {
+            if ((this.project.heat_vision || this.user._id == this.project.teacher_id) && this.highlightArray[i]) {
+                highlightCount += this.highlightArray[i]
+            }
+            if (this.alwaysHighlightArray[i]) {
                 highlightCount += this.alwaysHighlightArray[i]
-            // }
+            }
+            if (this.focusArray[i]) {
+                classString = 'h-f'
+            }
+            classString = classString + ' h-' + highlightCount
+            /**
+             * Style 77
+             * + Index 77 is reserved in the styles array for the highlight style
+             * + Using a space in this array elimates a binding from our word/.w loop in the template
+             */
+            this.reading.words[i].styles[77] = classString
         }
-        if (this.focusArray[i]) {
-            classString = 'h-f'
-        }
-        return classString + ' h-' + highlightCount
     }
 
     // private imageCommentOptions(imageIndex: number, event: Event) : void {

@@ -542,11 +542,11 @@ export class ProjectService {
             data.comment['_id'] = comment._id;
             url = url + '/' + comment._id
             options['method'] = 'PUT'
-            this._socket.updateComment(data.comment, 'UPDATE', this.project._id);
         } else {
             options['method'] = 'POST'
-            this._socket.updateComment(data.comment, 'CREATE', this.project._id);
         }
+
+        console.log('saveComment: ',comment)
 
         options['body'] = data
 
@@ -554,7 +554,14 @@ export class ProjectService {
             .request(url, options)
             .toPromise()
             .then(this._auth.extractData)
-            .then((data) => { return data.comment; })
+            .then((data) => { 
+                if (options['method']=='PUT') {
+                    this._socket.updateComment(data.comment, 'UPDATE', this.project._id);
+                } else if (options['method']=='POST') {
+                    this._socket.updateComment(data.comment, 'CREATE', this.project._id);
+                }
+                return data.comment
+            })
     } // public saveComment
 
     /**
@@ -586,6 +593,21 @@ export class ProjectService {
             .toPromise()
             .then(this._auth.extractData);
     }//  public deleteComment(comment): Promise<any>
+
+    /**
+     * Deletes a comment that was made locally but never saved to the db
+     * - Need to pass and find index of the local comment
+     */
+    public deleteTempComment(comment : EdjiComment): void {
+        // Identify the locally made comment in the array
+        let localIndex = this.project.comments.indexOf(comment)
+        // Remove the locally made comment
+        this.project.comments.splice(localIndex, 1)
+        // Rebuild the comments by position array
+        this.buildCommentsByPos()
+        // Send a notice out to the annotator to remove the locally made comment - important for getting highlights to go away
+        this._socket.updateComment(comment, 'DELETE', this.project._id)
+    }
 
     /** 
      * Save an answer on a project.
