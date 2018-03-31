@@ -6,7 +6,7 @@ import { Angulartics2GoogleAnalytics } from 'angulartics2/ga'
 import { Angulartics2 } from 'angulartics2'
 
 import { AppState } from './app.service'
-import { AuthService } from './shared'
+import { AuthService, MessageService } from './shared'
 
 /*
  * App Component
@@ -32,7 +32,8 @@ export class AppComponent {
     public appState: AppState,
     private angulartics: Angulartics2,
     angulartics2GoogleAnalytics: Angulartics2GoogleAnalytics,
-    private _auth: AuthService
+    private _auth: AuthService,
+    private _messages: MessageService
     ) {
 
   }
@@ -41,6 +42,8 @@ export class AppComponent {
     if (this._auth.getUser().isLoggedIn) {
       this.angulartics.eventTrack.next({ action: 'hasAccount', properties: { category: 'edjiUsage', label: 'success' }})
     }
+    // Trigger the message service to start
+    this._messages.init()
   }
 
 }
