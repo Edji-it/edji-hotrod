@@ -422,7 +422,7 @@ div.sliding-pane.from-left.slide-in {
 	opacity: 0;
 	transition: opacity ease-in-out 0.4s;
 	position: absolute;
-	top: 62px;
+	top: 66px;
 	right: 16px;
 	z-index: 3;
 	min-width: 220px;
@@ -445,6 +445,15 @@ div.sliding-pane.from-left.slide-in {
 			border-bottom-right-radius: 12px;
 			border-bottom-left-radius: 12px;
 		}
+	}
+	&::before {
+		content: "";
+    position: absolute;
+    bottom: 100%;
+    right: 3%;
+    border-width: 10px;
+    border-style: solid;
+    border-color: transparent transparent #fff transparent;
 	}
 }
 

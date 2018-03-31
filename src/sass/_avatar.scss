@@ -45,6 +45,10 @@ $largeAvatarSize: 50px;
     cursor: pointer;
   }
   &__initials, .user-icon__overflow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 25%;
     font-weight: 500;
     color: #fff;
     font-size: 12px;
