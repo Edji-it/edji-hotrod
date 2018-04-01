@@ -39,6 +39,7 @@
         span.user-icon__initials {{user.fullname.substring(0,2)}}
         span.hero-tag.avatar-bottom(*ngIf="user.hero && user.hero.active", title="Hero Powers Activated") H
       .avatar__drop-down.list-group(*ngIf="showAvatarDropdown", [class.visible]="showAvatarDropdown")
+        .arrow
         button#accountButton.list-group-item.list-group-item-action(type="button", [routerLink]="['/account']") Josh Kyburz
           span.list-icon--right([innerHtml]="':gear:' | emojione")
         //- button.list-group-item.list-group-item-action(type="button" Disabled) Refer Teachers

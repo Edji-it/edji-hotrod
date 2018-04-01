@@ -446,18 +446,25 @@ div.sliding-pane.from-left.slide-in {
 			border-bottom-left-radius: 12px;
 		}
 	}
-	&::before {
-		content: "";
-    position: absolute;
-    bottom: 100%;
-    right: 3%;
-    border-width: 10px;
-    border-style: solid;
-    border-color: transparent transparent #fff transparent;
-	}
 }
 
 .list-icon--right {
 	position: absolute;
 	right: 12px;
+}
+
+.arrow {
+	content: "";
+	position: absolute;
+	bottom: 99%;
+	right: 3%;
+	border-width: 10px;
+	border-style: solid;
+	border-color: transparent transparent #fff transparent;
+	z-index: 4;
+}
+
+.list-group-item:nth-child(2) {
+	border-top-right-radius: 12px;
+	border-top-left-radius: 12px;
 }
