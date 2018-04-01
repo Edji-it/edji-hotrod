@@ -63,6 +63,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   private readingToAdd: string
   /** The project id that the user wanted to add to the dashboard */
   private tempUserId: string
+  private referralId: string
 
   constructor (
     private _auth: AuthService,
@@ -95,6 +96,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
       this.route.queryParams.subscribe((queryParams) => {
         this.readingToAdd = queryParams['reading']
         this.tempUserId = queryParams['userId']
+        this.referralId = queryParams['referral_id']
       })
     )
 
@@ -141,6 +143,11 @@ export class RegisterComponent implements OnInit, OnDestroy {
     }
 
     delete formValue.checkboxes // we don't want to store the checkboxes object
+
+    // If the new user was referred and there is a referral id, then let's add it here
+    if (typeof(this.referralId)!='undefined' && this.referralId!='') {
+      formValue.referral_id = this.referralId
+    }
 
     // Attempt to register this user.
     this._auth.register(formValue)
