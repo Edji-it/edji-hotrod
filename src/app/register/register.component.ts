@@ -46,6 +46,10 @@ export class RegisterComponent implements OnInit, OnDestroy {
     badName?: string,
     badUsername?: string
   } = {}
+  private successObject: {
+    referral?: boolean
+  } = {}
+  private userReferral: any = {}
 
   // private copy: Copy = new Copy()
   private userCopy: any
@@ -101,6 +105,22 @@ export class RegisterComponent implements OnInit, OnDestroy {
     )
 
     this._title.setTitle( 'Edji | Register' )
+
+    if (typeof(this.referralId)!='undefined' && this.referralId!='') {
+      // Store the referral_id in the locker in case the user signs up with oauth
+      this._auth.store("referral_id", this.referralId)
+      // We're going to ask the server to get the user that referred this new one so we can show a name
+      this.subscriptions.push(
+        this._auth.getUserByReferralId(this.referralId).subscribe((user) => {
+          this.userReferral = user
+        }, (err) => {
+          // If the servor throws an error, then let's make sure the copy is at least protected
+          this.userReferral = {fullname: "A special someone"}
+        })
+      )
+      // We need to activate the success object so we can show the user a friendly message
+      this.successObject.referral = true
+    }
   }
 
   //https://angular.io/docs/ts/latest/api/forms/index/FormGroup-class.html

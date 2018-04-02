@@ -4,6 +4,10 @@ nav-bar
     .sparks
     .col-sm-2
     .col-sm-8.col-pad.on-dark
+      #msgReferral.alert.alert-success(
+        *ngIf="successObject.referral", 
+        [innerHtml]=" '<strong>Congratulations!</strong> :tada: <br>' + userReferral.fullname + ' thought you would really like Edji. Sign up and make your first reading to receive 20% off Hero today!' | emojione"
+      )
       h1.on-dark.center([innerHtml]="'Your Edji Adventure Begins :tada:' | emojione")
       p(*ngIf="readingToAdd") Your reading will be ready to edit after you sign up!
       p(*ngIf="projectToAdd") Your reading will be on the dashboard after you sign up!
