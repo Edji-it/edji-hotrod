@@ -437,7 +437,7 @@ $avatarDropArrowRight: 15px;
 	right: calc(50% - #{ $avatarDropArrowWidth + $avatarDropArrowRight });
 	z-index: 3;
 	min-width: 220px;
-	box-shadow: rgba(0,0,0,0.3) 0 0 10px;
+	box-shadow: rgba(0,0,0,0.2) 0px 1px 20px;
 	border-radius: 12px;
 	&.visible {
 		opacity: 1;

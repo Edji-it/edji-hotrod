@@ -240,6 +240,21 @@ export class NavBarComponent implements OnInit, OnDestroy {
       }
     }
   }
+
+  /**
+   * Open Guides in New Tab
+   */
+  private openGuides(): void {
+    window.open('http://guide.edji.it', '_blank')
+  }
+
+  /**
+   * Open Feedback Modal
+   * - Requires "edji-feedback" component to exist on route
+   */
+  private openFeedback(): void {
+    this._util.showFeedbackModal=true
+  }
 }
 
 export interface ReadingShareObject {
