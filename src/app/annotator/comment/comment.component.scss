@@ -73,15 +73,6 @@ $tablet-width: 768px;
 }
 
 .mobileBlock-mobile-comment {
-  &.user-icon {
-    height: 40px;
-    width: 40px;
-    margin-top: 18px;
-  }
-  &.user-icon span {
-    line-height: 40px;
-    font-size: 20px;
-  }
   &.mobileBlock {
     width: calc(100% - 50px);
   }

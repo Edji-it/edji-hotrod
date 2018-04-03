@@ -144,3 +144,18 @@ $fa-font-path: 'fonts';
 // Shared module variables
 $slidingPaneTime: .4s;
 $navOffset: 60px;
+
+// Button Colors
+$btnBg: #969696;
+$btnActionBg: #deffda;
+$btnActionColor: #1db50a;
+$btnPrimaryBg: #e7faff;
+$btnPrimaryColor: #21c0f1;
+$btnSecondaryBg: #efefef;
+$btnSecondaryColor: #9a9a9a;
+$btnSecondaryBorder: 1px solid $btnSecondaryColor;
+//1px solid rgba(0,0,0,0.05);
+$btnSuccessBg: #46c78e; //#7fd9fc;
+$btnSuccessColor: #1eb10c;
+$btnHeroBg: #fff0f0;
+$btnHeroColor: #ff5c5c;

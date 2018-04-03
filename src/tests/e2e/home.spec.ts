@@ -111,8 +111,7 @@ describe('Home Page', () => {
     //     loginModal.guestLoginButton.click();
 
     //     // log out
-    //     browser.wait(EC.elementToBeClickable(sidebar.logOutButton), 5000, "never found the logout button");
-    //     sidebar.logOutButton.click();
+    //     sidebar.clickLogOutButton();
     // });
 
 }); // describe 'Home Page'

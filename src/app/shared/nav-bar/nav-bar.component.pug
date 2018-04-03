@@ -27,19 +27,37 @@
           ) {{ currentReading.title }}
         .nav-bar__author(*ngIf="projectOwner && projectOwner._id")
           follow-tag([owner]="projectOwner")
+
+    //- Login/Register Actions
     .nav__btn-wrap(*ngIf="!user.isLoggedIn")
       a#loginLink.btn.btn-primary.nav-bar__btn([routerLink]="['/login']") Log In
       a#registerLink.btn.btn-secondary.nav-bar__btn([routerLink]="['/register']") Register
 
-    .nav-bar__user(*ngIf="user.isLoggedIn", [ngClass]="{ 'nav-bar__user__show' : mNavShow }")
+    //- User Menu: Logged in Actions
+    .outer-circle--large.float-right(*ngIf="user.isLoggedIn", [class.active]="showAvatarDropdown")
+      .avatar__wrap
+        #avatarActionIcon.user-icon--large.pointer.float-right((click)="showAvatarDropdown=!showAvatarDropdown", (clickOutside)="showAvatarDropdown=false")
+          span.user-icon__initials {{user.fullname.substring(0,2)}}
+          span.hero-tag.avatar-bottom(*ngIf="user.hero && user.hero.active", title="Hero Powers Activated") H
+        .avatar__drop-down.list-group(*ngIf="showAvatarDropdown", [class.visible]="showAvatarDropdown")
+          .arrow
+          //- Account
+          button#accountButton.list-group-item.list-group-item-action(type="button", [routerLink]="['/account']") {{ user.fullname }}
+            span.list-icon--right([innerHtml]="':gear:' | emojione")
+          //- Refer
+          //- button.list-group-item.list-group-item-action(type="button" Disabled) Refer Teachers
+            span.list-icon--right([innerHtml]="':satellite:' | emojione")
+          //- Feedback
+          button.list-group-item.list-group-item-action(type="button", (click)="openFeedback()") Help &amp; Feedback
+            span.list-icon--right([innerHtml]="':question:' | emojione")
+          //- Guides
+          button.list-group-item.list-group-item-action(type="button", (click)="openGuides()") Guides
+            span.list-icon--right([innerHtml]="':book:' | emojione")
+          //- Log Out
+          button#logOutButton.list-group-item.list-group-item-action(type="button", (click)="logout()") Log Out
+            span.list-icon--right([innerHtml]="':outbox_tray:' | emojione")
 
-      a#accountButton.nav-bar__link(tabindex="1", [routerLink]="['/account']")
-        span(*ngIf="user.fullname") {{ user.fullname }}
-        span(*ngIf="!user.fullname") {{ user.username }}
-        span.hero-tag(*ngIf="user.hero && user.hero.active", title="Hero Powers Activated") H
-
-      a#logOutButton.link(tabindex="1", (click)="logout()", [innerHtml]="'Log Out'")
-
+    //- Go hero action (non-existent if already a hero)
     .nav__btn-wrap(*ngIf="!showProjectInfo && (!user.hero || !user.hero.active)")
       a#heroLink.btn.btn-clear.nav-bar__btn.hidden-sm-down.link([routerLink]="['/hero']", routerLinkActive="active") Go Hero!
 
@@ -51,6 +69,7 @@
         span([innerHtml]="':key:' | emojione") 
         | &nbsp;{{ currentProject.code }}
 
+    //- New Reading actions
     .nav__btn-wrap
       //- Share button: Desktop
       button#addReadingButton.btn.btn-action.nav-bar__btn.hidden-sm-down(*ngIf="canPublish", (click)="showShareTooltip = !showShareTooltip", [class.active]="showShareTooltip") Share
@@ -98,6 +117,7 @@
             href="#") Go!
       #projectCodeError.invalid-feedback(*ngIf="errorObject.invalidCode", [innerHtml]="errorObject.invalidCode | emojione")
 
+  //- Page title/reading title
   h1.hidden-md-up.mobile-heading(*ngIf="pageTitle && !showProjectInfo") {{ pageTitle }}
   h1.hidden-md-up.mobile-heading(*ngIf="showProjectInfo") {{ currentReading.title }}
 
