@@ -238,6 +238,11 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                     }
                 }
                 
+                // If comment is updated to be empty, we consider a "DRAFT", and deleted to other users
+                if(this._projects.isCommentHiddenDraft(commentUpdate.comment)) {
+                    commentUpdate.action = 'DELETE'
+                }
+
                 // Process different live comment updates
                 if (commentUpdate.action === 'DELETE') {
                     if (cIndex > -1) {
