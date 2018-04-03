@@ -16,8 +16,9 @@ export class Sidebar {
     */
 
     // Public Instance Variables
-    public logOutButton     = element(by.css("a#logOutButton"));
+    public logOutButton     = element(by.css("#logOutButton"));
     public logInButton     = element(by.css("a#loginLink"));
+    public avatarActionIcon = element(by.css("#avatarActionIcon"));
     public accountButton    = element(by.id("accountButton"));
     public heatButton       = element(by.id("toggleHeatVision"));
     public heatButtonMobile = element(by.id("toggleHeatVisionMobile"));
@@ -47,7 +48,7 @@ export class Sidebar {
     }
 
     public ownerToolToggle(): void {
-        browser.wait(this.EC.elementToBeClickable(this.logOutButton), 5000, "logout button never became clickable");
+        browser.wait(this.EC.elementToBeClickable(this.avatarActionIcon), 5000, "avatar dropdown button never became clickable");
         // Toggle the owner tools on mobile if the Owner Tools button is present
         this.ownerToolToggleButton.isPresent().then((result) => {
             if (result) {
@@ -63,20 +64,52 @@ export class Sidebar {
     }
 
     // Click the log out button.
-    public clickLogOutButton () : void
-    {
-        this.logOutButton.click();
+    public clickLogOutButton () : void {
+        this.avatarActionIcon.isPresent().then((result) => {
+            if (result) {
+                 this.avatarActionIcon.isDisplayed().then((result) => {
+                    if ( result ) {
+                        this.avatarActionIcon.click();
+                        this.logOutButton.isPresent().then((result) => {
+                            if (result) {
+                                 this.logOutButton.isDisplayed().then((result) => {
+                                    if ( result ) {
+                                        this.logOutButton.click();
+                                    }
+                                })
+                            }
+                        })
+                    }
+                })
+            }
+        })
     } // clickLogOutButton () : void
 
     // Click the log out button.
-    public clickAccountButton () : void
-    {
-        this.accountButton.click();
+    public clickAccountButton () : void {
+        this.avatarActionIcon.isPresent().then((result) => {
+            if (result) {
+                 this.avatarActionIcon.isDisplayed().then((result) => {
+                    if ( result ) {
+                        this.avatarActionIcon.click();
+                        this.accountButton.isPresent().then((result) => {
+                            if (result) {
+                                 this.accountButton.isDisplayed().then((result) => {
+                                    if ( result ) {
+                                        this.accountButton.click();
+                                    }
+                                })
+                            }
+                        })
+                    }
+                })
+            }
+        })
     } // clickAccountButton () : void
 
     public logout(): void {
-        browser.wait(this.EC.elementToBeClickable(this.logOutButton), 5000, "logout button never became clickable");
-        this.logOutButton.click();
+        browser.wait(this.EC.elementToBeClickable(this.avatarActionIcon), 5000, "avatar action button never became clickable");
+        this.clickLogOutButton();
         browser.wait(this.EC.urlContains("home"), 5000, "never arrived home after logging out");
     }
 

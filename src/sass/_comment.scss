@@ -140,10 +140,6 @@ edji-comment {
 		pointer-events: none;
 	}
 
-	&.line-first-word {
-		// @include transform(translate3d(-100%, 0px, 0));
-	}
-
 	&:hover{
 		z-index: 5500;
 
@@ -604,10 +600,6 @@ $expandShadowSize: 3px;
 		background-color: darken($gray,5%);
 	}
 
-	&:hover {
-
-	}
-
 	// Emoji Plus
 	// background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAAAGYktHRAD/AP8A/6C9p5MAAAAJcEhZcwAACxMAAAsTAQCanBgAAAAJdnBBZwAAAEAAAABAAOrz+GAAAAFgSURBVHja7ZsxUoNQEIY/HStGi4yVhVwgwxksOIeFpdbpvIK12ll4DgrPwOQCWFg5FGaoHLAIpSQvQdan+38tC+z72PdgFgAhhBDCLQcWJ8nzHGAGnABdQE4fQF0UxeS5HVkI6LoOYAFcAZ8BOT0Btxa5mQjomQFnO8SaYCKgbVur8cQpoJ8CUSIBEiABEiABEjAxeg7wXgES4F2A1gDvFSABEQsYbIllWQbrxsQCOAXGTOQOuADmgfFL4IVxLbtD4B24A+qyLL8NGqyA/qodA5fA+YhE9mG+g6xNvAKPQD0UsE3Av0cChjbEfO82EeC+AtwL0BTwXgHuBWgKrCtgBTzztx+FV5uCTF6Pp2kKcA9cB+7yANxUVTV5bmqIWJwk5gVVAiRAAqZHi6D3CpAA7wK0BnivAAmQAAn47XFKQAwCauCNsM/l623H/ClMOkJJksAeP0w0TWPlQQghhPDIFzius9vRuvq3AAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDE1LTEwLTAxVDEyOjAwOjE2LTA3OjAw41i45QAAACV0RVh0ZGF0ZTptb2RpZnkAMjAxNS0xMC0wMVQxMjowMDoxNi0wNzowMJIFAFkAAAAASUVORK5CYII=');
 
@@ -983,22 +975,11 @@ $avatarZIndexStart: 1000;
 		z-index: $avatarZIndexStart - $z;
 
 		&.user-icon {
-			// & .tooltiptext {
-			// 	left: #{ ($avatarOffset * $z) + $avatarMargin };
-			// }
 			box-shadow: 0px 1px 2px 2px rgba(0,0,0,0.05);
 			border: 2px solid transparent;
-			// span {
-			// 	font-size: 11px;
-			// }
 			&:hover {
 				border: 2px solid #ECA736;
 				z-index: 1001;
-				span {
-					// position: absolute;
-					// top: -2px;
-					// left: 6px;
-				}
 			}
 		}
 	}

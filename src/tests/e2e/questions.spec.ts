@@ -146,13 +146,13 @@ describe('Reading Questions Tests', () => {
   
             // Login
              guestForm.loginAsGuest(); // 
-            browser.wait(EC.elementToBeClickable(sidebar.logOutButton));
+            browser.wait(EC.elementToBeClickable(sidebar.avatarActionIcon));
         }); // beforeAll
 
         afterAll(() => {
             // log out
-            browser.wait(EC.elementToBeClickable(sidebar.logOutButton), 5000, "never found the logout button");
-            sidebar.logout();
+            browser.wait(EC.elementToBeClickable(sidebar.avatarActionIcon), 5000, "never found the avatar dropdown button");
+            sidebar.clickLogOutButton();
         }); // afterAll
 
         /*
