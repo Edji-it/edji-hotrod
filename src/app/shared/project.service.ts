@@ -190,11 +190,23 @@ export class ProjectService {
         return this.http.get(this._auth.getUrl() + '/projects/' + encodeURIComponent(projectCode) + '?pop=reading_id', this._auth.getOptions())
             .map(
                 (data) => {
-                    this.project = data.json().project; //can later have local setter to do validation/data manipulation before passing through observable
-                    this.currentProjectSource.next(this.project);
+                    let project = data.json().project; //can later have local setter to do validation/data manipulation before passing through observable
                     // Clear stats object
                     this._commentStats.resetStats()
-                    this.project.comments.reverse()
+                    /**
+                     * Set up our comments array
+                     * - Hide other user's comments without contents
+                     * - Reverse
+                     */
+                    project.comments = project.comments.filter(comment => {
+                        // If the comment has data/url (meaning they've filled out the comment) or its the current users comment
+                        return !this.isCommentHiddenDraft(comment)
+                    })
+                    project.comments.reverse()
+                    // Now that our project comments are ready, set it to the shared source!
+                    this.project = project
+                    this.currentProjectSource.next(this.project);
+                    // Return the project along the current Observable
                     return this.project;
                 });
     }
@@ -375,19 +387,23 @@ export class ProjectService {
         if (alwaysHighlight) {
             // loop through all of the indexes (corresponding to words) and increment their highlights
             for (var i = comment.start; i <= comment.end; i ++) {
-                // if true, means there's already a highlight
-                if (alwaysHighlightArray[i]) {
-                    alwaysHighlightArray[i]++;
-                } else {
-                    alwaysHighlightArray[i] = 1;
+                if (this.isCommentVisible(comment)) {
+                    // if true, means there's already a highlight
+                    if (alwaysHighlightArray[i]) {
+                        alwaysHighlightArray[i]++;
+                    } else {
+                        alwaysHighlightArray[i] = 1;
+                    }
                 }
             }
         } else {
             for (var i = comment.start; i <= comment.end; i ++) {
-                if (highlightArray[i]) {
-                    highlightArray[i]++;
-                } else {
-                    highlightArray[i] = 1;
+                if (this.isCommentVisible(comment)) {
+                    if (highlightArray[i]) {
+                        highlightArray[i]++;
+                    } else {
+                        highlightArray[i] = 1;
+                    }
                 }
             }
         }
@@ -685,12 +701,14 @@ export class ProjectService {
         for (let i = 0; i < len2; i++) {
             let comment = commentsArray[i]
             
+            // If the comment has data/url (meaning they've filled out the comment)
+            let dataInComment = ((comment.data && comment.data != '') || comment.url && comment.url != '') || comment.user_id == this.user._id
             // If user is current reading Owner/Teacher or Heat Vision is on, show all comments
-            let heatVisible = (this.project.heat_vision || this.user._id == this.project.teacher_id) 
+            let heatVisible = (this.project.heat_vision || (this.user._id == this.project.teacher_id))
             // Your own comments and the Owner/Teacher's comments are ALWAYS visible
-            let alwaysVisible = comment.user_id == this.user._id || comment.user_id == this.project.teacher_id
+            let alwaysVisible = comment.user_id == this.user._id || (comment.user_id == this.project.teacher_id)
 
-            if (comment && !comment.reply_to && !comment.questionId && comment.lineY && (heatVisible || alwaysVisible)) {
+            if (comment && !comment.reply_to && !comment.questionId && comment.lineY && this.isCommentVisible(comment)) {
                 // lineY is determined by each individual CommentComponent
                 let lineY = comment.lineY
                 // Push the comment into commentByPos based on the lineY number
@@ -702,6 +720,21 @@ export class ProjectService {
             }
         }
         this.commentByPosSubject.next(this.commentByPosSource)
+    }
+
+    public isCommentVisible(comment: any): boolean {
+        // If the comment has data/url (meaning they've filled out the comment) or its the current users comment
+        // let dataInComment = ((comment.data && comment.data != '') || comment.url && comment.url != '') || comment.user_id == this.user._id
+        // If user is current reading Owner/Teacher or Heat Vision is on, show all comments
+        let heatVisible = (this.project.heat_vision || (this.user._id == this.project.teacher_id))
+        // Your own comments and the Owner/Teacher's comments are ALWAYS visible
+        let alwaysVisible = comment.user_id == this.user._id || (comment.user_id == this.project.teacher_id)
+
+        return  (heatVisible || alwaysVisible)
+    }
+
+    public isCommentHiddenDraft(comment: any): boolean {
+        return ((!comment.data || comment.data == '') && (!comment.url || comment.url == '')) && comment.user_id != this.user._id
     }
 } // class
 
