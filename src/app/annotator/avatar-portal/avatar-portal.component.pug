@@ -1,5 +1,5 @@
 //- Desktop Avatar Icons
-.user-icon.hidden-md-down(
+.user-icon.pointer.hidden-md-down(
   *ngIf="indexOnLine<9",
   (tap)='triggerCommentPane(true)',
   [ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '','avatar-count-' + indexOnLine, 'avatar-' + comment.type ]"
