@@ -126,12 +126,19 @@ $largeAvatarSize: 50px;
 .outer-circle {
   border-radius: 50%;
   border: rgba(0,0,0,0.075) solid 1px;
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+   -khtml-user-select: none; /* Konqueror HTML */
+     -moz-user-select: none; /* Firefox */
+      -ms-user-select: none; /* Internet Explorer/Edge */
+          user-select: none; /* Non-prefixed version, currently
+                                supported by Chrome and Opera */
   &--large {
     @extend .outer-circle;
     height: 54px;
     width: 54px;
     margin-top: .4em;
-    margin-right: .4em;
+    margin-right: .8em;
   }
   & .user-icon {
     margin: 1px;
