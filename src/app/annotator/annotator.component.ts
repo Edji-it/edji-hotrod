@@ -238,6 +238,11 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                     }
                 }
                 
+                // If comment is updated to be empty, we consider a "DRAFT", and deleted to other users
+                if(this._projects.isCommentHiddenDraft(commentUpdate.comment)) {
+                    commentUpdate.action = 'DELETE'
+                }
+
                 // Process different live comment updates
                 if (commentUpdate.action === 'DELETE') {
                     if (cIndex > -1) {
@@ -255,14 +260,18 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                         comment.createdAt = Date.now()
                         // Sometimes an UPDATE comes through for comment not yet created
                         // Add highlights to local array
-                        this.incrementHighlights(this.user._id === comment.user_id || this.project.teacher_id == comment.user_id, comment.start, comment.end)
+                        if (this._projects.isCommentVisible(comment)) {
+                            this.incrementHighlights(this.user._id === comment.user_id || this.project.teacher_id == comment.user_id, comment.start, comment.end)
+                        }
                         this.commentsByIndexAdd(comment, wIndex, true)
                     }
                 } else if (commentUpdate.action === 'CREATE') {
                     // Socket updates don't come through with a timestamp
                     comment.createdAt = Date.now()
                     // Add highlights to local array
-                    this.incrementHighlights(this.user._id === comment.user_id || this.project.teacher_id == comment.user_id, comment.start, comment.end)
+                    if (this._projects.isCommentVisible(comment)) {
+                        this.incrementHighlights(this.user._id === comment.user_id || this.project.teacher_id == comment.user_id, comment.start, comment.end)
+                    }
                     this.commentsByIndexAdd(comment, wIndex, true)
                 }
             }, (error) => {
@@ -443,14 +452,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             this.optionsShow = false
             this.imageHotspotPlaceholder.preview = false
         }
-    }
-
-    isCommentVisible(comment: any) : boolean {
-        // If current user is Owner/Teacher or heat vision is on
-        let heatVisible = this.project.heat_vision || this.user._id == this.project.teacher_id
-        // Otherwise visible if Owner/Teacher comment or current user's comment
-        let alwaysVisible = comment.user_id == this.user._id || comment.user_id == this.project.teacher_id
-        return heatVisible || alwaysVisible
     }
 
     updateImageHeights(): void {
