@@ -64,6 +64,13 @@ nav-bar([showDashboardOptions]="true")
                                     [ngClass]="[ w ? w.styles.join(' ') : '' ]"
                                 )
                                 | {{ (!(w && w.styles) || (w && w.styles.indexOf('space')) > -1) ? '&nbsp;' : w && w.str }}
+                                div(*ngIf="w && w.styles.indexOf('img') > -1")
+                                    //- Image: Display image for image "word"
+                                    img.reading-image(
+                                        [attr.id]="'readingImage' + i",
+                                        [attr.index]="i",
+                                        [src]="w.url"
+                                    )
                             span.w &hellip;
                 </ng-template>
             </p-dataList>

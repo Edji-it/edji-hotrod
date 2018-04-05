@@ -93,3 +93,19 @@
     overflow-y: hidden;
     width:100%;
 }
+
+.feed__reading-preview > .w.img ~ .w.img:not(:first-child) {
+    display: none;
+}
+
+.feed__reading-preview > .w.img {
+    float: right;
+    & img {
+        max-height: 168px;
+        max-width: 225px;
+    }
+}
+
+// .w.br {
+//     height: 4px;
+// }
