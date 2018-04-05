@@ -155,7 +155,7 @@ scroll-progress([scrollProgress]="currentScroll")
                     img.reading-image(
                         [attr.id]="'readingImage' + i",
                         [attr.index]="i",
-                        [src]="w.url.replace('http://','//')",
+                        [src]="w.url",
                         (load)="updateImageHeights()"
                     )
                 //- Question Words: Display question component
