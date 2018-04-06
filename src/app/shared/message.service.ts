@@ -46,23 +46,25 @@ export class MessageService {
    */
   private subscribeToRefresh(): void {
     // Subscribe to the timer and run it every minute
-    this.timerSubscription = Observable.timer(0, 60000).subscribe(() => 
-      // Make the call to getMessages and subscribe to its observable
-      this.getMessages().subscribe((data: any) => {
-        let messages = data.messages
-        let msgLen = messages.length
-        // Check through the messages
-        for(var i=0; i < msgLen; i++) {
-          let message = messages[i]
-          // Refresh the user if message is 'user_refresh_required'
-          if (message.key==='user_refresh_required') {
-            this._auth.refreshUser()
+    this.timerSubscription = Observable.timer(0, 60000).subscribe(() => {
+      if (this._auth.getUser().isLoggedIn) {
+        // Make the call to getMessages and subscribe to its observable
+        this.getMessages().subscribe((data: any) => {
+          let messages = data.messages
+          let msgLen = messages.length
+          // Check through the messages
+          for(var i=0; i < msgLen; i++) {
+            let message = messages[i]
+            // Refresh the user if message is 'user_refresh_required'
+            if (message.key==='user_refresh_required') {
+              this._auth.refreshUser()
+            }
           }
-        }
-      }, (err) => {
-        console.error(err)
-      })
-    )
+        }, (err) => {
+          console.error(err)
+        })
+      }
+    })
   }
 }
 

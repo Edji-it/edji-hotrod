@@ -177,7 +177,7 @@ export class AuthService implements CanActivate {
         this.currentUserSource.next(this.user);
     }
 
-    /** Stores an object in local storage for you - your welcome */
+    /** Stores an object in local storage for you - you're welcome */
     public store(key: string, value: any): void {
         if (key != "user" && key != "token") {
             this.locker.set(key, value);
@@ -703,6 +703,21 @@ export class AuthService implements CanActivate {
         //     // shouldn't actually get this, should just be a redirect
         // })
         window.location.href = [this.baseUrl, 'auth', 'google'].join("/")
+    }
+
+    /**
+     * Gets the existing user who referred the new user
+     * @param referral_id is the referral id we'll be searching by to find the user
+     */
+    public getUserByReferralId(referral_id: any): Observable<any> {
+        return this.legacyHttp.get(this.baseUrl + '/users/referral/' + referral_id, this.getOptions())
+            .map( res => {
+                let data = res.json() || {}
+                let user = data.user
+                return user
+            }).catch( err => {
+                return err
+            })
     }
 }
 
