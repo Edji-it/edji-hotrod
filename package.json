@@ -21,7 +21,7 @@
     "clean": "npm cache clean && npm run rimraf -- node_modules doc coverage dist",
     "deploy:dev": "grunt bump && npm run build:prod && grunt push:dev && grunt cloudfront:dev",
     "deploy:dev:minor": "grunt bump:minor && npm run build:prod && grunt push:dev && grunt cloudfront:dev",
-    "deploy:prod": "grunt checkbranch:master:true && npm run protractor && npm run build:prod && grunt push:prod && grunt cloudfront:prod",
+    "deploy:prod": "grunt checkbranch:master:true && npm run build:prod && grunt push:prod && grunt cloudfront:prod",
     "deploy:prod:5": "grunt checkbranch:master:true && npm run protractor:5 && npm run build:prod && grunt push:prod && grunt cloudfront:prod",
     "dev": "npm run server:dev",
     "docker": "docker",
