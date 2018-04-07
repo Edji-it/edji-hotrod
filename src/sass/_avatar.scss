@@ -2,6 +2,7 @@ $defaultAvatarSize: 28px;
 $largeAvatarSize: 50px;
 
 .user-icon {
+  position: relative;
   height: $defaultAvatarSize;
   width: $defaultAvatarSize;
   line-height: $defaultAvatarSize - 5px;
@@ -45,15 +46,20 @@ $largeAvatarSize: 50px;
     cursor: pointer;
   }
   &__initials, .user-icon__overflow {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    left: 25%;
+    // Text Style
+    font-family: 'Open Sans';
     font-weight: 500;
     color: #fff;
     font-size: 12px;
-    vertical-align: middle;
     text-transform: uppercase;
+    // Centering
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 0px;
+    display: block;
+    width:100%;
+    text-align: center;
   }
   &__overflow {
     content: '';

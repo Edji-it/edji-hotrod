@@ -56,6 +56,11 @@
 
 $fireBoundVPad: 40px;
 
+// We only want this margin remove in this component
+.user-icon {
+    margin-right: 0px;
+}
+
 .fireBound {
     padding: 0px 0px $fireBoundVPad;
     overflow: hidden;

@@ -1,6 +1,6 @@
 .fireBound([ngClass]="[ commentMobile ? 'fireBlock-mobile-comment' : '' ]")
   .user-icon.firefeed([ngClass]="[ commentMobile ? 'fireBlock-mobile-comment' : '' ]")
-    span {{fireComment.author.substring(0,2)}}
+    .user-icon__initials {{fireComment.author.substring(0,2)}}
   .fireBlock([ngClass]="[ commentMobile ? 'fireBlock-mobile-comment' : '' ]")
     .list-item.list-item--block.fireTime-card
       | {{fireComment.author}}
