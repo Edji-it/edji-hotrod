@@ -253,6 +253,27 @@
     display: none !important;
 }
 
+// Sharing Icons
+.icon-email {
+    @include icon('icon-email.svg');
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+}
+
+.icon-facebook {
+    @include icon('icon-facebook.svg');
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+}
+
+.icon-twitter {
+    @include icon('icon-twitter.svg');
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+}
 
 // Acquired font awesome styles
 .fa {-moz-osx-font-smoothing: grayscale;
