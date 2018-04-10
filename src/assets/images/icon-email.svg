@@ -1,33 +1,16 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="121px" height="100px" viewBox="0 0 121 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
-    <title>Edji pattern</title>
-    <desc>Created with Sketch.</desc>
-    <defs>
-        <rect id="path-1" x="0" y="0.985908225" width="120.364916" height="98.9002876" rx="6"></rect>
-        <rect id="path-3" x="0.214796238" y="169.91586" width="248.979108" height="189.721897"></rect>
-        <mask id="mask-4" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="248.979108" height="189.721897" fill="white">
-            <use xlink:href="#path-3"></use>
-        </mask>
-        <rect id="path-5" x="60.2303323" y="129.235134" width="103" height="103"></rect>
-        <mask id="mask-6" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="103" height="103" fill="white">
-            <use xlink:href="#path-5"></use>
-        </mask>
-    </defs>
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Edji-pattern" transform="translate(0.184279, 0.000000)">
-            <mask id="mask-2" fill="white">
-                <use xlink:href="#path-1"></use>
-            </mask>
-            <use id="Mask" fill="#D8D8D8" xlink:href="#path-1"></use>
-            <g mask="url(#mask-2)" stroke="#FFFFFF">
-                <g transform="translate(-51.149075, -190.759610)">
-                    <use id="Rectangle-11" mask="url(#mask-4)" stroke-width="6" fill="#FFCD80" fill-rule="evenodd" xlink:href="#path-3"></use>
-                    <use id="Rectangle-12" mask="url(#mask-6)" stroke-width="12" fill="#FEF282" fill-rule="evenodd" transform="translate(111.730332, 180.735134) rotate(45.000000) translate(-111.730332, -180.735134) " xlink:href="#path-5"></use>
-                    <path d="M173.464796,242.25961 L123.210355,291.514051" id="Line-Copy-7" stroke-width="6" stroke-linecap="square" fill="none" transform="translate(148.464796, 266.759610) scale(-1, 1) translate(-148.464796, -266.759610) "></path>
-                    <path d="M99.4647962,243.25961 L49.2103548,292.514051" id="Line-Copy-8" stroke-width="6" stroke-linecap="square" fill="none"></path>
-                </g>
-            </g>
-        </g>
-    </g>
+<svg width="44" height="44" viewBox="0 0 44 44" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<title>image 4.2</title>
+<desc>Created using Figma</desc>
+<g id="Canvas" transform="translate(-1223 -1328)">
+<g id="image 4.2">
+<use xlink:href="#path0_fill" fill="url(#pattern0)" transform="translate(1223 1328)"/>
+</g>
+</g>
+<defs>
+<pattern id="pattern0" patternUnits="objectBoundingBox" patternContentUnits="objectBoundingBox" width="1" height="1">
+<use xlink:href="#image0" transform="matrix(0.015625 0 0 0.015625 0 0)"/>
+</pattern>
+<path id="path0_fill" d="M 0 0L 44 0L 44 44L 0 44L 0 0Z"/>
+<image id="image0" width="64" height="64" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAADQ0lEQVR4Ae2ZOcsUQRCGH28UQVADA3+CmWBmqnifkSIiiCeieN+3KIggIpiYiKgoImhkJAiesX9AMBNEA++bF6ahKGad69vZ4bMalp6jpvqtZ7p7unohShAIAkEgCASBIBAEgkAQCAJBIAgEgSDwvxEYUTHgkcB0YFTF59oy/w28AVSXKlUBTAZeAVNKeW/f6D0wA3hXtunRZQ2N3QRgnDnv0qG0VXqpdQD47vUVeAhoeFRqvCE5tTsbmGb8eG3m1tAcagioe/0xv5/AkaFxX8nLQuCD0SFNGgJTK3mpaGwBfHaNn67oq4n5SuC7a791AI+BrU7EySZRlXx2hQv+KvAs09FqD3ieCd7hIBwrGUgds+Uu+GuZE72M1nvASxPBbgehH3PCUuCbaed6NvFKxkB6wAsDQId7jTi9jYPufpPTJS74GyZ4+X06iB7gAUjIAQdhf5Oos2cXA/rkCap+N3NWop0BIM2HjVgJ3tMAwiLgi/F3Kyd4ue8UAAk6akQLwq4aEBa44G8DvRZunQOgeE84CPpalC3zAbvOuPOP4OWzkwAk7JSDsK0EgXku+LvAmILnOgtAurU4ShOYai2eepW5wCdjnzfh5T1bG4ASmH6XSa6By8Amd02nc4B7gDK6VDQMfqWTLtQ2F8j7DHqNCta+fXu80Rgr+I89bLXULSq1e0CRY3+/CoCLLqDVwBl3TeNby1n7qdNsvwZQlpmAXfFC3HnnAJw34hXEOiPYg0lBqn5gNltWZd0/3b9kfPjDTgE464Lf4NUCO4HXxu4tIGhjne1aYyMQF9z9dNoZAP6ztyUpzKknAjOBWQWbGOsdhHM5vjoBwK/+tucIrXtps4PgN18GAsCmw8r80lhVXWfpWwRHiyjbht13GEg6nDZE/F7AvqJIGtzX3GEhKPtUeZJdb3VHSLsw/q0oE+x3EWALQTnGo0EAsMmKBB3vd+TGv0+5k5ZWe0B6Cz+AQ0ZcW4fqCWo76VBdGUCv/LpKEBKhz9n9Fv8YUbDKEbQ13iiGOg/7BGo8sKwKsT7aem2FTdUBoPGmoLtY0lxQWlvV//JEeFj9PV6aVBgGgSAQBIJAEAgCQSAIBIEgEASCQBAIAsOGwF9TJ2LH708b6gAAAABJRU5ErkJggg=="/>
+</defs>
 </svg>
