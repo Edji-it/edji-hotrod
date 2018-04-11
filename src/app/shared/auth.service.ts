@@ -196,6 +196,11 @@ export class AuthService implements CanActivate {
         }
     }
 
+    /** Check if object is in local storage */
+    public checkStorage(key: string): any {
+        return this.locker.has(key)
+    }
+
     login(user: any) {
         let data = {
             'user': {
