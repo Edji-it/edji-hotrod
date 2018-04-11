@@ -35,6 +35,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription[] = []
     private liveCountSubscription: Subscription
     private showCommentCounts: boolean = false
+    private showReferralModal: boolean = false
     private mNavShow: boolean = false
     private isMobile: boolean = false
     private powersLoading: {
