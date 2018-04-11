@@ -209,7 +209,10 @@ export class RegisterComponent implements OnInit, OnDestroy {
             // default case where nothing special happens
             this._router.navigate(['/dashboard'])
           }
-          
+          // If the locker has a referral_id and we ended up here, that means we're not signing up with oauth and we need to clear the locker of this key
+          if (this._auth.checkStorage('referral_id')) {
+            this._auth.deleteFromStorage('referral_id')
+          }
         } else {
           // TRACK EXCEPTION... there was no data
           this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'failure' }})
