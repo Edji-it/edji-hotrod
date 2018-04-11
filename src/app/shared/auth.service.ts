@@ -629,7 +629,7 @@ export class AuthService implements CanActivate {
     }
 
     public validateHeroCoupon(couponCode: string) : Observable<any> {
-        return this._http.get(this.baseUrl + "/api/v1/subscriptions/coupons/" + couponCode,
+        return this._http.get(this.baseUrl + "/subscriptions/coupons/" + couponCode,
             { headers: new HttpHeaders({
                 'Content-Type': 'application/json',
                 'Authorization': this.getToken() ? this.getToken() : ""
