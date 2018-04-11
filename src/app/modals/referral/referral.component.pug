@@ -1,0 +1,16 @@
+.modal-will-fade([class.show]="showReferral", *ngIf="showReferral")
+  .modal
+    .modal-dialog(role="document")
+      .modal-content
+        .modal-header
+          h4.modal-title Give Hero, Get Hero
+          button.close.btn-icon--round(
+              (click)="closeModal()",
+              type="button",
+              data-dismiss="modal",
+              aria-label="Close"
+             )
+            span(aria-hidden="true") &times;
+        .modal-body
+          
+        .modal-footer
