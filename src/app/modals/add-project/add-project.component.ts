@@ -47,7 +47,7 @@ export class AddProjectModal implements OnInit {
       customCode: ''
     });
 
-    this.canChooseTypes = this._auth.getUser().hero && this._auth.getUser().hero.active
+    this.canChooseTypes = this._auth.getUser().hero_status
   }
 
   /**

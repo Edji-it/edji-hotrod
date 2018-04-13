@@ -14,6 +14,7 @@ interface BaseUser {
   fullname: string,
   email: string,
   identities?: string[],
+  hero_status?: boolean,
   hero?: {
     active: boolean,
     will_expire?: Date,

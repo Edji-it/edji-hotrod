@@ -62,7 +62,7 @@ export class AccountComponent implements OnInit, OnDestroy {
         .subscribe((params: any) => { 
           if(params && params['secretSwitch']){
               this._auth.secretSwitches[params['secretSwitch']] = true;
-              if (this._auth.secretSwitches['heroAvailable'] || (this.currentUser.hero && this.currentUser.hero.active)) {
+              if (this._auth.secretSwitches['heroAvailable'] || this.currentUser.hero_status) {
                   this.heroAvailable = true
               }
           }
@@ -73,7 +73,7 @@ export class AccountComponent implements OnInit, OnDestroy {
       let params = this.route.snapshot.params
       if(params && params['secretSwitch']){
           this._auth.secretSwitches[params['secretSwitch']] = true;
-          if (this._auth.secretSwitches['heroAvailable'] || (this.currentUser.hero && this.currentUser.hero.active)) {
+          if (this._auth.secretSwitches['heroAvailable'] || this.currentUser.hero_status) {
               this.heroAvailable = true
           }
       }

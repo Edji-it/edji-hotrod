@@ -171,7 +171,7 @@ export class NewReadingPage implements OnInit {
         if (this.readingId) {
             this.getReading(this.readingId)
         } else if (this.copyId) {
-            this.getReading(this.copyId, !this._auth.getUser().hero || !this._auth.getUser().hero.active)
+            this.getReading(this.copyId, !this._auth.getUser().hero_status)
         }
 
         this._title.setTitle('Edji | New Reading')

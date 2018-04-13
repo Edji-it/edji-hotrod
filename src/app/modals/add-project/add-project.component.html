@@ -50,7 +50,7 @@
                   </div>
                   <p *ngIf="commentTypes.indexOf('audio') > -1" class="label--gray"><span class="beta-tag">(BETA)</span>&nbsp;Beta features may not work on all devices.</p>
                   <!--</label>-->
-                <div *ngIf="user.hero && user.hero.active" class="form-group">
+                <div *ngIf="user.hero_status" class="form-group">
                     <label for="customCodeInput">Custom Code
                         <input [formControl]="projectForm.controls['customCode']" id="customCodeInput" type="text" class="form-control form-item--editor h3 mGroup" placeholder="(optional)" style="text-transform:lowercase;"/>
                     </label>
