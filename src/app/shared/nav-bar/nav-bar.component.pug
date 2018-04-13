@@ -38,7 +38,7 @@
       .avatar__wrap
         #avatarActionIcon.user-icon--large.pointer.float-right((click)="showAvatarDropdown=!showAvatarDropdown", (clickOutside)="showAvatarDropdown=false")
           span.user-icon__initials {{user.fullname.substring(0,2)}}
-          span.hero-tag.avatar-bottom(*ngIf="user.hero && user.hero.active", title="Hero Powers Activated") H
+          span.hero-tag.avatar-bottom(*ngIf="user.hero_status", title="Hero Powers Activated") H
         .avatar__drop-down.list-group(*ngIf="showAvatarDropdown", [class.visible]="showAvatarDropdown")
           .arrow
           //- Account
@@ -58,7 +58,7 @@
             span.list-icon--right([innerHtml]="':outbox_tray:' | emojione")
 
     //- Go hero action (non-existent if already a hero)
-    .nav__btn-wrap(*ngIf="!showProjectInfo && (!user.hero || !user.hero.active)")
+    .nav__btn-wrap(*ngIf="!showProjectInfo && (!user.hero_status)")
       a#heroLink.btn.btn-clear.nav-bar__btn.hidden-sm-down.link([routerLink]="['/hero']", routerLinkActive="active") Go Hero!
 
     //- Project Info (Desktop & Mobile)
@@ -84,7 +84,7 @@
             .input-group
               input#firstProjectLabel.form-control.form-item--editor.h3.mGroup([(ngModel)]="groupLabel", type="text", placeholder="eg. First Period, Peer review...")
             #errorGroupLabel.alert.alert-info(*ngIf="groupLabel.length < 1 && messages.groupNameLengthError") Please pick a name for your first Reading Group!
-        .form-group(*ngIf="user.hero && user.hero.active")
+        .form-group(*ngIf="user.hero_status")
           label(for="customCodeInput") Custom Code
             input#customCodeInput.form-control.form-item--editor.h3.mGroup([(ngModel)]="customCode", type="text", placeholder="(optional)", style="text-transform:lowercase;")
           #errorInvalidCustomCode.alert.alert-warning(*ngIf="messages.invalidCode") Whoops, someone is already using that group code. Could you pick another?

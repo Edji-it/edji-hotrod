@@ -43,6 +43,7 @@
     "protractor:mobile": "node ./node_modules/webdriver-manager update && protractor protractor-mobile.conf.js",
     "protractor:test": "node ./node_modules/webdriver-manager update && protractor",
     "protractor:5": "node ./node_modules/webdriver-manager update && protractor --capabilities.maxInstances=5",
+    "protractor:25": "node ./node_modules/webdriver-manager update && protractor --capabilities.maxInstances=25",
     "protractor:ci": "node ./node_modules/webdriver-manager update && protractor --disable-extensions --headless --disable-gpu --no-sandbox --capabilities.maxInstances=5",
     "rimraf": "rimraf",
     "server:dev:hmr": "npm run server:dev -- --inline --hot",

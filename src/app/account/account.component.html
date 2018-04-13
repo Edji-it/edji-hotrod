@@ -19,7 +19,7 @@
             <!-- Edit Profile Picture Button 
                 - Opens UploadProfPicModal -->
                 <!--THIS IS NOT READY TO EXPOSE-->
-            <!--<button *ngIf="currentUser.hero && currentUser.hero.active" id="editAvatarBtn" type="button" class="btn btn-sm edit-btn" (click)="showUploadProfPicModal= true;">Edit</button>-->
+            <!--<button *ngIf="currentUser.hero_status" id="editAvatarBtn" type="button" class="btn btn-sm edit-btn" (click)="showUploadProfPicModal= true;">Edit</button>-->
         </div>
     </div>
 
@@ -48,13 +48,13 @@
         </div>
 
         <!--Hero Subscription Mgmt-->
-        <div *ngIf="heroAvailable || (currentUser.hero && currentUser.hero.active)" class="info-group">
+        <div *ngIf="heroAvailable || currentUser.hero_status" class="info-group">
             <div class="info">
-                <span *ngIf="currentUser.hero.active" class="text-capitalize mr-4" style="display:inline-block;">Subscribed ({{ currentUser.hero.subscription_type }})</span>
-                <span *ngIf="!currentUser.hero.active" class="mr-4">Unsubscribed</span>
+                <span *ngIf="currentUser.hero_status" class="text-capitalize mr-4" style="display:inline-block;">Subscribed (Yearly)</span>
+                <span *ngIf="!currentUser.hero_status" class="mr-4">Unsubscribed</span>
 
-                <button *ngIf="currentUser.hero.active" id="heroModifyBtn" class="btn btn-secondary mr-4" (click)="showHeroChangeModal = true">Modify</button>
-                <button *ngIf="!currentUser.hero.active || expired || expiring" class="btn btn-hero mr-4" (click)="showHeroSubModal = true; trackHeroClick()">Go Hero</button>
+                <button *ngIf="currentUser.hero_status" id="heroModifyBtn" class="btn btn-secondary mr-4" (click)="showHeroChangeModal = true">Modify</button>
+                <button *ngIf="!currentUser.hero_status || expired || expiring" class="btn btn-hero mr-4" (click)="showHeroSubModal = true; trackHeroClick()">Go Hero</button>
                 
                 <div class="alert alert-warning my-1" *ngIf="expired">Your Hero subscription expired {{ currentUser.hero.will_expire | edjidate:'timeStamp':'mediumDate' }}</div>
                 <div class="alert alert-info my-1" *ngIf="expiring">Your Hero subscription will expire {{ currentUser.hero.will_expire | edjidate:'timeStamp':'mediumDate' }}</div>

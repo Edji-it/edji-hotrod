@@ -646,14 +646,14 @@ export class AuthService implements CanActivate {
             status : statusChange
         }
 
-        return this.legacyHttp.put(this.baseUrl + '/subscriptions', data, this.getOptions())
+        return this.legacyHttp.put(this.baseUrl + '/api/v1/subscriptions', data, this.getOptions())
             .map( res => {
                 return res.json()
             })
     }
 
     public cancelHeroSubscription(subscriptionId: string) {
-        return this.legacyHttp.delete([this.baseUrl, 'subscriptions', subscriptionId].join("/"), this.getOptions())
+        return this.legacyHttp.delete([this.baseUrl, 'api/v1/subscriptions', subscriptionId].join("/"), this.getOptions())
             .map((res) => {
                 return res.json() || {}
             })
