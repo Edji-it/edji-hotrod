@@ -19,3 +19,20 @@
 .referral__gradient-5 {
   color: #FF5C5C;
 }
+
+#buttonCopyReferralLink {
+  border-radius: 0.2rem;
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+}
+
+.form-control[disabled] {
+  text-align: center;
+  font-weight: 500;
+  background-color: initial;
+  cursor: text;
+  &:hover {
+    border: 1px solid #dce3ea;
+    z-index: 0;
+  }
+}

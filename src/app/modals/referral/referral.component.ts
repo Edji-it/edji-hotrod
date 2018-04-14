@@ -12,6 +12,9 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class ReferralModalComponent implements OnInit, OnDestroy {
 
+  private referralLink: string
+  private referralCode: string
+
   @Input() private showReferral: boolean
   @Output() private hideReferral: EventEmitter<boolean> = new EventEmitter()
 
@@ -27,7 +30,10 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    
+    // Set the referral code for copying and sharing
+    this.referralCode = "CODE"
+    // Set the link for the url for referral purposes
+    this.referralLink = "https://edji.it/r/" + this.referralCode
   }
 
   ngOnDestroy() {
@@ -40,7 +46,7 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
   }
 
   private copyReferralCode() {
-    console.log("clicked")
-
+    console.log(this.referralLink)
+    
   }
 }
