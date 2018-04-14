@@ -12,12 +12,23 @@
              )
             span(aria-hidden="true") &times;
         .modal-body
-          //- Some Text
           p.small Share your unique referral link to give 
             i and 
             | unlock Hero discounts.
           //- Text field - use form style (not editable)
-
+          .input-group
+            input#copyreferralCode.form-control(
+              name="ProjectCodeInput", 
+              type="text", 
+              style="text-align: center;",
+              readonly="true"
+              placeholder="🔑 Code")
+            span.input-group-btn
+              button#buttonCopyReferralLink.btn.btn-primary(
+                type="button", 
+                (click)="copyReferralCode()", 
+                name="Copy", 
+                href="#") Copy
           //- button to copy use form style
 
           //- mail icon

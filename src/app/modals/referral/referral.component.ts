@@ -13,6 +13,7 @@ import { ActivatedRoute } from '@angular/router';
 export class ReferralModalComponent implements OnInit, OnDestroy {
 
   @Input() private showReferral: boolean
+  @Output() private hideReferral: EventEmitter<boolean> = new EventEmitter()
 
   private subscriptions: Subscription[] = []
 
@@ -35,5 +36,11 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
 
   private closeModal() {
     this.showReferral = false
+    this.hideReferral.emit(false)
+  }
+
+  private copyReferralCode() {
+    console.log("clicked")
+
   }
 }

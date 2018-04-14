@@ -45,7 +45,7 @@
           button#accountButton.list-group-item.list-group-item-action(type="button", [routerLink]="['/account']") {{ user.fullname }}
             span.list-icon--right([innerHtml]="':gear:' | emojione")
           //- Refer
-          button.list-group-item.list-group-item-action(type="button", (click)="showReferralModal=!showReferralModal") Refer Teachers
+          button.list-group-item.list-group-item-action(type="button", (click)="showReferralModal=true") Refer Teachers
             span.list-icon--right([innerHtml]="':satellite:' | emojione")
           //- Feedback
           button.list-group-item.list-group-item-action(type="button", (click)="openFeedback()") Contact Us
@@ -144,4 +144,4 @@
   #projectCodeError.invalid-feedback(*ngIf="errorObject.invalidCode", [innerHtml]="errorObject.invalidCode | emojione")
 
 share-code([showOpenReading]="_route.snapshot.queryParams.readingCodeModal")
-referral-modal([showReferral]="showReferralModal")
+referral-modal([showReferral]="showReferralModal", (hideReferral)="showReferralModal=false")
