@@ -59,7 +59,14 @@ export class MessageService {
             let message = messages[i]
             // Refresh the user if message is 'user_refresh_required'
             if (message.key==='user_refresh_required') {
-              this._auth.refreshUser()
+              this._auth.refreshUser().take(1).subscribe(
+                data => {
+                  // do something else with user, if need be
+                },
+                error => {
+                  console.error(error)
+                }
+              )
             }
           }
         }, (err) => {
