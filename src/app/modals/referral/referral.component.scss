@@ -31,8 +31,28 @@
   font-weight: 500;
   background-color: initial;
   cursor: text;
+  min-width: 240px;
+  font-size: 14px;
   &:hover {
     border: 1px solid #dce3ea;
     z-index: 0;
+  }
+}
+
+.share-icon__group {
+  float: right;
+  & .share-icon {
+    margin: 4px 5px 0 5px;
+    cursor: pointer;
+    &:hover {
+      background-color: $gray;
+      border-radius: 50%;
+    }
+    &:first-child {
+      margin-left: 0;
+    }
+    &:last-child {
+      margin-right: 0;
+    }
   }
 }

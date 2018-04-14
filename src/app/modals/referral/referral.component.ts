@@ -46,7 +46,32 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
   }
 
   private copyReferralCode() {
-    console.log(this.referralLink)
-    
+    let selBox = document.createElement('textarea')
+    selBox.style.position = 'fixed'
+    selBox.style.left = '0'
+    selBox.style.top = '0'
+    selBox.style.opacity = '0'
+    selBox.value = this.referralLink
+    document.body.appendChild(selBox)
+    selBox.focus()
+    selBox.select()
+    document.execCommand('copy')
+    document.body.removeChild(selBox)
+  }
+
+  private shareReferralCode(shareMedium: string) {
+    switch(shareMedium) {
+      case 'email':
+        console.log('email')
+        break
+      case 'twitter':
+        console.log('twitter')
+        break
+      case 'facebook':
+        console.log('facebook')
+        break
+      default:
+        this.copyReferralCode()
+    }
   }
 }
