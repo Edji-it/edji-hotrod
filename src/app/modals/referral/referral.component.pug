@@ -60,8 +60,10 @@
           .hidden-sm-down
             .row
               .col-2.p-0.referral-col(*ngFor="let referral of referralBlocks; let i=index")
-                .referral-block([ngClass]="['referral-block-' + i]")
+                .referral-block.text-center([ngClass]="['referral-block-' + i]")
+                  | H
           .hidden-md-up
             .row
               .col-2.p-0.referral-col.narrow-margin(*ngFor="let referral of referralBlocks; let i=index")
-                .referral-block.narrow([ngClass]="['referral-block-' + i]")
+                .referral-block.text-center.narrow([ngClass]="['referral-block-' + i]")
+                  | H

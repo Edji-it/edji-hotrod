@@ -3,9 +3,15 @@
 .referral-block {
   width: 80%;
   // height: 80px;
-  height:calc(100vw * 80 / 1280.0);
+  height: calc(100vw * 80 / 1280.0);
+  line-height: calc(100vw * 80 / 1280.0);
+  font-size: 28px;
+  font-weight: 800;
   &.narrow {
-    height:calc(100vw * 150 / 1280.0);
+    height: calc(100vw * 150 / 1280.0);
+    line-height: calc(100vw * 150 / 1280.0);
+    font-size: 16px;
+    font-weight: 800;
   }
   border: 2px dashed;
   &-0 {
