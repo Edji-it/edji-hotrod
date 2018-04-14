@@ -49,7 +49,9 @@ export class MessageService {
     this.timerSubscription = Observable.timer(0, 60000).subscribe(() => {
       if (this._auth.getUser().isLoggedIn) {
         // Make the call to getMessages and subscribe to its observable
-        this.getMessages().subscribe((data: any) => {
+        this.getMessages()
+        .take(1)
+        .subscribe((data) => {
           let messages = data.messages
           let msgLen = messages.length
           // Check through the messages
