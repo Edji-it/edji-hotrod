@@ -1,26 +1,48 @@
 @import '../../../sass/base/variables';
 
-.referral__gradient-1 {
-  color: #FDEF80;
+.referral-block {
+  width: 80%;
+  // height: 80px;
+  height:calc(100vw * 80 / 1280.0);
+  &.narrow {
+    height:calc(100vw * 150 / 1280.0);
+  }
+  border: 2px dashed;
+  &-0 {
+    color: #FDEF80;
+  }
+
+  &-1 {
+    color: #FCE180;
+  }
+
+  &-2 {
+    color: #FCCB80;
+  }
+
+  &-3 {
+    color: #FCA580;
+  }
+
+  &-4 {
+    color: #FF5C5C;
+  }
 }
 
-.referral__gradient-2 {
-  color: #FCE180;
+.referral-col {
+  margin: 0 5px 0 5px;
+  &.narrow-margin {
+    margin: 0;
+  }
+  &:first-child {
+    margin-left: 30px;
+  }
+  &:last-child {
+    margin-right: 0;
+  }
 }
 
-.referral__gradient-3 {
-  color: #FCCB80;
-}
-
-.referral__gradient-4 {
-  color: #FCA580;
-}
-
-.referral__gradient-5 {
-  color: #FF5C5C;
-}
-
-#buttonCopyReferralLink {
+.btn-rnd-corner-right {
   border-radius: 0.2rem;
   border-bottom-left-radius: 0;
   border-top-left-radius: 0;
@@ -37,10 +59,13 @@
     border: 1px solid #dce3ea;
     z-index: 0;
   }
+  &.input-small {
+    min-width: 180px;
+    font-size: 12px;
+  }
 }
 
 .share-icon__group {
-  float: right;
   & .share-icon {
     margin: 4px 5px 0 5px;
     cursor: pointer;

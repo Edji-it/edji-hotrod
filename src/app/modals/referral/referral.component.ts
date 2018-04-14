@@ -14,6 +14,7 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
 
   private referralLink: string
   private referralCode: string
+  private referralBlocks: any[]
 
   @Input() private showReferral: boolean
   @Output() private hideReferral: EventEmitter<boolean> = new EventEmitter()
@@ -34,6 +35,14 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
     this.referralCode = "CODE"
     // Set the link for the url for referral purposes
     this.referralLink = "https://edji.it/r/" + this.referralCode
+
+    this.referralBlocks = [
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
   }
 
   ngOnDestroy() {
