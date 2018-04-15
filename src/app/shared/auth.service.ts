@@ -726,7 +726,7 @@ export class AuthService implements CanActivate {
      */
     public getReferralProgress(userId: string) : Observable<any> {
         return this._http.get(
-            this.getUrl() + '/users/' + userId + '/referrals', 
+            this.getUrl() + '/api/v1/users/' + userId + '/referrals', 
             { headers: new HttpHeaders({
                 'Content-Type': 'application/json',
                 'Authorization': this.getToken()

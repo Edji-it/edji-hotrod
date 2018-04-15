@@ -138,3 +138,10 @@
   height: calc(100vw * 175 / 1280.0);
   width: calc(100vw * 175 / 1280.0);
 }
+
+.coupon-message {
+  position: absolute;
+  bottom: -75px;
+  height: 40px;
+  width: 180px;
+}

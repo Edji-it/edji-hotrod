@@ -65,13 +65,15 @@
           p.small.mb-3 Each teacher you refer that creates a reading will unlock a 20% discount towards Hero for both of you.
             | Complete 5 referrals to get a whole year of Hero free.
           //- referral "squares" -- Desktop
-          .hidden-sm-down
+          .hidden-sm-down([ngStyle]="{'margin-bottom': numberReferrals > -1 ? '75px' : '0px'}")
             .container
               .row
                 .col-2.p-0.referral-col(*ngFor="let referral of referralBlocks; let i=index", [ngClass]="['referral-col-' + i]")
                   .referral-block.text-center([ngClass]="['referral-block-' + i]")
                     | H
-                  .referral-icon(*ngIf="referralBlocks[i]", [ngClass]="getReferralIcon(i)")
+                  //- If referrals are completed, let's add a "stamp" over top and some coupon copy
+                  .referral-icon(*ngIf="referralBlocks[i].referred", [ngClass]="getReferralIcon(i)")
+                  .coupon-message(*ngIf="numberReferrals==i")
           //- referral "squares" -- Mobile
           .hidden-md-up
             .container
@@ -79,4 +81,5 @@
                 .col-2.p-0.referral-col.narrow-margin(*ngFor="let referral of referralBlocks; let i=index", [ngClass]="['referral-col-' + i]")
                   .referral-block.text-center.narrow([ngClass]="['referral-block-' + i]")
                     | H
-                  .referral-icon.referral-icon--narrow(*ngIf="referralBlocks[i]", [ngClass]="getReferralIcon(i)")
+                  //- If referrals are completed, let's add a "stamp" over top and some coupon copy
+                  .referral-icon.referral-icon--narrow(*ngIf="referralBlocks[i].referred", [ngClass]="getReferralIcon(i)")

@@ -2,7 +2,7 @@ import { Subscription } from 'rxjs/Rx';
 import { Project } from '../../shared/datatypes';
 import { Router } from '@angular/router';
 import { Component, EventEmitter, Input, OnInit, Output, OnDestroy } from '@angular/core';
-import { UtilToolService, ProjectService } from './../../shared'
+import { UtilToolService, ProjectService, AuthService } from './../../shared'
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -14,7 +14,8 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
 
   private referralLink: string
   private referralCode: string
-  private referralBlocks: any[]
+  private referralBlocks: any = []
+  private numberReferrals: number
 
   @Input() private showReferral: boolean
   @Output() private hideReferral: EventEmitter<boolean> = new EventEmitter()
@@ -25,24 +26,53 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private _util: UtilToolService,
-    private _projects: ProjectService
+    private _projects: ProjectService,
+    private _auth: AuthService
   ) {
     
   }
 
   ngOnInit() {
-    // Set the referral code for copying and sharing
-    this.referralCode = "CODE"
-    // Set the link for the url for referral purposes
-    this.referralLink = "https://edji.it/r/" + this.referralCode
-
-    this.referralBlocks = [
-      true,
-      true,
-      true,
-      true,
-      true
-    ]
+    // Let's ask the db how many referrals this user has through the auth service
+    this.subscriptions.push(
+      this._auth.getReferralProgress(this._auth.getUser()._id).subscribe((userReferrals) => {
+        // Set the current number of referrals and build our array of objects
+        this.numberReferrals = userReferrals.users_referred.length - 1
+        this.numberReferrals = 1
+        let maximumReferral = 5
+        for (let i=0;i<maximumReferral;i++) {
+          if (i <= this.numberReferrals) {
+            this.referralBlocks[i] = {
+              referred: true
+            }
+          } else {
+            this.referralBlocks[i] = {
+              referred: false
+            }
+          }
+        }
+        if (this.numberReferrals > -1) {
+          // calculate the discount
+          this.referralBlocks[this.numberReferrals].discount = ((this.numberReferrals + 1) * 20)
+          // Set the discount text
+          
+        }
+        // this.referralBlocks = [
+        //   true,
+        //   true,
+        //   true,
+        //   true,
+        //   true
+        // ]
+        console.log(this.referralBlocks)
+        // Set the referral code for copying and sharing
+        this.referralCode = userReferrals.code
+        // Set the link for the url for referral purposes
+        this.referralLink = "https://edji.it/r/" + this.referralCode
+      }, (err) => {
+        console.error(err)
+      })
+    )
   }
 
   ngOnDestroy() {
