@@ -15,55 +15,60 @@
           p.small.mb-3 Share your unique referral link to give 
             i and 
             | unlock Hero discounts.
-          .row.mb-4.text-center
-            .col-sm-6
-              .input-group
-                .hidden-sm-down
-                  input#copyreferralCode.form-control(
-                    name="ProjectCodeInput",
-                    type="text",
-                    disabled="true",
-                    value="{{referralLink}}")
-                  span.input-group-btn
-                    button#buttonCopyReferralLink.btn.btn-primary.btn-rnd-corner-right(
-                      type="button", 
-                      (click)="shareReferralCode()", 
-                      name="Copy", 
-                      href="#") Copy
-                .hidden-md-up.w-100
-                  input#copyreferralCode.form-control.d-inline-block.input-small(
-                    name="ProjectCodeInput",
-                    type="text",
-                    disabled="true",
-                    value="{{referralLink}}")
-                  span.input-group-btn.d-inline-block
-                    button#buttonCopyReferralLink.btn.btn-primary.btn-rnd-corner-right(
-                      type="button", 
-                      (click)="shareReferralCode()", 
-                      name="Copy", 
-                      href="#") Copy
-            .hidden-sm-down
-              .col-sm-6
-                .share-icon__group.float-right
-                  .icon-email.share-icon((click)="shareReferralCode('email')")
-                  .icon-twitter.share-icon((click)="shareReferralCode('twitter')")
-                  .icon-facebook.share-icon((click)="shareReferralCode('facebook')")
-            .hidden-md-up.w-100
-              .col-sm-6
-                .share-icon__group
-                  .icon-email.share-icon((click)="shareReferralCode('email')")
-                  .icon-twitter.share-icon((click)="shareReferralCode('twitter')")
-                  .icon-facebook.share-icon((click)="shareReferralCode('facebook')")
+          .hidden-sm-down
+            .container
+              .row.mb-4
+                .col-sm-6.pl-0
+                  .input-group
+                    input#copyreferralCode.form-control(
+                      name="ProjectCodeInput",
+                      type="text",
+                      disabled="true",
+                      value="{{referralLink}}")
+                    span.input-group-btn
+                      button#buttonCopyReferralLink.btn.btn-primary.btn-rnd-corner-right(
+                        type="button", 
+                        (click)="shareReferralCode()", 
+                        name="Copy", 
+                        href="#") Copy
+                .col-sm-6.pr-0
+                  .share-icon__group.float-right
+                    .icon-email.share-icon((click)="shareReferralCode('email')")
+                    .icon-twitter.share-icon((click)="shareReferralCode('twitter')")
+                    .icon-facebook.share-icon((click)="shareReferralCode('facebook')")
+          .hidden-md-up.w-100
+            .container
+              .row.mb-4.text-center
+                .col-sm-6
+                  .input-group
+                    input#copyreferralCode.form-control.d-inline-block.input-small(
+                      name="ProjectCodeInput",
+                      type="text",
+                      disabled="true",
+                      value="{{referralLink}}")
+                    span.input-group-btn.d-inline-block
+                      button#buttonCopyReferralLink.btn.btn-primary.btn-rnd-corner-right(
+                        type="button", 
+                        (click)="shareReferralCode()", 
+                        name="Copy", 
+                        href="#") Copy
+                .col-sm-6
+                  .share-icon__group
+                    .icon-email.share-icon((click)="shareReferralCode('email')")
+                    .icon-twitter.share-icon((click)="shareReferralCode('twitter')")
+                    .icon-facebook.share-icon((click)="shareReferralCode('facebook')")
           h6.small.font-weight-bold Your Path to Hero
           p.small.mb-3 Each teacher you refer that creates a reading will unlock a 20% discount towards Hero for both of you.
             | Complete 5 referrals to get a whole year of Hero free.
           .hidden-sm-down
-            .row
-              .col-2.p-0.referral-col(*ngFor="let referral of referralBlocks; let i=index")
-                .referral-block.text-center([ngClass]="['referral-block-' + i]")
-                  | H
+            .container
+              .row
+                .col-2.p-0.referral-col(*ngFor="let referral of referralBlocks; let i=index", [ngClass]="['referral-col-' + i]")
+                  .referral-block.text-center([ngClass]="['referral-block-' + i]")
+                    | H
           .hidden-md-up
-            .row
-              .col-2.p-0.referral-col.narrow-margin(*ngFor="let referral of referralBlocks; let i=index")
-                .referral-block.text-center.narrow([ngClass]="['referral-block-' + i]")
-                  | H
+            .container
+              .row
+                .col-2.p-0.referral-col.narrow-margin(*ngFor="let referral of referralBlocks; let i=index", [ngClass]="['referral-col-' + i]")
+                  .referral-block.text-center.narrow([ngClass]="['referral-block-' + i]")
+                    | H
