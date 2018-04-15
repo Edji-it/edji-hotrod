@@ -719,6 +719,20 @@ export class AuthService implements CanActivate {
                 return err
             })
     }
+
+    /**
+     * Ask the db how many users the current user has referred
+     * @param userId is the user id for the current user
+     */
+    public getReferralProgress(userId: string) : Observable<any> {
+        return this._http.get(
+            this.getUrl() + '/users/' + userId + '/referrals', 
+            { headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+                'Authorization': this.getToken()
+            })
+        })
+    }
 }
 
 interface LoginObject {
