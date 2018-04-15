@@ -12,9 +12,11 @@
              )
             span(aria-hidden="true") &times;
         .modal-body
+          //- Overview copy
           p.small.mb-3 Share your unique referral link to give 
             i and 
             | unlock Hero discounts.
+          //- Generated code for copy and share buttons -- Desktop
           .hidden-sm-down
             .container
               .row.mb-4
@@ -36,6 +38,7 @@
                     .icon-email.share-icon((click)="shareReferralCode('email')")
                     .icon-twitter.share-icon((click)="shareReferralCode('twitter')")
                     .icon-facebook.share-icon((click)="shareReferralCode('facebook')")
+          //- Generated code for copy and share buttons -- Mobile
           .hidden-md-up.w-100
             .container
               .row.mb-4.text-center
@@ -57,18 +60,23 @@
                     .icon-email.share-icon((click)="shareReferralCode('email')")
                     .icon-twitter.share-icon((click)="shareReferralCode('twitter')")
                     .icon-facebook.share-icon((click)="shareReferralCode('facebook')")
+          //- More copy
           h6.small.font-weight-bold Your Path to Hero
           p.small.mb-3 Each teacher you refer that creates a reading will unlock a 20% discount towards Hero for both of you.
             | Complete 5 referrals to get a whole year of Hero free.
+          //- referral "squares" -- Desktop
           .hidden-sm-down
             .container
               .row
                 .col-2.p-0.referral-col(*ngFor="let referral of referralBlocks; let i=index", [ngClass]="['referral-col-' + i]")
                   .referral-block.text-center([ngClass]="['referral-block-' + i]")
                     | H
+                  .referral-icon(*ngIf="referralBlocks[i]", [ngClass]="getReferralIcon(i)")
+          //- referral "squares" -- Mobile
           .hidden-md-up
             .container
               .row
                 .col-2.p-0.referral-col.narrow-margin(*ngFor="let referral of referralBlocks; let i=index", [ngClass]="['referral-col-' + i]")
                   .referral-block.text-center.narrow([ngClass]="['referral-block-' + i]")
                     | H
+                  .referral-icon.referral-icon--narrow(*ngIf="referralBlocks[i]", [ngClass]="getReferralIcon(i)")

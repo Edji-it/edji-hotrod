@@ -123,3 +123,18 @@
     }
   }
 }
+
+.referral-icon {
+  width: 80px;
+  height: 80px;
+  position: absolute;
+  top: 50%;
+  left: 42%;
+  transform: translate3d(-50%, -50%, 0);
+  z-index: 2;
+}
+
+.referral-icon--narrow {
+  height: calc(100vw * 175 / 1280.0);
+  width: calc(100vw * 175 / 1280.0);
+}

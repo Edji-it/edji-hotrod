@@ -37,11 +37,11 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
     this.referralLink = "https://edji.it/r/" + this.referralCode
 
     this.referralBlocks = [
-      false,
-      false,
-      false,
-      false,
-      false
+      true,
+      true,
+      true,
+      true,
+      true
     ]
   }
 
@@ -81,6 +81,21 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
         break
       default:
         this.copyReferralCode()
+    }
+  }
+
+  private getReferralIcon(index: number) {
+    switch(index) {
+      case 0:
+        return "icon-bam"
+      case 1:
+        return "icon-splat"
+      case 2:
+        return "icon-biff"
+      case 3:
+        return "icon-pow"
+      case 4:
+        return "icon-hero"
     }
   }
 }

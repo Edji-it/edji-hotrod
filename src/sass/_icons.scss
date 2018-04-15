@@ -275,6 +275,42 @@
     height: 2em;
 }
 
+// Referral Icons
+.icon-bam {
+    @include icon('graphic-bam.svg');
+    display: inline-block;
+    width: 2em;
+    height: 2em;
+}
+
+.icon-splat {
+    @include icon('graphic-splat.svg');
+    display: inline-block;
+    width: 2em;
+    height: 2em;
+}
+
+.icon-biff {
+    @include icon('graphic-biff.svg');
+    display: inline-block;
+    width: 2em;
+    height: 2em;
+}
+
+.icon-pow {
+    @include icon('graphic-pow.svg');
+    display: inline-block;
+    width: 2em;
+    height: 2em;
+}
+
+.icon-hero {
+    @include icon('graphic-hero.svg');
+    display: inline-block;
+    width: 2em;
+    height: 2em;
+}
+
 // Acquired font awesome styles
 .fa {-moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
