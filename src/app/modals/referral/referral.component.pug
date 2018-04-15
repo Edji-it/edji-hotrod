@@ -74,6 +74,12 @@
                   //- If referrals are completed, let's add a "stamp" over top and some coupon copy
                   .referral-icon(*ngIf="referralBlocks[i].referred", [ngClass]="getReferralIcon(i)")
                   .coupon-message(*ngIf="numberReferrals==i")
+                    .row
+                      .col-8.p-0
+                        h6.small.font-weight-bold.mb-0 {{referralCouponCopy.header}}
+                        p.small.mb-3(style="font-size: 70%;") {{referralCouponCopy.text}}
+                      .col-4.p-0.ml-1
+                        button.btn.btn-hero(style="padding: 10px;") {{referralCouponCopy.buttonText}}
           //- referral "squares" -- Mobile
           .hidden-md-up
             .container
