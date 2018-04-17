@@ -49,6 +49,15 @@
       content: none;
     }
   }
+  &.referral--connecting-line:before {
+    border-right: 1px solid #DCDCDC;
+    content: '';
+    position: absolute;
+    z-index: 1;
+    height: 36px;
+    bottom: -36px;
+    left: 38%;
+  }
   &:after {
     border-bottom: 2px dotted;
     content: '';
@@ -140,8 +149,26 @@
 }
 
 .coupon-message {
-  position: absolute;
-  bottom: -75px;
-  height: 40px;
-  width: 180px;
+  height: 60px;
+  margin-top: 36px;
+  border: solid 1px #DCDCDC;
+  padding: 6px 0 6px 38px;
+  width: 86%;
+  float: left;
+  &.coupon-small {
+    width: 100%;
+    font-size: 80%;
+  }
+}
+
+.btn-coupon {
+  padding: 10px;
+  border-radius: 4px;
+  &.btn-coupon__small {
+    font-size: 80%;
+  }
+}
+
+.font-xs {
+  font-size: 70%;
 }

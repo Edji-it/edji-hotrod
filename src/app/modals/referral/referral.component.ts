@@ -39,7 +39,6 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
       this._auth.getReferralProgress(this._auth.getUser()._id).subscribe((userReferrals) => {
         // Set the current number of referrals and build our array of objects
         this.numberReferrals = userReferrals.users_referred.length - 1
-        this.numberReferrals = 1
         let maximumReferral = 5
         for (let i=0;i<maximumReferral;i++) {
           if (i <= this.numberReferrals) {

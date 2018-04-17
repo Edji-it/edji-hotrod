@@ -65,27 +65,45 @@
           p.small.mb-3 Each teacher you refer that creates a reading will unlock a 20% discount towards Hero for both of you.
             | Complete 5 referrals to get a whole year of Hero free.
           //- referral "squares" -- Desktop
-          .hidden-sm-down([ngStyle]="{'margin-bottom': numberReferrals > -1 ? '75px' : '0px'}")
+          .hidden-sm-down
             .container
               .row
-                .col-2.p-0.referral-col(*ngFor="let referral of referralBlocks; let i=index", [ngClass]="['referral-col-' + i]")
+                .col-2.p-0.referral-col(
+                  *ngFor="let referral of referralBlocks; let i=index", 
+                  [ngClass]="['referral-col-' + i, numberReferrals==i ? 'referral--connecting-line' : '' ]"
+                )
                   .referral-block.text-center([ngClass]="['referral-block-' + i]")
                     | H
                   //- If referrals are completed, let's add a "stamp" over top and some coupon copy
                   .referral-icon(*ngIf="referralBlocks[i].referred", [ngClass]="getReferralIcon(i)")
-                  .coupon-message(*ngIf="numberReferrals==i")
-                    .row
-                      .col-8.p-0
-                        h6.small.font-weight-bold.mb-0 {{referralCouponCopy.header}}
-                        p.small.mb-3(style="font-size: 70%;") {{referralCouponCopy.text}}
-                      .col-4.p-0.ml-1
-                        button.btn.btn-hero(style="padding: 10px;") {{referralCouponCopy.buttonText}}
+            .container.coupon-message(
+              *ngIf="numberReferrals>-1", 
+              [ngStyle]="{'float': numberReferrals>2 ? 'right' : 'left'}"
+            )
+              .row(style="flex-wrap: initial;")
+                .col-6.p-0
+                  h6.small.font-xs.font-weight-bold.mb-1 {{referralCouponCopy.header}}
+                  p.small.font-xs.mb-3 {{referralCouponCopy.text}}
+                .col-4.p-0.ml-1
+                  button.btn.btn-hero.btn-coupon {{referralCouponCopy.buttonText}}
           //- referral "squares" -- Mobile
           .hidden-md-up
             .container
               .row
-                .col-2.p-0.referral-col.narrow-margin(*ngFor="let referral of referralBlocks; let i=index", [ngClass]="['referral-col-' + i]")
+                .col-2.p-0.referral-col.narrow-margin(*ngFor="let referral of referralBlocks; let i=index", 
+                  [ngClass]="['referral-col-' + i, numberReferrals==i ? 'referral--connecting-line' : '' ]"
+                )
                   .referral-block.text-center.narrow([ngClass]="['referral-block-' + i]")
                     | H
                   //- If referrals are completed, let's add a "stamp" over top and some coupon copy
                   .referral-icon.referral-icon--narrow(*ngIf="referralBlocks[i].referred", [ngClass]="getReferralIcon(i)")
+            .container.coupon-message.coupon-small(
+              *ngIf="numberReferrals>-1", 
+              [ngStyle]="{'float': numberReferrals>2 ? 'right' : 'left'}"
+            )
+              .row(style="flex-wrap: initial;")
+                .col-6.p-0
+                  h6.small.font-xs.font-weight-bold.mb-1 {{referralCouponCopy.header}}
+                  p.small.font-xs.mb-3 {{referralCouponCopy.text}}
+                .col-4.p-0.ml-1
+                  button.btn.btn-hero.btn-coupon.btn-coupon__small {{referralCouponCopy.buttonText}}
