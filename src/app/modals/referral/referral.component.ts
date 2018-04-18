@@ -111,13 +111,13 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
   private shareReferralCode(shareMedium: string) {
     switch(shareMedium) {
       case 'email':
-        console.log('email')
+        window.open('mailto:?subject=Go Hero on Edji With Me&body=Create%20readings%20on%20Edji%20with%20me%2C%20and%20get%2020%25%20off%20Hero%20edji.it%2Fr%2F' + this.referralCode, '_blank')
         break
       case 'twitter':
-        console.log('twitter')
+        window.open('https://twitter.com/intent/tweet?text=Create%20readings%20on%20Edji%20with%20me%2C%20and%20get%2020%25%20off%20Hero%20edji.it%2Fr%2F' + this.referralCode, '_blank')
         break
       case 'facebook':
-        console.log('facebook')
+        // window.open('https://www.facebook.com/share.php?u=Create%20readings%20on%20Edji%20with%20me%2C%20and%20get%2020%25%20off%20Hero%20edji.it%2Fr%2F' + this.referralCode, '_blank')
         break
       default:
         this.copyReferralCode()
