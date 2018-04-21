@@ -51,5 +51,6 @@ interface BaseUser {
     images?: { title: string, url: string }[],
     documents?: { title: string, pages: string[] }[]
   },
-  avatar?: string
+  avatar?: string,
+  referred_by?: string
 }
