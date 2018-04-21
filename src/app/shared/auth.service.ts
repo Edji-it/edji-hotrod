@@ -595,7 +595,16 @@ export class AuthService implements CanActivate {
     /** Provides logic for sending user back to home if they are not authorized */
     public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
         if (!this.getUser().isLoggedIn) {
-            this._router.navigate(['/home']);
+            /**
+             * Query Params
+             * - We use the homepage as a landing page
+             * - Additional query params can be added to customize a user's landing experience
+             */
+            if (route.queryParams['r']) {
+                this._router.navigate(["register", { referral_id: route.queryParams['r'] }])
+            } else {
+                this._router.navigate(['/home']);
+            }
             return false;
         } else {
             return true;

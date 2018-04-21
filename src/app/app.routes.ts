@@ -19,13 +19,13 @@ import { DataResolver } from './app.resolver'
 import { AuthService } from './shared'
 
 export const ROUTES: Routes = [
-  { path: '', redirectTo: '/dashboard', pathMatch: 'full', canActivate: [AuthService] },
+  { path: '', component: DashboardComponent, canActivate: [AuthService] },
+  { path: 'dashboard',  component: DashboardComponent, canActivate: [AuthService] },
   { path: 'home',  component: HomeComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
   { path: 'account', component: AccountComponent, canActivate: [AuthService] },
   { path: 'discover', component: DiscoverFeedComponent, canActivate: [AuthService] },
-  { path: 'dashboard',  component: DashboardComponent, canActivate: [AuthService] },
   { path: 'project/:id',  component: ProjectPageComponent },
   { path: 'new-reading', component: NewReadingPage, canActivate: [AuthService] },
   { path: 'new-reading/:id', component: NewReadingPage, canActivate: [AuthService] },

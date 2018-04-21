@@ -85,7 +85,7 @@ describe('Referral Sharing and Rewards', () => {
         it("should register with referral link, and be credited for referral", () => {
             browser.get(referralLink)
             // Verify user lands on Registration page
-            // browser.wait(EC.urlContains("register"), 5000, "referral link never landed on registration page")
+            browser.wait(EC.urlContains("register"), 5000, "referral link never landed on registration page")
         })
     })
 
