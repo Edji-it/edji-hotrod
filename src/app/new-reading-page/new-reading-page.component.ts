@@ -273,6 +273,10 @@ export class NewReadingPage implements OnInit {
      * @argument node: any Html Element or Text node
      */
     private getNodeY(node: any) {
+        // This function is called against element selectors, which are prone to returning nothing/undefined
+        if (typeof(node) == 'undefined'){
+            node = {}
+        }
         if (node.nodeType === 3) {
             let range = document.createRange()
             range.selectNodeContents(node)
@@ -678,6 +682,11 @@ export class NewReadingPage implements OnInit {
             question_number: this.readingHtml.length
         }
         
+        // insertHtml is optional, and may not be defined
+        if (typeof(insertHtml) == 'undefined') {
+            insertHtml = ''
+        }
+
         if (insertHtml.includes("angularMediumEditor")) {
             if (insertPos) {
                 question.question_number = insertPos

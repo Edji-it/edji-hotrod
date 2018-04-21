@@ -18,7 +18,16 @@ exports.config = {
     'browserName': 'chrome',
     // marionette: true,
     'chromeOptions': {
-      'args': ['show-fps-counter=true','use-fake-ui-for-media-stream','disable-web-security','--window-size=1680,1050']
+      'args': [
+        'show-fps-counter=true',
+        'use-fake-ui-for-media-stream',
+        'disable-web-security',
+        '--window-size=1680,1050',
+        '--disable-extensions',
+        '--headless', 
+        '--disable-gpu',
+        '--no-sandbox'
+      ]
     },
     shardTestFiles: true,
     maxInstances: 1
