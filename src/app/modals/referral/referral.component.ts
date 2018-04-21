@@ -20,6 +20,7 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
 
   @Input() private showReferral: boolean
   @Output() private hideReferral: EventEmitter<boolean> = new EventEmitter()
+  @Output() private exerciseCoupon: EventEmitter<any> = new EventEmitter()
 
   private subscriptions: Subscription[] = []
 
@@ -78,7 +79,7 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
         // Set the referral code for copying and sharing
         this.referralCode = userReferrals.code
         // Set the link for the url for referral purposes
-        this.referralLink = "https://edji.it/r/" + this.referralCode
+        this.referralLink = this._auth.getUrl() + "/?r=" + this.referralCode
       }, (err) => {
         console.error(err)
       })
@@ -122,13 +123,13 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
   private shareReferralCode(shareMedium: string) {
     switch(shareMedium) {
       case 'email':
-        window.open('mailto:?subject=Go Hero on Edji With Me&body=Create%20readings%20on%20Edji%20with%20me%2C%20and%20get%2020%25%20off%20Hero%20edji.it%2Fr%2F' + this.referralCode, '_blank')
+        window.open('mailto:?subject=Go Hero on Edji With Me&body=Create%20readings%20on%20Edji%20with%20me%2C%20and%20get%2020%25%20off%20Hero%20' + encodeURIComponent(this.referralLink), '_blank')
         break
       case 'twitter':
-        window.open('https://twitter.com/intent/tweet?text=Create%20readings%20on%20Edji%20with%20me%2C%20and%20get%2020%25%20off%20Hero%20edji.it%2Fr%2F' + this.referralCode, '_blank')
+        window.open('https://twitter.com/intent/tweet?text=Create%20readings%20on%20Edji%20with%20me%2C%20and%20get%2020%25%20off%20Hero%20' + encodeURIComponent(this.referralLink), '_blank')
         break
       case 'facebook':
-        window.open('https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fedji.it%2Fr%2F' + this.referralCode + '&amp;src=sdkpreparse', '_blank')
+        window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(this.referralLink) + '&amp;src=sdkpreparse', '_blank')
         break
       default:
         this.copyReferralCode()
@@ -152,5 +153,28 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
       case 4:
         return "icon-hero"
     }
+  }
+
+  /**
+   * Depending on the number of referrals the user has, get the code
+   */
+  private getCouponCode() {
+    switch(this.numberReferrals) {
+      case 0:
+        return "HOTROD_HERO_ONE5TH"
+      case 1:
+        return "HOTROD_HERO_24BUCKS"
+      case 2:
+        return "HOTROD_HERO_36BIGONES"
+      case 3:
+        return "HOTROD_HERO_4FIFTHS"
+      case 4:
+        return "HOTROD_HERO_REFERMASTER"
+    }
+  }
+
+  // When the user chooses to use the coupon, we'll need to close this modal and pass along the coupon code to the hero subscription modal
+  private useCoupon() {
+    this.exerciseCoupon.emit(this.getCouponCode())
   }
 }

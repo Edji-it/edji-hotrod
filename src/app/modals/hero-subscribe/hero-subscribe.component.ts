@@ -26,12 +26,14 @@ export class HeroSubscribeComponent implements OnInit {
   private customCouponCode: string = ''
   // Discount value used for DISPLAY ONLY
   private percentOff: number = 0
+  private newPrice: number = 60
   private joiningAcademy: boolean = false
+  // private couponCode: string
 
   private sForm: FormGroup 
 
   @Input()
-  couponCode: string
+  couponCode: string = ''
 
   @Output()
   closeModal: EventEmitter<any> = new EventEmitter()
@@ -44,17 +46,18 @@ export class HeroSubscribeComponent implements OnInit {
     private angulartics: Angulartics2,
     private fb: FormBuilder,
   ) { 
+  }
+
+  ngOnInit() {
     // Construct formgroup
     this.sForm = this.fb.group({
       couponCode: [
-        '',
+        this.couponCode,
         [],
         this.validateCoupon.bind(this)
       ]
     }, { updateOn: "submit" });
-  }
-
-  ngOnInit() {
+    
     // Create a Stripe client
     if (this._auth.getEnv() === 'dev') {
       this.stripe = Stripe('pk_test_e2lOurNpSI745MOUdu2LgzOu')
@@ -117,6 +120,7 @@ export class HeroSubscribeComponent implements OnInit {
         (res) => {
           if (res.percent_off) {
             this.percentOff = res.percent_off
+            this.newPrice = (100-this.percentOff)/100 * 60
           }
           // Hack for detecting Hero Academy teachers
           if (coupon.indexOf('HA-') == 0) {

@@ -63,6 +63,8 @@ export class NavBarComponent implements OnInit, OnDestroy {
     } = {}
     private projectCodeShow: boolean = true
     private window
+    private showHeroSubModal: boolean
+    private couponCode: string
 
     constructor(
           private _route: ActivatedRoute,
@@ -255,6 +257,20 @@ export class NavBarComponent implements OnInit, OnDestroy {
    */
   private openFeedback(): void {
     this._util.showFeedbackModal=true
+  }
+
+  /**
+   * When the user decides to exercise their coupon code
+   */
+  private useCoupon(couponCode: string) {
+    // Hide the referral modal
+    this.showReferralModal=false
+    // Set the coupon code passed through from the referral modal
+    this.couponCode = couponCode
+    // Show the hero subscription modal and pass the coupon code in
+    // setTimeout(() => {
+      this.showHeroSubModal = true
+    // }, 1000)
   }
 }
 

@@ -85,7 +85,7 @@
                   h6.small.font-xs.font-weight-bold.mb-1 {{referralCouponCopy.header}}
                   p.small.font-xs.mb-3 {{referralCouponCopy.text}}
                 .col-4.p-0.ml-1
-                  button.btn.btn-hero.btn-coupon {{referralCouponCopy.buttonText}}
+                  button.btn.btn-hero.btn-coupon((click)="useCoupon()") {{referralCouponCopy.buttonText}}
           //- referral "squares" -- Mobile
           .hidden-md-up
             .container
@@ -106,4 +106,4 @@
                   h6.small.font-xs.font-weight-bold.mb-1 {{referralCouponCopy.header}}
                   p.small.font-xs.mb-3 {{referralCouponCopy.text}}
                 .col-4.p-0.ml-1
-                  button.btn.btn-hero.btn-coupon.btn-coupon__small {{referralCouponCopy.buttonText}}
+                  button.btn.btn-hero.btn-coupon.btn-coupon__small((click)="useCoupon()") {{referralCouponCopy.buttonText}}

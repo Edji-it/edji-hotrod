@@ -144,4 +144,11 @@
   #projectCodeError.invalid-feedback(*ngIf="errorObject.invalidCode", [innerHtml]="errorObject.invalidCode | emojione")
 
 share-code([showOpenReading]="_route.snapshot.queryParams.readingCodeModal")
-referral-modal([showReferral]="showReferralModal", (hideReferral)="showReferralModal=false")
+referral-modal([showReferral]="showReferralModal", (hideReferral)="showReferralModal=false", (exerciseCoupon)="useCoupon($event)")
+hero-subscribe-modal.modal-will-fade(
+  *ngIf="showHeroSubModal",
+  [class.show]="showHeroSubModal", 
+  (closeModal)="showHeroSubModal=false", 
+  (heroWasBorn)="_router.navigate(['/dashboard'])",
+  [couponCode]="couponCode"
+)
