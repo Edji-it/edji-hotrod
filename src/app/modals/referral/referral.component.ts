@@ -94,20 +94,31 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
     this.hideReferral.emit(false)
   }
 
+  /**
+   * Copies the referral link to the user's clipboard
+   */
   private copyReferralCode() {
+    // Create a new textarea element that we'll not make visible
     let selBox = document.createElement('textarea')
     selBox.style.position = 'fixed'
     selBox.style.left = '0'
     selBox.style.top = '0'
     selBox.style.opacity = '0'
+    // Set the value of the textarea to be the share link with their referral code
     selBox.value = this.referralLink
     document.body.appendChild(selBox)
+    // Focus on the element text, select the text, and use a copy command
     selBox.focus()
     selBox.select()
     document.execCommand('copy')
+    // Take this hidden element out of the DOM
     document.body.removeChild(selBox)
   }
 
+  /**
+   * Depending on which share button is clicked, perform a certain action
+   * @param shareMedium is the path the user will be using to share their referral code
+   */
   private shareReferralCode(shareMedium: string) {
     switch(shareMedium) {
       case 'email':
@@ -117,13 +128,17 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
         window.open('https://twitter.com/intent/tweet?text=Create%20readings%20on%20Edji%20with%20me%2C%20and%20get%2020%25%20off%20Hero%20edji.it%2Fr%2F' + this.referralCode, '_blank')
         break
       case 'facebook':
-        // window.open('https://www.facebook.com/share.php?u=Create%20readings%20on%20Edji%20with%20me%2C%20and%20get%2020%25%20off%20Hero%20edji.it%2Fr%2F' + this.referralCode, '_blank')
+        window.open('https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fedji.it%2Fr%2F' + this.referralCode + '&amp;src=sdkpreparse', '_blank')
         break
       default:
         this.copyReferralCode()
     }
   }
 
+  /**
+   * Depending on the referral square, return the icon name to display
+   * @param index is the position on the referral squares where a user has completed a referral
+   */
   private getReferralIcon(index: number) {
     switch(index) {
       case 0:
