@@ -1,5 +1,5 @@
 .modal-will-fade([class.show]="showReferral", *ngIf="showReferral")
-  .modal
+  .modal#referralModal
     .modal-dialog(role="document")
       .modal-content
         .modal-header
@@ -22,8 +22,8 @@
               .row.mb-4
                 .col-sm-6.pl-0
                   .input-group
-                    input#copyreferralCode.form-control(
-                      name="ProjectCodeInput",
+                    input#copyReferralCode.form-control(
+                      name="ReferralCode",
                       type="text",
                       disabled="true",
                       value="{{referralLink}}")

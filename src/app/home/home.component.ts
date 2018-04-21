@@ -32,7 +32,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription[] = [];
 
-  private loginForm: FormGroup;
   private errorObject: {
     "invalidCode"?: string,
     "loginFailed"?: string,
@@ -54,10 +53,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     private _title: Title,
     private ng4TwitterTimelineService: Ng4TwitterTimelineService
   ) {
-    this.loginForm = fb.group({
-      username: [null, Validators.required],
-      password: [null, Validators.required]
-    });
+    
   }
 
   ngOnInit() {

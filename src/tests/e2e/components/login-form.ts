@@ -90,15 +90,18 @@ export class LoginForm {
    * This method logs the user in from the form
    * It tests only the ability to enter the information into the fields; any other testing is left up to the module calling this method (verification of arriving at endpoint, for example)
    */
-  public login(): void {
+  public login(username?: string, password?: string): void {
+    // If login function not passed credentials, default to teacher user
+    if (!username) { username = this.teacherUser }
+    if (!password) { password = this.teacherPassword }
     // initial validation
     browser.wait(this.EC.elementToBeClickable(this.loginButton), 5000, "login button never became clickable");
 
     // form handling
     this.usernameInput.clear();
     this.passwordInput.clear();
-    this.usernameInput.sendKeys(this.teacherUser);
-    this.passwordInput.sendKeys(this.teacherPassword);
+    this.usernameInput.sendKeys(username);
+    this.passwordInput.sendKeys(password);
     
     // log them in
     browser.wait(this.EC.elementToBeClickable(this.loginButton), 5000, "login button never became clickable after login form entry");

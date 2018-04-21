@@ -4,22 +4,12 @@ export class Sidebar {
 
     private EC = protractor.ExpectedConditions; // vital
 
-    // constructor() {}
-    /*
-    28 Jan 2017
-    Last Modified: 28 Jan 2017
-    Nicholas Pumper
-
-    Page Object for the sidebar on any page.
-
-    - Does not inherit from PageObjectInterface because it's not a page.
-    */
-
     // Public Instance Variables
     public logOutButton     = element(by.css("#logOutButton"));
     public logInButton     = element(by.css("a#loginLink"));
     public avatarActionIcon = element(by.css("#avatarActionIcon"));
     public accountButton    = element(by.id("accountButton"));
+    public referralButton = element(by.id("navReferralButton"));
     public heatButton       = element(by.id("toggleHeatVision"));
     public heatButtonMobile = element(by.id("toggleHeatVisionMobile"));
     public navReadings = element(by.id("navReadings"));
@@ -97,6 +87,28 @@ export class Sidebar {
                                  this.accountButton.isDisplayed().then((result) => {
                                     if ( result ) {
                                         this.accountButton.click();
+                                    }
+                                })
+                            }
+                        })
+                    }
+                })
+            }
+        })
+    } // clickAccountButton () : void
+
+    // Click nav refferal button
+    public clickReferralButton () : void {
+        this.avatarActionIcon.isPresent().then((result) => {
+            if (result) {
+                 this.avatarActionIcon.isDisplayed().then((result) => {
+                    if ( result ) {
+                        this.avatarActionIcon.click();
+                        this.referralButton.isPresent().then((result) => {
+                            if (result) {
+                                 this.referralButton.isDisplayed().then((result) => {
+                                    if ( result ) {
+                                        this.referralButton.click();
                                     }
                                 })
                             }
