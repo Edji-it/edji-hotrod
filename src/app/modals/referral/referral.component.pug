@@ -12,6 +12,9 @@
              )
             span(aria-hidden="true") &times;
         .modal-body
+          .alert.alert-reading.alert-dismissable.fade(*ngIf="alertObject.show", [class.show]="alertObject.show", role="alert", [ngClass]="alertObject.type")
+            a.close(href="#", (click)="closeAlert()") ×
+            p.mb-0 {{alertObject.message}}
           //- Overview copy
           p.small.mb-3 Share your unique referral link to give 
             i and 

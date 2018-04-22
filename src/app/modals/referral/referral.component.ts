@@ -12,17 +12,21 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class ReferralModalComponent implements OnInit, OnDestroy {
 
+  private subscriptions: Subscription[] = []
   private referralLink: string
   private referralCode: string
   private referralBlocks: any = []
   private numberReferrals: number
   private referralCouponCopy: any = {}
+  private alertObject = {
+    show: false,
+    type: "",
+    message: ""
+  }
 
   @Input() private showReferral: boolean
   @Output() private hideReferral: EventEmitter<boolean> = new EventEmitter()
   @Output() private exerciseCoupon: EventEmitter<any> = new EventEmitter()
-
-  private subscriptions: Subscription[] = []
 
   constructor(
     private router: Router,
@@ -86,6 +90,11 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
         this.referralLink = this._auth.getUrl() + "/?r=" + this.referralCode
       }, (err) => {
         console.error(err)
+        this.alertObject = {
+          show: true,
+          type: "alert-danger",
+          message: "We had some trouble getting your referrals, it might be our fault"
+        }
       })
     )
   }
@@ -118,6 +127,14 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
     document.execCommand('copy')
     // Take this hidden element out of the DOM
     document.body.removeChild(selBox)
+    // Show a success alert when the code is copied to their clipboard
+    setTimeout(() => {
+      this.alertObject = {
+        show: true,
+        type: "alert-success",
+        message: "Your referral link was copied to your clipboard"
+      }
+    }, 500)
   }
 
   /**
@@ -180,5 +197,13 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
   // When the user chooses to use the coupon, we'll need to close this modal and pass along the coupon code to the hero subscription modal
   private useCoupon() {
     this.exerciseCoupon.emit(this.getCouponCode())
+  }
+
+  private closeAlert() {
+    this.alertObject = {
+      show: false,
+      type: "",
+      message: ""
+    }
   }
 }
