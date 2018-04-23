@@ -105,6 +105,8 @@ describe('Referral Sharing and Rewards', () => {
             browser.wait(EC.visibilityOf(referralStamp1), 3000, "referral stamp not showing for referred user")
             // Make sure the new user didn't get extra credit
             browser.wait(EC.invisibilityOf(referralStamp2), 3000, "extra referral stamp showing for referred user")
+            // Close referral modal 
+            referralClose.click()
             // Log out new user
             sidebar.clickLogOutButton()
         })
