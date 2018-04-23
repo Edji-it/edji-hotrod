@@ -149,12 +149,16 @@
 }
 
 .coupon-message {
-  height: 60px;
+  height: auto;
+  min-height: 60px;
   margin-top: 36px;
   border: solid 1px #DCDCDC;
-  padding: 6px 0 6px 38px;
+  border-radius: 3px;
+  padding: 8px 12px;
   width: 86%;
   float: left;
+  line-height: 13px;
+
   &.coupon-small {
     width: 100%;
     font-size: 80%;
@@ -162,8 +166,11 @@
 }
 
 .btn-coupon {
+  float:right;
+  margin-left: 5px;
   padding: 10px;
   border-radius: 4px;
+
   &.btn-coupon__small {
     font-size: 80%;
   }
