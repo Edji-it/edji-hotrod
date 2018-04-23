@@ -66,20 +66,14 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
         if (this.numberReferrals > -1) {
           // calculate and set the discount
           let discount = ((this.numberReferrals + 1) * 20)
+          if (discount > 100) { discount = 100 }
           // this.referralBlocks[this.numberReferrals].discount = discount
           // Set the discount text values (header, text, and button)
-          switch (this.numberReferrals) {
-            case 0:
-              this.referralCouponCopy.header = '1 Referral in the Bag!'
-              this.referralCouponCopy.text = "You've unlocked 20% off. Use it now or go for an even bigger deal."
-              this.referralCouponCopy.buttonText = 'Get Hero 20% Off'
-              break
-            case 4:
+          if (this.numberReferrals >= 4) {
               this.referralCouponCopy.header = 'Congratulations'
               this.referralCouponCopy.text = 'Hero is all yours! With great power comes great engagement.'
               this.referralCouponCopy.buttonText = 'Redeem Free Year'
-              break
-            default:
+          } else {
               this.referralCouponCopy.header = (this.numberReferrals + 1) + ' Referrals in the Bag!'
               this.referralCouponCopy.text = "You've unlocked " + discount + "% off. Use it now or go for an even bigger deal."
               this.referralCouponCopy.buttonText = 'Get Hero ' + discount + '% Off'
