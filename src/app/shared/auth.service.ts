@@ -601,7 +601,7 @@ export class AuthService implements CanActivate {
              * - Additional query params can be added to customize a user's landing experience
              */
             if (route.queryParams['r']) {
-                this._router.navigate(["register", { referral_id: route.queryParams['r'] }])
+                this._router.navigate(["/register"], { queryParams: {  referral_id: route.queryParams['r'] }})
             } else {
                 this._router.navigate(['/home']);
             }
@@ -719,7 +719,7 @@ export class AuthService implements CanActivate {
      * @param referral_id is the referral id we'll be searching by to find the user
      */
     public getUserByReferralId(referral_id: any): Observable<any> {
-        return this.legacyHttp.get(this.baseUrl + '/users/referral/' + referral_id, this.getOptions())
+        return this.legacyHttp.get(this.baseUrl + '/api/v1/referrals/' + referral_id, this.getOptions())
             .map( res => {
                 let data = res.json() || {}
                 let user = data.user
