@@ -166,7 +166,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
     // If the new user was referred and there is a referral id, then let's add it here
     if (typeof(this.referralId)!='undefined' && this.referralId!='') {
-      formValue.referral_id = this.referralId
+      formValue.referred_by = this.referralId
     }
 
     // Attempt to register this user.
