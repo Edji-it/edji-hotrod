@@ -2,7 +2,7 @@ import { browser, by, element, protractor } from 'protractor'
 
 // Internal
 import { Home, Login, Sidebar } from './page-objects'
-import { LoginForm } from './components'
+import { LoginForm, RegisterForm, UserDetailsModal } from './components'
 
 
 /**
@@ -12,6 +12,8 @@ import { LoginForm } from './components'
 describe('Referral Sharing and Rewards', () => {
     let login   = new Login()
     let loginForm = new LoginForm()
+    let registerForm = new RegisterForm()
+    let userDetails = new UserDetailsModal()
     let sidebar = new Sidebar()
     let EC      = protractor.ExpectedConditions
 
@@ -19,6 +21,11 @@ describe('Referral Sharing and Rewards', () => {
     let copyReferralLinkBtn = element(by.id("buttonCopyReferralLink"))
     let referalCodeBox = element(by.id("copyReferralCode"))
     let referralClose = element(by.css("#referralModal .close"))
+    let referralStamp1 = element(by.css("#referralStamp1"))
+    let referralStamp2 = element(by.css("#referralStamp2"))
+    let referralStamp3 = element(by.css("#referralStamp3"))
+    let referralStamp4 = element(by.css("#referralStamp4"))
+    let referralStamp5 = element(by.css("#referralStamp5"))
 
     describe("Test sharing referral code, and referred registration", () => {
         let referralLink = ""
@@ -86,6 +93,20 @@ describe('Referral Sharing and Rewards', () => {
             browser.get(referralLink)
             // Verify user lands on Registration page
             browser.wait(EC.urlContains("register"), 5000, "referral link never landed on registration page")
+            // Attempt registration
+            registerForm.submit()
+            // Created user should land on Dashboard
+            browser.wait(EC.urlContains("dashboard"), 5000, "referred user failed to register")
+            // Confirm account type
+            userDetails.confirmBot()
+            // Open referrals modal
+            sidebar.clickReferralButton()
+            // Verify user has 1 referral credit
+            browser.wait(EC.visibilityOf(referralStamp1), 3000, "referral stamp not showing for referred user")
+            // Make sure the new user didn't get extra credit
+            browser.wait(EC.invisibilityOf(referralStamp2), 3000, "extra referral stamp showing for referred user")
+            // Log out new user
+            sidebar.clickLogOutButton()
         })
     })
 

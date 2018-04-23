@@ -77,7 +77,7 @@
                   .referral-block.text-center([ngClass]="['referral-block-' + i]")
                     | H
                   //- If referrals are completed, let's add a "stamp" over top and some coupon copy
-                  .referral-icon(*ngIf="referralBlocks[i].referred", [ngClass]="getReferralIcon(i)")
+                  .referral-icon(*ngIf="referralBlocks[i].referred", [ngClass]="getReferralIcon(i)", [attr.id]="'referralStamp-' + (i + 1)")
             .container.coupon-message(
               *ngIf="numberReferrals>-1", 
               [ngStyle]="{'float': numberReferrals>2 ? 'right' : 'left'}"

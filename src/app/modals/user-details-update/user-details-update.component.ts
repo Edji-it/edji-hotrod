@@ -65,7 +65,8 @@ export class UserDetailsUpdateModal implements OnInit {
         this._auth.setUser(res.user)
         this._bumble.sendUserDetails(res.user)
         this.messages.success = true
-        this.triggerCloseTimeout()
+        // Close the modal
+        this.closeModal.emit()
         if (this._auth.getEnv() === "prod") { 
           if(res.user.identities && res.user.identities.indexOf('teacher') > -1) {
             let nameArr = res.user.fullname.split(" ")
@@ -91,12 +92,5 @@ export class UserDetailsUpdateModal implements OnInit {
       }
     }
     return valid ? null : { identity: true }
-  }
-
-  /** Triggers the timeout which closes the modal */
-  private triggerCloseTimeout(): void {
-    setTimeout(() => {
-      this.closeModal.emit()
-    }, 3000)
   }
 }

@@ -1,4 +1,4 @@
-.modal.fade([class.show]="showModal", *ngIf="showModal")
+.modal.fade#userDetailsModal([class.show]="showModal", *ngIf="showModal")
   .modal-dialog
     form.modal-content([formGroup]="userDetailsForm", (ngSubmit)="formSubmit(userDetailsForm)")
       .modal-header
@@ -10,30 +10,30 @@
         #accountTypeGroup.form-group.list-group
           .form-check.list-group-item
             label.form-check-label
-              input.form-check-input(type="checkbox", [formControl]="userDetailsForm.controls['identities']['controls']['student']", value="")
+              input#typeStudentInput.form-check-input(type="checkbox", [formControl]="userDetailsForm.controls['identities']['controls']['student']", value="")
               div([innerHtml]="checkboxCopy.student | emojione")
           .form-check.list-group-item
             label.form-check-label
-              input.form-check-input(type="checkbox", [formControl]="userDetailsForm.controls['identities'].controls['teacher']", value="")
+              input#typeTeacherInput.form-check-input(type="checkbox", [formControl]="userDetailsForm.controls['identities'].controls['teacher']", value="")
               div([innerHtml]="checkboxCopy.teacher | emojione")
           .form-check.list-group-item
             label.form-check-label
-              input.form-check-input(type="checkbox", [formControl]="userDetailsForm.controls['identities'].controls['business']", value="")
+              input#typeBusinessInput.form-check-input(type="checkbox", [formControl]="userDetailsForm.controls['identities'].controls['business']", value="")
               div([innerHtml]="checkboxCopy.business | emojione")
           .form-check.list-group-item
             label.form-check-label
-              input.form-check-input(type="checkbox", [formControl]="userDetailsForm.controls['identities'].controls['personal']", value="")
+              input#typePersonalInput.form-check-input(type="checkbox", [formControl]="userDetailsForm.controls['identities'].controls['personal']", value="")
               div([innerHtml]="checkboxCopy.personal | emojione")
           .form-check.list-group-item
             label.form-check-label
-              input.form-check-input(type="checkbox", [formControl]="userDetailsForm.controls['identities'].controls['robot']", value="")
+              input#typeRobotInput.form-check-input(type="checkbox", [formControl]="userDetailsForm.controls['identities'].controls['robot']", value="")
               div([innerHtml]="checkboxCopy.robot | emojione")
           .form-check.list-group-item
             label.form-check-label
-              input.form-check-input(type="checkbox", [formControl]="userDetailsForm.controls['identities'].controls['other']", value="")
+              input#typeOtherInput.form-check-input(type="checkbox", [formControl]="userDetailsForm.controls['identities'].controls['other']", value="")
               div([innerHtml]="checkboxCopy.other | emojione")
         .alert.alert-info(*ngIf="userDetailsForm.controls['identities'].dirty && userDetailsForm.controls['identities'].invalid") Please select at least one box!
         .alert.alert-success(*ngIf="messages.success", [innerHtml]=" ':heavy_check_mark: Thanks! Have fun reading with Edji!' | emojione ")
       .modal-footer
-        button.btn.btn-primary(type="submit", [disabled]="!userDetailsForm.valid", *ngIf="!messages.success") Submit
+        button#submitDetailsButton.btn.btn-primary(type="submit", [disabled]="!userDetailsForm.valid", *ngIf="!messages.success") Submit
         button.btn.btn-secondary(*ngIf="messages.success", type="button") Close
