@@ -24,7 +24,6 @@ exports.config = {
         'disable-web-security',
         '--window-size=1680,1050',
         '--disable-extensions',
-        '--headless', 
         '--disable-gpu',
         '--no-sandbox'
       ]
