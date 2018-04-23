@@ -63,12 +63,15 @@ export class UserDetailsUpdateModal implements OnInit {
       .take(1)
       .subscribe((res) => {
         this._auth.setUser(res.user)
-        this._bumble.sendUserDetails(res.user)
         this.messages.success = true
         // Close the modal
         this.closeModal.emit()
         if (this._auth.getEnv() === "prod") { 
+          // If we have a teacher, send it to Mailchimp and Bumblebee/Slack
           if(res.user.identities && res.user.identities.indexOf('teacher') > -1) {
+            // Tell Bumblebee/Slack!
+            this._bumble.sendUserDetails(res.user)
+            // Parse fullname for Mailchimp
             let nameArr = res.user.fullname.split(" ")
             let fname = nameArr[0]
             let lname = nameArr[1]
