@@ -74,7 +74,7 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
               this.referralCouponCopy.text = 'Hero is all yours! With great power comes great engagement.'
               this.referralCouponCopy.buttonText = 'Redeem Free Year'
           } else {
-              this.referralCouponCopy.header = (this.numberReferrals + 1) + ' Referrals in the Bag!'
+              this.referralCouponCopy.header = (this.numberReferrals + 1) + ' Referral' + (this.numberReferrals >= 1 ? 's' : '') + ' in the Bag!'
               this.referralCouponCopy.text = "You've unlocked " + discount + "% off. Use it now or go for an even bigger deal."
               this.referralCouponCopy.buttonText = 'Get Hero ' + discount + '% Off'
           }
