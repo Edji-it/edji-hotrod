@@ -87,7 +87,8 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
         // Set the referral code for copying and sharing
         this.referralCode = userReferrals.code
         // Set the link for the url for referral purposes
-        this.referralLink = this._auth.getUrl() + "/?r=" + this.referralCode
+        let origin = location.origin.includes('localhost') ? location.origin + "/#" : location.origin
+        this.referralLink = origin + "/?r=" + this.referralCode
       }, (err) => {
         console.error(err)
         this.alertObject = {
