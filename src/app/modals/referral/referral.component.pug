@@ -41,9 +41,9 @@
                       | Link was copied to your clipboard!
                 .col-sm-6.pr-0
                   .share-icon__group.float-right
-                    .icon-email.share-icon((click)="shareReferralCode('email')")
-                    .icon-twitter.share-icon((click)="shareReferralCode('twitter')")
-                    .icon-facebook.share-icon((click)="shareReferralCode('facebook')")
+                    #referEmailShare.icon-email.share-icon((click)="shareReferralCode('email')")
+                    #referTwitterShare.icon-twitter.share-icon((click)="shareReferralCode('twitter')")
+                    #referFacebookShare.icon-facebook.share-icon((click)="shareReferralCode('facebook')")
           //- Generated code for copy and share buttons -- Mobile
           .hidden-md-up.w-100
             .container

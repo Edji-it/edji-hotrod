@@ -1,7 +1,7 @@
 import { browser, by, element, protractor } from 'protractor'
 
 // Internal
-import { Home, Login, Sidebar } from './page-objects'
+import { Home, Login, Sidebar, Hero } from './page-objects'
 import { LoginForm, RegisterForm, UserDetailsModal } from './components'
 
 
@@ -15,17 +15,22 @@ describe('Referral Sharing and Rewards', () => {
     let registerForm = new RegisterForm()
     let userDetails = new UserDetailsModal()
     let sidebar = new Sidebar()
+    let hero = new Hero()
     let EC      = protractor.ExpectedConditions
 
     // Referral specific element references
     let copyReferralLinkBtn = element(by.id("buttonCopyReferralLink"))
     let referalCodeBox = element(by.id("copyReferralCode"))
     let referralClose = element(by.css("#referralModal .close"))
-    let referralStamp1 = element(by.css("#referralStamp1"))
-    let referralStamp2 = element(by.css("#referralStamp2"))
-    let referralStamp3 = element(by.css("#referralStamp3"))
-    let referralStamp4 = element(by.css("#referralStamp4"))
-    let referralStamp5 = element(by.css("#referralStamp5"))
+    let referralStamp1 = element(by.id("referralStamp1"))
+    let referralStamp2 = element(by.id("referralStamp2"))
+    let referralStamp3 = element(by.id("referralStamp3"))
+    let referralStamp4 = element(by.id("referralStamp4"))
+    let referralStamp5 = element(by.id("referralStamp5"))
+    let redeemButton = element(by.id("redeemReferralsButton"))
+    let facebookShare = element(by.id("referFacebookShare"))
+    let twitterShare = element(by.id("referTwitterShare"))
+    let emailShare = element(by.id("referEmailShare"))
 
     describe("Test sharing referral code, and referred registration", () => {
         let referralLink = ""
@@ -40,7 +45,7 @@ describe('Referral Sharing and Rewards', () => {
             loginForm.login(login.referUser, login.referPassword)
             // Verify that we reach the dashboard after login
             browser.wait(EC.urlContains("dashboard"), 5000, "never reached the dashboard after logging in")
-            // Navigate to the Hero promo page
+            // Open Referral Modal
             sidebar.clickReferralButton()
             // Verify we made it there
             browser.wait(EC.elementToBeClickable(copyReferralLinkBtn), 5000, "never saw the referral modal")
@@ -50,39 +55,75 @@ describe('Referral Sharing and Rewards', () => {
                 // Verify referral link is longer than just "edji.it"
                 expect(referralLink.length).toBeGreaterThan(5)
             })
-            
-            describe("Referral modal share and display", () => {
-                /**
-                 * Share Referral via:
-                 * - Facebook
-                 * - Twitter
-                 * - Email
-                 */
-                it("should be able to share unique referral link via socials", () => {
-                    // element(by.id("referShareFacebook")).click().then(function () {
-                    //     browser.getAllWindowHandles().then(function (handles) {
-                    //         newWindowHandle = handles[1]; // this is your new window
-                    //         browser.switchTo().window(newWindowHandle).then(function () {
-                    //             // fill in the form here
-                    //             expect(browser.getCurrentUrl()).toMatch(/\/url/);
-                    //         });
-                    //     });
-                    // });
-                })
-                
-
-                /**
-                 * User who has completed 5 referrals should be rewarded
-                 */
-                it("should reward user with 5 or more referrals", () => {
-                    
-                })
-            })
-
             // Close referral modal 
             referralClose.click()
-            // Log out referral user
-            sidebar.clickLogOutButton()
+        })
+
+        /**
+         * Share Referral via:
+         * - Facebook
+         * - Twitter
+         * - Email
+         */
+        it("should be able to share unique referral link via socials", () => {
+            // Open Referral Modal
+            sidebar.clickReferralButton()
+            // Share on Facebook
+            browser.wait(EC.elementToBeClickable(facebookShare), 5000, "never saw Facebook share button")
+            facebookShare.click().then(() => {
+                browser.getAllWindowHandles().then((handles) => {
+                    // Swap to newly opened tab
+                    let newWindowHandle = handles[1]
+                    browser.switchTo().window(newWindowHandle).then(() => {
+                        // Verify share page
+                        expect(browser.getCurrentUrl()).toContain("facebook.com")
+                    })
+                    // Close share tab
+                    browser.driver.close()
+                    browser.driver.switchTo().window(handles[0])
+                })
+            })
+            // Share on Twitter
+            browser.wait(EC.elementToBeClickable(twitterShare), 5000, "never saw Twitter share button")
+            twitterShare.click().then(() => {
+                browser.getAllWindowHandles().then((handles) => {
+                    // Swap to newly opened tab
+                    let newWindowHandle = handles[1] 
+                    browser.switchTo().window(newWindowHandle).then(() => {
+                        // Verify share page
+                        expect(browser.getCurrentUrl()).toContain("twitter.com")
+                    })
+                    // Close share tab
+                    browser.driver.close()
+                    browser.driver.switchTo().window(handles[0])
+                })
+            })
+            // Close referral modal 
+            referralClose.click()
+        })
+
+        /**
+         * User who has completed 5 referrals should be rewarded
+         */
+        it("should reward user with 5 or more referrals", () => {
+            // Open Referral modal
+            sidebar.clickReferralButton()
+            // Verify all 5 stamps are showing
+            browser.wait(EC.visibilityOf(referralStamp1), 3000, "referral stamp 1 not showing")
+            browser.wait(EC.visibilityOf(referralStamp2), 3000, "referral stamp 2 not showing")
+            browser.wait(EC.visibilityOf(referralStamp3), 3000, "referral stamp 3 not showing")
+            browser.wait(EC.visibilityOf(referralStamp4), 3000, "referral stamp 4 not showing")
+            browser.wait(EC.visibilityOf(referralStamp5), 3000, "referral stamp 5 not showing")
+            // Begin redeeming reward
+            redeemButton.click()
+            // Verify Hero subscription modal opened
+            browser.wait(EC.visibilityOf(hero.subscribeModal), 5000, "Hero modal didn't show when redeeming reward")
+            // Verify 100% discount applied
+            hero.validCouponMsg.getText().then(couponMsg => {
+                expect(couponMsg).toContain("100%")
+            })
+            // Close hero modal
+            hero.subscribeModalClose.click()
         })
 
         /**
@@ -90,6 +131,9 @@ describe('Referral Sharing and Rewards', () => {
          * - Referral modal will show 20% off
          */
         it("should register with referral link, and be credited for referral", () => {
+            // Log out referral user
+            sidebar.clickLogOutButton()
+            // Open referral link
             browser.get(referralLink)
             // Verify user lands on Registration page
             browser.wait(EC.urlContains("register"), 5000, "referral link never landed on registration page")
