@@ -23,6 +23,7 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
     type: "",
     message: ""
   }
+  private linkCopySuccess: boolean
 
   @Input() private showReferral: boolean
   @Output() private hideReferral: EventEmitter<boolean> = new EventEmitter()
@@ -129,13 +130,10 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
     // Take this hidden element out of the DOM
     document.body.removeChild(selBox)
     // Show a success alert when the code is copied to their clipboard
+    this.linkCopySuccess = true
     setTimeout(() => {
-      this.alertObject = {
-        show: true,
-        type: "alert-success",
-        message: "Your referral link was copied to your clipboard"
-      }
-    }, 500)
+      this.linkCopySuccess = false
+    }, 2000)
   }
 
   /**

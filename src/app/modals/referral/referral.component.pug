@@ -24,18 +24,21 @@
             .container
               .row.mb-4
                 .col-sm-6.pl-0
-                  .input-group
-                    input#copyReferralCode.form-control(
-                      name="ReferralCode",
-                      type="text",
-                      disabled="true",
-                      value="{{referralLink}}")
-                    span.input-group-btn
-                      button#buttonCopyReferralLink.btn.btn-primary.btn-rnd-corner-right(
-                        type="button", 
-                        (click)="shareReferralCode()", 
-                        name="Copy", 
-                        href="#") Copy
+                  .form-group
+                    .input-group
+                      input#copyReferralCode.form-control(
+                        name="ReferralCode",
+                        type="text",
+                        disabled="true",
+                        value="{{referralLink}}")
+                      span.input-group-btn
+                        button#buttonCopyReferralLink.btn.btn-primary.btn-rnd-corner-right(
+                          type="button", 
+                          (click)="shareReferralCode()", 
+                          name="Copy", 
+                          href="#") Copy
+                    small.form-text.text-success(*ngIf="linkCopySuccess")
+                      | Link was copied to your clipboard!
                 .col-sm-6.pr-0
                   .share-icon__group.float-right
                     .icon-email.share-icon((click)="shareReferralCode('email')")
