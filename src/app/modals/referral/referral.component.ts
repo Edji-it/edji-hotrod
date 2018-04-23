@@ -173,7 +173,9 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
    * Depending on the number of referrals the user has, get the code
    */
   private getCouponCode() {
-    switch(this.numberReferrals) {
+    // A user may refer more than 5, but they get the same discount
+    let couponNo = this.numberReferrals > 4 ? 4 : this.numberReferrals
+    switch(couponNo) {
       case 0:
         return "HOTROD_HERO_ONE5TH"
       case 1:
