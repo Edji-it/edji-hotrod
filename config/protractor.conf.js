@@ -24,7 +24,6 @@ exports.config = {
         'disable-web-security',
         '--window-size=1680,1050',
         '--disable-extensions',
-        '--headless', 
         '--disable-gpu',
         '--no-sandbox'
       ]
@@ -38,17 +37,18 @@ exports.config = {
    - Spec patterns are relative to the location of the spec file. They may include glob patterns.
   */
   suites: {
-    home:       helpers.root('src/tests/e2e/home.spec.ts'),
     account:    helpers.root('src/tests/e2e/account.spec.ts'),
-    login:      helpers.root('src/tests/e2e/login.spec.ts'),
-    ownerTools: helpers.root('src/tests/e2e/owner-tools.spec.ts'),
-    newReading: helpers.root('src/tests/e2e/new-reading.spec.ts'),
-    project:    helpers.root('src/tests/e2e/project.spec.ts'),
     dashboard:  helpers.root('src/tests/e2e/dashboard.spec.ts'),
     discover:   helpers.root('src/tests/e2e/discover.spec.ts'),
-    question:   helpers.root('src/tests/e2e/questions.spec.ts'),
-    version:    helpers.root('src/tests/e2e/version.spec.ts'),
     heroSubscribe: helpers.root('src/tests/e2e/hero-subscribe.spec.ts'),
+    home:       helpers.root('src/tests/e2e/home.spec.ts'),
+    login:      helpers.root('src/tests/e2e/login.spec.ts'),
+    newReading: helpers.root('src/tests/e2e/new-reading.spec.ts'),
+    ownerTools: helpers.root('src/tests/e2e/owner-tools.spec.ts'),
+    project:    helpers.root('src/tests/e2e/project.spec.ts'),
+    question:   helpers.root('src/tests/e2e/questions.spec.ts'),
+    referral:   helpers.root('src/tests/e2e/referral.spec.ts'),
+    version:    helpers.root('src/tests/e2e/version.spec.ts'),
     all:        [helpers.root('src/tests/e2e/home.spec.ts'),  helpers.root('src/tests/e2e/login.spec.ts')]
   },
 

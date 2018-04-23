@@ -32,6 +32,8 @@ export class Login implements PageObjectInterface
     public heroPassword     = 'testhero16';
     public botUser          = 'testbot';
     public botPassword      = 'testbot';
+    public referUser        = 'testrefer';
+    public referPassword    = 'testrefer2000';
     public invalidEntry     = 'HitlerHatesEDJI_666_420';
     public validProjectCode = 'test';
     public testGuestName    = "Queen Elizabeth II";
@@ -57,37 +59,4 @@ export class Login implements PageObjectInterface
         this.passwordInput.sendKeys(input);
     } // enterPassword (input : string) : void
     
-    clearLoginFields () : void
-    {
-        this.usernameInput.clear();
-        this.passwordInput.clear();
-    }
-    
-    enterStudentAccountCredentials () : void
-    {
-        this.enterUsername(this.studentUser);
-        this.enterPassword(this.studentPassword);
-    } // enterStudentAccountCredentials () : void
-
-    enterTeacherAccountCredentials () : void
-    {
-         this.enterUsername(this.teacherUser);
-         this.enterPassword(this.teacherPassword);
-    } // enterTeacherAccountCredentials () : void
-
-    clickLoginButton () : void
-    {   
-        this.loginButton.click();
-    } // clickLoginButton () : void
-    
-    enterGuestName (input : string) : void
-    {
-        this.guestNameInput.sendKeys(input);
-    } // enterGuestName () : void
-
-    clickGuestLoginButton () : void
-    {
-        this.guestLoginButton.click();
-    } // clickGuestLoginButton () : void
-
 } // class Login

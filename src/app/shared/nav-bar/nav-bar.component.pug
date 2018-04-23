@@ -45,13 +45,13 @@
           button#accountButton.list-group-item.list-group-item-action(type="button", [routerLink]="['/account']") {{ user.fullname }}
             span.list-icon--right([innerHtml]="':gear:' | emojione")
           //- Refer
-          //- button.list-group-item.list-group-item-action(type="button" Disabled) Refer Teachers
+          button#navReferralButton.list-group-item.list-group-item-action(type="button", (click)="showReferralModal=true") Refer Teachers
             span.list-icon--right([innerHtml]="':satellite:' | emojione")
           //- Feedback
-          button.list-group-item.list-group-item-action(type="button", (click)="openFeedback()") Contact Us
+          button#navFeedbackButton.list-group-item.list-group-item-action(type="button", (click)="openFeedback()") Contact Us
             span.list-icon--right([innerHtml]="':question:' | emojione")
           //- Guides
-          button.list-group-item.list-group-item-action(type="button", (click)="openGuides()") Guides
+          button#navGuidesButton.list-group-item.list-group-item-action(type="button", (click)="openGuides()") Guides
             span.list-icon--right([innerHtml]="':book:' | emojione")
           //- Log Out
           button#logOutButton.list-group-item.list-group-item-action(type="button", (click)="logout()") Log Out
@@ -144,3 +144,11 @@
   #projectCodeError.invalid-feedback(*ngIf="errorObject.invalidCode", [innerHtml]="errorObject.invalidCode | emojione")
 
 share-code([showOpenReading]="_route.snapshot.queryParams.readingCodeModal")
+referral-modal([showReferral]="showReferralModal", (hideReferral)="showReferralModal=false", (exerciseCoupon)="useCoupon($event)")
+hero-subscribe-modal.modal-will-fade(
+  *ngIf="showHeroSubModal",
+  [class.show]="showHeroSubModal", 
+  (closeModal)="showHeroSubModal=false", 
+  (heroWasBorn)="_router.navigate(['/dashboard'])",
+  [couponCode]="couponCode"
+)
