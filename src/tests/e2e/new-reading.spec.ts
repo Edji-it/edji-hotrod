@@ -83,10 +83,6 @@ describe('New Reading Page', () => {
         browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
         newReading.finalizeButton.click();
 
-        // // Click the 'Go to Reading' button on share button modal
-        // browser.wait(EC.elementToBeClickable(newReading.goToReadingButton), 5000, "share code modal go to reading button never became clickable")
-        // newReading.goToReadingButton.click();
-
         // Should redirect to Project page for new reading
         browser.wait(EC.urlContains("project"), 5000, "never arrived at new reading");
         // Reset user to dashboard
@@ -190,79 +186,79 @@ describe('New Reading Page', () => {
         - Insert PDF into the Reading
         - Create the Reading
     */
-    // describe("PDF upload", () => {
-    //     /**
-    //      * Test: Add reading with pages from a PDF
-    //      */
-    //     it('should upload a PDF to a reading and save it to the reading', function() {
-    //         // Open and wait for New Reading page
-    //         dashboard.openNewReading();
-    //         browser.wait(EC.elementToBeClickable(newReading.uploadPDfModalButton), 5000);
-    //         newReading.uploadPDfModalButton.click();
+    describe("PDF upload", () => {
+        /**
+         * Test: Add reading with pages from a PDF
+         */
+        it('should upload a PDF to a reading and save it to the reading', function() {
+            // Open and wait for New Reading page
+            dashboard.openNewReading();
+            browser.wait(EC.elementToBeClickable(newReading.uploadPDfModalButton), 5000);
+            newReading.uploadPDfModalButton.click();
             
-    //         // Select File to upload
-    //         let fileToUpload = '../../assets/test/2-pages.pdf';
-    //         let absolutePath = path.resolve(__dirname, fileToUpload);
-    //         newReading.pdfFileInput.sendKeys(absolutePath);
+            // Select File to upload
+            let fileToUpload = '../../assets/test/2-pages.pdf';
+            let absolutePath = path.resolve(__dirname, fileToUpload);
+            newReading.pdfFileInput.sendKeys(absolutePath);
 
-    //         // Begin upload 
-    //         browser.wait(EC.elementToBeClickable(newReading.pdfUploadTrigger), 10000, "button to upload a PDF never became clickable");
-    //         newReading.pdfUploadTrigger.click();
+            // Begin upload 
+            browser.wait(EC.elementToBeClickable(newReading.pdfUploadTrigger), 10000, "button to upload a PDF never became clickable");
+            newReading.pdfUploadTrigger.click();
 
-    //         // Image was uploaded! Insert it
-    //         browser.wait(EC.elementToBeClickable(newReading.insertUploadedPdf), 20000, "the pdf never became available to insert");
-    //         newReading.insertUploadedPdf.click();
+            // Image was uploaded! Insert it
+            browser.wait(EC.elementToBeClickable(newReading.insertUploadedPdf), 20000, "the pdf never became available to insert");
+            newReading.insertUploadedPdf.click();
 
-    //         // Complete rest of reading
-    //         newReading.titleInput.sendKeys(newReading.titleImageString);
-    //         // Make private to avoid needing grade levels and subjecst
-    //         newReading.privateButton.click();
+            // Complete rest of reading
+            newReading.titleInput.sendKeys(newReading.titleImageString);
+            // Make private to avoid needing grade levels and subjecst
+            newReading.privateButton.click();
 
-    //         // Submit New Reading
-    //         newReading.addNewReading()
-    //         browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
-    //         newReading.finalizeButton.click();
+            // Submit New Reading
+            newReading.addNewReading()
+            browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
+            newReading.finalizeButton.click();
 
-    //         // // Click the 'Go to Reading' button on share button modal
-    //         // browser.wait(EC.elementToBeClickable(newReading.goToReadingButton), 5000, "share code modal go to reading button never became clickable")
-    //         // newReading.goToReadingButton.click();
+            // // Click the 'Go to Reading' button on share button modal
+            // browser.wait(EC.elementToBeClickable(newReading.goToReadingButton), 5000, "share code modal go to reading button never became clickable")
+            // newReading.goToReadingButton.click();
 
-    //         // Should create a new Reading
-    //         browser.wait(EC.urlContains("project"), 5000, "never arrived at new reading");
+            // Should create a new Reading
+            browser.wait(EC.urlContains("project"), 5000, "never arrived at new reading");
 
-    //         // Should see image in new reading
-    //         browser.wait(EC.presenceOf(newReading.imageInReading), 10000, "never saw PDF in the new reading");
-    //         // Reset user to dashboard
-    //         sidebar.backToDash();
-    //     });
+            // Should see image in new reading
+            browser.wait(EC.presenceOf(newReading.imageInReading), 10000, "never saw PDF in the new reading");
+            // Reset user to dashboard
+            sidebar.backToDash();
+        });
 
-    //     // This following test relies on the previous one for a PDF to delete.
-    //     it('should delete a PDF that was uploaded', function() {
-    //        // Open and wait for New Reading page
-    //         dashboard.openNewReading();
-    //         browser.wait(EC.elementToBeClickable(newReading.uploadPDfModalButton), 5000);
-    //         newReading.uploadPDfModalButton.click();
+        // This following test relies on the previous one for a PDF to delete.
+        it('should delete a PDF that was uploaded', function() {
+           // Open and wait for New Reading page
+            dashboard.openNewReading();
+            browser.wait(EC.elementToBeClickable(newReading.uploadPDfModalButton), 5000);
+            newReading.uploadPDfModalButton.click();
            
-    //         // Click the delete button
-    //         let allPdfCards = element.all(by.id("titleCard"));
-    //         let pdfCard = element(by.id("titleCard"));
+            // Click the delete button
+            let allPdfCards = element.all(by.id("titleCard"));
+            let pdfCard = element(by.id("titleCard"));
 
-    //         let delBtn = element(by.id("pdfDelBtn"));
-    //         let confirmDelBtn = element(by.id("pdfDelBtnConfirm"));
+            let delBtn = element(by.id("pdfDelBtn"));
+            let confirmDelBtn = element(by.id("pdfDelBtnConfirm"));
 
-    //         browser.wait(EC.elementToBeClickable(delBtn), 5000, "delBtn never became clickable");
-    //         delBtn.click();
+            browser.wait(EC.elementToBeClickable(delBtn), 5000, "delBtn never became clickable");
+            delBtn.click();
 
-    //         browser.wait(EC.elementToBeClickable(confirmDelBtn), 5000, "confirm delete button never became clickable");
-    //         confirmDelBtn.click();
+            browser.wait(EC.elementToBeClickable(confirmDelBtn), 5000, "confirm delete button never became clickable");
+            confirmDelBtn.click();
 
-    //         // TO-DO: We've had issues tracking this via count
-    //         // browser.wait(EC.invisibilityOf(delBtn), 5000, 'delete button should not be visible.');
+            // TO-DO: We've had issues tracking this via count
+            // browser.wait(EC.invisibilityOf(delBtn), 5000, 'delete button should not be visible.');
 
-    //         // Reset user to dashboard
-    //         sidebar.backToDash();
-    //     });
-    // });
+            // Reset user to dashboard
+            sidebar.backToDash();
+        });
+    });
 
     describe("Image upload", () => {
         /**

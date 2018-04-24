@@ -2,7 +2,7 @@ import { Subscription } from 'rxjs/Rx';
 import { Project } from '../../shared/datatypes';
 import { Router } from '@angular/router';
 import { Component, EventEmitter, Input, OnInit, Output, OnDestroy } from '@angular/core';
-import { UtilToolService, ProjectService, AuthService } from './../../shared'
+import { UtilToolService, ProjectService, AuthService, ReadingService } from './../../shared'
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -24,6 +24,7 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
     message: ""
   }
   private linkCopySuccess: boolean
+  private referredByComplete: boolean 
 
   @Input() private showReferral: boolean
   @Output() private hideReferral: EventEmitter<boolean> = new EventEmitter()
@@ -34,51 +35,23 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private _util: UtilToolService,
     private _projects: ProjectService,
+    private _readings: ReadingService,
     private _auth: AuthService
   ) {
     
   }
 
   ngOnInit() {
+    let user = this._auth.getUser()
     // Let's ask the db how many referrals this user has through the auth service
     this.subscriptions.push(
-      this._auth.getReferralProgress(this._auth.getUser()._id).subscribe((userReferrals) => {
+      this._auth.getReferralProgress(user._id).subscribe((userReferrals) => {
         // Set the current number of referrals and build our array of objects
-        this.numberReferrals = userReferrals.users_referred.length - 1
-        // Count if you were referred by another user, add this to the number of referrals
-        if (this._auth.getUser().referred_by && this._auth.getUser().referred_by.length > 0) {
-          this.numberReferrals += 1
-        }
-        let maximumReferral = 5
-        for (let i=0;i<maximumReferral;i++) {
-          if (i <= this.numberReferrals) {
-            this.referralBlocks[i] = {
-              referred: true
-            }
-          } else {
-            this.referralBlocks[i] = {
-              referred: false
-            }
-          }
-        }
-        // If the user has 1 or more referrals
-        // Note: for purposes of lining up with the array, we subtract 1 from the user_referrals length above before we do anything else
-        if (this.numberReferrals > -1) {
-          // calculate and set the discount
-          let discount = ((this.numberReferrals + 1) * 20)
-          if (discount > 100) { discount = 100 }
-          // this.referralBlocks[this.numberReferrals].discount = discount
-          // Set the discount text values (header, text, and button)
-          if (this.numberReferrals >= 4) {
-              this.referralCouponCopy.header = 'Congratulations'
-              this.referralCouponCopy.text = 'Hero is all yours! With great power comes great engagement.'
-              this.referralCouponCopy.buttonText = 'Redeem Free Year'
-          } else {
-              this.referralCouponCopy.header = (this.numberReferrals + 1) + ' Referral' + (this.numberReferrals >= 1 ? 's' : '') + ' in the Bag!'
-              this.referralCouponCopy.text = "You've unlocked " + discount + "% off. Use it now or go for an even bigger deal."
-              this.referralCouponCopy.buttonText = 'Get Hero ' + discount + '% Off'
-          }
-        }
+        let completedReferrals = userReferrals.users_referred.filter(referred => {
+          return referred.status == "completed"
+        })
+        this.numberReferrals = completedReferrals.length - 1
+        this.evaluateReferralProgress(this.numberReferrals, this.referredByComplete)
         // Set the referral code for copying and sharing
         this.referralCode = userReferrals.code
         this.referralLink = location.origin + "/#/?r=" + this.referralCode
@@ -91,6 +64,25 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
         }
       })
     )
+    // If the user was referred, we want to give them credit when they create a reading
+    if (user.referred_by && user.referred_by.length > 0) {
+      this.subscriptions.push(
+        this._readings.currentUserReadings.subscribe((data) => {
+          if (data.readings && data.readings.length > 0) {
+            this.closeAlert()
+            this.referredByComplete = true
+            this.evaluateReferralProgress(this.numberReferrals, this.referredByComplete)
+          } else {
+            // Let the user know they need to create a Reading!
+            this.alertObject = {
+              show: true,
+              type: "alert-info",
+              message: "<b>Almost There</b><br/>Since you were referred by someone, just <a class='link' href='/#/new-reading'>create a reading</a> to get a stamp and earn 20% off!"
+            }
+          }
+        })
+      )
+    }
   }
 
   ngOnDestroy() {
@@ -100,6 +92,46 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
   private closeModal() {
     this.showReferral = false
     this.hideReferral.emit(false)
+  }
+
+  /**
+   * Evaluates Referral Progress
+   * - Updates display objects
+   */
+  private evaluateReferralProgress(referralIndex: number, referredByComplete: boolean) : void {
+    // Count if you were referred by another user AND completed a reading, add this to the number of referrals
+    if (referredByComplete) {
+      referralIndex += 1
+    }
+    let maximumReferral = 5
+    for (let i=0;i<maximumReferral;i++) {
+      if (i <= referralIndex) {
+        this.referralBlocks[i] = {
+          referred: true
+        }
+      } else {
+        this.referralBlocks[i] = {
+          referred: false
+        }
+      }
+    }
+    // If the user has 1 or more referrals
+    // Note: for purposes of lining up with the array, we subtract 1 from the user_referrals length above before we do anything else
+    if (referralIndex > -1) {
+      // calculate and set the discount
+      let discount = ((referralIndex + 1) * 20)
+      if (discount > 100) { discount = 100 }
+      // Set the discount text values (header, text, and button)
+      if (referralIndex >= 4) {
+          this.referralCouponCopy.header = 'Congratulations'
+          this.referralCouponCopy.text = 'Hero is all yours! With great power comes great engagement.'
+          this.referralCouponCopy.buttonText = 'Redeem Free Year'
+      } else {
+          this.referralCouponCopy.header = (referralIndex + 1) + ' Referral' + (referralIndex >= 1 ? 's' : '') + ' in the Bag!'
+          this.referralCouponCopy.text = "You've unlocked " + discount + "% off. Use it now or go for an even bigger deal."
+          this.referralCouponCopy.buttonText = 'Get Hero ' + discount + '% Off'
+      }
+    }
   }
 
   /**
