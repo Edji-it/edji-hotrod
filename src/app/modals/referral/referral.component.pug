@@ -1,4 +1,4 @@
-.modal-will-fade([class.show]="showReferral", *ngIf="showReferral")
+.modal-will-fade([class.show]="showModal", *ngIf="showModal")
   .modal#referralModal
     .modal-dialog(role="document")
       .modal-content
@@ -14,7 +14,7 @@
         .modal-body
           .alert.alert-reading.alert-dismissable.fade(*ngIf="alertObject.show", [class.show]="alertObject.show", role="alert", [ngClass]="alertObject.type")
             a.close(href="#", (click)="closeAlert()") ×
-            p.mb-0 {{alertObject.message}}
+            p.mb-0([innerHtml]="alertObject.message")
           //- Overview copy
           p.small.mb-3 Share your unique referral link to give 
             i and 
@@ -57,6 +57,7 @@
                       value="{{referralLink}}")
                     span.input-group-btn.d-inline-block
                       button#buttonCopyReferralLink.btn.btn-primary.btn-rnd-corner-right(
+                        *ngIf="referralLink",
                         type="button", 
                         (click)="shareReferralCode()", 
                         name="Copy", 
@@ -75,15 +76,15 @@
               .row
                 .col-2.p-0.referral-col(
                   *ngFor="let referral of referralBlocks; let i=index", 
-                  [ngClass]="['referral-col-' + i, (i == numberReferrals || (i == 4 && numberReferrals > i)) ? 'referral--connecting-line' : '' ]"
+                  [ngClass]="['referral-col-' + i, (i == referralIndex || (i == 4 && referralIndex > i)) ? 'referral--connecting-line' : '' ]"
                 )
                   .referral-block.text-center([ngClass]="['referral-block-' + i]")
                     | H
                   //- If referrals are completed, let's add a "stamp" over top and some coupon copy
                   .referral-icon(*ngIf="referralBlocks[i].referred", [ngClass]="getReferralIcon(i)", [attr.id]="'referralStamp' + (i + 1)")
             .coupon-message(
-              *ngIf="numberReferrals>-1", 
-              [ngStyle]="{'float': numberReferrals>2 ? 'right' : 'left'}"
+              *ngIf="referralIndex>-1", 
+              [ngStyle]="{'float': referralIndex>2 ? 'right' : 'left'}"
             )
               .row.no-gutters(style="flex-wrap: initial;")
                 .col-8
@@ -96,15 +97,15 @@
             .container
               .row
                 .col-2.p-0.referral-col.narrow-margin(*ngFor="let referral of referralBlocks; let i=index", 
-                  [ngClass]="['referral-col-' + i, numberReferrals==i ? 'referral--connecting-line' : '' ]"
+                  [ngClass]="['referral-col-' + i, referralIndex==i ? 'referral--connecting-line' : '' ]"
                 )
                   .referral-block.text-center.narrow([ngClass]="['referral-block-' + i]")
                     | H
                   //- If referrals are completed, let's add a "stamp" over top and some coupon copy
                   .referral-icon.referral-icon--narrow(*ngIf="referralBlocks[i].referred", [ngClass]="getReferralIcon(i)")
             .container.coupon-message.coupon-small(
-              *ngIf="numberReferrals>-1", 
-              [ngStyle]="{'float': numberReferrals>2 ? 'right' : 'left'}"
+              *ngIf="referralIndex>-1", 
+              [ngStyle]="{'float': referralIndex>2 ? 'right' : 'left'}"
             )
               .row(style="flex-wrap: initial;")
                 .col-6.p-0

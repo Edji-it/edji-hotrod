@@ -1,7 +1,7 @@
 import { browser, by, element, protractor } from 'protractor'
 
 // Internal
-import { Home, Login, Sidebar, Hero } from './page-objects'
+import { Home, Login, Sidebar, Hero, Dashboard, NewReading } from './page-objects'
 import { LoginForm, RegisterForm, UserDetailsModal } from './components'
 
 
@@ -16,6 +16,8 @@ describe('Referral Sharing and Rewards', () => {
     let userDetails = new UserDetailsModal()
     let sidebar = new Sidebar()
     let hero = new Hero()
+    let dashboard = new Dashboard()
+    let newReading = new NewReading()
     let EC      = protractor.ExpectedConditions
 
     // Referral specific element references
@@ -118,6 +120,8 @@ describe('Referral Sharing and Rewards', () => {
             redeemButton.click()
             // Verify Hero subscription modal opened
             browser.wait(EC.visibilityOf(hero.subscribeModal), 5000, "Hero modal didn't show when redeeming reward")
+            // Wait for coupon message
+            browser.wait(EC.visibilityOf(hero.validCouponMsg), 3000, "discount message never showed")
             // Verify 100% discount applied
             hero.validCouponMsg.getText().then(couponMsg => {
                 expect(couponMsg).toContain("100%")
@@ -130,7 +134,7 @@ describe('Referral Sharing and Rewards', () => {
          * Referral link should credit registered user as referred
          * - Referral modal will show 20% off
          */
-        it("should register with referral link, and be credited for referral", () => {
+        it("should register with referral link, create reading, and be credited for referral", () => {
             // Log out referral user
             sidebar.clickLogOutButton()
             // Open referral link
@@ -145,7 +149,36 @@ describe('Referral Sharing and Rewards', () => {
             userDetails.confirmBot()
             // Open referrals modal
             sidebar.clickReferralButton()
-            // Verify user has 1 referral credit
+            // Verify user has not received referral credit
+            browser.wait(EC.invisibilityOf(referralStamp1), 3000, "referral stamp should not show for incomplete referral")
+            // Close referral modal 
+            referralClose.click()
+            /**
+             * Create New Reading to complete Referral
+             */
+            dashboard.openNewReading();
+            // Enter sample Reading into form
+            newReading.titleInput.sendKeys(newReading.titleString);
+            // Make private to avoid needing grade levels and subjecst
+            newReading.privateButton.click();
+            newReading.contentInput.sendKeys(newReading.contentShortString);
+            newReading.sourceInput.sendKeys(newReading.sourceString);
+            // Submit New Reading
+            newReading.addNewReading()
+            // Group Label has content prefilled, so we clear it
+            newReading.groupInput.clear();
+            newReading.groupInput.sendKeys(newReading.groupString);
+            browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
+            newReading.finalizeButton.click();
+            // Should redirect to Project page for new reading
+            browser.wait(EC.urlContains("project"), 5000, "never arrived at new reading");
+            // Reset user to dashboard
+            sidebar.backToDash();
+            /**
+             * Verify user was credited for Referral completion
+             */
+            // Open referrals modal
+            sidebar.clickReferralButton()
             browser.wait(EC.visibilityOf(referralStamp1), 3000, "referral stamp not showing for referred user")
             // Make sure the new user didn't get extra credit
             browser.wait(EC.invisibilityOf(referralStamp2), 3000, "extra referral stamp showing for referred user")

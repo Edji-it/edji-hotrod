@@ -211,7 +211,9 @@ export class AuthService implements CanActivate {
     }
 
     logout() {
-        this.destroyCredentials();
+        this.destroyCredentials()
+        // Refresh window to clear components/services
+        location.reload()
     }
 
     /**
