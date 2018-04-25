@@ -33,6 +33,8 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
     if (typeof(showReferral) !== 'undefined' && this.showModal !== showReferral) {
       this.showModal = showReferral
       if (this.showModal) {
+        // Get user's referral status
+        this.getUserReferralStatus()
         // Refresh the check for created readings on modal open
         this._readings.updateCreated()
       }
@@ -55,27 +57,6 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     let user = this._auth.getUser()
-    // Let's ask the db how many referrals this user has through the auth service
-    this.subscriptions.push(
-      this._auth.getReferralProgress(user._id).subscribe((userReferrals) => {
-        // Set the current number of referrals and build our array of objects
-        let completedReferrals = userReferrals.users_referred.filter(referred => {
-          return referred.status == "completed"
-        })
-        this.numberReferrals = completedReferrals.length - 1
-        this.evaluateReferralProgress(this.numberReferrals, this.referredByComplete)
-        // Set the referral code for copying and sharing
-        this.referralCode = userReferrals.code
-        this.referralLink = location.origin + "/#/?r=" + this.referralCode
-      }, (err) => {
-        console.error(err)
-        this.alertObject = {
-          show: true,
-          type: "alert-danger",
-          message: "We had some trouble getting your referrals, it might be our fault"
-        }
-      })
-    )
     // If the user was referred, we want to give them credit when they create a reading
     if (user.referred_by && user.referred_by.length > 0) {
       this.subscriptions.push(
@@ -106,6 +87,32 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
     this.hideReferral.emit(false)
   }
 
+  /**
+   * Get User's Referral Status
+   * - Retrieves: referral code, users referred
+   * - Causes re-calc of referral stamps
+   */
+  private getUserReferralStatus() {
+    let user = this._auth.getUser() 
+    this._auth.getReferralProgress(user._id).take(1).subscribe((userReferrals) => {
+      // Set the current number of referrals and build our array of objects
+      let completedReferrals = userReferrals.users_referred.filter(referred => {
+        return referred.status == "completed"
+      })
+      this.numberReferrals = completedReferrals.length - 1
+      this.evaluateReferralProgress(this.numberReferrals, this.referredByComplete)
+      // Set the referral code for copying and sharing
+      this.referralCode = userReferrals.code
+      this.referralLink = location.origin + "/#/?r=" + this.referralCode
+    }, (err) => {
+      console.error(err)
+      this.alertObject = {
+        show: true,
+        type: "alert-danger",
+        message: "We had some trouble getting your referrals, it might be our fault"
+      }
+    })
+  }
   /**
    * Evaluates Referral Progress
    * - Updates display objects
