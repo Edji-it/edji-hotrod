@@ -32,6 +32,10 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
   set showReferral(showReferral: boolean) {
     if (typeof(showReferral) !== 'undefined' && this.showModal !== showReferral) {
       this.showModal = showReferral
+      if (this.showModal) {
+        // Refresh the check for created readings on modal open
+        this._readings.updateCreated()
+      }
     } 
   }
   get showReferral(): boolean { return this.showModal }
