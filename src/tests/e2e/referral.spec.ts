@@ -120,6 +120,8 @@ describe('Referral Sharing and Rewards', () => {
             redeemButton.click()
             // Verify Hero subscription modal opened
             browser.wait(EC.visibilityOf(hero.subscribeModal), 5000, "Hero modal didn't show when redeeming reward")
+            // Wait for coupon message
+            browser.wait(EC.visibilityOf(hero.validCouponMsg), 3000, "discount message never showed")
             // Verify 100% discount applied
             hero.validCouponMsg.getText().then(couponMsg => {
                 expect(couponMsg).toContain("100%")
