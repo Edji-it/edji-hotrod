@@ -57,6 +57,7 @@
                       value="{{referralLink}}")
                     span.input-group-btn.d-inline-block
                       button#buttonCopyReferralLink.btn.btn-primary.btn-rnd-corner-right(
+                        *ngIf="referralLink",
                         type="button", 
                         (click)="shareReferralCode()", 
                         name="Copy", 
