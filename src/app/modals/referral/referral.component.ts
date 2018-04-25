@@ -17,6 +17,7 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
   private referralCode: string
   private referralBlocks: any = []
   private numberReferrals: number
+  private referralIndex: number = -1
   private referralCouponCopy: any = {}
   private alertObject = {
     show: false,
@@ -26,7 +27,14 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
   private linkCopySuccess: boolean
   private referredByComplete: boolean 
 
-  @Input() private showReferral: boolean
+  private showModal: boolean
+  @Input()
+  set showReferral(showReferral: boolean) {
+    if (typeof(showReferral) !== 'undefined' && this.showModal !== showReferral) {
+      this.showModal = showReferral
+    } 
+  }
+  get showReferral(): boolean { return this.showModal }
   @Output() private hideReferral: EventEmitter<boolean> = new EventEmitter()
   @Output() private exerciseCoupon: EventEmitter<any> = new EventEmitter()
 
@@ -90,7 +98,7 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
   }
 
   private closeModal() {
-    this.showReferral = false
+    this.showModal = false
     this.hideReferral.emit(false)
   }
 
@@ -132,6 +140,7 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
           this.referralCouponCopy.buttonText = 'Get Hero ' + discount + '% Off'
       }
     }
+    this.referralIndex = referralIndex
   }
 
   /**
