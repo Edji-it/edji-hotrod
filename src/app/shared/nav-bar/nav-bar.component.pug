@@ -45,7 +45,7 @@
           button#accountButton.list-group-item.list-group-item-action(type="button", [routerLink]="['/account']") {{ user.fullname }}
             span.list-icon--right([innerHtml]="':gear:' | emojione")
           //- Refer
-          button#navReferralButton.list-group-item.list-group-item-action(type="button", (click)="showReferralModal=true") Refer Teachers
+          button#navReferralButton.list-group-item.list-group-item-action(type="button", (click)="openReferralModal()") Refer Teachers
             span.list-icon--right([innerHtml]="':satellite:' | emojione")
           //- Feedback
           button#navFeedbackButton.list-group-item.list-group-item-action(type="button", (click)="openFeedback()") Contact Us

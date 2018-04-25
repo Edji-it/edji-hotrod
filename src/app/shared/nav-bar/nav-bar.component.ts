@@ -260,6 +260,16 @@ export class NavBarComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * 
+   */
+  private openReferralModal(): void {
+    // Open the modal
+    this.showReferralModal=true
+    // Track when this button is clicked on in angulartics
+    this.angulartics.eventTrack.next({ action: 'clickReferralButton', properties: { category: 'referral', label: 'success' }})
+  }
+
+  /**
    * When the user decides to exercise their coupon code
    */
   private useCoupon(couponCode: string) {
