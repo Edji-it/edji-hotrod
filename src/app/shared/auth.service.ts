@@ -38,11 +38,11 @@ export class AuthService implements CanActivate {
     }
 
     constructor(
-            private legacyHttp: Http, 
-            private _http: HttpClient, 
-            private _router: Router, 
-            _locker: Locker
-        ) {
+        private legacyHttp: Http, 
+        private _http: HttpClient, 
+        private _router: Router, 
+        _locker: Locker
+    ) {
         let webpackEnv = process.env.ENV
         
         this.locker = _locker.useDriver(Locker.DRIVERS.LOCAL);
@@ -168,7 +168,7 @@ export class AuthService implements CanActivate {
     }
 
     public getToken(): any {
-        return this.locker.get('token');
+        return this.locker.get('token') || ""
     }
 
     private destroyCredentials() {
@@ -616,34 +616,39 @@ export class AuthService implements CanActivate {
     /**
      * Submit payment and subscription type to add plan to user
      */
-    public subscribeToHero(subscriptionType, tokenId, couponCode ?: string): Observable<any> {
+    public subscribeToHero(stripeToken, couponCode ?: string): Observable<HeroCreateResponse> {
         let data = {
-            subscriptionType : subscriptionType,
-            token: tokenId
+            token: stripeToken
         }
         if (couponCode) {
             data['couponCode'] = couponCode
         }
 
-        return this.legacyHttp.post(this.baseUrl + '/subscriptions', data, this.getOptions())
-            .map( res => {
-                if (res && res.json()) {
-                    // Add user to mailchimp list
-                    this.addToActiveHeroList(this.getUser())
-                    .toPromise()
-                    .then( res => {
-                        console.log(res)
-                    })
-                }
-                return res.json()
-            })
+        return this._http.post<HeroCreateResponse>(
+            this.baseUrl + '/api/v1/stripe/subscriptions',
+            data,
+            {
+                headers: new HttpHeaders({
+                    'Content-Type': 'application/json',
+                    'Authorization': this.getToken()
+                })
+            }
+        )
+        .map((res) => {
+            // Add user to mailchimp list
+            this.addToActiveHeroList(this.getUser())
+            .toPromise()
+            .then( res => { console.log(res) })
+            .catch( err => { console.error(err) })
+            return res
+        })
     }
 
     public validateHeroCoupon(couponCode: string) : Observable<any> {
         return this._http.get(this.baseUrl + "/subscriptions/coupons/" + couponCode,
             { headers: new HttpHeaders({
                 'Content-Type': 'application/json',
-                'Authorization': this.getToken() ? this.getToken() : ""
+                'Authorization': this.getToken()
             })
         })
     }
@@ -749,4 +754,9 @@ export class AuthService implements CanActivate {
 interface LoginObject {
     user: User
     token: string
+}
+
+interface HeroCreateResponse {
+    subscription: any
+    user: User
 }
