@@ -535,7 +535,7 @@ export class AuthService implements CanActivate {
     /**
      * Add users who subscribe to Hero to the Mailchimp Hero Subscribed list
      */
-    public addToActiveHeroList(user) {
+    public addToActiveHeroList(user) : void {
         if (this.getEnv() == 'prod') {
             let spaceIndex = user.fullname.indexOf(' ')
             if (spaceIndex < 0) { spaceIndex = user.fullname.length }
@@ -547,10 +547,13 @@ export class AuthService implements CanActivate {
                 'lname' : lname 
             }
             body['list'] = 'hero-subscribed'
-            return this.legacyHttp.post( this.baseUrl + '/mailchimp/add', body, this.getOptions())
+            this.legacyHttp.post( this.baseUrl + '/mailchimp/add', body, this.getOptions())
                 .map( res => {
                     return res.json()
                 })
+                .toPromise()
+                .then( res => { console.log(res) })
+                .catch( err => { console.error(err) })
         } else {
             console.info("Dev: Not adding user to Active Hero List")
         }
@@ -641,9 +644,7 @@ export class AuthService implements CanActivate {
         .map((res) => {
             // Add user to mailchimp list
             this.addToActiveHeroList(this.getUser())
-            .toPromise()
-            .then( res => { console.log(res) })
-            .catch( err => { console.error(err) })
+            
             return res
         })
     }
