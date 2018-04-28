@@ -17,7 +17,6 @@ export class HeroSubscribeComponent implements OnInit {
 
   private tempHide: boolean
   private card: any
-  private subtype: string = 'yearly'
   private loading: boolean = false
   private userNowHero: boolean
   private stripe: any
@@ -110,7 +109,7 @@ export class HeroSubscribeComponent implements OnInit {
   }
 
   private validateCoupon(control: AbstractControl) : Observable<any> {
-    let coupon = control.value.toUpperCase()
+    let coupon = control.value && control.value.toUpperCase()
     // Reset variables
     this.joiningAcademy = false
     this.percentOff = 0
