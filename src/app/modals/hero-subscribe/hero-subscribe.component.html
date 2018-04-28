@@ -14,7 +14,7 @@
                         <label>Hero Subscription Plan</label>
                         <table class="table table-hover">
                             <tbody>
-                                <tr *ngIf="!joiningAcademy" [class.table-info]="subtype == 'yearly'" (click)="subtype = 'yearly'" class="selectable">
+                                <tr *ngIf="!joiningAcademy" class="selectable table-info">
                                     <th scope="row">Yearly</th>
                                     <td>
                                         <p [class.strike-through]="sForm.controls['couponCode'].valid && !joiningAcademy"><b>$60/yr</b></p>
@@ -41,9 +41,9 @@
                         <form [formGroup]="sForm">
                             <div class="form-row">
                                 <label for="promo-code">Promo Code</label>
-                                <div id="promo-code" class="form-group" [class.has-success]="sForm.controls['couponCode'].valid" [class.has-danger]="sForm.controls['couponCode'].value.length > 0 && !sForm.controls['couponCode'].valid && sForm.controls['couponCode'].touched">
+                                <div id="promo-code" class="form-group" [class.has-success]="sForm.controls['couponCode'].valid" [class.has-danger]="sForm.controls['couponCode'].value && sForm.controls['couponCode'].value.length > 0 && !sForm.controls['couponCode'].valid && sForm.controls['couponCode'].touched">
                                     <input id="couponCodeInput" formControlName="couponCode" *ngIf="!initWithCoupon" [class.form-control-success]="sForm.controls['couponCode'].valid" type="text" class="form-control text-uppercase" tabindex="0" [class.hidden]="initWithCoupon" />
-                                    <div id="invalidCouponMsg" class="form-control-feedback" *ngIf="sForm.controls['couponCode'].value.length > 0 && !sForm.controls['couponCode'].valid && sForm.controls['couponCode'].touched"><b>Uh-oh!</b> That code is invalid or expired.</div>
+                                    <div id="invalidCouponMsg" class="form-control-feedback" *ngIf="sForm.controls['couponCode'].value && sForm.controls['couponCode'].value.length > 0 && !sForm.controls['couponCode'].valid && sForm.controls['couponCode'].touched"><b>Uh-oh!</b> That code is invalid or expired.</div>
                                     <div id="validCouponMsg" class="form-control-feedback" *ngIf="sForm.controls['couponCode'].valid && !joiningAcademy"><b>Applied!</b> {{percentOff}}% discount applied.</div>
                                     <div id="academyCouponMsg" class="form-control-feedback" *ngIf="sForm.controls['couponCode'].valid && joiningAcademy"><b>Hero Academy License Applied!</b></div>
                                 </div>
