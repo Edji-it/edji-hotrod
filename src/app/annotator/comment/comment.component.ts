@@ -323,8 +323,6 @@ export class CommentComponent implements OnInit, OnDestroy {
         console.log(error)
       })
     }
-
-
   } // public updateComment(comment: any, reply ?: boolean): void
 
   // Deletes comment via Project service, which updates the local Project object

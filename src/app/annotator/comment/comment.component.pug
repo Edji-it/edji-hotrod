@@ -48,12 +48,13 @@
             [recordNewAudio]="reRecordAudio",
             (showDeleteAudioModal)="showDeleteAudioModal = true",
             [userPermission]="userPermission",
-            [reply]="reply"
+            [reply]="reply",
+            [commentContext]="commentContext"
         )
         button#commentDelBtn.inline-delete(
             *ngIf="userPermission >= 3",
-            (tap)="userPermission > 3 ? deleteComment(comment) : showDeleteModal = true"
-        ) 
+            (tap)="userPermission > 3 ? deleteComment(comment) : _comments.deleteCommentConfirmation(comment, commentContext)"
+        )
             | +
         .reply(
             *ngIf="!reply && project.types.indexOf('reply') > -1",
@@ -125,7 +126,8 @@ div(*ngIf="commentPaneActive", [class.selected--block]="comment.selected")
                     [recordNewAudio]="reRecordAudio",
                     (showDeleteAudioModal)="showDeleteAudioModal = true",
                     [userPermission]="userPermission",
-                    [reply]="reply"
+                    [reply]="reply",
+                    [commentContext]="commentContext"
                 )
             //- Text that was commented on
             .list-item.list-item.mobileHighlight-card.h-1(*ngIf="!isImage")
@@ -138,7 +140,7 @@ div(*ngIf="commentPaneActive", [class.selected--block]="comment.selected")
     //- Comment action buttons
     .btn-row.right.mt-0
         //- .col-6.float-left.btn-float-right__sm
-        button.btn.btn-sm.btn-hero.btn-delete(*ngIf="userPermission >= 3", (tap)="userPermission > 3 ? deleteComment(comment) : showDeleteModal = true") Delete
+        button.btn.btn-sm.btn-hero.btn-delete(*ngIf="userPermission >= 3", (tap)="userPermission > 3 ? deleteComment(comment) : _comments.deleteCommentConfirmation(comment, commentContext)") Delete
         //- .col-6.float-right.btn-float-right__sm
         //- button.btn.btn-sm.btn-primary(*ngIf="repliesById[comment._id] && repliesById[comment._id].length>0", (tap)="commentReply.emit(comment)") Replies ({{ repliesById[comment._id] && repliesById[comment._id].length }})
         button#addReply.btn.btn-sm.btn-primary(*ngIf="!reply && project.types.indexOf('reply') > -1", (tap)="commentReply.emit(comment)") Replies ({{ repliesById[comment._id] && repliesById[comment._id].length || '0' }})
@@ -154,16 +156,4 @@ avatar-portal(
     [active]="indicatesPane",
     [lineY]="comment.lineY",
     (toggleCommentPane)="toggleCPane(comment)"
-)
-hot-del-comment(
-    *ngIf="showDeleteModal",
-    [comment]="comment",
-    (delete)="deleteComment(comment)",
-    (closeModal)="showDeleteModal = false; commentDeactivate.emit(comment)"
-)
-hot-del-audio(
-    *ngIf="showDeleteAudioModal",
-    [comment]="comment",
-    (delete)="reRecordAudio = true; showDeleteAudioModal = false",
-    (closeModal)="showDeleteAudioModal = false"
 )

@@ -226,3 +226,19 @@ comment-pane(
     (commentUpdated)="setLinePositions()",
     (commentReply)="discReplyFire($event)"
 )
+
+//- Delete Comment Modal
+hot-del-comment(
+    *ngIf="_comments.showDeleteCommentModal",
+    [comment]="_comments.deleteCommentRef",
+    (delete)="deleteComment(_comments.deleteCommentRef)",
+    (closeModal)="_comments.commentDeleted()"
+)
+
+//- Delete Audio Comment Modal
+hot-del-audio(
+    *ngIf="_comments.showAudioDeleteModal",
+    [comment]="_comments.deleteAudioRef",
+    (delete)="_comments.audioReset(); setLinePositions()",
+    (closeModal)="_comments.audioDeleteModalClose()"
+)
