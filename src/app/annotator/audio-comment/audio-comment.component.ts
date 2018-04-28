@@ -28,6 +28,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
   @Input() private comment: EdjiComment
   @Input() private userPermission: number
   @Input() private reply: boolean = false
+  @Input() private commentContext: string = 'normal'
   @Output() save: EventEmitter<any> = new EventEmitter<any>() 
   @Output() showDeleteAudioModal: EventEmitter<any> = new EventEmitter<boolean>()
 
@@ -285,7 +286,8 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
     if (this.recordOverConfirmed) {
       this.freshRecord()
     } else if (this.audio && this.audio.src && this.audio.src.length > 0) {
-      this.showDeleteAudioModal.emit(true)
+      // this.showDeleteAudioModal.emit(true)
+      this._comments.deleteAudioConfirmation(this.comment, this.commentContext)
     } else {
       this.freshRecord()
     }

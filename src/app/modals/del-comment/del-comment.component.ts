@@ -15,5 +15,7 @@ export class DeleteCommentModal implements OnInit {
 
   constructor() { }
 
-  ngOnInit() { }
+  ngOnInit() { 
+    
+  }
 }

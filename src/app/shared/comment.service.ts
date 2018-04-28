@@ -13,6 +13,12 @@ export class CommentService {
   private colors
   public keyboardActive: boolean
   public activeComment: EdjiComment = <EdjiComment>{}
+  public deleteCommentRef: EdjiComment = <EdjiComment>{}
+  public deleteAudioRef: EdjiComment = <EdjiComment>{}
+  public showDeleteCommentModal: boolean
+  public showDeleteAudioModal: boolean
+  public commentContext: string
+  public showAudioDeleteModal: boolean
 
   public clearActiveCommentsSource: Subject<boolean> = new Subject()
   public clearActiveComments: Observable<boolean> = this.clearActiveCommentsSource.asObservable()
@@ -151,4 +157,102 @@ export class CommentService {
     }
     return this.keyboardActive
   }
-} // CommentService class
+
+  /**
+   * This method will open the delete confirmation modal that lives on the annotator and set the comment reference
+   * Comment deletion is triggered from within the comment component, but the modal for confirmation lives in the annotator for better display purposes
+   * @param comment the comment we're looking to delete
+   * @param commentContext type of comment: normal, reply, or answer
+   */
+  public deleteCommentConfirmation(comment: EdjiComment, commentContext: string): void {
+    this.showDeleteCommentModal = true
+    this.deleteCommentRef = comment
+    this.commentContext = commentContext
+  }
+
+  /**
+   * When the modal is closed either through the user accepting the delete or just closing it, we'll tell the modal to close and reset our reference variables
+   */
+  public commentDeleted(): void {
+    this.showDeleteCommentModal = false
+    this.deleteCommentRef = <EdjiComment>{}
+    this.commentContext = 'normal'
+  }
+
+  /**
+   * This method will open the audio delete confirmation modal that lives on the annotator and set the comment reference
+   * @param comment the comment we're looking to re-record audio on
+   */
+  public deleteAudioConfirmation(comment: EdjiComment, commentContext: string): void {
+    this.showAudioDeleteModal = true
+    this.deleteAudioRef = comment
+    this.commentContext = commentContext
+  }
+
+  /**
+   * When the modal is closed either through the user accepting the delete or just closing it, we'll tell the modal to close and reset our reference variables
+   */
+  public audioDeleteModalClose(): void {
+    this.showAudioDeleteModal = false
+    this.deleteAudioRef = <EdjiComment>{}
+    this.commentContext = 'normal'
+  }
+
+  /**
+   * When the user clicks 'yes' on the delete audio modal, we will clear the comment url and dataArray here
+   */
+  public audioReset(): void {
+    var comment = this.deleteAudioRef
+    if (comment && comment.type=='audio' && comment.url) {
+      comment.url = ''
+      comment.dataArray = []
+      this.updateComment(comment)
+    }
+    this.audioDeleteModalClose()
+  }
+
+  /**
+   * Saves updates to comments
+   * @param comment Full EdjiComment object
+   */
+  public updateComment(comment: EdjiComment): void {
+    if (this.commentContext !== "answer") {
+      if (this.commentContext === "reply") {
+        // If this is a reply comment
+        this.angulartics.eventTrack.next({ action: comment.type + 'updateReply', properties: { category: 'heroFeature', label: 'attempt' }})
+        this._projects.addCommentToReplies(comment)
+      } else {
+        // If this is a regular comment.
+        this.angulartics.eventTrack.next({ action: comment.type + 'updateComment', properties: { category: 'projectAction', label: 'attempt' }})
+      }
+      this._projects.saveComment(comment)
+      .then(comment => {
+        if (this.commentContext === 'reply') {
+          this.angulartics.eventTrack.next({ action: comment.type + 'updateReply', properties: { category: 'heroFeature', label: 'success' }})
+        } else {
+          this.angulartics.eventTrack.next({ action: comment.type + 'updateComment', properties: { category: 'projectAction', label: 'success' }})
+        }
+      })
+      .catch(error => { 
+        if (this.commentContext === 'reply' || this.commentContext === 'answer') {
+          this.angulartics.eventTrack.next({ action: comment.type + 'updateReply', properties: { category: 'heroFeature', label: 'failure' }})
+        } else {
+          this.angulartics.eventTrack.next({ action: comment.type + 'updateComment', properties: { category: 'projectAction', label: 'failure' }})
+        }
+        console.log(error)
+      })
+    } else {
+      this.angulartics.eventTrack.next({ action: comment.type + 'updateAnswer', properties: { category: 'heroFeature', label: 'attempt' }})
+      this._projects.addAnswerToAnswers(comment)
+      this._projects.saveAnswer(comment)
+      .then(answer => {
+        this.angulartics.eventTrack.next({ action: comment.type + 'updateAnswer', properties: { category: 'heroFeature', label: 'success' }})
+        this._projects.addAnswerToAnswers(answer)
+      })
+      .catch(error => { 
+        this.angulartics.eventTrack.next({ action: comment.type + 'updateAnswer', properties: { category: 'heroFeature', label: 'failure' }})
+        console.log(error)
+      })
+    }
+  }
+}
