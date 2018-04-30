@@ -8,6 +8,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 
 import { User } from './datatypes'
 import { URLSearchParams } from '@angular/http/src/url_search_params';
+import { ga } from '../../assets/js/ga.js'
 
 @Injectable()
 export class AuthService implements CanActivate {
@@ -118,6 +119,9 @@ export class AuthService implements CanActivate {
         user.isLoggedIn = true;
         this.currentUserSource.next(user);
         this.locker.set('user', user);
+        if (user.username && user.username.length > 0) {
+            ga('set', 'userId', user.username); // Set the user ID using signed-in user_id.
+        }
     }
 
     //TODO create deleteUser object
