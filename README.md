@@ -1,7 +1,7 @@
 
 ## Edji Hot Rod
 
-[![CircleCI](https://circleci.com/gh/codiak/edji-hotrod/tree/dev.svg?style=svg&circle-token=d31434adc07888175da13d892c3a7542b92ce66b)](https://circleci.com/gh/codiak/edji-hotrod/tree/dev)
+[![CircleCI](https://circleci.com/gh/codiak/edji-hotrod/tree/dev.svg?style=svg)](https://circleci.com/gh/codiak/edji-hotrod/tree/dev)
 
 **Make sure you have Node version >= 5.0 and NPM >= 3**
 > Clone/Download the repo then edit `app.ts` inside [`/src/app/app.ts`](/src/app/app.ts)
