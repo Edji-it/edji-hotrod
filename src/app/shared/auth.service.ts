@@ -122,8 +122,8 @@ export class AuthService implements CanActivate {
         user.isLoggedIn = true;
         this.currentUserSource.next(user);
         this.locker.set('user', user);
-        if (user.username && user.username.length > 0) {
-            this.ga.setUsername(user.username); // Set the user ID using signed-in user_id.
+        if (user._id && user._id.length > 0) {
+            this.ga.setUsername(user._id); // Set the user ID using signed-in user_id.
         }
     }
 
