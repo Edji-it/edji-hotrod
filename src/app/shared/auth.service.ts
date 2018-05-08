@@ -8,7 +8,8 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 
 import { User } from './datatypes'
 import { URLSearchParams } from '@angular/http/src/url_search_params';
-import { ga } from '../../assets/js/ga.js'
+import { Angulartics2 } from 'angulartics2'
+import { Angulartics2GoogleAnalytics } from 'angulartics2/ga'
 
 @Injectable()
 export class AuthService implements CanActivate {
@@ -42,7 +43,9 @@ export class AuthService implements CanActivate {
         private legacyHttp: Http, 
         private _http: HttpClient, 
         private _router: Router, 
-        _locker: Locker
+        _locker: Locker,
+        private angulartics: Angulartics2,
+        private ga: Angulartics2GoogleAnalytics
     ) {
         let webpackEnv = process.env.ENV
         
@@ -120,7 +123,7 @@ export class AuthService implements CanActivate {
         this.currentUserSource.next(user);
         this.locker.set('user', user);
         if (user.username && user.username.length > 0) {
-            ga('set', 'userId', user.username); // Set the user ID using signed-in user_id.
+            this.ga.setUsername(user.username); // Set the user ID using signed-in user_id.
         }
     }
 
