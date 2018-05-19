@@ -7,7 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'hot-reading-card',
-  templateUrl: 'reading-card.component.pug',
+  template: require('pug-loader!./reading-card.component.pug')(),
   styleUrls: ['./reading-card.component.scss']
 })
 export class ReadingCardComponent implements OnInit, OnDestroy {

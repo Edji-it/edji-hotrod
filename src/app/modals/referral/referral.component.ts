@@ -8,7 +8,7 @@ import { take } from 'rxjs/operators'
 
 @Component({
   selector: 'referral-modal',
-  templateUrl: 'referral.component.pug',
+  template: require('pug-loader!./referral.component.pug')(),
   styleUrls: ['./referral.component.scss']
 })
 export class ReferralModalComponent implements OnInit, OnDestroy {

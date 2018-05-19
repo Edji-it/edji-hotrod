@@ -3,7 +3,7 @@ import { Title } from '@angular/platform-browser'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
 import { Angulartics2 } from 'angulartics2'
-import { IMultiSelectOption, IMultiSelectSettings } from 'angular-2-dropdown-multiselect'
+// import { IMultiSelectOption, IMultiSelectSettings } from 'angular-2-dropdown-multiselect'
 import { take } from 'rxjs/operators'
 
 import { ReadingService } from '../shared/reading.service'
@@ -17,7 +17,7 @@ import * as Rangy from 'rangy'
 @Component({
     selector: 'new-reading-page',
     styleUrls: ['new-reading-page.component.scss'],
-    templateUrl: 'new-reading-page.component.pug'
+    template: require('pug-loader!./new-reading-page.component.pug')()
 })
 export class NewReadingPage implements OnInit {
     
@@ -116,8 +116,8 @@ export class NewReadingPage implements OnInit {
         }
     ]
     private guideStepNo: number = 1
-
-    private subjects: IMultiSelectOption[] = [
+    //  IMultiSelectOption[] 
+    private subjects: any = [
         {id:'literature',name:'Language Arts'},
         {id:'math',name:'Mathematics'},
         {id:'science',name:'Science'},
@@ -129,7 +129,8 @@ export class NewReadingPage implements OnInit {
         {id:'art',name:'Art'},
         {id:'computer',name:'Computers/Technical'}
     ]
-    private subjectDropSettings: IMultiSelectSettings = {
+    //IMultiSelectSettings
+    private subjectDropSettings: any  = {
         displayAllSelectedText: true,
         dynamicTitleMaxItems: 4
     }

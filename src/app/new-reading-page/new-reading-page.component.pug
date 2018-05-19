@@ -63,7 +63,7 @@ nav-bar([pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'", [canPublish]
           .form-group(*ngIf="readingForm.controls['public'].value == 'true'")
             label Subject
             .input-group
-            ss-multiselect-dropdown(id="subjectDropdown",[options]="subjects", formControlName="subjects", [settings]="subjectDropSettings")
+            //- ss-multiselect-dropdown(id="subjectDropdown",[options]="subjects", formControlName="subjects", [settings]="subjectDropSettings")
             #errorTitle.alert.alert-warning.mt-2(*ngIf="readingForm.controls['subjects'].hasError('required') && (readingForm.controls['subjects'].dirty || submitted)") 
               | Please select at least one Subject area that this Reading applies to.
           //- Body Section
@@ -81,14 +81,14 @@ nav-bar([pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'", [canPublish]
                 (keyup)="contentChange($event)",
                 (mouseup)="contentChange($event)",
                 (mousedown)="$event.preventDefault ? $event.preventDefault() : $event.returnValue = false")
-              medium-editor#angularMediumEditor.content(
-                [(editorModel)]="readingPart.text",
-                [editorOptions]="mediumEditorConfig",
-                [editorPlaceholder]="getReadingPlaceholder(i)",
-                (keyup)="contentChange($event)",
-                (mouseup)="contentChange($event)",
-                [ngClass]="[i<readingHtml.length - 1 ? 'medium-editor__new-question' : '']",
-                [attr.rindex]="i")
+              //- medium-editor#angularMediumEditor.content(
+              //-   [(editorModel)]="readingPart.text",
+              //-   [editorOptions]="mediumEditorConfig",
+              //-   [editorPlaceholder]="getReadingPlaceholder(i)",
+              //-   (keyup)="contentChange($event)",
+              //-   (mouseup)="contentChange($event)",
+              //-   [ngClass]="[i<readingHtml.length - 1 ? 'medium-editor__new-question' : '']",
+              //-   [attr.rindex]="i")
             #errorContent.alert.alert-warning(*ngIf="submitted && readingIsBlank") Please give your Reading some text!
             //- Editor Insert Options
                 - Insert a Picture or Pdf

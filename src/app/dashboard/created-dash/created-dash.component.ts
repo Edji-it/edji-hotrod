@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
 import { FormGroup, FormBuilder, Validators } from '@angular/forms'
-import { Subscription } from 'rxjs/Subscription'
+import { Subscription } from 'rxjs'
 import { Angulartics2 } from 'angulartics2'
 import { Reading }      from '../../shared/datatypes';
 
@@ -19,7 +19,7 @@ import { User } from '../../shared/datatypes'
   // Our list of styles in our component. We may add more to compose many styles together
   styleUrls: [ './created-dash.component.scss' ],
   // Every Angular template is first compiled by the browser before Angular runs it's compiler
-  templateUrl: './created-dash.component.pug'
+  template: require('pug-loader!./created-dash.component.pug')()
 })
 export class CreatedDashComponent implements OnInit, OnDestroy {
   // Set our default values

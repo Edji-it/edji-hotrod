@@ -7,7 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'share-code',
-  templateUrl: 'share-code.component.pug',
+  template: require('pug-loader!./share-code.component.pug')(),
   styleUrls: ['./share-code.component.scss']
 })
 export class ShareCodeComponent implements OnInit, OnDestroy {

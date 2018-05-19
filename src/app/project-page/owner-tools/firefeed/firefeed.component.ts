@@ -8,7 +8,7 @@ import { ReadingService } from '../../../shared/reading.service';
 
 @Component({
   selector: 'hot-firefeed',
-  templateUrl: 'firefeed.component.pug',
+  template: require('pug-loader!./firefeed.component.pug')(),
   styleUrls: ['./firefeed.component.scss']
 })
 

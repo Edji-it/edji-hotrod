@@ -5,7 +5,7 @@ import { AuthService } from './../../shared'
 @Component({
   selector: 'hot-google-button',
   styleUrls: [ './google-button.component.scss' ],
-  templateUrl: 'google-button.component.pug'
+  template: require('pug-loader!./google-button.component.pug')()
 })
 
 export class GoogleButton implements OnInit {

@@ -4,11 +4,11 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 
 import { Reading } from './../../shared/datatypes'
 import { ReadingService } from './../../shared'
-import { IMultiSelectOption, IMultiSelectSettings } from 'angular-2-dropdown-multiselect';
+// import { IMultiSelectOption, IMultiSelectSettings } from 'angular-2-dropdown-multiselect';
 
 @Component({
   selector: 'hot-discover-add-meta',
-  templateUrl: 'discover-add-meta.component.pug',
+  template: require('pug-loader!./discover-add-meta.component.pug')(),
   styleUrls: ['discover-add-meta.component.scss']
 })
 
@@ -25,7 +25,8 @@ export class DiscoverAddMetaModal implements OnInit {
   private multiselectExpanded: boolean
   private projectLink: string
 
-  private subjects: IMultiSelectOption[] = [
+  // IMultiSelectOption[] 
+  private subjects: any = [
     {id:'literature',name:'Language Arts'},
     {id:'math',name:'Mathematics'},
     {id:'science',name:'Science'},
@@ -37,7 +38,8 @@ export class DiscoverAddMetaModal implements OnInit {
     {id:'art',name:'Art'},
     {id:'computer',name:'Computers/Technical'}
   ]
-  private subjectDropSettings: IMultiSelectSettings = {
+  // IMultiSelectSettings
+  private subjectDropSettings: any = {
     displayAllSelectedText: true,
     dynamicTitleMaxItems: 4
   } 

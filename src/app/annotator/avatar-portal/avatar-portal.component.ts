@@ -13,7 +13,7 @@ enum playState {
 
 @Component({
     selector: 'avatar-portal',
-    templateUrl: 'avatar-portal.component.pug',
+    template: require('pug-loader!./avatar-portal.component.pug')(),
     styleUrls: ['./avatar-portal.component.scss']
 })
 export class AvatarPortalComponent implements OnInit, OnDestroy {
