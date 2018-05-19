@@ -1,14 +1,13 @@
-import { Injectable } from '@angular/core';
-import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { Http, Response, Headers, RequestOptions } from '@angular/http';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Injectable } from '@angular/core'
+import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router'
+import { Http, Response, Headers, RequestOptions } from '@angular/http'
+import { Observable, BehaviorSubject } from 'rxjs'
 import { map, take, catchError } from 'rxjs/operators'
-import 'rxjs/add/operator/toPromise';
-import { Locker } from 'angular2-locker';
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { Locker } from 'angular2-locker'
+import { HttpClient, HttpHeaders } from "@angular/common/http"
 
 import { User } from './datatypes'
-import { URLSearchParams } from '@angular/http/src/url_search_params';
+import { URLSearchParams } from '@angular/http/src/url_search_params'
 import { Angulartics2 } from 'angulartics2'
 import { Angulartics2GoogleAnalytics } from 'angulartics2/ga'
 
@@ -21,14 +20,14 @@ export class AuthService implements CanActivate {
     Edit user prefs from here. Everything under the datatype User should be edited through here.
     */
 
-    private baseUrl = "http://localhost:3354";
-    private locker: Locker;
-    private ENV: string = "dev";
+    private baseUrl = "http://localhost:3354"
+    private locker: Locker
+    private ENV: string = "dev"
 
     //NOTE: (6/15/17) If this.user ever needs to be edited it, make a copy, edit the copy, THEN assign it so this.user is always fresh.
-    private user: User; 
-    private currentUserSource: BehaviorSubject<any>;
-    public currentUser: Observable<any>;
+    private user: User 
+    private currentUserSource: BehaviorSubject<any>
+    public currentUser: Observable<any>
 
     /**
      * Global Feature Flag object
@@ -50,28 +49,28 @@ export class AuthService implements CanActivate {
     ) {
         let webpackEnv = process.env.ENV
         
-        this.locker = _locker.useDriver(Locker.DRIVERS.LOCAL);
-        this.user = this.getUser();
-        this.currentUserSource = new BehaviorSubject<any>(this.user);
-        this.currentUser = this.currentUserSource.asObservable();
+        this.locker = _locker.useDriver(Locker.DRIVERS.LOCAL)
+        this.user = this.getUser()
+        this.currentUserSource = new BehaviorSubject<any>(this.user)
+        this.currentUser = this.currentUserSource.asObservable()
         
         // Check to see if prod or dev environment
         if (window.location.host.indexOf('local.edji.it') > -1) {
             // do nothing
         }else if (window.location.host.indexOf('dev.edji.it') > -1 || webpackEnv === 'test') {
-            //   baseUrl = "http://edji-dev.herokuapp.com";
-            this.baseUrl = "//optimus-dev.edji.it";
-            this.ENV = "dev";
+            //   baseUrl = "http://edji-dev.herokuapp.com"
+            this.baseUrl = "//optimus-dev.edji.it"
+            this.ENV = "dev"
         } else if (window.location.host.indexOf('edji.it') > -1 || window.location.host.indexOf('dvscf5tf91syg.cloudfront.net') > -1) {
-            //   this.baseUrl = "http://edji-prod.herokuapp.com";
-            this.baseUrl = "//optimus.edji.it";
-            this.ENV = "prod";
+            //   this.baseUrl = "http://edji-prod.herokuapp.com"
+            this.baseUrl = "//optimus.edji.it"
+            this.ENV = "prod"
         }
     }
 
     /** Provides environment variable to the rest of the app */
     public getEnv() {
-        return this.ENV;
+        return this.ENV
     }
 
     /** Give out options to any other http-using components or services */
@@ -79,16 +78,16 @@ export class AuthService implements CanActivate {
         let header = new Headers({
             'Content-Type': 'application/json',
             'Authorization': this.getToken()
-        });
+        })
         let options = new RequestOptions({
             headers: header,
             withCredentials: true
-        }); // Create a request option
-        return options;
+        }) // Create a request option
+        return options
     }
 
     public getUrl(): string {
-        return this.baseUrl;
+        return this.baseUrl
     }
 
     /**
@@ -96,22 +95,22 @@ export class AuthService implements CanActivate {
      * @param obj The object to be encoded
      */
     public formEncode(obj: Object): string {
-        var encodedString = '';
+        var encodedString = ''
         for (var key in obj) {
             if (encodedString.length !== 0) {
-                encodedString += '&';
+                encodedString += '&'
             }
-            encodedString += key + '=' + encodeURIComponent(obj[key]);
+            encodedString += key + '=' + encodeURIComponent(obj[key])
         }
-        return encodedString.replace(/%20/g, '+');
+        return encodedString.replace(/%20/g, '+')
     }
 
     /**
      * Takes a response object and turn the data into an object
      */
     public extractData(res: Response): any {
-        let body = res.json();
-        return body || {};
+        let body = res.json()
+        return body || {}
     }
 
     /**
@@ -120,11 +119,11 @@ export class AuthService implements CanActivate {
      */
     public setUser(user: any) {
         //should have session timeout, username, baseProfileId, typeId
-        user.isLoggedIn = true;
-        this.currentUserSource.next(user);
-        this.locker.set('user', user);
+        user.isLoggedIn = true
+        this.currentUserSource.next(user)
+        this.locker.set('user', user)
         if (user._id && user._id.length > 0) {
-            this.ga.setUsername(user._id); // Set the user ID using signed-in user_id.
+            this.ga.setUsername(user._id) // Set the user ID using signed-in user_id.
         }
     }
 
@@ -134,7 +133,7 @@ export class AuthService implements CanActivate {
      * Gets user object from local storage
      */
     public getUser(): User {
-        let user: User = this.locker.get('user');
+        let user: User = this.locker.get('user')
         if (!user) {
             // this kind of navigates around our interface... but oh well
             user = <User>{
@@ -142,16 +141,16 @@ export class AuthService implements CanActivate {
                 fullname: "guest",
                 isLoggedIn: false
             }
-            // this.setUser(user);
+            // this.setUser(user)
         } else {
-            user.isLoggedIn = true;
+            user.isLoggedIn = true
         }
 
-        return user;
+        return user
     }
 
     public getCurrentUser(): Observable<User> {
-        return this.currentUser;
+        return this.currentUser
     }
 
     /**
@@ -172,7 +171,7 @@ export class AuthService implements CanActivate {
     }
 
     public setToken(token: any) {
-        return this.locker.set('token', token);
+        return this.locker.set('token', token)
     }
 
     public getToken(): any {
@@ -180,27 +179,27 @@ export class AuthService implements CanActivate {
     }
 
     private destroyCredentials() {
-        this.locker.clear();
+        this.locker.clear()
         this.user = <User>{ isLoggedIn: false }
-        this.currentUserSource.next(this.user);
+        this.currentUserSource.next(this.user)
     }
 
     /** Stores an object in local storage for you - you're welcome */
     public store(key: string, value: any): void {
         if (key != "user" && key != "token") {
-            this.locker.set(key, value);
+            this.locker.set(key, value)
         }
     }
 
     /** Gets an object from local storage */
     public getFromStorage(key: string): any {
-        return this.locker.get(key);
+        return this.locker.get(key)
     }
 
     /** Deletes things (not user or token) from local storage */
     public deleteFromStorage(key: string): void {
         if (key != "user" && key != "token") {
-            this.locker.remove(key);
+            this.locker.remove(key)
         }
     }
 
@@ -210,12 +209,12 @@ export class AuthService implements CanActivate {
                 'username': user.username,
                 'password': user.password
             }
-        };
+        }
 
         return this.legacyHttp
             .post(this.baseUrl + '/users/login', data, this.getOptions())
             .toPromise()
-            .then(this.extractData);
+            .then(this.extractData)
     }
 
     logout() {
@@ -229,22 +228,22 @@ export class AuthService implements CanActivate {
      * @returns observable which either has errors or an object which has properties: user, token
      */
     public register(user: any): Observable < any > {
-        this.destroyCredentials();
+        this.destroyCredentials()
         return this.legacyHttp
             .post([this.baseUrl, 'users'].join('/'), {
                 user: user
             }, this.getOptions())
             .pipe(map((data) => {
-                let object = data.json();
+                let object = data.json()
 
                 // if the response has a token, the user should be successfully registered and logged in
                 if (object.token) {
-                    this.setUser(object.user);
-                    this.setToken(object.token);
+                    this.setUser(object.user)
+                    this.setToken(object.token)
                 }
 
-                return data.json();
-            }));
+                return data.json()
+            }))
     }
 
     /**
@@ -255,7 +254,7 @@ export class AuthService implements CanActivate {
      */
     public updateUser(updatedUser: any): Observable<any> {
         return new Observable(observer => {
-            //observer.next(true);  
+            //observer.next(true)  
             // Before we update the user, make sure we have the latest copy
             this.refreshUser().pipe(take(1))
                 .subscribe(currentUser =>{
@@ -277,11 +276,11 @@ export class AuthService implements CanActivate {
                                         for(var j = i + 1; j<a.length; j++) {
                                             if (isObj) {
                                                 if (a[i]._id === a[j]._id) {
-                                                    a.splice(j--, 1);
+                                                    a.splice(j--, 1)
                                                 }
                                             } else {
                                                 if (a[i] === a[j]) {
-                                                    a.splice(j--, 1);
+                                                    a.splice(j--, 1)
                                                 }
                                             }
                                         }
@@ -305,17 +304,17 @@ export class AuthService implements CanActivate {
                             user: mergedUser
                         }, this.getOptions())
                         .pipe(map((data) => {
-                            let object = data.json();
+                            let object = data.json()
 
                             // if the response has a token, the user should be successfully registered and logged in
                             if (object.user) {
-                                this.setUser(object.user);
+                                this.setUser(object.user)
                             }
                             if (object.token) {
-                                this.setUser(object.token);
+                                this.setUser(object.token)
                             }
 
-                            return data.json();
+                            return data.json()
                         }))
                         .toPromise()
                         .then( user => {
@@ -328,7 +327,7 @@ export class AuthService implements CanActivate {
                     observer.error(error)
                     console.error(error)
                 })
-        });
+        })
     }
 
     /*
@@ -340,7 +339,7 @@ export class AuthService implements CanActivate {
     - Insert the new set that you want to replace media.documents with.
     */
     public forceUpdateDocuments (newDocs : any[]) : Observable<any> {
-        // console.log("ran the baby");
+        // console.log("ran the baby")
 
         // We want to return an Observable because those are handy for timing's sake, so let's do that.
         return new Observable(observer => {
@@ -348,14 +347,14 @@ export class AuthService implements CanActivate {
                 .subscribe(currentUser =>{
                     // Make a copy of the user object, edit it, and shove it in.
                     let mergedUser = Object.assign({}, currentUser)// Get the latest copy of the user object.
-                    mergedUser.media.documents = newDocs; // let's just shove those in there
-                    this.user = mergedUser; // NOTE: We make a new object and assign it so that the user object is always nice and fresh.
+                    mergedUser.media.documents = newDocs // let's just shove those in there
+                    this.user = mergedUser // NOTE: We make a new object and assign it so that the user object is always nice and fresh.
                 
                     /* some handy console logs in case everything dies
-                    console.log("User is: " + mergedUser.username);
+                    console.log("User is: " + mergedUser.username)
                     this.user.media.documents.forEach((doc) => {
-                        console.log(doc);
-                    });
+                        console.log(doc)
+                    })
                     */
                     
                     // Let's save this here user object.
@@ -364,33 +363,33 @@ export class AuthService implements CanActivate {
                             user: mergedUser
                         }, this.getOptions())
                         .pipe(map((data) => {
-                            let object = data.json();
+                            let object = data.json()
                             // if the response has a token, the user should be successfully registered and logged in
                             if (object.user) {
-                                this.setUser(object.user);
+                                this.setUser(object.user)
                             }
                             if (object.token) {
-                                this.setUser(object.token);
+                                this.setUser(object.token)
                             }
 
-                            return data.json();
+                            return data.json()
                         }))
                         .toPromise()
                         .then( user => {
                             observer.next(user)
                         }, error => {
                             observer.error(error)
-                            console.error("Failed in forceUpdateDocuments in auth.service.ts when trying to save the user.");
+                            console.error("Failed in forceUpdateDocuments in auth.service.ts when trying to save the user.")
                         })
-                    // console.log("got over here");
-                    // this.user = mergedUser;
+                    // console.log("got over here")
+                    // this.user = mergedUser
                 },
                 error => {
                     observer.error(error)
                     console.error(error)
-                    console.error("Failed in forceUpdateDocuments in auth.service.ts");
+                    console.error("Failed in forceUpdateDocuments in auth.service.ts")
                 })
-        });
+        })
     } // public forceUpdatedDocuments (any[] : newDocs) : Observable<any>
 
     /*
@@ -405,9 +404,9 @@ export class AuthService implements CanActivate {
             this.refreshUser().pipe(take(1))
             .subscribe(currentUser =>{
                 // Make a copy of the user object, edit it, and shove it in.
-                let mergedUser = Object.assign({}, currentUser);// Get the latest copy of the user object.
-                mergedUser.avatar = newAvatar; // let's just shove those in there
-                this.user = mergedUser; // NOTE: We make a new object and assign it so that the user object is always nice and fresh.
+                let mergedUser = Object.assign({}, currentUser)// Get the latest copy of the user object.
+                mergedUser.avatar = newAvatar // let's just shove those in there
+                this.user = mergedUser // NOTE: We make a new object and assign it so that the user object is always nice and fresh.
 
                 // This code saves this here user object.
                 // This is repeated code from updateUser() we could consolidate these. (6.27.17)
@@ -415,33 +414,33 @@ export class AuthService implements CanActivate {
                     user: mergedUser
                 }, this.getOptions())
                 .pipe(map((data) => {
-                    let object = data.json();
+                    let object = data.json()
                     // if the response has a token, the user should be successfully registered and logged in
                     if (object.user) {
-                        this.setUser(object.user);
+                        this.setUser(object.user)
                     }
                     if (object.token) {
-                        this.setToken(object.token);
+                        this.setToken(object.token)
                     }
 
-                    console.log(this.user.avatar);
+                    console.log(this.user.avatar)
 
-                    return data.json();
+                    return data.json()
                 }))
                 .toPromise()
                 .then( user => {
                     observer.next(user)
                 }, error => {
                     observer.error(error)
-                    console.error("Failed in forceUpdateDocuments in auth.service.ts when trying to save the user.");
+                    console.error("Failed in forceUpdateDocuments in auth.service.ts when trying to save the user.")
                 })
             },
             error => {
                 observer.error(error)
                 console.error(error)
-                console.error("Failed in forceUpdateAvatar in auth.service.ts");
+                console.error("Failed in forceUpdateAvatar in auth.service.ts")
             }) // subscribe / error
-        });
+        })
     } // public forceUpdateAvatar (newAvatar : File) 
 
     /**
@@ -454,19 +453,19 @@ export class AuthService implements CanActivate {
             user: {
                 fullname: username
             }
-        };
+        }
 
         return this.legacyHttp.post([this.baseUrl, 'tempusers'].join('/'), data, this.getOptions())
             .pipe(map((data) => {
-                let object: any = data.json();
+                let object: any = data.json()
 
                 if (object.token) {
-                    this.setUser(object.user);
-                    this.setToken(object.token);
+                    this.setUser(object.user)
+                    this.setToken(object.token)
                 }
-                console.log(this.getOptions());
-                return object;
-            }));
+                console.log(this.getOptions())
+                return object
+            }))
     }
 
     /**
@@ -488,12 +487,12 @@ export class AuthService implements CanActivate {
             .then(this.extractData)
             .then((res) => {
                 if (res.token && res.user) {
-                    this.setUser(res.user);
-                    this.setToken(res.token);
+                    this.setUser(res.user)
+                    this.setToken(res.token)
                 }
-                return res;
-            });
-    };
+                return res
+            })
+    }
 
     public recoverPassword(username: string): Observable < boolean > {
         return this.legacyHttp
@@ -505,11 +504,11 @@ export class AuthService implements CanActivate {
             )
             .pipe(map((data) => {
                 if (data.status === 204) {
-                    return true;
+                    return true
                 } else {
-                    return false;
+                    return false
                 }
-            }));
+            }))
     }
 
     /** Call to convert a temp user's properties to the current user (who should already have credentials) */
@@ -583,7 +582,7 @@ export class AuthService implements CanActivate {
             )
             .subscribe(
                 (success) => {  },
-                (error) => { console.error(error); }
+                (error) => { console.error(error) }
             )
     }
 
@@ -622,11 +621,11 @@ export class AuthService implements CanActivate {
             if (route.queryParams['r']) {
                 this._router.navigate(["/register"], { queryParams: {  referral_id: route.queryParams['r'] }})
             } else {
-                this._router.navigate(['/home']);
+                this._router.navigate(['/home'])
             }
-            return false;
+            return false
         } else {
-            return true;
+            return true
         }
     }
 

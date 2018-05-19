@@ -12,7 +12,7 @@ import { ProjectService, SocketService, PowerToggle, ReadingService, UtilToolSer
 @Component({
   selector: 'nav-bar',
   styleUrls: [ './nav-bar.component.scss' ],
-  templateUrl: require('pug-loader!./nav-bar.component.pug')(),
+  template: require('pug-loader!./nav-bar.component.pug')(),
 })
 export class NavBarComponent implements OnInit, OnDestroy {
     @Input() pageTitle: string

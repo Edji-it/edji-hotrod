@@ -3,7 +3,7 @@ import { Component, ElementRef, OnInit } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
 import { FormGroup, FormBuilder, Validators } from '@angular/forms'
-import { Subscription } from 'rxjs/Subscription'
+import { Subscription } from 'rxjs'
 
 import { AuthService, ReadingService, ProjectService } from '../shared'
 import { User } from './../shared/datatypes'

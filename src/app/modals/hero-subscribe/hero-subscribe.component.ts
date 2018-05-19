@@ -2,6 +2,7 @@ import { Observable } from 'rxjs';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Angulartics2 } from 'angulartics2'
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { debounceTime, map } from 'rxjs/operators'
 
 // Project dependencies
 import { AuthService, BumblebeeService } from '../../shared'
@@ -114,8 +115,9 @@ export class HeroSubscribeComponent implements OnInit {
     this.joiningAcademy = false
     this.percentOff = 0
     return this._auth.validateHeroCoupon(coupon)
-      .debounceTime(1000)
-      .map(
+      .pipe(
+        debounceTime(1000),
+        map(
         (res) => {
           if (res.percent_off) {
             this.percentOff = res.percent_off
@@ -130,7 +132,7 @@ export class HeroSubscribeComponent implements OnInit {
         (err) => {
           return { invalid: true }
         }
-      )
+      ))
   }
 
   private checkout() {

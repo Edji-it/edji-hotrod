@@ -1,6 +1,8 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { ReadingService } from '../../shared';
-import { Reading }        from '../../shared/datatypes';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
+import { take } from 'rxjs/operators'
+
+import { ReadingService } from '../../shared'
+import { Reading }        from '../../shared/datatypes'
 
 @Component({
   selector: 'hot-del-reading',

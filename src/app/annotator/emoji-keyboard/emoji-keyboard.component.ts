@@ -1,11 +1,10 @@
-import { CommentService } from '../../shared/comment.service';
-import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import {
-  Locker
-} from 'angular2-locker';
+import { CommentService } from '../../shared/comment.service'
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
+import { Locker } from 'angular2-locker'
+import { take } from 'rxjs/operators'
 
 // Project Dependencies
-import { AuthService } from '../../shared';
+import { AuthService } from '../../shared'
 
 @Component({
   selector: 'emoji-keyboard',

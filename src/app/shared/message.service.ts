@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core'
 import { Observable, BehaviorSubject, Subscription, interval } from 'rxjs'
-import 'rxjs/add/operator/toPromise'
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http'
 import { Angulartics2 } from 'angulartics2'
 import { AuthService } from './auth.service'

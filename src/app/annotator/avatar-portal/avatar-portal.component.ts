@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output, OnInit, OnDestroy } from '@angular/core'
-import { ProjectService } from 'app/shared'
+import { ProjectService } from '../../shared'
 import { Subscription } from 'rxjs'
-import { EdjiComment } from 'app/shared/datatypes'
+import { EdjiComment } from '../../shared/datatypes'
 import { Angulartics2 } from 'angulartics2'
 
 enum playState {

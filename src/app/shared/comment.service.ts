@@ -1,10 +1,9 @@
-import { EdjiComment, CommentPermissions, Project } from './datatypes';
+import { EdjiComment, CommentPermissions, Project } from './datatypes'
 import { Injectable } from '@angular/core'
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import 'rxjs/add/operator/toPromise';
+import { BehaviorSubject, Observable, Subject } from 'rxjs'
 
 import { AuthService } from './auth.service'
-import { ProjectService, ReadingService, SocketService } from './';
+import { ProjectService, ReadingService, SocketService } from './'
 import { Angulartics2 } from 'angulartics2'
 
 @Injectable()

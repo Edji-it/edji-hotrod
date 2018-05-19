@@ -1,11 +1,11 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs/Subscription';
-import { Angulartics2 } from 'angulartics2';
+import { Component, OnInit, OnDestroy } from '@angular/core'
+import { Router, ActivatedRoute } from '@angular/router'
+import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
+import { FormGroup, FormBuilder, Validators } from '@angular/forms'
+import { Subscription } from 'rxjs'
+import { Angulartics2 } from 'angulartics2'
 
-import { AuthService, ReadingService, ProjectService } from '../../shared';
+import { AuthService, ReadingService, ProjectService } from '../../shared'
 
 @Component({
   selector: 'edji-joined-dash',
@@ -89,10 +89,10 @@ export class JoinedDashComponent implements OnInit, OnDestroy {
     this._projects.setCurrentProject(formValue.projectCode)
       .subscribe(
         (project) => {
-          this.router.navigate(['/project', project._id]);
+          this.router.navigate(['/project', project._id])
         },
         (error) => {
-          this.errorObject.wrongCode = "Unfortunately, we did not find that project";
+          this.errorObject.wrongCode = "Unfortunately, we did not find that project"
         }
       );
   }

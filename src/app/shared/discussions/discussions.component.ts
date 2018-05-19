@@ -1,14 +1,14 @@
-import { Angulartics2 } from 'angulartics2';
-import { Subscription } from 'rxjs';
-import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Angulartics2 } from 'angulartics2'
+import { Subscription } from 'rxjs'
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core'
 
 // Project dependencies
-import { EdjiComment, Project, Reading } from '../datatypes';
-import { AuthService, CommentService, ProjectService, ReadingService } from '../';
+import { EdjiComment, Project, Reading } from '../datatypes'
+import { AuthService, CommentService, ProjectService, ReadingService } from '../'
 
 @Component({
   selector: 'hot-discussions',
-  templateUrl: require('pug-loader!discussions.component.pug'),
+  template: require('pug-loader!./discussions.component.pug'),
   styleUrls: ['./discussions.component.scss']
 })
 

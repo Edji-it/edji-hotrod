@@ -7,7 +7,7 @@ import { User } from '../datatypes';
 @Component({
   selector: 'follow-tag',
   styleUrls: [ './follow-tag.component.scss' ],
-  templateUrl: require('pug-loader!./follow-tag.component.pug')
+  template: require('pug-loader!./follow-tag.component.pug')
 })
 export class FollowTag implements OnInit {
     @Input() owner: User

@@ -10,7 +10,7 @@ import { ALLSPARK } from '../../app.constants'
 
 @Component({
   selector: 'edji-feedback',
-  templateUrl: require('pug-loader!feedback.component.pug'),
+  template: require('pug-loader!feedback.component.pug'),
   styleUrls: ['./feedback.component.scss']
 })
 export class FeedbackComponent implements OnInit {
