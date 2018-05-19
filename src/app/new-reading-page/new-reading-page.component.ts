@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
 import { Angulartics2 } from 'angulartics2'
 import { IMultiSelectOption, IMultiSelectSettings } from 'angular-2-dropdown-multiselect'
+import { take } from 'rxjs/operators'
 
 import { ReadingService } from '../shared/reading.service'
 import { ProjectService } from '../shared/project.service'
@@ -180,9 +181,9 @@ export class NewReadingPage implements OnInit {
      private getReading(readingId: string, stripHero?: boolean) {
 
         this._readings.get(readingId)
-            .take(1)
+            .pipe(take(1))
             .subscribe(
-                data => {
+                (data: any) => {
                     if (stripHero && data.questions && data.questions.length > 0) {
                         // Clean out features which require Hero, and tell the user it happened
                         data.html = data.html.replace(/\<\$question\$\>/g, '')

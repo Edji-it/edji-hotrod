@@ -68,7 +68,7 @@ export class AddProjectModal implements OnInit {
     if (formValue.replyType) { types.push("reply"); }
 
     this._projects.validateProject(formValue.customCode)
-      .take(1)
+      .pipe(take(1))
       .subscribe(
         (success) => {
           // this actually means that the code already exists, so we give the user an error here

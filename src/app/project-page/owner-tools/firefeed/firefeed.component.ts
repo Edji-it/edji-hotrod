@@ -1,5 +1,5 @@
 import { Project, Reading } from '../../../shared/datatypes';
-import { Subscription } from 'rxjs/Rx';
+import { Subscription } from 'rxjs';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 
 // Project dependencies

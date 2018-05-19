@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core'
 import { Http } from '@angular/http'
-import { Observable } from 'rxjs/Observable'
+import { Observable } from 'rxjs'
+import { take } from 'rxjs/operators'
 
 import { AuthService } from '.'
 import { User } from './datatypes'
@@ -23,7 +24,7 @@ export class BumblebeeService {
       { userDetails: userDetails },
       this._auth.getOptions()
       )
-      .take(1)
+      .pipe(take(1))
       .subscribe(
         (success) => {  },
         (error) => { console.error(error) }
@@ -45,7 +46,7 @@ export class BumblebeeService {
         { user: user, action: action },
         this._auth.getOptions()
       )
-      .take(1)
+      .pipe(take(1))
       .subscribe(
         (success) => {},
         (error) => { console.error(error) }
@@ -60,7 +61,7 @@ export class BumblebeeService {
         { error: error },
         this._auth.getOptions()
       )
-      .take(1)
+      .pipe(take(1))
       .subscribe(
         (success) => {},
         (error) => { console.error(error) }

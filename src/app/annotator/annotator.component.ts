@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, QueryList, ViewChildren, HostListener, ViewChild } from '@angular/core'
-import { Subject, Subscription } from 'rxjs/Rx';
+import { Subject, Subscription } from 'rxjs';
 import * as Rangy from 'rangy';
 import { Angulartics2 } from 'angulartics2'
 // import { HotkeysService, Hotkey } from 'angular2-hotkeys'

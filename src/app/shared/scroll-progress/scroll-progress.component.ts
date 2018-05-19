@@ -1,10 +1,10 @@
-import { Subscription } from 'rxjs/Rx'
+import { Subscription } from 'rxjs'
 import { ProjectService } from '../index'
 import { Component, EventEmitter, OnInit, Input } from '@angular/core'
 
 @Component({
   selector: 'scroll-progress',
-  templateUrl: './scroll-progress.component.pug',
+  templateUrl: require('pug-loader!./scroll-progress.component.pug'),
   styleUrls: ['./scroll-progress.component.scss']
 })
 export class ScrollProgressComponent implements OnInit {

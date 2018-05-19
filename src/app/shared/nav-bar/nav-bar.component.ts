@@ -1,7 +1,8 @@
 import { Angulartics2 } from 'angulartics2';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, Input, OnDestroy, OnInit, Output, EventEmitter } from '@angular/core'
-import { Subscription } from 'rxjs/Rx'
+import { Subscription } from 'rxjs'
+import { take } from 'rxjs/operators'
 // import { EventEmitter } from '@angular/forms/src/facade/async'
 
 import { Project, Reading } from '../datatypes'
@@ -11,7 +12,7 @@ import { ProjectService, SocketService, PowerToggle, ReadingService, UtilToolSer
 @Component({
   selector: 'nav-bar',
   styleUrls: [ './nav-bar.component.scss' ],
-  templateUrl: './nav-bar.component.pug'
+  templateUrl: require('pug-loader!./nav-bar.component.pug')(),
 })
 export class NavBarComponent implements OnInit, OnDestroy {
     @Input() pageTitle: string
@@ -170,7 +171,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
       if (shareObj.customCode) {
         // does the project exist? this call will actually fail if it does
         this._projects.validateProject(shareObj.customCode)
-        .take(1)
+        .pipe(take(1))
         .subscribe((res) => {
           // this is actually an error in this case! lol. If the code IS valid, we want them NOT to try and make a reading
           this.shareLoading = false
@@ -210,7 +211,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
     this.joinLoading = true;
     this.angulartics.eventTrack.next({ action: 'enterLightningCode', properties: { category: 'joinProject', label: 'attempt' }});
     this._projects.validateProject(code)
-      .take(1)
+      .pipe(take(1))
       .subscribe(
         (data) => {
           this.joinLoading = false;

@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { Subscription } from 'rxjs'
+import { take } from 'rxjs/operators'
 
 import { AuthService } from '../'
 
@@ -76,7 +77,7 @@ export class TutorialBoxComponent implements OnInit {
         }
         console.log('Update:', user)
         this._auth.updateUser(user)
-            .take(1)
+            .pipe(take(1))
             .subscribe(
                 (data) => {
                     let user = data.user

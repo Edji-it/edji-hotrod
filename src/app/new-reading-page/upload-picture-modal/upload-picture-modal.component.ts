@@ -1,8 +1,9 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { Locker } from 'angular2-locker';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core'
+import { Locker } from 'angular2-locker'
+import { take } from 'rxjs/operators'
 
 // Project Dependencies
-import { AuthService, MediaService } from '../../shared';
+import { AuthService, MediaService } from '../../shared'
 
 @Component({
   selector: 'upload-picture-modal',
@@ -36,7 +37,7 @@ export class UploadModalComponent implements OnInit {
     }
 
     // Get the latest uploaded pics
-    this._auth.refreshUser().take(1).subscribe(user => {
+    this._auth.refreshUser().pipe(take(1)).subscribe(user => {
       this.uploadedImages = user.media.images
     })
   }
@@ -104,7 +105,7 @@ export class UploadModalComponent implements OnInit {
     }
     user.media.images = this.uploadedImages
     this._auth.updateUser( user )
-        .take(1)
+        .pipe(take(1))
         .subscribe(
           (user) => {
             if (user.media) {

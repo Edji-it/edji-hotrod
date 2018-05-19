@@ -1,21 +1,22 @@
-import { Injectable } from '@angular/core';
-import { Http, Response, Headers, RequestOptions } from '@angular/http';
-import { Observable, Subject } from 'rxjs/Rx';
+import { Injectable } from '@angular/core'
+import { Http, Response, Headers, RequestOptions } from '@angular/http'
+import { Observable, Subject } from 'rxjs'
+import { map } from 'rxjs/operators'
 
 @Injectable()
 export class MediaService {
 
-    private imageService: string = '//grapple-dev.edji.it';
-    private pdfBucket: string = '//image-dev.edji.it/pdf';
+    private imageService: string = '//grapple-dev.edji.it'
+    private pdfBucket: string = '//image-dev.edji.it/pdf'
 
     constructor(private http: Http) { 
         // Check to see if prod or dev environment
         if (window.location.host.indexOf('dev.edji.it') > -1) {
-            this.imageService = '//grapple-dev.edji.it';
-            this.pdfBucket = '//image-dev.edji.it/pdf';
+            this.imageService = '//grapple-dev.edji.it'
+            this.pdfBucket = '//image-dev.edji.it/pdf'
         } else if (window.location.host.indexOf('edji.it') > -1 || window.location.host.indexOf('dvscf5tf91syg.cloudfront.net') > -1) {
-            this.imageService = '//grapple.edji.it';
-            this.pdfBucket = '//image.edji.it/pdf';
+            this.imageService = '//grapple.edji.it'
+            this.pdfBucket = '//image.edji.it/pdf'
         }
     }
 
@@ -43,10 +44,10 @@ export class MediaService {
 
     uploadAudio(formData: any): Observable<any> {
         let uploadSource = new Subject();
-        let type = 'audio/wav';
-        let name = 'my-audio.wav';
-        // let type = 'audio/aac';
-        // let name = 'my-audio.aac';
+        let type = 'audio/wav'
+        let name = 'my-audio.wav'
+        // let type = 'audio/aac'
+        // let name = 'my-audio.aac'
 
         this.http.get(this.imageService + '/sign-s3?file-name=' + name + '&file-type=' + type + '&file-path=audio')
             .subscribe((res) => {
@@ -104,9 +105,9 @@ export class MediaService {
 
     pdfCheck(fileId: string): Observable<any> {
         return this.http.get(this.pdfBucket + '/' + fileId + '/spark.json')
-            .map(data => {
+            .pipe(map(data => {
                 return data.json() || {};
-            });
+            }));
     } // pdfCheck(fileId: string): Observable<any>
     
 } // class

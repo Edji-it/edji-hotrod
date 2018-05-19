@@ -1,4 +1,4 @@
-import { Subscription } from 'rxjs/Rx';
+import { Subscription } from 'rxjs';
 import { Project } from '../../shared/datatypes';
 import { Router } from '@angular/router';
 import { Component, EventEmitter, Input, OnInit, Output, OnDestroy } from '@angular/core';

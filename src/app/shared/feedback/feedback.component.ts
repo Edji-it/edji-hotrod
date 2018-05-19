@@ -3,13 +3,14 @@ import { Http } from '@angular/http'
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { Angulartics2 } from 'angulartics2'
+import { take } from 'rxjs/operators'
 
 import { AuthService, BumblebeeService, Copy, UtilToolService } from './..'
-import { ALLSPARK } from '../../app.constants';
+import { ALLSPARK } from '../../app.constants'
 
 @Component({
   selector: 'edji-feedback',
-  templateUrl: 'feedback.component.pug',
+  templateUrl: require('pug-loader!feedback.component.pug'),
   styleUrls: ['./feedback.component.scss']
 })
 export class FeedbackComponent implements OnInit {
@@ -120,7 +121,7 @@ export class FeedbackComponent implements OnInit {
       user: userSend
     }
 
-    this._bumblebee.sendFeedback(data).take(1).subscribe(
+    this._bumblebee.sendFeedback(data).pipe(take(1)).subscribe(
       (res) => {
         this.loading = false
         this.angulartics.eventTrack.next({ action: 'sendFeedback', properties: { category: 'accountManagement', label: 'success' }})

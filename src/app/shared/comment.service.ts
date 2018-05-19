@@ -1,6 +1,6 @@
 import { EdjiComment, CommentPermissions, Project } from './datatypes';
 import { Injectable } from '@angular/core'
-import { BehaviorSubject, Observable, Subject } from 'rxjs/Rx';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import 'rxjs/add/operator/toPromise';
 
 import { AuthService } from './auth.service'

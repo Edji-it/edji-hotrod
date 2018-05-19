@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Angulartics2 } from 'angulartics2'
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
