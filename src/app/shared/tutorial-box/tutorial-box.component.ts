@@ -1,5 +1,5 @@
-import { Subscription } from 'rxjs/Rx';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { Subscription } from 'rxjs'
 
 import { AuthService } from '../'
 

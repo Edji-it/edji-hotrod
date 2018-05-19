@@ -1,5 +1,4 @@
 import { Mock } from 'protractor/built/driverProviders';
-import { Map } from 'rxjs/util/Map';
 import { BrowserXhr } from '@angular/http';
 import { Component, OnInit } from '@angular/core';
 

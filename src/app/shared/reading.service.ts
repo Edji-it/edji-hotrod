@@ -1,8 +1,8 @@
 import { Project } from './datatypes'
 import { Injectable } from '@angular/core'
 import { Http, Response, Headers, RequestOptions } from '@angular/http'
-import { BehaviorSubject, Observable, Subject } from 'rxjs/Rx'
-import 'rxjs/add/operator/toPromise'
+import { BehaviorSubject, Observable, Subject } from 'rxjs'
+import { map, take } from 'rxjs/operators'
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http'
 
 import { AuthService } from './auth.service'
@@ -69,7 +69,7 @@ export class ReadingService {
           'Authorization': this._auth.getToken()
         }), 
         params: feedParams })
-        .take(1)
+        .pipe(take(1))
         .subscribe((data: any) => { 
           this.userReadingsSource.next(data)
         }, (error) => {
@@ -82,12 +82,14 @@ export class ReadingService {
     
     return this.http
       .get(this._auth.getUrl() + '/readings/' + id, this._auth.getOptions())
-      .map(data => {
-        if (data.json()) {
-          this.setReadingObj(data.json())
-        }
-        return data.json()
-      });
+      .pipe(
+        map(data => {
+          if (data.json()) {
+            this.setReadingObj(data.json())
+          }
+          return data.json()
+        })
+      );
   } // public get(id : string) : Observable<any>
 
   public setReadingObj(reading: any) : void {
@@ -102,9 +104,11 @@ export class ReadingService {
   public getAllVersions(versionId : string) : Observable<any> {
       return this.http
           .get(this._auth.getUrl() + '/readings/versions/' + versionId, this._auth.getOptions())
-          .map(data => {
-            return data.json()
-          });
+          .pipe(
+            map(data => {
+              return data.json()
+            })
+          );
   } // public getAllVersions(versionId : string) : Observable<any>
 
   public clear(): void {
@@ -117,26 +121,28 @@ export class ReadingService {
   public delete(targetReading: Reading): Observable<any> {
     // console.log("Deleting '" + targetReading.title)
     return this.http.delete(this._auth.getUrl() + '/readings/' +  targetReading._id, this._auth.getOptions())
-      .map(value => {
-        // Delete was successful
-        let readingResponse = this.userReadingsSource.value
-        readingResponse.readings.forEach(
-          (reading, index) => {
-            
-            if (reading.version_count > 1) {
-              // Reload content (slower but simpler)
-              this.updateCreated()
-            } else if (reading._id == targetReading._id) {
-              // Single version readings we can remove instantly
-              readingResponse.readings.splice(index, 1)
-              readingResponse.total--
-              this.userReadingsSource.next(readingResponse)
-            }
+      .pipe(
+        map(value => {
+          // Delete was successful
+          let readingResponse = this.userReadingsSource.value
+          readingResponse.readings.forEach(
+            (reading, index) => {
+              
+              if (reading.version_count > 1) {
+                // Reload content (slower but simpler)
+                this.updateCreated()
+              } else if (reading._id == targetReading._id) {
+                // Single version readings we can remove instantly
+                readingResponse.readings.splice(index, 1)
+                readingResponse.total--
+                this.userReadingsSource.next(readingResponse)
+              }
 
-          } // (reading, index) =>
-        ) // readings.forEach
-        return value
-      });
+            } // (reading, index) =>
+          ) // readings.forEach
+          return value
+        })
+      );
   } // public delete(): void
 
   /**
@@ -185,23 +191,27 @@ export class ReadingService {
 
       return this.http
         .put(this._auth.getUrl() + '/readings/' + reading['_id'], { reading: putReading }, this._auth.getOptions())
-        .map(data => {
-          if (data.json() && data.json().reading) {
-            this.readingValue = data.json().reading
-            this.readingSource.next(this.readingValue)
-          }
-          return data.json().reading;
-        });
+        .pipe(
+          map(data => {
+            if (data.json() && data.json().reading) {
+              this.readingValue = data.json().reading
+              this.readingSource.next(this.readingValue)
+            }
+            return data.json().reading;
+          })
+        );
     } else {
       return this.http
         .post(this._auth.getUrl() + '/readings', { reading: reading }, this._auth.getOptions())
-        .map(data => {
-          if (data.json() && data.json().reading) {
-            this.readingValue = data.json().reading
-            this.readingSource.next(this.readingValue)
-          }
-          return data.json().reading;
-        });
+        .pipe(
+          map(data => {
+            if (data.json() && data.json().reading) {
+              this.readingValue = data.json().reading
+              this.readingSource.next(this.readingValue)
+            }
+            return data.json().reading;
+          })
+        );
     } // if
   } // public save()
   

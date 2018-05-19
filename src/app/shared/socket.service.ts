@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
-import { Observable } from 'rxjs/Observable';
 import * as io from 'socket.io-client';
+import { Observable, Subject } from 'rxjs';
 
 import { AuthService } from './auth.service';
 
