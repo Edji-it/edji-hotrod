@@ -3,7 +3,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core'
 import { PRIMARY_OUTLET, Router, ActivatedRoute } from '@angular/router'
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
-import { Subscription } from 'rxjs/Subscription'
+import { Subscription } from 'rxjs'
+import { take } from 'rxjs/operators'
 import { Angulartics2 } from 'angulartics2'
 
 import { AuthService, Copy, ProjectService } from './../shared'
@@ -171,8 +172,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
     // Attempt to register this user.
     this._auth.register(formValue)
-      .take(1)
-      .subscribe((data) => {
+      .pipe(take(1))
+      .subscribe((data: any) => {
         this.registerLoading = false
         if (data.user) {
 
@@ -188,7 +189,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
           this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'success' }})
           if (this.readingToAdd && this.tempUserId) {
             this._auth.convertTempUser(this.tempUserId)
-              .take(1)
+              .pipe(take(1))
               .subscribe(() => {
                 this._router.navigate(['/new-reading'], { queryParams: { copyId: this.readingToAdd } })
               }, (err) => {
@@ -197,7 +198,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
               })
           } else if (this.tempUserId) {
             this._auth.convertTempUser(this.tempUserId)
-              .take(1)
+              .pipe(take(1))
               .subscribe(() => {
                 this._router.navigate(['/dashboard'])
               }, (err) => {

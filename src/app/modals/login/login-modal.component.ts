@@ -30,7 +30,7 @@ export class LoginModal implements OnInit {
 
   onLoginSuccess() {
     this._project.addUserToProject(this.projectId)
-      .take(1)
+      .pipe(take(1))
       .subscribe(() => {
         this.closeModal.emit()
       }, (err) => {

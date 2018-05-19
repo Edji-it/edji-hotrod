@@ -21,7 +21,7 @@ enum playState {
 
 @Component({
   selector: 'audio-comment',
-  templateUrl: 'audio-comment.component.pug',
+  templateUrl: require('pug-loader!audio-comment.component.pug')(),
   styleUrls: ['./audio-comment.component.scss']
 })
 export class AudioCommentComponent implements OnInit, AfterViewInit{
@@ -203,7 +203,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
         
         // Comment saved! Save audio file
         this._media.uploadAudio(this.audioFile)
-          .take(1)
+          .pipe(take(1))
           .subscribe(data => {
             // Player no longer loading!
             this.currentState = playState.inactive

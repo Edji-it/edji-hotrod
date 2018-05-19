@@ -3,11 +3,11 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
+import { take } from 'rxjs/operators'
 import { Angulartics2 } from 'angulartics2';
 import { Ng4TwitterTimelineService } from 'ng4-twitter-timeline/lib/index';
 
-import { AppState } from '../app.service';
 import { AuthService } from '../shared/auth.service';
 import { ProjectService } from './../shared/project.service';
 
@@ -44,7 +44,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   // TypeScript public modifiers
   constructor(
-    private appState: AppState,
     private _auth: AuthService,
     private _project: ProjectService,
     private router: Router,
@@ -142,9 +141,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.joinLoading = true;
     this.angulartics.eventTrack.next({ action: 'enterLightningCode', properties: { category: 'joinProject', label: 'attempt' }});
     this._project.validateProject(code)
-      .take(1)
+      .pipe(take(1))
       .subscribe(
-        (data) => {
+        (data: any) => {
           this.joinLoading = false;
           this.angulartics.eventTrack.next({ action: 'enterLightningCode', properties: { category: 'joinProject', label: 'success' }});
           if (data._id){

@@ -38,7 +38,7 @@ export class DeleteReadingModal implements OnInit {
   deleteThisReading(reading : Reading) : void {
     // Listen for an Observable from reading.service.ts
     this._readings.delete(reading)
-      .take(1) // so we don't need to unsubscribe
+      .pipe(take(1)) // so we don't need to unsubscribe
       .subscribe(
       data => { 
         console.log("Deleting the reading was successful.");

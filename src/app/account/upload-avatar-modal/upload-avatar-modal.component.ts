@@ -78,7 +78,7 @@ export class UploadAvatarModal implements OnInit {
   public confirmNewAvatar () : void
   {
     this._auth.forceUpdateAvatar(this.uploadedFile)
-      .take(1).subscribe(() => {
+      .pipe(take(1)).subscribe(() => {
         console.log("Saved!");
         console.log(this._auth.getUser().avatar);
         this.newAvatarConfirmed.emit();

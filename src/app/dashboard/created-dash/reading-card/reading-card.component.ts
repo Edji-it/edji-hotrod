@@ -1,4 +1,4 @@
-import { Subscription } from 'rxjs/Rx';
+import { Subscription } from 'rxjs';
 import { Angulartics2 } from 'angulartics2';
 import { ReadingService, ProjectService } from '../../../shared';
 import { Reading, Project }      from '../../../shared/datatypes';

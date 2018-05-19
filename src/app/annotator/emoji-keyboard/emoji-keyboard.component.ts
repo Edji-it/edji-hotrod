@@ -116,7 +116,7 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
     }
     user.prefs.recentEmoji = this.emojifilters[0].emoji;
     this._auth.updateUser(user)
-        .take(1)
+        .pipe(take(1))
         .subscribe(
           (data) => {
             let user = data.user

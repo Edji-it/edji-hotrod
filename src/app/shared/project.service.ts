@@ -523,9 +523,9 @@ export class ProjectService {
      */
     public delete(targetProject : Project) : Observable<any> {
         return this.http.delete(this._auth.getUrl() + '/projects/' +  targetProject._id, this._auth.getOptions())
-            .map( data => {
+            .pipe(map( data => {
                 this._readings.removeProject(targetProject)
-            })
+            }))
     } // public delete(projectId)
 
     /** 

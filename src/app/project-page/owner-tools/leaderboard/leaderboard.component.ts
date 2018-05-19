@@ -1,4 +1,4 @@
-import { Subscription } from 'rxjs/Rx'
+import { Subscription } from 'rxjs'
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 
 import { CommentStats, Reading } from './../../../shared/datatypes'

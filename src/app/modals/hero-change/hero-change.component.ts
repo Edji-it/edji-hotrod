@@ -1,6 +1,7 @@
-import { Angulartics2 } from 'angulartics2';
-import { AuthService } from '../../shared';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Angulartics2 } from 'angulartics2'
+import { AuthService } from '../../shared'
+import { Component, EventEmitter, OnInit, Output } from '@angular/core'
+import { take } from 'rxjs/operators'
 
 import { BumblebeeService } from './../../shared'
 
@@ -55,7 +56,7 @@ export class HeroChangeComponent implements OnInit {
   updateType(type: string) {
     this.updating = true
     this._auth.updateHeroSub(type)
-      .take(1)
+      .pipe(take(1))
       .subscribe(
         data => {
           this.updating = false
@@ -80,7 +81,7 @@ export class HeroChangeComponent implements OnInit {
     // track user cancelling hero subscription in analytics
     this.angulartics.eventTrack.next({ action: 'cancelSubscription', properties: { category: 'heroFeature', label: 'attempt' }})
     this._auth.cancelHeroSubscription(this.user.hero.subscription_id)
-      .take(1)
+      .pipe(take(1))
       .subscribe(
         data => {
           // track user cancelling hero subscription in analytics

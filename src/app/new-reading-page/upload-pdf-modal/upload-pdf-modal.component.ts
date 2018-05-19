@@ -1,9 +1,10 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { Locker } from 'angular2-locker';
-import { DeletePdfMiniModal } from "./delete-pdf-mini-modal/delete-pdf-mini-modal.component";
+import { Component, OnInit, Output, EventEmitter } from '@angular/core'
+import { Locker } from 'angular2-locker'
+import { take } from 'rxjs/operators'
 
 // Project Dependencies
-import { MediaService, AuthService } from '../../shared';
+import { MediaService, AuthService } from '../../shared'
+import { DeletePdfMiniModal } from "./delete-pdf-mini-modal/delete-pdf-mini-modal.component"
 
 @Component({
   selector: 'upload-pdf-modal',
@@ -60,7 +61,7 @@ export class UploadPdfModalComponent implements OnInit {
     })
 
     // Get the latest uploaded docs
-    this._auth.refreshUser().take(1).subscribe(user => {
+    this._auth.refreshUser().pipe(take(1)).subscribe((user:any) => {
       if (user.media && user.media.documents) {
         this.uploadedDocs = user.media.documents
       }
@@ -136,7 +137,7 @@ export class UploadPdfModalComponent implements OnInit {
     let ONE_HOUR = 60 * 60 * 1000;
 
     this._media.pdfCheck(fileId)
-      .take(1)
+      .pipe(take(1))
       .subscribe(
         data => {
           if (data.converted === true) {
@@ -234,7 +235,7 @@ export class UploadPdfModalComponent implements OnInit {
     }
     user.media.documents = this.uploadedDocs;
     this._auth.updateUser( user )
-        .take(1)
+        .pipe(take(1))
         .subscribe(
           (user) => {
             if (user.documents) {

@@ -1,12 +1,13 @@
 import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
-import { AuthService } from "app/shared";
-import { Subscription } from 'rxjs/Rx';
+import { AuthService } from "../";
+import { Subscription } from 'rxjs'
+import { take } from 'rxjs/operators'
 import { User } from '../datatypes';
 
 @Component({
   selector: 'follow-tag',
   styleUrls: [ './follow-tag.component.scss' ],
-  templateUrl: './follow-tag.component.pug'
+  templateUrl: require('pug-loader!./follow-tag.component.pug')
 })
 export class FollowTag implements OnInit {
     @Input() owner: User
@@ -36,7 +37,7 @@ export class FollowTag implements OnInit {
 
   followUser(userId: string) : void {
     this._auth.followUser(userId)
-      .take(1)
+      .pipe(take(1))
       .subscribe(
         data => {
           this.followEvent.emit(true)
@@ -46,7 +47,7 @@ export class FollowTag implements OnInit {
 
   unfollowUser(userId: string) : void {
     this._auth.unfollowUser(userId)
-      .take(1)
+      .pipe(take(1))
       .subscribe(data => {
         this.followEvent.emit(false)
       })

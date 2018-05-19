@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
+import { take } from 'rxjs/operators'
 
 import { AuthService } from './../shared'
 
@@ -40,7 +41,7 @@ export class OAuthComponent implements OnInit {
 
     const token = decodeURIComponent(encodedToken)
 
-    this._auth.getUserWithAuthToken(type, token).take(1).subscribe((res) => {
+    this._auth.getUserWithAuthToken(type, token).pipe(take(1)).subscribe((res) => {
       this._auth.setUser(res.user)
       this._auth.setToken(res.token)
       this._router.navigate(['/dashboard'])

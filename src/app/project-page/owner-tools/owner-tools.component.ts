@@ -1,4 +1,5 @@
-import { Subscription } from 'rxjs/Rx'
+import { Subscription } from 'rxjs'
+import { take } from 'rxjs/operators'
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
 // Project Dependencies
@@ -86,7 +87,7 @@ export class OwnerToolsComponent implements OnInit {
       updateObj[powerName] = turnOn
 
       this._projects.update(updateObj, this.currentProject._id)
-        .take(1)
+        .pipe(take(1))
         .subscribe((project) => {
           // Live update users once save is successful
           this._socket.toggleHeatVision({ all: turnOn })

@@ -1,5 +1,5 @@
 import { Title } from '@angular/platform-browser';
-import { Observable, Subscription } from 'rxjs/Rx'
+import { Observable, Subscription } from 'rxjs'
 import { Router, ActivatedRoute, Params } from '@angular/router'
 import { Component, OnDestroy, OnInit } from '@angular/core'
 
@@ -101,7 +101,7 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
                     //     this._readings.clear()
                     //     // Tell service to load correct reading
                     //     this._readings.get(this.project.reading_id)
-                    //         .take(1)
+                    //         .pipe(take(1))
                     //         .subscribe(
                     //             reading => {
                     //                 this.reading = reading

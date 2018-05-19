@@ -1,6 +1,7 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { ProjectService } from '../../shared';
-import { Project }        from '../../shared/datatypes';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
+import { ProjectService } from '../../shared'
+import { Project } from '../../shared/datatypes'
+import { take } from 'rxjs/operators'
 
 @Component({
   selector: 'hot-del-project',
@@ -37,7 +38,7 @@ export class DeleteProjectModal implements OnInit {
   deleteThisProject(project : Project) : void {
     // Listen for an Observable from project.service.ts
     this._projects.delete(project)
-      .take(1) // so we don't need to unsubscribe
+      .pipe(take(1)) // so we don't need to unsubscribe
       .subscribe(
       data => { 
         // Data is updated through observables on the Reading service

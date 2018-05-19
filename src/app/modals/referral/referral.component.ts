@@ -1,9 +1,10 @@
-import { Subscription } from 'rxjs/Rx';
+import { Subscription } from 'rxjs';
 import { Project } from '../../shared/datatypes';
 import { Router } from '@angular/router';
 import { Component, EventEmitter, Input, OnInit, Output, OnDestroy } from '@angular/core';
 import { UtilToolService, ProjectService, AuthService, ReadingService } from './../../shared'
 import { ActivatedRoute } from '@angular/router';
+import { take } from 'rxjs/operators'
 
 @Component({
   selector: 'referral-modal',
@@ -94,7 +95,7 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
    */
   private getUserReferralStatus() {
     let user = this._auth.getUser() 
-    this._auth.getReferralProgress(user._id).take(1).subscribe((userReferrals) => {
+    this._auth.getReferralProgress(user._id).pipe(take(1)).subscribe((userReferrals: any) => {
       // Set the current number of referrals and build our array of objects
       let completedReferrals = userReferrals.users_referred.filter(referred => {
         return referred.status == "completed"

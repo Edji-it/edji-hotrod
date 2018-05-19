@@ -2,6 +2,7 @@ import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_di
 import { FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { Component, Output, EventEmitter } from '@angular/core'
 import { Angulartics2 } from 'angulartics2'
+import { take } from 'rxjs/operators'
 
 import { AuthService } from './../../shared'
 
@@ -34,7 +35,7 @@ export class ResetPassComponent {
     this.angulartics.eventTrack.next({ action: 'requestPasswordEmail', properties: { category: 'accountManagement', label: 'attempt' }})
 
     this._auth.recoverPassword( formValue.username )
-      .take(1)
+      .pipe(take(1))
       .subscribe((success) => {
         this.loading = false
         this.submitted = true

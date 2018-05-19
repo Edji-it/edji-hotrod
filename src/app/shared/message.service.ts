@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core'
-import { Observable, BehaviorSubject } from 'rxjs/Rx'
+import { Observable, BehaviorSubject, Subscription, interval } from 'rxjs'
 import 'rxjs/add/operator/toPromise'
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http'
 import { Angulartics2 } from 'angulartics2'
 import { AuthService } from './auth.service'
-import { AnonymousSubscription } from 'rxjs/Subscription';
+import { map, take } from 'rxjs/operators'
 
 @Injectable()
 export class MessageService {
 
-  private timerSubscription: AnonymousSubscription
+  private timerSubscription: Subscription
 
   constructor(
     private _http: HttpClient,
@@ -46,11 +46,11 @@ export class MessageService {
    */
   private subscribeToRefresh(): void {
     // Subscribe to the timer and run it every minute
-    this.timerSubscription = Observable.timer(0, 60000).subscribe(() => {
+    this.timerSubscription = interval(60000).subscribe(() => {
       if (this._auth.getUser().isLoggedIn) {
         // Make the call to getMessages and subscribe to its observable
         this.getMessages()
-        .take(1)
+        .pipe(take(1))
         .subscribe((data) => {
           let messages = data.messages
           let msgLen = messages.length
@@ -59,7 +59,7 @@ export class MessageService {
             let message = messages[i]
             // Refresh the user if message is 'user_refresh_required'
             if (message.key==='user_refresh_required') {
-              this._auth.refreshUser().take(1).subscribe(
+              this._auth.refreshUser().pipe(take(1)).subscribe(
                 data => {
                   // do something else with user, if need be
                 },
