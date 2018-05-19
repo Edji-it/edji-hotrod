@@ -1,10 +1,8 @@
-import { SELENIUM_PORT } from 'webdriver-manager/built/lib/cmds';
 import { ActivatedRoute, Params } from '@angular/router'
 import { Injectable } from '@angular/core'
 import { Http, Response, Headers, RequestOptions } from '@angular/http'
 import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs'
 import { map, take } from 'rxjs/operators'
-import 'rxjs/add/operator/toPromise'
 import { Angulartics2 } from 'angulartics2'
 
 import { AuthService } from './auth.service'

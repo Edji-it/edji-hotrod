@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { AuthService } from '../shared'
-import { ReadingService } from "app/shared/reading.service";
+import { ReadingService } from "../shared/reading.service";
 
 @Component({
   selector: 'app-discover-feed',

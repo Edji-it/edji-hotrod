@@ -1,4 +1,3 @@
-import { document } from '@angular/platform-browser/src/facade/browser'
 import { Component, EventEmitter, ElementRef, Input, Output, OnInit, AfterViewInit } from '@angular/core'
 
 import { EdjiComment } from './../../shared/datatypes/comment'
@@ -83,11 +82,6 @@ export class TextCommentComponent implements OnInit, AfterViewInit {
     }
 
     focusField(event) {
-        // setTimeout( function(event) {
-            // event.preventDefault()
-            //this.textComment.nativeElement.value = 'hi'
-            this.element.nativeElement.select()
-            // this.element.nativeElement.querySelector('#textComment').value = 'hi'
-        // }, 3000)
+        this.element.nativeElement.select()
     }
 }
