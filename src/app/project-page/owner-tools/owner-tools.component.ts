@@ -8,7 +8,7 @@ import { CommentStats, Project, Reading } from './../../shared/datatypes';
 
 @Component({
   selector: 'owner-tools',
-  templateUrl: './owner-tools.component.pug',
+  template: require('pug-loader!./owner-tools.component.pug')(),
   styleUrls: ['./owner-tools.component.scss']
 })
 export class OwnerToolsComponent implements OnInit {

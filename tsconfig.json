@@ -16,5 +16,18 @@
       "es2017",
       "dom"
     ]
-  }
+    ,"types": [
+      "hammerjs",
+      "jasmine",
+      "node",
+      "selenium-webdriver",
+      "source-map",
+      "uglify-js",
+      "webpack"
+    ]
+  },
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }

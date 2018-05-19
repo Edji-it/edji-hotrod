@@ -12,7 +12,7 @@ import { ALLSPARK } from './../app.constants'
 
 @Component({
   selector: 'edji-register',
-  templateUrl: 'register.component.pug',
+  template: require('pug-loader!./register.component.pug')(),
   styles: [`
     .btn-group-wrapper {
       width: 100%;

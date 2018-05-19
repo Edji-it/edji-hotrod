@@ -4,7 +4,7 @@ import { Component, EventEmitter, OnInit, Input } from '@angular/core'
 
 @Component({
   selector: 'scroll-progress',
-  template: require('pug-loader!./scroll-progress.component.pug'),
+  template: require('pug-loader!./scroll-progress.component.pug')(),
   styleUrls: ['./scroll-progress.component.scss']
 })
 export class ScrollProgressComponent implements OnInit {

@@ -8,7 +8,7 @@ import { AuthService, CommentService, ProjectService, ReadingService } from '../
 
 @Component({
   selector: 'hot-discussions',
-  template: require('pug-loader!./discussions.component.pug'),
+  template: require('pug-loader!./discussions.component.pug')(),
   styleUrls: ['./discussions.component.scss']
 })
 

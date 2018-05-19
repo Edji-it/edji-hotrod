@@ -12,7 +12,7 @@ export const CUSTOM_INPUT_CONTROL_VALUE_ACCESSOR: any = {
 
 @Component({
     selector: 'grade-selector',
-    templateUrl:'grade-selector.component.pug',
+    template: require('pug-loader!./grade-selector.component.pug')(),
     styleUrls: ['grade-selector.component.scss'],
     providers: [CUSTOM_INPUT_CONTROL_VALUE_ACCESSOR]
 })

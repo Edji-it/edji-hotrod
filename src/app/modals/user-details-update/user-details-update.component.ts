@@ -9,7 +9,7 @@ import { AuthService, BumblebeeService } from './../../shared'
 
 @Component({
   selector: 'hot-user-details-update',
-  templateUrl: 'user-details-update.component.pug'
+  template: require('pug-loader!./user-details-update.component.pug')()
 })
 
 export class UserDetailsUpdateModal implements OnInit {

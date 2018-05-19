@@ -6,7 +6,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators'
 import { Angulartics2 } from 'angulartics2';
-import { Ng4TwitterTimelineService } from 'ng4-twitter-timeline/lib/index';
+// import { Ng4TwitterTimelineService } from 'ng4-twitter-timeline/lib/index';
 
 import { AuthService } from '../shared/auth.service';
 import { ProjectService } from './../shared/project.service';
@@ -23,7 +23,7 @@ import { ProjectService } from './../shared/project.service';
   // Our list of styles in our component. We may add more to compose many styles together
   styleUrls: [ './home.component.scss' ],
   // Every Angular template is first compiled by the browser before Angular runs it's compiler
-  templateUrl: './home.component.pug'
+  template: require('pug-loader!./home.component.pug')()
 })
 export class HomeComponent implements OnInit, OnDestroy {
   // Set our default values
@@ -50,7 +50,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     private angulartics: Angulartics2,
     fb: FormBuilder,
     private _title: Title,
-    private ng4TwitterTimelineService: Ng4TwitterTimelineService
+    // private ng4TwitterTimelineService: Ng4TwitterTimelineService
   ) {
     
   }

@@ -21,7 +21,7 @@ import { ALLSPARK } from './../../app.constants'
 
 @Component({
   selector: 'edji-comment',
-  templateUrl: './comment.component.pug',
+  template: require('pug-loader!./comment.component.pug')(),
   styleUrls: ['./comment.component.scss']
 })
 export class CommentComponent implements OnInit, OnDestroy {

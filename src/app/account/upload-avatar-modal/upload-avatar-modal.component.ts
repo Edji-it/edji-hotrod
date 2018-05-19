@@ -1,8 +1,9 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
+import { take } from 'rxjs/operators'
 
 // Dependencies
-import { AuthService, MediaService } from '../../shared';
-import { User } from '../../shared/datatypes';
+import { AuthService, MediaService } from '../../shared'
+import { User } from '../../shared/datatypes'
 
 @Component({
   selector: 'hot-upload-avatar',

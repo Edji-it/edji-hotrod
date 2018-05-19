@@ -4,7 +4,7 @@ import { EdjiComment } from '../../shared/datatypes'
 
 @Component({
     selector: 'emoji-comment',
-    templateUrl: 'emoji-comment.component.pug',
+    template: require('pug-loader!./emoji-comment.component.pug')(),
     styleUrls: ['./emoji-comment.component.scss']
 })
 export class EmojiCommentComponent {

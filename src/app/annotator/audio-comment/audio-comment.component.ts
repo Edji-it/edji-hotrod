@@ -22,7 +22,7 @@ enum playState {
 
 @Component({
   selector: 'audio-comment',
-  template: require('pug-loader!audio-comment.component.pug')(),
+  template: require('pug-loader!./audio-comment.component.pug')(),
   styleUrls: ['./audio-comment.component.scss']
 })
 export class AudioCommentComponent implements OnInit, AfterViewInit{

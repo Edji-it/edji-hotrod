@@ -6,7 +6,7 @@ import { Reading }        from '../../shared/datatypes'
 
 @Component({
   selector: 'hot-del-reading',
-  templateUrl: 'del-reading.component.pug'
+  template: require('pug-loader!./del-reading.component.pug')()
 })
 export class DeleteReadingModal implements OnInit {
 

@@ -6,7 +6,7 @@ import { AuthService } from './../shared'
 
 @Component({
   selector: 'hot-oauth-redirect',
-  templateUrl: 'oauth-redirect.component.pug'
+  template: require('pug-loader!./oauth-redirect.component.pug')()
 })
 
 export class OAuthComponent implements OnInit {
