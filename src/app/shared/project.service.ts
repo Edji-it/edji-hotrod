@@ -2,8 +2,9 @@ import { SELENIUM_PORT } from 'webdriver-manager/built/lib/cmds';
 import { ActivatedRoute, Params } from '@angular/router'
 import { Injectable } from '@angular/core'
 import { Http, Response, Headers, RequestOptions } from '@angular/http'
-import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs/Rx';
-import 'rxjs/add/operator/toPromise';
+import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs'
+import { map, take } from 'rxjs/operators'
+import 'rxjs/add/operator/toPromise'
 import { Angulartics2 } from 'angulartics2'
 
 import { AuthService } from './auth.service'
@@ -188,7 +189,8 @@ export class ProjectService {
      */
     public setCurrentProject(projectCode: string): Observable<any> {
         return this.http.get(this._auth.getUrl() + '/projects/' + encodeURIComponent(projectCode) + '?pop=reading_id', this._auth.getOptions())
-            .map(
+            .pipe(
+                map(
                 (data) => {
                     let project = data.json().project; //can later have local setter to do validation/data manipulation before passing through observable
                     // Clear stats object
@@ -208,7 +210,8 @@ export class ProjectService {
                     this.currentProjectSource.next(this.project);
                     // Return the project along the current Observable
                     return this.project;
-                });
+                })
+            );
     }
 
     /** 
@@ -419,7 +422,7 @@ export class ProjectService {
         
         // return this.http.get(this._auth.getUrl() + '/readings/' + readingId + '/projects/' + userId , this._auth.getOptions() );
         return this.http.get(this._auth.getUrl() + "/projects/reading/" + readingId, this._auth.getOptions())
-            .map((data) => { return data.json() || {}; });
+            .pipe(map((data) => { return data.json() || {}; }));
     }
 
     /**
@@ -431,7 +434,7 @@ export class ProjectService {
         projectCode = encodeURIComponent(projectCode.toLowerCase())
 
         return this.http.get(this._auth.getUrl() + '/projects/' + projectCode + "/validate", this._auth.getOptions())
-            .map((data) => { return data.json() || {}; });
+            .pipe(map((data) => { return data.json() || {}; }));
             
     } // public validateProject(projectCode: string): Observable<any>
 
@@ -442,15 +445,18 @@ export class ProjectService {
     public get(projectId: string) : Observable<any> {
             return this.http
                 .get(this._auth.getUrl() + '/projects/' + projectId, this._auth.getOptions())
-                .map(
-                    data => {
-                        // Update local Project object if returned
-                        if (data.json().project && data.json().project._id) {
-                            this.project = data.json().project;
-                            this.currentProjectSource.next(this.project);
+                .pipe(
+                    map(
+                        data => {
+                            // Update local Project object if returned
+                            if (data.json().project && data.json().project._id) {
+                                this.project = data.json().project;
+                                this.currentProjectSource.next(this.project);
+                            }
+                            return data.json().project;
                         }
-                        return data.json().project;
-                    });
+                    )
+                );
     } // public get(projectId: string)
 
     /**
@@ -465,13 +471,15 @@ export class ProjectService {
 
         return this.http
             .post(this._auth.getUrl() + '/projects/', { 'project' : project }, this._auth.getOptions())
-            .map((data) => {
-                if (data && data.json()) {
-                    this.project = data.json().project;
-                    this.currentProjectSource.next(this.project);
-                    return this.project;
-                }
-            })
+            .pipe(
+                map((data) => {
+                    if (data && data.json()) {
+                        this.project = data.json().project;
+                        this.currentProjectSource.next(this.project);
+                        return this.project;
+                    }
+                })
+            )
     }
     
     /**
@@ -482,29 +490,31 @@ export class ProjectService {
     public update(updateObj: any, projectId: string): Observable<any> {
         return this.http
             .put([this._auth.getUrl(), 'projects', projectId].join("/"), { project: updateObj }, this._auth.getOptions())
-            .map((data) => {
-                if (data && data.json()) {
-                    // Set the existing comments aside here temporarily
-                    let comments = this.project.comments
+            .pipe(
+                map((data) => {
+                    if (data && data.json()) {
+                        // Set the existing comments aside here temporarily
+                        let comments = this.project.comments
 
-                    /**
-                     * If heat vision was toggled, lets bring the existing comments back in to the project
-                     * The reason we do this is because the lineY values get wiped out and will not reset on their own
-                    */
-                    let updateObjArray: string = JSON.stringify(updateObj)
-                    let updatedProject = data.json() && data.json().project
-                    // Get the project data back from the server
-                    if (updateObjArray.indexOf("heat_vision")>-1) {
-                        updatedProject.comments = comments
-                    }
-                    
-                    // this.project =
-                    Object.assign(this.project, updatedProject)
-                    
-                    this.currentProjectSource.next(this.project)
-                    return this.project
-                } // if
-            }) //.map
+                        /**
+                         * If heat vision was toggled, lets bring the existing comments back in to the project
+                         * The reason we do this is because the lineY values get wiped out and will not reset on their own
+                        */
+                        let updateObjArray: string = JSON.stringify(updateObj)
+                        let updatedProject = data.json() && data.json().project
+                        // Get the project data back from the server
+                        if (updateObjArray.indexOf("heat_vision")>-1) {
+                            updatedProject.comments = comments
+                        }
+                        
+                        // this.project =
+                        Object.assign(this.project, updatedProject)
+                        
+                        this.currentProjectSource.next(this.project)
+                        return this.project
+                    } // if
+                }) //.map
+            ) // pipe
     } // public update (updateObj: any, projectId: string): Observable<any> 
 
     /** . 
@@ -583,22 +593,24 @@ export class ProjectService {
         
         return this.http
             .delete(url, this._auth.getOptions())
-            .map(data => {
-                // Tell other Project views that the comment is gone
-                this._socket.updateComment(comment, 'DELETE', this.project._id)
-                // Update stats
-                this.commentStats.addCommentToStats(comment, -1)
+            .pipe(
+                map(data => {
+                    // Tell other Project views that the comment is gone
+                    this._socket.updateComment(comment, 'DELETE', this.project._id)
+                    // Update stats
+                    this.commentStats.addCommentToStats(comment, -1)
 
-                for (var i = 0; i <= this.project.comments.length; i++) {
-                    if (this.project.comments[i] && this.project.comments[i]._id === comment._id) {
-                        // Remove comment from local object
-                        this.project.comments.splice(i, 1)
+                    for (var i = 0; i <= this.project.comments.length; i++) {
+                        if (this.project.comments[i] && this.project.comments[i]._id === comment._id) {
+                            // Remove comment from local object
+                            this.project.comments.splice(i, 1)
+                        }
                     }
-                }
 
-                this.buildCommentsByPos()
-                return data
-            })
+                    this.buildCommentsByPos()
+                    return data
+                })
+            )
             .toPromise()
             .then(this._auth.extractData);
     }//  public deleteComment(comment): Promise<any>
@@ -662,13 +674,13 @@ export class ProjectService {
 
         return this.http
             .delete(url, this._auth.getOptions())
-            .map(data => {
+            .pipe(map(data => {
                 // Tell other Project views that the comment is gone
                  this._socket.updateComment(answer, 'DELETE', this.project._id);
 
                 this.removeAnswerFromAnswers(answer)
                 return data;
-            })
+            }))
             .toPromise()
             .then(this._auth.extractData);
     }//  public deleteAnswer(answer): Promise<any>
