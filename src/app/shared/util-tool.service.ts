@@ -1,12 +1,16 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from '@angular/core'
+
+const { version: appVersion } = require('../../../package.json')
 
 @Injectable() export class UtilToolService {
 
     public showFeedbackModal: boolean
     public showShareCode: boolean
+    public appVersion: string
 
   constructor() {
-      
+    // Get version number
+    this.appVersion = appVersion
   }
 
   /**
@@ -62,7 +66,7 @@ import { Injectable } from '@angular/core';
    * Return the current Edji version of the user
    */
   public getEdjiVersion(): string {
-    return document.getElementById('buildNumber').innerHTML.trim()
+    return this.appVersion
   }
 
   /**
