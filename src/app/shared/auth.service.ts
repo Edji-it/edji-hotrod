@@ -3,13 +3,13 @@ import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from
 import { Http, Response, Headers, RequestOptions } from '@angular/http'
 import { Observable, BehaviorSubject } from 'rxjs'
 import { map, take, catchError } from 'rxjs/operators'
-import { Locker } from 'angular2-locker'
 import { HttpClient, HttpHeaders } from "@angular/common/http"
 
 import { User } from './datatypes'
 import { URLSearchParams } from '@angular/http/src/url_search_params'
 import { Angulartics2 } from 'angulartics2'
 import { Angulartics2GoogleAnalytics } from 'angulartics2/ga'
+import { LockerService } from '../_services/locker.service';
 
 @Injectable()
 export class AuthService implements CanActivate {
@@ -21,7 +21,6 @@ export class AuthService implements CanActivate {
     */
 
     private baseUrl = "http://localhost:3354"
-    private locker: Locker
     private ENV: string = "dev"
 
     //NOTE: (6/15/17) If this.user ever needs to be edited it, make a copy, edit the copy, THEN assign it so this.user is always fresh.
@@ -43,13 +42,12 @@ export class AuthService implements CanActivate {
         private legacyHttp: Http, 
         private _http: HttpClient, 
         private _router: Router, 
-        _locker: Locker,
+        private _locker: LockerService,
         private angulartics: Angulartics2,
         private ga: Angulartics2GoogleAnalytics
     ) {
         let webpackEnv = process.env.ENV
         
-        this.locker = _locker.useDriver(Locker.DRIVERS.LOCAL)
         this.user = this.getUser()
         this.currentUserSource = new BehaviorSubject<any>(this.user)
         this.currentUser = this.currentUserSource.asObservable()
@@ -121,7 +119,7 @@ export class AuthService implements CanActivate {
         //should have session timeout, username, baseProfileId, typeId
         user.isLoggedIn = true
         this.currentUserSource.next(user)
-        this.locker.set('user', user)
+        this._locker.set('user', user)
         if (user._id && user._id.length > 0) {
             this.ga.setUsername(user._id) // Set the user ID using signed-in user_id.
         }
@@ -133,7 +131,7 @@ export class AuthService implements CanActivate {
      * Gets user object from local storage
      */
     public getUser(): User {
-        let user: User = this.locker.get('user')
+        let user: User = this._locker.get('user')
         if (!user) {
             // this kind of navigates around our interface... but oh well
             user = <User>{
@@ -171,38 +169,19 @@ export class AuthService implements CanActivate {
     }
 
     public setToken(token: any) {
-        return this.locker.set('token', token)
+        return this._locker.set('token', token)
     }
 
     public getToken(): any {
-        return this.locker.get('token') || ""
+        return this._locker.get('token') || ""
     }
 
     private destroyCredentials() {
-        this.locker.clear()
+        this._locker.clear()
         this.user = <User>{ isLoggedIn: false }
         this.currentUserSource.next(this.user)
     }
-
-    /** Stores an object in local storage for you - you're welcome */
-    public store(key: string, value: any): void {
-        if (key != "user" && key != "token") {
-            this.locker.set(key, value)
-        }
-    }
-
-    /** Gets an object from local storage */
-    public getFromStorage(key: string): any {
-        return this.locker.get(key)
-    }
-
-    /** Deletes things (not user or token) from local storage */
-    public deleteFromStorage(key: string): void {
-        if (key != "user" && key != "token") {
-            this.locker.remove(key)
-        }
-    }
-
+    
     login(user: any) {
         let data = {
             'user': {

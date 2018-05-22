@@ -15,9 +15,6 @@ import { AuthService, MessageService } from './shared'
 @Component({
   selector: 'app',
   encapsulation: ViewEncapsulation.None,
-  styleUrls: [
-    '../sass/main.scss'
-  ],
   template: `
     <main class="main">
       <router-outlet></router-outlet>

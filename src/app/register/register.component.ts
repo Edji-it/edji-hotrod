@@ -9,6 +9,7 @@ import { Angulartics2 } from 'angulartics2'
 
 import { AuthService, Copy, ProjectService } from './../shared'
 import { ALLSPARK } from './../app.constants'
+import { LockerService } from '../_services/locker.service';
 
 @Component({
   selector: 'edji-register',
@@ -77,7 +78,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private angulartics: Angulartics2,
     private _fb: FormBuilder,
-    private _title: Title
+    private _title: Title,
+    private _locker: LockerService
   ) {
 
     this.userCopy = new Copy().getUserCopy()
@@ -109,7 +111,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
     if (typeof(this.referralId)!='undefined' && this.referralId!='') {
       // Store the referral_id in the locker in case the user signs up with oauth
-      this._auth.store("referral_id", this.referralId)
+      this._locker.set("referral_id", this.referralId)
       // We're going to ask the server to get the user that referred this new one so we can show a name
       this.subscriptions.push(
         this._auth.getUserByReferralId(this.referralId).subscribe((user) => {

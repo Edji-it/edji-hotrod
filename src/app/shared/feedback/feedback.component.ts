@@ -7,6 +7,7 @@ import { take } from 'rxjs/operators'
 
 import { AuthService, BumblebeeService, Copy, UtilToolService } from './..'
 import { ALLSPARK } from '../../app.constants'
+import { LockerService } from '../../_services/locker.service';
 
 @Component({
   selector: 'edji-feedback',
@@ -39,11 +40,12 @@ export class FeedbackComponent implements OnInit {
     private http: Http,
     private angulartics: Angulartics2,
     fb: FormBuilder,
-    private _util: UtilToolService
+    private _util: UtilToolService,
+    private _locker: LockerService
   ) {
     this.user = this._auth.getUser()
 
-    let prevData: any = this._auth.getFromStorage("feedbackFormData") || {}
+    let prevData: any = this._locker.get("feedbackFormData") || {}
 
     this.feedbackForm = fb.group({
       name: [this.user.fullname, Validators.required],
@@ -126,7 +128,7 @@ export class FeedbackComponent implements OnInit {
         this.loading = false
         this.angulartics.eventTrack.next({ action: 'sendFeedback', properties: { category: 'accountManagement', label: 'success' }})
         this.feedbackSuccess = true
-        this._auth.deleteFromStorage("feedbackFormData")
+        this._locker.remove("feedbackFormData")
         this.feedbackClose()
         this.showFeedbackSuccess = true
       },
@@ -135,7 +137,7 @@ export class FeedbackComponent implements OnInit {
         this.loading = false
         this.angulartics.eventTrack.next({ action: 'sendFeedback', properties: { category: 'accountManagement', label: 'failure' }})
         this.errorObject.serverError = "Something has gone wrong. Please try submitting your feedback again later!"
-        this._auth.store("feedbackFormData", formValue)
+        this._locker.set("feedbackFormData", formValue)
       }
     )
   }

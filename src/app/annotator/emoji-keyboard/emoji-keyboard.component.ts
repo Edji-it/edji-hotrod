@@ -1,10 +1,10 @@
 import { CommentService } from '../../shared/comment.service'
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
-import { Locker } from 'angular2-locker'
 import { take } from 'rxjs/operators'
 
 // Project Dependencies
 import { AuthService } from '../../shared'
+import { LockerService } from '../../_services/locker.service';
 
 @Component({
   selector: 'emoji-keyboard',
@@ -12,7 +12,7 @@ import { AuthService } from '../../shared'
   styleUrls: ['./emoji-keyboard.component.scss']
 })
 export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
-  private locker: Locker;
+  private locker: LockerService;
   
   private _isActive = false;
   private currentComment: string;
@@ -89,7 +89,7 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
   ];
 
   constructor(
-        private _locker: Locker,
+        private _locker: LockerService,
         private _auth: AuthService,
         private _comments: CommentService
     ) {}
