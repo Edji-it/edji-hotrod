@@ -1,10 +1,10 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core'
-import { Locker } from 'angular2-locker'
 import { take } from 'rxjs/operators'
 
 // Project Dependencies
 import { MediaService, AuthService } from '../../shared'
 import { DeletePdfMiniModal } from "./delete-pdf-mini-modal/delete-pdf-mini-modal.component"
+import { LockerService } from '../../_services/locker.service';
 
 @Component({
   selector: 'upload-pdf-modal',
@@ -29,7 +29,6 @@ export class UploadPdfModalComponent implements OnInit {
   private newDocsIds: string[] = []; 
   // private newImgUrls: string[] = [];
   private selectedIndex: number = 0;
-  private locker: Locker; 
   private file: any = {};
   private title: string = '';
   private selectedFiles: any[] = [];
@@ -40,15 +39,15 @@ export class UploadPdfModalComponent implements OnInit {
   private pdfFileInputId : string  = "pdfFileInput";
   private confirmDelete : boolean = false;
 
-  constructor(private _locker: Locker, private _media: MediaService, private _auth: AuthService) {
-    this.locker = _locker.useDriver(Locker.DRIVERS.LOCAL);
+  constructor(private _locker: LockerService, private _media: MediaService, private _auth: AuthService) {
+    
   }
 
   ngOnInit() {
     // Load previously uploaded docs
     // (6.15.17) NOTE: We tried changing this here first if tree and everything went to hell. Be careful.
-    if (this.locker.get('uploadedDocs')) {
-      this.uploadedDocs = this.locker.get('uploadedDocs');
+    if (this._locker.get('uploadedDocs')) {
+      this.uploadedDocs = this._locker.get('uploadedDocs');
     } else if (this._auth.getUser().media && this._auth.getUser().media.documents) {
       this.uploadedDocs = this._auth.getUser().media.documents;
     }
@@ -225,7 +224,7 @@ export class UploadPdfModalComponent implements OnInit {
    * Save Uploaded Doc list to localStorage AND user object
    */
   saveUploadedDocs(): void {
-    this.locker.set('uploadedDocs', this.uploadedDocs);
+    this._locker.set('uploadedDocs', this.uploadedDocs);
     let user = this._auth.getUser();
     if (!user.media) {
         user.media = {};

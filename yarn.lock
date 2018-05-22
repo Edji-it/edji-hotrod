@@ -461,9 +461,9 @@ amdefine@>=0.0.4:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/amdefine/-/amdefine-1.0.1.tgz#4a5282ac164729e93619bcfd3ad151f817ce91f5"
 
-angular2-locker@^0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/angular2-locker/-/angular2-locker-0.5.0.tgz#5f60837d310d20c39ffa997d54ef7654367f2c62"
+angular-safeguard@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/angular-safeguard/-/angular-safeguard-2.0.1.tgz#6067c90aa3fa33105d7010f2a0aad7f0bd941060"
 
 angulartics2@^6.1.0:
   version "6.1.0"

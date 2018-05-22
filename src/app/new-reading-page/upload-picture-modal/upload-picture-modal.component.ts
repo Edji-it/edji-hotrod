@@ -1,9 +1,9 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core'
-import { Locker } from 'angular2-locker'
 import { take } from 'rxjs/operators'
 
 // Project Dependencies
 import { AuthService, MediaService } from '../../shared'
+import { LockerService } from '../../_services/locker.service';
 
 @Component({
   selector: 'upload-picture-modal',
@@ -26,8 +26,8 @@ export class UploadModalComponent implements OnInit {
   private noUploadAllowed: boolean = true;
   private errorMsg: string = '';
 
-  constructor(private _locker: Locker, private _media: MediaService, private _auth: AuthService) {
-    this.locker = _locker.useDriver(Locker.DRIVERS.LOCAL);
+  constructor(private _locker: LockerService, private _media: MediaService, private _auth: AuthService) {
+    
   }
 
   ngOnInit() {

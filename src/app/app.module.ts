@@ -5,7 +5,7 @@ import { HttpModule } from '@angular/http'
 import { RouterModule, PreloadAllModules, RouteReuseStrategy } from '@angular/router'
 import { HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser'
 // import { NgbModule } from '@ng-bootstrap/ng-bootstrap'
-import { LockerModule, Locker, LockerConfig} from 'angular2-locker'
+import { LockerModule, Locker, LockerConfig} from 'angular-safeguard'
 import { Angulartics2Module } from 'angulartics2'
 import { Angulartics2GoogleAnalytics } from 'angulartics2/ga'
 
