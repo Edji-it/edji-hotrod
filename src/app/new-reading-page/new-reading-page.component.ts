@@ -3,7 +3,7 @@ import { Title } from '@angular/platform-browser'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
 import { Angulartics2 } from 'angulartics2'
-// import { IMultiSelectOption, IMultiSelectSettings } from 'angular-2-dropdown-multiselect'
+import { IMultiSelectOption, IMultiSelectSettings } from '../_directives'
 import { take } from 'rxjs/operators'
 
 import { ReadingService } from '../shared/reading.service'

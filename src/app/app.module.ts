@@ -33,7 +33,7 @@ import { ReuseStrategy } from './route-reuse-strategy'
 
 // Directives
 // import { MediumEditorDirective } from 'angular2-medium-editor/medium-editor.directive'
-// import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect'
+import { MultiselectDropdownModule } from './_directives'
 import { ClickOutsideDirective } from './_directives/click-outside.directive'
 
 // Pipes
@@ -208,7 +208,7 @@ const APP_PROVIDERS = [
     HttpModule,
     HttpClientModule,
     LockerModule,
-    // MultiselectDropdownModule,
+    MultiselectDropdownModule,
     RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
     Angulartics2Module.forRoot([ Angulartics2GoogleAnalytics ]),
     // NgbModule.forRoot(), // Ng Bootstrap Import

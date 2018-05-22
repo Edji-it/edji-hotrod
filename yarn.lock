@@ -461,6 +461,10 @@ amdefine@>=0.0.4:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/amdefine/-/amdefine-1.0.1.tgz#4a5282ac164729e93619bcfd3ad151f817ce91f5"
 
+angular-2-dropdown-multiselect@codiak/angular-2-dropdown-multiselect:
+  version "0.0.0-development"
+  resolved "https://codeload.github.com/codiak/angular-2-dropdown-multiselect/tar.gz/93eb3a1e23745b06f3c0b89c13dd2d408b5cfade"
+
 angular-safeguard@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/angular-safeguard/-/angular-safeguard-2.0.1.tgz#6067c90aa3fa33105d7010f2a0aad7f0bd941060"
