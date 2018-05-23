@@ -52,11 +52,12 @@ nav-bar
         .btn-row
           button.btn.btn-primary.btn-lg([routerLink]="['/register']") Get Started
   //- Tweet Row
-  .container-fluid([class.hide]="!tweetsLoaded")
-    .row
-      .col-12
-        h1.padding--vertical What Teachers Like You Are Saying About Edji!
-        //- ng4-twitter-timeline([dataSrc]="{sourceType: 'collection', id: '947890483635851267'}", [opts]="{tweetLimit: 10, chrome: { noheader: true }}")
+  div.mt-4([class.hide]="!tweetsLoaded")
+    .container
+      .row
+        .col-12
+          h1 What Teachers Like You Are Saying About Edji!
+    ng4-twitter-timeline([dataSrc]="{sourceType: 'collection', id: '947890483635851267'}", [opts]="{tweetLimit: 10, chrome: { noheader: true }}")
   //- Row below promo
   .container
     //- we don't want this content to be fluid, so we give it another container
