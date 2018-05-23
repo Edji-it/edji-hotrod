@@ -469,6 +469,12 @@ angular-safeguard@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/angular-safeguard/-/angular-safeguard-2.0.1.tgz#6067c90aa3fa33105d7010f2a0aad7f0bd941060"
 
+angular2-medium-editor@1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/angular2-medium-editor/-/angular2-medium-editor-1.2.0.tgz#3de10adeedd5d4b50fcebbf97ab378a840b79928"
+  dependencies:
+    tslib "^1.9.0"
+
 angulartics2@^6.1.0:
   version "6.1.0"
   resolved "https://registry.yarnpkg.com/angulartics2/-/angulartics2-6.1.0.tgz#4cbeb321f47b08d1063651ff32636ef1ec49e1c1"

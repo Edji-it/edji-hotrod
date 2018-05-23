@@ -4,7 +4,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { HttpModule } from '@angular/http'
 import { RouterModule, PreloadAllModules, RouteReuseStrategy } from '@angular/router'
 import { HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser'
-// import { NgbModule } from '@ng-bootstrap/ng-bootstrap'
 import { LockerModule, Locker, LockerConfig} from 'angular-safeguard'
 import { Angulartics2Module } from 'angulartics2'
 import { Angulartics2GoogleAnalytics } from 'angulartics2/ga'
@@ -32,7 +31,7 @@ import {
 import { ReuseStrategy } from './route-reuse-strategy'
 
 // Directives
-// import { MediumEditorDirective } from 'angular2-medium-editor/medium-editor.directive'
+import { MediumEditorDirective } from 'angular2-medium-editor'
 import { MultiselectDropdownModule } from './_directives'
 import { ClickOutsideDirective } from './_directives/click-outside.directive'
 
@@ -83,7 +82,7 @@ import { CommentPaneComponent } from './shared/comment-pane/comment-pane.compone
 import { HttpClientModule } from '@angular/common/http';
 import { DataListModule } from 'primeng/datalist';
 import { PaginatorModule } from 'primeng/paginator';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 // Configure Hammer.js
 export class MyHammerConfig extends HammerGestureConfig  {
@@ -118,7 +117,7 @@ const APP_PROVIDERS = [
 @NgModule({
   bootstrap: [ AppComponent ],
   declarations: [
-    // MediumEditorDirective,
+    MediumEditorDirective,
     ClickOutsideDirective,
     EmojiOnePipe,
     LinkifyPipe,

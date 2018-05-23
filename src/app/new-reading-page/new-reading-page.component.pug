@@ -81,14 +81,14 @@ nav-bar([pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'", [canPublish]
                 (keyup)="contentChange($event)",
                 (mouseup)="contentChange($event)",
                 (mousedown)="$event.preventDefault ? $event.preventDefault() : $event.returnValue = false")
-              //- medium-editor#angularMediumEditor.content(
-              //-   [(editorModel)]="readingPart.text",
-              //-   [editorOptions]="mediumEditorConfig",
-              //-   [editorPlaceholder]="getReadingPlaceholder(i)",
-              //-   (keyup)="contentChange($event)",
-              //-   (mouseup)="contentChange($event)",
-              //-   [ngClass]="[i<readingHtml.length - 1 ? 'medium-editor__new-question' : '']",
-              //-   [attr.rindex]="i")
+              medium-editor#angularMediumEditor.content(
+                [(editorModel)]="readingPart.text",
+                [editorOptions]="mediumEditorConfig",
+                [editorPlaceholder]="getReadingPlaceholder(i)",
+                (keyup)="contentChange($event)",
+                (mouseup)="contentChange($event)",
+                [ngClass]="[i<readingHtml.length - 1 ? 'medium-editor__new-question' : '']",
+                [attr.rindex]="i")
             #errorContent.alert.alert-warning(*ngIf="submitted && readingIsBlank") Please give your Reading some text!
             //- Editor Insert Options
                 - Insert a Picture or Pdf
