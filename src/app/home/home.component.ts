@@ -6,7 +6,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators'
 import { Angulartics2 } from 'angulartics2';
-// import { Ng4TwitterTimelineService } from 'ng4-twitter-timeline/lib/index';
+import { Ng4TwitterTimelineService } from './twitter-timeline';
 
 import { AuthService } from '../shared/auth.service';
 import { ProjectService } from './../shared/project.service';
@@ -18,7 +18,8 @@ import { ProjectService } from './../shared/project.service';
   selector: 'home',  // <home></home>
   // We need to tell Angular's Dependency Injection which providers are in our app.
   providers: [
-    Title
+    Title,
+    Ng4TwitterTimelineService
   ],
   // Our list of styles in our component. We may add more to compose many styles together
   styleUrls: [ './home.component.scss' ],
@@ -50,7 +51,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     private angulartics: Angulartics2,
     fb: FormBuilder,
     private _title: Title,
-    // private ng4TwitterTimelineService: Ng4TwitterTimelineService
+    private ng4TwitterTimelineService: Ng4TwitterTimelineService
   ) {
     
   }
@@ -108,6 +109,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
     .timeline-Body {
       border-top: none;
+    }
+    .timeline-Widget {
+      max-width: none;
+      width: 100%;
     }
     `;
   

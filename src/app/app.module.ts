@@ -12,7 +12,7 @@ import { Angulartics2GoogleAnalytics } from 'angulartics2/ga'
 import { AppComponent } from './app.component'
 import { ROUTES } from './app.routes'
 
-// import { Ng4TwitterTimelineModule } from 'ng4-twitter-timeline/lib/index';
+import { Ng4TwitterTimelineModule } from './home/twitter-timeline';
 
 const { version: appVersion } = require('../../package.json')
 
@@ -212,8 +212,8 @@ const APP_PROVIDERS = [
     Angulartics2Module.forRoot([ Angulartics2GoogleAnalytics ]),
     // NgbModule.forRoot(), // Ng Bootstrap Import
     DataListModule,
-    PaginatorModule
-    // Ng4TwitterTimelineModule
+    PaginatorModule,
+    Ng4TwitterTimelineModule
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     // ENV_PROVIDERS,
