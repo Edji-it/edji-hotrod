@@ -11,20 +11,21 @@ import { User } from "../../shared/datatypes"
   templateUrl: 'add-project.component.html'
 })
 export class AddProjectModal implements OnInit {
-  @Output() closeModal: EventEmitter<any> = new EventEmitter();
+  @Output() closeModal: EventEmitter<any> = new EventEmitter()
 
-  @Input() reading: any;
-  private projectForm: FormGroup
-  private formSubmitted: boolean = false;
-  private errors: {
+  @Input() reading: any
+  public projectForm: FormGroup
+  public formSubmitted: boolean = false
+  public errors: {
     serviceError ?: boolean,
     invalidCode?: boolean,
     groupNameLength?: boolean
-  } = {};
-  private commentTypes: any = []
-  private canChooseTypes: boolean = false 
-  private customCode: string = ''
-  private user: User
+  } = {}
+  public commentTypes: any = []
+  public canChooseTypes: boolean = false 
+  public customCode: string = ''
+  public user: User
+  public loading: boolean
 
   constructor(
     private _projects: ProjectService, 
@@ -46,7 +47,7 @@ export class AddProjectModal implements OnInit {
       audioType: this.commentTypes.indexOf('audio') > -1 ? true : false,
       replyType: this.commentTypes.indexOf('reply') > -1 ? true : false,
       customCode: ''
-    });
+    })
 
     this.canChooseTypes = this._auth.getUser().hero_status
   }
@@ -56,17 +57,18 @@ export class AddProjectModal implements OnInit {
    */
   addProject(formValue: any) {
     // reset errors
-    this.errors = {};
+    this.errors = {}
 
     // trigger form submission and check for form errors
-    this.formSubmitted = true;
-    if (!this.projectForm.valid) { return; }
+    this.formSubmitted = true
+    this.loading = true
+    if (!this.projectForm.valid) { return }
 
-    let types = [];
-    if (formValue.emojiType) { types.push("emoji"); }
-    if (formValue.textType) { types.push("text"); }
-    if (formValue.audioType) { types.push("audio"); }
-    if (formValue.replyType) { types.push("reply"); }
+    let types = []
+    if (formValue.emojiType) { types.push("emoji") }
+    if (formValue.textType) { types.push("text") }
+    if (formValue.audioType) { types.push("audio") }
+    if (formValue.replyType) { types.push("reply") }
 
     this._projects.validateProject(formValue.customCode)
       .pipe(take(1))
@@ -74,22 +76,24 @@ export class AddProjectModal implements OnInit {
         (success) => {
           // this actually means that the code already exists, so we give the user an error here
           this.errors.invalidCode = true
+          this.loading = false
           return
         },
         (err) => {
+          this.loading = false
           if (err.status == 404) {
             // no code found - they're good to create the new one!
             this._projects.create(this.reading._id, { 'label' : formValue.label, 'types' : types, 'code': formValue.customCode } )
               .subscribe( project => {
                 if (project._id) {
-                  project.new = true;
-                  this.reading.projects.push(project);
-                  this.closeModal.emit();
+                  project.new = true
+                  this.reading.projects.push(project)
+                  this.closeModal.emit()
                 }
               }, error => {
-                console.error(error);
-                this.errors.serviceError = true;
-              });
+                console.error(error)
+                this.errors.serviceError = true
+              })
           } else {
             this.errors.serviceError = true
           }

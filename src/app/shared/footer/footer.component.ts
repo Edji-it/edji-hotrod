@@ -16,7 +16,7 @@ export class FooterComponent implements OnInit {
   private browserProperties: any
 
   constructor(
-    private _util: UtilToolService
+    public _util: UtilToolService
   ) {
     this.window = window
   }

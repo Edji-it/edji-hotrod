@@ -20,12 +20,12 @@ export class GradeSelector implements ControlValueAccessor {
     @Input() classSmall: boolean
 
     //The internal data model
-    private gradeSelection: number[] = []
-    private gradePreview: number[] = []
+    public gradeSelection: number[] = []
+    public gradePreview: number[] = []
 
     // Form reference values
-    private gradeInitials: string[] = ['K','1','2','3','4','5','6','7','8','9','10','11','12','U']
-    private gradeNames: string[] = [
+    public gradeInitials: string[] = ['K','1','2','3','4','5','6','7','8','9','10','11','12','U']
+    public gradeNames: string[] = [
         'Kindergarten',
         '1st Grade',
         '2nd Grade',
@@ -42,7 +42,7 @@ export class GradeSelector implements ControlValueAccessor {
         'University/College'
     ]
 
-    private selectGrade(gradeIndex: number): void {
+    public selectGrade(gradeIndex: number): void {
         if (this.gradeSelection.length == 1) {
             let val = this.gradeSelection[0]
             if (gradeIndex < val) {
@@ -63,7 +63,7 @@ export class GradeSelector implements ControlValueAccessor {
         this.onChangeCallback(this.gradeSelection)
     }
 
-    private previewRange(gradeIndex: number) : void {
+    public previewRange(gradeIndex: number) : void {
         this.gradePreview = []
         if (this.gradeSelection.length == 1) {
             let val = this.gradeSelection[0]
@@ -81,8 +81,8 @@ export class GradeSelector implements ControlValueAccessor {
 
     //Placeholders for the callbacks which are later provided
     //by the Control Value Accessor
-    private onTouchedCallback: () => void = noop;
-    private onChangeCallback: (_: any) => void = noop;
+    public onTouchedCallback: () => void = noop;
+    public onChangeCallback: (_: any) => void = noop;
 
     //get accessor
     get value(): any {

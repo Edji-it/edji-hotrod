@@ -39,24 +39,24 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription[] = []
 
-  private registerForm: FormGroup
-  private registerLoading: boolean = false
-  private errorObject: {
+  public registerForm: FormGroup
+  public registerLoading: boolean = false
+  public errorObject: {
     duplicateUsername?: boolean,
     duplicateEmail?: boolean,
     serverError?: boolean,
     badName?: string,
     badUsername?: string
   } = {}
-  private successObject: {
+  public successObject: {
     referral?: boolean
   } = {}
-  private userReferral: any = {}
+  public userReferral: any = {}
 
-  // private copy: Copy = new Copy()
-  private userCopy: any
+  // public copy: Copy = new Copy()
+  public userCopy: any
 
-  private checkboxCopy = {
+  public checkboxCopy = {
     student: "As a student! :writing_hand:",
     teacher: "As a teacher! :apple:",
     business: "For business. :briefcase:",
@@ -66,10 +66,11 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   /** The reading id that the user wanted to make a copy of */
-  private readingToAdd: string
+  public readingToAdd: string
+  public projectToAdd: string
   /** The project id that the user wanted to add to the dashboard */
-  private tempUserId: string
-  private referralId: string
+  public tempUserId: string
+  public referralId: string
 
   constructor (
     private _auth: AuthService,
@@ -102,6 +103,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.route.queryParams.subscribe((queryParams) => {
         this.readingToAdd = queryParams['reading']
+        this.projectToAdd = queryParams['project']
         this.tempUserId = queryParams['userId']
         this.referralId = queryParams['referral_id']
       })
@@ -151,7 +153,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   /** Makes call to register the user */
-  private register(formValue: any): void {
+  public register(formValue: any): void {
     this.errorObject = {}
 
     this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'attempt' }})

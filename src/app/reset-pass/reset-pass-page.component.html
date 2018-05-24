@@ -11,12 +11,12 @@
           <div class="form-group">
             <label for="passwordInput">Password</label>
             <input type="password" id="passwordInput" [formControl]="resetForm.controls['password']" tabindex="0" />
-            <div id="msgNoPassword" class="alert alert-danger" *ngIf="resetForm.controls['password'].hasError('required') && (resetForm.controls['password'].dirty || resetForm.submitted)">Make sure to add your new password!</div>
+            <div id="msgNoPassword" class="alert alert-danger" *ngIf="resetForm.controls['password'].hasError('required') && (resetForm.controls['password'].dirty || submitted)">Make sure to add your new password!</div>
           </div>
           <div class="form-group">
             <label for="passwordConfirmInput">Confirm Password</label>
             <input type="password" id="passwordConfirmInput" [formControl]="resetForm.controls['passwordConfirm']" tabindex="0" />
-            <div id="msgNoPasswordConfirm" class="alert alert-danger" *ngIf="resetForm.controls['passwordConfirm'].hasError('required') && (resetForm.controls['passwordConfirm'].dirty || resetForm.submitted)">Remember to confirm your password!</div>
+            <div id="msgNoPasswordConfirm" class="alert alert-danger" *ngIf="resetForm.controls['passwordConfirm'].hasError('required') && (resetForm.controls['passwordConfirm'].dirty || submitted)">Remember to confirm your password!</div>
             <div id="msgPasswordMismatch" class="alert alert-info" *ngIf="resetForm.hasError('mismatch')">Please make sure the passwords match</div>
             <!--<div id="msgError" class="alert alert-danger" *ngIf="errorObject.loginFailed">{{errorObject.loginFailed}}</div>
             <div id="msgServerError" class="alert alert-danger" *ngIf="errorObject.serverError">{{errorObject.serverError}}</div>-->

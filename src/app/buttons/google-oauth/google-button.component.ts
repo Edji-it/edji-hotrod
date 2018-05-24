@@ -10,7 +10,7 @@ import { AuthService } from './../../shared'
 
 export class GoogleButton implements OnInit {
 
-  @Input() private copy: string = "Google"
+  @Input() public copy: string = "Google"
   
   constructor(
     private _auth: AuthService
@@ -18,7 +18,7 @@ export class GoogleButton implements OnInit {
 
   ngOnInit() { }
 
-  private googleSignIn(): void {
+  public googleSignIn(): void {
     this._auth.oauthLogin('google')
   }
 }

@@ -13,7 +13,7 @@ export class FollowTag implements OnInit {
     @Input() owner: User
     @Output() followEvent: EventEmitter<boolean> = new EventEmitter()
 
-    private user = {}
+    public user: User = <User>{}
     private userSub: Subscription
   constructor(
       private _auth: AuthService

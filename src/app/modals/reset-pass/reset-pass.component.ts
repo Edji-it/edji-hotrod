@@ -15,12 +15,12 @@ export class ResetPassComponent {
   @Output()
   closeModal: EventEmitter<any> = new EventEmitter()
 
-  private passwordForm: FormGroup
-  private responseSuccess: boolean
-  private submissionSuccess: boolean = false
-  private errorObject: any = { }
-  private submitted: boolean = false
-  private loading: boolean = false
+  public passwordForm: FormGroup
+  public responseSuccess: boolean
+  public submissionSuccess: boolean = false
+  public errorObject: any = { }
+  public submitted: boolean = false
+  public loading: boolean = false
 
   constructor(private _auth: AuthService, private angulartics: Angulartics2, fb: FormBuilder) {
     this.passwordForm = fb.group({
@@ -28,7 +28,7 @@ export class ResetPassComponent {
     })
   }
 
-  private onSubmit(formValue: any): void {
+  public onSubmit(formValue: any): void {
     this.loading = true
     this.clearErrors()
 

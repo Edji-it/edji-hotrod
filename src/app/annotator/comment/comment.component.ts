@@ -63,12 +63,12 @@ export class CommentComponent implements OnInit, OnDestroy {
   @Input() public comment: EdjiComment
   @Input() private readOnly: boolean = false
   @Input() private replyRef: boolean = false
-  @Input() private reply: boolean = false   // Is it a reply to another comment? 
+  @Input() public reply: boolean = false   // Is it a reply to another comment? 
   @Input() private commentLite: boolean = false
   @Input() private commentContext: string = 'normal'; // See NOTES in summary.
-  @Input() private commentMobile: boolean = false
-  @Input() private commentMobileFirst: boolean = false
-  @Input() private commentPaneActive: boolean = false
+  @Input() public commentMobile: boolean = false
+  @Input() public commentMobileFirst: boolean = false
+  @Input() public commentPaneActive: boolean = false
   @Input() private assignedQuestion : EdjiQuestion; // If this is an answer, it'll need this.
   @Input() private userPermission: number = CommentPermissions.READ
   @Input() private showDeleteAudioModal: boolean = false

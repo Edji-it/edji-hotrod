@@ -34,6 +34,7 @@ export interface BaseComment {
   reply_to?: string,
   replies?: any[],
   questionId? : string,
+  prompt?: string,
   new?: boolean
 }
 

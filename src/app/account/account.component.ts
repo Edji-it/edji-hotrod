@@ -17,22 +17,24 @@ export class AccountComponent implements OnInit, OnDestroy {
   The page for the user's account info. A profile page.
   */
   
-  private nameInitials  : string = "" // we gonna use these for the temp profile pic
-  private currentUser   : any
-  private expiring : boolean = false
-  private expired : boolean = false
-  private showPassModal : boolean = false
-  private showUploadProfPicModal : boolean = false
+  public nameInitials  : string = "" // we gonna use these for the temp profile pic
+  public currentUser   : any
+  public expiring : boolean = false
+  public expired : boolean = false
+  public showPassModal : boolean = false
+  public showUploadProfPicModal : boolean = false
+  public showHeroSubModal: boolean = false
+  public showHeroChangeModal: boolean = false
 
   private subscriptions : any[] = []
 
   // Feature flags
-  private heroAvailable: boolean = false
+  public heroAvailable: boolean = false
 
   constructor(
     private _auth: AuthService, 
     private route: ActivatedRoute, 
-    private _router: Router,
+    public _router: Router,
     private angulartics: Angulartics2
   ) {
     

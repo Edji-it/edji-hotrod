@@ -9,10 +9,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HeroPricingComponent implements OnInit {
 
-  private showLoginModal: boolean
-  private showHeroSubModal: boolean
+  public showLoginModal: boolean
+  public showHeroSubModal: boolean
 
-  constructor(private _router: Router, private _auth: AuthService) { }
+  constructor(public _router: Router, private _auth: AuthService) { }
 
   ngOnInit() {
   }

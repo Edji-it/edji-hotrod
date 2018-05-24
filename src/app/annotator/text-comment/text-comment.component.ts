@@ -10,15 +10,15 @@ import { CommentService } from '../../shared/comment.service'
 })
 export class TextCommentComponent implements OnInit, AfterViewInit {
 
-    @Input() private comment: EdjiComment
-    @Input() private reply: boolean = false
-    @Input() private readOnly: boolean
+    @Input() public comment: EdjiComment
+    @Input() public reply: boolean = false
+    @Input() public readOnly: boolean
 
     @Output() activate: EventEmitter<any> = new EventEmitter<any>() 
     @Output() deactivate: EventEmitter<any> = new EventEmitter<any>() 
 
-    private editing: boolean
-    private activated: boolean = false
+    public editing: boolean
+    public activated: boolean = false
 
     // We need to know when changes to inactive to clear the editing variable
     @Input() set active(active){

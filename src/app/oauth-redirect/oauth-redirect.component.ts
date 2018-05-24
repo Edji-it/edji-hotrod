@@ -11,11 +11,12 @@ import { AuthService } from './../shared'
 
 export class OAuthComponent implements OnInit {
 
-  private messages: {
+  public messages: {
     noToken?: boolean,
     noUser?: boolean,
     error?: boolean,
-    serverError?: boolean
+    serverError?: boolean,
+    duplicate_user?: boolean
   } = {}
 
   constructor(

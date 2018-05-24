@@ -38,69 +38,69 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     @ViewChildren('words') wordEls
     @ViewChild('article') articleEl: ElementRef
 
-    private reading: Reading = <Reading>{}
-    private project: Project = <Project>{}
+    public reading: Reading = <Reading>{}
+    public project: Project = <Project>{}
     // Determines when infinite scroll should begin 
-    private lastWord: number = 4000
-    private lastWordImageOffset: number = 100
+    public lastWord: number = 4000
+    public lastWordImageOffset: number = 100
     // Used to calculate max/progress for reading progress bar
-    private currentDocHeight: number = 0
-    private currentScroll: number = 0
+    public currentDocHeight: number = 0
+    public currentScroll: number = 0
     
-    private commentsByIndex : EdjiComment[][] = []
-    private focusOverride   : boolean = false
+    public commentsByIndex : EdjiComment[][] = []
+    public focusOverride   : boolean = false
 
-    private highlightArray      : number[] = []
-    private alwaysHighlightArray: number[] = []
-    private focusArray          : boolean[] = []
+    public highlightArray      : number[] = []
+    public alwaysHighlightArray: number[] = []
+    public focusArray          : boolean[] = []
     
     // Line Count
-    private lineCountRunning: boolean = false
-    private lineNumRunning: boolean
-    private commentPane: boolean
-    private lineExpanded: number
+    public lineCountRunning: boolean = false
+    public lineNumRunning: boolean
+    public commentPane: boolean
+    public lineExpanded: number
 
-    // private activeComment: EdjiComment = <EdjiComment>{}
-    private replyComment: EdjiComment = <EdjiComment>{}
-    private selectedComment: EdjiComment = <EdjiComment>{}
+    // public activeComment: EdjiComment = <EdjiComment>{}
+    public replyComment: EdjiComment = <EdjiComment>{}
+    public selectedComment: EdjiComment = <EdjiComment>{}
     // Comment options that can be made directly on a word
-    private directCommentOptions: string[] = []
+    public directCommentOptions: string[] = []
 
     // Trigger Booleans
-    private showDiscussions : boolean = false
-    private optionsShow = false
-    private hideKeyboard = false
+    public showDiscussions : boolean = false
+    public optionsShow = false
+    public hideKeyboard = false
 
     // Status Booleans
-    private isMobile = false
+    public isMobile = false
 
-    private highlightY = 200 
-    private highlightX = 20 
-    private optionLeft = true
-    private mobileIndex = 0
+    public highlightY = 200 
+    public highlightX = 20 
+    public optionLeft = true
+    public mobileIndex = 0
 
-    private imageCoords = {}
-    private imageHotspotPlaceholder: any = {
+    public imageCoords = {}
+    public imageHotspotPlaceholder: any = {
         index: -1,
         x: 0,
         y: 0,
         focus: false,
         preview: false
     }
-    private imageHeight: number[] = []
+    public imageHeight: number[] = []
 
-    private subscriptions: Subscription[] = []
+    public subscriptions: Subscription[] = []
 
     // For converting old Readings
-    private words: any[] = []
+    public words: any[] = []
 
     // For verifying comment ownership
-    private user: any
+    public user: any
 
     // For mobile display of comments
-    private foundArray: any[] = []
+    public foundArray: any[] = []
 
-    private guideContent = [
+    public guideContent = [
         {
             title: "Try Highlighting!",
             image: "/assets/guide/add-highlight.gif",
@@ -117,13 +117,13 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             body: "Your comment can be seen by the reading creator. If they turn Heat Vision on, everyone can see it!"
         }
     ]
-    private guideStepNo = 1
+    public guideStepNo = 1
 
-    private annotatorPaper: Element
-    private annotatorContent: Element
+    public annotatorPaper: Element
+    public annotatorContent: Element
 
-    private window: any
-    private audioSupportError: boolean = false
+    public window: any
+    public audioSupportError: boolean = false
 
     constructor(
         private element: ElementRef,
@@ -132,7 +132,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         private _auth: AuthService,
         private _socket: SocketService,
         private _util: UtilToolService,
-        private _comments: CommentService,
+        public _comments: CommentService,
         private angulartics: Angulartics2,
         private _audio: AudioService
         // private _hotkeysService: HotkeysService
@@ -972,12 +972,12 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     /**
      * Decides if the Emoji Keyboard is active
      */
-    private isEmojiKeyboardActive() : boolean {
+    public isEmojiKeyboardActive() : boolean {
         // return this._comments.isEmojiKeyboardActive(this.user)
         return this._comments.setEmojiKeyboardActive(this.user)
     }
 
-    private discReplyFire(comment) {
+    public discReplyFire(comment) {
         this.replyComment = comment
         this.focusOverride = true
         this.focusHighlight(comment.start, comment.end, comment.loc)
@@ -985,7 +985,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.showDiscussions = true
     }
 
-    private hideDiscussions(comment: any) {
+    public hideDiscussions(comment: any) {
         this.showDiscussions = false
         this.focusOverride = false
         this.unfocusHighlight(comment.start, comment.end, comment.loc)
@@ -1028,7 +1028,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         }
     }
 
-    private toggleCommentPane(visible?: boolean, comment?): void {
+    public toggleCommentPane(visible?: boolean, comment?): void {
         // Make sure the line counts are up-to-date
         this.setLinePositions()
 

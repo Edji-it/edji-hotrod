@@ -9,13 +9,13 @@ import { AuthService } from './../../shared';
   templateUrl: 'guest-form.component.html'
 })
 export class GuestForm implements OnInit {
-  private guestForm: FormGroup;
+  public guestForm: FormGroup;
 
   @Output()
-  private loginSuccess: EventEmitter<any> = new EventEmitter();
+  public loginSuccess: EventEmitter<any> = new EventEmitter();
 
-  private isLoading: boolean = false;
-  private errorObject: {
+  public isLoading: boolean = false;
+  public errorObject: {
     invalidCode?:string,
     badName?:string,
     tempError?:string,
@@ -37,7 +37,7 @@ export class GuestForm implements OnInit {
   /**
    * Happens when join as guest is pressed. First calls to sign in the tempuser and then navigates upon receiving project data
    */
-  private joinSessionAsGuest(formValue: any): void {
+  public joinSessionAsGuest(formValue: any): void {
     this.isLoading = true;
     this.angulartics.eventTrack.next({ action: 'joinAsGuest', properties: { category: 'joinProject', label: 'attempt' }});
 
