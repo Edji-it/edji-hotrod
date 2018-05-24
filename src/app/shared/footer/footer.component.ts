@@ -8,7 +8,7 @@ declare var window: any
 @Component({
   selector: 'footer',
   styleUrls: [ './footer.component.scss' ],
-  template: require('pug-loader!./footer.component.pug')()
+  templateUrl: './footer.component.pug'
 })
 export class FooterComponent implements OnInit {
   private appVersion;

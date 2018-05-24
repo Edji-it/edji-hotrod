@@ -7,7 +7,7 @@ import { ReadingService } from "../shared/reading.service";
 
 @Component({
   selector: 'app-discover-feed',
-  template: require('pug-loader!./discover-feed.component.pug')(),
+  templateUrl: './discover-feed.component.pug',
   styleUrls: ['./discover-feed.component.scss']
 })
 export class DiscoverFeedComponent implements OnInit {

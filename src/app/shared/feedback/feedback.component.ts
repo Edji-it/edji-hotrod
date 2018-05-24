@@ -11,7 +11,7 @@ import { LockerService } from '../../_services/locker.service';
 
 @Component({
   selector: 'edji-feedback',
-  template: require('pug-loader!./feedback.component.pug')(),
+  templateUrl: './feedback.component.pug',
   styleUrls: ['./feedback.component.scss']
 })
 export class FeedbackComponent implements OnInit {
@@ -22,15 +22,15 @@ export class FeedbackComponent implements OnInit {
   private closeModal: EventEmitter<any> = new EventEmitter()
 
   // private showFeedbackModal: boolean = false
-  private showFeedbackSuccess: boolean = false
-  private feedbackForm: FormGroup
-  private feedbackSuccess: boolean = false
-  private user: any
-  private userCopy: any
+  public showFeedbackSuccess: boolean = false
+  public feedbackForm: FormGroup
+  public feedbackSuccess: boolean = false
+  public user: any
+  public userCopy: any
   private window
-  private loading: boolean = false
+  public loading: boolean = false
 
-  private errorObject: {
+  public errorObject: {
     serverError?: string
   } = {}
 
@@ -40,7 +40,7 @@ export class FeedbackComponent implements OnInit {
     private http: Http,
     private angulartics: Angulartics2,
     fb: FormBuilder,
-    private _util: UtilToolService,
+    public _util: UtilToolService,
     private _locker: LockerService
   ) {
     this.user = this._auth.getUser()
@@ -76,7 +76,7 @@ export class FeedbackComponent implements OnInit {
     document.body.style.overflow = 'hidden'
   }
 
-  private feedbackClose(): void {
+  public feedbackClose(): void {
     this.closeModal.emit()
     this._util.showFeedbackModal = false
     
@@ -84,12 +84,12 @@ export class FeedbackComponent implements OnInit {
     document.body.style.overflow = ''
   }
 
-  private successClose(): void {
+  public successClose(): void {
     this.showFeedbackSuccess = false
   }
 
   /** Sends feedback to bumblebee */
-  private sendFeedback(formValue: any): void {
+  public sendFeedback(formValue: any): void {
     this.loading = true
     this.angulartics.eventTrack.next({ action: 'sendFeedback', properties: { category: 'accountManagement', label: 'attempt' }})
 

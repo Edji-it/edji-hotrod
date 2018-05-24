@@ -7,7 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'share-code',
-  template: require('pug-loader!./share-code.component.pug')(),
+  templateUrl: './share-code.component.pug',
   styleUrls: ['./share-code.component.scss']
 })
 export class ShareCodeComponent implements OnInit, OnDestroy {
@@ -17,7 +17,7 @@ export class ShareCodeComponent implements OnInit, OnDestroy {
   
   private codeLetters: any
   private subscriptions: Subscription[] = []
-    private currentProject: Project
+  public currentProject: Project
 
   constructor(
     private router: Router,

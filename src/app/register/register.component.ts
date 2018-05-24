@@ -13,7 +13,6 @@ import { LockerService } from '../_services/locker.service';
 
 @Component({
   selector: 'edji-register',
-  template: require('pug-loader!./register.component.pug')(),
   styles: [`
     .btn-group-wrapper {
       width: 100%;
@@ -27,7 +26,8 @@ import { LockerService } from '../_services/locker.service';
     label.btn.btn-primary.active {
       border: 3px solid #4A92BC;
     }
-  `]
+  `],
+  templateUrl: './register.component.pug'
 })
 export class RegisterComponent implements OnInit, OnDestroy {
 

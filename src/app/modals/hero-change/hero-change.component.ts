@@ -16,10 +16,10 @@ export class HeroChangeComponent implements OnInit {
   private isUpdated: boolean = false
   private updating: boolean = false
   
-  private confirmCancel: boolean = false
-  private isCanceled: boolean = false
-  private canceling: boolean = false
-  private cancelMsg: string = ''
+  public confirmCancel: boolean = false
+  public isCanceled: boolean = false
+  public canceling: boolean = false
+  public cancelMsg: string = ''
 
   // Form values
   private subtype: string = 'yearly'

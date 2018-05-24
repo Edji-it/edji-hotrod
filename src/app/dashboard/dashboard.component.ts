@@ -18,16 +18,16 @@ import { User } from './../shared/datatypes'
   // Our list of styles in our component. We may add more to compose many styles together
   styleUrls: [ './dashboard.component.scss' ],
   // Every Angular template is first compiled by the browser before Angular runs it's compiler
-  template: require('pug-loader!./dashboard.component.pug')()
+  templateUrl: './dashboard.component.pug'
 })
 export class DashboardComponent implements OnInit {
   // Set our default values
   private currentUser: User 
-  private mobileShowJoined:boolean = true
-  private showUserDetailsModal: boolean = false
+  public mobileShowJoined:boolean = true
+  public showUserDetailsModal: boolean = false
 
   // Tool Tip variables
-  private toolTipsContent: any[] = [
+  public toolTipsContent: any[] = [
       {
           title: "The Dashboard",
           image: "/assets/dashboard-tooltips/logo.png",
@@ -54,7 +54,7 @@ export class DashboardComponent implements OnInit {
           body: 'This will create a new Version of your reading. This lets you simply add to, or edit a Reading you have already made.'
       }
   ]
-  private toolTipStepNo: number = 1
+  public toolTipStepNo: number = 1
 
   // TypeScript public modifiers
   constructor (

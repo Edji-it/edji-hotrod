@@ -8,7 +8,7 @@ import { ReadingService } from './../../shared'
 
 @Component({
   selector: 'hot-discover-add-meta',
-  template: require('pug-loader!./discover-add-meta.component.pug')(),
+  templateUrl: './discover-add-meta.component.pug',
   styleUrls: ['discover-add-meta.component.scss']
 })
 
