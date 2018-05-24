@@ -15,7 +15,7 @@ declare var window: any
 
 @Component({
     selector: 'annotator',
-    template: require('pug-loader!./annotator.component.pug')(),
+    templateUrl: './annotator.component.pug',
     styleUrls: ['annotator.component.scss']
 })
 export class AnnotatorComponent implements OnInit, OnDestroy {

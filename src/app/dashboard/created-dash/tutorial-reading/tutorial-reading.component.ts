@@ -4,7 +4,7 @@ import { Reading } from './../../../shared/datatypes'
 
 @Component({
   selector: 'hot-tutorial-reading',
-  template: require('pug-loader!./tutorial-reading.component.pug')(),
+  templateUrl: './tutorial-reading.component.pug',
   styleUrls: ['./tutorial-reading.component.scss']
 })
 

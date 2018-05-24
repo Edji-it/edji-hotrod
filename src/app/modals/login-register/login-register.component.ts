@@ -4,7 +4,7 @@ import { ProjectService } from './../../shared'
 
 @Component({
   selector: 'hot-login-register',
-  template: require('pug-loader!./login-register.component.pug')(),
+  templateUrl: './login-register.component.pug',
   styles: [`
     .modal-footer { flex-direction: column }
   `]

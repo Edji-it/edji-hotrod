@@ -16,18 +16,18 @@ declare var Stripe: any
 })
 export class HeroSubscribeComponent implements OnInit {
 
-  private tempHide: boolean
-  private card: any
-  private loading: boolean = false
-  private userNowHero: boolean
-  private stripe: any
-  private stripeMessage: string
-  private initWithCoupon: boolean = false
-  private customCouponCode: string = ''
+  public tempHide: boolean
+  public card: any
+  public loading: boolean = false
+  public userNowHero: boolean
+  public stripe: any
+  public stripeMessage: string
+  public initWithCoupon: boolean = false
+  public customCouponCode: string = ''
   // Discount value used for DISPLAY ONLY
-  private percentOff: number = 0
-  private newPrice: number = 60
-  private joiningAcademy: boolean = false
+  public percentOff: number = 0
+  public newPrice: number = 60
+  public joiningAcademy: boolean = false
   // private couponCode: string
 
   private sForm: FormGroup 

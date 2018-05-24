@@ -24,7 +24,7 @@ import { ProjectService } from './../shared/project.service';
   // Our list of styles in our component. We may add more to compose many styles together
   styleUrls: [ './home.component.scss' ],
   // Every Angular template is first compiled by the browser before Angular runs it's compiler
-  template: require('pug-loader!./home.component.pug')()
+  templateUrl: './home.component.pug'
 })
 export class HomeComponent implements OnInit, OnDestroy {
   // Set our default values
@@ -39,8 +39,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     "serverError"?: string
   } = {};
 
-  private showPassModal: boolean = false;
-  private tweetsLoaded: boolean = false;
+  public showPassModal: boolean = false;
+  public tweetsLoaded: boolean = false;
   private twitterRestyleAttempts = 0;
 
   // TypeScript public modifiers
@@ -142,7 +142,7 @@ export class HomeComponent implements OnInit, OnDestroy {
    * Validates project and then navigates to project if valid
    * @param code The project's short code
    */
-  private joinSession(code: string): void {
+  public joinSession(code: string): void {
     this.joinLoading = true;
     this.angulartics.eventTrack.next({ action: 'enterLightningCode', properties: { category: 'joinProject', label: 'attempt' }});
     this._project.validateProject(code)

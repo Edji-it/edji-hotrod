@@ -5,7 +5,7 @@ import { CommentService } from '../../shared/comment.service'
 
 @Component({
     selector: 'text-comment',
-    template: require('pug-loader!./text-comment.component.pug')(),
+    templateUrl: './text-comment.component.pug',
     styleUrls: ['./text-comment.component.scss']
 })
 export class TextCommentComponent implements OnInit, AfterViewInit {

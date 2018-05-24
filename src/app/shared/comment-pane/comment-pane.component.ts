@@ -9,7 +9,7 @@ import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output }
 
 @Component({
   selector: 'comment-pane',
-  template: require('pug-loader!./comment-pane.component.pug')(),
+  templateUrl: './comment-pane.component.pug',
   styleUrls: ['./comment-pane.component.scss']
 })
 export class CommentPaneComponent implements OnInit, OnDestroy {

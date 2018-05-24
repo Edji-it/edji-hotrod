@@ -8,7 +8,6 @@ form.pb-4.hidden-md-up([formGroup]="codeForm", (ngSubmit)="addSession(codeForm.v
       [formControl]="codeForm.controls['projectCode']", 
       type="text", 
       style="text-align: center;", 
-      [(ngModel)]="projectCode", 
       placeholder="🔑 Code", 
       aria-describedby="add-project-code"
     )

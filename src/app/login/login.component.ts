@@ -14,7 +14,7 @@ import { AuthService, ProjectService } from '../shared';
   // where, in this case, selector is the string 'home'
   selector: 'hot-login',  // <home></home>
   // We need to tell Angular's Dependency Injection which providers are in our app.
-  template: require('pug-loader!./login.component.pug')(),
+  templateUrl: './login.component.pug',
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit, OnDestroy {
@@ -22,9 +22,8 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   // Set our default values
   private sessionCode: String;
-  private loginLoading: Boolean = false;
-
-  private showPassModal: boolean = false;
+  public loginLoading: Boolean = false;
+  public showPassModal: boolean = false;
 
   // TypeScript public modifiers
   constructor(
@@ -49,7 +48,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this._title.setTitle( 'Edji | Login' )
   }
 
-  private loginSuccess(): void {
+  public loginSuccess(): void {
     this._router.navigate(['/dashboard'])
   }
 

@@ -7,33 +7,35 @@ import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'hot-reading-card',
-  template: require('pug-loader!./reading-card.component.pug')(),
+  templateUrl: './reading-card.component.pug',
   styleUrls: ['./reading-card.component.scss']
 })
 export class ReadingCardComponent implements OnInit, OnDestroy {
-  private versions: any[] = [];
-  private errorObject = {
+  public versions: any[] = [];
+  public errorObject = {
     readingError: ""
   };
   private subscriptions: Subscription[] = [];
-  private isLoading: boolean = false;
+  public isLoading: boolean = false;
 
-  @Input() reading: Reading;
-  @Input() readOnly: boolean;
+  @Input() 
+  public reading: Reading;
+  @Input() 
+  public readOnly: boolean;
 
-  private showOptions     : boolean = false;
-  private showOptionsV    : boolean = false;
-  private showVersions    : boolean = false;
-  private relevantReading : any = {};
-  private relevantProject : Project;
-  private showAddModal    : boolean = false;
-  private showDeleteReadingModal : boolean = false;
-  private showDeleteProjectModal : boolean = false;
-  private togglePublicFlag: boolean
-  private currentPublicFlag: boolean
-  private showReadingDiscoverModal: boolean
+  public showOptions     : boolean = false;
+  public showOptionsV    : boolean = false;
+  public showVersions    : boolean = false;
+  public relevantReading : any = {};
+  public relevantProject : Project;
+  public showAddModal    : boolean = false;
+  public showDeleteReadingModal : boolean = false;
+  public showDeleteProjectModal : boolean = false;
+  public togglePublicFlag: boolean
+  public currentPublicFlag: boolean
+  public showReadingDiscoverModal: boolean
 
-  private versionHeight = 50;
+  public versionHeight = 50;
 
   constructor(
     private _route: ActivatedRoute,

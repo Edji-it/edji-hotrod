@@ -17,11 +17,11 @@ export class TutorialBoxComponent implements OnInit {
 
   @Input() private pageObjs: any[]
   @Input() private tutorialName: string
-  @Input() private forceShow: boolean
+  @Input() public forceShow: boolean
 
-  private pageNo: number = 1
-  private subscriptions: Subscription[] = []
-  private isCompleted: boolean = false
+  public pageNo: number = 1
+  public subscriptions: Subscription[] = []
+  public isCompleted: boolean = false
 
   @Output() pageChange :  EventEmitter<any>
   @Output() dismiss :  EventEmitter<any>

@@ -19,27 +19,25 @@ import { User } from '../../shared/datatypes'
   // Our list of styles in our component. We may add more to compose many styles together
   styleUrls: [ './created-dash.component.scss' ],
   // Every Angular template is first compiled by the browser before Angular runs it's compiler
-  template: require('pug-loader!./created-dash.component.pug')()
+  templateUrl: './created-dash.component.pug'
 })
 export class CreatedDashComponent implements OnInit, OnDestroy {
   // Set our default values
-  private readings: Reading[] = [];
-  private errorObject = {
+  public readings: Reading[] = [];
+  public errorObject = {
     readingError: ""
   };
   private subscriptions: Subscription[] = [];
+  public readingToBeRemoved : Reading;
 
-  private showLoginReqModal: boolean = false
-  private user: User
-
-  private readingToBeRemoved : Reading;
-
+  public showLoginReqModal: boolean = false
+  public user: User
   // Joined Readings, p-datalist values
-  private loading: boolean = true
-  private first: number = 0 // first page 
-  private rows: number = 15 // number of Readings to return
-  private total: number = 15 // total Readings
-  private pageNo: number = 1
+  public loading: boolean = true
+  public first: number = 0 // first page 
+  public rows: number = 15 // number of Readings to return
+  public total: number = 15 // total Readings
+  public pageNo: number = 1
 
   // TypeScript public modifiers
   constructor(

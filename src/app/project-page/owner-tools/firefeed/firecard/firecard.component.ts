@@ -9,7 +9,7 @@ import { ProjectService } from '../../../../shared/project.service'
 
 @Component({
   selector: 'hot-firecard',
-  template: require('pug-loader!./firecard.component.pug')(),
+  templateUrl: './firecard.component.pug',
   styleUrls: ['firecard.component.scss']
 })
 
