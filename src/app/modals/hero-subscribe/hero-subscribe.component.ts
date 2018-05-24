@@ -30,7 +30,7 @@ export class HeroSubscribeComponent implements OnInit {
   public joiningAcademy: boolean = false
   // private couponCode: string
 
-  private sForm: FormGroup 
+  public sForm: FormGroup 
 
   @Input()
   couponCode: string = ''

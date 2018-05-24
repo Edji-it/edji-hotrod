@@ -60,7 +60,7 @@ import { LoginForm, GuestForm } from './forms'
 
 import { LoginModal, UserDetailsUpdateModal, ResetPassComponent, DeleteCommentModal, DeleteAudioModal, DeleteReadingModal, DeleteProjectModal, AddProjectModal, LoginRequiredModal, HeroSubscribeComponent, HeroChangeComponent, LoginRegisterModal, DiscoverAddMetaModal, ReferralModalComponent } from './modals'
 import { AnnotatorComponent, CommentComponent, TextCommentComponent, EmojiCommentComponent, EmojiKeyboardComponent, AudioCommentComponent, AvatarPortalComponent } from './annotator'
-import { ProjectPageComponent, ProjectInfoComponent, OwnerToolsComponent, LeaderboardComponent } from './project-page'
+import { ProjectPageComponent, OwnerToolsComponent, LeaderboardComponent } from './project-page'
 import { FirefeedComponent } from './project-page/owner-tools/firefeed/firefeed.component'
 import { FirecardComponent } from './project-page/owner-tools/firefeed/firecard/firecard.component'
 import { QuestionfeedComponent } from './project-page/owner-tools/questionfeed/questionfeed.component'
@@ -175,7 +175,6 @@ const APP_PROVIDERS = [
     UploadPdfModalComponent,
     DeletePdfMiniModal,
     ProjectPageComponent,
-    ProjectInfoComponent,
     OwnerToolsComponent,
     LoginRequiredModal,
     HeroSubscribeComponent,

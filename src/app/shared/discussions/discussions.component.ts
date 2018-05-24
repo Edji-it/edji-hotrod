@@ -19,13 +19,14 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
   @Output() activeReply: EventEmitter<any> = new EventEmitter()
 
   private project: Project
-  private currentReading: Reading
   private subscriptions: Subscription[] = []
   private repliesById: any = {}
 
   private replyCommentNew: EdjiComment
   private createReply: boolean = false
   private user: any
+  
+  public currentReading: Reading
 
   constructor(
     private _projects: ProjectService, 

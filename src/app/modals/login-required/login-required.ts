@@ -11,7 +11,7 @@ export class LoginRequiredModal implements OnInit {
 
   @Output() closeModal: EventEmitter<any> = new EventEmitter()
 
-  private user: User
+  public user: User
 
   constructor(
     private _auth: AuthService

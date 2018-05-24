@@ -15,17 +15,18 @@ export class OwnerToolsComponent implements OnInit {
   @Output() hide: EventEmitter<any> = new EventEmitter()
 
   private subscriptions: Subscription[] = []
-  private commentStats: CommentStats
-  private currentProject: Project
-  private currentReading: Reading
-  private user: any = {}
-  private showFireFeed: boolean
-  private showCommentCounts: boolean
-  private showQuestionFeed: boolean
-  private ownerToolBlockHeight: string
+  
+  public commentStats: CommentStats
+  public currentProject: Project
+  public currentReading: Reading
+  public user: any = {}
+  public showFireFeed: boolean
+  public showCommentCounts: boolean
+  public showQuestionFeed: boolean
+  public ownerToolBlockHeight: string
 
   // State vars
-  private powersLoading: any = {}
+  public powersLoading: any = {}
 
   constructor(
     private _projects: ProjectService,

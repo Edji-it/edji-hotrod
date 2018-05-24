@@ -15,17 +15,17 @@ import { ProjectService } from '../../../../shared/project.service'
 
 export class FirecardComponent implements OnInit, OnDestroy {
   
-  private yPos: number = 0
-  private isImage: boolean = false
   private currentReading: Reading
   private subscriptions: Subscription[] = []
-  private secondsAgo: number = 0
-  private audio
-  private myCanvas
-  private playAble: boolean = false
-  private isPlaying: boolean = false
-  private viewInitRunOnce: boolean = false
-  private lastWord: number = 0
+  private yPos: number = 0
+  public isImage: boolean = false
+  public secondsAgo: number = 0
+  public audio
+  public myCanvas
+  public playAble: boolean = false
+  public isPlaying: boolean = false
+  public viewInitRunOnce: boolean = false
+  public lastWord: number = 0
 
   @Input() fireComment: EdjiComment
 

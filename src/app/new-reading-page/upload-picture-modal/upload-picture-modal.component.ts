@@ -15,16 +15,15 @@ export class UploadModalComponent implements OnInit {
   @Output() closeModal: EventEmitter<any> = new EventEmitter();
   @Output() returnImage: EventEmitter<any> = new EventEmitter();
   
-  private uploadedImages: any[] = [];
-  private newImgUrls: string[] = [];
-  private selectedIndex: number = 0;
-  private locker: any;
-  private file: any = {};
-  private uploading: boolean = false;
-  private uploadUrl: string = '//grapple-dev.edji.it';
+  public uploadedImages: any[] = [];
+  public newImgUrls: string[] = [];
+  public selectedIndex: number = 0;
+  public file: any = {};
+  public uploading: boolean = false;
+  public uploadUrl: string = '//grapple-dev.edji.it';
 
-  private noUploadAllowed: boolean = true;
-  private errorMsg: string = '';
+  public noUploadAllowed: boolean = true;
+  public errorMsg: string = '';
 
   constructor(private _locker: LockerService, private _media: MediaService, private _auth: AuthService) {
     
@@ -94,7 +93,7 @@ export class UploadModalComponent implements OnInit {
 
     this.newImgUrls.unshift(url);
     this.uploadedImages.unshift(imgObj);
-    this.locker.set('uploadedImages', this.uploadedImages);
+    this._locker.set('uploadedImages', this.uploadedImages);
 
     let user = this._auth.getUser();
     if (!user.media) {

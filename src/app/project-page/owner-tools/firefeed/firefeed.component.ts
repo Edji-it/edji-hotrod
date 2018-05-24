@@ -15,10 +15,10 @@ import { ReadingService } from '../../../shared/reading.service';
 export class FirefeedComponent implements OnInit, OnDestroy {
   @Input() visible: boolean = false
   @Output() hide: EventEmitter<any> = new EventEmitter()
-
-  private project: Project
-  private currentReading: Reading
+  
   private subscriptions: Subscription[] = []
+  private project: Project
+  public currentReading: Reading
 
   constructor(
     private _projects: ProjectService, 
