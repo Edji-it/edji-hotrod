@@ -14,6 +14,8 @@ export class DeleteAudioModal implements OnInit {
   @Input()
   comment: any;
 
+  public showError: boolean = false
+
   constructor() { }
 
   ngOnInit() { }

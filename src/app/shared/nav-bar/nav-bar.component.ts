@@ -25,57 +25,57 @@ export class NavBarComponent implements OnInit, OnDestroy {
     @Output() shareAction: EventEmitter<ReadingShareObject> = new EventEmitter<ReadingShareObject>()
 
 
-    private showAvatarDropdown: boolean = false
-    private showShareTooltip: boolean = false
-    private user: any
-    private currentProject: any
-    private projectOwner: any
-    private createdDate: string
-    private liveCount: number = 1
-    private currentReading: any
-    private subscriptions: Subscription[] = []
-    private liveCountSubscription: Subscription
-    private showCommentCounts: boolean = false
-    private showReferralModal: boolean = false
-    private mNavShow: boolean = false
-    private isMobile: boolean = false
-    private powersLoading: {
+    public showAvatarDropdown: boolean = false
+    public showShareTooltip: boolean = false
+    public user: any
+    public currentProject: any
+    public projectOwner: any
+    public createdDate: string
+    public liveCount: number = 1
+    public currentReading: any
+    public subscriptions: Subscription[] = []
+    public liveCountSubscription: Subscription
+    public showCommentCounts: boolean = false
+    public showReferralModal: boolean = false
+    public mNavShow: boolean = false
+    public isMobile: boolean = false
+    public powersLoading: {
       heatVision?: boolean
     } = { }
-    private tooltipPlacement: string = 'right'
-    private messages: {
+    public tooltipPlacement: string = 'right'
+    public messages: {
       invalidCode?: boolean,
       serviceError?: boolean,
       groupNameLengthError?: boolean
     } = { }
     
     // Group/Share form
-    private submitted: boolean = false
-    private groupLabel: string = "Group 1"
-    private customCode: string = ""
-    private shareLoading: boolean = false
+    public submitted: boolean = false
+    public groupLabel: string = "Group 1"
+    public customCode: string = ""
+    public shareLoading: boolean = false
 
-    private projectCode: string
-    private joinLoading: boolean = false
-    private errorObject: {
+    public projectCode: string
+    public joinLoading: boolean = false
+    public errorObject: {
       "invalidCode"?: string,
       "loginFailed"?: string,
       "serverError"?: string
     } = {}
-    private projectCodeShow: boolean = true
-    private window
-    private showHeroSubModal: boolean
-    private couponCode: string
+    public projectCodeShow: boolean = true
+    public window
+    public showHeroSubModal: boolean
+    public couponCode: string
 
     constructor(
-          private _route: ActivatedRoute,
+          public _route: ActivatedRoute,
           private _auth: AuthService, 
           private _socket: SocketService, 
-          private _router: Router,
+          public _router: Router,
           private angulartics: Angulartics2,
           private _projects: ProjectService,
           private _readings: ReadingService,
-          private _util: UtilToolService
+          public _util: UtilToolService
         ) {
 
     }
@@ -273,7 +273,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
   /**
    * When the user decides to exercise their coupon code
    */
-  private useCoupon(couponCode: string) {
+  public useCoupon(couponCode: string) {
     // Hide the referral modal
     this.showReferralModal=false
     // Set the coupon code passed through from the referral modal

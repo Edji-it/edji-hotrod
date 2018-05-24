@@ -14,21 +14,22 @@ import { take } from 'rxjs/operators'
 export class ReferralModalComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription[] = []
-  private referralLink: string
-  private referralCode: string
-  private referralBlocks: any = []
-  private numberReferrals: number
-  private referralIndex: number = -1
-  private referralCouponCopy: any = {}
-  private alertObject = {
+  public referralLink: string
+  public referralCode: string
+  public referralBlocks: any = []
+  public numberReferrals: number
+  public referralIndex: number = -1
+  public referralCouponCopy: any = {}
+  public alertObject = {
     show: false,
     type: "",
     message: ""
   }
-  private linkCopySuccess: boolean
-  private referredByComplete: boolean 
+  public linkCopySuccess: boolean
+  public referredByComplete: boolean 
 
-  private showModal: boolean
+  public showModal: boolean
+
   @Input()
   set showReferral(showReferral: boolean) {
     if (typeof(showReferral) !== 'undefined' && this.showModal !== showReferral) {

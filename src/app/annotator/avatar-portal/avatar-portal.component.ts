@@ -18,15 +18,15 @@ enum playState {
 })
 export class AvatarPortalComponent implements OnInit, OnDestroy {
   
-  private subscriptions: Subscription[] = []
-  private repliesById: any = {}
-  private commentsByPos: any = []
-  private currentState: playState = playState.inactive
-  private audio
+  public subscriptions: Subscription[] = []
+  public repliesById: any = {}
+  public commentsByPos: any = []
+  public currentState: playState = playState.inactive
+  public audio
     
-  @Input() private lineCount: Number = 1
-  @Input() private active: boolean = false
-  @Input() private lineY: Number = 0
+  @Input() public lineCount: Number = 1
+  @Input() public active: boolean = false
+  @Input() public lineY: Number = 0
   @Input() public comment: EdjiComment
   @Input() public indexOnLine: Number = 1
 
@@ -60,7 +60,7 @@ export class AvatarPortalComponent implements OnInit, OnDestroy {
     ))
   }
 
-  private triggerCommentPane(selected?: boolean) {
+  public triggerCommentPane(selected?: boolean) {
     // If the avatar is the 8th where it shows '+' and number of comments
     if (this.indexOnLine==8) {
       selected=false

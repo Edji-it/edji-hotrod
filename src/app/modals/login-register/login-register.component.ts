@@ -12,13 +12,13 @@ import { ProjectService } from './../../shared'
 export class LoginRegisterModal implements OnInit {
 
   @Input()
-  private loginHeader: string
+  public loginHeader: string
 
   @Output()
-  private closeModal: EventEmitter<any> = new EventEmitter()
+  public closeModal: EventEmitter<any> = new EventEmitter()
 
   @Output()
-  private loginSuccess: EventEmitter<any> = new EventEmitter()
+  public loginSuccess: EventEmitter<any> = new EventEmitter()
 
   constructor(
     private _project: ProjectService

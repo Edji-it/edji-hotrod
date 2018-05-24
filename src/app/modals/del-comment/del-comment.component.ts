@@ -13,6 +13,8 @@ export class DeleteCommentModal implements OnInit {
   @Input()
   comment: any;
 
+  public showError: boolean = false
+
   constructor() { }
 
   ngOnInit() { 

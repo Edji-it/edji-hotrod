@@ -19,7 +19,7 @@ export class LoginModal implements OnInit {
   @Input()
   private projectId: string
 
-  private guestLogin: boolean = true
+  public guestLogin: boolean = true
 
   constructor(
     private _project: ProjectService,

@@ -11,12 +11,12 @@ import { AuthService } from './../../shared/auth.service';
 })
 export class ChangePassComponent implements OnInit {
 
-  private passwordForm: FormGroup;
-  private messages: {
+  public passwordForm: FormGroup;
+  public messages: {
     success?: boolean,
     serviceError?: boolean
   } = {}
-  private loading: boolean
+  public loading: boolean
   @Output() closeModal = new EventEmitter();
 
   constructor(private _auth: AuthService, private angulartics: Angulartics2, fb: FormBuilder) {
@@ -36,7 +36,7 @@ export class ChangePassComponent implements OnInit {
       ? null : {'mismatch': true};
   }
 
-  private onSubmit(value: any): void {
+  public onSubmit(value: any): void {
     this.messages = {}
     this.loading = true
     this.angulartics.eventTrack.next({ action: 'resetPasswordLoggedIn', properties: { category: 'accountManagement', label: 'attempt' }})

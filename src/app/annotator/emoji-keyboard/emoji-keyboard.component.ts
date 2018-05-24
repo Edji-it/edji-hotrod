@@ -42,7 +42,7 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
   private activeCategoryIndex: number = 0;
   private scrollAreaOffset: number = 0;
 
-  private emojifilters = [{
+  public emojifilters = [{
       icon: ":clock:",
       title: "Recent",
       emoji: []
