@@ -10,7 +10,10 @@ export interface EdjiComment extends BaseComment {
   active          : boolean,
   showAvatar      : boolean,
   imagePos: number,
-  selected: boolean
+  selected: boolean,
+  question_number?: number,
+  createdAt?: Date,
+  updatedAt?: Date
 }
 
 /** Comment properties we get from the server */

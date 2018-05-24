@@ -28,7 +28,7 @@
                                 </div>
                                 <span class="input-group-btn">    
                                     <button id="pdfBrowseButton" class="btn btn-default btn-file" type="button" (click)="browseInput.click()">
-                                        Browse <input #browseInput id="pdfFileInput" type="file" 
+                                        Browse <input #browseInput [attr.id]="pdfFileInputId" type="file" 
                                             accept=".pdf"
                                             (change)="updateUploadFile()"
                                             style="display:none;">

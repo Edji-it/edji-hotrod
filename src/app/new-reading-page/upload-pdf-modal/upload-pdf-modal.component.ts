@@ -22,22 +22,21 @@ export class UploadPdfModalComponent implements OnInit {
   Upload a PDF with this modal!
   */
 
-  @Output() closeModal: EventEmitter<any> = new EventEmitter();
-  @Output() returnImage: EventEmitter<any> = new EventEmitter();
+  @Output() closeModal: EventEmitter<any> = new EventEmitter()
+  @Output() returnImage: EventEmitter<any> = new EventEmitter()
   
-  private uploadedDocs: any[] = [];
-  private newDocsIds: string[] = []; 
-  // private newImgUrls: string[] = [];
-  private selectedIndex: number = 0;
-  private file: any = {};
-  private title: string = '';
-  private selectedFiles: any[] = [];
-  private uploading: boolean = false;
-  private uploadUrl: string = '//grapple-dev.edji.it';
-  private noUploadAllowed: boolean = true;
-  private errorMsg: string = '';
-  private pdfFileInputId : string  = "pdfFileInput";
-  private confirmDelete : boolean = false;
+  private newDocsIds: string[] = [] 
+  private uploadUrl: string = '//grapple-dev.edji.it'
+  public selectedIndex: number = 0
+  public uploadedDocs: any[] = []
+  public file: any = {}
+  public title: string = ''
+  public selectedFiles: any[] = []
+  public uploading: boolean = false
+  public noUploadAllowed: boolean = true
+  public errorMsg: string = ''
+  public pdfFileInputId : string  = "pdfFileInput"
+  public confirmDelete : boolean = false
 
   constructor(private _locker: LockerService, private _media: MediaService, private _auth: AuthService) {
     

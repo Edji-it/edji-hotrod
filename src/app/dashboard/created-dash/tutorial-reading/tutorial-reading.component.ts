@@ -10,7 +10,7 @@ import { Reading } from './../../../shared/datatypes'
 
 export class TutorialReadingComponent implements OnInit {
   /** This is a special reading - if the tutorial reading is ever updated, this id should be swapped out */
-  private reading: Reading = {
+  public reading: Reading = {
       _id: "593319c7da3d54001102e166",
       title: "How to Make a Reading",
       draft: true,

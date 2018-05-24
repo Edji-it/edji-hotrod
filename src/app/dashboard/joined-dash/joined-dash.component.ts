@@ -19,7 +19,7 @@ import { AuthService, ReadingService, ProjectService } from '../../shared'
 export class JoinedDashComponent implements OnInit, OnDestroy {
   // Set our default values
   public projects: Array<any> = [];
-  private errorObject = {
+  public errorObject = {
     wrongCode : "",
     projectError: ""
   };

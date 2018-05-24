@@ -32,16 +32,16 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
         The bones for where a project will sit inside of.
     */
 
-    private project: Project = <Project>{}
-    private reading: any = {}
+    public project: Project = <Project>{}
+    public reading: any = {}
     private subscriptions: Subscription[] = []
     private joinedRoom: boolean = false
-    private error: string
+    public error: string
     private user: User
     // private liveCount: number = 1
     private createdDate: Date
     private createDate: string
-    private showLoginModal: boolean = false
+    public showLoginModal: boolean = false
     
     constructor(
         private _router: Router,

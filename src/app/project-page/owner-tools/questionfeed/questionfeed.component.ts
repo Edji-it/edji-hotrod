@@ -17,8 +17,8 @@ export class QuestionfeedComponent implements OnInit, OnDestroy {
   @Output() hide: EventEmitter<any> = new EventEmitter()
 
   private project: Project
-  private currentReading: Reading
   private subscriptions: Subscription[] = []
+  public currentReading: Reading
 
   constructor(
     private _projects: ProjectService, 

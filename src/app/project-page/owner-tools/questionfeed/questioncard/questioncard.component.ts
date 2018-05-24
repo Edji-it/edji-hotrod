@@ -20,8 +20,8 @@ export class QuestioncardComponent implements OnInit, OnDestroy {
 
   private currentReading: Reading
   private subscriptions: Subscription[] = []
-  private answersHidden: boolean
-  private answersById: any = {}
+  public answersHidden: boolean
+  public answersById: any = {}
 
   constructor(
     private _projects : ProjectService,
