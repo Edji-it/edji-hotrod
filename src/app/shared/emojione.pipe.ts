@@ -1,5 +1,5 @@
 import { NgModule, Pipe, PipeTransform } from '@angular/core'
-import * as emojione from 'emojione/lib/js/emojione.js';
+import { emojioneList } from 'emojione/lib/js/emojione.js';
 
 var stopGapList = {
   ":thinking_face:" : "1f914",
@@ -45,12 +45,12 @@ export class EmojiOnePipe implements PipeTransform {
     let convertShortcodes = function(substring) {
       let emojiUc : string;
       // emojione.emojioneList is an object used to map SHORTCODES to UNICODE
-      if (emojione.emojioneList[substring]) {
-        emojiUc = emojione.emojioneList[substring]['uc_base']
+      if (emojioneList[substring]) {
+        emojiUc = emojioneList[substring]['uc_base']
       } else if (stopGapList[substring]) {
         emojiUc = stopGapList[substring]
       } else {
-        emojiUc = emojione.emojioneList[':question:']['uc_base']
+        emojiUc = emojioneList[':question:']['uc_base']
       }
       
       // Provide unicode emoji as an alt fallback, and the shortcode as a title/tooltip
