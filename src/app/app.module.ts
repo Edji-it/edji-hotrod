@@ -1,5 +1,5 @@
 import { NgModule, ApplicationRef, ErrorHandler } from '@angular/core'
-import { BrowserModule } from '@angular/platform-browser'
+// import { BrowserModule } from '@angular/platform-browser'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { HttpModule } from '@angular/http'
 import { RouterModule, PreloadAllModules, RouteReuseStrategy } from '@angular/router'
@@ -199,7 +199,7 @@ const APP_PROVIDERS = [
     UserDetailsUpdateModal
   ],
   imports: [ // import Angular's modules
-    BrowserModule,
+    // BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
