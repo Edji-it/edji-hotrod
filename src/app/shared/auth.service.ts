@@ -11,6 +11,7 @@ import { Angulartics2 } from 'angulartics2'
 import { Angulartics2GoogleAnalytics } from 'angulartics2/ga'
 import { LockerService } from '../_services/locker.service';
 
+import { environment } from '../../environments/environment';
 @Injectable()
 export class AuthService implements CanActivate {
 
@@ -46,7 +47,7 @@ export class AuthService implements CanActivate {
         private angulartics: Angulartics2,
         private ga: Angulartics2GoogleAnalytics
     ) {
-        let webpackEnv = process.env.ENV
+        let buildEnv = environment.ENV
         
         this.user = this.getUser()
         this.currentUserSource = new BehaviorSubject<any>(this.user)
@@ -55,7 +56,7 @@ export class AuthService implements CanActivate {
         // Check to see if prod or dev environment
         if (window.location.host.indexOf('local.edji.it') > -1) {
             // do nothing
-        }else if (window.location.host.indexOf('dev.edji.it') > -1 || webpackEnv === 'test') {
+        }else if (window.location.host.indexOf('dev.edji.it') > -1 || buildEnv === 'test') {
             //   baseUrl = "http://edji-dev.herokuapp.com"
             this.baseUrl = "//optimus-dev.edji.it"
             this.ENV = "dev"
