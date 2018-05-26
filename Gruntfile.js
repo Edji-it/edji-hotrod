@@ -11,7 +11,6 @@ module.exports = function ( grunt ) {
      */
     grunt.loadNpmTasks('grunt-aws');
     grunt.loadNpmTasks('grunt-checkbranch');
-    grunt.loadNpmTasks('grunt-bump');
   
     /**
      * Load in our build configuration file.
@@ -28,27 +27,6 @@ module.exports = function ( grunt ) {
        * version. It's already there, so we don't repeat ourselves here.
        */
       pkg: grunt.file.readJSON("package.json"),
-       
-      /**
-       * Increments the version number, etc.
-       */
-      bump: {
-        options: {
-          files: [
-            "package.json"
-          ],
-          commit: true,
-          commitMessage: 'Release v%VERSION%',
-          createTag: true,
-          tagName: 'v%VERSION%',
-          tagMessage: 'Version %VERSION%',
-          push: true,
-          pushTo: 'origin',
-          commitFiles: [
-            "package.json"
-          ]
-        }
-      },
       
       // Read the file
       aws: grunt.file.readJSON('aws-keys.json'),
