@@ -43,6 +43,10 @@ module.exports = function ( grunt ) {
           src: "**",
           options: {
               bucket: "dev.edji.it"
+              // overwrite Upload files, whether or not they already exist default: true
+              // overwrite: true, (Default: true)
+              // cache Skip uploading files which have already been uploaded (same ETag) default: true
+              // cache: false 
           }
         },
         prod: {
@@ -50,6 +54,10 @@ module.exports = function ( grunt ) {
           src: "**",
           options: {
               bucket: "edji.it"
+              // overwrite Upload files, whether or not they already exist default: true
+              // overwrite: true, (Default: true)
+              // cache Skip uploading files which have already been uploaded (same ETag) default: true
+              // cache: false 
           }
         }
       },
