@@ -2,6 +2,7 @@ import { UtilToolService } from '../util-tool.service';
 import { Mock } from 'protractor/built/driverProviders';
 import { BrowserXhr } from '@angular/http';
 import { Component, OnInit } from '@angular/core';
+const appVersion = require('../../../../package.json').version;
 
 declare var window: any
 
@@ -19,6 +20,7 @@ export class FooterComponent implements OnInit {
     public _util: UtilToolService
   ) {
     this.window = window
+    this.appVersion = appVersion
   }
 
   ngOnInit() {
