@@ -12,7 +12,7 @@ declare var window: any
   templateUrl: './footer.component.pug'
 })
 export class FooterComponent implements OnInit {
-  private appVersion;
+  public appVersion;
   private window
   private browserProperties: any
 
