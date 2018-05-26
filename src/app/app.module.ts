@@ -85,11 +85,11 @@ import { PaginatorModule } from 'primeng/paginator';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 // Configure Hammer.js
-export class MyHammerConfig extends HammerGestureConfig  {
-  overrides = <any>{
-      'swipe': {velocity: 0.4, threshold: 20} // override default settings
-  }
-} // export class MyHammerConfig extends HammerGestureConfig 
+// export class MyHammerConfig extends HammerGestureConfig  {
+//   overrides = <any>{
+//       'swipe': {velocity: 0.4, threshold: 20} // override default settings
+//   }
+// } // export class MyHammerConfig extends HammerGestureConfig 
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -106,7 +106,7 @@ const APP_PROVIDERS = [
   BumblebeeService,
   { 
       provide: HAMMER_GESTURE_CONFIG, 
-      useClass: MyHammerConfig 
+      useClass: HammerGestureConfig 
   }
   // { provide: RouteReuseStrategy, useClass: ReuseStrategy }
 ]; // const APP_PROVIDERS
