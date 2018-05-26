@@ -28,8 +28,8 @@ exports.config = {
         '--no-sandbox'
       ]
     },
-    // shardTestFiles: true,
-    maxInstances: 1
+    shardTestFiles: true,
+    maxInstances: 5
   },
 
   /*
