@@ -39,14 +39,14 @@ module.exports = function ( grunt ) {
           region: "us-west-2"
         },
         dev: {
-          cwd: "dist/",
+          cwd: "dist/edji-hotrod/",
           src: "**",
           options: {
               bucket: "dev.edji.it"
           }
         },
         prod: {
-          cwd: "dist/",
+          cwd: "dist/edji-hotrod/",
           src: "**",
           options: {
               bucket: "edji.it"
@@ -120,7 +120,7 @@ module.exports = function ( grunt ) {
   
     };
   
-    // grunt.initConfig( grunt.util._.extend( taskConfig, userConfig ) );
+    grunt.initConfig( taskConfig );
   
     /**
      * The `compile` task gets your app ready for deployment by concatenating and
