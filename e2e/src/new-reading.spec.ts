@@ -197,7 +197,7 @@ describe('New Reading Page', () => {
             newReading.uploadPDfModalButton.click();
             
             // Select File to upload
-            let fileToUpload = '../../assets/test/2-pages.pdf';
+            let fileToUpload = 'assets/2-pages.pdf';
             let absolutePath = path.resolve(__dirname, fileToUpload);
             newReading.pdfFileInput.sendKeys(absolutePath);
 
@@ -271,7 +271,7 @@ describe('New Reading Page', () => {
             browser.wait(EC.elementToBeClickable(newReading.imageUploadTrigger), 6000, "image upload trigger never became clickable");
             
             // Select File to upload
-            let fileToUpload = '../../assets/test/titration.jpg';
+            let fileToUpload = 'assets/titration.jpg';
             let absolutePath = path.resolve(__dirname, fileToUpload);
             newReading.imageFileInput.sendKeys(absolutePath);
 
