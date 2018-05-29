@@ -4,11 +4,16 @@ import * as Rangy from 'rangy';
 import { Angulartics2 } from 'angulartics2'
 // import { HotkeysService, Hotkey } from 'angular2-hotkeys'
 
-import { ReadingService } from '../shared/reading.service'
-import { ProjectService } from '../shared/project.service'
-import { CommentService } from '../shared/comment.service'
 import { CommentComponent } from './comment/comment.component'
-import { AudioService, AuthService, SocketService, UtilToolService } from '../shared' 
+import { 
+    AudioService, 
+    AuthService, 
+    CommentService, 
+    ProjectService, 
+    ReadingService, 
+    SocketService, 
+    UtilToolService 
+} from '../_services' 
 import { CommentPermissions, EdjiComment, Project, Reading } from './../shared/datatypes'
 
 declare var window: any

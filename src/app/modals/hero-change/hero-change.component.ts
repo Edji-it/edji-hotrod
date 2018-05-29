@@ -1,9 +1,8 @@
 import { Angulartics2 } from 'angulartics2'
-import { AuthService } from '../../shared'
 import { Component, EventEmitter, OnInit, Output } from '@angular/core'
 import { take } from 'rxjs/operators'
 
-import { BumblebeeService } from './../../shared'
+import { AuthService, BumblebeeService } from './../../_services'
 
 @Component({
   selector: 'hero-change-modal',

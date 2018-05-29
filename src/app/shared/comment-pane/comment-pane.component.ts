@@ -1,12 +1,10 @@
-import { CommentService } from '../comment.service'
-import { AuthService } from '../auth.service' 
-import { SocketService } from '../socket.service'
 import { Project, User } from '../datatypes'
 import { Subscription } from 'rxjs'
-import { ProjectService } from '../index'
 import { CommentPermissions, EdjiComment } from '../datatypes/index'
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core'
 
+// Project Dependencies
+import { AuthService, ProjectService, CommentService, SocketService } from '../../_services'
 @Component({
   selector: 'comment-pane',
   templateUrl: './comment-pane.component.pug',

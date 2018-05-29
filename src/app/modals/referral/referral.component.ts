@@ -1,10 +1,12 @@
-import { Subscription } from 'rxjs';
-import { Project } from '../../shared/datatypes';
-import { Router } from '@angular/router';
-import { Component, EventEmitter, Input, OnInit, Output, OnDestroy } from '@angular/core';
-import { UtilToolService, ProjectService, AuthService, ReadingService } from './../../shared'
-import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs'
+import { Router } from '@angular/router'
+import { Component, EventEmitter, Input, OnInit, Output, OnDestroy } from '@angular/core'
+import { ActivatedRoute } from '@angular/router'
 import { take } from 'rxjs/operators'
+
+// Project Dependencies
+import { Project } from '../../shared/datatypes'
+import { AuthService, UtilToolService, ProjectService, ReadingService } from './../../_services'
 
 @Component({
   selector: 'referral-modal',

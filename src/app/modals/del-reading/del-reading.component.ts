@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 import { take } from 'rxjs/operators'
 
-import { ReadingService } from '../../shared'
+// Project Dependencies
+import { ReadingService } from '../../_services'
 import { Reading }        from '../../shared/datatypes'
 
 @Component({

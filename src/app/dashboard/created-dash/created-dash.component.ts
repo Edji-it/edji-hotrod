@@ -4,10 +4,10 @@ import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_di
 import { FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { Subscription } from 'rxjs'
 import { Angulartics2 } from 'angulartics2'
-import { Reading }      from '../../shared/datatypes';
 
-import { AuthService, ReadingService, ProjectService } from '../../shared'
-import { User } from '../../shared/datatypes'
+// Project Dependencies
+import { AuthService, ReadingService, ProjectService } from '../../_services'
+import { User, Reading } from '../../shared/datatypes'
 
 @Component({
   // The selector is what angular internally uses

@@ -4,7 +4,7 @@ import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output }
 
 // Project dependencies
 import { EdjiComment, Project, Reading } from '../datatypes'
-import { AuthService, CommentService, ProjectService, ReadingService } from '../'
+import { AuthService, CommentService, ProjectService, ReadingService } from '../../_services'
 
 @Component({
   selector: 'hot-discussions',

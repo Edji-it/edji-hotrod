@@ -1,10 +1,7 @@
-import { SocketService } from '../../../../shared';
-import { CommentService } from '../../../../shared/comment.service'
 import { Subscription } from 'rxjs'
 import { EdjiComment, Reading } from '../../../../shared/datatypes'
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, AfterViewInit } from '@angular/core'
-import { ReadingService } from '../../../../shared/reading.service'
-import { ProjectService } from '../../../../shared/project.service'
+import { CommentService, ProjectService, ReadingService, SocketService } from '../../../../_services'
 
 
 @Component({

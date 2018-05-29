@@ -1,12 +1,11 @@
 import { Title } from '@angular/platform-browser';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
-// import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Angulartics2 } from 'angulartics2';
 
-import { AuthService, ProjectService } from '../shared';
+// Project Dependencies
+import { AuthService, ProjectService } from '../_services';
 
 @Component({
   // The selector is what angular internally uses

@@ -3,7 +3,7 @@ import { take } from 'rxjs/operators'
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
 // Project Dependencies
-import { AuthService, ProjectService, ReadingService, SocketService } from '../../shared';
+import { AuthService, ProjectService, ReadingService, SocketService } from '../../_services';
 import { CommentStats, Project, Reading } from './../../shared/datatypes';
 
 @Component({

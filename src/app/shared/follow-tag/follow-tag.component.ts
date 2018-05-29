@@ -1,8 +1,11 @@
 import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
-import { AuthService } from "../";
 import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
+
+// Project Dependencies
+import { AuthService } from "../../_services";
 import { User } from '../datatypes';
+
 
 @Component({
   selector: 'follow-tag',

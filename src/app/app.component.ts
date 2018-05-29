@@ -6,7 +6,7 @@ import { Angulartics2GoogleAnalytics } from 'angulartics2/ga'
 import { Angulartics2 } from 'angulartics2'
 
 // import { AppState } from './app.service'
-import { AuthService, MessageService } from './shared'
+import { AuthService, MessageService } from './_services'
 
 /*
  * App Component

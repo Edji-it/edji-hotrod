@@ -9,7 +9,7 @@ import {
     ReadingService, 
     SocketService, 
     AudioService 
-} from '../shared';
+} from '../_services';
 import { Project, Reading, User } from './../shared/datatypes';
 
 

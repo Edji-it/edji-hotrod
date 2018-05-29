@@ -1,15 +1,14 @@
-import { Title } from '@angular/platform-browser';
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
-import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { Title } from '@angular/platform-browser'
+import { Component, OnInit, OnDestroy } from '@angular/core'
+import { Router } from '@angular/router'
+import { FormGroup, FormBuilder, Validators } from '@angular/forms'
+import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
-import { Angulartics2 } from 'angulartics2';
-import { Ng4TwitterTimelineService } from './twitter-timeline';
+import { Angulartics2 } from 'angulartics2'
 
-import { AuthService } from '../shared/auth.service';
-import { ProjectService } from './../shared/project.service';
+// Project Dependencies
+import { Ng4TwitterTimelineService } from './twitter-timeline'
+import { AuthService, ProjectService } from '../_services'
 
 @Component({
   // The selector is what angular internally uses

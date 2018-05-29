@@ -1,6 +1,7 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core'
 
-import { AuthService } from '../../shared'
+// Project Dependencies
+import { AuthService } from '../../_services'
 import { User } from '../../shared/datatypes'
 
 @Component({

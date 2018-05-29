@@ -3,7 +3,8 @@ import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_di
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { take } from 'rxjs/operators'
 
-import { AuthService, ProjectService } from './../../shared'
+// Project Dependencies
+import { AuthService, ProjectService } from './../../_services'
 import { User } from "../../shared/datatypes"
 
 @Component({

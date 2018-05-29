@@ -6,8 +6,7 @@ import { take } from 'rxjs/operators'
 // import { EventEmitter } from '@angular/forms/src/facade/async'
 
 import { Project, Reading } from '../datatypes'
-import { AuthService } from '../auth.service'
-import { ProjectService, SocketService, PowerToggle, ReadingService, UtilToolService } from '..'
+import { AuthService, ProjectService, SocketService, PowerToggle, ReadingService, UtilToolService } from '../../_services'
 
 @Component({
   selector: 'nav-bar',

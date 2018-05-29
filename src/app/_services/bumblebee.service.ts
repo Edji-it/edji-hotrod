@@ -3,8 +3,9 @@ import { Http } from '@angular/http'
 import { Observable } from 'rxjs'
 import { take } from 'rxjs/operators'
 
+// Project Dependencies
 import { AuthService } from '.'
-import { User } from './datatypes'
+import { User } from '../shared/datatypes'
 
 @Injectable()
 export class BumblebeeService {

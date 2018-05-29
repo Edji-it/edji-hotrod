@@ -2,9 +2,10 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 
+// Project Dependencies
 import { Reading } from './../../shared/datatypes'
-import { ReadingService } from './../../shared'
-// import { IMultiSelectOption, IMultiSelectSettings } from 'angular-2-dropdown-multiselect';
+import { ReadingService } from './../../_services'
+import { IMultiSelectOption, IMultiSelectSettings } from '../../_directives'
 
 @Component({
   selector: 'hot-discover-add-meta',

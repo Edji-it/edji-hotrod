@@ -5,7 +5,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { debounceTime, map } from 'rxjs/operators'
 
 // Project dependencies
-import { AuthService, BumblebeeService } from '../../shared'
+import { AuthService, BumblebeeService } from '../../_services'
 
 declare var Stripe: any
 

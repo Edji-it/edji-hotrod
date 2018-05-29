@@ -3,8 +3,7 @@ import { Subscription } from 'rxjs';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 
 // Project dependencies
-import { ProjectService } from '../../../shared/project.service';
-import { ReadingService } from '../../../shared/reading.service';
+import { ProjectService, ReadingService } from '../../../_services';
 
 @Component({
   selector: 'hot-questionfeed',

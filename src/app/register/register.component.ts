@@ -1,13 +1,14 @@
 import { Title } from '@angular/platform-browser';
 import { Component, OnInit, OnDestroy } from '@angular/core'
 import { PRIMARY_OUTLET, Router, ActivatedRoute } from '@angular/router'
-import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
 import { Angulartics2 } from 'angulartics2'
 
-import { AuthService, Copy, ProjectService } from './../shared'
+// Project Dependencies
+import { Copy } from './../shared'
+import { AuthService, ProjectService } from './../_services'
 import { ALLSPARK } from './../app.constants'
 import { LockerService } from '../_services/locker.service';
 

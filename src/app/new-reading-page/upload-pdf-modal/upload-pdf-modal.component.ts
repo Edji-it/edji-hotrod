@@ -2,9 +2,9 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core'
 import { take } from 'rxjs/operators'
 
 // Project Dependencies
-import { MediaService, AuthService } from '../../shared'
+import { MediaService, AuthService } from '../../_services'
 import { DeletePdfMiniModal } from "./delete-pdf-mini-modal/delete-pdf-mini-modal.component"
-import { LockerService } from '../../_services/locker.service';
+import { LockerService } from '../../_services/locker.service'
 
 @Component({
   selector: 'upload-pdf-modal',

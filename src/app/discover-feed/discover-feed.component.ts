@@ -1,9 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core'
+import { ActivatedRoute, Router } from '@angular/router'
+import { Subscription } from 'rxjs'
 
-import { AuthService } from '../shared'
-import { ReadingService } from "../shared/reading.service";
+// Project Dependencies
+import { AuthService, ReadingService } from '../_services'
 
 @Component({
   selector: 'app-discover-feed',
