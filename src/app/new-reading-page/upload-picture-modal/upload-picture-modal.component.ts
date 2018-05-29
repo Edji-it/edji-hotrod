@@ -2,8 +2,7 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core'
 import { take } from 'rxjs/operators'
 
 // Project Dependencies
-import { AuthService, MediaService } from '../../shared'
-import { LockerService } from '../../_services/locker.service';
+import { AuthService, LockerService, MediaService } from '../../_services'
 
 @Component({
   selector: 'upload-picture-modal',

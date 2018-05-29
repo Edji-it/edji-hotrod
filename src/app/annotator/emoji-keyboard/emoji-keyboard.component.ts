@@ -1,9 +1,8 @@
-import { CommentService } from '../../shared/comment.service'
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
 import { take } from 'rxjs/operators'
 
 // Project Dependencies
-import { AuthService } from '../../shared'
+import { AuthService, CommentService } from '../../_services'
 import { LockerService } from '../../_services/locker.service';
 
 @Component({

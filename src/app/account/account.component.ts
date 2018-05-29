@@ -1,7 +1,9 @@
 import { Angulartics2 } from 'angulartics2';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { AuthService } from '../shared/auth.service';
+
+// Project Dependencies
+import { AuthService } from '../_services/auth.service';
 import { User } from '../shared/datatypes';
 
 @Component({

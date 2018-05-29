@@ -1,10 +1,12 @@
-import { EdjiComment, CommentPermissions, Project } from './datatypes'
 import { Injectable } from '@angular/core'
 import { BehaviorSubject, Observable, Subject } from 'rxjs'
 
+// Project Dependencies
 import { AuthService } from './auth.service'
 import { ProjectService, ReadingService, SocketService } from './'
 import { Angulartics2 } from 'angulartics2'
+import { EdjiComment, CommentPermissions, Project } from '../shared/datatypes'
+
 
 @Injectable()
 export class CommentService {

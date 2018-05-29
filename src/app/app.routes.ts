@@ -1,5 +1,7 @@
 import { Routes, RouterModule } from '@angular/router'
 
+// Project Dependencies
+import { AuthService } from './_services'
 import { NewReadingPage } from './new-reading-page';
 import { ProjectPageComponent } from './project-page';
 import { HomeComponent } from './home';
@@ -14,9 +16,6 @@ import { HeroPricingComponent } from './hero-pricing/hero-pricing.component';
 import { DiscoverFeedComponent } from "./discover-feed/discover-feed.component";
 import { OAuthComponent } from './oauth-redirect/oauth-redirect.component';
 
-// services
-// import { DataResolver } from './app.resolver'
-import { AuthService } from './shared'
 
 export const ROUTES: Routes = [
   { path: '', component: DashboardComponent, canActivate: [AuthService] },

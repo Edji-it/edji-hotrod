@@ -3,7 +3,9 @@ import { Router } from '@angular/router'
 import { FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { Angulartics2 } from 'angulartics2'
 
-import { AuthService, Copy } from '../../shared'
+// Project Dependencies
+import { AuthService } from '../../_services'
+import { Copy } from '../../shared'
 
 @Component({
   selector: 'hot-login-form',

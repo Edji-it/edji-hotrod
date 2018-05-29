@@ -1,6 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core'
 
-import { AuthService } from './../../shared'
+// Project Dependencies
+import { AuthService } from './../../_services'
 
 @Component({
   selector: 'hot-google-button',

@@ -1,12 +1,12 @@
-import { Project } from './datatypes'
 import { Injectable } from '@angular/core'
 import { Http, Response, Headers, RequestOptions } from '@angular/http'
 import { BehaviorSubject, Observable, Subject } from 'rxjs'
 import { map, take } from 'rxjs/operators'
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http'
 
+// Project Dependencies
 import { AuthService } from './auth.service'
-import { Reading } from './datatypes/reading'
+import { Project, Reading } from '../shared/datatypes'
 
 interface FilterObj {
   type?: string,

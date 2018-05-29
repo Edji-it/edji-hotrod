@@ -1,8 +1,9 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Angulartics2 } from 'angulartics2';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core'
+import { FormGroup, FormBuilder, Validators } from '@angular/forms'
+import { Angulartics2 } from 'angulartics2'
 
-import { AuthService } from './../../shared';
+// Project Dependencies
+import { AuthService } from './../../_services'
 
 @Component({
   selector: 'hot-guest-login',
