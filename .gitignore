@@ -24,11 +24,12 @@
 !.vscode/launch.json
 !.vscode/extensions.json
 
-# misc
+# misc and logs
 /.sass-cache
 /connect.lock
 /coverage
 /libpeerconnection.log
+debug.log
 npm-debug.log
 yarn-error.log
 testem.log
@@ -37,3 +38,6 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+# Secure Files
+aws-keys.json
