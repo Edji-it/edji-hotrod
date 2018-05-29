@@ -2,9 +2,7 @@ import { Subscription } from 'rxjs'
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 
 import { CommentStats, Reading } from './../../../shared/datatypes'
-
-import { ProjectService } from '../../../shared/project.service'
-import { ReadingService } from '../../../shared/reading.service'
+import { ProjectService, ReadingService } from '../../../_services'
 
 @Component({
   selector: 'hot-leaderboard',

@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
 import { take } from 'rxjs/operators'
 
-import { AuthService } from './../shared'
+// Project Dependencies
+import { AuthService } from './../_services'
 
 @Component({
   selector: 'hot-oauth-redirect',

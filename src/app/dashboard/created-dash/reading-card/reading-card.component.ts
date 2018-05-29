@@ -1,9 +1,11 @@
-import { Subscription } from 'rxjs';
-import { Angulartics2 } from 'angulartics2';
-import { ReadingService, ProjectService } from '../../../shared';
-import { Reading, Project }      from '../../../shared/datatypes';
-import { Component, Input, Output, OnDestroy, OnInit, EventEmitter } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs'
+import { Angulartics2 } from 'angulartics2'
+import { Component, Input, Output, OnDestroy, OnInit, EventEmitter } from '@angular/core'
+import { ActivatedRoute } from '@angular/router'
+
+// Project Dependencies
+import { ReadingService, ProjectService } from '../../../_services';
+import { Reading, Project } from '../../../shared/datatypes';
 
 @Component({
   selector: 'hot-reading-card',

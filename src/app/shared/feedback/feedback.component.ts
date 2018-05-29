@@ -5,9 +5,10 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { Angulartics2 } from 'angulartics2'
 import { take } from 'rxjs/operators'
 
-import { AuthService, BumblebeeService, Copy, UtilToolService } from './..'
+import { AuthService, BumblebeeService, UtilToolService } from '../../_services'
 import { ALLSPARK } from '../../app.constants'
 import { LockerService } from '../../_services/locker.service';
+import { Copy } from '..';
 
 @Component({
   selector: 'edji-feedback',

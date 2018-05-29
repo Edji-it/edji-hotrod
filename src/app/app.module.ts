@@ -27,7 +27,7 @@ import {
   ReadingService,
   SocketService,
   UtilToolService
-} from './shared'
+} from './_services'
 import { ReuseStrategy } from './route-reuse-strategy'
 
 // Directives
@@ -36,11 +36,14 @@ import { MultiselectDropdownModule } from './_directives'
 import { ClickOutsideDirective } from './_directives/click-outside.directive'
 
 // Pipes
-import { EmojiOnePipe, AddClassPipe } from './shared'
-import { EdjiDatePipe } from './_pipes/edjidate.pipe'
-import { LinkifyPipe } from './_pipes/linkify.pipe'
-import { SubjectPipe } from './_pipes/subject.pipe'
-import { UserInitialsPipe } from './_pipes/userinitials.pipe'
+import { 
+  EmojiOnePipe, 
+  AddClassPipe, 
+  EdjiDatePipe, 
+  LinkifyPipe, 
+  SubjectPipe, 
+  UserInitialsPipe 
+} from './_pipes'
 
 // Components
 import {

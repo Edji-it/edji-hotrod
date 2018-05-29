@@ -5,7 +5,8 @@ import { Observable, BehaviorSubject } from 'rxjs'
 import { map, take, catchError } from 'rxjs/operators'
 import { HttpClient, HttpHeaders } from "@angular/common/http"
 
-import { User } from './datatypes'
+// Project Dependencies
+import { User } from '../shared/datatypes'
 import { URLSearchParams } from '@angular/http/src/url_search_params'
 import { Angulartics2 } from 'angulartics2'
 import { Angulartics2GoogleAnalytics } from 'angulartics2/ga'

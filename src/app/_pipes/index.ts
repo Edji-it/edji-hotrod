@@ -1,0 +1,6 @@
+export * from './addclass.pipe'
+export * from './edjidate.pipe'
+export * from './emojione.pipe'
+export * from './linkify.pipe'
+export * from './subject.pipe'
+export * from './userinitials.pipe'

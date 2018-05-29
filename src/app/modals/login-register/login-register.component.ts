@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 
-import { ProjectService } from './../../shared'
+// Project Dependencies
+import { ProjectService } from './../../_services'
 
 @Component({
   selector: 'hot-login-register',

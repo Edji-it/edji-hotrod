@@ -1,7 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
-import { ProjectService } from '../../shared'
-import { Project } from '../../shared/datatypes'
 import { take } from 'rxjs/operators'
+
+// Project Dependencies
+import { ProjectService } from '../../_services'
+import { Project } from '../../shared/datatypes'
 
 @Component({
   selector: 'hot-del-project',

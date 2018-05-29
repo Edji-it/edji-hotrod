@@ -5,7 +5,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { Subscription } from 'rxjs'
 import { Angulartics2 } from 'angulartics2'
 
-import { AuthService, ReadingService, ProjectService } from '../../shared'
+// Project Dependencies
+import { AuthService, ReadingService, ProjectService } from '../../_services'
 
 @Component({
   selector: 'edji-joined-dash',
