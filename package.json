@@ -10,6 +10,7 @@
     "deploy:dev:minor": "ng build --prod && grunt push:dev && grunt cloudfront:dev",
     "deploy:dev:major": "ng build --prod && grunt push:dev && grunt cloudfront:dev",
     "deploy:prod": "grunt checkbranch:master:true && ng build --prod && grunt push:prod && grunt cloudfront:prod",
+    "dev": "ng serve",
     "start": "ng serve",
     "build": "ng build",
     "build:ci": "ng build --aot",

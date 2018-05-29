@@ -3,7 +3,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Angulartics2 } from 'angulartics2';
 
-import { AuthService } from './../shared';
+// Project Dependencies
+import { AuthService } from './../_services';
 
 @Component({
   selector: 'hot-reset-pass-page',

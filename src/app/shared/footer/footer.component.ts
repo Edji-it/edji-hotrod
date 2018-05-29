@@ -1,8 +1,10 @@
-import { UtilToolService } from '../util-tool.service';
-import { Mock } from 'protractor/built/driverProviders';
-import { BrowserXhr } from '@angular/http';
-import { Component, OnInit } from '@angular/core';
-const appVersion = require('../../../../package.json').version;
+import { Mock } from 'protractor/built/driverProviders'
+import { BrowserXhr } from '@angular/http'
+import { Component, OnInit } from '@angular/core'
+
+// Project Dependencies
+const appVersion = require('../../../../package.json').version
+import { UtilToolService } from '../../_services'
 
 declare var window: any
 

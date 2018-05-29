@@ -99,7 +99,7 @@ Once you have those, you should install these globals with `yarn`:
 ## Installing
 * `fork` this repo
 * `clone` your fork
-* `yarn global add webpack webpack-dev-server karma-cli protractor typescript`grunt` to install required global dependencies
+* `yarn global add @angular/cli webpack webpack-dev-server karma-cli protractor typescript grunt` to install required global dependencies
 * `yarn` to install all dependencies
 * `yarn run dev` to start the dev server in another tab
 

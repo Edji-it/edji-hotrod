@@ -1,7 +1,8 @@
 import { Component, EventEmitter, ElementRef, Input, Output, OnInit, AfterViewInit } from '@angular/core'
 
+// Project Dependencies
 import { EdjiComment } from './../../shared/datatypes/comment'
-import { CommentService } from '../../shared/comment.service'
+import { CommentService } from '../../_services'
 
 @Component({
     selector: 'text-comment',

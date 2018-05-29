@@ -4,12 +4,13 @@ import { Http, Response, Headers, RequestOptions } from '@angular/http'
 import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs'
 import { map, take } from 'rxjs/operators'
 import { Angulartics2 } from 'angulartics2'
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
 
+// Project Dependencies
 import { AuthService } from './auth.service'
 import { SocketService } from './socket.service'
-import { CommentStats, iCommentStats, EdjiComment, Project, User } from './datatypes';
-import { ReadingService } from "./reading.service";
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { CommentStats, iCommentStats, EdjiComment, Project, User } from '../shared/datatypes'
+import { ReadingService } from "./reading.service"
 
 @Injectable()
 export class ProjectService {

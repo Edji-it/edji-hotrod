@@ -5,7 +5,8 @@ import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_di
 import { FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { Subscription } from 'rxjs'
 
-import { AuthService, ReadingService, ProjectService } from '../shared'
+// Project Dependencies
+import { AuthService, ReadingService, ProjectService } from '../_services'
 import { User } from './../shared/datatypes'
 
 @Component({

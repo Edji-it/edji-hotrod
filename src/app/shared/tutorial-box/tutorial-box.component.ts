@@ -2,7 +2,8 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
 
-import { AuthService } from '../'
+// Project Dependencies
+import { AuthService } from '../../_services'
 
 @Component({
   selector: 'tutorial-box',

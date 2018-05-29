@@ -1,9 +1,10 @@
-import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Component, Output, EventEmitter, OnInit } from '@angular/core';
-import { Angulartics2 } from 'angulartics2';
+import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
+import { FormGroup, FormBuilder, Validators } from '@angular/forms'
+import { Component, Output, EventEmitter, OnInit } from '@angular/core'
+import { Angulartics2 } from 'angulartics2'
 
-import { AuthService } from './../../shared/auth.service';
+// Project Dependencies
+import { AuthService } from './../../_services/auth.service'
 
 @Component({
   selector: 'edji-change-pass',

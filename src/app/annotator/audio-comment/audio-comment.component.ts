@@ -1,13 +1,12 @@
 import { DomSanitizer } from '@angular/platform-browser'
-import { AudioService } from '../../shared/audio.service'
 import { Angulartics2 } from 'angulartics2'
-import { CommentService } from '../../shared/comment.service'
-import { MediaService } from '../../shared/media.service'
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { take } from 'rxjs/operators'
-
-import { EdjiComment } from '../../shared/datatypes'
 import * as Recorder from 'opus-recorder/dist/recorder.min.js'
+
+// Project Dependencies
+import { EdjiComment } from '../../shared/datatypes'
+import { AudioService, CommentService, MediaService } from '../../_services'
 
 // declare var MediaRecorder: any
 declare var window: any
