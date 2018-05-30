@@ -8,7 +8,6 @@ form.pb-4.hidden-md-up([formGroup]="codeForm", (ngSubmit)="addSession(codeForm.v
       [formControl]="codeForm.controls['projectCode']", 
       type="text", 
       style="text-align: center;", 
-      [(ngModel)]="projectCode", 
       placeholder="🔑 Code", 
       aria-describedby="add-project-code"
     )
@@ -25,11 +24,11 @@ form.pb-4.hidden-md-up([formGroup]="codeForm", (ngSubmit)="addSession(codeForm.v
   .alert.alert-danger(*ngIf="errorObject.wrongCode") {{errorObject.wrongCode}}
 .item-list.joined-list
   //- Show messaging if no Projects exist
-  .alert.alert-info(role="alert", *ngIf="!isLoading && projects.length < 1 && !errorObject.projectError")
+  .alert.alert-info(role="alert", *ngIf="!loading && projects.length < 1 && !errorObject.projectError")
     h4.alert-heading No Joined Readings Yet...
     p Once you've joined someone else's Reading, it will show here.
   //- Show loading until Projects call gets back
-  .row.loading(*ngIf="isLoading")
+  .row.loading(*ngIf="loading")
   .alert.alert-danger(*ngIf="errorObject.projectError && projects.length < 1")
     strong Oh no!
     | {{errorObject.projectError}}

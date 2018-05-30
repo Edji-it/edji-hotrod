@@ -1,7 +1,7 @@
-.fireBound([ngClass]="[ commentMobile ? 'fireBlock-mobile-comment' : '' ]")
-  .user-icon.firefeed([ngClass]="[ commentMobile ? 'fireBlock-mobile-comment' : '' ]")
+.fireBound
+  .user-icon.firefeed
     .user-icon__initials {{fireComment.author.substring(0,2)}}
-  .fireBlock([ngClass]="[ commentMobile ? 'fireBlock-mobile-comment' : '' ]")
+  .fireBlock
     .list-item.list-item--block.fireTime-card
       | {{fireComment.author}}
       span.fireTime-card__time &nbsp;{{ fireComment.createdAt | edjidate:'timeAgo':null:secondsAgo }}

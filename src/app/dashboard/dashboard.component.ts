@@ -3,9 +3,10 @@ import { Component, ElementRef, OnInit } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
 import { FormGroup, FormBuilder, Validators } from '@angular/forms'
-import { Subscription } from 'rxjs/Subscription'
+import { Subscription } from 'rxjs'
 
-import { AuthService, ReadingService, ProjectService } from '../shared'
+// Project Dependencies
+import { AuthService, ReadingService, ProjectService } from '../_services'
 import { User } from './../shared/datatypes'
 
 @Component({
@@ -23,11 +24,11 @@ import { User } from './../shared/datatypes'
 export class DashboardComponent implements OnInit {
   // Set our default values
   private currentUser: User 
-  private mobileShowJoined:boolean = true
-  private showUserDetailsModal: boolean = false
+  public mobileShowJoined:boolean = true
+  public showUserDetailsModal: boolean = false
 
   // Tool Tip variables
-  private toolTipsContent: any[] = [
+  public toolTipsContent: any[] = [
       {
           title: "The Dashboard",
           image: "/assets/dashboard-tooltips/logo.png",
@@ -54,7 +55,7 @@ export class DashboardComponent implements OnInit {
           body: 'This will create a new Version of your reading. This lets you simply add to, or edit a Reading you have already made.'
       }
   ]
-  private toolTipStepNo: number = 1
+  public toolTipStepNo: number = 1
 
   // TypeScript public modifiers
   constructor (

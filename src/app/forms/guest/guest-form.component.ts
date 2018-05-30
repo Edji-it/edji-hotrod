@@ -1,21 +1,22 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Angulartics2 } from 'angulartics2';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core'
+import { FormGroup, FormBuilder, Validators } from '@angular/forms'
+import { Angulartics2 } from 'angulartics2'
 
-import { AuthService } from './../../shared';
+// Project Dependencies
+import { AuthService } from './../../_services'
 
 @Component({
   selector: 'hot-guest-login',
   templateUrl: 'guest-form.component.html'
 })
 export class GuestForm implements OnInit {
-  private guestForm: FormGroup;
+  public guestForm: FormGroup;
 
   @Output()
-  private loginSuccess: EventEmitter<any> = new EventEmitter();
+  public loginSuccess: EventEmitter<any> = new EventEmitter();
 
-  private isLoading: boolean = false;
-  private errorObject: {
+  public isLoading: boolean = false;
+  public errorObject: {
     invalidCode?:string,
     badName?:string,
     tempError?:string,
@@ -37,7 +38,7 @@ export class GuestForm implements OnInit {
   /**
    * Happens when join as guest is pressed. First calls to sign in the tempuser and then navigates upon receiving project data
    */
-  private joinSessionAsGuest(formValue: any): void {
+  public joinSessionAsGuest(formValue: any): void {
     this.isLoading = true;
     this.angulartics.eventTrack.next({ action: 'joinAsGuest', properties: { category: 'joinProject', label: 'attempt' }});
 

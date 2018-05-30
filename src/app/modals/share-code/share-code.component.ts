@@ -1,13 +1,13 @@
-import { Subscription } from 'rxjs/Rx';
+import { Subscription } from 'rxjs';
 import { Project } from '../../shared/datatypes';
 import { Router } from '@angular/router';
 import { Component, EventEmitter, Input, OnInit, Output, OnDestroy } from '@angular/core';
-import { UtilToolService, ProjectService } from './../../shared'
+import { UtilToolService, ProjectService } from './../../_services'
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'share-code',
-  templateUrl: 'share-code.component.pug',
+  templateUrl: './share-code.component.pug',
   styleUrls: ['./share-code.component.scss']
 })
 export class ShareCodeComponent implements OnInit, OnDestroy {
@@ -17,7 +17,7 @@ export class ShareCodeComponent implements OnInit, OnDestroy {
   
   private codeLetters: any
   private subscriptions: Subscription[] = []
-    private currentProject: Project
+  public currentProject: Project
 
   constructor(
     private router: Router,

@@ -1,6 +1,8 @@
-import { Subscription } from 'rxjs/Rx'
-import { ProjectService } from '../index'
+import { Subscription } from 'rxjs'
 import { Component, EventEmitter, OnInit, Input } from '@angular/core'
+
+// Project Dependencies
+import { ProjectService } from '../../_services'
 
 @Component({
   selector: 'scroll-progress',

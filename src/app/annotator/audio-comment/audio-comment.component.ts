@@ -1,12 +1,12 @@
-import { DomSanitizer } from '@angular/platform-browser';
-import { AudioService } from '../../shared/audio.service';
+import { DomSanitizer } from '@angular/platform-browser'
 import { Angulartics2 } from 'angulartics2'
-import { CommentService } from '../../shared/comment.service'
-import { MediaService } from '../../shared/media.service'
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { take } from 'rxjs/operators'
+import * as Recorder from 'opus-recorder/dist/recorder.min.js'
 
+// Project Dependencies
 import { EdjiComment } from '../../shared/datatypes'
-import * as Recorder from 'opus-recorder/dist/recorder.min.js';
+import { AudioService, CommentService, MediaService } from '../../_services'
 
 // declare var MediaRecorder: any
 declare var window: any
@@ -21,55 +21,55 @@ enum playState {
 
 @Component({
   selector: 'audio-comment',
-  templateUrl: 'audio-comment.component.pug',
+  templateUrl: './audio-comment.component.pug',
   styleUrls: ['./audio-comment.component.scss']
 })
 export class AudioCommentComponent implements OnInit, AfterViewInit{
-  @Input() private comment: EdjiComment
-  @Input() private userPermission: number
-  @Input() private reply: boolean = false
-  @Input() private commentContext: string = 'normal'
+  @Input() public comment: EdjiComment
+  @Input() public userPermission: number
+  @Input() public reply: boolean = false
+  @Input() public commentContext: string = 'normal'
   @Output() save: EventEmitter<any> = new EventEmitter<any>() 
   @Output() showDeleteAudioModal: EventEmitter<any> = new EventEmitter<boolean>()
 
-  private currentState: playState = playState.inactive
+  public currentState: playState = playState.inactive
 
-  // private isPlaying: boolean = false
-  // private isRecording: boolean = false
-  private recordOverConfirmed: boolean = false
-  private playTime: number = 0
-  private playWidth: number = 100
-  private playWidthOffset: number = 60
-  private playheadPos: number
-  private myCanvas
-  private chunks: any = []
-  // private mediaRecorder: any
-  private recorder: any
-  private recorderReady: boolean
+  // public isPlaying: boolean = false
+  // public isRecording: boolean = false
+  public recordOverConfirmed: boolean = false
+  public playTime: number = 0
+  public playWidth: number = 100
+  public playWidthOffset: number = 60
+  public playheadPos: number
+  public myCanvas
+  public chunks: any = []
+  // public mediaRecorder: any
+  public recorder: any
+  public recorderReady: boolean
 
-  private audio
-  private audioFile
-  private activated: boolean = false
-  private rStartAt: any
-  private rDuration: number = 0
-  private pStartAt: any
-  private pDuration: number = 0
-  private rInterval: any
-  private pInterval: any
-  private initWaves = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-  private waves;
-  private wavePos: number = 0
+  public audio
+  public audioFile
+  public activated: boolean = false
+  public rStartAt: any
+  public rDuration: number = 0
+  public pStartAt: any
+  public pDuration: number = 0
+  public rInterval: any
+  public pInterval: any
+  public initWaves = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+  public waves;
+  public wavePos: number = 0
   // Change the next variable to control maximum audio comment length in milliseconds
-  private timeLimit: number = 30000
+  public timeLimit: number = 30000
   // Change the next variable to control the frequency at which the playback/recording currentTime evaluates
   private INTERVAL_GAP: number = 500
   private MAX_SECONDS: number = 30
 
-  private isInitialized: boolean = false
-  private countdown: boolean = false
-  private countdownI: number = 3
-  private countdownText: string[] = ['Go!', 'Set', 'Ready']
-  private countdownInterval: any
+  public isInitialized: boolean = false
+  public countdown: boolean = false
+  public countdownI: number = 3
+  public countdownText: string[] = ['Go!', 'Set', 'Ready']
+  public countdownInterval: any
 
   // We need to know when changes to inactive to clear the editing variable
   @Input() set active(active){
@@ -203,7 +203,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
         
         // Comment saved! Save audio file
         this._media.uploadAudio(this.audioFile)
-          .take(1)
+          .pipe(take(1))
           .subscribe(data => {
             // Player no longer loading!
             this.currentState = playState.inactive
@@ -282,7 +282,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
   /** 
    * Call for audio deletion or call for a fresh recording sesh
    */
-  private record() {
+  public record() {
     if (this.recordOverConfirmed) {
       this.freshRecord()
     } else if (this.audio && this.audio.src && this.audio.src.length > 0) {
@@ -296,7 +296,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
   /** 
    * Record Audio from the user's microphone
    */
-  private freshRecord() {
+  public freshRecord() {
     if (this.currentState == playState.recording) {
       this.recorder.stop()
     }
@@ -310,7 +310,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
   /** 
    * Stop recording audio
    */
-  private stopRecord() {
+  public stopRecord() {
     this.currentState = playState.inactive
     clearInterval(this.rInterval)
     // Clone playTime value
@@ -322,7 +322,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
   /** 
    * Pause playback of the audio track
    */
-  private pause() {
+  public pause() {
     // Let analytics know user paused playback
     this.angulartics.eventTrack.next({ action: 'audioPause', properties: { category: 'heroFeature', label: 'success' }})
     this.currentState = playState.inactive
@@ -334,14 +334,14 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
   /** 
    * Start playback of the audio track
    */
-  private play() {
+  public play() {
     // Let analytics know user started playback
     this.angulartics.eventTrack.next({ action: 'audioPlay', properties: { category: 'heroFeature', label: 'success' }})
     this.currentState = playState.playing
     this.audio.play()
   }
 
-  private setPlayhead() {
+  public setPlayhead() {
     if (this.currentState == playState.recording) {
       this.playheadPos =  Math.round((this.playTime / this.MAX_SECONDS) * this.playWidth)
     } else {
@@ -352,7 +352,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
   /**
    * Set the playback back to the beginning #back2basics
    */
-  private restartPlayback() {
+  public restartPlayback() {
     this.currentState = playState.playing
     // Let analytics know user restarted playback
     this.angulartics.eventTrack.next({ action: 'audioRestart', properties: { category: 'heroFeature', label: 'success' }})
@@ -362,7 +362,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
     this.audio.play()
   }
 
-  private setPlaybackTime(event) {
+  public setPlaybackTime(event) {
     let percentLeftClicked = event.offsetX/this.playWidth
     if (this.audio) {
       this.audio.currentTime = this.MAX_SECONDS * percentLeftClicked
@@ -384,7 +384,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
     this.playWidthOffset = btnWidth
   }
 
-  private getCalcWidth() {
+  public getCalcWidth() {
     return this.sanitizer.bypassSecurityTrustStyle('calc(100% - ' + this.playWidthOffset + 'px)')
   }
 

@@ -1,17 +1,19 @@
 import { Title } from '@angular/platform-browser';
 import { Component, OnInit, OnDestroy } from '@angular/core'
 import { PRIMARY_OUTLET, Router, ActivatedRoute } from '@angular/router'
-import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
-import { Subscription } from 'rxjs/Subscription'
+import { Subscription } from 'rxjs'
+import { take } from 'rxjs/operators'
 import { Angulartics2 } from 'angulartics2'
 
-import { AuthService, Copy, ProjectService } from './../shared'
+// Project Dependencies
+import { Copy } from './../shared'
+import { AuthService, ProjectService } from './../_services'
 import { ALLSPARK } from './../app.constants'
+import { LockerService } from '../_services/locker.service';
 
 @Component({
   selector: 'edji-register',
-  templateUrl: 'register.component.pug',
   styles: [`
     .btn-group-wrapper {
       width: 100%;
@@ -25,7 +27,8 @@ import { ALLSPARK } from './../app.constants'
     label.btn.btn-primary.active {
       border: 3px solid #4A92BC;
     }
-  `]
+  `],
+  templateUrl: './register.component.pug'
 })
 export class RegisterComponent implements OnInit, OnDestroy {
 
@@ -37,24 +40,24 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription[] = []
 
-  private registerForm: FormGroup
-  private registerLoading: boolean = false
-  private errorObject: {
+  public registerForm: FormGroup
+  public registerLoading: boolean = false
+  public errorObject: {
     duplicateUsername?: boolean,
     duplicateEmail?: boolean,
     serverError?: boolean,
     badName?: string,
     badUsername?: string
   } = {}
-  private successObject: {
+  public successObject: {
     referral?: boolean
   } = {}
-  private userReferral: any = {}
+  public userReferral: any = {}
 
-  // private copy: Copy = new Copy()
-  private userCopy: any
+  // public copy: Copy = new Copy()
+  public userCopy: any
 
-  private checkboxCopy = {
+  public checkboxCopy = {
     student: "As a student! :writing_hand:",
     teacher: "As a teacher! :apple:",
     business: "For business. :briefcase:",
@@ -64,10 +67,11 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   /** The reading id that the user wanted to make a copy of */
-  private readingToAdd: string
+  public readingToAdd: string
+  public projectToAdd: string
   /** The project id that the user wanted to add to the dashboard */
-  private tempUserId: string
-  private referralId: string
+  public tempUserId: string
+  public referralId: string
 
   constructor (
     private _auth: AuthService,
@@ -76,7 +80,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private angulartics: Angulartics2,
     private _fb: FormBuilder,
-    private _title: Title
+    private _title: Title,
+    private _locker: LockerService
   ) {
 
     this.userCopy = new Copy().getUserCopy()
@@ -99,6 +104,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.route.queryParams.subscribe((queryParams) => {
         this.readingToAdd = queryParams['reading']
+        this.projectToAdd = queryParams['project']
         this.tempUserId = queryParams['userId']
         this.referralId = queryParams['referral_id']
       })
@@ -108,7 +114,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
     if (typeof(this.referralId)!='undefined' && this.referralId!='') {
       // Store the referral_id in the locker in case the user signs up with oauth
-      this._auth.store("referral_id", this.referralId)
+      this._locker.set("referral_id", this.referralId)
       // We're going to ask the server to get the user that referred this new one so we can show a name
       this.subscriptions.push(
         this._auth.getUserByReferralId(this.referralId).subscribe((user) => {
@@ -148,7 +154,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   /** Makes call to register the user */
-  private register(formValue: any): void {
+  public register(formValue: any): void {
     this.errorObject = {}
 
     this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'attempt' }})
@@ -171,8 +177,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
     // Attempt to register this user.
     this._auth.register(formValue)
-      .take(1)
-      .subscribe((data) => {
+      .pipe(take(1))
+      .subscribe((data: any) => {
         this.registerLoading = false
         if (data.user) {
 
@@ -188,7 +194,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
           this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'success' }})
           if (this.readingToAdd && this.tempUserId) {
             this._auth.convertTempUser(this.tempUserId)
-              .take(1)
+              .pipe(take(1))
               .subscribe(() => {
                 this._router.navigate(['/new-reading'], { queryParams: { copyId: this.readingToAdd } })
               }, (err) => {
@@ -197,7 +203,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
               })
           } else if (this.tempUserId) {
             this._auth.convertTempUser(this.tempUserId)
-              .take(1)
+              .pipe(take(1))
               .subscribe(() => {
                 this._router.navigate(['/dashboard'])
               }, (err) => {

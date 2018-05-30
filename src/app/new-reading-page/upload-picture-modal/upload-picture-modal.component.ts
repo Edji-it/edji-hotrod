@@ -1,8 +1,8 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { Locker } from 'angular2-locker';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core'
+import { take } from 'rxjs/operators'
 
 // Project Dependencies
-import { AuthService, MediaService } from '../../shared';
+import { AuthService, LockerService, MediaService } from '../../_services'
 
 @Component({
   selector: 'upload-picture-modal',
@@ -14,19 +14,18 @@ export class UploadModalComponent implements OnInit {
   @Output() closeModal: EventEmitter<any> = new EventEmitter();
   @Output() returnImage: EventEmitter<any> = new EventEmitter();
   
-  private uploadedImages: any[] = [];
-  private newImgUrls: string[] = [];
-  private selectedIndex: number = 0;
-  private locker: any;
-  private file: any = {};
-  private uploading: boolean = false;
-  private uploadUrl: string = '//grapple-dev.edji.it';
+  public uploadedImages: any[] = [];
+  public newImgUrls: string[] = [];
+  public selectedIndex: number = 0;
+  public file: any = {};
+  public uploading: boolean = false;
+  public uploadUrl: string = '//grapple-dev.edji.it';
 
-  private noUploadAllowed: boolean = true;
-  private errorMsg: string = '';
+  public noUploadAllowed: boolean = true;
+  public errorMsg: string = '';
 
-  constructor(private _locker: Locker, private _media: MediaService, private _auth: AuthService) {
-    this.locker = _locker.useDriver(Locker.DRIVERS.LOCAL);
+  constructor(private _locker: LockerService, private _media: MediaService, private _auth: AuthService) {
+    
   }
 
   ngOnInit() {
@@ -36,7 +35,7 @@ export class UploadModalComponent implements OnInit {
     }
 
     // Get the latest uploaded pics
-    this._auth.refreshUser().take(1).subscribe(user => {
+    this._auth.refreshUser().pipe(take(1)).subscribe(user => {
       this.uploadedImages = user.media.images
     })
   }
@@ -93,7 +92,7 @@ export class UploadModalComponent implements OnInit {
 
     this.newImgUrls.unshift(url);
     this.uploadedImages.unshift(imgObj);
-    this.locker.set('uploadedImages', this.uploadedImages);
+    this._locker.set('uploadedImages', this.uploadedImages);
 
     let user = this._auth.getUser();
     if (!user.media) {
@@ -104,7 +103,7 @@ export class UploadModalComponent implements OnInit {
     }
     user.media.images = this.uploadedImages
     this._auth.updateUser( user )
-        .take(1)
+        .pipe(take(1))
         .subscribe(
           (user) => {
             if (user.media) {

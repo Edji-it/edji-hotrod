@@ -1,11 +1,12 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs/Subscription';
-import { Angulartics2 } from 'angulartics2';
+import { Component, OnInit, OnDestroy } from '@angular/core'
+import { Router, ActivatedRoute } from '@angular/router'
+import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
+import { FormGroup, FormBuilder, Validators } from '@angular/forms'
+import { Subscription } from 'rxjs'
+import { Angulartics2 } from 'angulartics2'
 
-import { AuthService, ReadingService, ProjectService } from '../../shared';
+// Project Dependencies
+import { AuthService, ReadingService, ProjectService } from '../../_services'
 
 @Component({
   selector: 'edji-joined-dash',
@@ -18,19 +19,20 @@ import { AuthService, ReadingService, ProjectService } from '../../shared';
 })
 export class JoinedDashComponent implements OnInit, OnDestroy {
   // Set our default values
-  private projects: Array<any> = [];
-  private errorObject = {
+  public projects: Array<any> = [];
+  public errorObject = {
     wrongCode : "",
     projectError: ""
   };
   private subscriptions: Subscription[] = [];
-  private codeForm: FormGroup;
+  public codeForm: FormGroup;
+  public joinLoading: boolean = false
 
   // Joined Readings, p-datalist values
-  private loading: boolean = true
-  private first: number = 0 // first page 
-  private rows: number = 25 // number of Readings to return
-  private total: number = 25 // total Readings
+  public loading: boolean = true
+  public first: number = 0 // first page 
+  public rows: number = 25 // number of Readings to return
+  public total: number = 25 // total Readings
   
   // TypeScript public modifiers
   constructor(
@@ -84,15 +86,18 @@ export class JoinedDashComponent implements OnInit, OnDestroy {
   }
 
   /** attempts to navigate to the session */
-  private addSession(formValue: any): void {
+  public addSession(formValue: any): void {
+    this.joinLoading = true
 
     this._projects.setCurrentProject(formValue.projectCode)
       .subscribe(
         (project) => {
-          this.router.navigate(['/project', project._id]);
+          this.joinLoading = false
+          this.router.navigate(['/project', project._id])
         },
         (error) => {
-          this.errorObject.wrongCode = "Unfortunately, we did not find that project";
+          this.joinLoading = false
+          this.errorObject.wrongCode = "Unfortunately, we did not find that project"
         }
       );
   }

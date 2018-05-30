@@ -1,7 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
+import { take } from 'rxjs/operators'
 
-import { ProjectService } from './../../shared'
+// Project Dependencies
+import { ProjectService } from './../../_services'
 
 @Component({
   selector: 'hot-login-modal',
@@ -18,7 +20,7 @@ export class LoginModal implements OnInit {
   @Input()
   private projectId: string
 
-  private guestLogin: boolean = true
+  public guestLogin: boolean = true
 
   constructor(
     private _project: ProjectService,
@@ -30,7 +32,7 @@ export class LoginModal implements OnInit {
 
   onLoginSuccess() {
     this._project.addUserToProject(this.projectId)
-      .take(1)
+      .pipe(take(1))
       .subscribe(() => {
         this.closeModal.emit()
       }, (err) => {

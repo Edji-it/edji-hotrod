@@ -1,8 +1,10 @@
-import { UtilToolService } from '../util-tool.service';
-import { Mock } from 'protractor/built/driverProviders';
-import { Map } from 'rxjs/util/Map';
-import { BrowserXhr } from '@angular/http';
-import { Component, OnInit } from '@angular/core';
+import { Mock } from 'protractor/built/driverProviders'
+import { BrowserXhr } from '@angular/http'
+import { Component, OnInit } from '@angular/core'
+
+// Project Dependencies
+const appVersion = require('../../../../package.json').version
+import { UtilToolService } from '../../_services'
 
 declare var window: any
 
@@ -12,14 +14,15 @@ declare var window: any
   templateUrl: './footer.component.pug'
 })
 export class FooterComponent implements OnInit {
-  private appVersion;
+  public appVersion;
   private window
   private browserProperties: any
 
   constructor(
-    private _util: UtilToolService
+    public _util: UtilToolService
   ) {
     this.window = window
+    this.appVersion = appVersion
   }
 
   ngOnInit() {

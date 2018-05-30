@@ -1,13 +1,11 @@
 import { Title } from '@angular/platform-browser';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
-// import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import { Angulartics2 } from 'angulartics2';
 
-import { AppState } from '../app.service';
-import { AuthService, ProjectService } from '../shared';
+// Project Dependencies
+import { AuthService, ProjectService } from '../_services';
 
 @Component({
   // The selector is what angular internally uses
@@ -23,13 +21,11 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   // Set our default values
   private sessionCode: String;
-  private loginLoading: Boolean = false;
-
-  private showPassModal: boolean = false;
+  public loginLoading: Boolean = false;
+  public showPassModal: boolean = false;
 
   // TypeScript public modifiers
   constructor(
-    private appState: AppState,
     private _auth: AuthService,
     private _project: ProjectService,
     private _router: Router,
@@ -51,7 +47,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this._title.setTitle( 'Edji | Login' )
   }
 
-  private loginSuccess(): void {
+  public loginSuccess(): void {
     this._router.navigate(['/dashboard'])
   }
 

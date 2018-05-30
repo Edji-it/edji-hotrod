@@ -1,25 +1,25 @@
-import { document } from '@angular/platform-browser/src/facade/browser'
 import { Component, EventEmitter, ElementRef, Input, Output, OnInit, AfterViewInit } from '@angular/core'
 
+// Project Dependencies
 import { EdjiComment } from './../../shared/datatypes/comment'
-import { CommentService } from '../../shared/comment.service'
+import { CommentService } from '../../_services'
 
 @Component({
     selector: 'text-comment',
-    templateUrl: 'text-comment.component.pug',
+    templateUrl: './text-comment.component.pug',
     styleUrls: ['./text-comment.component.scss']
 })
 export class TextCommentComponent implements OnInit, AfterViewInit {
 
-    @Input() private comment: EdjiComment
-    @Input() private reply: boolean = false
-    @Input() private readOnly: boolean
+    @Input() public comment: EdjiComment
+    @Input() public reply: boolean = false
+    @Input() public readOnly: boolean
 
     @Output() activate: EventEmitter<any> = new EventEmitter<any>() 
     @Output() deactivate: EventEmitter<any> = new EventEmitter<any>() 
 
-    private editing: boolean
-    private activated: boolean = false
+    public editing: boolean
+    public activated: boolean = false
 
     // We need to know when changes to inactive to clear the editing variable
     @Input() set active(active){
@@ -83,11 +83,6 @@ export class TextCommentComponent implements OnInit, AfterViewInit {
     }
 
     focusField(event) {
-        // setTimeout( function(event) {
-            // event.preventDefault()
-            //this.textComment.nativeElement.value = 'hi'
-            this.element.nativeElement.select()
-            // this.element.nativeElement.querySelector('#textComment').value = 'hi'
-        // }, 3000)
+        this.element.nativeElement.select()
     }
 }

@@ -1,11 +1,9 @@
-import { CommentService } from '../../shared/comment.service';
-import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import {
-  Locker
-} from 'angular2-locker';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
+import { take } from 'rxjs/operators'
 
 // Project Dependencies
-import { AuthService } from '../../shared';
+import { AuthService, CommentService } from '../../_services'
+import { LockerService } from '../../_services/locker.service';
 
 @Component({
   selector: 'emoji-keyboard',
@@ -13,7 +11,7 @@ import { AuthService } from '../../shared';
   styleUrls: ['./emoji-keyboard.component.scss']
 })
 export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
-  private locker: Locker;
+  private locker: LockerService;
   
   private _isActive = false;
   private currentComment: string;
@@ -43,7 +41,7 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
   private activeCategoryIndex: number = 0;
   private scrollAreaOffset: number = 0;
 
-  private emojifilters = [{
+  public emojifilters = [{
       icon: ":clock:",
       title: "Recent",
       emoji: []
@@ -90,7 +88,7 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
   ];
 
   constructor(
-        private _locker: Locker,
+        private _locker: LockerService,
         private _auth: AuthService,
         private _comments: CommentService
     ) {}
@@ -116,7 +114,7 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
     }
     user.prefs.recentEmoji = this.emojifilters[0].emoji;
     this._auth.updateUser(user)
-        .take(1)
+        .pipe(take(1))
         .subscribe(
           (data) => {
             let user = data.user

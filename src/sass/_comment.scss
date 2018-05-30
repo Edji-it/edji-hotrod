@@ -932,17 +932,17 @@ textarea.text-comment-input,
   left: -40px;
   margin-top: -6px;
 
-  background-image: url('assets/images/icon-comment.svg');
+  background-image: url('../assets/images/icon-comment.svg');
   background-size: 100% auto;
 
   &.active {
     opacity: 1;
-    background-image: url('assets/images/icon-comment--blue.svg');
+    background-image: url('../assets/images/icon-comment--blue.svg');
   }
 
   &.avatar__reply {
     opacity: 1;
-		background-image: url('assets/images/icon-comment--green.svg');
+		background-image: url('../assets/images/icon-comment--green.svg');
 		min-width: initial;
 		width: 12px;
 		height: 12px;

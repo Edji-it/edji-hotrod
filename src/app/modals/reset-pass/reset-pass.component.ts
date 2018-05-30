@@ -1,9 +1,10 @@
-import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
 import { FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { Component, Output, EventEmitter } from '@angular/core'
 import { Angulartics2 } from 'angulartics2'
+import { take } from 'rxjs/operators'
 
-import { AuthService } from './../../shared'
+// Project Dependencies
+import { AuthService } from './../../_services'
 
 @Component({
   selector: 'edji-reset-pass',
@@ -14,12 +15,12 @@ export class ResetPassComponent {
   @Output()
   closeModal: EventEmitter<any> = new EventEmitter()
 
-  private passwordForm: FormGroup
-  private responseSuccess: boolean
-  private submissionSuccess: boolean = false
-  private errorObject: any = { }
-  private submitted: boolean = false
-  private loading: boolean = false
+  public passwordForm: FormGroup
+  public responseSuccess: boolean
+  public submissionSuccess: boolean = false
+  public errorObject: any = { }
+  public submitted: boolean = false
+  public loading: boolean = false
 
   constructor(private _auth: AuthService, private angulartics: Angulartics2, fb: FormBuilder) {
     this.passwordForm = fb.group({
@@ -27,14 +28,14 @@ export class ResetPassComponent {
     })
   }
 
-  private onSubmit(formValue: any): void {
+  public onSubmit(formValue: any): void {
     this.loading = true
     this.clearErrors()
 
     this.angulartics.eventTrack.next({ action: 'requestPasswordEmail', properties: { category: 'accountManagement', label: 'attempt' }})
 
     this._auth.recoverPassword( formValue.username )
-      .take(1)
+      .pipe(take(1))
       .subscribe((success) => {
         this.loading = false
         this.submitted = true

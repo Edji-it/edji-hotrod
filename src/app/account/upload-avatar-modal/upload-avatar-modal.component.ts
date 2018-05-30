@@ -1,8 +1,9 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
+import { take } from 'rxjs/operators'
 
 // Dependencies
-import { AuthService, MediaService } from '../../shared';
-import { User } from '../../shared/datatypes';
+import { AuthService, MediaService } from '../../_services'
+import { User } from '../../shared/datatypes'
 
 @Component({
   selector: 'hot-upload-avatar',
@@ -78,7 +79,7 @@ export class UploadAvatarModal implements OnInit {
   public confirmNewAvatar () : void
   {
     this._auth.forceUpdateAvatar(this.uploadedFile)
-      .take(1).subscribe(() => {
+      .pipe(take(1)).subscribe(() => {
         console.log("Saved!");
         console.log(this._auth.getUser().avatar);
         this.newAvatarConfirmed.emit();

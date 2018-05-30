@@ -1,6 +1,7 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core'
 
-import { AuthService } from '../../shared'
+// Project Dependencies
+import { AuthService } from '../../_services'
 import { User } from '../../shared/datatypes'
 
 @Component({
@@ -11,7 +12,7 @@ export class LoginRequiredModal implements OnInit {
 
   @Output() closeModal: EventEmitter<any> = new EventEmitter()
 
-  private user: User
+  public user: User
 
   constructor(
     private _auth: AuthService

@@ -1,14 +1,14 @@
-import { Angulartics2 } from 'angulartics2';
-import { Subscription } from 'rxjs/Rx';
-import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Angulartics2 } from 'angulartics2'
+import { Subscription } from 'rxjs'
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core'
 
 // Project dependencies
-import { EdjiComment, Project, Reading } from '../datatypes';
-import { AuthService, CommentService, ProjectService, ReadingService } from '../';
+import { EdjiComment, Project, Reading } from '../datatypes'
+import { AuthService, CommentService, ProjectService, ReadingService } from '../../_services'
 
 @Component({
   selector: 'hot-discussions',
-  templateUrl: 'discussions.component.pug',
+  templateUrl: './discussions.component.pug',
   styleUrls: ['./discussions.component.scss']
 })
 
@@ -19,13 +19,14 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
   @Output() activeReply: EventEmitter<any> = new EventEmitter()
 
   private project: Project
-  private currentReading: Reading
   private subscriptions: Subscription[] = []
   private repliesById: any = {}
 
   private replyCommentNew: EdjiComment
   private createReply: boolean = false
   private user: any
+  
+  public currentReading: Reading
 
   constructor(
     private _projects: ProjectService, 

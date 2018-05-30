@@ -1,10 +1,11 @@
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Angulartics2 } from 'angulartics2'
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { debounceTime, map } from 'rxjs/operators'
 
 // Project dependencies
-import { AuthService, BumblebeeService } from '../../shared'
+import { AuthService, BumblebeeService } from '../../_services'
 
 declare var Stripe: any
 
@@ -15,21 +16,21 @@ declare var Stripe: any
 })
 export class HeroSubscribeComponent implements OnInit {
 
-  private tempHide: boolean
-  private card: any
-  private loading: boolean = false
-  private userNowHero: boolean
-  private stripe: any
-  private stripeMessage: string
-  private initWithCoupon: boolean = false
-  private customCouponCode: string = ''
+  public tempHide: boolean
+  public card: any
+  public loading: boolean = false
+  public userNowHero: boolean
+  public stripe: any
+  public stripeMessage: string
+  public initWithCoupon: boolean = false
+  public customCouponCode: string = ''
   // Discount value used for DISPLAY ONLY
-  private percentOff: number = 0
-  private newPrice: number = 60
-  private joiningAcademy: boolean = false
+  public percentOff: number = 0
+  public newPrice: number = 60
+  public joiningAcademy: boolean = false
   // private couponCode: string
 
-  private sForm: FormGroup 
+  public sForm: FormGroup 
 
   @Input()
   couponCode: string = ''
@@ -114,8 +115,9 @@ export class HeroSubscribeComponent implements OnInit {
     this.joiningAcademy = false
     this.percentOff = 0
     return this._auth.validateHeroCoupon(coupon)
-      .debounceTime(1000)
-      .map(
+      .pipe(
+        debounceTime(1000),
+        map(
         (res) => {
           if (res.percent_off) {
             this.percentOff = res.percent_off
@@ -130,7 +132,7 @@ export class HeroSubscribeComponent implements OnInit {
         (err) => {
           return { invalid: true }
         }
-      )
+      ))
   }
 
   private checkout() {

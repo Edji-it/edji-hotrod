@@ -1,15 +1,14 @@
-import { Title } from '@angular/platform-browser';
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
-import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs/Subscription';
-import { Angulartics2 } from 'angulartics2';
-import { Ng4TwitterTimelineService } from 'ng4-twitter-timeline/lib/index';
+import { Title } from '@angular/platform-browser'
+import { Component, OnInit, OnDestroy } from '@angular/core'
+import { Router } from '@angular/router'
+import { FormGroup, FormBuilder, Validators } from '@angular/forms'
+import { Subscription } from 'rxjs'
+import { take } from 'rxjs/operators'
+import { Angulartics2 } from 'angulartics2'
 
-import { AppState } from '../app.service';
-import { AuthService } from '../shared/auth.service';
-import { ProjectService } from './../shared/project.service';
+// Project Dependencies
+import { Ng4TwitterTimelineService } from './twitter-timeline'
+import { AuthService, ProjectService } from '../_services'
 
 @Component({
   // The selector is what angular internally uses
@@ -18,7 +17,8 @@ import { ProjectService } from './../shared/project.service';
   selector: 'home',  // <home></home>
   // We need to tell Angular's Dependency Injection which providers are in our app.
   providers: [
-    Title
+    Title,
+    Ng4TwitterTimelineService
   ],
   // Our list of styles in our component. We may add more to compose many styles together
   styleUrls: [ './home.component.scss' ],
@@ -38,13 +38,12 @@ export class HomeComponent implements OnInit, OnDestroy {
     "serverError"?: string
   } = {};
 
-  private showPassModal: boolean = false;
-  private tweetsLoaded: boolean = false;
+  public showPassModal: boolean = false;
+  public tweetsLoaded: boolean = false;
   private twitterRestyleAttempts = 0;
 
   // TypeScript public modifiers
   constructor(
-    private appState: AppState,
     private _auth: AuthService,
     private _project: ProjectService,
     private router: Router,
@@ -110,6 +109,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     .timeline-Body {
       border-top: none;
     }
+    .timeline-Widget {
+      max-width: none;
+      width: 100%;
+    }
     `;
   
   restyleTwitter(){
@@ -138,13 +141,13 @@ export class HomeComponent implements OnInit, OnDestroy {
    * Validates project and then navigates to project if valid
    * @param code The project's short code
    */
-  private joinSession(code: string): void {
+  public joinSession(code: string): void {
     this.joinLoading = true;
     this.angulartics.eventTrack.next({ action: 'enterLightningCode', properties: { category: 'joinProject', label: 'attempt' }});
     this._project.validateProject(code)
-      .take(1)
+      .pipe(take(1))
       .subscribe(
-        (data) => {
+        (data: any) => {
           this.joinLoading = false;
           this.angulartics.eventTrack.next({ action: 'enterLightningCode', properties: { category: 'joinProject', label: 'success' }});
           if (data._id){

@@ -1,14 +1,14 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
-import { setTimeout } from 'timers'
+import { take } from 'rxjs/operators'
 
 import { User } from './../../shared/datatypes'
-import { AuthService, BumblebeeService } from './../../shared'
+import { AuthService, BumblebeeService } from './../../_services'
 
 @Component({
   selector: 'hot-user-details-update',
-  templateUrl: 'user-details-update.component.pug'
+  templateUrl: './user-details-update.component.pug'
 })
 
 export class UserDetailsUpdateModal implements OnInit {
@@ -60,8 +60,8 @@ export class UserDetailsUpdateModal implements OnInit {
     }
 
     this._auth.updateUser({identities: identities})
-      .take(1)
-      .subscribe((res) => {
+      .pipe(take(1))
+      .subscribe((res: any) => {
         this._auth.setUser(res.user)
         this.messages.success = true
         // Close the modal

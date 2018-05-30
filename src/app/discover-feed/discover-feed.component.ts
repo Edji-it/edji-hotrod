@@ -1,9 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs/Rx';
+import { Component, OnInit, OnDestroy } from '@angular/core'
+import { ActivatedRoute, Router } from '@angular/router'
+import { Subscription } from 'rxjs'
 
-import { AuthService } from '../shared'
-import { ReadingService } from "app/shared/reading.service";
+// Project Dependencies
+import { AuthService, ReadingService } from '../_services'
 
 @Component({
   selector: 'app-discover-feed',
@@ -12,24 +12,25 @@ import { ReadingService } from "app/shared/reading.service";
 })
 export class DiscoverFeedComponent implements OnInit {
 
-  private readings = []
   private subscriptions: Subscription[] = []
-  private edjiOwnerObj: any = {
+  
+  public readings = []
+  public edjiOwnerObj: any = {
     _id: '5897f6314897db0011a48bb8',
     fullname: 'Edji',
     username: 'edji'
   }
 
   // Filters
-  private followingFilter: boolean = true
-  private gradeFilter: number[] = []
+  public followingFilter: boolean = true
+  public gradeFilter: number[] = []
 
-  private first: number = 0
-  private rows: number = 20
-  private total: number = 20
+  public first: number = 0
+  public rows: number = 20
+  public total: number = 20
 
   // State vars
-  private loading: boolean = true
+  public loading: boolean = true
 
   constructor(private _readings: ReadingService) { }
 

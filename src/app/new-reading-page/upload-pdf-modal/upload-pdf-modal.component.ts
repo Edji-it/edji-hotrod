@@ -1,9 +1,10 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { Locker } from 'angular2-locker';
-import { DeletePdfMiniModal } from "./delete-pdf-mini-modal/delete-pdf-mini-modal.component";
+import { Component, OnInit, Output, EventEmitter } from '@angular/core'
+import { take } from 'rxjs/operators'
 
 // Project Dependencies
-import { MediaService, AuthService } from '../../shared';
+import { MediaService, AuthService } from '../../_services'
+import { DeletePdfMiniModal } from "./delete-pdf-mini-modal/delete-pdf-mini-modal.component"
+import { LockerService } from '../../_services/locker.service'
 
 @Component({
   selector: 'upload-pdf-modal',
@@ -21,33 +22,31 @@ export class UploadPdfModalComponent implements OnInit {
   Upload a PDF with this modal!
   */
 
-  @Output() closeModal: EventEmitter<any> = new EventEmitter();
-  @Output() returnImage: EventEmitter<any> = new EventEmitter();
+  @Output() closeModal: EventEmitter<any> = new EventEmitter()
+  @Output() returnImage: EventEmitter<any> = new EventEmitter()
   
-  private uploadedDocs: any[] = [];
-  private newDocsIds: string[] = []; 
-  // private newImgUrls: string[] = [];
-  private selectedIndex: number = 0;
-  private locker: Locker; 
-  private file: any = {};
-  private title: string = '';
-  private selectedFiles: any[] = [];
-  private uploading: boolean = false;
-  private uploadUrl: string = '//grapple-dev.edji.it';
-  private noUploadAllowed: boolean = true;
-  private errorMsg: string = '';
-  private pdfFileInputId : string  = "pdfFileInput";
-  private confirmDelete : boolean = false;
+  private newDocsIds: string[] = [] 
+  private uploadUrl: string = '//grapple-dev.edji.it'
+  public selectedIndex: number = 0
+  public uploadedDocs: any[] = []
+  public file: any = {}
+  public title: string = ''
+  public selectedFiles: any[] = []
+  public uploading: boolean = false
+  public noUploadAllowed: boolean = true
+  public errorMsg: string = ''
+  public pdfFileInputId : string  = "pdfFileInput"
+  public confirmDelete : boolean = false
 
-  constructor(private _locker: Locker, private _media: MediaService, private _auth: AuthService) {
-    this.locker = _locker.useDriver(Locker.DRIVERS.LOCAL);
+  constructor(private _locker: LockerService, private _media: MediaService, private _auth: AuthService) {
+    
   }
 
   ngOnInit() {
     // Load previously uploaded docs
     // (6.15.17) NOTE: We tried changing this here first if tree and everything went to hell. Be careful.
-    if (this.locker.get('uploadedDocs')) {
-      this.uploadedDocs = this.locker.get('uploadedDocs');
+    if (this._locker.get('uploadedDocs')) {
+      this.uploadedDocs = this._locker.get('uploadedDocs');
     } else if (this._auth.getUser().media && this._auth.getUser().media.documents) {
       this.uploadedDocs = this._auth.getUser().media.documents;
     }
@@ -60,7 +59,7 @@ export class UploadPdfModalComponent implements OnInit {
     })
 
     // Get the latest uploaded docs
-    this._auth.refreshUser().take(1).subscribe(user => {
+    this._auth.refreshUser().pipe(take(1)).subscribe((user:any) => {
       if (user.media && user.media.documents) {
         this.uploadedDocs = user.media.documents
       }
@@ -136,7 +135,7 @@ export class UploadPdfModalComponent implements OnInit {
     let ONE_HOUR = 60 * 60 * 1000;
 
     this._media.pdfCheck(fileId)
-      .take(1)
+      .pipe(take(1))
       .subscribe(
         data => {
           if (data.converted === true) {
@@ -224,7 +223,7 @@ export class UploadPdfModalComponent implements OnInit {
    * Save Uploaded Doc list to localStorage AND user object
    */
   saveUploadedDocs(): void {
-    this.locker.set('uploadedDocs', this.uploadedDocs);
+    this._locker.set('uploadedDocs', this.uploadedDocs);
     let user = this._auth.getUser();
     if (!user.media) {
         user.media = {};
@@ -234,7 +233,7 @@ export class UploadPdfModalComponent implements OnInit {
     }
     user.media.documents = this.uploadedDocs;
     this._auth.updateUser( user )
-        .take(1)
+        .pipe(take(1))
         .subscribe(
           (user) => {
             if (user.documents) {

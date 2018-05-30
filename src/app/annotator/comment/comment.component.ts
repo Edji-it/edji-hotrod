@@ -1,4 +1,4 @@
-import { Subscription } from 'rxjs/Rx';
+import { Subscription } from 'rxjs';
 import {
     Component,
     ElementRef,
@@ -11,10 +11,8 @@ import {
 } from '@angular/core';
 import { Angulartics2 } from 'angulartics2'
 
-import { ProjectService } from '../../shared/project.service'
-import { CommentService } from '../../shared/comment.service'
-import { AuthService } from '../../shared/auth.service'
-import { UtilToolService } from '../../shared/util-tool.service'
+// Project Dependencies
+import { AuthService, CommentService, ProjectService, UtilToolService } from '../../_services'
 import { AnnotatorComponent } from '../annotator.component'
 import { EdjiComment, CommentPermissions, EdjiQuestion } from './../../shared/datatypes'
 import { ALLSPARK } from './../../app.constants'
@@ -63,12 +61,12 @@ export class CommentComponent implements OnInit, OnDestroy {
   @Input() public comment: EdjiComment
   @Input() private readOnly: boolean = false
   @Input() private replyRef: boolean = false
-  @Input() private reply: boolean = false   // Is it a reply to another comment? 
+  @Input() public reply: boolean = false   // Is it a reply to another comment? 
   @Input() private commentLite: boolean = false
   @Input() private commentContext: string = 'normal'; // See NOTES in summary.
-  @Input() private commentMobile: boolean = false
-  @Input() private commentMobileFirst: boolean = false
-  @Input() private commentPaneActive: boolean = false
+  @Input() public commentMobile: boolean = false
+  @Input() public commentMobileFirst: boolean = false
+  @Input() public commentPaneActive: boolean = false
   @Input() private assignedQuestion : EdjiQuestion; // If this is an answer, it'll need this.
   @Input() private userPermission: number = CommentPermissions.READ
   @Input() private showDeleteAudioModal: boolean = false
