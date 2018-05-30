@@ -1141,7 +1141,7 @@ button.ui-button::-moz-focus-inner {
 .ui-colorpicker-panel .ui-colorpicker-color {
      width: 150px;
      height: 150px;
-     background: transparent url("./images/color.png") no-repeat left top; 
+    //  background: transparent url("./images/color.png") no-repeat left top; 
 }
 
 .ui-colorpicker-panel .ui-colorpicker-color-handle {
@@ -1157,7 +1157,7 @@ button.ui-button::-moz-focus-inner {
 }
 
 .ui-colorpicker-panel .ui-colorpicker-hue {
-    background: transparent url("./images/hue.png") no-repeat left top; 
+    // background: transparent url("./images/hue.png") no-repeat left top; 
     width: 17px;
     height: 150px;
     top: 8px;
@@ -3162,7 +3162,7 @@ button.ui-button::-moz-focus-inner {
 }
 
 .ui-lightbox-loading .ui-lightbox-content {
-    background: url("./images/loading.gif") #000000 center center no-repeat;
+    // background: url("./images/loading.gif") #000000 center center no-repeat;
 }
 
 .ui-lightbox-caption {
@@ -4035,7 +4035,7 @@ button.ui-button::-moz-focus-inner {
 
 .ui-password-panel .ui-password-meter { 
     height: 10px; 
-    background:transparent url("./images/password-meter.png") no-repeat left top; 
+    // background:transparent url("./images/password-meter.png") no-repeat left top; 
     padding: 0;
     margin: 0;
 }
@@ -5555,7 +5555,7 @@ button.ui-button::-moz-focus-inner {
 }
 
 .ui-tree.ui-tree-horizontal .ui-treenode {
-    background: url("./images/line.gif") repeat-x scroll center center transparent;
+    // background: url("./images/line.gif") repeat-x scroll center center transparent;
     padding: .25em 2.5em;
 }
 
@@ -5579,7 +5579,7 @@ button.ui-button::-moz-focus-inner {
 }
 
 .ui-tree.ui-tree-horizontal .ui-treenode-connector-line {
-    background: url("./images/line.gif") repeat-y scroll 0 0 transparent;
+    // background: url("./images/line.gif") repeat-y scroll 0 0 transparent;
     width: 1px;
 }
 

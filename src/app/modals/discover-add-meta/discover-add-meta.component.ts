@@ -2,13 +2,14 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 
+// Project Dependencies
 import { Reading } from './../../shared/datatypes'
-import { ReadingService } from './../../shared'
-import { IMultiSelectOption, IMultiSelectSettings } from 'angular-2-dropdown-multiselect';
+import { ReadingService } from './../../_services'
+import { IMultiSelectOption, IMultiSelectSettings } from '../../_directives'
 
 @Component({
   selector: 'hot-discover-add-meta',
-  templateUrl: 'discover-add-meta.component.pug',
+  templateUrl: './discover-add-meta.component.pug',
   styleUrls: ['discover-add-meta.component.scss']
 })
 
@@ -25,7 +26,8 @@ export class DiscoverAddMetaModal implements OnInit {
   private multiselectExpanded: boolean
   private projectLink: string
 
-  private subjects: IMultiSelectOption[] = [
+  // IMultiSelectOption[] 
+  private subjects: any = [
     {id:'literature',name:'Language Arts'},
     {id:'math',name:'Mathematics'},
     {id:'science',name:'Science'},
@@ -37,7 +39,8 @@ export class DiscoverAddMetaModal implements OnInit {
     {id:'art',name:'Art'},
     {id:'computer',name:'Computers/Technical'}
   ]
-  private subjectDropSettings: IMultiSelectSettings = {
+  // IMultiSelectSettings
+  private subjectDropSettings: any = {
     displayAllSelectedText: true,
     dynamicTitleMaxItems: 4
   } 

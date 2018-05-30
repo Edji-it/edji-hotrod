@@ -1,7 +1,9 @@
-import { Subscription } from 'rxjs/Rx';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { Subscription } from 'rxjs'
+import { take } from 'rxjs/operators'
 
-import { AuthService } from '../'
+// Project Dependencies
+import { AuthService } from '../../_services'
 
 @Component({
   selector: 'tutorial-box',
@@ -16,11 +18,11 @@ export class TutorialBoxComponent implements OnInit {
 
   @Input() private pageObjs: any[]
   @Input() private tutorialName: string
-  @Input() private forceShow: boolean
+  @Input() public forceShow: boolean
 
-  private pageNo: number = 1
-  private subscriptions: Subscription[] = []
-  private isCompleted: boolean = false
+  public pageNo: number = 1
+  public subscriptions: Subscription[] = []
+  public isCompleted: boolean = false
 
   @Output() pageChange :  EventEmitter<any>
   @Output() dismiss :  EventEmitter<any>
@@ -76,7 +78,7 @@ export class TutorialBoxComponent implements OnInit {
         }
         console.log('Update:', user)
         this._auth.updateUser(user)
-            .take(1)
+            .pipe(take(1))
             .subscribe(
                 (data) => {
                     let user = data.user

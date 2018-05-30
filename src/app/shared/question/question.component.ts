@@ -1,10 +1,9 @@
-import { DeleteProjectInput } from 'aws-sdk/clients/codebuild';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { Subscription } from 'rxjs/Rx'
+import { Subscription } from 'rxjs'
 
 // Project Dependencies
 import { EdjiComment, EdjiQuestion, Project, Reading, User } from "../datatypes"
-import { CommentService, AuthService, ProjectService, ReadingService } from "../"
+import { CommentService, AuthService, ProjectService, ReadingService } from "../../_services"
 
 enum ResponseType {
   OpenEnded = 0,

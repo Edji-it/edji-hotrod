@@ -1,20 +1,23 @@
 import { Component, OnInit } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
+import { take } from 'rxjs/operators'
 
-import { AuthService } from './../shared'
+// Project Dependencies
+import { AuthService } from './../_services'
 
 @Component({
   selector: 'hot-oauth-redirect',
-  templateUrl: 'oauth-redirect.component.pug'
+  templateUrl: './oauth-redirect.component.pug'
 })
 
 export class OAuthComponent implements OnInit {
 
-  private messages: {
+  public messages: {
     noToken?: boolean,
     noUser?: boolean,
     error?: boolean,
-    serverError?: boolean
+    serverError?: boolean,
+    duplicate_user?: boolean
   } = {}
 
   constructor(
@@ -40,7 +43,7 @@ export class OAuthComponent implements OnInit {
 
     const token = decodeURIComponent(encodedToken)
 
-    this._auth.getUserWithAuthToken(type, token).take(1).subscribe((res) => {
+    this._auth.getUserWithAuthToken(type, token).pipe(take(1)).subscribe((res) => {
       this._auth.setUser(res.user)
       this._auth.setToken(res.token)
       this._router.navigate(['/dashboard'])

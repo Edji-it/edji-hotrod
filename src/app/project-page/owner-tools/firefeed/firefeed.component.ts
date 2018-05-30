@@ -1,24 +1,23 @@
-import { Project, Reading } from '../../../shared/datatypes';
-import { Subscription } from 'rxjs/Rx';
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Project, Reading } from '../../../shared/datatypes'
+import { Subscription } from 'rxjs'
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core'
 
 // Project dependencies
-import { ProjectService } from '../../../shared/project.service';
-import { ReadingService } from '../../../shared/reading.service';
+import { ProjectService, ReadingService } from '../../../_services'
 
 @Component({
   selector: 'hot-firefeed',
-  templateUrl: 'firefeed.component.pug',
+  templateUrl: './firefeed.component.pug',
   styleUrls: ['./firefeed.component.scss']
 })
 
 export class FirefeedComponent implements OnInit, OnDestroy {
   @Input() visible: boolean = false
   @Output() hide: EventEmitter<any> = new EventEmitter()
-
-  private project: Project
-  private currentReading: Reading
+  
   private subscriptions: Subscription[] = []
+  private project: Project
+  public currentReading: Reading
 
   constructor(
     private _projects: ProjectService, 

@@ -1,12 +1,10 @@
-import { CommentService } from '../comment.service'
-import { AuthService } from '../auth.service' 
-import { SocketService } from '../socket.service'
 import { Project, User } from '../datatypes'
-import { Subscription } from 'rxjs/Rx'
-import { ProjectService } from '../index'
+import { Subscription } from 'rxjs'
 import { CommentPermissions, EdjiComment } from '../datatypes/index'
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core'
 
+// Project Dependencies
+import { AuthService, ProjectService, CommentService, SocketService } from '../../_services'
 @Component({
   selector: 'comment-pane',
   templateUrl: './comment-pane.component.pug',
@@ -15,20 +13,20 @@ import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output }
 export class CommentPaneComponent implements OnInit, OnDestroy {
 
   // General variables for the comment pane component
-  private commentPane: boolean
-  private lineNum: number = 0
-  private commentCount: number = 0
-  private rowComments: EdjiComment[][] = []
+  public commentPane: boolean
+  public lineNum: number = 0
+  public commentCount: number = 0
+  public rowComments: EdjiComment[][] = []
   // Is fully visible, focused, and editable
-  private active = false
-  private selected = false
-  private user: User
-  private project: Project = <Project>{}
-  private visible: boolean
+  public active = false
+  public selected = false
+  public user: User
+  public project: Project = <Project>{}
+  public visible: boolean
 
   // Subscriptions and related
-  private subscriptions: Subscription[] = []
-  private commentByPos: any[] = []
+  public subscriptions: Subscription[] = []
+  public commentByPos: any[] = []
 
   // Comment Pane Component Inputs
   @Input() comment: EdjiComment

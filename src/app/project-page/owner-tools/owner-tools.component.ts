@@ -1,8 +1,9 @@
-import { Subscription } from 'rxjs/Rx'
+import { Subscription } from 'rxjs'
+import { take } from 'rxjs/operators'
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
 // Project Dependencies
-import { AuthService, ProjectService, ReadingService, SocketService } from '../../shared';
+import { AuthService, ProjectService, ReadingService, SocketService } from '../../_services';
 import { CommentStats, Project, Reading } from './../../shared/datatypes';
 
 @Component({
@@ -14,17 +15,18 @@ export class OwnerToolsComponent implements OnInit {
   @Output() hide: EventEmitter<any> = new EventEmitter()
 
   private subscriptions: Subscription[] = []
-  private commentStats: CommentStats
-  private currentProject: Project
-  private currentReading: Reading
-  private user: any = {}
-  private showFireFeed: boolean
-  private showCommentCounts: boolean
-  private showQuestionFeed: boolean
-  private ownerToolBlockHeight: string
+  
+  public commentStats: CommentStats
+  public currentProject: Project
+  public currentReading: Reading
+  public user: any = {}
+  public showFireFeed: boolean
+  public showCommentCounts: boolean
+  public showQuestionFeed: boolean
+  public ownerToolBlockHeight: string
 
   // State vars
-  private powersLoading: any = {}
+  public powersLoading: any = {}
 
   constructor(
     private _projects: ProjectService,
@@ -86,7 +88,7 @@ export class OwnerToolsComponent implements OnInit {
       updateObj[powerName] = turnOn
 
       this._projects.update(updateObj, this.currentProject._id)
-        .take(1)
+        .pipe(take(1))
         .subscribe((project) => {
           // Live update users once save is successful
           this._socket.toggleHeatVision({ all: turnOn })

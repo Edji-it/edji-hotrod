@@ -1,10 +1,13 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { ReadingService } from '../../shared';
-import { Reading }        from '../../shared/datatypes';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
+import { take } from 'rxjs/operators'
+
+// Project Dependencies
+import { ReadingService } from '../../_services'
+import { Reading }        from '../../shared/datatypes'
 
 @Component({
   selector: 'hot-del-reading',
-  templateUrl: 'del-reading.component.pug'
+  templateUrl: './del-reading.component.pug'
 })
 export class DeleteReadingModal implements OnInit {
 
@@ -38,7 +41,7 @@ export class DeleteReadingModal implements OnInit {
   deleteThisReading(reading : Reading) : void {
     // Listen for an Observable from reading.service.ts
     this._readings.delete(reading)
-      .take(1) // so we don't need to unsubscribe
+      .pipe(take(1)) // so we don't need to unsubscribe
       .subscribe(
       data => { 
         console.log("Deleting the reading was successful.");

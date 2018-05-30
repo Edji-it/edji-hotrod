@@ -1,7 +1,8 @@
-import { AuthService } from '../shared';
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 
+// Project Dependencies
+import { AuthService } from '../_services';
 @Component({
   selector: 'hero-pricing',
   templateUrl: './hero-pricing.component.html',
@@ -9,10 +10,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HeroPricingComponent implements OnInit {
 
-  private showLoginModal: boolean
-  private showHeroSubModal: boolean
+  public showLoginModal: boolean
+  public showHeroSubModal: boolean
 
-  constructor(private _router: Router, private _auth: AuthService) { }
+  constructor(public _router: Router, private _auth: AuthService) { }
 
   ngOnInit() {
   }

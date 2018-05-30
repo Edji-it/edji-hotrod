@@ -1,6 +1,8 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
+  <title>Edji</title>
+  <base href="/">
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
@@ -27,17 +29,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
   <meta name="theme-color" content="#8ED9FF" />
 
-  <title><%= htmlWebpackPlugin.options.title %></title>
 
-  <meta name="description" content="<%= htmlWebpackPlugin.options.title %>">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
 
-  <% if (webpackConfig.htmlElements.headTags) { %>
-  <!-- Configured Head Tags  -->
-  <%= webpackConfig.htmlElements.headTags %>
-  <% } %>
-
-  <!-- base url -->
-  <base href="<%= htmlWebpackPlugin.options.metadata.baseUrl %>">
+  <!-- Global Variables -->
+  <script>
+    var global = global || window;
+    var Buffer = Buffer || [];
+    var process = process || {
+      env: { DEBUG: undefined },
+      version: []
+    };
+  </script>
 
   <!--HammerJS library-->
   <script src="/assets/js/h.js"></script>
@@ -46,34 +50,18 @@
   <script type="text/javascript" src="https://js.stripe.com/v3/"></script>
   <script src="//checkout.stripe.com/checkout.js"></script>
 
-  <!--<script type="text/javascript">
-    window.heap=window.heap||[],heap.load=function(e,t){window.heap.appid=e,window.heap.config=t=t||{};var r=t.forceSSL||"https:"===document.location.protocol,a=document.createElement("script");a.type="text/javascript",a.async=!0,a.src="/assets/js/ha.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(a,n);for(var o=function(e){return function(){heap.push([e].concat(Array.prototype.slice.call(arguments,0)))}},p=["addEventProperties","addUserProperties","clearEventProperties","identify","removeEventProperty","setEventProperties","track","unsetEventProperty"],c=0;c<p.length;c++)heap[p[c]]=o(p[c])};
-      heap.load("3505032672");
-  </script>-->
-</head>
-
-<body>
-
+  <!-- Google Analytics -->
   <script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','/assets/js/ga.js','ga');
-
-  ga('create', 'UA-83792906-1', 'auto');
-
-  </script>
-
-  <app>
-    <!--Loading...-->
-  </app>
-  <!--<span style="color: #aaa;">{{ appVersion }}</span>
-  -->
-  <div id="buildNumber" style="padding: 9px; font-size: 10px; display:block; width: 100%; font-family:'Open Sans'; text-align: center; color: #ccc;">
-    Build <%= htmlWebpackPlugin.options.metadata.version %></div>
-  <% if (htmlWebpackPlugin.options.metadata.isDevServer && htmlWebpackPlugin.options.metadata.HMR !== true) { %>
-  <!-- Webpack Dev Server reload -->
-  <script src="/webpack-dev-server.js"></script>
-  <% } %>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','/assets/js/ga.js','ga');
+  
+    ga('create', 'UA-83792906-1', 'auto');
+  
+   </script>
+</head>
+<body>
+  <app></app>
 </body>
 </html>

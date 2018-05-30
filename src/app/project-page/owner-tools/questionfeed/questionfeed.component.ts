@@ -1,10 +1,9 @@
 import { Project, Reading } from '../../../shared/datatypes';
-import { Subscription } from 'rxjs/Rx';
+import { Subscription } from 'rxjs';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 
 // Project dependencies
-import { ProjectService } from '../../../shared/project.service';
-import { ReadingService } from '../../../shared/reading.service';
+import { ProjectService, ReadingService } from '../../../_services';
 
 @Component({
   selector: 'hot-questionfeed',
@@ -17,8 +16,8 @@ export class QuestionfeedComponent implements OnInit, OnDestroy {
   @Output() hide: EventEmitter<any> = new EventEmitter()
 
   private project: Project
-  private currentReading: Reading
   private subscriptions: Subscription[] = []
+  public currentReading: Reading
 
   constructor(
     private _projects: ProjectService, 

@@ -3,20 +3,22 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Angulartics2 } from 'angulartics2';
 
-import { AuthService } from './../shared';
+// Project Dependencies
+import { AuthService } from './../_services';
 
 @Component({
   selector: 'hot-reset-pass-page',
   templateUrl: 'reset-pass-page.component.html'
 })
 export class ResetPassPage implements OnInit {
-  private resetForm: FormGroup;
-  private isLoading: boolean = false;
-  private resetToken: string;
-  private serviceResponse: {
+  public resetForm: FormGroup;
+  public isLoading: boolean = false;
+  public resetToken: string;
+  public serviceResponse: {
     success?: boolean,
     failure?: boolean
   } = {};
+  public submitted: boolean
 
   constructor(
     private _auth: AuthService,
@@ -47,11 +49,11 @@ export class ResetPassPage implements OnInit {
       ? null : { mismatch: true };
   }
 
-  private resetPass(formValue: any): void {
+  public resetPass(formValue: any): void {
     if (!this.resetForm.valid) {
       return;
     }
-
+    this.submitted = true
     this.isLoading = true
 
     this._auth.resetPassword({ newPassword: formValue.password, token: this.resetToken })

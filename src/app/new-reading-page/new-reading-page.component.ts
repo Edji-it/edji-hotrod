@@ -3,12 +3,10 @@ import { Title } from '@angular/platform-browser'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
 import { Angulartics2 } from 'angulartics2'
-import { IMultiSelectOption, IMultiSelectSettings } from 'angular-2-dropdown-multiselect'
+import { IMultiSelectOption, IMultiSelectSettings } from '../_directives'
+import { take } from 'rxjs/operators'
 
-import { ReadingService } from '../shared/reading.service'
-import { ProjectService } from '../shared/project.service'
-import { UtilToolService } from '../shared/util-tool.service'
-import { AuthService } from '../shared'
+import { AuthService, ProjectService, ReadingService, UtilToolService } from '../_services'
 import { EdjiComment, EdjiQuestion, User } from '../shared/datatypes'
 import { ReadingShareObject } from './../shared/nav-bar'
 import * as Rangy from 'rangy'
@@ -16,7 +14,7 @@ import * as Rangy from 'rangy'
 @Component({
     selector: 'new-reading-page',
     styleUrls: ['new-reading-page.component.scss'],
-    templateUrl: 'new-reading-page.component.pug'
+    templateUrl: './new-reading-page.component.pug'
 })
 export class NewReadingPage implements OnInit {
     
@@ -26,56 +24,57 @@ export class NewReadingPage implements OnInit {
         Create a new reading!
     */
 
-    private readingForm     : FormGroup
-    private newReadingInner : string = "<div>&nbsp;</div>"
-    private readingHtml     : any[] = [{'text': this.newReadingInner}]
-    private readingIsBlank  : boolean = false
-    private submitted       : boolean = false
-    private addLoadingD     : boolean = false
-    private addLoadingP     : boolean = false
-    private isDraft         : boolean = true
-    private readingId       : any = ""
-    private reading         : any = {}
-    private projects        : any[] = []
-    private questions       : any[] = []
-    private insertOptionShow: boolean
+    public readingForm     : FormGroup
+    public newReadingInner : string = "<div>&nbsp;</div>"
+    public readingHtml     : any[] = [{'text': this.newReadingInner}]
+    public readingIsBlank  : boolean = false
+    public submitted       : boolean = false
+    public addLoadingD     : boolean = false
+    public addLoadingP     : boolean = false
+    public isDraft         : boolean = true
+    public readingId       : any = ""
+    public reading         : any = {}
+    public projects        : any[] = []
+    public questions       : any[] = []
+    public insertOptionShow: boolean
+    public showPdfUploadModal: boolean
 
     // Trigger booleans
-    private showAlert       : boolean = false
-    private showUploadModal : boolean = false // Should the modal appear?
+    public showAlert       : boolean = false
+    public showUploadModal : boolean = false // Should the modal appear?
     
-    private errorObject = {
+    public errorObject = {
         readingError: ""
     };
     
-    private successObject = {
+    public successObject = {
         readingSuccess: ""
     };
 
     // Messages
-    private successAlert : string = "Nice work! This reading draft was successfully saved!"
-    private readingPlaceholder: string = 'Type or paste your reading...'
-    private error : string = '' // Error message 
-    private alert : string = ''
+    public successAlert : string = "Nice work! This reading draft was successfully saved!"
+    public readingPlaceholder: string = 'Type or paste your reading...'
+    public error : string = '' // Error message 
+    public alert : string = ''
 
-    private versionId : string = ''
-    private ownerId : string
-    private copyId : string = ''
-    private copyCleanHeroMsg : boolean = false
-    private editorToolbarY : number = 54
-    private editorToolbarHidden : boolean
-    private insertNode : any
-    private masterSelection : any
-    private currentUser : User // User data of the current user.
+    public versionId : string = ''
+    public ownerId : string
+    public copyId : string = ''
+    public copyCleanHeroMsg : boolean = false
+    public editorToolbarY : number = 54
+    public editorToolbarHidden : boolean
+    public insertNode : any
+    public masterSelection : any
+    public currentUser : User // User data of the current user.
 
-    private static readonly EDITOR_TOOLBAR_Y = 40
+    public static readonly EDITOR_TOOLBAR_Y = 40
 
     // Used for processing reading
-    private words: any[] = []
-    private previousWordY: number = 0
+    public words: any[] = []
+    public previousWordY: number = 0
 
     // Configuration Options for Medium Editor
-    private mediumEditorConfig: any = {
+    public mediumEditorConfig: any = {
         imageDragging: false, 
         paste : { 
             forcePlainText : true,
@@ -97,7 +96,7 @@ export class NewReadingPage implements OnInit {
     }
 
     // Tutorial variables
-    private guideContent: any[] = [
+    public guideContent: any[] = [
         {
             title: "Use Formatting Styles",
             image: "/assets/guide/newReading__format.gif",
@@ -114,9 +113,9 @@ export class NewReadingPage implements OnInit {
             body: "Click Share when finished and name your first Group to get a code&mdash;don't worry, you can create more Groups later!"
         }
     ]
-    private guideStepNo: number = 1
-
-    private subjects: IMultiSelectOption[] = [
+    public guideStepNo: number = 1
+    //  IMultiSelectOption[] 
+    public subjects: any = [
         {id:'literature',name:'Language Arts'},
         {id:'math',name:'Mathematics'},
         {id:'science',name:'Science'},
@@ -128,7 +127,8 @@ export class NewReadingPage implements OnInit {
         {id:'art',name:'Art'},
         {id:'computer',name:'Computers/Technical'}
     ]
-    private subjectDropSettings: IMultiSelectSettings = {
+    //IMultiSelectSettings
+    public subjectDropSettings: any  = {
         displayAllSelectedText: true,
         dynamicTitleMaxItems: 4
     }
@@ -180,9 +180,9 @@ export class NewReadingPage implements OnInit {
      private getReading(readingId: string, stripHero?: boolean) {
 
         this._readings.get(readingId)
-            .take(1)
+            .pipe(take(1))
             .subscribe(
-                data => {
+                (data: any) => {
                     if (stripHero && data.questions && data.questions.length > 0) {
                         // Clean out features which require Hero, and tell the user it happened
                         data.html = data.html.replace(/\<\$question\$\>/g, '')
@@ -422,12 +422,12 @@ export class NewReadingPage implements OnInit {
         }
     }
 
-    private saveReading(event, form) {
+    public saveReading(event, form) {
         this.isDraft = true
         this.onSubmit(form)
     }
 
-    private shareReading(shareObj: ReadingShareObject, form) {
+    public shareReading(shareObj: ReadingShareObject, form) {
         // Handle group options passed back from Nav
         form.label = shareObj.groupLabel
         form.customCode = shareObj.customCode
@@ -642,7 +642,7 @@ export class NewReadingPage implements OnInit {
      * Takes an array of objects with a title and a url for an Image, formats, then inserts into reading
      * @param images Array of image objects to be inserted
      */
-    private addImages(images: { title: string, url: string }[]) {
+    public addImages(images: { title: string, url: string }[]) {
         if (this.insertNode && this.insertNode.parentNode) {
             // If there is a reference node for cursor position, insert at cursor
             images.forEach(image => {
@@ -672,7 +672,7 @@ export class NewReadingPage implements OnInit {
     /**
      * Adds a question block to the new reading and then adds in a new medium editor
      */
-    private addQuestion(insertHtml?: string, insertPos?: number) {
+    public addQuestion(insertHtml?: string, insertPos?: number) {
         let answer_types = this._auth.getAllowedCommentMediaTypes()
         let question = <EdjiQuestion>{
             prompt: '',
@@ -712,7 +712,7 @@ export class NewReadingPage implements OnInit {
     /**
      * Add a question to the "middle" of existing text and split it up
      */
-    private addQuestionInLine() {
+    public addQuestionInLine() {
         if (this.insertNode && this.insertNode.parentNode) {
             // If there is a reference node for cursor position, insert at cursor
             // Get and clear all elements in the medium editor block after the cursor position
@@ -785,7 +785,7 @@ export class NewReadingPage implements OnInit {
     /**
      * Removes a question block to the new reading and then adds in a new medium editor
      */
-    private deleteQuestion(questionNum: number) {
+    public deleteQuestion(questionNum: number) {
         // Append the text after the question to be deleted to the one before it
         this.readingHtml[questionNum-1].text += this.readingHtml[questionNum].text
 

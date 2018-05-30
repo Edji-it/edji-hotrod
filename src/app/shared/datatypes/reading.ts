@@ -27,4 +27,5 @@ export interface BaseReading {
   questions?: EdjiQuestion[],
   grade_levels?: number[],
   subjects?: string[],
+  heroic?: boolean
 }

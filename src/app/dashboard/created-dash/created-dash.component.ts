@@ -2,12 +2,12 @@ import { Component, OnInit, OnDestroy } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
 import { FormGroup, FormBuilder, Validators } from '@angular/forms'
-import { Subscription } from 'rxjs/Subscription'
+import { Subscription } from 'rxjs'
 import { Angulartics2 } from 'angulartics2'
-import { Reading }      from '../../shared/datatypes';
 
-import { AuthService, ReadingService, ProjectService } from '../../shared'
-import { User } from '../../shared/datatypes'
+// Project Dependencies
+import { AuthService, ReadingService, ProjectService } from '../../_services'
+import { User, Reading } from '../../shared/datatypes'
 
 @Component({
   // The selector is what angular internally uses
@@ -23,23 +23,21 @@ import { User } from '../../shared/datatypes'
 })
 export class CreatedDashComponent implements OnInit, OnDestroy {
   // Set our default values
-  private readings: Reading[] = [];
-  private errorObject = {
+  public readings: Reading[] = [];
+  public errorObject = {
     readingError: ""
   };
   private subscriptions: Subscription[] = [];
+  public readingToBeRemoved : Reading;
 
-  private showLoginReqModal: boolean = false
-  private user: User
-
-  private readingToBeRemoved : Reading;
-
+  public showLoginReqModal: boolean = false
+  public user: User
   // Joined Readings, p-datalist values
-  private loading: boolean = true
-  private first: number = 0 // first page 
-  private rows: number = 15 // number of Readings to return
-  private total: number = 15 // total Readings
-  private pageNo: number = 1
+  public loading: boolean = true
+  public first: number = 0 // first page 
+  public rows: number = 15 // number of Readings to return
+  public total: number = 15 // total Readings
+  public pageNo: number = 1
 
   // TypeScript public modifiers
   constructor(

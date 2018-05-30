@@ -1,10 +1,7 @@
-import { SocketService } from '../../../../shared';
-import { CommentService } from '../../../../shared/comment.service'
-import { ProjectService } from '../../../../shared/project.service'
-import { Subscription } from 'rxjs/Rx'
+import { Subscription } from 'rxjs'
 import { EdjiComment, Reading } from '../../../../shared/datatypes'
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, AfterViewInit } from '@angular/core'
-import { ReadingService } from '../../../../shared/reading.service'
+import { CommentService, ProjectService, ReadingService, SocketService } from '../../../../_services'
 
 
 @Component({
@@ -20,8 +17,8 @@ export class QuestioncardComponent implements OnInit, OnDestroy {
 
   private currentReading: Reading
   private subscriptions: Subscription[] = []
-  private answersHidden: boolean
-  private answersById: any = {}
+  public answersHidden: boolean
+  public answersById: any = {}
 
   constructor(
     private _projects : ProjectService,

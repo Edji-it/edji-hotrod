@@ -3,13 +3,16 @@ import { Http } from '@angular/http'
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { Angulartics2 } from 'angulartics2'
+import { take } from 'rxjs/operators'
 
-import { AuthService, BumblebeeService, Copy, UtilToolService } from './..'
-import { ALLSPARK } from '../../app.constants';
+import { AuthService, BumblebeeService, UtilToolService } from '../../_services'
+import { ALLSPARK } from '../../app.constants'
+import { LockerService } from '../../_services/locker.service';
+import { Copy } from '..';
 
 @Component({
   selector: 'edji-feedback',
-  templateUrl: 'feedback.component.pug',
+  templateUrl: './feedback.component.pug',
   styleUrls: ['./feedback.component.scss']
 })
 export class FeedbackComponent implements OnInit {
@@ -20,15 +23,15 @@ export class FeedbackComponent implements OnInit {
   private closeModal: EventEmitter<any> = new EventEmitter()
 
   // private showFeedbackModal: boolean = false
-  private showFeedbackSuccess: boolean = false
-  private feedbackForm: FormGroup
-  private feedbackSuccess: boolean = false
-  private user: any
-  private userCopy: any
+  public showFeedbackSuccess: boolean = false
+  public feedbackForm: FormGroup
+  public feedbackSuccess: boolean = false
+  public user: any
+  public userCopy: any
   private window
-  private loading: boolean = false
+  public loading: boolean = false
 
-  private errorObject: {
+  public errorObject: {
     serverError?: string
   } = {}
 
@@ -38,11 +41,12 @@ export class FeedbackComponent implements OnInit {
     private http: Http,
     private angulartics: Angulartics2,
     fb: FormBuilder,
-    private _util: UtilToolService
+    public _util: UtilToolService,
+    private _locker: LockerService
   ) {
     this.user = this._auth.getUser()
 
-    let prevData: any = this._auth.getFromStorage("feedbackFormData") || {}
+    let prevData: any = this._locker.get("feedbackFormData") || {}
 
     this.feedbackForm = fb.group({
       name: [this.user.fullname, Validators.required],
@@ -73,7 +77,7 @@ export class FeedbackComponent implements OnInit {
     document.body.style.overflow = 'hidden'
   }
 
-  private feedbackClose(): void {
+  public feedbackClose(): void {
     this.closeModal.emit()
     this._util.showFeedbackModal = false
     
@@ -81,12 +85,12 @@ export class FeedbackComponent implements OnInit {
     document.body.style.overflow = ''
   }
 
-  private successClose(): void {
+  public successClose(): void {
     this.showFeedbackSuccess = false
   }
 
   /** Sends feedback to bumblebee */
-  private sendFeedback(formValue: any): void {
+  public sendFeedback(formValue: any): void {
     this.loading = true
     this.angulartics.eventTrack.next({ action: 'sendFeedback', properties: { category: 'accountManagement', label: 'attempt' }})
 
@@ -120,12 +124,12 @@ export class FeedbackComponent implements OnInit {
       user: userSend
     }
 
-    this._bumblebee.sendFeedback(data).take(1).subscribe(
+    this._bumblebee.sendFeedback(data).pipe(take(1)).subscribe(
       (res) => {
         this.loading = false
         this.angulartics.eventTrack.next({ action: 'sendFeedback', properties: { category: 'accountManagement', label: 'success' }})
         this.feedbackSuccess = true
-        this._auth.deleteFromStorage("feedbackFormData")
+        this._locker.remove("feedbackFormData")
         this.feedbackClose()
         this.showFeedbackSuccess = true
       },
@@ -134,7 +138,7 @@ export class FeedbackComponent implements OnInit {
         this.loading = false
         this.angulartics.eventTrack.next({ action: 'sendFeedback', properties: { category: 'accountManagement', label: 'failure' }})
         this.errorObject.serverError = "Something has gone wrong. Please try submitting your feedback again later!"
-        this._auth.store("feedbackFormData", formValue)
+        this._locker.set("feedbackFormData", formValue)
       }
     )
   }

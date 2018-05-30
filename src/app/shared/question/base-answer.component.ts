@@ -1,10 +1,10 @@
 import { Component, Input, OnInit, EventEmitter } from '@angular/core'
-import { Subscription } from 'rxjs/Rx'
+import { Subscription } from 'rxjs'
 import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
 import { EdjiComment, EdjiQuestion, Project, Reading, User } from "../datatypes"
-import { CommentService, AuthService, ProjectService, ReadingService } from "../"
+import { CommentService, AuthService, ProjectService, ReadingService } from "../../_services"
 
 export abstract class BaseAnswerComponent {
 

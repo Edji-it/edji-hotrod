@@ -1,10 +1,11 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 
-import { ProjectService } from './../../shared'
+// Project Dependencies
+import { ProjectService } from './../../_services'
 
 @Component({
   selector: 'hot-login-register',
-  templateUrl: 'login-register.component.pug',
+  templateUrl: './login-register.component.pug',
   styles: [`
     .modal-footer { flex-direction: column }
   `]
@@ -12,13 +13,13 @@ import { ProjectService } from './../../shared'
 export class LoginRegisterModal implements OnInit {
 
   @Input()
-  private loginHeader: string
+  public loginHeader: string
 
   @Output()
-  private closeModal: EventEmitter<any> = new EventEmitter()
+  public closeModal: EventEmitter<any> = new EventEmitter()
 
   @Output()
-  private loginSuccess: EventEmitter<any> = new EventEmitter()
+  public loginSuccess: EventEmitter<any> = new EventEmitter()
 
   constructor(
     private _project: ProjectService

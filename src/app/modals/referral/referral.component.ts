@@ -1,33 +1,37 @@
-import { Subscription } from 'rxjs/Rx';
-import { Project } from '../../shared/datatypes';
-import { Router } from '@angular/router';
-import { Component, EventEmitter, Input, OnInit, Output, OnDestroy } from '@angular/core';
-import { UtilToolService, ProjectService, AuthService, ReadingService } from './../../shared'
-import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs'
+import { Router } from '@angular/router'
+import { Component, EventEmitter, Input, OnInit, Output, OnDestroy } from '@angular/core'
+import { ActivatedRoute } from '@angular/router'
+import { take } from 'rxjs/operators'
+
+// Project Dependencies
+import { Project } from '../../shared/datatypes'
+import { AuthService, UtilToolService, ProjectService, ReadingService } from './../../_services'
 
 @Component({
   selector: 'referral-modal',
-  templateUrl: 'referral.component.pug',
+  templateUrl: './referral.component.pug',
   styleUrls: ['./referral.component.scss']
 })
 export class ReferralModalComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription[] = []
-  private referralLink: string
-  private referralCode: string
-  private referralBlocks: any = []
-  private numberReferrals: number
-  private referralIndex: number = -1
-  private referralCouponCopy: any = {}
-  private alertObject = {
+  public referralLink: string
+  public referralCode: string
+  public referralBlocks: any = []
+  public numberReferrals: number
+  public referralIndex: number = -1
+  public referralCouponCopy: any = {}
+  public alertObject = {
     show: false,
     type: "",
     message: ""
   }
-  private linkCopySuccess: boolean
-  private referredByComplete: boolean 
+  public linkCopySuccess: boolean
+  public referredByComplete: boolean 
 
-  private showModal: boolean
+  public showModal: boolean
+
   @Input()
   set showReferral(showReferral: boolean) {
     if (typeof(showReferral) !== 'undefined' && this.showModal !== showReferral) {
@@ -94,7 +98,7 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
    */
   private getUserReferralStatus() {
     let user = this._auth.getUser() 
-    this._auth.getReferralProgress(user._id).take(1).subscribe((userReferrals) => {
+    this._auth.getReferralProgress(user._id).pipe(take(1)).subscribe((userReferrals: any) => {
       // Set the current number of referrals and build our array of objects
       let completedReferrals = userReferrals.users_referred.filter(referred => {
         return referred.status == "completed"
