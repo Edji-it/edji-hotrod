@@ -65,10 +65,12 @@ angular2-webpack-starter/
  │   │
  |   ├──vendor.browser.ts      * our vendor file
  │   │
- │   ├──app/                   * WebApp: folder
- │   │   ├──app.spec.ts        * a simple test of components in app.ts
- │   │   ├──app.e2e.ts         * a simple end-to-end test for /
- │   │   └──app.ts             * App.ts: a simple version of our App component components
+ │   ├──app/                   * Angular App folder
+ │   │   ├──_directives/       * Directives folder (app-wide)
+ │   │   ├──_pipes/            * Pipes folder (app-wide)
+ │   │   ├──_services/         * Services folder (app-wide)
+ │   │   ├──app.constants.ts   * Maintain app constant (unchanging!) values
+ │   │   └──app.component.ts   * Our primary app entry point
  │   │
  │   └──assets/                * static assets are served here
  │       ├──icon/              * our list of icons from www.favicon-generator.org
