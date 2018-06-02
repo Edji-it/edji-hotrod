@@ -75,7 +75,7 @@ export class LicenseRedirectComponent implements OnInit, OnDestroy {
       } else {
         // store the licenseId in the locker if we need to register the user
         // this._locker.set("license_id", this.licenseId)
-        this._router.navigate(['/login'])
+        // NEED: show the login form with a registration option here
       }
     }
   }
