@@ -145,7 +145,7 @@ export class AuthService implements CanActivate {
         } else {
             user.isLoggedIn = true
         }
-
+        // console.log(user)
         return user
     }
 
