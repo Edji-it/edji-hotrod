@@ -25,7 +25,7 @@ export class DashboardComponent implements OnInit {
   // Set our default values
   private currentUser: User 
   public mobileShowJoined:boolean = true
-  public showUserDetailsModal: boolean = true
+  public showUserDetailsModal: boolean = false
 
   // Tool Tip variables
   public toolTipsContent: any[] = [
