@@ -1,8 +1,8 @@
-import { Router } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router'
+import { Component, OnInit } from '@angular/core'
 
 // Project Dependencies
-import { AuthService } from '../_services';
+import { AuthService } from '../_services'
 @Component({
   selector: 'hero-pricing',
   templateUrl: './hero-pricing.component.html',

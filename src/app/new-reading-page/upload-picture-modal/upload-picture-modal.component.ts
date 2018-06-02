@@ -11,21 +11,21 @@ import { AuthService, LockerService, MediaService } from '../../_services'
 })
 export class UploadModalComponent implements OnInit {
 
-  @Output() closeModal: EventEmitter<any> = new EventEmitter();
-  @Output() returnImage: EventEmitter<any> = new EventEmitter();
-  
-  public uploadedImages: any[] = [];
-  public newImgUrls: string[] = [];
-  public selectedIndex: number = 0;
-  public file: any = {};
-  public uploading: boolean = false;
-  public uploadUrl: string = '//grapple-dev.edji.it';
+  @Output() closeModal: EventEmitter<any> = new EventEmitter()
+  @Output() returnImage: EventEmitter<any> = new EventEmitter()
 
-  public noUploadAllowed: boolean = true;
-  public errorMsg: string = '';
+  public uploadedImages: any[] = []
+  public newImgUrls: string[] = []
+  public selectedIndex = 0
+  public file: any = {}
+  public uploading = false
+  public uploadUrl = '//grapple-dev.edji.it'
+
+  public noUploadAllowed = true
+  public errorMsg = ''
 
   constructor(private _locker: LockerService, private _media: MediaService, private _auth: AuthService) {
-    
+
   }
 
   ngOnInit() {
@@ -44,15 +44,15 @@ export class UploadModalComponent implements OnInit {
    * Set 'file' variable and validate file
    */
   updateUploadFile() {
-    const files = document.getElementById('imageFileInput')['files'];
-    this.file = files[0];
+    const files = document.getElementById('imageFileInput')['files']
+    this.file = files[0]
     // Limit file size to 5mb
     if (this.file && this.file.size > 5 * Math.pow(10, 6) ) {
-      this.noUploadAllowed = true;
-      this.errorMsg = 'Image uploads are limited to 5mb, please select a smaller image';
+      this.noUploadAllowed = true
+      this.errorMsg = 'Image uploads are limited to 5mb, please select a smaller image'
     } else {
-      this.noUploadAllowed = false;
-      this.errorMsg = '';
+      this.noUploadAllowed = false
+      this.errorMsg = ''
     }
   }
 
@@ -60,46 +60,46 @@ export class UploadModalComponent implements OnInit {
    * Upload image and add image to modal for selection
    */
   beginUpload() {
-    this.updateUploadFile();
+    this.updateUploadFile()
 
-    if(this.file == null || this.noUploadAllowed){
-      alert('No file selected.');
-      return;
+    if (this.file == null || this.noUploadAllowed) {
+      alert('No file selected.')
+      return
     }
 
-    this.uploading = true;
+    this.uploading = true
 
     this._media.uploadImage(this.file)
       .subscribe(data => {
-        this.uploading = false;
-        this.addUploadUrl(data.url);
-        this.file = {};
+        this.uploading = false
+        this.addUploadUrl(data.url)
+        this.file = {}
       }, error => {
-        this.uploading = false;
-      });
-  } // beginUpload() 
+        this.uploading = false
+      })
+  } // beginUpload()
 
-  
+
 
   /**
    * Add upload URL to array and localStorage
    */
-  addUploadUrl(url: string, title ?: string) : void {
-    let imgObj = {
+  addUploadUrl(url: string, title ?: string): void {
+    const imgObj = {
       url: url,
       title: title
-    };
+    }
 
-    this.newImgUrls.unshift(url);
-    this.uploadedImages.unshift(imgObj);
-    this._locker.set('uploadedImages', this.uploadedImages);
+    this.newImgUrls.unshift(url)
+    this.uploadedImages.unshift(imgObj)
+    this._locker.set('uploadedImages', this.uploadedImages)
 
-    let user = this._auth.getUser();
+    const user = this._auth.getUser()
     if (!user.media) {
-        user.media = {};
+        user.media = {}
     }
     if (!user.media.images) {
-        user.media.images = [];
+        user.media.images = []
     }
     user.media.images = this.uploadedImages
     this._auth.updateUser( user )
@@ -113,11 +113,11 @@ export class UploadModalComponent implements OnInit {
           (error) => {
             console.log(error)
           }
-        );
+        )
   } // addUploadUrl
 
-  insertImage(imageIndex: number) : void {
-    this.returnImage.emit([this.uploadedImages[imageIndex]]);
-    this.closeModal.emit();
+  insertImage(imageIndex: number): void {
+    this.returnImage.emit([this.uploadedImages[imageIndex]])
+    this.closeModal.emit()
   } // insertImage
 }

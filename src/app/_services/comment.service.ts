@@ -23,7 +23,7 @@ export class CommentService {
 
   public clearActiveCommentsSource: Subject<boolean> = new Subject()
   public clearActiveComments: Observable<boolean> = this.clearActiveCommentsSource.asObservable()
-  
+
   /*
   Last Modified: 6 June 2017
   */
@@ -38,22 +38,22 @@ export class CommentService {
   }
 
   ngOnInit() {
-  
+
   }
   /**
    * Deactivates all Comment Components
    * - Fires clearActiveComments observable
    */
-  public deactivateAllComments() : void {
+  public deactivateAllComments(): void {
     this.clearActiveCommentsSource.next(true)
   }
 
-  /** 
+  /**
    * Create the waveform based on the audio comment's amplitude per 0.5 second interval of the comment
    */
   public waveForm(waves, canvas) {
     // Prepare the canvas
-    this.ctx = canvas.getContext("2d")
+    this.ctx = canvas.getContext('2d')
 
     // Set the properties for this waveform and write it in the barchart function
     barchart(
@@ -61,13 +61,13 @@ export class CommentService {
         canvas: canvas,
         padding: 2,
         gridScale: 5,
-        gridColor: "transparent",
+        gridColor: 'transparent',
         data: waves,
-        colors: ["#666"],
+        colors: ['#666'],
         ctx: this.ctx
       }
     )
-    
+
     // Write the waveform in a barchart style
     function barchart(options) {
       // Reset the canvas
@@ -75,10 +75,10 @@ export class CommentService {
         options.ctx.clearRect(0, 0, options.canvas.width - options.padding * 2, options.canvas.height - options.padding * 2)
       }
 
-      var maxValue = 0
-      var minValue = 0
+      let maxValue = 0
+      let minValue = 0
 
-      for (var bar in options.data){
+      for (const bar in options.data) {
         if (options.data[bar] < 0) {
           options.data[bar] = Math.abs(options.data[bar])
         }
@@ -87,49 +87,49 @@ export class CommentService {
       }
 
       // let avgValue = (minValue + maxValue)/2
-      let lowerThird = (minValue + maxValue)/3
-      let midThird = lowerThird*2
-      
-      var canvasActualHeight = options.canvas.height - options.padding * 2
-      var canvasActualWidth = options.canvas.width - options.padding * 2
+      const lowerThird = (minValue + maxValue) / 3
+      const midThird = lowerThird * 2
+
+      const canvasActualHeight = options.canvas.height - options.padding * 2
+      const canvasActualWidth = options.canvas.width - options.padding * 2
 
       // drawing the bars
-      var barIndex = 0
-      var numberOfBars = Object.keys(options.data).length
-      var barSize = (canvasActualWidth)/numberOfBars
+      let barIndex = 0
+      const numberOfBars = Object.keys(options.data).length
+      const barSize = (canvasActualWidth) / numberOfBars
 
       for (bar in options.data) {
-        var val = options.data[bar]
-        if (val===0) {
+        let val = options.data[bar]
+        if (val === 0) {
             val = 4
         }
         if (val < lowerThird) {
-          val = val/2
+          val = val / 2
         } else if (val < midThird) {
-          val = val/1.5
+          val = val / 1.5
         }
-        var barHeight = Math.round( canvasActualHeight * (val/maxValue)) 
-        
+        const barHeight = Math.round( canvasActualHeight * (val / maxValue))
+
         drawBar(
           options.ctx,
           options.padding + barIndex * barSize,
-          options.canvas.height/2,
+          options.canvas.height / 2,
           barSize,
           barHeight,
-          options.colors[barIndex%options.colors.length]
+          options.colors[barIndex % options.colors.length]
         )
         barIndex++
       }
-    } // function barchart(options) 
+    } // function barchart(options)
 
     // Draw the individual bar at the specific part of chart with the specific height. It will be mirrored vertically about the middle of the chart
-    function drawBar(ctx, upperLeftCornerX, upperLeftCornerY, width, height,color) {
+    function drawBar(ctx, upperLeftCornerX, upperLeftCornerY, width, height, color) {
       ctx.save()
-      ctx.fillStyle=color
-      ctx.fillRect(upperLeftCornerX,upperLeftCornerY - height,width,2*height)
+      ctx.fillStyle = color
+      ctx.fillRect(upperLeftCornerX, upperLeftCornerY - height, width, 2 * height)
       ctx.restore()
     } // function drawBar(ctx, upperLeftCornerX, upperLeftCornerY, width, height,color)
-  } // // public waveForm(waves, canvas) 
+  } // // public waveForm(waves, canvas)
 
   /** Used to determine which level of permission the user has for a specific comment
    * @param comment A comment object
@@ -153,7 +153,7 @@ export class CommentService {
     if (this.activeComment.type !== 'emoji') {
         this.keyboardActive = false
     } else {
-        this.keyboardActive = this.activeComment && (!this.activeComment.type || this.activeComment.type === 'emoji') && 
+        this.keyboardActive = this.activeComment && (!this.activeComment.type || this.activeComment.type === 'emoji') &&
           this.activeComment.active && this.activeComment.user_id === user._id
     }
     return this.keyboardActive
@@ -203,8 +203,8 @@ export class CommentService {
    * When the user clicks 'yes' on the delete audio modal, we will clear the comment url and dataArray here
    */
   public audioReset(): void {
-    var comment = this.deleteAudioRef
-    if (comment && comment.type=='audio' && comment.url) {
+    const comment = this.deleteAudioRef
+    if (comment && comment.type == 'audio' && comment.url) {
       comment.url = ''
       comment.dataArray = []
       this.updateComment(comment)
@@ -217,8 +217,8 @@ export class CommentService {
    * @param comment Full EdjiComment object
    */
   public updateComment(comment: EdjiComment): void {
-    if (this.commentContext !== "answer") {
-      if (this.commentContext === "reply") {
+    if (this.commentContext !== 'answer') {
+      if (this.commentContext === 'reply') {
         // If this is a reply comment
         this.angulartics.eventTrack.next({ action: comment.type + 'updateReply', properties: { category: 'heroFeature', label: 'attempt' }})
         this._projects.addCommentToReplies(comment)
@@ -234,7 +234,7 @@ export class CommentService {
           this.angulartics.eventTrack.next({ action: comment.type + 'updateComment', properties: { category: 'projectAction', label: 'success' }})
         }
       })
-      .catch(error => { 
+      .catch(error => {
         if (this.commentContext === 'reply' || this.commentContext === 'answer') {
           this.angulartics.eventTrack.next({ action: comment.type + 'updateReply', properties: { category: 'heroFeature', label: 'failure' }})
         } else {
@@ -250,7 +250,7 @@ export class CommentService {
         this.angulartics.eventTrack.next({ action: comment.type + 'updateAnswer', properties: { category: 'heroFeature', label: 'success' }})
         this._projects.addAnswerToAnswers(answer)
       })
-      .catch(error => { 
+      .catch(error => {
         this.angulartics.eventTrack.next({ action: comment.type + 'updateAnswer', properties: { category: 'heroFeature', label: 'failure' }})
         console.log(error)
       })

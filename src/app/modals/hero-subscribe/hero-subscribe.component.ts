@@ -1,5 +1,5 @@
-import { Observable } from 'rxjs';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Observable } from 'rxjs'
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { Angulartics2 } from 'angulartics2'
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { debounceTime, map } from 'rxjs/operators'
@@ -18,34 +18,34 @@ export class HeroSubscribeComponent implements OnInit {
 
   public tempHide: boolean
   public card: any
-  public loading: boolean = false
+  public loading = false
   public userNowHero: boolean
   public stripe: any
   public stripeMessage: string
-  public initWithCoupon: boolean = false
-  public customCouponCode: string = ''
+  public initWithCoupon = false
+  public customCouponCode = ''
   // Discount value used for DISPLAY ONLY
-  public percentOff: number = 0
-  public newPrice: number = 60
-  public joiningAcademy: boolean = false
+  public percentOff = 0
+  public newPrice = 60
+  public joiningAcademy = false
   // private couponCode: string
 
-  public sForm: FormGroup 
+  public sForm: FormGroup
 
   @Input()
-  couponCode: string = ''
+  couponCode = ''
 
   @Output()
   closeModal: EventEmitter<any> = new EventEmitter()
   @Output()
   heroWasBorn: EventEmitter<any> = new EventEmitter()
-  
+
   constructor(
     private _auth: AuthService,
     private _bumblebee: BumblebeeService,
     private angulartics: Angulartics2,
     private fb: FormBuilder,
-  ) { 
+  ) {
   }
 
   ngOnInit() {
@@ -56,8 +56,8 @@ export class HeroSubscribeComponent implements OnInit {
         [],
         this.validateCoupon.bind(this)
       ]
-    }, { updateOn: "submit" });
-    
+    }, { updateOn: 'submit' })
+
     // Create a Stripe client
     if (this._auth.getEnv() === 'dev') {
       this.stripe = Stripe('pk_test_e2lOurNpSI745MOUdu2LgzOu')
@@ -70,11 +70,11 @@ export class HeroSubscribeComponent implements OnInit {
     }
 
     // Create an instance of Elements
-    var elements = this.stripe.elements()
+    const elements = this.stripe.elements()
 
     // Custom styling can be passed to options when creating an Element.
     // (Note that this demo uses a wider set of styles than the guide below.)
-    var style = {
+    const style = {
       base: {
         color: '#32325d',
         lineHeight: '24px',
@@ -99,18 +99,18 @@ export class HeroSubscribeComponent implements OnInit {
 
     // Handle real-time validation errors from the card Element.
     this.card.addEventListener('change', function(event) {
-      var displayError = document.getElementById('card-errors')
+      const displayError = document.getElementById('card-errors')
       if (event.error) {
         displayError.textContent = event.error.message
       } else {
         displayError.textContent = ''
       }
-    });
-  
+    })
+
   }
 
-  private validateCoupon(control: AbstractControl) : Observable<any> {
-    let coupon = control.value && control.value.toUpperCase()
+  private validateCoupon(control: AbstractControl): Observable<any> {
+    const coupon = control.value && control.value.toUpperCase()
     // Reset variables
     this.joiningAcademy = false
     this.percentOff = 0
@@ -121,7 +121,7 @@ export class HeroSubscribeComponent implements OnInit {
         (res) => {
           if (res.percent_off) {
             this.percentOff = res.percent_off
-            this.newPrice = (100-this.percentOff)/100 * 60
+            this.newPrice = (100 - this.percentOff) / 100 * 60
           }
           // Hack for detecting Hero Academy teachers
           if (coupon.indexOf('HA-') == 0) {
@@ -144,15 +144,15 @@ export class HeroSubscribeComponent implements OnInit {
     }
 
     this.loading = true
-    
+
     if (this.percentOff == 100) {
       this.becomeHero()
     } else {
       this.stripe.createToken(this.card).then((result) => {
         if (result.error) {
           // Inform the user if there was an error
-          var errorElement = document.getElementById('card-errors')
-          errorElement.textContent = result.error.message;
+          const errorElement = document.getElementById('card-errors')
+          errorElement.textContent = result.error.message
           this.loading = false
         } else {
           this.becomeHero(result.token.id)
@@ -162,10 +162,10 @@ export class HeroSubscribeComponent implements OnInit {
   }
 
   private becomeHero(stripeToken ?: string) {
-    let eventAction = 'addSubscription'
+    const eventAction = 'addSubscription'
     // track user adding hero subscription in analytics
         this.angulartics.eventTrack.next({ action: eventAction, properties: { category: 'heroFeature', label: 'attempt' }})
-        this._auth.subscribeToHero(stripeToken ? stripeToken : "", this.initWithCoupon ? this.couponCode.toUpperCase() : this.sForm.valid ? this.sForm.controls["couponCode"].value.toUpperCase() : '')
+        this._auth.subscribeToHero(stripeToken ? stripeToken : '', this.initWithCoupon ? this.couponCode.toUpperCase() : this.sForm.valid ? this.sForm.controls['couponCode'].value.toUpperCase() : '')
         .subscribe(
           data => {
             // track user adding hero subscription in analytics
@@ -174,7 +174,7 @@ export class HeroSubscribeComponent implements OnInit {
             this.loading = false
             if (data.user) {
               this._auth.setUser(data.user)
-              this._bumblebee.userHeroAction(data.user, "subscribed")
+              this._bumblebee.userHeroAction(data.user, 'subscribed')
             }
           },
           error => {

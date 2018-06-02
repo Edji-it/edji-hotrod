@@ -13,7 +13,7 @@ import { AuthService, CommentService, ProjectService, ReadingService } from '../
 })
 
 export class DiscussionsComponent implements OnInit, OnDestroy {
-  @Input() visible: boolean = false
+  @Input() visible = false
   @Input() comment: EdjiComment
   @Output() hide: EventEmitter<any> = new EventEmitter()
   @Output() activeReply: EventEmitter<any> = new EventEmitter()
@@ -23,13 +23,13 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
   private repliesById: any = {}
 
   private replyCommentNew: EdjiComment
-  private createReply: boolean = false
+  private createReply = false
   private user: any
-  
+
   public currentReading: Reading
 
   constructor(
-    private _projects: ProjectService, 
+    private _projects: ProjectService,
     private _readings: ReadingService,
     private _auth: AuthService,
     private _comments: CommentService,
@@ -41,10 +41,10 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
     // Subscribe to the reading
     this.subscriptions.push( this._readings.currentReading.subscribe(
       reading => {
-        this.currentReading = reading;
+        this.currentReading = reading
       },
       error => {
-        console.error(error);
+        console.error(error)
       }
     ) )
 
@@ -76,7 +76,7 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
             this.user = user
         })
     )
-  } // ngOnInit() 
+  } // ngOnInit()
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe() })
@@ -89,11 +89,11 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
    * @param type What kind of reply comment: emoji, text...
    */
   addReplyOfType(type: string): void {
-    let commentId = this.comment._id
+    const commentId = this.comment._id
 
     this.angulartics.eventTrack.next({ action: type + 'ReplyCreate', properties: { category: 'heroFeature', label: 'attempt' }})
-    
-    var replyCommentNew = <EdjiComment>{
+
+    const replyCommentNew = <EdjiComment>{
       user_id: this.user._id,
       author: this.user.fullname,
       reply_to: commentId,
@@ -105,7 +105,7 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
     // replyCommentNew.active = true
     this.replyCommentNew = replyCommentNew
 
-    if (type=='emoji') {
+    if (type == 'emoji') {
       this.activeEmojiKeyboardReply(this.replyCommentNew)
     }
 

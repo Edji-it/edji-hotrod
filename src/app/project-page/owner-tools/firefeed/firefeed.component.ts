@@ -12,15 +12,15 @@ import { ProjectService, ReadingService } from '../../../_services'
 })
 
 export class FirefeedComponent implements OnInit, OnDestroy {
-  @Input() visible: boolean = false
+  @Input() visible = false
   @Output() hide: EventEmitter<any> = new EventEmitter()
-  
+
   private subscriptions: Subscription[] = []
   private project: Project
   public currentReading: Reading
 
   constructor(
-    private _projects: ProjectService, 
+    private _projects: ProjectService,
     private _readings: ReadingService
   ) { }
 
@@ -28,10 +28,10 @@ export class FirefeedComponent implements OnInit, OnDestroy {
     // Subscribe to the reading
     this.subscriptions.push( this._readings.currentReading.subscribe(
       reading => {
-        this.currentReading = reading;
+        this.currentReading = reading
       },
       error => {
-        console.error(error);
+        console.error(error)
       }
     ) )
     // Subscribe to updates from that project once we're subscribed to the reading

@@ -5,7 +5,7 @@ import { take } from 'rxjs/operators'
 
 // Project Dependencies
 import { AuthService, ProjectService } from './../../_services'
-import { User } from "../../shared/datatypes"
+import { User } from '../../shared/datatypes'
 
 @Component({
   selector: 'hot-add-project-modal',
@@ -16,26 +16,26 @@ export class AddProjectModal implements OnInit {
 
   @Input() reading: any
   public projectForm: FormGroup
-  public formSubmitted: boolean = false
+  public formSubmitted = false
   public errors: {
     serviceError ?: boolean,
     invalidCode?: boolean,
     groupNameLength?: boolean
   } = {}
   public commentTypes: any = []
-  public canChooseTypes: boolean = false 
-  public customCode: string = ''
+  public canChooseTypes = false
+  public customCode = ''
   public user: User
   public loading: boolean
 
   constructor(
-    private _projects: ProjectService, 
+    private _projects: ProjectService,
     private _fb: FormBuilder,
     private _auth: AuthService
     ) {
   }
 
-  ngOnInit() { 
+  ngOnInit() {
     this.user = this._auth.getUser()
 
     // Get authorized comment types
@@ -65,11 +65,11 @@ export class AddProjectModal implements OnInit {
     this.loading = true
     if (!this.projectForm.valid) { return }
 
-    let types = []
-    if (formValue.emojiType) { types.push("emoji") }
-    if (formValue.textType) { types.push("text") }
-    if (formValue.audioType) { types.push("audio") }
-    if (formValue.replyType) { types.push("reply") }
+    const types = []
+    if (formValue.emojiType) { types.push('emoji') }
+    if (formValue.textType) { types.push('text') }
+    if (formValue.audioType) { types.push('audio') }
+    if (formValue.replyType) { types.push('reply') }
 
     this._projects.validateProject(formValue.customCode)
       .pipe(take(1))

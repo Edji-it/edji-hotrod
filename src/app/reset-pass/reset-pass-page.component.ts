@@ -1,23 +1,23 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Angulartics2 } from 'angulartics2';
+import { Component, OnInit } from '@angular/core'
+import { FormGroup, FormBuilder, Validators } from '@angular/forms'
+import { Router, ActivatedRoute } from '@angular/router'
+import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
-import { AuthService } from './../_services';
+import { AuthService } from './../_services'
 
 @Component({
   selector: 'hot-reset-pass-page',
   templateUrl: 'reset-pass-page.component.html'
 })
 export class ResetPassPage implements OnInit {
-  public resetForm: FormGroup;
-  public isLoading: boolean = false;
-  public resetToken: string;
+  public resetForm: FormGroup
+  public isLoading = false
+  public resetToken: string
   public serviceResponse: {
     success?: boolean,
     failure?: boolean
-  } = {};
+  } = {}
   public submitted: boolean
 
   constructor(
@@ -30,28 +30,28 @@ export class ResetPassPage implements OnInit {
     this.resetForm = _fb.group({
       password: [null, Validators.required],
       passwordConfirm: [null, Validators.required]
-    }, { validator: this.passwordsEqual });
+    }, { validator: this.passwordsEqual })
   }
 
   ngOnInit() {
-    this.resetToken = this.route.snapshot.queryParams['token'];
+    this.resetToken = this.route.snapshot.queryParams['token']
     if (!this.resetToken) {
-      this._router.navigate(['/login']);
+      this._router.navigate(['/login'])
     }
   }
 
-  //https://angular.io/docs/ts/latest/api/forms/index/FormGroup-class.html
+  // https://angular.io/docs/ts/latest/api/forms/index/FormGroup-class.html
   /** Validates that the passwords are equal and assigns error if not
    * @returns error to FormGroup called 'mismatch' if the passwords are not equal
    */
   private passwordsEqual(group: FormGroup): any {
     return group.get('password').value === group.get('passwordConfirm').value
-      ? null : { mismatch: true };
+      ? null : { mismatch: true }
   }
 
   public resetPass(formValue: any): void {
     if (!this.resetForm.valid) {
-      return;
+      return
     }
     this.submitted = true
     this.isLoading = true
@@ -60,17 +60,17 @@ export class ResetPassPage implements OnInit {
       .then((res) => {
         this.isLoading = false
         if (res.user && res.token) {
-          this.serviceResponse.success = true;
-          res.user.username && this.angulartics.setUsername.next(res.user.username);
-          res.user.email && this.angulartics.setUserProperties.next({ email: res.user.email});
+          this.serviceResponse.success = true
+          res.user.username && this.angulartics.setUsername.next(res.user.username)
+          res.user.email && this.angulartics.setUserProperties.next({ email: res.user.email})
         } else {
-          this.serviceResponse.failure = true;
+          this.serviceResponse.failure = true
         }
       })
       .catch((err) => {
-        console.error(err);
+        console.error(err)
         this.isLoading = false
-        this.serviceResponse.failure = true;
-      });
+        this.serviceResponse.failure = true
+      })
   }
 }

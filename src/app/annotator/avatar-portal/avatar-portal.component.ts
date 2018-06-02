@@ -7,7 +7,7 @@ import { Angulartics2 } from 'angulartics2'
 import { ProjectService } from '../../_services'
 
 enum playState {
-  inactive, 
+  inactive,
   loading,
   playing,
   recording
@@ -19,15 +19,15 @@ enum playState {
     styleUrls: ['./avatar-portal.component.scss']
 })
 export class AvatarPortalComponent implements OnInit, OnDestroy {
-  
+
   public subscriptions: Subscription[] = []
   public repliesById: any = {}
   public commentsByPos: any = []
   public currentState: playState = playState.inactive
   public audio
-    
+
   @Input() public lineCount: Number = 1
-  @Input() public active: boolean = false
+  @Input() public active = false
   @Input() public lineY: Number = 0
   @Input() public comment: EdjiComment
   @Input() public indexOnLine: Number = 1
@@ -37,8 +37,8 @@ export class AvatarPortalComponent implements OnInit, OnDestroy {
   constructor (
     private _projects: ProjectService,
     private angulartics: Angulartics2,
-  ) { 
-      
+  ) {
+
   }
 
   ngOnInit() {
@@ -48,7 +48,7 @@ export class AvatarPortalComponent implements OnInit, OnDestroy {
       }
     ))
     // If comment already has uploaded audio, load it
-    if (this.comment.type=='audio' && this.comment.url && this.comment.url.length > 0) {
+    if (this.comment.type == 'audio' && this.comment.url && this.comment.url.length > 0) {
       this.loadAudioPlayer(this.comment.url)
     }
     // Subscribe to updates to the reply reference object
@@ -64,22 +64,22 @@ export class AvatarPortalComponent implements OnInit, OnDestroy {
 
   public triggerCommentPane(selected?: boolean) {
     // If the avatar is the 8th where it shows '+' and number of comments
-    if (this.indexOnLine==8) {
-      selected=false
+    if (this.indexOnLine == 8) {
+      selected = false
     }
     // If selected is true then we will have the comment pane scroll to the comment the user clicked on
     if (selected) {
-      this.comment.selected=true
+      this.comment.selected = true
     } else {
-      this.comment.selected=false
+      this.comment.selected = false
     }
     this.toggleCommentPane.emit()
   }
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe() })
-  }  
-  
+  }
+
   private loadAudioPlayer(url: string) {
     // Fresh audio object
     this.audio = new Audio()
@@ -96,7 +96,7 @@ export class AvatarPortalComponent implements OnInit, OnDestroy {
     }
   }
 
-  /** 
+  /**
    * Pause playback of the audio track
    */
   private pause() {
@@ -106,7 +106,7 @@ export class AvatarPortalComponent implements OnInit, OnDestroy {
     this.audio.pause()
   }
 
-  /** 
+  /**
    * Start playback of the audio track
    */
   private play() {

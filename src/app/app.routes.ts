@@ -2,19 +2,19 @@ import { Routes, RouterModule } from '@angular/router'
 
 // Project Dependencies
 import { AuthService } from './_services'
-import { NewReadingPage } from './new-reading-page';
-import { ProjectPageComponent } from './project-page';
-import { HomeComponent } from './home';
-import { RegisterComponent } from './register';
-import { AccountComponent } from './account';
-import { DashboardComponent } from './dashboard';
-import { NoContentComponent } from './no-content';
-import { LoginComponent } from './login';
-import { ResetPassPage } from './reset-pass/reset-pass-page.component';
-import { HeroPromoComponent } from './hero-promo/hero-promo.component';
-import { HeroPricingComponent } from './hero-pricing/hero-pricing.component';
-import { DiscoverFeedComponent } from "./discover-feed/discover-feed.component";
-import { OAuthComponent } from './oauth-redirect/oauth-redirect.component';
+import { NewReadingPage } from './new-reading-page'
+import { ProjectPageComponent } from './project-page'
+import { HomeComponent } from './home'
+import { RegisterComponent } from './register'
+import { AccountComponent } from './account'
+import { DashboardComponent } from './dashboard'
+import { NoContentComponent } from './no-content'
+import { LoginComponent } from './login'
+import { ResetPassPage } from './reset-pass/reset-pass-page.component'
+import { HeroPromoComponent } from './hero-promo/hero-promo.component'
+import { HeroPricingComponent } from './hero-pricing/hero-pricing.component'
+import { DiscoverFeedComponent } from './discover-feed/discover-feed.component'
+import { OAuthComponent } from './oauth-redirect/oauth-redirect.component'
 
 
 export const ROUTES: Routes = [

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 
 @Component({
   selector: 'hot-del-audio',
@@ -7,14 +7,14 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 })
 export class DeleteAudioModal implements OnInit {
   @Output()
-  closeModal: EventEmitter<any> = new EventEmitter();
+  closeModal: EventEmitter<any> = new EventEmitter()
   @Output()
-  delete: EventEmitter<any> = new EventEmitter();
+  delete: EventEmitter<any> = new EventEmitter()
 
   @Input()
-  comment: any;
+  comment: any
 
-  public showError: boolean = false
+  public showError = false
 
   constructor() { }
 

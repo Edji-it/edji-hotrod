@@ -13,10 +13,10 @@ export class ScrollProgressComponent implements OnInit {
 
   private subscriptions: Subscription[] = []
   // Scroll progress as a percent, 0-100
-  private _scrollProgress: number = 0
+  private _scrollProgress = 0
 
   // Scroll progress inputs for calculation
-  @Input() 
+  @Input()
   set scrollProgress(progress: number) {
     this._scrollProgress = Math.ceil(progress)
   }

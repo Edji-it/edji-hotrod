@@ -20,15 +20,15 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
   public referralCode: string
   public referralBlocks: any = []
   public numberReferrals: number
-  public referralIndex: number = -1
+  public referralIndex = -1
   public referralCouponCopy: any = {}
   public alertObject = {
     show: false,
-    type: "",
-    message: ""
+    type: '',
+    message: ''
   }
   public linkCopySuccess: boolean
-  public referredByComplete: boolean 
+  public referredByComplete: boolean
 
   public showModal: boolean
 
@@ -42,7 +42,7 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
         // Refresh the check for created readings on modal open
         this._readings.updateCreated()
       }
-    } 
+    }
   }
   get showReferral(): boolean { return this.showModal }
   @Output() private hideReferral: EventEmitter<boolean> = new EventEmitter()
@@ -56,11 +56,11 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
     private _readings: ReadingService,
     private _auth: AuthService
   ) {
-    
+
   }
 
   ngOnInit() {
-    let user = this._auth.getUser()
+    const user = this._auth.getUser()
     // If the user was referred, we want to give them credit when they create a reading
     if (user.referred_by && user.referred_by.length > 0) {
       this.subscriptions.push(
@@ -73,8 +73,8 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
             // Let the user know they need to create a Reading!
             this.alertObject = {
               show: true,
-              type: "alert-info",
-              message: "<b>Almost There</b><br/>Since you were referred by someone, just <a class='link' href='/#/new-reading'>create a reading</a> to get a stamp and earn 20% off!"
+              type: 'alert-info',
+              message: '<b>Almost There</b><br/>Since you were referred by someone, just <a class=\'link\' href=\'/#/new-reading\'>create a reading</a> to get a stamp and earn 20% off!'
             }
           }
         })
@@ -97,23 +97,23 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
    * - Causes re-calc of referral stamps
    */
   private getUserReferralStatus() {
-    let user = this._auth.getUser() 
+    const user = this._auth.getUser()
     this._auth.getReferralProgress(user._id).pipe(take(1)).subscribe((userReferrals: any) => {
       // Set the current number of referrals and build our array of objects
-      let completedReferrals = userReferrals.users_referred.filter(referred => {
-        return referred.status == "completed"
+      const completedReferrals = userReferrals.users_referred.filter(referred => {
+        return referred.status == 'completed'
       })
       this.numberReferrals = completedReferrals.length - 1
       this.evaluateReferralProgress(this.numberReferrals, this.referredByComplete)
       // Set the referral code for copying and sharing
       this.referralCode = userReferrals.code
-      this.referralLink = location.origin + "/#/?r=" + this.referralCode
+      this.referralLink = location.origin + '/#/?r=' + this.referralCode
     }, (err) => {
       console.error(err)
       this.alertObject = {
         show: true,
-        type: "alert-danger",
-        message: "We had some trouble getting your referrals, it might be our fault"
+        type: 'alert-danger',
+        message: 'We had some trouble getting your referrals, it might be our fault'
       }
     })
   }
@@ -121,13 +121,13 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
    * Evaluates Referral Progress
    * - Updates display objects
    */
-  private evaluateReferralProgress(referralIndex: number, referredByComplete: boolean) : void {
+  private evaluateReferralProgress(referralIndex: number, referredByComplete: boolean): void {
     // Count if you were referred by another user AND completed a reading, add this to the number of referrals
     if (referredByComplete) {
       referralIndex += 1
     }
-    let maximumReferral = 5
-    for (let i=0;i<maximumReferral;i++) {
+    const maximumReferral = 5
+    for (let i = 0; i < maximumReferral; i++) {
       if (i <= referralIndex) {
         this.referralBlocks[i] = {
           referred: true
@@ -151,7 +151,7 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
           this.referralCouponCopy.buttonText = 'Redeem Free Year'
       } else {
           this.referralCouponCopy.header = (referralIndex + 1) + ' Referral' + (referralIndex >= 1 ? 's' : '') + ' in the Bag!'
-          this.referralCouponCopy.text = "You've unlocked " + discount + "% off. Use it now or go for an even bigger deal."
+          this.referralCouponCopy.text = 'You\'ve unlocked ' + discount + '% off. Use it now or go for an even bigger deal.'
           this.referralCouponCopy.buttonText = 'Get Hero ' + discount + '% Off'
       }
     }
@@ -163,7 +163,7 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
    */
   private copyReferralCode() {
     // Create a new textarea element that we'll not make visible
-    let selBox = document.createElement('textarea')
+    const selBox = document.createElement('textarea')
     selBox.style.position = 'fixed'
     selBox.style.left = '0'
     selBox.style.top = '0'
@@ -189,7 +189,7 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
    * @param shareMedium is the path the user will be using to share their referral code
    */
   private shareReferralCode(shareMedium: string) {
-    switch(shareMedium) {
+    switch (shareMedium) {
       case 'email':
         window.open('mailto:?subject=Go Hero on Edji With Me&body=Create%20readings%20on%20Edji%20with%20me%2C%20and%20get%2020%25%20off%20Hero%20' + encodeURIComponent(this.referralLink), '_blank')
         break
@@ -209,17 +209,17 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
    * @param index is the position on the referral squares where a user has completed a referral
    */
   private getReferralIcon(index: number) {
-    switch(index) {
+    switch (index) {
       case 0:
-        return "icon-bam"
+        return 'icon-bam'
       case 1:
-        return "icon-splat"
+        return 'icon-splat'
       case 2:
-        return "icon-biff"
+        return 'icon-biff'
       case 3:
-        return "icon-pow"
+        return 'icon-pow'
       case 4:
-        return "icon-hero"
+        return 'icon-hero'
     }
   }
 
@@ -228,18 +228,18 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
    */
   private getCouponCode() {
     // A user may refer more than 5, but they get the same discount
-    let couponNo = this.referralIndex > 4 ? 4 : this.referralIndex
-    switch(couponNo) {
+    const couponNo = this.referralIndex > 4 ? 4 : this.referralIndex
+    switch (couponNo) {
       case 0:
-        return "HOTROD_HERO_ONE5TH"
+        return 'HOTROD_HERO_ONE5TH'
       case 1:
-        return "HOTROD_HERO_24BUCKS"
+        return 'HOTROD_HERO_24BUCKS'
       case 2:
-        return "HOTROD_HERO_36BIGONES"
+        return 'HOTROD_HERO_36BIGONES'
       case 3:
-        return "HOTROD_HERO_4FIFTHS"
+        return 'HOTROD_HERO_4FIFTHS'
       case 4:
-        return "HOTROD_HERO_REFERMASTER"
+        return 'HOTROD_HERO_REFERMASTER'
     }
   }
 
@@ -251,8 +251,8 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
   private closeAlert() {
     this.alertObject = {
       show: false,
-      type: "",
-      message: ""
+      type: '',
+      message: ''
     }
   }
 }

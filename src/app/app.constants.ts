@@ -4,6 +4,6 @@
  */
 
 export const ALLSPARK = {
-    EMAILREGEX:<RegExp> /^\w+([\.-]?\w+)*(\+[a-z0-9-]+)?@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-    BASELINEHEIGHT:<number> 26
+    EMAILREGEX: <RegExp> /^\w+([\.-]?\w+)*(\+[a-z0-9-]+)?@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+    BASELINEHEIGHT: <number> 26
 }

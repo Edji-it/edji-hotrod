@@ -12,19 +12,19 @@ import { AuthService, BumblebeeService } from './../../_services'
 export class HeroChangeComponent implements OnInit {
 
   private user: any = {}
-  private isUpdated: boolean = false
-  private updating: boolean = false
-  
-  public confirmCancel: boolean = false
-  public isCanceled: boolean = false
-  public canceling: boolean = false
-  public cancelMsg: string = ''
+  private isUpdated = false
+  private updating = false
+
+  public confirmCancel = false
+  public isCanceled = false
+  public canceling = false
+  public cancelMsg = ''
 
   // Form values
-  private subtype: string = 'yearly'
+  private subtype = 'yearly'
 
   @Output()
-  closeModal: EventEmitter<any> = new EventEmitter(); // Tell the listening page to close the darned thing.
+  closeModal: EventEmitter<any> = new EventEmitter() // Tell the listening page to close the darned thing.
 
   constructor(
     private _auth: AuthService,
@@ -40,7 +40,7 @@ export class HeroChangeComponent implements OnInit {
   /**
    * Hook into the close event
    */
-  close() : void {
+  close(): void {
     // Reset defaults
     this.isUpdated = false
     this.confirmCancel = false
@@ -61,7 +61,7 @@ export class HeroChangeComponent implements OnInit {
           this.updating = false
           this.isUpdated = true
           if (data.user) {
-            this._bumblebee.userHeroAction(data.user, "unsubscribed")
+            this._bumblebee.userHeroAction(data.user, 'unsubscribed')
             this._auth.setUser(data.user)
           }
         },
@@ -97,7 +97,7 @@ export class HeroChangeComponent implements OnInit {
           this.angulartics.eventTrack.next({ action: 'cancelSubscription', properties: { category: 'heroFeature', label: 'failure' }})
 
           this.canceling = false
-          this.cancelMsg = "Sorry, canceling your subscription failed. <a class='link' href='mailto:support@edji.it'>Please contact support</a>."
+          this.cancelMsg = 'Sorry, canceling your subscription failed. <a class=\'link\' href=\'mailto:support@edji.it\'>Please contact support</a>.'
           console.log(err)
         }
       )

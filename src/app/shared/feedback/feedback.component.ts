@@ -7,8 +7,8 @@ import { take } from 'rxjs/operators'
 
 import { AuthService, BumblebeeService, UtilToolService } from '../../_services'
 import { ALLSPARK } from '../../app.constants'
-import { LockerService } from '../../_services/locker.service';
-import { Copy } from '..';
+import { LockerService } from '../../_services/locker.service'
+import { Copy } from '..'
 
 @Component({
   selector: 'edji-feedback',
@@ -23,13 +23,13 @@ export class FeedbackComponent implements OnInit {
   private closeModal: EventEmitter<any> = new EventEmitter()
 
   // private showFeedbackModal: boolean = false
-  public showFeedbackSuccess: boolean = false
+  public showFeedbackSuccess = false
   public feedbackForm: FormGroup
-  public feedbackSuccess: boolean = false
+  public feedbackSuccess = false
   public user: any
   public userCopy: any
   private window
-  public loading: boolean = false
+  public loading = false
 
   public errorObject: {
     serverError?: string
@@ -46,7 +46,7 @@ export class FeedbackComponent implements OnInit {
   ) {
     this.user = this._auth.getUser()
 
-    let prevData: any = this._locker.get("feedbackFormData") || {}
+    const prevData: any = this._locker.get('feedbackFormData') || {}
 
     this.feedbackForm = fb.group({
       name: [this.user.fullname, Validators.required],
@@ -65,7 +65,7 @@ export class FeedbackComponent implements OnInit {
    * @returns error which should be assigned to the email input
    */
   private emailValidator(control: FormControl): any {
-    let emailRe: RegExp = ALLSPARK.EMAILREGEX
+    const emailRe: RegExp = ALLSPARK.EMAILREGEX
     return emailRe.test(control.value) ? null : { 'emailIncorrect': true }
   }
 
@@ -80,7 +80,7 @@ export class FeedbackComponent implements OnInit {
   public feedbackClose(): void {
     this.closeModal.emit()
     this._util.showFeedbackModal = false
-    
+
     // Workaround: This modal is long enough that it needs to scroll and we don't want two scrollbars
     document.body.style.overflow = ''
   }
@@ -94,21 +94,21 @@ export class FeedbackComponent implements OnInit {
     this.loading = true
     this.angulartics.eventTrack.next({ action: 'sendFeedback', properties: { category: 'accountManagement', label: 'attempt' }})
 
-    var w = this.window.navigator
+    const w = this.window.navigator
     // Set a message and the following properties to return:
     // Device
     // Browser
     // Browser Version
     // Edji Version
 
-    formValue.content = formValue.content + '<br><br>' + this._util.getPlatform(w) 
-        + '<br>' + this._util.getBrowser(w.userAgent) 
-        + '<br>' + this._util.getBrowserVersion(w.userAgent) 
+    formValue.content = formValue.content + '<br><br>' + this._util.getPlatform(w)
+        + '<br>' + this._util.getBrowser(w.userAgent)
+        + '<br>' + this._util.getBrowserVersion(w.userAgent)
         + '<br>' + this._util.getEdjiVersion()
         + '<br>' + window.location.href
 
     // Only send the user properties we need to bumblebee
-    var userSend: any = {
+    const userSend: any = {
       username: this.user.username,
       fullname: this.user.fullname,
       email: this.user.email,
@@ -117,10 +117,10 @@ export class FeedbackComponent implements OnInit {
       hero: this.user.hero
     }
 
-    let data: any = {
-      emailSubject: "Feedback form submitted!",
+    const data: any = {
+      emailSubject: 'Feedback form submitted!',
       formInfo: formValue,
-      type: "feedback",
+      type: 'feedback',
       user: userSend
     }
 
@@ -129,7 +129,7 @@ export class FeedbackComponent implements OnInit {
         this.loading = false
         this.angulartics.eventTrack.next({ action: 'sendFeedback', properties: { category: 'accountManagement', label: 'success' }})
         this.feedbackSuccess = true
-        this._locker.remove("feedbackFormData")
+        this._locker.remove('feedbackFormData')
         this.feedbackClose()
         this.showFeedbackSuccess = true
       },
@@ -137,8 +137,8 @@ export class FeedbackComponent implements OnInit {
         console.error(err)
         this.loading = false
         this.angulartics.eventTrack.next({ action: 'sendFeedback', properties: { category: 'accountManagement', label: 'failure' }})
-        this.errorObject.serverError = "Something has gone wrong. Please try submitting your feedback again later!"
-        this._locker.set("feedbackFormData", formValue)
+        this.errorObject.serverError = 'Something has gone wrong. Please try submitting your feedback again later!'
+        this._locker.set('feedbackFormData', formValue)
       }
     )
   }

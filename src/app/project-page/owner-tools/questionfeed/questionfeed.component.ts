@@ -1,9 +1,9 @@
-import { Project, Reading } from '../../../shared/datatypes';
-import { Subscription } from 'rxjs';
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Project, Reading } from '../../../shared/datatypes'
+import { Subscription } from 'rxjs'
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core'
 
 // Project dependencies
-import { ProjectService, ReadingService } from '../../../_services';
+import { ProjectService, ReadingService } from '../../../_services'
 
 @Component({
   selector: 'hot-questionfeed',
@@ -12,7 +12,7 @@ import { ProjectService, ReadingService } from '../../../_services';
 })
 
 export class QuestionfeedComponent implements OnInit, OnDestroy {
-  @Input() visible: boolean = false
+  @Input() visible = false
   @Output() hide: EventEmitter<any> = new EventEmitter()
 
   private project: Project
@@ -20,7 +20,7 @@ export class QuestionfeedComponent implements OnInit, OnDestroy {
   public currentReading: Reading
 
   constructor(
-    private _projects: ProjectService, 
+    private _projects: ProjectService,
     private _readings: ReadingService
   ) { }
 
@@ -28,11 +28,11 @@ export class QuestionfeedComponent implements OnInit, OnDestroy {
     // Subscribe to the reading
     this.subscriptions.push( this._readings.currentReading.subscribe(
       reading => {
-        this.currentReading = reading;
+        this.currentReading = reading
       },
       error => {
-        console.error(error);
-      }) 
+        console.error(error)
+      })
     )
     // Subscribe to updates from that project once we're subscribed to the reading
     this.subscriptions.push( this._projects.currentProject.subscribe(
@@ -43,7 +43,7 @@ export class QuestionfeedComponent implements OnInit, OnDestroy {
       },
       (error) => {
         console.error(error)
-      }) 
+      })
     )
   }
 

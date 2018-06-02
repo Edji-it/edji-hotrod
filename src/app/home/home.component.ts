@@ -27,20 +27,20 @@ import { AuthService, ProjectService } from '../_services'
 })
 export class HomeComponent implements OnInit, OnDestroy {
   // Set our default values
-  private projectCode: string;
-  private joinLoading: boolean = false;
+  private projectCode: string
+  private joinLoading = false
 
-  private subscriptions: Subscription[] = [];
+  private subscriptions: Subscription[] = []
 
   private errorObject: {
-    "invalidCode"?: string,
-    "loginFailed"?: string,
-    "serverError"?: string
-  } = {};
+    'invalidCode'?: string,
+    'loginFailed'?: string,
+    'serverError'?: string
+  } = {}
 
-  public showPassModal: boolean = false;
-  public tweetsLoaded: boolean = false;
-  private twitterRestyleAttempts = 0;
+  public showPassModal = false
+  public tweetsLoaded = false
+  private twitterRestyleAttempts = 0
 
   // TypeScript public modifiers
   constructor(
@@ -52,21 +52,21 @@ export class HomeComponent implements OnInit, OnDestroy {
     private _title: Title,
     private ng4TwitterTimelineService: Ng4TwitterTimelineService
   ) {
-    
+
   }
 
   ngOnInit() {
     this._title.setTitle('Edji')
     this.restyleTwitter()
   }
- 
+
   private widgetCSS = `
     body{
       font-family: 'Open Sans';
     }
     .timeline-Header{
       display: none;
-      background-color: white; 
+      background-color: white;
       /** border-top-left-radius: 10px; border-top-right-radius: 10px; */
     }
     .timeline-Header-title{
@@ -113,19 +113,19 @@ export class HomeComponent implements OnInit, OnDestroy {
       max-width: none;
       width: 100%;
     }
-    `;
-  
-  restyleTwitter(){
+    `
+
+  restyleTwitter() {
     if (this.twitterRestyleAttempts < 6) {
-      setTimeout(()=> {
-        if (document.getElementById("twitter-widget-0") && document.getElementById("twitter-widget-0")['contentDocument']) {
-          var w = document.getElementById("twitter-widget-0")['contentDocument'];
+      setTimeout(() => {
+        if (document.getElementById('twitter-widget-0') && document.getElementById('twitter-widget-0')['contentDocument']) {
+          const w = document.getElementById('twitter-widget-0')['contentDocument']
           console.log(w)
-          var s = document.createElement("style");
-          s.innerHTML = this.widgetCSS;
-          s.type = "text/css";
-          w.head.appendChild(s);
-          this.tweetsLoaded = true;
+          const s = document.createElement('style')
+          s.innerHTML = this.widgetCSS
+          s.type = 'text/css'
+          w.head.appendChild(s)
+          this.tweetsLoaded = true
         } else {
           this.restyleTwitter()
         }
@@ -134,7 +134,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach((sub: Subscription) => { sub.unsubscribe(); });
+    this.subscriptions.forEach((sub: Subscription) => { sub.unsubscribe() })
   }
 
   /**
@@ -142,39 +142,39 @@ export class HomeComponent implements OnInit, OnDestroy {
    * @param code The project's short code
    */
   public joinSession(code: string): void {
-    this.joinLoading = true;
-    this.angulartics.eventTrack.next({ action: 'enterLightningCode', properties: { category: 'joinProject', label: 'attempt' }});
+    this.joinLoading = true
+    this.angulartics.eventTrack.next({ action: 'enterLightningCode', properties: { category: 'joinProject', label: 'attempt' }})
     this._project.validateProject(code)
       .pipe(take(1))
       .subscribe(
         (data: any) => {
-          this.joinLoading = false;
-          this.angulartics.eventTrack.next({ action: 'enterLightningCode', properties: { category: 'joinProject', label: 'success' }});
-          if (data._id){
-            this.router.navigate(['/project', data._id]);
+          this.joinLoading = false
+          this.angulartics.eventTrack.next({ action: 'enterLightningCode', properties: { category: 'joinProject', label: 'success' }})
+          if (data._id) {
+            this.router.navigate(['/project', data._id])
           } else {
-            this.router.navigate(['/project', code]);
+            this.router.navigate(['/project', code])
           }
         },
         (error) => {
-          this.joinLoading = false;
+          this.joinLoading = false
           if (error.status === 500) {
-            this.angulartics.eventTrack.next({ action: 'enterLightningCode', properties: { category: 'joinProject', label: 'failure' }});
-            this.errorObject.invalidCode = "Oh no! Something went wrong and we don't know what happened!";
+            this.angulartics.eventTrack.next({ action: 'enterLightningCode', properties: { category: 'joinProject', label: 'failure' }})
+            this.errorObject.invalidCode = 'Oh no! Something went wrong and we don\'t know what happened!'
           } else {
-            this.errorObject.invalidCode = "We don't think that's a real code :confused:";
+            this.errorObject.invalidCode = 'We don\'t think that\'s a real code :confused:'
           }
         }
-      );
+      )
   }
 
   /**
    * Clears all errorObject strings to equal empty strings
    */
   private clearErrors(): void {
-    for (let property in this.errorObject) {
+    for (const property in this.errorObject) {
       if (this.errorObject.hasOwnProperty(property) && typeof this.errorObject[property] === 'string') {
-        this.errorObject[property] = "";
+        this.errorObject[property] = ''
       }
     }
   }
