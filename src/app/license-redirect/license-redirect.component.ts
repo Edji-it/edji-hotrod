@@ -52,28 +52,30 @@ export class LicenseRedirectComponent implements OnInit, OnDestroy {
     if (typeof(this.licenseId)!='undefined' && this.licenseId!='') {
       // if the user is logged in already, then we'll process the license
       if (this.user.isLoggedIn) {
-        // tell the server we need to process the license on the user
-        console.log('accepting this license:', this.licenseId)
-        this._academy.acceptLicense(this.licenseId).pipe(take(1)).subscribe((userWithLicense: any) => {
-          // console.log(userWithLicense)
-          // update the user across the app with the new license ID and hero status update
-          // this._auth.refreshUser().pipe(take(1)).subscribe((updatedUser: any) => {
-          //   if (updatedUser.license_ids.includes(this.licenseId) && (updatedUser.hero && updatedUser.hero.active)) {
-          //     console.log(updatedUser)
-          //     // once we update the user to add a license and make them a hero, let's redirect them to the dashboard
-          //     // this._router.navigate(['/dashboard'])
-          //   } else {
-          //     // error handling if the license was not processed on their account
-          //     this.messages.licenseProcessError = true
-          //   }
-          // })
-        }, (err) => {
-          console.error(err)
-        })
+        // if the user already accepted this license, redirect them to the dashboard.. otherwise process it
+        if (this.user.license_ids.includes(this.licenseId) && (this.user.hero && this.user.hero.active)) {
+          this._router.navigate(['/dashboard'])
+        } else {
+          // tell the server we need to process the license on the user
+          this._academy.acceptLicense(this.licenseId).pipe(take(1)).subscribe((userWithLicense: any) => {
+            // update the user across the app with the new license ID and hero status update
+            this._auth.refreshUser().pipe(take(1)).subscribe((updatedUser: any) => {
+              if (updatedUser.license_ids.includes(this.licenseId) && (updatedUser.hero && updatedUser.hero.active)) {
+                // once we update the user to add a license and make them a hero, let's redirect them to the dashboard
+                this._router.navigate(['/dashboard'])
+              } else {
+                // error handling if the license was not processed on their account
+                this.messages.licenseProcessError = true
+              }
+            })
+          }, (err) => {
+            console.error(err)
+          })
+        }
       } else {
         // store the licenseId in the locker if we need to register the user
         // this._locker.set("license_id", this.licenseId)
-        console.log(this.licenseId)
+        this._router.navigate(['/login'])
       }
     }
   }

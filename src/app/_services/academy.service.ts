@@ -18,13 +18,13 @@ export class AcademyService {
 
   public acceptLicense(licenseId: string): Observable<AcceptLicenseResponse> {
     return this._http.put<AcceptLicenseResponse>(this._auth.getUrl() + '/api/v1/licenses/' + licenseId + '/accept',
-      {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-          'Authorization': this._auth.getToken()
-        })
-      }
-    )
+    {},
+    {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': this._auth.getToken()
+      })
+    })
   }
 }
 
