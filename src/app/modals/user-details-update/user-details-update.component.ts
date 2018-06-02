@@ -43,6 +43,7 @@ export class UserDetailsUpdateModal implements OnInit {
       identities: _fb.group({
         student: true,
         teacher: null,
+        administrator: null,
         business: null,
         personal: null,
         robot: null,
@@ -73,7 +74,7 @@ export class UserDetailsUpdateModal implements OnInit {
         this.closeModal.emit()
         if (this._auth.getEnv() === "prod") { 
           // If we have a teacher, send it to Mailchimp and Bumblebee/Slack
-          if(res.user.identities && res.user.identities.indexOf('teacher') > -1) {
+          if(res.user.identities && res.user.identities.indexOf('teacher') > -1 || res.user.identities.indexOf('administrator') > -1) {
             // Tell Bumblebee/Slack!
             this._bumble.sendUserDetails(res.user)
             // Parse fullname for Mailchimp
