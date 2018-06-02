@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 
 import { AcademyRoutingModule } from './academy-routing.module';
 import { EngagementComponent } from './engagement/engagement.component';
-
+import { AppComponent } from '../app.component';
 @NgModule({
   imports: [
     CommonModule,
-    AcademyRoutingModule
+    AcademyRoutingModule,
+    AppComponent
   ],
   declarations: [EngagementComponent]
 })
