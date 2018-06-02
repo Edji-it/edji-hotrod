@@ -11,18 +11,18 @@ import { CommentService, ProjectService, ReadingService, SocketService } from '.
 })
 
 export class FirecardComponent implements OnInit, OnDestroy {
-  
+
   private currentReading: Reading
   private subscriptions: Subscription[] = []
-  private yPos: number = 0
-  public isImage: boolean = false
-  public secondsAgo: number = 0
+  private yPos = 0
+  public isImage = false
+  public secondsAgo = 0
   public audio
   public myCanvas
-  public playAble: boolean = false
-  public isPlaying: boolean = false
-  public viewInitRunOnce: boolean = false
-  public lastWord: number = 0
+  public playAble = false
+  public isPlaying = false
+  public viewInitRunOnce = false
+  public lastWord = 0
 
   @Input() fireComment: EdjiComment
 
@@ -40,13 +40,13 @@ export class FirecardComponent implements OnInit, OnDestroy {
         reading => {
           if (reading._id) {
              this.currentReading = reading
-            if (this.currentReading.words[this.fireComment.start] && this.currentReading.words[this.fireComment.start].styles[0]==='img') {
+            if (this.currentReading.words[this.fireComment.start] && this.currentReading.words[this.fireComment.start].styles[0] === 'img') {
               this.isImage = true
             }
           }
         },
         error => {
-          console.error(error);
+          console.error(error)
         }
       )
     )
@@ -54,17 +54,17 @@ export class FirecardComponent implements OnInit, OnDestroy {
     // Subscribe to comment comment updates
     this.subscriptions.push(
       this._socket.commentUpdates.subscribe((commentUpdate) => {
-        let comment = commentUpdate.comment
-        
+        const comment = commentUpdate.comment
+
         // Process different live comment updates
         if (commentUpdate.action === 'DELETE') {
-          
+
         } else if (commentUpdate.action === 'UPDATE') {
-          if (comment.type=='audio' && comment.url && comment.url.length > 0) {
+          if (comment.type == 'audio' && comment.url && comment.url.length > 0) {
             this.buildAudioView()
           }
         } else if (commentUpdate.action === 'CREATE') {
-          
+
         }
       }, (error) => {
         console.warn(error)
@@ -81,11 +81,11 @@ export class FirecardComponent implements OnInit, OnDestroy {
       )
 
     // Refresh time ago date every minute
-    setInterval(()=> {
+    setInterval(() => {
       this.secondsAgo++
     }, 60 * 1000)
 
-    if (this.fireComment.type=='audio' && this.fireComment.url && this.fireComment.url.length > 0) {
+    if (this.fireComment.type == 'audio' && this.fireComment.url && this.fireComment.url.length > 0) {
       this.buildAudioView()
     }
   }
@@ -112,11 +112,11 @@ export class FirecardComponent implements OnInit, OnDestroy {
           this.buildAudioView()
         }, 250)
       }
-      
+
   }
 
   public getOffset(el) {
-    el = el.getBoundingClientRect();
+    el = el.getBoundingClientRect()
     return {
       left: el.left + window.scrollX,
       top: el.top + window.scrollY
@@ -127,7 +127,7 @@ export class FirecardComponent implements OnInit, OnDestroy {
     // If the image index is further down than the last word rendered, send out a request to update the lastWord
     if (imageIndex > this.lastWord) {
       this._projects.lastWordUpdateSubj.next(imageIndex)
-      setTimeout(()=>{
+      setTimeout(() => {
         this.scrollToImage(imageIndex)
       }, 1)
     } else {
@@ -136,8 +136,8 @@ export class FirecardComponent implements OnInit, OnDestroy {
   }
 
   public scrollToImage(imageIndex) {
-    let yOffset = 100
-    let imageElement = document.getElementById("readingImage" + imageIndex)
+    const yOffset = 100
+    const imageElement = document.getElementById('readingImage' + imageIndex)
     this.yPos = this.getOffset(imageElement).top
     window.scrollTo(0, this.yPos - yOffset)
   }
@@ -146,7 +146,7 @@ export class FirecardComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((sub) => { sub.unsubscribe() })
   }
 
-  /** 
+  /**
    * Pause playback of the audio track
    */
   private pause() {
@@ -160,7 +160,7 @@ export class FirecardComponent implements OnInit, OnDestroy {
     }
   }
 
-  /** 
+  /**
    * Start playback of the audio track
    */
   private play() {
@@ -177,7 +177,7 @@ export class FirecardComponent implements OnInit, OnDestroy {
   }
 
 
-  private getPlayhead() : number {
+  private getPlayhead(): number {
     if (this.audio) {
       return Math.round(this.audio.currentTime / 30 * 100)
     } else {
@@ -186,7 +186,7 @@ export class FirecardComponent implements OnInit, OnDestroy {
   }
 
   private setPlaybackTime(event) {
-    let percentLeftClicked = event.offsetX/event.target.clientWidth
+    const percentLeftClicked = event.offsetX / event.target.clientWidth
     this.audio.currentTime = 30 * percentLeftClicked
   }
 }

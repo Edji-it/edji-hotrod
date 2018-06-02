@@ -12,10 +12,10 @@ export class MessageService {
 
   constructor(
     private _http: HttpClient,
-    private angulartics: Angulartics2, 
+    private angulartics: Angulartics2,
     private _auth: AuthService
   ) {
-    
+
   }
 
   /**
@@ -31,7 +31,7 @@ export class MessageService {
    * Gets messages (notifications) from the server
    */
   public getMessages(): Observable<GetMessagesResponse> {
-    return this._http.get<GetMessagesResponse>(this._auth.getUrl() + '/api/v1/users/' + this._auth.getUser()._id + '/messages', 
+    return this._http.get<GetMessagesResponse>(this._auth.getUrl() + '/api/v1/users/' + this._auth.getUser()._id + '/messages',
       {
         headers: new HttpHeaders({
           'Content-Type': 'application/json',
@@ -51,13 +51,13 @@ export class MessageService {
         this.getMessages()
         .pipe(take(1))
         .subscribe((data) => {
-          let messages = data.messages
-          let msgLen = messages.length
+          const messages = data.messages
+          const msgLen = messages.length
           // Check through the messages
-          for(var i=0; i < msgLen; i++) {
-            let message = messages[i]
+          for (let i = 0; i < msgLen; i++) {
+            const message = messages[i]
             // Refresh the user if message is 'user_refresh_required'
-            if (message.key==='user_refresh_required') {
+            if (message.key === 'user_refresh_required') {
               this._auth.refreshUser().pipe(take(1)).subscribe(
                 data => {
                   // do something else with user, if need be
@@ -81,7 +81,7 @@ export class MessageService {
  */
 interface GetMessagesResponse {
   messages: {
-    key: String, 
+    key: String,
     added_at_time: String
   }[]
 }

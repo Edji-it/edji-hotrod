@@ -1,48 +1,48 @@
-//import * as webdriver from 'webdriver';
-import { browser, by, element, protractor } from 'protractor';
-import { Dashboard, Login, NewReading, Sidebar, Home } from './page-objects';
-import { LoginForm } from './components';
+// import * as webdriver from 'webdriver';
+import { browser, by, element, protractor } from 'protractor'
+import { Dashboard, Login, NewReading, Sidebar, Home } from './page-objects'
+import { LoginForm } from './components'
 
 /* ---- Versioning Tests ------------------------ */
-describe("Versioning - ", () => {
+describe('Versioning - ', () => {
 
     /* ---- Variable Initialization --------------- */
-    let login = new Login();
-    let dashboard = new Dashboard();
-    let loginForm = new LoginForm();
-    let sidebar = new Sidebar();
-    let newReading  = new NewReading();
-    let home  = new Home();
-    let EC = protractor.ExpectedConditions; // vital
-    var uniqueTitle: string = new Date().valueOf().toString();
-    let titleUpdate = uniqueTitle + 'update';
+    const login = new Login()
+    const dashboard = new Dashboard()
+    const loginForm = new LoginForm()
+    const sidebar = new Sidebar()
+    const newReading  = new NewReading()
+    const home  = new Home()
+    const EC = protractor.ExpectedConditions // vital
+    const uniqueTitle: string = new Date().valueOf().toString()
+    const titleUpdate = uniqueTitle + 'update'
 
     beforeAll(() => {
         // Login as test account that we can fill with junk data
-        login.getPage();
-        browser.wait(EC.elementToBeClickable(login.loginButton), 5000);
-        login.enterUsername(login.botUser);
-        login.enterPassword(login.botPassword);
-        browser.wait(EC.elementToBeClickable(login.loginButton), 5000);
-        login.loginButton.click();
-        browser.wait(EC.urlContains("dashboard"), 5000, "never arrived at dashboard");
+        login.getPage()
+        browser.wait(EC.elementToBeClickable(login.loginButton), 5000)
+        login.enterUsername(login.botUser)
+        login.enterPassword(login.botPassword)
+        browser.wait(EC.elementToBeClickable(login.loginButton), 5000)
+        login.loginButton.click()
+        browser.wait(EC.urlContains('dashboard'), 5000, 'never arrived at dashboard')
     })
 
     afterEach(() => {
         // navigate back to the dashboard after every test
-        sidebar.backToDash();
-    });
+        sidebar.backToDash()
+    })
 
     afterAll(() => {
-        sidebar.logout();
+        sidebar.logout()
     })
 
 
     it('should see Edji in the title', () => {
-        let subject = browser.getTitle();
-        let result  = 'Edji';
-        browser.wait(EC.titleContains(result), 5000, 'Title should contain "Edji".');
-    });
+        const subject = browser.getTitle()
+        const result  = 'Edji'
+        browser.wait(EC.titleContains(result), 5000, 'Title should contain "Edji".')
+    })
 
     /* Test: Add a reading
         - Click the 'Copy and Edit' button
@@ -53,35 +53,35 @@ describe("Versioning - ", () => {
             - Users should be able to return to new version and publish
         - Create a new group for an old version
     */
-    // 
+    //
     it('should create a new reading with a specific title', () => {
         // Create a new reading to control it properly thru the process
         // Open and wait for New Reading page
-        dashboard.openNewReading();
-        browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000);
+        dashboard.openNewReading()
+        browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000)
 
         // Enter sample Reading into form
-        newReading.titleInput.sendKeys(uniqueTitle);
+        newReading.titleInput.sendKeys(uniqueTitle)
         // Select Grade Range
-        newReading.gradeTileK.click();
-        newReading.gradeTileU.click();
+        newReading.gradeTileK.click()
+        newReading.gradeTileU.click()
         // Select Subject
-        newReading.subjectDropdown.click();
-        newReading.subjectFirstOption.click();
-        newReading.contentInput.sendKeys(newReading.contentShortString);
-        newReading.sourceInput.sendKeys(newReading.sourceString);
+        newReading.subjectDropdown.click()
+        newReading.subjectFirstOption.click()
+        newReading.contentInput.sendKeys(newReading.contentShortString)
+        newReading.sourceInput.sendKeys(newReading.sourceString)
 
         // Submit New Reading
         newReading.addNewReading()
-        browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
-        newReading.finalizeButton.click();
+        browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, 'finalize reading button never became clickable')
+        newReading.finalizeButton.click()
 
         // Should redirect to Project page for new reading
-        browser.wait(EC.urlContains("project"), 7500, "never arrived at the reading page after published");
+        browser.wait(EC.urlContains('project'), 7500, 'never arrived at the reading page after published')
 
         // Go to the dashboard
-        sidebar.backToDash();
-    });
+        sidebar.backToDash()
+    })
 
     it('should go to new reading page with existing reading and validate the reading; then save it as a draft', () => {
         // Switch to the created readings tab on mobile (will simply skip if on desktop)
@@ -89,84 +89,84 @@ describe("Versioning - ", () => {
 
         // Make a new version of that reading
         // Click the options, then copy and edit button
-        browser.wait(EC.elementToBeClickable(element(by.css('button[testFindOptions="' + uniqueTitle + '"]'))), 8000, "reading card options button never became clickable after load");
-        element(by.css('button[testFindOptions="' + uniqueTitle + '"]')).click();
+        browser.wait(EC.elementToBeClickable(element(by.css('button[testFindOptions="' + uniqueTitle + '"]'))), 8000, 'reading card options button never became clickable after load')
+        element(by.css('button[testFindOptions="' + uniqueTitle + '"]')).click()
 
-        browser.wait(EC.elementToBeClickable(element(by.css('button[testFindCopyAndEdit="' + uniqueTitle + '"]'))), 5000, "copy and edit button never became clicakble after options dropdown click");
-        element(by.css('button[testFindCopyAndEdit="' + uniqueTitle + '"]')).click();
+        browser.wait(EC.elementToBeClickable(element(by.css('button[testFindCopyAndEdit="' + uniqueTitle + '"]'))), 5000, 'copy and edit button never became clicakble after options dropdown click')
+        element(by.css('button[testFindCopyAndEdit="' + uniqueTitle + '"]')).click()
 
         // Make sure it arrives at the new reading page with the copyId query param
-        browser.wait(EC.urlContains("new-reading"), 5000, "never arrived at the new reading page");
-        browser.wait(EC.urlContains("copyId"), 5000, "never passed an ID of the previous reading");
+        browser.wait(EC.urlContains('new-reading'), 5000, 'never arrived at the new reading page')
+        browser.wait(EC.urlContains('copyId'), 5000, 'never passed an ID of the previous reading')
 
         // Make sure the copyId is valid
         browser.wait(function() {
             return browser.getCurrentUrl().then(function(url) {
-                return newReading.findIdExp.test(url);
-            });
-        }, 5000, "reading ID not valid");
+                return newReading.findIdExp.test(url)
+            })
+        }, 5000, 'reading ID not valid')
 
         // Add more text
-        newReading.contentInput.sendKeys(newReading.contentShortStringB);
+        newReading.contentInput.sendKeys(newReading.contentShortStringB)
 
         // Update the title
-        //newReading.titleInput.clear();
-        newReading.titleInput.sendKeys('update');
+        // newReading.titleInput.clear();
+        newReading.titleInput.sendKeys('update')
 
         // Save it as a draft
         newReading.saveDraftNewReading()
 
         // Draft should be created in this block
         // Should redirect to new reading page with same inputs and a success alert
-        browser.wait(EC.urlContains("new-reading"), 5000, "never created the draft");
-        browser.wait(EC.presenceOf(newReading.successAlert), 5000, "never saw the success alert");
-    });
+        browser.wait(EC.urlContains('new-reading'), 5000, 'never created the draft')
+        browser.wait(EC.presenceOf(newReading.successAlert), 5000, 'never saw the success alert')
+    })
 
-    it('should open up the latest version that is a draft and publish the draft', () => {  
+    it('should open up the latest version that is a draft and publish the draft', () => {
         // Switch to the created readings tab on mobile (will simply skip if on desktop)
         dashboard.goToCreatedTab()
 
         // Go back in to that drafted reading
-        browser.wait(EC.elementToBeClickable(element(by.cssContainingText('.draft-edit', titleUpdate))), 8000, "draft never became clickable after loading of reading cards");
-        element(by.cssContainingText('.draft-edit', titleUpdate)).click();
+        browser.wait(EC.elementToBeClickable(element(by.cssContainingText('.draft-edit', titleUpdate))), 8000, 'draft never became clickable after loading of reading cards')
+        element(by.cssContainingText('.draft-edit', titleUpdate)).click()
 
         // Make sure the site arrives at the new reading page with the copyId query param
-        browser.wait(EC.urlContains("new-reading"), 5000, "never arrived at the new reading page");
+        browser.wait(EC.urlContains('new-reading'), 5000, 'never arrived at the new reading page')
 
         // Publish the reading
         newReading.addNewReading()
-        browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
-        newReading.finalizeButton.click();
+        browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, 'finalize reading button never became clickable')
+        newReading.finalizeButton.click()
 
         // Reading should be published
-        browser.wait(EC.urlContains("project"), 15000, "never arrived at the finished reading");
-    });
+        browser.wait(EC.urlContains('project'), 15000, 'never arrived at the finished reading')
+    })
 
     it('should create a new group for an older version', () => {
         // Switch to the created readings tab on mobile (will simply skip if on desktop)
         dashboard.goToCreatedTab()
-        
+
         // Create a new group for an older version
         // Make sure the reading cards load before moving on to the next step
-        browser.wait(EC.elementToBeClickable(dashboard.firstProject), 15000, "reading cards never loaded");
+        browser.wait(EC.elementToBeClickable(dashboard.firstProject), 15000, 'reading cards never loaded')
 
         // Expand the past versions
-        browser.wait(EC.elementToBeClickable(element(by.css('[testFindVersionToggle="' + titleUpdate + '"]'))), 5000, "past versions toggle never became clickable");
-        element(by.css('[testFindVersionToggle="' + titleUpdate + '"]')).click();
+        browser.wait(EC.elementToBeClickable(element(by.css('[testFindVersionToggle="' + titleUpdate + '"]'))), 5000, 'past versions toggle never became clickable')
+        element(by.css('[testFindVersionToggle="' + titleUpdate + '"]')).click()
 
         // Verify version 1 of this reading is in the list
-        browser.wait(EC.elementToBeClickable(element(by.css('p[testVersionNumberV="' + uniqueTitle + '"]'))), 5000, "past versions never loaded");
-        browser.wait(EC.elementToBeClickable(element(by.css('button[testFindOptionsV="' + uniqueTitle + '"]'))), 8000, "reading card options for versionbutton never became clickable after load");
-        element(by.css('button[testFindOptionsV="' + uniqueTitle + '"]')).click();
+        browser.wait(EC.elementToBeClickable(element(by.css('p[testVersionNumberV="' + uniqueTitle + '"]'))), 5000, 'past versions never loaded')
+        browser.wait(EC.elementToBeClickable(element(by.css('button[testFindOptionsV="' + uniqueTitle + '"]'))), 8000, 'reading card options for versionbutton never became clickable after load')
+        element(by.css('button[testFindOptionsV="' + uniqueTitle + '"]')).click()
 
         // Make sure the Create New Group button shows up and then click on it
-        browser.wait(EC.elementToBeClickable(element(by.css('button[testFindCreateNewGroupV="' + uniqueTitle + '"]'))), 5000, "create new group button never became clicakble after options dropdown click");
-        element(by.css('button[testFindCreateNewGroupV="' + uniqueTitle + '"]')).click();
+        browser.wait(EC.elementToBeClickable(element(by.css('button[testFindCreateNewGroupV="' + uniqueTitle + '"]'))), 5000, 'create new group button never became clicakble after options dropdown click')
+        element(by.css('button[testFindCreateNewGroupV="' + uniqueTitle + '"]')).click()
 
         // Wait for the input field for the group label to show and enter text
-        dashboard.createNewGroupModalInput(uniqueTitle);
+        dashboard.createNewGroupModalInput(uniqueTitle)
 
         // Locate the group and confirm the name
-        browser.wait(EC.elementToBeClickable(element(by.css('span[testFindGroupV="' + uniqueTitle + '"]'))), 5000, "new group label never showed up");
-    });
-});
+        browser.wait(EC.elementToBeClickable(element(by.css('span[testFindGroupV="' + uniqueTitle + '"]'))), 5000, 'new group label never showed up')
+    })
+})

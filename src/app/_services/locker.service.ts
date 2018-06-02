@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { Locker, DRIVERS } from 'angular-safeguard';
+import { Injectable } from '@angular/core'
+import { Locker, DRIVERS } from 'angular-safeguard'
 
 /**
  * Localstorage wrapper

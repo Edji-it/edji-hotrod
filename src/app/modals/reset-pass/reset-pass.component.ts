@@ -17,10 +17,10 @@ export class ResetPassComponent {
 
   public passwordForm: FormGroup
   public responseSuccess: boolean
-  public submissionSuccess: boolean = false
+  public submissionSuccess = false
   public errorObject: any = { }
-  public submitted: boolean = false
-  public loading: boolean = false
+  public submitted = false
+  public loading = false
 
   constructor(private _auth: AuthService, private angulartics: Angulartics2, fb: FormBuilder) {
     this.passwordForm = fb.group({
@@ -45,7 +45,7 @@ export class ResetPassComponent {
         this.loading = false
         console.error(err)
         this.angulartics.eventTrack.next({ action: 'requestPasswordEmail', properties: { category: 'accountManagement', label: 'failure' }})
-        this.errorObject.unsuccessful = "We were unable to send the email"
+        this.errorObject.unsuccessful = 'We were unable to send the email'
       })
   }
 
@@ -53,9 +53,9 @@ export class ResetPassComponent {
    * Clears all errorObject strings to equal empty strings
    */
   private clearErrors(): void {
-    for (let property in this.errorObject) {
+    for (const property in this.errorObject) {
       if (this.errorObject.hasOwnProperty(property) && typeof this.errorObject[property] === 'string') {
-        this.errorObject[property] = ""
+        this.errorObject[property] = ''
       }
     }
   }

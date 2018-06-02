@@ -10,29 +10,29 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
 import { AuthService } from './auth.service'
 import { SocketService } from './socket.service'
 import { CommentStats, iCommentStats, EdjiComment, Project, User } from '../shared/datatypes'
-import { ReadingService } from "./reading.service"
+import { ReadingService } from './reading.service'
 
 @Injectable()
 export class ProjectService {
-    private targetProjectId: string = ''
+    private targetProjectId = ''
 
     // For verifying comment ownership on heat vision
     private user: any
 
     /** project will be given out as observable */
-    private project: any = { title: "initial value" }
+    private project: any = { title: 'initial value' }
     private currentProjectSource: BehaviorSubject<any> = new BehaviorSubject<any>(this.project)
     public currentProject: Observable<any> = this.currentProjectSource.asObservable()
     // Maintain local Project data and its updates in this service
 
-    /** 
+    /**
      * VERY IMPORTANT: please don't construct more than one of these (please)
      *  components don't know how to handle it if the reference to the commentStats object changes
      * This stores all of the comment stats for a project and all of the logic to manipulate the stats
      */
     _commentStats: CommentStats
     subscriptions: Subscription[] = []
-    
+
     /**
      * Updated Reference Object
      * Reference comments by word index
@@ -74,9 +74,9 @@ export class ProjectService {
     public lastWordUpdateState: Observable<number> = this.lastWordUpdateSubj.asObservable()
 
     constructor(
-        private http: Http, 
+        private http: Http,
         private _http: HttpClient,
-        private _auth: AuthService, 
+        private _auth: AuthService,
         private _route: ActivatedRoute,
         private _socket: SocketService,
         private _readings: ReadingService,
@@ -97,7 +97,7 @@ export class ProjectService {
 
         this.subscriptions.push(
             this._socket.commentUpdates.subscribe((commentUpdate) => {
-                let comment = commentUpdate.comment
+                const comment = commentUpdate.comment
                 // Process different live comment updates
                 if (commentUpdate.action === 'DELETE') {
                     if (comment.reply_to) {
@@ -127,7 +127,7 @@ export class ProjectService {
             })
         )
     } // constructor
-    
+
     /**
      * Get all Joined Projects for a single user
      * @returns chainable promise resolved with reading data
@@ -136,34 +136,34 @@ export class ProjectService {
             return this.http
                 .get(this._auth.getUrl() + '/projects', this._auth.getOptions())
                 .toPromise()
-                .then(this._auth.extractData);
+                .then(this._auth.extractData)
     } // public getAll()
 
     /**
      * Pulls projects user has joined, paginated
      * @param filters object containing pagination values (to eventually include other filters)
      */
-    public getJoined(filters?: ProjectFilters) : Observable<GetProjectsResponse> {
+    public getJoined(filters?: ProjectFilters): Observable<GetProjectsResponse> {
         let feedParams = new HttpParams()
         // Set Pagination values
         if (filters) {
             if (filters.size) {
-                feedParams = feedParams.append("size", filters.size.toString())
+                feedParams = feedParams.append('size', filters.size.toString())
             }
             if (filters.start) {
-                feedParams = feedParams.append("start", filters.start.toString())
+                feedParams = feedParams.append('start', filters.start.toString())
             }
         }
         // Populate Reading to show user Title
-        feedParams = feedParams.append("pop", "reading")
+        feedParams = feedParams.append('pop', 'reading')
         // Populate Teacher to show Reading Creator
-        feedParams = feedParams.append("pop", "teacher")
-        
-        return this._http.get<GetProjectsResponse>(this._auth.getUrl() + '/api/v1/projects', 
+        feedParams = feedParams.append('pop', 'teacher')
+
+        return this._http.get<GetProjectsResponse>(this._auth.getUrl() + '/api/v1/projects',
             { headers: new HttpHeaders({
             'Content-Type': 'application/json',
             'Authorization': this._auth.getToken()
-            }), 
+            }),
             params: feedParams })
     }
 
@@ -191,7 +191,7 @@ export class ProjectService {
             .pipe(
                 map(
                 (data) => {
-                    let project = data.json().project; //can later have local setter to do validation/data manipulation before passing through observable
+                    const project = data.json().project // can later have local setter to do validation/data manipulation before passing through observable
                     // Clear stats object
                     this._commentStats.resetStats()
                     /**
@@ -206,14 +206,14 @@ export class ProjectService {
                     project.comments.reverse()
                     // Now that our project comments are ready, set it to the shared source!
                     this.project = project
-                    this.currentProjectSource.next(this.project);
+                    this.currentProjectSource.next(this.project)
                     // Return the project along the current Observable
-                    return this.project;
+                    return this.project
                 })
-            );
+            )
     }
 
-    /** 
+    /**
      * Provide a getter for the private commentStats object
      */
     get commentStats(): CommentStats {
@@ -232,19 +232,19 @@ export class ProjectService {
     } {
         this.initializeProjectObservables()
         // these empty arrays will be passed into their modifier functions throughout this function
-        let commentsByIndex: EdjiComment[][] = []
-        let alwaysHighlightArray: number[] = []
-        let highlightArray: number[] = []
+        const commentsByIndex: EdjiComment[][] = []
+        const alwaysHighlightArray: number[] = []
+        const highlightArray: number[] = []
         this._commentStats.initStats(project)
-        let user = this._auth.getUser()
+        const user = this._auth.getUser()
 
         // using a cached-length for loop for speediness
         // doing my best to only loop through this once for efficiency
         // abstracted the logic related to the different items so that it's more readable
         // you can look in any one of those funcitons if you want to change what is returning
-        let len = project.comments.length
+        const len = project.comments.length
         for (let i = 0; i < len; i++) {
-            let comment = project.comments[i]
+            const comment = project.comments[i]
 
             // decorate the comment and push it into the array
             this.addCommentToArray(comment, project, user, commentsByIndex)
@@ -256,9 +256,9 @@ export class ProjectService {
             this._commentStats.addCommentToStats(comment, 1)
         }
 
-        let ans = project.answers && project.answers.length
+        const ans = project.answers && project.answers.length
         for (let i = 0; i < ans; i++) {
-            let answer = project.answers[i]
+            const answer = project.answers[i]
 
             // push the answer to the array
             this.addAnswerToAnswers(answer)
@@ -268,9 +268,9 @@ export class ProjectService {
             commentsByIndex: commentsByIndex,
             highlightArrays: { alwaysHighlightArray: alwaysHighlightArray, highlightArray: highlightArray }
         }
-    } //  public processComments(project: Project): 
+    } //  public processComments(project: Project):
 
-    /** 
+    /**
      * Decorates the comment before adding it to the array
      *  modifies the array which is passed in
      *  trying to make processComments a little more readable
@@ -283,12 +283,12 @@ export class ProjectService {
 
         // get the user help decorate the comment
         if (comment.user_id === user._id || comment.user_id === this.project.teacher_id) {
-            comment.showAvatar = true;
+            comment.showAvatar = true
         }
 
         // if (comment.loc && comment.loc.y && comment.text==="") {
         //     comment.imagePos = Math.round(comment.loc.y/8)*8
-        // }   
+        // }
 
         // this.decorateComment(comment)
 
@@ -307,7 +307,7 @@ export class ProjectService {
                 this.repliesByIdSource[comment.reply_to] = []
             }
             // Double check comment doesn't exist
-            for (let reply of this.repliesByIdSource[comment.reply_to]) {
+            for (const reply of this.repliesByIdSource[comment.reply_to]) {
                 if (reply._id == comment._id) {
                     skipAdd = true
                 }
@@ -321,11 +321,11 @@ export class ProjectService {
                 this.repliesByIdSubject.next(this.repliesByIdSource)
             }
         }
-    } // public addCommentToReplies(comment: EdjiComment): void 
+    } // public addCommentToReplies(comment: EdjiComment): void
 
-    public removeCommentFromReplies(comment: EdjiComment) : void {
+    public removeCommentFromReplies(comment: EdjiComment): void {
         if (comment.reply_to) {
-            for (let i = 0; i < this.repliesByIdSource[comment.reply_to].length; i++){
+            for (let i = 0; i < this.repliesByIdSource[comment.reply_to].length; i++) {
                 if (this.repliesByIdSource[comment.reply_to][i]._id === comment._id) {
                     this.repliesByIdSource[comment.reply_to].splice(i, 1)
                     this.repliesByIdSubject.next(this.repliesByIdSource)
@@ -334,7 +334,7 @@ export class ProjectService {
         }
     } // public removeCommentFromReplies(comment: EdjiComment) : void
 
-    /** 
+    /**
      * Adds the answer to the array by question ID
      * If the user answers a question, add the answer to the array of that question by it's question ID
      * This groups all answers together by the question ID for the project
@@ -347,7 +347,7 @@ export class ProjectService {
                 this.answersByIdSource[answer.questionId] = []
             }
             // Double check comment doesn't exist
-            for (let answerExist of this.answersByIdSource[answer.questionId]) {
+            for (const answerExist of this.answersByIdSource[answer.questionId]) {
                 if (answerExist._id == answer._id) {
                     skipAdd = true
                 }
@@ -359,16 +359,16 @@ export class ProjectService {
         }
     } // public addAnswerToAnswers(answer: EdjiComment): void
 
-    public removeAnswerFromAnswers(answer: EdjiComment) : void {
+    public removeAnswerFromAnswers(answer: EdjiComment): void {
         if (answer.questionId) {
-            for (let i = 0; i < this.answersByIdSource[answer.questionId].length; i++){
+            for (let i = 0; i < this.answersByIdSource[answer.questionId].length; i++) {
                 if (this.answersByIdSource[answer.questionId][i]._id === answer._id) {
                     this.answersByIdSource[answer.questionId].splice(i, 1)
                     this.answersByIdSubject.next(this.answersByIdSource)
                 }
             } // for
         }
-    } //  public removeAnswerFromAnswers(answer: EdjiComment) : void 
+    } //  public removeAnswerFromAnswers(answer: EdjiComment) : void
 
     /**
      * Prepares two arrays, one containing numbers of all of the words that are highlighted
@@ -384,27 +384,27 @@ export class ProjectService {
         alwaysHighlightArray: number[], highlightArray: number[]
     } {
         // conditional determines which array we'll sort to - students only see highlightArray w/o heat vision on
-        let alwaysHighlight = userId === comment.user_id || project.teacher_id == comment.user_id
+        const alwaysHighlight = userId === comment.user_id || project.teacher_id == comment.user_id
 
         if (alwaysHighlight) {
             // loop through all of the indexes (corresponding to words) and increment their highlights
-            for (var i = comment.start; i <= comment.end; i ++) {
+            for (let i = comment.start; i <= comment.end; i ++) {
                 if (this.isCommentVisible(comment)) {
                     // if true, means there's already a highlight
                     if (alwaysHighlightArray[i]) {
-                        alwaysHighlightArray[i]++;
+                        alwaysHighlightArray[i]++
                     } else {
-                        alwaysHighlightArray[i] = 1;
+                        alwaysHighlightArray[i] = 1
                     }
                 }
             }
         } else {
-            for (var i = comment.start; i <= comment.end; i ++) {
+            for (let i = comment.start; i <= comment.end; i ++) {
                 if (this.isCommentVisible(comment)) {
                     if (highlightArray[i]) {
-                        highlightArray[i]++;
+                        highlightArray[i]++
                     } else {
-                        highlightArray[i] = 1;
+                        highlightArray[i] = 1
                     }
                 }
             }
@@ -417,11 +417,11 @@ export class ProjectService {
      * Gets all of a teacher's projects for a reading
      */
     public getForReading(readingId: string): Observable<any> {
-        let userId = this._auth.getUser()._id;
-        
+        const userId = this._auth.getUser()._id
+
         // return this.http.get(this._auth.getUrl() + '/readings/' + readingId + '/projects/' + userId , this._auth.getOptions() );
-        return this.http.get(this._auth.getUrl() + "/projects/reading/" + readingId, this._auth.getOptions())
-            .pipe(map((data) => { return data.json() || {}; }));
+        return this.http.get(this._auth.getUrl() + '/projects/reading/' + readingId, this._auth.getOptions())
+            .pipe(map((data) => data.json() || {}))
     }
 
     /**
@@ -432,16 +432,16 @@ export class ProjectService {
     public validateProject(projectCode: string): Observable<any> {
         projectCode = encodeURIComponent(projectCode.toLowerCase())
 
-        return this.http.get(this._auth.getUrl() + '/projects/' + projectCode + "/validate", this._auth.getOptions())
-            .pipe(map((data) => { return data.json() || {}; }));
-            
+        return this.http.get(this._auth.getUrl() + '/projects/' + projectCode + '/validate', this._auth.getOptions())
+            .pipe(map((data) => data.json() || {}))
+
     } // public validateProject(projectCode: string): Observable<any>
 
-    /** 
+    /**
     * Pull a Project object
     * @param projectId
     */
-    public get(projectId: string) : Observable<any> {
+    public get(projectId: string): Observable<any> {
             return this.http
                 .get(this._auth.getUrl() + '/projects/' + projectId, this._auth.getOptions())
                 .pipe(
@@ -449,13 +449,13 @@ export class ProjectService {
                         data => {
                             // Update local Project object if returned
                             if (data.json().project && data.json().project._id) {
-                                this.project = data.json().project;
-                                this.currentProjectSource.next(this.project);
+                                this.project = data.json().project
+                                this.currentProjectSource.next(this.project)
                             }
-                            return data.json().project;
+                            return data.json().project
                         }
                     )
-                );
+                )
     } // public get(projectId: string)
 
     /**
@@ -464,23 +464,23 @@ export class ProjectService {
      * @param takes a Project object with the new label
      */
     public create(readingId: string, project: any) {
-        project.reading_id = readingId;
+        project.reading_id = readingId
         if (project.code) { project.code = project.code.toLowerCase() }
-        
+
 
         return this.http
             .post(this._auth.getUrl() + '/projects/', { 'project' : project }, this._auth.getOptions())
             .pipe(
                 map((data) => {
                     if (data && data.json()) {
-                        this.project = data.json().project;
-                        this.currentProjectSource.next(this.project);
-                        return this.project;
+                        this.project = data.json().project
+                        this.currentProjectSource.next(this.project)
+                        return this.project
                     }
                 })
             )
     }
-    
+
     /**
      * Update a project's fields
      * @param updateObj Object which contains all of the parameters to update
@@ -488,46 +488,46 @@ export class ProjectService {
      */
     public update(updateObj: any, projectId: string): Observable<any> {
         return this.http
-            .put([this._auth.getUrl(), 'projects', projectId].join("/"), { project: updateObj }, this._auth.getOptions())
+            .put([this._auth.getUrl(), 'projects', projectId].join('/'), { project: updateObj }, this._auth.getOptions())
             .pipe(
                 map((data) => {
                     if (data && data.json()) {
                         // Set the existing comments aside here temporarily
-                        let comments = this.project.comments
+                        const comments = this.project.comments
 
                         /**
                          * If heat vision was toggled, lets bring the existing comments back in to the project
                          * The reason we do this is because the lineY values get wiped out and will not reset on their own
                         */
-                        let updateObjArray: string = JSON.stringify(updateObj)
-                        let updatedProject = data.json() && data.json().project
+                        const updateObjArray: string = JSON.stringify(updateObj)
+                        const updatedProject = data.json() && data.json().project
                         // Get the project data back from the server
-                        if (updateObjArray.indexOf("heat_vision")>-1) {
+                        if (updateObjArray.indexOf('heat_vision') > -1) {
                             updatedProject.comments = comments
                         }
-                        
+
                         // this.project =
                         Object.assign(this.project, updatedProject)
-                        
+
                         this.currentProjectSource.next(this.project)
                         return this.project
                     } // if
-                }) //.map
+                }) // .map
             ) // pipe
-    } // public update (updateObj: any, projectId: string): Observable<any> 
+    } // public update (updateObj: any, projectId: string): Observable<any>
 
-    /** . 
+    /** .
      * Delete a Project
      * @param Requires a Project ID
      */
-    public delete(targetProject : Project) : Observable<any> {
+    public delete(targetProject: Project): Observable<any> {
         return this.http.delete(this._auth.getUrl() + '/projects/' +  targetProject._id, this._auth.getOptions())
             .pipe(map( data => {
                 this._readings.removeProject(targetProject)
             }))
     } // public delete(projectId)
 
-    /** 
+    /**
      * Save a comment on a project.
      * - Give this thing an EdjiComment object, and it will handle it from there
      *   It will save it as the right comment type, whether a normal comment, a reply, or question answer.
@@ -539,19 +539,19 @@ export class ProjectService {
      * @param text (optional) Selection of text comment was made on. Left as optional, but SHOULD be passed.
      * @param commentId (optional) If passed, will update comment with that ID
      */
-    public saveComment(commentObj: EdjiComment) : Promise<any> {
-        let projectId : string = this.project._id;
-        let comment = Object.assign({}, commentObj)
+    public saveComment(commentObj: EdjiComment): Promise<any> {
+        const projectId: string = this.project._id
+        const comment = Object.assign({}, commentObj)
 
-        comment.project_id = projectId; // Tell the comment what project it's a part of
-        
+        comment.project_id = projectId // Tell the comment what project it's a part of
+
         // Clean frontend only properties
         delete comment['active']
         delete comment['new']
         delete comment['showAvatar']
-        
+
         // Get the url of this project that we're saving to.
-        let url = this._auth.getUrl() + '/projects/' + projectId + '/comments';
+        let url = this._auth.getUrl() + '/projects/' + projectId + '/comments'
         if (!comment.user_id) {
             comment.user_id = this._auth.getUser()._id
         }
@@ -559,18 +559,18 @@ export class ProjectService {
             comment.author = this._auth.getUser().fullname ? this._auth.getUser().fullname : this._auth.getUser().username
         }
 
-        let options = this._auth.getOptions()
-        let data = { comment: comment }
+        const options = this._auth.getOptions()
+        const data = { comment: comment }
         // Add comment ID if passed
         // Tell other Project viewers comment changed, using Socket
         if (comment._id) {
-            data.comment['_id'] = comment._id;
+            data.comment['_id'] = comment._id
             url = url + '/' + comment._id
             options['method'] = 'PUT'
-            this._socket.updateComment(data.comment, 'UPDATE', this.project._id);
+            this._socket.updateComment(data.comment, 'UPDATE', this.project._id)
         } else {
             options['method'] = 'POST'
-            this._socket.updateComment(data.comment, 'CREATE', this.project._id);
+            this._socket.updateComment(data.comment, 'CREATE', this.project._id)
         }
 
         options['body'] = data
@@ -579,17 +579,17 @@ export class ProjectService {
             .request(url, options)
             .toPromise()
             .then(this._auth.extractData)
-            .then((data) => { return data.comment; })
+            .then((data) => data.comment)
     } // public saveComment
 
     /**
-     * Deletes comment via service, then updates local Project object 
+     * Deletes comment via service, then updates local Project object
      * - Project page should subscribe to the currentProject Observable to receive these updates
      */
-    public deleteComment(comment : EdjiComment): Promise<any> {
-        let projectId = this.project._id;
-        let url = this._auth.getUrl() + '/projects/' + projectId + '/comments/' + comment._id;
-        
+    public deleteComment(comment: EdjiComment): Promise<any> {
+        const projectId = this.project._id
+        const url = this._auth.getUrl() + '/projects/' + projectId + '/comments/' + comment._id
+
         return this.http
             .delete(url, this._auth.getOptions())
             .pipe(
@@ -599,7 +599,7 @@ export class ProjectService {
                     // Update stats
                     this.commentStats.addCommentToStats(comment, -1)
 
-                    for (var i = 0; i <= this.project.comments.length; i++) {
+                    for (let i = 0; i <= this.project.comments.length; i++) {
                         if (this.project.comments[i] && this.project.comments[i]._id === comment._id) {
                             // Remove comment from local object
                             this.project.comments.splice(i, 1)
@@ -611,29 +611,29 @@ export class ProjectService {
                 })
             )
             .toPromise()
-            .then(this._auth.extractData);
+            .then(this._auth.extractData)
     }//  public deleteComment(comment): Promise<any>
 
-    /** 
+    /**
      * Save an answer on a project.
      * - Give this thing an EdjiComment object, and it will handle it from there
      *   It will save it as the right answer type, whether a normal answer, a reply, or question answer.
      *   It just needs to have the appropriate type assigned and the proper data.
      * @param answerObj Answer of EdjiComment datatype
      */
-    public saveAnswer(answerObj: EdjiComment) : Promise<any> {
-        let projectId : string = this.project._id;
-        let answer = Object.assign({}, answerObj)
+    public saveAnswer(answerObj: EdjiComment): Promise<any> {
+        const projectId: string = this.project._id
+        const answer = Object.assign({}, answerObj)
 
-        answer.project_id = projectId; // Tell the answer what project it's a part of
-        
+        answer.project_id = projectId // Tell the answer what project it's a part of
+
         // Clean frontend only properties
         delete answer['active']
         delete answer['new']
         delete answer['showAvatar']
-        
+
         // Get the url of this project that we're saving to.
-        let url = this._auth.getUrl() + '/projects/' + projectId + '/answers';
+        let url = this._auth.getUrl() + '/projects/' + projectId + '/answers'
         if (!answer.user_id) {
             answer.user_id = this._auth.getUser()._id
         }
@@ -641,12 +641,12 @@ export class ProjectService {
             answer.author = this._auth.getUser().fullname ? this._auth.getUser().fullname : this._auth.getUser().username
         }
 
-        let options = this._auth.getOptions()
-        let data = { answer: answer }
+        const options = this._auth.getOptions()
+        const data = { answer: answer }
         // Add comment ID if passed
         // Tell other Project viewers comment changed, using Socket
         if (answer._id) {
-            data.answer['_id'] = answer._id;
+            data.answer['_id'] = answer._id
             url = url + '/' + answer._id
             options['method'] = 'PUT'
             this._socket.updateComment(data.answer, 'UPDATE', this.project._id)
@@ -660,28 +660,28 @@ export class ProjectService {
             .request(url, options)
             .toPromise()
             .then(this._auth.extractData)
-            .then((data) => { return data.answer; })
+            .then((data) => data.answer)
     } // public saveAnswer
 
     /**
-     * Deletes answer via service, then updates local Project object 
+     * Deletes answer via service, then updates local Project object
      * - Project page should subscribe to the currentProject Observable to receive these updates
      */
-    public deleteAnswer(answer : EdjiComment): Promise<any> {
-        let projectId = this.project._id;
-        let url = this._auth.getUrl() + '/projects/' + projectId + '/answers/' + answer._id;
+    public deleteAnswer(answer: EdjiComment): Promise<any> {
+        const projectId = this.project._id
+        const url = this._auth.getUrl() + '/projects/' + projectId + '/answers/' + answer._id
 
         return this.http
             .delete(url, this._auth.getOptions())
             .pipe(map(data => {
                 // Tell other Project views that the comment is gone
-                 this._socket.updateComment(answer, 'DELETE', this.project._id);
+                 this._socket.updateComment(answer, 'DELETE', this.project._id)
 
                 this.removeAnswerFromAnswers(answer)
-                return data;
+                return data
             }))
             .toPromise()
-            .then(this._auth.extractData);
+            .then(this._auth.extractData)
     }//  public deleteAnswer(answer): Promise<any>
 
     /**
@@ -695,7 +695,7 @@ export class ProjectService {
             [this._auth.getUrl(), 'projects', projectId, 'user_id'].join('/'),
             {},
             this._auth.getOptions()
-        ) //this.http.put
+        ) // this.http.put
     } // public addUserToProject(projectId: string): Observable<any>
 
     /**
@@ -706,24 +706,24 @@ export class ProjectService {
         // Re-initialize the comment by position array
         this.commentByPosSource = []
         // Copy then reverse the array
-        let commentsArray = this.project.comments.slice().reverse()
+        const commentsArray = this.project.comments.slice().reverse()
         // Loop through each comment to group comments together by line number
-        let len2 = commentsArray.length
+        const len2 = commentsArray.length
         for (let i = 0; i < len2; i++) {
-            let comment = commentsArray[i]
-            
+            const comment = commentsArray[i]
+
             // If the comment has data/url (meaning they've filled out the comment)
-            let dataInComment = ((comment.data && comment.data != '') || comment.url && comment.url != '') || comment.user_id == this.user._id
+            const dataInComment = ((comment.data && comment.data != '') || comment.url && comment.url != '') || comment.user_id == this.user._id
             // If user is current reading Owner/Teacher or Heat Vision is on, show all comments
-            let heatVisible = (this.project.heat_vision || (this.user._id == this.project.teacher_id))
+            const heatVisible = (this.project.heat_vision || (this.user._id == this.project.teacher_id))
             // Your own comments and the Owner/Teacher's comments are ALWAYS visible
-            let alwaysVisible = comment.user_id == this.user._id || (comment.user_id == this.project.teacher_id)
+            const alwaysVisible = comment.user_id == this.user._id || (comment.user_id == this.project.teacher_id)
 
             if (comment && !comment.reply_to && !comment.questionId && comment.lineY && this.isCommentVisible(comment)) {
                 // lineY is determined by each individual CommentComponent
-                let lineY = comment.lineY
+                const lineY = comment.lineY
                 // Push the comment into commentByPos based on the lineY number
-                if (typeof(this.commentByPosSource[lineY])=='undefined') {
+                if (typeof(this.commentByPosSource[lineY]) == 'undefined') {
                     this.commentByPosSource[lineY] = [comment]
                 } else {
                     this.commentByPosSource[lineY].push(comment)
@@ -737,9 +737,9 @@ export class ProjectService {
         // If the comment has data/url (meaning they've filled out the comment) or its the current users comment
         // let dataInComment = ((comment.data && comment.data != '') || comment.url && comment.url != '') || comment.user_id == this.user._id
         // If user is current reading Owner/Teacher or Heat Vision is on, show all comments
-        let heatVisible = (this.project.heat_vision || (this.user._id == this.project.teacher_id))
+        const heatVisible = (this.project.heat_vision || (this.user._id == this.project.teacher_id))
         // Your own comments and the Owner/Teacher's comments are ALWAYS visible
-        let alwaysVisible = comment.user_id == this.user._id || (comment.user_id == this.project.teacher_id)
+        const alwaysVisible = comment.user_id == this.user._id || (comment.user_id == this.project.teacher_id)
 
         return  (heatVisible || alwaysVisible)
     }

@@ -1,16 +1,16 @@
-import { Title } from '@angular/platform-browser';
+import { Title } from '@angular/platform-browser'
 import { Observable, Subscription } from 'rxjs'
 import { Router, ActivatedRoute, Params } from '@angular/router'
 import { Component, OnDestroy, OnInit } from '@angular/core'
 
-import { 
-    AuthService, 
-    ProjectService, 
-    ReadingService, 
-    SocketService, 
-    AudioService 
-} from '../_services';
-import { Project, Reading, User } from './../shared/datatypes';
+import {
+    AuthService,
+    ProjectService,
+    ReadingService,
+    SocketService,
+    AudioService
+} from '../_services'
+import { Project, Reading, User } from './../shared/datatypes'
 
 
 @Component({
@@ -35,14 +35,14 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
     public project: Project = <Project>{}
     public reading: any = {}
     private subscriptions: Subscription[] = []
-    private joinedRoom: boolean = false
+    private joinedRoom = false
     public error: string
     private user: User
     // private liveCount: number = 1
     private createdDate: Date
     private createDate: string
-    public showLoginModal: boolean = false
-    
+    public showLoginModal = false
+
     constructor(
         private _router: Router,
         private _projects: ProjectService,
@@ -56,11 +56,11 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
     ngOnInit() {
         // this makes the window always render scrolled to the top
         this._router.events.subscribe(() => {
-            window.scrollTo(0, 0);
+            window.scrollTo(0, 0)
         })
 
         // gets id from route
-        let idParam: string = this.route.snapshot.params['id']
+        const idParam: string = this.route.snapshot.params['id']
 
         /** Set the current user every time it changes */
         this.subscriptions.push(

@@ -11,12 +11,12 @@ import { ProjectService, ReadingService } from '../../../_services'
 })
 
 export class LeaderboardComponent implements OnInit {
-  @Input() visible: boolean = false
+  @Input() visible = false
   @Output() hide: EventEmitter<any> = new EventEmitter()
 
   /** This is a reference to the actual commentStats object which has methods for modification of properties */
   @Input() commentStats: CommentStats
-  
+
   private currentReading: Reading
   private subscriptions: Subscription[] = []
   private answersById: any = {}
@@ -24,18 +24,18 @@ export class LeaderboardComponent implements OnInit {
 
   constructor(
     private _readings: ReadingService,
-    private _projects : ProjectService
+    private _projects: ProjectService
   ) { }
 
   ngOnInit() {
     // Subscribe to the reading
     this.subscriptions.push( this._readings.currentReading.subscribe(
       reading => {
-        this.currentReading = reading;
+        this.currentReading = reading
       },
       error => {
-        console.error(error);
-      }) 
+        console.error(error)
+      })
     )
 
     // Subscribe to updates to the answer reference object
@@ -46,7 +46,7 @@ export class LeaderboardComponent implements OnInit {
       },
       (error) => {
         console.error(error)
-      }) 
+      })
     )
 
   }
@@ -56,31 +56,31 @@ export class LeaderboardComponent implements OnInit {
   }
 
   private questionAnswerStatus() {
-    var answered: boolean
+    let answered: boolean
     this.userAnswers = []
 
     // check if there is a user, and the reading contains questions
-    if (this.commentStats.stats.userStats && this.commentStats.stats.userStats.length>0 && this.currentReading.questions && this.currentReading.questions.length>0) {
+    if (this.commentStats.stats.userStats && this.commentStats.stats.userStats.length > 0 && this.currentReading.questions && this.currentReading.questions.length > 0) {
 
       // loop through the userStats to get answered questions by each user in the reading
-      for (let i=0;i<this.commentStats.stats.userStats.length;i++) {
-        let commentUser = this.commentStats.stats.userStats[i]
+      for (let i = 0; i < this.commentStats.stats.userStats.length; i++) {
+        const commentUser = this.commentStats.stats.userStats[i]
 
         // loop through the reading's available questions
-        for (let j=0;j<this.currentReading.questions.length;j++) {
-          let question = this.currentReading.questions[j]
+        for (let j = 0; j < this.currentReading.questions.length; j++) {
+          const question = this.currentReading.questions[j]
           // check if the question has answers
           if (this.answersById[question._id] && this.answersById[question._id].length > 0) {
             // loop through the answers by that question ID
-            for (let k=0;k<this.answersById[question._id].length;k++) {
-              let answer = this.answersById[question._id][k]
-              if (answer.user_id===commentUser._id) {
+            for (let k = 0; k < this.answersById[question._id].length; k++) {
+              const answer = this.answersById[question._id][k]
+              if (answer.user_id === commentUser._id) {
                 answered = true
-                break;
+                break
               }
             }
             // if the user has answered that question, then break and mark it answered (default is not answered)
-            let userAnswerObj = {
+            const userAnswerObj = {
               user: commentUser._id,
               answered: answered
             }

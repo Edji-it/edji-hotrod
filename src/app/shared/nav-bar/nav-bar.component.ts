@@ -1,5 +1,5 @@
-import { Angulartics2 } from 'angulartics2';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Angulartics2 } from 'angulartics2'
+import { ActivatedRoute, Router } from '@angular/router'
 import { Component, Input, OnDestroy, OnInit, Output, EventEmitter } from '@angular/core'
 import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
@@ -19,57 +19,57 @@ export class NavBarComponent implements OnInit, OnDestroy {
     @Input() canPublish: boolean
     @Input() showProjectInfo: boolean
     @Input() showDashboardOptions: boolean
-    
+
     @Output() saveAction: EventEmitter<any> = new EventEmitter()
     @Output() shareAction: EventEmitter<ReadingShareObject> = new EventEmitter<ReadingShareObject>()
 
 
-    public showAvatarDropdown: boolean = false
-    public showShareTooltip: boolean = false
+    public showAvatarDropdown = false
+    public showShareTooltip = false
     public user: any
     public currentProject: any
     public projectOwner: any
     public createdDate: string
-    public liveCount: number = 1
+    public liveCount = 1
     public currentReading: any
     public subscriptions: Subscription[] = []
     public liveCountSubscription: Subscription
-    public showCommentCounts: boolean = false
-    public showReferralModal: boolean = false
-    public mNavShow: boolean = false
-    public isMobile: boolean = false
+    public showCommentCounts = false
+    public showReferralModal = false
+    public mNavShow = false
+    public isMobile = false
     public powersLoading: {
       heatVision?: boolean
     } = { }
-    public tooltipPlacement: string = 'right'
+    public tooltipPlacement = 'right'
     public messages: {
       invalidCode?: boolean,
       serviceError?: boolean,
       groupNameLengthError?: boolean
     } = { }
-    
+
     // Group/Share form
-    public submitted: boolean = false
-    public groupLabel: string = "Group 1"
-    public customCode: string = ""
-    public shareLoading: boolean = false
+    public submitted = false
+    public groupLabel = 'Group 1'
+    public customCode = ''
+    public shareLoading = false
 
     public projectCode: string
-    public joinLoading: boolean = false
+    public joinLoading = false
     public errorObject: {
-      "invalidCode"?: string,
-      "loginFailed"?: string,
-      "serverError"?: string
+      'invalidCode'?: string,
+      'loginFailed'?: string,
+      'serverError'?: string
     } = {}
-    public projectCodeShow: boolean = true
+    public projectCodeShow = true
     public window
     public showHeroSubModal: boolean
     public couponCode: string
 
     constructor(
           public _route: ActivatedRoute,
-          private _auth: AuthService, 
-          private _socket: SocketService, 
+          private _auth: AuthService,
+          private _socket: SocketService,
           public _router: Router,
           private angulartics: Angulartics2,
           private _projects: ProjectService,
@@ -78,7 +78,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
         ) {
 
     }
-    
+
     ngOnInit() {
       /** Set the current user every time it changes */
       this.subscriptions.push(
@@ -104,14 +104,14 @@ export class NavBarComponent implements OnInit, OnDestroy {
       this.subscriptions.push(
         this._readings.currentReading.subscribe(
             reading => {
-                this.currentReading = reading;
+                this.currentReading = reading
             },
             error => {
-                console.error(error);
+                console.error(error)
             }
         )
       )
-      
+
       if (this.showProjectInfo) {
         // Subscribe to current Project data
         this.subscriptions.push(
@@ -122,12 +122,12 @@ export class NavBarComponent implements OnInit, OnDestroy {
                     this.createdDate = new Date(project.createdAt).toDateString()
                 },
                 error => {
-                    console.error(error);
+                    console.error(error)
                 }
             )
         )
 
-        // Subscribe to user count updates       
+        // Subscribe to user count updates
         this.subscriptions.push(
           this._socket.liveUsersCount.subscribe((users) => {
                   this.liveCount = users.length
@@ -142,7 +142,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
     ngOnDestroy() {
       this.subscriptions.forEach((sub) => { sub.unsubscribe() })
     }
-    
+
     logout() {
         this._auth.logout()
         this._router.navigate(['/home'])
@@ -196,8 +196,8 @@ export class NavBarComponent implements OnInit, OnDestroy {
     }
 
     showShareCodeModal() {
-      let currentParams = Object.assign({}, this._route.snapshot.queryParams)
-      let newParams = Object.assign(currentParams, { readingCodeModal: true })
+      const currentParams = Object.assign({}, this._route.snapshot.queryParams)
+      const newParams = Object.assign(currentParams, { readingCodeModal: true })
       this._router.navigate(['.'], { relativeTo: this._route, queryParams: newParams })
     }
 
@@ -207,39 +207,39 @@ export class NavBarComponent implements OnInit, OnDestroy {
    */
   private joinSession(code: string): void {
     // console.log("first call", code);
-    this.joinLoading = true;
-    this.angulartics.eventTrack.next({ action: 'enterLightningCode', properties: { category: 'joinProject', label: 'attempt' }});
+    this.joinLoading = true
+    this.angulartics.eventTrack.next({ action: 'enterLightningCode', properties: { category: 'joinProject', label: 'attempt' }})
     this._projects.validateProject(code)
       .pipe(take(1))
       .subscribe(
         (data) => {
-          this.joinLoading = false;
-          this.angulartics.eventTrack.next({ action: 'enterLightningCode', properties: { category: 'joinProject', label: 'success' }});
-          if (data._id){
-            this._router.navigate(['/project', data._id]);
+          this.joinLoading = false
+          this.angulartics.eventTrack.next({ action: 'enterLightningCode', properties: { category: 'joinProject', label: 'success' }})
+          if (data._id) {
+            this._router.navigate(['/project', data._id])
           } else {
-            this._router.navigate(['/project', code]);
+            this._router.navigate(['/project', code])
           }
         },
         (error) => {
-          this.joinLoading = false;
+          this.joinLoading = false
           if (error.status === 500) {
-            this.angulartics.eventTrack.next({ action: 'enterLightningCode', properties: { category: 'joinProject', label: 'failure' }});
-            this.errorObject.invalidCode = "Oh no! Something went wrong and we don't know what happened!";
+            this.angulartics.eventTrack.next({ action: 'enterLightningCode', properties: { category: 'joinProject', label: 'failure' }})
+            this.errorObject.invalidCode = 'Oh no! Something went wrong and we don\'t know what happened!'
           } else {
-            this.errorObject.invalidCode = "We don't think that's a real code :confused:";
+            this.errorObject.invalidCode = 'We don\'t think that\'s a real code :confused:'
           }
         }
-      );
+      )
   }
 
   /**
    * Clears all errorObject strings to equal empty strings
    */
   private clearErrors(): void {
-    for (let property in this.errorObject) {
+    for (const property in this.errorObject) {
       if (this.errorObject.hasOwnProperty(property) && typeof this.errorObject[property] === 'string') {
-        this.errorObject[property] = "";
+        this.errorObject[property] = ''
       }
     }
   }
@@ -256,15 +256,15 @@ export class NavBarComponent implements OnInit, OnDestroy {
    * - Requires "edji-feedback" component to exist on route
    */
   private openFeedback(): void {
-    this._util.showFeedbackModal=true
+    this._util.showFeedbackModal = true
   }
 
   /**
-   * 
+   *
    */
   private openReferralModal(): void {
     // Open the modal
-    this.showReferralModal=true
+    this.showReferralModal = true
     // Track when this button is clicked on in angulartics
     this.angulartics.eventTrack.next({ action: 'clickReferralButton', properties: { category: 'referral', label: 'success' }})
   }
@@ -274,7 +274,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
    */
   public useCoupon(couponCode: string) {
     // Hide the referral modal
-    this.showReferralModal=false
+    this.showReferralModal = false
     // Set the coupon code passed through from the referral modal
     this.couponCode = couponCode
     // Show the hero subscription modal and pass the coupon code in

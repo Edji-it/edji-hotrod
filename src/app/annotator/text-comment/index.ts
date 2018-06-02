@@ -1,1 +1,1 @@
-export * from './text-comment.component';
+export * from './text-comment.component'

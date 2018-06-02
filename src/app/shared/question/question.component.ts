@@ -1,14 +1,14 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core'
 import { Subscription } from 'rxjs'
 
 // Project Dependencies
-import { EdjiComment, EdjiQuestion, Project, Reading, User } from "../datatypes"
-import { CommentService, AuthService, ProjectService, ReadingService } from "../../_services"
+import { EdjiComment, EdjiQuestion, Project, Reading, User } from '../datatypes'
+import { CommentService, AuthService, ProjectService, ReadingService } from '../../_services'
 
 enum ResponseType {
   OpenEnded = 0,
   MultipleChoice = 1
-} // 
+} //
 
 @Component({
   selector: 'edji-question',
@@ -23,7 +23,7 @@ export class QuestionComponent implements OnInit, OnDestroy {
 
     Handles display of the Question.
   */
-  
+
   // INPUTS
 
   // The question being asked, and all of it's data and logic.
@@ -34,11 +34,11 @@ export class QuestionComponent implements OnInit, OnDestroy {
   public answers: EdjiComment[]
   // What kind of answers is this question given?
   // The corresponding one is toggled in the template.
-  @Input() 
-  public responseType : ResponseType = ResponseType.OpenEnded
+  @Input()
+  public responseType: ResponseType = ResponseType.OpenEnded
 
-  @Output() 
-  questionDelete= new EventEmitter()
+  @Output()
+  questionDelete = new EventEmitter()
 
   @Output()
   questionUpdate = new EventEmitter()
@@ -46,14 +46,14 @@ export class QuestionComponent implements OnInit, OnDestroy {
   // State
   public questionOrder = 0 // Is this the first question? Or the second? Etc.
 
-  private newAnswer : EdjiComment // New answers will be loaded here.
+  private newAnswer: EdjiComment // New answers will be loaded here.
   private currentReading: Reading
-  private user : User
-  private subscriptions : Subscription[] = []
+  private user: User
+  private subscriptions: Subscription[] = []
   private answersById: any = {}
-  private questionOptionsStatus: boolean = false
-  private ownerHidden: boolean = false
-  private questionPos: number = 0
+  private questionOptionsStatus = false
+  private ownerHidden = false
+  private questionPos = 0
 
   // Set which answer types are allowed and which options to toggle.
   // Answer types are passed onto which ever Answer component
@@ -61,22 +61,22 @@ export class QuestionComponent implements OnInit, OnDestroy {
   private optionTypeStatus: any[] = []
   private answerTypesAvailable: any[] = []
   private optionTypesAvailable: any[] = [{
-      'type':'public','text':'public answers'
+      'type': 'public', 'text': 'public answers'
     }, {
-      'type':'lock','text':'lock next questions'
+      'type': 'lock', 'text': 'lock next questions'
   }]
 
   // References
   private project: Project
 
   constructor(
-    private _projects : ProjectService, 
-    private _readings : ReadingService,
-    private _auth     : AuthService,
-    private _comments : CommentService
+    private _projects: ProjectService,
+    private _readings: ReadingService,
+    private _auth: AuthService,
+    private _comments: CommentService
   ) {
     // TEMP
-    
+
   } // constructor
 
   ngOnInit() {
@@ -91,7 +91,7 @@ export class QuestionComponent implements OnInit, OnDestroy {
         console.error(error)
       })
     )
-    
+
     // Subscribe to updates from that project once we're subscribed to the reading
     this.subscriptions.push( this._projects.currentProject.subscribe(
       (project) => {
@@ -101,7 +101,7 @@ export class QuestionComponent implements OnInit, OnDestroy {
       },
       (error) => {
         console.error(error)
-      }) 
+      })
     )
 
     // Subscribe to updates to the answer reference object
@@ -125,17 +125,17 @@ export class QuestionComponent implements OnInit, OnDestroy {
 
   } // ngOnInit
 
-  public setQuestionOrder (input : string) : void {
+  public setQuestionOrder (input: string): void {
     // Make sure there is no whitespace.
   } // setQuestionOrder
 
   // Has the current user already answered this question?
-  public hasUserAnswered () : boolean {
+  public hasUserAnswered (): boolean {
     if (this.answersById[this.question._id]) {
-      for (let i=0; i<this.answersById[this.question._id].length; i++) {
+      for (let i = 0; i < this.answersById[this.question._id].length; i++) {
         if (this.project.answers && this.answersById[this.question._id][i].user_id === this.user._id) {
           return true
-        } 
+        }
       }
     } else {
       return false
@@ -154,7 +154,7 @@ export class QuestionComponent implements OnInit, OnDestroy {
       }
     }
     this.questionUpdate.emit(this.question)
-  } // private toggleAnswerOfType(type: string) 
+  } // private toggleAnswerOfType(type: string)
 
   /** Toggles option selection
    * @param type A option type
@@ -164,9 +164,9 @@ export class QuestionComponent implements OnInit, OnDestroy {
     if (this.optionTypeStatus[type]) {
       this.question.option_types.push(type)
     } else {
-      for (let i=0;i<this.question.option_types.length;i++) {
-        if (this.question.option_types[i]===type) {
-          this.question.option_types.splice(i,1)
+      for (let i = 0; i < this.question.option_types.length; i++) {
+        if (this.question.option_types[i] === type) {
+          this.question.option_types.splice(i, 1)
           break
         }
       }
@@ -181,17 +181,17 @@ export class QuestionComponent implements OnInit, OnDestroy {
   } //  private getCommentPermissions(comment: any): number
 
   /** Used to set the available answer and option types and also to set the current question position
-   * 
+   *
    */
   private updateSelections() {
     // Initialize the options for questions
     for (let i = 0; i < this.optionTypesAvailable.length; i++) {
-      this.optionTypeStatus[this.optionTypesAvailable[i].type]=false
+      this.optionTypeStatus[this.optionTypesAvailable[i].type] = false
     }
 
     // Select the options if we're making an edit to the reading
-    for (let i=0; i<this.question.option_types.length; i++) {
-      this.optionTypeStatus[this.question.option_types[i]]=true
+    for (let i = 0; i < this.question.option_types.length; i++) {
+      this.optionTypeStatus[this.question.option_types[i]] = true
     }
 
     // Also set the question position
@@ -199,9 +199,9 @@ export class QuestionComponent implements OnInit, OnDestroy {
   }
 
   private textAreaAdjust(el, height) {
-    let elHeight = height.offsetHeight * 1.2
-    let element = el.srcElement
-    element.style.height = elHeight+"px"
+    const elHeight = height.offsetHeight * 1.2
+    const element = el.srcElement
+    element.style.height = elHeight + 'px'
   }
 
   ngOnDestroy() {

@@ -1,4 +1,4 @@
-import { Directive, ElementRef, Host, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Directive, ElementRef, Host, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core'
 
 @Directive({
   selector: '[ssAutofocus]'
@@ -8,10 +8,10 @@ export class AutofocusDirective implements OnInit, OnChanges {
   /**
    * Will set focus if set to falsy value or not set at all
    */
-  @Input() ssAutofocus: boolean;
+  @Input() ssAutofocus: boolean
 
   get element(): { focus?: Function } {
-    return this.elemRef.nativeElement;
+    return this.elemRef.nativeElement
   }
 
   constructor(
@@ -19,23 +19,23 @@ export class AutofocusDirective implements OnInit, OnChanges {
   ) { }
 
   ngOnInit() {
-    this.focus();
+    this.focus()
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    const ssAutofocusChange = changes.ssAutofocus;
+    const ssAutofocusChange = changes.ssAutofocus
 
     if (ssAutofocusChange && !ssAutofocusChange.isFirstChange()) {
-      this.focus();
+      this.focus()
     }
   }
 
   focus() {
     if (this.ssAutofocus) {
-      return;
+      return
     }
 
-    this.element.focus && this.element.focus();
+    this.element.focus && this.element.focus()
   }
 
 }

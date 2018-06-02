@@ -14,7 +14,7 @@ declare var window: any
   templateUrl: './footer.component.pug'
 })
 export class FooterComponent implements OnInit {
-  public appVersion;
+  public appVersion
   private window
   private browserProperties: any
 
@@ -26,13 +26,13 @@ export class FooterComponent implements OnInit {
   }
 
   ngOnInit() {
-    var w = this.window.navigator
+    let w = this.window.navigator
     // Set a message and the following properties to return:
     // Device
     // Browser
     // Browser Version
     // Edji Version
-    this.browserProperties = '%0A%0A' + "We're going to do our best to help you! Please don't delete this information, we'll use it to resolve your problem. Thanks for hanging in there while we get this resolved!" 
+    this.browserProperties = '%0A%0A' + 'We\'re going to do our best to help you! Please don\'t delete this information, we\'ll use it to resolve your problem. Thanks for hanging in there while we get this resolved!'
     + '%0A%0A%0A%0A%0A' + this._util.getPlatform(w) + '%0A' + this._util.getBrowser(w.userAgent) + '%0A' + this._util.getBrowserVersion(w.userAgent) + '%0A' + this._util.getEdjiVersion()
   }
 }

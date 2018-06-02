@@ -30,5 +30,5 @@ export class LoginRegisterModal implements OnInit {
       this.loginHeader = 'Please log in or register to continue.'
     }
   }
-  
+
 }

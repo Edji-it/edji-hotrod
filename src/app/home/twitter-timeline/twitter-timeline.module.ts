@@ -1,12 +1,12 @@
-import { NgModule, ModuleWithProviders } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { NgModule, ModuleWithProviders } from '@angular/core'
+import { CommonModule } from '@angular/common'
 
 import
 {
-	//ng4-twitter-timeline
+	// ng4-twitter-timeline
 	Ng4TwitterTimelineComponent,
 	Ng4TwitterTimelineService
-} from './index';
+} from './index'
 
 
 @NgModule({
@@ -27,15 +27,13 @@ import
 		Ng4TwitterTimelineService
 	]
 })
-export class Ng4TwitterTimelineModule 
-{
-	static forRoot(): ModuleWithProviders
-	{
+export class Ng4TwitterTimelineModule {
+	static forRoot(): ModuleWithProviders {
 		return {
 			ngModule: Ng4TwitterTimelineModule,
 			providers:
-			[ 
+			[
 			]
-		};
-	}	
+		}
+	}
 }

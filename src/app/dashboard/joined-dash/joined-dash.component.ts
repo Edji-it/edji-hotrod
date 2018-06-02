@@ -19,33 +19,33 @@ import { AuthService, ReadingService, ProjectService } from '../../_services'
 })
 export class JoinedDashComponent implements OnInit, OnDestroy {
   // Set our default values
-  public projects: Array<any> = [];
+  public projects: Array<any> = []
   public errorObject = {
-    wrongCode : "",
-    projectError: ""
-  };
-  private subscriptions: Subscription[] = [];
-  public codeForm: FormGroup;
-  public joinLoading: boolean = false
+    wrongCode : '',
+    projectError: ''
+  }
+  private subscriptions: Subscription[] = []
+  public codeForm: FormGroup
+  public joinLoading = false
 
   // Joined Readings, p-datalist values
-  public loading: boolean = true
-  public first: number = 0 // first page 
-  public rows: number = 25 // number of Readings to return
-  public total: number = 25 // total Readings
-  
+  public loading = true
+  public first = 0 // first page
+  public rows = 25 // number of Readings to return
+  public total = 25 // total Readings
+
   // TypeScript public modifiers
   constructor(
     public router: Router,
     private route: ActivatedRoute,
-    private _auth: AuthService, 
+    private _auth: AuthService,
     private _projects: ProjectService,
     private angulartics: Angulartics2,
     fb: FormBuilder
   ) {
     this.codeForm = fb.group({
       projectCode: [null, Validators.compose([Validators.required])]
-    });
+    })
   }
 
   ngOnInit() {
@@ -54,17 +54,17 @@ export class JoinedDashComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
+    this.subscriptions.forEach((sub) => { sub.unsubscribe() })
   }
 
   /**
    * Load Created with Params
    * - This auto-runs on load and every change, called by p-dataList in the template
    */
-  loadJoinedFeed(paging?: any){
-    window.scrollTo(0,0)
+  loadJoinedFeed(paging?: any) {
+    window.scrollTo(0, 0)
     this.projects = []
-    let filters = {}
+    const filters = {}
     this.loading = true
 
     // Pagination values
@@ -74,14 +74,14 @@ export class JoinedDashComponent implements OnInit, OnDestroy {
 
     this._projects.getJoined(filters)
       .subscribe(data => {
-        this.loading = false;
-        this.total = data.total;
-        this.projects = data.projects || [];
+        this.loading = false
+        this.total = data.total
+        this.projects = data.projects || []
       },
       (error) => {
-        this.loading = false;
-        this.angulartics.eventTrack.next({ action: "getAllProjects", properties: { category: "serviceCalls", label: "failure" }});
-        this.errorObject.projectError = "We had some trouble getting your projects, it might be our fault";
+        this.loading = false
+        this.angulartics.eventTrack.next({ action: 'getAllProjects', properties: { category: 'serviceCalls', label: 'failure' }})
+        this.errorObject.projectError = 'We had some trouble getting your projects, it might be our fault'
       })
   }
 
@@ -97,9 +97,9 @@ export class JoinedDashComponent implements OnInit, OnDestroy {
         },
         (error) => {
           this.joinLoading = false
-          this.errorObject.wrongCode = "Unfortunately, we did not find that project"
+          this.errorObject.wrongCode = 'Unfortunately, we did not find that project'
         }
-      );
+      )
   }
 
 

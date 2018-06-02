@@ -10,9 +10,9 @@ import { User } from '../shared/datatypes'
 @Injectable()
 export class BumblebeeService {
 
-  private url: string = "//bumblebee.edji.it"
+  private url = '//bumblebee.edji.it'
   // private url: string = "http://localhost:8333"
-  private isProd: boolean = true
+  private isProd = true
 
   constructor(private _auth: AuthService, private http: Http) {
     this.isProd = this._auth.getEnv() == 'prod'
@@ -20,7 +20,7 @@ export class BumblebeeService {
 
   public sendUserDetails(userDetails: any): void {
     this.http.post(
-      this.url + "/newuser",
+      this.url + '/newuser',
       // "http://localhost:8333/newuser",
       { userDetails: userDetails },
       this._auth.getOptions()
@@ -34,7 +34,7 @@ export class BumblebeeService {
 
   public sendFeedback(data: any): Observable<any> {
     return this.http.post(
-      this.url + "/newform",
+      this.url + '/newform',
       data,
       this._auth.getOptions()
     )
@@ -43,7 +43,7 @@ export class BumblebeeService {
   public userHeroAction(user: User, action: string): void {
     if (this.isProd) {
       this.http.post(
-        this.url + "/hero",
+        this.url + '/hero',
         { user: user, action: action },
         this._auth.getOptions()
       )
@@ -58,7 +58,7 @@ export class BumblebeeService {
   public reportError(error: any): void {
     if (this.isProd) {
       this.http.post(
-        this.url + "/error",
+        this.url + '/error',
         { error: error },
         this._auth.getOptions()
       )

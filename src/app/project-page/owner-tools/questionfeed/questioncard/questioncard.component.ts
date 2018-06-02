@@ -21,7 +21,7 @@ export class QuestioncardComponent implements OnInit, OnDestroy {
   public answersById: any = {}
 
   constructor(
-    private _projects : ProjectService,
+    private _projects: ProjectService,
     public el: ElementRef,
     private _readings: ReadingService,
     private _socket: SocketService
@@ -36,7 +36,7 @@ export class QuestioncardComponent implements OnInit, OnDestroy {
           }
         },
         error => {
-          console.error(error);
+          console.error(error)
         }
       )
     )
@@ -44,10 +44,10 @@ export class QuestioncardComponent implements OnInit, OnDestroy {
     // Subscribe to comment comment updates
     this.subscriptions.push(
       this._socket.commentUpdates.subscribe((commentUpdate) => {
-        let comment = commentUpdate.comment
+        const comment = commentUpdate.comment
         // Process different live comment updates
         if (commentUpdate.action === 'DELETE') {
-          
+
         } else if (commentUpdate.action === 'UPDATE') {
 
         } else if (commentUpdate.action === 'CREATE') {
@@ -64,7 +64,7 @@ export class QuestioncardComponent implements OnInit, OnDestroy {
       },
       (error) => {
         console.error(error)
-      }) 
+      })
     )
   }
 

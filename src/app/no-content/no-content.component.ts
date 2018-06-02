@@ -1,6 +1,6 @@
-import { Title } from '@angular/platform-browser';
-import { Component, OnInit } from '@angular/core';
-import { Angulartics2 } from 'angulartics2';
+import { Title } from '@angular/platform-browser'
+import { Component, OnInit } from '@angular/core'
+import { Angulartics2 } from 'angulartics2'
 
 @Component({
   selector: 'no-content',

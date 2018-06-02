@@ -1,4 +1,4 @@
-import { Subscription } from 'rxjs';
+import { Subscription } from 'rxjs'
 import {
     Component,
     ElementRef,
@@ -8,7 +8,7 @@ import {
     OnInit,
     Output,
     SimpleChange,
-} from '@angular/core';
+} from '@angular/core'
 import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
@@ -39,17 +39,17 @@ export class CommentComponent implements OnInit, OnDestroy {
       - assignedQuestion
   */
 
-  public lineCount: number = 1
-  public indexOnLine: number = 1
-  
-  private justSaved: boolean = false
-  private isLoading: boolean = false
+  public lineCount = 1
+  public indexOnLine = 1
+
+  private justSaved = false
+  private isLoading = false
   // Hold the current scroll position for the iOS fix
   private currentScroll: number
   // Is fully visible, focused, and editable
   private active = false
   private reRecordAudio = false
-  private showDeleteModal: boolean = false
+  private showDeleteModal = false
   private user: any
   private subscriptions: Subscription[] = []
   private repliesById: any = {}
@@ -59,17 +59,17 @@ export class CommentComponent implements OnInit, OnDestroy {
   private indicatesPane: boolean
 
   @Input() public comment: EdjiComment
-  @Input() private readOnly: boolean = false
-  @Input() private replyRef: boolean = false
-  @Input() public reply: boolean = false   // Is it a reply to another comment? 
-  @Input() private commentLite: boolean = false
-  @Input() private commentContext: string = 'normal'; // See NOTES in summary.
-  @Input() public commentMobile: boolean = false
-  @Input() public commentMobileFirst: boolean = false
-  @Input() public commentPaneActive: boolean = false
-  @Input() private assignedQuestion : EdjiQuestion; // If this is an answer, it'll need this.
+  @Input() private readOnly = false
+  @Input() private replyRef = false
+  @Input() public reply = false   // Is it a reply to another comment?
+  @Input() private commentLite = false
+  @Input() private commentContext = 'normal' // See NOTES in summary.
+  @Input() public commentMobile = false
+  @Input() public commentMobileFirst = false
+  @Input() public commentPaneActive = false
+  @Input() private assignedQuestion: EdjiQuestion // If this is an answer, it'll need this.
   @Input() private userPermission: number = CommentPermissions.READ
-  @Input() private showDeleteAudioModal: boolean = false
+  @Input() private showDeleteAudioModal = false
   @Input()
   set isActive(isActive: boolean) {
     if (typeof(isActive) !== 'undefined' && this.active !== isActive) {
@@ -80,7 +80,7 @@ export class CommentComponent implements OnInit, OnDestroy {
       } else {
         this.toggleCPane(this.comment, true)
       }
-    } 
+    }
   }
   get isActive(): boolean { return this.active }
 
@@ -109,7 +109,7 @@ export class CommentComponent implements OnInit, OnDestroy {
     if (!this.reply) {
       if (this.comment.lineCount) {
         this.lineCount = this.comment.lineCount
-      } 
+      }
     }
 
     /** Set the current user every time it changes */
@@ -174,8 +174,8 @@ export class CommentComponent implements OnInit, OnDestroy {
    * @param vYalue: number The y position in pixels
    * @returns number Nearest baseline Y value
    */
-  private nearestLine(yValue: number) : number {
-    return yValue + (ALLSPARK.BASELINEHEIGHT/2) - yValue%ALLSPARK.BASELINEHEIGHT
+  private nearestLine(yValue: number): number {
+    return yValue + (ALLSPARK.BASELINEHEIGHT / 2) - yValue % ALLSPARK.BASELINEHEIGHT
   }
 
   /**
@@ -184,23 +184,23 @@ export class CommentComponent implements OnInit, OnDestroy {
    * - imageY provides consistent and lighter comment positioning on images
    */
   setLineY() {
-    let firstWord = document.querySelector('.w[index="1"]')
-    let commentWord = document.querySelector( '.w[index="'+this.comment.start+'"]')
-    let commentImage = document.getElementById('readingImage' + this.comment.start)
+    const firstWord = document.querySelector('.w[index="1"]')
+    const commentWord = document.querySelector( '.w[index="' + this.comment.start + '"]')
+    const commentImage = document.getElementById('readingImage' + this.comment.start)
 
     if (firstWord && (commentWord || commentImage)) {
-      let firstWordTop: number = firstWord.getBoundingClientRect().bottom
+      const firstWordTop: number = firstWord.getBoundingClientRect().bottom
 
       // This will need to re-decorate on resize
-      if (this.comment.loc && this.comment.loc.y && this.comment.text === "") {
-          let imageTop: number = commentImage.getBoundingClientRect().top
-          let imageHeight = commentImage.clientHeight
+      if (this.comment.loc && this.comment.loc.y && this.comment.text === '') {
+          const imageTop: number = commentImage.getBoundingClientRect().top
+          const imageHeight = commentImage.clientHeight
           // Get nearest baseline (Y) of comment within image
-          let imageY = (this.comment.loc.y/100) * imageHeight
+          let imageY = (this.comment.loc.y / 100) * imageHeight
           this.comment.imageY = imageY = this.nearestLine(imageY)
 
           // Get image offset for Line Y value
-          let imageOffset = imageTop - firstWordTop 
+          let imageOffset = imageTop - firstWordTop
           imageOffset = this.nearestLine(imageOffset)
           this.comment.lineY = imageY + imageOffset
       } else {
@@ -210,8 +210,8 @@ export class CommentComponent implements OnInit, OnDestroy {
           this.comment.lineY = this.nearestLine(wordY)
       }
     } else {
-      console.log("Looking for y position of comment not yet rendered...")
-      setTimeout(()=> {
+      console.log('Looking for y position of comment not yet rendered...')
+      setTimeout(() => {
         this.setLineY()
       }, 1000)
     }
@@ -259,8 +259,8 @@ export class CommentComponent implements OnInit, OnDestroy {
       this.comment.data = comment
     } // else
 
-    if (this.commentContext !== "answer") {
-      if (this.commentContext === "reply") {
+    if (this.commentContext !== 'answer') {
+      if (this.commentContext === 'reply') {
         // If this is a reply comment
         this.angulartics.eventTrack.next({ action: comment.type + 'updateReply', properties: { category: 'heroFeature', label: 'attempt' }})
         this.isLoading = true
@@ -287,7 +287,7 @@ export class CommentComponent implements OnInit, OnDestroy {
           // this.comment.active = false
         }, 1000)
       })
-      .catch(error => { 
+      .catch(error => {
         // Appropriate post-delete failure action, sorted by comment type.
         if (this.commentContext === 'reply' || this.commentContext === 'answer') {
           this.angulartics.eventTrack.next({ action: comment.type + 'updateReply', properties: { category: 'heroFeature', label: 'failure' }})
@@ -306,7 +306,7 @@ export class CommentComponent implements OnInit, OnDestroy {
         this.angulartics.eventTrack.next({ action: comment.type + 'updateAnswer', properties: { category: 'heroFeature', label: 'success' }})
 
         this.isLoading = false
-        
+
         this.commentUpdated.emit()
         this._projects.addAnswerToAnswers(answer)
 
@@ -316,7 +316,7 @@ export class CommentComponent implements OnInit, OnDestroy {
           // this.comment.active = false
         }, 1000)
       })
-      .catch(error => { 
+      .catch(error => {
         this.angulartics.eventTrack.next({ action: comment.type + 'updateAnswer', properties: { category: 'heroFeature', label: 'failure' }})
         console.log(error)
       })
@@ -324,7 +324,7 @@ export class CommentComponent implements OnInit, OnDestroy {
   } // public updateComment(comment: any, reply ?: boolean): void
 
   // Deletes comment via Project service, which updates the local Project object
-  public deleteComment(comment: any) : void {
+  public deleteComment(comment: any): void {
     // Stop the user from continuing to edit, and close emoji keyboard
     // Sort through the comment types and do the apppropriate pre-delete action
     if (this.comment.reply_to) {
@@ -345,7 +345,7 @@ export class CommentComponent implements OnInit, OnDestroy {
         } else {
           this.angulartics.eventTrack.next({ action: comment.type + 'deleteComment', properties: { category: 'projectAction', label: 'success' }})
         }
-        
+
         // Tell Annotator to destroy this comment element!
         this.showDeleteModal = false
       })
@@ -396,7 +396,7 @@ export class CommentComponent implements OnInit, OnDestroy {
   toggleCPane(comment?, forceOpen?: boolean): void {
     if (!this.commentPaneActive) {
       if (comment.selected) {
-        this.comment.selected=true
+        this.comment.selected = true
       }
        // Need to give the app 1 millisecond to update all arrays when adding a new comment
       if (!this.indicatesPane || forceOpen) {
@@ -415,11 +415,11 @@ export class CommentComponent implements OnInit, OnDestroy {
 
   updateLineCount(): void {
     if (this.comment.lineY) {
-      let commentsOnLine = this.commentsByPos[this.comment.lineY]
+      const commentsOnLine = this.commentsByPos[this.comment.lineY]
       this.lineCount = commentsOnLine && commentsOnLine.length
-      for (let i = 0; i < this.lineCount; i++){
+      for (let i = 0; i < this.lineCount; i++) {
         if (commentsOnLine[i]._id == this.comment._id) {
-          this.indexOnLine =  this.lineCount - i 
+          this.indexOnLine =  this.lineCount - i
         }
       }
     } else {

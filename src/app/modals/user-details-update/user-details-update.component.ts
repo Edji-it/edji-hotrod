@@ -17,12 +17,12 @@ export class UserDetailsUpdateModal implements OnInit {
 
   private userDetailsForm: FormGroup
   private checkboxCopy = {
-    student: "As a student! :writing_hand:",
-    teacher: "As a teacher! :apple:",
-    business: "For business. :briefcase:",
-    personal: "My own reading and sharing :books:",
-    robot: "I'm a robot. :robot_face:",
-    other: "Some reason we haven't listed here! :sparkles:"
+    student: 'As a student! :writing_hand:',
+    teacher: 'As a teacher! :apple:',
+    business: 'For business. :briefcase:',
+    personal: 'My own reading and sharing :books:',
+    robot: 'I\'m a robot. :robot_face:',
+    other: 'Some reason we haven\'t listed here! :sparkles:'
   }
   private messages: {
     success?: boolean,
@@ -33,7 +33,7 @@ export class UserDetailsUpdateModal implements OnInit {
     private _auth: AuthService,
     private _bumble: BumblebeeService,
     _fb: FormBuilder
-  ) { 
+  ) {
     this.userDetailsForm = _fb.group({
       identities: _fb.group({
         student: true,
@@ -50,10 +50,10 @@ export class UserDetailsUpdateModal implements OnInit {
   }
 
   private formSubmit(form: FormGroup): void {
-    let user: User = this._auth.getUser()
+    const user: User = this._auth.getUser()
 
-    let identities = []
-    for(let field in form.value.identities) {
+    const identities = []
+    for (const field in form.value.identities) {
       if (form.value.identities[field]) {
         identities.push(field) // the name of the field gets added to the array, making it important to name the fields properly
       }
@@ -66,15 +66,15 @@ export class UserDetailsUpdateModal implements OnInit {
         this.messages.success = true
         // Close the modal
         this.closeModal.emit()
-        if (this._auth.getEnv() === "prod") { 
+        if (this._auth.getEnv() === 'prod') {
           // If we have a teacher, send it to Mailchimp and Bumblebee/Slack
-          if(res.user.identities && res.user.identities.indexOf('teacher') > -1) {
+          if (res.user.identities && res.user.identities.indexOf('teacher') > -1) {
             // Tell Bumblebee/Slack!
             this._bumble.sendUserDetails(res.user)
             // Parse fullname for Mailchimp
-            let nameArr = res.user.fullname.split(" ")
-            let fname = nameArr[0]
-            let lname = nameArr[1]
+            const nameArr = res.user.fullname.split(' ')
+            const fname = nameArr[0]
+            const lname = nameArr[1]
             this._auth.addToNewUsersList({ 'email' : res.user.email, 'fname' : fname, 'lname' : lname })
           }
         }
@@ -89,7 +89,7 @@ export class UserDetailsUpdateModal implements OnInit {
    */
   private checkboxValidator(group: FormGroup): any {
     let valid = false
-    for(let control in group.controls) {
+    for (const control in group.controls) {
       if (group.controls[control].value === true) {
         valid = true
       }

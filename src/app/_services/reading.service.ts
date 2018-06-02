@@ -24,18 +24,18 @@ export class ReadingService {
 
 
   constructor(private http: Http, private _http: HttpClient, private _auth: AuthService) {
-    
+
   }
 
   ngOnInit() {
-      
+
   }
 
-  //set up thumbnail observables
-  private readingValue: Reading = <Reading>{};
+  // set up thumbnail observables
+  private readingValue: Reading = <Reading>{}
   // BehaviorSubjects push last value on subscribe
-  private readingSource: BehaviorSubject<Reading> = new BehaviorSubject(this.readingValue);
-  public currentReading: Observable<Reading> = this.readingSource.asObservable();
+  private readingSource: BehaviorSubject<Reading> = new BehaviorSubject(this.readingValue)
+  public currentReading: Observable<Reading> = this.readingSource.asObservable()
 
   // User's Readings observable
   private userReadingsSource = new BehaviorSubject<GetReadingsResponse>({})
@@ -49,37 +49,37 @@ export class ReadingService {
    * Get all Created Readings for a user, paginated
    * @param filters object containing pagination values (to eventually include other filters)
    */
-  public updateCreated(filters?: ReadingFilters) : void {
+  public updateCreated(filters?: ReadingFilters): void {
     let feedParams = new HttpParams()
     // Set Pagination values
     if (filters) {
       if (filters.size) {
-        feedParams = feedParams.append("size", filters.size.toString())
+        feedParams = feedParams.append('size', filters.size.toString())
       }
       if (filters.start) {
-        feedParams = feedParams.append("start", filters.start.toString())
+        feedParams = feedParams.append('start', filters.start.toString())
       }
     }
     // Populate list of Projects user has created on Reading
-    feedParams = feedParams.append("pop", "projects")
+    feedParams = feedParams.append('pop', 'projects')
 
-    this._http.get(this._auth.getUrl() + '/api/v1/readings', 
+    this._http.get(this._auth.getUrl() + '/api/v1/readings',
         { headers: new HttpHeaders({
           'Content-Type': 'application/json',
           'Authorization': this._auth.getToken()
-        }), 
+        }),
         params: feedParams })
         .pipe(take(1))
-        .subscribe((data: any) => { 
+        .subscribe((data: any) => {
           this.userReadingsSource.next(data)
         }, (error) => {
           this.userReadingsSource.error(error)
         })
-  } //getCreated()
+  } // getCreated()
 
   // Pull one reading by ID
-  public get(id : string) : Observable<any> {
-    
+  public get(id: string): Observable<any> {
+
     return this.http
       .get(this._auth.getUrl() + '/readings/' + id, this._auth.getOptions())
       .pipe(
@@ -89,10 +89,10 @@ export class ReadingService {
           }
           return data.json()
         })
-      );
+      )
   } // public get(id : string) : Observable<any>
 
-  public setReadingObj(reading: any) : void {
+  public setReadingObj(reading: any): void {
     // console.log("Set", reading)
     if (reading._id) {
       this.readingValue = reading
@@ -101,20 +101,20 @@ export class ReadingService {
   }
 
   // Pull all versions of a particular reading
-  public getAllVersions(versionId : string) : Observable<any> {
+  public getAllVersions(versionId: string): Observable<any> {
       return this.http
           .get(this._auth.getUrl() + '/readings/versions/' + versionId, this._auth.getOptions())
           .pipe(
             map(data => {
               return data.json()
             })
-          );
+          )
   } // public getAllVersions(versionId : string) : Observable<any>
 
   public clear(): void {
     this.readingValue = <Reading>{}
     this.readingSource.next(this.readingValue)
-  } // public clear(): void 
+  } // public clear(): void
 
   // It deletes the reading. Fairly straightforward.
   // No need to return an Observable<Reading> since we don't need to use it after the fact.
@@ -124,10 +124,10 @@ export class ReadingService {
       .pipe(
         map(value => {
           // Delete was successful
-          let readingResponse = this.userReadingsSource.value
+          const readingResponse = this.userReadingsSource.value
           readingResponse.readings.forEach(
             (reading, index) => {
-              
+
               if (reading.version_count > 1) {
                 // Reload content (slower but simpler)
                 this.updateCreated()
@@ -142,14 +142,14 @@ export class ReadingService {
           ) // readings.forEach
           return value
         })
-      );
+      )
   } // public delete(): void
 
   /**
    * Remove Project from service maintained list of Readings with nested Projects
    */
   public removeProject(targetProject: Project) {
-    let readingRes = this.userReadingsSource.value
+    const readingRes = this.userReadingsSource.value
     let projectFound = false
 
     readingRes.readings.forEach( reading => {
@@ -165,7 +165,7 @@ export class ReadingService {
 
     // If we didn't find the project, it's hiding in a version
     if (!projectFound) {
-      console.error("PROJECT NOT FOUND")
+      console.error('PROJECT NOT FOUND')
       this.refreshVersionSource.next(targetProject._id)
     }
     this.userReadingsSource.next(readingRes)
@@ -175,9 +175,9 @@ export class ReadingService {
   public save(reading: any): Observable<any> {
     // DO NOT ADD OWNER_ID OR TEACHER_IDS
     // The server takes care of all of that by itself
-    
+
     if (reading['_id']) {
-      let putReading = {
+      const putReading = {
         title: reading.title,
         words: reading.words,
         html: reading.html,
@@ -197,9 +197,9 @@ export class ReadingService {
               this.readingValue = data.json().reading
               this.readingSource.next(this.readingValue)
             }
-            return data.json().reading;
+            return data.json().reading
           })
-        );
+        )
     } else {
       return this.http
         .post(this._auth.getUrl() + '/readings', { reading: reading }, this._auth.getOptions())
@@ -209,38 +209,38 @@ export class ReadingService {
               this.readingValue = data.json().reading
               this.readingSource.next(this.readingValue)
             }
-            return data.json().reading;
+            return data.json().reading
           })
-        );
+        )
     } // if
   } // public save()
-  
+
   public getFeed(filters?: FilterObj): Observable<any> {
     let feedParams = new HttpParams()
     if (filters  && filters['grades']) {
-      let grades = filters['grades']
+      const grades = filters['grades']
       // filters['grades'].forEach( grade => { feedParams = feedParams.append("grades", grade + "")})
-      feedParams = feedParams.append("grades", Math.min(...grades) + "")
-      feedParams = feedParams.append("grades", Math.max(...grades) + "")
+      feedParams = feedParams.append('grades', Math.min(...grades) + '')
+      feedParams = feedParams.append('grades', Math.max(...grades) + '')
     }
     if (filters && filters['size']) {
-      feedParams = feedParams.append("size", filters['size'])
+      feedParams = feedParams.append('size', filters['size'])
     }
     if (filters && filters['start']) {
-      feedParams = feedParams.append("start", filters['start'])
+      feedParams = feedParams.append('start', filters['start'])
     }
     if (filters && filters['type']) {
-      feedParams = feedParams.append("type", filters['type'])
+      feedParams = feedParams.append('type', filters['type'])
     }
-    feedParams = feedParams.append("populate", "owner").append("populate", "words_preview")
-    
-    //{{url}}/readings/feed?grades[]=1&grades[]=8&populate[]=words_preview&populate[]=owner&start=0
+    feedParams = feedParams.append('populate', 'owner').append('populate', 'words_preview')
+
+    // {{url}}/readings/feed?grades[]=1&grades[]=8&populate[]=words_preview&populate[]=owner&start=0
     return this._http.get(
-      this._auth.getUrl() + '/readings/feed', 
+      this._auth.getUrl() + '/readings/feed',
         { headers: new HttpHeaders({
           'Content-Type': 'application/json',
           'Authorization': this._auth.getToken()
-        }), 
+        }),
         params: feedParams })
   }
 }

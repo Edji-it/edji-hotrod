@@ -1,4 +1,4 @@
-import { Title } from '@angular/platform-browser';
+import { Title } from '@angular/platform-browser'
 import { Component, OnInit, OnDestroy } from '@angular/core'
 import { PRIMARY_OUTLET, Router, ActivatedRoute } from '@angular/router'
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
@@ -10,7 +10,7 @@ import { Angulartics2 } from 'angulartics2'
 import { Copy } from './../shared'
 import { AuthService, ProjectService } from './../_services'
 import { ALLSPARK } from './../app.constants'
-import { LockerService } from '../_services/locker.service';
+import { LockerService } from '../_services/locker.service'
 
 @Component({
   selector: 'edji-register',
@@ -41,7 +41,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = []
 
   public registerForm: FormGroup
-  public registerLoading: boolean = false
+  public registerLoading = false
   public errorObject: {
     duplicateUsername?: boolean,
     duplicateEmail?: boolean,
@@ -58,12 +58,12 @@ export class RegisterComponent implements OnInit, OnDestroy {
   public userCopy: any
 
   public checkboxCopy = {
-    student: "As a student! :writing_hand:",
-    teacher: "As a teacher! :apple:",
-    business: "For business. :briefcase:",
-    personal: "My own reading and sharing :books:",
-    robot: "I'm a robot. :robot_face:",
-    other: "Some reason we haven't listed here! :sparkles:"
+    student: 'As a student! :writing_hand:',
+    teacher: 'As a teacher! :apple:',
+    business: 'For business. :briefcase:',
+    personal: 'My own reading and sharing :books:',
+    robot: 'I\'m a robot. :robot_face:',
+    other: 'Some reason we haven\'t listed here! :sparkles:'
   }
 
   /** The reading id that the user wanted to make a copy of */
@@ -112,16 +112,16 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
     this._title.setTitle( 'Edji | Register' )
 
-    if (typeof(this.referralId)!='undefined' && this.referralId!='') {
+    if (typeof(this.referralId) != 'undefined' && this.referralId != '') {
       // Store the referral_id in the locker in case the user signs up with oauth
-      this._locker.set("referral_id", this.referralId)
+      this._locker.set('referral_id', this.referralId)
       // We're going to ask the server to get the user that referred this new one so we can show a name
       this.subscriptions.push(
         this._auth.getUserByReferralId(this.referralId).subscribe((user) => {
           this.userReferral = user
         }, (err) => {
           // If the servor throws an error, then let's make sure the copy is at least protected
-          this.userReferral = {fullname: "A special someone"}
+          this.userReferral = {fullname: 'A special someone'}
         })
       )
       // We need to activate the success object so we can show the user a friendly message
@@ -129,7 +129,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     }
   }
 
-  //https://angular.io/docs/ts/latest/api/forms/index/FormGroup-class.html
+  // https://angular.io/docs/ts/latest/api/forms/index/FormGroup-class.html
   /** Validates that the passwords are equal and assigns error if not
    * @returns error to FormGroup called 'mismatch' if the passwords are not equal
    */
@@ -143,13 +143,13 @@ export class RegisterComponent implements OnInit, OnDestroy {
    */
   private emailValidator(control: FormControl): any {
     // If you change the RegExp for the email validator here, change it on the username validator as well
-    let emailRe: RegExp = ALLSPARK.EMAILREGEX
+    const emailRe: RegExp = ALLSPARK.EMAILREGEX
     return emailRe.test(control.value) ? null : { 'emailIncorrect': true }
   }
 
   private usernameValidator(control: FormControl): any {
     // If you change the RegExp for the username validator here, change it on the email validator as well
-    let usernameRe: RegExp = ALLSPARK.EMAILREGEX
+    const usernameRe: RegExp = ALLSPARK.EMAILREGEX
     return !usernameRe.test(control.value) ? null : { 'usernameIncorrect': true }
   }
 
@@ -162,7 +162,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.registerLoading = true
 
     formValue.identities = []
-    for(let field in formValue.checkboxes) {
+    for (const field in formValue.checkboxes) {
       if (formValue.checkboxes[field]) {
         formValue.identities.push(field) // the name of the field gets added to the array, making it important to name the fields properly
       }
@@ -171,7 +171,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     delete formValue.checkboxes // we don't want to store the checkboxes object
 
     // If the new user was referred and there is a referral id, then let's add it here
-    if (typeof(this.referralId)!='undefined' && this.referralId!='') {
+    if (typeof(this.referralId) != 'undefined' && this.referralId != '') {
       formValue.referred_by = this.referralId
     }
 
@@ -186,7 +186,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
           data.user.email && this.angulartics.setUserProperties.next({ email: data.user.email})
           if (data.user.identities) {
             data.user.identities.forEach((identity) => {
-              let userProperty: any = {}
+              const userProperty: any = {}
               userProperty[identity] = true
               this.angulartics.setUserProperties.next(userProperty)
             })
@@ -215,7 +215,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
             // default case where nothing special happens
             this._router.navigate(['/dashboard'])
           }
-          
+
         } else {
           // TRACK EXCEPTION... there was no data
           this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'failure' }})
@@ -228,31 +228,30 @@ export class RegisterComponent implements OnInit, OnDestroy {
         // ...then let's throw an error
         switch (err.status) {
           case 406:
-            let error = err.json() || {}
+            const error = err.json() || {}
             if (error.validationErrors) {
               // Use these print statements to see what's goin on
-              //console.log("[register.component.ts] ");
-              //console.log( error.validationErrors.username);
+              // console.log("[register.component.ts] ");
+              // console.log( error.validationErrors.username);
 
-              let errorCaught: boolean = false
+              let errorCaught = false
               // If the full name has bad words
-              if (error.validationErrors.fullname === "badWords") {
-                this.errorObject.badName = ":anguished: Would you mind choosing another name?"
+              if (error.validationErrors.fullname === 'badWords') {
+                this.errorObject.badName = ':anguished: Would you mind choosing another name?'
                 errorCaught = true
-              } 
+              }
               // if the username has bad words
-              if (error.validationErrors.username === "badWords") {
-                this.errorObject.badUsername = ":anguished: Would you mind choosing another username?"
+              if (error.validationErrors.username === 'badWords') {
+                this.errorObject.badUsername = ':anguished: Would you mind choosing another username?'
                 errorCaught = true
               }
 
               // if the username has whitespace
-              if (error.validationErrors.username === "whitespace")
-              {
-                this.errorObject.badUsername = "Whoops! Usernames can not have spaces."
+              if (error.validationErrors.username === 'whitespace') {
+                this.errorObject.badUsername = 'Whoops! Usernames can not have spaces.'
                 errorCaught = true
               } // if whitespaced username
-              
+
               // If we havent caught an error that we know about yet...
               if (!errorCaught) {
                 this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'failure' }})
@@ -261,7 +260,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
             }
 
             if (error.duplicateFieldError) {
-              let field = error.duplicateFieldError.field
+              const field = error.duplicateFieldError.field
               if (field === 'username') {
                 this.errorObject.duplicateUsername = true
               } else if (field === 'email') {
@@ -276,7 +275,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
             this.errorObject.serverError = true
             console.error(err)
         }
-      });
+      })
   }
 
   ngOnDestroy() {

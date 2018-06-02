@@ -1,7 +1,7 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { Angulartics2 } from 'angulartics2';
+import { Component, OnInit, OnDestroy } from '@angular/core'
+import { ActivatedRoute, Router } from '@angular/router'
+import { Subscription } from 'rxjs'
+import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
 import { AuthService } from '../_services'
@@ -16,19 +16,19 @@ export class HeroPromoComponent implements OnInit, OnDestroy {
   public countdownDate
   public countdownText: string
   public countdownOver: boolean
-  public subMsg : string
+  public subMsg: string
   public subError: boolean
   public subSuccess: boolean
   public showLoginModal: boolean
   public showHeroSubModal: boolean
-  public cancelGetPriceCall: boolean = false
+  public cancelGetPriceCall = false
 
   private subscriptions: Subscription[] = []
 
   constructor(
-      private _auth: AuthService, 
-      private route: ActivatedRoute, 
-      public _router: Router, 
+      private _auth: AuthService,
+      private route: ActivatedRoute,
+      public _router: Router,
       private angulartics: Angulartics2
     ) { }
 
@@ -39,7 +39,7 @@ export class HeroPromoComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((sub) => { sub.unsubscribe() })
   }
 
-  public goHero() : void {
+  public goHero(): void {
     // Is user logged in?
     if (this._auth.getUser().isLoggedIn != true) {
       this.showLoginModal = true

@@ -16,15 +16,15 @@ export class LoginForm implements OnInit {
   @Output()
   public loginSuccess: EventEmitter<any> = new EventEmitter()
 
-  public loginLoading: boolean = false
+  public loginLoading = false
 
   public loginForm: FormGroup
   public userCopy: any = {}
   public errorObject: {
-    "loginFailed"?: string,
-    "serverError"?: string
+    'loginFailed'?: string,
+    'serverError'?: string
   } = {}
-  public submitted: boolean = false
+  public submitted = false
 
   constructor(
     private _auth: AuthService,
@@ -33,7 +33,7 @@ export class LoginForm implements OnInit {
     fb: FormBuilder
   ) {
     this.userCopy = new Copy().getUserCopy()
-    
+
     this.loginForm = fb.group({
       username: [null, Validators.required],
       password: [null, Validators.required]
@@ -51,7 +51,7 @@ public login(formValue: any): void {
 
 		this._auth.login(formValue)
       .then(
-        (data: any)  => { 
+        (data: any)  => {
           this.loginLoading = false
           this.clearErrors()
 
@@ -61,7 +61,7 @@ public login(formValue: any): void {
             data.user.email && this.angulartics.setUserProperties.next({ email: data.user.email})
             if (data.user.identities) {
               data.user.identities.forEach((identity) => {
-                let userProperty: any = {}
+                const userProperty: any = {}
                 userProperty[identity] = true
                 this.angulartics.setUserProperties.next(userProperty)
               })
@@ -79,17 +79,17 @@ public login(formValue: any): void {
             this.loginSuccess.emit(data.user)
           }
         },
-        (error) =>  { 
+        (error) =>  {
           this.loginLoading = false
           if (error.status === 400) {
-            this.errorObject.loginFailed = "We are missing the username or password!"
+            this.errorObject.loginFailed = 'We are missing the username or password!'
           } else if (error.status === 401) {
-            this.errorObject.loginFailed = "Password is incorrect for that username"
+            this.errorObject.loginFailed = 'Password is incorrect for that username'
           } else if (error.status === 404) {
-            this.errorObject.loginFailed = "There might be a network error!"
+            this.errorObject.loginFailed = 'There might be a network error!'
           } else {
             this.angulartics.eventTrack.next({ action: 'loginMain', properties: { category: 'login', label: 'failure' }})
-            this.errorObject.serverError = "Oh no, something went wrong and we don't know what it is!"
+            this.errorObject.serverError = 'Oh no, something went wrong and we don\'t know what it is!'
           }
         }
       )
@@ -99,9 +99,9 @@ public login(formValue: any): void {
    * Clears all errorObject strings to equal empty strings
    */
   private clearErrors(): void {
-    for (let property in this.errorObject) {
+    for (const property in this.errorObject) {
       if (this.errorObject.hasOwnProperty(property) && typeof this.errorObject[property] === 'string') {
-        this.errorObject[property] = ""
+        this.errorObject[property] = ''
       }
     }
   }

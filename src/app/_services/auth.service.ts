@@ -3,16 +3,16 @@ import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from
 import { Http, Response, Headers, RequestOptions } from '@angular/http'
 import { Observable, BehaviorSubject } from 'rxjs'
 import { map, take, catchError } from 'rxjs/operators'
-import { HttpClient, HttpHeaders } from "@angular/common/http"
+import { HttpClient, HttpHeaders } from '@angular/common/http'
 
 // Project Dependencies
 import { User } from '../shared/datatypes'
 import { URLSearchParams } from '@angular/http/src/url_search_params'
 import { Angulartics2 } from 'angulartics2'
 import { Angulartics2GoogleAnalytics } from 'angulartics2/ga'
-import { LockerService } from '../_services/locker.service';
+import { LockerService } from '../_services/locker.service'
 
-import { environment } from '../../environments/environment';
+import { environment } from '../../environments/environment'
 @Injectable()
 export class AuthService implements CanActivate {
 
@@ -22,11 +22,11 @@ export class AuthService implements CanActivate {
     Edit user prefs from here. Everything under the datatype User should be edited through here.
     */
 
-    private baseUrl = "http://localhost:3354"
-    private ENV: string = "dev"
+    private baseUrl = 'http://localhost:3354'
+    private ENV = 'dev'
 
-    //NOTE: (6/15/17) If this.user ever needs to be edited it, make a copy, edit the copy, THEN assign it so this.user is always fresh.
-    private user: User 
+    // NOTE: (6/15/17) If this.user ever needs to be edited it, make a copy, edit the copy, THEN assign it so this.user is always fresh.
+    private user: User
     private currentUserSource: BehaviorSubject<any>
     public currentUser: Observable<any>
 
@@ -41,30 +41,30 @@ export class AuthService implements CanActivate {
     }
 
     constructor(
-        private legacyHttp: Http, 
-        private _http: HttpClient, 
-        private _router: Router, 
+        private legacyHttp: Http,
+        private _http: HttpClient,
+        private _router: Router,
         private _locker: LockerService,
         private angulartics: Angulartics2,
         private ga: Angulartics2GoogleAnalytics
     ) {
-        let buildEnv = environment.ENV
-        
+        const buildEnv = environment.ENV
+
         this.user = this.getUser()
         this.currentUserSource = new BehaviorSubject<any>(this.user)
         this.currentUser = this.currentUserSource.asObservable()
-        
+
         // Check to see if prod or dev environment
         if (window.location.host.indexOf('local.edji.it') > -1) {
             // do nothing
-        }else if (window.location.host.indexOf('dev.edji.it') > -1 || buildEnv === 'test') {
+        } else if (window.location.host.indexOf('dev.edji.it') > -1 || buildEnv === 'test') {
             //   baseUrl = "http://edji-dev.herokuapp.com"
-            this.baseUrl = "//optimus-dev.edji.it"
-            this.ENV = "dev"
+            this.baseUrl = '//optimus-dev.edji.it'
+            this.ENV = 'dev'
         } else if (window.location.host.indexOf('edji.it') > -1 || window.location.host.indexOf('dvscf5tf91syg.cloudfront.net') > -1) {
             //   this.baseUrl = "http://edji-prod.herokuapp.com"
-            this.baseUrl = "//optimus.edji.it"
-            this.ENV = "prod"
+            this.baseUrl = '//optimus.edji.it'
+            this.ENV = 'prod'
         }
     }
 
@@ -75,11 +75,11 @@ export class AuthService implements CanActivate {
 
     /** Give out options to any other http-using components or services */
     public getOptions(): RequestOptions {
-        let header = new Headers({
+        const header = new Headers({
             'Content-Type': 'application/json',
             'Authorization': this.getToken()
         })
-        let options = new RequestOptions({
+        const options = new RequestOptions({
             headers: header,
             withCredentials: true
         }) // Create a request option
@@ -95,8 +95,8 @@ export class AuthService implements CanActivate {
      * @param obj The object to be encoded
      */
     public formEncode(obj: Object): string {
-        var encodedString = ''
-        for (var key in obj) {
+        let encodedString = ''
+        for (const key in obj) {
             if (encodedString.length !== 0) {
                 encodedString += '&'
             }
@@ -109,7 +109,7 @@ export class AuthService implements CanActivate {
      * Takes a response object and turn the data into an object
      */
     public extractData(res: Response): any {
-        let body = res.json()
+        const body = res.json()
         return body || {}
     }
 
@@ -118,7 +118,7 @@ export class AuthService implements CanActivate {
      * @param user The user should be an object to store in sessionstorage
      */
     public setUser(user: any) {
-        //should have session timeout, username, baseProfileId, typeId
+        // should have session timeout, username, baseProfileId, typeId
         user.isLoggedIn = true
         this.currentUserSource.next(user)
         this._locker.set('user', user)
@@ -127,7 +127,7 @@ export class AuthService implements CanActivate {
         }
     }
 
-    //TODO create deleteUser object
+    // TODO create deleteUser object
 
     /**
      * Gets user object from local storage
@@ -137,8 +137,8 @@ export class AuthService implements CanActivate {
         if (!user) {
             // this kind of navigates around our interface... but oh well
             user = <User>{
-                _id: "",
-                fullname: "guest",
+                _id: '',
+                fullname: 'guest',
                 isLoggedIn: false
             }
             // this.setUser(user)
@@ -160,8 +160,8 @@ export class AuthService implements CanActivate {
     public refreshUser(): Observable<any> {
         return this.legacyHttp.get(this.baseUrl + '/users/' + this.getUser()._id, this.getOptions())
             .pipe(map( res => {
-                let data = res.json() || {}
-                let user = data.user
+                const data = res.json() || {}
+                const user = data.user
                 // If we get a user object, update our local copy
                 if (user._id) {
                     this.setUser(user)
@@ -175,7 +175,7 @@ export class AuthService implements CanActivate {
     }
 
     public getToken(): any {
-        return this._locker.get('token') || ""
+        return this._locker.get('token') || ''
     }
 
     private destroyCredentials() {
@@ -183,9 +183,9 @@ export class AuthService implements CanActivate {
         this.user = <User>{ isLoggedIn: false }
         this.currentUserSource.next(this.user)
     }
-    
+
     login(user: any) {
-        let data = {
+        const data = {
             'user': {
                 'username': user.username,
                 'password': user.password
@@ -215,7 +215,7 @@ export class AuthService implements CanActivate {
                 user: user
             }, this.getOptions())
             .pipe(map((data) => {
-                let object = data.json()
+                const object = data.json()
 
                 // if the response has a token, the user should be successfully registered and logged in
                 if (object.token) {
@@ -235,26 +235,26 @@ export class AuthService implements CanActivate {
      */
     public updateUser(updatedUser: any): Observable<any> {
         return new Observable(observer => {
-            //observer.next(true)  
+            // observer.next(true)
             // Before we update the user, make sure we have the latest copy
             this.refreshUser().pipe(take(1))
-                .subscribe(currentUser =>{
-                    let mergedUser = Object.assign({}, currentUser)
-                    
+                .subscribe(currentUser => {
+                    const mergedUser = Object.assign({}, currentUser)
+
                     // Loop through and merge arrays
-                    let propsToCheck = ['prefs', 'media']
+                    const propsToCheck = ['prefs', 'media']
                     for (let n = 0; n < propsToCheck.length; n++) {
-                        let propA = propsToCheck[n]
-                        for (let prop in mergedUser[propA]) {
+                        const propA = propsToCheck[n]
+                        for (const prop in mergedUser[propA]) {
                             if (mergedUser[propA][prop] && Object.prototype.toString.call(mergedUser[propA][prop]) === '[object Array]') {
                                 if (updatedUser[propA] && updatedUser[propA][prop]) {
                                     mergedUser[propA][prop] = updatedUser[propA][prop].concat(mergedUser[propA][prop])
-                                    let a = mergedUser[propA][prop]
-                                    let isObj = typeof(mergedUser[propA][prop][0]) === 'object'
+                                    const a = mergedUser[propA][prop]
+                                    const isObj = typeof(mergedUser[propA][prop][0]) === 'object'
 
                                     // Clean out the duplicates we probably just concat'd in
-                                    for(var i=0; i<a.length; i++) {
-                                        for(var j = i + 1; j<a.length; j++) {
+                                    for (let i = 0; i < a.length; i++) {
+                                        for (let j = i + 1; j < a.length; j++) {
                                             if (isObj) {
                                                 if (a[i]._id === a[j]._id) {
                                                     a.splice(j--, 1)
@@ -274,7 +274,7 @@ export class AuthService implements CanActivate {
                     }
 
                     // merge all the simpler properties
-                    for(let prop in updatedUser) {
+                    for (const prop in updatedUser) {
                         if (propsToCheck.indexOf(prop) < 0) {
                             mergedUser[prop] = updatedUser[prop]
                         }
@@ -285,7 +285,7 @@ export class AuthService implements CanActivate {
                             user: mergedUser
                         }, this.getOptions())
                         .pipe(map((data) => {
-                            let object = data.json()
+                            const object = data.json()
 
                             // if the response has a token, the user should be successfully registered and logged in
                             if (object.user) {
@@ -303,7 +303,7 @@ export class AuthService implements CanActivate {
                         }, error => {
                             observer.error(error)
                         })
-                }, 
+                },
                 error => {
                     observer.error(error)
                     console.error(error)
@@ -319,32 +319,32 @@ export class AuthService implements CanActivate {
     - This properly replaces the contents of user, but ONLY the media.documents.
     - Insert the new set that you want to replace media.documents with.
     */
-    public forceUpdateDocuments (newDocs : any[]) : Observable<any> {
+    public forceUpdateDocuments (newDocs: any[]): Observable<any> {
         // console.log("ran the baby")
 
         // We want to return an Observable because those are handy for timing's sake, so let's do that.
         return new Observable(observer => {
             this.refreshUser().pipe(take(1))
-                .subscribe(currentUser =>{
+                .subscribe(currentUser => {
                     // Make a copy of the user object, edit it, and shove it in.
-                    let mergedUser = Object.assign({}, currentUser)// Get the latest copy of the user object.
+                    const mergedUser = Object.assign({}, currentUser)// Get the latest copy of the user object.
                     mergedUser.media.documents = newDocs // let's just shove those in there
                     this.user = mergedUser // NOTE: We make a new object and assign it so that the user object is always nice and fresh.
-                
+
                     /* some handy console logs in case everything dies
                     console.log("User is: " + mergedUser.username)
                     this.user.media.documents.forEach((doc) => {
                         console.log(doc)
                     })
                     */
-                    
+
                     // Let's save this here user object.
                     // This is repeated code from updateUser() we could consolidate these. (6.14.17)
                     this.legacyHttp.put( this.baseUrl + '/users', {
                             user: mergedUser
                         }, this.getOptions())
                         .pipe(map((data) => {
-                            let object = data.json()
+                            const object = data.json()
                             // if the response has a token, the user should be successfully registered and logged in
                             if (object.user) {
                                 this.setUser(object.user)
@@ -360,7 +360,7 @@ export class AuthService implements CanActivate {
                             observer.next(user)
                         }, error => {
                             observer.error(error)
-                            console.error("Failed in forceUpdateDocuments in auth.service.ts when trying to save the user.")
+                            console.error('Failed in forceUpdateDocuments in auth.service.ts when trying to save the user.')
                         })
                     // console.log("got over here")
                     // this.user = mergedUser
@@ -368,7 +368,7 @@ export class AuthService implements CanActivate {
                 error => {
                     observer.error(error)
                     console.error(error)
-                    console.error("Failed in forceUpdateDocuments in auth.service.ts")
+                    console.error('Failed in forceUpdateDocuments in auth.service.ts')
                 })
         })
     } // public forceUpdatedDocuments (any[] : newDocs) : Observable<any>
@@ -379,13 +379,13 @@ export class AuthService implements CanActivate {
 
     Overwrite the current avatar stored under the user object.
     */
-    public forceUpdateAvatar (newAvatar : string) : Observable<any> {
+    public forceUpdateAvatar (newAvatar: string): Observable<any> {
         // We want to return an Observable because those are handy for timing's sake, so let's do that.
         return new Observable(observer => {
             this.refreshUser().pipe(take(1))
-            .subscribe(currentUser =>{
+            .subscribe(currentUser => {
                 // Make a copy of the user object, edit it, and shove it in.
-                let mergedUser = Object.assign({}, currentUser)// Get the latest copy of the user object.
+                const mergedUser = Object.assign({}, currentUser)// Get the latest copy of the user object.
                 mergedUser.avatar = newAvatar // let's just shove those in there
                 this.user = mergedUser // NOTE: We make a new object and assign it so that the user object is always nice and fresh.
 
@@ -395,7 +395,7 @@ export class AuthService implements CanActivate {
                     user: mergedUser
                 }, this.getOptions())
                 .pipe(map((data) => {
-                    let object = data.json()
+                    const object = data.json()
                     // if the response has a token, the user should be successfully registered and logged in
                     if (object.user) {
                         this.setUser(object.user)
@@ -413,16 +413,16 @@ export class AuthService implements CanActivate {
                     observer.next(user)
                 }, error => {
                     observer.error(error)
-                    console.error("Failed in forceUpdateDocuments in auth.service.ts when trying to save the user.")
+                    console.error('Failed in forceUpdateDocuments in auth.service.ts when trying to save the user.')
                 })
             },
             error => {
                 observer.error(error)
                 console.error(error)
-                console.error("Failed in forceUpdateAvatar in auth.service.ts")
+                console.error('Failed in forceUpdateAvatar in auth.service.ts')
             }) // subscribe / error
         })
-    } // public forceUpdateAvatar (newAvatar : File) 
+    } // public forceUpdateAvatar (newAvatar : File)
 
     /**
      * Calls to server, which creates a temp user object
@@ -430,7 +430,7 @@ export class AuthService implements CanActivate {
      * @returns Observable object with user and token properties
      */
     public createTempUser(username: string): Observable < any > {
-        let data = {
+        const data = {
             user: {
                 fullname: username
             }
@@ -438,7 +438,7 @@ export class AuthService implements CanActivate {
 
         return this.legacyHttp.post([this.baseUrl, 'tempusers'].join('/'), data, this.getOptions())
             .pipe(map((data) => {
-                let object: any = data.json()
+                const object: any = data.json()
 
                 if (object.token) {
                     this.setUser(object.user)
@@ -495,7 +495,7 @@ export class AuthService implements CanActivate {
     /** Call to convert a temp user's properties to the current user (who should already have credentials) */
     public convertTempUser(oldId: string): Observable<boolean> {
         return this.legacyHttp.put(
-            [this.baseUrl, 'users', 'convert', oldId].join("/"),
+            [this.baseUrl, 'users', 'convert', oldId].join('/'),
             {},
             this.getOptions()
             )
@@ -503,7 +503,7 @@ export class AuthService implements CanActivate {
             if (res) {
                 return true
             } else {
-                throw new Error("Did not get json response from convertTempUser")
+                throw new Error('Did not get json response from convertTempUser')
             }
         }))
     }
@@ -512,27 +512,27 @@ export class AuthService implements CanActivate {
      * Add users interested in Hero to the Mailchimp Hero update list
      */
     public addToHeroList(user) {
-        let body = user
+        const body = user
         body['list'] = 'hero'
         return this.legacyHttp.post( this.baseUrl + '/mailchimp/add', body, this.getOptions())
             .pipe(map( res => {
                 return res.json()
             }))
     }
-    
+
     /**
      * Add users who subscribe to Hero to the Mailchimp Hero Subscribed list
      */
-    public addToActiveHeroList(user) : void {
+    public addToActiveHeroList(user): void {
         if (this.getEnv() == 'prod') {
             let spaceIndex = user.fullname.indexOf(' ')
             if (spaceIndex < 0) { spaceIndex = user.fullname.length }
-            let fname = user.fullname.substr(0,spaceIndex)
-            let lname = user.fullname.substr(spaceIndex + 1)
-            let body = { 
-                'email' : user.email, 
-                'fname' : fname, 
-                'lname' : lname 
+            const fname = user.fullname.substr(0, spaceIndex)
+            const lname = user.fullname.substr(spaceIndex + 1)
+            const body = {
+                'email' : user.email,
+                'fname' : fname,
+                'lname' : lname
             }
             body['list'] = 'hero-subscribed'
             this.legacyHttp.post( this.baseUrl + '/mailchimp/add', body, this.getOptions())
@@ -543,16 +543,16 @@ export class AuthService implements CanActivate {
                 .then( res => { console.log(res) })
                 .catch( err => { console.error(err) })
         } else {
-            console.info("Dev: Not adding user to Active Hero List")
+            console.info('Dev: Not adding user to Active Hero List')
         }
     }
-    
+
 
     /**
      * Add newly registered users to the sign up Mailchimp list
      */
-    public addToNewUsersList(user) : void {
-        let body = user
+    public addToNewUsersList(user): void {
+        const body = user
         body['list'] = 'new'
         this.legacyHttp.post( this.baseUrl + '/mailchimp/add', body, this.getOptions())
             .pipe(
@@ -570,24 +570,24 @@ export class AuthService implements CanActivate {
     /**
      * Return array of allowed comment types
      */
-    public getAllowedCommentTypes() : string[] {
+    public getAllowedCommentTypes(): string[] {
         this.user = this.getUser()
         if (this.user['hero'] && this.user['hero']['active']) {
-            return ['emoji','text','audio','reply']
+            return ['emoji', 'text', 'audio', 'reply']
         } else {
-            return ['emoji','text']
+            return ['emoji', 'text']
         }
     }
 
     /**
      * Return array of allowed comment media types
      */
-    public getAllowedCommentMediaTypes() : string[] {
+    public getAllowedCommentMediaTypes(): string[] {
         this.user = this.getUser()
         if (this.user['hero'] && this.user['hero']['active']) {
-            return ['emoji','text','audio']
+            return ['emoji', 'text', 'audio']
         } else {
-            return ['emoji','text']
+            return ['emoji', 'text']
         }
     }
 
@@ -600,7 +600,7 @@ export class AuthService implements CanActivate {
              * - Additional query params can be added to customize a user's landing experience
              */
             if (route.queryParams['r']) {
-                this._router.navigate(["/register"], { queryParams: {  referral_id: route.queryParams['r'] }})
+                this._router.navigate(['/register'], { queryParams: {  referral_id: route.queryParams['r'] }})
             } else {
                 this._router.navigate(['/home'])
             }
@@ -614,7 +614,7 @@ export class AuthService implements CanActivate {
      * Submit payment and subscription type to add plan to user
      */
     public subscribeToHero(stripeToken, couponCode ?: string): Observable<HeroCreateResponse> {
-        let data = {
+        const data = {
             token: stripeToken
         }
         if (couponCode) {
@@ -634,13 +634,13 @@ export class AuthService implements CanActivate {
         .pipe(map((res) => {
             // Add user to mailchimp list
             this.addToActiveHeroList(this.getUser())
-            
+
             return res
         }))
     }
 
-    public validateHeroCoupon(couponCode: string) : Observable<any> {
-        return this._http.get(this.baseUrl + "/subscriptions/coupons/" + couponCode,
+    public validateHeroCoupon(couponCode: string): Observable<any> {
+        return this._http.get(this.baseUrl + '/subscriptions/coupons/' + couponCode,
             { headers: new HttpHeaders({
                 'Content-Type': 'application/json',
                 'Authorization': this.getToken()
@@ -652,7 +652,7 @@ export class AuthService implements CanActivate {
         if (!statusChange) {
             statusChange = 'subscribed'
         }
-        let data = {
+        const data = {
             subscription_type : subscriptionType,
             status : statusChange
         }
@@ -664,14 +664,14 @@ export class AuthService implements CanActivate {
     }
 
     public cancelHeroSubscription(subscriptionId: string) {
-        return this.legacyHttp.delete([this.baseUrl, 'api/v1/subscriptions', subscriptionId].join("/"), this.getOptions())
+        return this.legacyHttp.delete([this.baseUrl, 'api/v1/subscriptions', subscriptionId].join('/'), this.getOptions())
             .pipe(map((res) => {
                 return res.json() || {}
             }))
     }
 
     public getUserWithAuthToken(type: string, token: string): Observable<LoginObject> {
-        return this.legacyHttp.get(this.baseUrl + "/users?oauth_type=" + type + "&oauth_token=" + token)
+        return this.legacyHttp.get(this.baseUrl + '/users?oauth_type=' + type + '&oauth_token=' + token)
             .pipe(map((res) => {
                 return res.json()
             }))
@@ -682,11 +682,11 @@ export class AuthService implements CanActivate {
      * - Add user to user's Following array
      * - Updates user object
      */
-    public followUser(userId: string) : Observable<any> {
+    public followUser(userId: string): Observable<any> {
         return this.legacyHttp.put(this.baseUrl + '/users/following', { 'user_id' : userId, 'action': 'follow' }, this.getOptions())
             .pipe(map( res => {
-                let user = res.json().user || {}
-                if(user._id) {
+                const user = res.json().user || {}
+                if (user._id) {
                     this.setUser(user)
                 }
                 return user
@@ -698,11 +698,11 @@ export class AuthService implements CanActivate {
      * - Removes a user from user's Following array
      * - Updates user object
      */
-    public unfollowUser(userId: string) : Observable<any> {
+    public unfollowUser(userId: string): Observable<any> {
         return this.legacyHttp.put(this.baseUrl + '/users/following', { 'user_id' : userId, 'action': 'unfollow' }, this.getOptions())
             .pipe(map( res => {
-                let user = res.json().user  || {}
-                if(user._id) {
+                const user = res.json().user  || {}
+                if (user._id) {
                     this.setUser(user)
                 }
                 return user
@@ -713,7 +713,7 @@ export class AuthService implements CanActivate {
         // this.legacyHttp.get([this.baseUrl, 'auth', 'google'].join("/")).pipe(take(1)).subscribe((res) => {
         //     // shouldn't actually get this, should just be a redirect
         // })
-        window.location.href = [this.baseUrl, 'auth', 'google'].join("/")
+        window.location.href = [this.baseUrl, 'auth', 'google'].join('/')
     }
 
     /**
@@ -724,8 +724,8 @@ export class AuthService implements CanActivate {
         return this.legacyHttp.get(this.baseUrl + '/api/v1/referrals/' + referral_id, this.getOptions())
             .pipe(
                 map( res => {
-                    let data = res.json() || {}
-                    let user = data.user
+                    const data = res.json() || {}
+                    const user = data.user
                     return user
                 }),
                 catchError( err => {
@@ -738,9 +738,9 @@ export class AuthService implements CanActivate {
      * Ask the db how many users the current user has referred
      * @param userId is the user id for the current user
      */
-    public getReferralProgress(userId: string) : Observable<any> {
+    public getReferralProgress(userId: string): Observable<any> {
         return this._http.get(
-            this.getUrl() + '/api/v1/users/' + userId + '/referrals', 
+            this.getUrl() + '/api/v1/users/' + userId + '/referrals',
             { headers: new HttpHeaders({
                 'Content-Type': 'application/json',
                 'Authorization': this.getToken()

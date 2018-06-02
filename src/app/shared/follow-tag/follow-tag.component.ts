@@ -1,10 +1,10 @@
-import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
+import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core'
 import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
 
 // Project Dependencies
-import { AuthService } from "../../_services";
-import { User } from '../datatypes';
+import { AuthService } from '../../_services'
+import { User } from '../datatypes'
 
 
 @Component({
@@ -21,7 +21,7 @@ export class FollowTag implements OnInit {
   constructor(
       private _auth: AuthService
   ) {
-      
+
   }
 
   ngOnInit() {
@@ -38,7 +38,7 @@ export class FollowTag implements OnInit {
     return this.user['following'] && this.user['following'].indexOf(this.owner._id) > -1
   }
 
-  followUser(userId: string) : void {
+  followUser(userId: string): void {
     this._auth.followUser(userId)
       .pipe(take(1))
       .subscribe(
@@ -48,7 +48,7 @@ export class FollowTag implements OnInit {
       )
   }
 
-  unfollowUser(userId: string) : void {
+  unfollowUser(userId: string): void {
     this._auth.unfollowUser(userId)
       .pipe(take(1))
       .subscribe(data => {

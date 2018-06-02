@@ -1,10 +1,10 @@
 import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core'
 
 // Project Dependencies
-import { AuthService, ProjectService, ReadingService, SocketService } from '../../_services';
-import { CommentStats, Project, Reading } from './../../shared/datatypes';
+import { AuthService, ProjectService, ReadingService, SocketService } from '../../_services'
+import { CommentStats, Project, Reading } from './../../shared/datatypes'
 
 @Component({
   selector: 'owner-tools',
@@ -15,7 +15,7 @@ export class OwnerToolsComponent implements OnInit {
   @Output() hide: EventEmitter<any> = new EventEmitter()
 
   private subscriptions: Subscription[] = []
-  
+
   public commentStats: CommentStats
   public currentProject: Project
   public currentReading: Reading
@@ -31,7 +31,7 @@ export class OwnerToolsComponent implements OnInit {
   constructor(
     private _projects: ProjectService,
     private _auth: AuthService,
-    private _socket: SocketService, 
+    private _socket: SocketService,
     private _readings: ReadingService
   ) {
     this.commentStats = this._projects.commentStats
@@ -42,7 +42,7 @@ export class OwnerToolsComponent implements OnInit {
     this.subscriptions.push( this._readings.currentReading.subscribe(
       reading => {
         this.currentReading = reading
-        if (this.currentReading.questions && this.currentReading.questions.length>0) {
+        if (this.currentReading.questions && this.currentReading.questions.length > 0) {
           this.ownerToolBlockHeight = '256px'
         } else {
           this.ownerToolBlockHeight = '192px'
@@ -67,7 +67,7 @@ export class OwnerToolsComponent implements OnInit {
         console.error(error)
       })
     )
-    
+
     this.subscriptions.push(
         this._auth.getCurrentUser().subscribe((user) => {
             this.user = user
@@ -84,7 +84,7 @@ export class OwnerToolsComponent implements OnInit {
       }, 1000)
 
       // Toggle the Heat Vision boolean
-      let updateObj: any = {}
+      const updateObj: any = {}
       updateObj[powerName] = turnOn
 
       this._projects.update(updateObj, this.currentProject._id)
@@ -96,7 +96,7 @@ export class OwnerToolsComponent implements OnInit {
   }
 
   private showElseFalse(displayPane: string) {
-    switch(displayPane) {
+    switch (displayPane) {
       case 'showQuestionFeed':
         this.showQuestionFeed = !this.showQuestionFeed
         this.showFireFeed = false

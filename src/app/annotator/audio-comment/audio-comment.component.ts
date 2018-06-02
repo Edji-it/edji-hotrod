@@ -13,7 +13,7 @@ declare var window: any
 declare var navigator: any
 
 enum playState {
-  inactive, 
+  inactive,
   loading,
   playing,
   recording
@@ -24,22 +24,22 @@ enum playState {
   templateUrl: './audio-comment.component.pug',
   styleUrls: ['./audio-comment.component.scss']
 })
-export class AudioCommentComponent implements OnInit, AfterViewInit{
+export class AudioCommentComponent implements OnInit, AfterViewInit {
   @Input() public comment: EdjiComment
   @Input() public userPermission: number
-  @Input() public reply: boolean = false
-  @Input() public commentContext: string = 'normal'
-  @Output() save: EventEmitter<any> = new EventEmitter<any>() 
+  @Input() public reply = false
+  @Input() public commentContext = 'normal'
+  @Output() save: EventEmitter<any> = new EventEmitter<any>()
   @Output() showDeleteAudioModal: EventEmitter<any> = new EventEmitter<boolean>()
 
   public currentState: playState = playState.inactive
 
   // public isPlaying: boolean = false
   // public isRecording: boolean = false
-  public recordOverConfirmed: boolean = false
-  public playTime: number = 0
-  public playWidth: number = 100
-  public playWidthOffset: number = 60
+  public recordOverConfirmed = false
+  public playTime = 0
+  public playWidth = 100
+  public playWidthOffset = 60
   public playheadPos: number
   public myCanvas
   public chunks: any = []
@@ -49,30 +49,30 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
 
   public audio
   public audioFile
-  public activated: boolean = false
+  public activated = false
   public rStartAt: any
-  public rDuration: number = 0
+  public rDuration = 0
   public pStartAt: any
-  public pDuration: number = 0
+  public pDuration = 0
   public rInterval: any
   public pInterval: any
-  public initWaves = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-  public waves;
-  public wavePos: number = 0
+  public initWaves = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+  public waves
+  public wavePos = 0
   // Change the next variable to control maximum audio comment length in milliseconds
-  public timeLimit: number = 30000
+  public timeLimit = 30000
   // Change the next variable to control the frequency at which the playback/recording currentTime evaluates
-  private INTERVAL_GAP: number = 500
-  private MAX_SECONDS: number = 30
+  private INTERVAL_GAP = 500
+  private MAX_SECONDS = 30
 
-  public isInitialized: boolean = false
-  public countdown: boolean = false
-  public countdownI: number = 3
+  public isInitialized = false
+  public countdown = false
+  public countdownI = 3
   public countdownText: string[] = ['Go!', 'Set', 'Ready']
   public countdownInterval: any
 
   // We need to know when changes to inactive to clear the editing variable
-  @Input() set active(active){
+  @Input() set active(active) {
     this.activated = active
     if (!active && this.currentState == playState.recording) {
       this.stopRecord()
@@ -102,7 +102,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
   ) {
 
   }
-  
+
   ngOnInit() {
     this.myCanvas = this.el.nativeElement.querySelector('.wave-form')
     // Initialize the wave!
@@ -118,13 +118,13 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
     this._comments.waveForm(this.waves, this.myCanvas)
   }
 
-  ngAfterViewInit(){
-    setTimeout(_=> this.setPlayWidth())
+  ngAfterViewInit() {
+    setTimeout(_ => this.setPlayWidth())
   }
-  
+
   public verifyAudio() {
     // Verify the user has accepted access to the microphone
-    if (typeof(this._audio.recorder)==='undefined') {
+    if (typeof(this._audio.recorder) === 'undefined') {
         this._audio.initializeAudio()
     }
 
@@ -145,7 +145,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
     this.initializeAudio()
 
     this.countdown = true
-    this.countdownInterval = setInterval(()=> {
+    this.countdownInterval = setInterval(() => {
       this.countdownI--
     }, 800)
     setTimeout(() => {
@@ -176,7 +176,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
       // Maintain state when we know for sure we are recording
       this.currentState = playState.recording
       // While recording, check the duration of the recording total and stop it once it hits the limit
-      this.rInterval = setInterval(()=> {
+      this.rInterval = setInterval(() => {
         // While recording, update playTime value
         this.playTime += 0.5
         this.setPlayhead()
@@ -194,13 +194,13 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
 
         // Set the audio for playback via the blob object from the stored chunks
         const blob = new Blob(this.chunks, { 'type': 'audio/wav; codecs="wav"' })
-        
-        var file = new File([blob], 'my-audio.wav', {
+
+        const file = new File([blob], 'my-audio.wav', {
             type: 'audio/wav'
-        });
-        
+        })
+
         this.audioFile = file
-        
+
         // Comment saved! Save audio file
         this._media.uploadAudio(this.audioFile)
           .pipe(take(1))
@@ -225,24 +225,24 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
      * - Saves data to chunks array as it is received
      * - In Chrome, we receive all chunks at the end of recording
      */
-    this._audio.addRecorderListener('dataAvailable', (e) =>{
+    this._audio.addRecorderListener('dataAvailable', (e) => {
       // Save data to create audio file on 'stop'
       this.chunks.push(e.detail)
 
       // Sample for waves every 500ms
-      let detailLength = e.detail.length
-      let sampleInterval = detailLength/(this.rDuration*2)
+      const detailLength = e.detail.length
+      const sampleInterval = detailLength / (this.rDuration * 2)
       for (let i = 0; i < detailLength; i = i + sampleInterval) {
         i = Math.floor(i)
         // Sample for the wave ~~~
-        let neighborAvg = ((e.detail[i] || 0) + (e.detail[i+1] || 0) + (e.detail[i+2] || 0) + 1)/3
+        const neighborAvg = ((e.detail[i] || 0) + (e.detail[i + 1] || 0) + (e.detail[i + 2] || 0) + 1) / 3
         this.waves[this.wavePos] = Math.round(neighborAvg)
         this.wavePos++
-      }      
-      
+      }
+
       this._comments.waveForm(this.waves, this.myCanvas)
     })
-    
+
     // Intialize the recording stream
     this.recorder.initStream()
   }
@@ -266,7 +266,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
     this.audio.onplay = e => {
       this.currentState = playState.playing
       this.playTime = 0
-      this.pInterval = setInterval(()=> {
+      this.pInterval = setInterval(() => {
         this.playTime = this.playTime + this.INTERVAL_GAP
         this.setPlayhead()
       }, this.INTERVAL_GAP)
@@ -279,7 +279,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
     }
   }
 
-  /** 
+  /**
    * Call for audio deletion or call for a fresh recording sesh
    */
   public record() {
@@ -293,7 +293,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
     }
   }
 
-  /** 
+  /**
    * Record Audio from the user's microphone
    */
   public freshRecord() {
@@ -307,7 +307,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
     this.verifyAudio()
   }
 
-  /** 
+  /**
    * Stop recording audio
    */
   public stopRecord() {
@@ -319,7 +319,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
     this.recorder.stop()
   }
 
-  /** 
+  /**
    * Pause playback of the audio track
    */
   public pause() {
@@ -331,7 +331,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
     this.audio.pause()
   }
 
-  /** 
+  /**
    * Start playback of the audio track
    */
   public play() {
@@ -348,7 +348,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
       this.playheadPos =  Math.round((this.audio.currentTime / this.MAX_SECONDS) * this.playWidth)
     }
   }
-  
+
   /**
    * Set the playback back to the beginning #back2basics
    */
@@ -363,13 +363,13 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
   }
 
   public setPlaybackTime(event) {
-    let percentLeftClicked = event.offsetX/this.playWidth
+    const percentLeftClicked = event.offsetX / this.playWidth
     if (this.audio) {
       this.audio.currentTime = this.MAX_SECONDS * percentLeftClicked
     }
   }
 
-  private getPlayhead_exp() : number {
+  private getPlayhead_exp(): number {
     if (this.audio) {
       return Math.round((this.audio.currentTime / 30) * this.playWidth)
     } else {
@@ -378,8 +378,8 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
   }
 
   private setPlayWidth() {
-    let totalWidth = this.el.nativeElement.getBoundingClientRect().width
-    let btnWidth = this.el.nativeElement.querySelector('.audio-btn-wrap').getBoundingClientRect().width
+    const totalWidth = this.el.nativeElement.getBoundingClientRect().width
+    const btnWidth = this.el.nativeElement.querySelector('.audio-btn-wrap').getBoundingClientRect().width
     this.playWidth = totalWidth - btnWidth - 2 // 2 pixels to account for borders
     this.playWidthOffset = btnWidth
   }

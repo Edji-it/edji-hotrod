@@ -12,17 +12,17 @@ import { CommentService } from '../../_services'
 export class TextCommentComponent implements OnInit, AfterViewInit {
 
     @Input() public comment: EdjiComment
-    @Input() public reply: boolean = false
+    @Input() public reply = false
     @Input() public readOnly: boolean
 
-    @Output() activate: EventEmitter<any> = new EventEmitter<any>() 
-    @Output() deactivate: EventEmitter<any> = new EventEmitter<any>() 
+    @Output() activate: EventEmitter<any> = new EventEmitter<any>()
+    @Output() deactivate: EventEmitter<any> = new EventEmitter<any>()
 
     public editing: boolean
-    public activated: boolean = false
+    public activated = false
 
     // We need to know when changes to inactive to clear the editing variable
-    @Input() set active(active){
+    @Input() set active(active) {
         // this.editing = false
         this.editing = false
         this.activated = active
@@ -34,8 +34,8 @@ export class TextCommentComponent implements OnInit, AfterViewInit {
     constructor(
         private element: ElementRef,
         private _comments: CommentService
-    ) { 
-        
+    ) {
+
     }
 
     ngOnInit() {
@@ -51,12 +51,12 @@ export class TextCommentComponent implements OnInit, AfterViewInit {
     }
 
     ngAfterViewInit() {
-        
+
     }
 
     toggleActive(event) {
         if (this.activated) {
-            if (event && ['a','i'].indexOf(event.target.tagName.toLowerCase()) < 0 && this.editing) {
+            if (event && ['a', 'i'].indexOf(event.target.tagName.toLowerCase()) < 0 && this.editing) {
                 this.deactivate.emit(false)
             } else if (this.editing != true) {
                 this.deactivate.emit(true)

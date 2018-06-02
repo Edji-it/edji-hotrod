@@ -23,7 +23,7 @@ import { AuthService, MessageService } from './_services'
   `
 })
 export class AppComponent {
-  name = 'Edji';
+  name = 'Edji'
 
   constructor(
     private angulartics: Angulartics2,
