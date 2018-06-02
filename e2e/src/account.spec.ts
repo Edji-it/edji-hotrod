@@ -1,7 +1,7 @@
-import { browser, by, element, protractor } from 'protractor';
-import { Account, Login } from './page-objects';
-import * as path from 'path';
-import { Sidebar } from "./page-objects/sidebar-page";
+import { browser, by, element, protractor } from 'protractor'
+import { Account, Login } from './page-objects'
+import * as path from 'path'
+import { Sidebar } from './page-objects/sidebar-page'
 
 /*
     27 Jan 2017
@@ -17,46 +17,46 @@ import { Sidebar } from "./page-objects/sidebar-page";
 describe('Account Page', () => {
 
     /* ---- Variable Initialization --------------- */
-    
+
     // object references
-    let EC = protractor.ExpectedConditions; // vital
-    let account = new Account();
-    let login = new Login();
-    let sidebar = new Sidebar();
+    const EC = protractor.ExpectedConditions // vital
+    const account = new Account()
+    const login = new Login()
+    const sidebar = new Sidebar()
 
     /* ---- beforeEach ---------------------------- */
     // Does this before each test.
     beforeAll(() => {
-        login.getPage();
-        browser.wait(EC.elementToBeClickable(login.loginButton), 5000);
-        login.enterUsername(login.heroUser);
-        login.enterPassword(login.heroPassword);
-        browser.wait(EC.elementToBeClickable(login.loginButton), 5000);
-        login.loginButton.click();
-        browser.wait(EC.urlContains("dashboard"), 5000, "never arrived at dashboard");
+        login.getPage()
+        browser.wait(EC.elementToBeClickable(login.loginButton), 5000)
+        login.enterUsername(login.heroUser)
+        login.enterPassword(login.heroPassword)
+        browser.wait(EC.elementToBeClickable(login.loginButton), 5000)
+        login.loginButton.click()
+        browser.wait(EC.urlContains('dashboard'), 5000, 'never arrived at dashboard')
         // account.getPage();
-        sidebar.clickAccountButton();
-        browser.wait(EC.urlContains("account"), 5000, "never arrived at account page");
-    }); // beforeAll
+        sidebar.clickAccountButton()
+        browser.wait(EC.urlContains('account'), 5000, 'never arrived at account page')
+    }) // beforeAll
 
     /* ---- Vital Super Basic Test  --------------- */
-    
+
     /* Test: Extremely Basic Test.
     - IF THIS FAILS: You are not running Protractor correctly;
     */
     it('Extremely Basic Test', () => {
-        let subject = browser.getTitle();
-        let result  = 'Edji';
-        browser.wait(EC.titleContains(result), 5000, 'Title should contain "Edji".');
-    });
+        const subject = browser.getTitle()
+        const result  = 'Edji'
+        browser.wait(EC.titleContains(result), 5000, 'Title should contain "Edji".')
+    })
 
     // Created 7.25.17
     describe('Hero Management', () => {
         it('Hero user should see subscription options', () => {
             // make sure there is no avatar
-            browser.wait(EC.visibilityOf(account.heroModifyBtn), 5000, "should see modify subscription button");
-        });
-    });
+            browser.wait(EC.visibilityOf(account.heroModifyBtn), 5000, 'should see modify subscription button')
+        })
+    })
 
     // Created 7.3.17
     // describe('Avatars', () => {
@@ -73,7 +73,7 @@ describe('Account Page', () => {
     //         it('Clicking "Cancel" on the modal should not set an avatar', () => {
     //             // Make sure there is no avatar
     //             browser.wait(EC.invisibilityOf(account.avatarImg), 2000, "should not be able to see the avatar image");
-            
+
     //             // open the upload modal
     //             account.openModal();
 
@@ -156,5 +156,5 @@ describe('Account Page', () => {
     //             browser.wait(EC.invisibilityOf(account.avatarModal), 5000, "should not be able to see the upload avatar modal.");
     //         }); // it('Upload an Avatar, save it, then remove it...
     //     }); // describe Changing Avatars
-    // }); // describe('Avatars', 
-}); // describe 'Account Page'
+    // }); // describe('Avatars',
+}) // describe 'Account Page'

@@ -1,7 +1,7 @@
-import * as path from 'path';
-import { SideBarComponent } from '../../app/shared/side-bar';
-import { browser, by, element, protractor} from 'protractor';
-import { NewReading, Login, Sidebar, Dashboard } from './page-objects';
+import * as path from 'path'
+import { SideBarComponent } from '../../app/shared/side-bar'
+import { browser, by, element, protractor} from 'protractor'
+import { NewReading, Login, Sidebar, Dashboard } from './page-objects'
 
 /*
     27 Jan 2017
@@ -17,38 +17,38 @@ import { NewReading, Login, Sidebar, Dashboard } from './page-objects';
 describe('New Reading Page', () => {
 
     /* ---- Variable Initialization --------------- */
-    
-    let newReading  = new NewReading();
-    let login       = new Login();
-    let sidebar     = new Sidebar();
-    let dashboard = new Dashboard();
-    let EC          = protractor.ExpectedConditions;
+
+    const newReading  = new NewReading()
+    const login       = new Login()
+    const sidebar     = new Sidebar()
+    const dashboard = new Dashboard()
+    const EC          = protractor.ExpectedConditions
 
     beforeAll(() => {
         // Login as test account that we can fill with junk data
-        login.getPage();
-        browser.wait(EC.elementToBeClickable(login.loginButton), 5000);
-        login.enterUsername(login.botUser);
-        login.enterPassword(login.botPassword);
-        browser.wait(EC.elementToBeClickable(login.loginButton), 5000);
-        login.loginButton.click();
-        browser.wait(EC.urlContains("dashboard"), 5000, "never arrived at dashboard");
-    });
+        login.getPage()
+        browser.wait(EC.elementToBeClickable(login.loginButton), 5000)
+        login.enterUsername(login.botUser)
+        login.enterPassword(login.botPassword)
+        browser.wait(EC.elementToBeClickable(login.loginButton), 5000)
+        login.loginButton.click()
+        browser.wait(EC.urlContains('dashboard'), 5000, 'never arrived at dashboard')
+    })
 
     afterAll(() => {
-        sidebar.logout();
-    });
+        sidebar.logout()
+    })
 
     /* ---- Vital Super Basic Test  --------------- */
-    
+
     /* Test: Extremely Basic Test.
     - IF THIS FAILS: You are not running Protractor correctly;
     */
     it('should see Edji in the title', () => {
-        let subject = browser.getTitle();
-        let result  = 'Edji';
-        browser.wait(EC.titleContains(result), 5000, 'Title should contain "Edji".');
-    });
+        const subject = browser.getTitle()
+        const result  = 'Edji'
+        browser.wait(EC.titleContains(result), 5000, 'Title should contain "Edji".')
+    })
 
     /* ---- New Reading Tests ------------------------ */
 
@@ -64,30 +64,30 @@ describe('New Reading Page', () => {
     */
     it('should add reading when all fields are filled and submitted', () => {
         // Open and wait for New Reading page
-        dashboard.openNewReading();
+        dashboard.openNewReading()
 
         // Enter sample Reading into form
-        newReading.titleInput.sendKeys(newReading.titleString);
+        newReading.titleInput.sendKeys(newReading.titleString)
         // Make private to avoid needing grade levels and subjecst
-        newReading.privateButton.click();
-        newReading.contentInput.sendKeys(newReading.contentShortString);
-        newReading.sourceInput.sendKeys(newReading.sourceString);
+        newReading.privateButton.click()
+        newReading.contentInput.sendKeys(newReading.contentShortString)
+        newReading.sourceInput.sendKeys(newReading.sourceString)
 
         // Submit New Reading
         newReading.addNewReading()
-        
-        // Group Label has content prefilled, so we clear it
-        newReading.groupInput.clear();
-        newReading.groupInput.sendKeys(newReading.groupString);
 
-        browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
-        newReading.finalizeButton.click();
+        // Group Label has content prefilled, so we clear it
+        newReading.groupInput.clear()
+        newReading.groupInput.sendKeys(newReading.groupString)
+
+        browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, 'finalize reading button never became clickable')
+        newReading.finalizeButton.click()
 
         // Should redirect to Project page for new reading
-        browser.wait(EC.urlContains("project"), 5000, "never arrived at new reading");
+        browser.wait(EC.urlContains('project'), 5000, 'never arrived at new reading')
         // Reset user to dashboard
-        sidebar.backToDash();
-    });
+        sidebar.backToDash()
+    })
 
 
     /* Test: Add reading, don’t enter title and see error
@@ -98,25 +98,25 @@ describe('New Reading Page', () => {
     */
     it('should display an error if the title is not filled', () => {
         // Open and wait for New Reading page
-        dashboard.openNewReading();
+        dashboard.openNewReading()
 
         // Enter sample Reading into form, excluding title
-        newReading.titleInput.clear();
+        newReading.titleInput.clear()
         // Make private to avoid needing grade levels and subjects
-        newReading.privateButton.click();
-        newReading.contentInput.sendKeys(newReading.contentShortString);
-        newReading.sourceInput.sendKeys(newReading.sourceString);
+        newReading.privateButton.click()
+        newReading.contentInput.sendKeys(newReading.contentShortString)
+        newReading.sourceInput.sendKeys(newReading.sourceString)
 
         // Submit New Reading
         newReading.addNewReading()
-        browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
-        newReading.finalizeButton.click();
+        browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, 'finalize reading button never became clickable')
+        newReading.finalizeButton.click()
 
         // Should see error for empty title
-        browser.wait(EC.presenceOf(newReading.titleError), 5000, "never saw an error for empty title");
+        browser.wait(EC.presenceOf(newReading.titleError), 5000, 'never saw an error for empty title')
         // Reset user to dashboard
-        sidebar.backToDash();
-    });
+        sidebar.backToDash()
+    })
 
      /* Test: Add reading, don’t enter content and see error
         - Open New Reading page
@@ -126,23 +126,23 @@ describe('New Reading Page', () => {
     */
     it('should display an error if no content is entered', () => {
         // Open and wait for New Reading page
-        dashboard.openNewReading();
+        dashboard.openNewReading()
 
         // Enter sample Reading data into form, but clear content
-        newReading.titleInput.sendKeys(newReading.titleString);
-        newReading.contentInput.clear();
-        newReading.sourceInput.sendKeys(newReading.sourceString);
+        newReading.titleInput.sendKeys(newReading.titleString)
+        newReading.contentInput.clear()
+        newReading.sourceInput.sendKeys(newReading.sourceString)
 
         // Submit New Reading
         newReading.addNewReading()
-        browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
-        newReading.finalizeButton.click();
+        browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, 'finalize reading button never became clickable')
+        newReading.finalizeButton.click()
 
         // Should see error for empty content
-        browser.wait(EC.presenceOf(newReading.contentError), 5000, "never saw an error for empty content");
+        browser.wait(EC.presenceOf(newReading.contentError), 5000, 'never saw an error for empty content')
         // Reset user to dashboard
-        sidebar.backToDash();
-    });
+        sidebar.backToDash()
+    })
 
     /* Test: Add reading, but clear Group Label and see error
         - Open New Reading page
@@ -152,32 +152,32 @@ describe('New Reading Page', () => {
     */
     it('should display an error if no group label is entered', () => {
         // Open and wait for New Reading page
-        dashboard.openNewReading();
+        dashboard.openNewReading()
 
         // Enter sample Reading into form, but clear group label
-        newReading.titleInput.sendKeys(newReading.titleString);
+        newReading.titleInput.sendKeys(newReading.titleString)
         // Make private to avoid needing grade levels and subjecst
-        newReading.privateButton.click();
-        newReading.contentInput.sendKeys(newReading.contentShortString);
-        newReading.sourceInput.sendKeys(newReading.sourceString);
+        newReading.privateButton.click()
+        newReading.contentInput.sendKeys(newReading.contentShortString)
+        newReading.sourceInput.sendKeys(newReading.sourceString)
 
         newReading.addNewReading()
 
-        browser.wait(EC.elementToBeClickable(newReading.groupInput), 5000, "group input became clickable");
-        newReading.groupInput.clear();
+        browser.wait(EC.elementToBeClickable(newReading.groupInput), 5000, 'group input became clickable')
+        newReading.groupInput.clear()
         // This field needs special attention to trigger the required
-        newReading.groupInput.sendKeys(' ');
-        newReading.groupInput.sendKeys(protractor.Key.BACK_SPACE); 
+        newReading.groupInput.sendKeys(' ')
+        newReading.groupInput.sendKeys(protractor.Key.BACK_SPACE)
 
         // Submit New Reading
-        browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "save reading button never became clickable after content add");
-        newReading.finalizeButton.click();
-        
+        browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, 'save reading button never became clickable after content add')
+        newReading.finalizeButton.click()
+
         // Should see error for empty group label
-        browser.wait(EC.presenceOf(newReading.groupError), 5000, "never saw an error for empty group label");
+        browser.wait(EC.presenceOf(newReading.groupError), 5000, 'never saw an error for empty group label')
         // Reset user to dashboard
-        sidebar.backToDash();
-    });
+        sidebar.backToDash()
+    })
 
     /* Test: Upload a PDF and create a Reading with
         - Open New Reading page
@@ -186,125 +186,125 @@ describe('New Reading Page', () => {
         - Insert PDF into the Reading
         - Create the Reading
     */
-    describe("PDF upload", () => {
+    describe('PDF upload', () => {
         /**
          * Test: Add reading with pages from a PDF
          */
         it('should upload a PDF to a reading and save it to the reading', function() {
             // Open and wait for New Reading page
-            dashboard.openNewReading();
-            browser.wait(EC.elementToBeClickable(newReading.uploadPDfModalButton), 5000);
-            newReading.uploadPDfModalButton.click();
-            
-            // Select File to upload
-            let fileToUpload = 'assets/2-pages.pdf';
-            let absolutePath = path.resolve(__dirname, fileToUpload);
-            newReading.pdfFileInput.sendKeys(absolutePath);
+            dashboard.openNewReading()
+            browser.wait(EC.elementToBeClickable(newReading.uploadPDfModalButton), 5000)
+            newReading.uploadPDfModalButton.click()
 
-            // Begin upload 
-            browser.wait(EC.elementToBeClickable(newReading.pdfUploadTrigger), 10000, "button to upload a PDF never became clickable");
-            newReading.pdfUploadTrigger.click();
+            // Select File to upload
+            const fileToUpload = 'assets/2-pages.pdf'
+            const absolutePath = path.resolve(__dirname, fileToUpload)
+            newReading.pdfFileInput.sendKeys(absolutePath)
+
+            // Begin upload
+            browser.wait(EC.elementToBeClickable(newReading.pdfUploadTrigger), 10000, 'button to upload a PDF never became clickable')
+            newReading.pdfUploadTrigger.click()
 
             // Image was uploaded! Insert it
-            browser.wait(EC.elementToBeClickable(newReading.insertUploadedPdf), 20000, "the pdf never became available to insert");
-            newReading.insertUploadedPdf.click();
+            browser.wait(EC.elementToBeClickable(newReading.insertUploadedPdf), 20000, 'the pdf never became available to insert')
+            newReading.insertUploadedPdf.click()
 
             // Complete rest of reading
-            newReading.titleInput.sendKeys(newReading.titleImageString);
+            newReading.titleInput.sendKeys(newReading.titleImageString)
             // Make private to avoid needing grade levels and subjecst
-            newReading.privateButton.click();
+            newReading.privateButton.click()
 
             // Submit New Reading
             newReading.addNewReading()
-            browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
-            newReading.finalizeButton.click();
+            browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, 'finalize reading button never became clickable')
+            newReading.finalizeButton.click()
 
             // // Click the 'Go to Reading' button on share button modal
             // browser.wait(EC.elementToBeClickable(newReading.goToReadingButton), 5000, "share code modal go to reading button never became clickable")
             // newReading.goToReadingButton.click();
 
             // Should create a new Reading
-            browser.wait(EC.urlContains("project"), 5000, "never arrived at new reading");
+            browser.wait(EC.urlContains('project'), 5000, 'never arrived at new reading')
 
             // Should see image in new reading
-            browser.wait(EC.presenceOf(newReading.imageInReading), 10000, "never saw PDF in the new reading");
+            browser.wait(EC.presenceOf(newReading.imageInReading), 10000, 'never saw PDF in the new reading')
             // Reset user to dashboard
-            sidebar.backToDash();
-        });
+            sidebar.backToDash()
+        })
 
         // This following test relies on the previous one for a PDF to delete.
         it('should delete a PDF that was uploaded', function() {
            // Open and wait for New Reading page
-            dashboard.openNewReading();
-            browser.wait(EC.elementToBeClickable(newReading.uploadPDfModalButton), 5000);
-            newReading.uploadPDfModalButton.click();
-           
+            dashboard.openNewReading()
+            browser.wait(EC.elementToBeClickable(newReading.uploadPDfModalButton), 5000)
+            newReading.uploadPDfModalButton.click()
+
             // Click the delete button
-            let allPdfCards = element.all(by.id("titleCard"));
-            let pdfCard = element(by.id("titleCard"));
+            const allPdfCards = element.all(by.id('titleCard'))
+            const pdfCard = element(by.id('titleCard'))
 
-            let delBtn = element(by.id("pdfDelBtn"));
-            let confirmDelBtn = element(by.id("pdfDelBtnConfirm"));
+            const delBtn = element(by.id('pdfDelBtn'))
+            const confirmDelBtn = element(by.id('pdfDelBtnConfirm'))
 
-            browser.wait(EC.elementToBeClickable(delBtn), 5000, "delBtn never became clickable");
-            delBtn.click();
+            browser.wait(EC.elementToBeClickable(delBtn), 5000, 'delBtn never became clickable')
+            delBtn.click()
 
-            browser.wait(EC.elementToBeClickable(confirmDelBtn), 5000, "confirm delete button never became clickable");
-            confirmDelBtn.click();
+            browser.wait(EC.elementToBeClickable(confirmDelBtn), 5000, 'confirm delete button never became clickable')
+            confirmDelBtn.click()
 
             // TO-DO: We've had issues tracking this via count
             // browser.wait(EC.invisibilityOf(delBtn), 5000, 'delete button should not be visible.');
 
             // Reset user to dashboard
-            sidebar.backToDash();
-        });
-    });
+            sidebar.backToDash()
+        })
+    })
 
-    describe("Image upload", () => {
+    describe('Image upload', () => {
         /**
          * Test: Add reading with an image
          */
         it('should upload an image to a reading and save it to the reading', function() {
             // Open and wait for New Reading page
-            dashboard.openNewReading();
-            newReading.insertImageButtonTap();
-            browser.wait(EC.elementToBeClickable(newReading.imageUploadTrigger), 6000, "image upload trigger never became clickable");
-            
-            // Select File to upload
-            let fileToUpload = 'assets/titration.jpg';
-            let absolutePath = path.resolve(__dirname, fileToUpload);
-            newReading.imageFileInput.sendKeys(absolutePath);
+            dashboard.openNewReading()
+            newReading.insertImageButtonTap()
+            browser.wait(EC.elementToBeClickable(newReading.imageUploadTrigger), 6000, 'image upload trigger never became clickable')
 
-            // Begin upload 
-            browser.wait(EC.elementToBeClickable(newReading.imageUploadTrigger), 5000, "button to upload an image never became clickable");
-            newReading.imageUploadTrigger.click();
+            // Select File to upload
+            const fileToUpload = 'assets/titration.jpg'
+            const absolutePath = path.resolve(__dirname, fileToUpload)
+            newReading.imageFileInput.sendKeys(absolutePath)
+
+            // Begin upload
+            browser.wait(EC.elementToBeClickable(newReading.imageUploadTrigger), 5000, 'button to upload an image never became clickable')
+            newReading.imageUploadTrigger.click()
 
             // Image was uploaded! Insert it
-            browser.wait(EC.elementToBeClickable(newReading.uploadedImage), 10000, "never saw the image uploaded");
-            newReading.uploadedImage.click();
+            browser.wait(EC.elementToBeClickable(newReading.uploadedImage), 10000, 'never saw the image uploaded')
+            newReading.uploadedImage.click()
 
             // Complete rest of reading
-            newReading.titleInput.sendKeys(newReading.titleImageString);
+            newReading.titleInput.sendKeys(newReading.titleImageString)
             // Make private to avoid needing grade levels and subjecst
-            newReading.privateButton.click();
+            newReading.privateButton.click()
 
             // Submit New Reading
             newReading.addNewReading()
-            browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
-            newReading.finalizeButton.click();
+            browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, 'finalize reading button never became clickable')
+            newReading.finalizeButton.click()
 
             // Should create a new Reading
-            browser.wait(EC.urlContains("project"), 5000, "never arrived at new reading");
+            browser.wait(EC.urlContains('project'), 5000, 'never arrived at new reading')
 
             // Should see image in new reading
-            browser.wait(EC.presenceOf(newReading.imageInReading), 10000, "never saw an image in the new reading");
+            browser.wait(EC.presenceOf(newReading.imageInReading), 10000, 'never saw an image in the new reading')
 
             // Reset user to dashboard
-            sidebar.backToDash();
-        });
-    });
+            sidebar.backToDash()
+        })
+    })
 
-    describe("Reading draft", () => {
+    describe('Reading draft', () => {
         /**
          * Test: Add reading as a draft
             - Click on new title box and Enter title
@@ -318,40 +318,40 @@ describe('New Reading Page', () => {
          */
         it('should add a reading as a draft and return to the same screen with a reading id', function() {
             // Open and wait for New Reading page
-            dashboard.openNewReading();
-            browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000);
+            dashboard.openNewReading()
+            browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000)
 
             // Enter sample Reading into form
-            newReading.titleInput.sendKeys(newReading.titleString);
+            newReading.titleInput.sendKeys(newReading.titleString)
             // Make private to avoid needing grade levels and subjecst
-            newReading.privateButton.click();
-            newReading.contentInput.sendKeys(newReading.contentShortString);
-            newReading.sourceInput.sendKeys(newReading.sourceString);
+            newReading.privateButton.click()
+            newReading.contentInput.sendKeys(newReading.contentShortString)
+            newReading.sourceInput.sendKeys(newReading.sourceString)
 
             // Submit New Draft for Reading
             newReading.saveDraftNewReading()
 
             // Draft should be created in this block
             // Should redirect to new reading page with same inputs and a success alert
-            browser.wait(EC.urlContains("new-reading"), 5000, "never created the draft");
-            browser.wait(EC.presenceOf(newReading.successAlert), 5000, "never saw the success alert");
+            browser.wait(EC.urlContains('new-reading'), 5000, 'never created the draft')
+            browser.wait(EC.presenceOf(newReading.successAlert), 5000, 'never saw the success alert')
 
             // Add more text
-            newReading.privateButton.click();
-            newReading.contentInput.sendKeys(newReading.contentShortStringB);
+            newReading.privateButton.click()
+            newReading.contentInput.sendKeys(newReading.contentShortStringB)
 
             // Submit New Reading
             newReading.addNewReading()
-            browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
-            newReading.finalizeButton.click();
+            browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, 'finalize reading button never became clickable')
+            newReading.finalizeButton.click()
 
             // Should create a new Reading
-            browser.wait(EC.urlContains("project"), 5000, "never arrived at new reading");
+            browser.wait(EC.urlContains('project'), 5000, 'never arrived at new reading')
 
             // Reset user to dashboard
-            sidebar.backToDash();
-        });
-    });
+            sidebar.backToDash()
+        })
+    })
 
     /* Test: Add reading, then adjust with editing buttons. (Headers, bold, underlines, italixs, text size)
         - Log in with Teacher account
@@ -361,4 +361,4 @@ describe('New Reading Page', () => {
         - Click Add Reading
     */
 
-}); // describe 'Account Page'
+}) // describe 'Account Page'

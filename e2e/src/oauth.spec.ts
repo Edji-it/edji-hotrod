@@ -12,7 +12,7 @@ describe('register page', () => {
 
   describe(('google auth'), () => {
     it('should log in with Google', () => {
-      
+
     })
   })
 })

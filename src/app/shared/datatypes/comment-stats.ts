@@ -18,7 +18,7 @@ export class CommentStats {
   }
 
   public initStats(project?: Project): iCommentStats {
-    let commentStats: iCommentStats = {
+    const commentStats: iCommentStats = {
         count: 0,
         userStats: []
     }
@@ -32,8 +32,8 @@ export class CommentStats {
     //  we have to do this because some students won't make a comment, so this is their only data on the project
     //  looping through addCommentToStats will later increment the count
     let len = project.students_ids.length
-    for(let i = 0; i < len; i++) {
-        let student = project.students_ids[i]
+    for (let i = 0; i < len; i++) {
+        const student = project.students_ids[i]
 
         commentStats.userStats.push({
             _id: student._id,
@@ -44,8 +44,8 @@ export class CommentStats {
 
     // do the same for temp student ids
     len = project.temp_ids.length
-    for(let i = 0; i < len; i++) {
-        let student = project.temp_ids[i]
+    for (let i = 0; i < len; i++) {
+        const student = project.temp_ids[i]
 
         commentStats.userStats.push({
             _id: student._id,
@@ -76,7 +76,7 @@ export class CommentStats {
 
         // find the student in the array. if they don't exist and are adding a comment, then add to the count
         //  if they don't exist and are deleting a comment, log an error... we're not sure why that's happenning...
-        let student = this.findStudent(comment.user_id)
+        const student = this.findStudent(comment.user_id)
         if (!student && difference > 0) {
             this._stats.userStats.push({
                 _id: comment.user_id,
@@ -87,13 +87,13 @@ export class CommentStats {
             student.count += difference
         } else {
             // if we're trying to subtract from a non-existant student, then log this error... we don't want to do that.
-            console.error("We tried subtracting a comment from a student who doesn't exist!")
+            console.error('We tried subtracting a comment from a student who doesn\'t exist!')
         }
 
         this._stats.userStats.sort(this.compareStudents)
     }
 
-    /** 
+    /**
      * Get a student from the _stats.userStats array by _id
      * @param _id the _id from the student that you want to find
      * @returns the object in the array that matches that id

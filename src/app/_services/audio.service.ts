@@ -8,12 +8,12 @@
  * - Safari limits the number of audio contexts that can load at once
  * - Browsers request access to the microphone for every Recorder initiated
  */
-import { Injectable } from '@angular/core';
+import { Injectable } from '@angular/core'
 import * as Recorder from 'opus-recorder/dist/recorder.min.js'
 
 @Injectable()
 export class AudioService {
-    
+
     public recorder
     // Reference listeners by event name
     private listeners: any = {}
@@ -42,7 +42,7 @@ export class AudioService {
         this.recorder.clearStream()
 
         // Remove event listeners
-        for (let eventName in this.listeners){
+        for (const eventName in this.listeners) {
             if (this.listeners.hasOwnProperty(eventName)) {
                 // Clear event listeners
                 this.recorder.removeEventListener(eventName, this.listeners[eventName])
@@ -59,7 +59,7 @@ export class AudioService {
     }
 
     public shutAudioDown() {
-        if (typeof(this.recorder)!=='undefined') {
+        if (typeof(this.recorder) !== 'undefined') {
             this.recorder.clearStream()
             this.recorder = undefined
         }

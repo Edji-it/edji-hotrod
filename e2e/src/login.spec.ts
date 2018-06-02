@@ -1,7 +1,7 @@
-import { browser, by, element, protractor } from 'protractor';
+import { browser, by, element, protractor } from 'protractor'
 
-import { Home, Login, Sidebar } from './page-objects';
-import { LoginForm } from './components';
+import { Home, Login, Sidebar } from './page-objects'
+import { LoginForm } from './components'
 
 /*
     23 Jan 2017
@@ -15,37 +15,37 @@ import { LoginForm } from './components';
 describe('Login Page', () => {
 
     /* ---- Variable Initialization --------------- */
-    let login   = new Login();
-    let loginForm = new LoginForm();
-    let home    = new Home();
-    let sidebar = new Sidebar();
-    let EC      = protractor.ExpectedConditions; // vital
+    const login   = new Login()
+    const loginForm = new LoginForm()
+    const home    = new Home()
+    const sidebar = new Sidebar()
+    const EC      = protractor.ExpectedConditions // vital
 
 /* ---- beforeEach ---------------------------- */
     beforeEach (() => {
-        login.getPage();
-    });
+        login.getPage()
+    })
 
 
 /* ---- Generic Login Tests ---------------------------- */
 
     // test all the errors
-    describe("Login errors", () => {
-        loginForm.testLoginErrors();
-    });
+    describe('Login errors', () => {
+        loginForm.testLoginErrors()
+    })
 
-    describe("Successful login", () => {
+    describe('Successful login', () => {
         afterEach(() => {
-            sidebar.logout();
-        });
+            sidebar.logout()
+        })
 
-        it("should login and navigate to the dashboard", () => {
+        it('should login and navigate to the dashboard', () => {
             // log in a user
-            loginForm.login();
+            loginForm.login()
 
             // verify that we reach the dashboard after login
-            browser.wait(EC.urlContains("dashboard"), 5000, "never reached the dashboard after loggin in");
-        });
-    });
+            browser.wait(EC.urlContains('dashboard'), 5000, 'never reached the dashboard after loggin in')
+        })
+    })
 
-}); // describe Login Page
+}) // describe Login Page

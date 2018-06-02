@@ -1,8 +1,7 @@
-import { browser, by, element, protractor } from 'protractor';
-import { PageObjectInterface } from './PageObjectInterface';
+import { browser, by, element, protractor } from 'protractor'
+import { PageObjectInterface } from './PageObjectInterface'
 
-export class Home implements PageObjectInterface
-{
+export class Home implements PageObjectInterface {
     /*
     18 Jan 2017
     Last Modified: 27 Jan 2017
@@ -13,31 +12,28 @@ export class Home implements PageObjectInterface
     */
 
     // Public Instance Variables
-    public loginLink         = element(by.id("loginLink"));
-    public registerButton    = element(by.id("registerLink"));
-    public joinProjectButton = element(by.id("buttonJoinProject"));
-    public projectCodeInputNav  = element(by.id("projectCodeInputNav"));
-    public projectCodeInputUnderNav  = element(by.id("projectCodeInputUnderNav"));
-    public footerGuidesLink  = element(by.id("footerGuidesLink"));
-    public footerTwitterLink = element(by.id("footerTwitterLink"));
-    public footerSupportLink = element(by.id("footerSupportLink"));
-    public footerTermsLink = element(by.id("footerTermsLink"));
+    public loginLink         = element(by.id('loginLink'))
+    public registerButton    = element(by.id('registerLink'))
+    public joinProjectButton = element(by.id('buttonJoinProject'))
+    public projectCodeInputNav  = element(by.id('projectCodeInputNav'))
+    public projectCodeInputUnderNav  = element(by.id('projectCodeInputUnderNav'))
+    public footerGuidesLink  = element(by.id('footerGuidesLink'))
+    public footerTwitterLink = element(by.id('footerTwitterLink'))
+    public footerSupportLink = element(by.id('footerSupportLink'))
+    public footerTermsLink = element(by.id('footerTermsLink'))
 
     // get the home page
-    getPage() : void 
-    {
-        browser.get('/#/home');
+    getPage(): void {
+        browser.get('/#/home')
     } // getPage() : void
 
     // click on the login link
-    clickLogin() : void
-    {
-        this.loginLink.click();
+    clickLogin(): void {
+        this.loginLink.click()
     } // clickLogin() : void
 
     // Entering the project code from the home page
-    enterProjectCodeFromHome(input: string) : void
-    {
+    enterProjectCodeFromHome(input: string): void {
         // This line actually *breaks* being able to find the input
         // browser.get('#projectCodeInput');
         this.projectCodeInputNav.isPresent().then((result) => {
@@ -45,36 +41,35 @@ export class Home implements PageObjectInterface
                 this.projectCodeInputNav.isDisplayed().then((result) => {
                     if (result) {
                         // Project code input within the nav was visible, usually for destkop
-                        browser.wait(this.projectCodeInputNav.isDisplayed, 5000, ('Never loaded Project Code input box'));
-                        this.projectCodeInputNav.sendKeys(input);
-                        browser.actions().sendKeys(protractor.Key.ENTER).perform();
+                        browser.wait(this.projectCodeInputNav.isDisplayed, 5000, ('Never loaded Project Code input box'))
+                        this.projectCodeInputNav.sendKeys(input)
+                        browser.actions().sendKeys(protractor.Key.ENTER).perform()
                     } else {
                         // Project code input just under the nav was visible, usually for mobile
-                        browser.wait(this.projectCodeInputUnderNav.isDisplayed, 5000, ('Never loaded Project Code input box'));
-                        this.projectCodeInputUnderNav.sendKeys(input);
-                        browser.actions().sendKeys(protractor.Key.ENTER).perform();
+                        browser.wait(this.projectCodeInputUnderNav.isDisplayed, 5000, ('Never loaded Project Code input box'))
+                        this.projectCodeInputUnderNav.sendKeys(input)
+                        browser.actions().sendKeys(protractor.Key.ENTER).perform()
                     }
-                });
+                })
             } else {
                 this.projectCodeInputNav.isDisplayed().then((result) => {
                     if (result) {
                         // Project code input within the nav was visible, usually for destkop
-                        browser.wait(this.projectCodeInputNav.isDisplayed, 5000, ('Never loaded Project Code input box'));
-                        this.projectCodeInputNav.sendKeys(input);
-                        browser.actions().sendKeys(protractor.Key.ENTER).perform();
+                        browser.wait(this.projectCodeInputNav.isDisplayed, 5000, ('Never loaded Project Code input box'))
+                        this.projectCodeInputNav.sendKeys(input)
+                        browser.actions().sendKeys(protractor.Key.ENTER).perform()
                     } else {
                         // Project code input just under the nav was visible, usually for mobile
-                        browser.wait(this.projectCodeInputUnderNav.isDisplayed, 5000, ('Never loaded Project Code input box'));
-                        this.projectCodeInputUnderNav.sendKeys(input);
-                        browser.actions().sendKeys(protractor.Key.ENTER).perform();
+                        browser.wait(this.projectCodeInputUnderNav.isDisplayed, 5000, ('Never loaded Project Code input box'))
+                        this.projectCodeInputUnderNav.sendKeys(input)
+                        browser.actions().sendKeys(protractor.Key.ENTER).perform()
                     }
-                });
+                })
             }
-        });
+        })
     } // enterProjectCode(input: string) : void
 
-    clickJoinProjectButton () :  void
-    {
+    clickJoinProjectButton ():  void {
         // This test does not want to get the join project button for some reason.
         /*
         browser.get('#buttonJoinProject');
@@ -82,35 +77,32 @@ export class Home implements PageObjectInterface
         */
 
         // so the work around is press enter:
-        browser.actions().sendKeys(protractor.Key.ENTER).perform();
+        browser.actions().sendKeys(protractor.Key.ENTER).perform()
 
         // or very manually click it
         // browser.actions().mouseMove(this.joinProjectButton).mouseDown().mouseUp().perform();
     } // clickProjectButton () :  void
 
     // click the footer guides link
-    clickGuidesLink() : void
-    {
-        browser.get('#footerGuidesLink');  // Little trick to scroll to ID
+    clickGuidesLink(): void {
+        browser.get('#footerGuidesLink')  // Little trick to scroll to ID
 
-        this.footerGuidesLink.click();
+        this.footerGuidesLink.click()
     } // clickGuidesLink() : void
 
     // click the footer twitter link
-    clickTwitterLink() : void 
-    {
-        browser.get('#footerTwitterLink');  // Little trick to scroll to ID
+    clickTwitterLink(): void {
+        browser.get('#footerTwitterLink')  // Little trick to scroll to ID
 
-        this.footerTwitterLink.click();
-    } // clickTwitterLink() : void 
+        this.footerTwitterLink.click()
+    } // clickTwitterLink() : void
 
     // click the footer twitter link
-    clickSupportLink() : void 
-    {
-        browser.get('#footerSupportLink');  // Little trick to scroll to ID
+    clickSupportLink(): void {
+        browser.get('#footerSupportLink')  // Little trick to scroll to ID
 
-        this.footerSupportLink.click();
-    } // clickSupportLink() : void 
+        this.footerSupportLink.click()
+    } // clickSupportLink() : void
 } // class Home
 
-    
+

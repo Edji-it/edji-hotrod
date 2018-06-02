@@ -1,14 +1,14 @@
-/*  
+/*
   Last Mod: 8.5.17
 */
 
 /** Comment properties we add on the front end */
 export interface EdjiComment extends BaseComment {
-  lineCount       : number,
-  expanded        : boolean,
-  project_id      : string,
-  active          : boolean,
-  showAvatar      : boolean,
+  lineCount: number,
+  expanded: boolean,
+  project_id: string,
+  active: boolean,
+  showAvatar: boolean,
   imagePos: number,
   selected: boolean,
   question_number?: number,
@@ -33,7 +33,7 @@ export interface BaseComment {
   imageY?: number, // Used for positioning of comments in rows on images
   reply_to?: string,
   replies?: any[],
-  questionId? : string,
+  questionId?: string,
   prompt?: string,
   new?: boolean
 }
