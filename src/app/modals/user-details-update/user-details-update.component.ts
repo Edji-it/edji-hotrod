@@ -16,14 +16,19 @@ export class UserDetailsUpdateModal implements OnInit {
   @Output() closeModal: EventEmitter<any> = new EventEmitter()
 
   private userDetailsForm: FormGroup
-  private checkboxCopy = {
-    student: "As a student! :writing_hand:",
-    teacher: "As a teacher! :apple:",
-    business: "For business. :briefcase:",
-    personal: "My own reading and sharing :books:",
-    robot: "I'm a robot. :robot_face:",
-    other: "Some reason we haven't listed here! :sparkles:"
-  }
+  private identities: {
+    name: string
+    checkboxCopy: string
+  }[] = [
+    { name: 'student', checkboxCopy: "Student :writing_hand:" },
+    { name: 'teacher', checkboxCopy: "Teacher :apple:" },
+    { name: 'administrator', checkboxCopy: "Tech Coach/Administrator :clipboard:" },
+    { name: 'business', checkboxCopy: "Business Application :briefcase:" },
+    { name: 'personal', checkboxCopy: "Personal Reading Platform :books:" },
+    { name: 'robot', checkboxCopy: "I'm a robot. :robot_face:" },
+    { name: 'other', checkboxCopy: "Other :sparkles:" }
+  ]
+
   private messages: {
     success?: boolean,
     serviceError?: boolean
