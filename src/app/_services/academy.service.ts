@@ -26,6 +26,21 @@ export class AcademyService {
       })
     })
   }
+
+  /**
+   * Send an event to Pipo - our server for logging data!
+   * @param event event data, follow this schema:
+   */
+  public pipoEvent(event: any): Observable<any> {
+    return this._http.get<any>(this._auth.getPipoUrl() + '/api/v1/events',
+      {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          'Authorization': this._auth.getToken()
+        })
+      }
+    )
+  }
 }
 
 /**
