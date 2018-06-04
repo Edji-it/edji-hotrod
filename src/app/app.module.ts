@@ -59,7 +59,7 @@ import {
 } from './shared'
 import { HomeComponent } from './home'
 import { RegisterPageComponent } from './register-page'
-import { LoginForm, GuestForm } from './forms'
+import { LoginForm, GuestForm, RegisterFormComponent } from './forms'
 
 import { LoginModal, UserDetailsUpdateModal, ResetPassComponent, DeleteCommentModal, DeleteAudioModal, DeleteReadingModal, DeleteProjectModal, AddProjectModal, LoginRequiredModal, HeroSubscribeComponent, HeroChangeComponent, LoginRegisterModal, DiscoverAddMetaModal, ReferralModalComponent } from './modals'
 import { AnnotatorComponent, CommentComponent, TextCommentComponent, EmojiCommentComponent, EmojiKeyboardComponent, AudioCommentComponent, AvatarPortalComponent } from './annotator'
@@ -147,6 +147,7 @@ const APP_PROVIDERS = [
     AppComponent,
     AccountComponent,
     LoginForm,
+    RegisterFormComponent,
     GuestForm,
     LoginModal,
     LoginRegisterModal,
