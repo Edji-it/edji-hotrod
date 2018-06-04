@@ -66,6 +66,9 @@ export class NavBarComponent implements OnInit, OnDestroy {
     public showHeroSubModal: boolean
     public couponCode: string
 
+    // Nav menu variables
+    public academyMenuShow: boolean = false
+
     constructor(
           public _route: ActivatedRoute,
           private _auth: AuthService, 

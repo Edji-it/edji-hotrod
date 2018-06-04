@@ -60,30 +60,8 @@ export class AccountComponent implements OnInit, OnDestroy {
         }
       )
     )
-
-    this.subscriptions.push(
-      this.route.params
-        .subscribe((params: any) => { 
-          if(params && params['secretSwitch']){
-              this._auth.secretSwitches[params['secretSwitch']] = true;
-              if (this._auth.secretSwitches['heroAvailable'] || this.currentUser.hero_status) {
-                  this.heroAvailable = true
-              }
-          }
-        })
-    );
-
-    if (this.route.snapshot.params) {
-      let params = this.route.snapshot.params
-      if(params && params['secretSwitch']){
-          this._auth.secretSwitches[params['secretSwitch']] = true;
-          if (this._auth.secretSwitches['heroAvailable'] || this.currentUser.hero_status) {
-              this.heroAvailable = true
-          }
-      }
-    }
-
-    this.heroAvailable = new Date("Aug 15, 2017 12:00:00").getTime() < Date.now()
+    
+    this.heroAvailable = true
   }
 
   ngOnDestroy() {
