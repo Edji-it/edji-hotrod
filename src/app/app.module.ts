@@ -58,7 +58,7 @@ import {
   TutorialBoxComponent
 } from './shared'
 import { HomeComponent } from './home'
-import { RegisterComponent } from './register'
+import { RegisterPageComponent } from './register-page'
 import { LoginForm, GuestForm } from './forms'
 
 import { LoginModal, UserDetailsUpdateModal, ResetPassComponent, DeleteCommentModal, DeleteAudioModal, DeleteReadingModal, DeleteProjectModal, AddProjectModal, LoginRequiredModal, HeroSubscribeComponent, HeroChangeComponent, LoginRegisterModal, DiscoverAddMetaModal, ReferralModalComponent } from './modals'
@@ -129,7 +129,7 @@ const APP_PROVIDERS = [
     UserInitialsPipe,
     ResetPassPage,
     AddClassPipe,
-    RegisterComponent,
+    RegisterPageComponent,
     NavBarComponent,
     FooterComponent,
     CommentPaneComponent,

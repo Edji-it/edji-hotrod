@@ -28,9 +28,9 @@ import { LockerService } from '../_services/locker.service';
       border: 3px solid #4A92BC;
     }
   `],
-  templateUrl: './register.component.pug'
+  templateUrl: './register-page.component.pug'
 })
-export class RegisterComponent implements OnInit, OnDestroy {
+export class RegisterPageComponent implements OnInit, OnDestroy {
 
   /*
   Last Mod: 17 June 2017
