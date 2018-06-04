@@ -9,9 +9,9 @@
         h5 I'm using Edji as a...
         #accountTypeGroup.form-group.list-group
           .form-check.list-group-item(*ngFor="let identity of identities")
-            label.form-check-label([attr.for]="'type' + identity.name + 'Input'")
+            label.form-check-label([attr.for]="identity.id")
               input.form-check-input(
-                [attr.id]="'type' + identity.name + 'Input'",
+                [attr.id]="identity.id",
                 type="checkbox",
                 [formControl]="userDetailsForm.controls['identities'].controls[identity.name]",
                 value=""

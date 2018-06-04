@@ -18,15 +18,16 @@ export class UserDetailsUpdateModal implements OnInit {
   private userDetailsForm: FormGroup
   private identities: {
     name: string
+    id: string
     checkboxCopy: string
   }[] = [
-    { name: 'student', checkboxCopy: "Student :writing_hand:" },
-    { name: 'teacher', checkboxCopy: "Teacher :apple:" },
-    { name: 'administrator', checkboxCopy: "Tech Coach/Administrator :clipboard:" },
-    { name: 'business', checkboxCopy: "Business Application :briefcase:" },
-    { name: 'personal', checkboxCopy: "Personal Reading Platform :books:" },
-    { name: 'robot', checkboxCopy: "I'm a robot. :robot_face:" },
-    { name: 'other', checkboxCopy: "Other :sparkles:" }
+    { name: 'student', id: 'typeStudentInput', checkboxCopy: "Student :writing_hand:" },
+    { name: 'teacher', id: 'typeTeacherInput', checkboxCopy: "Teacher :apple:" },
+    { name: 'administrator', id: 'typeAdministratorInput', checkboxCopy: "Tech Coach/Administrator :clipboard:" },
+    { name: 'business', id: 'typeBusinessInput', checkboxCopy: "Business Application :briefcase:" },
+    { name: 'personal', id: 'typePersonalInput', checkboxCopy: "Personal Reading Platform :books:" },
+    { name: 'robot', id: 'typeRobotInput', checkboxCopy: "I'm a robot. :robot_face:" },
+    { name: 'other', id: 'typeOtherInput', checkboxCopy: "Other :sparkles:" }
   ]
 
   private messages: {
