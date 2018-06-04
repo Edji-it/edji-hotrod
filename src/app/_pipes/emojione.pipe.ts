@@ -30,7 +30,8 @@ var stopGapList = {
   ":lifter:" : "1f3cb",
   ":bicyclist:" : "1f6b4",
   ":mountain_bicyclist:" : "1f6b5",
-  ":levitate:" : "1f574"
+  ":levitate:" : "1f574",
+  ":robot_face:" : "1f916"
 }
 
 @Pipe({
