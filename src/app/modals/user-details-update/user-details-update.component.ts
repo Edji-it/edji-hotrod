@@ -16,14 +16,20 @@ export class UserDetailsUpdateModal implements OnInit {
   @Output() closeModal: EventEmitter<any> = new EventEmitter()
 
   private userDetailsForm: FormGroup
-  private checkboxCopy = {
-    student: "As a student! :writing_hand:",
-    teacher: "As a teacher! :apple:",
-    business: "For business. :briefcase:",
-    personal: "My own reading and sharing :books:",
-    robot: "I'm a robot. :robot_face:",
-    other: "Some reason we haven't listed here! :sparkles:"
-  }
+  private identities: {
+    name: string
+    id: string
+    checkboxCopy: string
+  }[] = [
+    { name: 'student', id: 'typeStudentInput', checkboxCopy: "Student :writing_hand:" },
+    { name: 'teacher', id: 'typeTeacherInput', checkboxCopy: "Teacher :apple:" },
+    { name: 'administrator', id: 'typeAdministratorInput', checkboxCopy: "Tech Coach/Administrator :clipboard:" },
+    { name: 'business', id: 'typeBusinessInput', checkboxCopy: "Business Application :briefcase:" },
+    { name: 'personal', id: 'typePersonalInput', checkboxCopy: "Personal Reading Platform :books:" },
+    { name: 'robot', id: 'typeRobotInput', checkboxCopy: "I'm a robot. :robot_face:" },
+    { name: 'other', id: 'typeOtherInput', checkboxCopy: "Other :sparkles:" }
+  ]
+
   private messages: {
     success?: boolean,
     serviceError?: boolean
@@ -38,6 +44,7 @@ export class UserDetailsUpdateModal implements OnInit {
       identities: _fb.group({
         student: true,
         teacher: null,
+        administrator: null,
         business: null,
         personal: null,
         robot: null,
@@ -68,7 +75,7 @@ export class UserDetailsUpdateModal implements OnInit {
         this.closeModal.emit()
         if (this._auth.getEnv() === "prod") { 
           // If we have a teacher, send it to Mailchimp and Bumblebee/Slack
-          if(res.user.identities && res.user.identities.indexOf('teacher') > -1) {
+          if(res.user.identities && res.user.identities.indexOf('teacher') > -1 || res.user.identities.indexOf('administrator') > -1) {
             // Tell Bumblebee/Slack!
             this._bumble.sendUserDetails(res.user)
             // Parse fullname for Mailchimp
