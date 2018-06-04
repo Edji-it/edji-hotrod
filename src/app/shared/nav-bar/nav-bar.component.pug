@@ -12,7 +12,7 @@
       a#navDiscover.btn.btn-link([routerLink]="['/discover']", routerLinkActive="active")
         //- span([innerHtml]="':triangular_flag_on_post:' | emojione")
         | Discover
-      .dropdown([class.show]="academyMenuShow")
+      .dropdown(*ngIf="secretSwitches.academy", [class.show]="academyMenuShow")
         a#navAcademy.btn.btn-link.dropdown-toggle(
             routerLinkActive="active",
             (click)="academyMenuShow = !academyMenuShow"
@@ -23,17 +23,6 @@
             | Engagement
           a.dropdown-item([routerLink]="['/academy/licenses']", routerLinkActive="active")
             | Licenses
-        //- <div class="dropdown">
-        //-   <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        //-     Dropdown link
-        //-   </a>
-
-        //-   <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-        //-     <a class="dropdown-item" href="#">Action</a>
-        //-     <a class="dropdown-item" href="#">Another action</a>
-        //-     <a class="dropdown-item" href="#">Something else here</a>
-        //-   </div>
-        //- </div>
     //- Optional Title
     div(*ngIf="!projectCodeShow")
       .nav-bar__heading.hidden-sm-down(*ngIf="!showProjectInfo")
