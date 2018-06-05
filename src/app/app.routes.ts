@@ -5,7 +5,7 @@ import { AuthService } from './_services'
 import { NewReadingPage } from './new-reading-page';
 import { ProjectPageComponent } from './project-page';
 import { HomeComponent } from './home';
-import { RegisterComponent } from './register';
+import { RegisterPageComponent } from './register-page';
 import { AccountComponent } from './account';
 import { DashboardComponent } from './dashboard';
 import { NoContentComponent } from './no-content';
@@ -22,7 +22,7 @@ export const ROUTES: Routes = [
   { path: '', component: DashboardComponent, canActivate: [AuthService] },
   { path: 'dashboard',  component: DashboardComponent, canActivate: [AuthService] },
   { path: 'home',  component: HomeComponent },
-  { path: 'register', component: RegisterComponent },
+  { path: 'register', component: RegisterPageComponent },
   { path: 'login', component: LoginComponent },
   { path: 'account', component: AccountComponent, canActivate: [AuthService] },
   { path: 'discover', component: DiscoverFeedComponent, canActivate: [AuthService] },

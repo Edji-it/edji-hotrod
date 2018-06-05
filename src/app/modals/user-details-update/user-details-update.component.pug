@@ -2,36 +2,21 @@
   .modal-dialog
     form.modal-content([formGroup]="userDetailsForm", (ngSubmit)="formSubmit(userDetailsForm)")
       .modal-header
-        h4.modal-title Just a few more details...
+        h4.modal-title Before you begin
         button(*ngIf="messages.success", type="button", class="close", aria-label="Close", (click)="closeModal.emit()")
           span(aria-hidden="true") &times;
       .modal-body
-        h5 How will you use Edji?
+        h5 I'm using Edji as a...
         #accountTypeGroup.form-group.list-group
-          .form-check.list-group-item
-            label.form-check-label
-              input#typeStudentInput.form-check-input(type="checkbox", [formControl]="userDetailsForm.controls['identities']['controls']['student']", value="")
-              div([innerHtml]="checkboxCopy.student | emojione")
-          .form-check.list-group-item
-            label.form-check-label
-              input#typeTeacherInput.form-check-input(type="checkbox", [formControl]="userDetailsForm.controls['identities'].controls['teacher']", value="")
-              div([innerHtml]="checkboxCopy.teacher | emojione")
-          .form-check.list-group-item
-            label.form-check-label
-              input#typeBusinessInput.form-check-input(type="checkbox", [formControl]="userDetailsForm.controls['identities'].controls['business']", value="")
-              div([innerHtml]="checkboxCopy.business | emojione")
-          .form-check.list-group-item
-            label.form-check-label
-              input#typePersonalInput.form-check-input(type="checkbox", [formControl]="userDetailsForm.controls['identities'].controls['personal']", value="")
-              div([innerHtml]="checkboxCopy.personal | emojione")
-          .form-check.list-group-item
-            label.form-check-label
-              input#typeRobotInput.form-check-input(type="checkbox", [formControl]="userDetailsForm.controls['identities'].controls['robot']", value="")
-              div([innerHtml]="checkboxCopy.robot | emojione")
-          .form-check.list-group-item
-            label.form-check-label
-              input#typeOtherInput.form-check-input(type="checkbox", [formControl]="userDetailsForm.controls['identities'].controls['other']", value="")
-              div([innerHtml]="checkboxCopy.other | emojione")
+          .form-check.list-group-item(*ngFor="let identity of identities")
+            label.form-check-label([attr.for]="identity.id")
+              input.form-check-input(
+                [attr.id]="identity.id",
+                type="checkbox",
+                [formControl]="userDetailsForm.controls['identities'].controls[identity.name]",
+                value=""
+              )
+              div([innerHtml]="identity.checkboxCopy | emojione")
         .alert.alert-info(*ngIf="userDetailsForm.controls['identities'].dirty && userDetailsForm.controls['identities'].invalid") Please select at least one box!
         .alert.alert-success(*ngIf="messages.success", [innerHtml]=" ':heavy_check_mark: Thanks! Have fun reading with Edji!' | emojione ")
       .modal-footer

@@ -1,0 +1,12 @@
+.btn-group-wrapper {
+    width: 100%;
+    text-align: center;
+  }
+
+.btn-group-wrapper label {
+    margin: 0;
+}
+
+label.btn.btn-primary.active {
+    border: 3px solid #4A92BC;
+}
