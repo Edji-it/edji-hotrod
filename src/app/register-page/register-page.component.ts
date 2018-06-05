@@ -43,7 +43,7 @@ export class RegisterPageComponent implements OnInit, OnDestroy {
   public successObject: {
     referral?: boolean
   } = {}
-  public userReferral: any = {}
+  public referringUserName: string = ""
 
   /** The reading id that the user wanted to make a copy of */
   public readingToAdd: string
@@ -87,11 +87,12 @@ export class RegisterPageComponent implements OnInit, OnDestroy {
       this._locker.set("referral_id", this.referralId)
       // We're going to ask the server to get the user that referred this new one so we can show a name
       this.subscriptions.push(
-        this._auth.getUserByReferralId(this.referralId).subscribe((user) => {
-          this.userReferral = user
+        this._auth.getUserByReferralId(this.referralId)
+        .subscribe((user) => {
+          this.referringUserName = user.fullname
         }, (err) => {
           // If the servor throws an error, then let's make sure the copy is at least protected
-          this.userReferral = {fullname: "A special someone"}
+          this.referringUserName = "A special someone"
         })
       )
       // We need to activate the success object so we can show the user a friendly message

@@ -6,7 +6,7 @@ nav-bar
     .col-sm-8.col-pad.on-dark
       #msgReferral.alert.alert-success(
         *ngIf="successObject.referral", 
-        [innerHtml]=" '<strong>Congratulations!</strong> :tada: <br>' + userReferral.fullname + ' thought you would really like Edji. Sign up and make your first reading to receive 20% off Hero today!' | emojione"
+        [innerHtml]=" '<strong>Congratulations!</strong> :tada: <br>' + referringUserName + ' thought you would really like Edji. Sign up and make your first reading to receive 20% off Hero today!' | emojione"
       )
       hot-register-form(
         [readingToAdd]="readingToAdd",
