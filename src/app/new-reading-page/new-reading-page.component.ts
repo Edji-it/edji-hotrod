@@ -6,10 +6,11 @@ import { Angulartics2 } from 'angulartics2'
 import { IMultiSelectOption, IMultiSelectSettings } from '../_directives'
 import { take } from 'rxjs/operators'
 
-import { AuthService, ProjectService, ReadingService, UtilToolService } from '../_services'
+import { AuthService, ProjectService, ReadingService, UtilToolService, AcademyService } from '../_services'
 import { EdjiComment, EdjiQuestion, User } from '../shared/datatypes'
 import { ReadingShareObject } from './../shared/nav-bar'
 import * as Rangy from 'rangy'
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'new-reading-page',
@@ -38,6 +39,8 @@ export class NewReadingPage implements OnInit {
     public questions       : any[] = []
     public insertOptionShow: boolean
     public showPdfUploadModal: boolean
+    private user: any
+    private subscriptions: Subscription[] = []
 
     // Trigger booleans
     public showAlert       : boolean = false
@@ -143,7 +146,8 @@ export class NewReadingPage implements OnInit {
         private el: ElementRef,
         private _title: Title,
         private _auth: AuthService,
-        private _util: UtilToolService
+        private _util: UtilToolService,
+        private _academy: AcademyService
     ) {
         this.readingForm = fb.group({
             title: [null, Validators.required],
@@ -173,6 +177,13 @@ export class NewReadingPage implements OnInit {
         } else if (this.copyId) {
             this.getReading(this.copyId, !this._auth.getUser().hero_status)
         }
+
+        /** Set the current user every time it changes */
+        this.subscriptions.push(
+            this._auth.getCurrentUser().subscribe((user) => {
+                this.user = user
+            })
+        )
 
         this._title.setTitle('Edji | New Reading')
      }

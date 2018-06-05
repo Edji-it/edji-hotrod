@@ -22,7 +22,7 @@ export class AuthService implements CanActivate {
     Edit user prefs from here. Everything under the datatype User should be edited through here.
     */
 
-    private pipoBaseUrl = "http://localhost:3355"
+    private pipoBaseUrl = "//pipo-dev.edji.it"
     private baseUrl = "http://localhost:3354"
     private ENV: string = "dev"
 

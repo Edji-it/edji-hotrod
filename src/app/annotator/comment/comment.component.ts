@@ -135,7 +135,6 @@ export class CommentComponent implements OnInit, OnDestroy {
       (project) => {
         if (project) {
           this.project = project
-          console.log(project)
         }
       },
       (error) => {
@@ -279,18 +278,6 @@ export class CommentComponent implements OnInit, OnDestroy {
           this.angulartics.eventTrack.next({ action: comment.type + 'updateReply', properties: { category: 'heroFeature', label: 'success' }})
         } else {
           this.angulartics.eventTrack.next({ action: comment.type + 'updateComment', properties: { category: 'projectAction', label: 'success' }})
-          this._academy.pipoEvent({ 
-            name: "reading_action",
-            user: this.user,
-            institution_id: this.user.institution_ids[0],
-            teacher: this.project.teacher,
-            detail: {
-              reading_id: this.project.reading_id._id,
-              group_id: this.project._id,
-              // subjects: ,
-              source: this.project.reading_id.source
-            }
-          })
         } // else
         this.isLoading = false
         this.commentUpdated.emit()

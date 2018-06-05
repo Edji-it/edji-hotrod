@@ -49,47 +49,27 @@ export class AcademyService {
    * {
       SHARED PROPERTIES:
         date: timestamp,                            -> set on the server
+        type: "reading_created",                    -> set at event location
         teacher: boolean,                           -> set at event location
         hero: boolean,                              -> set at event location
         user_id: string,                            -> set at event location
         institution_id: ObjectId,                   -> set at event location
         --------------------------------------------------------------------
       SPECIFIC TO THE EVENT:
-        type: "reading_created",                    -> set at event location
         reading_id: ObjectId,                       -> set at event location
         group_id: ObjectId                          -> set at event location
-        reading_owner: ObjectId,                    -> set at event location
         subjects: string[],                         -> set at event location
         source: string (hostname, book title...)    -> set at event location
       }
    */
   public pipoEvent(event: any): void {
-    let pipoEvent = {
-      e: event.name,
-      uid: event.user._id,
-      t: false,
-      h: false,
-      iid: event.institution_id,
-      dtl: event.detail
-    }
-    
-    // If the user on the event object is the teacher, then we'll note this on the event to save
-    if (event.user._id===event.teacher._id) {
-      pipoEvent.t = true
-    }
-
-    // If the user is a hero, let's note that before we save the event to Pipo
-    if (event.user.hero_status) {
-      pipoEvent.t = true
-    }
-
-    this.saveToPipo(pipoEvent)
+    this.saveToPipo(event)
     .subscribe(
       data => {
-        console.log(data, pipoEvent)
+        // console.log(data, event)
       },
       error => {
-        console.log(error)
+        // console.log(error)
       })
   }
 }
