@@ -16,6 +16,7 @@ import { HeroPricingComponent } from './hero-pricing/hero-pricing.component';
 import { DiscoverFeedComponent } from "./discover-feed/discover-feed.component";
 import { OAuthComponent } from './oauth-redirect/oauth-redirect.component';
 import { LicenseRedirectComponent } from './license-redirect/license-redirect.component';
+import { LicenseWelcomeComponent } from './license-welcome/license-welcome.component';
 
 
 export const ROUTES: Routes = [
@@ -28,6 +29,7 @@ export const ROUTES: Routes = [
   { path: 'discover', component: DiscoverFeedComponent, canActivate: [AuthService] },
   { path: 'project/:id',  component: ProjectPageComponent },
   { path: 'license/accept/:license_id', component: LicenseRedirectComponent, pathMatch: 'full' },
+  { path: 'license/welcome', component: LicenseWelcomeComponent, canActivate: [AuthService], pathMatch: 'full' },
   { path: 'new-reading', component: NewReadingPage, canActivate: [AuthService] },
   { path: 'new-reading/:id', component: NewReadingPage, canActivate: [AuthService] },
   { path: 'reset-password', component: ResetPassPage },
