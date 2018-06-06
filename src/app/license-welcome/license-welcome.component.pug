@@ -14,14 +14,20 @@ nav-bar([showDashboardOptions]="true")
         p You have joined the #ACADEMY NAME# league of Heroes. As a member of this elite team, you have access to all of the Edji Hero powers.
         p Give some of your new powers a try:
         p
-          b Create Questions
+          b([innerHtml]="':question: Insert Questions' | emojione")
           br
-          | Create a <a class="link" [routerLink]="['/new-reading']">New Reading</a> to add inline Questions!
+          | Get in depth, targeted responses from your students with a well placed question! 
+          //- Give it a try with a<a class="link" [routerLink]="['/new-reading']"> New Reading</a>
         p
-          b Comment Replies
+          b([innerHtml]="':speech_balloon: Comment Replies' | emojione")
           br
-          | Try enabling Comment Replies for a new Reading Group on your <a class="link" [routerLink]="['/dashboard']">Dashboard</a>
+          | Let your students start their own discussion in the reading with Replies!
         p
-          b More About Hero
+          b([innerHtml]="':mega: Audio Comments' | emojione")
           br 
-          | Check out the <a class="link" href="http//guide.edji.it">Edji Guide</a> to find out more about your Hero powers.
+          | Give students the option to talk out their thoughts on your readings with Audio Comments!
+  .row
+    .col-12
+      .btn-row.mt-4
+        a.btn.btn-secondary([routerLink]="['/dashboard']") Continue to Dashboard
+        a.btn.btn-primary([routerLink]="['/new-reading']") Test Out My Powers
