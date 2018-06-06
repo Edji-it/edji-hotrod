@@ -41,8 +41,8 @@ import {
   TutorialBoxComponent
 } from './shared'
 import { HomeComponent } from './home'
-import { RegisterComponent } from './register'
-import { LoginForm, GuestForm } from './forms'
+import { RegisterPageComponent } from './register-page'
+import { LoginForm, GuestForm, RegisterFormComponent } from './forms'
 
 import { LoginModal, UserDetailsUpdateModal, ResetPassComponent, DeleteCommentModal, DeleteAudioModal, DeleteReadingModal, DeleteProjectModal, AddProjectModal, LoginRequiredModal, HeroChangeComponent, LoginRegisterModal, DiscoverAddMetaModal } from './modals'
 import { AnnotatorComponent, CommentComponent, TextCommentComponent, EmojiCommentComponent, EmojiKeyboardComponent, AudioCommentComponent, AvatarPortalComponent } from './annotator'
@@ -108,7 +108,7 @@ const APP_PROVIDERS = [
     MediumEditorDirective,
     ClickOutsideDirective,
     ResetPassPage,
-    RegisterComponent,
+    RegisterPageComponent,
     CommentPaneComponent,
     CommentComponent,
     AvatarPortalComponent,
@@ -123,6 +123,7 @@ const APP_PROVIDERS = [
     AppComponent,
     AccountComponent,
     LoginForm,
+    RegisterFormComponent,
     GuestForm,
     LoginModal,
     LoginRegisterModal,
