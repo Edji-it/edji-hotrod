@@ -69,7 +69,7 @@ export class AcademyService {
         // console.log(data, event)
       },
       error => {
-        // console.log(error)
+        console.error(error)
       })
   }
 }
