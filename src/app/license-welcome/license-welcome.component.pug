@@ -1,5 +1,27 @@
 nav-bar([showDashboardOptions]="true")
-.container-fluid.dashboard-container
+.container-main
   .row
-    .col-12
-      h1 Welcome to your Academy
+    //- .navy-gradient.has-sparks
+    //- .sparks
+    .col-6
+      .card.card--academy.has-sparks
+        .sparks
+        .hero-smash__wrap
+          img.hero-smash(src="/assets/images/logo-academy.svg")
+        h1.center.on-dark Welcome to Hero Academy
+    .col-6
+        h2 Congratulations!
+        p You have joined the #ACADEMY NAME# league of Heroes. As a member of this elite team, you have access to all of the Edji Hero powers.
+        p Give some of your new powers a try:
+        p
+          b Create Questions
+          br
+          | Create a <a class="link" [routerLink]="['/new-reading']">New Reading</a> to add inline Questions!
+        p
+          b Comment Replies
+          br
+          | Try enabling Comment Replies for a new Reading Group on your <a class="link" [routerLink]="['/dashboard']">Dashboard</a>
+        p
+          b More About Hero
+          br 
+          | Check out the <a class="link" href="http//guide.edji.it">Edji Guide</a> to find out more about your Hero powers.

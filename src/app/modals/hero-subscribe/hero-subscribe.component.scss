@@ -1,37 +1,4 @@
 
-.hero-smash__wrap {
-    min-height: 200px;
-    width: 100%;
-    position: relative;
-    margin-bottom: 30px;
-}
-
-@keyframes smashDown {
-    0% {
-        bottom: calc(100% + 100px);
-    }
-    97% {
-        bottom: 0px
-    }
-    99% {
-        bottom: 4px
-    }
-    100% {
-        bottom: 0px
-    }
-}
-
-.hero-smash {
-    width: 60%;
-    left: 50%;
-    transform: translateX(-50%);
-    animation-name: smashDown;
-    animation-duration: 500ms;
-    animation-fill-mode: forwards;
-    animation-timing-function: ease-in;
-    position: absolute;
-}
-
 .card-icon {
     height: 24px;
 }
