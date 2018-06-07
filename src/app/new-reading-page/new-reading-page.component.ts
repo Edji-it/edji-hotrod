@@ -585,7 +585,7 @@ export class NewReadingPage implements OnInit {
         } else {
             this.angulartics.eventTrack.next({ action: submitAction, properties: { category: 'contentManagement', label: 'attempt' }})
         }
-        
+
         this._readings.save(reading)
             .subscribe(
                 data => {
@@ -605,6 +605,19 @@ export class NewReadingPage implements OnInit {
                                     this.addLoadingD = false
                                     this.addLoadingP = false
                                     this.router.navigate(['project', project._id], { queryParams: { readingCodeModal: true }})
+                                    this._academy.pipoEvent({
+                                        // standard event info:
+                                        event_name: "reading_action",
+                                        user_id: this.user._id,
+                                        teacher: (project.teacher_id===this.user._id),
+                                        hero: this.user.hero_status,
+                                        institution_id: this.user.institution_ids,
+                                        // event-specific info:
+                                        reading_id: data._id,
+                                        group_id: project._id,
+                                        subjects: reading.subjects,
+                                        source: reading.source
+                                    })
                                 }, (error) => {
                                     console.error(error)
                                     this.addLoadingD = false
