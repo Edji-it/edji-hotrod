@@ -605,6 +605,7 @@ export class NewReadingPage implements OnInit {
                                     this.addLoadingD = false
                                     this.addLoadingP = false
                                     this.router.navigate(['project', project._id], { queryParams: { readingCodeModal: true }})
+                                    // send the data to Pipo to log the new reading
                                     this._academy.pipoEvent({
                                         // standard event info:
                                         event_name: "reading_action",

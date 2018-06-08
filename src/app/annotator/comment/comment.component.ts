@@ -276,8 +276,38 @@ export class CommentComponent implements OnInit, OnDestroy {
         // Appropriate post-delete action, sorted by comment type.
         if (this.commentContext === 'reply') {
           this.angulartics.eventTrack.next({ action: comment.type + 'updateReply', properties: { category: 'heroFeature', label: 'success' }})
+          // send the data to Pipo to log the reply
+          this._academy.pipoEvent({
+            // standard event info:
+            event_name: "reader_action",
+            user_id: this.user._id,
+            teacher: (this.project.teacher._id===this.user._id),
+            hero: this.user.hero_status,
+            institution_id: this.user.institution_ids,
+            // event-specific info:
+            reading_id: this.project.reading_id._id,
+            group_id: this.project._id,
+            action_type: 'reply',
+            comment_type: comment.type,
+            reading_owner: this.project.owner_id
+          })
         } else {
           this.angulartics.eventTrack.next({ action: comment.type + 'updateComment', properties: { category: 'projectAction', label: 'success' }})
+          // send the data to Pipo to log the comment
+          this._academy.pipoEvent({
+            // standard event info:
+            event_name: "reader_action",
+            user_id: this.user._id,
+            teacher: (this.project.teacher._id===this.user._id),
+            hero: this.user.hero_status,
+            institution_id: this.user.institution_ids,
+            // event-specific info:
+            reading_id: this.project.reading_id._id,
+            group_id: this.project._id,
+            action_type: 'comment',
+            comment_type: comment.type,
+            reading_owner: this.project.owner_id
+          })
         } // else
         this.isLoading = false
         this.commentUpdated.emit()
@@ -305,6 +335,21 @@ export class CommentComponent implements OnInit, OnDestroy {
       this._projects.saveAnswer(this.comment)
       .then(answer => {
         this.angulartics.eventTrack.next({ action: comment.type + 'updateAnswer', properties: { category: 'heroFeature', label: 'success' }})
+        // send the data to Pipo to log the answer
+        this._academy.pipoEvent({
+          // standard event info:
+          event_name: "reader_action",
+          user_id: this.user._id,
+          teacher: (this.project.teacher._id===this.user._id),
+          hero: this.user.hero_status,
+          institution_id: this.user.institution_ids,
+          // event-specific info:
+          reading_id: this.project.reading_id._id,
+          group_id: this.project._id,
+          action_type: 'answer',
+          comment_type: comment.type,
+          reading_owner: this.project.owner_id
+        })
 
         this.isLoading = false
         
