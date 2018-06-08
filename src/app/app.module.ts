@@ -7,6 +7,8 @@ import { Angulartics2GoogleAnalytics } from 'angulartics2/ga'
 
 // App is our top level component
 import { AppComponent } from './app.component'
+// Shared Module imports components between modules
+import { SharedModule } from './app-shared.module';
 
 import { Ng4TwitterTimelineModule } from './home/twitter-timeline';
 
@@ -68,9 +70,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { DataListModule } from 'primeng/datalist';
 import { PaginatorModule } from 'primeng/paginator';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { SharedModule } from './app-shared.module';
 import { RouterModule, PreloadAllModules, Router } from '@angular/router';
 import { ROUTES } from './app.routes';
+import { LicenseRedirectComponent } from './license-redirect/license-redirect.component';
 
 // Configure Hammer.js
 // export class MyHammerConfig extends HammerGestureConfig  {
@@ -169,7 +171,8 @@ const APP_PROVIDERS = [
     ReadingCardComponent,
     HeroPromoComponent,
     HeroPricingComponent,
-    ScrollProgressComponent
+    ScrollProgressComponent,
+    LicenseRedirectComponent
   ],
   /** Components which can be dynamically created */
   entryComponents: [
