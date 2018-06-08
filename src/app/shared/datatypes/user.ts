@@ -52,5 +52,7 @@ interface BaseUser {
     documents?: { title: string, pages: string[] }[]
   },
   avatar?: string,
-  referred_by?: string
+  referred_by?: string,
+  license_ids?: string[],
+  institution_ids?: string[]
 }

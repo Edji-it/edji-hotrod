@@ -86,6 +86,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { DataListModule } from 'primeng/datalist';
 import { PaginatorModule } from 'primeng/paginator';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { LicenseRedirectComponent } from './license-redirect/license-redirect.component';
 
 // Configure Hammer.js
 // export class MyHammerConfig extends HammerGestureConfig  {
@@ -196,7 +197,8 @@ const APP_PROVIDERS = [
     ReadingCardComponent,
     HeroPromoComponent,
     HeroPricingComponent,
-    ScrollProgressComponent
+    ScrollProgressComponent,
+    LicenseRedirectComponent
   ],
   /** Components which can be dynamically created */
   entryComponents: [

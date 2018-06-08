@@ -12,4 +12,5 @@ export * from './util-tool.service'
  * Services relying on other services above
  * - Compiler will fail if dependent services are not listed first in barrel file
  */
+export * from './academy.service'
 export * from './comment.service'

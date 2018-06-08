@@ -22,6 +22,7 @@ export class AuthService implements CanActivate {
     Edit user prefs from here. Everything under the datatype User should be edited through here.
     */
 
+    private pipoBaseUrl = "//pipo-dev.edji.it"
     private baseUrl = "http://localhost:3354"
     private ENV: string = "dev"
 
@@ -57,12 +58,12 @@ export class AuthService implements CanActivate {
         // Check to see if prod or dev environment
         if (window.location.host.indexOf('local.edji.it') > -1) {
             // do nothing
-        }else if (window.location.host.indexOf('dev.edji.it') > -1 || buildEnv === 'test') {
-            //   baseUrl = "http://edji-dev.herokuapp.com"
+        } else if (window.location.host.indexOf('dev.edji.it') > -1 || buildEnv === 'test') {
+            this.pipoBaseUrl = "//pipo-dev.edji.it"
             this.baseUrl = "//optimus-dev.edji.it"
             this.ENV = "dev"
         } else if (window.location.host.indexOf('edji.it') > -1 || window.location.host.indexOf('dvscf5tf91syg.cloudfront.net') > -1) {
-            //   this.baseUrl = "http://edji-prod.herokuapp.com"
+            this.pipoBaseUrl = "//pipo.edji.it"
             this.baseUrl = "//optimus.edji.it"
             this.ENV = "prod"
         }
@@ -88,6 +89,13 @@ export class AuthService implements CanActivate {
 
     public getUrl(): string {
         return this.baseUrl
+    }
+
+    /**
+     * Returns the base url for the pipo server
+     */
+    public getPipoUrl(): string {
+        return this.pipoBaseUrl
     }
 
     /**
@@ -145,7 +153,7 @@ export class AuthService implements CanActivate {
         } else {
             user.isLoggedIn = true
         }
-
+        
         return user
     }
 
