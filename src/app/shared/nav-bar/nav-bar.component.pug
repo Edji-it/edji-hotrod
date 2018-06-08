@@ -14,7 +14,7 @@
         | Discover
 
     //- Optional Title
-    div(*ngIf="!projectCodeShow")
+    div(*ngIf="!projectCodeShow || hideAccountOptions")
       .nav-bar__heading.hidden-sm-down(*ngIf="!showProjectInfo")
         h1(
           *ngIf="pageTitle",
@@ -29,7 +29,7 @@
           follow-tag([owner]="projectOwner")
 
     //- Login/Register Actions
-    .nav__btn-wrap(*ngIf="!user.isLoggedIn")
+    .nav__btn-wrap(*ngIf="!user.isLoggedIn && !hideAccountOptions")
       a#loginLink.btn.btn-primary.nav-bar__btn([routerLink]="['/login']") Log In
       a#registerLink.btn.btn-secondary.nav-bar__btn([routerLink]="['/register']") Register
 
@@ -58,7 +58,7 @@
             span.list-icon--right([innerHtml]="':outbox_tray:' | emojione")
 
     //- Go hero action (non-existent if already a hero)
-    .nav__btn-wrap(*ngIf="!showProjectInfo && (!user.hero_status)")
+    .nav__btn-wrap(*ngIf="!showProjectInfo && !user.hero_status && !hideAccountOptions")
       a#heroLink.btn.btn-clear.nav-bar__btn.hidden-sm-down.link([routerLink]="['/hero']", routerLinkActive="active") Go Hero!
 
     //- Project Info (Desktop & Mobile)
@@ -97,7 +97,7 @@
       button#saveDraftButtonMobile.btn.btn-clear.nav-bar__btn.hidden-md-up(*ngIf="canPublish", (click)="saveAction.emit()") Save
 
     //- Join Reading Code
-    .row.col-5.nav__join-code.hidden-sm-down(*ngIf="projectCodeShow && !canPublish")
+    .row.col-5.nav__join-code.hidden-sm-down(*ngIf="projectCodeShow && !canPublish && !hideAccountOptions")
       .input-group.input-group-lg
         input#projectCodeInputNav.form-control(
           name="ProjectCodeInput", 
@@ -118,8 +118,8 @@
       #projectCodeError.invalid-feedback(*ngIf="errorObject.invalidCode", [innerHtml]="errorObject.invalidCode | emojione")
 
   //- Page title/reading title
-  h1.hidden-md-up.mobile-heading(*ngIf="pageTitle && !showProjectInfo") {{ pageTitle }}
-  h1.hidden-md-up.mobile-heading(*ngIf="showProjectInfo") {{ currentReading.title }}
+  h1.hidden-md-up.mobile-heading(*ngIf="(pageTitle && !showProjectInfo) || hideAccountOptions") {{ pageTitle }}
+  h1.hidden-md-up.mobile-heading(*ngIf="showProjectInfo || hideAccountOptions") {{ currentReading.title }}
 
 //- Join Reading Code
 //- .container

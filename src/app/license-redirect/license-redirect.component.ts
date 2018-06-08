@@ -14,6 +14,7 @@ import { LockerService, AuthService, AcademyService } from '../_services'
 })
 export class LicenseRedirectComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = []
+  private login: boolean = true
 
   public user: User
   public licenseId: string
@@ -75,7 +76,7 @@ export class LicenseRedirectComponent implements OnInit, OnDestroy {
       } else {
         // store the licenseId in the locker if we need to register the user
         // this._locker.set("license_id", this.licenseId)
-        // NEED: show the login form with a registration option here
+        
       }
     }
   }
