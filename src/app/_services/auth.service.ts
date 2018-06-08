@@ -31,16 +31,6 @@ export class AuthService implements CanActivate {
     private currentUserSource: BehaviorSubject<any>
     public currentUser: Observable<any>
 
-    /**
-     * Global Feature Flag object
-     * - Keep updated when flags are added or removed, for reference
-     * - Update via url param subscriptions inside of relevant components
-     */
-    public secretSwitches = {
-        heroAvailable: false,
-        googleAuth: false
-    }
-
     constructor(
         private legacyHttp: Http, 
         private _http: HttpClient, 

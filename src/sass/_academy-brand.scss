@@ -1,0 +1,14 @@
+
+.academy-container {
+    margin-top: 30px;
+}
+
+.academy-bg {
+        display: block;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        background: $academyBg;
+        z-index: -1;
+        pointer-events: none;
+}

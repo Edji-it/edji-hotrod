@@ -1,8 +1,5 @@
 import { NgModule, ApplicationRef, ErrorHandler } from '@angular/core'
-// import { BrowserModule } from '@angular/platform-browser'
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { HttpModule } from '@angular/http'
-import { RouterModule, PreloadAllModules, RouteReuseStrategy } from '@angular/router'
 import { HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser'
 import { LockerModule, Locker, LockerConfig} from 'angular-safeguard'
 import { Angulartics2Module } from 'angulartics2'
@@ -10,7 +7,8 @@ import { Angulartics2GoogleAnalytics } from 'angulartics2/ga'
 
 // App is our top level component
 import { AppComponent } from './app.component'
-import { ROUTES } from './app.routes'
+// Shared Module imports components between modules
+import { SharedModule } from './app-shared.module';
 
 import { Ng4TwitterTimelineModule } from './home/twitter-timeline';
 
@@ -28,32 +26,19 @@ import {
   SocketService,
   UtilToolService
 } from './_services'
-import { ReuseStrategy } from './route-reuse-strategy'
+// import { ReuseStrategy } from './route-reuse-strategy'
 
 // Directives
 import { MediumEditorDirective } from 'angular2-medium-editor'
 import { MultiselectDropdownModule } from './_directives'
 import { ClickOutsideDirective } from './_directives/click-outside.directive'
 
-// Pipes
-import { 
-  EmojiOnePipe, 
-  AddClassPipe, 
-  EdjiDatePipe, 
-  LinkifyPipe, 
-  SubjectPipe, 
-  UserInitialsPipe 
-} from './_pipes'
-
 // Components
 import {
   DiscussionsComponent,
-  FooterComponent,
-  NavBarComponent,
   OauthRowComponent,
   OpenEndedAnswersComponent,
   QuestionComponent,
-  FollowTag,
   ScrollProgressComponent,
   TutorialBoxComponent
 } from './shared'
@@ -61,7 +46,7 @@ import { HomeComponent } from './home'
 import { RegisterPageComponent } from './register-page'
 import { LoginForm, GuestForm, RegisterFormComponent } from './forms'
 
-import { LoginModal, UserDetailsUpdateModal, ResetPassComponent, DeleteCommentModal, DeleteAudioModal, DeleteReadingModal, DeleteProjectModal, AddProjectModal, LoginRequiredModal, HeroSubscribeComponent, HeroChangeComponent, LoginRegisterModal, DiscoverAddMetaModal, ReferralModalComponent } from './modals'
+import { LoginModal, UserDetailsUpdateModal, ResetPassComponent, DeleteCommentModal, DeleteAudioModal, DeleteReadingModal, DeleteProjectModal, AddProjectModal, LoginRequiredModal, HeroChangeComponent, LoginRegisterModal, DiscoverAddMetaModal } from './modals'
 import { AnnotatorComponent, CommentComponent, TextCommentComponent, EmojiCommentComponent, EmojiKeyboardComponent, AudioCommentComponent, AvatarPortalComponent } from './annotator'
 import { ProjectPageComponent, OwnerToolsComponent, LeaderboardComponent } from './project-page'
 import { FirefeedComponent } from './project-page/owner-tools/firefeed/firefeed.component'
@@ -73,7 +58,6 @@ import { DashboardComponent, JoinedDashComponent, CreatedDashComponent, Tutorial
 import { NoContentComponent } from './no-content'
 import { AccountComponent, ChangePassComponent, UploadAvatarModal } from './account'
 import { FeedbackComponent } from './shared/feedback/feedback.component'
-import { ShareCodeComponent } from './modals/share-code/share-code.component'
 import { LoginComponent } from './login';
 import { ResetPassPage } from './reset-pass/reset-pass-page.component';
 import { HeroPromoComponent } from './hero-promo/hero-promo.component';
@@ -86,6 +70,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { DataListModule } from 'primeng/datalist';
 import { PaginatorModule } from 'primeng/paginator';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterModule, PreloadAllModules, Router } from '@angular/router';
+import { ROUTES } from './app.routes';
 import { LicenseRedirectComponent } from './license-redirect/license-redirect.component';
 
 // Configure Hammer.js
@@ -123,16 +109,8 @@ const APP_PROVIDERS = [
   declarations: [
     MediumEditorDirective,
     ClickOutsideDirective,
-    EmojiOnePipe,
-    LinkifyPipe,
-    SubjectPipe,
-    EdjiDatePipe,
-    UserInitialsPipe,
     ResetPassPage,
-    AddClassPipe,
     RegisterPageComponent,
-    NavBarComponent,
-    FooterComponent,
     CommentPaneComponent,
     CommentComponent,
     AvatarPortalComponent,
@@ -141,7 +119,6 @@ const APP_PROVIDERS = [
     AudioCommentComponent,
     EmojiKeyboardComponent,
     QuestionComponent,
-    FollowTag,
     GoogleButton,
     OauthRowComponent,
     OpenEndedAnswersComponent,
@@ -168,7 +145,6 @@ const APP_PROVIDERS = [
     HeroPricingComponent,
     DiscoverFeedComponent,
     DiscoverAddMetaModal,
-    ReferralModalComponent,
     LeaderboardComponent,
     FirefeedComponent,
     FirecardComponent,
@@ -182,7 +158,6 @@ const APP_PROVIDERS = [
     ProjectPageComponent,
     OwnerToolsComponent,
     LoginRequiredModal,
-    HeroSubscribeComponent,
     HeroChangeComponent,
     TutorialBoxComponent,
     DashboardComponent,
@@ -191,7 +166,6 @@ const APP_PROVIDERS = [
     LoginComponent,
     HomeComponent,
     FeedbackComponent,
-    ShareCodeComponent,
     NoContentComponent,
     UserDetailsUpdateModal,
     ReadingCardComponent,
@@ -205,17 +179,14 @@ const APP_PROVIDERS = [
     UserDetailsUpdateModal
   ],
   imports: [ // import Angular's modules
-    // BrowserModule,
+    SharedModule,
     BrowserAnimationsModule,
-    FormsModule,
-    ReactiveFormsModule,
     HttpModule,
     HttpClientModule,
     LockerModule,
     MultiselectDropdownModule,
-    RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
     Angulartics2Module.forRoot([ Angulartics2GoogleAnalytics ]),
-    // NgbModule.forRoot(), // Ng Bootstrap Import
+    RouterModule.forRoot(ROUTES, { useHash: true }),
     DataListModule,
     PaginatorModule,
     Ng4TwitterTimelineModule
