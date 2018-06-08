@@ -53,5 +53,6 @@ interface BaseUser {
   },
   avatar?: string,
   referred_by?: string,
-  license_ids?: string[]
+  license_ids?: string[],
+  institution_ids?: string[]
 }
