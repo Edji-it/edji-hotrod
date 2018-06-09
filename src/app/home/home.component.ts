@@ -110,8 +110,9 @@ export class HomeComponent implements OnInit, OnDestroy {
       border-top: none;
     }
     .timeline-Widget {
-      max-width: none;
-      width: 100%;
+      max-width: 100%;
+      width: 100vw;
+      overflow-x: hidden;
     }
     `;
   
