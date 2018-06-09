@@ -46,7 +46,7 @@ import { HomeComponent } from './home'
 import { RegisterPageComponent } from './register-page'
 import { LoginForm, GuestForm, RegisterFormComponent } from './forms'
 
-import { LoginModal, UserDetailsUpdateModal, ResetPassComponent, DeleteCommentModal, DeleteAudioModal, DeleteReadingModal, DeleteProjectModal, AddProjectModal, LoginRequiredModal, HeroChangeComponent, LoginRegisterModal, DiscoverAddMetaModal } from './modals'
+import { LoginModal, UserDetailsUpdateModal, ResetPassComponent, DeleteCommentModal, DeleteReadingModal, DeleteProjectModal, AddProjectModal, LoginRequiredModal, HeroChangeComponent, LoginRegisterModal, DiscoverAddMetaModal } from './modals'
 import { AnnotatorComponent, CommentComponent, TextCommentComponent, EmojiCommentComponent, EmojiKeyboardComponent, AudioCommentComponent, AvatarPortalComponent } from './annotator'
 import { ProjectPageComponent, OwnerToolsComponent, LeaderboardComponent } from './project-page'
 import { FirefeedComponent } from './project-page/owner-tools/firefeed/firefeed.component'
@@ -57,7 +57,6 @@ import { NewReadingPage, UploadModalComponent, UploadPdfModalComponent, DeletePd
 import { DashboardComponent, JoinedDashComponent, CreatedDashComponent, TutorialReadingComponent, ReadingCardComponent } from './dashboard'
 import { NoContentComponent } from './no-content'
 import { AccountComponent, ChangePassComponent, UploadAvatarModal } from './account'
-import { FeedbackComponent } from './shared/feedback/feedback.component'
 import { LoginComponent } from './login';
 import { ResetPassPage } from './reset-pass/reset-pass-page.component';
 import { HeroPromoComponent } from './hero-promo/hero-promo.component';
@@ -133,7 +132,6 @@ const APP_PROVIDERS = [
     ChangePassComponent,
     ResetPassComponent,
     DeleteCommentModal,
-    DeleteAudioModal,
     DeleteReadingModal,
     DeleteProjectModal,
     UploadAvatarModal,
@@ -165,7 +163,6 @@ const APP_PROVIDERS = [
     CreatedDashComponent,
     LoginComponent,
     HomeComponent,
-    FeedbackComponent,
     NoContentComponent,
     UserDetailsUpdateModal,
     ReadingCardComponent,

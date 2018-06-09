@@ -30,20 +30,16 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
   @Input() public reply: boolean = false
   @Input() public commentContext: string = 'normal'
   @Output() save: EventEmitter<any> = new EventEmitter<any>() 
-  @Output() showDeleteAudioModal: EventEmitter<any> = new EventEmitter<boolean>()
 
   public currentState: playState = playState.inactive
 
-  // public isPlaying: boolean = false
-  // public isRecording: boolean = false
-  public recordOverConfirmed: boolean = false
+  public confirmClear: boolean = false
   public playTime: number = 0
   public playWidth: number = 100
   public playWidthOffset: number = 60
   public playheadPos: number
   public myCanvas
   public chunks: any = []
-  // public mediaRecorder: any
   public recorder: any
   public recorderReady: boolean
 
@@ -80,15 +76,6 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
   }
   get active() {
     return this.activated
-  }
-
-  // Once we confirm that we're ready to delete and record new audio, let's do it
-  @Input() set recordNewAudio(confirmed) {
-    this.recordOverConfirmed = confirmed
-
-    if (this.isInitialized && this.recordOverConfirmed) {
-      this.record()
-    }
   }
 
   constructor(
@@ -225,26 +212,23 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
      * - Saves data to chunks array as it is received
      * - In Chrome, we receive all chunks at the end of recording
      */
-    this._audio.addRecorderListener('dataAvailable', (e) =>{
+    this._audio.addRecorderListener('dataavailable', (data) =>{
       // Save data to create audio file on 'stop'
-      this.chunks.push(e.detail)
+      this.chunks.push(data)
 
       // Sample for waves every 500ms
-      let detailLength = e.detail.length
+      let detailLength = data.length
       let sampleInterval = detailLength/(this.rDuration*2)
       for (let i = 0; i < detailLength; i = i + sampleInterval) {
         i = Math.floor(i)
         // Sample for the wave ~~~
-        let neighborAvg = ((e.detail[i] || 0) + (e.detail[i+1] || 0) + (e.detail[i+2] || 0) + 1)/3
+        let neighborAvg = ((data[i] || 0) + (data[i+1] || 0) + (data[i+2] || 0) + 1)/3
         this.waves[this.wavePos] = Math.round(neighborAvg)
         this.wavePos++
       }      
       
       this._comments.waveForm(this.waves, this.myCanvas)
     })
-    
-    // Intialize the recording stream
-    this.recorder.initStream()
   }
 
   /**
@@ -279,15 +263,34 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
     }
   }
 
+  /**
+   * Resets Audio Comment
+   * - Clears component recording variables
+   * - Saves comment with removed data
+   */
+  public clearRecording() : void {
+    // Reset playhead
+    this.playheadPos = 0
+    // Clear variables tied to existing recording
+    this.audio.src = this.comment.url = ""
+    this.comment.dataArray = []
+    // Clear wave data
+    this.newWave()
+    // Update wave display
+    this._comments.waveForm(this.waves, this.myCanvas)
+    // Save Comment
+    this.save.emit(this.comment)
+    // Close Popover
+    this.confirmClear = false
+  }
+
   /** 
    * Call for audio deletion or call for a fresh recording sesh
    */
   public record() {
-    if (this.recordOverConfirmed) {
-      this.freshRecord()
-    } else if (this.audio && this.audio.src && this.audio.src.length > 0) {
-      // this.showDeleteAudioModal.emit(true)
-      this._comments.deleteAudioConfirmation(this.comment, this.commentContext)
+    if (this.comment && this.comment.url && this.comment.url.length > 0) {
+      // User should confirm clearing previous recording
+      this.confirmClear = true
     } else {
       this.freshRecord()
     }
@@ -303,7 +306,6 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
     // Clear existing recording
     this.chunks = []
     // Assign recorder to this component
-    // this.initializeAudio()
     this.verifyAudio()
   }
 
