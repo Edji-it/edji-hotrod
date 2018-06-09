@@ -213,7 +213,6 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
      * - In Chrome, we receive all chunks at the end of recording
      */
     this._audio.addRecorderListener('dataavailable', (data) =>{
-      console.log("data available", data)
       // Save data to create audio file on 'stop'
       this.chunks.push(data)
 
