@@ -30,13 +30,9 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
   @Input() public reply: boolean = false
   @Input() public commentContext: string = 'normal'
   @Output() save: EventEmitter<any> = new EventEmitter<any>() 
-  // @Output() showDeleteAudioModal: EventEmitter<any> = new EventEmitter<boolean>()
 
   public currentState: playState = playState.inactive
 
-  // public isPlaying: boolean = false
-  // public isRecording: boolean = false
-  // public recordOverConfirmed: boolean = false
   public confirmClear: boolean = false
   public playTime: number = 0
   public playWidth: number = 100
@@ -44,7 +40,6 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
   public playheadPos: number
   public myCanvas
   public chunks: any = []
-  // public mediaRecorder: any
   public recorder: any
   public recorderReady: boolean
 
@@ -82,15 +77,6 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
   get active() {
     return this.activated
   }
-
-  // // Once we confirm that we're ready to delete and record new audio, let's do it
-  // @Input() set recordNewAudio(confirmed) {
-  //   this.recordOverConfirmed = confirmed
-
-  //   if (this.isInitialized && this.recordOverConfirmed) {
-  //     this.record()
-  //   }
-  // }
 
   constructor(
     private _media: MediaService,
@@ -244,9 +230,6 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
       
       this._comments.waveForm(this.waves, this.myCanvas)
     })
-    
-    // Intialize the recording stream
-    // this.recorder.initStream()
   }
 
   /**
@@ -281,6 +264,11 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
     }
   }
 
+  /**
+   * Resets Audio Comment
+   * - Clears component recording variables
+   * - Saves comment with removed data
+   */
   public clearRecording() : void {
     // Reset playhead
     this.playheadPos = 0
@@ -319,7 +307,6 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
     // Clear existing recording
     this.chunks = []
     // Assign recorder to this component
-    // this.initializeAudio()
     this.verifyAudio()
   }
 
