@@ -91,7 +91,7 @@ div(*ngIf="commentPaneActive", [class.selected--block]="comment.selected")
         [class.readonly]="readOnly",
         [ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '' ]"
     )
-        i.icon.icon-draft.icon-draft__comment(*ngIf="!comment.new && ((!comment.data || comment.data=='') || (!comment.url || comment.url==''))")
+        i.icon.icon-draft.icon-draft__comment(*ngIf="!comment.new && ((!comment.data || comment.data=='') && (!comment.url || comment.url == ''))")
         .user-icon([class.selected]="comment.selected", [ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '' ]")
             span.user-icon__initials {{comment.author.substring(0,2)}}
         .mobileBlock([ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '' ]")
