@@ -612,7 +612,7 @@ export class NewReadingPage implements OnInit {
                                         user_id: this.user._id,
                                         teacher: (project.teacher_id===this.user._id),
                                         hero: this.user.hero_status || false,
-                                        institution_id: this.user.institution_ids || []],
+                                        institution_id: this.user.institution_ids || [],
                                         // event-specific info:
                                         reading_id: data._id,
                                         group_id: project._id,
