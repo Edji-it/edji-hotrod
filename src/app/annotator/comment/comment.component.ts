@@ -48,7 +48,6 @@ export class CommentComponent implements OnInit, OnDestroy {
   private currentScroll: number
   // Is fully visible, focused, and editable
   private active = false
-  private reRecordAudio = false
   private showDeleteModal: boolean = false
   private user: any
   private subscriptions: Subscription[] = []
@@ -251,7 +250,6 @@ export class CommentComponent implements OnInit, OnDestroy {
    * @param comment Full EdjiComment object
    */
   public updateComment(comment: EdjiComment): void {
-    this.reRecordAudio = false
     if (comment._id) {
       // this.comment.project_id, comment, this.comment.start, this.comment.end, this.comment.type, this.comment.text, this.comment._id, this.comment.loc
       this.comment.data = comment.data

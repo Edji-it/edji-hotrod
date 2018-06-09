@@ -153,8 +153,10 @@ $mobileBoundVPad: 40px;
 
 .mobileBound {
   padding: 0px 0px $mobileBoundVPad;
-  overflow: hidden;
+  // overflow: hidden;
+  overflow: visible;
   position: relative;
+
   &.comment {
     left: 0;
     margin: 0;
@@ -176,7 +178,7 @@ $mobileBoundVPad: 40px;
   height: 99%;
   top: 0px;
   border-left: 1px dashed #CFCFCF;
-  z-index: -1;
+  // z-index: -1;
 }
 
 .mobileBlock-mobile-comment:before {

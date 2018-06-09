@@ -30,7 +30,9 @@ export class AudioService {
                 // We process chunks of data as we go (see: dataAvailable event)
                 streamPages: true
             })
-            this.recorder.initStream()
+            console.log(this.recorder)
+            // this.recorder.initWorker()
+            //initStream()
         }
     }
 
@@ -42,20 +44,22 @@ export class AudioService {
         this.recorder.clearStream()
 
         // Remove event listeners
-        for (let eventName in this.listeners){
-            if (this.listeners.hasOwnProperty(eventName)) {
-                // Clear event listeners
-                this.recorder.removeEventListener(eventName, this.listeners[eventName])
-            }
-        }
+        // for (let eventName in this.listeners){
+        //     if (this.listeners.hasOwnProperty(eventName)) {
+        //         // Clear event listeners
+        //         this.recorder.removeEventListener(eventName, this.listeners[eventName])
+        //     }
+        // }
 
         // iOS Safari fix
-        this.recorder.audioContext.resume()
+        console.log(this.recorder)
+        this.recorder.resume()
     }
 
     public addRecorderListener(event: string, listener: Function): void {
-        this.listeners[event] = listener
-        this.recorder.addEventListener(event, listener)
+        // this.listeners[event] = listener
+        // this.recorder.addEventListener(event, listener)
+        this.recorder['on'+event] = listener
     }
 
     public shutAudioDown() {
