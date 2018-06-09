@@ -66,7 +66,7 @@ export class AcademyService {
     this.saveToPipo(event)
     .subscribe(
       data => {
-        // console.log(data, event)
+        // console.log(data.event)
       },
       error => {
         console.error(error)

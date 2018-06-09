@@ -611,8 +611,8 @@ export class NewReadingPage implements OnInit {
                                         event_name: "reading_action",
                                         user_id: this.user._id,
                                         teacher: (project.teacher_id===this.user._id),
-                                        hero: this.user.hero_status,
-                                        institution_id: this.user.institution_ids,
+                                        hero: this.user.hero_status || false,
+                                        institution_id: this.user.institution_ids || []],
                                         // event-specific info:
                                         reading_id: data._id,
                                         group_id: project._id,
