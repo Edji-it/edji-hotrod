@@ -9,7 +9,7 @@ import { RouterModule, PreloadAllModules } from "@angular/router"
 import { FormsModule, ReactiveFormsModule } from "@angular/forms"
 
 // Project Dependencies
-import { NavBarComponent, FooterComponent, FollowTag } from "./shared"
+import { NavBarComponent, FooterComponent, FollowTag, FeedbackComponent } from "./shared"
 import { ROUTES } from "./app.routes";
 // Pipes
 import { 
@@ -27,6 +27,7 @@ let SHARED_DECLARATIONS = [
     AddClassPipe,
     EdjiDatePipe,
     EmojiOnePipe,
+    FeedbackComponent,
     FollowTag,
     FooterComponent, 
     HeroSubscribeComponent,
