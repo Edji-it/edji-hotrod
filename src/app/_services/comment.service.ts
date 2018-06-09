@@ -177,7 +177,7 @@ export class CommentService {
   public commentDeleted(): void {
     this.showDeleteCommentModal = false
     this.deleteCommentRef = <EdjiComment>{}
-    this.commentContext = 'normal'
+    this.commentContext = 'comment'
   }
 
   /**
