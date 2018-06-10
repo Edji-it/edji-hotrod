@@ -6,7 +6,7 @@ import { take } from 'rxjs/operators'
 // import { EventEmitter } from '@angular/forms/src/facade/async'
 
 import { Project, Reading } from '../datatypes'
-import { AuthService, ProjectService, SocketService, PowerToggle, ReadingService, UtilToolService } from '../../_services'
+import { AuthService, ProjectService, SocketService, PowerToggle, ReadingService, SecretSwitchesService, UtilToolService, Secrets } from '../../_services'
 
 @Component({
   selector: 'nav-bar',
@@ -67,6 +67,10 @@ export class NavBarComponent implements OnInit, OnDestroy {
     public showHeroSubModal: boolean
     public couponCode: string
 
+    // Nav menu variables
+    public academyMenuShow: boolean = false
+    public secretSwitches: Secrets = {}
+
     constructor(
           public _route: ActivatedRoute,
           private _auth: AuthService, 
@@ -75,7 +79,8 @@ export class NavBarComponent implements OnInit, OnDestroy {
           private angulartics: Angulartics2,
           private _projects: ProjectService,
           private _readings: ReadingService,
-          public _util: UtilToolService
+          public _util: UtilToolService,
+          private _secret: SecretSwitchesService
         ) {
 
     }
@@ -101,8 +106,8 @@ export class NavBarComponent implements OnInit, OnDestroy {
         this.projectCodeShow = true
       }
 
-      // Subscribe to current Reading data
       this.subscriptions.push(
+        // Subscribe to current Reading data 
         this._readings.currentReading.subscribe(
             reading => {
                 this.currentReading = reading;
@@ -110,12 +115,15 @@ export class NavBarComponent implements OnInit, OnDestroy {
             error => {
                 console.error(error);
             }
-        )
+        ),
+        this._route.params.subscribe((params) => {
+          this.secretSwitches = this._secret.processSwitches(params)
+        })
       )
       
       if (this.showProjectInfo) {
-        // Subscribe to current Project data
         this.subscriptions.push(
+          // Subscribe to current Project data
           this._projects.currentProject.subscribe(
                 project => {
                     this.currentProject = project
@@ -125,16 +133,13 @@ export class NavBarComponent implements OnInit, OnDestroy {
                 error => {
                     console.error(error);
                 }
-            )
-        )
-
-        // Subscribe to user count updates       
-        this.subscriptions.push(
-          this._socket.liveUsersCount.subscribe((users) => {
-                  this.liveCount = users.length
-              }, (error) => {
-                  console.warn(error)
-              })
+            ),
+             // Subscribe to user count updates   
+            this._socket.liveUsersCount.subscribe((users) => {
+              this.liveCount = users.length
+          }, (error) => {
+              console.warn(error)
+          })
         )
       }
       this.window = window

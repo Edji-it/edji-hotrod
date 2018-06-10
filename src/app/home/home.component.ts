@@ -110,8 +110,9 @@ export class HomeComponent implements OnInit, OnDestroy {
       border-top: none;
     }
     .timeline-Widget {
-      max-width: none;
-      width: 100%;
+      max-width: 100%;
+      width: 100vw;
+      overflow-x: hidden;
     }
     `;
   
@@ -120,7 +121,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       setTimeout(()=> {
         if (document.getElementById("twitter-widget-0") && document.getElementById("twitter-widget-0")['contentDocument']) {
           var w = document.getElementById("twitter-widget-0")['contentDocument'];
-          console.log(w)
+          // console.log(w)
           var s = document.createElement("style");
           s.innerHTML = this.widgetCSS;
           s.type = "text/css";

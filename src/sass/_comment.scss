@@ -157,13 +157,8 @@ edji-comment {
 	}
 
 	&:not(.active) .comment-input-wrapper:hover {
-		transform: scale(1.0) translateZ(0px);
 		box-shadow: $inputFocusHalfShadow;
 		border-color: #b8d4e2;
-		
-		// & .input-wrap {
-		// 	box-shadow: $inputFocusHalfShadow;
-		// }
 		
 		.reply {
 			display: block !important;
@@ -212,9 +207,8 @@ edji-comment {
 .comment-input-wrapper {
 	border: $commentBorder;
 	border-radius: 4px;
-	overflow: hidden;
+	overflow: visible; // hidden;
 	position: relative;
-	transform: scale(1.0) translateZ(0px);
 	transition:  transform linear 0.2s;
 }
 
@@ -700,6 +694,10 @@ $progressStart: 51px;
     border-radius: 0px;
     border-right: solid $green;
 	pointer-events: none;
+	min-width: 0px;
+
+	// Playhead is updated every 0.5 secs
+	transition: min-width linear 500ms;
 
 	&.recording {
 		background-color: rgba(255,100,100,0.6);

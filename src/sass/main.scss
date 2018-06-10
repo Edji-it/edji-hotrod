@@ -64,6 +64,7 @@ $seamlessPlaceholderColor: #cdcdcd;
 @import 'questions';
 @import 'avatar';
 @import 'hero-brand';
+@import 'academy-brand';
 @import './base/variables';
 
 /**
@@ -72,6 +73,37 @@ $seamlessPlaceholderColor: #cdcdcd;
  * --- they can live in main.scss until they have a place
  * ----------------------------------------------------------
  */
+
+.popover {
+	box-shadow: 0px 2px 20px 0px rgba(0,0,0,0.2);
+	border: 0px solid transparent;
+}
+
+.popover-content {
+	min-width: 180px;
+}
+
+.popover--attach-bottom {
+	$popoverArrowWidth: 8px;
+	position: absolute;
+	top: calc(100% + #{$popoverArrowWidth});
+	left: 50%;
+	transform: translateX(-50%);
+
+	&:before {
+		content: "";
+		border-top: $popoverArrowWidth solid transparent;
+		border-left: $popoverArrowWidth solid transparent;
+		border-right: $popoverArrowWidth solid transparent;
+		border-bottom: $popoverArrowWidth solid rgba(255,255,255,0.9);
+		position: absolute;
+		margin-right: -$popoverArrowWidth;
+		top: -2*$popoverArrowWidth;
+		height: 0px;
+		width: $popoverArrowWidth;
+		left: 50%;
+	}
+}
 
 .medium-editor-placeholder-relative {
 	color: $seamlessPlaceholderColor;

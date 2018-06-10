@@ -11,6 +11,7 @@ import { AuthService } from './auth.service'
 import { SocketService } from './socket.service'
 import { CommentStats, iCommentStats, EdjiComment, Project, User } from '../shared/datatypes'
 import { ReadingService } from "./reading.service"
+import { AcademyService } from './academy.service';
 
 @Injectable()
 export class ProjectService {
@@ -80,7 +81,8 @@ export class ProjectService {
         private _route: ActivatedRoute,
         private _socket: SocketService,
         private _readings: ReadingService,
-         private angulartics: Angulartics2
+        private angulartics: Angulartics2,
+        private _academy: AcademyService
     ) {
         // needs to be constructed here or else it returns undefined
         this._commentStats = new CommentStats()
@@ -571,6 +573,28 @@ export class ProjectService {
         } else {
             options['method'] = 'POST'
             this._socket.updateComment(data.comment, 'CREATE', this.project._id);
+
+            // need to set a comment context to discern between comments and replies for pipo event
+            let commentContext = 'comment'
+            if (comment.reply_to && comment.reply_to!=='') {
+                commentContext = 'reply'
+            }
+
+            // add the comment creation event to pipo
+            this._academy.pipoEvent({
+                // standard event info:
+                event_name: "reader_action",
+                user_id: this.user._id,
+                teacher: (this.project.teacher._id===this.user._id),
+                hero: this.user.hero_status || false,
+                institution_id: this.user.institution_ids || [],
+                // event-specific info:
+                reading_id: this.project.reading_id._id,
+                group_id: this.project._id,
+                action_type: commentContext,
+                comment_type: comment.type,
+                reading_owner: this.project.owner_id
+              })
         }
 
         options['body'] = data
@@ -653,6 +677,22 @@ export class ProjectService {
         } else {
             options['method'] = 'POST'
             this._socket.updateComment(data.answer, 'CREATE', this.project._id)
+
+            // add the comment creation event to pipo
+            this._academy.pipoEvent({
+                // standard event info:
+                event_name: "reader_action",
+                user_id: this.user._id,
+                teacher: (this.project.teacher._id===this.user._id),
+                hero: this.user.hero_status || false,
+                institution_id: this.user.institution_ids || [],
+                // event-specific info:
+                reading_id: this.project.reading_id._id,
+                group_id: this.project._id,
+                action_type: 'answer',
+                comment_type: answer.type,
+                reading_owner: this.project.owner_id
+              })
         }
 
         options['body'] = data

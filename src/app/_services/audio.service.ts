@@ -15,8 +15,6 @@ import * as Recorder from 'opus-recorder/dist/recorder.min.js'
 export class AudioService {
     
     public recorder
-    // Reference listeners by event name
-    private listeners: any = {}
 
     constructor() {}
 
@@ -30,7 +28,6 @@ export class AudioService {
                 // We process chunks of data as we go (see: dataAvailable event)
                 streamPages: true
             })
-            this.recorder.initStream()
         }
     }
 
@@ -41,21 +38,12 @@ export class AudioService {
     public freshRecorder(): void {
         this.recorder.clearStream()
 
-        // Remove event listeners
-        for (let eventName in this.listeners){
-            if (this.listeners.hasOwnProperty(eventName)) {
-                // Clear event listeners
-                this.recorder.removeEventListener(eventName, this.listeners[eventName])
-            }
-        }
-
         // iOS Safari fix
-        this.recorder.audioContext.resume()
+        this.recorder.resume()
     }
 
     public addRecorderListener(event: string, listener: Function): void {
-        this.listeners[event] = listener
-        this.recorder.addEventListener(event, listener)
+        this.recorder['on'+event] = listener
     }
 
     public shutAudioDown() {

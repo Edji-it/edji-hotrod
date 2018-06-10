@@ -15,11 +15,11 @@ export class CommentService {
   public keyboardActive: boolean
   public activeComment: EdjiComment = <EdjiComment>{}
   public deleteCommentRef: EdjiComment = <EdjiComment>{}
-  public deleteAudioRef: EdjiComment = <EdjiComment>{}
+  // public deleteAudioRef: EdjiComment = <EdjiComment>{}
   public showDeleteCommentModal: boolean
-  public showDeleteAudioModal: boolean
+  // public showDeleteAudioModal: boolean
   public commentContext: string
-  public showAudioDeleteModal: boolean
+  // public showAudioDeleteModal: boolean
 
   public clearActiveCommentsSource: Subject<boolean> = new Subject()
   public clearActiveComments: Observable<boolean> = this.clearActiveCommentsSource.asObservable()
@@ -177,39 +177,7 @@ export class CommentService {
   public commentDeleted(): void {
     this.showDeleteCommentModal = false
     this.deleteCommentRef = <EdjiComment>{}
-    this.commentContext = 'normal'
-  }
-
-  /**
-   * This method will open the audio delete confirmation modal that lives on the annotator and set the comment reference
-   * @param comment the comment we're looking to re-record audio on
-   */
-  public deleteAudioConfirmation(comment: EdjiComment, commentContext: string): void {
-    this.showAudioDeleteModal = true
-    this.deleteAudioRef = comment
-    this.commentContext = commentContext
-  }
-
-  /**
-   * When the modal is closed either through the user accepting the delete or just closing it, we'll tell the modal to close and reset our reference variables
-   */
-  public audioDeleteModalClose(): void {
-    this.showAudioDeleteModal = false
-    this.deleteAudioRef = <EdjiComment>{}
-    this.commentContext = 'normal'
-  }
-
-  /**
-   * When the user clicks 'yes' on the delete audio modal, we will clear the comment url and dataArray here
-   */
-  public audioReset(): void {
-    var comment = this.deleteAudioRef
-    if (comment && comment.type=='audio' && comment.url) {
-      comment.url = ''
-      comment.dataArray = []
-      this.updateComment(comment)
-    }
-    this.audioDeleteModalClose()
+    this.commentContext = 'comment'
   }
 
   /**

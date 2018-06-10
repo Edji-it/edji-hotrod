@@ -149,7 +149,6 @@ nav-bar([pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'", [canPublish]
     [pageObjs]="guideContent", 
     [pager]="guideStepNo", 
     (pageChange)="guideStepNo = $event")
-  edji-feedback
 
 //- Modals
 upload-picture-modal.modal-will-fade([class.show]="showUploadModal", (returnImage)="addImages($event)", (closeModal)="showUploadModal = false")

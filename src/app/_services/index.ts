@@ -6,6 +6,7 @@ export * from './media.service'
 export * from './message.service'
 export * from './project.service'
 export * from './reading.service'
+export * from './secret-switches.service'
 export * from './socket.service'
 export * from './util-tool.service'
 /**

@@ -44,7 +44,7 @@ export class DeleteReadingModal implements OnInit {
       .pipe(take(1)) // so we don't need to unsubscribe
       .subscribe(
       data => { 
-        console.log("Deleting the reading was successful.");
+        // console.log("Deleting the reading was successful.");
         // Data is updated through observables on the Reading service
       },
       err => {

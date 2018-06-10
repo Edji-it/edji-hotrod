@@ -199,7 +199,6 @@ scroll-progress([scrollProgress]="currentScroll")
         [class.keyboard-offset]="isEmojiKeyboardActive()",
         [class.mobile-toolbar-offset]="optionsShow"
     )
-    edji-feedback
 
 //- Emoji Keyboard: Custom Emoji entry component
     [currentComment]="_comments.activeComment && _comments.activeComment.data ? _comments.activeComment.data : ''",
@@ -233,12 +232,4 @@ hot-del-comment(
     [comment]="_comments.deleteCommentRef",
     (delete)="deleteComment(_comments.deleteCommentRef)",
     (closeModal)="_comments.commentDeleted()"
-)
-
-//- Delete Audio Comment Modal
-hot-del-audio(
-    *ngIf="_comments.showAudioDeleteModal",
-    [comment]="_comments.deleteAudioRef",
-    (delete)="_comments.audioReset(); setLinePositions()",
-    (closeModal)="_comments.audioDeleteModalClose()"
 )

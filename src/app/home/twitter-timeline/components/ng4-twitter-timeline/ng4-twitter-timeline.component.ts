@@ -60,7 +60,7 @@ export class Ng4TwitterTimelineComponent implements OnInit, AfterViewInit
       //ERROR
       err =>
       {
-        console.log('****  ERROR LOADING TWITTER WIDGET', err);
+        console.error('****  ERROR LOADING TWITTER WIDGET', err);
       },
       
       //COMPLETE

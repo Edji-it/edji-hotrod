@@ -48,7 +48,6 @@ export class CommentComponent implements OnInit, OnDestroy {
   private currentScroll: number
   // Is fully visible, focused, and editable
   private active = false
-  private reRecordAudio = false
   private showDeleteModal: boolean = false
   private user: any
   private subscriptions: Subscription[] = []
@@ -63,7 +62,7 @@ export class CommentComponent implements OnInit, OnDestroy {
   @Input() private replyRef: boolean = false
   @Input() public reply: boolean = false   // Is it a reply to another comment? 
   @Input() private commentLite: boolean = false
-  @Input() private commentContext: string = 'normal'; // See NOTES in summary.
+  @Input() private commentContext: string = 'comment'; // See NOTES in summary.
   @Input() public commentMobile: boolean = false
   @Input() public commentMobileFirst: boolean = false
   @Input() public commentPaneActive: boolean = false
@@ -251,7 +250,6 @@ export class CommentComponent implements OnInit, OnDestroy {
    * @param comment Full EdjiComment object
    */
   public updateComment(comment: EdjiComment): void {
-    this.reRecordAudio = false
     if (comment._id) {
       // this.comment.project_id, comment, this.comment.start, this.comment.end, this.comment.type, this.comment.text, this.comment._id, this.comment.loc
       this.comment.data = comment.data
@@ -276,38 +274,8 @@ export class CommentComponent implements OnInit, OnDestroy {
         // Appropriate post-delete action, sorted by comment type.
         if (this.commentContext === 'reply') {
           this.angulartics.eventTrack.next({ action: comment.type + 'updateReply', properties: { category: 'heroFeature', label: 'success' }})
-          // send the data to Pipo to log the reply
-          this._academy.pipoEvent({
-            // standard event info:
-            event_name: "reader_action",
-            user_id: this.user._id,
-            teacher: (this.project.teacher._id===this.user._id),
-            hero: this.user.hero_status,
-            institution_id: this.user.institution_ids,
-            // event-specific info:
-            reading_id: this.project.reading_id._id,
-            group_id: this.project._id,
-            action_type: 'reply',
-            comment_type: comment.type,
-            reading_owner: this.project.owner_id
-          })
         } else {
           this.angulartics.eventTrack.next({ action: comment.type + 'updateComment', properties: { category: 'projectAction', label: 'success' }})
-          // send the data to Pipo to log the comment
-          this._academy.pipoEvent({
-            // standard event info:
-            event_name: "reader_action",
-            user_id: this.user._id,
-            teacher: (this.project.teacher._id===this.user._id),
-            hero: this.user.hero_status,
-            institution_id: this.user.institution_ids,
-            // event-specific info:
-            reading_id: this.project.reading_id._id,
-            group_id: this.project._id,
-            action_type: 'comment',
-            comment_type: comment.type,
-            reading_owner: this.project.owner_id
-          })
         } // else
         this.isLoading = false
         this.commentUpdated.emit()
@@ -326,7 +294,7 @@ export class CommentComponent implements OnInit, OnDestroy {
           this.angulartics.eventTrack.next({ action: comment.type + 'updateComment', properties: { category: 'projectAction', label: 'failure' }})
         } // else
 
-        console.log(error)
+        console.error(error)
       })
     } else {
       this.angulartics.eventTrack.next({ action: comment.type + 'updateAnswer', properties: { category: 'heroFeature', label: 'attempt' }})
@@ -335,21 +303,6 @@ export class CommentComponent implements OnInit, OnDestroy {
       this._projects.saveAnswer(this.comment)
       .then(answer => {
         this.angulartics.eventTrack.next({ action: comment.type + 'updateAnswer', properties: { category: 'heroFeature', label: 'success' }})
-        // send the data to Pipo to log the answer
-        this._academy.pipoEvent({
-          // standard event info:
-          event_name: "reader_action",
-          user_id: this.user._id,
-          teacher: (this.project.teacher._id===this.user._id),
-          hero: this.user.hero_status,
-          institution_id: this.user.institution_ids,
-          // event-specific info:
-          reading_id: this.project.reading_id._id,
-          group_id: this.project._id,
-          action_type: 'answer',
-          comment_type: comment.type,
-          reading_owner: this.project.owner_id
-        })
 
         this.isLoading = false
         
@@ -364,7 +317,7 @@ export class CommentComponent implements OnInit, OnDestroy {
       })
       .catch(error => { 
         this.angulartics.eventTrack.next({ action: comment.type + 'updateAnswer', properties: { category: 'heroFeature', label: 'failure' }})
-        console.log(error)
+        console.error(error)
       })
     }
   } // public updateComment(comment: any, reply ?: boolean): void
@@ -403,7 +356,7 @@ export class CommentComponent implements OnInit, OnDestroy {
           this.angulartics.eventTrack.next({ action: comment.type + 'deleteComment', properties: { category: 'projectAction', label: 'failure' }})
         }
         this.deactivate(this.comment)
-        console.log(error)
+        console.error(error)
       })
     } else {
       this._projects.deleteAnswer(comment)
@@ -416,7 +369,7 @@ export class CommentComponent implements OnInit, OnDestroy {
         // TRACK EXCEPTION
         this.angulartics.eventTrack.next({ action: comment.type + 'deleteAnswer', properties: { category: 'heroFeature', label: 'failure' }})
         this.deactivate(this.comment)
-        console.log(error)
+        console.error(error)
       })
     }
   } // deleteComment(comment: any) : void
