@@ -241,11 +241,9 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
 
   private loadAudioPlayer(url: string) {
     // Fresh audio object
-    this.audio = new Audio()
+    this.audio = new Audio(url)
     this.isInitialized = true
     this.audio.preload = 'none'
-    this.audio.src = url
-    this.audio.load()
 
     this.audio.onplay = e => {
       this.currentState = playState.playing
@@ -259,8 +257,12 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
     this.audio.onended = e => {
       this.currentState = playState.inactive
       this.playTime = 0
+      this.playheadPos = 0
       clearInterval(this.pInterval)
     }
+
+    // load() should run after all settings are configured
+    this.audio.load()
   }
 
   /**
@@ -318,6 +320,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
     // Clone playTime value
     this.rDuration = this.playTime + 0
     this.playTime = 0
+    this.playheadPos = 0
     this.recorder.stop()
   }
 
@@ -409,7 +412,22 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
     return this.currentState == playState.loading
   }
 
+  shutPlayerDown() : void {
+    // Stop stream if playing
+    // - Also seems to resolve a bug that causes choppy audio while recording
+    this.audio.pause()
+    // Clear source
+    this.audio.src = ""
+    // Unload media
+    this.audio.load()
+    // Remove Audio element from DOM
+    this.audio.remove()
+  }
+
   ngOnDestroy() {
-    this._audio.shutAudioDown()
+    // Clear audio player
+    this.shutPlayerDown()
+    // Clear recorder 
+    this._audio.shutRecorderDown()
   }
 }

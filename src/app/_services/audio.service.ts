@@ -46,7 +46,8 @@ export class AudioService {
         this.recorder['on'+event] = listener
     }
 
-    public shutAudioDown() {
+    public shutRecorderDown() {
+        console.log("Shut audio down!")
         if (typeof(this.recorder)!=='undefined') {
             this.recorder.clearStream()
             this.recorder = undefined
