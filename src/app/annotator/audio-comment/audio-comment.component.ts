@@ -7,6 +7,7 @@ import * as Recorder from 'opus-recorder/dist/recorder.min.js'
 // Project Dependencies
 import { EdjiComment } from '../../shared/datatypes'
 import { AudioService, CommentService, MediaService } from '../../_services'
+import { Observable, Subscription } from 'rxjs';
 
 // declare var MediaRecorder: any
 declare var window: any
@@ -67,6 +68,8 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
   public countdownText: string[] = ['Go!', 'Set', 'Ready']
   public countdownInterval: any
 
+  private subscriptions: Subscription[] = []
+
   // We need to know when changes to inactive to clear the editing variable
   @Input() set active(active){
     this.activated = active
@@ -103,6 +106,21 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
     }
     // Render either initial or saved waveform
     this._comments.waveForm(this.waves, this.myCanvas)
+    // Ensure we don't record or play multiple comments at the same time
+    this.subscriptions.push(
+      this._audio.audioInitiated.subscribe(initiatedId => {
+        if (initiatedId != this.comment._id) {
+          // Pause Audio
+          if (this.currentState === playState.playing) {
+            this.pause()
+          }
+          // Pause Recorder
+          if (this.currentState === playState.recording) {
+            this.stopRecord()
+          }
+        }
+      })
+    )
   }
 
   ngAfterViewInit(){
@@ -126,6 +144,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
   }
 
   public startRecording() {
+    this._audio.signalAudioInitiated(this.comment._id)
     // Use shared recorder
     this.recorder = this._audio.recorder
     // When we know we're ready to record, let's prep the audio recorder and start recording audio
@@ -340,6 +359,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
    * Start playback of the audio track
    */
   public play() {
+    this._audio.signalAudioInitiated(this.comment._id)
     // Let analytics know user started playback
     this.angulartics.eventTrack.next({ action: 'audioPlay', properties: { category: 'heroFeature', label: 'success' }})
     this.currentState = playState.playing
@@ -429,5 +449,9 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
     this.shutPlayerDown()
     // Clear recorder 
     this._audio.shutRecorderDown()
+    // Clear Subscriptions
+    this.subscriptions.forEach(sub => {
+      sub.unsubscribe()
+    })
   }
 }

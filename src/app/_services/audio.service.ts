@@ -10,11 +10,16 @@
  */
 import { Injectable } from '@angular/core';
 import * as Recorder from 'opus-recorder/dist/recorder.min.js'
+import { Observable, Subject } from 'rxjs';
 
 @Injectable()
 export class AudioService {
     
     public recorder
+
+    // Indiactes either playback or recording has started
+    public audioInitSubject: Subject<string> = new Subject()
+    public audioInitiated: Observable<any> = this.audioInitSubject.asObservable()
 
     constructor() {}
 
@@ -52,5 +57,9 @@ export class AudioService {
             this.recorder.clearStream()
             this.recorder = undefined
         }
+    }
+
+    public signalAudioInitiated(commentId: string) : void {
+        this.audioInitSubject.next(commentId)
     }
 }
