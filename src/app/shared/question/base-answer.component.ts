@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, EventEmitter } from '@angular/core'
+import { Component, Input, OnInit, EventEmitter, OnDestroy } from '@angular/core'
 import { Subscription } from 'rxjs'
 import { Angulartics2 } from 'angulartics2'
 
@@ -6,7 +6,7 @@ import { Angulartics2 } from 'angulartics2'
 import { EdjiComment, EdjiQuestion, Project, Reading, User } from "../datatypes"
 import { CommentService, AuthService, ProjectService, ReadingService } from "../../_services"
 
-export abstract class BaseAnswerComponent {
+export abstract class BaseAnswerComponent implements OnInit {
 
   /*
     4 Aug 2017
@@ -35,7 +35,7 @@ export abstract class BaseAnswerComponent {
     private _angulartics: Angulartics2
   ) {
     this.user = this._auth.getUser()
-  } // constructor
+  }
 
   ngOnInit () {
 
@@ -44,9 +44,11 @@ export abstract class BaseAnswerComponent {
   // Ask ProjectService to tell the server to save this comment.
   public saveAnswer(newAnswer : EdjiComment) : void {
     newAnswer.new = true
-
+    
     newAnswer.user_id = this.user._id
-    newAnswer.author = this.user.fullname
+    if (!newAnswer.author) {
+      newAnswer.author = this.user.fullname
+    }
 
     // Please make sure the questionId is added to the answer as a reference.. this will error out otherwise
     newAnswer.questionId = this.baseQuestionReference._id // Be careful. This line literally breaks the entire thing without errors sometimes. 8.8.17
@@ -62,19 +64,16 @@ export abstract class BaseAnswerComponent {
       this._projects.saveAnswer(answer)
 
       this._angulartics.eventTrack.next({ action: newAnswer.type + 'AnswerCreate', properties: { category: 'heroFeature', label: 'success' }})
-    
-      // setTimeout(() => {
-      // }, 100)
     })
     .catch(error => {
       // TRACK EXCEPTION
       this._angulartics.eventTrack.next({ action: newAnswer.type + 'AnswerCreate', properties: { category: 'heroFeature', label: 'failure' }})
-      console.log(error)
+      console.error(error)
     })
-  } // public saveAnswer (answer : EdjiComment) : void
+  }
 
   public activeEmojiKeyboardReply(comment: EdjiComment): void {
     this._comments.activeComment = comment
     this._comments.setEmojiKeyboardActive(this.user)
-  } // public activeEmojiKeyboardReply(activeReply: any): void
-} // class
+  }
+}
