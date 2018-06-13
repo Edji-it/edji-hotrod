@@ -36,6 +36,9 @@
     -o-transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
     -webkit-transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    
+    white-space: nowrap;
+    overflow: hidden;
 
     &:hover {
         .audio-btn-wrap.fade-out {
@@ -45,6 +48,7 @@
 }
 
 button {
+    float: left;
     vertical-align: inherit;
     margin: 0px -1px;
 }
@@ -70,5 +74,20 @@ button {
 }
 
 .wave-wrap {
-    float: left;
+    display: inline-block;
+    width: 100%;
+
+    $wavePadOffset: 3px;
+
+    button + & {
+        width: calc(100% - #{ 23px - $wavePadOffset });
+    }
+
+    button + button + & {
+        width: calc(100% - #{ 23px*2 - $wavePadOffset });
+    }
+
+    button + button + button + & {
+        width: calc(100% - #{ 23px*3 - $wavePadOffset });
+    }
 }

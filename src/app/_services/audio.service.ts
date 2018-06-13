@@ -29,7 +29,7 @@ export class AudioService {
                 // Chrome does NOT like 'x-wav' mime type
                 type: 'audio/wav',
                 // Safari only plays well with the waveWorker
-                encoderPath: '/assets/js/waveWorker.min.js',
+                encoderPath: '/assets/js/waveWorker-1.4.1.min.js',
                 // We process chunks of data as we go (see: dataAvailable event)
                 streamPages: true
             })

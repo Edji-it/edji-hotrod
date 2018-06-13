@@ -51,27 +51,6 @@ export class FirecardComponent implements OnInit, OnDestroy {
       )
     )
 
-    // Subscribe to comment comment updates
-    this.subscriptions.push(
-      this._socket.commentUpdates.subscribe((commentUpdate) => {
-        let comment = commentUpdate.comment
-        
-        // Process different live comment updates
-        if (commentUpdate.action === 'DELETE') {
-          
-        } else if (commentUpdate.action === 'UPDATE') {
-          if (comment.type=='audio' && comment.url && comment.url.length > 0) {
-            this.buildAudioView()
-          }
-        } else if (commentUpdate.action === 'CREATE') {
-          
-        }
-      }, (error) => {
-        console.warn(error)
-      })
-    )
-
-
     this.subscriptions.push(
       this._projects.lastWordUpdateState.subscribe(
           (lastWord) => {
@@ -103,7 +82,8 @@ export class FirecardComponent implements OnInit, OnDestroy {
       if (this.myCanvas) {
         this.audio = new Audio()
         this.audio.src = this.fireComment.url
-        this.audio.load()
+        // Do not load audio until played
+        // this.audio.load()
         this.playAble = true
         // Build the waveform
         this._comments.waveForm(this.fireComment.dataArray, this.myCanvas)
@@ -164,6 +144,8 @@ export class FirecardComponent implements OnInit, OnDestroy {
    * Start playback of the audio track
    */
   private play() {
+    // Load player
+    this.audio.load()
     this.isPlaying = true
     // this.pStartAt = new Date()
     this.audio.play()
