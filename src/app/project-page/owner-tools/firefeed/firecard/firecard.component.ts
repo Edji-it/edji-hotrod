@@ -51,27 +51,6 @@ export class FirecardComponent implements OnInit, OnDestroy {
       )
     )
 
-    // Subscribe to comment comment updates
-    this.subscriptions.push(
-      this._socket.commentUpdates.subscribe((commentUpdate) => {
-        let comment = commentUpdate.comment
-        
-        // Process different live comment updates
-        if (commentUpdate.action === 'DELETE') {
-          
-        } else if (commentUpdate.action === 'UPDATE') {
-          if (comment.type=='audio' && comment.url && comment.url.length > 0) {
-            this.buildAudioView()
-          }
-        } else if (commentUpdate.action === 'CREATE') {
-          
-        }
-      }, (error) => {
-        console.warn(error)
-      })
-    )
-
-
     this.subscriptions.push(
       this._projects.lastWordUpdateState.subscribe(
           (lastWord) => {
