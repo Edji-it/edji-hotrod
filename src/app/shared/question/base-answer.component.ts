@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, EventEmitter, OnDestroy } from '@angular/core'
+import { Component, Input, OnInit, EventEmitter } from '@angular/core'
 import { Subscription } from 'rxjs'
 import { Angulartics2 } from 'angulartics2'
 
