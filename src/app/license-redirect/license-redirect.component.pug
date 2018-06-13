@@ -3,18 +3,26 @@ nav-bar([hideAccountOptions]="true", [pageTitle]="'Join Your Academy'")
 .alert.alert-danger(*ngIf="messages.serverError") There was an error while fetching the user information. Please try again or contact Edji Support.
 .alert.alert-danger(*ngIf="messages.invalidLicense") Sorry! Looks like that might not be a valid license. Please contact your administrator, or contact Edji Support.
 
-.container-fluid.mt-5
-  .row
-    .col-10
-      h1(*ngIf="login") Login
-      h1(*ngIf="!login") Register
-    .col-2
-      button.float-right.btn.btn-primary(*ngIf="login", (click)="login=false") Register
-      button.float-right.btn.btn-primary(*ngIf="!login", (click)="login=true") Login
-
-.container-fluid.mt-5
-  .row
-    .col-12
-      hot-login-form(*ngIf="login")
-    .col-12
-      hot-register-form(*ngIf="!login")
+.container-fluid
+  .row.navy-gradient.has-sparks
+    .sparks
+    .col-sm-2
+    .col-sm-8.col-pad.on-dark
+      .mt-5
+        .row
+          .col-10
+            h1.on-dark(*ngIf="login") Login
+            h1.on-dark(*ngIf="!login") Register
+          .col-2
+            button.float-right.btn.btn-primary(*ngIf="login", (click)="login=false") Register
+            button.float-right.btn.btn-primary(*ngIf="!login", (click)="login=true") Login
+      .mt-5
+        .row
+          .col-12(*ngIf="login")
+            .button__row
+              hot-google-button([copy]="'Sign In with Google'")
+            hr
+            p.text-divider(style="background:#133d64;") or
+            hot-login-form((loginSuccess)="processLicense()")
+          .col-12(*ngIf="!login")
+            hot-register-form((registerSuccess)="processLicense()", [licenseToProcess]="true")

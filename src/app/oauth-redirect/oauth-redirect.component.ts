@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, Input, Output } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
 import { take } from 'rxjs/operators'
 
 // Project Dependencies
-import { AuthService } from './../_services'
+import { AuthService, LockerService } from './../_services'
 
 @Component({
   selector: 'hot-oauth-redirect',
@@ -11,6 +11,8 @@ import { AuthService } from './../_services'
 })
 
 export class OAuthComponent implements OnInit {
+
+  @Input() landingPage: boolean
 
   public messages: {
     noToken?: boolean,
@@ -23,6 +25,7 @@ export class OAuthComponent implements OnInit {
   constructor(
     private _auth: AuthService,
     private _router: Router,
+    private _locker: LockerService,
     private route: ActivatedRoute
   ) { }
 
@@ -46,6 +49,15 @@ export class OAuthComponent implements OnInit {
     this._auth.getUserWithAuthToken(type, token).pipe(take(1)).subscribe((res) => {
       this._auth.setUser(res.user)
       this._auth.setToken(res.token)
+      // if we are coming here from a landing page like the license accept, then the success case should take us back to that landing page again
+      if (this.landingPage) {
+        if (this._locker.has('licenseId')) {
+          let licenseId = this._locker.get('licenseId')
+          this._locker.remove('licenseId')
+          this._router.navigate(['/license/accept/' + licenseId])
+          return
+        }
+      }
       this._router.navigate(['/dashboard'])
     }, (err) => {
       console.error(err)
