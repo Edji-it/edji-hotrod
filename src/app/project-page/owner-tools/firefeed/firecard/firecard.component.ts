@@ -103,7 +103,8 @@ export class FirecardComponent implements OnInit, OnDestroy {
       if (this.myCanvas) {
         this.audio = new Audio()
         this.audio.src = this.fireComment.url
-        this.audio.load()
+        // Do not load audio until played
+        // this.audio.load()
         this.playAble = true
         // Build the waveform
         this._comments.waveForm(this.fireComment.dataArray, this.myCanvas)
@@ -164,6 +165,8 @@ export class FirecardComponent implements OnInit, OnDestroy {
    * Start playback of the audio track
    */
   private play() {
+    // Load player
+    this.audio.load()
     this.isPlaying = true
     // this.pStartAt = new Date()
     this.audio.play()
