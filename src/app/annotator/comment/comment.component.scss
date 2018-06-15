@@ -163,7 +163,7 @@ $mobileBoundVPad: 40px;
     &.active {
       // padding-right: 25px;
       &.new {
-        padding-left: 12px;
+        // padding-left: 12px;
       }
     }
   }
@@ -236,8 +236,8 @@ $mobileBoundVPad: 40px;
   height: 25px;
   width: 25px;
   top: 18px;
-  position: relative;
-  float: right;
+  right: -4px;
+  position: absolute;
   text-align: right;
   z-index: 5501;
   padding-left: 5px;
@@ -249,7 +249,7 @@ $mobileBoundVPad: 40px;
   position: relative;
   top: -12px;
   font-size: 14px;
-  left: 16px;
+  left: 6px;
 }
 
 .comment-new-highlight__mobile {

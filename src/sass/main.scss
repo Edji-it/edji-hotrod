@@ -77,6 +77,14 @@ $seamlessPlaceholderColor: #cdcdcd;
 .popover {
 	box-shadow: 0px 2px 20px 0px rgba(0,0,0,0.2);
 	border: 0px solid transparent;
+
+	&.fade {
+		pointer-events: none;
+		
+		&.show {
+			pointer-events: all;
+		}
+	}
 }
 
 .popover-content {

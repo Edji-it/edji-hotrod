@@ -39,11 +39,11 @@ export class OpenEndedAnswersComponent extends BaseAnswerComponent {
     private comments : CommentService,
     private angulartics: Angulartics2) {
     super(projects, readings, auth, comments, angulartics)
-  } // constructor
+  }
 
   ngOnInit() {
 
-  } // ngOnInit
+  }
 
   // Tell the server we've got ourselves a new answer, aka a new EdjiComment
   public outputAnswer (type: string) : void {
@@ -51,14 +51,15 @@ export class OpenEndedAnswersComponent extends BaseAnswerComponent {
     // Make the comment to provide as the answer.
     var newResponse = <EdjiComment> {
       data: '',
-      type: type
-    } // var newResponse = <EdjiComment>
+      type: type,
+      author: this.auth.getUser().fullname ? this.auth.getUser().fullname : this.auth.getUser().username
+    }
 
     if (type=='emoji') {
       this.activeEmojiKeyboardReply(newResponse)
-    } // if
+    }
 
     // Ask the base class to send the comment to the server.
     this.saveAnswer(newResponse);
-  } // public createAnswer (type: string) : void
-} // class
+  }
+}

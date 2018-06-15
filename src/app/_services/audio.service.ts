@@ -10,11 +10,16 @@
  */
 import { Injectable } from '@angular/core';
 import * as Recorder from 'opus-recorder/dist/recorder.min.js'
+import { Observable, Subject } from 'rxjs';
 
 @Injectable()
 export class AudioService {
     
     public recorder
+
+    // Indiactes either playback or recording has started
+    public audioInitSubject: Subject<string> = new Subject()
+    public audioInitiated: Observable<any> = this.audioInitSubject.asObservable()
 
     constructor() {}
 
@@ -24,7 +29,7 @@ export class AudioService {
                 // Chrome does NOT like 'x-wav' mime type
                 type: 'audio/wav',
                 // Safari only plays well with the waveWorker
-                encoderPath: '/assets/js/waveWorker.min.js',
+                encoderPath: '/assets/js/waveWorker-1.4.1.min.js',
                 // We process chunks of data as we go (see: dataAvailable event)
                 streamPages: true
             })
@@ -46,10 +51,15 @@ export class AudioService {
         this.recorder['on'+event] = listener
     }
 
-    public shutAudioDown() {
+    public shutRecorderDown() {
+        console.log("Shut audio down!")
         if (typeof(this.recorder)!=='undefined') {
             this.recorder.clearStream()
             this.recorder = undefined
         }
+    }
+
+    public signalAudioInitiated(commentId: string) : void {
+        this.audioInitSubject.next(commentId)
     }
 }

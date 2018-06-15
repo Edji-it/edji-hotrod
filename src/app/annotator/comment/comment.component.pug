@@ -74,11 +74,6 @@
 //- Comments that are displayed in the comment pane
 hr.mobileBlock-hr(*ngIf="commentMobile && !commentMobileFirst")
 div(*ngIf="commentPaneActive", [class.selected--block]="comment.selected")
-    .comment-action--save.comment-action--save__mobile.comment-action--save__mobile-btn(
-        *ngIf="comment.active && !readOnly",
-        (tap)="deactivate(comment)",
-        [innerHtml]="':white_check_mark:' | emojione"
-    )
     .comment-new-highlight__mobile(*ngIf="comment && comment.active  && comment.new")
         .comment-new-dot__mobile
         p.comment-new-text__mobile new
@@ -91,6 +86,11 @@ div(*ngIf="commentPaneActive", [class.selected--block]="comment.selected")
         [class.readonly]="readOnly",
         [ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '' ]"
     )
+        .comment-action--save.comment-action--save__mobile.comment-action--save__mobile-btn(
+            *ngIf="comment.active && !readOnly",
+            (tap)="deactivate(comment)",
+            [innerHtml]="':white_check_mark:' | emojione"
+        )
         i.icon.icon-draft.icon-draft__comment(*ngIf="!comment.new && ((!comment.data || comment.data=='') && (!comment.url || comment.url == ''))")
         .user-icon([class.selected]="comment.selected", [ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '' ]")
             span.user-icon__initials {{comment.author.substring(0,2)}}

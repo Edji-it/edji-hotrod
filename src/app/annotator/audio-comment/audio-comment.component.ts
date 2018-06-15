@@ -7,6 +7,7 @@ import * as Recorder from 'opus-recorder/dist/recorder.min.js'
 // Project Dependencies
 import { EdjiComment } from '../../shared/datatypes'
 import { AudioService, CommentService, MediaService } from '../../_services'
+import { Observable, Subscription } from 'rxjs';
 
 // declare var MediaRecorder: any
 declare var window: any
@@ -24,7 +25,7 @@ enum playState {
   templateUrl: './audio-comment.component.pug',
   styleUrls: ['./audio-comment.component.scss']
 })
-export class AudioCommentComponent implements OnInit, AfterViewInit{
+export class AudioCommentComponent implements OnInit {
   @Input() public comment: EdjiComment
   @Input() public userPermission: number
   @Input() public reply: boolean = false
@@ -35,8 +36,6 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
 
   public confirmClear: boolean = false
   public playTime: number = 0
-  public playWidth: number = 100
-  public playWidthOffset: number = 60
   public playheadPos: number
   public myCanvas
   public chunks: any = []
@@ -62,10 +61,21 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
   private MAX_SECONDS: number = 30
 
   public isInitialized: boolean = false
-  public countdown: boolean = false
-  public countdownI: number = 3
-  public countdownText: string[] = ['Go!', 'Set', 'Ready']
+  public countdownI: number = -3
+  public countdownText: any = { 
+    '-3':null,
+    '-2':'Ready',
+    '-1':'Set',  
+    0:'Go!', 
+    25:'5 Seconds Left', 
+    26:'4 Seconds Left', 
+    27:'3 Seconds Left', 
+    28:'2 Seconds Left', 
+    29:'1 Second Left'
+  }
   public countdownInterval: any
+
+  private subscriptions: Subscription[] = []
 
   // We need to know when changes to inactive to clear the editing variable
   @Input() set active(active){
@@ -103,12 +113,23 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
     }
     // Render either initial or saved waveform
     this._comments.waveForm(this.waves, this.myCanvas)
+    // Ensure we don't record or play multiple comments at the same time
+    this.subscriptions.push(
+      this._audio.audioInitiated.subscribe(initiatedId => {
+        if (initiatedId != this.comment._id) {
+          // Pause Audio
+          if (this.currentState === playState.playing) {
+            this.pause()
+          }
+          // Pause Recorder
+          if (this.currentState === playState.recording) {
+            this.stopRecord()
+          }
+        }
+      })
+    )
   }
 
-  ngAfterViewInit(){
-    setTimeout(_=> this.setPlayWidth())
-  }
-  
   public verifyAudio() {
     // Verify the user has accepted access to the microphone
     if (typeof(this._audio.recorder)==='undefined') {
@@ -126,23 +147,24 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
   }
 
   public startRecording() {
+    this._audio.signalAudioInitiated(this.comment._id)
     // Use shared recorder
     this.recorder = this._audio.recorder
     // When we know we're ready to record, let's prep the audio recorder and start recording audio
     this.initializeAudio()
 
-    this.countdown = true
+    this.countdownI = -2
     this.countdownInterval = setInterval(()=> {
-      this.countdownI--
+      this.countdownI++
     }, 800)
     setTimeout(() => {
       clearInterval(this.countdownInterval)
       this.countdownInterval = ''
-      this.countdownI = 2
-      this.countdown = false
+      // Hide Countdown
+      this.countdownI = 0
       this.rStartAt = new Date()
       this.recorder.start()
-    }, 3000)
+    }, 2000)
   }
 
   public initializeAudio() {
@@ -166,7 +188,14 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
       this.rInterval = setInterval(()=> {
         // While recording, update playTime value
         this.playTime += 0.5
+        this.countdownI = Math.floor(this.playTime)
         this.setPlayhead()
+
+        if (this.playTime >= this.MAX_SECONDS) {
+          // Hide Countdown
+          this.countdownI = -3
+          this.stopRecord()
+        }
       }, this.INTERVAL_GAP)
     })
 
@@ -176,8 +205,6 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
       this._audio.addRecorderListener('stop', () => {
         // Player begins uploading recording on stop
         this.currentState = playState.loading
-        // Clear duration loop
-        clearInterval(this.rInterval)
 
         // Set the audio for playback via the blob object from the stored chunks
         const blob = new Blob(this.chunks, { 'type': 'audio/wav; codecs="wav"' })
@@ -241,11 +268,9 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
 
   private loadAudioPlayer(url: string) {
     // Fresh audio object
-    this.audio = new Audio()
+    this.audio = new Audio(url)
     this.isInitialized = true
     this.audio.preload = 'none'
-    this.audio.src = url
-    this.audio.load()
 
     this.audio.onplay = e => {
       this.currentState = playState.playing
@@ -259,8 +284,12 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
     this.audio.onended = e => {
       this.currentState = playState.inactive
       this.playTime = 0
+      this.playheadPos = 0
       clearInterval(this.pInterval)
     }
+
+    // load() should run after all settings are configured
+    this.audio.load()
   }
 
   /**
@@ -314,10 +343,13 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
    */
   public stopRecord() {
     this.currentState = playState.inactive
+    // Clear time keeping interval and countdown
     clearInterval(this.rInterval)
+    this.countdownI = -3
     // Clone playTime value
     this.rDuration = this.playTime + 0
     this.playTime = 0
+    this.playheadPos = 0
     this.recorder.stop()
   }
 
@@ -337,6 +369,7 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
    * Start playback of the audio track
    */
   public play() {
+    this._audio.signalAudioInitiated(this.comment._id)
     // Let analytics know user started playback
     this.angulartics.eventTrack.next({ action: 'audioPlay', properties: { category: 'heroFeature', label: 'success' }})
     this.currentState = playState.playing
@@ -345,9 +378,9 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
 
   public setPlayhead() {
     if (this.currentState == playState.recording) {
-      this.playheadPos =  Math.round((this.playTime / this.MAX_SECONDS) * this.playWidth)
+      this.playheadPos =  Math.round(this.playTime / this.MAX_SECONDS * 100)
     } else {
-      this.playheadPos =  Math.round((this.audio.currentTime / this.MAX_SECONDS) * this.playWidth)
+      this.playheadPos =  Math.round(this.audio.currentTime / this.MAX_SECONDS * 100)
     }
   }
   
@@ -364,37 +397,18 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
     this.audio.play()
   }
 
-  public setPlaybackTime(event) {
-    let percentLeftClicked = event.offsetX/this.playWidth
-    if (this.audio) {
-      this.audio.currentTime = this.MAX_SECONDS * percentLeftClicked
-    }
-  }
-
-  private getPlayhead_exp() : number {
-    if (this.audio) {
-      return Math.round((this.audio.currentTime / 30) * this.playWidth)
-    } else {
-      return 0
-    }
-  }
-
-  private setPlayWidth() {
-    let totalWidth = this.el.nativeElement.getBoundingClientRect().width
-    let btnWidth = this.el.nativeElement.querySelector('.audio-btn-wrap').getBoundingClientRect().width
-    this.playWidth = totalWidth - btnWidth - 2 // 2 pixels to account for borders
-    this.playWidthOffset = btnWidth
-  }
-
-  public getCalcWidth() {
-    return this.sanitizer.bypassSecurityTrustStyle('calc(100% - ' + this.playWidthOffset + 'px)')
-  }
+  // public setPlaybackTime(event) {
+  //   let percentLeftClicked = event.offsetX/this.playWidth
+  //   if (this.audio) {
+  //     this.audio.currentTime = this.MAX_SECONDS * percentLeftClicked
+  //   }
+  // }
 
   /**
    * Play state convenience functions
    */
   isPlayable(): boolean {
-    return this.currentState == playState.playing || this.currentState == playState.inactive
+    return this.audio && this.audio.src && (this.currentState == playState.playing || this.currentState == playState.inactive)
   }
   isInactive(): boolean {
     return this.currentState == playState.inactive
@@ -409,7 +423,26 @@ export class AudioCommentComponent implements OnInit, AfterViewInit{
     return this.currentState == playState.loading
   }
 
+  shutPlayerDown() : void {
+    // Stop stream if playing
+    // - Also seems to resolve a bug that causes choppy audio while recording
+    this.audio.pause()
+    // Clear source
+    this.audio.src = ""
+    // Unload media
+    this.audio.load()
+    // Remove Audio element from DOM
+    this.audio.remove()
+  }
+
   ngOnDestroy() {
-    this._audio.shutAudioDown()
+    // Clear audio player
+    this.shutPlayerDown()
+    // Clear recorder 
+    this._audio.shutRecorderDown()
+    // Clear Subscriptions
+    this.subscriptions.forEach(sub => {
+      sub.unsubscribe()
+    })
   }
 }
