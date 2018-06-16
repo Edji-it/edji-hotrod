@@ -8,7 +8,8 @@ import {
     ProjectService, 
     ReadingService, 
     SocketService, 
-    AudioService 
+    AudioService, 
+    AcademyService
 } from '../_services';
 import { Project, Reading, User } from './../shared/datatypes';
 
@@ -44,6 +45,7 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
     public showLoginModal: boolean = false
     
     constructor(
+        private _academy: AcademyService,
         private _router: Router,
         private _projects: ProjectService,
         private _socket: SocketService,
@@ -94,6 +96,9 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
                         this._readings.setReadingObj(this.project.reading_id)
 
                         this._title.setTitle( 'Edji | ' + this.reading.title )
+
+
+                        this._academy.initReadingTimer(this.user, this.project)
                     }
                     // Manually Get Reading once we know this Project's reading ID
                     // else if (this.reading._id != this.project.reading_id) {
@@ -123,5 +128,6 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
         this.subscriptions.forEach((sub) => { sub.unsubscribe() })
         // End socket connections
         this._socket.leaveRoom()
+        this._academy.stopReadingTimer()
     }
 }
