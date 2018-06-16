@@ -29,7 +29,7 @@ export const ROUTES: Routes = [
   { path: 'discover', component: DiscoverFeedComponent, canActivate: [AuthService] },
   { path: 'project/:id',  component: ProjectPageComponent },
   { path: 'license/accept/:license_id', component: LicenseRedirectComponent, pathMatch: 'full' },
-  { path: 'license/welcome', component: LicenseWelcomeComponent, canActivate: [AuthService], pathMatch: 'full' },
+  { path: 'license/welcome/:institution_id', component: LicenseWelcomeComponent, canActivate: [AuthService], pathMatch: 'full' },
   { path: 'new-reading', component: NewReadingPage, canActivate: [AuthService] },
   { path: 'new-reading/:id', component: NewReadingPage, canActivate: [AuthService] },
   { path: 'reset-password', component: ResetPassPage },

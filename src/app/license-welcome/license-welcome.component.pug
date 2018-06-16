@@ -11,7 +11,9 @@ nav-bar([showDashboardOptions]="true")
         h1.center.on-dark Welcome to Hero Academy
     .col-6
         h2 Congratulations!
-        p You have joined the #ACADEMY NAME# league of Heroes. As a member of this elite team, you have access to all of the Edji Hero powers.
+        p You have joined the 
+          b {{institution ? institution.name : ''}} 
+          | league of Heroes. As a member of this elite team, you have access to all of the Edji Hero powers.
         p Give some of your new powers a try:
         p
           b([innerHtml]="':question: Insert Questions' | emojione")

@@ -32,6 +32,20 @@ export class AcademyService {
   }
 
   /**
+   * Gets the name for the institution
+   * @param institutionId _id of the institution to get
+   */
+  public getInstitution(institutionId: string): Observable<GetInsitutionResponse> {
+    return this._http.get<GetInsitutionResponse>(this._auth.getUrl() + '/api/v1/institutions/' + institutionId,
+    {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': this._auth.getToken()
+      })
+    })
+  }
+
+  /**
    * Send an event to Pipo - our server for logging data!
    * @param event event data, follow this schema:
    */
@@ -83,4 +97,15 @@ export class AcademyService {
  */
 interface AcceptLicenseResponse {
   user?: User
+}
+
+/**
+ * 
+ */
+interface GetInsitutionResponse {
+  institution: {
+    _id: string
+    name: string
+    abbreviation: string
+  }
 }

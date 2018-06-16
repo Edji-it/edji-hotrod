@@ -84,8 +84,10 @@ export class LicenseRedirectComponent implements OnInit, OnDestroy {
       // update the user across the app with the new license ID and hero status update
       this._auth.refreshUser().pipe(take(1)).subscribe((updatedUser: any) => {
         if (updatedUser.license_ids.includes(this.licenseId) && (updatedUser.hero && updatedUser.hero.active)) {
+          let index = updatedUser.institution_ids.length - 1
+          let institutionId = updatedUser.institution_ids[index]
           // once we update the user to add a license and make them a hero, let's redirect them to the dashboard
-          this._router.navigate(['/license/welcome'])
+          this._router.navigate(['/license/welcome/' + institutionId])
         } else {
           // error handling if the license was not processed on their account
           this.messages.licenseProcessError = true
