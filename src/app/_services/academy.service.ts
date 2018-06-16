@@ -16,6 +16,10 @@ export class AcademyService {
     private _auth: AuthService
   ) { }
 
+  /**
+   * Accepts a license that is shared with the user
+   * @param licenseId _id of the license to accept
+   */
   public acceptLicense(licenseId: string): Observable<AcceptLicenseResponse> {
     return this._http.put<AcceptLicenseResponse>(this._auth.getUrl() + '/api/v1/licenses/' + licenseId + '/accept',
     {},

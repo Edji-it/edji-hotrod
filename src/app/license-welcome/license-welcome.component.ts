@@ -10,6 +10,7 @@ export class LicenseWelcomeComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    
   }
 
 }

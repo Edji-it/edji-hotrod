@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
 import { take } from 'rxjs/operators'
 
@@ -12,8 +12,6 @@ import { AuthService, LockerService } from './../_services'
 
 export class OAuthComponent implements OnInit {
 
-  @Input() landingPage: boolean
-
   public messages: {
     noToken?: boolean,
     noUser?: boolean,
@@ -21,6 +19,8 @@ export class OAuthComponent implements OnInit {
     serverError?: boolean,
     duplicate_user?: boolean
   } = {}
+
+  private licenseId = ''
 
   constructor(
     private _auth: AuthService,
@@ -44,19 +44,21 @@ export class OAuthComponent implements OnInit {
       return this.messages.noToken = true
     }
 
+    // if we have a license to process
+    if (this._locker.has('licenseId')) {
+      this.licenseId = this._locker.get('licenseId')
+      this._locker.remove('licenseId')
+    }
+
     const token = decodeURIComponent(encodedToken)
 
     this._auth.getUserWithAuthToken(type, token).pipe(take(1)).subscribe((res) => {
       this._auth.setUser(res.user)
       this._auth.setToken(res.token)
       // if we are coming here from a landing page like the license accept, then the success case should take us back to that landing page again
-      if (this.landingPage) {
-        if (this._locker.has('licenseId')) {
-          let licenseId = this._locker.get('licenseId')
-          this._locker.remove('licenseId')
-          this._router.navigate(['/license/accept/' + licenseId])
-          return
-        }
+      if (this.licenseId!=='' && this.licenseId.length>0) {
+        this._router.navigate(['/license/accept/' + this.licenseId])
+        return
       }
       this._router.navigate(['/dashboard'])
     }, (err) => {
