@@ -159,7 +159,7 @@ describe('Referral Sharing and Rewards', () => {
             dashboard.openNewReading();
             // Enter sample Reading into form
             newReading.titleInput.sendKeys(newReading.titleString);
-            // Make private to avoid needing grade levels and subjecst
+            // Make private to avoid needing grade levels and subject
             newReading.privateButton.click();
             newReading.contentInput.sendKeys(newReading.contentShortString);
             newReading.sourceInput.sendKeys(newReading.sourceString);

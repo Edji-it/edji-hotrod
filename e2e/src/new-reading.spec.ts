@@ -1,5 +1,4 @@
 import * as path from 'path';
-import { SideBarComponent } from '../../app/shared/side-bar';
 import { browser, by, element, protractor} from 'protractor';
 import { NewReading, Login, Sidebar, Dashboard } from './page-objects';
 
