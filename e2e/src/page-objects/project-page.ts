@@ -137,11 +137,11 @@ export class Project implements PageObjectInterface {
         this.addAudioBtn.isDisplayed().then((result) => {
           if (result) {
             // Desktop clicking of the add emoji comment button
-            browser.wait(this.EC.elementToBeClickable(this.addAudioBtn), 5000, "never found the add emoji comment button");
+            browser.wait(this.EC.elementToBeClickable(this.addAudioBtn), 5000, "never found the add audio comment button");
             this.addAudioBtn.click();
           } else {
-            // Mobile clicking of the add emoji comment button
-            browser.wait(this.EC.elementToBeClickable(this.addAudioBtnMobile), 5000, "never found the add emoji comment button");
+            // Mobile clicking of the add audio comment button
+            browser.wait(this.EC.elementToBeClickable(this.addAudioBtnMobile), 5000, "never found the add audio comment button");
             this.addAudioBtnMobile.click();
           }
         });

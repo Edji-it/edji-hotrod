@@ -38,6 +38,8 @@ export class Home implements PageObjectInterface
     // Entering the project code from the home page
     enterProjectCodeFromHome(input: string) : void
     {
+        // Ensure page has loaded
+        browser.wait(this.projectCodeInputNav.isPresent, 5000, "Project Code input was not present in Nav")
         // This line actually *breaks* being able to find the input
         // browser.get('#projectCodeInput');
         this.projectCodeInputNav.isPresent().then((result) => {
