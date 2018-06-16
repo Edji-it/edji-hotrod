@@ -36,7 +36,8 @@
                   "with": "src/environments/environment.test.ts"
                 }
               ],
-              "aot": true
+              "aot": true,
+              "progress": false
             },
             "production": {
               "fileReplacements": [
