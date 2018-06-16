@@ -22,6 +22,8 @@ export class Home implements PageObjectInterface
     public footerTwitterLink = element(by.id("footerTwitterLink"));
     public footerSupportLink = element(by.id("footerSupportLink"));
     public footerTermsLink = element(by.id("footerTermsLink"));
+    
+    private EC = protractor.ExpectedConditions
 
     // get the home page
     getPage() : void 
@@ -39,7 +41,7 @@ export class Home implements PageObjectInterface
     enterProjectCodeFromHome(input: string) : void
     {
         // Ensure page has loaded
-        browser.wait(this.projectCodeInputNav.isPresent, 5000, "Project Code input was not present in Nav")
+        browser.wait(this.EC.elementToBeClickable(this.projectCodeInputNav), 5000, "Project Code input was not present in Nav")
         // This line actually *breaks* being able to find the input
         // browser.get('#projectCodeInput');
         this.projectCodeInputNav.isPresent().then((result) => {
