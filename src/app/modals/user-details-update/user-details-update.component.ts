@@ -92,7 +92,7 @@ export class UserDetailsUpdateModal implements OnInit {
             user_id: res.user._id,
             teacher: true,
             hero: res.user.hero_status || false,
-            institution_id: res.institution_ids || []
+            institution_id: res.user.institution_ids || []
           })
         }
         
