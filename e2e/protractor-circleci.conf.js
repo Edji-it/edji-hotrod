@@ -21,7 +21,7 @@ localConf['capabilities']['chromeOptions']['args'] = [
 ];
 
 // Use 3 instances on CircleCI
-localConf['capabilities']['maxInstances'] = 3;
+localConf['capabilities']['maxInstances'] = 1;
 
 // Set the value of exports.config based on
 exports.config = localConf;
