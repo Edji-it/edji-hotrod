@@ -63,7 +63,7 @@ exports.config = {
     showTiming: true,
     showColors: true,
     isVerbose: false,
-    includeStackTrace: true,
+    includeStackTrace: false, // Reporting is better handled by our SpecReporter below
     // A longer default timeout makes our test suite unusable
     defaultTimeoutInterval: 50000,
     print: () => {} // take out the dot logging when tests are run
