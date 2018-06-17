@@ -63,7 +63,7 @@ $largeAvatarSize: 50px;
   }
   &__overflow {
     content: '';
-    color: #cdcdcd;
+    color: #cdcdcd !important;
   }
   // Classes for the comment avatars with tooltips:
   & .tooltipbody {

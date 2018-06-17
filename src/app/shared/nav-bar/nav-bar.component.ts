@@ -251,10 +251,20 @@ export class NavBarComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Open Guides in New Tab
+   * Open Edji Guide
    */
   private openGuides(): void {
+    this.showAvatarDropdown = false
+    // Open Guides in new tab
     window.open('http://guide.edji.it', '_blank')
+  }
+
+  /**
+   * Open Account page
+   */
+  private openAccount(): void {
+    this.showAvatarDropdown = false
+    this._router.navigate(['/account'])
   }
 
   /**
@@ -262,13 +272,15 @@ export class NavBarComponent implements OnInit, OnDestroy {
    * - Requires "edji-feedback" component to exist on route
    */
   private openFeedback(): void {
+    this.showAvatarDropdown = false
     this._util.showFeedbackModal=true
   }
 
   /**
-   * 
+   * Open Referral Modal
    */
   private openReferralModal(): void {
+    this.showAvatarDropdown = false
     // Open the modal
     this.showReferralModal=true
     // Track when this button is clicked on in angulartics

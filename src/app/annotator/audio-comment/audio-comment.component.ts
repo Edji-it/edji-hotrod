@@ -424,15 +424,17 @@ export class AudioCommentComponent implements OnInit {
   }
 
   shutPlayerDown() : void {
-    // Stop stream if playing
-    // - Also seems to resolve a bug that causes choppy audio while recording
-    this.audio.pause()
-    // Clear source
-    this.audio.src = ""
-    // Unload media
-    this.audio.load()
-    // Remove Audio element from DOM
-    this.audio.remove()
+    if (this.audio && this.audio.pause) {
+      // Stop stream if playing
+      // - Also seems to resolve a bug that causes choppy audio while recording
+      this.audio.pause()
+      // Clear source
+      this.audio.src = ""
+      // Unload media
+      this.audio.load()
+      // Remove Audio element from DOM
+      this.audio.remove()
+    }
   }
 
   ngOnDestroy() {
