@@ -20,7 +20,7 @@ localConf['capabilities']['chromeOptions']['args'] = [
   '--no-sandbox'
 ];
 
-// Use 3 isntances on CircleCI
+// Use 3 instances on CircleCI
 localConf['capabilities']['maxInstances'] = 3;
 
 // Set the value of exports.config based on
