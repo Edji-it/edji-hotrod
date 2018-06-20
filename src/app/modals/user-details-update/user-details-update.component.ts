@@ -4,7 +4,7 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { take } from 'rxjs/operators'
 
 import { User } from './../../shared/datatypes'
-import { AuthService, BumblebeeService } from './../../_services'
+import { AuthService, BumblebeeService, AcademyService } from './../../_services'
 
 @Component({
   selector: 'hot-user-details-update',
@@ -36,6 +36,7 @@ export class UserDetailsUpdateModal implements OnInit {
   } = {}
 
   constructor(
+    private _academy: AcademyService,
     private _auth: AuthService,
     private _bumble: BumblebeeService,
     _fb: FormBuilder
@@ -73,9 +74,9 @@ export class UserDetailsUpdateModal implements OnInit {
         this.messages.success = true
         // Close the modal
         this.closeModal.emit()
-        if (this._auth.getEnv() === "prod") { 
-          // If we have a teacher, send it to Mailchimp and Bumblebee/Slack
-          if(res.user.identities && res.user.identities.indexOf('teacher') > -1 || res.user.identities.indexOf('administrator') > -1) {
+        // If we have a teacher, send it to Mailchimp and Bumblebee/Slack
+        if(res.user.identities && res.user.identities.indexOf('teacher') > -1 || res.user.identities.indexOf('administrator') > -1) {
+          if (this._auth.getEnv() === "prod") { 
             // Tell Bumblebee/Slack!
             this._bumble.sendUserDetails(res.user)
             // Parse fullname for Mailchimp
@@ -84,7 +85,17 @@ export class UserDetailsUpdateModal implements OnInit {
             let lname = nameArr[1]
             this._auth.addToNewUsersList({ 'email' : res.user.email, 'fname' : fname, 'lname' : lname })
           }
+          // send the data to Pipo to track registrations if they are a teacher
+          this._academy.pipoEvent({
+            // standard event info:
+            event_name: "registration",
+            user_id: res.user._id,
+            teacher: true,
+            hero: res.user.hero_status || false,
+            institution_id: res.user.institution_ids || []
+          })
         }
+        
       }, (err) => {
         console.error(err)
       })
