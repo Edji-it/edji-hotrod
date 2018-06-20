@@ -11,7 +11,6 @@
   button.btn.owner-tools__btn.btn-hv(type="button", (tap)="togglePower('heat_vision', !this.currentProject.heat_vision)")
     //- placement={{tooltipPlacement}} ngbTooltip="Turn on Heat Vision to let readers see comments from other readers, turn it off to make comments private!"
     i#toggleHeatVision.icon-heatvision(*ngIf="currentProject", [ngClass]="[!currentProject.heat_vision ? 'inactive' : 'active']")
-    i.power__loading.loading([class.is-loading]="powersLoading.heatVision")
     span.badge.badge-pill.badge-primary(*ngIf="currentProject.heat_vision") On
     span.badge.badge-pill.badge-secondary(*ngIf="!currentProject.heat_vision") Off
     label Vision
@@ -44,7 +43,6 @@
       [class.btn-show--animation]="ownerToolShow"
     )
       i#toggleHeatVisionMobile.icon-heatvision.owner-tool-icon-mobile(*ngIf="currentProject", [ngClass]="[!currentProject.heat_vision ? 'inactive' : 'active']")
-      i.power__loading.loading([class.is-loading]="powersLoading.heatVision")
       span.badge.badge-pill.badge-primary(*ngIf="currentProject.heat_vision") On
       span.badge.badge-pill.badge-secondary(*ngIf="!currentProject.heat_vision") Off
       //- label Vision
