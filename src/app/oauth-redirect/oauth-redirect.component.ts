@@ -49,6 +49,8 @@ export class OAuthComponent implements OnInit {
     if (this._locker.has('licenseId')) {
       this.licenseId = this._locker.get('licenseId')
       this._locker.remove('licenseId')
+    }
+    
     // if the user is coming from another route, let's redirect them to it
     if (this._locker.has('oauthRedirect')) {
       this.redirectRoute = this._locker.get('oauthRedirect')
