@@ -26,7 +26,7 @@
 }
 
 .answer-designate {
-  font-size: 14px;
+  font-size: 11px;
   font-style: italic;
   display: inline-block;
   margin-right: 6px;
@@ -38,4 +38,21 @@
 
 .question-answer-status__block {
   padding-left: 12px;
+}
+
+.comment-filter {
+	cursor: pointer;
+	opacity: 0.4;
+	display: inline-block;
+	padding: 0px 2px;
+	vertical-align: middle; // center icon on line
+
+	& .icon {
+		height: 1.2em;
+		width: 1.2em;
+	}
+
+	&:hover, &:focus {
+		opacity: 0.8;
+	}
 }

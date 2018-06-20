@@ -1,8 +1,9 @@
 import { Subscription } from 'rxjs'
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 
+// Project Dependencies
 import { CommentStats, Reading } from './../../../shared/datatypes'
-import { ProjectService, ReadingService } from '../../../_services'
+import { ProjectService, ReadingService, CommentService } from '../../../_services'
 
 @Component({
   selector: 'hot-leaderboard',
@@ -24,7 +25,8 @@ export class LeaderboardComponent implements OnInit {
 
   constructor(
     private _readings: ReadingService,
-    private _projects : ProjectService
+    private _projects : ProjectService,
+    private _comments: CommentService
   ) { }
 
   ngOnInit() {
@@ -90,5 +92,11 @@ export class LeaderboardComponent implements OnInit {
         }
       }
     }
+  }
+
+  public viewStudentFilter(student) : void {
+    this._projects.filterByUser(student._id)
+    // trigger re-eval for highlights
+    // this._projects.processComments()
   }
 }
