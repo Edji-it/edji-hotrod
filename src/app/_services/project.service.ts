@@ -77,7 +77,6 @@ export class ProjectService {
     /**
      * Comment Filters
      */
-    private inProgressFilter: CommentFilter
     public activeFilter: CommentFilter
     private filterUpdatesSource: Subject<CommentFilter> = new Subject<CommentFilter>()
     public filterUpdates: Observable<CommentFilter> = this.filterUpdatesSource.asObservable()
@@ -783,10 +782,10 @@ export class ProjectService {
         this.commentByPosSubject.next(this.commentByPosSource)
     }
 
-    public isCommentVisible(comment: any): boolean {
-        let filter = this.activeFilter || this.inProgressFilter
+    public isCommentVisible(comment: any, inProgressFilter?: CommentFilter): boolean {
+        let filter = this.activeFilter || inProgressFilter
         if (filter){
-            // If a user filter is active, only show that user's comments
+            // If a comment filter is active, only show filtered comments
             let fitsFilter = true
             let filterKeys = Object.keys(filter.propertyFilters)
             for (let key of filterKeys) {
@@ -811,17 +810,24 @@ export class ProjectService {
     }
 
     /**
+     * Clear active filter, if there is one
+     */
+    public clearFilters(): void {
+        this.activeFilter = null
+        this.filterUpdatesSource.next(this.activeFilter)
+    }
+
+    /**
      * Filter comments to show one user
      * - Pass an empty string to clear the filter
      * @param userId The id for the Student you want to view the comments of
      */
     public filterByUser(userId: string) : void {
         let props: CommentPropertyFilters = {}
+        // Clear current filter, without notifying components
+        this.activeFilter = null
         // For User id filters, we want an exact match
         props.user_id = new RegExp("^" + userId + "$")
-        
-        // Make in progress filter available to _project service functions
-        this.inProgressFilter = { propertyFilters: props }
         // Construct full filter and notify components
         this.generateCommentFilter(props)
     }
@@ -838,14 +844,14 @@ export class ProjectService {
         let filterHighlightArray = []
         comments.forEach(comment => {
             // Filter out comments
-            if (this.isCommentVisible(comment)) {
+            if (this.isCommentVisible(comment, commentFilter)) {
                 // Generate Highlight Array
                 filterHighlightArray = this.incrementHighlightIndices(comment, filterHighlightArray)
+                console.log("FOR EACH COMMENT!")
             }
         })
         commentFilter.filterHighlightArray = filterHighlightArray
-        // Clear in progress filter
-        this.inProgressFilter = null
+        console.log(filterHighlightArray)
         // Announce the completed filter to components!
         this.activeFilter = commentFilter
         this.filterUpdatesSource.next(this.activeFilter)

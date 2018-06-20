@@ -225,6 +225,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 this._projects.filterUpdates.subscribe(
                     (filter) => {
                         this.filterHighlightArray = filter.filterHighlightArray
+                        console.log(this.filterHighlightArray)
                     }
                 )
             )
@@ -910,7 +911,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
         // If a filter is applied, use filter highlights
         if (this.filterHighlightArray) {
-            highlightCount += (this.filterHighlightArray[i] + 0)
+            if (this.filterHighlightArray[i]) {
+                highlightCount += this.filterHighlightArray[i]
+            }
         } else {
             if ((this.project.heat_vision || this.user._id == this.project.teacher_id) && this.highlightArray[i]) {
                 highlightCount += this.highlightArray[i]
