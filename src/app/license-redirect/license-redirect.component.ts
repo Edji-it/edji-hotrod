@@ -14,7 +14,7 @@ import { LockerService, AuthService, AcademyService } from '../_services'
 })
 export class LicenseRedirectComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = []
-  private login: boolean = true
+  public login: boolean = true
 
   public user: User
   public licenseId: string
