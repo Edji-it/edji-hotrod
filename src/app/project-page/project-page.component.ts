@@ -97,22 +97,8 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
 
                         this._title.setTitle( 'Edji | ' + this.reading.title )
 
-
                         this._academy.initReadingTimer(this.user, this.project)
                     }
-                    // Manually Get Reading once we know this Project's reading ID
-                    // else if (this.reading._id != this.project.reading_id) {
-                    //     // Clear reading
-                    //     this._readings.clear()
-                    //     // Tell service to load correct reading
-                    //     this._readings.get(this.project.reading_id)
-                    //         .pipe(take(1))
-                    //         .subscribe(
-                    //             reading => {
-                    //                 this.reading = reading
-                    //             }
-                    //         )
-                    // }
                 }
             },
             (error) => {

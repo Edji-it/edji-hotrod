@@ -111,7 +111,7 @@ export class AcademyService {
    * Shutdown Logic
    */
   public stopReadingTimer(): void {
-    this.readingTimerSubscription.unsubscribe()
+    this.readingTimerSubscription && this.readingTimerSubscription.unsubscribe()
   }
 
   /**
@@ -134,7 +134,7 @@ export class AcademyService {
         group_id: this.project._id,
         reading_owner: this.project.teacher._id,
         reading_time: 30
-    })
+      })
     })
   }
 }
