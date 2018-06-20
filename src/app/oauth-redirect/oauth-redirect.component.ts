@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router'
 import { take } from 'rxjs/operators'
 
 // Project Dependencies
-import { AuthService } from './../_services'
+import { AuthService, LockerService } from './../_services'
 
 @Component({
   selector: 'hot-oauth-redirect',
@@ -20,9 +20,12 @@ export class OAuthComponent implements OnInit {
     duplicate_user?: boolean
   } = {}
 
+  private redirectRoute = '/dashboard'
+
   constructor(
     private _auth: AuthService,
     private _router: Router,
+    private _locker: LockerService,
     private route: ActivatedRoute
   ) { }
 
@@ -41,12 +44,18 @@ export class OAuthComponent implements OnInit {
       return this.messages.noToken = true
     }
 
+    // if the user is coming from another route, let's redirect them to it
+    if (this._locker.has('oauthRedirect')) {
+      this.redirectRoute = this._locker.get('oauthRedirect')
+      this._locker.remove('oauthRedirect')
+    }
+
     const token = decodeURIComponent(encodedToken)
 
     this._auth.getUserWithAuthToken(type, token).pipe(take(1)).subscribe((res) => {
       this._auth.setUser(res.user)
       this._auth.setToken(res.token)
-      this._router.navigate(['/dashboard'])
+      this._router.navigate([this.redirectRoute])
     }, (err) => {
       console.error(err)
       switch (err.status) {

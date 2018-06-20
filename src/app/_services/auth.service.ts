@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router'
+import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, ActivatedRoute } from '@angular/router'
 import { Http, Response, Headers, RequestOptions } from '@angular/http'
 import { Observable, BehaviorSubject } from 'rxjs'
 import { map, take, catchError } from 'rxjs/operators'
@@ -37,7 +37,8 @@ export class AuthService implements CanActivate {
         private _router: Router, 
         private _locker: LockerService,
         private angulartics: Angulartics2,
-        private ga: Angulartics2GoogleAnalytics
+        private ga: Angulartics2GoogleAnalytics,
+        private route: ActivatedRoute
     ) {
         let buildEnv = environment.ENV
         
@@ -707,6 +708,13 @@ export class AuthService implements CanActivate {
             }))
     }
     public oauthLogin(type: string): void {
+        // Store the route the user was at prior to logging in with oauth because we lose it once we login with other services like google
+        let activeRoute = this.route.snapshot['_routerState'].url
+
+        if (activeRoute.indexOf('register') === -1 && activeRoute.indexOf('login') === -1 && activeRoute.indexOf('hero') === -1) {
+            this._locker.set('oauthRedirect', activeRoute)
+        }
+
         // eventually we'll need to switch on type to determine different places to go, but for meow we'll just always do google
         // this.legacyHttp.get([this.baseUrl, 'auth', 'google'].join("/")).pipe(take(1)).subscribe((res) => {
         //     // shouldn't actually get this, should just be a redirect
