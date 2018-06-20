@@ -12,7 +12,7 @@ import { take } from 'rxjs/operators';
 export class LicenseWelcomeComponent implements OnInit {
   private subscriptions: Subscription[] = []
   private institutionId: string
-  private institution: any
+  public institution: any
 
   constructor(
     private _academy: AcademyService,
