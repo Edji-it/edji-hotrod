@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
-import { Observable } from 'rxjs'
+import { Observable, interval, Subscription } from 'rxjs'
 
 // project dependancies
 import { AuthService } from 'src/app/_services'
@@ -10,6 +10,10 @@ import { User } from '../shared/datatypes'
   providedIn: 'root'
 })
 export class AcademyService {
+  private readingTimerSubscription: Subscription
+
+  private user: User
+  private project: any
 
   constructor(
     private _http: HttpClient,
@@ -71,6 +75,49 @@ export class AcademyService {
       error => {
         console.error(error)
       })
+  }
+
+  /**
+   * This method starts the timer
+   * Startup Logic
+   */
+  public initReadingTimer(user: User, project: any): void {
+    this.user = user
+    this.project = project
+    // Start the interval to track time on a reading (30 seconds right now)
+    this.readingTimer()
+  }
+
+  /**
+   * This method stops the timer for reading
+   * Shutdown Logic
+   */
+  public stopReadingTimer(): void {
+    this.readingTimerSubscription.unsubscribe()
+  }
+
+  /**
+   * Sends an event to pipo every 30 seconds once the timer is rolling
+   * Starts by using initReadingTimer()
+   * Stops by using stopReadingTimer - or leaving Edji all together
+   */
+  private readingTimer(): void {
+    this.readingTimerSubscription = interval(30000).subscribe(() => {
+      // send the data to Pipo to log the new reading
+      this.pipoEvent({
+        // standard event info:
+        event_name: "reading_tick",
+        user_id: this.user._id,
+        teacher: (this.project.teacher._id===this.user._id),
+        hero: this.user.hero_status || false,
+        institution_id: this.user.institution_ids || [],
+        // event-specific info:
+        reading_id: this.project.reading_id._id,
+        group_id: this.project._id,
+        reading_owner: this.project.teacher._id,
+        reading_time: 30
+    })
+    })
   }
 }
 
