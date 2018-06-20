@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core'
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 import { Angulartics2 } from 'angulartics2'
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms'
 import { Subscription } from 'rxjs'
@@ -23,6 +23,9 @@ export class RegisterFormComponent implements OnInit {
   /** The project id that the user wanted to add to the dashboard */
   @Input() tempUserId: string
   @Input() referralId: string
+  @Input() licenseToProcess: boolean
+
+  @Output() registerSuccess: EventEmitter<any> = new EventEmitter()
 
   private subscriptions: Subscription[] = []
 
@@ -148,6 +151,8 @@ export class RegisterFormComponent implements OnInit {
                 // should also have an error put on the dashboard
                 this._router.navigate(['/dashboard'])
               })
+          } else if (this.licenseToProcess) {
+            this.registerSuccess.emit(data.user)
           } else {
             // default case where nothing special happens
             this._router.navigate(['/dashboard'])

@@ -20,9 +20,27 @@ export class AcademyService {
     private _auth: AuthService
   ) { }
 
+  /**
+   * Accepts a license that is shared with the user
+   * @param licenseId _id of the license to accept
+   */
   public acceptLicense(licenseId: string): Observable<AcceptLicenseResponse> {
     return this._http.put<AcceptLicenseResponse>(this._auth.getUrl() + '/api/v1/licenses/' + licenseId + '/accept',
     {},
+    {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': this._auth.getToken()
+      })
+    })
+  }
+
+  /**
+   * Gets the name for the institution
+   * @param institutionId _id of the institution to get
+   */
+  public getInstitution(institutionId: string): Observable<GetInsitutionResponse> {
+    return this._http.get<GetInsitutionResponse>(this._auth.getUrl() + '/api/v1/institutions/' + institutionId,
     {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
@@ -126,4 +144,15 @@ export class AcademyService {
  */
 interface AcceptLicenseResponse {
   user?: User
+}
+
+/**
+ * 
+ */
+interface GetInsitutionResponse {
+  institution: {
+    _id: string
+    name: string
+    abbreviation: string
+  }
 }

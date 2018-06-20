@@ -14,6 +14,7 @@ import { LockerService, AuthService, AcademyService } from '../_services'
 })
 export class LicenseRedirectComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = []
+  public login: boolean = true
 
   public user: User
   public licenseId: string
@@ -56,31 +57,44 @@ export class LicenseRedirectComponent implements OnInit, OnDestroy {
         if (this.user.license_ids.includes(this.licenseId) && (this.user.hero && this.user.hero.active)) {
           this._router.navigate(['/dashboard'])
         } else {
-          // tell the server we need to process the license on the user
-          this._academy.acceptLicense(this.licenseId).pipe(take(1)).subscribe((userWithLicense: any) => {
-            // update the user across the app with the new license ID and hero status update
-            this._auth.refreshUser().pipe(take(1)).subscribe((updatedUser: any) => {
-              if (updatedUser.license_ids.includes(this.licenseId) && (updatedUser.hero && updatedUser.hero.active)) {
-                // once we update the user to add a license and make them a hero, let's redirect them to the dashboard
-                this._router.navigate(['/dashboard'])
-              } else {
-                // error handling if the license was not processed on their account
-                this.messages.licenseProcessError = true
-              }
-            })
-          }, (err) => {
-            console.error(err)
-          })
+          this.processLicense()
         }
       } else {
-        // store the licenseId in the locker if we need to register the user
-        // this._locker.set("license_id", this.licenseId)
-        // NEED: show the login form with a registration option here
+        // store the licenseId in the locker if we need to register the user or they need to login
+        this._locker.set("licenseId", this.licenseId)
       }
     }
   }
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe() })
+  }
+
+  /**
+   * Tells the server we have a license to add to the user account
+   * If coming from oauth or any other case where we have a licenseId on here, let's clear it from the locker
+   */
+  processLicense() {
+    // if licenseId is in the locker let's take it out
+    if (this._locker.has('licenseId')) {
+      this._locker.remove('licenseId')
+    }
+    // tell the server we need to process the license on the user
+    this._academy.acceptLicense(this.licenseId).pipe(take(1)).subscribe((userWithLicense: any) => {
+      // update the user across the app with the new license ID and hero status update
+      this._auth.refreshUser().pipe(take(1)).subscribe((updatedUser: any) => {
+        if (updatedUser.license_ids.includes(this.licenseId) && (updatedUser.hero && updatedUser.hero.active)) {
+          let index = updatedUser.institution_ids.length - 1
+          let institutionId = updatedUser.institution_ids[index]
+          // once we update the user to add a license and make them a hero, let's redirect them to the dashboard
+          this._router.navigate(['/license/welcome/' + institutionId])
+        } else {
+          // error handling if the license was not processed on their account
+          this.messages.licenseProcessError = true
+        }
+      })
+    }, (err) => {
+      console.error(err)
+    })
   }
 }

@@ -1,13 +1,18 @@
 
 $mobileNavHeight: 66px;
 
-.containter-fluid {
+.container-fluid {
   overflow-x: hidden;
 }
 
 .container--less-pad {
   padding-left: $base-pad/2;
   padding-right: $base-pad/2;
+}
+
+.container-main {
+  @extend .container;
+  margin-top: $base-pad;
 }
 
 body > .main {

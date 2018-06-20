@@ -1,5 +1,5 @@
 import { Title } from '@angular/platform-browser';
-import { Component, OnInit, OnDestroy } from '@angular/core'
+import { Component, OnInit, OnDestroy, Input } from '@angular/core'
 import { PRIMARY_OUTLET, Router, ActivatedRoute } from '@angular/router'
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { Subscription } from 'rxjs'

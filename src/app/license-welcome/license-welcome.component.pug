@@ -1,0 +1,35 @@
+nav-bar([showDashboardOptions]="true")
+.container-main
+  .row
+    //- .navy-gradient.has-sparks
+    //- .sparks
+    .col-6
+      .card.card--academy.has-sparks
+        .sparks
+        .hero-smash__wrap
+          img.hero-smash(src="/assets/images/logo-academy.svg")
+        h1.center.on-dark Welcome to Hero Academy
+    .col-6
+        h2 Congratulations!
+        p You have joined the 
+          b {{institution ? institution.name : ''}} 
+          | league of Heroes. As a member of this elite team, you have access to all of the Edji Hero powers.
+        p Give some of your new powers a try:
+        p
+          b([innerHtml]="':question: Insert Questions' | emojione")
+          br
+          | Get in depth, targeted responses from your students with a well placed question! 
+          //- Give it a try with a<a class="link" [routerLink]="['/new-reading']"> New Reading</a>
+        p
+          b([innerHtml]="':speech_balloon: Comment Replies' | emojione")
+          br
+          | Let your students start their own discussion in the reading with Replies!
+        p
+          b([innerHtml]="':mega: Audio Comments' | emojione")
+          br 
+          | Give students the option to talk out their thoughts on your readings with Audio Comments!
+  .row
+    .col-12
+      .btn-row.mt-4
+        a.btn.btn-secondary([routerLink]="['/dashboard']") Continue to Dashboard
+        a.btn.btn-primary([routerLink]="['/new-reading']") Test Out My Powers
