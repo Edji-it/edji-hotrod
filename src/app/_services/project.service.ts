@@ -822,23 +822,25 @@ export class ProjectService {
      * - Pass an empty string to clear the filter
      * @param userId The id for the Student you want to view the comments of
      */
-    public filterByUser(userId: string) : void {
+    public filterByUser(user: User) : void {
         let props: CommentPropertyFilters = {}
         // Clear current filter, without notifying components
         this.activeFilter = null
         // For User id filters, we want an exact match
-        props.user_id = new RegExp("^" + userId + "$")
+        props.user_id = new RegExp("^" + user._id + "$")
         // Construct full filter and notify components
-        this.generateCommentFilter(props)
+        this.generateCommentFilter(props, "Student", user.fullname ? user.fullname : user.username)
     }
 
     /**
      * Get highlights for all filtered comments
      * @fires filterUpdates Observable
      */
-    private generateCommentFilter(propertyFilters: any) {
+    private generateCommentFilter(propertyFilters: any, displayType: string, displayName: string) {
         let commentFilter = <CommentFilter>{}
         commentFilter.propertyFilters = propertyFilters
+        commentFilter.displayType = displayType
+        commentFilter.displayName = displayName
         // Get copy of comments
         let comments = this.project.comments.slice()
         let filterHighlightArray = []
@@ -847,11 +849,9 @@ export class ProjectService {
             if (this.isCommentVisible(comment, commentFilter)) {
                 // Generate Highlight Array
                 filterHighlightArray = this.incrementHighlightIndices(comment, filterHighlightArray)
-                console.log("FOR EACH COMMENT!")
             }
         })
         commentFilter.filterHighlightArray = filterHighlightArray
-        console.log(filterHighlightArray)
         // Announce the completed filter to components!
         this.activeFilter = commentFilter
         this.filterUpdatesSource.next(this.activeFilter)
@@ -873,7 +873,9 @@ interface ProjectFilters {
 
 interface CommentFilter {
     propertyFilters: CommentPropertyFilters,
-    filterHighlightArray?: number[]
+    filterHighlightArray?: number[],
+    displayType: string,
+    displayName: string
 }
 
 interface CommentPropertyFilters {

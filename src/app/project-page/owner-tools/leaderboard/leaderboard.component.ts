@@ -95,8 +95,6 @@ export class LeaderboardComponent implements OnInit {
   }
 
   public viewStudentFilter(student) : void {
-    this._projects.filterByUser(student._id)
-    // trigger re-eval for highlights
-    // this._projects.processComments()
+    this._projects.filterByUser(student)
   }
 }
