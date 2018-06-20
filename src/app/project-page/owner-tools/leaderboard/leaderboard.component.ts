@@ -2,8 +2,9 @@ import { Subscription } from 'rxjs'
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 
 // Project Dependencies
-import { CommentStats, Reading } from './../../../shared/datatypes'
+import { CommentStats, Reading, User } from './../../../shared/datatypes'
 import { ProjectService, ReadingService, CommentService } from '../../../_services'
+import { CommentFilter } from '../../../_services/project.service'
 
 @Component({
   selector: 'hot-leaderboard',
@@ -22,6 +23,7 @@ export class LeaderboardComponent implements OnInit {
   private subscriptions: Subscription[] = []
   private answersById: any = {}
   private userAnswers: any[] = []
+  public appliedFilter: CommentFilter
 
   constructor(
     private _readings: ReadingService,
@@ -31,26 +33,30 @@ export class LeaderboardComponent implements OnInit {
 
   ngOnInit() {
     // Subscribe to the reading
-    this.subscriptions.push( this._readings.currentReading.subscribe(
-      reading => {
-        this.currentReading = reading;
-      },
-      error => {
-        console.error(error);
-      }) 
-    )
-
+    this.subscriptions.push( 
+      this._readings.currentReading.subscribe(
+        reading => {
+          this.currentReading = reading;
+        },
+        error => {
+          console.error(error);
+        }) 
+      ),
     // Subscribe to updates to the answer reference object
-    this.subscriptions.push( this._projects.answersById.subscribe(
+    this._projects.answersById.subscribe(
       (answersById) => {
         this.answersById = answersById
         this.questionAnswerStatus()
       },
       (error) => {
         console.error(error)
-      }) 
+      }),
+    // Get Updates about applied comment filters so we can show the user
+    this._projects.filterUpdates.subscribe(
+      (filter) => {
+        this.appliedFilter = filter
+      }
     )
-
   }
 
   ngOnDestroy() {
@@ -94,7 +100,19 @@ export class LeaderboardComponent implements OnInit {
     }
   }
 
-  public viewStudentFilter(student) : void {
+  /**
+   * Apply Student Filter
+   * @param student User needs "_id" and "fullname"/"username"
+   */
+  public viewStudentFilter(student: User) : void {
     this._projects.filterByUser(student)
+  }
+
+  /**
+   * Clear Filters
+   * @description clears any applied filters via project service
+   */
+  public clearFilter(): void {
+    this._projects.clearFilters()
   }
 }

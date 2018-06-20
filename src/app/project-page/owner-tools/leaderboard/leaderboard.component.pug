@@ -19,3 +19,13 @@
         .answer-designate Answers:
         .answer-circle__group(*ngFor='let answer of userAnswers')
           .circle(*ngIf='answer.user===commentUser._id' [ngClass]="[ answer.answered ? 'filled' : '']")
+.filter-bubble(*ngIf="appliedFilter")
+  button.close.btn-icon--round(
+      (click)="clearFilter()",
+      type="button",
+      data-dismiss="modal",
+      aria-label="Close"
+      )
+    span(aria-hidden="true") &times;
+  .filter-bubble__descriptor Viewing {{ appliedFilter.displayType }}
+  .filter-bubble__name {{ appliedFilter.displayName }}

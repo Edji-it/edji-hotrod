@@ -810,7 +810,7 @@ export class ProjectService {
     }
 
     /**
-     * Clear active filter, if there is one
+     * Clear active comment filter, if there is one
      */
     public clearFilters(): void {
         this.activeFilter = null
@@ -871,14 +871,14 @@ interface ProjectFilters {
     start?: number
   }
 
-interface CommentFilter {
+export interface CommentFilter {
     propertyFilters: CommentPropertyFilters,
     filterHighlightArray?: number[],
     displayType: string,
     displayName: string
 }
 
-interface CommentPropertyFilters {
+export interface CommentPropertyFilters {
     type ?: RegExp,
     user_id ?: RegExp
 }

@@ -56,3 +56,34 @@
 		opacity: 0.8;
 	}
 }
+
+.filter-bubble {
+	position: fixed;
+	z-index: 8000;
+	top: $navBarHeight + $base-pad;
+	right: $base-pad;
+	width: 225px;
+	padding: 15px;
+	min-height: 20px;
+	background: #ffffff;
+	box-shadow: 0px 1px 15px 0px rgba(0,0,0,0.2);
+	border-radius: 15px;
+
+	& button.close {
+		position: absolute;
+		top: 5px;
+		right: 5px;
+	}
+}
+
+.filter-bubble__descriptor {
+	font-family: $base-font-family;
+	font-weight: 300;
+	font-size: 11px;
+}
+
+.filter-bubble__name {
+	font-family: $base-font-family;
+	font-weight: 500;
+	font-size: 14px;
+}

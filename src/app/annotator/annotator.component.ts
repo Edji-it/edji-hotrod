@@ -224,8 +224,11 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 // Get filtered highlights for comment filters
                 this._projects.filterUpdates.subscribe(
                     (filter) => {
-                        this.filterHighlightArray = filter.filterHighlightArray
-                        console.log(this.filterHighlightArray)
+                        if (filter) {
+                            this.filterHighlightArray = filter.filterHighlightArray
+                        } else {
+                            this.filterHighlightArray = null
+                        }
                     }
                 )
             )
@@ -1099,7 +1102,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             this.angulartics.eventTrack.next({ action: comment.type + 'deleteComment', properties: { category: 'projectAction', label: 'failure' }})
           }
           this.inactivateComment()
-          console.log(error)
+          console.error(error)
         })
       } else {
         this._projects.deleteAnswer(comment)
@@ -1113,7 +1116,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
           // TRACK EXCEPTION
           this.angulartics.eventTrack.next({ action: comment.type + 'deleteAnswer', properties: { category: 'heroFeature', label: 'failure' }})
           this.inactivateComment()
-          console.log(error)
+          console.error(error)
         })
       }
     } 
