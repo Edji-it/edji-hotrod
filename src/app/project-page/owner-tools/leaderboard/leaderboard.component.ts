@@ -6,7 +6,7 @@ import { ProjectService, ReadingService } from '../../../_services'
 
 @Component({
   selector: 'hot-leaderboard',
-  templateUrl: 'leaderboard.component.html',
+  templateUrl: 'leaderboard.component.pug',
   styleUrls: ['./leaderboard.component.scss']
 })
 
