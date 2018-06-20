@@ -4,7 +4,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
-import { AuthService } from '../../_services'
+import { AuthService, AcademyService } from '../../_services'
 import { Copy } from '../../shared'
 
 @Component({
@@ -27,6 +27,7 @@ export class LoginForm implements OnInit {
   public submitted: boolean = false
 
   constructor(
+    private _academy: AcademyService,
     private _auth: AuthService,
     private _router: Router,
     private angulartics: Angulartics2,
@@ -77,6 +78,18 @@ public login(formValue: any): void {
             this._auth.setToken(data.token)
             this._auth.setUser(data.user)
             this.loginSuccess.emit(data.user)
+          }
+
+          // send the data to Pipo to track logins if they are a teacher
+          if(data.user.identities && data.user.identities.indexOf('teacher') > -1 || data.user.identities.indexOf('administrator') > -1) {
+            this._academy.pipoEvent({
+              // standard event info:
+              event_name: "login",
+              user_id: data.user._id,
+              teacher: true,
+              hero: data.user.hero_status || false,
+              institution_id: data.user.institution_ids || []
+            })
           }
         },
         (error) =>  { 
