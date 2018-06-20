@@ -1,7 +1,8 @@
 nav-bar([showProjectInfo]="true")
 owner-tools
 .container-fluid
-  .project-column([ngClass]="{ loading: !project._id }")
+  .row.loading(*ngIf="!project._id")
+  .project-column
     p.alert.alert-danger(*ngIf="error") {{ error }}
     <annotator #annotator *ngIf="project._id && reading._id"></annotator>
 hot-login-modal.modal-will-fade([projectId]="project._id", [class.show]="showLoginModal", (closeModal)="showLoginModal = false")

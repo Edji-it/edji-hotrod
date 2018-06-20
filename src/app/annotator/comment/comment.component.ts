@@ -13,7 +13,6 @@ import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
 import { AuthService, CommentService, ProjectService, UtilToolService, AcademyService } from '../../_services'
-import { AnnotatorComponent } from '../annotator.component'
 import { EdjiComment, CommentPermissions, EdjiQuestion } from './../../shared/datatypes'
 import { ALLSPARK } from './../../app.constants'
 

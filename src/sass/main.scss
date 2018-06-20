@@ -124,20 +124,20 @@ $seamlessPlaceholderColor: #cdcdcd;
 
 .loading{
 	&::after{
-		background: url("../assets/images/loading.svg") !important;
+		background: url("../assets/images/loading-dots.gif") !important;
 		background-position: center !important;
 		background-repeat: no-repeat !important;
-		background-size: 50px !important;
+		background-size: 75px !important;
 		content: " ";
-		width: 50px;
-		height: 50px;
+		width: 75px;
+		height: 100px;
 		display: block;
 		margin: 0 auto;
-		transition:opacity 0.5s;
+		transition:opacity 300;
 	}
 	> *{
 		opacity:0;
-		transition:opacity 0.5s;
+		transition:opacity 300;
 
 	}
 
@@ -150,6 +150,9 @@ $seamlessPlaceholderColor: #cdcdcd;
 		}
 	}
 
+	&.row {
+		margin: 20px 0px;
+	}
 }
 
 .disabled {
