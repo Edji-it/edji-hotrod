@@ -583,7 +583,7 @@ export class ProjectService {
             // add the comment creation event to pipo
             this._academy.pipoEvent({
                 // standard event info:
-                event_name: "reader_action",
+                event_name: "reading_action",
                 user_id: this.user._id,
                 teacher: (this.project.teacher._id===this.user._id),
                 hero: this.user.hero_status || false,
@@ -681,7 +681,7 @@ export class ProjectService {
             // add the comment creation event to pipo
             this._academy.pipoEvent({
                 // standard event info:
-                event_name: "reader_action",
+                event_name: "reading_action",
                 user_id: this.user._id,
                 teacher: (this.project.teacher._id===this.user._id),
                 hero: this.user.hero_status || false,
