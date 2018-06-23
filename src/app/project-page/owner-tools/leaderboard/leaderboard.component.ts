@@ -2,7 +2,7 @@ import { Subscription } from 'rxjs'
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 
 // Project Dependencies
-import { CommentStats, Reading, User } from './../../../shared/datatypes'
+import { CommentStats, Reading } from './../../../shared/datatypes'
 import { ProjectService, ReadingService, CommentService } from '../../../_services'
 import { CommentFilter } from '../../../_services/project.service'
 
@@ -55,6 +55,12 @@ export class LeaderboardComponent implements OnInit {
     this._projects.filterUpdates.subscribe(
       (filter) => {
         this.appliedFilter = filter
+        
+        if (this.commentStats.stats.userStats) {
+          for (let i = 0; i < this.commentStats.stats.userStats.length; i++){
+            this.commentStats.stats.userStats[i]['filtered'] = this.isStudentFiltered(this.commentStats.stats.userStats[i])
+          }
+        }
       }
     )
   }
@@ -104,8 +110,36 @@ export class LeaderboardComponent implements OnInit {
    * Apply Student Filter
    * @param student User needs "_id" and "fullname"/"username"
    */
-  public viewStudentFilter(student: User) : void {
+  public viewStudentFilter(student: any) : void {
     this._projects.filterByUser(student)
+  }
+
+  /**
+   * Page through Student Filters
+   */
+  public pageStudentFilter(pageChange: number) : void {
+    let currentIndex: number
+    let newIndex: number
+    let userCount: number = this.commentStats.stats.userStats.length
+
+    for (let i = 0; i < userCount; i++) {
+      if(this.commentStats.stats.userStats[i]['filtered'] === true) {
+        currentIndex = i
+        break
+      }
+    }
+
+    newIndex = currentIndex + pageChange
+
+    if (newIndex < 0) {
+      newIndex = userCount - 1
+    }
+
+    if (newIndex >= userCount) {
+      newIndex = 0
+    }
+
+    this.viewStudentFilter(this.commentStats.stats.userStats[newIndex])
   }
 
   /**
@@ -119,7 +153,7 @@ export class LeaderboardComponent implements OnInit {
   /**
    * Is Student Filtered
    */
-  public isStudentFiltered(student: User) : boolean {
+  public isStudentFiltered(student: any) : boolean {
     if (this.appliedFilter && this.appliedFilter.propertyFilters.user_id) {
       return this.appliedFilter.propertyFilters.user_id.test(student._id)
     } else {

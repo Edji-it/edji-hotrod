@@ -229,6 +229,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                         } else {
                             this.filterHighlightArray = null
                         }
+                        // Re-evaluate comment positions
+                        this.setLinePositions()
                     }
                 )
             )

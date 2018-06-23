@@ -14,7 +14,7 @@
       .btn.btn-icon.btn-outline-primary.e2e-student-filter(
           [attr.id]="'studentFilterBtn'+i",
           style='float:right;', 
-          [class.active]="isStudentFiltered(commentUser)",
+          [class.active]="commentUser.filtered",
           (click)="viewStudentFilter(commentUser)", 
           title="View only {{commentUser.fullname}}'s comments"
         ) 
@@ -37,4 +37,9 @@
     .filter-bubble__descriptor 
       .icon.icon-comment-filter.mr-1
       | Viewing {{ appliedFilter.displayType }}
-    .filter-bubble__name {{ appliedFilter.displayName }}
+    .filter-bubble__name 
+      .btn.btn-icon.btn-outline-primary.btn--prev((click)="pageStudentFilter(-1)")
+        .fa.fa-backward
+      | {{ appliedFilter.displayName }}
+      .btn.btn-icon.btn-outline-primary.btn--next((click)="pageStudentFilter(1)")
+        .fa.fa-forward

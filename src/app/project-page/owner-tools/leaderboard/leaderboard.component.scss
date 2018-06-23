@@ -103,6 +103,24 @@
 	font-family: $base-font-family;
 	font-weight: 500;
 	font-size: 14px;
+	line-height: 27px;
+	text-align: center;
+	margin-top: 10px;
+
+	& .btn {
+		border-radius: 50%;
+		width: 27px;
+		height: 27px;
+	}
+
+	& .btn--prev {
+		float: left;
+	}
+
+	
+	& .btn--next {
+		float: right;
+	}
 }
 
 $userListBorderWidth: 2px;
