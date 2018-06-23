@@ -608,7 +608,7 @@ export class NewReadingPage implements OnInit {
                                     // send the data to Pipo to log the new reading
                                     this._academy.pipoEvent({
                                         // standard event info:
-                                        event_name: "reading_action",
+                                        event_name: "reading_created",
                                         user_id: this.user._id,
                                         teacher: (project.teacher_id===this.user._id),
                                         hero: this.user.hero_status || false,
