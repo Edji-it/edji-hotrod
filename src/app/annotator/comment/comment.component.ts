@@ -55,6 +55,7 @@ export class CommentComponent implements OnInit, OnDestroy {
   private project: any
   private commentPane: boolean
   private indicatesPane: boolean
+  private setLineYAttempts: number = 0
 
   @Input() public comment: EdjiComment
   @Input() private readOnly: boolean = false
@@ -192,6 +193,7 @@ export class CommentComponent implements OnInit, OnDestroy {
 
       // This will need to re-decorate on resize
       if (this.comment.loc && this.comment.loc.y && this.comment.text === "") {
+          this.setLineYAttempts = 0
           let imageTop: number = commentImage.getBoundingClientRect().top
           let imageHeight = commentImage.clientHeight
           // Get nearest baseline (Y) of comment within image
@@ -203,16 +205,21 @@ export class CommentComponent implements OnInit, OnDestroy {
           imageOffset = this.nearestLine(imageOffset)
           this.comment.lineY = imageY + imageOffset
       } else {
-          // Math.round(allthis.Comments[i].nativeElement.getBoundingClientRect().bottom - firstWordTop)
           let wordY = commentWord.getBoundingClientRect().bottom
           wordY = wordY - firstWordTop
           this.comment.lineY = this.nearestLine(wordY)
       }
     } else {
       console.log("Looking for y position of comment not yet rendered...")
-      setTimeout(()=> {
-        this.setLineY()
-      }, 1000)
+      this.setLineYAttempts++
+      if (this.setLineYAttempts < 10) {
+        setTimeout(()=> {
+          this.setLineY()
+        }, 1000)
+      } else {
+        // Reset attempt count once we've tried 10 times
+        this.setLineYAttempts = 0
+      }
     }
   }
 
