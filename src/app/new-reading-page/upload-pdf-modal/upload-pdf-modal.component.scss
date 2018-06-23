@@ -55,6 +55,9 @@ $pdfThumbHeight: 250px;
     position: relative;
     margin: 15px 0px;
 
+    // Bootstrap will make this go vertical in mobile, so override the display here:
+    display: flex;
+
     &.hidden {
         display: none;
     }
