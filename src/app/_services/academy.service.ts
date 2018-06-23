@@ -66,6 +66,19 @@ export class AcademyService {
   }
 
   /**
+   * Server will return all licenses the current user can manage
+   */
+  public getLicenses(): Observable<any> {
+    return this._http.get<any>(this._auth.getUrl() + '/api/v1/licenses',
+    {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': this._auth.getToken()
+      })
+    })
+  }
+
+  /**
    * Event handler that can be called from anywhere in the app. Handles success and error 
    * @param event event data to be passed in from where the event occurs follow this schema:
    * {
@@ -147,7 +160,7 @@ interface AcceptLicenseResponse {
 }
 
 /**
- * 
+ * /api/v1/institutions/:institution_id Response
  */
 interface GetInsitutionResponse {
   institution: {
