@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { Observable, interval, Subscription } from 'rxjs'
+import { map } from 'rxjs/operators'
 
 // project dependancies
 import { AuthService } from 'src/app/_services'
@@ -14,11 +15,18 @@ export class AcademyService {
 
   private user: User
   private project: any
+  public currentInstitution: string
+
+  public allLicenses: any
+  public institutionLicenses: any
 
   constructor(
     private _http: HttpClient,
     private _auth: AuthService
-  ) { }
+  ) { 
+    // dev currentInstitution
+    this.currentInstitution = "5b006d759dbfbf137ec0df23"
+  }
 
   /**
    * Accepts a license that is shared with the user
@@ -76,6 +84,21 @@ export class AcademyService {
         'Authorization': this._auth.getToken()
       })
     })
+    .pipe(
+      map((data)=>{
+        // institutionLicenses will initially contain all licenses, and we will need to filter for the ones for the relevant institution
+        this.institutionLicenses = data.licenses
+        let licensesLength = this.institutionLicenses.length
+        for (let i=licensesLength-1; i>-1; i--) {
+          let license = this.institutionLicenses[i]
+          // if the license is not for the current institution, pull it out
+          if (license.owning_institution!==this.currentInstitution) {
+            this.institutionLicenses.splice(i,1)
+          }
+        }
+        return this.institutionLicenses
+      })
+    )
   }
 
   /**

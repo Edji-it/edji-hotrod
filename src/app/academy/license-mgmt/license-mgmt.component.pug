@@ -1,6 +1,16 @@
 nav-bar([showDashboardOptions]="true")
 .academy-bg
 .container.academy-container
-    .row
-        .col-8
-            h1 Licenses for ACADEMY NAME
+  .row
+    .col-8
+      h1 Licenses for {{currentAcademy ? currentAcademy.name : 'Academy'}}
+  .row
+    .col-12
+      ul.list-group
+        li.list-group-item(*ngFor="let license of licenses; let i = index")
+          //- table
+          //-   tr
+          //-     th
+          div License {{i + 1}}
+          div Created On {{license.createdAt | edjidate:'timeStamp':'mediumDate'}}
+          div.float-right Max Users: {{license.max_users}}

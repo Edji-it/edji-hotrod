@@ -17,6 +17,7 @@ export class LicenseMgmtComponent implements OnInit {
 
   public user: User
   public licenses: any[]
+  public currentAcademy: any
   
   constructor(
     private _auth: AuthService,
@@ -34,6 +35,11 @@ export class LicenseMgmtComponent implements OnInit {
       this._academy.getLicenses().subscribe((licenses) => {
         this.licenses = licenses
         console.log(licenses)
+      }),
+      // get the current academy name
+      this._academy.getInstitution(this._academy.currentInstitution).subscribe((academy) => {
+        this.currentAcademy = academy.institution
+        console.log(this.currentAcademy)
       })
     )
   }
