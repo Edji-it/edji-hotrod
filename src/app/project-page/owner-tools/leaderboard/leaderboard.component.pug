@@ -5,27 +5,34 @@
       | Students
       button.close.stats-close-btn.btn-icon--round((click)='hide.emit()' type='button')
         span(aria-hidden='true') &times;
-    .user-list-item(style='opacity: 0.3; margin-bottom: 14px; white-space: nowrap; border-bottom: 1px solid #cdcdcd;')
+    p(style='opacity: 0.3; margin-bottom: 14px; white-space: nowrap; border-bottom: 1px solid #cdcdcd;')
       span {{ commentStats.stats.userStats.length }} Readers
-      img(style='height: 1em; width: auto; float: right' src='assets/images/icon-comment.svg')
+      //- img(style='height: 1em; width: auto; float: right' src='assets/images/icon-comment.svg')
     .user-list-item(*ngFor='let commentUser of commentStats.stats.userStats')
       span {{ commentUser.fullname }}
-      b(style='float:right;') 
+      //- Comment filter shows on hover and when active
+      .btn.btn-icon.btn-outline-primary(
+          style='float:right;', 
+          [class.active]="isStudentFiltered(commentUser)",
+          (click)="viewStudentFilter(commentUser)", 
+          title="View only {{commentUser.fullname}}'s comments"
+        ) 
+        .icon.icon-comment-filter.mr-1
         | {{ commentUser.count }}
-        .comment-filter((click)="viewStudentFilter(commentUser)", title="View only {{commentUser.fullname}}'s comments")
-          .icon.icon-comment-filter
       .question-answer-status__block(*ngIf='commentUser && currentReading.questions && currentReading.questions.length > 0')
-        // (click)="testAnswerFilter(commentUser)"
         .answer-designate Answers:
         .answer-circle__group(*ngFor='let answer of userAnswers')
           .circle(*ngIf='answer.user===commentUser._id' [ngClass]="[ answer.answered ? 'filled' : '']")
-.filter-bubble(*ngIf="appliedFilter")
-  button.close.btn-icon--round(
-      (click)="clearFilter()",
-      type="button",
-      data-dismiss="modal",
-      aria-label="Close"
-      )
-    span(aria-hidden="true") &times;
-  .filter-bubble__descriptor Viewing {{ appliedFilter.displayType }}
-  .filter-bubble__name {{ appliedFilter.displayName }}
+.filter-bubble([class.slide-in]="appliedFilter")
+  ng-container(*ngIf="appliedFilter")
+    button.close.btn-icon--round(
+        (click)="clearFilter()",
+        type="button",
+        data-dismiss="modal",
+        aria-label="Close"
+        )
+      span(aria-hidden="true") &times;
+    .filter-bubble__descriptor 
+      .icon.icon-comment-filter.mr-1
+      | Viewing {{ appliedFilter.displayType }}
+    .filter-bubble__name {{ appliedFilter.displayName }}

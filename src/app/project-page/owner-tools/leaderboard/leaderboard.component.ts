@@ -115,4 +115,15 @@ export class LeaderboardComponent implements OnInit {
   public clearFilter(): void {
     this._projects.clearFilters()
   }
+
+  /**
+   * Is Student Filtered
+   */
+  public isStudentFiltered(student: User) : boolean {
+    if (this.appliedFilter && this.appliedFilter.propertyFilters.user_id) {
+      return this.appliedFilter.propertyFilters.user_id.test(student._id)
+    } else {
+      return false
+    }
+  }
 }

@@ -36,8 +36,8 @@
   display: inline-block;
 }
 
-.question-answer-status__block {
-  padding-left: 12px;
+.question-answer-status__block { 
+	margin-top: 2px;
 }
 
 .comment-filter {
@@ -61,13 +61,26 @@
 	position: fixed;
 	z-index: 8000;
 	top: $navBarHeight + $base-pad;
-	right: $base-pad;
+	right: $base-pad + 200px;
 	width: 225px;
 	padding: 15px;
 	min-height: 20px;
 	background: #ffffff;
 	box-shadow: 0px 1px 15px 0px rgba(0,0,0,0.2);
 	border-radius: 15px;
+	border: 2px solid $blue;
+
+	// Not showing by default
+	opacity: 0;
+	pointer-events: none;
+
+	&.slide-in {
+		// Transition when shown
+		transition: opacity 400ms ease, right 400ms ease;
+		opacity: 1;
+		pointer-events: all;
+		right: $base-pad;
+	}
 
 	& button.close {
 		position: absolute;
@@ -76,6 +89,7 @@
 	}
 }
 
+// Filter notification display classes
 .filter-bubble__descriptor {
 	font-family: $base-font-family;
 	font-weight: 300;
@@ -86,4 +100,42 @@
 	font-family: $base-font-family;
 	font-weight: 500;
 	font-size: 14px;
+}
+
+$userListBorderWidth: 2px;
+
+.user-list-item {
+	padding: 10px;
+	margin: 0px -10px;
+	border-radius: 2px;
+
+	&:nth-child(odd) {
+		background: #f5f8f8;
+	}
+}
+
+.icon-comment-filter {
+	opacity: 0.6;
+	vertical-align: middle;
+}
+
+.btn-icon.btn-outline-primary {
+	border: 2px solid #e7e7e7;
+	background: #ffffff;
+	border-radius: 5px;
+	padding: 0.25em;
+	cursor: pointer;
+
+	& .icon {
+		padding: 2px;
+	}
+
+	&:hover, &:focus {
+		border-color: desaturate($blue, 25%);
+	}
+
+	&.active {
+		border-color: $blue;
+		color: $blue;
+	}
 }
