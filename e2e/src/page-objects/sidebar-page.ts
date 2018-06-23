@@ -10,13 +10,16 @@ export class Sidebar {
     public avatarActionIcon = element(by.css("#avatarActionIcon"));
     public accountButton    = element(by.id("accountButton"));
     public referralButton = element(by.id("navReferralButton"));
-    public heatButton       = element(by.id("toggleHeatVision"));
-    public heatButtonMobile = element(by.id("toggleHeatVisionMobile"));
     public navReadings = element(by.id("navReadings"));
     public navDiscover = element(by.id("navDiscover"));
     public accountButtonSpan = this.accountButton.element(by.css('span'));
     public logo = element(by.id("logo"));
     public heroLink = element(by.id("heroLink"));
+
+    // Owner Tools
+    public leaderboardButton = element(by.id("toggleLeaderboard"));
+    public heatButton       = element(by.id("toggleHeatVision"));
+    public heatButtonMobile = element(by.id("toggleHeatVisionMobile"));
     public ownerToolToggleButton = element(by.id("buttonOwnerToolToggle"));
 
     public backToDash(): void {

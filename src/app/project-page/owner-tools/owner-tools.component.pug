@@ -3,7 +3,7 @@
   //- Buttons for toggling panes and tools
     - Desktop Buttons
   //- Comment Stats pane
-  button.btn.owner-tools__btn.btn-cmt(type="button", aria-label="Comment Counts", (click)="showElseFalse('showCommentCounts')")
+  button#toggleLeaderboard.btn.owner-tools__btn.btn-cmt(type="button", aria-label="Comment Counts", (click)="showElseFalse('showCommentCounts')")
     //- img(*ngIf="isMobile" style="width: 50px;" src="assets/images/icon-comment.svg")
     img(src="assets/images/icon-leaderboard.svg")
     label Students
@@ -29,7 +29,7 @@
   //- Mobile Buttons
   .owner-options-group--mobile([class.btn-group-show--animation]="ownerToolShow", [style.max-height]="ownerToolBlockHeight")
     //- Comment Stats pane
-    button.btn.btn-icon--circle-shadow.owner-options--mobile(
+    button#toggleLeaderboard.btn.btn-icon--circle-shadow.owner-options--mobile(
       type="button",
       (tap)="showElseFalse('showCommentCounts'); ownerToolShow=!ownerToolShow", 
       [class.btn-show--animation]="ownerToolShow"

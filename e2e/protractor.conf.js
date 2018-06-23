@@ -42,6 +42,7 @@ exports.config = {
     discover:   helpers.root('e2e/src/discover.spec.ts'),
     heroSubscribe: helpers.root('e2e/src/hero-subscribe.spec.ts'),
     home:       helpers.root('e2e/src/home.spec.ts'),
+    leaderboard:helpers.root('e2e/src/owner-tools__leaderboard.spec.ts'),
     login:      helpers.root('e2e/src/login.spec.ts'),
     newReading: helpers.root('e2e/src/new-reading.spec.ts'),
     ownerTools: helpers.root('e2e/src/owner-tools.spec.ts'),
