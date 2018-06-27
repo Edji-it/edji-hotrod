@@ -56,12 +56,13 @@ describe('Project Page as an owner wishing to filter by student: ', () => {
         sidebar.leaderboardButton.click();
 
         // Get comment count
-        // let totalCount: number
-        // element.all(by.css('edji-comment:not(.hidden)'))
-        //     .count()
-        //     .then((count) => {
-        //         totalCount = count
-        //     })
+        let totalCount: number
+        element.all(by.css('edji-comment:not(.hidden)'))
+            .count()
+            .then((count) => {
+                totalCount = count
+            })
+        console.log("COUNT", totalCount)
         // Wait for filters to be available
         browser.wait(EC.elementToBeClickable(element(by.id("studentFilterBtn0"))), 3000, "never saw student filter buttons in leaderboard")
 
@@ -71,116 +72,20 @@ describe('Project Page as an owner wishing to filter by student: ', () => {
         firstCommenterFilter.click()
 
         // First Commenter should only have one comment
-        element.all(by.css('edji-comment:not(.hidden)'))
-            .count()
+        let firstCommenterComments = element.all(by.css('.e2e-comment--First-Commenter'))
+        browser.wait(EC.visibilityOf(firstCommenterComments.first()), 3000, 'not able to see First Commenter\'s comment when filtering')
+        firstCommenterComments.count()
             .then((count) => {
                 expect(count).toBe(1)
             })
-    });
 
-    /**
-     * Test:
-     * - Go to a project page
-     * - Login with guest name
-     * - Make sure that the guest name is on the account button
-     */
-    // it("show other user's comment to guest while Heat Vision is on", () => {
-    //     // logging in
-    //     // browser.wait(EC.elementToBeClickable(loginModal.guestNameInput), 6000, "never saw a guest name input box");
-    //     // loginModal.guestNameInput.sendKeys("Hot Commenter");
-    //     // browser.wait(EC.elementToBeClickable(loginModal.guestLoginButton), 5000, "never found the guest login button");
-    //     // loginModal.guestLoginButton.click();
+        // Paginate to next Student
+        browser.wait(EC.elementToBeClickable(sidebar.nextStudentButton), 5000, "never saw \"next\" student filter button")
+        sidebar.nextStudentButton.click()
 
-        
-    //     // Make sure the comment was created
-    //     let comments = element.all(by.css('edji-comment:not(.hidden):not(.spec-owner)'));
-    //     browser.wait(EC.elementToBeClickable(comments.first()), 5000, "never found the added comment");
-    //     expect(comments.count()).toBeGreaterThan(0);
-    // });
-
-    // it("should toggle off Heat Vision as Project Owner", () => {
-    //     // initial validation
-    //     browser.wait(EC.presenceOf(loginModal.guestLoginHeader), 5000, "never saw the login modal's header");
-    //     expect(loginModal.guestLoginHeader.isPresent()).toBeTruthy();
-    //     expect(loginModal.accountLoginHeader.isPresent()).toBeFalsy();
-
-    //     // switch to login section and validate
-    //     browser.wait(EC.elementToBeClickable(loginModal.gotoAccountLoginButton), 5000, "never found button to go to account login");
-    //     loginModal.gotoAccountLoginButton.click();
-    //     expect(loginModal.accountLoginHeader.isPresent()).toBeTruthy();
-    //     loginModal.usernameInput.sendKeys('testsidekick');
-    //     loginModal.passwordInput.sendKeys('testsidekick16');
-    //     browser.wait(EC.elementToBeClickable(loginModal.accountLoginButton), 5000, "never found the account login button on modal");
-        
-    //     loginModal.accountLoginButton.submit();
-
-    //     // Need to check for and click the owner tools button if its showing
-    //     sidebar.ownerToolToggle();
-        
-    //     // Desktop Heat Vision Button toggle
-    //     sidebar.heatButton.isPresent().then((result) => {
-    //         if (result) {
-    //             sidebar.heatButton.isDisplayed().then((result) => {
-    //                 if (result) {
-    //                     browser.wait(EC.elementToBeClickable(sidebar.heatButton), 5000, "never found the heat vision button");
-
-    //                     // Conditionally toggle the Heat Vision to make Active
-    //                     sidebar.heatButton.getAttribute('class').then(classes => {
-    //                         if (classes.indexOf('inactive') < 1) {
-    //                             sidebar.heatButton.click();
-    //                         }
-    //                     });
-
-    //                     browser.sleep(2000);
-    //                     expect(sidebar.heatButton.getAttribute('class')).toContain("inactive");
-    //                 }
-    //             });
-    //         }
-    //     });
-
-    //     // Mobile Heat Vision button toggle
-    //     sidebar.heatButtonMobile.isPresent().then((result) => {
-    //         if (result) {
-    //             sidebar.heatButtonMobile.isDisplayed().then((result) => {
-    //                 if (result) {
-    //                     browser.wait(EC.elementToBeClickable(sidebar.heatButtonMobile), 5000, "never found the heat vision button");
-
-    //                     // Conditionally toggle the Heat Vision to make Active
-    //                     sidebar.heatButtonMobile.getAttribute('class').then(classes => {
-    //                         if (classes.indexOf('inactive') < 1) {
-    //                             sidebar.heatButtonMobile.click();
-    //                         }
-    //                     });
-
-    //                     browser.sleep(2000);
-    //                     expect(sidebar.heatButtonMobile.getAttribute('class')).toContain("inactive");
-    //                 }
-    //             });
-    //         }
-    //     });
-    // });
-
-    // /**
-    //  * Test:
-    //  * - Go to a project page
-    //  * - Login with guest name
-    //  * - Make sure that the guest name is on the account button
-    //  */
-    // it("hide other user's comments to guest while Heat Vision is on", () => {
-    //     // logging in
-    //     browser.wait(EC.elementToBeClickable(loginModal.guestNameInput), 6000, "never saw a guest name input box");
-    //     loginModal.guestNameInput.sendKeys("Not Hot Commenter");
-    //     browser.wait(EC.elementToBeClickable(loginModal.guestLoginButton), 5000, "never found the guest login button");
-    //     loginModal.guestLoginButton.click();
-
-        
-    //     // Make sure the comment was created
-    //     let comments = element.all(by.css('edji-comment:not(.hidden):not(.spec-owner)'))
-    //         .count()
-    //         .then((count) => {
-    //             expect(count).toBe(0)
-    //         })
-    // });    
-     
-}); // describe 'Dashboard Page'
-  
+        // First commenter's comment should no longer be visible
+        browser.wait(EC.invisibilityOf(firstCommenterComments.first()), 3000, "next student filter did not hide previous student's comments")
+    
+        // Clear filter and ensure all comments are showing again
+    })   
+})

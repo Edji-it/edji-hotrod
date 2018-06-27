@@ -17,10 +17,12 @@ export class Sidebar {
     public heroLink = element(by.id("heroLink"));
 
     // Owner Tools
-    public leaderboardButton = element(by.id("toggleLeaderboard"));
-    public heatButton       = element(by.id("toggleHeatVision"));
-    public heatButtonMobile = element(by.id("toggleHeatVisionMobile"));
-    public ownerToolToggleButton = element(by.id("buttonOwnerToolToggle"));
+    public leaderboardButton = element(by.id("toggleLeaderboard"))
+    public prevStudentButton = element(by.id("studentFilterPrev"))
+    public nextStudentButton = element(by.id("studentFilterNext"))
+    public heatButton = element(by.id("toggleHeatVision"))
+    public heatButtonMobile = element(by.id("toggleHeatVisionMobile"))
+    public ownerToolToggleButton = element(by.id("buttonOwnerToolToggle"))
 
     public backToDash(): void {
         let modalCloseBtn = element(by.css(".show .modal button.close"));
