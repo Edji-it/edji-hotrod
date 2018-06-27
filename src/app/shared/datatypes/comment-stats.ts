@@ -1,8 +1,10 @@
 import { EdjiComment, iCommentStats, Project } from './'
+import { UserCommentStats } from './comment';
 
 export class CommentStats {
   private _stats: iCommentStats = {
-    count: 0,
+    reply_count: 0,
+    comment_count: 0,
     userStats: []
   }
 
@@ -19,7 +21,8 @@ export class CommentStats {
 
   public initStats(project?: Project): iCommentStats {
     let commentStats: iCommentStats = {
-        count: 0,
+        reply_count: 0,
+        comment_count: 0,
         userStats: []
     }
 
@@ -37,7 +40,8 @@ export class CommentStats {
 
         commentStats.userStats.push({
             _id: student._id,
-            count: 0,
+            comment_count: 0,
+            reply_count: 0,
             fullname: student.fullname
         })
     }
@@ -49,7 +53,8 @@ export class CommentStats {
 
         commentStats.userStats.push({
             _id: student._id,
-            count: 0,
+            comment_count: 0,
+            reply_count: 0,
             fullname: student.fullname
         })
     }
@@ -61,7 +66,7 @@ export class CommentStats {
    * Sets the stats back to a blank object
    */
   public resetStats(): void {
-    this._stats = { count: 0, userStats: [] }
+    this._stats = { comment_count: 0, reply_count: 0, userStats: [] }
   }
 
     /**
@@ -71,8 +76,13 @@ export class CommentStats {
      * @param commentStats The comment stats object which will be modified and returned
      */
     public addCommentToStats(comment: EdjiComment, difference: number): void {
+        let isReply = comment.reply_to && comment.reply_to.length > 0
         // increment the total reading comment count by the difference
-        this._stats.count += difference
+        if (isReply) {
+            this._stats.reply_count += difference
+        } else {
+            this._stats.comment_count += difference
+        } 
 
         // find the student in the array. if they don't exist and are adding a comment, then add to the count
         //  if they don't exist and are deleting a comment, log an error... we're not sure why that's happenning...
@@ -81,10 +91,15 @@ export class CommentStats {
             this._stats.userStats.push({
                 _id: comment.user_id,
                 fullname: comment.author,
-                count: 1
+                comment_count: isReply ? 0 : 1,
+                reply_count: isReply ? 1 : 0,
             })
         } else if (student) {
-            student.count += difference
+            if (isReply) {
+                student.reply_count += difference
+            } else {            
+                student.comment_count += difference
+            }
         } else {
             // if we're trying to subtract from a non-existant student, then log this error... we don't want to do that.
             console.error("We tried subtracting a comment from a student who doesn't exist!")
@@ -98,7 +113,7 @@ export class CommentStats {
      * @param _id the _id from the student that you want to find
      * @returns the object in the array that matches that id
      */
-    private findStudent(_id: string): { _id: string, fullname: string, count: number } {
+    private findStudent(_id: string): UserCommentStats {
         return this._stats.userStats.find((student) => {
             return student._id == _id
         })
@@ -109,10 +124,12 @@ export class CommentStats {
      *  used to sort the array of students
      */
     private compareStudents(
-        stu1: { _id: string, fullname: string, count: number }, stu2: { _id: string, fullname: string, count: number }
+        stu1: UserCommentStats, stu2: UserCommentStats
     ): number {
-        if (stu1.count < stu2.count) { return 1 }
-        if (stu1.count > stu2.count) { return -1 }
+        let stu1Count = stu1.comment_count + stu1.reply_count
+        let stu2Count = stu2.comment_count + stu2.reply_count
+        if (stu1Count < stu2Count) { return 1 }
+        if (stu1Count > stu2Count) { return -1 }
         return 0
     }
 }

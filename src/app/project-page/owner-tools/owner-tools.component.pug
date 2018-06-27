@@ -17,7 +17,7 @@
   //- Fire Feed toggle
   button.btn.owner-tools__btn.btn-hv(type="button", (tap)="showElseFalse('showFireFeed')")
     i#toggleFirefeed.icon-fire-feed(*ngIf="currentProject")
-    span.badge.badge-pill.badge-info(*ngIf="commentStats.stats.count && commentStats.stats.count > 0") {{ commentStats.stats.count }}
+    span.badge.badge-pill.badge-info(*ngIf="commentStats.stats.comment_count && commentStats.stats.comment_count > 0") {{ commentStats.stats.comment_count }}
     label Feed
   //- Question Feed toggle
   div(*ngIf="currentReading.questions && currentReading.questions.length>0")
