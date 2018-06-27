@@ -116,29 +116,30 @@ export class LeaderboardComponent implements OnInit {
 
   /**
    * Page through Student Filters
+   * @param pageChange how far, negative or positive, to paginate through students
    */
   public pageStudentFilter(pageChange: number) : void {
     let currentIndex: number
     let newIndex: number
     let userCount: number = this.commentStats.stats.userStats.length
-
+    // Find the current index/page of the applied student filter
     for (let i = 0; i < userCount; i++) {
       if(this.commentStats.stats.userStats[i]['filtered'] === true) {
         currentIndex = i
         break
       }
     }
-
+    // Calc index of filter to change to
     newIndex = currentIndex + pageChange
-
+    // If already first student, loop to the end
     if (newIndex < 0) {
       newIndex = userCount - 1
     }
-
+    // If already last student, loop to the start
     if (newIndex >= userCount) {
       newIndex = 0
     }
-
+    // Apply filter for student navigated to
     this.viewStudentFilter(this.commentStats.stats.userStats[newIndex])
   }
 

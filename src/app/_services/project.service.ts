@@ -410,7 +410,7 @@ export class ProjectService {
      * @param comment Comment relevant comment highlights should be accounted for
      * @param highlightArray number[] array of values to increment
      */
-    private incrementHighlightIndices(comment: BaseComment, highlightArray: number[]): number[] {
+    private incrementHighlightIndices(comment: EdjiComment, highlightArray: number[]): number[] {
         // loop through all of the indexes (corresponding to words) and increment their highlights
         for (var i = comment.start; i <= comment.end; i ++) {
             if (this.isCommentVisible(comment)) {
@@ -791,6 +791,7 @@ export class ProjectService {
             for (let key of filterKeys) {
                 if (filter.propertyFilters[key].test(comment[key]) === false) {
                     fitsFilter = false
+                    break
                 }
             }
             return fitsFilter
@@ -836,7 +837,7 @@ export class ProjectService {
      * Get highlights for all filtered comments
      * @fires filterUpdates Observable
      */
-    private generateCommentFilter(propertyFilters: any, displayType: string, displayName: string) {
+    private generateCommentFilter(propertyFilters: CommentPropertyFilters, displayType: string, displayName: string) {
         let commentFilter = <CommentFilter>{}
         commentFilter.propertyFilters = propertyFilters
         commentFilter.displayType = displayType
