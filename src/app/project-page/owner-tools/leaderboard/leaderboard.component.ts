@@ -2,8 +2,8 @@ import { Subscription } from 'rxjs'
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 
 // Project Dependencies
-import { CommentStats, Reading } from './../../../shared/datatypes'
-import { ProjectService, ReadingService, CommentService } from '../../../_services'
+import { CommentStats, Reading, User } from './../../../shared/datatypes'
+import { ProjectService, ReadingService, AuthService } from '../../../_services'
 import { CommentFilter } from '../../../_services/project.service'
 
 @Component({
@@ -19,19 +19,26 @@ export class LeaderboardComponent implements OnInit {
   /** This is a reference to the actual commentStats object which has methods for modification of properties */
   @Input() commentStats: CommentStats
   
+  private currentUser: User
   private currentReading: Reading
   private subscriptions: Subscription[] = []
   private answersById: any = {}
   private userAnswers: any[] = []
+
   public appliedFilter: CommentFilter
+  public showFilterHeroModal: boolean
 
   constructor(
     private _readings: ReadingService,
     private _projects : ProjectService,
-    private _comments: CommentService
+    private _auth: AuthService
   ) { }
 
   ngOnInit() {
+    // Subscribe to current user
+    this._auth.getCurrentUser().subscribe((user) => {
+        this.currentUser = user
+    }), 
     // Subscribe to the reading
     this.subscriptions.push( 
       this._readings.currentReading.subscribe(
@@ -111,7 +118,11 @@ export class LeaderboardComponent implements OnInit {
    * @param student User needs "_id" and "fullname"/"username"
    */
   public viewStudentFilter(student: any) : void {
-    this._projects.filterByUser(student)
+    if (this.currentUser && this.currentUser.hero_status){
+      this._projects.filterByUser(student)
+    } else {
+      this.showFilterHeroModal = true
+    }
   }
 
   /**
