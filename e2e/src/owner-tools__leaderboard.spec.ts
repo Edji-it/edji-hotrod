@@ -22,7 +22,7 @@ describe('Project Page as an owner wishing to filter by student: ', () => {
         // Id for Owner Tools Test Reading owned by Teach/Teach
         browser.get("/#/home");
         // Open Test project
-        home.enterProjectCodeFromHome('test')
+        home.enterProjectCodeFromHome('testhero')
     });
 
     afterEach(() => {
@@ -42,8 +42,8 @@ describe('Project Page as an owner wishing to filter by student: ', () => {
         browser.wait(EC.elementToBeClickable(loginModal.gotoAccountLoginButton), 5000, "never found button to go to account login");
         loginModal.gotoAccountLoginButton.click();
         expect(loginModal.accountLoginHeader.isPresent()).toBeTruthy();
-        loginModal.usernameInput.sendKeys('testsidekick');
-        loginModal.passwordInput.sendKeys('testsidekick16');
+        loginModal.usernameInput.sendKeys('testhero');
+        loginModal.passwordInput.sendKeys('testhero16');
         browser.wait(EC.elementToBeClickable(loginModal.accountLoginButton), 5000, "never found the account login button on modal");
         
         loginModal.accountLoginButton.submit();
