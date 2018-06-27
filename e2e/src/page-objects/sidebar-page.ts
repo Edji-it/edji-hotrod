@@ -20,6 +20,7 @@ export class Sidebar {
     public leaderboardButton = element(by.id("toggleLeaderboard"))
     public prevStudentButton = element(by.id("studentFilterPrev"))
     public nextStudentButton = element(by.id("studentFilterNext"))
+    public studentFilterClose = element(by.css(".filter-bubble .close"))
     public heatButton = element(by.id("toggleHeatVision"))
     public heatButtonMobile = element(by.id("toggleHeatVisionMobile"))
     public ownerToolToggleButton = element(by.id("buttonOwnerToolToggle"))

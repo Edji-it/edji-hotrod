@@ -62,7 +62,7 @@ describe('Project Page as an owner wishing to filter by student: ', () => {
             .then((count) => {
                 totalCount = count
             })
-        console.log("COUNT", totalCount)
+            
         // Wait for filters to be available
         browser.wait(EC.elementToBeClickable(element(by.id("studentFilterBtn0"))), 3000, "never saw student filter buttons in leaderboard")
 
@@ -76,16 +76,22 @@ describe('Project Page as an owner wishing to filter by student: ', () => {
         browser.wait(EC.visibilityOf(firstCommenterComments.first()), 3000, 'not able to see First Commenter\'s comment when filtering')
         firstCommenterComments.count()
             .then((count) => {
-                expect(count).toBe(1)
+                expect(count).toBe(1, 'found more or less than First Commenter\'s single comment despite filtering')
             })
-
-        // Paginate to next Student
-        browser.wait(EC.elementToBeClickable(sidebar.nextStudentButton), 5000, "never saw \"next\" student filter button")
-        sidebar.nextStudentButton.click()
-
+        // Paginate to previous Student
+        browser.wait(EC.elementToBeClickable(sidebar.prevStudentButton), 5000, 'never saw \"previous\" student filter button')
+        sidebar.prevStudentButton.click()
         // First commenter's comment should no longer be visible
-        browser.wait(EC.invisibilityOf(firstCommenterComments.first()), 3000, "next student filter did not hide previous student's comments")
-    
-        // Clear filter and ensure all comments are showing again
+        browser.wait(EC.invisibilityOf(firstCommenterComments.first()), 3000, 'previous student filter did not hide previous student\'s comments')
+        // Close student filter
+        sidebar.studentFilterClose.click()
+        // Ensure First Commenter's comment is visible again
+        browser.wait(EC.elementToBeClickable(firstCommenterComments.first()), 3000, 'never saw First Commenter\'s comment after clearing')
+        // Ensure all comments are showing again
+        element.all(by.css('edji-comment:not(.hidden)'))
+            .count()
+            .then((count) => {
+                expect(count == totalCount).toBeTruthy('all comments did not show after clearing student filter')
+            })
     })   
 })
