@@ -10,14 +10,20 @@ export class Sidebar {
     public avatarActionIcon = element(by.css("#avatarActionIcon"));
     public accountButton    = element(by.id("accountButton"));
     public referralButton = element(by.id("navReferralButton"));
-    public heatButton       = element(by.id("toggleHeatVision"));
-    public heatButtonMobile = element(by.id("toggleHeatVisionMobile"));
     public navReadings = element(by.id("navReadings"));
     public navDiscover = element(by.id("navDiscover"));
     public accountButtonSpan = this.accountButton.element(by.css('span'));
     public logo = element(by.id("logo"));
     public heroLink = element(by.id("heroLink"));
-    public ownerToolToggleButton = element(by.id("buttonOwnerToolToggle"));
+
+    // Owner Tools
+    public leaderboardButton = element(by.id("toggleLeaderboard"))
+    public prevStudentButton = element(by.id("studentFilterPrev"))
+    public nextStudentButton = element(by.id("studentFilterNext"))
+    public studentFilterClose = element(by.css(".filter-bubble .close"))
+    public heatButton = element(by.id("toggleHeatVision"))
+    public heatButtonMobile = element(by.id("toggleHeatVisionMobile"))
+    public ownerToolToggleButton = element(by.id("buttonOwnerToolToggle"))
 
     public backToDash(): void {
         let modalCloseBtn = element(by.css(".show .modal button.close"));

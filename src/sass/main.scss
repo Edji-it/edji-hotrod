@@ -130,7 +130,7 @@ $seamlessPlaceholderColor: #cdcdcd;
 		background-size: 75px !important;
 		content: " ";
 		width: 75px;
-		height: 100px;
+		min-height: 100px;
 		display: block;
 		margin: 0 auto;
 		transition:opacity 300;

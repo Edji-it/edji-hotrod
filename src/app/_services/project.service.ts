@@ -9,7 +9,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
 // Project Dependencies
 import { AuthService } from './auth.service'
 import { SocketService } from './socket.service'
-import { CommentStats, iCommentStats, EdjiComment, Project, User } from '../shared/datatypes'
+import { CommentStats, iCommentStats, EdjiComment, Project, User, BaseComment } from '../shared/datatypes'
 import { ReadingService } from "./reading.service"
 import { AcademyService } from './academy.service';
 
@@ -73,6 +73,13 @@ export class ProjectService {
     // Broadcast rendering the lastword element if firefeed view image reference doesn't have the image rendered yet
     public lastWordUpdateSubj: Subject<number> = new Subject<number>()
     public lastWordUpdateState: Observable<number> = this.lastWordUpdateSubj.asObservable()
+
+    /**
+     * Comment Filters
+     */
+    public activeFilter: CommentFilter
+    private filterUpdatesSource: Subject<CommentFilter> = new Subject<CommentFilter>()
+    public filterUpdates: Observable<CommentFilter> = this.filterUpdatesSource.asObservable()
 
     constructor(
         private http: Http, 
@@ -390,29 +397,31 @@ export class ProjectService {
 
         if (alwaysHighlight) {
             // loop through all of the indexes (corresponding to words) and increment their highlights
-            for (var i = comment.start; i <= comment.end; i ++) {
-                if (this.isCommentVisible(comment)) {
-                    // if true, means there's already a highlight
-                    if (alwaysHighlightArray[i]) {
-                        alwaysHighlightArray[i]++;
-                    } else {
-                        alwaysHighlightArray[i] = 1;
-                    }
-                }
-            }
+            alwaysHighlightArray = this.incrementHighlightIndices(comment, alwaysHighlightArray)
         } else {
-            for (var i = comment.start; i <= comment.end; i ++) {
-                if (this.isCommentVisible(comment)) {
-                    if (highlightArray[i]) {
-                        highlightArray[i]++;
-                    } else {
-                        highlightArray[i] = 1;
-                    }
-                }
-            }
+            highlightArray = this.incrementHighlightIndices(comment, highlightArray)
         }
 
         return { alwaysHighlightArray: alwaysHighlightArray, highlightArray: highlightArray }
+    }
+
+    /**
+     * Increment highlight values in array
+     * @param comment Comment relevant comment highlights should be accounted for
+     * @param highlightArray number[] array of values to increment
+     */
+    private incrementHighlightIndices(comment: EdjiComment, highlightArray: number[]): number[] {
+        // loop through all of the indexes (corresponding to words) and increment their highlights
+        for (var i = comment.start; i <= comment.end; i ++) {
+            if (this.isCommentVisible(comment)) {
+                if (highlightArray[i]) {
+                    highlightArray[i]++;
+                } else {
+                    highlightArray[i] = 1;
+                }
+            }
+        }
+        return highlightArray
     }
 
     /**
@@ -773,19 +782,80 @@ export class ProjectService {
         this.commentByPosSubject.next(this.commentByPosSource)
     }
 
-    public isCommentVisible(comment: any): boolean {
-        // If the comment has data/url (meaning they've filled out the comment) or its the current users comment
-        // let dataInComment = ((comment.data && comment.data != '') || comment.url && comment.url != '') || comment.user_id == this.user._id
-        // If user is current reading Owner/Teacher or Heat Vision is on, show all comments
-        let heatVisible = (this.project.heat_vision || (this.user._id == this.project.teacher_id))
-        // Your own comments and the Owner/Teacher's comments are ALWAYS visible
-        let alwaysVisible = comment.user_id == this.user._id || (comment.user_id == this.project.teacher_id)
-
-        return  (heatVisible || alwaysVisible)
+    public isCommentVisible(comment: any, inProgressFilter?: CommentFilter): boolean {
+        let filter = this.activeFilter || inProgressFilter
+        if (filter){
+            // If a comment filter is active, only show filtered comments
+            let fitsFilter = true
+            let filterKeys = Object.keys(filter.propertyFilters)
+            for (let key of filterKeys) {
+                if (filter.propertyFilters[key].test(comment[key]) === false) {
+                    fitsFilter = false
+                    break
+                }
+            }
+            return fitsFilter
+        } else {
+            // If the comment has data/url (meaning they've filled out the comment) or its the current users comment
+            // let dataInComment = ((comment.data && comment.data != '') || comment.url && comment.url != '') || comment.user_id == this.user._id
+            // If user is current reading Owner/Teacher or Heat Vision is on, show all comments
+            let heatVisible = (this.project.heat_vision || (this.user._id == this.project.teacher_id))
+            // Your own comments and the Owner/Teacher's comments are ALWAYS visible
+            let alwaysVisible = comment.user_id == this.user._id || (comment.user_id == this.project.teacher_id)
+            return  (heatVisible || alwaysVisible)
+        }
     }
 
     public isCommentHiddenDraft(comment: any): boolean {
         return ((!comment.data || comment.data == '') && (!comment.url || comment.url == '')) && comment.user_id != this.user._id
+    }
+
+    /**
+     * Clear active comment filter, if there is one
+     */
+    public clearFilters(): void {
+        this.activeFilter = null
+        this.filterUpdatesSource.next(this.activeFilter)
+    }
+
+    /**
+     * Filter comments to show one user
+     * - Pass an empty string to clear the filter
+     * @param userId The id for the Student you want to view the comments of
+     */
+    public filterByUser(user: User) : void {
+        let props: CommentPropertyFilters = {}
+        // Clear current filter, without notifying components
+        this.activeFilter = null
+        // For User id filters, we want an exact match
+        props.user_id = new RegExp("^" + user._id + "$")
+        // Construct full filter and notify components
+        this.generateCommentFilter(props, "Student", user.fullname ? user.fullname : user.username)
+    }
+
+    /**
+     * Get highlights for all filtered comments
+     * @fires filterUpdates Observable
+     */
+    private generateCommentFilter(propertyFilters: CommentPropertyFilters, displayType: string, displayName: string) {
+        let commentFilter = <CommentFilter>{}
+        commentFilter.propertyFilters = propertyFilters
+        commentFilter.displayType = displayType
+        commentFilter.displayName = displayName
+        // Get copy of comments
+        let comments = this.project.comments.slice()
+        let filterHighlightArray = []
+        comments.forEach(comment => {
+            // Filter out comments
+            if (this.isCommentVisible(comment, commentFilter)) {
+                // Generate Highlight Array
+                filterHighlightArray = this.incrementHighlightIndices(comment, filterHighlightArray)
+            }
+        })
+        commentFilter.filterHighlightArray = filterHighlightArray
+        // Announce the completed filter to components!
+        this.activeFilter = commentFilter
+        this.filterUpdatesSource.next(this.activeFilter)
     }
 } // class
 
@@ -801,3 +871,15 @@ interface ProjectFilters {
     size?: number,
     start?: number
   }
+
+export interface CommentFilter {
+    propertyFilters: CommentPropertyFilters,
+    filterHighlightArray?: number[],
+    displayType: string,
+    displayName: string
+}
+
+export interface CommentPropertyFilters {
+    type ?: RegExp,
+    user_id ?: RegExp
+}

@@ -140,6 +140,10 @@
     height: 1em;
 }
 
+.icon-comment-filter {
+    @include icon('icon-comment-filter.svg');
+}
+
 .icon-link {
     @include icon('icon-link.svg');
     display: inline-block;

@@ -81,7 +81,7 @@
         </div>
         <div class="answerOverflow answerOverflow-normal" id="answerBlock" *ngIf="!ownerHidden">
           <div *ngFor="let answer of answersById[question._id]">
-            <div *ngIf="!((question.option_types.indexOf('public') === -1 && user._id !== project.teacher_id) && answer.user_id !== user._id && answer.user_id !== project.teacher_id)" class="comment-wrap-row">
+            <div *ngIf="isAnswerVisible(answer)" class="comment-wrap-row">
               <edji-comment class="answerCommentBlock"  
                 [comment]="answer" 
                 [commentContext]="'answer'" 

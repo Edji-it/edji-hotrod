@@ -1,0 +1,64 @@
+// Comments Pane
+.sliding-pane.from-left([ngClass]="{ 'slide-in' : visible }")
+  .container-fluid.container--less-pad
+    h4
+      | {{ commentStats.stats.userStats.length }} Students
+      button.close.stats-close-btn.btn-icon--round((click)='hide.emit()' type='button')
+        span(aria-hidden='true') &times;
+    p(style='opacity: 0.3; margin-bottom: 14px; white-space: nowrap; border-bottom: 1px solid #cdcdcd;')
+      span.small Student
+      //- img(style='height: 1em; width: auto; float: right' src='assets/images/icon-comment.svg')
+      span(style="float:right;")
+        span.small.mr-2 Replies
+        span.small(style="width:65px;") Comments
+    .user-list-item(*ngFor='let commentUser of commentStats.stats.userStats; let i = index')
+      span.user-list__name([attr.id]="'studentName'+i") {{ commentUser.fullname }}
+      //- Comment filter shows on hover and when active
+      .student-filter__wrap
+        .btn.btn-icon.btn-outline-primary.e2e-student-filter(
+            [attr.id]="'studentFilterBtn'+i",
+            [class.active]="commentUser.filtered",
+            (click)="viewStudentFilter(commentUser)", 
+            title="View only {{commentUser.fullname}}'s comments"
+          ) 
+          .icon.icon-comment-filter.mr-1
+          | {{ commentUser.comment_count }}
+      //- Reply Count
+      .student-replies__wrap {{ commentUser.reply_count }}
+      .question-answer-status__block(*ngIf='commentUser && currentReading.questions && currentReading.questions.length > 0')
+        .answer-designate Answers:
+        ng-container(*ngFor='let answer of userAnswers')
+          .answer-circle__group(*ngIf='answer.user===commentUser._id')
+            .circle([class.filled]="answer.answered")
+.filter-bubble([class.slide-in]="appliedFilter")
+  ng-container(*ngIf="appliedFilter")
+    button.close.btn-icon--round(
+        (click)="clearFilter()",
+        type="button",
+        data-dismiss="modal",
+        aria-label="Close"
+        )
+      span(aria-hidden="true") &times;
+    .filter-bubble__descriptor 
+      .icon.icon-comment-filter.mr-1
+      | Viewing {{ appliedFilter.displayType }}
+    .filter-bubble__name 
+      #studentFilterPrev.btn.btn-icon.btn-outline-primary.btn--prev((click)="pageStudentFilter(-1)")
+        .fa.fa-backward
+      | {{ appliedFilter.displayName }}
+      #studentFilterNext.btn.btn-icon.btn-outline-primary.btn--next((click)="pageStudentFilter(1)")
+        .fa.fa-forward
+.modal(*ngIf="showFilterHeroModal")
+  .modal-dialog
+    .modal-content
+      .modal-header
+        h5.modal-title View Student Filters, with Hero!
+        button.close((click)="showFilterHeroModal = false")
+          span(aria-hidden="true") &times;
+      .modal-body
+        .text-center
+          img.card.w-75.mb-4(style="display:inline-block;", src="/assets/images/promo-student-filter.png")
+        p Student Filters are one of the great tools Edji Heroes can use to review or show off an individual student.
+      .modal-footer
+        .btn.btn-secondary((click)="showFilterHeroModal = false") Close
+        .btn.btn-hero([routerLink]="['/hero']") Learn About Hero

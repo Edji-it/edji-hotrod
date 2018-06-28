@@ -3,10 +3,10 @@
   //- Buttons for toggling panes and tools
     - Desktop Buttons
   //- Comment Stats pane
-  button.btn.owner-tools__btn.btn-cmt(type="button", aria-label="Comment Counts", (click)="showElseFalse('showCommentCounts')")
+  button#toggleLeaderboard.btn.owner-tools__btn.btn-cmt(type="button", aria-label="Comment Counts", (click)="showElseFalse('showCommentCounts')")
     //- img(*ngIf="isMobile" style="width: 50px;" src="assets/images/icon-comment.svg")
     img(src="assets/images/icon-leaderboard.svg")
-    label Tally
+    label Students
   //- Heat Vision toggle
   button.btn.owner-tools__btn.btn-hv(type="button", (tap)="togglePower('heat_vision', !this.currentProject.heat_vision)")
     //- placement={{tooltipPlacement}} ngbTooltip="Turn on Heat Vision to let readers see comments from other readers, turn it off to make comments private!"
@@ -17,7 +17,7 @@
   //- Fire Feed toggle
   button.btn.owner-tools__btn.btn-hv(type="button", (tap)="showElseFalse('showFireFeed')")
     i#toggleFirefeed.icon-fire-feed(*ngIf="currentProject")
-    span.badge.badge-pill.badge-info(*ngIf="commentStats.stats.count && commentStats.stats.count > 0") {{ commentStats.stats.count }}
+    span.badge.badge-pill.badge-info(*ngIf="commentStats.stats.comment_count && commentStats.stats.comment_count > 0") {{ commentStats.stats.comment_count }}
     label Feed
   //- Question Feed toggle
   div(*ngIf="currentReading.questions && currentReading.questions.length>0")
@@ -29,7 +29,7 @@
   //- Mobile Buttons
   .owner-options-group--mobile([class.btn-group-show--animation]="ownerToolShow", [style.max-height]="ownerToolBlockHeight")
     //- Comment Stats pane
-    button.btn.btn-icon--circle-shadow.owner-options--mobile(
+    button#toggleLeaderboard.btn.btn-icon--circle-shadow.owner-options--mobile(
       type="button",
       (tap)="showElseFalse('showCommentCounts'); ownerToolShow=!ownerToolShow", 
       [class.btn-show--animation]="ownerToolShow"

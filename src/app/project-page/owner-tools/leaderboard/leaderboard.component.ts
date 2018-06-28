@@ -1,12 +1,14 @@
 import { Subscription } from 'rxjs'
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 
-import { CommentStats, Reading } from './../../../shared/datatypes'
-import { ProjectService, ReadingService } from '../../../_services'
+// Project Dependencies
+import { CommentStats, Reading, User } from './../../../shared/datatypes'
+import { ProjectService, ReadingService, AuthService } from '../../../_services'
+import { CommentFilter } from '../../../_services/project.service'
 
 @Component({
   selector: 'hot-leaderboard',
-  templateUrl: 'leaderboard.component.html',
+  templateUrl: 'leaderboard.component.pug',
   styleUrls: ['./leaderboard.component.scss']
 })
 
@@ -17,38 +19,57 @@ export class LeaderboardComponent implements OnInit {
   /** This is a reference to the actual commentStats object which has methods for modification of properties */
   @Input() commentStats: CommentStats
   
+  private currentUser: User
   private currentReading: Reading
   private subscriptions: Subscription[] = []
   private answersById: any = {}
   private userAnswers: any[] = []
 
+  public appliedFilter: CommentFilter
+  public showFilterHeroModal: boolean
+
   constructor(
     private _readings: ReadingService,
-    private _projects : ProjectService
+    private _projects : ProjectService,
+    private _auth: AuthService
   ) { }
 
   ngOnInit() {
+    // Subscribe to current user
+    this._auth.getCurrentUser().subscribe((user) => {
+        this.currentUser = user
+    }), 
     // Subscribe to the reading
-    this.subscriptions.push( this._readings.currentReading.subscribe(
-      reading => {
-        this.currentReading = reading;
-      },
-      error => {
-        console.error(error);
-      }) 
-    )
-
+    this.subscriptions.push( 
+      this._readings.currentReading.subscribe(
+        reading => {
+          this.currentReading = reading;
+        },
+        error => {
+          console.error(error);
+        }) 
+      ),
     // Subscribe to updates to the answer reference object
-    this.subscriptions.push( this._projects.answersById.subscribe(
+    this._projects.answersById.subscribe(
       (answersById) => {
         this.answersById = answersById
         this.questionAnswerStatus()
       },
       (error) => {
         console.error(error)
-      }) 
+      }),
+    // Get Updates about applied comment filters so we can show the user
+    this._projects.filterUpdates.subscribe(
+      (filter) => {
+        this.appliedFilter = filter
+        
+        if (this.commentStats.stats.userStats) {
+          for (let i = 0; i < this.commentStats.stats.userStats.length; i++){
+            this.commentStats.stats.userStats[i]['filtered'] = this.isStudentFiltered(this.commentStats.stats.userStats[i])
+          }
+        }
+      }
     )
-
   }
 
   ngOnDestroy() {
@@ -89,6 +110,66 @@ export class LeaderboardComponent implements OnInit {
           }
         }
       }
+    }
+  }
+
+  /**
+   * Apply Student Filter
+   * @param student User needs "_id" and "fullname"/"username"
+   */
+  public viewStudentFilter(student: any) : void {
+    if (this.currentUser && this.currentUser.hero_status){
+      this._projects.filterByUser(student)
+    } else {
+      this.showFilterHeroModal = true
+    }
+  }
+
+  /**
+   * Page through Student Filters
+   * @param pageChange how far, negative or positive, to paginate through students
+   */
+  public pageStudentFilter(pageChange: number) : void {
+    let currentIndex: number
+    let newIndex: number
+    let userCount: number = this.commentStats.stats.userStats.length
+    // Find the current index/page of the applied student filter
+    for (let i = 0; i < userCount; i++) {
+      if(this.commentStats.stats.userStats[i]['filtered'] === true) {
+        currentIndex = i
+        break
+      }
+    }
+    // Calc index of filter to change to
+    newIndex = currentIndex + pageChange
+    // If already first student, loop to the end
+    if (newIndex < 0) {
+      newIndex = userCount - 1
+    }
+    // If already last student, loop to the start
+    if (newIndex >= userCount) {
+      newIndex = 0
+    }
+    // Apply filter for student navigated to
+    this.viewStudentFilter(this.commentStats.stats.userStats[newIndex])
+  }
+
+  /**
+   * Clear Filters
+   * @description clears any applied filters via project service
+   */
+  public clearFilter(): void {
+    this._projects.clearFilters()
+  }
+
+  /**
+   * Is Student Filtered
+   */
+  public isStudentFiltered(student: any) : boolean {
+    if (this.appliedFilter && this.appliedFilter.propertyFilters.user_id) {
+      return this.appliedFilter.propertyFilters.user_id.test(student._id)
+    } else {
+      return false
     }
   }
 }
