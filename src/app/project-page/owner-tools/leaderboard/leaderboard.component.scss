@@ -90,6 +90,15 @@
 		top: 5px;
 		right: 5px;
 	}
+
+	@media(max-width:$phone) {
+		position: fixed;
+		top: calc(100% - 100px);
+		bottom: 0px;
+		right: 0px;
+		left: 0px;
+		width: 100%;
+	}
 }
 
 // Filter notification display classes

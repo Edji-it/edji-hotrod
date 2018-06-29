@@ -30,7 +30,11 @@
         ng-container(*ngFor='let answer of userAnswers')
           .answer-circle__group(*ngIf='answer.user===commentUser._id')
             .circle([class.filled]="answer.answered")
-.filter-bubble([class.slide-in]="appliedFilter")
+.filter-bubble(
+    [class.slide-in]="appliedFilter",
+    (swipeleft)="pageStudentFilter(-1)",
+    (swiperight)="pageStudentFilter(1)"
+  )
   ng-container(*ngIf="appliedFilter")
     button.close.btn-icon--round(
         (click)="clearFilter()",
