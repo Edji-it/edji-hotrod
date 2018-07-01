@@ -7,10 +7,21 @@ nav-bar([showDashboardOptions]="true")
   .row
     .col-12
       ul.list-group
-        li.list-group-item(*ngFor="let license of licenses; let i = index")
-          //- table
-          //-   tr
-          //-     th
-          div License {{i + 1}}
-          div Created On {{license.createdAt | edjidate:'timeStamp':'mediumDate'}}
-          div.float-right Max Users: {{license.max_users}}
+        li.list-group-item(*ngFor="let license of licenses; let i = index", (click)="expand(license._id)")
+          .container
+            //- .row.no-gutters
+            //-   .col-4 License {{i + 1}}
+            //-   .col-4 Created On {{license.createdAt | edjidate:'timeStamp':'shortDate'}}
+            //-   .col-4 Max Users: {{license.max_users}}
+            h2 Teachers on This License
+            li.list-group-item.license-group-user(*ngFor="let user of license.users")
+              .pl-4.container
+                .row.no-gutters
+                  .col-4 {{user.fullname}}
+                  .col-8 {{user.email}}
+            h2 Pending Invitations to This License
+            li.list-group-item.license-group-user(*ngFor="let invitation of license.pending_invitations")
+              .pl-4.container
+                .row.no-gutters
+                  .col-4 {{invitation.email}}
+                  .col-8 Expires on {{invitation.expiration | edjidate:'timeStamp':'shortDate'}}

@@ -1,5 +1,5 @@
 // library imports
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, OnDestroy } from '@angular/core'
 import { Subscription } from 'rxjs'
 
 // project imports
@@ -11,7 +11,7 @@ import { AuthService, AcademyService } from '../../_services'
   templateUrl: './license-mgmt.component.pug',
   styleUrls: ['./license-mgmt.component.scss']
 })
-export class LicenseMgmtComponent implements OnInit {
+export class LicenseMgmtComponent implements OnInit, OnDestroy {
 
   public subscriptions: Subscription[] = []
 
@@ -44,4 +44,19 @@ export class LicenseMgmtComponent implements OnInit {
     )
   }
 
+  public expand(licenseId: string) {
+    let d = document.getElementById(licenseId)
+    if (d.className.indexOf('show')===-1) {
+      d.className += " show"
+    } else {
+      console.log(d)
+      document.getElementById(licenseId).className.replace('show', '')
+    }
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach(sub => {
+      sub.unsubscribe()
+    })
+  }
 }
