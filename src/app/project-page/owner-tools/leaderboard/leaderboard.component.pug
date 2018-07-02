@@ -46,12 +46,12 @@
     .filter-bubble__descriptor 
       .icon.icon-comment-filter.mr-1
       | Viewing {{ appliedFilter.displayType }}
-    .filter-bubble__name 
-      #studentFilterPrev.btn.btn-icon.btn-outline-primary.btn--prev((click)="pageStudentFilter(-1)")
+    #studentFilterPrev.btn.btn-icon.btn-outline-primary.btn--prev((click)="pageStudentFilter(-1)")
         .fa.fa-backward
+    .filter-bubble__name
       | {{ appliedFilter.displayName }}
-      #studentFilterNext.btn.btn-icon.btn-outline-primary.btn--next((click)="pageStudentFilter(1)")
-        .fa.fa-forward
+    #studentFilterNext.btn.btn-icon.btn-outline-primary.btn--next((click)="pageStudentFilter(1)")
+      .fa.fa-forward
 .modal(*ngIf="showFilterHeroModal")
   .modal-dialog
     .modal-content

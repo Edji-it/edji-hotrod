@@ -65,7 +65,7 @@
 	z-index: 8000;
 	top: $navBarHeight + $base-pad;
 	right: $base-pad + 200px;
-	width: 225px;
+	width: 240px;
 	padding: 15px;
 	min-height: 20px;
 	background: #ffffff;
@@ -99,6 +99,13 @@
 		left: 0px;
 		width: 100%;
 	}
+
+	@media(max-width: $tablet) {
+		position: fixed;
+		top: calc(100% - 120px);
+		bottom: 30px;
+		right: 5px;
+	}
 }
 
 // Filter notification display classes
@@ -114,22 +121,22 @@
 	font-size: 14px;
 	line-height: 27px;
 	text-align: center;
-	margin-top: 10px;
+	margin: 10px 3px 0px 3px;
+	vertical-align: middle;
 
-	& .btn {
-		border-radius: 50%;
-		width: 27px;
-		height: 27px;
-	}
+	white-space: nowrap;
+    width: calc(100% - 60px);
+    display: inline-block;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+}
 
-	& .btn--prev {
-		float: left;
-	}
-
-	
-	& .btn--next {
-		float: right;
-	}
+.btn--prev, .btn--next {
+	// float: left;
+	border-radius: 50% !important;
+	width: 27px;
+	height: 27px;
+	margin-top:10px;
 }
 
 $userListBorderWidth: 2px;
