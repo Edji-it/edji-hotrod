@@ -26,16 +26,166 @@
 }
 
 .answer-designate {
-  font-size: 14px;
+  font-size: 11px;
   font-style: italic;
   display: inline-block;
   margin-right: 6px;
+  vertical-align: top;
+  line-height: 22px;
 }
 
 .answer-circle__group {
   display: inline-block;
+  margin-right: 1px;
 }
 
-.question-answer-status__block {
-  padding-left: 12px;
+.question-answer-status__block { 
+	margin-top: 2px;
+}
+
+.comment-filter {
+	cursor: pointer;
+	opacity: 0.4;
+	display: inline-block;
+	padding: 0px 2px;
+	vertical-align: middle; // center icon on line
+
+	& .icon {
+		height: 1.2em;
+		width: 1.2em;
+	}
+
+	&:hover, &:focus {
+		opacity: 0.8;
+	}
+}
+
+.filter-bubble {
+	position: fixed;
+	z-index: 8000;
+	top: $navBarHeight + $base-pad;
+	right: $base-pad + 200px;
+	width: 240px;
+	padding: 15px;
+	min-height: 20px;
+	background: #ffffff;
+	box-shadow: 0px 1px 15px 0px rgba(0,0,0,0.2);
+	border-radius: 15px;
+	border: 2px solid $blue;
+
+	// Not showing by default
+	opacity: 0;
+	pointer-events: none;
+
+	&.slide-in {
+		// Transition when shown
+		transition: opacity 400ms ease, right 400ms ease;
+		opacity: 1;
+		pointer-events: all;
+		right: $base-pad;
+	}
+
+	& button.close {
+		position: absolute;
+		top: 5px;
+		right: 5px;
+	}
+
+	@media(max-width:$phone) {
+		position: fixed;
+		top: calc(100% - 100px);
+		bottom: 0px;
+		right: 0px;
+		left: 0px;
+		width: 100%;
+	}
+
+	@media(max-width: $tablet) {
+		position: fixed;
+		top: calc(100% - 120px);
+		bottom: 30px;
+		right: 5px;
+	}
+}
+
+// Filter notification display classes
+.filter-bubble__descriptor {
+	font-family: $base-font-family;
+	font-weight: 300;
+	font-size: 11px;
+}
+
+.filter-bubble__name {
+	font-family: $base-font-family;
+	font-weight: 500;
+	font-size: 14px;
+	line-height: 27px;
+	text-align: center;
+	margin: 10px 3px 0px 3px;
+	vertical-align: middle;
+
+	white-space: nowrap;
+    width: calc(100% - 60px);
+    display: inline-block;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+}
+
+.btn--prev, .btn--next {
+	// float: left;
+	border-radius: 50% !important;
+	width: 27px;
+	height: 27px;
+	margin-top:10px;
+}
+
+$userListBorderWidth: 2px;
+
+.user-list-item {
+	padding: 10px;
+	margin: 0px -10px;
+	border-radius: 2px;
+
+	&:nth-child(odd) {
+		background: #f5f8f8;
+	}
+}
+
+.icon-comment-filter {
+	opacity: 0.6;
+	vertical-align: middle;
+}
+
+.btn-icon.btn-outline-primary {
+	border: 2px solid #e7e7e7;
+	background: #ffffff;
+	border-radius: 5px;
+	padding: 0.25em;
+	cursor: pointer;
+
+	& .icon {
+		padding: 2px;
+	}
+
+	&:hover, &:focus {
+		border-color: desaturate($blue, 25%);
+	}
+
+	&.active {
+		border-color: $blue;
+		color: $blue;
+	}
+}
+
+.student-filter__wrap {
+	width:65px;
+	float:right;
+	text-align:center;
+	margin-top:-2px;
+}
+
+.student-replies__wrap {
+	text-align:center;
+	float:right;
+	width: 60px;
 }

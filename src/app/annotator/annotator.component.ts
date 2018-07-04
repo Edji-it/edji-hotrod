@@ -55,8 +55,12 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     public commentsByIndex : EdjiComment[][] = []
     public focusOverride   : boolean = false
 
+    // Indices highlighted by users other than owner or current user
     public highlightArray      : number[] = []
+    // Indices highlighted by current user or reading owner
     public alwaysHighlightArray: number[] = []
+    // Indices for highlights of a selected filter
+    public filterHighlightArray: number[]
     public focusArray          : boolean[] = []
     
     // Line Count
@@ -216,7 +220,19 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                     },
                     (error) => {
                         console.error(error)
-                    })
+                    }),
+                // Get filtered highlights for comment filters
+                this._projects.filterUpdates.subscribe(
+                    (filter) => {
+                        if (filter) {
+                            this.filterHighlightArray = filter.filterHighlightArray
+                        } else {
+                            this.filterHighlightArray = null
+                        }
+                        // Re-evaluate comment positions
+                        this.setLinePositions()
+                    }
+                )
             )
         /** Run-once logic to initialize the comment-based arrays and stats */
         let processedCommentData = this._projects.processComments(this.project)
@@ -897,21 +913,21 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     private getHighlightClass(i: number): string {
         let classString = ''
         let highlightCount = 0
-        let focusHighlight = false
 
-        if ((this.project.heat_vision || this.user._id == this.project.teacher_id) && this.highlightArray[i]) {
-            highlightCount += this.highlightArray[i]
-        }
-        if (this.alwaysHighlightArray[i]) {
-            // AlwaysHighlight also tracks focused words
-            // if (this.alwaysHighlightArray[i] >= 1000) {
-            //     // Focus style
-            //     focusHighlight = true
-            //     highlightCount += (this.alwaysHighlightArray[i] - 1000)
-            // } else {
+        // If a filter is applied, use filter highlights
+        if (this.filterHighlightArray) {
+            if (this.filterHighlightArray[i]) {
+                highlightCount += this.filterHighlightArray[i]
+            }
+        } else {
+            if ((this.project.heat_vision || this.user._id == this.project.teacher_id) && this.highlightArray[i]) {
+                highlightCount += this.highlightArray[i]
+            }
+            if (this.alwaysHighlightArray[i]) {
                 highlightCount += this.alwaysHighlightArray[i]
-            // }
+            }
         }
+        // Apply focus class to words of focused comments
         if (this.focusArray[i]) {
             classString = 'h-f'
         }
@@ -1088,7 +1104,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             this.angulartics.eventTrack.next({ action: comment.type + 'deleteComment', properties: { category: 'projectAction', label: 'failure' }})
           }
           this.inactivateComment()
-          console.log(error)
+          console.error(error)
         })
       } else {
         this._projects.deleteAnswer(comment)
@@ -1102,7 +1118,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
           // TRACK EXCEPTION
           this.angulartics.eventTrack.next({ action: comment.type + 'deleteAnswer', properties: { category: 'heroFeature', label: 'failure' }})
           this.inactivateComment()
-          console.log(error)
+          console.error(error)
         })
       }
     } 

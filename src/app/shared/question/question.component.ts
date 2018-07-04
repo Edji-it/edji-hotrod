@@ -204,6 +204,17 @@ export class QuestionComponent implements OnInit, OnDestroy {
     element.style.height = elHeight+"px"
   }
 
+  /**
+   * Test if an answer should be visible
+   */
+  private isAnswerVisible(answer): boolean {
+    let isPublic = this.question.option_types.indexOf('public') === -1
+    let isReadingOwner = this.user._id === this.project.teacher_id
+    let isAnswerer = answer.user_id === this.user._id
+    // isCommentVisible accounts for comment filters
+    return (isPublic || isReadingOwner || isAnswerer) && this._projects.isCommentVisible(answer)
+  }
+
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe() })
   }

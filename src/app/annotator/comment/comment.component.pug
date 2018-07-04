@@ -152,5 +152,6 @@ avatar-portal(
     [indexOnLine]="indexOnLine",
     [active]="indicatesPane",
     [lineY]="comment.lineY",
-    (toggleCommentPane)="toggleCPane(comment)"
+    (toggleCommentPane)="toggleCPane(comment)",
+    [ngClass]="['e2e-comment--'+comment.author.replace(' ', '-')]"
 )

@@ -1,14 +1,14 @@
 {
   "name": "edji-hotrod",
-  "version": "4.0.12",
+  "version": "4.1.0",
   "description": "Hot Rod is Edji's roaring Front End!",
   "author": "Edji, Inc.",
   "homepage": "https://edji.it/",
   "scripts": {
     "ng": "ng",
-    "deploy:dev": "ng build --prod && grunt push:dev && grunt cloudfront:dev",
-    "deploy:dev:minor": "ng build --prod && grunt push:dev && grunt cloudfront:dev",
-    "deploy:dev:major": "ng build --prod && grunt push:dev && grunt cloudfront:dev",
+    "deploy:dev": "yarn release && ng build --prod && grunt push:dev && grunt cloudfront:dev",
+    "deploy:dev:minor": "yarn release --release-as minor && ng build --prod && grunt push:dev && grunt cloudfront:dev",
+    "deploy:dev:major": "yarn release --release-as major && ng build --prod && grunt push:dev && grunt cloudfront:dev",
     "deploy:prod": "grunt checkbranch:master:true && ng build --prod && grunt push:prod && grunt cloudfront:prod",
     "dev": "ng serve",
     "start": "ng serve",
@@ -20,6 +20,7 @@
     "e2e:ci": "ng e2e --protractor-config e2e/protractor-circleci.conf.js",
     "e2e:mobile": "ng e2e --protractor-config e2e/protractor-mobile.conf.js",
     "postinstall": "node ./ng-add-pug-loader.js",
+    "release": "yarn standard-version",
     "server:ci": "http-server dist -p 3375 --cors --silent"
   },
   "private": true,
@@ -47,6 +48,7 @@
     "primeng": "^6.0.0-alpha.1",
     "rangy": "^1.3.0",
     "rxjs": "^6.1.0",
+    "standard-version": "^4.4.0",
     "zone.js": "^0.8.26"
   },
   "devDependencies": {

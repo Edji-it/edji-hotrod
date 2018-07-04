@@ -1,7 +1,7 @@
 nav-bar([showProjectInfo]="true")
 owner-tools
 .container-fluid
-  .row.loading(*ngIf="!project._id")
+  .row.loading(*ngIf="!project._id", style="min-height: 600px;")
   .project-column
     p.alert.alert-danger(*ngIf="error") {{ error }}
     <annotator #annotator *ngIf="project._id && reading._id"></annotator>
