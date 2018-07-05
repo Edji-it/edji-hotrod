@@ -16,7 +16,7 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
   public subscriptions: Subscription[] = []
 
   public user: User
-  public licenses: any[]
+  public license: any
   public currentAcademy: any
   
   constructor(
@@ -33,8 +33,8 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
       }),
       // get the licenses the user can manage
       this._academy.getLicenses().subscribe((licenses) => {
-        this.licenses = licenses
-        console.log(licenses)
+        this.license = licenses[0]
+        console.log(this.license)
       }),
       // get the current academy name
       this._academy.getInstitution(this._academy.currentInstitution).subscribe((academy) => {
@@ -42,16 +42,6 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
         console.log(this.currentAcademy)
       })
     )
-  }
-
-  public expand(licenseId: string) {
-    let d = document.getElementById(licenseId)
-    if (d.className.indexOf('show')===-1) {
-      d.className += " show"
-    } else {
-      console.log(d)
-      document.getElementById(licenseId).className.replace('show', '')
-    }
   }
 
   ngOnDestroy() {
