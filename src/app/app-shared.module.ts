@@ -21,7 +21,7 @@ import {
     UserInitialsPipe 
   } from './_pipes'
 import { ShareCodeComponent } from "./modals/share-code/share-code.component"
-import { ReferralModalComponent, HeroSubscribeComponent } from "./modals"
+import { ReferralModalComponent, HeroSubscribeComponent, LicenseInviteComponent } from "./modals"
 
 let SHARED_DECLARATIONS = [
     AddClassPipe,
@@ -31,6 +31,7 @@ let SHARED_DECLARATIONS = [
     FollowTag,
     FooterComponent, 
     HeroSubscribeComponent,
+    LicenseInviteComponent,
     LinkifyPipe, 
     NavBarComponent,
     ReferralModalComponent,
