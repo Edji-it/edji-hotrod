@@ -17,7 +17,7 @@ nav-bar([showDashboardOptions]="true")
         .col-md-8
           h2.mt-2 Pending Invitations For This License
         .col-md-4.py-3.text-center
-          button.btn.btn-primary.btn-sm((click)="addLicense()") Invite a Teacher
+          button.btn.btn-primary.btn-sm((click)="showLicenseInviteModal=true") Invite a Teacher
       ul.list-group
         li.px-0(*ngFor="let invitation of license.pending_invitations")
           .pl-4.container
@@ -25,3 +25,31 @@ nav-bar([showDashboardOptions]="true")
               .col-4 {{invitation.name ? invitation.name : ''}}
               .col-4 {{invitation.email ? invitation.email : ''}}
               .col-4 Expires on {{invitation.expiration | edjidate:'timeStamp':'shortDate'}}
+  .row
+    .container
+      h2 Something about inviting
+      form([formGroup]="licenseInvite", (ngSubmit)="formSubmit(licenseInvite)")
+        //- Name of Teacher
+        .form-group
+          label Name
+          input#licenseInviteNameInput(
+            type="text",
+            [formControl]="licenseInvite.controls['name']",
+            tabindex="0"
+          )
+          #errorTitle.alert.alert-info(*ngIf="licenseInvite.controls['name'].hasError('required') && (licenseInvite.controls['name'].dirty || submitted)") 
+            | Please enter the name of the teacher for the license invite
+        //- Email Address
+        .form-group
+          label Email
+          input#licenseInviteEmailInput(
+            type="text", 
+            [formControl]="licenseInvite.controls['email']", 
+            tabindex="1"
+          )
+          #licenseInviteErrorNoEmail.alert.alert-info(*ngIf="licenseInvite.controls['email'].hasError('required') && (licenseInvite.controls['email'].dirty || submitted)") 
+            | Please enter the email address of the teacher for the license invite
+          #licenseInviteErrorBadEmail.alert.alert-info(*ngIf="licenseInvite.controls['email'].hasError('emailIncorrect') && licenseInvite.controls['email'].dirty && !licenseInvite.controls['email'].hasError('required')") 
+            | We don't think that's an email...
+        button.btn.btn-primary(type="submit", [disabled]="!licenseInvite.valid") Submit
+license-invite-support([showModal]="showLicenseInviteModal", (closeModal)="showLicenseInviteModal=false")

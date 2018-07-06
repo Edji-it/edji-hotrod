@@ -5,7 +5,7 @@ import { map } from 'rxjs/operators'
 
 // project dependancies
 import { AuthService } from 'src/app/_services'
-import { User } from '../shared/datatypes'
+import { User, License } from '../shared/datatypes'
 
 @Injectable({
   providedIn: 'root'
@@ -35,6 +35,24 @@ export class AcademyService {
   public acceptLicense(licenseId: string): Observable<AcceptLicenseResponse> {
     return this._http.put<AcceptLicenseResponse>(this._auth.getUrl() + '/api/v1/licenses/' + licenseId + '/accept',
     {},
+    {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': this._auth.getToken()
+      })
+    })
+  }
+
+  /**
+   * Invites a teacher to a license
+   * @param licenseId _id of the license to accept
+   */
+  public inviteToLicense(name: string, email: string, licenseId: string): Observable<InviteLicenseResponse> {
+    return this._http.put<InviteLicenseResponse>(this._auth.getUrl() + '/api/v1/licenses/' + licenseId + '/invite',
+    {
+      "email": email,
+      "name": name
+    },
     {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
@@ -191,4 +209,11 @@ interface GetInsitutionResponse {
     name: string
     abbreviation: string
   }
+}
+
+/**
+ * /api/v1/licenses/:license_id/invite Response
+ */
+interface InviteLicenseResponse {
+  license: License
 }

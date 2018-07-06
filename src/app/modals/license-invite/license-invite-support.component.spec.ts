@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LicenseInviteComponent } from './license-invite.component';
+import { LicenseInviteComponent } from './license-invite-support.component';
 
 describe('LicenseInviteComponent', () => {
   let component: LicenseInviteComponent;
