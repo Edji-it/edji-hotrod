@@ -1,3 +1,5 @@
+@import '../../../sass/base/variables';
+
 .license-group__hidden {
   // display: none;
   height: 0;
@@ -57,7 +59,7 @@ $academy-purple: #2B2B48;
 }
 
 .check-box {
-  width: 2rem;
+  width: 5%;
 }
 
 .licenses-table {
@@ -69,5 +71,31 @@ $academy-purple: #2B2B48;
   }
   tr:last-child {
     border-bottom: #CFCFCF solid 2px;
+  }
+}
+
+.educator-pending {
+  font-style: italic;
+  color: #838383;
+  &.expires {
+    font-size: 14px;
+  }
+}
+
+.role-header {
+  width: 20%;
+}
+
+.educator-header {
+  width: 33%;
+}
+
+.academy-invite-button {
+  position: absolute;
+  bottom: 0;
+  @media(max-width: $tablet) {
+    width: 100%;
+    position: relative;
+    margin-top: 6px;
   }
 }

@@ -17,41 +17,44 @@ nav-bar([showDashboardOptions]="true")
         thead
           tr
             th.check-box(scope="col")
-            th.academy-header(scope="col") Educator
-            th.academy-header(scope="col") Role
+            th.academy-header.educator-header(scope="col") Educator
+            th.academy-header.role-header(scope="col") Role
             th.academy-header(scope="col") Joined Academy
         tbody
           tr.no-border(*ngFor="let licenseUser of licenseUsers")
             td
-            td {{ licenseUser.educator }}
-            td {{ licenseUser.role }}
-            td {{ licenseUser.joined | edjidate:'timeStamp':'shortDate' }}
+            td([ngClass]="[licenseUser.type=='pending' ? 'educator-pending' : '']") {{ licenseUser.educator }}
+            td([ngClass]="[licenseUser.type=='pending' ? 'educator-pending' : '']") {{ licenseUser.role }}
+            td(*ngIf="licenseUser.type=='active'") {{ licenseUser.joined | edjidate:'timeStamp':'shortDate' }}
+            td.educator-pending.expires(*ngIf="licenseUser.type=='pending'") Pending - Expires {{ licenseUser.joined | edjidate:'timeStamp':'shortDate' }}
   .row
     .container
       .academy-name.mt-5 Invite to Academy
       .academy-header.font-weight-light Add a teacher or admin to your Academy. They will receive an email with a link to accept their Academy license.
       form([formGroup]="licenseInvite", (ngSubmit)="formSubmit(licenseInvite)")
-        //- Name of Teacher
-        .form-group
-          label Name
-          input#licenseInviteNameInput(
-            type="text",
-            [formControl]="licenseInvite.controls['name']",
-            tabindex="0"
-          )
-          #errorTitle.alert.alert-info(*ngIf="licenseInvite.controls['name'].hasError('required') && (licenseInvite.controls['name'].dirty || submitted)") 
-            | Please enter the name of the teacher for the license invite
-        //- Email Address
-        .form-group
-          label Email
-          input#licenseInviteEmailInput(
-            type="text", 
-            [formControl]="licenseInvite.controls['email']", 
-            tabindex="1"
-          )
-          #licenseInviteErrorNoEmail.alert.alert-info(*ngIf="licenseInvite.controls['email'].hasError('required') && (licenseInvite.controls['email'].dirty || submitted)") 
-            | Please enter the email address of the teacher for the license invite
-          #licenseInviteErrorBadEmail.alert.alert-info(*ngIf="licenseInvite.controls['email'].hasError('emailIncorrect') && licenseInvite.controls['email'].dirty && !licenseInvite.controls['email'].hasError('required')") 
-            | We don't think that's an email...
-        button.btn.btn-primary(type="submit", [disabled]="!licenseInvite.valid") Submit
+        .row.mt-4
+          .col-md-4
+            //- Name of Teacher
+            label Name
+            input#licenseInviteNameInput.mb-0(
+              type="text",
+              [formControl]="licenseInvite.controls['name']",
+              tabindex="0"
+            )
+            #errorTitle.alert.alert-info(*ngIf="licenseInvite.controls['name'].hasError('required') && (licenseInvite.controls['name'].dirty || submitted)") 
+              | Please enter the name of the teacher for the license invite
+          .col-md-6
+            //- Email Address
+            label Email
+            input#licenseInviteEmailInput.mb-0(
+              type="text", 
+              [formControl]="licenseInvite.controls['email']", 
+              tabindex="1"
+            )
+            #licenseInviteErrorNoEmail.alert.alert-info(*ngIf="licenseInvite.controls['email'].hasError('required') && (licenseInvite.controls['email'].dirty || submitted)") 
+              | Please enter the email address of the teacher for the license invite
+            #licenseInviteErrorBadEmail.alert.alert-info(*ngIf="licenseInvite.controls['email'].hasError('emailIncorrect') && licenseInvite.controls['email'].dirty && !licenseInvite.controls['email'].hasError('required')") 
+              | We don't think that's an email...
+          .col-md-2
+            button.btn.btn-primary.academy-invite-button(type="submit", [disabled]="!licenseInvite.valid") Submit
 license-invite-support([showModal]="showLicenseInviteModal", (closeModal)="showLicenseInviteModal=false")
