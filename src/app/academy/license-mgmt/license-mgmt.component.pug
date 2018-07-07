@@ -7,7 +7,7 @@ nav-bar([showDashboardOptions]="true")
       .academy-name {{currentAcademy ? currentAcademy.name : 'Academy'}}
     .col-6.text-right
       .academy-header Licenses
-      .licenses-available.mr-4 {{license ? license.max_users - license.users.length : 0}} 
+      button.btn.academy-pill.bckgnd-invisible.mr-4 {{license ? license.max_users - license.users.length : 0}} 
         .text-smaller available
       button.btn.academy-pill {{license ? license.users.length : 0}} 
         .text-smaller in Use

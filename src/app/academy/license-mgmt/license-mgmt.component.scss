@@ -51,6 +51,10 @@ $academy-purple: #2B2B48;
   padding: 8px;
   font-size: 24px;
   display: inline-block;
+  &.bckgnd-invisible {
+    background-color: transparent;
+    color: $academy-purple;
+  }
 }
 
 .text-smaller {
