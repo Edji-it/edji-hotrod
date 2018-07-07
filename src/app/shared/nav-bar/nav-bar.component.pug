@@ -67,10 +67,6 @@
           button#logOutButton.list-group-item.list-group-item-action(type="button", (click)="logout()") Log Out
             span.list-icon--right([innerHtml]="':outbox_tray:' | emojione")
 
-    //- Go hero action (non-existent if already a hero)
-    .nav__btn-wrap(*ngIf="!showProjectInfo && !user.hero_status && !hideAccountOptions")
-      a#heroLink.btn.btn-hero.btn-sm.nav-bar__btn.hidden-sm-down([routerLink]="['/hero']", routerLinkActive="active") Go Hero!
-
     //- Project Info (Desktop & Mobile)
     .nav-bar__project-data(*ngIf="showProjectInfo && currentProject && currentProject._id")
       .group-label {{ currentProject.label }} &ensp;
@@ -126,6 +122,9 @@
             name="Join", 
             href="#") Go!
       #projectCodeError.invalid-feedback(*ngIf="errorObject.invalidCode", [innerHtml]="errorObject.invalidCode | emojione")
+    //- Go hero action (non-existent if already a hero)
+    .nav__btn-wrap(*ngIf="!user.hero_status && !hideAccountOptions")
+      a#heroLink.btn.btn-hero.btn-sm.nav-bar__btn.hidden-sm-down([routerLink]="['/hero']", routerLinkActive="active") Go Hero!
 
   //- Page title/reading title
   h1.hidden-md-up.mobile-heading(*ngIf="(pageTitle && !showProjectInfo) || hideAccountOptions") {{ pageTitle }}
