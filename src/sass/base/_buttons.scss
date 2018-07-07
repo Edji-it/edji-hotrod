@@ -194,11 +194,11 @@ button, .button, .btn { //, [class*='btn']
 }
 
 .btn.btn-hero {
-  background-color: #ffffff;
+  background-color: $btnHeroColor;
   // background-image: linear-gradient(180deg, #FFFFFF 7%, $btnHeroBg 100%);
   border: $btnBorderWidth solid $btnHeroColor;
   border-radius: $btnBorderRadius;
-  color: $btnHeroColor;
+  color: #fff;
 
   &.loading {
     background: $btnHeroBg;

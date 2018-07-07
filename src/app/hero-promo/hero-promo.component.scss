@@ -1,5 +1,44 @@
 @import '../../sass/base/variables';
 
+.twilight {
+    background-color:#003350;
+    background:linear-gradient( 180deg, #003350 75%,#91925d);
+    color: #fff;
+}
+
+.big-bold {
+    font-weight: 800;
+    font-size: 72px;
+    letter-spacing: -2px;
+    margin-bottom: 6px;
+    line-height: 65px;
+}
+
+.medium-bold {
+    font-weight: 800;
+    font-size: 48px;
+    letter-spacing: -2px;
+    margin-bottom: 6px;
+    line-height: 45px;
+}
+
+.small-bold {
+    font-weight: 800;
+    font-size: 24px;
+    letter-spacing: -1px;
+    margin-bottom: 6px;
+    line-height: 26px;
+    color: #121212;
+}
+
+.medium-semibold {
+    font-weight: 400;
+    font-size: 24px;
+    color: #121212;
+    letter-spacing: -1px;
+}
+
+
 .countdown-clock {
     color: #fff;
     text-align: center;

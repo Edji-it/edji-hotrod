@@ -6,39 +6,113 @@ nav-bar
   //-     img.hero-background(src='/assets/images/hero-lg.png')
   //-     .call-to-action
   //-       h1.promo-header.center Empower with Hero
-  .row.hero-promo-form
-    .col-md-8.offset-md-2
-      .button__row.pb-4
-        button#heroCTA.btn.btn-hero((click)='goHero()')
-          | Go Hero for 
-          span(style='font-weight: 700;') $60/yr
-      h1(style='margin-bottom: 0.5em;') Heroes Make Powerful Lessons
-      p(style='font-size:1.25em;')
+  .row.twilight(style="padding-top:100px; padding-bottom: 100px; position: relative; overflow:hidden;")
+    img(style="position:absolute;right:10%;bottom:0px;height:95%;", src="/assets/images/hero-promo-spotlight.svg")
+    img(style="width:100%; position: absolute; bottom: -50px;",src="/assets/images/hero-promo-skyline.svg")
+    .col-12(style="padding-bottom:25px;")
+      h1.big-bold(style="color:#fff;") Answer the Call
+    .col-1
+    .col-6
+      p.my-4(style='font-size:1.25em;')
         | Hero gives you more powers to supercharge your classrooms readings. Engage your students with questions, in reading discussion, and more! 
         span([innerHTML]="':tada:' | emojione")
-      p(style='font-size:1.25em') As a Hero, you get:
-      p
-        strong Reading Questions
-        br
-        | Gather more insight into your students thoughts as they read. Ask them what they learned or how their understanding of the topic has changed. Choose if they can answer with emoji, text, or by recording their own audio answer!
-      p
-        strong Comment Replies
-        br
-        | Replies let you or your readers start discussion right in the text. Reach out to a student and ask them to expand on their comment, or let students talk to eachother to explore a topic even more in depth on their own!
-      p
-        strong Custom Group Codes
-        br
-        | Share a reading with a custom code you select to be memorable and easier for your students to reach. Codes can describe the reading, an answer to a trivia question, or a fun to get students even more excited about reading!
+      button.btn.btn-hero((click)='goHero()')
+        | Go Hero
+  //- Feature preview and Academy CTA
+  .row.my-4
+    .col-8  
+      .card-group
+        .card
+          img.card-img-top.img-fluid(src="")
+          .card-block
+            h4.card-title Amp Up Student Voice
+        .card
+          .card-block
+            h4.card-title More Comment Types
+        .card
+          .card-block
+            h4.card-title More Comment Types
+    .col-4
+        h2.small-bold Assemble Your Team
+        p With Hero Academy, your whole school can weild the powers of Hero
+        .btn.btn-hero Request Academy
+  .row.hero-promo-form(style="margin:50px 0px;")
+    .col-md-8.offset-md-2
+      h2.text-center.medium-bold(style='margin-bottom: 0.5em;') Make Powerful Lessons
+  .row.my-4
+    .col-4
+      h3.medium-semibold <b>Questions</b> in Readings provide another challenge for students
+      //- p In-line questions and compiled answers.
+    .col-8
+      img(src="/assets/images/hero-promo-question.png")
+  .row.my-4
+    .col-4
+      h3.medium-semibold <b>Comment Replies</b> let you or your students start discussions right in the text
+      //- p
+      //-   strong Comment Replies
+      //-   br
+      //-   | Replies let you or your readers start discussion right in the text. Reach out to a student and ask them to expand on their comment, or let students talk to eachother to explore a topic even more in depth on their own!
+    .col-8
+      p IMAGE
+  .row.my-4
+    .col-4
+      h3.medium-semibold <b>Custom Group Codes</b> for memorization or for tying into another activity
+      //- br
+      //- | Share a reading with a custom code you select to be memorable and easier for your students to reach. Codes can describe the reading, an answer to a trivia question, or a fun to get students even more excited about reading!
       //- <p><strong>Custom Avatars</strong><br/>As a Reading owner, have your picture show next to each of your comments.</p>
-      p
-        strong Audio Comments
+    .col-8
+      p IMAGE
+  .row.navy
+    .col-2
+    .col-4
+      .button__row
+          button.btn.btn-hero((click)='goHero()')
+            | Time to Go Hero
+    .col-4
+      .button__row
+          button.btn.btn-secondary([routerLink]="['/pricing']")
+            | Hero vs. Academy
+  .row.my-4
+    .col-4
+      h3.medium-semibold
+        | Put student voices on a stage with <b>Audio Comments</b>
         span.beta-tag (BETA)
-        br
-        | Let your students record an Audio Comment as they read so they can put their thoughts directly into the reading for their classmates to hear. Great for students that struggle with writing, or students that are so excited they just can&apos;t wait to write their thoughts down!
-      br
-      small
-        span.beta-tag (BETA)
-        |  Audio comments are currently only available on Windows computers and Chromebooks while using the Google Chrome Browser. iPad and MacBook functionality is coming soon!
+    .col-8
+      p IMAGE
+  .row.my-4
+    .col-4
+      h3.medium-semibold
+        | <b>Student Filters</b> give the power to review and show off an individual's annotations
+    .col-8
+      p IMAGE
+  .row.my-4
+    .col-4
+      h3.medium-semibold
+        | Priority customer support
+    .col-8
+      p IMAGE
+  .row.my-4
+    .col-4
+      h3.medium-semibold
+        | Hero subscribers make Edji possible
+    .col-8
+      p IMAGE
+  .row  
+    .col-12
+      .button__row.pb-4
+          button#heroCTA.btn.btn-hero((click)='goHero()')
+            | Go Hero for 
+            span(style='font-weight: 700;') $60/yr
+  //- .row
+  //-   .col-8
+  //-       strong Audio Comments
+  //-       span.beta-tag (BETA)
+  //-       br
+  //-       | Let your students record an Audio Comment as they read so they can put their thoughts directly into the reading for their classmates to hear. Great for students that struggle with writing, or students that are so excited they just can&apos;t wait to write their thoughts down!
+  //-     br
+  //-     small
+  //-       span.beta-tag (BETA)
+  //-       |  Audio comments are currently only available on Windows computers and Chromebooks while using the Google Chrome Browser. iPad and MacBook functionality is coming soon!
   //- Share buttons!
     NOTES:
     - Change the second half of onclick to customize the default share message.
