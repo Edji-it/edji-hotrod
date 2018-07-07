@@ -2,32 +2,34 @@ nav-bar([showDashboardOptions]="true")
 .academy-bg
 .container.academy-container
   .row
-    .col-8
-      h1 Licenses for {{currentAcademy ? currentAcademy.name : 'Academy'}}
+    .col-6
+      .academy-header Academy
+      .academy-name {{currentAcademy ? currentAcademy.name : 'Academy'}}
+    .col-6.text-right
+      .academy-header Licenses
+      .licenses-available.mr-4 {{license ? license.max_users - license.users.length : 0}} 
+        .text-smaller available
+      button.btn.academy-pill {{license ? license.users.length : 0}} 
+        .text-smaller in Use
   .row
-    .container(*ngIf="license")
-      h2 Teachers on This License
-      ul.list-group
-        li.px-0(*ngFor="let user of license.users")
-          .pl-4.container
-            .row.no-gutters
-              .col-4 {{user.fullname}}
-              .col-4 {{user.email}}
-      .row
-        .col-md-8
-          h2.mt-2 Pending Invitations For This License
-        .col-md-4.py-3.text-center
-          button.btn.btn-primary.btn-sm((click)="showLicenseInviteModal=true") Invite a Teacher
-      ul.list-group
-        li.px-0(*ngFor="let invitation of license.pending_invitations")
-          .pl-4.container
-            .row.no-gutters
-              .col-4 {{invitation.name ? invitation.name : ''}}
-              .col-4 {{invitation.email ? invitation.email : ''}}
-              .col-4 Expires on {{invitation.expiration | edjidate:'timeStamp':'shortDate'}}
+    .container(*ngIf="licenseUsers.length > 1")
+      table.table.table-striped.licenses-table
+        thead
+          tr
+            th.check-box(scope="col")
+            th.academy-header(scope="col") Educator
+            th.academy-header(scope="col") Role
+            th.academy-header(scope="col") Joined Academy
+        tbody
+          tr.no-border(*ngFor="let licenseUser of licenseUsers")
+            td
+            td {{ licenseUser.educator }}
+            td {{ licenseUser.role }}
+            td {{ licenseUser.joined | edjidate:'timeStamp':'shortDate' }}
   .row
     .container
-      h2 Something about inviting
+      .academy-name.mt-5 Invite to Academy
+      .academy-header.font-weight-light Add a teacher or admin to your Academy. They will receive an email with a link to accept their Academy license.
       form([formGroup]="licenseInvite", (ngSubmit)="formSubmit(licenseInvite)")
         //- Name of Teacher
         .form-group

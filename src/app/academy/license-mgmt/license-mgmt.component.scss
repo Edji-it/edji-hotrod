@@ -21,3 +21,53 @@
     }
   }
 }
+
+$academy-purple: #2B2B48;
+
+.academy-name {
+  font-weight: 200;
+  font-size: 24px;
+}
+
+.academy-header {
+  font-weight: 400;
+  font-size: 16px;
+  color: #7a7a7a;
+}
+
+.licenses-available {
+  color: $academy-purple;
+  font-size: 24px;
+  display: inline-block;
+}
+
+.academy-pill {
+  background-color: $academy-purple;
+  cursor: initial;
+  color: #ffffff;
+  border-radius: 4px;
+  padding: 8px;
+  font-size: 24px;
+  display: inline-block;
+}
+
+.text-smaller {
+  font-size: 14px;
+  display: inline;
+}
+
+.check-box {
+  width: 2rem;
+}
+
+.licenses-table {
+  tr:first-child {
+    border-bottom: #CFCFCF solid 2px;
+    &.no-border {
+      border: none;
+    }
+  }
+  tr:last-child {
+    border-bottom: #CFCFCF solid 2px;
+  }
+}

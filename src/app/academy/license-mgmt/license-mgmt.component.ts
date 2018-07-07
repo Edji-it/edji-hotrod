@@ -18,6 +18,7 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
   public subscriptions: Subscription[] = []
 
   public user: User
+  public licenseUsers: any = []
   public license: any
   public currentAcademy: any
 
@@ -46,6 +47,60 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
       this._academy.getLicenses().subscribe((licenses) => {
         this.license = licenses[0]
         console.log(this.license)
+
+        // Set the array lengths here for looping speed
+        let activeLicenseLength = this.license.users.length
+        let pendLicenseLength = this.license.pending_invitations.length
+
+        // Set up the array with the active licenses
+        for (var i=0; i<activeLicenseLength; i++) {
+          let licenseUser = this.license.users[i]
+          let licenseRoles = this.license.roles
+          let licenseUserLicenseIds = this.license.users[i].license_ids
+          // Set the Name of educator
+          let educatorName = licenseUser.fullname
+          // Set the default role of the educator to be 'teacher'
+          let educatorRole = 'Teacher'
+          for (var j=0; j<licenseRoles.length; j++) {
+            // If the educator has a role beyond teacher per the license roles, override it here
+            if (licenseRoles[j].user_id===this.user._id) {
+              educatorRole = licenseRoles[j].role.charAt(0).toUpperCase() + licenseRoles[j].role.substr(1,licenseRoles[j].role.length).toLowerCase()
+            }
+          }
+          let educatorJoined = new Date
+          for (var k=0; k<licenseUserLicenseIds.length; k++) {
+            // Set the joined date of the educator for this license
+            if (licenseUserLicenseIds.license_id===this.license._id) {
+              educatorJoined = licenseUserLicenseIds.joined // | edjidate:'timeStamp':'shortDate'
+            }
+          }
+          // Push the object properties to the license
+          this.licenseUsers.push({
+            educator: educatorName,
+            role: educatorRole,
+            joined: educatorJoined,
+            type: 'active'
+          })
+        }
+
+        // Finish up the array with the pending licenses
+        for (var i=0; i<pendLicenseLength; i++) {
+          let pendingLicense = this.license.pending_invitations[i]
+          // Set the Name of educator
+          let educatorName = pendingLicense.name
+          // Set the default role of the educator to be 'teacher'
+          let educatorRole = 'Teacher'
+          // Set the joined date to their pending initation expiration date
+          let educatorJoined = pendingLicense.expiration
+          // Push the object properties to the license
+          this.licenseUsers.push({
+            educator: educatorName,
+            role: educatorRole,
+            joined: educatorJoined,
+            type: 'pending'
+          })
+        }
+        console.log(this.licenseUsers)
       }),
       // get the current academy name
       this._academy.getInstitution(this._academy.currentInstitution).subscribe((academy) => {
@@ -69,9 +124,14 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
     this._academy.inviteToLicense(form.controls.name.value, form.controls.email.value, this.license._id)
     .subscribe(data => {
       let updatedLicense = data.license
-      let latestInvitation = updatedLicense.pending_invitations
+      let latestInvitation = updatedLicense.pending_invitations[updatedLicense.pending_invitations.length-1]
       // Load the latest pending invitation to the list
-      this.license.pending_invitations.push(latestInvitation[latestInvitation.length-1])
+      this.licenseUsers.push({
+        educator: latestInvitation.name,
+        role: 'Teacher',
+        joined: latestInvitation.expiration,
+        type: 'pending'
+      })
       // Clear the form
       this.licenseInvite.reset()
     },
