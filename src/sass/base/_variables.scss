@@ -148,17 +148,20 @@ $fa-font-path: 'fonts';
 $slidingPaneTime: .4s;
 $navOffset: 60px;
 
+// Button Sizes
+$btnBorderWidth: 1px;
+$btnBorderRadius: 2px;
 // Button Colors
 $btnBg: #969696;
-$btnActionBg: #deffda;
+$btnActionBg: #fff;
 $btnActionColor: #1db50a;
-$btnPrimaryBg: #e7faff;
+$btnPrimaryBg: #fff;
 $btnPrimaryColor: #21c0f1;
-$btnSecondaryBg: #efefef;
+$btnSecondaryBg: #fff;
 $btnSecondaryColor: #9a9a9a;
-$btnSecondaryBorder: 1px solid $btnSecondaryColor;
+$btnSecondaryBorder: $btnBorderWidth solid $btnSecondaryColor;
 //1px solid rgba(0,0,0,0.05);
-$btnSuccessBg: #46c78e; //#7fd9fc;
+$btnSuccessBg: #fff; //46c78e; //#7fd9fc;
 $btnSuccessColor: #1eb10c;
-$btnHeroBg: #fff0f0;
+$btnHeroBg: #fff;
 $btnHeroColor: #ff5c5c;

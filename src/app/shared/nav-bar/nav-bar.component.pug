@@ -69,7 +69,7 @@
 
     //- Go hero action (non-existent if already a hero)
     .nav__btn-wrap(*ngIf="!showProjectInfo && !user.hero_status && !hideAccountOptions")
-      a#heroLink.btn.btn-clear.nav-bar__btn.hidden-sm-down.link([routerLink]="['/hero']", routerLinkActive="active") Go Hero!
+      a#heroLink.btn.btn-hero.btn-sm.nav-bar__btn.hidden-sm-down([routerLink]="['/hero']", routerLinkActive="active") Go Hero!
 
     //- Project Info (Desktop & Mobile)
     .nav-bar__project-data(*ngIf="showProjectInfo && currentProject && currentProject._id")

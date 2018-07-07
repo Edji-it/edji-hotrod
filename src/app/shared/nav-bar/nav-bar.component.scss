@@ -272,6 +272,11 @@ a.nav-bar__link {
 	vertical-align: middle;
 	margin: 15px 8px 15px 0px;
 
+	&.btn-sm {
+		margin: 22px 8px 22px 0px;
+		min-width: 90px;
+	}
+
 	@media(max-width: $desktop) {
 		font-size: 14px;
 		min-width: 10px;
@@ -395,7 +400,7 @@ div.sliding-pane.from-left.slide-in {
 .nav__join-code {
 	max-height: 60%;
 	margin-top: $navPadY;
-	margin-right: .5em;
+	// margin-right: .5em;
 	float: right;
 }
 
