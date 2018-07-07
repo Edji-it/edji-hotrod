@@ -8,7 +8,7 @@ import { AuthService } from '../_services'
 
 @Component({
   selector: 'app-hero-promo',
-  templateUrl: './hero-promo.component.html',
+  templateUrl: './hero-promo.component.pug',
   styleUrls: ['./hero-promo.component.scss']
 })
 export class HeroPromoComponent implements OnInit, OnDestroy {
