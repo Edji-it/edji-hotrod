@@ -83,7 +83,7 @@ export class LicenseRedirectComponent implements OnInit, OnDestroy {
     this._academy.acceptLicense(this.licenseId).pipe(take(1)).subscribe((userWithLicense: any) => {
       // update the user across the app with the new license ID and hero status update
       this._auth.refreshUser().pipe(take(1)).subscribe((updatedUser: any) => {
-        if (updatedUser.license_ids.includes(this.licenseId) && (updatedUser.hero && updatedUser.hero.active)) {
+        if (this.findLicense(updatedUser.license_ids, this.licenseId)>-1 && (updatedUser.hero && updatedUser.hero.active)) {
           let index = updatedUser.institution_ids.length - 1
           let institutionId = updatedUser.institution_ids[index]
           // once we update the user to add a license and make them a hero, let's redirect them to the dashboard
@@ -96,5 +96,21 @@ export class LicenseRedirectComponent implements OnInit, OnDestroy {
     }, (err) => {
       console.error(err)
     })
+  }
+
+  /**
+   * Checks for the license on the user object since it is an array of objects including licnese_id and joined date
+   * @param userLicenses the licenses on the user object, which is an array of licenses
+   * @param license_id the license we are looking to confirm is on the user object
+   */
+  private findLicense(userLicenses, license_id) {
+    let arrLength = userLicenses.length
+    for (var i=0; i<arrLength; i++) {
+      if(userLicenses[i].license_id===license_id) {
+        console.log(i)
+        return i
+      }
+    }
+    return -1;
   }
 }
