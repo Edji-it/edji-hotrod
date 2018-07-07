@@ -21,7 +21,9 @@ import {
     UserInitialsPipe 
   } from './_pipes'
 import { ShareCodeComponent } from "./modals/share-code/share-code.component"
-import { ReferralModalComponent, HeroSubscribeComponent } from "./modals"
+import { ReferralModalComponent, HeroSubscribeComponent } from "./modals";
+import { HotChartHzbarComponent } from './shared/hot-chart-hzbar/hot-chart-hzbar.component';
+import { HotChartGaugeComponent } from './shared/hot-chart-gauge/hot-chart-gauge.component'
 
 let SHARED_DECLARATIONS = [
     AddClassPipe,
@@ -57,7 +59,9 @@ let SHARED_IMPORTS = [
       * - SharedModule shouldn't need any private components
       */
     declarations: [
-        SHARED_DECLARATIONS
+        SHARED_DECLARATIONS,
+        HotChartHzbarComponent,
+        HotChartGaugeComponent
     ],
     /**
      * Exports are made available to children modules
