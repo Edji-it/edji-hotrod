@@ -1,0 +1,6 @@
+//- Reading Report Pane
+.sliding-pane.from-left.reading-report([ngClass]="{ 'slide-in' : visible }")
+  .container-fluid.container--less-pad
+    h4
+      button.close.stats-close-btn.btn-icon--round((click)='hide.emit()' type='button')
+        span(aria-hidden='true') &times;

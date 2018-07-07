@@ -73,6 +73,7 @@ import { RouterModule, PreloadAllModules, Router } from '@angular/router';
 import { ROUTES } from './app.routes';
 import { LicenseRedirectComponent } from './license-redirect/license-redirect.component';
 import { LicenseWelcomeComponent } from './license-welcome/license-welcome.component';
+import { ReadingReportComponent } from './project-page/owner-tools/reading-report/reading-report.component';
 
 // Configure Hammer.js
 // export class MyHammerConfig extends HammerGestureConfig  {
@@ -171,7 +172,8 @@ const APP_PROVIDERS = [
     HeroPricingComponent,
     ScrollProgressComponent,
     LicenseRedirectComponent,
-    LicenseWelcomeComponent
+    LicenseWelcomeComponent,
+    ReadingReportComponent
   ],
   /** Components which can be dynamically created */
   entryComponents: [

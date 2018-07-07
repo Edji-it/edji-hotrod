@@ -76,6 +76,21 @@
     }
 }
 
+.icon-reading-report {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    background: url('/assets/images/icon-reading-report.png');
+    background-size: 100% 100%;
+    background-position: center center;
+    cursor: pointer;
+    
+    &.inactive {
+        background-size: 100% 100%;
+        filter: grayscale(100%);
+    }
+}
+
 .icon-add-question {
     @include icon('icon-add-question.svg');
     display: inline-block;
