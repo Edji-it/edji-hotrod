@@ -39,6 +39,8 @@ let SHARED_DECLARATIONS = [
     SubjectPipe, 
     ShareCodeComponent,
     UserInitialsPipe,
+    HotChartHzbarComponent,
+    HotChartGaugeComponent
 ]
 
 let SHARED_IMPORTS = [
@@ -59,9 +61,7 @@ let SHARED_IMPORTS = [
       * - SharedModule shouldn't need any private components
       */
     declarations: [
-        SHARED_DECLARATIONS,
-        HotChartHzbarComponent,
-        HotChartGaugeComponent
+        SHARED_DECLARATIONS
     ],
     /**
      * Exports are made available to children modules

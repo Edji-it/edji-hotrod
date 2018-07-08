@@ -1,3 +1,11 @@
-<p>
-  hot-chart-gauge works!
-</p>
+.gauge-outline(
+  [ngStyle]="{ 'width': chartSize + 'px', 'height': chartSize/2 + 'px', 'border-top-left-radius': chartSize/2 + 'px', 'border-top-right-radius': chartSize/2 + 'px', 'background': 'linear-gradient(0.25turn,' + colorLeft + ',' + colorRight + ')' }"
+)
+  .gauge-inner(
+    [ngStyle]="{ 'border-top-left-radius': chartSize/2 + 'px', 'border-top-right-radius': chartSize/2 + 'px' }"
+  )
+    .needle(
+      [ngStyle]="{ 'height': chartSize/2 + 'px', 'transform': 'rotate(' + needlePosition + 'deg)' }"
+    )
+.needleValue.mt-2 {{ needleValue }}
+.needleMetric {{ needleMetric }}
