@@ -28,6 +28,19 @@
   transform: rotate(-90deg);
   transform-origin: bottom;
   transition: transform 2s ease-in-out;
+  z-index: 2;
+}
+
+.avg-tick {
+  width: 2px;
+  background: #FFFFFFFF;
+  left: 48%;
+  bottom: 0;
+  position: absolute;
+  transform: rotate(-90deg);
+  transform-origin: bottom;
+  transition: transform 2s ease-in-out;
+  z-index: 1;
 }
 
 .needle-value {

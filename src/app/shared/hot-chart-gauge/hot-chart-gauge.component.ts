@@ -16,13 +16,14 @@ export class HotChartGaugeComponent implements OnInit {
   @Input() measures: Measures
 
   public needlePosition: number = -90
+  public averagePosition: number = -90
 
   constructor() { }
 
   ngOnInit() {
     this.measures = {
       full: 'Minutes Reading',
-      abbreviated: ''
+      abbreviated: 'min'
     }
     this.values = {
       min: 10,
@@ -33,6 +34,8 @@ export class HotChartGaugeComponent implements OnInit {
     setTimeout(()=> {
       // needle position has a range between -90 and 90, needs to be extrapolated from the min, max, and val values
       this.needlePosition = (((this.values.val - this.values.min) / (this.values.max - this.values.min)) * 180) - 90
+
+      this.averagePosition = (((this.values.avg - this.values.min) / (this.values.max - this.values.min)) * 180) - 90
     }, 1)
   }
 }
