@@ -11,6 +11,7 @@ import { AppComponent } from './app.component'
 import { SharedModule } from './app-shared.module';
 
 import { Ng4TwitterTimelineModule } from './home/twitter-timeline';
+import { NgxPageScrollModule } from 'ngx-page-scroll';
 
 const { version: appVersion } = require('../../package.json')
 
@@ -188,7 +189,8 @@ const APP_PROVIDERS = [
     RouterModule.forRoot(ROUTES, { useHash: true }),
     DataListModule,
     PaginatorModule,
-    Ng4TwitterTimelineModule
+    Ng4TwitterTimelineModule,
+    NgxPageScrollModule
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     // ENV_PROVIDERS,

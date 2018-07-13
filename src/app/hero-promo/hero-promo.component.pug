@@ -6,8 +6,9 @@ nav-bar
   //-     img.hero-background(src='/assets/images/hero-lg.png')
   //-     .call-to-action
   //-       h1.promo-header.center Empower with Hero
-  .row.twilight(style="padding-top:100px; padding-bottom: 100px; position: relative; overflow:hidden;")
-    img(style="position:absolute;right:10%;bottom:0px;height:95%;", src="/assets/images/hero-promo-spotlight.svg")
+  .row.twilight.has-sparks(style="padding-top:100px; padding-bottom: 100px; position: relative; overflow:hidden;")
+    .sparks
+    img.promo-spotlight(style="position:absolute;right:10%;bottom:0px;height:95%;", src="/assets/images/hero-promo-spotlight.svg")
     img(style="width:100%; position: absolute; bottom: -50px;",src="/assets/images/hero-promo-skyline.svg")
     .col-12(style="padding-bottom:25px;")
       h1.big-bold(style="color:#fff;") Answer the Call
@@ -22,15 +23,18 @@ nav-bar
   .row.row-xl-pad
     .col-8
       .row
-        .col-4.text-center
-          img(src="/assets/images/promo-spot-mic.svg")
+        .feature-preview.col-4.text-center(pageScroll, href="#sectionAudio")
+          .img-wrap
+            img(src="/assets/images/promo-spot-mic.svg")
           h3.pt-3 Amp up student voice
-        .col-4.text-center
-          img(src="/assets/images/promo-spot-filter.svg")
+        .feature-preview.col-4.text-center(pageScroll, href="#sectionFilter")
+          .img-wrap
+            img(style="transform: translateX(-1px);",src="/assets/images/promo-spot-filter.svg")
           h3.pt-3 Filter on individuals
-        .col-4.text-center
-          img(src="/assets/images/promo-spot-question.svg")
-          h3.pt-3 
+        .feature-preview.col-4.text-center(pageScroll, href="#sectionQuestion")
+          .img-wrap
+            img(style="transform: translate3d(2px,2px,0px);", src="/assets/images/promo-spot-question.svg")
+          h3.pt-3 Ask and assess
     .col-4
         h2.small-bold Assemble Your Team
         p With Hero Academy, your whole school can weild the powers of Hero
@@ -39,20 +43,20 @@ nav-bar
     .col-md-8.offset-md-2
       h2.text-center.medium-bold(style='margin-bottom: 0.5em;') Make Powerful Lessons
   .row.row-xl-pad
-    .col-4.offset-md-1
-      h3.medium-semibold Add <b>Questions</b> to Readings 
+    #sectionQuestion.col-4.offset-md-1
+      h3.medium-semibold Add in-line <b>Questions</b> to Readings, and get compiled answers
       //- p In-line questions and compiled answers.
     .col-7.text-center
       img(src="/assets/images/hero-promo-question.png")
   .row.row-xl-pad
     .col-4.offset-md-1
-      h3.medium-semibold <b>Comment Replies</b> let you or your students start discussions right in the text
+      h3.medium-semibold Comment <b>Replies</b> let you or your students start discussions right in the text
       //- pimg(src="/assets/images/hero-promo-question.png")
       //-   strong Comment Replies
       //-   br
       //-   | Replies let you or your readers start discussion right in the text. Reach out to a student and ask them to expand on their comment, or let students talk to eachother to explore a topic even more in depth on their own!
-    .col-7
-      p IMAGE
+    .col-7.text-center
+      img(src="/assets/images/hero-promo-replies.png", style="border:1px solid #cdcdcd; max-width: 400px;")
   .row.row-xl-pad
     .col-4.offset-md-1
       h3.medium-semibold <b>Custom Group Codes</b> for memorization or for tying into another activity
@@ -61,7 +65,8 @@ nav-bar
       //- <p><strong>Custom Avatars</strong><br/>As a Reading owner, have your picture show next to each of your comments.</p>
     .col-7.text-center
       img(src="/assets/images/hero-promo-codes.png", style="border:1px solid #cdcdcd; max-width: 400px;")
-  .row.navy.row-xl-pad
+  .row.navy.row-xl-pad.has-sparks
+    .sparks
     .col-12
       h1.on-dark.text-center What's the next step in your hero's journey?
     .col-2
@@ -74,14 +79,14 @@ nav-bar
           button.btn.btn-secondary([routerLink]="['/pricing']")
             | Begin an Academy
   .row.row-xl-pad
-    .col-4.offset-md-1
+    #sectionAudio.col-4.offset-md-1
       h3.medium-semibold
         | Put student voices on a stage with <b>Audio Comments</b>
         span.beta-tag (BETA)
     .col-7.text-center
       img(src="/assets/images/hero-promo-audio.png", style="border:1px solid #cdcdcd; max-width: 400px;")
   .row.row-xl-pad
-    .col-4.offset-md-1
+    #sectionFilter.col-4.offset-md-1
       h3.medium-semibold
         | <b>Student Filters</b> give the power to review and show off an individual's annotations
     .col-7.text-center
@@ -90,20 +95,19 @@ nav-bar
     .col-4.offset-md-1
       h3.medium-semibold
         | Priority customer support
-    .col-7
-      p IMAGE
-  .row.row-xl-pad
-    .col-4.offset-md-1
-      h3.medium-semibold
+    .col-7.text-center
+      img(src="/assets/images/hero-promo-phone.svg", style="max-width: 400px;")
+  .row.navy.row-xl-pad.has-sparks
+    .sparks
+    .col-12.text-center
+      h1.on-dark
         | Hero subscribers make Edji possible
-    .col-7
-      p IMAGE
-  .row  
-    .col-12
+      p.on-dark
+        | Do you
       .button__row.pb-4
-          button#heroCTA.btn.btn-hero((click)='goHero()')
-            | Go Hero for 
-            span(style='font-weight: 700;') $60/yr
+          button#heroCTA.btn-lg.btn.btn-hero((click)='goHero()')
+            | Go Hero 
+            span(style='font-weight: 700;')
   //- .row
   //-   .col-8
   //-       strong Audio Comments
@@ -117,20 +121,20 @@ nav-bar
   //- Share buttons!
     NOTES:
     - Change the second half of onclick to customize the default share message.
-  .row
-    .col-12.text-center
-      //- Facebook
-      .icon-share-button
-        a(href='https://www.facebook.com/sharer/sharer.php?u=https%3A//edji.it/%23/hero' title='Share on Facebook' target='_blank' onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=https%3A//edji.it/%23/hero'); return false;")
-          img(alt='Share on Facebook' src='assets/share-icons/Facebook.png')
-      //- Twitter
-      .icon-share-button
-        a(href='https://twitter.com/intent/tweet?source=https%3A%2F%2Fedji.it&text=:%20https%3A%2F%2Fedji.it' target='_blank' title='Tweet' onclick="window.open('https://twitter.com/intent/tweet?text=' + 'Read like a superhero with Edji Hero! ' + encodeURIComponent(document.URL)); return false;")
-          img(alt='Tweet' src='assets/share-icons/Twitter.png')
-      //- Email
-      .icon-share-button
-        a(href='mailto:?subject=&body=:%20https%3A%2F%2Fedji.it' target='_blank' title='Send email' onclick="window.open('mailto:?subject=' + '' + '&body=' +  encodeURIComponent(document.URL)); return false;")
-          img(alt='Send email' src='assets/share-icons/Email.png')
+  //- .row
+  //-   .col-12.text-center
+  //-     //- Facebook
+  //-     .icon-share-button
+  //-       a(href='https://www.facebook.com/sharer/sharer.php?u=https%3A//edji.it/%23/hero' title='Share on Facebook' target='_blank' onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=https%3A//edji.it/%23/hero'); return false;")
+  //-         img(alt='Share on Facebook' src='assets/share-icons/Facebook.png')
+  //-     //- Twitter
+  //-     .icon-share-button
+  //-       a(href='https://twitter.com/intent/tweet?source=https%3A%2F%2Fedji.it&text=:%20https%3A%2F%2Fedji.it' target='_blank' title='Tweet' onclick="window.open('https://twitter.com/intent/tweet?text=' + 'Read like a superhero with Edji Hero! ' + encodeURIComponent(document.URL)); return false;")
+  //-         img(alt='Tweet' src='assets/share-icons/Twitter.png')
+  //-     //- Email
+  //-     .icon-share-button
+  //-       a(href='mailto:?subject=&body=:%20https%3A%2F%2Fedji.it' target='_blank' title='Send email' onclick="window.open('mailto:?subject=' + '' + '&body=' +  encodeURIComponent(document.URL)); return false;")
+  //-         img(alt='Send email' src='assets/share-icons/Email.png')
 //- container-fluid
 hot-login-register.modal-will-fade(
     [loginHeader]="loginModalHeader", 
