@@ -92,7 +92,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
       this.subscriptions.push(
           this._auth.getCurrentUser().subscribe((user) => {
               this.user = user
-              this.isTeacher = this.user.identities.indexOf('teacher') > -1
+              this.isTeacher = this.user.identities && this.user.identities.indexOf('teacher') > -1
               console.log(this.user.identities, this.isTeacher)
           })
       )
