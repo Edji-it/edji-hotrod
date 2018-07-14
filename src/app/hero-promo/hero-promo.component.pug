@@ -17,7 +17,7 @@ nav-bar
       p.row-xl-pad(style='font-size:1.25em;')
         | Hero gives you more powers to supercharge your classrooms readings. Engage your students with questions, in reading discussion, and more! 
         span([innerHTML]="':tada:' | emojione")
-      button.btn.btn-hero((click)='goHero()')
+      button.btn.btn-lg.btn-hero((click)='goHero()')
         | Go Hero
   //- Feature preview and Academy CTA
   .row.row-xl-pad
@@ -29,7 +29,7 @@ nav-bar
           h3.pt-3 Amp up student voice
         .feature-preview.col-4.text-center(pageScroll, href="#sectionFilter")
           .img-wrap
-            img(style="transform: translateX(-1px);",src="/assets/images/promo-spot-filter.svg")
+            img(style="transform: translateX(-1px);", src="/assets/images/promo-spot-filter.svg")
           h3.pt-3 Filter on individuals
         .feature-preview.col-4.text-center(pageScroll, href="#sectionQuestion")
           .img-wrap
@@ -37,8 +37,8 @@ nav-bar
           h3.pt-3 Ask and assess
     .col-4
         h2.small-bold Assemble Your Team
-        p With Hero Academy, your whole school can weild the powers of Hero
-        .btn.btn-hero Request Academy
+        p With Hero Academy, your whole school can wield the powers of Hero
+        .btn.btn-secondary((click)="showRequestAcademyModal = true") Request Academy Info
   .row.hero-promo-form(style="margin:50px 0px;")
     .col-md-8.offset-md-2
       h2.text-center.medium-bold(style='margin-bottom: 0.5em;') Make Powerful Lessons
@@ -72,17 +72,15 @@ nav-bar
     .col-2
     .col-4
       .button__row
-          button.btn.btn-hero((click)='goHero()')
-            | Time to Go Hero
+          button.btn.btn-secondary((click)="showRequestAcademyModal = true") Request Academy Info
     .col-4
       .button__row
-          button.btn.btn-secondary([routerLink]="['/pricing']")
-            | Begin an Academy
+          button.btn.btn-hero((click)='goHero()')
+            | Time to Go Hero
   .row.row-xl-pad
     #sectionAudio.col-4.offset-md-1
       h3.medium-semibold
         | Put student voices on a stage with <b>Audio Comments</b>
-        span.beta-tag (BETA)
     .col-7.text-center
       img(src="/assets/images/hero-promo-audio.png", style="border:1px solid #cdcdcd; max-width: 400px;")
   .row.row-xl-pad
@@ -94,47 +92,20 @@ nav-bar
   .row.row-xl-pad
     .col-4.offset-md-1
       h3.medium-semibold
-        | Priority customer support
+        | Priority customer support at the ready to help you build your lesson and solve technical issues in your classroom
     .col-7.text-center
       img(src="/assets/images/hero-promo-phone.svg", style="max-width: 400px;")
   .row.navy.row-xl-pad.has-sparks
     .sparks
     .col-12.text-center
-      h1.on-dark
-        | Hero subscribers make Edji possible
-      p.on-dark
-        | Do you
-      .button__row.pb-4
+      h1.on-dark(style="margin:0px;")
+        | Answer the Call
+      p.on-dark.mt-2.mb-4
+        | Engage your students, build super lessons, and support Edji
+      .button__row.pb-2
           button#heroCTA.btn-lg.btn.btn-hero((click)='goHero()')
             | Go Hero 
             span(style='font-weight: 700;')
-  //- .row
-  //-   .col-8
-  //-       strong Audio Comments
-  //-       span.beta-tag (BETA)
-  //-       br
-  //-       | Let your students record an Audio Comment as they read so they can put their thoughts directly into the reading for their classmates to hear. Great for students that struggle with writing, or students that are so excited they just can&apos;t wait to write their thoughts down!
-  //-     br
-  //-     small
-  //-       span.beta-tag (BETA)
-  //-       |  Audio comments are currently only available on Windows computers and Chromebooks while using the Google Chrome Browser. iPad and MacBook functionality is coming soon!
-  //- Share buttons!
-    NOTES:
-    - Change the second half of onclick to customize the default share message.
-  //- .row
-  //-   .col-12.text-center
-  //-     //- Facebook
-  //-     .icon-share-button
-  //-       a(href='https://www.facebook.com/sharer/sharer.php?u=https%3A//edji.it/%23/hero' title='Share on Facebook' target='_blank' onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=https%3A//edji.it/%23/hero'); return false;")
-  //-         img(alt='Share on Facebook' src='assets/share-icons/Facebook.png')
-  //-     //- Twitter
-  //-     .icon-share-button
-  //-       a(href='https://twitter.com/intent/tweet?source=https%3A%2F%2Fedji.it&text=:%20https%3A%2F%2Fedji.it' target='_blank' title='Tweet' onclick="window.open('https://twitter.com/intent/tweet?text=' + 'Read like a superhero with Edji Hero! ' + encodeURIComponent(document.URL)); return false;")
-  //-         img(alt='Tweet' src='assets/share-icons/Twitter.png')
-  //-     //- Email
-  //-     .icon-share-button
-  //-       a(href='mailto:?subject=&body=:%20https%3A%2F%2Fedji.it' target='_blank' title='Send email' onclick="window.open('mailto:?subject=' + '' + '&body=' +  encodeURIComponent(document.URL)); return false;")
-  //-         img(alt='Send email' src='assets/share-icons/Email.png')
 //- container-fluid
 hot-login-register.modal-will-fade(
     [loginHeader]="loginModalHeader", 
@@ -147,3 +118,7 @@ hero-subscribe-modal.modal-will-fade(
     (closeModal)='showHeroSubModal = !showHeroSubModal', 
     (heroWasBorn)="_router.navigate(['/dashboard'])"
   )
+request-academy-modal.modal-will-fade(
+  [class.show]="showRequestAcademyModal",
+  (closeModal)="showRequestAcademyModal = false"
+)

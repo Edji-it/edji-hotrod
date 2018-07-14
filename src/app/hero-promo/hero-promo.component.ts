@@ -19,9 +19,12 @@ export class HeroPromoComponent implements OnInit, OnDestroy {
   public subMsg : string
   public subError: boolean
   public subSuccess: boolean
+  public cancelGetPriceCall: boolean = false
+
+  // modal vars
   public showLoginModal: boolean
   public showHeroSubModal: boolean
-  public cancelGetPriceCall: boolean = false
+  public showRequestAcademyModal: boolean
 
   private subscriptions: Subscription[] = []
 
