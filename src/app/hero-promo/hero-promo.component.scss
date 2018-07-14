@@ -39,9 +39,10 @@
 
 .medium-semibold {
     font-weight: 400;
-    font-size: 24px;
+    font-size: 22px;
     color: #121212;
-    letter-spacing: -1px;
+    letter-spacing: 0px;
+    line-height: 32px;
 
     &.on-dark {
         color: #fff;
