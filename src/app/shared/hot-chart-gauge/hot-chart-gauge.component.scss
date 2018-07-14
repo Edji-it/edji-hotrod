@@ -68,3 +68,65 @@
 .chart-cluster {
   margin: 0 auto;
 }
+
+// .average-tooltip-outer {
+//   transition: all 2s ease-in-out;
+//   transform: rotate(0deg);
+//   // transform-origin: 75px bottom;
+//   transform-origin: -16px 16px;
+// }
+
+.average-tooltip {
+  transition: all 2s ease-in-out;
+  background-color: #fff;
+  color: #000;
+  border-radius: 4px;
+  padding: 4px;
+  position: absolute;
+  z-index: 3;
+  bottom: 5px;
+  left: -75px;
+  font-size: 9px;
+  line-height: 9px;
+  -webkit-filter: drop-shadow(rgba(0, 0, 0, 0.2) 0 2px 6px);
+  filter: drop-shadow(rgba(0, 0, 0, 0.2) 0 2px 6px);
+  border: solid 1px #CACACA;
+
+  &:before {
+    content: "";
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-left: -5px;
+    border-width: 3px;
+    border-style: solid;
+    border-color: #CACACA #CACACA transparent transparent;
+  }
+
+  &:after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    right: 1px;
+    margin-left: -5px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: #fff #fff transparent transparent;
+  }
+
+  &.position-right {
+    left: -20px;
+
+    &:before {
+      right: initial;
+      left: 5px;
+      border-color: #CACACA transparent transparent #CACACA;
+    }
+
+    &:after {
+      right: initial;
+      left: 6px;
+      border-color: #fff transparent transparent #fff;
+    }
+  }
+}

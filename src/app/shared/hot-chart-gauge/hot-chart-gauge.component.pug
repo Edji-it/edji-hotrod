@@ -12,12 +12,13 @@
           .needle(
             [ngStyle]="{ 'height': chartSize/2 + 'px', 'transform': 'rotate(' + needlePosition + 'deg)' }"
           )
-          //- .avg-tick(
-          //-   [ngStyle]="{ 'height': chartSize/10 + 'px', 'bottom': ((chartSize/2) - (chartSize/10)) + 'px', 'transform': 'rotate(' + averagePosition + 'deg)' }"
-          //- )
           .avg-tick(
             [ngStyle]="{ 'height': chartSize/2 + 'px', 'transform': 'rotate(' + averagePosition + 'deg)' }"
           )
+          .average-tooltip(
+            [ngClass]="{'position-right': avgAngle > 90}", 
+            [@animateToolTip]="{value: animationState, params: {avgAngle: avgAngle, avgLft: avgLft, avgBtm: avgBtm}}"
+          ) Average: {{ values.avg }}
     .gauge-value
       .gauge-value-max {{ values.max }} {{ measures.abbreviated }}
 .row
