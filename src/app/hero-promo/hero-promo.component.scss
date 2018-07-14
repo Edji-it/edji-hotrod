@@ -1,5 +1,11 @@
 @import '../../sass/base/variables';
 
+.promo-screen-wrap {
+    display: inline-block;
+    max-width: 400px;
+    border:1px solid #dedede;
+}
+
 .twilight {
     background-color:#003350;
     background:linear-gradient( 180deg, #003350 75%,#91925d);

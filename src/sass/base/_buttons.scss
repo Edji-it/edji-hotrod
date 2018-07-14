@@ -204,8 +204,14 @@ button, .button, .btn { //, [class*='btn']
     background: $btnHeroBg;
   }
 
-  &:hover, &:active, &:focus, &.active {
-    background: $btnHeroColor; 
+  &.active {
+    background: #fff;
+    color: $btnHeroColor;
+  }
+
+  &:hover, &:active, &:focus {
+    background: $btnHeroFocusColor; 
+    border-color: $btnHeroColor;
     color: #fff;
   }
 }

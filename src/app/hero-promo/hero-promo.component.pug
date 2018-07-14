@@ -1,11 +1,6 @@
 nav-bar
 .container-fluid
-  //- .row.navy.has-sparks
-  //-   .sparks(style='z-index:0;')
-  //-   .col-sm-12
-  //-     img.hero-background(src='/assets/images/hero-lg.png')
-  //-     .call-to-action
-  //-       h1.promo-header.center Empower with Hero
+  //- Promo row
   .row.twilight.has-sparks(style="padding-top:100px; padding-bottom: 100px; position: relative; overflow:hidden;")
     .sparks
     img.promo-spotlight(style="position:absolute;right:10%;bottom:0px;height:95%;", src="/assets/images/hero-promo-spotlight.svg")
@@ -47,24 +42,20 @@ nav-bar
       h3.medium-semibold Add in-line <b>Questions</b> to Readings, and get compiled answers
       //- p In-line questions and compiled answers.
     .col-7.text-center
-      img(src="/assets/images/hero-promo-question.png")
+      div(style="max-width:600px;")
+        img(src="/assets/images/hero-promo-question.png")
   .row.row-xl-pad
     .col-4.offset-md-1
       h3.medium-semibold Comment <b>Replies</b> let you or your students start discussions right in the text
-      //- pimg(src="/assets/images/hero-promo-question.png")
-      //-   strong Comment Replies
-      //-   br
-      //-   | Replies let you or your readers start discussion right in the text. Reach out to a student and ask them to expand on their comment, or let students talk to eachother to explore a topic even more in depth on their own!
     .col-7.text-center
-      img(src="/assets/images/hero-promo-replies.png", style="border:1px solid #cdcdcd; max-width: 400px;")
+      .promo-screen-wrap
+        img(src="/assets/images/hero-promo-replies.png")
   .row.row-xl-pad
     .col-4.offset-md-1
       h3.medium-semibold <b>Custom Group Codes</b> for memorization or for tying into another activity
-      //- br
-      //- | Share a reading with a custom code you select to be memorable and easier for your students to reach. Codes can describe the reading, an answer to a trivia question, or a fun to get students even more excited about reading!
-      //- <p><strong>Custom Avatars</strong><br/>As a Reading owner, have your picture show next to each of your comments.</p>
     .col-7.text-center
-      img(src="/assets/images/hero-promo-codes.png", style="border:1px solid #cdcdcd; max-width: 400px;")
+      .promo-screen-wrap
+        img(src="/assets/images/hero-promo-codes.png")
   .row.navy.row-xl-pad.has-sparks
     .sparks
     .col-12
@@ -82,7 +73,8 @@ nav-bar
       h3.medium-semibold
         | Put student voices on a stage with <b>Audio Comments</b>
     .col-7.text-center
-      img(src="/assets/images/hero-promo-audio.png", style="border:1px solid #cdcdcd; max-width: 400px;")
+      .promo-screen-wrap
+        img(src="/assets/images/hero-promo-audio.png")
   .row.row-xl-pad
     #sectionFilter.col-4.offset-md-1
       h3.medium-semibold
