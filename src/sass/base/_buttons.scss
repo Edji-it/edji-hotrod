@@ -165,30 +165,33 @@ button, .button, .btn { //, [class*='btn']
   border: $btnBorderWidth solid $btnPrimaryColor;
   border-radius: $btnBorderRadius;
   color: $btnPrimaryColor;
+  box-shadow: 0 4px 2px -2px rgba($btnPrimaryColor,0.5);
 
   &.loading {
     background: darken($btnPrimaryBg, 20%);
   }
 
   &:hover, &:active, &:focus {
-    background: $btnPrimaryColor;
+    box-shadow: 0 0px 15px 0px rgba($btnPrimaryFocusColor,0.5);
+    background: $btnPrimaryFocusColor;
     color: #fff;
   }
 }
 
-.btn.btn-action {
-  background-color: #ffffff;
-  // background-image: linear-gradient(180deg, #FFFFFF 7%, $btnActionBg 100%);
+.btn.btn-action, .btn.btn-success  {
+  background-color: $btnActionBg;
   border: $btnBorderWidth solid $btnActionColor;
   border-radius: $btnBorderRadius;
   color: $btnActionColor;
+  box-shadow: 0 4px 2px -2px rgba($btnActionColor,0.5);
 
   &.loading {
     background: #cdcdcd;
   }
 
   &:hover, &:active, &:focus, &.active {
-    background: $btnActionColor; 
+    box-shadow: 0 0px 15px 0px rgba($btnActionFocusColor,0.5);
+    background: $btnActionFocusColor; 
     color: #fff;
   }
 }
@@ -199,6 +202,7 @@ button, .button, .btn { //, [class*='btn']
   border: $btnBorderWidth solid $btnHeroColor;
   border-radius: $btnBorderRadius;
   color: #fff;
+  box-shadow: 0 4px 2px -2px rgba($btnHeroColor,0.5);
 
   &.loading {
     background: $btnHeroBg;
@@ -213,38 +217,26 @@ button, .button, .btn { //, [class*='btn']
     background: $btnHeroFocusColor; 
     border-color: $btnHeroColor;
     color: #fff;
-  }
-}
-
-.btn.btn-success {
-  background-color: #ffffff;
-  border: $btnBorderWidth solid $btnSuccessColor;
-  border-radius: $btnBorderRadius;
-  color: $btnSuccessColor;
-
-  &.loading {
-    background: darken($btnSuccessBg, 20%);
-  }
-
-  &:hover, &:active, &:focus, &.active {
-    background: $btnSuccessColor;
-    color: #fff;
+    box-shadow: 0 0px 15px 0px rgba($btnHeroFocusColor,0.5);
   }
 }
 
 .btn-secondary { 
   color: $btnSecondaryColor;
-  border: $btnSecondaryBorder;
+  border: $btnBorderWidth solid $btnSecondaryColor;
   background-color: $btnSecondaryBg;
   border-radius: $btnBorderRadius;
+  box-shadow: 0 4px 2px -2px rgba($btnSecondaryColor,0.5);
 
   &.loading {
     background: darken($btnSecondaryBg, 20%);
   }
 
   &:hover, &:active, &:focus {
-    background: $btnSecondaryColor;
+    background: $btnSecondaryFocusColor;
+    border-color: $btnSecondaryColor;
     color: #fff;
+    box-shadow: 0 0px 15px 0px rgba($btnSecondaryFocusColor,0.5);
   }
 
   &:disabled {
@@ -480,6 +472,9 @@ pre.btn {
   width: 80% !important;
 }
 
+.input-group > .input-group-btn {
+  margin-left: -3px;
+}
 // Small padding/offset adjustments
 .input-group-lg > .input-group-btn > .btn {
   padding: 0.5rem 1.5rem;
