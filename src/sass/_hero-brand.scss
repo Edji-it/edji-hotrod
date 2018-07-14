@@ -34,3 +34,27 @@
     animation-timing-function: ease-in;
     position: absolute;
 }
+
+.hero-rule {
+    height: 1px;
+    width: 100%;
+    position: relative;
+    background: linear-gradient(to right, rgba(255,255,255,0), $btnHeroColor 40%, $btnHeroColor 60%, rgba(255,255,255,0));
+    margin: $base-pad 0px;
+
+    // &:before {
+    //     content: 'H';
+    //     text-align: center;
+    //     color: $btnHeroColor;
+    //     font-size: 10px;
+    //     display: block;
+    //     width: 20px;
+    //     height: 12px;
+    //     font-family: Arial;
+    //     font-weight: bold;
+    //     background: #fff;
+    //     position: absolute;
+    //     top: -7px;
+    //     left: calc(50% - 5px);
+    // }
+}

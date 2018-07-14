@@ -2,17 +2,19 @@
   .modal-dialog(role="document")
     .modal-content
       .modal-header
-        h4.modal-title Learn more about Hero Academy
+        h4.modal-title 
+          span.hero-tag--lg H
+          | &nbsp;Discover Hero Academy
         button.close.btn-icon--round(type="button", (click)="feedbackClose()", aria-label="Close")
           span(aria-hidden="true") &times;
 
       form#feedbackForm([formGroup]="feedbackForm", (ngSubmit)="sendFeedback(feedbackForm.value)") 
         .modal-body
           .row
-            .col-8
+            .col-7
               p.small Academy is a great way for a school or district to provide its teachers with Hero, and get even more from Edji. To learn more, request below, and we will reach out to you!
-            .col-4  
-              img(src="/assets/images/logo-academy.svg")
+            .col-5  
+              img.pr-2(src="/assets/images/logo-academy.svg")
           label(for="nameInput") Name
             input#nameInput(type="text", [placeholder]="userCopy.fullname", [formControl]="feedbackForm.controls['name']", tabindex="0")
             #msgNameRequired.alert.alert-info(*ngIf="feedbackForm.controls['name'].hasError('required')")
@@ -65,15 +67,16 @@
             button.btn.btn-primary(type="submit", [disabled]="!feedbackForm.valid", [class.loading]="loading", name="send feedback", tabindex="0") Request Info
 
 //- Success Modal
-.modal-will-fade([class.show]="showFeedbackSuccess")
+.modal-will-fade([class.show]="showRequestSuccess") 
   .modal
     .modal-dialog(role="document")
       .modal-content
         .modal-header
-          h4.modal-title Thanks for your feedback!
+          h4.modal-title Request Received
           button.close.btn-icon--round(type="button", (click)="successClose()", aria-label="Close")
             span(aria-hidden="true") &times;
-        .modal-body
-          p Thank you for your feedback{{ this.user.fullname ? ', ' + this.user.fullname : '' }}!
+        .modal-body.text-center
+          img.mb-4(src="/assets/images/logo-academy.svg", style="max-width: 200px;")
+          p We will be reaching out to you soon{{ this.user.fullname ? ', ' + this.user.fullname : '' }}!
         .modal-footer
-          button.btn.btn-secondary(type="button", (click)="successClose()") Dismiss
+          button.btn.btn-secondary(type="button", (click)="successClose()") Great!

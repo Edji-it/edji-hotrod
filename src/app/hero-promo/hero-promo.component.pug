@@ -18,6 +18,10 @@ nav-bar
   .row.row-xl-pad
     .col-8
       .row
+        .feature-preview.col-4.text-center(pageScroll, href="#sectionQuestion")
+          .img-wrap
+            img(style="transform: translate3d(2px,2px,0px);", src="/assets/images/promo-spot-question.svg")
+          h3.pt-3 Ask and assess
         .feature-preview.col-4.text-center(pageScroll, href="#sectionAudio")
           .img-wrap
             img(src="/assets/images/promo-spot-mic.svg")
@@ -26,17 +30,13 @@ nav-bar
           .img-wrap
             img(style="transform: translateX(-1px);", src="/assets/images/promo-spot-filter.svg")
           h3.pt-3 Filter on individuals
-        .feature-preview.col-4.text-center(pageScroll, href="#sectionQuestion")
-          .img-wrap
-            img(style="transform: translate3d(2px,2px,0px);", src="/assets/images/promo-spot-question.svg")
-          h3.pt-3 Ask and assess
     .col-4
         h2.small-bold Assemble Your Team
         p With Hero Academy, your whole school can wield the powers of Hero
         .btn.btn-secondary((click)="showRequestAcademyModal = true") Request Academy Info
   .row.hero-promo-form(style="margin:50px 0px;")
     .col-md-8.offset-md-2
-      h2.text-center.medium-bold(style='margin-bottom: 0.5em;') Make Powerful Lessons
+      h1.text-center(style='margin-bottom: 0.5em;') Make Powerful Lessons
   .row.row-xl-pad
     #sectionQuestion.col-4.offset-md-1
       h3.medium-semibold Add in-line <b>Questions</b> to Readings, and get compiled answers
@@ -44,12 +44,16 @@ nav-bar
     .col-7.text-center
       div(style="max-width:600px;")
         img(src="/assets/images/hero-promo-question.png")
+  .row
+    .hero-rule
   .row.row-xl-pad
     .col-4.offset-md-1
       h3.medium-semibold Comment <b>Replies</b> let you or your students start discussions right in the text
     .col-7.text-center
       .promo-screen-wrap
         img(src="/assets/images/hero-promo-replies.png")
+  .row
+    .hero-rule
   .row.row-xl-pad
     .col-4.offset-md-1
       h3.medium-semibold <b>Custom Group Codes</b> for memorization or for tying into another activity
@@ -75,16 +79,20 @@ nav-bar
     .col-7.text-center
       .promo-screen-wrap
         img(src="/assets/images/hero-promo-audio.png")
+  .row
+    .hero-rule
   .row.row-xl-pad
     #sectionFilter.col-4.offset-md-1
       h3.medium-semibold
         | <b>Student Filters</b> give the power to review and show off an individual's annotations
     .col-7.text-center
       img(src="/assets/images/hero-promo-filter.png", style="max-width: 400px;")
+  .row
+    .hero-rule
   .row.row-xl-pad
     .col-4.offset-md-1
       h3.medium-semibold
-        | Priority customer support at the ready to help you build your lesson and solve technical issues in your classroom
+        | <b>Priority Classroom Support</b> at the ready to help you build your lesson and solve technical issues in your classroom
     .col-7.text-center
       img(src="/assets/images/hero-promo-phone.svg", style="max-width: 400px;")
   .row.navy.row-xl-pad.has-sparks

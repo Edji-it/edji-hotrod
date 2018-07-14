@@ -21,9 +21,9 @@ export class RequestAcademyModal implements OnInit {
   private closeModal: EventEmitter<any> = new EventEmitter()
 
   // private showFeedbackModal: boolean = false
-  public showFeedbackSuccess: boolean = false
+  public showRequestSuccess: boolean = false
   public feedbackForm: FormGroup
-  public feedbackSuccess: boolean = false
+  public requestSuccess: boolean = false
   public user: any
   public userCopy: any
   private window
@@ -85,7 +85,7 @@ export class RequestAcademyModal implements OnInit {
   }
 
   public successClose(): void {
-    this.showFeedbackSuccess = false
+    this.showRequestSuccess = false
   }
 
   /** Sends feedback to bumblebee */
@@ -121,10 +121,10 @@ export class RequestAcademyModal implements OnInit {
       (res) => {
         this.loading = false
         this.angulartics.eventTrack.next({ action: 'requestAcademy', properties: { category: 'accountManagement', label: 'success' }})
-        this.feedbackSuccess = true
+        this.requestSuccess = true
         this._locker.remove("requestAcademyFormData")
         this.feedbackClose()
-        this.showFeedbackSuccess = true
+        this.showRequestSuccess = true
       },
       (err) => {
         console.error(err)
