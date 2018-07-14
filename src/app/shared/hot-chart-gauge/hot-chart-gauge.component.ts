@@ -61,9 +61,17 @@ export class HotChartGaugeComponent implements OnInit {
       const avgAngleRad = this.avgAngle * (Math.PI / 180)
       const correctionFactor = (this.chartSize / 2)
       // horizontal placement
-      this.avgLft = -(Math.abs(Math.round((((this.chartSize + 12)/2) * Math.cos(avgAngleRad)))) + correctionFactor)
+      if (this.avgAngle>=90) {
+        this.avgLft = -(Math.abs(Math.round((((this.chartSize + 12)/2) * Math.cos(avgAngleRad)))) + correctionFactor)
+      } else {
+        this.avgLft = -Math.abs(Math.round(((((this.chartSize + 12)/2) * (1-Math.cos(avgAngleRad))))))
+      }
       // vertical placement
-      this.avgBtm = -Math.abs(Math.round((((this.chartSize + 12)/2) * Math.sin(avgAngleRad))))
+      if (this.avgAngle>=90) {
+        this.avgBtm = -Math.abs(Math.round((((this.chartSize + 12)/2) * Math.sin(avgAngleRad))))
+      } else {
+        this.avgBtm = -(Math.abs(Math.round((((this.chartSize + 12)/2) * Math.sin(avgAngleRad)))) - 4)
+      }
     }, 1)
   }
 }
