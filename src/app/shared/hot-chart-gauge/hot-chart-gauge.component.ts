@@ -18,13 +18,16 @@ import { trigger, state, animate, transition, style, keyframes } from '@angular/
   ]
 })
 export class HotChartGaugeComponent implements OnInit {
-  // Set the chart size from the parent component
+  // [OPTIONAL] Set the chart size from the parent component
   @Input() chartSize: number = 150
-  // Pass in the chart values per the interface
+  // [REQUIRED] Pass in the chart values per the interface, must be passed in as an object with the following properties:
+    // min: Minimum, max: Maximum, avg: Average, val: Value
   @Input() values: Values
-  // Override the color gradient on the chart
+  // [OPTIONAL] Override the color gradient on the chart
   @Input() colorLeft: string = '#F8954D'
   @Input() colorRight: string = '#D0FFB3'
+  // [REQUIRED] The label information, must be passed in as an object with the following properties:
+    // full: The full measure name, abbreviated: [OPTIONAL] the abbreviated measure name, blank if null
   @Input() measures: Measures
 
   public needlePosition: number = -90
@@ -38,16 +41,7 @@ export class HotChartGaugeComponent implements OnInit {
 
   ngOnInit() {
     this.animationState = 'stop'
-    this.measures = {
-      full: 'Minutes Reading',
-      abbreviated: 'min'
-    }
-    this.values = {
-      min: 10,
-      max: 40,
-      avg: 32,
-      val: 23
-    }
+    
     setTimeout(()=> {
       // needle position has a range between -90 and 90, needs to be extrapolated from the min, max, and val values
       this.needlePosition = (((this.values.val - this.values.min) / (this.values.max - this.values.min)) * 180) - 90
@@ -59,10 +53,9 @@ export class HotChartGaugeComponent implements OnInit {
       // Calculate the angle of the average position
       this.avgAngle = (((this.values.avg - this.values.min) / (this.values.max - this.values.min)) * 180)
       const avgAngleRad = this.avgAngle * (Math.PI / 180)
-      const correctionFactor = (this.chartSize / 2)
       // horizontal placement
       if (this.avgAngle>=90) {
-        this.avgLft = -(Math.abs(Math.round((((this.chartSize + 12)/2) * Math.cos(avgAngleRad)))) + correctionFactor)
+        this.avgLft = -(Math.abs(Math.round((((this.chartSize + 12)/2) * Math.cos(avgAngleRad)))) + (this.chartSize / 2))
       } else {
         this.avgLft = -Math.abs(Math.round(((((this.chartSize + 12)/2) * (1-Math.cos(avgAngleRad))))))
       }
