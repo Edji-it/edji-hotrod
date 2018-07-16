@@ -3,11 +3,11 @@
 $inputVPadding: 10px;
 $inputHPadding: 20px;
 $inputBg: #ffffff;
-$inputShadow: none;
+$inputShadow: 0 4px 2px -2px rgba(186, 189, 214, 0.5);
 $inputFocusHalfShadow: 0px 1px 7.5px 0px rgba(0,0,0,0.05);
 $inputFocusShadow: 0px 1px 15px 0px rgba(0,0,0,0.1);
 $inputBorder: 1px solid rgb(220, 227, 234);
-$inputFocusBorder: $inputBorder; // 1px solid #9628ff; // 1px solid $purple;
+$inputFocusBorder: 1px solid rgb(180, 187, 194); // 1px solid #9628ff; // 1px solid $purple;
 $inputLineHeight: 20px;
 $inputFormRadius: 3px; //($inputLineHeight + 2*$inputVPadding )/2;
 

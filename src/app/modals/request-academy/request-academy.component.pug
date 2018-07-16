@@ -1,0 +1,82 @@
+.modal
+  .modal-dialog(role="document")
+    .modal-content
+      .modal-header
+        h4.modal-title 
+          span.hero-tag--lg H
+          | &nbsp;Discover Hero Academy
+        button.close.btn-icon--round(type="button", (click)="feedbackClose()", aria-label="Close")
+          span(aria-hidden="true") &times;
+
+      form#feedbackForm([formGroup]="feedbackForm", (ngSubmit)="sendFeedback(feedbackForm.value)") 
+        .modal-body
+          .row
+            .col-7
+              p.small Academy is a great way for a school or district to provide its teachers with Hero, and get even more from Edji. To learn more, request below, and we will reach out to you!
+            .col-5  
+              img.pr-2(src="/assets/images/logo-academy.svg")
+          label(for="nameInput") Name
+          input#nameInput(type="text", [placeholder]="userCopy.fullname", [formControl]="feedbackForm.controls['name']", tabindex="0")
+          #msgNameRequired.alert.alert-info(*ngIf="feedbackForm.controls['name'].hasError('required')")
+            strong Info&nbsp;
+            | Let us know who you are!
+          //- Email
+          label(for="emailInput") Email
+          input#emailInput(type="text", [placeholder]="userCopy.email", [formControl]="feedbackForm.controls['email']", tabindex="0")
+          //- Phone Number
+          label(for="emailInput") Phone 
+          input#phoneInput(type="tel", placeholder="612-567-8391", [formControl]="feedbackForm.controls['phone']", tabindex="0")
+          #msgEmailRequired.alert.alert-info(*ngIf="feedbackForm.controls['email'].hasError('required')")
+            strong Info&nbsp;
+            | Let us know who to get back with!
+          #msgEmailIncorrect.alert.alert-info(*ngIf="!feedbackForm.controls['email'].hasError('required') && feedbackForm.controls['email'].hasError('emailIncorrect') && feedbackForm.controls['email'].dirty")
+            strong Info&nbsp;
+            | We're not sure that's a real email
+          //- Additional Info
+          label(for="feedbackInput") Additional Request Info
+          textarea#feedbackInput([formControl]="feedbackForm.controls['content']", maxlength="1000", rows="3", name="content", tabindex="0", placeholder="Any specific questions about Hero Academy?")
+          label(for="contactType") Preferred Contact Method
+            .input-group.pt-1
+              .form-check
+                label#contactTypeEmail.form-check-label.form-check-btn(
+                  [class.active]="feedbackForm.controls['contactType'].value == 'email'"
+                )
+                  input.form-check-input(
+                          type="radio", 
+                          name="contactType", 
+                          value="email", 
+                          [formControl]="feedbackForm.controls['contactType']",
+                          checked
+                        )
+                  span([innerHTML]="':e-mail: Email' | emojione")
+                label#contactTypePhone.form-check-label.form-check-btn(
+                  [class.active]="feedbackForm.controls['contactType'].value == 'phone'"
+                )
+                  input.form-check-input(
+                      type="radio", 
+                      name="contactType", 
+                      value="phone", 
+                      [formControl]="feedbackForm.controls['contactType']"
+                    )
+                  span([innerHTML]="':telephone: Phone Call' | emojione")
+          #msgServerError.alert.alert-danger(*ngIf="errorObject.serverError")
+            strong Oh no!&nbsp;
+            | {{errorObject.serverError}}
+        .modal-footer
+            button.btn.btn-secondary(type="button", (click)="feedbackClose()") Cancel
+            button.btn.btn-primary(type="submit", [disabled]="!feedbackForm.valid", [class.loading]="loading", name="send feedback", tabindex="0") Request Info
+
+//- Success Modal
+.modal-will-fade([class.show]="showRequestSuccess") 
+  .modal
+    .modal-dialog(role="document")
+      .modal-content
+        .modal-header
+          h4.modal-title Request Received
+          button.close.btn-icon--round(type="button", (click)="successClose()", aria-label="Close")
+            span(aria-hidden="true") &times;
+        .modal-body.text-center
+          img.mb-4(src="/assets/images/logo-academy.svg", style="max-width: 200px;")
+          p We will be reaching out to you soon{{ this.user.fullname ? ', ' + this.user.fullname : '' }}!
+        .modal-footer
+          button.btn.btn-secondary(type="button", (click)="successClose()") Great!

@@ -5,7 +5,7 @@ $sideBarBg: #fff;
 $navBorder: 1px solid #DEDEDE;
 $navShadow: 0px 1px 10px 3px rgba(0,0,0,0.075);
 $navUserWidth: 120px;
-$navPadY: 15px;
+$navPadY: 14px;
 
 $lightBorder: 1px solid #f1f1f1;
 $purple: rgb(150, 40, 255);
@@ -272,11 +272,23 @@ a.nav-bar__link {
 	vertical-align: middle;
 	margin: 15px 8px 15px 0px;
 
+	&.btn-sm {
+		margin: 23px 8px 23px 0px;
+		min-width: 90px;
+	}
+
 	@media(max-width: $desktop) {
 		font-size: 14px;
 		min-width: 10px;
 		padding: 12px 10px;
 		margin: 15px 3px;
+
+		&.btn-sm {
+			font-size: 10px;
+			padding:0.25rem 0.5rem;
+			margin: 23px 8px 23px 0px;
+			min-width: 90px;
+		}
 	}
 }
 
@@ -395,7 +407,7 @@ div.sliding-pane.from-left.slide-in {
 .nav__join-code {
 	max-height: 60%;
 	margin-top: $navPadY;
-	margin-right: .5em;
+	// margin-right: .5em;
 	float: right;
 }
 

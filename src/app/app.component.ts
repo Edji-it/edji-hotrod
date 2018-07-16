@@ -4,10 +4,11 @@
 import { Component, ViewEncapsulation } from '@angular/core'
 import { Angulartics2GoogleAnalytics } from 'angulartics2/ga'
 import { Angulartics2 } from 'angulartics2'
+import { PageScrollConfig } from 'ngx-page-scroll'
+
 
 // import { AppState } from './app.service'
 import { AuthService, MessageService } from './_services'
-
 /*
  * App Component
  * Top Level Component
@@ -32,6 +33,9 @@ export class AppComponent {
     private _messages: MessageService
     ) {
 
+      // Scrollto should account for nav bar
+      PageScrollConfig.defaultScrollOffset = 90;
+      PageScrollConfig.defaultDuration = 800;
   }
 
   ngOnInit() {

@@ -1,0 +1,130 @@
+nav-bar
+.container-fluid
+  //- Promo row
+  .row.twilight.has-sparks(style="padding-top:100px; padding-bottom: 100px; position: relative; overflow:hidden;")
+    .sparks
+    img.promo-spotlight(src="/assets/images/hero-promo-spotlight.svg")
+    img(style="width:100%; position: absolute; bottom: -50px;",src="/assets/images/hero-promo-skyline.svg")
+    .col-md-12(style="padding-bottom:25px;")
+      h1.big-bold(style="color:#fff;") Answer the Call
+    .col-md-1
+    .col-md-6
+      p.row-xl-pad(style='font-size:1.25em; padding-top: 0px;')
+        | Hero gives you more powers to supercharge your classrooms readings. Engage your students with questions, in-reading discussion, and more! 
+        span([innerHTML]="':tada:' | emojione")
+      button.btn.btn-lg.btn-hero((click)='goHero()')
+        | Go Hero
+  //- Feature preview and Academy CTA
+  .row.row-xl-pad
+    .col-md-8
+      .row
+        .feature-preview.col-md-4.text-center(pageScroll, href="#sectionFilter")
+          .img-wrap
+            img(style="transform: translateX(-1px);", src="/assets/images/promo-spot-filter.svg")
+          h3.pt-3 Filter on individuals
+        .feature-preview.col-md-4.text-center(pageScroll, href="#sectionAudio")
+          .img-wrap
+            img(src="/assets/images/promo-spot-mic.svg")
+          h3.pt-3 Amp up student voice
+        .feature-preview.col-md-4.text-center(pageScroll, href="#sectionQuestion")
+          .img-wrap
+            img(style="transform: translate3d(2px,2px,0px);", src="/assets/images/promo-spot-question.svg")
+          h3.pt-3 Ask and assess
+    .col-md-4.pt-4
+        h2.small-bold Assemble Your Team
+        p With Hero Academy, your whole school can wield the powers of Hero
+        .btn.btn-secondary((click)="showRequestAcademyModal = true") Request Academy Info
+  .row.hero-promo-form(style="margin:50px 0px;")
+    .col-12
+      h1.big-light.text-center(style='margin-bottom: 0.5em;') 
+        | Make
+        span(style="background:rgba(253, 228, 104, 0.45); padding:0 0.1em; margin: 0 0.1em; display:inline-block;") Powerful 
+        | Lessons
+      p.medium-semibold.text-center Hero unlocks the full power of Edji with...
+  .row
+    .hero-rule
+  .row.row-xl-pad
+    #sectionFilter.col-md-4.offset-md-1
+      h3.medium-semibold
+        | <b>Student Filters</b> give the power to review and show off an individual's annotations
+    .col-md-7.text-center
+      img(src="/assets/images/hero-promo-filter.png", style="max-width: 400px;")
+  .row
+    .hero-rule
+  .row.row-xl-pad
+    #sectionAudio.col-md-4.offset-md-1
+      h3.medium-semibold
+        | Put student voices on a stage with <b>Audio Comments</b>
+    .col-md-7.text-center
+      .promo-screen-wrap
+        img(src="/assets/images/hero-promo-audio.png")
+  .row
+    .hero-rule
+  .row.row-xl-pad
+    #sectionQuestion.col-md-4.offset-md-1
+      h3.medium-semibold Add in-line <b>Questions</b> to Readings, and get answers in one place
+      //- p In-line questions and compiled answers.
+    .col-md-7.text-center
+      div(style="max-width:600px;")
+        img(src="/assets/images/hero-promo-question.png")
+  .row.navy.row-xl-pad.has-sparks
+    .sparks
+    .col-12
+      h1.on-dark.text-center What's the next step in your hero's journey?
+    .col-2
+    .col-md-4
+      .button__row
+          button.btn.btn-secondary((click)="showRequestAcademyModal = true") Request Academy Info
+    .col-md-4
+      .button__row
+          button.btn.btn-hero((click)='goHero()')
+            | Time to Go Hero
+  .row.row-xl-pad
+    .col-md-4.offset-md-1
+      h3.medium-semibold
+        | <b>Priority Classroom Support</b> at the ready to help you build your lesson and solve technical issues in your classroom
+    .col-md-7.text-center
+      img(src="/assets/images/hero-promo-phone.svg", style="max-width: 400px;")
+  .row
+    .hero-rule
+  .row.row-xl-pad
+    .col-md-4.offset-md-1
+      h3.medium-semibold Comment <b>Replies</b> let you and your students start discussions right in the text
+    .col-md-7.text-center
+      .promo-screen-wrap
+        img(src="/assets/images/hero-promo-replies.png")
+  .row
+    .hero-rule
+  .row.row-xl-pad
+    .col-md-4.offset-md-1
+      h3.medium-semibold <b>Custom Group Codes</b> for memorization or for tying readings into another activity
+    .col-md-7.text-center
+      .promo-screen-wrap
+        img(src="/assets/images/hero-promo-codes.png")
+  .row.navy.row-xl-pad.has-sparks
+    .sparks
+    .col-12.text-center
+      h1.big-light.on-dark(style="margin:0px;")
+        | Answer the Call
+      p.on-dark.mt-2.mb-4
+        | Engage your students, build super lessons, and support Edji
+      .button__row.pb-2
+          button#heroCTA.btn-lg.btn.btn-hero((click)='goHero()')
+            | Go Hero 
+            span(style='font-weight: 700;')
+//- container-fluid
+hot-login-register.modal-will-fade(
+    [loginHeader]="loginModalHeader", 
+    [class.show]='showLoginModal',
+    (closeModal)='showLoginModal = false',
+    (loginSuccess)='showHeroSubModal = true'
+  )
+hero-subscribe-modal.modal-will-fade(
+    [class.show]='showHeroSubModal', 
+    (closeModal)='showHeroSubModal = !showHeroSubModal', 
+    (heroWasBorn)="_router.navigate(['/dashboard'])"
+  )
+request-academy-modal.modal-will-fade(
+  [class.show]="showRequestAcademyModal",
+  (closeModal)="showRequestAcademyModal = false"
+)

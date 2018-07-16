@@ -69,6 +69,8 @@ export class NavBarComponent implements OnInit, OnDestroy {
 
     // Nav menu variables
     public academyMenuShow: boolean = false
+    public onHomePage: boolean = false
+    public isTeacher: boolean = false
     public secretSwitches: Secrets = {}
 
     constructor(
@@ -90,6 +92,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
       this.subscriptions.push(
           this._auth.getCurrentUser().subscribe((user) => {
               this.user = user
+              this.isTeacher = this.user.identities && this.user.identities.indexOf('teacher') > -1
           })
       )
 
@@ -102,6 +105,9 @@ export class NavBarComponent implements OnInit, OnDestroy {
 
       if (this._router.url.indexOf('/project') > -1) {
         this.projectCodeShow = false
+      } else if (this._router.url.indexOf('/home') > -1) {
+        this.onHomePage = true
+        this.projectCodeShow = true
       } else {
         this.projectCodeShow = true
       }

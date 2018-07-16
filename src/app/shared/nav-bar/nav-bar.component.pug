@@ -55,7 +55,7 @@
           button#accountButton.list-group-item.list-group-item-action(type="button", (click)="openAccount()") {{ user.fullname }}
             span.list-icon--right([innerHtml]="':gear:' | emojione")
           //- Refer
-          button#navReferralButton.list-group-item.list-group-item-action(type="button", (click)="openReferralModal()") Refer Teachers
+          button#navReferralButton.list-group-item.list-group-item-action(*ngIf="isTeacher" type="button", (click)="openReferralModal()") Refer Teachers
             span.list-icon--right([innerHtml]="':satellite:' | emojione")
           //- Feedback
           button#navFeedbackButton.list-group-item.list-group-item-action(type="button", (click)="openFeedback()") Contact Us
@@ -66,10 +66,6 @@
           //- Log Out
           button#logOutButton.list-group-item.list-group-item-action(type="button", (click)="logout()") Log Out
             span.list-icon--right([innerHtml]="':outbox_tray:' | emojione")
-
-    //- Go hero action (non-existent if already a hero)
-    .nav__btn-wrap(*ngIf="!showProjectInfo && !user.hero_status && !hideAccountOptions")
-      a#heroLink.btn.btn-clear.nav-bar__btn.hidden-sm-down.link([routerLink]="['/hero']", routerLinkActive="active") Go Hero!
 
     //- Project Info (Desktop & Mobile)
     .nav-bar__project-data(*ngIf="showProjectInfo && currentProject && currentProject._id")
@@ -126,7 +122,9 @@
             name="Join", 
             href="#") Go!
       #projectCodeError.invalid-feedback(*ngIf="errorObject.invalidCode", [innerHtml]="errorObject.invalidCode | emojione")
-
+    //- Go hero action (non-existent if already a hero)
+    .nav__btn-wrap(*ngIf="!user.isLoggedIn || (!user.hero_status && isTeacher)")
+      a#heroLink.btn.btn-hero.btn-sm.nav-bar__btn.hidden-sm-down([routerLink]="['/hero']", routerLinkActive="active") {{ onHomePage ? "Discover Hero" : "Upgrade to Hero" }}
   //- Page title/reading title
   h1.hidden-md-up.mobile-heading(*ngIf="(pageTitle && !showProjectInfo) || hideAccountOptions") {{ pageTitle }}
   h1.hidden-md-up.mobile-heading(*ngIf="showProjectInfo || hideAccountOptions") {{ currentReading.title }}

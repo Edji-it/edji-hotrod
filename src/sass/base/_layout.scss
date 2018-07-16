@@ -46,6 +46,16 @@ footer {
   padding-bottom: $base-pad;
 }
 
+.row-pad {
+  padding-top: $base-pad;
+  padding-bottom: $base-pad;
+}
+
+.row-xl-pad {
+  padding-top: 2*$base-pad;
+  padding-bottom: 2*$base-pad;
+}
+
 .col__center-fix {
   height: 100%; 
   position: relative;
