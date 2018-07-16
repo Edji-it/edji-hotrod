@@ -1,0 +1,114 @@
+#upgradeHeroModal.modal.fade-in([class.hide]="tempHide")
+  .modal-dialog
+    .modal-content
+      .modal-header
+        h4.modal-title
+          span.hero-tag--lg H
+          |  Go Hero
+        button.close((click)="closeModal.emit()" type="button") ×
+      .modal-body
+        .row([class.hide]="userNowHero")
+          .col-12
+            p.pb-1
+              | We are honored you will be joining the league of Heroes.
+              br
+            h4 Add Billing Information
+            .form-group
+              label Hero Subscription Plan
+              table.table.table-hover
+                tbody
+                  tr.selectable.table-info(*ngIf="!joiningAcademy")
+                    th(scope="row") Yearly
+                    td
+                      p([class.strike-through]="sForm.controls['couponCode'].valid && !joiningAcademy")
+                        b $60/yr
+                      p(*ngIf="sForm.controls['couponCode'].valid && !joiningAcademy")
+                        b ${{newPrice}}/yr
+                    td(colspan="2")
+                      p
+                        | Billed as 
+                        span([class.strike-through]="sForm.controls['couponCode'].valid && !joiningAcademy") $60
+                        span(*ngIf="sForm.controls['couponCode'].valid && !joiningAcademy")  ${{newPrice}}
+                        span(*ngIf="!sForm.controls['couponCode'].valid")  every year
+                        span(*ngIf="sForm.controls['couponCode'].valid && !joiningAcademy")  for your first year
+                  tr.table-info(*ngIf="joiningAcademy == true")
+                    th(scope="row" style="vertical-align:middle;") Hero Academy
+                    td
+                      img(src="/assets/images/logo-academy.svg")
+                    td(style="vertical-align:middle;" [innerHtml]="'Provided by your Institution! :tada:' | emojione")
+            form([formGroup]="sForm")
+              .form-row
+                label(for="promoCode") Promo Code
+                #promoCode.form-group([class.has-success]="sForm.controls['couponCode'].valid", [class.has-danger]="sForm.controls['couponCode'].value && sForm.controls['couponCode'].value.length > 0 && !sForm.controls['couponCode'].valid && sForm.controls['couponCode'].touched")
+                  input#couponCodeInput.form-control.text-uppercase( formControlName="couponCode", *ngIf="!initWithCoupon", [class.form-control-success]="sForm.controls['couponCode'].valid", type="text", tabindex="0", [class.hidden]="initWithCoupon")
+                  #invalidCouponMsg.form-control-feedback(*ngIf="sForm.controls['couponCode'].value && sForm.controls['couponCode'].value.length > 0 && !sForm.controls['couponCode'].valid && sForm.controls['couponCode'].touched")
+                    b Uh-oh!
+                    |  That code is invalid or expired.
+                  #validCouponMsg.form-control-feedback(*ngIf="sForm.controls['couponCode'].valid && !joiningAcademy")
+                    b Applied!
+                    |  {{percentOff}}% discount applied.
+                  #academyCouponMsg.form-control-feedback(*ngIf="sForm.controls['couponCode'].valid && joiningAcademy")
+                    b Hero Academy License Applied!
+            br
+            form#payment-form([class.hide]="sForm.controls['couponCode'].valid && percentOff == 100" action="/charge" method="post")
+              .form-row
+                .form-group
+                  label(for="card-element")
+                    | Credit or debit card
+                  #card-element
+                    // a Stripe Element will be inserted here.
+                  // Used to display form errors
+                  #card-errors(role="alert")
+                  .alert.alert-warning(*ngIf="stripeMessage" [innerHtml]="stripeMessage")
+                  .pt-2
+                    a(href="http://stripe.com" target="_blank")
+                      img(src="/assets/images/powered_by_stripe.png")
+                    div(style="float:right;")
+                      img.card-icon(src="/assets/images/icon-amex.png")
+                      img.card-icon(src="/assets/images/icon-mastercard.png")
+                      img.card-icon(src="/assets/images/icon-visa.png")
+                      img.card-icon(src="/assets/images/icon-discover.png")
+              .form-row
+                .form-group
+                  p.small
+                    | By Subscribing to Hero, you agree to our 
+                    a.link(target="_blank" href="http://guide.edji.it/index.php/hero-license-agreement/") License Terms
+                    |  and 
+                    a.link(target="_blank" href="http://guide.edji.it/index.php/back-to-edji-it/privacy-terms/") Privacy Policy
+                    | .
+              // <button>Submit Payment</button>
+          // col-12
+        // row
+        .row(*ngIf="userNowHero")
+          .col-12
+            .hero-smash__wrap
+              img.hero-smash(src="/assets/images/hero-lg.png")
+            h4.center You are now a Hero!
+            p Give some of your new powers a try:
+            p
+              b Create Questions
+              br
+              | Create a 
+              a.link([routerLink]="['/new-reading']") New Reading
+              |  to add inline Questions!
+            p
+              b Comment Replies
+              br
+              | Try enabling Comment Replies for a new Reading Group on your 
+              a.link([routerLink]="['/dashboard']") Dashboard
+            p
+              b More About Hero
+              br
+              | Check out the 
+              a.link(href="http//guide.edji.it") Edji Guide
+              |  to find out more about your Hero powers.
+      .modal-footer
+        //
+          <div class="alert alert-danger" role="alert">
+          <strong>Hero Subscription</strong> Couldn't process.
+          </div>
+        .btn-row.right(*ngIf="!userNowHero")
+          button.btn.btn-secondary((click)="closeModal.emit()" type="button" data-dismiss="modal") Cancel
+          button#subHero.btn.btn-primary([class.loading]="loading", (click)="checkout()") Subscribe
+        .btn-row.right(*ngIf="userNowHero")
+          button.btn((click)="heroWasBorn.emit(); closeModal.emit()" type="button" data-dismiss="modal") Awesome!
