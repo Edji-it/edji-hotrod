@@ -3,3 +3,14 @@
   font-weight: 500;
   font-size: 14px;
 }
+
+.icon-block {
+  border-right: #838383 solid 1px;
+}
+
+.icon-chart-axis {
+  text-align: right;
+  &-txt {
+    font-size: 12px;
+  }
+}
