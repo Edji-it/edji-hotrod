@@ -137,7 +137,22 @@
     }
 }
 
-// .promo-spotlight {
+.promo-spotlight {
+    position:absolute;
+    right:10%;
+    bottom:0px;
+    height:95%;
+    opacity: 0.9;
+
+    @media(max-width:$tablet) {
+        height: 400px;
+        opacity: 0.8;
+    }
+
+    @media(max-width:$phone) {
+        height: 250px;
+        opacity: 0.8;
+    }
 //     transition: all ease 1200;
 //     transform: rotate(0deg);
 
@@ -145,4 +160,4 @@
 //         transform: rotate(4deg);
 //         transform-origin: 0% 100%;
 //     }
-// }
+}

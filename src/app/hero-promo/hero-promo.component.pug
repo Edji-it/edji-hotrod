@@ -3,12 +3,12 @@ nav-bar
   //- Promo row
   .row.twilight.has-sparks(style="padding-top:100px; padding-bottom: 100px; position: relative; overflow:hidden;")
     .sparks
-    img.promo-spotlight(style="position:absolute;right:10%;bottom:0px;height:95%;", src="/assets/images/hero-promo-spotlight.svg")
+    img.promo-spotlight(src="/assets/images/hero-promo-spotlight.svg")
     img(style="width:100%; position: absolute; bottom: -50px;",src="/assets/images/hero-promo-skyline.svg")
-    .col-12(style="padding-bottom:25px;")
+    .col-md-12(style="padding-bottom:25px;")
       h1.big-bold(style="color:#fff;") Answer the Call
-    .col-1
-    .col-6
+    .col-md-1
+    .col-md-6
       p.row-xl-pad(style='font-size:1.25em; padding-top: 0px;')
         | Hero gives you more powers to supercharge your classrooms readings. Engage your students with questions, in-reading discussion, and more! 
         span([innerHTML]="':tada:' | emojione")
@@ -16,7 +16,7 @@ nav-bar
         | Go Hero
   //- Feature preview and Academy CTA
   .row.row-xl-pad
-    .col-8
+    .col-md-8
       .row
         .feature-preview.col-md-4.text-center(pageScroll, href="#sectionFilter")
           .img-wrap
@@ -30,7 +30,7 @@ nav-bar
           .img-wrap
             img(style="transform: translate3d(2px,2px,0px);", src="/assets/images/promo-spot-question.svg")
           h3.pt-3 Ask and assess
-    .col-md-4
+    .col-md-4.pt-4
         h2.small-bold Assemble Your Team
         p With Hero Academy, your whole school can wield the powers of Hero
         .btn.btn-secondary((click)="showRequestAcademyModal = true") Request Academy Info
