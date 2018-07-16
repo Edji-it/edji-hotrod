@@ -25,6 +25,7 @@ export class HeroPromoComponent implements OnInit, OnDestroy {
   public showLoginModal: boolean
   public showHeroSubModal: boolean
   public showRequestAcademyModal: boolean
+  public loginModalHeader: string = "Please log in or register"
 
   private subscriptions: Subscription[] = []
 
