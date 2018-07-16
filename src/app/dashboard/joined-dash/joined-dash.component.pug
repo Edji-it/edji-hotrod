@@ -31,7 +31,7 @@ form.pb-4.hidden-md-up([formGroup]="codeForm", (ngSubmit)="addSession(codeForm.v
   .row.loading(*ngIf="loading")
   .alert.alert-danger(*ngIf="errorObject.projectError && projects.length < 1")
     strong Oh no!
-    | {{errorObject.projectError}}
+    | &nbsp;{{errorObject.projectError}}
   ng-container(*ngFor="let project of projects")
     .list-item.list-item--button([routerLink]="['/project', project._id]", [class.hide]="!project.createdAt")
       .reading-icon
