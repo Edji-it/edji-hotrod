@@ -123,7 +123,7 @@
             href="#") Go!
       #projectCodeError.invalid-feedback(*ngIf="errorObject.invalidCode", [innerHtml]="errorObject.invalidCode | emojione")
     //- Go hero action (non-existent if already a hero)
-    .nav__btn-wrap(*ngIf="!user.hero_status && !hideAccountOptions && isTeacher")
+    .nav__btn-wrap(*ngIf="!user.isLoggedIn || (!user.hero_status && isTeacher)")
       a#heroLink.btn.btn-hero.btn-sm.nav-bar__btn.hidden-sm-down([routerLink]="['/hero']", routerLinkActive="active") {{ onHomePage ? "Discover Hero" : "Upgrade to Hero" }}
   //- Page title/reading title
   h1.hidden-md-up.mobile-heading(*ngIf="(pageTitle && !showProjectInfo) || hideAccountOptions") {{ pageTitle }}
