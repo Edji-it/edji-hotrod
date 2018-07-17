@@ -126,7 +126,7 @@
     .nav__btn-wrap(*ngIf="!user.isLoggedIn || (!user.hero_status && isTeacher)")
       a#heroLink.btn.btn-hero.btn-sm.nav-bar__btn.hidden-sm-down([routerLink]="['/hero']", routerLinkActive="hide") {{ currentPage == "home" ? "Discover Hero" : "Upgrade to Hero" }}
       a#goHeroLink.btn.btn-hero.btn-sm.nav-bar__btn.hidden-sm-down(
-          *ngIf="currentPage == 'hero'",
+          *ngIf="user.isLoggedIn && currentPage == 'hero'",
           (click)="showHeroSubModal = true"
         ) Go Hero
   //- Page title/reading title
