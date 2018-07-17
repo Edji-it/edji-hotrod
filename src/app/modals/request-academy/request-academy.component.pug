@@ -23,16 +23,16 @@
           //- Email
           label(for="emailInput") Email
           input#emailInput(type="text", [placeholder]="userCopy.email", [formControl]="feedbackForm.controls['email']", tabindex="0")
-          //- Phone Number
-          label(for="emailInput") Phone 
-          input#phoneInput(type="tel", placeholder="612-567-8391", [formControl]="feedbackForm.controls['phone']", tabindex="0")
           #msgEmailRequired.alert.alert-info(*ngIf="feedbackForm.controls['email'].hasError('required')")
             strong Info&nbsp;
-            | Let us know who to get back with!
+            | Where would you like follow-up emails sent?
           #msgEmailIncorrect.alert.alert-info(*ngIf="!feedbackForm.controls['email'].hasError('required') && feedbackForm.controls['email'].hasError('emailIncorrect') && feedbackForm.controls['email'].dirty")
             strong Info&nbsp;
             | We're not sure that's a real email
-          //- Additional Info
+          //- Phone Number
+          label(for="emailInput") Phone 
+          input#phoneInput(type="tel", placeholder="612-567-8391", [formControl]="feedbackForm.controls['phone']", tabindex="0")
+           //- Additional Info
           label(for="feedbackInput") Additional Request Info
           textarea#feedbackInput([formControl]="feedbackForm.controls['content']", maxlength="1000", rows="3", name="content", tabindex="0", placeholder="Any specific questions about Hero Academy?")
           label(for="contactType") Preferred Contact Method
