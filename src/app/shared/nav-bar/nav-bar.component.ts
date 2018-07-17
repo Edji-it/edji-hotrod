@@ -3,9 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Component, Input, OnDestroy, OnInit, Output, EventEmitter } from '@angular/core'
 import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
-// import { EventEmitter } from '@angular/forms/src/facade/async'
 
-import { Project, Reading } from '../datatypes'
+// Project Dependencies
 import { AuthService, ProjectService, SocketService, PowerToggle, ReadingService, SecretSwitchesService, UtilToolService, Secrets } from '../../_services'
 
 @Component({
@@ -62,16 +61,15 @@ export class NavBarComponent implements OnInit, OnDestroy {
       "loginFailed"?: string,
       "serverError"?: string
     } = {}
-    public projectCodeShow: boolean = true
     public window
     public showHeroSubModal: boolean
     public couponCode: string
 
     // Nav menu variables
     public academyMenuShow: boolean = false
-    public onHomePage: boolean = false
     public isTeacher: boolean = false
     public secretSwitches: Secrets = {}
+    public currentPage: string = ""
 
     constructor(
           public _route: ActivatedRoute,
@@ -104,12 +102,11 @@ export class NavBarComponent implements OnInit, OnDestroy {
       }
 
       if (this._router.url.indexOf('/project') > -1) {
-        this.projectCodeShow = false
+        this.currentPage = "project"
       } else if (this._router.url.indexOf('/home') > -1) {
-        this.onHomePage = true
-        this.projectCodeShow = true
-      } else {
-        this.projectCodeShow = true
+        this.currentPage = "home"
+      } else if (this._router.url.indexOf('/hero') > -1) {
+        this.currentPage = "hero"
       }
 
       this.subscriptions.push(
