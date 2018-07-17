@@ -24,7 +24,7 @@
           a.dropdown-item([routerLink]="['/academy/licenses']", routerLinkActive="active")
             | Licenses
     //- Optional Title
-    div(*ngIf="!projectCodeShow || hideAccountOptions")
+    div(*ngIf="currentPage == 'project' || hideAccountOptions")
       .nav-bar__heading.hidden-sm-down(*ngIf="!showProjectInfo")
         h1(
           *ngIf="pageTitle",
@@ -103,7 +103,7 @@
       button#saveDraftButtonMobile.btn.btn-clear.nav-bar__btn.hidden-md-up(*ngIf="canPublish", (click)="saveAction.emit()") Save
 
     //- Join Reading Code
-    .row.col-5.nav__join-code.hidden-sm-down(*ngIf="projectCodeShow && !canPublish && !hideAccountOptions")
+    .row.col-5.nav__join-code.hidden-sm-down(*ngIf="(currentPage != 'project') && !canPublish && !hideAccountOptions")
       .input-group.input-group-lg
         input#projectCodeInputNav.form-control(
           name="ProjectCodeInput", 
@@ -124,7 +124,11 @@
       #projectCodeError.invalid-feedback(*ngIf="errorObject.invalidCode", [innerHtml]="errorObject.invalidCode | emojione")
     //- Go hero action (non-existent if already a hero)
     .nav__btn-wrap(*ngIf="!user.isLoggedIn || (!user.hero_status && isTeacher)")
-      a#heroLink.btn.btn-hero.btn-sm.nav-bar__btn.hidden-sm-down([routerLink]="['/hero']", routerLinkActive="active") {{ onHomePage ? "Discover Hero" : "Upgrade to Hero" }}
+      a#heroLink.btn.btn-hero.btn-sm.nav-bar__btn.hidden-sm-down([routerLink]="['/hero']", routerLinkActive="hide") {{ currentPage == "home" ? "Discover Hero" : "Upgrade to Hero" }}
+      a#goHeroLink.btn.btn-hero.btn-sm.nav-bar__btn.hidden-sm-down(
+          *ngIf="currentPage == 'hero'",
+          (click)="showHeroSubModal = true"
+        ) Go Hero
   //- Page title/reading title
   h1.hidden-md-up.mobile-heading(*ngIf="(pageTitle && !showProjectInfo) || hideAccountOptions") {{ pageTitle }}
   h1.hidden-md-up.mobile-heading(*ngIf="showProjectInfo || hideAccountOptions") {{ currentReading.title }}
