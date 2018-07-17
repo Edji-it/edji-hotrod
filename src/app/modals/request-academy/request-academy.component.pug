@@ -59,6 +59,16 @@
                       [formControl]="feedbackForm.controls['contactType']"
                     )
                   span([innerHTML]="':telephone: Phone Call' | emojione")
+                label#contactTypeText.form-check-label.form-check-btn(
+                  [class.active]="feedbackForm.controls['contactType'].value == 'text'"
+                )
+                  input.form-check-input(
+                      type="radio", 
+                      name="contactType", 
+                      value="text", 
+                      [formControl]="feedbackForm.controls['contactType']"
+                    )
+                  span([innerHTML]="':speech_balloon: Text' | emojione")
           #msgServerError.alert.alert-danger(*ngIf="errorObject.serverError")
             strong Oh no!&nbsp;
             | {{errorObject.serverError}}
