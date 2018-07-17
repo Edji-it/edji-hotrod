@@ -21,7 +21,7 @@ import {
     UserInitialsPipe 
   } from './_pipes'
 import { ShareCodeComponent } from "./modals/share-code/share-code.component"
-import { ReferralModalComponent, HeroSubscribeComponent } from "./modals";
+import { ReferralModalComponent, HeroSubscribeComponent, RequestAcademyModal } from "./modals";
 import { HotChartHzbarComponent } from './shared/hot-chart-hzbar/hot-chart-hzbar.component';
 import { HotChartGaugeComponent } from './shared/hot-chart-gauge/hot-chart-gauge.component'
 
@@ -36,8 +36,9 @@ let SHARED_DECLARATIONS = [
     LinkifyPipe, 
     NavBarComponent,
     ReferralModalComponent,
-    SubjectPipe, 
+    RequestAcademyModal,
     ShareCodeComponent,
+    SubjectPipe, 
     UserInitialsPipe,
     HotChartHzbarComponent,
     HotChartGaugeComponent
