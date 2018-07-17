@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 
 // Project Dependencies
 import { CommentFilter, ProjectService } from 'src/app/_services/project.service'
-import { User, Project } from '../../../shared/datatypes'
+import { User, Project, EdjiComment } from '../../../shared/datatypes'
 import { AuthService } from '../../../_services'
 import { Subscription } from 'rxjs';
 
@@ -19,6 +19,7 @@ export class ReadingReportComponent implements OnInit {
   private currentUser: User
   public project: Project = <Project>{}
   public appliedFilter: CommentFilter
+  public comments: EdjiComment[] = []
 
   constructor(
     private _projects : ProjectService,
@@ -37,6 +38,7 @@ export class ReadingReportComponent implements OnInit {
       this._projects.filterUpdates.subscribe(
         (filter) => {
           this.appliedFilter = filter
+          console.log(filter)
         }
       )
     ),
@@ -45,7 +47,19 @@ export class ReadingReportComponent implements OnInit {
       this._projects.currentProject.subscribe(
         (project) => {
             if (project) {
-                this.project = project
+              this.project = project
+              if (project && project.comments) {
+                this._projects.filterByUser(this.currentUser)
+
+                // Only handle comments that are the curent selected users'
+                let commentsLength = this.project.comments.length
+                for (let i=0; i<commentsLength; i++) {
+                  let comment = this.project.comments[i]
+                  if (this.appliedFilter.propertyFilters.user_id.test(comment.user_id)) {
+                    this.comments.push(comment)
+                  }
+                }
+              }
             }
         },
         (error) => {

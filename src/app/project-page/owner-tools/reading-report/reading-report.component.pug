@@ -64,7 +64,10 @@
           [values]="{min: 2, max: 13, avg: 5, val: 11}"
         )
       .col-4
-        hot-chart-hzbar
+        hot-chart-hzbar(
+          *ngIf="visible",
+          [comments]="comments"
+        )
     .row.mt-5
       .col-12
         div Comments
