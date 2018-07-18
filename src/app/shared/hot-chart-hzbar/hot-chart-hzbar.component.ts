@@ -33,4 +33,12 @@ export class HotChartHzbarComponent implements OnInit {
     }
   }
 
+  // For displaying the count icons next to each comment type
+  public counter(i: number) {
+    if (i<26) {
+      return new Array(i)
+    } else {
+      return new Array(25)
+    }
+  }
 }

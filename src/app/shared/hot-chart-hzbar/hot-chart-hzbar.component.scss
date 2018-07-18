@@ -11,6 +11,37 @@
 .icon-chart-axis {
   text-align: right;
   &-txt {
-    font-size: 12px;
+    font-size: 11px;
+    color: #747474;
   }
+}
+
+.count-block {
+  height: 18px;
+  width: 6px;
+  display: inline-block;
+  margin-right: 1px;
+  &__emoji {
+    background-color: #FFCC4D;
+  }
+  &__text {
+    background-color: #E49A5F;
+  }
+  &__audio {
+    background-color: #D84F4F;
+  }
+  &__replies {
+    background-color: #6BDB5D;
+  }
+}
+
+.ml-tiny {
+  margin-left: 1px;
+}
+
+.count-plus {
+  display: inline-block;
+  font-size: 14px;
+  position: absolute;
+  bottom: 4px;
 }
