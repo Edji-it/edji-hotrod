@@ -1,0 +1,9 @@
+nav-bar
+.container
+  h1 Meet the Team
+  .row
+    .col-2(*ngFor="let player of players")
+      img([attr.src]="player.photo")
+      h3 {{ player.name }}
+      .emoji_wrap([innerHtml]="player.emoji | emojione")
+      p {{ player.book }}
