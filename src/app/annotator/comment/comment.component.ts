@@ -69,6 +69,7 @@ export class CommentComponent implements OnInit, OnDestroy {
   @Input() private assignedQuestion : EdjiQuestion; // If this is an answer, it'll need this.
   @Input() private userPermission: number = CommentPermissions.READ
   @Input() private showDeleteAudioModal: boolean = false
+  @Input() public readingReport: boolean = false
   @Input()
   set isActive(isActive: boolean) {
     if (typeof(isActive) !== 'undefined' && this.active !== isActive) {

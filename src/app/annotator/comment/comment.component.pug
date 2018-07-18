@@ -72,7 +72,7 @@
 //- END the other component comment display
 
 //- Comments that are displayed in the comment pane
-hr.mobileBlock-hr(*ngIf="commentMobile && !commentMobileFirst")
+hr.mobileBlock-hr(*ngIf="commentMobile && !commentMobileFirst && !readingReport")
 div(*ngIf="commentPaneActive", [class.selected--block]="comment.selected")
     .comment-new-highlight__mobile(*ngIf="comment && comment.active  && comment.new")
         .comment-new-dot__mobile
@@ -87,15 +87,15 @@ div(*ngIf="commentPaneActive", [class.selected--block]="comment.selected")
         [ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '' ]"
     )
         .comment-action--save.comment-action--save__mobile.comment-action--save__mobile-btn(
-            *ngIf="comment.active && !readOnly",
+            *ngIf="comment.active && !readOnly && !readingReport",
             (tap)="deactivate(comment)",
             [innerHtml]="':white_check_mark:' | emojione"
         )
-        i.icon.icon-draft.icon-draft__comment(*ngIf="!comment.new && ((!comment.data || comment.data=='') && (!comment.url || comment.url == ''))")
-        .user-icon([class.selected]="comment.selected", [ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '' ]")
+        i.icon.icon-draft.icon-draft__comment(*ngIf="!comment.new && ((!comment.data || comment.data=='') && (!comment.url || comment.url == '')) && !readingReport")
+        .user-icon(*ngIf="!readingReport", [class.selected]="comment.selected", [ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '' ]")
             span.user-icon__initials {{comment.author.substring(0,2)}}
-        .mobileBlock([ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '' ]")
-            .list-item.list-item--block.mobileTime-card
+        .mobileBlock([ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '', readingReport ? 'mobileBlock--reading-report' : '' ]")
+            .list-item.list-item--block.mobileTime-card(*ngIf="!readingReport")
                 | {{comment.author}}
                 span.mobileTime-card__time &nbsp;{{ comment.createdAt | edjidate:'timeAgo':null:secondsAgo }}
             .comment-input-wrapper
@@ -127,11 +127,11 @@ div(*ngIf="commentPaneActive", [class.selected--block]="comment.selected")
                     [commentContext]="commentContext"
                 )
             //- Text that was commented on
-            .list-item.mobileHighlight-card.h-1(*ngIf="!isImage")
+            .list-item.mobileHighlight-card.h-1(*ngIf="!isImage && !readingReport")
                 blockquote
                     | {{ comment.text ? comment.text : '...'}}
             //- Image comment handling
-            .list-item.mobileHighlight-card_liImage.h-1(*ngIf="isImage")
+            .list-item.mobileHighlight-card_liImage.h-1(*ngIf="isImage && !readingReport")
                 .mobileHighlight-card_image Image
             //- button.mobileHighlight-card_button((tap)="getImagePos(comment.start)") View&nbsp;&#8594;
     //- Comment action buttons
@@ -140,13 +140,13 @@ div(*ngIf="commentPaneActive", [class.selected--block]="comment.selected")
         button.btn.btn-sm.btn-hero.btn-delete(*ngIf="userPermission >= 3", (tap)="userPermission > 3 ? deleteComment(comment) : _comments.deleteCommentConfirmation(comment, commentContext)") Delete
         //- .col-6.float-right.btn-float-right__sm
         //- button.btn.btn-sm.btn-primary(*ngIf="repliesById[comment._id] && repliesById[comment._id].length>0", (tap)="commentReply.emit(comment)") Replies ({{ repliesById[comment._id] && repliesById[comment._id].length }})
-        button#addReply.btn.btn-sm.btn-primary(*ngIf="!reply && project.types.indexOf('reply') > -1", (tap)="commentReply.emit(comment)") Replies ({{ repliesById[comment._id] && repliesById[comment._id].length || '0' }})
+        button#addReply.btn.btn-sm.btn-primary(*ngIf="!readingReport && !reply && project.types.indexOf('reply') > -1", (tap)="commentReply.emit(comment)") Replies ({{ repliesById[comment._id] && repliesById[comment._id].length || '0' }})
         //- button.btn.btn-sm.btn-primary(ngIf="!repliesById[comment._id]", (tap)="commentReply.emit(comment)") Replyeply
 //- END comment pane display
 
 //- Handle Desktop and Mobile Icons for activating comments
 avatar-portal(
-    *ngIf="!reply",
+    *ngIf="!reply && !readingReport",
     [comment]="comment",
     [lineCount]="lineCount",
     [indexOnLine]="indexOnLine",

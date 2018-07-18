@@ -73,11 +73,19 @@
         div Comments
         hr.mt-0
     //- Comment Block
-    .row
+    .row(*ngFor="let reportComment of comments; let i = index")
       .col-3
-        div Comment Block
+        edji-comment(
+          [readOnly]="true",
+          [comment]="reportComment",
+          [commentMobile]="true",
+          [commentPaneActive]="true",
+          [commentMobileFirst]="i<1",
+          [readingReport]="true",
+          style="display: initial;"
+        )
       .col-9
-        div Comment words on the text itself
+        .h-1.report-text-highlighted {{ reportComment.text ? reportComment.text : '...'}}
     .row.mt-5
       .col-12
         div Summarize and Share
