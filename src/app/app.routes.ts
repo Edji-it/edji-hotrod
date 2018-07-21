@@ -36,7 +36,7 @@ export const ROUTES: Routes = [
   { path: 'reset-password', component: ResetPassPage },
   { path: 'hero', component: HeroPromoComponent, pathMatch: 'full' },
   { path: 'pricing', component: HeroPricingComponent, pathMatch: 'full'  },
-  { path: 'team', component: TeamPageComponent },
+  { path: 'about', component: TeamPageComponent },
   { path: 'academy', loadChildren: './academy/academy.module#AcademyModule' },
   { path: 'oauth/:type', component: OAuthComponent, pathMatch: 'full' },
   { path: 'not-found',    component: NoContentComponent, pathMatch: 'full' },
