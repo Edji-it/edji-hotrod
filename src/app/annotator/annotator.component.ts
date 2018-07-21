@@ -2,6 +2,7 @@ import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, QueryLis
 import { Subject, Subscription } from 'rxjs';
 import * as Rangy from 'rangy';
 import { Angulartics2 } from 'angulartics2'
+import * as jsPDF from 'jspdf'
 // import { HotkeysService, Hotkey } from 'angular2-hotkeys'
 
 import { CommentComponent } from './comment/comment.component'
@@ -155,6 +156,18 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         //     return false // Prevent bubbling
         // }))
         this.window = window
+    }
+
+    download() {
+
+        var doc = new jsPDF();
+        doc.text(20, 20, 'Hello world!');
+        doc.text(20, 30, 'This is client-side Javascript, pumping out a PDF.');
+        doc.addPage();
+        doc.text(20, 20, 'Do you like that?');
+
+        // Save the PDF
+        doc.save('Test.pdf');
     }
 
     /**
