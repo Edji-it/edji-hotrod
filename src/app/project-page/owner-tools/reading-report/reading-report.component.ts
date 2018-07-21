@@ -1,10 +1,12 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
+import { Subscription } from 'rxjs';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 
 // Project Dependencies
 import { CommentFilter, ProjectService } from 'src/app/_services/project.service'
 import { User, Project, EdjiComment } from '../../../shared/datatypes'
 import { AuthService } from '../../../_services'
-import { Subscription } from 'rxjs';
+import { ALLSPARK } from '../../../app.constants';
 
 @Component({
   selector: 'hot-reading-report',
@@ -20,11 +22,18 @@ export class ReadingReportComponent implements OnInit {
   public project: Project = <Project>{}
   public appliedFilter: CommentFilter
   public comments: EdjiComment[] = []
+  public evaluationForm: FormGroup
 
   constructor(
     private _projects : ProjectService,
-    private _auth: AuthService
-  ) { }
+    private _auth: AuthService,
+    private _fb: FormBuilder
+  ) { 
+    this.evaluationForm = _fb.group({
+      email: [null, Validators.compose([Validators.required, this.emailValidator])],
+      inputtext: [null, Validators.required],
+    })
+  }
 
   ngOnInit() {
     // Subscribe to current user
@@ -68,4 +77,19 @@ export class ReadingReportComponent implements OnInit {
     )
   }
 
+  /** Validates email against the same regex used on the server
+   * @returns error which should be assigned to the email input
+   */
+  private emailValidator(control: FormControl): any {
+    // If you change the RegExp for the email validator here, change it on the username validator as well
+    let emailRe: RegExp = ALLSPARK.EMAILREGEX
+    return emailRe.test(control.value) ? null : { 'emailIncorrect': true }
+  }
+
+  /** Makes call to send evaluation to the email on the form */
+  public sendEval(formValue: any): void {
+    // Need a place to send this report
+    console.log(formValue)
+    this.evaluationForm.reset()
+  }
 }
