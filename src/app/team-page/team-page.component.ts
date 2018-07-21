@@ -12,8 +12,8 @@ export class TeamPageComponent implements OnInit {
       name: "Corbin Fonville",
       title: "CEO",
       photo: "/assets/images/promo/headshot-corbin.jpg",
-      emoji: "",
-      book: ""
+      emoji: ":race_car:",
+      book: "Ender's Game"
     },
     {
       name: "Brennen Hicklin",
@@ -23,7 +23,7 @@ export class TeamPageComponent implements OnInit {
       book: "Hitchiker's Guide to the Galaxy"
     },
     {
-      name: "Cynder Hicklin-Pumper",
+      name: "Cynder",
       title: "Branch Manager",
       photo: "/assets/images/promo/headshot-cynder.jpg",
       emoji: ":tennis:",
@@ -33,31 +33,33 @@ export class TeamPageComponent implements OnInit {
       name: "Josh Kyburz",
       title: "Hacker",
       photo: "/assets/images/promo/headshot-josh.jpg",
-      emoji: "",
-      book: ""
+      emoji: ":fire:",
+      book: "Elon Musk by Ashlee Vance"
     },
     {
       name: "Cody Pumper",
       title: "Product Design",
       photo: "/assets/images/promo/headshot-cody.jpg",
-      emoji: "",
-      book: ""
+      emoji: ":tada:",
+      book: "Ready Player One"
     },
     {
       name: "Kelvin Stewart",
       title: "Assistant to the Branch Manager",
       photo: "/assets/images/promo/headshot-cynder.jpg",
-      emoji: "",
+      emoji: ":feet:",
       book: ""
     },
     {
       name: "Will Stewart",
-      title: "",
+      title: "Founding Teacher",
       photo: "/assets/images/promo/headshot-cynder.jpg",
-      emoji: "",
+      emoji: ":sauropod:",
       book: ""
     }
   ]
+
+  public expandStory: boolean = false
 
   constructor() { }
 

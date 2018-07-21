@@ -1,11 +1,52 @@
 nav-bar
 .container
-  .row.row-xl-pad
-    h1 Meet the Team
   .row
-    .col-3(*ngFor="let player of players")
-      img.rounded([attr.src]="player.photo")
-      h4 {{ player.name }}
-      .emoji_wrap([innerHtml]="player.emoji | emojione")
-      label Favorite Book
-      p {{ player.book }}
+    .col-12
+      .jumbotron.jumbotron--blue-sky(style="margin-top:60px; position: relative;")
+        .title-card About Edji
+        h1.mt-2 From Will's classroom, to yours
+        p
+          | Will Stewart was a 4th-grade teacher with a problem: He wanted students to be more excited about reading, and have an easier time discussing their readings in class. When he tried to get his students to read in class, he saw that students were often disengaged and bored, which meant their understanding of the reading suffered and classroom discussion turned into another lesson without his students feeling like they could contribute.
+        p 
+          | One day, he saw his students playing around and laughing while they were supposed to be reading. As he observed them, he realized that they weren’t just playing around and talking about their lunch or the movie they had seen. They were actually using emoji to talk about the article they were reading in class that day. They put down these Emoji:
+        .h1.text-center([innerHtml]="':sailboat: :package: :moneybag: :flag_gb: :flag_us:' | emojione")
+        p(*ngIf="!expandStory") When asked to explain...
+        .extended-story([class.show]="expandStory")
+          p
+            | When asked to explain them, the students excitedly described the events of the Boston Tea Party; How the Colonists were angry about the taxes they were being forced to pay, and how they dumped boxes of tea into the Boston Harbor in protest to the British. Will, amazed by the excitement his students were showing, wanted all of his students to try this and share their results, but disappointedly couldn’t find a service that let him do this. So he did something about it himself.
+          p
+            | Will went to Startup Weekend Education, in Minneapolis to find a group of people that could help him create a tool for reading and emoji sharing. With positive feedback and success at the event, the Edji team was born and started the journey of creating a tool that engages readers and excites discussion of their assigned reading.
+          p
+            | Today, Edji is much more than just emoji in reading. Edji is a tool for getting students really engaged in reading, and then help break the ice to get real, meaningful discussion going in the classroom.
+        p.lead(*ngIf="!expandStory")
+          a.btn.btn-primary.btn-sm((click)="expandStory = true", tabindex="0", role='button') Read More
+  .row.row-xl-pad
+    .col-12
+      h2.text-center.big-light Meet the Team
+    .col-3.mb-4(*ngFor="let player of players")
+      .player-card.card
+        img.card-img([attr.src]="player.photo")
+        .card-img-overlay
+          .card-title 
+            .emoji_wrap([innerHtml]="player.emoji | emojione")
+            | {{ player.name }}        
+          .player-title {{ player.title }}
+          .mt-2
+            label.mb-0 Favorite Book
+            p {{ player.book }}
+    .col-12
+      .card.card-inverse.navy
+        .card-block
+          h3.card-title Supporting Edji
+          p.card-text Edji isn’t a large company, and we aren’t backed by large corporations or venture capital.  We love creating Edji and inspiring young minds to think differently about reading. With each subscription to Edji Hero, you are letting us know that you enjoy Edji too. With your purchase, you are supporting more reliable Edji access and expanded features for both free and Hero users everywhere!
+          a.btn.btn-primary(href="#") Go somewhere
+
+    //- ADD MAP ONCE GOOGLE HAS VERIFIED OUR ADDRESS
+  //- .row  
+  //-   .embed-responsive.embed-responsive-21by9
+  //-     iframe(
+  //-       frameborder="0",
+  //-       style="border:0",
+  //-       src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBqYeeM9M_IM1b71yxBah74_7E68-lTUMg&q=4006+Nicollet+Ave,Minneapolis,+MN",
+  //-       allowfullscreen
+  //-     )
