@@ -159,15 +159,23 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     }
 
     download() {
-
         var doc = new jsPDF();
-        doc.text(20, 20, 'Hello world!');
-        doc.text(20, 30, 'This is client-side Javascript, pumping out a PDF.');
-        doc.addPage();
-        doc.text(20, 20, 'Do you like that?');
 
-        // Save the PDF
-        doc.save('Test.pdf');
+        // We'll make our own renderer to skip this editor
+        var specialElementHandlers = {
+            '.article-wrap': function(element, renderer){
+                return true
+            }
+        }
+
+        // All units are in the set measurement for the document
+        // This can be changed to "pt" (points), "mm" (Default), "cm", "in"
+        doc.fromHTML(document.querySelectorAll('.w')[0], 15, 15, {
+            'width': 170, 
+            'elementHandlers': specialElementHandlers
+        })
+
+        doc.save('Test.pdf')
     }
 
     /**
