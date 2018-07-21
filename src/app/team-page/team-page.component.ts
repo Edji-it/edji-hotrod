@@ -10,42 +10,49 @@ export class TeamPageComponent implements OnInit {
   public players: any[] = [
     {
       name: "Corbin Fonville",
-      photo: "/assets/images/promo/headshot-cynder.jpg",
+      title: "CEO",
+      photo: "/assets/images/promo/headshot-corbin.jpg",
       emoji: "",
       book: ""
     },
     {
       name: "Brennen Hicklin",
-      photo: "/assets/images/promo/headshot-cynder.jpg",
+      title: "Customer Success",
+      photo: "/assets/images/promo/headshot-brennen.jpg",
       emoji: ":rocket:",
       book: "Hitchiker's Guide to the Galaxy"
     },
     {
       name: "Cynder Hicklin-Pumper",
+      title: "Branch Manager",
       photo: "/assets/images/promo/headshot-cynder.jpg",
       emoji: ":tennis:",
       book: "Clifford the Big Red Dog"
     },
     {
       name: "Josh Kyburz",
-      photo: "/assets/images/promo/headshot-cynder.jpg",
+      title: "Hacker",
+      photo: "/assets/images/promo/headshot-josh.jpg",
       emoji: "",
       book: ""
     },
     {
       name: "Cody Pumper",
-      photo: "/assets/images/promo/headshot-cynder.jpg",
+      title: "Product Design",
+      photo: "/assets/images/promo/headshot-cody.jpg",
       emoji: "",
       book: ""
     },
     {
       name: "Kelvin Stewart",
+      title: "Assistant to the Branch Manager",
       photo: "/assets/images/promo/headshot-cynder.jpg",
       emoji: "",
       book: ""
     },
     {
       name: "Will Stewart",
+      title: "",
       photo: "/assets/images/promo/headshot-cynder.jpg",
       emoji: "",
       book: ""
