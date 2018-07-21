@@ -2,7 +2,6 @@ import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, QueryLis
 import { Subject, Subscription } from 'rxjs';
 import * as Rangy from 'rangy';
 import { Angulartics2 } from 'angulartics2'
-import * as jsPDF from 'jspdf'
 // import { HotkeysService, Hotkey } from 'angular2-hotkeys'
 
 import { CommentComponent } from './comment/comment.component'
@@ -156,26 +155,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         //     return false // Prevent bubbling
         // }))
         this.window = window
-    }
-
-    download() {
-        var doc = new jsPDF();
-
-        // We'll make our own renderer to skip this editor
-        var specialElementHandlers = {
-            '.article-wrap': function(element, renderer){
-                return true
-            }
-        }
-
-        // All units are in the set measurement for the document
-        // This can be changed to "pt" (points), "mm" (Default), "cm", "in"
-        doc.fromHTML(document.querySelectorAll('.w')[0], 15, 15, {
-            'width': 170, 
-            'elementHandlers': specialElementHandlers
-        })
-
-        doc.save('Test.pdf')
     }
 
     /**
