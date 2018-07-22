@@ -1,5 +1,5 @@
 //- Reading Report Pane
-.sliding-pane.from-left.reading-report([ngClass]="{ 'slide-in' : visible }")
+#readingReport.sliding-pane.from-left.reading-report([ngClass]="{ 'slide-in' : visible }")
   .container-fluid.container--less-pad
     button.close.stats-close-btn.btn-icon--round((click)='hide.emit()' type='button')
       span(aria-hidden='true') &times;
@@ -127,7 +127,7 @@
             button.btn.btn-success(
               title="Make sure you've completed all the fields!", 
               type="submit", 
-              [class.loading]="registerLoading", 
+              [class.loading]="evalLoading", 
               [disabled]="!evaluationForm.valid", 
               tabindex="2"
             ) Send

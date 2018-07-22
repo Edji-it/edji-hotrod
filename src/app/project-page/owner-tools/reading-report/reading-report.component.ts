@@ -1,12 +1,14 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
-import { Subscription } from 'rxjs';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { Subscription, Observable } from 'rxjs'
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms'
+import * as jsPDF from 'jspdf'
+import html2canvas from 'html2canvas'
 
 // Project Dependencies
 import { CommentFilter, ProjectService } from 'src/app/_services/project.service'
 import { User, Project, EdjiComment } from '../../../shared/datatypes'
 import { AuthService } from '../../../_services'
-import { ALLSPARK } from '../../../app.constants';
+import { ALLSPARK } from '../../../app.constants'
 
 @Component({
   selector: 'hot-reading-report',
@@ -23,6 +25,7 @@ export class ReadingReportComponent implements OnInit {
   public appliedFilter: CommentFilter
   public comments: EdjiComment[] = []
   public evaluationForm: FormGroup
+  public evalLoading: boolean
 
   constructor(
     private _projects : ProjectService,
@@ -90,6 +93,64 @@ export class ReadingReportComponent implements OnInit {
   public sendEval(formValue: any): void {
     // Need a place to send this report
     console.log(formValue)
+    this.evalLoading = true
+    this.saveAsPdf().then(pdf => {
+      // pdf.save('test.pdf')
+      console.log(pdf)
+      this.evalLoading = false
+    }, error => {
+      console.error(error)
+      this.evalLoading = false
+    })
     this.evaluationForm.reset()
+  }
+
+  private saveAsPdf(): Promise<any> {
+    let htmlRef = '#readingReport'
+    let htmlDoc = document.querySelectorAll(htmlRef)[0]
+    var doc = new jsPDF()
+
+    doc.internal.scaleFactor = 5
+
+    return doc.addHTML(htmlDoc, 0, 0, {
+      'width': htmlDoc.clientWidth,
+      // 'elementHandlers': specialElementHandlers
+      pagesplit: true
+    }, success => {
+      // doc.save('test.pdf')
+      console.log(doc)
+      doc.save('test.pdf')
+      return doc
+    }, error => {
+      console.error('we had an issue making the pdf')
+      return error
+    })
+
+    // return html2canvas(htmlDoc).then(function(canvas) {
+    //   // document.body.appendChild(canvas)
+    //   console.log(canvas)
+    //   // We'll make our own renderer to skip this editor
+    //   // var specialElementHandlers = {
+    //   //   canvas: function(element, renderer){
+    //   //     return true
+    //   //   }
+    //   // }
+  
+    //   // All units are in the set measurement for the document
+    //   // This can be changed to "pt" (points), "mm" (Default), "cm", "in"
+    //   // doc.fromHTML(canvas, 15, 15, {
+    //   //   'width': 170, 
+    //   //   'elementHandlers': specialElementHandlers
+    //   // }, success => {
+    //   //   doc.save('test.pdf')
+    //   //   return doc
+    //   // }, error => {
+    //   //   console.error('we had an issue making the pdf')
+    //   //   return error
+    //   // })
+      
+    //   // doc.save('Test.pdf')
+    //   // return doc
+    // })
   }
 }
