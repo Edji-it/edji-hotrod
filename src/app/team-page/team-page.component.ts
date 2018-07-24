@@ -46,14 +46,14 @@ export class TeamPageComponent implements OnInit {
     {
       name: "Kelvin Stewart",
       title: "Assistant to the Branch Manager",
-      photo: "/assets/images/promo/headshot-cynder.jpg",
+      photo: "/assets/images/promo/headshot-kelvin.jpg",
       emoji: ":feet:",
       book: ""
     },
     {
       name: "Will Stewart",
       title: "Founding Teacher",
-      photo: "/assets/images/promo/headshot-cynder.jpg",
+      photo: "/assets/images/promo/headshot-will.jpg",
       emoji: ":sauropod:",
       book: ""
     }
