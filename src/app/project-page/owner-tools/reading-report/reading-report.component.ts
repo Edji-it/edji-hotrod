@@ -108,26 +108,42 @@ export class ReadingReportComponent implements OnInit {
   private saveAsPdf(): Promise<any> {
     let htmlRef = '#readingReport'
     let htmlDoc = document.querySelectorAll(htmlRef)[0]
-    var doc = new jsPDF()
-
-    doc.internal.scaleFactor = 5
-
-    return doc.addHTML(htmlDoc, 0, 0, {
+    // var doc = new jsPDF('p', 'px', 'letter')
+    var specialElementHandlers = {
+      '.reading-report__pdf-hidden': function(element, renderer) {
+        return true
+      }
+    }
+    let options = {
       'width': htmlDoc.clientWidth,
-      // 'elementHandlers': specialElementHandlers
+      'height': htmlDoc.clientHeight,
+      'elementHandlers': specialElementHandlers,
       pagesplit: true
-    }, success => {
-      // doc.save('test.pdf')
-      console.log(doc)
-      doc.save('test.pdf')
-      return doc
-    }, error => {
-      console.error('we had an issue making the pdf')
-      return error
-    })
+    }
+    var rect = htmlDoc.getBoundingClientRect()
+    console.log(rect.width, rect.height)
 
-    // return html2canvas(htmlDoc).then(function(canvas) {
-    //   // document.body.appendChild(canvas)
+    // doc.internal.scaleFactor = 2.5
+
+    
+
+    return html2canvas(htmlDoc).then(function(canvas) {
+      document.body.appendChild(canvas)
+      var paperHeight = 210 * (canvas.height / canvas.width)
+      var paperFormatInMm = [210, paperHeight]
+      var doc = new jsPDF('p', 'px', 'letter')
+      doc.internal.scaleFactor = 2.5
+      doc.addImage(canvas, 'PNG', 2, 2)
+      doc.save('test.pdf')
+
+      // return doc.addHTML(canvas, 0, 0, options, success => {
+      //   console.log(doc)
+      //   doc.save('test.pdf')
+      //   return doc
+      // }, error => {
+      //   console.error('we had an issue making the pdf')
+      //   return error
+      // })
     //   console.log(canvas)
     //   // We'll make our own renderer to skip this editor
     //   // var specialElementHandlers = {
@@ -138,19 +154,32 @@ export class ReadingReportComponent implements OnInit {
   
     //   // All units are in the set measurement for the document
     //   // This can be changed to "pt" (points), "mm" (Default), "cm", "in"
-    //   // doc.fromHTML(canvas, 15, 15, {
-    //   //   'width': 170, 
-    //   //   'elementHandlers': specialElementHandlers
-    //   // }, success => {
-    //   //   doc.save('test.pdf')
-    //   //   return doc
-    //   // }, error => {
-    //   //   console.error('we had an issue making the pdf')
-    //   //   return error
-    //   // })
+      // return doc.fromHTML(htmlDoc, 15, 15, {
+      //   // 'width': 170, 
+      //   // 'elementHandlers': specialElementHandlers
+      //   useCORS: true
+      // }, success => {
+      //   doc.save('test.pdf')
+      //   return doc
+      // }, error => {
+      //   console.error('we had an issue making the pdf')
+      //   return error
+      // })
+
+      // return doc.html2pdf(htmlDoc, 15, 15, {
+      //   // 'width': 170, 
+      //   // 'elementHandlers': specialElementHandlers
+      //   useCORS: true
+      // }, success => {
+      //   doc.save('test.pdf')
+      //   return doc
+      // }, error => {
+      //   console.error('we had an issue making the pdf')
+      //   return error
+      // })
       
     //   // doc.save('Test.pdf')
     //   // return doc
-    // })
+    })
   }
 }

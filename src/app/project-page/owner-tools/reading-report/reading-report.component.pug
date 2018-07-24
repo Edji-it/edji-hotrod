@@ -3,7 +3,7 @@
   .container-fluid.container--less-pad
     button.close.stats-close-btn.btn-icon--round((click)='hide.emit()' type='button')
       span(aria-hidden='true') &times;
-    button.btn.btn-success.btn-sm.float-right.mr-5.cody-btn-update Send Copy
+    button.btn.btn-success.btn-sm.float-right.mr-5.cody-btn-update((click)="sendEval(evaluationForm)") Send Copy
   .container-fluid.container--less-pad.px-5
     //- Header Block
     .row
@@ -86,12 +86,12 @@
         )
       .col-9
         .h-1.report-text-highlighted {{ reportComment.text ? reportComment.text : '...'}}
-    .row.mt-5
+    .row.mt-5.reading-report__pdf-hidden
       .col-12
         div Summarize and Share
         hr.mt-0
     //- Summarize and Share Block
-    .row
+    .row.reading-report__pdf-hidden
       .col-4
         .row
           .col-12
