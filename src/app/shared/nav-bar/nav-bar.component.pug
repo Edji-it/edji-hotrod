@@ -2,14 +2,14 @@
   #sideBar.nav-bar
     button.mNavIcon.mNav([ngClass]="{ 'mNavShowing' : mNavShow }", (click)="mNavShowFlip()")
     a.nav-bar__logo-wrap([routerLink]="['/dashboard']")
-      img#logo.nav-bar__logo(src="assets/images/logo-3.2-mark.svg")
-
+      img#logo.nav-bar__logo(*ngIf="currentPage!='home'", src="assets/images/logo-3.2-mark.svg")
+      img#logo.nav-bar__logo-h(*ngIf="currentPage=='home'", src="assets/images/logo-3.2-horizontal.svg")
     //- Dashboard Nav
     .nav__menu(*ngIf="showDashboardOptions")
-      a#navReadings.btn.btn-link([routerLink]="['/dashboard']", routerLinkActive="active") 
+      a#navReadings.btn.btn-link([routerLink]="['/dashboard']", routerLinkActive="active", title="Your created and joined Readings") 
         //- span([innerHtml]="':book:' | emojione")
         | Readings
-      a#navDiscover.btn.btn-link([routerLink]="['/discover']", routerLinkActive="active")
+      a#navDiscover.btn.btn-link([routerLink]="['/discover']", routerLinkActive="active", title="Discover Readings from other Teachers")
         //- span([innerHtml]="':triangular_flag_on_post:' | emojione")
         | Discover
       .dropdown(*ngIf="secretSwitches.academy", [class.show]="academyMenuShow")
@@ -23,6 +23,9 @@
             | Engagement
           a.dropdown-item([routerLink]="['/academy/licenses']", routerLinkActive="active")
             | Licenses
+      a#navGuide.btn.btn-link.btn--hover-icon(*ngIf="isTeacher", href="http://guide.edji.it", target="_blank", )
+        | Guide
+        .icon.icon-external
     //- Optional Title
     div(*ngIf="currentPage == 'project' || hideAccountOptions")
       .nav-bar__heading.hidden-sm-down(*ngIf="!showProjectInfo")
@@ -61,7 +64,7 @@
           button#navFeedbackButton.list-group-item.list-group-item-action(type="button", (click)="openFeedback()") Contact Us
             span.list-icon--right([innerHtml]="':question:' | emojione")
           //- Guides
-          button#navGuidesButton.list-group-item.list-group-item-action(type="button", (click)="openGuides()") Guides
+          button#navGuidesButton.list-group-item.list-group-item-action(type="button", (click)="openGuides()") Guide
             span.list-icon--right([innerHtml]="':book:' | emojione")
           //- Log Out
           button#logOutButton.list-group-item.list-group-item-action(type="button", (click)="logout()") Log Out
