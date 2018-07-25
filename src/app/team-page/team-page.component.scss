@@ -25,11 +25,9 @@
 .emoji_wrap {
     display: inline-block;
     margin-right: 0.25em;
-    margin-left: -15px;
-}
-
-.player-card {
-    overflow: hidden;
+    font-size: 1.5em;
+    margin-left: -25px;
+    overflow: visible;
 }
 
 .player-card {
@@ -47,7 +45,7 @@
     }
 
     & .card-block {
-        padding-left: 15px;
+        padding-left: 25px;
         padding-right: 10px;
     }
 }

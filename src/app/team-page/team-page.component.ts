@@ -59,8 +59,6 @@ export class TeamPageComponent implements OnInit {
     }
   ]
 
-  public expandStory: boolean = false
-
   constructor() { }
 
   ngOnInit() {
