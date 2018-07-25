@@ -25,6 +25,7 @@
 .emoji_wrap {
     display: inline-block;
     margin-right: 0.25em;
+    margin-left: -15px;
 }
 
 .player-card {
@@ -32,12 +33,10 @@
 }
 
 .player-card {
-    $playerBottomPad: 55px;
     $playerBg: #fff;
 
     font-size: 14px;
     color: rgba(0,0,0,0.8);
-    padding-bottom: $playerBottomPad;
     background: $playerBg;
     border-color: #fff;
 
@@ -47,18 +46,20 @@
         font-weight: 500;
     }
 
-    & .card-img-overlay {
-        padding: 10px;
-        height: 100%;
-        transform: translateY(calc(100% - #{ $playerBottomPad }));
-        background: rgba($playerBg,0);
-        transition: all ease 400ms;
+    & .card-block {
+        padding-left: 15px;
+        padding-right: 10px;
     }
-    
-    &:hover, &:focus {
-        & .card-img-overlay {
-            transform: translateY(calc(70% - #{ $playerBottomPad }));
-            background: rgba($playerBg,0.8);
-        }
-    }
+}
+
+.map-fill {
+    position:absolute; 
+    top:-20px; 
+    left:0px; 
+    min-width: 100%; 
+    height: auto;
+}
+
+.card.navy {
+    border-color: #fafafa;
 }

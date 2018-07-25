@@ -9,6 +9,13 @@ export class TeamPageComponent implements OnInit {
 
   public players: any[] = [
     {
+      name: "Will Stewart",
+      title: "Founding Teacher",
+      photo: "/assets/images/promo/headshot-will.jpg",
+      emoji: ":sauropod:",
+      book: "How Do Dinosaurs Say Goodnight?"
+    },
+    {
       name: "Corbin Fonville",
       title: "CEO",
       photo: "/assets/images/promo/headshot-corbin.jpg",
@@ -21,13 +28,6 @@ export class TeamPageComponent implements OnInit {
       photo: "/assets/images/promo/headshot-brennen.jpg",
       emoji: ":rocket:",
       book: "Hitchiker's Guide to the Galaxy"
-    },
-    {
-      name: "Cynder",
-      title: "Branch Manager",
-      photo: "/assets/images/promo/headshot-cynder.jpg",
-      emoji: ":tennis:",
-      book: "Clifford the Big Red Dog"
     },
     {
       name: "Josh Kyburz",
@@ -44,18 +44,18 @@ export class TeamPageComponent implements OnInit {
       book: "Ready Player One"
     },
     {
-      name: "Kelvin Stewart",
-      title: "Assistant to the Branch Manager",
-      photo: "/assets/images/promo/headshot-kelvin.jpg",
-      emoji: ":feet:",
-      book: ""
+      name: "Cynder Hicklin-Pumper",
+      title: "Branch Manager",
+      photo: "/assets/images/promo/headshot-cynder.jpg",
+      emoji: ":tennis:",
+      book: "Clifford the Big Red Dog"
     },
     {
-      name: "Will Stewart",
-      title: "Founding Teacher",
-      photo: "/assets/images/promo/headshot-will.jpg",
-      emoji: ":sauropod:",
-      book: ""
+      name: "Kelvin Stewart",
+      title: "Head of Security",
+      photo: "/assets/images/promo/headshot-kelvin.jpg",
+      emoji: ":feet:",
+      book: "Squirrel Hunting Made Simple"
     }
   ]
 

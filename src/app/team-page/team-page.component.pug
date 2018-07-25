@@ -23,10 +23,10 @@ nav-bar
   .row.row-xl-pad
     .col-12
       h2.text-center.big-light Meet the Team
-    .col-3.mb-4(*ngFor="let player of players")
+    .col-lg-3.col-md-4.col-sm-6.mb-4(*ngFor="let player of players")
       .player-card.card
         img.card-img([attr.src]="player.photo")
-        .card-img-overlay
+        .card-block
           .card-title 
             .emoji_wrap([innerHtml]="player.emoji | emojione")
             | {{ player.name }}        
@@ -36,11 +36,17 @@ nav-bar
             p {{ player.book }}
   .row.row-xl-pad
     .col-12
-      .card.card-inverse.navy
+      .card.card-inverse.navy(style="overflow:hidden;")
         .card-block
-          h3.card-title Supporting Edji
-          p.card-text Edji isn’t a large company, and we aren’t backed by large corporations or venture capital.  We love creating Edji and inspiring young minds to think differently about reading. With each subscription to Edji Hero, you are letting us know that you enjoy Edji too. With your purchase, you are supporting more reliable Edji access and expanded features for both free and Hero users everywhere!
-          a.btn.btn-primary(href="#") Go somewhere
+          .row
+            .col-lg-6(style="padding-bottom:40px;")
+              h1.card-title Supporting Edji
+              p.on-dark Edji is a small company, and we aren’t backed by large corporations or venture capital.  We love creating Edji and inspiring young minds to think differently about reading. 
+              p.on-dark With each subscription to Edji Hero, you are letting us know that you enjoy Edji too. With your purchase, you are supporting more reliable Edji access and expanded features for both free and Hero users everywhere!
+              a.btn.btn-hero([routerLink]="['/hero']") Support Edji
+            .col-lg-6(style="min-height:350px;")
+              img.map-fill(src="/assets/images/promo/mn-map-zoom.png")
+       
 
     //- ADD MAP ONCE GOOGLE HAS VERIFIED OUR ADDRESS
   //- .row  
