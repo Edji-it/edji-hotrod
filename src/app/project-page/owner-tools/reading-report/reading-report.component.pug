@@ -86,48 +86,48 @@
         )
       .col-9
         .h-1.report-text-highlighted {{ reportComment.text ? reportComment.text : '...'}}
-  //- Summarize and Share Block
-  .row.mt-5.reading-report__pdf-hidden
-    .col-12
-      div Summarize and Share
-      hr.mt-0
-  .row.reading-report__pdf-hidden
-    .col-4
-      .row
-        .col-12
-          div Summarize Josh's work with this reading, and send a PDF copy of this report to their student email, a parent, or a fellow teacher
-      .row
-        .col-12
-          div An image of the report
-    .col-8
-      form#evaluationForm([formGroup]="evaluationForm", (ngSubmit)="sendEval(evaluationForm.value)")
-        label(for="inputtext") Evaluation
-        textarea#evalFormText(
-          [formControl]="evaluationForm.controls['inputtext']", 
-          placeholder="This student did a great job identifying the main themes...", 
-          tabindex="0"
-        )
-        #msgEvalRequired.alert.alert-info(
-          *ngIf="evaluationForm.controls['inputtext'].hasError('required') && evaluationForm.controls['inputtext'].dirty"
-        ) Send some feedback for this report!
-        .col-8.no-gutters.p-0.d-inline-block
-          label(for="email") Email
-          input#evalFormEmail(
-            type="text", 
-            [formControl]="evaluationForm.controls['email']", 
-            tabindex="1"
+    //- Summarize and Share Block
+    .row.mt-5.reading-report__pdf-hidden
+      .col-12
+        div Summarize and Share
+        hr.mt-0
+    .row.reading-report__pdf-hidden
+      .col-4
+        .row
+          .col-12
+            div Summarize Josh's work with this reading, and send a PDF copy of this report to their student email, a parent, or a fellow teacher
+        .row
+          .col-12
+            div An image of the report
+      .col-8
+        form#evaluationForm([formGroup]="evaluationForm", (ngSubmit)="sendEval(evaluationForm.value)")
+          label(for="inputtext") Evaluation
+          textarea#evalFormText(
+            [formControl]="evaluationForm.controls['inputtext']", 
+            placeholder="This student did a great job identifying the main themes...", 
+            tabindex="0"
           )
-          #msgEmailIncorrect.alert.alert-info(
-            *ngIf="evaluationForm.controls['email'].hasError('emailIncorrect') && evaluationForm.controls['email'].dirty"
-          ) We don't think that's an email...
-          #msgEmailRequired.alert.alert-info(
-            *ngIf="evaluationForm.controls['email'].hasError('required') && evaluationForm.controls['email'].dirty"
-          ) Make sure the you can recover your password with a valid email!
-        .col-4.no-gutters.p-0.mt-4.d-inline-block.text-right
-          button.btn.btn-success(
-            title="Make sure you've completed all the fields!", 
-            type="submit", 
-            [class.loading]="evalLoading", 
-            [disabled]="!evaluationForm.valid", 
-            tabindex="2"
-          ) Send
+          #msgEvalRequired.alert.alert-info(
+            *ngIf="evaluationForm.controls['inputtext'].hasError('required') && evaluationForm.controls['inputtext'].dirty"
+          ) Send some feedback for this report!
+          .col-8.no-gutters.p-0.d-inline-block
+            label(for="email") Email
+            input#evalFormEmail(
+              type="text", 
+              [formControl]="evaluationForm.controls['email']", 
+              tabindex="1"
+            )
+            #msgEmailIncorrect.alert.alert-info(
+              *ngIf="evaluationForm.controls['email'].hasError('emailIncorrect') && evaluationForm.controls['email'].dirty"
+            ) We don't think that's an email...
+            #msgEmailRequired.alert.alert-info(
+              *ngIf="evaluationForm.controls['email'].hasError('required') && evaluationForm.controls['email'].dirty"
+            ) Make sure the you can recover your password with a valid email!
+          .col-4.no-gutters.p-0.mt-4.d-inline-block.text-right
+            button.btn.btn-success(
+              title="Make sure you've completed all the fields!", 
+              type="submit", 
+              [class.loading]="evalLoading", 
+              [disabled]="!evaluationForm.valid", 
+              tabindex="2"
+            ) Send
