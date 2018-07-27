@@ -66,6 +66,27 @@ export class AcademyService {
   }
 
   /**
+   * 
+   * @param evalForm the evaluation form data from the reading report
+   * @param pdf the pdf that is captured from the reading report
+   */
+  public sendReadingReport(evalForm: any, pdf: any): Observable<any> {
+    return this._http.post<any>(this._auth.getUrl() + '/api/v1/reports/reading/send',
+      {
+        "email": evalForm.email,
+        "eval": evalForm.inputtext,
+        "pdf": pdf
+      },
+      {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          'Authorization': this._auth.getToken()
+        })
+      }
+    )
+  }
+
+  /**
    * Event handler that can be called from anywhere in the app. Handles success and error 
    * @param event event data to be passed in from where the event occurs follow this schema:
    * {
