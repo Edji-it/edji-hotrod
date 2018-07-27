@@ -13,7 +13,7 @@ export class TeamPageComponent implements OnInit {
       title: "Founding Teacher",
       photo: "/assets/images/promo/headshot-will.jpg",
       emoji: ":sauropod:",
-      book: "How Do Dinosaurs Say Goodnight?"
+      book: "All the Pretty Horses"
     },
     {
       name: "Corbin Fonville",
