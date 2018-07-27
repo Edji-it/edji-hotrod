@@ -89,7 +89,10 @@ export class ReadingReportComponent implements OnInit {
     return emailRe.test(control.value) ? null : { 'emailIncorrect': true }
   }
 
-  /** Makes call to send evaluation to the email on the form */
+  /**
+   * Makes call to send evaluation to the email on the form
+   * @param formValue is the evaluation form data
+   */
   public sendEval(formValue: any): void {
     // Need a place to send this report
     console.log(formValue)
@@ -104,35 +107,60 @@ export class ReadingReportComponent implements OnInit {
     this.evaluationForm.reset()
   }
 
-  private saveAsPdf(): Promise<any> {
-    let htmlRef = '#readingReport'
-    let htmlDoc = document.querySelectorAll(htmlRef)[0]
-    var doc = new jsPDF('p', 'px', 'letter')
-    var specialElementHandlers = {
-      '.reading-report__pdf-hidden': function(element, renderer) {
-        return true
-      }
-    }
-    let options = {
-      'elementHandlers': specialElementHandlers,
-      pagesplit: true,
-      margin: {
-        top: 10,
-        bottom: 10,
-        right: 20,
-        left: 20
-      }
-    }
-    console.log(htmlDoc)
-    doc.internal.scaleFactor = 2.5
-
-    return doc.addHTML(htmlDoc, 20, 10, options, success => {
-      doc.save('test.pdf')
-      console.log('pre-doc', doc)
-      return doc
+  /** Downloads the report to the user's computer */
+  public downloadPDF(): void {
+    this.evalLoading = true
+    this.saveAsPdf().then(pdf => {
+      pdf.save('test' + '.pdf')
+      this.evalLoading = false
     }, error => {
-      console.error('we had an issue making the pdf')
-      return error
+      console.error(error)
+      this.evalLoading = false
     })
+  }
+
+  private saveAsPdf(): any {
+    return new Promise<any>((resolve, reject) => {
+      // Get current scroll position and then scroll up to the top
+      // Needed because the pdf will not export the whole report unless you are scrolled to the top
+      var scrollPos = document.querySelector(".sliding-pane.from-left.reading-report.slide-in").scrollTop
+      document.querySelector(".sliding-pane.from-left.reading-report.slide-in").scrollTo(0, 0)
+
+      let htmlRef = '#readingReport'
+      let htmlDoc = document.querySelector(htmlRef)
+      var doc = new jsPDF('p', 'px', 'letter')
+      // report options to pass in
+      let options = {
+        pagesplit: true,
+        margin: {
+          top: 10,
+          bottom: 10,
+          right: 20,
+          left: 20
+        },
+        height: htmlDoc.clientHeight,
+        width: htmlDoc.clientWidth
+      }
+
+      // set the scale to fit the whole report width on a page
+      doc.internal.scaleFactor = 2.4
+
+      // Convert the reading report to a pdf
+      doc.addHTML(htmlDoc, 20, 10, options, success => {
+        document.querySelector(".sliding-pane.from-left.reading-report.slide-in").scrollTo(0, scrollPos)
+        resolve(doc)
+      }, error => {
+        console.error('we had an issue making the pdf')
+        document.querySelector(".sliding-pane.from-left.reading-report.slide-in").scrollTo(0, scrollPos)
+        reject(error)
+      })
+    })
+  }
+
+  // when the user clicks this from the top of the reading report, it will scroll them to the evaluation form to send it out
+  public goToEvalForm(): void {
+    var evalForm = document.querySelector('#evaluationForm')
+    var topPos = evalForm.getBoundingClientRect().top
+    document.querySelector(".sliding-pane.from-left.reading-report.slide-in").scrollTop = topPos
   }
 }

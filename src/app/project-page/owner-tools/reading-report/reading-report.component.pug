@@ -3,89 +3,91 @@
   .container-fluid.container--less-pad
     button.close.stats-close-btn.btn-icon--round((click)='hide.emit()' type='button')
       span(aria-hidden='true') &times;
-    button.btn.btn-success.btn-sm.float-right.mr-5.cody-btn-update((click)="sendEval(evaluationForm)") Send Copy
-  #readingReport.container-fluid.container--less-pad.px-5
-    //- Header Block
-    .row
-      .col-8
-        .row
-          .col-12
-            h1.mb-3.header-text__large Josh's Reading Report
-        //- Reading and Group Info
-        .row.mt-5
-          .col-12
-            div Nasa Publishes SpaceX's Proposal for a Futuristic Kennedy Space Center
-            hr.mt-0
-            .row
-              //- Assignment and Standards
-              .col-10
-                .row
-                  .col-12
-                    .sub-label.mb-0 Group Assignment
-                    .text-md In this reading students are learning about a genre of video game and how it relates to Shakespeare, paying attention to analogies.
-                .row.mt-3
-                  .col-12
-                    .sub-label.mb-0 Standards
-                    div CCSS.ELA-LITERACY.RI.5.2
-                    .text-md Determine two or more main ideas of a text and explain how they are supported by key details; summarize the text.
-              //- Reading Stats
-              .col-2.p-0
-                .sub-label.mb-0 Contents
-                .text-md 780 Words
-                .text-md 2 Images
-                .text-md 3 Questions
-      //- Teacher/Group Names
-      .col-4
-        .row
-          .col-12
-            .sub-label.mb-0 Teacher
-            div Will Stewart
-        .row.mt-3
-          .col-12
-            .sub-label.mb-0 Group
-            div Advisory
-    //- Stat's Block
-    .row.mt-5
-      .col-12
-        div Josh's Stats
-        hr.mt-0
-    .row
-      .col-4
-        hot-chart-gauge(
-          *ngIf="visible",
-          [measures]="{full: 'Minutes Reading', abbreviated: 'min'}",
-          [values]="{min: 10, max: 37, avg: 18, val: 23}",
-          [chartSize]="150"
-        )
-      .col-4
-        hot-chart-gauge(
-          *ngIf="visible",
-          [measures]="{full: 'Comments'}",
-          [values]="{min: 2, max: 13, avg: 5, val: 11}"
-        )
-      .col-4
-        hot-chart-hzbar(
-          *ngIf="visible",
-          [comments]="comments"
-        )
-    .row.mt-5
-      .col-12
-        div Comments
-        hr.mt-0
-    //- Comment Block
-    .row(*ngFor="let reportComment of comments; let i = index")
-      .col-3
-        edji-comment(
-          [readOnly]="true",
-          [comment]="reportComment",
-          [commentMobile]="true",
-          [commentPaneActive]="true",
-          [commentMobileFirst]="i<1",
-          [readingReport]="true",
-          style="display: initial;"
-        )
-      .col-9
-        .h-1.report-text-highlighted {{ reportComment.text ? reportComment.text : '...'}}
+    button.btn.btn-success.btn-sm.float-right.mr-5.cody-btn-update((click)="goToEvalForm()") Send Copy
+    button.btn.btn-primary.btn-sm.float-right.mr-5.cody-btn-update((click)="downloadPDF()") Download
+  .container-fluid.container--less-pad.px-5
+    #readingReport
+      //- Header Block
+      .row
+        .col-8
+          .row
+            .col-12
+              h1.mb-3.header-text__large Josh's Reading Report
+          //- Reading and Group Info
+          .row.mt-5
+            .col-12
+              div Nasa Publishes SpaceX's Proposal for a Futuristic Kennedy Space Center
+              hr.mt-0
+              .row
+                //- Assignment and Standards
+                .col-10
+                  .row
+                    .col-12
+                      .sub-label.mb-0 Group Assignment
+                      .text-md In this reading students are learning about a genre of video game and how it relates to Shakespeare, paying attention to analogies.
+                  .row.mt-3
+                    .col-12
+                      .sub-label.mb-0 Standards
+                      div CCSS.ELA-LITERACY.RI.5.2
+                      .text-md Determine two or more main ideas of a text and explain how they are supported by key details; summarize the text.
+                //- Reading Stats
+                .col-2.p-0
+                  .sub-label.mb-0 Contents
+                  .text-md 780 Words
+                  .text-md 2 Images
+                  .text-md 3 Questions
+        //- Teacher/Group Names
+        .col-4
+          .row
+            .col-12
+              .sub-label.mb-0 Teacher
+              div Will Stewart
+          .row.mt-3
+            .col-12
+              .sub-label.mb-0 Group
+              div Advisory
+      //- Stat's Block
+      .row.mt-5
+        .col-12
+          div Josh's Stats
+          hr.mt-0
+      .row
+        .col-4
+          hot-chart-gauge(
+            *ngIf="visible",
+            [measures]="{full: 'Minutes Reading', abbreviated: 'min'}",
+            [values]="{min: 10, max: 37, avg: 18, val: 23}",
+            [chartSize]="150"
+          )
+        .col-4
+          hot-chart-gauge(
+            *ngIf="visible",
+            [measures]="{full: 'Comments'}",
+            [values]="{min: 2, max: 13, avg: 5, val: 11}"
+          )
+        .col-4
+          hot-chart-hzbar(
+            *ngIf="visible",
+            [comments]="comments"
+          )
+      .row.mt-5
+        .col-12
+          div Comments
+          hr.mt-0
+      //- Comment Block
+      .row(*ngFor="let reportComment of comments; let i = index")
+        .col-3
+          edji-comment(
+            [readOnly]="true",
+            [comment]="reportComment",
+            [commentMobile]="true",
+            [commentPaneActive]="true",
+            [commentMobileFirst]="i<1",
+            [readingReport]="true",
+            style="display: initial;"
+          )
+        .col-9
+          .h-1.report-text-highlighted {{ reportComment.text ? reportComment.text : '...'}}
     //- Summarize and Share Block
     .row.mt-5.reading-report__pdf-hidden
       .col-12
@@ -129,5 +131,5 @@
               type="submit", 
               [class.loading]="evalLoading", 
               [disabled]="!evaluationForm.valid", 
-              tabindex="2"
+              tabindex="2",
             ) Send
