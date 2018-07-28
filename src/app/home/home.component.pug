@@ -49,8 +49,14 @@ nav-bar
     .col-sm-12
       .call-to-action
         h1 Share instantly. Read together. Learn loud
-        .btn-row
-          button.btn.btn-primary.btn-lg([routerLink]="['/register']") Get Started
+        .row
+          .col-md-3
+          .col-md-3
+            .text-center.mb-2
+              button.btn.btn-secondary([routerLink]="['/about']") Meet the Team
+          .col-md-3
+            .text-center
+              button.btn.btn-primary([routerLink]="['/register']") Get Started
   //- Tweet Row
   div.mt-4([class.hide]="!tweetsLoaded")
     .container

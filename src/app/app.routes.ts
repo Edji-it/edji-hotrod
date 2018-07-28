@@ -17,6 +17,7 @@ import { DiscoverFeedComponent } from "./discover-feed/discover-feed.component";
 import { OAuthComponent } from './oauth-redirect/oauth-redirect.component';
 import { LicenseRedirectComponent } from './license-redirect/license-redirect.component';
 import { LicenseWelcomeComponent } from './license-welcome/license-welcome.component';
+import { TeamPageComponent } from './team-page/team-page.component';
 
 
 export const ROUTES: Routes = [
@@ -35,6 +36,7 @@ export const ROUTES: Routes = [
   { path: 'reset-password', component: ResetPassPage },
   { path: 'hero', component: HeroPromoComponent, pathMatch: 'full' },
   { path: 'pricing', component: HeroPricingComponent, pathMatch: 'full'  },
+  { path: 'about', component: TeamPageComponent },
   { path: 'academy', loadChildren: './academy/academy.module#AcademyModule' },
   { path: 'oauth/:type', component: OAuthComponent, pathMatch: 'full' },
   { path: 'not-found',    component: NoContentComponent, pathMatch: 'full' },
