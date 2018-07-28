@@ -9,12 +9,12 @@
 }
 
 .title-card {
-    position: absolute;
-    left: 30px;
+    position: relative;
     font-weight: 300;
     font-size: 60px;
     line-height: 1em;
-    top: -0.5em;
+    margin-top: -2em;
+    margin-left: -0px;
     vertical-align: middle;
     display: inline-block;
     background: rgb(254, 242, 189);

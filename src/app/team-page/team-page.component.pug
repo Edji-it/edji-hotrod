@@ -4,16 +4,26 @@ nav-bar
     .col-12
       .jumbotron.jumbotron--blue-sky(style="margin-top:60px; position: relative;")
         .title-card About Edji
-        h1.mt-2 From Will's classroom, to yours
-        p
-          | Edji started in the classroom of Will Stewart, a 5th-grade teacher who noticed a problem in his class. 
-        p 
-          | His students didn’t love reading, in fact, they barely tolerated it. When they read, they were disengaged and Will struggled to help them get excited about the text. He couldn’t blame them, the PDFs and articles were stuck in apps only really meant for viewing. His students were prohibited from writing down their thoughts, discussing with each other, and sharing comments with their teacher. Will dreamed of a way to engage students in reading in a way that allowed them to share their thoughts with him and their classmates, and he had an idea. He attended a Startup weekend event, where he formed the Edji dream team.
-        p
-          | Two and a half years later, Edji is the collaborative classroom reading tool that helps his students find their love for reading. Will uses it every day to share articles and listen to his students thoughts.
+        h1 From Will's classroom, to yours
+        .col-md-10.offset-md-1
+          p
+            | Edji started in the classroom of Will Stewart, a 5th-grade teacher who noticed a problem in his class. 
+          p 
+            | His students didn’t love reading, in fact many barely tolerated it. When they read, they were disengaged and Will struggled to help them get excited about the text. He couldn’t blame them, the PDFs and articles were stuck in apps only really meant for viewing. His students were prohibited by their devices from writing down their thoughts, discussing with each other, and sharing comments with their teacher. Will dreamed of a way to engage students with reading in a way that allowed them to share their thoughts with him and their classmates. He had an idea, went on to pursue that idea at a Startup Weekend event, where he formed the Edji dream team.
+          p
+            | Two and a half years later, Edji is the collaborative classroom reading tool that inspires his students to love reading. Will uses it every day to share articles and listen to his students' thoughts.
+          p
+            | Let us help you inspire a love for reading too.
+          p.text-right
+            i Keep Reading!
+          p.text-right
+            | The Edji Team
   .row.row-xl-pad
     .col-12
-      h2.text-center.big-light Meet the Team
+      h2.text-center.big-light 
+        | Meet the
+        img(src="assets/images/logo-3.2-mark.svg", style="height: 1.5em; vertical-align: top; margin: 0.5em;")
+        | Team
     .col-lg-3.col-md-4.col-sm-6.mb-4(*ngFor="let player of players")
       .player-card.card
         img.card-img([attr.src]="player.photo")
