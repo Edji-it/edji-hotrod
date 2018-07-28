@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-
+import { ActivatedRoute } from '@angular/router';
+import { map } from 'rxjs/operators';
 @Component({
   selector: 'app-team-page',
   templateUrl: './team-page.component.pug',
@@ -31,7 +32,7 @@ export class TeamPageComponent implements OnInit {
     },
     {
       name: "Josh Kyburz",
-      title: "Hacker",
+      title: "Product Development",
       photo: "/assets/images/promo/headshot-josh.jpg",
       emoji: ":fire:",
       book: "Elon Musk by Ashlee Vance"
@@ -59,9 +60,14 @@ export class TeamPageComponent implements OnInit {
     }
   ]
 
-  constructor() { }
+  constructor(private route: ActivatedRoute) { }
 
   ngOnInit() {
+    // Workaround for handling "jump to" fragment/anchor
+    if (this.route.snapshot.fragment) {
+      let startEl = document.getElementById(this.route.snapshot.fragment)
+      startEl && startEl.scrollIntoView()
+    }
   }
 
 }

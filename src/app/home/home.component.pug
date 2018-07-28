@@ -53,10 +53,10 @@ nav-bar
           .col-md-3
           .col-md-3
             .text-center.mb-2
-              button.btn.btn-secondary([routerLink]="['/about']") Meet the Team
+              button.btn.btn-secondary([routerLink]="['/about']", fragment="top") Meet the Team
           .col-md-3
             .text-center
-              button.btn.btn-primary([routerLink]="['/register']") Get Started
+              button.btn.btn-primary([routerLink]="['/register']", fragment="top") Get Started
   //- Tweet Row
   div.mt-4([class.hide]="!tweetsLoaded")
     .container
