@@ -262,6 +262,15 @@ a.nav-bar__link {
 	&:hover {
 		opacity: 0.8;
 	}
+
+	&-h  {
+		@extend .nav-bar__logo;
+		padding: 0px;
+		// Carefully aligning the "E" with the other logo
+		height: $navHeight - 17px;
+		margin-top: -2px;
+		margin-left: -4px;
+	}
 }
 
 .nav-bar__btn {
