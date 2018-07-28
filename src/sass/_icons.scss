@@ -330,6 +330,10 @@
     height: 2em;
 }
 
+.icon-external {
+    @include icon('icon-external-link.svg');
+}
+
 // Acquired font awesome styles
 .fa {-moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;

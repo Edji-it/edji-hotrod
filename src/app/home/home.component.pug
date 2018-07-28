@@ -14,7 +14,7 @@ nav-bar
             h1.center.on-dark.promo-header See student thoughts 
               b live!
             .button__row.pt-2.promo-button__row
-              a.btn.btn-primary(href="/project/demo") Try Our Demo Reading
+              a.btn.btn-primary(href="/project/demo") Try an Edji Reading
   //- Container with Commenting and Heat Map info & images
   .container
     .row.promo-row.promo-row__no-btm-padding
@@ -49,8 +49,14 @@ nav-bar
     .col-sm-12
       .call-to-action
         h1 Share instantly. Read together. Learn loud
-        .btn-row
-          button.btn.btn-primary.btn-lg([routerLink]="['/register']") Get Started
+        .row
+          .col-md-3
+          .col-md-3
+            .text-center.mb-2
+              button.btn.btn-secondary([routerLink]="['/about']", fragment="top") Meet the Team
+          .col-md-3
+            .text-center
+              button.btn.btn-primary([routerLink]="['/register']", fragment="top") Get Started
   //- Tweet Row
   div.mt-4([class.hide]="!tweetsLoaded")
     .container
