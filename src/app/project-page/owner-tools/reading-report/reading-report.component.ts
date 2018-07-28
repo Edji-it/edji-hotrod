@@ -7,7 +7,7 @@ import html2canvas from 'html2canvas'
 // Project Dependencies
 import { CommentFilter, ProjectService } from 'src/app/_services/project.service'
 import { User, Project, EdjiComment } from '../../../shared/datatypes'
-import { AuthService } from '../../../_services'
+import { AuthService, AcademyService } from '../../../_services'
 import { ALLSPARK } from '../../../app.constants'
 
 @Component({
@@ -30,7 +30,8 @@ export class ReadingReportComponent implements OnInit {
   constructor(
     private _projects : ProjectService,
     private _auth: AuthService,
-    private _fb: FormBuilder
+    private _fb: FormBuilder,
+    private _academy: AcademyService
   ) { 
     this.evaluationForm = _fb.group({
       email: [null, Validators.compose([Validators.required, this.emailValidator])],
@@ -94,11 +95,16 @@ export class ReadingReportComponent implements OnInit {
    * @param formValue is the evaluation form data
    */
   public sendEval(formValue: any): void {
-    // Need a place to send this report
-    console.log(formValue)
     this.evalLoading = true
     this.saveAsPdf().then(pdf => {
-      console.log(pdf)
+      this._academy.sendReadingReport(formValue, pdf)
+      .subscribe(
+        data => {
+          console.log(data)
+        },
+        error => {
+          console.error(error)
+        })
       this.evalLoading = false
     }, error => {
       console.error(error)
