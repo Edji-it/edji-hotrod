@@ -31,7 +31,7 @@ export class TeamPageComponent implements OnInit {
     },
     {
       name: "Josh Kyburz",
-      title: "Hacker",
+      title: "Product Development",
       photo: "/assets/images/promo/headshot-josh.jpg",
       emoji: ":fire:",
       book: "Elon Musk by Ashlee Vance"
