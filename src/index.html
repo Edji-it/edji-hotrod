@@ -34,7 +34,7 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 
   <!-- Global Variables -->
-  <script>
+  <script id="global">
     var global = global || window;
     var Buffer = Buffer || [];
     var process = process || {
@@ -63,7 +63,8 @@
         }), t.load = function(t) {
           var e = 3e5, n = Math.ceil(new Date() / e) * e, o = document.createElement("script");
           o.type = "text/javascript", o.async = !0, o.crossorigin = "anonymous", o.src = "https://js.driftt.com/include/" + n + "/" + t + ".js";
-          var i = document.getElementsByTagName("body")[0];
+          
+          var i = document.getElementById("global");
           i.parentNode.insertBefore(o, i);
         };
       }
