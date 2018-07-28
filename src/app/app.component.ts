@@ -13,6 +13,8 @@ import { AuthService, MessageService } from './_services'
  * App Component
  * Top Level Component
  */
+
+ declare var drift;
 @Component({
   selector: 'app',
   encapsulation: ViewEncapsulation.None,
@@ -39,6 +41,9 @@ export class AppComponent {
   }
 
   ngOnInit() {
+    //  Test Drift
+    console.log("Is Drift loaded?", window['drift'], drift)
+
     if (this._auth.getUser().isLoggedIn) {
       this.angulartics.eventTrack.next({ action: 'hasAccount', properties: { category: 'edjiUsage', label: 'success' }})
     }
