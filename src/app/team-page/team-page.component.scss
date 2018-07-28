@@ -1,0 +1,63 @@
+.extended-story {
+    max-height: 0px;
+    transition: max-height linear 500ms;
+    overflow: hidden;
+
+    &.show {
+        max-height: 1000px;
+    }
+}
+
+.title-card {
+    position: relative;
+    font-weight: 300;
+    font-size: 60px;
+    line-height: 1em;
+    margin-top: -2em;
+    margin-left: -0px;
+    vertical-align: middle;
+    display: inline-block;
+    background: rgb(254, 242, 189);
+    width: auto;
+    padding: 10px 20px;
+}
+
+.emoji_wrap {
+    display: inline-block;
+    margin-right: 0.25em;
+    font-size: 1.5em;
+    margin-left: -25px;
+    overflow: visible;
+}
+
+.player-card {
+    $playerBg: #fff;
+
+    font-size: 14px;
+    color: rgba(0,0,0,0.8);
+    background: $playerBg;
+    border-color: #fff;
+
+    .card-title {
+        white-space: nowrap;
+        padding: 0px;
+        font-weight: 500;
+    }
+
+    & .card-block {
+        padding-left: 25px;
+        padding-right: 10px;
+    }
+}
+
+.map-fill {
+    position:absolute; 
+    top:-20px; 
+    left:0px; 
+    min-width: 100%; 
+    height: auto;
+}
+
+.card.navy {
+    border-color: #fafafa;
+}
