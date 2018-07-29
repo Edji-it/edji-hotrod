@@ -9,6 +9,7 @@ import { CommentFilter, ProjectService } from 'src/app/_services/project.service
 import { User, Project, EdjiComment } from '../../../shared/datatypes'
 import { AuthService, AcademyService } from '../../../_services'
 import { ALLSPARK } from '../../../app.constants'
+import { EdjiDatePipe } from '../../../_pipes/edjidate.pipe'
 
 @Component({
   selector: 'hot-reading-report',
@@ -35,7 +36,7 @@ export class ReadingReportComponent implements OnInit {
   ) { 
     this.evaluationForm = _fb.group({
       email: [null, Validators.compose([Validators.required, this.emailValidator])],
-      inputtext: [null, Validators.required],
+      inputText: [null, Validators.required],
     })
   }
 
@@ -95,9 +96,19 @@ export class ReadingReportComponent implements OnInit {
    * @param formValue is the evaluation form data
    */
   public sendEval(formValue: any): void {
+    // set the pdf name here
+    let date = new Date()
+    let dateVal = new EdjiDatePipe().transform(date.toDateString())
+    formValue.pdfName = this.appliedFilter.displayName + "'s Reading Report - " + dateVal
+
     this.evalLoading = true
     this.saveAsPdf().then(pdf => {
-      this._academy.sendReadingReport(formValue, pdf)
+      // convert the pdf in to a blob for transferring to our node server
+      var pdfData = new Blob([pdf.output()], {
+        type: 'application/pdf'
+      })
+
+      this._academy.sendReadingReport(formValue, pdfData)
       .subscribe(
         data => {
           console.log(data)

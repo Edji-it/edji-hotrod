@@ -77,18 +77,18 @@ export class EdjiDatePipe implements PipeTransform {
                 break
             case "shortDate":
                 // Converts the date to the following format: m/d/yyyy
-								newTime = time.getMonth() + '/' + time.getDate() + '/' + time.getFullYear()
+								newTime = time.getMonth() + 1 + '/' + time.getDate() + '/' + time.getFullYear()
                 break
         }
       } else {
         // If no format is specified, convert the date to the following format: m/d/yyyy
-				newTime = time.getMonth() + '/' + time.getDate() + '/' + time.getFullYear()
+				newTime = time.getMonth() + 1 + '/' + time.getDate() + '/' + time.getFullYear()
       }
 
       return newTime
     } else {
 			// Default case if the type of time format update is not selected, convert the date to the following format: m/d/yyyy
-			return time.getMonth() + '/' + time.getDate() + '/' + time.getFullYear()
+			return time.getMonth() + 1 + '/' + time.getDate() + '/' + time.getFullYear()
 		}
   }
 }

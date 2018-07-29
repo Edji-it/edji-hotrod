@@ -72,27 +72,28 @@ export class AcademyService {
    * @param pdf the pdf that is captured from the reading report
    */
   public sendReadingReport(evalForm: any, pdf: any): Observable<any> {
-    // return this._http.post<any>(this._auth.getUrl() + '/api/v1/reading/reports',
-    //   {
-    //     "email": evalForm.email,
-    //     "eval": evalForm.inputtext,
-    //     "pdf": pdf
-    //   },
-    //   {
-    //     headers: new HttpHeaders({
-    //       'Content-Type': 'application/json',
-    //       'Authorization': this._auth.getToken()
-    //     })
-    //   }
-    // )
-    return Observable.create(observer => {
-      //Yield a single value and complete
-      observer.next(true)
-      observer.complete()
+    return this._http.post<any>(this._auth.getUrl() + '/api/v1/readings/reports',
+      {
+        "email": evalForm.email,
+        "eval": evalForm.inputtext,
+        "pdfName": evalForm.pdfName,
+        "pdf": pdf
+      },
+      {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          'Authorization': this._auth.getToken()
+        })
+      }
+    )
+    // return Observable.create(observer => {
+    //   //Yield a single value and complete
+    //   observer.next(true)
+    //   observer.complete()
 
-      // Any cleanup logic might go here
-      return () => console.log(evalForm, pdf)
-    })
+    //   // Any cleanup logic might go here
+    //   return () => console.log(evalForm, pdf)
+    // })
   }
 
   /**
