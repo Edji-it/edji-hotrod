@@ -67,7 +67,7 @@ export class AcademyService {
   }
 
   /**
-   * 
+   * Sends the reading report to the server with the pdf attachment and message
    * @param evalForm the evaluation form data from the reading report
    * @param pdf the pdf that is captured from the reading report
    */
@@ -75,7 +75,8 @@ export class AcademyService {
     return this._http.post<any>(this._auth.getUrl() + '/api/v1/readings/reports',
       {
         "email": evalForm.email,
-        "eval": evalForm.inputtext,
+        "eval": evalForm.inputText,
+        "person_sharing": evalForm.personSharing,
         "pdfName": evalForm.pdfName,
         "pdf": pdf
       },
@@ -86,14 +87,6 @@ export class AcademyService {
         })
       }
     )
-    // return Observable.create(observer => {
-    //   //Yield a single value and complete
-    //   observer.next(true)
-    //   observer.complete()
-
-    //   // Any cleanup logic might go here
-    //   return () => console.log(evalForm, pdf)
-    // })
   }
 
   /**

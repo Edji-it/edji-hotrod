@@ -100,14 +100,14 @@ export class ReadingReportComponent implements OnInit {
     let date = new Date()
     let dateVal = new EdjiDatePipe().transform(date.toDateString())
     formValue.pdfName = this.appliedFilter.displayName + "'s Reading Report - " + dateVal
+    formValue.personSharing = this.currentUser.fullname
 
     this.evalLoading = true
     this.saveAsPdf().then(pdf => {
-      // convert the pdf in to a blob for transferring to our node server
-      var pdfData = new Blob([pdf.output()], {
-        type: 'application/pdf'
-      })
+      // convert the pdf to a data uri string
+      var pdfData = pdf.output('datauristring')
 
+      // user our academy service to package up the email details and send it off to our api
       this._academy.sendReadingReport(formValue, pdfData)
       .subscribe(
         data => {
@@ -121,6 +121,7 @@ export class ReadingReportComponent implements OnInit {
       console.error(error)
       this.evalLoading = false
     })
+    // empty out the form
     this.evaluationForm.reset()
   }
 
