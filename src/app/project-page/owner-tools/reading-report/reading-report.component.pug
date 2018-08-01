@@ -12,11 +12,11 @@
         .col-8
           .row
             .col-12
-              h1.mb-3.header-text__large Josh's Reading Report
+              h1.mb-3.header-text__large {{ appliedFilter.displayName ? appliedFilter.displayName : '' }}'s Reading Report
           //- Reading and Group Info
           .row.mt-5
             .col-12
-              div Nasa Publishes SpaceX's Proposal for a Futuristic Kennedy Space Center
+              div {{ project.reading_id ? project.reading_id.title : '' }}
               hr.mt-0
               .row
                 //- Assignment and Standards
@@ -24,46 +24,49 @@
                   .row
                     .col-12
                       .sub-label.mb-0 Group Assignment
-                      .text-md In this reading students are learning about a genre of video game and how it relates to Shakespeare, paying attention to analogies.
+                      .text-md [FAKE DATA] In this reading students are learning about a genre of video game and how it relates to Shakespeare, paying attention to analogies.
                   .row.mt-3
                     .col-12
                       .sub-label.mb-0 Standards
-                      div CCSS.ELA-LITERACY.RI.5.2
-                      .text-md Determine two or more main ideas of a text and explain how they are supported by key details; summarize the text.
+                      div [FAKE DATA] CCSS.ELA-LITERACY.RI.5.2
+                      .text-md [FAKE DATA] Determine two or more main ideas of a text and explain how they are supported by key details; summarize the text.
                 //- Reading Stats
                 .col-2.p-0
                   .sub-label.mb-0 Contents
-                  .text-md 780 Words
-                  .text-md 2 Images
-                  .text-md 3 Questions
+                  .text-md {{ wordCount }} Words
+                  .text-md {{ imageCount }} Images
+                  .text-md {{ questionCount }} Questions
         //- Teacher/Group Names
         .col-4
           .row
             .col-12
               .sub-label.mb-0 Teacher
-              div Will Stewart
+              div {{ project.teacher ? project.teacher.fullname : '' }}
           .row.mt-3
             .col-12
               .sub-label.mb-0 Group
-              div Advisory
+              div {{ project.label ? project.label : '' }}
       //- Stat's Block
       .row.mt-5
         .col-12
-          div Josh's Stats
+          div {{ appliedFilter.displayName ? appliedFilter.displayName : '' }}'s Stats
           hr.mt-0
       .row
         .col-4
+          //- Fake Data
           hot-chart-gauge(
             *ngIf="visible",
             [measures]="{full: 'Minutes Reading', abbreviated: 'min'}",
-            [values]="{min: 10, max: 37, avg: 18, val: 23}",
+            [values]="chartTimeReading",
             [chartSize]="150"
           )
         .col-4
+          //- Fake Data
           hot-chart-gauge(
             *ngIf="visible",
             [measures]="{full: 'Comments'}",
-            [values]="{min: 2, max: 13, avg: 5, val: 11}"
+            [values]="chartComments",
+            [chartSize]="150"
           )
         .col-4
           hot-chart-hzbar(
@@ -97,7 +100,7 @@
       .col-4
         .row
           .col-12
-            div Summarize Josh's work with this reading, and send a PDF copy of this report to their student email, a parent, or a fellow teacher
+            div Summarize {{ appliedFilter.displayName ? appliedFilter.displayName : '' }}'s work with this reading, and send a PDF copy of this report to their student email, a parent, or a fellow teacher
         .row
           .col-12
             div An image of the report

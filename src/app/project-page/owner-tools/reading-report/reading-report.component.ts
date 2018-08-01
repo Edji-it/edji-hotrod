@@ -1,8 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
-import { Subscription, Observable } from 'rxjs'
+import { Subscription } from 'rxjs'
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms'
 import * as jsPDF from 'jspdf'
-import html2canvas from 'html2canvas'
 
 // Project Dependencies
 import { CommentFilter, ProjectService } from 'src/app/_services/project.service'
@@ -23,10 +22,26 @@ export class ReadingReportComponent implements OnInit {
   private subscriptions: Subscription[] = []
   private currentUser: User
   public project: Project = <Project>{}
-  public appliedFilter: CommentFilter
+  public appliedFilter: CommentFilter = <CommentFilter>{}
   public comments: EdjiComment[] = []
   public evaluationForm: FormGroup
   public evalLoading: boolean
+  public wordCount: number = 0
+  public questionCount: number = 0
+  public imageCount: number = 0
+  public chartTimeReading: any = {
+    min: 1, 
+    max: 4, 
+    avg: 2, 
+    val: 3
+  }
+  public chartComments: any = {
+    min: 1, 
+    max: 4, 
+    avg: 2, 
+    val: 3
+  }
+  
 
   constructor(
     private _projects : ProjectService,
@@ -62,6 +77,8 @@ export class ReadingReportComponent implements OnInit {
         (project) => {
             if (project) {
               this.project = project
+              console.log(project)
+              // handle filter here
               if (project && project.comments) {
                 this._projects.filterByUser(this.currentUser)
 
@@ -69,8 +86,20 @@ export class ReadingReportComponent implements OnInit {
                 let commentsLength = this.project.comments.length
                 for (let i=0; i<commentsLength; i++) {
                   let comment = this.project.comments[i]
+                  // comment for the selected user
                   if (this.appliedFilter.propertyFilters.user_id.test(comment.user_id)) {
                     this.comments.push(comment)
+                  }
+                  // 
+                }
+                // handle counts here
+                this.wordCount = Math.round(project.reading_id.words.length / 2)
+                this.questionCount = project.reading_id.questions.length
+                let wordCount =  project.reading_id.words.length
+                for (let i=0;i<wordCount;i++) {
+                  let word = project.reading_id.words[i]
+                  if (word && word.styles && word.styles.includes('img')) {
+                    this.imageCount+=1
                   }
                 }
               }
