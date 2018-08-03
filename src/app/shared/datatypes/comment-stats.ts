@@ -5,6 +5,9 @@ export class CommentStats {
   private _stats: iCommentStats = {
     reply_count: 0,
     comment_count: 0,
+    comment_max: 0,
+    comment_min: 0,
+    comment_avg: 0,
     userStats: []
   }
 

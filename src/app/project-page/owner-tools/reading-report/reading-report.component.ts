@@ -43,7 +43,12 @@ export class ReadingReportComponent implements OnInit {
     avg: 2, 
     val: 3
   }
-  
+  public commentCountByType: any = {
+    emoji: 0,
+    text: 0,
+    audio: 0,
+    reply: 0
+  }
 
   constructor(
     private _projects : ProjectService,
@@ -70,13 +75,6 @@ export class ReadingReportComponent implements OnInit {
         (filter) => {
           this.appliedFilter = filter
           console.log(filter)
-        
-          if (this.commentStats.stats.userStats) {
-            for (let i = 0; i < this.commentStats.stats.userStats.length; i++){
-              this.commentStats.stats.userStats[i]['filtered'] = this.isStudentFiltered(this.commentStats.stats.userStats[i])
-            }
-            console.log(this.commentStats)
-          }
         }
       )
     ),
@@ -89,23 +87,14 @@ export class ReadingReportComponent implements OnInit {
               console.log(project)
               // handle filter here
               if (project && project.comments) {
+                // hacky manually designate the filter
                 this._projects.filterByUser(this.currentUser)
-
-                // Only handle comments that are the curent selected users'
-                let commentsLength = this.project.comments.length
-                for (let i=0; i<commentsLength; i++) {
-                  let comment = this.project.comments[i]
-                  // comment for the selected user
-                  if (this.appliedFilter.propertyFilters.user_id.test(comment.user_id)) {
-                    this.comments.push(comment)
-                  }
-                }
 
                 // handle counts here
                 this.wordCount = Math.round(project.reading_id.words.length / 2)
                 this.questionCount = project.reading_id.questions.length
-                let wordCount =  project.reading_id.words.length
-                for (let i=0;i<wordCount;i++) {
+                let wordsLength =  project.reading_id.words.length
+                for (let i=0;i<wordsLength;i++) {
                   let word = project.reading_id.words[i]
                   if (word && word.styles && word.styles.includes('img')) {
                     this.imageCount+=1
@@ -118,6 +107,34 @@ export class ReadingReportComponent implements OnInit {
             console.error(error)
         })
     )
+
+    // Temp hacky way to set the current filtered user since I'm hacking the filter to be on for now
+    // (get rid of setTimeout once we finalize the filter selection on report opening)
+    setTimeout(() => {
+      if (this.commentStats.stats.userStats) {
+        for (let i = 0; i < this.commentStats.stats.userStats.length; i++){
+          if (this.isStudentFiltered(this.commentStats.stats.userStats[i])) {
+            let userStats = this.commentStats.stats.userStats[i]
+            // Comments by the filtered user for displaying on the report right-out
+            this.comments = userStats.comments
+            // Comment count gauge chart setup
+            this.chartComments = {
+              min: this.commentStats.stats.comment_min,
+              max: this.commentStats.stats.comment_max,
+              avg: this.commentStats.stats.comment_avg,
+              val: userStats.comment_count
+            }
+            // Comment count by type horizontal bar chart setup
+            this.commentCountByType = {
+              emoji: userStats.emoji_comment_count,
+              text: userStats.text_comment_count,
+              audio: userStats.audio_comment_count,
+              reply: userStats.reply_count
+            }
+          }
+        }
+      }
+    }, 1000)
   }
 
   /** Validates email against the same regex used on the server
