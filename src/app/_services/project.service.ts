@@ -796,8 +796,6 @@ export class ProjectService {
             }
             return fitsFilter
         } else {
-            // If the comment has data/url (meaning they've filled out the comment) or its the current users comment
-            // let dataInComment = ((comment.data && comment.data != '') || comment.url && comment.url != '') || comment.user_id == this.user._id
             // If user is current reading Owner/Teacher or Heat Vision is on, show all comments
             let heatVisible = (this.project.heat_vision || (this.user._id == this.project.teacher_id))
             // Your own comments and the Owner/Teacher's comments are ALWAYS visible

@@ -5,7 +5,7 @@ import * as jsPDF from 'jspdf'
 
 // Project Dependencies
 import { CommentFilter, ProjectService } from 'src/app/_services/project.service'
-import { User, Project, EdjiComment } from '../../../shared/datatypes'
+import { User, Project, EdjiComment, CommentStats } from '../../../shared/datatypes'
 import { AuthService, AcademyService } from '../../../_services'
 import { ALLSPARK } from '../../../app.constants'
 import { EdjiDatePipe } from '../../../_pipes/edjidate.pipe'
@@ -17,6 +17,8 @@ import { EdjiDatePipe } from '../../../_pipes/edjidate.pipe'
 })
 export class ReadingReportComponent implements OnInit {
   @Input() visible: boolean = false
+  /** This is a reference to the actual commentStats object which has methods for modification of properties */
+  @Input() commentStats: CommentStats
   @Output() hide: EventEmitter<any> = new EventEmitter()
 
   private subscriptions: Subscription[] = []
@@ -68,6 +70,13 @@ export class ReadingReportComponent implements OnInit {
         (filter) => {
           this.appliedFilter = filter
           console.log(filter)
+        
+          if (this.commentStats.stats.userStats) {
+            for (let i = 0; i < this.commentStats.stats.userStats.length; i++){
+              this.commentStats.stats.userStats[i]['filtered'] = this.isStudentFiltered(this.commentStats.stats.userStats[i])
+            }
+            console.log(this.commentStats)
+          }
         }
       )
     ),
@@ -90,8 +99,8 @@ export class ReadingReportComponent implements OnInit {
                   if (this.appliedFilter.propertyFilters.user_id.test(comment.user_id)) {
                     this.comments.push(comment)
                   }
-                  // 
                 }
+
                 // handle counts here
                 this.wordCount = Math.round(project.reading_id.words.length / 2)
                 this.questionCount = project.reading_id.questions.length
@@ -209,5 +218,16 @@ export class ReadingReportComponent implements OnInit {
     var evalForm = document.querySelector('#evaluationForm')
     var topPos = evalForm.getBoundingClientRect().top
     document.querySelector(".sliding-pane.from-left.reading-report.slide-in").scrollTop = topPos
+  }
+
+  /**
+   * Is Student Filtered
+   */
+  public isStudentFiltered(student: any) : boolean {
+    if (this.appliedFilter && this.appliedFilter.propertyFilters.user_id) {
+      return this.appliedFilter.propertyFilters.user_id.test(student._id)
+    } else {
+      return false
+    }
   }
 }
