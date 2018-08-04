@@ -67,6 +67,21 @@ export class AcademyService {
   }
 
   /**
+   * Returns time on reading data from the reading group
+   * @param group_id from the reading 'project'
+   */
+  public getTimeOnReading(group_id: string): Observable<any> {
+    return this._http.get<any>(this._auth.getPipoUrl() + '/api/v1/stats/groups/' + group_id,
+      {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          'Authorization': this._auth.getToken()
+        })
+      }
+    )
+  }
+
+  /**
    * Sends the reading report to the server with the pdf attachment and message
    * @param evalForm the evaluation form data from the reading report
    * @param pdf the pdf that is captured from the reading report

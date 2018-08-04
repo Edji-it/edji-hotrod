@@ -9,6 +9,7 @@ import { User, Project, EdjiComment, CommentStats } from '../../../shared/dataty
 import { AuthService, AcademyService } from '../../../_services'
 import { ALLSPARK } from '../../../app.constants'
 import { EdjiDatePipe } from '../../../_pipes/edjidate.pipe'
+import { take } from '../../../../../node_modules/rxjs/operators';
 
 @Component({
   selector: 'hot-reading-report',
@@ -100,6 +101,15 @@ export class ReadingReportComponent implements OnInit {
                     this.imageCount+=1
                   }
                 }
+
+                // Get time on reading data
+                this._academy.getTimeOnReading(this.project._id).pipe(take(1))
+                .subscribe(data => {
+                  console.log('time on reading:', data)
+                },
+                (error) => {
+                  console.error(error)
+                })
               }
             }
         },
