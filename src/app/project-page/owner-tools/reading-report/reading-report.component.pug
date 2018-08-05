@@ -18,48 +18,46 @@
           span(aria-hidden='true') &times;
         button.btn.btn-success.btn-sm.float-right.mr-5((click)="goToEvalForm()") Send Copy
         button.btn.btn-primary.btn-sm.float-right.mr-5((click)="downloadPDF()") Download
-  .container-fluid.container--less-pad.px-5
-    #readingReport
+  .container-fluid.container--less-pad.px-3
+    #readingReport.p-4
       //- Header Block
       .row
-        .col-8
+        .col-9
           .row
             .col-12
-              
-              //- h2.mb-3.header-text__large {{ currentStudent.label ? currentStudent.label : '' }}'s Reading Report
+              h2.mb-0.header-text__medium {{ currentStudent.label ? currentStudent.label : '' }}'s Reading Report
+              hr.my-0
+              .mt-1 "{{ project.reading_id ? project.reading_id.title : '' }}" - Reading
           //- Reading and Group Info
-          .row.mt-5
+          .row.mt-4
+            //- Assignment and Standards
             .col-12
-              div {{ project.reading_id ? project.reading_id.title : '' }}
-              hr.mt-0
               .row
-                //- Assignment and Standards
-                .col-10
-                  .row
-                    .col-12
-                      .sub-label.mb-0 Group Assignment
-                      .text-md [FAKE DATA] In this reading students are learning about a genre of video game and how it relates to Shakespeare, paying attention to analogies.
-                  .row.mt-3
-                    .col-12
-                      .sub-label.mb-0 Standards
-                      div [FAKE DATA] CCSS.ELA-LITERACY.RI.5.2
-                      .text-md [FAKE DATA] Determine two or more main ideas of a text and explain how they are supported by key details; summarize the text.
-                //- Reading Stats
-                .col-2.p-0
-                  .sub-label.mb-0 Contents
-                  .text-md {{ wordCount }} Words
-                  .text-md {{ imageCount }} Images
-                  .text-md {{ questionCount }} Questions
+                .col-12
+                  .sub-label.mb-0 Group Assignment
+                  .text-md [FAKE DATA] In this reading students are learning about a genre of video game and how it relates to Shakespeare, paying attention to analogies.
+              .row.mt-3
+                .col-12
+                  .sub-label.mb-0 Standards
+                  div [FAKE DATA] CCSS.ELA-LITERACY.RI.5.2
+                  .text-md [FAKE DATA] Determine two or more main ideas of a text and explain how they are supported by key details; summarize the text.
         //- Teacher/Group Names
-        .col-4
+        .col-3
           .row
-            .col-12
+            .col-12.p-0
               .sub-label.mb-0 Teacher
               div {{ project.teacher ? project.teacher.fullname : '' }}
           .row.mt-3
-            .col-12
+            .col-12.p-0
               .sub-label.mb-0 Group
               div {{ project.label ? project.label : '' }}
+          .row.mt-5
+            //- Reading Stats
+            .col-12.p-0
+              .sub-label.mb-0 Contents
+              .text-md {{ wordCount }} Words
+              .text-md {{ imageCount }} Images
+              .text-md {{ questionCount }} Questions
       //- Stat's Block
       .row.mt-5
         .col-12
