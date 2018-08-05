@@ -15,18 +15,22 @@
   .col-9.pt-2
     .row
       .col-12.no-gutters.p-0.ml-tiny
+        .count-block.count-block__blank(*ngIf="commentCountByType.emoji===0")
         .count-block.count-block__emoji(*ngFor="let in of counter(commentCountByType.emoji)")
         .count-plus(*ngIf="commentCountByType.emoji>25") +{{commentCountByType.emoji-25}}
     .row
       .col-12.no-gutters.p-0.ml-tiny
+        .count-block.count-block__blank(*ngIf="commentCountByType.text===0")
         .count-block.count-block__text(*ngFor="let in of counter(commentCountByType.text)")
         .count-plus(*ngIf="commentCountByType.text>25") +{{commentCountByType.text-25}}
     .row
       .col-12.no-gutters.p-0.ml-tiny
+        .count-block.count-block__blank(*ngIf="commentCountByType.audio===0")
         .count-block.count-block__audio(*ngFor="let in of counter(commentCountByType.audio)")
         .count-plus(*ngIf="commentCountByType.audio>25") +{{commentCountByType.audio-25}}
     .row
       .col-12.no-gutters.p-0.ml-tiny
+        .count-block.count-block__blank(*ngIf="commentCountByType.reply===0")
         .count-block.count-block__replies(*ngFor="let in of counter(commentCountByType.reply)")
         .count-plus(*ngIf="commentCountByType.reply>25") +{{commentCountByType.reply-25}}
 .row
