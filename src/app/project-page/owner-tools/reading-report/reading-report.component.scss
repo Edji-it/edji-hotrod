@@ -16,3 +16,60 @@
 .report-text-highlighted {
   display: inline;
 }
+
+::ng-deep .ui-dropdown-panel .ui-dropdown-list {
+  background-color: white;
+}
+
+::ng-deep .ui-dropdown {
+  & label.ui-dropdown-label {
+    font-size: 36px;
+    width: max-content;
+    font-weight: 100;
+    padding: 0 24px 10px 0;
+    margin-left: 6px;
+    border-bottom: solid #00A2F5 2px;
+  }
+  &:hover {
+    & label.ui-dropdown-label {
+    background-color: rgba(0,0,0,0.05);
+    }
+    & .ui-dropdown-trigger {
+      transform: scale(1);
+      transition: transform ease-in-out 200ms;
+    }
+  }
+}
+
+::ng-deep .ui-dropdown-panel .ui-dropdown-list {
+  font-size: 18px;
+  width: max-content;
+}
+
+::ng-deep .ui-dropdown .ui-dropdown-trigger {
+  background-image: url(../../../../assets/images/filter-arrow-down.svg);
+  background-size: 100% auto;
+  height: 16px;
+  width: 12px;
+  right: 0px;
+  top: 18px;
+  transform: scale(0.7);
+  // &:hover {
+  //   transform: scale(1);
+  // }
+}
+
+::ng-deep .ui-dropdown {
+  width: max-content;
+}
+
+::ng-deep .ui-dropdown-panel .ui-dropdown-items-wrapper {
+  background-color: white;
+  max-height: 80vh;
+}
+
+::ng-deep .ui-dropdown-panel .ui-dropdown-item {
+  &:hover {
+    background-color: rgba(0,0,0,0.05);
+  }
+}

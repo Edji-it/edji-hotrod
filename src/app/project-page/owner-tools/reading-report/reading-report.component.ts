@@ -2,6 +2,8 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 import { Subscription } from 'rxjs'
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms'
 import * as jsPDF from 'jspdf'
+import { take } from '../../../../../node_modules/rxjs/operators'
+import { DropdownModule } from 'primeng/dropdown'
 
 // Project Dependencies
 import { CommentFilter, ProjectService } from 'src/app/_services/project.service'
@@ -9,7 +11,6 @@ import { User, Project, EdjiComment, CommentStats } from '../../../shared/dataty
 import { AuthService, AcademyService } from '../../../_services'
 import { ALLSPARK } from '../../../app.constants'
 import { EdjiDatePipe } from '../../../_pipes/edjidate.pipe'
-import { take } from '../../../../../node_modules/rxjs/operators';
 
 @Component({
   selector: 'hot-reading-report',
@@ -51,6 +52,9 @@ export class ReadingReportComponent implements OnInit {
     reply: 0
   }
 
+  public students: any[] = []
+  public selectedStudent: any
+
   constructor(
     private _projects : ProjectService,
     private _auth: AuthService,
@@ -83,77 +87,83 @@ export class ReadingReportComponent implements OnInit {
     this.subscriptions.push(
       this._projects.currentProject.subscribe(
         (project) => {
-            if (project) {
-              this.project = project
-              console.log(project)
-              // handle filter here
-              if (project && project.comments) {
-                // hacky manually designate the filter
-                this._projects.filterByUser(this.currentUser)
+          if (project) {
+            this.project = project
+            console.log(project)
+            // handle filter here
+            if (project && project.comments) {
+              // hacky manually designate the filter
+              this._projects.filterByUser(this.currentUser)
 
-                // handle counts here
-                this.wordCount = Math.round(project.reading_id.words.length / 2)
-                this.questionCount = project.reading_id.questions.length
-                let wordsLength =  project.reading_id.words.length
-                for (let i=0;i<wordsLength;i++) {
-                  let word = project.reading_id.words[i]
-                  if (word && word.styles && word.styles.includes('img')) {
-                    this.imageCount+=1
+              // handle counts here
+              this.wordCount = Math.round(project.reading_id.words.length / 2)
+              this.questionCount = project.reading_id.questions.length
+              let wordsLength =  project.reading_id.words.length
+              for (let i=0;i<wordsLength;i++) {
+                let word = project.reading_id.words[i]
+                if (word && word.styles && word.styles.includes('img')) {
+                  this.imageCount+=1
+                }
+              }
+
+              // Get time on reading data
+              this._academy.getTimeOnReading(this.project._id).pipe(take(1))
+              .subscribe((readingTimeData) => {
+                const correctionFactor = 60 * 30
+                readingTimeData = readingTimeData.time_on_reading
+                const user = readingTimeData.users.find( user => this.appliedFilter.propertyFilters.user_id.test(user.user_id))
+                // set the stats values for max, min, and average
+                this.chartTimeReading = {
+                  min: Math.round(readingTimeData.min / correctionFactor), 
+                  max: Math.round(readingTimeData.max / correctionFactor), 
+                  avg: Math.round(readingTimeData.avg / correctionFactor), 
+                  val: Math.round(user.value / correctionFactor)
+                }
+              },
+              (error) => {
+                console.error(error)
+              })
+            }
+            // need a 1 millisecond delay for the comment stats getter to evaluate
+            setTimeout(() => {
+              // only run this if we have data for any student
+              if (this.commentStats.stats.userStats && this.commentStats.stats.userStats.length > 0) {
+                // set the dropdown filter for all students
+                this.commentStats.stats.userStats.forEach((student) => {
+                  this.students.push({ label: student.fullname, value: student._id })
+                })
+                // set the filter to the first student
+                this.selectedStudent = this.students[0]
+
+                for (let i = 0; i < this.commentStats.stats.userStats.length; i++){
+                  if (this.isStudentFiltered(this.commentStats.stats.userStats[i])) {
+                    let userStats = this.commentStats.stats.userStats[i]
+                    // Comments by the filtered user for displaying on the report right-out
+                    this.comments = userStats.comments
+                    // Comment count gauge chart setup
+                    this.chartComments = {
+                      min: this.commentStats.stats.comment_min,
+                      max: this.commentStats.stats.comment_max,
+                      avg: this.commentStats.stats.comment_avg,
+                      val: userStats.comment_count
+                    }
+                    // Comment count by type horizontal bar chart setup
+                    this.commentCountByType = {
+                      emoji: userStats.emoji_comment_count,
+                      text: userStats.text_comment_count,
+                      audio: userStats.audio_comment_count,
+                      reply: userStats.reply_count
+                    }
                   }
                 }
-
-                // Get time on reading data
-                this._academy.getTimeOnReading(this.project._id).pipe(take(1))
-                .subscribe((readingTimeData) => {
-                  const correctionFactor = 60 * 30
-                  readingTimeData = readingTimeData.time_on_reading
-                  const user = readingTimeData.users.find( user => this.appliedFilter.propertyFilters.user_id.test(user.user_id))
-                  // set the stats values for max, min, and average
-                  this.chartTimeReading = {
-                    min: Math.round(readingTimeData.min / correctionFactor), 
-                    max: Math.round(readingTimeData.max / correctionFactor), 
-                    avg: Math.round(readingTimeData.avg / correctionFactor), 
-                    val: Math.round(user.value / correctionFactor)
-                  }
-                },
-                (error) => {
-                  console.error(error)
-                })
               }
-            }
+            }, 1)
+          }
         },
         (error) => {
           console.error(error)
         })
     )
-
-    // Temp hacky way to set the current filtered user since I'm hacking the filter to be on for now
-    // (get rid of setTimeout once we finalize the filter selection on report opening)
-    setTimeout(() => {
-      if (this.commentStats.stats.userStats) {
-        for (let i = 0; i < this.commentStats.stats.userStats.length; i++){
-          if (this.isStudentFiltered(this.commentStats.stats.userStats[i])) {
-            let userStats = this.commentStats.stats.userStats[i]
-            // Comments by the filtered user for displaying on the report right-out
-            this.comments = userStats.comments
-            // Comment count gauge chart setup
-            this.chartComments = {
-              min: this.commentStats.stats.comment_min,
-              max: this.commentStats.stats.comment_max,
-              avg: this.commentStats.stats.comment_avg,
-              val: userStats.comment_count
-            }
-            // Comment count by type horizontal bar chart setup
-            this.commentCountByType = {
-              emoji: userStats.emoji_comment_count,
-              text: userStats.text_comment_count,
-              audio: userStats.audio_comment_count,
-              reply: userStats.reply_count
-            }
-          }
-        }
-      }
-    }, 1000)
   }
 
   /** Validates email against the same regex used on the server

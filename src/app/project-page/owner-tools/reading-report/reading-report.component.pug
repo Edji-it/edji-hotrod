@@ -12,7 +12,18 @@
         .col-8
           .row
             .col-12
-              h1.mb-3.header-text__large {{ appliedFilter.displayName ? appliedFilter.displayName : '' }}'s Reading Report
+              h1.mb-3.header-text__large Reading Report for
+                p-dropdown(
+                  [options]="students",
+                  [(ngModel)]="selectedStudent",
+                  [autoWidth]="false",
+                  [style]="[{'width': '100%'}, {'font-size': '22px'}]",
+                  [scrollHeight]="'90vh'"
+                  [dropdownIcon]="'filter-arrow-down'"
+                )
+                //- i.filter-arrow-down
+
+              //- h1.mb-3.header-text__large {{ appliedFilter.displayName ? appliedFilter.displayName : '' }}'s Reading Report
           //- Reading and Group Info
           .row.mt-5
             .col-12
