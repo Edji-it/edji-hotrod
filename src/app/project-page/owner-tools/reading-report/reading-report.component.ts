@@ -27,6 +27,7 @@ export class ReadingReportComponent implements OnInit {
   private currentUser: User
   public project: any
   public appliedFilter: CommentFilter = <CommentFilter>{}
+  public currentStudent: any = {}
   public comments: EdjiComment[] = []
   public readingTimeData: any
   public evaluationForm: FormGroup
@@ -74,15 +75,6 @@ export class ReadingReportComponent implements OnInit {
       this._auth.getCurrentUser().subscribe((user) => {
         this.currentUser = user
       })
-    ),
-    // Get Updates about applied comment filters so we can show the user
-    this.subscriptions.push(
-      this._projects.filterUpdates.subscribe(
-        (filter) => {
-          this.appliedFilter = filter
-          console.log(filter)
-        }
-      )
     ),
     // Get Project from project service
     this.subscriptions.push(
@@ -139,7 +131,7 @@ export class ReadingReportComponent implements OnInit {
 
     // Loop through the user stats inside of the comment stats
     for (let i = 0; i < this.commentStats.stats.userStats.length; i++) {
-      if (this.isStudentFiltered(this.commentStats.stats.userStats[i])) {
+      if (this.commentStats.stats.userStats[i]._id===this.currentStudent.value) {
         let userStats = this.commentStats.stats.userStats[i]
         // Comments by the filtered user for displaying on the report right-out
         this.comments = userStats.comments
@@ -162,7 +154,7 @@ export class ReadingReportComponent implements OnInit {
 
     // Process the time on reading data for the selected user
     const correctionFactor = 60 * 30
-    const userTimeVal = this.readingTimeData.users.find( user => this.appliedFilter.propertyFilters.user_id.test(user.user_id))
+    const userTimeVal = this.readingTimeData.users.find( user => this.currentStudent.value===user.user_id)
     // set the stats values for max, min, and average
     this.chartTimeReading = {
       min: Math.round(this.readingTimeData.min / correctionFactor), 
@@ -183,11 +175,7 @@ export class ReadingReportComponent implements OnInit {
     if (initialPass) {
       // set the filter to the first student
       this.selectedStudent = this.students[0]
-
-      // set the filter to the first user
-      if (this.selectedStudent && this.selectedStudent.value) {
-        this.studentFilterChange(this.selectedStudent)
-      }
+      this.currentStudent = this.selectedStudent
     }
   }
 
@@ -195,22 +183,8 @@ export class ReadingReportComponent implements OnInit {
    * This gets called whenever the dropdown selection changes
    */
   public changeStudentSelection(): void {
-    const student = this.students.find( user => user.value===this.selectedStudent)
-    this.studentFilterChange(student)
+    this.currentStudent = this.students.find( user => user.value===this.selectedStudent)
     this.buildReport()
-  }
-
-  /**
-   * Makes a call to the project service to change the student filter
-   * @param student object from the dropdown form. value is the _id and label is the fullname
-   */
-  private studentFilterChange(student: any): void {
-    // the filterByUser method needs a user, so we'll initialize a blank one and pass the values it needs
-    let selectedUser = <User>{}
-    selectedUser._id = student.value
-    selectedUser.fullname = student.label
-    // activate the filter
-    this._projects.filterByUser(selectedUser)
   }
 
   /** Validates email against the same regex used on the server
@@ -230,7 +204,7 @@ export class ReadingReportComponent implements OnInit {
     // set the pdf name here
     let date = new Date()
     let dateVal = new EdjiDatePipe().transform(date.toDateString())
-    formValue.pdfName = this.appliedFilter.displayName + "'s Reading Report - " + dateVal
+    formValue.pdfName = this.currentStudent.label + "'s Reading Report - " + dateVal
     formValue.personSharing = this.currentUser.fullname
 
     this.evalLoading = true

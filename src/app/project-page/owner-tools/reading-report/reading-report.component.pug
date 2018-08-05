@@ -26,7 +26,7 @@
           .row
             .col-12
               
-              //- h2.mb-3.header-text__large {{ appliedFilter.displayName ? appliedFilter.displayName : '' }}'s Reading Report
+              //- h2.mb-3.header-text__large {{ currentStudent.label ? currentStudent.label : '' }}'s Reading Report
           //- Reading and Group Info
           .row.mt-5
             .col-12
@@ -63,7 +63,7 @@
       //- Stat's Block
       .row.mt-5
         .col-12
-          div {{ appliedFilter.displayName ? appliedFilter.displayName : '' }}'s Stats
+          div {{ currentStudent.label ? currentStudent.label : '' }}'s Stats
           hr.mt-0
       .row
         .col-4
@@ -112,7 +112,7 @@
       .col-4
         .row
           .col-12
-            div Summarize {{ appliedFilter.displayName ? appliedFilter.displayName : '' }}'s work with this reading, and send a PDF copy of this report to their student email, a parent, or a fellow teacher
+            div Summarize {{ currentStudent.label ? currentStudent.label : '' }}'s work with this reading, and send a PDF copy of this report to their student email, a parent, or a fellow teacher
         .row
           .col-12
             div An image of the report
