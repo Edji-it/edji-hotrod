@@ -104,8 +104,17 @@ export class ReadingReportComponent implements OnInit {
 
                 // Get time on reading data
                 this._academy.getTimeOnReading(this.project._id).pipe(take(1))
-                .subscribe(data => {
-                  console.log('time on reading:', data)
+                .subscribe((readingTimeData) => {
+                  const correctionFactor = 60 * 30
+                  readingTimeData = readingTimeData.time_on_reading
+                  const user = readingTimeData.users.find( user => this.appliedFilter.propertyFilters.user_id.test(user.user_id))
+                  // set the stats values for max, min, and average
+                  this.chartTimeReading = {
+                    min: Math.round(readingTimeData.min / correctionFactor), 
+                    max: Math.round(readingTimeData.max / correctionFactor), 
+                    avg: Math.round(readingTimeData.avg / correctionFactor), 
+                    val: Math.round(user.value / correctionFactor)
+                  }
                 },
                 (error) => {
                   console.error(error)
@@ -114,7 +123,7 @@ export class ReadingReportComponent implements OnInit {
             }
         },
         (error) => {
-            console.error(error)
+          console.error(error)
         })
     )
 
