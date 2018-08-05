@@ -186,14 +186,31 @@ export class ReadingReportComponent implements OnInit {
 
       // set the filter to the first user
       if (this.selectedStudent && this.selectedStudent.value) {
-        // the filterByUser method needs a user, so we'll initialize a blank one and pass the values it needs
-        let selectedUser = <User>{}
-        selectedUser._id = this.selectedStudent.value
-        selectedUser.fullname = this.selectedStudent.label
-        // activate the filter
-        this._projects.filterByUser(selectedUser)
+        this.studentFilterChange(this.selectedStudent)
       }
     }
+  }
+
+  /**
+   * This gets called whenever the dropdown selection changes
+   */
+  public changeStudentSelection(): void {
+    const student = this.students.find( user => user.value===this.selectedStudent)
+    this.studentFilterChange(student)
+    this.buildReport()
+  }
+
+  /**
+   * Makes a call to the project service to change the student filter
+   * @param student object from the dropdown form. value is the _id and label is the fullname
+   */
+  private studentFilterChange(student: any): void {
+    // the filterByUser method needs a user, so we'll initialize a blank one and pass the values it needs
+    let selectedUser = <User>{}
+    selectedUser._id = student.value
+    selectedUser.fullname = student.label
+    // activate the filter
+    this._projects.filterByUser(selectedUser)
   }
 
   /** Validates email against the same regex used on the server

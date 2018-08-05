@@ -10,7 +10,8 @@
             [autoWidth]="false",
             [style]="[{'width': '100%'}, {'font-size': '22px'}]",
             [scrollHeight]="'90vh'"
-            [dropdownIcon]="'filter-arrow-down'"
+            [dropdownIcon]="'filter-arrow-down'", 
+            (onChange)="changeStudentSelection()"
           )
       .col-4.p-0
         button.close.stats-close-btn.btn-icon--round((click)='hide.emit()' type='button')
