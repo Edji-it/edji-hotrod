@@ -10,7 +10,7 @@
 }
 
 .header-text__large {
-  font-size: 36px;
+  font-size: 30px;
 }
 
 .report-text-highlighted {
@@ -23,10 +23,10 @@
 
 ::ng-deep .ui-dropdown {
   & label.ui-dropdown-label {
-    font-size: 36px;
+    font-size: 30px;
     width: max-content;
     font-weight: 100;
-    padding: 0 24px 10px 0;
+    padding: 0 20px 4px 6px;
     margin-left: 6px;
     border-bottom: solid #00A2F5 2px;
   }
@@ -42,21 +42,23 @@
 }
 
 ::ng-deep .ui-dropdown-panel .ui-dropdown-list {
-  font-size: 18px;
-  width: max-content;
+  font-size: 16px;
+  min-width: max-content;
+  width: 100%;
+}
+
+::ng-deep .ui-dropdown .ui-dropdown-panel {
+  min-width: max-content;
 }
 
 ::ng-deep .ui-dropdown .ui-dropdown-trigger {
   background-image: url(../../../../assets/images/filter-arrow-down.svg);
   background-size: 100% auto;
-  height: 16px;
+  height: 13px;
   width: 12px;
   right: 0px;
-  top: 18px;
+  top: 15px;
   transform: scale(0.7);
-  // &:hover {
-  //   transform: scale(1);
-  // }
 }
 
 ::ng-deep .ui-dropdown {
