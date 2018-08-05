@@ -297,4 +297,9 @@ export class ReadingReportComponent implements OnInit {
       return false
     }
   }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((sub) => { sub.unsubscribe() })
+    this.students=[]
+  }
 }

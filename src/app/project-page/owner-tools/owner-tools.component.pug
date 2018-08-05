@@ -84,4 +84,4 @@ hot-firefeed((hide)="showFireFeed=false", [visible]="showFireFeed")
 hot-questionfeed((hide)="showQuestionFeed=false", [visible]="showQuestionFeed")
 
 //- Reading Report goes here
-hot-reading-report((hide)="showReadingReport=false", [commentStats]="commentStats", [visible]="showReadingReport")
+hot-reading-report(*ngIf="showReadingReport", (hide)="showReadingReport=false", [commentStats]="commentStats", [visible]="showReadingReport")
