@@ -40,6 +40,10 @@ export class HotChartGaugeComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    
+  }
+
+  ngOnChanges() {
     this.animationState = 'stop'
     
     setTimeout(()=> {
