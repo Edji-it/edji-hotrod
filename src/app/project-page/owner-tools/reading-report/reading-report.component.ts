@@ -25,9 +25,10 @@ export class ReadingReportComponent implements OnInit {
 
   private subscriptions: Subscription[] = []
   private currentUser: User
-  public project: Project = <Project>{}
+  public project: any
   public appliedFilter: CommentFilter = <CommentFilter>{}
   public comments: EdjiComment[] = []
+  public readingTimeData: any
   public evaluationForm: FormGroup
   public evalLoading: boolean
   public wordCount: number = 0
@@ -89,81 +90,110 @@ export class ReadingReportComponent implements OnInit {
         (project) => {
           if (project) {
             this.project = project
-            console.log(project)
-            // handle filter here
+            // need to wait until we have the project loaded before we can proceed
             if (project && project.comments) {
-              // hacky manually designate the filter
-              this._projects.filterByUser(this.currentUser)
-
-              // handle counts here
-              this.wordCount = Math.round(project.reading_id.words.length / 2)
-              this.questionCount = project.reading_id.questions.length
-              let wordsLength =  project.reading_id.words.length
-              for (let i=0;i<wordsLength;i++) {
-                let word = project.reading_id.words[i]
-                if (word && word.styles && word.styles.includes('img')) {
-                  this.imageCount+=1
-                }
-              }
-
               // Get time on reading data
               this._academy.getTimeOnReading(this.project._id).pipe(take(1))
               .subscribe((readingTimeData) => {
-                const correctionFactor = 60 * 30
-                readingTimeData = readingTimeData.time_on_reading
-                const user = readingTimeData.users.find( user => this.appliedFilter.propertyFilters.user_id.test(user.user_id))
-                // set the stats values for max, min, and average
-                this.chartTimeReading = {
-                  min: Math.round(readingTimeData.min / correctionFactor), 
-                  max: Math.round(readingTimeData.max / correctionFactor), 
-                  avg: Math.round(readingTimeData.avg / correctionFactor), 
-                  val: Math.round(user.value / correctionFactor)
-                }
+                this.readingTimeData = readingTimeData.time_on_reading
+                // need a 1 millisecond delay for the comment stats getter to evaluate
+                setTimeout(() => {
+                  // only run this if we have data for any student
+                  if (this.commentStats.stats.userStats && this.commentStats.stats.userStats.length > 0) {
+                    if (this.students.length===0) {
+                      this.populateStudentList(true)
+                    } else {
+                      this.populateStudentList()
+                    }
+                    this.buildReport()
+                  }
+                }, 1)
               },
               (error) => {
                 console.error(error)
               })
             }
-            // need a 1 millisecond delay for the comment stats getter to evaluate
-            setTimeout(() => {
-              // only run this if we have data for any student
-              if (this.commentStats.stats.userStats && this.commentStats.stats.userStats.length > 0) {
-                // set the dropdown filter for all students
-                this.commentStats.stats.userStats.forEach((student) => {
-                  this.students.push({ label: student.fullname, value: student._id })
-                })
-                // set the filter to the first student
-                this.selectedStudent = this.students[0]
-
-                for (let i = 0; i < this.commentStats.stats.userStats.length; i++){
-                  if (this.isStudentFiltered(this.commentStats.stats.userStats[i])) {
-                    let userStats = this.commentStats.stats.userStats[i]
-                    // Comments by the filtered user for displaying on the report right-out
-                    this.comments = userStats.comments
-                    // Comment count gauge chart setup
-                    this.chartComments = {
-                      min: this.commentStats.stats.comment_min,
-                      max: this.commentStats.stats.comment_max,
-                      avg: this.commentStats.stats.comment_avg,
-                      val: userStats.comment_count
-                    }
-                    // Comment count by type horizontal bar chart setup
-                    this.commentCountByType = {
-                      emoji: userStats.emoji_comment_count,
-                      text: userStats.text_comment_count,
-                      audio: userStats.audio_comment_count,
-                      reply: userStats.reply_count
-                    }
-                  }
-                }
-              }
-            }, 1)
           }
         },
         (error) => {
           console.error(error)
         })
-    )
+      )
+  }
+
+  /**
+   * all logic for displaying any metrics on the report should go in here
+   * when we change student selections, this will get called to re-build the metrics on the report
+   */
+  private buildReport(): void {
+    // handle overall reading counts here
+    this.wordCount = Math.round(this.project.reading_id.words.length / 2)
+    this.questionCount = this.project.reading_id.questions.length
+    let wordsLength =  this.project.reading_id.words.length
+    for (let i=0;i<wordsLength;i++) {
+      let word = this.project.reading_id.words[i]
+      if (word && word.styles && word.styles.includes('img')) {
+        this.imageCount+=1
+      }
+    }
+
+    // Loop through the user stats inside of the comment stats
+    for (let i = 0; i < this.commentStats.stats.userStats.length; i++) {
+      if (this.isStudentFiltered(this.commentStats.stats.userStats[i])) {
+        let userStats = this.commentStats.stats.userStats[i]
+        // Comments by the filtered user for displaying on the report right-out
+        this.comments = userStats.comments
+        // Comment count gauge chart setup
+        this.chartComments = {
+          min: this.commentStats.stats.comment_min,
+          max: this.commentStats.stats.comment_max,
+          avg: this.commentStats.stats.comment_avg,
+          val: userStats.comment_count
+        }
+        // Comment count by type horizontal bar chart setup
+        this.commentCountByType = {
+          emoji: userStats.emoji_comment_count,
+          text: userStats.text_comment_count,
+          audio: userStats.audio_comment_count,
+          reply: userStats.reply_count
+        }
+      }
+    }
+
+    // Process the time on reading data for the selected user
+    const correctionFactor = 60 * 30
+    const userTimeVal = this.readingTimeData.users.find( user => this.appliedFilter.propertyFilters.user_id.test(user.user_id))
+    // set the stats values for max, min, and average
+    this.chartTimeReading = {
+      min: Math.round(this.readingTimeData.min / correctionFactor), 
+      max: Math.round(this.readingTimeData.max / correctionFactor), 
+      avg: Math.round(this.readingTimeData.avg / correctionFactor), 
+      val: userTimeVal ? Math.round(userTimeVal.value / correctionFactor) : this.chartTimeReading.min
+    }
+  }
+
+  /**
+   * This method will build the list of users for the dropdown
+   */
+  private populateStudentList(initialPass?: boolean): void {
+    // set the dropdown filter for all students
+    this.commentStats.stats.userStats.forEach((student) => {
+      this.students.push({ label: student.fullname, value: student._id })
+    })
+    if (initialPass) {
+      // set the filter to the first student
+      this.selectedStudent = this.students[0]
+
+      // set the filter to the first user
+      if (this.selectedStudent && this.selectedStudent.value) {
+        // the filterByUser method needs a user, so we'll initialize a blank one and pass the values it needs
+        let selectedUser = <User>{}
+        selectedUser._id = this.selectedStudent.value
+        selectedUser.fullname = this.selectedStudent.label
+        // activate the filter
+        this._projects.filterByUser(selectedUser)
+      }
+    }
   }
 
   /** Validates email against the same regex used on the server
