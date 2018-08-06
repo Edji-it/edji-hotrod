@@ -101,6 +101,15 @@
           )
         .col-9
           .h-1.report-text-highlighted {{ reportComment.text ? reportComment.text : '...'}}
+      .row.mt-5(*ngIf="evaluations && evaluations.length>0")
+        .col-12
+          div Feedback
+          hr.mt-0
+      //- Comment Block
+      .row(*ngIf="evaluations && evaluations.length>0")
+        .col-12(*ngFor="let evaluation of evaluations")
+          .sub-label.mb-0 {{ evaluation.createdAt | edjidate }}
+          p {{ evaluation.evaluation ? evaluation.evaluation : '' }}
     //- Summarize and Share Block
     .row.mt-5.reading-report__pdf-hidden
       .col-12

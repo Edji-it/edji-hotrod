@@ -26,6 +26,7 @@ export class ReadingReportComponent implements OnInit {
   private subscriptions: Subscription[] = []
   private currentUser: User
   public project: any
+  public evaluations: any = []
   public appliedFilter: CommentFilter = <CommentFilter>{}
   public currentStudent: any = {}
   public comments: EdjiComment[] = []
@@ -84,6 +85,7 @@ export class ReadingReportComponent implements OnInit {
             this.project = project
             // need to wait until we have the project loaded before we can proceed
             if (project && project.comments) {
+              console.log(project)
               // Get time on reading data
               this._academy.getTimeOnReading(this.project._id).pipe(take(1))
               .subscribe((readingTimeData) => {
@@ -161,6 +163,16 @@ export class ReadingReportComponent implements OnInit {
       max: Math.round(this.readingTimeData.max / correctionFactor), 
       avg: Math.round(this.readingTimeData.avg / correctionFactor), 
       val: userTimeVal ? Math.round(userTimeVal.value / correctionFactor) : this.chartTimeReading.min
+    }
+
+    // If there are evaluations from the teacher on the selected student, let's display it here
+    this.evaluations = []
+    if (this.project.report_evals && this.project.report_evals.length>0) {
+      this.project.report_evals.forEach((evaluation) => {
+        if (this.currentStudent.value===evaluation.user_id) {
+          this.evaluations.push(evaluation)
+        }
+      })
     }
   }
 
