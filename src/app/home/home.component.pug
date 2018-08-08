@@ -62,7 +62,7 @@ nav-bar
     .container
       .row
         .col-12
-          h1 What Teachers Like You Are Saying About Edji!
+          h1 What teachers like you are saying about Edji!
     ng4-twitter-timeline([dataSrc]="{sourceType: 'collection', id: '947890483635851267'}", [opts]="{tweetLimit: 10, chrome: { noheader: true }}")
   //- Row below promo
   .container
@@ -79,6 +79,7 @@ nav-bar
               li.promo-list Encourage discussion in readings with comment replies
               li.promo-list Let their voice be heard with Audio Comments
             p Hero is an ever expanding feature set to get even more out of your class readings
+            button.btn.btn-hero([routerLink]="['/hero']", fragment="top") Learn More
       .col-md-6.center.nopadding__min-screen
         .row.has-sparks.full-width__min-screen
           .flexi-img.img-fluid.promo-img__background.promo-img-3
