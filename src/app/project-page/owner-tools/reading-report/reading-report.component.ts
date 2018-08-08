@@ -219,6 +219,7 @@ export class ReadingReportComponent implements OnInit {
     let dateVal = new EdjiDatePipe().transform(date.toDateString())
     formValue.pdfName = this.currentStudent.label + "'s Reading Report - " + dateVal
     formValue.personSharing = this.currentUser.fullname
+    formValue.personSharingEmail = this.currentUser.email
 
     this.evalLoading = true
     this.saveAsPdf().then(pdf => {
