@@ -37,6 +37,11 @@ export class HeroPromoComponent implements OnInit, OnDestroy {
     ) { }
 
   ngOnInit() {
+    // Workaround for handling "jump to" fragment/anchor
+    if (this.route.snapshot.fragment) {
+      let startEl = document.getElementById(this.route.snapshot.fragment)
+      startEl && startEl.scrollIntoView()
+    }
   }
 
   ngOnDestroy() {
