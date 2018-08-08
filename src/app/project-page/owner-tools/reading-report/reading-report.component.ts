@@ -67,6 +67,7 @@ export class ReadingReportComponent implements OnInit {
     this.evaluationForm = _fb.group({
       email: [null, Validators.compose([Validators.required, this.emailValidator])],
       inputText: [null, Validators.required],
+      name: [null, Validators.required]
     })
   }
 

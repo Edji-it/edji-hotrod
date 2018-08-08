@@ -134,7 +134,7 @@
           #msgEvalRequired.alert.alert-info(
             *ngIf="evaluationForm.controls['inputText'].hasError('required') && evaluationForm.controls['inputText'].dirty"
           ) Send some feedback for this report!
-          .col-8.no-gutters.p-0.d-inline-block
+          .col-7.no-gutters.p-0.d-inline-block
             label(for="email") Email
             input#evalFormEmail(
               type="text", 
@@ -146,7 +146,17 @@
             ) We don't think that's an email...
             #msgEmailRequired.alert.alert-info(
               *ngIf="evaluationForm.controls['email'].hasError('required') && evaluationForm.controls['email'].dirty"
-            ) Make sure the you can recover your password with a valid email!
+            ) Make sure the report goes out to a valid email address!
+          .col-4.no-gutters.ml-1.p-0.d-inline-block
+            label(for="name") Name
+            input#evalFormName(
+              type="text", 
+              [formControl]="evaluationForm.controls['name']", 
+              tabindex="1"
+            )
+            #msgNameRequired.alert.alert-info(
+              *ngIf="evaluationForm.controls['name'].hasError('required') && evaluationForm.controls['name'].dirty"
+            ) Make sure you add a name to the email greeting!
           .col-4.no-gutters.p-0.mt-4.d-inline-block.text-right
             button.btn.btn-success(
               title="Make sure you've completed all the fields!", 
