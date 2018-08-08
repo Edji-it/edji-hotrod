@@ -95,7 +95,8 @@ export class AcademyService {
         "person_sharing_email": evalForm.personSharingEmail,
         "person_receiving": evalForm.name,
         "pdfName": evalForm.pdfName,
-        "pdf": pdf
+        "pdf": pdf,
+        "reading_name": evalForm.readingName
       },
       {
         headers: new HttpHeaders({

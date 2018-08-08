@@ -220,6 +220,7 @@ export class ReadingReportComponent implements OnInit {
     formValue.pdfName = this.currentStudent.label + "'s Reading Report - " + dateVal
     formValue.personSharing = this.currentUser.fullname
     formValue.personSharingEmail = this.currentUser.email
+    formValue.readingName = this.project.reading_id.title
 
     this.evalLoading = true
     this.saveAsPdf().then(pdf => {
