@@ -12,9 +12,14 @@ button#buttonNewReadingMobile.btn.btn-primary.new-reading-btn.hidden-md-up([rout
 .item-list.created-list([ngClass]="['page-'+pageNo]")
   //- Show readings with date values
   .alert.alert-info(role="alert", *ngIf="!loading && readings.length < 1 && !errorObject.readingError")
-    h4.alert-heading Create your first reading!
-    p Readings you create will be shown here, along with their Groups.
-    img.guide-video-thumb(src="/assets/images/thumbnail-first-reading.jpg", (click)="showNewReadingVideoModal = true")
+    .row
+      .col-7
+        h4.alert-heading Create your first reading!
+        p Will is here to run through the basics of creating a Reading, and how it used, to get you started.
+      .col-5
+        .guide-video-thumb
+          .icon.icon-play
+          img(src="/assets/images/thumbnail-first-reading.jpg", (click)="showNewReadingVideoModal = true")
     //- https://youtu.be/GPB8i8H8IBc
   .alert.alert-danger.alert-readings(*ngIf="errorObject.readingError", role="alert") {{ errorObject.readingError }}
   .row.loading(*ngIf="loading")
