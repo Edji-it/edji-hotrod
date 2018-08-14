@@ -69,6 +69,7 @@ import { CommentPaneComponent } from './shared/comment-pane/comment-pane.compone
 import { HttpClientModule } from '@angular/common/http';
 import { DataListModule } from 'primeng/datalist';
 import { PaginatorModule } from 'primeng/paginator';
+import { TooltipModule } from 'primeng/tooltip';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, PreloadAllModules, Router } from '@angular/router';
 import { ROUTES } from './app.routes';
@@ -191,6 +192,7 @@ const APP_PROVIDERS = [
     RouterModule.forRoot(ROUTES, { useHash: true }),
     DataListModule,
     PaginatorModule,
+    TooltipModule,
     Ng4TwitterTimelineModule,
     NgxPageScrollModule
   ],

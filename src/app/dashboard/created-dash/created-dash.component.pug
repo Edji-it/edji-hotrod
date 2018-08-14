@@ -2,7 +2,7 @@
 .row.hidden-sm-down
   .col-sm-6
     h1.no-flow Created 
-      i.icon__tooltip(placement="bottom", ngbTooltip="Readings are how you share content on Edji!")
+      i.icon__tooltip(tooltipPosition="bottom", pTooltip="Readings are how you share content on Edji!")
         span.icon.icon-circle.icon-info  i
   .col-sm-6
     button#buttonNewReading.btn.btn-primary.new-reading-btn(*ngIf="user.type == 'temp'", (click)="showLoginReqModal = true") New Reading
