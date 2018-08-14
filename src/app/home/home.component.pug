@@ -15,6 +15,20 @@ nav-bar
             //-   b live!
             .button__row.pt-2.promo-button__row
               a.btn.btn-primary(href="/project/demo") Try an Edji Reading
+  .row.jumbotron--guide-video
+      .col-md-8.mt-4([class.col-md-12]="videoBig")
+        .guide-video-wrap
+          .embed-responsive.embed-responsive-16by9
+              iframe.embed-responsive-item(
+                  src="//www.youtube.com/embed/GPB8i8H8IBc",
+                  frameborder="0",
+                  allow="autoplay; encrypted-media"
+                  allowfullscreen
+              )
+      .col-md-4.my-4(style="min-height:100px;")
+        .col__center-content.guide-video-heading
+          p.h1 See how easy it is to create and share your first Edji Reading
+  //- hr
   //- Container with Commenting and Heat Map info & images
   .container
     .row.promo-row.promo-row__no-btm-padding
