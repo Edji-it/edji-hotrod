@@ -11,15 +11,15 @@ button#buttonNewReadingMobile.btn.btn-primary.new-reading-btn.hidden-md-up([rout
 //- Our Readings!
 .item-list.created-list([ngClass]="['page-'+pageNo]")
   //- Show readings with date values
-  .alert.alert-info(role="alert", *ngIf="!loading && readings.length < 1 && !errorObject.readingError")
+  .alert.alert-info.alert-dismissible.fade(role="alert", [class.show]="!loading && readings.length < 1 && !errorObject.readingError")
     .row
       .col-7
         h4.alert-heading Create your first reading!
         p Watch Will show you the basics of creating a Reading to get you started.
       .col-5
-        .guide-video-thumb
+        .guide-video-thumb((click)="showNewReadingVideoModal = true")
           .icon.icon-play
-          img(src="/assets/images/thumbnail-first-reading.jpg", (click)="showNewReadingVideoModal = true")
+          img(src="/assets/images/thumbnail-first-reading.jpg")
     //- https://youtu.be/GPB8i8H8IBc
   .alert.alert-danger.alert-readings(*ngIf="errorObject.readingError", role="alert") {{ errorObject.readingError }}
   .row.loading(*ngIf="loading")
@@ -27,7 +27,7 @@ button#buttonNewReadingMobile.btn.btn-primary.new-reading-btn.hidden-md-up([rout
   hot-reading-card(*ngFor="let reading of readings", style="margin-bottom: 30px; float:left; width:100%;", [reading]="reading")
   <p-paginator [rows]="rows" [totalRecords]="total" (onPageChange)="loadCreatedFeed($event)"></p-paginator>
 hot-login-req(*ngIf="showLoginReqModal", (closeModal)="showLoginReqModal = false")
-.modal(*ngIf="showNewReadingVideoModal")
+.modal.show(*ngIf="showNewReadingVideoModal")
   .modal-dialog.modal-video
     button.close(aria-label="close", (click)="showNewReadingVideoModal = false")
       span &times;
