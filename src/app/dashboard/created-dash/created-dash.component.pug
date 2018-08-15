@@ -7,16 +7,17 @@
   .col-sm-6
     button#buttonNewReading.btn.btn-primary.new-reading-btn(*ngIf="user.type == 'temp'", (click)="showLoginReqModal = true") New Reading
     button#buttonNewReading.btn.btn-primary.new-reading-btn(*ngIf="user.type != 'temp'", [routerLink]="['/new-reading']") New Reading
-button#buttonNewReadingMobile.btn.btn-primary.new-reading-btn.hidden-md-up([routerLink]="[ '/new-reading' ]") New Reading
+.row.hidden-md-up
+  button#buttonNewReadingMobile.btn.btn-primary.new-reading-btn([routerLink]="[ '/new-reading' ]") New Reading
 //- Our Readings!
 .item-list.created-list([ngClass]="['page-'+pageNo]")
   //- Show readings with date values
-  .alert.alert-info.alert-dismissible.fade(role="alert", [class.show]="!loading && readings.length < 1 && !errorObject.readingError")
+  .alert.alert-info.alert-dismissible(role="alert", *ngIf="!loading && readings.length < 1 && !errorObject.readingError")
     .row
-      .col-7
+      .col-lg-7
         h4.alert-heading Create your first reading!
         p Watch Will show you the basics of creating a Reading to get you started.
-      .col-5
+      .col-lg-5.nopadding.text-center
         .guide-video-thumb((click)="showNewReadingVideoModal = true")
           .icon.icon-play
           img(src="/assets/images/thumbnail-first-reading.jpg")
