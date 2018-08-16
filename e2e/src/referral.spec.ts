@@ -54,6 +54,7 @@ describe('Referral Sharing and Rewards', () => {
             // Get referral link and save it for later
             referalCodeBox.getAttribute('value').then(text => {
                 referralLink = text
+                console.log("LINK:",referralLink)
                 // Verify referral link is longer than just "edji.it"
                 expect(referralLink.length).toBeGreaterThan(5)
             })
@@ -137,6 +138,8 @@ describe('Referral Sharing and Rewards', () => {
         it("should register with referral link, create reading, and be credited for referral", () => {
             // Log out referral user
             sidebar.clickLogOutButton()
+            // Wait for app to refresh after logout
+            browser.wait(EC.elementToBeClickable(sidebar.logo), 5000, "app did not finish refreshing within 5 seconds after logout")
             // Open referral link
             browser.get(referralLink)
             // Verify user lands on Registration page
@@ -146,7 +149,7 @@ describe('Referral Sharing and Rewards', () => {
             // Created user should land on Dashboard
             browser.wait(EC.urlContains("dashboard"), 5000, "referred user failed to register")
             // Confirm account type
-            userDetails.confirmBot()
+            userDetails.confirmBot('teacher')
             // Open referrals modal
             sidebar.clickReferralButton()
             // Verify user has not received referral credit

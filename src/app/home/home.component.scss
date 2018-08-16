@@ -211,3 +211,21 @@ li.promo-list {
         width: initial;
     }
 }
+
+.guide-video-heading {
+    width: calc(100% - 60px);
+}
+
+.jumbotron--guide-video {
+    // margin: 100px 0px;
+    background: transparent;
+}
+
+.guide-video-wrap {
+    // margin-top: -100px;
+    // margin-bottom: -100px;
+
+    @media (max-width: $tablet){
+        // margin-bottom: 30px;
+    }
+}
