@@ -2,21 +2,43 @@
 .row.hidden-sm-down
   .col-sm-6
     h1.no-flow Created 
-      i.icon__tooltip(placement="bottom", ngbTooltip="Readings are how you share content on Edji!")
+      i.icon__tooltip(tooltipPosition="bottom", pTooltip="Readings are how you share content on Edji!")
         span.icon.icon-circle.icon-info  i
   .col-sm-6
     button#buttonNewReading.btn.btn-primary.new-reading-btn(*ngIf="user.type == 'temp'", (click)="showLoginReqModal = true") New Reading
     button#buttonNewReading.btn.btn-primary.new-reading-btn(*ngIf="user.type != 'temp'", [routerLink]="['/new-reading']") New Reading
-button#buttonNewReadingMobile.btn.btn-primary.new-reading-btn.hidden-md-up([routerLink]="[ '/new-reading' ]") New Reading
+.row.hidden-md-up
+  button#buttonNewReadingMobile.btn.btn-primary.new-reading-btn([routerLink]="[ '/new-reading' ]") New Reading
 //- Our Readings!
 .item-list.created-list([ngClass]="['page-'+pageNo]")
   //- Show readings with date values
-  .alert.alert-info(role="alert", *ngIf="!loading && readings.length < 1 && !errorObject.readingError")
-    h4.alert-heading Share some text or something you wrote!
-    p Readings are a great way to explore a piece of text together, or get feedback on your own writing.
+  .alert.alert-info.alert-dismissible(role="alert", *ngIf="!loading && readings.length < 1 && !errorObject.readingError")
+    .row
+      .col-lg-7
+        h4.alert-heading Create your first reading!
+        p Watch Will show you the basics of creating a Reading to get you started.
+      .col-lg-5.nopadding.text-center
+        .guide-video-thumb((click)="showNewReadingVideoModal = true")
+          .icon.icon-play
+          img(src="/assets/images/thumbnail-first-reading.jpg")
+    //- https://youtu.be/GPB8i8H8IBc
   .alert.alert-danger.alert-readings(*ngIf="errorObject.readingError", role="alert") {{ errorObject.readingError }}
   .row.loading(*ngIf="loading")
   hot-tutorial-reading(*ngIf="!loading && readings.length < 1 && !errorObject.readingError && user.type !=='temp'")
   hot-reading-card(*ngFor="let reading of readings", style="margin-bottom: 30px; float:left; width:100%;", [reading]="reading")
   <p-paginator [rows]="rows" [totalRecords]="total" (onPageChange)="loadCreatedFeed($event)"></p-paginator>
 hot-login-req(*ngIf="showLoginReqModal", (closeModal)="showLoginReqModal = false")
+.modal.show(*ngIf="showNewReadingVideoModal")
+  .modal-dialog.modal-video
+    button.close(aria-label="close", (click)="showNewReadingVideoModal = false")
+      span &times;
+    .modal-content
+      .modal-body
+        .embed-responsive.embed-responsive-16by9
+          iframe.embed-responsive-item(
+              src="//www.youtube.com/embed/GPB8i8H8IBc",
+              frameborder="0",
+              allow="autoplay; encrypted-media"
+              allowfullscreen
+          )
+      
