@@ -32,7 +32,9 @@
                         disabled="true",
                         value="{{referralLink}}")
                       span.input-group-btn
+                        //- e2e: ngIf on copy button ensures link is ready to copy
                         button#buttonCopyReferralLink.btn.btn-primary.btn-rnd-corner-right(
+                          *ngIf="referralLink && referralLink.length > 0"
                           type="button", 
                           (click)="shareReferralCode()", 
                           name="Copy", 
