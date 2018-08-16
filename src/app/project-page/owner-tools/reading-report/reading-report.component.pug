@@ -35,12 +35,12 @@
               .row
                 .col-12
                   .sub-label.mb-0 Group Assignment
-                  .text-md [FAKE DATA] In this reading students are learning about a genre of video game and how it relates to Shakespeare, paying attention to analogies.
-              .row.mt-3
-                .col-12
-                  .sub-label.mb-0 Standards
-                  div [FAKE DATA] CCSS.ELA-LITERACY.RI.5.2
-                  .text-md [FAKE DATA] Determine two or more main ideas of a text and explain how they are supported by key details; summarize the text.
+                  .text-md {{ project.group_assignment ? project.group_assignment : '' }}
+              //- .row.mt-3
+              //-   .col-12
+              //-     .sub-label.mb-0 Standards
+              //-     div [FAKE DATA] CCSS.ELA-LITERACY.RI.5.2
+              //-     .text-md [FAKE DATA] Determine two or more main ideas of a text and explain how they are supported by key details; summarize the text.
         //- Teacher/Group Names
         .col-3
           .row
