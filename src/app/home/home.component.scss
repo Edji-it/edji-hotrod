@@ -77,7 +77,7 @@ $navy: #072649;
 .promo-header__divider {
     width: 60%;
     height: 1px;
-    margin: 5px auto 0;
+    margin: 5px auto;
     background-color: #fff;
     background: radial-gradient(circle at center, rgba(255,255,255,1),rgba(255,255,255,0));
 }
@@ -209,5 +209,23 @@ li.promo-list {
     @media (max-width: $sm-max-device) {
         height: 250px;
         width: initial;
+    }
+}
+
+.guide-video-heading {
+    width: calc(100% - 60px);
+}
+
+.jumbotron--guide-video {
+    // margin: 100px 0px;
+    background: transparent;
+}
+
+.guide-video-wrap {
+    // margin-top: -100px;
+    // margin-bottom: -100px;
+
+    @media (max-width: $tablet){
+        // margin-bottom: 30px;
     }
 }

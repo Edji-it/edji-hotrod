@@ -31,6 +31,7 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
   public readingToBeRemoved : Reading;
 
   public showLoginReqModal: boolean = false
+  public showNewReadingVideoModal: boolean = false
   public user: User
   // Joined Readings, p-datalist values
   public loading: boolean = true

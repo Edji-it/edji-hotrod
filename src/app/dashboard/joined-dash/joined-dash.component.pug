@@ -1,5 +1,5 @@
 h1.joined-header.no-flow(for="projectCodeInput") Joined
-  i.icon__tooltip(placement="bottom", ngbTooltip="These are Readings that someone else made, and you joined!")
+  i.icon__tooltip(tooltipPosition="bottom", pTooltip="These are Readings that someone else made, and you joined!")
     span.icon.icon-circle.icon-info i
 form.pb-4.hidden-md-up([formGroup]="codeForm", (ngSubmit)="addSession(codeForm.value)")
   .input-group.input-group-lg.pb-2
