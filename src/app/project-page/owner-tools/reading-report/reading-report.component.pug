@@ -105,7 +105,7 @@
         .col-12
           div Feedback
           hr.mt-0
-      //- Comment Block
+      //- Evaluation Block
       .row(*ngIf="evaluations && evaluations.length>0")
         .col-12(*ngFor="let evaluation of evaluations")
           .sub-label.mb-0 {{ evaluation.createdAt | edjidate }}

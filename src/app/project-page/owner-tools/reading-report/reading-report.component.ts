@@ -214,7 +214,7 @@ export class ReadingReportComponent implements OnInit {
    * @param formValue is the evaluation form data
    */
   public sendEval(formValue: any): void {
-    // set the pdf name here
+    // set the pdf name here and data
     let date = new Date()
     let dateVal = new EdjiDatePipe().transform(date.toDateString())
     formValue.pdfName = this.currentStudent.label + "'s Reading Report - " + dateVal
@@ -223,24 +223,44 @@ export class ReadingReportComponent implements OnInit {
     formValue.readingName = this.project.reading_id.title
 
     this.evalLoading = true
-    this.saveAsPdf().then(pdf => {
-      // convert the pdf to a data uri string
-      var pdfData = pdf.output('datauristring')
 
-      // user our academy service to package up the email details and send it off to our api
-      this._academy.sendReadingReport(formValue, pdfData)
-      .subscribe(
-        data => {
-          console.log(data)
-        },
-        error => {
-          console.error(error)
-        })
-      this.evalLoading = false
-    }, error => {
+    // create a new evaluation to save to the project
+    let evalObj = {
+      createdAt: date,
+      evaluation: formValue.inputText,
+      user_id: this.currentStudent.value
+    }
+    var projectToUpdate = this.project
+    // add the new evaluation to the project
+    projectToUpdate.report_evals.push(evalObj)
+
+    // update the project with the new evaluation, create the pdf, and then email it out
+    this._projects.update(projectToUpdate, this.project._id, true).subscribe( project => {
+      // update our project so evaluation shows in the page
+      this.project.report_evals.push(evalObj)
+      this.evaluations.push(evalObj)
+
+      this.saveAsPdf().then(pdf => {
+        // convert the pdf to a data uri string
+        var pdfData = pdf.output('datauristring')
+        
+          // user our academy service to package up the email details and send it off to our api if the project successfully updated
+          this._academy.sendReadingReport(formValue, pdfData)
+          .subscribe(
+            data => {
+              console.log(data)
+            },
+            error => {
+              console.error(error)
+            })
+          this.evalLoading = false
+      }, error => {
+        console.error(error)
+        this.evalLoading = false
+      })
+    }), error => {
       console.error(error)
-      this.evalLoading = false
-    })
+    }
     // empty out the form
     this.evaluationForm.reset()
   }
@@ -316,5 +336,6 @@ export class ReadingReportComponent implements OnInit {
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe() })
     this.students=[]
+    this.evaluations=[]
   }
 }
