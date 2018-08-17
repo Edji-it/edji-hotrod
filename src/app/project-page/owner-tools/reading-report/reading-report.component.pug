@@ -152,7 +152,7 @@
             input#evalFormName(
               type="text", 
               [formControl]="evaluationForm.controls['name']", 
-              tabindex="1"
+              tabindex="2"
             )
             #msgNameRequired.alert.alert-info(
               *ngIf="evaluationForm.controls['name'].hasError('required') && evaluationForm.controls['name'].dirty"
@@ -163,5 +163,14 @@
               type="submit", 
               [class.loading]="evalLoading", 
               [disabled]="!evaluationForm.valid", 
-              tabindex="2",
-            ) Send
+              tabindex="3",
+            ) Send Email
+          .col-4.no-gutters.p-0.mt-4.d-inline-block.text-right.float-right
+            button.btn.btn-success(
+              title="Make sure you've filled out your evaluation", 
+              type="button", 
+              [class.loading]="evalLoading", 
+              [disabled]="!evaluationForm.controls['inputText'].valid", 
+              tabindex="3",
+              (click)="addEvaluationOnly(evaluationForm.controls['inputText'].value)"
+            ) Add Evaluation

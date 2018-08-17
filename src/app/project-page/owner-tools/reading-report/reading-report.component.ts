@@ -237,27 +237,50 @@ export class ReadingReportComponent implements OnInit {
     // update the project with the new evaluation, create the pdf, and then email it out
     this._projects.update(projectToUpdate, this.project._id, true).subscribe( project => {
       // update our project so evaluation shows in the page
-      this.project.report_evals.push(evalObj)
       this.evaluations.push(evalObj)
 
-      this.saveAsPdf().then(pdf => {
-        // convert the pdf to a data uri string
-        var pdfData = pdf.output('datauristring')
-        
-          // user our academy service to package up the email details and send it off to our api if the project successfully updated
-          this._academy.sendReadingReport(formValue, pdfData)
-          .subscribe(
-            data => {
-              console.log(data)
-            },
-            error => {
-              console.error(error)
-            })
+      setTimeout(() => {
+        this.saveAsPdf().then(pdf => {
+          // convert the pdf to a data uri string
+          var pdfData = pdf.output('datauristring')
+          
+            // user our academy service to package up the email details and send it off to our api if the project successfully updated
+            this._academy.sendReadingReport(formValue, pdfData)
+            .subscribe(
+              data => {
+                console.log(data)
+              },
+              error => {
+                console.error(error)
+              })
+            this.evalLoading = false
+        }, error => {
+          console.error(error)
           this.evalLoading = false
-      }, error => {
-        console.error(error)
-        this.evalLoading = false
-      })
+        })
+      }, 1)
+    }), error => {
+      console.error(error)
+    }
+    // empty out the form
+    this.evaluationForm.reset()
+  }
+
+  public addEvaluationOnly(evalData: any): void {
+     // create a new evaluation to save to the project
+     let evalObj = {
+      createdAt: new Date,
+      evaluation: evalData,
+      user_id: this.currentStudent.value
+    }
+    var projectToUpdate = this.project
+    // add the new evaluation to the project
+    projectToUpdate.report_evals.push(evalObj)
+
+    // update the project with the new evaluation, create the pdf, and then email it out
+    this._projects.update(projectToUpdate, this.project._id, true).subscribe( project => {
+      // update our project so evaluation shows in the page
+      this.evaluations.push(evalObj)
     }), error => {
       console.error(error)
     }
@@ -336,6 +359,5 @@ export class ReadingReportComponent implements OnInit {
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe() })
     this.students=[]
-    this.evaluations=[]
   }
 }
