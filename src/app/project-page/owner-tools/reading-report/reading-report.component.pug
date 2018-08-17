@@ -16,8 +16,8 @@
       .col-4.p-0
         button.close.stats-close-btn.btn-icon--round((click)='hide.emit()' type='button')
           span(aria-hidden='true') &times;
-        button.btn.btn-success.btn-sm.float-right.mr-5((click)="goToEvalForm()") Send Copy
-        button.btn.btn-primary.btn-sm.float-right.mr-5((click)="downloadPDF()") Download
+        //- button.btn.btn-success.btn-sm.float-right.mr-5((click)="goToEvalForm()") Send Copy
+        //- button.btn.btn-primary.btn-sm.float-right.mr-5((click)="downloadPDF()") Download
   .container-fluid.container--less-pad.px-3
     #readingReport.p-4
       //- Header Block
@@ -119,7 +119,8 @@
       .col-4
         .row
           .col-12
-            div Summarize {{ currentStudent.label ? currentStudent.label : '' }}'s work with this reading, and send a PDF copy of this report to their student email, a parent, or a fellow teacher
+            //- div Summarize {{ currentStudent.label ? currentStudent.label : '' }}'s work with this reading, and send a PDF copy of this report to their student email, a parent, or a fellow teacher
+            div Summarize {{ currentStudent.label ? currentStudent.label : '' }}'s work with this reading
         .row
           .col-12
             div An image of the report
@@ -134,37 +135,37 @@
           #msgEvalRequired.alert.alert-info(
             *ngIf="evaluationForm.controls['inputText'].hasError('required') && evaluationForm.controls['inputText'].dirty"
           ) Send some feedback for this report!
-          .col-7.no-gutters.p-0.d-inline-block
-            label(for="email") Email
-            input#evalFormEmail(
-              type="text", 
-              [formControl]="evaluationForm.controls['email']", 
-              tabindex="1"
-            )
-            #msgEmailIncorrect.alert.alert-info(
-              *ngIf="evaluationForm.controls['email'].hasError('emailIncorrect') && evaluationForm.controls['email'].dirty"
-            ) We don't think that's an email...
-            #msgEmailRequired.alert.alert-info(
-              *ngIf="evaluationForm.controls['email'].hasError('required') && evaluationForm.controls['email'].dirty"
-            ) Make sure the report goes out to a valid email address!
-          .col-4.no-gutters.ml-1.p-0.d-inline-block.float-right
-            label(for="name") Name
-            input#evalFormName(
-              type="text", 
-              [formControl]="evaluationForm.controls['name']", 
-              tabindex="2"
-            )
-            #msgNameRequired.alert.alert-info(
-              *ngIf="evaluationForm.controls['name'].hasError('required') && evaluationForm.controls['name'].dirty"
-            ) Make sure you add a name to the email greeting!
-          .col-4.no-gutters.p-0.mt-4.d-inline-block.text-right.float-right
-            button.btn.btn-success(
-              title="Make sure you've completed all the fields!", 
-              type="submit", 
-              [class.loading]="evalLoading", 
-              [disabled]="!evaluationForm.valid", 
-              tabindex="3",
-            ) Send Email
+          //- .col-7.no-gutters.p-0.d-inline-block
+          //-   label(for="email") Email
+          //-   input#evalFormEmail(
+          //-     type="text", 
+          //-     [formControl]="evaluationForm.controls['email']", 
+          //-     tabindex="1"
+          //-   )
+          //-   #msgEmailIncorrect.alert.alert-info(
+          //-     *ngIf="evaluationForm.controls['email'].hasError('emailIncorrect') && evaluationForm.controls['email'].dirty"
+          //-   ) We don't think that's an email...
+          //-   #msgEmailRequired.alert.alert-info(
+          //-     *ngIf="evaluationForm.controls['email'].hasError('required') && evaluationForm.controls['email'].dirty"
+          //-   ) Make sure the report goes out to a valid email address!
+          //- .col-4.no-gutters.ml-1.p-0.d-inline-block.float-right
+          //-   label(for="name") Name
+          //-   input#evalFormName(
+          //-     type="text", 
+          //-     [formControl]="evaluationForm.controls['name']", 
+          //-     tabindex="2"
+          //-   )
+          //-   #msgNameRequired.alert.alert-info(
+          //-     *ngIf="evaluationForm.controls['name'].hasError('required') && evaluationForm.controls['name'].dirty"
+          //-   ) Make sure you add a name to the email greeting!
+          //- .col-4.no-gutters.p-0.mt-4.d-inline-block.text-right.float-right
+          //-   button.btn.btn-success(
+          //-     title="Make sure you've completed all the fields!", 
+          //-     type="submit", 
+          //-     [class.loading]="evalLoading", 
+          //-     [disabled]="!evaluationForm.valid", 
+          //-     tabindex="3",
+          //-   ) Send Email
           .col-4.no-gutters.p-0.mt-4.d-inline-block.text-right.float-right
             button.btn.btn-success(
               title="Make sure you've filled out your evaluation", 
