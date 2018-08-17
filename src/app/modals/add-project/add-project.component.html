@@ -31,7 +31,6 @@
                             <span class="custom-control-description">Text Commenting</span>
                         </label>
                     </div>
-                    <!--jzk7|20170709 - make this disabled instead of hidden after we launch-->
                     <div class="input-group pl-3" [class.disabled]="!canChooseTypes">
                         <label class="custom-control custom-checkbox">
                             <input type="checkbox" [formControl]="projectForm.controls['audioType']" class="custom-control-input">
@@ -55,6 +54,11 @@
                         <input [formControl]="projectForm.controls['customCode']" id="customCodeInput" type="text" class="form-control form-item--editor h3 mGroup" placeholder="(optional)" style="text-transform:lowercase;"/>
                     </label>
                     <div *ngIf="errors.invalidCode" id="errorInvalidCustomCode" class="alert alert-warning">Whoops, someone is already using that group code. Could you pick another?</div>
+                </div>
+                <div *ngIf="user.hero_status" class="form-group">
+                    <label for="groupInstructions">Reading Group Instructions
+                        <input [formControl]="projectForm.controls['groupInstructions']" id="groupInstructions" type="text" class="form-control form-item--editor h3 mGroup" placeholder="In today's mission, you will..."/>
+                    </label>
                 </div>
               </div>
               <div class="modal-footer">

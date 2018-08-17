@@ -25,7 +25,7 @@
       i#toggleQuestionfeed.icon-question(*ngIf="currentProject")
       label Questions
   //- Reading Report toggle
-  div(*ngIf="currentReading.questions && currentReading.questions.length>0")
+  div(*ngIf="user.hero")
     button.btn.owner-tools__btn.btn-hv.btn-reading-report(type="button", (tap)="showElseFalse('showReadingReport')")
       i#toggleReadingReport.icon-reading-report(*ngIf="currentProject")
       label Reading

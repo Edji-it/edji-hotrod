@@ -37,10 +37,10 @@ export class ReadingReportComponent implements OnInit {
   public questionCount: number = 0
   public imageCount: number = 0
   public chartTimeReading: any = {
-    min: 1, 
-    max: 4, 
-    avg: 2, 
-    val: 3
+    min: 0, 
+    max: 0, 
+    avg: 0, 
+    val: 0
   }
   public chartComments: any = {
     min: 1, 
@@ -91,22 +91,23 @@ export class ReadingReportComponent implements OnInit {
               this._academy.getTimeOnReading(this.project._id).pipe(take(1))
               .subscribe((readingTimeData) => {
                 this.readingTimeData = readingTimeData.time_on_reading
-                // need a 1 millisecond delay for the comment stats getter to evaluate
-                setTimeout(() => {
-                  // only run this if we have data for any student
-                  if (this.commentStats.stats.userStats && this.commentStats.stats.userStats.length > 0) {
-                    if (this.students.length===0) {
-                      this.populateStudentList(true)
-                    } else {
-                      this.populateStudentList()
-                    }
-                    this.buildReport()
-                  }
-                }, 1)
+                this.processTimeChart()
               },
               (error) => {
                 console.error(error)
               })
+              // need a 1 millisecond delay for the comment stats getter to evaluate
+              setTimeout(() => {
+                // only run this if we have data for any student
+                if (this.commentStats.stats.userStats && this.commentStats.stats.userStats.length > 0) {
+                  if (this.students.length===0) {
+                    this.populateStudentList(true)
+                  } else {
+                    this.populateStudentList()
+                  }
+                  this.buildReport()
+                }
+              }, 1)
             }
           }
         },
@@ -154,26 +155,30 @@ export class ReadingReportComponent implements OnInit {
         }
       }
     }
+  }
 
-    // Process the time on reading data for the selected user
-    const correctionFactor = 60 * 30
-    const userTimeVal = this.readingTimeData.users.find( user => this.currentStudent.value===user.user_id)
-    // set the stats values for max, min, and average
-    this.chartTimeReading = {
-      min: Math.round(this.readingTimeData.min / correctionFactor), 
-      max: Math.round(this.readingTimeData.max / correctionFactor), 
-      avg: Math.round(this.readingTimeData.avg / correctionFactor), 
-      val: userTimeVal ? Math.round(userTimeVal.value / correctionFactor) : this.chartTimeReading.min
-    }
+  // Process the time on reading data for the selected user
+  private processTimeChart(): void {
+    if (this.readingTimeData && this.readingTimeData.users.length > 0) {
+      const correctionFactor = 60 * 30
+      const userTimeVal = this.readingTimeData.users.find( user => this.currentStudent.value===user.user_id)
+      // set the stats values for max, min, and average
+      this.chartTimeReading = {
+        min: Math.round(this.readingTimeData.min / correctionFactor), 
+        max: Math.round(this.readingTimeData.max / correctionFactor), 
+        avg: Math.round(this.readingTimeData.avg / correctionFactor), 
+        val: userTimeVal ? Math.round(userTimeVal.value / correctionFactor) : this.chartTimeReading.min
+      }
 
-    // If there are evaluations from the teacher on the selected student, let's display it here
-    this.evaluations = []
-    if (this.project.report_evals && this.project.report_evals.length>0) {
-      this.project.report_evals.forEach((evaluation) => {
-        if (this.currentStudent.value===evaluation.user_id) {
-          this.evaluations.push(evaluation)
-        }
-      })
+      // If there are evaluations from the teacher on the selected student, let's display it here
+      this.evaluations = []
+      if (this.project.report_evals && this.project.report_evals.length>0) {
+        this.project.report_evals.forEach((evaluation) => {
+          if (this.currentStudent.value===evaluation.user_id) {
+            this.evaluations.push(evaluation)
+          }
+        })
+      }
     }
   }
 

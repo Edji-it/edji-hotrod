@@ -66,6 +66,12 @@ nav-bar([pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'", [canPublish]
             ss-multiselect-dropdown(id="subjectDropdown",[options]="subjects", formControlName="subjects", [settings]="subjectDropSettings")
             #errorTitle.alert.alert-warning.mt-2(*ngIf="readingForm.controls['subjects'].hasError('required') && (readingForm.controls['subjects'].dirty || submitted)") 
               | Please select at least one Subject area that this Reading applies to.
+          //- Reading Group Instructions section
+          .form-group(*ngIf="user.hero")
+            label Group Instructions
+              p.sub-label Provide your students with instructions for this reading. Instructions can be changed whenever you make a new group
+              .input-group
+                input#readingInstructions.form-control.form-item--editor.h3(type="text", placeholder="Reading Group Instructions", [formControl]="readingForm.controls['instructions']")
           //- Body Section
               - Includes "reading content" and "source"
           .form-group.medium-wrap(style="position:relative;")

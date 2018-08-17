@@ -47,10 +47,13 @@ export class AddProjectModal implements OnInit {
       textType: true,
       audioType: this.commentTypes.indexOf('audio') > -1 ? true : false,
       replyType: this.commentTypes.indexOf('reply') > -1 ? true : false,
-      customCode: ''
+      customCode: '',
+      groupInstructions: ''
     })
 
     this.canChooseTypes = this._auth.getUser().hero_status
+
+    console.log(this.reading)
   }
 
   /**

@@ -154,7 +154,8 @@ export class NewReadingPage implements OnInit {
             source: [null, null],
             public: ['true'],
             subjects: [[], Validators.required],
-            grade_levels: [[], Validators.required]
+            grade_levels: [[], Validators.required],
+            instructions: [null, null] 
         });
 
         // Define the user object.
@@ -208,7 +209,8 @@ export class NewReadingPage implements OnInit {
                             subjects: this.reading.subjects,
                             grade_levels: this.reading.grade_levels,
                             source: this.reading.source,
-                            public: this.reading.public.toString()
+                            public: this.reading.public.toString(),
+                            instructions: this.reading.instructions
                         });
                         this.versionId = this.reading.version_id;
                         if (this.reading.owner_id) {
@@ -600,7 +602,7 @@ export class NewReadingPage implements OnInit {
                             // Get authorized comment types
                             let commentTypes = this._auth.getAllowedCommentTypes()
 
-                            this._projects.create(data._id, { 'label' : form.label, 'types' : commentTypes, 'code': form.customCode })
+                            this._projects.create(data._id, { 'label' : form.label, 'types' : commentTypes, 'code': form.customCode, 'group_instructions': form.instructions })
                                 .subscribe( (project) => {
                                     this.addLoadingD = false
                                     this.addLoadingP = false
