@@ -24,6 +24,7 @@ export class Sidebar {
     public heatButton = element(by.id("toggleHeatVision"))
     public heatButtonMobile = element(by.id("toggleHeatVisionMobile"))
     public ownerToolToggleButton = element(by.id("buttonOwnerToolToggle"))
+    public readingReportButton = element(by.id("toggleReadingReport"))
 
     public backToDash(): void {
         let modalCloseBtn = element(by.css(".show .modal button.close"));

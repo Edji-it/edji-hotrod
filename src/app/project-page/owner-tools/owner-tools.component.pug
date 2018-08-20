@@ -71,6 +71,14 @@
       )
         i#toggleQuestionfeedMobile.icon-question.owner-tool-icon-mobile(*ngIf="currentProject")
         //- label Questions
+    //- Reading Report pane
+    button.btn.btn-icon--circle-shadow.owner-options--mobile(
+      *ngIf="user.hero"
+      type="button",
+      (tap)="showElseFalse('showReadingReport'); ownerToolShow=!ownerToolShow", 
+      [class.btn-show--animation]="ownerToolShow"
+    )
+      i#toggleReadingReportMobile.icon-reading-report(*ngIf="currentProject")
   a#buttonOwnerToolToggle.btn.btn-icon--circle-shadow.mobile-menu-spot((tap)="ownerToolShow=!ownerToolShow")
     span(style="font-size: 11px;") Tools
 
