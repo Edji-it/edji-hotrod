@@ -11,7 +11,7 @@ import { AuthService } from '../_services'
   templateUrl: './hero-promo.component.pug',
   styleUrls: ['./hero-promo.component.scss']
 })
-export class HeroPromoComponent implements OnInit, OnDestroy {
+export class HeroPromoPageComponent implements OnInit, OnDestroy {
 
   public countdownDate
   public countdownText: string
