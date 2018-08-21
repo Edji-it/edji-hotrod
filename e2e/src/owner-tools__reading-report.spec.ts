@@ -14,7 +14,7 @@ describe('Project Page as an owner using reading report: ', () => {
   let sidebar = new Sidebar()
   let home = new Home()
   let EC = protractor.ExpectedConditions
-  var uniqueEval: string = new Date().valueOf().toString()
+  var uniqueEval: string = new Date().valueOf().toString() + '-eval'
 
   beforeAll(() => {
     login.getPage()
@@ -30,7 +30,7 @@ describe('Project Page as an owner using reading report: ', () => {
     // Id for Owner Tools Test Reading owned by Teach/Teach
     browser.get("/#/dashboard")
     // Open Reading Report project
-    home.enterProjectCodeFromHome('readingreport')
+    project.getReadingReportPage()
   })
 
   afterAll(() => {
@@ -38,13 +38,7 @@ describe('Project Page as an owner using reading report: ', () => {
     sidebar.logout()
   })
 
-  /* ---- Project Tests ------------------------- */
-
-  // it('should see Edji in the title', () => {
-  //   let subject = browser.getTitle()
-  //   let result  = 'Edji'
-  //   browser.wait(EC.titleContains(result), 5000, 'Title should contain "Edji".')
-  // })
+  /* ---- Reading Report Tests ------------------------- */
 
   // open the reading report and verify it's open
   it("should open the reading report and verify it's open", () => {
@@ -60,7 +54,7 @@ describe('Project Page as an owner using reading report: ', () => {
   })
 
   // verify there is a comment in the count and the count is greater than 0 for the initial student
-  it("should make comment on reading and verify there is a comment in the count on the report", () => {
+  it("verify there is a comment in the count and the count is greater than 0 for the initial student", () => {
     // Need to check for and click the owner tools button if its showing
     sidebar.ownerToolToggle()
         
@@ -74,8 +68,6 @@ describe('Project Page as an owner using reading report: ', () => {
     // verify the comment count is greater than 0
     let gaugeValue = element(by.id("gaugeValue"))
     browser.wait(EC.visibilityOf(gaugeValue), 3000, 'not able to find the gauge value')
-    // expect(gaugeValue.innerHTML).toBeGreaterThan(1, 'comment count is not greater than 1')
-
     gaugeValue.getText().then((count) => {
       expect(count).toBeGreaterThan(1, 'comment count is not greater than 1')
     })
@@ -100,6 +92,7 @@ describe('Project Page as an owner using reading report: ', () => {
 
     // Verify the evaluation was added
     let evaluations = element.all(by.css('.evaluation_text'))
+    browser.wait(EC.textToBePresentInElement(element(by.id("evalFormText")), ''), 3000, "evaluation never was added to the report")
     evaluations.last().getText().then((evaluation) => {
       expect(evaluation).toBe(uniqueEval, 'never saw the latest evaluation get added')
     })
@@ -125,8 +118,37 @@ describe('Project Page as an owner using reading report: ', () => {
     browser.wait(EC.invisibilityOf(element(by.id("readingReport"))), 3000, 'reading report never closed')
   })
 
-  // // verify you can open the dropdown for student selection and change the student
-  // it("should verify you can open the dropdown for student selection and change the student", () => {
-    
-  // })
+  // verify you can open the dropdown for student selection and change the student
+  it("should verify you can open the dropdown for student selection and change the student", () => {
+    sidebar.ownerToolToggle()
+        
+    // Open Reading Report
+    browser.wait(EC.elementToBeClickable(sidebar.readingReportButton), 5000, "never found the reading report button")
+    sidebar.readingReportButton.click()
+
+    // Wait for report to open up
+    browser.wait(EC.elementToBeClickable(element(by.id("studentSelector"))), 3000, "never saw student filter dropdown on reading report")
+
+    // verify the audio comment count is greater than or equal to 1 for the default (Test Hero)
+    element.all(by.css('.count-block.count-block__audio'))
+      .count()
+      .then((count) => {
+          expect(count >= 1).toBeTruthy('Test Hero audio count was supposed to be equal to or greater than 1 on the reading report')
+      })
+
+    // Click on the student dropdown to open it up
+    browser.wait(EC.elementToBeClickable(element(by.id("studentSelector"))), 3000, "never saw student selection dropdown")
+    element(by.id("studentSelector")).click()
+
+    // Click on the other student in the dropdown
+    browser.wait(EC.elementToBeClickable(element(by.css("li.ui-dropdown-item:nth-child(2)"))), 3000, "never saw second student in the dropdown")
+    element(by.css("li.ui-dropdown-item:nth-child(2)")).click()
+
+    // verify the audio comment count is 0 for the second student (Josh)
+    element.all(by.css('.count-block.count-block__audio'))
+      .count()
+      .then((count) => {
+          expect(count == 0).toBeTruthy('Audio count value on the reading report was supposed to change on student selection change')
+      })
+  })
 })
