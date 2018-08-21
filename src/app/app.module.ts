@@ -60,7 +60,7 @@ import { NoContentComponent } from './no-content'
 import { AccountComponent, ChangePassComponent, UploadAvatarModal } from './account'
 import { LoginComponent } from './login';
 import { ResetPassPage } from './reset-pass/reset-pass-page.component';
-import { HeroPromoComponent } from './hero-promo/hero-promo.component';
+import { HeroPromoPageComponent } from './hero-promo/hero-promo.component';
 import { HeroPricingComponent } from './hero-pricing/hero-pricing.component';
 import { DiscoverFeedComponent } from './discover-feed/discover-feed.component';
 import { OAuthComponent } from './oauth-redirect/oauth-redirect.component'
@@ -144,7 +144,7 @@ const APP_PROVIDERS = [
     NewReadingPage,
     GradeSelector,
     OAuthComponent,
-    HeroPromoComponent,
+    HeroPromoPageComponent,
     HeroPricingComponent,
     DiscoverFeedComponent,
     DiscoverAddMetaModal,
@@ -171,7 +171,7 @@ const APP_PROVIDERS = [
     NoContentComponent,
     UserDetailsUpdateModal,
     ReadingCardComponent,
-    HeroPromoComponent,
+    HeroPromoPageComponent,
     HeroPricingComponent,
     ScrollProgressComponent,
     LicenseRedirectComponent,

@@ -430,3 +430,61 @@ input[type=text].input-noborder, input[type=password].input-noborder, input[type
 	margin-top: 0.25rem;
 	color: #ed4c5c;
 }
+
+// Logo
+
+.nav-bar__logo-wrap {
+	float: left; 
+	padding: 8px;
+	height: 100%;
+}
+
+.nav-bar__logo {
+	height: $navHeight;
+	width: auto;
+	cursor: pointer;
+	padding: 5px;
+
+	&:hover {
+		opacity: 0.8;
+	}
+
+	&-h  {
+		@extend .nav-bar__logo;
+		padding: 0px;
+		// Carefully aligning the "E" with the other logo
+		height: $navHeight - 17px;
+		margin-top: -2px;
+		margin-left: -4px;
+	}
+}
+
+.nav-bar {
+	position: fixed;
+	top: 0;
+	left: 0;
+	padding: 0px;
+	width: 100%;
+	height: $navHeight;
+	text-align: center;
+	background: $sideBarBg; 
+	z-index: 6001;
+	// border-right: none;
+	border: $navBorder;
+	box-shadow: $navShadow;
+
+	& .logo-button {
+		width: 80px;
+		height: auto;
+	}
+
+	&.on-top {
+		z-index: 5000 + 2000;
+	}
+
+	@media(max-width: 576px) {
+		// swap to nav along top
+    	height: $navHeight;
+		width: 100%;
+  	}
+}

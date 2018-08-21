@@ -111,8 +111,14 @@ $sansFontFamily: 'Roboto', sans-serif;
 // Layout Dimensions
 $base-pad: 30px;
 
+$navBorder: 1px solid #DEDEDE;
+$navShadow: 0px 1px 10px 3px rgba(0,0,0,0.075);
+$navUserWidth: 120px;
+$navPadY: 14px;
+$navHeight: 70px;
 $navBarHeight: 68px;
 $sideBarWidth: 100px;
+$sideBarBg: #fff;
 
 $zLow: 1000;
 $zMid: 5000;
