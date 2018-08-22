@@ -41,7 +41,7 @@ button, .button, .btn { //, [class*='btn']
     /* Rectangle Copy 14: */
     background-color: #eaeaea !important;
     background-image: radial-gradient(50% -88%, #F4F4F4 95%, #FFFFFF 100%) !important;
-    border: 1px solid #D3D3D3 !important;
+    border: $btnBorderWidth solid #D3D3D3 !important;
     box-shadow: -1px 1px 0 0 #FFFFFF;
     border-radius: 1px;
     // cursor: not-allowed;
@@ -161,84 +161,86 @@ button, .button, .btn { //, [class*='btn']
 
 .btn.btn-primary {
   background-color: $btnPrimaryBg;
-  background-image: linear-gradient(180deg, #FFFFFF 7%, $btnPrimaryBg 100%);
-  border: 1px solid $btnPrimaryColor;
-  border-radius: 1px;
+  // background-image: linear-gradient(180deg, #FFFFFF 7%, $btnPrimaryBg 100%);
+  border: $btnBorderWidth solid $btnPrimaryColor;
+  border-radius: $btnBorderRadius;
   color: $btnPrimaryColor;
+  box-shadow: 0 4px 2px -2px rgba($btnPrimaryColor,0.5);
 
   &.loading {
     background: darken($btnPrimaryBg, 20%);
   }
 
   &:hover, &:active, &:focus {
-    background: $btnPrimaryBg; 
-    box-shadow: 0px 0px 10px 0px #CFF1FF;
+    box-shadow: 0 0px 15px 0px rgba($btnPrimaryFocusColor,0.5);
+    background: $btnPrimaryFocusColor;
+    color: #fff;
   }
 }
 
-.btn.btn-action {
-  background-color: #ffffff;
-  background-image: linear-gradient(180deg, #FFFFFF 7%, $btnActionBg 100%);
-  border: 1px solid $btnActionColor;
-  border-radius: 1px;
+.btn.btn-action, .btn.btn-success  {
+  background-color: $btnActionBg;
+  border: $btnBorderWidth solid $btnActionColor;
+  border-radius: $btnBorderRadius;
   color: $btnActionColor;
+  box-shadow: 0 4px 2px -2px rgba($btnActionColor,0.5);
 
   &.loading {
     background: #cdcdcd;
   }
 
   &:hover, &:active, &:focus, &.active {
-    background: desaturate(darken($btnActionBg, 20%), 20%); 
+    box-shadow: 0 0px 15px 0px rgba($btnActionFocusColor,0.5);
+    background: $btnActionFocusColor; 
+    color: #fff;
   }
 }
 
 .btn.btn-hero {
-  background-color: #ffffff;
-  background-image: linear-gradient(180deg, #FFFFFF 7%, $btnHeroBg 100%);
-  border: 1px solid $btnHeroColor;
-  border-radius: 1px;
-  color: $btnHeroColor;
+  background-color: $btnHeroColor;
+  // background-image: linear-gradient(180deg, #FFFFFF 7%, $btnHeroBg 100%);
+  border: $btnBorderWidth solid $btnHeroColor;
+  border-radius: $btnBorderRadius;
+  color: #fff;
+  box-shadow: 0 4px 2px -2px rgba($btnHeroColor,0.5);
+
+  &:not([href]):not([tabindex]) {
+    color: #fff;
+  }
 
   &.loading {
     background: $btnHeroBg;
   }
 
-  &:hover, &:active, &:focus, &.active {
-    background: $btnHeroBg; 
-    box-shadow: 0px 0px 10px 0px #ffe4e4;
-  }
-}
-
-.btn.btn-success {
-  background-color: #ffffff;
-  background-image: linear-gradient(180deg, #FFFFFF 7%, $btnSuccessBg 100%);
-  border: 1px solid $btnSuccessColor;
-  border-radius: 1px;
-  color: $btnSuccessColor;
-
-  &.loading {
-    background: darken($btnSuccessBg, 20%);
+  &.active {
+    background: #fff;
+    color: $btnHeroColor;
   }
 
-  &:hover, &:active, &:focus, &.active {
-    background: darken($btnSuccessBg, 20%);
+  &:hover, &:active, &:focus {
+    background: $btnHeroFocusColor; 
+    border-color: $btnHeroColor;
+    color: #fff;
+    box-shadow: 0 0px 15px 0px rgba($btnHeroFocusColor,0.5);
   }
 }
 
 .btn-secondary { 
   color: $btnSecondaryColor;
-  border: $btnSecondaryBorder;
+  border: $btnBorderWidth solid $btnSecondaryColor;
   background-color: $btnSecondaryBg;
-  background-image: linear-gradient(180deg, #FFFFFF 7%, $btnSecondaryBg 100%);
+  border-radius: $btnBorderRadius;
+  box-shadow: 0 4px 2px -2px rgba($btnSecondaryColor,0.5);
 
   &.loading {
     background: darken($btnSecondaryBg, 20%);
   }
 
   &:hover, &:active, &:focus {
-    background: $btnSecondaryBg;
-    color: $btnSecondaryColor;
-    box-shadow: 0px 0px 10px 0px #E1E1E1;
+    background: $btnSecondaryFocusColor;
+    border-color: $btnSecondaryColor;
+    color: #fff;
+    box-shadow: 0 0px 15px 0px rgba($btnSecondaryFocusColor,0.5);
   }
 
   &:disabled {
@@ -312,9 +314,6 @@ button, .button, .btn { //, [class*='btn']
 
   &:hover, &:active, &:focus {
     text-shadow: none;
-    &:before {
-      // color: $purple;
-    }
   }
 }
 
@@ -334,6 +333,22 @@ button, .button, .btn { //, [class*='btn']
     text-shadow: none;
     background: rgba(0,0,0,0.1);
     opacity: 1;
+  }
+}
+
+.btn--hover-icon {
+  & .icon {
+    opacity: 0;
+    position: absolute;
+    left: 100%;
+    margin-left: 0.5em;
+    transition: opacity ease 400;
+  }
+
+  &:hover, &:focus {
+    & .icon {
+      opacity: 1;
+    }
   }
 }
 
@@ -474,6 +489,9 @@ pre.btn {
   width: 80% !important;
 }
 
+.input-group > .input-group-btn {
+  margin-left: -3px;
+}
 // Small padding/offset adjustments
 .input-group-lg > .input-group-btn > .btn {
   padding: 0.5rem 1.5rem;

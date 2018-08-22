@@ -11,12 +11,14 @@ import { DashboardComponent } from './dashboard';
 import { NoContentComponent } from './no-content';
 import { LoginComponent } from './login';
 import { ResetPassPage } from './reset-pass/reset-pass-page.component';
-import { HeroPromoComponent } from './hero-promo/hero-promo.component';
+import { HeroPromoPageComponent } from './hero-promo/hero-promo.component';
 import { HeroPricingComponent } from './hero-pricing/hero-pricing.component';
 import { DiscoverFeedComponent } from "./discover-feed/discover-feed.component";
 import { OAuthComponent } from './oauth-redirect/oauth-redirect.component';
 import { LicenseRedirectComponent } from './license-redirect/license-redirect.component';
 import { LicenseWelcomeComponent } from './license-welcome/license-welcome.component';
+import { TeamPageComponent } from './team-page/team-page.component';
+import { PromoPageComponent } from './promo/promo.component';
 
 
 export const ROUTES: Routes = [
@@ -33,8 +35,10 @@ export const ROUTES: Routes = [
   { path: 'new-reading', component: NewReadingPage, canActivate: [AuthService] },
   { path: 'new-reading/:id', component: NewReadingPage, canActivate: [AuthService] },
   { path: 'reset-password', component: ResetPassPage },
-  { path: 'hero', component: HeroPromoComponent, pathMatch: 'full' },
+  { path: 'hero', component: HeroPromoPageComponent, pathMatch: 'full' },
   { path: 'pricing', component: HeroPricingComponent, pathMatch: 'full'  },
+  { path: 'promo', component: PromoPageComponent, pathMatch: 'full'  },
+  { path: 'about', component: TeamPageComponent },
   { path: 'academy', loadChildren: './academy/academy.module#AcademyModule' },
   { path: 'oauth/:type', component: OAuthComponent, pathMatch: 'full' },
   { path: 'not-found',    component: NoContentComponent, pathMatch: 'full' },

@@ -1,0 +1,61 @@
+#top
+nav-bar
+.container
+  .row
+    .col-12
+      .jumbotron.jumbotron--blue-sky(style="margin-top:60px; position: relative;")
+        .title-card About Edji
+        h1 From Will's classroom, to yours
+        .col-md-10.offset-md-1
+          p
+            | Edji started in the classroom of Will Stewart, a 5th-grade teacher who noticed a problem in his class. 
+          p 
+            | His students didn’t love reading, in fact many barely tolerated it. When they read, they were disengaged and Will struggled to help them get excited about the text. He couldn’t blame them, the PDFs and articles were stuck in apps only really meant for viewing. His students were prohibited by their devices from writing down their thoughts, discussing with each other, and sharing comments with their teacher. Will dreamed of a way to engage students with reading in a way that allowed them to share their thoughts with him and their classmates. He had an idea, went on to pursue that idea at a Startup Weekend event, where he formed the Edji dream team.
+          p
+            | Two and a half years later, Edji is the collaborative classroom reading tool that inspires his students to love reading. Will uses it every day to share articles and listen to his students' thoughts.
+          p
+            | Let us help you inspire a love for reading too.
+          p.text-right
+            i Keep Reading!
+          p.text-right
+            | The Edji Team
+  .row.row-xl-pad
+    .col-12
+      h2.text-center.big-light 
+        | Meet the
+        img(src="assets/images/logo-3.2-mark.svg", style="height: 1.5em; vertical-align: top; margin: 0.5em;")
+        | Team
+    .col-lg-3.col-md-4.col-sm-6.mb-4(*ngFor="let player of players")
+      .player-card.card
+        img.card-img([attr.src]="player.photo")
+        .card-block
+          .card-title 
+            .emoji_wrap([innerHtml]="player.emoji | emojione")
+            | {{ player.name }}        
+          .player-title {{ player.title }}
+          .mt-2
+            label.mb-0 Favorite Book
+            p {{ player.book }}
+  .row.row-xl-pad
+    .col-12
+      .card.card-inverse.navy(style="overflow:hidden;")
+        .card-block
+          .row
+            .col-lg-6(style="padding-bottom:40px;")
+              h1.card-title Supporting Edji
+              p.on-dark Edji is a small company, and we aren’t backed by large corporations or venture capital.  We love creating Edji and inspiring young minds to think differently about reading. 
+              p.on-dark With each subscription to Edji Hero, you are letting us know that you enjoy Edji too. With your purchase, you are supporting more reliable Edji access and expanded features for both free and Hero users everywhere!
+              a.btn.btn-hero([routerLink]="['/hero']") Support Edji
+            .col-lg-6(style="min-height:350px;")
+              img.map-fill(src="/assets/images/promo/mn-map-zoom.png")
+       
+
+    //- ADD MAP ONCE GOOGLE HAS VERIFIED OUR ADDRESS
+  //- .row  
+  //-   .embed-responsive.embed-responsive-21by9
+  //-     iframe(
+  //-       frameborder="0",
+  //-       style="border:0",
+  //-       src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBqYeeM9M_IM1b71yxBah74_7E68-lTUMg&q=4006+Nicollet+Ave,Minneapolis,+MN",
+  //-       allowfullscreen
+  //-     )

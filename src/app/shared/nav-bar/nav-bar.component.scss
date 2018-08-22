@@ -1,12 +1,5 @@
 @import '../../../sass/base/variables';
 
-$navHeight: 70px;
-$sideBarBg: #fff;
-$navBorder: 1px solid #DEDEDE;
-$navShadow: 0px 1px 10px 3px rgba(0,0,0,0.075);
-$navUserWidth: 120px;
-$navPadY: 15px;
-
 $lightBorder: 1px solid #f1f1f1;
 $purple: rgb(150, 40, 255);
 
@@ -28,35 +21,6 @@ $purple: rgb(150, 40, 255);
 		}
 	}
 
-.nav-bar {
-	position: fixed;
-	top: 0;
-	left: 0;
-	padding: 0px;
-	width: 100%;
-	height: $navHeight;
-	text-align: center;
-	background: $sideBarBg; 
-	z-index: 6001;
-	// border-right: none;
-	border: $navBorder;
-	box-shadow: $navShadow;
-
-	& .logo-button {
-		width: 80px;
-		height: auto;
-	}
-
-	&.on-top {
-		z-index: 5000 + 2000;
-	}
-
-	@media(max-width: 576px) {
-		// swap to nav along top
-    	height: $navHeight;
-		width: 100%;
-  	}
-}
 .sliding-pane {
 	// Put sliding pane under the sideBar
 	// But above comments!
@@ -245,24 +209,6 @@ a.nav-bar__link {
 	}
 }
 
-// Logo
-
-.nav-bar__logo-wrap {
-	float: left; 
-	padding: 8px;
-	height: 100%;
-}
-
-.nav-bar__logo {
-	height: $navHeight;
-	width: auto;
-	cursor: pointer;
-	padding: 5px;
-
-	&:hover {
-		opacity: 0.8;
-	}
-}
 
 .nav-bar__btn {
 	float: right;
@@ -272,11 +218,23 @@ a.nav-bar__link {
 	vertical-align: middle;
 	margin: 15px 8px 15px 0px;
 
+	&.btn-sm {
+		margin: 23px 8px 23px 0px;
+		min-width: 90px;
+	}
+
 	@media(max-width: $desktop) {
 		font-size: 14px;
 		min-width: 10px;
 		padding: 12px 10px;
 		margin: 15px 3px;
+
+		&.btn-sm {
+			font-size: 10px;
+			padding:0.25rem 0.5rem;
+			margin: 23px 8px 23px 0px;
+			min-width: 90px;
+		}
 	}
 }
 
@@ -395,7 +353,7 @@ div.sliding-pane.from-left.slide-in {
 .nav__join-code {
 	max-height: 60%;
 	margin-top: $navPadY;
-	margin-right: .5em;
+	// margin-right: .5em;
 	float: right;
 }
 

@@ -8,10 +8,10 @@ import { AuthService } from '../_services'
 
 @Component({
   selector: 'app-hero-promo',
-  templateUrl: './hero-promo.component.html',
+  templateUrl: './hero-promo.component.pug',
   styleUrls: ['./hero-promo.component.scss']
 })
-export class HeroPromoComponent implements OnInit, OnDestroy {
+export class HeroPromoPageComponent implements OnInit, OnDestroy {
 
   public countdownDate
   public countdownText: string
@@ -19,9 +19,13 @@ export class HeroPromoComponent implements OnInit, OnDestroy {
   public subMsg : string
   public subError: boolean
   public subSuccess: boolean
+  public cancelGetPriceCall: boolean = false
+
+  // modal vars
   public showLoginModal: boolean
   public showHeroSubModal: boolean
-  public cancelGetPriceCall: boolean = false
+  public showRequestAcademyModal: boolean
+  public loginModalHeader: string = "Please log in or register"
 
   private subscriptions: Subscription[] = []
 
@@ -33,6 +37,11 @@ export class HeroPromoComponent implements OnInit, OnDestroy {
     ) { }
 
   ngOnInit() {
+    // Workaround for handling "jump to" fragment/anchor
+    if (this.route.snapshot.fragment) {
+      let startEl = document.getElementById(this.route.snapshot.fragment)
+      startEl && startEl.scrollIntoView()
+    }
   }
 
   ngOnDestroy() {

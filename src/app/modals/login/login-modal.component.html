@@ -28,7 +28,7 @@
       <div *ngIf="guestLogin" class="modal-footer">
         <p class="center">Wait! I have an account and want to use it!</p>
         <div class="center">
-          <button id="gotoAccountLoginButton" (click)="guestLogin = false">Login with Account</button>
+          <button class="btn btn-secondary" id="gotoAccountLoginButton" (click)="guestLogin = false">Login with Account</button>
         </div>
       </div>
       <div *ngIf="!guestLogin" class="modal-footer">

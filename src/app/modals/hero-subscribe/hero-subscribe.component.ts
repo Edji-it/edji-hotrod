@@ -11,7 +11,7 @@ declare var Stripe: any
 
 @Component({
   selector: 'hero-subscribe-modal',
-  templateUrl: './hero-subscribe.component.html',
+  templateUrl: './hero-subscribe.component.pug',
   styleUrls: ['./hero-subscribe.component.scss']
 })
 export class HeroSubscribeComponent implements OnInit {

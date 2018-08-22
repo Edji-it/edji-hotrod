@@ -21,7 +21,8 @@ import {
     UserInitialsPipe 
   } from './_pipes'
 import { ShareCodeComponent } from "./modals/share-code/share-code.component"
-import { ReferralModalComponent, HeroSubscribeComponent, LicenseInviteComponent } from "./modals"
+import { ReferralModalComponent, HeroSubscribeComponent, RequestAcademyModal, LicenseInviteComponent } from "./modals"
+import { PromoPageComponent } from './promo/promo.component'
 
 let SHARED_DECLARATIONS = [
     AddClassPipe,
@@ -35,8 +36,9 @@ let SHARED_DECLARATIONS = [
     LinkifyPipe, 
     NavBarComponent,
     ReferralModalComponent,
-    SubjectPipe, 
+    RequestAcademyModal,
     ShareCodeComponent,
+    SubjectPipe, 
     UserInitialsPipe,
 ]
 
@@ -58,7 +60,8 @@ let SHARED_IMPORTS = [
       * - SharedModule shouldn't need any private components
       */
     declarations: [
-        SHARED_DECLARATIONS
+        SHARED_DECLARATIONS,
+        PromoPageComponent
     ],
     /**
      * Exports are made available to children modules

@@ -11,6 +11,7 @@ import { AppComponent } from './app.component'
 import { SharedModule } from './app-shared.module';
 
 import { Ng4TwitterTimelineModule } from './home/twitter-timeline';
+import { NgxPageScrollModule } from 'ngx-page-scroll';
 
 const { version: appVersion } = require('../../package.json')
 
@@ -59,7 +60,7 @@ import { NoContentComponent } from './no-content'
 import { AccountComponent, ChangePassComponent, UploadAvatarModal } from './account'
 import { LoginComponent } from './login';
 import { ResetPassPage } from './reset-pass/reset-pass-page.component';
-import { HeroPromoComponent } from './hero-promo/hero-promo.component';
+import { HeroPromoPageComponent } from './hero-promo/hero-promo.component';
 import { HeroPricingComponent } from './hero-pricing/hero-pricing.component';
 import { DiscoverFeedComponent } from './discover-feed/discover-feed.component';
 import { OAuthComponent } from './oauth-redirect/oauth-redirect.component'
@@ -68,11 +69,13 @@ import { CommentPaneComponent } from './shared/comment-pane/comment-pane.compone
 import { HttpClientModule } from '@angular/common/http';
 import { DataListModule } from 'primeng/datalist';
 import { PaginatorModule } from 'primeng/paginator';
+import { TooltipModule } from 'primeng/tooltip';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, PreloadAllModules, Router } from '@angular/router';
 import { ROUTES } from './app.routes';
 import { LicenseRedirectComponent } from './license-redirect/license-redirect.component';
 import { LicenseWelcomeComponent } from './license-welcome/license-welcome.component';
+import { TeamPageComponent } from './team-page/team-page.component';
 
 // Configure Hammer.js
 // export class MyHammerConfig extends HammerGestureConfig  {
@@ -140,7 +143,7 @@ const APP_PROVIDERS = [
     NewReadingPage,
     GradeSelector,
     OAuthComponent,
-    HeroPromoComponent,
+    HeroPromoPageComponent,
     HeroPricingComponent,
     DiscoverFeedComponent,
     DiscoverAddMetaModal,
@@ -167,11 +170,12 @@ const APP_PROVIDERS = [
     NoContentComponent,
     UserDetailsUpdateModal,
     ReadingCardComponent,
-    HeroPromoComponent,
+    HeroPromoPageComponent,
     HeroPricingComponent,
     ScrollProgressComponent,
     LicenseRedirectComponent,
-    LicenseWelcomeComponent
+    LicenseWelcomeComponent,
+    TeamPageComponent
   ],
   /** Components which can be dynamically created */
   entryComponents: [
@@ -188,7 +192,9 @@ const APP_PROVIDERS = [
     RouterModule.forRoot(ROUTES, { useHash: true }),
     DataListModule,
     PaginatorModule,
-    Ng4TwitterTimelineModule
+    TooltipModule,
+    Ng4TwitterTimelineModule,
+    NgxPageScrollModule
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     // ENV_PROVIDERS,

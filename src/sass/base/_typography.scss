@@ -192,6 +192,15 @@ h2.card-title {
   margin: 0 2px;
   text-shadow: -1px 1px 0px #bbbbbb;
   text-decoration: none !important;
+
+  &--lg {
+    @extend .hero-tag;
+    display: inline-block;
+    font-size: 1.1em;
+    margin-top: -.1em;
+    vertical-align: top;
+    text-shadow: -2px 2px 0px #bbbbbb;
+  }
 }
 
 // Text colors: Transitioning to latest Bootstrap v4 styles
@@ -205,4 +214,9 @@ h2.card-title {
 
 .invalid-feedback {
   color: $red;
+}
+
+.big-light {
+  font-weight: 300;
+  font-size: 60px;
 }

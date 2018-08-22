@@ -131,3 +131,55 @@ button.new-reading-btn {
         margin-top: 35px;
     }
 }
+
+.guide-video-thumb {
+    cursor: pointer;
+    display: inline-block;
+    width: calc(100% - 60px);
+    max-width: 250px;
+    position: relative;
+
+    & .icon-play {
+        transition: transform;
+        height: 2em;
+        width: 2em;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate3d(-50%, -50%, 0);
+    }
+
+    &:hover, &:focus, &:active {
+        box-shadow: 0 0px 15px 0px rgba($btnPrimaryFocusColor,0.5);
+
+        & .icon-play {
+            transform: scale(1.05) translate3d(-50%, -50%, 0);
+        }
+    }
+
+    & img {
+        width: 100%;
+    }
+}
+
+.modal-video {
+    min-width: calc(100% - 60px);
+}
+
+.modal-body {
+    position:relative;
+    padding:0px;
+}
+
+.close {
+    position:absolute;
+    right: 0px;
+    top: -35px;
+    padding-left: 10px;
+    padding-right: 10px;
+    z-index:999;
+    font-size:2rem;
+    font-weight: normal;
+    color:#fff;
+    opacity:1;
+}

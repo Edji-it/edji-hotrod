@@ -9,14 +9,28 @@ nav-bar
       .col-md-8.col-pad.join-panel
         .col__center-fix
           .col__center-content
-            h1.center.on-dark.promo-header.join-header__top Make your readings engaging
+            h1.center.on-dark.promo-header.join-header__top Make reading engagement visible
             .promo-header__divider
-            h1.center.on-dark.promo-header See student thoughts 
-              b live!
+            //- h1.center.on-dark.promo-header See student thoughts 
+            //-   b live!
             .button__row.pt-2.promo-button__row
-              a.btn.btn-primary(href="/project/demo") Try Our Demo Reading
+              a.btn.btn-primary(href="/project/demo") Try an Edji Reading
+  //- hr
   //- Container with Commenting and Heat Map info & images
   .container
+    .row.jumbotron--guide-video
+      .col-md-8.mt-4
+        .guide-video-wrap
+          .embed-responsive.embed-responsive-16by9
+              iframe.embed-responsive-item(
+                  src="//www.youtube.com/embed/GPB8i8H8IBc",
+                  frameborder="0",
+                  allow="autoplay; encrypted-media"
+                  allowfullscreen
+              )
+      .col-md-4.my-4(style="min-height:120px; padding-left: 0px; padding-right: 0px;")
+        .col__center-content.guide-video-heading
+          p.h1.mb-0 See how easy it is to create and share your first Edji Reading
     .row.promo-row.promo-row__no-btm-padding
       .col-md-6
         .col__center-fix
@@ -49,14 +63,20 @@ nav-bar
     .col-sm-12
       .call-to-action
         h1 Share instantly. Read together. Learn loud
-        .btn-row
-          button.btn.btn-primary.btn-lg([routerLink]="['/register']") Get Started
+        .row
+          .col-md-3
+          .col-md-3
+            .text-center.mb-2
+              button.btn.btn-secondary([routerLink]="['/about']", fragment="top") Meet the Team
+          .col-md-3
+            .text-center
+              button.btn.btn-primary([routerLink]="['/register']", fragment="top") Get Started
   //- Tweet Row
   div.mt-4([class.hide]="!tweetsLoaded")
     .container
       .row
         .col-12
-          h1 What Teachers Like You Are Saying About Edji!
+          h1 What teachers like you are saying about Edji!
     ng4-twitter-timeline([dataSrc]="{sourceType: 'collection', id: '947890483635851267'}", [opts]="{tweetLimit: 10, chrome: { noheader: true }}")
   //- Row below promo
   .container
@@ -73,6 +93,7 @@ nav-bar
               li.promo-list Encourage discussion in readings with comment replies
               li.promo-list Let their voice be heard with Audio Comments
             p Hero is an ever expanding feature set to get even more out of your class readings
+            button.btn.btn-hero([routerLink]="['/hero']", fragment="top") Learn More
       .col-md-6.center.nopadding__min-screen
         .row.has-sparks.full-width__min-screen
           .flexi-img.img-fluid.promo-img__background.promo-img-3
