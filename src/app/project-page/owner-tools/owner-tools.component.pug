@@ -26,11 +26,13 @@
       label Questions
   //- Reading Report toggle
   div(*ngIf="user.hero")
-    button.btn.owner-tools__btn.btn-hv.btn-reading-report(type="button", (tap)="showElseFalse('showReadingReport')")
+    button.btn.owner-tools__btn.btn-hv.btn-reading-report(
+        type="button",
+        (tap)="showElseFalse('showReadingReport')",
+        [class.hero--micro-offer__wrap]="user && !user.hero_status"
+      )
       i#toggleReadingReport.icon-reading-report(*ngIf="currentProject")
-      label Reading
-        br
-        | Report
+      label Snapshot
 
 .owner-tools-button__mobile.hidden-lg-up(*ngIf="currentProject && user._id == currentProject.owner_id")
   //- Mobile Buttons
