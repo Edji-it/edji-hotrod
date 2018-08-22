@@ -3,7 +3,7 @@
   .container
     .row
       .col-8.p-0
-        h1.mb-3.header-text__large Reading Report for
+        h1.mb-3.header-text__large(*ngIf="currentUser.hero.active") Reading Report for
           p-dropdown#studentSelector(
             [options]="students",
             [(ngModel)]="selectedStudent",
@@ -18,7 +18,7 @@
           span(aria-hidden='true') &times;
         //- button.btn.btn-success.btn-sm.float-right.mr-5((click)="goToEvalForm()") Send Copy
         //- button.btn.btn-primary.btn-sm.float-right.mr-5((click)="downloadPDF()") Download
-  .container-fluid.container--less-pad.px-3
+  .container-fluid.container--less-pad.px-3(*ngIf="currentUser.hero.active")
     #readingReport.p-4
       //- Header Block
       .row
@@ -175,3 +175,11 @@
               tabindex="3",
               (click)="addEvaluationOnly(evaluationForm.controls['inputText'].value)"
             ) Add Evaluation
+  .container-fluid.container--less-pad.px-3.mt-2(*ngIf="!currentUser.hero.active")
+    #readingReport
+      .modal-dialog.reading-report-blurred
+        .modal-content.reading-report-blurred-outer
+          .modal-body.text-center.reading-report-blurred-inner 
+            h3 You need to upgrade to access analytics
+            h6 Upgrade Required
+      img(src="/assets/images/reading-report-blurred.jpg")
