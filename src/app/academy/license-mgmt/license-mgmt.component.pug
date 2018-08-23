@@ -7,9 +7,9 @@ nav-bar([showDashboardOptions]="true")
       .academy-name {{currentAcademy ? currentAcademy.name : 'Academy'}}
     .col-6.text-right
       .academy-header Licenses
-      button.btn.academy-pill.bckgnd-invisible.mr-4 {{license ? license.max_users - license.users.length : 0}} 
+      button.btn.academy-pill.bckgnd-invisible.mr-4#availableLicenseCount {{license ? license.max_users - license.users.length : 0}} 
         .text-smaller available
-      button.btn.academy-pill {{license ? license.users.length : 0}} 
+      button.btn.academy-pill#activeLicenseCount {{license ? license.users.length : 0}} 
         .text-smaller in Use
   .row
     .container(*ngIf="licenseUsers.length > 1")
@@ -56,5 +56,5 @@ nav-bar([showDashboardOptions]="true")
             #licenseInviteErrorBadEmail.alert.alert-info(*ngIf="licenseInvite.controls['email'].hasError('emailIncorrect') && licenseInvite.controls['email'].dirty && !licenseInvite.controls['email'].hasError('required')") 
               | We don't think that's an email...
           .col-md-2
-            button.btn.btn-primary.academy-invite-button(type="submit", [disabled]="!licenseInvite.valid") Submit
+            button.btn.btn-primary.academy-invite-button#licenseInviteSubmitBtn(type="submit", [disabled]="!licenseInvite.valid") Submit
 license-invite-support([showModal]="showLicenseInviteModal", (closeModal)="showLicenseInviteModal=false")
