@@ -18,7 +18,7 @@ import { EdjiDatePipe } from '../../../_pipes/edjidate.pipe'
   styleUrls: ['./reading-report.component.scss']
 })
 export class ReadingReportComponent implements OnInit {
-  @Input() visible: boolean = false
+  // @Input() visible: boolean = false
   /** This is a reference to the actual commentStats object which has methods for modification of properties */
   @Input() commentStats: CommentStats
   @Output() hide: EventEmitter<any> = new EventEmitter()
@@ -57,6 +57,9 @@ export class ReadingReportComponent implements OnInit {
 
   public students: any[] = []
   public selectedStudent: any
+  
+  // Slide in value animates pane once component has loaded
+  public slidePaneIn: boolean = false
 
   constructor(
     private _projects : ProjectService,
@@ -72,6 +75,11 @@ export class ReadingReportComponent implements OnInit {
   }
 
   ngOnInit() {
+    // Slide in once component is constructed
+    setTimeout(() => {
+      this.slidePaneIn = true
+    }, 100)
+
     // Subscribe to current user
     this.subscriptions.push(
       this._auth.getCurrentUser().subscribe((user) => {
@@ -360,6 +368,18 @@ export class ReadingReportComponent implements OnInit {
     } else {
       return false
     }
+  }
+
+  /**
+   * Close Report
+   * - Allows for animation to close before destroying the component
+   */
+  public close() {
+    this.slidePaneIn = false
+    // Wait for slide closed to complete
+    setTimeout(()=> {
+      this.hide.emit()
+    }, 400)
   }
 
   ngOnDestroy() {

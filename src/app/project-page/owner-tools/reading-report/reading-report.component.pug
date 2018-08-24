@@ -1,5 +1,5 @@
 //- Reading Report Pane
-.sliding-pane.from-left.reading-report([ngClass]="{ 'slide-in' : visible }")
+.sliding-pane.from-left.reading-report([ngClass]="{ 'slide-in' : slidePaneIn }")
   .container
     .row
       .col-8.p-0
@@ -14,7 +14,7 @@
             (onChange)="changeStudentSelection()"
           )
       .col-4.p-0
-        button#closeReadingReport.close.stats-close-btn.btn-icon--round((click)='hide.emit()' type='button')
+        button#closeReadingReport.close.stats-close-btn.btn-icon--round((click)='close()' type='button')
           span(aria-hidden='true') &times;
         //- button.btn.btn-success.btn-sm.float-right.mr-5((click)="goToEvalForm()") Send Copy
         //- button.btn.btn-primary.btn-sm.float-right.mr-5((click)="downloadPDF()") Download
