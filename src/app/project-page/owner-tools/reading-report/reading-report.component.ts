@@ -288,7 +288,10 @@ export class ReadingReportComponent implements OnInit {
       user_id: this.currentStudent.value
     }
     var projectToUpdate = this.project
-    // add the new evaluation to the project
+    // Ensure "report_evals" exists and is an array
+    if (!projectToUpdate.report_evals)
+      projectToUpdate.report_evals = []
+    // Add the new evaluation to the project
     projectToUpdate.report_evals.push(evalObj)
 
     // update the project with the new evaluation, create the pdf, and then email it out
