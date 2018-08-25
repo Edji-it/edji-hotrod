@@ -175,11 +175,21 @@
               tabindex="3",
               (click)="addEvaluationOnly(evaluationForm.controls['inputText'].value)"
             ) Add Evaluation
+  //- Hero Micro
   .container-fluid.container--less-pad.px-3.mt-2(*ngIf="!currentUser.hero.active")
     #readingReport
       .modal-dialog.reading-report-blurred
         .modal-content.reading-report-blurred-outer
           .modal-body.text-center.reading-report-blurred-inner 
-            h3 You need to upgrade to access analytics
-            h6 Upgrade Required
+            h2.h1 Unlock Reading Recap with Hero
+            .text-left
+              p([innerHtml]='":timer: View a student\'s time and activity" | emojione')
+              p([innerHtml]='":bookmark_tabs: Provide feedback for students" | emojione')
+              p([innerHtml]='":floppy_disk: Save a copy of the Recap to share with parents" | emojione')
+            //- With Edji Hero, get and provide insights feedback save to parents
+            //- time on reading
+            //- activity 
+            //- feedback
+            .btn-row.mt-4
+              .btn.btn-hero([routerLink]="['/hero']") Learn About Hero
       img(src="/assets/images/reading-report-blurred.jpg")
