@@ -110,8 +110,7 @@ scroll-progress([scrollProgress]="currentScroll")
                     .question-body
                         .notice-section
                             label.label--gray.all-caps Instructions
-                            | Please read this text and highlight all the punctuation.
-                        //- | {{ project.group_instructions }}
+                            | {{ project.group_instructions }}
             //- Word Loop: reading.words is one big array of individual "words", which can also be puncuation or media
             <span #words class="w" *ngFor="let w of reading.words | slice:0:lastWord ; let i = index" [ngClass]="[ w && w.styles ? w.styles.join(' ') : '', getHighlightClass(i) ]" [attr.index]="i">
                 //- Comment Loop: Display comments if they exist for this Word
@@ -175,6 +174,18 @@ scroll-progress([scrollProgress]="currentScroll")
                 )
                 //- end Word span ".w"
             </span>
+            //- Teacher's Feedback
+            .w.question
+                .row.question-container.question-container__existing
+                    .number-container
+                        .notice-indicator([innerHtml]="':bookmark_tabs:' | emojione")
+                    .question-body
+                        .notice-section
+                            label.label--gray.all-caps Teacher's Feedback
+                            .row(*ngIf="project.report_evals")
+                                .col-12(*ngFor="let evaluation of project.report_evals")
+                                    .sub-label.mb-0 {{ evaluation.createdAt | edjidate }}
+                                    p.evaluation_text {{ evaluation.evaluation ? evaluation.evaluation : '' }}
         .row.mb-4(*ngIf="lastWord < reading.words.length")
             .loading(style="margin: 0 auto;")
 //- End of Reading options
