@@ -11,6 +11,7 @@
     "deploy:dev:major": "yarn release --release-as major && ng build --prod && grunt push:dev && grunt cloudfront:dev",
     "deploy:prod": "grunt checkbranch:master:true && ng build --prod && grunt push:prod && grunt cloudfront:prod",
     "dev": "ng serve",
+    "dev:ssl": "ng serve --ssl true",
     "start": "ng serve",
     "build": "ng build",
     "build:ci": "ng build --aot",
