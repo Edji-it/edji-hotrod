@@ -26,13 +26,13 @@
       label Questions
   //- Reading Report toggle
   div(*ngIf="user.hero")
-    button.btn.owner-tools__btn.btn-hv.btn-reading-report(
+    button.btn.owner-tools__btn.btn-hv.btn-reading-recap(
         type="button",
-        (tap)="showElseFalse('showReadingReport')",
+        (tap)="showElseFalse('showReadingRecap')",
         [class.hero--micro-offer__wrap]="user && !user.hero_status"
       )
-      i#toggleReadingReport.icon-reading-report(*ngIf="currentProject")
-      label Snapshot
+      i#toggleReadingRecap.icon-reading-recap(*ngIf="currentProject")
+      label Recap
 
 .owner-tools-button__mobile.hidden-lg-up(*ngIf="currentProject && user._id == currentProject.owner_id")
   //- Mobile Buttons
@@ -77,10 +77,10 @@
     button.btn.btn-icon--circle-shadow.owner-options--mobile(
       *ngIf="user.hero"
       type="button",
-      (tap)="showElseFalse('showReadingReport'); ownerToolShow=!ownerToolShow", 
+      (tap)="showElseFalse('showReadingRecap'); ownerToolShow=!ownerToolShow", 
       [class.btn-show--animation]="ownerToolShow"
     )
-      i#toggleReadingReportMobile.icon-reading-report(*ngIf="currentProject")
+      i#toggleReadingRecapMobile.icon-reading-recap(*ngIf="currentProject")
   a#buttonOwnerToolToggle.btn.btn-icon--circle-shadow.mobile-menu-spot((tap)="ownerToolShow=!ownerToolShow")
     span(style="font-size: 11px;") Tools
 
@@ -94,4 +94,4 @@ hot-firefeed((hide)="showFireFeed=false", [visible]="showFireFeed")
 hot-questionfeed((hide)="showQuestionFeed=false", [visible]="showQuestionFeed")
 
 //- Reading Report goes here
-hot-reading-report(*ngIf="showReadingReport", (hide)="showReadingReport=false", [commentStats]="commentStats")
+hot-reading-recap(*ngIf="showReadingRecap", (hide)="showReadingRecap=false", [commentStats]="commentStats")

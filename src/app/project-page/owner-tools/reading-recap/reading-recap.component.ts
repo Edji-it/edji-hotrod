@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 import { Subscription } from 'rxjs'
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms'
 import * as jsPDF from 'jspdf'
-import { take } from '../../../../../node_modules/rxjs/operators'
+import { take } from 'rxjs/operators'
 import { DropdownModule } from 'primeng/dropdown'
 
 // Project Dependencies
@@ -13,11 +13,11 @@ import { ALLSPARK } from '../../../app.constants'
 import { EdjiDatePipe } from '../../../_pipes/edjidate.pipe'
 
 @Component({
-  selector: 'hot-reading-report',
-  templateUrl: './reading-report.component.pug',
-  styleUrls: ['./reading-report.component.scss']
+  selector: 'hot-reading-recap',
+  templateUrl: './reading-recap.component.pug',
+  styleUrls: ['./reading-recap.component.scss']
 })
-export class ReadingReportComponent implements OnInit {
+export class ReadingRecapComponent implements OnInit {
   // @Input() visible: boolean = false
   /** This is a reference to the actual commentStats object which has methods for modification of properties */
   @Input() commentStats: CommentStats
@@ -259,7 +259,7 @@ export class ReadingReportComponent implements OnInit {
           var pdfData = pdf.output('datauristring')
           
             // user our academy service to package up the email details and send it off to our api if the project successfully updated
-            this._academy.sendReadingReport(formValue, pdfData)
+            this._academy.sendReadingRecap(formValue, pdfData)
             .subscribe(
               data => {
                 console.log(data)
@@ -321,8 +321,8 @@ export class ReadingReportComponent implements OnInit {
     return new Promise<any>((resolve, reject) => {
       // Get current scroll position and then scroll up to the top
       // Needed because the pdf will not export the whole report unless you are scrolled to the top
-      var scrollPos = document.querySelector(".sliding-pane.from-left.reading-report.slide-in").scrollTop
-      document.querySelector(".sliding-pane.from-left.reading-report.slide-in").scrollTo(0, 0)
+      var scrollPos = document.querySelector(".sliding-pane.from-left.reading-recap.slide-in").scrollTop
+      document.querySelector(".sliding-pane.from-left.reading-recap.slide-in").scrollTo(0, 0)
 
       let htmlRef = '#readingReport'
       let htmlDoc = document.querySelector(htmlRef)
@@ -345,11 +345,11 @@ export class ReadingReportComponent implements OnInit {
 
       // Convert the reading report to a pdf
       doc.addHTML(htmlDoc, 20, 10, options, success => {
-        document.querySelector(".sliding-pane.from-left.reading-report.slide-in").scrollTo(0, scrollPos)
+        document.querySelector(".sliding-pane.from-left.reading-recap.slide-in").scrollTo(0, scrollPos)
         resolve(doc)
       }, error => {
         console.error('we had an issue making the pdf')
-        document.querySelector(".sliding-pane.from-left.reading-report.slide-in").scrollTo(0, scrollPos)
+        document.querySelector(".sliding-pane.from-left.reading-recap.slide-in").scrollTo(0, scrollPos)
         reject(error)
       })
     })
@@ -359,7 +359,7 @@ export class ReadingReportComponent implements OnInit {
   public goToEvalForm(): void {
     var evalForm = document.querySelector('#evaluationForm')
     var topPos = evalForm.getBoundingClientRect().top
-    document.querySelector(".sliding-pane.from-left.reading-report.slide-in").scrollTop = topPos
+    document.querySelector(".sliding-pane.from-left.reading-recap.slide-in").scrollTop = topPos
   }
 
   /**

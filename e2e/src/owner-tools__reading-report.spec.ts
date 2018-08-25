@@ -30,7 +30,7 @@ describe('Project Page as an owner using reading report: ', () => {
     // Id for Owner Tools Test Reading owned by Teach/Teach
     browser.get("/#/dashboard")
     // Open Reading Report project
-    project.getReadingReportPage()
+    project.getReadingRecapPage()
   })
 
   afterAll(() => {
@@ -111,8 +111,8 @@ describe('Project Page as an owner using reading report: ', () => {
     browser.wait(EC.elementToBeClickable(element(by.id("studentSelector"))), 3000, "never saw student filter dropdown on reading report")
 
     // Close Reading Report
-    browser.wait(EC.elementToBeClickable(element(by.id("closeReadingReport"))), 3000, "never saw close button")
-    element(by.id("closeReadingReport")).click()
+    browser.wait(EC.elementToBeClickable(element(by.id("closeReadingRecap"))), 3000, "never saw close button")
+    element(by.id("closeReadingRecap")).click()
 
     // Verify the Reading Report is closed
     browser.wait(EC.invisibilityOf(element(by.id("readingReport"))), 3000, 'reading report never closed')

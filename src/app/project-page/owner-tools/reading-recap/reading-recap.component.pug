@@ -1,9 +1,9 @@
 //- Reading Report Pane
-.sliding-pane.from-left.reading-report([ngClass]="{ 'slide-in' : slidePaneIn }")
+.sliding-pane.from-left.reading-recap([ngClass]="{ 'slide-in' : slidePaneIn }")
   .container
     .row
       .col-8.p-0
-        h1.mb-3.header-text__large(*ngIf="currentUser.hero.active") Reading Report for
+        h1.mb-3.header-text__large(*ngIf="currentUser.hero.active") Reading Recap for
           p-dropdown#studentSelector(
             [options]="students",
             [(ngModel)]="selectedStudent",
@@ -14,7 +14,7 @@
             (onChange)="changeStudentSelection()"
           )
       .col-4.p-0
-        button#closeReadingReport.close.stats-close-btn.btn-icon--round((click)='close()' type='button')
+        button#closeReadingRecap.close.stats-close-btn.btn-icon--round((click)='close()' type='button')
           span(aria-hidden='true') &times;
         //- button.btn.btn-success.btn-sm.float-right.mr-5((click)="goToEvalForm()") Send Copy
         //- button.btn.btn-primary.btn-sm.float-right.mr-5((click)="downloadPDF()") Download
@@ -25,7 +25,7 @@
         .col-9
           .row
             .col-12
-              h2.mb-0.header-text__medium {{ currentStudent.label ? currentStudent.label : '' }}'s Reading Report
+              h2.mb-0.header-text__medium {{ currentStudent.label ? currentStudent.label : '' }}'s Reading Recap
               hr.my-0
               .mt-1 "{{ project.reading_id ? project.reading_id.title : '' }}" - Reading
           //- Reading and Group Info
@@ -88,11 +88,11 @@
           div Comments
           hr.mt-0
       //- Comment Block
-      .row(*ngFor="let reportComment of comments; let i = index")
+      .row(*ngFor="let recapComment of comments; let i = index")
         .col-3
           edji-comment(
             [readOnly]="true",
-            [comment]="reportComment",
+            [comment]="recapComment",
             [commentMobile]="true",
             [commentPaneActive]="true",
             [commentMobileFirst]="i<1",
@@ -100,7 +100,7 @@
             style="display: initial;"
           )
         .col-9
-          .h-1.report-text-highlighted {{ reportComment.text ? reportComment.text : '...'}}
+          .h-1.report-text-highlighted {{ recapComment.text ? recapComment.text : '...'}}
       .row.mt-5(*ngIf="evaluations && evaluations.length>0")
         .col-12
           div Feedback
@@ -111,11 +111,11 @@
           .sub-label.mb-0 {{ evaluation.createdAt | edjidate }}
           p.evaluation_text {{ evaluation.evaluation ? evaluation.evaluation : '' }}
     //- Summarize and Share Block
-    .row.mt-5.reading-report__pdf-hidden
+    .row.mt-5.reading-recap__pdf-hidden
       .col-12
         div Summarize and Share
         hr.mt-0
-    .row.reading-report__pdf-hidden
+    .row.reading-recap__pdf-hidden
       .col-4
         .row
           .col-12
@@ -178,9 +178,9 @@
   //- Hero Micro
   .container-fluid.container--less-pad.px-3.mt-2(*ngIf="!currentUser.hero.active")
     #readingReport
-      .modal-dialog.reading-report-blurred
-        .modal-content.reading-report-blurred-outer
-          .modal-body.text-center.reading-report-blurred-inner 
+      .modal-dialog.reading-recap-blurred
+        .modal-content.reading-recap-blurred-outer
+          .modal-body.text-center.reading-recap-blurred-inner 
             h2.h1 Unlock Reading Recap with Hero
             .text-left
               p([innerHtml]='":timer: View a student\'s time and activity" | emojione')
@@ -192,4 +192,4 @@
             //- feedback
             .btn-row.mt-4
               .btn.btn-hero([routerLink]="['/hero']") Learn About Hero
-      img(src="/assets/images/reading-report-blurred.jpg")
+      img(src="/assets/images/reading-recap-blurred.jpg")

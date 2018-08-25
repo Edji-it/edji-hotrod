@@ -23,7 +23,7 @@ export class OwnerToolsComponent implements OnInit {
   public showFireFeed: boolean
   public showCommentCounts: boolean
   public showQuestionFeed: boolean
-  public showReadingReport: boolean
+  public showReadingRecap: boolean
   public ownerToolBlockHeight: string
 
   // State vars
@@ -102,31 +102,31 @@ export class OwnerToolsComponent implements OnInit {
         this.showQuestionFeed = !this.showQuestionFeed
         this.showFireFeed = false
         this.showCommentCounts = false
-        this.showReadingReport = false
+        this.showReadingRecap = false
         break
       case 'showFireFeed':
         this.showQuestionFeed = false
         this.showFireFeed = !this.showFireFeed
         this.showCommentCounts = false
-        this.showReadingReport = false
+        this.showReadingRecap = false
         break
       case 'showCommentCounts':
         this.showQuestionFeed = false
         this.showFireFeed = false
         this.showCommentCounts = !this.showCommentCounts
-        this.showReadingReport = false
+        this.showReadingRecap = false
         break
-      case 'showReadingReport':
+      case 'showReadingRecap':
         this.showQuestionFeed = false
         this.showFireFeed = false
         this.showCommentCounts = false
-        this.showReadingReport = !this.showReadingReport
+        this.showReadingRecap = !this.showReadingRecap
         break
       default:
         this.showCommentCounts = false
         this.showFireFeed = false
         this.showQuestionFeed = false
-        this.showReadingReport = false
+        this.showReadingRecap = false
     }
   }
 

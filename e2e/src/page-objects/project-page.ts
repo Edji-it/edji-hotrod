@@ -78,9 +78,9 @@ export class Project implements PageObjectInterface {
     browser.get("/#/project/reply");
   }
 
-  public getReadingReportPage(): void {
+  public getReadingRecapPage(): void {
     // Open Reading Report project
-    browser.get("/#/project/readingreport")
+    browser.get("/#/project/readingrecap")
   }
 
   public skipTutorial(): void {

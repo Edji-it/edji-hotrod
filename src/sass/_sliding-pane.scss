@@ -26,7 +26,7 @@ $slidingPaneWidth: 250px;
     @media(min-width: 1060px) {
         width: calc( (100% - 530px) / 2 ) !important;
     }
-    &.reading-report {
+    &.reading-recap {
         width: calc( (100% - 42px)) !important;
     }
 }

@@ -86,7 +86,7 @@ export class AcademyService {
    * @param evalForm the evaluation form data from the reading report
    * @param pdf the pdf that is captured from the reading report
    */
-  public sendReadingReport(evalForm: any, pdf: any): Observable<any> {
+  public sendReadingRecap(evalForm: any, pdf: any): Observable<any> {
     return this._http.post<any>(this._auth.getUrl() + '/api/v1/readings/reports',
       {
         "email": evalForm.email,
