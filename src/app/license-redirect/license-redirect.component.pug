@@ -1,10 +1,10 @@
 nav-bar([hideAccountOptions]="true", [pageTitle]="'Join Your Academy'")
-.alert.alert-danger(*ngIf="messages.licenseProcessError") There was an issue processing your license. Please try again or contact Edji Support.
-.alert.alert-danger(*ngIf="messages.serverError") There was an error while fetching the user information. Please try again or contact Edji Support.
-.alert.alert-danger(*ngIf="messages.invalidLicense") Sorry! Looks like that might not be a valid license. Please contact your administrator, or contact Edji Support.
+.alert.alert-danger.mb-0(*ngIf="messages.licenseProcessError") There was an issue processing your license. Please try again or contact Edji Support.
+.alert.alert-danger.mb-0(*ngIf="messages.serverError") There was an error while fetching the user information. Please try again or contact Edji Support.
+.alert.alert-danger.mb-0(*ngIf="messages.invalidLicense") Sorry! Looks like that might not be a valid license. Please contact your administrator, or contact Edji Support.
 
 .container-fluid
-  .row.navy-gradient.has-sparks
+  .row.navy-gradient.has-sparks(*ngIf="!messages.licenseProcessError && !messages.serverError && !messages.invalidLicense")
     .sparks
     .col-sm-2
     .col-sm-8.col-pad.on-dark
@@ -26,3 +26,7 @@ nav-bar([hideAccountOptions]="true", [pageTitle]="'Join Your Academy'")
             hot-login-form((loginSuccess)="processLicense()")
           .col-12(*ngIf="!login")
             hot-register-form((registerSuccess)="processLicense()", [licenseToProcess]="true")
+  .row.mt-5(*ngIf="messages.licenseProcessError || messages.serverError || messages.invalidLicense")
+    .col-12.text-center
+      button.btn.btn-primary.mr-2([routerLink]="['/dashboard']") Back to Dashboard
+      button.btn.btn-primary((click)="_util.showFeedbackModal=true") Contact Edji Support

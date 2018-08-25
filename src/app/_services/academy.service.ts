@@ -6,11 +6,13 @@ import { map } from 'rxjs/operators'
 // project dependancies
 import { AuthService } from 'src/app/_services'
 import { User, License } from '../shared/datatypes'
+import { Router, ActivatedRouteSnapshot, RouterStateSnapshot, CanActivate } from '../../../node_modules/@angular/router'
+import { LockerService } from '../_services/locker.service'
 
 @Injectable({
   providedIn: 'root'
 })
-export class AcademyService {
+export class AcademyService implements CanActivate {
   private readingTimerSubscription: Subscription
 
   private user: User
@@ -22,7 +24,9 @@ export class AcademyService {
 
   constructor(
     private _http: HttpClient,
-    private _auth: AuthService
+    private _auth: AuthService,
+    private _router: Router,
+    private _locker: LockerService
   ) { 
     // dev currentInstitution
     this.currentInstitution = "5b006d759dbfbf137ec0df23"
@@ -190,6 +194,19 @@ export class AcademyService {
         reading_time: 30
       })
     })
+  }
+
+  /** Provides logic for sending user back to home if they are not authorized */
+  public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+    let user: User = this._locker.get('user')
+    console.log(user)
+    // is a teacher and belongs to an institution and can therefore access the academy suite
+    if (!user.hero.active && !user.identities.includes('teacher') && user.license_ids.length === 0) {
+      this._router.navigate(['/dashboard'])
+      return false
+    } else {
+      return true
+    }
   }
 }
 

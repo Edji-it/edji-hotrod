@@ -5,7 +5,7 @@ import { take } from 'rxjs/operators';
 
 // Project dependancies
 import { User } from '../shared/datatypes'
-import { LockerService, AuthService, AcademyService } from '../_services'
+import { LockerService, AuthService, AcademyService, UtilToolService } from '../_services'
 
 @Component({
   selector: 'app-license-redirect',
@@ -30,7 +30,8 @@ export class LicenseRedirectComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private _router: Router,
     private _locker: LockerService,
-    private _academy: AcademyService
+    private _academy: AcademyService,
+    public _util: UtilToolService
   ) { }
 
   ngOnInit() {
@@ -95,6 +96,12 @@ export class LicenseRedirectComponent implements OnInit, OnDestroy {
       })
     }, (err) => {
       console.error(err)
+      if (err.status===403 && err.error.error === 'invite not found for email') {
+        this.messages.serverError = true
+      }
+      if (err.status===403 && err.error.error === 'invalid license') {
+        this.messages.invalidLicense = true
+      }
     })
   }
 

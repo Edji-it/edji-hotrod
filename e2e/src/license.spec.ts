@@ -32,7 +32,7 @@ describe('Academy user that has ability to manage licenses for their academy: ',
       dashboard.getLicenseManage()
 
       // should get a 404!
-
+      browser.wait(EC.presenceOf(element(by.id('notFound'))), 5000, "never found the 404 page")
     })
 
     // Log-in as a teacher that does not have access to manage licenses - should not be able to access, this is expected behavior
@@ -44,7 +44,7 @@ describe('Academy user that has ability to manage licenses for their academy: ',
       dashboard.getLicenseManage()
 
       // should get a 404!
-      
+      browser.wait(EC.presenceOf(element(by.id('notFound'))), 5000, "never found the 404 page")
     })
 
     // Log-in as a hero that has access to manage the page - verify they can access the page
