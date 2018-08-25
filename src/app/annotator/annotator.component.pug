@@ -102,6 +102,16 @@ scroll-progress([scrollProgress]="currentScroll")
             (clickOutside)="hideCommentOptions()",
             #article
         )
+            //- Reading Group Instructions
+            .w.question(*ngIf="reading.group_instructions && reading.group_instructions.length > 1")
+                .row.question-container.question-container__existing
+                    .number-container
+                        .notice-indicator([innerHtml]="':mega:' | emojione")
+                    .question-body
+                        .notice-section
+                            label.label--gray.all-caps Instructions
+                            | Please read this text and highlight all the punctuation.
+                        //- | {{ project.group_instructions }}
             //- Word Loop: reading.words is one big array of individual "words", which can also be puncuation or media
             <span #words class="w" *ngFor="let w of reading.words | slice:0:lastWord ; let i = index" [ngClass]="[ w && w.styles ? w.styles.join(' ') : '', getHighlightClass(i) ]" [attr.index]="i">
                 //- Comment Loop: Display comments if they exist for this Word
