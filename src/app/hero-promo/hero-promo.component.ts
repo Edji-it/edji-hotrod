@@ -30,7 +30,7 @@ export class HeroPromoPageComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = []
 
   constructor(
-      private _auth: AuthService, 
+      public _auth: AuthService, 
       private route: ActivatedRoute, 
       public _router: Router, 
       private angulartics: Angulartics2
