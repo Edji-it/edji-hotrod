@@ -85,10 +85,10 @@ export class DashboardComponent implements OnInit {
     }
 
     /** TEMP SALE CODE */
-    // let userDismissedSale = this._locker.get('buyHeroGiveHeroSaleDismissed')
-    // if (!userDismissedSale) {
+    let userDismissedSale = this._locker.get('buyHeroGiveHeroSaleDismissed')
+    if (!userDismissedSale) {
       this.showSaleModal = this._auth.getShowSale()
-    // }
+    }
     /** TEMP SALE CODE */
   }
 
