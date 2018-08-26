@@ -756,8 +756,9 @@ export class AuthService implements CanActivate {
 
     /** TEMP SALE CODE */
     public getShowSale() : boolean {
-        if (this.user && this.user.hero_status != true) {
-            let minDate = new Date('08/27/2018')
+        let user = this.currentUserSource.value
+        if (user && user.hero_status != true) {
+            let minDate = new Date('08/25/2018')
             let maxDate =  new Date('9/15/2018')
             let currentDate = new Date()
             

@@ -48,6 +48,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   public loginSuccess(): void {
+    console.log('loginSuccess fired')
     this._router.navigate(['/dashboard'])
   }
 
