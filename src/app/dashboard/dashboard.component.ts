@@ -85,16 +85,10 @@ export class DashboardComponent implements OnInit {
     }
 
     /** TEMP SALE CODE */
-    let minDate = new Date('08/25/2018')
-    let maxDate =  new Date('9/15/2018')
-    let currentDate = new Date()
-
-    if (currentDate > minDate && currentDate < maxDate ){
-        let userDismissedSale = this._locker.get('buyHeroGiveHeroSaleDismissed')
-        // if (!userDismissedSale) {
-          this.showSaleModal = true
-        // }
-    }
+    // let userDismissedSale = this._locker.get('buyHeroGiveHeroSaleDismissed')
+    // if (!userDismissedSale) {
+      this.showSaleModal = this._auth.getShowSale()
+    // }
     /** TEMP SALE CODE */
   }
 

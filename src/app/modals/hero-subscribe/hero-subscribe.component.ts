@@ -106,7 +106,6 @@ export class HeroSubscribeComponent implements OnInit {
         displayError.textContent = ''
       }
     });
-  
   }
 
   private validateCoupon(control: AbstractControl) : Observable<any> {

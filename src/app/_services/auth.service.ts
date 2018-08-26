@@ -753,6 +753,24 @@ export class AuthService implements CanActivate {
             })
         })
     }
+
+    /** TEMP SALE CODE */
+    public getShowSale() : boolean {
+        if (this.user && this.user.hero_status != true) {
+            let minDate = new Date('08/25/2018')
+            let maxDate =  new Date('9/15/2018')
+            let currentDate = new Date()
+            
+            if (currentDate > minDate && currentDate < maxDate ){
+                return true
+            } else {
+                return false
+            }
+        } else {
+            return false
+        }
+    }
+    /** TEMP SALE CODE */
 }
 
 interface LoginObject {
