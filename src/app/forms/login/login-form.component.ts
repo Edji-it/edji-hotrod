@@ -52,7 +52,7 @@ public login(formValue: any): void {
 
 		this._auth.login(formValue)
       .then(
-        (data: any)  => { 
+        (data)  => { 
           this.loginLoading = false
           this.clearErrors()
 

@@ -9,7 +9,13 @@
       .modal-body
         .row([class.hide]="userNowHero")
           .col-12
-            p.pb-1
+            //- ** TEMP SALE CODE **
+            ng-container(*ngIf="_auth.getShowSale()")
+              img(src="/assets/images/promo/sale-banner.png")
+              label.pt-2.mb-0 Limited Time Offer
+              p.pb-2 Go Hero before September 15th, and receive a <b>free</b> gift code for 1 year of Edji Hero to share with a friend or coworker!
+            //- ** TEMP SALE CODE **
+            p.pb-1(*ngIf="!_auth.getShowSale()")
               | We are honored to have you join the league of Heroes.
               br
             //- h4 Add Billing Information
