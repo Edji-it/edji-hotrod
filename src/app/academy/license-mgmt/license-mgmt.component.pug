@@ -33,7 +33,7 @@ nav-bar([showDashboardOptions]="true")
       .academy-header.font-weight-light Add a teacher or admin to your Academy. They will receive an email with a link to accept their Academy license.
       form([formGroup]="licenseInvite", (ngSubmit)="formSubmit(licenseInvite)")
         .row.mt-4
-          .col-md-4
+          .col-md-4.px-2
             //- Name of Teacher
             label Name
             input#licenseInviteNameInput.mb-0(
@@ -43,7 +43,7 @@ nav-bar([showDashboardOptions]="true")
             )
             #errorTitle.alert.alert-info(*ngIf="licenseInvite.controls['name'].hasError('required') && (licenseInvite.controls['name'].dirty || submitted)") 
               | Please enter the name of the teacher for the license invite
-          .col-md-6
+          .col-md-4.px-2
             //- Email Address
             label Email
             input#licenseInviteEmailInput.mb-0(
@@ -51,6 +51,12 @@ nav-bar([showDashboardOptions]="true")
               [formControl]="licenseInvite.controls['email']", 
               tabindex="1"
             )
+          .col-md-2.px-2
+            //- Role
+            label Role
+            select.role-select.mb-0#licenseRole([formControl]="licenseInvite.controls['role']")
+              option([ngValue]="teacher") Teacher
+              option([ngValue]="administrator") Administrator
             #licenseInviteErrorNoEmail.alert.alert-info(*ngIf="licenseInvite.controls['email'].hasError('required') && (licenseInvite.controls['email'].dirty || submitted)") 
               | Please enter the email address of the teacher for the license invite
             #licenseInviteErrorBadEmail.alert.alert-info(*ngIf="licenseInvite.controls['email'].hasError('emailIncorrect') && licenseInvite.controls['email'].dirty && !licenseInvite.controls['email'].hasError('required')") 
