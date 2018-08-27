@@ -37,6 +37,9 @@ export class HotChartGaugeComponent implements OnInit {
   public avgAngle: number = 0
   public animationState: string = 'start'
 
+  // Error displayed to user
+  public errorMsg = ""
+
   constructor() { }
 
   ngOnInit() {
@@ -45,6 +48,12 @@ export class HotChartGaugeComponent implements OnInit {
 
   ngOnChanges() {
     this.animationState = 'stop'
+
+    // Some users will not have data
+    if (!this.values.val) {
+      this.errorMsg = "Not enough data for this student"
+      this.values.val = this.values.min
+    }
     
     setTimeout(()=> {
       // needle position has a range between -90 and 90, needs to be extrapolated from the min, max, and val values

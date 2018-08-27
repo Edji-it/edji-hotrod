@@ -1,5 +1,6 @@
-.row.mt-4
+.row.mt-4([class.chart-cluster--disabled]="errorMsg")
   .chart-cluster
+    .gauge-alert.alert.alert-warning(*ngIf="errorMsg", [innerHtml]="errorMsg")
     .gauge-value
       .gauge-value-min {{ values.min }} {{ measures.abbreviated }}
     .gauge-section.px-2
@@ -23,5 +24,5 @@
       .gauge-value-max {{ values.max }} {{ measures.abbreviated }}
 .row
   .col-12.no-gutters.p-0
-    #gaugeValue.needle-value.mt-2 {{ values.val }}
+    #gaugeValue.needle-value.mt-2([innerHtml]="values.val ? values.val : '&mdash;'")
     .needle-metric {{ measures.full }}

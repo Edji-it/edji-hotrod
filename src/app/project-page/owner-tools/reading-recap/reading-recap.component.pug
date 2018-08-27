@@ -66,21 +66,18 @@
       .row
         .col-4
           hot-chart-gauge(
-            *ngIf="visible",
             [measures]="{full: 'Minutes Reading', abbreviated: 'min'}",
             [values]="chartTimeReading",
             [chartSize]="150"
           )
         .col-4
           hot-chart-gauge(
-            *ngIf="visible",
             [measures]="{full: 'Comments'}",
             [values]="chartComments",
             [chartSize]="150"
           )
         .col-4
           hot-chart-hzbar(
-            *ngIf="visible",
             [commentCountByType]="commentCountByType"
           )
       .row.mt-5

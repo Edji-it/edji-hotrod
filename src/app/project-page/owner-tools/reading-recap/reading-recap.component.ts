@@ -185,7 +185,7 @@ export class ReadingRecapComponent implements OnInit {
         min: Math.round(this.readingTimeData.min / correctionFactor), 
         max: Math.round(this.readingTimeData.max / correctionFactor), 
         avg: Math.round(this.readingTimeData.avg / correctionFactor), 
-        val: userTimeVal ? Math.round(userTimeVal.value / correctionFactor) : this.chartTimeReading.min
+        val: userTimeVal ? Math.round(userTimeVal.value / correctionFactor) : null
       }
     }
   }

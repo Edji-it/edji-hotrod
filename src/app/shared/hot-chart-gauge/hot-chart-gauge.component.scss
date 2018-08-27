@@ -1,3 +1,6 @@
+@import '../../../sass/base/variables';
+@import '../../../sass/base/variables';
+
 .gauge-outline {
   background: linear-gradient(0.25turn, #F8954D, #D0FFB3);
   position: relative;
@@ -69,6 +72,15 @@
   margin: 0 auto;
 }
 
+.chart-cluster--disabled {
+  & .gauge-section, 
+  & .gauge-value, 
+  & .needle-metric,
+  & + .row {
+    opacity: 0.3;
+  }
+}
+
 .average-tooltip {
   transition: all 2s ease-in-out;
   background-color: #fff;
@@ -122,4 +134,17 @@
       border-color: #fff transparent transparent #fff;
     }
   }
+}
+
+// Modifies Bootstrap's alert class
+.gauge-alert {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%, -50%, 0);
+  z-index: $zLow;
+  font-size: 12px;
+  text-align: center;
+  max-width: 100%;
+  white-space: nowrap;
 }
