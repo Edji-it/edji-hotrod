@@ -487,7 +487,7 @@ export class NewReadingPage implements OnInit {
         if (!form.title || form.title.length < 1 || this.readingIsBlank || !questionsValid || (form.public == 'true' && (form.grade_levels.length < 1 || form.subjects.length < 1))) {
             this.addLoadingD = false
             this.addLoadingP = false
-            this.error = 'Not quite, please check all the fields!'
+            this.error = ':warning: <b>Empty Fields</b> Not quite, please make sure all highlighted fields are complete!'
             return
         }
 

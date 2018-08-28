@@ -11,7 +11,7 @@ nav-bar([pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'", [canPublish]
             p This reading was created with Hero features, such as questions, which have been removed. To copy readings and preserve Hero features, consider 
               a.link([routerLink]="['/hero']") going Hero
               |.
-          p.alert.alert-warning(*ngIf="error.length > 0") {{ error }}
+          p.alert.alert-danger(*ngIf="error.length > 0",  [innerHtml]="error | emojione")
           .alert.alert-success.alert-readings.alert-dismissable(role="alert", *ngIf="showAlert") {{ successObject.readingSuccess }}
             a.close(href="#", (click)="showAlert=false") × 
           .alert.alert-danger.alert-readings(role="alert", *ngIf="errorObject.readingError") {{ errorObject.readingError }}
@@ -20,7 +20,9 @@ nav-bar([pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'", [canPublish]
             label
               span Title
               input#readingTitle.form-control.h1.form-item--editor.mTitle(type="text", placeholder="Reading Title...", [formControl]="readingForm.controls['title']")
-              #errorTitle.alert.alert-warning(*ngIf="readingForm.controls['title'].hasError('required') && (readingForm.controls['title'].dirty || submitted)") Please give your Reading a title!
+              #errorTitle.alert.alert-danger(*ngIf="readingForm.controls['title'].hasError('required') && (readingForm.controls['title'].dirty || submitted)") 
+                b No Title
+                | Please give your Reading a title!
           //- Public Flag
           .form-group
             label Make Public
@@ -57,14 +59,16 @@ nav-bar([pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'", [canPublish]
             label Grade Level
               p.sub-label Select which grade levels this reading targets. (Click to select start of range, and click again to select end of range!)
             grade-selector(formControlName="grade_levels")
-            #errorTitle.alert.alert-warning.mt-2(*ngIf="readingForm.controls['grade_levels'].hasError('required') && (readingForm.controls['grade_levels'].dirty || submitted)") 
+            #errorTitle.alert.alert-danger.mt-2(*ngIf="readingForm.controls['grade_levels'].hasError('required') && (readingForm.controls['grade_levels'].dirty || submitted)") 
+              b No Grades Selected
               | Please select the range of grade levels this Reading is best suited for.
           //- Subject Selector
           .form-group(*ngIf="readingForm.controls['public'].value == 'true'")
             label Subject
             .input-group
             ss-multiselect-dropdown(id="subjectDropdown",[options]="subjects", formControlName="subjects", [settings]="subjectDropSettings")
-            #errorTitle.alert.alert-warning.mt-2(*ngIf="readingForm.controls['subjects'].hasError('required') && (readingForm.controls['subjects'].dirty || submitted)") 
+            #errorTitle.alert.alert-danger.mt-2(*ngIf="readingForm.controls['subjects'].hasError('required') && (readingForm.controls['subjects'].dirty || submitted)") 
+              b No Subjects Selected
               | Please select at least one Subject area that this Reading applies to.
           //- Reading Group Instructions section
           .form-group(*ngIf="user.hero")
@@ -95,7 +99,9 @@ nav-bar([pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'", [canPublish]
                 (mouseup)="contentChange($event)",
                 [ngClass]="[i<readingHtml.length - 1 ? 'medium-editor__new-question' : '']",
                 [attr.rindex]="i")
-            #errorContent.alert.alert-warning(*ngIf="submitted && readingIsBlank") Please give your Reading some text!
+            #errorContent.alert.alert-danger(*ngIf="submitted && readingIsBlank") 
+              b No Content
+              | Please give your Reading some content!
             //- Editor Insert Options
                 - Insert a Picture or Pdf
                 - (Hero) Insert a Question
