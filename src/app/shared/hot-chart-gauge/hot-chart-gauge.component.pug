@@ -1,4 +1,4 @@
-.row.mt-4([class.chart-cluster--disabled]="errorMsg")
+.row.mt-4.min-100([class.chart-cluster--disabled]="errorMsg")
   .chart-cluster
     .gauge-alert.alert.alert-warning(*ngIf="errorMsg", [innerHtml]="errorMsg")
     .gauge-value
