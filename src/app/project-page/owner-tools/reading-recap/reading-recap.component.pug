@@ -26,16 +26,17 @@
           .row
             .col-12
               h2.mb-0.header-text__medium {{ currentStudent.label ? currentStudent.label : '' }}'s Reading Recap
-              hr.my-0
               .mt-1 "{{ project.reading_id ? project.reading_id.title : '' }}" - Reading
+              hr.my-0
           //- Reading and Group Info
           .row.mt-4
             //- Assignment and Standards
             .col-12
               .row
                 .col-12
-                  .sub-label.mb-0 Group Assignment
+                  .sub-label.mb-0 Group Instructions
                   .text-md {{ project.group_instructions ? project.group_instructions : '' }}
+                  i.text-md() None
               //- .row.mt-3
               //-   .col-12
               //-     .sub-label.mb-0 Standards
@@ -47,17 +48,17 @@
             .col-12.p-0
               .sub-label.mb-0 Teacher
               div {{ project.teacher ? project.teacher.fullname : '' }}
-          .row.mt-3
+          .row.mt-2
             .col-12.p-0
               .sub-label.mb-0 Group
               div {{ project.label ? project.label : '' }}
-          .row.mt-5
+          .row.mt-2
             //- Reading Stats
             .col-12.p-0
               .sub-label.mb-0 Contents
               .text-md {{ wordCount }} Words
               .text-md {{ imageCount }} Images
-              .text-md {{ questionCount }} Questions
+              .text-md(*ngIf="questionCount > 0") {{ questionCount }} Questions
       //- Stat's Block
       .row.mt-5
         .col-12
@@ -110,20 +111,21 @@
     //- Summarize and Share Block
     .row.mt-5.reading-recap__pdf-hidden
       .col-12
-        div Summarize and Share
+        div Add Feedback
         hr.mt-0
     .row.reading-recap__pdf-hidden
       .col-4
         .row
           .col-12
             //- div Summarize {{ currentStudent.label ? currentStudent.label : '' }}'s work with this reading, and send a PDF copy of this report to their student email, a parent, or a fellow teacher
-            div Summarize {{ currentStudent.label ? currentStudent.label : '' }}'s work with this reading
-        .row
-          .col-12
-            div An image of the report
-      .col-8
+            div Give private feedback on {{ currentStudent.label ? currentStudent.label : '' }}'s comments
+        //- FUTURE THUMBNAIL
+        //- .row
+        //-   .col-12
+        //-     div An image of the report
+      .col-8.pb-4
         form#evaluationForm([formGroup]="evaluationForm", (ngSubmit)="sendEval(evaluationForm.value)")
-          label(for="inputText") Evaluation
+          label(for="inputText") Feedback
           textarea#evalFormText(
             [formControl]="evaluationForm.controls['inputText']", 
             placeholder="This student did a great job identifying the main themes...", 
@@ -165,13 +167,13 @@
           //-   ) Send Email
           .col-4.no-gutters.p-0.mt-4.d-inline-block.text-right.float-right
             button#sendEvalBtn.btn.btn-success(
-              title="Make sure you've filled out your evaluation", 
+              title="Make sure you've filled out your feedback", 
               type="button", 
               [class.loading]="evalLoading", 
               [disabled]="!evaluationForm.controls['inputText'].valid", 
               tabindex="3",
               (click)="addEvaluationOnly(evaluationForm.controls['inputText'].value)"
-            ) Add Evaluation
+            ) Add Feedback
   //- Hero Micro
   .container-fluid.container--less-pad.px-3.mt-2(*ngIf="!currentUser.hero.active")
     #readingReport
