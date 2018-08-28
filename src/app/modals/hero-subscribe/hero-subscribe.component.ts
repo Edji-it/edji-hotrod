@@ -41,7 +41,7 @@ export class HeroSubscribeComponent implements OnInit {
   heroWasBorn: EventEmitter<any> = new EventEmitter()
   
   constructor(
-    private _auth: AuthService,
+    public _auth: AuthService,
     private _bumblebee: BumblebeeService,
     private angulartics: Angulartics2,
     private fb: FormBuilder,
@@ -106,7 +106,6 @@ export class HeroSubscribeComponent implements OnInit {
         displayError.textContent = ''
       }
     });
-  
   }
 
   private validateCoupon(control: AbstractControl) : Observable<any> {
