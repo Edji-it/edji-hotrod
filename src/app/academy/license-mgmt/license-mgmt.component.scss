@@ -28,12 +28,12 @@ $academy-purple: #2B2B48;
 
 .academy-name {
   font-weight: 200;
-  font-size: 24px;
+  font-size: 20px;
 }
 
 .academy-header {
   font-weight: 400;
-  font-size: 16px;
+  font-size: 14px;
   color: #7a7a7a;
 }
 
@@ -94,18 +94,13 @@ $academy-purple: #2B2B48;
   width: 33%;
 }
 
-.academy-invite-button {
-  position: absolute;
-  bottom: 0;
-  @media(max-width: $tablet) {
-    width: 100%;
-    position: relative;
-    margin-top: 6px;
-  }
-}
-
 .role-select {
   height: 40px;
   max-width: initial;
-  width: calc(100% + 14px);
+  width: 100%;
+}
+
+.academy-container {
+  background-color: white;
+  box-shadow: 0px 0px 22px 4px rgba(0, 0, 0, 0.06);
 }

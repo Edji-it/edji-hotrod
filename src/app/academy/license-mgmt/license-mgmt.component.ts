@@ -21,9 +21,20 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
   public licenseUsers: any = []
   public license: any
   public currentAcademy: any
+  public licenseRoles: any = [
+    {label: 'Teacher', value: 'teacher'},
+    {label: 'Administrator', value: 'administrator'},
+  ]
+  public licenseUpdateTypes: any = [
+    {label: 'Add Licenses', value: 'add licenses'},
+    {label: 'Modify Existing License', value: 'update license'},
+    {label: 'Update Academy Information', value: 'update academy info'},
+    {label: 'Other', value: 'other'}
+  ]
 
   public showLicenseInviteModal: boolean
   public licenseInvite: FormGroup
+  public licenseRequest: FormGroup
   
   constructor(
     private _fb: FormBuilder,
@@ -32,7 +43,12 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
   ) { 
     this.licenseInvite = this._fb.group({
       name: [null, Validators.required],
-      email: [null, Validators.compose([Validators.required, this.emailValidator])]
+      email: [null, Validators.compose([Validators.required, this.emailValidator])],
+      role: [this.licenseRoles[0].value, null]
+    })
+    this.licenseRequest = this._fb.group({
+      request: [this.licenseUpdateTypes[0].value, null],
+      message: [null, Validators.compose([Validators.required])]
     })
   }
 
@@ -121,14 +137,15 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
 
   // Submits the name and email address of the invitation to the teacher
   public formSubmit(form: FormGroup): void {
-    this._academy.inviteToLicense(form.controls.name.value, form.controls.email.value, this.license._id)
+    console.log(form.controls.role.value)
+    this._academy.inviteToLicense(form.controls.name.value, form.controls.email.value, form.controls.role.value, this.license._id)
     .subscribe(data => {
       let updatedLicense = data.license
       let latestInvitation = updatedLicense.pending_invitations[updatedLicense.pending_invitations.length-1]
       // Load the latest pending invitation to the list
       this.licenseUsers.push({
         educator: latestInvitation.name,
-        role: 'Teacher',
+        role: latestInvitation.role,
         joined: latestInvitation.expiration,
         type: 'pending'
       })

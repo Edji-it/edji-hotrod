@@ -51,11 +51,12 @@ export class AcademyService implements CanActivate {
    * Invites a teacher to a license
    * @param licenseId _id of the license to accept
    */
-  public inviteToLicense(name: string, email: string, licenseId: string): Observable<InviteLicenseResponse> {
+  public inviteToLicense(name: string, email: string, role: string, licenseId: string): Observable<InviteLicenseResponse> {
     return this._http.put<InviteLicenseResponse>(this._auth.getUrl() + '/api/v1/licenses/' + licenseId + '/invite',
     {
       "email": email,
-      "name": name
+      "name": name,
+      "role": role
     },
     {
       headers: new HttpHeaders({

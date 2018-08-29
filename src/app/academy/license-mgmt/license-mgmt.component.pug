@@ -1,66 +1,95 @@
 nav-bar([showDashboardOptions]="true")
 .academy-bg
-.container.academy-container
-  .row
-    .col-6
-      .academy-header Academy
-      .academy-name {{currentAcademy ? currentAcademy.name : 'Academy'}}
-    .col-6.text-right
-      .academy-header Licenses
-      button.btn.academy-pill.bckgnd-invisible.mr-4#availableLicenseCount {{license ? license.max_users - license.users.length : 0}} 
-        .text-smaller available
-      button.btn.academy-pill#activeLicenseCount {{license ? license.users.length : 0}} 
-        .text-smaller in Use
-  .row
-    .container(*ngIf="licenseUsers.length > 1")
-      table.table.table-striped.licenses-table
-        thead
-          tr
-            th.check-box(scope="col")
-            th.academy-header.educator-header(scope="col") Educator
-            th.academy-header.role-header(scope="col") Role
-            th.academy-header(scope="col") Joined Academy
-        tbody
-          tr.no-border(*ngFor="let licenseUser of licenseUsers")
-            td
-            td([ngClass]="[licenseUser.type=='pending' ? 'educator-pending' : '']") {{ licenseUser.educator }}
-            td([ngClass]="[licenseUser.type=='pending' ? 'educator-pending' : '']") {{ licenseUser.role }}
-            td(*ngIf="licenseUser.type=='active'") {{ licenseUser.joined | edjidate:'timeStamp':'shortDate' }}
-            td.educator-pending.expires(*ngIf="licenseUser.type=='pending'") Pending - Expires {{ licenseUser.joined | edjidate:'timeStamp':'shortDate' }}
-  .row
-    .container
-      .academy-name.mt-5 Invite to Academy
-      .academy-header.font-weight-light Add a teacher or admin to your Academy. They will receive an email with a link to accept their Academy license.
-      form([formGroup]="licenseInvite", (ngSubmit)="formSubmit(licenseInvite)")
-        .row.mt-4
-          .col-md-4.px-2
-            //- Name of Teacher
-            label Name
-            input#licenseInviteNameInput.mb-0(
-              type="text",
-              [formControl]="licenseInvite.controls['name']",
-              tabindex="0"
-            )
-            #errorTitle.alert.alert-info(*ngIf="licenseInvite.controls['name'].hasError('required') && (licenseInvite.controls['name'].dirty || submitted)") 
-              | Please enter the name of the teacher for the license invite
-          .col-md-4.px-2
-            //- Email Address
-            label Email
-            input#licenseInviteEmailInput.mb-0(
-              type="text", 
-              [formControl]="licenseInvite.controls['email']", 
-              tabindex="1"
-            )
-          .col-md-2.px-2
-            //- Role
-            label Role
-            select.role-select.mb-0#licenseRole([formControl]="licenseInvite.controls['role']")
-              option([ngValue]="teacher") Teacher
-              option([ngValue]="administrator") Administrator
-            #licenseInviteErrorNoEmail.alert.alert-info(*ngIf="licenseInvite.controls['email'].hasError('required') && (licenseInvite.controls['email'].dirty || submitted)") 
-              | Please enter the email address of the teacher for the license invite
-            #licenseInviteErrorBadEmail.alert.alert-info(*ngIf="licenseInvite.controls['email'].hasError('emailIncorrect') && licenseInvite.controls['email'].dirty && !licenseInvite.controls['email'].hasError('required')") 
-              | We don't think that's an email...
-          .col-md-2
-            button.btn.btn-primary.academy-invite-button#licenseInviteSubmitBtn(type="submit", [disabled]="!licenseInvite.valid") Submit
-license-invite-support([showModal]="showLicenseInviteModal", (closeModal)="showLicenseInviteModal=false")
+.row.mx-4
+  .col-md-8
+    .container.academy-container.py-4
+      .row
+        .col-6
+          .academy-header Academy
+          .academy-name {{currentAcademy ? currentAcademy.name : 'Academy'}}
+        .col-6.text-right
+          .academy-header Licenses
+          button.btn.academy-pill.bckgnd-invisible.mr-4#availableLicenseCount {{license ? license.max_users - license.users.length : 0}} 
+            .text-smaller available
+          button.btn.academy-pill#activeLicenseCount {{license ? license.users.length : 0}} 
+            .text-smaller in Use
+      .row
+        .container(*ngIf="licenseUsers.length > 1")
+          table.table.table-striped.licenses-table
+            thead
+              tr
+                th.check-box(scope="col")
+                th.academy-header.educator-header(scope="col") Educator
+                th.academy-header.role-header(scope="col") Role
+                th.academy-header(scope="col") Joined Academy
+            tbody
+              tr.no-border(*ngFor="let licenseUser of licenseUsers")
+                td
+                td([ngClass]="[licenseUser.type=='pending' ? 'educator-pending' : '']") {{ licenseUser.educator }}
+                td([ngClass]="[licenseUser.type=='pending' ? 'educator-pending' : '']") {{ licenseUser.role }}
+                td(*ngIf="licenseUser.type=='active'") {{ licenseUser.joined | edjidate:'timeStamp':'shortDate' }}
+                td.educator-pending.expires(*ngIf="licenseUser.type=='pending'") Pending - Expires {{ licenseUser.joined | edjidate:'timeStamp':'shortDate' }}
+      .row
+        .container
+          .row.my-5
+            .col-md-4
+              .academy-name Invite to Academy
+              .academy-header.font-weight-light Add a teacher or admin to your Academy. They will receive an email with a link to accept their Academy license.
+            .col-md-8
+              form([formGroup]="licenseInvite", (ngSubmit)="formSubmit(licenseInvite)")
+                .form-group
+                  //- Name of Teacher
+                  label Name
+                  input#licenseInviteNameInput.mb-0(
+                    type="text",
+                    [formControl]="licenseInvite.controls['name']",
+                    tabindex="0"
+                  )
+                  #errorTitle.alert.alert-info(*ngIf="licenseInvite.controls['name'].hasError('required') && (licenseInvite.controls['name'].dirty || submitted)") 
+                    | Please enter the name of the teacher for the license invite
+                .form-group
+                  //- Email Address
+                  label Email
+                  input#licenseInviteEmailInput.mb-0(
+                    type="text", 
+                    [formControl]="licenseInvite.controls['email']", 
+                    tabindex="1"
+                  )
+                  #licenseInviteErrorNoEmail.alert.alert-info(*ngIf="licenseInvite.controls['email'].hasError('required') && (licenseInvite.controls['email'].dirty || submitted)") 
+                    | Please enter the email address of the teacher for the license invite
+                  #licenseInviteErrorBadEmail.alert.alert-info(*ngIf="licenseInvite.controls['email'].hasError('emailIncorrect') && licenseInvite.controls['email'].dirty && !licenseInvite.controls['email'].hasError('required')") 
+                    | We don't think that's an email...
+                .form-group
+                  //- Role
+                  label Role
+                  select.role-select.mb-0#licenseRole([formControl]="licenseInvite.controls['role']")
+                    option(*ngFor="let role of licenseRoles", [ngValue]="role.value") {{role.label}}
+                .form-group.mt-4
+                  button.btn.btn-primary.float-right#licenseInviteSubmitBtn(type="submit", [disabled]="!licenseInvite.valid") Submit
+  .col-md-4
+    .container.academy-container
+      .row
+        .col-12
+          .academy-name Request or Update Academy Licenses
+          .academy-header.font-weight-light To change your Academy’s number of licenses, update Acadmey information, or for other Hero Academy support, submit your request below.
+          form([formGroup]="licenseRequest", (ngSubmit)="formSubmit(licenseRequest)")
+            .form-group
+              //- Request Type
+              label Request Type
+              select.role-select.mb-0#licenseRole([formControl]="licenseRequest.controls['request']")
+                option(*ngFor="let requestType of licenseUpdateTypes", [ngValue]="requestType.value") {{requestType.label}}
+            .form-group
+              //- Message
+              label Message
+              input#licenseInviteNameInput.mb-0(
+                type="text",
+                [formControl]="licenseRequest.controls['message']",
+                tabindex="0"
+              )
+              #errorTitle.alert.alert-info(*ngIf="licenseRequest.controls['message'].hasError('required') && (licenseRequest.controls['message'].dirty || submitted)") 
+                | Please enter a message
+            .row
+              .col-md-4.float-right
+                button.btn.btn-primary.float-right#licenseInviteSubmitBtn(type="submit", [disabled]="!licenseRequest.valid") Submit
+              .col-md-8.float-left
+                i.academy-header.font-weight-light Edji Support will contact you within 48 hours to confirm completion or get additional information
