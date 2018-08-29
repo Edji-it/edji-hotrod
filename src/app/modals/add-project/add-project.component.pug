@@ -19,10 +19,11 @@
                     | Groups like to have names!
             .form-group
                 label More with Hero
-                p.small(*ngIf='!isHero')
-                    | Unlock group instructions, the choice of comment types, and custom codes! 
-                .btn-row
-                    a.btn.btn-sm.btn-hero([routerLink]='["/hero"]') Learn More
+                .row
+                    p.col-9.small(*ngIf='!isHero')
+                        | Unlock group instructions, the choice of comment types, and custom codes! 
+                    .col-3.nopadding
+                        a.btn.btn-sm.btn-hero([routerLink]='["/hero"]') Learn More
             .form-group([class.disabled]="!isHero")
                 label(for='groupInstructions')
                     | Reading Group Instructions
