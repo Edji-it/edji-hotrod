@@ -9,7 +9,10 @@
             .form-group(*ngIf='subheading')
                 p {{ subheading }}
             .form-group
-                label(for='newProjectLabel') Group Name
+                label(for='newProjectLabel') 
+                    | Group Name
+                    i.icon__tooltip(tooltipPosition="right", pTooltip="A group is a section of students on a reading", tooltipZIndex="9000")
+                        span.icon.icon-circle.icon-info  i
                 input#newProjectLabel(tabindex='0', type='text', placeholder='What will you call the group?', [formControl]="projectForm.controls['label']")
                 #msgLabelRequired.alert.alert-warning(*ngIf="formSubmitted && projectForm.controls['label'].hasError('required')", role='alert')
                     b No Name
