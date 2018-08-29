@@ -57,7 +57,7 @@ export class Dashboard implements PageObjectInterface
 
     // get the dashboard page
     getLicenseManage() : void {
-        browser.get('/#/academy/licenses;secret=academy');
+        browser.get('/#/academy/licenses');
     }
 
     // get the new reading page
