@@ -6,7 +6,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { Subscription } from 'rxjs'
 
 // Project Dependencies
-import { AuthService, ReadingService, ProjectService } from '../_services'
+import { AuthService, ReadingService, ProjectService, LockerService } from '../_services'
 import { User } from './../shared/datatypes'
 
 @Component({
@@ -57,11 +57,16 @@ export class DashboardComponent implements OnInit {
   ]
   public toolTipStepNo: number = 1
 
+  /** TEMP SALE CODE */
+  public showSaleModal: boolean = false
+  /** TEMP SALE CODE */
+
   // TypeScript public modifiers
   constructor (
     public _router: Router,
     private _auth: AuthService,
     private _title: Title,
+    private _locker: LockerService,
     private route: ActivatedRoute
   ) {
     // this makes the window always render scrolled to the top
@@ -78,6 +83,13 @@ export class DashboardComponent implements OnInit {
     if (this.userProfileIncomplete()) {
       this.showUserDetailsModal = true
     }
+
+    /** TEMP SALE CODE */
+    let userDismissedSale = this._locker.get('buyHeroGiveHeroSaleDismissed')
+    if (!userDismissedSale && this.currentUser.identities && this.currentUser.identities.indexOf('teacher') >= 0) {
+        this.showSaleModal = this._auth.getShowSale()      
+    }
+    /** TEMP SALE CODE */
   }
 
   private userProfileIncomplete(): boolean {
@@ -92,4 +104,11 @@ export class DashboardComponent implements OnInit {
     }
     return incomplete
   }
+
+  /** TEMP SALE CODE */
+  public closeSaleModal() : void {
+    this.showSaleModal = false
+    this._locker.set('buyHeroGiveHeroSaleDismissed', true)
+  }
+  /** TEMP SALE CODE */
 }
