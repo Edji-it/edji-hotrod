@@ -9,7 +9,7 @@ import { User } from "../../shared/datatypes"
 
 @Component({
   selector: 'hot-add-project-modal',
-  templateUrl: 'add-project.component.html'
+  templateUrl: 'add-project.component.pug'
 })
 export class AddProjectModal implements OnInit {
   @Output() closeModal: EventEmitter<any> = new EventEmitter()
@@ -29,7 +29,7 @@ export class AddProjectModal implements OnInit {
     groupNameLength?: boolean
   } = {}
   public commentTypes: any = []
-  public canChooseTypes: boolean = false 
+  public isHero: boolean = false 
   public customCode: string = ''
   public user: User
   public loading: boolean
@@ -57,9 +57,8 @@ export class AddProjectModal implements OnInit {
       groupInstructions: ''
     })
 
-    this.canChooseTypes = this._auth.getUser().hero_status
-
-    console.log(this.reading)
+    // isHero turns Hero-only group features on/off
+    this.isHero = this._auth.getUser().hero_status
   }
 
   /**
