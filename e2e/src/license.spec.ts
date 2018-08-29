@@ -120,8 +120,16 @@ describe('Academy user that has ability to manage licenses for their academy: ',
     let invites = element.all(by.css('.educator-pending--name'))
     // when this next field goes blank, data was successfully sent to the server, then to bluestreak to send the email
     browser.wait(EC.textToBePresentInElement(element(by.id("licenseInviteNameInput")), ''), 3000, "license invite never was sent to teacher")
-    invites.last().getText().then((invite) => {
-      expect(invite).toBe(uniqueName, 'never saw the latest license invite get added')
-    })
+    
+    browser.wait(specificTextToBePresentInElement(invites.last(), uniqueName), 5000, "never saw the latest license invite get added")
   })
+
+  var specificTextToBePresentInElement = function(elementFinder, nameText) {
+    var hasText = function() {
+      return elementFinder.getText().then((text) => {
+        return text
+      })
+    }
+    return EC.and(EC.textToBePresentInElement(elementFinder, nameText))
+  }
 })
