@@ -72,7 +72,7 @@ nav-bar([showDashboardOptions]="true")
         .col-12
           .academy-name Request or Update Academy Licenses
           .academy-header.font-weight-light To change your Academy’s number of licenses, update Acadmey information, or for other Hero Academy support, submit your request below.
-          form([formGroup]="licenseRequest", (ngSubmit)="formSubmit(licenseRequest)")
+          form([formGroup]="licenseRequest", (ngSubmit)="sendRequest(licenseRequest)")
             .form-group.mt-4
               //- Request Type
               label Request Type
@@ -92,4 +92,7 @@ nav-bar([showDashboardOptions]="true")
               .col-12
                 i.academy-header.font-weight-light Edji Support will contact you within 48 hours to confirm completion or get additional information
               .col-12.float-right.mt-4
+                #msgServerError.alert.alert-danger(*ngIf="errorObject.serverError")
+                  strong Oh no!&nbsp;
+                  | {{errorObject.serverError}}
                 button.btn.btn-primary.float-right#licenseInviteSubmitBtn(type="submit", [disabled]="!licenseRequest.valid") Request
