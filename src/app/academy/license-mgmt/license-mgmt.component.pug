@@ -1,7 +1,7 @@
 nav-bar([showDashboardOptions]="true")
 .academy-bg
-.row.mx-4
-  .col-md-8
+.row.mx-3
+  .col-md-8.px-2
     .container.academy-container.py-4
       .row
         .col-6
@@ -66,30 +66,30 @@ nav-bar([showDashboardOptions]="true")
                     option(*ngFor="let role of licenseRoles", [ngValue]="role.value") {{role.label}}
                 .form-group.mt-4
                   button.btn.btn-primary.float-right#licenseInviteSubmitBtn(type="submit", [disabled]="!licenseInvite.valid") Submit
-  .col-md-4
-    .container.academy-container
+  .col-md-4.px-2
+    .container.academy-container.py-4
       .row
         .col-12
           .academy-name Request or Update Academy Licenses
           .academy-header.font-weight-light To change your Academy’s number of licenses, update Acadmey information, or for other Hero Academy support, submit your request below.
           form([formGroup]="licenseRequest", (ngSubmit)="formSubmit(licenseRequest)")
-            .form-group
+            .form-group.mt-4
               //- Request Type
               label Request Type
-              select.role-select.mb-0#licenseRole([formControl]="licenseRequest.controls['request']")
+              select.role-select.mb-0#licenseReqTypeInput([formControl]="licenseRequest.controls['request']")
                 option(*ngFor="let requestType of licenseUpdateTypes", [ngValue]="requestType.value") {{requestType.label}}
             .form-group
               //- Message
               label Message
-              input#licenseInviteNameInput.mb-0(
-                type="text",
+              textarea#licenseReqMsgInput.mb-0(
+                rows="4",
                 [formControl]="licenseRequest.controls['message']",
-                tabindex="0"
+                placeholder="Additional information, such as number of licenses..."
               )
               #errorTitle.alert.alert-info(*ngIf="licenseRequest.controls['message'].hasError('required') && (licenseRequest.controls['message'].dirty || submitted)") 
                 | Please enter a message
             .row
-              .col-md-4.float-right
-                button.btn.btn-primary.float-right#licenseInviteSubmitBtn(type="submit", [disabled]="!licenseRequest.valid") Submit
-              .col-md-8.float-left
+              .col-12
                 i.academy-header.font-weight-light Edji Support will contact you within 48 hours to confirm completion or get additional information
+              .col-12.float-right.mt-4
+                button.btn.btn-primary.float-right#licenseInviteSubmitBtn(type="submit", [disabled]="!licenseRequest.valid") Request
