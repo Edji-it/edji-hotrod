@@ -68,11 +68,11 @@ export class AddProjectModal implements OnInit {
   addProject(formValue: any) {
     // reset errors
     this.errors = {}
-
     // trigger form submission and check for form errors
     this.formSubmitted = true
-    this.loading = true
     if (!this.projectForm.valid) { return }
+    // Start loading spinner! If we're valid, we're requesting
+    this.loading = true
 
     let types = []
     if (formValue.emojiType) { types.push("emoji") }
