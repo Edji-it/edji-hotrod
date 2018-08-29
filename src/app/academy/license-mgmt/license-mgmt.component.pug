@@ -25,7 +25,7 @@ nav-bar([showDashboardOptions]="true")
             tbody
               tr.no-border(*ngFor="let licenseUser of licenseUsers")
                 td
-                td([ngClass]="[licenseUser.type=='pending' ? 'educator-pending' : '']") {{ licenseUser.educator }}
+                td.educator-pending--name([ngClass]="[licenseUser.type=='pending' ? 'educator-pending' : '']") {{ licenseUser.educator }}
                 td([ngClass]="[licenseUser.type=='pending' ? 'educator-pending' : '']") {{ licenseUser.role }}
                 td(*ngIf="licenseUser.type=='active'") {{ licenseUser.joined | edjidate:'timeStamp':'shortDate' }}
                 td.educator-pending.expires(*ngIf="licenseUser.type=='pending'") Pending - Expires {{ licenseUser.joined | edjidate:'timeStamp':'shortDate' }}

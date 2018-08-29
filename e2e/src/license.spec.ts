@@ -95,33 +95,33 @@ describe('Academy user that has ability to manage licenses for their academy: ',
     })
   })
 
-  // // Access the license management page - verify inviting a new teacher and that the inivite was succesfully sent
-  // it("should log in as an admin and successfully invite a teacher to join", () => {
-  //   // log-in as the hero and make sure we hit the dashboard
-  //   login.loginAndVerify(login.adminUser, login.adminPassword)
+  // Access the license management page - verify inviting a new teacher and that the inivite was succesfully sent
+  it("should log in as an admin and successfully invite a teacher to join", () => {
+    // log-in as the hero and make sure we hit the dashboard
+    login.loginAndVerify(login.adminUser, login.adminPassword)
 
-  //   // go to the academy license manage page
-  //   dashboard.getLicenseManage()
+    // go to the academy license manage page
+    dashboard.getLicenseManage()
     
-  //   // should get the license management page!
-  //   browser.wait(EC.presenceOf(element(by.id('activeLicenseCount'))), 5000, "never saw the license page")
+    // should get the license management page!
+    browser.wait(EC.presenceOf(element(by.id('activeLicenseCount'))), 5000, "never saw the license page")
     
-  //   // invite a teacher
-  //     // Name
-  //     let uniqueName: string = 'fakeTeach-' + new Date().valueOf().toString()
-  //     element(by.id("licenseInviteNameInput")).sendKeys(uniqueName)
-  //     // Email
-  //     element(by.id("licenseInviteEmailInput")).sendKeys('fakeTeach@edji.it')
-  //     //submit
-  //     browser.wait(EC.elementToBeClickable(element(by.id("licenseInviteSubmitBtn"))), 5000)
-  //     element(by.id("licenseInviteSubmitBtn")).click()
+    // invite a teacher
+      // Name
+      let uniqueName: string = 'fakeTeach-' + new Date().valueOf().toString() + '-license'
+      element(by.id("licenseInviteNameInput")).sendKeys(uniqueName)
+      // Email
+      element(by.id("licenseInviteEmailInput")).sendKeys('fakeTeach@edji.it')
+      //submit
+      browser.wait(EC.elementToBeClickable(element(by.id("licenseInviteSubmitBtn"))), 5000)
+      element(by.id("licenseInviteSubmitBtn")).click()
 
-  //   // verify the invite was sent
-  //   let invites = element.all(by.css('.educator-pending'))
-  //   // when this next field goes blank, data was successfully sent to the server, then to bluestreak to send the email
-  //   browser.wait(EC.textToBePresentInElement(element(by.id("licenseInviteNameInput")), ''), 3000, "license invite never was sent to teacher")
-  //   invites.last().getText().then((invite) => {
-  //     expect(invite).toBe(uniqueName, 'never saw the latest license invite get added')
-  //   })
-  // })
+    // verify the invite was sent
+    let invites = element.all(by.css('.educator-pending--name'))
+    // when this next field goes blank, data was successfully sent to the server, then to bluestreak to send the email
+    browser.wait(EC.textToBePresentInElement(element(by.id("licenseInviteNameInput")), ''), 3000, "license invite never was sent to teacher")
+    invites.last().getText().then((invite) => {
+      expect(invite).toBe(uniqueName, 'never saw the latest license invite get added')
+    })
+  })
 })
