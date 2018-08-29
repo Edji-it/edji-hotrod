@@ -2,15 +2,23 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">New Group</h4>
+                <h4 class="modal-title">{{ heading ? heading : 'New Group' }}</h4>
                 <button (click)="closeModal.emit()" type="button" class="close">&times;</button>
             </div>
             <form [formGroup]="projectForm" (ngSubmit)="addProject(projectForm.value)">
               <div class="modal-body">
+                  <div *ngIf="subheading" class="form-group">
+                    <p>{{ subheading }}</p>
+                  </div>
                   <div class="form-group">
                       <label for="newProjectLabel">Group Name</label>
                       <input tabindex="0" id="newProjectLabel" type="text" placeholder="What will you call the group?" [formControl]="projectForm.controls['label']" />
                       <div id="msgLabelRequired" *ngIf="formSubmitted && projectForm.controls['label'].hasError('required')" class="alert alert-warning" role="alert">Groups like to have names!</div>
+                  </div>
+                  <div *ngIf="user.hero_status" class="form-group">
+                      <label for="groupInstructions">Reading Group Instructions
+                          <input [formControl]="projectForm.controls['groupInstructions']" id="groupInstructions" type="text" class="form-control form-item--editor h3 mGroup" placeholder="In today's mission, you will..."/>
+                      </label>
                   </div>
                   <div class="form-group">
                     <label>Comment Types</label>
@@ -54,11 +62,6 @@
                         <input [formControl]="projectForm.controls['customCode']" id="customCodeInput" type="text" class="form-control form-item--editor h3 mGroup" placeholder="(optional)" style="text-transform:lowercase;"/>
                     </label>
                     <div *ngIf="errors.invalidCode" id="errorInvalidCustomCode" class="alert alert-warning">Whoops, someone is already using that group code. Could you pick another?</div>
-                </div>
-                <div *ngIf="user.hero_status" class="form-group">
-                    <label for="groupInstructions">Reading Group Instructions
-                        <input [formControl]="projectForm.controls['groupInstructions']" id="groupInstructions" type="text" class="form-control form-item--editor h3 mGroup" placeholder="In today's mission, you will..."/>
-                    </label>
                 </div>
               </div>
               <div class="modal-footer">

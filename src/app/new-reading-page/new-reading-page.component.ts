@@ -7,7 +7,7 @@ import { IMultiSelectOption, IMultiSelectSettings } from '../_directives'
 import { take } from 'rxjs/operators'
 
 import { AuthService, ProjectService, ReadingService, UtilToolService, AcademyService } from '../_services'
-import { EdjiComment, EdjiQuestion, User } from '../shared/datatypes'
+import { EdjiComment, EdjiQuestion, User, Project } from '../shared/datatypes'
 import { ReadingShareObject } from './../shared/nav-bar'
 import * as Rangy from 'rangy'
 import { Subscription } from 'rxjs';
@@ -19,35 +19,28 @@ import { Subscription } from 'rxjs';
 })
 export class NewReadingPage implements OnInit {
     
-    /*
-        New Reading Page
-        Last Mod: 5 Aug 2017
-        Create a new reading!
-    */
-
-    public readingForm     : FormGroup
-    public newReadingInner : string = "<div>&nbsp;</div>"
-    public readingHtml     : any[] = [{'text': this.newReadingInner}]
-    public readingIsBlank  : boolean = false
-    public submitted       : boolean = false
-    public addLoadingD     : boolean = false
-    public addLoadingP     : boolean = false
-    public isDraft         : boolean = true
-    public readingId       : any = ""
-    public reading         : any = {}
-    public projects        : any[] = []
-    public questions       : any[] = []
+    public readingForm: FormGroup
+    public newReadingInner: string = "<div>&nbsp;</div>"
+    public readingHtml: any[] = [{'text': this.newReadingInner}]
+    public readingIsBlank: boolean = false
+    public submitted: boolean = false
+    public isDraft: boolean = true
+    public readingId: any = ""
+    public reading: any = {}
+    public projects: any[] = []
+    public questions: any[] = []
     public insertOptionShow: boolean
     public showPdfUploadModal: boolean
     private user: any
     private subscriptions: Subscription[] = []
 
     // Trigger booleans
-    public showAlert       : boolean = false
-    public showUploadModal : boolean = false // Should the modal appear?
-    
+    public showAlert: boolean = false
+    public showUploadModal: boolean = false
+    public showFirstGroupModal: boolean = false
+
     public errorObject = {
-        readingError: ""
+    readingError: ""
     };
     
     public successObject = {
@@ -380,7 +373,7 @@ export class NewReadingPage implements OnInit {
                 // Process any nested elements, except text since that was already saved to link
                 this.extractTextNodes(element.childNodes, inheritedTags, true)
             } else if (element.nodeType === 3 && !ignoreText) {
-                 // Found a text node!
+                // Found a text node!
                 // Make sure we aren't processing line breaks within the text nodes
                 // Text nodes should rely on word wrap
                 let rootWordTags = inheritedTags.slice()
@@ -435,43 +428,23 @@ export class NewReadingPage implements OnInit {
         }
     }
 
-    public saveReading(event, form) {
-        this.isDraft = true
-        this.onSubmit(form)
-    }
-
-    public shareReading(shareObj: ReadingShareObject, form) {
-        // Handle group options passed back from Nav
-        form.label = shareObj.groupLabel
-        form.customCode = shareObj.customCode
-        // No longer draft!
-        this.isDraft = false
-        this.onSubmit(form)
-    }
-
     /**
-     * Runs on form submit, and processes reading before calling service
-     *  @param form Passed from the HTML form element
+     * Custom form validation for a New Reading
+     * @param form Reading form
      */
-    private onSubmit(form) {
+    private validateReading(form) : boolean {
+        let questionsValid: boolean = true
         // Set submitted to show form errors
         this.submitted = true
-        if (this.isDraft===false) {
-            this.addLoadingP = true
-        } else {
-            this.addLoadingD = true
-        }
-        this.error = '';
-
+        this.error = ''
         // Custom empty validation for reading content
         if (this.el.nativeElement.querySelector('medium-editor').innerText.trim().length > 0 || this.el.nativeElement.querySelectorAll('medium-editor img').length > 0) {
             this.readingIsBlank = false
         } else {
             this.readingIsBlank = true
+            return false
         }
-
         // Overall validation check that questions have been filled out properly
-        let questionsValid: boolean = true
         if (this.readingHtml[1] && this.readingHtml[1].question) {
             for (let i=0;i<this.readingHtml.length;i++) {
                 if (this.readingHtml[i].question && 
@@ -482,13 +455,36 @@ export class NewReadingPage implements OnInit {
                 }
             }
         }
-
-        // This would be better handled by formcontrols
+        
         if (!form.title || form.title.length < 1 || this.readingIsBlank || !questionsValid || (form.public == 'true' && (form.grade_levels.length < 1 || form.subjects.length < 1))) {
-            this.addLoadingD = false
-            this.addLoadingP = false
+            return false
+        } else {
+            return true
+        }
+    }
+
+    public saveReading(event, form) {
+        // Save draft!
+        this.isDraft = true
+        this.onSubmit(form)
+    }
+
+    public shareReading(form) {
+        // No longer draft!
+        this.isDraft = false
+        this.onSubmit(form)
+    }
+
+    /**
+     * Runs on form submit, and processes reading before calling service
+     *  @param form Passed from the HTML form element
+     *  @returns boolean False if error saving or validating
+     */
+    private onSubmit(form,) : boolean {
+        // This would be better handled by formcontrols
+        if (this.validateReading(form) === false) {
             this.error = ':warning: <b>Empty Fields</b> Not quite, please make sure all highlighted fields are complete!'
-            return
+            return false
         }
 
         // Clear parsed words array
@@ -592,6 +588,9 @@ export class NewReadingPage implements OnInit {
             .subscribe(
                 data => {
                     if (data._id) {
+                        // Save for reference by Add Group modal and openFirstGroup()
+                        this.reading = data
+                        // Report saving reading with/without questions
                         if (reading.questions.length > 0) {
                             this.angulartics.eventTrack.next({ action: submitAction + 'WithQuestion', properties: { category: 'heroFeature', label: 'success' }})
                         } else {
@@ -599,55 +598,51 @@ export class NewReadingPage implements OnInit {
                         }
                         // Create default Project if it is in final version
                         if (reading.draft===false) {
-                            // Get authorized comment types
-                            let commentTypes = this._auth.getAllowedCommentTypes()
-
-                            this._projects.create(data._id, { 'label' : form.label, 'types' : commentTypes, 'code': form.customCode, 'group_instructions': form.instructions })
-                                .subscribe( (project) => {
-                                    this.addLoadingD = false
-                                    this.addLoadingP = false
-                                    this.router.navigate(['project', project._id], { queryParams: { readingCodeModal: true }})
-                                    // send the data to Pipo to log the new reading
-                                    this._academy.pipoEvent({
-                                        // standard event info:
-                                        event_name: "reading_created",
-                                        user_id: this.user._id,
-                                        teacher: (project.teacher_id===this.user._id),
-                                        hero: this.user.hero_status || false,
-                                        institution_id: this.user.institution_ids || [],
-                                        // event-specific info:
-                                        reading_id: data._id,
-                                        group_id: project._id,
-                                        subjects: reading.subjects,
-                                        source: reading.source
-                                    })
-                                }, (error) => {
-                                    console.error(error)
-                                    this.addLoadingD = false
-                                    this.addLoadingP = false
-                                });
+                            // Reading saved! Now user needs to create their first project
+                            this.showFirstGroupModal = true
                         } else {
-                            this.addLoadingD = false
-                            this.addLoadingP = false
                             this.router.navigate(['new-reading/' + data._id], { queryParams: { successAlert: this.successAlert } })
                             this.successObject.readingSuccess = this.successAlert
                             this.showAlert = true
                             this.reading.updatedAt = data.updatedAt
+                            return true
                         }
                     }
                 },
                 error => {
                     console.error(error)
-                    this.addLoadingD = false
-                    this.addLoadingP = false
                     if (reading.questions.length > 0) {
                         this.angulartics.eventTrack.next({ action: submitAction + 'WithQuestion', properties: { category: 'heroFeature', label: 'failure' }})
                     } else {
                         this.angulartics.eventTrack.next({ action: submitAction, properties: { category: 'contentManagement', label: 'failure' }})
                     }
                     this.errorObject.readingError = "There was an issue saving your reading. It may be our fault; please try again"
+                    return false
                 }
             )
+    }
+
+    /**
+     * Opens reading for first group
+     * @param project Project object for first group
+     */
+    private openFirstGroup(project: Project) {
+        // Send the data to Pipo to log the new reading
+        this._academy.pipoEvent({
+            // standard event info:
+            event_name: "reading_created",
+            user_id: this.user._id,
+            teacher: (project.teacher_id===this.user._id),
+            hero: this.user.hero_status || false,
+            institution_id: this.user.institution_ids || [],
+            // event-specific info:
+            reading_id: this.reading._id,
+            group_id: project._id,
+            subjects: this.reading.subjects,
+            source: this.reading.source
+        })
+        // Navigate user to newly created group for reading
+        this.router.navigate(['project', project._id], { queryParams: { readingCodeModal: true }})
     }
 
     /**

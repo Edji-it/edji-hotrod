@@ -13,8 +13,14 @@ import { User } from "../../shared/datatypes"
 })
 export class AddProjectModal implements OnInit {
   @Output() closeModal: EventEmitter<any> = new EventEmitter()
+  @Output() groupSaved: EventEmitter<boolean> = new EventEmitter() 
 
   @Input() reading: any
+  
+  // Optional copy inputs
+  @Input() heading: string
+  @Input() subheading: string
+
   public projectForm: FormGroup
   public formSubmitted: boolean = false
   public errors: {
@@ -91,7 +97,7 @@ export class AddProjectModal implements OnInit {
               .subscribe( project => {
                 if (project._id) {
                   project.new = true
-                  this.reading.projects.push(project)
+                  this.groupSaved.emit(project)
                   this.closeModal.emit()
                 }
               }, error => {

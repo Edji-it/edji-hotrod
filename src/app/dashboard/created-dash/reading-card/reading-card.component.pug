@@ -189,7 +189,8 @@
 //- hot-add-project-modal is opens when "Create New Group" under the dropdown is clicked
 hot-add-project-modal(
   *ngIf="showAddModal", 
-  [reading]="relevantReading", 
+  [reading]="relevantReading",
+  (groupSaved)="addGroup($event)",
   (closeModal)="showAddModal = false"
 )
 //- hot-del-reading pops up when "Delete" is clicked underneath a Reading's dropdown menu

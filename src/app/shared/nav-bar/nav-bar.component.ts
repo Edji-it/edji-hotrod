@@ -179,44 +179,44 @@ export class NavBarComponent implements OnInit, OnDestroy {
       }
     }
 
-    finalizeReadingAndShare(shareObj: ReadingShareObject) {
-      this.messages = {}
-      this.submitted = true
-      this.shareLoading = true
-      if (shareObj.groupLabel.length < 1) {
-        this.shareLoading = false
-        this.messages.groupNameLengthError = true
-        return // we should give the user some sort of feedback here
-      }
+    // finalizeReadingAndShare(shareObj: ReadingShareObject) {
+    //   this.messages = {}
+    //   this.submitted = true
+    //   this.shareLoading = true
+    //   if (shareObj.groupLabel.length < 1) {
+    //     this.shareLoading = false
+    //     this.messages.groupNameLengthError = true
+    //     return // we should give the user some sort of feedback here
+    //   }
 
-      // we only want to check the validate route if there is a custom code - otherwise let it go through
-      if (shareObj.customCode) {
-        // does the project exist? this call will actually fail if it does
-        this._projects.validateProject(shareObj.customCode)
-        .pipe(take(1))
-        .subscribe((res) => {
-          // this is actually an error in this case! lol. If the code IS valid, we want them NOT to try and make a reading
-          this.shareLoading = false
-          this.messages.invalidCode = true
-        }, (err) => {
-          this.shareLoading = false
+    //   // we only want to check the validate route if there is a custom code - otherwise let it go through
+    //   if (shareObj.customCode) {
+    //     // does the project exist? this call will actually fail if it does
+    //     this._projects.validateProject(shareObj.customCode)
+    //     .pipe(take(1))
+    //     .subscribe((res) => {
+    //       // this is actually an error in this case! lol. If the code IS valid, we want them NOT to try and make a reading
+    //       this.shareLoading = false
+    //       this.messages.invalidCode = true
+    //     }, (err) => {
+    //       this.shareLoading = false
 
-          // this is actually the successful response :)
-          if (err.status == 404) {
-            this.shareAction.emit(shareObj)
-          } else {
-            this.messages.serviceError = true
-          }
-        })
-      } else {
-        this.shareAction.emit(shareObj)
-        // Nav bar does not manage validation on New Reading, so we make sure the button doesn't get stuck loading
-        // Note: The above condition will clear shareLoading in both cases
-        setTimeout(() => {
-          this.shareLoading = false
-        }, 500)
-      }
-    }
+    //       // this is actually the successful response :)
+    //       if (err.status == 404) {
+    //         this.shareAction.emit(shareObj)
+    //       } else {
+    //         this.messages.serviceError = true
+    //       }
+    //     })
+    //   } else {
+    //     this.shareAction.emit(shareObj)
+    //     // Nav bar does not manage validation on New Reading, so we make sure the button doesn't get stuck loading
+    //     // Note: The above condition will clear shareLoading in both cases
+    //     setTimeout(() => {
+    //       this.shareLoading = false
+    //     }, 500)
+    //   }
+    // }
 
     showShareCodeModal() {
       let currentParams = Object.assign({}, this._route.snapshot.queryParams)
