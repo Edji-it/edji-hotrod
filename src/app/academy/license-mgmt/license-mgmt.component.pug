@@ -7,12 +7,13 @@ nav-bar([showDashboardOptions]="true")
         .col-6
           .academy-header Academy
           .academy-name {{currentAcademy ? currentAcademy.name : 'Academy'}}
-        .col-6.text-right
-          .academy-header Licenses
-          button.btn.academy-pill.bckgnd-invisible.mr-4#availableLicenseCount {{license ? license.max_users - license.users.length : 0}} 
-            .text-smaller available
-          button.btn.academy-pill#activeLicenseCount {{license ? license.users.length : 0}} 
-            .text-smaller in Use
+        .col-6
+          .float-right
+            .academy-header.ml-2 Licenses
+            button.btn.academy-pill.bckgnd-invisible.mr-4#availableLicenseCount {{license ? license.max_users - license.users.length : 0}} 
+              .text-smaller available
+            button.btn.academy-pill#activeLicenseCount {{license ? license.users.length : 0}} 
+              .text-smaller in Use
       .row
         .container(*ngIf="licenseUsers.length > 1")
           table.table.table-striped.licenses-table
