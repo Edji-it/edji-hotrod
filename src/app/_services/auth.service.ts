@@ -139,7 +139,7 @@ export class AuthService implements CanActivate {
             this._academy.getLicenses()
                 .pipe(take(1))
                 .subscribe(data => {
-                    data.licenses[0].roles.forEach(roleObj => {
+                    data.licenses && data.licenses[0] && data.licenses[0].roles.forEach(roleObj => {
                         if (roleObj.role == 'administrator') {
                             user.isAcademyAdmin = true
                             this.currentUserSource.next(user)
