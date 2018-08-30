@@ -14,7 +14,7 @@ import {
     SocketService, 
     UtilToolService 
 } from '../_services' 
-import { CommentPermissions, EdjiComment, Project, Reading } from './../shared/datatypes'
+import { CommentPermissions, EdjiComment, Project, Reading, Feedback } from './../shared/datatypes'
 
 declare var window: any
 
@@ -45,6 +45,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
     public reading: Reading = <Reading>{}
     public project: Project = <Project>{}
+    // Feedback for current user
+    public feedbackForUser: Feedback[] = []
     // Determines when infinite scroll should begin 
     public lastWord: number = 4000
     public lastWordImageOffset: number = 100
@@ -215,6 +217,12 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                                 if (['reply'].indexOf(this.project.types[i]) < 0) {
                                     this.directCommentOptions.push(this.project.types[i])
                                 }
+                            }
+                            // Set aside feedback for current user
+                            if (this.project.report_evals) {
+                                this.feedbackForUser = this.project.report_evals.filter(feedback => {
+                                    return this.user._id == feedback.user_id
+                                })
                             }
                         }
                     },
@@ -1122,4 +1130,12 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         })
       }
     } 
+
+    // /**
+    //  * Return feedback for current user
+    //  * @param feedbackArray
+    //  */
+    // public getUsersFeedback(feedbackArray: Feedback[]) : Feedback[] {
+        
+    // }
 }

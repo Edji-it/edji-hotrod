@@ -103,7 +103,7 @@ scroll-progress([scrollProgress]="currentScroll")
             #article
         )
             //- Reading Group Instructions
-            .w.question(*ngIf="reading.group_instructions && reading.group_instructions.length > 1")
+            .w.question(*ngIf="project.group_instructions && project.group_instructions.length > 1")
                 .row.question-container.question-container__existing
                     .number-container
                         .notice-indicator([innerHtml]="':mega:' | emojione")
@@ -175,17 +175,16 @@ scroll-progress([scrollProgress]="currentScroll")
                 //- end Word span ".w"
             </span>
             //- Teacher's Feedback
-            .w.question
+            .w.question(*ngIf="feedbackForUser")
                 .row.question-container.question-container__existing
                     .number-container
                         .notice-indicator([innerHtml]="':bookmark_tabs:' | emojione")
                     .question-body
                         .notice-section
-                            label.label--gray.all-caps Teacher's Feedback
-                            .row(*ngIf="project.report_evals")
-                                .col-12(*ngFor="let evaluation of project.report_evals")
-                                    .sub-label.mb-0 {{ evaluation.createdAt | edjidate }}
-                                    p.evaluation_text {{ evaluation.evaluation ? evaluation.evaluation : '' }}
+                            label.label--gray.all-caps Teacher's Feedback For You
+                            .feedback-box(*ngFor="let feedback of feedbackForUser")
+                                .sub-label.mb-0 {{ feedback.createdAt | edjidate }}
+                                p.feedback_text {{ feedback.evaluation ? feedback.evaluation : '' }}
         .row.mb-4(*ngIf="lastWord < reading.words.length")
             .loading(style="margin: 0 auto;")
 //- End of Reading options
