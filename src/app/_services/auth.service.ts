@@ -34,7 +34,6 @@ export class AuthService implements CanActivate {
 
     constructor(
         private legacyHttp: Http,
-        private _academy: AcademyService,
         private _http: HttpClient,
         private _router: Router,
         private _locker: LockerService,
@@ -136,7 +135,7 @@ export class AuthService implements CanActivate {
         user.isLoggedIn = true
         // Determine if user is an Academy Admin
         if (user && user.license_ids) { 
-            this._academy.getLicenses()
+            this._http.get<any>(this.getUrl() + '/api/v1/licenses', this.getHeaders())
                 .pipe(take(1))
                 .subscribe(data => {
                     data.licenses && data.licenses[0] && data.licenses[0].roles.forEach(roleObj => {
@@ -146,9 +145,8 @@ export class AuthService implements CanActivate {
                             this._locker.set('user', user)
                         }
                     })
-
                 }, err => {
-
+                    // No licenses
                 })
         }
         this.currentUserSource.next(user)
