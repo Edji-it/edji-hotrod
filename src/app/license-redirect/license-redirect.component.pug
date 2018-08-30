@@ -11,8 +11,12 @@ nav-bar([hideAccountOptions]="true", [pageTitle]="'Join Your Academy'")
       .mt-5
         .row
           .col-10
-            h1.on-dark(*ngIf="login") Login
-            h1.on-dark(*ngIf="!login") Register
+            ng-container(*ngIf="login")
+              h1.on-dark Login
+              p.on-dark Join your Academy by logging in to your account
+            ng-container(*ngIf="!login")
+              h1.on-dark Register
+              p.on-dark Join your Academy by registering for an account
           .col-2
             button.float-right.btn.btn-primary(*ngIf="login", (click)="login=false") Register
             button.float-right.btn.btn-primary(*ngIf="!login", (click)="login=true") Login
