@@ -92,7 +92,13 @@ export class AddProjectModal implements OnInit {
           this.loading = false
           if (err.status == 404) {
             // no code found - they're good to create the new one!
-            this._projects.create(this.reading._id, { 'label' : formValue.label, 'types' : types, 'code': formValue.customCode } )
+            let newProject = { 
+              'label' : formValue.label, 
+              'types' : types, 
+              'code': formValue.customCode,
+              'group_instructions': formValue.groupInstructions
+            }
+            this._projects.create(this.reading._id, newProject)
               .subscribe( project => {
                 if (project._id) {
                   project.new = true
