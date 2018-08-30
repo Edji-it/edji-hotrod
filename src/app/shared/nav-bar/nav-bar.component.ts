@@ -68,6 +68,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
     // Nav menu variables
     public academyMenuShow: boolean = false
     public isTeacher: boolean = false
+    public isAcademyAdmin: boolean = false
     public secretSwitches: Secrets = {}
     public currentPage: string = ""
 

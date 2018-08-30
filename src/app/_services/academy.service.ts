@@ -202,7 +202,7 @@ export class AcademyService implements CanActivate {
     let user: User = this._locker.get('user')
     console.log(user)
     // is a teacher and belongs to an institution and can therefore access the academy suite
-    if (!user.hero.active || (!user.identities.includes('teacher') && !user.identities.includes('administrator')) || user.license_ids.length === 0) {
+    if (!user.hero_status || (!user.identities.includes('teacher') && !user.identities.includes('administrator')) || user.license_ids.length === 0) {
       this._router.navigate(['/dashboard'])
       return false
     } else {
