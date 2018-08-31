@@ -46,7 +46,7 @@ nav-bar([showDashboardOptions]="true")
                     [formControl]="licenseInvite.controls['name']",
                     tabindex="0"
                   )
-                  #errorTitle.alert.alert-info(*ngIf="licenseInvite.controls['name'].hasError('required') && (licenseInvite.controls['name'].dirty || submitted)") 
+                  #errorTitle.alert.alert-info(*ngIf="licenseInvite.controls['name'].hasError('required') && (licenseInvite.controls['name'].dirty)") 
                     | Please enter the name of the teacher for the license invite
                 .form-group
                   //- Email Address
@@ -56,7 +56,7 @@ nav-bar([showDashboardOptions]="true")
                     [formControl]="licenseInvite.controls['email']", 
                     tabindex="0"
                   )
-                  #licenseInviteErrorNoEmail.alert.alert-info(*ngIf="licenseInvite.controls['email'].hasError('required') && (licenseInvite.controls['email'].dirty || submitted)") 
+                  #licenseInviteErrorNoEmail.alert.alert-info(*ngIf="licenseInvite.controls['email'].hasError('required') && (licenseInvite.controls['email'].dirty)") 
                     | Please enter the email address of the teacher for the license invite
                   #licenseInviteErrorBadEmail.alert.alert-info(*ngIf="licenseInvite.controls['email'].hasError('emailIncorrect') && licenseInvite.controls['email'].dirty && !licenseInvite.controls['email'].hasError('required')") 
                     | We don't think that's an email...
@@ -91,7 +91,7 @@ nav-bar([showDashboardOptions]="true")
                 [formControl]="licenseRequest.controls['message']",
                 placeholder="Additional information, such as number of licenses..."
               )
-              #errorTitle.alert.alert-info(*ngIf="licenseRequest.controls['message'].hasError('required') && (licenseRequest.controls['message'].dirty || submitted)") 
+              #errorTitle.alert.alert-info(*ngIf="licenseRequest.controls['message'].hasError('required') && (licenseRequest.controls['message'].dirty)") 
                 | Please enter a message
             .row
               .col-12
