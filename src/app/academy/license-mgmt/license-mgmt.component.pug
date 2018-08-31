@@ -93,6 +93,9 @@ nav-bar([showDashboardOptions]="true")
               .col-12
                 i.academy-header.font-weight-light Edji Support will contact you within 48 hours to confirm completion or get additional information
               .col-12.float-right.mt-4
+                #successRequestSent.alert.alert-success(*ngIf="licenseRequestSent")
+                  strong Request Sent!&nbsp;
+                  | We will be reaching out to you shortly.
                 #msgServerError.alert.alert-danger(*ngIf="errorObject.serverError")
                   strong Oh no!&nbsp;
                   | {{errorObject.serverError}}

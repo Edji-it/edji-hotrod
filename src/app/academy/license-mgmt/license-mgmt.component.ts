@@ -37,6 +37,7 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
   public showLicenseInviteModal: boolean
   public licenseInvite: FormGroup
   public licenseRequest: FormGroup
+  public licenseRequestSent: boolean
   public loading: boolean = false
 
   public errorObject: {
@@ -200,6 +201,10 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
 
     this._bumblebee.sendFeedback(data).pipe(take(1)).subscribe(
       (res) => {
+        this.licenseRequestSent = true
+        setTimeout(() => {
+          this.licenseRequestSent = false
+        }, 4000);
         // Clear the form
         this.licenseRequest.reset()
         this.loading = false
