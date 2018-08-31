@@ -29,7 +29,7 @@ export class AcademyService implements CanActivate {
     private _locker: LockerService
   ) { 
     // dev currentInstitution
-    this.currentInstitution = "5b006d759dbfbf137ec0df23"
+    this.currentInstitution = "5b8897e472aaa60cb2d8ffeb"
   }
 
   /**
@@ -111,14 +111,16 @@ export class AcademyService implements CanActivate {
       map((data)=>{
         // institutionLicenses will initially contain all licenses, and we will need to filter for the ones for the relevant institution
         this.institutionLicenses = data.licenses
-        let licensesLength = this.institutionLicenses.length
-        for (let i=licensesLength-1; i>-1; i--) {
-          let license = this.institutionLicenses[i]
-          // if the license is not for the current institution, pull it out
-          if (license.owning_institution!==this.currentInstitution) {
-            this.institutionLicenses.splice(i,1)
-          }
-        }
+        this.currentInstitution = data.licenses && data.licenses[0].owning_institution
+        // Filter based on currentInstitution for handling multiple institutions
+        // let licensesLength = this.institutionLicenses.length
+        // for (let i=licensesLength-1; i>-1; i--) {
+        //   let license = this.institutionLicenses[i]
+        //   // if the license is not for the current institution, pull it out
+        //   if (license.owning_institution!==this.currentInstitution) {
+        //     this.institutionLicenses.splice(i,1)
+        //   }
+        // }
         return this.institutionLicenses
       })
     )

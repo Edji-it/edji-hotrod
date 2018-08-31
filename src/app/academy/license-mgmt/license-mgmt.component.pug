@@ -15,7 +15,7 @@ nav-bar([showDashboardOptions]="true")
             button.btn.academy-pill#activeLicenseCount {{license ? license.users.length : 0}} 
               .text-smaller in Use
       .row
-        .container(*ngIf="licenseUsers.length > 1")
+        .container(*ngIf="licenseUsers.length > 0")
           table.table.table-striped.licenses-table
             thead
               tr
