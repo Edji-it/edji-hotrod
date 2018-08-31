@@ -54,7 +54,7 @@ nav-bar([showDashboardOptions]="true")
                   input#licenseInviteEmailInput.mb-0(
                     type="text", 
                     [formControl]="licenseInvite.controls['email']", 
-                    tabindex="1"
+                    tabindex="0"
                   )
                   #licenseInviteErrorNoEmail.alert.alert-info(*ngIf="licenseInvite.controls['email'].hasError('required') && (licenseInvite.controls['email'].dirty || submitted)") 
                     | Please enter the email address of the teacher for the license invite
@@ -64,9 +64,13 @@ nav-bar([showDashboardOptions]="true")
                   //- Role
                   label Role
                   select.role-select.mb-0#licenseRole([formControl]="licenseInvite.controls['role']")
-                    option(*ngFor="let role of licenseRoles", [ngValue]="role.value") {{role.label}}
+                    option(*ngFor="let role of licenseRoles", [ngValue]="role.value", tabindex="0") {{role.label}}
                 .form-group.mt-4
-                  button.btn.btn-primary.float-right#licenseInviteSubmitBtn(type="submit", [disabled]="!licenseInvite.valid") Submit
+                  button.btn.btn-primary.float-right#licenseInviteSubmitBtn(
+                    type="submit", 
+                    [disabled]="!licenseInvite.valid",
+                    tabindex="0"
+                  ) Submit
   .col-md-4.px-2
     .container.academy-container.py-4
       .row
