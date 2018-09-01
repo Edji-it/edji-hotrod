@@ -23,7 +23,6 @@ export class RegisterFormComponent implements OnInit {
   /** The project id that the user wanted to add to the dashboard */
   @Input() tempUserId: string
   @Input() referralId: string
-  @Input() licenseToProcess: boolean
 
   @Output() registerSuccess: EventEmitter<any> = new EventEmitter()
 
@@ -151,7 +150,7 @@ export class RegisterFormComponent implements OnInit {
                 // should also have an error put on the dashboard
                 this._router.navigate(['/dashboard'])
               })
-          } else if (this.licenseToProcess) {
+          } else if (this.registerSuccess) {
             this.registerSuccess.emit(data.user)
           } else {
             // default case where nothing special happens

@@ -235,10 +235,16 @@ export class AuthService implements CanActivate {
             }))
     }
 
-    logout() {
+    /**
+     * Log out user
+     * @param noReload ONLY use when user is expected to immediately log in to another account
+     */
+    logout(noReload?: boolean) {
         this.destroyCredentials()
         // Refresh window to clear components/services
-        location.reload()
+        if (!noReload) {
+            location.reload()
+        }
     }
 
     /**

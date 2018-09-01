@@ -18,12 +18,9 @@ export class LicenseRedirectComponent implements OnInit, OnDestroy {
 
   public user: User
   public licenseId: string
+  public academyName: string = "Academy"
 
-  public messages: {
-    licenseProcessError?: boolean,
-    invalidLicense?: boolean,
-    serverError?: boolean
-  } = {}
+  public errorKey: string = ""
 
   constructor(
     private _auth: AuthService,
@@ -44,6 +41,9 @@ export class LicenseRedirectComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.route.params.subscribe((params) => {
         this.licenseId = params['license_id']
+        if (params['academy']) {
+          this.academyName = params['academy']
+        }
       })
     )
 
@@ -57,11 +57,9 @@ export class LicenseRedirectComponent implements OnInit, OnDestroy {
         // if the user already accepted this license, redirect them to the dashboard.. otherwise process it
         if (this.user.license_ids.includes(this.licenseId) && this.user.hero_status) {
           this._router.navigate(['/dashboard'])
-        } else {
-          this.processLicense()
         }
       } else {
-        // store the licenseId in the locker if we need to register the user or they need to login
+        // store the licenseId in the locker if we need to register the user or they need to login with Google
         this._locker.set("licenseId", this.licenseId)
       }
     }
@@ -91,16 +89,16 @@ export class LicenseRedirectComponent implements OnInit, OnDestroy {
           this._router.navigate(['/license/welcome/' + institutionId])
         } else {
           // error handling if the license was not processed on their account
-          this.messages.licenseProcessError = true
+          this.errorKey = 'licenseProcessError'
         }
       })
     }, (err) => {
       console.error(err)
       if (err.status===403 && err.error.error === 'invite not found for email') {
-        this.messages.serverError = true
+        this.errorKey = 'serverError'
       }
       if (err.status===403 && err.error.error === 'invalid license') {
-        this.messages.invalidLicense = true
+        this.errorKey = 'invalidLicense'
       }
     })
   }
@@ -119,5 +117,19 @@ export class LicenseRedirectComponent implements OnInit, OnDestroy {
       }
     }
     return -1;
+  }
+
+  /**
+   * Log out and show log in form
+   */
+  public changeAccount(): void {
+    this._auth.logout(true)
+  }
+
+  /**
+   * Registered for License
+   */
+  public userRegistered(user: User): void {
+    
   }
 }
