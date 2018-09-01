@@ -87,7 +87,7 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
           let educatorRole = 'Teacher'
           for (var j=0; j<licenseRoles.length; j++) {
             // If the educator has a role beyond teacher per the license roles, override it here
-            if (licenseRoles[j].user_id===this.user._id) {
+            if (licenseRoles[j].user_id === licenseUser._id) {
               educatorRole = this.capitalizeFirstLetter(licenseRoles[j].role)
             }
           }
