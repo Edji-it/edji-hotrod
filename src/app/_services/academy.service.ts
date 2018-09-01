@@ -201,7 +201,6 @@ export class AcademyService implements CanActivate {
   /** Provides logic for sending user back to home if they are not authorized */
   public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     let user: User = this._locker.get('user')
-    console.log(user)
     // is a teacher and belongs to an institution and can therefore access the academy suite
     if (!user.hero_status || (!user.identities.includes('teacher') && !user.identities.includes('administrator')) || user.license_ids.length === 0) {
       this._router.navigate(['/dashboard'])
