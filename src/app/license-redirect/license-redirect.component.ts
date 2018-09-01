@@ -55,7 +55,7 @@ export class LicenseRedirectComponent implements OnInit, OnDestroy {
       // if the user is logged in already, then we'll process the license
       if (this.user.isLoggedIn) {
         // if the user already accepted this license, redirect them to the dashboard.. otherwise process it
-        if (this.user.license_ids.includes(this.licenseId) && (this.user.hero && this.user.hero.active)) {
+        if (this.user.license_ids.includes(this.licenseId) && this.user.hero_status) {
           this._router.navigate(['/dashboard'])
         } else {
           this.processLicense()
@@ -84,7 +84,7 @@ export class LicenseRedirectComponent implements OnInit, OnDestroy {
     this._academy.acceptLicense(this.licenseId).pipe(take(1)).subscribe((userWithLicense: any) => {
       // update the user across the app with the new license ID and hero status update
       this._auth.refreshUser().pipe(take(1)).subscribe((updatedUser: any) => {
-        if (this.findLicense(updatedUser.license_ids, this.licenseId)>-1 && (updatedUser.hero && updatedUser.hero.active)) {
+        if (this.findLicense(updatedUser.license_ids, this.licenseId)>-1 && updatedUser.hero_status) {
           let index = updatedUser.institution_ids.length - 1
           let institutionId = updatedUser.institution_ids[index]
           // once we update the user to add a license and make them a hero, let's redirect them to the dashboard
