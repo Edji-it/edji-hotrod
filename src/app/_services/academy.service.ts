@@ -17,7 +17,6 @@ export class AcademyService implements CanActivate {
 
   private user: User
   private project: any
-  public currentInstitution: string
 
   public allLicenses: any
   public institutionLicenses: any
@@ -28,8 +27,7 @@ export class AcademyService implements CanActivate {
     private _router: Router,
     private _locker: LockerService
   ) { 
-    // dev currentInstitution
-    this.currentInstitution = "5b8897e472aaa60cb2d8ffeb"
+    
   }
 
   /**
@@ -109,9 +107,10 @@ export class AcademyService implements CanActivate {
     })
     .pipe(
       map((data)=>{
+        let user = this._auth.getUser()
+        let currentInstitution: string = user.institution_ids && user.institution_ids[0]
         // institutionLicenses will initially contain all licenses, and we will need to filter for the ones for the relevant institution
         this.institutionLicenses = data.licenses
-        this.currentInstitution = data.licenses && data.licenses[0].owning_institution
         // Filter based on currentInstitution for handling multiple institutions
         // let licensesLength = this.institutionLicenses.length
         // for (let i=licensesLength-1; i>-1; i--) {

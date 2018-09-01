@@ -67,6 +67,12 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
       // Set the current user every time it changes 
       this._auth.getCurrentUser().subscribe((user) => {
         this.user = user
+        // Get the current academy name
+        this._academy.getInstitution(this.user.institution_ids[0])
+          .pipe(take(1))
+          .subscribe((academy) => {
+            this.currentAcademy = academy.institution
+          })
       }),
       // get the licenses the user can manage
       this._academy.getLicenses().subscribe((licenses) => {
@@ -124,10 +130,6 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
             type: 'pending'
           })
         }
-      }),
-      // get the current academy name
-      this._academy.getInstitution(this._academy.currentInstitution).subscribe((academy) => {
-        this.currentAcademy = academy.institution
       })
     )
   }
