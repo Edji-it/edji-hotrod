@@ -13,3 +13,11 @@ interface BaseLicense {
   roles: { _id: string, role: string, user_id: string }[]
 }
 
+export interface LicenseInvite {
+  email: string,
+  educator: string,
+  role: string,
+  expiration?: Date,
+  _id?: string
+}
+

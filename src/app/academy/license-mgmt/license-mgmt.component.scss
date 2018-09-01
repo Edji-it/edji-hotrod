@@ -78,7 +78,7 @@ $academy-purple: #2B2B48;
   }
 }
 
-.educator-pending {
+.educator-pending, .educator-pending td {
   font-style: italic;
   color: #838383;
   &.expires {
