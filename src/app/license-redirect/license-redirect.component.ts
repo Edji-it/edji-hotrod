@@ -5,7 +5,7 @@ import { take } from 'rxjs/operators';
 
 // Project dependancies
 import { User } from '../shared/datatypes'
-import { LockerService, AuthService, AcademyService } from '../_services'
+import { LockerService, AuthService, AcademyService, UtilToolService } from '../_services'
 
 @Component({
   selector: 'app-license-redirect',
@@ -30,7 +30,8 @@ export class LicenseRedirectComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private _router: Router,
     private _locker: LockerService,
-    private _academy: AcademyService
+    private _academy: AcademyService,
+    public _util: UtilToolService
   ) { }
 
   ngOnInit() {
@@ -54,7 +55,7 @@ export class LicenseRedirectComponent implements OnInit, OnDestroy {
       // if the user is logged in already, then we'll process the license
       if (this.user.isLoggedIn) {
         // if the user already accepted this license, redirect them to the dashboard.. otherwise process it
-        if (this.user.license_ids.includes(this.licenseId) && (this.user.hero && this.user.hero.active)) {
+        if (this.user.license_ids.includes(this.licenseId) && this.user.hero_status) {
           this._router.navigate(['/dashboard'])
         } else {
           this.processLicense()
@@ -83,7 +84,7 @@ export class LicenseRedirectComponent implements OnInit, OnDestroy {
     this._academy.acceptLicense(this.licenseId).pipe(take(1)).subscribe((userWithLicense: any) => {
       // update the user across the app with the new license ID and hero status update
       this._auth.refreshUser().pipe(take(1)).subscribe((updatedUser: any) => {
-        if (updatedUser.license_ids.includes(this.licenseId) && (updatedUser.hero && updatedUser.hero.active)) {
+        if (this.findLicense(updatedUser.license_ids, this.licenseId)>-1 && updatedUser.hero_status) {
           let index = updatedUser.institution_ids.length - 1
           let institutionId = updatedUser.institution_ids[index]
           // once we update the user to add a license and make them a hero, let's redirect them to the dashboard
@@ -95,6 +96,28 @@ export class LicenseRedirectComponent implements OnInit, OnDestroy {
       })
     }, (err) => {
       console.error(err)
+      if (err.status===403 && err.error.error === 'invite not found for email') {
+        this.messages.serverError = true
+      }
+      if (err.status===403 && err.error.error === 'invalid license') {
+        this.messages.invalidLicense = true
+      }
     })
+  }
+
+  /**
+   * Checks for the license on the user object since it is an array of objects including licnese_id and joined date
+   * @param userLicenses the licenses on the user object, which is an array of licenses
+   * @param license_id the license we are looking to confirm is on the user object
+   */
+  private findLicense(userLicenses, license_id) {
+    let arrLength = userLicenses.length
+    for (var i=0; i<arrLength; i++) {
+      if(userLicenses[i].license_id===license_id) {
+        console.log(i)
+        return i
+      }
+    }
+    return -1;
   }
 }

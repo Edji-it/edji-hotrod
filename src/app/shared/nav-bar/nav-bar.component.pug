@@ -12,17 +12,19 @@
       a#navDiscover.btn.btn-link([routerLink]="['/discover']", routerLinkActive="active", title="Discover Readings from other Teachers")
         //- span([innerHtml]="':triangular_flag_on_post:' | emojione")
         | Discover
-      .dropdown(*ngIf="secretSwitches.academy", [class.show]="academyMenuShow")
-        a#navAcademy.btn.btn-link.dropdown-toggle(
-            routerLinkActive="active",
-            (click)="academyMenuShow = !academyMenuShow"
-          )
+      .dropdown(*ngIf="user.isAcademyAdmin", [class.show]="academyMenuShow")
+        a#navAcademy.btn.btn-link([routerLink]="['/academy/licenses']", routerLinkActive="active") 
           | Academy
-        .dropdown-menu(aria-labelledby="navAcademy")
-          a.dropdown-item([routerLink]="['/academy/engagement']", routerLinkActive="active")
-            | Engagement
-          a.dropdown-item([routerLink]="['/academy/licenses']", routerLinkActive="active")
-            | Licenses
+        //- a#navAcademy.btn.btn-link.dropdown-toggle(
+        //-     routerLinkActive="active",
+        //-     (click)="academyMenuShow = !academyMenuShow"
+        //-   )
+        //-   | Academy
+        //- .dropdown-menu(aria-labelledby="navAcademy")
+        //-   a.dropdown-item([routerLink]="['/academy/engagement']", routerLinkActive="active")
+        //-     | Engagement
+        //-   a.dropdown-item([routerLink]="['/academy/licenses']", routerLinkActive="active")
+        //-     | Licenses
       a#navGuide.btn.btn-link.btn--hover-icon(*ngIf="isTeacher", href="http://guide.edji.it", target="_blank", )
         | Guide
         .icon.icon-external

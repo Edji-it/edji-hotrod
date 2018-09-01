@@ -17,14 +17,14 @@
         .form-group
           label Subject
           .input-group
-          //- ss-multiselect-dropdown(
-          //-   id="subjectDropdown",
-          //-   [options]="subjects", 
-          //-   formControlName="subjects", 
-          //-   [settings]="subjectDropSettings", 
-          //-   (click)="multiselectExpanded=!multiselectExpanded",
-          //-   (clickOutside)="multiselectExpanded=false"
-          //- )
+          ss-multiselect-dropdown(
+            id="subjectDropdown",
+            [options]="subjects", 
+            formControlName="subjects", 
+            [settings]="subjectDropSettings", 
+            (click)="multiselectExpanded=!multiselectExpanded",
+            (clickOutside)="multiselectExpanded=false"
+          )
           #errorTitle.alert.alert-warning.mt-2(*ngIf="readingMetaForm.controls['subjects'].hasError('required') && (readingMetaForm.controls['subjects'].dirty || submitted)") 
             | Please select at least one Subject area that this Reading applies to.
         //- Give the user a link to the first project in the reading list as a "preview" if they are unsure of the content for selecting grade levels and subjects
