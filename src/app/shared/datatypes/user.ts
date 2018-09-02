@@ -51,10 +51,10 @@ interface BaseUser {
     images?: { title: string, url: string }[],
     documents?: { title: string, pages: string[] }[]
   },
-  academies?: {
+  academies?: [{
     name: string,
     abbreviation: string
-  },
+  }],
   currentAcademy?: number,
   avatar?: string,
   referred_by?: string,
