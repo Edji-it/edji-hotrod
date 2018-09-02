@@ -92,9 +92,9 @@ export class AcademyService {
         "email": evalForm.email,
         "evaluation": evalForm.inputText,
         "person_sharing": evalForm.personSharing,
-        "person_sharing_email": evalForm.personSharingEmail,
+        "replyTo": evalForm.personSharingEmail,
         "person_receiving": evalForm.name,
-        "pdfName": evalForm.pdfName,
+        "attachment_name": evalForm.pdfName,
         "pdf": pdf,
         "reading_name": evalForm.readingName
       },
