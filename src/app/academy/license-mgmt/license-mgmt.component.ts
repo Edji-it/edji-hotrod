@@ -20,7 +20,7 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
   public subscriptions: Subscription[] = []
 
   public user: User
-  public licenseUsers: licenseRow[] = []
+  public licenseUsers: LicenseRow[] = []
   public license: any
   public currentAcademy: any
   public licenseRoles: any = [
@@ -228,11 +228,9 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
    * Send pending user another invite
    * @param license Pending license object
    */
-  private resendInvite(invite: licenseRow) : void {
+  private resendInvite(invite: LicenseRow) : void {
     this._academy.inviteToLicense(invite.educator, invite.email, invite.role, this.license._id)
     .subscribe(data => {
-      let updatedLicense = data.license
-      let latestInvitation = updatedLicense.pending_invitations[updatedLicense.pending_invitations.length-1]
       // Update the expired license
       invite.type = 'pending'
       invite.joined = new Date()
@@ -243,7 +241,7 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
   }
 }
 
-interface licenseRow {
+interface LicenseRow {
   educator: string,
   email: string,
   role: string,
