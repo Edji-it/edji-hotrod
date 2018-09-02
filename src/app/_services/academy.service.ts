@@ -107,20 +107,7 @@ export class AcademyService implements CanActivate {
     })
     .pipe(
       map((data)=>{
-        let user = this._auth.getUser()
-        let currentInstitution: string = user.institution_ids && user.institution_ids[0]
-        // institutionLicenses will initially contain all licenses, and we will need to filter for the ones for the relevant institution
-        this.institutionLicenses = data.licenses
-        // Filter based on currentInstitution for handling multiple institutions
-        // let licensesLength = this.institutionLicenses.length
-        // for (let i=licensesLength-1; i>-1; i--) {
-        //   let license = this.institutionLicenses[i]
-        //   // if the license is not for the current institution, pull it out
-        //   if (license.owning_institution!==this.currentInstitution) {
-        //     this.institutionLicenses.splice(i,1)
-        //   }
-        // }
-        return this.institutionLicenses
+        return data.licenses
       })
     )
   }

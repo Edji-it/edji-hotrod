@@ -22,6 +22,8 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
   public user: User
   public licenseUsers: LicenseRow[] = []
   public license: any
+  // Hold on to loaded licenses
+  private licenses: any[]
   public currentAcademy: any
   public licenseRoles: any = [
     {label: 'Teacher', value: 'teacher'},
@@ -76,71 +78,80 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
       // Set the current user every time it changes 
       this._auth.getCurrentUser().subscribe((user) => {
         this.user = user
-        // Get the current academy name
-        this._academy.getInstitution(this.user.institution_ids[0])
-          .pipe(take(1))
-          .subscribe((academy) => {
-            this.currentAcademy = academy.institution
-          })
+        if (this.licenses && this.user.hasOwnProperty('currentAcademy')) {
+          this.loadLicenseRows(this.licenses[this.user.currentAcademy])
+        }
       }),
       // get the licenses the user can manage
       this._academy.getLicenses().subscribe((licenses) => {
-        this.license = licenses[0]
-
-        // Set the array lengths here for looping speed
-        let activeLicenseLength = this.license.users.length
-        let pendLicenseLength = this.license.pending_invitations.length
-
-        // Set up the array with the active licenses
-        for (var i=0; i<activeLicenseLength; i++) {
-          let licenseUser = this.license.users[i]
-          let licenseRoles = this.license.roles
-          let licenseUserLicenseIds = this.license.users[i].license_ids
-          // Set the default role of the educator to be 'teacher'
-          let educatorRole = 'Teacher'
-          for (var j=0; j<licenseRoles.length; j++) {
-            // If the educator has a role beyond teacher per the license roles, override it here
-            if (licenseRoles[j].user_id === licenseUser._id) {
-              educatorRole = this.capitalizeFirstLetter(licenseRoles[j].role)
-            }
-          }
-          let educatorJoined = new Date()
-          for (var k=0; k<licenseUserLicenseIds.length; k++) {
-            // Set the joined date of the educator for this license
-            if (licenseUserLicenseIds.license_id===this.license._id) {
-              educatorJoined = licenseUserLicenseIds.joined // | edjidate:'timeStamp':'shortDate'
-            }
-          }
-          // Push the object properties to the license
-          this.licenseUsers.push({
-            educator: licenseUser.fullname,
-            email: licenseUser.email,
-            role: educatorRole,
-            joined: educatorJoined,
-            type: 'active'
-          })
-        }
-
-        // Finish up the array with the pending licenses
-        for (var i=0; i<pendLicenseLength; i++) {
-          let pendingLicense = this.license.pending_invitations[i]
-          // Set the default role of the educator to be 'teacher'
-          let educatorRole = this.capitalizeFirstLetter(pendingLicense.role) || 'Teacher'
-          // Set type: 'pending' can also be 'expired'
-          let inviteType = this.today > new Date(pendingLicense.expiration) ? 'expired' : 'pending'
-          // Push the object properties to the license
-          this.licenseUsers.push({
-            // Set the Name of educator
-            educator: pendingLicense.name,
-            email: pendingLicense.email,
-            role: educatorRole,
-            // Set the joined date to their pending initation expiration date
-            joined: pendingLicense.expiration,
-            type: inviteType
-          })
-        }
+        let licenseIndex = this.user.currentAcademy || 0
+        this.licenses = licenses
+        this.loadLicenseRows(this.licenses[licenseIndex])
       })
     )
+  }
+
+  /**
+   * Process license data for display
+   * @param activeLicense license for active academy
+   */
+  private loadLicenseRows(activeLicense: any) : void {
+    this.license = activeLicense
+    this.licenseUsers = []
+    // Get the current academy name
+    this.currentAcademy = this.license['owning_institution']
+    // Set the array lengths here for looping speed
+    let activeLicenseLength = this.license.users.length
+    let pendLicenseLength = this.license.pending_invitations.length
+
+    // Set up the array with the active licenses
+    for (var i=0; i<activeLicenseLength; i++) {
+      let licenseUser = this.license.users[i]
+      let licenseRoles = this.license.roles
+      let licenseUserLicenseIds = this.license.users[i].license_ids
+      // Set the default role of the educator to be 'teacher'
+      let educatorRole = 'Teacher'
+      for (var j=0; j<licenseRoles.length; j++) {
+        // If the educator has a role beyond teacher per the license roles, override it here
+        if (licenseRoles[j].user_id === licenseUser._id) {
+          educatorRole = this.capitalizeFirstLetter(licenseRoles[j].role)
+        }
+      }
+      let educatorJoined = new Date()
+      for (var k=0; k<licenseUserLicenseIds.length; k++) {
+        // Set the joined date of the educator for this license
+        if (licenseUserLicenseIds.license_id===this.license._id) {
+          educatorJoined = licenseUserLicenseIds.joined // | edjidate:'timeStamp':'shortDate'
+        }
+      }
+      // Push the object properties to the license
+      this.licenseUsers.push({
+        educator: licenseUser.fullname,
+        email: licenseUser.email,
+        role: educatorRole,
+        joined: educatorJoined,
+        type: 'active'
+      })
+    }
+
+    // Finish up the array with the pending licenses
+    for (var i=0; i<pendLicenseLength; i++) {
+      let pendingLicense = this.license.pending_invitations[i]
+      // Set the default role of the educator to be 'teacher'
+      let educatorRole = this.capitalizeFirstLetter(pendingLicense.role) || 'Teacher'
+      // Set type: 'pending' can also be 'expired'
+      let inviteType = this.today > new Date(pendingLicense.expiration) ? 'expired' : 'pending'
+      // Push the object properties to the license
+      this.licenseUsers.push({
+        // Set the Name of educator
+        educator: pendingLicense.name,
+        email: pendingLicense.email,
+        role: educatorRole,
+        // Set the joined date to their pending initation expiration date
+        joined: pendingLicense.expiration,
+        type: inviteType
+      })
+    }
   }
 
   /** Validates email against the same regex used on the server
