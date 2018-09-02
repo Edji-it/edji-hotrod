@@ -71,12 +71,12 @@
           button#logOutButton.list-group-item.list-group-item-action(type="button", (click)="logout()") Log Out
             span.list-icon--right([innerHtml]="':outbox_tray:' | emojione")
     //- Academy indicator 
-    .nav__btn-wrap
+    .nav__btn-wrap.hidden-sm-down(*ngIf="user.academies && user.academies.length > 0")
       .academy-plate(
           title="Hero Academy", 
           *ngIf="user.academies", 
           (click)="showAcademyDropdown = !showAcademyDropdown",
-          [class.has-multiple]="user.academies.length > 0"
+          [class.has-multiple]="user.academies.length > 1"
           )
         .icon.icon-academy-plate
         .academy-plate__initials {{ user.academies[user.currentAcademy].abbreviation }}
