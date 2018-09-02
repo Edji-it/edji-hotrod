@@ -40,6 +40,9 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
     sent ?: boolean,
     resent ?: boolean
   } = {}
+  public inviteError: {
+    server ?: boolean
+  } = {}
   public licenseRequest: FormGroup
   public licenseRequestSent: boolean
   public loading: boolean = false
@@ -155,6 +158,8 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
     let existingInvite: LicenseRow
     let invitedEmail = form.controls.email.value
     let licenseUsersLength = this.licenseUsers.length
+    // Reset form errors
+    this.inviteError = {}
     for (let i = 0; i < licenseUsersLength; i++) {
       if (this.licenseUsers[i].email === invitedEmail) {
         existingInvite = this.licenseUsers[i]
@@ -187,6 +192,7 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
         },
         (error) => {
           console.error(error)
+          this.inviteError.server = true
         })
     }
   }
@@ -253,6 +259,7 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
    * @param license Pending license object
    */
   private resendInvite(invite: LicenseRow) : void {
+    this.inviteError = {}
     this._academy.inviteToLicense(invite.educator, invite.email, invite.role, this.license._id)
     .subscribe(data => {
       // Update the expired license
@@ -268,6 +275,7 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
     },
     (error) => {
       console.error(error)
+      this.inviteError.server = true
     })
   }
 }

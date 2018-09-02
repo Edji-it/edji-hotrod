@@ -52,6 +52,10 @@ nav-bar([showDashboardOptions]="true")
                 #licenseResent.alert.alert-success(*ngIf="this.inviteSuccess.resent")
                   b Resent&nbsp;
                   | Academy invite updated and resent!
+                #licenseInviteServerError.alert.alert-warning(*ngIf="inviteError.server")
+                  b Server Error&nbsp;
+                  | There was an error processing the invite. 
+                  a.link(href="mailto:support@edji.it") Please contact support.
                 .form-group
                   //- Name of Teacher
                   label Name
