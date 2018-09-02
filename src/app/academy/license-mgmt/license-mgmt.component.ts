@@ -82,11 +82,7 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
         this.license = licenses[0]
         
         // Get the current academy name
-        this._academy.getInstitution(this.license['owning_institution'])
-          .pipe(take(1))
-          .subscribe((academy) => {
-            this.currentAcademy = academy.institution
-          })
+        this.currentAcademy = this.license['owning_institution']
 
         // Set the array lengths here for looping speed
         let activeLicenseLength = this.license.users.length

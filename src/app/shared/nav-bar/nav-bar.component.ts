@@ -25,6 +25,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
 
 
     public showAvatarDropdown: boolean = false
+    public showAcademyDropdown: boolean = false
     public showShareTooltip: boolean = false
     public user: any
     public currentProject: any

@@ -19,14 +19,35 @@ $plateLightColor: #FCCB80;
     position: relative;
     height: 100%;
     width: 50px;
+    cursor: pointer;
 
-    & .icon {
+    & .icon-academy-plate {
         position: absolute;
         top: 50%;
         left: 0px;
         transform: translateY(-50%);
         height: 50px;
         width: 50px;
+    }
+
+    & .icon-caret {
+        opacity: 0;
+        width: 6px;
+        position: absolute;
+        bottom: 5px;
+        left: calc(50% - 3px);
+    }
+    
+    &.has-multiple {
+        &:hover, &:focus {
+            & .academy-plate__initials {
+                color: #fff;
+            }
+        }
+
+        & .icon-caret {
+            opacity: 0.5;
+        }
     }
 
     & .academy-plate__initials {

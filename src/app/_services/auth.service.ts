@@ -138,13 +138,26 @@ export class AuthService implements CanActivate {
             this._http.get<any>(this.getUrl() + '/api/v1/licenses', this.getHeaders())
                 .pipe(take(1))
                 .subscribe(data => {
-                    data.licenses && data.licenses[0] && data.licenses[0].roles.forEach(roleObj => {
-                        if (roleObj.role === 'owner' || roleObj.role === 'administrator') {
-                            user.isAcademyAdmin = true
-                            this.currentUserSource.next(user)
-                            this._locker.set('user', user)
-                        }
-                    })
+                    let licenseCount = data.licenses && data.licenses.length
+                    console.log(licenseCount)
+                    for (let i = 0; i < licenseCount; i++) {
+                        let license = data.licenses[i]
+                        license.roles.forEach(roleObj => {
+                            // Detect Admin
+                            if (roleObj.role === 'owner' || roleObj.role === 'administrator') {
+                                user.isAcademyAdmin = true
+                            }
+                        })
+                        console.log(license.owning_institution)
+                        // Attach academies to user
+                        if (!user.academies) { user.academies = []}
+                        user.academies.push(license.owning_institution)
+                    }
+                    if (!user.currentAcademy) {
+                        user.currentAcademy = 0
+                    }
+                    this.currentUserSource.next(user)
+                    this._locker.set('user', user)
                 }, err => {
                     // No licenses
                 })
@@ -154,6 +167,15 @@ export class AuthService implements CanActivate {
         if (user._id && user._id.length > 0) {
             this.ga.setUsername(user._id) // Set the user ID using signed-in user_id.
         }
+    }
+
+    /**
+     * Select users current institution
+     */
+    public setAcademy(academyIndex: number) {
+        this.user.currentAcademy = academyIndex
+        this.currentUserSource.next(this.user)
+        this._locker.set('user', this.user)
     }
 
     //TODO create deleteUser object

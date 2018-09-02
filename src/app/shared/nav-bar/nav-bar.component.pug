@@ -72,9 +72,19 @@
             span.list-icon--right([innerHtml]="':outbox_tray:' | emojione")
     //- Academy indicator 
     .nav__btn-wrap
-      .academy-plate(title="Hero Academy")
+      .academy-plate(
+          title="Hero Academy", 
+          *ngIf="user.academies", 
+          (click)="showAcademyDropdown = !showAcademyDropdown",
+          [class.has-multiple]="user.academies.length > 0"
+          )
         .icon.icon-academy-plate
-        .academy-plate__initials CJP
+        .academy-plate__initials {{ user.academies[user.currentAcademy].abbreviation }}
+        .icon.icon-caret.down
+      .avatar__drop-down.list-group([class.visible]="showAcademyDropdown")
+        .arrow
+        button.list-group-item.list-group-item-action(*ngFor="let academy of user.academies; let i = index", (click)="_auth.setAcademy(i); showAcademyDropdown = false")
+          | {{ academy.name }} ({{academy.abbreviation}})
 
     //- Project Info (Desktop & Mobile)
     .nav-bar__project-data(*ngIf="showProjectInfo && currentProject && currentProject._id")
