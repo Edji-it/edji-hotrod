@@ -3,7 +3,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core'
 import { Subscription } from 'rxjs'
 
 // project imports
-import { User, LicenseInvite } from '../../shared/datatypes'
+import { User } from '../../shared/datatypes'
 import { AuthService, AcademyService, BumblebeeService } from '../../_services'
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { ALLSPARK } from '../../app.constants';
@@ -233,7 +233,7 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
     .subscribe(data => {
       // Update the expired license
       invite.type = 'pending'
-      invite.joined = new Date()
+      invite.joined = new Date(Date.now() + (1000 /*sec*/ * 60 /*min*/ * 60 /*hour*/ * 24 /*day*/ * 14))
     },
     (error) => {
       console.error(error)
