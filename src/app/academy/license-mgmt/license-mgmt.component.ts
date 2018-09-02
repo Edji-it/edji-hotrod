@@ -76,16 +76,17 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
       // Set the current user every time it changes 
       this._auth.getCurrentUser().subscribe((user) => {
         this.user = user
-        // Get the current academy name
-        this._academy.getInstitution(this.user.institution_ids[0])
-          .pipe(take(1))
-          .subscribe((academy) => {
-            this.currentAcademy = academy.institution
-          })
       }),
       // get the licenses the user can manage
       this._academy.getLicenses().subscribe((licenses) => {
         this.license = licenses[0]
+        
+        // Get the current academy name
+        this._academy.getInstitution(this.license['owning_institution'])
+          .pipe(take(1))
+          .subscribe((academy) => {
+            this.currentAcademy = academy.institution
+          })
 
         // Set the array lengths here for looping speed
         let activeLicenseLength = this.license.users.length
