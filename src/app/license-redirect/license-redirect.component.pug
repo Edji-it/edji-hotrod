@@ -51,8 +51,8 @@ nav-bar([hideAccountOptions]="true", [pageTitle]="'Join Your Academy'")
           | .
 
   //- Acceptance Errors
-  .row.mt-5(*ngIf="errorKey")
-    .col-12
+  .row.mt-5.justify-content-center(*ngIf="errorKey")
+    .col-sm-12.col-md-8.col-pad
       .alert.alert-danger.mb-0(*ngIf="errorKey === 'licenseProcessError'") There was an issue processing your license. Please try again or contact Edji Support.
       .alert.alert-danger.mb-0(*ngIf="errorKey === 'serverError'") There was an error while fetching the user information. Please try again or contact Edji Support.
       .alert.alert-danger.mb-0(*ngIf="errorKey === 'invalidLicense'") Sorry! Looks like that might not be a valid license. Please contact your administrator, or contact Edji Support.
