@@ -160,7 +160,7 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
         type: 'pending'
       })
       // Clear the form
-      this.licenseInvite.reset()
+      this.licenseInvite.reset({ role: this.licenseRoles[0].value})
     },
     (error) => {
       console.error(error)
