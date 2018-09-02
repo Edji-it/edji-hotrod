@@ -257,7 +257,7 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
     .subscribe(data => {
       // Update the expired license
       invite.type = 'pending'
-      invite.joined = new Date()
+      invite.joined = new Date(Date.now() + (1000 /*sec*/ * 60 /*min*/ * 60 /*hour*/ * 24 /*day*/ * 14))
       // Clear the form (resent is used when email address matches existing)
       this.licenseInvite.reset({ role: this.licenseRoles[0].value})
       // Show success message
