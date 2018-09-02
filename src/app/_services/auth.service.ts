@@ -149,7 +149,6 @@ export class AuthService implements CanActivate {
                                     user.isAcademyAdmin = true
                                 }
                             })
-                            console.log(license.owning_institution)
                             // Attach academies to user
                             if (!user.academies) { user.academies = []}
                             user.academies.push(license.owning_institution)
@@ -175,9 +174,12 @@ export class AuthService implements CanActivate {
      * Select users current institution
      */
     public setAcademy(academyIndex: number) {
-        this.user.currentAcademy = academyIndex
-        this.currentUserSource.next(this.user)
-        this._locker.set('user', this.user)
+        let user = this.currentUserSource.value
+        if (this.user.academies && this.user.academies[academyIndex]) {
+            user.currentAcademy = academyIndex
+            this.currentUserSource.next(user)
+            this._locker.set('user', user)   
+        }
     }
 
     //TODO create deleteUser object
