@@ -90,7 +90,7 @@ export class AcademyService {
     return this._http.post<any>(this._auth.getUrl() + '/api/v1/readings/reports',
       {
         "email": evalForm.email,
-        "eval": evalForm.inputText,
+        "evaluation": evalForm.inputText,
         "person_sharing": evalForm.personSharing,
         "person_sharing_email": evalForm.personSharingEmail,
         "person_receiving": evalForm.name,

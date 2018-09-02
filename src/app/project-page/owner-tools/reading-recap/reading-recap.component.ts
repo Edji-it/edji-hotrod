@@ -43,10 +43,10 @@ export class ReadingRecapComponent implements OnInit {
     val: 0
   }
   public chartComments: any = {
-    min: 1, 
-    max: 4, 
-    avg: 2, 
-    val: 3
+    min: 0, 
+    max: 0, 
+    avg: 0, 
+    val: 0
   }
   public commentCountByType: any = {
     emoji: 0,
