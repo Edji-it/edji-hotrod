@@ -12,3 +12,34 @@
         z-index: -1;
         pointer-events: none;
 }
+
+$plateLightColor: #FCCB80;
+
+.academy-plate {
+    position: relative;
+    height: 100%;
+    width: 50px;
+
+    & .icon {
+        position: absolute;
+        top: 50%;
+        left: 0px;
+        transform: translateY(-50%);
+        height: 50px;
+        width: 50px;
+    }
+
+    & .academy-plate__initials {
+        font-family: 'Open Sans', Arial;
+        font-weight: bolder;
+        font-size: 14px;
+        color: $plateLightColor;
+        position: absolute;
+        z-index: 1;
+        text-align: center;
+        line-height: 1em;
+        width: 100%;
+        top: 30px;
+        letter-spacing: 2px;
+    }
+}

@@ -47,7 +47,6 @@
     .nav__btn-wrap(*ngIf="!user.isLoggedIn && !hideAccountOptions")
       a#loginLink.btn.btn-primary.nav-bar__btn([routerLink]="['/login']") Log In
       a#registerLink.btn.btn-secondary.nav-bar__btn([routerLink]="['/register']") Register
-
     //- User Menu: Logged in Actions
     .outer-circle--large.float-right(*ngIf="user.isLoggedIn", [class.active]="showAvatarDropdown")
       .avatar__wrap
@@ -71,6 +70,11 @@
           //- Log Out
           button#logOutButton.list-group-item.list-group-item-action(type="button", (click)="logout()") Log Out
             span.list-icon--right([innerHtml]="':outbox_tray:' | emojione")
+    //- Academy indicator 
+    .nav__btn-wrap
+      .academy-plate(title="Hero Academy")
+        .icon.icon-academy-plate
+        .academy-plate__initials CJP
 
     //- Project Info (Desktop & Mobile)
     .nav-bar__project-data(*ngIf="showProjectInfo && currentProject && currentProject._id")
