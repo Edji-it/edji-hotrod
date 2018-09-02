@@ -50,9 +50,11 @@ export class HotChartGaugeComponent implements OnInit {
     this.animationState = 'stop'
 
     // Some users will not have data
-    if (!this.values.val) {
+    if (!this.values.val || this.values.val===0) {
       this.errorMsg = "Not enough data for this student"
       this.values.val = this.values.min
+    } else {
+      this.errorMsg = ''
     }
     
     setTimeout(()=> {
