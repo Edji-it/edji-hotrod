@@ -9,7 +9,7 @@ nav-bar([showDashboardOptions]="true")
           .academy-name {{currentAcademy ? currentAcademy.name : 'Academy'}}
         .col-6
           .float-right
-            .academy-header.ml-2 Licenses
+            .academy-header.ml-2 License Seats
             button.btn.academy-pill.bckgnd-invisible.mr-4#availableLicenseCount {{license ? license.max_users - license.users.length : 0}} 
               .text-smaller available
             button.btn.academy-pill#activeLicenseCount {{license ? license.users.length : 0}} 
@@ -24,12 +24,20 @@ nav-bar([showDashboardOptions]="true")
                 th.academy-header.role-header(scope="col") Role
                 th.academy-header(scope="col") Joined Academy
             tbody
-              tr.no-border(*ngFor="let licenseUser of licenseUsers")
+              tr.no-border(
+                  *ngFor="let licenseUser of licenseUsers", 
+                  [class.table-danger]="licenseUser.type == 'expired'", 
+                  [class.educator-pending]="licenseUser.type != 'active'"
+                )
                 td
-                td.educator-pending--name([ngClass]="[licenseUser.type=='pending' ? 'educator-pending' : '']") {{ licenseUser.educator }}
-                td([ngClass]="[licenseUser.type=='pending' ? 'educator-pending' : '']") {{ licenseUser.role }}
+                td.educator-pending--name {{ licenseUser.educator }}
+                td {{ licenseUser.role }}
                 td(*ngIf="licenseUser.type=='active'") {{ licenseUser.joined | edjidate:'timeStamp':'shortDate' }}
-                td.educator-pending.expires(*ngIf="licenseUser.type=='pending'") Pending - Expires {{ licenseUser.joined | edjidate:'timeStamp':'shortDate' }}
+                td.educator-pending.expires(*ngIf="licenseUser.type=='pending'") 
+                  i Pending - Expires {{ licenseUser.joined | edjidate:'timeStamp':'shortDate' }}
+                td.educator-pending.expires(*ngIf="licenseUser.type=='expired'") 
+                  | Expired {{ licenseUser.joined | edjidate:'timeStamp':'shortDate' }}
+                  .btn.btn-secondary.btn-sm.ml-3((click)="resendInvite(licenseUser)") Resend
       .row
         .container
           .row.my-5
@@ -38,6 +46,16 @@ nav-bar([showDashboardOptions]="true")
               .academy-header.font-weight-light Add a teacher or admin to your Academy. They will receive an email with a link to accept their Academy license.
             .col-md-8
               form([formGroup]="licenseInvite", (ngSubmit)="formSubmit(licenseInvite)")
+                #licenseSent.alert.alert-success(*ngIf="this.inviteSuccess.sent")
+                  b Sent&nbsp;
+                  | Academy invite sent!
+                #licenseResent.alert.alert-success(*ngIf="this.inviteSuccess.resent")
+                  b Resent&nbsp;
+                  | Academy invite updated and resent!
+                #licenseInviteServerError.alert.alert-warning(*ngIf="inviteError.server")
+                  b Server Error&nbsp;
+                  | There was an error processing the invite. 
+                  a.link(href="mailto:support@edji.it") Please contact support.
                 .form-group
                   //- Name of Teacher
                   label Name
@@ -56,9 +74,9 @@ nav-bar([showDashboardOptions]="true")
                     [formControl]="licenseInvite.controls['email']", 
                     tabindex="0"
                   )
-                  #licenseInviteErrorNoEmail.alert.alert-info(*ngIf="licenseInvite.controls['email'].hasError('required') && (licenseInvite.controls['email'].dirty)") 
+                  #licenseInviteErrorNoEmail.alert.alert-warning(*ngIf="licenseInvite.controls['email'].hasError('required') && (licenseInvite.controls['email'].dirty)") 
                     | Please enter the email address of the teacher for the license invite
-                  #licenseInviteErrorBadEmail.alert.alert-info(*ngIf="licenseInvite.controls['email'].hasError('emailIncorrect') && licenseInvite.controls['email'].dirty && !licenseInvite.controls['email'].hasError('required')") 
+                  #licenseInviteErrorBadEmail.alert.alert-warning(*ngIf="licenseInvite.controls['email'].hasError('emailIncorrect') && licenseInvite.controls['email'].dirty && !licenseInvite.controls['email'].hasError('required')") 
                     | We don't think that's an email...
                 .form-group
                   //- Role

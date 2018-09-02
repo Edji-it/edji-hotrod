@@ -20,7 +20,7 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
   public subscriptions: Subscription[] = []
 
   public user: User
-  public licenseUsers: any = []
+  public licenseUsers: LicenseRow[] = []
   public license: any
   public currentAcademy: any
   public licenseRoles: any = [
@@ -36,9 +36,17 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
 
   public showLicenseInviteModal: boolean
   public licenseInvite: FormGroup
+  public inviteSuccess: {
+    sent ?: boolean,
+    resent ?: boolean
+  } = {}
+  public inviteError: {
+    server ?: boolean
+  } = {}
   public licenseRequest: FormGroup
   public licenseRequestSent: boolean
   public loading: boolean = false
+  public today: Date
 
   public errorObject: {
     serverError?: string
@@ -51,6 +59,7 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
     private _bumblebee: BumblebeeService,
     private angulartics: Angulartics2
   ) { 
+    this.today = new Date()
     this.licenseInvite = this._fb.group({
       name: [null, Validators.required],
       email: [null, Validators.compose([Validators.required, this.emailValidator])],
@@ -87,8 +96,6 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
           let licenseUser = this.license.users[i]
           let licenseRoles = this.license.roles
           let licenseUserLicenseIds = this.license.users[i].license_ids
-          // Set the Name of educator
-          let educatorName = licenseUser.fullname
           // Set the default role of the educator to be 'teacher'
           let educatorRole = 'Teacher'
           for (var j=0; j<licenseRoles.length; j++) {
@@ -97,7 +104,7 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
               educatorRole = this.capitalizeFirstLetter(licenseRoles[j].role)
             }
           }
-          let educatorJoined = new Date
+          let educatorJoined = new Date()
           for (var k=0; k<licenseUserLicenseIds.length; k++) {
             // Set the joined date of the educator for this license
             if (licenseUserLicenseIds.license_id===this.license._id) {
@@ -106,7 +113,8 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
           }
           // Push the object properties to the license
           this.licenseUsers.push({
-            educator: educatorName,
+            educator: licenseUser.fullname,
+            email: licenseUser.email,
             role: educatorRole,
             joined: educatorJoined,
             type: 'active'
@@ -116,18 +124,19 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
         // Finish up the array with the pending licenses
         for (var i=0; i<pendLicenseLength; i++) {
           let pendingLicense = this.license.pending_invitations[i]
-          // Set the Name of educator
-          let educatorName = pendingLicense.name
           // Set the default role of the educator to be 'teacher'
           let educatorRole = this.capitalizeFirstLetter(pendingLicense.role) || 'Teacher'
-          // Set the joined date to their pending initation expiration date
-          let educatorJoined = pendingLicense.expiration
+          // Set type: 'pending' can also be 'expired'
+          let inviteType = this.today > new Date(pendingLicense.expiration) ? 'expired' : 'pending'
           // Push the object properties to the license
           this.licenseUsers.push({
-            educator: educatorName,
+            // Set the Name of educator
+            educator: pendingLicense.name,
+            email: pendingLicense.email,
             role: educatorRole,
-            joined: educatorJoined,
-            type: 'pending'
+            // Set the joined date to their pending initation expiration date
+            joined: pendingLicense.expiration,
+            type: inviteType
           })
         }
       })
@@ -145,23 +154,47 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
 
   // Submits the name and email address of the invitation to the teacher
   public formSubmit(form: FormGroup): void {
-    this._academy.inviteToLicense(form.controls.name.value, form.controls.email.value, form.controls.role.value, this.license._id)
-    .subscribe(data => {
-      let updatedLicense = data.license
-      let latestInvitation = updatedLicense.pending_invitations[updatedLicense.pending_invitations.length-1]
-      // Load the latest pending invitation to the list
-      this.licenseUsers.push({
-        educator: latestInvitation.name,
-        role: this.capitalizeFirstLetter(latestInvitation.role),
-        joined: latestInvitation.expiration,
-        type: 'pending'
-      })
-      // Clear the form
-      this.licenseInvite.reset()
-    },
-    (error) => {
-      console.error(error)
-    })
+    // Check if user has already been invited
+    let existingInvite: LicenseRow
+    let invitedEmail = form.controls.email.value
+    let licenseUsersLength = this.licenseUsers.length
+    // Reset form errors
+    this.inviteError = {}
+    for (let i = 0; i < licenseUsersLength; i++) {
+      if (this.licenseUsers[i].email === invitedEmail) {
+        existingInvite = this.licenseUsers[i]
+      }
+    }
+
+    if (existingInvite) {
+      // Re-send request
+      this.resendInvite(existingInvite)
+    } else {
+      this._academy.inviteToLicense(form.controls.name.value, form.controls.email.value, form.controls.role.value, this.license._id)
+        .subscribe(data => {
+          let updatedLicense = data.license
+          let latestInvitation = updatedLicense.pending_invitations[updatedLicense.pending_invitations.length-1]
+          // Load the latest pending invitation to the list
+          this.licenseUsers.push({
+            educator: latestInvitation.name,
+            email: latestInvitation.email,
+            role: this.capitalizeFirstLetter(latestInvitation.role),
+            joined: latestInvitation.expiration,
+            type: 'pending'
+          })
+          // Clear the form
+          this.licenseInvite.reset({ role: this.licenseRoles[0].value})
+          // Show success message
+          this.inviteSuccess.sent = true
+          setTimeout(() => {
+            this.inviteSuccess = {}
+          }, 4000)
+        },
+        (error) => {
+          console.error(error)
+          this.inviteError.server = true
+        })
+    }
   }
 
   ngOnDestroy() {
@@ -220,4 +253,37 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
       }
     )
   }
+
+  /**
+   * Send pending user another invite
+   * @param license Pending license object
+   */
+  private resendInvite(invite: LicenseRow) : void {
+    this.inviteError = {}
+    this._academy.inviteToLicense(invite.educator, invite.email, invite.role, this.license._id)
+    .subscribe(data => {
+      // Update the expired license
+      invite.type = 'pending'
+      invite.joined = new Date(Date.now() + (1000 /*sec*/ * 60 /*min*/ * 60 /*hour*/ * 24 /*day*/ * 14))
+      // Clear the form (resent is used when email address matches existing)
+      this.licenseInvite.reset({ role: this.licenseRoles[0].value})
+      // Show success message
+      this.inviteSuccess.resent = true
+      setTimeout(() => {
+        this.inviteSuccess = {}
+      }, 4000)
+    },
+    (error) => {
+      console.error(error)
+      this.inviteError.server = true
+    })
+  }
+}
+
+interface LicenseRow {
+  educator: string,
+  email: string,
+  role: string,
+  joined: Date,
+  type: string
 }

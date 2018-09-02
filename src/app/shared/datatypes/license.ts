@@ -9,7 +9,15 @@ interface BaseLicense {
   license_type: string,
   max_users: number,
   owning_institution: string,
-  pending_invitations: { _id: string, email: string, expiration: Date, name: string, role: string }[],
+  pending_invitations: LicenseInvite[],
   roles: { _id: string, role: string, user_id: string }[]
+}
+
+export interface LicenseInvite {
+  email: string,
+  name: string,
+  role: string,
+  expiration: Date,
+  _id?: string
 }
 
