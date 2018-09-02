@@ -138,23 +138,25 @@ export class AuthService implements CanActivate {
             this._http.get<any>(this.getUrl() + '/api/v1/licenses', this.getHeaders())
                 .pipe(take(1))
                 .subscribe(data => {
-                    let licenseCount = data.licenses && data.licenses.length
-                    console.log(licenseCount)
-                    for (let i = 0; i < licenseCount; i++) {
-                        let license = data.licenses[i]
-                        license.roles.forEach(roleObj => {
-                            // Detect Admin
-                            if (roleObj.role === 'owner' || roleObj.role === 'administrator') {
-                                user.isAcademyAdmin = true
-                            }
-                        })
-                        console.log(license.owning_institution)
-                        // Attach academies to user
-                        if (!user.academies) { user.academies = []}
-                        user.academies.push(license.owning_institution)
-                    }
-                    if (!user.currentAcademy) {
-                        user.currentAcademy = 0
+                    // Attach properties for Academy users
+                    if (data.licenses) {
+                        let licenseCount = data.licenses.length
+                        for (let i = 0; i < licenseCount; i++) {
+                            let license = data.licenses[i]
+                            license.roles.forEach(roleObj => {
+                                // Detect Admin
+                                if (roleObj.role === 'owner' || roleObj.role === 'administrator') {
+                                    user.isAcademyAdmin = true
+                                }
+                            })
+                            console.log(license.owning_institution)
+                            // Attach academies to user
+                            if (!user.academies) { user.academies = []}
+                            user.academies.push(license.owning_institution)
+                        }
+                        if (!user.currentAcademy) {
+                            user.currentAcademy = 0
+                        }
                     }
                     this.currentUserSource.next(user)
                     this._locker.set('user', user)
