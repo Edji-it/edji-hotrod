@@ -41,10 +41,12 @@ export class LicenseRedirectComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.route.params.subscribe((params) => {
         this.invitationId = params['license_id']
-        if (params['academy']) {
-          this.academyName = params['academy']
+      }),
+      this.route.queryParams.subscribe((queryParams) => {
+        if (queryParams['academy']) {
+          this.academyName = queryParams['academy']
         }
-      })
+      }),
     )
 
     /** 
