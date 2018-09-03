@@ -3,7 +3,7 @@
   .container.px-3
     .row
       .col-8
-        h1.mb-3.header-text__large(*ngIf="currentUser.hero.active") Reading Recap for
+        h1.mb-3.header-text__large(*ngIf="currentUser.hero_status") Reading Recap for
           p-dropdown#studentSelector(
             [options]="students",
             [(ngModel)]="selectedStudent",
@@ -18,7 +18,7 @@
           span(aria-hidden='true') &times;
         //- button.btn.btn-success.btn-sm.float-right.mr-5((click)="goToEvalForm()") Send Copy
         //- button.btn.btn-primary.btn-sm.float-right.mr-5((click)="downloadPDF()") Download
-  .container.px-3(*ngIf="currentUser.hero.active")
+  .container.px-3(*ngIf="currentUser.hero_status")
     #readingReport.p-4
       //- Header Block
       .row
@@ -175,7 +175,7 @@
               (click)="addEvaluationOnly(evaluationForm.controls['inputText'].value)"
             ) Add Feedback
   //- Hero Micro
-  .container-fluid.container--less-pad.px-3.mt-2(*ngIf="!currentUser.hero.active")
+  .container-fluid.container--less-pad.px-3.mt-2(*ngIf="!currentUser.hero_status")
     #readingReport
       .modal-dialog.reading-recap-blurred
         .modal-content.reading-recap-blurred-outer
