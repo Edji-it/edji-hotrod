@@ -1,9 +1,10 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { NgModule } from '@angular/core'
+import { Routes, RouterModule } from '@angular/router'
 
 // Project Dependencies
-import { EngagementComponent } from './engagement/engagement.component';
-import { LicenseMgmtComponent } from './license-mgmt/license-mgmt.component';
+import { EngagementComponent } from './engagement/engagement.component'
+import { LicenseMgmtComponent } from './license-mgmt/license-mgmt.component'
+import { AcademyService } from '../_services'
 
 const routes: Routes = [ {
   path: '',
@@ -13,7 +14,8 @@ const routes: Routes = [ {
   component: EngagementComponent
 },{
   path: 'licenses',
-  component: LicenseMgmtComponent
+  component: LicenseMgmtComponent,
+  canActivate: [AcademyService]
 }];
 
 @NgModule({

@@ -1,25 +1,34 @@
 import { Injectable } from '@angular/core'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { Observable, interval, Subscription } from 'rxjs'
+import { map } from 'rxjs/operators'
 
 // project dependancies
 import { AuthService } from 'src/app/_services'
-import { User } from '../shared/datatypes'
-import { resolve } from 'url';
+import { User, License } from '../shared/datatypes'
+import { Router, ActivatedRouteSnapshot, RouterStateSnapshot, CanActivate } from '../../../node_modules/@angular/router'
+import { LockerService } from '../_services/locker.service'
 
 @Injectable({
   providedIn: 'root'
 })
-export class AcademyService {
+export class AcademyService implements CanActivate {
   private readingTimerSubscription: Subscription
 
   private user: User
   private project: any
 
+  public allLicenses: any
+  public institutionLicenses: any
+
   constructor(
     private _http: HttpClient,
-    private _auth: AuthService
-  ) { }
+    private _auth: AuthService,
+    private _router: Router,
+    private _locker: LockerService
+  ) { 
+    
+  }
 
   /**
    * Accepts a license that is shared with the user
@@ -28,6 +37,25 @@ export class AcademyService {
   public acceptLicense(licenseId: string): Observable<AcceptLicenseResponse> {
     return this._http.put<AcceptLicenseResponse>(this._auth.getUrl() + '/api/v1/licenses/' + licenseId + '/accept',
     {},
+    {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': this._auth.getToken()
+      })
+    })
+  }
+
+  /**
+   * Invites a teacher to a license
+   * @param licenseId _id of the license to accept
+   */
+  public inviteToLicense(name: string, email: string, role: string, licenseId: string): Observable<InviteLicenseResponse> {
+    return this._http.put<InviteLicenseResponse>(this._auth.getUrl() + '/api/v1/licenses/' + licenseId + '/invite',
+    {
+      "email": email,
+      "name": name,
+      "role": role
+    },
     {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
@@ -108,6 +136,24 @@ export class AcademyService {
   }
 
   /**
+   * Server will return all licenses the current user can manage
+   */
+  public getLicenses(): Observable<any> {
+    return this._http.get<any>(this._auth.getUrl() + '/api/v1/licenses',
+    {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': this._auth.getToken()
+      })
+    })
+    .pipe(
+      map((data)=>{
+        return data.licenses
+      })
+    )
+  }
+
+  /**
    * Event handler that can be called from anywhere in the app. Handles success and error 
    * @param event event data to be passed in from where the event occurs follow this schema:
    * {
@@ -179,6 +225,18 @@ export class AcademyService {
       })
     })
   }
+
+  /** Provides logic for sending user back to home if they are not authorized */
+  public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+    let user: User = this._locker.get('user')
+    // is a teacher and belongs to an institution and can therefore access the academy suite
+    if (!user.hero_status || (!user.identities.includes('teacher') && !user.identities.includes('administrator')) || user.license_ids.length === 0) {
+      this._router.navigate(['/dashboard'])
+      return false
+    } else {
+      return true
+    }
+  }
 }
 
 /**
@@ -189,7 +247,7 @@ interface AcceptLicenseResponse {
 }
 
 /**
- * 
+ * /api/v1/institutions/:institution_id Response
  */
 interface GetInsitutionResponse {
   institution: {
@@ -197,4 +255,11 @@ interface GetInsitutionResponse {
     name: string
     abbreviation: string
   }
+}
+
+/**
+ * /api/v1/licenses/:license_id/invite Response
+ */
+interface InviteLicenseResponse {
+  license: License
 }

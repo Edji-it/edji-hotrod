@@ -91,6 +91,10 @@
     }
 }
 
+.icon-academy-plate {
+    @include icon('icon-academy-plate.svg');
+}
+
 .icon-add-question {
     @include icon('icon-add-question.svg');
     display: inline-block;

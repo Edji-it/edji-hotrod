@@ -25,6 +25,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
 
 
     public showAvatarDropdown: boolean = false
+    public showAcademyDropdown: boolean = false
     public showShareTooltip: boolean = false
     public user: any
     public currentProject: any
@@ -68,6 +69,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
     // Nav menu variables
     public academyMenuShow: boolean = false
     public isTeacher: boolean = false
+    public isAcademyAdmin: boolean = false
     public secretSwitches: Secrets = {}
     public currentPage: string = ""
 
@@ -80,7 +82,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
 
     constructor(
           public _route: ActivatedRoute,
-          private _auth: AuthService, 
+          public  _auth: AuthService, 
           private _socket: SocketService, 
           public _router: Router,
           private angulartics: Angulartics2,

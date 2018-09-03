@@ -15,6 +15,7 @@ export class Sidebar {
     public accountButtonSpan = this.accountButton.element(by.css('span'));
     public logo = element(by.id("logo"));
     public heroLink = element(by.id("heroLink"));
+    public closeModal = element(by.css("button.close"));
 
     // Owner Tools
     public leaderboardButton = element(by.id("toggleLeaderboard"))
@@ -125,6 +126,21 @@ export class Sidebar {
             }
         })
     } // clickAccountButton () : void
+
+    public closeModals(): void {
+        // Toggle the owner tools on mobile if the Owner Tools button is present
+        this.closeModal.isPresent().then((result) => {
+            if (result) {
+                this.closeModal.isDisplayed().then((result) => {
+                    if (result) {
+                        // Click the Tools button to expand the owner tools options for mobile before proceeding
+                        browser.wait(this.EC.elementToBeClickable(this.closeModal), 5000, "modal close button never became clickable");
+                        this.closeModal.click()
+                    } 
+                });
+            }
+        });
+    }
 
     public logout(): void {
         browser.wait(this.EC.elementToBeClickable(this.avatarActionIcon), 5000, "avatar action button never became clickable");

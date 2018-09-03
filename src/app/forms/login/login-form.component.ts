@@ -6,6 +6,7 @@ import { Angulartics2 } from 'angulartics2'
 // Project Dependencies
 import { AuthService, AcademyService } from '../../_services'
 import { Copy } from '../../shared'
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'hot-login-form',
@@ -51,8 +52,9 @@ public login(formValue: any): void {
     this.submitted = true
 
 		this._auth.login(formValue)
-      .then(
-        (data)  => { 
+      .pipe(take(1))
+      .subscribe(
+        (data: any)  => { 
           this.loginLoading = false
           this.clearErrors()
 
@@ -75,8 +77,6 @@ public login(formValue: any): void {
           }
 
           if (data.token) {
-            this._auth.setToken(data.token)
-            this._auth.setUser(data.user)
             this.loginSuccess.emit(data.user)
           }
 
