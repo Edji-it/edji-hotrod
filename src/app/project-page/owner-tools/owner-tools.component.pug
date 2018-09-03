@@ -25,14 +25,13 @@
       i#toggleQuestionfeed.icon-question(*ngIf="currentProject")
       label Questions
   //- Reading Report toggle
-  div(*ngIf="user.hero")
-    button.btn.owner-tools__btn.btn-hv.btn-reading-recap(
-        type="button",
-        (tap)="showElseFalse('showReadingRecap')",
-        [class.hero--micro-offer__wrap]="user && !user.hero_status"
-      )
-      i#toggleReadingRecap.icon-reading-recap(*ngIf="currentProject")
-      label Recap
+  button.btn.owner-tools__btn.btn-hv.btn-reading-recap(
+      type="button",
+      (tap)="showElseFalse('showReadingRecap')",
+      [class.hero--micro-offer__wrap]="user && !user.hero_status"
+    )
+    i#toggleReadingRecap.icon-reading-recap(*ngIf="currentProject")
+    label Recap
 
 .owner-tools-button__mobile.hidden-lg-up(*ngIf="currentProject && user._id == currentProject.owner_id")
   //- Mobile Buttons
@@ -75,7 +74,6 @@
         //- label Questions
     //- Reading Report pane
     button.btn.btn-icon--circle-shadow.owner-options--mobile(
-      *ngIf="user.hero"
       type="button",
       (tap)="showElseFalse('showReadingRecap'); ownerToolShow=!ownerToolShow", 
       [class.btn-show--animation]="ownerToolShow"

@@ -44,9 +44,9 @@ export class OwnerToolsComponent implements OnInit {
       reading => {
         this.currentReading = reading
         if (this.currentReading.questions && this.currentReading.questions.length>0) {
-          this.ownerToolBlockHeight = '256px'
+          this.ownerToolBlockHeight = '285px'
         } else {
-          this.ownerToolBlockHeight = '192px'
+          this.ownerToolBlockHeight = '221px'
         }
       },
       error => {
