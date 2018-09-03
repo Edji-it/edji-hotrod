@@ -178,7 +178,7 @@ export class AuthService implements CanActivate {
         if (this.user.academies && this.user.academies[academyIndex]) {
             user.currentAcademy = academyIndex
             this.currentUserSource.next(user)
-            this._locker.set('user', user)   
+            this._locker.set('user', user)
         }
     }
 

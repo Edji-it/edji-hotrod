@@ -82,7 +82,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
 
     constructor(
           public _route: ActivatedRoute,
-          private _auth: AuthService, 
+          public  _auth: AuthService, 
           private _socket: SocketService, 
           public _router: Router,
           private angulartics: Angulartics2,
