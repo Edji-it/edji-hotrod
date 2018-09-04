@@ -229,7 +229,7 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
       username: this.user.username,
       fullname: this.user.fullname,
       email: this.user.email,
-      hero: this.user.hero
+      hero: this.user['hero_status']
     }
 
     let formSend = {
