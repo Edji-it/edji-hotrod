@@ -641,7 +641,7 @@ export class AuthService implements CanActivate {
      */
     public getAllowedCommentTypes(): string[] {
         this.user = this.getUser()
-        if (this.user['hero'] && this.user.hero_status) {
+        if (this.user.hero_status) {
             return ['emoji', 'text', 'audio', 'reply']
         } else {
             return ['emoji', 'text']
@@ -653,7 +653,7 @@ export class AuthService implements CanActivate {
      */
     public getAllowedCommentMediaTypes(): string[] {
         this.user = this.getUser()
-        if (this.user['hero'] && this.user.hero_status) {
+        if (this.user.hero_status) {
             return ['emoji', 'text', 'audio']
         } else {
             return ['emoji', 'text']
