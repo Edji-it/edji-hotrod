@@ -94,7 +94,6 @@ export class ReadingRecapComponent implements OnInit {
             this.project = project
             // need to wait until we have the project loaded before we can proceed
             if (project && project.comments) {
-              console.log(project)
               // Get time on reading data
               this._academy.getTimeOnReading(this.project._id).pipe(take(1))
               .subscribe((readingTimeData) => {
@@ -262,7 +261,7 @@ export class ReadingRecapComponent implements OnInit {
             this._academy.sendReadingRecap(formValue, pdfData)
             .subscribe(
               data => {
-                console.log(data)
+                
               },
               error => {
                 console.error(error)
