@@ -177,14 +177,14 @@ export class ReadingRecapComponent implements OnInit {
   // Process the time on reading data for the selected user
   private processTimeChart(): void {
     if (this.readingTimeData && this.readingTimeData.users.length > 0) {
-      const correctionFactor = 60 * 30
+      const correctionFactor = 60
       const userTimeVal = this.readingTimeData.users.find( user => this.currentStudent.value===user.user_id)
       // set the stats values for max, min, and average
       this.chartTimeReading = {
         min: Math.round(this.readingTimeData.min / correctionFactor), 
         max: Math.round(this.readingTimeData.max / correctionFactor), 
         avg: Math.round(this.readingTimeData.avg / correctionFactor), 
-        val: userTimeVal ? Math.round(userTimeVal.value / correctionFactor) : null
+        val: userTimeVal ? Math.round(userTimeVal.reading_time / correctionFactor) : null
       }
     }
   }
