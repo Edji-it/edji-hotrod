@@ -93,6 +93,8 @@ export class RequestAcademyModal implements OnInit {
     this.loading = true
     this.angulartics.eventTrack.next({ action: 'requestAcademy', properties: { category: 'accountManagement', label: 'attempt' }})
 
+    // Add Request type
+    formValue.content = '\nRequest Type: Hero Academy Request'
 
     // Attach phone number
     formValue.content = formValue.content + '\nPhone: ' + formValue.phone
