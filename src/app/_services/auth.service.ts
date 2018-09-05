@@ -13,6 +13,7 @@ import { Angulartics2GoogleAnalytics } from 'angulartics2/ga'
 import { LockerService } from '../_services/locker.service';
 
 import { environment } from '../../environments/environment';
+import { AcademyService } from './academy.service';
 @Injectable()
 export class AuthService implements CanActivate {
 
@@ -27,25 +28,33 @@ export class AuthService implements CanActivate {
     private ENV: string = "dev"
 
     //NOTE: (6/15/17) If this.user ever needs to be edited it, make a copy, edit the copy, THEN assign it so this.user is always fresh.
-    private user: User 
+    private user: User
     private currentUserSource: BehaviorSubject<any>
     public currentUser: Observable<any>
 
+    private academyState: AcademyState = {}
+    private academyStateSource: BehaviorSubject<AcademyState>
+    public currentAcademyState: Observable<AcademyState>
+
     constructor(
-        private legacyHttp: Http, 
-        private _http: HttpClient, 
-        private _router: Router, 
+        private legacyHttp: Http,
+        private _http: HttpClient,
+        private _router: Router,
         private _locker: LockerService,
         private angulartics: Angulartics2,
         private ga: Angulartics2GoogleAnalytics,
         private route: ActivatedRoute
     ) {
         let buildEnv = environment.ENV
-        
+
         this.user = this.getUser()
         this.currentUserSource = new BehaviorSubject<any>(this.user)
         this.currentUser = this.currentUserSource.asObservable()
-        
+
+        this.academyState = this._locker.get('academyState') || {}
+        this.academyStateSource = new BehaviorSubject<any>(this.academyState)
+        this.currentAcademyState = this.academyStateSource.asObservable()
+
         // Check to see if prod or dev environment
         if (window.location.host.indexOf('local.edji.it') > -1) {
             // do nothing
@@ -78,6 +87,18 @@ export class AuthService implements CanActivate {
         return options
     }
 
+    /**
+     * Return default authorization headers
+     */
+    public getHeaders(): { headers: HttpHeaders } {
+        return {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+                'Authorization': this.getToken()
+            })
+        }
+    }
+
     public getUrl(): string {
         return this.baseUrl
     }
@@ -105,6 +126,7 @@ export class AuthService implements CanActivate {
     }
 
     /**
+     * DEPRECATED - Transition to HttpClient
      * Takes a response object and turn the data into an object
      */
     public extractData(res: Response): any {
@@ -119,10 +141,90 @@ export class AuthService implements CanActivate {
     public setUser(user: any) {
         //should have session timeout, username, baseProfileId, typeId
         user.isLoggedIn = true
+        // Determine if user is an Academy Admin
+        if (user && user.license_ids && user.license_ids[0]) { 
+            this.fetchAcademies(user)
+        }
         this.currentUserSource.next(user)
         this._locker.set('user', user)
         if (user._id && user._id.length > 0) {
             this.ga.setUsername(user._id) // Set the user ID using signed-in user_id.
+        }
+    }
+
+    /**
+     * Retrieve academy objects
+     * @description Updates ACADEMY OBSERVABLE and user's isAcademyAdmin property
+     */
+    private fetchAcademies(user: User): void {
+        // Fetch license and academy information for admins and owners
+        this._http.get<any>(this.getUrl() + '/api/v1/licenses', this.getHeaders())
+            .pipe(take(1))
+            .subscribe(data => {
+                // Attach properties for Academy users
+                if (data.licenses) {
+                    let licenseCount = data.licenses.length
+                    let academies = []
+                    for (let i = 0; i < licenseCount; i++) {
+                        let license = data.licenses[i]
+                        license.roles.forEach(roleObj => {
+                            // Detect Admin
+                            if (roleObj.role === 'owner' || roleObj.role === 'administrator') {
+                                user.isAcademyAdmin = true
+                            }
+                        })
+                        // Attach academies to user
+                        academies.push(license.owning_institution)
+                    }
+                    this.setAcademies(academies)
+                }
+                this.currentUserSource.next(user)
+                this._locker.set('user', user)
+            }, err => {
+                // Fetch academy information for teacher (non-admin) users
+                if (err.status == 404 && user.institution_ids && user.institution_ids[0]) {
+                    this._http.get<any>(this.getUrl() + '/api/v1/institutions/' + user.institution_ids[0], this.getHeaders())
+                    .pipe(take(1))
+                    .subscribe(data => {
+                        let academy = data.institution
+                        if (academy) {
+                            let academies = [academy]
+                            this.setAcademies(academies)
+                        }
+                    })
+                } else {
+                    console.error(err)
+                }
+            })
+    }
+
+    /**
+     * Save academies to user object
+     * @description sets array of Academies, and resets selected to 0
+     * @param academies 
+     */
+    private setAcademies(academies: any[]) : void {
+        let academyState = this.academyStateSource.value
+        academyState.academies = academies
+        // Reset to first academy
+        academyState.selected = 0
+        // Update academyState stores
+        this.academyStateSource.next(academyState)
+        this._locker.set('academyState', academyState)
+    }
+
+    /**
+     * Select current academy
+     * Select users current institution (saved as an index)
+     * @param academyIndex index of academy to select
+     */
+    public setCurrentAcademy(academyIndex: number) {
+        let academyState = this.academyStateSource.value
+        if (academyState.academies && academyState.academies[academyIndex]) {
+            academyState.selected = academyIndex
+            // Update academyState stores
+            this.academyStateSource.next(academyState)
+            this._locker.set('academyState', academyState)
         }
     }
 
@@ -144,7 +246,7 @@ export class AuthService implements CanActivate {
         } else {
             user.isLoggedIn = true
         }
-        
+
         return user
     }
 
@@ -158,7 +260,7 @@ export class AuthService implements CanActivate {
      */
     public refreshUser(): Observable<any> {
         return this.legacyHttp.get(this.baseUrl + '/users/' + this.getUser()._id, this.getOptions())
-            .pipe(map( res => {
+            .pipe(map(res => {
                 let data = res.json() || {}
                 let user = data.user
                 // If we get a user object, update our local copy
@@ -181,33 +283,48 @@ export class AuthService implements CanActivate {
         this._locker.clear()
         this.user = <User>{ isLoggedIn: false }
         this.currentUserSource.next(this.user)
+        this.setAcademies([])
     }
-    
-    login(user: any) {
+
+    /**
+     * Log in a user
+     * @param loginCredentials username and password 
+     */
+    login(loginCredentials: any) {
         let data = {
             'user': {
-                'username': user.username,
-                'password': user.password
+                'username': loginCredentials.username,
+                'password': loginCredentials.password
             }
         }
 
-        return this.legacyHttp
-            .post(this.baseUrl + '/users/login', data, this.getOptions())
-            .toPromise()
-            .then(this.extractData)
+        return this._http.post(this.baseUrl + '/users/login', data, this.getHeaders())
+            .pipe(map((data: any) => {
+                if (data.token) {
+                    this.setToken(data.token)
+                    this.setUser(data.user)
+                }
+                return data
+            }))
     }
 
-    logout() {
+    /**
+     * Log out user
+     * @param noReload ONLY use when user is expected to immediately log in to another account
+     */
+    logout(noReload?: boolean) {
         this.destroyCredentials()
         // Refresh window to clear components/services
-        location.reload()
+        if (!noReload) {
+            location.reload()
+        }
     }
 
     /**
      * Makes call to server in order to register a new user and set their local information
      * @returns observable which either has errors or an object which has properties: user, token
      */
-    public register(user: any): Observable < any > {
+    public register(user: any): Observable<any> {
         this.destroyCredentials()
         return this.legacyHttp
             .post([this.baseUrl, 'users'].join('/'), {
@@ -237,9 +354,9 @@ export class AuthService implements CanActivate {
             //observer.next(true)  
             // Before we update the user, make sure we have the latest copy
             this.refreshUser().pipe(take(1))
-                .subscribe(currentUser =>{
+                .subscribe(currentUser => {
                     let mergedUser = Object.assign({}, currentUser)
-                    
+
                     // Loop through and merge arrays
                     let propsToCheck = ['prefs', 'media']
                     for (let n = 0; n < propsToCheck.length; n++) {
@@ -249,11 +366,11 @@ export class AuthService implements CanActivate {
                                 if (updatedUser[propA] && updatedUser[propA][prop]) {
                                     mergedUser[propA][prop] = updatedUser[propA][prop].concat(mergedUser[propA][prop])
                                     let a = mergedUser[propA][prop]
-                                    let isObj = typeof(mergedUser[propA][prop][0]) === 'object'
+                                    let isObj = typeof (mergedUser[propA][prop][0]) === 'object'
 
                                     // Clean out the duplicates we probably just concat'd in
-                                    for(var i=0; i<a.length; i++) {
-                                        for(var j = i + 1; j<a.length; j++) {
+                                    for (var i = 0; i < a.length; i++) {
+                                        for (var j = i + 1; j < a.length; j++) {
                                             if (isObj) {
                                                 if (a[i]._id === a[j]._id) {
                                                     a.splice(j--, 1)
@@ -273,16 +390,16 @@ export class AuthService implements CanActivate {
                     }
 
                     // merge all the simpler properties
-                    for(let prop in updatedUser) {
+                    for (let prop in updatedUser) {
                         if (propsToCheck.indexOf(prop) < 0) {
                             mergedUser[prop] = updatedUser[prop]
                         }
                     }
 
                     // This is repeated code from forceUpdateDocuments() we could consolidate these. 6.14.
-                    this.legacyHttp.put( this.baseUrl + '/users', {
-                            user: mergedUser
-                        }, this.getOptions())
+                    this.legacyHttp.put(this.baseUrl + '/users', {
+                        user: mergedUser
+                    }, this.getOptions())
                         .pipe(map((data) => {
                             let object = data.json()
 
@@ -297,16 +414,16 @@ export class AuthService implements CanActivate {
                             return data.json()
                         }))
                         .toPromise()
-                        .then( user => {
+                        .then(user => {
                             observer.next(user)
                         }, error => {
                             observer.error(error)
                         })
-                }, 
-                error => {
-                    observer.error(error)
-                    console.error(error)
-                })
+                },
+                    error => {
+                        observer.error(error)
+                        console.error(error)
+                    })
         })
     }
 
@@ -318,30 +435,30 @@ export class AuthService implements CanActivate {
     - This properly replaces the contents of user, but ONLY the media.documents.
     - Insert the new set that you want to replace media.documents with.
     */
-    public forceUpdateDocuments (newDocs : any[]) : Observable<any> {
+    public forceUpdateDocuments(newDocs: any[]): Observable<any> {
         // console.log("ran the baby")
 
         // We want to return an Observable because those are handy for timing's sake, so let's do that.
         return new Observable(observer => {
             this.refreshUser().pipe(take(1))
-                .subscribe(currentUser =>{
+                .subscribe(currentUser => {
                     // Make a copy of the user object, edit it, and shove it in.
                     let mergedUser = Object.assign({}, currentUser)// Get the latest copy of the user object.
                     mergedUser.media.documents = newDocs // let's just shove those in there
                     this.user = mergedUser // NOTE: We make a new object and assign it so that the user object is always nice and fresh.
-                
+
                     /* some handy console logs in case everything dies
                     console.log("User is: " + mergedUser.username)
                     this.user.media.documents.forEach((doc) => {
                         console.log(doc)
                     })
                     */
-                    
+
                     // Let's save this here user object.
                     // This is repeated code from updateUser() we could consolidate these. (6.14.17)
-                    this.legacyHttp.put( this.baseUrl + '/users', {
-                            user: mergedUser
-                        }, this.getOptions())
+                    this.legacyHttp.put(this.baseUrl + '/users', {
+                        user: mergedUser
+                    }, this.getOptions())
                         .pipe(map((data) => {
                             let object = data.json()
                             // if the response has a token, the user should be successfully registered and logged in
@@ -355,7 +472,7 @@ export class AuthService implements CanActivate {
                             return data.json()
                         }))
                         .toPromise()
-                        .then( user => {
+                        .then(user => {
                             observer.next(user)
                         }, error => {
                             observer.error(error)
@@ -364,11 +481,11 @@ export class AuthService implements CanActivate {
                     // console.log("got over here")
                     // this.user = mergedUser
                 },
-                error => {
-                    observer.error(error)
-                    console.error(error)
-                    console.error("Failed in forceUpdateDocuments in auth.service.ts")
-                })
+                    error => {
+                        observer.error(error)
+                        console.error(error)
+                        console.error("Failed in forceUpdateDocuments in auth.service.ts")
+                    })
         })
     } // public forceUpdatedDocuments (any[] : newDocs) : Observable<any>
 
@@ -378,48 +495,48 @@ export class AuthService implements CanActivate {
 
     Overwrite the current avatar stored under the user object.
     */
-    public forceUpdateAvatar (newAvatar : string) : Observable<any> {
+    public forceUpdateAvatar(newAvatar: string): Observable<any> {
         // We want to return an Observable because those are handy for timing's sake, so let's do that.
         return new Observable(observer => {
             this.refreshUser().pipe(take(1))
-            .subscribe(currentUser =>{
-                // Make a copy of the user object, edit it, and shove it in.
-                let mergedUser = Object.assign({}, currentUser)// Get the latest copy of the user object.
-                mergedUser.avatar = newAvatar // let's just shove those in there
-                this.user = mergedUser // NOTE: We make a new object and assign it so that the user object is always nice and fresh.
+                .subscribe(currentUser => {
+                    // Make a copy of the user object, edit it, and shove it in.
+                    let mergedUser = Object.assign({}, currentUser)// Get the latest copy of the user object.
+                    mergedUser.avatar = newAvatar // let's just shove those in there
+                    this.user = mergedUser // NOTE: We make a new object and assign it so that the user object is always nice and fresh.
 
-                // This code saves this here user object.
-                // This is repeated code from updateUser() we could consolidate these. (6.27.17)
-                this.legacyHttp.put( this.baseUrl + '/users', {
-                    user: mergedUser
-                }, this.getOptions())
-                .pipe(map((data) => {
-                    let object = data.json()
-                    // if the response has a token, the user should be successfully registered and logged in
-                    if (object.user) {
-                        this.setUser(object.user)
-                    }
-                    if (object.token) {
-                        this.setToken(object.token)
-                    }
+                    // This code saves this here user object.
+                    // This is repeated code from updateUser() we could consolidate these. (6.27.17)
+                    this.legacyHttp.put(this.baseUrl + '/users', {
+                        user: mergedUser
+                    }, this.getOptions())
+                        .pipe(map((data) => {
+                            let object = data.json()
+                            // if the response has a token, the user should be successfully registered and logged in
+                            if (object.user) {
+                                this.setUser(object.user)
+                            }
+                            if (object.token) {
+                                this.setToken(object.token)
+                            }
 
-                    console.log(this.user.avatar)
+                            console.log(this.user.avatar)
 
-                    return data.json()
-                }))
-                .toPromise()
-                .then( user => {
-                    observer.next(user)
-                }, error => {
-                    observer.error(error)
-                    console.error("Failed in forceUpdateDocuments in auth.service.ts when trying to save the user.")
-                })
-            },
-            error => {
-                observer.error(error)
-                console.error(error)
-                console.error("Failed in forceUpdateAvatar in auth.service.ts")
-            }) // subscribe / error
+                            return data.json()
+                        }))
+                        .toPromise()
+                        .then(user => {
+                            observer.next(user)
+                        }, error => {
+                            observer.error(error)
+                            console.error("Failed in forceUpdateDocuments in auth.service.ts when trying to save the user.")
+                        })
+                },
+                    error => {
+                        observer.error(error)
+                        console.error(error)
+                        console.error("Failed in forceUpdateAvatar in auth.service.ts")
+                    }) // subscribe / error
         })
     } // public forceUpdateAvatar (newAvatar : File) 
 
@@ -428,7 +545,7 @@ export class AuthService implements CanActivate {
      * @param username String value for the temp user's username, gets assigned to fullname property of TempUser model
      * @returns Observable object with user and token properties
      */
-    public createTempUser(username: string): Observable < any > {
+    public createTempUser(username: string): Observable<any> {
         let data = {
             user: {
                 fullname: username
@@ -474,7 +591,7 @@ export class AuthService implements CanActivate {
             })
     }
 
-    public recoverPassword(username: string): Observable < boolean > {
+    public recoverPassword(username: string): Observable<boolean> {
         return this.legacyHttp
             .post(
                 [this.baseUrl, 'users', 'recover_password'].join('/'), {
@@ -497,71 +614,71 @@ export class AuthService implements CanActivate {
             [this.baseUrl, 'users', 'convert', oldId].join("/"),
             {},
             this.getOptions()
-            )
-        .pipe(map((res) => {
-            if (res) {
-                return true
-            } else {
-                throw new Error("Did not get json response from convertTempUser")
-            }
-        }))
+        )
+            .pipe(map((res) => {
+                if (res) {
+                    return true
+                } else {
+                    throw new Error("Did not get json response from convertTempUser")
+                }
+            }))
     }
 
-     /**
-     * Add users interested in Hero to the Mailchimp Hero update list
-     */
+    /**
+    * Add users interested in Hero to the Mailchimp Hero update list
+    */
     public addToHeroList(user) {
         let body = user
         body['list'] = 'hero'
-        return this.legacyHttp.post( this.baseUrl + '/mailchimp/add', body, this.getOptions())
-            .pipe(map( res => {
+        return this.legacyHttp.post(this.baseUrl + '/mailchimp/add', body, this.getOptions())
+            .pipe(map(res => {
                 return res.json()
             }))
     }
-    
+
     /**
      * Add users who subscribe to Hero to the Mailchimp Hero Subscribed list
      */
-    public addToActiveHeroList(user) : void {
+    public addToActiveHeroList(user): void {
         if (this.getEnv() == 'prod') {
             let spaceIndex = user.fullname.indexOf(' ')
             if (spaceIndex < 0) { spaceIndex = user.fullname.length }
-            let fname = user.fullname.substr(0,spaceIndex)
+            let fname = user.fullname.substr(0, spaceIndex)
             let lname = user.fullname.substr(spaceIndex + 1)
-            let body = { 
-                'email' : user.email, 
-                'fname' : fname, 
-                'lname' : lname 
+            let body = {
+                'email': user.email,
+                'fname': fname,
+                'lname': lname
             }
             body['list'] = 'hero-subscribed'
-            this.legacyHttp.post( this.baseUrl + '/mailchimp/add', body, this.getOptions())
-                .pipe(map( res => {
+            this.legacyHttp.post(this.baseUrl + '/mailchimp/add', body, this.getOptions())
+                .pipe(map(res => {
                     return res.json()
                 }))
                 .toPromise()
-                .then( res => { console.log(res) })
-                .catch( err => { console.error(err) })
+                .then(res => { console.log(res) })
+                .catch(err => { console.error(err) })
         } else {
             console.info("Dev: Not adding user to Active Hero List")
         }
     }
-    
+
 
     /**
      * Add newly registered users to the sign up Mailchimp list
      */
-    public addToNewUsersList(user) : void {
+    public addToNewUsersList(user): void {
         let body = user
         body['list'] = 'new'
-        this.legacyHttp.post( this.baseUrl + '/mailchimp/add', body, this.getOptions())
+        this.legacyHttp.post(this.baseUrl + '/mailchimp/add', body, this.getOptions())
             .pipe(
-                map( res => {
+                map(res => {
                     return res.json()
                 }),
                 take(1)
             )
             .subscribe(
-                (success) => {  },
+                (success) => { },
                 (error) => { console.error(error) }
             )
     }
@@ -569,24 +686,24 @@ export class AuthService implements CanActivate {
     /**
      * Return array of allowed comment types
      */
-    public getAllowedCommentTypes() : string[] {
+    public getAllowedCommentTypes(): string[] {
         this.user = this.getUser()
-        if (this.user['hero'] && this.user['hero']['active']) {
-            return ['emoji','text','audio','reply']
+        if (this.user.hero_status) {
+            return ['emoji', 'text', 'audio', 'reply']
         } else {
-            return ['emoji','text']
+            return ['emoji', 'text']
         }
     }
 
     /**
      * Return array of allowed comment media types
      */
-    public getAllowedCommentMediaTypes() : string[] {
+    public getAllowedCommentMediaTypes(): string[] {
         this.user = this.getUser()
-        if (this.user['hero'] && this.user['hero']['active']) {
-            return ['emoji','text','audio']
+        if (this.user.hero_status) {
+            return ['emoji', 'text', 'audio']
         } else {
-            return ['emoji','text']
+            return ['emoji', 'text']
         }
     }
 
@@ -599,7 +716,7 @@ export class AuthService implements CanActivate {
              * - Additional query params can be added to customize a user's landing experience
              */
             if (route.queryParams['r']) {
-                this._router.navigate(["/register"], { queryParams: {  referral_id: route.queryParams['r'] }})
+                this._router.navigate(["/register"], { queryParams: { referral_id: route.queryParams['r'] } })
             } else {
                 this._router.navigate(['/home'])
             }
@@ -612,7 +729,7 @@ export class AuthService implements CanActivate {
     /**
      * Submit payment and subscription type to add plan to user
      */
-    public subscribeToHero(stripeToken, couponCode ?: string): Observable<HeroCreateResponse> {
+    public subscribeToHero(stripeToken, couponCode?: string): Observable<HeroCreateResponse> {
         let data = {
             token: stripeToken
         }
@@ -630,34 +747,35 @@ export class AuthService implements CanActivate {
                 })
             }
         )
-        .pipe(map((res) => {
-            // Add user to mailchimp list
-            this.addToActiveHeroList(this.getUser())
-            
-            return res
-        }))
+            .pipe(map((res) => {
+                // Add user to mailchimp list
+                this.addToActiveHeroList(this.getUser())
+
+                return res
+            }))
     }
 
-    public validateHeroCoupon(couponCode: string) : Observable<any> {
+    public validateHeroCoupon(couponCode: string): Observable<any> {
         return this._http.get(this.baseUrl + "/subscriptions/coupons/" + couponCode,
-            { headers: new HttpHeaders({
-                'Content-Type': 'application/json',
-                'Authorization': this.getToken()
+            {
+                headers: new HttpHeaders({
+                    'Content-Type': 'application/json',
+                    'Authorization': this.getToken()
+                })
             })
-        })
     }
 
-    public updateHeroSub(subscriptionType: string, statusChange ?: string) {
+    public updateHeroSub(subscriptionType: string, statusChange?: string) {
         if (!statusChange) {
             statusChange = 'subscribed'
         }
         let data = {
-            subscription_type : subscriptionType,
-            status : statusChange
+            subscription_type: subscriptionType,
+            status: statusChange
         }
 
         return this.legacyHttp.put(this.baseUrl + '/api/v1/subscriptions', data, this.getOptions())
-            .pipe(map( res => {
+            .pipe(map(res => {
                 return res.json()
             }))
     }
@@ -670,10 +788,12 @@ export class AuthService implements CanActivate {
     }
 
     public getUserWithAuthToken(type: string, token: string): Observable<LoginObject> {
-        return this.legacyHttp.get(this.baseUrl + "/users?oauth_type=" + type + "&oauth_token=" + token)
-            .pipe(map((res) => {
-                return res.json()
-            }))
+        return this._http.get<GetWithAuthTokenResponse>(this.baseUrl + "/users?oauth_type=" + type + "&oauth_token=" + token)
+        .pipe(map((res) => {
+            this.setToken(res.token)
+            this.setUser(res.user)
+            return res
+        }))
     }
 
     /**
@@ -681,11 +801,11 @@ export class AuthService implements CanActivate {
      * - Add user to user's Following array
      * - Updates user object
      */
-    public followUser(userId: string) : Observable<any> {
-        return this.legacyHttp.put(this.baseUrl + '/users/following', { 'user_id' : userId, 'action': 'follow' }, this.getOptions())
-            .pipe(map( res => {
+    public followUser(userId: string): Observable<any> {
+        return this.legacyHttp.put(this.baseUrl + '/users/following', { 'user_id': userId, 'action': 'follow' }, this.getOptions())
+            .pipe(map(res => {
                 let user = res.json().user || {}
-                if(user._id) {
+                if (user._id) {
                     this.setUser(user)
                 }
                 return user
@@ -697,11 +817,11 @@ export class AuthService implements CanActivate {
      * - Removes a user from user's Following array
      * - Updates user object
      */
-    public unfollowUser(userId: string) : Observable<any> {
-        return this.legacyHttp.put(this.baseUrl + '/users/following', { 'user_id' : userId, 'action': 'unfollow' }, this.getOptions())
-            .pipe(map( res => {
-                let user = res.json().user  || {}
-                if(user._id) {
+    public unfollowUser(userId: string): Observable<any> {
+        return this.legacyHttp.put(this.baseUrl + '/users/following', { 'user_id': userId, 'action': 'unfollow' }, this.getOptions())
+            .pipe(map(res => {
+                let user = res.json().user || {}
+                if (user._id) {
                     this.setUser(user)
                 }
                 return user
@@ -729,12 +849,12 @@ export class AuthService implements CanActivate {
     public getUserByReferralId(referral_id: any): Observable<any> {
         return this.legacyHttp.get(this.baseUrl + '/api/v1/referrals/' + referral_id, this.getOptions())
             .pipe(
-                map( res => {
+                map(res => {
                     let data = res.json() || {}
                     let user = data.user
                     return user
                 }),
-                catchError( err => {
+                catchError(err => {
                     return err
                 })
             )
@@ -744,25 +864,26 @@ export class AuthService implements CanActivate {
      * Ask the db how many users the current user has referred
      * @param userId is the user id for the current user
      */
-    public getReferralProgress(userId: string) : Observable<any> {
+    public getReferralProgress(userId: string): Observable<any> {
         return this._http.get(
-            this.getUrl() + '/api/v1/users/' + userId + '/referrals', 
-            { headers: new HttpHeaders({
-                'Content-Type': 'application/json',
-                'Authorization': this.getToken()
+            this.getUrl() + '/api/v1/users/' + userId + '/referrals',
+            {
+                headers: new HttpHeaders({
+                    'Content-Type': 'application/json',
+                    'Authorization': this.getToken()
+                })
             })
-        })
     }
 
     /** TEMP SALE CODE */
-    public getShowSale() : boolean {
+    public getShowSale(): boolean {
         let user = this.currentUserSource.value
         if (user && user.hero_status != true) {
             let minDate = new Date('08/25/2018')
-            let maxDate =  new Date('9/15/2018')
+            let maxDate = new Date('9/15/2018')
             let currentDate = new Date()
-            
-            if (currentDate > minDate && currentDate < maxDate ){
+
+            if (currentDate > minDate && currentDate < maxDate) {
                 return true
             } else {
                 return false
@@ -782,4 +903,18 @@ interface LoginObject {
 interface HeroCreateResponse {
     subscription: any
     user: User
+}
+
+interface GetWithAuthTokenResponse {
+    token: string
+    user: User
+}
+
+export interface AcademyState {
+    academies?: {
+        name?: string,
+        abbreviation?: string,
+        _id?: string
+    }[],
+    selected?: number
 }

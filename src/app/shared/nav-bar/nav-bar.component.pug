@@ -12,17 +12,19 @@
       a#navDiscover.btn.btn-link([routerLink]="['/discover']", routerLinkActive="active", title="Discover Readings from other Teachers")
         //- span([innerHtml]="':triangular_flag_on_post:' | emojione")
         | Discover
-      .dropdown(*ngIf="secretSwitches.academy", [class.show]="academyMenuShow")
-        a#navAcademy.btn.btn-link.dropdown-toggle(
-            routerLinkActive="active",
-            (click)="academyMenuShow = !academyMenuShow"
-          )
+      .dropdown(*ngIf="user.isAcademyAdmin", [class.show]="academyMenuShow")
+        a#navAcademy.btn.btn-link([routerLink]="['/academy/licenses']", routerLinkActive="active") 
           | Academy
-        .dropdown-menu(aria-labelledby="navAcademy")
-          a.dropdown-item([routerLink]="['/academy/engagement']", routerLinkActive="active")
-            | Engagement
-          a.dropdown-item([routerLink]="['/academy/licenses']", routerLinkActive="active")
-            | Licenses
+        //- a#navAcademy.btn.btn-link.dropdown-toggle(
+        //-     routerLinkActive="active",
+        //-     (click)="academyMenuShow = !academyMenuShow"
+        //-   )
+        //-   | Academy
+        //- .dropdown-menu(aria-labelledby="navAcademy")
+        //-   a.dropdown-item([routerLink]="['/academy/engagement']", routerLinkActive="active")
+        //-     | Engagement
+        //-   a.dropdown-item([routerLink]="['/academy/licenses']", routerLinkActive="active")
+        //-     | Licenses
       a#navGuide.btn.btn-link.btn--hover-icon(*ngIf="isTeacher", href="http://guide.edji.it", target="_blank", )
         | Guide
         .icon.icon-external
@@ -45,7 +47,6 @@
     .nav__btn-wrap(*ngIf="!user.isLoggedIn && !hideAccountOptions")
       a#loginLink.btn.btn-primary.nav-bar__btn([routerLink]="['/login']") Log In
       a#registerLink.btn.btn-secondary.nav-bar__btn([routerLink]="['/register']") Register
-
     //- User Menu: Logged in Actions
     .outer-circle--large.float-right(*ngIf="user.isLoggedIn", [class.active]="showAvatarDropdown")
       .avatar__wrap
@@ -69,6 +70,21 @@
           //- Log Out
           button#logOutButton.list-group-item.list-group-item-action(type="button", (click)="logout()") Log Out
             span.list-icon--right([innerHtml]="':outbox_tray:' | emojione")
+    //- Academy indicator 
+    .nav__btn-wrap.hidden-sm-down(*ngIf="academyState && academyState.academies && academyState.academies.length > 0")
+      .academy-plate(
+          title="Hero Academy", 
+          *ngIf="academyState.academies", 
+          (click)="showAcademyDropdown = !showAcademyDropdown",
+          [class.has-multiple]="academyState.academies.length > 1"
+          )
+        .icon.icon-academy-plate
+        .academy-plate__initials {{ academyState.academies[academyState.selected].abbreviation }}
+        .icon.icon-caret.down
+      .avatar__drop-down.list-group([class.visible]="showAcademyDropdown")
+        .arrow
+        button.list-group-item.list-group-item-action(*ngFor="let academy of academyState.academies; let i = index", (click)="_auth.setCurrentAcademy(i); showAcademyDropdown = false")
+          | {{ academy.name }} ({{academy.abbreviation}})
 
     //- Project Info (Desktop & Mobile)
     .nav-bar__project-data(*ngIf="showProjectInfo && currentProject && currentProject._id")

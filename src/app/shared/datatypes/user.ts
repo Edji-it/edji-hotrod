@@ -15,21 +15,6 @@ interface BaseUser {
   email: string,
   identities?: string[],
   hero_status?: boolean,
-  hero?: {
-    active: boolean,
-    will_expire?: Date,
-    customer_id: string,
-    subscription_id: string,
-    subscription_type: string,
-    subscription_label: string,
-    subscription_cost?: string, // i think instead of storing the cost we should use Stripe to get it on-demand
-    history: {
-      subscription_id: string,
-      subscription_type: string,
-      change: string,
-      date: Date
-    }[]
-  },
   prefs?: {
     recentEmoji?: string[],
     onboarding?: {
@@ -54,5 +39,6 @@ interface BaseUser {
   avatar?: string,
   referred_by?: string,
   license_ids?: string[],
-  institution_ids?: string[]
+  institution_ids?: string[],
+  isAcademyAdmin?: boolean
 }

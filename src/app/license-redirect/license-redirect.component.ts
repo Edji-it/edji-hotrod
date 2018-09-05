@@ -5,7 +5,7 @@ import { take } from 'rxjs/operators';
 
 // Project dependancies
 import { User } from '../shared/datatypes'
-import { LockerService, AuthService, AcademyService } from '../_services'
+import { LockerService, AuthService, AcademyService, UtilToolService } from '../_services'
 
 @Component({
   selector: 'app-license-redirect',
@@ -17,20 +17,18 @@ export class LicenseRedirectComponent implements OnInit, OnDestroy {
   public login: boolean = true
 
   public user: User
-  public licenseId: string
+  public invitationId: string
+  public academyName: string = "Academy"
 
-  public messages: {
-    licenseProcessError?: boolean,
-    invalidLicense?: boolean,
-    serverError?: boolean
-  } = {}
+  public errorKey: string = ""
 
   constructor(
     private _auth: AuthService,
     private route: ActivatedRoute,
     private _router: Router,
     private _locker: LockerService,
-    private _academy: AcademyService
+    private _academy: AcademyService,
+    public _util: UtilToolService
   ) { }
 
   ngOnInit() {
@@ -42,26 +40,29 @@ export class LicenseRedirectComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(
       this.route.params.subscribe((params) => {
-        this.licenseId = params['license_id']
-      })
+        this.invitationId = params['license_id']
+      }),
+      this.route.queryParams.subscribe((queryParams) => {
+        if (queryParams['academy']) {
+          this.academyName = queryParams['academy']
+        }
+      }),
     )
 
     /** 
      * if the license_id is defined and passed in properly through the query param on the route, 
      * let's add it to the locker and then move to the login/register check
      */ 
-    if (typeof(this.licenseId)!='undefined' && this.licenseId!='') {
+    if (typeof(this.invitationId)!='undefined' && this.invitationId!='') {
       // if the user is logged in already, then we'll process the license
       if (this.user.isLoggedIn) {
         // if the user already accepted this license, redirect them to the dashboard.. otherwise process it
-        if (this.user.license_ids.includes(this.licenseId) && (this.user.hero && this.user.hero.active)) {
+        if (this.user.license_ids.includes(this.invitationId) && this.user.hero_status) {
           this._router.navigate(['/dashboard'])
-        } else {
-          this.processLicense()
         }
       } else {
-        // store the licenseId in the locker if we need to register the user or they need to login
-        this._locker.set("licenseId", this.licenseId)
+        // store the invitationId in the locker if we need to register the user or they need to login with Google
+        this._locker.set("invitationId", this.invitationId)
       }
     }
   }
@@ -72,29 +73,47 @@ export class LicenseRedirectComponent implements OnInit, OnDestroy {
 
   /**
    * Tells the server we have a license to add to the user account
-   * If coming from oauth or any other case where we have a licenseId on here, let's clear it from the locker
+   * If coming from oauth or any other case where we have a invitationId on here, let's clear it from the locker
    */
   processLicense() {
-    // if licenseId is in the locker let's take it out
-    if (this._locker.has('licenseId')) {
-      this._locker.remove('licenseId')
+    // if invitationId is in the locker let's take it out
+    if (this._locker.has('invitationId')) {
+      this._locker.remove('invitationId')
     }
     // tell the server we need to process the license on the user
-    this._academy.acceptLicense(this.licenseId).pipe(take(1)).subscribe((userWithLicense: any) => {
+    this._academy.acceptLicense(this.invitationId).pipe(take(1)).subscribe((userWithLicense: any) => {
       // update the user across the app with the new license ID and hero status update
       this._auth.refreshUser().pipe(take(1)).subscribe((updatedUser: any) => {
-        if (updatedUser.license_ids.includes(this.licenseId) && (updatedUser.hero && updatedUser.hero.active)) {
-          let index = updatedUser.institution_ids.length - 1
-          let institutionId = updatedUser.institution_ids[index]
-          // once we update the user to add a license and make them a hero, let's redirect them to the dashboard
-          this._router.navigate(['/license/welcome/' + institutionId])
-        } else {
-          // error handling if the license was not processed on their account
-          this.messages.licenseProcessError = true
-        }
+        let index = updatedUser.institution_ids.length - 1
+        let institutionId = updatedUser.institution_ids[index]
+        // once we update the user to add a license and make them a hero, let's redirect them to the dashboard
+        this._router.navigate(['/license/welcome/' + institutionId])
       })
     }, (err) => {
       console.error(err)
+      if (err.status===403 && err.error.error === 'invite not found for email') {
+        this.errorKey = 'serverError'
+      }
+      if (err.status===403 && err.error.error === 'invalid license') {
+        this.errorKey = 'invalidLicense'
+      }
+      if (err.status===500) {
+        this.errorKey = 'licenseProcessError'
+      }
     })
+  }
+
+  /**
+   * Log out and show log in form
+   */
+  public changeAccount(): void {
+    this._auth.logout(true)
+  }
+
+  /**
+   * Registered for License
+   */
+  public userRegistered(user: User): void {
+    console.info('user updated')
   }
 }

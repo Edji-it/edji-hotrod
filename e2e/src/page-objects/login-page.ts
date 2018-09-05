@@ -1,5 +1,6 @@
 import { browser, by, element, protractor } from 'protractor';
 import { PageObjectInterface } from './PageObjectInterface';
+import { Sidebar } from '.'
 
 export class Login implements PageObjectInterface
 {
@@ -9,8 +10,6 @@ export class Login implements PageObjectInterface
     Nicholas Pumper
 
     Page Object for the Login page.
-
-    
     */
 
     // Public Instance Variables
@@ -30,6 +29,8 @@ export class Login implements PageObjectInterface
     public teacherPassword  = 'testsidekick16';
     public heroUser         = 'testhero';
     public heroPassword     = 'testhero16';
+    public adminUser         = 'testadmin';
+    public adminPassword     = 'testadmin16';
     public botUser          = 'testbot';
     public botPassword      = 'testbot';
     public referUser        = 'testrefer';
@@ -58,5 +59,16 @@ export class Login implements PageObjectInterface
     {
         this.passwordInput.sendKeys(input);
     } // enterPassword (input : string) : void
+
+    loginAndVerify(user: string, pass: string): void {
+        let EC = protractor.ExpectedConditions
+        let sidebar = new Sidebar()
+        this.enterUsername(user)
+        this.enterPassword(pass)
+        browser.wait(EC.elementToBeClickable(this.loginButton), 5000)
+        this.loginButton.click()
+        browser.wait(EC.urlContains("dashboard"), 5000, "never arrived at dashboard")
+        sidebar.closeModals()
+    }
     
 } // class Login

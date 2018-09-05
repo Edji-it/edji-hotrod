@@ -77,7 +77,7 @@ export class EdjiDatePipe implements PipeTransform {
                 break
             case "shortDate":
                 // Converts the date to the following format: m/d/yyyy
-								newTime = time.getMonth() + '/' + time.getDate() + '/' + time.getFullYear()
+								newTime = time.getMonth() + 1 + '/' + time.getDate() + '/' + time.getFullYear()
                 break
         }
       } else {

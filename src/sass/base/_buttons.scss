@@ -12,6 +12,7 @@ button, .button, .btn { //, [class*='btn']
   font-size: $base-font-size;
   -webkit-font-smoothing: antialiased;
   font-weight: 500;
+  font-style: normal;
   line-height: 1;
   padding: $small-spacing $base-spacing;
   text-decoration: none;

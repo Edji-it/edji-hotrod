@@ -1,0 +1,39 @@
+.modal-will-fade([class.show]="showModal", *ngIf="showModal")
+  .modal#licenseInviteModal
+    .modal-dialog(role="document")
+      form.modal-content([formGroup]="licenseInvite", (ngSubmit)="formSubmit(licenseInvite)")
+        .modal-header
+          h4.modal-title Invite a Teacher to this License
+          button.close.btn-icon--round(
+              (click)="closeModal.emit(false)",
+              type="button",
+              data-dismiss="modal",
+              aria-label="Close"
+             )
+            span(aria-hidden="true") &times;
+        .modal-body
+          //- Name of Teacher
+          .form-group
+            label Name
+            input#licenseInviteNameInput(
+              type="text",
+              [formControl]="licenseInvite.controls['name']",
+              tabindex="0"
+            )
+            #errorTitle.alert.alert-info(*ngIf="licenseInvite.controls['name'].hasError('required') && (licenseInvite.controls['name'].dirty || submitted)") 
+              | Please enter the name of the teacher for the license invite
+          //- Email Address
+          .form-group
+            label Email
+            input#licenseInviteEmailInput(
+              type="text", 
+              [formControl]="licenseInvite.controls['email']", 
+              tabindex="1"
+            )
+            #licenseInviteErrorNoEmail.alert.alert-info(*ngIf="licenseInvite.controls['email'].hasError('required') && (licenseInvite.controls['email'].dirty || submitted)") 
+              | Please enter the email address of the teacher for the license invite
+            #licenseInviteErrorBadEmail.alert.alert-info(*ngIf="licenseInvite.controls['email'].hasError('emailIncorrect') && licenseInvite.controls['email'].dirty && !licenseInvite.controls['email'].hasError('required')") 
+              | We don't think that's an email...
+        .modal-footer
+          button.btn.btn-primary(type="submit", [disabled]="!licenseInvite.valid") Submit
+          button.btn.btn-secondary(type="button", (click)="closeModal.emit(false)") Close

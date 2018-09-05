@@ -34,7 +34,7 @@ export class HeroChangeComponent implements OnInit {
 
   ngOnInit() {
     this.user = this._auth.getUser()
-    this.subtype = this.user.hero.type ? this.user.hero.type : 'yearly'
+    this.subtype = 'yearly'
   }
 
   /**

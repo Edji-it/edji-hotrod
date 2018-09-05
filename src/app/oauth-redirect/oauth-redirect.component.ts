@@ -60,8 +60,6 @@ export class OAuthComponent implements OnInit {
     const token = decodeURIComponent(encodedToken)
 
     this._auth.getUserWithAuthToken(type, token).pipe(take(1)).subscribe((res) => {
-      this._auth.setUser(res.user)
-      this._auth.setToken(res.token)
       // if we are coming here from a landing page like the license accept, then the success case should take us back to that landing page again
       if (this.licenseId!=='' && this.licenseId.length>0) {
         this._router.navigate(['/license/accept/' + this.licenseId])
