@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
 
 // Project Dependencies
-import { AuthService, ProjectService, SocketService, PowerToggle, ReadingService, SecretSwitchesService, UtilToolService, Secrets } from '../../_services'
+import { AuthService, ProjectService, SocketService, PowerToggle, ReadingService, SecretSwitchesService, UtilToolService, Secrets, AcademyState } from '../../_services'
 
 @Component({
   selector: 'nav-bar',
@@ -28,6 +28,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
     public showAcademyDropdown: boolean = false
     public showShareTooltip: boolean = false
     public user: any
+    public academyState: AcademyState
     public currentProject: any
     public projectOwner: any
     public createdDate: string
@@ -107,6 +108,9 @@ export class NavBarComponent implements OnInit, OnDestroy {
                 this.showHeroOfferTerms = true
               }
               /** TEMP SALE CODE */
+          }),
+          this._auth.currentAcademyState.subscribe((currentState) => {
+            this.academyState =  currentState
           })
       )
 

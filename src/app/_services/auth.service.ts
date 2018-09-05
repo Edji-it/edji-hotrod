@@ -32,9 +32,9 @@ export class AuthService implements CanActivate {
     private currentUserSource: BehaviorSubject<any>
     public currentUser: Observable<any>
 
-    private academyState: { academies?: any[], selected?: number } = {}
-    private academyStateSource: BehaviorSubject<any>
-    public currentAcademyState: Observable<any>
+    private academyState: AcademyState = {}
+    private academyStateSource: BehaviorSubject<AcademyState>
+    public currentAcademyState: Observable<AcademyState>
 
     constructor(
         private legacyHttp: Http,
@@ -175,9 +175,6 @@ export class AuthService implements CanActivate {
                         // Attach academies to user
                         academies.push(license.owning_institution)
                     }
-                    if (!user.currentAcademy) {
-                        user.currentAcademy = 0
-                    }
                     this.setAcademies(academies)
                 }
                 this.currentUserSource.next(user)
@@ -188,8 +185,9 @@ export class AuthService implements CanActivate {
                 if (err.status == 404) {
                     this._http.get<any>(this.getUrl() + '/api/v1/institutions/' + user.institution_ids[0], this.getHeaders())
                     .pipe(take(1))
-                    .subscribe(academy => {
-                        if (academy._id) {
+                    .subscribe(data => {
+                        let academy = data.institution
+                        if (academy) {
                             let academies = [academy]
                             this.setAcademies(academies)
                         }
@@ -200,6 +198,7 @@ export class AuthService implements CanActivate {
 
     /**
      * Save academies to user object
+     * @description sets array of Academies, and resets selected to 0
      * @param academies 
      */
     private setAcademies(academies: any[]) : void {
@@ -282,6 +281,7 @@ export class AuthService implements CanActivate {
         this._locker.clear()
         this.user = <User>{ isLoggedIn: false }
         this.currentUserSource.next(this.user)
+        this.setAcademies([])
     }
 
     /**
@@ -906,4 +906,13 @@ interface HeroCreateResponse {
 interface GetWithAuthTokenResponse {
     token: string
     user: User
+}
+
+export interface AcademyState {
+    academies?: {
+        name?: string,
+        abbreviation?: string,
+        _id?: string
+    }[],
+    selected?: number
 }
