@@ -142,7 +142,7 @@ export class AuthService implements CanActivate {
         //should have session timeout, username, baseProfileId, typeId
         user.isLoggedIn = true
         // Determine if user is an Academy Admin
-        if (user && user.license_ids) { 
+        if (user && user.license_ids && user.license_ids[0]) { 
             this.fetchAcademies(user)
         }
         this.currentUserSource.next(user)
@@ -182,7 +182,7 @@ export class AuthService implements CanActivate {
                 this._locker.set('user', user)
             }, err => {
                 // Fetch academy information for teacher (non-admin) users
-                if (err.status == 404) {
+                if (err.status == 404 && institution_ids && institution_ids[0]) {
                     this._http.get<any>(this.getUrl() + '/api/v1/institutions/' + user.institution_ids[0], this.getHeaders())
                     .pipe(take(1))
                     .subscribe(data => {
