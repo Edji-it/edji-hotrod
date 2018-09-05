@@ -83,7 +83,7 @@
         .icon.icon-caret.down
       .avatar__drop-down.list-group([class.visible]="showAcademyDropdown")
         .arrow
-        button.list-group-item.list-group-item-action(*ngFor="let academy of user.academies; let i = index", (click)="_auth.setAcademy(i); showAcademyDropdown = false")
+        button.list-group-item.list-group-item-action(*ngFor="let academy of user.academies; let i = index", (click)="_auth.setCurrentAcademy(i); showAcademyDropdown = false")
           | {{ academy.name }} ({{academy.abbreviation}})
 
     //- Project Info (Desktop & Mobile)
