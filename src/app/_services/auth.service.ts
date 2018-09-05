@@ -32,6 +32,10 @@ export class AuthService implements CanActivate {
     private currentUserSource: BehaviorSubject<any>
     public currentUser: Observable<any>
 
+    private academyState: AcademyState = {}
+    private academyStateSource: BehaviorSubject<AcademyState>
+    public currentAcademyState: Observable<AcademyState>
+
     constructor(
         private legacyHttp: Http,
         private _http: HttpClient,
@@ -46,6 +50,10 @@ export class AuthService implements CanActivate {
         this.user = this.getUser()
         this.currentUserSource = new BehaviorSubject<any>(this.user)
         this.currentUser = this.currentUserSource.asObservable()
+
+        this.academyState = this._locker.get('academyState') || {}
+        this.academyStateSource = new BehaviorSubject<any>(this.academyState)
+        this.currentAcademyState = this.academyStateSource.asObservable()
 
         // Check to see if prod or dev environment
         if (window.location.host.indexOf('local.edji.it') > -1) {
@@ -134,34 +142,8 @@ export class AuthService implements CanActivate {
         //should have session timeout, username, baseProfileId, typeId
         user.isLoggedIn = true
         // Determine if user is an Academy Admin
-        if (user && user.license_ids) { 
-            this._http.get<any>(this.getUrl() + '/api/v1/licenses', this.getHeaders())
-                .pipe(take(1))
-                .subscribe(data => {
-                    // Attach properties for Academy users
-                    if (data.licenses) {
-                        let licenseCount = data.licenses.length
-                        for (let i = 0; i < licenseCount; i++) {
-                            let license = data.licenses[i]
-                            license.roles.forEach(roleObj => {
-                                // Detect Admin
-                                if (roleObj.role === 'owner' || roleObj.role === 'administrator') {
-                                    user.isAcademyAdmin = true
-                                }
-                            })
-                            // Attach academies to user
-                            if (!user.academies) { user.academies = []}
-                            user.academies.push(license.owning_institution)
-                        }
-                        if (!user.currentAcademy) {
-                            user.currentAcademy = 0
-                        }
-                    }
-                    this.currentUserSource.next(user)
-                    this._locker.set('user', user)
-                }, err => {
-                    // No licenses
-                })
+        if (user && user.license_ids && user.license_ids[0]) { 
+            this.fetchAcademies(user)
         }
         this.currentUserSource.next(user)
         this._locker.set('user', user)
@@ -171,14 +153,78 @@ export class AuthService implements CanActivate {
     }
 
     /**
-     * Select users current institution
+     * Retrieve academy objects
+     * @description Updates ACADEMY OBSERVABLE and user's isAcademyAdmin property
      */
-    public setAcademy(academyIndex: number) {
-        let user = this.currentUserSource.value
-        if (this.user.academies && this.user.academies[academyIndex]) {
-            user.currentAcademy = academyIndex
-            this.currentUserSource.next(user)
-            this._locker.set('user', user)
+    private fetchAcademies(user: User): void {
+        // Fetch license and academy information for admins and owners
+        this._http.get<any>(this.getUrl() + '/api/v1/licenses', this.getHeaders())
+            .pipe(take(1))
+            .subscribe(data => {
+                // Attach properties for Academy users
+                if (data.licenses) {
+                    let licenseCount = data.licenses.length
+                    let academies = []
+                    for (let i = 0; i < licenseCount; i++) {
+                        let license = data.licenses[i]
+                        license.roles.forEach(roleObj => {
+                            // Detect Admin
+                            if (roleObj.role === 'owner' || roleObj.role === 'administrator') {
+                                user.isAcademyAdmin = true
+                            }
+                        })
+                        // Attach academies to user
+                        academies.push(license.owning_institution)
+                    }
+                    this.setAcademies(academies)
+                }
+                this.currentUserSource.next(user)
+                this._locker.set('user', user)
+            }, err => {
+                // Fetch academy information for teacher (non-admin) users
+                if (err.status == 404 && user.institution_ids && user.institution_ids[0]) {
+                    this._http.get<any>(this.getUrl() + '/api/v1/institutions/' + user.institution_ids[0], this.getHeaders())
+                    .pipe(take(1))
+                    .subscribe(data => {
+                        let academy = data.institution
+                        if (academy) {
+                            let academies = [academy]
+                            this.setAcademies(academies)
+                        }
+                    })
+                } else {
+                    console.error(err)
+                }
+            })
+    }
+
+    /**
+     * Save academies to user object
+     * @description sets array of Academies, and resets selected to 0
+     * @param academies 
+     */
+    private setAcademies(academies: any[]) : void {
+        let academyState = this.academyStateSource.value
+        academyState.academies = academies
+        // Reset to first academy
+        academyState.selected = 0
+        // Update academyState stores
+        this.academyStateSource.next(academyState)
+        this._locker.set('academyState', academyState)
+    }
+
+    /**
+     * Select current academy
+     * Select users current institution (saved as an index)
+     * @param academyIndex index of academy to select
+     */
+    public setCurrentAcademy(academyIndex: number) {
+        let academyState = this.academyStateSource.value
+        if (academyState.academies && academyState.academies[academyIndex]) {
+            academyState.selected = academyIndex
+            // Update academyState stores
+            this.academyStateSource.next(academyState)
+            this._locker.set('academyState', academyState)
         }
     }
 
@@ -237,6 +283,7 @@ export class AuthService implements CanActivate {
         this._locker.clear()
         this.user = <User>{ isLoggedIn: false }
         this.currentUserSource.next(this.user)
+        this.setAcademies([])
     }
 
     /**
@@ -741,10 +788,12 @@ export class AuthService implements CanActivate {
     }
 
     public getUserWithAuthToken(type: string, token: string): Observable<LoginObject> {
-        return this.legacyHttp.get(this.baseUrl + "/users?oauth_type=" + type + "&oauth_token=" + token)
-            .pipe(map((res) => {
-                return res.json()
-            }))
+        return this._http.get<GetWithAuthTokenResponse>(this.baseUrl + "/users?oauth_type=" + type + "&oauth_token=" + token)
+        .pipe(map((res) => {
+            this.setToken(res.token)
+            this.setUser(res.user)
+            return res
+        }))
     }
 
     /**
@@ -854,4 +903,18 @@ interface LoginObject {
 interface HeroCreateResponse {
     subscription: any
     user: User
+}
+
+interface GetWithAuthTokenResponse {
+    token: string
+    user: User
+}
+
+export interface AcademyState {
+    academies?: {
+        name?: string,
+        abbreviation?: string,
+        _id?: string
+    }[],
+    selected?: number
 }
