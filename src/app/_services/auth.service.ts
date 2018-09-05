@@ -51,7 +51,7 @@ export class AuthService implements CanActivate {
         this.currentUserSource = new BehaviorSubject<any>(this.user)
         this.currentUser = this.currentUserSource.asObservable()
 
-        this.academyState = this._locker.get('academyState')
+        this.academyState = this._locker.get('academyState') || {}
         this.academyStateSource = new BehaviorSubject<any>(this.academyState)
         this.currentAcademyState = this.academyStateSource.asObservable()
 
