@@ -182,7 +182,7 @@ export class AuthService implements CanActivate {
                 this._locker.set('user', user)
             }, err => {
                 // Fetch academy information for teacher (non-admin) users
-                if (err.status == 404 && institution_ids && institution_ids[0]) {
+                if (err.status == 404 && user.institution_ids && user.institution_ids[0]) {
                     this._http.get<any>(this.getUrl() + '/api/v1/institutions/' + user.institution_ids[0], this.getHeaders())
                     .pipe(take(1))
                     .subscribe(data => {
