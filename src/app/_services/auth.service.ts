@@ -51,6 +51,7 @@ export class AuthService implements CanActivate {
         this.currentUserSource = new BehaviorSubject<any>(this.user)
         this.currentUser = this.currentUserSource.asObservable()
 
+        this.academyState = this._locker.get('academyState')
         this.academyStateSource = new BehaviorSubject<any>(this.academyState)
         this.currentAcademyState = this.academyStateSource.asObservable()
 
@@ -180,7 +181,6 @@ export class AuthService implements CanActivate {
                 this.currentUserSource.next(user)
                 this._locker.set('user', user)
             }, err => {
-                console.log(err)
                 // Fetch academy information for teacher (non-admin) users
                 if (err.status == 404) {
                     this._http.get<any>(this.getUrl() + '/api/v1/institutions/' + user.institution_ids[0], this.getHeaders())
@@ -192,6 +192,8 @@ export class AuthService implements CanActivate {
                             this.setAcademies(academies)
                         }
                     })
+                } else {
+                    console.error(err)
                 }
             })
     }
