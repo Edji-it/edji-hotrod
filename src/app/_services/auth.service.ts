@@ -741,10 +741,12 @@ export class AuthService implements CanActivate {
     }
 
     public getUserWithAuthToken(type: string, token: string): Observable<LoginObject> {
-        return this.legacyHttp.get(this.baseUrl + "/users?oauth_type=" + type + "&oauth_token=" + token)
-            .pipe(map((res) => {
-                return res.json()
-            }))
+        return this._http.get<GetWithAuthTokenResponse>(this.baseUrl + "/users?oauth_type=" + type + "&oauth_token=" + token)
+        .pipe(map((res) => {
+            this.setToken(res.token)
+            this.setUser(res.user)
+            return res
+        }))
     }
 
     /**
@@ -853,5 +855,10 @@ interface LoginObject {
 
 interface HeroCreateResponse {
     subscription: any
+    user: User
+}
+
+interface GetWithAuthTokenResponse {
+    token: string
     user: User
 }
