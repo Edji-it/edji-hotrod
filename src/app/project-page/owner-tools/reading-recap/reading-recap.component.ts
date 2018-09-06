@@ -24,7 +24,7 @@ export class ReadingRecapComponent implements OnInit {
   @Output() hide: EventEmitter<any> = new EventEmitter()
 
   private subscriptions: Subscription[] = []
-  private currentUser: User
+  public currentUser: User
   public project: any
   public evaluations: any = []
   public appliedFilter: CommentFilter = <CommentFilter>{}
