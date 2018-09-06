@@ -1,0 +1,28 @@
+.row.mt-4.min-100([class.chart-cluster--disabled]="errorMsg")
+  .chart-cluster
+    .gauge-alert.alert.alert-warning(*ngIf="errorMsg.length > 0", [innerHtml]="errorMsg")
+    .gauge-value
+      .gauge-value-min {{ values.min }} {{ measures.abbreviated }}
+    .gauge-section.px-2
+      .gauge-outline(
+        [ngStyle]="{ 'width': chartSize + 'px', 'height': chartSize/2 + 'px', 'border-top-left-radius': chartSize/2 + 'px', 'border-top-right-radius': chartSize/2 + 'px', 'background': 'linear-gradient(0.25turn,' + colorLeft + ',' + colorRight + ')' }"
+      )
+        .gauge-inner(
+          [ngStyle]="{ 'border-top-left-radius': chartSize/2 + 'px', 'border-top-right-radius': chartSize/2 + 'px' }"
+        )
+          .needle(
+            [ngStyle]="{ 'height': chartSize/2 + 'px', 'transform': 'rotate(' + needlePosition + 'deg)' }"
+          )
+          .avg-tick(
+            [ngStyle]="{ 'height': chartSize/2 + 'px', 'transform': 'rotate(' + averagePosition + 'deg)' }"
+          )
+          .average-tooltip(
+            [ngClass]="{'position-right': avgAngle > 90}", 
+            [@animateToolTip]="{value: animationState, params: {avgAngle: avgAngle, avgLft: avgLft, avgBtm: avgBtm}}"
+          ) Average: {{ values.avg }}
+    .gauge-value
+      .gauge-value-max {{ values.max }} {{ measures.abbreviated }}
+.row
+  .col-12.no-gutters.p-0
+    #gaugeValue.needle-value.mt-2([innerHtml]="values.val ? values.val : '&mdash;'")
+    .needle-metric {{ measures.full }}

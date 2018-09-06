@@ -19,18 +19,6 @@
     margin: 0;
 }
 
-.number-container {
-    //width: 100%;
-    height: calc(100%);
-    vertical-align: middle;
-    display: inline-block;
-    margin: auto;
-    position: absolute;
-    height: 100%;
-    top: -5px;
-    left: 33px;
-}
-
 .prompt {
     color: black;
     font-weight: 500;
@@ -115,10 +103,6 @@
 
 .hidden {
     display: none;
-}
-
-.label, .label--gray, label {
-    margin: 5px 0 0 0;
 }
 
 .question-input {

@@ -76,6 +76,21 @@
     }
 }
 
+.icon-reading-recap {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    background: url('/assets/images/icon-reading-recap.svg');
+    background-size: 100% 100%;
+    background-position: center center;
+    cursor: pointer;
+    
+    &.inactive {
+        background-size: 100% 100%;
+        filter: grayscale(100%);
+    }
+}
+
 .icon-academy-plate {
     @include icon('icon-academy-plate.svg');
 }

@@ -154,4 +154,14 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Add group to reading card
+   * @param group Project object to add to reading
+   */
+  public addGroup(group) {
+    if(!this.reading.projects) {
+      this.reading.projects = []
+    }
+    this.reading.projects.push(group)
+  }
 } // @Component

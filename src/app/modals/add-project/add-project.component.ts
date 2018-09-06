@@ -9,12 +9,18 @@ import { User } from "../../shared/datatypes"
 
 @Component({
   selector: 'hot-add-project-modal',
-  templateUrl: 'add-project.component.html'
+  templateUrl: 'add-project.component.pug'
 })
 export class AddProjectModal implements OnInit {
   @Output() closeModal: EventEmitter<any> = new EventEmitter()
+  @Output() groupSaved: EventEmitter<boolean> = new EventEmitter() 
 
   @Input() reading: any
+  
+  // Optional copy inputs
+  @Input() heading: string
+  @Input() subheading: string
+
   public projectForm: FormGroup
   public formSubmitted: boolean = false
   public errors: {
@@ -23,7 +29,7 @@ export class AddProjectModal implements OnInit {
     groupNameLength?: boolean
   } = {}
   public commentTypes: any = []
-  public canChooseTypes: boolean = false 
+  public isHero: boolean = false 
   public customCode: string = ''
   public user: User
   public loading: boolean
@@ -47,10 +53,12 @@ export class AddProjectModal implements OnInit {
       textType: true,
       audioType: this.commentTypes.indexOf('audio') > -1 ? true : false,
       replyType: this.commentTypes.indexOf('reply') > -1 ? true : false,
-      customCode: ''
+      customCode: '',
+      groupInstructions: ''
     })
 
-    this.canChooseTypes = this._auth.getUser().hero_status
+    // isHero turns Hero-only group features on/off
+    this.isHero = this._auth.getUser().hero_status
   }
 
   /**
@@ -59,11 +67,11 @@ export class AddProjectModal implements OnInit {
   addProject(formValue: any) {
     // reset errors
     this.errors = {}
-
     // trigger form submission and check for form errors
     this.formSubmitted = true
-    this.loading = true
     if (!this.projectForm.valid) { return }
+    // Start loading spinner! If we're valid, we're requesting
+    this.loading = true
 
     let types = []
     if (formValue.emojiType) { types.push("emoji") }
@@ -84,11 +92,17 @@ export class AddProjectModal implements OnInit {
           this.loading = false
           if (err.status == 404) {
             // no code found - they're good to create the new one!
-            this._projects.create(this.reading._id, { 'label' : formValue.label, 'types' : types, 'code': formValue.customCode } )
+            let newProject = { 
+              'label' : formValue.label, 
+              'types' : types, 
+              'code': formValue.customCode,
+              'group_instructions': formValue.groupInstructions
+            }
+            this._projects.create(this.reading._id, newProject)
               .subscribe( project => {
                 if (project._id) {
                   project.new = true
-                  this.reading.projects.push(project)
+                  this.groupSaved.emit(project)
                   this.closeModal.emit()
                 }
               }, error => {

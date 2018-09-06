@@ -1,0 +1,94 @@
+#readingReport {
+  border: dashed 2px #dcdcdc;
+}
+
+.text-md {
+  font-size: 14px;
+}
+
+.header-text__large {
+  font-size: 30px;
+}
+
+.header-text__medium {
+  font-size: 32px;
+  font-weight: 200;
+}
+
+.report-text-highlighted {
+  display: inline;
+}
+
+::ng-deep .ui-dropdown-panel .ui-dropdown-list {
+  background-color: white;
+}
+
+::ng-deep .ui-dropdown {
+  & label.ui-dropdown-label {
+    font-size: 30px;
+    width: max-content;
+    font-weight: 100;
+    padding: 0 20px 4px 6px;
+    margin-left: 6px;
+    border-bottom: solid #00A2F5 2px;
+  }
+  &:hover {
+    & label.ui-dropdown-label {
+    background-color: rgba(0,0,0,0.05);
+    }
+    & .ui-dropdown-trigger {
+      transform: scale(1);
+      transition: transform ease-in-out 200ms;
+    }
+  }
+}
+
+::ng-deep .ui-dropdown-panel .ui-dropdown-list {
+  font-size: 16px;
+  min-width: max-content;
+  width: 100%;
+}
+
+::ng-deep .ui-dropdown .ui-dropdown-panel {
+  min-width: max-content;
+}
+
+::ng-deep .ui-dropdown .ui-dropdown-trigger {
+  background-image: url(../../../../assets/images/filter-arrow-down.svg);
+  background-size: 100% auto;
+  height: 13px;
+  width: 12px;
+  right: 0px;
+  top: 15px;
+  transform: scale(0.7);
+}
+
+::ng-deep .ui-dropdown {
+  width: max-content;
+}
+
+::ng-deep .ui-dropdown-panel .ui-dropdown-items-wrapper {
+  background-color: white;
+  max-height: 80vh;
+}
+
+::ng-deep .ui-dropdown-panel .ui-dropdown-item {
+  &:hover {
+    background-color: rgba(0,0,0,0.05);
+  }
+}
+
+.reading-recap-blurred {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%, -50%, 0px);
+  &-outer {
+    background: transparent;
+  border: none;
+  box-shadow: none;
+  }
+  &-inner {
+    background: transparent;
+  }
+}

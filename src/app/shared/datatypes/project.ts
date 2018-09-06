@@ -18,6 +18,13 @@ interface BaseProject {
   label: string,
   code: string,
   types: string, // can currently be 'emoji' and 'text'
-  heat_vision: boolean
+  heat_vision: boolean,
+  report_evals?: Feedback[]
 }
 
+export interface Feedback {
+  createdAt: Date,
+  evaluation: string,
+  user_id: string,
+  _id: string
+}

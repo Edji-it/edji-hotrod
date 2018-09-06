@@ -1,0 +1,67 @@
+#addProjectModal.modal.fade-in.show
+  .modal-dialog
+    .modal-content
+      .modal-header
+        h4.modal-title {{ heading ? heading : &apos;New Group&apos; }}
+        button.close((click)='closeModal.emit()', type='button') &times;
+      form([formGroup]='projectForm', (ngSubmit)='addProject(projectForm.value)')
+        .modal-body.pb-0
+            .form-group(*ngIf='subheading')
+                p {{ subheading }}
+            .form-group
+                label(for='newProjectLabel') 
+                    | Group Name
+                    i.icon__tooltip(tooltipPosition="right", pTooltip="A group is a section of students on a reading", tooltipZIndex="9000")
+                        span.icon.icon-circle.icon-info  i
+                input#newProjectLabel(tabindex='0', type='text', placeholder='1st Period, Vocabulary, Monday Class...', [formControl]="projectForm.controls['label']")
+                #msgLabelRequired.alert.alert-warning(*ngIf="formSubmitted && projectForm.controls['label'].hasError('required')", role='alert')
+                    b No Name
+                    | Groups like to have names!
+            div([class.hero-box]="!isHero")
+                .form-group(*ngIf="!isHero")
+                    label More with Hero
+                    .row
+                        p.col-9.small(*ngIf='!isHero')
+                            | Unlock group instructions, the choice of comment types, and custom codes! 
+                        .col-3.nopadding
+                            a.btn.btn-sm.btn-hero([routerLink]='["/hero"]') Learn More
+                .form-group([class.disabled]="!isHero")
+                    label(for='groupInstructions')
+                        | Reading Group Instructions
+                        i.icon__tooltip(tooltipPosition="right", pTooltip="Instructions are displayed at the beginning of a reading, and included in the Recap.", tooltipZIndex="9000")
+                            span.icon.icon-circle.icon-info  i
+                    textarea#groupInstructions.form-control.mGroup([formControl]="projectForm.controls['groupInstructions']", type='text', placeholder="For today's lesson, you will...")
+                .form-group.row([class.disabled]='!isHero')
+                    label.col-12 Comment Types
+                    .input-group.col-6
+                        label.custom-control.custom-checkbox
+                            input.custom-control-input(type='checkbox', [formControl]="projectForm.controls['emojiType']")
+                            span.custom-control-indicator
+                            span.custom-control-description Emoji Commenting
+                    .input-group.col-6
+                        label.custom-control.custom-checkbox
+                            input.custom-control-input(type='checkbox', [formControl]="projectForm.controls['textType']")
+                            span.custom-control-indicator
+                            span.custom-control-description Text Commenting
+                    .input-group.col-6
+                        label.custom-control.custom-checkbox
+                            input.custom-control-input(type='checkbox', [formControl]="projectForm.controls['audioType']")
+                            span.custom-control-indicator
+                            span.custom-control-description Audio Commenting 
+                            span.hero-tag(title='Hero Power') H
+                    .input-group.col-6
+                        label.custom-control.custom-checkbox
+                            input.custom-control-input(type='checkbox', [formControl]="projectForm.controls['replyType']")
+                            span.custom-control-indicator
+                            span.custom-control-description
+                            | Comment Replies 
+                            span.hero-tag(title='Hero Power') H
+                .form-group.pb-0([class.disabled]='!isHero')
+                    label(for='customCodeInput')
+                        | Custom Code
+                    input#customCodeInput.form-control.h3.mGroup([formControl]="projectForm.controls['customCode']", type='text', placeholder='(optional)', style='text-transform:lowercase;')
+                    #errorInvalidCustomCode.alert.alert-warning(*ngIf='errors.invalidCode') Whoops, someone is already using that group code. Could you pick another?
+        .modal-footer
+            .button__row(style='padding-top:0px;')
+                button#buttonCreateGroup.btn.btn-primary(tabindex='0', type='submit', [class.loading]='loading', name='Add Project', style='margin: 5px 3px; width:100%;') Create Group
+            #msgServiceError.alert.alert-warning(*ngIf='formSubmitted && errors.serviceError', role='alert') Uh oh! We messed up and we don&apos;t know what to do!

@@ -1,0 +1,34 @@
+.row.mt-4.min-100
+  .col-3.icon-block.pt-2
+    .row
+      .col-12.no-gutters.p-0.icon-chart-axis.pr-3
+        .icon.icon-emoji-comment
+    .row
+      .col-12.no-gutters.p-0.icon-chart-axis.pr-3
+        .icon.icon-text-comment
+    .row
+      .col-12.no-gutters.p-0.icon-chart-axis.pr-3
+        .icon.icon-mic
+    .row
+      .col-12.no-gutters.p-0.icon-chart-axis-txt.text-center
+        .icon Replies
+  .col-9.pt-2.pl-0
+    .count-block__row
+      .count-block.count-block__blank(*ngIf="commentCountByType.emoji===0")
+      .count-block.count-block__emoji(*ngFor="let in of counter(commentCountByType.emoji)")
+      .count-plus(*ngIf="commentCountByType.emoji>25") +{{commentCountByType.emoji-25}}
+    .count-block__row
+      .count-block.count-block__blank(*ngIf="commentCountByType.text===0")
+      .count-block.count-block__text(*ngFor="let in of counter(commentCountByType.text)")
+      .count-plus(*ngIf="commentCountByType.text>25") +{{commentCountByType.text-25}}
+    .count-block__row
+      .count-block.count-block__blank(*ngIf="commentCountByType.audio===0")
+      .count-block.count-block__audio(*ngFor="let in of counter(commentCountByType.audio)")
+      .count-plus(*ngIf="commentCountByType.audio>25") +{{commentCountByType.audio-25}}
+    .count-block__row
+      .count-block.count-block__blank(*ngIf="commentCountByType.reply===0")
+      .count-block.count-block__replies(*ngFor="let in of counter(commentCountByType.reply)")
+      .count-plus(*ngIf="commentCountByType.reply>25") +{{commentCountByType.reply-25}}
+.row
+  .col-12.no-gutters.p-0
+    .lower-label.mt-2 Interactons by Type
