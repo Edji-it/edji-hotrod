@@ -413,7 +413,7 @@ export class ProjectService {
     private incrementHighlightIndices(comment: EdjiComment, highlightArray: number[]): number[] {
         // loop through all of the indexes (corresponding to words) and increment their highlights
         for (var i = comment.start; i <= comment.end; i ++) {
-            if (this.isCommentVisible(comment)) {
+            if (this.isCommentVisible(comment, null, true)) {
                 if (highlightArray[i]) {
                     highlightArray[i]++;
                 } else {
@@ -785,7 +785,7 @@ export class ProjectService {
         this.commentByPosSubject.next(this.commentByPosSource)
     }
 
-    public isCommentVisible(comment: any, inProgressFilter?: CommentFilter): boolean {
+    public isCommentVisible(comment: any, inProgressFilter?: CommentFilter, initiateComments?: boolean): boolean {
         let filter = this.activeFilter || inProgressFilter
         if (filter){
             // If a comment filter is active, only show filtered comments
@@ -800,7 +800,10 @@ export class ProjectService {
             return fitsFilter
         } else {
             // If user is current reading Owner/Teacher or Heat Vision is on, show all comments
-            let heatVisible = (this.project.heat_vision || (this.user._id == this.project.teacher_id))
+            let heatVisible = true
+            if (!initiateComments) {
+                heatVisible = (this.project.heat_vision || (this.user._id == this.project.teacher_id))
+            }
             // Your own comments and the Owner/Teacher's comments are ALWAYS visible
             let alwaysVisible = comment.user_id == this.user._id || (comment.user_id == this.project.teacher_id)
             return  (heatVisible || alwaysVisible)

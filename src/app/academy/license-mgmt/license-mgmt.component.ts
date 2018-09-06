@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs'
 
 // project imports
 import { User } from '../../shared/datatypes'
-import { AuthService, AcademyService, BumblebeeService } from '../../_services'
+import { AuthService, AcademyService, BumblebeeService, AcademyState } from '../../_services'
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { ALLSPARK } from '../../app.constants';
 import { Angulartics2 } from '../../../../node_modules/angulartics2';
@@ -20,6 +20,7 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
   public subscriptions: Subscription[] = []
 
   public user: User
+  public academyState: AcademyState
   public licenseUsers: LicenseRow[] = []
   public license: any
   // Hold on to loaded licenses
@@ -78,13 +79,17 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
       // Set the current user every time it changes 
       this._auth.getCurrentUser().subscribe((user) => {
         this.user = user
-        if (this.licenses && this.user.hasOwnProperty('currentAcademy')) {
-          this.loadLicenseRows(this.licenses[this.user.currentAcademy])
+      }),
+      // Know when user swaps between academies
+      this._auth.currentAcademyState.subscribe((currentState) => {
+        this.academyState = currentState
+        if (this.licenses && this.academyState && this.academyState.selected) {
+          this.loadLicenseRows(this.licenses[this.academyState.selected])
         }
       }),
       // get the licenses the user can manage
       this._academy.getLicenses().subscribe((licenses) => {
-        let licenseIndex = this.user.currentAcademy || 0
+        let licenseIndex = this.academyState.selected || 0
         this.licenses = licenses
         this.loadLicenseRows(this.licenses[licenseIndex])
       })
@@ -229,7 +234,7 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
       username: this.user.username,
       fullname: this.user.fullname,
       email: this.user.email,
-      hero: this.user.hero
+      hero: this.user.hero_status
     }
 
     let formSend = {
