@@ -60,6 +60,7 @@ export class ReadingRecapComponent implements OnInit {
   
   // Slide in value animates pane once component has loaded
   public slidePaneIn: boolean = false
+  private teacherId: string
 
   constructor(
     private _projects : ProjectService,
@@ -92,6 +93,7 @@ export class ReadingRecapComponent implements OnInit {
         (project) => {
           if (project) {
             this.project = project
+            this.teacherId = project.teacher_id
             // need to wait until we have the project loaded before we can proceed
             if (project && project.comments) {
               // Get time on reading data
@@ -195,7 +197,9 @@ export class ReadingRecapComponent implements OnInit {
   private populateStudentList(initialPass?: boolean): void {
     // set the dropdown filter for all students
     this.commentStats.stats.userStats.forEach((student) => {
-      this.students.push({ label: student.fullname, value: student._id })
+      if (student._id!==this.teacherId) {
+        this.students.push({ label: student.fullname, value: student._id })
+      }
     })
     if (initialPass) {
       // set the filter to the first student
