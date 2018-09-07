@@ -195,16 +195,26 @@ export class ReadingRecapComponent implements OnInit {
    * This method will build the list of users for the dropdown
    */
   private populateStudentList(initialPass?: boolean): void {
+    let removePos = -1
     // set the dropdown filter for all students
-    this.commentStats.stats.userStats.forEach((student) => {
+    this.commentStats.stats.userStats.forEach((student, index) => {
       if (student._id!==this.teacherId) {
         this.students.push({ label: student.fullname, value: student._id })
+      }
+      // if the current userStats object is our teacher, mark the index
+      if (student._id===this.teacherId) {
+        // mark the index of where the teacher is
+        removePos = index
       }
     })
     if (initialPass) {
       // set the filter to the first student
       this.selectedStudent = this.students[0]
       this.currentStudent = this.selectedStudent
+      // remove the teacher data from the local stats array so we don't count it in things like averages
+      if (removePos > -1) {
+        this.commentStats.stats.userStats.splice(removePos, 1)
+      }
     }
   }
 

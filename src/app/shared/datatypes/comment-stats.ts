@@ -10,6 +10,7 @@ export class CommentStats {
     comment_avg: 0,
     userStats: []
   }
+  private teacherId: string
 
   constructor(project?: Project) {
     this._stats = this.initStats(project)
@@ -36,6 +37,8 @@ export class CommentStats {
     if (!project) {
       return commentStats
     }
+
+    this.teacherId = project && project.teacher_id ? project.teacher_id : ''
 
     // loop through student ids and add them to the array
     //  we have to do this because some students won't make a comment, so this is their only data on the project
@@ -193,12 +196,15 @@ export class CommentStats {
     var tmp
     let userLength = this._stats.userStats.length
     var avgSum = 0
-
+    
     for (var i=userLength-1; i>=0; i--) {
+      // only calculate these stats for the students
+      if (this._stats.userStats[i]._id!==this.teacherId) {
         tmp = this._stats.userStats[i].comment_count
         avgSum += this._stats.userStats[i].comment_count
         if (tmp < lowest) lowest = tmp
         if (tmp > highest) highest = tmp
+      }
     }
 
     // set the stats values for max, min, and average
