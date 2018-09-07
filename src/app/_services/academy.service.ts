@@ -230,7 +230,7 @@ export class AcademyService implements CanActivate {
   public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     let user: User = this._locker.get('user')
     // is a teacher and belongs to an institution and can therefore access the academy suite
-    if (!user.hero_status || (!user.identities.includes('teacher') && !user.identities.includes('administrator')) || user.license_ids.length === 0) {
+    if (!user.hero_status || !user.isAcademyAdmin || user.license_ids.length === 0) {
       this._router.navigate(['/dashboard'])
       return false
     } else {
