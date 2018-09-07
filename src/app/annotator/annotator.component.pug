@@ -173,7 +173,7 @@ scroll-progress([scrollProgress]="currentScroll")
             </span>
             //- Teacher's Feedback
             .row.lesson-block(*ngIf="feedbackForUser && feedbackForUser.length > 0")
-                .lesson-block__indicator([innerHtml]="':pencil:' | emojione")
+                .lesson-block__indicator([innerHtml]="':tada:' | emojione")
                 .lesson-block__body
                     .lesson-block__header Teacher's Feedback For You
                     ng-container(*ngFor="let feedback of feedbackForUser")
