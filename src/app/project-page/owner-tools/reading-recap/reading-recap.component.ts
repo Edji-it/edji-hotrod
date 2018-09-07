@@ -286,10 +286,10 @@ export class ReadingRecapComponent implements OnInit {
       evaluation: evalData,
       user_id: this.currentStudent.value
     }
-    var projectToUpdate = this.project
-    // Ensure "report_evals" exists and is an array
-    if (!projectToUpdate.report_evals)
-      projectToUpdate.report_evals = []
+    let projectToUpdate = {
+      // Ensure "report_evals" exists and is an array
+      report_evals: this.project.report_evals ? this.project.report_evals : []
+    }
     // Add the new evaluation to the project
     projectToUpdate.report_evals.push(evalObj)
 
