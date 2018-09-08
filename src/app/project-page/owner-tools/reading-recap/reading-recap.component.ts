@@ -215,9 +215,6 @@ export class ReadingRecapComponent implements OnInit {
       }
     })
     if (initialPass) {
-      // set the filter to the first student
-      this.selectedStudent = this.students[0]
-      this.currentStudent = this.selectedStudent
       // remove the teacher data from the local stats array so we don't count it in things like averages
       if (removePos > -1) {
         this.commentStats.stats.userStats.splice(removePos, 1)
