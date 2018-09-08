@@ -96,6 +96,8 @@ export class ReadingRecapComponent implements OnInit {
             this.teacherId = project.teacher_id
             // need to wait until we have the project loaded before we can proceed
             if (project && project.comments) {
+              // Get Reading counts
+              this.getReadingCounts(project)
               // Get time on reading data
               this._academy.getTimeOnReading(this.project._id).pipe(take(1))
               .subscribe((readingTimeData) => {
@@ -126,22 +128,27 @@ export class ReadingRecapComponent implements OnInit {
       )
   }
 
+  /** Get Reading specific stats
+   * @description Gets counts for this Reading, student agnostic stats
+   */
+  private getReadingCounts(project: Project): void {
+    // handle overall reading counts here
+    this.wordCount = Math.round(project.reading_id.words.length / 2)
+    this.questionCount = project.reading_id.questions.length
+    let wordsLength =  project.reading_id.words.length
+    for (let i=0;i<wordsLength;i++) {
+      let word = project.reading_id.words[i]
+      if (word && word.styles && word.styles.includes('img')) {
+        this.imageCount+=1
+      }
+    }
+  }
+
   /**
    * all logic for displaying any metrics on the report should go in here
    * when we change student selections, this will get called to re-build the metrics on the report
    */
   private buildReport(): void {
-    // handle overall reading counts here
-    this.wordCount = Math.round(this.project.reading_id.words.length / 2)
-    this.questionCount = this.project.reading_id.questions.length
-    let wordsLength =  this.project.reading_id.words.length
-    for (let i=0;i<wordsLength;i++) {
-      let word = this.project.reading_id.words[i]
-      if (word && word.styles && word.styles.includes('img')) {
-        this.imageCount+=1
-      }
-    }
-
     // Loop through the user stats inside of the comment stats
     for (let i = 0; i < this.commentStats.stats.userStats.length; i++) {
       if (this.commentStats.stats.userStats[i]._id===this.currentStudent.value) {
