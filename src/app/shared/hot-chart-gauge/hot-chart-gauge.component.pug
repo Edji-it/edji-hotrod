@@ -2,7 +2,7 @@
   .chart-cluster
     .gauge-alert.alert.alert-warning(*ngIf="errorMsg.length > 0", [innerHtml]="errorMsg")
     .gauge-value
-      .gauge-value-min {{ values.min }} {{ measures.abbreviated }}
+      .gauge-value-min {{ errorMsg.length > 0 ? '-' : values.min }} {{ measures.abbreviated }}
     .gauge-section.px-2
       .gauge-outline(
         [ngStyle]="{ 'width': chartSize + 'px', 'height': chartSize/2 + 'px', 'border-top-left-radius': chartSize/2 + 'px', 'border-top-right-radius': chartSize/2 + 'px', 'background': 'linear-gradient(0.25turn,' + colorLeft + ',' + colorRight + ')' }"
