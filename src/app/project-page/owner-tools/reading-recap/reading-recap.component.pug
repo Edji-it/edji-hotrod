@@ -63,7 +63,7 @@
       //- Stat's Block
       .row.mt-5
         .col-12
-          div {{ currentStudent.label ? currentStudent.label : '' }}'s Stats
+          div {{ currentStudent.label ? currentStudent.label + '\'s' : '' }} Stats
           hr.mt-0
       .row
         .col-4
@@ -114,7 +114,12 @@
       .col-12
         div Add Feedback
         hr.mt-0
-    .row.reading-recap__pdf-hidden
+    .row(*ngIf="!currentStudent || !currentStudent.label")
+      .col-10.offset-1
+        .alert.alert-warning
+          b No Student Selected
+          | Once you have a student selected, you will be able to view their stats and send feedback
+    .row.reading-recap__pdf-hidden(*ngIf="currentStudent && currentStudent.label")
       .col-4
         .row
           .col-12
