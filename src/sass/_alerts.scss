@@ -2,6 +2,18 @@
 .alert {
     font-family: 'Open Sans', Arial, Arial, Helvetica, sans-serif;
     font-size: 14px;
+    font-weight: 400;
+
+    & b {
+        &:after {
+            content: ' '
+        }
+    }
+
+    & .emojioneemoji {
+        margin-bottom: 0.3em;
+        margin-right: 0.3em;
+    }
 }
 
 .alert-light {

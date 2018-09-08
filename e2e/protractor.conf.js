@@ -33,7 +33,7 @@ exports.config = {
   },
 
   /*
-   Run a suite of tests using 'yarn run protractor --suite suiteNameHere'
+   Run a suite of tests using 'yarn run protractor e2e/protractor.conf.js  --suite suiteNameHere'
    - Spec patterns are relative to the location of the spec file. They may include glob patterns.
   */
   suites: {
@@ -50,6 +50,7 @@ exports.config = {
     project:    helpers.root('e2e/src/project.spec.ts'),
     question:   helpers.root('e2e/src/questions.spec.ts'),
     referral:   helpers.root('e2e/src/referral.spec.ts'),
+    readingrecap: helpers.root('e2e/src/owner-tools__reading-recap.spec.ts'),
     version:    helpers.root('e2e/src/version.spec.ts'),
     all:        [helpers.root('e2e/src/home.spec.ts'),  helpers.root('e2e/src/login.spec.ts')]
   },

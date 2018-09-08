@@ -5369,10 +5369,13 @@ button.ui-button::-moz-focus-inner {
 }
 
 .ui-tooltip .ui-tooltip-text {
-   padding: .125em .5em;
-   background-color: rgb(76, 76, 76);
-   color: #ffffff;
-   white-space: pre-line;
+    font-family: 'Open Sans', Arial, Helvetica;
+    font-size: 14px;
+    padding: 8px 12px;
+    background-color: rgb(76, 76, 76);
+    border-radius: 3px;
+    color: #ffffff;
+    white-space: pre-line;
 }
 
 .ui-tooltip-arrow {

@@ -24,6 +24,14 @@
     button.btn.owner-tools__btn.btn-hv(type="button", (tap)="showElseFalse('showQuestionFeed')")
       i#toggleQuestionfeed.icon-question(*ngIf="currentProject")
       label Questions
+  //- Reading Report toggle
+  button.btn.owner-tools__btn.btn-hv.btn-reading-recap(
+      type="button",
+      (tap)="showElseFalse('showReadingRecap')",
+      [class.hero--micro-offer__wrap]="user && !user.hero_status"
+    )
+    i#toggleReadingRecap.icon-reading-recap(*ngIf="currentProject")
+    label Recap
 
 .owner-tools-button__mobile.hidden-lg-up(*ngIf="currentProject && user._id == currentProject.owner_id")
   //- Mobile Buttons
@@ -75,3 +83,6 @@ hot-firefeed((hide)="showFireFeed=false", [visible]="showFireFeed")
 
 //- Question Feed goes here
 hot-questionfeed((hide)="showQuestionFeed=false", [visible]="showQuestionFeed")
+
+//- Reading Report goes here
+hot-reading-recap(*ngIf="showReadingRecap", (hide)="showReadingRecap=false", [commentStats]="commentStats")

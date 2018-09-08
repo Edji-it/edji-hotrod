@@ -1,7 +1,7 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { Angulartics2 } from 'angulartics2';
+import { Component, OnInit, OnDestroy } from '@angular/core'
+import { ActivatedRoute, Router } from '@angular/router'
+import { Subscription } from 'rxjs'
+import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
 import { AuthService } from '../_services'

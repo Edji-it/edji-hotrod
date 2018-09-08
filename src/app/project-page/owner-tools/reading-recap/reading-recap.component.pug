@@ -1,0 +1,200 @@
+//- Reading Report Pane
+.sliding-pane.from-left.reading-recap([ngClass]="{ 'slide-in' : slidePaneIn }")
+  .container.px-3
+    .row
+      .col-8
+        h1.mb-3.header-text__large(*ngIf="currentUser.hero_status") Reading Recap for
+          p-dropdown#studentSelector(
+            [options]="students",
+            [(ngModel)]="selectedStudent",
+            [autoWidth]="false",
+            [style]="[{'width': '100%'}, {'font-size': '22px'}]",
+            [scrollHeight]="'90vh'"
+            [dropdownIcon]="'filter-arrow-down'", 
+            (onChange)="changeStudentSelection()",
+            placeholder="select student"
+          )
+      .col-4
+        button#closeReadingRecap.close.stats-close-btn.btn-icon--round((click)='close()' type='button')
+          span(aria-hidden='true') &times;
+        //- button.btn.btn-success.btn-sm.float-right.mr-5((click)="goToEvalForm()") Send Copy
+        //- button.btn.btn-primary.btn-sm.float-right.mr-5((click)="downloadPDF()") Download
+  .container.px-3(*ngIf="currentUser.hero_status")
+    #readingReport.p-4
+      //- Header Block
+      .row
+        .col-9
+          .row
+            .col-12
+              h2.mb-0.header-text__medium([innerHtml]='currentStudent.label ? (currentStudent.label + "\'s Reading Recap") : ("<i>View stats for a student</i>&nbsp; :arrow_up:" | emojione)')
+              .mt-1 "{{ project.reading_id ? project.reading_id.title : '' }}" - Reading
+              hr.my-0
+          //- Reading and Group Info
+          .row.mt-4
+            //- Assignment and Standards
+            .col-12
+              .row
+                .col-12
+                  .sub-label.mb-0 Group Instructions
+                  .text-md {{ project.group_instructions ? project.group_instructions : '' }}
+                  i.text-md(*ngIf="!project.group_instructions") None
+              //- .row.mt-3
+              //-   .col-12
+              //-     .sub-label.mb-0 Standards
+              //-     div [FAKE DATA] CCSS.ELA-LITERACY.RI.5.2
+              //-     .text-md [FAKE DATA] Determine two or more main ideas of a text and explain how they are supported by key details; summarize the text.
+        //- Teacher/Group Names
+        .col-3
+          .row
+            .col-12.p-0
+              .sub-label.mb-0 Teacher
+              div {{ project.teacher ? project.teacher.fullname : '' }}
+          .row.mt-2
+            .col-12.p-0
+              .sub-label.mb-0 Group
+              div {{ project.label ? project.label : '' }}
+          .row.mt-2
+            //- Reading Stats
+            .col-12.p-0
+              .sub-label.mb-0 Contents
+              .text-md {{ wordCount }} Words
+              .text-md {{ imageCount }} Images
+              .text-md(*ngIf="questionCount > 0") {{ questionCount }} Questions
+      //- Stat's Block
+      .row.mt-5
+        .col-12
+          div {{ currentStudent.label ? currentStudent.label + '\'s' : '' }} Stats
+          hr.mt-0
+      .row
+        .col-4
+          hot-chart-gauge(
+            [measures]="{full: 'Minutes Reading', abbreviated: 'min'}",
+            [values]="chartTimeReading",
+            [chartSize]="150"
+          )
+        .col-4
+          hot-chart-gauge(
+            [measures]="{full: 'Comments'}",
+            [values]="chartComments",
+            [chartSize]="150"
+          )
+        .col-4
+          hot-chart-hzbar(
+            [commentCountByType]="commentCountByType"
+          )
+      .row.mt-5
+        .col-12
+          div Comments
+          hr.mt-0
+      //- Comment Block
+      .row(*ngFor="let recapComment of comments; let i = index")
+        .col-3
+          edji-comment(
+            [readOnly]="true",
+            [comment]="recapComment",
+            [commentMobile]="true",
+            [commentPaneActive]="true",
+            [commentMobileFirst]="i<1",
+            [readingReport]="true",
+            style="display: initial;"
+          )
+        .col-9
+          .h-1.report-text-highlighted {{ recapComment.text ? recapComment.text : '...'}}
+      .row.mt-5(*ngIf="evaluations && evaluations.length>0")
+        .col-12
+          div Feedback
+          hr.mt-0
+      //- Evaluation Block
+      .row(*ngIf="evaluations && evaluations.length>0")
+        .col-12(*ngFor="let evaluation of evaluations")
+          .sub-label.mb-0 {{ evaluation.createdAt | edjidate }}
+          p.evaluation_text {{ evaluation.evaluation ? evaluation.evaluation : '' }}
+    //- Summarize and Share Block
+    .row.mt-5.reading-recap__pdf-hidden
+      .col-12
+        div Add Feedback
+        hr.mt-0
+    .row(*ngIf="!currentStudent || !currentStudent.label")
+      .col-10.offset-1
+        .alert.alert-warning
+          b No Student Selected
+          | Once you have a student selected, you will be able to view their stats and send feedback
+    .row.reading-recap__pdf-hidden(*ngIf="currentStudent && currentStudent.label")
+      .col-4
+        .row
+          .col-12
+            //- div Summarize {{ currentStudent.label ? currentStudent.label : '' }}'s work with this reading, and send a PDF copy of this report to their student email, a parent, or a fellow teacher
+            div Give private feedback on {{ currentStudent.label ? currentStudent.label : '' }}'s comments
+        //- FUTURE THUMBNAIL
+        //- .row
+        //-   .col-12
+        //-     div An image of the report
+      .col-8.pb-4
+        form#evaluationForm([formGroup]="evaluationForm", (ngSubmit)="sendEval(evaluationForm.value)")
+          label(for="inputText") Feedback
+          textarea#evalFormText(
+            [formControl]="evaluationForm.controls['inputText']", 
+            placeholder="This student did a great job identifying the main themes...", 
+            tabindex="0"
+          )
+          #msgEvalRequired.alert.alert-info(
+            *ngIf="evaluationForm.controls['inputText'].hasError('required') && evaluationForm.controls['inputText'].dirty"
+          ) Send some feedback for this report!
+          //- .col-7.no-gutters.p-0.d-inline-block
+          //-   label(for="email") Email
+          //-   input#evalFormEmail(
+          //-     type="text", 
+          //-     [formControl]="evaluationForm.controls['email']", 
+          //-     tabindex="1"
+          //-   )
+          //-   #msgEmailIncorrect.alert.alert-info(
+          //-     *ngIf="evaluationForm.controls['email'].hasError('emailIncorrect') && evaluationForm.controls['email'].dirty"
+          //-   ) We don't think that's an email...
+          //-   #msgEmailRequired.alert.alert-info(
+          //-     *ngIf="evaluationForm.controls['email'].hasError('required') && evaluationForm.controls['email'].dirty"
+          //-   ) Make sure the report goes out to a valid email address!
+          //- .col-4.no-gutters.ml-1.p-0.d-inline-block.float-right
+          //-   label(for="name") Name
+          //-   input#evalFormName(
+          //-     type="text", 
+          //-     [formControl]="evaluationForm.controls['name']", 
+          //-     tabindex="2"
+          //-   )
+          //-   #msgNameRequired.alert.alert-info(
+          //-     *ngIf="evaluationForm.controls['name'].hasError('required') && evaluationForm.controls['name'].dirty"
+          //-   ) Make sure you add a name to the email greeting!
+          //- .col-4.no-gutters.p-0.mt-4.d-inline-block.text-right.float-right
+          //-   button.btn.btn-success(
+          //-     title="Make sure you've completed all the fields!", 
+          //-     type="submit", 
+          //-     [class.loading]="evalLoading", 
+          //-     [disabled]="!evaluationForm.valid", 
+          //-     tabindex="3",
+          //-   ) Send Email
+          .col-4.no-gutters.p-0.mt-4.d-inline-block.text-right.float-right
+            button#sendEvalBtn.btn.btn-success(
+              title="Make sure you've filled out your feedback", 
+              type="button", 
+              [class.loading]="evalLoading", 
+              [disabled]="!evaluationForm.controls['inputText'].valid", 
+              tabindex="3",
+              (click)="addEvaluationOnly(evaluationForm.controls['inputText'].value)"
+            ) Add Feedback
+  //- Hero Micro
+  .container-fluid.container--less-pad.px-3.mt-2(*ngIf="!currentUser.hero_status")
+    #readingReport
+      .modal-dialog.reading-recap-blurred
+        .modal-content.reading-recap-blurred-outer
+          .modal-body.text-center.reading-recap-blurred-inner 
+            h2.h1 Unlock Reading Recap with Hero
+            .text-left
+              p([innerHtml]='":timer: View a student\'s time and activity" | emojione')
+              p([innerHtml]='":bookmark_tabs: Provide feedback for students" | emojione')
+              p([innerHtml]='":floppy_disk: Save a copy of the Recap to share with parents" | emojione')
+            //- With Edji Hero, get and provide insights feedback save to parents
+            //- time on reading
+            //- activity 
+            //- feedback
+            .btn-row.mt-4
+              .btn.btn-hero([routerLink]="['/hero']") Learn About Hero
+      img(src="/assets/images/reading-recap-blurred.jpg")

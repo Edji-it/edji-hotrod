@@ -1,0 +1,63 @@
+$horizontalBarHeight: 30px;
+
+.lower-label {
+  text-align: center;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.icon-block {
+  border-right: #838383 solid 1px;
+}
+
+.icon-chart-axis {
+  text-align: right;
+  font-size: 20px;
+  height: $horizontalBarHeight;    
+
+  & .icon {
+    margin-top: 5px;
+  }
+
+  &-txt {
+    vertical-align: middle;
+    line-height: $horizontalBarHeight;
+    font-size: 11px;
+    color: #747474;
+  }
+}
+
+.count-block {
+  height: 20px;
+  width: 6px;
+  display: inline-block;
+  margin-right: 1px;
+  &__emoji {
+    background-color: #FFCC4D;
+  }
+  &__text {
+    background-color: #E49A5F;
+  }
+  &__audio {
+    background-color: #D84F4F;
+  }
+  &__replies {
+    background-color: #6BDB5D;
+  }
+  &__blank {
+    background-color: transparent;
+  }
+}
+
+.count-block__row {
+  margin-left: 1px;
+  height: $horizontalBarHeight;
+  padding: 5px 0px;
+}
+
+.count-plus {
+  display: inline-block;
+  font-size: 14px;
+  position: absolute;
+  bottom: 4px;
+}

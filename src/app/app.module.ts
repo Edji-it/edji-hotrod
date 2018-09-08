@@ -75,6 +75,7 @@ import { RouterModule, PreloadAllModules, Router } from '@angular/router';
 import { ROUTES } from './app.routes';
 import { LicenseRedirectComponent } from './license-redirect/license-redirect.component';
 import { LicenseWelcomeComponent } from './license-welcome/license-welcome.component';
+import { ReadingRecapComponent } from './project-page/owner-tools/reading-recap/reading-recap.component';
 import { TeamPageComponent } from './team-page/team-page.component';
 
 // Configure Hammer.js
@@ -175,6 +176,7 @@ const APP_PROVIDERS = [
     ScrollProgressComponent,
     LicenseRedirectComponent,
     LicenseWelcomeComponent,
+    ReadingRecapComponent,
     TeamPageComponent
   ],
   /** Components which can be dynamically created */

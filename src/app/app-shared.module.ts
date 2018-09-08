@@ -22,6 +22,8 @@ import {
   } from './_pipes'
 import { ShareCodeComponent } from "./modals/share-code/share-code.component"
 import { ReferralModalComponent, HeroSubscribeComponent, RequestAcademyModal, LicenseInviteComponent } from "./modals"
+import { HotChartHzbarComponent } from './shared/hot-chart-hzbar/hot-chart-hzbar.component'
+import { HotChartGaugeComponent } from './shared/hot-chart-gauge/hot-chart-gauge.component'
 import { PromoPageComponent } from './promo/promo.component'
 
 let SHARED_DECLARATIONS = [
@@ -40,6 +42,8 @@ let SHARED_DECLARATIONS = [
     ShareCodeComponent,
     SubjectPipe, 
     UserInitialsPipe,
+    HotChartHzbarComponent,
+    HotChartGaugeComponent
 ]
 
 let SHARED_IMPORTS = [

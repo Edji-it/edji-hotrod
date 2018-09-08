@@ -78,6 +78,11 @@ export class Project implements PageObjectInterface {
     browser.get("/#/project/reply");
   }
 
+  public getReadingRecapPage(): void {
+    // Open Reading Report project
+    browser.get("/#/project/readingrecap")
+  }
+
   public skipTutorial(): void {
     // Click the share button for new reading no matter if it is on desktop or mobile
     this.tutorialSkip.isPresent().then((result) => {

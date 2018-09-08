@@ -497,7 +497,7 @@ export class ProjectService {
      * @param updateObj Object which contains all of the parameters to update
      * @param projectId Project id's string
      */
-    public update(updateObj: any, projectId: string): Observable<any> {
+    public update(updateObj: any, projectId: string, addReadingDetail?: boolean): Observable<any> {
         return this.http
             .put([this._auth.getUrl(), 'projects', projectId].join("/"), { project: updateObj }, this._auth.getOptions())
             .pipe(
@@ -517,10 +517,13 @@ export class ProjectService {
                             updatedProject.comments = comments
                         }
                         
-                        // this.project =
-                        Object.assign(this.project, updatedProject)
+                        if (!addReadingDetail) {
+                            // this.project =
+                            Object.assign(this.project, updatedProject)
+
+                            this.currentProjectSource.next(this.project)
+                        }
                         
-                        this.currentProjectSource.next(this.project)
                         return this.project
                     } // if
                 }) //.map
@@ -796,8 +799,6 @@ export class ProjectService {
             }
             return fitsFilter
         } else {
-            // If the comment has data/url (meaning they've filled out the comment) or its the current users comment
-            // let dataInComment = ((comment.data && comment.data != '') || comment.url && comment.url != '') || comment.user_id == this.user._id
             // If user is current reading Owner/Teacher or Heat Vision is on, show all comments
             let heatVisible = true
             if (!initiateComments) {

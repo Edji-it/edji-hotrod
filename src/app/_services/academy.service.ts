@@ -15,7 +15,6 @@ import { LockerService } from '../_services/locker.service'
 export class AcademyService implements CanActivate {
   private readingTimerSubscription: Subscription
 
-  private user: User
   private project: any
 
   public allLicenses: any
@@ -95,6 +94,47 @@ export class AcademyService implements CanActivate {
   }
 
   /**
+   * Returns time on reading data from the reading group
+   * @param group_id from the reading 'project'
+   */
+  public getTimeOnReading(group_id: string): Observable<any> {
+    return this._http.get<any>(this._auth.getPipoUrl() + '/api/v1/stats/groups/' + group_id,
+      {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          'Authorization': this._auth.getToken()
+        })
+      }
+    )
+  }
+
+  /**
+   * Sends the reading report to the server with the pdf attachment and message
+   * @param evalForm the evaluation form data from the reading report
+   * @param pdf the pdf that is captured from the reading report
+   */
+  public sendReadingRecap(evalForm: any, pdf: any): Observable<any> {
+    return this._http.post<any>(this._auth.getUrl() + '/api/v1/readings/reports',
+      {
+        "email": evalForm.email,
+        "evaluation": evalForm.inputText,
+        "person_sharing": evalForm.personSharing,
+        "replyTo": evalForm.personSharingEmail,
+        "person_receiving": evalForm.name,
+        "attachment_name": evalForm.pdfName,
+        "pdf": pdf,
+        "reading_name": evalForm.readingName
+      },
+      {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          'Authorization': this._auth.getToken()
+        })
+      }
+    )
+  }
+
+  /**
    * Server will return all licenses the current user can manage
    */
   public getLicenses(): Observable<any> {
@@ -146,11 +186,10 @@ export class AcademyService implements CanActivate {
    * This method starts the timer
    * Startup Logic
    */
-  public initReadingTimer(user: User, project: any): void {
-    this.user = user
+  public initReadingTimer(project: any): void {
     this.project = project
     // Start the interval to track time on a reading (30 seconds right now)
-    this.readingTimer()
+    this.startReadingTimer()
   }
 
   /**
@@ -166,16 +205,17 @@ export class AcademyService implements CanActivate {
    * Starts by using initReadingTimer()
    * Stops by using stopReadingTimer - or leaving Edji all together
    */
-  private readingTimer(): void {
+  private startReadingTimer(): void {
+    let user = this._auth.getUser()
     this.readingTimerSubscription = interval(30000).subscribe(() => {
       // send the data to Pipo to log the new reading
       this.pipoEvent({
         // standard event info:
         event_name: "reading_tick",
-        user_id: this.user._id,
-        teacher: (this.project.teacher._id===this.user._id),
-        hero: this.user.hero_status || false,
-        institution_id: this.user.institution_ids || [],
+        user_id: user._id,
+        teacher: (this.project.teacher._id===user._id),
+        hero: user.hero_status || false,
+        institution_id: user.institution_ids || [],
         // event-specific info:
         reading_id: this.project.reading_id._id,
         group_id: this.project._id,
@@ -189,7 +229,7 @@ export class AcademyService implements CanActivate {
   public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     let user: User = this._locker.get('user')
     // is a teacher and belongs to an institution and can therefore access the academy suite
-    if (!user.hero_status || (!user.identities.includes('teacher') && !user.identities.includes('administrator')) || user.license_ids.length === 0) {
+    if (!user.hero_status || !user.isAcademyAdmin || user.license_ids.length === 0) {
       this._router.navigate(['/dashboard'])
       return false
     } else {

@@ -74,6 +74,8 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
                     // Join Socket Room based on ID param
                     this._socket.joinSocketRoom(this.project._id, this.user._id)
                     this.joinedRoom = true
+                    // Start Reading Timer
+                    this._academy.initReadingTimer(this.project)
                 }
             })
         )
@@ -96,8 +98,6 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
                         this._readings.setReadingObj(this.project.reading_id)
 
                         this._title.setTitle( 'Edji | ' + this.reading.title )
-
-                        this._academy.initReadingTimer(this.user, this.project)
                     }
                 }
             },

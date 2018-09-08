@@ -52,16 +52,18 @@ export interface UserCommentStats {
   _id: string, 
   fullname: string, 
   comment_count: number, 
-  reply_count: number
+  reply_count: number,
+  emoji_comment_count: number,
+  text_comment_count: number,
+  audio_comment_count: number,
+  comments?: EdjiComment[]
 }
+
 export interface iCommentStats {
   comment_count: number,
+  comment_max: number,
+  comment_min: number,
+  comment_avg: number,
   reply_count: number,
-  userStats: UserCommentStats[]
-  // userRef: {
-  //   [_id: string]: {
-  //     fullname: string,
-  //     count: number
-  //   }
-  // }
+  userStats: UserCommentStats[],
 }
