@@ -11,7 +11,8 @@
             [style]="[{'width': '100%'}, {'font-size': '22px'}]",
             [scrollHeight]="'90vh'"
             [dropdownIcon]="'filter-arrow-down'", 
-            (onChange)="changeStudentSelection()"
+            (onChange)="changeStudentSelection()",
+            placeholder="select student"
           )
       .col-4
         button#closeReadingRecap.close.stats-close-btn.btn-icon--round((click)='close()' type='button')
@@ -25,7 +26,7 @@
         .col-9
           .row
             .col-12
-              h2.mb-0.header-text__medium {{ currentStudent.label ? currentStudent.label : '' }}'s Reading Recap
+              h2.mb-0.header-text__medium([innerHtml]='currentStudent.label ? (currentStudent.label + "\'s Reading Recap") : ("<i>Select a student</i>&nbsp; :arrow_up:" | emojione)')
               .mt-1 "{{ project.reading_id ? project.reading_id.title : '' }}" - Reading
               hr.my-0
           //- Reading and Group Info
