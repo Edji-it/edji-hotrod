@@ -97,7 +97,7 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
 
                         this._title.setTitle( 'Edji | ' + this.reading.title )
 
-                        this._academy.initReadingTimer(this.user, this.project)
+                        this._academy.initReadingTimer(this.project)
                     }
                 }
             },

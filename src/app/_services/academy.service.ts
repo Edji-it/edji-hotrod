@@ -15,7 +15,6 @@ import { LockerService } from '../_services/locker.service'
 export class AcademyService implements CanActivate {
   private readingTimerSubscription: Subscription
 
-  private user: User
   private project: any
 
   public allLicenses: any
@@ -187,11 +186,10 @@ export class AcademyService implements CanActivate {
    * This method starts the timer
    * Startup Logic
    */
-  public initReadingTimer(user: User, project: any): void {
-    this.user = user
+  public initReadingTimer(project: any): void {
     this.project = project
     // Start the interval to track time on a reading (30 seconds right now)
-    this.readingTimer()
+    this.startReadingTimer()
   }
 
   /**
@@ -207,16 +205,17 @@ export class AcademyService implements CanActivate {
    * Starts by using initReadingTimer()
    * Stops by using stopReadingTimer - or leaving Edji all together
    */
-  private readingTimer(): void {
+  private startReadingTimer(): void {
+    let user = this._auth.getUser()
     this.readingTimerSubscription = interval(30000).subscribe(() => {
       // send the data to Pipo to log the new reading
       this.pipoEvent({
         // standard event info:
         event_name: "reading_tick",
-        user_id: this.user._id,
-        teacher: (this.project.teacher._id===this.user._id),
-        hero: this.user.hero_status || false,
-        institution_id: this.user.institution_ids || [],
+        user_id: user._id,
+        teacher: (this.project.teacher._id===user._id),
+        hero: user.hero_status || false,
+        institution_id: user.institution_ids || [],
         // event-specific info:
         reading_id: this.project.reading_id._id,
         group_id: this.project._id,
