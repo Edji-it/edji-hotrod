@@ -69,6 +69,11 @@ article.content {
 		clear: both;
 	}
 
+	// Content copied from tables needs to flow
+	&.table {
+		width: auto !important;
+	}
+
 	&.b, &.B {
 		font-weight: bold;
 	}
