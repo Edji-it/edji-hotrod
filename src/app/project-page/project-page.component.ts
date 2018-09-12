@@ -69,13 +69,9 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
             this._auth.getCurrentUser().subscribe((user) => {
                 this.user = user
                 if (!this.user.isLoggedIn) { this.showLoginModal = true }
-
+                // Join socket + start reading timer
                 if (this.user._id && this.project._id && !this.joinedRoom) {
-                    // Join Socket Room based on ID param
-                    this._socket.joinSocketRoom(this.project._id, this.user._id)
-                    this.joinedRoom = true
-                    // Start Reading Timer
-                    this._academy.initReadingTimer(this.project)
+                    this.joinRoom(this.user, this.project)
                 }
             })
         )
@@ -86,11 +82,9 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
             (project) => {
                 if (project) {
                     this.project = project
-
+                    // Join socket + start reading timer
                     if (this.user._id && this.project._id && !this.joinedRoom) {
-                        // Join Socket Room based on ID param
-                        this._socket.joinSocketRoom(this.project._id, this.user._id)
-                        this.joinedRoom = true
+                        this.joinRoom(this.user, this.project)
                     }
 
                     if (this.project.reading_id && this.project.reading_id['_id']) {
@@ -115,5 +109,18 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
         // End socket connections
         this._socket.leaveRoom()
         this._academy.stopReadingTimer()
+    }
+
+    /**
+     * Join Socket room and start reading ticks
+     * @param user Current user on reading
+     * @param project Group user is joining
+     */
+    private joinRoom(user, project): void {
+        this.joinedRoom = true
+        // Join Socket Room based on ID param
+        this._socket.joinSocketRoom(project._id, user._id)
+        // Start Reading Timer
+        this._academy.startReadingTimer(user, project)
     }
 }
