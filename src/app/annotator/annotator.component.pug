@@ -107,7 +107,7 @@ scroll-progress([scrollProgress]="currentScroll")
                     .lesson-block__indicator([innerHtml]="':mega:' | emojione")
                     .lesson-block__body
                         .lesson-block__header Instructions
-                        | {{ project.group_instructions }}
+                        p([innerHtml]="project.group_instructions")
             //- Word Loop: reading.words is one big array of individual "words", which can also be puncuation or media
             <span #words class="w" *ngFor="let w of reading.words | slice:0:lastWord ; let i = index" [ngClass]="[ w && w.styles ? w.styles.join(' ') : '', getHighlightClass(i) ]" [attr.index]="i">
                 //- Comment Loop: Display comments if they exist for this Word
