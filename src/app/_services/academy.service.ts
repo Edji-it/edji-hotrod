@@ -5,7 +5,7 @@ import { map } from 'rxjs/operators'
 
 // project dependancies
 import { AuthService } from 'src/app/_services'
-import { User, License } from '../shared/datatypes'
+import { User, License, Project } from '../shared/datatypes'
 import { Router, ActivatedRouteSnapshot, RouterStateSnapshot, CanActivate } from '../../../node_modules/@angular/router'
 import { LockerService } from '../_services/locker.service'
 
@@ -14,8 +14,6 @@ import { LockerService } from '../_services/locker.service'
 })
 export class AcademyService implements CanActivate {
   private readingTimerSubscription: Subscription
-
-  private project: any
 
   public allLicenses: any
   public institutionLicenses: any
@@ -183,16 +181,6 @@ export class AcademyService implements CanActivate {
   }
 
   /**
-   * This method starts the timer
-   * Startup Logic
-   */
-  public initReadingTimer(project: any): void {
-    this.project = project
-    // Start the interval to track time on a reading (30 seconds right now)
-    this.startReadingTimer()
-  }
-
-  /**
    * This method stops the timer for reading
    * Shutdown Logic
    */
@@ -202,24 +190,22 @@ export class AcademyService implements CanActivate {
 
   /**
    * Sends an event to pipo every 30 seconds once the timer is rolling
-   * Starts by using initReadingTimer()
-   * Stops by using stopReadingTimer - or leaving Edji all together
+   * - Stops by using stopReadingTimer - or leaving Edji all together
    */
-  private startReadingTimer(): void {
-    let user = this._auth.getUser()
+  public startReadingTimer(user: User, project: Project): void {
     this.readingTimerSubscription = interval(30000).subscribe(() => {
       // send the data to Pipo to log the new reading
       this.pipoEvent({
         // standard event info:
         event_name: "reading_tick",
         user_id: user._id,
-        teacher: (this.project.teacher._id===user._id),
+        teacher: (project.teacher._id===user._id),
         hero: user.hero_status || false,
         institution_id: user.institution_ids || [],
         // event-specific info:
-        reading_id: this.project.reading_id._id,
-        group_id: this.project._id,
-        reading_owner: this.project.teacher._id,
+        reading_id: project.reading_id._id,
+        group_id: project._id,
+        reading_owner: project.teacher._id,
         reading_time: 30
       })
     })
