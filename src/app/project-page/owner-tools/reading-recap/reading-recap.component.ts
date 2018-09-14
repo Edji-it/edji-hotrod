@@ -266,7 +266,7 @@ export class ReadingRecapComponent implements OnInit {
     projectToUpdate.report_evals.push(evalObj)
 
     // update the project with the new evaluation, create the pdf, and then email it out
-    this._projects.update(projectToUpdate, this.project._id, true).subscribe( project => {
+    this._projects.update(projectToUpdate, this.project._id).subscribe( project => {
       // update our project so evaluation shows in the page
       this.evaluations.push(evalObj)
 
@@ -312,7 +312,7 @@ export class ReadingRecapComponent implements OnInit {
     projectToUpdate.report_evals.push(evalObj)
 
     // update the project with the new evaluation, create the pdf, and then email it out
-    this._projects.update(projectToUpdate, this.project._id, true).subscribe( project => {
+    this._projects.update(projectToUpdate, this.project._id).subscribe( project => {
       // update our project so evaluation shows in the page
       this.evaluations.push(evalObj)
     }), error => {
