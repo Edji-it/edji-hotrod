@@ -509,9 +509,9 @@ export class ProjectService {
                         }
                         this.currentProjectSource.next(this.project)
                         return this.project
-                    } // if
-                }) //.map
-            ) // pipe
+                    }
+                })
+            )
     } // public update (updateObj: any, projectId: string): Observable<any> 
 
     /** . 
