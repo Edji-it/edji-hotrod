@@ -148,6 +148,7 @@ export class CommentStats {
           for (let i=0; i<userCommentCount; i++) {
             if (student.comments[i]._id===comment._id) {
               student.comments.splice(i,1)
+              break
             }
           }
         }
