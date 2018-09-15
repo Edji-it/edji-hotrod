@@ -171,6 +171,7 @@ hot-add-project-modal(
   [heading]="'Create and Share First Group'",
   [subheading]="'Your reading has been saved! Now create your first group to publish this reading and share with students.'",
   [reading]="reading", 
+  [groupLabel]="'Group 1'",
   (groupSaved)="openFirstGroup($event)",
   (closeModal)="showFirstGroupModal = false"
 )
