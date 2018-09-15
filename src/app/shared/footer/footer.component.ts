@@ -1,5 +1,3 @@
-import { Mock } from 'protractor/built/driverProviders'
-import { BrowserXhr } from '@angular/http'
 import { Component, OnInit } from '@angular/core'
 
 // Project Dependencies

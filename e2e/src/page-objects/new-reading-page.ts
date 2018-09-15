@@ -17,14 +17,14 @@ export class NewReading implements PageObjectInterface
     public sourceInput = element(by.id('readingSource'));
     public publicButton = element(by.id('readingMakePublic'));
     public privateButton = element(by.id('readingMakePrivate'));
-    public groupInput = element(by.id('firstProjectLabel'));
+    public groupInput = element(by.id('newProjectLabel'));
     public gradeTileK = element(by.id('gradeTile0'));
     public gradeTileU = element(by.id('gradeTile13'));
     public subjectDropdown = element(by.id('subjectDropdown'));
     public subjectFirstOption = element.all(by.css('#subjectDropdown .dropdown-item')).first();
     public addButton = element(by.id('addReadingButton'));
     public addButtonMobile = element(by.id('addReadingButtonMobile'));
-    public finalizeButton = element(by.id('addReadingFinalizeButton'));
+    public finalizeButton = element(by.id('buttonCreateGroup'));
     public goToReadingButton = element(by.id('shareModalReadingButton'));
     public shareCodeModalClose = element(by.id('shareCodeModalClose'));
     public draftButton = element(by.id('saveDraftButton'));

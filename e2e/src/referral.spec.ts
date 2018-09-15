@@ -169,9 +169,9 @@ describe('Referral Sharing and Rewards', () => {
             // Submit New Reading
             newReading.addNewReading()
             // Group Label has content prefilled, so we clear it
+            browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
             newReading.groupInput.clear();
             newReading.groupInput.sendKeys(newReading.groupString);
-            browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
             newReading.finalizeButton.click();
             // Should redirect to Project page for new reading
             browser.wait(EC.urlContains("project"), 5000, "never arrived at new reading");
