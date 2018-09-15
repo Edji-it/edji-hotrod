@@ -59,7 +59,6 @@ describe("Versioning - ", () => {
         // Open and wait for New Reading page
         dashboard.openNewReading();
         browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000);
-
         // Enter sample Reading into form
         newReading.titleInput.sendKeys(uniqueTitle);
         // Select Grade Range
@@ -69,16 +68,12 @@ describe("Versioning - ", () => {
         newReading.subjectDropdown.click();
         newReading.subjectFirstOption.click();
         newReading.contentInput.sendKeys(newReading.contentShortString);
-        newReading.sourceInput.sendKeys(newReading.sourceString);
-
         // Submit New Reading
         newReading.addNewReading()
         browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
         newReading.finalizeButton.click();
-
         // Should redirect to Project page for new reading
         browser.wait(EC.urlContains("project"), 7500, "never arrived at the reading page after published");
-
         // Go to the dashboard
         sidebar.backToDash();
     });
