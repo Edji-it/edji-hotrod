@@ -18,6 +18,7 @@ export class NewReading implements PageObjectInterface
     public publicButton = element(by.id('readingMakePublic'));
     public privateButton = element(by.id('readingMakePrivate'));
     public groupInput = element(by.id('newProjectLabel'));
+    public newGroupModalClose = element(by.css('#addProjectModal .close'));
     public gradeTileK = element(by.id('gradeTile0'));
     public gradeTileU = element(by.id('gradeTile13'));
     public subjectDropdown = element(by.id('subjectDropdown'));
@@ -55,10 +56,10 @@ export class NewReading implements PageObjectInterface
     
     public titleError = element(by.id('errorTitle'));
     public contentError = element(by.id('errorContent'));
-    public groupError = element(by.id('errorGroupLabel'));
+    public groupError = element(by.id('msgLabelRequired'));
     public successAlert = element(by.css('.alert-success'));
 
-    public titleString = 'Test: Early Beginnings of Robots';
+    public titleString = 'Test: 3 Laws of Robotics';
     public qTitleString = 'When and how, in early human development, did the capacity to ask questions develop?';
     public qPrompt1 = 'Do you really think this timeline is accurate?';
     public qPrompt2 = 'Are you willing to give up the information?';
@@ -67,8 +68,9 @@ export class NewReading implements PageObjectInterface
     public qContentString1 = "Text before first question."
     public qContentString2 = "Text. AFTER Q"
     public qSourceString = "https://www.quora.com/When-and-how-in-early-human-development-did-the-capacity-to-ask-questions-develop"
-    public contentShortString = 'Three Laws of Robotics\nA robot may not injure a human being or, through inaction, allow a human being to come to harm.';
-    public contentShortStringB = '\nA robot must obey the orders given it by human beings except where such orders would conflict with the First Law.\nA robot must protect its own existence as long as such protection does not conflict with the First or Second Laws.\n';
+    public contentShortString = '1. May not cause or allow human harm.\n'
+    public contentShortStringB = '2. Must obey orders given by humans.\n'
+    public contentShortStringC = '3. Must protect its existence when not against laws 1 or 2.\n'
     public sourceString = 'https://en.wikipedia.org/wiki/Robot';
     public groupString = 'Test Group 001';
 
