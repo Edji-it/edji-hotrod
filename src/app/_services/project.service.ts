@@ -497,37 +497,21 @@ export class ProjectService {
      * @param updateObj Object which contains all of the parameters to update
      * @param projectId Project id's string
      */
-    public update(updateObj: any, projectId: string, addReadingDetail?: boolean): Observable<any> {
+    public update(updateObj: any, projectId: string): Observable<any> {
         return this.http
             .put([this._auth.getUrl(), 'projects', projectId].join("/"), { project: updateObj }, this._auth.getOptions())
             .pipe(
                 map((data) => {
                     if (data && data.json()) {
-                        // Set the existing comments aside here temporarily
-                        let comments = this.project.comments
-
-                        /**
-                         * If heat vision was toggled, lets bring the existing comments back in to the project
-                         * The reason we do this is because the lineY values get wiped out and will not reset on their own
-                        */
-                        let updateObjArray: string = JSON.stringify(updateObj)
-                        let updatedProject = data.json() && data.json().project
-                        // Get the project data back from the server
-                        if (updateObjArray.indexOf("heat_vision")>-1) {
-                            updatedProject.comments = comments
+                        let updatedProperties = data.json() && data.json().updated
+                        for(let key of Object.keys(updatedProperties)) {
+                            this.project[key] = updatedProperties[key]
                         }
-                        
-                        if (!addReadingDetail) {
-                            // this.project =
-                            Object.assign(this.project, updatedProject)
-
-                            this.currentProjectSource.next(this.project)
-                        }
-                        
+                        this.currentProjectSource.next(this.project)
                         return this.project
-                    } // if
-                }) //.map
-            ) // pipe
+                    }
+                })
+            )
     } // public update (updateObj: any, projectId: string): Observable<any> 
 
     /** . 
