@@ -145,9 +145,6 @@
     .nav__btn-wrap(*ngIf="!user.isLoggedIn || (!user.hero_status && isTeacher)")
       a#heroLink.btn.btn-hero.btn-sm.nav-bar__btn.hidden-sm-down([routerLink]="['/hero']", routerLinkActive="hide", fragment="top") 
         | {{ currentPage == "home" ? "Discover Hero" : heroBtnCopy }}
-        //- ** TEMP SALE CODE **
-        p.small(*ngIf="showHeroOfferTerms", style="position:absolute; top:25px; font-size:10px; text-align:center; left: 50%; transform: translateX(-50%); font-weight: 500; color: #888;") SALE UNTIL SEPT 15
-        //- ** TEMP SALE CODE **
       a#goHeroLink.btn.btn-hero.btn-sm.nav-bar__btn.hidden-sm-down(
           *ngIf="user.isLoggedIn && currentPage == 'hero'",
           (click)="showHeroSubModal = true"
