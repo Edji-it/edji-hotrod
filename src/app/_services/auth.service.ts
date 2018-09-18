@@ -911,10 +911,12 @@ interface GetWithAuthTokenResponse {
 }
 
 export interface AcademyState {
-    academies?: {
-        name?: string,
-        abbreviation?: string,
-        _id?: string
-    }[],
+    academies?: Academy[],
     selected?: number
+}
+
+export interface Academy {
+    name?: string,
+    abbreviation?: string,
+    _id?: string
 }
