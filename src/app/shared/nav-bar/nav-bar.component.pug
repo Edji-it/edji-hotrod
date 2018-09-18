@@ -79,7 +79,7 @@
           [class.has-multiple]="academyState.academies.length > 1"
           )
         .icon.icon-academy-plate
-        .academy-plate__initials {{ academyState.academies[academyState.selected].abbreviation }}
+        .academy-plate__initials([ngClass]="[ 'length-' + currentAcademy.abbreviation.length ]") {{ currentAcademy.abbreviation }}
         .icon.icon-caret.down
       .avatar__drop-down.list-group([class.visible]="showAcademyDropdown")
         .arrow
