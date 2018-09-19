@@ -41,37 +41,20 @@ describe('Project Page', () => {
      */
 
     describe("Login modal errors", () => {
-        beforeAll(() => {
-            home.getPage();
-            // Go to project to see login modal
-            home.enterProjectCodeFromHome('test');
-        });
-
-        loginModal.testLoginModalErrors();
+        home.getPage();
+        // Go to project to see login modal
+        home.enterProjectCodeFromHome('test')
+        loginModal.testLoginModalErrors()
     })
-
-    describe("Login modal success", () => {
-        beforeAll(() => {
-            // Should start on the homepage each time
-            home.enterProjectCodeFromHome('test');
-            // Login
-            guestForm.loginAsGuest();
-            browser.wait(EC.elementToBeClickable(sidebar.avatarActionIcon));
-        });
-
-        afterEach(() => {
-            // log out
-            sidebar.logout();
-        });
-    });
 
     describe("Commenting", () => {
         beforeAll(() => {
             // Should start on the homepage each time
-            // home.enterProjectCodeFromHome('test');
+            home.getPage()
+            home.enterProjectCodeFromHome('test')
             // Login
-            guestForm.loginAsGuest();
-            browser.wait(EC.elementToBeClickable(sidebar.avatarActionIcon));
+            guestForm.loginAsGuest()
+            browser.wait(EC.elementToBeClickable(sidebar.avatarActionIcon))
         });
 
         afterAll(() => {
