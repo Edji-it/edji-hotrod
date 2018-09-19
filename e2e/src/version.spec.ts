@@ -150,18 +150,17 @@ describe("Versioning - ", () => {
         element(by.css('[testFindVersionToggle="' + titleUpdate + '"]')).click();
 
         // Verify version 1 of this reading is in the list
-        browser.wait(EC.elementToBeClickable(element(by.css('p[testVersionNumberV="' + uniqueTitle + '"]'))), 5000, "past versions never loaded");
-        browser.wait(EC.elementToBeClickable(element(by.css('button[testFindOptionsV="' + uniqueTitle + '"]'))), 8000, "reading card options for versionbutton never became clickable after load");
-        element(by.css('button[testFindOptionsV="' + uniqueTitle + '"]')).click();
+        browser.wait(EC.elementToBeClickable(element(by.css('p[testVersionNumber="' + uniqueTitle + '"]'))), 5000, "past versions never loaded");
+        browser.wait(EC.elementToBeClickable(element(by.css('button[testFindOptions="' + uniqueTitle + '"]'))), 8000, "reading card options for versionbutton never became clickable after load");
+        element(by.css('button[testFindOptions="' + uniqueTitle + '"]')).click();
 
         // Make sure the Create New Group button shows up and then click on it
-        browser.wait(EC.elementToBeClickable(element(by.css('button[testFindCreateNewGroupV="' + uniqueTitle + '"]'))), 5000, "create new group button never became clicakble after options dropdown click");
-        element(by.css('button[testFindCreateNewGroupV="' + uniqueTitle + '"]')).click();
+        browser.wait(EC.elementToBeClickable(element(by.css('button[testFindCreateNewGroup="' + uniqueTitle + '"]'))), 5000, "create new group button never became clicakble after options dropdown click");
+        element(by.css('button[testFindCreateNewGroup="' + uniqueTitle + '"]')).click();
 
         // Wait for the input field for the group label to show and enter text
-        dashboard.createNewGroupModalInput(uniqueTitle);
-
+        dashboard.createNewGroupModalInput(uniqueTitle + "group");
         // Locate the group and confirm the name
-        browser.wait(EC.elementToBeClickable(element(by.css('span[testFindGroupV="' + uniqueTitle + '"]'))), 5000, "new group label never showed up");
+        browser.wait(EC.elementToBeClickable(element(by.css('span[testFindGroupLabel="' + uniqueTitle + 'group"]'))), 5000, "new group label never showed up");
     });
 });

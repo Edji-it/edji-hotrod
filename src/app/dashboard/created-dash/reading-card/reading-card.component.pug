@@ -93,8 +93,8 @@
       //- IMPORTANT NOTE: had to move the project link here so that the delete project button would work. Otherwise it overlapped and both buttons pressed.
       .title
         .project-title-input
-          span.reading-project--label
-            span(style="color: #cdcdcd;", [attr.testFindGroup]="reading.title") Group:
+          span.reading-project--label([attr.testFindGroupLabel]="reading.title")
+            span(style="color: #cdcdcd;") Group:
             | &nbsp;{{project.label}}
           span.project-title-input__save((click)="updateProjectLabel(reading._id, reading.newLabel)", [innerHtml]="':white_check_mark:' | emojione")
       div(style="clear:both;")
@@ -132,19 +132,19 @@
             h1.small {{version.title}} 
               span(*ngIf="!version.title")
                 i Untitled
-            p.blockquote-footer([attr.testVersionNumberV]="version.title") Version {{ versions.length - i }}
+            p.blockquote-footer([attr.testVersionNumber]="version.title") Version {{ versions.length - i }}
         i.icon.icon-draft(*ngIf="version['draft'] && version.draft === true && !version.projects[0]")
         #optionsWrapV.dropdown.reading-options(
           *ngIf="!version['draft'] || version.draft !== true || version.projects[0]", 
           (clickOutside)="version.showOptionsV = false", 
           [class.show]="version.showOptionsV"
         )
-          button.btn.btn-icon--plain((click)="version.showOptionsV = !version.showOptionsV", [attr.testFindOptionsV]="version.title")
+          button.btn.btn-icon--plain((click)="version.showOptionsV = !version.showOptionsV", [attr.testFindOptions]="version.title")
             i.icon.icon-more
           .dropdown-menu.dropdown-menu-right.reading-card-menu
             button.dropdown-item.e2e-new-group(
               (click)="relevantReading = version; showAddModal = true; version.showOptionsV = false; versionHeight = versionHeight + 66", 
-              [attr.testFindCreateNewGroupV]="version.title"
+              [attr.testFindCreateNewGroup]="version.title"
             ) Create New Group
             button.dropdown-item(
               *ngIf="!version.draft", 
@@ -162,7 +162,7 @@
             .title
               .project-title-input
                 span.reading-project--label
-                  span(style="color: #cdcdcd;", [attr.testFindGroupV]="versionProject.label") Group:
+                  span(style="color: #cdcdcd;", [attr.testFindGroupLabel]="versionProject.label") Group:
                   | &nbsp;{{versionProject.label}}
                 span.project-title-input__save((click)="updateProjectLabel(version._id, version.newLabel)", [innerHtml]="':white_check_mark:' | emojione")
             div(style="clear:both;")
