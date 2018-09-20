@@ -21,7 +21,7 @@ export class OAuthComponent implements OnInit {
   } = {}
 
   private licenseId = ''
-  private redirectRoute = '/dashboard'
+  private redirectRouteUrl = '/dashboard'
 
   constructor(
     private _auth: AuthService,
@@ -53,7 +53,7 @@ export class OAuthComponent implements OnInit {
     
     // if the user is coming from another route, let's redirect them to it
     if (this._locker.has('oauthRedirect')) {
-      this.redirectRoute = this._locker.get('oauthRedirect')
+      this.redirectRouteUrl = this._locker.get('oauthRedirect')
       this._locker.remove('oauthRedirect')
     }
 
@@ -65,7 +65,7 @@ export class OAuthComponent implements OnInit {
         this._router.navigate(['/license/accept/' + this.licenseId])
         return
       }
-      this._router.navigate([this.redirectRoute])
+      this._router.navigateByUrl(this.redirectRouteUrl)
     }, (err) => {
       console.error(err)
       switch (err.status) {
