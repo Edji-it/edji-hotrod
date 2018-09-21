@@ -54,7 +54,7 @@ describe('Academy user that has ability to manage licenses for their academy: ',
     dashboard.getLicenseManage()
     
     // should get the license management page!
-    browser.wait(EC.presenceOf(element(by.id('activeLicenseCount'))), 5000, "never saw the license page")
+    browser.wait(EC.presenceOf(element(by.id('activeLicenseCount'))), 5000, "never saw the license management page")
   })
 
   // Access the license management page - verify more than 1 license is in use
@@ -66,7 +66,7 @@ describe('Academy user that has ability to manage licenses for their academy: ',
     dashboard.getLicenseManage()
     
     // should get the license management page!
-    browser.wait(EC.presenceOf(element(by.id('activeLicenseCount'))), 5000, "never saw the license page")
+    browser.wait(EC.presenceOf(element(by.id('activeLicenseCount'))), 5000, "never saw the license management page")
     
     // verify more than 1 license is in use
     let activeLicenseVal = element(by.id("activeLicenseCount"))
@@ -85,7 +85,7 @@ describe('Academy user that has ability to manage licenses for their academy: ',
     dashboard.getLicenseManage()
     
     // should get the license management page!
-    browser.wait(EC.presenceOf(element(by.id('activeLicenseCount'))), 5000, "never saw the license page")
+    browser.wait(EC.presenceOf(element(by.id('availableLicenseCount'))), 5000, "never saw the license management page")
     
     // verify more than 1 license is available
     let availLicenseVal = element(by.id("availableLicenseCount"))
@@ -104,7 +104,7 @@ describe('Academy user that has ability to manage licenses for their academy: ',
     dashboard.getLicenseManage()
     
     // should get the license management page!
-    browser.wait(EC.presenceOf(element(by.id('activeLicenseCount'))), 5000, "never saw the license page")
+    browser.wait(EC.presenceOf(element(by.id('activeLicenseCount'))), 5000, "never saw the license management page")
     
     // invite a teacher
       // Name

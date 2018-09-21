@@ -70,7 +70,7 @@ describe('Dashboard Page', () => {
         // Go to next page
         dashboard.createdListNextPage.click();
         // Wait for second page load
-        browser.wait(EC.visibilityOf(dashboard.secondPageFirstReadingTitle), 3000, "did not load next page of Created Readings");
+        browser.wait(EC.visibilityOf(dashboard.secondPageFirstReadingTitle), 8000, "did not load next page of Created Readings");
         // Verify First Reading Title has changed
         expect(dashboard.secondPageFirstReadingTitle.getText().then((text) => {console.log(text, firstReadingTitleStr); return text == firstReadingTitleStr})).toBeFalsy();
         // Scroll back to pagination
