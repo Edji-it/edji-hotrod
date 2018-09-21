@@ -489,3 +489,12 @@ input[type=text].input-noborder, input[type=password].input-noborder, input[type
 		width: 100%;
   	}
 }
+
+.e2e-clickaway {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 5px;
+	height: 5px;
+	z-index: 1;
+}

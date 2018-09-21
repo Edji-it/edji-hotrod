@@ -92,35 +92,11 @@ describe('Dashboard Page', () => {
         expect(dashboard.projectCards.count()).toBeGreaterThan(0);
     });
 
-    // describe("Navigation from project dashboard", () => {
-        it("should get to a project by clicking a card", () => {
-            // Switch to the created readings tab on mobile (will simply skip if on desktop)
-            dashboard.goToCreatedTab()
-            
-            browser.wait(EC.presenceOf(dashboard.firstProject), 8000, "never saw a project");
-            dashboard.firstProject.click();
-            browser.wait(EC.urlContains("project"), 5000, "clicking on project card did not bring me to a project");
+    /* ---- Dashboard Tests ------------------------ */
 
-            sidebar.backToDash();
-        });
-
-        it("should get to a project by entering a code", () => {
-            // Use the function to check this as it can handle multiple display types (mobile/desktop/etc)
-            dashboard.enterProjectCodeFromNav(login.validProjectCode);
-
-            // verification
-            browser.wait(EC.urlContains("project"), 5000, "entering a project code did not bring me to a project");
-
-            // Return to dashboard
-            sidebar.backToDash();
-        });
-    // });
-
-    // /* ---- Dashboard Tests ------------------------ */
-
-    // /* Test: Can delete a project
-    // 6.1.17
-    // */
+    /* Test: Can delete a project
+    6.1.17
+    */
     describe("Delete Readings & Projects", () => {
         it ("Delete a project off of a new reading.", () => {
             // Switch to the created readings tab on mobile (will simply skip if on desktop)
@@ -205,5 +181,28 @@ describe('Dashboard Page', () => {
             // Unable to confirm title
             browser.wait(EC.invisibilityOf(element(by.cssContainingText('.reading-title-text', uniqueTitle))), 8000, "saw the unique readingTitle (END). We aren't supposed to.");
         }); // it ("Make a new reading then delete it")
+
+
+        it("should get to a project by entering a code", () => {
+            // Use the function to check this as it can handle multiple display types (mobile/desktop/etc)
+            dashboard.enterProjectCodeFromNav(login.validProjectCode);
+            // verification
+            browser.wait(EC.urlContains("project"), 5000, "entering a project code did not bring me to a project");
+            // Return to dashboard
+            sidebar.backToDash();
+        });
+        
+        /**
+         * Open project by clicking card
+         * - Requires step before to reload the dashboard
+         */
+        it("should get to a project by clicking a card", () => {
+            // Switch to the created readings tab on mobile (will simply skip if on desktop)
+            dashboard.goToCreatedTab()
+            browser.wait(EC.presenceOf(dashboard.firstProject), 8000, "never saw a project");
+            dashboard.projectCards.first().click();
+            browser.wait(EC.urlContains("project"), 5000, "clicking on project card did not bring me to a project");
+            sidebar.backToDash();
+        });
     });
 }); // describe 'Dashboard Page'

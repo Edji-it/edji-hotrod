@@ -11,7 +11,7 @@ export class LoginForm {
   public msgNoUserName    = element(by.id("msgNoUserName"));
   public msgBadName       = element(by.id("msgBadName"));
   
-  public accountLoginHeader = element(by.id("accountLoginHeader"))
+  public clickawaySquare = element(by.css(".e2e-clickaway"))
 
   // other variables
   public studentUser      = 'student';
@@ -34,7 +34,7 @@ export class LoginForm {
       this.usernameInput.click()
       this.usernameInput.clear()
       // clear selection
-      this.accountLoginHeader.click()
+      this.clickawaySquare.click()
       this.passwordInput.click()
       this.passwordInput.clear()
       

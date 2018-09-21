@@ -1,5 +1,6 @@
 <form [formGroup]="loginForm" (ngSubmit)="login(loginForm.value)">
   <div class="form-group">
+    <div class="e2e-clickaway"></div>
     <label for="usernameInput">Username</label>
     <input type="text" id="usernameInput" [placeholder]="'e.g. ' + userCopy.username" [formControl]="loginForm.controls['username']" tabindex="0" />
     <div class="alert alert-danger" *ngIf="loginForm.controls['username'].hasError('required') && (loginForm.controls['username'].dirty)">Hey there! Make sure to add a username!</div>
