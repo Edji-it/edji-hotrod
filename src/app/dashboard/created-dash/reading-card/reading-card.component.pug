@@ -190,7 +190,7 @@
 hot-add-project-modal(
   *ngIf="showAddModal", 
   [reading]="relevantReading",
-  (groupSaved)="addGroup($event)",
+  (groupSaved)="addGroup(relevantReading, $event)",
   (closeModal)="showAddModal = false"
 )
 //- hot-del-reading pops up when "Delete" is clicked underneath a Reading's dropdown menu

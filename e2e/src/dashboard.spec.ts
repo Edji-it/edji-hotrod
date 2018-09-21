@@ -134,44 +134,33 @@ describe('Dashboard Page', () => {
         }); // it ("Delete a project off of a new reading.", () => {
 
         it("Make a new reading then delete it.", () => {
-
-            // Approach 2
+            // Create Unique title for New Reading (for referencing)
             let uniqueTitle: string = new Date().valueOf().toString();
-
             // Create a new reading to control it properly thru the process
             dashboard.openNewReading();
-
             // Enter sample Reading into form
             newReading.titleInput.sendKeys(uniqueTitle);
-            // Select Grade Range
-            newReading.gradeTileK.click();
-            newReading.gradeTileU.click();
-            // Select Subject
-            newReading.subjectDropdown.click();
-            newReading.subjectFirstOption.click();
+            // Make private to avoid needing grade levels and subjects
+            newReading.privateButton.click()
             newReading.contentInput.sendKeys(newReading.contentShortString);
-            newReading.sourceInput.sendKeys(newReading.sourceString);
-
             // Submit New Reading
             newReading.addNewReading()
             browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
             newReading.finalizeButton.click();
-
             // Should redirect to Project page for new reading
             browser.wait(EC.urlContains("project"), 7500, "never arrived at the reading page after published");
-
             // Go to the dashboard
             sidebar.backToDash();
-
             // Switch to the created readings tab on mobile (will simply skip if on desktop)
             dashboard.goToCreatedTab()
-
+            // Check for the "options" on newly created reading on Dashboard
             browser.wait(EC.elementToBeClickable(element(by.css('button[testFindOptions="' + uniqueTitle + '"]'))), 8000, "reading card options button never became clickable after load");
+            // Open Reading options
             element(by.css('button[testFindOptions="' + uniqueTitle + '"]')).click();
-
+            // Select "Delete Reading"
             browser.wait(EC.elementToBeClickable(element(by.css('button[testDelete="' + uniqueTitle + '"]'))), 5000, "copy and edit button never became clicakble after options dropdown click");
             element(by.css('button[testDelete="' + uniqueTitle + '"]')).click();
-
+            // Find delete Reading confirmation modal
             let deleteModal = element(by.id('deleteReadingModal'));
             browser.wait(EC.presenceOf(deleteModal), 5000, "never saw a deleteModal");
             browser.wait(EC.presenceOf(dashboard.deleteConfirm), 5000, "never saw a deleteConfirm on the deleteModal");
