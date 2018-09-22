@@ -62,5 +62,15 @@ $plateLightColor: #FCCB80;
         width: 100%;
         top: 30px;
         letter-spacing: 2px;
+
+        &.length-4 {
+            letter-spacing: 1px;
+            font-size: 13px;
+        }
+
+        &.length-5 {
+            letter-spacing: 1px;
+            font-size: 12px;
+        }
     }
 }
