@@ -82,7 +82,7 @@ describe('Project Page as an owner wishing to filter by student: ', () => {
         browser.wait(EC.elementToBeClickable(sidebar.prevStudentButton), 5000, 'never saw \"previous\" student filter button')
         sidebar.prevStudentButton.click()
         // First commenter's comment should no longer be visible
-        browser.wait(EC.invisibilityOf(firstCommenterComments.first()), 3000, 'previous student filter did not hide previous student\'s comments')
+        browser.wait(EC.invisibilityOf(firstCommenterComments.first()), 5000, 'previous student filter did not hide previous student\'s comments')
         // Close student filter
         sidebar.studentFilterClose.click()
         // Ensure First Commenter's comment is visible again

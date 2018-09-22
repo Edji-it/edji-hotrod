@@ -45,84 +45,62 @@ describe('Academy user that has ability to manage licenses for their academy: ',
     browser.wait(EC.urlContains("dashboard"), 5000, "should not have hit the licenses page")
   })
 
-  // Log-in as a hero that has access to manage the page - verify they can access the page
-  it("should log in as an admin and be able to access the academy license manage page", () => {
-    // log-in as the hero and make sure we hit the dashboard
-    login.loginAndVerify(login.adminUser, login.adminPassword)
-
-    // go to the academy license manage page
-    dashboard.getLicenseManage()
-    
-    // should get the license management page!
-    browser.wait(EC.presenceOf(element(by.id('activeLicenseCount'))), 5000, "never saw the license management page")
-  })
-
-  // Access the license management page - verify more than 1 license is in use
-  it("should log in as an admin and verify more than 1 license is in use", () => {
-    // log-in as the hero and make sure we hit the dashboard
-    login.loginAndVerify(login.adminUser, login.adminPassword)
-
-    // go to the academy license manage page
-    dashboard.getLicenseManage()
-    
-    // should get the license management page!
-    browser.wait(EC.presenceOf(element(by.id('activeLicenseCount'))), 5000, "never saw the license management page")
-    
-    // verify more than 1 license is in use
-    let activeLicenseVal = element(by.id("activeLicenseCount"))
-    browser.wait(EC.visibilityOf(activeLicenseVal), 3000, 'not able to find the active license value')
-    activeLicenseVal.getText().then((count) => {
-      expect(count.substring(0, 1)).toBeGreaterThan(1, 'active licenses value is not greater than 1')
+  describe("Academy admin should be able to log in and:", () => {
+    // Log-in as a hero that has access to manage the page - verify they can access the page
+    beforeAll(() => {
+      // log-in as the hero and make sure we hit the dashboard
+      login.loginAndVerify(login.adminUser, login.adminPassword)
+      // go to the academy license manage page
+      dashboard.getLicenseManage()
+      // should get the license management page!
+      browser.wait(EC.presenceOf(element(by.id('activeLicenseCount'))), 8000, "never saw the license management page")
     })
-  })
 
-  // Access the license management page - verify more than 1 license is available
-  it("should log in as an admin and verify more than 1 license is available", () => {
-    // log-in as the hero and make sure we hit the dashboard
-    login.loginAndVerify(login.adminUser, login.adminPassword)
-
-    // go to the academy license manage page
-    dashboard.getLicenseManage()
-    
-    // should get the license management page!
-    browser.wait(EC.presenceOf(element(by.id('availableLicenseCount'))), 5000, "never saw the license management page")
-    
-    // verify more than 1 license is available
-    let availLicenseVal = element(by.id("availableLicenseCount"))
-    browser.wait(EC.visibilityOf(availLicenseVal), 3000, 'not able to find the available license value')
-    availLicenseVal.getText().then((count) => {
-      expect(count.substring(0, 1)).toBeGreaterThan(1, 'available licenses value is not greater than 1')
+    // Access the license management page - verify more than 1 license is in use
+    it("should log in as an admin and verify more than 1 license is in use", () => {
+      // Find active license count on license mangagement page
+      browser.wait(EC.presenceOf(element(by.id('activeLicenseCount'))), 5000, "never saw the active licenses count on license management page")
+      // verify more than 1 license is in use
+      let activeLicenseVal = element(by.id("activeLicenseCount"))
+      browser.wait(EC.visibilityOf(activeLicenseVal), 3000, 'not able to find the active license value')
+      activeLicenseVal.getText().then((count) => {
+        expect(count.substring(0, 1)).toBeGreaterThan(1, 'active licenses value is not greater than 1')
+      })
     })
-  })
 
-  // Access the license management page - verify inviting a new teacher and that the inivite was succesfully sent
-  it("should log in as an admin and successfully invite a teacher to join", () => {
-    // log-in as the hero and make sure we hit the dashboard
-    login.loginAndVerify(login.adminUser, login.adminPassword)
+    // Access the license management page - verify more than 1 license is available
+    it("should log in as an admin and verify more than 1 license is available", () => {
+      // Find available license count on license mangagement page
+      browser.wait(EC.presenceOf(element(by.id('availableLicenseCount'))), 5000, "never saw the available licenses count on license management page")
+      // verify more than 1 license is available
+      let availLicenseVal = element(by.id("availableLicenseCount"))
+      browser.wait(EC.visibilityOf(availLicenseVal), 3000, 'not able to find the available license value')
+      availLicenseVal.getText().then((count) => {
+        expect(count.substring(0, 1)).toBeGreaterThan(1, 'available licenses value is not greater than 1')
+      })
+    })
 
-    // go to the academy license manage page
-    dashboard.getLicenseManage()
-    
-    // should get the license management page!
-    browser.wait(EC.presenceOf(element(by.id('activeLicenseCount'))), 5000, "never saw the license management page")
-    
-    // invite a teacher
-      // Name
-      let uniqueName: string = 'fakeTeach-' + new Date().valueOf().toString() + '-license'
-      element(by.id("licenseInviteNameInput")).sendKeys(uniqueName)
-      // Email
-      element(by.id("licenseInviteEmailInput")).sendKeys('fakeTeach@edji.it')
-      //submit
-      browser.wait(EC.elementToBeClickable(element(by.id("licenseInviteSubmitBtn"))), 5000)
-      element(by.id("licenseInviteSubmitBtn")).click()
+    // Access the license management page - verify inviting a new teacher and that the inivite was succesfully sent
+    it("should log in as an admin and successfully invite a teacher to join", () => {
+      // Find invite fields
+      browser.wait(EC.elementToBeClickable(element(by.id('licenseInviteNameInput'))), 5000, "never found license invite name input")
+      // invite a teacher
+        // Name
+        let uniqueName: string = 'fakeTeach-' + new Date().valueOf().toString() + '-license'
+        element(by.id("licenseInviteNameInput")).sendKeys(uniqueName)
+        // Email
+        element(by.id("licenseInviteEmailInput")).sendKeys('fakeTeach@edji.it')
+        //submit
+        browser.wait(EC.elementToBeClickable(element(by.id("licenseInviteSubmitBtn"))), 5000)
+        element(by.id("licenseInviteSubmitBtn")).click()
 
-    // verify the invite was sent
-    let invites = element.all(by.css('.educator-pending--name'))
-    // when this next field goes blank, data was successfully sent to the server, then to bluestreak to send the email
-    browser.wait(EC.textToBePresentInElement(element(by.id("licenseInviteNameInput")), ''), 3000, "license invite never was sent to teacher")
-    
-    browser.wait(specificTextToBePresentInElement(invites.last(), uniqueName), 5000, "never saw the latest license invite get added")
-  })
+      // verify the invite was sent
+      let invites = element.all(by.css('.educator-pending--name'))
+      // when this next field goes blank, data was successfully sent to the server, then to bluestreak to send the email
+      browser.wait(EC.textToBePresentInElement(element(by.id("licenseInviteNameInput")), ''), 3000, "license invite never was sent to teacher")
+      browser.wait(specificTextToBePresentInElement(invites.last(), uniqueName), 5000, "never saw the latest license invite get added")
+    })
+  }) //- End Academy Admin steps
 
   var specificTextToBePresentInElement = function(elementFinder, nameText) {
     var hasText = function() {
