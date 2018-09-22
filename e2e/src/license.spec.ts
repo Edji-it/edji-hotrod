@@ -10,50 +10,58 @@ describe('Academy user that has ability to manage licenses for their academy: ',
   let sidebar = new Sidebar()
   let EC = protractor.ExpectedConditions
 
-  beforeEach(() => {
-    // get ready to login
-    login.getPage()
-    browser.wait(EC.elementToBeClickable(login.loginButton), 5000)
-  })
+  describe("Non-Admin users should not be able to access the license mgmt page", () => {
+    beforeEach(() => {
+      // get ready to login
+      login.getPage()
+      browser.wait(EC.elementToBeClickable(login.loginButton), 5000)
+    })
 
-  afterEach(() => {
-    // log out
-    sidebar.logout()
-  })
-
-  // Log-in as a student and attempt to access the academy page - should not be able to access, this is expected behavior
-  it("should log in as a student and not be able to access the academy license manage page", () => {
-    // log-in as the student and make sure we hit the dashboard
-    login.loginAndVerify(login.studentUser, login.studentPassword)
-
-    // go to the academy license manage page
-    dashboard.getLicenseManage()
-
-    // should not go to the licenses page
-    browser.wait(EC.urlContains("dashboard"), 5000, "should not have hit the licenses page")
-  })
-
-  // Log-in as a teacher that does not have access to manage licenses - should not be able to access, this is expected behavior
-  it("should log in as a teacher (non-hero) and not be able to access the academy license manage page", () => {
-    // log-in as the teacher (non-hero) and make sure we hit the dashboard
-    login.loginAndVerify(login.teacherUser, login.teacherPassword)
-
-    // go to the academy license manage page
-    dashboard.getLicenseManage()
+    afterEach(() => {
+      // log out
+      sidebar.logout()
+    })
     
-    // should not go to the licenses page
-    browser.wait(EC.urlContains("dashboard"), 5000, "should not have hit the licenses page")
+    // Log-in as a student and attempt to access the academy page - should not be able to access, this is expected behavior
+    it("should log in as a student and not be able to access the academy license manage page", () => {
+      // log-in as the student and make sure we hit the dashboard
+      login.loginAndVerify(login.studentUser, login.studentPassword)
+
+      // go to the academy license manage page
+      dashboard.getLicenseManage()
+
+      // should not go to the licenses page
+      browser.wait(EC.urlContains("dashboard"), 5000, "should not have hit the licenses page")
+    })
+
+    // Log-in as a teacher that does not have access to manage licenses - should not be able to access, this is expected behavior
+    it("should log in as a teacher (non-hero) and not be able to access the academy license manage page", () => {
+      // log-in as the teacher (non-hero) and make sure we hit the dashboard
+      login.loginAndVerify(login.teacherUser, login.teacherPassword)
+      // go to the academy license manage page
+      dashboard.getLicenseManage()
+      // should not go to the licenses page
+      browser.wait(EC.urlContains("dashboard"), 5000, "should not have hit the licenses page")
+    })
   })
 
   describe("Academy admin should be able to log in and:", () => {
     // Log-in as a hero that has access to manage the page - verify they can access the page
     beforeAll(() => {
+      // get ready to login
+      login.getPage()
+      browser.wait(EC.elementToBeClickable(login.loginButton), 5000)
       // log-in as the hero and make sure we hit the dashboard
       login.loginAndVerify(login.adminUser, login.adminPassword)
       // go to the academy license manage page
       dashboard.getLicenseManage()
       // should get the license management page!
       browser.wait(EC.presenceOf(element(by.id('activeLicenseCount'))), 8000, "never saw the license management page")
+    })
+
+    afterAll(() => {
+      // log out
+      sidebar.logout()
     })
 
     // Access the license management page - verify more than 1 license is in use
