@@ -230,8 +230,8 @@ describe('Project Page', () => {
 
             // Wait 5 seconds for the avatar with a reply to become clickable
             project.openReplyPane()
-            
-            browser.wait(EC.elementToBeClickable(project.addReplyBtn), 5000, "never found the add reply comment button");
+            // Wait 8 seconds for reply pane to render
+            browser.wait(EC.elementToBeClickable(project.addReplyBtn), 8000, "never found the add reply comment button");
             project.addReplyBtn.click();
 
             // Wait 5 seconds for the discussions pane to open

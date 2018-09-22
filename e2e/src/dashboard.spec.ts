@@ -53,7 +53,7 @@ describe('Dashboard Page', () => {
      */
     it("should paginate Created readings", () => {
         // Wait for Readings to load into Dashboard
-        browser.wait(EC.elementToBeClickable(dashboard.firstReadingCard), 3000, "never found Created Readings on Dashboard")
+        browser.wait(EC.elementToBeClickable(dashboard.firstReadingCard), 8000, "never found Created Readings on Dashboard")
         // Verify the first reading title is ready
         browser.wait(EC.elementToBeClickable(dashboard.firstReadingTitle), 3000, "never found first Created Reading title on Dashboard")
         // Save title of first Reading on first page
