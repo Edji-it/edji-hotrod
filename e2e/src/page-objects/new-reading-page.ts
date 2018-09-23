@@ -59,11 +59,11 @@ export class NewReading implements PageObjectInterface
     public groupError = element(by.id('msgLabelRequired'));
     public successAlert = element(by.css('.alert-success'));
 
-    public titleString = 'Test: 3 Laws of Robotics';
+    public titleString = 'Test (3 Laws) ' + new Date().valueOf(); // Keep titles unique
     public qTitleString = 'When and how, in early human development, did the capacity to ask questions develop?';
     public qPrompt1 = 'Do you really think this timeline is accurate?';
     public qPrompt2 = 'Are you willing to give up the information?';
-    public titleImageString = 'Test: Image';
+    public titleImageString = 'Test: Image' + new Date().valueOf();
     public contentString = 'Many ancient mythologies, and most modern religions include artificial people, such as the mechanical servants built by the Greek god Hephaestus[16] (Vulcan to the Romans), the clay golems of Jewish legend and clay giants of Norse legend, and Galatea, the mythical statue of Pygmalion that came to life. Since circa 400 BC, myths of Crete include Talos, a man of bronze who guarded the Cretan island of Europa from pirates.\nWashstand automaton reconstruction, as described by Philo of Byzantium (Greece, 3rd century BC).';
     public qContentString1 = "Text before first question."
     public qContentString2 = "Text. AFTER Q"
