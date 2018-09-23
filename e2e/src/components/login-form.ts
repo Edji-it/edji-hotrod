@@ -10,6 +10,8 @@ export class LoginForm {
   public msgError         = element(by.id("msgError"));
   public msgNoUserName    = element(by.id("msgNoUserName"));
   public msgBadName       = element(by.id("msgBadName"));
+  
+  public clickawaySquare = element(by.css(".e2e-clickaway"))
 
   // other variables
   public studentUser      = 'student';
@@ -29,8 +31,12 @@ export class LoginForm {
       browser.wait(this.EC.elementToBeClickable(this.loginButton), 5000, "login button never became clickable after page load");
 
       // clear the login fields - just to make sure that they're clean
-      this.usernameInput.clear();
-      this.passwordInput.clear();
+      this.usernameInput.click()
+      this.usernameInput.clear()
+      // clear selection
+      this.clickawaySquare.click()
+      this.passwordInput.click()
+      this.passwordInput.clear()
       
     });
 
@@ -38,7 +44,7 @@ export class LoginForm {
     it('should give an error message when they don\'t enter a password', () => {
 
       // form handling
-      this.usernameInput.sendKeys(this.studentUser);
+      this.usernameInput.sendKeys(this.invalidEntry);
       browser.wait(this.EC.elementToBeClickable(this.loginButton), 5000, "login button never became clickable after login form entry");
       this.loginButton.submit();
       
@@ -46,14 +52,12 @@ export class LoginForm {
       browser.wait(this.EC.presenceOf(this.msgError), 5000, 'never saw password error message');
     });
 
-    // Test: Not typing in a password on log in should throw an error message.
+    // Test: Not typing in a username on log in should throw an error message.
     it('should give an error message when they don\'t enter a username', () => {
-
       // form handling
-      this.passwordInput.sendKeys(this.studentPassword);
+      this.passwordInput.sendKeys(this.invalidEntry);
       browser.wait(this.EC.elementToBeClickable(this.loginButton), 5000, "login button never became clickable after login form entry");
       this.loginButton.submit();
-      
       // test verification
       browser.wait(this.EC.presenceOf(this.msgError), 5000, 'never saw username error message');
     });

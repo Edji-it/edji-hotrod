@@ -59,7 +59,6 @@ describe("Versioning - ", () => {
         // Open and wait for New Reading page
         dashboard.openNewReading();
         browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000);
-
         // Enter sample Reading into form
         newReading.titleInput.sendKeys(uniqueTitle);
         // Select Grade Range
@@ -69,16 +68,12 @@ describe("Versioning - ", () => {
         newReading.subjectDropdown.click();
         newReading.subjectFirstOption.click();
         newReading.contentInput.sendKeys(newReading.contentShortString);
-        newReading.sourceInput.sendKeys(newReading.sourceString);
-
         // Submit New Reading
         newReading.addNewReading()
         browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
         newReading.finalizeButton.click();
-
         // Should redirect to Project page for new reading
         browser.wait(EC.urlContains("project"), 7500, "never arrived at the reading page after published");
-
         // Go to the dashboard
         sidebar.backToDash();
     });
@@ -155,18 +150,17 @@ describe("Versioning - ", () => {
         element(by.css('[testFindVersionToggle="' + titleUpdate + '"]')).click();
 
         // Verify version 1 of this reading is in the list
-        browser.wait(EC.elementToBeClickable(element(by.css('p[testVersionNumberV="' + uniqueTitle + '"]'))), 5000, "past versions never loaded");
-        browser.wait(EC.elementToBeClickable(element(by.css('button[testFindOptionsV="' + uniqueTitle + '"]'))), 8000, "reading card options for versionbutton never became clickable after load");
-        element(by.css('button[testFindOptionsV="' + uniqueTitle + '"]')).click();
+        browser.wait(EC.elementToBeClickable(element(by.css('p[testVersionNumber="' + uniqueTitle + '"]'))), 5000, "past versions never loaded");
+        browser.wait(EC.elementToBeClickable(element(by.css('button[testFindOptions="' + uniqueTitle + '"]'))), 8000, "reading card options for versionbutton never became clickable after load");
+        element(by.css('button[testFindOptions="' + uniqueTitle + '"]')).click();
 
         // Make sure the Create New Group button shows up and then click on it
-        browser.wait(EC.elementToBeClickable(element(by.css('button[testFindCreateNewGroupV="' + uniqueTitle + '"]'))), 5000, "create new group button never became clicakble after options dropdown click");
-        element(by.css('button[testFindCreateNewGroupV="' + uniqueTitle + '"]')).click();
+        browser.wait(EC.elementToBeClickable(element(by.css('button[testFindCreateNewGroup="' + uniqueTitle + '"]'))), 5000, "create new group button never became clicakble after options dropdown click");
+        element(by.css('button[testFindCreateNewGroup="' + uniqueTitle + '"]')).click();
 
         // Wait for the input field for the group label to show and enter text
-        dashboard.createNewGroupModalInput(uniqueTitle);
-
+        dashboard.createNewGroupModalInput(uniqueTitle + "group");
         // Locate the group and confirm the name
-        browser.wait(EC.elementToBeClickable(element(by.css('span[testFindGroupV="' + uniqueTitle + '"]'))), 5000, "new group label never showed up");
+        browser.wait(EC.elementToBeClickable(element(by.css('span[testFindGroupLabel="' + uniqueTitle + 'group"]'))), 5000, "new group label never showed up");
     });
 });

@@ -78,10 +78,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
     // Copy Variables
     public heroBtnCopy: string = "Upgrade to Hero"
 
-    /** TEMP SALE CODE */
-    public showHeroOfferTerms: boolean = false
-    /** TEMP SALE CODE */
-
     constructor(
           public _route: ActivatedRoute,
           public  _auth: AuthService, 
@@ -102,13 +98,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
           this._auth.getCurrentUser().subscribe((user) => {
               this.user = user
               this.isTeacher = this.user.identities && this.user.identities.indexOf('teacher') > -1
-
-              /** TEMP SALE CODE */
-              if (this._auth.getShowSale()) {
-                this.heroBtnCopy = "Go Hero, Give Hero"
-                this.showHeroOfferTerms = true
-              }
-              /** TEMP SALE CODE */
           }),
           this._auth.currentAcademyState.subscribe((currentState) => {
             this.academyState =  currentState

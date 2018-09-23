@@ -67,7 +67,7 @@ describe('Discover Feed', () => {
 
     // Testbot should create Public reading, and other user should see it in the global feed
     describe("Create new public reading, and verify it shows in Public feed", () => {
-        let newPublicReadingTitle = "Public Reading " + new Date()
+        let newPublicReadingTitle = "Public Reading " + new Date().valueOf()
         // Discover Feed should exist and load for every user
         it("should create new public reading as testbot", () => {
             // Open New Reading page

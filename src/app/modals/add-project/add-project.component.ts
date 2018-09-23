@@ -20,6 +20,7 @@ export class AddProjectModal implements OnInit {
   // Optional copy inputs
   @Input() heading: string
   @Input() subheading: string
+  @Input() groupLabel: string
 
   public projectForm: FormGroup
   public formSubmitted: boolean = false
@@ -48,7 +49,7 @@ export class AddProjectModal implements OnInit {
     this.commentTypes = this._auth.getAllowedCommentTypes()
 
     this.projectForm = this._fb.group({
-      label: [null, Validators.required],
+      label: [this.groupLabel ? this.groupLabel : '', Validators.required],
       emojiType: true,
       textType: true,
       audioType: this.commentTypes.indexOf('audio') > -1 ? true : false,

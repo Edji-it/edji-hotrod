@@ -20,7 +20,7 @@ export class LoginModal {
   public guestBadNameErr = element(by.id("msgBadName"));
 
   // html elements for user login
-  public accountLoginHeader = element(by.id("accountLoginHeader"));
+  public clickawaySquare = element(by.css(".e2e-clickaway"));
   public usernameInput = element(by.id("usernameInput"));
   public passwordInput = element(by.id("passwordInput"));
   public accountLoginButton = element(by.id("buttonLogin"));
