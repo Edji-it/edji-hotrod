@@ -36,12 +36,12 @@ describe('Project Page as an owner wishing to filter by student: ', () => {
         // initial validation
         browser.wait(EC.presenceOf(loginModal.guestLoginHeader), 5000, "never saw the login modal's header");
         expect(loginModal.guestLoginHeader.isPresent()).toBeTruthy();
-        expect(loginModal.accountLoginHeader.isPresent()).toBeFalsy();
+        expect(loginModal.clickawaySquare.isPresent()).toBeFalsy();
 
         // switch to login section and validate
         browser.wait(EC.elementToBeClickable(loginModal.gotoAccountLoginButton), 5000, "never found button to go to account login");
         loginModal.gotoAccountLoginButton.click();
-        expect(loginModal.accountLoginHeader.isPresent()).toBeTruthy();
+        expect(loginModal.clickawaySquare.isPresent()).toBeTruthy();
         loginModal.usernameInput.sendKeys('testhero');
         loginModal.passwordInput.sendKeys('testhero16');
         browser.wait(EC.elementToBeClickable(loginModal.accountLoginButton), 5000, "never found the account login button on modal");
@@ -82,7 +82,7 @@ describe('Project Page as an owner wishing to filter by student: ', () => {
         browser.wait(EC.elementToBeClickable(sidebar.prevStudentButton), 5000, 'never saw \"previous\" student filter button')
         sidebar.prevStudentButton.click()
         // First commenter's comment should no longer be visible
-        browser.wait(EC.invisibilityOf(firstCommenterComments.first()), 3000, 'previous student filter did not hide previous student\'s comments')
+        browser.wait(EC.invisibilityOf(firstCommenterComments.first()), 5000, 'previous student filter did not hide previous student\'s comments')
         // Close student filter
         sidebar.studentFilterClose.click()
         // Ensure First Commenter's comment is visible again

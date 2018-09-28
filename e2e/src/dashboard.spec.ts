@@ -53,7 +53,7 @@ describe('Dashboard Page', () => {
      */
     it("should paginate Created readings", () => {
         // Wait for Readings to load into Dashboard
-        browser.wait(EC.elementToBeClickable(dashboard.firstReadingCard), 3000, "never found Created Readings on Dashboard")
+        browser.wait(EC.elementToBeClickable(dashboard.firstReadingCard), 8000, "never found Created Readings on Dashboard")
         // Verify the first reading title is ready
         browser.wait(EC.elementToBeClickable(dashboard.firstReadingTitle), 3000, "never found first Created Reading title on Dashboard")
         // Save title of first Reading on first page
@@ -70,7 +70,7 @@ describe('Dashboard Page', () => {
         // Go to next page
         dashboard.createdListNextPage.click();
         // Wait for second page load
-        browser.wait(EC.visibilityOf(dashboard.secondPageFirstReadingTitle), 3000, "did not load next page of Created Readings");
+        browser.wait(EC.visibilityOf(dashboard.secondPageFirstReadingTitle), 8000, "did not load next page of Created Readings");
         // Verify First Reading Title has changed
         expect(dashboard.secondPageFirstReadingTitle.getText().then((text) => {console.log(text, firstReadingTitleStr); return text == firstReadingTitleStr})).toBeFalsy();
         // Scroll back to pagination
@@ -92,35 +92,11 @@ describe('Dashboard Page', () => {
         expect(dashboard.projectCards.count()).toBeGreaterThan(0);
     });
 
-    // describe("Navigation from project dashboard", () => {
-        it("should get to a project by clicking a card", () => {
-            // Switch to the created readings tab on mobile (will simply skip if on desktop)
-            dashboard.goToCreatedTab()
-            
-            browser.wait(EC.presenceOf(dashboard.firstProject), 8000, "never saw a project");
-            dashboard.firstProject.click();
-            browser.wait(EC.urlContains("project"), 5000, "clicking on project card did not bring me to a project");
+    /* ---- Dashboard Tests ------------------------ */
 
-            sidebar.backToDash();
-        });
-
-        it("should get to a project by entering a code", () => {
-            // Use the function to check this as it can handle multiple display types (mobile/desktop/etc)
-            dashboard.enterProjectCodeFromNav(login.validProjectCode);
-
-            // verification
-            browser.wait(EC.urlContains("project"), 5000, "entering a project code did not bring me to a project");
-
-            // Return to dashboard
-            sidebar.backToDash();
-        });
-    // });
-
-    // /* ---- Dashboard Tests ------------------------ */
-
-    // /* Test: Can delete a project
-    // 6.1.17
-    // */
+    /* Test: Can delete a project
+    6.1.17
+    */
     describe("Delete Readings & Projects", () => {
         it ("Delete a project off of a new reading.", () => {
             // Switch to the created readings tab on mobile (will simply skip if on desktop)
@@ -158,44 +134,33 @@ describe('Dashboard Page', () => {
         }); // it ("Delete a project off of a new reading.", () => {
 
         it("Make a new reading then delete it.", () => {
-
-            // Approach 2
+            // Create Unique title for New Reading (for referencing)
             let uniqueTitle: string = new Date().valueOf().toString();
-
             // Create a new reading to control it properly thru the process
             dashboard.openNewReading();
-
             // Enter sample Reading into form
             newReading.titleInput.sendKeys(uniqueTitle);
-            // Select Grade Range
-            newReading.gradeTileK.click();
-            newReading.gradeTileU.click();
-            // Select Subject
-            newReading.subjectDropdown.click();
-            newReading.subjectFirstOption.click();
+            // Make private to avoid needing grade levels and subjects
+            newReading.privateButton.click()
             newReading.contentInput.sendKeys(newReading.contentShortString);
-            newReading.sourceInput.sendKeys(newReading.sourceString);
-
             // Submit New Reading
             newReading.addNewReading()
             browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
             newReading.finalizeButton.click();
-
             // Should redirect to Project page for new reading
             browser.wait(EC.urlContains("project"), 7500, "never arrived at the reading page after published");
-
             // Go to the dashboard
             sidebar.backToDash();
-
             // Switch to the created readings tab on mobile (will simply skip if on desktop)
             dashboard.goToCreatedTab()
-
+            // Check for the "options" on newly created reading on Dashboard
             browser.wait(EC.elementToBeClickable(element(by.css('button[testFindOptions="' + uniqueTitle + '"]'))), 8000, "reading card options button never became clickable after load");
+            // Open Reading options
             element(by.css('button[testFindOptions="' + uniqueTitle + '"]')).click();
-
+            // Select "Delete Reading"
             browser.wait(EC.elementToBeClickable(element(by.css('button[testDelete="' + uniqueTitle + '"]'))), 5000, "copy and edit button never became clicakble after options dropdown click");
             element(by.css('button[testDelete="' + uniqueTitle + '"]')).click();
-
+            // Find delete Reading confirmation modal
             let deleteModal = element(by.id('deleteReadingModal'));
             browser.wait(EC.presenceOf(deleteModal), 5000, "never saw a deleteModal");
             browser.wait(EC.presenceOf(dashboard.deleteConfirm), 5000, "never saw a deleteConfirm on the deleteModal");
@@ -205,5 +170,28 @@ describe('Dashboard Page', () => {
             // Unable to confirm title
             browser.wait(EC.invisibilityOf(element(by.cssContainingText('.reading-title-text', uniqueTitle))), 8000, "saw the unique readingTitle (END). We aren't supposed to.");
         }); // it ("Make a new reading then delete it")
+
+
+        it("should get to a project by entering a code", () => {
+            // Use the function to check this as it can handle multiple display types (mobile/desktop/etc)
+            dashboard.enterProjectCodeFromNav(login.validProjectCode);
+            // verification
+            browser.wait(EC.urlContains("project"), 5000, "entering a project code did not bring me to a project");
+            // Return to dashboard
+            sidebar.backToDash();
+        });
+        
+        /**
+         * Open project by clicking card
+         * - Requires step before to reload the dashboard
+         */
+        it("should get to a project by clicking a card", () => {
+            // Switch to the created readings tab on mobile (will simply skip if on desktop)
+            dashboard.goToCreatedTab()
+            browser.wait(EC.presenceOf(dashboard.firstProject), 8000, "never saw a project");
+            dashboard.projectCards.first().click();
+            browser.wait(EC.urlContains("project"), 5000, "clicking on project card did not bring me to a project");
+            sidebar.backToDash();
+        });
     });
 }); // describe 'Dashboard Page'
