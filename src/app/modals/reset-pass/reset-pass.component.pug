@@ -1,10 +1,10 @@
-#passwordModal.modal
+#passResetModal.modal
   .modal-dialog
     .modal-content
       form((ngSubmit)='onSubmit(passwordForm.value)', [formGroup]='passwordForm')
         .modal-header
           h4.modal-title Password Reset
-          button.close.btn-icon--round((click)='closeModal.emit()', type='button', data-dismiss='modal', aria-label='Close')
+          button.close.btn-icon--round((click)='close()', type='button', data-dismiss='modal', aria-label='Close')
             span(aria-hidden='true') &times;
         .modal-body
           .form-group([ngClass]="{ 'has-success': submissionSuccess }")
@@ -17,5 +17,5 @@
               i {{sentName}}
             .alert.alert-danger(*ngIf='errorObject.unsuccessful', [innerHtml]='errorObject.unsuccessful')
         .modal-footer
-          button.btn.btn-primary(*ngIf='!submissionSuccess', type='submit', [disabled]='!passwordForm.valid', [class.loading]='loading') Reset Password
-          button.btn.btn-secondary(*ngIf='submissionSuccess', (click)='closeModal.emit()') Close
+          button#btnPassResetSubmit.btn.btn-primary(*ngIf='!submissionSuccess', type='submit', [disabled]='!passwordForm.valid', [class.loading]='loading') Reset Password
+          button#btnPassResetClose.btn.btn-secondary(*ngIf='submissionSuccess', (click)='close()') Close

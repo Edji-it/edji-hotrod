@@ -71,7 +71,6 @@ export class ResetPassComponent {
           // Generic server error
           this.errorObject.unsuccessful = "<b>Server Error</b> We were unable to send the reset email"
         }
-        
       })
   }
 
@@ -84,5 +83,18 @@ export class ResetPassComponent {
         this.errorObject[property] = ""
       }
     }
+  }
+
+  /**
+   * Close modal
+   * - Clears form for use when reopened
+   */
+  public close(): void {
+    // Clear form
+    this.clearErrors()
+    this.passwordForm.reset()
+    this.submissionSuccess = false
+    // Trigger close
+    this.closeModal.emit()
   }
 }
