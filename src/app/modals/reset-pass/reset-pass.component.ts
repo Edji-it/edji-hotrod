@@ -9,7 +9,7 @@ import { ALLSPARK } from '../../app.constants';
 
 @Component({
   selector: 'edji-reset-pass',
-  templateUrl: 'reset-pass.component.html'
+  templateUrl: 'reset-pass.component.pug'
 })
 export class ResetPassComponent {
 
@@ -20,7 +20,6 @@ export class ResetPassComponent {
   public responseSuccess: boolean
   public submissionSuccess: boolean = false
   public errorObject: any = { }
-  public submitted: boolean = false
   public loading: boolean = false
   public sentName: string = ""
 
@@ -49,25 +48,28 @@ export class ResetPassComponent {
       .subscribe((success) => {
         this.sentName = enteredValue
         this.loading = false
-        this.submitted = true
         this.angulartics.eventTrack.next({ action: 'requestPasswordEmail', properties: { category: 'accountManagement', label: 'success' }})
         this.submissionSuccess = true
       }, (err) => {
-        let errorBody = err.json()
         this.loading = false
-        console.error(err)
+        this.submissionSuccess = false
         this.angulartics.eventTrack.next({ action: 'requestPasswordEmail', properties: { category: 'accountManagement', label: 'failure' }})
         if (err.status == 400) {
+          let errorBody = err.json()
           // User's password can't reset because it's an OAuth account
           if (errorBody.oauth_types && errorBody.oauth_types[0] == 'google') {
-            this.errorObject.unsuccessful = "This is a Google account, please try signing in with Google."
+            // Google
+            this.errorObject.unsuccessful = "<b>Google Account</b> Unable to reset password, please try signing in with Google."
           } else {
-            this.errorObject.unsuccessful = "We were unable to reset your account, please <a class='link' href='mailto:support@edji.it'>contact support</a>"
+            // Other 400 account error
+            this.errorObject.unsuccessful = "<b>Account Error</b> We were unable to reset your account, please <a class='link' href='mailto:support@edji.it'>contact support</a>"
           }
-        } else if(err.status == 404) {
-          this.errorObject.unsuccessful = "We were unable to find that account"
+        } else if (err.status == 404) {
+          // Account not found
+          this.errorObject.unsuccessful = "<b>Account Not Found</b> We were unable to find that account"
         } else {
-          this.errorObject.unsuccessful = "We were unable to send the email"
+          // Generic server error
+          this.errorObject.unsuccessful = "<b>Server Error</b> We were unable to send the reset email"
         }
         
       })

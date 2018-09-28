@@ -1,0 +1,21 @@
+#passwordModal.modal
+  .modal-dialog
+    .modal-content
+      form((ngSubmit)='onSubmit(passwordForm.value)', [formGroup]='passwordForm')
+        .modal-header
+          h4.modal-title Password Reset
+          button.close.btn-icon--round((click)='closeModal.emit()', type='button', data-dismiss='modal', aria-label='Close')
+            span(aria-hidden='true') &times;
+        .modal-body
+          .form-group([ngClass]="{ 'has-success': submissionSuccess }")
+            label(for='inputPassResetUsername') Username or Email
+            input#inputPassResetUsername.form-control(type='text', [formControl]="passwordForm.controls['username']")
+            .alert.alert-info(*ngIf="passwordForm.controls['username'].hasError('required') && passwordForm.controls['username'].dirty") You must enter a username
+            .alert.alert-success(*ngIf='submissionSuccess')
+              b Email Sent
+              | We have sent a password reset link to 
+              i {{sentName}}
+            .alert.alert-danger(*ngIf='errorObject.unsuccessful', [innerHtml]='errorObject.unsuccessful')
+        .modal-footer
+          button.btn.btn-primary(*ngIf='!submissionSuccess', type='submit', [disabled]='!passwordForm.valid', [class.loading]='loading') Reset Password
+          button.btn.btn-secondary(*ngIf='submissionSuccess', (click)='closeModal.emit()') Close
