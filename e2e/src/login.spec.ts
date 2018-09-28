@@ -29,11 +29,12 @@ describe('Login Page', () => {
 
 /* ---- Generic Login Tests ---------------------------- */
 
-    // test all the errors
+    // Test all login errors
     describe("Login errors", () => {
         loginForm.testLoginErrors();
     });
 
+    // Test successful login flow
     describe("Successful login", () => {
         afterEach(() => {
             sidebar.logout();
@@ -47,5 +48,50 @@ describe('Login Page', () => {
             browser.wait(EC.urlContains("dashboard"), 5000, "never reached the dashboard after loggin in");
         });
     });
+
+    // Test Reset password form
+    describe("Reset password modal should handle multiple account cases", () => {
+        beforeEach(() => {
+            // Open reset modal
+            login.resetPasswordOpen.click()
+        })
+
+        afterEach(() => {
+            // Close reset modal to clear it
+            login.resetPassModalClose.click()
+        })
+
+        it("should show an error for a nonexistent account", () => {
+            browser.wait(EC.elementToBeClickable(login.resetAccountField), 3000, "did not see field to enter username/email")
+            login.resetAccountField.sendKeys("Nonexistent!")
+            login.resetPassSubmit.click()
+            browser.wait(EC.visibilityOf(login.resetPassError), 3000, "did not show error for nonexistent account")
+            browser.wait(EC.invisibilityOf(login.resetPassSuccess), 3000, "saw success message for nonexistent account")
+        })
+
+        it("should show an error for a Google account", () => {
+            browser.wait(EC.elementToBeClickable(login.resetAccountField), 3000, "did not see field to enter username/email")
+            login.resetAccountField.sendKeys("cody@edji.it")
+            login.resetPassSubmit.click()
+            browser.wait(EC.visibilityOf(login.resetPassError), 3000, "did not show error for Google account")
+            browser.wait(EC.invisibilityOf(login.resetPassSuccess), 3000, "saw success message for Google account")
+        })
+
+        it("should show a success message for an existing account username", () => {
+            browser.wait(EC.elementToBeClickable(login.resetAccountField), 3000, "did not see field to enter username/email")
+            login.resetAccountField.sendKeys(login.teacherUser)
+            login.resetPassSubmit.click()
+            browser.wait(EC.visibilityOf(login.resetPassSuccess), 3000, "did not show success message for existing account username")
+            browser.wait(EC.invisibilityOf(login.resetPassError), 3000, "saw error message for existing account username")
+        })
+        
+        it("should show a success message for an existing account email", () => {
+            browser.wait(EC.elementToBeClickable(login.resetAccountField), 3000, "did not see field to enter username/email")
+            login.resetAccountField.sendKeys(login.teacherUserEmail)
+            login.resetPassSubmit.click()
+            browser.wait(EC.visibilityOf(login.resetPassSuccess), 3000, "did not show success message for existing account email")
+            browser.wait(EC.invisibilityOf(login.resetPassError), 3000, "saw error message for existing account email")
+        })
+    })
 
 }); // describe Login Page

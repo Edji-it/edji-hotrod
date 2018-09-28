@@ -22,22 +22,33 @@ export class Login implements PageObjectInterface
     public msgBadName       = element(by.id("msgBadName"));
     public guestNameInput   = element(by.id("guestNameInput"));
     public guestLoginButton = element(by.id("guestLoginButton"));
+    
+    // Reset password elements
+    public resetPasswordOpen = element(by.id("linkForgotPassword"))
+    public resetAccountField = element(by.id("inputPassResetUsername"))
+    public resetPassSubmit = element(by.id("btnPassResetSubmit"))
+    public resetPassModalClose = element(by.css("#passResetModal .close"))
+    public resetPassFormClose = element(by.id("btnPassResetClose"))
+    public resetPassSuccess = element(by.css("#passResetModal .alert-success"))
+    public resetPassError = element(by.css("#passResetModal .alert-danger"))
 
-    public studentUser      = 'student';
-    public studentPassword  = 'student';
-    public teacherUser      = 'testsidekick';
-    public teacherPassword  = 'testsidekick16';
-    public heroUser         = 'testhero';
-    public heroPassword     = 'testhero16';
-    public adminUser         = 'testadmin';
-    public adminPassword     = 'testadmin16';
-    public botUser          = 'testbot';
-    public botPassword      = 'testbot';
-    public referUser        = 'testrefer';
-    public referPassword    = 'testrefer2000';
-    public invalidEntry     = 'HitlerHatesEDJI_666_420';
-    public validProjectCode = 'test';
-    public testGuestName    = "Queen Elizabeth II";
+    // Account Credentials
+    public studentUser      = 'student'
+    public studentPassword  = 'student'
+    public teacherUser      = 'testsidekick'
+    public teacherUserEmail = 'sidekick@edji.it'
+    public teacherPassword  = 'testsidekick16'
+    public heroUser         = 'testhero'
+    public heroPassword     = 'testhero16'
+    public adminUser         = 'testadmin'
+    public adminPassword     = 'testadmin16'
+    public botUser          = 'testbot'
+    public botPassword      = 'testbot'
+    public referUser        = 'testrefer'
+    public referPassword    = 'testrefer2000'
+    public invalidEntry     = 'HitlerHatesEDJI_666_420'
+    public validProjectCode = 'test'
+    public testGuestName    = "Queen Elizabeth II"
 
     // get the login page
     getPage() : void 
