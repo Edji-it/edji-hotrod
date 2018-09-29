@@ -79,7 +79,7 @@ describe('Login Page', () => {
 
         it("should show a success message for an existing account username", () => {
             browser.wait(EC.elementToBeClickable(login.resetAccountField), 3000, "did not see field to enter username/email")
-            login.resetAccountField.sendKeys(login.teacherUser)
+            login.resetAccountField.sendKeys(login.apiUser)
             login.resetPassSubmit.click()
             browser.wait(EC.visibilityOf(login.resetPassSuccess), 3000, "did not show success message for existing account username")
             browser.wait(EC.invisibilityOf(login.resetPassError), 3000, "saw error message for existing account username")
@@ -87,7 +87,7 @@ describe('Login Page', () => {
         
         it("should show a success message for an existing account email", () => {
             browser.wait(EC.elementToBeClickable(login.resetAccountField), 3000, "did not see field to enter username/email")
-            login.resetAccountField.sendKeys(login.teacherUserEmail)
+            login.resetAccountField.sendKeys(login.apiUserEmail)
             login.resetPassSubmit.click()
             browser.wait(EC.visibilityOf(login.resetPassSuccess), 3000, "did not show success message for existing account email")
             browser.wait(EC.invisibilityOf(login.resetPassError), 3000, "saw error message for existing account email")
