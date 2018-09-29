@@ -40,12 +40,15 @@ export class CommentStats {
 
     this.teacherId = project && project.teacher_id ? project.teacher_id : ''
 
+    console.log(project)
+
     // loop through student ids and add them to the array
     //  we have to do this because some students won't make a comment, so this is their only data on the project
     //  looping through addCommentToStats will later increment the count
     let len = project.students_ids.length
     for(let i = 0; i < len; i++) {
         let student = project.students_ids[i]
+        console.log('student', student.fullname)
 
         commentStats.userStats.push({
             _id: student._id,
@@ -63,6 +66,7 @@ export class CommentStats {
     len = project.temp_ids.length
     for(let i = 0; i < len; i++) {
         let student = project.temp_ids[i]
+        console.log('temp', student.fullname)
 
         commentStats.userStats.push({
             _id: student._id,
@@ -75,6 +79,8 @@ export class CommentStats {
             comments: []
         })
     }
+
+    console.log(commentStats)
 
     return commentStats
   }

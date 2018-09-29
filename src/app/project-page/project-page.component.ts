@@ -72,6 +72,7 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
                 // Join socket + start reading timer
                 if (this.user._id && this.project._id && !this.joinedRoom) {
                     this.joinRoom(this.user, this.project)
+                    console.log(' joined socket ')
                 }
             })
         )

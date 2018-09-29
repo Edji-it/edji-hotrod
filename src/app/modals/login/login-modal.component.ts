@@ -35,6 +35,7 @@ export class LoginModal implements OnInit {
       .pipe(take(1))
       .subscribe(() => {
         this.closeModal.emit()
+        console.log(' added user to project ')
       }, (err) => {
         console.error(err)
         this.closeModal.emit()

@@ -36,6 +36,7 @@ export class OwnerToolsComponent implements OnInit {
     private _readings: ReadingService
   ) {
     this.commentStats = this._projects.commentStats
+    console.log('owner tools:', this.commentStats)
   }
 
   ngOnInit() {
