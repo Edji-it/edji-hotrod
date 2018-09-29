@@ -73,7 +73,7 @@ export class EdjiDatePipe implements PipeTransform {
                 break
             case "mediumDate":
                 // Converts the date to the following format: Fri Apr 21, 2017
-								newTime = shortDays[time.getDay()] + ' ' + shortMonths[time.getMonth()] + ' ' + time.getDate() + ', ' + time.getFullYear()
+								newTime = shortMonths[time.getMonth()] + ' ' + time.getDate() + ', ' + time.getFullYear()
                 break
             case "shortDate":
                 // Converts the date to the following format: m/d/yyyy
