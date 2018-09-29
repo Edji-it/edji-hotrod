@@ -4,6 +4,7 @@ import { PageObjectInterface } from './PageObjectInterface';
 export class Hero implements PageObjectInterface
 {
     // Public Instance Variables
+    public topCTAbutton = element(by.id("topHeroCTA"))
     public CTAbutton = element(by.id("heroCTA"))
     public subscribeButton = element(by.id("subHero"))
     public subscribeModal = element(by.id("upgradeHeroModal"))
