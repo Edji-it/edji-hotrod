@@ -36,8 +36,8 @@ describe('Hero Subscription Management', () => {
         });
 
         it("should open the Hero subscription modal", () => {
-            browser.wait(EC.elementToBeClickable(hero.CTAbutton), 3000, "never saw Hero call to action button");
-            hero.CTAbutton.click();
+            browser.wait(EC.elementToBeClickable(hero.topCTAbutton), 3000, "never saw Hero call to action button");
+            hero.topCTAbutton.click();
             // Verify modal popped up
             browser.wait(EC.elementToBeClickable(hero.subscribeModalHeader), 3000, "never saw Hero subscription modal");
         });
