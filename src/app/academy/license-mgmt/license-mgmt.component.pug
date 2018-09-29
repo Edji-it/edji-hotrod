@@ -32,11 +32,11 @@ nav-bar([showDashboardOptions]="true")
                 td
                 td.educator-pending--name {{ licenseUser.educator }}
                 td {{ licenseUser.role }}
-                td(*ngIf="licenseUser.type=='active'") {{ licenseUser.joined | edjidate:'timeStamp':'shortDate' }}
+                td(*ngIf="licenseUser.type=='active'") {{ licenseUser.joined | edjidate:'timeStamp':'mediumDate' }}
                 td.educator-pending.expires(*ngIf="licenseUser.type=='pending'") 
-                  i Pending - Expires {{ licenseUser.joined | edjidate:'timeStamp':'shortDate' }}
+                  i Pending - Expires {{ licenseUser.joined | edjidate:'timeStamp':'mediumDate' }}
                 td.educator-pending.expires(*ngIf="licenseUser.type=='expired'") 
-                  | Expired {{ licenseUser.joined | edjidate:'timeStamp':'shortDate' }}
+                  | Expired {{ licenseUser.joined | edjidate:'timeStamp':'mediumDate' }}
                   .btn.btn-secondary.btn-sm.ml-3((click)="resendInvite(licenseUser)") Resend
       .row
         .container
