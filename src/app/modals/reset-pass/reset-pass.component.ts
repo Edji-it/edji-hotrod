@@ -5,10 +5,11 @@ import { take } from 'rxjs/operators'
 
 // Project Dependencies
 import { AuthService } from './../../_services'
+import { ALLSPARK } from '../../app.constants';
 
 @Component({
   selector: 'edji-reset-pass',
-  templateUrl: 'reset-pass.component.html'
+  templateUrl: 'reset-pass.component.pug'
 })
 export class ResetPassComponent {
 
@@ -19,8 +20,8 @@ export class ResetPassComponent {
   public responseSuccess: boolean
   public submissionSuccess: boolean = false
   public errorObject: any = { }
-  public submitted: boolean = false
   public loading: boolean = false
+  public sentName: string = ""
 
   constructor(private _auth: AuthService, private angulartics: Angulartics2, fb: FormBuilder) {
     this.passwordForm = fb.group({
@@ -29,23 +30,47 @@ export class ResetPassComponent {
   }
 
   public onSubmit(formValue: any): void {
+    let enteredValue: string = formValue.username
+    let resetUser = {}
     this.loading = true
     this.clearErrors()
 
     this.angulartics.eventTrack.next({ action: 'requestPasswordEmail', properties: { category: 'accountManagement', label: 'attempt' }})
+    // Username or Email?
+    if (ALLSPARK.EMAILREGEX.test(enteredValue)) {
+      resetUser["email"] = enteredValue
+    } else {
+      resetUser["username"] = enteredValue
+    }
 
-    this._auth.recoverPassword( formValue.username )
+    this._auth.recoverPassword( resetUser )
       .pipe(take(1))
       .subscribe((success) => {
+        this.sentName = enteredValue
         this.loading = false
-        this.submitted = true
         this.angulartics.eventTrack.next({ action: 'requestPasswordEmail', properties: { category: 'accountManagement', label: 'success' }})
         this.submissionSuccess = true
       }, (err) => {
         this.loading = false
-        console.error(err)
+        this.submissionSuccess = false
         this.angulartics.eventTrack.next({ action: 'requestPasswordEmail', properties: { category: 'accountManagement', label: 'failure' }})
-        this.errorObject.unsuccessful = "We were unable to send the email"
+        if (err.status == 400) {
+          let errorBody = err.json()
+          // User's password can't reset because it's an OAuth account
+          if (errorBody.oauth_types && errorBody.oauth_types[0] == 'google') {
+            // Google
+            this.errorObject.unsuccessful = "<b>Google Account</b> Unable to reset password, please try signing in with Google."
+          } else {
+            // Other 400 account error
+            this.errorObject.unsuccessful = "<b>Account Error</b> We were unable to reset your account, please <a class='link' href='mailto:support@edji.it'>contact support</a>"
+          }
+        } else if (err.status == 404) {
+          // Account not found
+          this.errorObject.unsuccessful = "<b>Account Not Found</b> We were unable to find that account"
+        } else {
+          // Generic server error
+          this.errorObject.unsuccessful = "<b>Server Error</b> We were unable to send the reset email"
+        }
       })
   }
 
@@ -58,5 +83,18 @@ export class ResetPassComponent {
         this.errorObject[property] = ""
       }
     }
+  }
+
+  /**
+   * Close modal
+   * - Clears form for use when reopened
+   */
+  public close(): void {
+    // Clear form
+    this.clearErrors()
+    this.passwordForm.reset()
+    this.submissionSuccess = false
+    // Trigger close
+    this.closeModal.emit()
   }
 }

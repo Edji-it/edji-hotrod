@@ -113,7 +113,7 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
     for (var i=0; i<activeLicenseLength; i++) {
       let licenseUser = this.license.users[i]
       let licenseRoles = this.license.roles
-      let licenseUserLicenseIds = this.license.users[i].license_ids
+      let userLicenseIds = licenseUser.license_ids
       // Set the default role of the educator to be 'teacher'
       let educatorRole = 'Teacher'
       for (var j=0; j<licenseRoles.length; j++) {
@@ -122,11 +122,11 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
           educatorRole = this.capitalizeFirstLetter(licenseRoles[j].role)
         }
       }
-      let educatorJoined = new Date()
-      for (var k=0; k<licenseUserLicenseIds.length; k++) {
+      let educatorJoined: Date
+      for (var k=0; k<userLicenseIds.length; k++) {
         // Set the joined date of the educator for this license
-        if (licenseUserLicenseIds.license_id===this.license._id) {
-          educatorJoined = licenseUserLicenseIds.joined // | edjidate:'timeStamp':'shortDate'
+        if (userLicenseIds[k].license_id === this.license._id) {
+          educatorJoined = userLicenseIds[k].joined
         }
       }
       // Push the object properties to the license

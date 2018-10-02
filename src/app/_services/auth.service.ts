@@ -591,12 +591,10 @@ export class AuthService implements CanActivate {
             })
     }
 
-    public recoverPassword(username: string): Observable<boolean> {
+    public recoverPassword(resetUser: { username?:string, email?:string }): Observable<boolean> {
         return this.legacyHttp
             .post(
-                [this.baseUrl, 'users', 'recover_password'].join('/'), {
-                    username: username
-                },
+                [this.baseUrl, 'users', 'recover_password'].join('/'), resetUser,
                 this.getOptions()
             )
             .pipe(map((data) => {
