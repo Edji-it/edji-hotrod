@@ -19,6 +19,7 @@ export class ProjectService {
 
     // For verifying comment ownership on heat vision
     private user: any
+    private userInfo: any
 
     /** project will be given out as observable */
     private project: any = { title: "initial value" }
@@ -196,7 +197,8 @@ export class ProjectService {
      * @returns observable with project data
      */
     public setCurrentProject(projectCode: string): Observable<any> {
-        return this.http.get(this._auth.getUrl() + '/projects/' + encodeURIComponent(projectCode) + '?pop=reading_id', this._auth.getOptions())
+        // return this.http.get(this._auth.getUrl() + '/projects/' + encodeURIComponent(projectCode) + '?pop=reading_id', this._auth.getOptions())
+        return this.http.get(this._auth.getUrl() + '/api/v1/projects/' + encodeURIComponent(projectCode) + '?pop=reading_id', this._auth.getOptions())
             .pipe(
                 map(
                 (data) => {
@@ -216,10 +218,23 @@ export class ProjectService {
                     // Now that our project comments are ready, set it to the shared source!
                     this.project = project
                     this.currentProjectSource.next(this.project);
+                    this.getUserInfoFromProject(project._id)
                     // Return the project along the current Observable
                     return this.project;
                 })
             );
+    }
+
+    public getUserInfoFromProject(projectId: string) {
+        this._auth.getUserInfoByProject(projectId)
+        .subscribe(
+            (userInfo) => {
+                console.log(userInfo)
+                // this.userInfo = 
+            },
+            (error) => {
+                console.error(error)
+            })
     }
 
     /** 
@@ -244,7 +259,9 @@ export class ProjectService {
         let commentsByIndex: EdjiComment[][] = []
         let alwaysHighlightArray: number[] = []
         let highlightArray: number[] = []
+        console.log('set project comments', project._id, project)
         this._commentStats.initStats(project)
+        console.log('set project comments - stats', this._commentStats._stats)
         let user = this._auth.getUser()
 
         // using a cached-length for loop for speediness

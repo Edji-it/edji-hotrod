@@ -2,7 +2,7 @@ import { EdjiComment, iCommentStats, Project } from './'
 import { UserCommentStats } from './comment';
 
 export class CommentStats {
-  private _stats: iCommentStats = {
+  public _stats: iCommentStats = {
     reply_count: 0,
     comment_count: 0,
     comment_max: 0,
@@ -10,7 +10,7 @@ export class CommentStats {
     comment_avg: 0,
     userStats: []
   }
-  private teacherId: string
+  public teacherId: string
 
   constructor(project?: Project) {
     this._stats = this.initStats(project)
@@ -40,7 +40,9 @@ export class CommentStats {
 
     this.teacherId = project && project.teacher_id ? project.teacher_id : ''
 
-    console.log(project)
+    console.log('initStats project', project._id, project)
+    console.log('student ids', project.students_ids)
+    console.log('temp ids', project.temp_ids)
 
     // loop through student ids and add them to the array
     //  we have to do this because some students won't make a comment, so this is their only data on the project
@@ -48,7 +50,8 @@ export class CommentStats {
     let len = project.students_ids.length
     for(let i = 0; i < len; i++) {
         let student = project.students_ids[i]
-        console.log('student', student.fullname)
+        console.log('student id', student)
+        console.log('student name', student.fullname)
 
         commentStats.userStats.push({
             _id: student._id,
@@ -60,13 +63,15 @@ export class CommentStats {
             fullname: student.fullname,
             comments: []
         })
+        console.log('student stats populate', commentStats.userStats.length)
     }
 
     // do the same for temp student ids
     len = project.temp_ids.length
     for(let i = 0; i < len; i++) {
         let student = project.temp_ids[i]
-        console.log('temp', student.fullname)
+        console.log('temp id', student)
+        console.log('temp name', student.fullname)
 
         commentStats.userStats.push({
             _id: student._id,
@@ -78,6 +83,7 @@ export class CommentStats {
             fullname: student.fullname,
             comments: []
         })
+        console.log('temp stats populate', commentStats.userStats.length)
     }
 
     console.log(commentStats)
@@ -89,6 +95,7 @@ export class CommentStats {
    * Sets the stats back to a blank object
    */
   public resetStats(): void {
+    console.log('reset the stats')
     this._stats = { 
       comment_count: 0, 
       comment_max: 0,
