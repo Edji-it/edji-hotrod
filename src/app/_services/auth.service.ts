@@ -877,9 +877,9 @@ export class AuthService implements CanActivate {
      * Returns user information for student_ids and temp_ids on the project
      * @param projectId is the id for the project
      */
-    public getUserInfoByProject(projectId: string): Observable<any> {
+    public getUserInfoByProject(students_ids?: any, temp_ids?: any): Observable<any> {
       return this._http.get(
-        this.getUrl() + '/api/v1/projects/' + projectId + '/user-details',
+        this.getUrl() + '/api/v1/users/public-details?students_ids=' + students_ids + '&temp_ids=' + temp_ids,
         {
           headers: new HttpHeaders({
             'Content-Type': 'application/json',

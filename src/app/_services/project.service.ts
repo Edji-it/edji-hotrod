@@ -197,7 +197,6 @@ export class ProjectService {
      * @returns observable with project data
      */
     public setCurrentProject(projectCode: string): Observable<any> {
-        // return this.http.get(this._auth.getUrl() + '/projects/' + encodeURIComponent(projectCode) + '?pop=reading_id', this._auth.getOptions())
         return this.http.get(this._auth.getUrl() + '/api/v1/projects/' + encodeURIComponent(projectCode) + '?pop=reading_id', this._auth.getOptions())
             .pipe(
                 map(
@@ -217,20 +216,39 @@ export class ProjectService {
                     project.comments.reverse()
                     // Now that our project comments are ready, set it to the shared source!
                     this.project = project
-                    this.currentProjectSource.next(this.project);
-                    this.getUserInfoFromProject(project._id)
+                    this.currentProjectSource.next(this.project)
+                    // Get and attach user information to the students_ids and temp_ids
+                    this.getUserInfoFromProject(project)
                     // Return the project along the current Observable
                     return this.project;
                 })
             );
     }
 
-    public getUserInfoFromProject(projectId: string) {
-        this._auth.getUserInfoByProject(projectId)
+    /**
+     * Pulls in fullname and username for students and temp users for leaderboard and 
+     * @param project current project the user is on
+     */
+    public getUserInfoFromProject(project: Project) {
+        this._auth.getUserInfoByProject(project.students_ids, project.temp_ids)
         .subscribe(
             (userInfo) => {
-                console.log(userInfo)
-                // this.userInfo = 
+                userInfo = userInfo.users
+                // attach the basic user information to each students_id
+                this.project.students_ids = this.project.students_ids.map((obj) => {
+                    return userInfo.find((el) => {
+                        return el._id===obj
+                    })
+                })
+                // attach the basic user information to each temp_id
+                this.project.temp_ids = this.project.temp_ids.map((obj) => {
+                    return userInfo.find((el) => {
+                        return el._id===obj
+                    })
+                })
+                this.currentProjectSource.next(this.project)
+                this._commentStats.initStats(this.project)
+                console.log(this.project)
             },
             (error) => {
                 console.error(error)
