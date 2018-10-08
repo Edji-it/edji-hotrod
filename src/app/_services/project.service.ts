@@ -247,8 +247,7 @@ export class ProjectService {
                     })
                 })
                 this.currentProjectSource.next(this.project)
-                this._commentStats.initStats(this.project)
-                console.log(this.project)
+                this._commentStats.addUsersToStats(this.commentStats._stats, this.project)
             },
             (error) => {
                 console.error(error)
@@ -277,9 +276,7 @@ export class ProjectService {
         let commentsByIndex: EdjiComment[][] = []
         let alwaysHighlightArray: number[] = []
         let highlightArray: number[] = []
-        console.log('set project comments', project._id, project)
         this._commentStats.initStats(project)
-        console.log('set project comments - stats', this._commentStats._stats)
         let user = this._auth.getUser()
 
         // using a cached-length for loop for speediness

@@ -40,18 +40,12 @@ export class CommentStats {
 
     this.teacherId = project && project.teacher_id ? project.teacher_id : ''
 
-    console.log('initStats project', project._id, project)
-    console.log('student ids', project.students_ids)
-    console.log('temp ids', project.temp_ids)
-
     // loop through student ids and add them to the array
     //  we have to do this because some students won't make a comment, so this is their only data on the project
     //  looping through addCommentToStats will later increment the count
     let len = project.students_ids.length
     for(let i = 0; i < len; i++) {
         let student = project.students_ids[i]
-        console.log('student id', student)
-        console.log('student name', student.fullname)
 
         commentStats.userStats.push({
             _id: student._id,
@@ -63,15 +57,12 @@ export class CommentStats {
             fullname: student.fullname,
             comments: []
         })
-        console.log('student stats populate', commentStats.userStats.length)
     }
 
     // do the same for temp student ids
     len = project.temp_ids.length
     for(let i = 0; i < len; i++) {
         let student = project.temp_ids[i]
-        console.log('temp id', student)
-        console.log('temp name', student.fullname)
 
         commentStats.userStats.push({
             _id: student._id,
@@ -83,11 +74,60 @@ export class CommentStats {
             fullname: student.fullname,
             comments: []
         })
-        console.log('temp stats populate', commentStats.userStats.length)
     }
+    return commentStats
+  }
 
-    console.log(commentStats)
-
+  /**
+   * This will go back and add the missing user information to the commentStats object so the leaderboard is fully updated
+   * @param commentStats existing comment stats object that we're going to modify
+   * @param project the current project the user is on
+   */
+  public addUsersToStats(commentStats: iCommentStats, project: Project): iCommentStats {
+    // Run through the students_ids and add the user to the stats if they're not already in the list
+    let len = project.students_ids.length
+    for (let i=0; i<len; i++) {
+      let student = project.students_ids[i]
+      // see if there is a student in the stats list already
+      let studentFound = commentStats.userStats.find(el=>(
+        el._id===student._id
+      ))
+      // add the student if they are not already in the list
+      if (!studentFound) {
+        commentStats.userStats.push({
+          _id: student._id,
+          comment_count: 0,
+          reply_count: 0,
+          emoji_comment_count: 0,
+          text_comment_count:  0,
+          audio_comment_count: 0,
+          fullname: student.fullname,
+          comments: []
+        })
+      }
+    }
+    // Run through the temp_ids and add the user to the stats if they're not already in the list
+    len = project.temp_ids.length
+    for (let i=0; i<len; i++) {
+      let student = project.temp_ids[i]
+      // see if there is a student in the stats list already
+      let studentFound = commentStats.userStats.find(el=>(
+        el._id===student._id
+      ))
+      // add the student if they are not already in the list
+      if (!studentFound) {
+        commentStats.userStats.push({
+          _id: student._id,
+          comment_count: 0,
+          reply_count: 0,
+          emoji_comment_count: 0,
+          text_comment_count:  0,
+          audio_comment_count: 0,
+          fullname: student.fullname,
+          comments: []
+        })
+      }
+    }
     return commentStats
   }
 
@@ -95,7 +135,6 @@ export class CommentStats {
    * Sets the stats back to a blank object
    */
   public resetStats(): void {
-    console.log('reset the stats')
     this._stats = { 
       comment_count: 0, 
       comment_max: 0,
