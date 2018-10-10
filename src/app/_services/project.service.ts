@@ -217,8 +217,10 @@ export class ProjectService {
                     // Now that our project comments are ready, set it to the shared source!
                     this.project = project
                     this.currentProjectSource.next(this.project)
-                    // Get and attach user information to the students_ids and temp_ids
-                    this.getUserInfoFromProject(project)
+                    // Get and attach user information to the students_ids and temp_ids if we have at least 1 of either
+                    if (project.students_ids.length > 0 && project.temp_ids > 0) {
+                        this.getUserInfoFromProject(project)
+                    }
                     // Return the project along the current Observable
                     return this.project;
                 })
