@@ -878,8 +878,24 @@ export class AuthService implements CanActivate {
      * @param projectId is the id for the project
      */
     public getUserInfoByProject(students_ids?: any, temp_ids?: any): Observable<any> {
+      // set up the query params here:
+      // student ids setup
+      let len = students_ids.length
+      let students_ids_params
+      for (var i=1; i<len; i++) {
+        students_ids_params += '&students_ids[]=' + students_ids[i]
+      }
+      // temp ids setup
+      len = temp_ids.length
+      let temp_ids_params
+      for (var i=1; i<len; i++) {
+        temp_ids_params += '&temp_ids[]=' + temp_ids[i]
+      }
+      // combine in to the final params to search by
+      let search_params = '?students_ids[]=' + students_ids[0] + students_ids_params + '&temp_ids[]=' + temp_ids[0] + temp_ids_params
+
       return this._http.get(
-        this.getUrl() + '/api/v1/users/public-details?students_ids=' + students_ids + '&temp_ids=' + temp_ids,
+        this.getUrl() + '/api/v1/users/public-details' + search_params,
         {
           headers: new HttpHeaders({
             'Content-Type': 'application/json',
