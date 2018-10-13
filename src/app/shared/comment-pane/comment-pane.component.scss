@@ -38,6 +38,9 @@
   cursor: pointer;
 }
 
+.reply-row {
+  position: relative;
+}
 
 .replyHighlight-card {
   margin: 0;
@@ -112,7 +115,7 @@
 }
 
 .replyButtonGroup {
-  width: 100%;
+  width: auto;
   display: inline-block;
   margin-top: 5px;
   
@@ -153,9 +156,9 @@
 .replyInput {
   width: calc(90% - 116px);
   display: inline-block;
-  left: 34px;
-  position: absolute;
-  top: 12px;
-  text-align: right;
+  // left: 34px;
+  position: relative;
+  // top: 12px;
+  text-align: left;
   color: darken($gray, 10%);
 }

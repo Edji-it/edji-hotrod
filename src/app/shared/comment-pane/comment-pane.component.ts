@@ -18,7 +18,9 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
   public lineNum: number = 0
   public commentCount: number = 0
   public rowComments: EdjiComment[][] = []
+  // Reply variables
   public repliesById: any = {}
+  public replyCommentNew: EdjiComment
   // Is fully visible, focused, and editable
   public active = false
   public selected = false
