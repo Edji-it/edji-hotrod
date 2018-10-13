@@ -38,7 +38,7 @@ export class Login implements PageObjectInterface
     public teacherUser      = 'testsidekick'
     public teacherUserEmail = 'sidekick@edji.it'
     public teacherPassword  = 'testsidekick16'
-    public apiUser          = 'api_user_success'
+    public apiUser          = 'api_email_success'
     public apiUserEmail     = 'success@simulator.amazonses.com'
     public apiUserPassword  = 'tester'
     public heroUser         = 'testhero'
