@@ -94,18 +94,20 @@ describe('Academy user that has ability to manage licenses for their academy: ',
       browser.wait(EC.elementToBeClickable(element(by.id('licenseInviteNameInput'))), 5000, "never found license invite name input")
       // invite a teacher
         // Name
-        let uniqueName: string = 'fakeTeach-' + new Date().valueOf().toString() + '-license'
+        let dateString: string = new Date().valueOf().toString()
+        let uniqueName: string = 'fakeTeach-' + dateString + '-license'
         element(by.id("licenseInviteNameInput")).sendKeys(uniqueName)
         // Email
-        element(by.id("licenseInviteEmailInput")).sendKeys('fakeTeach@edji.it')
+        element(by.id("licenseInviteEmailInput")).sendKeys('success+' + dateString +'@simulator.amazonses.com')
         //submit
         browser.wait(EC.elementToBeClickable(element(by.id("licenseInviteSubmitBtn"))), 5000)
         element(by.id("licenseInviteSubmitBtn")).click()
 
       // verify the invite was sent
       let invites = element.all(by.css('.educator-pending--name'))
-      // when this next field goes blank, data was successfully sent to the server, then to bluestreak to send the email
+      // when this next field goes blank, data was successfully sent to the server
       browser.wait(EC.textToBePresentInElement(element(by.id("licenseInviteNameInput")), ''), 3000, "license invite never was sent to teacher")
+      // Verify new invite shows in table
       browser.wait(specificTextToBePresentInElement(invites.last(), uniqueName), 5000, "never saw the latest license invite get added")
     })
   }) //- End Academy Admin steps
