@@ -11,21 +11,48 @@
   )
     .row
       .col-12
-        div()
+        div(*ngFor="let comment of commentByPos[comment.lineY]; let i = index")
           edji-comment( 
-            *ngFor="let mobileComment of commentByPos[comment.lineY]; let i = index",
-            [class.hidden]="(!project.heat_vision && user._id !== project.teacher_id) && mobileComment.user_id !== user._id && mobileComment.user_id !== project.teacher_id",
-            [class.spec-owner]="mobileComment.user_id === project.teacher_id",
-            [readOnly]="mobileComment.user_id !== user._id",
-            [userPermission]="getCommentPermissions(mobileComment)",
+            [class.hidden]="(!project.heat_vision && user._id !== project.teacher_id) && comment.user_id !== user._id && comment.user_id !== project.teacher_id",
+            [class.spec-owner]="comment.user_id === project.teacher_id",
+            [readOnly]="comment.user_id !== user._id",
+            [userPermission]="getCommentPermissions(comment)",
             [commentPaneActive]="true",
-            [comment]="mobileComment", 
+            [comment]="comment", 
             [commentMobile]="true", 
             [commentMobileFirst]="i<1",
-            (commentActivation)="commentActivationEmitter($event, mobileComment)",
+            (commentActivation)="commentActivationEmitter($event, comment)",
             (commentUpdated)="commentUpdatedEmitter()",
             (commentReply)="commentReplyEmitter($event)",
             style="display: initial;"
           )
+          ng-container(*ngIf="repliesById[comment._id]")
+            label Replies
+            .replyOverflow([ngClass]="[ _comments.activeComment.active && _comments.activeComment.type=='emoji' ? '' : 'replyOverflow-normal' ]")
+              .comment-wrap-row(*ngFor="let replyComment of repliesById[comment._id]")
+                edji-comment.replyCommentBlock(
+                  *ngIf="comment.author", 
+                  [readOnly]="replyComment.user_id !== user._id",
+                  [comment]="replyComment",
+                  [commentContext]="'reply'",
+                  [isActive]="replyComment.active",
+                  [reply]="true",
+                  [userPermission]="getCommentPermissions(replyComment)"
+                )
+                .replyCommentAddSection
+            hr.replyHeaderRow
+            //--Reply input--
+            .comment__avatar.reply__avatar(*ngIf="comment.author", [class.show]="comment.showAvatar") {{comment.author.substr(0,2).toUpperCase()}}
+            .replyInput Reply:
+            //--Add reply buttons--
+            .replyButtonGroup
+              button#addEmojiReply.emoji(*ngIf="project.types.indexOf('emoji') > -1", (click)="addReplyOfType('emoji')")
+                i.icon.icon-emoji-comment
+              button#addTextReply.emoji(*ngIf="project.types.indexOf('text') > -1", (click)="addReplyOfType('text')")
+                i.icon.icon-text-comment
+              button#addAudioReply.emoji(*ngIf="project.types.indexOf('audio') > -1", (click)="addReplyOfType('audio')")
+                i.icon.icon-mic
+                span.beta-tag--icon(title="Beta Feature: May not work on all devices.")
+                  | B
 .exit-row(*ngIf="visible", (tap)="dismissCommentPane()")
 //- END .comment - mobile
