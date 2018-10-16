@@ -881,15 +881,23 @@ export class AuthService implements CanActivate {
       // set up the query params here:
       // student ids setup
       let len = students_ids.length
-      let students_ids_params
+      let students_ids_params=''
       for (var i=1; i<len; i++) {
-        students_ids_params += '&students_ids[]=' + students_ids[i]
+        if (students_ids_params.length>0) {
+          students_ids_params += '&students_ids[]=' + students_ids[i]
+        } else {
+          students_ids_params = '&students_ids[]=' + students_ids[i]
+        }
       }
       // temp ids setup
       len = temp_ids.length
-      let temp_ids_params
+      let temp_ids_params=''
       for (var i=1; i<len; i++) {
-        temp_ids_params += '&temp_ids[]=' + temp_ids[i]
+        if (temp_ids_params.length>0) {
+          temp_ids_params += '&temp_ids[]=' + temp_ids[i]
+        } else {
+          temp_ids_params = '&temp_ids[]=' + temp_ids[i]
+        }
       }
       // combine in to the final params to search by
       let search_params = '?students_ids[]=' + students_ids[0] + students_ids_params + '&temp_ids[]=' + temp_ids[0] + temp_ids_params
