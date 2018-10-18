@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router'
 import { take } from 'rxjs/operators'
 
 // Project Dependencies
-import { ProjectService } from './../../_services'
+import { ProjectService, SocketService } from './../../_services'
 
 @Component({
   selector: 'hot-login-modal',
@@ -24,7 +24,8 @@ export class LoginModal implements OnInit {
 
   constructor(
     private _project: ProjectService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private _socket: SocketService
   ) { }
 
   ngOnInit() {
@@ -36,6 +37,9 @@ export class LoginModal implements OnInit {
       .subscribe(() => {
         this.closeModal.emit()
         console.log(' added user to project ')
+        this._socket.groupUpdateEvent({
+          type: 'refreshLeaderboard'
+        })
       }, (err) => {
         console.error(err)
         this.closeModal.emit()

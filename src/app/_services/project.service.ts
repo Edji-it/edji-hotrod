@@ -136,6 +136,19 @@ export class ProjectService {
                 console.warn(error)
             })
         )
+
+        this.subscriptions.push(this._socket.groupUpdate.subscribe(
+            (groupUpdate) => {
+                console.log('called groupUpdate')
+                if (groupUpdate.type==='refreshLeaderboard') {
+                    console.log('actually refresh the leaderboard')
+                    // Get and attach user information to the students_ids and temp_ids if we have at least 1 of either
+                    if (this.project.students_ids.length > 0 || this.project.temp_ids.length > 0) {
+                        this.getUserInfoFromProject(this.project)
+                    }
+                }
+            }
+          ))
     } // constructor
     
     /**
@@ -197,7 +210,8 @@ export class ProjectService {
      * @returns observable with project data
      */
     public setCurrentProject(projectCode: string): Observable<any> {
-        return this.http.get(this._auth.getUrl() + '/api/v1/projects/' + encodeURIComponent(projectCode) + '?pop=reading_id', this._auth.getOptions())
+        // return this.http.get(this._auth.getUrl() + '/api/v1/projects/' + encodeURIComponent(projectCode) + '?pop=reading_id', this._auth.getOptions())
+        return this.http.get(this._auth.getUrl() + '/projects/' + encodeURIComponent(projectCode) + '?pop=reading_id', this._auth.getOptions())
             .pipe(
                 map(
                 (data) => {
@@ -218,7 +232,7 @@ export class ProjectService {
                     this.project = project
                     this.currentProjectSource.next(this.project)
                     // Get and attach user information to the students_ids and temp_ids if we have at least 1 of either
-                    if (project.students_ids.length > 0 || project.temp_ids > 0) {
+                    if (project.students_ids.length > 0 || project.temp_ids.length > 0) {
                         this.getUserInfoFromProject(project)
                     }
                     // Return the project along the current Observable

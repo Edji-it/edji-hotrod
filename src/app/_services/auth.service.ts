@@ -878,32 +878,47 @@ export class AuthService implements CanActivate {
      * @param projectId is the id for the project
      */
     public getUserInfoByProject(students_ids?: any, temp_ids?: any): Observable<any> {
+      // if the students_ids is already converted to the leaderboard-friendly format, strip it out and use _ids only
+      if (students_ids.length>0 && students_ids[0].hasOwnProperty("_id")) {
+        let length = students_ids.length
+        for (var i=0; i<length; i++) {
+          students_ids[i]=students_ids[i]._id
+        }
+      }
+      // if the students_ids is already converted to the leaderboard-friendly format, strip it out and use _ids only
+      if (temp_ids.length>0 && temp_ids[0].hasOwnProperty("_id")) {
+        let length = temp_ids.length
+        for (var i=0; i<length; i++) {
+          temp_ids[i]=temp_ids[i]._id
+        }
+      }
       // set up the query params here:
       // student ids setup
       let len = students_ids.length
       let students_ids_params=''
-      for (var i=1; i<len; i++) {
+      for (var i=0; i<len; i++) {
         if (students_ids_params.length>0) {
           students_ids_params += '&students_ids[]=' + students_ids[i]
         } else {
-          students_ids_params = '&students_ids[]=' + students_ids[i]
+          students_ids_params = 'students_ids[]=' + students_ids[i]
         }
       }
       // temp ids setup
       len = temp_ids.length
       let temp_ids_params=''
-      for (var i=1; i<len; i++) {
+      for (var i=0; i<len; i++) {
         if (temp_ids_params.length>0) {
           temp_ids_params += '&temp_ids[]=' + temp_ids[i]
         } else {
-          temp_ids_params = '&temp_ids[]=' + temp_ids[i]
+          temp_ids_params = 'temp_ids[]=' + temp_ids[i]
         }
       }
       // combine in to the final params to search by
-      let search_params = '?students_ids[]=' + students_ids[0] + students_ids_params + '&temp_ids[]=' + temp_ids[0] + temp_ids_params
+      let search_params = students_ids_params + temp_ids_params
+      let search_params_final = '?' + search_params
 
       return this._http.get(
-        this.getUrl() + '/api/v1/users/public-details' + search_params,
+        this.getUrl() + '/api/v1/users/public-details' + search_params_final,
         {
           headers: new HttpHeaders({
             'Content-Type': 'application/json',
