@@ -139,9 +139,8 @@ export class ProjectService {
 
         this.subscriptions.push(this._socket.groupUpdate.subscribe(
             (groupUpdate) => {
-                console.log('called groupUpdate')
                 if (groupUpdate.type==='refreshLeaderboard') {
-                    console.log('actually refresh the leaderboard')
+                    console.log(this.project)
                     // Get and attach user information to the students_ids and temp_ids if we have at least 1 of either
                     if (this.project.students_ids.length > 0 || this.project.temp_ids.length > 0) {
                         this.getUserInfoFromProject(this.project)
@@ -249,6 +248,7 @@ export class ProjectService {
         this._auth.getUserInfoByProject(project.students_ids, project.temp_ids)
         .subscribe(
             (userInfo) => {
+                console.log(userInfo)
                 userInfo = userInfo.users
                 // attach the basic user information to each students_id
                 this.project.students_ids = this.project.students_ids.map((obj) => {

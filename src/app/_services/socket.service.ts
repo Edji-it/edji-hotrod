@@ -32,8 +32,8 @@ export class SocketService {
         if (this._auth.getEnv() === "prod") {
             this.url = "//bluestreak.edji.it";
         } else {
-            // this.url = '//localhost:7899';
-            this.url = "//bluestreak-dev.edji.it";
+            this.url = '//localhost:7899';
+            // this.url = "//bluestreak-dev.edji.it";
         }
 
         // Ensure we have a socket available
@@ -77,7 +77,6 @@ export class SocketService {
          * Trigger socket response generically
          */
         this.socket.on('groupUpdate', (groupUpdate) => {
-            console.log('socket response received')
             this.groupUpdateSubj.next(groupUpdate)
         })
     }
@@ -95,7 +94,6 @@ export class SocketService {
     }
 
     public toggleHeatVision(heatToggle: PowerToggle) {
-        console.log('call to heat')
         let projectPowers = {
             'heatVision' : heatToggle
         };
@@ -108,7 +106,6 @@ export class SocketService {
      * remaining values can be passed as additional properties but must be defined in socket listener locations for proper response handling
      */
     public groupUpdateEvent(groupUpdate: any): void {
-        console.log('need to fire the socket')
         this.socket.emit('groupUpdate', groupUpdate)
     }
 }
