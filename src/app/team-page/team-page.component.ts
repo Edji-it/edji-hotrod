@@ -24,6 +24,13 @@ export class TeamPageComponent implements OnInit {
       book: "Ender's Game"
     },
     {
+      name: "Amanda Fonville",
+      title: "Sales & Customer Success",
+      photo: "/assets/images/promo/headshot-amanda.jpg",
+      emoji: ":crown:",
+      book: "The Ranger's Apprentice"
+    },
+    {
       name: "Brennen Hicklin",
       title: "Customer Success",
       photo: "/assets/images/promo/headshot-brennen.jpg",
@@ -43,6 +50,16 @@ export class TeamPageComponent implements OnInit {
       photo: "/assets/images/promo/headshot-cody.jpg",
       emoji: ":tada:",
       book: "Ready Player One"
+    }
+  ]
+
+  public animals: any[] = [
+    {
+      name: "Sprocket Fonville",
+      title: "Office Administrator",
+      photo: "/assets/images/promo/headshot-sprocket.jpg",
+      emoji: ":gear:",
+      book: "How to Talk to Your Cat about Gun Safety"
     },
     {
       name: "Cynder Hicklin-Pumper",
