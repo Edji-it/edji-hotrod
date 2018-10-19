@@ -914,6 +914,9 @@ export class AuthService implements CanActivate {
         }
       }
       // combine in to the final params to search by
+      if (students_ids_params.length>0 && temp_ids_params.length>0) {
+        temp_ids_params = '&' + temp_ids_params
+      }
       let search_params = students_ids_params + temp_ids_params
       let search_params_final = '?' + search_params
 

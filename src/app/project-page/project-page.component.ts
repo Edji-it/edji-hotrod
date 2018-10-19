@@ -86,6 +86,9 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
                     // Join socket + start reading timer
                     if (this.user._id && this.project._id && !this.joinedRoom) {
                         this.joinRoom(this.user, this.project)
+                        if (this.newToGroup()) {
+                            console.log('user is new to the reading')
+                        }
                     }
 
                     if (this.project.reading_id && this.project.reading_id['_id']) {
@@ -123,5 +126,25 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
         this._socket.joinSocketRoom(project._id, user._id)
         // Start Reading Timer
         this._academy.startReadingTimer(user, project)
+    }
+
+    private newToGroup(): boolean {
+        // make sure the current user is not the teacher of this project
+        let userFound = true
+        let students_ids = this.project.students_ids
+        let temp_ids = this.project.temp_ids
+        // if they are a teacher, then return false (not new to the group)
+        if (this.user._id===this.project.teacher_id) {
+            userFound = false
+        }
+        // make sure this user does not exist in the students_ids list
+        if (students_ids.includes(this.user._id)) {
+            userFound = false
+        }
+        // make sure this user does not exist in the temp_ids list
+        if (temp_ids.includes(this.user._id)) {
+            userFound = false
+        }
+        return userFound
     }
 }

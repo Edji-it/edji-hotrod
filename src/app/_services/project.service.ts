@@ -137,14 +137,14 @@ export class ProjectService {
             })
         )
 
+        /**
+         * Our socket handler for group-specific socket update events
+         * groupUpdate.type is the identifier for specific events
+         */ 
         this.subscriptions.push(this._socket.groupUpdate.subscribe(
             (groupUpdate) => {
-                if (groupUpdate.type==='refreshLeaderboard') {
-                    console.log(this.project)
-                    // Get and attach user information to the students_ids and temp_ids if we have at least 1 of either
-                    if (this.project.students_ids.length > 0 || this.project.temp_ids.length > 0) {
-                        this.getUserInfoFromProject(this.project)
-                    }
+                if (groupUpdate.type==='refreshLeaderboard' && this.user._id===this.project.teacher_id) {
+                    this.addUserInfoToProject(groupUpdate)
                 }
             }
           ))
@@ -231,7 +231,7 @@ export class ProjectService {
                     this.project = project
                     this.currentProjectSource.next(this.project)
                     // Get and attach user information to the students_ids and temp_ids if we have at least 1 of either
-                    if (project.students_ids.length > 0 || project.temp_ids.length > 0) {
+                    if ((project.students_ids.length > 0 || project.temp_ids.length > 0) && this.user._id===this.project.teacher_id) {
                         this.getUserInfoFromProject(project)
                     }
                     // Return the project along the current Observable
@@ -248,7 +248,6 @@ export class ProjectService {
         this._auth.getUserInfoByProject(project.students_ids, project.temp_ids)
         .subscribe(
             (userInfo) => {
-                console.log(userInfo)
                 userInfo = userInfo.users
                 // attach the basic user information to each students_id
                 this.project.students_ids = this.project.students_ids.map((obj) => {
@@ -268,6 +267,34 @@ export class ProjectService {
             (error) => {
                 console.error(error)
             })
+    }
+
+    /**
+     * Adds user information to the student that just joined the project so we can see them on the leaderboard
+     * @param groupUpdate the object that contains user properties to properly add student to leaderboard
+     */
+    private addUserInfoToProject(groupUpdate: any) {
+        console.log(this.project,groupUpdate)
+        // if the student that joined is registered, here is their info
+        if (groupUpdate.userType && groupUpdate.userType==="registered") {
+            this.project.students_ids.push({
+                _id: groupUpdate._id,
+                fullname: groupUpdate.fullname,
+                username: groupUpdate.username,
+                userType: groupUpdate.userType
+            })
+        }
+        // if the student that joined is a temp, here is their info
+        if (groupUpdate.userType && groupUpdate.userType==="temp") {
+            this.project.temp_ids.push({
+                _id: groupUpdate._id,
+                fullname: groupUpdate.fullname,
+                userType: groupUpdate.userType
+            })
+        }
+        // update the project info across the app for the teacher based on this update
+        this.currentProjectSource.next(this.project)
+        this._commentStats.addUsersToStats(this.commentStats._stats, this.project)
     }
 
     /** 
