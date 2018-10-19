@@ -250,13 +250,13 @@ export class ProjectService {
             (userInfo) => {
                 userInfo = userInfo.users
                 // attach the basic user information to each students_id
-                this.project.students_ids = this.project.students_ids.map((obj) => {
+                this.project.students = this.project.students_ids.map((obj) => {
                     return userInfo.find((el) => {
                         return el._id===obj
                     })
                 })
                 // attach the basic user information to each temp_id
-                this.project.temp_ids = this.project.temp_ids.map((obj) => {
+                this.project.temps = this.project.temp_ids.map((obj) => {
                     return userInfo.find((el) => {
                         return el._id===obj
                     })
@@ -274,10 +274,9 @@ export class ProjectService {
      * @param groupUpdate the object that contains user properties to properly add student to leaderboard
      */
     private addUserInfoToProject(groupUpdate: any) {
-        console.log(this.project,groupUpdate)
         // if the student that joined is registered, here is their info
         if (groupUpdate.userType && groupUpdate.userType==="registered") {
-            this.project.students_ids.push({
+            this.project.students.push({
                 _id: groupUpdate._id,
                 fullname: groupUpdate.fullname,
                 username: groupUpdate.username,
@@ -286,7 +285,7 @@ export class ProjectService {
         }
         // if the student that joined is a temp, here is their info
         if (groupUpdate.userType && groupUpdate.userType==="temp") {
-            this.project.temp_ids.push({
+            this.project.temps.push({
                 _id: groupUpdate._id,
                 fullname: groupUpdate.fullname,
                 userType: groupUpdate.userType

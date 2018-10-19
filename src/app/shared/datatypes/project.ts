@@ -3,7 +3,8 @@ import { Reading } from './reading';
 
 /** Project properties we add on the front end */
 export interface Project extends BaseProject {
-
+  students: { _id: string, fullname: string, username: string, userType: string }[], // front end properties to add more reference info to students
+  temps: { _id: string, fullname: string, userType: string }[] // front end properties to add more reference info to temps
 }
 
 /** The project object as it is returned from the server */
@@ -15,8 +16,8 @@ interface BaseProject {
   owner_id: any,
   comments: EdjiComment[],
   answers?: EdjiComment[],
-  students_ids: any[], // server populates the ids with this object
-  temp_ids: any[], // same as above with temp_ids
+  students_ids: string [], // server populates the ids with this object
+  temp_ids: string[], // same as above with temp_ids
   label: string,
   code: string,
   types: string, // can currently be 'emoji' and 'text'

@@ -43,9 +43,9 @@ export class CommentStats {
     // loop through student ids and add them to the array
     //  we have to do this because some students won't make a comment, so this is their only data on the project
     //  looping through addCommentToStats will later increment the count
-    let len = project.students_ids.length
+    let len = project.students && project.students.length || 0
     for(let i = 0; i < len; i++) {
-        let student = project.students_ids[i]
+        let student = project.students[i]
 
         commentStats.userStats.push({
             _id: student._id,
@@ -60,9 +60,9 @@ export class CommentStats {
     }
 
     // do the same for temp student ids
-    len = project.temp_ids.length
+    len = project.temps && project.temps.length || 0
     for(let i = 0; i < len; i++) {
-        let student = project.temp_ids[i]
+        let student = project.temps[i]
 
         commentStats.userStats.push({
             _id: student._id,
@@ -84,10 +84,10 @@ export class CommentStats {
    * @param project the current project the user is on
    */
   public addUsersToStats(commentStats: iCommentStats, project: Project): iCommentStats {
-    // Run through the students_ids and add the user to the stats if they're not already in the list
-    let len = project.students_ids.length
+    // Run through the students and add the user to the stats if they're not already in the list
+    let len = project.students.length
     for (let i=0; i<len; i++) {
-      let student = project.students_ids[i]
+      let student = project.students[i]
       // see if there is a student in the stats list already
       let studentFound = commentStats.userStats.find(el=>(
         el._id===student._id
@@ -106,10 +106,10 @@ export class CommentStats {
         })
       }
     }
-    // Run through the temp_ids and add the user to the stats if they're not already in the list
-    len = project.temp_ids.length
+    // Run through the temps and add the user to the stats if they're not already in the list
+    len = project.temps.length
     for (let i=0; i<len; i++) {
-      let student = project.temp_ids[i]
+      let student = project.temps[i]
       // see if there is a student in the stats list already
       let studentFound = commentStats.userStats.find(el=>(
         el._id===student._id

@@ -86,9 +86,7 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
                     // Join socket + start reading timer
                     if (this.user._id && this.project._id && !this.joinedRoom) {
                         this.joinRoom(this.user, this.project)
-                        if (this.newToGroup()) {
-                            console.log('user is new to the reading')
-                        }
+                        this.addToLeaderboard()
                     }
 
                     if (this.project.reading_id && this.project.reading_id['_id']) {
@@ -128,23 +126,26 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
         this._academy.startReadingTimer(user, project)
     }
 
-    private newToGroup(): boolean {
-        // make sure the current user is not the teacher of this project
-        let userFound = true
-        let students_ids = this.project.students_ids
-        let temp_ids = this.project.temp_ids
-        // if they are a teacher, then return false (not new to the group)
-        if (this.user._id===this.project.teacher_id) {
-            userFound = false
+    private addToLeaderboard() {
+        // if they are not a teacher, then send an update to sockets
+        if (this.user._id!==this.project.teacher_id) {
+            // our socket event takes a bit of user information to setup the event
+            let currentUser = this.user
+            let username=''
+            let userType="temp"
+            if (currentUser.type!=="temp") {
+                username=currentUser.username
+                userType="registered"
+            }
+
+            // fire the socket event so the teacher knows we just got another student
+            this._socket.groupUpdateEvent({
+                type: 'refreshLeaderboard',
+                _id: currentUser._id,
+                fullname: currentUser.fullname,
+                username: username,
+                userType: userType
+            })
         }
-        // make sure this user does not exist in the students_ids list
-        if (students_ids.includes(this.user._id)) {
-            userFound = false
-        }
-        // make sure this user does not exist in the temp_ids list
-        if (temp_ids.includes(this.user._id)) {
-            userFound = false
-        }
-        return userFound
     }
 }

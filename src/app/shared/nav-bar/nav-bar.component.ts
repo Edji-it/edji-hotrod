@@ -102,7 +102,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
           this._auth.currentAcademyState.subscribe((currentState) => {
             this.academyState =  currentState
             // Set abbreviation
-            this.currentAcademy = this.academyState.academies[this.academyState.selected]
+            this.currentAcademy = this.academyState && this.academyState.academies[this.academyState.selected] || {}
           })
       )
 
