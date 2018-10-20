@@ -10,6 +10,10 @@ describe('Academy user that has ability to manage licenses for their academy: ',
   let sidebar = new Sidebar()
   let EC = protractor.ExpectedConditions
 
+  // Elements
+  let licenseLoader = element(by.id('licenseMgmtLoader'))
+  let navAcademyBtn = element(by.id('navAcademy'))
+
   describe("Non-Admin users should not be able to access the license mgmt page", () => {
     beforeEach(() => {
       // get ready to login
@@ -53,10 +57,13 @@ describe('Academy user that has ability to manage licenses for their academy: ',
       browser.wait(EC.elementToBeClickable(login.loginButton), 5000)
       // log-in as the hero and make sure we hit the dashboard
       login.loginAndVerify(login.adminUser, login.adminPassword)
-      // go to the academy license manage page
-      dashboard.getLicenseManage()
+      // go to the academy license manage page via nav
+      browser.wait(EC.elementToBeClickable(navAcademyBtn), 5000, "never saw Academy option in nav bar")
+      navAcademyBtn.click()
       // should get the license management page!
       browser.wait(EC.presenceOf(element(by.id('activeLicenseCount'))), 8000, "never saw the license management page")
+      // Wait until page has completed loading
+      browser.wait(EC.invisibilityOf(licenseLoader), 5000, "license management table did not load")
     })
 
     afterAll(() => {
