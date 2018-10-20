@@ -33,7 +33,7 @@ exports.config = {
   },
 
   /*
-   Run a suite of tests using 'yarn run protractor e2e/protractor.conf.js  --suite suiteNameHere'
+   Run a suite of tests using 'yarn e2e --suite suiteNameHere'
    - Spec patterns are relative to the location of the spec file. They may include glob patterns.
   */
   suites: {
