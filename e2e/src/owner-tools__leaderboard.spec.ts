@@ -72,7 +72,7 @@ describe('Project Page as an owner wishing to filter by student: ', () => {
         firstCommenterFilter.click()
 
         // First Commenter should only have one comment
-        let firstCommenterComments = element.all(by.css('.e2e-comment--First-Commenter'))
+        let firstCommenterComments = element.all(by.css('.e2e-comment--First-Commenter .user-icon')) // User icon is a more reliable indicator of visibility
         browser.wait(EC.visibilityOf(firstCommenterComments.first()), 3000, 'not able to see First Commenter\'s comment when filtering')
         firstCommenterComments.count()
             .then((count) => {
