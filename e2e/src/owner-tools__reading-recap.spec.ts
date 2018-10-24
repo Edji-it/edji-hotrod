@@ -16,6 +16,9 @@ describe('Project Page as an owner using reading report: ', () => {
   let EC = protractor.ExpectedConditions
   var uniqueEval: string = new Date().valueOf().toString() + '-eval'
 
+  let recapStudentDropdown = element(by.id('studentSelector'))
+  let recapStudentOptions = element.all(by.css('#studentSelector li'))
+
   beforeAll(() => {
     login.getPage()
     browser.wait(EC.elementToBeClickable(login.loginButton), 5000)
@@ -24,14 +27,16 @@ describe('Project Page as an owner using reading report: ', () => {
     browser.wait(EC.elementToBeClickable(login.loginButton), 5000)
     login.loginButton.click()
     browser.wait(EC.urlContains("dashboard"), 5000, "never arrived at dashboard")
+    // Enter reading recap test reading code
+    home.enterProjectCodeFromHome('readingrecap')
   })
 
-  beforeEach(() => {
-    // Id for Owner Tools Test Reading owned by Teach/Teach
-    browser.get("/#/dashboard")
-    // Open Reading Report project
-    project.getReadingRecapPage()
-  })
+  // beforeEach(() => {
+  //   // Go to dashboard
+  //   browser.get("/#/dashboard")
+  //   // Enter reading recap test reading code
+  //   home.enterProjectCodeFromHome('readingrecap')
+  // })
 
   afterAll(() => {
     // log out
@@ -50,69 +55,47 @@ describe('Project Page as an owner using reading report: ', () => {
     sidebar.readingReportButton.click()
 
     // Wait for report to open up
-    browser.wait(EC.elementToBeClickable(element(by.id("studentSelector"))), 3000, "never saw student filter dropdown on reading report")
+    browser.wait(EC.elementToBeClickable(recapStudentDropdown), 3000, "never saw student filter dropdown on reading report")
   })
 
   // verify there is a comment in the count and the count is greater than 0 for the initial student
   it("verify there is a comment in the count and the count is greater than 0 for the initial student", () => {
-    // Need to check for and click the owner tools button if its showing
-    sidebar.ownerToolToggle()
-        
-    // Open Reading Report
-    browser.wait(EC.elementToBeClickable(sidebar.readingReportButton), 5000, "never found the reading report button")
-    sidebar.readingReportButton.click()
-
-    // Wait for report to open up
-    browser.wait(EC.elementToBeClickable(element(by.id("studentSelector"))), 3000, "never saw student filter dropdown on reading report")
-
+    // Select a student from dropdown
+    browser.wait(EC.elementToBeClickable(recapStudentDropdown), 5000, "recap student selector never became clickable")
+    recapStudentDropdown.click()
+    browser.wait(EC.elementToBeClickable(recapStudentOptions.first()), 3000, "recap student selector never became clickable")
+    recapStudentOptions.first().click()
+    
     // verify the comment count is greater than 0
     let gaugeValue = element(by.id("gaugeValue"))
     browser.wait(EC.visibilityOf(gaugeValue), 3000, 'not able to find the gauge value')
     gaugeValue.getText().then((count) => {
-      expect(count).toBeGreaterThan(1, 'comment count is not greater than 1')
+      expect(count).toBeGreaterThan(1, 'minutes on reading is not greater than 1')
     })
   })
 
   // add an evaluation and verify it shows up
   it("should add an evaluation and verify it shows up", () => {
-    // Need to check for and click the owner tools button if its showing
-    sidebar.ownerToolToggle()
-        
-    // Open Reading Report
-    browser.wait(EC.elementToBeClickable(sidebar.readingReportButton), 5000, "never found the reading report button")
-    sidebar.readingReportButton.click()
-
-    // Wait for report to open up
-    browser.wait(EC.elementToBeClickable(element(by.id("studentSelector"))), 5000, "never saw student filter dropdown on reading report")
-
     // Add text to the evaluation field and submit it
     element(by.id("evalFormText")).sendKeys(uniqueEval)
     browser.wait(EC.elementToBeClickable(element(by.id("sendEvalBtn"))), 3000, "send evaluation button never became clickable")
     element(by.id("sendEvalBtn")).click()
-
-    // Verify the evaluation was added
+    // Verify eval input was cleared
+    browser.wait(EC.visibilityOf(element(by.css("#sendEvalBtn:disabled"))), 3000, "evaluation form did not properly submit")
+    // Verify eval text populated at bottom of feedback list
     let evaluations = element.all(by.css('.evaluation_text'))
-    browser.wait(EC.textToBePresentInElement(element(by.id("evalFormText")), ''), 3000, "evaluation never was added to the report")
     evaluations.last().getText().then((evaluation) => {
-      expect(evaluation).toBe(uniqueEval, 'never saw the latest evaluation get added')
+      expect(evaluation).toBe(uniqueEval, 'latest evaluation did not show at bottom')
     })
   })
 
   // close the report and make sure it closes
   it("should close the report and make sure it closes", () => {
-    // Need to check for and click the owner tools button if its showing
-    sidebar.ownerToolToggle()
-        
-    // Open Reading Report
-    browser.wait(EC.elementToBeClickable(sidebar.readingReportButton), 5000, "never found the reading report button")
-    sidebar.readingReportButton.click()
-
-    // Wait for report to open up
-    browser.wait(EC.elementToBeClickable(element(by.id("studentSelector"))), 3000, "never saw student filter dropdown on reading report")
-
-    // Close Reading Report
-    browser.wait(EC.elementToBeClickable(element(by.id("closeReadingRecap"))), 3000, "never saw close button")
-    element(by.id("closeReadingRecap")).click()
+    browser.executeScript('document.querySelector(".reading-recap").scrollTo(0,0);').then(function () {
+      // Close Reading Report
+      browser.wait(EC.elementToBeClickable(element(by.id("closeReadingRecap"))), 3000, "never saw close button")
+      element(by.id("closeReadingRecap")).click()
+    })
 
     // Verify the Reading Report is closed
     browser.wait(EC.invisibilityOf(element(by.id("readingReport"))), 3000, 'reading report never closed')
@@ -120,30 +103,28 @@ describe('Project Page as an owner using reading report: ', () => {
 
   // verify you can open the dropdown for student selection and change the student
   it("should verify you can open the dropdown for student selection and change the student", () => {
+    // Need to check for and click the owner tools button if its showing
     sidebar.ownerToolToggle()
-        
     // Open Reading Report
     browser.wait(EC.elementToBeClickable(sidebar.readingReportButton), 5000, "never found the reading report button")
     sidebar.readingReportButton.click()
-
-    // Wait for report to open up
-    browser.wait(EC.elementToBeClickable(element(by.id("studentSelector"))), 3000, "never saw student filter dropdown on reading report")
-
+    // Select first student
+    browser.wait(EC.elementToBeClickable(recapStudentDropdown), 5000, "recap student selector never became clickable")
+    recapStudentDropdown.click()
+    browser.wait(EC.elementToBeClickable(recapStudentOptions.first()), 3000, "recap student selector never became clickable")
+    recapStudentOptions.first().click()
     // verify the audio comment count is greater than or equal to 1 for the default (Test Hero)
     element.all(by.css('.count-block.count-block__audio'))
       .count()
       .then((count) => {
           expect(count >= 1).toBeTruthy('Test Hero audio count was supposed to be equal to or greater than 1 on the reading report')
       })
-
     // Click on the student dropdown to open it up
-    browser.wait(EC.elementToBeClickable(element(by.id("studentSelector"))), 3000, "never saw student selection dropdown")
-    element(by.id("studentSelector")).click()
-
+    browser.wait(EC.elementToBeClickable(recapStudentDropdown), 3000, "never saw student selection dropdown")
+    recapStudentDropdown.click()
     // Click on the other student in the dropdown
     browser.wait(EC.elementToBeClickable(element(by.css("li.ui-dropdown-item:nth-child(2)"))), 3000, "never saw second student in the dropdown")
     element(by.css("li.ui-dropdown-item:nth-child(2)")).click()
-
     // verify the audio comment count is 0 for the second student (Josh)
     element.all(by.css('.count-block.count-block__audio'))
       .count()
