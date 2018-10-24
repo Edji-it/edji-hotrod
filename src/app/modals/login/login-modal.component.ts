@@ -24,7 +24,6 @@ export class LoginModal implements OnInit {
 
   constructor(
     private _project: ProjectService,
-    private route: ActivatedRoute,
     private _socket: SocketService,
     private _auth: AuthService
   ) { }
