@@ -32,8 +32,8 @@ export class SocketService {
         if (this._auth.getEnv() === "prod") {
             this.url = "//bluestreak.edji.it";
         } else {
-            this.url = '//localhost:7899';
-            // this.url = "//bluestreak-dev.edji.it";
+            // this.url = '//localhost:7899';
+            this.url = "//bluestreak-dev.edji.it";
         }
 
         // Ensure we have a socket available
