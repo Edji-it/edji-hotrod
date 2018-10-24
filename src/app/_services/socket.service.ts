@@ -22,6 +22,9 @@ export class SocketService {
     private heatVision: Subject<any> = new Subject()
     public heatVisionUpdates: Observable<any> = this.heatVision.asObservable()
 
+    // Refresh Leaderboard Update observable
+    private groupUpdateSubj: Subject<any> = new Subject()
+    public groupUpdate: Observable<any> = this.groupUpdateSubj.asObservable()
 
     constructor(
         private _auth: AuthService
@@ -68,6 +71,14 @@ export class SocketService {
         this.socket.on('heatVision', (heatToggle) => {
             this.heatVision.next(heatToggle)    
         })
+
+        /**
+         * Watch any project updates
+         * Trigger socket response generically
+         */
+        this.socket.on('groupUpdate', (groupUpdate) => {
+            this.groupUpdateSubj.next(groupUpdate)
+        })
     }
     
     /**
@@ -87,6 +98,15 @@ export class SocketService {
             'heatVision' : heatToggle
         };
         this.socket.emit('heatVision', projectPowers);
+    }
+
+    /**
+     * groupUpdateEvent: Generic handling of group sockets for flexibility
+     * @param groupUpdate must have property 'type' as a string to declare type of socket response
+     * remaining values can be passed as additional properties but must be defined in socket listener locations for proper response handling
+     */
+    public groupUpdateEvent(groupUpdate: any): void {
+        this.socket.emit('groupUpdate', groupUpdate)
     }
 }
 
