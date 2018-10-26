@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router'
 import { take } from 'rxjs/operators'
 
 // Project Dependencies
-import { ProjectService } from './../../_services'
+import { ProjectService, SocketService, AuthService } from './../../_services'
 
 @Component({
   selector: 'hot-login-modal',
@@ -24,7 +24,8 @@ export class LoginModal implements OnInit {
 
   constructor(
     private _project: ProjectService,
-    private route: ActivatedRoute
+    private _socket: SocketService,
+    private _auth: AuthService
   ) { }
 
   ngOnInit() {
@@ -35,6 +36,24 @@ export class LoginModal implements OnInit {
       .pipe(take(1))
       .subscribe(() => {
         this.closeModal.emit()
+
+        // our socket event takes a bit of user information to setup the event
+        let currentUser = this._auth.getUser()
+        let username=''
+        let userType="temp"
+        if (currentUser.type!=="temp") {
+          username=currentUser.username
+          userType="registered"
+        }
+
+        // fire the socket event so the teacher knows we just got another student
+        this._socket.groupUpdateEvent({
+          type: 'refreshLeaderboard',
+          _id: currentUser._id,
+          fullname: currentUser.fullname,
+          username: username,
+          userType: userType
+        })
       }, (err) => {
         console.error(err)
         this.closeModal.emit()

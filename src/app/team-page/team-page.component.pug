@@ -36,6 +36,20 @@ nav-bar
           .mt-2
             label.mb-0 Favorite Book
             p {{ player.book }}
+    .col-12
+      h3.medium-500([innerHtml]="'Paws-itive Influences'")
+      hr
+    .col-lg-3.col-md-4.col-sm-6.mb-4(*ngFor="let animal of animals")
+      .player-card.card
+        img.card-img([attr.src]="animal.photo")
+        .card-block
+          .card-title 
+            .emoji_wrap([innerHtml]="animal.emoji | emojione")
+            | {{ animal.name }}        
+          .player-title {{ animal.title }}
+          .mt-2
+            label.mb-0 Favorite Book
+            p {{ animal.book }}
   .row.row-xl-pad
     .col-12
       .card.card-inverse.navy(style="overflow:hidden;")

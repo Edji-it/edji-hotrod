@@ -72,6 +72,7 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
                 // Join socket + start reading timer
                 if (this.user._id && this.project._id && !this.joinedRoom) {
                     this.joinRoom(this.user, this.project)
+                    console.log(' joined socket ')
                 }
             })
         )
@@ -85,6 +86,7 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
                     // Join socket + start reading timer
                     if (this.user._id && this.project._id && !this.joinedRoom) {
                         this.joinRoom(this.user, this.project)
+                        this.addToLeaderboard()
                     }
 
                     if (this.project.reading_id && this.project.reading_id['_id']) {
@@ -122,5 +124,28 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
         this._socket.joinSocketRoom(project._id, user._id)
         // Start Reading Timer
         this._academy.startReadingTimer(user, project)
+    }
+
+    private addToLeaderboard() {
+        // if they are not a teacher, then send an update to sockets
+        if (this.user._id!==this.project.teacher_id) {
+            // our socket event takes a bit of user information to setup the event
+            let currentUser = this.user
+            let username=''
+            let userType="temp"
+            if (currentUser.type!=="temp") {
+                username=currentUser.username
+                userType="registered"
+            }
+
+            // fire the socket event so the teacher knows we just got another student
+            this._socket.groupUpdateEvent({
+                type: 'refreshLeaderboard',
+                _id: currentUser._id,
+                fullname: currentUser.fullname,
+                username: username,
+                userType: userType
+            })
+        }
     }
 }

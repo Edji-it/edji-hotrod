@@ -44,6 +44,7 @@ nav-bar
       p.medium-semibold.text-center Hero unlocks the full power of Edji with...
   .row
     .hero-rule
+  //- Student Filters
   .row.row-xl-pad
     #sectionFilter.col-md-4.offset-md-1
       h3.medium-semibold
@@ -52,6 +53,16 @@ nav-bar
       img(src="/assets/images/hero-promo-filter.png", style="max-width: 400px;")
   .row
     .hero-rule
+  //- Reading Recap
+  .row.row-xl-pad
+    #sectionRecap.col-md-6.offset-md-3
+      h3.medium-semibold.text-center
+        | See each student's engagement in-depth with <b>Reading Recap</b>
+    .col-md-12.text-center.pt-4
+      img(src="/assets/images/hero-promo-recap.png", style="max-width: 700px;")
+  .row
+    .hero-rule
+  //- Audio Comments
   .row.row-xl-pad
     #sectionAudio.col-md-4.offset-md-1
       h3.medium-semibold
@@ -61,13 +72,22 @@ nav-bar
         img(src="/assets/images/hero-promo-audio.png")
   .row
     .hero-rule
+  //- Questions
   .row.row-xl-pad
-    #sectionQuestion.col-md-4.offset-md-1
-      h3.medium-semibold Add in-line <b>Questions</b> to Readings, and get answers in one place
+    #sectionQuestion.col-md-6.offset-md-3
+      h3.medium-semibold.text-center Add in-line <b>Questions</b> to Readings, and get answers in one place
       //- p In-line questions and compiled answers.
+    .col-md-12.text-center
+      img(src="/assets/images/hero-promo-question.png", style="max-width:700px;")
+  .row
+    .hero-rule
+  //- Feedback
+  .row.row-xl-pad
+    #sectionFeedback.col-md-4.offset-md-1
+      h3.medium-semibold Give live <b>Feedback</b> to students when it is most impactful
     .col-md-7.text-center
-      div(style="max-width:600px;")
-        img(src="/assets/images/hero-promo-question.png")
+      img(src="/assets/images/hero-promo-feedback.png", style="max-width:600px;")
+  //- CTA Row
   .row.navy.row-xl-pad.has-sparks
     .sparks
     .col-12
@@ -80,14 +100,25 @@ nav-bar
       .button__row
           button.btn.btn-hero((click)='goHero()')
             | Time to Go Hero
+  //- Classroom Support
   .row.row-xl-pad
-    .col-md-4.offset-md-1
+    #sectionSupport.col-md-4.offset-md-1
       h3.medium-semibold
         | <b>Priority Classroom Support</b> at the ready to help you build your lesson and solve technical issues in your classroom
     .col-md-7.text-center
       img(src="/assets/images/hero-promo-phone.svg", style="max-width: 400px;")
   .row
     .hero-rule
+  //- Instructions
+  .row.row-xl-pad
+    #sectionInstructions.col-md-4.offset-md-1
+      h3.medium-semibold
+        | Use <b>Instructions</b> to give students clear goals and improve understanding
+    .col-md-7.text-center
+      img(src="/assets/images/hero-promo-instructions.png", style="max-width: 500px;")
+  .row
+    .hero-rule
+  //- Custom Codes
   .row.row-xl-pad
     .col-md-4.offset-md-1
       h3.medium-semibold <b>Custom Group Codes</b> for memorization or for tying readings into another activity
@@ -96,6 +127,7 @@ nav-bar
         img(src="/assets/images/hero-promo-codes.png")
   .row
     .hero-rule
+  //- Replies
   .row.row-xl-pad
     .col-md-4.offset-md-1
       h3.medium-semibold Comment <b>Replies</b> let you and your students start discussions right in the text
