@@ -1,9 +1,10 @@
-import { NgModule, ApplicationRef, ErrorHandler } from '@angular/core'
+import { NgModule, ApplicationRef, ErrorHandler, Injectable } from '@angular/core'
 import { HttpModule } from '@angular/http'
 import { HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser'
 import { LockerModule, Locker, LockerConfig} from 'angular-safeguard'
 import { Angulartics2Module } from 'angulartics2'
 import { Angulartics2GoogleAnalytics } from 'angulartics2/ga'
+import * as Sentry from "@sentry/browser";
 
 // App is our top level component
 import { AppComponent } from './app.component'
@@ -13,7 +14,21 @@ import { SharedModule } from './app-shared.module';
 import { Ng4TwitterTimelineModule } from './home/twitter-timeline';
 import { NgxPageScrollModule } from 'ngx-page-scroll';
 
-const { version: appVersion } = require('../../package.json')
+// Sentry Setup
+const appVersion = require('../../package.json').version
+Sentry.init({
+  dsn: "https://f71b0ea0db5a4785b8ebee0b426b4bec@sentry.io/229527",
+  release: appVersion
+});
+
+@Injectable()
+export class SentryErrorHandler implements ErrorHandler {
+  constructor() {}
+  handleError(error) {
+    Sentry.captureException(error.originalError || error);
+    throw error;
+  }
+}
 
 // Services
 import {
@@ -101,7 +116,8 @@ const APP_PROVIDERS = [
   { 
       provide: HAMMER_GESTURE_CONFIG, 
       useClass: HammerGestureConfig 
-  }
+  },
+  { provide: ErrorHandler, useClass: SentryErrorHandler }
   // { provide: RouteReuseStrategy, useClass: ReuseStrategy }
 ]; // const APP_PROVIDERS
 
