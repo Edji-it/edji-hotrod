@@ -268,12 +268,10 @@ export class CommentComponent implements OnInit, OnDestroy {
     if (this.commentContext !== "answer") {
       if (this.commentContext === "reply") {
         // If this is a reply comment
-        this.angulartics.eventTrack.next({ action: comment.type + 'updateReply', properties: { category: 'heroFeature', label: 'attempt' }})
         this.isLoading = true
         this._projects.addCommentToReplies(this.comment)
       } else {
         // If it is a regular comment.
-        this.angulartics.eventTrack.next({ action: comment.type + 'updateComment', properties: { category: 'projectAction', label: 'attempt' }})
         this.isLoading = true
       } // else
       this._projects.saveComment(this.comment)
@@ -294,23 +292,13 @@ export class CommentComponent implements OnInit, OnDestroy {
         }, 1000)
       })
       .catch(error => { 
-        // Appropriate post-delete failure action, sorted by comment type.
-        if (this.commentContext === 'reply' || this.commentContext === 'answer') {
-          this.angulartics.eventTrack.next({ action: comment.type + 'updateReply', properties: { category: 'heroFeature', label: 'failure' }})
-        } else {
-          this.angulartics.eventTrack.next({ action: comment.type + 'updateComment', properties: { category: 'projectAction', label: 'failure' }})
-        } // else
-
         console.error(error)
       })
     } else {
-      this.angulartics.eventTrack.next({ action: comment.type + 'updateAnswer', properties: { category: 'heroFeature', label: 'attempt' }})
       this.isLoading = true
       this._projects.addAnswerToAnswers(this.comment)
       this._projects.saveAnswer(this.comment)
       .then(answer => {
-        this.angulartics.eventTrack.next({ action: comment.type + 'updateAnswer', properties: { category: 'heroFeature', label: 'success' }})
-
         this.isLoading = false
         
         this.commentUpdated.emit()
@@ -322,8 +310,7 @@ export class CommentComponent implements OnInit, OnDestroy {
           // this.comment.active = false
         }, 1000)
       })
-      .catch(error => { 
-        this.angulartics.eventTrack.next({ action: comment.type + 'updateAnswer', properties: { category: 'heroFeature', label: 'failure' }})
+      .catch(error => {
         console.error(error)
       })
     }
@@ -356,12 +343,6 @@ export class CommentComponent implements OnInit, OnDestroy {
         this.showDeleteModal = false
       })
       .catch(error => {
-        // TRACK EXCEPTION
-        if (this.comment.reply_to) {
-          this.angulartics.eventTrack.next({ action: comment.type + 'deleteReply', properties: { category: 'heroFeature', label: 'failure' }})
-        } else {
-          this.angulartics.eventTrack.next({ action: comment.type + 'deleteComment', properties: { category: 'projectAction', label: 'failure' }})
-        }
         this.deactivate(this.comment)
         console.error(error)
       })
@@ -373,8 +354,6 @@ export class CommentComponent implements OnInit, OnDestroy {
         this.showDeleteModal = false
       })
       .catch(error => {
-        // TRACK EXCEPTION
-        this.angulartics.eventTrack.next({ action: comment.type + 'deleteAnswer', properties: { category: 'heroFeature', label: 'failure' }})
         this.deactivate(this.comment)
         console.error(error)
       })

@@ -79,7 +79,7 @@ export class JoinedDashComponent implements OnInit, OnDestroy {
       },
       (error) => {
         this.loading = false;
-        this.angulartics.eventTrack.next({ action: "getAllProjects", properties: { category: "serviceCalls", label: "failure" }});
+        console.error(error)
         this.errorObject.projectError = "We had some trouble getting your projects, it might be our fault";
       })
   }

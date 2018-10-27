@@ -227,7 +227,6 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
   /** Sends license update/request feedback to bumblebee */
   public sendRequest(formValue: any): void {
     this.loading = true
-    this.angulartics.eventTrack.next({ action: 'requestLicense', properties: { category: 'accountManagement', label: 'attempt' }})
 
     // Only send the user properties we need to bumblebee
     var userSend: any = {
@@ -264,7 +263,6 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
       (err) => {
         console.error(err)
         this.loading = false
-        this.angulartics.eventTrack.next({ action: 'requestLicense', properties: { category: 'accountManagement', label: 'failure' }})
         this.errorObject.serverError = "Something has gone wrong. Please try submitting your feedback again later!"
       }
     )

@@ -54,7 +54,7 @@ export class HeroPromoPageComponent implements OnInit, OnDestroy {
       this.showLoginModal = true
     } else {
       this.showHeroSubModal = true
-      this.angulartics.eventTrack.next({ action: 'heroSubInterest', properties: { category: 'heroFeature', label: 'attempt' }})
+      this.angulartics.eventTrack.next({ action: 'heroSubInterest', properties: { category: 'heroFeature', label: 'success' }})
     }
   }
 }

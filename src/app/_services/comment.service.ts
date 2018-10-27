@@ -186,14 +186,6 @@ export class CommentService {
    */
   public updateComment(comment: EdjiComment): void {
     if (this.commentContext !== "answer") {
-      if (this.commentContext === "reply") {
-        // If this is a reply comment
-        this.angulartics.eventTrack.next({ action: comment.type + 'updateReply', properties: { category: 'heroFeature', label: 'attempt' }})
-        this._projects.addCommentToReplies(comment)
-      } else {
-        // If this is a regular comment.
-        this.angulartics.eventTrack.next({ action: comment.type + 'updateComment', properties: { category: 'projectAction', label: 'attempt' }})
-      }
       this._projects.saveComment(comment)
       .then(comment => {
         if (this.commentContext === 'reply') {
@@ -202,24 +194,17 @@ export class CommentService {
           this.angulartics.eventTrack.next({ action: comment.type + 'updateComment', properties: { category: 'projectAction', label: 'success' }})
         }
       })
-      .catch(error => { 
-        if (this.commentContext === 'reply' || this.commentContext === 'answer') {
-          this.angulartics.eventTrack.next({ action: comment.type + 'updateReply', properties: { category: 'heroFeature', label: 'failure' }})
-        } else {
-          this.angulartics.eventTrack.next({ action: comment.type + 'updateComment', properties: { category: 'projectAction', label: 'failure' }})
-        }
+      .catch(error => {
         console.log(error)
       })
     } else {
-      this.angulartics.eventTrack.next({ action: comment.type + 'updateAnswer', properties: { category: 'heroFeature', label: 'attempt' }})
       this._projects.addAnswerToAnswers(comment)
       this._projects.saveAnswer(comment)
       .then(answer => {
         this.angulartics.eventTrack.next({ action: comment.type + 'updateAnswer', properties: { category: 'heroFeature', label: 'success' }})
         this._projects.addAnswerToAnswers(answer)
       })
-      .catch(error => { 
-        this.angulartics.eventTrack.next({ action: comment.type + 'updateAnswer', properties: { category: 'heroFeature', label: 'failure' }})
+      .catch(error => {
         console.log(error)
       })
     }

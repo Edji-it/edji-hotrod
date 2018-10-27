@@ -228,27 +228,25 @@ export class NavBarComponent implements OnInit, OnDestroy {
    */
   private joinSession(code: string): void {
     // console.log("first call", code);
-    this.joinLoading = true;
-    this.angulartics.eventTrack.next({ action: 'enterLightningCode', properties: { category: 'joinProject', label: 'attempt' }});
+    this.joinLoading = true
     this._projects.validateProject(code)
       .pipe(take(1))
       .subscribe(
         (data) => {
           this.joinLoading = false;
-          this.angulartics.eventTrack.next({ action: 'enterLightningCode', properties: { category: 'joinProject', label: 'success' }});
+          this.angulartics.eventTrack.next({ action: 'enterLightningCode', properties: { category: 'joinProject', label: 'success' }})
           if (data._id){
-            this._router.navigate(['/project', data._id]);
+            this._router.navigate(['/project', data._id])
           } else {
-            this._router.navigate(['/project', code]);
+            this._router.navigate(['/project', code])
           }
         },
         (error) => {
           this.joinLoading = false;
           if (error.status === 500) {
-            this.angulartics.eventTrack.next({ action: 'enterLightningCode', properties: { category: 'joinProject', label: 'failure' }});
-            this.errorObject.invalidCode = "Oh no! Something went wrong and we don't know what happened!";
+            this.errorObject.invalidCode = "Oh no! Something went wrong and we don't know what happened!"
           } else {
-            this.errorObject.invalidCode = "We don't think that's a real code :confused:";
+            this.errorObject.invalidCode = "We don't think that's a real code :confused:"
           }
         }
       );

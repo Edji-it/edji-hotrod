@@ -582,8 +582,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         for (var i = start; i <= end; i++) {
             text += this.reading.words[i] ? this.reading.words[i].str : ' '
         }
-
-        this.angulartics.eventTrack.next({ action: type + 'CommentCreate', properties: { category: 'projectAction', label: 'attempt' }})
         
         let comment = <EdjiComment>{
             data: '',
@@ -624,8 +622,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 }
             })
             .catch(error => {
-                // TRACK EXCEPTION
-                this.angulartics.eventTrack.next({ action: type + 'CommentCreate', properties: { category: 'projectAction', label: 'failure' }})
                 // We should figure out how to handle this properly!
                 // Maybe show a warning icon?
                 console.warn(error)
@@ -1083,13 +1079,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     public deleteComment(comment: any) : void {
       // Stop the user from continuing to edit, and close emoji keyboard
       // Sort through the comment types and do the apppropriate pre-delete action
-      if (comment.reply_to) {
-        this.angulartics.eventTrack.next({ action: comment.type + 'deleteReply', properties: { category: 'heroFeature', label: 'attempt' }})
-      } else if (comment.questionId) {
-        this.angulartics.eventTrack.next({ action: comment.type + 'deleteAnswer', properties: { category: 'heroFeature', label: 'attempt' }})
-      } else {
-        this.angulartics.eventTrack.next({ action: comment.type + 'deleteComment', properties: { category: 'projectAction', label: 'attempt' }})
-      }
   
       if (this._comments.commentContext !== 'answer') {
         this._projects.deleteComment(comment)
@@ -1105,12 +1094,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
           this._comments.commentDeleted()
         })
         .catch(error => {
-          // TRACK EXCEPTION
-          if (comment.reply_to) {
-            this.angulartics.eventTrack.next({ action: comment.type + 'deleteReply', properties: { category: 'heroFeature', label: 'failure' }})
-          } else {
-            this.angulartics.eventTrack.next({ action: comment.type + 'deleteComment', properties: { category: 'projectAction', label: 'failure' }})
-          }
           this.inactivateComment()
           console.error(error)
         })
@@ -1123,8 +1106,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
           this._comments.commentDeleted()
         })
         .catch(error => {
-          // TRACK EXCEPTION
-          this.angulartics.eventTrack.next({ action: comment.type + 'deleteAnswer', properties: { category: 'heroFeature', label: 'failure' }})
           this.inactivateComment()
           console.error(error)
         })

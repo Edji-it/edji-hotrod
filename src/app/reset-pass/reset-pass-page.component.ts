@@ -61,8 +61,8 @@ export class ResetPassPage implements OnInit {
         this.isLoading = false
         if (res.user && res.token) {
           this.serviceResponse.success = true;
-          res.user.username && this.angulartics.setUsername.next(res.user.username);
-          res.user.email && this.angulartics.setUserProperties.next({ email: res.user.email});
+          // res.user.username && this.angulartics.setUsername.next(res.user.username);
+          // res.user.email && this.angulartics.setUserProperties.next({ email: res.user.email});
         } else {
           this.serviceResponse.failure = true;
         }

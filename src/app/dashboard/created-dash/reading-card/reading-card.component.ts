@@ -73,20 +73,17 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
 
   getVersions(versionId : string) {
     if (this.showVersions && this.versions.length < 1) {
-      this.isLoading = true;
-      this.angulartics.eventTrack.next({ action: "getAllVersions", properties: { category: "serviceCalls", label: "attempt" }});
-
+      this.isLoading = true
       this._readings.getAllVersions(versionId)
         .subscribe(
           data => {
-            this.angulartics.eventTrack.next({ action: "getAllVersions", properties: { category: "serviceCalls", label: "success" }});
-            this.isLoading = false;
-            this.versions = data.readings || [];
+            this.angulartics.eventTrack.next({ action: "getAllVersions", properties: { category: "serviceCalls", label: "success" }})
+            this.isLoading = false
+            this.versions = data.readings || []
           },
           err => {
-            this.isLoading = false;
-            this.angulartics.eventTrack.next({ action: "getAllVersions", properties: { category: "serviceCalls", label: "failure" }});
-            this.errorObject.readingError = "We had some trouble getting the versions for this reading, it might be our fault";
+            this.isLoading = false
+            this.errorObject.readingError = "We had some trouble getting the versions for this reading, it might be our fault"
           })
     } // if
   } // getVersions(versionId : string)

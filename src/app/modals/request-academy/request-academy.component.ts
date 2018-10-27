@@ -91,8 +91,6 @@ export class RequestAcademyModal implements OnInit {
   /** Sends feedback to bumblebee */
   public sendFeedback(formValue: any): void {
     this.loading = true
-    this.angulartics.eventTrack.next({ action: 'requestAcademy', properties: { category: 'accountManagement', label: 'attempt' }})
-
     // Add Request type
     formValue.content = '\nRequest Type: Hero Academy Request'
 
@@ -131,7 +129,6 @@ export class RequestAcademyModal implements OnInit {
       (err) => {
         console.error(err)
         this.loading = false
-        this.angulartics.eventTrack.next({ action: 'requestAcademy', properties: { category: 'accountManagement', label: 'failure' }})
         this.errorObject.serverError = "Something has gone wrong. Please try submitting your feedback again later!"
         this._locker.set("requestAcademyFormData", formValue)
       }

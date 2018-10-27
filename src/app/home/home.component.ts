@@ -123,10 +123,10 @@ export class HomeComponent implements OnInit, OnDestroy {
           var w = document.getElementById("twitter-widget-0")['contentDocument'];
           // console.log(w)
           var s = document.createElement("style");
-          s.innerHTML = this.widgetCSS;
-          s.type = "text/css";
-          w.head.appendChild(s);
-          this.tweetsLoaded = true;
+          s.innerHTML = this.widgetCSS
+          s.type = "text/css"
+          w.head.appendChild(s)
+          this.tweetsLoaded = true
         } else {
           this.restyleTwitter()
         }
@@ -135,7 +135,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach((sub: Subscription) => { sub.unsubscribe(); });
+    this.subscriptions.forEach((sub: Subscription) => { sub.unsubscribe()})
   }
 
   /**
@@ -143,30 +143,29 @@ export class HomeComponent implements OnInit, OnDestroy {
    * @param code The project's short code
    */
   public joinSession(code: string): void {
-    this.joinLoading = true;
-    this.angulartics.eventTrack.next({ action: 'enterLightningCode', properties: { category: 'joinProject', label: 'attempt' }});
+    this.joinLoading = true
     this._project.validateProject(code)
       .pipe(take(1))
       .subscribe(
         (data: any) => {
           this.joinLoading = false;
-          this.angulartics.eventTrack.next({ action: 'enterLightningCode', properties: { category: 'joinProject', label: 'success' }});
+          this.angulartics.eventTrack.next({ action: 'enterLightningCode', properties: { category: 'joinProject', label: 'success' }})
           if (data._id){
-            this.router.navigate(['/project', data._id]);
+            this.router.navigate(['/project', data._id])
           } else {
-            this.router.navigate(['/project', code]);
+            this.router.navigate(['/project', code])
           }
         },
         (error) => {
           this.joinLoading = false;
           if (error.status === 500) {
-            this.angulartics.eventTrack.next({ action: 'enterLightningCode', properties: { category: 'joinProject', label: 'failure' }});
-            this.errorObject.invalidCode = "Oh no! Something went wrong and we don't know what happened!";
+            console.error(error)
+            this.errorObject.invalidCode = "Oh no! Something went wrong and we don't know what happened!"
           } else {
-            this.errorObject.invalidCode = "We don't think that's a real code :confused:";
+            this.errorObject.invalidCode = "We don't think that's a real code :confused:"
           }
         }
-      );
+      )
   }
 
   /**
@@ -175,7 +174,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   private clearErrors(): void {
     for (let property in this.errorObject) {
       if (this.errorObject.hasOwnProperty(property) && typeof this.errorObject[property] === 'string') {
-        this.errorObject[property] = "";
+        this.errorObject[property] = ""
       }
     }
   }

@@ -96,9 +96,6 @@ export class RegisterFormComponent implements OnInit {
   /** Makes call to register the user */
   public register(formValue: any): void {
     this.errorObject = {}
-
-    this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'attempt' }})
-
     this.registerLoading = true
 
     formValue.identities = []
@@ -122,15 +119,15 @@ export class RegisterFormComponent implements OnInit {
         this.registerLoading = false
         if (data.user) {
 
-          data.user.username && this.angulartics.setUsername.next(data.user.username)
-          data.user.email && this.angulartics.setUserProperties.next({ email: data.user.email})
-          if (data.user.identities) {
-            data.user.identities.forEach((identity) => {
-              let userProperty: any = {}
-              userProperty[identity] = true
-              this.angulartics.setUserProperties.next(userProperty)
-            })
-          }
+          // data.user.username && this.angulartics.setUsername.next(data.user.username)
+          // data.user.email && this.angulartics.setUserProperties.next({ email: data.user.email})
+          // if (data.user.identities) {
+          //   data.user.identities.forEach((identity) => {
+          //     let userProperty: any = {}
+          //     userProperty[identity] = true
+          //     this.angulartics.setUserProperties.next(userProperty)
+          //   })
+          // }
           this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'success' }})
           if (this.readingToAdd && this.tempUserId) {
             this._auth.convertTempUser(this.tempUserId)
@@ -156,11 +153,7 @@ export class RegisterFormComponent implements OnInit {
           } else {
             // default case where nothing special happens
             this._router.navigate(['/dashboard'])
-          }
-          
-        } else {
-          // TRACK EXCEPTION... there was no data
-          this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'failure' }})
+          } 
         }
 
       // If there is a failure with registering the user...
@@ -197,7 +190,7 @@ export class RegisterFormComponent implements OnInit {
               
               // If we havent caught an error that we know about yet...
               if (!errorCaught) {
-                this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'failure' }})
+                console.error(err)
                 // form validation should have caught any other errors
               }
             }
@@ -214,7 +207,6 @@ export class RegisterFormComponent implements OnInit {
             }
             break
           default:
-            this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'failure' }})
             this.errorObject.serverError = true
             console.error(err)
         }

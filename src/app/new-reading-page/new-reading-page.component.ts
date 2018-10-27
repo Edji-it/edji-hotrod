@@ -578,12 +578,6 @@ export class NewReadingPage implements OnInit {
         } else {
             submitAction = "createNewReading"
         }
-        if (reading.questions && reading.questions.length > 0) {
-            this.angulartics.eventTrack.next({ action: submitAction + 'WithQuestion', properties: { category: 'heroFeature', label: 'attempt' }})
-        } else {
-            this.angulartics.eventTrack.next({ action: submitAction, properties: { category: 'contentManagement', label: 'attempt' }})
-        }
-
         this._readings.save(reading)
             .subscribe(
                 data => {
@@ -611,11 +605,6 @@ export class NewReadingPage implements OnInit {
                 },
                 error => {
                     console.error(error)
-                    if (reading.questions.length > 0) {
-                        this.angulartics.eventTrack.next({ action: submitAction + 'WithQuestion', properties: { category: 'heroFeature', label: 'failure' }})
-                    } else {
-                        this.angulartics.eventTrack.next({ action: submitAction, properties: { category: 'contentManagement', label: 'failure' }})
-                    }
                     this.errorObject.readingError = "There was an issue saving your reading. It may be our fault; please try again"
                     return false
                 }
