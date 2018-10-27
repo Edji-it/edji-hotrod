@@ -73,7 +73,7 @@
 
 //- Comments that are displayed in the comment pane
 hr.mobileBlock-hr(*ngIf="commentMobile && !commentMobileFirst && !readingReport")
-div(*ngIf="commentPaneActive", [class.selected--block]="comment.selected")
+div(*ngIf="commentPaneActive")
     .comment-new-highlight__mobile(*ngIf="comment && comment.active  && comment.new")
         .comment-new-dot__mobile
         p.comment-new-text__mobile new
