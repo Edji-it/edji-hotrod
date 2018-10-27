@@ -33,7 +33,7 @@
                   img.arrow-point(src="assets/images/reply-triangle.png")
                   .arrow-line
                 label {{ repliesById[comment._id].length }} Replies
-              .comment-wrap-row(*ngFor="let replyComment of repliesById[comment._id]")
+              .comment-wrap-row(*ngFor="let replyComment of repliesById[comment._id] | sortByDate:'createdAt'")
                 edji-comment.replyCommentBlock(
                   *ngIf="comment.author", 
                   [readOnly]="replyComment.user_id !== user._id",
