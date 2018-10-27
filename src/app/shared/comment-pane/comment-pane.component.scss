@@ -162,3 +162,44 @@
   text-align: left;
   color: darken($gray, 10%);
 }
+
+.replies {
+  margin-left: 50px;
+  position: relative;
+
+  label {
+    display: inline-block;
+    color: #5F5F5F;
+  }
+}
+
+.replies__header {
+  // margin-top: -25px;
+  // width: 50%;
+  // display: inline-block;
+  margin-top: -25px;
+  width: 50%;
+  float: left;
+}
+
+.arrow-wrap {
+  // -25px ???
+  width: 32px;
+  display: inline-block;
+}
+
+.arrow-point {
+  width: 10px;
+  margin: 0px 8.5px;
+  height: auto;
+  vertical-align: top;
+}
+
+.arrow-line {
+  width: 2px;
+  height: calc(100% - 25px);
+  background: #A9EFBC;
+  position: absolute;
+  top: -20px;
+  left: 13px;
+}

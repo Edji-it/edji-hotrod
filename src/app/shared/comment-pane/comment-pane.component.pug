@@ -26,9 +26,13 @@
             (commentReply)="commentReplyEmitter($event)",
             style="display: initial;"
           )
-          ng-container(*ngIf="repliesById[comment._id]")
-            label Replies
-            .replyOverflow([ngClass]="[ _comments.activeComment.active && _comments.activeComment.type=='emoji' ? '' : 'replyOverflow-normal' ]")
+          ng-container(*ngIf="repliesToggleById[comment._id]")
+            .replies([ngClass]="[ _comments.activeComment.active && _comments.activeComment.type=='emoji' ? '' : 'replyOverflow-normal' ]")
+              .replies__header
+                .arrow-wrap
+                  img.arrow-point(src="assets/images/reply-triangle.png")
+                  .arrow-line
+                label {{ repliesById[comment._id].length }} Replies
               .comment-wrap-row(*ngFor="let replyComment of repliesById[comment._id]")
                 edji-comment.replyCommentBlock(
                   *ngIf="comment.author", 

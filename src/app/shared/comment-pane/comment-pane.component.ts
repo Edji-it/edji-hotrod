@@ -19,7 +19,8 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
   public commentCount: number = 0
   public rowComments: EdjiComment[][] = []
   // Reply variables
-  public repliesById: any = {}
+  public repliesById: any = {} // Updated via project service
+  public repliesToggleById: any = {} // Boolean properties for template
   public replyCommentNew: EdjiComment
   // Is fully visible, focused, and editable
   public active = false
@@ -204,7 +205,9 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
   }
 
   commentReplyEmitter(comment) {
-    this.commentReply.emit(comment)
+    // Toggle display of
+    this.repliesToggleById[comment._id] = !this.repliesToggleById[comment._id]
+    // this.commentReply.emit(comment)
   }
 
   /**
