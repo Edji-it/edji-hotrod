@@ -44,19 +44,18 @@
                   [userPermission]="getCommentPermissions(replyComment)"
                 )
                 .replyCommentAddSection
-            //--Reply input--
-            .reply-row
-              .comment__avatar.reply__avatar {{ user.fullname.substr(0,2).toUpperCase()}}
-              .replyInput Reply:
-              //--Add reply buttons--
-              .replyButtonGroup
-                button#addEmojiReply.emoji(*ngIf="project.types.indexOf('emoji') > -1", (click)="addReplyOfType('emoji')")
-                  i.icon.icon-emoji-comment
-                button#addTextReply.emoji(*ngIf="project.types.indexOf('text') > -1", (click)="addReplyOfType('text')")
-                  i.icon.icon-text-comment
-                button#addAudioReply.emoji(*ngIf="project.types.indexOf('audio') > -1", (click)="addReplyOfType('audio')")
-                  i.icon.icon-mic
-                  span.beta-tag--icon(title="Beta Feature: May not work on all devices.")
-                    | B
+              //--Reply input--
+              .reply-row
+                .comment__avatar.show.reply__avatar {{ user.fullname.substr(0,2).toUpperCase()}}
+                .reply-input__line
+                .replyInput Add a Reply:
+                //--Add reply buttons--
+                .replyButtonGroup
+                  button#addEmojiReply.emoji(*ngIf="project.types.indexOf('emoji') > -1", (click)="addReplyOfType('emoji')")
+                    i.icon.icon-emoji-comment
+                  button#addTextReply.emoji(*ngIf="project.types.indexOf('text') > -1", (click)="addReplyOfType('text')")
+                    i.icon.icon-text-comment
+                  button#addAudioReply.emoji(*ngIf="project.types.indexOf('audio') > -1", (click)="addReplyOfType('audio')")
+                    i.icon.icon-mic
 .exit-row(*ngIf="visible", (tap)="dismissCommentPane()")
 //- END .comment - mobile
