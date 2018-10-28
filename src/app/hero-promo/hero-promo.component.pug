@@ -13,7 +13,7 @@ nav-bar
       p.row-xl-pad(style='font-size:1.25em; padding-top: 0px;')
         | Hero gives you more powers to supercharge your classrooms readings. Engage your students with questions, in-reading discussion, and more! 
         span([innerHTML]="':tada:' | emojione")
-      button#topHeroCTA.btn.btn-lg.btn-hero((click)='goHero()')
+      button#topHeroCTA.btn.btn-lg.btn-hero((click)='goHero("upperCTA")')
         | Go Hero
   //- Feature preview and Academy CTA
   .row.row-xl-pad
@@ -98,7 +98,7 @@ nav-bar
           button.btn.btn-secondary((click)="showRequestAcademyModal = true") Request Academy Info
     .col-md-4
       .button__row
-          button.btn.btn-hero((click)='goHero()')
+          button.btn.btn-hero((click)='goHero("middleCTA")')
             | Time to Go Hero
   //- Classroom Support
   .row.row-xl-pad
@@ -142,7 +142,7 @@ nav-bar
       p.on-dark.mt-2.mb-4
         | Engage your students, build super lessons, and support Edji
       .button__row.pb-2
-          button#heroCTA.btn-lg.btn.btn-hero((click)='goHero()')
+          button#heroCTA.btn-lg.btn.btn-hero((click)='goHero("lowerCTA")')
             | Go Hero 
             span(style='font-weight: 700;')
 //- container-fluid

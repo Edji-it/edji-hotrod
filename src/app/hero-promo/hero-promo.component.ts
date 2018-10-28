@@ -48,13 +48,13 @@ export class HeroPromoPageComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((sub) => { sub.unsubscribe() })
   }
 
-  public goHero() : void {
+  public goHero(location?: string) : void {
     // Is user logged in?
     if (this._auth.getUser().isLoggedIn != true) {
       this.showLoginModal = true
     } else {
       this.showHeroSubModal = true
-      this.angulartics.eventTrack.next({ action: 'heroSubInterest', properties: { category: 'heroFeature', label: 'success' }})
     }
+    this.angulartics.eventTrack.next({ action: 'goHero_promoPage_' + location, properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }})
   }
 }
