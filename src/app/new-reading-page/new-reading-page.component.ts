@@ -684,6 +684,11 @@ export class NewReadingPage implements OnInit {
      * Adds a question block to the new reading and then adds in a new medium editor
      */
     public addQuestion(insertHtml?: string, insertPos?: number) {
+        // fire an analytic event here for tracking purposes
+        this.angulartics.eventTrack.next({ 
+            action: 'qna_question_added', 
+            properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }
+        })
         let answer_types = this._auth.getAllowedCommentMediaTypes()
         let question = <EdjiQuestion>{
             prompt: '',

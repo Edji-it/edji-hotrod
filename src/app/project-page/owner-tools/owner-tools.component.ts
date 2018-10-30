@@ -1,10 +1,11 @@
 import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core'
+import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
-import { AuthService, ProjectService, ReadingService, SocketService } from '../../_services';
-import { CommentStats, Project, Reading } from './../../shared/datatypes';
+import { AuthService, ProjectService, ReadingService, SocketService } from '../../_services'
+import { CommentStats, Project, Reading } from './../../shared/datatypes'
 
 @Component({
   selector: 'owner-tools',
@@ -33,7 +34,8 @@ export class OwnerToolsComponent implements OnInit {
     private _projects: ProjectService,
     private _auth: AuthService,
     private _socket: SocketService, 
-    private _readings: ReadingService
+    private _readings: ReadingService,
+    private angulartics: Angulartics2
   ) {
     this.commentStats = this._projects.commentStats
   }
@@ -77,23 +79,34 @@ export class OwnerToolsComponent implements OnInit {
   }
 
   private togglePower(powerName: string, turnOn: boolean) {
+
+    // fire an analytic event here for tracking purposes
+    let toggle = 'Off'
+    if (turnOn) {
+      toggle = 'On'
+    }
+    this.angulartics.eventTrack.next({ 
+      action: 'teacherTools_heatVision_toggle' + toggle, 
+      properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }
+    })
+    
     // set heat vision to loading
-      this.powersLoading.heatVision = true
-      setTimeout(() => {
-        // stop heat vision loading
-        this.powersLoading.heatVision = false
-      }, 1000)
+    this.powersLoading.heatVision = true
+    setTimeout(() => {
+      // stop heat vision loading
+      this.powersLoading.heatVision = false
+    }, 1000)
 
-      // Toggle the Heat Vision boolean
-      let updateObj: any = {}
-      updateObj[powerName] = turnOn
+    // Toggle the Heat Vision boolean
+    let updateObj: any = {}
+    updateObj[powerName] = turnOn
 
-      this._projects.update(updateObj, this.currentProject._id)
-        .pipe(take(1))
-        .subscribe((project) => {
-          // Live update users once save is successful
-          this._socket.toggleHeatVision({ all: turnOn })
-        })
+    this._projects.update(updateObj, this.currentProject._id)
+      .pipe(take(1))
+      .subscribe((project) => {
+        // Live update users once save is successful
+        this._socket.toggleHeatVision({ all: turnOn })
+      })
   }
 
   private showElseFalse(displayPane: string) {
@@ -103,18 +116,33 @@ export class OwnerToolsComponent implements OnInit {
         this.showFireFeed = false
         this.showCommentCounts = false
         this.showReadingRecap = false
+        // fire an analytic event here for tracking purposes
+        this.angulartics.eventTrack.next({ 
+            action: 'teacherTools_questionPanel_open', 
+            properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }
+        })
         break
       case 'showFireFeed':
         this.showQuestionFeed = false
         this.showFireFeed = !this.showFireFeed
         this.showCommentCounts = false
         this.showReadingRecap = false
+        // fire an analytic event here for tracking purposes
+        this.angulartics.eventTrack.next({ 
+            action: 'teacherTools_firefeed_open', 
+            properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }
+        })
         break
       case 'showCommentCounts':
         this.showQuestionFeed = false
         this.showFireFeed = false
         this.showCommentCounts = !this.showCommentCounts
         this.showReadingRecap = false
+        // fire an analytic event here for tracking purposes
+        this.angulartics.eventTrack.next({ 
+            action: 'teacherTools_leaderboard_open', 
+            properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }
+        })
         break
       case 'showReadingRecap':
         this.showQuestionFeed = false
