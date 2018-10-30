@@ -208,7 +208,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                             if (this.project.types.indexOf('audio') > -1 && !this._audio.isSupported()) {
                                 this.audioSupportError = true
                                 // if audio is not supported, let analytics know
-                                this.angulartics.eventTrack.next({ action: 'audioSupport', properties: { category: 'heroFeature', label: 'failure' }})
+                                this.angulartics.eventTrack.next({ 
+                                    action: 'noAudioSupport', 
+                                    properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }
+                                })
                             }
                             this.directCommentOptions = []
                             for (let i = 0; i < this.project.types.length; i++) {
@@ -597,17 +600,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             .then(comment => {
                 // We add the comment from the service because it has an Id
                 if (comment._id) {
-                    this.angulartics.eventTrack.next({ action: type + 'CommentCreate', properties: { category: 'projectAction', label: 'success' }})
-                    // Check if comment should start expanded
-                    // Needs to be moved to commentsByIndexAdd or comment component ngOnInit
-                    // if (document.querySelector('.w[index="' + start + '"] .comment')) {
-                    //     let commentY = document.querySelector('.w[index="' + start + '"] .comment')['offsetTop']
-
-                    //     if (this.lineCountArray[commentY] && this.lineCountArray[commentY][0].expanded) {
-                    //         comment.expanded = true
-                    //         comment.lineCount = this.lineCountArray[commentY].length + 1
-                    //     }
-                    // }
                     // Add setting to trigger focus on new comment
                     comment.new = true // this is basically to tell our test cases which comment was just made
                     this.inactivateComment()
@@ -1006,7 +998,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.replyComment = comment
         this.focusOverride = true
         this.focusHighlight(comment.start, comment.end, comment.loc)
-        this.angulartics.eventTrack.next({ action: 'openDiscussionPanel', properties: { category: 'heroFeature', label: 'success' }})
         this.showDiscussions = true
     }
 
@@ -1083,13 +1074,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
       if (this._comments.commentContext !== 'answer') {
         this._projects.deleteComment(comment)
         .then(data => {
-          // Sort through the comment types and do the apppropriate post-delete action
-          if (comment.reply_to) {
-            this._projects.removeCommentFromReplies(comment)
-            this.angulartics.eventTrack.next({ action: comment.type + 'deleteReply', properties: { category: 'heroFeature', label: 'success' }})
-          } else {
-            this.angulartics.eventTrack.next({ action: comment.type + 'deleteComment', properties: { category: 'projectAction', label: 'success' }})
-          }
           // Tell the modal to close on successful delete
           this._comments.commentDeleted()
         })
@@ -1101,7 +1085,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this._projects.deleteAnswer(comment)
         .then(data => {
           this._projects.removeAnswerFromAnswers(comment)
-          this.angulartics.eventTrack.next({ action: comment.type + 'deleteAnswer', properties: { category: 'heroFeature', label: 'success' }})
           // Tell the modal to close on successful delete
           this._comments.commentDeleted()
         })
@@ -1110,13 +1093,5 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
           console.error(error)
         })
       }
-    } 
-
-    // /**
-    //  * Return feedback for current user
-    //  * @param feedbackArray
-    //  */
-    // public getUsersFeedback(feedbackArray: Feedback[]) : Feedback[] {
-        
-    // }
+    }
 }

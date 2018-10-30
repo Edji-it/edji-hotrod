@@ -149,7 +149,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       .subscribe(
         (data: any) => {
           this.joinLoading = false;
-          this.angulartics.eventTrack.next({ action: 'enterLightningCode', properties: { category: 'joinProject', label: 'success' }})
           if (data._id){
             this.router.navigate(['/project', data._id])
           } else {

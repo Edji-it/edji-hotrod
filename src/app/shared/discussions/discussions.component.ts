@@ -109,7 +109,6 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
     // Tell the server we've added a comment.
     this._projects.saveComment(this.replyCommentNew)
     .then(comment => {
-      this.angulartics.eventTrack.next({ action: type + 'ReplyCreate', properties: { category: 'heroFeature', label: 'success' }})
       comment.active = true
       this._comments.activeComment = comment
       this._projects.addCommentToReplies(comment)

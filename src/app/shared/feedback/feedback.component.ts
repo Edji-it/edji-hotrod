@@ -125,7 +125,11 @@ export class FeedbackComponent implements OnInit {
     this._bumblebee.sendFeedback(data).pipe(take(1)).subscribe(
       (res) => {
         this.loading = false
-        this.angulartics.eventTrack.next({ action: 'sendFeedback', properties: { category: 'accountManagement', label: 'success' }})
+        // fire an analytic event here for tracking purposes
+        this.angulartics.eventTrack.next({ 
+          action: 'send_feedback', 
+          properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }
+        })
         this.feedbackSuccess = true
         this._locker.remove("feedbackFormData")
         this.feedbackClose()

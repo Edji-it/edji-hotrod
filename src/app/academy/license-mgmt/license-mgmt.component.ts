@@ -268,7 +268,6 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
         // Clear the form
         this.licenseRequest.reset()
         this.loading = false
-        this.angulartics.eventTrack.next({ action: 'requestLicense', properties: { category: 'accountManagement', label: 'success' }})
       },
       (err) => {
         console.error(err)

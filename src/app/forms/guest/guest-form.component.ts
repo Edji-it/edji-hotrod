@@ -49,8 +49,6 @@ export class GuestForm implements OnInit {
         this._auth.setUser(data.user)
 
         this.loginSuccess.emit(data.user)
-        this.angulartics.eventTrack.next({ action: 'joinAsGuest', properties: { category: 'joinProject', label: 'success' }})
-
       },
       (error) => {
         this.isLoading = false;

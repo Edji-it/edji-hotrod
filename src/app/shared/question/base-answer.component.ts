@@ -62,12 +62,8 @@ export abstract class BaseAnswerComponent implements OnInit {
       this._comments.activeComment = answer
       this._projects.addAnswerToAnswers(answer)
       this._projects.saveAnswer(answer)
-
-      this._angulartics.eventTrack.next({ action: newAnswer.type + 'AnswerCreate', properties: { category: 'heroFeature', label: 'success' }})
     })
     .catch(error => {
-      // TRACK EXCEPTION
-      this._angulartics.eventTrack.next({ action: newAnswer.type + 'AnswerCreate', properties: { category: 'heroFeature', label: 'failure' }})
       console.error(error)
     })
   }

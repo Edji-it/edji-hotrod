@@ -6,7 +6,7 @@ import * as Recorder from 'opus-recorder/dist/recorder.min.js'
 
 // Project Dependencies
 import { EdjiComment } from '../../shared/datatypes'
-import { AudioService, CommentService, MediaService } from '../../_services'
+import { AudioService, CommentService, MediaService, AuthService } from '../../_services'
 import { Observable, Subscription } from 'rxjs';
 
 // declare var MediaRecorder: any
@@ -95,7 +95,8 @@ export class AudioCommentComponent implements OnInit {
     private angulartics: Angulartics2,
     private sanitizer: DomSanitizer,
     // Note: The AudioService is provided at the page level (project page) to be lighter
-    private _audio: AudioService
+    private _audio: AudioService,
+    private _auth: AuthService
   ) {
 
   }
@@ -357,8 +358,6 @@ export class AudioCommentComponent implements OnInit {
    * Pause playback of the audio track
    */
   public pause() {
-    // Let analytics know user paused playback
-    this.angulartics.eventTrack.next({ action: 'audioPause', properties: { category: 'heroFeature', label: 'success' }})
     this.currentState = playState.inactive
     clearInterval(this.pInterval)
     this.playTime = 0
@@ -371,7 +370,16 @@ export class AudioCommentComponent implements OnInit {
   public play() {
     this._audio.signalAudioInitiated(this.comment._id)
     // Let analytics know user started playback
-    this.angulartics.eventTrack.next({ action: 'audioPlay', properties: { category: 'heroFeature', label: 'success' }})
+    let commentContext = 'comment'
+    if (this.comment.reply_to && this.comment.reply_to!=='') {
+        commentContext = 'reply'
+    } else if (this.comment.questionId && this.comment.questionId!=='') {
+      commentContext = 'answer'
+    }
+    this.angulartics.eventTrack.next({ 
+      action: commentContext + '_audio_play', 
+      properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }
+    })
     this.currentState = playState.playing
     this.audio.play()
   }
@@ -389,8 +397,6 @@ export class AudioCommentComponent implements OnInit {
    */
   public restartPlayback() {
     this.currentState = playState.playing
-    // Let analytics know user restarted playback
-    this.angulartics.eventTrack.next({ action: 'audioRestart', properties: { category: 'heroFeature', label: 'success' }})
     // Reload
     this.audio.load()
     // Play!

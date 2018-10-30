@@ -46,7 +46,11 @@ export class ResetPassComponent {
       .subscribe((success) => {
         this.sentName = enteredValue
         this.loading = false
-        this.angulartics.eventTrack.next({ action: 'requestPasswordEmail', properties: { category: 'accountManagement', label: 'success' }})
+        // fire an analytic event here for tracking purposes
+        this.angulartics.eventTrack.next({ 
+          action: 'change_password_request', 
+          properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }
+        })
         this.submissionSuccess = true
       }, (err) => {
         this.loading = false

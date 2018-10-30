@@ -234,7 +234,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
       .subscribe(
         (data) => {
           this.joinLoading = false;
-          this.angulartics.eventTrack.next({ action: 'enterLightningCode', properties: { category: 'joinProject', label: 'success' }})
           if (data._id){
             this._router.navigate(['/project', data._id])
           } else {
@@ -296,8 +295,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
     this.showAvatarDropdown = false
     // Open the modal
     this.showReferralModal=true
-    // Track when this button is clicked on in angulartics
-    this.angulartics.eventTrack.next({ action: 'clickReferralButton', properties: { category: 'referral', label: 'success' }})
   }
 
   /**

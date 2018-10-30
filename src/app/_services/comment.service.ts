@@ -188,11 +188,6 @@ export class CommentService {
     if (this.commentContext !== "answer") {
       this._projects.saveComment(comment)
       .then(comment => {
-        if (this.commentContext === 'reply') {
-          this.angulartics.eventTrack.next({ action: comment.type + 'updateReply', properties: { category: 'heroFeature', label: 'success' }})
-        } else {
-          this.angulartics.eventTrack.next({ action: comment.type + 'updateComment', properties: { category: 'projectAction', label: 'success' }})
-        }
       })
       .catch(error => {
         console.log(error)
@@ -201,7 +196,6 @@ export class CommentService {
       this._projects.addAnswerToAnswers(comment)
       this._projects.saveAnswer(comment)
       .then(answer => {
-        this.angulartics.eventTrack.next({ action: comment.type + 'updateAnswer', properties: { category: 'heroFeature', label: 'success' }})
         this._projects.addAnswerToAnswers(answer)
       })
       .catch(error => {

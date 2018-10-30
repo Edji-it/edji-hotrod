@@ -4,7 +4,7 @@ import { EdjiComment } from '../../shared/datatypes'
 import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
-import { ProjectService } from '../../_services'
+import { ProjectService, AuthService } from '../../_services'
 
 enum playState {
   inactive, 
@@ -37,6 +37,7 @@ export class AvatarPortalComponent implements OnInit, OnDestroy {
   constructor (
     private _projects: ProjectService,
     private angulartics: Angulartics2,
+    private _auth: AuthService
   ) { 
       
   }
@@ -101,7 +102,6 @@ export class AvatarPortalComponent implements OnInit, OnDestroy {
    */
   private pause() {
     // Let analytics know user paused playback
-    this.angulartics.eventTrack.next({ action: 'audioPause', properties: { category: 'heroFeature', label: 'success' }})
     this.currentState = playState.inactive
     this.audio.pause()
   }
@@ -111,7 +111,16 @@ export class AvatarPortalComponent implements OnInit, OnDestroy {
    */
   private play() {
     // Let analytics know user started playback
-    this.angulartics.eventTrack.next({ action: 'audioPlay', properties: { category: 'heroFeature', label: 'success' }})
+    let commentContext = 'comment'
+    if (this.comment.reply_to && this.comment.reply_to!=='') {
+        commentContext = 'reply'
+    } else if (this.comment.questionId && this.comment.questionId!=='') {
+      commentContext = 'answer'
+    }
+    this.angulartics.eventTrack.next({ 
+      action: commentContext + '_audio_play', 
+      properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }
+    })
     this.currentState = playState.playing
     this.audio.play()
   }
