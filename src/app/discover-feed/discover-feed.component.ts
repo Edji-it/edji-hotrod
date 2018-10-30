@@ -34,6 +34,7 @@ export class DiscoverFeedComponent implements OnInit {
   public loading: boolean = true
 
   constructor(
+    private _auth: AuthService,
     private _readings: ReadingService,
     private angulartics: Angulartics2
   ) { }
@@ -46,7 +47,14 @@ export class DiscoverFeedComponent implements OnInit {
    * Load Feed with Params
    * - This auto-runs on load and every change, called by p-dataList in the template
    */
-  loadFeed(paging?: any){
+  loadFeed(action: string, paging?: any){
+    // fire an analytic event here for tracking purposes
+    if (action!=='') {
+      this.angulartics.eventTrack.next({ 
+        action: 'discover_' + action, 
+        properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }
+      })
+    }
     this.loading = true
 
     let filters = {
