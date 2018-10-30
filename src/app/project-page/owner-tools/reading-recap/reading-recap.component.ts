@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms'
 import * as jsPDF from 'jspdf'
 import { take } from 'rxjs/operators'
 import { DropdownModule } from 'primeng/dropdown'
+import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
 import { CommentFilter, ProjectService } from 'src/app/_services/project.service'
@@ -66,7 +67,8 @@ export class ReadingRecapComponent implements OnInit {
     private _projects : ProjectService,
     private _auth: AuthService,
     private _fb: FormBuilder,
-    private _academy: AcademyService
+    private _academy: AcademyService,
+    private angulartics: Angulartics2
   ) { 
     this.evaluationForm = _fb.group({
       email: [null, Validators.compose([Validators.required, this.emailValidator])],
@@ -76,6 +78,8 @@ export class ReadingRecapComponent implements OnInit {
   }
 
   ngOnInit() {
+    // event tracking for opening recap
+    this.angulartics.eventTrack.next({ action: 'readingRecap_opened', properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }})
     // Slide in once component is constructed
     setTimeout(() => {
       this.slidePaneIn = true
@@ -226,6 +230,8 @@ export class ReadingRecapComponent implements OnInit {
    * This gets called whenever the dropdown selection changes
    */
   public changeStudentSelection(): void {
+    // fire an analytic event here for tracking purposes
+    this.angulartics.eventTrack.next({ action: 'readingRecap_studentSelected', properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }})
     this.currentStudent = this.students.find( user => user.value===this.selectedStudent)
     this.buildReport()
     this.processTimeChart()
@@ -298,6 +304,8 @@ export class ReadingRecapComponent implements OnInit {
   }
 
   public addEvaluationOnly(evalData: any): void {
+    // fire an analytic event here for tracking purposes
+    this.angulartics.eventTrack.next({ action: 'readingRecap_feedbackGiven', properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }})
      // create a new evaluation to save to the project
      let evalObj = {
       createdAt: new Date,
