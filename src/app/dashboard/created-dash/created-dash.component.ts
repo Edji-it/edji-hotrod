@@ -39,6 +39,7 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
   public rows: number = 15 // number of Readings to return
   public total: number = 15 // total Readings
   public pageNo: number = 1
+  private currentPageNo: number = 0 // used for analytics to determine page up/down direction
 
   // TypeScript public modifiers
   constructor(
@@ -69,7 +70,6 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
           },
           (error) => {
             this.loading = false;
-            this.angulartics.eventTrack.next({ action: "getAllReadings", properties: { category: "serviceCalls", label: "failure" }});
             this.errorObject.readingError = "We had some trouble getting your readings, it might be our fault";
           }
       )
@@ -96,6 +96,18 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
     this.rows = filters['size'] = paging && paging.rows != undefined ? parseInt(paging.rows) : this.rows
 
     this._readings.updateCreated(filters)
+    if (paging && paging!==undefined) {
+      let direction = 'Up'
+      if (this.currentPageNo>paging.page) {
+        direction = 'Down'
+      }
+      // fire an analytic event here for tracking purposes
+      this.angulartics.eventTrack.next({ 
+        action: 'createdReading_pagination_page' + direction, 
+        properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }
+      })
+      this.currentPageNo=paging.page
+    }
   }
 
   private updateProjectLabel(projectId: string, projectLabel: string) {

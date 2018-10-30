@@ -32,6 +32,7 @@ export class JoinedDashComponent implements OnInit, OnDestroy {
   public first: number = 0 // first page 
   public rows: number = 25 // number of Readings to return
   public total: number = 25 // total Readings
+  private currentPageNo: number = 0 // used for analytics to determine page up/down direction
   
   // TypeScript public modifiers
   constructor(
@@ -70,6 +71,19 @@ export class JoinedDashComponent implements OnInit, OnDestroy {
     this.first = filters['start'] = paging && paging.first != undefined ? (parseInt(paging.first) - 1) : this.first
     if (this.first < 0) { this.first = filters['start'] = 0 }
     this.rows = filters['size'] = paging && paging.rows != undefined ? parseInt(paging.rows) : this.rows
+
+    if (paging && paging!==undefined) {
+      let direction = 'Up'
+      if (this.currentPageNo>paging.page) {
+        direction = 'Down'
+      }
+      // fire an analytic event here for tracking purposes
+      this.angulartics.eventTrack.next({ 
+        action: 'joinedReading_pagination_page' + direction, 
+        properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }
+      })
+      this.currentPageNo=paging.page
+    }
 
     this._projects.getJoined(filters)
       .subscribe(data => {

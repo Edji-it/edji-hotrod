@@ -1,8 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 import { take } from 'rxjs/operators'
+import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
-import { ProjectService } from '../../_services'
+import { ProjectService, AuthService } from '../../_services'
 import { Project } from '../../shared/datatypes'
 
 @Component({
@@ -31,13 +32,20 @@ export class DeleteProjectModal implements OnInit {
   public showError : boolean = false;
 
   constructor( 
-    private _projects : ProjectService
+    private _projects : ProjectService,
+    private angulartics: Angulartics2,
+    private _auth: AuthService
   ) { }
 
   ngOnInit() { }
 
   // upon recieving a deleteReading event, our del-project modal will trigger this
   deleteThisProject(project : Project) : void {
+    // fire an analytic event here for tracking purposes
+    this.angulartics.eventTrack.next({ 
+      action: 'createdReading_delete', 
+      properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }
+    })
     // Listen for an Observable from project.service.ts
     this._projects.delete(project)
       .pipe(take(1)) // so we don't need to unsubscribe

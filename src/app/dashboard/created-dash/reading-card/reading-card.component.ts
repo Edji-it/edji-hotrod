@@ -4,7 +4,7 @@ import { Component, Input, Output, OnDestroy, OnInit, EventEmitter } from '@angu
 import { ActivatedRoute } from '@angular/router'
 
 // Project Dependencies
-import { ReadingService, ProjectService } from '../../../_services';
+import { ReadingService, ProjectService, AuthService } from '../../../_services';
 import { Reading, Project } from '../../../shared/datatypes';
 
 @Component({
@@ -43,7 +43,8 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
     private _route: ActivatedRoute,
     private _readings: ReadingService,
     private _projects: ProjectService,
-    private angulartics: Angulartics2
+    private angulartics: Angulartics2,
+    private _auth: AuthService
   ) { }
 
   ngOnInit() {
@@ -77,7 +78,11 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
       this._readings.getAllVersions(versionId)
         .subscribe(
           data => {
-            this.angulartics.eventTrack.next({ action: "getAllVersions", properties: { category: "serviceCalls", label: "success" }})
+            // fire an analytic event here for tracking purposes
+            this.angulartics.eventTrack.next({ 
+              action: 'createdReading_getAllVersions', 
+              properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }
+            })
             this.isLoading = false
             this.versions = data.readings || []
           },
@@ -124,6 +129,15 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
     }
 
     if ((publicFlag && (this.reading.grade_levels && this.reading.subjects)) || !publicFlag) {
+      // fire an analytic event here for tracking purposes
+      let publicVal = 'public'
+      if (!publicFlag) {
+        publicVal = 'private'
+      }
+      this.angulartics.eventTrack.next({ 
+        action: 'createdReading_togglePublic_' + publicVal, 
+        properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }
+      })
       // Close the tooltip
       this.togglePublicFlag=false
 
