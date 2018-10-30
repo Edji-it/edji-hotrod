@@ -32,7 +32,7 @@ export class AppComponent {
     private _auth: AuthService,
     private _messages: MessageService
     ) {
-
+      angulartics2GoogleAnalytics.startTracking()
       // Scrollto should account for nav bar
       PageScrollConfig.defaultScrollOffset = 90;
       PageScrollConfig.defaultDuration = 800;
