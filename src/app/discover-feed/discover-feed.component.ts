@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Subscription } from 'rxjs'
+import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
 import { AuthService, ReadingService } from '../_services'
@@ -32,7 +33,10 @@ export class DiscoverFeedComponent implements OnInit {
   // State vars
   public loading: boolean = true
 
-  constructor(private _readings: ReadingService) { }
+  constructor(
+    private _readings: ReadingService,
+    private angulartics: Angulartics2
+  ) { }
 
   ngOnInit() {
 
