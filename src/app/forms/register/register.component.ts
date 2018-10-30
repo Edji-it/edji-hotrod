@@ -118,17 +118,11 @@ export class RegisterFormComponent implements OnInit {
       .subscribe((data: any) => {
         this.registerLoading = false
         if (data.user) {
-
-          // data.user.username && this.angulartics.setUsername.next(data.user.username)
-          // data.user.email && this.angulartics.setUserProperties.next({ email: data.user.email})
-          // if (data.user.identities) {
-          //   data.user.identities.forEach((identity) => {
-          //     let userProperty: any = {}
-          //     userProperty[identity] = true
-          //     this.angulartics.setUserProperties.next(userProperty)
-          //   })
-          // }
-          this.angulartics.eventTrack.next({ action: 'registerMain', properties: { category: 'login', label: 'success' }})
+          // fire an analytic event here for tracking purposes
+          this.angulartics.eventTrack.next({ 
+            action: 'registration', 
+            properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }
+          })
           if (this.readingToAdd && this.tempUserId) {
             this._auth.convertTempUser(this.tempUserId)
               .pipe(take(1))

@@ -309,9 +309,30 @@ export class NavBarComponent implements OnInit, OnDestroy {
     // Set the coupon code passed through from the referral modal
     this.couponCode = couponCode
     // Show the hero subscription modal and pass the coupon code in
-    // setTimeout(() => {
-      this.showHeroSubModal = true
-    // }, 1000)
+    this.showHeroSubModal = true
+    // fire an analytic event here for tracking purposes
+    this.angulartics.eventTrack.next({ 
+      action: 'referral_redeemCoupon' + this.getCouponNum(this.couponCode), 
+      properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }
+    })
+  }
+
+  // we don't want to expose the coupon code to analytics, so we'll reference the number of referrals
+  private getCouponNum(couponCode: string): number {
+    switch(couponCode) {
+      case "HOTROD_HERO_ONE5TH":
+        return 1
+      case "HOTROD_HERO_24BUCKS":
+        return 2
+      case "HOTROD_HERO_36BIGONES":
+        return 3
+      case "HOTROD_HERO_4FIFTHS":
+        return 4
+      case "HOTROD_HERO_REFERMASTER":
+        return 5
+      default:
+        return 0
+    }
   }
 }
 

@@ -81,8 +81,11 @@ export class HeroChangeComponent implements OnInit {
       .pipe(take(1))
       .subscribe(
         data => {
-          // track user cancelling hero subscription in analytics
-          this.angulartics.eventTrack.next({ action: 'cancelSubscription', properties: { category: 'heroFeature', label: 'success' }})
+          // fire an analytic event here for tracking purposes
+          this.angulartics.eventTrack.next({ 
+            action: 'subscription_cancel', 
+            properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }
+          })
 
           this.canceling = false
           this.isCanceled = true
