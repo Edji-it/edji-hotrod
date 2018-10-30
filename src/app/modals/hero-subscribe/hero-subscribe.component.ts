@@ -34,6 +34,8 @@ export class HeroSubscribeComponent implements OnInit {
 
   @Input()
   couponCode: string = ''
+  @Input()
+  goHeroLocation: string = 'subscribeModal'
 
   @Output()
   closeModal: EventEmitter<any> = new EventEmitter()
@@ -168,7 +170,7 @@ export class HeroSubscribeComponent implements OnInit {
     .subscribe(
       data => {
         // track user adding hero subscription in analytics
-        this.angulartics.eventTrack.next({ action: eventAction, properties: { category: 'heroFeature', label: 'success' }})
+        this.angulartics.eventTrack.next({ action: 'goHero_promoPage_' + this.goHeroLocation, properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }})
         this.userNowHero = true
         this.loading = false
         if (data.user) {

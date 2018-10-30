@@ -19,22 +19,22 @@ nav-bar
   .row.row-xl-pad
     .col-md-8
       .row
-        .feature-preview.col-md-4.text-center(pageScroll, href="#sectionFilter")
+        .feature-preview.col-md-4.text-center(pageScroll, href="#sectionFilter", (click)='spotlightTracking("studentFiltering")')
           .img-wrap
             img(style="transform: translateX(-1px);", src="/assets/images/promo-spot-filter.svg")
           h3.pt-3 Filter on individuals
-        .feature-preview.col-md-4.text-center(pageScroll, href="#sectionAudio")
+        .feature-preview.col-md-4.text-center(pageScroll, href="#sectionAudio", (click)='spotlightTracking("audioCommenting")')
           .img-wrap
             img(src="/assets/images/promo-spot-mic.svg")
           h3.pt-3 Amp up student voice
-        .feature-preview.col-md-4.text-center(pageScroll, href="#sectionQuestion")
+        .feature-preview.col-md-4.text-center(pageScroll, href="#sectionQuestion", (click)='spotlightTracking("questionsAnswers")')
           .img-wrap
             img(style="transform: translate3d(2px,2px,0px);", src="/assets/images/promo-spot-question.svg")
           h3.pt-3 Ask and assess
     .col-md-4.pt-4
         h2.small-bold Assemble Your Team
         p With Hero Academy, your whole school can wield the powers of Hero
-        .btn.btn-secondary((click)="showRequestAcademyModal = true") Request Academy Info
+        .btn.btn-secondary((click)="requestAcademyModalShow('featurePreview')") Request Academy Info
   .row.hero-promo-form(style="margin:50px 0px;")
     .col-12
       h1.big-light.text-center(style='margin-bottom: 0.5em;') 
@@ -95,7 +95,7 @@ nav-bar
     .col-2
     .col-md-4
       .button__row
-          button.btn.btn-secondary((click)="showRequestAcademyModal = true") Request Academy Info
+          button.btn.btn-secondary((click)="requestAcademyModalShow('middleCTA')") Request Academy Info
     .col-md-4
       .button__row
           button.btn.btn-hero((click)='goHero("middleCTA")')
