@@ -32,17 +32,17 @@
                 .arrow-wrap
                   img.arrow-point(src="assets/images/reply-triangle.png")
                   .arrow-line
-              .comment-wrap-row(*ngFor="let replyComment of repliesById[comment._id] | sortByDate:'createdAt'")
-                edji-comment.replyCommentBlock(
-                  *ngIf="comment.author", 
-                  [readOnly]="replyComment.user_id !== user._id",
-                  [comment]="replyComment",
-                  [commentContext]="'reply'",
-                  [isActive]="replyComment.active",
-                  [reply]="true",
-                  [userPermission]="getCommentPermissions(replyComment)"
-                )
-                .replyCommentAddSection
+              ng-container(*ngIf="repliesById[comment._id]")
+                .comment-wrap-row(*ngFor="let replyComment of repliesById[comment._id] | sortByDate:'createdAt'")
+                  edji-comment.replyCommentBlock(
+                    *ngIf="comment.author", 
+                    [readOnly]="replyComment.user_id !== user._id",
+                    [comment]="replyComment",
+                    [commentContext]="'reply'",
+                    [isActive]="replyComment.active",
+                    [reply]="true",
+                    [userPermission]="getCommentPermissions(replyComment)"
+                  )
               //--Reply input--
               .reply-row
                 .comment__avatar.show.reply__avatar {{ user.fullname.substr(0,2).toUpperCase()}}
@@ -50,11 +50,11 @@
                 .replyInput Add a Reply:
                 //--Add reply buttons--
                 .replyButtonGroup
-                  button#addEmojiReply.emoji(*ngIf="project.types.indexOf('emoji') > -1", (click)="addReplyOfType('emoji')")
+                  button#addEmojiReply.emoji(*ngIf="project.types.indexOf('emoji') > -1", (click)="addReplyOfType(comment, 'emoji')")
                     i.icon.icon-emoji-comment
-                  button#addTextReply.emoji(*ngIf="project.types.indexOf('text') > -1", (click)="addReplyOfType('text')")
+                  button#addTextReply.emoji(*ngIf="project.types.indexOf('text') > -1", (click)="addReplyOfType(comment, 'text')")
                     i.icon.icon-text-comment
-                  button#addAudioReply.emoji(*ngIf="project.types.indexOf('audio') > -1", (click)="addReplyOfType('audio')")
+                  button#addAudioReply.emoji(*ngIf="project.types.indexOf('audio') > -1", (click)="addReplyOfType(comment, 'audio')")
                     i.icon.icon-mic
 .exit-row(*ngIf="visible", (tap)="dismissCommentPane()")
 //- END .comment - mobile

@@ -216,8 +216,8 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
    * Requires three parameters, and finds the other information it needs
    * @param type What kind of reply comment: emoji, text...
    */
-  addReplyOfType(type: string): void {
-    let commentId = this.comment._id
+  addReplyOfType(comment: EdjiComment, type: string): void {
+    let commentId = comment._id
 
     this.angulartics.eventTrack.next({ action: type + 'ReplyCreate', properties: { category: 'heroFeature', label: 'attempt' }})
     
