@@ -497,3 +497,40 @@ pre.btn {
 .input-group-lg > .input-group-btn > .btn {
   padding: 0.5rem 1.5rem;
 }
+
+// Coment action buttons
+.btn-xs {
+  background: #fff;
+  color: #5F5F5F;
+  font-size: 10px;
+  line-height: 17px;
+  border-radius: 4px;
+  text-decoration: none;
+  padding: 1px 5px;
+
+  &:hover, &:focus {
+    color: #fff;
+  }
+}
+
+// eg. Reply action
+.btn-xs-action {
+  @extend .btn-xs;
+  &:hover, &:focus {
+    background: $btnActionFocusColor;
+  }
+}
+
+.btn-xs-primary {
+  @extend .btn-xs;
+  &:hover, &:focus {
+    background: $btnPrimaryFocusColor;
+  }
+}
+
+.btn-xs-danger {
+  @extend .btn-xs;
+  &:hover, &:focus {
+    background: #E26F6E;
+  }
+}
