@@ -81,7 +81,7 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
             // fire an analytic event here for tracking purposes
             this.angulartics.eventTrack.next({ 
               action: 'createdReading_getAllVersions', 
-              properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }
+              properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
             })
             this.isLoading = false
             this.versions = data.readings || []
@@ -136,7 +136,7 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
       }
       this.angulartics.eventTrack.next({ 
         action: 'createdReading_togglePublic_' + publicVal, 
-        properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }
+        properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
       })
       // Close the tooltip
       this.togglePublicFlag=false

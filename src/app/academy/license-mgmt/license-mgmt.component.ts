@@ -173,7 +173,7 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
     // fire an analytic event here for tracking purposes
     this.angulartics.eventTrack.next({ 
       action: 'academy_' + form.controls.role.value + '_invite', 
-      properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }
+      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
     })
     // Check if user has already been invited
     let existingInvite: LicenseRow
@@ -234,7 +234,7 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
     // fire an analytic event here for tracking purposes
     this.angulartics.eventTrack.next({ 
       action: 'academy_' + formValue.value.request + '_request', 
-      properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }
+      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
     })
     this.loading = true
 

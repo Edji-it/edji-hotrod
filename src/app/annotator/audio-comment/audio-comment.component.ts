@@ -378,7 +378,7 @@ export class AudioCommentComponent implements OnInit {
     }
     this.angulartics.eventTrack.next({ 
       action: commentContext + '_audio_play', 
-      properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }
+      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
     })
     this.currentState = playState.playing
     this.audio.play()

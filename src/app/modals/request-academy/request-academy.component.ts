@@ -78,7 +78,7 @@ export class RequestAcademyModal implements OnInit {
 
   public feedbackClose(): void {
     this.closeModal.emit()
-    this.angulartics.eventTrack.next({ action: 'academyRequest_academyModal_revoked', properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }})
+    this.angulartics.eventTrack.next({ action: 'academyRequest_academyModal_revoked', properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }})
     this._util.showFeedbackModal = false
     
     // Workaround: This modal is long enough that it needs to scroll and we don't want two scrollbars
@@ -121,7 +121,7 @@ export class RequestAcademyModal implements OnInit {
     this._bumblebee.sendFeedback(data).pipe(take(1)).subscribe(
       (res) => {
         this.loading = false
-        this.angulartics.eventTrack.next({ action: 'academyRequest_academyModal_submitted', properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }})
+        this.angulartics.eventTrack.next({ action: 'academyRequest_academyModal_submitted', properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }})
         this.requestSuccess = true
         this._locker.remove("requestAcademyFormData")
         this.feedbackClose()

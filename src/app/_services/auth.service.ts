@@ -14,6 +14,8 @@ import { LockerService } from '../_services/locker.service';
 
 import { environment } from '../../environments/environment';
 import { AcademyService } from './academy.service';
+const { version: appVersion } = require('../../../package.json')
+
 @Injectable()
 export class AuthService implements CanActivate {
 
@@ -990,9 +992,9 @@ export class AuthService implements CanActivate {
     public setAnalyticEventLabel(): string {
         let user = this.getUser()
         if (user._id) {
-            return user._id
+            return user._id + '_' + appVersion
         } else {
-            return 'new'
+            return 'new' + '_' + appVersion
         }
     }
 }

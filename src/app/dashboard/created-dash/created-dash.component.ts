@@ -104,7 +104,7 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
       // fire an analytic event here for tracking purposes
       this.angulartics.eventTrack.next({ 
         action: 'createdReading_pagination_page' + direction, 
-        properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }
+        properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
       })
       this.currentPageNo=paging.page
     }

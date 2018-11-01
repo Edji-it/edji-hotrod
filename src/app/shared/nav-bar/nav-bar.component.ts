@@ -310,7 +310,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
     // fire an analytic event here for tracking purposes
     this.angulartics.eventTrack.next({ 
       action: 'referral_redeemCoupon' + this.getCouponNum(this.couponCode), 
-      properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }
+      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
     })
   }
 

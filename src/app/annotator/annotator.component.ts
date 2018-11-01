@@ -210,7 +210,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                                 // if audio is not supported, let analytics know
                                 this.angulartics.eventTrack.next({ 
                                     action: 'noAudioSupport', 
-                                    properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }
+                                    properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
                                 })
                             }
                             this.directCommentOptions = []

@@ -121,7 +121,7 @@ export class RegisterFormComponent implements OnInit {
           // fire an analytic event here for tracking purposes
           this.angulartics.eventTrack.next({ 
             action: 'registration', 
-            properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }
+            properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
           })
           if (this.readingToAdd && this.tempUserId) {
             this._auth.convertTempUser(this.tempUserId)

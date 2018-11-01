@@ -55,17 +55,17 @@ export class HeroPromoPageComponent implements OnInit, OnDestroy {
     } else {
       this.showHeroSubModal = true
     }
-    this.angulartics.eventTrack.next({ action: 'goHero_promoPage_' + location, properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }})
+    this.angulartics.eventTrack.next({ action: 'goHero_promoPage_' + location, properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }})
   }
 
   // analytic event handler
   public spotlightTracking(feature?: string): void {
-    this.angulartics.eventTrack.next({ action: 'heroSpotlight_' + feature + '_clicked', properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }})
+    this.angulartics.eventTrack.next({ action: 'heroSpotlight_' + feature + '_clicked', properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }})
   }
 
   // shows the modal and fires an analytics event for us
   public requestAcademyModalShow(location?: string): void {
     this.showRequestAcademyModal = true
-    this.angulartics.eventTrack.next({ action: 'academyRequest_promoPage_' + location + '_opened', properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }})
+    this.angulartics.eventTrack.next({ action: 'academyRequest_promoPage_' + location + '_opened', properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }})
   }
 }

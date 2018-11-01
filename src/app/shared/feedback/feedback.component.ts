@@ -128,7 +128,7 @@ export class FeedbackComponent implements OnInit {
         // fire an analytic event here for tracking purposes
         this.angulartics.eventTrack.next({ 
           action: 'send_feedback', 
-          properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }
+          properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
         })
         this.feedbackSuccess = true
         this._locker.remove("feedbackFormData")

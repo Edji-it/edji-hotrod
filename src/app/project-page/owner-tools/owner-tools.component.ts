@@ -87,7 +87,7 @@ export class OwnerToolsComponent implements OnInit {
     }
     this.angulartics.eventTrack.next({ 
       action: 'teacherTools_heatVision_toggle' + toggle, 
-      properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }
+      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
     })
     
     // set heat vision to loading
@@ -119,7 +119,7 @@ export class OwnerToolsComponent implements OnInit {
         // fire an analytic event here for tracking purposes
         this.angulartics.eventTrack.next({ 
             action: 'teacherTools_questionPanel_open', 
-            properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }
+            properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
         })
         break
       case 'showFireFeed':
@@ -130,7 +130,7 @@ export class OwnerToolsComponent implements OnInit {
         // fire an analytic event here for tracking purposes
         this.angulartics.eventTrack.next({ 
             action: 'teacherTools_firefeed_open', 
-            properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }
+            properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
         })
         break
       case 'showCommentCounts':
@@ -141,7 +141,7 @@ export class OwnerToolsComponent implements OnInit {
         // fire an analytic event here for tracking purposes
         this.angulartics.eventTrack.next({ 
             action: 'teacherTools_leaderboard_open', 
-            properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }
+            properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
         })
         break
       case 'showReadingRecap':

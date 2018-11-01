@@ -79,7 +79,7 @@ export class ReadingRecapComponent implements OnInit {
 
   ngOnInit() {
     // event tracking for opening recap
-    this.angulartics.eventTrack.next({ action: 'readingRecap_opened', properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }})
+    this.angulartics.eventTrack.next({ action: 'readingRecap_opened', properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }})
     // Slide in once component is constructed
     setTimeout(() => {
       this.slidePaneIn = true
@@ -231,7 +231,7 @@ export class ReadingRecapComponent implements OnInit {
    */
   public changeStudentSelection(): void {
     // fire an analytic event here for tracking purposes
-    this.angulartics.eventTrack.next({ action: 'readingRecap_studentSelected', properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }})
+    this.angulartics.eventTrack.next({ action: 'readingRecap_studentSelected', properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }})
     this.currentStudent = this.students.find( user => user.value===this.selectedStudent)
     this.buildReport()
     this.processTimeChart()
@@ -305,7 +305,7 @@ export class ReadingRecapComponent implements OnInit {
 
   public addEvaluationOnly(evalData: any): void {
     // fire an analytic event here for tracking purposes
-    this.angulartics.eventTrack.next({ action: 'readingRecap_feedbackGiven', properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }})
+    this.angulartics.eventTrack.next({ action: 'readingRecap_feedbackGiven', properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }})
      // create a new evaluation to save to the project
      let evalObj = {
       createdAt: new Date,

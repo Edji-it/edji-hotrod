@@ -669,7 +669,7 @@ export class ProjectService {
               // fire an analytic event here for tracking purposes
               this.angulartics.eventTrack.next({ 
                 action: commentContext + '_' + comment.type + '_create', 
-                properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }
+                properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
               })
         }
 
@@ -699,7 +699,7 @@ export class ProjectService {
         // fire an analytic event here for tracking purposes
         this.angulartics.eventTrack.next({ 
           action: commentContext + '_' + comment.type + '_delete', 
-          properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }
+          properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
         })
         
         return this.http
@@ -785,7 +785,7 @@ export class ProjectService {
               // fire an analytic event here for tracking purposes
               this.angulartics.eventTrack.next({ 
                 action: 'answer_' + answer.type + '_create', 
-                properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }
+                properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
               })
         }
 
@@ -808,7 +808,7 @@ export class ProjectService {
         // fire an analytic event here for tracking purposes
         this.angulartics.eventTrack.next({ 
             action: 'answer_' + answer.type + '_delete', 
-          properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }
+          properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
         })
 
         return this.http

@@ -44,7 +44,7 @@ export class DeleteProjectModal implements OnInit {
     // fire an analytic event here for tracking purposes
     this.angulartics.eventTrack.next({ 
       action: 'createdReading_delete', 
-      properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }
+      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
     })
     // Listen for an Observable from project.service.ts
     this._projects.delete(project)

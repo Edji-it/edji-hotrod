@@ -175,7 +175,7 @@ export class NewReadingPage implements OnInit {
             // fire an analytic event here for tracking purposes
             this.angulartics.eventTrack.next({ 
                 action: 'discover_reading_retrieve', 
-                properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }
+                properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
             })
         }
 
@@ -602,7 +602,7 @@ export class NewReadingPage implements OnInit {
                             // fire an analytic event here for tracking purposes
                             this.angulartics.eventTrack.next({ 
                                 action: this.readingType + '_' + publicFlag + '_create', 
-                                properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }
+                                properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
                             })
                         } else {
                             this.router.navigate(['new-reading/' + data._id], { queryParams: { successAlert: this.successAlert } })
@@ -612,7 +612,7 @@ export class NewReadingPage implements OnInit {
                             // fire an analytic event here for tracking purposes
                             this.angulartics.eventTrack.next({ 
                                 action: this.readingType + '_draft_save', 
-                                properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }
+                                properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
                             })
                             return true
                         }
@@ -702,7 +702,7 @@ export class NewReadingPage implements OnInit {
         // fire an analytic event here for tracking purposes
         this.angulartics.eventTrack.next({ 
             action: 'qna_question_added', 
-            properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }
+            properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
         })
         let answer_types = this._auth.getAllowedCommentMediaTypes()
         let question = <EdjiQuestion>{

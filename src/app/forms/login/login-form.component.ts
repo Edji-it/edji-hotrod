@@ -61,7 +61,7 @@ public login(formValue: any): void {
             // fire an analytic event here for tracking purposes
             this.angulartics.eventTrack.next({ 
               action: 'login', 
-              properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }
+              properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
             })
           }
           if (data.token) {

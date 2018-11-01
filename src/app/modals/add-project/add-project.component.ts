@@ -144,7 +144,7 @@ export class AddProjectModal implements OnInit {
     // fire an analytic event here for tracking purposes
     this.angulartics.eventTrack.next({
       action: 'newGroup_' + commentTypes.substring(0,commentTypes.length-1) + '_' + customGroupName + '_' + customGroupCode + '_' + groupInstructions, 
-      properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }
+      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
     })
   }
 }

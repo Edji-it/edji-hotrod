@@ -38,7 +38,7 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
     // fire an analytic event here for tracking purposes
     this.angulartics.eventTrack.next({ 
       action: 'referral_openModal', 
-      properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }
+      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
     })
     if (typeof(showReferral) !== 'undefined' && this.showModal !== showReferral) {
       this.showModal = showReferral
@@ -215,7 +215,7 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
     }
     this.angulartics.eventTrack.next({ 
       action: 'referral_' + shareMedium + '_shareLink', 
-      properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }
+      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
     })
   }
 

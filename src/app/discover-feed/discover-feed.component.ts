@@ -52,7 +52,7 @@ export class DiscoverFeedComponent implements OnInit {
     if (action!=='') {
       this.angulartics.eventTrack.next({ 
         action: 'discover_' + action, 
-        properties: { category: this._auth.setAnalyticEventCategory, label: this._auth.setAnalyticEventLabel }
+        properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
       })
     }
     this.loading = true
