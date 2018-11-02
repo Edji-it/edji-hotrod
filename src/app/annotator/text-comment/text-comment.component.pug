@@ -1,7 +1,8 @@
 .text-comment.input-wrap([ngClass]="[comment.active ? 'active' : '']")
   //- Comment Input
   textarea.text-comment-input(
-    *ngIf="editing", 
+    *ngIf="editing",
+    #textInput,
     type='text', 
     placeholder="Text comment...", 
     [class.disabled]="readOnly",
@@ -19,12 +20,12 @@
     [ngClass]="[reply ? 'replyDisplay' : '']",
     (tap)="toggleActive($event)"
   )
-  .text-comment__edit-btn(
-    *ngIf="comment.active && !editing && !readOnly", 
-    (tap)="editing = true"
-  )
-    span.label--abs-left Edit
-    i.icon-text-comment
+  //- .text-comment__edit-btn(
+  //-   *ngIf="comment.active && !editing && !readOnly", 
+  //-   (tap)="editing = true"
+  //- )
+  //-   span.label--abs-left Edit
+  //-   i.icon-text-comment
   .text-comment__countdown(
     [class.hidden]="editing !== true", 
     [class.danger]="comment.data.length > 260"

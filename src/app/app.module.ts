@@ -116,8 +116,9 @@ const APP_PROVIDERS = [
   { 
       provide: HAMMER_GESTURE_CONFIG, 
       useClass: HammerGestureConfig 
-  },
-  { provide: ErrorHandler, useClass: SentryErrorHandler }
+  }
+  // ,
+  // { provide: ErrorHandler, useClass: SentryErrorHandler }
   // { provide: RouteReuseStrategy, useClass: ReuseStrategy }
 ]; // const APP_PROVIDERS
 

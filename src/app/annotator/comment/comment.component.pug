@@ -34,6 +34,7 @@
         text-comment(
             *ngIf="comment.type == 'text'",
             [readOnly]="readOnly",
+            [isEditing]="editing",
             [comment]="comment",
             [active]="comment.active",
             [reply]="reply",
@@ -69,6 +70,12 @@
         [innerHtml]="':white_check_mark:' | emojione"
     )
     i.comment__saved([innerHtml]='":ok_hand:" | emojione')
+    //- Comment action row
+    .comment__action-row.btn-row.left.mt-0([class.reply-gap]="repliesShowing")
+    button.btn.btn-xs-danger(*ngIf="userPermission >= 3", (tap)="userPermission > 3 ? deleteComment(comment) : _comments.deleteCommentConfirmation(comment, commentContext)") Delete
+    ng-container(*ngIf="comment.type != 'audio' && !readOnly")
+        .action-separator
+        button.btn.btn-xs-primary((tap)="editing = true") Edit
 //- END the other component comment display
 
 //- Comments that are displayed in the comment pane
@@ -110,6 +117,7 @@ div(*ngIf="commentPaneActive")
                 text-comment(
                     *ngIf="comment.type == 'text'",
                     [readOnly]="readOnly",
+                    [isEditing]="editing",
                     [comment]="comment",
                     [active]="comment.active",
                     [reply]="reply",
@@ -136,13 +144,14 @@ div(*ngIf="commentPaneActive")
             //- button.mobileHighlight-card_button((tap)="getImagePos(comment.start)") View&nbsp;&#8594;
             //- Comment action buttons
             .comment__action-row.btn-row.left.mt-0([class.reply-gap]="repliesShowing")
-                button#addReply.btn.btn-xs-action(*ngIf="!readingReport && !reply && project.types.indexOf('reply') > -1", (tap)="toggleReplies()")
-                    | {{ replyBtnText() }}
-                .action-separator
+                ng-container(*ngIf="!readingReport && !reply && project.types.indexOf('reply') > -1")
+                    button#addReply.btn.btn-xs-action((tap)="toggleReplies()")
+                        | {{ replyBtnText() }}
+                    .action-separator
                 button.btn.btn-xs-danger(*ngIf="userPermission >= 3", (tap)="userPermission > 3 ? deleteComment(comment) : _comments.deleteCommentConfirmation(comment, commentContext)") Delete
                 ng-container(*ngIf="comment.type != 'audio' && !readOnly")
                     .action-separator
-                    button.btn.btn-xs-primary((tap)="comment.active = true") Edit
+                    button.btn.btn-xs-primary((tap)="editing = true") Edit
 //- END comment pane display
 
 //- Handle Desktop and Mobile Icons for activating comments
