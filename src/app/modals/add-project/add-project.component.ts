@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { take } from 'rxjs/operators'
+import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
 import { AuthService, ProjectService } from './../../_services'
@@ -38,7 +39,8 @@ export class AddProjectModal implements OnInit {
   constructor(
     private _projects: ProjectService, 
     private _fb: FormBuilder,
-    private _auth: AuthService
+    private _auth: AuthService,
+    private angulartics: Angulartics2
     ) {
   }
 
@@ -103,6 +105,7 @@ export class AddProjectModal implements OnInit {
               .subscribe( project => {
                 if (project._id) {
                   project.new = true
+                  this.trackAnalyticEvent(formValue, types)
                   this.groupSaved.emit(project)
                   this.closeModal.emit()
                 }
@@ -115,5 +118,33 @@ export class AddProjectModal implements OnInit {
           }
         }
       )
+  }
+
+  // there is a bit of setup for this event, so we'll handle this offsite
+  private trackAnalyticEvent(formValue: any, types: any) {
+    let customGroupName = false
+    let customGroupCode = false
+    let groupInstructions = false
+    let commentTypes = ''
+    // did the user put in a custom group name?
+    if (formValue.label.length>0) {
+      customGroupName = true
+    }
+    // did the user put in a custom group code?
+    if (formValue.customCode.length > 0) {
+      customGroupCode = true
+    }
+    // did the user put in group instructions?
+    if (formValue.groupInstructions.length>0) {
+      groupInstructions = true
+    }
+    types.forEach(type => {
+      commentTypes+=type + '-'
+    })
+    // fire an analytic event here for tracking purposes
+    this.angulartics.eventTrack.next({
+      action: 'newGroup_' + commentTypes.substring(0,commentTypes.length-1) + '_' + customGroupName + '_' + customGroupCode + '_' + groupInstructions, 
+      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
+    })
   }
 }

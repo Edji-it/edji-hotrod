@@ -12,6 +12,7 @@ import {
     AcademyService
 } from '../_services';
 import { Project, Reading, User } from './../shared/datatypes';
+import { Angulartics2 } from 'angulartics2';
 
 
 @Component({
@@ -52,7 +53,8 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
         private _auth: AuthService,
         private route: ActivatedRoute,
         private _readings: ReadingService,
-        private _title: Title
+        private _title: Title,
+        private angulartics: Angulartics2
     ) {}
 
     ngOnInit() {
@@ -72,7 +74,6 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
                 // Join socket + start reading timer
                 if (this.user._id && this.project._id && !this.joinedRoom) {
                     this.joinRoom(this.user, this.project)
-                    console.log(' joined socket ')
                 }
             })
         )
@@ -94,6 +95,16 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
                         this._readings.setReadingObj(this.project.reading_id)
 
                         this._title.setTitle( 'Edji | ' + this.reading.title )
+
+                        let analyticsType = 'joined'
+                        if (this.user._id===this.project.teacher_id) {
+                            analyticsType = 'created'
+                        }
+                        // fire an analytic event here for tracking purposes
+                        this.angulartics.eventTrack.next({ 
+                            action: analyticsType + 'Reading_open', 
+                            properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
+                        })
                     }
                 }
             },

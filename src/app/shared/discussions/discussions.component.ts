@@ -90,9 +90,6 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
    */
   addReplyOfType(type: string): void {
     let commentId = this.comment._id
-
-    this.angulartics.eventTrack.next({ action: type + 'ReplyCreate', properties: { category: 'heroFeature', label: 'attempt' }})
-    
     var replyCommentNew = <EdjiComment>{
       user_id: this.user._id,
       author: this.user.fullname,
@@ -112,14 +109,11 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
     // Tell the server we've added a comment.
     this._projects.saveComment(this.replyCommentNew)
     .then(comment => {
-      this.angulartics.eventTrack.next({ action: type + 'ReplyCreate', properties: { category: 'heroFeature', label: 'success' }})
       comment.active = true
       this._comments.activeComment = comment
       this._projects.addCommentToReplies(comment)
     })
     .catch(error => {
-      // TRACK EXCEPTION
-      this.angulartics.eventTrack.next({ action: type + 'ReplyCreate', properties: { category: 'heroFeature', label: 'failure' }})
       console.log(error)
     })
   } // createReplyComment(type: string): void

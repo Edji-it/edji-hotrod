@@ -14,6 +14,8 @@ import { LockerService } from '../_services/locker.service';
 
 import { environment } from '../../environments/environment';
 import { AcademyService } from './academy.service';
+const { version: appVersion } = require('../../../package.json')
+
 @Injectable()
 export class AuthService implements CanActivate {
 
@@ -926,6 +928,74 @@ export class AuthService implements CanActivate {
             }
         }
         return query_string
+    }
+
+    /**
+     * sets the Analytics event category
+     */
+    public setAnalyticEventCategory(): string {
+        let user = this.getUser()
+        let userType = ''
+        let identity = ''
+        let subscription = ''
+        // set the user type
+        if (!user.isLoggedIn || user.type==='temp') {
+            userType='guest'
+        } else if (this.user.hero_status) {
+            userType='hero'
+        } else {
+            userType='regular'
+        }
+        // set the user identity (teacher, admin, student, other)
+        identity = this.getPrimaryUserIdentity()
+        // set the subscription (hero academy, hero, sidekick)
+        subscription = this.getPrimarySubscription()
+        return userType + '_' + identity + '_' + subscription
+    }
+
+    /**
+     * returns the user's primary identity based on the identities array
+     */
+    public getPrimaryUserIdentity(): string {
+        let user = this.getUser()
+        if (!user.isLoggedIn) {
+            return 'new'
+        }
+        if (user.identities.includes('administrator')) {
+            return 'admin'
+        } else if (user.identities.includes('teacher')) {
+            return 'teacher'
+        } else if (user.identities.includes('student')) {
+            return 'student'
+        } else {
+            return 'other'
+        }
+    }
+
+    /**
+     * returns the primary subscription for the user
+     */
+    public getPrimarySubscription(): string {
+        let user = this.getUser()
+        if (!user.isLoggedIn) {
+            return 'recruit'
+        }
+        if (user.institution_ids.length>0 && user.hero_status) {
+            return 'heroAcademy'
+        } else if (user.hero_status) {
+            return 'hero'
+        } else {
+            return 'sidekick'
+        }
+    }
+
+    public setAnalyticEventLabel(): string {
+        let user = this.getUser()
+        if (user._id) {
+            return user._id + '_' + appVersion
+        } else {
+            return 'new' + '_' + appVersion
+        }
     }
 }
 

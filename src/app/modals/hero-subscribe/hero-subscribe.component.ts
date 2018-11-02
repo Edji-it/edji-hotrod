@@ -34,6 +34,8 @@ export class HeroSubscribeComponent implements OnInit {
 
   @Input()
   couponCode: string = ''
+  @Input()
+  goHeroLocation: string = 'subscribeModal'
 
   @Output()
   closeModal: EventEmitter<any> = new EventEmitter()
@@ -145,6 +147,7 @@ export class HeroSubscribeComponent implements OnInit {
     this.loading = true
     
     if (this.percentOff == 100) {
+      // referral
       this.becomeHero()
     } else {
       this.stripe.createToken(this.card).then((result) => {
@@ -154,6 +157,7 @@ export class HeroSubscribeComponent implements OnInit {
           errorElement.textContent = result.error.message;
           this.loading = false
         } else {
+          // organic purchase
           this.becomeHero(result.token.id)
         }
       })
@@ -162,26 +166,22 @@ export class HeroSubscribeComponent implements OnInit {
 
   private becomeHero(stripeToken ?: string) {
     let eventAction = 'addSubscription'
-    // track user adding hero subscription in analytics
-        this.angulartics.eventTrack.next({ action: eventAction, properties: { category: 'heroFeature', label: 'attempt' }})
-        this._auth.subscribeToHero(stripeToken ? stripeToken : "", this.initWithCoupon ? this.couponCode.toUpperCase() : this.sForm.valid ? this.sForm.controls["couponCode"].value.toUpperCase() : '')
-        .subscribe(
-          data => {
-            // track user adding hero subscription in analytics
-            this.angulartics.eventTrack.next({ action: eventAction, properties: { category: 'heroFeature', label: 'success' }})
-            this.userNowHero = true
-            this.loading = false
-            if (data.user) {
-              this._auth.setUser(data.user)
-              this._bumblebee.userHeroAction(data.user, "subscribed")
-            }
-          },
-          error => {
-            // track user adding hero subscription in analytics
-            this.angulartics.eventTrack.next({ action: eventAction, properties: { category: 'heroFeature', label: 'failure' }})
-            this.loading = false
-            this.stripeMessage = 'There was an error processing your payment. Please try correcting your payment information, or <a href="mailto:support@edji.it" class="link">contact our support team</a>.'
-            this._bumblebee.reportError(error)
-          })
+    this._auth.subscribeToHero(stripeToken ? stripeToken : "", this.initWithCoupon ? this.couponCode.toUpperCase() : this.sForm.valid ? this.sForm.controls["couponCode"].value.toUpperCase() : '')
+    .subscribe(
+      data => {
+        // track user adding hero subscription in analytics
+        this.angulartics.eventTrack.next({ action: 'goHero_promoPage_' + this.goHeroLocation, properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }})
+        this.userNowHero = true
+        this.loading = false
+        if (data.user) {
+          this._auth.setUser(data.user)
+          this._bumblebee.userHeroAction(data.user, "subscribed")
+        }
+      },
+      error => {
+        this.loading = false
+        this.stripeMessage = 'There was an error processing your payment. Please try correcting your payment information, or <a href="mailto:support@edji.it" class="link">contact our support team</a>.'
+        this._bumblebee.reportError(error)
+      })
   }
 }
