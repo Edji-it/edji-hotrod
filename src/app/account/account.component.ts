@@ -95,6 +95,13 @@ export class AccountComponent implements OnInit, OnDestroy {
   } // public getAvatar () : any 
 
   private trackHeroClick(): void {
-    this.angulartics.eventTrack.next({ action: 'heroSubInterest', properties: { category: 'heroFeature', label: 'attempt' }})
+    // fire an analytic event here for tracking purposes
+    this.angulartics.eventTrack.next({ 
+      action: 'goHero_accountPage', 
+      properties: { 
+        category: this._auth.setAnalyticEventCategory(), 
+        label: this._auth.setAnalyticEventLabel() 
+      }
+    })
   }
 } // class

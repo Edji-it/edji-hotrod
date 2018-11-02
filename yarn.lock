@@ -569,9 +569,9 @@ angular2-medium-editor@1.2.0:
   dependencies:
     tslib "^1.9.0"
 
-angulartics2@^6.1.0:
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/angulartics2/-/angulartics2-6.1.0.tgz#4cbeb321f47b08d1063651ff32636ef1ec49e1c1"
+angulartics2@^7.0.2:
+  version "7.0.2"
+  resolved "https://registry.yarnpkg.com/angulartics2/-/angulartics2-7.0.2.tgz#b0e07375883b522a0059e8efb070603b122899df"
   dependencies:
     tslib "^1.9.0"
 

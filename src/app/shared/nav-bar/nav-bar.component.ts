@@ -228,27 +228,24 @@ export class NavBarComponent implements OnInit, OnDestroy {
    */
   private joinSession(code: string): void {
     // console.log("first call", code);
-    this.joinLoading = true;
-    this.angulartics.eventTrack.next({ action: 'enterLightningCode', properties: { category: 'joinProject', label: 'attempt' }});
+    this.joinLoading = true
     this._projects.validateProject(code)
       .pipe(take(1))
       .subscribe(
         (data) => {
           this.joinLoading = false;
-          this.angulartics.eventTrack.next({ action: 'enterLightningCode', properties: { category: 'joinProject', label: 'success' }});
           if (data._id){
-            this._router.navigate(['/project', data._id]);
+            this._router.navigate(['/project', data._id])
           } else {
-            this._router.navigate(['/project', code]);
+            this._router.navigate(['/project', code])
           }
         },
         (error) => {
           this.joinLoading = false;
           if (error.status === 500) {
-            this.angulartics.eventTrack.next({ action: 'enterLightningCode', properties: { category: 'joinProject', label: 'failure' }});
-            this.errorObject.invalidCode = "Oh no! Something went wrong and we don't know what happened!";
+            this.errorObject.invalidCode = "Oh no! Something went wrong and we don't know what happened!"
           } else {
-            this.errorObject.invalidCode = "We don't think that's a real code :confused:";
+            this.errorObject.invalidCode = "We don't think that's a real code :confused:"
           }
         }
       );
@@ -298,8 +295,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
     this.showAvatarDropdown = false
     // Open the modal
     this.showReferralModal=true
-    // Track when this button is clicked on in angulartics
-    this.angulartics.eventTrack.next({ action: 'clickReferralButton', properties: { category: 'referral', label: 'success' }})
   }
 
   /**
@@ -311,9 +306,30 @@ export class NavBarComponent implements OnInit, OnDestroy {
     // Set the coupon code passed through from the referral modal
     this.couponCode = couponCode
     // Show the hero subscription modal and pass the coupon code in
-    // setTimeout(() => {
-      this.showHeroSubModal = true
-    // }, 1000)
+    this.showHeroSubModal = true
+    // fire an analytic event here for tracking purposes
+    this.angulartics.eventTrack.next({ 
+      action: 'referral_redeemCoupon' + this.getCouponNum(this.couponCode), 
+      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
+    })
+  }
+
+  // we don't want to expose the coupon code to analytics, so we'll reference the number of referrals
+  private getCouponNum(couponCode: string): number {
+    switch(couponCode) {
+      case "HOTROD_HERO_ONE5TH":
+        return 1
+      case "HOTROD_HERO_24BUCKS":
+        return 2
+      case "HOTROD_HERO_36BIGONES":
+        return 3
+      case "HOTROD_HERO_4FIFTHS":
+        return 4
+      case "HOTROD_HERO_REFERMASTER":
+        return 5
+      default:
+        return 0
+    }
   }
 }
 

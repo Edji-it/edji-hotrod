@@ -62,4 +62,4 @@
 </div>
 
 <hot-login-register [loginHeader]="'To go Hero, first you\'ll need an account'" class="modal-will-fade" [class.show]="showLoginModal" (closeModal)="showLoginModal = false" (loginSuccess)="showHeroSubModal = true"></hot-login-register>
-<hero-subscribe-modal class="modal-will-fade" [class.show]="showHeroSubModal" (closeModal)="showHeroSubModal = !showHeroSubModal" (heroWasBorn)="_router.navigate(['/dashboard'])"></hero-subscribe-modal>
+<hero-subscribe-modal class="modal-will-fade" [class.show]="showHeroSubModal" [goHeroLocation]="'heroPricingPage'" (closeModal)="showHeroSubModal = !showHeroSubModal" (heroWasBorn)="_router.navigate(['/dashboard'])"></hero-subscribe-modal>

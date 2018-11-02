@@ -170,6 +170,11 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
 
   // Submits the name and email address of the invitation to the teacher
   public formSubmit(form: FormGroup): void {
+    // fire an analytic event here for tracking purposes
+    this.angulartics.eventTrack.next({ 
+      action: 'academy_' + form.controls.role.value + '_invite', 
+      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
+    })
     // Check if user has already been invited
     let existingInvite: LicenseRow
     let invitedEmail = form.controls.email.value
@@ -226,8 +231,12 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
 
   /** Sends license update/request feedback to bumblebee */
   public sendRequest(formValue: any): void {
+    // fire an analytic event here for tracking purposes
+    this.angulartics.eventTrack.next({ 
+      action: 'academy_' + formValue.value.request + '_request', 
+      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
+    })
     this.loading = true
-    this.angulartics.eventTrack.next({ action: 'requestLicense', properties: { category: 'accountManagement', label: 'attempt' }})
 
     // Only send the user properties we need to bumblebee
     var userSend: any = {
@@ -259,12 +268,10 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
         // Clear the form
         this.licenseRequest.reset()
         this.loading = false
-        this.angulartics.eventTrack.next({ action: 'requestLicense', properties: { category: 'accountManagement', label: 'success' }})
       },
       (err) => {
         console.error(err)
         this.loading = false
-        this.angulartics.eventTrack.next({ action: 'requestLicense', properties: { category: 'accountManagement', label: 'failure' }})
         this.errorObject.serverError = "Something has gone wrong. Please try submitting your feedback again later!"
       }
     )

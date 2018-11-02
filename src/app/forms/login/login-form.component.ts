@@ -46,8 +46,6 @@ export class LoginForm implements OnInit {
   }
 
 public login(formValue: any): void {
-    this.angulartics.eventTrack.next({ action: 'loginMain', properties: { category: 'login', label: 'attempt' }})
-
     this.loginLoading = true
     this.submitted = true
 
@@ -60,22 +58,12 @@ public login(formValue: any): void {
 
           // sets username and email for analytics use
           if (data.user) {
-            data.user.username && this.angulartics.setUsername.next(data.user.username)
-            data.user.email && this.angulartics.setUserProperties.next({ email: data.user.email})
-            if (data.user.identities) {
-              data.user.identities.forEach((identity) => {
-                let userProperty: any = {}
-                userProperty[identity] = true
-                this.angulartics.setUserProperties.next(userProperty)
-              })
-            }
-            this.angulartics.eventTrack.next({ action: 'loginMain', properties: { category: 'login', label: 'success' }})
-          } else {
-            this.angulartics.eventTrack.next({ action: 'loginMain', properties: { category: 'login', label: 'failure' }})
-            // there are other fields that the call should contain, like 'label' 'value' and 'interactionType'
-            // this.angulartics.exceptionTrack.next({ appId: 'app', appName: 'Test App', appVersion: '0.1' })
+            // fire an analytic event here for tracking purposes
+            this.angulartics.eventTrack.next({ 
+              action: 'login', 
+              properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
+            })
           }
-
           if (data.token) {
             this.loginSuccess.emit(data.user)
           }
@@ -101,7 +89,7 @@ public login(formValue: any): void {
           } else if (error.status === 404) {
             this.errorObject.loginFailed = "There might be a network error!"
           } else {
-            this.angulartics.eventTrack.next({ action: 'loginMain', properties: { category: 'login', label: 'failure' }})
+            console.error(error)
             this.errorObject.serverError = "Oh no, something went wrong and we don't know what it is!"
           }
         }

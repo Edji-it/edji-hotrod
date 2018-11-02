@@ -32,16 +32,16 @@ export class AppComponent {
     private _auth: AuthService,
     private _messages: MessageService
     ) {
-
+      angulartics2GoogleAnalytics.startTracking()
       // Scrollto should account for nav bar
       PageScrollConfig.defaultScrollOffset = 90;
       PageScrollConfig.defaultDuration = 800;
   }
 
   ngOnInit() {
-    if (this._auth.getUser().isLoggedIn) {
-      this.angulartics.eventTrack.next({ action: 'hasAccount', properties: { category: 'edjiUsage', label: 'success' }})
-    }
+    // if (this._auth.getUser().isLoggedIn) {
+    //   this.angulartics.eventTrack.next({ action: 'hasAccount', properties: { category: 'edjiUsage', label: 'success' }})
+    // }
     // Trigger the message service to start
     this._messages.init()
   }

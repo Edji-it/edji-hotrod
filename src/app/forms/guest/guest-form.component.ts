@@ -39,28 +39,24 @@ export class GuestForm implements OnInit {
    * Happens when join as guest is pressed. First calls to sign in the tempuser and then navigates upon receiving project data
    */
   public joinSessionAsGuest(formValue: any): void {
-    this.isLoading = true;
-    this.angulartics.eventTrack.next({ action: 'joinAsGuest', properties: { category: 'joinProject', label: 'attempt' }});
+    this.isLoading = true
 
     // create the user's temporary account and set local token and user
     this._auth.createTempUser(formValue.guestName).subscribe(
       (data) => {
-        this.isLoading = false;
-        this._auth.setToken(data.token);
-        this._auth.setUser(data.user);
+        this.isLoading = false
+        this._auth.setToken(data.token)
+        this._auth.setUser(data.user)
 
-        this.loginSuccess.emit(data.user);
-        this.angulartics.eventTrack.next({ action: 'joinAsGuest', properties: { category: 'joinProject', label: 'success' }});
-
+        this.loginSuccess.emit(data.user)
       },
       (error) => {
         this.isLoading = false;
         if (error.status === 406) {
-          this.errorObject.badName = ":anguished: Would you mind choosing another name?";
+          this.errorObject.badName = ":anguished: Would you mind choosing another name?"
         } else {
-          this.angulartics.eventTrack.next({ action: 'joinAsGuest', properties: { category: 'joinProject', label: 'failure' }});
-          this.errorObject.tempError = "I'm sorry :disappointed: something didn't happen right. It's probably our fault.";
-          console.error(error);
+          this.errorObject.tempError = "I'm sorry :disappointed: something didn't happen right. It's probably our fault."
+          console.error(error)
         }
       }
     )

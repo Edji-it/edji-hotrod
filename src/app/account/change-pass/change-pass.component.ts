@@ -40,7 +40,6 @@ export class ChangePassComponent implements OnInit {
   public onSubmit(value: any): void {
     this.messages = {}
     this.loading = true
-    this.angulartics.eventTrack.next({ action: 'resetPasswordLoggedIn', properties: { category: 'accountManagement', label: 'attempt' }})
 
     this._auth.resetPassword({
         oldPassword: this.passwordForm.get('oldPassword').value,
@@ -49,14 +48,17 @@ export class ChangePassComponent implements OnInit {
       .then((res) => {
         this.messages.success = true
         this.loading = false
-        this.angulartics.eventTrack.next({ action: 'resetPasswordLoggedIn', properties: { category: 'accountManagement', label: 'success' }})
+        // fire an analytic event here for tracking purposes
+        this.angulartics.eventTrack.next({ 
+          action: 'change_password_request', 
+          properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
+        })
         this._auth.setToken(res.token)
       })
       .catch((err) => {
         // TRACK EXCEPTION
         console.error(err)
         this.loading = false
-        this.angulartics.eventTrack.next({ action: 'resetPasswordLoggedIn', properties: { category: 'accountManagement', label: 'failure' }})
         this.messages.serviceError = true
       });
   }

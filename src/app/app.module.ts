@@ -206,7 +206,11 @@ const APP_PROVIDERS = [
     HttpClientModule,
     LockerModule,
     MultiselectDropdownModule,
-    Angulartics2Module.forRoot([ Angulartics2GoogleAnalytics ]),
+    Angulartics2Module.forRoot({
+      pageTracking: {
+        clearIds: true,
+      }
+    }),
     RouterModule.forRoot(ROUTES, { useHash: true }),
     DataListModule,
     PaginatorModule,
