@@ -25,8 +25,12 @@ Sentry.init({
 export class SentryErrorHandler implements ErrorHandler {
   constructor() {}
   handleError(error) {
-    Sentry.captureException(error.originalError || error);
-    throw error;
+    // Post error to Sentry
+    Sentry.captureException(error.originalError || error)
+    // Continue to log error to browser
+    console.error(error)
+    // Continue throwing error
+    throw error
   }
 }
 
