@@ -1,7 +1,7 @@
+doctype html
 .text-comment.input-wrap([ngClass]="[comment.active ? 'active' : '']")
   //- Comment Input
   textarea.text-comment-input(
-    *ngIf="editing",
     #textInput,
     type='text', 
     placeholder="Text comment...", 
@@ -11,7 +11,7 @@
     (keydown.enter)='blurField($event)', 
     (keyup.esc)='blurField($event)', 
     maxlength="280", 
-    [ngClass]="[reply ? 'replyDisplay' : '']"
+    [ngClass]="{ 'replyDisplay': reply, 'disabled': readOnly, 'hide': !editing }"
   )
   //- Comment Display
   #textCommentInput.text-comment-input(

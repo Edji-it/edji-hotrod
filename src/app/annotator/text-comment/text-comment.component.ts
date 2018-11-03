@@ -26,8 +26,6 @@ export class TextCommentComponent implements OnInit, AfterViewInit {
 
     // We need to know when changes to inactive to clear the editing variable
     @Input() set active(active){
-        // this.editing = false
-        // this.editing = false
         this.activated = active
     }
     get active() {
@@ -35,11 +33,10 @@ export class TextCommentComponent implements OnInit, AfterViewInit {
     }
 
     @Input() set isEditing(isEditing: boolean) {
+        console.log("EDITING SET", isEditing)
         this.editing = !!isEditing
         this.activated = !!isEditing
-        // if (!this.active) {
-        // this.activate()
-        // }
+        
         if (isEditing) {
             this.textInput && this.textInput.nativeElement.focus()
         }
