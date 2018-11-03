@@ -10,7 +10,6 @@ doctype html
     (blur)='updateComment(comment)', 
     (keydown.enter)='blurField($event)', 
     (keyup.esc)='blurField($event)', 
-    maxlength="280", 
     [ngClass]="{ 'replyDisplay': reply, 'disabled': readOnly, 'hide': !editing }"
   )
   //- Comment Display
@@ -26,7 +25,7 @@ doctype html
   //- )
   //-   span.label--abs-left Edit
   //-   i.icon-text-comment
-  .text-comment__countdown(
-    [class.hidden]="editing !== true", 
-    [class.danger]="comment.data.length > 260"
-  ) {{ -1*(280 - comment.data.length) }}
+  //- .text-comment__countdown(
+  //-   [class.hidden]="editing !== true", 
+  //-   [class.danger]="comment.data.length > 260"
+  //- ) {{ -1*(280 - comment.data.length) }}
