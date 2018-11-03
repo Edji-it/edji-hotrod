@@ -36,7 +36,7 @@
           type="submit", 
           [disabled]="userDetailsForm.controls['identities'].invalid"
         ) Next
-        button#submitDetailsButton.btn.btn-primary(
+        button#finalSubmitButton.btn.btn-primary(
           *ngIf="!identitySelect && !messages.success", 
           type="submit", 
           [disabled]="userDetailsForm.controls['school'].invalid || (userDetailsForm.controls['phone'].hasError('phoneIncorrect') && userDetailsForm.controls['phone'].dirty)"
