@@ -344,7 +344,7 @@ export class CommentComponent implements OnInit, OnDestroy {
 
     if (replies) {
       let repliesCount = replies.length
-      if (repliesCount == 0) {
+      if (repliesCount == 1) {
         btnText = repliesCount + " Reply"
       } else if (repliesCount > 1) {
         btnText = repliesCount + " Replies"
