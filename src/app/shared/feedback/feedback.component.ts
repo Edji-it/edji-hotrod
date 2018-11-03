@@ -92,8 +92,6 @@ export class FeedbackComponent implements OnInit {
   /** Sends feedback to bumblebee */
   public sendFeedback(formValue: any): void {
     this.loading = true
-    this.angulartics.eventTrack.next({ action: 'sendFeedback', properties: { category: 'accountManagement', label: 'attempt' }})
-
     var w = this.window.navigator
     // Set a message and the following properties to return:
     // Device
@@ -127,7 +125,11 @@ export class FeedbackComponent implements OnInit {
     this._bumblebee.sendFeedback(data).pipe(take(1)).subscribe(
       (res) => {
         this.loading = false
-        this.angulartics.eventTrack.next({ action: 'sendFeedback', properties: { category: 'accountManagement', label: 'success' }})
+        // fire an analytic event here for tracking purposes
+        this.angulartics.eventTrack.next({ 
+          action: 'send_feedback', 
+          properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
+        })
         this.feedbackSuccess = true
         this._locker.remove("feedbackFormData")
         this.feedbackClose()
@@ -136,7 +138,6 @@ export class FeedbackComponent implements OnInit {
       (err) => {
         console.error(err)
         this.loading = false
-        this.angulartics.eventTrack.next({ action: 'sendFeedback', properties: { category: 'accountManagement', label: 'failure' }})
         this.errorObject.serverError = "Something has gone wrong. Please try submitting your feedback again later!"
         this._locker.set("feedbackFormData", formValue)
       }

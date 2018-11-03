@@ -78,6 +78,7 @@ export class RequestAcademyModal implements OnInit {
 
   public feedbackClose(): void {
     this.closeModal.emit()
+    this.angulartics.eventTrack.next({ action: 'academyRequest_academyModal_revoked', properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }})
     this._util.showFeedbackModal = false
     
     // Workaround: This modal is long enough that it needs to scroll and we don't want two scrollbars
@@ -91,8 +92,6 @@ export class RequestAcademyModal implements OnInit {
   /** Sends feedback to bumblebee */
   public sendFeedback(formValue: any): void {
     this.loading = true
-    this.angulartics.eventTrack.next({ action: 'requestAcademy', properties: { category: 'accountManagement', label: 'attempt' }})
-
     // Add Request type
     formValue.content = '\nRequest Type: Hero Academy Request'
 
@@ -122,7 +121,7 @@ export class RequestAcademyModal implements OnInit {
     this._bumblebee.sendFeedback(data).pipe(take(1)).subscribe(
       (res) => {
         this.loading = false
-        this.angulartics.eventTrack.next({ action: 'requestAcademy', properties: { category: 'accountManagement', label: 'success' }})
+        this.angulartics.eventTrack.next({ action: 'academyRequest_academyModal_submitted', properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }})
         this.requestSuccess = true
         this._locker.remove("requestAcademyFormData")
         this.feedbackClose()
@@ -131,7 +130,6 @@ export class RequestAcademyModal implements OnInit {
       (err) => {
         console.error(err)
         this.loading = false
-        this.angulartics.eventTrack.next({ action: 'requestAcademy', properties: { category: 'accountManagement', label: 'failure' }})
         this.errorObject.serverError = "Something has gone wrong. Please try submitting your feedback again later!"
         this._locker.set("requestAcademyFormData", formValue)
       }

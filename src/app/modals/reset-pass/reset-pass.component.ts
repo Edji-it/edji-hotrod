@@ -34,8 +34,6 @@ export class ResetPassComponent {
     let resetUser = {}
     this.loading = true
     this.clearErrors()
-
-    this.angulartics.eventTrack.next({ action: 'requestPasswordEmail', properties: { category: 'accountManagement', label: 'attempt' }})
     // Username or Email?
     if (ALLSPARK.EMAILREGEX.test(enteredValue)) {
       resetUser["email"] = enteredValue
@@ -48,12 +46,15 @@ export class ResetPassComponent {
       .subscribe((success) => {
         this.sentName = enteredValue
         this.loading = false
-        this.angulartics.eventTrack.next({ action: 'requestPasswordEmail', properties: { category: 'accountManagement', label: 'success' }})
+        // fire an analytic event here for tracking purposes
+        this.angulartics.eventTrack.next({ 
+          action: 'change_password_request', 
+          properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
+        })
         this.submissionSuccess = true
       }, (err) => {
         this.loading = false
         this.submissionSuccess = false
-        this.angulartics.eventTrack.next({ action: 'requestPasswordEmail', properties: { category: 'accountManagement', label: 'failure' }})
         if (err.status == 400) {
           let errorBody = err.json()
           // User's password can't reset because it's an OAuth account

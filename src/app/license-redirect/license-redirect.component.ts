@@ -54,6 +54,10 @@ export class LicenseRedirectComponent implements OnInit, OnDestroy {
      * let's add it to the locker and then move to the login/register check
      */ 
     if (typeof(this.invitationId)!='undefined' && this.invitationId!='') {
+      // we need to log temps out so we give them the login / register screen
+      if (this.user.isLoggedIn && this.user.type==='temp') {
+        this.changeAccount()
+      }
       // if the user is logged in already, then we'll process the license
       if (this.user.isLoggedIn) {
         // if the user already accepted this license, redirect them to the dashboard.. otherwise process it

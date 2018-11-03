@@ -10,7 +10,7 @@ nav-bar([showDashboardOptions]="true")
                     id="discoverFilterFollowing",
                     [class.active]="followingFilter",
                     title="Filter by users you follow",
-                    (click)="followingFilter = true; loadFeed()"
+                    (click)="followingFilter = true; loadFeed('filter_following')"
                   )
                   span([innerHTML]="':green_heart: Following' | emojione")
                 //- Public option
@@ -18,7 +18,7 @@ nav-bar([showDashboardOptions]="true")
                     id="discoverFilterPublic",
                     [class.active]="!followingFilter",
                     title="See public readings from all users",
-                    (click)="followingFilter = false; loadFeed()"
+                    (click)="followingFilter = false; loadFeed('filter_public')"
                 )
                     span([innerHTML]="':earth_americas: Public' | emojione")
             br
@@ -26,9 +26,9 @@ nav-bar([showDashboardOptions]="true")
                 label Grade Level
                     button.btn-secondary.btn-sm.filter-clear(
                         *ngIf="gradeFilter.length > 0",
-                        (click)="gradeFilter = []; loadFeed()"
+                        (click)="gradeFilter = []; loadFeed('')"
                     ) Clear
-                grade-selector([(ngModel)]="gradeFilter", (ngModelChange)="loadFeed()")
+                grade-selector([(ngModel)]="gradeFilter", (ngModelChange)="loadFeed('filter_gradeLevel')")
             //- .form-group
             //-     label Subjects
                 //- ss-multiselect-dropdown([options]="subjects", [(ngModel)]="subjectFilter", [settings]="subjectDropSettings")
@@ -42,10 +42,10 @@ nav-bar([showDashboardOptions]="true")
                 follow-tag(
                     id="followEdjiTag",
                     [owner]="edjiOwnerObj",
-                    (followEvent)="loadFeed()"
+                    (followEvent)="loadFeed('')"
                 )
             .row.loading(*ngIf="loading")
-            <p-dataList [value]="readings" [paginator]="true" [paginatorPosition]="'bottom'" [rows]="rows" [lazy]="true" (onLazyLoad)="loadFeed($event)" [totalRecords]="total" [emptyMessage]="'No Readings to show.'">
+            <p-dataList [value]="readings" [paginator]="true" [paginatorPosition]="'bottom'" [rows]="rows" [lazy]="true" (onLazyLoad)="loadFeed('feed_paginate', $event)" [totalRecords]="total" [emptyMessage]="'No Readings to show.'">
                 <ng-template let-reading pTemplate="item">
                     .col-12.feed__reading(*ngIf="reading")
                         div {{index}}
