@@ -55,7 +55,6 @@ import { ClickOutsideDirective } from './_directives/click-outside.directive'
 
 // Components
 import {
-  DiscussionsComponent,
   OauthRowComponent,
   OpenEndedAnswersComponent,
   QuestionComponent,
@@ -174,7 +173,6 @@ const APP_PROVIDERS = [
     FirecardComponent,
     QuestionfeedComponent,
     QuestioncardComponent,
-    DiscussionsComponent,
     UploadModalComponent,
     TutorialReadingComponent,
     UploadPdfModalComponent,
