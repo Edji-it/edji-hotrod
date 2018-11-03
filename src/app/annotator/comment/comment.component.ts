@@ -47,8 +47,6 @@ export class CommentComponent implements OnInit, OnDestroy {
   private currentScroll: number
   // Is fully visible, focused, and editable
   private active: boolean = false
-  // User is editing comment
-  public editing: boolean = false
   private showDeleteModal: boolean = false
   private user: any
   private subscriptions: Subscription[] = []
@@ -242,7 +240,6 @@ export class CommentComponent implements OnInit, OnDestroy {
    * TO-DO: Clean out code for optionally passing JUST comment.data as comment parameter
    */
   deactivate(comment ?: any, noUpdate ?: boolean): void {
-    this.editing = false
     this.comment.selected = false
     this.comment.active = this.active = false
     this.comment.new = false

@@ -184,7 +184,8 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
     
     
     if (shouldActivate) {
-      for (let i=0;i<commentsByIndex[wordIndex].length;i++) {
+      let commentsByIndexL = commentsByIndex[wordIndex] ? commentsByIndex[wordIndex].length : 0
+      for (let i=0;i<commentsByIndexL;i++) {
         if (commentsByIndex[wordIndex][i]._id===comment._id) {
           commentIndex = i
           break

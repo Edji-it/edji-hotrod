@@ -34,7 +34,6 @@
         text-comment(
             *ngIf="comment.type == 'text'",
             [readOnly]="readOnly",
-            [isEditing]="editing",
             [comment]="comment",
             [active]="comment.active",
             [reply]="reply",
@@ -75,7 +74,7 @@
     button.btn.btn-xs-danger(*ngIf="userPermission >= 3", (tap)="userPermission > 3 ? deleteComment(comment) : _comments.deleteCommentConfirmation(comment, commentContext)") Delete
     ng-container(*ngIf="comment.type != 'audio' && !readOnly")
         .action-separator
-        button.btn.btn-xs-primary((tap)="editing = true") Edit
+        button.btn.btn-xs-primary((tap)="comment.active = true") Edit
 //- END the other component comment display
 
 //- Comments that are displayed in the comment pane
@@ -117,7 +116,6 @@ div(*ngIf="commentPaneActive")
                 text-comment(
                     *ngIf="comment.type == 'text'",
                     [readOnly]="readOnly",
-                    [isEditing]="editing",
                     [comment]="comment",
                     [active]="comment.active",
                     [reply]="reply",
@@ -151,7 +149,7 @@ div(*ngIf="commentPaneActive")
                 button.btn.btn-xs-danger(*ngIf="userPermission >= 3", (tap)="userPermission > 3 ? deleteComment(comment) : _comments.deleteCommentConfirmation(comment, commentContext)") Delete
                 ng-container(*ngIf="comment.type != 'audio' && !readOnly")
                     .action-separator
-                    button.btn.btn-xs-primary((tap)="editing = true") Edit
+                    button.btn.btn-xs-primary((tap)="comment.active = true") Edit
 //- END comment pane display
 
 //- Handle Desktop and Mobile Icons for activating comments
