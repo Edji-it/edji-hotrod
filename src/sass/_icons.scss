@@ -163,6 +163,13 @@
     @include icon('icon-comment-filter.svg');
 }
 
+.icon-reply-arrow {
+    @include icon('icon-reply-arrow.png');
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+}
+
 .icon-link {
     @include icon('icon-link.svg');
     display: inline-block;

@@ -508,7 +508,7 @@ pre.btn {
   text-decoration: none;
   padding: 1px 5px;
 
-  &:hover, &:focus {
+  &:hover {
     color: #fff;
   }
 }
@@ -516,21 +516,21 @@ pre.btn {
 // eg. Reply action
 .btn-xs-action {
   @extend .btn-xs;
-  &:hover, &:focus {
-    background: $btnActionFocusColor;
+  &:hover {
+    background: $btnActionFocusColor !important;
   }
 }
 
 .btn-xs-primary {
   @extend .btn-xs;
-  &:hover, &:focus {
+  &:hover {
     background: $btnPrimaryFocusColor;
   }
 }
 
 .btn-xs-danger {
   @extend .btn-xs;
-  &:hover, &:focus {
+  &:hover {
     background: #E26F6E;
   }
 }

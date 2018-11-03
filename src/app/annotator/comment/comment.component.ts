@@ -355,6 +355,13 @@ export class CommentComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Determine if comment has replies
+   */
+  public hasReplies(comment): boolean {
+    return this.repliesById[comment._id] && this.repliesById[comment._id].length > 0
+  }
+
+  /**
    * Toggle display of replies
    * @description Uses output to trigger display in parent component
    */

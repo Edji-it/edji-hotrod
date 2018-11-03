@@ -49,11 +49,6 @@
             [reply]="reply",
             [commentContext]="commentContext"
         )
-        button#commentDelBtn.inline-delete(
-            *ngIf="userPermission >= 3",
-            (tap)="userPermission > 3 ? deleteComment(comment) : _comments.deleteCommentConfirmation(comment, commentContext)"
-        )
-            | +
         .reply(
             *ngIf="!reply && project.types.indexOf('reply') > -1",
             (tap)="commentReply.emit()"
@@ -71,10 +66,10 @@
     i.comment__saved([innerHtml]='":ok_hand:" | emojione')
     //- Comment action row
     .comment__action-row.btn-row.left.mt-0([class.reply-gap]="repliesShowing")
-    button.btn.btn-xs-danger(*ngIf="userPermission >= 3", (tap)="userPermission > 3 ? deleteComment(comment) : _comments.deleteCommentConfirmation(comment, commentContext)") Delete
-    ng-container(*ngIf="comment.type != 'audio' && !readOnly && !comment.active")
-        .action-separator
-        button.btn.btn-xs-primary((tap)="activate(comment)") Edit
+        button.btn.btn-xs-danger(*ngIf="userPermission >= 3", (tap)="userPermission > 3 ? deleteComment(comment) : _comments.deleteCommentConfirmation(comment, commentContext)") Delete
+        ng-container(*ngIf="comment.type != 'audio' && !readOnly && !comment.active")
+            .action-separator
+            button.btn.btn-xs-primary((tap)="activate(comment)") Edit
 //- END the other component comment display
 
 //- Comments that are displayed in the comment pane
@@ -143,7 +138,12 @@ div(*ngIf="commentPaneActive")
             //- Comment action buttons
             .comment__action-row.btn-row.left.mt-0([class.reply-gap]="repliesShowing")
                 ng-container(*ngIf="!readingReport && !reply && project.types.indexOf('reply') > -1")
-                    button#addReply.btn.btn-xs-action((tap)="toggleReplies()")
+                    button#addReply.btn.btn-xs-action.btn--reply(
+                        (tap)="toggleReplies()", 
+                        [class.has-reply]="hasReplies(comment)",
+                        [class.text-only]="repliesShowing"
+                    )
+                        i.icon.icon-reply-arrow
                         | {{ replyBtnText() }}
                     .action-separator
                 button.btn.btn-xs-danger(*ngIf="userPermission >= 3", (tap)="userPermission > 3 ? deleteComment(comment) : _comments.deleteCommentConfirmation(comment, commentContext)") Delete
