@@ -12,6 +12,7 @@ import { CommentService } from '../../_services'
 export class TextCommentComponent implements OnInit, AfterViewInit {
 
     @ViewChild('textInput') public textInput: ElementRef
+    @ViewChild('textDisplay') public textDisplay: ElementRef
 
     @Input() public comment: EdjiComment
     @Input() public reply: boolean = false
@@ -22,13 +23,16 @@ export class TextCommentComponent implements OnInit, AfterViewInit {
     @Output() deactivate: EventEmitter<any> = new EventEmitter<any>() 
 
     public activated: boolean = false
+    public textareaHeight: string = '60px'
 
     // We need to know when changes to inactive to clear the editing variable
     @Input() set active(active){
-        this.activated = active
+        if (!this.readOnly) {
+            this.activated = active
         
-        if (active) {
-            this.textInput && this.textInput.nativeElement.focus()
+            if (active) {
+                this.activateField()
+            }
         }
     }
     get active() {
@@ -57,7 +61,11 @@ export class TextCommentComponent implements OnInit, AfterViewInit {
         
     }
 
-    toggleActive(event) {
+    /**
+     * Determine if field should be activated or deactivated on Click
+     * @param event Click event
+     */
+    clickToggleActive(event) {
         if (this.activated) {
             if (event && ['a','i'].indexOf(event.target.tagName.toLowerCase()) < 0) {
                 this.deactivate.emit(false)
@@ -65,8 +73,19 @@ export class TextCommentComponent implements OnInit, AfterViewInit {
                 // ignore event
             }
         } else if (!this.readOnly) {
-            this.activate.emit()
+            this.activateField()
         }
+    }
+
+    activateField() {
+        // Set activated
+        this.activated = true
+        // Set textarea height
+        this.textareaHeight = this.textDisplay ? this.textDisplay.nativeElement.scrollHeight + 'px' : '60px'
+        // Focus text field
+        this.textInput && this.textInput.nativeElement.focus()
+        // Notify output
+        this.activate.emit()
     }
 
     updateComment(commentData: any) {

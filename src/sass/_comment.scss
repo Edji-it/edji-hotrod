@@ -853,7 +853,8 @@ textarea.text-comment-input,
     background: #fff;
     padding: 8px 23px 0px 10px;
     width: 180px;
-    height: 30px;
+	min-height: 30px;
+	height: auto;
     line-height: 16px;
     resize: none;
     font-size: 12px;
