@@ -3,6 +3,7 @@ import { Router } from '@angular/router'
 import { Component, EventEmitter, Input, OnInit, Output, OnDestroy } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { take } from 'rxjs/operators'
+import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
 import { Project } from '../../shared/datatypes'
@@ -34,6 +35,11 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
 
   @Input()
   set showReferral(showReferral: boolean) {
+    // fire an analytic event here for tracking purposes
+    this.angulartics.eventTrack.next({ 
+      action: 'referral_openModal', 
+      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
+    })
     if (typeof(showReferral) !== 'undefined' && this.showModal !== showReferral) {
       this.showModal = showReferral
       if (this.showModal) {
@@ -54,7 +60,8 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
     private _util: UtilToolService,
     private _projects: ProjectService,
     private _readings: ReadingService,
-    private _auth: AuthService
+    private _auth: AuthService,
+    private angulartics: Angulartics2
   ) {
     
   }
@@ -202,6 +209,14 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
       default:
         this.copyReferralCode()
     }
+    // fire an analytic event here for tracking purposes
+    if (shareMedium==='') {
+      shareMedium='copy'
+    }
+    this.angulartics.eventTrack.next({ 
+      action: 'referral_' + shareMedium + '_shareLink', 
+      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
+    })
   }
 
   /**

@@ -33,6 +33,7 @@ export class NewReadingPage implements OnInit {
     public showPdfUploadModal: boolean
     private user: any
     private subscriptions: Subscription[] = []
+    private readingType: string = 'newReading' // used for analytics purposes
 
     // Trigger booleans
     public showAlert: boolean = false
@@ -169,7 +170,13 @@ export class NewReadingPage implements OnInit {
         if (this.readingId) {
             this.getReading(this.readingId)
         } else if (this.copyId) {
+            this.readingType = 'existingReading'
             this.getReading(this.copyId, !this._auth.getUser().hero_status)
+            // fire an analytic event here for tracking purposes
+            this.angulartics.eventTrack.next({ 
+                action: 'discover_reading_retrieve', 
+                properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
+            })
         }
 
         /** Set the current user every time it changes */
@@ -578,44 +585,41 @@ export class NewReadingPage implements OnInit {
         } else {
             submitAction = "createNewReading"
         }
-        if (reading.questions && reading.questions.length > 0) {
-            this.angulartics.eventTrack.next({ action: submitAction + 'WithQuestion', properties: { category: 'heroFeature', label: 'attempt' }})
-        } else {
-            this.angulartics.eventTrack.next({ action: submitAction, properties: { category: 'contentManagement', label: 'attempt' }})
-        }
-
         this._readings.save(reading)
             .subscribe(
                 data => {
                     if (data._id) {
                         // Save for reference by Add Group modal and openFirstGroup()
                         this.reading = data
-                        // Report saving reading with/without questions
-                        if (reading.questions.length > 0) {
-                            this.angulartics.eventTrack.next({ action: submitAction + 'WithQuestion', properties: { category: 'heroFeature', label: 'success' }})
-                        } else {
-                            this.angulartics.eventTrack.next({ action: submitAction, properties: { category: 'contentManagement', label: 'success' }})
-                        }
                         // Create default Project if it is in final version
                         if (reading.draft===false) {
                             // Reading saved! Now user needs to create their first project
                             this.showFirstGroupModal = true
+                            let publicFlag = 'public'
+                            if (!this.reading.public) {
+                                publicFlag = 'private'
+                            }
+                            // fire an analytic event here for tracking purposes
+                            this.angulartics.eventTrack.next({ 
+                                action: this.readingType + '_' + publicFlag + '_create', 
+                                properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
+                            })
                         } else {
                             this.router.navigate(['new-reading/' + data._id], { queryParams: { successAlert: this.successAlert } })
                             this.successObject.readingSuccess = this.successAlert
                             this.showAlert = true
                             this.reading.updatedAt = data.updatedAt
+                            // fire an analytic event here for tracking purposes
+                            this.angulartics.eventTrack.next({ 
+                                action: this.readingType + '_draft_save', 
+                                properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
+                            })
                             return true
                         }
                     }
                 },
                 error => {
                     console.error(error)
-                    if (reading.questions.length > 0) {
-                        this.angulartics.eventTrack.next({ action: submitAction + 'WithQuestion', properties: { category: 'heroFeature', label: 'failure' }})
-                    } else {
-                        this.angulartics.eventTrack.next({ action: submitAction, properties: { category: 'contentManagement', label: 'failure' }})
-                    }
                     this.errorObject.readingError = "There was an issue saving your reading. It may be our fault; please try again"
                     return false
                 }
@@ -695,6 +699,11 @@ export class NewReadingPage implements OnInit {
      * Adds a question block to the new reading and then adds in a new medium editor
      */
     public addQuestion(insertHtml?: string, insertPos?: number) {
+        // fire an analytic event here for tracking purposes
+        this.angulartics.eventTrack.next({ 
+            action: 'qna_question_added', 
+            properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
+        })
         let answer_types = this._auth.getAllowedCommentMediaTypes()
         let question = <EdjiQuestion>{
             prompt: '',

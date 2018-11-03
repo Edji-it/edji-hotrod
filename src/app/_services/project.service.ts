@@ -661,6 +661,12 @@ export class ProjectService {
                 comment_type: comment.type,
                 reading_owner: this.project.owner_id
               })
+
+              // fire an analytic event here for tracking purposes
+              this.angulartics.eventTrack.next({ 
+                action: commentContext + '_' + comment.type + '_create', 
+                properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
+              })
         }
 
         options['body'] = data
@@ -679,6 +685,18 @@ export class ProjectService {
     public deleteComment(comment : EdjiComment): Promise<any> {
         let projectId = this.project._id;
         let url = this._auth.getUrl() + '/projects/' + projectId + '/comments/' + comment._id;
+
+        // need to set a comment context to discern between comments and replies for analytic event
+        let commentContext = 'comment'
+        if (comment.reply_to && comment.reply_to!=='') {
+            commentContext = 'reply'
+        }
+
+        // fire an analytic event here for tracking purposes
+        this.angulartics.eventTrack.next({ 
+          action: commentContext + '_' + comment.type + '_delete', 
+          properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
+        })
         
         return this.http
             .delete(url, this._auth.getOptions())
@@ -759,6 +777,12 @@ export class ProjectService {
                 comment_type: answer.type,
                 reading_owner: this.project.owner_id
               })
+
+              // fire an analytic event here for tracking purposes
+              this.angulartics.eventTrack.next({ 
+                action: 'answer_' + answer.type + '_create', 
+                properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
+              })
         }
 
         options['body'] = data
@@ -776,6 +800,12 @@ export class ProjectService {
     public deleteAnswer(answer : EdjiComment): Promise<any> {
         let projectId = this.project._id;
         let url = this._auth.getUrl() + '/projects/' + projectId + '/answers/' + answer._id;
+
+        // fire an analytic event here for tracking purposes
+        this.angulartics.eventTrack.next({ 
+            action: 'answer_' + answer.type + '_delete', 
+          properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
+        })
 
         return this.http
             .delete(url, this._auth.getOptions())
