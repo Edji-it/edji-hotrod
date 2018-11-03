@@ -42,6 +42,8 @@ export class UserDetailsUpdateModal implements OnInit {
     _fb: FormBuilder
   ) { 
     this.userDetailsForm = _fb.group({
+      school: [null],
+      phone: [null],
       identities: _fb.group({
         student: true,
         teacher: null,
@@ -57,7 +59,18 @@ export class UserDetailsUpdateModal implements OnInit {
   ngOnInit() {
   }
 
-  private formSubmit(form: FormGroup): void {
+  public formSubmit(form: FormGroup): void {
+    // if the user identifies as a teacher or admin, we need to switch to the next section to collect school name and phone number (optional)
+    if (form.value.identities.teacher || form.value.identities.administrator && !form.value.school){
+      console.log('need more info', form.value)
+    } else {
+      // update the user if we have the info we need
+      // this.processIdentities(form)
+      console.log('run processIdentities', form.value)
+    }
+  }
+
+  private processIdentities(form: FormGroup): void {
     let user: User = this._auth.getUser()
 
     let identities = []
