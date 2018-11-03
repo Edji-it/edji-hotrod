@@ -961,11 +961,11 @@ export class AuthService implements CanActivate {
         if (!user.isLoggedIn) {
             return 'new'
         }
-        if (user.identities.includes('administrator')) {
+        if (user.identities && user.identities.includes('administrator')) {
             return 'admin'
-        } else if (user.identities.includes('teacher')) {
+        } else if (user.identities && user.identities.includes('teacher')) {
             return 'teacher'
-        } else if (user.identities.includes('student')) {
+        } else if (user.identities && user.identities.includes('student')) {
             return 'student'
         } else {
             return 'other'
@@ -980,7 +980,7 @@ export class AuthService implements CanActivate {
         if (!user.isLoggedIn) {
             return 'recruit'
         }
-        if (user.institution_ids.length>0 && user.hero_status) {
+        if (user.institution_ids && user.institution_ids.length>0 && user.hero_status) {
             return 'heroAcademy'
         } else if (user.hero_status) {
             return 'hero'
