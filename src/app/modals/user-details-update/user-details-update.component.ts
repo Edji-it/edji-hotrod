@@ -63,10 +63,12 @@ export class UserDetailsUpdateModal implements OnInit {
 
   public formSubmit(form: FormGroup): void {
     // if the user identifies as a teacher or admin, we need to switch to the next section to collect school name and phone number (optional)
-    if (form.value.identities.teacher || form.value.identities.administrator && !form.value.school){
+    if ((form.value.identities.teacher || form.value.identities.administrator) && !form.value.school){
+      console.log(form)
       this.identitySelect = false
     } else {
       // update the user if we have the info we need
+      console.log('should process the identities')
       this.processIdentities(form)
     }
   }
