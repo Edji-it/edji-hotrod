@@ -5,6 +5,7 @@ import { take } from 'rxjs/operators'
 
 import { User } from './../../shared/datatypes'
 import { AuthService, BumblebeeService, AcademyService } from './../../_services'
+import { ALLSPARK } from 'src/app/app.constants'
 
 @Component({
   selector: 'hot-user-details-update',
@@ -29,6 +30,7 @@ export class UserDetailsUpdateModal implements OnInit {
     { name: 'robot', id: 'typeRobotInput', checkboxCopy: "I'm a robot. :robot_face:" },
     { name: 'other', id: 'typeOtherInput', checkboxCopy: "Other :sparkles:" }
   ]
+  public identitySelect: boolean = true
 
   private messages: {
     success?: boolean,
@@ -42,8 +44,8 @@ export class UserDetailsUpdateModal implements OnInit {
     _fb: FormBuilder
   ) { 
     this.userDetailsForm = _fb.group({
-      school: [null],
-      phone: [null],
+      school: [null, Validators.required],
+      phone: [null, Validators.compose([Validators.required, this.phoneNumberValidator])],
       identities: _fb.group({
         student: true,
         teacher: null,
@@ -62,11 +64,10 @@ export class UserDetailsUpdateModal implements OnInit {
   public formSubmit(form: FormGroup): void {
     // if the user identifies as a teacher or admin, we need to switch to the next section to collect school name and phone number (optional)
     if (form.value.identities.teacher || form.value.identities.administrator && !form.value.school){
-      console.log('need more info', form.value)
+      this.identitySelect = false
     } else {
       // update the user if we have the info we need
-      // this.processIdentities(form)
-      console.log('run processIdentities', form.value)
+      this.processIdentities(form)
     }
   }
 
@@ -80,7 +81,16 @@ export class UserDetailsUpdateModal implements OnInit {
       }
     }
 
-    this._auth.updateUser({identities: identities})
+    let school = ''
+    let phone = ''
+    if (form.value.school) {
+      school = form.value.school
+    }
+    if (form.value.phone) {
+      phone = form.value.phone
+    }
+
+    this._auth.updateUser({identities: identities, school_name: school, phone_number: phone})
       .pipe(take(1))
       .subscribe((res: any) => {
         this._auth.setUser(res.user)
@@ -126,5 +136,18 @@ export class UserDetailsUpdateModal implements OnInit {
       }
     }
     return valid ? null : { identity: true }
+  }
+
+  /**
+   * Validates the phone number is in the correct reg expression if one is entered
+   * @param control is our form control 
+   */
+  private phoneNumberValidator(control: FormControl): any {
+    if (!control.value) {
+      return null
+    }
+    // Run the check agains the phone validator
+    let phoneRe: RegExp = ALLSPARK.PHONEREGEX
+    return phoneRe.test(control.value) ? null : { 'phoneIncorrect': true }
   }
 }

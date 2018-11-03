@@ -6,19 +6,39 @@
         button(*ngIf="messages.success", type="button", class="close", aria-label="Close", (click)="closeModal.emit()")
           span(aria-hidden="true") &times;
       .modal-body
-        h5 I'm using Edji as a...
-        #accountTypeGroup.form-group.list-group
-          .form-check.list-group-item(*ngFor="let identity of identities")
-            label.form-check-label([attr.for]="identity.id")
-              input.form-check-input(
-                [attr.id]="identity.id",
-                type="checkbox",
-                [formControl]="userDetailsForm.controls['identities'].controls[identity.name]",
-                value=""
-              )
-              div([innerHtml]="identity.checkboxCopy | emojione")
-        .alert.alert-info(*ngIf="userDetailsForm.controls['identities'].dirty && userDetailsForm.controls['identities'].invalid") Please select at least one box!
-        .alert.alert-success(*ngIf="messages.success", [innerHtml]=" ':heavy_check_mark: Thanks! Have fun reading with Edji!' | emojione ")
+        div(*ngIf="identitySelect")
+          h5 I'm using Edji as a...
+          #accountTypeGroup.form-group.list-group
+            .form-check.list-group-item(*ngFor="let identity of identities")
+              label.form-check-label([attr.for]="identity.id")
+                input.form-check-input(
+                  [attr.id]="identity.id",
+                  type="checkbox",
+                  [formControl]="userDetailsForm.controls['identities'].controls[identity.name]",
+                  value=""
+                )
+                div([innerHtml]="identity.checkboxCopy | emojione")
+          .alert.alert-info(*ngIf="userDetailsForm.controls['identities'].dirty && userDetailsForm.controls['identities'].invalid") Please select at least one box!
+          .alert.alert-success(*ngIf="messages.success", [innerHtml]=" ':heavy_check_mark: Thanks! Have fun reading with Edji!' | emojione ")
+        div(*ngIf="!identitySelect")
+          h5 Almost Done!
+          .form-group
+            label(for="schoolInput") School District
+            input#schoolInput(type="text", [formControl]="userDetailsForm.controls['school']", tabindex="0", placeholder="My District")
+            #msgSchoolRequired.alert.alert-info(*ngIf="userDetailsForm.controls['school'].hasError('required') && userDetailsForm.controls['school'].dirty") Enter your School District here
+          .form-group
+            label(for="phoneInput") Phone Number
+            input#phoneInput(type="tel", [formControl]="userDetailsForm.controls['phone']", tabindex="0", placeholder="123-456-7890")
+            #msgPhoneIncorrect.alert.alert-info(*ngIf="userDetailsForm.controls['phone'].hasError('phoneIncorrect') && userDetailsForm.controls['phone'].dirty") We don't think that's a phone number...
       .modal-footer
-        button#submitDetailsButton.btn.btn-primary(type="submit", [disabled]="!userDetailsForm.valid", *ngIf="!messages.success") Submit
+        button#submitDetailsButton.btn.btn-primary(
+          *ngIf="identitySelect && !messages.success", 
+          type="submit", 
+          [disabled]="userDetailsForm.controls['identities'].invalid"
+        ) Next
+        button#submitDetailsButton.btn.btn-primary(
+          *ngIf="!identitySelect && !messages.success", 
+          type="submit", 
+          [disabled]="userDetailsForm.controls['school'].invalid || (userDetailsForm.controls['phone'].hasError('phoneIncorrect') && userDetailsForm.controls['phone'].dirty)"
+        ) Next
         button.btn.btn-secondary(*ngIf="messages.success", type="button") Close
