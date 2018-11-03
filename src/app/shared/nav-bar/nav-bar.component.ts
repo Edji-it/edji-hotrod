@@ -97,12 +97,18 @@ export class NavBarComponent implements OnInit, OnDestroy {
       this.subscriptions.push(
           this._auth.getCurrentUser().subscribe((user) => {
               this.user = user
-              this.isTeacher = this.user.identities && this.user.identities.indexOf('teacher') > -1
+              if (this.user && this.user.identities) {
+                this.isTeacher = this.user.identities.indexOf('teacher') > -1
+              }
           }),
           this._auth.currentAcademyState.subscribe((currentState) => {
-            this.academyState =  currentState
+            this.academyState = currentState
             // Set abbreviation
-            this.currentAcademy = this.academyState && this.academyState.academies[this.academyState.selected] || {}
+            if (this.academyState && this.academyState.academies) {
+              this.currentAcademy = this.academyState.academies[this.academyState.selected]
+            } else {
+              this.currentAcademy = {}
+            }
           })
       )
 
