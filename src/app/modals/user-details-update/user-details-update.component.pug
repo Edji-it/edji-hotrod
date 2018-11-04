@@ -2,7 +2,7 @@
   .modal-dialog
     form.modal-content([formGroup]="userDetailsForm", (ngSubmit)="formSubmit(userDetailsForm)")
       .modal-header
-        h4.modal-title Before you begin
+        h4.modal-title {{ modalHeadings.header }}
         button(*ngIf="messages.success", type="button", class="close", aria-label="Close", (click)="closeModal.emit()")
           span(aria-hidden="true") &times;
       .modal-body
@@ -21,13 +21,15 @@
           .alert.alert-info(*ngIf="userDetailsForm.controls['identities'].dirty && userDetailsForm.controls['identities'].invalid") Please select at least one box!
           .alert.alert-success(*ngIf="messages.success", [innerHtml]=" ':heavy_check_mark: Thanks! Have fun reading with Edji!' | emojione ")
         div(*ngIf="!identitySelect")
-          h5 Almost Done!
+          h5 {{ modalHeadings.body }}
           .form-group
             label(for="schoolInput") School District
+              small &nbsp; [Required]
             input#schoolInput(type="text", [formControl]="userDetailsForm.controls['school']", tabindex="0", placeholder="My District")
             #msgSchoolRequired.alert.alert-info(*ngIf="userDetailsForm.controls['school'].hasError('required') && userDetailsForm.controls['school'].dirty") Enter your School District here
           .form-group
             label(for="phoneInput") Phone Number
+              small &nbsp; [Optional]
             input#phoneInput(type="tel", [formControl]="userDetailsForm.controls['phone']", tabindex="0", placeholder="123-456-7890")
             #msgPhoneIncorrect.alert.alert-info(*ngIf="userDetailsForm.controls['phone'].hasError('phoneIncorrect') && userDetailsForm.controls['phone'].dirty") We don't think that's a phone number...
       .modal-footer

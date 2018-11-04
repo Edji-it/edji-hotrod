@@ -16,6 +16,7 @@ export class UserDetailsUpdateModal implements OnInit {
   @Input() showModal: boolean
   @Output() closeModal: EventEmitter<any> = new EventEmitter()
 
+  private currentUser: User 
   private userDetailsForm: FormGroup
   private identities: {
     name: string
@@ -36,6 +37,14 @@ export class UserDetailsUpdateModal implements OnInit {
     success?: boolean,
     serviceError?: boolean
   } = {}
+
+  public modalHeadings: {
+    header: string,
+    body: string
+  } = {
+    header: 'Before you begin',
+    body: 'Almost Done!'
+  }
 
   constructor(
     private _academy: AcademyService,
@@ -59,6 +68,18 @@ export class UserDetailsUpdateModal implements OnInit {
   }
 
   ngOnInit() {
+    this.currentUser = this._auth.getUser()
+
+    if (
+      (this.currentUser && this.currentUser.identities && this.currentUser.identities.includes('teacher')) || 
+      (this.currentUser && this.currentUser.identities && this.currentUser.identities.includes('administrator')) && 
+      this.currentUser && !this.currentUser.school_name
+    ) {
+      this.setFormIdentities(this.currentUser)
+      this.modalHeadings.header = 'We just need some more detail'
+      this.modalHeadings.body = 'Almost Done!'
+      this.identitySelect = false
+    }
   }
 
   public formSubmit(form: FormGroup): void {
@@ -72,8 +93,6 @@ export class UserDetailsUpdateModal implements OnInit {
   }
 
   private processIdentities(form: FormGroup): void {
-    let user: User = this._auth.getUser()
-
     let identities = []
     for(let field in form.value.identities) {
       if (form.value.identities[field]) {
@@ -81,6 +100,7 @@ export class UserDetailsUpdateModal implements OnInit {
       }
     }
 
+    // Set school and phone if we have it
     let school = ''
     let phone = ''
     if (form.value.school) {
@@ -149,5 +169,20 @@ export class UserDetailsUpdateModal implements OnInit {
     // Run the check agains the phone validator
     let phoneRe: RegExp = ALLSPARK.PHONEREGEX
     return phoneRe.test(control.value) ? null : { 'phoneIncorrect': true }
+  }
+
+  /**
+   * If we're prompting the user to add secondary properties like school district and phone number, 
+   * we need to set the identities to their current values so we don't overwrite them
+   * @param user current user
+   */
+  private setFormIdentities(user: User) {
+    for (let control in this.userDetailsForm.value.identities) {
+      if (user.identities.includes(control)) {
+        this.userDetailsForm.controls.identities['controls'][control].setValue(true)
+      } else {
+        this.userDetailsForm.controls.identities['controls'][control].setValue(null)
+      }
+    }
   }
 }
