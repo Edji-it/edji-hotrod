@@ -32,6 +32,7 @@ export class UserDetailsUpdateModal implements OnInit {
     { name: 'other', id: 'typeOtherInput', checkboxCopy: "Other :sparkles:" }
   ]
   public identitySelect: boolean = true
+  private existingUser: boolean
 
   private messages: {
     success?: boolean,
@@ -75,6 +76,7 @@ export class UserDetailsUpdateModal implements OnInit {
       (this.currentUser && this.currentUser.identities && this.currentUser.identities.includes('administrator')) && 
       this.currentUser && !this.currentUser.school_name
     ) {
+      this.existingUser=true
       this.setFormIdentities(this.currentUser)
       this.modalHeadings.header = 'We just need some more detail'
       this.modalHeadings.body = 'Almost Done!'
@@ -119,9 +121,13 @@ export class UserDetailsUpdateModal implements OnInit {
         this.closeModal.emit()
         // If we have a teacher, send it to Mailchimp and Bumblebee/Slack
         if(res.user.identities && res.user.identities.indexOf('teacher') > -1 || res.user.identities.indexOf('administrator') > -1) {
-          if (this._auth.getEnv() === "prod") { 
+          if (this._auth.getEnv() === "prod") {
             // Tell Bumblebee/Slack!
-            this._bumble.sendUserDetails(res.user)
+            if (this.existingUser) {
+              this._bumble.sendUserDetails(res.user, 'additionalDetails')
+            } else {
+              this._bumble.sendUserDetails(res.user)
+            }
             // Parse fullname for Mailchimp
             let nameArr = res.user.fullname.split(" ")
             let fname = nameArr[0]
