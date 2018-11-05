@@ -1,0 +1,87 @@
+nav-bar
+.jumbotron.jumbotron-fluid.jumbotron--sunny
+  .container
+    h1.display-3
+      | Go Hero, 
+      br
+      | Get More Edji
+    p.lead
+      | Edji's core set of features will stay open and freely available, but a Hero subscription supports Edji and unlocks even more abilities 
+      span([innerHtml]="':tada:' | emojione")
+.container
+  .row.align-items-center
+    .col-sm-4
+      .card.card-outline-secondary
+        .card-block
+          h2.card-title Sidekick
+          span.pricing Free
+          hr
+          p.card-text
+            | With a free Edji account, you get:
+          ul.feature-list.mb-4
+            li Unlimited Readings
+            li Unlimited Groups
+            li Emoji and Text Comments
+          a.btn.btn-primary.btn-lg.btn-block([routerLink]="['/register']") Register
+    .col-sm-4
+      .card.card-outline-danger
+        .card-block
+          img.card-img-top(src='/assets/images/hero-lg.png')
+          h2.card-title Hero
+          //- $5<span class="small"> / month or </span>
+          span.pricing
+            | $60
+            span.small  / year
+          hr
+          p.card-text With supporting text below as a natural lead-in to additional content.
+          ul.feature-list.mb-4
+            li Unlimited Readings
+            li Unlimited Groups
+            li Emoji and Text Comments
+            li
+              b Reading Questions
+            li
+              b Comment Replies
+            li
+              b Custom Group Codes
+            li
+              b Audio Comments
+          a.btn.btn-hero.btn-lg.btn-block(tabindex='1', (click)='goHero()') Go Hero
+    .col-sm-4
+      .card.card-outline-secondary
+        .card-block
+          h2.card-title Hero Academy
+          span.pricing Contact Us
+          hr
+          p.card-text
+            | We work directly with institutions to determine an appropriate pricing plan to give all their teachers Heroes.
+          a.btn.btn-primary.btn-lg.btn-block(href='mailto:support@edji.it') Request More Info
+  .row
+    .col-sm-8.col-8.col-xs-12.no-padding
+      .features-table
+        ul
+          h1 Features
+          li Unlimited Readings
+          li Custom Group Control
+          li Reading Recap & Feedback
+    .col-sm-2.col-2.col-xs-12.no-padding
+      .features-table-free
+        ul
+          h1 Free
+          li([innerHtml]="':heavy_check_mark:' | emojione")
+          li([innerHtml]="'-' | emojione")
+          li([innerHtml]="'-' | emojione")
+    .col-sm-2.col-2.col-xs-12.no-padding
+      .features-table-paid
+        ul
+          h1 Hero
+          li([innerHtml]="':heavy_check_mark:' | emojione")
+          li([innerHtml]="':heavy_check_mark:' | emojione")
+          li([innerHtml]="':heavy_check_mark:' | emojione")
+
+hot-login-register.modal-will-fade(
+    [loginHeader]='"To go Hero, first you\'ll need an account"',
+    [class.show]='showLoginModal',
+    (closeModal)='showLoginModal = false',
+    (loginSuccess)='showHeroSubModal = true')
+hero-subscribe-modal.modal-will-fade([class.show]='showHeroSubModal', [goHeroLocation]="'heroPricingPage'", (closeModal)='showHeroSubModal = !showHeroSubModal', (heroWasBorn)="_router.navigate(['/dashboard'])")

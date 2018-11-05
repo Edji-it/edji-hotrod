@@ -5,7 +5,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../_services';
 @Component({
   selector: 'hero-pricing',
-  templateUrl: './hero-pricing.component.html',
+  templateUrl: './hero-pricing.component.pug',
   styleUrls: ['./hero-pricing.component.scss']
 })
 export class HeroPricingComponent implements OnInit {
