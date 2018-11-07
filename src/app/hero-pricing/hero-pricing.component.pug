@@ -65,7 +65,15 @@ nav-bar
               th.text-center(scope="col") Edji Hero
           tbody
             tr(*ngFor="let feature of featureValues")
-              td([innerHtml]="feature.name")
+              td
+                span([innerHtml]="feature.name + ' '")
+                i.icon__tooltip(*ngIf="feature.info", (click)="triggerInfoModal(feature.info)")
+                  span.icon.icon-circle.icon-info  i
+                //- a.badge.badge-pill.badge-info(
+                //-     *ngIf="feature.info", (click)="triggerInfoModal(feature.info)",
+                //-     style="fontfont-style:italic; color:#fff;"
+                //-   )
+                //-   | i
               td.feature-check([innerHtml]="(feature.free ? ':white_check_mark:' : ':heavy_minus_sign:') | emojione")
               td.feature-check([innerHtml]="':white_check_mark:' | emojione")
   .row
@@ -88,3 +96,18 @@ hot-login-register.modal-will-fade(
     (closeModal)='showLoginModal = false',
     (loginSuccess)='showHeroSubModal = true')
 hero-subscribe-modal.modal-will-fade([class.show]='showHeroSubModal', [goHeroLocation]="'heroPricingPage'", (closeModal)='showHeroSubModal = !showHeroSubModal', (heroWasBorn)="_router.navigate(['/dashboard'])")
+
+//- Feature Info Modal
+.modal(*ngIf="showInfoModal")
+  .modal-dialog
+    .modal-content
+      .modal-header
+        h5.modal-title {{ infoModalInfo.heading }}
+        button.close((click)="showInfoModal = false")
+          span(aria-hidden="true") &times;
+      .modal-body
+        .text-center
+          img.card.w-75.mb-4(style="display:inline-block;", [src]="infoModalInfo.image")
+        p([innerHtml]="infoModalInfo.description")
+      .modal-footer
+        .btn.btn-secondary((click)="showInfoModal = false") Close
