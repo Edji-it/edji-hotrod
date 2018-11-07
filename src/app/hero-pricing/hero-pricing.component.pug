@@ -1,5 +1,5 @@
 nav-bar
-.jumbotron.jumbotron-fluid.jumbotron--sunny
+.jumbotron.jumbotron-fluid.jumbotron--blue-sky
   .container
     h1.display-3
       | Go Hero, 
@@ -13,39 +13,29 @@ nav-bar
     .col-sm-4
       .card.card-outline-secondary
         .card-block
-          h2.card-title Sidekick
+          h2.card-title Edji Free
           span.pricing Free
           hr
           p.card-text
-            | With a free Edji account, you get:
-          ul.feature-list.mb-4
-            li Unlimited Readings
-            li Unlimited Groups
-            li Emoji and Text Comments
-          a.btn.btn-primary.btn-lg.btn-block([routerLink]="['/register']") Register
+            | Edji Free is the basic Edji kit that allows teachers to give readings and generate engagement through comments.
+          label Who is it for?
+          p.card-text
+            | Teachers that want their class to read occasionally and see their thoughts!
+          a.btn.btn-primary.btn-lg.btn-block(*ngIf="!user || !user.isLoggedIn", [routerLink]="['/register']") Register
+          a.btn.btn-primary.btn-lg.btn-block(*ngIf="user.isLoggedIn", disabled) Current Plan
     .col-sm-4
       .card.card-outline-danger
         .card-block
           img.card-img-top(src='/assets/images/hero-lg.png')
-          h2.card-title Hero
+          h2.card-title Edji Hero
           //- $5<span class="small"> / month or </span>
           span.pricing
             | $60
             span.small  / year
           hr
-          p.card-text With supporting text below as a natural lead-in to additional content.
-          ul.feature-list.mb-4
-            li Unlimited Readings
-            li Unlimited Groups
-            li Emoji and Text Comments
-            li
-              b Reading Questions
-            li
-              b Comment Replies
-            li
-              b Custom Group Codes
-            li
-              b Audio Comments
+          p.card-text Teachers are Edji’s Heroes, and Edji Hero is a way for teachers to shine when giving their class readings. Get extra customization and lesson planning, plus an in depth view of how each student did while reading.
+          label Who is it for?
+          p.card-text Teachers who want the most student engagement possible!
           a.btn.btn-hero.btn-lg.btn-block(tabindex='1', (click)='goHero()') Go Hero
     .col-sm-4
       .card.card-outline-secondary
@@ -54,30 +44,26 @@ nav-bar
           span.pricing Contact Us
           hr
           p.card-text
-            | We work directly with institutions to determine an appropriate pricing plan to give all their teachers Heroes.
+            | Academy is the easy way to get all your schools teachers full access to Edji Hero features. Easily get teachers signed on and manage your Academy licenses.
+          label Who is it for?
+          p.card-text Teachers and Administrators who want their whole school using Edji!
           a.btn.btn-primary.btn-lg.btn-block(href='mailto:support@edji.it') Request More Info
   .row.no-gutters
-    .col-sm-4.col-4.col-xs-12.no-padding
-      .features-table
-        ul
-          h1 Features
-          li Unlimited Readings
-          li Custom Group Control
-          li Reading Recap & Feedback
-    .col-sm-4.col-4.col-xs-12.no-padding
-      .features-table-free
-        ul
-          h1 Free
-          li([innerHtml]="':heavy_check_mark:' | emojione")
-          li([innerHtml]="'-' | emojione")
-          li([innerHtml]="'-' | emojione")
-    .col-sm-4.col-4.col-xs-12.no-padding
-      .features-table-paid
-        ul
-          h1 Hero
-          li([innerHtml]="':heavy_check_mark:' | emojione")
-          li([innerHtml]="':heavy_check_mark:' | emojione")
-          li([innerHtml]="':heavy_check_mark:' | emojione")
+    .col-12
+      .my-2
+        h1 
+      .table-responsive
+        table.table.table-features
+          thead 
+            tr
+              th(scope="col", style="width:50%;") Feature
+              th.text-center(scope="col") Edji Free
+              th.text-center(scope="col") Edji Hero
+          tbody
+            tr(*ngFor="let feature of featureValues")
+              td([innerHtml]="feature.name")
+              td.feature-check([innerHtml]="(feature.free ? ':white_check_mark:' : ':heavy_minus_sign:') | emojione")
+              td.feature-check([innerHtml]="':white_check_mark:' | emojione")
 
 hot-login-register.modal-will-fade(
     [loginHeader]='"To go Hero, first you\'ll need an account"',
