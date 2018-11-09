@@ -192,7 +192,7 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
         }
       }
 
-      if (comment && (comment.type==='emoji' || comment.type==='text')) {
+      if (comment && comment.type==='emoji') {
         this.scrollAdjust()
       }
       this.commentActivationMobile.emit({activate: shouldActivate, wi: wordIndex, ci: commentIndex, activatedComment: comment})
