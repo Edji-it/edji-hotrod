@@ -27,6 +27,7 @@ article {
 article.content {
 	margin-top: 0px;
 	margin-left: 50px;
+	word-break: break-word;
 	
 	@media all and (min-width: $desktop) {
 		margin-left: 253px;
