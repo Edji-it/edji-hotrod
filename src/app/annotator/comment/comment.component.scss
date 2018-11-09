@@ -283,12 +283,11 @@ $mobileBoundVPad: 40px;
 }
 
 .icon-draft__comment {
+  -webkit-transform: rotate(0deg) translateY(0%);
   transform: rotate(0deg) translateY(0%);
-  top: 0;
-  right: auto;
-  width: 42px;
   height: 18px;
   z-index: 1;
+  vertical-align: middle;
 }
 
 .mobileBlock--reading-recap {

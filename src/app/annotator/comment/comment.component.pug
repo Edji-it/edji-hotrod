@@ -92,13 +92,12 @@ div(*ngIf="commentPaneActive")
             (tap)="deactivate(comment)",
             [innerHtml]="':white_check_mark:' | emojione"
         )
-        i.icon.icon-draft.icon-draft__comment(*ngIf="!comment.new && ((!comment.data || comment.data=='') && (!comment.url || comment.url == '')) && !readingReport")
         .user-icon(*ngIf="!readingReport", [class.selected]="comment.selected", [ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '' ]")
             span.user-icon__initials {{comment.author.substring(0,2)}}
         .mobileBlock([ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '', readingReport ? 'mobileBlock--reading-recap' : '' ]")
             .list-item.list-item--block.mobileTime-card(*ngIf="!readingReport")
                 | {{comment.author}}
-                span.mobileTime-card__time &nbsp;{{ comment.createdAt | edjidate:'timeAgo':null:secondsAgo }}
+                span.mobileTime-card__time &nbsp;{{ toggleDraftIcon(comment) ? 'New' : comment.createdAt | edjidate:'timeAgo':null:secondsAgo }}
             .comment-input-wrapper
                 emoji-comment(
                     *ngIf="comment.type == 'emoji' || !comment.type",
@@ -137,7 +136,10 @@ div(*ngIf="commentPaneActive")
             //- button.mobileHighlight-card_button((tap)="getImagePos(comment.start)") View&nbsp;&#8594;
             //- Comment action buttons
             .comment__action-row.btn-row.left.mt-0([class.reply-gap]="repliesShowing")
-                ng-container(*ngIf="!readingReport && !reply && project.types.indexOf('reply') > -1")
+                ng-container(*ngIf="toggleDraftIcon(comment) && !readingReport")
+                    i.icon.icon-draft.icon-draft__comment
+                    .action-separator
+                ng-container(*ngIf="!readingReport && !reply && project.types.indexOf('reply') > -1 && !toggleDraftIcon(comment)")
                     button#addReply.btn.btn-xs-action.btn--reply(
                         (tap)="toggleReplies()", 
                         [class.has-reply]="hasReplies(comment)",

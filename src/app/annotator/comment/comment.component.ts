@@ -421,4 +421,12 @@ export class CommentComponent implements OnInit, OnDestroy {
       this.lineCount = 1
     }
   }
+
+  /**
+   * Checks to see if we need to display the draft icon or the replies button
+   * @param comment is the comment we're checking against
+   */
+  public toggleDraftIcon(comment: any): boolean {
+    return !comment.new && ((!comment.data || comment.data=='') && (!comment.url || comment.url == ''))
+  }
 }
