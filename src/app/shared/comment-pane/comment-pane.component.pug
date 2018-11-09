@@ -41,7 +41,8 @@
                     [commentContext]="'reply'",
                     [isActive]="replyComment.active",
                     [reply]="true",
-                    [userPermission]="getCommentPermissions(replyComment)"
+                    [userPermission]="getCommentPermissions(replyComment)",
+                    (commentActivation)="commentActivationEmitter($event, comment)"
                   )
               //--Reply input--
               .reply-row
