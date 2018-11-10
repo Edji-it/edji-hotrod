@@ -121,19 +121,17 @@ describe('Project Page', () => {
             project.addTextComment();
 
             // add some text to the comment
-            browser.wait(EC.visibilityOf(project.textComment), 5000, "couldn't click the text comment");
-            project.textComment.sendKeys('some test text');
+            browser.wait(EC.presenceOf(element(by.css('textarea.text-comment-input'))), 5000, "couldn't see the text comment");
+            browser.actions().sendKeys('test comment').perform();
+            // Press ENTER to save 
+            browser.actions().sendKeys(protractor.Key.ENTER).perform();
             
-            // save the comment
-            browser.wait(EC.elementToBeClickable(project.emojiCommentSave), 5000, "could not click the save button on the comment");
-            project.emojiCommentSave.click();
-
             // delete the comment
             browser.wait(EC.elementToBeClickable(project.emojiCommentDelete), 5000, "could not find delete button");
             project.emojiCommentDelete.click();
 
             // make sure it's deleted
-            browser.wait(EC.invisibilityOf(project.textComment), 5000, "text comment never went away after deleting it");
+            browser.wait(EC.invisibilityOf(element(by.css('textarea.text-comment-input'))), 5000, "text comment never went away after deleting it");
 
             // close the comment pane
             browser.wait(EC.elementToBeClickable(project.closePane), 5000, "could not find close pane button");
@@ -234,20 +232,14 @@ describe('Project Page', () => {
             browser.wait(EC.elementToBeClickable(project.addReplyBtn), 8000, "never found the add reply comment button");
             project.addReplyBtn.click();
 
-            // Wait 5 seconds for the discussions pane to open
-            browser.wait(EC.visibilityOf(project.discussionsPane), 5000, "discussions pane never opened");
             // Wait 5 seconds for the add text reply button to become clickable and Click on the add text reply button
             browser.wait(EC.elementToBeClickable(project.addTextReplyBtn), 5000, "never found the add text reply comment button");
-            
-            // This lil browser sleep trick avoids issues where the add text reply button is intermittently unavailable on load
-            browser.sleep(1000);
             project.addTextReplyBtn.click();
-            browser.sleep(1000);
-            browser.wait(EC.elementToBeClickable(element(by.css('textarea.text-comment-input'))), 5000, "wait for text reply input to show");
+            browser.wait(EC.presenceOf(element(by.css('textarea.text-comment-input'))), 5000, "wait for text reply input to show");
 
             // Add text to the text input field
             // browser.wait(EC.elementToBeClickable(project.textReplyComment), 5000, "couldn't add text to the reply text comment");
-            browser.actions().sendKeys('some test reply text').perform();
+            browser.actions().sendKeys('test reply').perform();
             // Press ENTER to save 
             browser.actions().sendKeys(protractor.Key.ENTER).perform();
 
@@ -257,13 +249,6 @@ describe('Project Page', () => {
 
             // Verify the reply comment is gone
             browser.wait(EC.invisibilityOf(project.textReplyComment), 5000, "text reply comment never went away after deleting it");
-
-            // Wait 5 seconds for the dismiss button to become clickable and then click it
-            browser.wait(EC.elementToBeClickable(project.dismissReplyPanelBtn), 5000, "never found discussions panel dismiss button");
-            project.dismissReplyPanelBtn.click();
-
-            // Verify the discussions panel is dismissed
-            browser.wait(EC.invisibilityOf(project.discussionPanel), 5000, "discussion panel never went away after dismissal");
         });
     });
 }); // describe 'Dashboard Page'
