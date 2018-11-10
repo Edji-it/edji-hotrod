@@ -224,13 +224,6 @@ emoji-keyboard(
     (dismissKeyboard)="inactivateComment()"
 )
 
-//- Discussions: Comment Replies panel
-hot-discussions(
-    (hide)="hideDiscussions(replyComment)",
-    [visible]="showDiscussions",
-    [comment]="replyComment"
-)
-
 //- comment-pane
 comment-pane(
     [isActive]="selectedComment.active",

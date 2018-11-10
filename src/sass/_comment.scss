@@ -851,9 +851,10 @@ textarea.text-comment-input,
 .text-comment-input {
     text-align: left;
     background: #fff;
-    padding: 8px 23px 0px 10px;
+    padding: 8px 23px 8px 10px;
     width: 180px;
-    height: 30px;
+	min-height: 30px;
+	height: auto;
     line-height: 16px;
     resize: none;
     font-size: 12px;
@@ -869,7 +870,7 @@ textarea.text-comment-input,
     -webkit-perspective: 1000;
 
     .text-comment & {
-        max-height: 30px !important;
+        // max-height: 30px !important;
         overflow: hidden;
     }
 

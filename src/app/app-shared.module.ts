@@ -17,6 +17,7 @@ import {
     EdjiDatePipe, 
     EmojiOnePipe, 
     LinkifyPipe, 
+    SortByDatePipe,
     SubjectPipe, 
     UserInitialsPipe 
   } from './_pipes'
@@ -40,6 +41,7 @@ let SHARED_DECLARATIONS = [
     ReferralModalComponent,
     RequestAcademyModal,
     ShareCodeComponent,
+    SortByDatePipe,
     SubjectPipe, 
     UserInitialsPipe,
     HotChartHzbarComponent,

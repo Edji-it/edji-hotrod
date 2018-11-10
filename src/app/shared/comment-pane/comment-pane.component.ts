@@ -5,6 +5,7 @@ import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output }
 
 // Project Dependencies
 import { AuthService, ProjectService, CommentService, SocketService } from '../../_services'
+import { Angulartics2 } from 'angulartics2';
 @Component({
   selector: 'comment-pane',
   templateUrl: './comment-pane.component.pug',
@@ -17,6 +18,10 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
   public lineNum: number = 0
   public commentCount: number = 0
   public rowComments: EdjiComment[][] = []
+  // Reply variables
+  public repliesById: any = {} // Updated via project service
+  public repliesToggleById: any = {} // Boolean properties for template
+  public replyCommentNew: EdjiComment
   // Is fully visible, focused, and editable
   public active = false
   public selected = false
@@ -37,7 +42,7 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
       
       // if the comment is new, let's adjust the scroll position if there are a ton of comments
       if (this.comment.new) {
-        this.scrollAdjust()
+        this.scrollAdjust(this.comment)
       }
     } 
   }
@@ -66,6 +71,7 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
       public el: ElementRef,
       private _auth: AuthService,
       private _comments: CommentService,
+      private angulartics: Angulartics2
     ) { }
 
   ngOnInit() {
@@ -103,6 +109,15 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
             document.body.classList.remove("body__lock-scroll")
           }
         }
+      ),
+      // Subscribe to updates to the reply reference object
+      this._projects.repliesById.subscribe(
+        (repliesById) => {
+          this.repliesById = repliesById
+        },
+        (error) => {
+          console.error(error)
+        }
       )
     )
 
@@ -127,35 +142,12 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
     document.body.classList.remove("body__lock-scroll")
   }
 
-  scrollAdjust(iselected?: EdjiComment) {
+  scrollAdjust(targetComment: EdjiComment) {
     setTimeout(() => {
-      // Get the comments that are currently in the pane
-      let comments: any[] = Array.from(document.querySelectorAll('.sliding-pane-comment .comment-container edji-comment'))
-      let len
-      let commentIndex = 0
-      let paneComments = this.commentByPos[this.comment['lineY']]
-
-      // Get the position of the active comment in the list of comments in comment pane
-      if (this.comment.lineY) {
-        len = paneComments.length
-        for (let i=0; i<len; i++) {
-          // If comment is new and active, we'll scroll to it and add the associated active classes
-          if (paneComments[i]._id===this._comments.activeComment._id) {
-            commentIndex = i
-            break
-          }
-          // If the user selected the avatar, we'll scroll to it and add flair with a class that checks for comment.selected
-          if (iselected && paneComments[i]._id===this.comment._id) {
-            commentIndex = i
-            break
-          }
-        }
-      } 
-      
-      // Set the scroll position to where the active comment is in view
-      if (comments[commentIndex]) { 
-        document.querySelector('.sliding-pane-comment').scrollTop = comments[commentIndex].offsetTop
-      }
+      let commentEl = document.getElementById('comment-'+targetComment._id)
+      commentEl.scrollIntoView()
+      // Offset for comment pane sticky header (60px) and nav bar (70px), and a lil padding
+      document.querySelector('.sliding-pane-comment').scrollTop -= 150
     }, 1)
   }
 
@@ -169,15 +161,16 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
     
     
     if (shouldActivate) {
-      for (let i=0;i<commentsByIndex[wordIndex].length;i++) {
+      let commentsByIndexL = commentsByIndex[wordIndex] ? commentsByIndex[wordIndex].length : 0
+      for (let i=0;i<commentsByIndexL;i++) {
         if (commentsByIndex[wordIndex][i]._id===comment._id) {
           commentIndex = i
           break
         }
       }
 
-      if (comment && (comment.type==='emoji' || comment.type==='text')) {
-        this.scrollAdjust()
+      if (comment && comment.type==='emoji') {
+        this.scrollAdjust(comment)
       }
       this.commentActivationMobile.emit({activate: shouldActivate, wi: wordIndex, ci: commentIndex, activatedComment: comment})
     } else {
@@ -190,13 +183,62 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
   }
 
   commentReplyEmitter(comment) {
-    this.commentReply.emit(comment)
+    // Toggle display of
+    this.repliesToggleById[comment._id] = !this.repliesToggleById[comment._id]
+    // this.commentReply.emit(comment)
   }
+
+  /**
+   * Create a Comment of any Type
+   * - Fired from comment options tooltip
+   * Requires three parameters, and finds the other information it needs
+   * @param type What kind of reply comment: emoji, text...
+   */
+  addReplyOfType(comment: EdjiComment, type: string): void {
+    let commentId = comment._id
+
+    this.angulartics.eventTrack.next({ action: type + 'ReplyCreate', properties: { category: 'heroFeature', label: 'attempt' }})
+    
+    var replyCommentNew = <EdjiComment>{
+      user_id: this.user._id,
+      author: this.user.fullname,
+      reply_to: commentId,
+      data  : '',
+      type  : type
+    }
+
+    replyCommentNew.new = true
+    // replyCommentNew.active = true
+    this.replyCommentNew = replyCommentNew
+
+    if (type=='emoji') {
+      this.activeEmojiKeyboardReply(this.replyCommentNew)
+    }
+
+    // Tell the server we've added a comment.
+    this._projects.saveComment(this.replyCommentNew)
+    .then(comment => {
+      this.angulartics.eventTrack.next({ action: type + 'ReplyCreate', properties: { category: 'heroFeature', label: 'success' }})
+      comment.active = true
+      this._comments.activeComment = comment
+      this._projects.addCommentToReplies(comment)
+    })
+    .catch(error => {
+      // TRACK EXCEPTION
+      this.angulartics.eventTrack.next({ action: type + 'ReplyCreate', properties: { category: 'heroFeature', label: 'failure' }})
+      console.log(error)
+    })
+  } // createReplyComment(type: string): void
 
   /** Used to determine which level of permission the user has for a specific comment
    * @param comment A comment object
    */
   private getCommentPermissions(comment: any): number {
       return this._comments.getCommentPermissions(comment, this.user, this.project)
+  }
+
+  private activeEmojiKeyboardReply(activeReply: any): void {
+    this._comments.activeComment = activeReply
+    this._comments.setEmojiKeyboardActive(this.user)
   }
 }
