@@ -35,14 +35,14 @@
               ng-container(*ngIf="repliesById[comment._id]")
                 .comment-wrap-row(*ngFor="let replyComment of repliesById[comment._id] | sortByDate:'createdAt'")
                   edji-comment.replyCommentBlock(
-                    *ngIf="comment.author", 
+                    *ngIf="replyComment.author", 
                     [readOnly]="replyComment.user_id !== user._id",
                     [comment]="replyComment",
                     [commentContext]="'reply'",
                     [isActive]="replyComment.active",
                     [reply]="true",
                     [userPermission]="getCommentPermissions(replyComment)",
-                    (commentActivation)="commentActivationEmitter($event, comment)"
+                    (commentActivation)="commentActivationEmitter($event, replyComment)"
                   )
               //--Reply input--
               .reply-row
