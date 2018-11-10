@@ -48,7 +48,7 @@
               .reply-row
                 .comment__avatar.show.reply__avatar {{ user.fullname.substr(0,2).toUpperCase()}}
                 .reply-input__line
-                .replyInput Add a Reply:
+                .replyInput Add a Reply
                 //--Add reply buttons--
                 .replyButtonGroup
                   button#addEmojiReply.emoji(*ngIf="project.types.indexOf('emoji') > -1", (click)="addReplyOfType(comment, 'emoji')")

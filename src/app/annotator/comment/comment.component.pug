@@ -145,8 +145,9 @@ div(*ngIf="commentPaneActive")
                     )
                         i.icon.icon-reply-arrow
                         | {{ replyBtnText() }}
+                ng-container(*ngIf="userPermission >= 3")
                     .action-separator
-                button.btn.btn-xs-danger(*ngIf="userPermission >= 3", (tap)="userPermission > 3 ? deleteComment(comment) : _comments.deleteCommentConfirmation(comment, commentContext)") Delete
+                    button.btn.btn-xs-danger((tap)="userPermission > 3 ? deleteComment(comment) : _comments.deleteCommentConfirmation(comment, commentContext)") Delete
                 ng-container(*ngIf="comment.type != 'audio' && !readOnly && !comment.active")
                     .action-separator
                     button.btn.btn-xs-primary((tap)="activate(comment)") Edit
