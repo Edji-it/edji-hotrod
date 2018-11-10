@@ -55,7 +55,6 @@ import { ClickOutsideDirective } from './_directives/click-outside.directive'
 
 // Components
 import {
-  DiscussionsComponent,
   OauthRowComponent,
   OpenEndedAnswersComponent,
   QuestionComponent,
@@ -120,8 +119,9 @@ const APP_PROVIDERS = [
   { 
       provide: HAMMER_GESTURE_CONFIG, 
       useClass: HammerGestureConfig 
-  },
-  { provide: ErrorHandler, useClass: SentryErrorHandler }
+  }
+  // ,
+  // { provide: ErrorHandler, useClass: SentryErrorHandler }
   // { provide: RouteReuseStrategy, useClass: ReuseStrategy }
 ]; // const APP_PROVIDERS
 
@@ -173,7 +173,6 @@ const APP_PROVIDERS = [
     FirecardComponent,
     QuestionfeedComponent,
     QuestioncardComponent,
-    DiscussionsComponent,
     UploadModalComponent,
     TutorialReadingComponent,
     UploadPdfModalComponent,

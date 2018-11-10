@@ -23,7 +23,7 @@ export class Questions implements PageObjectInterface {
     public textCommentBtn       = this.answerOptions.element(by.css(".text.button__answer-type"));
     public firstQuestion        = element(by.id("question-1"))
     public firstAnswer          = this.firstQuestion.element(by.css("edji-comment"))
-    public firstAnswerDelete    = this.firstAnswer.element(by.id("commentDelBtn")); // element(by.id('commentDelBtn'));
+    public firstAnswerDelete    = this.firstAnswer.element(by.css(".e2e-delete-button"))
     public textCommentInput     = this.firstQuestion.element(by.css('.answerCommentBlock .text-comment-input:not(.disabled)'));
 
     public getPage() : void {
