@@ -121,7 +121,7 @@ describe('Project Page', () => {
             project.addTextComment();
 
             // add some text to the comment
-            browser.wait(EC.elementToBeClickable(project.textComment), 5000, "couldn't click the text comment");
+            browser.wait(EC.visibilityOf(project.textComment), 5000, "couldn't click the text comment");
             project.textComment.sendKeys('some test text');
             
             // save the comment
