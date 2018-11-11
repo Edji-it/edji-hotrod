@@ -1,6 +1,12 @@
 $defaultAvatarSize: 28px;
 $largeAvatarSize: 50px;
 
+@keyframes border-pulsate {
+  0%   { border-color: rgba(236,167,54, 1); }
+  50% { border-color: rgba(236,167,54, 0); }
+  100%   { border-color: rgba(236,167,54, 1); }
+}
+
 .user-icon {
   position: relative;
   height: $defaultAvatarSize;
@@ -19,14 +25,15 @@ $largeAvatarSize: 50px;
     font-family: 'Open Sans';
   }
   &.firefeed {
-      margin-top: initial;
+    margin-top: initial;
   }
   &--light {
-      @extend .user-icon;
-      background: #f0f0f0;
+    @extend .user-icon;
+    background: #f0f0f0;
   }
   &.selected {
-      border: 2px solid #ECA736;
+    border: 2px solid rgba(236,167,54, 0);
+    animation: border-pulsate 2s ease-in-out 2;
   }
   &--large {
     @extend .user-icon;
