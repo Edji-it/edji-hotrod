@@ -78,16 +78,14 @@ export class UserDetailsUpdateModal implements OnInit {
     ) {
       this.existingUser=true
       this.setFormIdentities(this.currentUser)
-      this.modalHeadings.header = 'Welcome Teacher!'
-      this.modalHeadings.body = 'We\'re honored to have you, your account is almost ready.'
-      this.identitySelect = false
+      this.showTeacherForm()
     }
   }
 
   public formSubmit(form: FormGroup): void {
     // if the user identifies as a teacher or admin, we need to switch to the next section to collect school name and phone number (optional)
     if ((form.value.identities.teacher || form.value.identities.administrator) && form.value.school===null) {
-      this.identitySelect = false
+      this.showTeacherForm()
     } else {
       // update the user if we have the info we need
       this.processIdentities(form)
@@ -190,5 +188,14 @@ export class UserDetailsUpdateModal implements OnInit {
         this.userDetailsForm.controls.identities['controls'][control].setValue(null)
       }
     }
+  }
+
+  /**
+   * Disply teacher specific form and copy
+   */
+  private showTeacherForm(): void {
+    this.modalHeadings.header = 'Welcome Teacher!'
+    this.modalHeadings.body = 'We\'re honored to have you, your account is almost ready.'
+    this.identitySelect = false
   }
 }
