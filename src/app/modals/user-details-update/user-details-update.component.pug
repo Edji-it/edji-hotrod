@@ -30,7 +30,7 @@
           .form-group
             label(for="phoneInput") Phone Number
               small &nbsp; [Optional]
-            input#phoneInput(type="tel", [formControl]="userDetailsForm.controls['phone']", tabindex="0", placeholder="123-456-7890")
+            input#phoneInput(type="text", [formControl]="userDetailsForm.controls['phone']", tabindex="0", placeholder="123-456-7890")
             #msgPhoneIncorrect.alert.alert-info(*ngIf="userDetailsForm.controls['phone'].hasError('phoneIncorrect') && userDetailsForm.controls['phone'].dirty") We don't think that's a phone number...
       .modal-footer
         button#submitDetailsButton.btn.btn-primary(
