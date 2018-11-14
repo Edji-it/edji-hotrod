@@ -7,25 +7,24 @@
           span(aria-hidden="true") &times;
       .modal-body
         div(*ngIf="identitySelect")
-          h5 {{ modalHeadings.body }}
+          p {{ modalHeadings.body }}
           #accountTypeGroup.form-group.list-group
-            .form-check.list-group-item(*ngFor="let identity of identities")
-              label.custom-control.custom-checkbox([attr.for]="identity.id")
-                input.custom-control-input(
-                  [attr.id]="identity.id",
-                  type="checkbox",
-                  [formControl]="userDetailsForm.controls['identities'].controls[identity.name]",
-                  value=""
-                )
-                span.custom-control-indicator
-                span.custom-control-description(style="font-size:16px; margin: 0 5px;", [innerHtml]="identity.checkboxCopy | emojione")
+              .form-check.list-group-item(*ngFor="let identity of identities")
+                label.custom-control.custom-checkbox([attr.for]="identity.id")
+                  input.custom-control-input(
+                    [attr.id]="identity.id",
+                    type="checkbox",
+                    [formControl]="userDetailsForm.controls['identities'].controls[identity.name]",
+                    value=""
+                  )
+                  span.custom-control-indicator
+                  span.custom-control-description(style="font-size:16px; margin: 0 5px;", [innerHtml]="identity.checkboxCopy | emojione")
           .alert.alert-info(*ngIf="userDetailsForm.controls['identities'].dirty && userDetailsForm.controls['identities'].invalid") Please select at least one box!
           .alert.alert-success(*ngIf="messages.success", [innerHtml]=" ':heavy_check_mark: Thanks! Have fun reading with Edji!' | emojione ")
         div(*ngIf="!identitySelect")
-          h5 {{ modalHeadings.body }}
+          p {{ modalHeadings.body }}
           .form-group
             label(for="schoolInput") School District
-              small &nbsp; [Required]
             input#schoolInput(type="text", [formControl]="userDetailsForm.controls['school']", tabindex="0", placeholder="My District")
             #msgSchoolRequired.alert.alert-info(*ngIf="userDetailsForm.controls['school'].hasError('required') && userDetailsForm.controls['school'].dirty") Enter your School District here
           .form-group
@@ -43,5 +42,5 @@
           *ngIf="!identitySelect && !messages.success", 
           type="submit", 
           [disabled]="userDetailsForm.controls['school'].invalid || (userDetailsForm.controls['phone'].hasError('phoneIncorrect') && userDetailsForm.controls['phone'].dirty)"
-        ) Next
+        ) Done
         button.btn.btn-secondary(*ngIf="messages.success", type="button") Close

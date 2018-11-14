@@ -44,7 +44,7 @@ export class UserDetailsUpdateModal implements OnInit {
     body: string
   } = {
     header: 'Before you begin',
-    body: 'Almost Done!'
+    body: 'I\'m using Edji as a... '
   }
 
   constructor(
@@ -78,8 +78,8 @@ export class UserDetailsUpdateModal implements OnInit {
     ) {
       this.existingUser=true
       this.setFormIdentities(this.currentUser)
-      this.modalHeadings.header = 'We just need some more detail'
-      this.modalHeadings.body = 'Almost Done!'
+      this.modalHeadings.header = 'Welcome Teacher!'
+      this.modalHeadings.body = 'We\'re honored to have you, your account is almost ready.'
       this.identitySelect = false
     }
   }
