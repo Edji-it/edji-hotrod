@@ -32,6 +32,16 @@
               small &nbsp; [Optional]
             input#phoneInput(type="text", [formControl]="userDetailsForm.controls['phone']", tabindex="0", placeholder="123-456-7890")
             #msgPhoneIncorrect.alert.alert-info(*ngIf="userDetailsForm.controls['phone'].hasError('phoneIncorrect') && userDetailsForm.controls['phone'].dirty") We don't think that's a phone number...
+          .form-group
+            label.custom-control.custom-checkbox([attr.for]="salesCanContact")
+                input.custom-control-input(
+                  [attr.id]="salesCanContact",
+                  type="checkbox",
+                  [formControl]="userDetailsForm.controls['sales_can_contact']",
+                  value=""
+                )
+                span.custom-control-indicator
+                p.custom-control-description(style="padding-top:2px;") It is okay to contact me about trying Hero Academy for my school
       .modal-footer
         button#submitDetailsButton.btn.btn-primary(
           *ngIf="identitySelect && !messages.success", 
