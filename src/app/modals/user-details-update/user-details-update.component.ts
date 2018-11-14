@@ -56,7 +56,7 @@ export class UserDetailsUpdateModal implements OnInit {
     this.userDetailsForm = _fb.group({
       school: [null, Validators.required],
       phone: [null, Validators.compose([Validators.required, this.phoneNumberValidator])],
-      sales_can_contact: [null],
+      sales_can_contact: null,
       identities: _fb.group({
         student: true,
         teacher: null,
