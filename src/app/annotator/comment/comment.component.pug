@@ -1,6 +1,7 @@
 //- Other components that use a comment display like questions use this block for display and logic
 #comment.comment.hidden-md-down(
     *ngIf="reply",
+    [id]="'comment-' + comment._id",
     [class.new]="comment.new",
     [class.saved]="justSaved",
     [class.active]="active",
@@ -66,7 +67,7 @@
     i.comment__saved([innerHtml]='":ok_hand:" | emojione')
     //- Comment action row
     .comment__action-row.btn-row.left.mt-0([class.reply-gap]="repliesShowing")
-        button.btn.btn-xs-danger(*ngIf="userPermission >= 3", (tap)="userPermission > 3 ? deleteComment(comment) : _comments.deleteCommentConfirmation(comment, commentContext)") Delete
+        button.btn.btn-xs-danger.e2e-delete-button(*ngIf="userPermission >= 3", (tap)="userPermission > 3 ? deleteComment(comment) : _comments.deleteCommentConfirmation(comment, commentContext)") Delete
         ng-container(*ngIf="comment.type != 'audio' && !readOnly && !comment.active")
             .action-separator
             button.btn.btn-xs-primary((tap)="activate(comment)") Edit
@@ -74,7 +75,7 @@
 
 //- Comments that are displayed in the comment pane
 hr.mobileBlock-hr(*ngIf="commentMobile && !commentMobileFirst && !readingReport")
-div(*ngIf="commentPaneActive")
+div(*ngIf="commentPaneActive", [id]="'comment-' + comment._id")
     .comment-new-highlight__mobile(*ngIf="comment && comment.active  && comment.new")
         .comment-new-dot__mobile
         p.comment-new-text__mobile new
@@ -147,8 +148,9 @@ div(*ngIf="commentPaneActive")
                     )
                         i.icon.icon-reply-arrow
                         | {{ replyBtnText() }}
+                ng-container(*ngIf="userPermission >= 3")
                     .action-separator
-                button.btn.btn-xs-danger(*ngIf="userPermission >= 3", (tap)="userPermission > 3 ? deleteComment(comment) : _comments.deleteCommentConfirmation(comment, commentContext)") Delete
+                    button.btn.btn-xs-danger.e2e-delete-button((tap)="userPermission > 3 ? deleteComment(comment) : _comments.deleteCommentConfirmation(comment, commentContext)") Delete
                 ng-container(*ngIf="comment.type != 'audio' && !readOnly && !comment.active")
                     .action-separator
                     button.btn.btn-xs-primary((tap)="activate(comment)") Edit

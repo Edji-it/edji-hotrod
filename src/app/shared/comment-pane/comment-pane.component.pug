@@ -35,20 +35,20 @@
               ng-container(*ngIf="repliesById[comment._id]")
                 .comment-wrap-row(*ngFor="let replyComment of repliesById[comment._id] | sortByDate:'createdAt'")
                   edji-comment.replyCommentBlock(
-                    *ngIf="comment.author", 
+                    *ngIf="replyComment.author", 
                     [readOnly]="replyComment.user_id !== user._id",
                     [comment]="replyComment",
                     [commentContext]="'reply'",
                     [isActive]="replyComment.active",
                     [reply]="true",
                     [userPermission]="getCommentPermissions(replyComment)",
-                    (commentActivation)="commentActivationEmitter($event, comment)"
+                    (commentActivation)="commentActivationEmitter($event, replyComment)"
                   )
               //--Reply input--
               .reply-row
                 .comment__avatar.show.reply__avatar {{ user.fullname.substr(0,2).toUpperCase()}}
                 .reply-input__line
-                .replyInput Add a Reply:
+                .replyInput Add a Reply
                 //--Add reply buttons--
                 .replyButtonGroup
                   button#addEmojiReply.emoji(*ngIf="project.types.indexOf('emoji') > -1", (click)="addReplyOfType(comment, 'emoji')")

@@ -21,13 +21,13 @@ export class Project implements PageObjectInterface {
   public addEmojiReplyBtn = element(by.id("addEmojiReply"));
   public addAudioReplyBtn = element(by.id("addAudioReply"));
   public image = element(by.css('article .img-wrap > img'));
-  public textComment = element(by.css('.new .text-comment textarea'));
+  public textComment = element(by.css('.new textarea.text-comment-input'));
   public existingTextComment = element(by.css('div.text-comment-input'));
   public textReplyComment = element(by.css('.replyComment.new .text-comment-input'));
   public dismissReplyPanelBtn = element(by.id('discussionClosePanel'));
   public discussionPanel = element(by.css('div.sliding-pane.from-left.replies.slide-in'));
   public commentSave = element(by.css('.comment__save'));
-  public replyDelete = element(by.css('button.inline-delete'));
+  public replyDelete = element(by.css('button.e2e-delete-button'));
   public discussionsPane = element(by.css('.replies.slide-in'));
   public imageRight = 25;
   public imageDown = 25;
@@ -49,9 +49,9 @@ export class Project implements PageObjectInterface {
   public avatarAudio = element(by.css('.user-icon.avatar-audio'));
   public avatarTextReply = element(by.css('.user-icon.avatar-text .comment__button--mobile.avatar__reply'));
   public mobileTextReply = element(by.css('edji-comment:not(.hidden) .hidden-lg-up.comment__button--mobile'));
-  public commentDelete = element.all(by.css('edji-comment button.btn-delete')).last();
+  public commentDelete = element.all(by.css('edji-comment .e2e-delete-button')).last();
   public addReplyBtn = element(by.id("addReply"));
-  public emojiCommentDelete = element(by.css('edji-comment button.btn-delete'));
+  public emojiCommentDelete = element(by.css('edji-comment .e2e-delete-button'));
   public closePane = element(by.css('.sliding-pane-comment__header button.close'));
 
   public getPage(): void {

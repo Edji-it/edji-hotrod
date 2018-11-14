@@ -49,12 +49,9 @@ export class TextCommentComponent implements OnInit, AfterViewInit {
     ngOnInit() {
         setTimeout(() => {
             if (this.comment.active == true) {
-                setTimeout(() => {
-                    // this.element.nativeElement.querySelector('textarea').focus()
-                    this.textInput && this.textInput.nativeElement.focus()
-                }, 100)
+                this.textInput && this.textInput.nativeElement.focus({ preventScroll: true })
             }
-        }, 100)
+        }, 200)
     }
 
     ngAfterViewInit() {
@@ -83,7 +80,7 @@ export class TextCommentComponent implements OnInit, AfterViewInit {
         // Set textarea height
         this.textareaHeight = this.textDisplay ? this.textDisplay.nativeElement.scrollHeight + 'px' : '60px'
         // Focus text field
-        this.textInput && this.textInput.nativeElement.focus()
+        this.textInput && this.textInput.nativeElement.focus({ preventScroll: true })
         // Notify output
         this.activate.emit()
     }

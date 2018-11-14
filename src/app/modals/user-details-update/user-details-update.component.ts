@@ -5,6 +5,7 @@ import { take } from 'rxjs/operators'
 
 import { User } from './../../shared/datatypes'
 import { AuthService, BumblebeeService, AcademyService } from './../../_services'
+import { ALLSPARK } from 'src/app/app.constants'
 
 @Component({
   selector: 'hot-user-details-update',
@@ -15,6 +16,7 @@ export class UserDetailsUpdateModal implements OnInit {
   @Input() showModal: boolean
   @Output() closeModal: EventEmitter<any> = new EventEmitter()
 
+  private currentUser: User 
   private userDetailsForm: FormGroup
   private identities: {
     name: string
@@ -29,11 +31,21 @@ export class UserDetailsUpdateModal implements OnInit {
     { name: 'robot', id: 'typeRobotInput', checkboxCopy: "I'm a robot. :robot_face:" },
     { name: 'other', id: 'typeOtherInput', checkboxCopy: "Other :sparkles:" }
   ]
+  public identitySelect: boolean = true
+  private existingUser: boolean
 
   private messages: {
     success?: boolean,
     serviceError?: boolean
   } = {}
+
+  public modalHeadings: {
+    header: string,
+    body: string
+  } = {
+    header: 'Before you begin',
+    body: 'I\'m using Edji as a... '
+  }
 
   constructor(
     private _academy: AcademyService,
@@ -42,6 +54,8 @@ export class UserDetailsUpdateModal implements OnInit {
     _fb: FormBuilder
   ) { 
     this.userDetailsForm = _fb.group({
+      school: [null, Validators.required],
+      phone: [null, Validators.compose([Validators.required, this.phoneNumberValidator])],
       identities: _fb.group({
         student: true,
         teacher: null,
@@ -55,11 +69,30 @@ export class UserDetailsUpdateModal implements OnInit {
   }
 
   ngOnInit() {
+    this.currentUser = this._auth.getUser()
+
+    if (
+      (this.currentUser && this.currentUser.identities && this.currentUser.identities.includes('teacher')) || 
+      (this.currentUser && this.currentUser.identities && this.currentUser.identities.includes('administrator')) && 
+      this.currentUser && !this.currentUser.school_name
+    ) {
+      this.existingUser=true
+      this.setFormIdentities(this.currentUser)
+      this.showTeacherForm()
+    }
   }
 
-  private formSubmit(form: FormGroup): void {
-    let user: User = this._auth.getUser()
+  public formSubmit(form: FormGroup): void {
+    // if the user identifies as a teacher or admin, we need to switch to the next section to collect school name and phone number (optional)
+    if ((form.value.identities.teacher || form.value.identities.administrator) && form.value.school===null) {
+      this.showTeacherForm()
+    } else {
+      // update the user if we have the info we need
+      this.processIdentities(form)
+    }
+  }
 
+  private processIdentities(form: FormGroup): void {
     let identities = []
     for(let field in form.value.identities) {
       if (form.value.identities[field]) {
@@ -67,7 +100,17 @@ export class UserDetailsUpdateModal implements OnInit {
       }
     }
 
-    this._auth.updateUser({identities: identities})
+    // Set school and phone if we have it
+    let school = ''
+    let phone = ''
+    if (form.value.school) {
+      school = form.value.school
+    }
+    if (form.value.phone) {
+      phone = form.value.phone
+    }
+
+    this._auth.updateUser({identities: identities, school_name: school, phone_number: phone})
       .pipe(take(1))
       .subscribe((res: any) => {
         this._auth.setUser(res.user)
@@ -76,9 +119,13 @@ export class UserDetailsUpdateModal implements OnInit {
         this.closeModal.emit()
         // If we have a teacher, send it to Mailchimp and Bumblebee/Slack
         if(res.user.identities && res.user.identities.indexOf('teacher') > -1 || res.user.identities.indexOf('administrator') > -1) {
-          if (this._auth.getEnv() === "prod") { 
+          if (this._auth.getEnv() === "prod") {
             // Tell Bumblebee/Slack!
-            this._bumble.sendUserDetails(res.user)
+            if (this.existingUser) {
+              this._bumble.sendUserDetails(res.user, 'additionalDetails')
+            } else {
+              this._bumble.sendUserDetails(res.user)
+            }
             // Parse fullname for Mailchimp
             let nameArr = res.user.fullname.split(" ")
             let fname = nameArr[0]
@@ -113,5 +160,42 @@ export class UserDetailsUpdateModal implements OnInit {
       }
     }
     return valid ? null : { identity: true }
+  }
+
+  /**
+   * Validates the phone number is in the correct reg expression if one is entered
+   * @param control is our form control 
+   */
+  private phoneNumberValidator(control: FormControl): any {
+    if (!control.value) {
+      return null
+    }
+    // Run the check agains the phone validator
+    let phoneRe: RegExp = ALLSPARK.PHONEREGEX
+    return phoneRe.test(control.value) ? null : { 'phoneIncorrect': true }
+  }
+
+  /**
+   * If we're prompting the user to add secondary properties like school district and phone number, 
+   * we need to set the identities to their current values so we don't overwrite them
+   * @param user current user
+   */
+  private setFormIdentities(user: User) {
+    for (let control in this.userDetailsForm.value.identities) {
+      if (user.identities.includes(control)) {
+        this.userDetailsForm.controls.identities['controls'][control].setValue(true)
+      } else {
+        this.userDetailsForm.controls.identities['controls'][control].setValue(null)
+      }
+    }
+  }
+
+  /**
+   * Disply teacher specific form and copy
+   */
+  private showTeacherForm(): void {
+    this.modalHeadings.header = 'Welcome Teacher!'
+    this.modalHeadings.body = 'We\'re honored to have you, your account is almost ready.'
+    this.identitySelect = false
   }
 }
