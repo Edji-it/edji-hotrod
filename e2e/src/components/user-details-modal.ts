@@ -11,6 +11,8 @@ export class UserDetailsModal {
     public robotOption = element(by.id("typeRobotInput"))
     public otherOption = element(by.id("typeOtherInput"))
     public submitButton = element(by.id("submitDetailsButton"))
+    public finalSubmitButton = element(by.id("finalSubmitButton"))
+    public schoolInput = element(by.id("schoolInput"))
     
 
   /**
@@ -27,6 +29,12 @@ export class UserDetailsModal {
     }
     browser.wait(this.EC.elementToBeClickable(this.submitButton), 5000, "'Submit' button not clickable after selecting account type option")
     this.submitButton.click()
+    if (type === 'teacher' || type ==='administrator') {
+      // enter a school district name if they are a teacher or admin account type
+      this.schoolInput.sendKeys('District Edji')
+      browser.wait(this.EC.elementToBeClickable(this.finalSubmitButton), 5000, "Final 'Submit' button not clickable after entering school district")
+      this.finalSubmitButton.click()
+    }
     browser.wait(this.EC.invisibilityOf(this.modal), 5000, "user details modal did not close after completion")
   }
 }

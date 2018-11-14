@@ -91,6 +91,13 @@ export class DashboardComponent implements OnInit {
     if (!this.currentUser.identities || this.currentUser.identities.length < 1) {
       incomplete = true
     }
+    if (
+      ((this.currentUser.identities && this.currentUser.identities.includes('teacher')) || 
+      (this.currentUser.identities && this.currentUser.identities.includes('admininstrator'))) && 
+      !this.currentUser.school_name
+    ) {
+      incomplete = true
+    }
     return incomplete
   }
 }
