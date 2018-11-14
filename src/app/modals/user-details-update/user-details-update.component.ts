@@ -56,6 +56,7 @@ export class UserDetailsUpdateModal implements OnInit {
     this.userDetailsForm = _fb.group({
       school: [null, Validators.required],
       phone: [null, Validators.compose([Validators.required, this.phoneNumberValidator])],
+      sales_can_contact: null,
       identities: _fb.group({
         student: true,
         teacher: null,
@@ -103,14 +104,18 @@ export class UserDetailsUpdateModal implements OnInit {
     // Set school and phone if we have it
     let school = ''
     let phone = ''
+    let contactMe = false
     if (form.value.school) {
       school = form.value.school
     }
     if (form.value.phone) {
       phone = form.value.phone
     }
+    if (form.value.sales_can_contact) {
+      contactMe = form.value.sales_can_contact
+    }
 
-    this._auth.updateUser({identities: identities, school_name: school, phone_number: phone})
+    this._auth.updateUser({identities: identities, school_name: school, phone_number: phone, sales_can_contact: contactMe })
       .pipe(take(1))
       .subscribe((res: any) => {
         this._auth.setUser(res.user)
