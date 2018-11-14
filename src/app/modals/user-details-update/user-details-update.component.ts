@@ -200,7 +200,7 @@ export class UserDetailsUpdateModal implements OnInit {
    */
   private showTeacherForm(): void {
     this.modalHeadings.header = 'Welcome Teacher!'
-    this.modalHeadings.body = 'We\'re honored to have you, your account is almost ready.'
+    this.modalHeadings.body = 'We\'re honored to have you. Where do you teach?'
     this.identitySelect = false
   }
 }
