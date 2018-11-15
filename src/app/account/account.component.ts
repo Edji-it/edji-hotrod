@@ -5,6 +5,7 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 // Project Dependencies
 import { AuthService } from '../_services/auth.service';
 import { User } from '../shared/datatypes';
+import { EdjiDatePipe } from '../_pipes';
 
 @Component({
   selector: 'edji-account',
@@ -27,6 +28,8 @@ export class AccountComponent implements OnInit, OnDestroy {
   public showUploadProfPicModal : boolean = false
   public showHeroSubModal: boolean = false
   public showHeroChangeModal: boolean = false
+  public customerInfo: any
+  public customerSubEnd: Date
 
   private subscriptions : any[] = []
 
@@ -49,6 +52,20 @@ export class AccountComponent implements OnInit, OnDestroy {
       this._auth.currentUser.subscribe(
         user => {
           this.currentUser = user
+
+          this._auth.getStripeCustomer(this.currentUser.stripe_customer_id).subscribe(
+            customer => {
+              this.customerInfo = customer
+              if (customer && customer.subscriptions && customer.subscriptions.data[0]) {
+                // Stripe sends the date back as the UTC Epoch, so we'll convert it here
+                let utcSeconds = customer.subscriptions.data[0].current_period_end
+                let date = new Date(0)
+                date.setUTCSeconds(utcSeconds)
+                this.customerSubEnd = date
+              }
+            }
+          )
+
           if (this.currentUser.hero && this.currentUser.hero.will_expire) {
             let expireDate = new Date(this.currentUser.hero.will_expire)
             if ( expireDate.getTime() < Date.now()) {

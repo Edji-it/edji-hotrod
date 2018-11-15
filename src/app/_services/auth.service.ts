@@ -780,10 +780,16 @@ export class AuthService implements CanActivate {
             }))
     }
 
-    public cancelHeroSubscription(subscriptionId: string) {
-        return this.legacyHttp.delete([this.baseUrl, 'api/v1/subscriptions', subscriptionId].join("/"), this.getOptions())
+    public cancelHeroSubscription(subscriptionId: string): Observable<any> {
+        return this._http.delete<any>(this.baseUrl + 'api/v1/stripe/subscriptions/' + subscriptionId,
+            {
+                headers: new HttpHeaders({
+                    'Content-Type': 'application/json',
+                    'Authorization': this.getToken()
+                })
+            })
             .pipe(map((res) => {
-                return res.json() || {}
+                return res || {}
             }))
     }
 
@@ -996,6 +1002,23 @@ export class AuthService implements CanActivate {
         } else {
             return 'new' + '_' + appVersion
         }
+    }
+
+    /**
+     * Returns customer information including subscriptions, but not payment source
+     * @param customer_id the customer ID from Stripe that we store on the user object
+     */
+    public getStripeCustomer(customer_id: string): Observable<any> {
+        return this._http.get<any>(this.baseUrl + "/api/v1/stripe/customers/" + customer_id,
+        {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+                'Authorization': this.getToken()
+            })
+        })
+        .pipe(map((customer) => {
+            return customer.customer
+        }))
     }
 }
 

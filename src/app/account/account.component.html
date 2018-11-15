@@ -59,6 +59,7 @@
                 <div class="alert alert-warning my-1" *ngIf="expired">Your Hero subscription expired {{ currentUser.hero.will_expire | edjidate:'timeStamp':'mediumDate' }}</div>
                 <div class="alert alert-info my-1" *ngIf="expiring">Your Hero subscription will expire {{ currentUser.hero.will_expire | edjidate:'timeStamp':'mediumDate' }}</div>
             </div>
+            <span>Renews on {{ customerSubEnd | edjidate:'timeStamp':'mediumDate' }}</span>
             <label for="inputPassword" class="info-label">Hero Subscription</label>
         </div>
 
