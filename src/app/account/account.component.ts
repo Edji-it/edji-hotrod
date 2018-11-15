@@ -22,8 +22,7 @@ export class AccountComponent implements OnInit, OnDestroy {
   
   public nameInitials  : string = "" // we gonna use these for the temp profile pic
   public currentUser   : any
-  public expiring : boolean = false
-  public expired : boolean = false
+  public cancelled : boolean = false
   public showPassModal : boolean = false
   public showUploadProfPicModal : boolean = false
   public showHeroSubModal: boolean = false
@@ -47,23 +46,8 @@ export class AccountComponent implements OnInit, OnDestroy {
       this._auth.currentUser.subscribe(
         user => {
           this.currentUser = user
-          // Get customer info back from Stripe for renewal details and active subscription status
-          this._auth.getStripeCustomer(this.currentUser.stripe_customer_id).subscribe(
-            customer => {
-              this.customerInfo = customer
-              console.log(customer)
-              if (customer && customer.subscriptions && customer.subscriptions.data) {
-                let lastSub = customer.subscriptions.data.length - 1
-                // Check to see if they have an active subscription
-                this.expired = !customer.subscriptions.data[lastSub].plan.active
-                // Stripe sends the date back as the UTC Epoch, so we'll convert it here
-                let utcSeconds = customer.subscriptions.data[lastSub].current_period_end
-                let date = new Date(0)
-                date.setUTCSeconds(utcSeconds)
-                this.customerSubEnd = date.toDateString()
-              }
-            }
-          )
+          console.log(user)
+          this.updateHeroStatus()
         }
       )
     )
@@ -98,5 +82,29 @@ export class AccountComponent implements OnInit, OnDestroy {
         label: this._auth.setAnalyticEventLabel() 
       }
     })
+  }
+
+  // Get customer info back from Stripe for renewal details and active subscription status
+  public updateHeroStatus(): void {
+    this._auth.getStripeCustomer(this.currentUser.stripe_customer_id).subscribe(
+      customer => {
+        this.customerInfo = customer
+        console.log(customer)
+        if (customer && customer.subscriptions && customer.subscriptions.data) {
+          let lastSub = customer.subscriptions.data.length - 1
+          // Check to see if they have an active subscription
+          if (lastSub < 0 || this.currentUser.hero_cancelled) {
+            this.cancelled = true
+          } else {
+            // Stripe sends the date back as the UTC Epoch, so we'll convert it here
+            let utcSeconds = customer.subscriptions.data[lastSub].current_period_end
+            let date = new Date(0)
+            date.setUTCSeconds(utcSeconds)
+            this.customerSubEnd = date.toDateString()
+          }
+          console.log(this.cancelled)
+        }
+      }
+    )
   }
 }

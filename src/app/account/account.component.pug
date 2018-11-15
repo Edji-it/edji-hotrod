@@ -15,7 +15,7 @@ nav-bar
       //-   THIS IS NOT READY TO EXPOSE
       //- button#editAvatarBtn.btn.btn-sm.edit-btn(*ngIf="currentUser.hero_status", type="button", (click)="showUploadProfPicModal= true;") Edit
   //- Text Column
-  .column.col-sm-6
+  .column.col-sm-9
     //- spacer div
     .spacer-mobile-collapse
     //- Name
@@ -40,14 +40,15 @@ nav-bar
       .col-md-8
         .info-group
           .info
-            span.text-capitalize.mr-4(*ngIf="currentUser.hero_status", [style.display]="'inline-block'") Subscribed (Yearly)
+            span.text-capitalize.mr-4(*ngIf="currentUser.hero_status && !cancelled", [style.display]="'inline-block'") Subscribed (Yearly)
             span.mr-4(*ngIf="!currentUser.hero_status") Unsubscribed
-            .alert.alert-warning.my-1(*ngIf="cancelled") Your Hero subscription was cancelled on {{ currentUser.hero.will_expire | edjidate:'timeStamp':'mediumDate' }}
-          span Renews on {{ customerSubEnd | edjidate:'timeStamp':'mediumDate' }}
+            .alert.alert-warning.my-1(*ngIf="cancelled") Your Hero subscription was cancelled on {{ currentUser.hero_cancelled | edjidate:'timeStamp':'mediumDate' }}
+          span(*ngIf="!cancelled") Renews on {{ customerSubEnd | edjidate:'timeStamp':'mediumDate' }}
           label.info-label(for="inputPassword") Hero Subscription
       .col-md-4
-        button#heroModifyBtn.btn.btn-secondary.mr-4(*ngIf="currentUser.hero_status", (click)="showHeroChangeModal = true") Modify
-        button.btn.btn-hero.mr-4(*ngIf="!currentUser.hero_status || cancelled", (click)="showHeroSubModal = true; trackHeroClick()") Go Hero
+        button#heroModifyBtn.btn.btn-secondary.mr-4(*ngIf="currentUser.hero_status && !cancelled", (click)="showHeroChangeModal = true") Modify
+        button.btn.btn-hero.mr-4(*ngIf="!currentUser.hero_status", (click)="showHeroSubModal = true; trackHeroClick()") Go Hero
+        button.btn.btn-hero.mr-4(*ngIf="cancelled", (click)="showHeroSubModal = true; trackHeroClick()") Resume Subscription
     //- Reading on Edji since
     .info-group.mt-5
       h4.faded Reading on Edji since {{currentUser.createdAt | edjidate:'timeStamp':'mediumDate'}}
@@ -63,7 +64,7 @@ hot-upload-avatar.modal-will-fade(
   (closeModal)="showUploadProfPicModal = !showUploadProfPicModal"
 )
 hero-subscribe-modal.modal-will-fade(
-  *ngIf="!currentUser.hero_status",
+  *ngIf="showHeroSubModal",
   [class.show]="showHeroSubModal", 
   [goHeroLocation]="'accountPage'", 
   (closeModal)="showHeroSubModal = !showHeroSubModal", 
@@ -71,5 +72,5 @@ hero-subscribe-modal.modal-will-fade(
 )
 hero-change-modal.modal-will-fade(
   [class.show]="showHeroChangeModal", 
-  (closeModal)="showHeroChangeModal = !showHeroChangeModal"
+  (closeModal)="showHeroChangeModal = !showHeroChangeModal; updateHeroStatus()"
 )

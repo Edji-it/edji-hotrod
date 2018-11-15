@@ -6,6 +6,7 @@ import { debounceTime, map } from 'rxjs/operators'
 
 // Project dependencies
 import { AuthService, BumblebeeService } from '../../_services'
+import { User } from 'src/app/shared/datatypes'
 
 declare var Stripe: any
 
@@ -28,9 +29,12 @@ export class HeroSubscribeComponent implements OnInit {
   public percentOff: number = 0
   public newPrice: number = 60
   public joiningAcademy: boolean = false
+  public currentUser: User
+  public previouslyCancelled: boolean = false
   // private couponCode: string
 
   public sForm: FormGroup 
+  private subscriptions : any[] = []
 
   @Input()
   couponCode: string = ''
@@ -51,6 +55,17 @@ export class HeroSubscribeComponent implements OnInit {
   }
 
   ngOnInit() {
+    // get the user
+    this.subscriptions.push(
+      this._auth.currentUser.subscribe(
+        user => {
+          this.currentUser = user
+          if (user.hero_cancelled) {
+            this.previouslyCancelled = true
+          }
+        }
+      )
+    )
     // Construct formgroup
     this.sForm = this.fb.group({
       couponCode: [
@@ -183,5 +198,10 @@ export class HeroSubscribeComponent implements OnInit {
         this.stripeMessage = 'There was an error processing your payment. Please try correcting your payment information, or <a href="mailto:support@edji.it" class="link">contact our support team</a>.'
         this._bumblebee.reportError(error)
       })
+  }
+
+  // a user that was previously a hero and cancelled will need to contact support to handle going hero again
+  public resumeHero(): void {
+    this.closeModal.emit()
   }
 }
