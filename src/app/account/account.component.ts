@@ -41,18 +41,16 @@ export class AccountComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute, 
     public _router: Router,
     private angulartics: Angulartics2
-  ) {
-    
+  ) { 
     this.nameInitials = "";
-  } // constructor
+  }
 
   ngOnInit() { 
-    // this._title.setTitle('Edji | "' + this.currentUser['fullname'] + '"');
     this.subscriptions.push(
       this._auth.currentUser.subscribe(
         user => {
           this.currentUser = user
-
+          // Get customer info back from Stripe for renewal details and active subscription status
           this._auth.getStripeCustomer(this.currentUser.stripe_customer_id).subscribe(
             customer => {
               this.customerInfo = customer
@@ -65,7 +63,6 @@ export class AccountComponent implements OnInit, OnDestroy {
               }
             }
           )
-
           if (this.currentUser.hero && this.currentUser.hero.will_expire) {
             let expireDate = new Date(this.currentUser.hero.will_expire)
             if ( expireDate.getTime() < Date.now()) {
@@ -77,39 +74,28 @@ export class AccountComponent implements OnInit, OnDestroy {
         }
       )
     )
-    
     this.heroAvailable = true
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
+    this.subscriptions.forEach((sub) => { sub.unsubscribe() })
   }
 
-  public getUserInitials() : string 
-  {
-    var firstInitialPos;
-    var result;
-
-    result = "";
-    firstInitialPos = 0; // needed for creating name initials
-
-    this.currentUser = this._auth.getUser();
-
-    return result;
-  } // public getUserInitials : ()
+  public getUserInitials(): string {
+    var firstInitialPos
+    var result
+    result = ""
+    firstInitialPos = 0 // needed for creating name initials
+    return result
+  }
 
   // Accessor for user.avatar
   // Get the avatar from the user object
-  public getAvatar () : string
-  {
-    let avatar;
-    //console.log("[account.component.ts] Called getAvatar()!");
-
-    this.currentUser = this._auth.getUser();
-    avatar = this.currentUser.avatar;
-
-    return avatar;
-  } // public getAvatar () : any 
+  public getAvatar(): string {
+    let avatar
+    avatar = this.currentUser.avatar
+    return avatar
+  }
 
   private trackHeroClick(): void {
     // fire an analytic event here for tracking purposes
@@ -121,4 +107,4 @@ export class AccountComponent implements OnInit, OnDestroy {
       }
     })
   }
-} // class
+}
