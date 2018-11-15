@@ -10,7 +10,7 @@ import { EdjiDatePipe } from '../_pipes';
 @Component({
   selector: 'edji-account',
   styleUrls: ['./account.component.scss'],
-  templateUrl: './account.component.html'
+  templateUrl: './account.component.pug'
 })
 export class AccountComponent implements OnInit, OnDestroy {
 
