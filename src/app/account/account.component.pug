@@ -1,57 +1,57 @@
 nav-bar
-  .container-fluid.profile-container.row
-    //- Profile Pic Column
-    .column.col-sm-3([style.width]="24%")
-      h1.profile-title Profile
-      //- Profile Pic block
-      .profile-pic-container
-        //- User Profile Pic
-        span.profile-pic
-          //- Avatar picture
-          img#avatarImg.profile-pic(*ngIf="getAvatar()", [src]="getAvatar()")
-          span#userInitials(*ngIf="!getAvatar()") {{currentUser.fullname | userinitials}}
-        //- Edit Profile Picture Button 
-          - Opens UploadProfPicModal -->
-          THIS IS NOT READY TO EXPOSE
-        //- button#editAvatarBtn.btn.btn-sm.edit-btn(*ngIf="currentUser.hero_status", type="button", (click)="showUploadProfPicModal= true;") Edit
-    //- Text Column
-    .column.col-sm-6
-      //- spacer div
-      .spacer-mobile-collapse
-      //- Name
-      .info-group
-        .name-label {{currentUser.fullname}}
-        .info-label Name
-      //- user name
-      .info-group
-        p.info {{currentUser.username}}
-        label.info-label(for="inputPassword") Username
-      //- email
-      .info-group
-        p.info {{currentUser.email}}
-        label.info-label(for="inputPassword") Email
-      //- Hero Subscription Mgmt
-      .info-group(*ngIf="heroAvailable || currentUser.hero_status")
-        .info
-          span.text-capitalize.mr-4(*ngIf="currentUser.hero_status", [style.display]="inline-block") Subscribed (Yearly)
-          span.mr-4(*ngIf="!currentUser.hero_status") Unsubscribed
-          button#heroModifyBtn.btn.btn-secondary.mr-4(*ngIf="currentUser.hero_status", (click)="showHeroChangeModal = true") Modify
-          button.btn.btn-hero.mr-4(*ngIf="!currentUser.hero_status || expired || expiring", (click)="showHeroSubModal = true; trackHeroClick()") Go Hero
-          .alert.alert-warning.my-1(*ngIf="expired") Your Hero subscription expired {{ currentUser.hero.will_expire | edjidate:'timeStamp':'mediumDate' }}
-          .alert.alert-info.my-1(*ngIf="expiring") Your Hero subscription will expire {{ currentUser.hero.will_expire | edjidate:'timeStamp':'mediumDate' }}
-        span Renews on {{ customerSubEnd | edjidate:'timeStamp':'mediumDate' }}
-        label.info-label(for="inputPassword") Hero Subscription
-      //- Reading on Edji since
-      .info-group
-        h4.faded Reading on Edji since {{currentUser.createdAt | edjidate:'timeStamp':'mediumDate'}}
-    //- Third Column
-    .column.col-sm-3([style.width]="25%")
-      //- Buffer div
-      div([style.height]="5%")
-      //- Change Password Button
-      button.btn.change-password-btn(type="button", (click)="showPassModal = !showPassModal") Change Password
-    //- buffer before the footer. Includes a nice border line.
-    .row.container-line
+.container-fluid.profile-container.row
+  //- Profile Pic Column
+  .column.col-sm-3([style.width]="'24%'")
+    h1.profile-title Profile
+    //- Profile Pic block
+    .profile-pic-container
+      //- User Profile Pic
+      span.profile-pic
+        //- Avatar picture
+        img#avatarImg.profile-pic(*ngIf="getAvatar()", [src]="getAvatar()")
+        span#userInitials(*ngIf="!getAvatar()") {{currentUser.fullname | userinitials}}
+      //- Edit Profile Picture Button 
+      //-   - Opens UploadProfPicModal -->
+      //-   THIS IS NOT READY TO EXPOSE
+      //- button#editAvatarBtn.btn.btn-sm.edit-btn(*ngIf="currentUser.hero_status", type="button", (click)="showUploadProfPicModal= true;") Edit
+  //- Text Column
+  .column.col-sm-6
+    //- spacer div
+    .spacer-mobile-collapse
+    //- Name
+    .info-group
+      .name-label {{currentUser.fullname}}
+      .info-label Name
+    //- user name
+    .info-group
+      p.info {{currentUser.username}}
+      label.info-label(for="inputPassword") Username
+    //- email
+    .info-group
+      p.info {{currentUser.email}}
+      label.info-label(for="inputPassword") Email
+    //- Hero Subscription Mgmt
+    .info-group(*ngIf="heroAvailable || currentUser.hero_status")
+      .info
+        span.text-capitalize.mr-4(*ngIf="currentUser.hero_status", [style.display]="'inline-block'") Subscribed (Yearly)
+        span.mr-4(*ngIf="!currentUser.hero_status") Unsubscribed
+        button#heroModifyBtn.btn.btn-secondary.mr-4(*ngIf="currentUser.hero_status", (click)="showHeroChangeModal = true") Modify
+        button.btn.btn-hero.mr-4(*ngIf="!currentUser.hero_status || expired || expiring", (click)="showHeroSubModal = true; trackHeroClick()") Go Hero
+        .alert.alert-warning.my-1(*ngIf="expired") Your Hero subscription expired {{ currentUser.hero.will_expire | edjidate:'timeStamp':'mediumDate' }}
+        .alert.alert-info.my-1(*ngIf="expiring") Your Hero subscription will expire {{ currentUser.hero.will_expire | edjidate:'timeStamp':'mediumDate' }}
+      span Renews on {{ customerSubEnd | edjidate:'timeStamp':'mediumDate' }}
+      label.info-label(for="inputPassword") Hero Subscription
+    //- Reading on Edji since
+    .info-group
+      h4.faded Reading on Edji since {{currentUser.createdAt | edjidate:'timeStamp':'mediumDate'}}
+  //- Third Column
+  .column.col-sm-3([style.width]="'25%'")
+    //- Buffer div
+    div([style.height]="'5%'")
+    //- Change Password Button
+    button.btn.change-password-btn(type="button", (click)="showPassModal = !showPassModal") Change Password
+  //- buffer before the footer. Includes a nice border line.
+  .row.container-line
 
 edji-change-pass.modal-will-fade(
   [class.show]="showPassModal", 
