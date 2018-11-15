@@ -29,12 +29,9 @@ export class AccountComponent implements OnInit, OnDestroy {
   public showHeroSubModal: boolean = false
   public showHeroChangeModal: boolean = false
   public customerInfo: any
-  public customerSubEnd: Date
+  public customerSubEnd: string = ""
 
   private subscriptions : any[] = []
-
-  // Feature flags
-  public heroAvailable: boolean = false
 
   constructor(
     private _auth: AuthService, 
@@ -54,27 +51,22 @@ export class AccountComponent implements OnInit, OnDestroy {
           this._auth.getStripeCustomer(this.currentUser.stripe_customer_id).subscribe(
             customer => {
               this.customerInfo = customer
-              if (customer && customer.subscriptions && customer.subscriptions.data[0]) {
+              console.log(customer)
+              if (customer && customer.subscriptions && customer.subscriptions.data) {
+                let lastSub = customer.subscriptions.data.length - 1
+                // Check to see if they have an active subscription
+                this.expired = !customer.subscriptions.data[lastSub].plan.active
                 // Stripe sends the date back as the UTC Epoch, so we'll convert it here
-                let utcSeconds = customer.subscriptions.data[0].current_period_end
+                let utcSeconds = customer.subscriptions.data[lastSub].current_period_end
                 let date = new Date(0)
                 date.setUTCSeconds(utcSeconds)
-                this.customerSubEnd = date
+                this.customerSubEnd = date.toDateString()
               }
             }
           )
-          if (this.currentUser.hero && this.currentUser.hero.will_expire) {
-            let expireDate = new Date(this.currentUser.hero.will_expire)
-            if ( expireDate.getTime() < Date.now()) {
-              this.expired = true
-            } else {
-              this.expiring = true
-            }
-          }
         }
       )
     )
-    this.heroAvailable = true
   }
 
   ngOnDestroy() {

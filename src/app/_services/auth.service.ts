@@ -780,8 +780,8 @@ export class AuthService implements CanActivate {
             }))
     }
 
-    public cancelHeroSubscription(subscriptionId: string): Observable<any> {
-        return this._http.delete<any>(this.baseUrl + 'api/v1/stripe/subscriptions/' + subscriptionId,
+    public cancelHeroSubscription(customerId: string): Observable<any> {
+        return this._http.delete<any>(this.baseUrl + '/api/v1/stripe/subscriptions/' + customerId,
             {
                 headers: new HttpHeaders({
                     'Content-Type': 'application/json',
