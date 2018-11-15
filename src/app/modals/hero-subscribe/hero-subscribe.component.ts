@@ -2,7 +2,7 @@ import { Observable } from 'rxjs';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Angulartics2 } from 'angulartics2'
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
-import { debounceTime, map } from 'rxjs/operators'
+import { debounceTime, map, take } from 'rxjs/operators'
 
 // Project dependencies
 import { AuthService, BumblebeeService } from '../../_services'
@@ -31,6 +31,9 @@ export class HeroSubscribeComponent implements OnInit {
   public joiningAcademy: boolean = false
   public currentUser: User
   public previouslyCancelled: boolean = false
+  public resubscribeSent: boolean = false
+  public resubMessage: string
+  public resubSuccess: string
   // private couponCode: string
 
   public sForm: FormGroup 
@@ -202,6 +205,44 @@ export class HeroSubscribeComponent implements OnInit {
 
   // a user that was previously a hero and cancelled will need to contact support to handle going hero again
   public resumeHero(): void {
-    this.closeModal.emit()
+    this.loading = true
+    // Add Request type
+    let content = {content: "I'd Like to Resubscribe to Edji Hero"}
+    content.content += "\nStripe Customer ID: " + this.currentUser.stripe_customer_id
+    content['name'] = this.currentUser.fullname
+    content['email'] = this.currentUser.email
+
+    // Only send the user properties we need to bumblebee
+    var userSend: any = {
+      username: this.currentUser.username,
+      fullname: this.currentUser.fullname,
+      email: this.currentUser.email,
+      createdAt: this.currentUser.createdAt,
+      updatedAt: this.currentUser.updatedAt,
+      hero: this.currentUser.hero_status
+    }
+
+    let data: any = {
+      emailSubject: "Hero ReSubscribe Request",
+      formInfo: content,
+      type: "feedback",
+      user: userSend
+    }
+
+    this._bumblebee.sendFeedback(data).pipe(take(1)).subscribe(
+      (res) => {
+        this.angulartics.eventTrack.next({ 
+          action: 'heroRequest_heroModal_submitted', 
+          properties: { category: this._auth.setAnalyticEventCategory(), 
+          label: this._auth.setAnalyticEventLabel() }}
+        )
+        this.resubscribeSent = true
+        this.resubSuccess = "Your request was sent to the Edji support team"
+      },
+      (err) => {
+        console.error(err)
+        this.resubMessage = 'There was an error processing your request. Please try <a href="mailto:support@edji.it" class="link">contacting the Edji support team directly</a>.'
+      }
+    )
   }
 }

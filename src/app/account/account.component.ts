@@ -27,7 +27,6 @@ export class AccountComponent implements OnInit, OnDestroy {
   public showUploadProfPicModal : boolean = false
   public showHeroSubModal: boolean = false
   public showHeroChangeModal: boolean = false
-  public customerInfo: any
   public customerSubEnd: string = ""
 
   private subscriptions : any[] = []
@@ -46,7 +45,6 @@ export class AccountComponent implements OnInit, OnDestroy {
       this._auth.currentUser.subscribe(
         user => {
           this.currentUser = user
-          console.log(user)
           this.updateHeroStatus()
         }
       )
@@ -88,21 +86,19 @@ export class AccountComponent implements OnInit, OnDestroy {
   public updateHeroStatus(): void {
     this._auth.getStripeCustomer(this.currentUser.stripe_customer_id).subscribe(
       customer => {
-        this.customerInfo = customer
-        console.log(customer)
         if (customer && customer.subscriptions && customer.subscriptions.data) {
           let lastSub = customer.subscriptions.data.length - 1
+          let customerData = customer.subscriptions.data[lastSub]
           // Check to see if they have an active subscription
-          if (lastSub < 0 || this.currentUser.hero_cancelled) {
-            this.cancelled = true
-          } else {
+          if (customerData && customerData.plan && customerData.plan.active) {
             // Stripe sends the date back as the UTC Epoch, so we'll convert it here
-            let utcSeconds = customer.subscriptions.data[lastSub].current_period_end
+            let utcSeconds = customerData.current_period_end
             let date = new Date(0)
             date.setUTCSeconds(utcSeconds)
             this.customerSubEnd = date.toDateString()
+          } else if (lastSub < 0 && this.currentUser.hero_cancelled) {
+            this.cancelled = true
           }
-          console.log(this.cancelled)
         }
       }
     )
