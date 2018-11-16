@@ -20,14 +20,17 @@ export class AccountComponent implements OnInit, OnDestroy {
   The page for the user's account info. A profile page.
   */
   
-  public nameInitials  : string = "" // we gonna use these for the temp profile pic
-  public currentUser   : any
-  public cancelled : boolean = false
-  public showPassModal : boolean = false
-  public showUploadProfPicModal : boolean = false
+  public nameInitials: string = "" // we gonna use these for the temp profile pic
+  public currentUser: any
+  public customerSubEnd: string = ""
+
+  public showPassModal: boolean = false
+  public showUploadProfPicModal: boolean = false
   public showHeroSubModal: boolean = false
   public showHeroChangeModal: boolean = false
-  public customerSubEnd: string = ""
+
+  public cancelled: boolean = false
+  public academyHero: boolean = false
 
   private subscriptions : any[] = []
 
@@ -71,7 +74,7 @@ export class AccountComponent implements OnInit, OnDestroy {
     return avatar
   }
 
-  private trackHeroClick(): void {
+  public trackHeroClick(): void {
     // fire an analytic event here for tracking purposes
     this.angulartics.eventTrack.next({ 
       action: 'goHero_accountPage', 
@@ -84,23 +87,38 @@ export class AccountComponent implements OnInit, OnDestroy {
 
   // Get customer info back from Stripe for renewal details and active subscription status
   public updateHeroStatus(): void {
-    this._auth.getStripeCustomer(this.currentUser.stripe_customer_id).subscribe(
-      customer => {
-        if (customer && customer.subscriptions && customer.subscriptions.data) {
-          let lastSub = customer.subscriptions.data.length - 1
-          let customerData = customer.subscriptions.data[lastSub]
-          // Check to see if they have an active subscription
-          if (customerData && customerData.plan && customerData.plan.active) {
-            // Stripe sends the date back as the UTC Epoch, so we'll convert it here
-            let utcSeconds = customerData.current_period_end
-            let date = new Date(0)
-            date.setUTCSeconds(utcSeconds)
-            this.customerSubEnd = date.toDateString()
-          } else if (lastSub < 0 && this.currentUser.hero_cancelled) {
-            this.cancelled = true
-          }
+    if (this.currentUser.stripe_customer_id) {
+      this._auth.getStripeCustomer(this.currentUser.stripe_customer_id).subscribe(
+        customer => {
+          let subscription = this.getSubscription(customer)
+            // Check to see if they have an active subscription
+            if (subscription) {
+              this.customerSubEnd = this.getStripeDate(subscription.current_period_end)
+            } else if (!subscription && this.currentUser.hero_cancelled) {
+              this.cancelled = true
+            }
         }
-      }
-    )
+      )
+    } else if (this.currentUser.license_ids && this.currentUser.license_ids.length) {
+      this.academyHero = true
+    }
+  }
+
+  // get the latest active subscription
+  private getSubscription(customer: any): any {
+    if (customer && customer.subscriptions && customer.subscriptions.data) {
+      let lastSub = customer.subscriptions.data.length - 1
+      let customerData = customer.subscriptions.data[lastSub]
+      return customerData
+    } else {
+      return {}
+    }
+  }
+
+  // Stripe sends the date back as the UTC Epoch, so we'll convert it here
+  private getStripeDate(utcSeconds: number): string {
+    let date = new Date(0)
+    date.setUTCSeconds(utcSeconds)
+    return date.toDateString()
   }
 }

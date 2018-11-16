@@ -40,13 +40,14 @@ nav-bar
       .col-md-8
         .info-group
           .info
-            span.text-capitalize.mr-4(*ngIf="currentUser.hero_status && !cancelled", [style.display]="'inline-block'") Subscribed (Yearly)
+            span.text-capitalize.mr-4(*ngIf="currentUser.hero_status && !cancelled && !academyHero", [style.display]="'inline-block'") Subscribed (Yearly)
+            span.text-capitalize.mr-4(*ngIf="currentUser.hero_status && academyHero", [style.display]="'inline-block'") Hero Academy
             span.mr-4(*ngIf="!currentUser.hero_status") Unsubscribed
             .alert.alert-warning.my-1(*ngIf="cancelled") Your Hero subscription was cancelled on {{ currentUser.hero_cancelled | edjidate:'timeStamp':'mediumDate' }}
-          span(*ngIf="!cancelled") Renews on {{ customerSubEnd | edjidate:'timeStamp':'mediumDate' }}
+          span(*ngIf="currentUser.hero_status && !cancelled && !academyHero") Renews on {{ customerSubEnd | edjidate:'timeStamp':'mediumDate' }}
           label.info-label(for="inputPassword") Hero Subscription
       .col-md-4
-        button#heroModifyBtn.btn.btn-secondary.mr-4(*ngIf="currentUser.hero_status && !cancelled", (click)="showHeroChangeModal = true") Modify
+        button#heroModifyBtn.btn.btn-secondary.mr-4(*ngIf="currentUser.hero_status && !cancelled && !academyHero", (click)="showHeroChangeModal = true") Modify
         button.btn.btn-hero.mr-4(*ngIf="!currentUser.hero_status", (click)="showHeroSubModal = true; trackHeroClick()") Go Hero
         button.btn.btn-hero.mr-4(*ngIf="cancelled", (click)="showHeroSubModal = true; trackHeroClick()") Resume Subscription
     //- Reading on Edji since
