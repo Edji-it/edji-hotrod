@@ -63,7 +63,7 @@ describe('Project Page as an owner using reading report: ', () => {
     // Select a student from dropdown
     browser.wait(EC.elementToBeClickable(recapStudentDropdown), 5000, "recap student selector never became clickable")
     recapStudentDropdown.click()
-    browser.wait(EC.elementToBeClickable(recapStudentOptions.first()), 3000, "recap student selector never became clickable")
+    browser.wait(EC.elementToBeClickable(recapStudentOptions.get(0)), 3000, "recap student selector never became clickable")
     recapStudentOptions.first().click()
     
     // verify the comment count is greater than 0
@@ -89,30 +89,15 @@ describe('Project Page as an owner using reading report: ', () => {
     })
   })
 
-  // close the report and make sure it closes
-  it("should close the report and make sure it closes", () => {
-    browser.executeScript('document.querySelector(".reading-recap").scrollTo(0,0);').then(function () {
-      // Close Reading Report
-      browser.wait(EC.elementToBeClickable(element(by.id("closeReadingRecap"))), 3000, "never saw close button")
-      element(by.id("closeReadingRecap")).click()
-    })
-
-    // Verify the Reading Report is closed
-    browser.wait(EC.invisibilityOf(element(by.id("readingReport"))), 3000, 'reading report never closed')
-  })
-
   // verify you can open the dropdown for student selection and change the student
   it("should verify you can open the dropdown for student selection and change the student", () => {
-    // Need to check for and click the owner tools button if its showing
-    sidebar.ownerToolToggle()
-    // Open Reading Report
-    browser.wait(EC.elementToBeClickable(sidebar.readingReportButton), 5000, "never found the reading report button")
-    sidebar.readingReportButton.click()
-    // Select first student
-    browser.wait(EC.elementToBeClickable(recapStudentDropdown), 5000, "recap student selector never became clickable")
-    recapStudentDropdown.click()
-    browser.wait(EC.elementToBeClickable(recapStudentOptions.first()), 3000, "recap student selector never became clickable")
-    recapStudentOptions.first().click()
+    browser.executeScript('document.querySelector(".reading-recap").scrollTo(0,0);').then(function () {
+      // Select first student
+      browser.wait(EC.elementToBeClickable(recapStudentDropdown), 5000, "recap student selector never became clickable")
+      recapStudentDropdown.click()
+      browser.wait(EC.elementToBeClickable(recapStudentOptions.get(1)), 3000, "recap student selector never became clickable")
+      recapStudentOptions.first().click()
+    })
     // verify the audio comment count is greater than or equal to 1 for the default (Test Hero)
     element.all(by.css('.count-block.count-block__audio'))
       .count()
@@ -131,5 +116,17 @@ describe('Project Page as an owner using reading report: ', () => {
       .then((count) => {
           expect(count == 0).toBeTruthy('Audio count value on the reading report was supposed to change on student selection change')
       })
+  })
+
+  // close the report and make sure it closes
+  it("should close the report and make sure it closes", () => {
+    browser.executeScript('document.querySelector(".reading-recap").scrollTo(0,0);').then(function () {
+      // Close Reading Report
+      browser.wait(EC.elementToBeClickable(element(by.id("closeReadingRecap"))), 3000, "never saw close button")
+      element(by.id("closeReadingRecap")).click()
+    })
+
+    // Verify the Reading Report is closed
+    browser.wait(EC.invisibilityOf(element(by.id("readingReport"))), 3000, 'reading report never closed')
   })
 })
