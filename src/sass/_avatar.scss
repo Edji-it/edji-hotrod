@@ -1,10 +1,12 @@
 $defaultAvatarSize: 28px;
 $largeAvatarSize: 50px;
+$selectedOrange: rgb(255,182,63);
 
 @keyframes border-pulsate {
-  0%   { border-color: rgba(236,167,54, 1); }
-  50% { border-color: rgba(236,167,54, 0); }
-  100%   { border-color: rgba(236,167,54, 1); }
+  0% { border-color: rgba($selectedOrange, 0.5); }
+  33% { border-color: rgba($selectedOrange, 1); }
+  66% { border-color: rgba($selectedOrange, 1); }
+  100%   { border-color: rgba($selectedOrange, 0.5); }
 }
 
 .user-icon {
@@ -33,6 +35,7 @@ $largeAvatarSize: 50px;
   }
   &.selected {
     border: 2px solid rgba(236,167,54, 0);
+    transition: border-color ease 1s;
     animation: border-pulsate 2s ease-in-out 2;
   }
   &--large {
