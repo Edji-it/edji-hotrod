@@ -32,8 +32,6 @@ export class HeroSubscribeComponent implements OnInit {
   public currentUser: User
   public previouslyCancelled: boolean = false
   public resubscribeSent: boolean = false
-  public resubMessage: string
-  public resubSuccess: string
   // private couponCode: string
 
   public sForm: FormGroup 
@@ -206,43 +204,9 @@ export class HeroSubscribeComponent implements OnInit {
   // a user that was previously a hero and cancelled will need to contact support to handle going hero again
   public resumeHero(): void {
     this.loading = true
-    // Add Request type
-    let content = {content: "I'd Like to Resubscribe to Edji Hero"}
-    content.content += "\nStripe Customer ID: " + this.currentUser.stripe_customer_id
-    content['name'] = this.currentUser.fullname
-    content['email'] = this.currentUser.email
 
-    // Only send the user properties we need to bumblebee
-    var userSend: any = {
-      username: this.currentUser.username,
-      fullname: this.currentUser.fullname,
-      email: this.currentUser.email,
-      createdAt: this.currentUser.createdAt,
-      updatedAt: this.currentUser.updatedAt,
-      hero: this.currentUser.hero_status
-    }
-
-    let data: any = {
-      emailSubject: "Hero ReSubscribe Request",
-      formInfo: content,
-      type: "feedback",
-      user: userSend
-    }
-
-    this._bumblebee.sendFeedback(data).pipe(take(1)).subscribe(
-      (res) => {
-        this.angulartics.eventTrack.next({ 
-          action: 'heroRequest_heroModal_submitted', 
-          properties: { category: this._auth.setAnalyticEventCategory(), 
-          label: this._auth.setAnalyticEventLabel() }}
-        )
-        this.resubscribeSent = true
-        this.resubSuccess = "Your request was sent to the Edji support team"
-      },
-      (err) => {
-        console.error(err)
-        this.resubMessage = 'There was an error processing your request. Please try <a href="mailto:support@edji.it" class="link">contacting the Edji support team directly</a>.'
-      }
-    )
+    // essentially, we're going to run the same method here, but not pass in a payment token or coupon
+    // the server will know how to handle because the user has a Stripe customer ID for us to re-charge against
+    this.becomeHero()
   }
 }
