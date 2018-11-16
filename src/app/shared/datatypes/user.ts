@@ -40,5 +40,7 @@ interface BaseUser {
   referred_by?: string,
   license_ids?: string[],
   institution_ids?: string[],
-  isAcademyAdmin?: boolean
+  isAcademyAdmin?: boolean,
+  school_name: string,
+  phone_number: string
 }

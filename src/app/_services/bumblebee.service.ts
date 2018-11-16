@@ -18,11 +18,11 @@ export class BumblebeeService {
     this.isProd = this._auth.getEnv() == 'prod'
   }
 
-  public sendUserDetails(userDetails: any): void {
+  public sendUserDetails(userDetails: any, sendType?: string): void {
     this.http.post(
       this.url + "/newuser",
       // "http://localhost:8333/newuser",
-      { userDetails: userDetails },
+      { userDetails: userDetails, sendType: sendType },
       this._auth.getOptions()
       )
       .pipe(take(1))
