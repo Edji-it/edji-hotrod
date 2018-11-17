@@ -105,3 +105,11 @@
         display: none;
     }
 }
+
+.text-comment-input.hide {
+    display: block !important;
+    position: fixed;
+    top: -10000px;
+    left: -10000px;
+    pointer-events: all;
+}

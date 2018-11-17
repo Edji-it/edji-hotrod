@@ -35,11 +35,13 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
 
   @Input()
   set showReferral(showReferral: boolean) {
-    // fire an analytic event here for tracking purposes
-    this.angulartics.eventTrack.next({ 
-      action: 'referral_openModal', 
-      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
-    })
+    if (showReferral) {
+      // fire an analytic event here for tracking purposes
+      this.angulartics.eventTrack.next({ 
+        action: 'referral_openModal', 
+        properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
+      })
+    }
     if (typeof(showReferral) !== 'undefined' && this.showModal !== showReferral) {
       this.showModal = showReferral
       if (this.showModal) {

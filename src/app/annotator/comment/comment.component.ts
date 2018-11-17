@@ -39,13 +39,14 @@ export class CommentComponent implements OnInit, OnDestroy {
 
   public lineCount: number = 1
   public indexOnLine: number = 1
+  public repliesShowing: boolean = false
   
   private justSaved: boolean = false
   private isLoading: boolean = false
   // Hold the current scroll position for the iOS fix
   private currentScroll: number
   // Is fully visible, focused, and editable
-  private active = false
+  private active: boolean = false
   private showDeleteModal: boolean = false
   private user: any
   private subscriptions: Subscription[] = []
@@ -333,6 +334,41 @@ export class CommentComponent implements OnInit, OnDestroy {
       })
     }
   } // deleteComment(comment: any) : void
+
+  /**
+   * Display text for "Replies" button
+   */
+  public replyBtnText() : string {
+    let replies = this.repliesById[this.comment._id]
+    let btnText = "Reply"
+
+    if (replies) {
+      let repliesCount = replies.length
+      if (repliesCount == 1) {
+        btnText = repliesCount + " Reply"
+      } else if (repliesCount > 1) {
+        btnText = repliesCount + " Replies"
+      }
+    }
+
+    return btnText
+  }
+
+  /**
+   * Determine if comment has replies
+   */
+  public hasReplies(comment): boolean {
+    return this.repliesById[comment._id] && this.repliesById[comment._id].length > 0
+  }
+
+  /**
+   * Toggle display of replies
+   * @description Uses output to trigger display in parent component
+   */
+  public toggleReplies() : void {
+    this.repliesShowing = !this.repliesShowing
+    this.commentReply.emit(this.comment)
+  }
 
   /**
    * Collapse all stacked comments on the same line
