@@ -98,7 +98,7 @@ div(*ngIf="commentPaneActive", [id]="'comment-' + comment._id")
         .mobileBlock([ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '', readingReport ? 'mobileBlock--reading-recap' : '' ]")
             .list-item.list-item--block.mobileTime-card(*ngIf="!readingReport")
                 | {{comment.author}}
-                span.mobileTime-card__time &nbsp;{{ toggleDraftIcon(comment) ? 'New' : comment.createdAt | edjidate:'timeAgo':null:secondsAgo }}
+                span.mobileTime-card__time &nbsp;{{ ((!comment.data || comment.data=='') && (!comment.url || comment.url == '')) ? 'New' : comment.createdAt | edjidate:'timeAgo':null:secondsAgo }}
             .comment-input-wrapper
                 emoji-comment(
                     *ngIf="comment.type == 'emoji' || !comment.type",
@@ -137,10 +137,9 @@ div(*ngIf="commentPaneActive", [id]="'comment-' + comment._id")
             //- button.mobileHighlight-card_button((tap)="getImagePos(comment.start)") View&nbsp;&#8594;
             //- Comment action buttons
             .comment__action-row.btn-row.left.mt-0([class.reply-gap]="repliesShowing")
-                ng-container(*ngIf="toggleDraftIcon(comment) && !readingReport")
+                ng-container(*ngIf="((!comment.data || comment.data=='') && (!comment.url || comment.url == '')) && !readingReport")
                     i.icon.icon-draft.icon-draft__comment
-                    .action-separator
-                ng-container(*ngIf="!readingReport && !reply && project.types.indexOf('reply') > -1 && !toggleDraftIcon(comment)")
+                ng-container(*ngIf="!readingReport && !reply && project.types.indexOf('reply') > -1 && !((!comment.data || comment.data=='') && (!comment.url || comment.url == ''))")
                     button#addReply.btn.btn-xs-action.btn--reply(
                         (tap)="toggleReplies()", 
                         [class.has-reply]="hasReplies(comment)",
