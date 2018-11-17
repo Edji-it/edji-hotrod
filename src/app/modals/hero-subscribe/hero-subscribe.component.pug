@@ -15,6 +15,8 @@
           .col-12(*ngIf="stripeMessage")
             #resub-errors(role="alert")
             .alert.alert-warning(*ngIf="stripeMessage" [innerHtml]="stripeMessage")
+              p There was an error processing your payment. Please try correcting your payment information, or 
+              a.link(href="mailto:support@edji.it") contact our support team
         .row([class.hide]="userNowHero || previouslyCancelled")
           .col-12
             p.pb-1

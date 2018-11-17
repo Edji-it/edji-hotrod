@@ -68,7 +68,7 @@ hero-subscribe-modal.modal-will-fade(
   *ngIf="showHeroSubModal",
   [class.show]="showHeroSubModal", 
   [goHeroLocation]="'accountPage'", 
-  (closeModal)="showHeroSubModal = !showHeroSubModal", 
+  (closeModal)="showHeroSubModal = !showHeroSubModal; updateHeroStatus()", 
   (heroWasBorn)="_router.navigate(['/dashboard'])"
 )
 hero-change-modal.modal-will-fade(
