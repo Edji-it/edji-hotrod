@@ -99,7 +99,7 @@ hero-subscribe-modal.modal-will-fade([class.show]='showHeroSubModal', [goHeroLoc
 
 //- Feature Info Modal
 .modal(*ngIf="showInfoModal")
-  .modal-dialog
+  .modal-dialog.modal-lg
     .modal-content
       .modal-header
         h5.modal-title {{ infoModalInfo.heading }}
@@ -107,7 +107,7 @@ hero-subscribe-modal.modal-will-fade([class.show]='showHeroSubModal', [goHeroLoc
           span(aria-hidden="true") &times;
       .modal-body
         .text-center
-          img.card.w-75.mb-4(style="display:inline-block;", [src]="infoModalInfo.image")
+          img.card.mb-4(style="display:inline-block; max-height: 500px;", [src]="infoModalInfo.image")
         p([innerHtml]="infoModalInfo.description")
       .modal-footer
         .btn.btn-secondary((click)="showInfoModal = false") Close

@@ -22,11 +22,11 @@ export class HeroPricingComponent implements OnInit {
     {
       name: "Unlimited Readings, students, comments",
       free: true,
-      info: {
-        heading: "Unlimited Readings, Students Comments",
-        description: "Edji loves reading, so why would we limit how much you can read? Every Edji user can create as many readings to share with as many readers as they want. No storage, class size or engagement limits, ever.",
-        image: ""
-      }
+      // info: {
+      //   heading: "Unlimited Readings, Students Comments",
+      //   description: "Edji loves reading, so why would we limit how much you can read? Every Edji user can create as many readings to share with as many readers as they want. No storage, class size or engagement limits, ever.",
+      //   image: "/assets/images/pricing/"
+      // }
     },
     {
       name: "Reader Management: Leaderboard, Firefeed",
@@ -34,7 +34,7 @@ export class HeroPricingComponent implements OnInit {
       info: {
         heading: "Reader Management",
         description: "Getting an entire class to read together is no easy feat, so we make sure that you can stay on top of your classes engagement with the Fire Feed to see new comments, and the Reader List to keep track of what each reader is doing.",
-        image: ""
+        image: "/assets/images/pricing/fire-feed.png"
       }
     },
     {
@@ -43,7 +43,7 @@ export class HeroPricingComponent implements OnInit {
       info: {
         heading: "Heat Vision",
         description: "Heat vision is the core of Edji: Showing teachers where students are engaging with their text. See what was interesting to your readers, or what they might have skipped. Show off Heat Vision to help your students see what their peers were thinking",
-        image: ""
+        image: "/assets/images/pricing/heat-vision.gif"
       }
     },
     {
@@ -52,7 +52,7 @@ export class HeroPricingComponent implements OnInit {
       info: {
         heading: "Reading Customization",
         description: "Engage your students with more than just words on the screen. Liven up your readings with images, GIFs, and PDF’s that you can build right into your lesson.",
-        image: ""
+        image: "/assets/images/pricing/image-comments.png"
       }
     },
     {
@@ -70,24 +70,44 @@ export class HeroPricingComponent implements OnInit {
       info: {
         heading: "Custom Group Control",
         description: "Get full control of your reading groups by leaving Instructions, choosing comment types, and creating custom group codes!",
-        image: ""
+        image: "/assets/images/pricing/custom-group.png"
       }
     },
     {
       name: "Reading Recap/Feedback",
-      free: false
+      free: false,
+      info: {
+        heading: "Student Analysis Tools",
+        description: "Analyze how your students read using Hero’s unique student analysis tools. See from one student’s perspective with the Student Filter, see each students reading stats with the Reading Recap, and provide timely and effective feedback with the Feedback Tool.",
+        image: "/assets/images/pricing/"
+      }
     },
     {
       name: "Audio Comments",
-      free: false
+      free: false,
+      info: {
+        heading: "Audio Comments",
+        description: "Allow your students to literally speak their minds as they read with Edji by allowing Audio Comments on your Edji readings.",
+        image: "/assets/images/hero-promo-audio.png"
+      }
     },
     {
       name: "Questions",
-      free: false
+      free: false,
+      info: {
+        heading: "Questions",
+        description: "Insert Questions into your reading to call out important details or make your students think about the points made in the text. While getting the tools to watch your students’ answers roll in.",
+        image: "/assets/images/hero-promo-question.png"
+      }
     },
     {
-      name: "Replies/discussion tools",
-      free: false
+      name: "Discussion Tools",
+      free: false,
+      info: {
+        heading: "Discussion Tools",
+        description: "Unlock the ability to open up discussion in your Edji readings with comment replies. Leave feedback, ask further questions, and get your students talking!",
+        image: "/assets/images/"
+      }
     }
   ]
 
