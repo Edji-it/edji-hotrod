@@ -61,9 +61,11 @@ export class HeroSubscribeComponent implements OnInit {
       this._auth.currentUser.subscribe(
         user => {
           this.currentUser = user
-          if (user.hero_cancelled) {
-            this.previouslyCancelled = true
-          }
+        }
+      ),
+      this._auth.getStripeSubscriptions().subscribe(
+        (subscriptions) => {
+          this.previouslyCancelled = this.activeSubscription(subscriptions)
         }
       )
     )
@@ -204,9 +206,35 @@ export class HeroSubscribeComponent implements OnInit {
   // a user that was previously a hero and cancelled will need to contact support to handle going hero again
   public resumeHero(): void {
     this.loading = true
+    this._auth.rejoinHero()
+    .subscribe(
+      data => {
+        // track user adding hero subscription in analytics
+        this.angulartics.eventTrack.next({ action: 'rejoinHero_promoPage_' + this.goHeroLocation, properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }})
+        this.userNowHero = true
+        this.loading = false
+        if (data.user) {
+          this._bumblebee.userHeroAction(data.user, "subscribed")
+        }
+      },
+      error => {
+        this.loading = false
+        this.stripeMessage = 'There was an error processing your payment. Please try correcting your payment information, or <a href="mailto:support@edji.it" class="link">contact our support team</a>.'
+        this._bumblebee.reportError(error)
+      })
+  }
 
-    // essentially, we're going to run the same method here, but not pass in a payment token or coupon
-    // the server will know how to handle because the user has a Stripe customer ID for us to re-charge against
-    this.becomeHero()
+  // determines which goHero call we need to make
+  private activeSubscription(subscriptions: any): boolean {
+    // we need to both check if we have an active subscription and if not, what was the most recent cancellation
+    let len = subscriptions.length
+    for (var i=0; i<len; i++) {
+      let sub = subscriptions[i]
+      if (this._auth.getStripeDate(sub.current_period_end) > new Date()) {
+        // we have ourselves an active subsription! 
+        return true
+      }
+    }
+    return false
   }
 }

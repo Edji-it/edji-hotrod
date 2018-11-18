@@ -1037,6 +1037,33 @@ export class AuthService implements CanActivate {
             return subscriptions.subscriptions
         }))
     }
+
+    /**
+     * Reverses the cancellation in Stripe - only for active subscriptions
+     * New subscriptions need to route through the subscribeToHero method
+     */
+    public rejoinHero(): Observable<any> {
+        return this._http.put<any>(
+            this.baseUrl + '/api/v1/stripe/subscriptions',
+            {},
+            {
+                headers: new HttpHeaders({
+                    'Content-Type': 'application/json',
+                    'Authorization': this.getToken()
+                })
+            }
+        )
+        .pipe(map((res) => {
+            return res
+        }))
+    }
+
+    // Stripe sends the date back as the UTC Epoch, so we'll convert it here
+    public getStripeDate(utcSeconds: number): Date {
+        let date = new Date(0)
+        date.setUTCSeconds(utcSeconds)
+        return date
+    }
 }
 
 interface LoginObject {

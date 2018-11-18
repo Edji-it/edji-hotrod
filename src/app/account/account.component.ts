@@ -110,22 +110,15 @@ export class AccountComponent implements OnInit, OnDestroy {
       if (!sub.canceled_at) {
         this.canceled = false
         // we have ourselves an active subsription! Set the necessary variables for displaying useful info
-        this.customerSubEnd = this.getStripeDate(sub.current_period_end)
+        this.customerSubEnd = this._auth.getStripeDate(sub.current_period_end).toString()
         return
       }
       if (sub.canceled_at && sub.canceled_at > maxCancel) {
         this.canceled = true
         maxCancel = sub.canceled_at
-        this.customerCancelDate = this.getStripeDate(maxCancel)
-        this.customerSubEnd = this.getStripeDate(sub.current_period_end)
+        this.customerCancelDate = this._auth.getStripeDate(maxCancel).toString()
+        this.customerSubEnd = this._auth.getStripeDate(sub.current_period_end).toString()
       }
     }
-  }
-
-  // Stripe sends the date back as the UTC Epoch, so we'll convert it here
-  private getStripeDate(utcSeconds: number): string {
-    let date = new Date(0)
-    date.setUTCSeconds(utcSeconds)
-    return date.toDateString()
   }
 }
