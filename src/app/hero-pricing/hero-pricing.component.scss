@@ -44,3 +44,17 @@
         background: #fafafa;
     }
 }
+
+.learn-more {
+    display: none;
+}
+.row-hover {
+    &:hover, &:focus {
+        cursor: pointer;
+        background: rgba(0,0,0,.075) !important;
+
+        & .learn-more {
+            display: inline-block;
+        }
+    }
+}

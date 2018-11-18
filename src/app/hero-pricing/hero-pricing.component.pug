@@ -71,18 +71,15 @@ nav-bar
               th.text-center(scope="col") Edji Free
               th.text-center(scope="col") Edji Hero
           tbody
-            tr(*ngFor="let feature of featureValues")
-              td
-                span([innerHtml]="feature.name + ' '")
-                i.icon__tooltip(*ngIf="feature.info", (click)="triggerInfoModal(feature.info)")
-                  span.icon.icon-circle.icon-info  i
-                //- a.badge.badge-pill.badge-info(
-                //-     *ngIf="feature.info", (click)="triggerInfoModal(feature.info)",
-                //-     style="fontfont-style:italic; color:#fff;"
-                //-   )
-                //-   | i
-              td.feature-check([innerHtml]="(feature.free ? ':white_check_mark:' : ':heavy_minus_sign:') | emojione")
-              td.feature-check([innerHtml]="':white_check_mark:' | emojione")
+            ng-container(*ngFor="let feature of featureValues")
+              tr([class.row-hover]="feature.info",  (click)="feature.info ? triggerInfoModal(feature.info) : null")
+                td
+                  span([innerHtml]="feature.name + ' '")
+                  i.icon__tooltip(*ngIf="feature.info")
+                    span.icon.icon-circle.icon-info  i
+                  span.text-primary.learn-more.small Learn more
+                td.feature-check([innerHtml]="(feature.free ? ':white_check_mark:' : ':heavy_minus_sign:') | emojione")
+                td.feature-check([innerHtml]="':white_check_mark:' | emojione")
   .row
     .hero-rule
 .container-fluid
