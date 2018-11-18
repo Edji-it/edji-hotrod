@@ -1008,8 +1008,8 @@ export class AuthService implements CanActivate {
      * Returns customer information including subscriptions, but not payment source
      * @param customer_id the customer ID from Stripe that we store on the user object
      */
-    public getStripeCustomer(customer_id: string): Observable<any> {
-        return this._http.get<any>(this.baseUrl + "/api/v1/stripe/customers/" + customer_id,
+    public getStripeCustomer(): Observable<any> {
+        return this._http.get<any>(this.baseUrl + "/api/v1/stripe/customers/",
         {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json',
@@ -1018,6 +1018,23 @@ export class AuthService implements CanActivate {
         })
         .pipe(map((customer) => {
             return customer.customer
+        }))
+    }
+
+    /**
+     * Returns customer information including subscriptions, but not payment source
+     * @param customer_id the customer ID from Stripe that we store on the user object
+     */
+    public getStripeSubscriptions(): Observable<any> {
+        return this._http.get<any>(this.baseUrl + "/api/v1/stripe/subscriptions/",
+        {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+                'Authorization': this.getToken()
+            })
+        })
+        .pipe(map((subscriptions) => {
+            return subscriptions.subscriptions
         }))
     }
 }

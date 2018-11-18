@@ -88,9 +88,9 @@ export class AccountComponent implements OnInit, OnDestroy {
   // Get customer info back from Stripe for renewal details and active subscription status
   public updateHeroStatus(): void {
     if (this.currentUser.stripe_customer_id) {
-      this._auth.getStripeCustomer(this.currentUser.stripe_customer_id).subscribe(
-        customer => {
-          let subscription = this.getSubscription(customer)
+      this._auth.getStripeSubscriptions().subscribe(
+        (subscriptions) => {
+          let subscription = this.getSubscription(subscriptions)
             // Check to see if they have an active subscription
             if (subscription) {
               this.customerSubEnd = this.getStripeDate(subscription.current_period_end)
@@ -105,14 +105,8 @@ export class AccountComponent implements OnInit, OnDestroy {
   }
 
   // get the latest active subscription
-  private getSubscription(customer: any): any {
-    if (customer && customer.subscriptions && customer.subscriptions.data) {
-      let lastSub = customer.subscriptions.data.length - 1
-      let customerData = customer.subscriptions.data[lastSub]
-      return customerData
-    } else {
-      return {}
-    }
+  private getSubscription(subscriptions: any): any {
+    console.log(subscriptions)
   }
 
   // Stripe sends the date back as the UTC Epoch, so we'll convert it here
