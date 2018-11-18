@@ -77,9 +77,8 @@ export class HeroChangeComponent implements OnInit {
   cancelSub() {
     this.canceling = true
     this.cancelMsg = ''
-    console.log(this.user)
     // console.log(this.user.hero.subscription_id)
-    this._auth.cancelHeroSubscription(this.user.stripe_customer_id)
+    this._auth.cancelHeroSubscription()
       .pipe(take(1))
       .subscribe(
         data => {
@@ -94,7 +93,6 @@ export class HeroChangeComponent implements OnInit {
           if (data.user) {
             this._auth.setUser(data.user)
           }
-          console.log(data.user)
         },
         err => {
           this.canceling = false
