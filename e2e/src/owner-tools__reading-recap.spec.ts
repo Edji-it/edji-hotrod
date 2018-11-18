@@ -81,9 +81,6 @@ describe('Project Page as an owner using reading report: ', () => {
   // add an evaluation and verify it shows up
   it("should add an evaluation and verify it shows up", () => {
     browser.wait(EC.visibilityOf(readingEvalFirst), 3000, "previous reading evals never became visible")
-    readingEvals.count().then((count) => {
-      evalCount = count
-    })
     browser.wait(EC.elementToBeClickable(element(by.id("evalFormText"))), 3000, "evaluation input field never became clickable")
     // Add text to the evaluation field and submit it
     element(by.id("evalFormText")).sendKeys(uniqueEval)
@@ -91,13 +88,6 @@ describe('Project Page as an owner using reading report: ', () => {
     element(by.id("sendEvalBtn")).click()
     // Verify eval input was cleared
     browser.wait(EC.visibilityOf(element(by.css("#sendEvalBtn:disabled"))), 3000, "evaluation form did not properly submit")
-    // Make sure the count of evaluations increased by 1 before we check for it to be created with certain text
-    // browser.wait(countElements(readingEvals, evalCount), 3000, "evaluation was not submitted")
-    browser.wait(countElements(readingEvals, evalCount), 3000).then((success) => {
-      // success handler
-    }, (error) => {
-      expect(true).toBe(false, "evaluation was not submitted")
-    })
     // Verify eval text populated at bottom of feedback list
     readingEvals.last().getText().then((evaluation) => {
       expect(evaluation).toBe(uniqueEval, 'latest evaluation did not show at bottom')
