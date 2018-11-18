@@ -55,7 +55,7 @@ nav-bar
             | Academy is the easy way to get all your schools' teachers full access to Edji Hero features. Easily get teachers signed on and manage your Academy licenses.
           label Who is it for?
           p.card-text Teachers and Administrators who want to collaborate within their school
-          a.btn.btn-primary.btn-lg.btn-block(href='mailto:support@edji.it') Request More Info
+          button.btn.btn-primary.btn-lg.btn-block((click)="showRequestAcademyModal = true") Request More Info
   .row.mt-4
     .hero-rule
   .row.no-gutters
@@ -102,7 +102,10 @@ hot-login-register.modal-will-fade(
     (closeModal)='showLoginModal = false',
     (loginSuccess)='showHeroSubModal = true')
 hero-subscribe-modal.modal-will-fade([class.show]='showHeroSubModal', [goHeroLocation]="'heroPricingPage'", (closeModal)='showHeroSubModal = !showHeroSubModal', (heroWasBorn)="_router.navigate(['/dashboard'])")
-
+request-academy-modal.modal-will-fade(
+  [class.show]="showRequestAcademyModal",
+  (closeModal)="showRequestAcademyModal = false"
+)
 //- Feature Info Modal
 .modal(*ngIf="showInfoModal")
   .modal-dialog.modal-lg
