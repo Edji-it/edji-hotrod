@@ -26,6 +26,8 @@ button, .button, .btn { //, [class*='btn']
   &.btn-lg {
     line-height: 1.25em;
     font-size: 1.25*$base-font-size;
+    padding-left: 2em;
+    padding-right: 2em;
   }
 
   &.btn-sm {

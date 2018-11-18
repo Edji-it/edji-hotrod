@@ -1,9 +1,8 @@
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 
 // Project Dependencies
 import { AuthService } from '../_services';
-import { User } from '../shared/datatypes';
 import { Subscription } from 'rxjs';
 @Component({
   selector: 'hero-pricing',
@@ -61,7 +60,7 @@ export class HeroPricingComponent implements OnInit {
       info: {
         heading: "Emoji and Text Comments",
         description: "Real reading engagement is powerful, emotional and moving. Have your students engage with the text and leave behind their thoughts and feelings for you to see.",
-        image: ""
+        image: "/assets/images/pricing/text-emoji.png"
       }
     },
     {
@@ -74,12 +73,12 @@ export class HeroPricingComponent implements OnInit {
       }
     },
     {
-      name: "Reading Recap/Feedback",
+      name: "Student Analysis Tools",
       free: false,
       info: {
         heading: "Student Analysis Tools",
         description: "Analyze how your students read using Hero’s unique student analysis tools. See from one student’s perspective with the Student Filter, see each students reading stats with the Reading Recap, and provide timely and effective feedback with the Feedback Tool.",
-        image: "/assets/images/pricing/"
+        image: "/assets/images/pricing/recap.png"
       }
     },
     {
@@ -106,16 +105,22 @@ export class HeroPricingComponent implements OnInit {
       info: {
         heading: "Discussion Tools",
         description: "Unlock the ability to open up discussion in your Edji readings with comment replies. Leave feedback, ask further questions, and get your students talking!",
-        image: "/assets/images/"
+        image: "/assets/images/pricing/replies.png"
       }
     }
   ]
 
   private subscriptions: Subscription[] = []
 
-  constructor(public _router: Router, private _auth: AuthService) { }
+  constructor(public _router: Router, private _auth: AuthService, private route: ActivatedRoute) { }
 
   ngOnInit() {
+    // Workaround for handling "jump to" fragment/anchor
+    if (this.route.snapshot.fragment) {
+      let startEl = document.getElementById(this.route.snapshot.fragment)
+      startEl && startEl.scrollIntoView()
+    }
+
     this.subscriptions.push(
       this._auth.getCurrentUser().subscribe((user) => {
           this.user = user

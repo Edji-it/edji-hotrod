@@ -1,3 +1,4 @@
+#top
 nav-bar
 .jumbotron.jumbotron-fluid.jumbotron--clear
   .container
@@ -22,9 +23,11 @@ nav-bar
             | Edji Free is the basic Edji kit that allows teachers to give readings and generate engagement through comments.
           label Who is it for?
           p.card-text
-            | Teachers that want their class to read occasionally and see their thoughts!
-          a.btn.btn-primary.btn-lg.btn-block(*ngIf="!user || !user.isLoggedIn", [routerLink]="['/register']") Register
-          a.btn.btn-primary.btn-lg.btn-block(*ngIf="user.isLoggedIn", disabled) Current Plan
+            | Teachers that want their class to read occasionally and see their thoughts
+          a.btn.btn-primary.btn-lg.btn-block(*ngIf="!user || !user.isLoggedIn || !user.hero_status", [routerLink]="['/register']") 
+            | Register
+          a.btn.btn-primary.btn-lg.btn-block.disabled(*ngIf="user && user.isLoggedIn && user.hero_status", disabled) 
+            | {{ user.hero_status ? 'Included' : 'Current Plan'}}
     .col-sm-4
       .card.card-outline-danger
         .card-block
@@ -35,10 +38,13 @@ nav-bar
             | $60
             span.small  / year
           hr
-          p.card-text Hero gives teachers powers to get the most out of readings. Get extra customization and lesson planning, plus an in depth view of how each student did while reading.
+          p.card-text Hero gives teachers powers to get the most out of readings. Get extra customization and lesson planning, plus an in depth view of each students’ reading activity
           label Who is it for?
-          p.card-text Teachers who want the most student engagement possible!
-          a.btn.btn-hero.btn-lg.btn-block(tabindex='1', (click)='goHero()') Go Hero
+          p.card-text Teachers who want the most student engagement possible
+          a.btn.btn-hero.btn-lg.btn-block(*ngIf="!user || !user.isLoggedIn || !user.hero_status", tabindex='1', (click)='goHero()') Go Hero
+          a.btn.btn-hero.btn-lg.btn-block(*ngIf="user && user.isLoggedIn && user.hero_status", [routerLink]="['/account']", [innerHtml]="'Current Plan &nbsp;:tada:' | emojione")
+      .text-center.mt-3
+        a.btn.btn-link([routerLink]="['/hero']", fragment="top") Discover Hero!
     .col-sm-4
       .card.card-outline-secondary
         .card-block
@@ -46,9 +52,9 @@ nav-bar
           span.pricing Contact Us
           hr
           p.card-text
-            | Academy is the easy way to get all your schools teachers full access to Edji Hero features. Easily get teachers signed on and manage your Academy licenses.
+            | Academy is the easy way to get all your schools' teachers full access to Edji Hero features. Easily get teachers signed on and manage your Academy licenses.
           label Who is it for?
-          p.card-text Teachers and Administrators who want their whole school using Edji!
+          p.card-text Teachers and Administrators who want to collaborate within their school
           a.btn.btn-primary.btn-lg.btn-block(href='mailto:support@edji.it') Request More Info
   .row.mt-4
     .hero-rule
