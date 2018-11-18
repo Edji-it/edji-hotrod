@@ -30,7 +30,7 @@ export class AccountComponent implements OnInit, OnDestroy {
   public showHeroSubModal: boolean = false
   public showHeroChangeModal: boolean = false
 
-  public cancelled: boolean = false
+  public canceled: boolean = false
   public academyHero: boolean = false
 
   private subscriptions : any[] = []
@@ -108,11 +108,13 @@ export class AccountComponent implements OnInit, OnDestroy {
     for (var i=0; i<len; i++) {
       let sub = subscriptions[i]
       if (!sub.canceled_at) {
+        this.canceled = false
         // we have ourselves an active subsription! Set the necessary variables for displaying useful info
         this.customerSubEnd = this.getStripeDate(sub.current_period_end)
         return
       }
       if (sub.canceled_at && sub.canceled_at > maxCancel) {
+        this.canceled = true
         maxCancel = sub.canceled_at
         this.customerCancelDate = this.getStripeDate(maxCancel)
         this.customerSubEnd = this.getStripeDate(sub.current_period_end)
