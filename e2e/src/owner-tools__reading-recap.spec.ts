@@ -20,8 +20,6 @@ describe('Project Page as an owner using reading report: ', () => {
   let recapStudentOptions = element.all(by.css('#studentSelector li'))
   let commentCountGauge = element.all(by.css('#gaugeValue')).get(1)
   let readingEvalFirst = element.all(by.css('.evaluation_text')).first()
-  let readingEvals = element.all(by.css('.evaluation_text'))
-  let evalCount = 0
 
   beforeAll(() => {
     login.getPage()
@@ -89,9 +87,7 @@ describe('Project Page as an owner using reading report: ', () => {
     // Verify eval input was cleared
     browser.wait(EC.visibilityOf(element(by.css("#sendEvalBtn:disabled"))), 3000, "evaluation form did not properly submit")
     // Verify eval text populated at bottom of feedback list
-    readingEvals.last().getText().then((evaluation) => {
-      expect(evaluation).toBe(uniqueEval, 'latest evaluation did not show at bottom')
-    })
+    browser.wait(EC.visibilityOf(element(by.cssContainingText('.evaluation_text', uniqueEval))), 3000, "latest evaluation did not show at bottom")
   })
 
   // verify you can open the dropdown for student selection and change the student
@@ -135,15 +131,3 @@ describe('Project Page as an owner using reading report: ', () => {
     browser.wait(EC.invisibilityOf(element(by.id("readingReport"))), 3000, 'reading report never closed')
   })
 })
-
-// checks that a list of elements is greater than the value that is passed in
-function countElements(el, i) {
-  // count the number of elements found
-  return el.count().then((elCount) => {
-    if (i===0) {
-      return false
-    }
-    // if not enough elements, return false so browser.wait will keep looping
-    return elCount > i
-  })
-}
