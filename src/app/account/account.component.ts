@@ -23,6 +23,7 @@ export class AccountComponent implements OnInit, OnDestroy {
   public nameInitials: string = "" // we gonna use these for the temp profile pic
   public currentUser: any
   public customerSubEnd: string = ""
+  public customerCancelDate: string = ""
 
   public showPassModal: boolean = false
   public showUploadProfPicModal: boolean = false
@@ -90,13 +91,7 @@ export class AccountComponent implements OnInit, OnDestroy {
     if (this.currentUser.stripe_customer_id) {
       this._auth.getStripeSubscriptions().subscribe(
         (subscriptions) => {
-          let subscription = this.getSubscription(subscriptions)
-            // Check to see if they have an active subscription
-            if (subscription) {
-              this.customerSubEnd = this.getStripeDate(subscription.current_period_end)
-            } else if (!subscription && this.currentUser.hero_cancelled) {
-              this.cancelled = true
-            }
+          this.getSubscription(subscriptions)
         }
       )
     } else if (this.currentUser.license_ids && this.currentUser.license_ids.length) {
@@ -105,8 +100,24 @@ export class AccountComponent implements OnInit, OnDestroy {
   }
 
   // get the latest active subscription
-  private getSubscription(subscriptions: any): any {
+  private getSubscription(subscriptions: any): void {
     console.log(subscriptions)
+    // we need to both check if we have an active subscription and if not, what was the most recent cancellation
+    let len = subscriptions.length
+    let maxCancel = 0
+    for (var i=0; i<len; i++) {
+      let sub = subscriptions[i]
+      if (!sub.canceled_at) {
+        // we have ourselves an active subsription! Set the necessary variables for displaying useful info
+        this.customerSubEnd = this.getStripeDate(sub.current_period_end)
+        return
+      }
+      if (sub.canceled_at && sub.canceled_at > maxCancel) {
+        maxCancel = sub.canceled_at
+        this.customerCancelDate = this.getStripeDate(maxCancel)
+        this.customerSubEnd = this.getStripeDate(sub.current_period_end)
+      }
+    }
   }
 
   // Stripe sends the date back as the UTC Epoch, so we'll convert it here

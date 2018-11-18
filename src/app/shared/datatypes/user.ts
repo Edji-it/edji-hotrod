@@ -45,6 +45,5 @@ interface BaseUser {
   institution_ids?: string[],
   isAcademyAdmin?: boolean,
   school_name: string,
-  phone_number: string,
-  hero_cancelled?: Date
+  phone_number: string
 }
