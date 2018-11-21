@@ -1,0 +1,79 @@
+nav-bar
+.container-fluid.profile-container.row
+  //- Profile Pic Column
+  .column.col-sm-3
+    h1.profile-title Profile
+    //- Profile Pic block
+    .profile-pic-container
+      //- User Profile Pic
+      span.profile-pic
+        //- Avatar picture
+        img#avatarImg.profile-pic(*ngIf="getAvatar()", [src]="getAvatar()")
+        span#userInitials(*ngIf="!getAvatar()") {{currentUser.fullname | userinitials}}
+      //- Edit Profile Picture Button 
+      //-   - Opens UploadProfPicModal -->
+      //-   THIS IS NOT READY TO EXPOSE
+      //- button#editAvatarBtn.btn.btn-sm.edit-btn(*ngIf="currentUser.hero_status", type="button", (click)="showUploadProfPicModal= true;") Edit
+  //- Text Column
+  .column.col-sm-9
+    //- spacer div
+    .spacer-mobile-collapse
+    //- Name
+    .info-group
+      .name-label {{currentUser.fullname}}
+      .info-label Name
+    //- user name
+    .row
+      .col-md-8
+        .info-group
+          p.info {{currentUser.username}}
+          label.info-label(for="inputPassword") Username
+      .col-md-4
+        //- Change Password Button
+        button.btn.change-password-btn.mb-4(type="button", (click)="showPassModal = !showPassModal") Change Password
+    //- email
+    .info-group
+      p.info {{currentUser.email}}
+      label.info-label(for="inputPassword") Email
+    //- Hero Subscription Mgmt
+    .row
+      .col-md-8
+        .info-group
+          .info
+            span.text-capitalize.mr-4(*ngIf="currentUser.hero_status && !canceled && !academyHero", [style.display]="'inline-block'") Subscribed (Yearly)
+            span.text-capitalize.mr-4(*ngIf="currentUser.hero_status && academyHero", [style.display]="'inline-block'") Hero Academy
+            span.mr-4(*ngIf="!currentUser.hero_status") Unsubscribed
+            .alert.alert-warning.my-1(*ngIf="canceled") Your Hero subscription was canceled on {{ currentUser.hero_cancelled | edjidate:'timeStamp':'mediumDate' }}
+              br 
+              | Your Hero powers will go away after {{ customerSubEnd | edjidate:'timeStamp':'mediumDate' }}
+          span(*ngIf="currentUser.hero_status && !canceled && !academyHero") Renews on {{ customerSubEnd | edjidate:'timeStamp':'mediumDate' }}
+          label.info-label(for="inputPassword") Hero Subscription
+      .col-md-4
+        button#heroModifyBtn.btn.btn-secondary.mr-4(*ngIf="currentUser.hero_status && !canceled && !academyHero", (click)="showHeroChangeModal = true") Modify
+        button.btn.btn-hero.mr-4(*ngIf="!currentUser.hero_status", (click)="showHeroSubModal = true; trackHeroClick()") Go Hero
+        button.btn.btn-hero.mr-4(*ngIf="canceled", (click)="showHeroSubModal = true; trackHeroClick()") Resume Subscription
+    //- Reading on Edji since
+    .info-group.mt-5
+      h4.faded Reading on Edji since {{currentUser.createdAt | edjidate:'timeStamp':'mediumDate'}}
+  //- buffer before the footer. Includes a nice border line.
+  .row.container-line
+
+edji-change-pass.modal-will-fade(
+  [class.show]="showPassModal", 
+  (closeModal)="showPassModal = !showPassModal"
+)
+hot-upload-avatar.modal-will-fade(
+  [class.show]="showUploadProfPicModal", 
+  (closeModal)="showUploadProfPicModal = !showUploadProfPicModal"
+)
+hero-subscribe-modal.modal-will-fade(
+  *ngIf="showHeroSubModal",
+  [class.show]="showHeroSubModal", 
+  [goHeroLocation]="'accountPage'", 
+  (closeModal)="showHeroSubModal = !showHeroSubModal", 
+  (heroWasBorn)="_router.navigate(['/dashboard'])"
+)
+hero-change-modal.modal-will-fade(
+  [class.show]="showHeroChangeModal", 
+  (closeModal)="showHeroChangeModal = !showHeroChangeModal; updateHeroStatus()"
+)

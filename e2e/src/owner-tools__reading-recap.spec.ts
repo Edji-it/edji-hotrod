@@ -18,6 +18,8 @@ describe('Project Page as an owner using reading report: ', () => {
 
   let recapStudentDropdown = element(by.id('studentSelector'))
   let recapStudentOptions = element.all(by.css('#studentSelector li'))
+  let commentCountGauge = element.all(by.css('#gaugeValue')).get(1)
+  let readingEvalFirst = element.all(by.css('.evaluation_text')).first()
 
   beforeAll(() => {
     login.getPage()
@@ -68,14 +70,16 @@ describe('Project Page as an owner using reading report: ', () => {
     
     // verify the comment count is greater than 0
     let gaugeValue = element(by.id("gaugeValue"))
-    browser.wait(EC.visibilityOf(gaugeValue), 3000, 'not able to find the gauge value')
-    gaugeValue.getText().then((count) => {
-      expect(count).toBeGreaterThan(1, 'minutes on reading is not greater than 1')
+    browser.wait(EC.visibilityOf(commentCountGauge), 3000, 'not able to find the gauge value')
+    commentCountGauge.getText().then((count) => {
+      expect(parseInt(count)).toBeGreaterThan(1, 'minutes on reading is not greater than 1')
     })
   })
 
   // add an evaluation and verify it shows up
   it("should add an evaluation and verify it shows up", () => {
+    browser.wait(EC.visibilityOf(readingEvalFirst), 3000, "previous reading evals never became visible")
+    browser.wait(EC.elementToBeClickable(element(by.id("evalFormText"))), 3000, "evaluation input field never became clickable")
     // Add text to the evaluation field and submit it
     element(by.id("evalFormText")).sendKeys(uniqueEval)
     browser.wait(EC.elementToBeClickable(element(by.id("sendEvalBtn"))), 3000, "send evaluation button never became clickable")
@@ -83,10 +87,7 @@ describe('Project Page as an owner using reading report: ', () => {
     // Verify eval input was cleared
     browser.wait(EC.visibilityOf(element(by.css("#sendEvalBtn:disabled"))), 3000, "evaluation form did not properly submit")
     // Verify eval text populated at bottom of feedback list
-    let evaluations = element.all(by.css('.evaluation_text'))
-    evaluations.last().getText().then((evaluation) => {
-      expect(evaluation).toBe(uniqueEval, 'latest evaluation did not show at bottom')
-    })
+    browser.wait(EC.visibilityOf(element(by.cssContainingText('.evaluation_text', uniqueEval))), 3000, "latest evaluation did not show at bottom")
   })
 
   // verify you can open the dropdown for student selection and change the student

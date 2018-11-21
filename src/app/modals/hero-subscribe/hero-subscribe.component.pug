@@ -7,7 +7,21 @@
           |  Go Hero
         button.close((click)="closeModal.emit()" type="button") ×
       .modal-body
-        .row([class.hide]="userNowHero")
+        .row(*ngIf="previouslyCancelled")
+          .col-12(*ngIf="!resubMessage && !resubSuccess")
+            p.pb-1
+              | You will need to contact Edji Support to Go Hero again
+          .col-12(*ngIf="resubMessage || resubSuccess")
+            #resub-errors(role="alert")
+            .alert.alert-warning(*ngIf="resubMessage")
+              b Uh oh! 
+              | {{ resubMessage }}
+              a.link(href="mailto:support@edji.it") contacting our support team directly
+            #resub-success(role="alert")
+            .alert.alert-success(*ngIf="resubSuccess")
+              b Thank you! 
+              | {{ resubSuccess }}
+        .row([class.hide]="userNowHero || previouslyCancelled")
           .col-12
             p.pb-1
               | We are honored to have you join the league of Heroes.
@@ -107,8 +121,11 @@
           <div class="alert alert-danger" role="alert">
           <strong>Hero Subscription</strong> Couldn't process.
           </div>
-        .btn-row.right(*ngIf="!userNowHero")
+        .btn-row.right(*ngIf="!userNowHero && !resubscribeSent")
           button.btn.btn-secondary((click)="closeModal.emit()" type="button" data-dismiss="modal") Cancel
-          button#subHero.btn.btn-primary([class.loading]="loading", (click)="checkout()") Subscribe
+          button#subHero.btn.btn-primary(*ngIf="!previouslyCancelled", [class.loading]="loading", (click)="checkout()") Subscribe
+          button#subHero.btn.btn-primary(*ngIf="previouslyCancelled", [class.loading]="loading", (click)="resumeHero()") Contact Support
         .btn-row.right(*ngIf="userNowHero")
           button.btn((click)="heroWasBorn.emit(); closeModal.emit()" type="button" data-dismiss="modal") Awesome!
+        .btn-row.right(*ngIf="resubscribeSent")
+          button.btn((click)="closeModal.emit()" type="button" data-dismiss="modal") Close

@@ -201,12 +201,10 @@
 
 .icon-draft {
     @include icon('icon-draft.svg');
-    display: block;
-    position: absolute;
-    top: 50%;
-    right: 20px;
-    width: 100px;
+    margin-right: 2px;
+    width: 46px;
     height: 50px;
+    -webkit-transform: rotate(20deg) translateY(-50%);
     transform: rotate(20deg) translateY(-50%);
 }
 
