@@ -43,15 +43,17 @@ nav-bar
             span.text-capitalize.mr-4(*ngIf="currentUser.hero_status && !canceled && !academyHero", [style.display]="'inline-block'") Subscribed (Yearly)
             span.text-capitalize.mr-4(*ngIf="currentUser.hero_status && academyHero", [style.display]="'inline-block'") Hero Academy
             span.mr-4(*ngIf="!currentUser.hero_status") Unsubscribed
-            .alert.alert-warning.my-1(*ngIf="canceled") Your Hero subscription was canceled on {{ currentUser.hero_cancelled | edjidate:'timeStamp':'mediumDate' }}
+            .alert.alert-warning.my-1(*ngIf="canceled") 
+              b Canceled
+              | Your Hero subscription was canceled{{ customerCancelDate && ' on ' + (customerCancelDate | edjidate:'timeStamp':'mediumDate') }}.
               br 
-              | Your Hero powers will go away after {{ customerSubEnd | edjidate:'timeStamp':'mediumDate' }}
+              | Your Hero powers will go away on {{ customerSubEnd | edjidate:'timeStamp':'mediumDate' }}.
           span(*ngIf="currentUser.hero_status && !canceled && !academyHero") Renews on {{ customerSubEnd | edjidate:'timeStamp':'mediumDate' }}
           label.info-label(for="inputPassword") Hero Subscription
       .col-md-4
         button#heroModifyBtn.btn.btn-secondary.mr-4(*ngIf="currentUser.hero_status && !canceled && !academyHero", (click)="showHeroChangeModal = true") Modify
         button.btn.btn-hero.mr-4(*ngIf="!currentUser.hero_status", (click)="showHeroSubModal = true; trackHeroClick()") Go Hero
-        button.btn.btn-hero.mr-4(*ngIf="canceled", (click)="showHeroSubModal = true; trackHeroClick()") Resume Subscription
+        button.btn.btn-hero.mr-4(*ngIf="canceled", (click)="showHeroSubModal = true; trackHeroClick()") Renew Subscription
     //- Reading on Edji since
     .info-group.mt-5
       h4.faded Reading on Edji since {{currentUser.createdAt | edjidate:'timeStamp':'mediumDate'}}
@@ -70,7 +72,7 @@ hero-subscribe-modal.modal-will-fade(
   *ngIf="showHeroSubModal",
   [class.show]="showHeroSubModal", 
   [goHeroLocation]="'accountPage'", 
-  (closeModal)="showHeroSubModal = !showHeroSubModal", 
+  (closeModal)="showHeroSubModal = !showHeroSubModal; updateHeroStatus()", 
   (heroWasBorn)="_router.navigate(['/dashboard'])"
 )
 hero-change-modal.modal-will-fade(

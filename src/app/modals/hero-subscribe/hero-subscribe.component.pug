@@ -7,20 +7,16 @@
           |  Go Hero
         button.close((click)="closeModal.emit()" type="button") ×
       .modal-body
-        .row(*ngIf="previouslyCancelled")
-          .col-12(*ngIf="!resubMessage && !resubSuccess")
+        .row(*ngIf="previouslyCancelled && !userNowHero")
+          .col-12(*ngIf="!stripeMessage")
             p.pb-1
-              | You will need to contact Edji Support to Go Hero again
-          .col-12(*ngIf="resubMessage || resubSuccess")
+              | Click on Resubscribe below to confirm you want to Go Hero again.
+              | Your account will be charged again after your next renewal date
+          .col-12(*ngIf="stripeMessage")
             #resub-errors(role="alert")
-            .alert.alert-warning(*ngIf="resubMessage")
-              b Uh oh! 
-              | {{ resubMessage }}
-              a.link(href="mailto:support@edji.it") contacting our support team directly
-            #resub-success(role="alert")
-            .alert.alert-success(*ngIf="resubSuccess")
-              b Thank you! 
-              | {{ resubSuccess }}
+            .alert.alert-warning(*ngIf="stripeMessage")
+              p There was an error processing your payment. Please try correcting your payment information, or 
+              a.link(href="mailto:support@edji.it") contact our support team
         .row([class.hide]="userNowHero || previouslyCancelled")
           .col-12
             p.pb-1
@@ -124,7 +120,7 @@
         .btn-row.right(*ngIf="!userNowHero && !resubscribeSent")
           button.btn.btn-secondary((click)="closeModal.emit()" type="button" data-dismiss="modal") Cancel
           button#subHero.btn.btn-primary(*ngIf="!previouslyCancelled", [class.loading]="loading", (click)="checkout()") Subscribe
-          button#subHero.btn.btn-primary(*ngIf="previouslyCancelled", [class.loading]="loading", (click)="resumeHero()") Contact Support
+          button#subHero.btn.btn-primary(*ngIf="previouslyCancelled", [class.loading]="loading", (click)="resumeHero()") Resubscribe to Hero
         .btn-row.right(*ngIf="userNowHero")
           button.btn((click)="heroWasBorn.emit(); closeModal.emit()" type="button" data-dismiss="modal") Awesome!
         .btn-row.right(*ngIf="resubscribeSent")
