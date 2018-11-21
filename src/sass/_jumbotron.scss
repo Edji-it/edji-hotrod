@@ -1,3 +1,7 @@
+.jumbotron--clear {
+    background-color: #fff;
+}
+
 .jumbotron--sunny {
     background-color: #ffffff;
     background-image: linear-gradient(180deg, #ffffff 0%, #fbf6dc 80%, #ffe9c7 100%);
@@ -5,6 +9,13 @@
 
 .jumbotron--blue-sky {
     background-color: #f3fcff;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
+}
+
+.jumbotron--twilight {
+    background-color:#003350;
+    color: #fff;
+
+    & h1 {
+        color: #fff;
+    }
 }
