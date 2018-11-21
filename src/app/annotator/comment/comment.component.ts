@@ -421,4 +421,12 @@ export class CommentComponent implements OnInit, OnDestroy {
       this.lineCount = 1
     }
   }
+
+  /**
+   * Returns true if comment is a fresh, empty comment
+   * @param comment EdjiComment in question
+   */
+  isCommentNewDraft(comment: EdjiComment) : boolean {
+    return ((!comment.data || comment.data=='') && (!comment.url || comment.url == ''))
+  }
 }
