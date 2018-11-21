@@ -20,12 +20,41 @@
 }
 
 .feature-list {
-    list-style-type: disc;
-    list-style-image: url('/assets/images/icon-check.svg');
+    list-style-type: none;
     padding-left: 28px;
     
     & li {
         padding: 0 0 7px 0px;
         line-height: 25px;
+    }
+}
+
+.feature-check {
+    font-size: 20px;
+    text-align: center;
+}
+
+.table-features {
+    & th, & td {
+        border-top:  none;
+        border-bottom: none;
+    }
+
+    tbody tr:nth-of-type(odd) {
+        background: #fafafa;
+    }
+}
+
+.learn-more {
+    display: none;
+}
+.row-hover {
+    &:hover, &:focus {
+        cursor: pointer;
+        background: rgba(0,0,0,.075) !important;
+
+        & .learn-more {
+            display: inline-block;
+        }
     }
 }

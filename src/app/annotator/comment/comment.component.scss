@@ -132,6 +132,22 @@ $tablet-width: 768px;
 .mobileTime-card__time {
   font-style: italic;
   padding-left: 0.25em;
+
+  & .time-text--draft {
+    display: none;
+  }
+
+  &.is-draft {
+    color: #B0D8ED;
+
+    & .time-text--date {
+      display: none;
+    }
+
+    & .time-text--draft {
+      display: inline;
+    }
+  }
 }
 
 .mobileComment-card {
@@ -245,15 +261,6 @@ $mobileBoundVPad: 40px;
   padding-left: 5px;
 }
 
-.comment-new-text__mobile {
-  color: #93DC4F;
-  width: 40px;
-  position: relative;
-  top: -12px;
-  font-size: 14px;
-  left: 6px;
-}
-
 .comment-new-highlight__mobile {
   position: absolute;
 }
@@ -283,12 +290,11 @@ $mobileBoundVPad: 40px;
 }
 
 .icon-draft__comment {
+  -webkit-transform: rotate(0deg) translateY(0%);
   transform: rotate(0deg) translateY(0%);
-  top: 0;
-  right: auto;
-  width: 42px;
   height: 18px;
   z-index: 1;
+  vertical-align: middle;
 }
 
 .mobileBlock--reading-recap {

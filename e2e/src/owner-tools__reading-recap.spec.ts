@@ -18,6 +18,8 @@ describe('Project Page as an owner using reading report: ', () => {
 
   let recapStudentDropdown = element(by.id('studentSelector'))
   let recapStudentOptions = element.all(by.css('#studentSelector li'))
+  let commentCountGauge = element.all(by.css('#gaugeValue')).get(1)
+  let readingEvalFirst = element.all(by.css('.evaluation_text')).first()
 
   beforeAll(() => {
     login.getPage()
@@ -63,19 +65,21 @@ describe('Project Page as an owner using reading report: ', () => {
     // Select a student from dropdown
     browser.wait(EC.elementToBeClickable(recapStudentDropdown), 5000, "recap student selector never became clickable")
     recapStudentDropdown.click()
-    browser.wait(EC.elementToBeClickable(recapStudentOptions.first()), 3000, "recap student selector never became clickable")
+    browser.wait(EC.elementToBeClickable(recapStudentOptions.get(0)), 3000, "recap student selector never became clickable")
     recapStudentOptions.first().click()
     
     // verify the comment count is greater than 0
     let gaugeValue = element(by.id("gaugeValue"))
-    browser.wait(EC.visibilityOf(gaugeValue), 3000, 'not able to find the gauge value')
-    gaugeValue.getText().then((count) => {
-      expect(count).toBeGreaterThan(1, 'minutes on reading is not greater than 1')
+    browser.wait(EC.visibilityOf(commentCountGauge), 3000, 'not able to find the gauge value')
+    commentCountGauge.getText().then((count) => {
+      expect(parseInt(count)).toBeGreaterThan(1, 'minutes on reading is not greater than 1')
     })
   })
 
   // add an evaluation and verify it shows up
   it("should add an evaluation and verify it shows up", () => {
+    browser.wait(EC.visibilityOf(readingEvalFirst), 3000, "previous reading evals never became visible")
+    browser.wait(EC.elementToBeClickable(element(by.id("evalFormText"))), 3000, "evaluation input field never became clickable")
     // Add text to the evaluation field and submit it
     element(by.id("evalFormText")).sendKeys(uniqueEval)
     browser.wait(EC.elementToBeClickable(element(by.id("sendEvalBtn"))), 3000, "send evaluation button never became clickable")
@@ -83,36 +87,18 @@ describe('Project Page as an owner using reading report: ', () => {
     // Verify eval input was cleared
     browser.wait(EC.visibilityOf(element(by.css("#sendEvalBtn:disabled"))), 3000, "evaluation form did not properly submit")
     // Verify eval text populated at bottom of feedback list
-    let evaluations = element.all(by.css('.evaluation_text'))
-    evaluations.last().getText().then((evaluation) => {
-      expect(evaluation).toBe(uniqueEval, 'latest evaluation did not show at bottom')
-    })
-  })
-
-  // close the report and make sure it closes
-  it("should close the report and make sure it closes", () => {
-    browser.executeScript('document.querySelector(".reading-recap").scrollTo(0,0);').then(function () {
-      // Close Reading Report
-      browser.wait(EC.elementToBeClickable(element(by.id("closeReadingRecap"))), 3000, "never saw close button")
-      element(by.id("closeReadingRecap")).click()
-    })
-
-    // Verify the Reading Report is closed
-    browser.wait(EC.invisibilityOf(element(by.id("readingReport"))), 3000, 'reading report never closed')
+    browser.wait(EC.visibilityOf(element(by.cssContainingText('.evaluation_text', uniqueEval))), 3000, "latest evaluation did not show at bottom")
   })
 
   // verify you can open the dropdown for student selection and change the student
   it("should verify you can open the dropdown for student selection and change the student", () => {
-    // Need to check for and click the owner tools button if its showing
-    sidebar.ownerToolToggle()
-    // Open Reading Report
-    browser.wait(EC.elementToBeClickable(sidebar.readingReportButton), 5000, "never found the reading report button")
-    sidebar.readingReportButton.click()
-    // Select first student
-    browser.wait(EC.elementToBeClickable(recapStudentDropdown), 5000, "recap student selector never became clickable")
-    recapStudentDropdown.click()
-    browser.wait(EC.elementToBeClickable(recapStudentOptions.first()), 3000, "recap student selector never became clickable")
-    recapStudentOptions.first().click()
+    browser.executeScript('document.querySelector(".reading-recap").scrollTo(0,0);').then(function () {
+      // Select first student
+      browser.wait(EC.elementToBeClickable(recapStudentDropdown), 5000, "recap student selector never became clickable")
+      recapStudentDropdown.click()
+      browser.wait(EC.elementToBeClickable(recapStudentOptions.get(1)), 3000, "recap student selector never became clickable")
+      recapStudentOptions.first().click()
+    })
     // verify the audio comment count is greater than or equal to 1 for the default (Test Hero)
     element.all(by.css('.count-block.count-block__audio'))
       .count()
@@ -131,5 +117,17 @@ describe('Project Page as an owner using reading report: ', () => {
       .then((count) => {
           expect(count == 0).toBeTruthy('Audio count value on the reading report was supposed to change on student selection change')
       })
+  })
+
+  // close the report and make sure it closes
+  it("should close the report and make sure it closes", () => {
+    browser.executeScript('document.querySelector(".reading-recap").scrollTo(0,0);').then(function () {
+      // Close Reading Report
+      browser.wait(EC.elementToBeClickable(element(by.id("closeReadingRecap"))), 3000, "never saw close button")
+      element(by.id("closeReadingRecap")).click()
+    })
+
+    // Verify the Reading Report is closed
+    browser.wait(EC.invisibilityOf(element(by.id("readingReport"))), 3000, 'reading report never closed')
   })
 })

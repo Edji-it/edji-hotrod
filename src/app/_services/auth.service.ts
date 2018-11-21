@@ -780,10 +780,16 @@ export class AuthService implements CanActivate {
             }))
     }
 
-    public cancelHeroSubscription(subscriptionId: string) {
-        return this.legacyHttp.delete([this.baseUrl, 'api/v1/subscriptions', subscriptionId].join("/"), this.getOptions())
+    public cancelHeroSubscription(): Observable<any> {
+        return this._http.delete<any>(this.baseUrl + '/api/v1/stripe/subscriptions/',
+            {
+                headers: new HttpHeaders({
+                    'Content-Type': 'application/json',
+                    'Authorization': this.getToken()
+                })
+            })
             .pipe(map((res) => {
-                return res.json() || {}
+                return res || {}
             }))
     }
 
@@ -996,6 +1002,67 @@ export class AuthService implements CanActivate {
         } else {
             return 'new' + '_' + appVersion
         }
+    }
+
+    /**
+     * Returns customer information including subscriptions, but not payment source
+     * @param customer_id the customer ID from Stripe that we store on the user object
+     */
+    public getStripeCustomer(): Observable<any> {
+        return this._http.get<any>(this.baseUrl + "/api/v1/stripe/customers/",
+        {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+                'Authorization': this.getToken()
+            })
+        })
+        .pipe(map((customer) => {
+            return customer.customer
+        }))
+    }
+
+    /**
+     * Returns customer information including subscriptions, but not payment source
+     * @param customer_id the customer ID from Stripe that we store on the user object
+     */
+    public getStripeSubscriptions(): Observable<any> {
+        return this._http.get<any>(this.baseUrl + "/api/v1/stripe/subscriptions/",
+        {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+                'Authorization': this.getToken()
+            })
+        })
+        .pipe(map((subscriptions) => {
+            return subscriptions.subscriptions
+        }))
+    }
+
+    /**
+     * Reverses the cancellation in Stripe - only for active subscriptions
+     * New subscriptions need to route through the subscribeToHero method
+     */
+    public rejoinHero(): Observable<any> {
+        return this._http.put<any>(
+            this.baseUrl + '/api/v1/stripe/subscriptions',
+            {},
+            {
+                headers: new HttpHeaders({
+                    'Content-Type': 'application/json',
+                    'Authorization': this.getToken()
+                })
+            }
+        )
+        .pipe(map((res) => {
+            return res
+        }))
+    }
+
+    // Stripe sends the date back as the UTC Epoch, so we'll convert it here
+    public getStripeDate(utcSeconds: number): Date {
+        let date = new Date(0)
+        date.setUTCSeconds(utcSeconds)
+        return date
     }
 }
 

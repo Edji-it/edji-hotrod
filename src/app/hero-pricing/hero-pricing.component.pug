@@ -1,0 +1,120 @@
+#top
+nav-bar
+.jumbotron.jumbotron-fluid.jumbotron--clear
+  .container
+    .row
+      .col-md-12.col-lg-8
+        h1.display-3
+          | Go Hero, 
+          br
+          | Get More Edji
+        p.lead
+          | Edji's core set of features will stay open and freely available, but a Hero subscription supports Edji and unlocks even more abilities 
+          span([innerHtml]="':tada:' | emojione")
+.container
+  .row.align-items-center
+    .col-sm-4
+      .card.card-outline-secondary
+        .card-block
+          h2.card-title Edji Free
+          span.pricing Free
+          hr
+          p.card-text
+            | Edji Free is the basic Edji kit that allows teachers to give readings and generate engagement through comments.
+          label Who is it for?
+          p.card-text
+            | Teachers that want their class to read occasionally and see their thoughts.
+          a.btn.btn-primary.btn-lg.btn-block(*ngIf="!user || !user.isLoggedIn || !user.hero_status", [routerLink]="['/register']") 
+            | Register
+          a.btn.btn-primary.btn-lg.btn-block.disabled(*ngIf="user && user.isLoggedIn && user.hero_status", disabled) 
+            | {{ user.hero_status ? 'Included' : 'Current Plan'}}
+    .col-sm-4
+      .card.card-outline-danger
+        .card-block
+          img.card-img-top(src='/assets/images/hero-lg.png')
+          h2.card-title Edji Hero
+          //- $5<span class="small"> / month or </span>
+          span.pricing
+            | $5
+            span.small  / month
+          p.small Charged annually per teacher
+          hr
+          p.card-text Hero gives teachers powers to get the most out of readings. Get extra customization and lesson planning, plus an in depth view of each students’ reading activity.
+          label Who is it for?
+          p.card-text Teachers who want the most student engagement possible.
+          a.btn.btn-hero.btn-lg.btn-block(*ngIf="!user || !user.isLoggedIn || !user.hero_status", tabindex='1', (click)='goHero("pricingHeroCard")') Go Hero
+          a.btn.btn-hero.btn-lg.btn-block(*ngIf="user && user.isLoggedIn && user.hero_status", [routerLink]="['/account']", [innerHtml]="'Current Plan &nbsp;:tada:' | emojione")
+      .text-center.mt-3
+        a.btn.btn-link([routerLink]="['/hero']", fragment="top") Discover Hero!
+    .col-sm-4
+      .card.card-outline-secondary
+        .card-block
+          h2.card-title Hero Academy
+          span.pricing Contact Us
+          hr
+          p.card-text
+            | Academy is the easy way to get all your schools' teachers full access to Edji Hero features. Easily get teachers signed on and manage your Academy licenses.
+          label Who is it for?
+          p.card-text Teachers and Administrators who want to collaborate within their school.
+          button.btn.btn-primary.btn-lg.btn-block((click)="showRequestAcademyModal = true") Request More Info
+  .row.mt-4
+    .hero-rule
+  .row.no-gutters
+    .col-12
+      .my-2
+        h2 What's included?
+      .table-responsive
+        table.table.table-features
+          thead 
+            tr
+              th(scope="col", style="width:50%;") Feature
+              th.text-center(scope="col") Edji Free
+              th.text-center(scope="col") Edji Hero
+          tbody
+            ng-container(*ngFor="let feature of featureValues")
+              tr([class.row-hover]="feature.info",  (click)="feature.info ? triggerInfoModal(feature.info) : null")
+                td
+                  span([innerHtml]="feature.name + ' '")
+                  i.icon__tooltip(*ngIf="feature.info")
+                    span.icon.icon-circle.icon-info  i
+                  span.text-primary.learn-more.small Learn more
+                td.feature-check([innerHtml]="(feature.free ? ':white_check_mark:' : ':heavy_minus_sign:') | emojione")
+                td.feature-check([innerHtml]="':white_check_mark:' | emojione")
+  .row
+    .hero-rule
+.container-fluid
+  .row.navy.row-xl-pad.has-sparks
+      .sparks
+      .col-12.text-center
+        h1.big-light.on-dark(style="margin:0px;")
+          | Answer the Call
+        p.on-dark.mt-2.mb-4
+          | Engage your students, build super lessons, and support Edji
+        .button__row.pb-2
+            button#heroCTA.btn-lg.btn.btn-hero((click)='goHero("pricingLowerCTA")')
+              | Go Hero 
+              span(style='font-weight: 700;')
+hot-login-register.modal-will-fade(
+    [loginHeader]='"To go Hero, first you\'ll need an account"',
+    [class.show]='showLoginModal',
+    (closeModal)='showLoginModal = false',
+    (loginSuccess)='showHeroSubModal = true')
+hero-subscribe-modal.modal-will-fade([class.show]='showHeroSubModal', [goHeroLocation]="'heroPricingPage'", (closeModal)='showHeroSubModal = !showHeroSubModal', (heroWasBorn)="_router.navigate(['/dashboard'])")
+request-academy-modal.modal-will-fade(
+  [class.show]="showRequestAcademyModal",
+  (closeModal)="showRequestAcademyModal = false"
+)
+//- Feature Info Modal
+.modal(*ngIf="showInfoModal")
+  .modal-dialog.modal-lg
+    .modal-content
+      .modal-header
+        h5.modal-title {{ infoModalInfo.heading }}
+        button.close((click)="showInfoModal = false")
+          span(aria-hidden="true") &times;
+      .modal-body
+        .text-center
+          img.card.mb-4(style="display:inline-block; max-height: 500px;", [src]="infoModalInfo.image")
+        p([innerHtml]="infoModalInfo.description")
+      .modal-footer
+        .btn.btn-secondary((click)="showInfoModal = false") Close

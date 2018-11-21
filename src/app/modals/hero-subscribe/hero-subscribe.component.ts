@@ -2,10 +2,11 @@ import { Observable } from 'rxjs';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Angulartics2 } from 'angulartics2'
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
-import { debounceTime, map } from 'rxjs/operators'
+import { debounceTime, map, take } from 'rxjs/operators'
 
 // Project dependencies
 import { AuthService, BumblebeeService } from '../../_services'
+import { User } from 'src/app/shared/datatypes'
 
 declare var Stripe: any
 
@@ -28,9 +29,13 @@ export class HeroSubscribeComponent implements OnInit {
   public percentOff: number = 0
   public newPrice: number = 60
   public joiningAcademy: boolean = false
+  public currentUser: User
+  public previouslyCancelled: boolean = false
+  public resubscribeSent: boolean = false
   // private couponCode: string
 
   public sForm: FormGroup 
+  private subscriptions : any[] = []
 
   @Input()
   couponCode: string = ''
@@ -51,6 +56,19 @@ export class HeroSubscribeComponent implements OnInit {
   }
 
   ngOnInit() {
+    // get the user
+    this.subscriptions.push(
+      this._auth.currentUser.subscribe(
+        user => {
+          this.currentUser = user
+        }
+      ),
+      this._auth.getStripeSubscriptions().subscribe(
+        (subscriptions) => {
+          this.previouslyCancelled = this.activeSubscription(subscriptions)
+        }
+      )
+    )
     // Construct formgroup
     this.sForm = this.fb.group({
       couponCode: [
@@ -183,5 +201,40 @@ export class HeroSubscribeComponent implements OnInit {
         this.stripeMessage = 'There was an error processing your payment. Please try correcting your payment information, or <a href="mailto:support@edji.it" class="link">contact our support team</a>.'
         this._bumblebee.reportError(error)
       })
+  }
+
+  // a user that was previously a hero and cancelled will need to contact support to handle going hero again
+  public resumeHero(): void {
+    this.loading = true
+    this._auth.rejoinHero()
+    .subscribe(
+      data => {
+        // track user adding hero subscription in analytics
+        this.angulartics.eventTrack.next({ action: 'rejoinHero_promoPage_' + this.goHeroLocation, properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }})
+        this.userNowHero = true
+        this.loading = false
+        if (data.user) {
+          this._bumblebee.userHeroAction(data.user, "subscribed")
+        }
+      },
+      error => {
+        this.loading = false
+        this.stripeMessage = 'There was an error processing your payment. Please try correcting your payment information, or <a href="mailto:support@edji.it" class="link">contact our support team</a>.'
+        this._bumblebee.reportError(error)
+      })
+  }
+
+  // determines which goHero call we need to make
+  private activeSubscription(subscriptions: any): boolean {
+    // we need to both check if we have an active subscription and if not, what was the most recent cancellation
+    let len = subscriptions.length
+    for (var i=0; i<len; i++) {
+      let sub = subscriptions[i]
+      if (this._auth.getStripeDate(sub.current_period_end) > new Date()) {
+        // we have ourselves an active subsription! 
+        return true
+      }
+    }
+    return false
   }
 }

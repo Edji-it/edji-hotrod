@@ -5,11 +5,12 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 // Project Dependencies
 import { AuthService } from '../_services/auth.service';
 import { User } from '../shared/datatypes';
+import { EdjiDatePipe } from '../_pipes';
 
 @Component({
   selector: 'edji-account',
   styleUrls: ['./account.component.scss'],
-  templateUrl: './account.component.html'
+  templateUrl: './account.component.pug'
 })
 export class AccountComponent implements OnInit, OnDestroy {
 
@@ -19,82 +20,62 @@ export class AccountComponent implements OnInit, OnDestroy {
   The page for the user's account info. A profile page.
   */
   
-  public nameInitials  : string = "" // we gonna use these for the temp profile pic
-  public currentUser   : any
-  public expiring : boolean = false
-  public expired : boolean = false
-  public showPassModal : boolean = false
-  public showUploadProfPicModal : boolean = false
+  public nameInitials: string = "" // we gonna use these for the temp profile pic
+  public currentUser: any
+  public customerSubEnd: string = ""
+  public customerCancelDate: string = ""
+
+  public showPassModal: boolean = false
+  public showUploadProfPicModal: boolean = false
   public showHeroSubModal: boolean = false
   public showHeroChangeModal: boolean = false
 
-  private subscriptions : any[] = []
+  public canceled: boolean = false
+  public academyHero: boolean = false
 
-  // Feature flags
-  public heroAvailable: boolean = false
+  private subscriptions : any[] = []
 
   constructor(
     private _auth: AuthService, 
     private route: ActivatedRoute, 
     public _router: Router,
     private angulartics: Angulartics2
-  ) {
-    
+  ) { 
     this.nameInitials = "";
-  } // constructor
+  }
 
   ngOnInit() { 
-    // this._title.setTitle('Edji | "' + this.currentUser['fullname'] + '"');
     this.subscriptions.push(
       this._auth.currentUser.subscribe(
         user => {
           this.currentUser = user
-          if (this.currentUser.hero && this.currentUser.hero.will_expire) {
-            let expireDate = new Date(this.currentUser.hero.will_expire)
-            if ( expireDate.getTime() < Date.now()) {
-              this.expired = true
-            } else {
-              this.expiring = true
-            }
-          }
+          this.updateHeroStatus()
         }
       )
     )
-    
-    this.heroAvailable = true
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
+    this.subscriptions.forEach((sub) => { sub.unsubscribe() })
   }
 
-  public getUserInitials() : string 
-  {
-    var firstInitialPos;
-    var result;
-
-    result = "";
-    firstInitialPos = 0; // needed for creating name initials
-
-    this.currentUser = this._auth.getUser();
-
-    return result;
-  } // public getUserInitials : ()
+  public getUserInitials(): string {
+    var firstInitialPos
+    var result
+    result = ""
+    firstInitialPos = 0 // needed for creating name initials
+    return result
+  }
 
   // Accessor for user.avatar
   // Get the avatar from the user object
-  public getAvatar () : string
-  {
-    let avatar;
-    //console.log("[account.component.ts] Called getAvatar()!");
+  public getAvatar(): string {
+    let avatar
+    avatar = this.currentUser.avatar
+    return avatar
+  }
 
-    this.currentUser = this._auth.getUser();
-    avatar = this.currentUser.avatar;
-
-    return avatar;
-  } // public getAvatar () : any 
-
-  private trackHeroClick(): void {
+  public trackHeroClick(): void {
     // fire an analytic event here for tracking purposes
     this.angulartics.eventTrack.next({ 
       action: 'goHero_accountPage', 
@@ -104,4 +85,40 @@ export class AccountComponent implements OnInit, OnDestroy {
       }
     })
   }
-} // class
+
+  // Get customer info back from Stripe for renewal details and active subscription status
+  public updateHeroStatus(): void {
+    if (this.currentUser.stripe_customer_id) {
+      this._auth.getStripeSubscriptions().subscribe(
+        (subscriptions) => {
+          this.getSubscription(subscriptions)
+        }
+      )
+    } else if (this.currentUser.license_ids && this.currentUser.license_ids.length) {
+      this.academyHero = true
+    }
+  }
+
+  // get the latest active subscription
+  private getSubscription(subscriptions: any): void {
+    console.log(subscriptions)
+    // we need to both check if we have an active subscription and if not, what was the most recent cancellation
+    let len = subscriptions.length
+    let maxCancel = 0
+    for (var i=0; i<len; i++) {
+      let sub = subscriptions[i]
+      if (!sub.canceled_at) {
+        this.canceled = false
+        // we have ourselves an active subsription! Set the necessary variables for displaying useful info
+        this.customerSubEnd = this._auth.getStripeDate(sub.current_period_end).toString()
+        return
+      }
+      if (sub.canceled_at && sub.canceled_at > maxCancel) {
+        this.canceled = true
+        maxCancel = sub.canceled_at
+        this.customerCancelDate = this._auth.getStripeDate(maxCancel).toString()
+        this.customerSubEnd = this._auth.getStripeDate(sub.current_period_end).toString()
+      }
+    }
+  }
+}
