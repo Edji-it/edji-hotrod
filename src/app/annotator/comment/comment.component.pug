@@ -76,8 +76,9 @@
 //- Comments that are displayed in the comment pane
 hr.mobileBlock-hr(*ngIf="commentMobile && !commentMobileFirst && !readingReport")
 div(*ngIf="commentPaneActive", [id]="'comment-' + comment._id")
-    .comment-selected-highlight(*ngIf="comment && (comment.selected || comment.new)")
-        .comment-selected-dot__mobile
+    //- We are removing this dot indicator for now
+    //- .comment-selected-highlight(*ngIf="comment && (comment.selected || comment.new)")
+    //-     .comment-selected-dot__mobile
     #comment.comment.mobileBound(
         [class.new]="comment.new",
         [class.saved]="justSaved",
