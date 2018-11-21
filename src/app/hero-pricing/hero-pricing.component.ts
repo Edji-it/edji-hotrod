@@ -4,6 +4,8 @@ import { Component, OnInit } from '@angular/core';
 // Project Dependencies
 import { AuthService } from '../_services';
 import { Subscription } from 'rxjs';
+import { User } from '../shared/datatypes';
+import { Angulartics2 } from 'angulartics2';
 @Component({
   selector: 'hero-pricing',
   templateUrl: './hero-pricing.component.pug',
@@ -11,10 +13,11 @@ import { Subscription } from 'rxjs';
 })
 export class HeroPricingComponent implements OnInit {
 
-  public user = {}
+  public user: User = <any>{}
   public showLoginModal: boolean
   public showHeroSubModal: boolean
   public showInfoModal: boolean
+  public showRequestAcademyModal: boolean
   public infoModalInfo: { heading?: string, description?: string, image?: string } = {}
 
   public featureValues = [
@@ -112,7 +115,12 @@ export class HeroPricingComponent implements OnInit {
 
   private subscriptions: Subscription[] = []
 
-  constructor(public _router: Router, private _auth: AuthService, private route: ActivatedRoute) { }
+  constructor(
+      public _router: Router, 
+      private _auth: AuthService, 
+      private route: ActivatedRoute,
+      private angulartics: Angulartics2
+    ) { }
 
   ngOnInit() {
     // Workaround for handling "jump to" fragment/anchor
@@ -128,12 +136,13 @@ export class HeroPricingComponent implements OnInit {
     )
   }
 
-  goHero(): void {
+  goHero(location?: string): void {
     if (this._auth.getUser().isLoggedIn) {
       this.showHeroSubModal = true
     } else {
       this.showLoginModal = true
     }
+    this.angulartics.eventTrack.next({ action: 'goHero_promoPage_' + location, properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }})
   }
 
   public triggerInfoModal(info: { heading: string, description: string, image: string }): void {
