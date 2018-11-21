@@ -32,8 +32,6 @@ export class HeroSubscribeComponent implements OnInit {
   public currentUser: User
   public previouslyCancelled: boolean = false
   public resubscribeSent: boolean = false
-  public resubMessage: string
-  public resubSuccess: string
   // private couponCode: string
 
   public sForm: FormGroup 
@@ -63,9 +61,11 @@ export class HeroSubscribeComponent implements OnInit {
       this._auth.currentUser.subscribe(
         user => {
           this.currentUser = user
-          if (user.hero_cancelled) {
-            this.previouslyCancelled = true
-          }
+        }
+      ),
+      this._auth.getStripeSubscriptions().subscribe(
+        (subscriptions) => {
+          this.previouslyCancelled = this.activeSubscription(subscriptions)
         }
       )
     )
@@ -206,43 +206,35 @@ export class HeroSubscribeComponent implements OnInit {
   // a user that was previously a hero and cancelled will need to contact support to handle going hero again
   public resumeHero(): void {
     this.loading = true
-    // Add Request type
-    let content = {content: "I'd Like to Resubscribe to Edji Hero"}
-    content.content += "\nStripe Customer ID: " + this.currentUser.stripe_customer_id
-    content['name'] = this.currentUser.fullname
-    content['email'] = this.currentUser.email
-
-    // Only send the user properties we need to bumblebee
-    var userSend: any = {
-      username: this.currentUser.username,
-      fullname: this.currentUser.fullname,
-      email: this.currentUser.email,
-      createdAt: this.currentUser.createdAt,
-      updatedAt: this.currentUser.updatedAt,
-      hero: this.currentUser.hero_status
-    }
-
-    let data: any = {
-      emailSubject: "Hero ReSubscribe Request",
-      formInfo: content,
-      type: "feedback",
-      user: userSend
-    }
-
-    this._bumblebee.sendFeedback(data).pipe(take(1)).subscribe(
-      (res) => {
-        this.angulartics.eventTrack.next({ 
-          action: 'heroRequest_heroModal_submitted', 
-          properties: { category: this._auth.setAnalyticEventCategory(), 
-          label: this._auth.setAnalyticEventLabel() }}
-        )
-        this.resubscribeSent = true
-        this.resubSuccess = "Your request was sent to the Edji support team"
+    this._auth.rejoinHero()
+    .subscribe(
+      data => {
+        // track user adding hero subscription in analytics
+        this.angulartics.eventTrack.next({ action: 'rejoinHero_promoPage_' + this.goHeroLocation, properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }})
+        this.userNowHero = true
+        this.loading = false
+        if (data.user) {
+          this._bumblebee.userHeroAction(data.user, "subscribed")
+        }
       },
-      (err) => {
-        console.error(err)
-        this.resubMessage = 'There was an error processing your request. Please try <a href="mailto:support@edji.it" class="link">contacting the Edji support team directly</a>.'
+      error => {
+        this.loading = false
+        this.stripeMessage = 'There was an error processing your payment. Please try correcting your payment information, or <a href="mailto:support@edji.it" class="link">contact our support team</a>.'
+        this._bumblebee.reportError(error)
+      })
+  }
+
+  // determines which goHero call we need to make
+  private activeSubscription(subscriptions: any): boolean {
+    // we need to both check if we have an active subscription and if not, what was the most recent cancellation
+    let len = subscriptions.length
+    for (var i=0; i<len; i++) {
+      let sub = subscriptions[i]
+      if (this._auth.getStripeDate(sub.current_period_end) > new Date()) {
+        // we have ourselves an active subsription! 
+        return true
       }
-    )
+    }
+    return false
   }
 }
