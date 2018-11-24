@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import { Observable, Subject, of } from 'rxjs';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Angulartics2 } from 'angulartics2'
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
@@ -133,7 +133,11 @@ export class HeroSubscribeComponent implements OnInit {
     // Reset variables
     this.joiningAcademy = false
     this.percentOff = 0
-    return this._auth.validateHeroCoupon(coupon)
+    // Don't bother checking empty coupons
+    if (!coupon || coupon.length < 1) {
+      return of({ invalid: true })
+    } else {
+      return this._auth.validateHeroCoupon(coupon)
       .pipe(
         debounceTime(1000),
         map(
@@ -152,6 +156,7 @@ export class HeroSubscribeComponent implements OnInit {
           return { invalid: true }
         }
       ))
+    }
   }
 
   private checkout() {
