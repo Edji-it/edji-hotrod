@@ -7,7 +7,7 @@ import { IMultiSelectOption, IMultiSelectSettings } from '../_directives'
 import { take } from 'rxjs/operators'
 
 import { AuthService, ProjectService, ReadingService, UtilToolService, AcademyService } from '../_services'
-import { EdjiComment, EdjiQuestion, User, Project } from '../shared/datatypes'
+import { EdjiComment, EdjiQuestion, User, Project, Reading } from '../shared/datatypes'
 import { ReadingShareObject } from './../shared/nav-bar'
 import * as Rangy from 'rangy'
 import { Subscription } from 'rxjs';
@@ -26,7 +26,7 @@ export class NewReadingPage implements OnInit {
     public submitted: boolean = false
     public isDraft: boolean = true
     public readingId: any = ""
-    public reading: any = {}
+    public reading: Reading = <Reading>{}
     public projects: any[] = []
     public questions: any[] = []
     public insertOptionShow: boolean
@@ -209,7 +209,7 @@ export class NewReadingPage implements OnInit {
                             subjects: this.reading.subjects,
                             grade_levels: this.reading.grade_levels,
                             source: this.reading.source,
-                            public: this.reading.public.toString(),
+                            public: this.reading.public ? this.reading.public.toString() : 'false',
                             instructions: this.reading.instructions
                         });
                         this.versionId = this.reading.version_id;
