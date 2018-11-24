@@ -392,7 +392,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             html.offsetHeight 
         )
         // Extrapolate a value for document height based on total words and words already rendered with the current height
-        this.currentDocHeight = (height*this.reading.words.length)/this.lastWord
+        if (this.reading && this.reading.words) {
+            this.currentDocHeight = (height*this.reading.words.length)/this.lastWord
+        }
     }
 
     // Updates OGP
