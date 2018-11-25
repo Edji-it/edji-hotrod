@@ -1042,9 +1042,9 @@ export class AuthService implements CanActivate {
      * Reverses the cancellation in Stripe - only for active subscriptions
      * New subscriptions need to route through the subscribeToHero method
      */
-    public rejoinHero(): Observable<any> {
+    public rejoinHero(subscription_id: string): Observable<any> {
         return this._http.put<any>(
-            this.baseUrl + '/api/v1/stripe/subscriptions',
+            this.baseUrl + '/api/v1/stripe/subscriptions/' + subscription_id,
             {},
             {
                 headers: new HttpHeaders({

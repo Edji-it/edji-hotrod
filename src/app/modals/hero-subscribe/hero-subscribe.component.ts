@@ -32,6 +32,7 @@ export class HeroSubscribeComponent implements OnInit {
   public currentUser: User
   public previouslyCancelled: boolean = false
   public resubscribeSent: boolean = false
+  public subscription_id: string = ''
   // private couponCode: string
 
   public sForm: FormGroup 
@@ -206,22 +207,24 @@ export class HeroSubscribeComponent implements OnInit {
   // a user that was previously a hero and cancelled will need to contact support to handle going hero again
   public resumeHero(): void {
     this.loading = true
-    this._auth.rejoinHero()
-    .subscribe(
-      data => {
-        // track user adding hero subscription in analytics
-        this.angulartics.eventTrack.next({ action: 'rejoinHero_promoPage_' + this.goHeroLocation, properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }})
-        this.userNowHero = true
-        this.loading = false
-        if (data.user) {
-          this._bumblebee.userHeroAction(data.user, "subscribed")
-        }
-      },
-      error => {
-        this.loading = false
-        this.stripeMessage = 'There was an error processing your payment. Please try correcting your payment information, or <a href="mailto:support@edji.it" class="link">contact our support team</a>.'
-        this._bumblebee.reportError(error)
-      })
+    if (this.subscription_id) {
+      this._auth.rejoinHero(this.subscription_id)
+      .subscribe(
+        data => {
+          // track user adding hero subscription in analytics
+          this.angulartics.eventTrack.next({ action: 'rejoinHero_promoPage_' + this.goHeroLocation, properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }})
+          this.userNowHero = true
+          this.loading = false
+          if (data.user) {
+            this._bumblebee.userHeroAction(data.user, "subscribed")
+          }
+        },
+        error => {
+          this.loading = false
+          this.stripeMessage = 'There was an error processing your payment. Please try correcting your payment information, or <a href="mailto:support@edji.it" class="link">contact our support team</a>.'
+          this._bumblebee.reportError(error)
+        })
+    }
   }
 
   // determines which goHero call we need to make
@@ -231,6 +234,7 @@ export class HeroSubscribeComponent implements OnInit {
     for (var i=0; i<len; i++) {
       let sub = subscriptions[i]
       if (this._auth.getStripeDate(sub.current_period_end) > new Date()) {
+        this.subscription_id = sub.id
         // we have ourselves an active subsription! 
         return true
       }
