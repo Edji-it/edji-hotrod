@@ -134,6 +134,8 @@ a.w {
 
 // Styles for commenting
 .active-content {
+	@extend %canSelectText;
+
 	& .w.img {
 		display: block;
 		margin: 6px auto;

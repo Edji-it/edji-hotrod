@@ -15,6 +15,7 @@ export interface BaseReading {
   html?: string,
   words?: any[],
   title: string,
+  instructions?: string,
   owner_id?: string,
   teacher_ids?: string[],
   public?: boolean,
@@ -22,10 +23,13 @@ export interface BaseReading {
   source?: string,
   cover_img?: string,
   draft: boolean,
+  parent_id?: string,
   version_id?: string,
   _id: string,
   questions?: EdjiQuestion[],
   grade_levels?: number[],
   subjects?: string[],
-  heroic?: boolean
+  heroic?: boolean,
+  createdAt?: string,
+  updatedAt?: string
 }

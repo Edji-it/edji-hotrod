@@ -120,7 +120,7 @@ scroll-progress([scrollProgress]="currentScroll")
                     (mouseleave)='unfocusHighlight(comment.start, comment.end, comment.loc)',
                     [readOnly]="comment.user_id !== user._id",
                     [userPermission]="getCommentPermissions(comment)",
-                    [isActive]="comment.active",
+                    [isActive]="comment.active ? true : false",
                     (commentActivation)="setActiveCommentByIndex($event, i, ci)",
                     (commentDeleted)="removeComment(comment, i, ci)",
                     (commentDeactivate)="unfocusHighlight($event.start, $event.end)",
@@ -226,8 +226,8 @@ emoji-keyboard(
 
 //- comment-pane
 comment-pane(
-    [isActive]="selectedComment.active",
-    [isSelected]="selectedComment.selected",
+    [isActive]="selectedComment.active ? true : false",
+    [isSelected]="selectedComment.selected ? true : false",
     [comment]="selectedComment",
     (hideComment)="toggleCommentPane(false)",
     (commentActivationMobile)="setActiveCommentByIndex($event.activate, $event.wi, $event.ci, $event.activatedComment)",

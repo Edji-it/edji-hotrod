@@ -1,7 +1,7 @@
 import { Project, User } from '../datatypes'
 import { Subscription } from 'rxjs'
 import { CommentPermissions, EdjiComment } from '../datatypes/index'
-import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core'
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
 
 // Project Dependencies
 import { AuthService, ProjectService, CommentService, SocketService } from '../../_services'
@@ -14,7 +14,6 @@ import { Angulartics2 } from 'angulartics2';
 export class CommentPaneComponent implements OnInit, OnDestroy {
 
   // General variables for the comment pane component
-  public commentPane: boolean
   public lineNum: number = 0
   public commentCount: number = 0
   public rowComments: EdjiComment[][] = []
@@ -42,7 +41,7 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
       
       // if the comment is new, let's adjust the scroll position if there are a ton of comments
       if (this.comment.new) {
-        this.scrollAdjust(this.comment)
+        this.scrollToComment(this.comment)
       }
     } 
   }
@@ -54,7 +53,7 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
       
       // if the comment was selected then we'll need to scroll to it, but not activate it
       if (this.comment.selected) {
-        this.scrollAdjust(this.comment)
+        this.scrollToComment(this.comment)
       }
     } 
   }
@@ -64,6 +63,8 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
   @Output() commentActivationMobile = new EventEmitter<any>()
   @Output() commentUpdated: EventEmitter<any> = new EventEmitter()
   @Output() commentReply = new EventEmitter()
+
+  @ViewChild('commentPane') private commentPane: ElementRef;
 
   constructor(
       private _projects: ProjectService,
@@ -142,12 +143,19 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
     document.body.classList.remove("body__lock-scroll")
   }
 
-  scrollAdjust(targetComment: EdjiComment) {
+  /**
+   * Scroll to Comment
+   * @param targetComment Comment to scroll to
+   */
+  scrollToComment(targetComment: EdjiComment) {
     setTimeout(() => {
       let commentEl = document.getElementById('comment-'+targetComment._id)
-      commentEl.scrollIntoView()
-      // Offset for comment pane sticky header (60px) and nav bar (70px), and a lil padding
-      document.querySelector('.sliding-pane-comment').scrollTop -= 150
+      // Found comment, scroll!
+      if (commentEl && commentEl.scrollIntoView) {
+        commentEl.scrollIntoView()
+        // Offset for comment pane sticky header (60px) and nav bar (70px), and a lil padding
+        this.commentPane.nativeElement.scrollTop -= 150
+      }
     }, 1)
   }
 
@@ -170,7 +178,7 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
       }
 
       if (comment && comment.type==='emoji') {
-        this.scrollAdjust(comment)
+        this.scrollToComment(comment)
       }
       this.commentActivationMobile.emit({activate: shouldActivate, wi: wordIndex, ci: commentIndex, activatedComment: comment})
     } else {

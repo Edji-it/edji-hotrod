@@ -21,8 +21,17 @@ $seamlessPlaceholderColor: #cdcdcd;
 
 
 %noSelect {
+	user-select: none;
 	-webkit-user-select: none;
 	-moz-user-select: none;
+	-ms-user-select: none;
+}
+
+%canSelectText {
+	user-select: text;
+	-webkit-user-select: text;
+	-moz-user-select: text;
+	-ms-user-select: text;
 }
 
 /**
