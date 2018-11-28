@@ -101,7 +101,7 @@ export class RegisterPageComponent implements OnInit, OnDestroy {
     this._locker.set("referral_id", referralId)
     // We're going to ask the server to get the user that referred this new one so we can show a name
     this.subscriptions.push(
-      this._auth.getUserByReferralId(this.referralId)
+      this._auth.getUserByReferralId(referralId)
       .subscribe((user) => {
         this.referringUserName = user.fullname
       }, (err) => {
