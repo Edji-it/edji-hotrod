@@ -101,7 +101,6 @@ export class AccountComponent implements OnInit, OnDestroy {
 
   // get the latest active subscription
   private getSubscription(subscriptions: any): void {
-    console.log(subscriptions)
     // we need to both check if we have an active subscription and if not, what was the most recent cancellation
     let len = subscriptions.length
     let maxCancel = 0

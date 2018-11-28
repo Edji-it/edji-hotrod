@@ -6,6 +6,7 @@ $modalBorderRadius: 8px;
 $modalBodyBg: #fff;
 
 .modal-will-fade {
+
   &, .modal {
     opacity: 0;
     pointer-events: none;
@@ -37,6 +38,9 @@ $modalBodyBg: #fff;
   display: flex;
   align-items: center;
   transition: background ease-in 0.3s;
+
+  // Safari rendering fix
+  transform: translateZ(0px);
 }
 
 .modal-dialog {

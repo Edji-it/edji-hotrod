@@ -16,8 +16,6 @@ import {
 } from '../_services' 
 import { CommentPermissions, EdjiComment, Project, Reading, Feedback } from './../shared/datatypes'
 
-declare var window: any
-
 @Component({
     selector: 'annotator',
     templateUrl: './annotator.component.pug',
@@ -167,6 +165,19 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     scrollUpdate(event) {
         this.onScrollUpdate()
         this.currentScroll = (document.documentElement.scrollTop / ( document.body.scrollHeight - window.innerHeight ) ) * 100
+    }
+
+    /**
+     * Handle Window Resize
+     * - Content reflows impact positioning of comments and other variables we calculate
+     */
+    @HostListener('window:resize') onResize() {
+        // Line counts need to be re-rendered when text reflows
+        this.updateImageHeights()
+        this.setLinePositions()
+        // Update scroll progress on resize
+        this.currentDocHeight = 0
+        this.preScrollHeightUpdate()
     }
     
     ngOnInit() {
@@ -337,15 +348,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             this.setLinePositions()
         }, 3000)
        
-        // Line counts need to be re-rendered when text reflows
-        window.onresize = () => {
-            this.updateImageHeights()
-            this.setLinePositions()
-            // Update scroll progress on resize
-            this.currentDocHeight = 0
-            this.preScrollHeightUpdate()
-        }
-
         // Only supported by modern browsers, but very reliable in those cases
         document.addEventListener("selectionchange", (event) => {
             if(!this.optionsShow) {
@@ -389,8 +391,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             html.scrollHeight, 
             html.offsetHeight 
         )
-        // Extrapolate a value for document height based on total words and words already rednered with the current height
-        this.currentDocHeight = (height*this.reading.words.length)/this.lastWord
+        // Extrapolate a value for document height based on total words and words already rendered with the current height
+        if (this.reading && this.reading.words) {
+            this.currentDocHeight = (height*this.reading.words.length)/this.lastWord
+        }
     }
 
     // Updates OGP
@@ -929,11 +933,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         }
         return classString + ' h-' + highlightCount
     }
-
-    // private imageCommentOptions(imageIndex: number, event: Event) : void {
-        
-    //     this.showCommentOptions(event)
-    // }
 
     /** Used to determine which level of permission the user has for a specific comment
      * @param comment A comment object

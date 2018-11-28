@@ -192,7 +192,8 @@ export class CommentComponent implements OnInit, OnDestroy {
       let firstWordTop: number = firstWord.getBoundingClientRect().bottom
 
       // This will need to re-decorate on resize
-      if (this.comment.loc && this.comment.loc.y && this.comment.text === "") {
+      if (commentImage && this.comment.loc && this.comment.loc.y && this.comment.text === "") {
+          // Set comment on image position
           this.setLineYAttempts = 0
           let imageTop: number = commentImage.getBoundingClientRect().top
           let imageHeight = commentImage.clientHeight
@@ -205,6 +206,7 @@ export class CommentComponent implements OnInit, OnDestroy {
           imageOffset = this.nearestLine(imageOffset)
           this.comment.lineY = imageY + imageOffset
       } else {
+          // Set comment on text position
           let wordY = commentWord.getBoundingClientRect().bottom
           wordY = wordY - firstWordTop
           this.comment.lineY = this.nearestLine(wordY)

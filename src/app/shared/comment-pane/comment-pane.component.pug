@@ -1,4 +1,4 @@
-.sliding-pane-comment.from-left(*ngIf="visible", [ngClass]="[ visible ? 'slide-in' : '' ]", style="z-index: 5999;")
+.sliding-pane-comment.from-left(*ngIf="visible", #commentPane="", [ngClass]="[ visible ? 'slide-in' : '' ]", style="z-index: 5999;")
   .sliding-pane-comment__header.container-fluid
     .row
       .col-12

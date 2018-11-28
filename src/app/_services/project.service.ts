@@ -403,7 +403,7 @@ export class ProjectService {
     } // public addCommentToReplies(comment: EdjiComment): void 
 
     public removeCommentFromReplies(comment: EdjiComment) : void {
-        if (comment.reply_to) {
+        if (comment.reply_to && this.repliesByIdSource[comment.reply_to]) {
             for (let i = 0; i < this.repliesByIdSource[comment.reply_to].length; i++){
                 if (this.repliesByIdSource[comment.reply_to][i]._id === comment._id) {
                     this.repliesByIdSource[comment.reply_to].splice(i, 1)

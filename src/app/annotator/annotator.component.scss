@@ -16,6 +16,9 @@ $midGray: #f7f7f7;
 	-o-transition: opacity 250ms, margin 250ms;
 	transition: opacity 250ms, margin 250ms;
 
+    // Safari rendering fix
+    transform: translateZ(1px);
+    
 	position: absolute;
 	left: -6px;
 	top: -999px;
