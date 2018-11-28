@@ -98,7 +98,7 @@ export class RegisterPageComponent implements OnInit, OnDestroy {
    */
   setReferral(referralId: string) : void {
     // Store the referral_id in the locker in case the user signs up with oauth
-    this._locker.set("referral_id", this.referralId)
+    this._locker.set("referral_id", referralId)
     // We're going to ask the server to get the user that referred this new one so we can show a name
     this.subscriptions.push(
       this._auth.getUserByReferralId(this.referralId)
