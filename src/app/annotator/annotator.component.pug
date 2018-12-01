@@ -14,29 +14,27 @@ scroll-progress([scrollProgress]="currentScroll")
         (blur)="hideCommentOptions($event)",
         [style.top]="highlightY + 'px'",
         [ngClass]="{ 'active' : optionsShow }"
-    )
+    ) 
+        //- optionsShow
         //- Desktop buttons
         .options.hidden-md-down
             //- Emoji Comment
             button#addEmojiComment.emoji(
                 *ngIf="project.types.indexOf('emoji') > -1",
-                (touchstart)="addCommentOfType('emoji')",
-                (mousedown)="addCommentOfType('emoji')"
+                (tap)="addCommentOfType('emoji')"
             )
                 i.icon.icon-emoji-comment
             //- Text Comment
             button#addTextComment.emoji(
                 *ngIf="project.types.indexOf('text') > -1",
-                (touchstart)="addCommentOfType('text')",
-                (mousedown)="addCommentOfType('text')"
+                (tap)="addCommentOfType('text')"
             )
                 i.icon.icon-text-comment
             //- Audio Comment
             button#addAudioComment.emoji(
                 *ngIf="project.types.indexOf('audio') > -1",
                 [class.super-disabled]="audioSupportError",
-                (touchstart)="addCommentOfType('audio')",
-                (mousedown)="addCommentOfType('audio')",
+                (tap)="addCommentOfType('audio')"
             )
                 i.icon.icon-mic
                 span.beta-tag--icon(title="Beta Feature: May not work on all devices.")
@@ -50,8 +48,7 @@ scroll-progress([scrollProgress]="currentScroll")
                     *ngIf="project.types.indexOf('emoji') > -1",
                     [ngClass]="'col-' + (12 / directCommentOptions.length)", 
                     [class.btn-show--animation]="optionsShow",
-                    (touchstart)="addCommentOfType('emoji')",
-                    (mousedown)="addCommentOfType('emoji')"
+                    (tap)="addCommentOfType('emoji')"
                 )
                     button.emoji.comment__options--mobileButton()
                         i.icon.icon-emoji-comment
