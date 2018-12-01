@@ -998,7 +998,11 @@ export class AuthService implements CanActivate {
     public setAnalyticEventLabel(): string {
         let user = this.getUser()
         if (user._id) {
-            return user._id + '_' + appVersion
+            if (user.school_name) {
+                return user._id + '_' + appVersion + '_' + user.school_name
+            } else {
+                return user._id + '_' + appVersion
+            }
         } else {
             return 'new' + '_' + appVersion
         }
