@@ -507,7 +507,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             if (this.guideStepNo < 2) {
                 this.guideStepNo = 2
             }
-        } else if (event.type == "touchend" && target.getAttribute && target.getAttribute('index')) {
+        } else if (event.type == "tap" && target.getAttribute && target.getAttribute('index')) {
             console.log("Word index: ", target, target.getAttribute('index'))
             let wordI = parseInt(target.getAttribute('index'))
             let prevAnchor = this.quickSelect.anchor
