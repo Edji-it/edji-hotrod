@@ -97,6 +97,7 @@ scroll-progress([scrollProgress]="currentScroll")
             (mouseup)="showCommentOptions($event)",
             (touchend)="showCommentOptions($event)",
             (clickOutside)="hideCommentOptions()",
+            [ngClass]="[ quickSelect.anchor ? 'quick-select--begin' : '', quickSelect.focus ? 'quick-select--end':'']"
             #article
         )
             //- Reading Group Instructions

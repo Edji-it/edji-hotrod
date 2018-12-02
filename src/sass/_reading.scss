@@ -437,20 +437,80 @@ $nextB: 68;
 }
 
 $commentFadeOpacity: 0.35;
+$hoverBlue: #c4e4ff;
+$quickBlue: #55aef7;
+
+@keyframes material-ripple {
+	0% {
+		background-size: auto 100%;
+	}
+	80% {
+		background: $hoverBlue radial-gradient(circle, $quickBlue 1%, $quickBlue 5%, transparent 5%) center;
+		background-size: auto 10000%;
+	}
+	81% {
+		background: $quickBlue;
+		background-color: $quickBlue;
+	}
+	100% {
+		background-size: auto 10000%;
+		background-color: $hoverBlue;
+	}
+}
+
+
+.w {
+	background-position: center;
+
+	&:hover {
+		cursor: pointer;
+		border-bottom: $focusUnderlineWidth solid $hoverBlue; 
+	}
+
+	&.quick-select--click {
+		background-size: auto 100%;
+		background-repeat: no-repeat;
+		background: $hoverBlue radial-gradient(circle, $quickBlue 1%, $quickBlue 5%, transparent 5%) center;
+		animation: material-ripple 300ms;
+		animation-fill-mode: forwards;
+		animation-timing-function: linear;
+	}
+}
+
 
 // Focus Highlight styles (for on comment hover)
 article.content .w.h-f {
 	// background: blue;
+	transition: background-color linear 400ms;
 	border-bottom: $focusUnderlineWidth solid #969696; 
+	// overflow: hidden;
 
 	&.img {
-		border-color: transparent;
+		background: transparent !important;
+		border-color: transparent !important;
+
+		&:hover, &:focus, &:active {
+			border-color: transparent !important;
+		}
 
 		& .hotspot:not(.focused) {
 			opacity: 0.4;
 		}
 	}
 }
+
+article.content {
+	&.quick-select--begin .w.h-f {
+		border-color: $quickBlue;
+		background-color: $hoverBlue;
+	}
+
+	&.quick-select--end .w.h-f {
+		border-color: $quickBlue; 
+		background-color: $hoverBlue;
+	}
+}
+
 
 .reading-page {
 	transition: transform $slidingPaneTime linear;

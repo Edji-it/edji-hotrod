@@ -507,7 +507,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             if (this.guideStepNo < 2) {
                 this.guideStepNo = 2
             }
-        } else if (event.type == "touchend" && target.getAttribute && target.getAttribute('index')) {
+        } else if ((event.type == "touchend" || event.type == "mouseup") && target.getAttribute && target.getAttribute('index')) {
             console.log("Word index: ", target, target.getAttribute('index'))
             let wordI = parseInt(target.getAttribute('index'))
             let prevAnchor = this.quickSelect.anchor
@@ -1000,6 +1000,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // Apply focus class to words of focused comments
         if (this.focusArray[i]) {
             classString = 'h-f'
+        }
+        // 
+        if (i == this.quickSelect.focus || i == this.quickSelect.anchor) {
+            classString += ' quick-select--click'
         }
         return classString + ' h-' + highlightCount
     }
