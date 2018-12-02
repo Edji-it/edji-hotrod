@@ -95,7 +95,7 @@ scroll-progress([scrollProgress]="currentScroll")
         //- Create components after load for reading
         article#annotatorContent.content.active-content.pt-4(
             (mouseup)="showCommentOptions($event)",
-            (touchend)="showCommentOptions($event)",
+            (tap)="showCommentOptions($event)",
             (clickOutside)="hideCommentOptions()",
             [ngClass]="[ quickSelect.anchor ? 'quick-select--begin' : '', quickSelect.focus ? 'quick-select--end':'']"
             #article
