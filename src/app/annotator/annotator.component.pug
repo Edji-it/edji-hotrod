@@ -93,13 +93,15 @@ scroll-progress([scrollProgress]="currentScroll")
                 | Google Chrome Web Browser
             | for your desktop device.
         //- Create components after load for reading
+        //- Note: -1 tabindex for disabling "Touch to Search" on mobile https://developers.google.com/web/updates/2015/10/tap-to-search
         article#annotatorContent.content.active-content.pt-4(
             (mouseup)="showCommentOptions($event)",
             (touchstart)="logScrollStart($event)",
             (touchend)="showCommentOptions($event)",
             (clickOutside)="hideCommentOptions()",
             [ngClass]="[ quickSelect.anchor != null ? 'quick-select--begin' : '', quickSelect.focus != null ? 'quick-select--end':'']"
-            #article
+            #article,
+            tabindex="-1"
         )
             //- Reading Group Instructions
             .row.lesson-block(*ngIf="project.group_instructions && project.group_instructions.length > 1")

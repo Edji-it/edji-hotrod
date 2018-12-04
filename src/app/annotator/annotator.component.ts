@@ -853,12 +853,12 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         let start : number
         let end : number
 
-        if (this.quickSelect.anchor != null) {
+        if (this.quickSelect.anchor) {
             // Quick Select Selection (Underline)
             start = this.quickSelect.anchor
             end = this.quickSelect.focus != null ? this.quickSelect.focus : start
             this.quickSelect.focus = null
-            this.quickSelect.anchor != null = null
+            this.quickSelect.anchor = null
         } else {
             // Browser API selection
             let selection = Rangy.getSelection()
