@@ -583,10 +583,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             if (prevAnchor == null && prevFocus == null) {
                 this.quickSelect.anchor = wordI
                 this.focusHighlight(wordI, wordI)
-            } else if (prevAnchor && prevFocus == null) {
+            } else if (prevAnchor != null && prevFocus == null) {
                 this.quickSelect.focus =  wordI
                 this.focusHighlight(prevAnchor, wordI)
-            } else if (prevAnchor && prevFocus) {
+            } else if (prevAnchor != null && prevFocus != null) {
                 // Restart focusing
                 this.unfocusHighlight(prevAnchor, prevFocus)
                 this.quickSelect.anchor = wordI
@@ -853,9 +853,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         let start : number
         let end : number
 
-        if (this.quickSelect.anchor) {
+        if (this.quickSelect.anchor != null) {
             // Quick Select Selection (Underline)
-            start = this.quickSelect.anchor != null
+            start = this.quickSelect.anchor
             end = this.quickSelect.focus != null ? this.quickSelect.focus : start
             this.quickSelect.focus = null
             this.quickSelect.anchor != null = null
