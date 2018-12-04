@@ -433,8 +433,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
     clearQuickSelect() : void {
         if (this.quickSelect.anchor != null) {
-            let focus = this.quickSelect.focus != null ? this.quickSelect.focus : this.quickSelect.anchor
-            this.unfocusHighlight(this.quickSelect.anchor, focus)
+            // We can safely clear all highlight values
+            this.focusArray = []
         }
         this.quickSelect.focus = null
         this.quickSelect.anchor = null
@@ -511,6 +511,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
          * Handle creating selection and coordinates for comments on images
          */
         if (target.classList && target.classList.contains('reading-image') && target['parentNode']) {
+            // When tapping image, clear in progress Quick Select
+            this.clearQuickSelect()
             // when they click the picture, we need to create the selection for them
             this.imageCoords = this.getRelativeCoords(event)
             let range = Rangy.createRange()
@@ -579,6 +581,12 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             let prevAnchor = this.quickSelect.anchor
             let prevFocus = this.quickSelect.focus
             let focusY
+
+            // If tapped word is space, select next word
+            let wordText = (target.innerText || '').trim()
+            if (wordText.length < 1) {
+                wordI--
+            }
 
             if (prevAnchor == null && prevFocus == null) {
                 this.quickSelect.anchor = wordI
