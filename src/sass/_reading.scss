@@ -116,7 +116,10 @@ article.content {
 
 a.w {
 	padding-top: 0px !important;
-	border-bottom: none;
+	border-bottom: 0px solid transparent !important;
+	// &:hover, &:focus {
+	// 	border-bottom: none !important;
+	// }
 	&:after {
 		display: none;
 	}
@@ -440,6 +443,9 @@ $commentFadeOpacity: 0.35;
 $hoverBlue: #c4e4ff;
 $quickBlue: #55aef7;
 
+/**
+ * WIP: Does not work on iOS Safari
+ **/
 @keyframes material-ripple {
 	0% {
 		background-size: auto 100%;
@@ -458,6 +464,18 @@ $quickBlue: #55aef7;
 	}
 }
 
+@keyframes quick-select-pulse {
+	0% {
+		background-color: $hoverBlue;
+	}
+	30% {
+		background-color: $quickBlue;
+	}
+	100% {
+		background-color: $hoverBlue;
+	}
+}
+
 
 .w {
 	background-position: center;
@@ -467,23 +485,18 @@ $quickBlue: #55aef7;
 		border-bottom: $focusUnderlineWidth solid $hoverBlue; 
 	}
 
-	&.quick-select--click {
+	// "h-f" is also needed because it takes longer to apply than the quick select class
+	&.h-f.quick-select--click {
 		background-size: auto 100%;
 		background-repeat: no-repeat;
-		background: $hoverBlue radial-gradient(circle, $quickBlue 1%, $quickBlue 5%, transparent 5%) center;
-		animation: material-ripple 300ms;
+		// TO-DO: Material ripple style
+		// background: $hoverBlue radial-gradient(circle, $quickBlue 1%, $quickBlue 5%, transparent 5%) center;
+		// animation: material-ripple 300ms;
+		background: $hoverBlue;
+		animation: quick-select-pulse 1s;
 		animation-fill-mode: forwards;
-		animation-timing-function: linear;
+		animation-timing-function: ease;
 	}
-}
-
-
-// Focus Highlight styles (for on comment hover)
-article.content .w.h-f {
-	// background: blue;
-	transition: background-color linear 400ms;
-	border-bottom: $focusUnderlineWidth solid #969696; 
-	// overflow: hidden;
 
 	&.img {
 		background: transparent !important;
@@ -492,7 +505,18 @@ article.content .w.h-f {
 		&:hover, &:focus, &:active {
 			border-color: transparent !important;
 		}
+	}
+}
 
+
+// Focus Highlight styles (for on comment hover)
+article.content .w.h-f {
+	// background: blue;
+	// transition: background-color linear 400ms;
+	border-bottom: $focusUnderlineWidth solid #969696; 
+	// overflow: hidden;
+
+	&.img {
 		& .hotspot:not(.focused) {
 			opacity: 0.4;
 		}
@@ -501,13 +525,13 @@ article.content .w.h-f {
 
 article.content {
 	&.quick-select--begin .w.h-f {
+		border-bottom-style: dotted;
 		border-color: $quickBlue;
-		background-color: $hoverBlue;
+		background: $hoverBlue;
 	}
 
 	&.quick-select--end .w.h-f {
-		border-color: $quickBlue; 
-		background-color: $hoverBlue;
+		border-bottom-style: solid;
 	}
 }
 

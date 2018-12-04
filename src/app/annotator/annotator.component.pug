@@ -95,9 +95,10 @@ scroll-progress([scrollProgress]="currentScroll")
         //- Create components after load for reading
         article#annotatorContent.content.active-content.pt-4(
             (mouseup)="showCommentOptions($event)",
-            (tap)="showCommentOptions($event)",
+            (touchstart)="logScrollStart($event)",
+            (touchend)="showCommentOptions($event)",
             (clickOutside)="hideCommentOptions()",
-            [ngClass]="[ quickSelect.anchor ? 'quick-select--begin' : '', quickSelect.focus ? 'quick-select--end':'']"
+            [ngClass]="[ quickSelect.anchor != null ? 'quick-select--begin' : '', quickSelect.focus != null ? 'quick-select--end':'']"
             #article
         )
             //- Reading Group Instructions

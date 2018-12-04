@@ -139,6 +139,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         focus: null
     }
 
+    // For debouncing/wait on showCommentOptions
+    private showCommentOptionsWait: boolean = false
+    private touchStartPosition: { x?: number, y?: number } = {}
+
     constructor(
         private element: ElementRef,
         private _readings: ReadingService,
@@ -356,7 +360,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // Only supported by modern browsers, but very reliable in those cases
         document.addEventListener("selectionchange", (event) => {
             if(!this.optionsShow) {
-                this.showCommentOptions({ name: 'selectionchange', target: document })
+                this.showCommentOptions(event)
             }
         })
     } // ngOnInit
@@ -428,8 +432,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     }
 
     clearQuickSelect() : void {
-        if (this.quickSelect.anchor) {
-            let focus = this.quickSelect.focus ? this.quickSelect.focus : this.quickSelect.anchor
+        if (this.quickSelect.anchor != null) {
+            let focus = this.quickSelect.focus != null ? this.quickSelect.focus : this.quickSelect.anchor
             this.unfocusHighlight(this.quickSelect.anchor, focus)
         }
         this.quickSelect.focus = null
@@ -437,9 +441,65 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Keep note of when user is dragging/scrolling, and ignore touchend
+     * @param event touchmove event
+     */
+    logScrollStart(event) : void {
+        let touches = event.touches
+        if (touches.length < 1) {
+            touches = event.changedTouches
+        }
+        if (touches[0]) {
+            this.touchStartPosition.x = touches[0].clientX
+            this.touchStartPosition.y = touches[0].clientY
+        }
+    }
+
+    /**
+     * Check if a touchend event is the end of a scroll/drag
+     * @param endEvent a touchend event
+     */
+    checkIfScrolling(endEvent) : boolean {
+        let scrolled = false
+        let touches = endEvent.touches
+        if (touches.length < 1) {
+            touches = endEvent.changedTouches
+        }
+        if (touches && touches[0]) {
+            let startX = this.touchStartPosition.x
+            let startY = this.touchStartPosition.y
+            let endX = touches[0].clientX
+            let endY = touches[0].clientY
+            if (startX && startY) {
+                // If finger moves more than 10px, consider it a scroll/drag
+                // code.google.com/mobile/articles/fast_buttons.html
+                if (Math.abs(endX - startX) > 20 || Math.abs(endY - startY) > 20) {
+                    scrolled = true
+                }
+            }
+            // Reset start values once referenced
+            this.touchStartPosition = {}
+        }
+        return scrolled
+    }
+
+    /**
      * Show tooltip to the side with buttons for adding comment types
      */
     showCommentOptions(event): void {
+        // Debug with:
+        // console.log("showCommentOptions fired from ", event.type)
+        if (this.showCommentOptionsWait || (event.type == 'touchend' && this.checkIfScrolling(event))) {
+            return
+        } else {
+            // We only need to worry about preventing overlapping touch and click events
+            if (event.type != 'selectionchange') {
+                this.showCommentOptionsWait = true
+                setTimeout(() => {
+                    this.showCommentOptionsWait = false
+                }, 50)
+            }
+        }
         // Only show options if text selected
         let sel = Rangy.getSelection()
         let target = event.target || event.srcElement || event.currentTarget
@@ -453,7 +513,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         if (target.classList && target.classList.contains('reading-image') && target['parentNode']) {
             // when they click the picture, we need to create the selection for them
             this.imageCoords = this.getRelativeCoords(event)
-            
             let range = Rangy.createRange()
             range.selectNodeContents(target['parentNode'])
 
@@ -467,14 +526,11 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             
             // this makes sure there are no other selections made
             sel.setSingleRange(range)
-        } 
-        // TO-DO
-        // else {
-        //     // Functions as "click outside" for images
-        //     if (event.name != 'timeout') {
-        //         this.hideCommentOptions()
-        //     }
-        // }
+        } else {
+            // Functions as "click outside" for images
+            this.optionsShow = false
+            this.imageHotspotPlaceholder.preview = false
+        }
         
         
         /**
@@ -482,42 +538,52 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
          * - Runs when:
          *      - Regular selection is being made
          *      - Image hotspot is made
+         * - Should:
+         *      - Clear Quick Select
          */
         if (sel && (this.imageHotspotPlaceholder.preview || sel.toString())
                 && (sel.focusNode.classList && sel.focusNode.classList.contains('w') || (sel.focusNode.parentNode.classList.contains('w') || sel.focusNode.parentNode.classList.contains('img-wrap')))
                 && (sel.anchorNode.classList && sel.anchorNode.classList.contains('w') || (sel.anchorNode.parentNode.classList.contains('w') || sel.anchorNode.parentNode.classList.contains('img-wrap')))
-            ) {
+            ) {  
             let focusY
+            // Clear Quick Select
+            this.clearQuickSelect()
+            // Find Y position of selection (for comment options)
             if (!!sel.focusNode.getBoundingClientRect) {
                 focusY = sel.focusNode.getBoundingClientRect().top
             } else {
                 focusY = sel.focusNode.parentNode && sel.focusNode.parentNode.getBoundingClientRect().top
             }
-
             // Set y position of comment options
             this.highlightY = (focusY - scrollOffset + readingPad)
-            
+            // Adjust y position for image comments
             if (this.imageHotspotPlaceholder.preview == true) {
                 let yOnImage = this.imageHeight[this.imageHotspotPlaceholder.index]
                 // Offset 10px to line up with hotspot
                 this.highlightY = this.highlightY + (this.imageHotspotPlaceholder.y/100 * yOnImage) - 10
             } 
+            // Show comment options
             this.optionsShow = true
             // Guide content
             if (this.guideStepNo < 2) {
                 this.guideStepNo = 2
             }
-        } else if (event.type == "tap" && target.getAttribute && target.getAttribute('index')) {
-            console.log("Word index: ", target, target.getAttribute('index'))
+        } else if (target.getAttribute && target.getAttribute('index') >= 0) {
+            /**
+             * Quick Select
+             * - Runs when words are tapped
+             * - Should:
+             *      - Clear other types of commenting
+             */
             let wordI = parseInt(target.getAttribute('index'))
             let prevAnchor = this.quickSelect.anchor
             let prevFocus = this.quickSelect.focus
             let focusY
 
-            if (!prevAnchor && !prevFocus) {
+            if (prevAnchor == null && prevFocus == null) {
                 this.quickSelect.anchor = wordI
                 this.focusHighlight(wordI, wordI)
-            } else if (prevAnchor && !prevFocus) {
+            } else if (prevAnchor && prevFocus == null) {
                 this.quickSelect.focus =  wordI
                 this.focusHighlight(prevAnchor, wordI)
             } else if (prevAnchor && prevFocus) {
@@ -537,13 +603,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             // Set y position of comment options
             this.highlightY = (focusY - scrollOffset + readingPad)
             this.optionsShow = true
-        } 
-        // TO-DO
-        // else if (!doNotDismiss) {
-        //     console.log("FINAL ELSE IF")
-        //     // this.optionsShow = false
-        //     this.imageHotspotPlaceholder.preview = false
-        // }
+        } else {
+            this.clearQuickSelect()
+            this.optionsShow = false
+        }
     }
 
     updateImageHeights(): void {
@@ -792,10 +855,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
         if (this.quickSelect.anchor) {
             // Quick Select Selection (Underline)
-            start = this.quickSelect.anchor
-            end = this.quickSelect.focus ? this.quickSelect.focus : start
+            start = this.quickSelect.anchor != null
+            end = this.quickSelect.focus != null ? this.quickSelect.focus : start
             this.quickSelect.focus = null
-            this.quickSelect.anchor = null
+            this.quickSelect.anchor != null = null
         } else {
             // Browser API selection
             let selection = Rangy.getSelection()
@@ -933,14 +996,11 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      * @param end Index for last word
      */
     private focusHighlight(start, end, location ?: any): void {
-        console.log("Focus Highlight", start, end)
-        // TO-DO
-        // if (this.optionsShow == true) {
-        //     return
-        // }
+        if (this.optionsShow == true) {
+            return
+        }
         // Make sure start and end are in order
         if (start > end) {
-            console.log("Swap values!")
             end = [start, start = end][0] // Swap start and end values
         }
         for (var i = start; i <= end; i ++) {
@@ -962,18 +1022,17 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      * @param end Index for last word
      */
     private unfocusHighlight(start, end, location ?: any): void {
-        if (!this.focusOverride) {
-            // Make sure start and end are in order
-            if (start > end) {
-                end = [start, start = end][0] // Swap start and end values
-            }
-            for (var i = start; i <= end; i ++) {
-                // if (this.focusArray[i] = true) {
-                    this.focusArray[i] = false
-                // } 
-            }
-            this.imageHotspotPlaceholder['focus'] = false
+        if (this.focusOverride) {
+            return 
         }
+        // Make sure start and end are in order
+        if (start > end) {
+            end = [start, start = end][0] // Swap start and end values
+        }
+        for (var i = start; i <= end; i ++) {
+            this.focusArray[i] = false
+        }
+        this.imageHotspotPlaceholder['focus'] = false
     }
 
     /**
@@ -1002,7 +1061,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             classString = 'h-f'
         }
         // 
-        if (i == this.quickSelect.focus || i == this.quickSelect.anchor) {
+        if (i == this.quickSelect.focus || i == this.quickSelect.anchor != null) {
             classString += ' quick-select--click'
         }
         return classString + ' h-' + highlightCount
@@ -1023,6 +1082,16 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         let PosX = 0
         let PosY = 0
         let ImgPos
+
+        // Handle touch events
+        if (e.type == 'touchend' || e.type == 'tap') {
+            let touches = e['touches']
+            if (touches.length < 1) {
+                touches = e['changedTouches']
+            }
+            e = touches[0]
+            target = e.target
+        }
 
          function FindPosition(oElement) {
             if(typeof( oElement.offsetParent ) != "undefined")
