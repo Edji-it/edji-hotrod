@@ -532,6 +532,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             // Functions as "click outside" for images
             this.optionsShow = false
             this.imageHotspotPlaceholder.preview = false
+            if (target.classList.contains('img')) {
+                return
+            }
         }
         
         
@@ -582,9 +585,14 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             let prevFocus = this.quickSelect.focus
             let focusY
 
+            // If tapped question, ignore event
+            if (target.classList.contains('question')) {
+                return
+            }
+
             // If tapped word is space, select next word
             let wordText = (target.innerText || '').trim()
-            if (wordText.length < 1) {
+            if (wordText.length < 1 && wordI != 1) {
                 wordI--
             }
 

@@ -145,6 +145,7 @@ a.w {
 		text-align: center;
 		position: relative;
 		background: transparent !important;
+		cursor: default;
 
 		&::-moz-selection {
 			background: transparent;
@@ -160,13 +161,6 @@ a.w {
 		position: relative;
 		cursor: crosshair; //url('/assets/images/cursor-image.png'), pointer; 
 	}
-
-	// & img[id*="readingImage"] {
-	// 	-webkit-user-select: none;  
-	// 	-moz-user-select: none;    
-	// 	-ms-user-select: none;      
-	// 	user-select: none;
-	// }
 
 	& div.img-wrap::selection {
 		background-color: rgba(0, 0, 0, 0);
@@ -186,10 +180,6 @@ a.w {
 		max-width: calc(100% - #{ $highlightWidth*2 });
 		height: auto;
 		margin: $highlightWidth;
-
-		&:hover, &:active {
-			// outline: 6px solid rgba(253, 228, 104, 0.45) !important;
-		}
 	}
 	
 }
@@ -498,7 +488,8 @@ $quickBlue: #55aef7;
 		animation-timing-function: ease;
 	}
 
-	&.img {
+	// Fake "words" which are not selectable
+	&.img, &.question, &.br {
 		background: transparent !important;
 		border-color: transparent !important;
 
