@@ -142,7 +142,7 @@ export class HeroPricingComponent implements OnInit {
     } else {
       this.showLoginModal = true
     }
-    this.angulartics.eventTrack.next({ action: 'goHero_promoPage_' + location, properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }})
+    this.angulartics.eventTrack.next({ action: 'heroInterest_promoPage_' + location, properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }})
   }
 
   public triggerInfoModal(info: { heading: string, description: string, image: string }): void {
