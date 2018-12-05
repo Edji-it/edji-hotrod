@@ -44,10 +44,9 @@
 .comment__pane--pointer-right::after {
   content: "";
   position: absolute;
-  top: 100%;
   left: 45%;
-  margin-left: -5px;
-  border-width: 10px;
+  margin-left: 8px;
+  border-width: 14px;
   border-style: solid;
-  border-color: #fff transparent transparent transparent;
+  border-color: transparent transparent transparent #fff;
 }
