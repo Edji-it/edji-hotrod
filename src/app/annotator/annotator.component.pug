@@ -57,8 +57,7 @@ scroll-progress([scrollProgress]="currentScroll")
                     *ngIf="project.types.indexOf('text') > -1",
                     [ngClass]="'col-' + (12 / directCommentOptions.length)", 
                     [class.btn-show--animation]="optionsShow",
-                    (touchstart)="addCommentOfType('text')",
-                    (mousedown)="addCommentOfType('text')"
+                    (tap)="addCommentOfType('text')"
                 )
                     button.emoji.comment__options--mobileButton()
                         i.icon.icon-text-comment
@@ -68,8 +67,7 @@ scroll-progress([scrollProgress]="currentScroll")
                     [ngClass]="'col-' + (12 / directCommentOptions.length)",
                     [class.super-disabled]="audioSupportError", 
                     [class.btn-show--animation]="optionsShow",
-                    (touchstart)="addCommentOfType('audio')",
-                    (mousedown)="addCommentOfType('audio')"
+                    (tap)="addCommentOfType('audio')"
                 )
                     button.emoji.comment__options--mobileButton()
                         i.icon.icon-mic
