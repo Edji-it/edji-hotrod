@@ -25,9 +25,22 @@ export class AvatarPortalComponent implements OnInit, OnDestroy {
   public commentsByPos: any = []
   public currentState: playState = playState.inactive
   public audio
+  public active: boolean = false
     
   @Input() public lineCount: Number = 1
-  @Input() public active: boolean = false
+  // @Input() public active: boolean = false
+  @Input()
+  set isActive(isActive: boolean) {
+    if (typeof(isActive) !== 'undefined' && this.active !== isActive) {
+      this.active = isActive
+      if (isActive) {
+        console.log('comment activated - ', this.indexOnLine)
+      } else {
+        console.log('comment deactivated - ', this.indexOnLine)
+      }
+    } 
+  }
+  get isActive(): boolean { return this.active }
   @Input() public lineY: Number = 0
   @Input() public comment: EdjiComment
   @Input() public indexOnLine: Number = 1
