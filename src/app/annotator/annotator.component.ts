@@ -1084,7 +1084,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             classString = 'h-f'
         }
         // 
-        if (i == this.quickSelect.focus || i == this.quickSelect.anchor != null) {
+        if (i == this.quickSelect.focus || i == this.quickSelect.anchor) {
             classString += ' quick-select--click'
         }
         return classString + ' h-' + highlightCount
