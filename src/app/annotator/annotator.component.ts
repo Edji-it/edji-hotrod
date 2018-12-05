@@ -873,7 +873,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         let start : number
         let end : number
 
-        if (this.quickSelect.anchor) {
+        if (this.imageHotspotPlaceholder && this.imageHotspotPlaceholder.preview && this.imageHotspotPlaceholder.index) {
+            // Image Selection
+            start = this.imageHotspotPlaceholder.index
+        } else if (this.quickSelect.anchor) {
             // Quick Select Selection (Underline)
             start = this.quickSelect.anchor
             end = this.quickSelect.focus != null ? this.quickSelect.focus : start
