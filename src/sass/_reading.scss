@@ -492,6 +492,7 @@ $quickBlue: #55aef7;
 	&.img, &.question, &.br {
 		background: transparent !important;
 		border-color: transparent !important;
+		animation: none !important;
 
 		&:hover, &:focus, &:active {
 			border-color: transparent !important;

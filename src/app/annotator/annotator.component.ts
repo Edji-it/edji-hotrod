@@ -532,11 +532,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             // Functions as "click outside" for images
             this.optionsShow = false
             this.imageHotspotPlaceholder.preview = false
-            if (target.classList.contains('img')) {
+            if (target.classList && target.classList.contains('img')) {
                 return
             }
         }
-        
         
         /**
          * Make sure selection exists, and is within highlightable content
@@ -573,7 +572,12 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             if (this.guideStepNo < 2) {
                 this.guideStepNo = 2
             }
-        } else if (target.getAttribute && target.getAttribute('index') >= 0) {
+        } else if (target.getAttribute 
+                && target.getAttribute('index') != null
+                && target.classList
+                && !target.classList.contains('question')
+                && !target.classList.contains('br')
+            ) {
             /**
              * Quick Select
              * - Runs when words are tapped
@@ -586,7 +590,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             let focusY
 
             // If tapped question, ignore event
-            if (target.classList.contains('question')) {
+            if (target.classList.contains('question') || target.classList.contains('br')) {
                 return
             }
 
