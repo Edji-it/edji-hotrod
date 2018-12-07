@@ -25,7 +25,10 @@
   span.user-icon__initials(*ngIf="indexOnLine<8") {{comment.author.substring(0,2)}}
   span.user-icon__overflow(*ngIf="indexOnLine==8") +{{commentsByPos[comment.lineY] && commentsByPos[comment.lineY].length - 7}}
   .comment__button--mobile.avatar__reply(*ngIf="repliesById[comment._id] && repliesById[comment._id].length>0")
-  .icon-comment-arrow(*ngIf="active")
+  .icon-comment-arrow(
+    *ngIf="active",
+    [ngClass]="[ 'comment-arrow-' + indexOnLine ]"
+  )
 
 //- Mobile Icon
 .comment__button--mobile.hidden-lg-up((tap)='triggerCommentPane(false)', [ngClass]="[ active ? 'active' : '' ]")
