@@ -40,13 +40,3 @@
 .tooltipaudio {
   float: right;
 }
-
-.comment__pane--pointer-right::after {
-  content: "";
-  position: absolute;
-  left: 45%;
-  margin-left: 8px;
-  border-width: 14px;
-  border-style: solid;
-  border-color: transparent transparent transparent #fff;
-}
