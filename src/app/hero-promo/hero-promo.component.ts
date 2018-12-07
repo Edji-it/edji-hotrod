@@ -55,7 +55,7 @@ export class HeroPromoPageComponent implements OnInit, OnDestroy {
     } else {
       this.showHeroSubModal = true
     }
-    this.angulartics.eventTrack.next({ action: 'goHero_promoPage_' + location, properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }})
+    this.angulartics.eventTrack.next({ action: 'heroInterest_promoPage_' + location, properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }})
   }
 
   // analytic event handler
