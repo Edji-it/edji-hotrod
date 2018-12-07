@@ -980,6 +980,9 @@ $avatarZIndexStart: 990;
 				border: 2px solid #ECA736;
 				z-index: 991;
 			}
+			&.active {
+				z-index: 991;
+			}
 		}
 	}
 }
