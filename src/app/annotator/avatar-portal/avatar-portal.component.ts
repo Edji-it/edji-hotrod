@@ -33,11 +33,6 @@ export class AvatarPortalComponent implements OnInit, OnDestroy {
   set isActive(isActive: boolean) {
     if (typeof(isActive) !== 'undefined' && this.active !== isActive) {
       this.active = isActive
-      if (isActive) {
-        console.log('comment activated - ', this.indexOnLine)
-      } else {
-        console.log('comment deactivated - ', this.indexOnLine)
-      }
     } 
   }
   get isActive(): boolean { return this.active }
