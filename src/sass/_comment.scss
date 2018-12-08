@@ -965,7 +965,7 @@ textarea.text-comment-input,
 
 $avatarOffset: -23px;
 $avatarMargin: -15px;
-$avatarZIndexStart: 1000;
+$avatarZIndexStart: 990;
 
 @for $z from 1 through 8 {
 	div.avatar-count-#{$z} {
@@ -978,7 +978,10 @@ $avatarZIndexStart: 1000;
 			border: 2px solid transparent;
 			&:hover {
 				border: 2px solid #ECA736;
-				z-index: 1001;
+				z-index: 991;
+			}
+			&.active {
+				z-index: 991;
 			}
 		}
 	}
