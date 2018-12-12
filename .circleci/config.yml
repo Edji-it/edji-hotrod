@@ -31,7 +31,7 @@ jobs:
       - run: sudo apt-get update && wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && sudo dpkg -i google-chrome-stable_current_amd64.deb || echo '\ninstall failed - but its fine we just wanted a dependency list\n' && sudo apt-get -f install -y && sudo dpkg -i google-chrome-stable_current_amd64.deb && yarn install
       
       # Fix permissions for Protractor Retry
-      - run: sudo chmod 765 -R ~/repo/node_modules/protractor-retry
+      - run: sudo chmod 775 -R ~/repo/node_modules/protractor-retry
 
       - save_cache:
           paths:
@@ -40,7 +40,7 @@ jobs:
       # run tests!
       - run:
             name: build-app
-            command: yarn run e2e:ci
+            command: sudo yarn run e2e:ci
       - store_test_results:
             path: ./output
       - store_artifacts:
