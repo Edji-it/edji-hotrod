@@ -166,16 +166,18 @@ nav-bar([pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'", [canPublish]
 upload-picture-modal.modal-will-fade([class.show]="showUploadModal", (returnImage)="addImages($event)", (closeModal)="showUploadModal = false")
 upload-pdf-modal.modal-will-fade([class.show]="showPdfUploadModal", (returnImage)="addImages($event)", (closeModal)="showPdfUploadModal = false")
 //- Confirm if user wants to archive a past reading
-hot-confirm-archive-modal(
+hot-confirm-archive-modal.modal-will-fade(
   *ngIf="showConfirmArchiveModal",
-  (confirmArchive)="showConfirmArchiveModal=false; shareReading(readingForm.value)",
+  [class.show]="showConfirmArchiveModal", 
+  (confirmArchive)="showConfirmArchiveModal=false; archiveReading($event, readingForm.value)",
   (declineArchive)="showConfirmArchiveModal=false; saveReading(readingForm.value)",
   (goHero)="saveReading(readingForm.value); showHeroParam=true",
   (closeModal)="showConfirmArchiveModal=false"
 )
 //- Create First Group
-hot-add-project-modal(
+hot-add-project-modal.modal-will-fade(
   *ngIf="showFirstGroupModal",
+  [class.show]="showFirstGroupModal", 
   [heading]="'Create and Share First Group'",
   [subheading]="'Your reading has been saved! Now create your first group to publish this reading and share with students.'",
   [reading]="reading", 
@@ -188,6 +190,5 @@ hero-subscribe-modal.modal-will-fade(
   *ngIf="showHeroSubModal",
   [class.show]="showHeroSubModal", 
   (closeModal)="showHeroSubModal=false", 
-  (heroWasBorn)="router.navigate(['/dashboard'])",
-  [couponCode]="couponCode"
+  (heroWasBorn)="router.navigate(['/dashboard'])"
 )

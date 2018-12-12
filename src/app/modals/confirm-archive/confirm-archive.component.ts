@@ -9,7 +9,7 @@ import { Reading } from 'src/app/shared/datatypes';
 })
 export class ConfirmArchiveModal implements OnInit {
   @Output() closeModal: EventEmitter<any> = new EventEmitter()
-  @Output() confirmArchive: EventEmitter<any> = new EventEmitter()
+  @Output() confirmArchive: EventEmitter<string> = new EventEmitter()
   @Output() declineArchive: EventEmitter<any> = new EventEmitter()
   @Output() goHero: EventEmitter<any> = new EventEmitter()
 

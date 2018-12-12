@@ -508,6 +508,14 @@ export class NewReadingPage implements OnInit {
         this.onSubmit(form)
     }
 
+    public archiveReading(readingID, form) {
+        // make a call to archive the reading by its ID
+        console.log('archive: ' + readingID)
+
+        // move forward with sharing the reading once we get the go ahead
+        this.shareReading(form)
+    }
+
     /**
      * Runs on form submit, and processes reading before calling service
      *  @param form Passed from the HTML form element
