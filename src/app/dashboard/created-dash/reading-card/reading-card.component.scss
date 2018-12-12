@@ -107,10 +107,12 @@
         pointer-events: none;
         border-radius: 50%;
     }
-    &.access-icon__hover:hover {
-        cursor: pointer;
-        background: #f2f2f2;
-        border-radius: 13px;
+    &:not(.read-only) {
+        &.access-icon__hover:hover {
+            cursor: pointer;
+            background: #f2f2f2;
+            border-radius: 13px;
+        }
     }
 }
 

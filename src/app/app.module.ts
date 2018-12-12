@@ -65,7 +65,7 @@ import { HomeComponent } from './home'
 import { RegisterPageComponent } from './register-page'
 import { LoginForm, GuestForm, RegisterFormComponent } from './forms'
 
-import { LoginModal, UserDetailsUpdateModal, ResetPassComponent, DeleteCommentModal, DeleteReadingModal, DeleteProjectModal, AddProjectModal, LoginRequiredModal, HeroChangeComponent, LoginRegisterModal, DiscoverAddMetaModal } from './modals'
+import { LoginModal, UserDetailsUpdateModal, ResetPassComponent, DeleteCommentModal, DeleteReadingModal, DeleteProjectModal, AddProjectModal, LoginRequiredModal, HeroChangeComponent, LoginRegisterModal, DiscoverAddMetaModal, ConfirmArchiveModal } from './modals'
 import { AnnotatorComponent, CommentComponent, TextCommentComponent, EmojiCommentComponent, EmojiKeyboardComponent, AudioCommentComponent, AvatarPortalComponent } from './annotator'
 import { ProjectPageComponent, OwnerToolsComponent, LeaderboardComponent } from './project-page'
 import { FirefeedComponent } from './project-page/owner-tools/firefeed/firefeed.component'
@@ -154,6 +154,7 @@ const APP_PROVIDERS = [
     LoginModal,
     LoginRegisterModal,
     AddProjectModal,
+    ConfirmArchiveModal,
     ChangePassComponent,
     ResetPassComponent,
     DeleteCommentModal,

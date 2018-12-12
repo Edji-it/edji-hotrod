@@ -39,6 +39,7 @@ export class NewReadingPage implements OnInit {
     public showAlert: boolean = false
     public showUploadModal: boolean = false
     public showFirstGroupModal: boolean = false
+    public showConfirmArchiveModal: boolean = false
 
     public errorObject = {
     readingError: ""
@@ -470,10 +471,28 @@ export class NewReadingPage implements OnInit {
         }
     }
 
-    public saveReading(event, form) {
+    public saveReading(form) {
         // Save draft!
         this.isDraft = true
         this.onSubmit(form)
+    }
+
+    /**
+     * Verifies the user can save this reading without having to push one in to the archives
+     * @param form the new reading form data
+     */
+    public verifyCanShare(form) {
+        // if user is a hero, they can go ahead and share the reading
+        // share reading modal will pop up to fill in group details and confirm
+        if (!this.user.hero_status) {
+            this.shareReading(form)
+        } else {
+            // if user is not a hero, we'll show them a confirmation modal
+            // confirmation modal will warn the user that this new reading 
+            // will push an existing active reading to archives. they also 
+            // have the option to save as draft instead 
+            this.showConfirmArchiveModal=true
+        }
     }
 
     public shareReading(form) {

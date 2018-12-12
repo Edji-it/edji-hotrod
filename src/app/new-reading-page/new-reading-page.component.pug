@@ -1,4 +1,4 @@
-nav-bar([pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'", [canPublish]="true", (saveAction)="saveReading($event, readingForm.value)", (shareAction)="shareReading(readingForm.value)")
+nav-bar([pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'", [canPublish]="true", (saveAction)="saveReading(readingForm.value)", (shareAction)="verifyCanShare(readingForm.value)")
 .container.pt-4
   .row
     .col-sm-12
@@ -165,6 +165,13 @@ nav-bar([pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'", [canPublish]
 //- Modals
 upload-picture-modal.modal-will-fade([class.show]="showUploadModal", (returnImage)="addImages($event)", (closeModal)="showUploadModal = false")
 upload-pdf-modal.modal-will-fade([class.show]="showPdfUploadModal", (returnImage)="addImages($event)", (closeModal)="showPdfUploadModal = false")
+//- Confirm if user wants to archive a past reading
+hot-confirm-archive-modal(
+  *ngIf="showConfirmArchiveModal",
+  (confirmArchive)="showConfirmArchiveModal=false; shareReading(readingForm.value)",
+  (declineArchive)="showConfirmArchiveModal=false; saveReading(readingForm.value)",
+  (closeModal)="showConfirmArchiveModal=false"
+)
 //- Create First Group
 hot-add-project-modal(
   *ngIf="showFirstGroupModal",

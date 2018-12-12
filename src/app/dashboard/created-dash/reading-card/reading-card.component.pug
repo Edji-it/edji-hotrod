@@ -56,8 +56,9 @@
       i.icon.icon-link
     .reading-access-icon(
       [attr.title]="reading.public ? 'Public Reading' : 'Private Reading'", 
-      (click)="togglePublicTooltip()",
-      [class.access-icon__hover]="_route.snapshot.routeConfig.path!='discover'"
+      (click)="!readOnly && togglePublicTooltip()",
+      [class.access-icon__hover]="_route.snapshot.routeConfig.path!='discover'",
+      [class.read-only]="readOnly"
     )
       i(*ngIf="reading.public", [innerHTML]="':earth_americas:' | emojione")
       i(*ngIf="!reading.public", [innerHTML]="':lock:' | emojione")
