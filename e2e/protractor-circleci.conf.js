@@ -5,9 +5,11 @@
 
  // Import Global Protractor Configuration file
 var globalConf = require('./protractor.conf.js');
+var retry = require('protractor-retry').retry;
 
 // Clone the global configuration object
 var localConf = globalConf.config;
+
 
 // Make custom changes to any part of the global config as needed
 localConf['capabilities']['chromeOptions']['args'] = [
@@ -22,6 +24,30 @@ localConf['capabilities']['chromeOptions']['args'] = [
 
 // Use 3 instances on CircleCI
 localConf['capabilities']['maxInstances'] = 3;
+
+localConf.onPrepare = () => {
+  // We do not want to ignoreSynchronization, it defeats the purpose of protractor
+  browser.ignoreSynchronization = true;
+
+  // add test log output configuration
+  jasmine.getEnv().addReporter(new SpecReporter({
+    spec: {
+      displayStacktrace: true
+    }
+  }));
+
+  // Prepare Protractor Retry
+  retry.onPrepare();
+}
+
+localConf.afterLaunch = () => {
+  // Set how many times to retry failed tests
+  return retry.afterLaunch(2);
+},
+
+localConf.onCleanUp = (results) => {
+  retry.onCleanUp(results);
+},
 
 // Set the value of exports.config based on
 exports.config = localConf;
