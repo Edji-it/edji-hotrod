@@ -38,3 +38,7 @@ jobs:
       - run:
             name: build-app
             command: yarn run e2e:ci
+      - store_test_results:
+            path: ./output
+      - store_artifacts:
+            path: ./output
