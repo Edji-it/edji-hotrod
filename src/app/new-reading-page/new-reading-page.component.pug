@@ -172,7 +172,8 @@ hot-confirm-archive-modal.modal-will-fade(
   (confirmArchive)="showConfirmArchiveModal=false; archiveReading($event, readingForm.value)",
   (declineArchive)="showConfirmArchiveModal=false; saveReading(readingForm.value)",
   (goHero)="saveReading(readingForm.value); showHeroParam=true",
-  (closeModal)="showConfirmArchiveModal=false"
+  (closeModal)="showConfirmArchiveModal=false",
+  [readingToArchive]="readingToArchive"
 )
 //- Create First Group
 hot-add-project-modal.modal-will-fade(

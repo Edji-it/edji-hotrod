@@ -51,6 +51,8 @@ export class NewReadingPage implements OnInit {
         readingSuccess: ""
     };
 
+    public readingToArchive: Reading
+
     // Messages
     public successAlert : string = "Nice work! This reading draft was successfully saved!"
     public readingPlaceholder: string = 'Type or paste your reading...'
@@ -191,7 +193,25 @@ export class NewReadingPage implements OnInit {
         this.subscriptions.push(
             this._auth.getCurrentUser().subscribe((user) => {
                 this.user = user
-            })
+                // Gets the active readings from the dashboard if the user is not a hero user
+                // z7jzk - TO DO
+                if (this.user.hero_status) {
+                    this._readings.updateCreated()
+                }
+            }),
+            this._readings.currentUserReadings.subscribe(
+                (data)  => {
+                    // Take the second reading and make sure it is archived
+                    let archivedReading = data && data.readings && data.readings[1]
+                    // z7jzk - TO DO
+                    // if (archivedReading.archived) {
+                        this.readingToArchive = archivedReading
+                    // }
+                },
+                (error) => {
+                    console.error(error)
+                }
+            )
         )
 
         this._title.setTitle('Edji | New Reading')
@@ -491,6 +511,7 @@ export class NewReadingPage implements OnInit {
     public verifyCanShare(form) {
         // if user is a hero, they can go ahead and share the reading
         // share reading modal will pop up to fill in group details and confirm
+        // z7jzk - TO DO
         if (!this.user.hero_status) {
             this.shareReading(form)
         } else {
@@ -508,12 +529,27 @@ export class NewReadingPage implements OnInit {
         this.onSubmit(form)
     }
 
-    public archiveReading(readingID, form) {
-        // make a call to archive the reading by its ID
-        console.log('archive: ' + readingID)
-
-        // move forward with sharing the reading once we get the go ahead
-        this.shareReading(form)
+    /**
+     * 
+     * @param reading the reading that is to be archived (is an active reading on the created dashboard)
+     * @param form is the new reading we're going to share once we finish archiving the older active reading
+     */
+    public archiveReading(reading, form) {
+        // Make the call to PUT the reading archive value
+        // z7jzk - TO DO
+        if (!reading.archived) {
+            reading.archived = true
+            this._readings.save(reading)
+            .subscribe(
+                data => {
+                    // move forward with sharing the reading once we get the go ahead
+                    this.shareReading(form)
+                },
+                error => {
+                    console.error(error)
+                }
+            )
+        }
     }
 
     /**

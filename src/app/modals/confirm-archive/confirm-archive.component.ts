@@ -1,7 +1,7 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core'
-import { Reading } from 'src/app/shared/datatypes';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core'
 
 // Project Dependencies
+import { Reading } from 'src/app/shared/datatypes'
 
 @Component({
   selector: 'hot-confirm-archive-modal',
@@ -13,11 +13,7 @@ export class ConfirmArchiveModal implements OnInit {
   @Output() declineArchive: EventEmitter<any> = new EventEmitter()
   @Output() goHero: EventEmitter<any> = new EventEmitter()
 
-  public readingToArchive: Reading = {
-    title: 'Example',
-    draft: false,
-    _id: 'fakeId',
-  }
+  @Input() public readingToArchive: Reading
 
   constructor(
     
@@ -25,6 +21,6 @@ export class ConfirmArchiveModal implements OnInit {
   }
 
   ngOnInit() {
-
+    
   }
 }
