@@ -52,16 +52,16 @@ localConf.onPrepare = () => {
 
   // Prepare Protractor Retry
   retry.onPrepare();
-}
+};
 
 localConf.afterLaunch = () => {
   // Set how many times to retry failed tests
   return retry.afterLaunch(2);
-},
+};
 
 localConf.onCleanUp = (results) => {
   retry.onCleanUp(results);
-},
+};
 
 // Set the value of exports.config based on
 exports.config = localConf;
