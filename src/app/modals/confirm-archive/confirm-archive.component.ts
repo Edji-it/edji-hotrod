@@ -11,6 +11,7 @@ export class ConfirmArchiveModal implements OnInit {
   @Output() closeModal: EventEmitter<any> = new EventEmitter()
   @Output() confirmArchive: EventEmitter<any> = new EventEmitter()
   @Output() declineArchive: EventEmitter<any> = new EventEmitter()
+  @Output() goHero: EventEmitter<any> = new EventEmitter()
 
   public readingToArchive: Reading = {
     title: 'Example',
@@ -24,6 +25,6 @@ export class ConfirmArchiveModal implements OnInit {
   }
 
   ngOnInit() {
-    
+
   }
 }

@@ -170,6 +170,7 @@ hot-confirm-archive-modal(
   *ngIf="showConfirmArchiveModal",
   (confirmArchive)="showConfirmArchiveModal=false; shareReading(readingForm.value)",
   (declineArchive)="showConfirmArchiveModal=false; saveReading(readingForm.value)",
+  (goHero)="saveReading(readingForm.value); showHeroParam=true",
   (closeModal)="showConfirmArchiveModal=false"
 )
 //- Create First Group
@@ -181,4 +182,12 @@ hot-add-project-modal(
   [groupLabel]="'Group 1'",
   (groupSaved)="openFirstGroup($event)",
   (closeModal)="showFirstGroupModal = false"
+)
+//- Go Hero!
+hero-subscribe-modal.modal-will-fade(
+  *ngIf="showHeroSubModal",
+  [class.show]="showHeroSubModal", 
+  (closeModal)="showHeroSubModal=false", 
+  (heroWasBorn)="router.navigate(['/dashboard'])",
+  [couponCode]="couponCode"
 )

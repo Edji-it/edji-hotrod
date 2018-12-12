@@ -40,6 +40,8 @@ export class NewReadingPage implements OnInit {
     public showUploadModal: boolean = false
     public showFirstGroupModal: boolean = false
     public showConfirmArchiveModal: boolean = false
+    public showHeroSubModal: boolean = false
+    public showHeroParam: boolean = false
 
     public errorObject = {
     readingError: ""
@@ -161,6 +163,11 @@ export class NewReadingPage implements OnInit {
         this.readingId = this._route.snapshot.params['id']
         
         this.alert = this._route.snapshot.queryParams['successAlert']
+        // if the user clicks Go Hero in the confirm archive modal, we need to make sure they save before continuing
+        // the only way we can get the modal to show is watching the params because saving a draft triggers a reload
+        if (this._route.snapshot.queryParams['showHeroParam']) {
+            this.showHeroSubModal = true
+        }
         if (this.alert) {
             this.successObject.readingSuccess = this.alert
             this.showAlert = true
@@ -624,7 +631,11 @@ export class NewReadingPage implements OnInit {
                                 properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
                             })
                         } else {
-                            this.router.navigate(['new-reading/' + data._id], { queryParams: { successAlert: this.successAlert } })
+                            if (this.showHeroParam) {
+                                this.router.navigate(['new-reading/' + data._id], { queryParams: { successAlert: this.successAlert, showHeroParam: this.showHeroParam } })
+                            } else {
+                                this.router.navigate(['new-reading/' + data._id], { queryParams: { successAlert: this.successAlert } })
+                            }
                             this.successObject.readingSuccess = this.successAlert
                             this.showAlert = true
                             this.reading.updatedAt = data.updatedAt

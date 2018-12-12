@@ -9,7 +9,7 @@
         hot-reading-card(style="margin-bottom: 30px; float:left; width:100%;", [reading]="readingToArchive", [readOnly]="true")
         p.m-0 If you do, it is gone until you  
           a#goHeroLink.btn.btn-hero.btn-sm(
-            (click)="showHeroSubModal = true"
+            (click)="goHero.emit()"
           ) Go Hero
           |  (along with all of the associated groups). 
         p.mt-2 Are you sure?
