@@ -27,11 +27,8 @@ jobs:
           - v1-dependencies-{{ checksum "package.json" }}
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
-  
+
       - run: sudo apt-get update && wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && sudo dpkg -i google-chrome-stable_current_amd64.deb || echo '\ninstall failed - but its fine we just wanted a dependency list\n' && sudo apt-get -f install -y && sudo dpkg -i google-chrome-stable_current_amd64.deb && yarn install
-      
-      # Fix permissions for Protractor Retry
-      - run: sudo chmod -R a+x node_modules && sudo chmod -R a+rx e2e
 
       - save_cache:
           paths:
@@ -40,8 +37,4 @@ jobs:
       # run tests!
       - run:
             name: build-app
-            command: sudo yarn run e2e:ci
-      - store_test_results:
-            path: ./output
-      - store_artifacts:
-            path: ./output
+            command: yarn run e2e:ci
