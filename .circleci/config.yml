@@ -27,10 +27,11 @@ jobs:
           - v1-dependencies-{{ checksum "package.json" }}
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
-      
-      - run: chmod +x ~/repo/node_modules/protractor-retry/lib/retry.js
-
+  
       - run: sudo apt-get update && wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && sudo dpkg -i google-chrome-stable_current_amd64.deb || echo '\ninstall failed - but its fine we just wanted a dependency list\n' && sudo apt-get -f install -y && sudo dpkg -i google-chrome-stable_current_amd64.deb && yarn install
+      
+      # Fix permissions for Protractor Retry
+      - run: chmod +x ~/repo/node_modules/protractor-retry/lib/retry.js
 
       - save_cache:
           paths:

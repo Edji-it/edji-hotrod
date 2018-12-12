@@ -46,7 +46,7 @@ describe('Account Page', () => {
     */
     it('Extremely Basic Test', () => {
         let subject = browser.getTitle();
-        let result  = 'Edji';
+        let result  = 'NOT Edji';
         browser.wait(EC.titleContains(result), 5000, 'Title should contain "Edji".');
     });
 

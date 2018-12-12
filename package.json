@@ -66,6 +66,7 @@
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "~8.9.4",
     "apply-loader": "^2.0.0",
+    "child_process": "1.0.2",
     "codelyzer": "~4.2.1",
     "grunt": "^1.0.2",
     "grunt-aws": "^0.6.2",
