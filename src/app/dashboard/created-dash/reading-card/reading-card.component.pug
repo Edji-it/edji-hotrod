@@ -14,7 +14,7 @@
         *ngIf="reading.version_count && reading.version_count > 0", 
         [attr.testVersionNumber]="reading.title"
       ) Version {{reading.version_count > 0 ? reading.version_count : '' }}
-  i.icon.icon-draft(*ngIf="reading['draft']")
+  i.icon.icon-draft.reading-draft(*ngIf="reading['draft']")
   //- The Dropdown Options Menu
   #optionsWrap.dropdown.reading-options(
     *ngIf="!readOnly && (!reading['draft'] || reading.draft !== true || reading.projects[0])", 
@@ -133,7 +133,7 @@
               span(*ngIf="!version.title")
                 i Untitled
             p.blockquote-footer([attr.testVersionNumber]="version.title") Version {{ versions.length - i }}
-        i.icon.icon-draft(*ngIf="version['draft'] && version.draft === true && !version.projects[0]")
+        i.icon.icon-draft.reading-draft(*ngIf="version['draft'] && version.draft === true && !version.projects[0]")
         #optionsWrapV.dropdown.reading-options(
           *ngIf="!version['draft'] || version.draft !== true || version.projects[0]", 
           (clickOutside)="version.showOptionsV = false", 

@@ -202,7 +202,7 @@ export class ReadingService {
         );
     } else {
       return this.http
-        .post(this._auth.getUrl() + '/readings', { reading: reading }, this._auth.getOptions())
+        .post(this._auth.getUrl() + '/api/v1/readings', { reading: reading }, this._auth.getOptions())
         .pipe(
           map(data => {
             if (data.json() && data.json().reading) {
