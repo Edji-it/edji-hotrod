@@ -5,7 +5,6 @@
 
  // Import Global Protractor Configuration file
 var globalConf = require('./protractor.conf.js');
-var retry = require('protractor-retry').retry;
 
 // Clone the global configuration object
 var localConf = globalConf.config;
@@ -26,8 +25,6 @@ localConf['capabilities']['chromeOptions']['args'] = [
 localConf['capabilities']['maxInstances'] = 3;
 
 localConf.onPrepare = () => {
-  // Prepare Protractor Retry
-  retry.onPrepare();
   // Add Junit report output for tracking results in Circle
   var jasmineReporters = require('jasmine-reporters');
   var junitReporter = new jasmineReporters.JUnitXmlReporter({
@@ -51,15 +48,6 @@ localConf.onPrepare = () => {
       displayStacktrace: true
     }
   }));
-};
-
-localConf.afterLaunch = () => {
-  // Set how many times to retry failed tests
-  return retry.afterLaunch(2);
-};
-
-localConf.onCleanUp = (results) => {
-  retry.onCleanUp(results);
 };
 
 // Set the value of exports.config based on
