@@ -37,6 +37,7 @@ testem.log
 
 # Testing output
 /output
+/protractorFailuresReport
 
 # System Files
 .DS_Store
