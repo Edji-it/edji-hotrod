@@ -29,7 +29,7 @@ localConf.onPrepare = () => {
   var jasmineReporters = require('jasmine-reporters');
   var junitReporter = new jasmineReporters.JUnitXmlReporter({
     // setup the output path for the junit reports
-    savePath: 'output/',
+    savePath: 'output/protractor/',
     // conslidate all true:
     //   output/junitresults.xml
     //
