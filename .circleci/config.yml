@@ -28,18 +28,19 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
   
-      - run: sudo apt-get update && wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && sudo dpkg -i google-chrome-stable_current_amd64.deb || echo '\ninstall failed - but its fine we just wanted a dependency list\n' && sudo apt-get -f install -y && sudo dpkg -i google-chrome-stable_current_amd64.deb && yarn install
+      - run: 
+            name: Install Dependencies
+            command: sudo apt-get update && wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && sudo dpkg -i google-chrome-stable_current_amd64.deb || echo '\ninstall failed - but its fine we just wanted a dependency list\n' && sudo apt-get -f install -y && sudo dpkg -i google-chrome-stable_current_amd64.deb && yarn install
 
       - save_cache:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
-      # run tests!
       - run:
-            name: build-app
+            name: Build Application
             command: yarn run build:ci
       - run: 
-            name: serve-and-test
+            name: Serve and Test
             command: (yarn run server:ci &) && sleep 2 && yarn run e2e:retry
       - store_test_results:
             path: ./output
