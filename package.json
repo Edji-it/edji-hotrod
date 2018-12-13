@@ -72,6 +72,7 @@
     "grunt": "^1.0.2",
     "grunt-aws": "^0.6.2",
     "grunt-checkbranch": "^1.0.4",
+    "http-server": "^0.11.1",
     "jasmine-core": "3.1.0",
     "jasmine-reporters": "^2.3.2",
     "jasmine-spec-reporter": "4.2.1",
