@@ -14,16 +14,16 @@
     "dev:ssl": "ng serve --ssl true",
     "start": "ng serve",
     "build": "ng build",
-    "build:ci": "ng build --aot",
+    "build:ci": "ng build -c=test",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "e2e:ci": "ng e2e --protractor-config e2e/protractor-circleci.conf.js",
+    "e2e:ci": "protractor-flake --parser standard --max-attempts=3 -- e2e/protractor-circleci.conf.js",
+    "e2e:headless": "ng e2e --protractor-config e2e/protractor-circleci.conf.js",
     "e2e:mobile": "ng e2e --protractor-config e2e/protractor-mobile.conf.js",
-    "e2e:retry": "protractor-flake --parser standard --max-attempts=3 -- e2e/protractor-circleci.conf.js",
     "postinstall": "node ./ng-add-pug-loader.js",
     "release": "yarn standard-version",
-    "server:ci": "http-server dist -p 3375 --cors --silent"
+    "server:ci": "http-server dist/edji-hotrod -p 3375 --cors --silent"
   },
   "private": true,
   "dependencies": {
