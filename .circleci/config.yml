@@ -48,7 +48,7 @@ jobs:
             command: yarn run build:ci
       - run: 
             name: Serve and Test
-            command: (yarn run server:ci &) && sleep 2 && yarn run e2e:retry
+            command: (yarn run server:ci &) && sleep 2 && yarn run e2e:ci
       - store_test_results:
             path: ./output
       - store_artifacts:
