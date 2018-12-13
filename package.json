@@ -20,7 +20,7 @@
     "e2e": "ng e2e",
     "e2e:ci": "ng e2e --protractor-config e2e/protractor-circleci.conf.js",
     "e2e:mobile": "ng e2e --protractor-config e2e/protractor-mobile.conf.js",
-    "e2e:retry" : "protractor-flake --parser standard  --max-attempts=3 -- e2e/protractor-circleci.conf.js",
+    "e2e:retry": "protractor-flake --parser standard  --max-attempts=3 -- e2e/protractor-circleci.conf.js",
     "postinstall": "node ./ng-add-pug-loader.js",
     "release": "yarn standard-version",
     "server:ci": "http-server dist -p 3375 --cors --silent"
@@ -72,6 +72,7 @@
     "grunt": "^1.0.2",
     "grunt-aws": "^0.6.2",
     "grunt-checkbranch": "^1.0.4",
+    "http-server": "^0.11.1",
     "jasmine-core": "3.1.0",
     "jasmine-reporters": "^2.3.2",
     "jasmine-spec-reporter": "4.2.1",
