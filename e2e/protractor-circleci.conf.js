@@ -26,6 +26,8 @@ localConf['capabilities']['chromeOptions']['args'] = [
 localConf['capabilities']['maxInstances'] = 3;
 
 localConf.onPrepare = () => {
+  // Prepare Protractor Retry
+  retry.onPrepare();
   // Add Junit report output for tracking results in Circle
   var jasmineReporters = require('jasmine-reporters');
   var junitReporter = new jasmineReporters.JUnitXmlReporter({
@@ -49,9 +51,6 @@ localConf.onPrepare = () => {
       displayStacktrace: true
     }
   }));
-
-  // Prepare Protractor Retry
-  retry.onPrepare();
 };
 
 localConf.afterLaunch = () => {

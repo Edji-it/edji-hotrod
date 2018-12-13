@@ -28,7 +28,7 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
   
-      - run: sudo apt-get update && wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && sudo dpkg -i google-chrome-stable_current_amd64.deb || echo '\ninstall failed - but its fine we just wanted a dependency list\n' && sudo apt-get -f install -y && sudo dpkg -i google-chrome-stable_current_amd64.deb && yarn install
+      - run: sudo apt-get update && wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && sudo dpkg -i google-chrome-stable_current_amd64.deb || echo '\ninstall failed - but its fine we just wanted a dependency list\n' && sudo apt-get -f install -y && sudo dpkg -i google-chrome-stable_current_amd64.deb && sudo yarn install
       
       # Fix permissions for Protractor Retry
       - run: sudo chmod -R a+rx node_modules/protractor-retry
