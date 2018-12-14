@@ -169,7 +169,7 @@ upload-pdf-modal.modal-will-fade([class.show]="showPdfUploadModal", (returnImage
 hot-confirm-archive-modal.modal-will-fade(
   *ngIf="showConfirmArchiveModal",
   [class.show]="showConfirmArchiveModal", 
-  (confirmArchive)="showConfirmArchiveModal=false; archiveReading($event, readingForm.value)",
+  (confirmArchive)="showConfirmArchiveModal=false; archiveReading(readingForm.value)",
   (declineArchive)="showConfirmArchiveModal=false; saveReading(readingForm.value)",
   (goHero)="saveReading(readingForm.value); showHeroParam=true",
   (closeModal)="showConfirmArchiveModal=false",

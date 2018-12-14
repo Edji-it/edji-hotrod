@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core'
+import { Component, Output, EventEmitter, Input } from '@angular/core'
 
 // Project Dependencies
 import { Reading } from 'src/app/shared/datatypes'
@@ -7,9 +7,9 @@ import { Reading } from 'src/app/shared/datatypes'
   selector: 'hot-confirm-archive-modal',
   templateUrl: 'confirm-archive.component.pug'
 })
-export class ConfirmArchiveModal implements OnInit {
+export class ConfirmArchiveModal {
   @Output() closeModal: EventEmitter<any> = new EventEmitter()
-  @Output() confirmArchive: EventEmitter<string> = new EventEmitter()
+  @Output() confirmArchive: EventEmitter<any> = new EventEmitter()
   @Output() declineArchive: EventEmitter<any> = new EventEmitter()
   @Output() goHero: EventEmitter<any> = new EventEmitter()
 
@@ -18,9 +18,5 @@ export class ConfirmArchiveModal implements OnInit {
   constructor(
     
     ) {
-  }
-
-  ngOnInit() {
-    
   }
 }

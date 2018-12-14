@@ -52,6 +52,7 @@ export class NewReadingPage implements OnInit {
     };
 
     public readingToArchive: Reading
+    public archiveReadingsBefore: Reading
 
     // Messages
     public successAlert : string = "Nice work! This reading draft was successfully saved!"
@@ -194,8 +195,7 @@ export class NewReadingPage implements OnInit {
             this._auth.getCurrentUser().subscribe((user) => {
                 this.user = user
                 // Gets the active readings from the dashboard if the user is not a hero user
-                // z7jzk - TO DO
-                if (this.user.hero_status) {
+                if (!this.user.hero_status) {
                     this._readings.updateCreated()
                 }
             }),
@@ -203,10 +203,13 @@ export class NewReadingPage implements OnInit {
                 (data)  => {
                     // Take the second reading and make sure it is archived
                     let archivedReading = data && data.readings && data.readings[1]
-                    // z7jzk - TO DO
-                    // if (archivedReading.archived) {
+                    let archiveReadingsBefore = data && data.readings && data.readings[0]
+                    if (!this.user.hero_status && archivedReading) {
+                        // reading that we'll be archiving (for display purposes on modal)
                         this.readingToArchive = archivedReading
-                    // }
+                        // reading that we'll be setting as our archiveReadingsBefore property on the user - send PUT to server
+                        this.archiveReadingsBefore = archiveReadingsBefore
+                    }
                 },
                 (error) => {
                     console.error(error)
@@ -511,8 +514,7 @@ export class NewReadingPage implements OnInit {
     public verifyCanShare(form) {
         // if user is a hero, they can go ahead and share the reading
         // share reading modal will pop up to fill in group details and confirm
-        // z7jzk - TO DO
-        if (!this.user.hero_status) {
+        if (this.user.hero_status || !this.readingToArchive) {
             this.shareReading(form)
         } else {
             // if user is not a hero, we'll show them a confirmation modal
@@ -534,22 +536,21 @@ export class NewReadingPage implements OnInit {
      * @param reading the reading that is to be archived (is an active reading on the created dashboard)
      * @param form is the new reading we're going to share once we finish archiving the older active reading
      */
-    public archiveReading(reading, form) {
+    public archiveReading(form) {
         // Make the call to PUT the reading archive value
-        // z7jzk - TO DO
-        if (!reading.archived) {
-            reading.archived = true
-            this._readings.save(reading)
-            .subscribe(
-                data => {
-                    // move forward with sharing the reading once we get the go ahead
-                    this.shareReading(form)
-                },
-                error => {
-                    console.error(error)
-                }
-            )
-        }
+        let user = this.user
+        user.archiveReadingsBefore = this.archiveReadingsBefore.createdAt
+        
+        this._auth.updateUser(user)
+        .subscribe(
+            data => {
+                // move forward with sharing the reading once we get the go ahead
+                this.shareReading(form)
+            },
+            error => {
+                console.error(error)
+            }
+        )
     }
 
     /**

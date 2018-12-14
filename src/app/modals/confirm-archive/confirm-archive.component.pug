@@ -15,5 +15,5 @@
         p.mt-2 Are you sure?
       .modal-footer
         .button__row(style='padding-top:0px;')
-            button.float-right#buttonConfirm.btn.btn-action(tabindex='1', type='button', (click)="confirmArchive.emit(readingToArchive)") Continue Archiving
+            button.float-right#buttonConfirm.btn.btn-action(tabindex='1', type='button', (click)="confirmArchive.emit()") Continue Archiving
             button.float-right#buttonDraft.btn.btn-secondary(tabindex='0', type='button', (click)="declineArchive.emit()") Save as Draft
