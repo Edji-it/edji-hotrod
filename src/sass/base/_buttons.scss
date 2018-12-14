@@ -255,6 +255,8 @@ button, .button, .btn { //, [class*='btn']
   }
 }
 
+// Hover and underline style similar to a link
+// Should be used for external linking
 .btn-link, .btn.btn-link {
     background-color: transparent !important;
     padding: 4px 0px !important;
@@ -271,6 +273,35 @@ button, .button, .btn { //, [class*='btn']
     &.active {
       color: $btnPrimaryColor;
       border-bottom: 1px solid $btnPrimaryColor;
+    }
+}
+
+.btn-filter, .btn.btn-filter {
+    background-color: transparent;
+    padding: 6px;
+    margin: 0px 3px 10px 0px;
+    text-decoration: none;
+    color: #333;
+    font-weight: 400;
+    border: 0px solid transparent;
+    border-radius: 4px;
+
+    & img.emojioneemoji {
+      margin-top: -2px;
+      margin-right: 4px;
+    }
+
+    &:hover, &:active, &:focus {
+      border: 0px solid transparent;
+      background-color: #fafafa !important;
+      color: #2399DB;
+    }
+
+    &.active {
+      color: $btnPrimaryColor;
+      border: 0px solid transparent;
+      background-color: #EBF9FF !important;
+      color: #2399DB;
     }
 }
 

@@ -33,6 +33,8 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
   public showLoginReqModal: boolean = false
   public showNewReadingVideoModal: boolean = false
   public user: User
+  // Filter values
+  public activeFilter: string = 'recent'
   // Joined Readings, p-datalist values
   public loading: boolean = true
   public first: number = 0 // first page 
@@ -107,6 +109,19 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
         properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
       })
       this.currentPageNo=paging.page
+    }
+  }
+
+  /**
+   * Load filter
+   */
+  public loadFilter(filter: string) : void {
+    this.activeFilter = filter
+
+    if (filter === 'recent') {
+      this.loadCreatedFeed()
+    } else if (filter === 'bookmarked') {
+      // Load bookmarked readings
     }
   }
 
