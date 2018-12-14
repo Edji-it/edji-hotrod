@@ -35,6 +35,10 @@ yarn-error.log
 testem.log
 /typings
 
+# Testing output
+/output
+/protractorFailuresReport
+
 # System Files
 .DS_Store
 Thumbs.db
