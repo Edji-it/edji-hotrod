@@ -65,7 +65,7 @@ describe('Project Page as an owner using reading report: ', () => {
     // Select a student from dropdown
     browser.wait(EC.elementToBeClickable(recapStudentDropdown), 5000, "recap student selector never became clickable")
     recapStudentDropdown.click()
-    browser.wait(EC.elementToBeClickable(recapStudentOptions.get(0)), 3000, "recap student selector never became clickable")
+    browser.wait(EC.elementToBeClickable(recapStudentOptions.get(0)), 5000, "recap student selector never became clickable")
     recapStudentOptions.first().click()
     
     // verify the comment count is greater than 0
