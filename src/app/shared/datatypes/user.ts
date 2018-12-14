@@ -1,6 +1,7 @@
 /** Any properties stored server-side should be rendered on BaseUser */
 export interface User extends BaseUser {
   isLoggedIn: boolean,
+  isStudent?: boolean,
   type?: string,
   createdAt: Date,
   updatedAt: Date,

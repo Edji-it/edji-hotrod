@@ -6,12 +6,9 @@
       img#logo.nav-bar__logo-h(*ngIf="currentPage=='home'", src="assets/images/logo-3.2-horizontal.svg")
     //- Dashboard Nav
     .nav__menu(*ngIf="showDashboardOptions")
-      a#navReadings.btn.btn-link([routerLink]="['/dashboard']", routerLinkActive="active", title="Your created and joined Readings") 
-        //- span([innerHtml]="':book:' | emojione")
-        | Readings
-      a#navDiscover.btn.btn-link([routerLink]="['/discover']", routerLinkActive="active", title="Discover Readings from other Teachers")
-        //- span([innerHtml]="':triangular_flag_on_post:' | emojione")
-        | Discover
+      ng-container(*ngFor="let link of navLinks")
+        a.btn.btn-link([attr.id]="link.id", [routerLink]="[link.route]", routerLinkActive="active", [attr.title]="link.tooltip")
+          | {{ link.displayName }}
       .dropdown(*ngIf="user.isAcademyAdmin", [class.show]="academyMenuShow")
         a#navAcademy.btn.btn-link([routerLink]="['/academy/licenses']", routerLinkActive="active") 
           | Academy

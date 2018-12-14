@@ -143,6 +143,12 @@ export class AuthService implements CanActivate {
     public setUser(user: any) {
         //should have session timeout, username, baseProfileId, typeId
         user.isLoggedIn = true
+        // Set convenience "isStudent" flag
+        // + Default guest/temp to student flag
+        if ( (user.identities && user.identities.indexOf('student') > -1 && user.identities.indexOf('teacher') < 0)
+                || user.type == 'temp') {
+            user.isStudent = true
+        }
         // Determine if user is an Academy Admin
         if (user && user.license_ids && user.license_ids[0]) { 
             this.fetchAcademies(user)
@@ -709,7 +715,8 @@ export class AuthService implements CanActivate {
 
     /** Provides logic for sending user back to home if they are not authorized */
     public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-        if (!this.getUser().isLoggedIn) {
+        let user: User = this.getUser()
+        if (!user.isLoggedIn) {
             /**
              * Query Params
              * - We use the homepage as a landing page
@@ -722,6 +729,14 @@ export class AuthService implements CanActivate {
             }
             return false
         } else {
+            // Handle Dashboard defaults for Students vs Teachers
+            if (state.url == '/dashboard') {
+                if (user.isStudent) {
+                    this._router.navigate(['/dashboard/read'])
+                } else {
+                    this._router.navigate(['/dashboard/create'])
+                }
+            }
             return true
         }
     }

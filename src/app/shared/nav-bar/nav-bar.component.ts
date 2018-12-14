@@ -6,6 +6,7 @@ import { take } from 'rxjs/operators'
 
 // Project Dependencies
 import { AuthService, ProjectService, SocketService, PowerToggle, ReadingService, SecretSwitchesService, UtilToolService, Secrets, AcademyState, Academy } from '../../_services'
+import { User } from '../datatypes';
 
 @Component({
   selector: 'nav-bar',
@@ -74,6 +75,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
     public isAcademyAdmin: boolean = false
     public secretSwitches: Secrets = {}
     public currentPage: string = ""
+    public navLinks: NavLink[] = []
 
     // Copy Variables
     public heroBtnCopy: string = "Upgrade to Hero"
@@ -100,6 +102,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
               if (this.user && this.user.identities) {
                 this.isTeacher = this.user.identities.indexOf('teacher') > -1
               }
+              this.navLinks = this.generateNavLinks(user)
           }),
           this._auth.currentAcademyState.subscribe((currentState) => {
             this.academyState = currentState
@@ -182,6 +185,57 @@ export class NavBarComponent implements OnInit, OnDestroy {
         this.mNavShow = false
       }
     }
+
+    /**
+     * Determine nav links for user
+     * @param identities current users identities
+     * @returns NavLinks array
+     */
+    generateNavLinks(user: User) : NavLink[] {
+      let links: NavLink[] = []
+      if (user.isStudent) {
+        // Student Nav Links
+        // 1st: Read dashboard link
+        links.push({ 
+          id: 'navRead',
+          route: '/dashboard/read',
+          displayName: 'Read',
+          tooltip: 'Read with your class'
+        });
+        // 2nd Create dashboard link
+        links.push({ 
+          id: 'navCreate',
+          route: '/dashboard/create',
+          displayName: 'Write',
+          tooltip: 'Share your writing'
+        });
+      } else {
+        // Teacher Nav Links
+        // Create dashboard link
+        links.push({ 
+          id: 'navCreate',
+          route: '/dashboard/create',
+          displayName: 'Create',
+          tooltip: 'Create readings to share'
+        });
+        // Read dashboard link
+        links.push({ 
+          id: 'navRead',
+          route: '/dashboard/read',
+          displayName: 'Read',
+          tooltip: 'Join readings from others'
+        });
+        // Discover Feed Link
+        links.push({ 
+          id: 'navDiscover',
+          route: '/discover',
+          displayName: 'Discover',
+          tooltip: 'Discover Readings from other Teachers'
+        });
+      }
+      return links
+    }
+    
 
     // finalizeReadingAndShare(shareObj: ReadingShareObject) {
     //   this.messages = {}
@@ -342,4 +396,11 @@ export class NavBarComponent implements OnInit, OnDestroy {
 export interface ReadingShareObject {
   groupLabel: string
   customCode?: string
+}
+
+export interface NavLink {
+  id: string
+  route: string 
+  displayName: string
+  tooltip: string
 }
