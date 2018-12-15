@@ -17,6 +17,7 @@ interface BaseUser {
   username: string,
   fullname: string,
   email: string,
+  readingsArchivedBefore?: string,
   identities?: string[],
   hero_status?: boolean,
   prefs?: {

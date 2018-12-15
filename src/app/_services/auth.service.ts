@@ -139,8 +139,15 @@ export class AuthService implements CanActivate {
     /**
      * Saves user to local storage
      * @param user The user should be an object to store in sessionstorage
+     * @returns user Returns decorated user if needed immediately
      */
-    public setUser(user: any) {
+    public setUser(user: User) : User {
+        /**
+         * @todo Verify we are receiving readingsArchivedBefore date and remove this condition
+         */
+        if (!user.hero_status) {
+            user.readingsArchivedBefore = "2018-12-15T12:32:52.194Z"
+        }
         //should have session timeout, username, baseProfileId, typeId
         user.isLoggedIn = true
         // Set convenience "isStudent" flag
@@ -153,11 +160,13 @@ export class AuthService implements CanActivate {
         if (user && user.license_ids && user.license_ids[0]) { 
             this.fetchAcademies(user)
         }
+        //  Store user object
         this.currentUserSource.next(user)
         this._locker.set('user', user)
         if (user._id && user._id.length > 0) {
             this.ga.setUsername(user._id) // Set the user ID using signed-in user_id.
         }
+        return user
     }
 
     /**
@@ -273,7 +282,7 @@ export class AuthService implements CanActivate {
                 let user = data.user
                 // If we get a user object, update our local copy
                 if (user._id) {
-                    this.setUser(user)
+                    user = this.setUser(user)
                 }
                 return user
             }))
@@ -310,7 +319,7 @@ export class AuthService implements CanActivate {
             .pipe(map((data: any) => {
                 if (data.token) {
                     this.setToken(data.token)
-                    this.setUser(data.user)
+                    data.user = this.setUser(data.user)
                 }
                 return data
             }))
@@ -338,16 +347,16 @@ export class AuthService implements CanActivate {
             .post([this.baseUrl, 'users'].join('/'), {
                 user: user
             }, this.getOptions())
-            .pipe(map((data) => {
-                let object = data.json()
+            .pipe(map((res) => {
+                let data = res.json()
 
                 // if the response has a token, the user should be successfully registered and logged in
-                if (object.token) {
-                    this.setUser(object.user)
-                    this.setToken(object.token)
+                if (data.token) {
+                    data.user = this.setUser(data.user)
+                    this.setToken(data.token)
                 }
 
-                return data.json()
+                return data
             }))
     }
 
@@ -408,18 +417,18 @@ export class AuthService implements CanActivate {
                     this.legacyHttp.put(this.baseUrl + '/users', {
                         user: mergedUser
                     }, this.getOptions())
-                        .pipe(map((data) => {
-                            let object = data.json()
+                        .pipe(map((res) => {
+                            let data = res.json()
 
                             // if the response has a token, the user should be successfully registered and logged in
-                            if (object.user) {
-                                this.setUser(object.user)
+                            if (data.user) {
+                                data.user = this.setUser(data.user)
                             }
-                            if (object.token) {
-                                this.setUser(object.token)
+                            if (data.token) {
+                                this.setToken(data.token)
                             }
 
-                            return data.json()
+                            return data
                         }))
                         .toPromise()
                         .then(user => {
@@ -467,17 +476,17 @@ export class AuthService implements CanActivate {
                     this.legacyHttp.put(this.baseUrl + '/users', {
                         user: mergedUser
                     }, this.getOptions())
-                        .pipe(map((data) => {
-                            let object = data.json()
+                        .pipe(map((res) => {
+                            let data = res.json()
                             // if the response has a token, the user should be successfully registered and logged in
-                            if (object.user) {
-                                this.setUser(object.user)
+                            if (data.user) {
+                                data.user = this.setUser(data.user)
                             }
-                            if (object.token) {
-                                this.setUser(object.token)
+                            if (data.token) {
+                                this.setToken(data.token)
                             }
 
-                            return data.json()
+                            return data
                         }))
                         .toPromise()
                         .then(user => {
@@ -518,19 +527,19 @@ export class AuthService implements CanActivate {
                     this.legacyHttp.put(this.baseUrl + '/users', {
                         user: mergedUser
                     }, this.getOptions())
-                        .pipe(map((data) => {
-                            let object = data.json()
+                        .pipe(map((res) => {
+                            let data = res.json()
                             // if the response has a token, the user should be successfully registered and logged in
-                            if (object.user) {
-                                this.setUser(object.user)
+                            if (data.user) {
+                                data.user = this.setUser(data.user)
                             }
-                            if (object.token) {
-                                this.setToken(object.token)
+                            if (data.token) {
+                                this.setToken(data.token)
                             }
 
                             console.log(this.user.avatar)
 
-                            return data.json()
+                            return data
                         }))
                         .toPromise()
                         .then(user => {
@@ -561,15 +570,15 @@ export class AuthService implements CanActivate {
         }
 
         return this.legacyHttp.post([this.baseUrl, 'tempusers'].join('/'), data, this.getOptions())
-            .pipe(map((data) => {
-                let object: any = data.json()
+            .pipe(map((res) => {
+                let data: any = res.json()
 
-                if (object.token) {
-                    this.setUser(object.user)
-                    this.setToken(object.token)
+                if (data.token) {
+                    data.user = this.setUser(data.user)
+                    this.setToken(data.token)
                 }
                 console.log(this.getOptions())
-                return object
+                return data
             }))
     }
 
@@ -590,12 +599,12 @@ export class AuthService implements CanActivate {
             )
             .toPromise()
             .then(this.extractData)
-            .then((res) => {
-                if (res.token && res.user) {
-                    this.setUser(res.user)
-                    this.setToken(res.token)
+            .then((data) => {
+                if (data.token && data.user) {
+                    data.user = this.setUser(data.user)
+                    this.setToken(data.token)
                 }
-                return res
+                return data
             })
     }
 

@@ -108,7 +108,7 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
     if (this.first < 0) { this.first = filters['start'] = 0 }
     this.rows = filters['size'] = paging && paging.rows != undefined ? parseInt(paging.rows) : this.rows
 
-    this._readings.updateCreated(filters)
+    this._readings.updateCreated(this.user, filters)
     if (paging && paging!==undefined) {
       let direction = 'Up'
       if (this.currentPageNo>paging.page) {
