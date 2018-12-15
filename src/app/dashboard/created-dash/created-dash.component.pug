@@ -52,7 +52,22 @@
       .alert.alert-danger.alert-readings(*ngIf="errorObject.readingError", role="alert") {{ errorObject.readingError }}
       .row.loading(*ngIf="loading")
       hot-tutorial-reading(*ngIf="!loading && readings.length < 1 && !errorObject.readingError && user.type !=='temp'")
-      hot-reading-card(*ngFor="let reading of readings", style="margin-bottom: 30px; float:left; width:100%;", [reading]="reading")
+      ng-container(*ngFor="let reading of readings")
+        //- Mark beginning of archived readings
+        .divider--alert(*ngIf="reading.archivedBegin")
+          .alert.small
+            .icon.icon-folder
+            b Recently Archived Readings
+        hot-reading-card(style="margin-bottom: 30px; float:left; width:100%;", [reading]="reading")
+        //- Mark beginning of archived readings
+        .divider--alert(*ngIf="reading.archivedEnd")
+          .archived-fade--above
+          .alert
+            .hero-h.mr-1 H
+            b Access all Archived with Hero
+            p.pl-4 With Hero, you support Edji’s continued development and can have unlimited active readings - including your currently archived!
+            .btn-row.right
+              a.btn.btn-hero.btn-sm([routerLink]="['/hero']") Go Hero
       <p-paginator [rows]="rows" [totalRecords]="total" (onPageChange)="loadCreatedFeed($event)"></p-paginator>
   .col-4.col-sm-3
     h2 Drafts

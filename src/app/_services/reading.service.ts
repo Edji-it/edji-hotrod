@@ -89,8 +89,12 @@ export class ReadingService {
                 ) {
                 readings[i].archived = true
                 archivedTally++
-                // Limit number of archived shown to 2
-                if (archivedTally > 2) {
+                // Limit number of archived shown to 2, and flag begin/end of archive
+                if (archivedTally == 1) {
+                  readings[i].archivedBegin = true
+                } else if (archivedTally == 2) {
+                  readings[i].archivedEnd = true
+                } else  if (archivedTally > 2) {
                   readings.splice(i, 1)
                   i--
                 }
