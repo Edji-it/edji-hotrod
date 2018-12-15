@@ -9,6 +9,10 @@
   margin: 0;
 }
 
+.card-body--small {
+  font-size: 12px;
+}
+
 .draft-card {
   padding: $base-pad/2 0px $base-pad/2 40px;
   cursor: pointer;

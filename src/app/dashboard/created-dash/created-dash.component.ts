@@ -29,7 +29,6 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
   public errorObject = {
     readingError: ""
   };
-  private subscriptions: Subscription[] = [];
   public readingToBeRemoved : Reading;
 
   public showLoginReqModal: boolean = false
@@ -43,7 +42,14 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
   public rows: number = 15 // number of Readings to return
   public total: number = 15 // total Readings
   public pageNo: number = 1
+  public guideLinks: { displayName: string, url: string }[] = [
+    { displayName: "Lesson Ideas", url: "http://guide.edji.it/index.php/2017/05/20/getting-started-with-edji/" },
+    { displayName: "Readings for Math", url: "http://guide.edji.it/index.php/2017/07/16/using-edji-with-math/" },
+    { displayName: "AVID and WICOR", url: "http://guide.edji.it/index.php/2018/09/20/using-edji-with-avid-wicor/" }
+  ] 
+
   private currentPageNo: number = 0 // used for analytics to determine page up/down direction
+  private subscriptions: Subscription[] = [];
 
   // TypeScript public modifiers
   constructor(

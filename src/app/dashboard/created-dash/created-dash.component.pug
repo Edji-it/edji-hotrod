@@ -29,8 +29,14 @@
           [class.active]="activeFilter === 'bookmarked'",
           (click)="loadFilter('bookmarked')"
         )
-    div
-      p Guide Links
+    .card.my-4
+      .card-body.card-body--small.pt-1.px-3.pb-3
+        h5.card-title From the Edji Guide
+        p.card-text Get ideas and tips for your classroom:
+        ul.link-list
+          li(*ngFor="let guide of guideLinks")
+            a.link(target="_blank", [href]="guide.url")
+              | {{ guide.displayName }}
   .col-8.col-sm-6.item-list.created-list([ngClass]="['page-'+pageNo]")
       //- Show readings with date values
       .alert.alert-info.alert-dismissible(role="alert", *ngIf="!loading && readings.length < 1 && !errorObject.readingError")
