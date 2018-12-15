@@ -119,7 +119,7 @@ nav-bar([pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'", [canPublish]
                 img(title="Add PDF" src="/assets/images/icon-pdf.svg")
               //- Insert Question Button (Hero) - NOT DONE
                   - Modal not needed.
-              a#buttonInsertQuestion.btn.btn-icon--plain(*ngIf="currentUser.hero_status", (click)="addQuestionInLine()")
+              a#buttonInsertQuestion.btn.btn-icon--plain((click)="addQuestionInLine()")
                 img(title="Add Question" src="/assets/images/icon-add-question.svg")
             //- Mobile Insert Buttons
             .editor-button-bar.hidden-lg-up([class.hide]="editorToolbarHidden")
@@ -142,7 +142,6 @@ nav-bar([pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'", [canPublish]
                 //- Insert Question Button (Hero) - NOT DONE
                     - Modal not needed.
                 a#buttonInsertQuestionMobile.btn.btn-icon--circle-shadow.insert-options--mobile(
-                  *ngIf="currentUser.hero_status", 
                   (tap)="addQuestionInLine(); insertOptionShow=!insertOptionShow", 
                   [class.btn-show--animation]="insertOptionShow"
                 )
