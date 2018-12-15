@@ -87,6 +87,8 @@ describe('Discover Feed', () => {
             newReading.contentInput.sendKeys(newReading.contentShortString);
             // Hit save
             newReading.addNewReading()
+            // checks for and clicks the confirm archive button if the modal is there
+            newReading.confirmArchiveButtonClick()
             // Finalize
             browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
             newReading.finalizeButton.click();
