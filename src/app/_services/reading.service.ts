@@ -243,6 +243,61 @@ export class ReadingService {
         }), 
         params: feedParams })
   }
+
+  /**
+   * Gets all drafts for current user
+   * @returns Observable returning array of readings, { readings: [ ]} 
+   */
+  public getDrafts() : Observable<{readings: Reading[]}> {
+    /**
+     * @todo Integrate new drafts call
+     */
+    return Observable.create(function(observer) {
+      observer.next({
+        readings: [
+          {
+            createdAt: "2018-12-15T00:06:11.349Z",
+            draft: true,
+            grade_levels: [],
+            owner_id: "59bd8e3eee48dfca29138e87",
+            public: false,
+            source: null,
+            subjects: [],
+            teacher_ids: ["59bd8e3eee48dfca29138e87"],
+            title: "Vocabulary in the works of Shakespeare",
+            updatedAt: "2018-12-15T00:06:11.349Z",
+            _id: "5bfddbf3e9a10845202ff249"
+          },
+          {
+            createdAt: "2018-11-28T00:06:11.349Z",
+            draft: true,
+            grade_levels: [],
+            owner_id: "59bd8e3eee48dfca29138e87",
+            public: false,
+            source: null,
+            subjects: [],
+            teacher_ids: ["59bd8e3eee48dfca29138e87"],
+            title: "PD Session",
+            updatedAt: "2018-11-28T00:06:11.349Z",
+            _id: "5bfddbf3e9a10845202ff249"
+          },
+          {
+            createdAt: "2018-10-28T00:06:11.349Z",
+            draft: true,
+            grade_levels: [],
+            owner_id: "59bd8e3eee48dfca29138e87",
+            public: false,
+            source: null,
+            subjects: [],
+            teacher_ids: ["59bd8e3eee48dfca29138e87"],
+            title: "Biology in North American Forests",
+            updatedAt: "2018-10-28T00:06:11.349Z",
+            _id: "5bfddbf3e9a10845202ff249"
+          }
+        ]
+      });
+    });
+  } 
 }
 
 /**

@@ -15,6 +15,12 @@
     display: inline-block;
 }
 
+.icon-lg {
+    width: 2em;
+    height: 2em;
+    display: inline-block;
+}
+
 .icon__tooltip {
     cursor: pointer;
     background: transparent;
@@ -116,6 +122,15 @@
     display:inline-block;
     width: 0.5em;
     height: 0.5em;
+}
+
+.icon-create {
+    @include icon('icon-create.svg');
+    display:inline-block;
+
+    .btn:hover &, .btn:focus & {
+        @include icon('icon-create-white.svg');
+    }
 }
 
 .icon-caret {

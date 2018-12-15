@@ -8,6 +8,7 @@ import { Angulartics2 } from 'angulartics2'
 // Project Dependencies
 import { AuthService, ReadingService, ProjectService } from '../../_services'
 import { User, Reading } from '../../shared/datatypes'
+import { take } from 'rxjs/operators';
 
 @Component({
   // The selector is what angular internally uses
@@ -23,7 +24,8 @@ import { User, Reading } from '../../shared/datatypes'
 })
 export class CreatedDashComponent implements OnInit, OnDestroy {
   // Set our default values
-  public readings: Reading[] = [];
+  public readings: Reading[] = []
+  public drafts: Reading[] = []
   public errorObject = {
     readingError: ""
   };
@@ -77,7 +79,10 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
       )
     )
     
+    // Load user's created readings
     this.loadCreatedFeed()
+    // Load user's drafts
+    this.loadDrafts()
   } //  ngOnInit()
 
   ngOnDestroy () {}
@@ -111,9 +116,22 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
       this.currentPageNo=paging.page
     }
   }
+  
+  /**
+   * Loads draft array for current user
+   */
+  private loadDrafts() : void {
+    this._readings.getDrafts().pipe(take(1))
+      .subscribe(data => {
+        if (data.readings) {
+          this.drafts = data.readings
+        }
+      })
+  }
 
   /**
    * Load filter
+   * @param filter string key value for filter being applied (recent, bookmarket)
    */
   public loadFilter(filter: string) : void {
     this.activeFilter = filter

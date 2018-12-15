@@ -8,3 +8,43 @@
   padding: 10px 0px;
   margin: 0;
 }
+
+.draft-card {
+  padding: $base-pad/2 0px $base-pad/2 40px;
+  cursor: pointer;
+  position: relative;
+
+  &:hover, &:focus {
+    & .icon {
+      background-color: #fafafa;
+    }
+
+    & .draft-card__title {
+      color: $blue;
+    }
+  }
+
+  & .icon {
+    border-radius: 50%;
+    background-size: 70% auto;
+    position: absolute;
+    top: $base-pad/2;
+    left: 1px;
+  }
+
+  border-bottom: 1px solid #DCE3EA;
+
+  &:last-of-type, &:last-child {
+    border-bottom: 1px solid transparent;
+  }
+}
+
+.draft-card__title {
+  font-size: 18px;
+}
+
+.draft-card__date {
+  font-size: 11px;
+  color: #656565;
+  margin: 0px;
+}
