@@ -19,6 +19,9 @@ export class NewReading implements PageObjectInterface
     public privateButton = element(by.id('readingMakePrivate'));
     public groupInput = element(by.id('newProjectLabel'));
     public newGroupModalClose = element(by.css('#addProjectModal .close'));
+    public confirmArchiveModalClose = element(by.css('#confirmArchiveModal .close'));
+    public newGroupModal = element(by.id('addProjectModal'))
+    public confirmArchiveModal = element(by.id('confirmArchiveModal'))
     public gradeTileK = element(by.id('gradeTile0'));
     public gradeTileU = element(by.id('gradeTile13'));
     public subjectDropdown = element(by.id('subjectDropdown'));
