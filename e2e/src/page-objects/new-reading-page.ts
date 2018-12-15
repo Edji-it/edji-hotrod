@@ -24,6 +24,7 @@ export class NewReading implements PageObjectInterface
     public subjectDropdown = element(by.id('subjectDropdown'));
     public subjectFirstOption = element.all(by.css('#subjectDropdown .dropdown-item')).first();
     public addButton = element(by.id('addReadingButton'));
+    public confirmArchiveButton = element(by.id('buttonConfirm'));
     public addButtonMobile = element(by.id('addReadingButtonMobile'));
     public finalizeButton = element(by.id('buttonCreateGroup'));
     public goToReadingButton = element(by.id('shareModalReadingButton'));
@@ -162,6 +163,18 @@ export class NewReading implements PageObjectInterface
                 });
             }
         });
+    }
+
+    public confirmArchiveButtonClick(): void {
+        // Click the confirm archive reading button for new reading
+        this.confirmArchiveButton.isPresent().then((result) => {
+            if (result) {
+                this.confirmArchiveButton.isDisplayed().then((result) => {
+                    browser.wait(this.EC.elementToBeClickable(this.confirmArchiveButton), 5000, "confirm archive reading button never became clicable")
+                    this.confirmArchiveButton.click()
+                })
+            }
+        })
     }
 
 } // class Login
