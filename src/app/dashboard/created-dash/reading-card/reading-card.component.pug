@@ -1,9 +1,11 @@
 .list-item.list-item--block.reading-card(
-  [ngClass]="{'draft-edit' : (reading['draft'])}", 
+  [ngClass]="{'draft-edit' : (reading['draft']), 'archived': (reading.archived) }", 
   [routerLink]="(reading['draft']) ? ['/new-reading/' + reading._id] : []"
 )
-  .reading-icon
+  .reading-icon.hide-for-archived
     span {{reading.title.substring(0,2)}}
+  .archived-icon.show-for-archived
+    .icon.icon-folder
   .reading-title([class.no-version]="!reading.version_count")
     .reading-title--center-row
       h1.small.reading-title__text {{reading.title}} 
@@ -84,9 +86,12 @@
   //- Delete Reading if Draft Button
   .btn--delete-project.icon-button.btn--delete-draft(*ngIf="reading['draft']", title="Delete Draft", (click)="$event.stopPropagation(); relevantReading = reading; showDeleteReadingModal = true;")
     span([innerHtml]="':x:' | emojione")
-
 //- The Project Card
-.list-item.list-item--button.project-card(*ngFor="let project of reading.projects", [class.new-project]="project.new")
+.list-item.list-item--button.project-card(
+      *ngFor="let project of reading.projects", 
+      [class.new-project]="project.new",
+      [class.archived]="reading.archived"
+    )
   .row.project-row--right-pad([routerLink]="['/project', project._id]")
     .col-8
       //- Title

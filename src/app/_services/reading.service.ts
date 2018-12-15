@@ -6,7 +6,7 @@ import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http'
 
 // Project Dependencies
 import { AuthService } from './auth.service'
-import { Project, Reading } from '../shared/datatypes'
+import { Project, Reading, User } from '../shared/datatypes'
 
 interface FilterObj {
   type?: string,
@@ -49,7 +49,7 @@ export class ReadingService {
    * Get all Created Readings for a user, paginated
    * @param filters object containing pagination values (to eventually include other filters)
    */
-  public updateCreated(filters?: ReadingFilters) : void {
+  public updateCreated(user: User, filters?: ReadingFilters) : void {
     let feedParams = new HttpParams()
     // Set Pagination values
     if (filters) {
@@ -71,6 +71,19 @@ export class ReadingService {
         params: feedParams })
         .pipe(take(1))
         .subscribe((data: any) => { 
+          if (data.readings && !user.hero_status && user.readingsArchivedBefore) {
+            let archivedBefore = new Date(user.readingsArchivedBefore)
+            let readings = data.readings
+            let total = readings.length
+            for (let i = 0; i < total; i++) {
+              //  AND NOT LEGACY
+              if (new Date(readings[i].updatedAt) < archivedBefore) {
+                readings[i].archived = true
+              }
+            }
+            console.log("READINGS HANDLED", readings)
+            data.readings = readings
+          }
           this.userReadingsSource.next(data)
         }, (error) => {
           this.userReadingsSource.error(error)
@@ -130,7 +143,7 @@ export class ReadingService {
               
               if (reading.version_count > 1) {
                 // Reload content (slower but simpler)
-                this.updateCreated()
+                this.updateCreated(this._auth.getUser())
               } else if (reading._id == targetReading._id) {
                 // Single version readings we can remove instantly
                 readingResponse.readings.splice(index, 1)

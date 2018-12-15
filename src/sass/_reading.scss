@@ -701,6 +701,22 @@ $readingIconHeight: 60px;
     }
 }
 
+.archived-icon {
+	@extend .reading-icon;
+	background: transparent;
+	border: 1px solid #cccccc;
+	position: relative;
+
+	& .icon {
+		height: $readingIconHeight - 30px;
+		width: $readingIconHeight - 30px;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate3d(-50%, -50%, 0px);
+	}
+}
+
 .reading-title {
     height: $readingIconHeight;
     white-space: nowrap;

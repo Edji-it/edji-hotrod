@@ -7,14 +7,14 @@
   .col-sm-6
     button#buttonNewReading.btn.btn-primary.new-reading-btn(*ngIf="user.type == 'temp'", (click)="showLoginReqModal = true") 
       | New Reading
-      i.icon.icon-create.mr-0
+      i.icon.icon-create.mr-0.icon--btn-inline
     button#buttonNewReading.btn.btn-primary.new-reading-btn(*ngIf="user.type != 'temp'", [routerLink]="['/new-reading']")
       | New Reading
-      i.icon.icon-create.mr-0
+      i.icon.icon-create.mr-0.icon--btn-inline
 .row.hidden-md-up
   button#buttonNewReadingMobile.btn.btn-primary.new-reading-btn([routerLink]="[ '/new-reading' ]") 
     | New Reading
-    i.icon.icon-create.mr-0
+    i.icon.icon-create.mr-0.icon--btn-inline
 //- Main content row
 .row
   .col-12.col-sm-3

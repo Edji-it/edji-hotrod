@@ -223,6 +223,10 @@
     transform: rotate(20deg) translateY(-50%);
 }
 
+.icon-folder {
+    @include icon('icon-folder.svg');
+}
+
 .icon-loading {
     display: inline-block;
     width: 1em;
