@@ -73,15 +73,29 @@ export class ReadingService {
         .subscribe((data: any) => { 
           if (data.readings && !user.hero_status && user.readingsArchivedBefore) {
             let archivedBefore = new Date(user.readingsArchivedBefore)
-            let readings = data.readings
-            let total = readings.length
-            for (let i = 0; i < total; i++) {
-              //  AND NOT LEGACY
-              if (new Date(readings[i].updatedAt) < archivedBefore) {
+            let readings = data.readings.slice()
+            let archivedTally: number = 0
+            // Loop through readings and mark archived
+            for (let i = 0; i < readings.length; i++) {
+              /**
+               * Readings are "archived" if:
+               * - Updated date is prior to archived before date
+               * - Readings before Hero v2 (01-01-2018) are "legacy" and not archived
+               */
+              let readingDate = new Date(readings[i].updatedAt)
+              if (readingDate < archivedBefore
+                  // @todo Uncomment to allow legacy readings to be active
+                  // && readingDate >= new Date('2019-01-01')
+                ) {
                 readings[i].archived = true
+                archivedTally++
+                // Limit number of archived shown to 2
+                if (archivedTally > 2) {
+                  readings.splice(i, 1)
+                  i--
+                }
               }
             }
-            console.log("READINGS HANDLED", readings)
             data.readings = readings
           }
           this.userReadingsSource.next(data)
