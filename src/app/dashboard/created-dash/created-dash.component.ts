@@ -142,6 +142,7 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
   public loadFilter(filter: string) : void {
     this.activeFilter = filter
 
+    // Handle each sort option
     if (filter === 'recent') {
       this.loadCreatedFeed()
     } else if (filter === 'bookmarked') {
