@@ -110,7 +110,9 @@ button.new-reading-btn {
     float: right;
 
     @media (max-width: $tablet) {
-        margin: -10px 0 14px 0;
+        margin-bottom: $base-pad;
+        width: 100%;
+        font-size: 14px;
     }
 
     @media (min-width: $tablet) and (max-width: $desktop) {
@@ -185,7 +187,9 @@ button.new-reading-btn {
 }
 
 .created-list {
-    padding: 0px;
+    @media (min-width: $tablet){
+        padding: 0px;
+    }
 }
 
 .archived-fade--above {

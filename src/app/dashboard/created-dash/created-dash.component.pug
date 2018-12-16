@@ -1,20 +1,16 @@
 //- Created Readings View
-.row.hidden-sm-down
-  .col-sm-6
+.row
+  .col-12.col-sm-6
     h1.no-flow Created Readings
       i.icon__tooltip(tooltipPosition="bottom", pTooltip="Readings are how you share content on Edji!")
         span.icon.icon-circle.icon-info  i
-  .col-sm-6
+  .col-12.col-sm-6.text-right
     button#buttonNewReading.btn.btn-primary.new-reading-btn(*ngIf="user.type == 'temp'", (click)="showLoginReqModal = true") 
       | New Reading
       i.icon.icon-create.mr-0.icon--btn-inline
     button#buttonNewReading.btn.btn-primary.new-reading-btn(*ngIf="user.type != 'temp'", [routerLink]="['/new-reading']")
       | New Reading
       i.icon.icon-create.mr-0.icon--btn-inline
-.row.hidden-md-up
-  button#buttonNewReadingMobile.btn.btn-primary.new-reading-btn([routerLink]="[ '/new-reading' ]") 
-    | New Reading
-    i.icon.icon-create.mr-0.icon--btn-inline
 //- Main content row
 .row
   .col-12.col-sm-3
@@ -30,7 +26,7 @@
         )
         i.icon.icon-bookmark.mr-2(style="vertical-align:middle;")
         | Bookmarks
-    .card.my-4
+    .card.my-4.hidden-sm-down
       .card-body.card-body--small.pt-1.px-3.pb-3
         h5.card-title From the Edji Guide
         p.card-text Get ideas and tips for your classroom:
@@ -38,7 +34,7 @@
           li(*ngFor="let guide of guideLinks")
             a.link(target="_blank", [href]="guide.url")
               | {{ guide.displayName }}
-  .col-8.col-sm-6.item-list.created-list([ngClass]="['page-'+pageNo]")
+  .col-12.col-sm-6.item-list.created-list([ngClass]="['page-'+pageNo]")
       //- Show readings with date values
       .alert.alert-info.alert-dismissible(role="alert", *ngIf="!loading && readings.length < 1 && !errorObject.readingError")
         .row
@@ -70,7 +66,7 @@
             .btn-row.right
               a.btn.btn-hero.btn-sm([routerLink]="['/hero']") Go Hero
       <p-paginator [rows]="rows" [totalRecords]="total" (onPageChange)="loadCreatedFeed($event)"></p-paginator>
-  .col-4.col-sm-3
+  .col-12.col-sm-3
     h2 Drafts
     .draft-card(*ngFor="let draft of drafts", [routerLink]="['/new-reading/' + draft._id]")
       .icon.icon-lg.icon-create
