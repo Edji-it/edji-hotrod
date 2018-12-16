@@ -187,6 +187,15 @@ export class ProjectService {
             'Authorization': this._auth.getToken()
             }), 
             params: feedParams })
+            .pipe(map(data => {
+                /**
+                 * @todo REMOVE: Sample data for teacher with archived date
+                 */
+                if (data.projects[1]) {
+                    data.projects[1].teacher.readingsArchivedBefore = "Jan 1, 2019"
+                }
+                return data
+            }))
     }
 
     /**
