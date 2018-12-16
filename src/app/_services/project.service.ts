@@ -194,6 +194,25 @@ export class ProjectService {
                 if (data.projects[1]) {
                     data.projects[1].teacher.readingsArchivedBefore = "Jan 1, 2019"
                 }
+                let projects = data.projects.slice()
+                // Loop through projects and mark archived for display
+                for (let i = 0; i < projects.length; i++) {
+                    let teacher = projects[i].teacher
+                    if (teacher && !teacher.hero_status && teacher.readingsArchivedBefore) {
+                        /**
+                         * Readings are "archived" if:
+                         * - Updated date is prior to archived before date
+                         * - Readings before Hero v2 (01-01-2018) are "legacy" and not archived
+                         */
+                        let projectDate = new Date(projects[i].createdAt)
+                        let archivedBefore = new Date(teacher.readingsArchivedBefore)
+                        if (projectDate < archivedBefore) {
+                            projects[i].archived = true
+                        }
+                    }
+                }
+                //  Update return value
+                data.projects = projects
                 return data
             }))
     }
@@ -224,6 +243,15 @@ export class ProjectService {
                 map(
                 (data) => {
                     let project = data.json().project; //can later have local setter to do validation/data manipulation before passing through observable
+                    let teacher = project.teacher
+                    // Identify and set archived 
+                    if (teacher && !teacher.hero_status && teacher.readingsArchivedBefore) {
+                        let archivedBefore = new Date(teacher.readingsArchivedBefore)
+                        let projectDate = new Date(project.createdAt)
+                        if (projectDate < archivedBefore) {
+                            project.archived = true
+                        }
+                    }
                     // Clear stats object
                     this._commentStats.resetStats()
                     /**

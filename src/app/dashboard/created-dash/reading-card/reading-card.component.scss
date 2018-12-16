@@ -97,34 +97,6 @@
     min-height: 115px;
     float: none;
     width: 100%;
-
-    &.archived {
-        background: #F3F3F3;
-    }
-}
-
-.project-card {
-    &.archived {
-        background: #F3F3F3;
-    }
-}
-
-.show-for-archived {
-    visibility: hidden;
-    pointer-events: none;
-    position: absolute;
-}
-
-.archived {
-    & .hide-for-archived {
-        display: none;
-    }
-
-    & .show-for-archived {
-        visibility: visible;
-        pointer-events: all;
-        position: relative;
-    }
 }
 
 

@@ -82,7 +82,7 @@ export class ReadingService {
                * - Updated date is prior to archived before date
                * - Readings before Hero v2 (01-01-2018) are "legacy" and not archived
                */
-              let readingDate = new Date(readings[i].updatedAt)
+              let readingDate = new Date(readings[i].createdAt)
               if (readingDate < archivedBefore
                   // @todo Uncomment to allow legacy readings to be active
                   // && readingDate >= new Date('2019-01-01')
@@ -100,6 +100,7 @@ export class ReadingService {
                 }
               }
             }
+            //  Update return value
             data.readings = readings
           }
           this.userReadingsSource.next(data)

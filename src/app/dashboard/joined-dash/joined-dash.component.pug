@@ -42,9 +42,15 @@ form.pb-4.hidden-md-up([formGroup]="codeForm", (ngSubmit)="addSession(codeForm.v
       strong Oh no!
       | &nbsp;{{errorObject.projectError}}
     ng-container(*ngFor="let project of projects")
-      .list-item.list-item--button([routerLink]="['/project', project._id]", [class.hide]="!project.createdAt")
-        .reading-icon
+      .list-item.list-item--button.project-card(
+            [routerLink]="['/project', project._id]", 
+            [class.hide]="!project.createdAt",
+            [class.archived]="project.archived"
+          )
+        .reading-icon.hide-for-archived
           span {{ project.reading && project.reading.title ? project.reading.title.substring(0,2) : '' }}
+        .archived-icon.show-for-archived
+          .icon.icon-folder
         .reading-title
           .reading-title--center-row
             h1.small {{ project.reading ? project.reading.title : ''}} 
