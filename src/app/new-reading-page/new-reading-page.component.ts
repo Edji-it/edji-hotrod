@@ -52,7 +52,7 @@ export class NewReadingPage implements OnInit {
     };
 
     public readingToArchive: Reading
-    public archiveReadingsBefore: Reading
+    public readingsArchivedBefore: Reading
 
     // Messages
     public successAlert : string = "Nice work! This reading draft was successfully saved!"
@@ -203,12 +203,12 @@ export class NewReadingPage implements OnInit {
                 (data)  => {
                     // Take the second reading and make sure it is archived
                     let archivedReading = data && data.readings && data.readings[1]
-                    let archiveReadingsBefore = data && data.readings && data.readings[0]
+                    let readingsArchivedBefore = data && data.readings && data.readings[0]
                     if (!this.user.hero_status && archivedReading) {
                         // reading that we'll be archiving (for display purposes on modal)
                         this.readingToArchive = archivedReading
-                        // reading that we'll be setting as our archiveReadingsBefore property on the user - send PUT to server
-                        this.archiveReadingsBefore = archiveReadingsBefore
+                        // reading that we'll be setting as our readingsArchivedBefore property on the user - send PUT to server
+                        this.readingsArchivedBefore = readingsArchivedBefore
                     }
                 },
                 (error) => {
@@ -539,7 +539,7 @@ export class NewReadingPage implements OnInit {
     public archiveReading(form) {
         // Make the call to PUT the reading archive value
         let user = this.user
-        user.archiveReadingsBefore = this.archiveReadingsBefore.createdAt
+        user.readingsArchivedBefore = this.readingsArchivedBefore.createdAt
         
         this._auth.updateUser(user)
         .subscribe(
