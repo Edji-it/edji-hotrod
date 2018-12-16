@@ -101,7 +101,6 @@
 
 
 .reading-access-icon {
-    float: right;
     padding: 0 4px;
 
     & i {
@@ -124,6 +123,23 @@
 .project-card {
     margin-bottom: $projectCardGutter;
     width: 100%;
+}
+
+.tag-row {
+    white-space: nowrap;
+    overflow: hidden;
+    display: inline-block;
+}
+
+.reading-action-row {
+    text-align: right;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.reading-action {
+    margin-left: 5px;
+    display: inline-block;
 }
 
 

@@ -24,11 +24,12 @@
           [class.active]="activeFilter === 'recent'",
           (click)="loadFilter('recent')"
         )
-      .btn.btn-filter(
-          [innerHtml]="':bookmark: Bookmarked' | emojione", 
+      .btn.btn-filter( 
           [class.active]="activeFilter === 'bookmarked'",
           (click)="loadFilter('bookmarked')"
         )
+        i.icon.icon-bookmark.mr-2(style="vertical-align:middle;")
+        | Bookmarks
     .card.my-4
       .card-body.card-body--small.pt-1.px-3.pb-3
         h5.card-title From the Edji Guide

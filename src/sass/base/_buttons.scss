@@ -77,6 +77,20 @@ button, .button, .btn { //, [class*='btn']
     position: relative;
     vertical-align: middle;
   }
+
+  & .hide-inactive {
+    display: none;
+  }
+
+  &.active {
+    & .hide-active {
+      display: none;
+    }
+
+    & .hide-inactive {
+      display: inline-block;
+    }
+  }
 }
 
 .button, button {

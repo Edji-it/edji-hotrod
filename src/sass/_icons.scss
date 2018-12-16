@@ -227,6 +227,14 @@
     @include icon('icon-folder.svg');
 }
 
+.icon-bookmark {
+    @include icon('icon-bookmark.svg');
+}
+
+.icon-bookmark-off {
+    @include icon('icon-bookmark-off.svg');
+}
+
 .icon-loading {
     display: inline-block;
     width: 1em;

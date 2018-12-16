@@ -218,7 +218,8 @@ export class ReadingService {
         questions: reading.questions,
         public: reading.public,
         subjects: reading.subjects,
-        grade_levels: reading.grade_levels
+        grade_levels: reading.grade_levels,
+        bookmarked: reading.bookmarked
       } // let
 
       return this.http

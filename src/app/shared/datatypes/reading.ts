@@ -33,5 +33,6 @@ export interface BaseReading {
   subjects?: string[],
   heroic?: boolean,
   createdAt?: string,
-  updatedAt?: string
+  updatedAt?: string,
+  bookmarked?: boolean
 }
