@@ -209,8 +209,7 @@ export class ProjectService {
      * @returns observable with project data
      */
     public setCurrentProject(projectCode: string): Observable<any> {
-        // return this.http.get(this._auth.getUrl() + '/api/v1/projects/' + encodeURIComponent(projectCode) + '?pop=reading_id', this._auth.getOptions())
-        return this.http.get(this._auth.getUrl() + '/projects/' + encodeURIComponent(projectCode) + '?pop=reading_id', this._auth.getOptions())
+        return this.http.get(this._auth.getUrl() + '/api/v1/projects/' + encodeURIComponent(projectCode) + '?pop[]=reading_id&pop[]=teacher', this._auth.getOptions())
             .pipe(
                 map(
                 (data) => {
