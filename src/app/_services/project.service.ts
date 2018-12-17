@@ -944,6 +944,18 @@ export class ProjectService {
         this.activeFilter = commentFilter
         this.filterUpdatesSource.next(this.activeFilter)
     }
+
+    /**
+     * Returns true if the project is archived by checking the create date vs the archive_readings_before date
+     * @param project current project
+     */
+    public checkArchiveStatus(project: Project): boolean {
+        if (project && project.teacher && project.reading_id.createdAt < project.teacher.archive_readings_before) {
+            return true
+        } else {
+            return false
+        }
+    }
 } // class
 
 /**
