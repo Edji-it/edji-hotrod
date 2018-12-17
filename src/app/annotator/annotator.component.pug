@@ -90,6 +90,16 @@ scroll-progress([scrollProgress]="currentScroll")
             a(href="https://www.google.com/chrome/browser/desktop/", target="_blank")
                 | Google Chrome Web Browser
             | for your desktop device.
+        .alert.alert-info.fade.show(
+            role="alert",
+            *ngIf="readingArchived && user._id===project.teacher._id"
+        )
+            p This reading is archived. You may view the reading and your comments. The Owner Tools will be disabled. To gain full access to this reading, go hero.
+        .alert.alert-info.fade.show(
+            role="alert",
+            *ngIf="readingArchived && user._id!==project.teacher._id"
+        )
+            p This reading is archived. You may view the reading and your comments.
         //- Create components after load for reading
         //- Note: -1 tabindex for disabling "Touch to Search" on mobile https://developers.google.com/web/updates/2015/10/tap-to-search
         article#annotatorContent.content.active-content.pt-4(

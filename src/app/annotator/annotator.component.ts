@@ -82,6 +82,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
     // Status Booleans
     public isMobile = false
+    public readingArchived: boolean
 
     public highlightY = 200 
     public highlightX = 20 
@@ -221,6 +222,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 // Get Project from project service
                 this._projects.currentProject.subscribe(
                     (project) => {
+                        this.readingArchived = this._projects.checkArchiveStatus(project)
                         if (project) {
                             this.project = project
                             this.setLinePositions()
