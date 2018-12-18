@@ -64,7 +64,7 @@ export class HeroPricingComponent implements OnInit {
       info: {
         heading: "Emoji and Text Comments",
         description: "Real reading engagement is powerful, emotional and moving. Have your students engage with the text and express their thoughts for you to see, read or listen to.",
-        image: "/assets/images/pricing/text-emoji.png"
+        image: "/assets/images/pricing/comments.png"
       }
     },
     {
