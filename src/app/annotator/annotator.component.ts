@@ -223,6 +223,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 this._projects.currentProject.subscribe(
                     (project) => {
                         this.readingArchived = this._projects.checkArchiveStatus(project)
+                        if (this.readingArchived) {
+                            this._projects.filterByUser(this.user)
+                        }
                         if (project) {
                             this.project = project
                             this.setLinePositions()
@@ -491,7 +494,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     showCommentOptions(event): void {
         // Debug with:
         // console.log("showCommentOptions fired from ", event.type)
-        if (this.showCommentOptionsWait || (event.type == 'touchend' && this.checkIfScrolling(event))) {
+        if (this.showCommentOptionsWait || (event.type == 'touchend' && this.checkIfScrolling(event)) || this.readingArchived) {
             return
         } else {
             // We only need to worry about preventing overlapping touch and click events

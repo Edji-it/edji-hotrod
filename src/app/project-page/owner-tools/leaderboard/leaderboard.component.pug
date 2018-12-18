@@ -31,7 +31,7 @@
           .answer-circle__group(*ngIf='answer.user===commentUser._id')
             .circle([class.filled]="answer.answered")
 .filter-bubble(
-    [class.slide-in]="appliedFilter",
+    [class.slide-in]="appliedFilter && !archived",
     (swipeleft)="pageStudentFilter(-1)",
     (swiperight)="pageStudentFilter(1)"
   )
