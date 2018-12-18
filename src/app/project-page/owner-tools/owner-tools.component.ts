@@ -59,7 +59,6 @@ export class OwnerToolsComponent implements OnInit {
     this.subscriptions.push(
       this._projects.currentProject.subscribe(project => {
         this.readingArchived = this._projects.checkArchiveStatus(project)
-        console.log('reading archived:', this.readingArchived)
         // For transitioning how the server handles teacher/owner ids
         if (!project.owner_id || typeof(project.owner_id) != 'string') {
           if (typeof(project.teacher_id) == 'string') {

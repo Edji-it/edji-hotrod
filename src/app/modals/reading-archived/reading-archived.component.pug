@@ -1,0 +1,11 @@
+#readingArchivedModal.modal.fade-in.show
+  .modal-dialog
+    .modal-content
+      .modal-header
+        h4.modal-title {{ heading ? heading : &apos;This Reading is Archived&apos; }}
+        button.close((click)='goHome()', type='button') &times;
+      .modal-body.pb-0
+        p This Reading has been Archived. You will not be able to join this reading.
+      .modal-footer
+        .button__row(style='padding-top:0px;')
+          button#buttonGoHome.btn.btn-primary.w-100(type='button', (click)='goHome()') Take Me Home
