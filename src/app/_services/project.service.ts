@@ -950,7 +950,7 @@ export class ProjectService {
      * @param project current project
      */
     public checkArchiveStatus(project: Project): boolean {
-        if (project && project.teacher && project.reading_id.createdAt < project.teacher.archive_readings_before) {
+        if (project && project.teacher && (project.reading_id.createdAt < project.teacher.archive_readings_before) && !project.teacher.hero_status) {
             return true
         } else {
             return false
