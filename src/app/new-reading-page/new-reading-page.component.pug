@@ -1,4 +1,4 @@
-nav-bar([pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'", [canPublish]="true", (saveAction)="saveReading($event, readingForm.value)", (shareAction)="shareReading(readingForm.value)")
+nav-bar([pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'", [canPublish]="true", (saveAction)="saveReading(readingForm.value)", (shareAction)="verifyCanShare(readingForm.value)")
 .container.pt-4
   .row
     .col-sm-12
@@ -165,13 +165,31 @@ nav-bar([pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'", [canPublish]
 //- Modals
 upload-picture-modal.modal-will-fade([class.show]="showUploadModal", (returnImage)="addImages($event)", (closeModal)="showUploadModal = false")
 upload-pdf-modal.modal-will-fade([class.show]="showPdfUploadModal", (returnImage)="addImages($event)", (closeModal)="showPdfUploadModal = false")
+//- Confirm if user wants to archive a past reading
+hot-confirm-archive-modal.modal-will-fade(
+  *ngIf="showConfirmArchiveModal",
+  [class.show]="showConfirmArchiveModal", 
+  (confirmArchive)="showConfirmArchiveModal=false; archiveReading(readingForm.value)",
+  (declineArchive)="showConfirmArchiveModal=false; saveReading(readingForm.value)",
+  (goHero)="saveReading(readingForm.value); showHeroParam=true",
+  (closeModal)="showConfirmArchiveModal=false",
+  [readingToArchive]="readingToArchive"
+)
 //- Create First Group
-hot-add-project-modal(
+hot-add-project-modal.modal-will-fade(
   *ngIf="showFirstGroupModal",
+  [class.show]="showFirstGroupModal", 
   [heading]="'Create and Share First Group'",
   [subheading]="'Your reading has been saved! Now create your first group to publish this reading and share with students.'",
   [reading]="reading", 
   [groupLabel]="'Group 1'",
   (groupSaved)="openFirstGroup($event)",
   (closeModal)="showFirstGroupModal = false"
+)
+//- Go Hero!
+hero-subscribe-modal.modal-will-fade(
+  *ngIf="showHeroSubModal",
+  [class.show]="showHeroSubModal", 
+  (closeModal)="showHeroSubModal=false", 
+  (heroWasBorn)="router.navigate(['/dashboard'])"
 )
