@@ -161,7 +161,7 @@ avatar-portal(
     [comment]="comment",
     [lineCount]="lineCount",
     [indexOnLine]="indexOnLine",
-    [active]="indicatesPane",
+    [isActive]="indicatesPane",
     [lineY]="comment.lineY",
     (toggleCommentPane)="toggleCPane(comment)",
     [ngClass]="['e2e-comment--'+comment.author.replace(' ', '-')]"

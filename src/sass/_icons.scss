@@ -370,3 +370,20 @@ content: "|<"; }
 
 .fa-step-forward:before {
   content: ">|"; }
+
+.icon-comment-arrow {
+    width: 50px;
+    height: 60px;
+    background: url('/assets/images/comment-arrow.svg');
+    background-size: 100% 100%;
+    position: absolute;
+    top: -16px;
+}
+
+$arrowOffset: 23px;
+
+@for $z from 1 through 8 {
+    .comment-arrow-#{$z} {
+        left: #{$arrowOffset * ($z - 1)};
+    }
+}

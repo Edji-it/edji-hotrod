@@ -158,6 +158,7 @@ button.new-reading-btn {
 .draft-edit {
     cursor: pointer;
     border: 1px dotted #B3DCEE !important;
+    height: 0px;
 }
 
 .draft-edit:hover {
@@ -394,4 +395,12 @@ button.new-reading-btn {
 
 #readingMakePrivate {
     margin-right: 0;
+}
+
+.reading-draft {
+    width: 20%;
+    height: 50px;
+    position: absolute;
+    left: 0;
+    top: 50%;
 }
