@@ -2,22 +2,16 @@
 nav-bar
 .container-fluid
   //- Promo row
-  .row.twilight.has-sparks(style="padding-top:100px; padding-bottom: 100px; position: relative; overflow:hidden;")
+  .row.row-xl-pad.navy.has-sparks
     .sparks
-    img.promo-spotlight(src="/assets/images/hero-promo-spotlight.svg")
-    img(style="width:100%; position: absolute; bottom: -50px;",src="/assets/images/hero-promo-skyline.svg")
-    .col-md-11.offset-md-1(style="padding-bottom:25px;")
-      h1.big-bold(style="color:#fff;") Answer the Call
-    .col-md-1
-    .col-md-6
-      p.row-xl-pad(style='font-size:1.25em; padding-top: 0px;')
-        | Hero gives you more powers to supercharge your classrooms readings. Engage your students with questions, in-reading discussion, and more! 
-        span([innerHTML]="':tada:' | emojione")
-      .btn-row.text-left
-        button#topHeroCTA.btn.btn-lg.btn-hero((click)='goHero("upperCTA")')
-          | Go Hero
-        button.btn.btn-secondary.ml-4([routerLink]="['/pricing']", fragment="top") 
-          | Compare Plans
+    .col-md-11.offset-md-1
+      h1.display-4.on-dark.mb-0(style="font-weight: 100; line-height: 1.5em;")
+        | Fastest way to get students reading
+        .ml-2 Easiest way to annotate content
+        .ml-4 Best way to see student thoughts
+      //- p.lead
+        | Edji's core set of features will stay open and freely available, but a Hero subscription supports Edji and unlocks even more abilities 
+        span([innerHtml]="':tada:' | emojione")
   //- Feature preview and Academy CTA
   .row.row-xl-pad
     .col-md-8
@@ -38,13 +32,6 @@ nav-bar
         h2.small-bold Assemble Your Team
         p With Hero Academy, your whole school can wield the powers of Hero
         .btn.btn-secondary((click)="requestAcademyModalShow('featurePreview')") Request Academy Info
-  .row.hero-promo-form(style="margin:50px 0px;")
-    .col-12
-      h1.big-light.text-center(style='margin-bottom: 0.5em;') 
-        | Make
-        span(style="background:rgba(253, 228, 104, 0.45); padding:0 0.1em; margin: 0 0.1em; display:inline-block;") Powerful 
-        | Lessons
-      p.medium-semibold.text-center Hero unlocks the full power of Edji with...
   .row
     .hero-rule
   //- Student Filters
@@ -56,13 +43,13 @@ nav-bar
       img(src="/assets/images/hero-promo-filter.png", style="max-width: 400px;")
   .row
     .hero-rule
-  //- Reading Recap
+  //- Replies
   .row.row-xl-pad
-    #sectionRecap.col-md-6.offset-md-3
-      h3.medium-semibold.text-center
-        | See each student's engagement in-depth with <b>Reading Recap</b>
-    .col-md-12.text-center.pt-4
-      img(src="/assets/images/hero-promo-recap.png", style="max-width: 700px;")
+    .col-md-4.offset-md-1
+      h3.medium-semibold Comment <b>Replies</b> let you and your students start discussions right in the text
+    .col-md-7.text-center
+      .promo-screen-wrap
+        img(src="/assets/images/hero-promo-replies.png")
   .row
     .hero-rule
   //- Audio Comments
@@ -84,25 +71,33 @@ nav-bar
       img(src="/assets/images/hero-promo-question.png", style="max-width:700px;")
   .row
     .hero-rule
-  //- Feedback
+  //- Instructions
   .row.row-xl-pad
-    #sectionFeedback.col-md-4.offset-md-1
-      h3.medium-semibold Give live <b>Feedback</b> to students when it is most impactful
+    #sectionInstructions.col-md-4.offset-md-1
+      h3.medium-semibold
+        | Use <b>Instructions</b> to give students clear goals and improve understanding
     .col-md-7.text-center
-      img(src="/assets/images/hero-promo-feedback.png", style="max-width:600px;")
-  //- CTA Row
-  .row.navy.row-xl-pad.has-sparks
-    .sparks
+      img(src="/assets/images/hero-promo-instructions.png", style="max-width: 500px;")
+  //- //- CTA Row
+  //- .row.navy.row-xl-pad.has-sparks
+  //-   .sparks
+  //-   .col-12
+  //-     h1.on-dark.text-center What's the next step in your hero's journey?
+  //-   .col-2
+  //-   .col-md-4
+  //-     .button__row
+  //-         button.btn.btn-secondary((click)="requestAcademyModalShow('middleCTA')") Request Academy Info
+  //-   .col-md-4
+  //-     .button__row
+  //-         button.btn.btn-hero((click)='goHero("middleCTA")')
+  //-           | Time to Go Hero
+  .row.hero-promo-form(style="margin:50px 0px;")
     .col-12
-      h1.on-dark.text-center What's the next step in your hero's journey?
-    .col-2
-    .col-md-4
-      .button__row
-          button.btn.btn-secondary((click)="requestAcademyModalShow('middleCTA')") Request Academy Info
-    .col-md-4
-      .button__row
-          button.btn.btn-hero((click)='goHero("middleCTA")')
-            | Time to Go Hero
+      h1.big-light.text-center(style='margin-bottom: 0.5em;') 
+        | Make
+        span(style="background:rgba(253, 228, 104, 0.45); padding:0 0.1em; margin: 0 0.1em; display:inline-block;") Powerful 
+        | Lessons
+      p.medium-semibold.text-center Hero unlocks the full power of Edji with...
   //- Classroom Support
   .row.row-xl-pad
     #sectionSupport.col-md-4.offset-md-1
@@ -112,13 +107,13 @@ nav-bar
       img(src="/assets/images/hero-promo-phone.svg", style="max-width: 400px;")
   .row
     .hero-rule
-  //- Instructions
+  //- Reading Recap
   .row.row-xl-pad
-    #sectionInstructions.col-md-4.offset-md-1
-      h3.medium-semibold
-        | Use <b>Instructions</b> to give students clear goals and improve understanding
-    .col-md-7.text-center
-      img(src="/assets/images/hero-promo-instructions.png", style="max-width: 500px;")
+    #sectionRecap.col-md-6.offset-md-3
+      h3.medium-semibold.text-center
+        | See each student's engagement in-depth with <b>Reading Recap</b>
+    .col-md-12.text-center.pt-4
+      img(src="/assets/images/hero-promo-recap.png", style="max-width: 700px;")
   .row
     .hero-rule
   //- Custom Codes
@@ -130,13 +125,12 @@ nav-bar
         img(src="/assets/images/hero-promo-codes.png")
   .row
     .hero-rule
-  //- Replies
+  //- Feedback
   .row.row-xl-pad
-    .col-md-4.offset-md-1
-      h3.medium-semibold Comment <b>Replies</b> let you and your students start discussions right in the text
+    #sectionFeedback.col-md-4.offset-md-1
+      h3.medium-semibold Give live <b>Feedback</b> to students when it is most impactful
     .col-md-7.text-center
-      .promo-screen-wrap
-        img(src="/assets/images/hero-promo-replies.png")
+      img(src="/assets/images/hero-promo-feedback.png", style="max-width:600px;")
   .row.navy.row-xl-pad.has-sparks
     .sparks
     .col-12.text-center
