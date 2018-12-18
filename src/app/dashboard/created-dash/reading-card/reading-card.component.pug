@@ -9,7 +9,6 @@
       h1.small.reading-title__text {{reading.title}} 
         span(*ngIf="!reading.title")
           i Untitled
-        span.hero-tag(*ngIf="reading.heroic", title="Uses Hero features") H
       p.reading-version(
         *ngIf="reading.version_count && reading.version_count > 0", 
         [attr.testVersionNumber]="reading.title"
