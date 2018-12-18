@@ -37,8 +37,6 @@ scroll-progress([scrollProgress]="currentScroll")
                 (tap)="addCommentOfType('audio')"
             )
                 i.icon.icon-mic
-                span.beta-tag--icon(title="Beta Feature: May not work on all devices.")
-                    | B
         //- Mobile buttons
         .comment-options__mobile-wrap.hidden-lg-up([class.bottom-bar-offset]="user._id == project.teacher_id")
             //- .mobile-carrot-pointer &#9654;
@@ -71,8 +69,6 @@ scroll-progress([scrollProgress]="currentScroll")
                 )
                     button.emoji.comment__options--mobileButton()
                         i.icon.icon-mic
-                        span.beta-tag--icon(title="Beta Feature: May not work on all devices.")
-                            | B
     //- end .text-options
     .article-wrap
         .alert.alert-warning.alert-dismissible.fade.show(

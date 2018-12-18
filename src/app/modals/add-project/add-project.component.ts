@@ -47,15 +47,12 @@ export class AddProjectModal implements OnInit {
   ngOnInit() { 
     this.user = this._auth.getUser()
 
-    // Get authorized comment types
-    this.commentTypes = this._auth.getAllowedCommentTypes()
-
     this.projectForm = this._fb.group({
       label: [this.groupLabel ? this.groupLabel : '', Validators.required],
       emojiType: true,
       textType: true,
-      audioType: this.commentTypes.indexOf('audio') > -1 ? true : false,
-      replyType: this.commentTypes.indexOf('reply') > -1 ? true : false,
+      audioType: true,
+      replyType: true,
       customCode: '',
       groupInstructions: ''
     })

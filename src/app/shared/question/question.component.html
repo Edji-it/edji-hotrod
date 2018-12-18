@@ -73,7 +73,7 @@
         <div *ngIf="answersById[question._id] && answersById[question._id].length > 0">
           <div class="label--gray">ANSWERS
             <!--<span *ngIf="!hasUserAnswered()" style="font-weight:normal;display:block;margin-top:-1em;">(Answer to see other readers' answers)</span>-->
-            <button class="button-answers__hide btn btn-sm" (click)="ownerHidden = !ownerHidden" 
+            <button class="button-answers__hide btn btn-sm btn-gray" (click)="ownerHidden = !ownerHidden" 
             [class.hidden]="user._id !== project.teacher_id">
                 {{ownerHidden ? 'SHOW' : 'HIDE'}}
             </button>

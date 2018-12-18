@@ -119,11 +119,7 @@ export class LeaderboardComponent implements OnInit {
    * @param student User needs "_id" and "fullname"/"username"
    */
   public viewStudentFilter(student: any) : void {
-    if (this.currentUser && this.currentUser.hero_status){
-      this._projects.filterByUser(student)
-    } else {
-      this.showFilterHeroModal = true
-    }
+    this._projects.filterByUser(student)
   }
 
   /**

@@ -685,14 +685,11 @@ export class AuthService implements CanActivate {
 
     /**
      * Return array of allowed comment types
+     * DEPRECATED with the Hero for All Updates 1/1/2019
      */
     public getAllowedCommentTypes(): string[] {
         this.user = this.getUser()
-        if (this.user.hero_status) {
-            return ['emoji', 'text', 'audio', 'reply']
-        } else {
-            return ['emoji', 'text']
-        }
+        return ['emoji', 'text', 'audio', 'reply']
     }
 
     /**
@@ -700,11 +697,7 @@ export class AuthService implements CanActivate {
      */
     public getAllowedCommentMediaTypes(): string[] {
         this.user = this.getUser()
-        if (this.user.hero_status) {
-            return ['emoji', 'text', 'audio']
-        } else {
-            return ['emoji', 'text']
-        }
+        return ['emoji', 'text', 'audio']
     }
 
     /** Provides logic for sending user back to home if they are not authorized */

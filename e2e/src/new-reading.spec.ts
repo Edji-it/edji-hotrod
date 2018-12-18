@@ -72,7 +72,10 @@ describe('New Reading Page', () => {
         newReading.contentInput.sendKeys(newReading.contentShortString)
         // Submit New Reading
         newReading.addNewReading()
-        browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable")
+        // checks for and clicks the confirm archive button if the modal is there
+        newReading.confirmArchiveButtonClick()
+        browser.wait(EC.invisibilityOf(newReading.confirmArchiveModal), 5000, 'confirm archive modal should not be showing')
+        browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 8000, "finalize reading button never became clickable")
         // Group Label has content prefilled, so we clear it
         newReading.groupInput.clear()
         newReading.groupInput.sendKeys(newReading.groupString)
@@ -101,6 +104,8 @@ describe('New Reading Page', () => {
         newReading.contentInput.sendKeys(newReading.contentShortString)
         // Submit New Reading
         newReading.addNewReading()
+        // checks for and clicks the confirm archive button if the modal is there
+        newReading.confirmArchiveButtonClick()
         // Should see error for empty title
         browser.wait(EC.presenceOf(newReading.titleError), 5000, "never saw an error for empty title")
         // Reset user to dashboard
@@ -121,6 +126,8 @@ describe('New Reading Page', () => {
         newReading.contentInput.clear()
         // Submit New Reading
         newReading.addNewReading()
+        // checks for and clicks the confirm archive button if the modal is there
+        newReading.confirmArchiveButtonClick()
         // Should see error for empty content
         browser.wait(EC.presenceOf(newReading.contentError), 5000, "never saw an error for empty content")
         // Reset user to dashboard
@@ -142,6 +149,8 @@ describe('New Reading Page', () => {
         newReading.privateButton.click()
         newReading.contentInput.sendKeys(newReading.contentShortString)
         newReading.addNewReading()
+        // checks for and clicks the confirm archive button if the modal is there
+        newReading.confirmArchiveButtonClick()
         browser.wait(EC.elementToBeClickable(newReading.groupInput), 5000, "group input became clickable")
         // This field needs special attention to trigger the required
         newReading.groupInput.clear().then(() => {
@@ -191,6 +200,8 @@ describe('New Reading Page', () => {
             newReading.privateButton.click()
             // Submit New Reading
             newReading.addNewReading()
+            // checks for and clicks the confirm archive button if the modal is there
+            newReading.confirmArchiveButtonClick()
             browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable")
             newReading.finalizeButton.click()
             // Should create a new Reading
@@ -250,7 +261,7 @@ describe('New Reading Page', () => {
             newReading.imageUploadTrigger.click()
 
             // Image was uploaded! Insert it
-            browser.wait(EC.elementToBeClickable(newReading.uploadedImage), 10000, "never saw the image uploaded")
+            browser.wait(EC.elementToBeClickable(newReading.uploadedImage), 15000, "never saw the image uploaded")
             newReading.uploadedImage.click()
 
             // Complete rest of reading
@@ -260,7 +271,10 @@ describe('New Reading Page', () => {
 
             // Submit New Reading
             newReading.addNewReading()
-            browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable")
+            // checks for and clicks the confirm archive button if the modal is there
+            newReading.confirmArchiveButtonClick()
+            browser.wait(EC.invisibilityOf(newReading.confirmArchiveModal), 5000, 'confirm archive modal should not be showing')
+            browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 10000, "finalize reading button never became clickable")
             newReading.finalizeButton.click()
 
             // Should create a new Reading
@@ -307,6 +321,8 @@ describe('New Reading Page', () => {
             newReading.contentInput.sendKeys(newReading.contentShortStringB)
             // Submit New Reading
             newReading.addNewReading()
+            // checks for and clicks the confirm archive button if the modal is there
+            newReading.confirmArchiveButtonClick()
             browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable")
             newReading.finalizeButton.click()
             // Should create a new Reading
