@@ -58,3 +58,36 @@
         }
     }
 }
+
+
+.big-bold {
+    font-weight: 800;
+    font-size: 72px;
+    letter-spacing: -2px;
+    margin-bottom: 6px;
+    line-height: 65px;
+}
+
+.twilight {
+    background-color:#003350;
+    background:linear-gradient( 180deg, #003350 75%,#91925d);
+    color: #fff;
+}
+
+.promo-spotlight {
+    position:absolute;
+    right:10%;
+    bottom:0px;
+    height:95%;
+    opacity: 0.9;
+
+    @media(max-width:$tablet) {
+        height: 400px;
+        opacity: 0.8;
+    }
+
+    @media(max-width:$phone) {
+        height: 250px;
+        opacity: 0.8;
+    }
+}

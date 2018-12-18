@@ -11,7 +11,6 @@
       h1.small.reading-title__text {{reading.title}} 
         span(*ngIf="!reading.title")
           i Untitled
-        span.hero-tag(*ngIf="reading.heroic", title="Uses Hero features") H
       p.reading-version(
         *ngIf="reading.version_count && reading.version_count > 0", 
         [attr.testVersionNumber]="reading.title"
@@ -64,7 +63,8 @@
       .btn.btn-icon--round.reading-access-icon.reading-action(
         [attr.title]="reading.public ? 'Public Reading' : 'Private Reading'", 
         (click)="togglePublicTooltip()",
-        [class.access-icon__hover]="_route.snapshot.routeConfig.path!='discover'"
+        [class.access-icon__hover]="_route.snapshot.routeConfig.path!='discover'",
+        [class.read-only]="readOnly"
       )
         i.icon(*ngIf="reading.public", [innerHTML]="':earth_americas:' | emojione")
         i.icon(*ngIf="!reading.public", [innerHTML]="':lock:' | emojione")
@@ -100,15 +100,16 @@
 .list-item.list-item--button.project-card(
       *ngFor="let project of reading.projects", 
       [class.new-project]="project.new",
-      [class.archived]="reading.archived"
+      [class.archived]="reading.archived",
+      [class.read-only]="readOnly"
     )
-  .row.project-row--right-pad([routerLink]="['/project', project._id]")
+  .row.project-row--right-pad([routerLink]="!readOnly ? ['/project', project._id] : []")
     .col-8
       //- Title
       //- IMPORTANT NOTE: had to move the project link here so that the delete project button would work. Otherwise it overlapped and both buttons pressed.
       .title
         .project-title-input
-          span.reading-project--label([attr.testFindGroupLabel]="reading.title")
+          span.reading-project--label([attr.testFindGroupLabel]="reading.title", [class.read-only]="readOnly")
             span(style="color: #cdcdcd;") Group:
             | &nbsp;{{project.label}}
           span.project-title-input__save((click)="updateProjectLabel(reading._id, reading.newLabel)", [innerHtml]="':white_check_mark:' | emojione")
@@ -120,7 +121,7 @@
       //- Project Code
       pre.prj-code(style="float:right;") {{project.code || 'none'}}
   //- Delete Project Button
-  .btn--delete-project.icon-button(title="Delete Group", (click)="relevantProject = project; showDeleteProjectModal = true;")
+  .btn--delete-project.icon-button(*ngIf="!readOnly", title="Delete Group", (click)="relevantProject = project; showDeleteProjectModal = true;")
     span([innerHtml]="':x:' | emojione")
 //- Handle the version control
 .version-card--block(
