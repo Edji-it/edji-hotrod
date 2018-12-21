@@ -18,17 +18,18 @@ export class HeroPricingComponent implements OnInit {
   public showHeroSubModal: boolean
   public showInfoModal: boolean
   public showRequestAcademyModal: boolean
-  public infoModalInfo: { heading?: string, description?: string, image?: string } = {}
+  public infoModalInfo: { heading?: string, description?: string, image?: string, free_override?: string, hero_override?: string } = {}
 
   public featureValues = [
     {
-      name: "Unlimited Readings, students, comments",
-      free: true,
-      // info: {
-      //   heading: "Unlimited Readings, Students Comments",
-      //   description: "Edji loves reading, so why would we limit how much you can read? Every Edji user can create as many readings to share with as many readers as they want. No storage, class size or engagement limits, ever.",
-      //   image: "/assets/images/pricing/"
-      // }
+      name: "Complete Library History",
+      free: false,
+      free_override: "<span class=\"small\">2</span>",
+      hero_override: "<span class=\"small\">Unlimited</span>",
+      info: {
+        heading: "Active Readings",
+        description: "<h3>Edji Free</h3><p>As an Edji Free user, you have access to your two most recent readings to create groups and assign them to students. Once you create a third reading, your oldest Active Readings will be frozen and archived. Frozen readings cannot be commented on or copied, but can be unlocked at any time by going Hero.</p><br/><h3>Edji Hero</h3><p>Hero Teachers have access to all readings that they’ve created and can access their student's comments and discussions whenever they need it.</p>",
+      }
     },
     {
       name: "Reader Management: Leaderboard, Firefeed",
@@ -58,17 +59,17 @@ export class HeroPricingComponent implements OnInit {
       }
     },
     {
-      name: "Emoji and Text Comments",
+      name: "Audio, Emoji and Text Comments",
       free: true,
       info: {
         heading: "Emoji and Text Comments",
-        description: "Real reading engagement is powerful, emotional and moving. Have your students engage with the text and leave behind their thoughts and feelings for you to see.",
-        image: "/assets/images/pricing/text-emoji.png"
+        description: "Real reading engagement is powerful, emotional and moving. Have your students engage with the text and express their thoughts for you to see, read or listen to.",
+        image: "/assets/images/pricing/comments.png"
       }
     },
     {
       name: "Custom Group Control",
-      free: false,
+      free: true,
       info: {
         heading: "Custom Group Control",
         description: "Get full control of your reading groups by leaving Instructions, choosing comment types, and creating custom group codes!",
@@ -76,26 +77,8 @@ export class HeroPricingComponent implements OnInit {
       }
     },
     {
-      name: "Student Analysis Tools",
-      free: false,
-      info: {
-        heading: "Student Analysis Tools",
-        description: "Analyze how your students read using Hero’s unique student analysis tools. See from one student’s perspective with the Student Filter, see each students reading stats with the Reading Recap, and provide timely and effective feedback with the Feedback Tool.",
-        image: "/assets/images/pricing/recap.png"
-      }
-    },
-    {
-      name: "Audio Comments",
-      free: false,
-      info: {
-        heading: "Audio Comments",
-        description: "Allow your students to literally speak their minds as they read with Edji by allowing Audio Comments on your Edji readings.",
-        image: "/assets/images/hero-promo-audio.png"
-      }
-    },
-    {
       name: "Questions",
-      free: false,
+      free: true,
       info: {
         heading: "Questions",
         description: "Insert Questions into your reading to call out important details or make your students think about the points made in the text. While getting the tools to watch your students’ answers roll in.",
@@ -104,11 +87,29 @@ export class HeroPricingComponent implements OnInit {
     },
     {
       name: "Discussion Tools",
-      free: false,
+      free: true,
       info: {
         heading: "Discussion Tools",
         description: "Unlock the ability to open up discussion in your Edji readings with comment replies. Leave feedback, ask further questions, and get your students talking!",
         image: "/assets/images/pricing/replies.png"
+      }
+    },
+    {
+      name: "Student Analysis Tools",
+      free: false,
+      info: {
+        heading: "Student Analysis Tools",
+        description: "Analyze how your students read using Hero’s unique student analysis tools. See each students reading stats with the Reading Recap, and provide timely and effective feedback with the Feedback Tool.",
+        image: "/assets/images/pricing/recap.png"
+      }
+    },
+    {
+      name: "Custom Codes",
+      free: false,
+      info: {
+        heading: "Custom Group Codes",
+        description: "Give your Groups Custom codes for easy access, reading scavenger hunts and more!",
+        image: "/assets/images/pricing/custom-code.png"
       }
     }
   ]

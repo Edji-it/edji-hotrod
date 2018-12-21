@@ -46,5 +46,6 @@ interface BaseUser {
   isAcademyAdmin?: boolean,
   school_name: string,
   phone_number: string,
-  archive_readings_before?: Date
+  archive_readings_before?: Date,
+  readingsArchivedBefore?: Date
 }
