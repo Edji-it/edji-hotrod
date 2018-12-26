@@ -958,9 +958,9 @@ export class ProjectService {
         if (
             project 
             && project.teacher 
-            && (project.reading_id.createdAt < project.teacher.archive_readings_before) 
+            && (new Date(project.reading_id.createdAt) < new Date(project.teacher.archive_readings_before)) 
             && !project.teacher.hero_status 
-            && (project.reading_id.createdAt > new Date('2019-01-01'))
+            && (new Date(project.reading_id.createdAt) > new Date('2019-01-01'))
         ) {
             return true
         } else {

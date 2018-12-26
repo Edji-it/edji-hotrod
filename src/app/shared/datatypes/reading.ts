@@ -30,6 +30,6 @@ export interface BaseReading {
   grade_levels?: number[],
   subjects?: string[],
   heroic?: boolean,
-  createdAt?: Date,
-  updatedAt?: Date
+  createdAt?: string,
+  updatedAt?: string
 }
