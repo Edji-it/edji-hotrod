@@ -301,6 +301,8 @@ describe('New Reading Page', () => {
             - Redirect to reading page of newly created reading
          */
         it('should add a reading as a draft and return to the same screen with a reading id', function() {
+            // Reset user to dashboard
+            sidebar.backToDash()
             // Open and wait for New Reading page
             dashboard.openNewReading()
             browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000)
