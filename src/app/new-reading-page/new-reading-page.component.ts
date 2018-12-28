@@ -52,7 +52,7 @@ export class NewReadingPage implements OnInit {
     };
 
     public readingToArchive: Reading
-    public readingsArchivedBefore: Reading
+    public readingsArchivedBefore: string
 
     // Messages
     public successAlert : string = "Nice work! This reading draft was successfully saved!"
@@ -196,19 +196,20 @@ export class NewReadingPage implements OnInit {
                 this.user = user
                 // Gets the active readings from the dashboard if the user is not a hero user
                 if (!this.user.hero_status) {
-                    this._readings.updateCreated()
+                    this._readings.updateCreated(user)
                 }
             }),
             this._readings.currentUserReadings.subscribe(
                 (data)  => {
-                    // Take the second reading and make sure it is archived
-                    let archivedReading = data && data.readings && data.readings[1]
-                    let readingsArchivedBefore = data && data.readings && data.readings[0]
-                    if (!this.user.hero_status && archivedReading) {
-                        // reading that we'll be archiving (for display purposes on modal)
-                        this.readingToArchive = archivedReading
+                    if (!data.readings) {
+                        // If no readings, nothing to handle
+                        return
+                    }
+                    if (!this.user.hero_status && data.readings[1]) {
+                        // Take the second reading and make sure it is archived
+                        this.readingToArchive = data.readings[1]
                         // reading that we'll be setting as our readingsArchivedBefore property on the user - send PUT to server
-                        this.readingsArchivedBefore = readingsArchivedBefore
+                        this.readingsArchivedBefore = data.readings[0].createdAt
                     }
                 },
                 (error) => {
@@ -539,7 +540,7 @@ export class NewReadingPage implements OnInit {
     public archiveReading(form) {
         // Make the call to PUT the reading archive value
         let user = this.user
-        user.readingsArchivedBefore = this.readingsArchivedBefore.createdAt
+        user.archive_readings_before = this.readingsArchivedBefore
         
         this._auth.updateUser(user)
         .subscribe(

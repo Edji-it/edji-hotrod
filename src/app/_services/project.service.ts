@@ -188,24 +188,18 @@ export class ProjectService {
             }), 
             params: feedParams })
             .pipe(map(data => {
-                /**
-                 * @todo REMOVE: Sample data for teacher with archived date
-                 */
-                if (data.projects[1]) {
-                    data.projects[1].teacher.readingsArchivedBefore = "Jan 1, 2019"
-                }
                 let projects = data.projects.slice()
                 // Loop through projects and mark archived for display
                 for (let i = 0; i < projects.length; i++) {
                     let teacher = projects[i].teacher
-                    if (teacher && !teacher.hero_status && teacher.readingsArchivedBefore) {
+                    if (teacher && !teacher.hero_status && teacher.archive_readings_before) {
                         /**
                          * Readings are "archived" if:
                          * - Updated date is prior to archived before date
                          * - Readings before Hero v2 (01-01-2018) are "legacy" and not archived
                          */
                         let projectDate = new Date(projects[i].createdAt)
-                        let archivedBefore = new Date(teacher.readingsArchivedBefore)
+                        let archivedBefore = new Date(teacher.archive_readings_before)
                         if (projectDate < archivedBefore) {
                             projects[i].archived = true
                         }
@@ -245,8 +239,8 @@ export class ProjectService {
                     let project = data.json().project; //can later have local setter to do validation/data manipulation before passing through observable
                     let teacher = project.teacher
                     // Identify and set archived 
-                    if (teacher && !teacher.hero_status && teacher.readingsArchivedBefore) {
-                        let archivedBefore = new Date(teacher.readingsArchivedBefore)
+                    if (teacher && !teacher.hero_status && teacher.archive_readings_before) {
+                        let archivedBefore = new Date(teacher.archive_readings_before)
                         let projectDate = new Date(project.createdAt)
                         if (projectDate < archivedBefore) {
                             project.archived = true

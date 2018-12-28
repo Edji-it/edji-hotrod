@@ -17,7 +17,6 @@ interface BaseUser {
   username: string,
   fullname: string,
   email: string,
-  readingsArchivedBefore?: string,
   identities?: string[],
   hero_status?: boolean,
   prefs?: {
@@ -48,5 +47,5 @@ interface BaseUser {
   isAcademyAdmin?: boolean,
   school_name: string,
   phone_number: string,
-  readingsArchivedBefore?: Date
+  archive_readings_before?: string
 }

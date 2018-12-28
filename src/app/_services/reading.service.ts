@@ -71,8 +71,8 @@ export class ReadingService {
         params: feedParams })
         .pipe(take(1))
         .subscribe((data: any) => { 
-          if (data.readings && !user.hero_status && user.readingsArchivedBefore) {
-            let archivedBefore = new Date(user.readingsArchivedBefore)
+          if (data.readings && !user.hero_status && user.archive_readings_before) {
+            let archivedBefore = new Date(user.archive_readings_before)
             let readings = data.readings.slice()
             let archivedTally: number = 0
             // Loop through readings and mark archived

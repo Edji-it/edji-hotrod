@@ -142,12 +142,6 @@ export class AuthService implements CanActivate {
      * @returns user Returns decorated user if needed immediately
      */
     public setUser(user: User) : User {
-        /**
-         * @todo Verify we are receiving readingsArchivedBefore date and remove this condition
-         */
-        if (!user.hero_status) {
-            user.readingsArchivedBefore = "2018-12-15T12:32:52.194Z"
-        }
         //should have session timeout, username, baseProfileId, typeId
         user.isLoggedIn = true
         // Set convenience "isStudent" flag
