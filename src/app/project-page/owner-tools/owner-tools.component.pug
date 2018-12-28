@@ -3,33 +3,51 @@
   //- Buttons for toggling panes and tools
     - Desktop Buttons
   //- Comment Stats pane
-  button#toggleLeaderboard.btn.owner-tools__btn.btn-cmt(type="button", aria-label="Comment Counts", (click)="showElseFalse('showCommentCounts')")
+  button#toggleLeaderboard.btn.owner-tools__btn.btn-cmt(
+    type="button", 
+    aria-label="Comment Counts", 
+    (click)="showElseFalse('showCommentCounts')", 
+    [class.disabled]="readingArchived"
+  )
     //- img(*ngIf="isMobile" style="width: 50px;" src="assets/images/icon-comment.svg")
     img(src="assets/images/icon-leaderboard.svg")
     label Students
   //- Heat Vision toggle
-  button.btn.owner-tools__btn.btn-hv(type="button", (tap)="togglePower('heat_vision', !this.currentProject.heat_vision)")
+  button.btn.owner-tools__btn.btn-hv(
+    type="button", 
+    (tap)="togglePower('heat_vision', !this.currentProject.heat_vision)", 
+    [class.disabled]="readingArchived"
+  )
     //- placement={{tooltipPlacement}} ngbTooltip="Turn on Heat Vision to let readers see comments from other readers, turn it off to make comments private!"
     i#toggleHeatVision.icon-heatvision(*ngIf="currentProject", [ngClass]="[!currentProject.heat_vision ? 'inactive' : 'active']")
     span.badge.badge-pill.badge-primary(*ngIf="currentProject.heat_vision") On
     span.badge.badge-pill.badge-secondary(*ngIf="!currentProject.heat_vision") Off
     label Vision
   //- Fire Feed toggle
-  button.btn.owner-tools__btn.btn-hv(type="button", (tap)="showElseFalse('showFireFeed')")
+  button.btn.owner-tools__btn.btn-hv(
+    type="button", 
+    (tap)="showElseFalse('showFireFeed')", 
+    [class.disabled]="readingArchived"
+  )
     i#toggleFirefeed.icon-fire-feed(*ngIf="currentProject")
     span.badge.badge-pill.badge-info(*ngIf="commentStats.stats.comment_count && commentStats.stats.comment_count > 0") {{ commentStats.stats.comment_count }}
     label Feed
   //- Question Feed toggle
   div(*ngIf="currentReading.questions && currentReading.questions.length>0")
-    button.btn.owner-tools__btn.btn-hv(type="button", (tap)="showElseFalse('showQuestionFeed')")
+    button.btn.owner-tools__btn.btn-hv(
+      type="button", 
+      (tap)="showElseFalse('showQuestionFeed')", 
+      [class.disabled]="readingArchived"
+    )
       i#toggleQuestionfeed.icon-question(*ngIf="currentProject")
       label Questions
   //- Reading Report toggle
   button.btn.owner-tools__btn.btn-hv.btn-reading-recap(
-      type="button",
-      (tap)="showElseFalse('showReadingRecap')",
-      [class.hero--micro-offer__wrap]="user && !user.hero_status"
-    )
+    type="button",
+    (tap)="showElseFalse('showReadingRecap')",
+    [class.hero--micro-offer__wrap]="user && !user.hero_status", 
+    [class.disabled]="readingArchived"
+  )
     i#toggleReadingRecap.icon-reading-recap(*ngIf="currentProject")
     label Recap
 
@@ -40,7 +58,8 @@
     button#toggleLeaderboard.btn.btn-icon--circle-shadow.owner-options--mobile(
       type="button",
       (tap)="showElseFalse('showCommentCounts'); ownerToolShow=!ownerToolShow", 
-      [class.btn-show--animation]="ownerToolShow"
+      [class.btn-show--animation]="ownerToolShow", 
+      [class.disabled]="readingArchived"
     )
       img(src="assets/images/icon-leaderboard.svg", [class.hide]="!ownerToolShow", style="width: 32px;")
       //- label Tally
@@ -48,7 +67,8 @@
     button.btn.btn-icon--circle-shadow.owner-options--mobile(
       type="button",
       (tap)="togglePower('heat_vision', !this.currentProject.heat_vision); ownerToolShow=!ownerToolShow", 
-      [class.btn-show--animation]="ownerToolShow"
+      [class.btn-show--animation]="ownerToolShow", 
+      [class.disabled]="readingArchived"
     )
       i#toggleHeatVisionMobile.icon-heatvision.owner-tool-icon-mobile(*ngIf="currentProject", [ngClass]="[!currentProject.heat_vision ? 'inactive' : 'active']")
       span.badge.badge-pill.badge-primary(*ngIf="currentProject.heat_vision") On
@@ -58,7 +78,8 @@
     button.btn.btn-icon--circle-shadow.owner-options--mobile(
       type="button",
       (tap)="showElseFalse('showFireFeed')", 
-      [class.btn-show--animation]="ownerToolShow"
+      [class.btn-show--animation]="ownerToolShow", 
+      [class.disabled]="readingArchived"
     )
       i#toggleFirefeedMobile.icon-fire-feed.owner-tool-icon-mobile(*ngIf="currentProject")
       span.badge.badge-pill.badge-info(*ngIf="commentStats.stats.count && commentStats.stats.count > 0") {{ commentStats.stats.count }}
@@ -68,7 +89,8 @@
       button.btn.btn-icon--circle-shadow.owner-options--mobile(
         type="button",
         (tap)="showElseFalse('showQuestionFeed'); ownerToolShow=!ownerToolShow", 
-        [class.btn-show--animation]="ownerToolShow"
+        [class.btn-show--animation]="ownerToolShow", 
+        [class.disabled]="readingArchived"
       )
         i#toggleQuestionfeedMobile.icon-question.owner-tool-icon-mobile(*ngIf="currentProject")
         //- label Questions
@@ -76,7 +98,7 @@
     span(style="font-size: 11px;") Tools
 
 //- Leaderboard goes here
-hot-leaderboard((hide)="showCommentCounts=false", [commentStats]="commentStats", [visible]="showCommentCounts")
+hot-leaderboard((hide)="showCommentCounts=false", [commentStats]="commentStats", [visible]="showCommentCounts", [archived]="readingArchived")
 
 //- Fire Feed goes here
 hot-firefeed((hide)="showFireFeed=false", [visible]="showFireFeed")

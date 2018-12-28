@@ -219,8 +219,7 @@ export class ProjectService {
      * @returns observable with project data
      */
     public setCurrentProject(projectCode: string): Observable<any> {
-        // return this.http.get(this._auth.getUrl() + '/api/v1/projects/' + encodeURIComponent(projectCode) + '?pop=reading_id', this._auth.getOptions())
-        return this.http.get(this._auth.getUrl() + '/projects/' + encodeURIComponent(projectCode) + '?pop=reading_id', this._auth.getOptions())
+        return this.http.get(this._auth.getUrl() + '/api/v1/projects/' + encodeURIComponent(projectCode) + '?pop[]=reading_id&pop[]=teacher', this._auth.getOptions())
             .pipe(
                 map(
                 (data) => {
@@ -984,6 +983,29 @@ export class ProjectService {
         // Announce the completed filter to components!
         this.activeFilter = commentFilter
         this.filterUpdatesSource.next(this.activeFilter)
+    }
+
+    /**
+     * Returns true if
+     *   - the project is archived by checking the create date vs the archive_readings_before date
+     *   - teacher that created the reading is not currently a hero
+     *   - the reading was created after 1/1/2019
+     * 
+     * ALL OF THE ABOVE CONDITIONS MUST BE TRUE FOR THE READING TO BE CONSIDERED ARCHIVED
+     * @param project current project
+     */
+    public checkArchiveStatus(project: Project): boolean {
+        if (
+            project 
+            && project.teacher 
+            && (new Date(project.reading_id.createdAt) < new Date(project.teacher.archive_readings_before)) 
+            && !project.teacher.hero_status 
+            && (new Date(project.reading_id.createdAt) > new Date('2019-01-01'))
+        ) {
+            return true
+        } else {
+            return false
+        }
     }
 } // class
 
