@@ -173,7 +173,7 @@ export class NewReading implements PageObjectInterface
         this.confirmArchiveButton.isPresent().then((result) => {
             if (result) {
                 this.confirmArchiveButton.isDisplayed().then((result) => {
-                    browser.wait(this.EC.elementToBeClickable(this.confirmArchiveButton), 5000, "confirm archive reading button never became clicable")
+                    browser.wait(this.EC.elementToBeClickable(this.confirmArchiveButton), 6000, "confirm archive reading button never became clicable")
                     this.confirmArchiveButton.click()
                 })
             }

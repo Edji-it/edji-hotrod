@@ -14,6 +14,7 @@ import { CommentFilter } from '../../../_services/project.service'
 
 export class LeaderboardComponent implements OnInit {
   @Input() visible: boolean = false
+  @Input() archived: boolean = false
   @Output() hide: EventEmitter<any> = new EventEmitter()
 
   /** This is a reference to the actual commentStats object which has methods for modification of properties */
