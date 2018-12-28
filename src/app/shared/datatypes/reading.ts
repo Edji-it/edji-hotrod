@@ -34,5 +34,5 @@ export interface BaseReading {
   heroic?: boolean,
   createdAt?: string,
   updatedAt?: string,
-  bookmarked?: boolean
+  owner_bookmarked?: boolean
 }

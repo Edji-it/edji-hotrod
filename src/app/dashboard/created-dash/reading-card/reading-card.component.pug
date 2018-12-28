@@ -88,7 +88,7 @@
               span([innerHTML]="':lock: Private' | emojione")
       a.btn.btn-icon--round.reading-action(
         title="Bookmark",
-        [class.active]="reading.bookmarked",
+        [class.active]="reading.owner_bookmarked",
         (click)="toggleBookmark(reading)"
       )
         i.icon.icon-bookmark.hide-inactive

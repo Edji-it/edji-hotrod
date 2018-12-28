@@ -183,10 +183,10 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
    */
   public toggleBookmark(reading: Reading) : void {
     // Set "bookmarked" value
-    if (!!reading.bookmarked) {
-      reading.bookmarked = false
+    if (!!reading.owner_bookmarked) {
+      reading.owner_bookmarked = false
     } else {
-      reading.bookmarked = true
+      reading.owner_bookmarked = true
     }
     // Save bookmark to reading
     this._readings.save(reading)
