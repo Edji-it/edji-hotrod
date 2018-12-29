@@ -26,9 +26,7 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
   // Set our default values
   public readings: Reading[] = []
   public drafts: Reading[] = []
-  public errorObject = {
-    readingError: ""
-  };
+  public errorObject: { readingError?: string } = {}
   public readingToBeRemoved : Reading;
 
   public showLoginReqModal: boolean = false
@@ -63,7 +61,7 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // datalist component intializes by calling loadCreatedFeed()
+    // datalist component intializes by calling loadRecentlyCreated()
     this.loading = true
 
     this.subscriptions.push(
@@ -77,16 +75,18 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
             this.readings = data.readings || [];
             this.total = data.total;
             this.pageNo = Math.floor((this.first+1)/this.rows) + 1;
+            // Clear errors
+            this.errorObject = {}
           },
           (error) => {
             this.loading = false;
-            this.errorObject.readingError = "We had some trouble getting your readings, it might be our fault";
+            this.errorObject.readingError = "<b>Error Loading Readings</b> There was an error loading your readings. Please try again later or <a href=\"mailto:support@edji.it\" target=\"_blank\" class=\"link\">contact support</a>.";
           }
       )
     )
     
     // Load user's created readings
-    this.loadCreatedFeed()
+    this.loadRecentlyCreated()
     // Load user's drafts
     this.loadDrafts()
   } //  ngOnInit()
@@ -97,7 +97,7 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
    * Load Created with Params
    * - This auto-runs on load and every change, called by p-dataList in the template
    */
-  loadCreatedFeed(paging?: any): void{
+  loadRecentlyCreated(paging?: any): void{
     window.scrollTo(0,0)
     this.readings = []
     let filters = {}
@@ -122,9 +122,23 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
       this.currentPageNo=paging.page
     }
   }
+
+  /**
+   * Load Owner Bookmarked
+   * - Note: Does not support pagination
+   * - Updates currentUserReadings
+   * - Not available to Free users
+   */
+  private loadOwnerBookmarked(): void {
+    this.loading = true
+
+    // Tell reading service to fetch bookmarked and update currentUserReadings
+    this._readings.getOwnerBookmarked()
+  }
   
   /**
    * Loads draft array for current user
+   * - Note: Does not support pagination
    */
   private loadDrafts() : void {
     this._readings.getDrafts().pipe(take(1))
@@ -144,9 +158,9 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
 
     // Handle each sort option
     if (filter === 'recent') {
-      this.loadCreatedFeed()
+      this.loadRecentlyCreated()
     } else if (filter === 'bookmarked') {
-      // Load bookmarked readings
+      this.loadOwnerBookmarked()
     }
   }
 

@@ -91,6 +91,38 @@ button, .button, .btn { //, [class*='btn']
       display: inline-block;
     }
   }
+
+  // Disabled status, with hero badge indicating hero feature
+  &.disabled--not-hero {
+    pointer-events: none;
+    opacity: 0.6;
+    
+    & .icon {
+      filter: grayscale(100%);
+    }
+    
+    &:after {
+      display: inline-block;
+      text-align: center;
+      vertical-align: top;
+      color: #fff;
+      background: $btnHeroColor;
+      border-radius: 9px;
+      font-size: 12px;
+      line-height: 18px;
+      max-width: 24px;
+      padding: 0px 6px;
+      height: 18px;
+      font-family: 'Open Sans';
+      font-weight: bold;
+      content: 'H';
+      z-index: $zMid;
+      display: block;
+      position: absolute;
+      top: -2px;
+      right: -20px;
+    }
+  }
 }
 
 .button, button {

@@ -15,13 +15,14 @@
 .row
   .col-12.col-sm-3
     .mb-2
-      .btn.btn-filter(
+      button.btn.btn-filter(
           [innerHtml]="':sparkles: Recently Created' | emojione", 
           [class.active]="activeFilter === 'recent'",
           (click)="loadFilter('recent')"
         )
-      .btn.btn-filter( 
+      button.btn.btn-filter( 
           [class.active]="activeFilter === 'bookmarked'",
+          [class.disabled--not-hero]="!user.hero_status",
           (click)="loadFilter('bookmarked')"
         )
         i.icon.icon-bookmark.mr-2(style="vertical-align:middle;")
@@ -36,7 +37,7 @@
               | {{ guide.displayName }}
   .col-12.col-sm-6.item-list.created-list([ngClass]="['page-'+pageNo]")
       //- Show readings with date values
-      .alert.alert-info.alert-dismissible(role="alert", *ngIf="!loading && readings.length < 1 && !errorObject.readingError")
+      .alert.alert-info.alert-dismissible(role="alert", *ngIf="!loading && readings.length < 1 && !errorObject.readingError && activeFilter === 'recent'")
         .row
           .col-lg-7
             h4.alert-heading Create your first reading!
@@ -46,9 +47,13 @@
               .icon.icon-play
               img(src="/assets/images/thumbnail-first-reading.jpg")
         //- https://youtu.be/GPB8i8H8IBc
-      .alert.alert-danger.alert-readings(*ngIf="errorObject.readingError", role="alert") {{ errorObject.readingError }}
+      .alert.alert-danger.alert-readings(*ngIf="errorObject.readingError", role="alert", [innerHtml]="errorObject.readingError")
+      //- Bookmarked: No Readings message
+      .alert.alert-info.alert-readings(*ngIf="!loading && readings.length < 1 && activeFilter === 'bookmarked'")
+        b No Bookmarked Readings
+        p You do not currently have any Created Readings bookmarked!
       .row.loading(*ngIf="loading")
-      hot-tutorial-reading(*ngIf="!loading && readings.length < 1 && !errorObject.readingError && user.type !=='temp'")
+      hot-tutorial-reading(*ngIf="!loading && readings.length < 1 && !errorObject.readingError && user.type !=='temp' && activeFilter === 'recent'")
       ng-container(*ngFor="let reading of readings")
         //- Mark beginning of archived readings
         .divider--alert(*ngIf="reading.archivedBegin")
@@ -65,7 +70,7 @@
             p.pl-4 With Hero, you support Edji’s continued development and can have unlimited active readings - including your currently archived!
             .btn-row.right
               a.btn.btn-hero.btn-sm([routerLink]="['/hero']") Go Hero
-      <p-paginator [rows]="rows" [totalRecords]="total" (onPageChange)="loadCreatedFeed($event)"></p-paginator>
+      <p-paginator [rows]="rows" [totalRecords]="total" (onPageChange)="loadRecentlyCreated($event)"></p-paginator>
   .col-12.col-sm-3
     h2 Drafts
     .draft-card(*ngFor="let draft of drafts", [routerLink]="['/new-reading/' + draft._id]")

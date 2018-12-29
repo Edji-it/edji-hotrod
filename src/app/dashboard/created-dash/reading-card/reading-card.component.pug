@@ -86,8 +86,10 @@
                 (click)="$event.stopPropagation(); togglePublic(false)"
               )
               span([innerHTML]="':lock: Private' | emojione")
+      //- Bookmark action
       a.btn.btn-icon--round.reading-action(
         title="Bookmark",
+        [class.hide]="reading.archived",
         [class.active]="reading.owner_bookmarked",
         (click)="toggleBookmark(reading)"
       )
