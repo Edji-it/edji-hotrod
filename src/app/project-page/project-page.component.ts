@@ -44,7 +44,6 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
     private createdDate: Date
     private createDate: string
     public showLoginModal: boolean = false
-    public readingArchived: boolean = false
     public showArchiveModal: boolean = false
     
     constructor(
@@ -85,12 +84,16 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
             .subscribe(
             (project) => {
                 if (project) {
-                    // if the reading is archived, we'll show them a message and we don't want the login modal to get in the way
-                    // also do not show content on page
-                    this.readingArchived = this._projects.checkArchiveStatus(project)
-                    if (this.readingArchived) {
-                        this.showLoginModal = false
-                        this.showArchiveModal = true
+                    // If the reading is archived, we'll show them a banner or modal
+                    if (project.archived) {
+                        // If not owner or existing student, block viewing and show modal
+                        let notExistingStudent = project.students_ids && project.students_ids.indexOf(this.user._id) < 0
+                        let notTeacher = this.user._id !== project.teacher_id
+                        if (notExistingStudent && notTeacher) {
+                            // we don't want the login modal to get in the way
+                            this.showLoginModal = false
+                            this.showArchiveModal = true
+                        }
                     }
 
                     this.project = project

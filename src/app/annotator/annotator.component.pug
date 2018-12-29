@@ -86,21 +86,6 @@ scroll-progress([scrollProgress]="currentScroll")
             a(href="https://www.google.com/chrome/browser/desktop/", target="_blank")
                 | Google Chrome Web Browser
             | for your desktop device.
-        .alert.alert-info.fade.show.text-center(
-            role="alert",
-            *ngIf="readingArchived && user._id===project.teacher._id"
-        )
-            p.mb-0 This Reading has been Archived and is in Read Only mode. You can unlock Owner Tools and Comments by  
-                a#goHeroLink.btn.btn-hero.btn-sm.nav-bar__btn.hidden-sm-down.ml-1(
-                    [routerLink]="['/hero']", 
-                    routerLinkActive="hide", 
-                    fragment="top"
-                ) Going Hero
-        .alert.alert-info.fade.show.text-center(
-            role="alert",
-            *ngIf="readingArchived && user._id!==project.teacher._id"
-        )
-            p.mb-0 This Reading has been Archived. You will only be able to see comments that you have made.
         //- Create components after load for reading
         //- Note: -1 tabindex for disabling "Touch to Search" on mobile https://developers.google.com/web/updates/2015/10/tap-to-search
         article#annotatorContent.content.active-content.pt-4(
@@ -119,7 +104,7 @@ scroll-progress([scrollProgress]="currentScroll")
                         .lesson-block__header Instructions
                         p([innerHtml]="project.group_instructions")
             //- Word Loop: reading.words is one big array of individual "words", which can also be puncuation or media
-            <span #words class="w" *ngFor="let w of reading.words | slice:0:lastWord ; let i = index" [ngClass]="[ w && w.styles ? w.styles.join(' ') : '', getHighlightClass(i) ]" [attr.index]="i" [class.archived]="readingArchived">
+            <span #words class="w" *ngFor="let w of reading.words | slice:0:lastWord ; let i = index" [ngClass]="[ w && w.styles ? w.styles.join(' ') : '', getHighlightClass(i) ]" [attr.index]="i" [class.archived]="project.archived">
                 //- Comment Loop: Display comments if they exist for this Word
                 edji-comment(
                     *ngFor="let comment of commentsByIndex[i]; let ci = index",

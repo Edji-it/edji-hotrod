@@ -7,7 +7,7 @@ import { ProjectPageComponent } from './project-page';
 import { HomeComponent } from './home';
 import { RegisterPageComponent } from './register-page';
 import { AccountComponent } from './account';
-import { DashboardComponent } from './dashboard';
+import { DashboardComponent, CreatedDashComponent, JoinedDashComponent } from './dashboard';
 import { NoContentComponent } from './no-content';
 import { LoginComponent } from './login';
 import { ResetPassPage } from './reset-pass/reset-pass-page.component';
@@ -23,7 +23,15 @@ import { PromoPageComponent } from './promo/promo.component';
 
 export const ROUTES: Routes = [
   { path: '', component: DashboardComponent, canActivate: [AuthService] },
-  { path: 'dashboard',  component: DashboardComponent, canActivate: [AuthService] },
+  { path: 'dashboard',  component: DashboardComponent, canActivate: [AuthService],
+    children: [
+      // Root path is handled by canActivate
+      { path: 'create', component: CreatedDashComponent },
+      { path: 'read', component: JoinedDashComponent }
+    ] 
+  },
+  { path: 'create',  redirectTo: '/dashboard/create', canActivate: [AuthService] },
+  { path: 'read',  redirectTo: '/dashboard/read', canActivate: [AuthService] },
   { path: 'home',  component: HomeComponent },
   { path: 'register', component: RegisterPageComponent },
   { path: 'login', component: LoginComponent },

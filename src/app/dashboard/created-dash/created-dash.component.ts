@@ -8,6 +8,7 @@ import { Angulartics2 } from 'angulartics2'
 // Project Dependencies
 import { AuthService, ReadingService, ProjectService } from '../../_services'
 import { User, Reading } from '../../shared/datatypes'
+import { take } from 'rxjs/operators';
 
 @Component({
   // The selector is what angular internally uses
@@ -23,23 +24,30 @@ import { User, Reading } from '../../shared/datatypes'
 })
 export class CreatedDashComponent implements OnInit, OnDestroy {
   // Set our default values
-  public readings: Reading[] = [];
-  public errorObject = {
-    readingError: ""
-  };
-  private subscriptions: Subscription[] = [];
+  public readings: Reading[] = []
+  public drafts: Reading[] = []
+  public errorObject: { readingError?: string } = {}
   public readingToBeRemoved : Reading;
 
   public showLoginReqModal: boolean = false
   public showNewReadingVideoModal: boolean = false
   public user: User
+  // Filter values
+  public activeFilter: string = 'recent'
   // Joined Readings, p-datalist values
   public loading: boolean = true
   public first: number = 0 // first page 
   public rows: number = 15 // number of Readings to return
   public total: number = 15 // total Readings
   public pageNo: number = 1
+  public guideLinks: { displayName: string, url: string }[] = [
+    { displayName: "Lesson Ideas", url: "http://guide.edji.it/index.php/2017/05/20/getting-started-with-edji/" },
+    { displayName: "Readings for Math", url: "http://guide.edji.it/index.php/2017/07/16/using-edji-with-math/" },
+    { displayName: "AVID and WICOR", url: "http://guide.edji.it/index.php/2018/09/20/using-edji-with-avid-wicor/" }
+  ] 
+
   private currentPageNo: number = 0 // used for analytics to determine page up/down direction
+  private subscriptions: Subscription[] = [];
 
   // TypeScript public modifiers
   constructor(
@@ -53,7 +61,7 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // datalist component intializes by calling loadCreatedFeed()
+    // datalist component intializes by calling loadRecentlyCreated()
     this.loading = true
 
     this.subscriptions.push(
@@ -67,15 +75,20 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
             this.readings = data.readings || [];
             this.total = data.total;
             this.pageNo = Math.floor((this.first+1)/this.rows) + 1;
+            // Clear errors
+            this.errorObject = {}
           },
           (error) => {
             this.loading = false;
-            this.errorObject.readingError = "We had some trouble getting your readings, it might be our fault";
+            this.errorObject.readingError = "<b>Error Loading Readings</b> There was an error loading your readings. Please try again later or <a href=\"mailto:support@edji.it\" target=\"_blank\" class=\"link\">contact support</a>.";
           }
       )
     )
     
-    this.loadCreatedFeed()
+    // Load user's created readings
+    this.loadRecentlyCreated()
+    // Load user's drafts
+    this.loadDrafts()
   } //  ngOnInit()
 
   ngOnDestroy () {}
@@ -84,7 +97,7 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
    * Load Created with Params
    * - This auto-runs on load and every change, called by p-dataList in the template
    */
-  loadCreatedFeed(paging?: any): void{
+  loadRecentlyCreated(paging?: any): void{
     window.scrollTo(0,0)
     this.readings = []
     let filters = {}
@@ -95,7 +108,7 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
     if (this.first < 0) { this.first = filters['start'] = 0 }
     this.rows = filters['size'] = paging && paging.rows != undefined ? parseInt(paging.rows) : this.rows
 
-    this._readings.updateCreated(filters)
+    this._readings.updateCreated(this.user, filters)
     if (paging && paging!==undefined) {
       let direction = 'Up'
       if (this.currentPageNo>paging.page) {
@@ -107,6 +120,47 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
         properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
       })
       this.currentPageNo=paging.page
+    }
+  }
+
+  /**
+   * Load Owner Bookmarked
+   * - Note: Does not support pagination
+   * - Updates currentUserReadings
+   * - Not available to Free users
+   */
+  private loadOwnerBookmarked(): void {
+    this.loading = true
+
+    // Tell reading service to fetch bookmarked and update currentUserReadings
+    this._readings.getOwnerBookmarked()
+  }
+  
+  /**
+   * Loads draft array for current user
+   * - Note: Does not support pagination
+   */
+  private loadDrafts() : void {
+    this._readings.getDrafts().pipe(take(1))
+      .subscribe(data => {
+        if (data.readings) {
+          this.drafts = data.readings
+        }
+      })
+  }
+
+  /**
+   * Load filter
+   * @param filter string key value for filter being applied (recent, bookmarket)
+   */
+  public loadFilter(filter: string) : void {
+    this.activeFilter = filter
+
+    // Handle each sort option
+    if (filter === 'recent') {
+      this.loadRecentlyCreated()
+    } else if (filter === 'bookmarked') {
+      this.loadOwnerBookmarked()
     }
   }
 

@@ -6,6 +6,7 @@ import { ActivatedRoute } from '@angular/router'
 // Project Dependencies
 import { ReadingService, ProjectService, AuthService } from '../../../_services';
 import { Reading, Project } from '../../../shared/datatypes';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'hot-reading-card',
@@ -174,5 +175,30 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
         readingVersion.projects = []
       }
       readingVersion.projects.push(group)
+  }
+
+  /**
+   * Toggles bookmarking of a reading
+   * @param reading
+   */
+  public toggleBookmark(reading: Reading) : void {
+    // Set "bookmarked" value
+    if (!!reading.owner_bookmarked) {
+      reading.owner_bookmarked = false
+    } else {
+      reading.owner_bookmarked = true
+    }
+    // Save bookmark to reading
+    this._readings.save(reading)
+      .pipe(take(1))
+      .subscribe(
+        data => {
+          // Bookmarking successful
+        },
+        err => {
+          // Display error to user
+          console.error(err)
+        }
+      )
   }
 } // @Component

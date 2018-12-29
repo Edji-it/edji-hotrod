@@ -110,7 +110,9 @@ button.new-reading-btn {
     float: right;
 
     @media (max-width: $tablet) {
-        margin: -10px 0 14px 0;
+        margin-bottom: $base-pad;
+        width: 100%;
+        font-size: 14px;
     }
 
     @media (min-width: $tablet) and (max-width: $desktop) {
@@ -182,4 +184,21 @@ button.new-reading-btn {
     font-weight: normal;
     color:#fff;
     opacity:1;
+}
+
+.created-list {
+    @media (min-width: $tablet){
+        padding: 0px;
+    }
+}
+
+.archived-fade--above {
+    position: absolute;
+    left: 0;
+    bottom: 100%;
+    width: 100%;
+    height: 500px;
+    background: transparent linear-gradient(to top, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.7) 50%, rgba(255,255,255,0) 100%);
+    pointer-events: none;
+    z-index: $zLow;
 }

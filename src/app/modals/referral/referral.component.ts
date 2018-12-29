@@ -6,7 +6,7 @@ import { take } from 'rxjs/operators'
 import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
-import { Project } from '../../shared/datatypes'
+import { Project, User } from '../../shared/datatypes'
 import { AuthService, UtilToolService, ProjectService, ReadingService } from './../../_services'
 
 @Component({
@@ -33,6 +33,8 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
 
   public showModal: boolean
 
+  private user: User
+
   @Input()
   set showReferral(showReferral: boolean) {
     if (showReferral) {
@@ -48,7 +50,7 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
         // Get user's referral status
         this.getUserReferralStatus()
         // Refresh the check for created readings on modal open
-        this._readings.updateCreated()
+        this._readings.updateCreated(this.user)
       }
     } 
   }
@@ -69,9 +71,9 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    let user = this._auth.getUser()
+    this.user = this._auth.getUser()
     // If the user was referred, we want to give them credit when they create a reading
-    if (user.referred_by && user.referred_by.length > 0) {
+    if (this.user.referred_by && this.user.referred_by.length > 0) {
       this.subscriptions.push(
         this._readings.currentUserReadings.subscribe((data) => {
           if (data.readings && data.readings.length > 0) {
