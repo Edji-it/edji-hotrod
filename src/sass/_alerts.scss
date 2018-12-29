@@ -20,6 +20,17 @@
     border: 1px solid #eee;
 }
 
+.alert--fixed {
+    position: fixed;
+    top: $navHeight + 2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 800px;
+    max-width: calc(100% - 60px);
+    box-shadow: $navShadow;
+    z-index: $zTop - 1;
+}
+
 .divider--alert {
     position: relative;
     float: left;

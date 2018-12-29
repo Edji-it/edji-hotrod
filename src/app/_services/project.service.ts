@@ -1000,7 +1000,8 @@ export class ProjectService {
             && project.teacher 
             && (new Date(project.reading_id.createdAt) < new Date(project.teacher.archive_readings_before)) 
             && !project.teacher.hero_status 
-            && (new Date(project.reading_id.createdAt) > new Date('2019-01-01'))
+            // @todo Uncomment, after testing, for launch, allowing legacy readings
+            // && new Date(project.reading_id.createdAt) > new Date('2019-01-01')
         ) {
             return true
         } else {

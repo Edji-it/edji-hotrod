@@ -4,6 +4,7 @@ import { Project, EdjiQuestion } from '.'
 export interface Reading extends BaseReading {
   projects?: Project[],
   version_count?: number,
+  archived?: boolean,
   archivedBegin?: boolean,
   archivedEnd?: boolean
 }
