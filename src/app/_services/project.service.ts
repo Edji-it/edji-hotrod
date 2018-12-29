@@ -984,31 +984,7 @@ export class ProjectService {
         this.activeFilter = commentFilter
         this.filterUpdatesSource.next(this.activeFilter)
     }
-
-    /**
-     * Returns true if
-     *   - the project is archived by checking the create date vs the archive_readings_before date
-     *   - teacher that created the reading is not currently a hero
-     *   - the reading was created after 1/1/2019
-     * 
-     * ALL OF THE ABOVE CONDITIONS MUST BE TRUE FOR THE READING TO BE CONSIDERED ARCHIVED
-     * @param project current project
-     */
-    public checkArchiveStatus(project: Project): boolean {
-        if (
-            project 
-            && project.teacher 
-            && (new Date(project.reading_id.createdAt) < new Date(project.teacher.archive_readings_before)) 
-            && !project.teacher.hero_status 
-            // @todo Uncomment, after testing, for launch, allowing legacy readings
-            // && new Date(project.reading_id.createdAt) > new Date('2019-01-01')
-        ) {
-            return true
-        } else {
-            return false
-        }
-    }
-} // class
+} // _project
 
 /**
  * /api/v1/projects Response

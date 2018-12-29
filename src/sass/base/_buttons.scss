@@ -44,8 +44,8 @@ button, .button, .btn { //, [class*='btn']
     /* Rectangle Copy 14: */
     background-color: #eaeaea !important;
     background-image: radial-gradient(50% -88%, #F4F4F4 95%, #FFFFFF 100%) !important;
-    border: $btnBorderWidth solid #D3D3D3 !important;
-    box-shadow: -1px 1px 0 0 #FFFFFF;
+    border-color: rgba(127,127,127,0.2) !important;
+    box-shadow: 0px 1px 0 0 #FFFFFF;
     border-radius: 1px;
     // cursor: not-allowed;
     color: #D1D1D1 !important;

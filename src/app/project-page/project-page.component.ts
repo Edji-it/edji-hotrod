@@ -44,7 +44,6 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
     private createdDate: Date
     private createDate: string
     public showLoginModal: boolean = false
-    public readingArchived: boolean = false
     public showArchiveModal: boolean = false
     
     constructor(
@@ -86,8 +85,7 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
             (project) => {
                 if (project) {
                     // If the reading is archived, we'll show them a banner or modal
-                    this.readingArchived = this._projects.checkArchiveStatus(project)
-                    if (this.readingArchived) {
+                    if (project.archived) {
                         // If not owner or existing student, block viewing and show modal
                         let notExistingStudent = project.students_ids && project.students_ids.indexOf(this.user._id) < 0
                         let notTeacher = this.user._id !== project.teacher_id

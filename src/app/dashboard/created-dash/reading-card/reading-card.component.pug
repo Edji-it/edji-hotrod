@@ -32,7 +32,8 @@
       //- Create New Group dropdown button
       button.dropdown-item.e2e-new-group(
         (click)="relevantReading = reading; showAddModal = true; showOptions = false;",
-        [attr.testFindCreateNewGroup]="reading.title"
+        [attr.testFindCreateNewGroup]="reading.title",
+        [disabled]="reading.archived"
       ) Create New Group
       //- Copy & Edit dropdown button
       button.dropdown-item(
@@ -64,7 +65,8 @@
         [attr.title]="reading.public ? 'Public Reading' : 'Private Reading'", 
         (click)="togglePublicTooltip()",
         [class.access-icon__hover]="_route.snapshot.routeConfig.path!='discover'",
-        [class.read-only]="readOnly"
+        [class.read-only]="readOnly",
+        [class.disabled]="reading.archived"
       )
         i.icon(*ngIf="reading.public", [innerHTML]="':earth_americas:' | emojione")
         i.icon(*ngIf="!reading.public", [innerHTML]="':lock:' | emojione")
