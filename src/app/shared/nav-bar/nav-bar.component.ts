@@ -99,9 +99,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
       this.subscriptions.push(
           this._auth.getCurrentUser().subscribe((user) => {
               this.user = user
-              if (this.user && this.user.identities) {
-                this.isTeacher = this.user.identities.indexOf('teacher') > -1
-              }
               this.navLinks = this.generateNavLinks(user)
           }),
           this._auth.currentAcademyState.subscribe((currentState) => {

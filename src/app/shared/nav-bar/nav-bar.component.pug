@@ -1,7 +1,7 @@
 .nav-bar__wrap
   #sideBar.nav-bar
     button.mNavIcon.mNav([ngClass]="{ 'mNavShowing' : mNavShow }", (click)="mNavShowFlip()")
-    a.nav-bar__logo-wrap([routerLink]="['/dashboard']")
+    a.nav-bar__logo-wrap([routerLink]="[user.isStudent ? '/dashboard/read' : '/dashboard/create']")
       img#logo.nav-bar__logo(*ngIf="currentPage!='home'", src="assets/images/logo-3.2-mark.svg")
       img#logo.nav-bar__logo-h(*ngIf="currentPage=='home'", src="assets/images/logo-3.2-horizontal.svg")
     //- Dashboard Nav
@@ -22,7 +22,7 @@
         //-     | Engagement
         //-   a.dropdown-item([routerLink]="['/academy/licenses']", routerLinkActive="active")
         //-     | Licenses
-      a#navGuide.btn.btn-link.btn--hover-icon(*ngIf="isTeacher", href="http://guide.edji.it", target="_blank", )
+      a#navGuide.btn.btn-link.btn--hover-icon(*ngIf="!user.isStudent", href="http://guide.edji.it", target="_blank", )
         | Guide
         .icon.icon-external
     //- Optional Title
@@ -56,7 +56,7 @@
           button#accountButton.list-group-item.list-group-item-action(type="button", (click)="openAccount()") {{ user.fullname }}
             span.list-icon--right([innerHtml]="':gear:' | emojione")
           //- Refer
-          button#navReferralButton.list-group-item.list-group-item-action(*ngIf="isTeacher" type="button", (click)="openReferralModal()") Refer Teachers
+          button#navReferralButton.list-group-item.list-group-item-action(*ngIf="!user.isStudent" type="button", (click)="openReferralModal()") Refer Teachers
             span.list-icon--right([innerHtml]="':satellite:' | emojione")
           //- Feedback
           button#navFeedbackButton.list-group-item.list-group-item-action(type="button", (click)="openFeedback()") Contact Us
@@ -139,7 +139,7 @@
             href="#") Go!
       #projectCodeError.invalid-feedback(*ngIf="errorObject.invalidCode", [innerHtml]="errorObject.invalidCode | emojione")
     //- Go hero action (non-existent if already a hero)
-    .nav__btn-wrap(*ngIf="!showProjectInfo && (!user.isLoggedIn || (!user.hero_status && isTeacher))")
+    .nav__btn-wrap(*ngIf="!showProjectInfo && (!user.isLoggedIn || (!user.hero_status && !user.isStudent))")
       a#heroLink.btn.btn-hero.btn-sm.nav-bar__btn.hidden-sm-down([routerLink]="['/hero']", routerLinkActive="hide", fragment="top") 
         | {{ currentPage == "home" ? "Discover Hero" : heroBtnCopy }}
       a#goHeroLink.btn.btn-hero.btn-sm.nav-bar__btn.hidden-sm-down(

@@ -26,6 +26,7 @@ export const ROUTES: Routes = [
   { path: 'dashboard',  component: DashboardComponent, canActivate: [AuthService],
     children: [
       // Root path is handled by canActivate
+      { path: '', pathMatch: 'full', redirectTo: 'read'},
       { path: 'create', component: CreatedDashComponent },
       { path: 'read', component: JoinedDashComponent }
     ] 

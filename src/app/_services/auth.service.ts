@@ -726,7 +726,7 @@ export class AuthService implements CanActivate {
             return false
         } else {
             // Handle Dashboard defaults for Students vs Teachers
-            if (state.url == '/dashboard') {
+            if (state.url == '/dashboard' || state.url == '/') {
                 if (user.isStudent) {
                     this._router.navigate(['/dashboard/read'])
                 } else {
