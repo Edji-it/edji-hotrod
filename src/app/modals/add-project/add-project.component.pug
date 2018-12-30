@@ -54,8 +54,9 @@
                 .form-group.pb-0([class.disabled]='!isHero')
                     label(for='customCodeInput')
                         | Custom Code 
-                        span.hero-tag(title='Hero Power') H
-                    input#customCodeInput.form-control.h3.mGroup([attr.disabled]="!isHero", [formControl]="projectForm.controls['customCode']", type='text', placeholder='(optional)', style='text-transform:lowercase;')
+                        span.hero-h(title='Hero Power') 
+                            ='H'
+                    input#customCodeInput.form-control.h3.mGroup([disabled]="!isHero", [formControl]="projectForm.controls['customCode']", type='text', placeholder='(optional)', style='text-transform:lowercase;')
                     #errorInvalidCustomCode.alert.alert-warning(*ngIf='errors.invalidCode') Whoops, someone is already using that group code. Could you pick another?
         .modal-footer
             .button__row(style='padding-top:0px;')
