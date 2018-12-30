@@ -420,3 +420,15 @@ button.new-reading-btn {
         color: inherit;
     }
 }
+
+.reading-version {
+    border-bottom: 1px solid $medium-gray;
+    color: $medium-gray;
+    background: #ffffff;
+    cursor: pointer;
+
+    &:hover, &:focus {
+        color: $blue;
+        border-color: $blue;
+    }
+}

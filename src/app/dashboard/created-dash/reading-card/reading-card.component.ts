@@ -49,49 +49,25 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.subscriptions.push(
-      // Sometimes versions are updated, but the component maintains the version array, so we need to listen for updates
-      this._readings.refreshVersions.subscribe(
-        projectId => {
-          this.versions.forEach( readingVersion => {
-            readingVersion.projects && readingVersion.projects.forEach(
-              versionProject => {
-                if (versionProject._id == projectId) {
-                  // If the targeted Project is here, let's refresh our versions
-                  this.versions = []
-                  this.getVersions(this.reading.version_id)
-                }
-              }
-            )
-          })
-        }
-      )
-    )
+    
   }
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   } //ngOnDestroy
 
+  /**
+   * Updates user's current readings with all versions of a specific reading
+   * @param versionId "version_id" property from the appropriate Reading
+   */
   getVersions(versionId : string) {
-    if (this.showVersions && this.versions.length < 1) {
       this.isLoading = true
+      this.angulartics.eventTrack.next({ 
+        action: 'createdReading_getAllVersions', 
+        properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
+      })
+      // Update current user readings on Dashboard
       this._readings.getAllVersions(versionId)
-        .subscribe(
-          data => {
-            // fire an analytic event here for tracking purposes
-            this.angulartics.eventTrack.next({ 
-              action: 'createdReading_getAllVersions', 
-              properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
-            })
-            this.isLoading = false
-            this.versions = data.readings || []
-          },
-          err => {
-            this.isLoading = false
-            this.errorObject.readingError = "We had some trouble getting the versions for this reading, it might be our fault"
-          })
-    } // if
   } // getVersions(versionId : string)
 
   hasProjects() : boolean {

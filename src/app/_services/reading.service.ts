@@ -41,10 +41,6 @@ export class ReadingService {
   private userReadingsSource = new BehaviorSubject<GetReadingsResponse>({})
   public currentUserReadings: Observable<any> = this.userReadingsSource.asObservable()
 
-  // Version refresh observable
-  private refreshVersionSource = new Subject()
-  public  refreshVersions: Observable<any> = this.refreshVersionSource.asObservable()
-
   /**
    * Get all Created Readings for a user, paginated
    * @param filters object containing pagination values (to eventually include other filters)
@@ -133,14 +129,26 @@ export class ReadingService {
   }
 
   // Pull all versions of a particular reading
-  public getAllVersions(versionId : string) : Observable<any> {
-      return this.http
-          .get(this._auth.getUrl() + '/readings/versions/' + versionId, this._auth.getOptions())
-          .pipe(
-            map(data => {
-              return data.json()
-            })
-          );
+  public getAllVersions(versionId : string) : void {
+      this.http
+        .get(this._auth.getUrl() + '/readings/versions/' + versionId, this._auth.getOptions())
+        .pipe(
+          map(data => {
+            return data.json()
+          }),
+          take(1)
+        )
+        .subscribe(data => {
+          if (data.readings) {
+            data.filter = 'versions'
+            // Extract first version title for filter value
+            let firstVersion = data.readings[data.readings.length - 1]
+            data.filterValue = firstVersion && firstVersion.title
+            this.userReadingsSource.next(data)
+          } 
+        }, err => {
+          this.userReadingsSource.error(err)
+        })
   } // public getAllVersions(versionId : string) : Observable<any>
 
   public clear(): void {
@@ -195,11 +203,6 @@ export class ReadingService {
         )
     })
 
-    // If we didn't find the project, it's hiding in a version
-    if (!projectFound) {
-      console.error("PROJECT NOT FOUND")
-      this.refreshVersionSource.next(targetProject._id)
-    }
     this.userReadingsSource.next(readingRes)
   }
 

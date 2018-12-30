@@ -15,18 +15,28 @@
 .row
   .col-12.col-sm-3
     .mb-2
-      button.btn.btn-filter(
+      //- Recently Created
+      div
+        button.btn.btn-filter(
           [innerHtml]="':sparkles: Recently Created' | emojione", 
           [class.active]="activeFilter === 'recent'",
           (click)="loadFilter('recent')"
         )
-      button.btn.btn-filter( 
+      //- Bookmarks
+      div
+        button.btn.btn-filter( 
           [class.active]="activeFilter === 'bookmarked'",
           [class.disabled--not-hero]="!user.hero_status",
           (click)="loadFilter('bookmarked')"
         )
-        i.icon.icon-bookmark.mr-2(style="vertical-align:middle;")
-        | Bookmarks
+          i.icon.icon-bookmark.mr-2(style="vertical-align:middle;")
+          | Bookmarks
+      //- Versions
+      div
+        button.btn.btn-filter.active(
+            *ngIf="activeFilter === 'versions'",
+            [innerHtml]="':books: Versions' | emojione", 
+        )
     .card.my-4.hidden-sm-down
       .card-body.card-body--small.pt-1.px-3.pb-3
         h5.card-title From the Edji Guide
@@ -54,6 +64,10 @@
         p You do not currently have any Created Readings bookmarked!
       .row.loading(*ngIf="loading")
       hot-tutorial-reading(*ngIf="!loading && readings.length < 1 && !errorObject.readingError && user.type !=='temp' && activeFilter === 'recent'")
+      //- Sub headings for specific cases
+      .row(*ngIf="activeFilter === 'versions'")
+        .col-12        
+          h2.w-100.center Versions of &#8220;{{ activeFilterValue }}&#8221;
       ng-container(*ngFor="let reading of readings")
         //- Mark beginning of archived readings
         .divider--alert(*ngIf="reading.archivedBegin")

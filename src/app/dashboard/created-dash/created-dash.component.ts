@@ -34,6 +34,7 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
   public user: User
   // Filter values
   public activeFilter: string = 'recent'
+  public activeFilterValue: string = ''
   // Joined Readings, p-datalist values
   public loading: boolean = true
   public first: number = 0 // first page 
@@ -75,6 +76,11 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
             this.readings = data.readings || [];
             this.total = data.total;
             this.pageNo = Math.floor((this.first+1)/this.rows) + 1;
+            // Set display filter
+            if (data.filter) {
+              this.activeFilter = data.filter
+              this.activeFilterValue = data.filterValue
+            }
             // Clear errors
             this.errorObject = {}
           },

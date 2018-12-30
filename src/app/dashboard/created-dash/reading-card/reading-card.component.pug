@@ -11,10 +11,13 @@
       h1.small.reading-title__text {{reading.title}} 
         span(*ngIf="!reading.title")
           i Untitled
-      p.reading-version(
-        *ngIf="reading.version_count && reading.version_count > 0", 
+      p.reading-details(
+        *ngIf="reading.version_count && reading.version_count > 1", 
         [attr.testVersionNumber]="reading.title"
-      ) Version {{reading.version_count > 0 ? reading.version_count : '' }}
+      ) 
+        span.reading-date {{ reading.createdAt | edjidate:'timeAgo':null:secondsAgo }} &nbsp;
+        span.reading-version((click)="getVersions(reading.version_id)") 
+          |{{reading.version_count > 0 ? ('1 of ' + reading.version_count) : '' }} Versions
   i.icon.icon-draft.reading-draft(*ngIf="reading['draft']")
   //- The Dropdown Options Menu
   #optionsWrap.dropdown.reading-options(
@@ -127,84 +130,6 @@
   //- Delete Project Button
   .btn--delete-project.icon-button(*ngIf="!readOnly", title="Delete Group", (click)="relevantProject = project; showDeleteProjectModal = true;")
     span([innerHtml]="':x:' | emojione")
-//- Handle the version control
-.version-card--block(
-  [class.gone]="!reading.version_count || reading.version_count <= 1", 
-  [class.show]="showVersions", 
-  [style.maxHeight.px]="versionsHeight()"
-)
-  .list-item.version-card(id="{{ reading._id }}", [class.show]="showVersions")
-    .versions(
-      *ngFor="let version of versions; let i = index", 
-      [class.show]="showVersions", 
-      [class.hidden]="version._id === reading._id"
-    )
-      .version-number {{ versions.length - i }}
-      //- Handle the sub-readings (readings under version)
-      .list-item.list-item--block.reading-card(
-        [ngClass]="{'draft-edit' : (version['draft'] && version.draft === true && !version.projects[0])}", 
-        [routerLink]="(version['draft'] && version.draft === true && !version.projects[0]) ? ['/new-reading/' + version._id] : []"
-      )
-        .reading-icon
-          span {{version.title.substring(0,2)}}
-        .reading-title
-          .reading-title--center-row
-            h1.small {{version.title}} 
-              span(*ngIf="!version.title")
-                i Untitled
-            p.blockquote-footer([attr.testVersionNumber]="version.title") Version {{ versions.length - i }}
-        i.icon.icon-draft.reading-draft(*ngIf="version['draft'] && version.draft === true && !version.projects[0]")
-        #optionsWrapV.dropdown.reading-options(
-          *ngIf="!version['draft'] || version.draft !== true || version.projects[0]", 
-          (clickOutside)="version.showOptionsV = false", 
-          [class.show]="version.showOptionsV"
-        )
-          button.btn.btn-icon--plain((click)="version.showOptionsV = !version.showOptionsV", [attr.testFindOptions]="version.title")
-            i.icon.icon-more
-          .dropdown-menu.dropdown-menu-right.reading-card-menu
-            button.dropdown-item.e2e-new-group(
-              (click)="relevantReading = version; showAddModal = true; version.showOptionsV = false; versionHeight = versionHeight + 66", 
-              [attr.testFindCreateNewGroup]="version.title"
-            ) Create New Group
-            button.dropdown-item(
-              *ngIf="!version.draft", 
-              (click)="version.showOptionsV=false;", 
-              [routerLink]="['/new-reading/']", 
-              [queryParams]="{ copyId: version._id }",
-              [attr.testFindCopyAndEditV]="version.title"
-            ) Copy and Edit
-            //- Delete dropdown button
-            button.dropdown-item((click)="relevantReading = version; showDeleteReadingModal = true; showOptions = false;") Delete
-      //- Handle the sub-projects (projects under the readings that are under the version)
-      .list-item.list-item--button.project-card([class.new-project]="versionProject.new", *ngFor="let versionProject of version.projects")
-        a.row.project-row--right-pad([routerLink]="['/project', versionProject._id]")
-          .col-8
-            .title
-              .project-title-input
-                span.reading-project--label
-                  span(style="color: #cdcdcd;", [attr.testFindGroupLabel]="versionProject.label") Group:
-                  | &nbsp;{{versionProject.label}}
-                span.project-title-input__save((click)="updateProjectLabel(version._id, version.newLabel)", [innerHtml]="':white_check_mark:' | emojione")
-            div(style="clear:both;")
-              span.metadata {{ versionProject.comment_count ? versionProject.comment_count : 0 }} Comments
-              span &nbsp;|&nbsp;
-              span.metadata {{ versionProject.student_count ? versionProject.student_count : 0 }} Students
-          .col-4.prj-btns.pull-right
-            //- Project Code
-            pre.prj-code(style="float:right") {{versionProject.code || 'none'}}
-        //- Delete Project Button
-        .btn--delete-project.icon-button(title="Delete Group", (click)="relevantProject = versionProject; showDeleteProjectModal = true;")
-          span([innerHtml]="':x:' | emojione")
-    .row.loading(*ngIf="isLoading", style="position:absolute;z-index:9999;width:100%; background: #fff;")
-    .alert.alert-danger.alert-readings(role="alert", *ngIf="errorObject.readingError") {{ errorObject.readingError }}
-  .version-toggle(
-    [class.show]="showVersions", 
-    (click)="showVersions = !showVersions; getVersions(reading.version_id)", 
-    [attr.testFindVersionToggle]="reading.title"
-  )
-    button.btn.btn-clear.btn-showVersion(type="button", aria-label="Show Previous Versions")
-      i.icon.icon-carrot
-    | Past Versions
 //- Modals
 //- hot-add-project-modal is opens when "Create New Group" under the dropdown is clicked
 hot-add-project-modal(
