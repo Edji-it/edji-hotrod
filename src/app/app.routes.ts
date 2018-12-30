@@ -1,7 +1,7 @@
 import { Routes, RouterModule } from '@angular/router'
 
 // Project Dependencies
-import { AuthService } from './_services'
+import { AuthService, DashboardGuardService } from './_services'
 import { NewReadingPage } from './new-reading-page';
 import { ProjectPageComponent } from './project-page';
 import { HomeComponent } from './home';
@@ -23,16 +23,16 @@ import { PromoPageComponent } from './promo/promo.component';
 
 export const ROUTES: Routes = [
   { path: '', component: DashboardComponent, canActivate: [AuthService] },
-  { path: 'dashboard',  component: DashboardComponent, canActivate: [AuthService],
+  { path: 'dashboard',  component: DashboardComponent, canActivate: [DashboardGuardService],
     children: [
-      // Root path is handled by canActivate
-      { path: '', pathMatch: 'full', redirectTo: 'read'},
+      // Root path must be explicitly handled by canActivate, since the parent canActivate is not re-evaluated
+      { path: '', pathMatch: 'full', redirectTo: 'read', canActivate: [DashboardGuardService] },
       { path: 'create', component: CreatedDashComponent },
       { path: 'read', component: JoinedDashComponent }
     ] 
   },
-  { path: 'create',  redirectTo: '/dashboard/create', canActivate: [AuthService] },
-  { path: 'read',  redirectTo: '/dashboard/read', canActivate: [AuthService] },
+  { path: 'create',  redirectTo: '/dashboard/create' },
+  { path: 'read',  redirectTo: '/dashboard/read' },
   { path: 'home',  component: HomeComponent },
   { path: 'register', component: RegisterPageComponent },
   { path: 'login', component: LoginComponent },

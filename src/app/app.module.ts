@@ -44,7 +44,8 @@ import {
   ProjectService,
   ReadingService,
   SocketService,
-  UtilToolService
+  UtilToolService,
+  DashboardGuardService
 } from './_services'
 // import { ReuseStrategy } from './route-reuse-strategy'
 
@@ -109,6 +110,7 @@ const APP_PROVIDERS = [
   // ...APP_RESOLVER_PROVIDERS,
   // AppState,
   AuthService,
+  DashboardGuardService,
   ReadingService,
   MediaService,
   MessageService,

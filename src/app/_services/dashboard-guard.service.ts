@@ -1,0 +1,33 @@
+import { Injectable } from '@angular/core';
+import {CanActivate, Router, RouterStateSnapshot, ActivatedRouteSnapshot} from '@angular/router';
+import { AuthService } from '.';
+
+@Injectable()
+export class DashboardGuardService implements CanActivate {
+
+  constructor(
+    private router: Router,
+    private _auth: AuthService
+  ) {}
+
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+    let user = this._auth.getUser()
+    console.log("Dash guard!!")
+    if (!user.isLoggedIn) {
+        this.router.navigate(['/home'])
+        return false
+    } else {
+        let useDefault: boolean = (state.url == '/dashboard' || state.url == '/')
+        if (!useDefault) {
+            return true
+        } else if (user.isStudent) {
+            this.router.navigate(['/dashboard/read'])
+            return false
+        } else {
+            this.router.navigate(['/dashboard/create'])
+            return false
+        }
+    }
+  }
+
+}

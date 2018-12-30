@@ -1,7 +1,7 @@
 .nav-bar__wrap
   #sideBar.nav-bar
     button.mNavIcon.mNav([ngClass]="{ 'mNavShowing' : mNavShow }", (click)="mNavShowFlip()")
-    a.nav-bar__logo-wrap([routerLink]="[user.isStudent ? '/dashboard/read' : '/dashboard/create']")
+    a.nav-bar__logo-wrap([routerLink]="['/dashboard']")
       img#logo.nav-bar__logo(*ngIf="currentPage!='home'", src="assets/images/logo-3.2-mark.svg")
       img#logo.nav-bar__logo-h(*ngIf="currentPage=='home'", src="assets/images/logo-3.2-horizontal.svg")
     //- Dashboard Nav
