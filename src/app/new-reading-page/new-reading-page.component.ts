@@ -63,7 +63,6 @@ export class NewReadingPage implements OnInit {
     public versionId : string = ''
     public ownerId : string
     public copyId : string = ''
-    public copyCleanHeroMsg : boolean = false
     public editorToolbarY : number = 54
     public editorToolbarHidden : boolean
     public insertNode : any
@@ -221,18 +220,12 @@ export class NewReadingPage implements OnInit {
         this._title.setTitle('Edji | New Reading')
      }
 
-     private getReading(readingId: string, stripHero?: boolean) {
+     private getReading(readingId: string) {
 
         this._readings.get(readingId)
             .pipe(take(1))
             .subscribe(
                 (data: any) => {
-                    if (stripHero && data.questions && data.questions.length > 0) {
-                        // Clean out features which require Hero, and tell the user it happened
-                        data.html = data.html.replace(/\<\$question\$\>/g, '')
-                        data.questions = []
-                        this.copyCleanHeroMsg = true
-                    }
                     this.reading = data;
                     if (this.reading.html) {
                         this.populateDraftContent(this.reading.html)
