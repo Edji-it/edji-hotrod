@@ -136,17 +136,17 @@ export class RegisterFormComponent implements OnInit {
             this._auth.convertTempUser(this.tempUserId)
               .pipe(take(1))
               .subscribe(() => {
-                this._router.navigate(['/dashboard'])
+                this._router.navigate(['/dashboard/read'])
               }, (err) => {
                 console.error(err)
                 // should also have an error put on the dashboard
-                this._router.navigate(['/dashboard'])
+                this._router.navigate(['/dashboard/read'])
               })
           } else if (this.noRedirect) {
             this.registerSuccess.emit(data.user)
           } else {
             // default case where nothing special happens
-            this._router.navigate(['/dashboard'])
+            this._router.navigate(['/dashboard/read'])
           } 
         }
 

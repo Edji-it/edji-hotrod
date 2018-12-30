@@ -22,11 +22,11 @@ import { PromoPageComponent } from './promo/promo.component';
 
 
 export const ROUTES: Routes = [
-  { path: '', component: DashboardComponent, canActivate: [AuthService] },
+  { path: '', redirectTo: 'dashboard', pathMatch: 'full', canActivate: [AuthService] },
   { path: 'dashboard',  component: DashboardComponent, canActivate: [DashboardGuardService],
     children: [
       // Root path must be explicitly handled by canActivate, since the parent canActivate is not re-evaluated
-      { path: '', pathMatch: 'full', redirectTo: 'read', canActivate: [DashboardGuardService] },
+      { path: '', pathMatch: 'full', component: DashboardComponent, canActivate: [DashboardGuardService] },
       { path: 'create', component: CreatedDashComponent },
       { path: 'read', component: JoinedDashComponent }
     ] 

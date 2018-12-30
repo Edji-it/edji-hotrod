@@ -24,6 +24,7 @@ import { User } from './../shared/datatypes'
 export class DashboardComponent implements OnInit {
   // Set our default values
   private currentUser: User 
+  private subscriptions: Subscription[] = []
   public mobileShowJoined:boolean = true
   public showUserDetailsModal: boolean = false
 
@@ -79,6 +80,14 @@ export class DashboardComponent implements OnInit {
     if (this.userProfileIncomplete()) {
       this.showUserDetailsModal = true
     }
+
+    this.subscriptions.push(
+      this._auth.currentUser.subscribe(
+        user => {
+          this.currentUser = user
+        }
+      )
+    )
   }
 
   private userProfileIncomplete(): boolean {
@@ -99,5 +108,19 @@ export class DashboardComponent implements OnInit {
       incomplete = true
     }
     return incomplete
+  }
+
+  /**
+   * Handle display changes after user details are added
+   */
+  public userDetailsAdded(): void {
+    // Dismiss details modal
+    this.showUserDetailsModal = false
+    // Check which dashboard a new user should land on
+    if (!this.currentUser.isStudent) {
+      this._router.navigate(['/dashboard/create'])
+    } else {
+      this._router.navigate(['/dashboard/read'])
+    }
   }
 }
