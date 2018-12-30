@@ -92,13 +92,11 @@ export class AuthService implements CanActivate {
     /**
      * Return default authorization headers
      */
-    public getHeaders(): { headers: HttpHeaders } {
-        return {
-            headers: new HttpHeaders({
+    public getHeaders(): HttpHeaders {
+        return new HttpHeaders({
                 'Content-Type': 'application/json',
                 'Authorization': this.getToken()
-            })
-        }
+        })
     }
 
     public getUrl(): string {
@@ -169,7 +167,7 @@ export class AuthService implements CanActivate {
      */
     private fetchAcademies(user: User): void {
         // Fetch license and academy information for admins and owners
-        this._http.get<any>(this.getUrl() + '/api/v1/licenses', this.getHeaders())
+        this._http.get<any>(this.getUrl() + '/api/v1/licenses', { headers: this.getHeaders()})
             .pipe(take(1))
             .subscribe(data => {
                 // Attach properties for Academy users
@@ -194,7 +192,7 @@ export class AuthService implements CanActivate {
             }, err => {
                 // Fetch academy information for teacher (non-admin) users
                 if (err.status == 404 && user.institution_ids && user.institution_ids[0]) {
-                    this._http.get<any>(this.getUrl() + '/api/v1/institutions/' + user.institution_ids[0], this.getHeaders())
+                    this._http.get<any>(this.getUrl() + '/api/v1/institutions/' + user.institution_ids[0], { headers: this.getHeaders()})
                     .pipe(take(1))
                     .subscribe(data => {
                         let academy = data.institution
@@ -309,7 +307,7 @@ export class AuthService implements CanActivate {
             }
         }
 
-        return this._http.post(this.baseUrl + '/users/login', data, this.getHeaders())
+        return this._http.post(this.baseUrl + '/users/login', data, { headers: this.getHeaders() })
             .pipe(map((data: any) => {
                 if (data.token) {
                     this.setToken(data.token)

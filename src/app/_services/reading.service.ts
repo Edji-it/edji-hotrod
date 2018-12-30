@@ -284,7 +284,7 @@ export class ReadingService {
   public getDrafts() : Observable<{readings?: Reading[]}> {
     return this._http.get(
       this._auth.getUrl() + '/api/v1/readings/draft', 
-      this._auth.getHeaders()
+      { headers: this._auth.getHeaders() }
     )
   } 
 
@@ -293,9 +293,13 @@ export class ReadingService {
    * @description Updates currentUserReadings with bookmarked readings
    */
   public getOwnerBookmarked(): void {
+
     this._http.get(
       this._auth.getUrl() + '/api/v1/readings/owner_bookmarked',
-      this._auth.getHeaders()
+      {
+        headers: this._auth.getHeaders(),
+        params: new HttpParams().append("pop","projects")
+      }
     )
     .pipe(take(1))
     .subscribe(data => {
