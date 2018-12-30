@@ -181,7 +181,7 @@ export class NewReadingPage implements OnInit {
             this.getReading(this.readingId)
         } else if (this.copyId) {
             this.readingType = 'existingReading'
-            this.getReading(this.copyId, !this._auth.getUser().hero_status)
+            this.getReading(this.copyId)
             // fire an analytic event here for tracking purposes
             this.angulartics.eventTrack.next({ 
                 action: 'discover_reading_retrieve', 

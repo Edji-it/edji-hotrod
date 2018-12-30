@@ -57,6 +57,7 @@
         span.badge-pill.badge-secondary.badge-subject(*ngFor="let subject of reading.subjects") {{ subject | subjectName }}
     //- Reading action buttons
     .w-25.reading-action-row
+      //- Source Link
       a.btn.btn-icon--round.reading-action(
         *ngIf="reading.source", 
         [attr.href]="reading.source", 
@@ -64,6 +65,7 @@
         target="_blank"
       )
         i.icon.icon-link
+      //- Private/Public Toggle
       .btn.btn-icon--round.reading-access-icon.reading-action(
         [attr.title]="reading.public ? 'Public Reading' : 'Private Reading'", 
         (click)="togglePublicTooltip()",
@@ -73,26 +75,27 @@
       )
         i.icon(*ngIf="reading.public", [innerHTML]="':earth_americas:' | emojione")
         i.icon(*ngIf="!reading.public", [innerHTML]="':lock:' | emojione")
-        span.tooltipbody([class.show]="togglePublicFlag", [class.no-link]="!reading.source")
-          .tooltiptitle
-            | Make Reading Public?
-          .tooltiptext.block-with-text
-            //- Public option
-            label#readingMakePublic.form-check-label.form-check-btn(
-                [class.active]="reading.public",
-                title="Allow anyone to find this Reading in Discover",
-                (click)="$event.stopPropagation(); togglePublic(true)"
-              )
-              span([innerHTML]="':earth_americas: Public' | emojione")
-            //- Private option
-            label#readingMakePrivate.form-check-label.form-check-btn(
-                [class.active]="!reading.public",
-                title="Hide this Reading from Discover",
-                (click)="$event.stopPropagation(); togglePublic(false)"
-              )
-              span([innerHTML]="':lock: Private' | emojione")
+        .tooltip-wrap
+          .tooltip([class.show]="togglePublicFlag", [class.no-link]="!reading.source")
+            .tooltip-title
+              | Make public for others to Discover?
+            .tooltiptext.block-with-text
+              //- Public option
+              label#readingMakePublic.form-check-label.form-check-btn(
+                  [class.active]="reading.public",
+                  title="Allow anyone to find this Reading in Discover",
+                  (click)="$event.stopPropagation(); togglePublic(true)"
+                )
+                span([innerHTML]="':earth_americas: Public' | emojione")
+              //- Private option
+              label#readingMakePrivate.form-check-label.form-check-btn(
+                  [class.active]="!reading.public",
+                  title="Hide this Reading from Discover",
+                  (click)="$event.stopPropagation(); togglePublic(false)"
+                )
+                span([innerHTML]="':lock: Private' | emojione")
       //- Bookmark action
-      a.btn.btn-icon--round.reading-action(
+      .btn.btn-icon--round.reading-action.hover--tooltip(
         title="Bookmark",
         [class.hide]="reading.archived",
         [class.active]="reading.owner_bookmarked",
@@ -100,6 +103,9 @@
       )
         i.icon.icon-bookmark.hide-inactive
         i.icon.icon-bookmark-off.hide-active
+        .tooltip-wrap
+          .tooltip
+            .tooltip-title {{ reading.owner_bookmarked ? "Bookmarked" : "Not Bookmarked" }}
   //- Delete Reading if Draft Button
   .btn--delete-project.icon-button.btn--delete-draft(*ngIf="reading['draft']", title="Delete Draft", (click)="$event.stopPropagation(); relevantReading = reading; showDeleteReadingModal = true;")
     span([innerHtml]="':x:' | emojione")

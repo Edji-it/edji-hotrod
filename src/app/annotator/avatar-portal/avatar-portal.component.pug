@@ -10,7 +10,7 @@
     [ngClass]="[ 'comment-arrow-' + indexOnLine ]"
   )
   span.tooltipbody(*ngIf="indexOnLine<8")
-    .tooltiptitle([class.inline-center]="comment.type == 'audio'")
+    .tooltip-title([class.inline-center]="comment.type == 'audio'")
       | {{comment.author}}
     span.tooltipemoji(*ngIf="comment.type == 'emoji' || !comment.type", [innerHtml]="comment.data | emojione")
     .tooltiptext.block-with-text(*ngIf="comment.type == 'text'", [innerHtml]="comment.data | linkify | emojione")
