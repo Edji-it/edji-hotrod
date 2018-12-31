@@ -6,7 +6,7 @@ import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http'
 
 // Project Dependencies
 import { AuthService } from './auth.service'
-import { Project, Reading } from '../shared/datatypes'
+import { Project, Reading, User } from '../shared/datatypes'
 
 interface FilterObj {
   type?: string,
@@ -41,15 +41,11 @@ export class ReadingService {
   private userReadingsSource = new BehaviorSubject<GetReadingsResponse>({})
   public currentUserReadings: Observable<any> = this.userReadingsSource.asObservable()
 
-  // Version refresh observable
-  private refreshVersionSource = new Subject()
-  public  refreshVersions: Observable<any> = this.refreshVersionSource.asObservable()
-
   /**
    * Get all Created Readings for a user, paginated
    * @param filters object containing pagination values (to eventually include other filters)
    */
-  public updateCreated(filters?: ReadingFilters) : void {
+  public updateCreated(user: User, filters?: ReadingFilters) : void {
     let feedParams = new HttpParams()
     // Set Pagination values
     if (filters) {
@@ -71,6 +67,38 @@ export class ReadingService {
         params: feedParams })
         .pipe(take(1))
         .subscribe((data: any) => { 
+          if (data.readings && !user.hero_status && user.archive_readings_before) {
+            let archivedBefore = new Date(user.archive_readings_before)
+            let readings = data.readings.slice()
+            let archivedTally: number = 0
+            // Loop through readings and mark archived
+            for (let i = 0; i < readings.length; i++) {
+              /**
+               * Readings are "archived" if:
+               * - Updated date is prior to archived before date
+               * - Readings before Hero v2 (01-01-2018) are "legacy" and not archived
+               */
+              let readingDate = new Date(readings[i].createdAt)
+              if (readingDate < archivedBefore
+                  // @todo Uncomment to allow legacy readings to be active
+                  // && readingDate >= new Date('2019-01-01')
+                ) {
+                readings[i].archived = true
+                archivedTally++
+                // Limit number of archived shown to 2, and flag begin/end of archive
+                if (archivedTally == 1) {
+                  readings[i].archivedBegin = true
+                } else if (archivedTally == 2) {
+                  readings[i].archivedEnd = true
+                } else  if (archivedTally > 2) {
+                  readings.splice(i, 1)
+                  i--
+                }
+              }
+            }
+            //  Update return value
+            data.readings = readings
+          }
           this.userReadingsSource.next(data)
         }, (error) => {
           this.userReadingsSource.error(error)
@@ -101,14 +129,26 @@ export class ReadingService {
   }
 
   // Pull all versions of a particular reading
-  public getAllVersions(versionId : string) : Observable<any> {
-      return this.http
-          .get(this._auth.getUrl() + '/readings/versions/' + versionId, this._auth.getOptions())
-          .pipe(
-            map(data => {
-              return data.json()
-            })
-          );
+  public getAllVersions(versionId : string) : void {
+      this.http
+        .get(this._auth.getUrl() + '/readings/versions/' + versionId, this._auth.getOptions())
+        .pipe(
+          map(data => {
+            return data.json()
+          }),
+          take(1)
+        )
+        .subscribe(data => {
+          if (data.readings) {
+            data.filter = 'versions'
+            // Extract first version title for filter value
+            let firstVersion = data.readings[data.readings.length - 1]
+            data.filterValue = firstVersion && firstVersion.title
+            this.userReadingsSource.next(data)
+          } 
+        }, err => {
+          this.userReadingsSource.error(err)
+        })
   } // public getAllVersions(versionId : string) : Observable<any>
 
   public clear(): void {
@@ -130,7 +170,7 @@ export class ReadingService {
               
               if (reading.version_count > 1) {
                 // Reload content (slower but simpler)
-                this.updateCreated()
+                this.updateCreated(this._auth.getUser())
               } else if (reading._id == targetReading._id) {
                 // Single version readings we can remove instantly
                 readingResponse.readings.splice(index, 1)
@@ -163,11 +203,6 @@ export class ReadingService {
         )
     })
 
-    // If we didn't find the project, it's hiding in a version
-    if (!projectFound) {
-      console.error("PROJECT NOT FOUND")
-      this.refreshVersionSource.next(targetProject._id)
-    }
     this.userReadingsSource.next(readingRes)
   }
 
@@ -186,7 +221,8 @@ export class ReadingService {
         questions: reading.questions,
         public: reading.public,
         subjects: reading.subjects,
-        grade_levels: reading.grade_levels
+        grade_levels: reading.grade_levels,
+        owner_bookmarked: reading.owner_bookmarked
       } // let
 
       return this.http
@@ -242,6 +278,39 @@ export class ReadingService {
           'Authorization': this._auth.getToken()
         }), 
         params: feedParams })
+  }
+
+  /**
+   * Gets all drafts for current user
+   * @returns Observable returning array of readings, { readings: [ ]} 
+   */
+  public getDrafts() : Observable<{readings?: Reading[]}> {
+    return this._http.get(
+      this._auth.getUrl() + '/api/v1/readings/draft', 
+      { headers: this._auth.getHeaders() }
+    )
+  } 
+
+  /**
+   * Get all bookmarked readings for current user
+   * @description Updates currentUserReadings with bookmarked readings
+   */
+  public getOwnerBookmarked(): void {
+
+    this._http.get(
+      this._auth.getUrl() + '/api/v1/readings/owner_bookmarked',
+      {
+        headers: this._auth.getHeaders(),
+        params: new HttpParams().append("pop","projects")
+      }
+    )
+    .pipe(take(1))
+    .subscribe(data => {
+      // Update currentUserReadings
+      this.userReadingsSource.next(data)
+    }, (error) => {
+      this.userReadingsSource.error(error)
+    })
   }
 }
 

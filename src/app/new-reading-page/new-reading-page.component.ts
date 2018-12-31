@@ -39,6 +39,9 @@ export class NewReadingPage implements OnInit {
     public showAlert: boolean = false
     public showUploadModal: boolean = false
     public showFirstGroupModal: boolean = false
+    public showConfirmArchiveModal: boolean = false
+    public showHeroSubModal: boolean = false
+    public showHeroParam: boolean = false
 
     public errorObject = {
     readingError: ""
@@ -47,6 +50,9 @@ export class NewReadingPage implements OnInit {
     public successObject = {
         readingSuccess: ""
     };
+
+    public readingToArchive: Reading
+    public readingsArchivedBefore: string
 
     // Messages
     public successAlert : string = "Nice work! This reading draft was successfully saved!"
@@ -57,7 +63,6 @@ export class NewReadingPage implements OnInit {
     public versionId : string = ''
     public ownerId : string
     public copyId : string = ''
-    public copyCleanHeroMsg : boolean = false
     public editorToolbarY : number = 54
     public editorToolbarHidden : boolean
     public insertNode : any
@@ -160,6 +165,11 @@ export class NewReadingPage implements OnInit {
         this.readingId = this._route.snapshot.params['id']
         
         this.alert = this._route.snapshot.queryParams['successAlert']
+        // if the user clicks Go Hero in the confirm archive modal, we need to make sure they save before continuing
+        // the only way we can get the modal to show is watching the params because saving a draft triggers a reload
+        if (this._route.snapshot.queryParams['showHeroParam']) {
+            this.showHeroSubModal = true
+        }
         if (this.alert) {
             this.successObject.readingSuccess = this.alert
             this.showAlert = true
@@ -171,7 +181,7 @@ export class NewReadingPage implements OnInit {
             this.getReading(this.readingId)
         } else if (this.copyId) {
             this.readingType = 'existingReading'
-            this.getReading(this.copyId, !this._auth.getUser().hero_status)
+            this.getReading(this.copyId)
             // fire an analytic event here for tracking purposes
             this.angulartics.eventTrack.next({ 
                 action: 'discover_reading_retrieve', 
@@ -183,24 +193,39 @@ export class NewReadingPage implements OnInit {
         this.subscriptions.push(
             this._auth.getCurrentUser().subscribe((user) => {
                 this.user = user
-            })
+                // Gets the active readings from the dashboard if the user is not a hero user
+                if (!this.user.hero_status) {
+                    this._readings.updateCreated(user)
+                }
+            }),
+            this._readings.currentUserReadings.subscribe(
+                (data)  => {
+                    if (!data.readings) {
+                        // If no readings, nothing to handle
+                        return
+                    }
+                    if (!this.user.hero_status && data.readings[1]) {
+                        // Take the second reading and make sure it is archived
+                        this.readingToArchive = data.readings[1]
+                        // reading that we'll be setting as our readingsArchivedBefore property on the user - send PUT to server
+                        this.readingsArchivedBefore = data.readings[0].createdAt
+                    }
+                },
+                (error) => {
+                    console.error(error)
+                }
+            )
         )
 
         this._title.setTitle('Edji | New Reading')
      }
 
-     private getReading(readingId: string, stripHero?: boolean) {
+     private getReading(readingId: string) {
 
         this._readings.get(readingId)
             .pipe(take(1))
             .subscribe(
                 (data: any) => {
-                    if (stripHero && data.questions && data.questions.length > 0) {
-                        // Clean out features which require Hero, and tell the user it happened
-                        data.html = data.html.replace(/\<\$question\$\>/g, '')
-                        data.questions = []
-                        this.copyCleanHeroMsg = true
-                    }
                     this.reading = data;
                     if (this.reading.html) {
                         this.populateDraftContent(this.reading.html)
@@ -470,16 +495,56 @@ export class NewReadingPage implements OnInit {
         }
     }
 
-    public saveReading(event, form) {
+    public saveReading(form) {
         // Save draft!
         this.isDraft = true
         this.onSubmit(form)
+    }
+
+    /**
+     * Verifies the user can save this reading without having to push one in to the archives
+     * @param form the new reading form data
+     */
+    public verifyCanShare(form) {
+        // if user is a hero, they can go ahead and share the reading
+        // share reading modal will pop up to fill in group details and confirm
+        if (this.user.hero_status || !this.readingToArchive) {
+            this.shareReading(form)
+        } else {
+            // if user is not a hero, we'll show them a confirmation modal
+            // confirmation modal will warn the user that this new reading 
+            // will push an existing active reading to archives. they also 
+            // have the option to save as draft instead 
+            this.showConfirmArchiveModal=true
+        }
     }
 
     public shareReading(form) {
         // No longer draft!
         this.isDraft = false
         this.onSubmit(form)
+    }
+
+    /**
+     * 
+     * @param reading the reading that is to be archived (is an active reading on the created dashboard)
+     * @param form is the new reading we're going to share once we finish archiving the older active reading
+     */
+    public archiveReading(form) {
+        // Make the call to PUT the reading archive value
+        let user = this.user
+        user.archive_readings_before = this.readingsArchivedBefore
+        
+        this._auth.updateUser(user)
+        .subscribe(
+            data => {
+                // move forward with sharing the reading once we get the go ahead
+                this.shareReading(form)
+            },
+            error => {
+                console.error(error)
+            }
+        )
     }
 
     /**
@@ -605,7 +670,11 @@ export class NewReadingPage implements OnInit {
                                 properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
                             })
                         } else {
-                            this.router.navigate(['new-reading/' + data._id], { queryParams: { successAlert: this.successAlert } })
+                            if (this.showHeroParam) {
+                                this.router.navigate(['new-reading/' + data._id], { queryParams: { successAlert: this.successAlert, showHeroParam: this.showHeroParam } })
+                            } else {
+                                this.router.navigate(['new-reading/' + data._id], { queryParams: { successAlert: this.successAlert } })
+                            }
                             this.successObject.readingSuccess = this.successAlert
                             this.showAlert = true
                             this.reading.updatedAt = data.updatedAt

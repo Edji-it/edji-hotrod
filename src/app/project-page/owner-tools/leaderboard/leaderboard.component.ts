@@ -14,6 +14,7 @@ import { CommentFilter } from '../../../_services/project.service'
 
 export class LeaderboardComponent implements OnInit {
   @Input() visible: boolean = false
+  @Input() archived: boolean = false
   @Output() hide: EventEmitter<any> = new EventEmitter()
 
   /** This is a reference to the actual commentStats object which has methods for modification of properties */
@@ -118,11 +119,7 @@ export class LeaderboardComponent implements OnInit {
    * @param student User needs "_id" and "fullname"/"username"
    */
   public viewStudentFilter(student: any) : void {
-    if (this.currentUser && this.currentUser.hero_status){
-      this._projects.filterByUser(student)
-    } else {
-      this.showFilterHeroModal = true
-    }
+    this._projects.filterByUser(student)
   }
 
   /**

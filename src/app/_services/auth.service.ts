@@ -92,13 +92,11 @@ export class AuthService implements CanActivate {
     /**
      * Return default authorization headers
      */
-    public getHeaders(): { headers: HttpHeaders } {
-        return {
-            headers: new HttpHeaders({
+    public getHeaders(): HttpHeaders {
+        return new HttpHeaders({
                 'Content-Type': 'application/json',
                 'Authorization': this.getToken()
-            })
-        }
+        })
     }
 
     public getUrl(): string {
@@ -139,19 +137,28 @@ export class AuthService implements CanActivate {
     /**
      * Saves user to local storage
      * @param user The user should be an object to store in sessionstorage
+     * @returns user Returns decorated user if needed immediately
      */
-    public setUser(user: any) {
+    public setUser(user: User) : User {
         //should have session timeout, username, baseProfileId, typeId
         user.isLoggedIn = true
+        // Set convenience "isStudent" flag
+        // + Default guest/temp to student flag
+        if ( (user.identities && user.identities.indexOf('student') > -1 && user.identities.indexOf('teacher') < 0)
+                || user.type == 'temp') {
+            user.isStudent = true
+        }
         // Determine if user is an Academy Admin
         if (user && user.license_ids && user.license_ids[0]) { 
             this.fetchAcademies(user)
         }
+        //  Store user object
         this.currentUserSource.next(user)
         this._locker.set('user', user)
         if (user._id && user._id.length > 0) {
             this.ga.setUsername(user._id) // Set the user ID using signed-in user_id.
         }
+        return user
     }
 
     /**
@@ -160,7 +167,7 @@ export class AuthService implements CanActivate {
      */
     private fetchAcademies(user: User): void {
         // Fetch license and academy information for admins and owners
-        this._http.get<any>(this.getUrl() + '/api/v1/licenses', this.getHeaders())
+        this._http.get<any>(this.getUrl() + '/api/v1/licenses', { headers: this.getHeaders()})
             .pipe(take(1))
             .subscribe(data => {
                 // Attach properties for Academy users
@@ -185,7 +192,7 @@ export class AuthService implements CanActivate {
             }, err => {
                 // Fetch academy information for teacher (non-admin) users
                 if (err.status == 404 && user.institution_ids && user.institution_ids[0]) {
-                    this._http.get<any>(this.getUrl() + '/api/v1/institutions/' + user.institution_ids[0], this.getHeaders())
+                    this._http.get<any>(this.getUrl() + '/api/v1/institutions/' + user.institution_ids[0], { headers: this.getHeaders()})
                     .pipe(take(1))
                     .subscribe(data => {
                         let academy = data.institution
@@ -267,7 +274,7 @@ export class AuthService implements CanActivate {
                 let user = data.user
                 // If we get a user object, update our local copy
                 if (user._id) {
-                    this.setUser(user)
+                    user = this.setUser(user)
                 }
                 return user
             }))
@@ -300,11 +307,11 @@ export class AuthService implements CanActivate {
             }
         }
 
-        return this._http.post(this.baseUrl + '/users/login', data, this.getHeaders())
+        return this._http.post(this.baseUrl + '/users/login', data, { headers: this.getHeaders() })
             .pipe(map((data: any) => {
                 if (data.token) {
                     this.setToken(data.token)
-                    this.setUser(data.user)
+                    data.user = this.setUser(data.user)
                 }
                 return data
             }))
@@ -332,16 +339,16 @@ export class AuthService implements CanActivate {
             .post([this.baseUrl, 'users'].join('/'), {
                 user: user
             }, this.getOptions())
-            .pipe(map((data) => {
-                let object = data.json()
+            .pipe(map((res) => {
+                let data = res.json()
 
                 // if the response has a token, the user should be successfully registered and logged in
-                if (object.token) {
-                    this.setUser(object.user)
-                    this.setToken(object.token)
+                if (data.token) {
+                    data.user = this.setUser(data.user)
+                    this.setToken(data.token)
                 }
 
-                return data.json()
+                return data
             }))
     }
 
@@ -402,18 +409,18 @@ export class AuthService implements CanActivate {
                     this.legacyHttp.put(this.baseUrl + '/users', {
                         user: mergedUser
                     }, this.getOptions())
-                        .pipe(map((data) => {
-                            let object = data.json()
+                        .pipe(map((res) => {
+                            let data = res.json()
 
                             // if the response has a token, the user should be successfully registered and logged in
-                            if (object.user) {
-                                this.setUser(object.user)
+                            if (data.user) {
+                                data.user = this.setUser(data.user)
                             }
-                            if (object.token) {
-                                this.setUser(object.token)
+                            if (data.token) {
+                                this.setToken(data.token)
                             }
 
-                            return data.json()
+                            return data
                         }))
                         .toPromise()
                         .then(user => {
@@ -461,17 +468,17 @@ export class AuthService implements CanActivate {
                     this.legacyHttp.put(this.baseUrl + '/users', {
                         user: mergedUser
                     }, this.getOptions())
-                        .pipe(map((data) => {
-                            let object = data.json()
+                        .pipe(map((res) => {
+                            let data = res.json()
                             // if the response has a token, the user should be successfully registered and logged in
-                            if (object.user) {
-                                this.setUser(object.user)
+                            if (data.user) {
+                                data.user = this.setUser(data.user)
                             }
-                            if (object.token) {
-                                this.setUser(object.token)
+                            if (data.token) {
+                                this.setToken(data.token)
                             }
 
-                            return data.json()
+                            return data
                         }))
                         .toPromise()
                         .then(user => {
@@ -512,19 +519,19 @@ export class AuthService implements CanActivate {
                     this.legacyHttp.put(this.baseUrl + '/users', {
                         user: mergedUser
                     }, this.getOptions())
-                        .pipe(map((data) => {
-                            let object = data.json()
+                        .pipe(map((res) => {
+                            let data = res.json()
                             // if the response has a token, the user should be successfully registered and logged in
-                            if (object.user) {
-                                this.setUser(object.user)
+                            if (data.user) {
+                                data.user = this.setUser(data.user)
                             }
-                            if (object.token) {
-                                this.setToken(object.token)
+                            if (data.token) {
+                                this.setToken(data.token)
                             }
 
                             console.log(this.user.avatar)
 
-                            return data.json()
+                            return data
                         }))
                         .toPromise()
                         .then(user => {
@@ -555,15 +562,15 @@ export class AuthService implements CanActivate {
         }
 
         return this.legacyHttp.post([this.baseUrl, 'tempusers'].join('/'), data, this.getOptions())
-            .pipe(map((data) => {
-                let object: any = data.json()
+            .pipe(map((res) => {
+                let data: any = res.json()
 
-                if (object.token) {
-                    this.setUser(object.user)
-                    this.setToken(object.token)
+                if (data.token) {
+                    data.user = this.setUser(data.user)
+                    this.setToken(data.token)
                 }
                 console.log(this.getOptions())
-                return object
+                return data
             }))
     }
 
@@ -584,12 +591,12 @@ export class AuthService implements CanActivate {
             )
             .toPromise()
             .then(this.extractData)
-            .then((res) => {
-                if (res.token && res.user) {
-                    this.setUser(res.user)
-                    this.setToken(res.token)
+            .then((data) => {
+                if (data.token && data.user) {
+                    data.user = this.setUser(data.user)
+                    this.setToken(data.token)
                 }
-                return res
+                return data
             })
     }
 
@@ -685,14 +692,11 @@ export class AuthService implements CanActivate {
 
     /**
      * Return array of allowed comment types
+     * DEPRECATED with the Hero for All Updates 1/1/2019
      */
     public getAllowedCommentTypes(): string[] {
         this.user = this.getUser()
-        if (this.user.hero_status) {
-            return ['emoji', 'text', 'audio', 'reply']
-        } else {
-            return ['emoji', 'text']
-        }
+        return ['emoji', 'text', 'audio', 'reply']
     }
 
     /**
@@ -700,16 +704,13 @@ export class AuthService implements CanActivate {
      */
     public getAllowedCommentMediaTypes(): string[] {
         this.user = this.getUser()
-        if (this.user.hero_status) {
-            return ['emoji', 'text', 'audio']
-        } else {
-            return ['emoji', 'text']
-        }
+        return ['emoji', 'text', 'audio']
     }
 
     /** Provides logic for sending user back to home if they are not authorized */
     public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-        if (!this.getUser().isLoggedIn) {
+        let user: User = this.getUser()
+        if (!user.isLoggedIn) {
             /**
              * Query Params
              * - We use the homepage as a landing page

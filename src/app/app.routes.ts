@@ -1,13 +1,13 @@
 import { Routes, RouterModule } from '@angular/router'
 
 // Project Dependencies
-import { AuthService } from './_services'
+import { AuthService, DashboardGuardService } from './_services'
 import { NewReadingPage } from './new-reading-page';
 import { ProjectPageComponent } from './project-page';
 import { HomeComponent } from './home';
 import { RegisterPageComponent } from './register-page';
 import { AccountComponent } from './account';
-import { DashboardComponent } from './dashboard';
+import { DashboardComponent, CreatedDashComponent, JoinedDashComponent } from './dashboard';
 import { NoContentComponent } from './no-content';
 import { LoginComponent } from './login';
 import { ResetPassPage } from './reset-pass/reset-pass-page.component';
@@ -22,8 +22,17 @@ import { PromoPageComponent } from './promo/promo.component';
 
 
 export const ROUTES: Routes = [
-  { path: '', component: DashboardComponent, canActivate: [AuthService] },
-  { path: 'dashboard',  component: DashboardComponent, canActivate: [AuthService] },
+  { path: '', redirectTo: 'dashboard', pathMatch: 'full', canActivate: [AuthService] },
+  { path: 'dashboard',  component: DashboardComponent, canActivate: [DashboardGuardService],
+    children: [
+      // Root path must be explicitly handled by canActivate, since the parent canActivate is not re-evaluated
+      { path: '', pathMatch: 'full', component: DashboardComponent, canActivate: [DashboardGuardService] },
+      { path: 'create', component: CreatedDashComponent },
+      { path: 'read', component: JoinedDashComponent }
+    ] 
+  },
+  { path: 'create',  redirectTo: '/dashboard/create' },
+  { path: 'read',  redirectTo: '/dashboard/read' },
   { path: 'home',  component: HomeComponent },
   { path: 'register', component: RegisterPageComponent },
   { path: 'login', component: LoginComponent },
@@ -35,8 +44,10 @@ export const ROUTES: Routes = [
   { path: 'new-reading', component: NewReadingPage, canActivate: [AuthService] },
   { path: 'new-reading/:id', component: NewReadingPage, canActivate: [AuthService] },
   { path: 'reset-password', component: ResetPassPage },
-  { path: 'hero', component: HeroPromoPageComponent, pathMatch: 'full' },
-  { path: 'pricing', component: HeroPricingComponent, pathMatch: 'full'  },
+  { path: 'features', component: HeroPromoPageComponent, pathMatch: 'full' },
+  { path: 'hero', redirectTo: '/plans', pathMatch: 'full' },
+  { path: 'pricing', redirectTo: '/plans', pathMatch: 'full'  },
+  { path: 'plans', component: HeroPricingComponent, pathMatch: 'full'  },
   { path: 'promo', component: PromoPageComponent, pathMatch: 'full'  },
   { path: 'about', component: TeamPageComponent },
   { path: 'academy', loadChildren: './academy/academy.module#AcademyModule' },

@@ -1,4 +1,4 @@
-h1.joined-header.no-flow(for="projectCodeInput") Joined
+h1.joined-header.no-flow(for="projectCodeInput") Joined Readings
   i.icon__tooltip(tooltipPosition="bottom", pTooltip="These are Readings that someone else made, and you joined!")
     span.icon.icon-circle.icon-info i
 form.pb-4.hidden-md-up([formGroup]="codeForm", (ngSubmit)="addSession(codeForm.value)")
@@ -22,28 +22,43 @@ form.pb-4.hidden-md-up([formGroup]="codeForm", (ngSubmit)="addSession(codeForm.v
     strong([innerHtml]="':zap: Code' | emojione")
     | Enter a lightning code to quickly join a project!
   .alert.alert-danger(*ngIf="errorObject.wrongCode") {{errorObject.wrongCode}}
-.item-list.joined-list
-  //- Show messaging if no Projects exist
-  .alert.alert-info(role="alert", *ngIf="!loading && projects.length < 1 && !errorObject.projectError")
-    h4.alert-heading No Joined Readings Yet...
-    p Once you've joined someone else's Reading, it will show here.
-  //- Show loading until Projects call gets back
-  .row.loading(*ngIf="loading")
-  .alert.alert-danger(*ngIf="errorObject.projectError && projects.length < 1")
-    strong Oh no!
-    | &nbsp;{{errorObject.projectError}}
-  ng-container(*ngFor="let project of projects")
-    .list-item.list-item--button([routerLink]="['/project', project._id]", [class.hide]="!project.createdAt")
-      .reading-icon
-        span {{ project.reading && project.reading.title ? project.reading.title.substring(0,2) : '' }}
-      .reading-title
-        .reading-title--center-row
-          h1.small {{ project.reading ? project.reading.title : ''}} 
-            span(*ngIf="project.reading && !project.reading.title") 
-              i Untitled
-            span.reading-project--label {{project.label}}
-      div(style="clear:both; line-height: 18px; padding: 10px 0px 0px;")
-        span(style="color: #cdcdcd; margin-right: 5px;") Created by:
-        follow-tag(*ngIf="project.teacher", [owner]="project.teacher")
-        pre.prj-code(style="margin-top: -5px; margin-bottom: 0px;") {{project.code || 'none'}}
-  <p-paginator [rows]="rows" [totalRecords]="total" (onPageChange)="loadJoinedFeed($event)"></p-paginator>
+//- Main content row
+.row
+  .col-12.col-sm-3
+    .mb-2
+      .btn.btn-filter(
+          [innerHtml]="':sparkles: Recently Created' | emojione", 
+          [class.active]="activeFilter === 'recent'",
+          (click)="loadFilter('recent')"
+        )
+  .col-8.col-sm-6.item-list.joined-list
+    //- Show messaging if no Projects exist
+    .alert.alert-info(role="alert", *ngIf="!loading && projects.length < 1 && !errorObject.projectError")
+      h4.alert-heading No Joined Readings Yet...
+      p Once you've joined someone else's Reading, it will show here.
+    //- Show loading until Projects call gets back
+    .row.loading(*ngIf="loading")
+    .alert.alert-danger(*ngIf="errorObject.projectError && projects.length < 1")
+      strong Oh no!
+      | &nbsp;{{errorObject.projectError}}
+    ng-container(*ngFor="let project of projects")
+      .list-item.list-item--button.project-card(
+            [routerLink]="['/project', project._id]", 
+            [class.hide]="!project.createdAt",
+            [class.archived]="project.archived"
+          )
+        .reading-icon.hide-for-archived
+          span {{ project.reading && project.reading.title ? project.reading.title.substring(0,2) : '' }}
+        .archived-icon.show-for-archived
+          .icon.icon-folder
+        .reading-title
+          .reading-title--center-row
+            h1.small {{ project.reading ? project.reading.title : ''}} 
+              span(*ngIf="project.reading && !project.reading.title") 
+                i Untitled
+              span.reading-project--label {{project.label}}
+        div(style="clear:both; line-height: 18px; padding: 10px 0px 0px;")
+          span(style="color: #cdcdcd; margin-right: 5px;") Created by:
+          follow-tag(*ngIf="project.teacher", [owner]="project.teacher")
+          pre.prj-code(style="margin-top: -5px; margin-bottom: 0px;") {{project.code || 'none'}}
+    <p-paginator [rows]="rows" [totalRecords]="total" (onPageChange)="loadJoinedFeed($event)"></p-paginator>

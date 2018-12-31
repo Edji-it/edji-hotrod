@@ -1,18 +1,24 @@
 #top
 nav-bar
-.jumbotron.jumbotron-fluid.jumbotron--clear
-  .container
-    .row
-      .col-md-12.col-lg-8
-        h1.display-3
-          | Go Hero, 
-          br
-          | Get More Edji
-        p.lead
-          | Edji's core set of features will stay open and freely available, but a Hero subscription supports Edji and unlocks even more abilities 
-          span([innerHtml]="':tada:' | emojione")
+.container-fluid
+  //- Promo row
+  .row.twilight.has-sparks(style="padding-top:100px; padding-bottom: 100px; position: relative; overflow:hidden;")
+    .sparks
+    img.promo-spotlight(src="/assets/images/hero-promo-spotlight.svg")
+    img(style="width:100%; position: absolute; bottom: -50px;",src="/assets/images/hero-promo-skyline.svg")
+    .col-md-11.offset-md-1(style="padding-bottom:25px;")
+      h1.big-bold(style="color:#fff;") Answer the Call
+    .col-md-1
+    .col-md-6
+      p.row-xl-pad(style='font-size:1.25em; padding-top: 0px;')
+        | Hero unleashes the full power of Edji, giving you unlimited access to all of your Readings, and allowing you to evaluate student engagement and provide powerful feedback right when it’s needed
+        | &nbsp;
+        span([innerHTML]="':tada:' | emojione")
+      .btn-row.text-left
+        button#topHeroCTA.btn.btn-lg.btn-hero((click)='goHero("upperCTA")')
+          | Go Hero
 .container
-  .row.align-items-center
+  .row.row-xl-pad.align-items-center
     .col-sm-4
       .card.card-outline-secondary
         .card-block
@@ -20,7 +26,7 @@ nav-bar
           span.pricing Free
           hr
           p.card-text
-            | Edji Free is the basic Edji kit that allows teachers to give readings and generate engagement through comments.
+            | Edji Free is an advanced set of reading creation, annotation and discussion tools for easy classroom reading and discussion.
           label Who is it for?
           p.card-text
             | Teachers that want their class to read occasionally and see their thoughts.
@@ -39,13 +45,11 @@ nav-bar
             span.small  / month
           p.small Charged annually per teacher
           hr
-          p.card-text Hero gives teachers powers to get the most out of readings. Get extra customization and lesson planning, plus an in depth view of each students’ reading activity.
+          p.card-text Hero takes the limits off of Edji and gives teachers powerful evaluation and feedback tools to assist and assess their students as they read.
           label Who is it for?
-          p.card-text Teachers who want the most student engagement possible.
+          p.card-text Teachers who make reading a staple of their class and want a detailed history of their classroom engagement
           a.btn.btn-hero.btn-lg.btn-block(*ngIf="!user || !user.isLoggedIn || !user.hero_status", tabindex='1', (click)='goHero("pricingHeroCard")') Go Hero
           a.btn.btn-hero.btn-lg.btn-block(*ngIf="user && user.isLoggedIn && user.hero_status", [routerLink]="['/account']", [innerHtml]="'Current Plan &nbsp;:tada:' | emojione")
-      .text-center.mt-3
-        a.btn.btn-link([routerLink]="['/hero']", fragment="top") Discover Hero!
     .col-sm-4
       .card.card-outline-secondary
         .card-block
@@ -78,8 +82,12 @@ nav-bar
                   i.icon__tooltip(*ngIf="feature.info")
                     span.icon.icon-circle.icon-info  i
                   span.text-primary.learn-more.small Learn more
-                td.feature-check([innerHtml]="(feature.free ? ':white_check_mark:' : ':heavy_minus_sign:') | emojione")
-                td.feature-check([innerHtml]="':white_check_mark:' | emojione")
+                //- Standard check display
+                td.feature-check(*ngIf="!feature.free_override", [innerHtml]="(feature.free ? ':white_check_mark:' : ':heavy_minus_sign:') | emojione")
+                td.feature-check(*ngIf="!feature.free_override", [innerHtml]="':white_check_mark:' | emojione")
+                //- Override text display
+                td.feature-check(*ngIf="feature.free_override", [innerHtml]="feature.free_override")
+                td.feature-check(*ngIf="feature.hero_override", [innerHtml]="feature.hero_override")
   .row
     .hero-rule
 .container-fluid
@@ -113,7 +121,7 @@ request-academy-modal.modal-will-fade(
         button.close((click)="showInfoModal = false")
           span(aria-hidden="true") &times;
       .modal-body
-        .text-center
+        .text-center(*ngIf="infoModalInfo.image")
           img.card.mb-4(style="display:inline-block; max-height: 500px;", [src]="infoModalInfo.image")
         p([innerHtml]="infoModalInfo.description")
       .modal-footer

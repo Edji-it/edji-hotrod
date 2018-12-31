@@ -470,7 +470,7 @@ $quickBlue: #55aef7;
 .w {
 	background-position: center;
 
-	&:hover {
+	&:hover:not(.archived) {
 		cursor: pointer;
 		border-bottom: $focusUnderlineWidth solid $hoverBlue; 
 	}
@@ -699,6 +699,22 @@ $readingIconHeight: 60px;
         font-size: $readingIconHeight/2;
         vertical-align: middle;
     }
+}
+
+.archived-icon {
+	@extend .reading-icon;
+	background: transparent;
+	border: 1px solid #cccccc;
+	position: relative;
+
+	& .icon {
+		height: $readingIconHeight - 30px;
+		width: $readingIconHeight - 30px;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate3d(-50%, -50%, 0px);
+	}
 }
 
 .reading-title {

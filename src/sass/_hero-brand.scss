@@ -43,6 +43,22 @@
     margin: $base-pad 0px;
 }
 
+.hero-h {
+    display: inline-block;
+    text-align: center;
+    vertical-align: top;
+    color: #fff;
+    background: $btnHeroColor;
+    border-radius: 9px;
+    font-size: 12px;
+    line-height: 18px;
+    max-width: 24px;
+    padding: 0px 6px;
+    height: 18px;
+    font-family: 'Open Sans';
+    font-weight: bold;
+}
+
 .hero--micro-offer__wrap {
     position: relative;
 
@@ -51,23 +67,10 @@
     }
 
     &:after {
-        z-index: $zMid;
+        @extend .hero-h;
         content: 'H';
-        text-align: center;
-        // text-shadow: -1px 2px 2px rgba(0,0,0,0.2);
-        // transform-origin: center;
-        // transform: rotate(-10deg);       
-        color: #fff;
-        background: $btnHeroColor;
-        border-radius: 9px;
-        font-size: 12px;
-        line-height: 18px;
+        z-index: $zMid;
         display: block;
-        max-width: 24px;
-        padding: 0px 6px;
-        height: 18px;
-        font-family: 'Open Sans';
-        font-weight: bold;
         position: absolute;
         top: 3px;
         right: 3px;

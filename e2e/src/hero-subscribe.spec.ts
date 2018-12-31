@@ -32,7 +32,7 @@ describe('Hero Subscription Management', () => {
             // Navigate to the Hero promo page
             sidebar.clickHeroLink();
             // Verify we made it there
-            browser.wait(EC.urlContains("hero"), 5000, "never reached the Hero promo page");
+            browser.wait(EC.urlContains("plans"), 5000, "never reached the Hero promo page");
         });
 
         it("should open the Hero subscription modal", () => {
