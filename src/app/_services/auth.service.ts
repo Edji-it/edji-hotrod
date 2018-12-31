@@ -94,8 +94,8 @@ export class AuthService implements CanActivate {
      */
     public getHeaders(): HttpHeaders {
         return new HttpHeaders({
-                'Content-Type': 'application/json',
-                'Authorization': this.getToken()
+            'Content-Type': 'application/json',
+            'Authorization': this.getToken()
         })
     }
 
@@ -139,17 +139,22 @@ export class AuthService implements CanActivate {
      * @param user The user should be an object to store in sessionstorage
      * @returns user Returns decorated user if needed immediately
      */
-    public setUser(user: User) : User {
+    public setUser(user: User): User {
         //should have session timeout, username, baseProfileId, typeId
         user.isLoggedIn = true
         // Set convenience "isStudent" flag
         // + Default guest/temp to student flag
-        if ( (user.identities && user.identities.indexOf('student') > -1 && user.identities.indexOf('teacher') < 0)
-                || user.type == 'temp') {
+        if (
+            user.type === 'temp' ||
+            (
+                user.identities && user.identities.includes('student') &&
+                !['teacher', 'administrator'].some(id => user.identities.includes(id)) // checks if they're anything in the array
+            )
+        ) {
             user.isStudent = true
         }
         // Determine if user is an Academy Admin
-        if (user && user.license_ids && user.license_ids[0]) { 
+        if (user && user.license_ids && user.license_ids[0]) {
             this.fetchAcademies(user)
         }
         //  Store user object
@@ -167,7 +172,7 @@ export class AuthService implements CanActivate {
      */
     private fetchAcademies(user: User): void {
         // Fetch license and academy information for admins and owners
-        this._http.get<any>(this.getUrl() + '/api/v1/licenses', { headers: this.getHeaders()})
+        this._http.get<any>(this.getUrl() + '/api/v1/licenses', { headers: this.getHeaders() })
             .pipe(take(1))
             .subscribe(data => {
                 // Attach properties for Academy users
@@ -192,15 +197,15 @@ export class AuthService implements CanActivate {
             }, err => {
                 // Fetch academy information for teacher (non-admin) users
                 if (err.status == 404 && user.institution_ids && user.institution_ids[0]) {
-                    this._http.get<any>(this.getUrl() + '/api/v1/institutions/' + user.institution_ids[0], { headers: this.getHeaders()})
-                    .pipe(take(1))
-                    .subscribe(data => {
-                        let academy = data.institution
-                        if (academy) {
-                            let academies = [academy]
-                            this.setAcademies(academies)
-                        }
-                    })
+                    this._http.get<any>(this.getUrl() + '/api/v1/institutions/' + user.institution_ids[0], { headers: this.getHeaders() })
+                        .pipe(take(1))
+                        .subscribe(data => {
+                            let academy = data.institution
+                            if (academy) {
+                                let academies = [academy]
+                                this.setAcademies(academies)
+                            }
+                        })
                 } else {
                     console.error(err)
                 }
@@ -212,7 +217,7 @@ export class AuthService implements CanActivate {
      * @description sets array of Academies, and resets selected to 0
      * @param academies 
      */
-    private setAcademies(academies: any[]) : void {
+    private setAcademies(academies: any[]): void {
         let academyState = this.academyStateSource.value
         academyState.academies = academies
         // Reset to first academy
@@ -600,7 +605,7 @@ export class AuthService implements CanActivate {
             })
     }
 
-    public recoverPassword(resetUser: { username?:string, email?:string }): Observable<boolean> {
+    public recoverPassword(resetUser: { username?: string, email?: string }): Observable<boolean> {
         return this.legacyHttp
             .post(
                 [this.baseUrl, 'users', 'recover_password'].join('/'), resetUser,
@@ -796,11 +801,11 @@ export class AuthService implements CanActivate {
 
     public getUserWithAuthToken(type: string, token: string): Observable<LoginObject> {
         return this._http.get<GetWithAuthTokenResponse>(this.baseUrl + "/users?oauth_type=" + type + "&oauth_token=" + token)
-        .pipe(map((res) => {
-            this.setToken(res.token)
-            this.setUser(res.user)
-            return res
-        }))
+            .pipe(map((res) => {
+                this.setToken(res.token)
+                this.setUser(res.user)
+                return res
+            }))
     }
 
     /**
@@ -890,17 +895,17 @@ export class AuthService implements CanActivate {
     public getUserInfoByProject(students_ids?: any[], temp_ids?: any[]): Observable<any> {
         let search_params: string = ''
         // if the students_ids is already converted to the leaderboard-friendly format, strip it out and use _ids only
-        if (students_ids.length>0 && students_ids[0].hasOwnProperty("_id")) {
+        if (students_ids.length > 0 && students_ids[0].hasOwnProperty("_id")) {
             let length = students_ids.length
-            for (var i=0; i<length; i++) {
-                students_ids[i]=students_ids[i]._id
+            for (var i = 0; i < length; i++) {
+                students_ids[i] = students_ids[i]._id
             }
         }
         // if the students_ids is already converted to the leaderboard-friendly format, strip it out and use _ids only
-        if (temp_ids.length>0 && temp_ids[0].hasOwnProperty("_id")) {
+        if (temp_ids.length > 0 && temp_ids[0].hasOwnProperty("_id")) {
             let length = temp_ids.length
-            for (var i=0; i<length; i++) {
-                temp_ids[i]=temp_ids[i]._id
+            for (var i = 0; i < length; i++) {
+                temp_ids[i] = temp_ids[i]._id
             }
         }
         // Attach student ids to query string
@@ -911,11 +916,11 @@ export class AuthService implements CanActivate {
         return this._http.get(
             this.getUrl() + '/api/v1/users/public-details?' + search_params,
             {
-            headers: new HttpHeaders({
-                'Content-Type': 'application/json',
-                'Authorization': this.getToken()
+                headers: new HttpHeaders({
+                    'Content-Type': 'application/json',
+                    'Authorization': this.getToken()
+                })
             })
-        })
     }
 
     /**
@@ -924,12 +929,12 @@ export class AuthService implements CanActivate {
      * @param array array of string values to be used as param values
      * @param init_string query string to attach values to
      */
-    private arrayParamsToString(key: string, array: string[], init_string?: string) : string {
+    private arrayParamsToString(key: string, array: string[], init_string?: string): string {
         let len: number = array.length
         let query_string: string = init_string || ''
-        for (var i=0; i<len; i++) {
-            if (query_string.length>0) {
-                query_string += '&'+ key + '=' + array[i]
+        for (var i = 0; i < len; i++) {
+            if (query_string.length > 0) {
+                query_string += '&' + key + '=' + array[i]
             } else {
                 query_string = key + '=' + array[i]
             }
@@ -946,12 +951,12 @@ export class AuthService implements CanActivate {
         let identity = ''
         let subscription = ''
         // set the user type
-        if (!user.isLoggedIn || user.type==='temp') {
-            userType='guest'
+        if (!user.isLoggedIn || user.type === 'temp') {
+            userType = 'guest'
         } else if (this.user.hero_status) {
-            userType='hero'
+            userType = 'hero'
         } else {
-            userType='regular'
+            userType = 'regular'
         }
         // set the user identity (teacher, admin, student, other)
         identity = this.getPrimaryUserIdentity()
@@ -987,7 +992,7 @@ export class AuthService implements CanActivate {
         if (!user.isLoggedIn) {
             return 'recruit'
         }
-        if (user.institution_ids && user.institution_ids.length>0 && user.hero_status) {
+        if (user.institution_ids && user.institution_ids.length > 0 && user.hero_status) {
             return 'heroAcademy'
         } else if (user.hero_status) {
             return 'hero'
@@ -1015,15 +1020,15 @@ export class AuthService implements CanActivate {
      */
     public getStripeCustomer(): Observable<any> {
         return this._http.get<any>(this.baseUrl + "/api/v1/stripe/customers/",
-        {
-            headers: new HttpHeaders({
-                'Content-Type': 'application/json',
-                'Authorization': this.getToken()
+            {
+                headers: new HttpHeaders({
+                    'Content-Type': 'application/json',
+                    'Authorization': this.getToken()
+                })
             })
-        })
-        .pipe(map((customer) => {
-            return customer.customer
-        }))
+            .pipe(map((customer) => {
+                return customer.customer
+            }))
     }
 
     /**
@@ -1032,15 +1037,15 @@ export class AuthService implements CanActivate {
      */
     public getStripeSubscriptions(): Observable<any> {
         return this._http.get<any>(this.baseUrl + "/api/v1/stripe/subscriptions/",
-        {
-            headers: new HttpHeaders({
-                'Content-Type': 'application/json',
-                'Authorization': this.getToken()
+            {
+                headers: new HttpHeaders({
+                    'Content-Type': 'application/json',
+                    'Authorization': this.getToken()
+                })
             })
-        })
-        .pipe(map((subscriptions) => {
-            return subscriptions.subscriptions
-        }))
+            .pipe(map((subscriptions) => {
+                return subscriptions.subscriptions
+            }))
     }
 
     /**
@@ -1058,9 +1063,9 @@ export class AuthService implements CanActivate {
                 })
             }
         )
-        .pipe(map((res) => {
-            return res
-        }))
+            .pipe(map((res) => {
+                return res
+            }))
     }
 
     // Stripe sends the date back as the UTC Epoch, so we'll convert it here
