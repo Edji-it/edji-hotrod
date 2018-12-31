@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router'
 
 // Project Dependencies
 import { ReadingService, ProjectService, AuthService } from '../../../_services';
-import { Reading, Project } from '../../../shared/datatypes';
+import { Reading, Project, User } from '../../../shared/datatypes';
 import { take } from 'rxjs/operators';
 
 @Component({
@@ -37,8 +37,11 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
   public togglePublicFlag: boolean
   public currentPublicFlag: boolean
   public showReadingDiscoverModal: boolean
-
+  public showBookmarkTooltip: boolean
+  
   public versionHeight = 50;
+
+  private user: User
 
   constructor(
     private _route: ActivatedRoute,
@@ -49,7 +52,11 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    
+    this.subscriptions.push(
+      this._auth.currentUser.subscribe(user => {
+        this.user = user
+      })
+    )
   }
 
   ngOnDestroy() {

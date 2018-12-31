@@ -99,13 +99,15 @@
         title="Bookmark",
         [class.hide]="reading.archived",
         [class.active]="reading.owner_bookmarked",
-        (click)="toggleBookmark(reading)"
+        [class.disabled]="!user.hero_status",
+        (click)="user.hero_status && toggleBookmark(reading)"
       )
         i.icon.icon-bookmark.hide-inactive
         i.icon.icon-bookmark-off.hide-active
         .tooltip-wrap
           .tooltip
-            .tooltip-title {{ reading.owner_bookmarked ? "Bookmarked" : "Not Bookmarked" }}
+            .tooltip-title(*ngIf="!user.hero_status") Bookmarking is available with <a class="link" [routerLink]="['/plans']">Hero</a>
+            .tooltip-title(*ngIf="user.hero_status") {{ reading.owner_bookmarked ? "Bookmarked" : "Not Bookmarked" }}
   //- Delete Reading if Draft Button
   .btn--delete-project.icon-button.btn--delete-draft(*ngIf="reading['draft']", title="Delete Draft", (click)="$event.stopPropagation(); relevantReading = reading; showDeleteReadingModal = true;")
     span([innerHtml]="':x:' | emojione")
