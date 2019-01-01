@@ -56,7 +56,7 @@
       ng-container(*ngIf="reading.subjects && reading.subjects.length > 0")
         span.badge-pill.badge-secondary.badge-subject(*ngFor="let subject of reading.subjects") {{ subject | subjectName }}
     //- Reading action buttons
-    .w-25.reading-action-row
+    .w-25.reading-action-row(*ngIf="!readOnly")
       //- Source Link
       a.btn.btn-icon--round.reading-action(
         *ngIf="reading.source", 
@@ -70,7 +70,6 @@
         [attr.title]="reading.public ? 'Public Reading' : 'Private Reading'", 
         (click)="togglePublicTooltip()",
         [class.access-icon__hover]="_route.snapshot.routeConfig.path!='discover'",
-        [class.read-only]="readOnly",
         [class.disabled]="reading.archived"
       )
         i.icon(*ngIf="reading.public", [innerHTML]="':earth_americas:' | emojione")
