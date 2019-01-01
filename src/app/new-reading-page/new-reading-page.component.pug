@@ -1,4 +1,9 @@
-nav-bar([pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'", [canPublish]="true", (saveAction)="saveReading(readingForm.value)", (shareAction)="verifyCanShare(readingForm.value)")
+nav-bar(
+    [pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'", 
+    [canPublish]="true", 
+    (saveAction)="saveReading(readingForm.value)", 
+    (shareAction)="verifyCanShare(readingForm.value)"
+  )
 .container.pt-4
   .row
     .col-sm-12
@@ -162,9 +167,9 @@ upload-pdf-modal.modal-will-fade([class.show]="showPdfUploadModal", (returnImage
 hot-confirm-archive-modal.modal-will-fade(
   *ngIf="showConfirmArchiveModal",
   [class.show]="showConfirmArchiveModal", 
-  (confirmArchive)="showConfirmArchiveModal=false; archiveReading(readingForm.value)",
-  (declineArchive)="showConfirmArchiveModal=false; saveReading(readingForm.value)",
-  (goHero)="saveReading(readingForm.value); showHeroParam=true",
+  (confirmArchive)="showConfirmArchiveModal=false; showFirstGroupModal = true",
+  (declineArchive)="showConfirmArchiveModal=false",
+  (goHero)="showHeroParam=true",
   (closeModal)="showConfirmArchiveModal=false",
   [readingToArchive]="readingToArchive"
 )
@@ -176,7 +181,7 @@ hot-add-project-modal.modal-will-fade(
   [subheading]="'Your reading has been saved! Now create your first group to publish this reading and share with students.'",
   [reading]="reading", 
   [groupLabel]="'Group 1'",
-  (groupSaved)="openFirstGroup($event)",
+  (groupSaved)="finalizeShare(readingForm.value, $event)",
   (closeModal)="showFirstGroupModal = false"
 )
 //- Go Hero!
