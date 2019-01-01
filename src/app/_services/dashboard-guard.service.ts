@@ -12,14 +12,17 @@ export class DashboardGuardService implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     let user = this._auth.getUser()
-    console.log("DASH GUARD")
     if (!user.isLoggedIn) {
         // Redirect users not logged in
-        this.router.navigate(['/home'])
+        // - Handle referral links to the register page
+        if (route.queryParams['r']) {
+            this.router.navigate(["/register"], { queryParams: { referral_id: route.queryParams['r'] } })
+        } else {
+            this.router.navigate(['/home'])
+        }
         return false
     } else {
         // Handle default dashboard for students/teachers
-        console.log(state.url)
         let useDefault: boolean = (state.url == '/dashboard' || state.url == '/')
         if (!useDefault) {
             return true

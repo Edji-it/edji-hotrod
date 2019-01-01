@@ -22,7 +22,13 @@ import { PromoPageComponent } from './promo/promo.component';
 
 
 export const ROUTES: Routes = [
-  { path: '', redirectTo: 'dashboard', pathMatch: 'full', canActivate: [AuthService] },
+  { 
+    path: '', 
+    redirectTo: 'dashboard', 
+    pathMatch: 'full', 
+    // Ideally we would use the AuthService canActivate initially, but it does not work with "redirectTo"
+    // canActivate: [AuthService] 
+  },
   { path: 'dashboard',  component: DashboardComponent, canActivate: [DashboardGuardService],
     children: [
       // Root path must be explicitly handled by canActivate, since the parent canActivate is not re-evaluated
