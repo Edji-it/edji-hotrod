@@ -169,8 +169,6 @@ export class NewReading implements PageObjectInterface
     }
 
     public confirmArchiveButtonClick(): void {
-        // Verify "Confirm Share"/archive modal is showing
-        browser.wait(this.EC.visibilityOf(this.confirmArchiveModal), 5000, "never saw 'Confirm Share/Archive' modal")
         // Click the confirm archive reading button for new reading
         this.confirmArchiveButton.isPresent().then((result) => {
             if (result) {
