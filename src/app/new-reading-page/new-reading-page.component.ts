@@ -207,7 +207,7 @@ export class NewReadingPage implements OnInit {
                         // If no readings, nothing to handle
                         return
                     }
-                    if (!this.user.hero_status && data.readings[1] && data.readings[1].archived) {
+                    if (!this.user.hero_status && data.readings[1] && !data.readings[1].archived) {
                         // Take the second reading and make sure it is archived
                         this.readingToArchive = data.readings[1]
                         // reading that we'll be setting as our readingsArchivedBefore property on the user - send PUT to server
@@ -701,12 +701,15 @@ export class NewReadingPage implements OnInit {
                                     action: this.readingType + '_draft_save', 
                                     properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
                                 })
+                                // Navigate user       
+                                if (this.showHeroParam) {
+                                    this.router.navigate(['new-reading/' + data._id], { queryParams: { successAlert: this.successAlert, showHeroParam: this.showHeroParam } })
+                                } else {
+                                    this.router.navigate(['new-reading/' + data._id], { queryParams: { successAlert: this.successAlert } })
+                                }
                             }
-                            if (this.showHeroParam) {
-                                this.router.navigate(['new-reading/' + data._id], { queryParams: { successAlert: this.successAlert, showHeroParam: this.showHeroParam } })
-                            } else {
-                                this.router.navigate(['new-reading/' + data._id], { queryParams: { successAlert: this.successAlert } })
-                            }
+                            // Update reading values for continuing to edit
+                            this.readingId = data._id
                             this.reading.updatedAt = data.updatedAt
                         }
                         return true
