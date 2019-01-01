@@ -17,48 +17,49 @@ import { User } from './../shared/datatypes'
   // We need to tell Angular's Dependency Injection which providers are in our app.
   providers: [],
   // Our list of styles in our component. We may add more to compose many styles together
-  styleUrls: [ './dashboard.component.scss' ],
+  styleUrls: ['./dashboard.component.scss'],
   // Every Angular template is first compiled by the browser before Angular runs it's compiler
   templateUrl: './dashboard.component.pug'
 })
 export class DashboardComponent implements OnInit {
   // Set our default values
-  private currentUser: User 
-  public mobileShowJoined:boolean = true
+  private currentUser: User
+  private subscriptions: Subscription[] = []
+  public mobileShowJoined: boolean = true
   public showUserDetailsModal: boolean = false
 
   // Tool Tip variables
   public toolTipsContent: any[] = [
-      {
-          title: "The Dashboard",
-          image: "/assets/dashboard-tooltips/logo.png",
-          body: "This is The Dashboard, your hub to Edji. You can find all the Readings you have Created or Joined here!"
-      },
-      {
-          title: "Joined Readings",
-          image: "/assets/dashboard-tooltips/lightning-code.png",
-          body: 'These are Readings that you join to read and comment on. Join a new one by using a Lightning Code!'
-      },
-      {
-          title: "Created Readings",
-          image: "/assets/dashboard-tooltips/reading.png",
-          body: 'These are Readings that you created yourself. Each reading will have Groups, and each Group has a Lightning Code!'
-      },
-      {
-          title: "Create A New Group",
-          image: "/assets/dashboard-tooltips/groups.png",
-          body: 'This creates an exact copy of a Reading that you can immediately share with a new Group of users.'
-      },
-      {
-          title: "Copy & Edit",
-          image: "/assets/dashboard-tooltips/versioning.png",
-          body: 'This will create a new Version of your reading. This lets you simply add to, or edit a Reading you have already made.'
-      }
+    {
+      title: "The Dashboard",
+      image: "/assets/dashboard-tooltips/logo.png",
+      body: "This is The Dashboard, your hub to Edji. You can find all the Readings you have Created or Joined here!"
+    },
+    {
+      title: "Joined Readings",
+      image: "/assets/dashboard-tooltips/lightning-code.png",
+      body: 'These are Readings that you join to read and comment on. Join a new one by using a Lightning Code!'
+    },
+    {
+      title: "Created Readings",
+      image: "/assets/dashboard-tooltips/reading.png",
+      body: 'These are Readings that you created yourself. Each reading will have Groups, and each Group has a Lightning Code!'
+    },
+    {
+      title: "Create A New Group",
+      image: "/assets/dashboard-tooltips/groups.png",
+      body: 'This creates an exact copy of a Reading that you can immediately share with a new Group of users.'
+    },
+    {
+      title: "Copy & Edit",
+      image: "/assets/dashboard-tooltips/versioning.png",
+      body: 'This will create a new Version of your reading. This lets you simply add to, or edit a Reading you have already made.'
+    }
   ]
   public toolTipStepNo: number = 1
 
   // TypeScript public modifiers
-  constructor (
+  constructor(
     public _router: Router,
     private _auth: AuthService,
     private _title: Title,
@@ -74,11 +75,19 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     this.currentUser = this._auth.getUser()
 
-    this._title.setTitle( 'Edji | Dashboard' )
+    this._title.setTitle('Edji | Dashboard')
 
     if (this.userProfileIncomplete()) {
       this.showUserDetailsModal = true
     }
+
+    this.subscriptions.push(
+      this._auth.currentUser.subscribe(
+        user => {
+          this.currentUser = user
+        }
+      )
+    )
   }
 
   private userProfileIncomplete(): boolean {
@@ -92,12 +101,28 @@ export class DashboardComponent implements OnInit {
       incomplete = true
     }
     if (
-      ((this.currentUser.identities && this.currentUser.identities.includes('teacher')) || 
-      (this.currentUser.identities && this.currentUser.identities.includes('admininstrator'))) && 
+      (
+        (this.currentUser.identities && this.currentUser.identities.includes('teacher')) ||
+        (this.currentUser.identities && this.currentUser.identities.includes('administrator'))
+      ) &&
       !this.currentUser.school_name
     ) {
       incomplete = true
     }
     return incomplete
+  }
+
+  /**
+   * Handle display changes after user details are added
+   */
+  public userDetailsAdded(): void {
+    // Dismiss details modal
+    this.showUserDetailsModal = false
+    // Check which dashboard a new user should land on
+    if (!this.currentUser.isStudent) {
+      this._router.navigate(['/dashboard/create'])
+    } else {
+      this._router.navigate(['/dashboard/read'])
+    }
   }
 }

@@ -41,6 +41,7 @@ h1, .h1 {
 }
 
 h2, .h2 {
+  font-weight: 200;
   font-size: 24px;
 }
 
@@ -105,6 +106,24 @@ a.link--light {
   &:focus,
   &:hover {
     color: $blue;
+  }
+}
+
+.link-list, ul.link-list {
+  list-style: none;
+  
+  & li {
+    padding-left: 20px;
+    line-height: 2em;
+  }
+
+  & li::before {
+    content: "\2022";  /* Add content: \2022 is the CSS Code/unicode for a bullet */
+    color: #656565; /* Change the color */
+    font-weight: bold; /* If you want it to be bold */
+    display: inline-block; /* Needed to add space between the bullet and the text */ 
+    width: 1em; /* Also needed for space (tweak if needed) */
+    margin-left: -1em; /* Also needed for space (tweak if needed) */
   }
 }
 

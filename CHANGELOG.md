@@ -243,6 +243,7 @@ All notable changes to this project will be documented in this file. See [standa
 
 
 <a name="4.1.3"></a>
+
 ## [4.1.3](https://github.com/codiak/edji-hotrod/compare/v4.1.2...v4.1.3) (2018-07-21)
 
 

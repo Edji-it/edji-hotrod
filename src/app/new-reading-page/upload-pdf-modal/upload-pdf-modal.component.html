@@ -53,7 +53,7 @@
                     <!--<div class="card-columns">-->
                         <div *ngFor="let doc of uploadedDocs; let i = index" class="upload-list-item" [class.new]="newDocsIds.indexOf(doc.uuid) > -1">
                             <!--Display doc pages if available-->
-                            <div *ngIf="doc.pages && doc.pages[0]" class="card-group">
+                            <div *ngIf="doc.pages && doc.pages[0] && i < 10" class="card-group">
                                 <!-- Delete PDF Mini Modal -->
                                 <delete-pdf-mini-modal *ngIf="doc.confirmDelete" (confirm)="removeUploadedDoc(doc)" (dismiss)="doc.confirmDelete = false"></delete-pdf-mini-modal>
                                 <!-- Title Card -->

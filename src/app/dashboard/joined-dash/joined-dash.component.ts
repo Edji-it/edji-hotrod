@@ -26,7 +26,7 @@ export class JoinedDashComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   public codeForm: FormGroup;
   public joinLoading: boolean = false
-
+  public activeFilter: string = 'recent'
   // Joined Readings, p-datalist values
   public loading: boolean = true
   public first: number = 0 // first page 
@@ -97,8 +97,25 @@ export class JoinedDashComponent implements OnInit, OnDestroy {
         this.errorObject.projectError = "We had some trouble getting your projects, it might be our fault";
       })
   }
+  
+  /**
+   * Load filter
+   * @param filter string key value for filter being applied (recent)
+   */
+  public loadFilter(filter: string) : void {
+    this.activeFilter = filter
 
-  /** attempts to navigate to the session */
+    // Handle each sort option
+    if (filter === 'recent') {
+      this.loadJoinedFeed()
+    }
+  }
+  
+
+  /**
+   * Navigate to the session
+   * @param formValue 
+   */
   public addSession(formValue: any): void {
     this.joinLoading = true
 

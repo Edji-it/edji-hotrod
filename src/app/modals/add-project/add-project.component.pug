@@ -17,49 +17,46 @@
                 #msgLabelRequired.alert.alert-warning(*ngIf="formSubmitted && projectForm.controls['label'].hasError('required')", role='alert')
                     b No Name
                     | Groups like to have names!
+            .form-group()
+                label(for='groupInstructions')
+                    | Reading Group Instructions
+                    i.icon__tooltip(tooltipPosition="right", pTooltip="Instructions are displayed at the beginning of a reading, and included in the Recap.", tooltipZIndex="9000")
+                        span.icon.icon-circle.icon-info  i
+                textarea#groupInstructions.form-control.mGroup([formControl]="projectForm.controls['groupInstructions']", type='text', placeholder="For today's lesson, you will...")
+            .form-group.row()
+                label.col-12 Comment Types
+                .input-group.col-6
+                    label.custom-control.custom-checkbox
+                        input.custom-control-input(type='checkbox', [formControl]="projectForm.controls['emojiType']")
+                        span.custom-control-indicator
+                        span.custom-control-description Emoji Commenting
+                .input-group.col-6
+                    label.custom-control.custom-checkbox
+                        input.custom-control-input(type='checkbox', [formControl]="projectForm.controls['textType']")
+                        span.custom-control-indicator
+                        span.custom-control-description Text Commenting
+                .input-group.col-6
+                    label.custom-control.custom-checkbox
+                        input.custom-control-input(type='checkbox', [formControl]="projectForm.controls['audioType']")
+                        span.custom-control-indicator
+                        span.custom-control-description Audio Commenting
+                .input-group.col-6
+                    label.custom-control.custom-checkbox
+                        input.custom-control-input(type='checkbox', [formControl]="projectForm.controls['replyType']")
+                        span.custom-control-indicator
+                        span.custom-control-description
+                        | Comment Replies
             div([class.hero-box]="!isHero")
-                .form-group(*ngIf="!isHero")
-                    label More with Hero
-                    .row
-                        p.col-9.small(*ngIf='!isHero')
-                            | Unlock group instructions, the choice of comment types, and custom codes! 
-                        .col-3.nopadding
-                            a.btn.btn-sm.btn-hero([routerLink]='["/hero"]') Learn More
-                .form-group([class.disabled]="!isHero")
-                    label(for='groupInstructions')
-                        | Reading Group Instructions
-                        i.icon__tooltip(tooltipPosition="right", pTooltip="Instructions are displayed at the beginning of a reading, and included in the Recap.", tooltipZIndex="9000")
-                            span.icon.icon-circle.icon-info  i
-                    textarea#groupInstructions.form-control.mGroup([formControl]="projectForm.controls['groupInstructions']", type='text', placeholder="For today's lesson, you will...")
-                .form-group.row([class.disabled]='!isHero')
-                    label.col-12 Comment Types
-                    .input-group.col-6
-                        label.custom-control.custom-checkbox
-                            input.custom-control-input(type='checkbox', [formControl]="projectForm.controls['emojiType']")
-                            span.custom-control-indicator
-                            span.custom-control-description Emoji Commenting
-                    .input-group.col-6
-                        label.custom-control.custom-checkbox
-                            input.custom-control-input(type='checkbox', [formControl]="projectForm.controls['textType']")
-                            span.custom-control-indicator
-                            span.custom-control-description Text Commenting
-                    .input-group.col-6
-                        label.custom-control.custom-checkbox
-                            input.custom-control-input(type='checkbox', [formControl]="projectForm.controls['audioType']")
-                            span.custom-control-indicator
-                            span.custom-control-description Audio Commenting 
-                            span.hero-tag(title='Hero Power') H
-                    .input-group.col-6
-                        label.custom-control.custom-checkbox
-                            input.custom-control-input(type='checkbox', [formControl]="projectForm.controls['replyType']")
-                            span.custom-control-indicator
-                            span.custom-control-description
-                            | Comment Replies 
-                            span.hero-tag(title='Hero Power') H
+                .form-group.p-0(*ngIf="!isHero")
+                    .row.no-gutters
+                        .label.w-100 Unlock custom codes!
+                            a.float-right.btn.btn-sm.btn-hero(target="_blank" href="/#/plans") Learn More
                 .form-group.pb-0([class.disabled]='!isHero')
                     label(for='customCodeInput')
-                        | Custom Code
-                    input#customCodeInput.form-control.h3.mGroup([formControl]="projectForm.controls['customCode']", type='text', placeholder='(optional)', style='text-transform:lowercase;')
+                        | Custom Code 
+                        span.hero-h(title='Hero Power') 
+                            ='H'
+                    input#customCodeInput.form-control.h3.mGroup([disabled]="!isHero", [formControl]="projectForm.controls['customCode']", type='text', placeholder='(optional)', style='text-transform:lowercase;')
                     #errorInvalidCustomCode.alert.alert-warning(*ngIf='errors.invalidCode') Whoops, someone is already using that group code. Could you pick another?
         .modal-footer
             .button__row(style='padding-top:0px;')

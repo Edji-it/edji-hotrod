@@ -19,3 +19,57 @@
 .alert-light {
     border: 1px solid #eee;
 }
+
+.alert--fixed {
+    position: fixed;
+    top: $navHeight + 2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 800px;
+    max-width: calc(100% - 60px);
+    box-shadow: $navShadow;
+    z-index: $zTop - 1;
+}
+
+.divider--alert {
+    position: relative;
+    float: left;
+    width: 100%;
+    margin: $base-pad 0px 2*$base-pad;
+    text-align: center;
+
+    & .alert {
+        display: inline-block;
+        min-width: 370px;
+        width: 50%;
+        background: #F4F8FF;
+        border: 1px solid #C3C3C3;
+        border-radius: 3px;
+        padding: 20px;
+        margin: 0px;
+        text-align: left;
+
+        &.small {
+            min-width: 200px;
+            width: auto;
+            white-space: nowrap;
+            padding: 8px 16px;
+        }
+
+        & .icon {
+            margin-right: 1em;
+        }
+    }
+
+    // Divider line for displaying behind
+    &:before {
+        content: ' ';
+        width: calc(100% + #{$base-pad});
+        height: 1px;
+        background-color: #C3C3C3;
+        position: absolute;
+        top: 50%;
+        left: -($base-pad/2);
+        z-index: -1;
+    }
+}

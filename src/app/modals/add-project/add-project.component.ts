@@ -46,22 +46,18 @@ export class AddProjectModal implements OnInit {
 
   ngOnInit() { 
     this.user = this._auth.getUser()
-
-    // Get authorized comment types
-    this.commentTypes = this._auth.getAllowedCommentTypes()
+    // isHero turns Hero-only group features on/off
+    this.isHero = this.user.hero_status
 
     this.projectForm = this._fb.group({
       label: [this.groupLabel ? this.groupLabel : '', Validators.required],
       emojiType: true,
       textType: true,
-      audioType: this.commentTypes.indexOf('audio') > -1 ? true : false,
-      replyType: this.commentTypes.indexOf('reply') > -1 ? true : false,
+      audioType: true,
+      replyType: true,
       customCode: '',
       groupInstructions: ''
     })
-
-    // isHero turns Hero-only group features on/off
-    this.isHero = this._auth.getUser().hero_status
   }
 
   /**

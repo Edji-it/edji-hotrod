@@ -37,8 +37,6 @@ scroll-progress([scrollProgress]="currentScroll")
                 (tap)="addCommentOfType('audio')"
             )
                 i.icon.icon-mic
-                span.beta-tag--icon(title="Beta Feature: May not work on all devices.")
-                    | B
         //- Mobile buttons
         .comment-options__mobile-wrap.hidden-lg-up([class.bottom-bar-offset]="user._id == project.teacher_id")
             //- .mobile-carrot-pointer &#9654;
@@ -71,8 +69,6 @@ scroll-progress([scrollProgress]="currentScroll")
                 )
                     button.emoji.comment__options--mobileButton()
                         i.icon.icon-mic
-                        span.beta-tag--icon(title="Beta Feature: May not work on all devices.")
-                            | B
     //- end .text-options
     .article-wrap
         .alert.alert-warning.alert-dismissible.fade.show(
@@ -108,7 +104,7 @@ scroll-progress([scrollProgress]="currentScroll")
                         .lesson-block__header Instructions
                         p([innerHtml]="project.group_instructions")
             //- Word Loop: reading.words is one big array of individual "words", which can also be puncuation or media
-            <span #words class="w" *ngFor="let w of reading.words | slice:0:lastWord ; let i = index" [ngClass]="[ w && w.styles ? w.styles.join(' ') : '', getHighlightClass(i) ]" [attr.index]="i">
+            <span #words class="w" *ngFor="let w of reading.words | slice:0:lastWord ; let i = index" [ngClass]="[ w && w.styles ? w.styles.join(' ') : '', getHighlightClass(i) ]" [attr.index]="i" [class.archived]="project.archived">
                 //- Comment Loop: Display comments if they exist for this Word
                 edji-comment(
                     *ngFor="let comment of commentsByIndex[i]; let ci = index",

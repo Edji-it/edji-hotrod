@@ -187,6 +187,16 @@ export class ProjectService {
             'Authorization': this._auth.getToken()
             }), 
             params: feedParams })
+            .pipe(map(data => {
+                let projects = data.projects.slice()
+                // Loop through projects and mark archived for display
+                for (let i = 0; i < projects.length; i++) {
+                    projects[i] = this.decorateArchivedProject(projects[i])
+                }
+                //  Update return value
+                data.projects = projects
+                return data
+            }))
     }
 
     /**
@@ -209,12 +219,14 @@ export class ProjectService {
      * @returns observable with project data
      */
     public setCurrentProject(projectCode: string): Observable<any> {
-        // return this.http.get(this._auth.getUrl() + '/api/v1/projects/' + encodeURIComponent(projectCode) + '?pop=reading_id', this._auth.getOptions())
-        return this.http.get(this._auth.getUrl() + '/projects/' + encodeURIComponent(projectCode) + '?pop=reading_id', this._auth.getOptions())
+        return this.http.get(this._auth.getUrl() + '/api/v1/projects/' + encodeURIComponent(projectCode) + '?pop[]=reading_id&pop[]=teacher', this._auth.getOptions())
             .pipe(
                 map(
                 (data) => {
                     let project = data.json().project; //can later have local setter to do validation/data manipulation before passing through observable
+                    let teacher = project.teacher
+                    // Decorate project if archived
+                    project = this.decorateArchivedProject(project)
                     // Clear stats object
                     this._commentStats.resetStats()
                     /**
@@ -238,6 +250,31 @@ export class ProjectService {
                     return this.project;
                 })
             );
+    }
+
+    /**
+     * Determine if project is archived, and adds flag
+     * @param project to determine if archive
+     * @return project with updated flag
+     */
+    public decorateArchivedProject(project: Project) : Project {
+        let teacher = project.teacher
+        // Identify and set archived 
+        if (teacher && !teacher.hero_status && teacher.archive_readings_before) {
+             /**
+             * Readings are "archived" if all are true:
+             * - Updated date is prior to archived before date
+             * - Readings before Hero v2 (01-01-2018) are "legacy" and not archived
+             * - Teacher is NOT Hero
+             */
+            let archivedBefore = new Date(teacher.archive_readings_before)
+            let projectDate = new Date(project.createdAt)
+            if (projectDate < archivedBefore && projectDate > new Date('01-01-2019')
+                ) {
+                project.archived = true
+            }
+        }
+        return project
     }
 
     /**
@@ -945,7 +982,7 @@ export class ProjectService {
         this.activeFilter = commentFilter
         this.filterUpdatesSource.next(this.activeFilter)
     }
-} // class
+} // _project
 
 /**
  * /api/v1/projects Response

@@ -116,7 +116,7 @@ export class Dashboard implements PageObjectInterface
 
     // Switch to the created readings tab on mobile 
     goToCreatedTab(): void {
-        browser.wait(this.EC.urlContains("dashboard"), 5000, "never reached the dashboard before clicking new reading button");
+        browser.wait(this.EC.urlContains("dashboard"), 5000, "never reached the dashboard before clicking first created reading");
         this.createdTab.isPresent().then((result) => {
             if (result) {
                 this.createdTab.isDisplayed().then((result) => {
@@ -132,7 +132,7 @@ export class Dashboard implements PageObjectInterface
 
     // Entering the project code from the home page
     enterProjectCodeFromNav(input: string) : void {
-        browser.wait(this.EC.urlContains("dashboard"), 5000, "never reached the dashboard before clicking new reading button");
+        browser.wait(this.EC.urlContains("dashboard"), 5000, "never reached the dashboard before putting in a reading code on nav");
         // browser.wait(this.EC.elementToBeClickable(this.projectJoinButton), 5000, "never found the join project button");
         this.projectCodeInputNav.isPresent().then((result) => {
             if (result) {

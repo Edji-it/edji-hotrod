@@ -1,0 +1,12 @@
+#readingArchivedModal.modal.fade-in.show
+  .modal-dialog
+    .modal-content
+      .modal-header
+        h4.modal-title This Reading is Archived
+        button.close((click)='goHome()', type='button') &times;
+      .modal-body.pb-0
+        p Once archived, a reading is no longer joinable. 
+        p Only the teacher or previous students can view an archived copy of their comments on this reading. To learn more about archived readings, <a class="link" href="http://guide.edji.it/index.php/2018/11/28/edji-changes-faq/" target="_blank">visit our guide</a>.
+      .modal-footer
+        .button__row(style='padding-top:0px;')
+          button#buttonGoHome.btn.btn-primary.w-100(type='button', (click)='goHome()') Take Me Home

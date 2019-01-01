@@ -5,7 +5,8 @@ import { ActivatedRoute } from '@angular/router'
 
 // Project Dependencies
 import { ReadingService, ProjectService, AuthService } from '../../../_services';
-import { Reading, Project } from '../../../shared/datatypes';
+import { Reading, Project, User } from '../../../shared/datatypes';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'hot-reading-card',
@@ -36,8 +37,11 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
   public togglePublicFlag: boolean
   public currentPublicFlag: boolean
   public showReadingDiscoverModal: boolean
-
+  public showBookmarkTooltip: boolean
+  
   public versionHeight = 50;
+
+  private user: User
 
   constructor(
     private _route: ActivatedRoute,
@@ -49,22 +53,9 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscriptions.push(
-      // Sometimes versions are updated, but the component maintains the version array, so we need to listen for updates
-      this._readings.refreshVersions.subscribe(
-        projectId => {
-          this.versions.forEach( readingVersion => {
-            readingVersion.projects && readingVersion.projects.forEach(
-              versionProject => {
-                if (versionProject._id == projectId) {
-                  // If the targeted Project is here, let's refresh our versions
-                  this.versions = []
-                  this.getVersions(this.reading.version_id)
-                }
-              }
-            )
-          })
-        }
-      )
+      this._auth.currentUser.subscribe(user => {
+        this.user = user
+      })
     )
   }
 
@@ -72,25 +63,18 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   } //ngOnDestroy
 
+  /**
+   * Updates user's current readings with all versions of a specific reading
+   * @param versionId "version_id" property from the appropriate Reading
+   */
   getVersions(versionId : string) {
-    if (this.showVersions && this.versions.length < 1) {
       this.isLoading = true
+      this.angulartics.eventTrack.next({ 
+        action: 'createdReading_getAllVersions', 
+        properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
+      })
+      // Update current user readings on Dashboard
       this._readings.getAllVersions(versionId)
-        .subscribe(
-          data => {
-            // fire an analytic event here for tracking purposes
-            this.angulartics.eventTrack.next({ 
-              action: 'createdReading_getAllVersions', 
-              properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
-            })
-            this.isLoading = false
-            this.versions = data.readings || []
-          },
-          err => {
-            this.isLoading = false
-            this.errorObject.readingError = "We had some trouble getting the versions for this reading, it might be our fault"
-          })
-    } // if
   } // getVersions(versionId : string)
 
   hasProjects() : boolean {
@@ -174,5 +158,30 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
         readingVersion.projects = []
       }
       readingVersion.projects.push(group)
+  }
+
+  /**
+   * Toggles bookmarking of a reading
+   * @param reading
+   */
+  public toggleBookmark(reading: Reading) : void {
+    // Set "bookmarked" value
+    if (!!reading.owner_bookmarked) {
+      reading.owner_bookmarked = false
+    } else {
+      reading.owner_bookmarked = true
+    }
+    // Save bookmark to reading
+    this._readings.save(reading)
+      .pipe(take(1))
+      .subscribe(
+        data => {
+          // Bookmarking successful
+        },
+        err => {
+          // Display error to user
+          console.error(err)
+        }
+      )
   }
 } // @Component
