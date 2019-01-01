@@ -60,7 +60,7 @@ describe('Discover Feed', () => {
         browser.wait(EC.elementToBeClickable(unfollowEdjiTag), 5000, "never saw message to follow Edji");
         unfollowEdjiTag.click();
         // Reload feed
-        sidebar.navReadings.click();
+        sidebar.navCreate.click();
         sidebar.navDiscover.click();
         browser.wait(EC.stalenessOf(discover.firstFeedReading), 5000, "followed user reading not showing");
     });
@@ -71,7 +71,7 @@ describe('Discover Feed', () => {
         // Discover Feed should exist and load for every user
         it("should create new public reading as testbot", () => {
             // Open New Reading page
-            sidebar.navReadings.click();
+            sidebar.navCreate.click();
             dashboard.openNewReading();
             browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000);
             // Enter Title

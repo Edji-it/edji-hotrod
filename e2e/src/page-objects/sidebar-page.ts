@@ -10,7 +10,8 @@ export class Sidebar {
     public avatarActionIcon = element(by.css("#avatarActionIcon"));
     public accountButton    = element(by.id("accountButton"));
     public referralButton = element(by.id("navReferralButton"));
-    public navReadings = element(by.id("navReadings"));
+    public navCreate = element(by.id("navCreate"));
+    public navRead = element(by.id("navRead"));
     public navDiscover = element(by.id("navDiscover"));
     public accountButtonSpan = this.accountButton.element(by.css('span'));
     public logo = element(by.id("logo"));
