@@ -269,9 +269,7 @@ export class ProjectService {
              */
             let archivedBefore = new Date(teacher.archive_readings_before)
             let projectDate = new Date(project.createdAt)
-            if (projectDate < archivedBefore 
-                    // @todo Uncomment, after testing, for launch, allowing legacy readings
-                    //&& projectDate > new Date('01-01-2019')
+            if (projectDate < archivedBefore && projectDate > new Date('01-01-2019')
                 ) {
                 project.archived = true
             }

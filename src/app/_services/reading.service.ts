@@ -79,10 +79,7 @@ export class ReadingService {
                * - Readings before Hero v2 (01-01-2018) are "legacy" and not archived
                */
               let readingDate = new Date(readings[i].createdAt)
-              if (readingDate < archivedBefore
-                  // @todo Uncomment to allow legacy readings to be active
-                  // && readingDate >= new Date('2019-01-01')
-                ) {
+              if (readingDate < archivedBefore && readingDate >= new Date('2019-01-01')) {
                 readings[i].archived = true
                 archivedTally++
                 // Limit number of archived shown to 2, and flag begin/end of archive
