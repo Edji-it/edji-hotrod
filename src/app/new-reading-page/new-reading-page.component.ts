@@ -621,6 +621,11 @@ export class NewReadingPage implements OnInit {
         // If the reading is not being saved as a draft (A.K.A. it's a final version)
         if (this.isDraft === true) {
             reading.draft = true
+            /**
+             * Updated "createdAt" date to reflect when it became a true reading
+             * - WORKAROUND: We use createdAt to sort the dashboard, and this avoids issues with recently shared readings showing later
+             */
+            reading.createdAt = new Date().toISOString()
         } else {
             reading.draft = false
         }

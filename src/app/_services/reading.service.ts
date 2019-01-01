@@ -222,7 +222,9 @@ export class ReadingService {
         public: reading.public,
         subjects: reading.subjects,
         grade_levels: reading.grade_levels,
-        owner_bookmarked: reading.owner_bookmarked
+        owner_bookmarked: reading.owner_bookmarked,
+        // We reset "createdAt" in New Reading when publishing a draft
+        createdAt: reading.createdAt
       } // let
 
       return this.http
