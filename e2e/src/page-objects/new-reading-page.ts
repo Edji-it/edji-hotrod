@@ -61,7 +61,7 @@ export class NewReading implements PageObjectInterface
     public titleError = element(by.id('errorTitle'));
     public contentError = element(by.id('errorContent'));
     public groupError = element(by.id('msgLabelRequired'));
-    public successAlert = element(by.css('.alert-success'));
+    public successAlert = element(by.id('msgDraftSaved'));
 
     public titleString = 'Test (3 Laws) ' + new Date().valueOf(); // Keep titles unique
     public qTitleString = 'When and how, in early human development, did the capacity to ask questions develop?';

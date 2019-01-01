@@ -124,21 +124,21 @@ describe("Versioning - ", () => {
         dashboard.goToCreatedTab()
 
         // Go back in to that drafted reading
-        browser.wait(EC.elementToBeClickable(element(by.cssContainingText('.draft-edit', titleUpdate))), 8000, "draft never became clickable after loading of reading cards");
-        element(by.cssContainingText('.draft-edit', titleUpdate)).click();
+        browser.wait(EC.elementToBeClickable(element(by.cssContainingText('.draft-card__title', titleUpdate))), 8000, "draft never became clickable after loading of reading cards");
+        element(by.cssContainingText('.draft-card__title', titleUpdate)).click()
 
         // Make sure the site arrives at the new reading page with the copyId query param
-        browser.wait(EC.urlContains("new-reading"), 5000, "never arrived at the new reading page");
+        browser.wait(EC.urlContains("new-reading"), 5000, "never arrived at the new reading page")
 
-        // Publish the reading
+        // Submit New Reading
         newReading.addNewReading()
         // checks for and clicks the confirm archive button if the modal is there
         newReading.confirmArchiveButtonClick()
-        browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
-        newReading.finalizeButton.click();
+        browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable")
+        newReading.finalizeButton.click()
 
         // Reading should be published
-        browser.wait(EC.urlContains("project"), 15000, "never arrived at the finished reading");
+        browser.wait(EC.urlContains("project"), 15000, "never arrived at the finished reading")
     });
 
     it('should create a new group for an older version', () => {
@@ -148,10 +148,6 @@ describe("Versioning - ", () => {
         // Create a new group for an older version
         // Make sure the reading cards load before moving on to the next step
         browser.wait(EC.elementToBeClickable(dashboard.firstProject), 15000, "reading cards never loaded");
-
-        // Expand the past versions
-        browser.wait(EC.elementToBeClickable(element(by.css('[testFindVersionToggle="' + titleUpdate + '"]'))), 5000, "past versions toggle never became clickable");
-        element(by.css('[testFindVersionToggle="' + titleUpdate + '"]')).click();
 
         // Verify version 1 of this reading is in the list
         browser.wait(EC.elementToBeClickable(element(by.css('p[testVersionNumber="' + uniqueTitle + '"]'))), 5000, "past versions never loaded");
@@ -165,6 +161,6 @@ describe("Versioning - ", () => {
         // Wait for the input field for the group label to show and enter text
         dashboard.createNewGroupModalInput(uniqueTitle + "group");
         // Locate the group and confirm the name
-        browser.wait(EC.elementToBeClickable(element(by.css('span[testFindGroupLabel="' + uniqueTitle + 'group"]'))), 5000, "new group label never showed up");
+        browser.wait(EC.elementToBeClickable(element(by.css('.new-project'))), 5000, "new group label never showed up");
     });
 });

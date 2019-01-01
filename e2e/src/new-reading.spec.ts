@@ -273,12 +273,11 @@ describe('New Reading Page', () => {
             newReading.addNewReading()
             // checks for and clicks the confirm archive button if the modal is there
             newReading.confirmArchiveButtonClick()
-            browser.wait(EC.invisibilityOf(newReading.confirmArchiveModal), 5000, 'confirm archive modal should not be showing')
-            browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 10000, "finalize reading button never became clickable")
+            browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable")
             newReading.finalizeButton.click()
 
             // Should create a new Reading
-            browser.wait(EC.urlContains("project"), 5000, "never arrived at new reading")
+            browser.wait(EC.urlContains("project"), 10000, "never arrived at new reading")
 
             // Should see image in new reading
             browser.wait(EC.presenceOf(newReading.imageInReading), 10000, "never saw an image in the new reading")
@@ -317,7 +316,7 @@ describe('New Reading Page', () => {
             newReading.saveDraftNewReading()
             // Should redirect to new reading page with same inputs and a success alert
             browser.wait(EC.urlContains("new-reading"), 5000, "never created the draft")
-            browser.wait(EC.presenceOf(newReading.successAlert), 5000, "never saw the success alert")
+            browser.wait(EC.visibilityOf(newReading.successAlert), 5000, "never saw the success alert")
             // Add more text
             newReading.contentInput.sendKeys(protractor.Key.ARROW_DOWN)
             newReading.contentInput.sendKeys(newReading.contentShortStringB)

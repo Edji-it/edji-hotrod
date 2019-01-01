@@ -11,7 +11,7 @@ nav-bar(
         .reading-page
           //- Error and Success Messaging
           p.alert.alert-danger(*ngIf="error.length > 0",  [innerHtml]="error | emojione")
-          .alert.alert-success.alert-readings.alert-dismissable(role="alert", *ngIf="showAlert") {{ successObject.readingSuccess }}
+          #msgDraftSaved.alert.alert-success.alert-readings.alert-dismissable(role="alert", *ngIf="showAlert") {{ successObject.readingSuccess }}
             a.close(href="#", (click)="showAlert=false") × 
           .alert.alert-danger.alert-readings(role="alert", *ngIf="errorObject.readingError") {{ errorObject.readingError }}
           //- Title Section
