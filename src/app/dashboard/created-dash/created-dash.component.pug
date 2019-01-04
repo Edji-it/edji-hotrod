@@ -84,7 +84,7 @@
               span.icon.icon-circle.icon-info  i
         hot-reading-card(style="margin-bottom: 30px; float:left; width:100%;", [reading]="reading")
         //- Mark beginning of archived readings
-        .divider--alert.divider--archived-end(*ngIf="reading.archivedEnd")
+        .divider--alert(*ngIf="reading.archivedEnd")
           .archived-fade--above
           .alert
             .hero-h.mr-1 H
