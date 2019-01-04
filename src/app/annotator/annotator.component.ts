@@ -603,6 +603,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 wordI--
             }
 
+            // Set the anchor (start) or focus (end) for the highlight section on the clickable highlighting
             if (prevAnchor == null && prevFocus == null) {
                 this.quickSelect.anchor = wordI
                 this.focusHighlight(wordI, wordI)
