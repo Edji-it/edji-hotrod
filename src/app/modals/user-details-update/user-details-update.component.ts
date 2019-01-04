@@ -44,7 +44,7 @@ export class UserDetailsUpdateModal implements OnInit {
     body: string
   } = {
     header: 'Before you begin',
-    body: 'I\'m using Edji as a... '
+    body: 'Help us customize your experience. Are you a...'
   }
 
   constructor(
