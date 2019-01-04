@@ -11,7 +11,7 @@
             .form-group
                 label(for='newProjectLabel') 
                     | Group Name
-                    i.icon__tooltip(tooltipPosition="right", pTooltip="A group is a section of students on a reading", tooltipZIndex="9000")
+                    i.icon__tooltip(tooltipPosition="right", pTooltip="A group is a section of students on a Reading", tooltipZIndex="9000")
                         span.icon.icon-circle.icon-info  i
                 input#newProjectLabel(tabindex='0', type='text', placeholder='1st Period, Vocabulary, Monday Class...', [formControl]="projectForm.controls['label']")
                 #msgLabelRequired.alert.alert-warning(*ngIf="formSubmitted && projectForm.controls['label'].hasError('required')", role='alert')
@@ -20,7 +20,7 @@
             .form-group()
                 label(for='groupInstructions')
                     | Reading Group Instructions
-                    i.icon__tooltip(tooltipPosition="right", pTooltip="Instructions are displayed at the beginning of a reading, and included in the Recap.", tooltipZIndex="9000")
+                    i.icon__tooltip(tooltipPosition="right", pTooltip="Instructions are displayed at the beginning of a Reading, and included in the Recap.", tooltipZIndex="9000")
                         span.icon.icon-circle.icon-info  i
                 textarea#groupInstructions.form-control.mGroup([formControl]="projectForm.controls['groupInstructions']", type='text', placeholder="For today's lesson, you will...")
             .form-group.row()

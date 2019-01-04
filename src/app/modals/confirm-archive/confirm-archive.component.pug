@@ -5,9 +5,9 @@
         h4.modal-title Confirm Share
         button.close((click)='closeModal.emit()', type='button') &times;
       .modal-body
-        p.mb-3 Sharing a new reading will archive this reading:
+        p.mb-3 Sharing a new Reading will archive this Reading:
         hot-reading-card(style="margin-bottom: 30px; float:left; width:100%;", [reading]="readingToArchive", [readOnly]="true")
-        p.m-0 You can access all archived readings when you 
+        p.m-0 You can access all archived Readings when you 
           a#goHeroLink.btn.btn-hero.btn-sm(
             (click)="goHero.emit()"
           ) Go Hero
