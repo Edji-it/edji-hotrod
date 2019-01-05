@@ -315,18 +315,14 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                         comment.createdAt = Date.now()
                         // Sometimes an UPDATE comes through for comment not yet created
                         // Add highlights to local array
-                        if (this._projects.isCommentVisible(comment)) {
-                            this.incrementHighlights(this.user._id === comment.user_id || this.project.teacher_id == comment.user_id, comment.start, comment.end)
-                        }
+                        this.incrementHighlights(this.user._id === comment.user_id || this.project.teacher_id == comment.user_id, comment.start, comment.end)
                         this.commentsByIndexAdd(comment, wIndex, true)
                     }
                 } else if (commentUpdate.action === 'CREATE') {
                     // Socket updates don't come through with a timestamp
                     comment.createdAt = Date.now()
                     // Add highlights to local array
-                    if (this._projects.isCommentVisible(comment)) {
-                        this.incrementHighlights(this.user._id === comment.user_id || this.project.teacher_id == comment.user_id, comment.start, comment.end)
-                    }
+                    this.incrementHighlights(this.user._id === comment.user_id || this.project.teacher_id == comment.user_id, comment.start, comment.end)
                     this.commentsByIndexAdd(comment, wIndex, true)
                 }
             }, (error) => {
@@ -1066,7 +1062,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      * Keep this light! It runs for every word instance
      * @param i is the word index
      */
-    public getHighlightClass(i: number, heat_vision: boolean): string {
+    public getHighlightClass(i: number): string {
         let classString = ''
         let highlightCount = 0
 
