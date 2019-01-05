@@ -49,14 +49,12 @@ nav-bar([showDashboardOptions]="true")
                 <ng-template let-reading pTemplate="item">
                     .col-12.feed__reading(*ngIf="reading")
                         div {{index}}
-                        .feed__reading-data(*ngIf="reading.owner")
-                            .comment__avatar {{reading.owner.fullname.substr(0,2).toUpperCase()}}
+                        .feed__reading-data.mb-2(*ngIf="reading.owner")
+                            .comment__avatar.mb-0 {{reading.owner.fullname.substr(0,2).toUpperCase()}}
                             follow-tag([owner]="reading.owner")
-                            i {{ ' shared ' + (reading.updatedAt | edjidate:'timeAgo':null:secondsAgo) }}
-                            = " "
-                            .btn-group(style="float:right")
-                                //- .btn.btn-sm.btn-primary Preview
-                                .btn.btn-sm.btn-primary([routerLink]="['/new-reading']", [queryParams]="{ copyId: reading._id }") Get this Reading
+                            i.hidden-md-down.ws-nowrap {{ ' shared ' + (reading.updatedAt | edjidate:'timeAgo':null:secondsAgo) }}
+                            .btn.btn-sm.btn-primary.float-right([routerLink]="['/new-reading']", [queryParams]="{ copyId: reading._id }") Get this Reading
+                            i.hidden-lg-up.ws-nowrap {{ ' shared ' + (reading.updatedAt | edjidate:'timeAgo':null:secondsAgo) }}
                         hot-reading-card([reading]="reading", [readOnly]="true")
                         .feed__reading-preview(*ngIf="reading.words_preview")
                             span.w(

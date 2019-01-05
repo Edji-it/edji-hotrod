@@ -68,3 +68,10 @@
     pointer-events: none;
     z-index: 5000;
 }
+
+// Whitespace helpers
+.ws {
+    &-nowrap {
+        white-space: nowrap;
+    }
+}
