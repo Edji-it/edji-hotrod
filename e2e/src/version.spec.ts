@@ -21,8 +21,8 @@ describe("Versioning - ", () => {
         // Login as test account that we can fill with junk data
         login.getPage();
         browser.wait(EC.elementToBeClickable(login.loginButton), 5000);
-        login.enterUsername(login.botUser);
-        login.enterPassword(login.botPassword);
+        login.enterUsername(login.heroUser);
+        login.enterPassword(login.heroPassword);
         browser.wait(EC.elementToBeClickable(login.loginButton), 5000);
         login.loginButton.click();
         browser.wait(EC.urlContains("dashboard"), 5000, "never arrived at dashboard");
