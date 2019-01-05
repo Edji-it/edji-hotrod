@@ -1066,7 +1066,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      * Keep this light! It runs for every word instance
      * @param i is the word index
      */
-    public getHighlightClass(i: number): string {
+    public getHighlightClass(i: number, heat_vision: boolean): string {
         let classString = ''
         let highlightCount = 0
 
