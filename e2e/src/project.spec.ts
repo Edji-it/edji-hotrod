@@ -61,41 +61,26 @@ describe('Project Page', () => {
             sidebar.logout();
         });
 
-        it("should make an emoji comment", () => {
-
-            let emojiKeyboard = element(by.css('emoji-keyboard'));
-            let grinningEmoji = emojiKeyboard.element(by.css("[dataname=':grinning:'"));
-
+        it("should make an emoji comment by clicking on words", () => {
+            let emojiKeyboard = element(by.css('emoji-keyboard'))
+            let grinningEmoji = emojiKeyboard.element(by.css("[dataname=':grinning:']"))
             // Code for making a comment
             // Find text to select
             browser.wait(EC.elementToBeClickable(element(by.css(".w[index='18']"))), 10000, "never found words to click on");
-
-            // Select Text to comment on (should select 'Lorem Ipsum')
-            browser.executeScript(function () {
-                let range = document.createRange();
-                let sel = window.getSelection();
-                range.setStart(document.body.querySelector(".w[index='26']").childNodes[0], 0);
-                range.setEnd(document.body.querySelector(".w[index='30']").childNodes[0], 0);
-                sel.removeAllRanges();
-                sel.addRange(range);
-            });
-
-            browser.actions().mouseUp(element(by.css(".w[index='21']"))).perform();
-
-            // browser.actions().mouseMove(element(by.css(".w[index='18']"))).mouseDown().mouseMove(element(by.css(".w[index='21']"))).mouseUp().perform();
-
+            // Select words using Quick Highlight by clicking
+            element(by.css(".w[index='26']")).click()
+            element(by.css(".w[index='30']")).click()
             // Add emoji comment
             project.addEmojiComment();
-
-            // Type emojis
+            // Select emojis
             browser.wait(EC.elementToBeClickable(grinningEmoji), 5000, "never found the emoji keyboard");
             grinningEmoji.click();
-            emojiKeyboard.element(by.css("[dataname=':heart_eyes:'")).click();
+            emojiKeyboard.element(by.css("[dataname=':heart_eyes:']")).click();
             emojiKeyboard.element(by.css(".emojionearea-filter[title='Objects']")).click();
 
             // Use emoji keyboard filter, and type an emoji from further down
             browser.wait(EC.elementToBeClickable(emojiKeyboard.element(by.css("[dataname=':dollar:'"))), 5000, "never scrolled to the dollars emoji");
-            emojiKeyboard.element(by.css("[dataname=':dollar:'")).click();
+            emojiKeyboard.element(by.css("[dataname=':dollar:']")).click();
 
             // Save emoji comment
             project.emojiCommentSave.click();
@@ -109,7 +94,7 @@ describe('Project Page', () => {
             project.closePane.click();
         });
 
-        it("should make a comment on an image", () => {
+        it("should make a comment on an image by clicking on image", () => {
             // Find and click on image
             browser.wait(EC.presenceOf(project.image), 10000, "never found the image");
             browser.executeScript('window.scrollTo(0, document.querySelector("article .img-wrap > img").scrollTop);').then(function () {
@@ -154,7 +139,7 @@ describe('Project Page', () => {
             sidebar.clickLogOutButton();
         });
 
-        it("should make audio comment as logged in user", () => {
+        it("should make audio comment by selecting text", () => {
             // Find text to select
             browser.wait(EC.elementToBeClickable(element(by.css(".w[index='18']"))), 10000, "never found words to click on");
 
@@ -168,7 +153,7 @@ describe('Project Page', () => {
                 sel.addRange(range);
             });
 
-            browser.actions().mouseUp(element(by.css(".w[index='14']"))).perform();
+            // browser.actions().mouseUp(element(by.css(".w[index='14']"))).perform();
 
             // browser.actions().mouseMove(element(by.css(".w[index='12']"))).mouseDown().mouseMove(element(by.css(".w[index='14']"))).mouseUp().perform();
 
