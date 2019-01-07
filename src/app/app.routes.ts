@@ -49,7 +49,7 @@ export const ROUTES: Routes = [
   { path: 'license/welcome/:institution_id', component: LicenseWelcomeComponent, canActivate: [AuthService], pathMatch: 'full' },
   { path: 'new-reading', component: NewReadingPage, canActivate: [AuthService] },
   { path: 'new-reading/:id', component: NewReadingPage, canActivate: [AuthService] },
-  { path: 'redeem-token/:type/:id', component: RedeemToken },
+  { path: 'redeem-token/:type/:token', component: RedeemToken },
   { path: 'features', component: HeroPromoPageComponent, pathMatch: 'full' },
   { path: 'hero', redirectTo: '/plans', pathMatch: 'full' },
   { path: 'pricing', redirectTo: '/plans', pathMatch: 'full'  },

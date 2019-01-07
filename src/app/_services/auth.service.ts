@@ -581,28 +581,42 @@ export class AuthService implements CanActivate {
 
     /**
      * There are two cases to use this call:
-     *  1) User is logged in and resetting password => resetObject should be assigned properties oldPassword, newPassword
-     *  2) User has a password recovery email => resetObject should be assigned properties: token, newPassword
-     * @param resetObject Can have properties: oldPassword, newPassword, token
+     *  1) User is logged in and resetting value => resetObject should be assigned properties type, newValue
+     *  2) User has a recovery email => resetObject should be assigned properties: token, newValue
+     * @param resetObject Can have properties: type (reset type), token, newValue (new password, email, etc)
      * @returns Chainable promise resolved with json data containing either a user object & token or errors
      **/
-    public resetPassword(resetObject: any) {
-        return this.legacyHttp
-            .post(
-                [this.baseUrl, 'users', 'reset_password'].join('/'), {
-                    resetObject: resetObject
-                },
-                this.getOptions()
-            )
-            .toPromise()
-            .then(this.extractData)
-            .then((data) => {
-                if (data.token && data.user) {
-                    data.user = this.setUser(data.user)
-                    this.setToken(data.token)
-                }
-                return data
+    public resetProperty(resetObject: RedeemTokenObj) {
+        // We check if the user is logged in because we'll pass the authToken if they are
+        let user = this.getUser()
+        let newHeaders: HttpHeaders
+        if (user.isLoggedIn) {
+            newHeaders = new HttpHeaders({
+                'Content-Type': 'application/json',
+                'Authorization': this.getToken()
             })
+        } else {
+            newHeaders = new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        }
+
+        return this._http.post<any>(
+            this.baseUrl + '/api/v1/users/' + userInfo + '/tokens/' + resetObject.type + '/' + resetObject.token,
+            { reset_property: resetObject.newValue },
+            {
+                headers: newHeaders
+            }
+        )
+        .toPromise()
+        .then(this.extractData)
+        .then((data) => {
+            if (data.token && data.user) {
+                data.user = this.setUser(data.user)
+                this.setToken(data.token)
+            }
+            return data
+        })
     }
 
     public recoverPassword(resetUser: { username?: string, email?: string }): Observable<boolean> {
@@ -1111,4 +1125,10 @@ export interface Academy {
     name?: string,
     abbreviation?: string,
     _id?: string
+}
+
+interface RedeemTokenObj {
+    newValue: string
+    type: string
+    token?: string
 }
