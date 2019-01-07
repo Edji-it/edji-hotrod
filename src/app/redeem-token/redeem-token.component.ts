@@ -75,16 +75,15 @@ export class RedeemToken implements OnInit {
     this.submitted = true
     this.isLoading = true
 
-    this._auth.resetPassword({ newValue: formValue.field, token: this.resetToken, type: this.redeemType })
-    .then((res) => {
+    this._auth.resetProperty({ newValue: formValue.field, token: this.resetToken, type: this.redeemType })
+    .subscribe((res) => {
       this.isLoading = false
-      if (res.user && res.token) {
+      if (res) {
         this.serviceResponse.success = true
       } else {
         this.serviceResponse.failure = true
       }
-    })
-    .catch((err) => {
+    },(err) => {
       console.error(err)
       this.isLoading = false
       this.serviceResponse.failure = true

@@ -586,7 +586,7 @@ export class AuthService implements CanActivate {
      * @param resetObject Can have properties: type (reset type), token, newValue (new password, email, etc)
      * @returns Chainable promise resolved with json data containing either a user object & token or errors
      **/
-    public resetProperty(resetObject: RedeemTokenObj) {
+    public resetProperty(resetObject: RedeemTokenObj): Observable<boolean> {
         // We check if the user is logged in because we'll pass the authToken if they are
         let user = this.getUser()
         let newHeaders: HttpHeaders
@@ -602,21 +602,19 @@ export class AuthService implements CanActivate {
         }
 
         return this._http.post<any>(
-            this.baseUrl + '/api/v1/users/' + userInfo + '/tokens/' + resetObject.type + '/' + resetObject.token,
-            { reset_property: resetObject.newValue },
+            this.baseUrl + '/api/v1/users/' + 'username=jzkyburz' + '/tokens/' + resetObject.type + '/' + resetObject.token,
+            { [resetObject.type]: resetObject.newValue },
             {
                 headers: newHeaders
             }
         )
-        .toPromise()
-        .then(this.extractData)
-        .then((data) => {
-            if (data.token && data.user) {
-                data.user = this.setUser(data.user)
-                this.setToken(data.token)
+        .pipe(map((res) => {
+            if (res.status === 204) {
+                return true
+            } else {
+                return false
             }
-            return data
-        })
+        }))
     }
 
     public recoverPassword(resetUser: { username?: string, email?: string }): Observable<boolean> {

@@ -30,11 +30,11 @@ nav-bar
           #msgSuccess.alert.alert-success(
             *ngIf="serviceResponse.success"
           ) You've successfully changed your {{ redeemCopy.name }}! 
-            a([routerLink]="['/dashboard']") Go to your dashboard
+            a([routerLink]="['/login']") Go to the login page
           button#buttonLogin.btn.btn-primary(
             type="submit", 
             [class.loading]="isLoading", 
             [disabled]="serviceResponse.success", 
             name="Login", 
             tabindex="0"
-          ) Log In
+          ) Reset {{ redeemCopy.name }}
