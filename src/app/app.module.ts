@@ -79,7 +79,7 @@ import { DashboardComponent, JoinedDashComponent, CreatedDashComponent, Tutorial
 import { NoContentComponent } from './no-content'
 import { AccountComponent, ChangePassComponent, UploadAvatarModal } from './account'
 import { LoginComponent } from './login';
-import { ResetPassPage } from './reset-pass/reset-pass-page.component';
+import { RedeemToken } from './redeem-token/redeem-token.component';
 import { HeroPromoPageComponent } from './hero-promo/hero-promo.component';
 import { HeroPricingComponent } from './hero-pricing/hero-pricing.component';
 import { DiscoverFeedComponent } from './discover-feed/discover-feed.component';
@@ -136,7 +136,7 @@ const APP_PROVIDERS = [
   declarations: [
     MediumEditorDirective,
     ClickOutsideDirective,
-    ResetPassPage,
+    RedeemToken,
     RegisterPageComponent,
     CommentPaneComponent,
     CommentComponent,

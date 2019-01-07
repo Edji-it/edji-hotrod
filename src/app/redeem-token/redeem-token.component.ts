@@ -7,10 +7,10 @@ import { Angulartics2 } from 'angulartics2';
 import { AuthService } from './../_services';
 
 @Component({
-  selector: 'hot-reset-pass-page',
-  templateUrl: 'reset-pass-page.component.html'
+  selector: 'hot-redeem-token',
+  templateUrl: 'redeem-token.component.pug'
 })
-export class ResetPassPage implements OnInit {
+export class RedeemToken implements OnInit {
   public resetForm: FormGroup;
   public isLoading: boolean = false;
   public resetToken: string;
