@@ -1,0 +1,40 @@
+nav-bar
+.gray
+.container-fluid
+  .row.navy-gradient.has-sparks
+    .sparks
+    .col-sm-3
+    .col-sm-6.col-pad.on-dark
+      h1.center.on-dark Reset your Edji password
+      br
+      form([formGroup]="resetForm", (ngSubmit)="resetPass(resetForm.value)")
+        .form-group
+          label(for="passwordInput") Password
+          input#passwordInput(type="password", [formControl]="resetForm.controls['password']", tabindex="0")
+          #msgNoPassword.alert.alert-danger(
+            *ngIf="resetForm.controls['password'].hasError('required') && (resetForm.controls['password'].dirty || submitted)"
+          ) Make sure to add your new password!
+        .form-group
+          label(for="passwordConfirmInput") Confirm Password
+          input#passwordConfirmInput(type="password", [formControl]="resetForm.controls['passwordConfirm']", tabindex="0")
+          #msgNoPasswordConfirm.alert.alert-danger(
+            *ngIf="resetForm.controls['passwordConfirm'].hasError('required') && (resetForm.controls['passwordConfirm'].dirty || submitted)"
+          ) Remember to confirm your password!
+          #msgPasswordMismatch.alert.alert-info(
+            *ngIf="resetForm.hasError('mismatch')"
+          ) Please make sure the passwords match
+        .button__row
+          #msgFailure.alert.alert-danger(
+            *ngIf="serviceResponse.failure"
+          ) Please request another password link. The link used was invalid. Remember, they only last one hour.
+          #msgSuccess.alert.alert-success(
+            *ngIf="serviceResponse.success"
+          ) You've successfully changed your password! 
+            a([routerLink]="['/dashboard']") Go to your dashboard
+          button#buttonLogin.btn.btn-primary(
+            type="submit", 
+            [class.loading]="isLoading", 
+            [disabled]="serviceResponse.success", 
+            name="Login", 
+            tabindex="0"
+          ) Log In
