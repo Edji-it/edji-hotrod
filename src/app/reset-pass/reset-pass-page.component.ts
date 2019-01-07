@@ -34,13 +34,12 @@ export class ResetPassPage implements OnInit {
   }
 
   ngOnInit() {
-    this.resetToken = this.route.snapshot.queryParams['token'];
-    if (!this.resetToken) {
-      this._router.navigate(['/login']);
-    }
+    // this.resetToken = this.route.snapshot.queryParams['token'];
+    // if (!this.resetToken) {
+    //   this._router.navigate(['/login']);
+    // }
   }
 
-  //https://angular.io/docs/ts/latest/api/forms/index/FormGroup-class.html
   /** Validates that the passwords are equal and assigns error if not
    * @returns error to FormGroup called 'mismatch' if the passwords are not equal
    */
