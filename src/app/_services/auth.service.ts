@@ -606,18 +606,29 @@ export class AuthService implements CanActivate {
     }
 
     public recoverPassword(resetUser: { username?: string, email?: string }): Observable<boolean> {
-        return this.legacyHttp
-            .post(
-                [this.baseUrl, 'users', 'recover_password'].join('/'), resetUser,
-                this.getOptions()
-            )
-            .pipe(map((data) => {
-                if (data.status === 204) {
-                    return true
-                } else {
-                    return false
-                }
-            }))
+        // need to pass in the correct user search
+        let userInfo: string
+        if (resetUser.username) {
+            userInfo = 'username=' + resetUser.username
+        } else if (resetUser.email) {
+            userInfo = 'email=' + resetUser.email
+        }
+
+        return this._http.get<any>(
+            this.baseUrl + '/api/v1/users/' + userInfo + '/tokens/password',
+            {
+                headers: new HttpHeaders({
+                    'Content-Type': 'application/json'
+                })
+            }
+        )
+        .pipe(map((data) => {
+            if (data.status === 200) {
+                return true
+            } else {
+                return false
+            }
+        }))
     }
 
     /** Call to convert a temp user's properties to the current user (who should already have credentials) */
