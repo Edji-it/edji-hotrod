@@ -636,12 +636,6 @@ export class AuthService implements CanActivate {
                 headers: newHeaders
             }
         )
-        .pipe(map((data) => {
-            return true
-        }, (err)=> {
-            console.error(err)
-            return false
-        }))
     }
 
     public recoverPassword(resetUser: { username?: string, email?: string }): Observable<boolean> {
@@ -661,13 +655,6 @@ export class AuthService implements CanActivate {
                 })
             }
         )
-        .pipe(map((data) => {
-            if (data.status === 200) {
-                return true
-            } else {
-                return false
-            }
-        }))
     }
 
     /** Call to convert a temp user's properties to the current user (who should already have credentials) */
