@@ -5,6 +5,7 @@ import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
 import { AuthService } from './../_services'
+import { User } from '../shared/datatypes'
 
 @Component({
   selector: 'hot-redeem-token',
@@ -26,6 +27,7 @@ export class RedeemToken implements OnInit {
     name: 'Password'
   }
   public userId: string
+  private user: User
 
   constructor(
     private _auth: AuthService,
@@ -60,6 +62,9 @@ export class RedeemToken implements OnInit {
         }
         break
     }
+    this._auth.getCurrentUser().subscribe((user) => {
+      this.user = user
+    })
   }
 
   /** Validates that the fields are equal and assigns error if not
@@ -80,7 +85,11 @@ export class RedeemToken implements OnInit {
     this._auth.resetProperty({ newValue: formValue.field, token: this.resetToken, type: this.redeemType, userId: this.userId })
     .subscribe((res) => {
       this.isLoading = false
-      this.serviceResponse.success = true
+      if (this.user.isLoggedIn) {
+        this._router.navigate(['/dashboard'])
+      } else {
+        this.serviceResponse.success = true
+      }
     },(err) => {
       this.isLoading = false
       this.serviceResponse.failure = true
