@@ -43,7 +43,7 @@ export class RedeemToken implements OnInit {
   ngOnInit() {
     this.redeemType = this.route.snapshot.params['type']
     this.resetToken = this.route.snapshot.params['token']
-    this.userId = this.route.snapshot.params['user_id']
+    this.userId = this.route.snapshot.queryParams['user_id']
     if (!this.resetToken) {
       this._router.navigate(['/login'])
     }
@@ -80,13 +80,8 @@ export class RedeemToken implements OnInit {
     this._auth.resetProperty({ newValue: formValue.field, token: this.resetToken, type: this.redeemType, userId: this.userId })
     .subscribe((res) => {
       this.isLoading = false
-      if (res) {
-        this.serviceResponse.success = true
-      } else {
-        this.serviceResponse.failure = true
-      }
+      this.serviceResponse.success = true
     },(err) => {
-      console.error(err)
       this.isLoading = false
       this.serviceResponse.failure = true
     })
