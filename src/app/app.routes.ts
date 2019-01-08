@@ -10,7 +10,7 @@ import { AccountComponent } from './account';
 import { DashboardComponent, CreatedDashComponent, JoinedDashComponent } from './dashboard';
 import { NoContentComponent } from './no-content';
 import { LoginComponent } from './login';
-import { ResetPassPage } from './reset-pass/reset-pass-page.component';
+import { RedeemToken } from './redeem-token/redeem-token.component';
 import { HeroPromoPageComponent } from './hero-promo/hero-promo.component';
 import { HeroPricingComponent } from './hero-pricing/hero-pricing.component';
 import { DiscoverFeedComponent } from "./discover-feed/discover-feed.component";
@@ -49,7 +49,7 @@ export const ROUTES: Routes = [
   { path: 'license/welcome/:institution_id', component: LicenseWelcomeComponent, canActivate: [AuthService], pathMatch: 'full' },
   { path: 'new-reading', component: NewReadingPage, canActivate: [AuthService] },
   { path: 'new-reading/:id', component: NewReadingPage, canActivate: [AuthService] },
-  { path: 'reset-password', component: ResetPassPage },
+  { path: 'redeem-token/:type/:token', component: RedeemToken },
   { path: 'features', component: HeroPromoPageComponent, pathMatch: 'full' },
   { path: 'hero', redirectTo: '/plans', pathMatch: 'full' },
   { path: 'pricing', redirectTo: '/plans', pathMatch: 'full'  },
