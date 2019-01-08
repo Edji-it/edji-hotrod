@@ -616,7 +616,9 @@ export class AuthService implements CanActivate {
         // We check if the user is logged in because we'll pass the authToken if they are
         let user = this.getUser()
         let newHeaders: HttpHeaders
-        if (user.isLoggedIn) {
+        // If user is logged in and changing a property other than password, pass Auth
+        // Otherwise, we want to avoid the potential of a user changing another user's password
+        if (user.isLoggedIn && resetObject.type !== 'password') {
             newHeaders = new HttpHeaders({
                 'Content-Type': 'application/json',
                 'Authorization': this.getToken()
