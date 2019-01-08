@@ -25,6 +25,7 @@ export class RedeemToken implements OnInit {
   } = {
     name: 'Password'
   }
+  public userId: string
 
   constructor(
     private _auth: AuthService,
@@ -42,6 +43,7 @@ export class RedeemToken implements OnInit {
   ngOnInit() {
     this.redeemType = this.route.snapshot.params['type']
     this.resetToken = this.route.snapshot.params['token']
+    this.userId = this.route.snapshot.params['user_id']
     if (!this.resetToken) {
       this._router.navigate(['/login'])
     }
@@ -75,7 +77,7 @@ export class RedeemToken implements OnInit {
     this.submitted = true
     this.isLoading = true
 
-    this._auth.resetProperty({ newValue: formValue.field, token: this.resetToken, type: this.redeemType })
+    this._auth.resetProperty({ newValue: formValue.field, token: this.resetToken, type: this.redeemType, userId: this.userId })
     .subscribe((res) => {
       this.isLoading = false
       if (res) {

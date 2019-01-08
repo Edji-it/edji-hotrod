@@ -602,7 +602,7 @@ export class AuthService implements CanActivate {
         }
 
         return this._http.post<any>(
-            this.baseUrl + '/api/v1/users/' + 'username=jzkyburz' + '/tokens/' + resetObject.type + '/' + resetObject.token,
+            this.baseUrl + '/api/v1/users/tokens/' + resetObject.type + '/' + resetObject.token + '/?user_id=' + resetObject.userId,
             { [resetObject.type]: resetObject.newValue },
             {
                 headers: newHeaders
@@ -621,13 +621,13 @@ export class AuthService implements CanActivate {
         // need to pass in the correct user search
         let userInfo: string
         if (resetUser.username) {
-            userInfo = 'username=' + resetUser.username
+            userInfo = 'username=' + encodeURIComponent(resetUser.username)
         } else if (resetUser.email) {
-            userInfo = 'email=' + resetUser.email
+            userInfo = 'email=' + encodeURIComponent(resetUser.email)
         }
 
         return this._http.get<any>(
-            this.baseUrl + '/api/v1/users/' + userInfo + '/tokens/password',
+            this.baseUrl + '/api/v1/users/tokens/password?' + userInfo,
             {
                 headers: new HttpHeaders({
                     'Content-Type': 'application/json'
@@ -1128,5 +1128,6 @@ export interface Academy {
 interface RedeemTokenObj {
     newValue: string
     type: string
-    token?: string
+    userId: string
+    token: string
 }
