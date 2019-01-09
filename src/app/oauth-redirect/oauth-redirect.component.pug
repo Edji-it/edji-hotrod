@@ -11,10 +11,10 @@ nav-bar
         ng-container(*ngIf="messages.duplicate_user") 
             .alert.alert-danger
                 p A user already exists with that email address. If you'd like to log in to that account, please sign in with a username and password.
-                p If you have forgotten, you may try resetting your password.
+                p If you have forgotten your password, you can reset it.
             .btn-row.right
-                button.btn.btn-secondary([routerLink]="['/login']") Forgot Password?
-                button.btn.btn-primary([routerLink]="['/login']") Log In
+                a.btn.btn-secondary([routerLink]="['/login']", [queryParams]="{mlink: 'forgot'}") Forgot Password?
+                a.btn.btn-primary([routerLink]="['/login']") Log In
         ng-container(*ngIf="messages.serverError") 
             .alert.alert-danger
                 | There was an error fetching your user information. Please try again or contact us.
