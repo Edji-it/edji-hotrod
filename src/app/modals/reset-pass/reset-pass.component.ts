@@ -56,7 +56,7 @@ export class ResetPassComponent {
         this.loading = false
         this.submissionSuccess = false
         if (err.status == 400) {
-          let errorBody = err.json()
+          let errorBody = err.error
           // User's password can't reset because it's an OAuth account
           if (errorBody.oauth_types && errorBody.oauth_types[0] == 'google') {
             // Google
