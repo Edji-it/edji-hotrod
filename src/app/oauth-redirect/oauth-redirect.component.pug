@@ -1,5 +1,27 @@
 nav-bar
-.alert.alert-danger(*ngIf="messages.noUser") There was no user found with that token
-.alert.alert-danger(*ngIf="messages.duplicate_user") Whoops, a user already exists with that email address. If you'd like to log into that account, please sign in with a username and password
-.alert.alert-danger(*ngIf="messages.serverError") There was an error while fetching the user information. Please try again or contact us.
-.alert.alert-danger(*ngIf="messages.noToken") Sorry! Looks like something went wrong with login. Please return to the Login page and try again!
+.container.dashboard-container
+  .row
+    .col-sm-12.col-md-8.offset-md-2.mt-4(*ngIf="hasError")
+        h2 Error Signing in with Google
+        ng-container(*ngIf="messages.noUser") 
+            .alert.alert-danger
+                | There was no user found with that token
+            .btn-row.right
+                button.btn.btn-primary([routerLink]="['/login']") Return to Log In
+        ng-container(*ngIf="messages.duplicate_user") 
+            .alert.alert-danger
+                p A user already exists with that email address. If you'd like to log in to that account, please sign in with a username and password.
+                p If you have forgotten, you may try resetting your password.
+            .btn-row.right
+                button.btn.btn-secondary([routerLink]="['/login']") Forgot Password?
+                button.btn.btn-primary([routerLink]="['/login']") Log In
+        ng-container(*ngIf="messages.serverError") 
+            .alert.alert-danger
+                | There was an error fetching your user information. Please try again or contact us.
+            .btn-row.right
+                button.btn.btn-primary([routerLink]="['/login']") Return to Log In
+        ng-container(*ngIf="messages.noToken") 
+            .alert.alert-danger
+                | Sorry! Looks like something went wrong with login. Please return to the Login page and try again!
+            .btn-row.right
+                button.btn.btn-primary([routerLink]="['/login']") Return to Log In
