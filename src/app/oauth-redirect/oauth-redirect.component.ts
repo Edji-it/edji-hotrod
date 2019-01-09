@@ -20,6 +20,9 @@ export class OAuthComponent implements OnInit {
     duplicate_user?: boolean
   } = {}
 
+  // Error display 
+  public hasError: boolean
+
   private licenseId = ''
   private redirectRouteUrl = '/dashboard'
 
@@ -37,11 +40,13 @@ export class OAuthComponent implements OnInit {
     const error = this.route.snapshot.queryParams.error
 
     if (error) {
+      this.hasError = true
       return this.messages[error] = true
     }
 
     // tell them what's up if there's no token or oauth type...
     if (!encodedToken || encodedToken.length < 1) {
+      this.hasError = true
       return this.messages.noToken = true
     }
 
@@ -68,6 +73,8 @@ export class OAuthComponent implements OnInit {
       this._router.navigateByUrl(this.redirectRouteUrl)
     }, (err) => {
       console.error(err)
+      this.hasError = true
+      // Set specific message
       switch (err.status) {
         case 400:
         case 404:
