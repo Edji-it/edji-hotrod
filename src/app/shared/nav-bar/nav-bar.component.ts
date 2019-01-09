@@ -77,6 +77,9 @@ export class NavBarComponent implements OnInit, OnDestroy {
     public currentPage: string = ""
     public navLinks: NavLink[] = []
 
+    // Dev only display
+    public isDevDeployed: boolean
+
     // Copy Variables
     public heroBtnCopy: string = "Upgrade to Hero"
 
@@ -91,7 +94,9 @@ export class NavBarComponent implements OnInit, OnDestroy {
           public _util: UtilToolService,
           private _secret: SecretSwitchesService
         ) {
-
+        if (window.location.host.indexOf('dev.edji.it') > -1) {
+          this.isDevDeployed = true
+        }
     }
     
     ngOnInit() {

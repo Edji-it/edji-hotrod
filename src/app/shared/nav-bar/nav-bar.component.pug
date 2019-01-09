@@ -2,8 +2,13 @@
   #sideBar.nav-bar
     button.mNavIcon.mNav([ngClass]="{ 'mNavShowing' : mNavShow }", (click)="mNavShowFlip()")
     a.nav-bar__logo-wrap([routerLink]="['/dashboard']")
-      img#logo.nav-bar__logo(*ngIf="currentPage!='home'", src="assets/images/logo-3.2-mark.svg")
-      img#logo.nav-bar__logo-h(*ngIf="currentPage=='home'", src="assets/images/logo-3.2-horizontal.svg")
+      ng-container(*ngIf="!isDevDeployed")
+        img#logo.nav-bar__logo(*ngIf="currentPage!='home'", src="assets/images/logo-3.2-mark.svg")
+        img#logo.nav-bar__logo-h(*ngIf="currentPage=='home'", src="assets/images/logo-3.2-horizontal.svg")
+      //-  Dev logos
+      ng-container(*ngIf="isDevDeployed")
+        img#logo.nav-bar__logo(*ngIf="currentPage!='home'", src="assets/images/logo-3.2-mark--dev.svg")
+        img#logo.nav-bar__logo-h(*ngIf="currentPage=='home'", src="assets/images/logo-3.2-horizontal--dev.svg")
     //- Dashboard Nav
     .nav__menu(*ngIf="showDashboardOptions")
       ng-container(*ngFor="let link of navLinks")
