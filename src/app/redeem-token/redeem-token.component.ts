@@ -34,12 +34,9 @@ export class RedeemToken implements OnInit {
     private _router: Router,
     private route: ActivatedRoute,
     private angulartics: Angulartics2,
-    _fb: FormBuilder
+    private _fb: FormBuilder
   ) {
-    this.resetForm = _fb.group({
-      field: [null, Validators.required],
-      fieldConfirm: [null, Validators.required]
-    }, { validator: this.fieldsEqual })
+    
   }
 
   ngOnInit() {
@@ -49,12 +46,15 @@ export class RedeemToken implements OnInit {
     if (!this.resetToken) {
       this._router.navigate(['/login'])
     }
+    // Set form field validates based on type
+    let fieldValidators: any[] = [Validators.required]
     // We want this to be flexible, so let's set the copy based on the generated link from the server
     switch (this.redeemType) {
       case 'password':
         this.redeemCopy = {
           name: 'Password'
         }
+        fieldValidators.push(Validators.minLength(6))
         break
       case 'email':
         this.redeemCopy = {
@@ -62,6 +62,12 @@ export class RedeemToken implements OnInit {
         }
         break
     }
+    // Build reset form
+    this.resetForm = this._fb.group({
+      field: [null, Validators.compose(fieldValidators)],
+      fieldConfirm: [null, Validators.required]
+    }, { validator: this.fieldsEqual })
+
     this._auth.getCurrentUser().subscribe((user) => {
       this.user = user
     })
@@ -76,10 +82,10 @@ export class RedeemToken implements OnInit {
   }
 
   public resetValue(formValue: any): void {
+    this.submitted = true
     if (!this.resetForm.valid) {
       return
     }
-    this.submitted = true
     this.isLoading = true
 
     this._auth.resetProperty({ newValue: formValue.field, token: this.resetToken, type: this.redeemType, userId: this.userId })
