@@ -370,6 +370,22 @@
     @include icon('icon-external-link.svg');
 }
 
+.icon-vision-flame {
+    @include icon('icon-vision-flame.svg');
+
+    &.inactive {
+        filter: grayscale(100%);
+    }
+}
+
+.icon-key {
+    @include icon('icon-key.svg');
+}
+
+.icon-group {
+    @include icon('icon-group.svg');
+}
+
 // Acquired font awesome styles
 .fa {-moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;

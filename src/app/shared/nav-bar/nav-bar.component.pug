@@ -90,12 +90,25 @@
 
     //- Project Info (Desktop & Mobile)
     .nav-bar__project-data(*ngIf="showProjectInfo && currentProject && currentProject._id")
-      .group-label {{ currentProject.label }} &ensp;
-        span.badge.badge-pill([ngClass]="[ liveCount > 1 ? 'badge-primary' : 'badge-secondary']") {{ liveCount }} Reading
-      pre.btn((click)="showShareCodeModal()", title="Display group code")
-        span([innerHtml]="':key:' | emojione") 
-        | &nbsp;{{ currentProject.code }}
-
+      //- Heat Vision Status
+      .nav__btn-slider([class.expanded]="sliderBtnExpanded['heat']")
+        ng-container(*ngIf="currentProject.heat_vision")
+          i.icon.icon-vision-flame((click)="toggleSlider('heat')")
+          .btn-slider__value Heat Vision On
+        ng-container(*ngIf="!currentProject.heat_vision")
+          i.icon.icon-vision-flame.inactive((click)="toggleSlider('heat')")
+          .btn-slider__value Heat Vision Off
+      //- Group Label
+      .nav__btn-slider([class.expanded]="sliderBtnExpanded['group']")
+        i.icon.icon-group((click)="toggleSlider('group')")
+          .btn-slider-badge.badge.badge-pill.badge-primary(*ngIf="liveCount > 0") {{ liveCount }}
+        .btn-slider__value.with-pill
+          | {{ currentProject.label }}
+          .badge.badge-pill([ngClass]="[ liveCount > 1 ? 'badge-primary' : 'badge-secondary']") {{ liveCount }} Reading
+      //- Key Code
+      .nav__btn-slider([class.expanded]="sliderBtnExpanded['code']")
+        i.icon.icon-key((click)="toggleSlider('code')")
+        .btn-slider__value.code((click)="showShareCodeModal()") {{ currentProject.code }}
     //- New Reading actions
     .nav__btn-wrap
       //- Share button: Desktop

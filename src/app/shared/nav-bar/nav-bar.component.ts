@@ -83,6 +83,16 @@ export class NavBarComponent implements OnInit, OnDestroy {
     // Copy Variables
     public heroBtnCopy: string = "Upgrade to Hero"
 
+    // Nav Slider Button expansion booleans
+    public sliderBtnExpanded: {
+      heat?: boolean,
+      group?: boolean,
+      code?: boolean
+    } = {
+      // Default expand code
+      code: true
+    }
+
     constructor(
           public _route: ActivatedRoute,
           public  _auth: AuthService, 
@@ -392,6 +402,14 @@ export class NavBarComponent implements OnInit, OnDestroy {
       default:
         return 0
     }
+  }
+
+  /**
+   * Toggle slider btn by key
+   * @param key String key for slider btn
+   */
+  toggleSlider(key: string) : void {
+    this.sliderBtnExpanded[key] = !this.sliderBtnExpanded[key]
   }
 }
 

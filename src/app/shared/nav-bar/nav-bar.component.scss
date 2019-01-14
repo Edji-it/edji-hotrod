@@ -55,7 +55,7 @@ $purple: rgb(150, 40, 255);
 	float: right;
 	height: 100%;
 	min-width: $navUserWidth;
-	padding: 0px 15px;
+	padding: 0px 10px;
 	text-align: right;
 	// border-left: $navBorder;
 	border-right: $navBorder;
@@ -106,10 +106,6 @@ $purple: rgb(150, 40, 255);
 	& .emojioneemoji {
 		margin-top: -2px;
 		margin-right: 3px;
-	}
-
-	& pre {
-		overflow: hidden;
 	}
 
 	&.hidden-md-up {
@@ -362,6 +358,108 @@ div.sliding-pane.from-left.slide-in {
 	margin-top: $navPadY;
 	margin-right: .5em;
 	margin-bottom: .5em;
+}
+
+.nav__btn-slider {
+	$sliderHeight: 34px;
+	display: inline-block;
+	height: $sliderHeight;
+	width: auto;
+	max-width: $sliderHeight;
+	border-radius: $sliderHeight/2;
+	cursor: pointer;
+	margin-top: ($navHeight - $sliderHeight)/2;
+	margin-bottom: ($navHeight - $sliderHeight)/2;
+	transition: all 300ms ease-in, background 0ms linear;
+	white-space: nowrap;
+	background-color: #f9f9f9;
+
+	& + & {
+		// margin in between sliders only
+		margin-left: 10px;
+	}
+
+	& .icon {
+		display: inline-block;
+		height: $sliderHeight;
+		width: $sliderHeight;
+		border-radius: 50%;
+		background-color: #f4f4f4;
+		background-size: 60%;
+		// Relative for badge positioning
+		position: relative;
+		overflow: visible;
+	}
+
+	& .btn-slider-badge {
+		font-style: normal;
+		font-size: 9px;
+		position: absolute;
+		left: $sliderHeight;
+		transform: translateX(-75%);
+		top: -2px;
+		z-index: $zMid + 1;
+		opacity: 1;
+		transition: opacity 200ms linear;
+	}
+
+	&:hover, &.expanded {
+		& .btn-slider-badge {
+			opacity: 0;
+		}
+	}
+
+	& .btn-slider__value {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		display: inline-block;
+		line-height: $sliderHeight;
+		font-size: 12px;
+		font-weight: 500;
+		color: $dark-gray;
+		vertical-align: top;
+		text-align: left;
+		border-collapse: collapse;
+		transition: all 300ms ease-in, background 0ms linear;
+		// Default 0 width, unless expanded
+		max-width: 0px;
+		padding: 0px;
+
+		&.code {
+			font-family: 'Courier New', Courier, monospace;
+			font-weight: 600;
+		}
+
+		&.with-pill {
+			padding-top: 5px !important;
+			line-height: 12px;
+
+			& .badge-pill {
+				display: block;
+				margin-top: 3px;
+			}
+		}
+	}
+
+	// expanded state
+	&.expanded, &:hover {
+		max-width: 180px !important;
+
+		& .btn-slider__value {
+			max-width: (180px - $sliderHeight) !important;		
+			padding: 0px 12px 0px 8px;
+		}
+	}
+
+	// Expanded display
+	&.expanded {
+		border-collapse: collapse;
+		border: 1px solid #ffedd1;
+	}
+
+	&:hover, &:focus {
+		background: #f0f0f0;
+	}
 }
 
 #projectCodeError {
