@@ -44,6 +44,7 @@
           ) {{ currentReading.title }}
         .nav-bar__author(*ngIf="projectOwner && projectOwner._id")
           follow-tag([owner]="projectOwner")
+          .badge.badge-pill([ngClass]="[ liveCount > 1 ? 'badge-primary' : 'badge-secondary']") {{ liveCount }} Reading
 
     //- Login/Register Actions
     .nav__btn-wrap(*ngIf="!user.isLoggedIn && !hideAccountOptions")
@@ -101,10 +102,8 @@
       //- Group Label
       .nav__btn-slider([class.expanded]="sliderBtnExpanded['group']")
         i.icon.icon-group((click)="toggleSlider('group')")
-          .btn-slider-badge.badge.badge-pill.badge-primary(*ngIf="liveCount > 0") {{ liveCount }}
-        .btn-slider__value.with-pill
+        .btn-slider__value
           | {{ currentProject.label }}
-          .badge.badge-pill([ngClass]="[ liveCount > 1 ? 'badge-primary' : 'badge-secondary']") {{ liveCount }} Reading
       //- Key Code
       .nav__btn-slider([class.expanded]="sliderBtnExpanded['code']")
         i.icon.icon-key((click)="toggleSlider('code')")
