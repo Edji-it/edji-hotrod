@@ -185,6 +185,10 @@ $purple: rgb(150, 40, 255);
 	line-height: 13px;
 	vertical-align: middle;
 	font-size: 12px;
+
+	& .badge {
+		margin-left: 5px;
+	}
 }
 
 a.nav-bar__link {
@@ -362,6 +366,8 @@ div.sliding-pane.from-left.slide-in {
 
 .nav__btn-slider {
 	$sliderHeight: 34px;
+	$sliderBorderSize: 1px;
+
 	display: inline-block;
 	height: $sliderHeight;
 	width: auto;
@@ -372,23 +378,29 @@ div.sliding-pane.from-left.slide-in {
 	margin-bottom: ($navHeight - $sliderHeight)/2;
 	transition: all 300ms ease-in, background 0ms linear;
 	white-space: nowrap;
-	background-color: #f9f9f9;
+	background-color: transparent;
+	// Preserves spacing until expanded style applied
+	border: $sliderBorderSize solid transparent;
 
 	& + & {
 		// margin in between sliders only
-		margin-left: 10px;
+		margin-left: 5px;
 	}
 
 	& .icon {
 		display: inline-block;
-		height: $sliderHeight;
-		width: $sliderHeight;
+		height: $sliderHeight - (2*$sliderBorderSize);
+		width: $sliderHeight - (2*$sliderBorderSize);
 		border-radius: 50%;
 		background-color: #f4f4f4;
 		background-size: 60%;
 		// Relative for badge positioning
 		position: relative;
 		overflow: visible;
+		
+		&:hover, &:focus {
+			background-color: #f9f9f9;
+		}
 	}
 
 	& .btn-slider-badge {
@@ -404,6 +416,8 @@ div.sliding-pane.from-left.slide-in {
 	}
 
 	&:hover, &.expanded {
+		background-color:#f9f9f9;
+
 		& .btn-slider-badge {
 			opacity: 0;
 		}
@@ -455,6 +469,9 @@ div.sliding-pane.from-left.slide-in {
 	&.expanded {
 		border-collapse: collapse;
 		border: 1px solid #ffedd1;
+		& .icon {
+			background-color: #ffffff;
+		}
 	}
 
 	&:hover, &:focus {
