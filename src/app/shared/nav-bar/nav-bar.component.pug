@@ -92,7 +92,11 @@
     //- Project Info (Desktop & Mobile)
     .nav-bar__project-data(*ngIf="showProjectInfo && currentProject && currentProject._id")
       //- Heat Vision Status
-      .nav__btn-slider([class.expanded]="sliderBtnExpanded['heat']", (click)="toggleSlider('heat')")
+      .nav__btn-slider(
+          [class.expanded]="sliderBtnExpanded['heat']",
+          [class.has-action]="projectOwner._id == user._id",
+          (click)="toggleSlider('heat')",
+          )
         ng-container(*ngIf="currentProject.heat_vision")
           i.icon.icon-vision-flame
           .btn-slider__value Heat Vision On
@@ -105,7 +109,7 @@
         .btn-slider__value
           | {{ currentProject.label }}
       //- Key Code
-      .nav__btn-slider([class.expanded]="sliderBtnExpanded['code']")
+      .nav__btn-slider.has-action([class.expanded]="sliderBtnExpanded['code']")
         i.icon.icon-key((click)="toggleSlider('code')")
         .btn-slider__value.code((click)="showShareCodeModal()") {{ currentProject.code }}
     //- New Reading actions
