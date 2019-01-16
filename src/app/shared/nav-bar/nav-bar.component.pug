@@ -92,16 +92,16 @@
     //- Project Info (Desktop & Mobile)
     .nav-bar__project-data(*ngIf="showProjectInfo && currentProject && currentProject._id")
       //- Heat Vision Status
-      .nav__btn-slider([class.expanded]="sliderBtnExpanded['heat']")
+      .nav__btn-slider([class.expanded]="sliderBtnExpanded['heat']", (click)="toggleSlider('heat')")
         ng-container(*ngIf="currentProject.heat_vision")
-          i.icon.icon-vision-flame((click)="toggleSlider('heat')")
+          i.icon.icon-vision-flame
           .btn-slider__value Heat Vision On
         ng-container(*ngIf="!currentProject.heat_vision")
-          i.icon.icon-vision-flame.inactive((click)="toggleSlider('heat')")
+          i.icon.icon-vision-flame.inactive
           .btn-slider__value Heat Vision Off
       //- Group Label
-      .nav__btn-slider([class.expanded]="sliderBtnExpanded['group']")
-        i.icon.icon-group((click)="toggleSlider('group')")
+      .nav__btn-slider([class.expanded]="sliderBtnExpanded['group']", (click)="toggleSlider('group')")
+        i.icon.icon-group
         .btn-slider__value
           | {{ currentProject.label }}
       //- Key Code

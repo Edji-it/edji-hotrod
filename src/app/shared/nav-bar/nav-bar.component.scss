@@ -427,7 +427,7 @@ div.sliding-pane.from-left.slide-in {
 		overflow: hidden;
 		text-overflow: ellipsis;
 		display: inline-block;
-		line-height: $sliderHeight;
+		line-height: $sliderHeight - (2*$sliderBorderSize);
 		font-size: 12px;
 		font-weight: 500;
 		color: $dark-gray;
