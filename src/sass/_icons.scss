@@ -386,6 +386,14 @@
     @include icon('icon-group.svg');
 }
 
+.icon-pill-collapse {
+    @include icon('icon-pill-collapse.svg');
+}
+
+.icon-pill-expand {
+    @include icon('icon-pill-expand.svg');
+}
+
 // Acquired font awesome styles
 .fa {-moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;

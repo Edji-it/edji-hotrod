@@ -409,13 +409,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
    * @param key String key for slider btn
    */
   toggleSlider(key: string) : void {
-    if (this.sliderBtnExpanded[key]) {
-      // For now, we only allow one to be expanded
-      this.sliderBtnExpanded[key] = false
-    } else {
-      this.sliderBtnExpanded = {}
-      this.sliderBtnExpanded[key] = true
-    }
+    this.sliderBtnExpanded[key] = !this.sliderBtnExpanded[key]
   }
 }
 

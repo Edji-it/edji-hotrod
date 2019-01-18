@@ -73,22 +73,6 @@
           //- Log Out
           button#logOutButton.list-group-item.list-group-item-action(type="button", (click)="logout()") Log Out
             span.list-icon--right([innerHtml]="':outbox_tray:' | emojione")
-    //- Academy indicator 
-    .nav__btn-wrap.hidden-sm-down(*ngIf="academyState && academyState.academies && academyState.academies.length > 0")
-      .academy-plate(
-          title="Hero Academy", 
-          *ngIf="academyState.academies", 
-          (click)="showAcademyDropdown = !showAcademyDropdown",
-          [class.has-multiple]="academyState.academies.length > 1"
-          )
-        .icon.icon-academy-plate
-        .academy-plate__initials([ngClass]="[ 'length-' + currentAcademy.abbreviation.length ]") {{ currentAcademy.abbreviation }}
-        .icon.icon-caret.down
-      .avatar__drop-down.list-group([class.visible]="showAcademyDropdown")
-        .arrow
-        button.list-group-item.list-group-item-action(*ngFor="let academy of academyState.academies; let i = index", (click)="_auth.setCurrentAcademy(i); showAcademyDropdown = false")
-          | {{ academy.name }} ({{academy.abbreviation}})
-
     //- Project Info (Desktop & Mobile)
     .nav-bar__project-data(*ngIf="showProjectInfo && currentProject && currentProject._id")
       //- Heat Vision Status
@@ -112,6 +96,19 @@
       .nav__btn-slider.has-action([class.expanded]="sliderBtnExpanded['code']")
         i.icon.icon-key((click)="toggleSlider('code')")
         .btn-slider__value.code((click)="showShareCodeModal()") {{ currentProject.code }}
+      //- Academy Plate
+      .nav__btn-slider__wrap
+        .nav__btn-slider.has-action(
+            *ngIf="academyState && academyState.academies && academyState.academies.length > 0",
+            [class.expanded]="sliderBtnExpanded['academy']"
+          )
+          i.icon.icon-academy-plate((click)="toggleSlider('academy')")
+          .btn-slider__value((click)="showAcademyDropdown = !showAcademyDropdown") 
+            | {{ currentAcademy.abbreviation }}
+        .btn-slider__drop-down.list-group([class.visible]="showAcademyDropdown")
+          .arrow
+          button.list-group-item.list-group-item-action(*ngFor="let academy of academyState.academies; let i = index", (click)="_auth.setCurrentAcademy(i); showAcademyDropdown = false")
+            | {{ academy.name }} ({{academy.abbreviation}})
     //- New Reading actions
     .nav__btn-wrap
       //- Share button: Desktop
