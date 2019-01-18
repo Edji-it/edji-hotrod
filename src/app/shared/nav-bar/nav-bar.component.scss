@@ -411,6 +411,7 @@ div.sliding-pane.from-left.slide-in {
 		
 		&:hover, &:focus {
 			background-color: #f9f9f9;
+			background-image: url('/assets/images/icon-pill-expand.svg');
 		}
 	}
 
@@ -473,6 +474,10 @@ div.sliding-pane.from-left.slide-in {
 
 		& .icon {
 			background-color: #ffffff;
+
+			&:hover, &:focus {
+				background-image: url('/assets/images/icon-pill-collapse.svg');
+			}
 		}
 	}
 
@@ -486,11 +491,11 @@ div.sliding-pane.from-left.slide-in {
 			border: 1px solid $btnPrimaryColor;
 
 			& .icon {
-				background-color: transparent;
+				background-color: rgba(255,255,255,0.5);
 			}
 
 			&:hover {
-				box-shadow: 0 0px 15px 0px rgba($btnPrimaryFocusColor,0.5);
+				box-shadow: 0 0px 15px 0px rgba($btnPrimaryFocusColor,0.75);
 				background: $btnPrimaryFocusColor;
 				color: #fff;
 			}
@@ -555,7 +560,6 @@ $avatarDropArrowRight: 15px;
 	opacity: 0;
 	pointer-events: none;
 	transition: opacity ease-in-out 0.4s;
-	transition-delay: 500ms;
 	position: absolute;
 	top: calc(100% + #{ $avatarDropArrowOffset });
 	right: 69px;

@@ -74,32 +74,32 @@
           button#logOutButton.list-group-item.list-group-item-action(type="button", (click)="logout()") Log Out
             span.list-icon--right([innerHtml]="':outbox_tray:' | emojione")
     //- Project Info (Desktop & Mobile)
-    .nav-bar__project-data(*ngIf="showProjectInfo && currentProject && currentProject._id")
-      //- Heat Vision Status
-      .nav__btn-slider(
-          [class.expanded]="sliderBtnExpanded['heat']",
-          [class.has-action]="projectOwner._id == user._id",
-          (click)="toggleSlider('heat')",
-          )
-        ng-container(*ngIf="currentProject.heat_vision")
-          i.icon.icon-vision-flame
-          .btn-slider__value Heat Vision On
-        ng-container(*ngIf="!currentProject.heat_vision")
-          i.icon.icon-vision-flame.inactive
-          .btn-slider__value Heat Vision Off
-      //- Group Label
-      .nav__btn-slider([class.expanded]="sliderBtnExpanded['group']", (click)="toggleSlider('group')")
-        i.icon.icon-group
-        .btn-slider__value
-          | {{ currentProject.label }}
-      //- Key Code
-      .nav__btn-slider.has-action([class.expanded]="sliderBtnExpanded['code']")
-        i.icon.icon-key((click)="toggleSlider('code')")
-        .btn-slider__value.code((click)="showShareCodeModal()") {{ currentProject.code }}
-      //- Academy Plate
-      .nav__btn-slider__wrap
+    .nav-bar__project-data
+      ng-container(*ngIf="showProjectInfo && currentProject && currentProject._id")
+        //- Heat Vision Status
+        .nav__btn-slider(
+            [class.expanded]="sliderBtnExpanded['heat']",
+            [class.has-action]="projectOwner._id == user._id",
+            (click)="toggleSlider('heat')",
+            )
+          ng-container(*ngIf="currentProject.heat_vision")
+            i.icon.icon-vision-flame
+            .btn-slider__value Heat Vision On
+          ng-container(*ngIf="!currentProject.heat_vision")
+            i.icon.icon-vision-flame.inactive
+            .btn-slider__value Heat Vision Off
+        //- Group Label
+        .nav__btn-slider([class.expanded]="sliderBtnExpanded['group']", (click)="toggleSlider('group')")
+          i.icon.icon-group
+          .btn-slider__value
+            | {{ currentProject.label }}
+        //- Key Code
+        .nav__btn-slider.has-action([class.expanded]="sliderBtnExpanded['code']")
+          i.icon.icon-key((click)="toggleSlider('code')")
+          .btn-slider__value.code((click)="showShareCodeModal()") {{ currentProject.code }}
+      //- Academy Info
+      .nav__btn-slider__wrap(*ngIf="academyState && academyState.academies && academyState.academies.length > 0")
         .nav__btn-slider.has-action(
-            *ngIf="academyState && academyState.academies && academyState.academies.length > 0",
             [class.expanded]="sliderBtnExpanded['academy']"
           )
           i.icon.icon-academy-plate((click)="toggleSlider('academy')")
