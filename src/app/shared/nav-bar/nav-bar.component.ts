@@ -42,9 +42,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
     public showReferralModal: boolean = false
     public mNavShow: boolean = false
     public isMobile: boolean = false
-    public powersLoading: {
-      heatVision?: boolean
-    } = { }
     public tooltipPlacement: string = 'right'
     public messages: {
       invalidCode?: boolean,
@@ -87,11 +84,16 @@ export class NavBarComponent implements OnInit, OnDestroy {
     public sliderBtnExpanded: {
       heat?: boolean,
       group?: boolean,
-      code?: boolean
+      code?: boolean,
+      academy?: boolean
     } = {
       // Default expand code
       code: true
     }
+    // Nav Slider Button loading states
+    public sliderBtnLoading: {
+      heat?: boolean
+    } = { }
 
     constructor(
           public _route: ActivatedRoute,
@@ -410,6 +412,36 @@ export class NavBarComponent implements OnInit, OnDestroy {
    */
   toggleSlider(key: string) : void {
     this.sliderBtnExpanded[key] = !this.sliderBtnExpanded[key]
+  }
+
+  /**
+   * Toggle Heat Vision
+   */
+  public toggleHeatVision(toggleTo: boolean): void {
+    // Do not attempt if user does not own project
+    if(this.projectOwner._id != this.user._id) {
+      return
+    }
+
+    this.angulartics.eventTrack.next({ 
+      action: 'navBar_heatVision_toggle' + toggleTo, 
+      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
+    })
+    
+    // set heat vision to loading
+    this.sliderBtnLoading.heat = true
+
+    this._projects.update({ 'heat_vision': toggleTo }, this.currentProject._id)
+      .pipe(take(1))
+      .subscribe((project) => {
+        // Live update users once save is successful
+        this._socket.toggleHeatVision({ all: toggleTo })
+        // Allow a moment for changes to propagate to users
+        setTimeout(() => {
+          // stop heat vision loading
+          this.sliderBtnLoading.heat = false
+        }, 500)
+      })
   }
 }
 

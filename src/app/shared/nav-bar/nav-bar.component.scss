@@ -467,6 +467,19 @@ div.sliding-pane.from-left.slide-in {
 		}
 	}
 
+	// Loading display
+	&.loading {
+		pointer-events: none;
+
+		&, & > * {
+			opacity: 1;
+		}
+
+		& .icon {
+			background-image: url('/assets/images/loading-smaller-dark.svg');
+		}
+	}
+
 	// Expanded display
 	&.expanded {
 		border-collapse: collapse;

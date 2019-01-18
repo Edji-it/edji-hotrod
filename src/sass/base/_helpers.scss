@@ -75,3 +75,21 @@
         white-space: nowrap;
     }
 }
+
+// Show/hide on hover
+.hover-parent {
+    .hover-show--inline-block, .hover-show--block {
+        display: none;
+    }
+    &:hover {
+        & .hover-show--inline-block {
+            display: inline-block;
+        } 
+        & .hover-show--block {
+            display: block;
+        } 
+        & .hover-hide {
+            display: none;
+        }   
+    }
+}
