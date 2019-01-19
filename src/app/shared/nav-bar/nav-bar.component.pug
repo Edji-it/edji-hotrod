@@ -83,18 +83,17 @@
               [class.loading]="sliderBtnLoading['heat']",
               [class.has-action]="projectOwner._id == user._id"
               )
-            ng-container(*ngIf="currentProject.heat_vision")
+            ng-container(*ngIf="projectOwner._id == user._id")
               i.icon.icon-vision-flame((click)="toggleSlider('heat')")
                 .icon-pill-status
               .btn-slider__value.hover-parent((click)="toggleHeatVision(false)") 
-                .hover-show--inline-block(style="width: 85px; text-align:center;") Turn Off
-                .hover-hide Heat Vision On
-            ng-container(*ngIf="!currentProject.heat_vision")
+                .hover-show--inline-block(style="width: 85px; text-align:center;") Turn {{ currentProject.heat_vision ? 'On' : 'Off' }}
+                .hover-hide Heat Vision {{ currentProject.heat_vision ? 'On' : 'Off' }}
+            ng-container(*ngIf="projectOwner._id != user._id")
               i.icon.icon-vision-flame.inactive((click)="toggleSlider('heat')")
                 .icon-pill-status
-              .btn-slider__value.hover-parent((click)="toggleHeatVision(true)")
-                .hover-show--inline-block(style="width: 85px; text-align:center;") Turn On
-                .hover-hide Heat Vision Off
+              .btn-slider__value
+                | Heat Vision {{ currentProject.heat_vision ? 'On' : 'Off' }}
           .tooltip.tooltip--bottom
             .tooltip-title {{ currentProject.heat_vision ? "Heat Vision on, comments visible" : "Heat Vision off, comments hidden" }}
         //- Group Label

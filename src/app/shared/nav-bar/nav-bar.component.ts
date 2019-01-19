@@ -407,6 +407,12 @@ export class NavBarComponent implements OnInit, OnDestroy {
    * @param key String key for slider btn
    */
   toggleSlider(key: string) : void {
+    // Track usage
+    this.angulartics.eventTrack.next({ 
+      action: 'navBar_sliderToggle_' + key, 
+      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
+    })
+
     this.sliderBtnExpanded[key] = !this.sliderBtnExpanded[key]
   }
 
