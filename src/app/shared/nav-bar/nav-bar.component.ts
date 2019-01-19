@@ -7,6 +7,7 @@ import { take } from 'rxjs/operators'
 // Project Dependencies
 import { AuthService, ProjectService, SocketService, PowerToggle, ReadingService, SecretSwitchesService, UtilToolService, Secrets, AcademyState, Academy } from '../../_services'
 import { User } from '../datatypes';
+import { MessageService } from 'primeng/components/common/messageservice';
 
 @Component({
   selector: 'nav-bar',
@@ -107,7 +108,8 @@ export class NavBarComponent implements OnInit, OnDestroy {
           private _projects: ProjectService,
           private _readings: ReadingService,
           public _util: UtilToolService,
-          private _secret: SecretSwitchesService
+          private _secret: SecretSwitchesService,
+          private messageService: MessageService
         ) {
         if (window.location.host.indexOf('dev.edji.it') > -1) {
           this.isDevDeployed = true
@@ -115,6 +117,11 @@ export class NavBarComponent implements OnInit, OnDestroy {
     }
     
     ngOnInit() {
+      this.addSingle()
+      setTimeout(()=> {      
+        this.addSingle()
+
+      },2000)
       /** Set the current user every time it changes */
       this.subscriptions.push(
           this._auth.getCurrentUser().subscribe((user) => {
@@ -438,6 +445,20 @@ export class NavBarComponent implements OnInit, OnDestroy {
           this.sliderBtnLoading.heat = false
         }, 500)
       })
+  }
+
+  // Toasts
+  addSingle() {
+      this.messageService.add({severity:'success', summary:'Service Message', detail:'Via MessageService'});
+  }
+
+  addMultiple() {
+      this.messageService.addAll([{severity:'success', summary:'Service Message', detail:'Via MessageService'},
+                                  {severity:'info', summary:'Info Message', detail:'Via MessageService'}]);
+  }
+
+  clear() {
+      this.messageService.clear();
   }
 }
 
