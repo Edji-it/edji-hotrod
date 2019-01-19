@@ -77,36 +77,48 @@
     .nav-bar__project-data
       ng-container(*ngIf="showProjectInfo && currentProject && currentProject._id")
         //- Heat Vision Status
-        .nav__btn-slider(
-            [class.expanded]="sliderBtnExpanded['heat']",
-            [class.loading]="sliderBtnLoading['heat']",
-            [class.has-action]="projectOwner._id == user._id"
-            )
-          ng-container(*ngIf="currentProject.heat_vision")
-            i.icon.icon-vision-flame((click)="toggleSlider('heat')")
-            .btn-slider__value.hover-parent((click)="toggleHeatVision(false)") 
-              .hover-show--inline-block(style="width: 85px; text-align:center;") Turn Off
-              .hover-hide Heat Vision On
-          ng-container(*ngIf="!currentProject.heat_vision")
-            i.icon.icon-vision-flame.inactive((click)="toggleSlider('heat')")
-            .btn-slider__value.hover-parent((click)="toggleHeatVision(true)")
-              .hover-show--inline-block(style="width: 85px; text-align:center;") Turn On
-              .hover-hide Heat Vision Off
+        .nav__btn-slider__wrap.hover--tooltip
+          .nav__btn-slider(
+              [class.expanded]="sliderBtnExpanded['heat']",
+              [class.loading]="sliderBtnLoading['heat']",
+              [class.has-action]="projectOwner._id == user._id"
+              )
+            ng-container(*ngIf="currentProject.heat_vision")
+              i.icon.icon-vision-flame((click)="toggleSlider('heat')")
+              .btn-slider__value.hover-parent((click)="toggleHeatVision(false)") 
+                .hover-show--inline-block(style="width: 85px; text-align:center;") Turn Off
+                .hover-hide Heat Vision On
+            ng-container(*ngIf="!currentProject.heat_vision")
+              i.icon.icon-vision-flame.inactive((click)="toggleSlider('heat')")
+              .btn-slider__value.hover-parent((click)="toggleHeatVision(true)")
+                .hover-show--inline-block(style="width: 85px; text-align:center;") Turn On
+                .hover-hide Heat Vision Off
+          .tooltip.tooltip--bottom
+            .tooltip-title {{ currentProject.heat_vision ? "Heat Vision on, comments visible" : "Heat Vision off, comments hidden" }}
         //- Group Label
-        .nav__btn-slider([class.expanded]="sliderBtnExpanded['group']", (click)="toggleSlider('group')")
-          i.icon.icon-group
-          .btn-slider__value
-            | {{ currentProject.label }}
+        .nav__btn-slider__wrap.hover--tooltip
+          .nav__btn-slider([class.expanded]="sliderBtnExpanded['group']", (click)="toggleSlider('group')")
+            i.icon.icon-group
+            .btn-slider__value
+              | {{ currentProject.label }}
+          .tooltip.tooltip--bottom
+            .tooltip-title Group
+            .tooltip-text([class.tooltip-text--wide]="currentProject.label.length > 25") {{ currentProject.label }}
         //- Key Code
-        .nav__btn-slider.has-action([class.expanded]="sliderBtnExpanded['code']")
-          i.icon.icon-key((click)="toggleSlider('code')")
-          .btn-slider__value.code((click)="showShareCodeModal()") {{ currentProject.code }}
+        .nav__btn-slider__wrap.hover--tooltip
+          .nav__btn-slider.has-action([class.expanded]="sliderBtnExpanded['code']")
+            i.icon.icon-key((click)="toggleSlider('code')")
+            .btn-slider__value.code((click)="showShareCodeModal()") {{ currentProject.code }}
+          .tooltip.tooltip--bottom
+            .tooltip-title Group Code
       //- Academy Info
       .nav__btn-slider__wrap(*ngIf="academyState && academyState.academies && academyState.academies.length > 0")
         .nav__btn-slider.has-action(
             [class.expanded]="sliderBtnExpanded['academy']"
           )
-          i.icon.icon-academy-plate((click)="toggleSlider('academy')")
+          i.icon.icon-academy-plate.hover--tooltip((click)="toggleSlider('academy')")
+            .tooltip.tooltip--bottom(style="top: calc(100% + 27px)")
+              .tooltip-title Hero Academy Member
           .btn-slider__value((click)="showAcademyDropdown = !showAcademyDropdown") 
             | {{ currentAcademy.abbreviation }}
         .btn-slider__drop-down.list-group([class.visible]="showAcademyDropdown")
