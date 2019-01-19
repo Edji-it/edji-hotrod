@@ -413,7 +413,6 @@ div.sliding-pane.from-left.slide-in {
 		
 		&:hover, &:focus {
 			background-color: #f9f9f9;
-			background-image: url('/assets/images/icon-pill-expand.svg');
 		}
 	}
 
@@ -489,10 +488,6 @@ div.sliding-pane.from-left.slide-in {
 
 		& .icon {
 			background-color: #ffffff;
-
-			&:hover, &:focus {
-				background-image: url('/assets/images/icon-pill-collapse.svg');
-			}
 		}
 	}
 

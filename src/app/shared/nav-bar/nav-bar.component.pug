@@ -85,11 +85,13 @@
               )
             ng-container(*ngIf="currentProject.heat_vision")
               i.icon.icon-vision-flame((click)="toggleSlider('heat')")
+                .icon-pill-status
               .btn-slider__value.hover-parent((click)="toggleHeatVision(false)") 
                 .hover-show--inline-block(style="width: 85px; text-align:center;") Turn Off
                 .hover-hide Heat Vision On
             ng-container(*ngIf="!currentProject.heat_vision")
               i.icon.icon-vision-flame.inactive((click)="toggleSlider('heat')")
+                .icon-pill-status
               .btn-slider__value.hover-parent((click)="toggleHeatVision(true)")
                 .hover-show--inline-block(style="width: 85px; text-align:center;") Turn On
                 .hover-hide Heat Vision Off
@@ -99,6 +101,7 @@
         .nav__btn-slider__wrap.hover--tooltip
           .nav__btn-slider([class.expanded]="sliderBtnExpanded['group']", (click)="toggleSlider('group')")
             i.icon.icon-group
+              .icon-pill-status
             .btn-slider__value
               | {{ currentProject.label }}
           .tooltip.tooltip--bottom
@@ -108,6 +111,7 @@
         .nav__btn-slider__wrap.hover--tooltip
           .nav__btn-slider.has-action([class.expanded]="sliderBtnExpanded['code']")
             i.icon.icon-key((click)="toggleSlider('code')")
+              .icon-pill-status
             .btn-slider__value.code((click)="showShareCodeModal()") {{ currentProject.code }}
           .tooltip.tooltip--bottom
             .tooltip-title Group Code
@@ -117,6 +121,7 @@
             [class.expanded]="sliderBtnExpanded['academy']"
           )
           i.icon.icon-academy-plate.hover--tooltip((click)="toggleSlider('academy')")
+            .icon-pill-status
             .tooltip.tooltip--bottom(style="top: calc(100% + 27px)")
               .tooltip-title Hero Academy Member
           .btn-slider__value((click)="showAcademyDropdown = !showAcademyDropdown") 
