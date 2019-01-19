@@ -97,6 +97,7 @@ $purple: rgb(150, 40, 255);
 
 .nav-bar__project-data {
 	@extend .nav-bar__project;
+	white-space: nowrap;
 	text-align: right;
 	border-right: none;
 	// account for logo and username width
