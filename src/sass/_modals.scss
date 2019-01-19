@@ -62,6 +62,14 @@ $modalBodyBg: #fff;
 //   filter: blur(2px);
 // }
 
+.modal-title {
+  & .icon, & .icon-group {
+    margin-right: 5px;
+    font-size: 24px;
+    vertical-align: middle;
+  }
+}
+
 .modal-header {
   border: $modalBorder;
   background: #f7f7f7;

@@ -54,8 +54,7 @@ $purple: rgb(150, 40, 255);
 .nav-bar__project {
 	float: right;
 	height: 100%;
-	min-width: $navUserWidth;
-	padding: 0px 15px;
+	padding: 0px 10px;
 	text-align: right;
 	// border-left: $navBorder;
 	border-right: $navBorder;
@@ -98,18 +97,16 @@ $purple: rgb(150, 40, 255);
 
 .nav-bar__project-data {
 	@extend .nav-bar__project;
+	white-space: nowrap;
 	text-align: right;
 	border-right: none;
 	// account for logo and username width
 	max-width: calc(100% - #{ 100px + 70px });
+	overflow: visible;
 
 	& .emojioneemoji {
 		margin-top: -2px;
 		margin-right: 3px;
-	}
-
-	& pre {
-		overflow: hidden;
 	}
 
 	&.hidden-md-up {
@@ -154,10 +151,16 @@ $purple: rgb(150, 40, 255);
 }
 
 .nav-bar__heading {
-	float: left;
+	// float: left;
+	position: absolute;
+	left: 55px;
+	top: 0px;
+	background: #fff;
+	z-index: $zLow;
 	height: 100%;
 	padding: 0 $base-pad;
-	width: 50%;
+	width: auto;
+	max-width: 50%;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	overflow-x: hidden;
@@ -165,11 +168,11 @@ $purple: rgb(150, 40, 255);
 	overflow-y: hidden; // a scroll bar was coming up sometimes
 
 	@media(max-width: $desktop) {
-		width: 35%;
+		max-width: 35%;
 	}
 
 	@media(min-width: $desktop) {
-		width: 45%;
+		max-width: 45%;
 	}
 
 	& h1 {
@@ -189,6 +192,10 @@ $purple: rgb(150, 40, 255);
 	line-height: 13px;
 	vertical-align: middle;
 	font-size: 12px;
+
+	& .badge {
+		margin-left: 5px;
+	}
 }
 
 a.nav-bar__link {
@@ -364,6 +371,7 @@ div.sliding-pane.from-left.slide-in {
 	margin-bottom: .5em;
 }
 
+
 #projectCodeError {
 	position: absolute;
 	// Position the error box just under the code field, to fill the corner gaps
@@ -398,6 +406,20 @@ $avatarDropArrowRight: 15px;
 	height: 100%;
 }
 
+.btn-slider__drop-down {
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity ease-in-out 0.4s;
+	position: absolute;
+	top: calc(100% + #{ $avatarDropArrowOffset });
+	right: 0px;
+
+	&:hover, &:focus {
+		opacity: 1;
+		pointer-events: all;
+	}
+}
+
 .avatar__drop-down {
 	opacity: 0;
 	pointer-events: none;
@@ -407,9 +429,13 @@ $avatarDropArrowRight: 15px;
 	top: calc(100% + #{ $avatarDropArrowOffset });
 	right: calc(50% - #{ $avatarDropArrowWidth + $avatarDropArrowRight });
 	z-index: 3;
-	min-width: 220px;
+}
+
+.avatar__drop-down, .btn-slider__drop-down {
 	box-shadow: rgba(0,0,0,0.2) 0px 1px 20px;
+	min-width: 220px;
 	border-radius: 12px;
+
 	&.visible {
 		opacity: 1;
 		pointer-events: all;

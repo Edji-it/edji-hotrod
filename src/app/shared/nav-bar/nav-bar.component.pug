@@ -44,6 +44,7 @@
           ) {{ currentReading.title }}
         .nav-bar__author(*ngIf="projectOwner && projectOwner._id")
           follow-tag([owner]="projectOwner")
+          .badge.badge-pill([ngClass]="[ liveCount > 1 ? 'badge-primary' : 'badge-secondary']") {{ liveCount }} Reading
 
     //- Login/Register Actions
     .nav__btn-wrap(*ngIf="!user.isLoggedIn && !hideAccountOptions")
@@ -72,30 +73,62 @@
           //- Log Out
           button#logOutButton.list-group-item.list-group-item-action(type="button", (click)="logout()") Log Out
             span.list-icon--right([innerHtml]="':outbox_tray:' | emojione")
-    //- Academy indicator 
-    .nav__btn-wrap.hidden-sm-down(*ngIf="academyState && academyState.academies && academyState.academies.length > 0")
-      .academy-plate(
-          title="Hero Academy", 
-          *ngIf="academyState.academies", 
-          (click)="showAcademyDropdown = !showAcademyDropdown",
-          [class.has-multiple]="academyState.academies.length > 1"
-          )
-        .icon.icon-academy-plate
-        .academy-plate__initials([ngClass]="[ 'length-' + currentAcademy.abbreviation.length ]") {{ currentAcademy.abbreviation }}
-        .icon.icon-caret.down
-      .avatar__drop-down.list-group([class.visible]="showAcademyDropdown")
-        .arrow
-        button.list-group-item.list-group-item-action(*ngFor="let academy of academyState.academies; let i = index", (click)="_auth.setCurrentAcademy(i); showAcademyDropdown = false")
-          | {{ academy.name }} ({{academy.abbreviation}})
-
     //- Project Info (Desktop & Mobile)
-    .nav-bar__project-data(*ngIf="showProjectInfo && currentProject && currentProject._id")
-      .group-label {{ currentProject.label }} &ensp;
-        span.badge.badge-pill([ngClass]="[ liveCount > 1 ? 'badge-primary' : 'badge-secondary']") {{ liveCount }} Reading
-      pre.btn((click)="showShareCodeModal()", title="Display group code")
-        span([innerHtml]="':key:' | emojione") 
-        | &nbsp;{{ currentProject.code }}
-
+    .nav-bar__project-data
+      ng-container(*ngIf="showProjectInfo && currentProject && currentProject._id")
+        //- Heat Vision Status
+        .nav__btn-slider__wrap.hover--tooltip
+          .nav__btn-slider(
+              [class.expanded]="sliderBtnExpanded['heat']",
+              [class.loading]="sliderBtnLoading['heat']",
+              [class.has-action]="projectOwner._id == user._id"
+              )
+            ng-container(*ngIf="projectOwner._id == user._id")
+              i.icon.icon-vision-flame((click)="toggleSlider('heat')")
+                .icon-pill-status
+              .btn-slider__value.hover-parent((click)="toggleHeatVision(false)") 
+                .hover-show--inline-block(style="width: 85px; text-align:center;") Turn {{ currentProject.heat_vision ? 'On' : 'Off' }}
+                .hover-hide Heat Vision {{ currentProject.heat_vision ? 'On' : 'Off' }}
+            ng-container(*ngIf="projectOwner._id != user._id")
+              i.icon.icon-vision-flame.inactive((click)="toggleSlider('heat')")
+                .icon-pill-status
+              .btn-slider__value
+                | Heat Vision {{ currentProject.heat_vision ? 'On' : 'Off' }}
+          .tooltip.tooltip--bottom
+            .tooltip-title {{ currentProject.heat_vision ? "Heat Vision on, comments visible" : "Heat Vision off, comments hidden" }}
+        //- Group Label
+        .nav__btn-slider__wrap.hover--tooltip
+          .nav__btn-slider([class.expanded]="sliderBtnExpanded['group']", (click)="toggleSlider('group')")
+            i.icon.icon-group
+              .icon-pill-status
+            .btn-slider__value
+              | {{ currentProject.label }}
+          .tooltip.tooltip--bottom
+            .tooltip-title Group
+            .tooltip-text([class.tooltip-text--wide]="currentProject.label.length > 25") {{ currentProject.label }}
+        //- Key Code
+        .nav__btn-slider__wrap.hover--tooltip
+          .nav__btn-slider.has-action([class.expanded]="sliderBtnExpanded['code']")
+            i.icon.icon-key((click)="toggleSlider('code')")
+              .icon-pill-status
+            .btn-slider__value.code((click)="showShareCodeModal = true") {{ currentProject.code }}
+          .tooltip.tooltip--bottom
+            .tooltip-title Group Code
+      //- Academy Info
+      .nav__btn-slider__wrap(*ngIf="academyState && academyState.academies && academyState.academies.length > 0")
+        .nav__btn-slider.has-action(
+            [class.expanded]="sliderBtnExpanded['academy']"
+          )
+          i.icon.icon-academy-plate.hover--tooltip((click)="toggleSlider('academy')")
+            .icon-pill-status
+            .tooltip.tooltip--bottom(style="top: calc(100% + 27px)")
+              .tooltip-title Hero Academy Member
+          .btn-slider__value((click)="showAcademyDropdown = !showAcademyDropdown") 
+            | {{ currentAcademy.abbreviation }}
+        .btn-slider__drop-down.list-group([class.visible]="showAcademyDropdown")
+          .arrow
+          button.list-group-item.list-group-item-action(*ngFor="let academy of academyState.academies; let i = index", (click)="_auth.setCurrentAcademy(i); showAcademyDropdown = false")
+            | {{ academy.name }} ({{academy.abbreviation}})
     //- New Reading actions
     .nav__btn-wrap
       //- Share button: Desktop
@@ -177,7 +210,12 @@
         href="#") Go!
   #projectCodeError.invalid-feedback(*ngIf="errorObject.invalidCode", [innerHtml]="errorObject.invalidCode | emojione")
 
-share-code([showOpenReading]="_route.snapshot.queryParams.readingCodeModal")
+share-code(
+  *ngIf="showShareCodeModal",
+  [class.show]="showShareCodeModal", 
+  [showOnNewReading]="isNewReading",
+  (closeModal)="showShareCodeModal = false"
+)
 referral-modal([showReferral]="showReferralModal", (hideReferral)="showReferralModal=false", (exerciseCoupon)="useCoupon($event)")
 hero-subscribe-modal.modal-will-fade(
   *ngIf="showHeroSubModal",

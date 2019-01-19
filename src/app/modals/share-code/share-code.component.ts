@@ -12,8 +12,8 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class ShareCodeComponent implements OnInit, OnDestroy {
 
-  @Input()
-  private showOpenReading: boolean
+  @Input() private showOnNewReading: boolean
+  @Output() closeModal: EventEmitter<any> = new EventEmitter()
   
   private codeLetters: any
   private subscriptions: Subscription[] = []
@@ -58,9 +58,5 @@ export class ShareCodeComponent implements OnInit, OnDestroy {
   private navDashboard() {
     this._util.shareCodeModalClose()
     this.router.navigate(['dashboard'])
-  }
-
-  private closeModal() {
-    this.router.navigate(['.'], { relativeTo: this.route, queryParams: {} })
   }
 }

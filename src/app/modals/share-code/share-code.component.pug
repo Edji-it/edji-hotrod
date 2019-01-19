@@ -1,27 +1,37 @@
-.modal-will-fade([class.show]="showOpenReading", *ngIf="currentProject && currentProject.code")
-  .modal
-    .modal-dialog(role="document")
-      .modal-content
-        .modal-header
-          h4.modal-title Reading Group Code
-          button.close.btn-icon--round(
-              (click)="closeModal()",
-              type="button",
-              data-dismiss="modal",
-              aria-label="Close"
-             )
-            span(aria-hidden="true") &times;
-        .modal-body.modal-body-share
-          p.text-secondary 
-            | Join this Reading by going to&ensp;
-            a.link([routerLink]="'/' + currentProject.code", target="_blank") edji.it/{{ currentProject.code }}
-            | &ensp;or entering the code on your dashboard.
-          .share-code--block
-            .share-code--code(*ngFor="let codeLetter of currentProject.code.split('')")
-              span.sc--c([ngClass]="[ isNumber(codeLetter) ? 'sc--c__green' : '' ]") {{ codeLetter }}
-            .share-code--label 
-              span([innerHtml]="':key:' | emojione")
-              | &nbsp;
-              | {{ currentProject.label }}
-        .modal-footer
-          button#shareCodeModalClose.btn.btn-secondary.btn-share-footer__full(type="button", (click)="closeModal()") Close
+#shareCodeModal.modal.fade-in.show(*ngIf="currentProject && currentProject.code")
+  .modal-dialog(role="document")
+    .modal-content
+      .modal-header
+        h4.modal-title 
+          i.icon.icon-group
+          |  Group Code
+        button.close.btn-icon--round(
+            (click)="closeModal.emit()",
+            type="button",
+            data-dismiss="modal",
+            aria-label="Close"
+            )
+          span(aria-hidden="true") &times;
+      .modal-body.modal-body-share
+        p.text-secondary 
+          | Join this Reading by going to&ensp;
+          a.link([routerLink]="'/' + currentProject.code", target="_blank") edji.it/{{ currentProject.code }}
+          | &ensp;or entering the code on your dashboard.
+        .share-code--block
+          .share-code--code(*ngFor="let codeLetter of currentProject.code.split('')")
+            span.sc--c([ngClass]="[ isNumber(codeLetter) ? 'sc--c__green' : '' ]") {{ codeLetter }}
+          .share-code--label 
+            i.icon.icon-key
+            | &nbsp;for&nbsp;
+            b {{ currentProject.label }}
+        div(*ngIf="showOnNewReading")
+          hr
+          .text-center
+            .small
+              b Tip:
+              | &nbsp;Show this pop-up again by clicking:
+            .nav__btn-slider.has-action.expanded(style="pointer-events:none;")
+              i.icon.icon-key
+              .btn-slider__value {{ currentProject.code }}
+      .modal-footer
+        button#shareCodeModalClose.btn.btn-secondary(type="button", (click)="closeModal.emit()") Close

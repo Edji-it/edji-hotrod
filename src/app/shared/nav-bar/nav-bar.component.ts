@@ -40,12 +40,12 @@ export class NavBarComponent implements OnInit, OnDestroy {
     public liveCountSubscription: Subscription
     public showCommentCounts: boolean = false
     public showReferralModal: boolean = false
+    // Share Code modal properties
+    public showShareCodeModal: boolean = false
+    public isNewReading: boolean = false
+    // Toggle mobile navigation display
     public mNavShow: boolean = false
-    public isMobile: boolean = false
-    public powersLoading: {
-      heatVision?: boolean
-    } = { }
-    public tooltipPlacement: string = 'right'
+    // "Butter Bar" alerts for group code entry
     public messages: {
       invalidCode?: boolean,
       serviceError?: boolean,
@@ -83,6 +83,21 @@ export class NavBarComponent implements OnInit, OnDestroy {
     // Copy Variables
     public heroBtnCopy: string = "Upgrade to Hero"
 
+    // Nav Slider Button expansion booleans
+    public sliderBtnExpanded: {
+      heat?: boolean,
+      group?: boolean,
+      code?: boolean,
+      academy?: boolean
+    } = {
+      // Default expand code
+      code: true
+    }
+    // Nav Slider Button loading states
+    public sliderBtnLoading: {
+      heat?: boolean
+    } = { }
+
     constructor(
           public _route: ActivatedRoute,
           public  _auth: AuthService, 
@@ -117,13 +132,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
           })
       )
 
-      if (window.screen.availWidth < 768) {
-        this.isMobile = true
-        this.tooltipPlacement = 'bottom'
-      } else {
-        this.isMobile = false
-      }
-
       if (this._router.url.indexOf('/project') > -1) {
         this.currentPage = "project"
       } else if (this._router.url.indexOf('/home') > -1) {
@@ -144,6 +152,12 @@ export class NavBarComponent implements OnInit, OnDestroy {
         ),
         this._route.params.subscribe((params) => {
           this.secretSwitches = this._secret.processSwitches(params)
+        }),
+        this._route.queryParams.subscribe((queryParams) => {
+          if (queryParams.readingCodeModal) {
+            this.showShareCodeModal = true
+            this.isNewReading = true
+          }
         })
       )
       
@@ -278,12 +292,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
     //   }
     // }
 
-    showShareCodeModal() {
-      let currentParams = Object.assign({}, this._route.snapshot.queryParams)
-      let newParams = Object.assign(currentParams, { readingCodeModal: true })
-      this._router.navigate(['.'], { relativeTo: this._route, queryParams: newParams })
-    }
-
     /**
    * Validates project and then navigates to project if valid
    * @param code The project's short code
@@ -392,6 +400,50 @@ export class NavBarComponent implements OnInit, OnDestroy {
       default:
         return 0
     }
+  }
+
+  /**
+   * Toggle slider btn by key
+   * @param key String key for slider btn
+   */
+  toggleSlider(key: string) : void {
+    // Track usage
+    this.angulartics.eventTrack.next({ 
+      action: 'navBar_sliderToggle_' + key, 
+      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
+    })
+
+    this.sliderBtnExpanded[key] = !this.sliderBtnExpanded[key]
+  }
+
+  /**
+   * Toggle Heat Vision
+   */
+  public toggleHeatVision(toggleTo: boolean): void {
+    // Do not attempt if user does not own project
+    if(this.projectOwner._id != this.user._id) {
+      return
+    }
+
+    this.angulartics.eventTrack.next({ 
+      action: 'navBar_heatVision_toggle' + toggleTo, 
+      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
+    })
+    
+    // set heat vision to loading
+    this.sliderBtnLoading.heat = true
+
+    this._projects.update({ 'heat_vision': toggleTo }, this.currentProject._id)
+      .pipe(take(1))
+      .subscribe((project) => {
+        // Live update users once save is successful
+        this._socket.toggleHeatVision({ all: toggleTo })
+        // Allow a moment for changes to propagate to users
+        setTimeout(() => {
+          // stop heat vision loading
+          this.sliderBtnLoading.heat = false
+        }, 500)
+      })
   }
 }
 
