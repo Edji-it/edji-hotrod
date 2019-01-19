@@ -1,0 +1,173 @@
+// Nav styles used outside the nav component
+
+.nav__btn-slider__wrap {
+	display: inline-block;
+	width: auto;
+	height: 100%;
+	position: relative;
+
+	.nav__btn-slider + &, & + & {
+		// margin in between sliders only
+		margin-left: 5px;
+	}
+}
+
+.nav__btn-slider {
+	$sliderHeight: 34px;
+	$sliderBorderSize: 1px;
+
+	display: inline-block;
+	height: $sliderHeight;
+	width: auto;
+	max-width: $sliderHeight;
+	border-radius: $sliderHeight/2;
+	cursor: pointer;
+	margin-top: ($navHeight - $sliderHeight)/2;
+	margin-bottom: ($navHeight - $sliderHeight)/2;
+	transition: all 300ms ease-in, background 0ms linear, color 0ms linear, box-shadow 0ms linear;
+	white-space: nowrap;
+	background-color: transparent;
+	// Preserves spacing until expanded style applied
+	border: $sliderBorderSize solid transparent;
+
+	& + & {
+		// margin in between sliders only
+		margin-left: 5px;
+	}
+
+	& .icon {
+		display: inline-block;
+		height: $sliderHeight - (2*$sliderBorderSize);
+		width: $sliderHeight - (2*$sliderBorderSize);
+		border-radius: 50%;
+		background-color: #f4f4f4;
+		background-size: 60%;
+		// Relative for badge positioning
+		position: relative;
+		overflow: visible;
+		
+		&:hover, &:focus {
+			background-color: #f9f9f9;
+		}
+	}
+
+	& .btn-slider-badge {
+		font-style: normal;
+		font-size: 9px;
+		position: absolute;
+		left: $sliderHeight;
+		transform: translateX(-75%);
+		top: -2px;
+		z-index: $zMid + 1;
+		opacity: 1;
+		transition: opacity 200ms linear;
+	}
+
+	&:hover, &.expanded {
+		background-color:#f9f9f9;
+
+		& .btn-slider-badge {
+			opacity: 0;
+		}
+	}
+
+	& .btn-slider__value {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		display: inline-block;
+		line-height: $sliderHeight - (2*$sliderBorderSize);
+		font-size: 12px;
+		font-weight: 500;
+		// color: $dark-gray;
+		vertical-align: top;
+		text-align: left;
+		border-collapse: collapse;
+		transition: all 300ms ease-in, background 0ms linear, color 0ms linear;
+		// Default 0 width, unless expanded
+		max-width: 0px;
+		padding: 0px;
+
+		&.code {
+			font-family: 'Courier New', Courier, monospace;
+			font-weight: 600;
+		}
+
+		&.with-pill {
+			padding-top: 5px !important;
+			line-height: 12px;
+
+			& .badge-pill {
+				display: block;
+				margin-top: 3px;
+			}
+		}
+	}
+
+	// Loading display
+	&.loading {
+		pointer-events: none;
+
+		// Disable default loader
+		&::after {
+			display: none;
+		}
+
+		&, & > * {
+			opacity: 1;
+		}
+
+		& .icon {
+			background-image: url('/assets/images/loading-smaller-dark.svg');
+		}
+	}
+
+	// Expanded display
+	&.expanded {
+		border-collapse: collapse;
+		border: 1px solid #f1f1f1;
+
+		& .icon {
+			background-color: #ffffff;
+		}
+	}
+
+	// If expanding button
+	&.has-action {
+
+		&.expanded {
+			// box-shadow: 0px 3px 0px -1px #ffbc41;
+			box-shadow: 0 4px 2px -2px rgba($btnPrimaryColor,0.5);
+			background-color: $btnPrimaryBg;
+			border: 1px solid $btnPrimaryColor;
+
+			& .icon {
+				background-color: rgba(255,255,255,0.5);
+			}
+
+			&:hover {
+				box-shadow: 0 0px 15px 0px rgba($btnPrimaryFocusColor,0.75);
+				background: $btnPrimaryFocusColor;
+				color: #fff;
+			}
+		}
+
+		// &:hover {
+		// 	box-shadow: 0px 0px 15px 0px rgba(#ffbc41, 0.5);
+		// 	background-color: #fff;
+		// }
+	}
+
+	// expanded state
+	&.expanded {
+		max-width: 180px !important;
+
+		& .btn-slider__value {
+			max-width: (180px - $sliderHeight) !important;		
+			padding: 0px 12px 0px 8px;
+		}
+	}
+
+	// &:hover, &:focus {
+	// 	background: #f0f0f0;
+	// }
+}

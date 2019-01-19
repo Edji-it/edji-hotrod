@@ -40,9 +40,12 @@ export class NavBarComponent implements OnInit, OnDestroy {
     public liveCountSubscription: Subscription
     public showCommentCounts: boolean = false
     public showReferralModal: boolean = false
+    // Share Code modal properties
+    public showShareCodeModal: boolean = false
+    public isNewReading: boolean = false
+    // Toggle mobile navigation display
     public mNavShow: boolean = false
-    public isMobile: boolean = false
-    public tooltipPlacement: string = 'right'
+    // "Butter Bar" alerts for group code entry
     public messages: {
       invalidCode?: boolean,
       serviceError?: boolean,
@@ -129,13 +132,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
           })
       )
 
-      if (window.screen.availWidth < 768) {
-        this.isMobile = true
-        this.tooltipPlacement = 'bottom'
-      } else {
-        this.isMobile = false
-      }
-
       if (this._router.url.indexOf('/project') > -1) {
         this.currentPage = "project"
       } else if (this._router.url.indexOf('/home') > -1) {
@@ -156,6 +152,12 @@ export class NavBarComponent implements OnInit, OnDestroy {
         ),
         this._route.params.subscribe((params) => {
           this.secretSwitches = this._secret.processSwitches(params)
+        }),
+        this._route.queryParams.subscribe((queryParams) => {
+          if (queryParams.readingCodeModal) {
+            this.showShareCodeModal = true
+            this.isNewReading = true
+          }
         })
       )
       
@@ -289,12 +291,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
     //     }, 500)
     //   }
     // }
-
-    showShareCodeModal() {
-      let currentParams = Object.assign({}, this._route.snapshot.queryParams)
-      let newParams = Object.assign(currentParams, { readingCodeModal: true })
-      this._router.navigate(['.'], { relativeTo: this._route, queryParams: newParams })
-    }
 
     /**
    * Validates project and then navigates to project if valid

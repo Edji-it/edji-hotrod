@@ -112,7 +112,7 @@
           .nav__btn-slider.has-action([class.expanded]="sliderBtnExpanded['code']")
             i.icon.icon-key((click)="toggleSlider('code')")
               .icon-pill-status
-            .btn-slider__value.code((click)="showShareCodeModal()") {{ currentProject.code }}
+            .btn-slider__value.code((click)="showShareCodeModal = true") {{ currentProject.code }}
           .tooltip.tooltip--bottom
             .tooltip-title Group Code
       //- Academy Info
@@ -211,7 +211,12 @@
         href="#") Go!
   #projectCodeError.invalid-feedback(*ngIf="errorObject.invalidCode", [innerHtml]="errorObject.invalidCode | emojione")
 
-share-code([showOpenReading]="_route.snapshot.queryParams.readingCodeModal")
+share-code(
+  *ngIf="showShareCodeModal",
+  [class.show]="showShareCodeModal", 
+  [showOnNewReading]="isNewReading",
+  (closeModal)="showShareCodeModal = false"
+)
 referral-modal([showReferral]="showReferralModal", (hideReferral)="showReferralModal=false", (exerciseCoupon)="useCoupon($event)")
 hero-subscribe-modal.modal-will-fade(
   *ngIf="showHeroSubModal",
