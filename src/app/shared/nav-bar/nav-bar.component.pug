@@ -91,7 +91,7 @@
                 .hover-show--inline-block(style="width: 85px; text-align:center;") Turn {{ currentProject.heat_vision ? 'Off' : 'On' }}
                 .hover-hide Heat Vision {{ currentProject.heat_vision ? 'On' : 'Off' }}
             ng-container(*ngIf="projectOwner._id != user._id")
-              i.icon.icon-vision-flame.inactive((click)="toggleSlider('heat')")
+              i.icon.icon-vision-flame((click)="toggleSlider('heat')")
                 .icon-pill-status
               .btn-slider__value
                 | Heat Vision {{ currentProject.heat_vision ? 'On' : 'Off' }}
