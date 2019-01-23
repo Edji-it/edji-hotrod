@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
 
 // Project Dependencies
-import { AuthService, ProjectService, SocketService, PowerToggle, ReadingService, SecretSwitchesService, UtilToolService, Secrets, AcademyState, Academy } from '../../_services'
+import { AuthService, ProjectService, SocketService, PowerToggle, ReadingService, SecretSwitchesService, UtilToolService, Secrets, AcademyState, Academy, MessageService, MessageToast } from '../../_services'
 import { User } from '../datatypes';
 
 @Component({
@@ -98,6 +98,8 @@ export class NavBarComponent implements OnInit, OnDestroy {
       heat?: boolean
     } = { }
 
+    public toasts: MessageToast[] = []
+
     constructor(
           public _route: ActivatedRoute,
           public  _auth: AuthService, 
@@ -107,7 +109,8 @@ export class NavBarComponent implements OnInit, OnDestroy {
           private _projects: ProjectService,
           private _readings: ReadingService,
           public _util: UtilToolService,
-          private _secret: SecretSwitchesService
+          private _secret: SecretSwitchesService,
+          private _messages: MessageService
         ) {
         if (window.location.host.indexOf('dev.edji.it') > -1) {
           this.isDevDeployed = true
@@ -129,6 +132,9 @@ export class NavBarComponent implements OnInit, OnDestroy {
             } else {
               this.currentAcademy = {}
             }
+          }),
+          this._messages.toaster.subscribe((toasts) => {
+            this.toasts = toasts
           })
       )
 
@@ -438,6 +444,10 @@ export class NavBarComponent implements OnInit, OnDestroy {
           this.sliderBtnLoading.heat = false
         }, 500)
       })
+  }
+
+  public dismissToast(toastId: string) : void {
+    this._messages.dismissToast(toastId)
   }
 }
 

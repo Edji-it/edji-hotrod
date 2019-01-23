@@ -12,7 +12,8 @@ import {
     ProjectService, 
     ReadingService, 
     SocketService, 
-    UtilToolService 
+    UtilToolService, 
+    MessageService
 } from '../_services' 
 import { CommentPermissions, EdjiComment, Project, Reading, Feedback } from './../shared/datatypes'
 
@@ -152,7 +153,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         private _util: UtilToolService,
         public _comments: CommentService,
         private angulartics: Angulartics2,
-        private _audio: AudioService
+        private _audio: AudioService,
+        private _messages: MessageService
         // private _hotkeysService: HotkeysService
     ) {
         // this._hotkeysService.add(new Hotkey('t', (event: KeyboardEvent): boolean => {
@@ -335,6 +337,13 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             this._socket.heatVisionUpdates.subscribe((heatToggle) => {
                 this.project.heat_vision = heatToggle.heatVision.all
                 this.setLinePositions()
+
+                // We send the message here because we only care to show it when the user has the reading loaded
+                this._messages.sendToast({
+                    message: "Heat vision is now " + (heatToggle.heatVision.all ? 'ON' : 'OFF'),
+                    type: "heat",
+                    id: "uniqueid"
+                })
             })
         )
 

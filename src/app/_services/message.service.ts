@@ -10,12 +10,22 @@ export class MessageService {
 
   private timerSubscription: Subscription
 
+  // The Truth
+  public toasts: MessageToast[] = [{
+    message: "Hello World!",
+    type: "heat",
+    id: "AAAA"
+  }]
+  public breadToToast: BehaviorSubject<MessageToast[]>
+  public toaster: Observable<MessageToast[]>
+
   constructor(
     private _http: HttpClient,
     private angulartics: Angulartics2, 
     private _auth: AuthService
   ) {
-    
+    this.breadToToast = new BehaviorSubject(this.toasts)
+    this.toaster = this.breadToToast.asObservable()
   }
 
   /**
@@ -25,6 +35,24 @@ export class MessageService {
   public init(): void {
     // Start the interval call to the server to retrieve messages every set interval (1 minute right now)
     this.subscribeToRefresh()
+  }
+
+  public sendToast(toast: MessageToast) : void {
+    // Attach date for received
+    toast.date = new Date()
+
+    this.toasts.unshift(toast)
+    this.breadToToast.next(this.toasts)
+  }
+
+  public dismissToast(toastId: string) : void {
+    for (let i = 0; i < this.toasts.length; i++) {
+      if (this.toasts[i].id == toastId) {
+        this.toasts.splice(i, 1)
+        break
+      }
+    }
+    this.breadToToast.next(this.toasts)
   }
 
   /**
@@ -84,4 +112,11 @@ interface GetMessagesResponse {
     key: String, 
     added_at_time: String
   }[]
+}
+
+export interface MessageToast {
+  message: string,
+  type: string,
+  id: string,
+  date ?: Date
 }

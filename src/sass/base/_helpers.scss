@@ -93,3 +93,40 @@
         }   
     }
 }
+
+// Responseive hidden utitilies
+.hidden-lg-up {
+    @media(min-width:$lg-min-device) {
+        display: none !important;
+    }
+}
+
+.hidden-md-up {
+    @media(min-width:$md-min-device) {
+        display: none !important;
+    }
+}
+
+.hidden-sm-up {
+    @media(min-width:$sm-min-device) {
+        display: none !important;
+    }
+}
+
+.hidden-lg-down {
+    @media(max-width:$lg-max-device) {
+        display: none !important;
+    }
+}
+
+.hidden-md-down {
+    @media(max-width:$md-max-device) {
+        display: none !important;
+    }
+}
+
+.hidden-sm-down {
+    @media(max-width:$sm-max-device) {
+        display: none !important;
+    }
+}
