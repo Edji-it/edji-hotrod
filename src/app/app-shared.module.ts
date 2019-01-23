@@ -7,7 +7,6 @@ import { NgModule } from "@angular/core"
 import { CommonModule } from "@angular/common"
 import { RouterModule, PreloadAllModules } from "@angular/router"
 import { FormsModule, ReactiveFormsModule } from "@angular/forms"
-import { ToastModule } from 'primeng/toast';
 
 // Project Dependencies
 import { NavBarComponent, FooterComponent, FollowTag, FeedbackComponent } from "./shared"
@@ -27,7 +26,6 @@ import { ReferralModalComponent, HeroSubscribeComponent, RequestAcademyModal, Li
 import { HotChartHzbarComponent } from './shared/hot-chart-hzbar/hot-chart-hzbar.component'
 import { HotChartGaugeComponent } from './shared/hot-chart-gauge/hot-chart-gauge.component'
 import { PromoPageComponent } from './promo/promo.component'
-import { MessageService } from "primeng/components/common/messageservice";
 
 let SHARED_DECLARATIONS = [
     AddClassPipe,
@@ -53,8 +51,7 @@ let SHARED_DECLARATIONS = [
 let SHARED_IMPORTS = [
     CommonModule,
     FormsModule,
-    ReactiveFormsModule,
-    ToastModule
+    ReactiveFormsModule
 ]
 
 @NgModule({
@@ -79,12 +76,6 @@ let SHARED_IMPORTS = [
     exports: [
         SHARED_DECLARATIONS,
         SHARED_IMPORTS
-    ],
-    /**
-     * Services provided globally
-     */
-    providers: [
-        MessageService
     ]
 })
 export class SharedModule {}
