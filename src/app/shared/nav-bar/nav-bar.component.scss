@@ -358,15 +358,15 @@ div.sliding-pane.from-left.slide-in {
 }
 
 .nav__join-code {
-	max-height: 60%;
-	margin-top: $navPadY;
+	// max-height: 60%;
+	margin-top: $navPadY - 5px;
 	// margin-right: .5em;
 	float: right;
 }
 
 .nav__join-code--under {
-	max-height: 60%;
-	margin-top: $navPadY;
+	// max-height: 60%;
+	margin-top: $navPadY - 5px;
 	margin-right: .5em;
 	margin-bottom: .5em;
 }
