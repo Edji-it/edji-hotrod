@@ -11,21 +11,22 @@ export class MessageService {
   private timerSubscription: Subscription
 
   // The Truth
+  
   public toasts: MessageToast[] = [{
     message: "Hello World!",
-    type: "heat",
+    type: "default",
     id: "AAAA"
   }]
-  public breadToToast: BehaviorSubject<MessageToast[]>
-  public toaster: Observable<MessageToast[]>
+  public toastUpdatesSource: BehaviorSubject<MessageToast[]>
+  public toastUpdates: Observable<MessageToast[]>
 
   constructor(
     private _http: HttpClient,
     private angulartics: Angulartics2, 
     private _auth: AuthService
   ) {
-    this.breadToToast = new BehaviorSubject(this.toasts)
-    this.toaster = this.breadToToast.asObservable()
+    this.toastUpdatesSource = new BehaviorSubject(this.toasts)
+    this.toastUpdates = this.toastUpdatesSource.asObservable()
   }
 
   /**
@@ -37,22 +38,40 @@ export class MessageService {
     this.subscribeToRefresh()
   }
 
+  /**
+   * Send new or update toast message
+   * @param toast Message and associated display data to send
+   * - To send update, send with id that matches existing toast
+   */
   public sendToast(toast: MessageToast) : void {
+    let isUpdate
     // Attach date for received
     toast.date = new Date()
 
-    this.toasts.unshift(toast)
-    this.breadToToast.next(this.toasts)
+    // Check if toast with ID exists
+    for (let i = 0; i < this.toasts.length; i++) {
+      if (this.toasts[i].id === toast.id) {
+        // Replace toast with update
+        this.toasts[i] = toast
+        isUpdate = true
+        break
+      }
+    }
+    // Push new toasts to the front of the list
+    if (!isUpdate) {
+      this.toasts.unshift(toast)
+    }
+    this.toastUpdatesSource.next(this.toasts)
   }
 
   public dismissToast(toastId: string) : void {
     for (let i = 0; i < this.toasts.length; i++) {
-      if (this.toasts[i].id == toastId) {
+      if (this.toasts[i].id === toastId) {
         this.toasts.splice(i, 1)
         break
       }
     }
-    this.breadToToast.next(this.toasts)
+    this.toastUpdatesSource.next(this.toasts)
   }
 
   /**
@@ -116,7 +135,7 @@ interface GetMessagesResponse {
 
 export interface MessageToast {
   message: string,
-  type: string,
+  type: string, // "info", "heat-on", "heat-off"
   id: string,
   date ?: Date
 }

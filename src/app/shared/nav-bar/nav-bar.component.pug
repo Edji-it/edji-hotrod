@@ -221,9 +221,9 @@ share-code(
 .toast-wrap
   .toast.show(*ngFor="let toast of toasts", role="alert", aria-live="assertive", aria-atomic="true")
     .toast-header
-      i.icon.icon-vision-flame.rounded.mr-2
-      strong {{ toast.message }}
-      //- small {{ toast.date }}
+      i.icon.rounded([ngClass]="[toastIconClass(toast.type)]")
+      .toast-header__text([innerHtml]="toast.message")
+      //- small {{ toast.date | edjidate:'timeAgo' }}
       button.ml-2.mb-1.close(type="button", (click)="dismissToast(toast.id)", data-dismiss="toast", aria-label="Close")
         span(aria-hidden="true") &times;
     //- .toast-body {{ toast.message }}

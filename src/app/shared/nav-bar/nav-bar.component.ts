@@ -133,7 +133,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
               this.currentAcademy = {}
             }
           }),
-          this._messages.toaster.subscribe((toasts) => {
+          this._messages.toastUpdates.subscribe((toasts) => {
             this.toasts = toasts
           })
       )
@@ -448,6 +448,15 @@ export class NavBarComponent implements OnInit, OnDestroy {
 
   public dismissToast(toastId: string) : void {
     this._messages.dismissToast(toastId)
+  }
+
+  public toastIconClass(toastType: string) : string {
+    let toastTypeMap = {
+      'heat-on' : 'icon-vision-flame',
+      'heat-off' : 'icon-vision-flame inactive',
+      'info' : 'icon-play'
+    }
+    return toastTypeMap[toastType] || toastTypeMap['info']
   }
 }
 

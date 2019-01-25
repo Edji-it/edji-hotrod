@@ -336,12 +336,13 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.subscriptions.push(
             this._socket.heatVisionUpdates.subscribe((heatToggle) => {
                 this.project.heat_vision = heatToggle.heatVision.all
+                let heatStatus = heatToggle.heatVision.all ? 'on' : 'off'
                 this.setLinePositions()
-
+                
                 // We send the message here because we only care to show it when the user has the reading loaded
                 this._messages.sendToast({
-                    message: "Heat vision is now " + (heatToggle.heatVision.all ? 'ON' : 'OFF'),
-                    type: "heat",
+                    message: "Heat vision is now <b>" + heatStatus + "</b>",
+                    type: "heat-" + heatStatus,
                     id: "uniqueid"
                 })
             })
