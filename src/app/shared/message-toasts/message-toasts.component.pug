@@ -1,0 +1,18 @@
+//- Toasts should follow Bootstrap display specs:
+//- https://getbootstrap.com/docs/4.2/components/toasts/
+.toast-wrap
+  .toast.show(
+      *ngFor="let toast of toastObservable | async", 
+      role="alert", 
+      aria-live="assertive",
+      aria-atomic="true"
+    )
+    .toast-header
+      i.icon.rounded([ngClass]="[toastIconClass(toast.type)]")
+      .toast-header__text([innerHtml]="toast.message")
+      //- If we wish to timestamps:
+      //- small {{ toast.date | edjidate:'timeAgo' }}
+      button.ml-2.mb-1.close(type="button", (click)="dismissToast(toast.id)", data-dismiss="toast", aria-label="Close")
+        span(aria-hidden="true") &times;
+    //- For providing a longer message:
+    //- .toast-body {{ toast.message }}

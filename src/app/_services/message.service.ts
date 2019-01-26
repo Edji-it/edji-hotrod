@@ -5,20 +5,21 @@ import { Angulartics2 } from 'angulartics2'
 import { AuthService } from './auth.service'
 import { map, take } from 'rxjs/operators'
 
+const TOAST_TIME: number = 10000
 @Injectable()
 export class MessageService {
 
   private timerSubscription: Subscription
 
-  // The Truth
-  
-  public toasts: MessageToast[] = [{
-    message: "Hello World!",
-    type: "default",
-    id: "AAAA"
-  }]
+  /**
+   * Message Toasts are sent/updated via Observable
+   * (!) Use _messages.sendToast() to display a message toast
+   */
+  public toasts: MessageToast[] = []
   public toastUpdatesSource: BehaviorSubject<MessageToast[]>
   public toastUpdates: Observable<MessageToast[]>
+  //- Hold timers by the toast id
+  private toastTimers: {} = {}
 
   constructor(
     private _http: HttpClient,
@@ -47,6 +48,18 @@ export class MessageService {
     let isUpdate
     // Attach date for received
     toast.date = new Date()
+
+    // Set timeout
+    if (!toast.requireDismiss) {
+      // Cancel existing timer if this is a toast *update*
+      if (this.toastTimers[toast.id]) {
+        clearTimeout(this.toastTimers[toast.id])
+      }
+      // Begin timer for dismissing toast
+      this.toastTimers[toast.id] = setTimeout(() => {
+        this.dismissToast(toast.id)
+      }, TOAST_TIME)
+    }
 
     // Check if toast with ID exists
     for (let i = 0; i < this.toasts.length; i++) {
@@ -137,5 +150,7 @@ export interface MessageToast {
   message: string,
   type: string, // "info", "heat-on", "heat-off"
   id: string,
-  date ?: Date
+  date ?: Date,
+  limitToPage ?: string, // identify route where message type should show
+  requireDismiss ?: boolean
 }

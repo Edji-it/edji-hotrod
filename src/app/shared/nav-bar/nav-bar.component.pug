@@ -211,24 +211,21 @@
         href="#") Go!
   #projectCodeError.invalid-feedback(*ngIf="errorObject.invalidCode", [innerHtml]="errorObject.invalidCode | emojione")
 
+//- ************************************************
+//- Components in Nav for display on multiple pages
+//- ************************************************
+//- Group share code modal
 share-code(
   *ngIf="showShareCodeModal",
   [class.show]="showShareCodeModal", 
   [showOnNewReading]="isNewReading",
   (closeModal)="showShareCodeModal = false"
 )
-
-.toast-wrap
-  .toast.show(*ngFor="let toast of toasts", role="alert", aria-live="assertive", aria-atomic="true")
-    .toast-header
-      i.icon.rounded([ngClass]="[toastIconClass(toast.type)]")
-      .toast-header__text([innerHtml]="toast.message")
-      //- small {{ toast.date | edjidate:'timeAgo' }}
-      button.ml-2.mb-1.close(type="button", (click)="dismissToast(toast.id)", data-dismiss="toast", aria-label="Close")
-        span(aria-hidden="true") &times;
-    //- .toast-body {{ toast.message }}
-
+//- Message toast display
+edji-message-toasts
+//- Referrals
 referral-modal([showReferral]="showReferralModal", (hideReferral)="showReferralModal=false", (exerciseCoupon)="useCoupon($event)")
+//- Hero Subscribe/Pay
 hero-subscribe-modal.modal-will-fade(
   *ngIf="showHeroSubModal",
   [class.show]="showHeroSubModal", 

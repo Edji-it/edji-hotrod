@@ -109,8 +109,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
           private _projects: ProjectService,
           private _readings: ReadingService,
           public _util: UtilToolService,
-          private _secret: SecretSwitchesService,
-          private _messages: MessageService
+          private _secret: SecretSwitchesService
         ) {
         if (window.location.host.indexOf('dev.edji.it') > -1) {
           this.isDevDeployed = true
@@ -132,9 +131,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
             } else {
               this.currentAcademy = {}
             }
-          }),
-          this._messages.toastUpdates.subscribe((toasts) => {
-            this.toasts = toasts
           })
       )
 
@@ -444,19 +440,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
           this.sliderBtnLoading.heat = false
         }, 500)
       })
-  }
-
-  public dismissToast(toastId: string) : void {
-    this._messages.dismissToast(toastId)
-  }
-
-  public toastIconClass(toastType: string) : string {
-    let toastTypeMap = {
-      'heat-on' : 'icon-vision-flame',
-      'heat-off' : 'icon-vision-flame inactive',
-      'info' : 'icon-notice'
-    }
-    return toastTypeMap[toastType] || toastTypeMap['info']
   }
 }
 
