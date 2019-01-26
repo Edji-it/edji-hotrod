@@ -69,7 +69,7 @@ $navy: #072649;
 }
 
 .promo-text {
-    @media (max-width: $sm-max-device) {
+    @media (max-width: $small-screen) {
         margin-bottom: 25px;
     }
 }
@@ -147,7 +147,7 @@ $navy: #072649;
 }
 
 .promo-button__row {
-    @media (max-width: $sm-max-device) {
+    @media (max-width: $small-screen) {
         margin-top: 60px;
     }
 }
@@ -166,7 +166,7 @@ li.promo-list {
 }
 
 .promo-row__no-btm-padding {
-    @media (max-width: $sm-min-device) {
+    @media (max-width: $small-screen) {
         padding-bottom: 0;
     }
 }
@@ -198,7 +198,7 @@ li.promo-list {
 .nopadding__min-screen {
     padding-left: 45px;
     padding-right: 45px;
-    @media (max-width: $sm-max-device) {
+    @media (max-width: $small-screen) {
         padding: 0;
     }
 }
@@ -206,7 +206,7 @@ li.promo-list {
 .full-width__min-screen {
     height: 100%;
     width: 100%;
-    @media (max-width: $sm-max-device) {
+    @media (max-width: $small-screen) {
         height: 250px;
         width: initial;
     }
