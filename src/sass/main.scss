@@ -61,6 +61,7 @@ $seamlessPlaceholderColor: #cdcdcd;
 @import 'sliding-pane';
 @import 'modals';
 @import 'medium-editor';
+@import 'badges';
 @import 'cards';
 @import 'jumbotron';
 @import 'item-list';
@@ -362,22 +363,6 @@ input[type=text].input-noborder, input[type=password].input-noborder, input[type
 
 .StripeElement--webkit-autofill {
   background-color: #fefde5 !important;
-}
-
-.badge-success {
-	background-color: #87d87c;
-}
-
-.badge-secondary {
-	background-color: #aaa;
-}
-
-.badge-info {
-	background-color: #ef832e;
-}
-
-.badge-button {
-	cursor: pointer;
 }
 
 // Pagination overrides

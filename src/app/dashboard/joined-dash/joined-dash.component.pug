@@ -3,7 +3,7 @@ h1.joined-header.no-flow(for="projectCodeInput") Joined Readings
     span.icon.icon-circle.icon-info i
 form.pb-4.hidden-md-up([formGroup]="codeForm", (ngSubmit)="addSession(codeForm.value)")
   .input-group.input-group-lg.pb-2
-    input#projectCodeInputJoinDash(
+    input#projectCodeInputJoinDash.form-control(
       name="ProjectCodeInput", 
       [formControl]="codeForm.controls['projectCode']", 
       type="text", 
@@ -11,7 +11,7 @@ form.pb-4.hidden-md-up([formGroup]="codeForm", (ngSubmit)="addSession(codeForm.v
       placeholder="🔑 Code", 
       aria-describedby="add-project-code"
     )
-    span.input-group-btn
+    .input-group-append
       button#buttonJoinProject.btn.btn-primary(
         [class.loading]="joinLoading", 
         type="submit", 
