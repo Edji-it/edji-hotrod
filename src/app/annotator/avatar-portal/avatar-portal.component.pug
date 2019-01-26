@@ -32,5 +32,5 @@
   .comment__button--mobile.avatar__reply(*ngIf="repliesById[comment._id] && repliesById[comment._id].length>0")
 
 //- Mobile Icon
-.comment__button--mobile.hidden-md-up((tap)='triggerCommentPane(false)', [ngClass]="[ active ? 'active' : '' ]")
-.comment__count--mobile.hidden-md-up {{ lineCount }}
+.comment__button--mobile.hidden-lg-up((tap)='triggerCommentPane(false)', [ngClass]="[ active ? 'active' : '' ]")
+.comment__count--mobile.hidden-lg-up {{ lineCount }}
