@@ -454,7 +454,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
     let toastTypeMap = {
       'heat-on' : 'icon-vision-flame',
       'heat-off' : 'icon-vision-flame inactive',
-      'info' : 'icon-play'
+      'info' : 'icon-notice'
     }
     return toastTypeMap[toastType] || toastTypeMap['info']
   }
