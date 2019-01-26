@@ -2,8 +2,10 @@ import { Injectable } from '@angular/core'
 import { Observable, BehaviorSubject, Subscription, interval } from 'rxjs'
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http'
 import { Angulartics2 } from 'angulartics2'
-import { AuthService } from './auth.service'
 import { map, take } from 'rxjs/operators'
+
+// Project Dependencies
+import { AuthService } from './auth.service'
 
 const TOAST_TIME: number = 10000
 @Injectable()
@@ -52,9 +54,7 @@ export class MessageService {
     // Set timeout
     if (!toast.requireDismiss) {
       // Cancel existing timer if this is a toast *update*
-      if (this.toastTimers[toast.id]) {
-        clearTimeout(this.toastTimers[toast.id])
-      }
+      this.cancelToastTimer(toast.id)
       // Begin timer for dismissing toast
       this.toastTimers[toast.id] = setTimeout(() => {
         this.dismissToast(toast.id)
@@ -77,7 +77,14 @@ export class MessageService {
     this.toastUpdatesSource.next(this.toasts)
   }
 
+  /**
+   * Dismiss Toast Message
+   * @param toastId Toast for message to dismiss
+   */
   public dismissToast(toastId: string) : void {
+    // Cancel timer, if exists
+    this.cancelToastTimer(toastId)
+    // Remove toast
     for (let i = 0; i < this.toasts.length; i++) {
       if (this.toasts[i].id === toastId) {
         this.toasts.splice(i, 1)
@@ -85,6 +92,16 @@ export class MessageService {
       }
     }
     this.toastUpdatesSource.next(this.toasts)
+  }
+
+  /**
+   * Cancel Toast timer, if it exists
+   * @param toastId Toast of timer to cancel
+   */
+  public cancelToastTimer(toastId: string): void {
+    if (this.toastTimers[toastId]) {
+      clearTimeout(this.toastTimers[toastId])
+    }
   }
 
   /**

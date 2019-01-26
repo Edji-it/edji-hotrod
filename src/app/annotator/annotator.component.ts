@@ -252,6 +252,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                                     return this.user._id == feedback.user_id
                                 })
                             }
+                            // Display heat vision status on initial load
+                            this.showHeatVisionToast(this.project.heat_vision)
                         }
                     },
                     (error) => {
@@ -336,15 +338,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.subscriptions.push(
             this._socket.heatVisionUpdates.subscribe((heatToggle) => {
                 this.project.heat_vision = heatToggle.heatVision.all
-                let heatStatus = heatToggle.heatVision.all ? 'on' : 'off'
                 this.setLinePositions()
                 
                 // We send the message here because we only care to show it when the user has the reading loaded
-                this._messages.sendToast({
-                    message: "Heat vision is now <b>" + heatStatus + "</b>",
-                    type: "heat-" + heatStatus,
-                    id: "uniqueid"
-                })
+                this.showHeatVisionToast(this.project.heat_vision)
             })
         )
 
@@ -377,6 +374,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     ngOnDestroy() {
         this._readings.clear()
         this.subscriptions.forEach((sub) => { sub.unsubscribe() })
+
+        // Clear heat vision message
+        this._messages.dismissToast("heat")
     }
     
     /**
@@ -432,6 +432,21 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         for (let i=0;i<questions.length;i++) {
             questions[i].question_number = i+1
         }
+    }
+
+    /**
+     * Display heat vision toast
+     * @param heatVisionOn
+     */
+    private showHeatVisionToast(heatVisionOn: boolean) {
+        let heatStatus = heatVisionOn ? 'on' : 'off'
+        // Send toast via message service
+        this._messages.sendToast({
+            message: "Heat vision is now <b>" + heatStatus + "</b>",
+            type: "heat-" + heatStatus,
+            id: "heat",
+            limitToPage: "project"
+        })
     }
 
     hideCommentOptions(event ?): void {
