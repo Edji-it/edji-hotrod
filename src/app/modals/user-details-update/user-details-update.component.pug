@@ -8,17 +8,15 @@
       .modal-body
         div(*ngIf="identitySelect")
           p {{ modalHeadings.body }}
-          #accountTypeGroup.form-group.list-group
-              .form-check.list-group-item(*ngFor="let identity of identities")
-                label.custom-control.custom-checkbox([attr.for]="'input-' + identity.id", [attr.id]="identity.id")
+          #accountTypeGroup.input-group.py-2(*ngFor="let identity of identities")
+                .custom-control.custom-checkbox([attr.id]="identity.id")
                   input.custom-control-input(
                     [attr.id]="'input-' + identity.id",
                     type="checkbox",
                     [formControl]="userDetailsForm.controls['identities'].controls[identity.name]",
                     value=""
                   )
-                  span.custom-control-indicator
-                  span.custom-control-description(style="font-size:16px; margin: 0 5px;", [innerHtml]="identity.checkboxCopy | emojione")
+                  label.custom-control-label([attr.for]="'input-' + identity.id", style="font-size:16px; margin: 0 5px;", [innerHtml]="identity.checkboxCopy | emojione")
           .alert.alert-info(*ngIf="userDetailsForm.controls['identities'].dirty && userDetailsForm.controls['identities'].invalid") Please select at least one box!
           .alert.alert-success(*ngIf="messages.success", [innerHtml]=" ':heavy_check_mark: Thanks! Have fun reading with Edji!' | emojione ")
         div(*ngIf="!identitySelect")
@@ -33,15 +31,14 @@
             input#phoneInput(type="text", [formControl]="userDetailsForm.controls['phone']", tabindex="0", placeholder="123-456-7890")
             #msgPhoneIncorrect.alert.alert-info(*ngIf="userDetailsForm.controls['phone'].hasError('phoneIncorrect') && userDetailsForm.controls['phone'].dirty") We don't think that's a phone number...
           .form-group
-            label.custom-control.custom-checkbox([attr.for]="salesCanContact")
+            .custom-control.custom-checkbox()
                 input.custom-control-input(
-                  [attr.id]="salesCanContact",
+                  id="salesCanContact",
                   type="checkbox",
                   [formControl]="userDetailsForm.controls['sales_can_contact']",
                   value=""
                 )
-                span.custom-control-indicator
-                p.custom-control-description(style="padding-top:2px;") I am interested in learning more about Edji Academy for my school
+                label.custom-control-label(for="salesCanContact", style="padding-top:2px;") I am interested in learning more about Edji Academy for my school
       .modal-footer
         button#submitDetailsButton.btn.btn-primary(
           *ngIf="identitySelect && !messages.success", 

@@ -312,6 +312,16 @@ input.form-item--underline {
   }
 }
 
+
+// Custom Checkboxes
+label.custom-control-label {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 23px;
+  padding-bottom: 7px;
+  cursor: pointer;
+}
+
 tr.selectable {
   cursor: pointer;
 }
