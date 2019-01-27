@@ -82,6 +82,12 @@ $modalBodyBg: #fff;
     min-width: 30px;
     min-height: 30px;
   }
+
+  & .btn-icon--round {
+    margin-right: 1px;
+    margin-top: 0px;
+    padding: 0px;
+  }
 }
 
 .modal-footer {
