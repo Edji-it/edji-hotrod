@@ -340,6 +340,7 @@ tr.selectable {
   border: 2px solid $light-gray;
   border-radius: 16px;
   overflow: hidden;
+  cursor: pointer;
 
   & .emoji {
     filter: grayscale(100%);
