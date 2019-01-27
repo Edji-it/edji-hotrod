@@ -32,12 +32,12 @@
         .icon.icon-external
     //- Optional Title
     div(*ngIf="currentPage == 'project' || hideAccountOptions")
-      .nav-bar__heading.hidden-sm-down(*ngIf="!showProjectInfo")
+      .nav-bar__heading.hidden-md-down(*ngIf="!showProjectInfo")
         h1(
           *ngIf="pageTitle",
           title="{{ pageTitle }}"
           ) {{ pageTitle }}
-      .nav-bar__heading.hidden-sm-down(*ngIf="showProjectInfo")
+      .nav-bar__heading.hidden-md-down(*ngIf="showProjectInfo")
         h1.with-nav-sub(
           *ngIf="currentReading.title",
           title="{{ currentReading.title }}"
@@ -158,7 +158,7 @@
       button#saveDraftButtonMobile.btn.btn-clear.nav-bar__btn.hidden-md-up(*ngIf="canPublish", (click)="saveAction.emit()") Save
 
     //- Join Reading Code
-    .row.col-4.col-xl-5.nav__join-code.hidden-sm-down(*ngIf="(currentPage != 'project') && !canPublish && !hideAccountOptions")
+    .row.col-4.col-xl-5.nav__join-code.hidden-md-down(*ngIf="(currentPage != 'project') && !canPublish && !hideAccountOptions")
       .input-group.input-group-lg
         input#projectCodeInputNav.form-control(
           name="ProjectCodeInput", 
