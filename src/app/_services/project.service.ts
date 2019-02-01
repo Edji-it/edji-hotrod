@@ -644,7 +644,7 @@ export class ProjectService {
      * @param commentId (optional) If passed, will update comment with that ID
      */
     public saveComment(commentObj: EdjiComment) : Promise<any> {
-        let projectId : string = this.project._id;
+        let projectId : string = this.project._id
         let comment = Object.assign({}, commentObj)
 
         comment.project_id = projectId; // Tell the comment what project it's a part of
@@ -654,8 +654,6 @@ export class ProjectService {
         delete comment['new']
         delete comment['showAvatar']
         
-        // Get the url of this project that we're saving to.
-        let url = this._auth.getUrl() + '/projects/' + projectId + '/comments';
         if (!comment.user_id) {
             comment.user_id = this._auth.getUser()._id
         }
@@ -664,17 +662,12 @@ export class ProjectService {
         }
 
         let options = this._auth.getOptions()
-        let data = { comment: comment }
         // Add comment ID if passed
         // Tell other Project viewers comment changed, using Socket
         if (comment._id) {
-            data.comment['_id'] = comment._id;
-            url = url + '/' + comment._id
-            options['method'] = 'PUT'
-            this._socket.updateComment(data.comment, 'UPDATE', this.project._id);
+            this._socket.updateComment(comment, 'UPDATE', this.project._id);
         } else {
-            options['method'] = 'POST'
-            this._socket.updateComment(data.comment, 'CREATE', this.project._id);
+            this._socket.updateComment(comment, 'CREATE', this.project._id);
 
             // need to set a comment context to discern between comments and replies for pipo event
             let commentContext = 'comment'
@@ -696,23 +689,21 @@ export class ProjectService {
                 action_type: commentContext,
                 comment_type: comment.type,
                 reading_owner: this.project.owner_id
-              })
-
-              // fire an analytic event here for tracking purposes
-              this.angulartics.eventTrack.next({ 
+            })
+            // fire an analytic event here for tracking purposes
+            this.angulartics.eventTrack.next({ 
                 action: commentContext + '_' + comment.type + '_create', 
                 properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
-              })
+            })
         }
-
-        options['body'] = data
-
-        return this.http
-            .request(url, options)
-            .toPromise()
-            .then(this._auth.extractData)
-            .then((data) => { return data.comment; })
-    } // public saveComment
+        return this.http.put(
+            this._auth.getUrl() + '/api/v1/projects/' + projectId + '/comments',
+            comment,
+            this._auth.getOptions()
+        )
+        .toPromise()
+        .then(this._auth.extractData)
+    }
 
     /**
      * Deletes comment via service, then updates local Project object 
@@ -766,7 +757,7 @@ export class ProjectService {
      * @param answerObj Answer of EdjiComment datatype
      */
     public saveAnswer(answerObj: EdjiComment) : Promise<any> {
-        let projectId : string = this.project._id;
+        let projectId : string = this.project._id
         let answer = Object.assign({}, answerObj)
 
         answer.project_id = projectId; // Tell the answer what project it's a part of
@@ -777,7 +768,6 @@ export class ProjectService {
         delete answer['showAvatar']
         
         // Get the url of this project that we're saving to.
-        let url = this._auth.getUrl() + '/projects/' + projectId + '/answers';
         if (!answer.user_id) {
             answer.user_id = this._auth.getUser()._id
         }
@@ -786,17 +776,12 @@ export class ProjectService {
         }
 
         let options = this._auth.getOptions()
-        let data = { answer: answer }
         // Add comment ID if passed
         // Tell other Project viewers comment changed, using Socket
         if (answer._id) {
-            data.answer['_id'] = answer._id;
-            url = url + '/' + answer._id
-            options['method'] = 'PUT'
-            this._socket.updateComment(data.answer, 'UPDATE', this.project._id)
+            this._socket.updateComment(answer, 'UPDATE', this.project._id)
         } else {
-            options['method'] = 'POST'
-            this._socket.updateComment(data.answer, 'CREATE', this.project._id)
+            this._socket.updateComment(answer, 'CREATE', this.project._id)
 
             // add the comment creation event to pipo
             this._academy.pipoEvent({
@@ -813,21 +798,20 @@ export class ProjectService {
                 comment_type: answer.type,
                 reading_owner: this.project.owner_id
               })
-
               // fire an analytic event here for tracking purposes
               this.angulartics.eventTrack.next({ 
                 action: 'answer_' + answer.type + '_create', 
                 properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
               })
         }
-
-        options['body'] = data
-        return this.http
-            .request(url, options)
-            .toPromise()
-            .then(this._auth.extractData)
-            .then((data) => { return data.answer; })
-    } // public saveAnswer
+        return this.http.put(
+            this._auth.getUrl() + '/api/v1/projects/' + projectId + '/answers',
+            answer,
+            this._auth.getOptions()
+        )
+        .toPromise()
+        .then(this._auth.extractData)
+    }
 
     /**
      * Deletes answer via service, then updates local Project object 
