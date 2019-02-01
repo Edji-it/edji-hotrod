@@ -17,7 +17,6 @@ export class MessageService {
    * Message Toasts are sent/updated via Observable
    * (!) Use _messages.sendToast() to display a message toast
    */
-  public toasts: MessageToast[] = []
   public toastUpdatesSource: BehaviorSubject<MessageToast[]>
   public toastUpdates: Observable<MessageToast[]>
   //- Hold timers by the toast id
@@ -28,7 +27,7 @@ export class MessageService {
     private angulartics: Angulartics2, 
     private _auth: AuthService
   ) {
-    this.toastUpdatesSource = new BehaviorSubject(this.toasts)
+    this.toastUpdatesSource = new BehaviorSubject([])
     this.toastUpdates = this.toastUpdatesSource.asObservable()
   }
 
@@ -48,6 +47,7 @@ export class MessageService {
    */
   public sendToast(toast: MessageToast) : void {
     let isUpdate
+    let toasts = this.toastUpdatesSource.value
     // Attach date for received
     toast.date = new Date()
 
@@ -62,19 +62,19 @@ export class MessageService {
     }
 
     // Check if toast with ID exists
-    for (let i = 0; i < this.toasts.length; i++) {
-      if (this.toasts[i].id === toast.id) {
+    for (let i = 0; i < toasts.length; i++) {
+      if (toasts[i].id === toast.id) {
         // Replace toast with update
-        this.toasts[i] = toast
+        toasts[i] = toast
         isUpdate = true
         break
       }
     }
     // Push new toasts to the front of the list
     if (!isUpdate) {
-      this.toasts.unshift(toast)
+      toasts.unshift(toast)
     }
-    this.toastUpdatesSource.next(this.toasts)
+    this.toastUpdatesSource.next(toasts)
   }
 
   /**
@@ -82,16 +82,17 @@ export class MessageService {
    * @param toastId Toast for message to dismiss
    */
   public dismissToast(toastId: string) : void {
+    let toasts = this.toastUpdatesSource.value
     // Cancel timer, if exists
     this.cancelToastTimer(toastId)
     // Remove toast
-    for (let i = 0; i < this.toasts.length; i++) {
-      if (this.toasts[i].id === toastId) {
-        this.toasts.splice(i, 1)
+    for (let i = 0; i < toasts.length; i++) {
+      if (toasts[i].id === toastId) {
+        toasts.splice(i, 1)
         break
       }
     }
-    this.toastUpdatesSource.next(this.toasts)
+    this.toastUpdatesSource.next(toasts)
   }
 
   /**
