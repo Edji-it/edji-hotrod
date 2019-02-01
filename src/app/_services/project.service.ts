@@ -605,11 +605,11 @@ export class ProjectService {
      */
     public update(updateObj: any, projectId: string): Observable<any> {
         return this.http
-            .put([this._auth.getUrl(), 'projects', projectId].join("/"), { project: updateObj }, this._auth.getOptions())
+            .put(this._auth.getUrl() + '/api/v1/projects/' + projectId, updateObj, this._auth.getOptions())
             .pipe(
                 map((data) => {
                     if (data && data.json()) {
-                        let updatedProperties = data.json() && data.json().updated
+                        let updatedProperties = data.json()
                         for(let key of Object.keys(updatedProperties)) {
                             this.project[key] = updatedProperties[key]
                         }
@@ -854,7 +854,7 @@ export class ProjectService {
             }))
             .toPromise()
             .then(this._auth.extractData);
-    }//  public deleteAnswer(answer): Promise<any>
+    }
 
     /**
      * API call to add a user (of any type) to the project
@@ -864,11 +864,11 @@ export class ProjectService {
      */
     public addUserToProject(projectId: string): Observable<any> {
         return this.http.put(
-            [this._auth.getUrl(), 'projects', projectId, 'user_id'].join('/'),
+            this._auth.getUrl() + '/api/v1/projects/' + projectId + '/students',
             {},
             this._auth.getOptions()
-        ) //this.http.put
-    } // public addUserToProject(projectId: string): Observable<any>
+        )
+    }
 
     /**
      * Generates the "commentByPos" array, and pushes out to Subscribers
