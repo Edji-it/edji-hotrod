@@ -440,13 +440,22 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
      */
     private showHeatVisionToast(heatVisionOn: boolean) {
         let heatStatus = heatVisionOn ? 'on' : 'off'
+        let heatMessage = this.isGroupTeacher() ? "You have turned Heat Vision" : "Your teacher has turned Heat Vision"
         // Send toast via message service
         this._messages.sendToast({
-            message: "Heat vision is now <b>" + heatStatus + "</b>",
+            message: heatMessage + " <b>" + heatStatus + "</b>",
             type: "heat-" + heatStatus,
             id: "heat",
             limitToPage: "project"
         })
+    }
+
+    /**
+     * Is group owner?
+     * @return boolean: is current user the owner of the active reading/group
+     */
+    private isGroupTeacher() : boolean {
+        return (this.project.teacher_id === this.user._id)
     }
 
     hideCommentOptions(event ?): void {
