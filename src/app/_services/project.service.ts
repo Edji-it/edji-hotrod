@@ -582,7 +582,7 @@ export class ProjectService {
      * @param takes a Project object with the new label
      */
     public create(readingId: string, project: any) {
-        project.reading_id = readingId;
+        project.reading_id = readingId
         if (project.code) { project.code = project.code.toLowerCase() }
         
         return this.http
@@ -590,9 +590,9 @@ export class ProjectService {
             .pipe(
                 map((data) => {
                     if (data && data.json()) {
-                        this.project = data.json().project;
-                        this.currentProjectSource.next(this.project);
-                        return this.project;
+                        this.project = data.json()
+                        this.currentProjectSource.next(this.project)
+                        return this.project
                     }
                 })
             )
