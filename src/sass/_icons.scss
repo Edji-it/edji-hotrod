@@ -373,7 +373,7 @@
 .icon-vision-flame {
     @include icon('icon-vision-flame.svg');
 
-    &.inactive {
+    &.inactive, .inactive & {
         filter: grayscale(100%);
     }
 }
