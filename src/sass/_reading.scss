@@ -530,11 +530,6 @@ article.content {
 
 .reading-page {
 	transition: transform $slidingPaneTime linear;
-	@media(max-width: $md-max-device) {
-		&.sliding-out {
-			transform: translate3d( calc(100% - 20px), 0%, -1px);
-		}
-	}
 	&:not(.sliding-out) {
 		transform: translate3d(0, 0, 0);
 	}
@@ -543,6 +538,9 @@ article.content {
 	// padding: 40px 60px 50px 35px; 
 	@media(max-width: $medium-screen) {
 		padding-left: 60px;
+		&.sliding-out {
+			transform: translate3d( calc(100% - 20px), 0%, -1px);
+		}
 	}
 }
 

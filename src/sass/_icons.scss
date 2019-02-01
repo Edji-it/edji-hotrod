@@ -394,6 +394,10 @@
     @include icon('icon-pill-expand.svg');
 }
 
+.icon-notice {
+    @include icon('icon-wave.svg');
+}
+
 .icon-pill-status {
     opacity: 0;
     pointer-events: none;
