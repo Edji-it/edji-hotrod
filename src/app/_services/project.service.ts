@@ -585,9 +585,8 @@ export class ProjectService {
         project.reading_id = readingId;
         if (project.code) { project.code = project.code.toLowerCase() }
         
-
         return this.http
-            .post(this._auth.getUrl() + '/projects/', { 'project' : project }, this._auth.getOptions())
+            .post(this._auth.getUrl() + '/api/v1/projects/', project, this._auth.getOptions())
             .pipe(
                 map((data) => {
                     if (data && data.json()) {
