@@ -12,7 +12,8 @@ import {
     ProjectService, 
     ReadingService, 
     SocketService, 
-    UtilToolService 
+    UtilToolService, 
+    MessageService
 } from '../_services' 
 import { CommentPermissions, EdjiComment, Project, Reading, Feedback } from './../shared/datatypes'
 
@@ -152,7 +153,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         private _util: UtilToolService,
         public _comments: CommentService,
         private angulartics: Angulartics2,
-        private _audio: AudioService
+        private _audio: AudioService,
+        private _messages: MessageService
         // private _hotkeysService: HotkeysService
     ) {
         // this._hotkeysService.add(new Hotkey('t', (event: KeyboardEvent): boolean => {
@@ -250,6 +252,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                                     return this.user._id == feedback.user_id
                                 })
                             }
+                            // Display heat vision status on initial load
+                            this.showHeatVisionToast(this.project.heat_vision)
                         }
                     },
                     (error) => {
@@ -335,6 +339,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             this._socket.heatVisionUpdates.subscribe((heatToggle) => {
                 this.project.heat_vision = heatToggle.heatVision.all
                 this.setLinePositions()
+                
+                // We send the message here because we only care to show it when the user has the reading loaded
+                this.showHeatVisionToast(this.project.heat_vision)
             })
         )
 
@@ -367,6 +374,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     ngOnDestroy() {
         this._readings.clear()
         this.subscriptions.forEach((sub) => { sub.unsubscribe() })
+
+        // Clear heat vision message
+        this._messages.dismissToast("heat")
     }
     
     /**
@@ -422,6 +432,30 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         for (let i=0;i<questions.length;i++) {
             questions[i].question_number = i+1
         }
+    }
+
+    /**
+     * Display heat vision toast
+     * @param heatVisionOn
+     */
+    private showHeatVisionToast(heatVisionOn: boolean) {
+        let heatStatus = heatVisionOn ? 'on' : 'off'
+        let heatMessage = this.isGroupTeacher() ? "You have turned Heat Vision" : "Your teacher has turned Heat Vision"
+        // Send toast via message service
+        this._messages.sendToast({
+            message: heatMessage + " <b>" + heatStatus + "</b>",
+            type: "heat-" + heatStatus,
+            id: "heat",
+            limitToPage: "project"
+        })
+    }
+
+    /**
+     * Is group owner?
+     * @return boolean: is current user the owner of the active reading/group
+     */
+    private isGroupTeacher() : boolean {
+        return (this.project.teacher_id === this.user._id)
     }
 
     hideCommentOptions(event ?): void {

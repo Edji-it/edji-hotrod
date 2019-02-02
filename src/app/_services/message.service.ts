@@ -2,20 +2,33 @@ import { Injectable } from '@angular/core'
 import { Observable, BehaviorSubject, Subscription, interval } from 'rxjs'
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http'
 import { Angulartics2 } from 'angulartics2'
-import { AuthService } from './auth.service'
 import { map, take } from 'rxjs/operators'
 
+// Project Dependencies
+import { AuthService } from './auth.service'
+
+const TOAST_TIME: number = 10000
 @Injectable()
 export class MessageService {
 
   private timerSubscription: Subscription
+
+  /**
+   * Message Toasts are sent/updated via Observable
+   * (!) Use _messages.sendToast() to display a message toast
+   */
+  public toastUpdatesSource: BehaviorSubject<MessageToast[]>
+  public toastUpdates: Observable<MessageToast[]>
+  //- Hold timers by the toast id
+  private toastTimers: {} = {}
 
   constructor(
     private _http: HttpClient,
     private angulartics: Angulartics2, 
     private _auth: AuthService
   ) {
-    
+    this.toastUpdatesSource = new BehaviorSubject([])
+    this.toastUpdates = this.toastUpdatesSource.asObservable()
   }
 
   /**
@@ -25,6 +38,71 @@ export class MessageService {
   public init(): void {
     // Start the interval call to the server to retrieve messages every set interval (1 minute right now)
     this.subscribeToRefresh()
+  }
+
+  /**
+   * Send new or update toast message
+   * @param toast Message and associated display data to send
+   * - To send update, send with id that matches existing toast
+   */
+  public sendToast(toast: MessageToast) : void {
+    let isUpdate
+    let toasts = this.toastUpdatesSource.value
+    // Attach date for received
+    toast.date = new Date()
+
+    // Set timeout
+    if (!toast.requireDismiss) {
+      // Cancel existing timer if this is a toast *update*
+      this.cancelToastTimer(toast.id)
+      // Begin timer for dismissing toast
+      this.toastTimers[toast.id] = setTimeout(() => {
+        this.dismissToast(toast.id)
+      }, TOAST_TIME)
+    }
+
+    // Check if toast with ID exists
+    for (let i = 0; i < toasts.length; i++) {
+      if (toasts[i].id === toast.id) {
+        // Replace toast with update
+        toasts[i] = toast
+        isUpdate = true
+        break
+      }
+    }
+    // Push new toasts to the front of the list
+    if (!isUpdate) {
+      toasts.unshift(toast)
+    }
+    this.toastUpdatesSource.next(toasts)
+  }
+
+  /**
+   * Dismiss Toast Message
+   * @param toastId Toast for message to dismiss
+   */
+  public dismissToast(toastId: string) : void {
+    let toasts = this.toastUpdatesSource.value
+    // Cancel timer, if exists
+    this.cancelToastTimer(toastId)
+    // Remove toast
+    for (let i = 0; i < toasts.length; i++) {
+      if (toasts[i].id === toastId) {
+        toasts.splice(i, 1)
+        break
+      }
+    }
+    this.toastUpdatesSource.next(toasts)
+  }
+
+  /**
+   * Cancel Toast timer, if it exists
+   * @param toastId Toast of timer to cancel
+   */
+  public cancelToastTimer(toastId: string): void {
+    if (this.toastTimers[toastId]) {
+      clearTimeout(this.toastTimers[toastId])
+    }
   }
 
   /**
@@ -84,4 +162,13 @@ interface GetMessagesResponse {
     key: String, 
     added_at_time: String
   }[]
+}
+
+export interface MessageToast {
+  message: string,
+  type: string, // "info", "heat-on", "heat-off"
+  id: string,
+  date ?: Date,
+  limitToPage ?: string, // identify route where message type should show
+  requireDismiss ?: boolean
 }

@@ -312,6 +312,16 @@ input.form-item--underline {
   }
 }
 
+
+// Custom Checkboxes
+label.custom-control-label {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 23px;
+  padding-bottom: 7px;
+  cursor: pointer;
+}
+
 tr.selectable {
   cursor: pointer;
 }
@@ -326,9 +336,11 @@ tr.selectable {
 .form-check-btn {
   float: left;
   margin-right: 5px;
+  margin-bottom: 5px;
   border: 2px solid $light-gray;
   border-radius: 16px;
   overflow: hidden;
+  cursor: pointer;
 
   & .emoji {
     filter: grayscale(100%);

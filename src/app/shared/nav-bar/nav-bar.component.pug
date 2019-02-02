@@ -32,12 +32,12 @@
         .icon.icon-external
     //- Optional Title
     div(*ngIf="currentPage == 'project' || hideAccountOptions")
-      .nav-bar__heading.hidden-sm-down(*ngIf="!showProjectInfo")
+      .nav-bar__heading.hidden-md-down(*ngIf="!showProjectInfo")
         h1(
           *ngIf="pageTitle",
           title="{{ pageTitle }}"
           ) {{ pageTitle }}
-      .nav-bar__heading.hidden-sm-down(*ngIf="showProjectInfo")
+      .nav-bar__heading.hidden-md-down(*ngIf="showProjectInfo")
         h1.with-nav-sub(
           *ngIf="currentReading.title",
           title="{{ currentReading.title }}"
@@ -158,7 +158,7 @@
       button#saveDraftButtonMobile.btn.btn-clear.nav-bar__btn.hidden-md-up(*ngIf="canPublish", (click)="saveAction.emit()") Save
 
     //- Join Reading Code
-    .row.col-4.col-xl-5.nav__join-code.hidden-sm-down(*ngIf="(currentPage != 'project') && !canPublish && !hideAccountOptions")
+    .row.col-4.col-xl-5.nav__join-code.hidden-md-down(*ngIf="(currentPage != 'project') && !canPublish && !hideAccountOptions")
       .input-group.input-group-lg
         input#projectCodeInputNav.form-control(
           name="ProjectCodeInput", 
@@ -169,7 +169,7 @@
           [class.is-invalid]="errorObject.invalidCode"
           placeholder="🔑 Code", 
           aria-describedby="add-project-code")
-        span.input-group-btn
+        .input-group-append
           button#buttonJoinProject.btn.btn-primary(
             [class.loading]="joinLoading", 
             type="button", 
@@ -211,13 +211,21 @@
         href="#") Go!
   #projectCodeError.invalid-feedback(*ngIf="errorObject.invalidCode", [innerHtml]="errorObject.invalidCode | emojione")
 
+//- ************************************************
+//- Components in Nav for display on multiple pages
+//- ************************************************
+//- Group share code modal
 share-code(
   *ngIf="showShareCodeModal",
   [class.show]="showShareCodeModal", 
   [showOnNewReading]="isNewReading",
   (closeModal)="showShareCodeModal = false"
 )
+//- Message toast display
+edji-message-toasts([currentPage]="currentPage")
+//- Referrals
 referral-modal([showReferral]="showReferralModal", (hideReferral)="showReferralModal=false", (exerciseCoupon)="useCoupon($event)")
+//- Hero Subscribe/Pay
 hero-subscribe-modal.modal-will-fade(
   *ngIf="showHeroSubModal",
   [class.show]="showHeroSubModal", 

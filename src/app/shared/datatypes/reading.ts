@@ -20,7 +20,6 @@ export interface BaseReading {
   title: string,
   instructions?: string,
   owner_id?: string,
-  teacher_ids?: string[],
   public?: boolean,
   promoter_ids?: string[],
   source?: string,

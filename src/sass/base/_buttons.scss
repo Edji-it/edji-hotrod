@@ -9,7 +9,7 @@ button, .button, .btn { //, [class*='btn']
   cursor: pointer;
   display: inline-block;
   font-family: $base-font-family;
-  font-size: $base-font-size;
+  font-size: $base-font-size - 2px;
   -webkit-font-smoothing: antialiased;
   font-weight: 500;
   font-style: normal;
@@ -581,10 +581,6 @@ pre.btn {
 
 .input-group > .input-group-btn {
   margin-left: -3px;
-}
-// Small padding/offset adjustments
-.input-group-lg > .input-group-btn > .btn {
-  padding: 0.5rem 1.5rem;
 }
 
 // Coment action buttons

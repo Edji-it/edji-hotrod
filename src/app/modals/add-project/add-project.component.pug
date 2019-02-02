@@ -26,26 +26,21 @@
             .form-group.row()
                 label.col-12 Comment Types
                 .input-group.col-6
-                    label.custom-control.custom-checkbox
-                        input.custom-control-input(type='checkbox', [formControl]="projectForm.controls['emojiType']")
-                        span.custom-control-indicator
-                        span.custom-control-description Emoji Commenting
+                    .custom-control.custom-checkbox
+                        input#emojiCommenting.custom-control-input(type='checkbox', [formControl]="projectForm.controls['emojiType']")
+                        label.custom-control-label(for="emojiCommenting") Emoji Commenting
                 .input-group.col-6
-                    label.custom-control.custom-checkbox
-                        input.custom-control-input(type='checkbox', [formControl]="projectForm.controls['textType']")
-                        span.custom-control-indicator
-                        span.custom-control-description Text Commenting
+                    .custom-control.custom-checkbox
+                        input#textCommenting.custom-control-input(type='checkbox', [formControl]="projectForm.controls['textType']")
+                        label.custom-control-label(for="textCommenting") Text Commenting
                 .input-group.col-6
-                    label.custom-control.custom-checkbox
-                        input.custom-control-input(type='checkbox', [formControl]="projectForm.controls['audioType']")
-                        span.custom-control-indicator
-                        span.custom-control-description Audio Commenting
+                    .custom-control.custom-checkbox
+                        input#audioCommenting.custom-control-input(type='checkbox', [formControl]="projectForm.controls['audioType']")
+                        label.custom-control-label(for="audioCommenting") Audio Commenting
                 .input-group.col-6
-                    label.custom-control.custom-checkbox
-                        input.custom-control-input(type='checkbox', [formControl]="projectForm.controls['replyType']")
-                        span.custom-control-indicator
-                        span.custom-control-description
-                        | Comment Replies
+                    .custom-control.custom-checkbox
+                        input#replyCommenting.custom-control-input(type='checkbox', [formControl]="projectForm.controls['replyType']")
+                        label.custom-control-label(for="replyCommenting") Comment Replies
             div([class.hero-box]="!isHero")
                 .form-group.p-0(*ngIf="!isHero")
                     .row.no-gutters
