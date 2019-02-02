@@ -109,3 +109,25 @@ $modalBodyBg: #fff;
   // Required for scrolling modals
   margin-bottom: 100px;
 }
+
+.modal-video {
+  min-width: calc(100% - 60px);
+  
+  .modal-body {
+      position:relative;
+      padding:0px;
+  }
+    
+  .close {
+    position:absolute;
+    right: 0px;
+    top: -35px;
+    padding-left: 10px;
+    padding-right: 10px;
+    z-index:999;
+    font-size:2rem;
+    font-weight: normal;
+    color:#fff;
+    opacity:1;
+  }
+}

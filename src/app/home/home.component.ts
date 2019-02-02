@@ -27,20 +27,21 @@ import { AuthService, ProjectService } from '../_services'
 })
 export class HomeComponent implements OnInit, OnDestroy {
   // Set our default values
-  private projectCode: string;
-  private joinLoading: boolean = false;
+  private projectCode: string
+  private joinLoading: boolean = false
 
-  private subscriptions: Subscription[] = [];
+  private subscriptions: Subscription[] = []
 
   private errorObject: {
     "invalidCode"?: string,
     "loginFailed"?: string,
     "serverError"?: string
-  } = {};
+  } = {}
 
-  public showPassModal: boolean = false;
-  public tweetsLoaded: boolean = false;
-  private twitterRestyleAttempts = 0;
+  public showPassModal: boolean = false
+  public showPromoVideoModal: boolean = false
+  public tweetsLoaded: boolean = false
+  private twitterRestyleAttempts = 0
 
   // TypeScript public modifiers
   constructor(

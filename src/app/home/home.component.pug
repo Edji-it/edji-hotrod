@@ -32,15 +32,10 @@ nav-bar
   //- Container with Commenting and Heat Map info & images
   .container
     .row.jumbotron--guide-video
-      .col-md-8.mt-4
-        .guide-video-wrap
-          .embed-responsive.embed-responsive-16by9
-              iframe.embed-responsive-item(
-                  src="//www.youtube.com/embed/GPB8i8H8IBc",
-                  frameborder="0",
-                  allow="autoplay; encrypted-media"
-                  allowfullscreen
-              )
+      .col-md-8.mt-4.nopadding.text-center
+        .promo-video-thumb((click)="showPromoVideoModal = true")
+          .icon.icon-play
+          img(src="/assets/images/thumbnail-first-reading.jpg")
       .col-md-4.my-4(style="min-height:120px; padding-left: 0px; padding-right: 0px;")
         .col__center-content.guide-video-heading
           p.h1.mb-0 See how easy it is to create and share your first Edji Reading
@@ -127,3 +122,18 @@ nav-bar
     //- A catchy d3m0 reading button
 
 edji-reset-pass(*ngIf="showPassModal", (closeModal)="showPassModal = !showPassModal")
+//- Homepage video pop-up
+.modal.show(*ngIf="showPromoVideoModal", (click)="showPromoVideoModal = false")
+  .modal-dialog.modal-video
+    button.close(aria-label="close", (click)="showPromoVideoModal = false")
+      span &times;
+    .modal-content
+      .modal-body
+        .embed-responsive.embed-responsive-16by9
+          iframe.embed-responsive-item(
+              src="//www.youtube.com/embed/GPB8i8H8IBc?autoplay=1",
+              frameborder="0",
+              allow="autoplay; encrypted-media",
+              allowfullscreen
+          )
+      
