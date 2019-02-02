@@ -102,6 +102,7 @@ import { TeamPageComponent } from './team-page/team-page.component';
 export class MyHammerConfig extends HammerGestureConfig  {
   overrides = <any>{
       // override default gesture settings
+      //  Tap overrides for Chrome v71 sensitivity when making comments
       'tap': {
         time: 2000, // Maximum press time in ms.
         threshold: 100 //	While doing a tap some small movement is allowed.
