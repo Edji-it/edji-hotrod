@@ -99,11 +99,16 @@ import { ReadingRecapComponent } from './project-page/owner-tools/reading-recap/
 import { TeamPageComponent } from './team-page/team-page.component';
 
 // Configure Hammer.js
-// export class MyHammerConfig extends HammerGestureConfig  {
-//   overrides = <any>{
-//       'swipe': {velocity: 0.4, threshold: 20} // override default settings
-//   }
-// } // export class MyHammerConfig extends HammerGestureConfig 
+export class MyHammerConfig extends HammerGestureConfig  {
+  overrides = <any>{
+      // override default gesture settings
+      //  Tap overrides for Chrome v71 sensitivity when making comments
+      'tap': {
+        time: 2000, // Maximum press time in ms.
+        threshold: 100 //	While doing a tap some small movement is allowed.
+      } 
+  }
+} 
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -121,7 +126,7 @@ const APP_PROVIDERS = [
   BumblebeeService,
   { 
       provide: HAMMER_GESTURE_CONFIG, 
-      useClass: HammerGestureConfig 
+      useClass: MyHammerConfig 
   }
   // ,
   // { provide: ErrorHandler, useClass: SentryErrorHandler }
