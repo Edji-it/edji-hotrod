@@ -2,7 +2,8 @@
 
 @import '../../sass/base/variables';
 
-$topPromoMinHeight: 360px;
+$topPromoMinHeight: 250px;
+
 $phone-width-min: 0px;
 $phone-width: 480px;
 $tablet-width: 768px;
@@ -16,8 +17,12 @@ $tablet-width: 768px;
         height: $topPromoMinHeight;
         max-width: none !important;
         // offset image to give text space
-        margin-left: -120px;
+        // margin-left: -120px;
     }
+}
+
+.join-panel .col__center-fix {
+    min-height: $topPromoMinHeight;
 }
 
 .join-header {
@@ -50,7 +55,7 @@ $tablet-width: 768px;
 $navy: #072649;
 
 .promo-header {
-    font-size: 48px;
+    font-size: 42px;
     font-weight: 200;
     margin-bottom: 0px;
     line-height: 1.5em;
@@ -61,7 +66,7 @@ $navy: #072649;
 
     // Breakpoints need to be updated if copy changes!
     @media(max-width: 1050px) {
-        font-size: 42px;
+        font-size: 36px;
     }
     @media(max-width: 800px) {
         font-size: 32px;
@@ -110,6 +115,23 @@ $navy: #072649;
     }
     padding: 50px 0;
     text-align: center;
+}
+
+.value-prop-row {
+    padding-top: 2em;
+    padding-bottom: 2em;
+
+    & h2 {
+        line-height: 1.25em;
+    }
+
+    & img {
+        margin: 0px -1*$base-pad;
+        padding-top: 0.5em;
+        padding-bottom: 0.5em;
+        min-width: calc(100% + #{2*$base-pad});
+    }
+    
 }
 
 .join-panel {
