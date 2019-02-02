@@ -888,7 +888,8 @@ export class AuthService implements CanActivate {
         // this.legacyHttp.get([this.baseUrl, 'auth', 'google'].join("/")).pipe(take(1)).subscribe((res) => {
         //     // shouldn't actually get this, should just be a redirect
         // })
-        window.location.href = [this.baseUrl, 'auth', 'google'].join("/")
+        // window.location.href = [this.baseUrl, 'auth', 'google'].join("/")
+        document.location.href = [this.baseUrl, 'auth', 'google'].join("/")
     }
 
     /**
