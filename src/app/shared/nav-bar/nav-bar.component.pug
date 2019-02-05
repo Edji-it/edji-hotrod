@@ -202,7 +202,7 @@
       [(ngModel)]="projectCode", 
       placeholder="🔑 Code", 
       aria-describedby="add-project-code")
-    span.input-group-btn
+    .input-group-append
       button#buttonJoinProject.btn.btn-primary(
         [class.loading]="joinLoading", 
         type="button", 
