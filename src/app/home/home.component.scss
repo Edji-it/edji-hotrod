@@ -118,11 +118,12 @@ $navy: #072649;
 }
 
 .value-prop-row {
-    padding-top: 2em;
-    padding-bottom: 2em;
+    @extend .promo-row;
+    padding-bottom: 0px;
 
     & h2 {
         line-height: 1.25em;
+        margin-bottom: 1em;
     }
 
     & img {
@@ -130,6 +131,11 @@ $navy: #072649;
         padding-top: 0.5em;
         padding-bottom: 0.5em;
         min-width: calc(100% + #{2*$base-pad});
+    }
+
+    & p {
+        color: $dark-gray;
+        padding-left: 2em;
     }
     
 }
@@ -260,20 +266,24 @@ li.promo-list {
     position: relative;
 
     & .icon-play {
-        transition: transform;
-        height: 2em;
-        width: 2em;
+        transition: transform ease 200ms;
+        height: 5em;
+        width: 5em;
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate3d(-50%, -50%, 0);
+
+        background-size: 50% 50%;
+        border-radius: 50%;
+        background-color: rgba(0,0,0,0.25);
     }
 
     &:hover, &:focus, &:active {
         box-shadow: 0 0px 15px 0px rgba($btnPrimaryFocusColor,0.5);
 
         & .icon-play {
-            transform: scale(1.05) translate3d(-50%, -50%, 0);
+            transform: scale(1.1) translate3d(-48%, -48%, 0);
         }
     }
 
