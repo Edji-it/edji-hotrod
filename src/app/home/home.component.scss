@@ -2,7 +2,8 @@
 
 @import '../../sass/base/variables';
 
-$topPromoMinHeight: 360px;
+$topPromoMinHeight: 250px;
+
 $phone-width-min: 0px;
 $phone-width: 480px;
 $tablet-width: 768px;
@@ -16,8 +17,12 @@ $tablet-width: 768px;
         height: $topPromoMinHeight;
         max-width: none !important;
         // offset image to give text space
-        margin-left: -120px;
+        // margin-left: -120px;
     }
+}
+
+.join-panel .col__center-fix {
+    min-height: $topPromoMinHeight;
 }
 
 .join-header {
@@ -50,7 +55,7 @@ $tablet-width: 768px;
 $navy: #072649;
 
 .promo-header {
-    font-size: 48px;
+    font-size: 42px;
     font-weight: 200;
     margin-bottom: 0px;
     line-height: 1.5em;
@@ -61,7 +66,7 @@ $navy: #072649;
 
     // Breakpoints need to be updated if copy changes!
     @media(max-width: 1050px) {
-        font-size: 42px;
+        font-size: 36px;
     }
     @media(max-width: 800px) {
         font-size: 32px;
@@ -110,6 +115,29 @@ $navy: #072649;
     }
     padding: 50px 0;
     text-align: center;
+}
+
+.value-prop-row {
+    @extend .promo-row;
+    padding-bottom: 0px;
+
+    & h2 {
+        line-height: 1.25em;
+        margin-bottom: 1em;
+    }
+
+    & img {
+        margin: 0px -1*$base-pad;
+        padding-top: 0.5em;
+        padding-bottom: 0.5em;
+        min-width: calc(100% + #{2*$base-pad});
+    }
+
+    & p {
+        color: $dark-gray;
+        padding-left: 2em;
+    }
+    
 }
 
 .join-panel {
@@ -227,5 +255,39 @@ li.promo-list {
 
     @media (max-width: $tablet){
         // margin-bottom: 30px;
+    }
+}
+
+.promo-video-thumb {
+    cursor: pointer;
+    display: inline-block;
+    width: calc(100% - 60px);
+    // max-width: 250px;
+    position: relative;
+
+    & .icon-play {
+        transition: transform ease 200ms;
+        height: 5em;
+        width: 5em;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate3d(-50%, -50%, 0);
+
+        background-size: 50% 50%;
+        border-radius: 50%;
+        background-color: rgba(0,0,0,0.25);
+    }
+
+    &:hover, &:focus, &:active {
+        box-shadow: 0 0px 15px 0px rgba($btnPrimaryFocusColor,0.5);
+
+        & .icon-play {
+            transform: scale(1.1) translate3d(-48%, -48%, 0);
+        }
+    }
+
+    & img {
+        width: 100%;
     }
 }

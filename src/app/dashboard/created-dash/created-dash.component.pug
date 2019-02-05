@@ -101,7 +101,7 @@
       p.draft-card__date Last edited {{ draft.updatedAt | edjidate:'timeAgo':null:secondsAgo }}
 
 hot-login-req(*ngIf="showLoginReqModal", (closeModal)="showLoginReqModal = false")
-.modal.show(*ngIf="showNewReadingVideoModal")
+.modal.show(*ngIf="showNewReadingVideoModal", (click)="showNewReadingVideoModal = false")
   .modal-dialog.modal-video
     button.close(aria-label="close", (click)="showNewReadingVideoModal = false")
       span &times;
