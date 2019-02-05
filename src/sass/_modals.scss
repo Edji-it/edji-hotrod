@@ -112,6 +112,10 @@ $modalBodyBg: #fff;
 
 .modal-video {
   min-width: calc(100% - 60px);
+
+  @media(max-width: $tablet) {
+    min-width: calc(100% - 20px);
+  }
   
   .modal-body {
       position:relative;
