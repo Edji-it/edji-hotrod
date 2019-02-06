@@ -41,6 +41,13 @@ describe('Discover Feed', () => {
         browser.wait(EC.urlContains("discover"), 5000, "never arrived at Discover Feed");
     });
 
+    // Switch to the following view (not public)
+    it("should see readings in discover feed by default and switch to following view", () => {
+        browser.wait(EC.elementToBeClickable(discover.firstFeedReading), 5000, "never saw first reading in discover feed public view");
+        // View following feed
+        discover.filterFollowing.click()
+    });
+
     // Testbot follows no one by default
     it("should not see readings in following feed if not following anyone", () => {
         browser.wait(EC.presenceOf(discover.followEdjiMsg), 7500, "never saw message to follow Edji");
@@ -111,8 +118,6 @@ describe('Discover Feed', () => {
             // Got to Discover Feed
             sidebar.navDiscover.click();
             browser.wait(EC.urlContains("discover"), 5000, "never arrived at discover feed as sidekick user");
-            // View public/global feed
-            discover.filterPublic.click()
             browser.wait(EC.elementToBeClickable(discover.firstFeedReading), 5000)
             // Check title of most recent readings
             let foundTitle = element.all(by.css('.reading-title__text'))
