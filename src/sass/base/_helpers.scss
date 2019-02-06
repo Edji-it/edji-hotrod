@@ -68,3 +68,55 @@
     pointer-events: none;
     z-index: 5000;
 }
+
+// Whitespace helpers
+.ws {
+    &-nowrap {
+        white-space: nowrap;
+    }
+}
+
+// Show/hide on hover
+.hover-parent {
+    .hover-show--inline-block, .hover-show--block {
+        display: none;
+    }
+    &:hover {
+        & .hover-show--inline-block {
+            display: inline-block;
+        } 
+        & .hover-show--block {
+            display: block;
+        } 
+        & .hover-hide {
+            display: none;
+        }   
+    }
+}
+
+// Response hiders
+// Use as including (eg. hidden-md-down means hidden for (size medium - 1px) AND down)
+@mixin hidden-x-down($initial, $screenSize) {
+    .hidden-#{$initial}-down {
+        @media(max-width: #{$screenSize - 1px}) {
+            display: none !important;
+        }
+    }
+}
+@mixin hidden-x-up($initial, $screenSize) {
+    .hidden-#{$initial}-up {
+        @media(min-width: $screenSize) {
+            display: none !important;
+        }
+    }
+}
+// Create hidden and down classes (no need for xl-)
+@include hidden-x-down(xs, $small-screen);
+@include hidden-x-down(sm, $medium-screen);
+@include hidden-x-down(md, $large-screen);
+@include hidden-x-down(lg, $xl-screen);
+// Create hidden and up classes (no need for xs+)
+@include hidden-x-up(sm, $small-screen);
+@include hidden-x-up(md, $medium-screen);
+@include hidden-x-up(lg, $large-screen);
+@include hidden-x-up(xl, $xl-screen);

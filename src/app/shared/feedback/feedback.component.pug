@@ -19,20 +19,20 @@
               label(for="emailInput") Email
               input#emailInput(type="text", [placeholder]="userCopy.email", [formControl]="feedbackForm.controls['email']", tabindex="0")
               #msgEmailRequired.alert.alert-info(*ngIf="feedbackForm.controls['email'].hasError('required')")
-                strong Info&nbsp;
+                strong Email&nbsp;
                 | Let us know who to get back with!
               #msgEmailIncorrect.alert.alert-info(*ngIf="!feedbackForm.controls['email'].hasError('required') && feedbackForm.controls['email'].hasError('emailIncorrect') && feedbackForm.controls['email'].dirty")
-                strong Info&nbsp;
+                strong Invalid Email&nbsp;
                 | We're not sure that's a real email
 
-              label(for="feedbackInput") Tell us what's up!
+              label(for="feedbackInput") Message
               textarea#feedbackInput([formControl]="feedbackForm.controls['content']", maxlength="1000", rows="10", name="content", tabindex="0")
               #msgContentRequired.alert.alert-info(*ngIf="feedbackForm.controls['content'].hasError('required')")
-                strong Info&nbsp;
-                | Put some content with it!
+                strong Message Required&nbsp;
+                | Let us know why you are reaching out!
               
               #msgServerError.alert.alert-danger(*ngIf="errorObject.serverError")
-                strong Oh no!&nbsp;
+                strong Server Error!&nbsp;
                 | {{errorObject.serverError}}
           .modal-footer
               button.btn.btn-secondary(type="button", (click)="feedbackClose()") Cancel

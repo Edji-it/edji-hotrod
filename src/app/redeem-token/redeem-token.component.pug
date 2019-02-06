@@ -1,0 +1,44 @@
+nav-bar
+.gray
+.container-fluid
+  .row.navy-gradient.has-sparks
+    .sparks
+    .col-sm-3
+    .col-sm-6.col-pad.on-dark
+      h1.center.on-dark Reset your Edji {{ redeemCopy.name }}
+      br
+      ng-container(*ngIf="resetForm")
+        form([formGroup]="resetForm", (ngSubmit)="resetValue(resetForm.value)")
+          .form-group
+            label(for="passwordInput") {{ redeemCopy.name }}
+            input#passwordInput(type="password", [formControl]="resetForm.controls['field']", tabindex="0")
+            #msgNoPassword.alert.alert-danger(
+              *ngIf="resetForm.controls['field'].hasError('required') && (resetForm.controls['field'].dirty || submitted)"
+            ) Make sure to add your new {{ redeemCopy.name }}!
+            #msgShortPassword.alert.alert-warning(
+              *ngIf="resetForm.controls['field'].hasError('minlength') && submitted"
+            ) {{ redeemCopy.name }} must be at least 6 characters in length
+          .form-group
+            label(for="passwordConfirmInput") Confirm {{ redeemCopy.name }}
+            input#passwordConfirmInput(type="password", [formControl]="resetForm.controls['fieldConfirm']", tabindex="0")
+            #msgNoPasswordConfirm.alert.alert-danger(
+              *ngIf="resetForm.controls['fieldConfirm'].hasError('required') && (resetForm.controls['fieldConfirm'].dirty || submitted)"
+            ) Remember to confirm your {{ redeemCopy.name }}!
+            #msgPasswordMismatch.alert.alert-info(
+              *ngIf="resetForm.hasError('mismatch')"
+            ) Please make sure the {{ redeemCopy.name }}s match
+          .button__row
+            #msgFailure.alert.alert-danger(
+              *ngIf="serviceResponse.failure"
+            ) Please request another {{ redeemCopy.name }} link. The link used was invalid. Remember, they only last 24 hours.
+            #msgSuccess.alert.alert-success(
+              *ngIf="serviceResponse.success"
+            ) You've successfully changed your {{ redeemCopy.name }}! 
+              a([routerLink]="['/login']") Go to the login page
+            button#buttonLogin.btn.btn-primary(
+              type="submit", 
+              [class.loading]="isLoading", 
+              [disabled]="serviceResponse.success", 
+              name="Login", 
+              tabindex="0"
+            ) Reset {{ redeemCopy.name }}

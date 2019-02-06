@@ -370,6 +370,55 @@
     @include icon('icon-external-link.svg');
 }
 
+.icon-vision-flame {
+    @include icon('icon-vision-flame.svg');
+
+    &.inactive, .inactive & {
+        filter: grayscale(100%);
+    }
+}
+
+.icon-key {
+    @include icon('icon-key.svg');
+}
+
+.icon-group {
+    @include icon('icon-group.svg');
+}
+
+.icon-pill-collapse {
+    @include icon('icon-pill-collapse.svg');
+}
+
+.icon-pill-expand {
+    @include icon('icon-pill-expand.svg');
+}
+
+.icon-notice {
+    @include icon('icon-wave.svg');
+}
+
+.icon-pill-status {
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 3px);
+    transform: translateX(-50%);
+    width: 1em;
+    height: 1em;
+
+    @include icon('icon-pill-expand.svg');
+
+    .expanded & {
+        @include icon('icon-pill-collapse.svg');
+    }
+}
+
+.icon:hover .icon-pill-status {
+    opacity: 1;
+}
+
 // Acquired font awesome styles
 .fa {-moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;

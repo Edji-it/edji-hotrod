@@ -1,7 +1,49 @@
 nav-bar([showDashboardOptions]="true")
 .container.mt-4
     .row
-        .col-md-4.push-md-8
+        //- .col-md-4
+        //-     //- Empty Space
+        .col-md-8
+            h1.mb-1 Discover Readings
+            p.small.mt-2 Find readings created by others to use or modify for your class.
+            #notFollowingMessage.alert.alert-light(*ngIf="!loading && followingFilter && readings.length < 1")
+                h4 Time to follow someone!
+                p Follow Edji to see some of our latest curated Readings.
+                .comment__avatar Ed
+                follow-tag(
+                    id="followEdjiTag",
+                    [owner]="edjiOwnerObj",
+                    (followEvent)="loadFeed('')"
+                )
+            .row.loading(*ngIf="loading")
+            <p-dataList [value]="readings" [paginator]="true" [paginatorPosition]="'bottom'" [rows]="rows" [lazy]="true" (onLazyLoad)="loadFeed('feed_paginate', $event)" [totalRecords]="total" [emptyMessage]="'No Readings to show.'">
+                <ng-template let-reading pTemplate="item">
+                    .col-12.feed__reading(*ngIf="reading")
+                        div {{index}}
+                        .feed__reading-data.mb-2(*ngIf="reading.owner")
+                            .comment__avatar.mb-0 {{reading.owner.fullname.substr(0,2).toUpperCase()}}
+                            follow-tag([owner]="reading.owner")
+                            i.hidden-md-down.ws-nowrap {{ ' shared ' + (reading.updatedAt | edjidate:'timeAgo':null:secondsAgo) }}
+                            .btn.btn-sm.btn-primary.float-right([routerLink]="['/new-reading']", [queryParams]="{ copyId: reading._id }") Get this Reading
+                            i.hidden-lg-up.ws-nowrap {{ ' shared ' + (reading.updatedAt | edjidate:'timeAgo':null:secondsAgo) }}
+                        hot-reading-card([reading]="reading", [readOnly]="true")
+                        .feed__reading-preview(*ngIf="reading.words_preview")
+                            span.w(
+                                    *ngFor="let w of reading.words_preview", 
+                                    [ngClass]="[ w ? w.styles.join(' ') : '' ]"
+                                )
+                                | {{ (!(w && w.styles) || (w && w.styles.indexOf('space')) > -1) ? '&nbsp;' : w && w.str }}
+                                div(*ngIf="w && w.styles.indexOf('img') > -1")
+                                    //- Image: Display image for image "word"
+                                    img.reading-image(
+                                        [attr.id]="'readingImage' + i",
+                                        [attr.index]="i",
+                                        [src]="w.url"
+                                    )
+                            span.w &hellip;
+                </ng-template>
+            </p-dataList>
+        .col-md-4
             h4.mt-2 Filters
             .form-group
                 label Users
@@ -32,45 +74,3 @@ nav-bar([showDashboardOptions]="true")
             //- .form-group
             //-     label Subjects
                 //- ss-multiselect-dropdown([options]="subjects", [(ngModel)]="subjectFilter", [settings]="subjectDropSettings")
-        .col-md-8.pull-md-4
-            h1.mb-1 Discover Readings
-            p.small.mt-2 Find readings created by others to use or modify for your class.
-            #notFollowingMessage.alert.alert-light(*ngIf="!loading && followingFilter && readings.length < 1")
-                h4 Time to follow someone!
-                p Follow Edji to see some of our latest curated Readings.
-                .comment__avatar Ed
-                follow-tag(
-                    id="followEdjiTag",
-                    [owner]="edjiOwnerObj",
-                    (followEvent)="loadFeed('')"
-                )
-            .row.loading(*ngIf="loading")
-            <p-dataList [value]="readings" [paginator]="true" [paginatorPosition]="'bottom'" [rows]="rows" [lazy]="true" (onLazyLoad)="loadFeed('feed_paginate', $event)" [totalRecords]="total" [emptyMessage]="'No Readings to show.'">
-                <ng-template let-reading pTemplate="item">
-                    .col-12.feed__reading(*ngIf="reading")
-                        div {{index}}
-                        .feed__reading-data(*ngIf="reading.owner")
-                            .comment__avatar {{reading.owner.fullname.substr(0,2).toUpperCase()}}
-                            follow-tag([owner]="reading.owner")
-                            i {{ ' shared ' + (reading.updatedAt | edjidate:'timeAgo':null:secondsAgo) }}
-                            = " "
-                            .btn-group(style="float:right")
-                                //- .btn.btn-sm.btn-primary Preview
-                                .btn.btn-sm.btn-primary([routerLink]="['/new-reading']", [queryParams]="{ copyId: reading._id }") Get this Reading
-                        hot-reading-card([reading]="reading", [readOnly]="true")
-                        .feed__reading-preview(*ngIf="reading.words_preview")
-                            span.w(
-                                    *ngFor="let w of reading.words_preview", 
-                                    [ngClass]="[ w ? w.styles.join(' ') : '' ]"
-                                )
-                                | {{ (!(w && w.styles) || (w && w.styles.indexOf('space')) > -1) ? '&nbsp;' : w && w.str }}
-                                div(*ngIf="w && w.styles.indexOf('img') > -1")
-                                    //- Image: Display image for image "word"
-                                    img.reading-image(
-                                        [attr.id]="'readingImage' + i",
-                                        [attr.index]="i",
-                                        [src]="w.url"
-                                    )
-                            span.w &hellip;
-                </ng-template>
-            </p-dataList>

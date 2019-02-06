@@ -32,6 +32,11 @@
   line-height: 1.25;
   color: darken($gray, 40%);
   margin-top: 16px;
+
+  & .icon {
+    font-size: 26px;
+    vertical-align: middle;
+  }
 }
 
 .share-code--block {

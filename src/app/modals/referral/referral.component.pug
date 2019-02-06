@@ -23,7 +23,7 @@
           .hidden-sm-down
             .container
               .row.mb-4
-                .col-sm-6.pl-0
+                .col-sm-8.pl-0
                   .form-group
                     .input-group
                       input#copyReferralCode.form-control(
@@ -31,7 +31,7 @@
                         type="text",
                         disabled="true",
                         value="{{referralLink}}")
-                      span.input-group-btn
+                      .input-group-append
                         //- e2e: ngIf on copy button ensures link is ready to copy
                         button#buttonCopyReferralLink.btn.btn-primary.btn-rnd-corner-right(
                           *ngIf="referralLink && referralLink.length > 0"
@@ -41,7 +41,7 @@
                           href="#") Copy
                     small.form-text.text-success(*ngIf="linkCopySuccess")
                       | Link was copied to your clipboard!
-                .col-sm-6.pr-0
+                .col-sm-4.pr-0
                   .share-icon__group.float-right
                     #referEmailShare.icon-email.share-icon((click)="shareReferralCode('email')")
                     #referTwitterShare.icon-twitter.share-icon((click)="shareReferralCode('twitter')")
@@ -57,7 +57,7 @@
                       type="text",
                       disabled="true",
                       value="{{referralLink}}")
-                    span.input-group-btn.d-inline-block
+                    .input-group-append
                       button#buttonCopyReferralLink.btn.btn-primary.btn-rnd-corner-right(
                         *ngIf="referralLink",
                         type="button", 

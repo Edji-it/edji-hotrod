@@ -1,6 +1,6 @@
 import { Title } from '@angular/platform-browser';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Angulartics2 } from 'angulartics2';
 
@@ -29,13 +29,19 @@ export class LoginComponent implements OnInit, OnDestroy {
     private _auth: AuthService,
     private _project: ProjectService,
     private _router: Router,
+    private route: ActivatedRoute,
     private _title: Title
   ) {
     // this makes the window always render scrolled to the top
     this._router.events.subscribe(() => {
       window.scrollTo(0, 0)
     })
-    
+    this.route.queryParams.subscribe(params =>{
+      let modalLink = params['mlink']
+      if (modalLink === 'forgot') {
+        this.showPassModal = true
+      }
+    })
   }
 
   ngOnInit() {

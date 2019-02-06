@@ -580,10 +580,9 @@ export class AuthService implements CanActivate {
     }
 
     /**
-     * There are two cases to use this call:
+     * This is only used for:
      *  1) User is logged in and resetting password => resetObject should be assigned properties oldPassword, newPassword
-     *  2) User has a password recovery email => resetObject should be assigned properties: token, newPassword
-     * @param resetObject Can have properties: oldPassword, newPassword, token
+     * @param resetObject Can have properties: oldPassword, newPassword
      * @returns Chainable promise resolved with json data containing either a user object & token or errors
      **/
     public resetPassword(resetObject: any) {
@@ -605,25 +604,63 @@ export class AuthService implements CanActivate {
             })
     }
 
+    /**
+     * There are two cases to use this call:
+     *  1) User is logged in and resetting value => resetObject should be assigned properties type, newValue
+     *  2) User has a recovery email => resetObject should be assigned properties: token, newValue
+     * Call is flexible to handle resetting of any field the server deems able
+     * @param resetObject Can have properties: type (reset type), token, newValue (new password, email, etc)
+     * @returns Chainable promise resolved with json data containing either a user object & token or errors
+     **/
+    public resetProperty(resetObject: RedeemTokenObj): Observable<any> {
+        // We check if the user is logged in because we'll pass the authToken if they are
+        let user = this.getUser()
+        let newHeaders: HttpHeaders
+        // If user is logged in and changing a property other than password, pass Auth
+        // Otherwise, we want to avoid the potential of a user changing another user's password
+        if (user.isLoggedIn && resetObject.type !== 'password') {
+            newHeaders = new HttpHeaders({
+                'Content-Type': 'application/json',
+                'Authorization': this.getToken()
+            })
+        } else {
+            newHeaders = new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        }
+
+        return this._http.post<any>(
+            this.baseUrl + '/api/v1/users/tokens/' + resetObject.type + '/' + resetObject.token + '/?user_id=' + resetObject.userId,
+            { [resetObject.type]: resetObject.newValue },
+            {
+                headers: newHeaders
+            }
+        )
+    }
+
     public recoverPassword(resetUser: { username?: string, email?: string }): Observable<boolean> {
-        return this.legacyHttp
-            .post(
-                [this.baseUrl, 'users', 'recover_password'].join('/'), resetUser,
-                this.getOptions()
-            )
-            .pipe(map((data) => {
-                if (data.status === 204) {
-                    return true
-                } else {
-                    return false
-                }
-            }))
+        // need to pass in the correct user search
+        let userInfo: string
+        if (resetUser.username) {
+            userInfo = 'username=' + encodeURIComponent(resetUser.username)
+        } else if (resetUser.email) {
+            userInfo = 'email=' + encodeURIComponent(resetUser.email)
+        }
+
+        return this._http.get<any>(
+            this.baseUrl + '/api/v1/users/tokens/password?' + userInfo,
+            {
+                headers: new HttpHeaders({
+                    'Content-Type': 'application/json'
+                })
+            }
+        )
     }
 
     /** Call to convert a temp user's properties to the current user (who should already have credentials) */
     public convertTempUser(oldId: string): Observable<boolean> {
         return this.legacyHttp.put(
-            [this.baseUrl, 'users', 'convert', oldId].join("/"),
+            [this.baseUrl, 'api', 'v1', 'temp_users', 'convert', oldId].join("/"),
             {},
             this.getOptions()
         )
@@ -1100,4 +1137,11 @@ export interface Academy {
     name?: string,
     abbreviation?: string,
     _id?: string
+}
+
+interface RedeemTokenObj {
+    newValue: string
+    type: string
+    userId: string
+    token: string
 }

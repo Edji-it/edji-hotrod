@@ -31,7 +31,7 @@
     )
       i.icon.icon-more
     //- dropdown buttons
-    .dropdown-menu.dropdown-menu-right.reading-card-menu
+    .dropdown-menu.dropdown-menu-right.reading-card-menu([class.show]="showOptions")
       //- Create New Group dropdown button
       button.dropdown-item.e2e-new-group(
         (click)="relevantReading = reading; showAddModal = true; showOptions = false;",

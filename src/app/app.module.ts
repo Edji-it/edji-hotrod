@@ -79,7 +79,7 @@ import { DashboardComponent, JoinedDashComponent, CreatedDashComponent, Tutorial
 import { NoContentComponent } from './no-content'
 import { AccountComponent, ChangePassComponent, UploadAvatarModal } from './account'
 import { LoginComponent } from './login';
-import { ResetPassPage } from './reset-pass/reset-pass-page.component';
+import { RedeemToken } from './redeem-token/redeem-token.component';
 import { HeroPromoPageComponent } from './hero-promo/hero-promo.component';
 import { HeroPricingComponent } from './hero-pricing/hero-pricing.component';
 import { DiscoverFeedComponent } from './discover-feed/discover-feed.component';
@@ -99,11 +99,16 @@ import { ReadingRecapComponent } from './project-page/owner-tools/reading-recap/
 import { TeamPageComponent } from './team-page/team-page.component';
 
 // Configure Hammer.js
-// export class MyHammerConfig extends HammerGestureConfig  {
-//   overrides = <any>{
-//       'swipe': {velocity: 0.4, threshold: 20} // override default settings
-//   }
-// } // export class MyHammerConfig extends HammerGestureConfig 
+export class MyHammerConfig extends HammerGestureConfig  {
+  overrides = <any>{
+      // override default gesture settings
+      //  Tap overrides for Chrome v71 sensitivity when making comments
+      'tap': {
+        time: 2000, // Maximum press time in ms.
+        threshold: 100 //	While doing a tap some small movement is allowed.
+      } 
+  }
+} 
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -121,7 +126,7 @@ const APP_PROVIDERS = [
   BumblebeeService,
   { 
       provide: HAMMER_GESTURE_CONFIG, 
-      useClass: HammerGestureConfig 
+      useClass: MyHammerConfig 
   }
   // ,
   // { provide: ErrorHandler, useClass: SentryErrorHandler }
@@ -136,7 +141,7 @@ const APP_PROVIDERS = [
   declarations: [
     MediumEditorDirective,
     ClickOutsideDirective,
-    ResetPassPage,
+    RedeemToken,
     RegisterPageComponent,
     CommentPaneComponent,
     CommentComponent,
