@@ -18,7 +18,7 @@ nav-bar(
           .form-group
             label
               span Title
-              input#readingTitle.form-control.h1.form-item--editor.mTitle(type="text", placeholder="Reading Title...", [formControl]="readingForm.controls['title']")
+              input#readingTitle.form-control.title-input.h1.form-item--editor.mTitle(type="text", placeholder="Reading Title...", [formControl]="readingForm.controls['title']")
               #errorTitle.alert.alert-danger(*ngIf="readingForm.controls['title'].hasError('required') && (readingForm.controls['title'].dirty || submitted)") 
                 b No Title
                 | Please give your Reading a title!
@@ -27,7 +27,7 @@ nav-bar(
             label Make Public
               p.sub-label Share this Reading with other teachers looking for lessons. <b>Grade Level</b> and <b>Subject</b> are added to Public readings.
             .input-group
-              .form-check
+              .form-check.pl-0
                 //- Public option
                 label#readingMakePublic.form-check-label.form-check-btn(
                     [class.active]="readingForm.controls['public'].value == 'true'",
