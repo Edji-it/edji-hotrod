@@ -117,9 +117,8 @@ $navy: #072649;
     text-align: center;
 }
 
-.value-prop-row {
-    @extend .promo-row;
-    padding-bottom: 0px;
+.col--value-prop {
+    padding-top: $grid-gutter-width;
 
     & h2 {
         line-height: 1.25em;
