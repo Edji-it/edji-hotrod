@@ -12,6 +12,9 @@
                 
                  <!-- MODAL BODY -->
                 <div class="modal-body">
+                    <div class="alert alert-info">
+                        <b>Hint</b> PDF's in Edji use dot comments, just like images. If you would like to learn how to convert your PDF to plain text so your students can highlight, <a class="link" target="_blank" href="http://guide.edji.it/index.php/2017/05/09/customizing-your-lessons-with-edji-pdf-uploads/">check out our Guide page here</a>.
+                    </div>
                     <!--<label class="custom-file">
                         <input type="file" id="file-input" class="file-input">
                         <span class="custom-file-control"></span>
@@ -26,7 +29,7 @@
                                     <span *ngIf="!file || !file.name || file.name.length < 1" class="placeholder">Select a PDF to upload...</span>
                                     {{ file ? file.name : '' }}
                                 </div>
-                                <span class="input-group-btn">    
+                                <span class="input-group-append">    
                                     <button id="pdfBrowseButton" class="btn btn-default btn-file" type="button" (click)="browseInput.click()">
                                         Browse <input #browseInput [attr.id]="pdfFileInputId" type="file" 
                                             accept=".pdf"
