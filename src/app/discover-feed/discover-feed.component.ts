@@ -23,7 +23,7 @@ export class DiscoverFeedComponent implements OnInit {
   }
 
   // Filters
-  public followingFilter: boolean = true
+  public followingFilter: boolean = false // default to Public
   public gradeFilter: number[] = []
 
   public first: number = 0
@@ -47,7 +47,7 @@ export class DiscoverFeedComponent implements OnInit {
    * Load Feed with Params
    * - This auto-runs on load and every change, called by p-dataList in the template
    */
-  loadFeed(action: string, paging?: any){
+  loadFeed(action: string, paging?: any) {
     // fire an analytic event here for tracking purposes
     if (action!=='') {
       this.angulartics.eventTrack.next({ 
