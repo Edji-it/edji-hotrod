@@ -17,14 +17,9 @@ describe('Discover Feed', () => {
     let EC = protractor.ExpectedConditions
 
     beforeAll(() => {
-         // Login as test account that we can fill with junk data
         login.getPage()
         browser.wait(EC.elementToBeClickable(login.loginButton), 5000)
-        login.enterUsername(login.botUser)
-        login.enterPassword(login.botPassword)
-        browser.wait(EC.elementToBeClickable(login.loginButton), 5000)
-        login.loginButton.click()
-        browser.wait(EC.urlContains("dashboard"), 5000, "never arrived at dashboard")
+        login.loginAndVerify(login.botUser, login.botPassword)
     })
 
     afterAll(() => {
@@ -86,23 +81,19 @@ describe('Discover Feed', () => {
             // checks for and clicks the confirm archive button if the modal is there
             newReading.confirmArchiveButtonClick()
             // Finalize
-            browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable")
-            newReading.finalizeButton.click()
+            newReading.createGroupButtonClick()
             // Wait for navigation to hit project page after save
-            browser.wait(EC.urlContains("project"), 5000, "never arrived at published reading")
-            newReading.shareCodeModalClose.click()
+            browser.wait(EC.urlContains("project"), 7500, "never arrived at published reading")
+            newReading.shareCodeModalCloseClick()
+            browser.wait(EC.invisibilityOf(newReading.shareCodeModalClose), 5000, "share reading code modal never dismissed")
             sidebar.logout()
         });
 
         it("should see testbot's new public reading in public feed", () => {
             // Login as another user
-            sidebar.logInButton.click()
+            login.getPage()
             browser.wait(EC.elementToBeClickable(login.loginButton), 5000)
-            login.enterUsername(login.teacherUser)
-            login.enterPassword(login.teacherPassword)
-            browser.wait(EC.elementToBeClickable(login.loginButton), 5000)
-            login.loginButton.click()
-            browser.wait(EC.urlContains("dashboard"), 5000, "never arrived at dashboard")
+            login.loginAndVerify(login.teacherUser, login.teacherPassword)
 
             // Got to Discover Feed
             sidebar.navDiscover.click()
