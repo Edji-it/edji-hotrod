@@ -143,10 +143,14 @@ export class Sidebar {
         });
     }
 
+    public logout_deprecated(): void {
+        browser.wait(this.EC.elementToBeClickable(this.avatarActionIcon), 5000, "avatar action button never became clickable")
+        this.clickLogOutButton()
+        browser.wait(this.EC.urlContains("home"), 5000, "never arrived home after logging out")
+    }
+
     public logout(): void {
-        browser.wait(this.EC.elementToBeClickable(this.avatarActionIcon), 5000, "avatar action button never became clickable");
-        this.clickLogOutButton();
-        browser.wait(this.EC.urlContains("home"), 5000, "never arrived home after logging out");
+        this.clickLogOutButton()
     }
 
     public clickHeroLink(): void {
