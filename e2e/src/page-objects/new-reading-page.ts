@@ -55,7 +55,7 @@ export class NewReading implements PageObjectInterface
     public insertQuestionButtonMobile =  element(by.id('buttonInsertQuestionMobile'));
     public insertQuestionPrompt = element.all(by.css('textarea.text-comment-input')).last();
 
-    public imageInReading = element(by.css(".content .img img"));
+    public imageInReading = element(by.css(".content img"));
     // public imageUploadList = element.all(by.css('.upload-list-item'));
     
     public titleError = element(by.id('errorTitle'));
@@ -92,15 +92,15 @@ export class NewReading implements PageObjectInterface
             if (result) {
                 this.addButton.isDisplayed().then((result) => {
                     if (result) {
-                        browser.wait(this.EC.elementToBeClickable(this.addButton), 5000, "never found the share reading button");
+                        browser.wait(this.EC.elementToBeClickable(this.addButton), 5000, "never found the share reading button")
                         this.addButton.click()
                     } else {
-                        browser.wait(this.EC.elementToBeClickable(this.addButtonMobile), 5000, "never found the share reading button");
+                        browser.wait(this.EC.elementToBeClickable(this.addButtonMobile), 5000, "never found the share reading button")
                         this.addButtonMobile.click()
                     }
-                });
+                })
             }
-        });
+        })
     }
 
     public saveDraftNewReading(): void {
@@ -109,15 +109,15 @@ export class NewReading implements PageObjectInterface
             if (result) {
                 this.draftButton.isDisplayed().then((result) => {
                     if (result) {
-                        browser.wait(this.EC.elementToBeClickable(this.draftButton), 5000, "add draft button never became clickable after form entry");
+                        browser.wait(this.EC.elementToBeClickable(this.draftButton), 5000, "add draft button never became clickable after form entry")
                         this.draftButton.click()
                     } else {
-                        browser.wait(this.EC.elementToBeClickable(this.draftButtonMobile), 5000, "add draft button never became clickable after form entry");
+                        browser.wait(this.EC.elementToBeClickable(this.draftButtonMobile), 5000, "add draft button never became clickable after form entry")
                         this.draftButtonMobile.click()
                     }
-                });
+                })
             }
-        });
+        })
     }
 
     // Click the insert image button if we're on a mobile view
@@ -128,20 +128,20 @@ export class NewReading implements PageObjectInterface
                 this.insertToolToggleButton.isDisplayed().then((result) => {
                     if (result) {
                         // Click the Tools button to expand the insert tools options for mobile before proceeding
-                        browser.wait(this.EC.elementToBeClickable(this.insertToolToggleButton), 5000, "never found the insert tool button");
+                        browser.wait(this.EC.elementToBeClickable(this.insertToolToggleButton), 5000, "never found the insert tool button")
                         this.insertToolToggleButton.click()
 
                         // Click the image upload button for mobile
-                        browser.wait(this.EC.elementToBeClickable(this.uploadImageModalButtonMobile), 5000, "image upload modal button never became clickable");
-                        this.uploadImageModalButtonMobile.click();
+                        browser.wait(this.EC.elementToBeClickable(this.uploadImageModalButtonMobile), 5000, "image upload modal button never became clickable")
+                        this.uploadImageModalButtonMobile.click()
                     } else {
                         // Click the image upload button for desktop
-                        browser.wait(this.EC.elementToBeClickable(this.uploadImageModalButton), 5000, "image upload modal button never became clickable");
-                        this.uploadImageModalButton.click();
+                        browser.wait(this.EC.elementToBeClickable(this.uploadImageModalButton), 5000, "image upload modal button never became clickable")
+                        this.uploadImageModalButton.click()
                     }
-                });
+                })
             }
-        });
+        })
     }
 
     // Click the insert question button if we're on a mobile view
@@ -152,29 +152,58 @@ export class NewReading implements PageObjectInterface
                 this.insertToolToggleButton.isDisplayed().then((result) => {
                     if (result) {
                         // Click the Tools button to expand the insert tools options for mobile before proceeding
-                        browser.wait(this.EC.elementToBeClickable(this.insertToolToggleButton), 5000, "never found the insert tool button");
+                        browser.wait(this.EC.elementToBeClickable(this.insertToolToggleButton), 5000, "never found the insert tool button")
                         this.insertToolToggleButton.click()
 
                         // Click the question add button for mobile
-                        browser.wait(this.EC.elementToBeClickable(this.insertQuestionButtonMobile), 5000, "insert question button never became clickable");
-                        this.insertQuestionButtonMobile.click();
+                        browser.wait(this.EC.elementToBeClickable(this.insertQuestionButtonMobile), 5000, "insert question button never became clickable")
+                        this.insertQuestionButtonMobile.click()
                     } else {
                         // Click the question add button for desktop
-                        browser.wait(this.EC.elementToBeClickable(this.insertQuestionButton), 5000, "insert question button never became clickable");
-                        this.insertQuestionButton.click();
+                        browser.wait(this.EC.elementToBeClickable(this.insertQuestionButton), 5000, "insert question button never became clickable")
+                        this.insertQuestionButton.click()
                     }
-                });
+                })
             }
-        });
+        })
     }
 
-    public confirmArchiveButtonClick(): void {
+    public clickShareAndArchive(): void {
+        // Click share button
+        this.addNewReading()
+        // Wait for a modal to appear (either archive or create group)
+        let modal = element(by.css(".modal.show"))
+        browser.wait(this.EC.visibilityOf(modal), 5000, "archive or group modal did not show after clicking Share")
         // Click the confirm archive reading button for new reading
         this.confirmArchiveButton.isPresent().then((result) => {
             if (result) {
                 this.confirmArchiveButton.isDisplayed().then((result) => {
                     browser.wait(this.EC.elementToBeClickable(this.confirmArchiveButton), 6000, "confirm archive reading button never became clicable")
                     this.confirmArchiveButton.click()
+                })
+            }
+        })
+    }
+
+    public createGroupButtonClick(): void {
+        // Click the create group button to finalize the reading
+        this.finalizeButton.isPresent().then((result) => {
+            if (result) {
+                this.finalizeButton.isDisplayed().then((result) => {
+                    browser.wait(this.EC.elementToBeClickable(this.finalizeButton), 5000, "finalize reading button never became clickable")
+                    this.finalizeButton.click()
+                })
+            }
+        })
+    }
+
+    public shareCodeModalCloseClick(): void {
+        // Click the create group button to finalize the reading
+        this.shareCodeModalClose.isPresent().then((result) => {
+            if (result) {
+                this.shareCodeModalClose.isDisplayed().then((result) => {
+                    browser.wait(this.EC.elementToBeClickable(this.shareCodeModalClose), 5000, "share code modal close button never became clickable")
+                    this.shareCodeModalClose.click()
                 })
             }
         })
