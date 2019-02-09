@@ -47,14 +47,6 @@ nav-bar([showDashboardOptions]="true")
             h4.mt-2 Filters
             .form-group
                 label Users
-                //- Following users option
-                label.form-check-label.form-check-btn(
-                    id="discoverFilterFollowing",
-                    [class.active]="followingFilter",
-                    title="Filter by users you follow",
-                    (click)="followingFilter = true; loadFeed('filter_following')"
-                  )
-                  span([innerHTML]="':green_heart: Following' | emojione")
                 //- Public option
                 label.form-check-label.form-check-btn(
                     id="discoverFilterPublic",
@@ -63,6 +55,14 @@ nav-bar([showDashboardOptions]="true")
                     (click)="followingFilter = false; loadFeed('filter_public')"
                 )
                     span([innerHTML]="':earth_americas: Public' | emojione")
+                //- Following users option
+                label.form-check-label.form-check-btn(
+                    id="discoverFilterFollowing",
+                    [class.active]="followingFilter",
+                    title="Filter by users you follow",
+                    (click)="followingFilter = true; loadFeed('filter_following')"
+                  )
+                  span([innerHTML]="':green_heart: Following' | emojione")
             br
             .form-group(style="clear:left;")
                 label Grade Level
