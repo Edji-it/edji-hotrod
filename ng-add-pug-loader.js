@@ -19,7 +19,7 @@ fs.readFile(commonCliConfig, {}, (err, data) => {
   const file = fs.openSync(commonCliConfig, 'r+');
   fs.writeFile(file, output, (err) => {
     console.error(err);  
-    fs.close(file, ()=> {
+    fs.close(file, () => {
       console.log("File closed");
     });
   });
