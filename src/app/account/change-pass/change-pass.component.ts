@@ -23,7 +23,7 @@ export class ChangePassComponent implements OnInit {
   constructor(private _auth: AuthService, private angulartics: Angulartics2, fb: FormBuilder) {
     this.passwordForm = fb.group({
       oldPassword: [null, Validators.required],
-      newPassword: [null, Validators.compose([Validators.required, Validators.minLength(6)])],
+      newPassword: [null, [Validators.required, Validators.minLength(6)]],
       newPasswordConfirm: [null, Validators.required]
     }, { validator: this.passwordsEqual });
   }

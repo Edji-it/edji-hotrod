@@ -47,7 +47,7 @@ export class RequestAcademyModal implements OnInit {
 
     this.feedbackForm = fb.group({
       name: [this.user.fullname, Validators.required],
-      email: [this.user.email, Validators.compose([Validators.required, this.emailValidator])],
+      email: [this.user.email, [Validators.required, this.emailValidator]],
       phone: [],
       content: [prevData.content],
       contactType: ['email']
