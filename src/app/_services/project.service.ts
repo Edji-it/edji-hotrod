@@ -463,15 +463,18 @@ export class ProjectService {
                 this.answersByIdSource[answer.questionId] = []
             }
             // Double check comment doesn't exist
-            for (let answerExist of this.answersByIdSource[answer.questionId]) {
+            for (let i = 0; i < this.answersByIdSource[answer.questionId].length; i++) {
+                let answerExist = this.answersByIdSource[answer.questionId][i]
                 if (answerExist._id == answer._id) {
+                    this.answersByIdSource[answer.questionId][i] = answer
                     skipAdd = true
                 }
             }
             if (!skipAdd) {
                 this.answersByIdSource[answer.questionId].push(answer)
-                this.answersByIdSubject.next(this.answersByIdSource)
             }
+            // Update observable
+            this.answersByIdSubject.next(this.answersByIdSource)
         }
     } // public addAnswerToAnswers(answer: EdjiComment): void
 
