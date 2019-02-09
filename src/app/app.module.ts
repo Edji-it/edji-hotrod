@@ -1,7 +1,7 @@
 import { NgModule, ApplicationRef, ErrorHandler, Injectable } from '@angular/core'
 import { HttpModule } from '@angular/http'
 import { HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser'
-import { LockerModule, Locker, LockerConfig} from 'angular-safeguard'
+import { LockerModule, Locker, LockerConfig } from 'angular-safeguard'
 import { Angulartics2Module } from 'angulartics2'
 import { Angulartics2GoogleAnalytics } from 'angulartics2/ga'
 import * as Sentry from "@sentry/browser";
@@ -23,7 +23,7 @@ Sentry.init({
 
 @Injectable()
 export class SentryErrorHandler implements ErrorHandler {
-  constructor() {}
+  constructor() { }
   handleError(error) {
     // Post error to Sentry
     Sentry.captureException(error.originalError || error)
@@ -97,18 +97,19 @@ import { LicenseRedirectComponent } from './license-redirect/license-redirect.co
 import { LicenseWelcomeComponent } from './license-welcome/license-welcome.component';
 import { ReadingRecapComponent } from './project-page/owner-tools/reading-recap/reading-recap.component';
 import { TeamPageComponent } from './team-page/team-page.component';
+import { SearchPage } from './search-page/search-page.component'
 
 // Configure Hammer.js
-export class MyHammerConfig extends HammerGestureConfig  {
+export class MyHammerConfig extends HammerGestureConfig {
   overrides = <any>{
-      // override default gesture settings
-      //  Tap overrides for Chrome v71 sensitivity when making comments
-      'tap': {
-        time: 2000, // Maximum press time in ms.
-        threshold: 100 //	While doing a tap some small movement is allowed.
-      } 
+    // override default gesture settings
+    //  Tap overrides for Chrome v71 sensitivity when making comments
+    'tap': {
+      time: 2000, // Maximum press time in ms.
+      threshold: 100 //	While doing a tap some small movement is allowed.
+    }
   }
-} 
+}
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -124,9 +125,9 @@ const APP_PROVIDERS = [
   SocketService,
   UtilToolService,
   BumblebeeService,
-  { 
-      provide: HAMMER_GESTURE_CONFIG, 
-      useClass: MyHammerConfig 
+  {
+    provide: HAMMER_GESTURE_CONFIG,
+    useClass: MyHammerConfig
   }
   // ,
   // { provide: ErrorHandler, useClass: SentryErrorHandler }
@@ -137,7 +138,7 @@ const APP_PROVIDERS = [
  * `AppModule` is the main entry point into Angular2's bootstraping process
  */
 @NgModule({
-  bootstrap: [ AppComponent ],
+  bootstrap: [AppComponent],
   declarations: [
     MediumEditorDirective,
     ClickOutsideDirective,
@@ -203,6 +204,7 @@ const APP_PROVIDERS = [
     HeroPromoPageComponent,
     HeroPricingComponent,
     ScrollProgressComponent,
+    SearchPage,
     LicenseRedirectComponent,
     LicenseWelcomeComponent,
     ReadingRecapComponent,
