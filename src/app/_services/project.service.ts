@@ -465,8 +465,12 @@ export class ProjectService {
             // Double check comment doesn't exist
             for (let i = 0; i < this.answersByIdSource[answer.questionId].length; i++) {
                 let answerExist = this.answersByIdSource[answer.questionId][i]
-                if (answerExist._id == answer._id) {
-                    this.answersByIdSource[answer.questionId][i] = answer
+                if (answerExist._id === answer._id ) {
+                    if (this.user._id !== answer.user_id) {
+                        // Don't update users own answers from socket
+                        // - Case: Pointer the emoji keyboard relies on breaks if you do so
+                        this.answersByIdSource[answer.questionId][i] = answer
+                    }
                     skipAdd = true
                 }
             }
