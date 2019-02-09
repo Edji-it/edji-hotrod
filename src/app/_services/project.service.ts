@@ -665,9 +665,9 @@ export class ProjectService {
         // Add comment ID if passed
         // Tell other Project viewers comment changed, using Socket
         if (comment._id) {
-            this._socket.updateComment(comment, 'UPDATE', this.project._id);
+            this._socket.updateComment(comment, 'UPDATE', this.project._id)
         } else {
-            this._socket.updateComment(comment, 'CREATE', this.project._id);
+            this._socket.updateComment(comment, 'CREATE', this.project._id)
 
             // need to set a comment context to discern between comments and replies for pipo event
             let commentContext = 'comment'

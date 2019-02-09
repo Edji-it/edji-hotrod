@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs'
 
 // Project Dependencies
 import { EdjiComment, EdjiQuestion, Project, Reading, User } from "../datatypes"
-import { CommentService, AuthService, ProjectService, ReadingService } from "../../_services"
+import { CommentService, AuthService, ProjectService, ReadingService, SocketService } from "../../_services"
 
 enum ResponseType {
   OpenEnded = 0,
@@ -73,7 +73,8 @@ export class QuestionComponent implements OnInit, OnDestroy {
     private _projects : ProjectService, 
     private _readings : ReadingService,
     private _auth     : AuthService,
-    private _comments : CommentService
+    private _comments : CommentService,
+    private _socket: SocketService
   ) {
     // TEMP
     
@@ -121,9 +122,23 @@ export class QuestionComponent implements OnInit, OnDestroy {
           this.answerTypesAvailable = this._auth.getAllowedCommentMediaTypes()
           this.updateSelections()
         })
-    ) // this.subscriptions.push
+    )
 
-  } // ngOnInit
+    // need a separate socket listener here for the update answer function
+    this.subscriptions.push(
+      this._socket.commentUpdates.subscribe((commentUpdate) => {
+        let answer = commentUpdate.comment
+
+        if (answer.questionId && commentUpdate.action === 'UPDATE') {
+          this.answersById[this.question._id].find((answerIndex: EdjiComment, index: number) => {
+            if (answerIndex._id == answer._id && this.user._id!==answer.user_id) {
+              this.answersById[this.question._id][index] = answer
+            }
+          })
+        }
+      })
+    )
+  }
 
   public setQuestionOrder (input : string) : void {
     // Make sure there is no whitespace.
