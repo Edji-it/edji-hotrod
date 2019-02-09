@@ -17,6 +17,7 @@ export class Sidebar {
     public logo = element(by.id("logo"));
     public heroLink = element(by.id("heroLink"));
     public closeModal = element(by.css("button.close"));
+    public navAcademyBtn = element(by.id('navAcademy'))
 
     // Owner Tools
     public leaderboardButton = element(by.id("toggleLeaderboard"))
@@ -153,5 +154,17 @@ export class Sidebar {
         // this.logo.click();
         // browser.wait(this.EC.elementToBeClickable(this.heroLink), 5000, "hero link never became clickable");
         this.heroLink.click();
+    }
+
+    public academyButtonClick(): void {
+        // Click the confirm archive reading button for new reading
+        this.navAcademyBtn.isPresent().then((result) => {
+            if (result) {
+                this.navAcademyBtn.isDisplayed().then((result) => {
+                    browser.wait(this.EC.elementToBeClickable(this.navAcademyBtn), 5000, "never saw Academy option in nav bar")
+                    this.navAcademyBtn.click()
+                })
+            }
+        })
     }
 } // class Sidebar
