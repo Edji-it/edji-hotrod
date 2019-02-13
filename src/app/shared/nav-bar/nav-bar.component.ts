@@ -141,7 +141,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
         this.currentPage = "project"
       } else if (this._router.url.indexOf('/home') > -1) {
         this.currentPage = "home"
-      } else if (this._router.url.indexOf('/hero') > -1) {
+      } else if (this._router.url.indexOf('/hero') > -1 || this._router.url.indexOf('/plans') > -1) {
         this.currentPage = "hero"
       } else if (this._router.url.indexOf('/dashboard') > -1) {
         this.currentPage = "dashboard"

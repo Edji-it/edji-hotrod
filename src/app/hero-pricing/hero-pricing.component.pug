@@ -21,7 +21,7 @@ nav-bar
   .row.row-xl-pad.align-items-center
     .col-sm-4
       .card.card-outline-secondary
-        .card-block
+        .card-body
           h2.card-title Edji Free
           span.pricing Free
           hr
@@ -36,7 +36,7 @@ nav-bar
             | {{ user.hero_status ? 'Included' : 'Current Plan'}}
     .col-sm-4
       .card.card-outline-danger
-        .card-block
+        .card-body
           img.card-img-top(src='/assets/images/hero-lg.png')
           h2.card-title Edji Hero
           //- $5<span class="small"> / month or </span>
@@ -52,7 +52,7 @@ nav-bar
           a.btn.btn-hero.btn-lg.btn-block(*ngIf="user && user.isLoggedIn && user.hero_status", [routerLink]="['/account']", [innerHtml]="'Current Plan &nbsp;:tada:' | emojione")
     .col-sm-4
       .card.card-outline-secondary
-        .card-block
+        .card-body
           h2.card-title Hero Academy
           span.pricing Contact Us
           hr
