@@ -35,13 +35,13 @@ nav-bar([hideAccountOptions]="true", [pageTitle]="'Join Your Academy'")
       h1.on-dark Confirm Invite to <i>{{academyName}}</i>
       p.on-dark Please verify this is the account you would like to use.
       .card
-        .card-block
+        .card-body
           .card-title
             .user-icon--large.float-left.mr-3
               span.user-icon__initials {{user.fullname | userinitials}}
             h4.mb-0 {{user.fullname}}
             p.small {{user.email}}
-        .card-block
+        .card-body
           .btn-row.text-right
             .btn.btn-secondary((click)="changeAccount()") Use other account
             .btn.btn-hero((click)="processLicense()") Join Academy
