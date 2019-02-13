@@ -144,9 +144,7 @@ describe('Dashboard Page', () => {
             newReading.privateButton.click()
             newReading.contentInput.sendKeys(newReading.contentShortString);
             // Submit New Reading
-            newReading.addNewReading()
-            // checks for and clicks the confirm archive button if the modal is there
-            newReading.confirmArchiveButtonClick()
+            newReading.clickShareAndArchive()
             browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
             newReading.finalizeButton.click();
             // Should redirect to Project page for new reading

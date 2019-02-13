@@ -161,7 +161,7 @@ describe('New Reading Page', () => {
         - Open PDF upload modal
         - Select and upload a PDF
         - Insert PDF into the Reading
-        - Create the Reading
+        - Delete PDF
     */
     describe("PDF upload", () => {
         /**
@@ -218,6 +218,10 @@ describe('New Reading Page', () => {
     describe("Image upload", () => {
         /**
          * Test: Add reading with an image
+         * - Upload image
+         * - Insert image
+         * - Create reading with image
+         * - Verify new reading has image
          */
         it('should upload an image to a reading and save it to the reading', function() {
             // Open and wait for New Reading page
@@ -288,8 +292,11 @@ describe('New Reading Page', () => {
             newReading.sourceInput.sendKeys(newReading.sourceString)
             // Submit New Draft for Reading
             newReading.saveDraftNewReading()
-            // Should redirect to new reading page with a reading id and a success alert
-            browser.wait(EC.visibilityOf(newReading.successAlert), 15000, "never saw the success alert")
+            // Return to top where success message shows
+            browser.executeScript('window.scrollTo(0, 0)').then( () => {
+                // Should redirect to new reading page with a reading id and a success alert
+                browser.wait(EC.visibilityOf(newReading.successAlert), 15000, "never saw the success alert")
+            })
             // Add more text
             newReading.contentInput.sendKeys(newReading.contentShortStringB)
             // Submit New Reading
