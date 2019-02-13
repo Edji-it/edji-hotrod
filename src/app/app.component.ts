@@ -2,7 +2,7 @@
  * Angular 2 decorators and services
  */
 import { Component, ViewEncapsulation } from '@angular/core'
-import { Angulartics2GoogleAnalytics } from 'angulartics2/ga'
+import { Angulartics2GoogleGlobalSiteTag } from 'angulartics2/gst'
 import { Angulartics2 } from 'angulartics2'
 import { PageScrollConfig } from 'ngx-page-scroll'
 
@@ -28,11 +28,11 @@ export class AppComponent {
 
   constructor(
     private angulartics: Angulartics2,
-    angulartics2GoogleAnalytics: Angulartics2GoogleAnalytics,
+    angulartics2GoogleGlobalSiteTag : Angulartics2GoogleGlobalSiteTag  ,
     private _auth: AuthService,
     private _messages: MessageService
     ) {
-      angulartics2GoogleAnalytics.startTracking()
+      angulartics2GoogleGlobalSiteTag.startTracking()
       // Scrollto should account for nav bar
       PageScrollConfig.defaultScrollOffset = 90;
       PageScrollConfig.defaultDuration = 800;
