@@ -3,8 +3,7 @@ import { HttpModule } from '@angular/http'
 import { HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser'
 import { LockerModule, Locker, LockerConfig} from 'angular-safeguard'
 import { Angulartics2Module } from 'angulartics2'
-import { Angulartics2GoogleAnalytics } from 'angulartics2/ga'
-import * as Sentry from "@sentry/browser";
+import * as Sentry from "@sentry/browser"
 
 // App is our top level component
 import { AppComponent } from './app.component'
