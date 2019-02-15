@@ -861,7 +861,6 @@ export class NewReadingPage implements OnInit {
 
             // Create a new block and slice it in.. then add the stored text to that block
             let insertPos = 1
-            let refNode = this.insertNode.parentNode
             let refNode = this.insertNode.parentNode ? this.insertNode.parentNode : this.insertNode
             
             for (let i = 0; i < 5; i++) {
