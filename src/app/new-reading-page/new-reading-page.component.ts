@@ -481,7 +481,6 @@ export class NewReadingPage implements OnInit {
             this.readingIsBlank = false
         } else {
             this.readingIsBlank = true
-            return false
         }
         // Overall validation check that questions have been filled out properly
         if (this.readingHtml[1] && this.readingHtml[1].question) {
@@ -491,6 +490,9 @@ export class NewReadingPage implements OnInit {
                 this.readingHtml[i].question.prompt==='' || 
                 (this.readingHtml[i].question.answer_types && this.readingHtml[i].question.answer_types.length < 1))) {
                     questionsValid = false
+                } else {
+                    // Content is not blank if it includes a question!
+                    this.readingIsBlank = false
                 }
             }
         }
@@ -568,7 +570,7 @@ export class NewReadingPage implements OnInit {
         for (let i=0; i<editors.length; i++) {
             let contentEl = editors[i]
             // Make sure we aren't copying parts of the medium-editor
-            while (contentEl.childNodes.length == 1 && contentEl.firstChild.classList.contains('medium-editor-element')) {
+            while (contentEl.childNodes.length == 1 && contentEl.firstChild.classList && contentEl.firstChild.classList.contains('medium-editor-element')) {
                 contentEl = contentEl.firstChild
             } 
             // Add question "word"
@@ -860,6 +862,8 @@ export class NewReadingPage implements OnInit {
             // Create a new block and slice it in.. then add the stored text to that block
             let insertPos = 1
             let refNode = this.insertNode.parentNode
+            let refNode = this.insertNode.parentNode ? this.insertNode.parentNode : this.insertNode
+            
             for (let i = 0; i < 5; i++) {
                 if (refNode.getAttribute('rindex')) {
                     insertPos = Number(refNode.getAttribute('rindex')) + 1
@@ -872,7 +876,7 @@ export class NewReadingPage implements OnInit {
             var div = document.createElement('div')
             div.appendChild( tmpHtml.cloneNode(true) )
             var html = div.innerHTML
-            if (html.includes('angularMediumEditor')) {
+            if (html.includes('angularMediumEditor') || html.includes('medium-editor-element')) {
                 let newDiv = div.firstElementChild
                 html = newDiv.innerHTML
             }
