@@ -231,8 +231,9 @@ a.on-dark {
   color: $medium-gray;
 }
 
-.text-success {
-  color: #5dec56 !important;
+.text-success, .valid-feedback {
+  // Use a higher contrast green for legibility
+  color: #6DD260 !important;
 }
 
 .invalid-feedback {
