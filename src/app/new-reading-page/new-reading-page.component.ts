@@ -20,7 +20,9 @@ import { Subscription, Observable } from 'rxjs';
 export class NewReadingPage implements OnInit {
     
     public readingForm: FormGroup
-    public newReadingInner: string = "<div>&nbsp;</div>"
+    // Initiating editors with blank contents prevents rapidly triggering do-check cycles
+    // @todo (this is something that should really be fixed within the Medium Editor)
+    public newReadingInner: string = ""
     public readingHtml: any[] = [{'text': this.newReadingInner}]
     public readingIsBlank: boolean = false
     public submitted: boolean = false
@@ -263,6 +265,10 @@ export class NewReadingPage implements OnInit {
      * - Enables inserting images at cursor position
      */
     private contentChange(event: Event) {
+        if (!Rangy) {
+            // Clicking the editor before page is finished loading causes a broken reference to Rangy
+            return
+        }
         let sel = Rangy.getSelection()
         this.masterSelection = sel
         
@@ -802,7 +808,7 @@ export class NewReadingPage implements OnInit {
     /**
      * Adds a question block to the new reading and then adds in a new medium editor
      */
-    public addQuestion(insertHtml?: string, insertPos?: number) {
+    public addQuestion(insertHtml?: string, insertEditorIndex?: number) {
         // fire an analytic event here for tracking purposes
         this.angulartics.eventTrack.next({ 
             action: 'qna_question_added', 
@@ -821,23 +827,25 @@ export class NewReadingPage implements OnInit {
         if (typeof(insertHtml) == 'undefined') {
             insertHtml = ''
         }
-
+        
         if (insertHtml.includes("angularMediumEditor")) {
-            if (insertPos) {
-                question.question_number = insertPos
-                if (this.readingHtml.length > insertPos) {
-                    this.readingHtml.splice(insertPos,0,{'text':this.newReadingInner,'question':question})
+            if (insertEditorIndex) {
+                question.question_number = insertEditorIndex
+                if (this.readingHtml.length > insertEditorIndex) {
+                    this.readingHtml.splice(insertEditorIndex,0,{'text':this.newReadingInner,'question':question})
                 } else {
+                    // Handle question added to end of reading
                     this.readingHtml.push({'text':this.newReadingInner,'question':question})
                 }
             } else {
                 this.readingHtml.push({'text':this.newReadingInner,'question':question})
             }
         } else {
-            question.question_number = insertPos
-            if (this.readingHtml.length > insertPos) {
-                this.readingHtml.splice(insertPos,0,{'text':insertHtml,'question':question})
+            question.question_number = insertEditorIndex
+            if (this.readingHtml.length > insertEditorIndex) {
+                this.readingHtml.splice(insertEditorIndex,0,{'text':insertHtml,'question':question})
             } else {
+                // Handle question added to end of reading
                 this.readingHtml.push({'text':insertHtml,'question':question})
             }
             this.updateQuestionNumbers()
@@ -851,7 +859,7 @@ export class NewReadingPage implements OnInit {
         if (this.insertNode && this.insertNode.parentNode) {
             // If there is a reference node for cursor position, insert at cursor
             // Get and clear all elements in the medium editor block after the cursor position
-            let tmpHtml = this.extractBlockContentsFromCaret()
+            let cutHtml = this.cutBlockContentsFromCaret()
             
             // Send the 'enter' key 
             const event = new KeyboardEvent("keypress",{
@@ -860,27 +868,34 @@ export class NewReadingPage implements OnInit {
             document.dispatchEvent(event)
 
             // Create a new block and slice it in.. then add the stored text to that block
-            let insertPos = 1
-            let refNode = this.insertNode.parentNode ? this.insertNode.parentNode : this.insertNode
+            let insertEditorIndex = 1
+            let containingEditor = this.insertNode.parentNode ? this.insertNode.parentNode : this.insertNode
             
             for (let i = 0; i < 5; i++) {
-                if (refNode.getAttribute('rindex')) {
-                    insertPos = Number(refNode.getAttribute('rindex')) + 1
-                    // Found it
+                if (containingEditor.getAttribute('rindex')) {
+                    insertEditorIndex = parseInt(containingEditor.getAttribute('rindex')) + 1
+                    // Found containing editor
                     i = 5
+                } else {
+                    containingEditor = containingEditor.parentNode
                 }
-                refNode = refNode.parentNode
             }
-            // Make the html fragment a real piece of html!
+            // Update model with modified HTML (isn't triggered programmatically)
+            let precedingHtml = containingEditor.querySelector(".medium-editor-element").innerHTML
+            this.readingHtml[insertEditorIndex - 1].text = precedingHtml
+            /**
+             * Make the html fragment a real piece of html!
+             * - Closes any tags broken when "cut"
+             */
             var div = document.createElement('div')
-            div.appendChild( tmpHtml.cloneNode(true) )
+            div.appendChild( cutHtml.cloneNode(true) )
             var html = div.innerHTML
             if (html.includes('angularMediumEditor') || html.includes('medium-editor-element')) {
                 let newDiv = div.firstElementChild
                 html = newDiv.innerHTML
             }
 
-            this.addQuestion(html,insertPos)
+            this.addQuestion(html,insertEditorIndex)
         } else {
             // If no reference node (field has not been interacted with) insert question at end
             this.addQuestion()
@@ -890,7 +905,7 @@ export class NewReadingPage implements OnInit {
     /**
      * Extracts all elements in the medium editor after the cursor
      */
-    private extractBlockContentsFromCaret(): any {
+    private cutBlockContentsFromCaret(): any {
         var sel = Rangy.getSelection()
         if (sel.rangeCount) {
             var selRange = sel.getRangeAt(0)

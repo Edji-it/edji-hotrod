@@ -330,7 +330,10 @@ section.search {
 }
 
 .medium-editor-element {
-	display:block;
+	// Makes  line breaks appear consistently between Firefox and Chrome
+	white-space: pre-wrap;
+	display: block;
+	width: 100%;
 	min-height: 350px;
 	padding: 6px 0px;
 	cursor: text;
