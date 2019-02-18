@@ -48,7 +48,7 @@ export class ChangePassComponent implements OnInit {
         oldPassword: this.passwordForm.get('oldPassword').value,
         newPassword: this.passwordForm.get('newPassword').value
       })
-      .then((res) => {
+      .then((res: any) => {
         this.messages.success = true
         this.loading = false
         // fire an analytic event here for tracking purposes
