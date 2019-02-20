@@ -127,6 +127,7 @@ describe('Project Page', () => {
     describe("AudioCommenting", () => {
         beforeAll(() => {
             // Join project from the homepage
+            home.getPage()
             home.enterProjectCodeFromHome('audio');
             // Login
             guestForm.loginAsGuest();
@@ -187,14 +188,15 @@ describe('Project Page', () => {
             // Delete the audio comment
             browser.wait(EC.elementToBeClickable(project.commentDelete), 5000, "could not find delete button");
             project.commentDelete.click();
-            // Needs a second to make sure comment is deleted
-            browser.sleep(1000);
+            // Verify the audio comment is gone
+            browser.wait(EC.invisibilityOf(project.commentDelete), 5000, "audio comment never went away after deleting it");
         });
     });
 
     describe("Discussions", () => {
         beforeAll(() => {
             // Join reply project from the homepage
+            home.getPage()
             home.enterProjectCodeFromHome('reply');
             // Login
             guestForm.loginAsGuest();

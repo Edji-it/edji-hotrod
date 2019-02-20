@@ -42,24 +42,9 @@ export class Home implements PageObjectInterface
     {
         // Ensure page has loaded
         browser.wait(this.EC.elementToBeClickable(this.projectCodeInputNav), 5000, "Project Code input was not present in Nav")
-        // This line actually *breaks* being able to find the input
-        // browser.get('#projectCodeInput');
+        
         this.projectCodeInputNav.isPresent().then((result) => {
             if (result) {
-                this.projectCodeInputNav.isDisplayed().then((result) => {
-                    if (result) {
-                        // Project code input within the nav was visible, usually for destkop
-                        browser.wait(this.projectCodeInputNav.isDisplayed, 5000, ('Never loaded Project Code input box'));
-                        this.projectCodeInputNav.sendKeys(input);
-                        browser.actions().sendKeys(protractor.Key.ENTER).perform();
-                    } else {
-                        // Project code input just under the nav was visible, usually for mobile
-                        browser.wait(this.projectCodeInputUnderNav.isDisplayed, 5000, ('Never loaded Project Code input box'));
-                        this.projectCodeInputUnderNav.sendKeys(input);
-                        browser.actions().sendKeys(protractor.Key.ENTER).perform();
-                    }
-                });
-            } else {
                 this.projectCodeInputNav.isDisplayed().then((result) => {
                     if (result) {
                         // Project code input within the nav was visible, usually for destkop
