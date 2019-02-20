@@ -1,7 +1,7 @@
 import { ActivatedRoute, Router, Params } from '@angular/router'
 import { Title } from '@angular/platform-browser'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
+import { Component, ElementRef, OnInit, ViewChild, OnDestroy } from '@angular/core'
 import { Angulartics2 } from 'angulartics2'
 import { IMultiSelectOption, IMultiSelectSettings } from '../_directives'
 import { take } from 'rxjs/operators'
@@ -17,7 +17,7 @@ import { Subscription, Observable } from 'rxjs';
     styleUrls: ['new-reading-page.component.scss'],
     templateUrl: './new-reading-page.component.pug'
 })
-export class NewReadingPage implements OnInit {
+export class NewReadingPage implements OnInit, OnDestroy {
     
     public readingForm: FormGroup
     // Initiating editors with blank contents prevents rapidly triggering do-check cycles
@@ -56,6 +56,7 @@ export class NewReadingPage implements OnInit {
     // Archiving state
     public readingToArchive: Reading
     public readingsArchivedBefore: string
+    public readingArchivalSet: boolean = false
     // New project
     public newGroup: Project
 
@@ -182,9 +183,11 @@ export class NewReadingPage implements OnInit {
 
         this.copyId = this._route.snapshot.queryParams['copyId']
         
-        if (this.readingId) {
+        // Fetch the Reading if loading a draft that is not yet loaded
+        if (this.readingId && (!this.reading || this.readingId !== this.reading._id)) {
             this.getReading(this.readingId)
         } else if (this.copyId) {
+            // Fetch the Reading if copying from an existing Reading
             this.readingType = 'existingReading'
             this.getReading(this.copyId)
             // fire an analytic event here for tracking purposes
@@ -199,7 +202,7 @@ export class NewReadingPage implements OnInit {
             this._auth.getCurrentUser().subscribe((user) => {
                 this.user = user
                 // Gets the active readings from the dashboard if the user is not a hero user
-                if (!this.user.hero_status) {
+                if (!this.user.hero_status && !this.readingArchivalSet) {
                     this._readings.updateCreated(user)
                 }
             }),
@@ -209,6 +212,8 @@ export class NewReadingPage implements OnInit {
                         // If no readings, nothing to handle
                         return
                     }
+                    // If we have readings, don't request created readings again
+                    this.readingArchivalSet = true
                     if (!this.user.hero_status && data.readings[1] && !data.readings[1].archived) {
                         // Take the second reading and make sure it is archived
                         this.readingToArchive = data.readings[1]
@@ -227,6 +232,10 @@ export class NewReadingPage implements OnInit {
         )
 
         this._title.setTitle('Edji | New Reading')
+     }
+
+     ngOnDestroy() {
+        this.subscriptions.forEach((sub: Subscription) => { sub.unsubscribe()})
      }
 
      private getReading(readingId: string) {
@@ -714,7 +723,7 @@ export class NewReadingPage implements OnInit {
                                     action: this.readingType + '_draft_save', 
                                     properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
                                 })
-                                // Navigate user       
+                                // Update URL with reading id, now that we have one      
                                 if (this.showHeroParam) {
                                     this.router.navigate(['new-reading/' + data._id], { queryParams: { successAlert: this.successAlert, showHeroParam: this.showHeroParam } })
                                 } else {
