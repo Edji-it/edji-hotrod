@@ -49,7 +49,13 @@
             form([formGroup]="sForm")
               #promoCode.form-group([class.has-success]="sForm.controls['couponCode'].valid", [class.has-danger]="sForm.controls['couponCode'].value && sForm.controls['couponCode'].value.length > 0 && !sForm.controls['couponCode'].valid && sForm.controls['couponCode'].touched")
                 label(for="couponCodeInput") Promo Code
-                input#couponCodeInput.form-control.text-uppercase( formControlName="couponCode", *ngIf="!initWithCoupon", [class.is-valid]="sForm.controls['couponCode'].valid", type="text", tabindex="0", [class.hidden]="initWithCoupon")
+                input#couponCodeInput.form-control.text-uppercase( 
+                  formControlName="couponCode", 
+                  [class.is-valid]="sForm.controls['couponCode'].valid", 
+                  type="text", 
+                  tabindex="0", 
+                  [class.hide]="initWithCoupon"
+                )
                 #invalidCouponMsg.invalid-feedback(*ngIf="sForm.controls['couponCode'].value && sForm.controls['couponCode'].value.length > 0 && !sForm.controls['couponCode'].valid && sForm.controls['couponCode'].touched")
                   b Uh-oh!
                   |  That code is invalid or expired.
