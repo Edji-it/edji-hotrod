@@ -7,7 +7,7 @@ jobs:
   build:
     docker:
       # specify the version you desire here
-      - image: circleci/node:10.15-browsers
+      - image: circleci/node:10.15
         # env:
         #   - DISPLAY=:99
         #   - CHROME_BIN=/usr/bin/google-chrome
@@ -32,10 +32,10 @@ jobs:
             name: Install Dependencies
             command: |
                 sudo apt-get update
-                # wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-                # sudo dpkg -i google-chrome-stable_current_amd64.deb || echo '\ninstall failed - but its fine we just wanted a dependency list\n'
-                # sudo apt-get -f install -y
-                # sudo dpkg -i google-chrome-stable_current_amd64.deb
+                wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+                sudo dpkg -i google-chrome-stable_current_amd64.deb || echo '\ninstall failed - but its fine we just wanted a dependency list\n'
+                sudo apt-get -f install -y
+                sudo dpkg -i google-chrome-stable_current_amd64.deb
                 yarn install
                 node node_modules/protractor/bin/webdriver-manager update
       
