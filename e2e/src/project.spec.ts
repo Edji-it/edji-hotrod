@@ -175,15 +175,17 @@ describe('Project Page', () => {
             // Wait 5 seconds for the play audio button to become clickable (wait for audio to upload)
             browser.wait(EC.elementToBeClickable(project.audioPlay), 5000, "never found the play audio button");
             project.audioPlay.click();
-
+            
+            // wait 5 seconds for the restart button to become active
+            browser.wait(EC.elementToBeClickable(project.audioRestart), 5000, "could not restart the audio comment");
+            project.audioRestart.click();
+            
             // Wait up to 3 seconds for the pause button to become active
             browser.wait(EC.elementToBeClickable(project.audioPause), 3000, "could not pause the audio comment");
             project.audioPause.click();
 
             // REVISIT: We need to test the restart button
-            // // wait 5 seconds for the restart button to become active
-            // browser.wait(EC.elementToBeClickable(project.audioRestart), 5000, "could not restart the audio comment");
-            // project.audioRestart.click();
+            
 
             // Delete the audio comment
             browser.wait(EC.elementToBeClickable(project.commentDelete), 5000, "could not find delete button");
