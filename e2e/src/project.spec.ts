@@ -181,8 +181,8 @@ describe('Project Page', () => {
             // project.audioRestart.click();
             
             // Wait up to 3 seconds for the pause button to become active
-            browser.wait(EC.elementToBeClickable(project.audioPause), 3000, "could not pause the audio comment");
-            project.audioPause.click();
+            // browser.wait(EC.elementToBeClickable(project.audioPause), 3000, "could not pause the audio comment");
+            // project.audioPause.click();
 
             // REVISIT: We need to test the restart button
             
