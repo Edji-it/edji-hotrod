@@ -453,7 +453,15 @@ content: "|<"; }
     background: url('/assets/images/comment-arrow.svg');
     background-size: 100% 100%;
     position: absolute;
-    top: -16px;
+    top: 350px;
+    z-index: 991;
+
+    @media(max-width: $desktop) {
+        left: calc(100% - 50px);
+    }
+    @media(min-width: 1060px) {
+        left: calc( (100% - 567px) / 2 ) !important;
+    }
 }
 
 $arrowOffset: 23px;
@@ -462,4 +470,8 @@ $arrowOffset: 23px;
     .comment-arrow-#{$z} {
         left: #{$arrowOffset * ($z - 1)};
     }
+}
+
+.comment-arrow-img {
+    left: -180px;
 }

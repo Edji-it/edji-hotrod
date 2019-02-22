@@ -4,11 +4,6 @@
   (tap)='triggerCommentPane(true)',
   [ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '','avatar-count-' + indexOnLine, 'avatar-' + comment.type, active ? 'active' : '' ]"
 )
-  //- Icon Arrow
-  .icon-comment-arrow(
-    *ngIf="active",
-    [ngClass]="[ 'comment-arrow-' + indexOnLine ]"
-  )
   span.tooltipbody(*ngIf="indexOnLine<8")
     .tooltip-title([class.inline-center]="comment.type == 'audio'")
       | {{comment.author}}

@@ -230,6 +230,11 @@ comment-pane(
     (commentReply)="discReplyFire($event)"
 )
 
+//- Icon Arrow for the active comment
+.icon-comment-arrow(
+    [style.top]="commentHeightPos + 'px'"
+)
+
 //- Delete Comment Modal
 hot-del-comment(
     *ngIf="_comments.showDeleteCommentModal",

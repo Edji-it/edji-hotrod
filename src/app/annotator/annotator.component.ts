@@ -16,6 +16,7 @@ import {
     MessageService
 } from '../_services' 
 import { CommentPermissions, EdjiComment, Project, Reading, Feedback } from './../shared/datatypes'
+import { ALLSPARK } from '../app.constants'
 
 @Component({
     selector: 'annotator',
@@ -88,6 +89,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     public highlightX = 20 
     public optionLeft = true
     public mobileIndex = 0
+    public commentHeightPos = 0
 
     public imageCoords = {}
     public imageHotspotPlaceholder: any = {
@@ -1256,16 +1258,34 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             // Tell pane to open
             this.commentPane = true
             this._projects.commentPaneStateSubj.next(true)
+            // set the icon arrow position based on lineY and offsets
+            this.commentHeightPos = comment.lineY + this.getFirstWordOffset(comment)
         } else {
             // iOS selection
             let selec = Rangy.getSelection();
             selec.removeAllRanges()
             // Tell comments to close
             this.commentPane = false
+            // reset our icon arrow position
+            this.commentHeightPos = 0
             this._projects.commentPaneStateSubj.next(false)
             // Run the standard comment inactivation to reset variables and do things like close the Keyboard
             this.inactivateComment()
         }
+    }
+
+    public getFirstWordOffset(comment: EdjiComment): number {
+        let firstWord = document.querySelector('.w[index="1"]')
+        let scrollOffset = this.annotatorPaper.getBoundingClientRect().top
+
+        let averageVertical = (firstWord.getBoundingClientRect().top + firstWord.getBoundingClientRect().bottom) / 2
+        let adjustment = ALLSPARK.NAVBARHEIGHT
+
+        if (comment.loc && comment.loc.y) {
+            adjustment += ALLSPARK.BASELINEHEIGHT
+        }
+        
+        return (averageVertical - scrollOffset + adjustment)
     }
 
     // Deletes comment via Project service, which updates the local Project object
