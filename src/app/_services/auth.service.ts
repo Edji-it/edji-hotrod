@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, ActivatedRoute } from '@angular/router'
-import { Observable, BehaviorSubject } from 'rxjs'
+import { Observable, BehaviorSubject, Subject } from 'rxjs'
 import { map, take, catchError } from 'rxjs/operators'
 import { HttpClient, HttpHeaders } from "@angular/common/http"
 
@@ -37,6 +37,10 @@ export class AuthService implements CanActivate {
     private academyStateSource: BehaviorSubject<AcademyState>
     public currentAcademyState: Observable<AcademyState>
 
+    // Clear observables/in-memory objects in services
+    private clearAllSource: Subject<boolean> = new Subject()
+    public clearAll: Observable<boolean>
+
     constructor(
         private _http: HttpClient,
         private _router: Router,
@@ -46,6 +50,8 @@ export class AuthService implements CanActivate {
         private route: ActivatedRoute
     ) {
         let buildEnv = environment.ENV
+
+        this.clearAll = this.clearAllSource.asObservable()
 
         this.user = this.getUser()
         this.currentUserSource = new BehaviorSubject<any>(this.user)
@@ -314,7 +320,10 @@ export class AuthService implements CanActivate {
         this.destroyCredentials()
         // Refresh window to clear components/services
         if (!noReload) {
-            location.reload()
+            // Clear service in-memory objects
+            this.clearAllSource.next(true)
+            // Return to homepage
+            this._router.navigate(['/home'])
         }
     }
 

@@ -100,27 +100,23 @@ describe('Project Page', () => {
             browser.executeScript('window.scrollTo(0, document.querySelector("article .img-wrap > img").scrollTop);').then(function () {
                 browser.wait(EC.elementToBeClickable(project.image), 5000, "never scrolled and saw the image");
             });
-            project.image.click();
-
+            project.image.click()
             // click the tool tip
-            project.addTextComment();
-
+            project.addTextComment()
             // add some text to the comment
             browser.wait(EC.presenceOf(element(by.css('textarea.text-comment-input'))), 5000, "couldn't see the text comment");
-            browser.actions().sendKeys('test comment').perform();
+            browser.actions().sendKeys('test comment').perform()
             // Press ENTER to save 
-            browser.actions().sendKeys(protractor.Key.ENTER).perform();
-            
+            browser.actions().sendKeys(protractor.Key.ENTER).perform()
+        
             // delete the comment
             browser.wait(EC.elementToBeClickable(project.emojiCommentDelete), 5000, "could not find delete button");
-            project.emojiCommentDelete.click();
-
+            project.emojiCommentDelete.click()
             // make sure it's deleted
-            browser.wait(EC.invisibilityOf(element(by.css('textarea.text-comment-input'))), 5000, "text comment never went away after deleting it");
-
+            browser.wait(EC.invisibilityOf(element(by.css('textarea.text-comment-input'))), 5000, "text comment never went away after deleting it")
             // close the comment pane
             browser.wait(EC.elementToBeClickable(project.closePane), 5000, "could not find close pane button");
-            project.closePane.click();
+            project.closePane.click()
         });
     });
 
@@ -128,10 +124,10 @@ describe('Project Page', () => {
         beforeAll(() => {
             // Join project from the homepage
             home.getPage()
-            home.enterProjectCodeFromHome('audio');
+            home.enterProjectCodeFromHome('audio')
             // Login
-            guestForm.loginAsGuest();
-            browser.wait(EC.elementToBeClickable(sidebar.avatarActionIcon));
+            guestForm.loginAsGuest()
+            browser.wait(EC.elementToBeClickable(sidebar.avatarActionIcon))
         });
 
         afterAll(() => {
@@ -183,10 +179,9 @@ describe('Project Page', () => {
             // Wait up to 3 seconds for the pause button to become active
             browser.wait(EC.elementToBeClickable(project.audioPause), 3000, "could not pause the audio comment");
             project.audioPause.click();
-
-            // REVISIT: We need to test the restart button
-            
-
+            /**
+             * @todo We need to test the restart button here
+             */
             // Delete the audio comment
             browser.wait(EC.elementToBeClickable(project.commentDelete), 5000, "could not find delete button");
             project.commentDelete.click();

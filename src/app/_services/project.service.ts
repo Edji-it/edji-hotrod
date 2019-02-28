@@ -100,10 +100,7 @@ export class ProjectService {
         this.subscriptions.push(
             this._auth.getCurrentUser().subscribe((user) => {
                 this.user = user
-            })
-        )
-
-        this.subscriptions.push(
+            }),
             this._socket.commentUpdates.subscribe((commentUpdate) => {
                 let comment = commentUpdate.comment
                 // Process different live comment updates
@@ -132,20 +129,28 @@ export class ProjectService {
                 }
             }, (error) => {
                 console.warn(error)
+            }),
+            /**
+             * Our socket handler for group-specific socket update events
+             * groupUpdate.type is the identifier for specific events
+             */ 
+            this._socket.groupUpdate.subscribe(
+                (groupUpdate) => {
+                    if (groupUpdate.type==='refreshLeaderboard' && this.user._id===this.project.teacher_id) {
+                        this.addUserInfoToProject(groupUpdate)
+                    }
+                }
+            ),
+            /**
+             * Clear held values when told by _auth
+             */
+            this._auth.clearAll.subscribe((clear) => {
+                if (clear) {
+                    this.project = {title:""}
+                    this.currentProjectSource.next(this.project)
+                }
             })
         )
-
-        /**
-         * Our socket handler for group-specific socket update events
-         * groupUpdate.type is the identifier for specific events
-         */ 
-        this.subscriptions.push(this._socket.groupUpdate.subscribe(
-            (groupUpdate) => {
-                if (groupUpdate.type==='refreshLeaderboard' && this.user._id===this.project.teacher_id) {
-                    this.addUserInfoToProject(groupUpdate)
-                }
-            }
-          ))
     } // constructor
     
     /**

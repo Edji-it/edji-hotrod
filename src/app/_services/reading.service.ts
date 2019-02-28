@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { Http, Response, Headers, RequestOptions } from '@angular/http'
-import { BehaviorSubject, Observable, Subject } from 'rxjs'
+import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs'
 import { map, take } from 'rxjs/operators'
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http'
 
@@ -18,19 +18,7 @@ interface FilterObj {
 @Injectable()
 export class ReadingService {
 
-  /*
-    Last Modified: 5 Aug 2017
-  */
-
-
-  constructor(private http: Http, private _http: HttpClient, private _auth: AuthService) {
-    
-  }
-
-  ngOnInit() {
-      
-  }
-
+  
   //set up thumbnail observables
   private readingValue: Reading = <Reading>{};
   // BehaviorSubjects push last value on subscribe
@@ -40,6 +28,24 @@ export class ReadingService {
   // User's Readings observable
   private userReadingsSource = new BehaviorSubject<GetReadingsResponse>({})
   public currentUserReadings: Observable<any> = this.userReadingsSource.asObservable()
+
+  private subscriptions: Subscription[] = []
+
+  constructor(private http: Http, private _http: HttpClient, private _auth: AuthService) {
+    this.subscriptions.push(
+      /**
+       * Clear held values when told by _auth
+       */
+      this._auth.clearAll.subscribe((clear: boolean) => {
+        if (clear) {
+          // Clear Reading  
+          this.clear()
+          // Clear dashboard readings
+          this.userReadingsSource.next({})
+        }
+    })
+    )
+  }
 
   /**
    * Get all Created Readings for a user, paginated
