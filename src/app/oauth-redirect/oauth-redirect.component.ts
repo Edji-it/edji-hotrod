@@ -23,6 +23,13 @@ export class OAuthComponent implements OnInit {
   // Error display 
   public hasError: boolean
 
+  // Copy display
+  public loginTypeDisplay: string = 'Google'
+
+  private loginTypeMap = {
+    'google' : 'Google',
+    'clever' : 'Clever'
+  } 
   private licenseId = ''
   private redirectRouteUrl = '/dashboard'
 
@@ -38,6 +45,10 @@ export class OAuthComponent implements OnInit {
     const type = this.route.snapshot.params['type']
     const encodedToken = this.route.snapshot.queryParams.token
     const error = this.route.snapshot.queryParams.error
+
+    if (this.loginTypeMap[type]) {
+      this.loginTypeDisplay = this.loginTypeMap[type]
+    }
 
     if (error) {
       this.hasError = true
