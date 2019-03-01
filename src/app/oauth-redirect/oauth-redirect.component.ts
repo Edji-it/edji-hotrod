@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router'
 import { take } from 'rxjs/operators'
 
 // Project Dependencies
-import { AuthService, LockerService } from './../_services'
+import { AuthService, LockerService, MessageService } from './../_services'
 import { User } from '../shared/datatypes';
 
 @Component({
@@ -40,7 +40,8 @@ export class OAuthComponent implements OnInit {
     private _auth: AuthService,
     private _router: Router,
     private _locker: LockerService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private _messages: MessageService
   ) { }
 
   ngOnInit() {
@@ -119,6 +120,12 @@ export class OAuthComponent implements OnInit {
       .pipe(take(1))
       .subscribe(
         user => {
+          // Confirm with toast
+          this._messages.sendToast({
+            id: 'oauth-link',
+            type: 'success',
+            message: 'Successfully linked your Edji account'
+          })
           // Account successfully linked!
           this._router.navigate(['/home'])
         },
