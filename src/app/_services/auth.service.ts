@@ -358,6 +358,17 @@ export class AuthService implements CanActivate {
     }
 
     /**
+     * Link Oauth to an existing account
+     */
+    public linkOauth(oauthType: string, oauthToken: string) : Observable<any> {
+        return this._http.put(
+            `${this.baseUrl}/api/v1/users/@me/link?oauth_type=${oauthType}&oauth_token=${oauthToken}`,
+            {},
+            { headers: this.getHeaders() }
+        )
+    }
+
+    /**
      * Call to update user object
      * - Used primarily to update user preferences and document
      * - Cannot be passed password

@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core'
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core'
 import { Router } from '@angular/router'
 import { FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { Angulartics2 } from 'angulartics2'
@@ -13,6 +13,9 @@ import { take } from 'rxjs/operators';
   templateUrl: 'login-form.component.html'
 })
 export class LoginForm implements OnInit {
+
+  @Input()
+  public submitText: string = 'Log In'
 
   @Output()
   public loginSuccess: EventEmitter<any> = new EventEmitter()

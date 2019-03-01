@@ -4,6 +4,7 @@ import { take } from 'rxjs/operators'
 
 // Project Dependencies
 import { AuthService, LockerService } from './../_services'
+import { User } from '../shared/datatypes';
 
 @Component({
   selector: 'hot-oauth-redirect',
@@ -25,7 +26,6 @@ export class OAuthComponent implements OnInit {
 
   // Copy display
   public loginTypeDisplay: string = 'Google'
-
   private loginTypeMap = {
     'google' : 'Google',
     'clever' : 'Clever'
@@ -96,5 +96,20 @@ export class OAuthComponent implements OnInit {
           this.messages.serverError = true
       }
     })
+  }
+
+  /**
+   * Upon successful log in, link
+   * @param thing 
+   */
+  linkAfterLogin(user: User) {
+    console.log("Logged in!," + user)
+    this._auth.linkOauth('clever', 'EXAMPLETOKEN')
+      .pipe(take(1))
+      .subscribe(
+        user => {
+          console.log("Success!")
+        }
+      )
   }
 }
