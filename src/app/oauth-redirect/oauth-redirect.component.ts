@@ -35,6 +35,7 @@ export class OAuthComponent implements OnInit {
   private redirectRouteUrl = '/dashboard'
   // Oauth token
   private oAuthToken: string
+  private oAuthId: string
 
   constructor(
     private _auth: AuthService,
@@ -47,6 +48,7 @@ export class OAuthComponent implements OnInit {
   ngOnInit() {
     // grab that oauth token which is given by the server!
     this.loginType = this.route.snapshot.params['type']
+    this.oAuthId = this.route.snapshot.queryParams.oauth_id
     const encodedToken = this.route.snapshot.queryParams.token
     const error = this.route.snapshot.queryParams.error
 
@@ -115,8 +117,9 @@ export class OAuthComponent implements OnInit {
   linkAfterLogin(user: User) {
     let type = this.loginType
     let token = this.oAuthToken
+    let id = this.oAuthId
 
-    this._auth.linkOauth(type, token)
+    this._auth.linkOauth(type, token, id)
       .pipe(take(1))
       .subscribe(
         user => {
