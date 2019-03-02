@@ -360,9 +360,9 @@ export class AuthService implements CanActivate {
     /**
      * Link Oauth to an existing account
      */
-    public linkOauth(oauthType: string, oauthToken: string, oauthId: string) : Observable<any> {
+    public linkOauth(oauthType: string, oauthToken: string) : Observable<any> {
         return this._http.put(
-            `${this.baseUrl}/api/v1/users/@me/link?oauth_type=${oauthType}&oauth_token=${oauthToken}&oauth_id=${oauthId}`,
+            `${this.baseUrl}/api/v1/users/@me/link?oauth_type=${oauthType}&oauth_token=${oauthToken}`,
             {},
             { headers: this.getHeaders() }
         )

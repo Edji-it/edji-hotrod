@@ -35,7 +35,6 @@ export class OAuthComponent implements OnInit {
   private redirectRouteUrl = '/dashboard'
   // Oauth token
   private oAuthToken: string
-  private oAuthId: string
   // Current user, for linking existing already logged in
   private currentUser: User
 
@@ -51,7 +50,6 @@ export class OAuthComponent implements OnInit {
     this.currentUser = this._auth.getUser()
     // grab that oauth token which is given by the server!
     this.loginType = this.route.snapshot.params['type']
-    this.oAuthId = this.route.snapshot.queryParams.oauth_id
     const encodedToken = this.route.snapshot.queryParams.token
     const error = this.route.snapshot.queryParams.error
 
@@ -131,9 +129,8 @@ export class OAuthComponent implements OnInit {
   linkAfterLogin(user?: User) {
     let type = this.loginType
     let token = this.oAuthToken
-    let id = this.oAuthId
 
-    this._auth.linkOauth(type, token, id)
+    this._auth.linkOauth(type, token)
       .pipe(take(1))
       .subscribe(
         user => {
