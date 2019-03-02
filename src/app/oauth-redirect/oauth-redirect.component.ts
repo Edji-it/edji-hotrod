@@ -130,7 +130,7 @@ export class OAuthComponent implements OnInit {
             message: 'Successfully linked your Edji account'
           })
           // Account successfully linked!
-          this._router.navigate(['/home'])
+          this._router.navigate(['/dashboard'])
         },
         error => {
           this.messages.linkError = true
