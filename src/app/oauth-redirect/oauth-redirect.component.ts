@@ -36,6 +36,8 @@ export class OAuthComponent implements OnInit {
   // Oauth token
   private oAuthToken: string
   private oAuthId: string
+  // Current user, for linking existing already logged in
+  private currentUser: User
 
   constructor(
     private _auth: AuthService,
@@ -46,6 +48,7 @@ export class OAuthComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.currentUser = this._auth.getUser()
     // grab that oauth token which is given by the server!
     this.loginType = this.route.snapshot.params['type']
     this.oAuthId = this.route.snapshot.queryParams.oauth_id
@@ -87,6 +90,17 @@ export class OAuthComponent implements OnInit {
 
     this.oAuthToken = decodeURIComponent(encodedToken)
 
+    if (this.currentUser && this.currentUser.isLoggedIn) {
+      this.linkAfterLogin()
+    } else {
+      this.loginWithOauth()
+    }
+  }
+
+  /**
+   * Log in with OAuth
+   */
+  loginWithOauth() {
     this._auth.getUserWithAuthToken(this.loginType, this.oAuthToken).pipe(take(1)).subscribe((res) => {
       // if we are coming here from a landing page like the license accept, then the success case should take us back to that landing page again
       if (this.licenseId!=='' && this.licenseId.length>0) {
@@ -114,7 +128,7 @@ export class OAuthComponent implements OnInit {
    * Upon successful log in, link
    * @param thing 
    */
-  linkAfterLogin(user: User) {
+  linkAfterLogin(user?: User) {
     let type = this.loginType
     let token = this.oAuthToken
     let id = this.oAuthId
