@@ -139,11 +139,34 @@ $profilePicIconHeight: 60px;
 }
 
 .info-label {
-    font-family:    "Open Sans";
-    font-size:      15px;
-    color:        #D2CECE;
+    font-family: "Open Sans";
+    font-size: 15px;
+    color: #D2CECE;
+    margin-bottom: 0px;
+    margin-top: 8px;
 }
 
 .faded {
     color: #949494;
+}
+
+.linked-block {
+    display: inline-block;
+    padding: 3px $base-pad/2;
+    border: 1px solid #D2CECE;
+    position: relative;
+
+    & .icon {
+        vertical-align: middle;
+    }
+
+    &:hover, &:focus {
+        border-color: $blue;
+    }
+}
+
+.linked-logo {
+    height: 30px;
+    width: auto;
+    margin-left: 5px;
 }

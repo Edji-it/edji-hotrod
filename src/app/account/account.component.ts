@@ -24,6 +24,7 @@ export class AccountComponent implements OnInit, OnDestroy {
   public currentUser: any
   public customerSubEnd: string = ""
   public customerCancelDate: string = ""
+  public linkedAccounts: {'clever'?: boolean, 'google'?: boolean} = {}
 
   public showPassModal: boolean = false
   public showUploadProfPicModal: boolean = false
@@ -50,6 +51,9 @@ export class AccountComponent implements OnInit, OnDestroy {
         user => {
           this.currentUser = user
           this.updateHeroStatus()
+          if (user.oauth) {
+            this.populateLinkedAccounts(user.oauth)
+          }
         }
       )
     )
@@ -96,6 +100,17 @@ export class AccountComponent implements OnInit, OnDestroy {
       )
     } else if (this.currentUser.license_ids && this.currentUser.license_ids.length) {
       this.academyHero = true
+    }
+  }
+
+  /**
+   * Check for linked accounts (display linked/how to link)
+   * @param oauth oauth array from user object
+   */
+  private populateLinkedAccounts(oauth: any[]) : void {
+    this.linkedAccounts = {}
+    for (let i = 0; i < oauth.length; i++) {
+      this.linkedAccounts[oauth[i].type] = true
     }
   }
 

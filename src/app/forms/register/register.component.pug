@@ -2,7 +2,9 @@ h1.on-dark.center(*ngIf="!registerSuccess", [innerHtml]="'Your Edji Adventure Be
 p(*ngIf="readingToAdd") Your reading will be ready to edit after you sign up!
 p(*ngIf="projectToAdd") Your reading will be on the dashboard after you sign up!
 div.text-center.mt-4
-    hot-google-button([copy]="'Sign Up with Google'")
+    .button__row
+        hot-google-button([copy]="'Sign Up with Google'")
+        edji-clever-button
     hr
     p.text-divider or
 h4.text-center Register with a username and password
