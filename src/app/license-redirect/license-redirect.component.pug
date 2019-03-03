@@ -19,10 +19,9 @@ nav-bar([hideAccountOptions]="true", [pageTitle]="'Join Your Academy'")
       .mt-5
         .row
           .col-12(*ngIf="login")
-            .button__row
-              hot-google-button([copy]="'Sign In with Google'")
+            edji-oauth-row
             hr
-            p.text-divider(style="background:#133d64;") or
+            p.text-divider(style="background:#17436c;") or
             //- On Log In, user will be updated via Observable
             hot-login-form
           .col-12(*ngIf="!login")

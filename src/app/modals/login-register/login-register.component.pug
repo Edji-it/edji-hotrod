@@ -9,10 +9,9 @@
         div
           h3#accountLoginHeader {{ loginHeader }}
           br
-          .button__row
-            hot-google-button([copy]="'Sign In with Google'")
+          edji-oauth-row
           hr
-          p.text-divider(style="background:#fff;") or
+          p.text-divider.on-white or
           hot-login-form((loginSuccess)="loginSuccess.emit(); closeModal.emit()")
           hr
           .button__row
