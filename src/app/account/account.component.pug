@@ -25,7 +25,7 @@ nav-bar([showDashboardOptions]="true")
     //- user name
     .row
       .col-md-8
-        .info-group
+        .info-group(*ngIf="currentUser.username")
           label.info-label Username
           p.info {{currentUser.username}}
       .col-md-4.pt-3
@@ -55,7 +55,7 @@ nav-bar([showDashboardOptions]="true")
         button.btn.btn-hero.mr-4(*ngIf="!currentUser.hero_status", (click)="showHeroSubModal = true; trackHeroClick()") Go Hero
         button.btn.btn-hero.mr-4(*ngIf="canceled", (click)="showHeroSubModal = true; trackHeroClick()") Renew Subscription
     //- Linked Accounts
-    .info-group
+    .info-group(*ngIf="showLinkedAccounts")
       label.info-label Linked Accounts
         //- Clever linked
         //- div(*ngIf=)

@@ -6,6 +6,7 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { AuthService } from '../_services/auth.service';
 import { User } from '../shared/datatypes';
 import { EdjiDatePipe } from '../_pipes';
+import { SecretSwitchesService } from '../_services';
 
 @Component({
   selector: 'edji-account',
@@ -25,6 +26,10 @@ export class AccountComponent implements OnInit, OnDestroy {
   public customerSubEnd: string = ""
   public customerCancelDate: string = ""
   public linkedAccounts: {'clever'?: boolean, 'google'?: boolean} = {}
+  /**
+   * @todo clean out after Clever launch
+   */
+  public showLinkedAccounts: boolean = false
 
   public showPassModal: boolean = false
   public showUploadProfPicModal: boolean = false
@@ -40,7 +45,8 @@ export class AccountComponent implements OnInit, OnDestroy {
     private _auth: AuthService, 
     private route: ActivatedRoute, 
     public _router: Router,
-    private angulartics: Angulartics2
+    private angulartics: Angulartics2,
+    private _secrets: SecretSwitchesService
   ) { 
     this.nameInitials = "";
   }
@@ -55,7 +61,10 @@ export class AccountComponent implements OnInit, OnDestroy {
             this.populateLinkedAccounts(user.oauth)
           }
         }
-      )
+      ),
+      this._secrets.secretSwitchesUpdates.subscribe((switches) => {
+        this.showLinkedAccounts = switches.cleverButton
+      })
     )
   }
 
