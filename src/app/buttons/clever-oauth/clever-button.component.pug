@@ -1,4 +1,5 @@
 button.mb-3.btn.btn-clever(
+  *ngIf="showClever",
   (click)="cleverSignIn()",
   [class.dark]="dark",
   id="btnCleverLogIn",
