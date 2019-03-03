@@ -400,6 +400,11 @@ input[type=text].input-noborder, input[type=password].input-noborder, input[type
 	width: 35px; 
 	text-align: center;
 	padding-left: 1px;
+
+	&.on-white {
+		color: $dark-gray;
+		background:#fff;
+	}
 }
 
 // Stripe override
