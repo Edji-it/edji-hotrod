@@ -16,7 +16,7 @@ export class CleverButton implements OnInit {
   /**
    * @todo clean out after Clever launch
    */
-  private showClever: boolean
+  public showClever: boolean
 
   constructor(
     private _auth: AuthService,

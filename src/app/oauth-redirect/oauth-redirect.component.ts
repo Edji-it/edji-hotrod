@@ -34,7 +34,7 @@ export class OAuthComponent implements OnInit {
   private licenseId = ''
   private redirectRouteUrl = '/dashboard'
   // Oauth token
-  private oAuthToken: string
+  public oAuthToken: string
   // Current user, for linking existing already logged in
   private currentUser: User
 
