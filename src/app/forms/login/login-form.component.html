@@ -13,7 +13,7 @@
     <div id="msgServerError" class="alert alert-danger" *ngIf="errorObject.serverError">{{errorObject.serverError}}</div>
   </div>
   <div class="button__row">
-    <button id="buttonLogin" type="submit" [class.loading]="loginLoading" class="btn btn-primary" name="Login" tabindex="0">Log In</button>
+    <button id="buttonLogin" type="submit" [class.loading]="loginLoading" class="btn btn-primary" name="Login" tabindex="0">{{ submitText }}</button>
   </div>
   
 </form>

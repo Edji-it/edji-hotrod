@@ -30,6 +30,7 @@ import { MessageToast, MessageService } from "src/app/_services";
         let toastTypeMap = {
             'heat-on' : 'icon-vision-flame',
             'heat-off' : 'icon-vision-flame inactive',
+            'success' : 'icon-check',
             'info' : 'icon-notice'
         }
         return toastTypeMap[toastType] || toastTypeMap['info']
