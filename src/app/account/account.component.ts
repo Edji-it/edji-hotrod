@@ -6,6 +6,7 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { AuthService } from '../_services/auth.service';
 import { User } from '../shared/datatypes';
 import { EdjiDatePipe } from '../_pipes';
+import { SecretSwitchesService } from '../_services';
 
 @Component({
   selector: 'edji-account',
@@ -24,6 +25,11 @@ export class AccountComponent implements OnInit, OnDestroy {
   public currentUser: any
   public customerSubEnd: string = ""
   public customerCancelDate: string = ""
+  public linkedAccounts: {'clever'?: boolean, 'google'?: boolean} = {}
+  /**
+   * @todo clean out after Clever launch
+   */
+  public showLinkedAccounts: boolean = false
 
   public showPassModal: boolean = false
   public showUploadProfPicModal: boolean = false
@@ -39,7 +45,8 @@ export class AccountComponent implements OnInit, OnDestroy {
     private _auth: AuthService, 
     private route: ActivatedRoute, 
     public _router: Router,
-    private angulartics: Angulartics2
+    private angulartics: Angulartics2,
+    private _secrets: SecretSwitchesService
   ) { 
     this.nameInitials = "";
   }
@@ -50,8 +57,14 @@ export class AccountComponent implements OnInit, OnDestroy {
         user => {
           this.currentUser = user
           this.updateHeroStatus()
+          if (user.oauth) {
+            this.populateLinkedAccounts(user.oauth)
+          }
         }
-      )
+      ),
+      this._secrets.secretSwitchesUpdates.subscribe((switches) => {
+        this.showLinkedAccounts = switches.cleverButton
+      })
     )
   }
 
@@ -96,6 +109,17 @@ export class AccountComponent implements OnInit, OnDestroy {
       )
     } else if (this.currentUser.license_ids && this.currentUser.license_ids.length) {
       this.academyHero = true
+    }
+  }
+
+  /**
+   * Check for linked accounts (display linked/how to link)
+   * @param oauth oauth array from user object
+   */
+  private populateLinkedAccounts(oauth: any[]) : void {
+    this.linkedAccounts = {}
+    for (let i = 0; i < oauth.length; i++) {
+      this.linkedAccounts[oauth[i].type] = true
     }
   }
 

@@ -19,10 +19,9 @@ nav-bar([hideAccountOptions]="true", [pageTitle]="'Join Your Academy'")
       .mt-5
         .row
           .col-12(*ngIf="login")
-            .button__row
-              hot-google-button([copy]="'Sign In with Google'")
+            edji-oauth-row
             hr
-            p.text-divider(style="background:#133d64;") or
+            p.text-divider(style="background:#17436c;") or
             //- On Log In, user will be updated via Observable
             hot-login-form
           .col-12(*ngIf="!login")
@@ -35,19 +34,19 @@ nav-bar([hideAccountOptions]="true", [pageTitle]="'Join Your Academy'")
       h1.on-dark Confirm Invite to <i>{{academyName}}</i>
       p.on-dark Please verify this is the account you would like to use.
       .card
-        .card-block
+        .card-body
           .card-title
             .user-icon--large.float-left.mr-3
               span.user-icon__initials {{user.fullname | userinitials}}
             h4.mb-0 {{user.fullname}}
             p.small {{user.email}}
-        .card-block
+        .card-body
           .btn-row.text-right
             .btn.btn-secondary((click)="changeAccount()") Use other account
             .btn.btn-hero((click)="processLicense()") Join Academy
       .row-pad
         p.on-dark By joining a Hero Academy, your institution provides you with a license of 
-          a.link.on-dark([routerLink]="['/hero']") Edji Hero
+          a.link.on-dark([routerLink]="['/plans']") Edji Hero
           | .
 
   //- Acceptance Errors

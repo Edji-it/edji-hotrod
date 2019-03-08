@@ -80,7 +80,7 @@
           </div>
         </div>
         <div class="answerOverflow answerOverflow-normal" id="answerBlock" *ngIf="!ownerHidden">
-          <div *ngFor="let answer of answersById[question._id]">
+          <div *ngFor="let answer of answersById[question._id]; let i=index">
             <div *ngIf="isAnswerVisible(answer)" class="comment-wrap-row">
               <edji-comment class="answerCommentBlock"  
                 [comment]="answer" 

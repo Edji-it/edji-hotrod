@@ -66,10 +66,9 @@ export class RegisterPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // this makes the window always render scrolled to the top
-    this._router.events.subscribe(() => {
-      window.scrollTo(0, 0)
-    })
+    // This makes the window always render scrolled to the top
+    let startEl = document.getElementById('top')
+    startEl && startEl.scrollIntoView()
 
     this.subscriptions.push(
       this.route.queryParams.subscribe((queryParams) => {

@@ -3,8 +3,7 @@ import { HttpModule } from '@angular/http'
 import { HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser'
 import { LockerModule, Locker, LockerConfig } from 'angular-safeguard'
 import { Angulartics2Module } from 'angulartics2'
-import { Angulartics2GoogleAnalytics } from 'angulartics2/ga'
-import * as Sentry from "@sentry/browser";
+import * as Sentry from "@sentry/browser"
 
 // App is our top level component
 import { AppComponent } from './app.component'
@@ -84,7 +83,7 @@ import { HeroPromoPageComponent } from './hero-promo/hero-promo.component';
 import { HeroPricingComponent } from './hero-pricing/hero-pricing.component';
 import { DiscoverFeedComponent } from './discover-feed/discover-feed.component';
 import { OAuthComponent } from './oauth-redirect/oauth-redirect.component'
-import { GoogleButton } from './buttons'
+import { GoogleButton, CleverButton } from './buttons'
 import { CommentPaneComponent } from './shared/comment-pane/comment-pane.component'
 import { HttpClientModule } from '@angular/common/http';
 import { DataListModule } from 'primeng/datalist';
@@ -152,6 +151,7 @@ const APP_PROVIDERS = [
     AudioCommentComponent,
     EmojiKeyboardComponent,
     QuestionComponent,
+    CleverButton,
     GoogleButton,
     OauthRowComponent,
     OpenEndedAnswersComponent,

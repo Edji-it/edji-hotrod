@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs'
 
 // Project Dependencies
 import { EdjiComment, EdjiQuestion, Project, Reading, User } from "../datatypes"
-import { CommentService, AuthService, ProjectService, ReadingService } from "../../_services"
+import { CommentService, AuthService, ProjectService, ReadingService, SocketService } from "../../_services"
 
 enum ResponseType {
   OpenEnded = 0,
@@ -121,9 +121,8 @@ export class QuestionComponent implements OnInit, OnDestroy {
           this.answerTypesAvailable = this._auth.getAllowedCommentMediaTypes()
           this.updateSelections()
         })
-    ) // this.subscriptions.push
-
-  } // ngOnInit
+    )
+  }
 
   public setQuestionOrder (input : string) : void {
     // Make sure there is no whitespace.

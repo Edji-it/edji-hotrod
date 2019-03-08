@@ -28,7 +28,7 @@ nav-bar
     .col-lg-3.col-md-4.col-sm-6.mb-4(*ngFor="let player of players")
       .player-card.card
         img.card-img([attr.src]="player.photo")
-        .card-block
+        .card-body
           .card-title 
             .emoji_wrap([innerHtml]="player.emoji | emojione")
             | {{ player.name }}        
@@ -42,7 +42,7 @@ nav-bar
     .col-lg-3.col-md-4.col-sm-6.mb-4(*ngFor="let animal of animals")
       .player-card.card
         img.card-img([attr.src]="animal.photo")
-        .card-block
+        .card-body
           .card-title 
             .emoji_wrap([innerHtml]="animal.emoji | emojione")
             | {{ animal.name }}        
@@ -53,7 +53,7 @@ nav-bar
   .row.row-xl-pad
     .col-12
       .card.card-inverse.navy(style="overflow:hidden;")
-        .card-block
+        .card-body
           .row
             .col-lg-6(style="padding-bottom:40px;")
               h1.card-title Supporting Edji

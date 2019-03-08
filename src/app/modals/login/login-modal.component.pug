@@ -1,0 +1,22 @@
+.modal
+  .modal-dialog(role='document')
+    #loginModal.modal-content
+      .modal-header
+        h5.modal-title Log In
+      .modal-body
+        div(*ngIf='guestLogin')
+          h3#guestLoginHeader Edji as a guest
+          hot-guest-login((loginSuccess)='onLoginSuccess()')
+        div(*ngIf='!guestLogin')
+          edji-oauth-row
+          hr
+          p.text-divider.on-white or
+          hot-login-form((loginSuccess)='onLoginSuccess()')
+      .modal-footer(*ngIf='guestLogin')
+        p.center Wait! I have an account and want to use it!
+        .center
+          button#gotoAccountLoginButton.btn.btn-secondary((click)='guestLogin = false') Log In with Account
+      .modal-footer(*ngIf='!guestLogin')
+        p Wait! I don't want to login, I just want to comment!
+        div
+          button#gotoGuestLoginButton((click)='guestLogin = true') Guest Login

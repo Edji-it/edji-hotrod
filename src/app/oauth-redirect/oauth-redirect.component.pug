@@ -2,7 +2,7 @@ nav-bar
 .container.dashboard-container
   .row
     .col-sm-12.col-md-8.offset-md-2.mt-4(*ngIf="hasError")
-        h2 Error Signing in with Google
+        h2 Error Signing in with {{ loginTypeDisplay }}
         ng-container(*ngIf="messages.noUser") 
             .alert.alert-danger
                 | There was no user found with that token
@@ -25,3 +25,15 @@ nav-bar
                 | Sorry! Looks like something went wrong with login. Please return to the Login page and try again!
             .btn-row.right
                 button.btn.btn-primary([routerLink]="['/login']") Return to Log In
+    .col-sm-12.col-md-8.offset-md-2.mt-4(*ngIf="oAuthToken && messages.duplicate_user")
+        h2 Log in to Link with Clever
+        ng-container(*ngIf="!messages.linkError")
+            .alert.alert-warning
+                p An Edji user already exists with your Clever email address. If you'd like to link Clever with your existing Edji account, please log in below. 
+                p If you do not wish to link your account, you may return to the <a class="link" [routerLink]="['/login']">log in page</a> and continue with your Edji account.
+            hot-login-form((loginSuccess)="linkAfterLogin($event)", submitText="Log In and Link")
+            a.link([routerLink]="['/login']", [queryParams]="{mlink: 'forgot'}") Forgot password?
+        ng-container(*ngIf="messages.linkError")
+            .alert.alert-danger
+                b Error Linking
+                | There was an error linking your accounts. Please try again, or contact <a href="mailto:support@edji.it" class="link">Edji Support</a>.

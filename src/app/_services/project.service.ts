@@ -463,15 +463,22 @@ export class ProjectService {
                 this.answersByIdSource[answer.questionId] = []
             }
             // Double check comment doesn't exist
-            for (let answerExist of this.answersByIdSource[answer.questionId]) {
-                if (answerExist._id == answer._id) {
+            for (let i = 0; i < this.answersByIdSource[answer.questionId].length; i++) {
+                let answerExist = this.answersByIdSource[answer.questionId][i]
+                if (answerExist._id === answer._id ) {
+                    if (this.user._id !== answer.user_id) {
+                        // Don't update users own answers from socket
+                        // - Case: Pointer the emoji keyboard relies on breaks if you do so
+                        this.answersByIdSource[answer.questionId][i] = answer
+                    }
                     skipAdd = true
                 }
             }
             if (!skipAdd) {
                 this.answersByIdSource[answer.questionId].push(answer)
-                this.answersByIdSubject.next(this.answersByIdSource)
             }
+            // Update observable
+            this.answersByIdSubject.next(this.answersByIdSource)
         }
     } // public addAnswerToAnswers(answer: EdjiComment): void
 
@@ -665,9 +672,9 @@ export class ProjectService {
         // Add comment ID if passed
         // Tell other Project viewers comment changed, using Socket
         if (comment._id) {
-            this._socket.updateComment(comment, 'UPDATE', this.project._id);
+            this._socket.updateComment(comment, 'UPDATE', this.project._id)
         } else {
-            this._socket.updateComment(comment, 'CREATE', this.project._id);
+            this._socket.updateComment(comment, 'CREATE', this.project._id)
 
             // need to set a comment context to discern between comments and replies for pipo event
             let commentContext = 'comment'
