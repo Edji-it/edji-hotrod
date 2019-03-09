@@ -178,12 +178,10 @@ describe('Project Page', () => {
             // // wait 5 seconds for the restart button to become active
             // browser.wait(EC.elementToBeClickable(project.audioRestart), 5000, "could not restart the audio comment");
             // project.audioRestart.click();
-            /**
-             * @todo Test pause button (failing on Circle)
-             */
+            
             // Wait up to 3 seconds for the pause button to become active
-            // browser.wait(EC.elementToBeClickable(project.audioPause), 5000, "could not pause the audio comment");
-            // project.audioPause.click();
+            browser.wait(EC.elementToBeClickable(project.audioPause), 5000, "could not pause the audio comment");
+            project.audioPause.click();
 
             // Delete the audio comment
             browser.wait(EC.elementToBeClickable(project.commentDelete), 5000, "could not find delete button");
