@@ -29,8 +29,16 @@ article.content {
 	margin-left: 50px;
 	word-break: break-word;
 	
-	@media all and (min-width: $desktop) {
-		margin-left: 253px;
+	.sliding-out & {
+		// Static width comment pane, flexible margin
+		@media(min-width: $medium-screen) and (max-width: $large-screen) { // 768px - 992px
+			max-width:calc(100% - 320px);
+			margin-left: auto;
+		}	
+	}
+    // Flexible width comment pane, static margin
+	@media all and (min-width: $large-screen) { // 992px
+		margin-left: 285px;
   	}
 
 	&.hidden-text {
