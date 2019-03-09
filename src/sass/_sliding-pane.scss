@@ -20,9 +20,9 @@ $slidingPaneWidth: 265px;
         height: 70%;// calc(70% - #{ $navBarHeight - 13px });
     }
 
-    // Full width pane
+    // Full width "mobile" comment pane
     @media(max-width: $medium-screen) { // <768px
-        width: calc(100% - 50px);
+        width: calc(100% - 60px);
     }
     // Min width pane
     @media(min-width: $medium-screen) and (max-width: $large-screen) { // 768px - 992px
@@ -30,6 +30,7 @@ $slidingPaneWidth: 265px;
     }
     // Flexible width pane
     @media(min-width: $large-screen) { // >992px
+        min-width: 300px;
         width: calc( (100% - 530px) / 2 ) !important;
     }
     &.reading-recap {

@@ -32,13 +32,13 @@ article.content {
 	.sliding-out & {
 		// Static width comment pane, flexible margin
 		@media(min-width: $medium-screen) and (max-width: $large-screen) { // 768px - 992px
-			max-width:calc(100% - 320px);
+			max-width:calc(100% - 330px);
 			margin-left: auto;
 		}	
 	}
     // Flexible width comment pane, static margin
 	@media all and (min-width: $large-screen) { // 992px
-		margin-left: 285px;
+		margin-left: 330px;
   	}
 
 	&.hidden-text {

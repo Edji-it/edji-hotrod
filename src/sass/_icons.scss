@@ -459,12 +459,20 @@ content: "|<"; }
     position: absolute;
     top: 350px;
     z-index: $zMid + 2000;
+    left: 264px;
 
-    @media(max-width: $desktop) {
-        left: calc(100% - 51px);
+     // Full width "mobile" comment pane
+     @media(max-width: $medium-screen) { // <768px
+        left: calc(100% - 61px);
     }
-    @media(min-width: $desktop) {
-        left: calc( (100% - 537px) / 2 ) !important;
+    // NOTE: "large screen" value is different here to account min-width flexibility
+    // Min width pane
+    @media(min-width: $medium-screen) and (max-width: 1129px) { // 768px - 992px
+        left: 299px;
+    }
+    // Flexible width pane
+    @media(min-width: 1129px) { // >992px
+        left: calc( ((100% - 530px) / 2) - 1px ) !important;
     }
 }
 
