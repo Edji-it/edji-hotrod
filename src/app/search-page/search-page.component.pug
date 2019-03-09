@@ -1,11 +1,56 @@
 nav-bar([showDashboardOptions]="true")
 .container.mt-4
     .row
-        //- .col-md-4
-        //-     //- Empty Space
-        .col-md-8
+        .col-12
             h1.mb-1 Discover Readings
             p.small.mt-2 Find readings created by others to use or modify for your class.
+    .row
+        .col-md-4
+                .form-group(style="margin-top:45px;")
+                    .input-group.pb-2
+                        input#projectCodeInputJoinDash.form-control(
+                        name="SearchTermInput", 
+                        [(ngModel)]="searchTerm", 
+                        type="text", 
+                        style="text-align: left;", 
+                        placeholder="Search..."
+                        )
+                        .input-group-append
+                            button#buttonJoinProject.btn.btn-primary(
+                                [class.loading]="searchLoading", 
+                                name="Search", 
+                                href="#"
+                            ) Search
+                .form-group
+                    label Users
+                    //- Public option
+                    label.form-check-label.form-check-btn(
+                        id="discoverFilterPublic",
+                        [class.active]="!followingFilter",
+                        title="See public readings from all users",
+                        (click)="followingFilter = false; loadFeed('filter_public')"
+                    )
+                        span([innerHTML]="':earth_americas: Public' | emojione")
+                    //- Following users option
+                    label.form-check-label.form-check-btn(
+                        id="discoverFilterFollowing",
+                        [class.active]="followingFilter",
+                        title="Filter by users you follow",
+                        (click)="followingFilter = true; loadFeed('filter_following')"
+                    )
+                    span([innerHTML]="':green_heart: Following' | emojione")
+                br
+                .form-group(style="clear:left;")
+                    label Grade Level
+                        button.btn-secondary.btn-sm.filter-clear(
+                            *ngIf="gradeFilter.length > 0",
+                            (click)="gradeFilter = []; loadFeed('')"
+                        ) Clear
+                    grade-selector([(ngModel)]="gradeFilter", (ngModelChange)="loadFeed('filter_gradeLevel')")
+                //- .form-group
+                //-     label Subjects
+                    //- ss-multiselect-dropdown([options]="subjects", [(ngModel)]="subjectFilter", [settings]="subjectDropSettings")
+        .col-md-8
             #notFollowingMessage.alert.alert-light(*ngIf="!loading && followingFilter && readings.length < 1")
                 h4 Time to follow someone!
                 p Follow Edji to see some of our latest curated Readings.
@@ -43,34 +88,3 @@ nav-bar([showDashboardOptions]="true")
                             span.w &hellip;
                 </ng-template>
             </p-dataList>
-        .col-md-4
-            h4.mt-2 Filters
-            .form-group
-                label Users
-                //- Public option
-                label.form-check-label.form-check-btn(
-                    id="discoverFilterPublic",
-                    [class.active]="!followingFilter",
-                    title="See public readings from all users",
-                    (click)="followingFilter = false; loadFeed('filter_public')"
-                )
-                    span([innerHTML]="':earth_americas: Public' | emojione")
-                //- Following users option
-                label.form-check-label.form-check-btn(
-                    id="discoverFilterFollowing",
-                    [class.active]="followingFilter",
-                    title="Filter by users you follow",
-                    (click)="followingFilter = true; loadFeed('filter_following')"
-                  )
-                  span([innerHTML]="':green_heart: Following' | emojione")
-            br
-            .form-group(style="clear:left;")
-                label Grade Level
-                    button.btn-secondary.btn-sm.filter-clear(
-                        *ngIf="gradeFilter.length > 0",
-                        (click)="gradeFilter = []; loadFeed('')"
-                    ) Clear
-                grade-selector([(ngModel)]="gradeFilter", (ngModelChange)="loadFeed('filter_gradeLevel')")
-            //- .form-group
-            //-     label Subjects
-                //- ss-multiselect-dropdown([options]="subjects", [(ngModel)]="subjectFilter", [settings]="subjectDropSettings")

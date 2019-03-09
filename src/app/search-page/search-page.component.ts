@@ -30,6 +30,9 @@ export class SearchPage implements OnInit {
   public rows: number = 20
   public total: number = 20
 
+  // Search 
+  public searchTerm: string = ''
+
   // State vars
   public loading: boolean = true
 
