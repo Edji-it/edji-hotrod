@@ -29,6 +29,8 @@ export class Home implements PageObjectInterface
     getPage() : void 
     {
         browser.get('/#/home');
+        // Ensure home page loaded
+        browser.wait(this.EC.elementToBeClickable(this.projectCodeInputNav), 3000, "home page did not load with group code input in nav")
     } // getPage() : void
 
     // click on the login link
@@ -40,7 +42,7 @@ export class Home implements PageObjectInterface
     // Entering the project code from the home page
     enterProjectCodeFromHome(input: string) : void
     {
-        // Ensure page has loaded
+        // Ensure group code input is available
         browser.wait(this.EC.elementToBeClickable(this.projectCodeInputNav), 5000, "Project Code input was not present in Nav")
         
         this.projectCodeInputNav.isPresent().then((result) => {
