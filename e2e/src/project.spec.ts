@@ -40,12 +40,12 @@ describe('Project Page', () => {
      * - Make sure that the guest name is on the account button
      */
 
-    describe("Login modal errors", () => {
-        home.getPage();
-        // Go to project to see login modal
-        home.enterProjectCodeFromHome('test')
-        loginModal.testLoginModalErrors()
-    })
+    // describe("Login modal errors", () => {
+    //     home.getPage();
+    //     // Go to project to see login modal
+    //     home.enterProjectCodeFromHome('test')
+    //     loginModal.testLoginModalErrors()
+    // })
 
     describe("Commenting", () => {
         beforeAll(() => {
@@ -162,7 +162,7 @@ describe('Project Page', () => {
             project.audioRecord.click();
 
             // wait 3 seconds for the audio to record
-            browser.sleep(3000)
+            browser.sleep(9000)
 
             // click the record audio button to end recording
             browser.wait(EC.elementToBeClickable(project.audioRecord), 5000, "never found the record audio button");
@@ -177,7 +177,7 @@ describe('Project Page', () => {
             // project.audioRestart.click();
             
             // Wait up to 3 seconds for the pause button to become active
-            browser.wait(EC.elementToBeClickable(project.audioPause), 3000, "could not pause the audio comment");
+            browser.wait(EC.elementToBeClickable(project.audioPause), 5000, "could not pause the audio comment");
             project.audioPause.click();
             /**
              * @todo We need to test the restart button here
