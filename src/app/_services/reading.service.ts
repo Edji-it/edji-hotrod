@@ -124,8 +124,7 @@ export class ReadingService {
     let { term } = query
 
     if (term) {
-      queryString += 'title=' + term
-      queryString += 'html=' + term
+      queryString += 'title=' + term + '&html=' + term
     }
 
     return this.http
