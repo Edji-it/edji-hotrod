@@ -72,7 +72,12 @@ export class SearchPage implements OnInit {
       filters['grades'] = this.gradeFilter
     }
 
-    this._readings.search('')
+    // Attach search query
+    let query = {
+      term: this.searchTerm
+    }
+
+    this._readings.search(query)
       .subscribe(data => {
         console.log('data', data)
         this.readings = data.results || []

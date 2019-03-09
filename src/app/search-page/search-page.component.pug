@@ -13,13 +13,15 @@ nav-bar([showDashboardOptions]="true")
                         [(ngModel)]="searchTerm", 
                         type="text", 
                         style="text-align: left;", 
-                        placeholder="Search..."
+                        placeholder="Search...",
+                        (keyup.enter)="loadFeed('search_term')"
                         )
                         .input-group-append
                             button#buttonJoinProject.btn.btn-primary(
                                 [class.loading]="searchLoading", 
                                 name="Search", 
-                                href="#"
+                                href="#",
+                                (click)="loadFeed('search_term')"
                             ) Search
                 .form-group
                     label Users

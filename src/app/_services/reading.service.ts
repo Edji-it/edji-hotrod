@@ -120,8 +120,15 @@ export class ReadingService {
   } // public get(id : string) : Observable<any>
 
   public search(query): Observable<any> {
+    let queryString = ''
+    let { term } = query
+
+    if (term) {
+      queryString += 'title=' + term
+    }
+
     return this.http
-      .get(this._auth.getUrl() + '/api/v1/readings/_search?' + query, this._auth.getOptions())
+      .get(this._auth.getUrl() + '/api/v1/readings/_search?' + queryString, this._auth.getOptions())
       .pipe(map(data => data.json()), take(1))
   }
 
