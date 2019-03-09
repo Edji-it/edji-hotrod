@@ -125,6 +125,7 @@ export class ReadingService {
 
     if (term) {
       queryString += 'title=' + term
+      queryString += 'html=' + term
     }
 
     return this.http
