@@ -55,7 +55,7 @@ export class NewReading implements PageObjectInterface
     public insertQuestionButtonMobile =  element(by.id('buttonInsertQuestionMobile'));
     public insertQuestionPrompt = element.all(by.css('textarea.text-comment-input')).last();
 
-    public imageInReading = element(by.css(".content .img img"));
+    public imageInReading = element(by.css(".content img"));
     // public imageUploadList = element.all(by.css('.upload-list-item'));
     
     public titleError = element(by.id('errorTitle'));
@@ -168,7 +168,12 @@ export class NewReading implements PageObjectInterface
         })
     }
 
-    public confirmArchiveButtonClick(): void {
+    public clickShareAndArchive(): void {
+        // Click share button
+        this.addNewReading()
+        // Wait for a modal to appear (either archive or create group)
+        let modal = element(by.css(".modal.show"))
+        browser.wait(this.EC.visibilityOf(modal), 5000, "archive or group modal did not show after clicking Share")
         // Click the confirm archive reading button for new reading
         this.confirmArchiveButton.isPresent().then((result) => {
             if (result) {

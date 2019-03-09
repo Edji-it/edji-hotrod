@@ -55,7 +55,7 @@ export class AddProjectModal implements OnInit {
       textType: true,
       audioType: true,
       replyType: true,
-      customCode: '',
+      customCode: ['', { disabled: !this.isHero }],
       groupInstructions: ''
     })
   }

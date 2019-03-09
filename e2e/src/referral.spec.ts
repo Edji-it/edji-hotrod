@@ -167,9 +167,7 @@ describe('Referral Sharing and Rewards', () => {
             newReading.contentInput.sendKeys(newReading.contentShortString);
             newReading.sourceInput.sendKeys(newReading.sourceString);
             // Submit New Reading
-            newReading.addNewReading()
-            // checks for and clicks the confirm archive button if the modal is there
-            newReading.confirmArchiveButtonClick()
+            newReading.clickShareAndArchive()
             // Group Label has content prefilled, so we clear it
             browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
             newReading.groupInput.clear();

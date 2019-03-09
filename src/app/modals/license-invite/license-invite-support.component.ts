@@ -19,7 +19,7 @@ export class LicenseInviteComponent implements OnInit {
   ) {
     this.licenseInvite = this._fb.group({
       // name: [null, Validators.required],
-      // email: [null, Validators.compose([Validators.required, this.emailValidator])]
+      // email: [null, [Validators.required, this.emailValidator]]
     })
   }
 

@@ -49,7 +49,7 @@ import {
 // import { ReuseStrategy } from './route-reuse-strategy'
 
 // Directives
-import { MediumEditorDirective } from 'angular2-medium-editor'
+import { MediumEditorModule } from 'angular2-medium-editor'
 import { MultiselectDropdownModule } from './_directives'
 import { ClickOutsideDirective } from './_directives/click-outside.directive'
 
@@ -138,7 +138,6 @@ const APP_PROVIDERS = [
 @NgModule({
   bootstrap: [ AppComponent ],
   declarations: [
-    MediumEditorDirective,
     ClickOutsideDirective,
     RedeemToken,
     RegisterPageComponent,
@@ -218,6 +217,7 @@ const APP_PROVIDERS = [
     HttpModule,
     HttpClientModule,
     LockerModule,
+    MediumEditorModule,
     MultiselectDropdownModule,
     Angulartics2Module.forRoot({
       pageTracking: {

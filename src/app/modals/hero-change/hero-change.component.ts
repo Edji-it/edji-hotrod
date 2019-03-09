@@ -57,7 +57,7 @@ export class HeroChangeComponent implements OnInit {
     this._auth.updateHeroSub(type)
       .pipe(take(1))
       .subscribe(
-        data => {
+        (data: any) => {
           this.updating = false
           this.isUpdated = true
           if (data.user) {

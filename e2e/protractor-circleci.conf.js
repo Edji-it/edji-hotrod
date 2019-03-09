@@ -12,8 +12,9 @@ var localConf = globalConf.config;
 
 // Make custom changes to any part of the global config as needed
 localConf['capabilities']['chromeOptions']['args'] = [
-  'use-fake-ui-for-media-stream',
-  'disable-web-security',
+  '--use-fake-ui-for-media-stream',
+  '--use-fake-device-for-media-stream',
+  '--disable-web-security',
   '--headless',
   '--window-size=1680,1050',
   '--disable-extensions',

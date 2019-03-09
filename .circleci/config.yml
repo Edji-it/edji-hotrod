@@ -7,7 +7,7 @@ jobs:
   build:
     docker:
       # specify the version you desire here
-      - image: circleci/node:9.11
+      - image: circleci/node:10.15
         # env:
         #   - DISPLAY=:99
         #   - CHROME_BIN=/usr/bin/google-chrome

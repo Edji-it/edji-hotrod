@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { Http, Response, Headers, RequestOptions } from '@angular/http'
-import { BehaviorSubject, Observable, Subject } from 'rxjs'
+import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs'
 import { map, take } from 'rxjs/operators'
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http'
 
@@ -18,19 +18,7 @@ interface FilterObj {
 @Injectable()
 export class ReadingService {
 
-  /*
-    Last Modified: 5 Aug 2017
-  */
-
-
-  constructor(private http: Http, private _http: HttpClient, private _auth: AuthService) {
-    
-  }
-
-  ngOnInit() {
-      
-  }
-
+  
   //set up thumbnail observables
   private readingValue: Reading = <Reading>{};
   // BehaviorSubjects push last value on subscribe
@@ -40,6 +28,24 @@ export class ReadingService {
   // User's Readings observable
   private userReadingsSource = new BehaviorSubject<GetReadingsResponse>({})
   public currentUserReadings: Observable<any> = this.userReadingsSource.asObservable()
+
+  private subscriptions: Subscription[] = []
+
+  constructor(private http: Http, private _http: HttpClient, private _auth: AuthService) {
+    this.subscriptions.push(
+      /**
+       * Clear held values when told by _auth
+       */
+      this._auth.clearAll.subscribe((clear: boolean) => {
+        if (clear) {
+          // Clear Reading  
+          this.clear()
+          // Clear dashboard readings
+          this.userReadingsSource.next({})
+        }
+    })
+    )
+  }
 
   /**
    * Get all Created Readings for a user, paginated
@@ -105,14 +111,14 @@ export class ReadingService {
   // Pull one reading by ID
   public get(id : string) : Observable<any> {
     
-    return this.http
+    return this._http
       .get(this._auth.getUrl() + '/readings/' + id, this._auth.getOptions())
       .pipe(
-        map(data => {
-          if (data.json()) {
-            this.setReadingObj(data.json())
+        map((data: any) => {
+          if (data) {
+            this.setReadingObj(data)
           }
-          return data.json()
+          return data
         })
       );
   } // public get(id : string) : Observable<any>
@@ -127,15 +133,12 @@ export class ReadingService {
 
   // Pull all versions of a particular reading
   public getAllVersions(versionId : string) : void {
-      this.http
+      this._http
         .get(this._auth.getUrl() + '/readings/versions/' + versionId, this._auth.getOptions())
         .pipe(
-          map(data => {
-            return data.json()
-          }),
           take(1)
         )
-        .subscribe(data => {
+        .subscribe((data: any) => {
           if (data.readings) {
             data.filter = 'versions'
             // Extract first version title for filter value
@@ -157,7 +160,7 @@ export class ReadingService {
   // No need to return an Observable<Reading> since we don't need to use it after the fact.
   public delete(targetReading: Reading): Observable<any> {
     // console.log("Deleting '" + targetReading.title)
-    return this.http.delete(this._auth.getUrl() + '/readings/' +  targetReading._id, this._auth.getOptions())
+    return this._http.delete(this._auth.getUrl() + '/readings/' +  targetReading._id, this._auth.getOptions())
       .pipe(
         map(value => {
           // Delete was successful
@@ -224,27 +227,27 @@ export class ReadingService {
         createdAt: reading.createdAt
       } // let
 
-      return this.http
+      return this._http
         .put(this._auth.getUrl() + '/readings/' + reading['_id'], { reading: putReading }, this._auth.getOptions())
         .pipe(
-          map(data => {
-            if (data.json() && data.json().reading) {
-              this.readingValue = data.json().reading
+          map((data: any) => {
+            if (data && data.reading) {
+              this.readingValue = data.reading
               this.readingSource.next(this.readingValue)
             }
-            return data.json().reading;
+            return data.reading
           })
         );
     } else {
-      return this.http
+      return this._http
         .post(this._auth.getUrl() + '/api/v1/readings', { reading: reading }, this._auth.getOptions())
         .pipe(
-          map(data => {
-            if (data.json() && data.json().reading) {
-              this.readingValue = data.json().reading
+          map((data: any) => {
+            if (data && data.reading) {
+              this.readingValue = data.reading
               this.readingSource.next(this.readingValue)
             }
-            return data.json().reading;
+            return data.reading
           })
         );
     } // if
