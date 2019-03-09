@@ -1,3 +1,5 @@
 .mb-4
-    h3 Log In with Google
-    hot-google-button([copy]="'Sign In with Google'")
+    //- h3 Quick {{ signUp ? 'Sign Up' : 'Log In'}}
+    .button__row
+        hot-google-button([copy]="'Sign '+(signUp?'Up':'In')+' with Google'")
+        edji-clever-button

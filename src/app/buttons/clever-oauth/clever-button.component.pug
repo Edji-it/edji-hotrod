@@ -1,0 +1,11 @@
+button.mb-3.btn.btn-clever(
+  *ngIf="showClever",
+  (click)="cleverSignIn()",
+  [class.dark]="dark",
+  id="btnCleverLogIn",
+  type="button",
+  tabindex="0",
+  title="Sign in with Clever"
+) 
+  //- Forces the button to be sized correctly for background image
+  img(src="/assets/images/clever-btn--light.png", style="visibility: hidden;")

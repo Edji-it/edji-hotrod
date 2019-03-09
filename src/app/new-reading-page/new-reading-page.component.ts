@@ -1,7 +1,7 @@
 import { ActivatedRoute, Router, Params } from '@angular/router'
 import { Title } from '@angular/platform-browser'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
+import { Component, ElementRef, OnInit, ViewChild, OnDestroy } from '@angular/core'
 import { Angulartics2 } from 'angulartics2'
 import { IMultiSelectOption, IMultiSelectSettings } from '../_directives'
 import { take } from 'rxjs/operators'
@@ -17,10 +17,12 @@ import { Subscription, Observable } from 'rxjs';
     styleUrls: ['new-reading-page.component.scss'],
     templateUrl: './new-reading-page.component.pug'
 })
-export class NewReadingPage implements OnInit {
+export class NewReadingPage implements OnInit, OnDestroy {
     
     public readingForm: FormGroup
-    public newReadingInner: string = "<div>&nbsp;</div>"
+    // Initiating editors with blank contents prevents rapidly triggering do-check cycles
+    // @todo (this is something that should really be fixed within the Medium Editor)
+    public newReadingInner: string = ""
     public readingHtml: any[] = [{'text': this.newReadingInner}]
     public readingIsBlank: boolean = false
     public submitted: boolean = false
@@ -54,6 +56,7 @@ export class NewReadingPage implements OnInit {
     // Archiving state
     public readingToArchive: Reading
     public readingsArchivedBefore: string
+    public readingArchivalSet: boolean = false
     // New project
     public newGroup: Project
 
@@ -180,9 +183,11 @@ export class NewReadingPage implements OnInit {
 
         this.copyId = this._route.snapshot.queryParams['copyId']
         
-        if (this.readingId) {
+        // Fetch the Reading if loading a draft that is not yet loaded
+        if (this.readingId && (!this.reading || this.readingId !== this.reading._id)) {
             this.getReading(this.readingId)
         } else if (this.copyId) {
+            // Fetch the Reading if copying from an existing Reading
             this.readingType = 'existingReading'
             this.getReading(this.copyId)
             // fire an analytic event here for tracking purposes
@@ -197,7 +202,7 @@ export class NewReadingPage implements OnInit {
             this._auth.getCurrentUser().subscribe((user) => {
                 this.user = user
                 // Gets the active readings from the dashboard if the user is not a hero user
-                if (!this.user.hero_status) {
+                if (!this.user.hero_status && !this.readingArchivalSet) {
                     this._readings.updateCreated(user)
                 }
             }),
@@ -207,6 +212,8 @@ export class NewReadingPage implements OnInit {
                         // If no readings, nothing to handle
                         return
                     }
+                    // If we have readings, don't request created readings again
+                    this.readingArchivalSet = true
                     if (!this.user.hero_status && data.readings[1] && !data.readings[1].archived) {
                         // Take the second reading and make sure it is archived
                         this.readingToArchive = data.readings[1]
@@ -225,6 +232,10 @@ export class NewReadingPage implements OnInit {
         )
 
         this._title.setTitle('Edji | New Reading')
+     }
+
+     ngOnDestroy() {
+        this.subscriptions.forEach((sub: Subscription) => { sub.unsubscribe()})
      }
 
      private getReading(readingId: string) {
@@ -263,6 +274,10 @@ export class NewReadingPage implements OnInit {
      * - Enables inserting images at cursor position
      */
     private contentChange(event: Event) {
+        if (!Rangy) {
+            // Clicking the editor before page is finished loading causes a broken reference to Rangy
+            return
+        }
         let sel = Rangy.getSelection()
         this.masterSelection = sel
         
@@ -481,7 +496,6 @@ export class NewReadingPage implements OnInit {
             this.readingIsBlank = false
         } else {
             this.readingIsBlank = true
-            return false
         }
         // Overall validation check that questions have been filled out properly
         if (this.readingHtml[1] && this.readingHtml[1].question) {
@@ -491,6 +505,9 @@ export class NewReadingPage implements OnInit {
                 this.readingHtml[i].question.prompt==='' || 
                 (this.readingHtml[i].question.answer_types && this.readingHtml[i].question.answer_types.length < 1))) {
                     questionsValid = false
+                } else {
+                    // Content is not blank if it includes a question!
+                    this.readingIsBlank = false
                 }
             }
         }
@@ -568,7 +585,7 @@ export class NewReadingPage implements OnInit {
         for (let i=0; i<editors.length; i++) {
             let contentEl = editors[i]
             // Make sure we aren't copying parts of the medium-editor
-            while (contentEl.childNodes.length == 1 && contentEl.firstChild.classList.contains('medium-editor-element')) {
+            while (contentEl.childNodes.length == 1 && contentEl.firstChild.classList && contentEl.firstChild.classList.contains('medium-editor-element')) {
                 contentEl = contentEl.firstChild
             } 
             // Add question "word"
@@ -706,7 +723,7 @@ export class NewReadingPage implements OnInit {
                                     action: this.readingType + '_draft_save', 
                                     properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
                                 })
-                                // Navigate user       
+                                // Update URL with reading id, now that we have one      
                                 if (this.showHeroParam) {
                                     this.router.navigate(['new-reading/' + data._id], { queryParams: { successAlert: this.successAlert, showHeroParam: this.showHeroParam } })
                                 } else {
@@ -800,7 +817,7 @@ export class NewReadingPage implements OnInit {
     /**
      * Adds a question block to the new reading and then adds in a new medium editor
      */
-    public addQuestion(insertHtml?: string, insertPos?: number) {
+    public addQuestion(insertHtml?: string, insertEditorIndex?: number) {
         // fire an analytic event here for tracking purposes
         this.angulartics.eventTrack.next({ 
             action: 'qna_question_added', 
@@ -819,23 +836,25 @@ export class NewReadingPage implements OnInit {
         if (typeof(insertHtml) == 'undefined') {
             insertHtml = ''
         }
-
+        
         if (insertHtml.includes("angularMediumEditor")) {
-            if (insertPos) {
-                question.question_number = insertPos
-                if (this.readingHtml.length > insertPos) {
-                    this.readingHtml.splice(insertPos,0,{'text':this.newReadingInner,'question':question})
+            if (insertEditorIndex) {
+                question.question_number = insertEditorIndex
+                if (this.readingHtml.length > insertEditorIndex) {
+                    this.readingHtml.splice(insertEditorIndex,0,{'text':this.newReadingInner,'question':question})
                 } else {
+                    // Handle question added to end of reading
                     this.readingHtml.push({'text':this.newReadingInner,'question':question})
                 }
             } else {
                 this.readingHtml.push({'text':this.newReadingInner,'question':question})
             }
         } else {
-            question.question_number = insertPos
-            if (this.readingHtml.length > insertPos) {
-                this.readingHtml.splice(insertPos,0,{'text':insertHtml,'question':question})
+            question.question_number = insertEditorIndex
+            if (this.readingHtml.length > insertEditorIndex) {
+                this.readingHtml.splice(insertEditorIndex,0,{'text':insertHtml,'question':question})
             } else {
+                // Handle question added to end of reading
                 this.readingHtml.push({'text':insertHtml,'question':question})
             }
             this.updateQuestionNumbers()
@@ -849,7 +868,7 @@ export class NewReadingPage implements OnInit {
         if (this.insertNode && this.insertNode.parentNode) {
             // If there is a reference node for cursor position, insert at cursor
             // Get and clear all elements in the medium editor block after the cursor position
-            let tmpHtml = this.extractBlockContentsFromCaret()
+            let cutHtml = this.cutBlockContentsFromCaret()
             
             // Send the 'enter' key 
             const event = new KeyboardEvent("keypress",{
@@ -858,26 +877,34 @@ export class NewReadingPage implements OnInit {
             document.dispatchEvent(event)
 
             // Create a new block and slice it in.. then add the stored text to that block
-            let insertPos = 1
-            let refNode = this.insertNode.parentNode
+            let insertEditorIndex = 1
+            let containingEditor = this.insertNode.parentNode ? this.insertNode.parentNode : this.insertNode
+            
             for (let i = 0; i < 5; i++) {
-                if (refNode.getAttribute('rindex')) {
-                    insertPos = Number(refNode.getAttribute('rindex')) + 1
-                    // Found it
+                if (containingEditor.getAttribute('rindex')) {
+                    insertEditorIndex = parseInt(containingEditor.getAttribute('rindex')) + 1
+                    // Found containing editor
                     i = 5
+                } else {
+                    containingEditor = containingEditor.parentNode
                 }
-                refNode = refNode.parentNode
             }
-            // Make the html fragment a real piece of html!
+            // Update model with modified HTML (isn't triggered programmatically)
+            let precedingHtml = containingEditor.querySelector(".medium-editor-element").innerHTML
+            this.readingHtml[insertEditorIndex - 1].text = precedingHtml
+            /**
+             * Make the html fragment a real piece of html!
+             * - Closes any tags broken when "cut"
+             */
             var div = document.createElement('div')
-            div.appendChild( tmpHtml.cloneNode(true) )
+            div.appendChild( cutHtml.cloneNode(true) )
             var html = div.innerHTML
-            if (html.includes('angularMediumEditor')) {
+            if (html.includes('angularMediumEditor') || html.includes('medium-editor-element')) {
                 let newDiv = div.firstElementChild
                 html = newDiv.innerHTML
             }
 
-            this.addQuestion(html,insertPos)
+            this.addQuestion(html,insertEditorIndex)
         } else {
             // If no reference node (field has not been interacted with) insert question at end
             this.addQuestion()
@@ -887,7 +914,7 @@ export class NewReadingPage implements OnInit {
     /**
      * Extracts all elements in the medium editor after the cursor
      */
-    private extractBlockContentsFromCaret(): any {
+    private cutBlockContentsFromCaret(): any {
         var sel = Rangy.getSelection()
         if (sel.rangeCount) {
             var selRange = sel.getRangeAt(0)

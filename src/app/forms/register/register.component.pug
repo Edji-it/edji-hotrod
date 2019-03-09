@@ -2,29 +2,29 @@ h1.on-dark.center(*ngIf="!registerSuccess", [innerHtml]="'Your Edji Adventure Be
 p(*ngIf="readingToAdd") Your reading will be ready to edit after you sign up!
 p(*ngIf="projectToAdd") Your reading will be on the dashboard after you sign up!
 div.text-center.mt-4
-    hot-google-button([copy]="'Sign Up with Google'")
+    edji-oauth-row([signUp]="true")
     hr
     p.text-divider or
-h4.text-center Register with a username and password
+h3.text-center.my-4 Register with a username and password
 form#registerForm([formGroup]="registerForm", (ngSubmit)="register(registerForm.value)")
     .form-group
         label(for="usernameInput") Username
         input#usernameInput(type="text", [formControl]="registerForm.controls['username']", tabindex="0", [placeholder]="userCopy.username")
-        div#msgUsernameRequired.alert.alert-info(*ngIf="registerForm.controls['username'].hasError('required')") Enter a unique username! It should not contain spaces.
+        div#msgUsernameRequired.alert.alert-info(*ngIf="registerForm.controls['username'].hasError('required') && registerForm.controls['username'].dirty") Enter a unique username! It should not contain spaces.
         #msgUsernameIncorrect.alert.alert-info(*ngIf="registerForm.controls['username'].hasError('usernameIncorrect') && registerForm.controls['username'].dirty") Your username cannot be an email address...
     .form-group
         label(for="fullnameInput") Full Name
         input#fullnameInput(type="text", [formControl]="registerForm.controls['fullname']", tabindex="0", [placeholder]="userCopy.fullname")
-        #msgFullnameRequired.alert.alert-info(*ngIf="registerForm.controls['fullname'].hasError('required')") What should we call you?
+        #msgFullnameRequired.alert.alert-info(*ngIf="registerForm.controls['fullname'].hasError('required') && registerForm.controls['fullname'].dirty") What should we call you?
     .form-group
         label(for="emailInput") Email
         input#emailInput(type="text", [formControl]="registerForm.controls['email']", tabindex="0", [placeholder]="userCopy.email")
-        #msgEmailRequired.alert.alert-info(*ngIf="registerForm.controls['email'].hasError('required')") Make sure the you can recover your password with a valid email!
+        #msgEmailRequired.alert.alert-info(*ngIf="registerForm.controls['email'].hasError('required') && registerForm.controls['email'].dirty") Make sure the you can recover your password with a valid email!
         #msgEmailIncorrect.alert.alert-info(*ngIf="registerForm.controls['email'].hasError('emailIncorrect') && registerForm.controls['email'].dirty") We don't think that's an email...
     .form-group
         label(for="passwordInput") Password
         input#passwordInput(type="password", [formControl]="registerForm.controls['password']", tabindex="0", pattern=".{6,}", placeholder="Put a password here!")
-        #msgPasswordRequired.alert.alert-info(*ngIf="registerForm.controls['password'].invalid") Every good account has a password with 6 or more characters
+        #msgPasswordRequired.alert.alert-info(*ngIf="registerForm.controls['password'].invalid && registerForm.controls['password'].dirty") Every good account has a password with 6 or more characters
     .form-group
         label(for="passwordConfirmInput") Password Confirm
         input#passwordConfirmInput(type="password", [formControl]="registerForm.controls['passwordConfirm']", tabindex="0", placeholder="Type that password again!")

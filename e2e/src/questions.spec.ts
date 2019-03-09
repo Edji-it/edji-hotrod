@@ -124,9 +124,7 @@ describe('Reading Questions Tests', () => {
             newReading.sourceInput.sendKeys(newReading.qSourceString)
 
             // Submit New Reading
-            newReading.addNewReading()
-            // checks for and clicks the confirm archive button if the modal is there
-            newReading.confirmArchiveButtonClick()
+            newReading.clickShareAndArchive()
             browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
             newReading.finalizeButton.click();
 

@@ -1,6 +1,5 @@
 import { ActivatedRoute, Params } from '@angular/router'
 import { Injectable } from '@angular/core'
-import { Http, Response, Headers, RequestOptions } from '@angular/http'
 import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs'
 import { map, take } from 'rxjs/operators'
 import { Angulartics2 } from 'angulartics2'
@@ -83,7 +82,6 @@ export class ProjectService {
     public filterUpdates: Observable<CommentFilter> = this.filterUpdatesSource.asObservable()
 
     constructor(
-        private http: Http, 
         private _http: HttpClient,
         private _auth: AuthService, 
         private _route: ActivatedRoute,
@@ -102,10 +100,7 @@ export class ProjectService {
         this.subscriptions.push(
             this._auth.getCurrentUser().subscribe((user) => {
                 this.user = user
-            })
-        )
-
-        this.subscriptions.push(
+            }),
             this._socket.commentUpdates.subscribe((commentUpdate) => {
                 let comment = commentUpdate.comment
                 // Process different live comment updates
@@ -134,20 +129,28 @@ export class ProjectService {
                 }
             }, (error) => {
                 console.warn(error)
+            }),
+            /**
+             * Our socket handler for group-specific socket update events
+             * groupUpdate.type is the identifier for specific events
+             */ 
+            this._socket.groupUpdate.subscribe(
+                (groupUpdate) => {
+                    if (groupUpdate.type==='refreshLeaderboard' && this.user._id===this.project.teacher_id) {
+                        this.addUserInfoToProject(groupUpdate)
+                    }
+                }
+            ),
+            /**
+             * Clear held values when told by _auth
+             */
+            this._auth.clearAll.subscribe((clear) => {
+                if (clear) {
+                    this.project = {title:""}
+                    this.currentProjectSource.next(this.project)
+                }
             })
         )
-
-        /**
-         * Our socket handler for group-specific socket update events
-         * groupUpdate.type is the identifier for specific events
-         */ 
-        this.subscriptions.push(this._socket.groupUpdate.subscribe(
-            (groupUpdate) => {
-                if (groupUpdate.type==='refreshLeaderboard' && this.user._id===this.project.teacher_id) {
-                    this.addUserInfoToProject(groupUpdate)
-                }
-            }
-          ))
     } // constructor
     
     /**
@@ -155,10 +158,9 @@ export class ProjectService {
      * @returns chainable promise resolved with reading data
      */
     public getAll() {
-            return this.http
+            return this._http
                 .get(this._auth.getUrl() + '/projects', this._auth.getOptions())
                 .toPromise()
-                .then(this._auth.extractData);
     } // public getAll()
 
     /**
@@ -219,11 +221,11 @@ export class ProjectService {
      * @returns observable with project data
      */
     public setCurrentProject(projectCode: string): Observable<any> {
-        return this.http.get(this._auth.getUrl() + '/api/v1/projects/' + encodeURIComponent(projectCode) + '?pop[]=reading_id&pop[]=teacher', this._auth.getOptions())
+        return this._http.get(this._auth.getUrl() + '/api/v1/projects/' + encodeURIComponent(projectCode) + '?pop[]=reading_id&pop[]=teacher', this._auth.getOptions())
             .pipe(
                 map(
-                (data) => {
-                    let project = data.json().project; //can later have local setter to do validation/data manipulation before passing through observable
+                (data: any) => {
+                    let project = data.project; //can later have local setter to do validation/data manipulation before passing through observable
                     let teacher = project.teacher
                     // Decorate project if archived
                     project = this.decorateArchivedProject(project)
@@ -545,8 +547,7 @@ export class ProjectService {
         let userId = this._auth.getUser()._id;
         
         // return this.http.get(this._auth.getUrl() + '/readings/' + readingId + '/projects/' + userId , this._auth.getOptions() );
-        return this.http.get(this._auth.getUrl() + "/projects/reading/" + readingId, this._auth.getOptions())
-            .pipe(map((data) => { return data.json() || {}; }));
+        return this._http.get(this._auth.getUrl() + "/projects/reading/" + readingId, this._auth.getOptions())
     }
 
     /**
@@ -557,8 +558,7 @@ export class ProjectService {
     public validateProject(projectCode: string): Observable<any> {
         projectCode = encodeURIComponent(projectCode.toLowerCase())
 
-        return this.http.get(this._auth.getUrl() + '/projects/' + projectCode + "/validate", this._auth.getOptions())
-            .pipe(map((data) => { return data.json() || {}; }));
+        return this._http.get(this._auth.getUrl() + '/projects/' + projectCode + "/validate", this._auth.getOptions())
             
     } // public validateProject(projectCode: string): Observable<any>
 
@@ -567,17 +567,17 @@ export class ProjectService {
     * @param projectId
     */
     public get(projectId: string) : Observable<any> {
-            return this.http
+            return this._http
                 .get(this._auth.getUrl() + '/projects/' + projectId, this._auth.getOptions())
                 .pipe(
                     map(
-                        data => {
+                        (data: any) => {
                             // Update local Project object if returned
-                            if (data.json().project && data.json().project._id) {
-                                this.project = data.json().project;
+                            if (data.project && data.project._id) {
+                                this.project = data.project;
                                 this.currentProjectSource.next(this.project);
                             }
-                            return data.json().project;
+                            return data.project;
                         }
                     )
                 );
@@ -592,15 +592,13 @@ export class ProjectService {
         project.reading_id = readingId
         if (project.code) { project.code = project.code.toLowerCase() }
         
-        return this.http
+        return this._http
             .post(this._auth.getUrl() + '/api/v1/projects/', project, this._auth.getOptions())
             .pipe(
                 map((data) => {
-                    if (data && data.json()) {
-                        this.project = data.json()
-                        this.currentProjectSource.next(this.project)
-                        return this.project
-                    }
+                    this.project = data
+                    this.currentProjectSource.next(this.project)
+                    return this.project
                 })
             )
     }
@@ -611,18 +609,16 @@ export class ProjectService {
      * @param projectId Project id's string
      */
     public update(updateObj: any, projectId: string): Observable<any> {
-        return this.http
+        return this._http
             .put(this._auth.getUrl() + '/api/v1/projects/' + projectId, updateObj, this._auth.getOptions())
             .pipe(
                 map((data) => {
-                    if (data && data.json()) {
-                        let updatedProperties = data.json()
-                        for(let key of Object.keys(updatedProperties)) {
-                            this.project[key] = updatedProperties[key]
-                        }
-                        this.currentProjectSource.next(this.project)
-                        return this.project
+                    let updatedProperties = data
+                    for(let key of Object.keys(updatedProperties)) {
+                        this.project[key] = updatedProperties[key]
                     }
+                    this.currentProjectSource.next(this.project)
+                    return this.project
                 })
             )
     } // public update (updateObj: any, projectId: string): Observable<any> 
@@ -632,7 +628,7 @@ export class ProjectService {
      * @param Requires a Project ID
      */
     public delete(targetProject : Project) : Observable<any> {
-        return this.http.delete(this._auth.getUrl() + '/projects/' +  targetProject._id, this._auth.getOptions())
+        return this._http.delete(this._auth.getUrl() + '/projects/' +  targetProject._id, this._auth.getOptions())
             .pipe(map( data => {
                 this._readings.removeProject(targetProject)
             }))
@@ -703,13 +699,12 @@ export class ProjectService {
                 properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
             })
         }
-        return this.http.put(
+        return this._http.put(
             this._auth.getUrl() + '/api/v1/projects/' + projectId + '/comments',
             comment,
             this._auth.getOptions()
         )
         .toPromise()
-        .then(this._auth.extractData)
     }
 
     /**
@@ -732,7 +727,7 @@ export class ProjectService {
           properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
         })
         
-        return this.http
+        return this._http
             .delete(url, this._auth.getOptions())
             .pipe(
                 map(data => {
@@ -753,7 +748,6 @@ export class ProjectService {
                 })
             )
             .toPromise()
-            .then(this._auth.extractData);
     }//  public deleteComment(comment): Promise<any>
 
     /** 
@@ -811,13 +805,12 @@ export class ProjectService {
                 properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
               })
         }
-        return this.http.put(
+        return this._http.put(
             this._auth.getUrl() + '/api/v1/projects/' + projectId + '/answers',
             answer,
             this._auth.getOptions()
         )
         .toPromise()
-        .then(this._auth.extractData)
     }
 
     /**
@@ -834,17 +827,15 @@ export class ProjectService {
           properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
         })
 
-        return this.http
+        return this._http
             .delete(url, this._auth.getOptions())
             .pipe(map(data => {
                 // Tell other Project views that the comment is gone
-                 this._socket.updateComment(answer, 'DELETE', this.project._id);
-
+                this._socket.updateComment(answer, 'DELETE', this.project._id)
                 this.removeAnswerFromAnswers(answer)
                 return data;
             }))
             .toPromise()
-            .then(this._auth.extractData);
     }
 
     /**
@@ -854,7 +845,7 @@ export class ProjectService {
      * @returns Observable which will not contain any data
      */
     public addUserToProject(projectId: string): Observable<any> {
-        return this.http.put(
+        return this._http.put(
             this._auth.getUrl() + '/api/v1/projects/' + projectId + '/students',
             {},
             this._auth.getOptions()

@@ -77,9 +77,7 @@ describe('Discover Feed', () => {
             browser.wait(EC.elementToBeClickable(newReading.contentInput), 5000, "should see reading content input")
             newReading.contentInput.sendKeys(newReading.contentShortString)
             // Hit save
-            newReading.addNewReading()
-            // checks for and clicks the confirm archive button if the modal is there
-            newReading.confirmArchiveButtonClick()
+            newReading.clickShareAndArchive()
             // Finalize
             newReading.createGroupButtonClick()
             // Wait for navigation to hit project page after save

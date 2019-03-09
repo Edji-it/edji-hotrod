@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core'
 import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, ActivatedRoute } from '@angular/router'
-import { Http, Response, Headers, RequestOptions } from '@angular/http'
-import { Observable, BehaviorSubject } from 'rxjs'
+import { Observable, BehaviorSubject, Subject } from 'rxjs'
 import { map, take, catchError } from 'rxjs/operators'
 import { HttpClient, HttpHeaders } from "@angular/common/http"
 
@@ -38,8 +37,11 @@ export class AuthService implements CanActivate {
     private academyStateSource: BehaviorSubject<AcademyState>
     public currentAcademyState: Observable<AcademyState>
 
+    // Clear observables/in-memory objects in services
+    private clearAllSource: Subject<boolean> = new Subject()
+    public clearAll: Observable<boolean>
+
     constructor(
-        private legacyHttp: Http,
         private _http: HttpClient,
         private _router: Router,
         private _locker: LockerService,
@@ -48,6 +50,8 @@ export class AuthService implements CanActivate {
         private route: ActivatedRoute
     ) {
         let buildEnv = environment.ENV
+
+        this.clearAll = this.clearAllSource.asObservable()
 
         this.user = this.getUser()
         this.currentUserSource = new BehaviorSubject<any>(this.user)
@@ -77,15 +81,11 @@ export class AuthService implements CanActivate {
     }
 
     /** Give out options to any other http-using components or services */
-    public getOptions(): RequestOptions {
-        let header = new Headers({
-            'Content-Type': 'application/json',
-            'Authorization': this.getToken()
-        })
-        let options = new RequestOptions({
-            headers: header,
+    public getOptions(): { headers?: HttpHeaders, withCredentials?: boolean} {
+        let options = {
+            headers: this.getHeaders(),
             withCredentials: true
-        }) // Create a request option
+        } // Create a request option
         return options
     }
 
@@ -123,15 +123,6 @@ export class AuthService implements CanActivate {
             encodedString += key + '=' + encodeURIComponent(obj[key])
         }
         return encodedString.replace(/%20/g, '+')
-    }
-
-    /**
-     * DEPRECATED - Transition to HttpClient
-     * Takes a response object and turn the data into an object
-     */
-    public extractData(res: Response): any {
-        let body = res.json()
-        return body || {}
     }
 
     /**
@@ -273,9 +264,8 @@ export class AuthService implements CanActivate {
      * This pulls the latest user object in case a user has multiple sessions at once
      */
     public refreshUser(): Observable<any> {
-        return this.legacyHttp.get(this.baseUrl + '/users/' + this.getUser()._id, this.getOptions())
-            .pipe(map(res => {
-                let data = res.json() || {}
+        return this._http.get(this.baseUrl + '/users/' + this.getUser()._id, this.getOptions())
+            .pipe(map((data: any) => {
                 let user = data.user
                 // If we get a user object, update our local copy
                 if (user._id) {
@@ -330,7 +320,10 @@ export class AuthService implements CanActivate {
         this.destroyCredentials()
         // Refresh window to clear components/services
         if (!noReload) {
-            location.reload()
+            // Clear service in-memory objects
+            this.clearAllSource.next(true)
+            // Return to homepage
+            this._router.navigate(['/home'])
         }
     }
 
@@ -340,13 +333,11 @@ export class AuthService implements CanActivate {
      */
     public register(user: any): Observable<any> {
         this.destroyCredentials()
-        return this.legacyHttp
+        return this._http
             .post([this.baseUrl, 'users'].join('/'), {
                 user: user
             }, this.getOptions())
-            .pipe(map((res) => {
-                let data = res.json()
-
+            .pipe(map((data: any) => {
                 // if the response has a token, the user should be successfully registered and logged in
                 if (data.token) {
                     data.user = this.setUser(data.user)
@@ -355,6 +346,17 @@ export class AuthService implements CanActivate {
 
                 return data
             }))
+    }
+
+    /**
+     * Link Oauth to an existing account
+     */
+    public linkOauth(oauthType: string, oauthToken: string) : Observable<any> {
+        return this._http.put(
+            `${this.baseUrl}/api/v1/users/@me/link?oauth_type=${oauthType}&oauth_token=${oauthToken}`,
+            {},
+            { headers: this.getHeaders() }
+        )
     }
 
     /**
@@ -411,12 +413,10 @@ export class AuthService implements CanActivate {
                     }
 
                     // This is repeated code from forceUpdateDocuments() we could consolidate these. 6.14.
-                    this.legacyHttp.put(this.baseUrl + '/users', {
+                    this._http.put(this.baseUrl + '/users', {
                         user: mergedUser
                     }, this.getOptions())
-                        .pipe(map((res) => {
-                            let data = res.json()
-
+                        .pipe(map((data: any) => {
                             // if the response has a token, the user should be successfully registered and logged in
                             if (data.user) {
                                 data.user = this.setUser(data.user)
@@ -470,11 +470,10 @@ export class AuthService implements CanActivate {
 
                     // Let's save this here user object.
                     // This is repeated code from updateUser() we could consolidate these. (6.14.17)
-                    this.legacyHttp.put(this.baseUrl + '/users', {
+                    this._http.put(this.baseUrl + '/users', {
                         user: mergedUser
                     }, this.getOptions())
-                        .pipe(map((res) => {
-                            let data = res.json()
+                        .pipe(map((data: any) => {
                             // if the response has a token, the user should be successfully registered and logged in
                             if (data.user) {
                                 data.user = this.setUser(data.user)
@@ -521,11 +520,10 @@ export class AuthService implements CanActivate {
 
                     // This code saves this here user object.
                     // This is repeated code from updateUser() we could consolidate these. (6.27.17)
-                    this.legacyHttp.put(this.baseUrl + '/users', {
+                    this._http.put(this.baseUrl + '/users', {
                         user: mergedUser
                     }, this.getOptions())
-                        .pipe(map((res) => {
-                            let data = res.json()
+                        .pipe(map((data: any) => {
                             // if the response has a token, the user should be successfully registered and logged in
                             if (data.user) {
                                 data.user = this.setUser(data.user)
@@ -566,10 +564,8 @@ export class AuthService implements CanActivate {
             }
         }
 
-        return this.legacyHttp.post([this.baseUrl, 'tempusers'].join('/'), data, this.getOptions())
-            .pipe(map((res) => {
-                let data: any = res.json()
-
+        return this._http.post([this.baseUrl, 'tempusers'].join('/'), data, this.getOptions())
+            .pipe(map((data: any) => {
                 if (data.token) {
                     data.user = this.setUser(data.user)
                     this.setToken(data.token)
@@ -586,7 +582,7 @@ export class AuthService implements CanActivate {
      * @returns Chainable promise resolved with json data containing either a user object & token or errors
      **/
     public resetPassword(resetObject: any) {
-        return this.legacyHttp
+        return this._http
             .post(
                 [this.baseUrl, 'users', 'reset_password'].join('/'), {
                     resetObject: resetObject
@@ -594,8 +590,7 @@ export class AuthService implements CanActivate {
                 this.getOptions()
             )
             .toPromise()
-            .then(this.extractData)
-            .then((data) => {
+            .then((data: any) => {
                 if (data.token && data.user) {
                     data.user = this.setUser(data.user)
                     this.setToken(data.token)
@@ -659,7 +654,7 @@ export class AuthService implements CanActivate {
 
     /** Call to convert a temp user's properties to the current user (who should already have credentials) */
     public convertTempUser(oldId: string): Observable<boolean> {
-        return this.legacyHttp.put(
+        return this._http.put(
             [this.baseUrl, 'api', 'v1', 'temp_users', 'convert', oldId].join("/"),
             {},
             this.getOptions()
@@ -679,10 +674,7 @@ export class AuthService implements CanActivate {
     public addToHeroList(user) {
         let body = user
         body['list'] = 'hero'
-        return this.legacyHttp.post(this.baseUrl + '/mailchimp/add', body, this.getOptions())
-            .pipe(map(res => {
-                return res.json()
-            }))
+        return this._http.post(this.baseUrl + '/mailchimp/add', body, this.getOptions())
     }
 
     /**
@@ -700,10 +692,7 @@ export class AuthService implements CanActivate {
                 'lname': lname
             }
             body['list'] = 'hero-subscribed'
-            this.legacyHttp.post(this.baseUrl + '/mailchimp/add', body, this.getOptions())
-                .pipe(map(res => {
-                    return res.json()
-                }))
+            this._http.post(this.baseUrl + '/mailchimp/add', body, this.getOptions())
                 .toPromise()
                 .then(res => { console.log(res) })
                 .catch(err => { console.error(err) })
@@ -719,11 +708,8 @@ export class AuthService implements CanActivate {
     public addToNewUsersList(user): void {
         let body = user
         body['list'] = 'new'
-        this.legacyHttp.post(this.baseUrl + '/mailchimp/add', body, this.getOptions())
+        this._http.post(this.baseUrl + '/mailchimp/add', body, this.getOptions())
             .pipe(
-                map(res => {
-                    return res.json()
-                }),
                 take(1)
             )
             .subscribe(
@@ -817,10 +803,7 @@ export class AuthService implements CanActivate {
             status: statusChange
         }
 
-        return this.legacyHttp.put(this.baseUrl + '/api/v1/subscriptions', data, this.getOptions())
-            .pipe(map(res => {
-                return res.json()
-            }))
+        return this._http.put(this.baseUrl + '/api/v1/subscriptions', data, this.getOptions())
     }
 
     public cancelHeroSubscription(): Observable<any> {
@@ -851,9 +834,9 @@ export class AuthService implements CanActivate {
      * - Updates user object
      */
     public followUser(userId: string): Observable<any> {
-        return this.legacyHttp.put(this.baseUrl + '/users/following', { 'user_id': userId, 'action': 'follow' }, this.getOptions())
-            .pipe(map(res => {
-                let user = res.json().user || {}
+        return this._http.put(this.baseUrl + '/users/following', { 'user_id': userId, 'action': 'follow' }, this.getOptions())
+            .pipe(map((data: any) => {
+                let user = data.user || {}
                 if (user._id) {
                     this.setUser(user)
                 }
@@ -867,9 +850,9 @@ export class AuthService implements CanActivate {
      * - Updates user object
      */
     public unfollowUser(userId: string): Observable<any> {
-        return this.legacyHttp.put(this.baseUrl + '/users/following', { 'user_id': userId, 'action': 'unfollow' }, this.getOptions())
-            .pipe(map(res => {
-                let user = res.json().user || {}
+        return this._http.put(this.baseUrl + '/users/following', { 'user_id': userId, 'action': 'unfollow' }, this.getOptions())
+            .pipe(map((data: any) => {
+                let user = data.user || {}
                 if (user._id) {
                     this.setUser(user)
                 }
@@ -883,12 +866,7 @@ export class AuthService implements CanActivate {
         if (activeRoute.indexOf('register') === -1 && activeRoute.indexOf('login') === -1 && activeRoute.indexOf('hero') === -1) {
             this._locker.set('oauthRedirect', activeRoute)
         }
-
-        // eventually we'll need to switch on type to determine different places to go, but for meow we'll just always do google
-        // this.legacyHttp.get([this.baseUrl, 'auth', 'google'].join("/")).pipe(take(1)).subscribe((res) => {
-        //     // shouldn't actually get this, should just be a redirect
-        // })
-        window.location.href = [this.baseUrl, 'auth', 'google'].join("/")
+        window.location.href = [this.baseUrl, 'api/v1/auth', type].join("/")
     }
 
     /**
@@ -896,10 +874,9 @@ export class AuthService implements CanActivate {
      * @param referral_id is the referral id we'll be searching by to find the user
      */
     public getUserByReferralId(referral_id: any): Observable<any> {
-        return this.legacyHttp.get(this.baseUrl + '/api/v1/referrals/' + referral_id, this.getOptions())
+        return this._http.get(this.baseUrl + '/api/v1/referrals/' + referral_id, this.getOptions())
             .pipe(
-                map(res => {
-                    let data = res.json() || {}
+                map((data: any) => {
                     let user = data.user
                     return user
                 }),

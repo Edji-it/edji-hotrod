@@ -58,10 +58,10 @@ export class RegisterFormComponent implements OnInit {
     this.userCopy = new Copy().getUserCopy()
 
     this.registerForm = _fb.group({
-      username: [null, Validators.compose([Validators.required, this.usernameValidator])],
+      username: [null,[Validators.required, this.usernameValidator]],
       fullname: [null, Validators.required],
-      email: [null, Validators.compose([Validators.required, this.emailValidator])],
-      password: [null, Validators.compose([Validators.required, Validators.minLength(6)])],
+      email: [null, [Validators.required, this.emailValidator]],
+      password: [null, [Validators.required, Validators.minLength(6)]],
       passwordConfirm: [null, Validators.required],
     }, { validator: this.passwordsEqual })
   }

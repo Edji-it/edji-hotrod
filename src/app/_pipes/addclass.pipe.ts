@@ -1,6 +1,4 @@
-import { cli } from 'webdriver-manager/built/lib/cli_instance';
-import { HtmlParser } from '@angular/compiler';
-import { NgModule, Pipe, PipeTransform } from '@angular/core';
+import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'addclass'

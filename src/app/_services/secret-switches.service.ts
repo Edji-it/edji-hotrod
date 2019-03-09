@@ -5,6 +5,7 @@
  */
 import { Injectable } from '@angular/core';
 import { Params } from '@angular/router';
+import { Observable, BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -17,13 +18,21 @@ export class SecretSwitchesService {
    * - Update via url param subscriptions inside of relevant components
    */
   public secretSwitches: Secrets = {}
+  // Observable for receiving switch updates
+  private secretSwitchesSource: BehaviorSubject<Secrets> = new BehaviorSubject({})
+  public secretSwitchesUpdates: Observable<Secrets>
 
-  constructor() { }
+  constructor() {
+    this.secretSwitchesUpdates = this.secretSwitchesSource.asObservable()
+  }
 
   public processSwitches(params: Params) : any {
     if(params && params['secret']){
       this.secretSwitches[params['secret']] = true
     }
+    // Emit switch update
+    this.secretSwitchesSource.next(this.secretSwitches)
+    // Return switches for immediate use
     return this.secretSwitches
   }
 }
@@ -32,4 +41,5 @@ export interface Secrets {
     heroAvailable?: boolean
     googleAuth?: boolean
     academy?: boolean
+    cleverButton?: boolean
 }

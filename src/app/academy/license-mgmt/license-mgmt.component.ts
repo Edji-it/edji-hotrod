@@ -65,12 +65,12 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
     this.today = new Date()
     this.licenseInvite = this._fb.group({
       name: [null, Validators.required],
-      email: [null, Validators.compose([Validators.required, this.emailValidator])],
+      email: [null, [Validators.required, this.emailValidator]],
       role: [this.licenseRoles[0].value, null]
     })
     this.licenseRequest = this._fb.group({
       request: [this.licenseUpdateTypes[0].value, null],
-      message: [null, Validators.compose([Validators.required])]
+      message: [null, [Validators.required]]
     })
   }
 

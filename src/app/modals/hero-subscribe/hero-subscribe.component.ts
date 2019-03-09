@@ -77,7 +77,7 @@ export class HeroSubscribeComponent implements OnInit {
         [],
         this.validateCoupon.bind(this)
       ]
-    }, { updateOn: "submit" });
+    }, { updateOn: "blur" });
     
     // Create a Stripe client
     if (this._auth.getEnv() === 'dev') {
