@@ -83,7 +83,7 @@ import { HeroPromoPageComponent } from './hero-promo/hero-promo.component';
 import { HeroPricingComponent } from './hero-pricing/hero-pricing.component';
 import { DiscoverFeedComponent } from './discover-feed/discover-feed.component';
 import { OAuthComponent } from './oauth-redirect/oauth-redirect.component'
-import { GoogleButton } from './buttons'
+import { GoogleButton, CleverButton } from './buttons'
 import { CommentPaneComponent } from './shared/comment-pane/comment-pane.component'
 import { HttpClientModule } from '@angular/common/http';
 import { DataListModule } from 'primeng/datalist';
@@ -149,6 +149,7 @@ const APP_PROVIDERS = [
     AudioCommentComponent,
     EmojiKeyboardComponent,
     QuestionComponent,
+    CleverButton,
     GoogleButton,
     OauthRowComponent,
     OpenEndedAnswersComponent,

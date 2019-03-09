@@ -349,6 +349,17 @@ export class AuthService implements CanActivate {
     }
 
     /**
+     * Link Oauth to an existing account
+     */
+    public linkOauth(oauthType: string, oauthToken: string) : Observable<any> {
+        return this._http.put(
+            `${this.baseUrl}/api/v1/users/@me/link?oauth_type=${oauthType}&oauth_token=${oauthToken}`,
+            {},
+            { headers: this.getHeaders() }
+        )
+    }
+
+    /**
      * Call to update user object
      * - Used primarily to update user preferences and document
      * - Cannot be passed password
@@ -855,12 +866,7 @@ export class AuthService implements CanActivate {
         if (activeRoute.indexOf('register') === -1 && activeRoute.indexOf('login') === -1 && activeRoute.indexOf('hero') === -1) {
             this._locker.set('oauthRedirect', activeRoute)
         }
-
-        // eventually we'll need to switch on type to determine different places to go, but for meow we'll just always do google
-        // this._http.get([this.baseUrl, 'auth', 'google'].join("/")).pipe(take(1)).subscribe((res) => {
-        //     // shouldn't actually get this, should just be a redirect
-        // })
-        window.location.href = [this.baseUrl, 'auth', 'google'].join("/")
+        window.location.href = [this.baseUrl, 'api/v1/auth', type].join("/")
     }
 
     /**

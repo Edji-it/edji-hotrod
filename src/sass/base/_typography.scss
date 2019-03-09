@@ -47,7 +47,7 @@ h2, .h2 {
 
 h3, .h3 {
   font-size: $base-font-size;
-  font-weight: bold;
+  font-weight: 500;
   color: #5f5f5f;
 }
 
@@ -177,6 +177,10 @@ h2.card-title {
 
 .on-dark {
   color: #fff;
+
+  h1, h2, h3, h4, h5 {
+    color: #fff;
+  }
 }
 
 a.on-dark {

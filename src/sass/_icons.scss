@@ -398,6 +398,10 @@
     @include icon('icon-wave.svg');
 }
 
+.icon-check {
+    @include icon('icon-check.svg');
+}
+
 .icon-pill-status {
     opacity: 0;
     pointer-events: none;

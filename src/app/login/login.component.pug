@@ -5,9 +5,8 @@ nav-bar
       .sparks
       .col-sm-3
       .col-sm-6.col-pad.on-dark
-        h1.center.on-dark This Way to Edji!
-        .button__row
-          hot-google-button([copy]="'Sign In with Google'")
+        h1.center.on-dark Log In to Edji
+        edji-oauth-row
         hr
         p.text-divider(style="background:#133d64;") or
         hot-login-form((loginSuccess)="loginSuccess()")

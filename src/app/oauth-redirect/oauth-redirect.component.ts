@@ -3,7 +3,8 @@ import { Router, ActivatedRoute } from '@angular/router'
 import { take } from 'rxjs/operators'
 
 // Project Dependencies
-import { AuthService, LockerService } from './../_services'
+import { AuthService, LockerService, MessageService } from './../_services'
+import { User } from '../shared/datatypes';
 
 @Component({
   selector: 'hot-oauth-redirect',
@@ -17,30 +18,53 @@ export class OAuthComponent implements OnInit {
     noUser?: boolean,
     error?: boolean,
     serverError?: boolean,
-    duplicate_user?: boolean
+    duplicate_user?: boolean,
+    linkError?: boolean
   } = {}
 
   // Error display 
   public hasError: boolean
-
+  // Copy display
+  private loginType: string
+  public loginTypeDisplay: string = 'Google'
+  private loginTypeMap = {
+    'google' : 'Google',
+    'clever' : 'Clever'
+  } 
   private licenseId = ''
   private redirectRouteUrl = '/dashboard'
+  // Oauth token
+  public oAuthToken: string
+  // Current user, for linking existing already logged in
+  private currentUser: User
 
   constructor(
     private _auth: AuthService,
     private _router: Router,
     private _locker: LockerService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private _messages: MessageService
   ) { }
 
   ngOnInit() {
+    this.currentUser = this._auth.getUser()
     // grab that oauth token which is given by the server!
-    const type = this.route.snapshot.params['type']
+    this.loginType = this.route.snapshot.params['type']
     const encodedToken = this.route.snapshot.queryParams.token
     const error = this.route.snapshot.queryParams.error
 
+    if (this.loginTypeMap[this.loginType]) {
+      this.loginTypeDisplay = this.loginTypeMap[this.loginType]
+    }
+
     if (error) {
-      this.hasError = true
+      if (encodedToken) {
+        // error was returned, but indicates an additional step such as linking
+        this.oAuthToken = encodedToken
+      } else {
+        // error preventing user from moving forward
+        this.hasError = true
+      }
       return this.messages[error] = true
     }
 
@@ -62,9 +86,20 @@ export class OAuthComponent implements OnInit {
       this._locker.remove('oauthRedirect')
     }
 
-    const token = decodeURIComponent(encodedToken)
+    this.oAuthToken = decodeURIComponent(encodedToken)
 
-    this._auth.getUserWithAuthToken(type, token).pipe(take(1)).subscribe((res) => {
+    if (this.currentUser && this.currentUser.isLoggedIn) {
+      this.linkAfterLogin()
+    } else {
+      this.loginWithOauth()
+    }
+  }
+
+  /**
+   * Log in with OAuth
+   */
+  loginWithOauth() {
+    this._auth.getUserWithAuthToken(this.loginType, this.oAuthToken).pipe(take(1)).subscribe((res) => {
       // if we are coming here from a landing page like the license accept, then the success case should take us back to that landing page again
       if (this.licenseId!=='' && this.licenseId.length>0) {
         this._router.navigate(['/license/accept/' + this.licenseId])
@@ -85,5 +120,32 @@ export class OAuthComponent implements OnInit {
           this.messages.serverError = true
       }
     })
+  }
+
+  /**
+   * Upon successful log in, link
+   * @param thing 
+   */
+  linkAfterLogin(user?: User) {
+    let type = this.loginType
+    let token = this.oAuthToken
+
+    this._auth.linkOauth(type, token)
+      .pipe(take(1))
+      .subscribe(
+        user => {
+          // Confirm with toast
+          this._messages.sendToast({
+            id: 'oauth-link',
+            type: 'success',
+            message: 'Successfully linked your Edji account'
+          })
+          // Account successfully linked!
+          this._router.navigate(['/dashboard'])
+        },
+        error => {
+          this.messages.linkError = true
+        }
+      )
   }
 }

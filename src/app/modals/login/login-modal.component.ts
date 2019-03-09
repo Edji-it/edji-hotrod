@@ -7,7 +7,7 @@ import { ProjectService, SocketService, AuthService } from './../../_services'
 
 @Component({
   selector: 'hot-login-modal',
-  templateUrl: 'login-modal.component.html',
+  templateUrl: 'login-modal.component.pug',
   styles: [`
     .modal-footer { flex-direction: column }
   `]
