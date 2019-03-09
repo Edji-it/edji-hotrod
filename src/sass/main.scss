@@ -462,7 +462,7 @@ input[type=text].input-noborder, input[type=password].input-noborder, input[type
 	height: $navHeight;
 	text-align: center;
 	background: $sideBarBg; 
-	z-index: 6001;
+	z-index: $zTop - 1500;
 	// border-right: none;
 	border: $navBorder;
 	box-shadow: $navShadow;

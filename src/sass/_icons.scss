@@ -452,19 +452,19 @@ content: "|<"; }
   content: ">|"; }
 
 .icon-comment-arrow {
-    width: 50px;
-    height: 60px;
+    width: 27px;
+    height: 45px;
     background: url('/assets/images/comment-arrow.svg');
     background-size: 100% 100%;
     position: absolute;
     top: 350px;
-    z-index: 991;
+    z-index: $zMid + 2000;
 
     @media(max-width: $desktop) {
-        left: calc(100% - 50px);
+        left: calc(100% - 51px);
     }
-    @media(min-width: 1060px) {
-        left: calc( (100% - 567px) / 2 ) !important;
+    @media(min-width: $desktop) {
+        left: calc( (100% - 537px) / 2 ) !important;
     }
 }
 
