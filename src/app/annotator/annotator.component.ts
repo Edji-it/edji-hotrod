@@ -1262,7 +1262,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             this._projects.commentPaneStateSubj.next(true)
             // Set the icon arrow position based on lineY and offsets
             // console.log("Line y: " +  comment.lineY, "First word offset: " + this.getFirstWordOffset(comment))
-            this.commentHeightPos = comment.lineY + this.getFirstWordOffset(comment)
+            this.commentHeightPos = this.getCommentDisplayY(comment)
         } else {
             // iOS selection
             let selec = Rangy.getSelection();
@@ -1277,20 +1277,25 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         }
     }
 
-    public getFirstWordOffset(comment: EdjiComment): number {
-        let firstWord = document.querySelector('.w[index="1"]')
-        let scrollOffset = this.annotatorPaper.getBoundingClientRect().top
-
-        let averageVertical = (firstWord.getBoundingClientRect().top + firstWord.getBoundingClientRect().bottom) / 2
-        let adjustment = ALLSPARK.NAVBARHEIGHT
-
-        // For a period we were erroneously saving comments on text with image coords
-        // *Fixed March 2019, but allow for legacy comments by checking "comment.text"
-        if (comment.text == "" && comment.loc && comment.loc.y) {
-            adjustment += ALLSPARK.BASELINEHEIGHT
+    /**
+     * Calculate rendered y position of comment (absolute to body)
+     * @param comment comment for which you need the real display y position of
+     */
+    public getCommentDisplayY(comment: EdjiComment): number {
+        let commentIcon = document.querySelector('.w[index="'+comment.start+'"]')
+        if (commentIcon) {
+            let commentTop = commentIcon.getBoundingClientRect().top
+            let bodyTop = document.body.getBoundingClientRect().top
+            // Set adjustment for text lines
+            let adjustment = -0.25*ALLSPARK.BASELINEHEIGHT
+            // Use imageY for image comment position
+            if (comment.imageY) {
+                adjustment = -0.5*ALLSPARK.BASELINEHEIGHT + comment.imageY
+            }
+            return ((commentTop - bodyTop) + adjustment)
+        } else {
+            return 0
         }
-        
-        return (averageVertical - scrollOffset + adjustment)
     }
 
     // Deletes comment via Project service, which updates the local Project object
