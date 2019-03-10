@@ -567,6 +567,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             // Functions as "click outside" for images
             this.optionsShow = false
             this.imageHotspotPlaceholder.preview = false
+            // Clear imageCoords so they are not added to non-image comments
+            this.imageCoords = {}
             if (target.classList && target.classList.contains('img')) {
                 return
             }
@@ -1258,7 +1260,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             // Tell pane to open
             this.commentPane = true
             this._projects.commentPaneStateSubj.next(true)
-            // set the icon arrow position based on lineY and offsets
+            // Set the icon arrow position based on lineY and offsets
+            // console.log("Line y: " +  comment.lineY, "First word offset: " + this.getFirstWordOffset(comment))
             this.commentHeightPos = comment.lineY + this.getFirstWordOffset(comment)
         } else {
             // iOS selection
@@ -1281,7 +1284,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         let averageVertical = (firstWord.getBoundingClientRect().top + firstWord.getBoundingClientRect().bottom) / 2
         let adjustment = ALLSPARK.NAVBARHEIGHT
 
-        if (comment.loc && comment.loc.y) {
+        // For a period we were erroneously saving comments on text with image coords
+        // *Fixed March 2019, but allow for legacy comments by checking "comment.text"
+        if (comment.text == "" && comment.loc && comment.loc.y) {
             adjustment += ALLSPARK.BASELINEHEIGHT
         }
         
