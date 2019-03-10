@@ -26,7 +26,7 @@ $slidingPaneWidth: 265px;
     }
     // Min width pane
     @media(min-width: $medium-screen) and (max-width: $large-screen) { // 768px - 992px
-        min-width: 300px;
+        width: 300px;
     }
     // Flexible width pane
     @media(min-width: $large-screen) { // >992px

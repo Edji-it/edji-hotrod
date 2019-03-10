@@ -1,5 +1,5 @@
 //- Desktop Avatar Icons
-.user-icon.pointer.hidden-md-down(
+.user-icon.pointer.hidden-sm-down(
   *ngIf="indexOnLine<9",
   (tap)='triggerCommentPane(true)',
   [ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '','avatar-count-' + indexOnLine, 'avatar-' + comment.type, active ? 'active' : '' ]"
@@ -27,5 +27,5 @@
   .comment__button--mobile.avatar__reply(*ngIf="repliesById[comment._id] && repliesById[comment._id].length>0")
 
 //- Mobile Icon
-.comment__button--mobile.hidden-lg-up((tap)='triggerCommentPane(false)', [ngClass]="[ active ? 'active' : '' ]")
-.comment__count--mobile.hidden-lg-up {{ lineCount }}
+.comment__button--mobile.hidden-md-up((tap)='triggerCommentPane(false)', [ngClass]="[ active ? 'active' : '' ]")
+.comment__count--mobile.hidden-md-up {{ lineCount }}

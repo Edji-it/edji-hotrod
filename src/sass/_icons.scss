@@ -461,10 +461,14 @@ content: "|<"; }
     z-index: $zMid + 2000;
     left: 264px;
 
-     // Full width "mobile" comment pane
-     @media(max-width: $medium-screen) { // <768px
-        left: calc(100% - 61px);
+    // Hide on mobile for now
+    @media(max-width: $medium-screen){
+        display: none;
     }
+    // Full width "mobile" comment pane
+    // @media(max-width: $medium-screen) { // <768px
+    //     left: calc(100% - 61px);
+    // }
     // NOTE: "large screen" value is different here to account min-width flexibility
     // Min width pane
     @media(min-width: $medium-screen) and (max-width: 1129px) { // 768px - 992px
