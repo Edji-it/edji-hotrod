@@ -81,7 +81,7 @@ export class AuthService implements CanActivate {
     }
 
     /** Give out options to any other http-using components or services */
-    public getOptions(): { headers?: HttpHeaders, withCredentials?: boolean} {
+    public getOptions(): { headers?: HttpHeaders, withCredentials?: boolean } {
         let options = {
             headers: this.getHeaders(),
             withCredentials: true
@@ -302,7 +302,7 @@ export class AuthService implements CanActivate {
             }
         }
 
-        return this._http.post(this.baseUrl + '/users/login', data, { headers: this.getHeaders() })
+        return this._http.post(this.baseUrl + 'api/v1/users/login', data, { headers: this.getHeaders() })
             .pipe(map((data: any) => {
                 if (data.token) {
                     this.setToken(data.token)
@@ -351,7 +351,7 @@ export class AuthService implements CanActivate {
     /**
      * Link Oauth to an existing account
      */
-    public linkOauth(oauthType: string, oauthToken: string) : Observable<any> {
+    public linkOauth(oauthType: string, oauthToken: string): Observable<any> {
         return this._http.put(
             `${this.baseUrl}/api/v1/users/@me/link?oauth_type=${oauthType}&oauth_token=${oauthToken}`,
             {},
@@ -753,7 +753,7 @@ export class AuthService implements CanActivate {
         } else if (user.type === 'temp') {
             // Redirect temp users away from certain pages
             if (state.url.includes('/account') || state.url.includes('/new-reading')) {
-                this._router.navigate(['/register'], { queryParams: { 'userId': user._id }})
+                this._router.navigate(['/register'], { queryParams: { 'userId': user._id } })
             } else {
                 return true
             }
