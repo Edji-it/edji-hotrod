@@ -1,9 +1,8 @@
 import { Title } from '@angular/platform-browser';
 import { Component, OnInit, OnDestroy, Input } from '@angular/core'
-import { PRIMARY_OUTLET, Router, ActivatedRoute } from '@angular/router'
-import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
+import { Router, ActivatedRoute } from '@angular/router'
+import { FormBuilder } from '@angular/forms'
 import { Subscription } from 'rxjs'
-import { take } from 'rxjs/operators'
 import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
