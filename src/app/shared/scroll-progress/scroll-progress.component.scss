@@ -4,7 +4,8 @@
   position: fixed;
   top: 70px;
   left: 0;
-  z-index: 6000;
+  // "1" z lower than nav-bar
+  z-index: $zTop - 1501;
   width: 100%;
   border-radius: 0;
   height: 3px;

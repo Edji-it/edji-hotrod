@@ -16,6 +16,7 @@ import {
     MessageService
 } from '../_services' 
 import { CommentPermissions, EdjiComment, Project, Reading, Feedback } from './../shared/datatypes'
+import { ALLSPARK } from '../app.constants'
 
 @Component({
     selector: 'annotator',
@@ -88,6 +89,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     public highlightX = 20 
     public optionLeft = true
     public mobileIndex = 0
+    public commentHeightPos = 0
 
     public imageCoords = {}
     public imageHotspotPlaceholder: any = {
@@ -565,6 +567,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             // Functions as "click outside" for images
             this.optionsShow = false
             this.imageHotspotPlaceholder.preview = false
+            // Clear imageCoords so they are not added to non-image comments
+            this.imageCoords = {}
             if (target.classList && target.classList.contains('img')) {
                 return
             }
@@ -1256,15 +1260,41 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             // Tell pane to open
             this.commentPane = true
             this._projects.commentPaneStateSubj.next(true)
+            // Set the icon arrow position based on lineY and offsets
+            // console.log("Line y: " +  comment.lineY, "First word offset: " + this.getFirstWordOffset(comment))
+            this.commentHeightPos = this.getCommentDisplayY(comment)
         } else {
             // iOS selection
             let selec = Rangy.getSelection();
             selec.removeAllRanges()
             // Tell comments to close
             this.commentPane = false
+            // reset our icon arrow position
+            this.commentHeightPos = 0
             this._projects.commentPaneStateSubj.next(false)
             // Run the standard comment inactivation to reset variables and do things like close the Keyboard
             this.inactivateComment()
+        }
+    }
+
+    /**
+     * Calculate rendered y position of comment (absolute to body)
+     * @param comment comment for which you need the real display y position of
+     */
+    public getCommentDisplayY(comment: EdjiComment): number {
+        let commentIcon = document.querySelector('.w[index="'+comment.start+'"]')
+        if (commentIcon) {
+            let commentTop = commentIcon.getBoundingClientRect().top
+            let bodyTop = document.body.getBoundingClientRect().top
+            // Set adjustment for text lines
+            let adjustment = -0.25*ALLSPARK.BASELINEHEIGHT
+            // Use imageY for image comment position
+            if (comment.imageY) {
+                adjustment = -0.5*ALLSPARK.BASELINEHEIGHT + comment.imageY
+            }
+            return ((commentTop - bodyTop) + adjustment)
+        } else {
+            return 0
         }
     }
 

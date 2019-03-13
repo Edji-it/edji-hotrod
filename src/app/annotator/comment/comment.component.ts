@@ -192,6 +192,8 @@ export class CommentComponent implements OnInit, OnDestroy {
       let firstWordTop: number = firstWord.getBoundingClientRect().bottom
 
       // This will need to re-decorate on resize
+      // For a period we were erroneously saving comments on text with image coords
+      // *Fixed March 2019, but allow for legacy comments by checking "text" or commentImage
       if (commentImage && this.comment.loc && this.comment.loc.y && this.comment.text === "") {
           // Set comment on image position
           this.setLineYAttempts = 0
