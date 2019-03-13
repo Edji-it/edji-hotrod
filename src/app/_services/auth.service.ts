@@ -750,6 +750,13 @@ export class AuthService implements CanActivate {
                 this._router.navigate(['/home'])
             }
             return false
+        } else if (user.type === 'temp') {
+            // Redirect temp users away from certain pages
+            if (state.url.includes('/account') || state.url.includes('/new-reading')) {
+                this._router.navigate(['/register'], { queryParams: { 'userId': user._id }})
+            } else {
+                return true
+            }
         } else {
             return true
         }
