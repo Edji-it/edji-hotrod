@@ -17,7 +17,7 @@ export class BumblebeeService {
     this.isProd = this._auth.getEnv() == 'prod'
   }
 
-  public sendUserDetails(userDetails: any, sendType?: string): void {
+  public sendUserDetails(userDetails: User, sendType?: string): void {
     if (this.isProd) {
       this._http.post(
         this.url + "/newuser",
@@ -29,6 +29,8 @@ export class BumblebeeService {
           (success) => { },
           (error) => { console.error(error) }
         )
+    } else {
+      console.log('stubbing bumblebee user details', userDetails)
     }
   }
 

@@ -3,8 +3,8 @@ import { Router, ActivatedRoute } from '@angular/router'
 import { take } from 'rxjs/operators'
 
 // Project Dependencies
-import { AuthService, LockerService, MessageService } from './../_services'
-import { User } from '../shared/datatypes';
+import { AuthService, LockerService, MessageService, BumblebeeService } from './../_services'
+import { User } from '../shared/datatypes'
 
 @Component({
   selector: 'hot-oauth-redirect',
@@ -28,9 +28,9 @@ export class OAuthComponent implements OnInit {
   private loginType: string
   public loginTypeDisplay: string = 'Google'
   private loginTypeMap = {
-    'google' : 'Google',
-    'clever' : 'Clever'
-  } 
+    'google': 'Google',
+    'clever': 'Clever'
+  }
   private licenseId = ''
   private redirectRouteUrl = '/dashboard'
   // Oauth token
@@ -40,6 +40,7 @@ export class OAuthComponent implements OnInit {
 
   constructor(
     private _auth: AuthService,
+    private _bee: BumblebeeService,
     private _router: Router,
     private _locker: LockerService,
     private route: ActivatedRoute,
@@ -79,7 +80,7 @@ export class OAuthComponent implements OnInit {
       this.licenseId = this._locker.get('licenseId')
       this._locker.remove('licenseId')
     }
-    
+
     // if the user is coming from another route, let's redirect them to it
     if (this._locker.has('oauthRedirect')) {
       this.redirectRouteUrl = this._locker.get('oauthRedirect')
@@ -101,7 +102,7 @@ export class OAuthComponent implements OnInit {
   loginWithOauth() {
     this._auth.getUserWithAuthToken(this.loginType, this.oAuthToken).pipe(take(1)).subscribe((res) => {
       // if we are coming here from a landing page like the license accept, then the success case should take us back to that landing page again
-      if (this.licenseId!=='' && this.licenseId.length>0) {
+      if (this.licenseId !== '' && this.licenseId.length > 0) {
         this._router.navigate(['/license/accept/' + this.licenseId])
         return
       }
