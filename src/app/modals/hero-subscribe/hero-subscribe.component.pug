@@ -56,7 +56,7 @@
                   tabindex="0", 
                   [class.hide]="initWithCoupon"
                 )
-                #invalidCouponMsg.invalid-feedback(*ngIf="sForm.controls['couponCode'].value && sForm.controls['couponCode'].value.length > 0 && !sForm.controls['couponCode'].valid && sForm.controls['couponCode'].touched")
+                #invalidCouponMsg.invalid-feedback.d-block(*ngIf="sForm.controls['couponCode'].value && sForm.controls['couponCode'].value.length > 0 && !sForm.controls['couponCode'].valid && sForm.controls['couponCode'].touched")
                   b Uh-oh!
                   |  That code is invalid or expired.
                 #validCouponMsg.valid-feedback(*ngIf="sForm.controls['couponCode'].valid && !joiningAcademy")
