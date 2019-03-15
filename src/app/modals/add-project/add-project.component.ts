@@ -72,47 +72,62 @@ export class AddProjectModal implements OnInit {
     // Start loading spinner! If we're valid, we're requesting
     this.loading = true
 
+    if (formValue.customCode) {
+      // Validate custom codes
+      this._projects.validateProjectCode(formValue.customCode)
+        .subscribe(
+          (data) => {
+            if (data.found) {
+              // this actually means that the code already exists, so we give the user an error here
+              this.errors.invalidCode = true
+              this.loading = false
+            } else if (data.found === false) {
+              // Custom code does not exist! You are free to use it
+              this.createProject(formValue)
+            } else {
+              this.errors.serviceError = true
+            }
+          },
+          (err) => {
+            console.error(err)
+            this.errors.serviceError = true
+          }
+        )
+      } else {
+        // Otherwise create project with random code (picked by server)
+        this.createProject(formValue)
+      }
+  }
+
+  /**
+   * Create and emit project and close the modal
+   * - Run after validating the project (including custom codes)
+   */
+  createProject(formValue) {
     let types = []
     if (formValue.emojiType) { types.push("emoji") }
     if (formValue.textType) { types.push("text") }
     if (formValue.audioType) { types.push("audio") }
     if (formValue.replyType) { types.push("reply") }
-
-    this._projects.validateProject(formValue.customCode)
-      .subscribe(
-        (data) => {
-          if (data.found) {
-            // this actually means that the code already exists, so we give the user an error here
-            this.errors.invalidCode = true
-            this.loading = false
-            return
-          } else {
-            // no code found - they're good to create the new one!
-            let newProject = {
-              'label': formValue.label,
-              'types': types,
-              'code': formValue.customCode,
-              'group_instructions': formValue.groupInstructions
-            }
-            this._projects.create(this.reading._id, newProject)
-              .subscribe(project => {
-                if (project._id) {
-                  project.new = true
-                  this.trackAnalyticEvent(formValue, types)
-                  this.groupSaved.emit(project)
-                  this.closeModal.emit()
-                }
-              }, error => {
-                console.error(error)
-                this.errors.serviceError = true
-              })
-          }
-        },
-        (err) => {
-          console.error(err)
-          this.errors.serviceError = true
+    // no code found - they're good to create the new one!
+    let newProject = {
+      'label': formValue.label,
+      'types': types,
+      'code': formValue.customCode,
+      'group_instructions': formValue.groupInstructions
+    }
+    this._projects.create(this.reading._id, newProject)
+      .subscribe(project => {
+        if (project._id) {
+          project.new = true
+          this.trackAnalyticEvent(formValue, types)
+          this.groupSaved.emit(project)
+          this.closeModal.emit()
         }
-      )
+      }, error => {
+        console.error(error)
+        this.errors.serviceError = true
+      })
   }
 
   // there is a bit of setup for this event, so we'll handle this offsite

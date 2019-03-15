@@ -12,11 +12,6 @@ import { AuthService, SecretSwitchesService } from './../../_services'
 export class CleverButton implements OnInit {
 
   @Input() public dark: boolean
-  
-  /**
-   * @todo clean out after Clever launch
-   */
-  public showClever: boolean
 
   constructor(
     private _auth: AuthService,
@@ -24,12 +19,6 @@ export class CleverButton implements OnInit {
   ) { }
 
   ngOnInit() { 
-    /**
-     * @todo clean out after Clever launch
-     */
-    this._secrets.secretSwitchesUpdates.subscribe((switches) => {
-      this.showClever = switches.cleverButton
-    })
     
   }
 

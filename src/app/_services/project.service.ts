@@ -557,12 +557,12 @@ export class ProjectService {
      * @param projectCode Short project code
      * @returns Observable which will have error if response is invalid
      */
-    public validateProject(projectCode: string): Observable<any> {
+    public validateProjectCode(projectCode: string): Observable<any> {
         projectCode = encodeURIComponent(projectCode.toLowerCase())
 
-        return this._http.get<ValidateProjectResponse>(this._auth.getUrl() + '/api/v1/projects/' + projectCode + "/validate", this._auth.getOptions())
+        return this._http.get<validateProjectCodeResponse>(this._auth.getUrl() + '/api/v1/projects/' + projectCode + "/validate", this._auth.getOptions())
 
-    } // public validateProject(projectCode: string): Observable<any>
+    } // public validateProjectCode(projectCode: string): Observable<any>
 
     /** 
     * Pull a Project object
@@ -993,7 +993,7 @@ export interface CommentPropertyFilters {
     user_id?: RegExp
 }
 
-interface ValidateProjectResponse {
+interface validateProjectCodeResponse {
     found: boolean
     _id?: string
 }
