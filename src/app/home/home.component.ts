@@ -145,7 +145,7 @@ export class HomeComponent implements OnInit, OnDestroy {
    */
   public joinSession(code: string): void {
     this.joinLoading = true
-    this._project.validateProject(code)
+    this._project.validateProjectCode(code)
       .subscribe(
         (data) => {
           this.joinLoading = false

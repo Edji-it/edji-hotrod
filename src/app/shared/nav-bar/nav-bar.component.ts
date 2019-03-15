@@ -275,7 +275,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
   //   // we only want to check the validate route if there is a custom code - otherwise let it go through
   //   if (shareObj.customCode) {
   //     // does the project exist? this call will actually fail if it does
-  //     this._projects.validateProject(shareObj.customCode)
+  //     this._projects.validateProjectCode(shareObj.customCode)
   //     .pipe(take(1))
   //     .subscribe((res) => {
   //       // this is actually an error in this case! lol. If the code IS valid, we want them NOT to try and make a reading
@@ -308,7 +308,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
   private joinSession(code: string): void {
     // console.log("first call", code);
     this.joinLoading = true
-    this._projects.validateProject(code)
+    this._projects.validateProjectCode(code)
       .subscribe(
         (data) => {
           console.log('data', data)
