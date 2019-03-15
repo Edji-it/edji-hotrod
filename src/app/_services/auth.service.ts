@@ -302,7 +302,7 @@ export class AuthService implements CanActivate {
             }
         }
 
-        return this._http.post(this.baseUrl + 'api/v1/users/login', data, { headers: this.getHeaders() })
+        return this._http.post(this.baseUrl + '/api/v1/users/login', data, { headers: this.getHeaders() })
             .pipe(map((data: any) => {
                 if (data.token) {
                     this.setToken(data.token)
