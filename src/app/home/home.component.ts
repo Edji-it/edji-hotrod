@@ -21,7 +21,7 @@ import { AuthService, ProjectService } from '../_services'
     Ng4TwitterTimelineService
   ],
   // Our list of styles in our component. We may add more to compose many styles together
-  styleUrls: [ './home.component.scss' ],
+  styleUrls: ['./home.component.scss'],
   // Every Angular template is first compiled by the browser before Angular runs it's compiler
   templateUrl: './home.component.pug'
 })
@@ -53,14 +53,14 @@ export class HomeComponent implements OnInit, OnDestroy {
     private _title: Title,
     private ng4TwitterTimelineService: Ng4TwitterTimelineService
   ) {
-    
+
   }
 
   ngOnInit() {
     this._title.setTitle('Edji')
     this.restyleTwitter()
   }
- 
+
   private widgetCSS = `
     body{
       font-family: 'Open Sans';
@@ -116,10 +116,10 @@ export class HomeComponent implements OnInit, OnDestroy {
       overflow-x: hidden;
     }
     `;
-  
-  restyleTwitter(){
+
+  restyleTwitter() {
     if (this.twitterRestyleAttempts < 6) {
-      setTimeout(()=> {
+      setTimeout(() => {
         if (document.getElementById("twitter-widget-0") && document.getElementById("twitter-widget-0")['contentDocument']) {
           var w = document.getElementById("twitter-widget-0")['contentDocument'];
           // console.log(w)
@@ -136,7 +136,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach((sub: Subscription) => { sub.unsubscribe()})
+    this.subscriptions.forEach((sub: Subscription) => { sub.unsubscribe() })
   }
 
   /**
@@ -146,24 +146,19 @@ export class HomeComponent implements OnInit, OnDestroy {
   public joinSession(code: string): void {
     this.joinLoading = true
     this._project.validateProject(code)
-      .pipe(take(1))
       .subscribe(
-        (data: any) => {
-          this.joinLoading = false;
-          if (data._id){
+        (data) => {
+          this.joinLoading = false
+          if (data.found) {
             this.router.navigate(['/project', data._id])
-          } else {
-            this.router.navigate(['/project', code])
-          }
-        },
-        (error) => {
-          this.joinLoading = false;
-          if (error.status === 500) {
-            console.error(error)
-            this.errorObject.invalidCode = "Oh no! Something went wrong and we don't know what happened!"
           } else {
             this.errorObject.invalidCode = "We don't think that's a real code :confused:"
           }
+        },
+        (error) => {
+          this.joinLoading = false
+          console.error(error)
+          this.errorObject.invalidCode = "Oh no! Something went wrong and we don't know what happened!"
         }
       )
   }

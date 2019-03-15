@@ -33,7 +33,7 @@ export class ProjectService {
      */
     _commentStats: CommentStats
     subscriptions: Subscription[] = []
-    
+
     /**
      * Updated Reference Object
      * Reference comments by word index
@@ -83,7 +83,7 @@ export class ProjectService {
 
     constructor(
         private _http: HttpClient,
-        private _auth: AuthService, 
+        private _auth: AuthService,
         private _route: ActivatedRoute,
         private _socket: SocketService,
         private _readings: ReadingService,
@@ -133,10 +133,10 @@ export class ProjectService {
             /**
              * Our socket handler for group-specific socket update events
              * groupUpdate.type is the identifier for specific events
-             */ 
+             */
             this._socket.groupUpdate.subscribe(
                 (groupUpdate) => {
-                    if (groupUpdate.type==='refreshLeaderboard' && this.user._id===this.project.teacher_id) {
+                    if (groupUpdate.type === 'refreshLeaderboard' && this.user._id === this.project.teacher_id) {
                         this.addUserInfoToProject(groupUpdate)
                     }
                 }
@@ -146,28 +146,28 @@ export class ProjectService {
              */
             this._auth.clearAll.subscribe((clear) => {
                 if (clear) {
-                    this.project = {title:""}
+                    this.project = { title: "" }
                     this.currentProjectSource.next(this.project)
                 }
             })
         )
     } // constructor
-    
+
     /**
      * Get all Joined Projects for a single user
      * @returns chainable promise resolved with reading data
      */
     public getAll() {
-            return this._http
-                .get(this._auth.getUrl() + '/projects', this._auth.getOptions())
-                .toPromise()
+        return this._http
+            .get(this._auth.getUrl() + '/projects', this._auth.getOptions())
+            .toPromise()
     } // public getAll()
 
     /**
      * Pulls projects user has joined, paginated
      * @param filters object containing pagination values (to eventually include other filters)
      */
-    public getJoined(filters?: ProjectFilters) : Observable<GetProjectsResponse> {
+    public getJoined(filters?: ProjectFilters): Observable<GetProjectsResponse> {
         let feedParams = new HttpParams()
         // Set Pagination values
         if (filters) {
@@ -182,13 +182,15 @@ export class ProjectService {
         feedParams = feedParams.append("pop", "reading")
         // Populate Teacher to show Reading Creator
         feedParams = feedParams.append("pop", "teacher")
-        
-        return this._http.get<GetProjectsResponse>(this._auth.getUrl() + '/api/v1/projects', 
-            { headers: new HttpHeaders({
-            'Content-Type': 'application/json',
-            'Authorization': this._auth.getToken()
-            }), 
-            params: feedParams })
+
+        return this._http.get<GetProjectsResponse>(this._auth.getUrl() + '/api/v1/projects',
+            {
+                headers: new HttpHeaders({
+                    'Content-Type': 'application/json',
+                    'Authorization': this._auth.getToken()
+                }),
+                params: feedParams
+            })
             .pipe(map(data => {
                 let projects = data.projects.slice()
                 // Loop through projects and mark archived for display
@@ -224,33 +226,33 @@ export class ProjectService {
         return this._http.get(this._auth.getUrl() + '/api/v1/projects/' + encodeURIComponent(projectCode) + '?pop[]=reading_id&pop[]=teacher', this._auth.getOptions())
             .pipe(
                 map(
-                (data: any) => {
-                    let project = data.project; //can later have local setter to do validation/data manipulation before passing through observable
-                    let teacher = project.teacher
-                    // Decorate project if archived
-                    project = this.decorateArchivedProject(project)
-                    // Clear stats object
-                    this._commentStats.resetStats()
-                    /**
-                     * Set up our comments array
-                     * - Hide other user's comments without contents
-                     * - Reverse
-                     */
-                    project.comments = project.comments.filter(comment => {
-                        // If the comment has data/url (meaning they've filled out the comment) or its the current users comment
-                        return !this.isCommentHiddenDraft(comment)
+                    (data: any) => {
+                        let project = data.project; //can later have local setter to do validation/data manipulation before passing through observable
+                        let teacher = project.teacher
+                        // Decorate project if archived
+                        project = this.decorateArchivedProject(project)
+                        // Clear stats object
+                        this._commentStats.resetStats()
+                        /**
+                         * Set up our comments array
+                         * - Hide other user's comments without contents
+                         * - Reverse
+                         */
+                        project.comments = project.comments.filter(comment => {
+                            // If the comment has data/url (meaning they've filled out the comment) or its the current users comment
+                            return !this.isCommentHiddenDraft(comment)
+                        })
+                        project.comments.reverse()
+                        // Now that our project comments are ready, set it to the shared source!
+                        this.project = project
+                        this.currentProjectSource.next(this.project)
+                        // Get and attach user information to the students_ids and temp_ids if we have at least 1 of either
+                        if ((project.students_ids.length > 0 || project.temp_ids.length > 0) && this.user._id === this.project.teacher_id) {
+                            this.getUserInfoFromProject(project)
+                        }
+                        // Return the project along the current Observable
+                        return this.project;
                     })
-                    project.comments.reverse()
-                    // Now that our project comments are ready, set it to the shared source!
-                    this.project = project
-                    this.currentProjectSource.next(this.project)
-                    // Get and attach user information to the students_ids and temp_ids if we have at least 1 of either
-                    if ((project.students_ids.length > 0 || project.temp_ids.length > 0) && this.user._id===this.project.teacher_id) {
-                        this.getUserInfoFromProject(project)
-                    }
-                    // Return the project along the current Observable
-                    return this.project;
-                })
             );
     }
 
@@ -259,20 +261,20 @@ export class ProjectService {
      * @param project to determine if archive
      * @return project with updated flag
      */
-    public decorateArchivedProject(project: Project) : Project {
+    public decorateArchivedProject(project: Project): Project {
         let teacher = project.teacher
         // Identify and set archived 
         if (teacher && !teacher.hero_status && teacher.archive_readings_before) {
-             /**
-             * Readings are "archived" if all are true:
-             * - Updated date is prior to archived before date
-             * - Readings before Hero v2 (01-01-2018) are "legacy" and not archived
-             * - Teacher is NOT Hero
-             */
+            /**
+            * Readings are "archived" if all are true:
+            * - Updated date is prior to archived before date
+            * - Readings before Hero v2 (01-01-2018) are "legacy" and not archived
+            * - Teacher is NOT Hero
+            */
             let archivedBefore = new Date(teacher.archive_readings_before)
             let projectDate = new Date(project.createdAt)
             if (projectDate < archivedBefore && projectDate > new Date('01-01-2019')
-                ) {
+            ) {
                 project.archived = true
             }
         }
@@ -285,27 +287,27 @@ export class ProjectService {
      */
     public getUserInfoFromProject(project: Project) {
         this._auth.getUserInfoByProject(project.students_ids, project.temp_ids)
-        .subscribe(
-            (userInfo) => {
-                userInfo = userInfo.users
-                // attach the basic user information to each students_id
-                this.project.students = this.project.students_ids.map((obj) => {
-                    return userInfo.find((el) => {
-                        return el._id===obj
+            .subscribe(
+                (userInfo) => {
+                    userInfo = userInfo.users
+                    // attach the basic user information to each students_id
+                    this.project.students = this.project.students_ids.map((obj) => {
+                        return userInfo.find((el) => {
+                            return el._id === obj
+                        })
                     })
-                })
-                // attach the basic user information to each temp_id
-                this.project.temps = this.project.temp_ids.map((obj) => {
-                    return userInfo.find((el) => {
-                        return el._id===obj
+                    // attach the basic user information to each temp_id
+                    this.project.temps = this.project.temp_ids.map((obj) => {
+                        return userInfo.find((el) => {
+                            return el._id === obj
+                        })
                     })
+                    this.currentProjectSource.next(this.project)
+                    this._commentStats.addUsersToStats(this.commentStats._stats, this.project)
+                },
+                (error) => {
+                    console.error(error)
                 })
-                this.currentProjectSource.next(this.project)
-                this._commentStats.addUsersToStats(this.commentStats._stats, this.project)
-            },
-            (error) => {
-                console.error(error)
-            })
     }
 
     /**
@@ -314,7 +316,7 @@ export class ProjectService {
      */
     private addUserInfoToProject(groupUpdate: any) {
         // if the student that joined is registered, here is their info
-        if (groupUpdate.userType && groupUpdate.userType==="registered") {
+        if (groupUpdate.userType && groupUpdate.userType === "registered") {
             this.project.students.push({
                 _id: groupUpdate._id,
                 fullname: groupUpdate.fullname,
@@ -323,7 +325,7 @@ export class ProjectService {
             })
         }
         // if the student that joined is a temp, here is their info
-        if (groupUpdate.userType && groupUpdate.userType==="temp") {
+        if (groupUpdate.userType && groupUpdate.userType === "temp") {
             this.project.temps.push({
                 _id: groupUpdate._id,
                 fullname: groupUpdate.fullname,
@@ -441,9 +443,9 @@ export class ProjectService {
         }
     } // public addCommentToReplies(comment: EdjiComment): void 
 
-    public removeCommentFromReplies(comment: EdjiComment) : void {
+    public removeCommentFromReplies(comment: EdjiComment): void {
         if (comment.reply_to && this.repliesByIdSource[comment.reply_to]) {
-            for (let i = 0; i < this.repliesByIdSource[comment.reply_to].length; i++){
+            for (let i = 0; i < this.repliesByIdSource[comment.reply_to].length; i++) {
                 if (this.repliesByIdSource[comment.reply_to][i]._id === comment._id) {
                     this.repliesByIdSource[comment.reply_to].splice(i, 1)
                     this.repliesByIdSubject.next(this.repliesByIdSource)
@@ -467,7 +469,7 @@ export class ProjectService {
             // Double check comment doesn't exist
             for (let i = 0; i < this.answersByIdSource[answer.questionId].length; i++) {
                 let answerExist = this.answersByIdSource[answer.questionId][i]
-                if (answerExist._id === answer._id ) {
+                if (answerExist._id === answer._id) {
                     if (this.user._id !== answer.user_id) {
                         // Don't update users own answers from socket
                         // - Case: Pointer the emoji keyboard relies on breaks if you do so
@@ -484,9 +486,9 @@ export class ProjectService {
         }
     } // public addAnswerToAnswers(answer: EdjiComment): void
 
-    public removeAnswerFromAnswers(answer: EdjiComment) : void {
+    public removeAnswerFromAnswers(answer: EdjiComment): void {
         if (answer.questionId) {
-            for (let i = 0; i < this.answersByIdSource[answer.questionId].length; i++){
+            for (let i = 0; i < this.answersByIdSource[answer.questionId].length; i++) {
                 if (this.answersByIdSource[answer.questionId][i]._id === answer._id) {
                     this.answersByIdSource[answer.questionId].splice(i, 1)
                     this.answersByIdSubject.next(this.answersByIdSource)
@@ -505,7 +507,7 @@ export class ProjectService {
      * @param highlightArray the heat_vision = false highlight array, which will also be modified through the function
      * @returns the two arrays, which now are modified
      */
-    private prepareHighlightArrays(comment: EdjiComment, userId: string, project: Project, alwaysHighlightArray: number[], highlightArray: number[] ): {
+    private prepareHighlightArrays(comment: EdjiComment, userId: string, project: Project, alwaysHighlightArray: number[], highlightArray: number[]): {
         alwaysHighlightArray: number[], highlightArray: number[]
     } {
         // conditional determines which array we'll sort to - students only see highlightArray w/o heat vision on
@@ -528,7 +530,7 @@ export class ProjectService {
      */
     private incrementHighlightIndices(comment: EdjiComment, highlightArray: number[]): number[] {
         // loop through all of the indexes (corresponding to words) and increment their highlights
-        for (var i = comment.start; i <= comment.end; i ++) {
+        for (var i = comment.start; i <= comment.end; i++) {
             if (this.isCommentVisible(comment, null, true)) {
                 if (highlightArray[i]) {
                     highlightArray[i]++;
@@ -545,7 +547,7 @@ export class ProjectService {
      */
     public getForReading(readingId: string): Observable<any> {
         let userId = this._auth.getUser()._id;
-        
+
         // return this.http.get(this._auth.getUrl() + '/readings/' + readingId + '/projects/' + userId , this._auth.getOptions() );
         return this._http.get(this._auth.getUrl() + "/projects/reading/" + readingId, this._auth.getOptions())
     }
@@ -558,29 +560,29 @@ export class ProjectService {
     public validateProject(projectCode: string): Observable<any> {
         projectCode = encodeURIComponent(projectCode.toLowerCase())
 
-        return this._http.get(this._auth.getUrl() + '/projects/' + projectCode + "/validate", this._auth.getOptions())
-            
+        return this._http.get<ValidateProjectResponse>(this._auth.getUrl() + '/api/v1/projects/' + projectCode + "/validate", this._auth.getOptions())
+
     } // public validateProject(projectCode: string): Observable<any>
 
     /** 
     * Pull a Project object
     * @param projectId
     */
-    public get(projectId: string) : Observable<any> {
-            return this._http
-                .get(this._auth.getUrl() + '/projects/' + projectId, this._auth.getOptions())
-                .pipe(
-                    map(
-                        (data: any) => {
-                            // Update local Project object if returned
-                            if (data.project && data.project._id) {
-                                this.project = data.project;
-                                this.currentProjectSource.next(this.project);
-                            }
-                            return data.project;
+    public get(projectId: string): Observable<any> {
+        return this._http
+            .get(this._auth.getUrl() + '/projects/' + projectId, this._auth.getOptions())
+            .pipe(
+                map(
+                    (data: any) => {
+                        // Update local Project object if returned
+                        if (data.project && data.project._id) {
+                            this.project = data.project;
+                            this.currentProjectSource.next(this.project);
                         }
-                    )
-                );
+                        return data.project;
+                    }
+                )
+            );
     } // public get(projectId: string)
 
     /**
@@ -591,9 +593,10 @@ export class ProjectService {
     public create(readingId: string, project: any) {
         project.reading_id = readingId
         if (project.code) { project.code = project.code.toLowerCase() }
-        
+
         return this._http
             .post(this._auth.getUrl() + '/api/v1/projects/', project, this._auth.getOptions())
+            .pipe(take(1))
             .pipe(
                 map((data) => {
                     this.project = data
@@ -602,7 +605,7 @@ export class ProjectService {
                 })
             )
     }
-    
+
     /**
      * Update a project's fields
      * @param updateObj Object which contains all of the parameters to update
@@ -614,7 +617,7 @@ export class ProjectService {
             .pipe(
                 map((data) => {
                     let updatedProperties = data
-                    for(let key of Object.keys(updatedProperties)) {
+                    for (let key of Object.keys(updatedProperties)) {
                         this.project[key] = updatedProperties[key]
                     }
                     this.currentProjectSource.next(this.project)
@@ -627,9 +630,9 @@ export class ProjectService {
      * Delete a Project
      * @param Requires a Project ID
      */
-    public delete(targetProject : Project) : Observable<any> {
-        return this._http.delete(this._auth.getUrl() + '/projects/' +  targetProject._id, this._auth.getOptions())
-            .pipe(map( data => {
+    public delete(targetProject: Project): Observable<any> {
+        return this._http.delete(this._auth.getUrl() + '/projects/' + targetProject._id, this._auth.getOptions())
+            .pipe(map(data => {
                 this._readings.removeProject(targetProject)
             }))
     } // public delete(projectId)
@@ -646,17 +649,17 @@ export class ProjectService {
      * @param text (optional) Selection of text comment was made on. Left as optional, but SHOULD be passed.
      * @param commentId (optional) If passed, will update comment with that ID
      */
-    public saveComment(commentObj: EdjiComment) : Promise<any> {
-        let projectId : string = this.project._id
+    public saveComment(commentObj: EdjiComment): Promise<any> {
+        let projectId: string = this.project._id
         let comment = Object.assign({}, commentObj)
 
         comment.project_id = projectId; // Tell the comment what project it's a part of
-        
+
         // Clean frontend only properties
         delete comment['active']
         delete comment['new']
         delete comment['showAvatar']
-        
+
         if (!comment.user_id) {
             comment.user_id = this._auth.getUser()._id
         }
@@ -674,7 +677,7 @@ export class ProjectService {
 
             // need to set a comment context to discern between comments and replies for pipo event
             let commentContext = 'comment'
-            if (comment.reply_to && comment.reply_to!=='') {
+            if (comment.reply_to && comment.reply_to !== '') {
                 commentContext = 'reply'
             }
 
@@ -683,7 +686,7 @@ export class ProjectService {
                 // standard event info:
                 event_name: "comment_action",
                 user_id: this.user._id,
-                teacher: (this.project.teacher._id===this.user._id),
+                teacher: (this.project.teacher._id === this.user._id),
                 hero: this.user.hero_status || false,
                 institution_id: this.user.institution_ids || [],
                 // event-specific info:
@@ -694,8 +697,8 @@ export class ProjectService {
                 reading_owner: this.project.owner_id
             })
             // fire an analytic event here for tracking purposes
-            this.angulartics.eventTrack.next({ 
-                action: commentContext + '_' + comment.type + '_create', 
+            this.angulartics.eventTrack.next({
+                action: commentContext + '_' + comment.type + '_create',
                 properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
             })
         }
@@ -704,29 +707,29 @@ export class ProjectService {
             comment,
             this._auth.getOptions()
         )
-        .toPromise()
+            .toPromise()
     }
 
     /**
      * Deletes comment via service, then updates local Project object 
      * - Project page should subscribe to the currentProject Observable to receive these updates
      */
-    public deleteComment(comment : EdjiComment): Promise<any> {
+    public deleteComment(comment: EdjiComment): Promise<any> {
         let projectId = this.project._id;
         let url = this._auth.getUrl() + '/projects/' + projectId + '/comments/' + comment._id;
 
         // need to set a comment context to discern between comments and replies for analytic event
         let commentContext = 'comment'
-        if (comment.reply_to && comment.reply_to!=='') {
+        if (comment.reply_to && comment.reply_to !== '') {
             commentContext = 'reply'
         }
 
         // fire an analytic event here for tracking purposes
-        this.angulartics.eventTrack.next({ 
-          action: commentContext + '_' + comment.type + '_delete', 
-          properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
+        this.angulartics.eventTrack.next({
+            action: commentContext + '_' + comment.type + '_delete',
+            properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
         })
-        
+
         return this._http
             .delete(url, this._auth.getOptions())
             .pipe(
@@ -757,17 +760,17 @@ export class ProjectService {
      *   It just needs to have the appropriate type assigned and the proper data.
      * @param answerObj Answer of EdjiComment datatype
      */
-    public saveAnswer(answerObj: EdjiComment) : Promise<any> {
-        let projectId : string = this.project._id
+    public saveAnswer(answerObj: EdjiComment): Promise<any> {
+        let projectId: string = this.project._id
         let answer = Object.assign({}, answerObj)
 
         answer.project_id = projectId; // Tell the answer what project it's a part of
-        
+
         // Clean frontend only properties
         delete answer['active']
         delete answer['new']
         delete answer['showAvatar']
-        
+
         // Get the url of this project that we're saving to.
         if (!answer.user_id) {
             answer.user_id = this._auth.getUser()._id
@@ -789,7 +792,7 @@ export class ProjectService {
                 // standard event info:
                 event_name: "comment_action",
                 user_id: this.user._id,
-                teacher: (this.project.teacher._id===this.user._id),
+                teacher: (this.project.teacher._id === this.user._id),
                 hero: this.user.hero_status || false,
                 institution_id: this.user.institution_ids || [],
                 // event-specific info:
@@ -798,33 +801,33 @@ export class ProjectService {
                 action_type: 'answer',
                 comment_type: answer.type,
                 reading_owner: this.project.owner_id
-              })
-              // fire an analytic event here for tracking purposes
-              this.angulartics.eventTrack.next({ 
-                action: 'answer_' + answer.type + '_create', 
+            })
+            // fire an analytic event here for tracking purposes
+            this.angulartics.eventTrack.next({
+                action: 'answer_' + answer.type + '_create',
                 properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
-              })
+            })
         }
         return this._http.put(
             this._auth.getUrl() + '/api/v1/projects/' + projectId + '/answers',
             answer,
             this._auth.getOptions()
         )
-        .toPromise()
+            .toPromise()
     }
 
     /**
      * Deletes answer via service, then updates local Project object 
      * - Project page should subscribe to the currentProject Observable to receive these updates
      */
-    public deleteAnswer(answer : EdjiComment): Promise<any> {
+    public deleteAnswer(answer: EdjiComment): Promise<any> {
         let projectId = this.project._id;
         let url = this._auth.getUrl() + '/projects/' + projectId + '/answers/' + answer._id;
 
         // fire an analytic event here for tracking purposes
-        this.angulartics.eventTrack.next({ 
-            action: 'answer_' + answer.type + '_delete', 
-          properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
+        this.angulartics.eventTrack.next({
+            action: 'answer_' + answer.type + '_delete',
+            properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
         })
 
         return this._http
@@ -865,7 +868,7 @@ export class ProjectService {
         let len2 = commentsArray.length
         for (let i = 0; i < len2; i++) {
             let comment = commentsArray[i]
-            
+
             // If the comment has data/url (meaning they've filled out the comment)
             let dataInComment = ((comment.data && comment.data != '') || comment.url && comment.url != '') || comment.user_id == this.user._id
             // If user is current reading Owner/Teacher or Heat Vision is on, show all comments
@@ -877,7 +880,7 @@ export class ProjectService {
                 // lineY is determined by each individual CommentComponent
                 let lineY = comment.lineY
                 // Push the comment into commentByPos based on the lineY number
-                if (typeof(this.commentByPosSource[lineY])=='undefined') {
+                if (typeof (this.commentByPosSource[lineY]) == 'undefined') {
                     this.commentByPosSource[lineY] = [comment]
                 } else {
                     this.commentByPosSource[lineY].push(comment)
@@ -889,7 +892,7 @@ export class ProjectService {
 
     public isCommentVisible(comment: any, inProgressFilter?: CommentFilter, initiateComments?: boolean): boolean {
         let filter = this.activeFilter || inProgressFilter
-        if (filter){
+        if (filter) {
             // If a comment filter is active, only show filtered comments
             let fitsFilter = true
             let filterKeys = Object.keys(filter.propertyFilters)
@@ -908,7 +911,7 @@ export class ProjectService {
             }
             // Your own comments and the Owner/Teacher's comments are ALWAYS visible
             let alwaysVisible = comment.user_id == this.user._id || (comment.user_id == this.project.teacher_id)
-            return  (heatVisible || alwaysVisible)
+            return (heatVisible || alwaysVisible)
         }
     }
 
@@ -929,7 +932,7 @@ export class ProjectService {
      * - Pass an empty string to clear the filter
      * @param userId The id for the Student you want to view the comments of
      */
-    public filterByUser(user: User) : void {
+    public filterByUser(user: User): void {
         let props: CommentPropertyFilters = {}
         // Clear current filter, without notifying components
         this.activeFilter = null
@@ -976,7 +979,7 @@ interface GetProjectsResponse {
 interface ProjectFilters {
     size?: number,
     start?: number
-  }
+}
 
 export interface CommentFilter {
     propertyFilters: CommentPropertyFilters,
@@ -986,6 +989,11 @@ export interface CommentFilter {
 }
 
 export interface CommentPropertyFilters {
-    type ?: RegExp,
-    user_id ?: RegExp
+    type?: RegExp,
+    user_id?: RegExp
+}
+
+interface ValidateProjectResponse {
+    found: boolean
+    _id?: string
 }
