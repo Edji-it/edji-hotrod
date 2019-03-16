@@ -633,6 +633,12 @@ export class AuthService implements CanActivate {
         )
     }
 
+    /**
+     * Recover Password
+     * - Used for "forgotten" passwords while not logged in
+     * @params resetUser simple object with either username or email
+     * @returns HttpClient observable
+     */
     public recoverPassword(resetUser: { username?: string, email?: string }): Observable<boolean> {
         // need to pass in the correct user search
         let userInfo: string
