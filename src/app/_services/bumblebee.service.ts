@@ -11,25 +11,27 @@ import { User } from '../shared/datatypes'
 export class BumblebeeService {
 
   private url: string = "//bumblebee.edji.it"
-  // private url: string = "http://localhost:8333"
   private isProd: boolean = true
 
   constructor(private _auth: AuthService, private _http: HttpClient) {
     this.isProd = this._auth.getEnv() == 'prod'
   }
 
-  public sendUserDetails(userDetails: any, sendType?: string): void {
-    this._http.post(
-      this.url + "/newuser",
-      // "http://localhost:8333/newuser",
-      { userDetails: userDetails, sendType: sendType },
-      this._auth.getOptions()
+  public sendUserDetails(userDetails: User, sendType?: string): void {
+    if (this.isProd) {
+      this._http.post(
+        this.url + "/newuser",
+        { userDetails: userDetails, sendType: sendType },
+        this._auth.getOptions()
       )
-      .pipe(take(1))
-      .subscribe(
-        (success) => {  },
-        (error) => { console.error(error) }
-      )
+        .pipe(take(1))
+        .subscribe(
+          (success) => { },
+          (error) => { console.error(error) }
+        )
+    } else {
+      console.log('stubbing bumblebee user details', userDetails)
+    }
   }
 
   public sendFeedback(data: any): Observable<any> {
@@ -47,11 +49,11 @@ export class BumblebeeService {
         { user: user, action: action },
         this._auth.getOptions()
       )
-      .pipe(take(1))
-      .subscribe(
-        (success) => {},
-        (error) => { console.error(error) }
-      )
+        .pipe(take(1))
+        .subscribe(
+          (success) => { },
+          (error) => { console.error(error) }
+        )
     }
   }
 
@@ -62,11 +64,11 @@ export class BumblebeeService {
         { error: error },
         this._auth.getOptions()
       )
-      .pipe(take(1))
-      .subscribe(
-        (success) => {},
-        (error) => { console.error(error) }
-      )
+        .pipe(take(1))
+        .subscribe(
+          (success) => { },
+          (error) => { console.error(error) }
+        )
     }
   }
 }

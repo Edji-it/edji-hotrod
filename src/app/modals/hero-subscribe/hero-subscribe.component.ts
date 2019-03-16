@@ -5,7 +5,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { debounceTime, map, take } from 'rxjs/operators'
 
 // Project dependencies
-import { AuthService, BumblebeeService } from '../../_services'
+import { AuthService, BumblebeeService, MailchimpService } from '../../_services'
 import { User } from 'src/app/shared/datatypes'
 
 declare var Stripe: any
@@ -35,8 +35,8 @@ export class HeroSubscribeComponent implements OnInit {
   public subscription_id: string = ''
   // private couponCode: string
 
-  public sForm: FormGroup 
-  private subscriptions : any[] = []
+  public sForm: FormGroup
+  private subscriptions: any[] = []
 
   @Input()
   couponCode: string = ''
@@ -47,13 +47,14 @@ export class HeroSubscribeComponent implements OnInit {
   closeModal: EventEmitter<any> = new EventEmitter()
   @Output()
   heroWasBorn: EventEmitter<any> = new EventEmitter()
-  
+
   constructor(
     public _auth: AuthService,
     private _bumblebee: BumblebeeService,
+    private _chimp: MailchimpService,
     private angulartics: Angulartics2,
     private fb: FormBuilder,
-  ) { 
+  ) {
   }
 
   ngOnInit() {
@@ -78,7 +79,7 @@ export class HeroSubscribeComponent implements OnInit {
         this.validateCoupon.bind(this)
       ]
     }, { updateOn: "blur" });
-    
+
     // Create a Stripe client
     if (this._auth.getEnv() === 'dev') {
       this.stripe = Stripe('pk_test_e2lOurNpSI745MOUdu2LgzOu')
@@ -113,13 +114,13 @@ export class HeroSubscribeComponent implements OnInit {
     }
 
     // Create an instance of the card Element
-    this.card = elements.create('card', {style: style})
+    this.card = elements.create('card', { style: style })
 
     // Add an instance of the card Element into the `card-element` <div>
     this.card.mount('#card-element')
 
     // Handle real-time validation errors from the card Element.
-    this.card.addEventListener('change', function(event) {
+    this.card.addEventListener('change', function (event) {
       var displayError = document.getElementById('card-errors')
       if (event.error) {
         displayError.textContent = event.error.message
@@ -129,7 +130,7 @@ export class HeroSubscribeComponent implements OnInit {
     });
   }
 
-  private validateCoupon(control: AbstractControl) : Observable<any> {
+  private validateCoupon(control: AbstractControl): Observable<any> {
     let coupon = control.value && control.value.toUpperCase()
     // Reset variables
     this.joiningAcademy = false
@@ -139,24 +140,24 @@ export class HeroSubscribeComponent implements OnInit {
       return of({ invalid: true })
     } else {
       return this._auth.validateHeroCoupon(coupon)
-      .pipe(
-        debounceTime(1000),
-        map(
-        (res) => {
-          if (res.percent_off) {
-            this.percentOff = res.percent_off
-            this.newPrice = (100-this.percentOff)/100 * 60
-          }
-          // Hack for detecting Hero Academy teachers
-          if (coupon.indexOf('HA-') == 0) {
-            this.joiningAcademy = true
-          }
-          return null
-        },
-        (err) => {
-          return { invalid: true }
-        }
-      ))
+        .pipe(
+          debounceTime(1000),
+          map(
+            (res) => {
+              if (res.percent_off) {
+                this.percentOff = res.percent_off
+                this.newPrice = (100 - this.percentOff) / 100 * 60
+              }
+              // Hack for detecting Hero Academy teachers
+              if (coupon.indexOf('HA-') == 0) {
+                this.joiningAcademy = true
+              }
+              return null
+            },
+            (err) => {
+              return { invalid: true }
+            }
+          ))
     }
   }
 
@@ -169,7 +170,7 @@ export class HeroSubscribeComponent implements OnInit {
     }
 
     this.loading = true
-    
+
     if (this.percentOff == 100) {
       // referral
       this.becomeHero()
@@ -188,39 +189,18 @@ export class HeroSubscribeComponent implements OnInit {
     }
   }
 
-  private becomeHero(stripeToken ?: string) {
+  private becomeHero(stripeToken?: string) {
     let eventAction = 'addSubscription'
     this._auth.subscribeToHero(stripeToken ? stripeToken : "", this.initWithCoupon ? this.couponCode.toUpperCase() : this.sForm.valid ? this.sForm.controls["couponCode"].value.toUpperCase() : '')
-    .subscribe(
-      data => {
-        // track user adding hero subscription in analytics
-        this.angulartics.eventTrack.next({ action: 'goHero_promoPage_' + this.goHeroLocation, properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }})
-        this.userNowHero = true
-        this.loading = false
-        if (data.user) {
-          this._auth.setUser(data.user)
-          this._bumblebee.userHeroAction(data.user, "subscribed")
-        }
-      },
-      error => {
-        this.loading = false
-        this.stripeMessage = 'There was an error processing your payment. Please try correcting your payment information, or <a href="mailto:support@edji.it" class="link">contact our support team</a>.'
-        this._bumblebee.reportError(error)
-      })
-  }
-
-  // a user that was previously a hero and cancelled will need to contact support to handle going hero again
-  public resumeHero(): void {
-    this.loading = true
-    if (this.subscription_id) {
-      this._auth.rejoinHero(this.subscription_id)
       .subscribe(
         data => {
+          this._chimp.addToActiveHeroList(this._auth.getUser())
           // track user adding hero subscription in analytics
-          this.angulartics.eventTrack.next({ action: 'rejoinHero_promoPage_' + this.goHeroLocation, properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }})
+          this.angulartics.eventTrack.next({ action: 'goHero_promoPage_' + this.goHeroLocation, properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() } })
           this.userNowHero = true
           this.loading = false
           if (data.user) {
+            this._auth.setUser(data.user)
             this._bumblebee.userHeroAction(data.user, "subscribed")
           }
         },
@@ -229,6 +209,28 @@ export class HeroSubscribeComponent implements OnInit {
           this.stripeMessage = 'There was an error processing your payment. Please try correcting your payment information, or <a href="mailto:support@edji.it" class="link">contact our support team</a>.'
           this._bumblebee.reportError(error)
         })
+  }
+
+  // a user that was previously a hero and cancelled will need to contact support to handle going hero again
+  public resumeHero(): void {
+    this.loading = true
+    if (this.subscription_id) {
+      this._auth.rejoinHero(this.subscription_id)
+        .subscribe(
+          data => {
+            // track user adding hero subscription in analytics
+            this.angulartics.eventTrack.next({ action: 'rejoinHero_promoPage_' + this.goHeroLocation, properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() } })
+            this.userNowHero = true
+            this.loading = false
+            if (data.user) {
+              this._bumblebee.userHeroAction(data.user, "subscribed")
+            }
+          },
+          error => {
+            this.loading = false
+            this.stripeMessage = 'There was an error processing your payment. Please try correcting your payment information, or <a href="mailto:support@edji.it" class="link">contact our support team</a>.'
+            this._bumblebee.reportError(error)
+          })
     }
   }
 
@@ -236,7 +238,7 @@ export class HeroSubscribeComponent implements OnInit {
   private activeSubscription(subscriptions: any): boolean {
     // we need to both check if we have an active subscription and if not, what was the most recent cancellation
     let len = subscriptions.length
-    for (var i=0; i<len; i++) {
+    for (var i = 0; i < len; i++) {
       let sub = subscriptions[i]
       if (this._auth.getStripeDate(sub.current_period_end) > new Date()) {
         this.subscription_id = sub.id

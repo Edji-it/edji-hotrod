@@ -48,4 +48,9 @@ interface BaseUser {
   school_name: string,
   phone_number: string,
   archive_readings_before?: string
+  oauth?: Array<{
+    id: string
+    type: string
+    email?: string
+  }>
 }
