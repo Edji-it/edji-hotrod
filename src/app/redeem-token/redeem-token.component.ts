@@ -64,7 +64,7 @@ export class RedeemToken implements OnInit {
     }
     // Build reset form
     this.resetForm = this._fb.group({
-      field: [null, [fieldValidators]],
+      field: [null, fieldValidators],
       fieldConfirm: [null, Validators.required]
     }, { validator: this.fieldsEqual })
 
