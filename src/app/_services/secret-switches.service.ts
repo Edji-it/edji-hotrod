@@ -41,5 +41,4 @@ export interface Secrets {
     heroAvailable?: boolean
     googleAuth?: boolean
     academy?: boolean
-    cleverButton?: boolean
 }
