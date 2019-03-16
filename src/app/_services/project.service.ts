@@ -712,8 +712,12 @@ export class ProjectService {
      * - Project page should subscribe to the currentProject Observable to receive these updates
      */
     public deleteComment(comment : EdjiComment): Promise<any> {
-        let projectId = this.project._id;
-        let url = this._auth.getUrl() + '/projects/' + projectId + '/comments/' + comment._id;
+        let projectId = this.project._id
+        let url = this._auth.getUrl() + '/projects/' + projectId + '/comments/' + comment._id
+
+        let search_params: string = '?comment_id=' + comment._id
+        // Attach replies ids to query string
+        search_params = this._auth.arrayParamsToString('reply_ids[]', comment.replies, search_params)
 
         // need to set a comment context to discern between comments and replies for analytic event
         let commentContext = 'comment'
@@ -728,7 +732,7 @@ export class ProjectService {
         })
         
         return this._http
-            .delete(url, this._auth.getOptions())
+            .delete(this._auth.getUrl() + '/api/v1/projects/' + projectId + '/comments' + search_params, this._auth.getOptions())
             .pipe(
                 map(data => {
                     // Tell other Project views that the comment is gone
