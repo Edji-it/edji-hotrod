@@ -65,24 +65,14 @@ export class Sidebar {
 
     // Click the log out button.
     public clickLogOutButton () : void {
-        this.avatarActionIcon.isPresent().then((result) => {
-            if (result) {
-                 this.avatarActionIcon.isDisplayed().then((result) => {
-                    if ( result ) {
-                        this.avatarActionIcon.click();
-                        this.logOutButton.isPresent().then((result) => {
-                            if (result) {
-                                 this.logOutButton.isDisplayed().then((result) => {
-                                    if ( result ) {
-                                        this.logOutButton.click();
-                                    }
-                                })
-                            }
-                        })
-                    }
-                })
-            }
-        })
+        // Wait for avatar icon to be clickable
+        browser.wait(this.EC.elementToBeClickable(this.avatarActionIcon), 5000, "nav avatar menu was not clickable prior to log out")
+        // Click to open menu
+        this.avatarActionIcon.click()
+        // Wait for log out option to be available
+        browser.wait(this.EC.elementToBeClickable(this.logOutButton), 5000, "nav avatar menu log out option did not become clickable")
+        // Click to log out
+        this.logOutButton.click()
     } // clickLogOutButton () : void
 
     // Click the log out button.
