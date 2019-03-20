@@ -1128,6 +1128,14 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         return classString + ' h-' + highlightCount
     }
 
+    /**
+     * Returns whether a "w" word contains a style class
+     * @param w Word object
+     */
+    public wHasStyle(w, style): boolean {
+        return w && w.styles && w.styles.indexOf(style) > -1
+    }
+
     /** Used to determine which level of permission the user has for a specific comment
      * @param comment A comment object
      */

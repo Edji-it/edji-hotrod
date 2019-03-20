@@ -62,7 +62,7 @@ export class Dashboard implements PageObjectInterface
 
     // get the new reading page
     openNewReading() : void {
-        browser.wait(this.EC.urlContains("dashboard"), 5000, "never reached the dashboard before clicking new reading button");
+        browser.wait(this.EC.urlContains("dashboard"), 10000, "never reached the dashboard before clicking new reading button");
         // Click the new reading button on the dashboard for mobile
         this.createdTab.isPresent().then((result) => {
             if (result) {
