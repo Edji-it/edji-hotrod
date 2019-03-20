@@ -764,7 +764,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
         let text: string = ''
         for (var i = start; i <= end; i++) {
-            text += this.reading.words[i] ? this.reading.words[i].str : ' '
+            text += (this.reading.words[i] && this.reading.words[i].str) ? this.reading.words[i].str : ' '
         }
         
         let comment = <EdjiComment>{
