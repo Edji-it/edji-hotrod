@@ -45,7 +45,6 @@ export class AuthService implements CanActivate {
         private _http: HttpClient,
         private _router: Router,
         private _locker: LockerService,
-        private angulartics: Angulartics2,
         private ga: Angulartics2GoogleAnalytics,
         private route: ActivatedRoute
     ) {
@@ -633,6 +632,12 @@ export class AuthService implements CanActivate {
         )
     }
 
+    /**
+     * Recover Password
+     * - Used for "forgotten" passwords while not logged in
+     * @params resetUser simple object with either username or email
+     * @returns HttpClient observable
+     */
     public recoverPassword(resetUser: { username?: string, email?: string }): Observable<boolean> {
         // need to pass in the correct user search
         let userInfo: string
@@ -666,65 +671,6 @@ export class AuthService implements CanActivate {
                     throw new Error("Did not get json response from convertTempUser")
                 }
             }))
-    }
-
-    /**
-    * Add users interested in Hero to the Mailchimp Hero update list
-    */
-    public addToHeroList(user) {
-        let body = user
-        body['list'] = 'hero'
-        return this._http.post(this.baseUrl + '/mailchimp/add', body, this.getOptions())
-    }
-
-    /**
-     * Add users who subscribe to Hero to the Mailchimp Hero Subscribed list
-     */
-    public addToActiveHeroList(user): void {
-        if (this.getEnv() == 'prod') {
-            let spaceIndex = user.fullname.indexOf(' ')
-            if (spaceIndex < 0) { spaceIndex = user.fullname.length }
-            let fname = user.fullname.substr(0, spaceIndex)
-            let lname = user.fullname.substr(spaceIndex + 1)
-            let body = {
-                'email': user.email,
-                'fname': fname,
-                'lname': lname
-            }
-            body['list'] = 'hero-subscribed'
-            this._http.post(this.baseUrl + '/mailchimp/add', body, this.getOptions())
-                .toPromise()
-                .then(res => { console.log(res) })
-                .catch(err => { console.error(err) })
-        } else {
-            console.info("Dev: Not adding user to Active Hero List")
-        }
-    }
-
-
-    /**
-     * Add newly registered users to the sign up Mailchimp list
-     */
-    public addToNewUsersList(user): void {
-        let body = user
-        body['list'] = 'new'
-        this._http.post(this.baseUrl + '/mailchimp/add', body, this.getOptions())
-            .pipe(
-                take(1)
-            )
-            .subscribe(
-                (success) => { },
-                (error) => { console.error(error) }
-            )
-    }
-
-    /**
-     * Return array of allowed comment types
-     * DEPRECATED with the Hero for All Updates 1/1/2019
-     */
-    public getAllowedCommentTypes(): string[] {
-        this.user = this.getUser()
-        return ['emoji', 'text', 'audio', 'reply']
     }
 
     /**
@@ -783,12 +729,6 @@ export class AuthService implements CanActivate {
                 })
             }
         )
-            .pipe(map((res) => {
-                // Add user to mailchimp list
-                this.addToActiveHeroList(this.getUser())
-
-                return res
-            }))
     }
 
     public validateHeroCoupon(couponCode: string): Observable<any> {

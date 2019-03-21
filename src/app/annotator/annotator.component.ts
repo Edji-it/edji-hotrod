@@ -770,7 +770,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
         let text: string = ''
         for (var i = start; i <= end; i++) {
-            text += this.reading.words[i] ? this.reading.words[i].str : ' '
+            text += (this.reading.words[i] && this.reading.words[i].str) ? this.reading.words[i].str : ' '
         }
         
         let comment = <EdjiComment>{
@@ -1132,6 +1132,14 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             classString += ' quick-select--click'
         }
         return classString + ' h-' + highlightCount
+    }
+
+    /**
+     * Returns whether a "w" word contains a style class
+     * @param w Word object
+     */
+    public wHasStyle(w, style): boolean {
+        return w && w.styles && w.styles.indexOf(style) > -1
     }
 
     /** Used to determine which level of permission the user has for a specific comment

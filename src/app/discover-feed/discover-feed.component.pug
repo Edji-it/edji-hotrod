@@ -30,10 +30,10 @@ nav-bar([showDashboardOptions]="true")
                         .feed__reading-preview(*ngIf="reading.words_preview")
                             span.w(
                                     *ngFor="let w of reading.words_preview", 
-                                    [ngClass]="[ w ? w.styles.join(' ') : '' ]"
+                                    [ngClass]="[ w && w.styles ? w.styles.join(' ') : '' ]"
                                 )
                                 | {{ (!(w && w.styles) || (w && w.styles.indexOf('space')) > -1) ? '&nbsp;' : w && w.str }}
-                                div(*ngIf="w && w.styles.indexOf('img') > -1")
+                                div(*ngIf="w && w.styles && w.styles.indexOf('img') > -1")
                                     //- Image: Display image for image "word"
                                     img.reading-image(
                                         [attr.id]="'readingImage' + i",

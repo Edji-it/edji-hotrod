@@ -30,7 +30,7 @@ export class Home implements PageObjectInterface
     {
         browser.get('/#/home');
         // Ensure home page loaded
-        browser.wait(this.EC.elementToBeClickable(this.projectCodeInputNav), 3000, "home page did not load with group code input in nav")
+        browser.wait(this.EC.elementToBeClickable(this.projectCodeInputNav), 10000, "home page did not load with group code input in nav")
     } // getPage() : void
 
     // click on the login link
