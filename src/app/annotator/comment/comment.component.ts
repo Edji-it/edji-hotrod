@@ -185,6 +185,10 @@ export class CommentComponent implements OnInit, OnDestroy {
    */
   setLineY() {
     let firstWord = document.querySelector('.w[index="1"]')
+    // @todo Workaround: Identify back up firstWord (index 1 is more reliably a word)
+    if (!firstWord) {
+      firstWord = document.querySelector('.w[index="0"]')
+    }
     let commentWord = document.querySelector( '.w[index="'+this.comment.start+'"]')
     let commentImage = document.getElementById('readingImage' + this.comment.start)
 
