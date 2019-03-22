@@ -766,7 +766,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         for (var i = start; i <= end; i++) {
             text += (this.reading.words[i] && this.reading.words[i].str) ? this.reading.words[i].str : ' '
         }
-        
+        // We don't want trailing whitespaces saved for highlighted text
+        text = text.trim()
+        // Build comment
         let comment = <EdjiComment>{
             data: '',
             start: start,
@@ -775,7 +777,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             text: text,
             loc: this.imageCoords
         }
-
         // Tell server we've added a comment
         this._projects.saveComment(comment)
             .then(comment => {
