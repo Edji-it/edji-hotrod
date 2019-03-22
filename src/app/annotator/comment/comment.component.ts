@@ -213,7 +213,8 @@ export class CommentComponent implements OnInit, OnDestroy {
           this.comment.lineY = this.nearestLine(wordY)
       }
     } else {
-      console.log("Looking for y position of comment not yet rendered...")
+      // Y position debug log
+      // console.log("Looking for y position of comment not yet rendered...")
       this.setLineYAttempts++
       if (this.setLineYAttempts < 10) {
         setTimeout(()=> {
