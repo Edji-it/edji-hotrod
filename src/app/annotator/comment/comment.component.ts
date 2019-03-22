@@ -185,16 +185,19 @@ export class CommentComponent implements OnInit, OnDestroy {
    */
   setLineY() {
     let firstWord = document.querySelector('.w[index="1"]')
+    // @todo Workaround: Identify back up firstWord (index 1 is more reliably a word)
+    if (!firstWord) {
+      firstWord = document.querySelector('.w[index="0"]')
+    }
     let commentWord = document.querySelector( '.w[index="'+this.comment.start+'"]')
     let commentImage = document.getElementById('readingImage' + this.comment.start)
 
     if (firstWord && (commentWord || commentImage)) {
       let firstWordTop: number = firstWord.getBoundingClientRect().bottom
-
       // This will need to re-decorate on resize
       // For a period we were erroneously saving comments on text with image coords
-      // *Fixed March 2019, but allow for legacy comments by checking "text" or commentImage
-      if (commentImage && this.comment.loc && this.comment.loc.y && this.comment.text === "") {
+      // *Fixed March 2019, but allow for legacy comments by checking for commentImage
+      if (commentImage && this.comment.loc && this.comment.loc.y) {
           // Set comment on image position
           this.setLineYAttempts = 0
           let imageTop: number = commentImage.getBoundingClientRect().top
@@ -214,7 +217,8 @@ export class CommentComponent implements OnInit, OnDestroy {
           this.comment.lineY = this.nearestLine(wordY)
       }
     } else {
-      console.log("Looking for y position of comment not yet rendered...")
+      // Y position debug log
+      // console.log("Looking for y position of comment not yet rendered...")
       this.setLineYAttempts++
       if (this.setLineYAttempts < 10) {
         setTimeout(()=> {
