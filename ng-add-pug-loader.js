@@ -18,7 +18,9 @@ fs.readFile(commonCliConfig, {}, (err, data) => {
   const output = [configText.slice(0, position), pugRule, configText.slice(position)].join('');
   const file = fs.openSync(commonCliConfig, 'r+');
   fs.writeFile(file, output, (err) => {
-    console.error(err);
+    console.error(err);  
+    fs.close(file, () => {
+      console.log("File closed");
+    });
   });
-  fs.close(file);
 });

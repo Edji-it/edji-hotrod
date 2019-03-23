@@ -1,14 +1,9 @@
 //- Desktop Avatar Icons
-.user-icon.pointer.hidden-md-down(
+.user-icon.pointer.hidden-sm-down(
   *ngIf="indexOnLine<9",
   (tap)='triggerCommentPane(true)',
   [ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '','avatar-count-' + indexOnLine, 'avatar-' + comment.type, active ? 'active' : '' ]"
 )
-  //- Icon Arrow
-  .icon-comment-arrow(
-    *ngIf="active",
-    [ngClass]="[ 'comment-arrow-' + indexOnLine ]"
-  )
   span.tooltipbody(*ngIf="indexOnLine<8")
     .tooltip-title([class.inline-center]="comment.type == 'audio'")
       | {{comment.author}}
@@ -32,5 +27,5 @@
   .comment__button--mobile.avatar__reply(*ngIf="repliesById[comment._id] && repliesById[comment._id].length>0")
 
 //- Mobile Icon
-.comment__button--mobile.hidden-lg-up((tap)='triggerCommentPane(false)', [ngClass]="[ active ? 'active' : '' ]")
-.comment__count--mobile.hidden-lg-up {{ lineCount }}
+.comment__button--mobile.hidden-md-up((tap)='triggerCommentPane(false)', [ngClass]="[ active ? 'active' : '' ]")
+.comment__count--mobile.hidden-md-up {{ lineCount }}

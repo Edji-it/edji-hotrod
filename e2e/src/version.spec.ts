@@ -21,8 +21,8 @@ describe("Versioning - ", () => {
         // Login as test account that we can fill with junk data
         login.getPage();
         browser.wait(EC.elementToBeClickable(login.loginButton), 5000);
-        login.enterUsername(login.botUser);
-        login.enterPassword(login.botPassword);
+        login.enterUsername(login.heroUser);
+        login.enterPassword(login.heroPassword);
         browser.wait(EC.elementToBeClickable(login.loginButton), 5000);
         login.loginButton.click();
         browser.wait(EC.urlContains("dashboard"), 5000, "never arrived at dashboard");
@@ -69,9 +69,7 @@ describe("Versioning - ", () => {
         newReading.subjectFirstOption.click();
         newReading.contentInput.sendKeys(newReading.contentShortString);
         // Submit New Reading
-        newReading.addNewReading()
-        // checks for and clicks the confirm archive button if the modal is there
-        newReading.confirmArchiveButtonClick()
+        newReading.clickShareAndArchive()
         browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable");
         newReading.finalizeButton.click();
         // Should redirect to Project page for new reading
@@ -131,9 +129,7 @@ describe("Versioning - ", () => {
         browser.wait(EC.urlContains("new-reading"), 5000, "never arrived at the new reading page")
 
         // Submit New Reading
-        newReading.addNewReading()
-        // checks for and clicks the confirm archive button if the modal is there
-        newReading.confirmArchiveButtonClick()
+        newReading.clickShareAndArchive()
         browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable")
         newReading.finalizeButton.click()
 

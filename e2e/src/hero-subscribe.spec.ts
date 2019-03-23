@@ -46,15 +46,20 @@ describe('Hero Subscription Management', () => {
             // Valid coupon
             browser.wait(EC.elementToBeClickable(hero.couponInput), 3000)
             hero.couponInput.sendKeys(hero.validCoupon)
+            // Blur field
+            hero.couponInput.sendKeys(protractor.Key.TAB)
             browser.wait(EC.presenceOf(hero.validCouponMsg), 5000, "never saw valid coupon success message")
             // Academy coupon
             hero.couponInput.clear()
             hero.couponInput.sendKeys(hero.academyCoupon)
+            // Blur field
+            hero.couponInput.sendKeys(protractor.Key.TAB)
             browser.wait(EC.presenceOf(hero.academyCouponMsg), 5000, "never saw academy coupon success message")
             // Invalid coupon
             hero.couponInput.clear()
             hero.couponInput.sendKeys(hero.invalidCoupon)
-            hero.subscribeButton.click() // blur field
+            // Blur field
+            hero.subscribeButton.click()
             browser.wait(EC.presenceOf(hero.invalidCouponMsg), 5000, "never saw invalid coupon message")
             // Close subscription modal
             hero.subscribeModalClose.click()

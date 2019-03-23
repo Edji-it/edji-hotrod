@@ -55,7 +55,7 @@ nav-bar([showDashboardOptions]="true")
         button.btn.btn-hero.mr-4(*ngIf="!currentUser.hero_status", (click)="showHeroSubModal = true; trackHeroClick()") Go Hero
         button.btn.btn-hero.mr-4(*ngIf="canceled", (click)="showHeroSubModal = true; trackHeroClick()") Renew Subscription
     //- Linked Accounts
-    .info-group(*ngIf="showLinkedAccounts")
+    .info-group
       label.info-label Linked Accounts
       //- Clever linked
       div.mt-2

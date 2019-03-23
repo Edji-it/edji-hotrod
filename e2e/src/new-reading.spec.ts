@@ -27,11 +27,7 @@ describe('New Reading Page', () => {
         // Login as test account that we can fill with junk data
         login.getPage()
         browser.wait(EC.elementToBeClickable(login.loginButton), 5000)
-        login.enterUsername(login.botUser)
-        login.enterPassword(login.botPassword)
-        browser.wait(EC.elementToBeClickable(login.loginButton), 5000)
-        login.loginButton.click()
-        browser.wait(EC.urlContains("dashboard"), 5000, "never arrived at dashboard")
+        login.loginAndVerify(login.botUser, login.botPassword)
     })
 
     afterAll(() => {
@@ -71,9 +67,7 @@ describe('New Reading Page', () => {
         newReading.privateButton.click()
         newReading.contentInput.sendKeys(newReading.contentShortString)
         // Submit New Reading
-        newReading.addNewReading()
-        // checks for and clicks the confirm archive button if the modal is there
-        newReading.confirmArchiveButtonClick()
+        newReading.clickShareAndArchive()
         browser.wait(EC.invisibilityOf(newReading.confirmArchiveModal), 5000, 'confirm archive modal should not be showing')
         browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 8000, "finalize reading button never became clickable")
         // Group Label has content prefilled, so we clear it
@@ -104,8 +98,6 @@ describe('New Reading Page', () => {
         newReading.contentInput.sendKeys(newReading.contentShortString)
         // Submit New Reading
         newReading.addNewReading()
-        // checks for and clicks the confirm archive button if the modal is there
-        newReading.confirmArchiveButtonClick()
         // Should see error for empty title
         browser.wait(EC.presenceOf(newReading.titleError), 5000, "never saw an error for empty title")
         // Reset user to dashboard
@@ -126,8 +118,6 @@ describe('New Reading Page', () => {
         newReading.contentInput.clear()
         // Submit New Reading
         newReading.addNewReading()
-        // checks for and clicks the confirm archive button if the modal is there
-        newReading.confirmArchiveButtonClick()
         // Should see error for empty content
         browser.wait(EC.presenceOf(newReading.contentError), 5000, "never saw an error for empty content")
         // Reset user to dashboard
@@ -148,9 +138,7 @@ describe('New Reading Page', () => {
         // Make private to avoid needing grade levels and subjecst
         newReading.privateButton.click()
         newReading.contentInput.sendKeys(newReading.contentShortString)
-        newReading.addNewReading()
-        // checks for and clicks the confirm archive button if the modal is there
-        newReading.confirmArchiveButtonClick()
+        newReading.clickShareAndArchive()
         browser.wait(EC.elementToBeClickable(newReading.groupInput), 5000, "group input became clickable")
         // This field needs special attention to trigger the required
         newReading.groupInput.clear().then(() => {
@@ -173,7 +161,7 @@ describe('New Reading Page', () => {
         - Open PDF upload modal
         - Select and upload a PDF
         - Insert PDF into the Reading
-        - Create the Reading
+        - Delete PDF
     */
     describe("PDF upload", () => {
         /**
@@ -194,32 +182,18 @@ describe('New Reading Page', () => {
             // Image was uploaded! Insert it
             browser.wait(EC.elementToBeClickable(newReading.insertUploadedPdf), 20000, "the pdf never became available to insert")
             newReading.insertUploadedPdf.click()
-            // Complete rest of reading
-            newReading.titleInput.sendKeys(newReading.titleImageString)
-            // Make private to avoid needing grade levels and subjecst
-            newReading.privateButton.click()
-            // Submit New Reading
-            newReading.addNewReading()
-            // checks for and clicks the confirm archive button if the modal is there
-            newReading.confirmArchiveButtonClick()
-            browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable")
-            newReading.finalizeButton.click()
-            // Should create a new Reading
-            browser.wait(EC.urlContains("project"), 5000, "never arrived at new reading")
-
             // Should see image in new reading
             browser.wait(EC.presenceOf(newReading.imageInReading), 10000, "never saw PDF in the new reading")
-            // Reset user to dashboard
-            sidebar.backToDash()
+            // Stay on New Reading page for deleting the PDF
         })
 
         // This following test relies on the previous one for a PDF to delete.
         it('should delete a PDF that was uploaded', function() {
            // Open and wait for New Reading page
-            dashboard.openNewReading()
-            browser.wait(EC.elementToBeClickable(newReading.uploadPDfModalButton), 5000)
+            // dashboard.openNewReading()
+            browser.wait(EC.elementToBeClickable(newReading.uploadPDfModalButton), 5000, "insert PDF button was not clickable")
             newReading.uploadPDfModalButton.click()
-           
+            browser.wait(EC.elementToBeClickable( element(by.id("titleCard"))), 5000, "insert PDF modal did not become available")
             // Click the delete button
             let allPdfCards = element.all(by.id("titleCard"))
             let pdfCard = element(by.id("titleCard"))
@@ -244,6 +218,10 @@ describe('New Reading Page', () => {
     describe("Image upload", () => {
         /**
          * Test: Add reading with an image
+         * - Upload image
+         * - Insert image
+         * - Create reading with image
+         * - Verify new reading has image
          */
         it('should upload an image to a reading and save it to the reading', function() {
             // Open and wait for New Reading page
@@ -270,9 +248,7 @@ describe('New Reading Page', () => {
             newReading.privateButton.click()
 
             // Submit New Reading
-            newReading.addNewReading()
-            // checks for and clicks the confirm archive button if the modal is there
-            newReading.confirmArchiveButtonClick()
+            newReading.clickShareAndArchive()
             browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable")
             newReading.finalizeButton.click()
 
@@ -301,7 +277,7 @@ describe('New Reading Page', () => {
          */
         it('should add a reading as a draft and return to the same screen with a reading id', function() {
             // Reset user to dashboard
-            sidebar.backToDash()
+            // sidebar.backToDash()
             // Open and wait for New Reading page
             dashboard.openNewReading()
             browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000)
@@ -309,25 +285,26 @@ describe('New Reading Page', () => {
             newReading.titleInput.sendKeys(newReading.titleString)
             // Make private to avoid needing grade levels and subjecst
             newReading.privateButton.click()
+            // Content fill
             newReading.contentInput.sendKeys(newReading.contentShortString)
+            newReading.contentInput.sendKeys(protractor.Key.RETURN)
             // Saving Source is tested in the step
             newReading.sourceInput.sendKeys(newReading.sourceString)
             // Submit New Draft for Reading
             newReading.saveDraftNewReading()
-            // Should redirect to new reading page with same inputs and a success alert
-            browser.wait(EC.urlContains("new-reading"), 5000, "never created the draft")
-            browser.wait(EC.visibilityOf(newReading.successAlert), 5000, "never saw the success alert")
+            // Return to top where success message shows
+            browser.executeScript('window.scrollTo(0, 0)').then( () => {
+                // Should redirect to new reading page with a reading id and a success alert
+                browser.wait(EC.visibilityOf(newReading.successAlert), 15000, "never saw the success alert")
+            })
             // Add more text
-            newReading.contentInput.sendKeys(protractor.Key.ARROW_DOWN)
             newReading.contentInput.sendKeys(newReading.contentShortStringB)
             // Submit New Reading
-            newReading.addNewReading()
-            // checks for and clicks the confirm archive button if the modal is there
-            newReading.confirmArchiveButtonClick()
+            newReading.clickShareAndArchive()
             browser.wait(EC.elementToBeClickable(newReading.finalizeButton), 5000, "finalize reading button never became clickable")
             newReading.finalizeButton.click()
             // Should create a new Reading
-            browser.wait(EC.urlContains("project"), 5000, "never arrived at new reading")
+            browser.wait(EC.urlContains("project"), 10000, "never arrived at new reading")
             // Reset user to dashboard
             sidebar.backToDash()
         })

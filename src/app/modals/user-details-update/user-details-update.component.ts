@@ -4,7 +4,7 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { take } from 'rxjs/operators'
 
 import { User } from './../../shared/datatypes'
-import { AuthService, BumblebeeService, AcademyService } from './../../_services'
+import { AuthService, BumblebeeService, AcademyService, MailchimpService } from './../../_services'
 import { ALLSPARK } from 'src/app/app.constants'
 
 @Component({
@@ -16,21 +16,21 @@ export class UserDetailsUpdateModal implements OnInit {
   @Input() showModal: boolean
   @Output() closeModal: EventEmitter<any> = new EventEmitter()
 
-  private currentUser: User 
+  private currentUser: User
   private userDetailsForm: FormGroup
   private identities: {
     name: string
     id: string
     checkboxCopy: string
   }[] = [
-    { name: 'student', id: 'typeStudentInput', checkboxCopy: "Student :writing_hand:" },
-    { name: 'teacher', id: 'typeTeacherInput', checkboxCopy: "Teacher :apple:" },
-    { name: 'administrator', id: 'typeAdministratorInput', checkboxCopy: "Tech Coach/Administrator :clipboard:" },
-    { name: 'business', id: 'typeBusinessInput', checkboxCopy: "Business Application :briefcase:" },
-    { name: 'personal', id: 'typePersonalInput', checkboxCopy: "Personal Reading Platform :books:" },
-    { name: 'robot', id: 'typeRobotInput', checkboxCopy: "I'm a robot. :robot_face:" },
-    { name: 'other', id: 'typeOtherInput', checkboxCopy: "Other :sparkles:" }
-  ]
+      { name: 'student', id: 'typeStudentInput', checkboxCopy: "Student :writing_hand:" },
+      { name: 'teacher', id: 'typeTeacherInput', checkboxCopy: "Teacher :apple:" },
+      { name: 'administrator', id: 'typeAdministratorInput', checkboxCopy: "Tech Coach/Administrator :clipboard:" },
+      { name: 'business', id: 'typeBusinessInput', checkboxCopy: "Business Application :briefcase:" },
+      { name: 'personal', id: 'typePersonalInput', checkboxCopy: "Personal Reading Platform :books:" },
+      { name: 'robot', id: 'typeRobotInput', checkboxCopy: "I'm a robot. :robot_face:" },
+      { name: 'other', id: 'typeOtherInput', checkboxCopy: "Other :sparkles:" }
+    ]
   public identitySelect: boolean = true
   private existingUser: boolean
 
@@ -43,19 +43,20 @@ export class UserDetailsUpdateModal implements OnInit {
     header: string,
     body: string
   } = {
-    header: 'Before you begin',
-    body: 'Help us customize your experience. Are you a...'
-  }
+      header: 'Before you begin',
+      body: 'Help us customize your experience. Are you a...'
+    }
 
   constructor(
     private _academy: AcademyService,
     private _auth: AuthService,
     private _bumble: BumblebeeService,
+    private _chimp: MailchimpService,
     _fb: FormBuilder
-  ) { 
+  ) {
     this.userDetailsForm = _fb.group({
       school: [null, Validators.required],
-      phone: [null, Validators.compose([Validators.required, this.phoneNumberValidator])],
+      phone: [null, [Validators.required, this.phoneNumberValidator]],
       sales_can_contact: null,
       identities: _fb.group({
         student: true,
@@ -73,11 +74,11 @@ export class UserDetailsUpdateModal implements OnInit {
     this.currentUser = this._auth.getUser()
 
     if (
-      (this.currentUser && this.currentUser.identities && this.currentUser.identities.includes('teacher')) || 
-      (this.currentUser && this.currentUser.identities && this.currentUser.identities.includes('administrator')) && 
+      (this.currentUser && this.currentUser.identities && this.currentUser.identities.includes('teacher')) ||
+      (this.currentUser && this.currentUser.identities && this.currentUser.identities.includes('administrator')) &&
       this.currentUser && !this.currentUser.school_name
     ) {
-      this.existingUser=true
+      this.existingUser = true
       this.setFormIdentities(this.currentUser)
       this.showTeacherForm()
     }
@@ -85,7 +86,7 @@ export class UserDetailsUpdateModal implements OnInit {
 
   public formSubmit(form: FormGroup): void {
     // if the user identifies as a teacher or admin, we need to switch to the next section to collect school name and phone number (optional)
-    if ((form.value.identities.teacher || form.value.identities.administrator) && form.value.school===null) {
+    if ((form.value.identities.teacher || form.value.identities.administrator) && form.value.school === null) {
       this.showTeacherForm()
     } else {
       // update the user if we have the info we need
@@ -95,7 +96,7 @@ export class UserDetailsUpdateModal implements OnInit {
 
   private processIdentities(form: FormGroup): void {
     let identities = []
-    for(let field in form.value.identities) {
+    for (let field in form.value.identities) {
       if (form.value.identities[field]) {
         identities.push(field) // the name of the field gets added to the array, making it important to name the fields properly
       }
@@ -115,7 +116,7 @@ export class UserDetailsUpdateModal implements OnInit {
       contactMe = form.value.sales_can_contact
     }
 
-    this._auth.updateUser({identities: identities, school_name: school, phone_number: phone, sales_can_contact: contactMe })
+    this._auth.updateUser({ identities: identities, school_name: school, phone_number: phone, sales_can_contact: contactMe })
       .pipe(take(1))
       .subscribe((res: any) => {
         this._auth.setUser(res.user)
@@ -123,20 +124,15 @@ export class UserDetailsUpdateModal implements OnInit {
         // Close the modal
         this.closeModal.emit()
         // If we have a teacher, send it to Mailchimp and Bumblebee/Slack
-        if(res.user.identities && res.user.identities.indexOf('teacher') > -1 || res.user.identities.indexOf('administrator') > -1) {
-          if (this._auth.getEnv() === "prod") {
-            // Tell Bumblebee/Slack!
-            if (this.existingUser) {
-              this._bumble.sendUserDetails(res.user, 'additionalDetails')
-            } else {
-              this._bumble.sendUserDetails(res.user)
-            }
-            // Parse fullname for Mailchimp
-            let nameArr = res.user.fullname.split(" ")
-            let fname = nameArr[0]
-            let lname = nameArr[1]
-            this._auth.addToNewUsersList({ 'email' : res.user.email, 'fname' : fname, 'lname' : lname })
+        if (res.user.identities && res.user.identities.indexOf('teacher') > -1 || res.user.identities.indexOf('administrator') > -1) {
+          // Tell Bumblebee/Slack!
+          res.user.phone_number = phone
+          if (this.existingUser) {
+            this._bumble.sendUserDetails(res.user, 'additionalDetails')
+          } else {
+            this._bumble.sendUserDetails(res.user)
           }
+          this._chimp.addToNewUsersList(res.user)
           // send the data to Pipo to track registrations if they are a teacher
           this._academy.pipoEvent({
             // standard event info:
@@ -147,7 +143,7 @@ export class UserDetailsUpdateModal implements OnInit {
             institution_id: res.user.institution_ids || []
           })
         }
-        
+
       }, (err) => {
         console.error(err)
       })
@@ -159,7 +155,7 @@ export class UserDetailsUpdateModal implements OnInit {
    */
   private checkboxValidator(group: FormGroup): any {
     let valid = false
-    for(let control in group.controls) {
+    for (let control in group.controls) {
       if (group.controls[control].value === true) {
         valid = true
       }

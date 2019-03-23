@@ -452,12 +452,32 @@ content: "|<"; }
   content: ">|"; }
 
 .icon-comment-arrow {
-    width: 50px;
-    height: 60px;
+    width: 27px;
+    height: 45px;
     background: url('/assets/images/comment-arrow.svg');
     background-size: 100% 100%;
     position: absolute;
-    top: -16px;
+    top: 350px;
+    z-index: $zMid + 2000;
+    left: 264px;
+
+    // Hide on mobile for now
+    @media(max-width: $medium-screen){
+        display: none;
+    }
+    // Full width "mobile" comment pane
+    // @media(max-width: $medium-screen) { // <768px
+    //     left: calc(100% - 61px);
+    // }
+    // NOTE: "large screen" value is different here to account min-width flexibility
+    // Min width pane
+    @media(min-width: $medium-screen) and (max-width: 1129px) { // 768px - 992px
+        left: 299px;
+    }
+    // Flexible width pane
+    @media(min-width: 1129px) { // >992px
+        left: calc( ((100% - 530px) / 2) - 1px ) !important;
+    }
 }
 
 $arrowOffset: 23px;
@@ -466,4 +486,8 @@ $arrowOffset: 23px;
     .comment-arrow-#{$z} {
         left: #{$arrowOffset * ($z - 1)};
     }
+}
+
+.comment-arrow-img {
+    left: -180px;
 }

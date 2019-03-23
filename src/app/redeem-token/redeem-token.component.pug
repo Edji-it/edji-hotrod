@@ -11,7 +11,12 @@ nav-bar
         form([formGroup]="resetForm", (ngSubmit)="resetValue(resetForm.value)")
           .form-group
             label(for="passwordInput") {{ redeemCopy.name }}
-            input#passwordInput(type="password", [formControl]="resetForm.controls['field']", tabindex="0")
+            input.form-control#passwordInput(
+              type="password", 
+              [formControl]="resetForm.controls['field']", 
+              tabindex="0",
+              [class.is-valid]="resetForm.valid"
+            )
             #msgNoPassword.alert.alert-danger(
               *ngIf="resetForm.controls['field'].hasError('required') && (resetForm.controls['field'].dirty || submitted)"
             ) Make sure to add your new {{ redeemCopy.name }}!
@@ -20,7 +25,12 @@ nav-bar
             ) {{ redeemCopy.name }} must be at least 6 characters in length
           .form-group
             label(for="passwordConfirmInput") Confirm {{ redeemCopy.name }}
-            input#passwordConfirmInput(type="password", [formControl]="resetForm.controls['fieldConfirm']", tabindex="0")
+            input.form-control#passwordConfirmInput(
+              type="password", 
+              [formControl]="resetForm.controls['fieldConfirm']", 
+              tabindex="0",
+              [class.is-valid]="resetForm.valid"
+            )
             #msgNoPasswordConfirm.alert.alert-danger(
               *ngIf="resetForm.controls['fieldConfirm'].hasError('required') && (resetForm.controls['fieldConfirm'].dirty || submitted)"
             ) Remember to confirm your {{ redeemCopy.name }}!

@@ -12,7 +12,6 @@ describe('Academy user that has ability to manage licenses for their academy: ',
 
   // Elements
   let licenseLoader = element(by.id('licenseMgmtLoader'))
-  let navAcademyBtn = element(by.id('navAcademy'))
 
   describe("Non-Admin users should not be able to access the license mgmt page", () => {
     beforeEach(() => {
@@ -58,8 +57,7 @@ describe('Academy user that has ability to manage licenses for their academy: ',
       // log-in as the hero and make sure we hit the dashboard
       login.loginAndVerify(login.adminUser, login.adminPassword)
       // go to the academy license manage page via nav
-      browser.wait(EC.elementToBeClickable(navAcademyBtn), 5000, "never saw Academy option in nav bar")
-      navAcademyBtn.click()
+      sidebar.academyButtonClick()
       // should get the license management page!
       browser.wait(EC.presenceOf(element(by.id('activeLicenseCount'))), 8000, "never saw the license management page")
       // Wait until page has completed loading
@@ -72,7 +70,7 @@ describe('Academy user that has ability to manage licenses for their academy: ',
     })
 
     // Access the license management page - verify more than 1 license is in use
-    it("should log in as an admin and verify more than 1 license is in use", () => {
+    it("should verify more than 1 license is in use", () => {
       // Find active license count on license mangagement page
       browser.wait(EC.presenceOf(element(by.id('activeLicenseCount'))), 5000, "never saw the active licenses count on license management page")
       // verify more than 1 license is in use

@@ -50,7 +50,7 @@ export class FeedbackComponent implements OnInit {
 
     this.feedbackForm = fb.group({
       name: [this.user.fullname, Validators.required],
-      email: [this.user.email, Validators.compose([Validators.required, this.emailValidator])],
+      email: [this.user.email, [Validators.required, this.emailValidator]],
       content: [prevData.content, Validators.required]
     })
 

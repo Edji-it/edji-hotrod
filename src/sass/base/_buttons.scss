@@ -475,7 +475,7 @@ button, .button, .btn { //, [class*='btn']
     height: 2em;
     background-color:transparent;
     background-image: url('/assets/images/loading-smaller.svg') !important;
-    background-size: 100% 100% !important;
+    background-size: 100% auto !important;
   }
 }
 

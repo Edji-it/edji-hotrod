@@ -17,6 +17,7 @@ export class Sidebar {
     public logo = element(by.id("logo"));
     public heroLink = element(by.id("heroLink"));
     public closeModal = element(by.css("button.close"));
+    public navAcademyBtn = element(by.id('navAcademy'))
 
     // Owner Tools
     public leaderboardButton = element(by.id("toggleLeaderboard"))
@@ -64,24 +65,14 @@ export class Sidebar {
 
     // Click the log out button.
     public clickLogOutButton () : void {
-        this.avatarActionIcon.isPresent().then((result) => {
-            if (result) {
-                 this.avatarActionIcon.isDisplayed().then((result) => {
-                    if ( result ) {
-                        this.avatarActionIcon.click();
-                        this.logOutButton.isPresent().then((result) => {
-                            if (result) {
-                                 this.logOutButton.isDisplayed().then((result) => {
-                                    if ( result ) {
-                                        this.logOutButton.click();
-                                    }
-                                })
-                            }
-                        })
-                    }
-                })
-            }
-        })
+        // Wait for avatar icon to be clickable
+        browser.wait(this.EC.elementToBeClickable(this.avatarActionIcon), 5000, "nav avatar menu was not clickable prior to log out")
+        // Click to open menu
+        this.avatarActionIcon.click()
+        // Wait for log out option to be available
+        browser.wait(this.EC.elementToBeClickable(this.logOutButton), 5000, "nav avatar menu log out option did not become clickable")
+        // Click to log out
+        this.logOutButton.click()
     } // clickLogOutButton () : void
 
     // Click the log out button.
@@ -143,19 +134,27 @@ export class Sidebar {
         });
     }
 
-    public logout_deprecated(): void {
-        browser.wait(this.EC.elementToBeClickable(this.avatarActionIcon), 5000, "avatar action button never became clickable")
-        this.clickLogOutButton()
-        browser.wait(this.EC.urlContains("home"), 5000, "never arrived home after logging out")
-    }
-
     public logout(): void {
         this.clickLogOutButton()
+        // Verify page returns to home page
+        browser.wait(this.EC.urlContains("home"), 5000, "never arrived home after logging out")
     }
 
     public clickHeroLink(): void {
         // this.logo.click();
         // browser.wait(this.EC.elementToBeClickable(this.heroLink), 5000, "hero link never became clickable");
         this.heroLink.click();
+    }
+
+    public academyButtonClick(): void {
+        // Click the confirm archive reading button for new reading
+        this.navAcademyBtn.isPresent().then((result) => {
+            if (result) {
+                this.navAcademyBtn.isDisplayed().then((result) => {
+                    browser.wait(this.EC.elementToBeClickable(this.navAcademyBtn), 5000, "never saw Academy option in nav bar")
+                    this.navAcademyBtn.click()
+                })
+            }
+        })
     }
 } // class Sidebar

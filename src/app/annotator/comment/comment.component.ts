@@ -185,14 +185,19 @@ export class CommentComponent implements OnInit, OnDestroy {
    */
   setLineY() {
     let firstWord = document.querySelector('.w[index="1"]')
+    // @todo Workaround: Identify back up firstWord (index 1 is more reliably a word)
+    if (!firstWord) {
+      firstWord = document.querySelector('.w[index="0"]')
+    }
     let commentWord = document.querySelector( '.w[index="'+this.comment.start+'"]')
     let commentImage = document.getElementById('readingImage' + this.comment.start)
 
     if (firstWord && (commentWord || commentImage)) {
       let firstWordTop: number = firstWord.getBoundingClientRect().bottom
-
       // This will need to re-decorate on resize
-      if (commentImage && this.comment.loc && this.comment.loc.y && this.comment.text === "") {
+      // For a period we were erroneously saving comments on text with image coords
+      // *Fixed March 2019, but allow for legacy comments by checking for commentImage
+      if (commentImage && this.comment.loc && this.comment.loc.y) {
           // Set comment on image position
           this.setLineYAttempts = 0
           let imageTop: number = commentImage.getBoundingClientRect().top
@@ -212,7 +217,8 @@ export class CommentComponent implements OnInit, OnDestroy {
           this.comment.lineY = this.nearestLine(wordY)
       }
     } else {
-      console.log("Looking for y position of comment not yet rendered...")
+      // Y position debug log
+      // console.log("Looking for y position of comment not yet rendered...")
       this.setLineYAttempts++
       if (this.setLineYAttempts < 10) {
         setTimeout(()=> {
@@ -228,21 +234,18 @@ export class CommentComponent implements OnInit, OnDestroy {
   activate(event?: any): void {
     // Deactivate any active comments
     this._comments.deactivateAllComments()
-
     // Activate this comment
     this.comment.active = this.active = true
     this._comments.activeComment = this.comment
-    this._comments.activeComment.active = true
     this.commentActivation.emit(true)
   }
 
   /**
    * Deactivates/unfocuses comment, and optionally triggers save
    * @param comment (optional) Full EdjiComment object
-   * TO-DO: Clean out code for optionally passing JUST comment.data as comment parameter
    */
   deactivate(comment ?: any, noUpdate ?: boolean): void {
-    this.comment.selected = false
+    // Deactivate this comment
     this.comment.active = this.active = false
     this.comment.new = false
     this.commentActivation.emit(false)
@@ -251,7 +254,7 @@ export class CommentComponent implements OnInit, OnDestroy {
     if (comment && !noUpdate) {
       this.updateComment(comment)
     }
-  } // deactivate(commentData ?: any): void
+  } // deactivate()
 
   /**
    * Saves updates to comments

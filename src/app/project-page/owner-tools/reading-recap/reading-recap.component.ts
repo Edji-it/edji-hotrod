@@ -71,7 +71,7 @@ export class ReadingRecapComponent implements OnInit {
     private angulartics: Angulartics2
   ) { 
     this.evaluationForm = _fb.group({
-      email: [null, Validators.compose([Validators.required, this.emailValidator])],
+      email: [null, [Validators.required, this.emailValidator]],
       inputText: [null, Validators.required],
       name: [null, Validators.required]
     })
