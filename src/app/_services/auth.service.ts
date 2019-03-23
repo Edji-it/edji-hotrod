@@ -890,7 +890,7 @@ export class AuthService implements CanActivate {
      * @param array array of string values to be used as param values
      * @param init_string query string to attach values to
      */
-    private arrayParamsToString(key: string, array: string[], init_string?: string): string {
+    public arrayParamsToString(key: string, array: string[], init_string?: string): string {
         let len: number = array.length
         let query_string: string = init_string || ''
         for (var i = 0; i < len; i++) {
