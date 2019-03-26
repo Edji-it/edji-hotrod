@@ -50,7 +50,7 @@ interface BaseUser {
     school_name: String,
     school_id: String, // these are not ObjectIds, but these are Ids from the NCES data collection
     district_name: String,
-    disctrict_id: String // these are not ObjectIds, but these are Ids from the NCES data collection
+    district_id: String // these are not ObjectIds, but these are Ids from the NCES data collection
   },
   phone_number: string,
   archive_readings_before?: string
