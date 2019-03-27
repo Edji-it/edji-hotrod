@@ -76,7 +76,7 @@ export class UserDetailsUpdateModal implements OnInit {
     if (
       (this.currentUser && this.currentUser.identities && this.currentUser.identities.includes('teacher')) ||
       (this.currentUser && this.currentUser.identities && this.currentUser.identities.includes('administrator')) &&
-      this.currentUser && !this.currentUser.school_name
+      this.currentUser && !this.currentUser.school_district.district_name
     ) {
       this.existingUser = true
       this.setFormIdentities(this.currentUser)
@@ -103,11 +103,17 @@ export class UserDetailsUpdateModal implements OnInit {
     }
 
     // Set school and phone if we have it
-    let school = ''
+    let schoolInfo: schoolDistrict
     let phone = ''
     let contactMe = false
     if (form.value.school) {
-      school = form.value.school
+      // set the school and district data here
+      schoolInfo = {
+        school_name: form.value.school || '',
+        school_id: form.value.school || '',
+        district_name: form.value.school,
+        district_id: form.value.school || ''
+      }
     }
     if (form.value.phone) {
       phone = form.value.phone
@@ -116,7 +122,7 @@ export class UserDetailsUpdateModal implements OnInit {
       contactMe = form.value.sales_can_contact
     }
 
-    this._auth.updateUser({ identities: identities, school_name: school, phone_number: phone, sales_can_contact: contactMe })
+    this._auth.updateUser({ identities: identities, school_district: schoolInfo, phone_number: phone, sales_can_contact: contactMe })
       .pipe(take(1))
       .subscribe((res: any) => {
         this._auth.setUser(res.user)
@@ -199,4 +205,11 @@ export class UserDetailsUpdateModal implements OnInit {
     this.modalHeadings.body = 'We\'re honored to have you. Where do you teach?'
     this.identitySelect = false
   }
+}
+
+interface schoolDistrict {
+  school_id: string
+  school_name: string
+  district_id: string
+  district_name: string
 }
