@@ -223,6 +223,23 @@ label.border-wrap {
   position: relative;
 }
 
+.input-group-prepend-icon {
+  & .icon {
+    z-index: $zLow;
+    position: absolute;
+    top: 50%;
+    left: 0.3em;
+    transform: translateY(-50%);
+    height: 0.75em;
+    width: 0.75em;
+  }
+
+  & + .form-control {
+    padding-left: 2em;
+    border-radius: 0.3rem !important;
+  }
+}
+
 input.form-item--seamless {
 	background: transparent;
 	border: none;

@@ -402,6 +402,10 @@
     @include icon('icon-check.svg');
 }
 
+.icon-search {
+    @include icon('icon-search.svg');
+}
+
 .icon-pill-status {
     opacity: 0;
     pointer-events: none;
