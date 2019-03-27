@@ -36,6 +36,29 @@ export class SearchPage implements OnInit {
   // State vars
   public loading: boolean = true
 
+
+  // MAKE SUBJECTS COMPONENT
+  public subjects: any = [
+    {id:'literature',name:'Language Arts'},
+    {id:'math',name:'Mathematics'},
+    {id:'science',name:'Science'},
+    {id:'geography',name:'Geography'},
+    {id:'history',name:'History'},
+    {id:'government',name:'Government'},
+    {id:'health',name:'Health'},
+    {id:'languages',name:'Foreign Languages'},
+    {id:'art',name:'Art'},
+    {id:'computer',name:'Computers/Technical'}
+  ]
+  //IMultiSelectSettings
+  public subjectDropSettings: any  = {
+      displayAllSelectedText: true,
+      dynamicTitleMaxItems: 4
+  }
+
+  public subjectFilter: any = []
+
+
   constructor(
     private _auth: AuthService,
     private _readings: ReadingService,
@@ -62,6 +85,7 @@ export class SearchPage implements OnInit {
    * - This auto-runs on load and every change, called by p-dataList in the template
    */
   loadFeed(action: string, paging?: any) {
+    console.log(this.subjectFilter)
     this.router.navigate(['/discover/search', { q: this.searchTerm }])
     // fire an analytic event here for tracking purposes
     if (action !== '') {
@@ -85,11 +109,15 @@ export class SearchPage implements OnInit {
     }
 
     // Attach search query
-    let query = {
-      term: this.searchTerm
+    let queryString = ''
+    if (this.searchTerm) {
+      queryString += 'q=' + this.searchTerm
+    }
+    if (this.subjectFilter) {
+      queryString += 'subjects=' + this.subjectFilter[0]
     }
 
-    this._readings.search(query)
+    this._readings.search(queryString)
       .subscribe(data => {
         console.log('data', data)
         this.readings = data.results || []

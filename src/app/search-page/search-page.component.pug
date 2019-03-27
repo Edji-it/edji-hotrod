@@ -39,6 +39,15 @@ nav-bar([showDashboardOptions]="true")
                         //-         (click)="loadFeed('search_term')"
                         //-     ) Search
                 .form-group
+                    label Subjects
+                    ss-multiselect-dropdown(
+                        id="subjectDropdown",
+                        [(ngModel)]="subjectFilter",
+                        [options]="subjects", 
+                        [settings]="subjectDropSettings",
+                        (dropdownClosed)="loadFeed('search_filter')"
+                    )
+                .form-group
                     label Users
                     //- Public option
                     label.form-check-label.form-check-btn(

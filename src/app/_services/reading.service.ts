@@ -125,13 +125,13 @@ export class ReadingService {
       );
   } // public get(id : string) : Observable<any>
 
-  public search(query): Observable<any> {
-    let queryString = ''
-    let { term } = query
+  public search(queryString): Observable<any> {
+    // let queryString = ''
+    // let { term } = query
 
-    if (term) {
-      queryString += 'title=' + term + '&html=' + term
-    }
+    // if (term) {
+    //   queryString += 'title=' + term + '&html=' + term
+    // }
 
     return this._http
       .get(this._auth.getUrl() + '/api/v1/readings/_search?' + queryString, this._auth.getOptions())
