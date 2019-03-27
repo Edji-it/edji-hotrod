@@ -1,11 +1,12 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core'
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
-import { take } from 'rxjs/operators'
+import { take, debounceTime, map } from 'rxjs/operators'
 
 import { User } from './../../shared/datatypes'
 import { AuthService, BumblebeeService, AcademyService, MailchimpService } from './../../_services'
 import { ALLSPARK } from 'src/app/app.constants'
+import { fromEvent } from 'rxjs'
 
 @Component({
   selector: 'hot-user-details-update',
@@ -15,6 +16,8 @@ import { ALLSPARK } from 'src/app/app.constants'
 export class UserDetailsUpdateModal implements OnInit {
   @Input() showModal: boolean
   @Output() closeModal: EventEmitter<any> = new EventEmitter()
+
+  @ViewChild('schoolInput') input: ElementRef
 
   private currentUser: User
   private userDetailsForm: FormGroup
@@ -204,6 +207,15 @@ export class UserDetailsUpdateModal implements OnInit {
     this.modalHeadings.header = 'Welcome Teacher!'
     this.modalHeadings.body = 'We\'re honored to have you. Where do you teach?'
     this.identitySelect = false
+
+    setTimeout(() => {
+      const example = fromEvent(this.input.nativeElement, 'keyup').pipe(map(i => i))
+      const debouncedInput = example.pipe(debounceTime(500))
+      const subscribe = debouncedInput.subscribe(val => {
+        // search for schools here
+        console.log(this.userDetailsForm.value.school)
+      })
+    }, 1)
   }
 }
 

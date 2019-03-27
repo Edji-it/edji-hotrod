@@ -23,7 +23,7 @@
           p {{ modalHeadings.body }}
           .form-group
             label(for="schoolInput") School District
-            input#schoolInput(type="text", [formControl]="userDetailsForm.controls['school']", tabindex="0", placeholder="My District")
+            input#schoolInput(type="text", [formControl]="userDetailsForm.controls['school']", tabindex="0", placeholder="My District", #schoolInput)
             #msgSchoolRequired.alert.alert-info(*ngIf="userDetailsForm.controls['school'].hasError('required') && userDetailsForm.controls['school'].dirty") Enter your School District here
           .form-group
             label(for="phoneInput") Phone Number
