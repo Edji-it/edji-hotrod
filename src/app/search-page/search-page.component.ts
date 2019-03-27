@@ -39,11 +39,22 @@ export class SearchPage implements OnInit {
   constructor(
     private _auth: AuthService,
     private _readings: ReadingService,
-    private angulartics: Angulartics2
+    private angulartics: Angulartics2,
+    private route: ActivatedRoute,
+    private router: Router
   ) { }
 
   ngOnInit() {
-
+    this.subscriptions.push(
+      this.route.params.subscribe(
+        params => {
+          if (params.q) {
+            this.searchTerm = params.q
+            this.loadFeed('search_term')
+          }
+        }
+      )
+    )
   }
 
   /**
@@ -51,6 +62,7 @@ export class SearchPage implements OnInit {
    * - This auto-runs on load and every change, called by p-dataList in the template
    */
   loadFeed(action: string, paging?: any) {
+    this.router.navigate(['/discover/search', { q: this.searchTerm }])
     // fire an analytic event here for tracking purposes
     if (action !== '') {
       this.angulartics.eventTrack.next({

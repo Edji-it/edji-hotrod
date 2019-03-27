@@ -17,7 +17,7 @@ nav-bar([showDashboardOptions]="true")
                             placeholder="Search...",
                             (keyup.enter)="loadFeed('search_term')"
                         )
-            p.mt-2 Found <b>99</b> readings
+            p.mt-2 Found <b>{{ total || 0 }}</b> readings
             br
     .row
         .col-md-4
