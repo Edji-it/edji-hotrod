@@ -44,7 +44,7 @@ nav-bar([showDashboardOptions]="true")
                     div
                         button.btn.btn-filter( 
                             title="See public readings from all users",
-                            [class.active]="!followingFilter",,
+                            [class.active]="!activeLibrary || activeLibrary === 'public'",
                             (click)="activeLibrary = 'public'; loadFeed('filter_public')"
                         )
                             span([innerHTML]="':earth_americas: Public Library' | emojione")
@@ -52,26 +52,18 @@ nav-bar([showDashboardOptions]="true")
                     div
                         button.btn.btn-filter( 
                             title="Filter by users you follow",
-                            [class.active]="followingFilter",,
+                            [class.active]="activeLibrary === 'following'",
                             (click)="activeLibrary = 'following'; loadFeed('filter_following')"
                         )
                             span([innerHTML]="':green_heart: Following' | emojione")
-                    //- Public option
-                    //- label.form-check-label.form-check-btn(
-                    //-     id="discoverFilterPublic",
-                    //-     [class.active]="!followingFilter",
-                    //-     title="See public readings from all users",
-                    //-     (click)="followingFilter = false; loadFeed('filter_public')"
-                    //- )
-                    //-     span([innerHTML]="':earth_americas: Public Library' | emojione")
-                    //- Following users option
-                    //- label.form-check-label.form-check-btn(
-                    //-     id="discoverFilterFollowing",
-                    //-     [class.active]="followingFilter",
-                    //-     title="Filter by users you follow",
-                    //-     (click)="followingFilter = true; loadFeed('filter_following')"
-                    //- )
-                    //-     span([innerHTML]="':green_heart: Following' | emojione")
+                    //- Academy Libraries
+                    //- div(*ngFor="let academy of academies")
+                    //-     button.btn.btn-filter( 
+                    //-         title="Filter by your academy's library",
+                    //-         [class.active]="activeLibrary === 'ACADEMYID'",
+                    //-         (click)="activeLibrary = 'ACADEMYID'; loadFeed('filter_academy')"
+                    //-     )
+                    //-         span([innerHTML]="':school: Academy Name' | emojione")
                 .form-group
                     label Subjects
                     ss-multiselect-dropdown(
