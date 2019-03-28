@@ -39,6 +39,40 @@ nav-bar([showDashboardOptions]="true")
                         //-         (click)="loadFeed('search_term')"
                         //-     ) Search
                 .form-group
+                    label Community
+                    //- Public Library
+                    div
+                        button.btn.btn-filter( 
+                            title="See public readings from all users",
+                            [class.active]="!followingFilter",,
+                            (click)="activeLibrary = 'public'; loadFeed('filter_public')"
+                        )
+                            span([innerHTML]="':earth_americas: Public Library' | emojione")
+                    //- Following 
+                    div
+                        button.btn.btn-filter( 
+                            title="Filter by users you follow",
+                            [class.active]="followingFilter",,
+                            (click)="activeLibrary = 'following'; loadFeed('filter_following')"
+                        )
+                            span([innerHTML]="':green_heart: Following' | emojione")
+                    //- Public option
+                    //- label.form-check-label.form-check-btn(
+                    //-     id="discoverFilterPublic",
+                    //-     [class.active]="!followingFilter",
+                    //-     title="See public readings from all users",
+                    //-     (click)="followingFilter = false; loadFeed('filter_public')"
+                    //- )
+                    //-     span([innerHTML]="':earth_americas: Public Library' | emojione")
+                    //- Following users option
+                    //- label.form-check-label.form-check-btn(
+                    //-     id="discoverFilterFollowing",
+                    //-     [class.active]="followingFilter",
+                    //-     title="Filter by users you follow",
+                    //-     (click)="followingFilter = true; loadFeed('filter_following')"
+                    //- )
+                    //-     span([innerHTML]="':green_heart: Following' | emojione")
+                .form-group
                     label Subjects
                     ss-multiselect-dropdown(
                         id="subjectDropdown",
@@ -47,24 +81,6 @@ nav-bar([showDashboardOptions]="true")
                         [settings]="subjectDropSettings",
                         (dropdownClosed)="loadFeed('search_filter')"
                     )
-                .form-group
-                    label Users
-                    //- Public option
-                    label.form-check-label.form-check-btn(
-                        id="discoverFilterPublic",
-                        [class.active]="!followingFilter",
-                        title="See public readings from all users",
-                        (click)="followingFilter = false; loadFeed('filter_public')"
-                    )
-                        span([innerHTML]="':earth_americas: Public' | emojione")
-                    //- Following users option
-                    label.form-check-label.form-check-btn(
-                        id="discoverFilterFollowing",
-                        [class.active]="followingFilter",
-                        title="Filter by users you follow",
-                        (click)="followingFilter = true; loadFeed('filter_following')"
-                    )
-                        span([innerHTML]="':green_heart: Following' | emojione")
                 br
                 .form-group(style="clear:left;")
                     label Grade Level

@@ -5,6 +5,7 @@ import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
 import { AuthService, ReadingService } from '../_services'
+import { User } from '../shared/datatypes';
 
 @Component({
   selector: 'app-search-page',
@@ -22,8 +23,11 @@ export class SearchPage implements OnInit {
     username: 'edji'
   }
 
+  // User
+  private user: User
+
   // Filters
-  public followingFilter: boolean = false // default to Public
+  public activeLibrary: string = 'public' // default to Public
   public gradeFilter: number[] = []
 
   public first: number = 0
@@ -69,12 +73,21 @@ export class SearchPage implements OnInit {
 
   ngOnInit() {
     this.subscriptions.push(
+      // Get search params from URL
       this.route.params.subscribe(
         params => {
           if (params.q) {
             this.searchTerm = params.q
-            this.loadFeed('search_term')
           }
+          if (params.library) {
+            this.activeLibrary = params.library
+          }
+          this.loadFeed('search_term')
+        }
+      ),
+      this._auth.getCurrentUser().subscribe(
+        user => {
+          this.user = user
         }
       )
     )
@@ -86,7 +99,16 @@ export class SearchPage implements OnInit {
    */
   loadFeed(action: string, paging?: any) {
     console.log(this.subjectFilter)
-    this.router.navigate(['/discover/search', { q: this.searchTerm }])
+    let filterParams = {}
+    
+    if (this.searchTerm) {
+      filterParams['q'] = this.searchTerm
+    }
+    if (this.activeLibrary) {
+      filterParams['library'] = this.activeLibrary
+    }
+
+    this.router.navigate(['/discover/search', filterParams])
     // fire an analytic event here for tracking purposes
     if (action !== '') {
       this.angulartics.eventTrack.next({
@@ -97,7 +119,7 @@ export class SearchPage implements OnInit {
     this.loading = true
 
     let filters = {
-      type: this.followingFilter ? "following" : "global"
+      // type: this.followingFilter ? "following" : "global"
     }
     // Pagination values
     this.first = filters['start'] = paging && paging.first != undefined ? (parseInt(paging.first) - 1) : this.first
@@ -108,14 +130,33 @@ export class SearchPage implements OnInit {
       filters['grades'] = this.gradeFilter
     }
 
+
     // Attach search query
     let queryString = ''
     if (this.searchTerm) {
       queryString += 'q=' + this.searchTerm
     }
-    if (this.subjectFilter) {
-      queryString += 'subjects=' + this.subjectFilter[0]
+    if (this.subjectFilter && this.subjectFilter[0]) {
+      queryString += '&subjects=' + this.subjectFilter[0]
     }
+
+    if (this.activeLibrary === 'following') {
+      // Loop through and apply following ids
+      let following = this.user.following
+      following.forEach(userId => {
+        queryString += '&owner_id=' + userId
+      })
+    } else if (this.activeLibrary !== 'public') {
+      // Handle academy/institution id filter
+    }
+    
+    // grade_levels_lte, grade_levels_gte
+    // if (this.gradeFilter[0]) {
+    //   let grades = this.gradeFilter
+    //   // filters['grades'].forEach( grade => { feedParams = feedParams.append("grades", grade + "")})
+    //   queryString += '&gte=' + Math.min(...grades)
+    //   queryString += '&lte=' + Math.max(...grades)
+    // }
 
     this._readings.search(queryString)
       .subscribe(data => {
