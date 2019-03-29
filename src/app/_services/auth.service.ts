@@ -25,7 +25,7 @@ export class AuthService implements CanActivate {
     */
 
     private pipoBaseUrl = "//pipo-dev.edji.it"
-    private flakBaseUrl = "http://flak-dev.edji.it"
+    private flakBaseUrl = "//flak-dev.edji.it"
     private baseUrl = "http://localhost:3354"
     private ENV: string = "dev"
 
