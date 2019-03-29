@@ -212,8 +212,16 @@ export class UserDetailsUpdateModal implements OnInit {
       const example = fromEvent(this.input.nativeElement, 'keyup').pipe(map(i => i))
       const debouncedInput = example.pipe(debounceTime(500))
       const subscribe = debouncedInput.subscribe(val => {
-        // search for schools here
-        console.log(this.userDetailsForm.value.school)
+        let searchText = this.userDetailsForm.value.school
+        if (searchText!=='') {
+          // search for schools here
+          this._auth.getSchoolDistrict('school_name_suggest', searchText).subscribe((response) => {
+            console.log('school_name_suggest:', response)
+          })
+          this._auth.getSchoolDistrict('district_suggest', searchText).subscribe((response) => {
+            console.log('district_suggest:', response)
+          })
+        }
       })
     }, 1)
   }
