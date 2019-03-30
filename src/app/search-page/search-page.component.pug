@@ -85,7 +85,7 @@ nav-bar([showDashboardOptions]="true")
                 //-     label Subjects
                     //- ss-multiselect-dropdown([options]="subjects", [(ngModel)]="subjectFilter", [settings]="subjectDropSettings")
         .col-md-8
-            #notFollowingMessage.alert.alert-light(*ngIf="!searchTerm && !loading && followingFilter && readings.length < 1")
+            #notFollowingMessage.alert.alert-light(*ngIf="!searchTerm && !loading && activeLibrary == 'following' && readings.length < 1")
                 h4 Time to follow someone!
                 p Follow Edji to see some of our latest curated Readings.
                 .comment__avatar Ed
