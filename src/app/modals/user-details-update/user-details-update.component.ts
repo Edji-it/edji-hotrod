@@ -10,7 +10,8 @@ import { fromEvent } from 'rxjs'
 
 @Component({
   selector: 'hot-user-details-update',
-  templateUrl: './user-details-update.component.pug'
+  templateUrl: './user-details-update.component.pug',
+  styleUrls: ['user-details-update.component.scss']
 })
 
 export class UserDetailsUpdateModal implements OnInit {
@@ -46,9 +47,23 @@ export class UserDetailsUpdateModal implements OnInit {
     header: string,
     body: string
   } = {
-      header: 'Before you begin',
-      body: 'Help us customize your experience. Are you a...'
-    }
+    header: 'Before you begin',
+    body: 'Help us customize your experience. Are you a...'
+  }
+
+  public schools: any[]
+  public schoolSuggestShow: boolean
+  public schoolInfo: {
+    school_name: string,
+    school_id: string,
+    district_name: string,
+    district_id: string
+  } = {
+    school_name: '',
+    school_id: '',
+    district_name: '',
+    district_id: ''
+  }
 
   constructor(
     private _academy: AcademyService,
@@ -74,10 +89,6 @@ export class UserDetailsUpdateModal implements OnInit {
   }
 
   ngOnInit() {
-    this._auth.getSchoolDistrict('school_name_suggest', 'pitt').subscribe((response) => {
-      console.log('school_name_suggest:', response)
-    })
-
     this.currentUser = this._auth.getUser()
 
     if (
@@ -114,12 +125,16 @@ export class UserDetailsUpdateModal implements OnInit {
     let phone = ''
     let contactMe = false
     if (form.value.school) {
+      let districtNameVal = this.schoolInfo.district_name
+      if (this.schoolInfo.school_name==='') {
+        districtNameVal = form.value.school
+      }
       // set the school and district data here
       schoolInfo = {
-        school_name: form.value.school || '',
-        school_id: form.value.school || '',
-        district_name: form.value.school,
-        district_id: form.value.school || ''
+        school_name: this.schoolInfo.school_name,
+        school_id: this.schoolInfo.school_id,
+        district_name: districtNameVal,
+        district_id: this.schoolInfo.district_id
       }
     }
     if (form.value.phone) {
@@ -208,10 +223,16 @@ export class UserDetailsUpdateModal implements OnInit {
    * Disply teacher specific form and copy
    */
   private showTeacherForm(): void {
-    this.modalHeadings.header = 'Welcome Teacher!'
-    this.modalHeadings.body = 'We\'re honored to have you. Where do you teach?'
+    this.modalHeadings.header = `Welcome Teacher!`
+    this.modalHeadings.body = `We're honored to have you. Where do you teach?`
     this.identitySelect = false
+    this.searchOnTypeInIt()
+  }
 
+  /**
+   * Set up a keyup event, but debounce the input so we don't bombard our search client with a new search for each keystroke
+   */
+  private searchOnTypeInIt(): void {
     setTimeout(() => {
       const example = fromEvent(this.input.nativeElement, 'keyup').pipe(map(i => i))
       const debouncedInput = example.pipe(debounceTime(500))
@@ -219,15 +240,51 @@ export class UserDetailsUpdateModal implements OnInit {
         let searchText = this.userDetailsForm.value.school
         if (searchText!=='') {
           // search for schools here
-          this._auth.getSchoolDistrict('school_name_suggest', searchText).subscribe((response) => {
-            console.log('school_name_suggest:', response)
+          this._auth.getSchoolDistrict('school_name_suggest', searchText).subscribe((searchResults) => {
+            const searchReturn = searchResults && searchResults.suggest
+            const schools = searchReturn.school_name_suggest ? searchReturn.school_name_suggest[0].options : []
+            const districts = searchReturn.district_suggest ? searchReturn.district_suggest[0].options : []
+            const results = [...schools, ...districts]
+            // add a generic 'All Schools' record to the first district that comes back
+            // results.unshift({
+            //   _source: {
+            //     nces_district_id: results[0]._source.nces_district_id,
+            //     district: results[0]._source.district,
+            //     nces_school_id: '',
+            //     school_name: 'All Schools'
+            //   }
+            // })
+            this.displayResults(results)
+          }, (err) => {
+            console.error(err)
           })
-          // this._auth.getSchoolDistrict('district_suggest', searchText).subscribe((response) => {
-          //   console.log('district_suggest:', response)
-          // })
         }
       })
     }, 1)
+  }
+
+  /**
+   * Sets up the results that come back so a user can select them
+   * @param results search Results that we get from the school/district lookup
+   */
+  private displayResults(results: any): void {
+    this.schools = results
+    this.schoolSuggestShow = true
+  }
+
+  /**
+   * Set the school name in the field and then set the school details to the form object
+   * @param school is the school that the user selected!
+   */
+  public setSchoolInfo(school: any) {
+    this.schoolSuggestShow = false
+    // set the schoolInfo so we can save it on form submit
+    this.schoolInfo.district_id = school.nces_district_id
+    this.schoolInfo.district_name = school.district
+    this.schoolInfo.school_id = school.nces_school_id
+    this.schoolInfo.school_name = school.school_name
+    // update the form with the selected school
+    this.userDetailsForm.controls.school.setValue(school.school_name)
   }
 }
 
