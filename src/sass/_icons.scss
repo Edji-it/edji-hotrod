@@ -133,14 +133,14 @@
     }
 }
 
-.icon-caret {
+.icon-caret, .ui-paginator-icon.pi {
     @include icon('icon-caret-right.svg');
     display:inline-block;
     width: 1em;
     height: 1em;
     opacity: 0.6;
 
-    &.left {
+    &.left, &.pi-caret-left {
         transform: rotate(180deg);
     }
 
@@ -151,6 +151,10 @@
     &.up {
         transform: rotate(-90deg);
     }
+}
+
+.ui-paginator-icon.pi {
+    opacity: 0.5;
 }
 
 .icon-text-comment {

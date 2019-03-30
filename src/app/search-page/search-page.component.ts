@@ -33,8 +33,8 @@ export class SearchPage implements OnInit {
   public gradeMax: number = 13
 
   public first: number = 0
-  public rows: number = 20
-  public total: number = 20
+  public rows: number = 15
+  public total: number = 15
 
   // Search 
   public searchTerm: string = ''
@@ -92,6 +92,9 @@ export class SearchPage implements OnInit {
               this.gradesSelected.push(i)
             }
           }
+          if (params.from) {
+            this.first = parseInt(params.from)
+          }
           this.loadFeed('search_term')
         }
       ),
@@ -108,9 +111,15 @@ export class SearchPage implements OnInit {
    * - This auto-runs on load and every change, called by p-dataList in the template
    */
   loadFeed(action: string, paging?: any) {
+    let filters = {}
     let filterParams = {}
     // Reset results
-    this.readings = []
+    this.readings = []    
+    // Pagination values
+    this.first = filters['from'] = paging && paging.first != undefined ? (parseInt(paging.first) - 1) : this.first
+    if (this.first < 0) { this.first = filters['from'] = 0 }
+    this.rows = filters['size'] = paging && paging.rows != undefined ? parseInt(paging.rows) : this.rows
+
     
     if (this.searchTerm) {
       filterParams['q'] = this.searchTerm
@@ -122,6 +131,9 @@ export class SearchPage implements OnInit {
       let grades = this.gradesSelected
       filterParams['grade_gte'] =  Math.min(...grades)
       filterParams['grade_lte'] =  Math.max(...grades)
+    }
+    if (this.first) {
+      filterParams['from'] = this.first
     }
 
     this.router.navigate(['/discover/search', filterParams])
@@ -135,23 +147,10 @@ export class SearchPage implements OnInit {
     }
     this.loading = true
 
-    let filters = {
-      // type: this.followingFilter ? "following" : "global"
-    }
-    // Pagination values
-    this.first = filters['start'] = paging && paging.first != undefined ? (parseInt(paging.first) - 1) : this.first
-    if (this.first < 0) { this.first = filters['start'] = 0 }
-    this.rows = filters['size'] = paging && paging.rows != undefined ? parseInt(paging.rows) : this.rows
-
-    // if (this.gradeFilter.length > 0) {
-    //   filters['grades'] = this.gradeFilter
-    // }
-
-
     // Attach search query
-    let queryString = ''
+    let queryString = 'from=' + this.first
     if (this.searchTerm) {
-      queryString += 'q=' + this.searchTerm
+      queryString += '&q=' + this.searchTerm
     }
     if (this.subjectFilter && this.subjectFilter[0]) {
       queryString += '&subjects=' + this.subjectFilter[0]
