@@ -294,10 +294,3 @@ interface schoolDistrict {
   district_id: string
   district_name: string
 }
-
-interface schoolDistrict {
-  school_id: string
-  school_name: string
-  district_id: string
-  district_name: string
-}
