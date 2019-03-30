@@ -95,7 +95,7 @@ nav-bar([showDashboardOptions]="true")
                     (followEvent)="loadFeed('')"
                 )
             .row.loading(*ngIf="loading")
-            <p-dataList [value]="readings" [paginator]="true" [paginatorPosition]="'bottom'" [rows]="rows" [lazy]="true" (onLazyLoad)="loadFeed('feed_paginate', $event)" [totalRecords]="total" [emptyMessage]="'No Readings to show.'">
+            <p-dataList [value]="readings" [paginator]="true" [paginatorPosition]="'both'" [rows]="rows" [lazy]="true" (onLazyLoad)="loadFeed('feed_paginate', $event)" [totalRecords]="total" [emptyMessage]="'<b>None found</b> No Readings to show.'">
                 <ng-template let-reading pTemplate="item">
                    .col-12.feed__reading(*ngIf="reading")
                         div {{index}}

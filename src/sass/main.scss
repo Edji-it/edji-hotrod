@@ -388,6 +388,9 @@ input[type=text].input-noborder, input[type=password].input-noborder, input[type
 		}
 	}
 }
+.ui-paginator {
+	text-align: right;
+}
 
 .ui-paginator-page.ui-state-active {
 	border: 1px solid $blue;

@@ -28,7 +28,7 @@ export class SearchPage implements OnInit {
 
   // Filters
   public activeLibrary: string = 'public' // default to Public
-  public gradeFilter: number[] = []
+  public gradesSelected: number[] = []
   public gradeMin: number = 0
   public gradeMax: number = 13
 
