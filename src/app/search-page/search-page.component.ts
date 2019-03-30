@@ -151,12 +151,12 @@ export class SearchPage implements OnInit {
     }
     
     // grade_levels_lte, grade_levels_gte
-    // if (this.gradeFilter[0]) {
-    //   let grades = this.gradeFilter
-    //   // filters['grades'].forEach( grade => { feedParams = feedParams.append("grades", grade + "")})
-    //   queryString += '&gte=' + Math.min(...grades)
-    //   queryString += '&lte=' + Math.max(...grades)
-    // }
+    if (this.gradeFilter[0]) {
+      let grades = this.gradeFilter
+      // filters['grades'].forEach( grade => { feedParams = feedParams.append("grades", grade + "")})
+      queryString += '&grade_levels_gte=' + Math.min(...grades)
+      queryString += '&grade_levels_lte=' + Math.max(...grades)
+    }
 
     this._readings.search(queryString)
       .subscribe(data => {
