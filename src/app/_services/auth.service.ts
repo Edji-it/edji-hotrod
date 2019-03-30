@@ -25,8 +25,7 @@ export class AuthService implements CanActivate {
     */
 
     private pipoBaseUrl = "//pipo-dev.edji.it"
-    // private flakBaseUrl = "//flak-dev.edji.it"
-    private flakBaseUrl = 'https://oufa8mz1ve.execute-api.us-east-1.amazonaws.com/dev'
+    private flakBaseUrl = "//flak-dev.edji.it"
     private baseUrl = "http://localhost:3354"
     private ENV: string = "dev"
 
@@ -1046,14 +1045,14 @@ export class AuthService implements CanActivate {
     public getSchoolDistrict(searchText: string): Observable<any> {
         searchText = encodeURIComponent(searchText)
         return this._http.get<any>(
-            this.flakBaseUrl + `/schools?school_name=${searchText}&fuzzyness=2`, {
+            this.flakBaseUrl + `/schools?school_name=${searchText}`, {
                 headers: new HttpHeaders({
                     'Content-Type': 'application/json'
                 })
             }
         )
         .pipe(map((res) => {
-            return res
+            return res.hits.hits
         }))
     }
 }

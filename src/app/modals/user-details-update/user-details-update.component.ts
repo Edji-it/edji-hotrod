@@ -241,10 +241,6 @@ export class UserDetailsUpdateModal implements OnInit {
         if (searchText!=='') {
           // search for schools here
           this._auth.getSchoolDistrict(searchText).subscribe((searchResults) => {
-            const searchReturn = searchResults && searchResults.suggest
-            const schools = searchReturn.school_name_suggest ? searchReturn.school_name_suggest[0].options : []
-            const districts = searchReturn.district_suggest ? searchReturn.district_suggest[0].options : []
-            const results = [...schools, ...districts]
             // add a generic 'All Schools' record to the first district that comes back
             // results.unshift({
             //   _source: {
@@ -254,7 +250,7 @@ export class UserDetailsUpdateModal implements OnInit {
             //     school_name: 'All Schools'
             //   }
             // })
-            this.displayResults(results)
+            this.displayResults(searchResults)
           }, (err) => {
             console.error(err)
           })
