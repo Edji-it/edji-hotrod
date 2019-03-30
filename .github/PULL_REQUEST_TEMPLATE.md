@@ -1,13 +1,21 @@
-* **What kind of change does this PR introduce?** (Bug fix, feature, docs update, ...)
+**What kind of change does this PR introduce?**
 
+Bug fix, feature, docs update, ...
 
+**What is the current behavior?**
 
-* **What is the current behavior?** (You can also link to an open issue here)
+...
 
+**What is the new behavior?**
 
+...
 
-* **What is the new behavior (if this is a feature change)?**
+**Implementation notes:**
 
+...
 
+**Related issues:**
 
-* **Other information**:
+Resolves #
+
+Lastly, [add some :sparkles: to your PR title](https://gitmoji.carloscuesta.me/)

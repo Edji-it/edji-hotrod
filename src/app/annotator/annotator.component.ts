@@ -312,6 +312,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                         // Make sure we've removed the highlight focus
                         this.unfocusHighlight(comment.start, comment.end)
                         this.commentsByIndexRemove(comment._id, wIndex, cIndex)
+                        if (comment.replies && comment.replies.length > 0) {
+                            this.removeRepliesFromComments(comment)
+                        }
                     }
                 } else if (commentUpdate.action === 'UPDATE') {
                     if (cIndex > -1 && this.commentsByIndex[wIndex] && this.commentsByIndex[wIndex][cIndex]) {
@@ -323,6 +326,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                         // Add highlights to local array
                         this.incrementHighlights(this.user._id === comment.user_id || this.project.teacher_id == comment.user_id, comment.start, comment.end)
                         this.commentsByIndexAdd(comment, wIndex, true)
+                    }
+                    if (comment.reply_to) {
+                        this.addReplyToComment(comment)
                     }
                 } else if (commentUpdate.action === 'CREATE') {
                     // Socket updates don't come through with a timestamp
@@ -1334,5 +1340,39 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
           console.error(error)
         })
       }
+    }
+
+    /**
+     * Method for adding the reply _id to the replies property on a parent comment
+     * IMPORTANT for being able to delete all replies under a comment when deleting 
+     * the comment (if user does not refresh reading first before deleting)
+     * @param comment the reply comment that was just created
+     */
+    private addReplyToComment(comment: any): void {
+        let projCommentsLen = this.project.comments.length
+        // Add comment to local project array 
+        for (let i=0; i<projCommentsLen; i++) {
+            let projComment = this.project.comments[i]
+            if (projComment._id===comment.reply_to) {
+                projComment.replies.push(comment._id)
+            }
+        }
+    }
+
+    /**
+     * Method for removing the comment _ids of the reply comments for a parent's replies
+     * @param comment the parent comment that was just deleted
+     */
+    private removeRepliesFromComments(comment: any): void {
+        let projCommentsLen = this.project.comments.length
+        let replyIds = comment.replies
+        // Add comment to local project array 
+        for (let i=0; i<projCommentsLen; i++) {
+            let projComment = this.project.comments[i]
+            if (projComment && projComment._id && replyIds.includes(projComment._id)) {
+                this.project.comments.splice(i,1)
+                i--
+            }
+        }
     }
 }
