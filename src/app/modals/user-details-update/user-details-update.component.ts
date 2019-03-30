@@ -240,7 +240,7 @@ export class UserDetailsUpdateModal implements OnInit {
         let searchText = this.userDetailsForm.value.school
         if (searchText!=='') {
           // search for schools here
-          this._auth.getSchoolDistrict('school_name_suggest', searchText).subscribe((searchResults) => {
+          this._auth.getSchoolDistrict(searchText).subscribe((searchResults) => {
             const searchReturn = searchResults && searchResults.suggest
             const schools = searchReturn.school_name_suggest ? searchReturn.school_name_suggest[0].options : []
             const districts = searchReturn.district_suggest ? searchReturn.district_suggest[0].options : []
