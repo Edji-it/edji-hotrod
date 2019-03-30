@@ -74,6 +74,10 @@ export class UserDetailsUpdateModal implements OnInit {
   }
 
   ngOnInit() {
+    this._auth.getSchoolDistrict('school_name_suggest', 'pitt').subscribe((response) => {
+      console.log('school_name_suggest:', response)
+    })
+
     this.currentUser = this._auth.getUser()
 
     if (
@@ -218,9 +222,9 @@ export class UserDetailsUpdateModal implements OnInit {
           this._auth.getSchoolDistrict('school_name_suggest', searchText).subscribe((response) => {
             console.log('school_name_suggest:', response)
           })
-          this._auth.getSchoolDistrict('district_suggest', searchText).subscribe((response) => {
-            console.log('district_suggest:', response)
-          })
+          // this._auth.getSchoolDistrict('district_suggest', searchText).subscribe((response) => {
+          //   console.log('district_suggest:', response)
+          // })
         }
       })
     }, 1)

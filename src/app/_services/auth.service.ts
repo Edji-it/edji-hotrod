@@ -1046,7 +1046,11 @@ export class AuthService implements CanActivate {
     public getSchoolDistrict(searchBy: string, searchText: string): Observable<any> {
         searchText = encodeURIComponent(searchText)
         return this._http.get<any>(
-            this.flakBaseUrl + `/schools?${searchBy}=${searchText}`
+            this.flakBaseUrl + `/schools?school_name_suggest=${searchText}&district_suggest=${searchText}`, {
+                headers: new HttpHeaders({
+                    'Content-Type': 'application/json'
+                })
+            }
         )
         .pipe(map((res) => {
             return res
