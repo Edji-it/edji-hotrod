@@ -29,6 +29,8 @@ export class SearchPage implements OnInit {
   // Filters
   public activeLibrary: string = 'public' // default to Public
   public gradeFilter: number[] = []
+  public gradeMin: number = 0
+  public gradeMax: number = 13
 
   public first: number = 0
   public rows: number = 20
@@ -82,6 +84,14 @@ export class SearchPage implements OnInit {
           if (params.library) {
             this.activeLibrary = params.library
           }
+          if (params.grade_lte && params.grade_gte) {
+            this.gradeMin = parseInt(params.grade_gte)
+            this.gradeMax = parseInt(params.grade_lte)
+            this.gradesSelected = []
+            for (let i = this.gradeMin; i <= this.gradeMax; i++) {
+              this.gradesSelected.push(i)
+            }
+          }
           this.loadFeed('search_term')
         }
       ),
@@ -98,7 +108,6 @@ export class SearchPage implements OnInit {
    * - This auto-runs on load and every change, called by p-dataList in the template
    */
   loadFeed(action: string, paging?: any) {
-    console.log(this.subjectFilter)
     let filterParams = {}
     
     if (this.searchTerm) {
@@ -107,8 +116,14 @@ export class SearchPage implements OnInit {
     if (this.activeLibrary) {
       filterParams['library'] = this.activeLibrary
     }
+    if (this.gradesSelected.length > 0) {
+      let grades = this.gradesSelected
+      filterParams['grade_gte'] =  Math.min(...grades)
+      filterParams['grade_lte'] =  Math.max(...grades)
+    }
 
     this.router.navigate(['/discover/search', filterParams])
+
     // fire an analytic event here for tracking purposes
     if (action !== '') {
       this.angulartics.eventTrack.next({
@@ -126,9 +141,9 @@ export class SearchPage implements OnInit {
     if (this.first < 0) { this.first = filters['start'] = 0 }
     this.rows = filters['size'] = paging && paging.rows != undefined ? parseInt(paging.rows) : this.rows
 
-    if (this.gradeFilter.length > 0) {
-      filters['grades'] = this.gradeFilter
-    }
+    // if (this.gradeFilter.length > 0) {
+    //   filters['grades'] = this.gradeFilter
+    // }
 
 
     // Attach search query
@@ -151,11 +166,9 @@ export class SearchPage implements OnInit {
     }
     
     // grade_levels_lte, grade_levels_gte
-    if (this.gradeFilter[0]) {
-      let grades = this.gradeFilter
-      // filters['grades'].forEach( grade => { feedParams = feedParams.append("grades", grade + "")})
-      queryString += '&grade_levels_gte=' + Math.min(...grades)
-      queryString += '&grade_levels_lte=' + Math.max(...grades)
+    if (this.gradeMin && this.gradeMax) {
+      queryString += '&grade_levels_gte=' + this.gradeMax
+      queryString += '&grade_levels_lte=' + this.gradeMin
     }
 
     this._readings.search(queryString)

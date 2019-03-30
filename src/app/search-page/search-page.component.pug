@@ -77,10 +77,10 @@ nav-bar([showDashboardOptions]="true")
                 .form-group(style="clear:left;")
                     label Grade Level
                         button.btn-secondary.btn-sm.filter-clear(
-                            *ngIf="gradeFilter.length > 0",
-                            (click)="gradeFilter = []; loadFeed('')"
+                            *ngIf="gradesSelected.length > 0",
+                            (click)="gradesSelected = []; loadFeed('')"
                         ) Clear
-                    grade-selector([(ngModel)]="gradeFilter", (ngModelChange)="loadFeed('filter_gradeLevel')")
+                    grade-selector([(ngModel)]="gradesSelected", (ngModelChange)="loadFeed('filter_gradeLevel')")
                 //- .form-group
                 //-     label Subjects
                     //- ss-multiselect-dropdown([options]="subjects", [(ngModel)]="subjectFilter", [settings]="subjectDropSettings")
@@ -97,7 +97,7 @@ nav-bar([showDashboardOptions]="true")
             .row.loading(*ngIf="loading")
             <p-dataList [value]="readings" [paginator]="true" [paginatorPosition]="'bottom'" [rows]="rows" [lazy]="true" (onLazyLoad)="loadFeed('feed_paginate', $event)" [totalRecords]="total" [emptyMessage]="'No Readings to show.'">
                 <ng-template let-reading pTemplate="item">
-                    .col-12.feed__reading(*ngIf="reading")
+                   .col-12.feed__reading(*ngIf="reading")
                         div {{index}}
                         .feed__reading-data.mb-2(*ngIf="reading.owner")
                             .comment__avatar.mb-0 {{reading.owner.fullname.substr(0,2).toUpperCase()}}
@@ -109,10 +109,10 @@ nav-bar([showDashboardOptions]="true")
                         .feed__reading-preview(*ngIf="reading.words_preview")
                             span.w(
                                     *ngFor="let w of reading.words_preview", 
-                                    [ngClass]="[ w ? w.styles.join(' ') : '' ]"
+                                    [ngClass]="[ w && w.styles ? w.styles.join(' ') : '' ]"
                                 )
                                 | {{ (!(w && w.styles) || (w && w.styles.indexOf('space')) > -1) ? '&nbsp;' : w && w.str }}
-                                div(*ngIf="w && w.styles.indexOf('img') > -1")
+                                div(*ngIf="w && w.styles && w.styles.indexOf('img') > -1")
                                     //- Image: Display image for image "word"
                                     img.reading-image(
                                         [attr.id]="'readingImage' + i",
