@@ -85,7 +85,7 @@ nav-bar([showDashboardOptions]="true")
                 //-     label Subjects
                     //- ss-multiselect-dropdown([options]="subjects", [(ngModel)]="subjectFilter", [settings]="subjectDropSettings")
         .col-md-8
-            #notFollowingMessage.alert.alert-light(*ngIf="!loading && followingFilter && readings.length < 1")
+            #notFollowingMessage.alert.alert-light(*ngIf="!searchTerm && !loading && followingFilter && readings.length < 1")
                 h4 Time to follow someone!
                 p Follow Edji to see some of our latest curated Readings.
                 .comment__avatar Ed
@@ -95,7 +95,11 @@ nav-bar([showDashboardOptions]="true")
                     (followEvent)="loadFeed('')"
                 )
             .row.loading(*ngIf="loading")
-            <p-dataList [value]="readings" [paginator]="true" [paginatorPosition]="'both'" [rows]="rows" [lazy]="true" (onLazyLoad)="loadFeed('feed_paginate', $event)" [totalRecords]="total" [emptyMessage]="'<b>None found</b> No Readings to show.'">
+            //- No results message when user is genuinely searching
+            .alert.alert-info(*ngIf="searchTerm && !loading && readings.length < 1")
+                b No Readings Found
+                | There are no readings for "{{searchTerm}}" with your current filters, please try a different term or expanding your filters. 
+            <p-dataList [value]="readings" [paginator]="readings.length > 0" [paginatorPosition]="'both'" [rows]="rows" [lazy]="true" (onLazyLoad)="loadFeed('feed_paginate', $event)" [totalRecords]="total" [emptyMessage]="''">
                 <ng-template let-reading pTemplate="item">
                    .col-12.feed__reading(*ngIf="reading")
                         div {{index}}

@@ -109,6 +109,8 @@ export class SearchPage implements OnInit {
    */
   loadFeed(action: string, paging?: any) {
     let filterParams = {}
+    // Reset results
+    this.readings = []
     
     if (this.searchTerm) {
       filterParams['q'] = this.searchTerm
