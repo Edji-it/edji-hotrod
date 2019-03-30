@@ -2,10 +2,31 @@ nav-bar([showDashboardOptions]="true")
 .container.mt-4
     .row
         .col-12.my-4
-            h1.mb-1(style="display: flex;")
-                | My search for
-                .form-inline.ml-2
-                    .input-group.input-group-lg
+            ng-container(*ngIf="!isSearching")
+                h1.mb-1 Discover Readings
+                p.small.mt-2 Find readings created by others to use or modify for your class.
+            ng-container(*ngIf="isSearching")
+                h1.mb-1(style="display: flex;")
+                    | My search for
+                    .form-inline.ml-2
+                        .input-group.input-group-lg
+                            .input-group-prepend-icon((click)="searchInput.focus()")
+                                i.icon.icon-search
+                            input#readingSearch.form-control(
+                                #searchInput,
+                                name="SearchTermInput", 
+                                [(ngModel)]="searchTerm", 
+                                type="text", 
+                                style="text-align: left;", 
+                                placeholder="Search...",
+                                (keyup.enter)="loadFeed('search_term')"
+                            )
+                p.mt-2 Found <b>{{ total || 0 }}</b> readings
+                br
+    .row
+        .col-md-4
+                .form-group(*ngIf="!isSearching")
+                    .input-group.input-group
                         .input-group-prepend-icon((click)="searchInput.focus()")
                             i.icon.icon-search
                         input#readingSearch.form-control(
@@ -17,27 +38,6 @@ nav-bar([showDashboardOptions]="true")
                             placeholder="Search...",
                             (keyup.enter)="loadFeed('search_term')"
                         )
-            p.mt-2 Found <b>{{ total || 0 }}</b> readings
-            br
-    .row
-        .col-md-4
-                //- .form-group(style="margin-top:45px;")
-                //-     .input-group.pb-2
-                //-         input#projectCodeInputJoinDash.form-control(
-                //-             name="SearchTermInput", 
-                //-             [(ngModel)]="searchTerm", 
-                //-             type="text", 
-                //-             style="text-align: left;", 
-                //-             placeholder="Search...",
-                //-             (keyup.enter)="loadFeed('search_term')"
-                //-         )
-                        //- .input-group-append
-                        //-     button#buttonJoinProject.btn.btn-primary(
-                        //-         [class.loading]="searchLoading", 
-                        //-         name="Search", 
-                        //-         href="#",
-                        //-         (click)="loadFeed('search_term')"
-                        //-     ) Search
                 .form-group
                     label Community
                     //- Public Library

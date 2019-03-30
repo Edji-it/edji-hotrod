@@ -25,7 +25,8 @@ export class SearchPage implements OnInit {
 
   // User
   private user: User
-
+  // Main display toggle
+  public isSearching: boolean
   // Filters
   public activeLibrary: string = 'public' // default to Public
   public gradesSelected: number[] = []
@@ -74,6 +75,9 @@ export class SearchPage implements OnInit {
   ) { }
 
   ngOnInit() {
+    if (this.router.url.indexOf('/discover/search') >= 0 || this.searchTerm.length > 0) {
+      this.isSearching =  true
+    }
     this.subscriptions.push(
       // Get search params from URL
       this.route.params.subscribe(
@@ -122,6 +126,7 @@ export class SearchPage implements OnInit {
 
     
     if (this.searchTerm) {
+      this.isSearching = true
       filterParams['q'] = this.searchTerm
     }
     if (this.activeLibrary) {
@@ -136,7 +141,7 @@ export class SearchPage implements OnInit {
       filterParams['from'] = this.first
     }
 
-    this.router.navigate(['/discover/search', filterParams])
+    this.router.navigate(['/discover' + (this.isSearching ? '/search' : ''), filterParams])
 
     // fire an analytic event here for tracking purposes
     if (action !== '') {
@@ -174,7 +179,6 @@ export class SearchPage implements OnInit {
 
     this._readings.search(queryString)
       .subscribe(data => {
-        console.log('data', data)
         this.readings = data.results || []
         this.loading = false
         this.total = data.total
