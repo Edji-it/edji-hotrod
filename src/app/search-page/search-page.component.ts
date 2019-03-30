@@ -177,6 +177,11 @@ export class SearchPage implements OnInit {
       queryString += '&grade_levels_lte=' + this.gradeMin
     }
 
+    // For default, unfiltered no serach term, show latest
+    if (queryString.length < 10) {
+      queryString += '&sort=createdAt'
+    }
+    
     this._readings.search(queryString)
       .subscribe(data => {
         this.readings = data.results || []
