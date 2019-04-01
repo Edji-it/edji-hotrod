@@ -19,7 +19,7 @@ nav-bar([showDashboardOptions]="true")
                                 type="text", 
                                 style="text-align: left;", 
                                 placeholder="Search...",
-                                (keyup.enter)="loadFeed('search_term')"
+                                (keyup.enter)="updateSearchParams('search_term')"
                             )
                 p.mt-2 Found <b>{{ total || 0 }}</b> readings
                 br
@@ -36,7 +36,7 @@ nav-bar([showDashboardOptions]="true")
                             type="text", 
                             style="text-align: left;", 
                             placeholder="Search...",
-                            (keyup.enter)="loadFeed('search_term')"
+                            (keyup.enter)="updateSearchParams('search_term')"
                         )
                 .form-group
                     label Community
@@ -45,7 +45,7 @@ nav-bar([showDashboardOptions]="true")
                         button.btn.btn-filter( 
                             title="See public readings from all users",
                             [class.active]="!activeLibrary || activeLibrary === 'public'",
-                            (click)="activeLibrary = 'public'; loadFeed('filter_public')"
+                            (click)="activeLibrary = 'public'; updateSearchParams('filter_public')"
                         )
                             span([innerHTML]="':earth_americas: Public Library' | emojione")
                     //- Following 
@@ -53,7 +53,7 @@ nav-bar([showDashboardOptions]="true")
                         button.btn.btn-filter( 
                             title="Filter by users you follow",
                             [class.active]="activeLibrary === 'following'",
-                            (click)="activeLibrary = 'following'; loadFeed('filter_following')"
+                            (click)="activeLibrary = 'following'; updateSearchParams('filter_following')"
                         )
                             span([innerHTML]="':green_heart: Following' | emojione")
                     //- Academy Libraries
@@ -61,7 +61,7 @@ nav-bar([showDashboardOptions]="true")
                     //-     button.btn.btn-filter( 
                     //-         title="Filter by your academy's library",
                     //-         [class.active]="activeLibrary === 'ACADEMYID'",
-                    //-         (click)="activeLibrary = 'ACADEMYID'; loadFeed('filter_academy')"
+                    //-         (click)="activeLibrary = 'ACADEMYID'; updateSearchParams('filter_academy')"
                     //-     )
                     //-         span([innerHTML]="':school: Academy Name' | emojione")
                 .form-group
@@ -71,16 +71,16 @@ nav-bar([showDashboardOptions]="true")
                         [(ngModel)]="subjectFilter",
                         [options]="subjects", 
                         [settings]="subjectDropSettings",
-                        (dropdownClosed)="loadFeed('search_filter')"
+                        (dropdownClosed)="updateSearchParams('search_filter')"
                     )
                 br
                 .form-group(style="clear:left;")
                     label Grade Level
                         button.btn-secondary.btn-sm.filter-clear(
                             *ngIf="gradesSelected.length > 0",
-                            (click)="gradesSelected = []; loadFeed('')"
+                            (click)="gradesSelected = []; updateSearchParams('')"
                         ) Clear
-                    grade-selector([(ngModel)]="gradesSelected", (ngModelChange)="loadFeed('filter_gradeLevel')")
+                    grade-selector([(ngModel)]="gradesSelected", (ngModelChange)="updateSearchParams('filter_gradeLevel')")
                 //- .form-group
                 //-     label Subjects
                     //- ss-multiselect-dropdown([options]="subjects", [(ngModel)]="subjectFilter", [settings]="subjectDropSettings")
@@ -92,14 +92,14 @@ nav-bar([showDashboardOptions]="true")
                 follow-tag(
                     id="followEdjiTag",
                     [owner]="edjiOwnerObj",
-                    (followEvent)="loadFeed('')"
+                    (followEvent)="updateSearchParams('')"
                 )
             .row.loading(*ngIf="loading")
             //- No results message when user is genuinely searching
             .alert.alert-info(*ngIf="searchTerm && !loading && readings.length < 1")
                 b No Readings Found
                 | There are no readings for "{{searchTerm}}" with your current filters, please try a different term or expanding your filters. 
-            <p-dataList [value]="readings" [paginator]="readings.length > 0" [paginatorPosition]="'both'" [rows]="rows" [lazy]="true" (onLazyLoad)="loadFeed('feed_paginate', $event)" [totalRecords]="total" [emptyMessage]="''">
+            <p-dataList [value]="readings" [paginator]="readings.length > 0" [paginatorPosition]="'both'" [rows]="rows" [lazy]="true" (onLazyLoad)="updateSearchParams('feed_paginate', $event)" [totalRecords]="total" [emptyMessage]="''">
                 <ng-template let-reading pTemplate="item">
                    .col-12.feed__reading(*ngIf="reading")
                         div {{index}}

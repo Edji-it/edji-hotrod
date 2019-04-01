@@ -43,7 +43,6 @@ export class SearchPage implements OnInit {
   // State vars
   public loading: boolean = true
 
-
   // MAKE SUBJECTS COMPONENT
   public subjects: any = [
     {id:'literature',name:'Language Arts'},
@@ -80,8 +79,9 @@ export class SearchPage implements OnInit {
     }
     this.subscriptions.push(
       // Get search params from URL
-      this.route.params.subscribe(
+      this.route.queryParams.subscribe(
         params => {
+          this.clearFilterVars()
           if (params.q) {
             this.searchTerm = params.q
           }
@@ -99,7 +99,7 @@ export class SearchPage implements OnInit {
           if (params.from) {
             this.first = parseInt(params.from)
           }
-          this.loadFeed('search_term')
+          this.loadFeed()
         }
       ),
       this._auth.getCurrentUser().subscribe(
@@ -109,21 +109,18 @@ export class SearchPage implements OnInit {
       )
     )
   }
-
+  
   /**
-   * Load Feed with Params
-   * - This auto-runs on load and every change, called by p-dataList in the template
+   * Primary trigger for updating search
+   * - Passes new params to URL
    */
-  loadFeed(action: string, paging?: any) {
+  updateSearchParams(action: string, paging?: any) {
     let filters = {}
     let filterParams = {}
-    // Reset results
-    this.readings = []    
     // Pagination values
     this.first = filters['from'] = paging && paging.first != undefined ? (parseInt(paging.first) - 1) : this.first
     if (this.first < 0) { this.first = filters['from'] = 0 }
     this.rows = filters['size'] = paging && paging.rows != undefined ? parseInt(paging.rows) : this.rows
-
     
     if (this.searchTerm) {
       this.isSearching = true
@@ -140,9 +137,6 @@ export class SearchPage implements OnInit {
     if (this.first) {
       filterParams['from'] = this.first
     }
-
-    this.router.navigate(['/discover' + (this.isSearching ? '/search' : ''), filterParams])
-
     // fire an analytic event here for tracking purposes
     if (action !== '') {
       this.angulartics.eventTrack.next({
@@ -150,9 +144,32 @@ export class SearchPage implements OnInit {
         properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
       })
     }
-    this.loading = true
+    this.router.navigate(['/discover' + (this.isSearching ? '/search' : '')], { queryParams: filterParams })
+  }
 
-    // Attach search query
+  /**
+   * Clear component variables handling applied filters
+   */
+  clearFilterVars() {
+    this.searchTerm = ''
+    this.first = 0
+    this.gradeMin = 0
+    this.gradeMax = 13
+    this.gradesSelected = []
+    this.subjectFilter = []
+    this.activeLibrary = 'public'
+  }
+
+  /**
+   * Load Feed with Params
+   * - This auto-runs on load and every change, called by p-dataList in the template
+   * @note ONLY triggered by params subscription
+   */
+  loadFeed() {   
+    this.loading = true
+    // Reset results
+    this.readings = [] 
+    // Construct search query
     let queryString = 'from=' + this.first
     if (this.searchTerm) {
       queryString += '&q=' + this.searchTerm
@@ -160,7 +177,6 @@ export class SearchPage implements OnInit {
     if (this.subjectFilter && this.subjectFilter[0]) {
       queryString += '&subjects=' + this.subjectFilter[0]
     }
-
     if (this.activeLibrary === 'following') {
       // Loop through and apply following ids
       let following = this.user.following
@@ -170,11 +186,10 @@ export class SearchPage implements OnInit {
     } else if (this.activeLibrary !== 'public') {
       // Handle academy/institution id filter
     }
-    
     // grade_levels_lte, grade_levels_gte
-    if (this.gradeMin && this.gradeMax) {
-      queryString += '&grade_levels_gte=' + this.gradeMax
-      queryString += '&grade_levels_lte=' + this.gradeMin
+    if (this.gradeMin > -1 && this.gradeMax > -1) {
+      queryString += '&grade_levels_gte=' + this.gradeMin
+      queryString += '&grade_levels_lte=' + this.gradeMax
     }
 
     // For default, unfiltered no serach term, show latest
