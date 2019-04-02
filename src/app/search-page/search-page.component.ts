@@ -28,6 +28,7 @@ export class SearchPage implements OnInit {
   // Main display toggle
   public isSearching: boolean
   // Filters
+  public filterCount: number = 0
   public activeLibrary: string = 'public' // default to Public
   public gradesSelected: number[] = []
   public gradeMin: number = 0
@@ -100,9 +101,11 @@ export class SearchPage implements OnInit {
           }
           if (params.library) {
             this.activeLibrary = params.library
+            this.filterCount++
           }
           if (params.subjects) {
             this.subjectFilter = params.subjects.split(' ')
+            this.filterCount++
           }
           if (params.grade_lte && params.grade_gte) {
             this.gradeMin = parseInt(params.grade_gte)
@@ -111,6 +114,7 @@ export class SearchPage implements OnInit {
             for (let i = this.gradeMin; i <= this.gradeMax; i++) {
               this.gradesSelected.push(i)
             }
+            this.filterCount++
           }
           if (params.from) {
             this.first = parseInt(params.from)
@@ -166,6 +170,7 @@ export class SearchPage implements OnInit {
    */
   clearFilterVars() {
     this.searchTerm = ''
+    this.filterCount = 0
     this.first = 0
     this.gradeMin = 0
     this.gradeMax = 13
