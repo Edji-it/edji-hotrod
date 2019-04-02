@@ -40,6 +40,13 @@ export class SearchPage implements OnInit {
   // Search 
   public searchTerm: string = ''
 
+  // Search alerts
+  public searchAlerts: {
+    serverError?: boolean,
+    noResults?: boolean,
+    notFollowing?: boolean
+  } = {}
+
   // State vars
   public loading: boolean = true
 
@@ -78,6 +85,12 @@ export class SearchPage implements OnInit {
       this.isSearching =  true
     }
     this.subscriptions.push(
+      // User subscription needs to be first, prereq for filters
+      this._auth.getCurrentUser().subscribe(
+        user => {
+          this.user = user
+        }
+      ),
       // Get search params from URL
       this.route.queryParams.subscribe(
         params => {
@@ -87,6 +100,9 @@ export class SearchPage implements OnInit {
           }
           if (params.library) {
             this.activeLibrary = params.library
+          }
+          if (params.subjects) {
+            this.subjectFilter = params.subjects.split(' ')
           }
           if (params.grade_lte && params.grade_gte) {
             this.gradeMin = parseInt(params.grade_gte)
@@ -100,11 +116,6 @@ export class SearchPage implements OnInit {
             this.first = parseInt(params.from)
           }
           this.loadFeed()
-        }
-      ),
-      this._auth.getCurrentUser().subscribe(
-        user => {
-          this.user = user
         }
       )
     )
@@ -128,6 +139,9 @@ export class SearchPage implements OnInit {
     }
     if (this.activeLibrary) {
       filterParams['library'] = this.activeLibrary
+    }
+    if (this.subjectFilter && this.subjectFilter[0]) {
+      filterParams['subjects'] = this.subjectFilter.join(' ')
     }
     if (this.gradesSelected.length > 0) {
       let grades = this.gradesSelected
@@ -169,30 +183,38 @@ export class SearchPage implements OnInit {
     this.loading = true
     // Reset results
     this.readings = [] 
+    this.searchAlerts = {}
     // Construct search query
     let queryString = 'from=' + this.first
     if (this.searchTerm) {
       queryString += '&q=' + this.searchTerm
     }
-    if (this.subjectFilter && this.subjectFilter[0]) {
-      queryString += '&subjects=' + this.subjectFilter[0]
-    }
+    // Library
     if (this.activeLibrary === 'following') {
       // Loop through and apply following ids
       let following = this.user.following
+      // Display message if not following anyone
+      if (!following || following.length < 1) {
+        this.searchAlerts.notFollowing = true
+        this.loading = false
+        return
+      }
       following.forEach(userId => {
         queryString += '&owner_id=' + userId
       })
     } else if (this.activeLibrary !== 'public') {
       // Handle academy/institution id filter
     }
+    // Subjects
+    if (this.subjectFilter && this.subjectFilter[0]) {
+      queryString += '&subjects=' + this.subjectFilter.join(' ')
+    }
     // grade_levels_lte, grade_levels_gte
     if (this.gradeMin > -1 && this.gradeMax > -1) {
       queryString += '&grade_levels_gte=' + this.gradeMin
       queryString += '&grade_levels_lte=' + this.gradeMax
     }
-
-    // For default, unfiltered no serach term, show latest
+    // For default, unfiltered with no search term, show latest
     if (queryString.length < 10) {
       queryString += '&sort=createdAt'
     }
@@ -202,10 +224,13 @@ export class SearchPage implements OnInit {
         this.readings = data.results || []
         this.loading = false
         this.total = data.total
+        // Handle no results messaging
+        if (this.searchTerm && this.readings.length < 1) {
+          this.searchAlerts.noResults = true
+        }
       }, err => {
-        /**
-         * @todo handle error
-         */
+        this.loading = false
+        this.searchAlerts.serverError = true
         console.error(err)
       })
   }
