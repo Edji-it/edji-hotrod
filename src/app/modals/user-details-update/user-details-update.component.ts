@@ -240,7 +240,7 @@ export class UserDetailsUpdateModal implements OnInit {
         let searchText = this.userDetailsForm.value.school
         if (searchText!=='') {
           // search for schools here
-          this._auth.getSchoolDistrict(searchText).subscribe((searchResults) => {
+          this._auth.getSchoolDistrict(`'${searchText}'`).subscribe((searchResults) => {
             // add a generic 'All Schools' record to the first district that comes back
             // results.unshift({
             //   _source: {
