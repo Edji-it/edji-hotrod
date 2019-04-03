@@ -38,7 +38,6 @@ export class AccountComponent implements OnInit, OnDestroy {
 
   constructor(
     private _auth: AuthService, 
-    private route: ActivatedRoute, 
     public _router: Router,
     private angulartics: Angulartics2
   ) { 

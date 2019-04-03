@@ -15,6 +15,7 @@ export class ChangePassComponent implements OnInit {
   public passwordForm: FormGroup;
   public messages: {
     success?: boolean,
+    wrongPasswordError?: boolean,
     serviceError?: boolean
   } = {}
   public loading: boolean
@@ -48,7 +49,7 @@ export class ChangePassComponent implements OnInit {
         oldPassword: this.passwordForm.get('oldPassword').value,
         newPassword: this.passwordForm.get('newPassword').value
       })
-      .then((res: any) => {
+      .then((res) => {
         this.messages.success = true
         this.loading = false
         // fire an analytic event here for tracking purposes
@@ -59,10 +60,18 @@ export class ChangePassComponent implements OnInit {
         this._auth.setToken(res.token)
       })
       .catch((err) => {
-        // TRACK EXCEPTION
-        console.error(err)
         this.loading = false
-        this.messages.serviceError = true
+        if (err.status === 403) {
+          this.messages.wrongPasswordError = true
+        } else {
+          // TRACK EXCEPTION
+          console.error(err)
+          this.messages.serviceError = true
+        }
       });
+  }
+
+  public closeAndReset() {
+    this.closeModal.emit()
   }
 }
