@@ -53,7 +53,7 @@ export class SearchPage implements OnInit {
   public loading: boolean = true
 
   // MAKE SUBJECTS COMPONENT
-  public subjects: any = [
+  public subjects: {id: string, name: string}[] = [
     {id:'literature',name:'Language Arts'},
     {id:'math',name:'Mathematics'},
     {id:'science',name:'Science'},
