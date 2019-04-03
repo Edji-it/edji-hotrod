@@ -11,7 +11,7 @@ const TOAST_TIME: number = 10000
 @Injectable()
 export class MessageService {
 
-  private timerSubscription: Subscription
+  private timerSubscription: Subscription 
 
   /**
    * Message Toasts are sent/updated via Observable
