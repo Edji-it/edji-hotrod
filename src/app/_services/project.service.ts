@@ -152,17 +152,7 @@ export class ProjectService {
             })
         )
     } // constructor
-
-    /**
-     * Get all Joined Projects for a single user
-     * @returns chainable promise resolved with reading data
-     */
-    public getAll() {
-        return this._http
-            .get(this._auth.getUrl() + '/projects', this._auth.getOptions())
-            .toPromise()
-    } // public getAll()
-
+    
     /**
      * Pulls projects user has joined, paginated
      * @param filters object containing pagination values (to eventually include other filters)
@@ -546,9 +536,6 @@ export class ProjectService {
      * Gets all of a teacher's projects for a reading
      */
     public getForReading(readingId: string): Observable<any> {
-        let userId = this._auth.getUser()._id;
-
-        // return this.http.get(this._auth.getUrl() + '/readings/' + readingId + '/projects/' + userId , this._auth.getOptions() );
         return this._http.get(this._auth.getUrl() + "/projects/reading/" + readingId, this._auth.getOptions())
     }
 
@@ -563,27 +550,6 @@ export class ProjectService {
         return this._http.get<validateProjectCodeResponse>(this._auth.getUrl() + '/api/v1/projects/' + projectCode + "/validate", this._auth.getOptions())
 
     } // public validateProjectCode(projectCode: string): Observable<any>
-
-    /** 
-    * Pull a Project object
-    * @param projectId
-    */
-    public get(projectId: string): Observable<any> {
-        return this._http
-            .get(this._auth.getUrl() + '/projects/' + projectId, this._auth.getOptions())
-            .pipe(
-                map(
-                    (data: any) => {
-                        // Update local Project object if returned
-                        if (data.project && data.project._id) {
-                            this.project = data.project;
-                            this.currentProjectSource.next(this.project);
-                        }
-                        return data.project;
-                    }
-                )
-            );
-    } // public get(projectId: string)
 
     /**
      * Create a new Project
@@ -631,7 +597,7 @@ export class ProjectService {
      * @param Requires a Project ID
      */
     public delete(targetProject: Project): Observable<any> {
-        return this._http.delete(this._auth.getUrl() + '/projects/' + targetProject._id, this._auth.getOptions())
+        return this._http.delete(this._auth.getUrl() + '/api/v1/projects/' + targetProject._id, this._auth.getOptions())
             .pipe(map(data => {
                 this._readings.removeProject(targetProject)
             }))
