@@ -131,8 +131,13 @@ export class SearchPage implements OnInit {
   /**
    * Primary trigger for updating search
    * - Passes new params to URL
+   * @param paging Pagination values should only be passed for a pagination event (from the datalist component)
    */
   updateSearchParams(action: string, paging?: any) {
+    // Ignore if pagination values are passed and unchanged
+    if (this.first == paging.first && this.rows == paging.rows) {
+      return
+    }
     let filters = {}
     let filterParams = {}
     // Pagination values
