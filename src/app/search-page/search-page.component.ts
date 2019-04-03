@@ -135,7 +135,7 @@ export class SearchPage implements OnInit {
    */
   updateSearchParams(action: string, paging?: any) {
     // Ignore if pagination values are passed and unchanged
-    if (this.first == paging.first && this.rows == paging.rows) {
+    if (paging && this.first == paging.first && this.rows == paging.rows) {
       return
     }
     let filters = {}
@@ -229,9 +229,9 @@ export class SearchPage implements OnInit {
       queryString += '&grade_levels_gte=' + this.gradeMin
       queryString += '&grade_levels_lte=' + this.gradeMax
     }
-    // For default, unfiltered with no search term, show latest
-    if (queryString.length < 10) {
-      queryString += '&sort=createdAt'
+    // Default to sort by most recent, unless using a search term
+    if (!this.searchTerm) {
+      queryString += '&sort=createdAt&sort_order=desc'
     }
     
     this._readings.search(queryString)
