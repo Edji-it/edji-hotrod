@@ -9,14 +9,14 @@ import { User } from '../shared/datatypes'
 
 @Component({
   selector: 'hot-redeem-token',
-  templateUrl: 'redeem-token.component.pug'
+  templateUrl: 'redeem-token.component.pug',
 })
 export class RedeemToken implements OnInit {
   public resetForm: FormGroup
   public isLoading: boolean = false
   public resetToken: string
   public serviceResponse: {
-    success?: boolean,
+    success?: boolean
     failure?: boolean
   } = {}
   public submitted: boolean
@@ -24,7 +24,7 @@ export class RedeemToken implements OnInit {
   public redeemCopy: {
     name: string
   } = {
-    name: 'Password'
+    name: 'Password',
   }
   public userId: string
   private user: User
@@ -34,10 +34,8 @@ export class RedeemToken implements OnInit {
     private _router: Router,
     private route: ActivatedRoute,
     private angulartics: Angulartics2,
-    private _fb: FormBuilder
-  ) {
-    
-  }
+    private _fb: FormBuilder,
+  ) {}
 
   ngOnInit() {
     this.redeemType = this.route.snapshot.params['type']
@@ -52,23 +50,26 @@ export class RedeemToken implements OnInit {
     switch (this.redeemType) {
       case 'password':
         this.redeemCopy = {
-          name: 'Password'
+          name: 'Password',
         }
         fieldValidators.push(Validators.minLength(6))
         break
       case 'email':
         this.redeemCopy = {
-          name: 'Email'
+          name: 'Email',
         }
         break
     }
     // Build reset form
-    this.resetForm = this._fb.group({
-      field: [null, fieldValidators],
-      fieldConfirm: [null, Validators.required]
-    }, { validator: this.fieldsEqual })
+    this.resetForm = this._fb.group(
+      {
+        field: [null, fieldValidators],
+        fieldConfirm: [null, Validators.required],
+      },
+      { validator: this.fieldsEqual },
+    )
 
-    this._auth.getCurrentUser().subscribe((user) => {
+    this._auth.getCurrentUser().subscribe(user => {
       this.user = user
     })
   }
@@ -77,8 +78,7 @@ export class RedeemToken implements OnInit {
    * @returns error to FormGroup called 'mismatch' if the fields are not equal
    */
   private fieldsEqual(group: FormGroup): any {
-    return group.get('field').value === group.get('fieldConfirm').value
-      ? null : { mismatch: true }
+    return group.get('field').value === group.get('fieldConfirm').value ? null : { mismatch: true }
   }
 
   public resetValue(formValue: any): void {
@@ -88,17 +88,21 @@ export class RedeemToken implements OnInit {
     }
     this.isLoading = true
 
-    this._auth.resetProperty({ newValue: formValue.field, token: this.resetToken, type: this.redeemType, userId: this.userId })
-    .subscribe((res) => {
-      this.isLoading = false
-      if (this.user.isLoggedIn) {
-        this._router.navigate(['/dashboard'])
-      } else {
-        this.serviceResponse.success = true
-      }
-    },(err) => {
-      this.isLoading = false
-      this.serviceResponse.failure = true
-    })
+    this._auth
+      .resetProperty({ newValue: formValue.field, token: this.resetToken, type: this.redeemType, userId: this.userId })
+      .subscribe(
+        res => {
+          this.isLoading = false
+          if (this.user.isLoggedIn) {
+            this._router.navigate(['/dashboard'])
+          } else {
+            this.serviceResponse.success = true
+          }
+        },
+        err => {
+          this.isLoading = false
+          this.serviceResponse.failure = true
+        },
+      )
   }
 }

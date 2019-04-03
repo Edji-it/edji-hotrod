@@ -1,152 +1,156 @@
 @import '../../../sass/base/variables';
 
 .upload-list-item {
-    cursor: pointer;
-    transition: transform 0.2s linear;
+  cursor: pointer;
+  transition: transform 0.2s linear;
 }
 
 .card__center-overlay {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate3d(-50%, -50%, 0); 
-} 
+  transform: translate3d(-50%, -50%, 0);
+}
 
 .overlay-on-hover {
   opacity: 0;
 
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     opacity: 1;
   }
 }
 
 .file-name {
-    background: #fff;
-    font-size: 16px;
-    padding: 0.75em 1.5em;
-    display: inline-block;
-    line-height: 1em;
-    min-height: 40px;
-    vertical-align: middle;
-    border-radius: 3px;
-    overflow-y:hidden;
-    overflow-x:hidden;
-    text-overflow: ellipsis;
-    border: 1px solid #dce3ea;
-    cursor: pointer;
+  background: #fff;
+  font-size: 16px;
+  padding: 0.75em 1.5em;
+  display: inline-block;
+  line-height: 1em;
+  min-height: 40px;
+  vertical-align: middle;
+  border-radius: 3px;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  border: 1px solid #dce3ea;
+  cursor: pointer;
 
-    & .placeholder {
-        color: #dcdcdc;
-        font-style: italic;
-    }
+  & .placeholder {
+    color: #dcdcdc;
+    font-style: italic;
+  }
 
-    & + .btn {
-        margin-bottom: 8px;
-    }
+  & + .btn {
+    margin-bottom: 8px;
+  }
 }
 
 // PDF Cards
 $pdfThumbHeight: 250px;
 .card-group {
-    height: $pdfThumbHeight;
-    overflow-y: visible;
-    overflow-x: auto;
-    flex-flow: row nowrap;
-    position: relative;
-    margin: 15px 0px;
+  height: $pdfThumbHeight;
+  overflow-y: visible;
+  overflow-x: auto;
+  flex-flow: row nowrap;
+  position: relative;
+  margin: 15px 0px;
 
-    // Bootstrap will make this go vertical in mobile, so override the display here:
-    display: flex;
+  // Bootstrap will make this go vertical in mobile, so override the display here:
+  display: flex;
 
-    &.hidden {
-        display: none;
-    }
+  &.hidden {
+    display: none;
+  }
 
-    &:hover, &:active {
-        border-color: #aaa;
-    }
+  &:hover,
+  &:active {
+    border-color: #aaa;
+  }
 }
 .card {
-    flex: none !important;
-    overflow: hidden;
-    text-align: center;
+  flex: none !important;
+  overflow: hidden;
+  text-align: center;
 }
 .title-card {
-    border: none !important;
-    margin-right: 10px;
-    width: 180px;
-    background: #fafafa;
+  border: none !important;
+  margin-right: 10px;
+  width: 180px;
+  background: #fafafa;
 
-    & + .card {
-        border-left:1px solid rgba(0,0,0,0.125);
-    }
+  & + .card {
+    border-left: 1px solid rgba(0, 0, 0, 0.125);
+  }
 }
 .card img {
-    height: $pdfThumbHeight;
-    width: auto !important;
-    max-width: none;
+  height: $pdfThumbHeight;
+  width: auto !important;
+  max-width: none;
 }
 
 .document-card {
-    min-width: 180px;
+  min-width: 180px;
 }
 
 .card-group--placeholder {
-    overflow: hidden;
+  overflow: hidden;
 }
 
 .card-placeholder {
-    opacity: 0.5;
-    min-width: 180px;
-    background: #efefef;
+  opacity: 0.5;
+  min-width: 180px;
+  background: #efefef;
 }
 
 .group-alert {
-    position: absolute;
-    top: 50%;
-    left: 210px;
-    width: calc(95% - 210px);
-    max-width: 500px;
-    transform: translate3d(0, -50%, 0);
-    opacity: 0.95;
-    z-index: 3000;
+  position: absolute;
+  top: 50%;
+  left: 210px;
+  width: calc(95% - 210px);
+  max-width: 500px;
+  transform: translate3d(0, -50%, 0);
+  opacity: 0.95;
+  z-index: 3000;
 
-    &.has-icon {
-        padding-left: 3em;
-        text-indent: -2.5em;
-    }
+  &.has-icon {
+    padding-left: 3em;
+    text-indent: -2.5em;
+  }
 }
 
 .group-alert__icon {
-    height: 2em;
-    width: 2em;
-    margin: 0px 3px;
-    vertical-align: middle;
+  height: 2em;
+  width: 2em;
+  margin: 0px 3px;
+  vertical-align: middle;
 }
 
 .doc-title {
-    display: block;
-    width: 100%;
-    padding-bottom: 20px;
-    max-height: 5.5em;
-    line-height: 1.25em;
-    font-size: 14px;
-    font-weight: bold;
-    color: #333;
+  display: block;
+  width: 100%;
+  padding-bottom: 20px;
+  max-height: 5.5em;
+  line-height: 1.25em;
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
 }
 
 // Added 6.15.17
 .btn--delete-pdf {
-    opacity: 0.5;
-    filter: grayscale(100%);
-    margin-top: 10px;
+  opacity: 0.5;
+  filter: grayscale(100%);
+  margin-top: 10px;
 
-    & span {
-        pointer-events: none;
-    }
+  & span {
+    pointer-events: none;
+  }
 
-    &:hover, &:focus, &:active {
-        filter: grayscale(0%);
-        opacity: 1;
-    }
+  &:hover,
+  &:focus,
+  &:active {
+    filter: grayscale(0%);
+    opacity: 1;
+  }
 }

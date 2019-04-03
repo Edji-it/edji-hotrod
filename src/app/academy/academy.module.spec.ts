@@ -1,13 +1,13 @@
-import { AcademyModule } from './academy.module';
+import { AcademyModule } from './academy.module'
 
 describe('AcademyModule', () => {
-  let academyModule: AcademyModule;
+  let academyModule: AcademyModule
 
   beforeEach(() => {
-    academyModule = new AcademyModule();
-  });
+    academyModule = new AcademyModule()
+  })
 
   it('should create an instance', () => {
-    expect(academyModule).toBeTruthy();
-  });
-});
+    expect(academyModule).toBeTruthy()
+  })
+})

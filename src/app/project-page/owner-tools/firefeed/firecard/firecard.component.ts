@@ -3,15 +3,12 @@ import { EdjiComment, Reading } from '../../../../shared/datatypes'
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, AfterViewInit } from '@angular/core'
 import { CommentService, ProjectService, ReadingService, SocketService } from '../../../../_services'
 
-
 @Component({
   selector: 'hot-firecard',
   templateUrl: './firecard.component.pug',
-  styleUrls: ['firecard.component.scss']
+  styleUrls: ['firecard.component.scss'],
 })
-
 export class FirecardComponent implements OnInit, OnDestroy {
-  
   private currentReading: Reading
   private subscriptions: Subscription[] = []
   private yPos: number = 0
@@ -31,40 +28,41 @@ export class FirecardComponent implements OnInit, OnDestroy {
     private _readings: ReadingService,
     private _socket: SocketService,
     private _comments: CommentService,
-    private _projects: ProjectService
-  ) { }
+    private _projects: ProjectService,
+  ) {}
 
   ngOnInit() {
     this.subscriptions.push(
       this._readings.currentReading.subscribe(
         reading => {
           if (reading._id) {
-             this.currentReading = reading
-            if (this.currentReading.words[this.fireComment.start] && this.currentReading.words[this.fireComment.start].styles[0]==='img') {
+            this.currentReading = reading
+            if (
+              this.currentReading.words[this.fireComment.start] &&
+              this.currentReading.words[this.fireComment.start].styles[0] === 'img'
+            ) {
               this.isImage = true
             }
           }
         },
         error => {
-          console.error(error);
-        }
-      )
+          console.error(error)
+        },
+      ),
     )
 
     this.subscriptions.push(
-      this._projects.lastWordUpdateState.subscribe(
-          (lastWord) => {
-            this.lastWord = lastWord
-          }
-        )
-      )
+      this._projects.lastWordUpdateState.subscribe(lastWord => {
+        this.lastWord = lastWord
+      }),
+    )
 
     // Refresh time ago date every minute
-    setInterval(()=> {
+    setInterval(() => {
       this.secondsAgo++
     }, 60 * 1000)
 
-    if (this.fireComment.type=='audio' && this.fireComment.url && this.fireComment.url.length > 0) {
+    if (this.fireComment.type == 'audio' && this.fireComment.url && this.fireComment.url.length > 0) {
       this.buildAudioView()
     }
   }
@@ -79,27 +77,26 @@ export class FirecardComponent implements OnInit, OnDestroy {
 
   public buildAudioView() {
     this.myCanvas = this.el.nativeElement.querySelector('.wave-form')
-      if (this.myCanvas) {
-        this.audio = new Audio()
-        this.audio.src = this.fireComment.url
-        // Do not load audio until played
-        // this.audio.load()
-        this.playAble = true
-        // Build the waveform
-        this._comments.waveForm(this.fireComment.dataArray, this.myCanvas)
-      } else {
-        setTimeout(() => {
-          this.buildAudioView()
-        }, 250)
-      }
-      
+    if (this.myCanvas) {
+      this.audio = new Audio()
+      this.audio.src = this.fireComment.url
+      // Do not load audio until played
+      // this.audio.load()
+      this.playAble = true
+      // Build the waveform
+      this._comments.waveForm(this.fireComment.dataArray, this.myCanvas)
+    } else {
+      setTimeout(() => {
+        this.buildAudioView()
+      }, 250)
+    }
   }
 
   public getOffset(el) {
-    el = el.getBoundingClientRect();
+    el = el.getBoundingClientRect()
     return {
       left: el.left + window.scrollX,
-      top: el.top + window.scrollY
+      top: el.top + window.scrollY,
     }
   }
 
@@ -107,7 +104,7 @@ export class FirecardComponent implements OnInit, OnDestroy {
     // If the image index is further down than the last word rendered, send out a request to update the lastWord
     if (imageIndex > this.lastWord) {
       this._projects.lastWordUpdateSubj.next(imageIndex)
-      setTimeout(()=>{
+      setTimeout(() => {
         this.scrollToImage(imageIndex)
       }, 1)
     } else {
@@ -117,16 +114,18 @@ export class FirecardComponent implements OnInit, OnDestroy {
 
   public scrollToImage(imageIndex) {
     let yOffset = 100
-    let imageElement = document.getElementById("readingImage" + imageIndex)
+    let imageElement = document.getElementById('readingImage' + imageIndex)
     this.yPos = this.getOffset(imageElement).top
     window.scrollTo(0, this.yPos - yOffset)
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach((sub) => { sub.unsubscribe() })
+    this.subscriptions.forEach(sub => {
+      sub.unsubscribe()
+    })
   }
 
-  /** 
+  /**
    * Pause playback of the audio track
    */
   private pause() {
@@ -140,7 +139,7 @@ export class FirecardComponent implements OnInit, OnDestroy {
     }
   }
 
-  /** 
+  /**
    * Start playback of the audio track
    */
   private play() {
@@ -158,17 +157,16 @@ export class FirecardComponent implements OnInit, OnDestroy {
     this.audio.load()
   }
 
-
-  private getPlayhead() : number {
+  private getPlayhead(): number {
     if (this.audio) {
-      return Math.round(this.audio.currentTime / 30 * 100)
+      return Math.round((this.audio.currentTime / 30) * 100)
     } else {
       return 0
     }
   }
 
   private setPlaybackTime(event) {
-    let percentLeftClicked = event.offsetX/event.target.clientWidth
+    let percentLeftClicked = event.offsetX / event.target.clientWidth
     this.audio.currentTime = 30 * percentLeftClicked
   }
 }

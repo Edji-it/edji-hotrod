@@ -1,12 +1,22 @@
 $defaultAvatarSize: 28px;
 $largeAvatarSize: 50px;
-$selectedOrange: rgb(255,182,63);
+$selectedOrange: rgb(255, 182, 63);
 
 @keyframes border-pulsate {
-  0% { border-color: rgba($selectedOrange, 0.5); box-shadow: 0px 0px 0px 0px rgba($selectedOrange, 0.7); }
-  33% { border-color: rgba($selectedOrange, 1); }
-  66% { border-color: rgba($selectedOrange, 1); }
-  100%   { border-color: rgba($selectedOrange, 0.5); box-shadow: 0px 0px 0px 8px rgba($selectedOrange, 0); }
+  0% {
+    border-color: rgba($selectedOrange, 0.5);
+    box-shadow: 0px 0px 0px 0px rgba($selectedOrange, 0.7);
+  }
+  33% {
+    border-color: rgba($selectedOrange, 1);
+  }
+  66% {
+    border-color: rgba($selectedOrange, 1);
+  }
+  100% {
+    border-color: rgba($selectedOrange, 0.5);
+    box-shadow: 0px 0px 0px 8px rgba($selectedOrange, 0);
+  }
 }
 
 .user-icon {
@@ -15,7 +25,7 @@ $selectedOrange: rgb(255,182,63);
   width: $defaultAvatarSize;
   line-height: $defaultAvatarSize - 5px;
   border-radius: 50%;
-  background: #CFCFCF;
+  background: #cfcfcf;
   text-align: center;
   float: left;
   margin-right: 10px;
@@ -34,7 +44,7 @@ $selectedOrange: rgb(255,182,63);
     background: #f0f0f0;
   }
   &.selected {
-    border: 2px solid rgba(236,167,54, 0);
+    border: 2px solid rgba(236, 167, 54, 0);
     box-shadow: 0px 0px 0px 0px rgba($selectedOrange, 0);
     transition: border-color ease 1s;
     animation: border-pulsate 2s ease-in-out 4;
@@ -51,12 +61,13 @@ $selectedOrange: rgb(255,182,63);
     }
   }
   &.nav-avatar {
-    margin-top: .5em;
+    margin-top: 0.5em;
   }
   &.pointer {
     cursor: pointer;
   }
-  &__initials, .user-icon__overflow {
+  &__initials,
+  .user-icon__overflow {
     // Text Style
     font-family: 'Open Sans';
     font-weight: 500;
@@ -69,7 +80,7 @@ $selectedOrange: rgb(255,182,63);
     transform: translateY(-50%);
     left: 0px;
     display: block;
-    width:100%;
+    width: 100%;
     text-align: center;
   }
   &__overflow {
@@ -90,12 +101,12 @@ $selectedOrange: rgb(255,182,63);
     bottom: 168%;
     left: -67px;
     opacity: 0;
-    transition: opacity .4s;
+    transition: opacity 0.4s;
     font-size: 9px;
     line-height: 12px;
     filter: drop-shadow(rgba(0, 0, 0, 0.2) 0 2px 6px);
     &::after {
-      content: "";
+      content: '';
       position: absolute;
       top: 100%;
       left: 45%;
@@ -143,20 +154,20 @@ $selectedOrange: rgb(255,182,63);
 
 .outer-circle {
   border-radius: 50%;
-  border: rgba(0,0,0,0.075) solid 1px;
+  border: rgba(0, 0, 0, 0.075) solid 1px;
   -webkit-touch-callout: none; /* iOS Safari */
   -webkit-user-select: none; /* Safari */
-   -khtml-user-select: none; /* Konqueror HTML */
-     -moz-user-select: none; /* Firefox */
-      -ms-user-select: none; /* Internet Explorer/Edge */
-          user-select: none; /* Non-prefixed version, currently
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently
                                 supported by Chrome and Opera */
   &--large {
     @extend .outer-circle;
     height: 54px;
     width: 54px;
-    margin-top: .4em;
-    margin-right: .8em;
+    margin-top: 0.4em;
+    margin-right: 0.8em;
   }
   & .user-icon {
     margin: 1px;

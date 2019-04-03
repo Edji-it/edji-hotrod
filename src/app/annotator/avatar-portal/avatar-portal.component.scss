@@ -1,11 +1,11 @@
 @import '../../../sass/base/variables';
 
 /* mixin for multiline */
-@mixin multiLineEllipsis($lineHeight: 12px, $lineCount: 1, $bgColor: white){
+@mixin multiLineEllipsis($lineHeight: 12px, $lineCount: 1, $bgColor: white) {
   overflow: hidden;
   position: relative;
   line-height: $lineHeight;
-  max-height: $lineHeight * $lineCount; 
+  max-height: $lineHeight * $lineCount;
   text-align: justify;
   &:before {
     content: '...';
@@ -25,7 +25,7 @@
 }
 
 .block-with-text {
-  @include multiLineEllipsis($lineHeight: 12px, $lineCount: 2, $bgColor: white);  
+  @include multiLineEllipsis($lineHeight: 12px, $lineCount: 2, $bgColor: white);
 }
 
 .btn-audio {

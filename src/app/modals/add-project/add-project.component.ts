@@ -6,11 +6,11 @@ import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
 import { AuthService, ProjectService } from './../../_services'
-import { User } from "../../shared/datatypes"
+import { User } from '../../shared/datatypes'
 
 @Component({
   selector: 'hot-add-project-modal',
-  templateUrl: 'add-project.component.pug'
+  templateUrl: 'add-project.component.pug',
 })
 export class AddProjectModal implements OnInit {
   @Output() closeModal: EventEmitter<any> = new EventEmitter()
@@ -26,8 +26,8 @@ export class AddProjectModal implements OnInit {
   public projectForm: FormGroup
   public formSubmitted: boolean = false
   public errors: {
-    serviceError?: boolean,
-    invalidCode?: boolean,
+    serviceError?: boolean
+    invalidCode?: boolean
     groupNameLength?: boolean
   } = {}
   public commentTypes: any = []
@@ -40,9 +40,8 @@ export class AddProjectModal implements OnInit {
     private _projects: ProjectService,
     private _fb: FormBuilder,
     private _auth: AuthService,
-    private angulartics: Angulartics2
-  ) {
-  }
+    private angulartics: Angulartics2,
+  ) {}
 
   ngOnInit() {
     this.user = this._auth.getUser()
@@ -56,7 +55,7 @@ export class AddProjectModal implements OnInit {
       audioType: true,
       replyType: true,
       customCode: ['', { disabled: !this.isHero }],
-      groupInstructions: ''
+      groupInstructions: '',
     })
   }
 
@@ -68,35 +67,36 @@ export class AddProjectModal implements OnInit {
     this.errors = {}
     // trigger form submission and check for form errors
     this.formSubmitted = true
-    if (!this.projectForm.valid) { return }
+    if (!this.projectForm.valid) {
+      return
+    }
     // Start loading spinner! If we're valid, we're requesting
     this.loading = true
 
     if (formValue.customCode) {
       // Validate custom codes
-      this._projects.validateProjectCode(formValue.customCode)
-        .subscribe(
-          (data) => {
-            if (data.found) {
-              // this actually means that the code already exists, so we give the user an error here
-              this.errors.invalidCode = true
-              this.loading = false
-            } else if (data.found === false) {
-              // Custom code does not exist! You are free to use it
-              this.createProject(formValue)
-            } else {
-              this.errors.serviceError = true
-            }
-          },
-          (err) => {
-            console.error(err)
+      this._projects.validateProjectCode(formValue.customCode).subscribe(
+        data => {
+          if (data.found) {
+            // this actually means that the code already exists, so we give the user an error here
+            this.errors.invalidCode = true
+            this.loading = false
+          } else if (data.found === false) {
+            // Custom code does not exist! You are free to use it
+            this.createProject(formValue)
+          } else {
             this.errors.serviceError = true
           }
-        )
-      } else {
-        // Otherwise create project with random code (picked by server)
-        this.createProject(formValue)
-      }
+        },
+        err => {
+          console.error(err)
+          this.errors.serviceError = true
+        },
+      )
+    } else {
+      // Otherwise create project with random code (picked by server)
+      this.createProject(formValue)
+    }
   }
 
   /**
@@ -105,29 +105,39 @@ export class AddProjectModal implements OnInit {
    */
   createProject(formValue) {
     let types = []
-    if (formValue.emojiType) { types.push("emoji") }
-    if (formValue.textType) { types.push("text") }
-    if (formValue.audioType) { types.push("audio") }
-    if (formValue.replyType) { types.push("reply") }
+    if (formValue.emojiType) {
+      types.push('emoji')
+    }
+    if (formValue.textType) {
+      types.push('text')
+    }
+    if (formValue.audioType) {
+      types.push('audio')
+    }
+    if (formValue.replyType) {
+      types.push('reply')
+    }
     // no code found - they're good to create the new one!
     let newProject = {
-      'label': formValue.label,
-      'types': types,
-      'code': formValue.customCode,
-      'group_instructions': formValue.groupInstructions
+      label: formValue.label,
+      types: types,
+      code: formValue.customCode,
+      group_instructions: formValue.groupInstructions,
     }
-    this._projects.create(this.reading._id, newProject)
-      .subscribe(project => {
+    this._projects.create(this.reading._id, newProject).subscribe(
+      project => {
         if (project._id) {
           project.new = true
           this.trackAnalyticEvent(formValue, types)
           this.groupSaved.emit(project)
           this.closeModal.emit()
         }
-      }, error => {
+      },
+      error => {
         console.error(error)
         this.errors.serviceError = true
-      })
+      },
+    )
   }
 
   // there is a bit of setup for this event, so we'll handle this offsite
@@ -153,8 +163,16 @@ export class AddProjectModal implements OnInit {
     })
     // fire an analytic event here for tracking purposes
     this.angulartics.eventTrack.next({
-      action: 'newGroup_' + commentTypes.substring(0, commentTypes.length - 1) + '_' + customGroupName + '_' + customGroupCode + '_' + groupInstructions,
-      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
+      action:
+        'newGroup_' +
+        commentTypes.substring(0, commentTypes.length - 1) +
+        '_' +
+        customGroupName +
+        '_' +
+        customGroupCode +
+        '_' +
+        groupInstructions,
+      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
     })
   }
 }

@@ -4,13 +4,12 @@ $inputVPadding: 10px;
 $inputHPadding: 20px;
 $inputBg: #ffffff;
 $inputShadow: 0 4px 2px -2px rgba(186, 189, 214, 0.5);
-$inputFocusHalfShadow: 0px 1px 7.5px 0px rgba(0,0,0,0.05);
-$inputFocusShadow: 0px 1px 15px 0px rgba(0,0,0,0.1);
+$inputFocusHalfShadow: 0px 1px 7.5px 0px rgba(0, 0, 0, 0.05);
+$inputFocusShadow: 0px 1px 15px 0px rgba(0, 0, 0, 0.1);
 $inputBorder: 1px solid rgb(220, 227, 234);
 $inputFocusBorder: 1px solid rgb(180, 187, 194); // 1px solid #9628ff; // 1px solid $purple;
 $inputLineHeight: 20px;
 $inputFormRadius: 3px; //($inputLineHeight + 2*$inputVPadding )/2;
-
 
 fieldset {
   background-color: transparent;
@@ -40,10 +39,23 @@ textarea {
 }
 
 // All Input Styles
-input[type="color"], input[type="date"], input[type="datetime"], input[type="datetime-local"], 
-input[type="email"], input[type="month"], input[type="number"], input[type="password"], input[type="search"], 
-input[type="tel"], input[type="text"], input[type="time"], input[type="url"], input[type="week"], 
-input:not([type]), textarea, select[multiple],
+input[type='color'],
+input[type='date'],
+input[type='datetime'],
+input[type='datetime-local'],
+input[type='email'],
+input[type='month'],
+input[type='number'],
+input[type='password'],
+input[type='search'],
+input[type='tel'],
+input[type='text'],
+input[type='time'],
+input[type='url'],
+input[type='week'],
+input:not([type]),
+textarea,
+select[multiple],
 #{$all-text-inputs} {
   background-color: $inputBg;
   border: $inputBorder; //$base-border;
@@ -70,12 +82,13 @@ input:not([type]), textarea, select[multiple],
     font-weight: 100;
   }
 
-  &:active, &:focus, &:hover {
+  &:active,
+  &:focus,
+  &:hover {
     outline: none;
   }
 
   &:active {
-    
   }
 
   &:hover {
@@ -104,7 +117,6 @@ input:not([type]), textarea, select[multiple],
     }
   }
 
-  
   &.on-white {
     // border-color: $gray;
 
@@ -120,27 +132,27 @@ input:not([type]), textarea, select[multiple],
     font-weight: normal;
     // border-radius: (32px + 2*$inputVPadding)/2;
   }
-} 
+}
 
 .input-group input:focus {
-  transform: scale(1.0);
+  transform: scale(1);
 }
 
 textarea {
   resize: vertical;
 }
 
-[type="search"] {
+[type='search'] {
   appearance: none;
 }
 
-[type="checkbox"],
-[type="radio"] {
+[type='checkbox'],
+[type='radio'] {
   display: inline;
   margin-right: $small-spacing / 2;
 }
 
-[type="file"] {
+[type='file'] {
   margin-bottom: $small-spacing;
   width: 100%;
 }
@@ -151,7 +163,8 @@ select {
   width: auto;
 }
 
-label input, label textarea {
+label input,
+label textarea {
   margin-top: 4px;
 }
 
@@ -192,7 +205,8 @@ label input, label textarea {
     opacity: 0.4;
   }
 
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     opacity: 1;
   }
 }
@@ -221,18 +235,18 @@ label input, label textarea {
 }
 
 .offset-label--wrap {
-	padding-left: 90px;
+  padding-left: 90px;
   position: relative;
 
-	& .offset-label {
-		display: block; //inline-block;
-		position: absolute;
-		left: -90px;
-		width: 90px;
-		text-align: right;
-		padding-right: 10px;
-		// color: $blue;
-	}
+  & .offset-label {
+    display: block; //inline-block;
+    position: absolute;
+    left: -90px;
+    width: 90px;
+    text-align: right;
+    padding-right: 10px;
+    // color: $blue;
+  }
 
   @media (max-width: $tablet) {
     padding-left: 60px;
@@ -240,10 +254,10 @@ label input, label textarea {
 }
 
 label.border-wrap {
-	position: relative;
-	border-left: 1px solid rgba($blue, 0.5);
-	padding-left: 10px;
-	margin-left: -10px;
+  position: relative;
+  border-left: 1px solid rgba($blue, 0.5);
+  padding-left: 10px;
+  margin-left: -10px;
 }
 
 .input-group-tooltip {
@@ -260,7 +274,7 @@ label.border-wrap {
     transform: translateY(-50%);
     height: 0.75em;
     width: 0.75em;
-    
+
     .input-group-lg & {
       left: 0.3em;
     }
@@ -273,25 +287,28 @@ label.border-wrap {
 }
 
 input.form-item--seamless {
-	background: transparent;
-	border: none;
-	box-shadow: none;
-	padding: 0px;
-	margin: 0px;
-	border-radius: 0px;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0px;
+  margin: 0px;
+  border-radius: 0px;
 
   &.h1 {
     line-height: 1.25em;
   }
 
-	@include placeholder {
-		color: $seamlessPlaceholderColor;
-	}
-	
-	&:hover, &:active, &:focus, &.active {
-		transform: scale(1);
-		box-shadow: none;
-	}
+  @include placeholder {
+    color: $seamlessPlaceholderColor;
+  }
+
+  &:hover,
+  &:active,
+  &:focus,
+  &.active {
+    transform: scale(1);
+    box-shadow: none;
+  }
 }
 
 input.form-item--editor {
@@ -305,39 +322,47 @@ input.form-item--editor {
     border: $editorBorder;
   }
 
-  &:active, &:focus, &.active  {
+  &:active,
+  &:focus,
+  &.active {
     border: $editorActiveBorder;
     background: $editorActiveBg;
   }
 
-  &:hover, &:active, &:focus, &.active {
-		transform: scale(1);
-		box-shadow: none;
-	}
+  &:hover,
+  &:active,
+  &:focus,
+  &.active {
+    transform: scale(1);
+    box-shadow: none;
+  }
 
   @include placeholder {
-		color: #999;
-	}
+    color: #999;
+  }
 }
 
 input.form-item--underline {
-	background: transparent;
-	border: none;
-	box-shadow: none;
-	padding: 0px;
-	margin: 0px;
-	border-radius: 0px;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0px;
+  margin: 0px;
+  border-radius: 0px;
   border-bottom: 1px solid #cdcdcd;
 
-	@include placeholder {
-		color: $seamlessPlaceholderColor;
-	}
-	
-	&:hover, &:active, &:focus, &.active {
-		transform: scale(1);
-		box-shadow: none;
+  @include placeholder {
+    color: $seamlessPlaceholderColor;
+  }
+
+  &:hover,
+  &:active,
+  &:focus,
+  &.active {
+    transform: scale(1);
+    box-shadow: none;
     border-bottom: 1px solid #aaa;
-	}
+  }
 }
 
 .col-form-label {
@@ -350,17 +375,17 @@ input.form-item--underline {
   font-size: 16px;
   line-height: 28px;
 
-  &, & span {
+  &,
+  & span {
     -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
-     -khtml-user-select: none; /* Konqueror HTML */
-       -moz-user-select: none; /* Firefox */
-        -ms-user-select: none; /* Internet Explorer/Edge */
-            user-select: none; /* Non-prefixed version, currently
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome and Opera */
   }
 }
-
 
 // Custom Checkboxes
 label.custom-control-label {
@@ -379,7 +404,7 @@ tr.selectable {
   pointer-events: none;
   cursor: disabled;
   color: #ccc;
-  filter:grayscale(1);
+  filter: grayscale(1);
 }
 
 .form-check-btn {

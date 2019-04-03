@@ -10,9 +10,8 @@ import { IMultiSelectOption, IMultiSelectSettings } from '../../_directives'
 @Component({
   selector: 'hot-discover-add-meta',
   templateUrl: './discover-add-meta.component.pug',
-  styleUrls: ['discover-add-meta.component.scss']
+  styleUrls: ['discover-add-meta.component.scss'],
 })
-
 export class DiscoverAddMetaModal implements OnInit {
   @Input() showModal: boolean
   @Input() reading: Reading
@@ -20,43 +19,40 @@ export class DiscoverAddMetaModal implements OnInit {
 
   private readingMetaForm: FormGroup
   private messages: {
-    success?: boolean,
+    success?: boolean
     serviceError?: boolean
   } = {}
   private multiselectExpanded: boolean
   private projectLink: string
 
-  // IMultiSelectOption[] 
+  // IMultiSelectOption[]
   private subjects: any = [
-    {id:'literature',name:'Language Arts'},
-    {id:'math',name:'Mathematics'},
-    {id:'science',name:'Science'},
-    {id:'geography',name:'Geography'},
-    {id:'history',name:'History'},
-    {id:'government',name:'Government'},
-    {id:'health',name:'Health/Physical Education'},
-    {id:'languages',name:'Foreign Languages'},
-    {id:'art',name:'Art'},
-    {id:'computer',name:'Computers/Technical'}
+    { id: 'literature', name: 'Language Arts' },
+    { id: 'math', name: 'Mathematics' },
+    { id: 'science', name: 'Science' },
+    { id: 'geography', name: 'Geography' },
+    { id: 'history', name: 'History' },
+    { id: 'government', name: 'Government' },
+    { id: 'health', name: 'Health/Physical Education' },
+    { id: 'languages', name: 'Foreign Languages' },
+    { id: 'art', name: 'Art' },
+    { id: 'computer', name: 'Computers/Technical' },
   ]
   // IMultiSelectSettings
   private subjectDropSettings: any = {
     displayAllSelectedText: true,
-    dynamicTitleMaxItems: 4
-  } 
+    dynamicTitleMaxItems: 4,
+  }
 
-  constructor(
-    private _readings: ReadingService,
-    _fb: FormBuilder
-  ) { 
+  constructor(private _readings: ReadingService, _fb: FormBuilder) {
     this.readingMetaForm = _fb.group({
       subjects: [[], Validators.required],
-      grade_levels: [[], Validators.required]
+      grade_levels: [[], Validators.required],
     })
   }
 
   ngOnInit() {
-    if (this.reading && this.reading.projects && this.reading.projects.length>0) {
+    if (this.reading && this.reading.projects && this.reading.projects.length > 0) {
       this.projectLink = this.reading.projects[0]._id
     }
   }
@@ -69,18 +65,17 @@ export class DiscoverAddMetaModal implements OnInit {
     updateReading.grade_levels = form.value.grade_levels
     updateReading.public = true
     //  Make the call to PUT the reading public value
-    this._readings.save(updateReading)
-      .subscribe(
-        data => {
-          if (data._id) {
-            this.reading.subjects = data.subjects
-            this.reading.grade_levels = data.grade_levels
-            this.closeModal.emit()
-          }
-        },
-        error => {
-          console.error(error)
+    this._readings.save(updateReading).subscribe(
+      data => {
+        if (data._id) {
+          this.reading.subjects = data.subjects
+          this.reading.grade_levels = data.grade_levels
+          this.closeModal.emit()
         }
-      )
+      },
+      error => {
+        console.error(error)
+      },
+    )
   }
 }

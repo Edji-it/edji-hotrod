@@ -10,7 +10,7 @@ import { Router, ActivatedRouteSnapshot, RouterStateSnapshot, CanActivate } from
 import { LockerService } from '../_services/locker.service'
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AcademyService implements CanActivate {
   private readingTimerSubscription: Subscription
@@ -22,43 +22,50 @@ export class AcademyService implements CanActivate {
     private _http: HttpClient,
     private _auth: AuthService,
     private _router: Router,
-    private _locker: LockerService
-  ) { 
-    
-  }
+    private _locker: LockerService,
+  ) {}
 
   /**
    * Accepts a license that is shared with the user
    * @param licenseId _id of the license to accept
    */
   public acceptLicense(licenseId: string): Observable<AcceptLicenseResponse> {
-    return this._http.put<AcceptLicenseResponse>(this._auth.getUrl() + '/api/v1/licenses/' + licenseId + '/accept',
-    {},
-    {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization': this._auth.getToken()
-      })
-    })
+    return this._http.put<AcceptLicenseResponse>(
+      this._auth.getUrl() + '/api/v1/licenses/' + licenseId + '/accept',
+      {},
+      {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: this._auth.getToken(),
+        }),
+      },
+    )
   }
 
   /**
    * Invites a teacher to a license
    * @param licenseId _id of the license to accept
    */
-  public inviteToLicense(name: string, email: string, role: string, licenseId: string): Observable<InviteLicenseResponse> {
-    return this._http.put<InviteLicenseResponse>(this._auth.getUrl() + '/api/v1/licenses/' + licenseId + '/invite',
-    {
-      "email": email,
-      "name": name,
-      "role": role
-    },
-    {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization': this._auth.getToken()
-      })
-    })
+  public inviteToLicense(
+    name: string,
+    email: string,
+    role: string,
+    licenseId: string,
+  ): Observable<InviteLicenseResponse> {
+    return this._http.put<InviteLicenseResponse>(
+      this._auth.getUrl() + '/api/v1/licenses/' + licenseId + '/invite',
+      {
+        email: email,
+        name: name,
+        role: role,
+      },
+      {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: this._auth.getToken(),
+        }),
+      },
+    )
   }
 
   /**
@@ -66,12 +73,11 @@ export class AcademyService implements CanActivate {
    * @param institutionId _id of the institution to get
    */
   public getInstitution(institutionId: string): Observable<GetInsitutionResponse> {
-    return this._http.get<GetInsitutionResponse>(this._auth.getUrl() + '/api/v1/institutions/' + institutionId,
-    {
+    return this._http.get<GetInsitutionResponse>(this._auth.getUrl() + '/api/v1/institutions/' + institutionId, {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        'Authorization': this._auth.getToken()
-      })
+        Authorization: this._auth.getToken(),
+      }),
     })
   }
 
@@ -80,14 +86,15 @@ export class AcademyService implements CanActivate {
    * @param event event data, follow this schema:
    */
   private saveToPipo(event: any): Observable<any> {
-    return this._http.post<any>(this._auth.getPipoUrl() + '/api/v1/events',
-      {"data": event},
+    return this._http.post<any>(
+      this._auth.getPipoUrl() + '/api/v1/events',
+      { data: event },
       {
         headers: new HttpHeaders({
           'Content-Type': 'application/json',
-          'Authorization': this._auth.getToken()
-        })
-      }
+          Authorization: this._auth.getToken(),
+        }),
+      },
     )
   }
 
@@ -96,14 +103,12 @@ export class AcademyService implements CanActivate {
    * @param group_id from the reading 'project'
    */
   public getTimeOnReading(group_id: string): Observable<any> {
-    return this._http.get<any>(this._auth.getPipoUrl() + '/api/v1/stats/groups/' + group_id,
-      {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-          'Authorization': this._auth.getToken()
-        })
-      }
-    )
+    return this._http.get<any>(this._auth.getPipoUrl() + '/api/v1/stats/groups/' + group_id, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: this._auth.getToken(),
+      }),
+    })
   }
 
   /**
@@ -112,23 +117,24 @@ export class AcademyService implements CanActivate {
    * @param pdf the pdf that is captured from the reading report
    */
   public sendReadingRecap(evalForm: any, pdf: any): Observable<any> {
-    return this._http.post<any>(this._auth.getUrl() + '/api/v1/readings/reports',
+    return this._http.post<any>(
+      this._auth.getUrl() + '/api/v1/readings/reports',
       {
-        "email": evalForm.email,
-        "evaluation": evalForm.inputText,
-        "person_sharing": evalForm.personSharing,
-        "replyTo": evalForm.personSharingEmail,
-        "person_receiving": evalForm.name,
-        "attachment_name": evalForm.pdfName,
-        "pdf": pdf,
-        "reading_name": evalForm.readingName
+        email: evalForm.email,
+        evaluation: evalForm.inputText,
+        person_sharing: evalForm.personSharing,
+        replyTo: evalForm.personSharingEmail,
+        person_receiving: evalForm.name,
+        attachment_name: evalForm.pdfName,
+        pdf: pdf,
+        reading_name: evalForm.readingName,
       },
       {
         headers: new HttpHeaders({
           'Content-Type': 'application/json',
-          'Authorization': this._auth.getToken()
-        })
-      }
+          Authorization: this._auth.getToken(),
+        }),
+      },
     )
   }
 
@@ -136,18 +142,18 @@ export class AcademyService implements CanActivate {
    * Server will return all licenses the current user can manage
    */
   public getLicenses(): Observable<any> {
-    return this._http.get<any>(this._auth.getUrl() + '/api/v1/licenses',
-    {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization': this._auth.getToken()
+    return this._http
+      .get<any>(this._auth.getUrl() + '/api/v1/licenses', {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: this._auth.getToken(),
+        }),
       })
-    })
-    .pipe(
-      map((data)=>{
-        return data.licenses
-      })
-    )
+      .pipe(
+        map(data => {
+          return data.licenses
+        }),
+      )
   }
 
   /**
@@ -170,14 +176,14 @@ export class AcademyService implements CanActivate {
       }
    */
   public pipoEvent(event: any): void {
-    this.saveToPipo(event)
-    .subscribe(
+    this.saveToPipo(event).subscribe(
       data => {
         // console.log(data.event)
       },
       error => {
         console.error(error)
-      })
+      },
+    )
   }
 
   /**
@@ -197,16 +203,16 @@ export class AcademyService implements CanActivate {
       // send the data to Pipo to log the new reading
       this.pipoEvent({
         // standard event info:
-        event_name: "reading_tick",
+        event_name: 'reading_tick',
         user_id: user._id,
-        teacher: (project.teacher._id===user._id),
+        teacher: project.teacher._id === user._id,
         hero: user.hero_status || false,
         institution_id: user.institution_ids || [],
         // event-specific info:
         reading_id: project.reading_id._id,
         group_id: project._id,
         reading_owner: project.teacher._id,
-        reading_time: 30
+        reading_time: 30,
       })
     })
   }

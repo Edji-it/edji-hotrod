@@ -6,12 +6,15 @@ import { ProjectService } from './../../_services'
 @Component({
   selector: 'hot-login-register',
   templateUrl: './login-register.component.pug',
-  styles: [`
-    .modal-footer { flex-direction: column }
-  `]
+  styles: [
+    `
+      .modal-footer {
+        flex-direction: column;
+      }
+    `,
+  ],
 })
 export class LoginRegisterModal implements OnInit {
-
   @Input()
   public loginHeader: string
 
@@ -21,14 +24,11 @@ export class LoginRegisterModal implements OnInit {
   @Output()
   public loginSuccess: EventEmitter<any> = new EventEmitter()
 
-  constructor(
-    private _project: ProjectService
-  ) { }
+  constructor(private _project: ProjectService) {}
 
   ngOnInit() {
     if (!this.loginHeader) {
       this.loginHeader = 'Please log in or register to continue.'
     }
   }
-  
 }

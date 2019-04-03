@@ -1,145 +1,144 @@
 @import '../../../sass/base/variables';
 
 .emojionearea-picker {
-    opacity: 0;
-    pointer-events: none;
-    display: block;
-    width: 100%;
-    height: 30%;
-    min-height: 200px;
-    bottom: -200px;
-    left: 0;
-    position: fixed;
-    z-index: 9000;
-    transform: translate3d(0px,0px,0px);
-    transition-timing-function: linear;
-    transition: bottom 0.3s, opacity 0.3s;
+  opacity: 0;
+  pointer-events: none;
+  display: block;
+  width: 100%;
+  height: 30%;
+  min-height: 200px;
+  bottom: -200px;
+  left: 0;
+  position: fixed;
+  z-index: 9000;
+  transform: translate3d(0px, 0px, 0px);
+  transition-timing-function: linear;
+  transition: bottom 0.3s, opacity 0.3s;
 }
 
 // Safari fix
 .emojionearea {
-    width: 100%;
-    height: 100%;
+  width: 100%;
+  height: 100%;
 }
 
 .emojionearea-button.active + .emojionearea-picker,
 .active .emojionearea-picker,
 .emojionearea-picker.active {
-    pointer-events: all !important;
-    opacity: 1 !important;
-    bottom: 0px;
+  pointer-events: all !important;
+  opacity: 1 !important;
+  bottom: 0px;
 }
 
 .emojionearea-filter {
-    &.below-scroll {
-        // Active filter/category displays in color!
-        filter: grayscale(0) !important;
+  &.below-scroll {
+    // Active filter/category displays in color!
+    filter: grayscale(0) !important;
 
-        // HACK: Any subsequent "below scroll" children are not "active"
-        & + .emojionearea-filter.below-scroll {
-            filter: grayscale(1) !important;
-        }
+    // HACK: Any subsequent "below scroll" children are not "active"
+    & + .emojionearea-filter.below-scroll {
+      filter: grayscale(1) !important;
     }
+  }
 }
 
 .emojionearea-emojis-list {
-    // Pushes emoji below filter bar, and gives space at the bottom to indicate the end of the list
-    padding: 35px 0px;
+  // Pushes emoji below filter bar, and gives space at the bottom to indicate the end of the list
+  padding: 35px 0px;
 }
 
 .keyboard-btn {
-    display: block;
-    height: 100%;
-    line-height: 30px;
-    font-family: 'Open Sans', Arial, Helvetica, sans-serif;
-    font-style: normal;
-    font-weight: bold;
-    cursor: pointer;
-    margin-right: 15px;
-    padding: 5px 15px;
+  display: block;
+  height: 100%;
+  line-height: 30px;
+  font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+  font-style: normal;
+  font-weight: bold;
+  cursor: pointer;
+  margin-right: 15px;
+  padding: 5px 15px;
 
-    &:hover, &:active {
-        background: #fff;
-    }
+  &:hover,
+  &:active {
+    background: #fff;
+  }
 }
 
-
 .emojionearea-category.max-rows-1 {
-    max-height: 36px + 12px + 36px;
-    overflow-y: hidden;
+  max-height: 36px + 12px + 36px;
+  overflow-y: hidden;
 }
 
 .emojionearea-scroll-area,
 .emojionearea .emojionearea-picker .emojionearea-scroll-area {
-    overflow-y: scroll !important; /* has to be scroll, not auto */
-    -webkit-overflow-scrolling: touch  !important;
+  overflow-y: scroll !important; /* has to be scroll, not auto */
+  -webkit-overflow-scrolling: touch !important;
 }
 
 .emojionearea .emojionearea-picker.emojionearea-picker-position-bottom {
-    top: inherit !important;
+  top: inherit !important;
 }
- 
 
 .emojionearea .emojionearea-picker .emojionearea-wrapper {
-    width: 100%;
-    height: 100%;
+  width: 100%;
+  height: 100%;
 
-    &:after {
-        display: none;
-    }
+  &:after {
+    display: none;
+  }
 }
 .emojionearea .emojionearea-picker .emojionearea-scroll-area {
-    top: 0px;
-    bottom: 0px;
-    height: 100%  !important;
-    position: relative !important;
+  top: 0px;
+  bottom: 0px;
+  height: 100% !important;
+  position: relative !important;
 }
 
 .emojionearea.emojionearea-inline {
-    height: 100%;
+  height: 100%;
 }
 
 .emojionearea .emojionearea-picker .emojionearea-scroll-area .emojibtn {
-    width: 36px;
-    height: 36px;
-    padding: 6px;
+  width: 36px;
+  height: 36px;
+  padding: 6px;
 }
 
 .emojionearea .emojionearea-picker {
-    margin-top: 0px;
-    right: 0;
+  margin-top: 0px;
+  right: 0;
 }
 
 .emojionearea .emojionearea-picker .emojionearea-filters {
-    border-radius: 0px;
-    background: rgba(255,255,255,0.9);
-    width: calc(100% - 15px); //room for scrollbar
+  border-radius: 0px;
+  background: rgba(255, 255, 255, 0.9);
+  width: calc(100% - 15px); //room for scrollbar
 }
 
 /* Mobile Optimization */
 @media (max-width: $tablet) {
-	.emojionearea-picker {
-        width: 100%;
-        left: 0;
-        min-height: 38%;
-    }
-	.emojionearea .emojionearea-picker .emojionearea-filters .emojionearea-filter {
-		height: 20px;
-		width: 22px;
-		margin: 0px 0.5px;
-	}
-    .keyboard-btn {
-        margin: 0 1px;
-        padding: 3px;
-        font-size: 10px;
-    }
-    .emojionearea .emojionearea-picker .emojionearea-scroll-area .emojibtn {
-        width: 32px;
-        height: 32px;
-        padding: 6px;
-    }
-    img.emojioneemoji.keyboard-emoji-mobile {
-        width: 32px !important;
-        height: 32px !important;
-    }
+  .emojionearea-picker {
+    width: 100%;
+    left: 0;
+    min-height: 38%;
+  }
+  .emojionearea .emojionearea-picker .emojionearea-filters .emojionearea-filter {
+    height: 20px;
+    width: 22px;
+    margin: 0px 0.5px;
+  }
+  .keyboard-btn {
+    margin: 0 1px;
+    padding: 3px;
+    font-size: 10px;
+  }
+  .emojionearea .emojionearea-picker .emojionearea-scroll-area .emojibtn {
+    width: 32px;
+    height: 32px;
+    padding: 6px;
+  }
+  img.emojioneemoji.keyboard-emoji-mobile {
+    width: 32px !important;
+    height: 32px !important;
+  }
 }

@@ -1,5 +1,5 @@
 import { EdjiComment, iCommentStats, Project } from './'
-import { UserCommentStats } from './comment';
+import { UserCommentStats } from './comment'
 
 export class CommentStats {
   public _stats: iCommentStats = {
@@ -8,7 +8,7 @@ export class CommentStats {
     comment_max: 0,
     comment_min: 0,
     comment_avg: 0,
-    userStats: []
+    userStats: [],
   }
   public teacherId: string
 
@@ -25,12 +25,12 @@ export class CommentStats {
 
   public initStats(project?: Project): iCommentStats {
     let commentStats: iCommentStats = {
-        reply_count: 0,
-        comment_count: 0,
-        comment_max: 0,
-        comment_min: 0,
-        comment_avg: 0,
-        userStats: []
+      reply_count: 0,
+      comment_count: 0,
+      comment_max: 0,
+      comment_min: 0,
+      comment_avg: 0,
+      userStats: [],
     }
 
     // if there's not a project, just return the default commentStats
@@ -43,37 +43,37 @@ export class CommentStats {
     // loop through student ids and add them to the array
     //  we have to do this because some students won't make a comment, so this is their only data on the project
     //  looping through addCommentToStats will later increment the count
-    let len = project.students && project.students.length || 0
-    for(let i = 0; i < len; i++) {
-        let student = project.students[i]
+    let len = (project.students && project.students.length) || 0
+    for (let i = 0; i < len; i++) {
+      let student = project.students[i]
 
-        commentStats.userStats.push({
-            _id: student._id,
-            comment_count: 0,
-            reply_count: 0,
-            emoji_comment_count: 0,
-            text_comment_count:  0,
-            audio_comment_count: 0,
-            fullname: student.fullname,
-            comments: []
-        })
+      commentStats.userStats.push({
+        _id: student._id,
+        comment_count: 0,
+        reply_count: 0,
+        emoji_comment_count: 0,
+        text_comment_count: 0,
+        audio_comment_count: 0,
+        fullname: student.fullname,
+        comments: [],
+      })
     }
 
     // do the same for temp student ids
-    len = project.temps && project.temps.length || 0
-    for(let i = 0; i < len; i++) {
-        let student = project.temps[i]
+    len = (project.temps && project.temps.length) || 0
+    for (let i = 0; i < len; i++) {
+      let student = project.temps[i]
 
-        commentStats.userStats.push({
-            _id: student._id,
-            comment_count: 0,
-            reply_count: 0,
-            emoji_comment_count: 0,
-            text_comment_count:  0,
-            audio_comment_count: 0,
-            fullname: student.fullname,
-            comments: []
-        })
+      commentStats.userStats.push({
+        _id: student._id,
+        comment_count: 0,
+        reply_count: 0,
+        emoji_comment_count: 0,
+        text_comment_count: 0,
+        audio_comment_count: 0,
+        fullname: student.fullname,
+        comments: [],
+      })
     }
     return commentStats
   }
@@ -86,12 +86,10 @@ export class CommentStats {
   public addUsersToStats(commentStats: iCommentStats, project: Project): iCommentStats {
     // Run through the students and add the user to the stats if they're not already in the list
     let len = project.students.length
-    for (let i=0; i<len; i++) {
+    for (let i = 0; i < len; i++) {
       let student = project.students[i]
       // see if there is a student in the stats list already
-      let studentFound = commentStats.userStats.find(el=>(
-        el._id===student._id
-      ))
+      let studentFound = commentStats.userStats.find(el => el._id === student._id)
       // add the student if they are not already in the list
       if (!studentFound) {
         commentStats.userStats.push({
@@ -99,21 +97,19 @@ export class CommentStats {
           comment_count: 0,
           reply_count: 0,
           emoji_comment_count: 0,
-          text_comment_count:  0,
+          text_comment_count: 0,
           audio_comment_count: 0,
           fullname: student.fullname,
-          comments: []
+          comments: [],
         })
       }
     }
     // Run through the temps and add the user to the stats if they're not already in the list
     len = project.temps.length
-    for (let i=0; i<len; i++) {
+    for (let i = 0; i < len; i++) {
       let student = project.temps[i]
       // see if there is a student in the stats list already
-      let studentFound = commentStats.userStats.find(el=>(
-        el._id===student._id
-      ))
+      let studentFound = commentStats.userStats.find(el => el._id === student._id)
       // add the student if they are not already in the list
       if (!studentFound) {
         commentStats.userStats.push({
@@ -121,10 +117,10 @@ export class CommentStats {
           comment_count: 0,
           reply_count: 0,
           emoji_comment_count: 0,
-          text_comment_count:  0,
+          text_comment_count: 0,
           audio_comment_count: 0,
           fullname: student.fullname,
-          comments: []
+          comments: [],
         })
       }
     }
@@ -135,13 +131,13 @@ export class CommentStats {
    * Sets the stats back to a blank object
    */
   public resetStats(): void {
-    this._stats = { 
-      comment_count: 0, 
+    this._stats = {
+      comment_count: 0,
       comment_max: 0,
       comment_min: 0,
-      comment_avg: 0, 
-      reply_count: 0, 
-      userStats: [] 
+      comment_avg: 0,
+      reply_count: 0,
+      userStats: [],
     }
   }
 
@@ -158,7 +154,7 @@ export class CommentStats {
       this._stats.reply_count += difference
     } else {
       this._stats.comment_count += difference
-    } 
+    }
 
     // find the student in the array. if they don't exist and are adding a comment, then add to the count
     //  if they don't exist and are deleting a comment, log an error... we're not sure why that's happenning...
@@ -169,10 +165,10 @@ export class CommentStats {
         fullname: comment.author,
         comment_count: isReply ? 0 : 1,
         reply_count: isReply ? 1 : 0,
-        emoji_comment_count: comment.type==='emoji' && !isReply ? 1 : 0,
-        text_comment_count: comment.type==='text' && !isReply ? 1 : 0,
-        audio_comment_count: comment.type==='audio' && !isReply ? 1 : 0,
-        comments: [comment]
+        emoji_comment_count: comment.type === 'emoji' && !isReply ? 1 : 0,
+        text_comment_count: comment.type === 'text' && !isReply ? 1 : 0,
+        audio_comment_count: comment.type === 'audio' && !isReply ? 1 : 0,
+        comments: [comment],
       })
     } else if (student) {
       if (isReply) {
@@ -197,9 +193,9 @@ export class CommentStats {
           student.comments.push(comment)
         } else {
           let userCommentCount = student.comments.length
-          for (let i=0; i<userCommentCount; i++) {
-            if (student.comments[i]._id===comment._id) {
-              student.comments.splice(i,1)
+          for (let i = 0; i < userCommentCount; i++) {
+            if (student.comments[i]._id === comment._id) {
+              student.comments.splice(i, 1)
               break
             }
           }
@@ -215,13 +211,13 @@ export class CommentStats {
     this.calculateMinMaxAvg()
   }
 
-  /** 
+  /**
    * Get a student from the _stats.userStats array by _id
    * @param _id the _id from the student that you want to find
    * @returns the object in the array that matches that id
    */
   private findStudent(_id: string): UserCommentStats {
-    return this._stats.userStats.find((student) => {
+    return this._stats.userStats.find(student => {
       return student._id == _id
     })
   }
@@ -230,13 +226,15 @@ export class CommentStats {
    * Compares two students' counts together and returns number to match API of Array.prototype.sort()
    *  used to sort the array of students
    */
-  private compareStudents(
-    stu1: UserCommentStats, stu2: UserCommentStats
-  ): number {
+  private compareStudents(stu1: UserCommentStats, stu2: UserCommentStats): number {
     let stu1Count = stu1.comment_count + stu1.reply_count
     let stu2Count = stu2.comment_count + stu2.reply_count
-    if (stu1Count < stu2Count) { return 1 }
-    if (stu1Count > stu2Count) { return -1 }
+    if (stu1Count < stu2Count) {
+      return 1
+    }
+    if (stu1Count > stu2Count) {
+      return -1
+    }
     return 0
   }
 
@@ -244,15 +242,15 @@ export class CommentStats {
    * Calculates extra stats that we need for the reading report
    */
   private calculateMinMaxAvg(): void {
-    var lowest = Number.POSITIVE_INFINITY;
-    var highest = Number.NEGATIVE_INFINITY;
+    var lowest = Number.POSITIVE_INFINITY
+    var highest = Number.NEGATIVE_INFINITY
     var tmp
     let userLength = this._stats.userStats.length
     var avgSum = 0
-    
-    for (var i=userLength-1; i>=0; i--) {
+
+    for (var i = userLength - 1; i >= 0; i--) {
       // only calculate these stats for the students
-      if (this._stats.userStats[i]._id!==this.teacherId) {
+      if (this._stats.userStats[i]._id !== this.teacherId) {
         tmp = this._stats.userStats[i].comment_count
         avgSum += this._stats.userStats[i].comment_count
         if (tmp < lowest) lowest = tmp

@@ -1,75 +1,74 @@
-
 .alert {
-    font-family: 'Open Sans', Arial, Arial, Helvetica, sans-serif;
-    font-size: 14px;
-    font-weight: 400;
+  font-family: 'Open Sans', Arial, Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
 
-    & b {
-        &:after {
-            content: ' '
-        }
+  & b {
+    &:after {
+      content: ' ';
     }
+  }
 
-    & .emojioneemoji {
-        margin-bottom: 0.3em;
-        margin-right: 0.3em;
-    }
+  & .emojioneemoji {
+    margin-bottom: 0.3em;
+    margin-right: 0.3em;
+  }
 }
 
 .alert-light {
-    border: 1px solid #eee;
+  border: 1px solid #eee;
 }
 
 .alert--fixed {
-    position: fixed;
-    top: $navHeight + 2px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 800px;
-    max-width: calc(100% - 60px);
-    box-shadow: $navShadow;
-    z-index: $zTop - 1;
+  position: fixed;
+  top: $navHeight + 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  max-width: calc(100% - 60px);
+  box-shadow: $navShadow;
+  z-index: $zTop - 1;
 }
 
 .divider--alert {
-    position: relative;
-    float: left;
-    width: 100%;
-    margin: $base-pad 0px 2*$base-pad;
-    text-align: center;
+  position: relative;
+  float: left;
+  width: 100%;
+  margin: $base-pad 0px 2 * $base-pad;
+  text-align: center;
 
-    & .alert {
-        display: inline-block;
-        min-width: 370px;
-        width: 50%;
-        background: #F4F8FF;
-        border: 1px solid #C3C3C3;
-        border-radius: 3px;
-        padding: 20px;
-        margin: 0px;
-        text-align: left;
+  & .alert {
+    display: inline-block;
+    min-width: 370px;
+    width: 50%;
+    background: #f4f8ff;
+    border: 1px solid #c3c3c3;
+    border-radius: 3px;
+    padding: 20px;
+    margin: 0px;
+    text-align: left;
 
-        &.small {
-            min-width: 200px;
-            width: auto;
-            white-space: nowrap;
-            padding: 8px 16px;
-        }
-
-        & .icon {
-            margin-right: 1em;
-        }
+    &.small {
+      min-width: 200px;
+      width: auto;
+      white-space: nowrap;
+      padding: 8px 16px;
     }
 
-    // Divider line for displaying behind
-    &:before {
-        content: ' ';
-        width: calc(100% + #{$base-pad});
-        height: 1px;
-        background-color: #C3C3C3;
-        position: absolute;
-        top: 50%;
-        left: -($base-pad/2);
-        z-index: -1;
+    & .icon {
+      margin-right: 1em;
     }
+  }
+
+  // Divider line for displaying behind
+  &:before {
+    content: ' ';
+    width: calc(100% + #{$base-pad});
+    height: 1px;
+    background-color: #c3c3c3;
+    position: absolute;
+    top: 50%;
+    left: -($base-pad/2);
+    z-index: -1;
+  }
 }

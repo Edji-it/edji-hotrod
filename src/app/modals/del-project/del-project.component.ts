@@ -8,10 +8,9 @@ import { Project } from '../../shared/datatypes'
 
 @Component({
   selector: 'hot-del-project',
-  templateUrl: 'del-project.component.html'
+  templateUrl: 'del-project.component.html',
 })
 export class DeleteProjectModal implements OnInit {
-
   /*
   29 May 2017
   by Nick Pumper
@@ -21,41 +20,38 @@ export class DeleteProjectModal implements OnInit {
   */
 
   @Output()
-  closeModal: EventEmitter<any> = new EventEmitter(); // Tell the listening page to close the darned thing.
+  closeModal: EventEmitter<any> = new EventEmitter() // Tell the listening page to close the darned thing.
   @Output()
-  deleteProject: EventEmitter<any> = new EventEmitter(); // Tell the listening page to enact the delete procedures. This is done in reading-card and reading.service
+  deleteProject: EventEmitter<any> = new EventEmitter() // Tell the listening page to enact the delete procedures. This is done in reading-card and reading.service
 
   @Input()
   // We need the project info because we want to say the project title in the prompt
-  project : Project;
+  project: Project
 
-  public showError : boolean = false;
+  public showError: boolean = false
 
-  constructor( 
-    private _projects : ProjectService,
-    private angulartics: Angulartics2,
-    private _auth: AuthService
-  ) { }
+  constructor(private _projects: ProjectService, private angulartics: Angulartics2, private _auth: AuthService) {}
 
-  ngOnInit() { }
+  ngOnInit() {}
 
   // upon recieving a deleteReading event, our del-project modal will trigger this
-  deleteThisProject(project : Project) : void {
+  deleteThisProject(project: Project): void {
     // fire an analytic event here for tracking purposes
-    this.angulartics.eventTrack.next({ 
-      action: 'createdReading_delete', 
-      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
+    this.angulartics.eventTrack.next({
+      action: 'createdReading_delete',
+      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
     })
     // Listen for an Observable from project.service.ts
-    this._projects.delete(project)
+    this._projects
+      .delete(project)
       .pipe(take(1)) // so we don't need to unsubscribe
       .subscribe(
-      data => { 
-        // Data is updated through observables on the Reading service
-      },
-      err => {
-        this.showError = true;
-    })
+        data => {
+          // Data is updated through observables on the Reading service
+        },
+        err => {
+          this.showError = true
+        },
+      )
   } // deleteProject(project : Project)
-
 } // class DeleteProjectModule

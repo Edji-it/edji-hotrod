@@ -8,28 +8,26 @@ import { User } from '../shared/datatypes'
 
 @Component({
   selector: 'hot-oauth-redirect',
-  templateUrl: './oauth-redirect.component.pug'
+  templateUrl: './oauth-redirect.component.pug',
 })
-
 export class OAuthComponent implements OnInit {
-
   public messages: {
-    noToken?: boolean,
-    noUser?: boolean,
-    error?: boolean,
-    serverError?: boolean,
-    duplicate_user?: boolean,
+    noToken?: boolean
+    noUser?: boolean
+    error?: boolean
+    serverError?: boolean
+    duplicate_user?: boolean
     linkError?: boolean
   } = {}
 
-  // Error display 
+  // Error display
   public hasError: boolean
   // Copy display
   private loginType: string
   public loginTypeDisplay: string = 'Google'
   private loginTypeMap = {
-    'google': 'Google',
-    'clever': 'Clever'
+    google: 'Google',
+    clever: 'Clever',
   }
   private licenseId = ''
   private redirectRouteUrl = '/dashboard'
@@ -44,8 +42,8 @@ export class OAuthComponent implements OnInit {
     private _router: Router,
     private _locker: LockerService,
     private route: ActivatedRoute,
-    private _messages: MessageService
-  ) { }
+    private _messages: MessageService,
+  ) {}
 
   ngOnInit() {
     this.currentUser = this._auth.getUser()
@@ -66,13 +64,13 @@ export class OAuthComponent implements OnInit {
         // error preventing user from moving forward
         this.hasError = true
       }
-      return this.messages[error] = true
+      return (this.messages[error] = true)
     }
 
     // tell them what's up if there's no token or oauth type...
     if (!encodedToken || encodedToken.length < 1) {
       this.hasError = true
-      return this.messages.noToken = true
+      return (this.messages.noToken = true)
     }
 
     // if we have a license to process
@@ -100,38 +98,45 @@ export class OAuthComponent implements OnInit {
    * Log in with OAuth
    */
   loginWithOauth() {
-    this._auth.getUserWithAuthToken(this.loginType, this.oAuthToken).pipe(take(1)).subscribe((res) => {
-      // if we are coming here from a landing page like the license accept, then the success case should take us back to that landing page again
-      if (this.licenseId !== '' && this.licenseId.length > 0) {
-        this._router.navigate(['/license/accept/' + this.licenseId])
-        return
-      }
-      this._router.navigateByUrl(this.redirectRouteUrl)
-    }, (err) => {
-      console.error(err)
-      this.hasError = true
-      // Set specific message
-      switch (err.status) {
-        case 400:
-        case 404:
-          this.messages.noUser = true
-          break
-        case 500:
-        default:
-          this.messages.serverError = true
-      }
-    })
+    this._auth
+      .getUserWithAuthToken(this.loginType, this.oAuthToken)
+      .pipe(take(1))
+      .subscribe(
+        res => {
+          // if we are coming here from a landing page like the license accept, then the success case should take us back to that landing page again
+          if (this.licenseId !== '' && this.licenseId.length > 0) {
+            this._router.navigate(['/license/accept/' + this.licenseId])
+            return
+          }
+          this._router.navigateByUrl(this.redirectRouteUrl)
+        },
+        err => {
+          console.error(err)
+          this.hasError = true
+          // Set specific message
+          switch (err.status) {
+            case 400:
+            case 404:
+              this.messages.noUser = true
+              break
+            case 500:
+            default:
+              this.messages.serverError = true
+          }
+        },
+      )
   }
 
   /**
    * Upon successful log in, link
-   * @param thing 
+   * @param thing
    */
   linkAfterLogin(user?: User) {
     let type = this.loginType
     let token = this.oAuthToken
 
-    this._auth.linkOauth(type, token)
+    this._auth
+      .linkOauth(type, token)
       .pipe(take(1))
       .subscribe(
         user => {
@@ -139,14 +144,14 @@ export class OAuthComponent implements OnInit {
           this._messages.sendToast({
             id: 'oauth-link',
             type: 'success',
-            message: 'Successfully linked your Edji account'
+            message: 'Successfully linked your Edji account',
           })
           // Account successfully linked!
           this._router.navigate(['/dashboard'])
         },
         error => {
           this.messages.linkError = true
-        }
+        },
       )
   }
 }

@@ -6,20 +6,24 @@ import { EngagementComponent } from './engagement/engagement.component'
 import { LicenseMgmtComponent } from './license-mgmt/license-mgmt.component'
 import { AcademyService } from '../_services'
 
-const routes: Routes = [ {
-  path: '',
-  component: EngagementComponent
-},{
-  path: 'engagement',
-  component: EngagementComponent
-},{
-  path: 'licenses',
-  component: LicenseMgmtComponent,
-  canActivate: [AcademyService]
-}];
+const routes: Routes = [
+  {
+    path: '',
+    component: EngagementComponent,
+  },
+  {
+    path: 'engagement',
+    component: EngagementComponent,
+  },
+  {
+    path: 'licenses',
+    component: LicenseMgmtComponent,
+    canActivate: [AcademyService],
+  },
+]
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AcademyRoutingModule { }
+export class AcademyRoutingModule {}

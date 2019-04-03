@@ -1,31 +1,31 @@
 @import '../../../sass/base/variables';
 
 .btn-clever {
-    /* Rectangle: */
-    background: #FFFFFF url('/assets/images/clever-btn--light.png');
-    background-size: 100% 100%;
-    width: 207px;
-    height: auto; // 47px
-    padding: 0px;
-    margin: 0px;
-    outline: none;
-    border-radius: 3px;
+  /* Rectangle: */
+  background: #ffffff url('/assets/images/clever-btn--light.png');
+  background-size: 100% 100%;
+  width: 207px;
+  height: auto; // 47px
+  padding: 0px;
+  margin: 0px;
+  outline: none;
+  border-radius: 3px;
 
-    &.dark {
-        background-image: url('/assets/images/clever-btn--dark.png');
-    }
+  &.dark {
+    background-image: url('/assets/images/clever-btn--dark.png');
+  }
 
-    & .icon {
-        margin-right: 13px;
-    }
+  & .icon {
+    margin-right: 13px;
+  }
 
-    & img {
-        height: auto;
-        width: auto;
-    }
+  & img {
+    height: auto;
+    width: auto;
+  }
 
-    &:hover {
-        filter: brightness(110%);
-        box-shadow: 0px 1px 6px 0 $btnSecondaryFocusColor;
-    }
+  &:hover {
+    filter: brightness(110%);
+    box-shadow: 0px 1px 6px 0 $btnSecondaryFocusColor;
+  }
 }

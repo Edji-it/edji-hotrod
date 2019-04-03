@@ -3,104 +3,863 @@ import { take } from 'rxjs/operators'
 
 // Project Dependencies
 import { AuthService, CommentService } from '../../_services'
-import { LockerService } from '../../_services/locker.service';
+import { LockerService } from '../../_services/locker.service'
 
 @Component({
   selector: 'emoji-keyboard',
   templateUrl: './emoji-keyboard.component.html',
-  styleUrls: ['./emoji-keyboard.component.scss']
+  styleUrls: ['./emoji-keyboard.component.scss'],
 })
 export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
-  private locker: LockerService;
-  
-  private _isActive = false;
-  private currentComment: string;
+  private locker: LockerService
+
+  private _isActive = false
+  private currentComment: string
 
   @Input()
   set isActive(active: boolean) {
     this.currentComment = this._comments.activeComment.data
     if (this._isActive && active == false) {
-      this.onInactivated();
+      this.onInactivated()
     } else if (!this._isActive && active == true) {
-      this.onActivated();
+      this.onActivated()
     }
-    this._isActive = active;
+    this._isActive = active
   }
-  get isActive(): boolean { return this._isActive; }
+  get isActive(): boolean {
+    return this._isActive
+  }
 
   // @Input() private currentComment: string;
 
   // We have to tell the parent the comment updated since the keyboard doesn't maintain the comment
-  @Output() commentChange = new EventEmitter();
+  @Output() commentChange = new EventEmitter()
   // The keyboard's presence is controlled by the parent BUT the keyboard can also dismiss itself
-  @Output() dismissKeyboard = new EventEmitter();
+  @Output() dismissKeyboard = new EventEmitter()
   // Handy internal element reference for controlling the emoji filter actions
-  @ViewChild('emojiScrollArea') emojiScrollArea;
+  @ViewChild('emojiScrollArea') emojiScrollArea
 
   // Variables for controlling the emoji filter buttons
-  private activeCategoryIndex: number = 0;
-  private scrollAreaOffset: number = 0;
+  private activeCategoryIndex: number = 0
+  private scrollAreaOffset: number = 0
 
-  public emojifilters = [{
-      icon: ":clock:",
-      title: "Recent",
-      emoji: []
+  public emojifilters = [
+    {
+      icon: ':clock:',
+      title: 'Recent',
+      emoji: [],
     },
     {
-      icon: ":yum:",
-      title: "Smileys & People",
-      emoji: ["grinning", "grimacing", "grin", "joy", "smiley", "smile", "sweat_smile", "laughing", "innocent", "wink", "blush", "slight_smile", "upside_down", "relaxed", "yum", "relieved", "heart_eyes", "kissing_heart", "kissing", "kissing_smiling_eyes", "kissing_closed_eyes", "stuck_out_tongue_winking_eye", "stuck_out_tongue_closed_eyes", "stuck_out_tongue", "money_mouth", "nerd", "sunglasses", "hugging", "smirk", "no_mouth", "neutral_face", "expressionless", "unamused", "rolling_eyes", "thinking", "flushed", "disappointed", "worried", "angry", "rage", "pensive", "confused", "slight_frown", "frowning2", "persevere", "confounded", "tired_face", "weary", "triumph", "open_mouth", "scream", "fearful", "cold_sweat", "hushed", "frowning", "anguished", "cry", "disappointed_relieved", "sleepy", "sweat", "sob", "dizzy_face", "astonished", "zipper_mouth", "mask", "thermometer_face", "head_bandage", "sleeping", "zzz", "poop", "smiling_imp", "imp", "japanese_ogre", "japanese_goblin", "skull", "ghost", "alien", "robot", "smiley_cat", "smile_cat", "joy_cat", "heart_eyes_cat", "smirk_cat", "kissing_cat", "scream_cat", "crying_cat_face", "pouting_cat", "raised_hands", "clap", "wave", "thumbsup", "thumbsdown", "punch", "fist", "v", "ok_hand", "raised_hand", "open_hands", "muscle", "pray", "point_up", "point_up_2", "point_down", "point_left", "point_right", "hand_splayed", "metal", "vulcan", "writing_hand", "nail_care", "lips", "tongue", "ear", "nose", "eyes", "baby", "boy", "girl", "man", "woman", "person_with_blond_hair", "older_man", "older_woman", "man_with_gua_pi_mao", "man_with_turban", "cop", "construction_worker", "guardsman", "spy", "santa", "angel", "princess", "bride_with_veil", "walking", "runner", "dancer", "dancers", "couple", "two_men_holding_hands", "two_women_holding_hands", "bow", "information_desk_person", "no_good", "ok_woman", "raising_hand", "person_with_pouting_face", "person_frowning", "haircut", "massage", "couple_with_heart", "couplekiss", "shirt", "jeans", "necktie", "dress", "bikini", "kimono", "lipstick", "kiss", "footprints", "high_heel", "sandal", "boot", "mans_shoe", "athletic_shoe", "womans_hat", "tophat", "helmet_with_cross", "mortar_board", "crown", "school_satchel", "handbag", "briefcase", "eyeglasses", "dark_sunglasses", "ring", "closed_umbrella"]
+      icon: ':yum:',
+      title: 'Smileys & People',
+      emoji: [
+        'grinning',
+        'grimacing',
+        'grin',
+        'joy',
+        'smiley',
+        'smile',
+        'sweat_smile',
+        'laughing',
+        'innocent',
+        'wink',
+        'blush',
+        'slight_smile',
+        'upside_down',
+        'relaxed',
+        'yum',
+        'relieved',
+        'heart_eyes',
+        'kissing_heart',
+        'kissing',
+        'kissing_smiling_eyes',
+        'kissing_closed_eyes',
+        'stuck_out_tongue_winking_eye',
+        'stuck_out_tongue_closed_eyes',
+        'stuck_out_tongue',
+        'money_mouth',
+        'nerd',
+        'sunglasses',
+        'hugging',
+        'smirk',
+        'no_mouth',
+        'neutral_face',
+        'expressionless',
+        'unamused',
+        'rolling_eyes',
+        'thinking',
+        'flushed',
+        'disappointed',
+        'worried',
+        'angry',
+        'rage',
+        'pensive',
+        'confused',
+        'slight_frown',
+        'frowning2',
+        'persevere',
+        'confounded',
+        'tired_face',
+        'weary',
+        'triumph',
+        'open_mouth',
+        'scream',
+        'fearful',
+        'cold_sweat',
+        'hushed',
+        'frowning',
+        'anguished',
+        'cry',
+        'disappointed_relieved',
+        'sleepy',
+        'sweat',
+        'sob',
+        'dizzy_face',
+        'astonished',
+        'zipper_mouth',
+        'mask',
+        'thermometer_face',
+        'head_bandage',
+        'sleeping',
+        'zzz',
+        'poop',
+        'smiling_imp',
+        'imp',
+        'japanese_ogre',
+        'japanese_goblin',
+        'skull',
+        'ghost',
+        'alien',
+        'robot',
+        'smiley_cat',
+        'smile_cat',
+        'joy_cat',
+        'heart_eyes_cat',
+        'smirk_cat',
+        'kissing_cat',
+        'scream_cat',
+        'crying_cat_face',
+        'pouting_cat',
+        'raised_hands',
+        'clap',
+        'wave',
+        'thumbsup',
+        'thumbsdown',
+        'punch',
+        'fist',
+        'v',
+        'ok_hand',
+        'raised_hand',
+        'open_hands',
+        'muscle',
+        'pray',
+        'point_up',
+        'point_up_2',
+        'point_down',
+        'point_left',
+        'point_right',
+        'hand_splayed',
+        'metal',
+        'vulcan',
+        'writing_hand',
+        'nail_care',
+        'lips',
+        'tongue',
+        'ear',
+        'nose',
+        'eyes',
+        'baby',
+        'boy',
+        'girl',
+        'man',
+        'woman',
+        'person_with_blond_hair',
+        'older_man',
+        'older_woman',
+        'man_with_gua_pi_mao',
+        'man_with_turban',
+        'cop',
+        'construction_worker',
+        'guardsman',
+        'spy',
+        'santa',
+        'angel',
+        'princess',
+        'bride_with_veil',
+        'walking',
+        'runner',
+        'dancer',
+        'dancers',
+        'couple',
+        'two_men_holding_hands',
+        'two_women_holding_hands',
+        'bow',
+        'information_desk_person',
+        'no_good',
+        'ok_woman',
+        'raising_hand',
+        'person_with_pouting_face',
+        'person_frowning',
+        'haircut',
+        'massage',
+        'couple_with_heart',
+        'couplekiss',
+        'shirt',
+        'jeans',
+        'necktie',
+        'dress',
+        'bikini',
+        'kimono',
+        'lipstick',
+        'kiss',
+        'footprints',
+        'high_heel',
+        'sandal',
+        'boot',
+        'mans_shoe',
+        'athletic_shoe',
+        'womans_hat',
+        'tophat',
+        'helmet_with_cross',
+        'mortar_board',
+        'crown',
+        'school_satchel',
+        'handbag',
+        'briefcase',
+        'eyeglasses',
+        'dark_sunglasses',
+        'ring',
+        'closed_umbrella',
+      ],
     },
     {
-      icon: ":hamster:",
-      title: "Animals & Nature",
-      emoji: ["dog", "cat", "mouse", "hamster", "rabbit", "bear", "panda_face", "koala", "tiger", "lion_face", "cow", "pig", "pig_nose", "frog", "octopus", "monkey_face", "see_no_evil", "hear_no_evil", "speak_no_evil", "monkey", "chicken", "penguin", "bird", "hatching_chick", "wolf", "boar", "horse", "unicorn", "bee", "bug", "snail", "beetle", "ant", "spider", "scorpion", "crab", "snake", "turtle", "tropical_fish", "fish", "blowfish", "dolphin", "whale", "crocodile", "leopard", "water_buffalo", "ox", "dromedary_camel", "camel", "elephant", "goat", "ram", "sheep", "racehorse", "rat", "rooster", "turkey", "dove", "chipmunk", "feet", "sauropod", "t_rex", "dragon", "dragon_face", "cactus", "christmas_tree", "evergreen_tree", "deciduous_tree", "palm_tree", "seedling", "herb", "shamrock", "four_leaf_clover", "bamboo", "tanabata_tree", "leaves", "fallen_leaf", "maple_leaf", "ear_of_rice", "hibiscus", "sunflower", "rose", "tulip", "blossom", "cherry_blossom", "bouquet", "mushroom", "chestnut", "jack_o_lantern", "shell", "spider_web", "earth_americas", "earth_africa", "earth_asia", "last_quarter_moon_with_face", "sun_with_face", "crescent_moon", "star", "dizzy", "sparkles", "comet", "sunny", "white_sun_small_cloud", "partly_sunny", "white_sun_cloud", "white_sun_rain_cloud", "cloud", "cloud_rain", "thunder_cloud_rain", "cloud_lightning", "zap", "fire", "boom", "snowflake", "cloud_snow", "snowman2", "snowman", "wind_blowing_face", "dash", "cloud_tornado", "fog", "umbrella2", "droplet", "sweat_drops", "ocean"]
+      icon: ':hamster:',
+      title: 'Animals & Nature',
+      emoji: [
+        'dog',
+        'cat',
+        'mouse',
+        'hamster',
+        'rabbit',
+        'bear',
+        'panda_face',
+        'koala',
+        'tiger',
+        'lion_face',
+        'cow',
+        'pig',
+        'pig_nose',
+        'frog',
+        'octopus',
+        'monkey_face',
+        'see_no_evil',
+        'hear_no_evil',
+        'speak_no_evil',
+        'monkey',
+        'chicken',
+        'penguin',
+        'bird',
+        'hatching_chick',
+        'wolf',
+        'boar',
+        'horse',
+        'unicorn',
+        'bee',
+        'bug',
+        'snail',
+        'beetle',
+        'ant',
+        'spider',
+        'scorpion',
+        'crab',
+        'snake',
+        'turtle',
+        'tropical_fish',
+        'fish',
+        'blowfish',
+        'dolphin',
+        'whale',
+        'crocodile',
+        'leopard',
+        'water_buffalo',
+        'ox',
+        'dromedary_camel',
+        'camel',
+        'elephant',
+        'goat',
+        'ram',
+        'sheep',
+        'racehorse',
+        'rat',
+        'rooster',
+        'turkey',
+        'dove',
+        'chipmunk',
+        'feet',
+        'sauropod',
+        't_rex',
+        'dragon',
+        'dragon_face',
+        'cactus',
+        'christmas_tree',
+        'evergreen_tree',
+        'deciduous_tree',
+        'palm_tree',
+        'seedling',
+        'herb',
+        'shamrock',
+        'four_leaf_clover',
+        'bamboo',
+        'tanabata_tree',
+        'leaves',
+        'fallen_leaf',
+        'maple_leaf',
+        'ear_of_rice',
+        'hibiscus',
+        'sunflower',
+        'rose',
+        'tulip',
+        'blossom',
+        'cherry_blossom',
+        'bouquet',
+        'mushroom',
+        'chestnut',
+        'jack_o_lantern',
+        'shell',
+        'spider_web',
+        'earth_americas',
+        'earth_africa',
+        'earth_asia',
+        'last_quarter_moon_with_face',
+        'sun_with_face',
+        'crescent_moon',
+        'star',
+        'dizzy',
+        'sparkles',
+        'comet',
+        'sunny',
+        'white_sun_small_cloud',
+        'partly_sunny',
+        'white_sun_cloud',
+        'white_sun_rain_cloud',
+        'cloud',
+        'cloud_rain',
+        'thunder_cloud_rain',
+        'cloud_lightning',
+        'zap',
+        'fire',
+        'boom',
+        'snowflake',
+        'cloud_snow',
+        'snowman2',
+        'snowman',
+        'wind_blowing_face',
+        'dash',
+        'cloud_tornado',
+        'fog',
+        'umbrella2',
+        'droplet',
+        'sweat_drops',
+        'ocean',
+      ],
     },
     {
-      icon: ":pizza:",
-      title: "Food & Drink",
-      emoji: ["green_apple", "apple", "pear", "tangerine", "lemon", "banana", "watermelon", "grapes", "strawberry", "melon", "cherries", "peach", "pineapple", "tomato", "eggplant", "hot_pepper", "corn", "sweet_potato", "honey_pot", "bread", "cheese", "poultry_leg", "meat_on_bone", "fried_shrimp", "egg", "hamburger", "fries", "hotdog", "pizza", "spaghetti", "taco", "burrito", "ramen", "stew", "fish_cake", "sushi", "bento", "curry", "rice_ball", "rice", "rice_cracker", "oden", "dango", "shaved_ice", "ice_cream", "icecream", "cake", "birthday", "custard", "candy", "lollipop", "chocolate_bar", "popcorn", "doughnut", "cookie", "sake", "tea", "coffee", "baby_bottle", "fork_and_knife", "fork_knife_plate"]
-    }, {
-      icon: ":basketball:",
-      title: "Activity",
-      emoji: ["soccer", "basketball", "football", "baseball", "tennis", "volleyball", "rugby_football", "8ball", "golf", "golfer", "ping_pong", "badminton", "hockey", "field_hockey", "cricket", "ski", "skier", "snowboarder", "ice_skate", "bow_and_arrow", "fishing_pole_and_fish", "rowboat", "swimmer", "surfer", "bath", "basketball_player", "lifter", "bicyclist", "mountain_bicyclist", "horse_racing", "levitate", "trophy", "running_shirt_with_sash", "medal", "military_medal", "reminder_ribbon", "rosette", "ticket", "tickets", "performing_arts", "art", "circus_tent", "microphone", "headphones", "musical_score", "musical_keyboard", "saxophone", "trumpet", "guitar", "violin", "clapper", "video_game", "space_invader", "dart", "game_die", "slot_machine", "bowling"]
+      icon: ':pizza:',
+      title: 'Food & Drink',
+      emoji: [
+        'green_apple',
+        'apple',
+        'pear',
+        'tangerine',
+        'lemon',
+        'banana',
+        'watermelon',
+        'grapes',
+        'strawberry',
+        'melon',
+        'cherries',
+        'peach',
+        'pineapple',
+        'tomato',
+        'eggplant',
+        'hot_pepper',
+        'corn',
+        'sweet_potato',
+        'honey_pot',
+        'bread',
+        'cheese',
+        'poultry_leg',
+        'meat_on_bone',
+        'fried_shrimp',
+        'egg',
+        'hamburger',
+        'fries',
+        'hotdog',
+        'pizza',
+        'spaghetti',
+        'taco',
+        'burrito',
+        'ramen',
+        'stew',
+        'fish_cake',
+        'sushi',
+        'bento',
+        'curry',
+        'rice_ball',
+        'rice',
+        'rice_cracker',
+        'oden',
+        'dango',
+        'shaved_ice',
+        'ice_cream',
+        'icecream',
+        'cake',
+        'birthday',
+        'custard',
+        'candy',
+        'lollipop',
+        'chocolate_bar',
+        'popcorn',
+        'doughnut',
+        'cookie',
+        'sake',
+        'tea',
+        'coffee',
+        'baby_bottle',
+        'fork_and_knife',
+        'fork_knife_plate',
+      ],
     },
     {
-      icon: ":rocket:",
-      title: "Travel & Places",
-      emoji: ["red_car", "taxi", "blue_car", "bus", "trolleybus", "race_car", "police_car", "ambulance", "fire_engine", "minibus", "truck", "articulated_lorry", "tractor", "motorcycle", "bike", "rotating_light", "oncoming_police_car", "oncoming_bus", "oncoming_automobile", "oncoming_taxi", "aerial_tramway", "mountain_cableway", "suspension_railway", "railway_car", "train", "monorail", "bullettrain_side", "bullettrain_front", "light_rail", "mountain_railway", "steam_locomotive", "train2", "metro", "tram", "station", "helicopter", "airplane_small", "airplane", "airplane_departure", "airplane_arriving", "sailboat", "motorboat", "speedboat", "ferry", "cruise_ship", "rocket", "satellite_orbital", "seat", "anchor", "construction", "fuelpump", "busstop", "vertical_traffic_light", "traffic_light", "checkered_flag", "ship", "ferris_wheel", "roller_coaster", "carousel_horse", "construction_site", "foggy", "tokyo_tower", "factory", "fountain", "rice_scene", "mountain", "mountain_snow", "mount_fuji", "volcano", "japan", "camping", "tent", "park", "motorway", "railway_track", "sunrise", "sunrise_over_mountains", "desert", "beach", "island", "city_sunset", "city_dusk", "cityscape", "night_with_stars", "bridge_at_night", "milky_way", "stars", "sparkler", "fireworks", "rainbow", "homes", "european_castle", "japanese_castle", "stadium", "statue_of_liberty", "house", "house_with_garden", "house_abandoned", "office", "department_store", "post_office", "european_post_office", "hospital", "bank", "hotel", "convenience_store", "school", "love_hotel", "wedding", "classical_building", "church", "mosque", "synagogue", "kaaba", "shinto_shrine"]
+      icon: ':basketball:',
+      title: 'Activity',
+      emoji: [
+        'soccer',
+        'basketball',
+        'football',
+        'baseball',
+        'tennis',
+        'volleyball',
+        'rugby_football',
+        '8ball',
+        'golf',
+        'golfer',
+        'ping_pong',
+        'badminton',
+        'hockey',
+        'field_hockey',
+        'cricket',
+        'ski',
+        'skier',
+        'snowboarder',
+        'ice_skate',
+        'bow_and_arrow',
+        'fishing_pole_and_fish',
+        'rowboat',
+        'swimmer',
+        'surfer',
+        'bath',
+        'basketball_player',
+        'lifter',
+        'bicyclist',
+        'mountain_bicyclist',
+        'horse_racing',
+        'levitate',
+        'trophy',
+        'running_shirt_with_sash',
+        'medal',
+        'military_medal',
+        'reminder_ribbon',
+        'rosette',
+        'ticket',
+        'tickets',
+        'performing_arts',
+        'art',
+        'circus_tent',
+        'microphone',
+        'headphones',
+        'musical_score',
+        'musical_keyboard',
+        'saxophone',
+        'trumpet',
+        'guitar',
+        'violin',
+        'clapper',
+        'video_game',
+        'space_invader',
+        'dart',
+        'game_die',
+        'slot_machine',
+        'bowling',
+      ],
     },
     {
-      icon: ":bulb:",
-      title: "Objects",
-      emoji: ["watch", "iphone", "calling", "computer", "keyboard", "desktop", "printer", "mouse_three_button", "trackball", "joystick", "compression", "minidisc", "floppy_disk", "cd", "dvd", "vhs", "camera", "camera_with_flash", "video_camera", "movie_camera", "projector", "film_frames", "telephone_receiver", "telephone", "pager", "fax", "tv", "radio", "microphone2", "level_slider", "control_knobs", "stopwatch", "timer", "alarm_clock", "clock", "hourglass_flowing_sand", "hourglass", "satellite", "battery", "electric_plug", "bulb", "flashlight", "candle", "wastebasket", "oil", "money_with_wings", "dollar", "yen", "euro", "pound", "moneybag", "credit_card", "gem", "scales", "wrench", "hammer", "hammer_pick", "tools", "pick", "nut_and_bolt", "gear", "chains", "gun", "bomb", "knife", "dagger", "crossed_swords", "shield", "smoking", "skull_crossbones", "coffin", "urn", "amphora", "crystal_ball", "prayer_beads", "barber", "alembic", "telescope", "microscope", "hole", "pill", "syringe", "thermometer", "label", "bookmark", "toilet", "shower", "bathtub", "key", "key2", "couch", "sleeping_accommodation", "bed", "door", "bellhop", "frame_photo", "map", "beach_umbrella", "moyai", "shopping_bags", "balloon", "flags", "ribbon", "gift", "confetti_ball", "tada", "dolls", "wind_chime", "crossed_flags", "izakaya_lantern", "envelope", "envelope_with_arrow", "incoming_envelope", "e-mail", "love_letter", "postbox", "mailbox_closed", "mailbox", "mailbox_with_mail", "mailbox_with_no_mail", "package", "postal_horn", "inbox_tray", "outbox_tray", "scroll", "page_with_curl", "bookmark_tabs", "bar_chart", "chart_with_upwards_trend", "chart_with_downwards_trend", "page_facing_up", "date", "calendar", "calendar_spiral", "card_index", "card_box", "ballot_box", "file_cabinet", "clipboard", "notepad_spiral", "file_folder", "open_file_folder", "dividers", "newspaper2", "newspaper", "notebook", "closed_book", "notebook_with_decorative_cover", "ledger", "books", "book", "link", "paperclip", "paperclips", "scissors", "triangular_ruler", "straight_ruler", "pushpin", "round_pushpin", "triangular_flag_on_post", "flag_white", "flag_black", "closed_lock_with_key", "lock", "unlock", "lock_with_ink_pen", "pen_ballpoint", "pen_fountain", "black_nib", "pencil", "pencil2", "crayon", "paintbrush", "mag", "mag_right"]
+      icon: ':rocket:',
+      title: 'Travel & Places',
+      emoji: [
+        'red_car',
+        'taxi',
+        'blue_car',
+        'bus',
+        'trolleybus',
+        'race_car',
+        'police_car',
+        'ambulance',
+        'fire_engine',
+        'minibus',
+        'truck',
+        'articulated_lorry',
+        'tractor',
+        'motorcycle',
+        'bike',
+        'rotating_light',
+        'oncoming_police_car',
+        'oncoming_bus',
+        'oncoming_automobile',
+        'oncoming_taxi',
+        'aerial_tramway',
+        'mountain_cableway',
+        'suspension_railway',
+        'railway_car',
+        'train',
+        'monorail',
+        'bullettrain_side',
+        'bullettrain_front',
+        'light_rail',
+        'mountain_railway',
+        'steam_locomotive',
+        'train2',
+        'metro',
+        'tram',
+        'station',
+        'helicopter',
+        'airplane_small',
+        'airplane',
+        'airplane_departure',
+        'airplane_arriving',
+        'sailboat',
+        'motorboat',
+        'speedboat',
+        'ferry',
+        'cruise_ship',
+        'rocket',
+        'satellite_orbital',
+        'seat',
+        'anchor',
+        'construction',
+        'fuelpump',
+        'busstop',
+        'vertical_traffic_light',
+        'traffic_light',
+        'checkered_flag',
+        'ship',
+        'ferris_wheel',
+        'roller_coaster',
+        'carousel_horse',
+        'construction_site',
+        'foggy',
+        'tokyo_tower',
+        'factory',
+        'fountain',
+        'rice_scene',
+        'mountain',
+        'mountain_snow',
+        'mount_fuji',
+        'volcano',
+        'japan',
+        'camping',
+        'tent',
+        'park',
+        'motorway',
+        'railway_track',
+        'sunrise',
+        'sunrise_over_mountains',
+        'desert',
+        'beach',
+        'island',
+        'city_sunset',
+        'city_dusk',
+        'cityscape',
+        'night_with_stars',
+        'bridge_at_night',
+        'milky_way',
+        'stars',
+        'sparkler',
+        'fireworks',
+        'rainbow',
+        'homes',
+        'european_castle',
+        'japanese_castle',
+        'stadium',
+        'statue_of_liberty',
+        'house',
+        'house_with_garden',
+        'house_abandoned',
+        'office',
+        'department_store',
+        'post_office',
+        'european_post_office',
+        'hospital',
+        'bank',
+        'hotel',
+        'convenience_store',
+        'school',
+        'love_hotel',
+        'wedding',
+        'classical_building',
+        'church',
+        'mosque',
+        'synagogue',
+        'kaaba',
+        'shinto_shrine',
+      ],
     },
     {
-      icon: ":heartpulse:",
-      title: "Symbols",
-      emoji: ["heart", "broken_heart", "cupid", "peace", "cross", "star_and_crescent", "om_symbol", "wheel_of_dharma", "star_of_david", "six_pointed_star", "menorah", "yin_yang", "orthodox_cross", "place_of_worship", "no_entry_sign", "no_entry", "exclamation", "question", "interrobang", "bangbang", "100"]
+      icon: ':bulb:',
+      title: 'Objects',
+      emoji: [
+        'watch',
+        'iphone',
+        'calling',
+        'computer',
+        'keyboard',
+        'desktop',
+        'printer',
+        'mouse_three_button',
+        'trackball',
+        'joystick',
+        'compression',
+        'minidisc',
+        'floppy_disk',
+        'cd',
+        'dvd',
+        'vhs',
+        'camera',
+        'camera_with_flash',
+        'video_camera',
+        'movie_camera',
+        'projector',
+        'film_frames',
+        'telephone_receiver',
+        'telephone',
+        'pager',
+        'fax',
+        'tv',
+        'radio',
+        'microphone2',
+        'level_slider',
+        'control_knobs',
+        'stopwatch',
+        'timer',
+        'alarm_clock',
+        'clock',
+        'hourglass_flowing_sand',
+        'hourglass',
+        'satellite',
+        'battery',
+        'electric_plug',
+        'bulb',
+        'flashlight',
+        'candle',
+        'wastebasket',
+        'oil',
+        'money_with_wings',
+        'dollar',
+        'yen',
+        'euro',
+        'pound',
+        'moneybag',
+        'credit_card',
+        'gem',
+        'scales',
+        'wrench',
+        'hammer',
+        'hammer_pick',
+        'tools',
+        'pick',
+        'nut_and_bolt',
+        'gear',
+        'chains',
+        'gun',
+        'bomb',
+        'knife',
+        'dagger',
+        'crossed_swords',
+        'shield',
+        'smoking',
+        'skull_crossbones',
+        'coffin',
+        'urn',
+        'amphora',
+        'crystal_ball',
+        'prayer_beads',
+        'barber',
+        'alembic',
+        'telescope',
+        'microscope',
+        'hole',
+        'pill',
+        'syringe',
+        'thermometer',
+        'label',
+        'bookmark',
+        'toilet',
+        'shower',
+        'bathtub',
+        'key',
+        'key2',
+        'couch',
+        'sleeping_accommodation',
+        'bed',
+        'door',
+        'bellhop',
+        'frame_photo',
+        'map',
+        'beach_umbrella',
+        'moyai',
+        'shopping_bags',
+        'balloon',
+        'flags',
+        'ribbon',
+        'gift',
+        'confetti_ball',
+        'tada',
+        'dolls',
+        'wind_chime',
+        'crossed_flags',
+        'izakaya_lantern',
+        'envelope',
+        'envelope_with_arrow',
+        'incoming_envelope',
+        'e-mail',
+        'love_letter',
+        'postbox',
+        'mailbox_closed',
+        'mailbox',
+        'mailbox_with_mail',
+        'mailbox_with_no_mail',
+        'package',
+        'postal_horn',
+        'inbox_tray',
+        'outbox_tray',
+        'scroll',
+        'page_with_curl',
+        'bookmark_tabs',
+        'bar_chart',
+        'chart_with_upwards_trend',
+        'chart_with_downwards_trend',
+        'page_facing_up',
+        'date',
+        'calendar',
+        'calendar_spiral',
+        'card_index',
+        'card_box',
+        'ballot_box',
+        'file_cabinet',
+        'clipboard',
+        'notepad_spiral',
+        'file_folder',
+        'open_file_folder',
+        'dividers',
+        'newspaper2',
+        'newspaper',
+        'notebook',
+        'closed_book',
+        'notebook_with_decorative_cover',
+        'ledger',
+        'books',
+        'book',
+        'link',
+        'paperclip',
+        'paperclips',
+        'scissors',
+        'triangular_ruler',
+        'straight_ruler',
+        'pushpin',
+        'round_pushpin',
+        'triangular_flag_on_post',
+        'flag_white',
+        'flag_black',
+        'closed_lock_with_key',
+        'lock',
+        'unlock',
+        'lock_with_ink_pen',
+        'pen_ballpoint',
+        'pen_fountain',
+        'black_nib',
+        'pencil',
+        'pencil2',
+        'crayon',
+        'paintbrush',
+        'mag',
+        'mag_right',
+      ],
     },
     {
-      icon: ":flag_eu:",
-      title: "Flags",
-      emoji: ["flag_eu", "flag_ag", "flag_au", "flag_br", "flag_ca", "flag_cn", "flag_fr", "flag_de", "flag_in", "flag_id", "flag_it", "flag_jp", "flag_mx", "flag_ru", "flag_sa", "flag_za", "flag_kr", "flag_tr", "flag_gb", "flag_us"]
-    }
-  ];
+      icon: ':heartpulse:',
+      title: 'Symbols',
+      emoji: [
+        'heart',
+        'broken_heart',
+        'cupid',
+        'peace',
+        'cross',
+        'star_and_crescent',
+        'om_symbol',
+        'wheel_of_dharma',
+        'star_of_david',
+        'six_pointed_star',
+        'menorah',
+        'yin_yang',
+        'orthodox_cross',
+        'place_of_worship',
+        'no_entry_sign',
+        'no_entry',
+        'exclamation',
+        'question',
+        'interrobang',
+        'bangbang',
+        '100',
+      ],
+    },
+    {
+      icon: ':flag_eu:',
+      title: 'Flags',
+      emoji: [
+        'flag_eu',
+        'flag_ag',
+        'flag_au',
+        'flag_br',
+        'flag_ca',
+        'flag_cn',
+        'flag_fr',
+        'flag_de',
+        'flag_in',
+        'flag_id',
+        'flag_it',
+        'flag_jp',
+        'flag_mx',
+        'flag_ru',
+        'flag_sa',
+        'flag_za',
+        'flag_kr',
+        'flag_tr',
+        'flag_gb',
+        'flag_us',
+      ],
+    },
+  ]
 
-  constructor(
-        private _locker: LockerService,
-        private _auth: AuthService,
-        private _comments: CommentService
-    ) {}
+  constructor(private _locker: LockerService, private _auth: AuthService, private _comments: CommentService) {}
 
   ngOnInit() {
-      if (this._auth.getUser().prefs && this._auth.getUser().prefs.recentEmoji) {
-        this.emojifilters[0].emoji = this._auth.getUser().prefs.recentEmoji;
-      }
+    if (this._auth.getUser().prefs && this._auth.getUser().prefs.recentEmoji) {
+      this.emojifilters[0].emoji = this._auth.getUser().prefs.recentEmoji
+    }
   }
 
   ngAfterViewInit() {
-    this.updateScrollValues();
+    this.updateScrollValues()
   }
 
   /**
@@ -108,22 +867,21 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
    */
   onInactivated() {
     // Update user object with recent emoji
-    let user = this._auth.getUser();
+    let user = this._auth.getUser()
     if (!user.prefs) {
-        user.prefs = {};
+      user.prefs = {}
     }
-    user.prefs.recentEmoji = this.emojifilters[0].emoji;
-    this._auth.updateUser(user)
-        .pipe(take(1))
-        .subscribe(
-          (data) => {
-            let user = data.user
-            // UpdateUser does merging magic, bring back the merges!
-            if (user && user.prefs && user.prefs.recentEmoji) {
-              this.emojifilters[0].emoji = user.prefs.recentEmoji
-            }
-          }
-        )
+    user.prefs.recentEmoji = this.emojifilters[0].emoji
+    this._auth
+      .updateUser(user)
+      .pipe(take(1))
+      .subscribe(data => {
+        let user = data.user
+        // UpdateUser does merging magic, bring back the merges!
+        if (user && user.prefs && user.prefs.recentEmoji) {
+          this.emojifilters[0].emoji = user.prefs.recentEmoji
+        }
+      })
     document.querySelector('.main').className = 'main'
   }
 
@@ -133,12 +891,12 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
 
   // When clicking a category, jump to that section
   goToCategory(index): void {
-    let scrollOffset = this.emojiScrollArea.nativeElement.querySelector('#category' + index).offsetTop;
-    this.emojiScrollArea.nativeElement.scrollTop = scrollOffset;
+    let scrollOffset = this.emojiScrollArea.nativeElement.querySelector('#category' + index).offsetTop
+    this.emojiScrollArea.nativeElement.scrollTop = scrollOffset
   }
 
   scrollUpdate(event) {
-    this.scrollAreaOffset = event.target.scrollTop;
+    this.scrollAreaOffset = event.target.scrollTop
   }
 
   // Runs on view init and onresize, to keep scroll event light
@@ -147,44 +905,44 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
     if (this._comments.keyboardActive) {
       let filtersLength = this.emojifilters.length
       for (let i = 0; i < filtersLength; i++) {
-        this.emojifilters[i]['scrollY'] = this.emojiScrollArea.nativeElement.querySelector('#category' + i).offsetTop;
+        this.emojifilters[i]['scrollY'] = this.emojiScrollArea.nativeElement.querySelector('#category' + i).offsetTop
       }
     }
   }
 
   addEmoji(emoji: string): void {
-    this.currentComment += emoji;
-    this.commentChange.emit(this.currentComment);
+    this.currentComment += emoji
+    this.commentChange.emit(this.currentComment)
 
-    let emojiLabel = emoji.replace(/:/g, '');
-    let index = this.emojifilters[0].emoji.indexOf(emojiLabel);
-    // Update recent emojis 
+    let emojiLabel = emoji.replace(/:/g, '')
+    let index = this.emojifilters[0].emoji.indexOf(emojiLabel)
+    // Update recent emojis
     if (index < 0) {
-      this.emojifilters[0].emoji.unshift(emojiLabel);
+      this.emojifilters[0].emoji.unshift(emojiLabel)
       if (this.emojifilters[0].emoji.length > 20) {
-        this.emojifilters[0].emoji.pop();
+        this.emojifilters[0].emoji.pop()
       }
     } else {
-      this.emojifilters[0].emoji.splice(index, 1);
-      this.emojifilters[0].emoji.unshift(emojiLabel);
+      this.emojifilters[0].emoji.splice(index, 1)
+      this.emojifilters[0].emoji.unshift(emojiLabel)
     }
     // Save to localstorage (which is then saved to the user object)
-    this._locker.set('recentEmojis', this.emojifilters[0].emoji);
+    this._locker.set('recentEmojis', this.emojifilters[0].emoji)
   }
 
   // Empty the currentComment
   clearEmoji(): void {
-    this.currentComment = '';
-    this.commentChange.emit(this.currentComment);
+    this.currentComment = ''
+    this.commentChange.emit(this.currentComment)
   }
 
   // Removes last emoji from currentComment
   deleteLastEmoji(): void {
-    this.currentComment = this.currentComment.replace(/:[a-zA-Z0-9\-\_]*:$/, '');
-    this.commentChange.emit(this.currentComment);
+    this.currentComment = this.currentComment.replace(/:[a-zA-Z0-9\-\_]*:$/, '')
+    this.commentChange.emit(this.currentComment)
   }
 
   makeInactive(): void {
-    this.dismissKeyboard.emit();
+    this.dismissKeyboard.emit()
   }
 }

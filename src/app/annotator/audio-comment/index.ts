@@ -1,1 +1,1 @@
-export * from './audio-comment.component';
+export * from './audio-comment.component'

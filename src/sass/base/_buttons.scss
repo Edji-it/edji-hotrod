@@ -1,6 +1,9 @@
-@import "variables";
+@import 'variables';
 
-button, .button, .btn { //, [class*='btn']
+button,
+.button,
+.btn {
+  //, [class*='btn']
   appearance: none;
   background-color: $btnSecondaryBg;
   border: 0;
@@ -25,39 +28,43 @@ button, .button, .btn { //, [class*='btn']
 
   &.btn-lg {
     line-height: 1.25em;
-    font-size: 1.25*$base-font-size;
+    font-size: 1.25 * $base-font-size;
     padding-left: 2em;
     padding-right: 2em;
   }
 
   &.btn-sm {
     padding: 0.25rem 0.5rem;
-    font-size: .75*$base-font-size;
+    font-size: 0.75 * $base-font-size;
   }
 
-  &:hover, &:active, &:focus {
+  &:hover,
+  &:active,
+  &:focus {
     background: darken($btnSecondaryBg, 10%);
     color: $btnSecondaryColor;
   }
 
-  &:disabled, &[disabled] {
+  &:disabled,
+  &[disabled] {
     pointer-events: none;
     /* Rectangle Copy 14: */
     background-color: #eaeaea !important;
-    background-image: radial-gradient(50% -88%, #F4F4F4 95%, #FFFFFF 100%) !important;
-    border-color: rgba(127,127,127,0.2) !important;
-    box-shadow: 0px 1px 0 0 #FFFFFF;
+    background-image: radial-gradient(50% -88%, #f4f4f4 95%, #ffffff 100%) !important;
+    border-color: rgba(127, 127, 127, 0.2) !important;
+    box-shadow: 0px 1px 0 0 #ffffff;
     border-radius: 1px;
     // cursor: not-allowed;
-    color: #D1D1D1 !important;
+    color: #d1d1d1 !important;
 
     &:hover {
-      transform: translate3d(0,0,0);
+      transform: translate3d(0, 0, 0);
       // background-color: $btnBg;
     }
   }
 
-  &:focus, &:active {
+  &:focus,
+  &:active {
     outline: none;
   }
 
@@ -97,11 +104,11 @@ button, .button, .btn { //, [class*='btn']
   &.disabled--not-hero {
     pointer-events: none;
     opacity: 0.6;
-    
+
     & .icon {
       filter: grayscale(100%);
     }
-    
+
     &:after {
       display: inline-block;
       text-align: center;
@@ -126,7 +133,8 @@ button, .button, .btn { //, [class*='btn']
   }
 }
 
-.button, button {
+.button,
+button {
   &.square {
     width: 1em;
     text-align: center;
@@ -148,13 +156,15 @@ button, .button, .btn { //, [class*='btn']
       opacity: 0.8;
     }
 
-    &:hover, &:active, &:focus {
+    &:hover,
+    &:active,
+    &:focus {
       // background: darken($gray, 5%);
       & img {
         opacity: 1;
       }
     }
-  } 
+  }
 
   & img {
     height: 1.2em;
@@ -167,7 +177,8 @@ button, .button, .btn { //, [class*='btn']
   margin: 3px;
 }
 
-.button__row, .btn-row {
+.button__row,
+.btn-row {
   width: 100%;
   text-align: center;
   // padding: $base-pad/2 0;
@@ -176,20 +187,23 @@ button, .button, .btn { //, [class*='btn']
     margin-top: 80px;
   }
 
-  & .button, & .btn {
+  & .button,
+  & .btn {
     margin: 0px 5px;
   }
 
   &.right {
     text-align: right;
-    & .button, & .btn {
+    & .button,
+    & .btn {
       margin: 0px 0px 0px 5px;
     }
   }
 
   &.left {
     text-align: left;
-    & .button, & .btn {
+    & .button,
+    & .btn {
       margin: 0px 5px 0px 0px;
     }
   }
@@ -199,7 +213,7 @@ button, .button, .btn { //, [class*='btn']
   // Based on Bootstrap btn-group
   @extend .btn-group;
   width: 100%;
-  
+
   & .btn {
     width: 50%;
     box-shadow: -3px 3px 0px 0px darken($btnSecondaryBg, 10%);
@@ -207,17 +221,16 @@ button, .button, .btn { //, [class*='btn']
     z-index: $zMid + 500;
 
     &:hover {
-      
     }
   }
-  
+
   & > .btn.active {
     box-shadow: none;
-    background: lighten($purple,10%);
+    background: lighten($purple, 10%);
     transform: translate3d(-3px, 3px, 0);
     z-index: $zMid;
   }
-} 
+}
 
 .btn.btn-primary {
   background-color: $btnPrimaryBg;
@@ -225,33 +238,39 @@ button, .button, .btn { //, [class*='btn']
   border: $btnBorderWidth solid $btnPrimaryColor;
   border-radius: $btnBorderRadius;
   color: $btnPrimaryColor;
-  box-shadow: 0 4px 2px -2px rgba($btnPrimaryColor,0.5);
+  box-shadow: 0 4px 2px -2px rgba($btnPrimaryColor, 0.5);
 
   &.loading {
     background: darken($btnPrimaryBg, 20%);
   }
 
-  &:hover, &:active, &:focus {
-    box-shadow: 0 0px 15px 0px rgba($btnPrimaryFocusColor,0.5);
+  &:hover,
+  &:active,
+  &:focus {
+    box-shadow: 0 0px 15px 0px rgba($btnPrimaryFocusColor, 0.5);
     background: $btnPrimaryFocusColor;
     color: #fff;
   }
 }
 
-.btn.btn-action, .btn.btn-success  {
+.btn.btn-action,
+.btn.btn-success {
   background-color: $btnActionBg;
   border: $btnBorderWidth solid $btnActionColor;
   border-radius: $btnBorderRadius;
   color: $btnActionColor;
-  box-shadow: 0 4px 2px -2px rgba($btnActionColor,0.5);
+  box-shadow: 0 4px 2px -2px rgba($btnActionColor, 0.5);
 
   &.loading {
     background: #cdcdcd;
   }
 
-  &:hover, &:active, &:focus, &.active {
-    box-shadow: 0 0px 15px 0px rgba($btnActionFocusColor,0.5);
-    background: $btnActionFocusColor; 
+  &:hover,
+  &:active,
+  &:focus,
+  &.active {
+    box-shadow: 0 0px 15px 0px rgba($btnActionFocusColor, 0.5);
+    background: $btnActionFocusColor;
     color: #fff;
   }
 }
@@ -262,7 +281,7 @@ button, .button, .btn { //, [class*='btn']
   border: $btnBorderWidth solid $btnHeroColor;
   border-radius: $btnBorderRadius;
   color: #fff;
-  box-shadow: 0 4px 2px -2px rgba($btnHeroColor,0.5);
+  box-shadow: 0 4px 2px -2px rgba($btnHeroColor, 0.5);
 
   &:not([href]):not([tabindex]) {
     color: #fff;
@@ -277,36 +296,42 @@ button, .button, .btn { //, [class*='btn']
     color: $btnHeroColor;
   }
 
-  &:hover, &:active, &:focus {
-    background: $btnHeroFocusColor; 
+  &:hover,
+  &:active,
+  &:focus {
+    background: $btnHeroFocusColor;
     border-color: $btnHeroColor;
     color: #fff;
-    box-shadow: 0 0px 15px 0px rgba($btnHeroFocusColor,0.5);
+    box-shadow: 0 0px 15px 0px rgba($btnHeroFocusColor, 0.5);
   }
 }
 
-.btn-secondary { 
+.btn-secondary {
   color: $btnSecondaryColor;
   border: $btnBorderWidth solid $btnSecondaryColor;
   background-color: $btnSecondaryBg;
   border-radius: $btnBorderRadius;
-  box-shadow: 0 4px 2px -2px rgba($btnSecondaryColor,0.5);
+  box-shadow: 0 4px 2px -2px rgba($btnSecondaryColor, 0.5);
 
   &.loading {
     background: darken($btnSecondaryBg, 20%);
   }
 
-  &:hover, &:active, &:focus {
+  &:hover,
+  &:active,
+  &:focus {
     background: $btnSecondaryFocusColor;
     border-color: $btnSecondaryColor;
     color: #fff;
-    box-shadow: 0 0px 15px 0px rgba($btnSecondaryFocusColor,0.5);
+    box-shadow: 0 0px 15px 0px rgba($btnSecondaryFocusColor, 0.5);
   }
 
   &:disabled {
     background: $btnSecondaryBg !important;
 
-    &:hover, &:active, &:focus {
+    &:hover,
+    &:active,
+    &:focus {
       background: $btnSecondaryBg;
     }
   }
@@ -314,90 +339,98 @@ button, .button, .btn { //, [class*='btn']
 
 // Hover and underline style similar to a link
 // Should be used for external linking
-.btn-link, .btn.btn-link {
-    background-color: transparent !important;
-    padding: 4px 0px !important;
-    margin: 0px 15px !important;
+.btn-link,
+.btn.btn-link {
+  background-color: transparent !important;
+  padding: 4px 0px !important;
+  margin: 0px 15px !important;
+  text-decoration: none;
+  color: #333;
+  border-bottom: 1px solid transparent;
+
+  &:hover,
+  &:active,
+  &:focus {
     text-decoration: none;
-    color: #333;
-    border-bottom: 1px solid transparent;
+    border-bottom: 1px solid #333;
+    background-color: transparent !important;
+    outline: none !important;
+  }
 
-    &:hover, &:active, &:focus {
-      text-decoration: none;
-      border-bottom: 1px solid #333;
-      background-color: transparent !important;
-      outline: none !important;
-    }
-
-    &.active {
-      color: $btnPrimaryColor;
-      border-bottom: 1px solid $btnPrimaryColor;
-    }
+  &.active {
+    color: $btnPrimaryColor;
+    border-bottom: 1px solid $btnPrimaryColor;
+  }
 }
 
-.btn-filter, .btn.btn-filter {
-    background-color: transparent;
-    padding: 6px;
-    margin: 0px 3px 10px 0px;
-    text-decoration: none;
-    color: #333;
-    font-weight: 400;
+.btn-filter,
+.btn.btn-filter {
+  background-color: transparent;
+  padding: 6px;
+  margin: 0px 3px 10px 0px;
+  text-decoration: none;
+  color: #333;
+  font-weight: 400;
+  border: 0px solid transparent;
+  border-radius: 4px;
+
+  & img.emojioneemoji {
+    margin-top: -2px;
+    margin-right: 4px;
+  }
+
+  &:hover,
+  &:active,
+  &:focus {
     border: 0px solid transparent;
-    border-radius: 4px;
+    background-color: #fafafa !important;
+    color: #2399db;
+  }
 
-    & img.emojioneemoji {
-      margin-top: -2px;
-      margin-right: 4px;
-    }
-
-    &:hover, &:active, &:focus {
-      border: 0px solid transparent;
-      background-color: #fafafa !important;
-      color: #2399DB;
-    }
-
-    &.active {
-      color: $btnPrimaryColor;
-      border: 0px solid transparent;
-      background-color: #EBF9FF !important;
-      color: #2399DB;
-    }
+  &.active {
+    color: $btnPrimaryColor;
+    border: 0px solid transparent;
+    background-color: #ebf9ff !important;
+    color: #2399db;
+  }
 }
 
 // Deprecated button style
-.btn-clear, .btn.btn-clear {
-    border: none !important;
-    box-shadow: none !important;
+.btn-clear,
+.btn.btn-clear {
+  border: none !important;
+  box-shadow: none !important;
+  background-color: transparent !important;
+  color: #555;
+  text-decoration: underline;
+
+  &:active,
+  &:focus {
+    outline: none;
+    transform: translate3d(0, 0, 0) !important;
+  }
+
+  &:hover {
+    transform: translate3d(0, 0, 0) !important;
     background-color: transparent !important;
-    color: #555;
-    text-decoration: underline;
+    outline: none;
+    color: $blue;
 
-    &:active, &:focus {
-      outline: none;
-      transform: translate3d(0,0,0) !important;
-    }
-
-    &:hover {
-      transform: translate3d(0,0,0) !important;
-      background-color: transparent !important;
-      outline: none;
-      color: $blue;
-
-      & i.fa {
-        &:before {
-          // color: $purple;
-        }
+    & i.fa {
+      &:before {
+        // color: $purple;
       }
     }
+  }
 
-    &:visited {
-      text-decoration: underline;
-    }
+  &:visited {
+    text-decoration: underline;
+  }
 
-    &.active {
-      color: $blue;
-      text-decoration: underline;
-    }
+  &.active {
+    color: $blue;
+    text-decoration: underline;
+  }
 }
 
 .btn-icon {
@@ -405,7 +438,9 @@ button, .button, .btn { //, [class*='btn']
   padding: 5px;
   text-shadow: none;
 
-  &:hover, &:active, &:focus {
+  &:hover,
+  &:active,
+  &:focus {
     text-shadow: none;
   }
 }
@@ -416,15 +451,17 @@ button, .button, .btn { //, [class*='btn']
   opacity: 0.9;
   cursor: pointer;
   padding: 5px;
-  
+
   & img {
     height: 25px;
     width: auto;
   }
 
-  &:hover, &:active, &:focus {
+  &:hover,
+  &:active,
+  &:focus {
     text-shadow: none;
-    background: rgba(0,0,0,0.1);
+    background: rgba(0, 0, 0, 0.1);
     opacity: 1;
   }
 }
@@ -438,7 +475,8 @@ button, .button, .btn { //, [class*='btn']
     transition: opacity ease 400;
   }
 
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     & .icon {
       opacity: 1;
     }
@@ -453,9 +491,9 @@ button, .button, .btn { //, [class*='btn']
   line-height: 25px;
 }
 
-
 .header__button {
-  &.btn, & {
+  &.btn,
+  & {
     position: absolute;
     right: 0px;
     top: 50%;
@@ -476,23 +514,23 @@ button, .button, .btn { //, [class*='btn']
     transform: translate3d(-50%, -50%, 0);
     width: 2em;
     height: 2em;
-    background-color:transparent;
+    background-color: transparent;
     background-image: url('/assets/images/loading-smaller.svg') !important;
     background-size: 100% auto !important;
   }
 }
 
-
 .offset-buttons {
-	position: absolute;
-	top:0;
-	left: 100%;
-	padding-left: 5px;
-	max-width: 50px;
+  position: absolute;
+  top: 0;
+  left: 100%;
+  padding-left: 5px;
+  max-width: 50px;
 
-	& a, & .btn {
-		margin-bottom: 5px;
-	}
+  & a,
+  & .btn {
+    margin-bottom: 5px;
+  }
 }
 
 .fixed-btn-row--SE {
@@ -502,7 +540,7 @@ button, .button, .btn { //, [class*='btn']
   z-index: 9000;
 
   &.bottom-bar-offset {
-    @media(max-width: $tablet) {
+    @media (max-width: $tablet) {
       bottom: 70px;
       z-index: 5999;
     }
@@ -510,36 +548,37 @@ button, .button, .btn { //, [class*='btn']
 }
 
 .feedback-button {
-  background: rgba(0,0,0,0.1);
+  background: rgba(0, 0, 0, 0.1);
   transition: transform 0.2s linear;
   padding: 8px;
   opacity: 0.8;
   z-index: 1050;
 
   &:hover {
-    box-shadow: 0px 1px 8px 0px rgba(0,0,0,0.1);
+    box-shadow: 0px 1px 8px 0px rgba(0, 0, 0, 0.1);
     // transform: scale(1.05);
     opacity: 1;
   }
 
-  &  img {
+  & img {
     width: 30px;
     height: auto;
   }
 }
 
 .btn-icon--circle-shadow {
-    background: none;
-    text-shadow: none;
-    opacity: 1;
-    cursor: pointer;
+  background: none;
+  text-shadow: none;
+  opacity: 1;
+  cursor: pointer;
+  background-color: white;
+  background: white;
+
+  &:active,
+  &:focus &:hover {
     background-color: white;
     background: white;
-
-    &:active, &:focus &:hover {
-      background-color: white;
-      background: white;
-    }
+  }
 }
 
 .btn.mobile-menu-spot {
@@ -563,15 +602,15 @@ pre.btn {
   border: 2px solid #f6f6f6;
   border-radius: 3px;
   margin: 0px;
-	font-family: Courier New, Courier, monospace;
+  font-family: Courier New, Courier, monospace;
   font-weight: 600;
   color: $dark-gray;
-	letter-spacing: 1px;
-	padding: 5px 15px;
+  letter-spacing: 1px;
+  padding: 5px 15px;
 
-	& .emojioneemoji {
-		margin-top: -1px;
-	}
+  & .emojioneemoji {
+    margin-top: -1px;
+  }
 }
 
 .btn-wide {
@@ -589,7 +628,7 @@ pre.btn {
 // Coment action buttons
 .btn-xs {
   background: #fff;
-  color: #5F5F5F;
+  color: #5f5f5f;
   font-size: 10px;
   line-height: 17px;
   border-radius: 4px;
@@ -619,7 +658,7 @@ pre.btn {
 .btn-xs-danger {
   @extend .btn-xs;
   &:hover {
-    background: #E26F6E;
+    background: #e26f6e;
   }
 }
 

@@ -1,12 +1,12 @@
 @import '../../sass/base/variables';
 
 .card-title {
-    font-size: 42px;
-    font-weight: 200;
+  font-size: 42px;
+  font-weight: 200;
 }
 
 .card-text {
-    margin-bottom: 24px;
+  margin-bottom: 24px;
 }
 
 .pricing {
@@ -15,79 +15,80 @@
   color: #5f5f5f;
 
   &.deal {
-      color: $red;
+    color: $red;
   }
 }
 
 .feature-list {
-    list-style-type: none;
-    padding-left: 28px;
-    
-    & li {
-        padding: 0 0 7px 0px;
-        line-height: 25px;
-    }
+  list-style-type: none;
+  padding-left: 28px;
+
+  & li {
+    padding: 0 0 7px 0px;
+    line-height: 25px;
+  }
 }
 
 .feature-check {
-    font-size: 20px;
-    text-align: center;
+  font-size: 20px;
+  text-align: center;
 }
 
 .table-features {
-    & th, & td {
-        border-top:  none;
-        border-bottom: none;
-    }
+  & th,
+  & td {
+    border-top: none;
+    border-bottom: none;
+  }
 
-    tbody tr:nth-of-type(odd) {
-        background: #fafafa;
-    }
+  tbody tr:nth-of-type(odd) {
+    background: #fafafa;
+  }
 }
 
 .learn-more {
-    display: none;
+  display: none;
 }
 .row-hover {
-    &:hover, &:focus {
-        cursor: pointer;
-        background: rgba(0,0,0,.075) !important;
+  &:hover,
+  &:focus {
+    cursor: pointer;
+    background: rgba(0, 0, 0, 0.075) !important;
 
-        & .learn-more {
-            display: inline-block;
-        }
+    & .learn-more {
+      display: inline-block;
     }
+  }
 }
 
-
 .big-bold {
-    font-weight: 800;
-    font-size: 72px;
-    letter-spacing: -2px;
-    margin-bottom: 6px;
-    line-height: 65px;
+  font-weight: 800;
+  font-size: 72px;
+  letter-spacing: -2px;
+  margin-bottom: 6px;
+  line-height: 65px;
 }
 
 .twilight {
-    background-color:#003350;
-    background:linear-gradient( 180deg, #003350 75%,#91925d);
-    color: #fff;
+  background-color: #003350;
+  background: linear-gradient(180deg, #003350 75%, #91925d);
+  color: #fff;
 }
 
 .promo-spotlight {
-    position:absolute;
-    right:10%;
-    bottom:0px;
-    height:95%;
-    opacity: 0.9;
+  position: absolute;
+  right: 10%;
+  bottom: 0px;
+  height: 95%;
+  opacity: 0.9;
 
-    @media(max-width:$tablet) {
-        height: 400px;
-        opacity: 0.8;
-    }
+  @media (max-width: $tablet) {
+    height: 400px;
+    opacity: 0.8;
+  }
 
-    @media(max-width:$phone) {
-        height: 250px;
-        opacity: 0.8;
-    }
+  @media (max-width: $phone) {
+    height: 250px;
+    opacity: 0.8;
+  }
 }

@@ -1,5 +1,5 @@
-import { Observable, Subject, of } from 'rxjs';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Observable, Subject, of } from 'rxjs'
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { Angulartics2 } from 'angulartics2'
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { debounceTime, map, take } from 'rxjs/operators'
@@ -13,10 +13,9 @@ declare var Stripe: any
 @Component({
   selector: 'hero-subscribe-modal',
   templateUrl: './hero-subscribe.component.pug',
-  styleUrls: ['./hero-subscribe.component.scss']
+  styleUrls: ['./hero-subscribe.component.scss'],
 })
 export class HeroSubscribeComponent implements OnInit {
-
   public tempHide: boolean
   public card: any
   public loading: boolean = false
@@ -54,31 +53,25 @@ export class HeroSubscribeComponent implements OnInit {
     private _chimp: MailchimpService,
     private angulartics: Angulartics2,
     private fb: FormBuilder,
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
     // get the user
     this.subscriptions.push(
-      this._auth.currentUser.subscribe(
-        user => {
-          this.currentUser = user
-        }
-      ),
-      this._auth.getStripeSubscriptions().subscribe(
-        (subscriptions) => {
-          this.previouslyCancelled = this.activeSubscription(subscriptions)
-        }
-      )
+      this._auth.currentUser.subscribe(user => {
+        this.currentUser = user
+      }),
+      this._auth.getStripeSubscriptions().subscribe(subscriptions => {
+        this.previouslyCancelled = this.activeSubscription(subscriptions)
+      }),
     )
     // Construct formgroup
-    this.sForm = this.fb.group({
-      couponCode: [
-        this.couponCode,
-        [],
-        this.validateCoupon.bind(this)
-      ]
-    }, { updateOn: "blur" });
+    this.sForm = this.fb.group(
+      {
+        couponCode: [this.couponCode, [], this.validateCoupon.bind(this)],
+      },
+      { updateOn: 'blur' },
+    )
 
     // Create a Stripe client
     if (this._auth.getEnv() === 'dev') {
@@ -104,13 +97,13 @@ export class HeroSubscribeComponent implements OnInit {
         fontSmoothing: 'antialiased',
         fontSize: '16px',
         '::placeholder': {
-          color: '#aab7c4'
-        }
+          color: '#aab7c4',
+        },
       },
       invalid: {
         color: '#fa755a',
-        iconColor: '#fa755a'
-      }
+        iconColor: '#fa755a',
+      },
     }
 
     // Create an instance of the card Element
@@ -120,14 +113,14 @@ export class HeroSubscribeComponent implements OnInit {
     this.card.mount('#card-element')
 
     // Handle real-time validation errors from the card Element.
-    this.card.addEventListener('change', function (event) {
+    this.card.addEventListener('change', function(event) {
       var displayError = document.getElementById('card-errors')
       if (event.error) {
         displayError.textContent = event.error.message
       } else {
         displayError.textContent = ''
       }
-    });
+    })
   }
 
   private validateCoupon(control: AbstractControl): Observable<any> {
@@ -139,25 +132,25 @@ export class HeroSubscribeComponent implements OnInit {
     if (!coupon || coupon.length < 1) {
       return of({ invalid: true })
     } else {
-      return this._auth.validateHeroCoupon(coupon)
-        .pipe(
-          debounceTime(1000),
-          map(
-            (res) => {
-              if (res.percent_off) {
-                this.percentOff = res.percent_off
-                this.newPrice = (100 - this.percentOff) / 100 * 60
-              }
-              // Hack for detecting Hero Academy teachers
-              if (coupon.indexOf('HA-') == 0) {
-                this.joiningAcademy = true
-              }
-              return null
-            },
-            (err) => {
-              return { invalid: true }
+      return this._auth.validateHeroCoupon(coupon).pipe(
+        debounceTime(1000),
+        map(
+          res => {
+            if (res.percent_off) {
+              this.percentOff = res.percent_off
+              this.newPrice = ((100 - this.percentOff) / 100) * 60
             }
-          ))
+            // Hack for detecting Hero Academy teachers
+            if (coupon.indexOf('HA-') == 0) {
+              this.joiningAcademy = true
+            }
+            return null
+          },
+          err => {
+            return { invalid: true }
+          },
+        ),
+      )
     }
   }
 
@@ -175,11 +168,11 @@ export class HeroSubscribeComponent implements OnInit {
       // referral
       this.becomeHero()
     } else {
-      this.stripe.createToken(this.card).then((result) => {
+      this.stripe.createToken(this.card).then(result => {
         if (result.error) {
           // Inform the user if there was an error
           var errorElement = document.getElementById('card-errors')
-          errorElement.textContent = result.error.message;
+          errorElement.textContent = result.error.message
           this.loading = false
         } else {
           // organic purchase
@@ -191,46 +184,63 @@ export class HeroSubscribeComponent implements OnInit {
 
   private becomeHero(stripeToken?: string) {
     let eventAction = 'addSubscription'
-    this._auth.subscribeToHero(stripeToken ? stripeToken : "", this.initWithCoupon ? this.couponCode.toUpperCase() : this.sForm.valid ? this.sForm.controls["couponCode"].value.toUpperCase() : '')
+    this._auth
+      .subscribeToHero(
+        stripeToken ? stripeToken : '',
+        this.initWithCoupon
+          ? this.couponCode.toUpperCase()
+          : this.sForm.valid
+          ? this.sForm.controls['couponCode'].value.toUpperCase()
+          : '',
+      )
       .subscribe(
         data => {
           this._chimp.addToActiveHeroList(this._auth.getUser())
           // track user adding hero subscription in analytics
-          this.angulartics.eventTrack.next({ action: 'goHero_promoPage_' + this.goHeroLocation, properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() } })
+          this.angulartics.eventTrack.next({
+            action: 'goHero_promoPage_' + this.goHeroLocation,
+            properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
+          })
           this.userNowHero = true
           this.loading = false
           if (data.user) {
             this._auth.setUser(data.user)
-            this._bumblebee.userHeroAction(data.user, "subscribed")
+            this._bumblebee.userHeroAction(data.user, 'subscribed')
           }
         },
         error => {
           this.loading = false
-          this.stripeMessage = 'There was an error processing your payment. Please try correcting your payment information, or <a href="mailto:support@edji.it" class="link">contact our support team</a>.'
+          this.stripeMessage =
+            'There was an error processing your payment. Please try correcting your payment information, or <a href="mailto:support@edji.it" class="link">contact our support team</a>.'
           this._bumblebee.reportError(error)
-        })
+        },
+      )
   }
 
   // a user that was previously a hero and cancelled will need to contact support to handle going hero again
   public resumeHero(): void {
     this.loading = true
     if (this.subscription_id) {
-      this._auth.rejoinHero(this.subscription_id)
-        .subscribe(
-          data => {
-            // track user adding hero subscription in analytics
-            this.angulartics.eventTrack.next({ action: 'rejoinHero_promoPage_' + this.goHeroLocation, properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() } })
-            this.userNowHero = true
-            this.loading = false
-            if (data.user) {
-              this._bumblebee.userHeroAction(data.user, "subscribed")
-            }
-          },
-          error => {
-            this.loading = false
-            this.stripeMessage = 'There was an error processing your payment. Please try correcting your payment information, or <a href="mailto:support@edji.it" class="link">contact our support team</a>.'
-            this._bumblebee.reportError(error)
+      this._auth.rejoinHero(this.subscription_id).subscribe(
+        data => {
+          // track user adding hero subscription in analytics
+          this.angulartics.eventTrack.next({
+            action: 'rejoinHero_promoPage_' + this.goHeroLocation,
+            properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
           })
+          this.userNowHero = true
+          this.loading = false
+          if (data.user) {
+            this._bumblebee.userHeroAction(data.user, 'subscribed')
+          }
+        },
+        error => {
+          this.loading = false
+          this.stripeMessage =
+            'There was an error processing your payment. Please try correcting your payment information, or <a href="mailto:support@edji.it" class="link">contact our support team</a>.'
+          this._bumblebee.reportError(error)
+        },
+      )
     }
   }
 
@@ -242,7 +252,7 @@ export class HeroSubscribeComponent implements OnInit {
       let sub = subscriptions[i]
       if (this._auth.getStripeDate(sub.current_period_end) > new Date()) {
         this.subscription_id = sub.id
-        // we have ourselves an active subsription! 
+        // we have ourselves an active subsription!
         return true
       }
     }

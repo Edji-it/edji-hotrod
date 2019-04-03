@@ -6,31 +6,33 @@
 
 .footer {
   margin: 80px 0px 20px 0px;
-  text-align:center;
+  text-align: center;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 12px;
   font-weight: bold;
-  
-  &, & a {
-	  color: #999;
-	  text-decoration: none;
+
+  &,
+  & a {
+    color: #999;
+    text-decoration: none;
   }
 
-  & a, & span {
-	  padding: 5px 6px;
+  & a,
+  & span {
+    padding: 5px 6px;
   }
 
   & a {
-
-	  &:hover, &:active {
-		  color: $blue;
-		  text-decoration: none;
-	  }
+    &:hover,
+    &:active {
+      color: $blue;
+      text-decoration: none;
+    }
   }
 
   .footer-inner {
     padding: 40px 0;
-    border-top: 1px solid #DDD;
+    border-top: 1px solid #ddd;
   }
 
   .social {
@@ -42,7 +44,8 @@
       float: left;
       margin-left: 20px;
 
-      a, a:visited {
+      a,
+      a:visited {
         color: $gray-light;
         text-decoration: none;
         font-size: 40px;
@@ -57,17 +60,17 @@
 }
 
 .footer__attribution {
-    padding: 10px 0;
-    font-weight: normal;
+  padding: 10px 0;
+  font-weight: normal;
 }
 
 .footer__version {
-  padding: 9px; 
-  font-size: 10px; 
-  display:block; 
-  width: 100%; 
-  font-family:'Open Sans'; 
-  text-align: center; 
+  padding: 9px;
+  font-size: 10px;
+  display: block;
+  width: 100%;
+  font-family: 'Open Sans';
+  text-align: center;
   color: #ccc;
 }
 

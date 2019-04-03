@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Subscription } from 'rxjs'
-import { take } from 'rxjs/operators';
+import { take } from 'rxjs/operators'
 
 // Project dependancies
 import { User } from '../shared/datatypes'
@@ -10,7 +10,7 @@ import { LockerService, AuthService, AcademyService, UtilToolService } from '../
 @Component({
   selector: 'app-license-redirect',
   templateUrl: './license-redirect.component.pug',
-  styleUrls: ['./license-redirect.component.scss']
+  styleUrls: ['./license-redirect.component.scss'],
 })
 export class LicenseRedirectComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = []
@@ -18,9 +18,9 @@ export class LicenseRedirectComponent implements OnInit, OnDestroy {
 
   public user: User
   public invitationId: string
-  public academyName: string = "Academy"
+  public academyName: string = 'Academy'
 
-  public errorKey: string = ""
+  public errorKey: string = ''
 
   constructor(
     private _auth: AuthService,
@@ -28,34 +28,35 @@ export class LicenseRedirectComponent implements OnInit, OnDestroy {
     private _router: Router,
     private _locker: LockerService,
     private _academy: AcademyService,
-    public _util: UtilToolService
-  ) { }
+    public _util: UtilToolService,
+  ) {}
 
   ngOnInit() {
     this.subscriptions.push(
-      this._auth.getCurrentUser().subscribe((user) => {
-          this.user = user
-      })
+      this._auth.getCurrentUser().subscribe(user => {
+        this.user = user
+      }),
     )
 
     this.subscriptions.push(
-      this.route.params.subscribe((params) => {
+      this.route.params.subscribe(params => {
         this.invitationId = params['license_id']
       }),
-      this.route.queryParams.subscribe((queryParams) => {
+      this.route.queryParams.subscribe(queryParams => {
         if (queryParams['academy']) {
           this.academyName = queryParams['academy']
         }
       }),
     )
 
-    /** 
-     * if the license_id is defined and passed in properly through the query param on the route, 
+    /**
+     * if the license_id is defined and passed in properly through the query param on the route,
      * let's add it to the locker and then move to the login/register check
-     */ 
-    if (typeof(this.invitationId)!='undefined' && this.invitationId!='') {
+     */
+
+    if (typeof this.invitationId != 'undefined' && this.invitationId != '') {
       // we need to log temps out so we give them the login / register screen
-      if (this.user.isLoggedIn && this.user.type==='temp') {
+      if (this.user.isLoggedIn && this.user.type === 'temp') {
         this.changeAccount()
       }
       // if the user is logged in already, then we'll process the license
@@ -66,13 +67,15 @@ export class LicenseRedirectComponent implements OnInit, OnDestroy {
         }
       } else {
         // store the invitationId in the locker if we need to register the user or they need to login with Google
-        this._locker.set("invitationId", this.invitationId)
+        this._locker.set('invitationId', this.invitationId)
       }
     }
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach((sub) => { sub.unsubscribe() })
+    this.subscriptions.forEach(sub => {
+      sub.unsubscribe()
+    })
   }
 
   /**
@@ -85,26 +88,35 @@ export class LicenseRedirectComponent implements OnInit, OnDestroy {
       this._locker.remove('invitationId')
     }
     // tell the server we need to process the license on the user
-    this._academy.acceptLicense(this.invitationId).pipe(take(1)).subscribe((userWithLicense: any) => {
-      // update the user across the app with the new license ID and hero status update
-      this._auth.refreshUser().pipe(take(1)).subscribe((updatedUser: any) => {
-        let index = updatedUser.institution_ids.length - 1
-        let institutionId = updatedUser.institution_ids[index]
-        // once we update the user to add a license and make them a hero, let's redirect them to the dashboard
-        this._router.navigate(['/license/welcome/' + institutionId])
-      })
-    }, (err) => {
-      console.error(err)
-      if (err.status===403 && err.error.error === 'invite not found for email') {
-        this.errorKey = 'serverError'
-      }
-      if (err.status===403 && err.error.error === 'invalid license') {
-        this.errorKey = 'invalidLicense'
-      }
-      if (err.status===500) {
-        this.errorKey = 'licenseProcessError'
-      }
-    })
+    this._academy
+      .acceptLicense(this.invitationId)
+      .pipe(take(1))
+      .subscribe(
+        (userWithLicense: any) => {
+          // update the user across the app with the new license ID and hero status update
+          this._auth
+            .refreshUser()
+            .pipe(take(1))
+            .subscribe((updatedUser: any) => {
+              let index = updatedUser.institution_ids.length - 1
+              let institutionId = updatedUser.institution_ids[index]
+              // once we update the user to add a license and make them a hero, let's redirect them to the dashboard
+              this._router.navigate(['/license/welcome/' + institutionId])
+            })
+        },
+        err => {
+          console.error(err)
+          if (err.status === 403 && err.error.error === 'invite not found for email') {
+            this.errorKey = 'serverError'
+          }
+          if (err.status === 403 && err.error.error === 'invalid license') {
+            this.errorKey = 'invalidLicense'
+          }
+          if (err.status === 500) {
+            this.errorKey = 'licenseProcessError'
+          }
+        },
+      )
   }
 
   /**
