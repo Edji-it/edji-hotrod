@@ -1,13 +1,19 @@
 .list-item.list-item--block.reading-card(
-  [ngClass]="{'draft-edit' : (reading['draft']), 'archived': (reading.archived) }", 
-  [routerLink]="(reading['draft']) ? ['/new-reading/' + reading._id] : []"
+  [ngClass]="{'draft-edit' : (reading['draft']), 'archived': (reading.archived) }"
 )
   .reading-icon.hide-for-archived
     span {{reading.title.substring(0,2)}}
   .archived-icon.show-for-archived
     .icon.icon-folder
   .reading-title([class.no-version]="!reading.version_count")
-    .reading-title--center-row
+    .reading-title--center-row(
+      *ngIf="reading['draft']",
+      [routerLink]="['/new-reading/' + reading._id]"
+    )
+      h1.small.reading-title__text {{reading.title}} 
+        span(*ngIf="!reading.title")
+          i Untitled
+    .reading-title--center-row(*ngIf="!reading['draft']")
       h1.small.reading-title__text {{reading.title}} 
         span(*ngIf="!reading.title")
           i Untitled
