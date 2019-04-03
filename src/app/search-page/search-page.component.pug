@@ -123,7 +123,7 @@ nav-bar([showDashboardOptions]="true")
                 b No Readings Found
                 | There are no readings for "{{searchTerm}}" with your current filters, please try a different term or expanding your filters. 
             .row.loading(*ngIf="loading")
-            <p-dataList [value]="readings" [paginator]="readings.length > 0" [paginatorPosition]="'both'" [rows]="rows" [lazy]="true" (onLazyLoad)="updateSearchParams('feed_paginate', $event)" [totalRecords]="total" [emptyMessage]="''">
+            <p-dataList class="search-datalist" [value]="readings" [paginator]="readings.length > 0" [paginatorPosition]="'both'" [rows]="rows" [lazy]="true" (onLazyLoad)="updateSearchParams('feed_paginate', $event)" [totalRecords]="total" [emptyMessage]="''">
                 <ng-template let-reading pTemplate="item">
                    .col-12.feed__reading(*ngIf="reading")
                         div {{index}}

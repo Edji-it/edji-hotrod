@@ -523,3 +523,10 @@ input[type=text].input-noborder, input[type=password].input-noborder, input[type
         position: relative;
     }
 }
+
+// ngPrime Datalist 
+.search-datalist {
+	@media (min-width:$tablet) {
+		margin-top: -65px;
+	}
+}
