@@ -378,20 +378,27 @@ input[type=text].input-noborder, input[type=password].input-noborder, input[type
 .ui-paginator-page, 
 .ui-paginator-element {
 	&, .ui-paginator & {
-		color: $blue;
+		color: $medium-gray;
 		padding-left: 8px;
 		padding-right: 8px;
 		margin: 0px 4px;
+		border-radius: 3px;
 
 		&:hover, &:focus {
 			background: $light-gray;
+			color: $blue;
 		}
 	}
 }
+.ui-paginator {
+	text-align: right;
+	font-size: 14px;
+}
 
 .ui-paginator-page.ui-state-active {
-	border: 1px solid $blue;
-	color: $blue; 
+	border: none;
+	background-color: #EBF9FF !important;
+	color: $blue;
 }
 
 // ui-dropdown-panel overrides 
@@ -515,4 +522,11 @@ input[type=text].input-noborder, input[type=password].input-noborder, input[type
         pointer-events: all;
         position: relative;
     }
+}
+
+// ngPrime Datalist 
+.search-datalist {
+	@media (min-width:$tablet) {
+		margin-top: -65px;
+	}
 }

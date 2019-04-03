@@ -1,0 +1,152 @@
+nav-bar([showDashboardOptions]="true")
+.container.mt-4
+    .row
+        .col-12.my-4
+            ng-container(*ngIf="!isSearching")
+                h1.mb-1 Discover Readings
+                p.small.mt-2 Find readings created by others to use or modify for your class.
+            ng-container(*ngIf="isSearching")
+                h1.mb-1(style="display: flex;")
+                    | My search for
+                    .form-inline.ml-2
+                        .input-group.input-group-lg
+                            .input-group-prepend-icon((click)="searchInput.focus()")
+                                i.icon.icon-search
+                            input#readingSearch.form-control.form-control-autosize(
+                                #searchInput,
+                                name="SearchTermInput", 
+                                [(ngModel)]="searchTerm", 
+                                type="text", 
+                                style="text-align: left;", 
+                                placeholder="Search...",
+                                (keyup.enter)="updateSearchParams('search_term')",
+                                [style.minWidth]="searchFieldWidth",
+                                (keyup)="searchFieldWidth = dummySearchField.clientWidth"
+                            )
+                            .form-control-clear.icon.icon-close(
+                                *ngIf="searchTerm.length > 0",
+                                (click)="searchTerm = ''; updateSearchParams('')"
+                            )
+                            .form-control.form-control-dummysize(#dummySearchField) {{ searchTerm }}
+                div.mt-2
+                    span Found <b>{{ total || 0 }}</b> readings&nbsp;
+                    a.link(
+                        *ngIf="filterCount > 0", 
+                        tabindex="0", 
+                        (click)="clearFilterVars(true); updateSearchParams('')",
+                        title="Click to clear"
+                    ) 
+                        |with {{ filterCount }} filters
+                        i.icon.icon-close.mx-1
+                br
+    .row
+        .col-md-4
+                .form-group(*ngIf="!isSearching")
+                    .input-group.input-group
+                        .input-group-prepend-icon((click)="searchInput.focus()")
+                            i.icon.icon-search
+                        input#readingSearch.form-control(
+                            #searchInput,
+                            name="SearchTermInput", 
+                            [(ngModel)]="searchTerm", 
+                            type="text", 
+                            style="text-align: left;", 
+                            placeholder="Search...",
+                            (keyup.enter)="updateSearchParams('search_term')"
+                        )
+                .form-group
+                    label Community
+                    //- Public Library
+                    div
+                        button#discoverFilterPublic.btn.btn-filter( 
+                            title="See public readings from all users",
+                            [class.active]="!activeLibrary || activeLibrary === 'public'",
+                            (click)="activeLibrary = 'public'; updateSearchParams('filter_public')"
+                        )
+                            span([innerHTML]="':earth_americas: Public Library' | emojione")
+                    //- Following 
+                    div
+                        button#discoverFilterFollowing.btn.btn-filter( 
+                            title="Filter by users you follow",
+                            [class.active]="activeLibrary === 'following'",
+                            (click)="activeLibrary = 'following'; updateSearchParams('filter_following')"
+                        )
+                            span([innerHTML]="':green_heart: Following' | emojione")
+                    //- Academy Libraries
+                    //- div(*ngFor="let academy of academies")
+                    //-     button.btn.btn-filter( 
+                    //-         title="Filter by your academy's library",
+                    //-         [class.active]="activeLibrary === 'ACADEMYID'",
+                    //-         (click)="activeLibrary = 'ACADEMYID'; updateSearchParams('filter_academy')"
+                    //-     )
+                    //-         span([innerHTML]="':school: Academy Name' | emojione")
+                .form-group
+                    label Subjects
+                        button.btn-link.filter-clear(
+                            *ngIf="subjectFilter.length > 0",
+                            (click)="subjectFilter = []; updateSearchParams('')"
+                        ) Clear
+                    ss-multiselect-dropdown(
+                        id="subjectDropdown",
+                        [(ngModel)]="subjectFilter",
+                        [options]="subjects", 
+                        [settings]="subjectDropSettings",
+                        (dropdownClosed)="updateSearchParams('search_filter')"
+                    )
+                br
+                .form-group(style="clear:left;")
+                    label Grade Level
+                        button.btn-link.filter-clear(
+                            *ngIf="gradesSelected.length > 0",
+                            (click)="gradesSelected = []; updateSearchParams('')"
+                        ) Clear
+                    grade-selector([(ngModel)]="gradesSelected", (ngModelChange)="updateSearchParams('filter_gradeLevel')")
+                //- .form-group
+                //-     label Subjects
+                    //- ss-multiselect-dropdown([options]="subjects", [(ngModel)]="subjectFilter", [settings]="subjectDropSettings")
+        .col-md-8
+            #notFollowingMessage.alert.alert-light(*ngIf="searchAlerts.notFollowing")
+                h4 Time to follow someone!
+                p Follow Edji to see some of our latest curated Readings.
+                .comment__avatar Ed
+                follow-tag(
+                    id="followEdjiTag",
+                    [owner]="edjiOwnerObj",
+                    (followEvent)="loadFeed()"
+                )
+            //- Server error while loading
+            .alert.alert-warning(*ngIf="searchAlerts.serverError")
+                b Error Loading
+                | There was an error on our server or your connection, please try again or contact us if you continue to have an issue.
+            //- No results message when user is genuinely searching
+            .alert.alert-info(*ngIf="searchAlerts.noResults")
+                b No Readings Found
+                | There are no readings for "{{searchTerm}}" with your current filters, please try a different term or expanding your filters. 
+            .row.loading(*ngIf="loading")
+            <p-dataList class="search-datalist" [value]="readings" [paginator]="readings.length > 0" [paginatorPosition]="'both'" [rows]="rows" [lazy]="true" (onLazyLoad)="updateSearchParams('feed_paginate', $event)" [totalRecords]="total" [emptyMessage]="''">
+                <ng-template let-reading pTemplate="item">
+                   .col-12.feed__reading(*ngIf="reading")
+                        div {{index}}
+                        .feed__reading-data.mb-2(*ngIf="reading.owner")
+                            .comment__avatar.mb-0 {{reading.owner.fullname.substr(0,2).toUpperCase()}}
+                            follow-tag([owner]="reading.owner")
+                            i.hidden-md-down.ws-nowrap {{ ' shared ' + (reading.updatedAt | edjidate:'timeAgo':null:secondsAgo) }}
+                            .btn.btn-sm.btn-primary.float-right([routerLink]="['/new-reading']", [queryParams]="{ copyId: reading._id }") Get this Reading
+                            i.hidden-lg-up.ws-nowrap {{ ' shared ' + (reading.updatedAt | edjidate:'timeAgo':null:secondsAgo) }}
+                        hot-reading-card([reading]="reading", [readOnly]="true")
+                        .feed__reading-preview(*ngIf="reading.words_preview")
+                            span.w(
+                                    *ngFor="let w of reading.words_preview", 
+                                    [ngClass]="[ w && w.styles ? w.styles.join(' ') : '' ]"
+                                )
+                                | {{ (!(w && w.styles) || (w && w.styles.indexOf('space')) > -1) ? '&nbsp;' : w && w.str }}
+                                div(*ngIf="w && w.styles && w.styles.indexOf('img') > -1")
+                                    //- Image: Display image for image "word"
+                                    img.reading-image(
+                                        [attr.id]="'readingImage' + i",
+                                        [attr.index]="i",
+                                        [src]="w.url"
+                                    )
+                            span.w &hellip;
+                </ng-template>
+            </p-dataList>

@@ -1,5 +1,6 @@
 import { Component, forwardRef, Input } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
+import { ALLSPARK } from 'src/app/app.constants';
 
 const noop = () => {
 };
@@ -24,23 +25,8 @@ export class GradeSelector implements ControlValueAccessor {
     public gradePreview: number[] = []
 
     // Form reference values
-    public gradeInitials: string[] = ['K','1','2','3','4','5','6','7','8','9','10','11','12','U']
-    public gradeNames: string[] = [
-        'Kindergarten',
-        '1st Grade',
-        '2nd Grade',
-        '3rd Grade',
-        '4th Grade',
-        '5th Grade',
-        '6th Grade',
-        '7th Grade',
-        '8th Grade',
-        '9th Grade',
-        '10th Grade',
-        '11th Grade',
-        '12th Grade',
-        'University/College'
-    ]
+    public gradeInitials: string[] = ALLSPARK.GRADEINITIALS
+    public gradeNames: string[] = ALLSPARK.GRADENAMES
 
     public selectGrade(gradeIndex: number): void {
         if (this.gradeSelection.length == 1) {

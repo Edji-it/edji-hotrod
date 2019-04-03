@@ -19,32 +19,36 @@ import { LicenseRedirectComponent } from './license-redirect/license-redirect.co
 import { LicenseWelcomeComponent } from './license-welcome/license-welcome.component';
 import { TeamPageComponent } from './team-page/team-page.component';
 import { PromoPageComponent } from './promo/promo.component';
+import { SearchPage } from './search-page/search-page.component'
 
 
 export const ROUTES: Routes = [
-  { 
-    path: '', 
-    redirectTo: 'dashboard', 
-    pathMatch: 'full', 
+  {
+    path: '',
+    redirectTo: 'dashboard',
+    pathMatch: 'full',
     // Ideally we would use the AuthService canActivate initially, but it does not work with "redirectTo"
     // canActivate: [AuthService] 
   },
-  { path: 'dashboard',  component: DashboardComponent, canActivate: [DashboardGuardService],
+  {
+    path: 'dashboard', component: DashboardComponent, canActivate: [DashboardGuardService],
     children: [
       // Root path must be explicitly handled by canActivate, since the parent canActivate is not re-evaluated
       { path: '', pathMatch: 'full', component: DashboardComponent, canActivate: [DashboardGuardService] },
       { path: 'create', component: CreatedDashComponent },
       { path: 'read', component: JoinedDashComponent }
-    ] 
+    ]
   },
-  { path: 'create',  redirectTo: '/dashboard/create' },
-  { path: 'read',  redirectTo: '/dashboard/read' },
-  { path: 'home',  component: HomeComponent },
+  { path: 'create', redirectTo: '/dashboard/create' },
+  { path: 'read', redirectTo: '/dashboard/read' },
+  { path: 'home', component: HomeComponent },
   { path: 'register', component: RegisterPageComponent },
   { path: 'login', component: LoginComponent },
   { path: 'account', component: AccountComponent, canActivate: [AuthService] },
-  { path: 'discover', component: DiscoverFeedComponent, canActivate: [AuthService] },
-  { path: 'project/:id',  component: ProjectPageComponent },
+  { path: 'discover/legacy', component: DiscoverFeedComponent, canActivate: [AuthService] },
+  { path: 'discover', component: SearchPage, canActivate: [AuthService] },
+  { path: 'discover/search', component: SearchPage, canActivate: [AuthService] },
+  { path: 'project/:id', component: ProjectPageComponent },
   { path: 'license/accept/:license_id', component: LicenseRedirectComponent, pathMatch: 'full' },
   { path: 'license/welcome/:institution_id', component: LicenseWelcomeComponent, canActivate: [AuthService], pathMatch: 'full' },
   { path: 'new-reading', component: NewReadingPage, canActivate: [AuthService] },
@@ -52,13 +56,13 @@ export const ROUTES: Routes = [
   { path: 'redeem-token/:type/:token', component: RedeemToken },
   { path: 'features', component: HeroPromoPageComponent, pathMatch: 'full' },
   { path: 'hero', redirectTo: '/plans', pathMatch: 'full' },
-  { path: 'pricing', redirectTo: '/plans', pathMatch: 'full'  },
-  { path: 'plans', component: HeroPricingComponent, pathMatch: 'full'  },
-  { path: 'promo', component: PromoPageComponent, pathMatch: 'full'  },
+  { path: 'pricing', redirectTo: '/plans', pathMatch: 'full' },
+  { path: 'plans', component: HeroPricingComponent, pathMatch: 'full' },
+  { path: 'promo', component: PromoPageComponent, pathMatch: 'full' },
   { path: 'about', component: TeamPageComponent },
   { path: 'academy', loadChildren: './academy/academy.module#AcademyModule' },
   { path: 'oauth/:type', component: OAuthComponent, pathMatch: 'full' },
-  { path: 'not-found',    component: NoContentComponent, pathMatch: 'full' },
-  { path: ':projectId', redirectTo: '/project/:projectId', pathMatch: 'full'},
-  { path: '**',    component: NoContentComponent }
+  { path: 'not-found', component: NoContentComponent, pathMatch: 'full' },
+  { path: ':projectId', redirectTo: '/project/:projectId', pathMatch: 'full' },
+  { path: '**', component: NoContentComponent }
 ]
