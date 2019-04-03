@@ -67,6 +67,10 @@ nav-bar([showDashboardOptions]="true")
                     //-         span([innerHTML]="':school: Academy Name' | emojione")
                 .form-group
                     label Subjects
+                        button.btn-link.filter-clear(
+                            *ngIf="subjectFilter.length > 0",
+                            (click)="subjectFilter = []; updateSearchParams('')"
+                        ) Clear
                     ss-multiselect-dropdown(
                         id="subjectDropdown",
                         [(ngModel)]="subjectFilter",
@@ -77,7 +81,7 @@ nav-bar([showDashboardOptions]="true")
                 br
                 .form-group(style="clear:left;")
                     label Grade Level
-                        button.btn-secondary.btn-sm.filter-clear(
+                        button.btn-link.filter-clear(
                             *ngIf="gradesSelected.length > 0",
                             (click)="gradesSelected = []; updateSearchParams('')"
                         ) Clear
