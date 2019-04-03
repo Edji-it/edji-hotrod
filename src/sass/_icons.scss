@@ -196,6 +196,20 @@
     height: 1em;
 }
 
+
+.icon-close {
+    @include icon('icon-close.svg');
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    opacity: 0.75;
+    cursor: pointer;
+
+    &:hover, .link:hover &, .btn:hover {
+        opacity: 1;
+    }
+}
+
 .icon-google {
     @include icon('icon-google.svg');
     display: inline-block;

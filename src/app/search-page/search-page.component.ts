@@ -101,7 +101,9 @@ export class SearchPage implements OnInit {
           }
           if (params.library) {
             this.activeLibrary = params.library
-            this.filterCount++
+            if (this.activeLibrary !== 'public') {
+              this.filterCount++
+            } 
           }
           if (params.subjects) {
             this.subjectFilter = params.subjects.split(' ')

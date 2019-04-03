@@ -21,8 +21,20 @@ nav-bar([showDashboardOptions]="true")
                                 placeholder="Search...",
                                 (keyup.enter)="updateSearchParams('search_term')"
                             )
-                p.mt-2 Found <b>{{ total || 0 }}</b> readings
-                .btn.btn-secondary.btn-sm((click)="clearFilterVars(true)") {{ filterCount }} filters
+                            .form-control-clear.icon.icon-close(
+                                *ngIf="searchTerm.length > 0",
+                                (click)="searchTerm = ''; updateSearchParams('')"
+                            )
+                div.mt-2
+                    span Found <b>{{ total || 0 }}</b> readings&nbsp;
+                    a.link(
+                        *ngIf="filterCount > 0", 
+                        tabindex="0", 
+                        (click)="clearFilterVars(true); updateSearchParams('')",
+                        title="Click to clear"
+                    ) 
+                        |with {{ filterCount }} filters
+                        i.icon.icon-close.mx-1
                 br
     .row
         .col-md-4
@@ -71,6 +83,7 @@ nav-bar([showDashboardOptions]="true")
                             *ngIf="subjectFilter.length > 0",
                             (click)="subjectFilter = []; updateSearchParams('')"
                         ) Clear
+                            i.icon.icon-close
                     ss-multiselect-dropdown(
                         id="subjectDropdown",
                         [(ngModel)]="subjectFilter",

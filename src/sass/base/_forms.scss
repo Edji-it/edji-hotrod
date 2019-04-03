@@ -179,6 +179,23 @@ label input, label textarea {
   background: #fff;
   color: #000;
 }
+// Field clear icon
+.form-control-clear {
+  position: absolute;
+  font-size: 0.75em;
+  right: 0.4em;
+  top: 50%;
+  transform: translateY(-50%);
+
+  &.icon-close {
+    opacity: 0.4;
+  }
+
+  &:hover, &:focus {
+    opacity: 1;
+  }
+}
+
 .has-success .form-control-feedback {
   color: #79e883;
 }
