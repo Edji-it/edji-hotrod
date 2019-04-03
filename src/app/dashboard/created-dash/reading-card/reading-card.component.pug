@@ -61,8 +61,8 @@
     .tag-row.w-75
       ng-container(*ngIf="reading.subjects && reading.subjects.length > 0")
         span.badge-pill.badge-secondary.badge-subject(*ngFor="let subject of reading.subjects") {{ subject | subjectName }}
-      ng-container(*ngIf="gradeStart && gradeEnd")
-        b {{ gradeStart }} - {{ gradeEnd }}
+      ng-container(*ngIf="gradeDisplay")
+        span.badge.badge-grades(title="Grade levels") {{ gradeDisplay }}
     //- Reading action buttons
     .w-25.reading-action-row(*ngIf="!readOnly")
       //- Source Link

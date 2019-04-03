@@ -40,8 +40,7 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
   public showReadingDiscoverModal: boolean
   public showBookmarkTooltip: boolean
   public gradeInitials: string[] = ALLSPARK.GRADEINITIALS
-  public gradeStart: string
-  public gradeEnd: string 
+  public gradeDisplay: string
   
   public versionHeight = 50;
 
@@ -64,8 +63,13 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
     if (this.reading.grade_levels) {
       let grades = this.reading.grade_levels
       // Set grade values
-      this.gradeStart = this.gradeInitials[grades[0]]
-      this.gradeEnd = this.gradeInitials[grades[grades.length - 1]]
+      let gradeStart = this.gradeInitials[grades[0]]
+      let gradeEnd = this.gradeInitials[grades[grades.length - 1]]
+      if (gradeStart === gradeEnd) {
+        this.gradeDisplay = gradeStart
+      } else {
+        this.gradeDisplay = gradeStart + " - " + gradeEnd
+      }
     }
   }
 
