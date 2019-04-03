@@ -58,7 +58,7 @@ nav-bar([showDashboardOptions]="true")
                     label Community
                     //- Public Library
                     div
-                        button.btn.btn-filter( 
+                        button#discoverFilterPublic.btn.btn-filter( 
                             title="See public readings from all users",
                             [class.active]="!activeLibrary || activeLibrary === 'public'",
                             (click)="activeLibrary = 'public'; updateSearchParams('filter_public')"
@@ -66,7 +66,7 @@ nav-bar([showDashboardOptions]="true")
                             span([innerHTML]="':earth_americas: Public Library' | emojione")
                     //- Following 
                     div
-                        button.btn.btn-filter( 
+                        button#discoverFilterFollowing.btn.btn-filter( 
                             title="Filter by users you follow",
                             [class.active]="activeLibrary === 'following'",
                             (click)="activeLibrary = 'following'; updateSearchParams('filter_following')"
@@ -112,7 +112,7 @@ nav-bar([showDashboardOptions]="true")
                 follow-tag(
                     id="followEdjiTag",
                     [owner]="edjiOwnerObj",
-                    (followEvent)="updateSearchParams('')"
+                    (followEvent)="loadFeed()"
                 )
             //- Server error while loading
             .alert.alert-warning(*ngIf="searchAlerts.serverError")
