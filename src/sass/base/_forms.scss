@@ -228,10 +228,14 @@ label.border-wrap {
     z-index: $zLow;
     position: absolute;
     top: 50%;
-    left: 0.3em;
+    left: 0.75em;
     transform: translateY(-50%);
     height: 0.75em;
     width: 0.75em;
+    
+    .input-group-lg & {
+      left: 0.3em;
+    }
   }
 
   & + .form-control {

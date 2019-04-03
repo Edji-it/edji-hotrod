@@ -168,8 +168,10 @@ export class SearchPage implements OnInit {
   /**
    * Clear component variables handling applied filters
    */
-  clearFilterVars() {
-    this.searchTerm = ''
+  clearFilterVars(preserveTerm?: boolean) {
+    if (!preserveTerm) {
+      this.searchTerm = ''
+    }
     this.filterCount = 0
     this.first = 0
     this.gradeMin = 0

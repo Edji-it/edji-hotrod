@@ -22,7 +22,7 @@ nav-bar([showDashboardOptions]="true")
                                 (keyup.enter)="updateSearchParams('search_term')"
                             )
                 p.mt-2 Found <b>{{ total || 0 }}</b> readings
-                //- .btn.btn-sm((click)="") {{ filterCount }} filters
+                .btn.btn-secondary.btn-sm((click)="clearFilterVars(true)") {{ filterCount }} filters
                 br
     .row
         .col-md-4
