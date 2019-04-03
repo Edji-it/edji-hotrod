@@ -3,82 +3,90 @@
  */
 
 .hero-smash__wrap {
-    min-height: 200px;
-    width: 100%;
-    position: relative;
-    margin-bottom: 30px;
+  min-height: 200px;
+  width: 100%;
+  position: relative;
+  margin-bottom: 30px;
 }
 
 @keyframes smashDown {
-    0% {
-        bottom: calc(100% + 100px);
-    }
-    97% {
-        bottom: 0px
-    }
-    99% {
-        bottom: 4px
-    }
-    100% {
-        bottom: 0px
-    }
+  0% {
+    bottom: calc(100% + 100px);
+  }
+  97% {
+    bottom: 0px;
+  }
+  99% {
+    bottom: 4px;
+  }
+  100% {
+    bottom: 0px;
+  }
 }
 
 .hero-smash {
-    width: 60%;
-    left: 50%;
-    transform: translateX(-50%);
-    animation-name: smashDown;
-    animation-duration: 500ms;
-    animation-fill-mode: forwards;
-    animation-timing-function: ease-in;
-    position: absolute;
+  width: 60%;
+  left: 50%;
+  transform: translateX(-50%);
+  animation-name: smashDown;
+  animation-duration: 500ms;
+  animation-fill-mode: forwards;
+  animation-timing-function: ease-in;
+  position: absolute;
 }
 
 .hero-rule {
-    height: 1px;
-    width: 100%;
-    position: relative;
-    background: linear-gradient(to right, rgba(255,255,255,0), $btnHeroColor 40%, $btnHeroColor 60%, rgba(255,255,255,0));
-    margin: $base-pad 0px;
+  height: 1px;
+  width: 100%;
+  position: relative;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0),
+    $btnHeroColor 40%,
+    $btnHeroColor 60%,
+    rgba(255, 255, 255, 0)
+  );
+  margin: $base-pad 0px;
 }
 
 .hero-h {
-    display: inline-block;
-    text-align: center;
-    vertical-align: top;
-    color: #fff;
-    background: $btnHeroColor;
-    border-radius: 9px;
-    font-size: 12px;
-    line-height: 18px;
-    max-width: 24px;
-    padding: 0px 6px;
-    height: 18px;
-    font-family: 'Open Sans';
-    font-weight: bold;
+  display: inline-block;
+  text-align: center;
+  vertical-align: top;
+  color: #fff;
+  background: $btnHeroColor;
+  border-radius: 9px;
+  font-size: 12px;
+  line-height: 18px;
+  max-width: 24px;
+  padding: 0px 6px;
+  height: 18px;
+  font-family: 'Open Sans';
+  font-weight: bold;
 }
 
 .hero--micro-offer__wrap {
-    position: relative;
+  position: relative;
 
-    & > .btn, & > .icon, & > i {   
-        filter: grayscale(100%);
-    }
+  & > .btn,
+  & > .icon,
+  & > i {
+    filter: grayscale(100%);
+  }
 
-    &:after {
-        @extend .hero-h;
-        content: 'H';
-        z-index: $zMid;
-        display: block;
-        position: absolute;
-        top: 3px;
-        right: 3px;
-    }
+  &:after {
+    @extend .hero-h;
+    content: 'H';
+    z-index: $zMid;
+    display: block;
+    position: absolute;
+    top: 3px;
+    right: 3px;
+  }
 }
 
 .hero-box {
-    border: 1px dashed #ffbfbf;
-    border-radius: 3px;
-    padding: 8px;
+  border: 1px dashed #ffbfbf;
+  border-radius: 3px;
+  padding: 8px;
 }

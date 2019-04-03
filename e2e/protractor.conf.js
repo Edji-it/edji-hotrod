@@ -3,11 +3,11 @@
  * @author: @AngularClass
  */
 
-require('ts-node/register');
-var helpers;
+require('ts-node/register')
+var helpers
 
-helpers = require('./helpers.js'); // Helps us get the root file reference.
-SpecReporter = require('jasmine-spec-reporter').SpecReporter;
+helpers = require('./helpers.js') // Helps us get the root file reference.
+SpecReporter = require('jasmine-spec-reporter').SpecReporter
 
 exports.config = {
   // The address of a running selenium server.
@@ -15,21 +15,21 @@ exports.config = {
 
   // Capabilities to be passed to the webdriver instance.
   capabilities: {
-    'browserName': 'chrome',
+    browserName: 'chrome',
     // marionette: true,
-    'chromeOptions': {
-      'args': [
+    chromeOptions: {
+      args: [
         'show-fps-counter=true',
         'use-fake-ui-for-media-stream',
         'disable-web-security',
         '--window-size=1680,1050',
         '--disable-extensions',
         '--disable-gpu',
-        '--no-sandbox'
-      ]
+        '--no-sandbox',
+      ],
     },
     shardTestFiles: true,
-    maxInstances: 5
+    maxInstances: 5,
   },
 
   /*
@@ -37,22 +37,22 @@ exports.config = {
    - Spec patterns are relative to the location of the spec file. They may include glob patterns.
   */
   suites: {
-    account:    helpers.root('e2e/src/account.spec.ts'),
-    dashboard:  helpers.root('e2e/src/dashboard.spec.ts'),
-    discover:   helpers.root('e2e/src/discover.spec.ts'),
+    account: helpers.root('e2e/src/account.spec.ts'),
+    dashboard: helpers.root('e2e/src/dashboard.spec.ts'),
+    discover: helpers.root('e2e/src/discover.spec.ts'),
     heroSubscribe: helpers.root('e2e/src/hero-subscribe.spec.ts'),
-    home:       helpers.root('e2e/src/home.spec.ts'),
-    leaderboard:helpers.root('e2e/src/owner-tools__leaderboard.spec.ts'),
-    license:    helpers.root('e2e/src/license.spec.ts'),
-    login:      helpers.root('e2e/src/login.spec.ts'),
+    home: helpers.root('e2e/src/home.spec.ts'),
+    leaderboard: helpers.root('e2e/src/owner-tools__leaderboard.spec.ts'),
+    license: helpers.root('e2e/src/license.spec.ts'),
+    login: helpers.root('e2e/src/login.spec.ts'),
     newReading: helpers.root('e2e/src/new-reading.spec.ts'),
     ownerTools: helpers.root('e2e/src/owner-tools.spec.ts'),
-    project:    helpers.root('e2e/src/project.spec.ts'),
-    question:   helpers.root('e2e/src/questions.spec.ts'),
-    referral:   helpers.root('e2e/src/referral.spec.ts'),
+    project: helpers.root('e2e/src/project.spec.ts'),
+    question: helpers.root('e2e/src/questions.spec.ts'),
+    referral: helpers.root('e2e/src/referral.spec.ts'),
     readingrecap: helpers.root('e2e/src/owner-tools__reading-recap.spec.ts'),
-    version:    helpers.root('e2e/src/version.spec.ts'),
-    all:        [helpers.root('e2e/src/home.spec.ts'),  helpers.root('e2e/src/login.spec.ts')]
+    version: helpers.root('e2e/src/version.spec.ts'),
+    all: [helpers.root('e2e/src/home.spec.ts'), helpers.root('e2e/src/login.spec.ts')],
   },
 
   exclude: [],
@@ -69,25 +69,27 @@ exports.config = {
     includeStackTrace: false, // Reporting is better handled by our SpecReporter below
     // A longer default timeout makes our test suite unusable
     defaultTimeoutInterval: 60000,
-    print: () => {} // take out the dot logging when tests are run
+    print: () => {}, // take out the dot logging when tests are run
   },
   directConnect: true,
 
   onPrepare: function() {
     // We do not want to ignoreSynchronization, it defeats the purpose of protractor
-    browser.ignoreSynchronization = true;
+    browser.ignoreSynchronization = true
 
     // add test log output configuration
-    jasmine.getEnv().addReporter(new SpecReporter({
-      spec: {
-        displayStacktrace: true
-      }
-    }));
+    jasmine.getEnv().addReporter(
+      new SpecReporter({
+        spec: {
+          displayStacktrace: true,
+        },
+      }),
+    )
   },
 
   /**
    * Angular 2 configuration
    * useAllAngular2AppRoots: tells Protractor to wait for any angular2 apps on the page instead of just the one matching
    */
-   useAllAngular2AppRoots: true
-  }
+  useAllAngular2AppRoots: true,
+}

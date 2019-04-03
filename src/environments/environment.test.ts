@@ -4,5 +4,5 @@
 
 export const environment = {
   production: false,
-  ENV: 'test'
-};
+  ENV: 'test',
+}

@@ -2,22 +2,22 @@
 // Style overrides and additions for: https://getbootstrap.com/docs/4.2/components/badge/
 
 .badge-success {
-    color: #fff;
-	background-color: #87d87c;
+  color: #fff;
+  background-color: #87d87c;
 }
 
 .badge-secondary {
-	background-color: #aaa;
+  background-color: #aaa;
 }
 
 .badge-info {
-	background-color: #ef832e;
+  background-color: #ef832e;
 }
 
 .badge-button {
-	cursor: pointer;
+  cursor: pointer;
 }
 
 .badge-grades {
-	background: lighten($green,10%);
+  background: lighten($green, 10%);
 }

@@ -5,13 +5,13 @@ import { take } from 'rxjs/operators'
 
 import { AuthService, BumblebeeService, UtilToolService } from '../../_services'
 import { ALLSPARK } from '../../app.constants'
-import { LockerService } from '../../_services/locker.service';
-import { Copy } from '../../shared';
+import { LockerService } from '../../_services/locker.service'
+import { Copy } from '../../shared'
 
 @Component({
   selector: 'request-academy-modal',
   templateUrl: './request-academy.component.pug',
-  styleUrls: ['./request-academy.component.scss']
+  styleUrls: ['./request-academy.component.scss'],
 })
 export class RequestAcademyModal implements OnInit {
   @Output()
@@ -39,18 +39,18 @@ export class RequestAcademyModal implements OnInit {
     private angulartics: Angulartics2,
     fb: FormBuilder,
     public _util: UtilToolService,
-    private _locker: LockerService
+    private _locker: LockerService,
   ) {
     this.user = this._auth.getUser()
 
-    let prevData: any = this._locker.get("requestAcademyFormData") || {}
+    let prevData: any = this._locker.get('requestAcademyFormData') || {}
 
     this.feedbackForm = fb.group({
       name: [this.user.fullname, Validators.required],
       email: [this.user.email, [Validators.required, this.emailValidator]],
       phone: [],
       content: [prevData.content],
-      contactType: ['email']
+      contactType: ['email'],
     })
 
     this.window = window
@@ -65,7 +65,7 @@ export class RequestAcademyModal implements OnInit {
    */
   private emailValidator(control: FormControl): any {
     let emailRe: RegExp = ALLSPARK.EMAILREGEX
-    return emailRe.test(control.value) ? null : { 'emailIncorrect': true }
+    return emailRe.test(control.value) ? null : { emailIncorrect: true }
   }
 
   private open(): void {
@@ -78,9 +78,12 @@ export class RequestAcademyModal implements OnInit {
 
   public feedbackClose(): void {
     this.closeModal.emit()
-    this.angulartics.eventTrack.next({ action: 'academyRequest_academyModal_revoked', properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }})
+    this.angulartics.eventTrack.next({
+      action: 'academyRequest_academyModal_revoked',
+      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
+    })
     this._util.showFeedbackModal = false
-    
+
     // Workaround: This modal is long enough that it needs to scroll and we don't want two scrollbars
     document.body.style.overflow = ''
   }
@@ -108,31 +111,37 @@ export class RequestAcademyModal implements OnInit {
       email: this.user.email,
       createdAt: this.user.createdAt,
       updatedAt: this.user.updatedAt,
-      hero: this.user.hero
+      hero: this.user.hero,
     }
 
     let data: any = {
-      emailSubject: "Hero Academy Request",
+      emailSubject: 'Hero Academy Request',
       formInfo: formValue,
-      type: "feedback",
-      user: userSend
+      type: 'feedback',
+      user: userSend,
     }
 
-    this._bumblebee.sendFeedback(data).pipe(take(1)).subscribe(
-      (res) => {
-        this.loading = false
-        this.angulartics.eventTrack.next({ action: 'academyRequest_academyModal_submitted', properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }})
-        this.requestSuccess = true
-        this._locker.remove("requestAcademyFormData")
-        this.feedbackClose()
-        this.showRequestSuccess = true
-      },
-      (err) => {
-        console.error(err)
-        this.loading = false
-        this.errorObject.serverError = "Something has gone wrong. Please try submitting your feedback again later!"
-        this._locker.set("requestAcademyFormData", formValue)
-      }
-    )
+    this._bumblebee
+      .sendFeedback(data)
+      .pipe(take(1))
+      .subscribe(
+        res => {
+          this.loading = false
+          this.angulartics.eventTrack.next({
+            action: 'academyRequest_academyModal_submitted',
+            properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
+          })
+          this.requestSuccess = true
+          this._locker.remove('requestAcademyFormData')
+          this.feedbackClose()
+          this.showRequestSuccess = true
+        },
+        err => {
+          console.error(err)
+          this.loading = false
+          this.errorObject.serverError = 'Something has gone wrong. Please try submitting your feedback again later!'
+          this._locker.set('requestAcademyFormData', formValue)
+        },
+      )
   }
 }

@@ -13,13 +13,13 @@ import { User } from './../shared/datatypes'
   // The selector is what angular internally uses
   // for `document.querySelectorAll(selector)` in our index.html
   // where, in this case, selector is the string 'home'
-  selector: 'dashboard',  // <home></home>
+  selector: 'dashboard', // <home></home>
   // We need to tell Angular's Dependency Injection which providers are in our app.
   providers: [],
   // Our list of styles in our component. We may add more to compose many styles together
   styleUrls: ['./dashboard.component.scss'],
   // Every Angular template is first compiled by the browser before Angular runs it's compiler
-  templateUrl: './dashboard.component.pug'
+  templateUrl: './dashboard.component.pug',
 })
 export class DashboardComponent implements OnInit {
   // Set our default values
@@ -31,30 +31,32 @@ export class DashboardComponent implements OnInit {
   // Tool Tip variables
   public toolTipsContent: any[] = [
     {
-      title: "The Dashboard",
-      image: "/assets/dashboard-tooltips/logo.png",
-      body: "This is The Dashboard, your hub to Edji. You can find all the Readings you have Created or Joined here!"
+      title: 'The Dashboard',
+      image: '/assets/dashboard-tooltips/logo.png',
+      body: 'This is The Dashboard, your hub to Edji. You can find all the Readings you have Created or Joined here!',
     },
     {
-      title: "Joined Readings",
-      image: "/assets/dashboard-tooltips/lightning-code.png",
-      body: 'These are Readings that you join to read and comment on. Join a new one by using a Lightning Code!'
+      title: 'Joined Readings',
+      image: '/assets/dashboard-tooltips/lightning-code.png',
+      body: 'These are Readings that you join to read and comment on. Join a new one by using a Lightning Code!',
     },
     {
-      title: "Created Readings",
-      image: "/assets/dashboard-tooltips/reading.png",
-      body: 'These are Readings that you created yourself. Each reading will have Groups, and each Group has a Lightning Code!'
+      title: 'Created Readings',
+      image: '/assets/dashboard-tooltips/reading.png',
+      body:
+        'These are Readings that you created yourself. Each reading will have Groups, and each Group has a Lightning Code!',
     },
     {
-      title: "Create A New Group",
-      image: "/assets/dashboard-tooltips/groups.png",
-      body: 'This creates an exact copy of a Reading that you can immediately share with a new Group of users.'
+      title: 'Create A New Group',
+      image: '/assets/dashboard-tooltips/groups.png',
+      body: 'This creates an exact copy of a Reading that you can immediately share with a new Group of users.',
     },
     {
-      title: "Copy & Edit",
-      image: "/assets/dashboard-tooltips/versioning.png",
-      body: 'This will create a new Version of your reading. This lets you simply add to, or edit a Reading you have already made.'
-    }
+      title: 'Copy & Edit',
+      image: '/assets/dashboard-tooltips/versioning.png',
+      body:
+        'This will create a new Version of your reading. This lets you simply add to, or edit a Reading you have already made.',
+    },
   ]
   public toolTipStepNo: number = 1
 
@@ -64,7 +66,7 @@ export class DashboardComponent implements OnInit {
     private _auth: AuthService,
     private _title: Title,
     private _locker: LockerService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {
     // this makes the window always render scrolled to the top
     this._router.events.subscribe(() => {
@@ -82,11 +84,9 @@ export class DashboardComponent implements OnInit {
     }
 
     this.subscriptions.push(
-      this._auth.currentUser.subscribe(
-        user => {
-          this.currentUser = user
-        }
-      )
+      this._auth.currentUser.subscribe(user => {
+        this.currentUser = user
+      }),
     )
   }
 
@@ -95,7 +95,7 @@ export class DashboardComponent implements OnInit {
       return false
     }
 
-    // incomplete initialized as false and passed through filters until 
+    // incomplete initialized as false and passed through filters until
     let incomplete: boolean = false
     if (!this.currentUser.identities || this.currentUser.identities.length < 1) {
       incomplete = true

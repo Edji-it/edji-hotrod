@@ -7,13 +7,13 @@ import { take } from 'rxjs/operators'
 
 import { AuthService, BumblebeeService, UtilToolService } from '../../_services'
 import { ALLSPARK } from '../../app.constants'
-import { LockerService } from '../../_services/locker.service';
-import { Copy } from '..';
+import { LockerService } from '../../_services/locker.service'
+import { Copy } from '..'
 
 @Component({
   selector: 'edji-feedback',
   templateUrl: './feedback.component.pug',
-  styleUrls: ['./feedback.component.scss']
+  styleUrls: ['./feedback.component.scss'],
 })
 export class FeedbackComponent implements OnInit {
   @Output()
@@ -42,16 +42,16 @@ export class FeedbackComponent implements OnInit {
     private angulartics: Angulartics2,
     fb: FormBuilder,
     public _util: UtilToolService,
-    private _locker: LockerService
+    private _locker: LockerService,
   ) {
     this.user = this._auth.getUser()
 
-    let prevData: any = this._locker.get("feedbackFormData") || {}
+    let prevData: any = this._locker.get('feedbackFormData') || {}
 
     this.feedbackForm = fb.group({
       name: [this.user.fullname, Validators.required],
       email: [this.user.email, [Validators.required, this.emailValidator]],
-      content: [prevData.content, Validators.required]
+      content: [prevData.content, Validators.required],
     })
 
     this.window = window
@@ -66,7 +66,7 @@ export class FeedbackComponent implements OnInit {
    */
   private emailValidator(control: FormControl): any {
     let emailRe: RegExp = ALLSPARK.EMAILREGEX
-    return emailRe.test(control.value) ? null : { 'emailIncorrect': true }
+    return emailRe.test(control.value) ? null : { emailIncorrect: true }
   }
 
   private open(): void {
@@ -80,7 +80,7 @@ export class FeedbackComponent implements OnInit {
   public feedbackClose(): void {
     this.closeModal.emit()
     this._util.showFeedbackModal = false
-    
+
     // Workaround: This modal is long enough that it needs to scroll and we don't want two scrollbars
     document.body.style.overflow = ''
   }
@@ -99,11 +99,18 @@ export class FeedbackComponent implements OnInit {
     // Browser Version
     // Edji Version
 
-    formValue.content = formValue.content + '<br><br>' + this._util.getPlatform(w) 
-        + '<br>' + this._util.getBrowser(w.userAgent) 
-        + '<br>' + this._util.getBrowserVersion(w.userAgent) 
-        + '<br>' + this._util.getEdjiVersion()
-        + '<br>' + window.location.href
+    formValue.content =
+      formValue.content +
+      '<br><br>' +
+      this._util.getPlatform(w) +
+      '<br>' +
+      this._util.getBrowser(w.userAgent) +
+      '<br>' +
+      this._util.getBrowserVersion(w.userAgent) +
+      '<br>' +
+      this._util.getEdjiVersion() +
+      '<br>' +
+      window.location.href
 
     // Only send the user properties we need to bumblebee
     var userSend: any = {
@@ -112,35 +119,38 @@ export class FeedbackComponent implements OnInit {
       email: this.user.email,
       createdAt: this.user.createdAt,
       updatedAt: this.user.updatedAt,
-      hero: this.user.hero
+      hero: this.user.hero,
     }
 
     let data: any = {
-      emailSubject: "Feedback form submitted!",
+      emailSubject: 'Feedback form submitted!',
       formInfo: formValue,
-      type: "feedback",
-      user: userSend
+      type: 'feedback',
+      user: userSend,
     }
 
-    this._bumblebee.sendFeedback(data).pipe(take(1)).subscribe(
-      (res) => {
-        this.loading = false
-        // fire an analytic event here for tracking purposes
-        this.angulartics.eventTrack.next({ 
-          action: 'send_feedback', 
-          properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
-        })
-        this.feedbackSuccess = true
-        this._locker.remove("feedbackFormData")
-        this.feedbackClose()
-        this.showFeedbackSuccess = true
-      },
-      (err) => {
-        console.error(err)
-        this.loading = false
-        this.errorObject.serverError = "Something has gone wrong. Please try submitting your feedback again later!"
-        this._locker.set("feedbackFormData", formValue)
-      }
-    )
+    this._bumblebee
+      .sendFeedback(data)
+      .pipe(take(1))
+      .subscribe(
+        res => {
+          this.loading = false
+          // fire an analytic event here for tracking purposes
+          this.angulartics.eventTrack.next({
+            action: 'send_feedback',
+            properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
+          })
+          this.feedbackSuccess = true
+          this._locker.remove('feedbackFormData')
+          this.feedbackClose()
+          this.showFeedbackSuccess = true
+        },
+        err => {
+          console.error(err)
+          this.loading = false
+          this.errorObject.serverError = 'Something has gone wrong. Please try submitting your feedback again later!'
+          this._locker.set('feedbackFormData', formValue)
+        },
+      )
   }
 }

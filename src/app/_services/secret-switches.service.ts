@@ -3,15 +3,14 @@
  * - Handle feature flagging via url params
  * - Switches use "secret" as the query param key
  */
-import { Injectable } from '@angular/core';
-import { Params } from '@angular/router';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Injectable } from '@angular/core'
+import { Params } from '@angular/router'
+import { Observable, BehaviorSubject } from 'rxjs'
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SecretSwitchesService {
-
   /**
    * Global Feature Flag object
    * - Keep updated when flags are added or removed, for reference
@@ -26,8 +25,8 @@ export class SecretSwitchesService {
     this.secretSwitchesUpdates = this.secretSwitchesSource.asObservable()
   }
 
-  public processSwitches(params: Params) : any {
-    if(params && params['secret']){
+  public processSwitches(params: Params): any {
+    if (params && params['secret']) {
       this.secretSwitches[params['secret']] = true
     }
     // Emit switch update
@@ -38,7 +37,7 @@ export class SecretSwitchesService {
 }
 
 export interface Secrets {
-    heroAvailable?: boolean
-    googleAuth?: boolean
-    academy?: boolean
+  heroAvailable?: boolean
+  googleAuth?: boolean
+  academy?: boolean
 }

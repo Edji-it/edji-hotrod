@@ -1,25 +1,24 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing'
 
-import { LicenseRedirectComponent } from './license-redirect.component';
+import { LicenseRedirectComponent } from './license-redirect.component'
 
 describe('LicenseRedirectComponent', () => {
-  let component: LicenseRedirectComponent;
-  let fixture: ComponentFixture<LicenseRedirectComponent>;
+  let component: LicenseRedirectComponent
+  let fixture: ComponentFixture<LicenseRedirectComponent>
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LicenseRedirectComponent ]
-    })
-    .compileComponents();
-  }));
+      declarations: [LicenseRedirectComponent],
+    }).compileComponents()
+  }))
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(LicenseRedirectComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    fixture = TestBed.createComponent(LicenseRedirectComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+  })
 
   it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+    expect(component).toBeTruthy()
+  })
+})

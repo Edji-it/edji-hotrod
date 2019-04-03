@@ -3,25 +3,24 @@
 // Copyright 2013-2015 thoughtbot, inc.
 // MIT License
 
-@import "variables";
+@import 'variables';
 
 // Bootstrap!
 @import '../../../node_modules/bootstrap/scss/bootstrap.scss';
 
-@import "mixins";
-@import "buttons";
-@import "forms";
-@import "layout";
-@import "lists";
-@import "media";
-@import "tables";
-@import "typography";
-@import "helpers";
-
+@import 'mixins';
+@import 'buttons';
+@import 'forms';
+@import 'layout';
+@import 'lists';
+@import 'media';
+@import 'tables';
+@import 'typography';
+@import 'helpers';
 
 * {
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 html {
@@ -35,68 +34,68 @@ html {
 }
 
 *:focus {
-	outline: none;
+  outline: none;
 }
 
 html {
-	overflow: visible;
+  overflow: visible;
 }
 
-
-html, body {
-	font-family: 'Open Sans', serif;
-	padding: 0px;
-	margin: 0px;
-	height: 100%;
-	width: 100%;
+html,
+body {
+  font-family: 'Open Sans', serif;
+  padding: 0px;
+  margin: 0px;
+  height: 100%;
+  width: 100%;
 }
 
 body {
-	overflow-x: hidden;
-	color: #111;
-	overflow-y: auto;
-	width: 100%;
-	background: $pageBg;
-	-webkit-overflow-scrolling: touch;
+  overflow-x: hidden;
+  color: #111;
+  overflow-y: auto;
+  width: 100%;
+  background: $pageBg;
+  -webkit-overflow-scrolling: touch;
 
-	-webkit-transition: all 600ms;
-	-moz-transition: all 600ms;
-	-ms-transition: all 600ms;
-	-o-transition: all 600ms;
-	transition: all 600ms;
+  -webkit-transition: all 600ms;
+  -moz-transition: all 600ms;
+  -ms-transition: all 600ms;
+  -o-transition: all 600ms;
+  transition: all 600ms;
 }
 
 blockquote {
-	padding: 6px 16px;
-	border: none;
-	quotes: "\201C" "\201D";
-	display: inline-block;
-	position: relative;
-	margin: 0;
+  padding: 6px 16px;
+  border: none;
+  quotes: '\201C''\201D';
+  display: inline-block;
+  position: relative;
+  margin: 0;
 }
 
-blockquote:before { 
-	content: open-quote;
-	font-weight: bold;
-	position:absolute;
-	top: -4px;
-	left: 0;
-	font-size: 18px;
-} 
-blockquote:after { 
-	content: close-quote;
-	font-weight: bold;
-	position:absolute;
-	// bottom: 0;
-	right: 0;
-	font-size: 18px;
+blockquote:before {
+  content: open-quote;
+  font-weight: bold;
+  position: absolute;
+  top: -4px;
+  left: 0;
+  font-size: 18px;
+}
+blockquote:after {
+  content: close-quote;
+  font-weight: bold;
+  position: absolute;
+  // bottom: 0;
+  right: 0;
+  font-size: 18px;
 }
 
 body {
-	// Lock scroll for mobile
-	@media(max-width: $medium-screen) {
-		&.body__lock-scroll {
-			overflow-y: hidden;
-		}
-	}
+  // Lock scroll for mobile
+  @media (max-width: $medium-screen) {
+    &.body__lock-scroll {
+      overflow-y: hidden;
+    }
+  }
 }

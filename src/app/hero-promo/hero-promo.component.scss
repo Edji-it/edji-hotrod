@@ -1,106 +1,105 @@
 @import '../../sass/base/variables';
 
 .promo-screen-wrap {
-    display: inline-block;
-    max-width: 400px;
-    border:1px solid #dedede;
+  display: inline-block;
+  max-width: 400px;
+  border: 1px solid #dedede;
 }
 
 .twilight {
-    background-color:#003350;
-    background:linear-gradient( 180deg, #003350 75%,#91925d);
-    color: #fff;
+  background-color: #003350;
+  background: linear-gradient(180deg, #003350 75%, #91925d);
+  color: #fff;
 }
 
 .big-bold {
-    font-weight: 800;
-    font-size: 72px;
-    letter-spacing: -2px;
-    margin-bottom: 6px;
-    line-height: 65px;
+  font-weight: 800;
+  font-size: 72px;
+  letter-spacing: -2px;
+  margin-bottom: 6px;
+  line-height: 65px;
 }
 
 .medium-bold {
-    font-weight: 800;
-    font-size: 48px;
-    letter-spacing: -2px;
-    margin-bottom: 6px;
-    line-height: 45px;
+  font-weight: 800;
+  font-size: 48px;
+  letter-spacing: -2px;
+  margin-bottom: 6px;
+  line-height: 45px;
 }
 
 .small-bold {
-    font-weight: 800;
-    font-size: 24px;
-    letter-spacing: -1px;
-    margin-bottom: 6px;
-    line-height: 26px;
-    color: #121212;
+  font-weight: 800;
+  font-size: 24px;
+  letter-spacing: -1px;
+  margin-bottom: 6px;
+  line-height: 26px;
+  color: #121212;
 }
 
 .medium-semibold {
-    font-weight: 400;
-    font-size: 22px;
-    color: #121212;
-    letter-spacing: 0px;
-    line-height: 32px;
+  font-weight: 400;
+  font-size: 22px;
+  color: #121212;
+  letter-spacing: 0px;
+  line-height: 32px;
 
-    &.on-dark {
-        color: #fff;
-    }
+  &.on-dark {
+    color: #fff;
+  }
 }
 
-
 .countdown-clock {
-    color: #fff;
-    text-align: center;
-    padding: 20px;
-    font-size: 2em;
-    position: absolute;
-    top: 420px;
-    width: 100%;
-    font-weight: 300;
-    letter-spacing: 5px;
-    text-shadow: 1px 1px 5px rgba(0,0,0,0.5);
+  color: #fff;
+  text-align: center;
+  padding: 20px;
+  font-size: 2em;
+  position: absolute;
+  top: 420px;
+  width: 100%;
+  font-weight: 300;
+  letter-spacing: 5px;
+  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
 
-    @media(max-width: $phone) {
-        font-size: 1.5em;
-        top: 330px;
-    }
+  @media (max-width: $phone) {
+    font-size: 1.5em;
+    top: 330px;
+  }
 }
 
 .promo-header {
-    color: #fff;
-    font-size: 5.5em;
-    width: 100%;
-    position: absolute;
-    top: 159px;
-    text-shadow: 1px 1px 10px rgba(0,0,0,0.5);
+  color: #fff;
+  font-size: 5.5em;
+  width: 100%;
+  position: absolute;
+  top: 159px;
+  text-shadow: 1px 1px 10px rgba(0, 0, 0, 0.5);
 
-    @media(max-width: $phone) {
-        font-size: 4em;
-        top: 100px;
-    }
+  @media (max-width: $phone) {
+    font-size: 4em;
+    top: 100px;
+  }
 }
 
 .hero-background {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    top: 40px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 40px;
 }
 
 .call-to-action {
-    min-height: 500px;
-    z-index: 1;
-    position: relative;
+  min-height: 500px;
+  z-index: 1;
+  position: relative;
 
-    @media(max-width: $phone) {
-        min-height: 420px;
-    }
+  @media (max-width: $phone) {
+    min-height: 420px;
+  }
 }
 
 .hero-promo-form {
-    padding: 40px 0px;
+  padding: 40px 0px;
 }
 
 .icon-share-button {
@@ -110,64 +109,66 @@
 }
 
 .feature-preview {
-    cursor: pointer;
+  cursor: pointer;
 
+  & .img-wrap {
+    display: inline-block;
+    padding: 30px;
+    background: rgb(250, 248, 248);
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    // border-radius: 50%;
+    // transform: scale(0.95);
+    transition: all linear 300;
+  }
+
+  &:hover,
+  &:active {
     & .img-wrap {
-        display:inline-block;
-        padding: 30px;
-        background:rgb(250, 248, 248);
-        border-radius:50%;
-        width: 120px;
-        height: 120px;
-        // border-radius: 50%;
-        // transform: scale(0.95);
-        transition: all linear 300;
+      background: #fff4e0;
+      transform: scale(1.04);
     }
-
-    &:hover, &:active {
-        & .img-wrap {
-            background:#FFF4E0;
-            transform: scale(1.04);
-        }
-    }
+  }
 }
 
 .promo-spotlight {
-    position:absolute;
-    right:10%;
-    bottom:0px;
-    height:95%;
-    opacity: 0.9;
+  position: absolute;
+  right: 10%;
+  bottom: 0px;
+  height: 95%;
+  opacity: 0.9;
 
-    @media(max-width:$tablet) {
-        height: 400px;
-        opacity: 0.8;
-    }
+  @media (max-width: $tablet) {
+    height: 400px;
+    opacity: 0.8;
+  }
 
-    @media(max-width:$phone) {
-        height: 250px;
-        opacity: 0.8;
-    }
+  @media (max-width: $phone) {
+    height: 250px;
+    opacity: 0.8;
+  }
 }
 
 .promo-banner {
-    position: fixed;
-    top: $navBarHeight + 2px;
-    height: 50px;
-    width: 100%;
-    background: #FFF4E0;
-    z-index: 1;
-    font-weight: 800;
-    font-size: 14px;
-    line-height: 16px;
-    color: $red;
-    text-align: center;
-    padding: 10px;
+  position: fixed;
+  top: $navBarHeight + 2px;
+  height: 50px;
+  width: 100%;
+  background: #fff4e0;
+  z-index: 1;
+  font-weight: 800;
+  font-size: 14px;
+  line-height: 16px;
+  color: $red;
+  text-align: center;
+  padding: 10px;
 
-    cursor: pointer;
+  cursor: pointer;
 
-    &:hover, &:active {
-        padding: 7px;
-        border: 3px solid $red;
-    }
+  &:hover,
+  &:active {
+    padding: 7px;
+    border: 3px solid $red;
+  }
 }

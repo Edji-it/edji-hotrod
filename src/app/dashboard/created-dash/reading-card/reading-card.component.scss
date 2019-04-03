@@ -2,406 +2,408 @@
 @import '../../../../sass/base/variables';
 
 .project-card-wrap {
-    width: 100%; //calc(100% - #{ $projectCardGutter });
+  width: 100%; //calc(100% - #{ $projectCardGutter });
 
-    // @media (max-width: $phone) {
-    //     width: 100%;
-    // }
+  // @media (max-width: $phone) {
+  //     width: 100%;
+  // }
 }
 
 .project-card {
-    margin-bottom: 0px !important;
-    border-top: none !important;
-    border-bottom-style: dashed;
-    padding-top: 0;
-    padding-bottom: 0;
-    
-    &:last-of-type {
-        border-bottom-style: solid;
-    }
+  margin-bottom: 0px !important;
+  border-top: none !important;
+  border-bottom-style: dashed;
+  padding-top: 0;
+  padding-bottom: 0;
 
-    & .title {
-        display: block;
-        font-size: 14px;
-    }
+  &:last-of-type {
+    border-bottom-style: solid;
+  }
 
-    & .metadata {
-        font-size: 10px;
-    }
+  & .title {
+    display: block;
+    font-size: 14px;
+  }
 
-    &.new-project {
-        background: #edffed;
-    }
+  & .metadata {
+    font-size: 10px;
+  }
+
+  &.new-project {
+    background: #edffed;
+  }
 }
 
 .project-card--new {
-    float: left !important;
-    background: transparent;
-    box-shadow: none;
-    border-top: none;
+  float: left !important;
+  background: transparent;
+  box-shadow: none;
+  border-top: none;
 }
 
 .project-title-input__save {
-    display: none;
-    font-size: 23px;
-    position: absolute;
-    top: 3px;
-    right: -30px;
-    line-height: 1em;
-    cursor: pointer;
+  display: none;
+  font-size: 23px;
+  position: absolute;
+  top: 3px;
+  right: -30px;
+  line-height: 1em;
+  cursor: pointer;
 }
 
 .project-title-input {
-    float: left;
-    //width: calc(100% - 170px);
-    width: 75%;
-    position: relative;
+  float: left;
+  //width: calc(100% - 170px);
+  width: 75%;
+  position: relative;
 
-    & input {
-        line-height: 2em;
+  & input {
+    line-height: 2em;
 
-        &:active, &:focus {
-            & + .project-title-input__save {
-                display: block;
-            }
-        }
+    &:active,
+    &:focus {
+      & + .project-title-input__save {
+        display: block;
+      }
     }
+  }
 }
 
 .add-project-icon {
-    background: #fafafa;
-    border: 0px solid transparent;
+  background: #fafafa;
+  border: 0px solid transparent;
 
-    &:hover, &:active {
-        background: #ccc;
-    }
+  &:hover,
+  &:active {
+    background: #ccc;
+  }
 }
 
 .reading-card {
-    margin-bottom: 0px !important;
-    border-bottom: 1px dashed #cdcdcd !important;
-    overflow:visible;
-    min-height: 115px;
-    float: none;
-    width: 100%;
+  margin-bottom: 0px !important;
+  border-bottom: 1px dashed #cdcdcd !important;
+  overflow: visible;
+  min-height: 115px;
+  float: none;
+  width: 100%;
 }
 
-
 .reading-access-icon {
-    padding: 0 4px;
+  padding: 0 4px;
 
-    & i {
-        pointer-events: none;
-        border-radius: 50%;
+  & i {
+    pointer-events: none;
+    border-radius: 50%;
+  }
+  &:not(.read-only) {
+    &.access-icon__hover:hover {
+      cursor: pointer;
+      background: #f2f2f2;
+      border-radius: 13px;
     }
-    &:not(.read-only) {
-        &.access-icon__hover:hover {
-            cursor: pointer;
-            background: #f2f2f2;
-            border-radius: 13px;
-        }
-    }
+  }
 }
 
 .reading-data {
-	float: left;
-	width: 100%;
-    line-height: 30px;
+  float: left;
+  width: 100%;
+  line-height: 30px;
 }
 
 .project-card {
-    margin-bottom: $projectCardGutter;
-    width: 100%;
+  margin-bottom: $projectCardGutter;
+  width: 100%;
 }
 
 .tag-row {
-    white-space: nowrap;
-    overflow: hidden;
-    display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  display: inline-block;
 }
 
 .reading-action-row {
-    text-align: right;
-    display: inline-block;
-    vertical-align: top;
+  text-align: right;
+  display: inline-block;
+  vertical-align: top;
 }
 
 .reading-action {
-    margin-left: 5px;
-    display: inline-block;
+  margin-left: 5px;
+  display: inline-block;
 
-    &.disabled {
-        pointer-events: all;
-    }
+  &.disabled {
+    pointer-events: all;
+  }
 }
 
-
 button.new-reading-btn {
-    float: right;
+  float: right;
 }
 
 /* Mobile Optimization */
 @media (max-width: $tablet) {
-    .readings-header {
-        display: none;
-    }
+  .readings-header {
+    display: none;
+  }
 }
 
 .reading-options {
-    float: right;
-    & > button {
-        border-radius: 50%;
-    }
+  float: right;
+  & > button {
+    border-radius: 50%;
+  }
 }
 
 .reading-card-wrap {
-    position: relative;
+  position: relative;
 }
 
 .draft-edit {
-    cursor: pointer;
-    border: 1px dotted #B3DCEE !important;
-    height: 0px;
+  cursor: pointer;
+  border: 1px dotted #b3dcee !important;
+  height: 0px;
 }
 
 .draft-edit:hover {
-    background: #fafafa;
-    color: #00a2f5;
+  background: #fafafa;
+  color: #00a2f5;
 }
 
 .blockquote-footer {
-    color: inherit;
+  color: inherit;
 }
 
 .badge-subject {
-    display: inline-block;
-    color: #fff;
-    font-size: 10px;
-    height: 12px;
-    line-height: 12px;
-    background: #79b1f3;
-    text-transform:capitalize;
-    margin-right: 2px;
+  display: inline-block;
+  color: #fff;
+  font-size: 10px;
+  height: 12px;
+  line-height: 12px;
+  background: #79b1f3;
+  text-transform: capitalize;
+  margin-right: 2px;
 }
 
 .version-card {
-    border: none;
-    display: block;
-    padding: 15px;
-    padding-top:0px;
-    padding-left: 30px;
-    position: relative;
-    overflow: hidden;
-    padding-bottom: 50px;
+  border: none;
+  display: block;
+  padding: 15px;
+  padding-top: 0px;
+  padding-left: 30px;
+  position: relative;
+  overflow: hidden;
+  padding-bottom: 50px;
 
-    height: 50px;
-    max-height: 50px;
+  height: 50px;
+  max-height: 50px;
 
-    &.show {
-        height: auto;
-        min-height: 50px;
-        padding-top: 15px;
-        max-height: none !important;
+  &.show {
+    height: auto;
+    min-height: 50px;
+    padding-top: 15px;
+    max-height: none !important;
 
-        &.draftyFix {
-            padding-bottom: 30px;
-        }
+    &.draftyFix {
+      padding-bottom: 30px;
     }
-   
+  }
 }
 
 .version-card--block {
-    display: block;
+  display: block;
+  min-height: 50px;
+  transition: max-height linear 0.3s, min-height linear 0.3s;
+  position: relative;
+
+  &.gone {
+    display: none !important;
+
+    & .version-card {
+      height: 50px !important;
+    }
+  }
+
+  &.hidden {
     min-height: 50px;
-    transition: max-height linear 0.3s, min-height linear 0.3s;
-    position: relative;
-
-    &.gone {
-        display: none !important;
-
-        & .version-card {
-            height: 50px !important;
-        }
-    }
-
-    &.hidden {
-        min-height: 50px;
-        max-height: 50px !important;
-        overflow: hidden;
-    }
+    max-height: 50px !important;
+    overflow: hidden;
+  }
 }
 
 .btn-showVersion {
-    display: inline-block;
-    transition: transform linear 0.2s;
-    transform: rotate(-90deg) translate3d(0,0,0) !important;
-    height: 48px;
+  display: inline-block;
+  transition: transform linear 0.2s;
+  transform: rotate(-90deg) translate3d(0, 0, 0) !important;
+  height: 48px;
 
-    .show > .version-toggle > & {
-        transform: rotate(-180deg) translate3d(0,0,0) !important;
-    }
+  .show > .version-toggle > & {
+    transform: rotate(-180deg) translate3d(0, 0, 0) !important;
+  }
 }
 
 .version-toggle {
-    position: absolute;
-    bottom: 0px;
-    background: #fff;
-    height: 50px;
-    width: 100%;
-    font-size: 12px;
-    
-    cursor: pointer;
-    -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Safari */
-    -khtml-user-select: none; /* Konqueror HTML */
-    -moz-user-select: none; /* Firefox */
-    -ms-user-select: none; /* Internet Explorer/Edge */
-    user-select: none;
+  position: absolute;
+  bottom: 0px;
+  background: #fff;
+  height: 50px;
+  width: 100%;
+  font-size: 12px;
+
+  cursor: pointer;
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none;
 }
 
 .blockquote-footer {
-    font-size: 12px;
-    font-style: italic;
+  font-size: 12px;
+  font-style: italic;
 }
 
 .versions {
+  display: block;
+  margin-bottom: $base-pad/2;
+  // Do not make relative
+  // position: relative;
+
+  &.hidden {
+    display: none;
+    pointer-events: none;
+  }
+
+  &:before {
+    content: ' ';
     display: block;
-    margin-bottom: $base-pad/2;
-    // Do not make relative
-    // position: relative;
+    position: absolute;
+    // bottom: 50%;
+    left: 15px;
+    transform: translate3d(0, calc(-100% + 45px), 0);
+    width: 40px;
+    height: 100%;
+    border-left: 1px solid #cdcdcd;
+    border-bottom: 1px solid #cdcdcd;
+    // background: #fff;
+  }
 
-    &.hidden {
-        display: none;
-        pointer-events: none;
-    }
+  &:not(.show):before {
+    display: none;
+  }
 
-    &:before {
-        content: ' ';
-        display: block;
-        position: absolute;
-        // bottom: 50%;
-        left: 15px;
-        transform: translate3d(0, calc(-100% + 45px), 0);
-        width: 40px;
-        height: 100%;
-        border-left: 1px solid #cdcdcd;
-        border-bottom: 1px solid #cdcdcd;
-        // background: #fff;
-    }
+  & .version-number {
+    display: none;
+    position: absolute;
+    left: 5px;
+    height: 20px;
+    width: 20px;
+    text-align: center;
+    background: #fff;
+    border-radius: 50%;
+    border: 1px solid #cdcdcd;
+    transform: translate3d(0, 33px, 0);
+    z-index: 9000;
+  }
 
-    &:not(.show):before {
-        display: none;
-    }
-
-    & .version-number {
-        display: none;
-        position: absolute;
-        left: 5px;
-        height: 20px;
-        width: 20px;
-        text-align: center;
-        background: #fff;
-        border-radius: 50%;
-        border: 1px solid #cdcdcd;
-        transform: translate3d(0,33px,0);
-        z-index: 9000;
-    }
-
-    &.show .version-number {
-        display: block;
-    }
+  &.show .version-number {
+    display: block;
+  }
 }
 
 .versionShowText {
-    padding-left: 30px;
-    margin: 0;
-    &.show {
-        margin-bottom: 1em;
-    }
+  padding-left: 30px;
+  margin: 0;
+  &.show {
+    margin-bottom: 1em;
+  }
 }
 
 .dropdown-menu {
-    z-index: 1001;
+  z-index: 1001;
 }
 
 .dropdown-item {
-    line-height: 1.8em;
+  line-height: 1.8em;
 }
 
 .btn--delete-project {
-    opacity: 0.5;
-    filter: grayscale(100%);
-    position: absolute;
-    top: 50%;
-    right: 10px;
-    transform: translateY(-50%);
+  opacity: 0.5;
+  filter: grayscale(100%);
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
 
-    & span {
-        pointer-events: none;
-    }
+  & span {
+    pointer-events: none;
+  }
 
-    &:hover, &:focus, &:active {
-        filter: grayscale(0%);
-        opacity: 1;
-    }
+  &:hover,
+  &:focus,
+  &:active {
+    filter: grayscale(0%);
+    opacity: 1;
+  }
 
-    &.btn--delete-draft {
-        top: 25%;
-    }
+  &.btn--delete-draft {
+    top: 25%;
+  }
 }
 
 .project-row--right-pad {
-    padding-right: 50px;
-    padding-top: 15px;
-    padding-bottom: 15px;
+  padding-right: 50px;
+  padding-top: 15px;
+  padding-bottom: 15px;
 }
 
 .reading-access-icon .tooltip {
-    width: 236px;
+  width: 236px;
 }
 
 .reading-access-icon .tooltip.show {
-    visibility: visible;
-    opacity: 1;
+  visibility: visible;
+  opacity: 1;
 }
 
 .reading-access-icon .tooltip-title {
-    margin-bottom: 12px;
+  margin-bottom: 12px;
 }
 
 #readingMakePrivate {
-    margin-right: 0;
+  margin-right: 0;
 }
 
 .reading-draft {
-    width: 20%;
-    height: 50px;
-    position: absolute;
-    left: 0;
-    top: 50%;
+  width: 20%;
+  height: 50px;
+  position: absolute;
+  left: 0;
+  top: 50%;
 }
 
 .list-item--button {
-    &.read-only {
-        background: inherit;
-        cursor: inherit;
-    }
+  &.read-only {
+    background: inherit;
+    cursor: inherit;
+  }
 }
 
 .reading-project--label {
-    &.read-only {
-        color: inherit;
-    }
+  &.read-only {
+    color: inherit;
+  }
 }
 
 .reading-version {
-    border-bottom: 1px solid $medium-gray;
-    color: $medium-gray;
-    background: #ffffff;
-    cursor: pointer;
+  border-bottom: 1px solid $medium-gray;
+  color: $medium-gray;
+  background: #ffffff;
+  cursor: pointer;
 
-    &:hover, &:focus {
-        color: $blue;
-        border-color: $blue;
-    }
+  &:hover,
+  &:focus {
+    color: $blue;
+    border-color: $blue;
+  }
 }

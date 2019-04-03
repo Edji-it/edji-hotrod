@@ -8,26 +8,26 @@
   font-size: 28px;
   font-weight: 800;
   &.narrow {
-    height: calc(100vw * 140 / 1280.0);
-    line-height: calc(100vw * 140 / 1280.0);
+    height: calc(100vw * 140 / 1280);
+    line-height: calc(100vw * 140 / 1280);
     font-size: 16px;
     font-weight: 800;
   }
   border: 2px dotted;
   &-0 {
-    color: #FDEF80;
+    color: #fdef80;
   }
   &-1 {
-    color: #FCE180;
+    color: #fce180;
   }
   &-2 {
-    color: #FCCB80;
+    color: #fccb80;
   }
   &-3 {
-    color: #FCA580;
+    color: #fca580;
   }
   &-4 {
-    color: #FF5C5C;
+    color: #ff5c5c;
   }
 }
 
@@ -50,7 +50,7 @@
     }
   }
   &.referral--connecting-line:before {
-    border-right: 1px solid #DCDCDC;
+    border-right: 1px solid #dcdcdc;
     content: '';
     position: absolute;
     z-index: 1;
@@ -69,25 +69,25 @@
   }
   &-0 {
     &:after {
-      border-color: #FCE180;
+      border-color: #fce180;
       // border-image: linear-gradient(180deg, #FDEF80 0%, #FCE180 100%);
     }
   }
   &-1 {
     &:after {
-      border-color: #FCCB80;
+      border-color: #fccb80;
       // border-image: linear-gradient(180deg, #FCE180 0%, #FCCB80 100%);
     }
   }
   &-2 {
     &:after {
-      border-color: #FCA580;
+      border-color: #fca580;
       // border-image: linear-gradient(180deg, #FCCB80 0%, #FCA580 100%);
     }
   }
   &-3 {
     &:after {
-      border-color: #FF5C5C;
+      border-color: #ff5c5c;
       // border-image: linear-gradient(180deg, #FCA580 0%, #FF5C5C 100%);
     }
   }
@@ -144,15 +144,15 @@
 }
 
 .referral-icon--narrow {
-  height: calc(100vw * 175 / 1280.0);
-  width: calc(100vw * 175 / 1280.0);
+  height: calc(100vw * 175 / 1280);
+  width: calc(100vw * 175 / 1280);
 }
 
 .coupon-message {
   height: auto;
   min-height: 60px;
   margin-top: 36px;
-  border: solid 1px #DCDCDC;
+  border: solid 1px #dcdcdc;
   border-radius: 3px;
   padding: 8px 12px;
   width: 86%;
@@ -166,7 +166,7 @@
 }
 
 .btn-coupon {
-  float:right;
+  float: right;
   margin-left: 5px;
   padding: 10px;
   border-radius: 4px;
