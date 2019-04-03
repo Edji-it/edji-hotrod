@@ -183,9 +183,10 @@ label input, label textarea {
 .form-control-clear {
   position: absolute;
   font-size: 0.75em;
-  right: 0.4em;
+  left: calc(100% + 0.3em);
   top: 50%;
   transform: translateY(-50%);
+  z-index: $zMid;
 
   &.icon-close {
     opacity: 0.4;
@@ -195,7 +196,17 @@ label input, label textarea {
     opacity: 1;
   }
 }
-
+// Autosizing classes
+.form-control-dummysize {
+  position: fixed !important;
+  top: -1000px;
+  left: -1000px;
+  pointer-events: none;
+}
+.form-control-autosize {
+  min-width: 200px;
+  max-width: 100%;
+}
 .has-success .form-control-feedback {
   color: #79e883;
 }

@@ -12,19 +12,22 @@ nav-bar([showDashboardOptions]="true")
                         .input-group.input-group-lg
                             .input-group-prepend-icon((click)="searchInput.focus()")
                                 i.icon.icon-search
-                            input#readingSearch.form-control(
+                            input#readingSearch.form-control.form-control-autosize(
                                 #searchInput,
                                 name="SearchTermInput", 
                                 [(ngModel)]="searchTerm", 
                                 type="text", 
                                 style="text-align: left;", 
                                 placeholder="Search...",
-                                (keyup.enter)="updateSearchParams('search_term')"
+                                (keyup.enter)="updateSearchParams('search_term')",
+                                [style.minWidth]="searchFieldWidth",
+                                (keyup)="searchFieldWidth = dummySearchField.clientWidth"
                             )
                             .form-control-clear.icon.icon-close(
                                 *ngIf="searchTerm.length > 0",
                                 (click)="searchTerm = ''; updateSearchParams('')"
                             )
+                            .form-control.form-control-dummysize(#dummySearchField) {{ searchTerm }}
                 div.mt-2
                     span Found <b>{{ total || 0 }}</b> readings&nbsp;
                     a.link(
@@ -83,7 +86,6 @@ nav-bar([showDashboardOptions]="true")
                             *ngIf="subjectFilter.length > 0",
                             (click)="subjectFilter = []; updateSearchParams('')"
                         ) Clear
-                            i.icon.icon-close
                     ss-multiselect-dropdown(
                         id="subjectDropdown",
                         [(ngModel)]="subjectFilter",

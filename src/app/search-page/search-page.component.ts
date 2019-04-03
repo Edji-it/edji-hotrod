@@ -40,6 +40,7 @@ export class SearchPage implements OnInit {
 
   // Search 
   public searchTerm: string = ''
+  public searchFieldWidth: number = 100
 
   // Search alerts
   public searchAlerts: {
