@@ -7,6 +7,7 @@ import { ActivatedRoute } from '@angular/router'
 import { ReadingService, ProjectService, AuthService } from '../../../_services';
 import { Reading, Project, User } from '../../../shared/datatypes';
 import { take } from 'rxjs/operators';
+import { ALLSPARK } from 'src/app/app.constants';
 
 @Component({
   selector: 'hot-reading-card',
@@ -38,6 +39,8 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
   public currentPublicFlag: boolean
   public showReadingDiscoverModal: boolean
   public showBookmarkTooltip: boolean
+  public gradeInitials: string[] = ALLSPARK.GRADEINITIALS
+  public gradeDisplay: string
   
   public versionHeight = 50;
 
@@ -57,6 +60,17 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
         this.user = user
       })
     )
+    if (this.reading.grade_levels) {
+      let grades = this.reading.grade_levels
+      // Set grade values
+      let gradeStart = this.gradeInitials[grades[0]]
+      let gradeEnd = this.gradeInitials[grades[grades.length - 1]]
+      if (gradeStart === gradeEnd) {
+        this.gradeDisplay = gradeStart
+      } else {
+        this.gradeDisplay = gradeStart + " - " + gradeEnd
+      }
+    }
   }
 
   ngOnDestroy() {

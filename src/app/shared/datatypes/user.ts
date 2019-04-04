@@ -58,5 +58,7 @@ interface BaseUser {
     id: string
     type: string
     email?: string
-  }>
+  }>,
+  // User ids this user follows
+  following?: string[]
 }

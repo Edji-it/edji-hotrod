@@ -51,7 +51,7 @@ export class ReadingService {
    * Get all Created Readings for a user, paginated
    * @param filters object containing pagination values (to eventually include other filters)
    */
-  public updateCreated(user: User, filters?: ReadingFilters) : void {
+  public updateCreated(user: User, filters?: ReadingFilters): void {
     let feedParams = new HttpParams()
     // Set Pagination values
     if (filters) {
@@ -65,47 +65,49 @@ export class ReadingService {
     // Populate list of Projects user has created on Reading
     feedParams = feedParams.append("pop", "projects")
 
-    this._http.get(this._auth.getUrl() + '/api/v1/readings', 
-        { headers: new HttpHeaders({
+    this._http.get(this._auth.getUrl() + '/api/v1/readings',
+      {
+        headers: new HttpHeaders({
           'Content-Type': 'application/json',
           'Authorization': this._auth.getToken()
-        }), 
-        params: feedParams })
-        .pipe(take(1))
-        .subscribe((data: any) => { 
-          if (data.readings && !user.hero_status && user.archive_readings_before) {
-            let archivedBefore = new Date(user.archive_readings_before)
-            let readings = data.readings.slice()
-            let archivedTally: number = 0
-            // Loop through readings and mark archived
-            for (let i = 0; i < readings.length; i++) {
-              /**
-               * Readings are "archived" if:
-               * - Updated date is prior to archived before date
-               * - Readings before Hero v2 (01-01-2018) are "legacy" and not archived
-               */
-              let readingDate = new Date(readings[i].createdAt)
-              if (readingDate < archivedBefore && readingDate >= new Date('2019-01-01')) {
-                readings[i].archived = true
-                archivedTally++
-                // Limit number of archived shown to 2, and flag begin/end of archive
-                if (archivedTally == 1) {
-                  readings[i].archivedBegin = true
-                } else if (archivedTally == 2) {
-                  readings[i].archivedEnd = true
-                } else  if (archivedTally > 2) {
-                  readings.splice(i, 1)
-                  i--
-                }
+        }),
+        params: feedParams
+      })
+      .pipe(take(1))
+      .subscribe((data: any) => {
+        if (data.readings && !user.hero_status && user.archive_readings_before) {
+          let archivedBefore = new Date(user.archive_readings_before)
+          let readings = data.readings.slice()
+          let archivedTally: number = 0
+          // Loop through readings and mark archived
+          for (let i = 0; i < readings.length; i++) {
+            /**
+             * Readings are "archived" if:
+             * - Updated date is prior to archived before date
+             * - Readings before Hero v2 (01-01-2018) are "legacy" and not archived
+             */
+            let readingDate = new Date(readings[i].createdAt)
+            if (readingDate < archivedBefore && readingDate >= new Date('2019-01-01')) {
+              readings[i].archived = true
+              archivedTally++
+              // Limit number of archived shown to 2, and flag begin/end of archive
+              if (archivedTally == 1) {
+                readings[i].archivedBegin = true
+              } else if (archivedTally == 2) {
+                readings[i].archivedEnd = true
+              } else if (archivedTally > 2) {
+                readings.splice(i, 1)
+                i--
               }
             }
-            //  Update return value
-            data.readings = readings
           }
-          this.userReadingsSource.next(data)
-        }, (error) => {
-          this.userReadingsSource.error(error)
-        })
+          //  Update return value
+          data.readings = readings
+        }
+        this.userReadingsSource.next(data)
+      }, (error) => {
+        this.userReadingsSource.error(error)
+      })
   } //getCreated()
 
   // Pull one reading by ID
@@ -123,7 +125,20 @@ export class ReadingService {
       );
   } // public get(id : string) : Observable<any>
 
-  public setReadingObj(reading: any) : void {
+  public search(queryString): Observable<any> {
+    // let queryString = ''
+    // let { term } = query
+
+    // if (term) {
+    //   queryString += 'title=' + term + '&html=' + term
+    // }
+
+    return this._http
+      .get(this._auth.getUrl() + '/api/v1/readings/_search?' + queryString, this._auth.getOptions())
+      .pipe(take(1))
+  }
+
+  public setReadingObj(reading: any): void {
     // console.log("Set", reading)
     if (reading._id) {
       this.readingValue = reading
@@ -167,7 +182,7 @@ export class ReadingService {
           let readingResponse = this.userReadingsSource.value
           readingResponse.readings.forEach(
             (reading, index) => {
-              
+
               if (reading.version_count > 1) {
                 // Reload content (slower but simpler)
                 this.updateCreated(this._auth.getUser())
@@ -192,15 +207,15 @@ export class ReadingService {
     let readingRes = this.userReadingsSource.value
     let projectFound = false
 
-    readingRes.readings.forEach( reading => {
+    readingRes.readings.forEach(reading => {
       reading.projects = reading.projects.filter(
-          (project) => {
-            if (project._id == targetProject._id) {
-              projectFound = true
-            }
-            return project._id != targetProject._id
+        (project) => {
+          if (project._id == targetProject._id) {
+            projectFound = true
           }
-        )
+          return project._id != targetProject._id
+        }
+      )
     })
 
     this.userReadingsSource.next(readingRes)
@@ -210,7 +225,7 @@ export class ReadingService {
   public save(reading: any): Observable<any> {
     // DO NOT ADD OWNER_ID OR TEACHER_IDS
     // The server takes care of all of that by itself
-    
+
     if (reading['_id']) {
       let putReading = {
         title: reading.title,
@@ -252,10 +267,10 @@ export class ReadingService {
         );
     } // if
   } // public save()
-  
+
   public getFeed(filters?: FilterObj): Observable<any> {
     let feedParams = new HttpParams()
-    if (filters  && filters['grades']) {
+    if (filters && filters['grades']) {
       let grades = filters['grades']
       // filters['grades'].forEach( grade => { feedParams = feedParams.append("grades", grade + "")})
       feedParams = feedParams.append("grades", Math.min(...grades) + "")
@@ -271,27 +286,29 @@ export class ReadingService {
       feedParams = feedParams.append("type", filters['type'])
     }
     feedParams = feedParams.append("populate", "owner").append("populate", "words_preview")
-    
+
     //{{url}}/readings/feed?grades[]=1&grades[]=8&populate[]=words_preview&populate[]=owner&start=0
     return this._http.get(
-      this._auth.getUrl() + '/readings/feed', 
-        { headers: new HttpHeaders({
+      this._auth.getUrl() + '/readings/feed',
+      {
+        headers: new HttpHeaders({
           'Content-Type': 'application/json',
           'Authorization': this._auth.getToken()
-        }), 
-        params: feedParams })
+        }),
+        params: feedParams
+      })
   }
 
   /**
    * Gets all drafts for current user
    * @returns Observable returning array of readings, { readings: [ ]} 
    */
-  public getDrafts() : Observable<{readings?: Reading[]}> {
+  public getDrafts(): Observable<{ readings?: Reading[] }> {
     return this._http.get(
-      this._auth.getUrl() + '/api/v1/readings/draft', 
+      this._auth.getUrl() + '/api/v1/readings/draft',
       { headers: this._auth.getHeaders() }
     )
-  } 
+  }
 
   /**
    * Get all bookmarked readings for current user
@@ -303,16 +320,16 @@ export class ReadingService {
       this._auth.getUrl() + '/api/v1/readings/owner_bookmarked',
       {
         headers: this._auth.getHeaders(),
-        params: new HttpParams().append("pop","projects")
+        params: new HttpParams().append("pop", "projects")
       }
     )
-    .pipe(take(1))
-    .subscribe(data => {
-      // Update currentUserReadings
-      this.userReadingsSource.next(data)
-    }, (error) => {
-      this.userReadingsSource.error(error)
-    })
+      .pipe(take(1))
+      .subscribe(data => {
+        // Update currentUserReadings
+        this.userReadingsSource.next(data)
+      }, (error) => {
+        this.userReadingsSource.error(error)
+      })
   }
 }
 
@@ -327,4 +344,9 @@ interface GetReadingsResponse {
 interface ReadingFilters {
   size?: number,
   start?: number
+}
+
+interface ReadingSearchResponse {
+  total: number
+  results: Reading
 }

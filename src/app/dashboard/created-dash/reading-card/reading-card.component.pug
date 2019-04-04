@@ -1,13 +1,19 @@
 .list-item.list-item--block.reading-card(
-  [ngClass]="{'draft-edit' : (reading['draft']), 'archived': (reading.archived) }", 
-  [routerLink]="(reading['draft']) ? ['/new-reading/' + reading._id] : []"
+  [ngClass]="{'draft-edit' : (reading['draft']), 'archived': (reading.archived) }"
 )
   .reading-icon.hide-for-archived
     span {{reading.title.substring(0,2)}}
   .archived-icon.show-for-archived
     .icon.icon-folder
   .reading-title([class.no-version]="!reading.version_count")
-    .reading-title--center-row
+    .reading-title--center-row(
+      *ngIf="reading['draft']",
+      [routerLink]="['/new-reading/' + reading._id]"
+    )
+      h1.small.reading-title__text {{reading.title}} 
+        span(*ngIf="!reading.title")
+          i Untitled
+    .reading-title--center-row(*ngIf="!reading['draft']")
       h1.small.reading-title__text {{reading.title}} 
         span(*ngIf="!reading.title")
           i Untitled
@@ -55,6 +61,8 @@
     .tag-row.w-75
       ng-container(*ngIf="reading.subjects && reading.subjects.length > 0")
         span.badge-pill.badge-secondary.badge-subject(*ngFor="let subject of reading.subjects") {{ subject | subjectName }}
+      ng-container(*ngIf="gradeDisplay")
+        span.badge.badge-grades(title="Grade levels") {{ gradeDisplay }}
     //- Reading action buttons
     .w-25.reading-action-row(*ngIf="!readOnly")
       //- Source Link

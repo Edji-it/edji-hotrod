@@ -509,6 +509,12 @@ $quickBlue: #55aef7;
 			border-color: transparent !important;
 		}
 	}
+
+	// Do not present preview words as interactive
+	.feed__reading-preview &, .feed__reading-preview &:hover {
+		cursor: text;
+		border-bottom: 0px solid transparent;
+	}
 }
 
 

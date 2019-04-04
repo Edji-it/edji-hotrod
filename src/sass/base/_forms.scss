@@ -179,6 +179,34 @@ label input, label textarea {
   background: #fff;
   color: #000;
 }
+// Field clear icon
+.form-control-clear {
+  position: absolute;
+  font-size: 0.75em;
+  left: calc(100% + 0.3em);
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: $zMid;
+
+  &.icon-close {
+    opacity: 0.4;
+  }
+
+  &:hover, &:focus {
+    opacity: 1;
+  }
+}
+// Autosizing classes
+.form-control-dummysize {
+  position: fixed !important;
+  top: -1000px;
+  left: -1000px;
+  pointer-events: none;
+}
+.form-control-autosize {
+  min-width: 200px;
+  max-width: 100%;
+}
 .has-success .form-control-feedback {
   color: #79e883;
 }
@@ -221,6 +249,27 @@ label.border-wrap {
 .input-group-tooltip {
   width: auto;
   position: relative;
+}
+
+.input-group-prepend-icon {
+  & .icon {
+    z-index: $zLow;
+    position: absolute;
+    top: 50%;
+    left: 0.75em;
+    transform: translateY(-50%);
+    height: 0.75em;
+    width: 0.75em;
+    
+    .input-group-lg & {
+      left: 0.3em;
+    }
+  }
+
+  & + .form-control {
+    padding-left: 2em;
+    border-radius: 0.3rem !important;
+  }
 }
 
 input.form-item--seamless {
