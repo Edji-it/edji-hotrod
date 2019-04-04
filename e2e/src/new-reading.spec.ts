@@ -1,6 +1,8 @@
 import * as path from 'path'
 import { browser, by, element, protractor } from 'protractor'
-import { NewReading, Login, Sidebar, Dashboard } from './page-objects'
+import { NewReading, Login, Sidebar } from './page-objects'
+import { reset } from './utils/browser-methods'
+
 
 /*
     27 Jan 2017
@@ -29,7 +31,7 @@ describe('New Reading Page', () => {
   })
 
   beforeEach(() => {
-    browser.get('/#/reset-route')
+    reset()
     newReading.getPage()
   })
 

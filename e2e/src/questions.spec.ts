@@ -1,8 +1,7 @@
 import * as path from 'path'
-import { SideBarComponent } from '../../app/shared/side-bar'
-import { browser, by, element, protractor } from 'protractor'
+import { browser, protractor } from 'protractor'
 import { NewReading, Login, Sidebar, Project, Questions, Dashboard, Home } from './page-objects'
-import { LoginModal, GuestLoginForm } from './components'
+import { GuestLoginForm } from './components'
 
 /*
     08 Aug 2017
@@ -32,12 +31,7 @@ describe('Reading Questions Tests', () => {
     beforeAll(() => {
       // Login as test account that we can fill with junk data
       login.getPage()
-      browser.wait(EC.elementToBeClickable(login.loginButton), 5000)
-      login.enterUsername(login.heroUser)
-      login.enterPassword(login.heroPassword)
-      browser.wait(EC.elementToBeClickable(login.loginButton), 5000)
-      login.loginButton.click()
-      browser.wait(EC.urlContains('dashboard'), 5000, 'never arrived at dashboard')
+      login.loginAndVerify(login.heroUser, login.heroPassword)
     })
 
     afterAll(() => {
@@ -50,7 +44,6 @@ describe('Reading Questions Tests', () => {
         - IF THIS FAILS: You are not running Protractor correctly;
         */
     it('should see Edji in the title', () => {
-      let subject = browser.getTitle()
       let result = 'Edji'
       browser.wait(EC.titleContains(result), 5000, 'Title should contain "Edji".')
     })

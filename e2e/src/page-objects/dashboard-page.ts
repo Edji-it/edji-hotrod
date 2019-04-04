@@ -1,15 +1,8 @@
-import { browser, by, element, protractor } from 'protractor'
+import { browser, by, element, protractor, ElementFinder } from 'protractor'
 import { PageObjectInterface } from './PageObjectInterface'
 
 export class Dashboard implements PageObjectInterface {
   private EC = protractor.ExpectedConditions // vital
-  /*
-    28 Jan 2017
-    Last Modified: 28 Jan 2017
-    Nicholas Pumper
-
-    Page Object for the Dashboard page.
-    */
 
   // Public Instance Variables
   public readingCards = element.all(by.css('.reading-card'))
@@ -23,9 +16,7 @@ export class Dashboard implements PageObjectInterface {
   public projectJoinButton = element(by.css('#buttonJoinProject'))
   public newReadingButton = element(by.id('buttonNewReading'))
   public newReadingMobileButton = element(by.id('buttonNewReadingMobile'))
-  // public optionsButton = element.all(by.css('.btn-icon--plain')).first();
   public optionsButton = element(by.css('.btn-icon--plain'))
-  //public optionsList = element.all(by.css('.reading-card-menu'))
   public createdTab = element(by.id('createdTab'))
   public createdListLoading = element(by.css('.created-list.loading'))
   public createdListNextPage = element(by.css('.created-list .ui-paginator-next'))
@@ -39,14 +30,17 @@ export class Dashboard implements PageObjectInterface {
   public deleteButton = element(by.cssContainingText('.dropdown-item', 'Delete'))
   public deleteConfirm = element(by.id('delBtnModal'))
 
+  // groups
   public deleteProjectButton = element(by.css('.btn--delete-project'))
-  // public firstDeleteProjectButton = element(by.css("btn--delete-project")).first();
-  public projectLabel = element(by.css('#newProjectLabel'))
-  public groupCreate = element(by.css('#buttonCreateGroup'))
+  public projectLabel = element(by.id('newProjectLabel'))
+  public groupCreate = element(by.id('buttonCreateGroup'))
   public titleInput = element(by.id('readingTitle'))
-
   public uniqueGroupTitle = 'Cynder is such a cool dog'
-  public newGroupButton = element.all(by.css('.dropdown-menu .e2e-new-group')).first()
+  public newGroupButton = element.all(by.css('.e2e-new-group')).first()
+  public newProjectCard = element(by.css('.new-project'))
+  public getGroupDeleteButton = (card: ElementFinder) => card.element(by.css('.btn--delete-project'))
+  public groupDeleteModal = element(by.id('deleteProjectModal'))
+  public groupDeleteModalConfirmButton = element(by.id('delProjectBtnModal'))
 
   // get the dashboard page
   getPage(): void {
@@ -113,20 +107,20 @@ export class Dashboard implements PageObjectInterface {
   createNewGroupModalInput(groupName: string): void {
     // The modal needs to have already appeared before you use this.
     // This tak groupName and hits the Create Group button on the modal.
-
-    let groupNameInput = element(by.id('newProjectLabel'))
+    let groupNameInput = this.projectLabel
     let createGroupButton = element(by.id('buttonCreateGroup'))
 
     browser.wait(this.EC.presenceOf(groupNameInput), 5000, 'never saw a groupNameInput')
     browser.wait(this.EC.elementToBeClickable(groupNameInput), 5000, 'groupNameInput was never clickable')
 
+    groupNameInput.clear()
     groupNameInput.sendKeys(groupName)
 
     browser.wait(this.EC.presenceOf(createGroupButton), 5000, 'never saw a createGroupButton')
     browser.wait(this.EC.elementToBeClickable(createGroupButton), 5000, 'createGroupButton was never clickable')
 
     createGroupButton.click()
-  } // createNewGroupModalInput (groupName : string) : void
+  }
 
   // Switch to the created readings tab on mobile
   goToCreatedTab(): void {

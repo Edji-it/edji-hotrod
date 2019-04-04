@@ -52,7 +52,7 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
     private _projects: ProjectService,
     private angulartics: Angulartics2,
     private _auth: AuthService,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.subscriptions.push(
@@ -183,6 +183,7 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
       readingVersion.projects = []
     }
     readingVersion.projects.push(group)
+    this.showAddModal = false
   }
 
   /**
