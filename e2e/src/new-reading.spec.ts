@@ -19,7 +19,6 @@ describe('New Reading Page', () => {
   let newReading = new NewReading()
   let login = new Login()
   let sidebar = new Sidebar()
-  let dashboard = new Dashboard()
   let EC = protractor.ExpectedConditions
 
   beforeAll(() => {
@@ -30,6 +29,7 @@ describe('New Reading Page', () => {
   })
 
   beforeEach(() => {
+    browser.get('/#/reset-route')
     newReading.getPage()
   })
 

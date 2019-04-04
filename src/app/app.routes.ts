@@ -20,8 +20,14 @@ import { LicenseWelcomeComponent } from './license-welcome/license-welcome.compo
 import { TeamPageComponent } from './team-page/team-page.component'
 import { PromoPageComponent } from './promo/promo.component'
 import { SearchPage } from './search-page/search-page.component'
+import { ResetComponent } from './shared'
 
 export const ROUTES: Routes = [
+  {
+    path: 'reset-route',
+    component: ResetComponent,
+    pathMatch: 'full'
+  },
   {
     path: '',
     redirectTo: 'dashboard',
