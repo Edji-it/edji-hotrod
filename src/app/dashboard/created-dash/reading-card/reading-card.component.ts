@@ -49,7 +49,6 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
   constructor(
     private _route: ActivatedRoute,
     private _readings: ReadingService,
-    private _projects: ProjectService,
     private angulartics: Angulartics2,
     private _auth: AuthService,
   ) { }
