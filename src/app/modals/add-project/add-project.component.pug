@@ -55,11 +55,11 @@
                     #errorInvalidCustomCode.alert.alert-warning(*ngIf='errors.invalidCode') Whoops, someone is already using that group code. Could you pick another?
         .modal-footer
             .button__row(style='padding-top:0px;')
-                button#buttonCreateGroup.btn.btn-primary(
-                    [disabled]="!reading._id"
+                button.btn.btn-primary(
+                    [attr.id]=" (!reading._id || loading) ? 'loading-buttonCreateGroup' : 'buttonCreateGroup'",
                     tabindex='0', 
                     type='submit', 
-                    [class.loading]='loading',
+                    [class.loading]='!reading._id || loading',
                     name='Add Project', 
                     style='margin: 5px 3px; width:100%;') Create Group
             #msgServiceError.alert.alert-warning(*ngIf='formSubmitted && errors.serviceError', role='alert') There was an error in while creating your reading. Try again or contact support.
