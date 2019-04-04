@@ -154,6 +154,7 @@ export class Sidebar {
   }
 
   public logout(): void {
+    this.closeModals()
     this.clickLogOutButton()
     // Verify page returns to home page
     browser.wait(this.EC.urlContains('home'), 5000, 'never arrived home after logging out')
