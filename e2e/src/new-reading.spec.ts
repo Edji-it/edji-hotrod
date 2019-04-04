@@ -29,6 +29,10 @@ describe('New Reading Page', () => {
     login.loginAndVerify(login.botUser, login.botPassword)
   })
 
+  beforeEach(() => {
+    newReading.getPage()
+  })
+
   afterAll(() => {
     sidebar.logout()
   })
@@ -39,7 +43,6 @@ describe('New Reading Page', () => {
     - IF THIS FAILS: You are not running Protractor correctly
     */
   it('should see Edji in the title', () => {
-    let subject = browser.getTitle()
     let result = 'Edji'
     browser.wait(EC.titleContains(result), 5000, 'Title should contain "Edji".')
   })
@@ -53,13 +56,10 @@ describe('New Reading Page', () => {
         - Click on new title box and Enter title
         - Tab/click to source url, enter URL
         - Tab/click to contact, paste content or type in content
-        - Tab and hit enter/ click on “Add reading button”
+        - Tab and hit enter/ click on "Add reading button"
         - Redirect to reading page of newly created reading
     */
   it('should add reading when all fields are filled and submitted', () => {
-    // Open and wait for New Reading page
-    dashboard.openNewReading()
-
     // Enter sample Reading into form
     newReading.titleInput.sendKeys(newReading.titleString)
     // Make private to avoid needing grade levels and subjecst
@@ -80,19 +80,15 @@ describe('New Reading Page', () => {
     newReading.finalizeButton.click()
     // Should redirect to Project page for new reading
     browser.wait(EC.urlContains('project'), 5000, 'never arrived at new reading')
-    // Reset user to dashboard
-    sidebar.backToDash()
   })
 
   // /* Test: Add reading, don’t enter title and see error
   //     - Open New Reading page
   //     - Fill all fields *but* title
-  //     - Tab and hit enter/ click on “Add reading button”
+  //     - Tab and hit enter/ click on "Add reading button"
   //     - Receive error message asking to give reading a title
   // */
   it('should display an error if the title is not filled', () => {
-    // Open and wait for New Reading page
-    dashboard.openNewReading()
     // Enter sample Reading into form, excluding title
     newReading.titleInput.clear()
     // Make private to avoid needing grade levels and subjects
@@ -102,19 +98,15 @@ describe('New Reading Page', () => {
     newReading.addNewReading()
     // Should see error for empty title
     browser.wait(EC.presenceOf(newReading.titleError), 5000, 'never saw an error for empty title')
-    // Reset user to dashboard
-    sidebar.backToDash()
   })
 
   //  /* Test: Add reading, don’t enter content and see error
   //     - Open New Reading page
   //     - Fill all fields *but* content
-  //     - Tab and hit enter/ click on “Add reading button”
+  //     - Tab and hit enter/ click on "Add reading button"
   //     - Receive error message asking to give reading content
   // */
   it('should display an error if no content is entered', () => {
-    // Open and wait for New Reading page
-    dashboard.openNewReading()
     // Enter sample Reading data into form, but clear content
     newReading.titleInput.sendKeys(newReading.titleString)
     newReading.contentInput.clear()
@@ -122,19 +114,15 @@ describe('New Reading Page', () => {
     newReading.addNewReading()
     // Should see error for empty content
     browser.wait(EC.presenceOf(newReading.contentError), 5000, 'never saw an error for empty content')
-    // Reset user to dashboard
-    sidebar.backToDash()
   })
 
   /* Test: Add reading, but clear Group Label and see error
         - Open New Reading page
         - Fill all fields *but* group label
-        - Tab and hit enter/ click on “Add reading button”
+        - Tab and hit enter/ click on "Add reading button"
         - Receive error message asking to give reading a group label
     */
   it('should display an error if no group label is entered', () => {
-    // Open and wait for New Reading page
-    dashboard.openNewReading()
     // Enter sample Reading into form, but clear group label
     newReading.titleInput.sendKeys(newReading.titleString)
     // Make private to avoid needing grade levels and subjecst
@@ -158,8 +146,6 @@ describe('New Reading Page', () => {
     browser.wait(EC.presenceOf(newReading.groupError), 5000, 'never saw an error for empty group label')
     // Close New Group modal
     newReading.newGroupModalClose.click()
-    // Reset user to dashboard
-    sidebar.backToDash()
   })
 
   /* Test: Upload a PDF and create a Reading with
@@ -173,9 +159,7 @@ describe('New Reading Page', () => {
     /**
      * Test: Add reading with pages from a PDF
      */
-    it('should upload a PDF to a reading and save it to the reading', function() {
-      // Open and wait for New Reading page
-      dashboard.openNewReading()
+    it('should upload a PDF to a reading and save it to the reading', function () {
       browser.wait(EC.elementToBeClickable(newReading.uploadPDfModalButton), 5000)
       newReading.uploadPDfModalButton.click()
       // Select File to upload
@@ -202,9 +186,7 @@ describe('New Reading Page', () => {
     })
 
     // This following test relies on the previous one for a PDF to delete.
-    it('should delete a PDF that was uploaded', function() {
-      // Open and wait for New Reading page
-      // dashboard.openNewReading()
+    it('should delete a PDF that was uploaded', function () {
       browser.wait(
         EC.elementToBeClickable(newReading.uploadPDfModalButton),
         5000,
@@ -231,9 +213,6 @@ describe('New Reading Page', () => {
 
       // TO-DO: We've had issues tracking this via count
       // browser.wait(EC.invisibilityOf(delBtn), 5000, 'delete button should not be visible.')
-
-      // Reset user to dashboard
-      sidebar.backToDash()
     })
   })
 
@@ -245,9 +224,7 @@ describe('New Reading Page', () => {
      * - Create reading with image
      * - Verify new reading has image
      */
-    it('should upload an image to a reading and save it to the reading', function() {
-      // Open and wait for New Reading page
-      dashboard.openNewReading()
+    it('should upload an image to a reading and save it to the reading', function () {
       newReading.insertImageButtonTap()
       browser.wait(
         EC.elementToBeClickable(newReading.imageUploadTrigger),
@@ -291,9 +268,6 @@ describe('New Reading Page', () => {
 
       // Should see image in new reading
       browser.wait(EC.presenceOf(newReading.imageInReading), 10000, 'never saw an image in the new reading')
-
-      // Reset user to dashboard
-      sidebar.backToDash()
     })
   })
 
@@ -306,14 +280,12 @@ describe('New Reading Page', () => {
             - Click on "Save as Draft" button
             - Make sure the success alert shows up
             - Check to make sure the returned content matches what went in
-            - Click on “Publish” button
+            - Click on "Publish" button
             - Redirect to reading page of newly created reading
          */
-    it('should add a reading as a draft and return to the same screen with a reading id', function() {
+    it('should add a reading as a draft and return to the same screen with a reading id', function () {
       // Reset user to dashboard
       // sidebar.backToDash()
-      // Open and wait for New Reading page
-      dashboard.openNewReading()
       browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000)
       // Enter sample Reading into form
       newReading.titleInput.sendKeys(newReading.titleString)
@@ -343,16 +315,6 @@ describe('New Reading Page', () => {
       newReading.finalizeButton.click()
       // Should create a new Reading
       browser.wait(EC.urlContains('project'), 10000, 'never arrived at new reading')
-      // Reset user to dashboard
-      sidebar.backToDash()
     })
   })
-
-  /* Test: Add reading, then adjust with editing buttons. (Headers, bold, underlines, italixs, text size)
-        - Log in with Teacher account
-        - Arrive at Dashboard
-        - Add reading content.
-        - Adjust editing buttons.
-        - Click Add Reading
-    */
-}) // describe 'Account Page'
+})

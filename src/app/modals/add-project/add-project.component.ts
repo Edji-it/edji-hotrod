@@ -41,7 +41,7 @@ export class AddProjectModal implements OnInit {
     private _fb: FormBuilder,
     private _auth: AuthService,
     private angulartics: Angulartics2,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.user = this._auth.getUser()
@@ -90,6 +90,7 @@ export class AddProjectModal implements OnInit {
         },
         err => {
           console.error(err)
+          this.loading = false
           this.errors.serviceError = true
         },
       )
@@ -130,7 +131,6 @@ export class AddProjectModal implements OnInit {
           project.new = true
           this.trackAnalyticEvent(formValue, types)
           this.groupSaved.emit(project)
-          this.closeModal.emit()
         }
       },
       error => {

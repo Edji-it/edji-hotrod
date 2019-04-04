@@ -465,7 +465,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
         let rootWordTags = inheritedTags.slice()
         rootWordTags.indexOf('br') > -1 && rootWordTags.splice(rootWordTags.indexOf('br'), 1)
         // Split text inside child nodes
-        let nodeWords = element.textContent.split(/(?:([^a-zA-Z0-9]))/).filter(function(el) {
+        let nodeWords = element.textContent.split(/(?:([^a-zA-Z0-9]))/).filter(function (el) {
           return el.replace(/([\n])/g, '')
         })
         // If empty element, push a spacer word to reflect that
@@ -727,13 +727,6 @@ export class NewReadingPage implements OnInit, OnDestroy {
     // Prepare Reading object
     let reading = this.formatReading(form)
 
-    // having an _id controls whether it is a put or post call
-    let submitAction: string
-    if (reading['_id']) {
-      submitAction = 'updateReading'
-    } else {
-      submitAction = 'createNewReading'
-    }
     this._readings.save(reading).subscribe(
       data => {
         if (data._id) {
