@@ -604,12 +604,15 @@ export class NewReadingPage implements OnInit, OnDestroy {
    * @param reading the reading that is to be archived (is an active reading on the created dashboard)
    * @param form is the new reading we're going to share once we finish archiving the older active reading
    */
-  public archiveReading(): Observable<any> {
+  public async archiveReading(): Promise<void> {
     // Make the call to PUT the reading archive value
     let user = this.user
     user.archive_readings_before = this.readingsArchivedBefore
-
-    return this._auth.updateUser(user).pipe(take(1))
+    try {
+      this._auth.updateUser(user).toPromise()
+    } catch (err) {
+      console.error(err)
+    }
   }
 
   /**
@@ -803,14 +806,8 @@ export class NewReadingPage implements OnInit, OnDestroy {
     this.newGroup = project
     // Archive if needed
     if (this.readingsArchivedBefore) {
-      this.archiveReading().subscribe(
-        data => {
-          this.shareReading(readingForm)
-        },
-        error => {
-          // show error
-        },
-      )
+      this.archiveReading()
+      this.shareReading(readingForm)
     } else {
       this.shareReading(readingForm)
     }
