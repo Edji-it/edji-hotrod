@@ -34,29 +34,25 @@ describe('Referral Sharing and Rewards', () => {
   let emailShare = element(by.id('referEmailShare'))
 
   describe('Test sharing referral code, and referred registration', () => {
+    beforeAll(() => {
+      login.getPage()
+      login.loginAndVerify(login.referUser, login.referPassword)
+    })
     let referralLink = ''
     /**
      * Referral Code
      * - User should be able to open the Referral modal
      * - User should be able to share their referral code
      */
-    it('should login and access referral modal with code', () => {
-      browser.get('/#/login')
-      // Log in as referral user
-      loginForm.login(login.referUser, login.referPassword)
-      // Verify that we reach the dashboard after login
-      browser.wait(EC.urlContains('dashboard'), 5000, 'never reached the dashboard after logging in')
+    it('should access referral modal with code', async () => {
       // Open Referral Modal
       sidebar.clickReferralButton()
       // Verify we made it there
       browser.wait(EC.elementToBeClickable(copyReferralLinkBtn), 5000, 'never saw the referral modal')
       // Get referral link and save it for later
-      referalCodeBox.getAttribute('value').then(text => {
-        referralLink = text
-        console.log('LINK:', referralLink)
-        // Verify referral link is longer than just "edji.it"
-        expect(referralLink.length).toBeGreaterThan(5)
-      })
+      referralLink = await referalCodeBox.getAttribute('value')
+      // Verify referral link is longer than just "edji.it"
+      expect(referralLink.length).toBeGreaterThan(5)
       // Close referral modal
       referralClose.click()
     })
@@ -67,45 +63,49 @@ describe('Referral Sharing and Rewards', () => {
      * - Twitter
      * - Email
      */
-    it('should be able to share unique referral link via socials', () => {
+    it('should be able to share unique referral link via socials', async () => {
       // Open Referral Modal
       sidebar.clickReferralButton()
       // Share on Facebook
       browser.wait(EC.elementToBeClickable(facebookShare), 5000, 'never saw Facebook share button')
-      facebookShare.click().then(() => {
-        browser.getAllWindowHandles().then(handles => {
-          // Swap to newly opened tab
-          let newWindowHandle = handles[1]
-          browser
-            .switchTo()
-            .window(newWindowHandle)
-            .then(() => {
-              // Verify share page
-              expect(browser.getCurrentUrl()).toContain('facebook.com')
-            })
-          // Close share tab
-          browser.driver.close()
-          browser.driver.switchTo().window(handles[0])
-        })
-      })
+      const facebookLink = await facebookShare.getAttribute('href')
+      expect(facebookLink).toContain('facebook.com')
+      // facebookShare.click().then(() => {
+      //   browser.getAllWindowHandles().then(handles => {
+      //     // Swap to newly opened tab
+      //     let newWindowHandle = handles[1]
+      //     browser
+      //       .switchTo()
+      //       .window(newWindowHandle)
+      //       .then(() => {
+      //         // Verify share page
+      //         expect(browser.getCurrentUrl()).toContain('facebook.com')
+      //       })
+      //     // Close share tab
+      //     browser.driver.close()
+      //     browser.driver.switchTo().window(handles[0])
+      //   })
+      // })
       // Share on Twitter
       browser.wait(EC.elementToBeClickable(twitterShare), 5000, 'never saw Twitter share button')
-      twitterShare.click().then(() => {
-        browser.getAllWindowHandles().then(handles => {
-          // Swap to newly opened tab
-          let newWindowHandle = handles[1]
-          browser
-            .switchTo()
-            .window(newWindowHandle)
-            .then(() => {
-              // Verify share page
-              expect(browser.getCurrentUrl()).toContain('twitter.com')
-            })
-          // Close share tab
-          browser.driver.close()
-          browser.driver.switchTo().window(handles[0])
-        })
-      })
+      const twitterLink = await twitterShare.getAttribute('href')
+      expect(twitterLink).toContain('twitter.com')
+      // twitterShare.click().then(() => {
+      //   browser.getAllWindowHandles().then(handles => {
+      //     // Swap to newly opened tab
+      //     let newWindowHandle = handles[1]
+      //     browser
+      //       .switchTo()
+      //       .window(newWindowHandle)
+      //       .then(() => {
+      //         // Verify share page
+      //         expect(browser.getCurrentUrl()).toContain('twitter.com')
+      //       })
+      //     // Close share tab
+      //     browser.driver.close()
+      //     browser.driver.switchTo().window(handles[0])
+      //   })
+      // })
       // Close referral modal
       referralClose.click()
     })

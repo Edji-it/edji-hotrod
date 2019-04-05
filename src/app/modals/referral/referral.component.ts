@@ -16,21 +16,26 @@ import { AuthService, UtilToolService, ProjectService, ReadingService } from './
 })
 export class ReferralModalComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = []
-  public referralLink: string
-  public referralCode: string
-  public referralBlocks: any = []
-  public numberReferrals: number
-  public referralIndex: number = -1
-  public referralCouponCopy: any = {}
-  public alertObject = {
+  referralLink: string
+  referralCode: string
+  socialLinks = {
+    emailLink: '',
+    twitterLink: '',
+    facebookLink: ''
+  }
+  referralBlocks: any = []
+  numberReferrals: number
+  referralIndex: number = -1
+  referralCouponCopy: any = {}
+  alertObject = {
     show: false,
     type: '',
     message: '',
   }
-  public linkCopySuccess: boolean
-  public referredByComplete: boolean
+  linkCopySuccess: boolean
+  referredByComplete: boolean
 
-  public showModal: boolean
+  showModal: boolean
 
   private user: User
 
@@ -67,7 +72,7 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
     private _readings: ReadingService,
     private _auth: AuthService,
     private angulartics: Angulartics2,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.user = this._auth.getUser()
@@ -125,6 +130,7 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
           // Set the referral code for copying and sharing
           this.referralCode = userReferrals.code
           this.referralLink = location.origin + '/#/?r=' + this.referralCode
+          this.socialLinks = this.formatLinks(this.referralLink)
         },
         err => {
           console.error(err)
@@ -207,40 +213,26 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
     }, 2000)
   }
 
+  private formatLinks(referralLink: string) {
+    return {
+      emailLink: 'mailto:?subject=Go Hero on Edji With Me&body=Create%20readings%20on%20Edji%20with%20me%2C%20and%20get%2020%25%20off%20Hero%20' +
+        encodeURIComponent(referralLink),
+      twitterLink: 'https://twitter.com/intent/tweet?text=Create%20readings%20on%20Edji%20with%20me%2C%20and%20get%2020%25%20off%20Hero%20' +
+        encodeURIComponent(referralLink),
+      facebookLink: 'https://www.facebook.com/sharer/sharer.php?u=' +
+        encodeURIComponent(referralLink) +
+        '&amp;src=sdkpreparse',
+    }
+  }
+
   /**
    * Depending on which share button is clicked, perform a certain action
    * @param shareMedium is the path the user will be using to share their referral code
    */
-  private shareReferralCode(shareMedium: string) {
-    switch (shareMedium) {
-      case 'email':
-        window.open(
-          'mailto:?subject=Go Hero on Edji With Me&body=Create%20readings%20on%20Edji%20with%20me%2C%20and%20get%2020%25%20off%20Hero%20' +
-            encodeURIComponent(this.referralLink),
-          '_blank',
-        )
-        break
-      case 'twitter':
-        window.open(
-          'https://twitter.com/intent/tweet?text=Create%20readings%20on%20Edji%20with%20me%2C%20and%20get%2020%25%20off%20Hero%20' +
-            encodeURIComponent(this.referralLink),
-          '_blank',
-        )
-        break
-      case 'facebook':
-        window.open(
-          'https://www.facebook.com/sharer/sharer.php?u=' +
-            encodeURIComponent(this.referralLink) +
-            '&amp;src=sdkpreparse',
-          '_blank',
-        )
-        break
-      default:
-        this.copyReferralCode()
-    }
+  private trackReferralCode(shareMedium: string) {
     // fire an analytic event here for tracking purposes
-    if (shareMedium === '') {
-      shareMedium = 'copy'
+    if (shareMedium === 'copy') {
+      this.copyReferralCode()
     }
     this.angulartics.eventTrack.next({
       action: 'referral_' + shareMedium + '_shareLink',

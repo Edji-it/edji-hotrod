@@ -36,16 +36,34 @@
                         button#buttonCopyReferralLink.btn.btn-primary.btn-rnd-corner-right(
                           *ngIf="referralLink && referralLink.length > 0"
                           type="button", 
-                          (click)="shareReferralCode()", 
+                          (click)="trackReferralLink('copy')", 
                           name="Copy", 
                           href="#") Copy
                     small.form-text.text-success(*ngIf="linkCopySuccess")
                       | Link was copied to your clipboard!
                 .col-sm-4.pr-0
                   .share-icon__group.float-right
-                    #referEmailShare.icon-email.share-icon((click)="shareReferralCode('email')")
-                    #referTwitterShare.icon-twitter.share-icon((click)="shareReferralCode('twitter')")
-                    #referFacebookShare.icon-facebook.share-icon((click)="shareReferralCode('facebook')")
+                    a#referEmailShare(
+                      tabindex="0",
+                      target="_blank",
+                      [attr.href]="socialLinks.emailLink",
+                      (click)="trackReferralLink('email')"
+                    )
+                      .icon-email.share-icon
+                    a#referTwitterShare(
+                      tabindex="0",
+                      target="_blank",
+                      [attr.href]="socialLinks.twitterLink",
+                      (click)="trackReferralLink('twitter')"
+                    )
+                      .icon-twitter.share-icon
+                    a#referFacebookShare(
+                      tabindex="0",
+                      target="_blank",
+                      [attr.href]="socialLinks.facebookLink",
+                      (click)="trackReferralLink('facebook')"
+                    )
+                      .icon-facebook.share-icon
           //- Generated code for copy and share buttons -- Mobile
           .hidden-md-up.w-100
             .container
@@ -61,14 +79,32 @@
                       button#buttonCopyReferralLink.btn.btn-primary.btn-rnd-corner-right(
                         *ngIf="referralLink",
                         type="button", 
-                        (click)="shareReferralCode()", 
+                        (click)="trackReferralLink('copy')", 
                         name="Copy", 
                         href="#") Copy
                 .col-sm-6
                   .share-icon__group
-                    .icon-email.share-icon((click)="shareReferralCode('email')")
-                    .icon-twitter.share-icon((click)="shareReferralCode('twitter')")
-                    .icon-facebook.share-icon((click)="shareReferralCode('facebook')")
+                    a#referEmailShare(
+                      tabindex="0",
+                      target="_blank",
+                      [attr.href]="socialLinks.emailLink",
+                      (click)="trackReferralLink('email')"
+                    )
+                      .icon-email.share-icon((click)="trackReferralLink('email')")
+                    a#referTwitterShare(
+                      tabindex="0",
+                      target="_blank",
+                      [attr.href]="socialLinks.twitterLink",
+                      (click)="trackReferralLink('twitter')"
+                    )
+                      .icon-twitter.share-icon((click)="trackReferralLink('twitter')")
+                    a#referFacebookShare(
+                      tabindex="0",
+                      target="_blank",
+                      [attr.href]="socialLinks.facebookLink",
+                      (click)="trackReferralLink('facebook')"
+                    )
+                      .icon-facebook.share-icon((click)="trackReferralLink('facebook')")
           //- More copy
           h6.small.font-weight-bold Your Path to Hero
           p.small.mb-3 Each teacher you refer that creates a reading will unlock a 20% discount towards Hero for both of you. Complete 5 referrals to get a whole year of Hero free.
