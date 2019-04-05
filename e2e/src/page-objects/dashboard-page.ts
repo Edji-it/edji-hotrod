@@ -8,6 +8,7 @@ export class Dashboard implements PageObjectInterface {
   public readingCards = element.all(by.css('.reading-card'))
   public firstReadingCard = this.readingCards.first()
   public firstReadingTitle = element.all(by.css('.reading-title__text')).first()
+  public readingLoader = element(by.css('.e2e-reading-loader'))
   public secondPageFirstReadingTitle = element.all(by.css('.page-2 .reading-title__text')).first()
   public projectCards = element.all(by.css('.project-card'))
   public firstProject = this.projectCards.first()

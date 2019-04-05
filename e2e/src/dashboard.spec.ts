@@ -37,20 +37,10 @@ describe('Dashboard Page as a Hero', () => {
     sidebar.logout()
   })
 
-  /* ---- Vital Super Basic Test  --------------- */
-
-  /* Test: Extremely Basic Test.
-    - IF THIS FAILS: You are not running Protractor correctly;
-    */
-  it('should arrive at dashboard', () => {
-    browser.wait(EC.urlContains('dashboard'), 15000, 'never arrived at dashboard')
-  })
-
-  /**
-   * Paginate Created Readings
-   * - Requires "testbot" to have more than one page of Created Readings
-   */
-  it('should paginate Created readings', () => {
+  // it('should arrive at dashboard', () => {
+  //   browser.wait(EC.urlContains('dashboard'), 15000, 'never arrived at dashboard')
+  // })
+  it('should paginate Created readings', async () => {
     // Wait for Readings to load into Dashboard
     browser.wait(EC.elementToBeClickable(dashboard.firstReadingCard), 8000, 'never found Created Readings on Dashboard')
     // Verify the first reading title is ready
@@ -60,46 +50,36 @@ describe('Dashboard Page as a Hero', () => {
       'never found first Created Reading title on Dashboard',
     )
     // Save title of first Reading on first page
-    let firstReadingTitleStr = ''
-    dashboard.firstReadingTitle.getText().then(text => {
-      firstReadingTitleStr = text + ''
-      expect(text.length).toBeGreaterThan(1)
-    })
+    const firstReadingTitleStr = await dashboard.firstReadingTitle.getText()
 
     // Scroll to Joined pagination bar
-    browser
+    await browser
       .executeScript('window.scrollTo(0, document.querySelector(".created-list .ui-paginator-element").scrollTop);')
-      .then(() => {
-        browser.wait(
-          EC.elementToBeClickable(dashboard.createdListNextPage),
-          3000,
-          'next page arrow for Created Readings did not become clickable',
-        )
-      })
+    browser.wait(
+      EC.elementToBeClickable(dashboard.createdListNextPage),
+      3000,
+      'next page arrow for Created Readings did not become clickable',
+    )
     // Go to next page
     dashboard.createdListNextPage.click()
     // Wait for second page load
+    browser.sleep(2000) // userReadingsSource gets updated multiple times in a row, and ends up showing the same readings after loading unless there is a wait - it's pretty much invisible to the user
     browser.wait(
-      EC.visibilityOf(dashboard.secondPageFirstReadingTitle),
-      8000,
-      'did not load next page of Created Readings',
+      EC.elementToBeClickable(dashboard.secondPageFirstReadingTitle),
+      5000,
+      'did not load the second page of Created Readings',
     )
-    // Verify First Reading Title has changed
-    expect(
-      dashboard.secondPageFirstReadingTitle.getText().then(text => {
-        return text === firstReadingTitleStr
-      }),
-    ).toBeFalsy('expected the first reading on the second page to have a different title than the first reading on the first page')
+    const secondPageFirstReadingTitleStr = await dashboard.secondPageFirstReadingTitle.getText()
+    expect(firstReadingTitleStr).not.toEqual(secondPageFirstReadingTitleStr, 'expected the first reading on the second page to have a different title than the first reading on the first page')
+
     // Scroll back to pagination
-    browser
+    await browser
       .executeScript('window.scrollTo(0, document.querySelector(".created-list .ui-paginator-element").scrollTop);')
-      .then(() => {
-        browser.wait(
-          EC.elementToBeClickable(dashboard.createdListPrevPage),
-          3000,
-          'prev page arrow for Created Readings did not become clickable',
-        )
-      })
+    browser.wait(
+      EC.elementToBeClickable(dashboard.createdListPrevPage),
+      3000,
+      'prev page arrow for Created Readings did not become clickable',
+    )
     // Go to previous page
     dashboard.createdListPrevPage.click()
     // Wait for first page load
@@ -129,7 +109,7 @@ describe('Dashboard Page as a Hero', () => {
   describe('Delete Readings & Projects', () => {
     it('Delete a project off of a new reading.', () => {
       // Switch to the created readings tab on mobile (will simply skip if on desktop)
-      // dashboard.goToCreatedTab()
+      dashboard.goToCreatedTab()
 
       // Click the dropdown menu
       browser.sleep(3000) // the clickOutside directive is a little finicky and will close this if you click it too fast
@@ -249,4 +229,4 @@ describe('Dashboard Page as a Hero', () => {
       sidebar.backToDash()
     })
   })
-}) // describe 'Dashboard Page'
+})
