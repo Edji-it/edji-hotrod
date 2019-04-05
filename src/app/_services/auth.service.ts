@@ -1040,12 +1040,13 @@ export class AuthService implements CanActivate {
 
     /**
      * Searches for a school or district and returns a list from the NCES data set
+     * @param context is the parameter by which we want to search
      * @param searchText is the text string passed in that we want to search with flak
      */
-    public getSchoolDistrict(searchText: string): Observable<any> {
+    public getSchoolDistrict(context: string, searchText: string): Observable<any> {
         searchText = encodeURIComponent(searchText)
         return this._http.get<any>(
-            this.flakBaseUrl + `/schools?school_name=${searchText}`, {
+            this.flakBaseUrl + `/schools?${context}=${searchText}&fuzziness=2`, {
                 headers: new HttpHeaders({
                     'Content-Type': 'application/json'
                 })

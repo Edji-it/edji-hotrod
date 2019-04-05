@@ -235,25 +235,22 @@ export class UserDetailsUpdateModal implements OnInit {
   private searchOnTypeInIt(): void {
     setTimeout(() => {
       const example = fromEvent(this.input.nativeElement, 'keyup').pipe(map(i => i))
-      const debouncedInput = example.pipe(debounceTime(500))
-      const subscribe = debouncedInput.subscribe(val => {
+      const debouncedInput = example.pipe(debounceTime(150))
+      const searching = debouncedInput.subscribe(async val => {
         let searchText = this.userDetailsForm.value.school
         if (searchText!=='') {
-          // search for schools here
-          this._auth.getSchoolDistrict(`'${searchText}'`).subscribe((searchResults) => {
-            // add a generic 'All Schools' record to the first district that comes back
-            // results.unshift({
-            //   _source: {
-            //     nces_district_id: results[0]._source.nces_district_id,
-            //     district: results[0]._source.district,
-            //     nces_school_id: '',
-            //     school_name: 'All Schools'
-            //   }
-            // })
+          try {
+            let districtResults: any[] = []
+            let schoolResults: any[] = []
+
+            schoolResults = await this._auth.getSchoolDistrict('school_name', searchText).toPromise()
+            districtResults = await this._auth.getSchoolDistrict('district', searchText).toPromise()
+
+            let searchResults = [...schoolResults, ...districtResults]
             this.displayResults(searchResults)
-          }, (err) => {
+          } catch (err) {
             console.error(err)
-          })
+          }
         }
       })
     }, 1)
