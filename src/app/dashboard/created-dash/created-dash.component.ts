@@ -58,7 +58,7 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
     private _readings: ReadingService,
     private _projects: ProjectService,
     private angulartics: Angulartics2,
-  ) {}
+  ) { }
 
   ngOnInit() {
     // datalist component intializes by calling loadRecentlyCreated()
@@ -70,8 +70,7 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
       }),
       this._readings.currentUserReadings.subscribe(
         data => {
-          // console.log("Readings update!")
-          this.loading = false
+          console.log('updating created readings!')
           this.readings = data.readings || []
           this.total = data.total
           this.pageNo = Math.floor((this.first + 1) / this.rows) + 1
@@ -82,11 +81,13 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
           }
           // Clear errors
           this.errorObject = {}
+          this.loading = false
         },
         error => {
           this.loading = false
           this.errorObject.readingError =
             '<b>Error Loading Readings</b> There was an error loading your readings. Please try again later or <a href="mailto:support@edji.it" target="_blank" class="link">contact support</a>.'
+          console.error(error)
         },
       ),
     )
@@ -97,7 +98,7 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
     this.loadDrafts()
   } //  ngOnInit()
 
-  ngOnDestroy() {}
+  ngOnDestroy() { }
 
   /**
    * Load Created with Params
@@ -156,6 +157,8 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
         if (data.readings) {
           this.drafts = data.readings
         }
+      }, error => {
+        console.error(error)
       })
   }
 

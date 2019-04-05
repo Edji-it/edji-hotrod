@@ -201,13 +201,9 @@ export class ReadingService {
    */
   public removeProject(targetProject: Project) {
     let readingRes = this.userReadingsSource.value
-    let projectFound = false
 
     readingRes.readings.forEach(reading => {
       reading.projects = reading.projects.filter(project => {
-        if (project._id == targetProject._id) {
-          projectFound = true
-        }
         return project._id != targetProject._id
       })
     })
