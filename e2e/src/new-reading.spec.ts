@@ -26,7 +26,6 @@ describe('New Reading Page', () => {
   beforeAll(() => {
     // Login as test account that we can fill with junk data
     login.getPage()
-    browser.wait(EC.elementToBeClickable(login.loginButton), 5000)
     login.loginAndVerify(login.botUser, login.botPassword)
   })
 

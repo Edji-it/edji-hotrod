@@ -16,13 +16,18 @@ import { AuthService, UtilToolService, ProjectService, ReadingService } from './
 })
 export class ReferralModalComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = []
-  public referralLink: string
-  public referralCode: string
-  public referralBlocks: any = []
-  public numberReferrals: number
-  public referralIndex: number = -1
-  public referralCouponCopy: any = {}
-  public alertObject = {
+  referralLink: string
+  referralCode: string
+  socialLinks = {
+    emailLink: '',
+    twitterLink: '',
+    facebookLink: ''
+  }
+  referralBlocks: any = []
+  numberReferrals: number
+  referralIndex: number = -1
+  referralCouponCopy: any = {}
+  alertObject = {
     show: false,
     type: '',
     message: '',
@@ -30,7 +35,7 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
   public linkCopySuccess: boolean
   public referredByComplete: boolean
 
-  public showModal: boolean
+  showModal: boolean
 
   private user: User
 
@@ -205,6 +210,18 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.linkCopySuccess = false
     }, 2000)
+  }
+
+  private formatLinks(referralLink: string) {
+    return {
+      emailLink: 'mailto:?subject=Go Hero on Edji With Me&body=Create%20readings%20on%20Edji%20with%20me%2C%20and%20get%2020%25%20off%20Hero%20' +
+        encodeURIComponent(referralLink),
+      twitterLink: 'https://twitter.com/intent/tweet?text=Create%20readings%20on%20Edji%20with%20me%2C%20and%20get%2020%25%20off%20Hero%20' +
+        encodeURIComponent(referralLink),
+      facebookLink: 'https://www.facebook.com/sharer/sharer.php?u=' +
+        encodeURIComponent(referralLink) +
+        '&amp;src=sdkpreparse',
+    }
   }
 
   /**

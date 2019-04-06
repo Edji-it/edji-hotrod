@@ -12,5 +12,5 @@ export interface PageObjectInterface {
             Use browser.get to get the webpage of the page object.
     */
 
-  getPage()
+  getPage(...args: any[]): void
 } // interface PageObjectInterface

@@ -1045,91 +1045,23 @@ export class AuthService implements CanActivate {
   }
 
   /**
-   * Returns customer information including subscriptions, but not payment source
-   * @param customer_id the customer ID from Stripe that we store on the user object
+   * Searches for a school or district and returns a list from the NCES data set
+   * @param context is the parameter by which we want to search
+   * @param searchText is the text string passed in that we want to search with flak
    */
-  public getStripeCustomer(): Observable<any> {
-    return this._http
-      .get<any>(this.baseUrl + '/api/v1/stripe/customers/', {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-          Authorization: this.getToken(),
-        }),
-      })
-      .pipe(
-        map(customer => {
-          return customer.customer
-        }),
+  public getSchoolDistrict(context: string, searchText: string): Observable<any> {
+      searchText = encodeURIComponent(searchText)
+      return this._http.get<any>(
+          this.flakBaseUrl + `/schools?${context}=${searchText}&fuzziness=2`, {
+              headers: new HttpHeaders({
+                  'Content-Type': 'application/json'
+              })
+          }
       )
+      .pipe(map((res) => {
+          return res.hits.hits
+      }))
   }
-
-  /**
-   * Returns customer information including subscriptions, but not payment source
-   * @param customer_id the customer ID from Stripe that we store on the user object
-   */
-  public getStripeSubscriptions(): Observable<any> {
-    return this._http
-      .get<any>(this.baseUrl + '/api/v1/stripe/subscriptions/', {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-          Authorization: this.getToken(),
-        }),
-      })
-      .pipe(
-        map(subscriptions => {
-          return subscriptions.subscriptions
-        }),
-      )
-  }
-
-  /**
-   * Reverses the cancellation in Stripe - only for active subscriptions
-   * New subscriptions need to route through the subscribeToHero method
-   */
-  public rejoinHero(subscription_id: string): Observable<any> {
-    return this._http
-      .put<any>(
-        this.baseUrl + '/api/v1/stripe/subscriptions/' + subscription_id,
-        {},
-        {
-          headers: new HttpHeaders({
-            'Content-Type': 'application/json',
-            Authorization: this.getToken(),
-          }),
-        },
-      )
-      .pipe(
-        map(res => {
-          return res
-        }),
-      )
-  }
-
-  // Stripe sends the date back as the UTC Epoch, so we'll convert it here
-  public getStripeDate(utcSeconds: number): Date {
-    let date = new Date(0)
-    date.setUTCSeconds(utcSeconds)
-    return date
-  }
-
-    /**
-     * Searches for a school or district and returns a list from the NCES data set
-     * @param context is the parameter by which we want to search
-     * @param searchText is the text string passed in that we want to search with flak
-     */
-    public getSchoolDistrict(context: string, searchText: string): Observable<any> {
-        searchText = encodeURIComponent(searchText)
-        return this._http.get<any>(
-            this.flakBaseUrl + `/schools?${context}=${searchText}&fuzziness=2`, {
-                headers: new HttpHeaders({
-                    'Content-Type': 'application/json'
-                })
-            }
-        )
-        .pipe(map((res) => {
-            return res.hits.hits
-        }))
-    }
 }
 
 interface LoginObject {

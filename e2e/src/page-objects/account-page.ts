@@ -34,18 +34,18 @@ export class Account implements PageObjectInterface {
   // get the login page
   getPage(): void {
     browser.get('/#/account')
-  } // getPage() : void
+  }
 
-  openModal(): void {
-    browser.wait(this.EC.presenceOf(this.editBtn), 5000, 'should be able to see the edit button')
-    this.editBtn.click()
-    browser.wait(this.EC.visibilityOf(this.avatarModal), 5000, 'should be able to see the upload avatar modal.')
-    return
-  } // openModal () : void
+  // openModal(): void {
+  //   browser.wait(this.EC.presenceOf(this.editBtn), 5000, 'should be able to see the edit button')
+  //   this.editBtn.click()
+  //   browser.wait(this.EC.visibilityOf(this.avatarModal), 5000, 'should be able to see the upload avatar modal.')
+  //   return
+  // } // openModal () : void
 
-  closeModal(): void {
-    browser.wait(this.EC.visibilityOf(this.avatarModal), 5000, "can't close the modal if it's not open.")
-    this.closeModalBtn.click()
-    browser.wait(this.EC.invisibilityOf(this.avatarModal), 5000, 'should not be able to see the upload avatar modal.')
-  } // closeModal () : void
-} // class Login
+  // closeModal(): void {
+  //   browser.wait(this.EC.visibilityOf(this.avatarModal), 5000, "can't close the modal if it's not open.")
+  //   this.closeModalBtn.click()
+  //   browser.wait(this.EC.invisibilityOf(this.avatarModal), 5000, 'should not be able to see the upload avatar modal.')
+  // } // closeModal () : void
+}

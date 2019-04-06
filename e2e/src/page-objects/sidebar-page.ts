@@ -15,7 +15,7 @@ export class Sidebar {
   public accountButtonSpan = this.accountButton.element(by.css('span'))
   public logo = element(by.id('logo'))
   public heroLink = element(by.id('heroLink'))
-  public closeModal = element(by.css('button.close'))
+  public closeModal = element(by.css('.show .modal button.close'))
   public navAcademyBtn = element(by.id('navAcademy'))
 
   // Owner Tools
@@ -29,14 +29,13 @@ export class Sidebar {
   public readingReportButton = element(by.id('toggleReadingRecap'))
 
   public backToDash(): void {
-    let modalCloseBtn = element(by.css('.show .modal button.close'))
-    modalCloseBtn.isPresent().then(result => {
+    this.closeModal.isPresent().then(result => {
       if (result) {
-        modalCloseBtn.isDisplayed().then(result => {
+        this.closeModal.isDisplayed().then(result => {
           if (result) {
             //Whatever if it is true (displayed)
-            browser.wait(this.EC.elementToBeClickable(modalCloseBtn), 5000, 'modal close button never became clickable')
-            modalCloseBtn.click()
+            browser.wait(this.EC.elementToBeClickable(this.closeModal), 5000, 'modal close button never became clickable')
+            this.closeModal.click()
           }
         })
       }

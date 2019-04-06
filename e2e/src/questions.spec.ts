@@ -3,19 +3,7 @@ import { browser, protractor } from 'protractor'
 import { NewReading, Login, Sidebar, Project, Questions, Dashboard, Home } from './page-objects'
 import { GuestLoginForm } from './components'
 
-/*
-    08 Aug 2017
-    Last Modified: 10 Aug 2017
-    JZ Kyburz
-
-    e2e test the dashboard page - for questions!
-
-    - We log into all types of account.
-*/
-
-describe('Reading Questions Tests', () => {
-  /* ---- Variable Initialization --------------- */
-
+describe('Questions', () => {
   let newReading = new NewReading()
   let login = new Login()
   let sidebar = new Sidebar()
@@ -24,12 +12,11 @@ describe('Reading Questions Tests', () => {
   let guestForm = new GuestLoginForm()
   let question = new Questions()
   let dashboard = new Dashboard()
-  let home = new Home()
 
   // Testing the creation
-  describe('Questions - Create', () => {
+  describe('Create', () => {
     beforeAll(() => {
-      // Login as test account that we can fill with junk data
+      // Login as test account
       login.getPage()
       login.loginAndVerify(login.heroUser, login.heroPassword)
     })
@@ -38,21 +25,6 @@ describe('Reading Questions Tests', () => {
       sidebar.logout()
     })
 
-    /* ---- Vital Super Basic Test  --------------- */
-
-    /* Test: Extremely Basic Test.
-        - IF THIS FAILS: You are not running Protractor correctly;
-        */
-    it('should see Edji in the title', () => {
-      let result = 'Edji'
-      browser.wait(EC.titleContains(result), 5000, 'Title should contain "Edji".')
-    })
-
-    /* ---- New Reading Tests wQuestions ------------------------ */
-
-    /* Test: Add a reading with questions
-     *
-     */
     it('should add reading with questions when all fields are filled and submitted', () => {
       // Open and wait for New Reading page
       dashboard.openNewReading()
@@ -90,13 +62,9 @@ describe('Reading Questions Tests', () => {
       newReading.contentInput2.sendKeys(newReading.qContentString2)
 
       // Move the cursor over to insert the next question in the middle of text
-      newReading.contentInput2.sendKeys(protractor.Key.ARROW_LEFT)
-      newReading.contentInput2.sendKeys(protractor.Key.ARROW_LEFT)
-      newReading.contentInput2.sendKeys(protractor.Key.ARROW_LEFT)
-      newReading.contentInput2.sendKeys(protractor.Key.ARROW_LEFT)
-      newReading.contentInput2.sendKeys(protractor.Key.ARROW_LEFT)
-      newReading.contentInput2.sendKeys(protractor.Key.ARROW_LEFT)
-      newReading.contentInput2.sendKeys(protractor.Key.ARROW_LEFT)
+      for (let i=0; i<7; i++) {
+        newReading.contentInput2.sendKeys(protractor.Key.ARROW_LEFT)
+      }
 
       // Add another question, but we will add it in the middle of existing text
       newReading.insertQuestionButtonTap()
@@ -155,108 +123,99 @@ describe('Reading Questions Tests', () => {
 
       // Reset user to dashboard
       sidebar.backToDash()
-    }) // it('should add reading when all fields are filled ...
-  }) // describe('Questions - Create'
+    })
+  })
 
-  describe('Questions: Making Answer Comments', () => {
-    beforeAll(() => {
-      // Join reply project from the homepage
-      home.enterProjectCodeFromHome('questions')
+  describe('Create Answers', () => {
+    beforeEach(() => {
+      // home.enterProjectCodeFromHome('questions')
+      project.getPage('questions')
 
-      // Login
-      guestForm.loginAsGuest() //
+      // Login as a temp user
+      guestForm.loginAsGuest()
       browser.wait(EC.elementToBeClickable(sidebar.avatarActionIcon))
-    }) // beforeAll
+    })
 
-    afterAll(() => {
+    afterEach(() => {
       // log out
       browser.wait(EC.elementToBeClickable(sidebar.avatarActionIcon), 5000, 'never found the avatar dropdown button')
       sidebar.clickLogOutButton()
-    }) // afterAll
+    })
 
-    /*
-            Test: Make a comment on a question.
-        */
-    it('should make an emoji and text answer to a question as a guest.', () => {
-      // make sure we got there.
-      browser.wait(EC.presenceOf(question.testQuestion), 5000, ' failed to find the test question!')
-
-      // Skip the tutorial because it gets in the way
+    it('should make an emoji answer to a question as a guest', () => {
+      browser.wait(EC.presenceOf(question.testQuestion), 5000, ' failed to find the test question')
       project.skipTutorial()
-
-      // make sure we can see the OpenEndedAnswers block
       browser.wait(
         EC.presenceOf(question.openEndedAnswerBlock),
         10000,
-        'failed to find the open ended answers block under the test question!',
+        'failed to find the question to add an emoji answer to',
       )
-      // browser.executeScript('window.scrollTo(0, document.querySelector("article .button__answer-type").scrollTop + 400);').then(function () {
-      //     browser.wait(EC.elementToBeClickable(question.openEndedAnswerBlock), 5000, "never scrolled and saw the question");
-      // });
-
-      /**
-       * Emoji Answer
-       */
-      // First, let's find the emoji comment button
+      
       browser.wait(
         EC.elementToBeClickable(question.emojiCommentBtn),
         5000,
-        ' failed to click the emoji comment button!',
+        'failed to find the emoji answer button',
       )
-      // Click on the emoji comment button
       question.emojiCommentBtn.click()
-      // Confirm the comment and it's existence
-      browser.wait(EC.visibilityOf(question.emojiCommentSave), 5000, ' failed to find the comment confirm button!')
+
+      browser.wait(EC.visibilityOf(question.emojiCommentSave), 5000, 'failed to find the answer confirm button')
       question.emojiCommentSave.click()
-      // browser.wait(EC.presenceOf(question.firstAnswer), 5000, " There's supposed to be an emoji answer. This is unacceptable");
-      // Make sure the answer options hide after the comment confirms.
+
       browser.wait(
         EC.invisibilityOf(question.answerOptions),
         5000,
-        ' we are seeing the answer options, and we shouldnt!',
+        'answer options should not be showing after creating an emoji answer',
       )
-      // Delete the comment.
+      browser.sleep(2000)
+
       browser.wait(
         EC.visibilityOf(question.firstAnswerDelete),
         5000,
-        ' the emoji delete button never became clickable!',
+        'could not find emoji answer delete button',
       )
+
       question.firstAnswerDelete.click()
       browser.wait(
         EC.invisibilityOf(question.firstAnswer),
         5000,
-        " the comment never deleted! That, or there's a comment in the question for some reason. How about no.",
+        "answer was not deleted",
       )
-      // make sure the answer options are visible again
-      browser.wait(EC.visibilityOf(question.answerOptions), 5000, ' we should be able to see the answer options!')
+      browser.wait(EC.visibilityOf(question.answerOptions), 5000, 'answer options should be showing after the emoji answer was deleted')
+    })
 
-      /**
-       * Text Answer
-       */
+    it('should make a text answer to a question as a guest', () => {
+      browser.wait(EC.presenceOf(question.testQuestion), 5000, ' failed to find the test question')
+      project.skipTutorial()
+      browser.wait(
+        EC.presenceOf(question.openEndedAnswerBlock),
+        10000,
+        'failed to find the question to add a text answer to',
+      )
 
-      // and for my next trick, let's find the text comment button
-      browser.wait(EC.visibilityOf(question.textCommentBtn), 5000, ' failed to find the text comment button!')
+      browser.wait(EC.visibilityOf(question.textCommentBtn), 5000, 'failed to find the text comment button')
       question.textCommentBtn.click()
-      browser.wait(EC.visibilityOf(question.textCommentInput), 5000, ' failed to find the text comment input!')
-      question.textCommentInput.sendKeys('YOU MUST CONSTRUCT ADDITIONAL PYLONS' + protractor.Key.ENTER)
-      // Confirm the comment and it's existence
+
+      browser.wait(EC.visibilityOf(question.textCommentInput), 5000, 'failed to find the text comment input')
+      question.textCommentInput.sendKeys('ANSWER' + protractor.Key.ENTER)
+
       browser.wait(
         EC.visibilityOf(question.firstAnswer),
         5000,
-        " There's supposed to be a text answer. This is unacceptable",
+        "failed to find the text answer",
       )
-      // Delete the comment.
+      browser.sleep(2000)
+
       browser.wait(
         EC.visibilityOf(question.firstAnswerDelete),
         5000,
-        ' the emoji delete button never became clickable!',
+        'could not find text answer delete button',
       )
       question.firstAnswerDelete.click()
       browser.wait(
         EC.invisibilityOf(question.firstAnswer),
         5000,
-        " the comment never deleted! That, or there's a comment in the question for some reason. How about no.",
+        "answer options should be showing after the text answer was deleted",
       )
-    }) // it("should make an answer to a question as a logged...
-  }) //  describe("Questions: Making Answer Comments"
-}) //
+    })
+  })
+})
