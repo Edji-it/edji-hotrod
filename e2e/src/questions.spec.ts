@@ -62,7 +62,7 @@ describe('Questions', () => {
       newReading.contentInput2.sendKeys(newReading.qContentString2)
 
       // Move the cursor over to insert the next question in the middle of text
-      for (let i=0; i<7; i++) {
+      for (let i = 0; i < 7; i++) {
         newReading.contentInput2.sendKeys(protractor.Key.ARROW_LEFT)
       }
 
@@ -150,12 +150,8 @@ describe('Questions', () => {
         10000,
         'failed to find the question to add an emoji answer to',
       )
-      
-      browser.wait(
-        EC.elementToBeClickable(question.emojiCommentBtn),
-        5000,
-        'failed to find the emoji answer button',
-      )
+
+      browser.wait(EC.elementToBeClickable(question.emojiCommentBtn), 5000, 'failed to find the emoji answer button')
       question.emojiCommentBtn.click()
 
       browser.wait(EC.visibilityOf(question.emojiCommentSave), 5000, 'failed to find the answer confirm button')
@@ -168,19 +164,15 @@ describe('Questions', () => {
       )
       browser.sleep(2000)
 
-      browser.wait(
-        EC.visibilityOf(question.firstAnswerDelete),
-        5000,
-        'could not find emoji answer delete button',
-      )
+      browser.wait(EC.visibilityOf(question.firstAnswerDelete), 5000, 'could not find emoji answer delete button')
 
       question.firstAnswerDelete.click()
+      browser.wait(EC.invisibilityOf(question.firstAnswer), 5000, 'answer was not deleted')
       browser.wait(
-        EC.invisibilityOf(question.firstAnswer),
+        EC.visibilityOf(question.answerOptions),
         5000,
-        "answer was not deleted",
+        'answer options should be showing after the emoji answer was deleted',
       )
-      browser.wait(EC.visibilityOf(question.answerOptions), 5000, 'answer options should be showing after the emoji answer was deleted')
     })
 
     it('should make a text answer to a question as a guest', () => {
@@ -198,23 +190,15 @@ describe('Questions', () => {
       browser.wait(EC.visibilityOf(question.textCommentInput), 5000, 'failed to find the text comment input')
       question.textCommentInput.sendKeys('ANSWER' + protractor.Key.ENTER)
 
-      browser.wait(
-        EC.visibilityOf(question.firstAnswer),
-        5000,
-        "failed to find the text answer",
-      )
+      browser.wait(EC.visibilityOf(question.firstAnswer), 5000, 'failed to find the text answer')
       browser.sleep(2000)
 
-      browser.wait(
-        EC.visibilityOf(question.firstAnswerDelete),
-        5000,
-        'could not find text answer delete button',
-      )
+      browser.wait(EC.visibilityOf(question.firstAnswerDelete), 5000, 'could not find text answer delete button')
       question.firstAnswerDelete.click()
       browser.wait(
         EC.invisibilityOf(question.firstAnswer),
         5000,
-        "answer options should be showing after the text answer was deleted",
+        'answer options should be showing after the text answer was deleted',
       )
     })
   })

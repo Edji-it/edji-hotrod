@@ -3,7 +3,6 @@ import { browser, by, element, protractor } from 'protractor'
 import { NewReading, Login, Sidebar } from './page-objects'
 import { reset } from './utils/browser-methods'
 
-
 /*
     27 Jan 2017
     Last Modified: 27 Jan 2017
@@ -160,7 +159,7 @@ describe('New Reading Page', () => {
     /**
      * Test: Add reading with pages from a PDF
      */
-    it('should upload a PDF to a reading and save it to the reading', function () {
+    it('should upload a PDF to a reading and save it to the reading', function() {
       browser.wait(EC.elementToBeClickable(newReading.uploadPDfModalButton), 5000)
       newReading.uploadPDfModalButton.click()
       // Select File to upload
@@ -187,7 +186,7 @@ describe('New Reading Page', () => {
     })
 
     // This following test relies on the previous one for a PDF to delete.
-    it('should delete a PDF that was uploaded', function () {
+    it('should delete a PDF that was uploaded', function() {
       browser.wait(
         EC.elementToBeClickable(newReading.uploadPDfModalButton),
         5000,
@@ -225,7 +224,7 @@ describe('New Reading Page', () => {
      * - Create reading with image
      * - Verify new reading has image
      */
-    it('should upload an image to a reading and save it to the reading', function () {
+    it('should upload an image to a reading and save it to the reading', function() {
       newReading.insertImageButtonTap()
       browser.wait(
         EC.elementToBeClickable(newReading.imageUploadTrigger),
@@ -284,7 +283,7 @@ describe('New Reading Page', () => {
             - Click on "Publish" button
             - Redirect to reading page of newly created reading
          */
-    it('should add a reading as a draft and return to the same screen with a reading id', function () {
+    it('should add a reading as a draft and return to the same screen with a reading id', function() {
       // Reset user to dashboard
       // sidebar.backToDash()
       browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000)
