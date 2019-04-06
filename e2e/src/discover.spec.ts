@@ -57,10 +57,14 @@ describe('Discover Feed', () => {
     // Reload feed
     sidebar.navCreate.click()
     sidebar.navDiscover.click()
-    browser.wait(EC.elementToBeClickable(discover.firstFeedReading), 5000, "never saw first reading in discover feed public view")
+    browser.wait(
+      EC.elementToBeClickable(discover.firstFeedReading),
+      5000,
+      'never saw first reading in discover feed public view',
+    )
     // View following feed
     discover.filterFollowing.click()
-    browser.wait(EC.presenceOf(discover.followEdjiMsg), 7500, "never saw message to follow Edji")
+    browser.wait(EC.presenceOf(discover.followEdjiMsg), 7500, 'never saw message to follow Edji')
     browser.wait(EC.stalenessOf(discover.firstFeedReading), 5000, 'should not see any readings in following feed')
   })
 

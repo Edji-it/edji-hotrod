@@ -41,7 +41,7 @@ export class AddProjectModal implements OnInit {
     private _fb: FormBuilder,
     private _auth: AuthService,
     private angulartics: Angulartics2,
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.user = this._auth.getUser()

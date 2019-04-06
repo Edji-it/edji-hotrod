@@ -13,8 +13,8 @@ import { AuthService } from './../../_services/auth.service'
 export class ChangePassComponent implements OnInit {
   public passwordForm: FormGroup
   public messages: {
-    success?: boolean,
-    wrongPasswordError?: boolean,
+    success?: boolean
+    wrongPasswordError?: boolean
     serviceError?: boolean
   } = {}
   public loading: boolean
@@ -50,7 +50,7 @@ export class ChangePassComponent implements OnInit {
         oldPassword: this.passwordForm.get('oldPassword').value,
         newPassword: this.passwordForm.get('newPassword').value,
       })
-      .then((res) => {
+      .then(res => {
         this.messages.success = true
         this.loading = false
         // fire an analytic event here for tracking purposes
@@ -60,7 +60,7 @@ export class ChangePassComponent implements OnInit {
         })
         this._auth.setToken(res.token)
       })
-      .catch((err) => {
+      .catch(err => {
         this.loading = false
         if (err.status === 403) {
           this.messages.wrongPasswordError = true
@@ -69,7 +69,7 @@ export class ChangePassComponent implements OnInit {
           console.error(err)
           this.messages.serviceError = true
         }
-      });
+      })
   }
 
   public closeAndReset() {

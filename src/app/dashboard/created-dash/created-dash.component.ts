@@ -58,7 +58,7 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
     private _readings: ReadingService,
     private _projects: ProjectService,
     private angulartics: Angulartics2,
-  ) { }
+  ) {}
 
   ngOnInit() {
     // datalist component intializes by calling loadRecentlyCreated()
@@ -98,7 +98,7 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
     this.loadDrafts()
   } //  ngOnInit()
 
-  ngOnDestroy() { }
+  ngOnDestroy() {}
 
   /**
    * Load Created with Params
@@ -153,13 +153,16 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
     this._readings
       .getDrafts()
       .pipe(take(1))
-      .subscribe(data => {
-        if (data.readings) {
-          this.drafts = data.readings
-        }
-      }, error => {
-        console.error(error)
-      })
+      .subscribe(
+        data => {
+          if (data.readings) {
+            this.drafts = data.readings
+          }
+        },
+        error => {
+          console.error(error)
+        },
+      )
   }
 
   /**

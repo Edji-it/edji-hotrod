@@ -26,7 +26,7 @@ export const ROUTES: Routes = [
   {
     path: 'reset-route',
     component: ResetComponent,
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
   {
     path: '',

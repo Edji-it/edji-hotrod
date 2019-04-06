@@ -53,8 +53,9 @@ describe('Dashboard Page as a Hero', () => {
     const firstReadingTitleStr = await dashboard.firstReadingTitle.getText()
 
     // Scroll to Joined pagination bar
-    await browser
-      .executeScript('window.scrollTo(0, document.querySelector(".created-list .ui-paginator-element").scrollTop);')
+    await browser.executeScript(
+      'window.scrollTo(0, document.querySelector(".created-list .ui-paginator-element").scrollTop);',
+    )
     browser.wait(
       EC.elementToBeClickable(dashboard.createdListNextPage),
       3000,
@@ -70,11 +71,15 @@ describe('Dashboard Page as a Hero', () => {
       'did not load the second page of Created Readings',
     )
     const secondPageFirstReadingTitleStr = await dashboard.secondPageFirstReadingTitle.getText()
-    expect(firstReadingTitleStr).not.toEqual(secondPageFirstReadingTitleStr, 'expected the first reading on the second page to have a different title than the first reading on the first page')
+    expect(firstReadingTitleStr).not.toEqual(
+      secondPageFirstReadingTitleStr,
+      'expected the first reading on the second page to have a different title than the first reading on the first page',
+    )
 
     // Scroll back to pagination
-    await browser
-      .executeScript('window.scrollTo(0, document.querySelector(".created-list .ui-paginator-element").scrollTop);')
+    await browser.executeScript(
+      'window.scrollTo(0, document.querySelector(".created-list .ui-paginator-element").scrollTop);',
+    )
     browser.wait(
       EC.elementToBeClickable(dashboard.createdListPrevPage),
       3000,
@@ -96,8 +101,15 @@ describe('Dashboard Page as a Hero', () => {
     dashboard.goToCreatedTab()
 
     browser.wait(EC.presenceOf(dashboard.firstReadingCard))
-    expect(dashboard.readingCards.count()).toBeGreaterThan(0, 'expected to see at least one reading card on the dashboard')
-    browser.wait(EC.presenceOf(dashboard.firstProject), 8000, 'expected to see at least one project card on the dashboard')
+    expect(dashboard.readingCards.count()).toBeGreaterThan(
+      0,
+      'expected to see at least one reading card on the dashboard',
+    )
+    browser.wait(
+      EC.presenceOf(dashboard.firstProject),
+      8000,
+      'expected to see at least one project card on the dashboard',
+    )
     expect(dashboard.projectCards.count()).toBeGreaterThan(0)
   })
 
