@@ -110,19 +110,9 @@ export class Project implements PageObjectInterface {
         this.addEmojiBtn.isDisplayed().then(result => {
           if (result) {
             // Desktop clicking of the add emoji comment button
-            browser.wait(
-              this.EC.elementToBeClickable(this.addEmojiBtn),
-              5000,
-              'never found the add emoji comment button',
-            )
             this.addEmojiBtn.click()
           } else {
             // Mobile clicking of the add emoji comment button
-            browser.wait(
-              this.EC.elementToBeClickable(this.addEmojiBtnMobile),
-              5000,
-              'never found the add emoji comment button',
-            )
             this.addEmojiBtnMobile.click()
           }
         })
@@ -140,7 +130,7 @@ export class Project implements PageObjectInterface {
             browser.wait(
               this.EC.elementToBeClickable(this.addTextBtn),
               5000,
-              'never found the add emoji comment button',
+              'never found the add text comment button',
             )
             this.addTextBtn.click()
           } else {
@@ -148,7 +138,7 @@ export class Project implements PageObjectInterface {
             browser.wait(
               this.EC.elementToBeClickable(this.addTextBtnMobile),
               5000,
-              'never found the add emoji comment button',
+              'never found the add text comment button',
             )
             this.addTextBtnMobile.click()
           }
@@ -210,4 +200,25 @@ export class Project implements PageObjectInterface {
       }
     })
   }
-} // class
+
+  /**
+   * Helper file for creating a new emoji comment from word selection to saving with data
+   * DO NOT RELY ON THIS METHOD TO ACTUALLY TEST EMOJI COMMENT FUNCTIONALITY!!!
+   * USE AS A HELPER ONLY!
+   */
+  public createEmojiComment(): void {
+    let grinningEmoji = this.getEmojiFromKeyboard("[dataname=':grinning:']")
+    // Find text to select
+    browser.wait(this.EC.elementToBeClickable(element(by.css(".w[index='18']"))), 10000, 'never found words to click on')
+    // Select words using Quick Highlight by clicking
+    this.word(26).click()
+    this.word(30).click()
+    // Add emoji comment (click on the addd emoji button)
+    this.addEmojiComment()
+    // Select emojis
+    browser.wait(this.EC.elementToBeClickable(grinningEmoji), 5000, 'never found the emoji keyboard')
+    grinningEmoji.click()
+    // Save emoji comment
+    this.emojiCommentSave.click()
+  }
+}
