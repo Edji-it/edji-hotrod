@@ -1,15 +1,15 @@
-import { TestBed, inject } from '@angular/core/testing';
+import { TestBed, inject } from '@angular/core/testing'
 
-import { AcademyService } from './academy.service';
+import { AcademyService } from './academy.service'
 
 describe('AcademyService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [AcademyService]
-    });
-  });
+      providers: [AcademyService],
+    })
+  })
 
   it('should be created', inject([AcademyService], (service: AcademyService) => {
-    expect(service).toBeTruthy();
-  }));
-});
+    expect(service).toBeTruthy()
+  }))
+})

@@ -1,12 +1,25 @@
-import { Angulartics2 } from 'angulartics2';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Angulartics2 } from 'angulartics2'
+import { ActivatedRoute, Router } from '@angular/router'
 import { Component, Input, OnDestroy, OnInit, Output, EventEmitter } from '@angular/core'
 import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
 
 // Project Dependencies
-import { AuthService, ProjectService, SocketService, PowerToggle, ReadingService, SecretSwitchesService, UtilToolService, Secrets, AcademyState, Academy, MessageService, MessageToast } from '../../_services'
-import { User } from '../datatypes';
+import {
+  AuthService,
+  ProjectService,
+  SocketService,
+  PowerToggle,
+  ReadingService,
+  SecretSwitchesService,
+  UtilToolService,
+  Secrets,
+  AcademyState,
+  Academy,
+  MessageService,
+  MessageToast,
+} from '../../_services'
+import { User } from '../datatypes'
 
 @Component({
   selector: 'nav-bar',
@@ -23,7 +36,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
 
   @Output() saveAction: EventEmitter<any> = new EventEmitter()
   @Output() shareAction: EventEmitter<ReadingShareObject> = new EventEmitter<ReadingShareObject>()
-
 
   public showAvatarDropdown: boolean = false
   public showAcademyDropdown: boolean = false
@@ -47,22 +59,22 @@ export class NavBarComponent implements OnInit, OnDestroy {
   public mNavShow: boolean = false
   // "Butter Bar" alerts for group code entry
   public messages: {
-    invalidCode?: boolean,
-    serviceError?: boolean,
+    invalidCode?: boolean
+    serviceError?: boolean
     groupNameLengthError?: boolean
   } = {}
 
   // Group/Share form
   public submitted: boolean = false
-  public groupLabel: string = "Group 1"
-  public customCode: string = ""
+  public groupLabel: string = 'Group 1'
+  public customCode: string = ''
   public shareLoading: boolean = false
 
   public projectCode: string
   public joinLoading: boolean = false
   public errorObject: {
-    invalidCode?: string,
-    loginFailed?: string,
+    invalidCode?: string
+    loginFailed?: string
     serverError?: string
   } = {}
   public window
@@ -74,25 +86,25 @@ export class NavBarComponent implements OnInit, OnDestroy {
   public isTeacher: boolean = false
   public isAcademyAdmin: boolean = false
   public secretSwitches: Secrets = {}
-  public currentPage: string = ""
+  public currentPage: string = ''
   public navLinks: NavLink[] = []
 
   // Dev only display
   public isDevDeployed: boolean
 
   // Copy Variables
-  public heroBtnCopy: string = "Upgrade to Hero"
+  public heroBtnCopy: string = 'Upgrade to Hero'
 
   // Nav Slider Button expansion booleans
   public sliderBtnExpanded: {
-    heat?: boolean,
-    group?: boolean,
-    code?: boolean,
+    heat?: boolean
+    group?: boolean
+    code?: boolean
     academy?: boolean
   } = {
-      // Default expand code
-      code: true
-    }
+    // Default expand code
+    code: true,
+  }
   // Nav Slider Button loading states
   public sliderBtnLoading: {
     heat?: boolean
@@ -109,7 +121,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
     private _projects: ProjectService,
     private _readings: ReadingService,
     public _util: UtilToolService,
-    private _secret: SecretSwitchesService
+    private _secret: SecretSwitchesService,
   ) {
     if (window.location.host.indexOf('dev.edji.it') > -1) {
       this.isDevDeployed = true
@@ -119,11 +131,11 @@ export class NavBarComponent implements OnInit, OnDestroy {
   ngOnInit() {
     /** Set the current user every time it changes */
     this.subscriptions.push(
-      this._auth.getCurrentUser().subscribe((user) => {
+      this._auth.getCurrentUser().subscribe(user => {
         this.user = user
         this.navLinks = this.generateNavLinks(user)
       }),
-      this._auth.currentAcademyState.subscribe((currentState) => {
+      this._auth.currentAcademyState.subscribe(currentState => {
         this.academyState = currentState
         // Set abbreviation
         if (this.academyState && this.academyState.academies) {
@@ -131,43 +143,43 @@ export class NavBarComponent implements OnInit, OnDestroy {
         } else {
           this.currentAcademy = {}
         }
-      })
+      }),
     )
 
     /**
      * @todo Find a cleaner way to reference the parent page/route
      */
     if (this._router.url.indexOf('/project') > -1) {
-      this.currentPage = "project"
+      this.currentPage = 'project'
     } else if (this._router.url.indexOf('/home') > -1) {
-      this.currentPage = "home"
+      this.currentPage = 'home'
     } else if (this._router.url.indexOf('/hero') > -1 || this._router.url.indexOf('/plans') > -1) {
-      this.currentPage = "hero"
+      this.currentPage = 'hero'
     } else if (this._router.url.indexOf('/dashboard') > -1) {
-      this.currentPage = "dashboard"
+      this.currentPage = 'dashboard'
     } else {
-      this.currentPage = ""
+      this.currentPage = ''
     }
 
     this.subscriptions.push(
-      // Subscribe to current Reading data 
+      // Subscribe to current Reading data
       this._readings.currentReading.subscribe(
         reading => {
-          this.currentReading = reading;
+          this.currentReading = reading
         },
         error => {
-          console.error(error);
-        }
+          console.error(error)
+        },
       ),
-      this._route.params.subscribe((params) => {
+      this._route.params.subscribe(params => {
         this.secretSwitches = this._secret.processSwitches(params)
       }),
-      this._route.queryParams.subscribe((queryParams) => {
+      this._route.queryParams.subscribe(queryParams => {
         if (queryParams.readingCodeModal) {
           this.showShareCodeModal = true
           this.isNewReading = true
         }
-      })
+      }),
     )
 
     if (this.showProjectInfo) {
@@ -180,22 +192,27 @@ export class NavBarComponent implements OnInit, OnDestroy {
             this.createdDate = new Date(project.createdAt).toDateString()
           },
           error => {
-            console.error(error);
-          }
+            console.error(error)
+          },
         ),
-        // Subscribe to user count updates   
-        this._socket.liveUsersCount.subscribe((users) => {
-          this.liveCount = users.length
-        }, (error) => {
-          console.warn(error)
-        })
+        // Subscribe to user count updates
+        this._socket.liveUsersCount.subscribe(
+          users => {
+            this.liveCount = users.length
+          },
+          error => {
+            console.warn(error)
+          },
+        ),
       )
     }
     this.window = window
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach((sub) => { sub.unsubscribe() })
+    this.subscriptions.forEach(sub => {
+      sub.unsubscribe()
+    })
   }
 
   logout() {
@@ -225,15 +242,15 @@ export class NavBarComponent implements OnInit, OnDestroy {
         id: 'navRead',
         route: '/dashboard/read',
         displayName: 'Read',
-        tooltip: 'Read with your class'
-      });
+        tooltip: 'Read with your class',
+      })
       // 2nd Create dashboard link
       links.push({
         id: 'navCreate',
         route: '/dashboard/create',
         displayName: 'Write',
-        tooltip: 'Share your writing'
-      });
+        tooltip: 'Share your writing',
+      })
     } else {
       // Teacher Nav Links
       // Create dashboard link
@@ -241,26 +258,25 @@ export class NavBarComponent implements OnInit, OnDestroy {
         id: 'navCreate',
         route: '/dashboard/create',
         displayName: 'Create',
-        tooltip: 'Create readings to share'
-      });
+        tooltip: 'Create readings to share',
+      })
       // Read dashboard link
       links.push({
         id: 'navRead',
         route: '/dashboard/read',
         displayName: 'Read',
-        tooltip: 'Join readings from others'
-      });
+        tooltip: 'Join readings from others',
+      })
       // Discover Feed Link
       links.push({
         id: 'navDiscover',
         route: '/discover',
         displayName: 'Discover',
-        tooltip: 'Discover Readings from other Teachers'
-      });
+        tooltip: 'Discover Readings from other Teachers',
+      })
     }
     return links
   }
-
 
   // finalizeReadingAndShare(shareObj: ReadingShareObject) {
   //   this.messages = {}
@@ -302,30 +318,29 @@ export class NavBarComponent implements OnInit, OnDestroy {
   // }
 
   /**
- * Validates project and then navigates to project if valid
- * @param code The project's short code
- */
+   * Validates project and then navigates to project if valid
+   * @param code The project's short code
+   */
   private joinSession(code: string): void {
     // console.log("first call", code);
     this.joinLoading = true
-    this._projects.validateProjectCode(code)
-      .subscribe(
-        (data) => {
-          console.log('data', data)
-          this.joinLoading = false
-          if (data._id) {
-            this._router.navigate(['/project', data._id])
-          } else {
-            this.errorObject.invalidCode = "We don't think that's a real code :confused:"
-            console.log(this.errorObject)
-          }
-        },
-        (error) => {
-          this.joinLoading = false
-          console.error(error)
-          this.errorObject.invalidCode = "Oh no! Something went wrong and we don't know what happened!"
+    this._projects.validateProjectCode(code).subscribe(
+      data => {
+        console.log('data', data)
+        this.joinLoading = false
+        if (data._id) {
+          this._router.navigate(['/project', data._id])
+        } else {
+          this.errorObject.invalidCode = "We don't think that's a real code :confused:"
+          console.log(this.errorObject)
         }
-      );
+      },
+      error => {
+        this.joinLoading = false
+        console.error(error)
+        this.errorObject.invalidCode = "Oh no! Something went wrong and we don't know what happened!"
+      },
+    )
   }
 
   /**
@@ -334,7 +349,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
   private clearErrors(): void {
     for (let property in this.errorObject) {
       if (this.errorObject.hasOwnProperty(property) && typeof this.errorObject[property] === 'string') {
-        this.errorObject[property] = "";
+        this.errorObject[property] = ''
       }
     }
   }
@@ -387,22 +402,22 @@ export class NavBarComponent implements OnInit, OnDestroy {
     // fire an analytic event here for tracking purposes
     this.angulartics.eventTrack.next({
       action: 'referral_redeemCoupon' + this.getCouponNum(this.couponCode),
-      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
+      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
     })
   }
 
   // we don't want to expose the coupon code to analytics, so we'll reference the number of referrals
   private getCouponNum(couponCode: string): number {
     switch (couponCode) {
-      case "HOTROD_HERO_ONE5TH":
+      case 'HOTROD_HERO_ONE5TH':
         return 1
-      case "HOTROD_HERO_24BUCKS":
+      case 'HOTROD_HERO_24BUCKS':
         return 2
-      case "HOTROD_HERO_36BIGONES":
+      case 'HOTROD_HERO_36BIGONES':
         return 3
-      case "HOTROD_HERO_4FIFTHS":
+      case 'HOTROD_HERO_4FIFTHS':
         return 4
-      case "HOTROD_HERO_REFERMASTER":
+      case 'HOTROD_HERO_REFERMASTER':
         return 5
       default:
         return 0
@@ -417,7 +432,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
     // Track usage
     this.angulartics.eventTrack.next({
       action: 'navBar_sliderToggle_' + key,
-      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
+      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
     })
 
     this.sliderBtnExpanded[key] = !this.sliderBtnExpanded[key]
@@ -434,15 +449,16 @@ export class NavBarComponent implements OnInit, OnDestroy {
 
     this.angulartics.eventTrack.next({
       action: 'navBar_heatVision_toggle' + toggleTo,
-      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
+      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
     })
 
     // set heat vision to loading
     this.sliderBtnLoading.heat = true
 
-    this._projects.update({ 'heat_vision': toggleTo }, this.currentProject._id)
+    this._projects
+      .update({ heat_vision: toggleTo }, this.currentProject._id)
       .pipe(take(1))
-      .subscribe((project) => {
+      .subscribe(project => {
         // Live update users once save is successful
         this._socket.toggleHeatVision({ all: toggleTo })
         // Allow a moment for changes to propagate to users

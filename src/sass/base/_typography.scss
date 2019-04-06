@@ -1,11 +1,7 @@
-
-
-
-@include fontFace('Open Sans', '../assets/fonts/OpenSans-Light-webfont', normal, 100 );
-@include fontFace('Open Sans', '../assets/fonts/OpenSans-Regular-webfont', normal, normal );
-@include fontFace('Open Sans', '../assets/fonts/OpenSans-Semibold-webfont', normal, 500 );
-@include fontFace('Open Sans', '../assets/fonts/OpenSans-Bold-webfont', normal, 700 );
-
+@include fontFace('Open Sans', '../assets/fonts/OpenSans-Light-webfont', normal, 100);
+@include fontFace('Open Sans', '../assets/fonts/OpenSans-Regular-webfont', normal, normal);
+@include fontFace('Open Sans', '../assets/fonts/OpenSans-Semibold-webfont', normal, 500);
+@include fontFace('Open Sans', '../assets/fonts/OpenSans-Bold-webfont', normal, 700);
 
 body {
   color: $base-font-color;
@@ -27,7 +23,8 @@ h6 {
   margin: 0 0 $small-spacing;
 }
 
-h1, .h1 {
+h1,
+.h1 {
   font-weight: 100;
   font-size: 32px;
   margin-bottom: 40px;
@@ -40,12 +37,14 @@ h1, .h1 {
   }
 }
 
-h2, .h2 {
+h2,
+.h2 {
   font-weight: 200;
   font-size: 24px;
 }
 
-h3, .h3 {
+h3,
+.h3 {
   font-size: $base-font-size;
   font-weight: 500;
   color: #5f5f5f;
@@ -82,7 +81,8 @@ a {
   }
 }
 
-a.link, a.linkified {
+a.link,
+a.linkified {
   font-weight: normal;
   color: $medium-gray;
   cursor: pointer;
@@ -109,19 +109,20 @@ a.link--light {
   }
 }
 
-.link-list, ul.link-list {
+.link-list,
+ul.link-list {
   list-style: none;
-  
+
   & li {
     padding-left: 20px;
     line-height: 2em;
   }
 
   & li::before {
-    content: "\2022";  /* Add content: \2022 is the CSS Code/unicode for a bullet */
+    content: '\2022'; /* Add content: \2022 is the CSS Code/unicode for a bullet */
     color: #656565; /* Change the color */
     font-weight: bold; /* If you want it to be bold */
-    display: inline-block; /* Needed to add space between the bullet and the text */ 
+    display: inline-block; /* Needed to add space between the bullet and the text */
     width: 1em; /* Also needed for space (tweak if needed) */
     margin-left: -1em; /* Also needed for space (tweak if needed) */
   }
@@ -135,8 +136,9 @@ hr {
   margin: $base-spacing 0;
 }
 
-label, .label {
-  // color: 
+label,
+.label {
+  // color:
   font-family: $base-font-family;
   font-size: 12px;
   font-weight: 500;
@@ -160,7 +162,11 @@ label, .label {
   margin-bottom: 8px;
 }
 
-p, h1, h2, h3, h4 {
+p,
+h1,
+h2,
+h3,
+h4 {
   &.center {
     text-align: center;
   }
@@ -178,7 +184,11 @@ h2.card-title {
 .on-dark {
   color: #fff;
 
-  h1, h2, h3, h4, h5 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
     color: #fff;
   }
 }
@@ -186,24 +196,24 @@ h2.card-title {
 a.on-dark {
   color: #fafafa;
 }
- 
+
 .beta-tag {
-  color: #FA9B5C;
+  color: #fa9b5c;
   vertical-align: super;
   font-size: 0.75em;
 
   &--icon {
-      @extend .beta-tag;
-      font-size: 0.45em;
-      position: absolute;
-      top: 0px;
-      right: 0px;
-      background: #FA9B5C;
-      border-radius: 50%;
-      color: #fff;
-      width: 1.3em;
-      height: 1.3em;
-      line-height: 1.3em;
+    @extend .beta-tag;
+    font-size: 0.45em;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    background: #fa9b5c;
+    border-radius: 50%;
+    color: #fff;
+    width: 1.3em;
+    height: 1.3em;
+    line-height: 1.3em;
   }
 }
 
@@ -224,7 +234,7 @@ a.on-dark {
     @extend .hero-tag;
     display: inline-block;
     font-size: 1.1em;
-    margin-top: -.1em;
+    margin-top: -0.1em;
     vertical-align: top;
     text-shadow: -2px 2px 0px #bbbbbb;
   }
@@ -235,9 +245,10 @@ a.on-dark {
   color: $medium-gray;
 }
 
-.text-success, .valid-feedback {
+.text-success,
+.valid-feedback {
   // Use a higher contrast green for legibility
-  color: #6DD260 !important;
+  color: #6dd260 !important;
 }
 
 .invalid-feedback {

@@ -1,64 +1,63 @@
-
-
 .lesson-block {
-    display: block;
-    margin: 2em auto 2em auto !important;
-    background: transparent !important;
-    position: relative; 
-    width: 100%;
-    padding: 8px;
+  display: block;
+  margin: 2em auto 2em auto !important;
+  background: transparent !important;
+  position: relative;
+  width: 100%;
+  padding: 8px;
 }
 
 .lesson-block__indicator {
-    position: absolute;
-    top: -15px;
-    left: -15px;
-    color: white;
-    width: 30px;
-    height: 30px;
-    font-size:  16px;
-    font-weight: bold;
-    text-align: center;
-    border-radius:  50%;
-    line-height: 30px;
-    background-color: #c7f1d1;
+  position: absolute;
+  top: -15px;
+  left: -15px;
+  color: white;
+  width: 30px;
+  height: 30px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 50%;
+  line-height: 30px;
+  background-color: #c7f1d1;
 
-    & img {
-        margin-top: -2px;
-    }
+  & img {
+    margin-top: -2px;
+  }
 }
 
 .lesson-block__body {
-    font-size: 1em;
-    font-weight: 400;
-    background: $pageBg;
-    vertical-align: middle;
-    display: inline-block;
-    width: calc(100% - 10px);
-    margin-bottom: 10px;
-    padding: 5px 15px 20px 15px;
-    box-shadow: 0px 1px 20px 0px rgba(0,0,0,0.15);
+  font-size: 1em;
+  font-weight: 400;
+  background: $pageBg;
+  vertical-align: middle;
+  display: inline-block;
+  width: calc(100% - 10px);
+  margin-bottom: 10px;
+  padding: 5px 15px 20px 15px;
+  box-shadow: 0px 1px 20px 0px rgba(0, 0, 0, 0.15);
 
-    & .label, & .label--gray, & label {
-        margin: 5px 0 0 0;
-    }
+  & .label,
+  & .label--gray,
+  & label {
+    margin: 5px 0 0 0;
+  }
 
-    & p {
-        white-space: pre-wrap;
-        word-break: break-word;
-    }
+  & p {
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
 }
 
 .lesson-block__header {
-    @extend .h3;
-    margin: 10px 0 15px 0;
+  @extend .h3;
+  margin: 10px 0 15px 0;
 }
 
 .feedback-bubble {
-    display: block;
-    font-weight: 400;
-    padding: 10px;
-    background: #f9f9f9;
-    border-radius: 8px;
+  display: block;
+  font-weight: 400;
+  padding: 10px;
+  background: #f9f9f9;
+  border-radius: 8px;
 }
-

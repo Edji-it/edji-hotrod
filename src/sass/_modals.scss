@@ -6,8 +6,9 @@ $modalBorderRadius: 8px;
 $modalBodyBg: #fff;
 
 .modal-will-fade {
-
-  &, .modal, .modal-content {
+  &,
+  .modal,
+  .modal-content {
     opacity: 0;
     pointer-events: none;
     transition: opacity ease-in 0.3s;
@@ -19,7 +20,9 @@ $modalBodyBg: #fff;
   }
 
   &.show {
-    &, .modal, .modal-content {
+    &,
+    .modal,
+    .modal-content {
       opacity: 1;
       pointer-events: all;
     }
@@ -32,7 +35,7 @@ $modalBodyBg: #fff;
 
 .modal {
   z-index: 9000;
-  background: rgba(0,0,0,0.3);
+  background: rgba(0, 0, 0, 0.3);
   overflow: auto;
   // display: block;
   display: flex;
@@ -63,7 +66,8 @@ $modalBodyBg: #fff;
 // }
 
 .modal-title {
-  & .icon, & .icon-group {
+  & .icon,
+  & .icon-group {
     margin-right: 5px;
     font-size: 24px;
     vertical-align: middle;
@@ -73,8 +77,9 @@ $modalBodyBg: #fff;
 .modal-header {
   border: $modalBorder;
   background: #f7f7f7;
-  
-  &, & h4 {
+
+  &,
+  & h4 {
     color: $modalHeaderColor;
   }
 
@@ -95,14 +100,14 @@ $modalBodyBg: #fff;
 }
 
 .modal-body {
-    background: $modalBodyBg;
-    padding-top: 30px;
-    padding-bottom: 30px;
+  background: $modalBodyBg;
+  padding-top: 30px;
+  padding-bottom: 30px;
 }
 
 .modal-content {
   border: $modalBorder;
-  box-shadow: 0px 3px 25px 0px rgba(0,0,0,0.3);
+  box-shadow: 0px 3px 25px 0px rgba(0, 0, 0, 0.3);
   border-radius: $modalBorderRadius;
   overflow: hidden;
 
@@ -113,25 +118,25 @@ $modalBodyBg: #fff;
 .modal-video {
   min-width: calc(100% - 60px);
 
-  @media(max-width: $tablet) {
+  @media (max-width: $tablet) {
     min-width: calc(100% - 20px);
   }
-  
+
   .modal-body {
-      position:relative;
-      padding:0px;
+    position: relative;
+    padding: 0px;
   }
-    
+
   .close {
-    position:absolute;
+    position: absolute;
     right: 0px;
     top: -35px;
     padding-left: 10px;
     padding-right: 10px;
-    z-index:999;
-    font-size:2rem;
+    z-index: 999;
+    font-size: 2rem;
     font-weight: normal;
-    color:#fff;
-    opacity:1;
+    color: #fff;
+    opacity: 1;
   }
 }

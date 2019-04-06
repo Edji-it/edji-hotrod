@@ -1,109 +1,111 @@
-
-$slidingPaneShadow: 0px 1px 8px 3px rgba(0,0,0,0.05);
+$slidingPaneShadow: 0px 1px 8px 3px rgba(0, 0, 0, 0.05);
 $slidingPaneBorder: 1px solid $gray;
 $slidingPaneWidth: 265px;
 
 // Shared styles between panes
-.sliding-pane, 
+.sliding-pane,
 .sliding-pane-comment {
-    position: fixed;
-    display: block;
-    height: 100%;
-    min-width: $slidingPaneWidth;
-    top: 0;
-    left: 0;
-    background: #fff; //$midGray; //$gray;
-    z-index: $zMid + 1000;
-    overflow-y:auto;
+  position: fixed;
+  display: block;
+  height: 100%;
+  min-width: $slidingPaneWidth;
+  top: 0;
+  left: 0;
+  background: #fff; //$midGray; //$gray;
+  z-index: $zMid + 1000;
+  overflow-y: auto;
 
-    .keyboard-adjust & {
-        height: 70%;// calc(70% - #{ $navBarHeight - 13px });
-    }
+  .keyboard-adjust & {
+    height: 70%; // calc(70% - #{ $navBarHeight - 13px });
+  }
 
-    // Full width "mobile" comment pane
-    @media(max-width: $medium-screen) { // <768px
-        width: calc(100% - 60px);
-    }
-    // Min width pane
-    @media(min-width: $medium-screen) and (max-width: $large-screen) { // 768px - 992px
-        width: 300px;
-    }
-    // Flexible width pane
-    @media(min-width: $large-screen) { // >992px
-        min-width: 300px;
-        width: calc( (100% - 530px) / 2 ) !important;
-    }
-    &.reading-recap {
-        width: calc( (100% - 42px)) !important;
-    }
+  // Full width "mobile" comment pane
+  @media (max-width: $medium-screen) {
+    // <768px
+    width: calc(100% - 60px);
+  }
+  // Min width pane
+  @media (min-width: $medium-screen) and (max-width: $large-screen) {
+    // 768px - 992px
+    width: 300px;
+  }
+  // Flexible width pane
+  @media (min-width: $large-screen) {
+    // >992px
+    min-width: 300px;
+    width: calc((100% - 530px) / 2) !important;
+  }
+  &.reading-recap {
+    width: calc((100% - 42px)) !important;
+  }
 }
 
 .sliding-pane {
-    padding: $base-pad 5px;
-    transition: margin $slidingPaneTime linear;
-    padding-top: $navOffset + $base-pad;
-    box-shadow: $slidingPaneShadow;
-    border-right: $slidingPaneBorder;
+  padding: $base-pad 5px;
+  transition: margin $slidingPaneTime linear;
+  padding-top: $navOffset + $base-pad;
+  box-shadow: $slidingPaneShadow;
+  border-right: $slidingPaneBorder;
 
-    &.from-right {
-        // transform: translate3d(100%, 0, 0);
-        right: 0;
-    }
+  &.from-right {
+    // transform: translate3d(100%, 0, 0);
+    right: 0;
+  }
 
-    &.from-left {
-        // transform: translate3d(-105%, 0, 0);
-        left: 0;
-        margin-left: -100%;
-    }
-    
-    &.slide-in {
-        // transform: translate3d(0, 0, 0);
-        left: 0;
-        margin-left: 0%;
-    }
+  &.from-left {
+    // transform: translate3d(-105%, 0, 0);
+    left: 0;
+    margin-left: -100%;
+  }
 
-    &.replies {
-        overflow: hidden;
-    }
+  &.slide-in {
+    // transform: translate3d(0, 0, 0);
+    left: 0;
+    margin-left: 0%;
+  }
 
-    &.slide-slow {
-        transition: margin 0.8s linear;
-    }
+  &.replies {
+    overflow: hidden;
+  }
 
-    .keyboard-adjust & {
-        height: 70%;
-    }
+  &.slide-slow {
+    transition: margin 0.8s linear;
+  }
+
+  .keyboard-adjust & {
+    height: 70%;
+  }
 }
 
 .sliding-pane-comment {
-    padding: 0px;
-    z-index: $zMid + 1000;
-    overflow:auto;
-    box-shadow: $slidingPaneShadow;
-    border-right: $slidingPaneBorder;
-    transition: transform $slidingPaneTime linear;
+  padding: 0px;
+  z-index: $zMid + 1000;
+  overflow: auto;
+  box-shadow: $slidingPaneShadow;
+  border-right: $slidingPaneBorder;
+  transition: transform $slidingPaneTime linear;
 
-    &.from-right {
-        // transform: translate3d(100%, 0, 0);
-        right: 0;
-    }
+  &.from-right {
+    // transform: translate3d(100%, 0, 0);
+    right: 0;
+  }
 
-    &.from-left {
-        // transform: translate3d(-105%, 0, 0);
-        left: 0;
-        transform: translate3d(-100%, 0, 0);
-    }
-    
-    &.slide-in {
-        transform: translate3d(0%, 0, 0);
-    }
+  &.from-left {
+    // transform: translate3d(-105%, 0, 0);
+    left: 0;
+    transform: translate3d(-100%, 0, 0);
+  }
 
-    &.replies {
-        overflow-y: hidden;
-    }
+  &.slide-in {
+    transform: translate3d(0%, 0, 0);
+  }
+
+  &.replies {
+    overflow-y: hidden;
+  }
 }
 
 .user-list-item {
-    font-family: 'Open Sans';
-    margin: 6px 0px;
+  font-family: 'Open Sans';
+  margin: 6px 0px;
 }

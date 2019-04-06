@@ -78,6 +78,7 @@ nav-bar([showDashboardOptions]="true")
   .row.container-line
 
 edji-change-pass.modal-will-fade(
+  *ngIf="showPassModal",
   [class.show]="showPassModal", 
   (closeModal)="showPassModal = !showPassModal"
 )

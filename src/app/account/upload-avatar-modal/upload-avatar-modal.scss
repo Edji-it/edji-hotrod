@@ -5,62 +5,62 @@
 // Last Mod: 23 June 2017
 
 .body {
-    height: 12em;
-    margin-bottom: 10%;
+  height: 12em;
+  margin-bottom: 10%;
 }
 
 .save-button {
-    background-color: #3F9FFE;
-    color: #FAF9F9;
+  background-color: #3f9ffe;
+  color: #faf9f9;
 }
 
 .btn-container {
-    display: block;
-    margin-top: 2em;
+  display: block;
+  margin-top: 2em;
 }
 
 .footer-border {
-    border-top-width: 1.25px;
-    border-top-style: solid;
-    border-top-color: #DCDCDC;
-    width: 90%;
-    height: 5em;
-    display: block;
-    margin: auto;
+  border-top-width: 1.25px;
+  border-top-style: solid;
+  border-top-color: #dcdcdc;
+  width: 90%;
+  height: 5em;
+  display: block;
+  margin: auto;
 }
 
 .vertical-center-btn {
-    display: block;
-    margin: auto;
+  display: block;
+  margin: auto;
 }
 
 .profile-pic {
-    border-radius:  50%;
-    object-fit: cover; // Needed for images
-    min-width:  175px;
-    min-height: 175px;
-    width:      175px;
-    height:     175px;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+  border-radius: 50%;
+  object-fit: cover; // Needed for images
+  min-width: 175px;
+  min-height: 175px;
+  width: 175px;
+  height: 175px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .remove-button {
-    background-color: #FE3F5F;
-    color: #FAF9F9;
-    margin-top: 1em;
+  background-color: #fe3f5f;
+  color: #faf9f9;
+  margin-top: 1em;
 }
 
 .col-btn {
-    width: 12em;
+  width: 12em;
 }
 
 .row-btn {
-    width: 10em;
+  width: 10em;
 }
 
 .modal-button {
-    background-color: #C6C5C5;
-    color: #FAF9F9;
+  background-color: #c6c5c5;
+  color: #faf9f9;
 }

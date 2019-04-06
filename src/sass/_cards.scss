@@ -18,7 +18,8 @@
   cursor: pointer;
   position: relative;
 
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     & .icon {
       background-color: #fafafa;
     }
@@ -36,9 +37,10 @@
     left: 1px;
   }
 
-  border-bottom: 1px solid #DCE3EA;
+  border-bottom: 1px solid #dce3ea;
 
-  &:last-of-type, &:last-child {
+  &:last-of-type,
+  &:last-child {
     border-bottom: 1px solid transparent;
   }
 }

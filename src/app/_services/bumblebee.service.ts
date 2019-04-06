@@ -9,8 +9,7 @@ import { User } from '../shared/datatypes'
 
 @Injectable()
 export class BumblebeeService {
-
-  private url: string = "//bumblebee.edji.it"
+  private url: string = '//bumblebee.edji.it'
   private isProd: boolean = true
 
   constructor(private _auth: AuthService, private _http: HttpClient) {
@@ -19,15 +18,14 @@ export class BumblebeeService {
 
   public sendUserDetails(userDetails: User, sendType?: string): void {
     if (this.isProd) {
-      this._http.post(
-        this.url + "/newuser",
-        { userDetails: userDetails, sendType: sendType },
-        this._auth.getOptions()
-      )
+      this._http
+        .post(this.url + '/newuser', { userDetails: userDetails, sendType: sendType }, this._auth.getOptions())
         .pipe(take(1))
         .subscribe(
-          (success) => { },
-          (error) => { console.error(error) }
+          success => {},
+          error => {
+            console.error(error)
+          },
         )
     } else {
       console.log('stubbing bumblebee user details', userDetails)
@@ -35,39 +33,33 @@ export class BumblebeeService {
   }
 
   public sendFeedback(data: any): Observable<any> {
-    return this._http.post(
-      this.url + "/newform",
-      data,
-      this._auth.getOptions()
-    )
+    return this._http.post(this.url + '/newform', data, this._auth.getOptions())
   }
 
   public userHeroAction(user: User, action: string): void {
     if (this.isProd) {
-      this._http.post(
-        this.url + "/hero",
-        { user: user, action: action },
-        this._auth.getOptions()
-      )
+      this._http
+        .post(this.url + '/hero', { user: user, action: action }, this._auth.getOptions())
         .pipe(take(1))
         .subscribe(
-          (success) => { },
-          (error) => { console.error(error) }
+          success => {},
+          error => {
+            console.error(error)
+          },
         )
     }
   }
 
   public reportError(error: any): void {
     if (this.isProd) {
-      this._http.post(
-        this.url + "/error",
-        { error: error },
-        this._auth.getOptions()
-      )
+      this._http
+        .post(this.url + '/error', { error: error }, this._auth.getOptions())
         .pipe(take(1))
         .subscribe(
-          (success) => { },
-          (error) => { console.error(error) }
+          success => {},
+          error => {
+            console.error(error)
+          },
         )
     }
   }

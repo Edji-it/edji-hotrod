@@ -6,7 +6,6 @@ import { Angulartics2GoogleGlobalSiteTag } from 'angulartics2/gst'
 import { Angulartics2 } from 'angulartics2'
 import { PageScrollConfig } from 'ngx-page-scroll'
 
-
 // import { AppState } from './app.service'
 import { AuthService, MessageService } from './_services'
 /*
@@ -21,21 +20,21 @@ import { AuthService, MessageService } from './_services'
       <router-outlet></router-outlet>
     </main>
     <footer></footer>
-  `
+  `,
 })
 export class AppComponent {
-  name = 'Edji';
+  name = 'Edji'
 
   constructor(
     private angulartics: Angulartics2,
-    angulartics2GoogleGlobalSiteTag : Angulartics2GoogleGlobalSiteTag  ,
+    angulartics2GoogleGlobalSiteTag: Angulartics2GoogleGlobalSiteTag,
     private _auth: AuthService,
-    private _messages: MessageService
-    ) {
-      angulartics2GoogleGlobalSiteTag.startTracking()
-      // Scrollto should account for nav bar
-      PageScrollConfig.defaultScrollOffset = 90;
-      PageScrollConfig.defaultDuration = 800;
+    private _messages: MessageService,
+  ) {
+    angulartics2GoogleGlobalSiteTag.startTracking()
+    // Scrollto should account for nav bar
+    PageScrollConfig.defaultScrollOffset = 90
+    PageScrollConfig.defaultDuration = 800
   }
 
   ngOnInit() {
@@ -45,5 +44,4 @@ export class AppComponent {
     // Trigger the message service to start
     this._messages.init()
   }
-
 }

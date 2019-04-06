@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { Locker, DRIVERS } from 'angular-safeguard';
+import { Injectable } from '@angular/core'
+import { Locker, DRIVERS } from 'angular-safeguard'
 
 /**
  * Localstorage wrapper
@@ -7,11 +7,10 @@ import { Locker, DRIVERS } from 'angular-safeguard';
  * - Provides the cleanest interface possible and consolidates storage configuration (eg. using LOCAL)
  */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LockerService {
-
-  constructor(private _safeguard: Locker) { }
+  constructor(private _safeguard: Locker) {}
 
   public get(key: string): any {
     return this._safeguard.get(DRIVERS.LOCAL, key)

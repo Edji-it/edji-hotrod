@@ -1,28 +1,26 @@
-
-
 .number-container {
-    //width: 100%;
-    height: calc(100%);
-    vertical-align: middle;
-    display: inline-block;
-    margin: auto;
-    position: absolute;
-    height: 100%;
-    top: -5px;
-    left: 33px;
+  //width: 100%;
+  height: calc(100%);
+  vertical-align: middle;
+  display: inline-block;
+  margin: auto;
+  position: absolute;
+  height: 100%;
+  top: -5px;
+  left: 33px;
 }
 
 .question-container {
-    display: block;
-    margin: 10px auto;
-    background: transparent !important;
-    position: relative;
+  display: block;
+  margin: 10px auto;
+  background: transparent !important;
+  position: relative;
 }
 
 .question-container__existing {
-    margin: 2em auto 0px -48px;
-    width: calc(100% + 48px);
-    padding: 8px;
+  margin: 2em auto 0px -48px;
+  width: calc(100% + 48px);
+  padding: 8px;
 }
 
 // .question-container__inner {
@@ -32,86 +30,89 @@
 // }
 
 .prompt-section {
-    background: white;
-    padding-bottom: 24px;
-    border-bottom: $base-border;
-    margin-bottom: 24px;
+  background: white;
+  padding-bottom: 24px;
+  border-bottom: $base-border;
+  margin-bottom: 24px;
 }
 
 .question-container__new {
-    background: $editorBg !important;
-    margin: -10px auto;
-    padding: 8px;
+  background: $editorBg !important;
+  margin: -10px auto;
+  padding: 8px;
 }
 
 .question-number {
-    color: white;
-    background-color: #8ed9ff;
-    width: 30px;
-    height: 30px;
-    font-size:  16px;
-    font-weight: bold;
-    text-align: center;
-    border-radius:  50%;
-    line-height: 30px;
+  color: white;
+  background-color: #8ed9ff;
+  width: 30px;
+  height: 30px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 50%;
+  line-height: 30px;
 }
 
 .question-body {
-    // width: 100%;
-    background: $pageBg;
-    vertical-align: middle;
-    display: inline-block;
-    width: calc(100% - 40px);
-    margin-left: 40px;
-    margin-bottom: 10px;
-    padding: 5px 15px 15px 15px;
-    box-shadow: 0px 1px 20px 0px rgba(0,0,0,0.15);
+  // width: 100%;
+  background: $pageBg;
+  vertical-align: middle;
+  display: inline-block;
+  width: calc(100% - 40px);
+  margin-left: 40px;
+  margin-bottom: 10px;
+  padding: 5px 15px 15px 15px;
+  box-shadow: 0px 1px 20px 0px rgba(0, 0, 0, 0.15);
 
-    & .label, & .label--gray, & label {
-        margin: 5px 0 0 0;
-    }
+  & .label,
+  & .label--gray,
+  & label {
+    margin: 5px 0 0 0;
+  }
 }
 
 .button__answer-type {
-    background: transparent;
-    border: 1px solid darken($gray, 10%);
-    border-radius: 5px;
-    margin-right: 5px;
-    padding: 6px;
-    opacity: 0.6;
-    filter: grayscale(100%);
-    &.answer--enabled {
-        border: 1px solid $green;
-        opacity: 1;
-        filter: grayscale(0%);
+  background: transparent;
+  border: 1px solid darken($gray, 10%);
+  border-radius: 5px;
+  margin-right: 5px;
+  padding: 6px;
+  opacity: 0.6;
+  filter: grayscale(100%);
+  &.answer--enabled {
+    border: 1px solid $green;
+    opacity: 1;
+    filter: grayscale(0%);
 
-        & .icon__answer-text {
-            color: #333 !important;
-        }
+    & .icon__answer-text {
+      color: #333 !important;
     }
-    &:active, &:focus {
-        background: #fff !important;
-    }
-	&:hover {
-		background: $gray-light;
-		opacity: 1;
-		filter: grayscale(0%);
-		border: 1px solid $blue !important;
-	}
+  }
+  &:active,
+  &:focus {
+    background: #fff !important;
+  }
+  &:hover {
+    background: $gray-light;
+    opacity: 1;
+    filter: grayscale(0%);
+    border: 1px solid $blue !important;
+  }
 }
 
 .icon__answer-type {
-    width: 1.5em;
-    height: 1.5em;
-    vertical-align: middle;
+  width: 1.5em;
+  height: 1.5em;
+  vertical-align: middle;
 }
 
 .icon__answer-text {
-    text-transform: uppercase;
-    color: darken($gray, 10%);
-    vertical-align: middle;
-    display: inline-block;
-	font-size: 12px;
-	padding: 3px 5px;
-	font-weight: 700;
+  text-transform: uppercase;
+  color: darken($gray, 10%);
+  vertical-align: middle;
+  display: inline-block;
+  font-size: 12px;
+  padding: 3px 5px;
+  font-weight: 700;
 }

@@ -3,22 +3,22 @@ import { HttpModule } from '@angular/http'
 import { HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser'
 import { LockerModule, Locker, LockerConfig } from 'angular-safeguard'
 import { Angulartics2Module } from 'angulartics2'
-import * as Sentry from "@sentry/browser"
+import * as Sentry from '@sentry/browser'
 
 // App is our top level component
 import { AppComponent } from './app.component'
 // Shared Module imports components between modules
-import { SharedModule } from './app-shared.module';
+import { SharedModule } from './app-shared.module'
 
-import { Ng4TwitterTimelineModule } from './home/twitter-timeline';
-import { NgxPageScrollModule } from 'ngx-page-scroll';
+import { Ng4TwitterTimelineModule } from './home/twitter-timeline'
+import { NgxPageScrollModule } from 'ngx-page-scroll'
 
 // Sentry Setup
 const appVersion = require('../../package.json').version
 Sentry.init({
-  dsn: "https://f71b0ea0db5a4785b8ebee0b426b4bec@sentry.io/229527",
-  release: appVersion
-});
+  dsn: 'https://f71b0ea0db5a4785b8ebee0b426b4bec@sentry.io/229527',
+  release: appVersion,
+})
 
 @Injectable()
 export class SentryErrorHandler implements ErrorHandler {
@@ -45,7 +45,7 @@ import {
   SocketService,
   UtilToolService,
   DashboardGuardService,
-  MailchimpService
+  MailchimpService,
 } from './_services'
 // import { ReuseStrategy } from './route-reuse-strategy'
 
@@ -60,43 +60,77 @@ import {
   OpenEndedAnswersComponent,
   QuestionComponent,
   ScrollProgressComponent,
-  TutorialBoxComponent
+  TutorialBoxComponent,
+  ResetComponent
 } from './shared'
 import { HomeComponent } from './home'
 import { RegisterPageComponent } from './register-page'
 import { LoginForm, GuestForm, RegisterFormComponent } from './forms'
 
-
-import { LoginModal, UserDetailsUpdateModal, ResetPassComponent, DeleteCommentModal, DeleteReadingModal, DeleteProjectModal, AddProjectModal, LoginRequiredModal, HeroChangeComponent, LoginRegisterModal, DiscoverAddMetaModal, ReadingArchivedModal, ConfirmArchiveModal } from './modals'
-import { AnnotatorComponent, CommentComponent, TextCommentComponent, EmojiCommentComponent, EmojiKeyboardComponent, AudioCommentComponent, AvatarPortalComponent } from './annotator'
+import {
+  LoginModal,
+  UserDetailsUpdateModal,
+  ResetPassComponent,
+  DeleteCommentModal,
+  DeleteReadingModal,
+  DeleteProjectModal,
+  AddProjectModal,
+  LoginRequiredModal,
+  HeroChangeComponent,
+  LoginRegisterModal,
+  DiscoverAddMetaModal,
+  ReadingArchivedModal,
+  ConfirmArchiveModal,
+} from './modals'
+import {
+  AnnotatorComponent,
+  CommentComponent,
+  TextCommentComponent,
+  EmojiCommentComponent,
+  EmojiKeyboardComponent,
+  AudioCommentComponent,
+  AvatarPortalComponent,
+} from './annotator'
 import { ProjectPageComponent, OwnerToolsComponent, LeaderboardComponent } from './project-page'
 import { FirefeedComponent } from './project-page/owner-tools/firefeed/firefeed.component'
 import { FirecardComponent } from './project-page/owner-tools/firefeed/firecard/firecard.component'
 import { QuestionfeedComponent } from './project-page/owner-tools/questionfeed/questionfeed.component'
 import { QuestioncardComponent } from './project-page/owner-tools/questionfeed/questioncard/questioncard.component'
-import { NewReadingPage, UploadModalComponent, UploadPdfModalComponent, DeletePdfMiniModal, GradeSelector } from './new-reading-page'
-import { DashboardComponent, JoinedDashComponent, CreatedDashComponent, TutorialReadingComponent, ReadingCardComponent } from './dashboard'
+import {
+  NewReadingPage,
+  UploadModalComponent,
+  UploadPdfModalComponent,
+  DeletePdfMiniModal,
+  GradeSelector,
+} from './new-reading-page'
+import {
+  DashboardComponent,
+  JoinedDashComponent,
+  CreatedDashComponent,
+  TutorialReadingComponent,
+  ReadingCardComponent,
+} from './dashboard'
 import { NoContentComponent } from './no-content'
 import { AccountComponent, ChangePassComponent, UploadAvatarModal } from './account'
-import { LoginComponent } from './login';
-import { RedeemToken } from './redeem-token/redeem-token.component';
-import { HeroPromoPageComponent } from './hero-promo/hero-promo.component';
-import { HeroPricingComponent } from './hero-pricing/hero-pricing.component';
-import { DiscoverFeedComponent } from './discover-feed/discover-feed.component';
+import { LoginComponent } from './login'
+import { RedeemToken } from './redeem-token/redeem-token.component'
+import { HeroPromoPageComponent } from './hero-promo/hero-promo.component'
+import { HeroPricingComponent } from './hero-pricing/hero-pricing.component'
+import { DiscoverFeedComponent } from './discover-feed/discover-feed.component'
 import { OAuthComponent } from './oauth-redirect/oauth-redirect.component'
 import { GoogleButton, CleverButton } from './buttons'
 import { CommentPaneComponent } from './shared/comment-pane/comment-pane.component'
-import { HttpClientModule } from '@angular/common/http';
-import { DataListModule } from 'primeng/datalist';
-import { PaginatorModule } from 'primeng/paginator';
-import { TooltipModule } from 'primeng/tooltip';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterModule, PreloadAllModules, Router } from '@angular/router';
-import { ROUTES } from './app.routes';
-import { LicenseRedirectComponent } from './license-redirect/license-redirect.component';
-import { LicenseWelcomeComponent } from './license-welcome/license-welcome.component';
-import { ReadingRecapComponent } from './project-page/owner-tools/reading-recap/reading-recap.component';
-import { TeamPageComponent } from './team-page/team-page.component';
+import { HttpClientModule } from '@angular/common/http'
+import { DataListModule } from 'primeng/datalist'
+import { PaginatorModule } from 'primeng/paginator'
+import { TooltipModule } from 'primeng/tooltip'
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
+import { RouterModule, PreloadAllModules, Router } from '@angular/router'
+import { ROUTES } from './app.routes'
+import { LicenseRedirectComponent } from './license-redirect/license-redirect.component'
+import { LicenseWelcomeComponent } from './license-welcome/license-welcome.component'
+import { ReadingRecapComponent } from './project-page/owner-tools/reading-recap/reading-recap.component'
+import { TeamPageComponent } from './team-page/team-page.component'
 import { SearchPage } from './search-page/search-page.component'
 
 // Configure Hammer.js
@@ -104,10 +138,10 @@ export class MyHammerConfig extends HammerGestureConfig {
   overrides = <any>{
     // override default gesture settings
     //  Tap overrides for Chrome v71 sensitivity when making comments
-    'tap': {
+    tap: {
       time: 2000, // Maximum press time in ms.
-      threshold: 100 //	While doing a tap some small movement is allowed.
-    }
+      threshold: 100, //	While doing a tap some small movement is allowed.
+    },
   }
 }
 
@@ -128,12 +162,12 @@ const APP_PROVIDERS = [
   MailchimpService,
   {
     provide: HAMMER_GESTURE_CONFIG,
-    useClass: MyHammerConfig
-  }
+    useClass: MyHammerConfig,
+  },
   // ,
   // { provide: ErrorHandler, useClass: SentryErrorHandler }
   // { provide: RouteReuseStrategy, useClass: ReuseStrategy }
-]; // const APP_PROVIDERS
+] // const APP_PROVIDERS
 
 /**
  * `AppModule` is the main entry point into Angular2's bootstraping process
@@ -202,6 +236,7 @@ const APP_PROVIDERS = [
     NoContentComponent,
     UserDetailsUpdateModal,
     ReadingCardComponent,
+    ResetComponent,
     HeroPromoPageComponent,
     HeroPricingComponent,
     ScrollProgressComponent,
@@ -209,13 +244,12 @@ const APP_PROVIDERS = [
     LicenseRedirectComponent,
     LicenseWelcomeComponent,
     ReadingRecapComponent,
-    TeamPageComponent
+    TeamPageComponent,
   ],
   /** Components which can be dynamically created */
-  entryComponents: [
-    UserDetailsUpdateModal
-  ],
-  imports: [ // import Angular's modules
+  entryComponents: [UserDetailsUpdateModal],
+  imports: [
+    // import Angular's modules
     SharedModule,
     BrowserAnimationsModule,
     HttpModule,
@@ -226,18 +260,19 @@ const APP_PROVIDERS = [
     Angulartics2Module.forRoot({
       pageTracking: {
         clearIds: true,
-      }
+      },
     }),
     RouterModule.forRoot(ROUTES, { useHash: true }),
     DataListModule,
     PaginatorModule,
     TooltipModule,
     Ng4TwitterTimelineModule,
-    NgxPageScrollModule
+    NgxPageScrollModule,
   ],
-  providers: [ // expose our Services and Providers into Angular's dependency injection
+  providers: [
+    // expose our Services and Providers into Angular's dependency injection
     // ENV_PROVIDERS,
-    APP_PROVIDERS
-  ]
+    APP_PROVIDERS,
+  ],
 }) //@NgModule
 export class AppModule { }

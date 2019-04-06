@@ -2,7 +2,7 @@
 @import '../../../sass/base/variables';
 
 .gauge-outline {
-  background: linear-gradient(0.25turn, #F8954D, #D0FFB3);
+  background: linear-gradient(0.25turn, #f8954d, #d0ffb3);
   position: relative;
   margin-right: auto;
   margin-left: auto;
@@ -22,7 +22,7 @@
 
 .needle {
   width: 4px;
-  background: #C4C4C4;
+  background: #c4c4c4;
   border-top-left-radius: 100%;
   border-top-right-radius: 100%;
   left: 48%;
@@ -36,7 +36,7 @@
 
 .avg-tick {
   width: 2px;
-  background: #FFFFFF;
+  background: #ffffff;
   left: 48%;
   bottom: 0;
   position: absolute;
@@ -73,8 +73,8 @@
 }
 
 .chart-cluster--disabled {
-  & .gauge-section, 
-  & .gauge-value, 
+  & .gauge-section,
+  & .gauge-value,
   & .needle-metric,
   & + .row {
     opacity: 0.3;
@@ -95,21 +95,21 @@
   line-height: 9px;
   -webkit-filter: drop-shadow(rgba(0, 0, 0, 0.2) 0 2px 6px);
   filter: drop-shadow(rgba(0, 0, 0, 0.2) 0 2px 6px);
-  border: solid 1px #CACACA;
+  border: solid 1px #cacaca;
 
   &:before {
-    content: "";
+    content: '';
     position: absolute;
     top: 100%;
     right: 0;
     margin-left: -5px;
     border-width: 3px;
     border-style: solid;
-    border-color: #CACACA #CACACA transparent transparent;
+    border-color: #cacaca #cacaca transparent transparent;
   }
 
   &:after {
-    content: "";
+    content: '';
     position: absolute;
     top: 100%;
     right: 1px;
@@ -125,7 +125,7 @@
     &:before {
       right: initial;
       left: 5px;
-      border-color: #CACACA transparent transparent #CACACA;
+      border-color: #cacaca transparent transparent #cacaca;
     }
 
     &:after {
@@ -147,5 +147,5 @@
   text-align: center;
   max-width: 100%;
   white-space: nowrap;
-  box-shadow: 1px 2px 15px 0px rgba(0,0,0,0.1)
+  box-shadow: 1px 2px 15px 0px rgba(0, 0, 0, 0.1);
 }

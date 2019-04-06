@@ -3,80 +3,70 @@
  * - Used to import/export components shared globally
  * - Only add components when they are *needed* globally
  */
-import { NgModule } from "@angular/core"
-import { CommonModule } from "@angular/common"
-import { RouterModule, PreloadAllModules } from "@angular/router"
-import { FormsModule, ReactiveFormsModule } from "@angular/forms"
+import { NgModule } from '@angular/core'
+import { CommonModule } from '@angular/common'
+import { RouterModule, PreloadAllModules } from '@angular/router'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 
 // Project Dependencies
-import { NavBarComponent, FooterComponent, FollowTag, FeedbackComponent, MessageToastsComponent } from "./shared"
-import { ROUTES } from "./app.routes";
+import { NavBarComponent, FooterComponent, FollowTag, FeedbackComponent, MessageToastsComponent } from './shared'
+import { ROUTES } from './app.routes'
 // Pipes
-import { 
-    AddClassPipe, 
-    EdjiDatePipe, 
-    EmojiOnePipe, 
-    LinkifyPipe, 
-    SortByDatePipe,
-    SubjectPipe, 
-    UserInitialsPipe 
-  } from './_pipes'
-import { ShareCodeComponent } from "./modals/share-code/share-code.component"
-import { ReferralModalComponent, HeroSubscribeComponent, RequestAcademyModal, LicenseInviteComponent } from "./modals"
+import {
+  AddClassPipe,
+  EdjiDatePipe,
+  EmojiOnePipe,
+  LinkifyPipe,
+  SortByDatePipe,
+  SubjectPipe,
+  UserInitialsPipe,
+} from './_pipes'
+import { ShareCodeComponent } from './modals/share-code/share-code.component'
+import { ReferralModalComponent, HeroSubscribeComponent, RequestAcademyModal, LicenseInviteComponent } from './modals'
 import { HotChartHzbarComponent } from './shared/hot-chart-hzbar/hot-chart-hzbar.component'
 import { HotChartGaugeComponent } from './shared/hot-chart-gauge/hot-chart-gauge.component'
 import { PromoPageComponent } from './promo/promo.component'
 
 let SHARED_DECLARATIONS = [
-    AddClassPipe,
-    EdjiDatePipe,
-    EmojiOnePipe,
-    FeedbackComponent,
-    FollowTag,
-    FooterComponent, 
-    HeroSubscribeComponent,
-    LicenseInviteComponent,
-    LinkifyPipe, 
-    MessageToastsComponent,
-    NavBarComponent,
-    ReferralModalComponent,
-    RequestAcademyModal,
-    ShareCodeComponent,
-    SortByDatePipe,
-    SubjectPipe, 
-    UserInitialsPipe,
-    HotChartHzbarComponent,
-    HotChartGaugeComponent
+  AddClassPipe,
+  EdjiDatePipe,
+  EmojiOnePipe,
+  FeedbackComponent,
+  FollowTag,
+  FooterComponent,
+  HeroSubscribeComponent,
+  LicenseInviteComponent,
+  LinkifyPipe,
+  MessageToastsComponent,
+  NavBarComponent,
+  ReferralModalComponent,
+  RequestAcademyModal,
+  ShareCodeComponent,
+  SortByDatePipe,
+  SubjectPipe,
+  UserInitialsPipe,
+  HotChartHzbarComponent,
+  HotChartGaugeComponent,
 ]
 
-let SHARED_IMPORTS = [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule
-]
+let SHARED_IMPORTS = [CommonModule, FormsModule, ReactiveFormsModule]
 
 @NgModule({
-    imports: [
-        SHARED_IMPORTS,
-        // Routes have to be privately imported for every module
-        // RouterModule.forChild(ROUTES)  
-        RouterModule
-     ],
-     /**
-      * Declarations are private to AppShared
-      * - SharedModule shouldn't need any private components
-      */
-    declarations: [
-        SHARED_DECLARATIONS,
-        PromoPageComponent
-    ],
-    /**
-     * Exports are made available to children modules
-     * (essentially PUBLIC DECLARATIONS)
-     */
-    exports: [
-        SHARED_DECLARATIONS,
-        SHARED_IMPORTS
-    ]
+  imports: [
+    SHARED_IMPORTS,
+    // Routes have to be privately imported for every module
+    // RouterModule.forChild(ROUTES)
+    RouterModule,
+  ],
+  /**
+   * Declarations are private to AppShared
+   * - SharedModule shouldn't need any private components
+   */
+  declarations: [SHARED_DECLARATIONS, PromoPageComponent],
+  /**
+   * Exports are made available to children modules
+   * (essentially PUBLIC DECLARATIONS)
+   */
+  exports: [SHARED_DECLARATIONS, SHARED_IMPORTS],
 })
 export class SharedModule {}

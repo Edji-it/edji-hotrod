@@ -1,1 +1,1 @@
-export * from './emoji-comment.component';
+export * from './emoji-comment.component'

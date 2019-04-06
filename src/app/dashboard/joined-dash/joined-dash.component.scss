@@ -3,49 +3,49 @@
 /*styles for dashboard content only*/
 /* Push and Pull styles that aren't loading in for some reason */
 @media (min-width: #{$tablet}) {
-    .col-sm-push-6 {
-        left: 50%;
-    }
+  .col-sm-push-6 {
+    left: 50%;
+  }
 }
 @media (min-width: #{$tablet}) {
-    .col-sm-6 {
-        width: 50%;
-    }
+  .col-sm-6 {
+    width: 50%;
+  }
 }
 @media (min-width: #{$tablet}) {
-    .col-sm-pull-6 {
-        right: 50%;
-    }
+  .col-sm-pull-6 {
+    right: 50%;
+  }
 }
 @media (min-width: #{$tablet}) {
-    .col-sm-6 {
-        width: 50%;
-    }
+  .col-sm-6 {
+    width: 50%;
+  }
 }
 
 /* Adding margin to spread out the two columns */
 @media (max-width: #{$tablet}) {
-    .col-sm-pull-6 {
-        margin-top: 50px;
-    }
+  .col-sm-pull-6 {
+    margin-top: 50px;
+  }
 }
 
 // Differentiate joined icons
 .reading-icon {
-    background: #8ed9ff;
+  background: #8ed9ff;
 
-    // & span {
-    //     color: #fa9b5c;
-    // }
+  // & span {
+  //     color: #fa9b5c;
+  // }
 }
 
 /* Mobile Optimization */
 @media (max-width: #{$tablet}) {
-    .joined-header {
-        display: none;
-    }
+  .joined-header {
+    display: none;
+  }
 }
 
 .joined-list {
-    padding: 0px;
+  padding: 0px;
 }

@@ -28,7 +28,6 @@
   //- The Dropdown Options Menu
   #optionsWrap.dropdown.reading-options(
     *ngIf="!readOnly && (!reading['draft'] || reading.draft !== true || reading.projects[0])", 
-    (clickOutside)="showOptions = false", 
     [class.show]="showOptions"
   )
     button.btn.btn-icon--plain(

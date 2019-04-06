@@ -30,11 +30,11 @@
     font-weight: 100;
     padding: 0 20px 4px 6px;
     margin-left: 6px;
-    border-bottom: solid #00A2F5 2px;
+    border-bottom: solid #00a2f5 2px;
   }
   &:hover {
     & label.ui-dropdown-label {
-    background-color: rgba(0,0,0,0.05);
+      background-color: rgba(0, 0, 0, 0.05);
     }
     & .ui-dropdown-trigger {
       transform: scale(1);
@@ -74,7 +74,7 @@
 
 ::ng-deep .ui-dropdown-panel .ui-dropdown-item {
   &:hover {
-    background-color: rgba(0,0,0,0.05);
+    background-color: rgba(0, 0, 0, 0.05);
   }
 }
 
@@ -85,8 +85,8 @@
   transform: translate3d(-50%, -50%, 0px);
   &-outer {
     background: transparent;
-  border: none;
-  box-shadow: none;
+    border: none;
+    box-shadow: none;
   }
   &-inner {
     background: transparent;

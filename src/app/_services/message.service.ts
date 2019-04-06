@@ -10,7 +10,6 @@ import { AuthService } from './auth.service'
 const TOAST_TIME: number = 10000
 @Injectable()
 export class MessageService {
-
   private timerSubscription: Subscription
 
   /**
@@ -22,11 +21,7 @@ export class MessageService {
   //- Hold timers by the toast id
   private toastTimers: {} = {}
 
-  constructor(
-    private _http: HttpClient,
-    private angulartics: Angulartics2, 
-    private _auth: AuthService
-  ) {
+  constructor(private _http: HttpClient, private angulartics: Angulartics2, private _auth: AuthService) {
     this.toastUpdatesSource = new BehaviorSubject([])
     this.toastUpdates = this.toastUpdatesSource.asObservable()
   }
@@ -45,7 +40,7 @@ export class MessageService {
    * @param toast Message and associated display data to send
    * - To send update, send with id that matches existing toast
    */
-  public sendToast(toast: MessageToast) : void {
+  public sendToast(toast: MessageToast): void {
     let isUpdate
     let toasts = this.toastUpdatesSource.value
     // Attach date for received
@@ -81,7 +76,7 @@ export class MessageService {
    * Dismiss Toast Message
    * @param toastId Toast for message to dismiss
    */
-  public dismissToast(toastId: string) : void {
+  public dismissToast(toastId: string): void {
     let toasts = this.toastUpdatesSource.value
     // Cancel timer, if exists
     this.cancelToastTimer(toastId)
@@ -109,13 +104,15 @@ export class MessageService {
    * Gets messages (notifications) from the server
    */
   public getMessages(): Observable<GetMessagesResponse> {
-    return this._http.get<GetMessagesResponse>(this._auth.getUrl() + '/api/v1/users/' + this._auth.getUser()._id + '/messages', 
+    return this._http.get<GetMessagesResponse>(
+      this._auth.getUrl() + '/api/v1/users/' + this._auth.getUser()._id + '/messages',
       {
         headers: new HttpHeaders({
           'Content-Type': 'application/json',
-          'Authorization': this._auth.getToken()
-        })
-      })
+          Authorization: this._auth.getToken(),
+        }),
+      },
+    )
   }
 
   /**
@@ -127,28 +124,34 @@ export class MessageService {
       if (this._auth.getUser().isLoggedIn) {
         // Make the call to getMessages and subscribe to its observable
         this.getMessages()
-        .pipe(take(1))
-        .subscribe((data) => {
-          let messages = data.messages
-          let msgLen = messages.length
-          // Check through the messages
-          for(var i=0; i < msgLen; i++) {
-            let message = messages[i]
-            // Refresh the user if message is 'user_refresh_required'
-            if (message.key==='user_refresh_required') {
-              this._auth.refreshUser().pipe(take(1)).subscribe(
-                data => {
-                  // do something else with user, if need be
-                },
-                error => {
-                  console.error(error)
+          .pipe(take(1))
+          .subscribe(
+            data => {
+              let messages = data.messages
+              let msgLen = messages.length
+              // Check through the messages
+              for (var i = 0; i < msgLen; i++) {
+                let message = messages[i]
+                // Refresh the user if message is 'user_refresh_required'
+                if (message.key === 'user_refresh_required') {
+                  this._auth
+                    .refreshUser()
+                    .pipe(take(1))
+                    .subscribe(
+                      data => {
+                        // do something else with user, if need be
+                      },
+                      error => {
+                        console.error(error)
+                      },
+                    )
                 }
-              )
-            }
-          }
-        }, (err) => {
-          console.error(err)
-        })
+              }
+            },
+            err => {
+              console.error(err)
+            },
+          )
       }
     })
   }
@@ -159,16 +162,16 @@ export class MessageService {
  */
 interface GetMessagesResponse {
   messages: {
-    key: String, 
+    key: String
     added_at_time: String
   }[]
 }
 
 export interface MessageToast {
-  message: string,
-  type: string, // "info", "heat-on", "heat-off"
-  id: string,
-  date ?: Date,
-  limitToPage ?: string, // identify route where message type should show
-  requireDismiss ?: boolean
+  message: string
+  type: string // "info", "heat-on", "heat-off"
+  id: string
+  date?: Date
+  limitToPage?: string // identify route where message type should show
+  requireDismiss?: boolean
 }

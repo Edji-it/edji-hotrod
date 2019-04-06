@@ -1,15 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core'
 
 @Component({
   selector: 'app-engagement',
   templateUrl: './engagement.component.pug',
-  styleUrls: ['./engagement.component.scss']
+  styleUrls: ['./engagement.component.scss'],
 })
 export class EngagementComponent implements OnInit {
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }

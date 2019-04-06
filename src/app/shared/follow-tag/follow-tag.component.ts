@@ -1,33 +1,28 @@
-import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
+import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core'
 import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
 
 // Project Dependencies
-import { AuthService } from "../../_services";
-import { User } from '../datatypes';
-
+import { AuthService } from '../../_services'
+import { User } from '../datatypes'
 
 @Component({
   selector: 'follow-tag',
-  styleUrls: [ './follow-tag.component.scss' ],
-  templateUrl: './follow-tag.component.pug'
+  styleUrls: ['./follow-tag.component.scss'],
+  templateUrl: './follow-tag.component.pug',
 })
 export class FollowTag implements OnInit {
-    @Input() owner: User
-    @Output() followEvent: EventEmitter<boolean> = new EventEmitter()
+  @Input() owner: User
+  @Output() followEvent: EventEmitter<boolean> = new EventEmitter()
 
-    public user: User = <User>{}
-    private userSub: Subscription
-  constructor(
-      private _auth: AuthService
-  ) {
-      
-  }
+  public user: User = <User>{}
+  private userSub: Subscription
+  constructor(private _auth: AuthService) {}
 
   ngOnInit() {
-      this.userSub = this._auth.currentUser.subscribe(user => {
-          this.user = user
-      })
+    this.userSub = this._auth.currentUser.subscribe(user => {
+      this.user = user
+    })
   }
 
   ngOnDestroy() {
@@ -38,18 +33,18 @@ export class FollowTag implements OnInit {
     return this.user['following'] && this.user['following'].indexOf(this.owner._id) > -1
   }
 
-  followUser(userId: string) : void {
-    this._auth.followUser(userId)
+  followUser(userId: string): void {
+    this._auth
+      .followUser(userId)
       .pipe(take(1))
-      .subscribe(
-        data => {
-          this.followEvent.emit(true)
-        }
-      )
+      .subscribe(data => {
+        this.followEvent.emit(true)
+      })
   }
 
-  unfollowUser(userId: string) : void {
-    this._auth.unfollowUser(userId)
+  unfollowUser(userId: string): void {
+    this._auth
+      .unfollowUser(userId)
       .pipe(take(1))
       .subscribe(data => {
         this.followEvent.emit(false)

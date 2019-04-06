@@ -3,15 +3,12 @@ import { EdjiComment, Reading } from '../../../../shared/datatypes'
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, AfterViewInit } from '@angular/core'
 import { CommentService, ProjectService, ReadingService, SocketService } from '../../../../_services'
 
-
 @Component({
   selector: 'hot-questioncard',
   templateUrl: 'questioncard.component.html',
-  styleUrls: ['questioncard.component.scss']
+  styleUrls: ['questioncard.component.scss'],
 })
-
 export class QuestioncardComponent implements OnInit, OnDestroy {
-
   @Input() questionBlock: EdjiComment
   // @Input() readingRef: Reading
 
@@ -21,11 +18,11 @@ export class QuestioncardComponent implements OnInit, OnDestroy {
   public answersById: any = {}
 
   constructor(
-    private _projects : ProjectService,
+    private _projects: ProjectService,
     public el: ElementRef,
     private _readings: ReadingService,
-    private _socket: SocketService
-  ) { }
+    private _socket: SocketService,
+  ) {}
 
   ngOnInit() {
     this.subscriptions.push(
@@ -36,39 +33,44 @@ export class QuestioncardComponent implements OnInit, OnDestroy {
           }
         },
         error => {
-          console.error(error);
-        }
-      )
+          console.error(error)
+        },
+      ),
     )
 
     // Subscribe to comment comment updates
     this.subscriptions.push(
-      this._socket.commentUpdates.subscribe((commentUpdate) => {
-        let comment = commentUpdate.comment
-        // Process different live comment updates
-        if (commentUpdate.action === 'DELETE') {
-          
-        } else if (commentUpdate.action === 'UPDATE') {
-
-        } else if (commentUpdate.action === 'CREATE') {
-        }
-      }, (error) => {
-        console.warn(error)
-      })
+      this._socket.commentUpdates.subscribe(
+        commentUpdate => {
+          let comment = commentUpdate.comment
+          // Process different live comment updates
+          if (commentUpdate.action === 'DELETE') {
+          } else if (commentUpdate.action === 'UPDATE') {
+          } else if (commentUpdate.action === 'CREATE') {
+          }
+        },
+        error => {
+          console.warn(error)
+        },
+      ),
     )
 
     // Subscribe to updates to the answer reference object
-    this.subscriptions.push( this._projects.answersById.subscribe(
-      (answersById) => {
-        this.answersById = answersById
-      },
-      (error) => {
-        console.error(error)
-      }) 
+    this.subscriptions.push(
+      this._projects.answersById.subscribe(
+        answersById => {
+          this.answersById = answersById
+        },
+        error => {
+          console.error(error)
+        },
+      ),
     )
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach((sub) => { sub.unsubscribe() })
+    this.subscriptions.forEach(sub => {
+      sub.unsubscribe()
+    })
   }
 }
