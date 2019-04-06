@@ -148,26 +148,32 @@ describe('Questions', () => {
       browser.wait(
         EC.presenceOf(question.openEndedAnswerBlock),
         10000,
-        'failed to find the question to add an answer to',
+        'failed to find the question to add an emoji answer to',
       )
+      
       browser.wait(
         EC.elementToBeClickable(question.emojiCommentBtn),
         5000,
         'failed to find the emoji answer button',
       )
       question.emojiCommentBtn.click()
+
       browser.wait(EC.visibilityOf(question.emojiCommentSave), 5000, 'failed to find the answer confirm button')
       question.emojiCommentSave.click()
+
       browser.wait(
         EC.invisibilityOf(question.answerOptions),
         5000,
         'answer options should not be showing after creating an emoji answer',
       )
+      browser.sleep(2000)
+
       browser.wait(
         EC.visibilityOf(question.firstAnswerDelete),
         5000,
         'could not find emoji answer delete button',
       )
+
       question.firstAnswerDelete.click()
       browser.wait(
         EC.invisibilityOf(question.firstAnswer),
@@ -183,7 +189,7 @@ describe('Questions', () => {
       browser.wait(
         EC.presenceOf(question.openEndedAnswerBlock),
         10000,
-        'failed to find the question to add an answer to',
+        'failed to find the question to add a text answer to',
       )
 
       browser.wait(EC.visibilityOf(question.textCommentBtn), 5000, 'failed to find the text comment button')
@@ -197,6 +203,7 @@ describe('Questions', () => {
         5000,
         "failed to find the text answer",
       )
+      browser.sleep(2000)
 
       browser.wait(
         EC.visibilityOf(question.firstAnswerDelete),
