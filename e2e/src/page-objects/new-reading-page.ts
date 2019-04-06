@@ -40,8 +40,8 @@ export class NewReading implements PageObjectInterface {
   public imageUploadTrigger = element(by.id('buttonBeginImageUpload'))
   public imageFileInput = element(by.css('#imageFileInput'))
   public uploadedImage = element(by.css('.upload-list-item.new'))
-  public emojiAnswerButton = element(by.className('icon-emoji-comment'))
-  public textAnswerButton = element(by.className('icon-text-comment'))
+  public emojiAnswerButton = element(by.css('.icon-emoji-comment.icon__answer-type'))
+  public textAnswerButton = element(by.css('.icon-text-comment.icon__answer-type'))
 
   public uploadPDfModalButton = element(by.css('#buttonUploadPdf'))
   public pdfUploadTrigger = element(by.id('buttonBeginPdfUpload'))

@@ -23,7 +23,7 @@ export class Questions implements PageObjectInterface {
   public firstQuestion = element(by.id('question-1'))
   public firstAnswer = this.firstQuestion.element(by.css('edji-comment'))
   public firstAnswerDelete = this.firstAnswer.element(by.css('.e2e-delete-button'))
-  public textCommentInput = this.firstQuestion.element(by.css('.answerCommentBlock .text-comment-input:not(.disabled)'))
+  public textCommentInput = element.all(by.css('.answerCommentBlock .text-comment-input:not(.disabled)')).first()
 
   public getPage(): void {
     // First we clear out the url (sometimes page is preserved if the url stays the same)
