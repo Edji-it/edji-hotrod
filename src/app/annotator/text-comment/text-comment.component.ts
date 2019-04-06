@@ -26,13 +26,15 @@ export class TextCommentComponent implements OnInit, AfterViewInit {
 
   // We need to know when changes to inactive to clear the editing variable
   @Input() set active(active) {
-    if (!this.readOnly) {
-      this.activated = active
+    setTimeout(() => {
+      if (!this.readOnly) {
+        this.activated = active
 
-      if (active) {
-        this.activateField()
+        if (active) {
+          this.activateField()
+        }
       }
-    }
+    }, 1)
   }
   get active() {
     return this.activated
