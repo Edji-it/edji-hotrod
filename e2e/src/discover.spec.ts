@@ -52,7 +52,7 @@ describe('Discover Feed', () => {
     browser.wait(EC.presenceOf(discover.firstFeedReading), 5000, 'followed Edji account reading not showing')
   })
 
-  it('should no longer see readings in following feed after unfollowing Edji', () => {
+  it('should see the follow Edji account in following feed after unfollowing Edji', () => {
     discover.toggleFollowEdji(false)
     // Reload feed
     sidebar.navCreate.click()
@@ -61,7 +61,7 @@ describe('Discover Feed', () => {
     // View following feed
     discover.filterFollowing.click()
     browser.wait(EC.presenceOf(discover.followEdjiMsg), 7500, "never saw message to follow Edji")
-    browser.wait(EC.invisibilityOf(discover.firstFeedReading), 5000, "followed user reading not showing")
+    browser.wait(EC.stalenessOf(discover.firstFeedReading), 5000, 'should not see any readings in following feed')
   })
 
   describe('Create new public reading, and verify it shows in Public feed', () => {
