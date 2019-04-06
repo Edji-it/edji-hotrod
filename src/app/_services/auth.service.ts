@@ -24,6 +24,7 @@ export class AuthService implements CanActivate {
     */
 
   private pipoBaseUrl = '//pipo-dev.edji.it'
+  private flakBaseUrl = '//flak-dev.edji.it'
   private baseUrl = 'http://localhost:3354'
   private ENV: string = 'dev'
 
@@ -71,6 +72,7 @@ export class AuthService implements CanActivate {
       window.location.host.indexOf('dvscf5tf91syg.cloudfront.net') > -1
     ) {
       this.pipoBaseUrl = '//pipo.edji.it'
+      this.flakBaseUrl = '//flak.edji.it'
       this.baseUrl = '//optimus.edji.it'
       this.ENV = 'prod'
     }
@@ -1032,8 +1034,8 @@ export class AuthService implements CanActivate {
   public setAnalyticEventLabel(): string {
     let user = this.getUser()
     if (user._id) {
-      if (user.school_name) {
-        return user._id + '_' + appVersion + '_' + user.school_name
+      if (user.school_district.district_name) {
+        return user._id + '_' + appVersion + '_' + user.school_district.district_name
       } else {
         return user._id + '_' + appVersion
       }
@@ -1108,6 +1110,25 @@ export class AuthService implements CanActivate {
     let date = new Date(0)
     date.setUTCSeconds(utcSeconds)
     return date
+  }
+
+  /**
+  * Searches for a school or district and returns a list from the NCES data set
+  * @param context is the parameter by which we want to search
+  * @param searchText is the text string passed in that we want to search with flak
+  */
+  public getSchoolDistrict(context: string, searchText: string): Observable<any> {
+    searchText = encodeURIComponent(searchText)
+    return this._http.get<any>(
+      this.flakBaseUrl + `/schools?${context}=${searchText}&fuzziness=2`, {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json'
+        })
+      }
+    )
+    .pipe(map((res) => {
+      return res.hits.hits
+    }))
   }
 }
 
