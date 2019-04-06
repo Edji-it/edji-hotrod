@@ -10,13 +10,13 @@ import { CommentStats, Project, Reading } from './../../shared/datatypes'
 @Component({
   selector: 'owner-tools',
   templateUrl: './owner-tools.component.pug',
-  styleUrls: ['./owner-tools.component.scss']
+  styleUrls: ['./owner-tools.component.scss'],
 })
 export class OwnerToolsComponent implements OnInit {
   @Output() hide: EventEmitter<any> = new EventEmitter()
 
   private subscriptions: Subscription[] = []
-  
+
   public commentStats: CommentStats
   public currentProject: Project
   public currentReading: Reading
@@ -33,63 +33,67 @@ export class OwnerToolsComponent implements OnInit {
   constructor(
     private _projects: ProjectService,
     private _auth: AuthService,
-    private _socket: SocketService, 
+    private _socket: SocketService,
     private _readings: ReadingService,
-    private angulartics: Angulartics2
+    private angulartics: Angulartics2,
   ) {
     this.commentStats = this._projects.commentStats
   }
 
   ngOnInit() {
     // Subscribe to the reading
-    this.subscriptions.push( this._readings.currentReading.subscribe(
-      reading => {
-        this.currentReading = reading
-        if (this.currentReading.questions && this.currentReading.questions.length>0) {
-          this.ownerToolBlockHeight = '285px'
-        } else {
-          this.ownerToolBlockHeight = '221px'
-        }
-      },
-      error => {
-        console.error(error)
-      })
-    )
     this.subscriptions.push(
-      this._projects.currentProject.subscribe(project => {
-        // For transitioning how the server handles teacher/owner ids
-        if (!project.owner_id || typeof(project.owner_id) != 'string') {
-          if (typeof(project.teacher_id) == 'string') {
-            project.owner_id = project.teacher_id
-          } else if (project.teacher_id) {
-            project.owner_id = project.teacher_id._id
+      this._readings.currentReading.subscribe(
+        reading => {
+          this.currentReading = reading
+          if (this.currentReading.questions && this.currentReading.questions.length > 0) {
+            this.ownerToolBlockHeight = '285px'
+          } else {
+            this.ownerToolBlockHeight = '221px'
           }
-        }
-        this.currentProject = project
-      }, error => {
-        console.error(error)
-      })
+        },
+        error => {
+          console.error(error)
+        },
+      ),
     )
-    
     this.subscriptions.push(
-        this._auth.getCurrentUser().subscribe((user) => {
-            this.user = user
-        })
+      this._projects.currentProject.subscribe(
+        project => {
+          // For transitioning how the server handles teacher/owner ids
+          if (!project.owner_id || typeof project.owner_id != 'string') {
+            if (typeof project.teacher_id == 'string') {
+              project.owner_id = project.teacher_id
+            } else if (project.teacher_id) {
+              project.owner_id = project.teacher_id._id
+            }
+          }
+          this.currentProject = project
+        },
+        error => {
+          console.error(error)
+        },
+      ),
+    )
+
+    this.subscriptions.push(
+      this._auth.getCurrentUser().subscribe(user => {
+        this.user = user
+      }),
     )
   }
 
   private togglePower(powerName: string, turnOn: boolean) {
-
     // fire an analytic event here for tracking purposes
     let toggle = 'Off'
     if (turnOn) {
       toggle = 'On'
     }
-    this.angulartics.eventTrack.next({ 
-      action: 'teacherTools_heatVision_toggle' + toggle, 
-      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
+    this.angulartics.eventTrack.next({
+      action: 'teacherTools_heatVision_toggle' + toggle,
+      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
     })
-    
+
     // set heat vision to loading
     this.powersLoading.heatVision = true
     setTimeout(() => {
@@ -101,25 +105,26 @@ export class OwnerToolsComponent implements OnInit {
     let updateObj: any = {}
     updateObj[powerName] = turnOn
 
-    this._projects.update(updateObj, this.currentProject._id)
+    this._projects
+      .update(updateObj, this.currentProject._id)
       .pipe(take(1))
-      .subscribe((project) => {
+      .subscribe(project => {
         // Live update users once save is successful
         this._socket.toggleHeatVision({ all: turnOn })
       })
   }
 
   private showElseFalse(displayPane: string) {
-    switch(displayPane) {
+    switch (displayPane) {
       case 'showQuestionFeed':
         this.showQuestionFeed = !this.showQuestionFeed
         this.showFireFeed = false
         this.showCommentCounts = false
         this.showReadingRecap = false
         // fire an analytic event here for tracking purposes
-        this.angulartics.eventTrack.next({ 
-            action: 'teacherTools_questionPanel_open', 
-            properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
+        this.angulartics.eventTrack.next({
+          action: 'teacherTools_questionPanel_open',
+          properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
         })
         break
       case 'showFireFeed':
@@ -128,9 +133,9 @@ export class OwnerToolsComponent implements OnInit {
         this.showCommentCounts = false
         this.showReadingRecap = false
         // fire an analytic event here for tracking purposes
-        this.angulartics.eventTrack.next({ 
-            action: 'teacherTools_firefeed_open', 
-            properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
+        this.angulartics.eventTrack.next({
+          action: 'teacherTools_firefeed_open',
+          properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
         })
         break
       case 'showCommentCounts':
@@ -139,9 +144,9 @@ export class OwnerToolsComponent implements OnInit {
         this.showCommentCounts = !this.showCommentCounts
         this.showReadingRecap = false
         // fire an analytic event here for tracking purposes
-        this.angulartics.eventTrack.next({ 
-            action: 'teacherTools_leaderboard_open', 
-            properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
+        this.angulartics.eventTrack.next({
+          action: 'teacherTools_leaderboard_open',
+          properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
         })
         break
       case 'showReadingRecap':
@@ -161,5 +166,4 @@ export class OwnerToolsComponent implements OnInit {
   // private hackyGetCommentStats(): string[] {
   //   return Object.keys(this.commentStats.stats.userRef)
   // }
-
 }

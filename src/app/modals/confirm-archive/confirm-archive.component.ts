@@ -5,7 +5,7 @@ import { Reading } from 'src/app/shared/datatypes'
 
 @Component({
   selector: 'hot-confirm-archive-modal',
-  templateUrl: 'confirm-archive.component.pug'
+  templateUrl: 'confirm-archive.component.pug',
 })
 export class ConfirmArchiveModal {
   @Output() closeModal: EventEmitter<any> = new EventEmitter()
@@ -15,8 +15,5 @@ export class ConfirmArchiveModal {
 
   @Input() public readingToArchive: Reading
 
-  constructor(
-    
-    ) {
-  }
+  constructor() {}
 }

@@ -14,16 +14,13 @@ import { AuthService, ProjectService } from '../_services'
   // The selector is what angular internally uses
   // for `document.querySelectorAll(selector)` in our index.html
   // where, in this case, selector is the string 'home'
-  selector: 'home',  // <home></home>
+  selector: 'home', // <home></home>
   // We need to tell Angular's Dependency Injection which providers are in our app.
-  providers: [
-    Title,
-    Ng4TwitterTimelineService
-  ],
+  providers: [Title, Ng4TwitterTimelineService],
   // Our list of styles in our component. We may add more to compose many styles together
   styleUrls: ['./home.component.scss'],
   // Every Angular template is first compiled by the browser before Angular runs it's compiler
-  templateUrl: './home.component.pug'
+  templateUrl: './home.component.pug',
 })
 export class HomeComponent implements OnInit, OnDestroy {
   // Set our default values
@@ -33,9 +30,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = []
 
   private errorObject: {
-    "invalidCode"?: string,
-    "loginFailed"?: string,
-    "serverError"?: string
+    invalidCode?: string
+    loginFailed?: string
+    serverError?: string
   } = {}
 
   public showPassModal: boolean = false
@@ -51,10 +48,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     private angulartics: Angulartics2,
     fb: FormBuilder,
     private _title: Title,
-    private ng4TwitterTimelineService: Ng4TwitterTimelineService
-  ) {
-
-  }
+    private ng4TwitterTimelineService: Ng4TwitterTimelineService,
+  ) {}
 
   ngOnInit() {
     this._title.setTitle('Edji')
@@ -115,17 +110,20 @@ export class HomeComponent implements OnInit, OnDestroy {
       width: 100vw;
       overflow-x: hidden;
     }
-    `;
+    `
 
   restyleTwitter() {
     if (this.twitterRestyleAttempts < 6) {
       setTimeout(() => {
-        if (document.getElementById("twitter-widget-0") && document.getElementById("twitter-widget-0")['contentDocument']) {
-          var w = document.getElementById("twitter-widget-0")['contentDocument'];
+        if (
+          document.getElementById('twitter-widget-0') &&
+          document.getElementById('twitter-widget-0')['contentDocument']
+        ) {
+          var w = document.getElementById('twitter-widget-0')['contentDocument']
           // console.log(w)
-          var s = document.createElement("style");
+          var s = document.createElement('style')
           s.innerHTML = this.widgetCSS
-          s.type = "text/css"
+          s.type = 'text/css'
           w.head.appendChild(s)
           this.tweetsLoaded = true
         } else {
@@ -136,7 +134,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach((sub: Subscription) => { sub.unsubscribe() })
+    this.subscriptions.forEach((sub: Subscription) => {
+      sub.unsubscribe()
+    })
   }
 
   /**
@@ -145,22 +145,21 @@ export class HomeComponent implements OnInit, OnDestroy {
    */
   public joinSession(code: string): void {
     this.joinLoading = true
-    this._project.validateProjectCode(code)
-      .subscribe(
-        (data) => {
-          this.joinLoading = false
-          if (data.found) {
-            this.router.navigate(['/project', data._id])
-          } else {
-            this.errorObject.invalidCode = "We don't think that's a real code :confused:"
-          }
-        },
-        (error) => {
-          this.joinLoading = false
-          console.error(error)
-          this.errorObject.invalidCode = "Oh no! Something went wrong and we don't know what happened!"
+    this._project.validateProjectCode(code).subscribe(
+      data => {
+        this.joinLoading = false
+        if (data.found) {
+          this.router.navigate(['/project', data._id])
+        } else {
+          this.errorObject.invalidCode = "We don't think that's a real code :confused:"
         }
-      )
+      },
+      error => {
+        this.joinLoading = false
+        console.error(error)
+        this.errorObject.invalidCode = "Oh no! Something went wrong and we don't know what happened!"
+      },
+    )
   }
 
   /**
@@ -169,9 +168,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   private clearErrors(): void {
     for (let property in this.errorObject) {
       if (this.errorObject.hasOwnProperty(property) && typeof this.errorObject[property] === 'string') {
-        this.errorObject[property] = ""
+        this.errorObject[property] = ''
       }
     }
   }
-
 }

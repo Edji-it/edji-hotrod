@@ -1,19 +1,26 @@
 <div id="deleteCommentModal" class="modal fade-in show">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Register to make your own readings!</h4>
-                <button (click)="closeModal.emit()" type="button" class="close">&times;</button>
-            </div>
-            <div class="modal-body">
-              <p>Create an account so that you can save your reading!</p>
-            </div>
-            <div class="modal-footer">
-              <div class="btn-row right">
-                <button (click)="closeModal.emit()" type="button" class="btn btn-secondary">Cancel</button>
-                <button [routerLink]="['/register']" [queryParams]="{ userId: user._id }" type="button" class="btn btn-primary">Register</button>
-              </div>
-            </div>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Register to make your own readings!</h4>
+        <button (click)="closeModal.emit()" type="button" class="close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Create an account so that you can save your reading!</p>
+      </div>
+      <div class="modal-footer">
+        <div class="btn-row right">
+          <button (click)="closeModal.emit()" type="button" class="btn btn-secondary">Cancel</button>
+          <button
+            [routerLink]="['/register']"
+            [queryParams]="{ userId: user._id }"
+            type="button"
+            class="btn btn-primary"
+          >
+            Register
+          </button>
         </div>
+      </div>
     </div>
+  </div>
 </div>

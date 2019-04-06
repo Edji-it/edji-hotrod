@@ -9,9 +9,8 @@ import { ALLSPARK } from 'src/app/app.constants'
 
 @Component({
   selector: 'hot-user-details-update',
-  templateUrl: './user-details-update.component.pug'
+  templateUrl: './user-details-update.component.pug',
 })
-
 export class UserDetailsUpdateModal implements OnInit {
   @Input() showModal: boolean
   @Output() closeModal: EventEmitter<any> = new EventEmitter()
@@ -23,50 +22,53 @@ export class UserDetailsUpdateModal implements OnInit {
     id: string
     checkboxCopy: string
   }[] = [
-      { name: 'student', id: 'typeStudentInput', checkboxCopy: "Student :writing_hand:" },
-      { name: 'teacher', id: 'typeTeacherInput', checkboxCopy: "Teacher :apple:" },
-      { name: 'administrator', id: 'typeAdministratorInput', checkboxCopy: "Tech Coach/Administrator :clipboard:" },
-      { name: 'business', id: 'typeBusinessInput', checkboxCopy: "Business Application :briefcase:" },
-      { name: 'personal', id: 'typePersonalInput', checkboxCopy: "Personal Reading Platform :books:" },
-      { name: 'robot', id: 'typeRobotInput', checkboxCopy: "I'm a robot. :robot_face:" },
-      { name: 'other', id: 'typeOtherInput', checkboxCopy: "Other :sparkles:" }
-    ]
+    { name: 'student', id: 'typeStudentInput', checkboxCopy: 'Student :writing_hand:' },
+    { name: 'teacher', id: 'typeTeacherInput', checkboxCopy: 'Teacher :apple:' },
+    { name: 'administrator', id: 'typeAdministratorInput', checkboxCopy: 'Tech Coach/Administrator :clipboard:' },
+    { name: 'business', id: 'typeBusinessInput', checkboxCopy: 'Business Application :briefcase:' },
+    { name: 'personal', id: 'typePersonalInput', checkboxCopy: 'Personal Reading Platform :books:' },
+    { name: 'robot', id: 'typeRobotInput', checkboxCopy: "I'm a robot. :robot_face:" },
+    { name: 'other', id: 'typeOtherInput', checkboxCopy: 'Other :sparkles:' },
+  ]
   public identitySelect: boolean = true
   private existingUser: boolean
 
   private messages: {
-    success?: boolean,
+    success?: boolean
     serviceError?: boolean
   } = {}
 
   public modalHeadings: {
-    header: string,
+    header: string
     body: string
   } = {
-      header: 'Before you begin',
-      body: 'Help us customize your experience. Are you a...'
-    }
+    header: 'Before you begin',
+    body: 'Help us customize your experience. Are you a...',
+  }
 
   constructor(
     private _academy: AcademyService,
     private _auth: AuthService,
     private _bumble: BumblebeeService,
     private _chimp: MailchimpService,
-    _fb: FormBuilder
+    _fb: FormBuilder,
   ) {
     this.userDetailsForm = _fb.group({
       school: [null, Validators.required],
       phone: [null, [Validators.required, this.phoneNumberValidator]],
       sales_can_contact: null,
-      identities: _fb.group({
-        student: true,
-        teacher: null,
-        administrator: null,
-        business: null,
-        personal: null,
-        robot: null,
-        other: null
-      }, { validator: this.checkboxValidator })
+      identities: _fb.group(
+        {
+          student: true,
+          teacher: null,
+          administrator: null,
+          business: null,
+          personal: null,
+          robot: null,
+          other: null,
+        },
+        { validator: this.checkboxValidator },
+      ),
     })
   }
 
@@ -75,8 +77,11 @@ export class UserDetailsUpdateModal implements OnInit {
 
     if (
       (this.currentUser && this.currentUser.identities && this.currentUser.identities.includes('teacher')) ||
-      (this.currentUser && this.currentUser.identities && this.currentUser.identities.includes('administrator')) &&
-      this.currentUser && !this.currentUser.school_name
+      (this.currentUser &&
+        this.currentUser.identities &&
+        this.currentUser.identities.includes('administrator') &&
+        this.currentUser &&
+        !this.currentUser.school_name)
     ) {
       this.existingUser = true
       this.setFormIdentities(this.currentUser)
@@ -116,37 +121,43 @@ export class UserDetailsUpdateModal implements OnInit {
       contactMe = form.value.sales_can_contact
     }
 
-    this._auth.updateUser({ identities: identities, school_name: school, phone_number: phone, sales_can_contact: contactMe })
+    this._auth
+      .updateUser({ identities: identities, school_name: school, phone_number: phone, sales_can_contact: contactMe })
       .pipe(take(1))
-      .subscribe((res: any) => {
-        this._auth.setUser(res.user)
-        this.messages.success = true
-        // Close the modal
-        this.closeModal.emit()
-        // If we have a teacher, send it to Mailchimp and Bumblebee/Slack
-        if (res.user.identities && res.user.identities.indexOf('teacher') > -1 || res.user.identities.indexOf('administrator') > -1) {
-          // Tell Bumblebee/Slack!
-          res.user.phone_number = phone
-          if (this.existingUser) {
-            this._bumble.sendUserDetails(res.user, 'additionalDetails')
-          } else {
-            this._bumble.sendUserDetails(res.user)
+      .subscribe(
+        (res: any) => {
+          this._auth.setUser(res.user)
+          this.messages.success = true
+          // Close the modal
+          this.closeModal.emit()
+          // If we have a teacher, send it to Mailchimp and Bumblebee/Slack
+          if (
+            (res.user.identities && res.user.identities.indexOf('teacher') > -1) ||
+            res.user.identities.indexOf('administrator') > -1
+          ) {
+            // Tell Bumblebee/Slack!
+            res.user.phone_number = phone
+            if (this.existingUser) {
+              this._bumble.sendUserDetails(res.user, 'additionalDetails')
+            } else {
+              this._bumble.sendUserDetails(res.user)
+            }
+            this._chimp.addToNewUsersList(res.user)
+            // send the data to Pipo to track registrations if they are a teacher
+            this._academy.pipoEvent({
+              // standard event info:
+              event_name: 'registration',
+              user_id: res.user._id,
+              teacher: true,
+              hero: res.user.hero_status || false,
+              institution_id: res.user.institution_ids || [],
+            })
           }
-          this._chimp.addToNewUsersList(res.user)
-          // send the data to Pipo to track registrations if they are a teacher
-          this._academy.pipoEvent({
-            // standard event info:
-            event_name: "registration",
-            user_id: res.user._id,
-            teacher: true,
-            hero: res.user.hero_status || false,
-            institution_id: res.user.institution_ids || []
-          })
-        }
-
-      }, (err) => {
-        console.error(err)
-      })
+        },
+        err => {
+          console.error(err)
+        },
+      )
   }
 
   /**
@@ -165,7 +176,7 @@ export class UserDetailsUpdateModal implements OnInit {
 
   /**
    * Validates the phone number is in the correct reg expression if one is entered
-   * @param control is our form control 
+   * @param control is our form control
    */
   private phoneNumberValidator(control: FormControl): any {
     if (!control.value) {
@@ -173,11 +184,11 @@ export class UserDetailsUpdateModal implements OnInit {
     }
     // Run the check agains the phone validator
     let phoneRe: RegExp = ALLSPARK.PHONEREGEX
-    return phoneRe.test(control.value) ? null : { 'phoneIncorrect': true }
+    return phoneRe.test(control.value) ? null : { phoneIncorrect: true }
   }
 
   /**
-   * If we're prompting the user to add secondary properties like school district and phone number, 
+   * If we're prompting the user to add secondary properties like school district and phone number,
    * we need to set the identities to their current values so we don't overwrite them
    * @param user current user
    */
@@ -196,7 +207,7 @@ export class UserDetailsUpdateModal implements OnInit {
    */
   private showTeacherForm(): void {
     this.modalHeadings.header = 'Welcome Teacher!'
-    this.modalHeadings.body = 'We\'re honored to have you. Where do you teach?'
+    this.modalHeadings.body = "We're honored to have you. Where do you teach?"
     this.identitySelect = false
   }
 }

@@ -1,108 +1,108 @@
-import { Component, forwardRef, Input } from '@angular/core';
-import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
-import { ALLSPARK } from 'src/app/app.constants';
+import { Component, forwardRef, Input } from '@angular/core'
+import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms'
+import { ALLSPARK } from 'src/app/app.constants'
 
-const noop = () => {
-};
+const noop = () => {}
 
 export const CUSTOM_INPUT_CONTROL_VALUE_ACCESSOR: any = {
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => GradeSelector),
-    multi: true
-};
+  provide: NG_VALUE_ACCESSOR,
+  useExisting: forwardRef(() => GradeSelector),
+  multi: true,
+}
 
 @Component({
-    selector: 'grade-selector',
-    templateUrl: './grade-selector.component.pug',
-    styleUrls: ['grade-selector.component.scss'],
-    providers: [CUSTOM_INPUT_CONTROL_VALUE_ACCESSOR]
+  selector: 'grade-selector',
+  templateUrl: './grade-selector.component.pug',
+  styleUrls: ['grade-selector.component.scss'],
+  providers: [CUSTOM_INPUT_CONTROL_VALUE_ACCESSOR],
 })
 export class GradeSelector implements ControlValueAccessor {
-    @Input() classSmall: boolean
+  @Input() classSmall: boolean
 
-    //The internal data model
-    public gradeSelection: number[] = []
-    public gradePreview: number[] = []
+  //The internal data model
+  public gradeSelection: number[] = []
+  public gradePreview: number[] = []
 
-    // Form reference values
-    public gradeInitials: string[] = ALLSPARK.GRADEINITIALS
-    public gradeNames: string[] = ALLSPARK.GRADENAMES
+  // Form reference values
+  public gradeInitials: string[] = ALLSPARK.GRADEINITIALS
+  public gradeNames: string[] = ALLSPARK.GRADENAMES
 
-    public selectGrade(gradeIndex: number): void {
-        if (this.gradeSelection.length == 1) {
-            let val = this.gradeSelection[0]
-            if (gradeIndex < val) {
-                for (let i = gradeIndex; i < val; i++) {
-                    this.gradeSelection.push(i)
-                } 
-            } else if (gradeIndex > val) {
-                for (let i = gradeIndex; i > val; i--) {
-                    this.gradeSelection.push(i)
-                } 
-            }
-        } else {
-            this.gradeSelection = [gradeIndex]
+  public selectGrade(gradeIndex: number): void {
+    if (this.gradeSelection.length == 1) {
+      let val = this.gradeSelection[0]
+      if (gradeIndex < val) {
+        for (let i = gradeIndex; i < val; i++) {
+          this.gradeSelection.push(i)
         }
-        // Sort array for cleanliness
-        this.gradeSelection.sort((a,b) => { return a- b })
-        // Notify of change
-        this.onChangeCallback(this.gradeSelection)
-    }
-
-    public previewRange(gradeIndex: number) : void {
-        this.gradePreview = []
-        if (this.gradeSelection.length == 1) {
-            let val = this.gradeSelection[0]
-            if (gradeIndex < val) {
-                for (let i = gradeIndex; i < val; i++) {
-                    this.gradePreview.push(i)
-                } 
-            } else if (gradeIndex > val) {
-                for (let i = gradeIndex; i > val; i--) {
-                    this.gradePreview.push(i)
-                } 
-            }
+      } else if (gradeIndex > val) {
+        for (let i = gradeIndex; i > val; i--) {
+          this.gradeSelection.push(i)
         }
+      }
+    } else {
+      this.gradeSelection = [gradeIndex]
     }
+    // Sort array for cleanliness
+    this.gradeSelection.sort((a, b) => {
+      return a - b
+    })
+    // Notify of change
+    this.onChangeCallback(this.gradeSelection)
+  }
 
-    //Placeholders for the callbacks which are later provided
-    //by the Control Value Accessor
-    public onTouchedCallback: () => void = noop;
-    public onChangeCallback: (_: any) => void = noop;
-
-    //get accessor
-    get value(): any {
-        return this.gradeSelection;
-    };
-
-    //set accessor including call the onchange callback
-    set value(v: any) {
-        if (v !== this.gradeSelection && v !== null) {
-            this.gradeSelection = v;
-            this.onChangeCallback(v);
+  public previewRange(gradeIndex: number): void {
+    this.gradePreview = []
+    if (this.gradeSelection.length == 1) {
+      let val = this.gradeSelection[0]
+      if (gradeIndex < val) {
+        for (let i = gradeIndex; i < val; i++) {
+          this.gradePreview.push(i)
         }
-    }
-
-    //Set touched on blur
-    onBlur() {
-        this.onTouchedCallback();
-    }
-
-    //From ControlValueAccessor interface
-    writeValue(value: any) {
-        if (value !== this.gradeSelection && value !== null) {
-            this.gradeSelection = value;
+      } else if (gradeIndex > val) {
+        for (let i = gradeIndex; i > val; i--) {
+          this.gradePreview.push(i)
         }
+      }
     }
+  }
 
-    //From ControlValueAccessor interface
-    registerOnChange(fn: any) {
-        this.onChangeCallback = fn;
+  //Placeholders for the callbacks which are later provided
+  //by the Control Value Accessor
+  public onTouchedCallback: () => void = noop
+  public onChangeCallback: (_: any) => void = noop
+
+  //get accessor
+  get value(): any {
+    return this.gradeSelection
+  }
+
+  //set accessor including call the onchange callback
+  set value(v: any) {
+    if (v !== this.gradeSelection && v !== null) {
+      this.gradeSelection = v
+      this.onChangeCallback(v)
     }
+  }
 
-    //From ControlValueAccessor interface
-    registerOnTouched(fn: any) {
-        this.onTouchedCallback = fn;
+  //Set touched on blur
+  onBlur() {
+    this.onTouchedCallback()
+  }
+
+  //From ControlValueAccessor interface
+  writeValue(value: any) {
+    if (value !== this.gradeSelection && value !== null) {
+      this.gradeSelection = value
     }
+  }
 
+  //From ControlValueAccessor interface
+  registerOnChange(fn: any) {
+    this.onChangeCallback = fn
+  }
+
+  //From ControlValueAccessor interface
+  registerOnTouched(fn: any) {
+    this.onTouchedCallback = fn
+  }
 }

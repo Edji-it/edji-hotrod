@@ -1,37 +1,37 @@
 import { EdjiComment, User } from '.'
-import { Reading } from './reading';
+import { Reading } from './reading'
 
 /** Project properties we add on the front end */
 export interface Project extends BaseProject {
-  students: { _id: string, fullname: string, username: string, userType: string }[], // front end properties to add more reference info to students
-  temps: { _id: string, fullname: string, userType: string }[], // front end properties to add more reference info to temps
+  students: { _id: string; fullname: string; username: string; userType: string }[] // front end properties to add more reference info to students
+  temps: { _id: string; fullname: string; userType: string }[] // front end properties to add more reference info to temps
   archived?: boolean
 }
 
 /** The project object as it is returned from the server */
 interface BaseProject {
-  _id: string,
-  reading_id: Reading,
-  teacher: User,
-  teacher_id: any,
-  owner_id: any,
-  comments: EdjiComment[],
-  answers?: EdjiComment[],
-  students_ids: string [], // server populates the ids with this object
-  temp_ids: string[], // same as above with temp_ids
-  label: string,
-  code: string,
-  types: string, // can currently be 'emoji' and 'text'
-  heat_vision: boolean,
-  report_evals?: Feedback[],
-  group_instructions?: string,
-  createdAt?: string,
+  _id: string
+  reading_id: Reading
+  teacher: User
+  teacher_id: any
+  owner_id: any
+  comments: EdjiComment[]
+  answers?: EdjiComment[]
+  students_ids: string[] // server populates the ids with this object
+  temp_ids: string[] // same as above with temp_ids
+  label: string
+  code: string
+  types: string // can currently be 'emoji' and 'text'
+  heat_vision: boolean
+  report_evals?: Feedback[]
+  group_instructions?: string
+  createdAt?: string
   updatedAt?: string
 }
 
 export interface Feedback {
-  createdAt: Date,
-  evaluation: string,
-  user_id: string,
+  createdAt: Date
+  evaluation: string
+  user_id: string
   _id: string
 }

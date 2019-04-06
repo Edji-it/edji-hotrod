@@ -13,7 +13,7 @@ $horizontalBarHeight: 30px;
 .icon-chart-axis {
   text-align: right;
   font-size: 20px;
-  height: $horizontalBarHeight;    
+  height: $horizontalBarHeight;
 
   & .icon {
     margin-top: 5px;
@@ -33,16 +33,16 @@ $horizontalBarHeight: 30px;
   display: inline-block;
   margin-right: 1px;
   &__emoji {
-    background-color: #FFCC4D;
+    background-color: #ffcc4d;
   }
   &__text {
-    background-color: #E49A5F;
+    background-color: #e49a5f;
   }
   &__audio {
-    background-color: #D84F4F;
+    background-color: #d84f4f;
   }
   &__replies {
-    background-color: #6BDB5D;
+    background-color: #6bdb5d;
   }
   &__blank {
     background-color: transparent;

@@ -1,14 +1,14 @@
 **How To Test Using Protractor in Edji**
 
-*27 Jan 2017*
+_27 Jan 2017_
 
-*Last Modified: 27 Jan 2017*
+_Last Modified: 27 Jan 2017_
 
-*Nicholas Pumper*
+_Nicholas Pumper_
 
 **Basics**
 
-****
+---
 
 **This guide is dumb, where should I go to learn more?**
 
@@ -16,11 +16,11 @@ Go to the Protractor Github, ya dumb. But this a good guide because it explains 
 
 **How is this organized?**
 
-All end-to-end tests go under ‘src/tests/e2e’. All unit tests go under ‘src/tests/unit-tests’. 
+All end-to-end tests go under ‘src/tests/e2e’. All unit tests go under ‘src/tests/unit-tests’.
 
 **How do I write a test?**
 
-Go to the ‘spec.ts’ file for the page you want to write a test for. For example, ‘home.spec.ts’ runs the tests for the home page. 
+Go to the ‘spec.ts’ file for the page you want to write a test for. For example, ‘home.spec.ts’ runs the tests for the home page.
 
 **What are the .ts files in ‘src/tests/page-objects’ for?**
 

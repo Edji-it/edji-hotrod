@@ -2,89 +2,91 @@
 @import '../../../sass/base/variables';
 
 .project-card-wrap {
-    width: 100%; //calc(100% - #{ $projectCardGutter });
+  width: 100%; //calc(100% - #{ $projectCardGutter });
 
-    // @media (max-width: $phone) {
-    //     width: 100%;
-    // }
+  // @media (max-width: $phone) {
+  //     width: 100%;
+  // }
 }
 
 .project-card {
-    float: left !important;
-    margin-bottom: 0px !important;
-    border-top: none !important;
-    // box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.2);
+  float: left !important;
+  margin-bottom: 0px !important;
+  border-top: none !important;
+  // box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.2);
 
-    border-bottom-style: dashed;
-    
-    &:last-of-type {
-        border-bottom-style: solid;
-    }
+  border-bottom-style: dashed;
 
-    & .title {
-        display: block;
-        font-size: 14px;
-    }
+  &:last-of-type {
+    border-bottom-style: solid;
+  }
 
-    & .metadata {
-        font-size: 10px;
-    }
+  & .title {
+    display: block;
+    font-size: 14px;
+  }
 
-    // @media (min-width: $phone) {
-    //     &:nth-of-type(2n) {
-    //         margin-right: -1* $projectCardGutter;
-    //         margin-left: $projectCardGutter;
-    //     }
-    // }
-    
+  & .metadata {
+    font-size: 10px;
+  }
 
-    &:hover, &:active {
-        // transform: translateX(0px) scale(1.02);
-        // z-index: 1000;
-    }
+  // @media (min-width: $phone) {
+  //     &:nth-of-type(2n) {
+  //         margin-right: -1* $projectCardGutter;
+  //         margin-left: $projectCardGutter;
+  //     }
+  // }
+
+  &:hover,
+  &:active {
+    // transform: translateX(0px) scale(1.02);
+    // z-index: 1000;
+  }
 }
 
 .project-card--new {
-    float: left !important;
-    background: transparent;
-    box-shadow: none;
-    border-top: none;
+  float: left !important;
+  background: transparent;
+  box-shadow: none;
+  border-top: none;
 }
 
 .project-title-input__save {
-    display: none;
-    font-size: 23px;
-    position: absolute;
-    top: 3px;
-    right: -30px;
-    line-height: 1em;
-    cursor: pointer;
+  display: none;
+  font-size: 23px;
+  position: absolute;
+  top: 3px;
+  right: -30px;
+  line-height: 1em;
+  cursor: pointer;
 }
 
 .project-title-input {
-    float: left;
-    //width: calc(100% - 170px);
-    width: 100%;
-    position: relative;
+  float: left;
+  //width: calc(100% - 170px);
+  width: 100%;
+  position: relative;
 
-    & input {
-        line-height: 2em;
+  & input {
+    line-height: 2em;
 
-        &:active, &:focus {
-            & + .project-title-input__save {
-                display: block;
-            }
-        }
+    &:active,
+    &:focus {
+      & + .project-title-input__save {
+        display: block;
+      }
     }
+  }
 }
 
 .add-project-icon {
-    background: #fafafa;
-    border: 0px solid transparent;
+  background: #fafafa;
+  border: 0px solid transparent;
 
-    &:hover, &:active {
-        background: #ccc;
-    }
+  &:hover,
+  &:active {
+    background: #ccc;
+  }
 }
 
 // .reading-card {
@@ -95,89 +97,91 @@
 // }
 
 .project-card {
-    margin-bottom: $projectCardGutter;
-    padding-left: 15px;
-    padding-right: 15px;
+  margin-bottom: $projectCardGutter;
+  padding-left: 15px;
+  padding-right: 15px;
 }
 
 .reading-item-row {
-    display: flex;
-    flex-wrap: wrap;
-    margin-bottom: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
 }
 
 button.new-reading-btn {
-    float: right;
+  float: right;
 
-    @media (max-width: $tablet) {
-        margin-bottom: $base-pad;
-        width: 100%;
-        font-size: 14px;
-    }
+  @media (max-width: $tablet) {
+    margin-bottom: $base-pad;
+    width: 100%;
+    font-size: 14px;
+  }
 
-    @media (min-width: $tablet) and (max-width: $desktop) {
-        padding: 8px 14px;
-    }
+  @media (min-width: $tablet) and (max-width: $desktop) {
+    padding: 8px 14px;
+  }
 }
 
 .new-reading--btn {
-    float: right;
+  float: right;
 
-    @media (min-width: $tablet) and (max-width: $desktop) {
-        padding: 4px 0;
-    }
+  @media (min-width: $tablet) and (max-width: $desktop) {
+    padding: 4px 0;
+  }
 }
 
 .alert-readings {
-    @media (max-width: $tablet){
-        margin-top: 35px;
-    }
+  @media (max-width: $tablet) {
+    margin-top: 35px;
+  }
 }
 
 .guide-video-thumb {
-    cursor: pointer;
-    display: inline-block;
-    width: calc(100% - 60px);
-    max-width: 250px;
-    position: relative;
+  cursor: pointer;
+  display: inline-block;
+  width: calc(100% - 60px);
+  max-width: 250px;
+  position: relative;
+
+  & .icon-play {
+    transition: transform;
+    height: 2em;
+    width: 2em;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%, -50%, 0);
+  }
+
+  &:hover,
+  &:focus,
+  &:active {
+    box-shadow: 0 0px 15px 0px rgba($btnPrimaryFocusColor, 0.5);
 
     & .icon-play {
-        transition: transform;
-        height: 2em;
-        width: 2em;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate3d(-50%, -50%, 0);
+      transform: scale(1.05) translate3d(-50%, -50%, 0);
     }
+  }
 
-    &:hover, &:focus, &:active {
-        box-shadow: 0 0px 15px 0px rgba($btnPrimaryFocusColor,0.5);
-
-        & .icon-play {
-            transform: scale(1.05) translate3d(-50%, -50%, 0);
-        }
-    }
-
-    & img {
-        width: 100%;
-    }
+  & img {
+    width: 100%;
+  }
 }
 
-
 .created-list {
-    @media (min-width: $tablet){
-        padding: 0px;
-    }
+  @media (min-width: $tablet) {
+    padding: 0px;
+  }
 }
 
 .archived-fade--above {
-    position: absolute;
-    left: 0;
-    bottom: 100%;
-    width: 100%;
-    height: 500px;
-    background: transparent linear-gradient(to top, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.7) 50%, rgba(255,255,255,0) 100%);
-    pointer-events: none;
-    z-index: $zLow;
+  position: absolute;
+  left: 0;
+  bottom: 100%;
+  width: 100%;
+  height: 500px;
+  background: transparent
+    linear-gradient(to top, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 50%, rgba(255, 255, 255, 0) 100%);
+  pointer-events: none;
+  z-index: $zLow;
 }

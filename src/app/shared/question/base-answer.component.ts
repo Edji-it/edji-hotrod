@@ -3,11 +3,10 @@ import { Subscription } from 'rxjs'
 import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
-import { EdjiComment, EdjiQuestion, Project, Reading, User } from "../datatypes"
-import { CommentService, AuthService, ProjectService, ReadingService } from "../../_services"
+import { EdjiComment, EdjiQuestion, Project, Reading, User } from '../datatypes'
+import { CommentService, AuthService, ProjectService, ReadingService } from '../../_services'
 
 export abstract class BaseAnswerComponent implements OnInit {
-
   /*
     4 Aug 2017
     Nick Pumper
@@ -19,32 +18,29 @@ export abstract class BaseAnswerComponent implements OnInit {
   */
 
   @Input()
-  public baseQuestionReference : EdjiQuestion // Provided by the EdjiQuestion hosting this.
+  public baseQuestionReference: EdjiQuestion // Provided by the EdjiQuestion hosting this.
   @Input()
-  enabledAnswerTypes : any[] = ['text']
-
+  enabledAnswerTypes: any[] = ['text']
 
   // State
-  public user : User;
+  public user: User
 
   constructor(
-    private _projects : ProjectService,
-    private _readings : ReadingService,
-    private _auth     : AuthService,
-    private _comments : CommentService,
-    private _angulartics: Angulartics2
+    private _projects: ProjectService,
+    private _readings: ReadingService,
+    private _auth: AuthService,
+    private _comments: CommentService,
+    private _angulartics: Angulartics2,
   ) {
     this.user = this._auth.getUser()
   }
 
-  ngOnInit () {
-
-  }
+  ngOnInit() {}
 
   // Ask ProjectService to tell the server to save this comment.
-  public saveAnswer(newAnswer : EdjiComment) : void {
+  public saveAnswer(newAnswer: EdjiComment): void {
     newAnswer.new = true
-    
+
     newAnswer.user_id = this.user._id
     if (!newAnswer.author) {
       newAnswer.author = this.user.fullname
@@ -52,20 +48,24 @@ export abstract class BaseAnswerComponent implements OnInit {
 
     // Please make sure the questionId is added to the answer as a reference.. this will error out otherwise
     newAnswer.questionId = this.baseQuestionReference._id // Be careful. This line literally breaks the entire thing without errors sometimes. 8.8.17
-    
-    this._angulartics.eventTrack.next({ action: newAnswer.type + 'AnswerCreate', properties: { category: 'heroFeature', label: 'attempt' }})
+
+    this._angulartics.eventTrack.next({
+      action: newAnswer.type + 'AnswerCreate',
+      properties: { category: 'heroFeature', label: 'attempt' },
+    })
 
     // Tell the server we've added an answer
-    this._projects.saveAnswer(newAnswer)
-    .then(answer => {
-      answer.active = true
-      this._comments.activeComment = answer
-      this._projects.addAnswerToAnswers(answer)
-      this._projects.saveAnswer(answer)
-    })
-    .catch(error => {
-      console.error(error)
-    })
+    this._projects
+      .saveAnswer(newAnswer)
+      .then(answer => {
+        answer.active = true
+        this._comments.activeComment = answer
+        this._projects.addAnswerToAnswers(answer)
+        this._projects.saveAnswer(answer)
+      })
+      .catch(error => {
+        console.error(error)
+      })
   }
 
   public activeEmojiKeyboardReply(comment: EdjiComment): void {

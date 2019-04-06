@@ -7,56 +7,71 @@
     Initially made tethered to the Account page.
     -->
 <div id="uploadAvatarModal" class="modal fade-in show">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <!-- Header -->
-            <div class="modal-header">
-                <h4 class="modal-title">Change Avatar</h4>
-                <button id="closeModalBtn" (click)="closeModal.emit()" type="button" class="close">&times;</button>
-            </div>
-            <!-- Body -->
-            <div class="row modal-body body no-gutter">
-                <!-- Column 1 -->
-                <div class="col-md-6">
-                    <!-- Profile Pic -->
-                    <span class="profile-pic">
-                        <!-- Avatar -->
-                        <img id="uploadedPic" class="profile-pic" *ngIf="imageUploaded" [src]="getSelectedImage()">
-                        <!-- User Initials -->
-                        <span id="userInitials" *ngIf="imageUploaded === false">{{currentUser.fullname | userinitials}}</span>
-                    </span>
-                </div>
-                <!-- Column 2 -->
-                <div class="col-md-6">
-                    <div class="btn-container">
-                        <!-- Upload Button -->
-                        <label id="uploadBtn" class="btn modal-button col-btn">
-                            Upload New 
-                            <input id="imageFileInput" type="file" 
-                                accept=".jpg,.png,.gif,.jpeg,.svg"
-                                (change)="updateUploadedFile();"  style="display:none;">
-                        </label>
-                        <!-- Remove Button -->
-                        <button id="removeBtn" class="btn col-btn remove-button" (click)="removeAvatar();">Remove</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Footer -->
-            <div class="row modal-footer footer-border">
-                <!-- Error -->
-                <div *ngIf="showError" class="alert alert-danger" role="alert">
-                  <strong>Oh snap!</strong> Unable to upload profile picture. Either your file is invalid, or we did something wrong.
-                </div>
-
-                <!-- Cancel & Save Buttons -->
-                <div class="btn-row">
-                    <!-- Cancel Button -->
-                    <button id="cancelUploadBtn" (click)="closeModal.emit()" type="button" class="btn modal-button row-btn" data-dismiss="modal">Cancel</button><!--not sure what data-dismiss does-->
-                    <!-- Save Button -->
-                    <button id="saveAvatarBtn" (click)="confirmNewAvatar();" class="btn btn-primary save-button row-btn">Save</button>
-                </div>
-            </div>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Change Avatar</h4>
+        <button id="closeModalBtn" (click)="closeModal.emit()" type="button" class="close">&times;</button>
+      </div>
+      <!-- Body -->
+      <div class="row modal-body body no-gutter">
+        <!-- Column 1 -->
+        <div class="col-md-6">
+          <!-- Profile Pic -->
+          <span class="profile-pic">
+            <!-- Avatar -->
+            <img id="uploadedPic" class="profile-pic" *ngIf="imageUploaded" [src]="getSelectedImage()" />
+            <!-- User Initials -->
+            <span id="userInitials" *ngIf="imageUploaded === false">{{ currentUser.fullname | userinitials }}</span>
+          </span>
         </div>
+        <!-- Column 2 -->
+        <div class="col-md-6">
+          <div class="btn-container">
+            <!-- Upload Button -->
+            <label id="uploadBtn" class="btn modal-button col-btn">
+              Upload New
+              <input
+                id="imageFileInput"
+                type="file"
+                accept=".jpg,.png,.gif,.jpeg,.svg"
+                (change)="updateUploadedFile()"
+                style="display:none;"
+              />
+            </label>
+            <!-- Remove Button -->
+            <button id="removeBtn" class="btn col-btn remove-button" (click)="removeAvatar()">Remove</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="row modal-footer footer-border">
+        <!-- Error -->
+        <div *ngIf="showError" class="alert alert-danger" role="alert">
+          <strong>Oh snap!</strong> Unable to upload profile picture. Either your file is invalid, or we did something
+          wrong.
+        </div>
+
+        <!-- Cancel & Save Buttons -->
+        <div class="btn-row">
+          <!-- Cancel Button -->
+          <button
+            id="cancelUploadBtn"
+            (click)="closeModal.emit()"
+            type="button"
+            class="btn modal-button row-btn"
+            data-dismiss="modal"
+          >
+            Cancel</button
+          ><!--not sure what data-dismiss does-->
+          <!-- Save Button -->
+          <button id="saveAvatarBtn" (click)="confirmNewAvatar()" class="btn btn-primary save-button row-btn">
+            Save
+          </button>
+        </div>
+      </div>
     </div>
+  </div>
 </div>

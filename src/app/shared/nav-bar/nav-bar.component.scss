@@ -4,396 +4,399 @@ $lightBorder: 1px solid #f1f1f1;
 $purple: rgb(150, 40, 255);
 
 .nav-bar__wrap {
-	// float: left;
-	width: 100%;
-	height: $navHeight;
+  // float: left;
+  width: 100%;
+  height: $navHeight;
 
-	@media(max-width: $phone) {
-		height: auto;
-		min-height: $navHeight;
-	}
+  @media (max-width: $phone) {
+    height: auto;
+    min-height: $navHeight;
+  }
 }
-	.mobile-heading {
-		margin-top: $navHeight;
-		padding: $base-pad/2 $base-pad;
-		&.hidden-md-up {
-			margin-bottom: 0;
-		}
-	}
+.mobile-heading {
+  margin-top: $navHeight;
+  padding: $base-pad/2 $base-pad;
+  &.hidden-md-up {
+    margin-bottom: 0;
+  }
+}
 
 .sliding-pane {
-	// Put sliding pane under the sideBar
-	// But above comments!
-	z-index: 5900;
+  // Put sliding pane under the sideBar
+  // But above comments!
+  z-index: 5900;
 }
 
 .nav-bar__user {
-	font-family: 'Open Sans';
-	font-weight: bold;
-	line-height: 16px;
-    font-size: 16px;
-	color: $medium-gray;
-	float:right;
-	height: 100%;
-	min-width: $navUserWidth;
-	padding: 15px;
-	text-align: center;
-	border-left: $navBorder;
-	white-space: nowrap;
+  font-family: 'Open Sans';
+  font-weight: bold;
+  line-height: 16px;
+  font-size: 16px;
+  color: $medium-gray;
+  float: right;
+  height: 100%;
+  min-width: $navUserWidth;
+  padding: 15px;
+  text-align: center;
+  border-left: $navBorder;
+  white-space: nowrap;
 
-	@media(max-width: $phone) {
-		min-width: 80px;
-		max-width: 100px;
-	}
-	
-	& .link {
-		font-size: 12px;
-	}
+  @media (max-width: $phone) {
+    min-width: 80px;
+    max-width: 100px;
+  }
+
+  & .link {
+    font-size: 12px;
+  }
 }
 
 .nav-bar__project {
-	float: right;
-	height: 100%;
-	padding: 0px 10px;
-	text-align: right;
-	// border-left: $navBorder;
-	border-right: $navBorder;
-	font-family: 'Open Sans';
-	font-weight: bold;
-	line-height: 16px;
-    font-size: 16px;
-	overflow: hidden;
+  float: right;
+  height: 100%;
+  padding: 0px 10px;
+  text-align: right;
+  // border-left: $navBorder;
+  border-right: $navBorder;
+  font-family: 'Open Sans';
+  font-weight: bold;
+  line-height: 16px;
+  font-size: 16px;
+  overflow: hidden;
 
-	@media(max-width: $tablet) {
-		text-align: left;
-		// width: 50%;
-		background: #fff;
-		margin-bottom: $base-pad;
-		min-width: 50px;
-	}
+  @media (max-width: $tablet) {
+    text-align: left;
+    // width: 50%;
+    background: #fff;
+    margin-bottom: $base-pad;
+    min-width: 50px;
+  }
 
-	& label {
-		font-family: 'Open Sans';
-		font-size: 12px;
-		color: #cdcdcd;
-		margin-bottom: 0px;
-	}
+  & label {
+    font-family: 'Open Sans';
+    font-size: 12px;
+    color: #cdcdcd;
+    margin-bottom: 0px;
+  }
 
-	& label, & .group-label {
-		height: 50%;
-		line-height: 35px;
-		display: block;
-		width: 100%;
-		vertical-align: middle;
-	}
+  & label,
+  & .group-label {
+    height: 50%;
+    line-height: 35px;
+    display: block;
+    width: 100%;
+    vertical-align: middle;
+  }
 
-	& .group-label {
-		font-family: 'Open Sans';
-		font-size: 12px;
-		color: #333;
-		padding: 0px;
-	}
+  & .group-label {
+    font-family: 'Open Sans';
+    font-size: 12px;
+    color: #333;
+    padding: 0px;
+  }
 }
 
 .nav-bar__project-data {
-	@extend .nav-bar__project;
-	white-space: nowrap;
-	text-align: right;
-	border-right: none;
-	// account for logo and username width
-	max-width: calc(100% - #{ 100px + 70px });
-	overflow: visible;
+  @extend .nav-bar__project;
+  white-space: nowrap;
+  text-align: right;
+  border-right: none;
+  // account for logo and username width
+  max-width: calc(100% - #{100px + 70px});
+  overflow: visible;
 
-	& .emojioneemoji {
-		margin-top: -2px;
-		margin-right: 3px;
-	}
+  & .emojioneemoji {
+    margin-top: -2px;
+    margin-right: 3px;
+  }
 
-	&.hidden-md-up {
-		padding: 0;
-		& pre {
-			font-size: 74%;
-		}
-	}
+  &.hidden-md-up {
+    padding: 0;
+    & pre {
+      font-size: 74%;
+    }
+  }
 }
 
 .nav__menu {
-	float: left;
-	line-height: $navHeight - 2px; // Include border offset
-	height: 100%;
+  float: left;
+  line-height: $navHeight - 2px; // Include border offset
+  height: 100%;
 
-	& .btn {
-		display: inline-block;
-		
-		& > span {
-			display:inline-block;
-			margin-right: 5px;
-		}
-	}
+  & .btn {
+    display: inline-block;
 
-	& .dropdown {
-		display: inline-block;
+    & > span {
+      display: inline-block;
+      margin-right: 5px;
+    }
+  }
 
-		&.show {
-			background: #fafafa;
-		}
-	}
+  & .dropdown {
+    display: inline-block;
 
-	& .dropdown-item {
-		line-height: 36px;
-	}
+    &.show {
+      background: #fafafa;
+    }
+  }
 
-	@media(max-width: $tablet) {
-		& .btn {
-			margin: 0px 7.5px !important;
-		}
-	}
+  & .dropdown-item {
+    line-height: 36px;
+  }
+
+  @media (max-width: $tablet) {
+    & .btn {
+      margin: 0px 7.5px !important;
+    }
+  }
 }
 
 .nav-bar__heading {
-	// float: left;
-	position: absolute;
-	left: 55px;
-	top: 0px;
-	background: #fff;
-	z-index: $zLow;
-	height: 100%;
-	padding: 0 $base-pad;
-	width: auto;
-	max-width: 50%;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-	overflow-x: hidden;
-	text-align: left;
-	overflow-y: hidden; // a scroll bar was coming up sometimes
+  // float: left;
+  position: absolute;
+  left: 55px;
+  top: 0px;
+  background: #fff;
+  z-index: $zLow;
+  height: 100%;
+  padding: 0 $base-pad;
+  width: auto;
+  max-width: 50%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow-x: hidden;
+  text-align: left;
+  overflow-y: hidden; // a scroll bar was coming up sometimes
 
-	@media(max-width: $desktop) {
-		max-width: 35%;
-	}
+  @media (max-width: $desktop) {
+    max-width: 35%;
+  }
 
-	@media(min-width: $desktop) {
-		max-width: 45%;
-	}
+  @media (min-width: $desktop) {
+    max-width: 45%;
+  }
 
-	& h1 {
-		display: inline-block;
-		line-height: $navHeight;
-		margin-bottom: 0px;
-		vertical-align: middle;
-		font-size: 25px;
+  & h1 {
+    display: inline-block;
+    line-height: $navHeight;
+    margin-bottom: 0px;
+    vertical-align: middle;
+    font-size: 25px;
 
-		&.with-nav-sub {
-			line-height: $navHeight - 25px;
-		}
-	}
+    &.with-nav-sub {
+      line-height: $navHeight - 25px;
+    }
+  }
 }
 
 .nav-bar__author {
-	line-height: 13px;
-	vertical-align: middle;
-	font-size: 12px;
+  line-height: 13px;
+  vertical-align: middle;
+  font-size: 12px;
 
-	& .badge {
-		margin-left: 5px;
-	}
+  & .badge {
+    margin-left: 5px;
+  }
 }
 
 a.nav-bar__link {
-	// color: #fff;
-	// background: rgb(240,240,240);
-	// background: #61656b;
-    cursor: pointer;
-    display: block;
-	line-height: 22px;
-	color: $medium-gray;
-	
+  // color: #fff;
+  // background: rgb(240,240,240);
+  // background: #61656b;
+  cursor: pointer;
+  display: block;
+  line-height: 22px;
+  color: $medium-gray;
 
-	&:hover, &:active, &:focus {
-		// color: #fafafa;
-		text-decoration: none;
-		// background: #474a4e;
-		color: $blue;
-	}
+  &:hover,
+  &:active,
+  &:focus {
+    // color: #fafafa;
+    text-decoration: none;
+    // background: #474a4e;
+    color: $blue;
+  }
 }
 
-
 .nav-bar__btn {
-	float: right;
-	min-width: 110px;
-	position: relative;
-	// line-height: 45px;
-	vertical-align: middle;
-	margin: 15px 8px 15px 0px;
+  float: right;
+  min-width: 110px;
+  position: relative;
+  // line-height: 45px;
+  vertical-align: middle;
+  margin: 15px 8px 15px 0px;
 
-	&.btn-sm {
-		margin: 23px 8px 23px 0px;
-		min-width: 90px;
-	}
+  &.btn-sm {
+    margin: 23px 8px 23px 0px;
+    min-width: 90px;
+  }
 
-	@media(max-width: $desktop) {
-		font-size: 14px;
-		min-width: 10px;
-		padding: 12px 10px;
-		margin: 15px 3px;
+  @media (max-width: $desktop) {
+    font-size: 14px;
+    min-width: 10px;
+    padding: 12px 10px;
+    margin: 15px 3px;
 
-		&.btn-sm {
-			font-size: 10px;
-			padding:0.25rem 0.5rem;
-			margin: 23px 8px 23px 0px;
-			min-width: 90px;
-		}
-	}
+    &.btn-sm {
+      font-size: 10px;
+      padding: 0.25rem 0.5rem;
+      margin: 23px 8px 23px 0px;
+      min-width: 90px;
+    }
+  }
 }
 
 .nav-bar__icon-button {
-	position: relative;
-	padding: 20px 20px 15px 20px;
-	
-	& img {
-		width: 100px;
-		height: auto;
-		opacity: 0.5;
-	}
+  position: relative;
+  padding: 20px 20px 15px 20px;
 
-	& span {
-		color: #fff;
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translate3d(-50%, -50%, 0);
-		font-family: 'Open Sans';
-		font-size: 12px;
-	}
+  & img {
+    width: 100px;
+    height: auto;
+    opacity: 0.5;
+  }
 
-	&:hover, &:active {
-		opacity: 0.7;
-	}
+  & span {
+    color: #fff;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%, -50%, 0);
+    font-family: 'Open Sans';
+    font-size: 12px;
+  }
+
+  &:hover,
+  &:active {
+    opacity: 0.7;
+  }
 }
 
 .mNavIcon {
-	display: none;
+  display: none;
 }
 
 div.sliding-pane.from-left.slide-in {
-	box-shadow: 2px 2px 20px rgba(0,0,0,0.1);
+  box-shadow: 2px 2px 20px rgba(0, 0, 0, 0.1);
 }
 
 .power__loading {
-	position: absolute;
-	top: 15px;
-	left: 15px;
-	pointer-events: none;
-	opacity: 0;
-	transition: opacity 0.5s linear;
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s linear;
 
-	&.is-loading {
-		opacity: 1;
-	}
+  &.is-loading {
+    opacity: 1;
+  }
 }
 
 // Publish tooltip
 .publish-tooltip {
-    position: absolute;
-    // left: 0px;
-	background: #fff;
-    top: calc(100% + 4px);
-	left: 50%;
-	transform: translateX(-50%);
-    margin-top: 4px;
-    width: 300px;
-	// max-width: 100%;
+  position: absolute;
+  // left: 0px;
+  background: #fff;
+  top: calc(100% + 4px);
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 4px;
+  width: 300px;
+  // max-width: 100%;
+  display: block;
+  text-align: left;
+  padding: $base-pad/2;
+  border: 1px solid $midGray;
+  z-index: 1;
+  white-space: normal;
+
+  &__title {
+    margin-bottom: 5px;
+  }
+
+  & .btn {
+    width: 100%;
+  }
+
+  &:after,
+  &:before {
+    content: '';
     display: block;
-    text-align: left;
-    padding: $base-pad/2;
-    border: 1px solid $midGray;
-	z-index: 1;
-	white-space: normal;
+    position: absolute;
+    left: calc(50% - 8px);
+    bottom: calc(100% + 1px);
+    width: 0;
+    height: 0;
+    border: 8px solid transparent;
+    border-bottom-color: $midGray;
+  }
+  &:after {
+    // left: calc(100% + 0px);
+    bottom: calc(100% + 0px);
+    border-bottom-color: white;
+  }
 
-    &__title {
-		margin-bottom: 5px;
+  @media (max-width: $phone) {
+    position: fixed;
+    top: 75px;
+    transform: translateX(-100%);
+    left: calc(100% - 20px);
+
+    &:after,
+    &:before {
+      left: calc(100% - 125px);
     }
-
-    & .btn {
-        width: 100%;
-    }
-
-    &:after, &:before {
-        content: '';
-        display: block;  
-        position: absolute;
-        left: calc(50% - 8px);
-        bottom: calc(100% + 1px);
-        width: 0;
-        height: 0;
-        border: 8px solid transparent;
-        border-bottom-color: $midGray;
-    }
-    &:after {
-        // left: calc(100% + 0px);
-        bottom: calc(100% + 0px);
-        border-bottom-color: white;
-    }
-
-	@media(max-width: $phone) {
-		position: fixed;
-		top: 75px;
-		transform: translateX(-100%);
-		left: calc(100% - 20px);
-
-		&:after, &:before {
-			left: calc(100% - 125px);
-		}
-	}
+  }
 }
 
 .nav__btn-wrap {
-	float:right; 
-	position: relative; 
-	height: 100%;
-	margin-right: 15px;
+  float: right;
+  position: relative;
+  height: 100%;
+  margin-right: 15px;
 }
 
 .project-code__text {
-	cursor: pointer;
+  cursor: pointer;
 }
 
 .nav__join-code {
-	// max-height: 60%;
-	margin-top: $navPadY - 5px;
-	// margin-right: .5em;
-	float: right;
+  // max-height: 60%;
+  margin-top: $navPadY - 5px;
+  // margin-right: .5em;
+  float: right;
 }
 
 .nav__join-code--under {
-	// max-height: 60%;
-	margin-top: $navPadY - 5px;
-	margin-right: .5em;
-	margin-bottom: .5em;
+  // max-height: 60%;
+  margin-top: $navPadY - 5px;
+  margin-right: 0.5em;
+  margin-bottom: 0.5em;
 }
 
-
 #projectCodeError {
-	position: absolute;
-	// Position the error box just under the code field, to fill the corner gaps
-	width: calc(100% - #{2 * $base-pad});
-	height: 2em;
-	line-height: 2em;
-	top: calc(100% + #{$navPadY - 2px});
-	background: $red;
-	color: #fff;
-	border-bottom-left-radius: 3px;
-	border-bottom-right-radius: 3px;
-	box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.3);
-	padding: 0 0.5em;
-	text-align: center;
+  position: absolute;
+  // Position the error box just under the code field, to fill the corner gaps
+  width: calc(100% - #{2 * $base-pad});
+  height: 2em;
+  line-height: 2em;
+  top: calc(100% + #{$navPadY - 2px});
+  background: $red;
+  color: #fff;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+  box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.3);
+  padding: 0 0.5em;
+  text-align: center;
 
-	@media(max-width: $phone) {
-		position: relative;
-		width: 100%;
-		box-shadow: none;
-		border-radius: 3px;
-		margin-top: 2px;
-	}
+  @media (max-width: $phone) {
+    position: relative;
+    width: 100%;
+    box-shadow: none;
+    border-radius: 3px;
+    margin-top: 2px;
+  }
 }
 
 $avatarDropArrowWidth: 10px;
@@ -401,80 +404,82 @@ $avatarDropArrowOffset: $avatarDropArrowWidth + 2px;
 $avatarDropArrowRight: 15px;
 
 .avatar__wrap {
-	position: relative;
-	width: 100%;
-	height: 100%;
+  position: relative;
+  width: 100%;
+  height: 100%;
 }
 
 .btn-slider__drop-down {
-	opacity: 0;
-	pointer-events: none;
-	transition: opacity ease-in-out 0.4s;
-	position: absolute;
-	top: calc(100% + #{ $avatarDropArrowOffset });
-	right: 0px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity ease-in-out 0.4s;
+  position: absolute;
+  top: calc(100% + #{$avatarDropArrowOffset});
+  right: 0px;
 
-	&:hover, &:focus {
-		opacity: 1;
-		pointer-events: all;
-	}
+  &:hover,
+  &:focus {
+    opacity: 1;
+    pointer-events: all;
+  }
 }
 
 .avatar__drop-down {
-	opacity: 0;
-	pointer-events: none;
-	transition: opacity ease-in-out 0.4s;
-	position: absolute;
-	// Position the drop-down just below the avatar, relatively
-	top: calc(100% + #{ $avatarDropArrowOffset });
-	right: calc(50% - #{ $avatarDropArrowWidth + $avatarDropArrowRight });
-	z-index: 3;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity ease-in-out 0.4s;
+  position: absolute;
+  // Position the drop-down just below the avatar, relatively
+  top: calc(100% + #{$avatarDropArrowOffset});
+  right: calc(50% - #{$avatarDropArrowWidth + $avatarDropArrowRight});
+  z-index: 3;
 }
 
-.avatar__drop-down, .btn-slider__drop-down {
-	box-shadow: rgba(0,0,0,0.2) 0px 1px 20px;
-	min-width: 220px;
-	border-radius: 12px;
+.avatar__drop-down,
+.btn-slider__drop-down {
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 20px;
+  min-width: 220px;
+  border-radius: 12px;
 
-	&.visible {
-		opacity: 1;
-		pointer-events: all;
-		// transition-delay: 0s, 0s, 0.3s;
-	}
-	& .list-group-item {
-		text-align: left;
-		color: rgba(0,0,0,0.6);
-		&:hover {
-			color: $btnPrimaryColor;
-		}
-		&:first-child {
-			border-top-right-radius: 12px;
-			border-top-left-radius: 12px;
-		}
-		&:last-child {
-			border-bottom-right-radius: 12px;
-			border-bottom-left-radius: 12px;
-		}
-	}
+  &.visible {
+    opacity: 1;
+    pointer-events: all;
+    // transition-delay: 0s, 0s, 0.3s;
+  }
+  & .list-group-item {
+    text-align: left;
+    color: rgba(0, 0, 0, 0.6);
+    &:hover {
+      color: $btnPrimaryColor;
+    }
+    &:first-child {
+      border-top-right-radius: 12px;
+      border-top-left-radius: 12px;
+    }
+    &:last-child {
+      border-bottom-right-radius: 12px;
+      border-bottom-left-radius: 12px;
+    }
+  }
 }
 
 .list-icon--right {
-	position: absolute;
-	right: 12px;
+  position: absolute;
+  right: 12px;
 }
 
 .arrow {
-	content: "";
-	position: absolute;
-	bottom: 99%;
-	right: $avatarDropArrowRight;
-	border-width: $avatarDropArrowWidth;
-	border-style: solid;
-	border-color: transparent transparent #fff transparent;
-	z-index: 4;
+  content: '';
+  position: absolute;
+  bottom: 99%;
+  right: $avatarDropArrowRight;
+  border-width: $avatarDropArrowWidth;
+  border-style: solid;
+  border-color: transparent transparent #fff transparent;
+  z-index: 4;
 }
 
 .list-group-item:nth-child(2) {
-	border-top-right-radius: 12px;
-	border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  border-top-left-radius: 12px;
 }

@@ -13,10 +13,29 @@
                         <div *ngIf="passwordForm.controls['oldPassword'].hasError('required') && passwordForm.controls['oldPassword'].dirty" class="alert alert-info">You must have a password</div>
                         <div id="msgWrongPass" class="alert alert-danger" *ngIf="messages.wrongPasswordError">This password does not match your current password</div>
 
-                        <label for="new-password-input">New Password</label>
-                        <input type="password" id="new-password-input" class="form-control" [formControl]="passwordForm.controls['newPassword']" />
-                        <div *ngIf="passwordForm.controls['newPassword'].hasError('required') && passwordForm.controls['newPassword'].dirty" class="alert alert-info">A new password is required</div>
-                        <div *ngIf="passwordForm.controls['newPassword'].hasError('minlength') && passwordForm.controls['newPassword'].dirty" class="alert alert-warning">Passwords must have at least 6 characters</div>
+            <label for="new-password-input">New Password</label>
+            <input
+              type="password"
+              id="new-password-input"
+              class="form-control"
+              [formControl]="passwordForm.controls['newPassword']"
+            />
+            <div
+              *ngIf="
+                passwordForm.controls['newPassword'].hasError('required') && passwordForm.controls['newPassword'].dirty
+              "
+              class="alert alert-info"
+            >
+              A new password is required
+            </div>
+            <div
+              *ngIf="
+                passwordForm.controls['newPassword'].hasError('minlength') && passwordForm.controls['newPassword'].dirty
+              "
+              class="alert alert-warning"
+            >
+              Passwords must have at least 6 characters
+            </div>
 
                         <label for="new-password-confirm-input">New Confirm New Password</label>
                         <input type="password" id="new-password-confirm-input" class="form-control" [formControl]="passwordForm.controls['newPasswordConfirm']" />
@@ -36,6 +55,16 @@
             </form>
             <div id="msgServiceError" class="alert alert-danger" *ngIf="messages.serviceError">We encountered an error while changing your password. Please try again or contact support.</div>
         </div>
+        <div *ngIf="messages.success" class="modal-footer">
+          <div class="alert alert-success">
+            Way to go, you reset your password!
+            <button (click)="closeAndReset()" type="button" class="btn ml-2" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </form>
+      <div id="msgServiceError" class="alert alert-danger" *ngIf="messages.serviceError">
+        We encountered an error while changing your password. Please try again or contact support.
+      </div>
     </div>
+  </div>
 </div>
-

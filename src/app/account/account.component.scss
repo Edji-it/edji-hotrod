@@ -5,168 +5,168 @@
 // Last Mod: 23 June 2017
 
 .container-line {
-    border-bottom-width: 2px;
-    border-bottom-style: solid;
-    border-bottom-color: #DCDCDC;
-    width:  90%;
-    height: 100px;
-    margin:     auto;
-    display:    block; 
+  border-bottom-width: 2px;
+  border-bottom-style: solid;
+  border-bottom-color: #dcdcdc;
+  width: 90%;
+  height: 100px;
+  margin: auto;
+  display: block;
 }
 
 .profile-container {
-    margin:     auto;
-    display:    block; 
+  margin: auto;
+  display: block;
 }
 
 // Primarily for keeping things centered on mobile
 .profile-pic-container {
-    margin:     auto;
-    display:    block; 
+  margin: auto;
+  display: block;
 
-    @media(max-width: $phone) {
-        transform: translateX(-25%);
-	}
+  @media (max-width: $phone) {
+    transform: translateX(-25%);
+  }
 
-    @media(max-width: $xsphone) {
-        min-width: $xsphone;
-        transform: translate(-10%);
-	}
+  @media (max-width: $xsphone) {
+    min-width: $xsphone;
+    transform: translate(-10%);
+  }
 }
 
 $profilePicIconHeight: 60px;
 .profile-pic {
-    border-radius:  50%;
-    object-fit: cover; // Needed for images
-    min-width:  150px;
-    min-height: 150px;
-    width:      150px;
-    height:     150px;
-    margin:     auto;
-    display:    block;
-    background-color: #D4D1D1;
-    text-align: center;
-    line-height: 2.3;
+  border-radius: 50%;
+  object-fit: cover; // Needed for images
+  min-width: 150px;
+  min-height: 150px;
+  width: 150px;
+  height: 150px;
+  margin: auto;
+  display: block;
+  background-color: #d4d1d1;
+  text-align: center;
+  line-height: 2.3;
 
-    // For the temp profile pic
-     & span {
-        text-transform: uppercase;
-        font-family: 'Open Sans';
-        font-weight: bold;
-        color: #fff;
-        font-size: $profilePicIconHeight;
-    }
+  // For the temp profile pic
+  & span {
+    text-transform: uppercase;
+    font-family: 'Open Sans';
+    font-weight: bold;
+    color: #fff;
+    font-size: $profilePicIconHeight;
+  }
 }
 
 .profile-title {
-    font-size: 50px; 
-    color:      #DCDCDC;
-    text-align:    center;
-    margin-bottom: 35px;
+  font-size: 50px;
+  color: #dcdcdc;
+  text-align: center;
+  margin-bottom: 35px;
 
-    @media(max-width: $phone) {
-        display: inline-block;
-        vertical-align: middle;
-        margin-left: 50px;
-	}
+  @media (max-width: $phone) {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 50px;
+  }
 }
 
 .edit-btn-container {
-    margin-top: 10px;
-    height:     20px;
-    width: 10px;
+  margin-top: 10px;
+  height: 20px;
+  width: 10px;
 }
 
 .edit-btn {
-    color: #FAF9F9;
-    background-color: #D4D1D1;
-    display:    block;
-    margin:     auto;
-    margin-top: 10px;
+  color: #faf9f9;
+  background-color: #d4d1d1;
+  display: block;
+  margin: auto;
+  margin-top: 10px;
 }
 
 .change-password-btn {
-    align-content: right;
-    background-color: #898383;
-    color: #FAF9F9;
+  align-content: right;
+  background-color: #898383;
+  color: #faf9f9;
 }
 
 .spacer-mobile-collapse {
+  height: 9em;
 
-    height: 9em;
-
-    @media(max-width: $phone) {
-        height: 0em;
-    }
+  @media (max-width: $phone) {
+    height: 0em;
+  }
 }
 
 .column {
-    vertical-align: middle;
-    display:    inline-block;
+  vertical-align: middle;
+  display: inline-block;
 
-    @media(max-width: $tablet) {
-		margin-left: 40px;
-        min-width: 50%;
-	}
+  @media (max-width: $tablet) {
+    margin-left: 40px;
+    min-width: 50%;
+  }
 
-    @media(max-width: $phone) {
-        margin-left: 5px;
-        min-width: $phone;
-	}
+  @media (max-width: $phone) {
+    margin-left: 5px;
+    min-width: $phone;
+  }
 
-    @media(max-width: $xsphone) {
-        margin-left: 10px;
-        min-width: $xsphone;
-	}
+  @media (max-width: $xsphone) {
+    margin-left: 10px;
+    min-width: $xsphone;
+  }
 }
 
 .name-label {
-    font-family:    "Open Sans";
-    font-size:      40px;
-    margin-bottom: -7px;
-    font-weight:    500;
+  font-family: 'Open Sans';
+  font-size: 40px;
+  margin-bottom: -7px;
+  font-weight: 500;
 }
 
 .info-group {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .info {
-    font-family:    "Open Sans";
-    font-size:      20px;
-    margin-bottom: -2px;
-    font-weight:    500;
+  font-family: 'Open Sans';
+  font-size: 20px;
+  margin-bottom: -2px;
+  font-weight: 500;
 }
 
 .info-label {
-    font-family: "Open Sans";
-    font-size: 15px;
-    color: #D2CECE;
-    margin-bottom: 0px;
-    margin-top: 8px;
+  font-family: 'Open Sans';
+  font-size: 15px;
+  color: #d2cece;
+  margin-bottom: 0px;
+  margin-top: 8px;
 }
 
 .faded {
-    color: #949494;
+  color: #949494;
 }
 
 .linked-block {
-    display: inline-block;
-    padding: 3px $base-pad/2;
-    border: 1px solid #D2CECE;
-    position: relative;
+  display: inline-block;
+  padding: 3px $base-pad/2;
+  border: 1px solid #d2cece;
+  position: relative;
 
-    & .icon {
-        vertical-align: middle;
-    }
+  & .icon {
+    vertical-align: middle;
+  }
 
-    &:hover, &:focus {
-        border-color: $blue;
-    }
+  &:hover,
+  &:focus {
+    border-color: $blue;
+  }
 }
 
 .linked-logo {
-    height: 30px;
-    width: auto;
-    margin-left: 5px;
+  height: 30px;
+  width: auto;
+  margin-left: 5px;
 }

@@ -12,43 +12,41 @@ export class MailchimpService {
     this.isProd = _auth.getEnv() === 'prod'
   }
 
-  makeChimpUser(user: User): { email: string, fname: string, lname: string } {
+  makeChimpUser(user: User): { email: string; fname: string; lname: string } {
     let spaceIndex = user.fullname.indexOf(' ')
     if (spaceIndex < 0) spaceIndex = user.fullname.length
     return {
       email: user.email,
       fname: user.fullname.substr(0, spaceIndex),
-      lname: user.fullname.substr(spaceIndex + 1)
+      lname: user.fullname.substr(spaceIndex + 1),
     }
   }
 
   /**
-  * Add users who subscribe to Hero to the Mailchimp Hero Subscribed list
-  */
+   * Add users who subscribe to Hero to the Mailchimp Hero Subscribed list
+   */
   async addToActiveHeroList(user: User): Promise<void> {
     if (this.isProd) {
       let body: MailChimpPost = {
         ...this.makeChimpUser(user),
-        list: 'hero-subscribed'
+        list: 'hero-subscribed',
       }
-      await this._http.post(this._auth.getUrl() + '/mailchimp/add', body, this._auth.getOptions())
-        .toPromise()
+      await this._http.post(this._auth.getUrl() + '/mailchimp/add', body, this._auth.getOptions()).toPromise()
     } else {
-      console.info("Dev: Not adding user to Active Hero List")
+      console.info('Dev: Not adding user to Active Hero List')
     }
   }
 
   /**
-  * Add newly registered users to the sign up Mailchimp list
-  */
+   * Add newly registered users to the sign up Mailchimp list
+   */
   public async addToNewUsersList(user: User): Promise<void> {
     // if (this.isProd) {
     let body: MailChimpPost = {
       ...this.makeChimpUser(user),
-      list: 'new'
+      list: 'new',
     }
-    await this._http.post(this._auth.getUrl() + '/mailchimp/add', body, this._auth.getOptions())
-      .toPromise()
+    await this._http.post(this._auth.getUrl() + '/mailchimp/add', body, this._auth.getOptions()).toPromise()
     // } else {
     //   console.info("Dev: Not adding user to mailing list")
     // }

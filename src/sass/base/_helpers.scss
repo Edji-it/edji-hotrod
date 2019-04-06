@@ -5,24 +5,24 @@
 @import '/variables';
 
 .hide {
-	display: none !important;
-    pointer-events: none !important;
+  display: none !important;
+  pointer-events: none !important;
 }
 
 /**
  * Color helpers (Backgrounds)
  */
 .green {
-	background: mediumseagreen;
+  background: mediumseagreen;
 }
 
 .navy {
-	background: #072649;
+  background: #072649;
 }
 
 .navy-gradient {
-	background: #072649;
-	background: linear-gradient(to bottom, #072649, #17436c, #17436c, #27729a);
+  background: #072649;
+  background: linear-gradient(to bottom, #072649, #17436c, #17436c, #27729a);
 }
 
 .gray {
@@ -30,85 +30,86 @@
 }
 
 .sparks {
-    background-image: url('/assets/images/sparks.svg');
-    background-size:100% auto;
-    background-repeat: repeat;
-    background-position: center center;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    // z-index: 1;
+  background-image: url('/assets/images/sparks.svg');
+  background-size: 100% auto;
+  background-repeat: repeat;
+  background-position: center center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  // z-index: 1;
 }
 
 .has-sparks {
-    overflow: hidden;
-    position: relative;
+  overflow: hidden;
+  position: relative;
 }
 
 .dashboard__container--iPadwidth {
-    @media only screen and (max-device-width: $tablet) and (orientation:portrait) {
-        max-width: 100%;
-        flex: inherit;
-    }
+  @media only screen and (max-device-width: $tablet) and (orientation: portrait) {
+    max-width: 100%;
+    flex: inherit;
+  }
 }
 
 // Flexi image will go full width on mobile and 100% div height at a fixed width in non-mobile. Set the background image url in each component sass file
 .flexi-img {
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: cover;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 5000;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5000;
 }
 
 // Whitespace helpers
 .ws {
-    &-nowrap {
-        white-space: nowrap;
-    }
+  &-nowrap {
+    white-space: nowrap;
+  }
 }
 
 // Show/hide on hover
 .hover-parent {
-    .hover-show--inline-block, .hover-show--block {
-        display: none;
+  .hover-show--inline-block,
+  .hover-show--block {
+    display: none;
+  }
+  &:hover {
+    & .hover-show--inline-block {
+      display: inline-block;
     }
-    &:hover {
-        & .hover-show--inline-block {
-            display: inline-block;
-        } 
-        & .hover-show--block {
-            display: block;
-        } 
-        & .hover-hide {
-            display: none;
-        }   
+    & .hover-show--block {
+      display: block;
     }
+    & .hover-hide {
+      display: none;
+    }
+  }
 }
 
 // Response hiders
 // Use as including (eg. hidden-md-down means hidden for (size medium - 1px) AND down)
 @mixin hidden-x-down($initial, $screenSize) {
-    .hidden-#{$initial}-down {
-        @media(max-width: #{$screenSize - 1px}) {
-            display: none !important;
-        }
+  .hidden-#{$initial}-down {
+    @media (max-width: #{$screenSize - 1px}) {
+      display: none !important;
     }
+  }
 }
 @mixin hidden-x-up($initial, $screenSize) {
-    .hidden-#{$initial}-up {
-        @media(min-width: $screenSize) {
-            display: none !important;
-        }
+  .hidden-#{$initial}-up {
+    @media (min-width: $screenSize) {
+      display: none !important;
     }
+  }
 }
 // Create hidden and down classes (no need for xl-)
 @include hidden-x-down(xs, $small-screen);

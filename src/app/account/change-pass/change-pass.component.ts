@@ -8,34 +8,34 @@ import { AuthService } from './../../_services/auth.service'
 
 @Component({
   selector: 'edji-change-pass',
-  templateUrl: 'change-pass.component.html'
+  templateUrl: 'change-pass.component.html',
 })
 export class ChangePassComponent implements OnInit {
-
-  public passwordForm: FormGroup;
+  public passwordForm: FormGroup
   public messages: {
     success?: boolean,
     wrongPasswordError?: boolean,
     serviceError?: boolean
   } = {}
   public loading: boolean
-  @Output() closeModal = new EventEmitter();
+  @Output() closeModal = new EventEmitter()
 
   constructor(private _auth: AuthService, private angulartics: Angulartics2, fb: FormBuilder) {
-    this.passwordForm = fb.group({
-      oldPassword: [null, Validators.required],
-      newPassword: [null, [Validators.required, Validators.minLength(6)]],
-      newPasswordConfirm: [null, Validators.required]
-    }, { validator: this.passwordsEqual });
+    this.passwordForm = fb.group(
+      {
+        oldPassword: [null, Validators.required],
+        newPassword: [null, [Validators.required, Validators.minLength(6)]],
+        newPasswordConfirm: [null, Validators.required],
+      },
+      { validator: this.passwordsEqual },
+    )
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
-//https://angular.io/docs/ts/latest/api/forms/index/FormGroup-class.html
+  //https://angular.io/docs/ts/latest/api/forms/index/FormGroup-class.html
   private passwordsEqual(group: FormGroup) {
-    return group.get('newPassword').value === group.get('newPasswordConfirm').value
-      ? null : {'mismatch': true};
+    return group.get('newPassword').value === group.get('newPasswordConfirm').value ? null : { mismatch: true }
   }
 
   public onSubmit(value: any): void {
@@ -44,18 +44,19 @@ export class ChangePassComponent implements OnInit {
       return
     }
     this.loading = true
-    
-    this._auth.resetPassword({
+
+    this._auth
+      .resetPassword({
         oldPassword: this.passwordForm.get('oldPassword').value,
-        newPassword: this.passwordForm.get('newPassword').value
+        newPassword: this.passwordForm.get('newPassword').value,
       })
       .then((res) => {
         this.messages.success = true
         this.loading = false
         // fire an analytic event here for tracking purposes
-        this.angulartics.eventTrack.next({ 
-          action: 'change_password_request', 
-          properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }
+        this.angulartics.eventTrack.next({
+          action: 'change_password_request',
+          properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
         })
         this._auth.setToken(res.token)
       })

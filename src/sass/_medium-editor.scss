@@ -4,21 +4,23 @@
 
 $editorToolbarRadius: 0px;
 $editorToolbarBg: #fff;
-$editorToolbarShadow: 0px 1px 3px 0px rgba(0,0,0,0.2);
+$editorToolbarShadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2);
 
 .medium-editor-toolbar-actions {
-	box-shadow: $editorToolbarShadow;
-	border-radius: $editorToolbarRadius;
+  box-shadow: $editorToolbarShadow;
+  border-radius: $editorToolbarRadius;
 }
 
 .medium-editor-action {
-	border-radius: 0px;
-	background-color: $editorToolbarBg;
-	color: #333;
+  border-radius: 0px;
+  background-color: $editorToolbarBg;
+  color: #333;
 
-	&:hover, &:active, &:focus {
-		background-color: #efefef;
-	}
+  &:hover,
+  &:active,
+  &:focus {
+    background-color: #efefef;
+  }
 }
 
 .medium-editor-button-active {
@@ -27,17 +29,17 @@ $editorToolbarShadow: 0px 1px 3px 0px rgba(0,0,0,0.2);
 }
 
 .medium-editor-button-first {
-	border-top-left-radius: $editorToolbarRadius;
-	border-bottom-left-radius: $editorToolbarRadius;
+  border-top-left-radius: $editorToolbarRadius;
+  border-bottom-left-radius: $editorToolbarRadius;
 }
 
 .medium-editor-button-last {
-	border-top-right-radius: $editorToolbarRadius;
-	border-bottom-right-radius: $editorToolbarRadius;
+  border-top-right-radius: $editorToolbarRadius;
+  border-bottom-right-radius: $editorToolbarRadius;
 }
 
 .medium-editor-placeholder {
-	color: #999;
+  color: #999;
 
   &:after {
     font-style: normal;
@@ -45,12 +47,13 @@ $editorToolbarShadow: 0px 1px 3px 0px rgba(0,0,0,0.2);
     font-size: $readingFontSize;
     line-height: $readingLineHeight;
     @media only screen and (max-width: $xsphone) {
-			font-size: 12px;
-		}
+      font-size: 12px;
+    }
   }
 }
 
-.medium-toolbar-arrow-under:after, .medium-toolbar-arrow-over:before {
+.medium-toolbar-arrow-under:after,
+.medium-toolbar-arrow-over:before {
   border-style: solid;
   content: '';
   display: block;
@@ -58,26 +61,25 @@ $editorToolbarShadow: 0px 1px 3px 0px rgba(0,0,0,0.2);
   left: 50%;
   margin-left: -8px;
   position: absolute;
-  width: 0; 
+  width: 0;
 }
 
 .medium-toolbar-arrow-under:after {
-  border-width: 8px 8px 0 8px; 
+  border-width: 8px 8px 0 8px;
 }
 
 .medium-toolbar-arrow-over:before {
   border-width: 0 8px 8px 8px;
-  top: -8px; 
+  top: -8px;
 }
-
 
 .medium-toolbar-arrow-under:after {
   border-color: $editorToolbarBg transparent transparent transparent;
-  top: 48px; 
+  top: 48px;
 }
 
 .medium-toolbar-arrow-over:before {
-  border-color: transparent transparent $editorToolbarBg transparent; 
+  border-color: transparent transparent $editorToolbarBg transparent;
 }
 
 /* Mobile Optimization */
@@ -88,18 +90,22 @@ $editorToolbarShadow: 0px 1px 3px 0px rgba(0,0,0,0.2);
 }
 
 .medium-editor-action-anchor {
+  background-image: url('/assets/images/icon-link.png');
+  background-size: auto 1.25em;
+  background-position: center center;
+  background-repeat: no-repeat;
+  &:hover,
+  &:active,
+  &:focus {
     background-image: url('/assets/images/icon-link.png');
     background-size: auto 1.25em;
     background-position: center center;
     background-repeat: no-repeat;
-	&:hover, &:active, &:focus {
-    background-image: url('/assets/images/icon-link.png');
-    background-size: auto 1.25em;
-    background-position: center center;
-    background-repeat: no-repeat;
-	}
-  &:hover, &:active, &:focus {
-		background-color: #efefef;
+  }
+  &:hover,
+  &:active,
+  &:focus {
+    background-color: #efefef;
   }
 }
 
@@ -110,7 +116,7 @@ $editorToolbarShadow: 0px 1px 3px 0px rgba(0,0,0,0.2);
   padding: 20px;
   margin-top: 4px;
   font-size: $readingFontSize;
-	line-height: $readingLineHeight;
+  line-height: $readingLineHeight;
   border: $editorBorder;
 
   // Sometimes styles end up nested in different browsers (contenteditable is a b****)
@@ -121,7 +127,9 @@ $editorToolbarShadow: 0px 1px 3px 0px rgba(0,0,0,0.2);
     margin: 0px;
     border: none;
 
-    &:hover, &:focus, &:active {
+    &:hover,
+    &:focus,
+    &:active {
       background: none;
       border: none;
     }
@@ -136,7 +144,7 @@ $editorToolbarShadow: 0px 1px 3px 0px rgba(0,0,0,0.2);
   }
 
   & img {
-		border: 1px solid #efefef !important;
+    border: 1px solid #efefef !important;
     display: block !important;
     margin: 0 auto !important;
     cursor: move;
@@ -146,7 +154,8 @@ $editorToolbarShadow: 0px 1px 3px 0px rgba(0,0,0,0.2);
     background: mix($editorBg, $editorActiveBg);
   }
 
-  &:active, &:focus  {
+  &:active,
+  &:focus {
     border: $editorActiveBorder;
     background: $editorActiveBg;
   }
@@ -166,13 +175,13 @@ $editorToolbarShadow: 0px 1px 3px 0px rgba(0,0,0,0.2);
 // Override link tooltip styles
 .medium-editor-toolbar {
   background: #fff;
-  box-shadow:$editorToolbarShadow;
+  box-shadow: $editorToolbarShadow;
 }
 
 .medium-editor-anchor-preview {
   color: $blue;
   background: #fff;
-  box-shadow:$editorToolbarShadow;
+  box-shadow: $editorToolbarShadow;
   padding: 5px 20px 2px;
   border-radius: $editorToolbarRadius;
 
@@ -197,7 +206,8 @@ $editorToolbarShadow: 0px 1px 3px 0px rgba(0,0,0,0.2);
 .medium-editor-toolbar-form a {
   text-decoration: none !important;
 
-  &:hover, &:active {
+  &:hover,
+  &:active {
     text-decoration: none !important;
   }
 }
@@ -206,7 +216,8 @@ $editorToolbarShadow: 0px 1px 3px 0px rgba(0,0,0,0.2);
   background: #f5f5f5 !important;
   margin: 5px 0px !important;
 
-  &:focus, &:active {
+  &:focus,
+  &:active {
     transform: scale(1) !important;
   }
 }

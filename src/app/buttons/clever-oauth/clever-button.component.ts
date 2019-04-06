@@ -5,22 +5,15 @@ import { AuthService, SecretSwitchesService } from './../../_services'
 
 @Component({
   selector: 'edji-clever-button',
-  styleUrls: [ './clever-button.component.scss' ],
-  templateUrl: './clever-button.component.pug'
+  styleUrls: ['./clever-button.component.scss'],
+  templateUrl: './clever-button.component.pug',
 })
-
 export class CleverButton implements OnInit {
-
   @Input() public dark: boolean
 
-  constructor(
-    private _auth: AuthService,
-    private _secrets: SecretSwitchesService
-  ) { }
+  constructor(private _auth: AuthService, private _secrets: SecretSwitchesService) {}
 
-  ngOnInit() { 
-    
-  }
+  ngOnInit() {}
 
   public cleverSignIn(): void {
     this._auth.oauthLogin('clever')

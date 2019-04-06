@@ -16,7 +16,7 @@ import { EdjiDatePipe } from '../../../_pipes/edjidate.pipe'
 @Component({
   selector: 'hot-reading-recap',
   templateUrl: './reading-recap.component.pug',
-  styleUrls: ['./reading-recap.component.scss']
+  styleUrls: ['./reading-recap.component.scss'],
 })
 export class ReadingRecapComponent implements OnInit {
   // @Input() visible: boolean = false
@@ -38,48 +38,51 @@ export class ReadingRecapComponent implements OnInit {
   public questionCount: number = 0
   public imageCount: number = 0
   public chartTimeReading: any = {
-    min: 0, 
-    max: 0, 
-    avg: 0, 
-    val: 0
+    min: 0,
+    max: 0,
+    avg: 0,
+    val: 0,
   }
   public chartComments: any = {
-    min: 0, 
-    max: 0, 
-    avg: 0, 
-    val: 0
+    min: 0,
+    max: 0,
+    avg: 0,
+    val: 0,
   }
   public commentCountByType: any = {
     emoji: 0,
     text: 0,
     audio: 0,
-    reply: 0
+    reply: 0,
   }
 
   public students: any[] = []
   public selectedStudent: any
-  
+
   // Slide in value animates pane once component has loaded
   public slidePaneIn: boolean = false
   private teacherId: string
 
   constructor(
-    private _projects : ProjectService,
+    private _projects: ProjectService,
     private _auth: AuthService,
     private _fb: FormBuilder,
     private _academy: AcademyService,
-    private angulartics: Angulartics2
-  ) { 
+    private angulartics: Angulartics2,
+  ) {
     this.evaluationForm = _fb.group({
       email: [null, [Validators.required, this.emailValidator]],
       inputText: [null, Validators.required],
-      name: [null, Validators.required]
+      name: [null, Validators.required],
     })
   }
 
   ngOnInit() {
     // event tracking for opening recap
-    this.angulartics.eventTrack.next({ action: 'readingRecap_opened', properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }})
+    this.angulartics.eventTrack.next({
+      action: 'readingRecap_opened',
+      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
+    })
     // Slide in once component is constructed
     setTimeout(() => {
       this.slidePaneIn = true
@@ -87,48 +90,53 @@ export class ReadingRecapComponent implements OnInit {
 
     // Subscribe to current user
     this.subscriptions.push(
-      this._auth.getCurrentUser().subscribe((user) => {
+      this._auth.getCurrentUser().subscribe(user => {
         this.currentUser = user
-      })
+      }),
     ),
-    // Get Project from project service
-    this.subscriptions.push(
-      this._projects.currentProject.subscribe(
-        (project) => {
-          if (project) {
-            this.project = project
-            this.teacherId = project.teacher_id
-            // need to wait until we have the project loaded before we can proceed
-            if (project && project.comments) {
-              // Get Reading counts
-              this.getReadingCounts(project)
-              // Get time on reading data
-              this._academy.getTimeOnReading(this.project._id).pipe(take(1))
-              .subscribe((readingTimeData) => {
-                this.readingTimeData = readingTimeData.time_on_reading
-                this.processTimeChart()
-              },
-              (error) => {
-                console.error(error)
-              })
-              // need a 1 millisecond delay for the comment stats getter to evaluate
-              setTimeout(() => {
-                // only run this if we have data for any student
-                if (this.commentStats.stats.userStats && this.commentStats.stats.userStats.length > 0) {
-                  if (this.students.length===0) {
-                    this.populateStudentList(true)
-                  } else {
-                    this.populateStudentList()
+      // Get Project from project service
+      this.subscriptions.push(
+        this._projects.currentProject.subscribe(
+          project => {
+            if (project) {
+              this.project = project
+              this.teacherId = project.teacher_id
+              // need to wait until we have the project loaded before we can proceed
+              if (project && project.comments) {
+                // Get Reading counts
+                this.getReadingCounts(project)
+                // Get time on reading data
+                this._academy
+                  .getTimeOnReading(this.project._id)
+                  .pipe(take(1))
+                  .subscribe(
+                    readingTimeData => {
+                      this.readingTimeData = readingTimeData.time_on_reading
+                      this.processTimeChart()
+                    },
+                    error => {
+                      console.error(error)
+                    },
+                  )
+                // need a 1 millisecond delay for the comment stats getter to evaluate
+                setTimeout(() => {
+                  // only run this if we have data for any student
+                  if (this.commentStats.stats.userStats && this.commentStats.stats.userStats.length > 0) {
+                    if (this.students.length === 0) {
+                      this.populateStudentList(true)
+                    } else {
+                      this.populateStudentList()
+                    }
+                    this.buildReport()
                   }
-                  this.buildReport()
-                }
-              }, 1)
+                }, 1)
+              }
             }
-          }
-        },
-        (error) => {
-          console.error(error)
-        })
+          },
+          error => {
+            console.error(error)
+          },
+        ),
       )
   }
 
@@ -139,11 +147,11 @@ export class ReadingRecapComponent implements OnInit {
     // handle overall reading counts here
     this.wordCount = Math.round(project.reading_id.words.length / 2)
     this.questionCount = project.reading_id.questions.length
-    let wordsLength =  project.reading_id.words.length
-    for (let i=0;i<wordsLength;i++) {
+    let wordsLength = project.reading_id.words.length
+    for (let i = 0; i < wordsLength; i++) {
       let word = project.reading_id.words[i]
       if (word && word.styles && word.styles.includes('img')) {
-        this.imageCount+=1
+        this.imageCount += 1
       }
     }
   }
@@ -155,7 +163,7 @@ export class ReadingRecapComponent implements OnInit {
   private buildReport(): void {
     // Loop through the user stats inside of the comment stats
     for (let i = 0; i < this.commentStats.stats.userStats.length; i++) {
-      if (this.commentStats.stats.userStats[i]._id===this.currentStudent.value) {
+      if (this.commentStats.stats.userStats[i]._id === this.currentStudent.value) {
         let userStats = this.commentStats.stats.userStats[i]
         // Comments by the filtered user for displaying on the report right-out
         this.comments = userStats.comments
@@ -164,23 +172,23 @@ export class ReadingRecapComponent implements OnInit {
           min: this.commentStats.stats.comment_min,
           max: this.commentStats.stats.comment_max,
           avg: this.commentStats.stats.comment_avg,
-          val: userStats.comment_count
+          val: userStats.comment_count,
         }
         // Comment count by type horizontal bar chart setup
         this.commentCountByType = {
           emoji: userStats.emoji_comment_count,
           text: userStats.text_comment_count,
           audio: userStats.audio_comment_count,
-          reply: userStats.reply_count
+          reply: userStats.reply_count,
         }
       }
     }
 
     // If there are evaluations from the teacher on the selected student, let's display it here
     this.evaluations = []
-    if (this.project.report_evals && this.project.report_evals.length>0) {
-      this.project.report_evals.forEach((evaluation) => {
-        if (this.currentStudent.value===evaluation.user_id) {
+    if (this.project.report_evals && this.project.report_evals.length > 0) {
+      this.project.report_evals.forEach(evaluation => {
+        if (this.currentStudent.value === evaluation.user_id) {
           this.evaluations.push(evaluation)
         }
       })
@@ -191,13 +199,13 @@ export class ReadingRecapComponent implements OnInit {
   private processTimeChart(): void {
     if (this.readingTimeData && this.readingTimeData.users.length > 0) {
       const correctionFactor = 60
-      const userTimeVal = this.readingTimeData.users.find( user => this.currentStudent.value===user.user_id)
+      const userTimeVal = this.readingTimeData.users.find(user => this.currentStudent.value === user.user_id)
       // set the stats values for max, min, and average
       this.chartTimeReading = {
-        min: Math.round(this.readingTimeData.min / correctionFactor), 
-        max: Math.round(this.readingTimeData.max / correctionFactor), 
-        avg: Math.round(this.readingTimeData.avg / correctionFactor), 
-        val: userTimeVal ? Math.round(userTimeVal.reading_time / correctionFactor) : null
+        min: Math.round(this.readingTimeData.min / correctionFactor),
+        max: Math.round(this.readingTimeData.max / correctionFactor),
+        avg: Math.round(this.readingTimeData.avg / correctionFactor),
+        val: userTimeVal ? Math.round(userTimeVal.reading_time / correctionFactor) : null,
       }
     }
   }
@@ -209,11 +217,11 @@ export class ReadingRecapComponent implements OnInit {
     let removePos = -1
     // set the dropdown filter for all students
     this.commentStats.stats.userStats.forEach((student, index) => {
-      if (student._id!==this.teacherId) {
+      if (student._id !== this.teacherId) {
         this.students.push({ label: student.fullname, value: student._id })
       }
       // if the current userStats object is our teacher, mark the index
-      if (student._id===this.teacherId) {
+      if (student._id === this.teacherId) {
         // mark the index of where the teacher is
         removePos = index
       }
@@ -231,8 +239,11 @@ export class ReadingRecapComponent implements OnInit {
    */
   public changeStudentSelection(): void {
     // fire an analytic event here for tracking purposes
-    this.angulartics.eventTrack.next({ action: 'readingRecap_studentSelected', properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }})
-    this.currentStudent = this.students.find( user => user.value===this.selectedStudent)
+    this.angulartics.eventTrack.next({
+      action: 'readingRecap_studentSelected',
+      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
+    })
+    this.currentStudent = this.students.find(user => user.value === this.selectedStudent)
     this.buildReport()
     this.processTimeChart()
   }
@@ -243,7 +254,7 @@ export class ReadingRecapComponent implements OnInit {
   private emailValidator(control: FormControl): any {
     // If you change the RegExp for the email validator here, change it on the username validator as well
     let emailRe: RegExp = ALLSPARK.EMAILREGEX
-    return emailRe.test(control.value) ? null : { 'emailIncorrect': true }
+    return emailRe.test(control.value) ? null : { emailIncorrect: true }
   }
 
   /**
@@ -265,67 +276,73 @@ export class ReadingRecapComponent implements OnInit {
     let evalObj = {
       createdAt: date,
       evaluation: formValue.inputText,
-      user_id: this.currentStudent.value
+      user_id: this.currentStudent.value,
     }
     var projectToUpdate = this.project
     // add the new evaluation to the project
     projectToUpdate.report_evals.push(evalObj)
 
     // update the project with the new evaluation, create the pdf, and then email it out
-    this._projects.update(projectToUpdate, this.project._id).subscribe( project => {
+    this._projects.update(projectToUpdate, this.project._id).subscribe(project => {
       // update our project so evaluation shows in the page
       this.evaluations.push(evalObj)
 
       setTimeout(() => {
-        this.saveAsPdf().then(pdf => {
-          // convert the pdf to a data uri string
-          var pdfData = pdf.output('datauristring')
-          
+        this.saveAsPdf().then(
+          pdf => {
+            // convert the pdf to a data uri string
+            var pdfData = pdf.output('datauristring')
+
             // user our academy service to package up the email details and send it off to our api if the project successfully updated
-            this._academy.sendReadingRecap(formValue, pdfData)
-            .subscribe(
-              data => {
-                
-              },
+            this._academy.sendReadingRecap(formValue, pdfData).subscribe(
+              data => {},
               error => {
                 console.error(error)
-              })
+              },
+            )
             this.evalLoading = false
-        }, error => {
-          console.error(error)
-          this.evalLoading = false
-        })
+          },
+          error => {
+            console.error(error)
+            this.evalLoading = false
+          },
+        )
       }, 1)
-    }), error => {
-      console.error(error)
-    }
+    }),
+      error => {
+        console.error(error)
+      }
     // empty out the form
     this.evaluationForm.reset()
   }
 
   public addEvaluationOnly(evalData: any): void {
     // fire an analytic event here for tracking purposes
-    this.angulartics.eventTrack.next({ action: 'readingRecap_feedbackGiven', properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() }})
-     // create a new evaluation to save to the project
-     let evalObj = {
-      createdAt: new Date,
+    this.angulartics.eventTrack.next({
+      action: 'readingRecap_feedbackGiven',
+      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
+    })
+    // create a new evaluation to save to the project
+    let evalObj = {
+      createdAt: new Date(),
       evaluation: evalData,
-      user_id: this.currentStudent.value
+      user_id: this.currentStudent.value,
     }
     let projectToUpdate = {
       // Ensure "report_evals" exists and is an array
-      report_evals: this.project.report_evals ? this.project.report_evals : []
+      report_evals: this.project.report_evals ? this.project.report_evals : [],
     }
     // Add the new evaluation to the project
     projectToUpdate.report_evals.push(evalObj)
 
     // update the project with the new evaluation, create the pdf, and then email it out
-    this._projects.update(projectToUpdate, this.project._id).subscribe( project => {
+    this._projects.update(projectToUpdate, this.project._id).subscribe(project => {
       // update our project so evaluation shows in the page
       this.evaluations.push(evalObj)
-    }), error => {
-      console.error(error)
-    }
+    }),
+      error => {
+        console.error(error)
+      }
     // empty out the form
     this.evaluationForm.reset()
   }
@@ -333,21 +350,24 @@ export class ReadingRecapComponent implements OnInit {
   /** Downloads the report to the user's computer */
   public downloadPDF(): void {
     this.evalLoading = true
-    this.saveAsPdf().then(pdf => {
-      pdf.save('test' + '.pdf')
-      this.evalLoading = false
-    }, error => {
-      console.error(error)
-      this.evalLoading = false
-    })
+    this.saveAsPdf().then(
+      pdf => {
+        pdf.save('test' + '.pdf')
+        this.evalLoading = false
+      },
+      error => {
+        console.error(error)
+        this.evalLoading = false
+      },
+    )
   }
 
   private saveAsPdf(): any {
     return new Promise<any>((resolve, reject) => {
       // Get current scroll position and then scroll up to the top
       // Needed because the pdf will not export the whole report unless you are scrolled to the top
-      var scrollPos = document.querySelector(".sliding-pane.from-left.reading-recap.slide-in").scrollTop
-      document.querySelector(".sliding-pane.from-left.reading-recap.slide-in").scrollTo(0, 0)
+      var scrollPos = document.querySelector('.sliding-pane.from-left.reading-recap.slide-in').scrollTop
+      document.querySelector('.sliding-pane.from-left.reading-recap.slide-in').scrollTo(0, 0)
 
       let htmlRef = '#readingReport'
       let htmlDoc = document.querySelector(htmlRef)
@@ -359,24 +379,31 @@ export class ReadingRecapComponent implements OnInit {
           top: 10,
           bottom: 10,
           right: 20,
-          left: 20
+          left: 20,
         },
         height: htmlDoc.clientHeight,
-        width: htmlDoc.clientWidth
+        width: htmlDoc.clientWidth,
       }
 
       // set the scale to fit the whole report width on a page
       doc.internal.scaleFactor = 2.4
 
       // Convert the reading report to a pdf
-      doc.addHTML(htmlDoc, 20, 10, options, success => {
-        document.querySelector(".sliding-pane.from-left.reading-recap.slide-in").scrollTo(0, scrollPos)
-        resolve(doc)
-      }, error => {
-        console.error('we had an issue making the pdf')
-        document.querySelector(".sliding-pane.from-left.reading-recap.slide-in").scrollTo(0, scrollPos)
-        reject(error)
-      })
+      doc.addHTML(
+        htmlDoc,
+        20,
+        10,
+        options,
+        success => {
+          document.querySelector('.sliding-pane.from-left.reading-recap.slide-in').scrollTo(0, scrollPos)
+          resolve(doc)
+        },
+        error => {
+          console.error('we had an issue making the pdf')
+          document.querySelector('.sliding-pane.from-left.reading-recap.slide-in').scrollTo(0, scrollPos)
+          reject(error)
+        },
+      )
     })
   }
 
@@ -384,13 +411,13 @@ export class ReadingRecapComponent implements OnInit {
   public goToEvalForm(): void {
     var evalForm = document.querySelector('#evaluationForm')
     var topPos = evalForm.getBoundingClientRect().top
-    document.querySelector(".sliding-pane.from-left.reading-recap.slide-in").scrollTop = topPos
+    document.querySelector('.sliding-pane.from-left.reading-recap.slide-in').scrollTop = topPos
   }
 
   /**
    * Is Student Filtered
    */
-  public isStudentFiltered(student: any) : boolean {
+  public isStudentFiltered(student: any): boolean {
     if (this.appliedFilter && this.appliedFilter.propertyFilters.user_id) {
       return this.appliedFilter.propertyFilters.user_id.test(student._id)
     } else {
@@ -405,13 +432,15 @@ export class ReadingRecapComponent implements OnInit {
   public close() {
     this.slidePaneIn = false
     // Wait for slide closed to complete
-    setTimeout(()=> {
+    setTimeout(() => {
       this.hide.emit()
     }, 400)
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach((sub) => { sub.unsubscribe() })
-    this.students=[]
+    this.subscriptions.forEach(sub => {
+      sub.unsubscribe()
+    })
+    this.students = []
   }
 }

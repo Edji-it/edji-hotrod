@@ -5,63 +5,65 @@
 $dashToolbarHeight: 60px;
 
 .dashboard-container {
-    // margin: $base-pad;
-    // margin-top: $dashToolbarHeight + $base-pad;
-    margin-top: $base-pad;
+  // margin: $base-pad;
+  // margin-top: $dashToolbarHeight + $base-pad;
+  margin-top: $base-pad;
 }
 
 .dashboard-toolbar {
-    position: absolute;
-    top: 0px;
-    left: $sideBarWidth;
-    width: calc(100% - #{ $sideBarWidth });
-    z-index: 1;
+  position: absolute;
+  top: 0px;
+  left: $sideBarWidth;
+  width: calc(100% - #{$sideBarWidth});
+  z-index: 1;
 
-    @media(max-width: $tablet) {
-        width: 100%;
-        top: $navBarHeight;
-        left: 0px;
-    }
+  @media (max-width: $tablet) {
+    width: 100%;
+    top: $navBarHeight;
+    left: 0px;
+  }
 }
 
 .tab-2 {
-    width: 50%;
-    font-family: 'Open Sans';
-    font-size: 24px;
-    line-height: $dashToolbarHeight;
-    float: left;
-    background:darken($lightBg,10%);
-    text-align: center;
-    text-decoration: none;
-    box-shadow: inset 0px -5px 10px 0px rgba(0,0,0,0.1);
+  width: 50%;
+  font-family: 'Open Sans';
+  font-size: 24px;
+  line-height: $dashToolbarHeight;
+  float: left;
+  background: darken($lightBg, 10%);
+  text-align: center;
+  text-decoration: none;
+  box-shadow: inset 0px -5px 10px 0px rgba(0, 0, 0, 0.1);
 
-    &:hover, &:active, &:focus {
-        text-decoration: none;
-        color: #999;
-        background: #ddd;
-    }
-    
-    &.active {
-        background: $lightBg;
-        box-shadow: none;
-        color: $blue;
-    }
+  &:hover,
+  &:active,
+  &:focus {
+    text-decoration: none;
+    color: #999;
+    background: #ddd;
+  }
+
+  &.active {
+    background: $lightBg;
+    box-shadow: none;
+    color: $blue;
+  }
 }
 .dashboard-toolbar {
-    display: none;
+  display: none;
 }
 
 @media (max-width: #{$tablet}) {
-    .tab-2 {
-        font-size: 18px;
-    }
-    // .dashboard-container {
-    //     margin: 100px 10px 0px 10px;
-    // }
-    .dashboard-toolbar {
-        display: block;
-    }
-    .mnHide {
-        display: none;
-    }
+  .tab-2 {
+    font-size: 18px;
+  }
+  // .dashboard-container {
+  //     margin: 100px 10px 0px 10px;
+  // }
+  .dashboard-toolbar {
+    display: block;
+  }
+  .mnHide {
+    display: none;
+  }
 }
