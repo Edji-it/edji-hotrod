@@ -98,7 +98,7 @@ export class UserDetailsUpdateModal implements OnInit {
         this.currentUser.identities &&
         this.currentUser.identities.includes('administrator') &&
         this.currentUser &&
-        (this.currentUser.school_district && !this.currentUser.school_district.district_name)
+        (this.currentUser.school_district && !this.currentUser.school_district.district_name))
     ) {
       this.existingUser = true
       this.setFormIdentities(this.currentUser)
