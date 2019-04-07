@@ -1034,8 +1034,8 @@ export class AuthService implements CanActivate {
   public setAnalyticEventLabel(): string {
     let user = this.getUser()
     if (user._id) {
-      if (user.school_district && user.school_district.district_name) {
-        return user._id + '_' + appVersion + '_' + user.school_district.district_name
+      if (user.school && user.school.district_name) {
+        return user._id + '_' + appVersion + '_' + user.school.district_name
       } else {
         return user._id + '_' + appVersion
       }
@@ -1114,13 +1114,12 @@ export class AuthService implements CanActivate {
 
   /**
   * Searches for a school or district and returns a list from the NCES data set
-  * @param context is the parameter by which we want to search
   * @param searchText is the text string passed in that we want to search with flak
   */
-  public getSchoolDistrict(context: string, searchText: string): Observable<any> {
+  public getSchoolDistrict(searchText: string): Observable<any> {
     searchText = encodeURIComponent(searchText)
     return this._http.get<any>(
-      this.flakBaseUrl + `/schools?${context}=${searchText}&fuzziness=2`, {
+      this.flakBaseUrl + `/schools?school_name=${searchText}&district=${searchText}&fuzziness=2`, {
         headers: new HttpHeaders({
           'Content-Type': 'application/json'
         })

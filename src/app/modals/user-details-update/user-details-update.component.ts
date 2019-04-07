@@ -98,7 +98,7 @@ export class UserDetailsUpdateModal implements OnInit {
         this.currentUser.identities &&
         this.currentUser.identities.includes('administrator') &&
         this.currentUser &&
-        (this.currentUser.school_district && !this.currentUser.school_district.district_name))
+        (this.currentUser.school && !this.currentUser.school.district_name))
     ) {
       this.existingUser = true
       this.setFormIdentities(this.currentUser)
@@ -149,7 +149,7 @@ export class UserDetailsUpdateModal implements OnInit {
     }
 
     this._auth
-      .updateUser({ identities: identities, school_district: schoolInfo, phone_number: phone, sales_can_contact: contactMe })
+      .updateUser({ identities: identities, school: schoolInfo, phone_number: phone, sales_can_contact: contactMe })
       .pipe(take(1))
       .subscribe(
         (res: any) => {
@@ -250,14 +250,9 @@ export class UserDetailsUpdateModal implements OnInit {
         let searchText = this.userDetailsForm.value.school
         if (searchText!=='') {
           try {
-            let districtResults: any[] = []
             let schoolResults: any[] = []
-
-             schoolResults = await this._auth.getSchoolDistrict('school_name', searchText).toPromise()
-            districtResults = await this._auth.getSchoolDistrict('district', searchText).toPromise()
-
-             let searchResults = [...schoolResults, ...districtResults]
-            this.displayResults(searchResults)
+            schoolResults = await this._auth.getSchoolDistrict(searchText).toPromise()
+            this.displayResults(schoolResults)
           } catch (err) {
             console.error(err)
           }

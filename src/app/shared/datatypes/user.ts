@@ -46,7 +46,7 @@ interface BaseUser {
   institution_ids?: string[]
   isAcademyAdmin?: boolean
   // school_name: string, // @deprecated 3/26/2019
-  school_district: {
+  school: {
     school_name: String
     school_id: String // these are not ObjectIds, but these are Ids from the NCES data collection
     district_name: String
