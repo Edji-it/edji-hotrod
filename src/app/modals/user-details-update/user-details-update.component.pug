@@ -22,9 +22,13 @@
         div(*ngIf="!identitySelect")
           p {{ modalHeadings.body }}
           .form-group
-            label(for="schoolInput") School District
-            input#schoolInput(type="text", [formControl]="userDetailsForm.controls['school']", tabindex="0", placeholder="My District")
+            label(for="schoolInput") School/District
+            input#schoolInput(type="text", [formControl]="userDetailsForm.controls['school']", tabindex="0", placeholder="My District", #schoolInput, [ngClass]="[ schoolSuggestShow ? 'marginZero' :' ' ]", autocomplete="off")
             #msgSchoolRequired.alert.alert-info(*ngIf="userDetailsForm.controls['school'].hasError('required') && userDetailsForm.controls['school'].dirty") Enter your School District here
+            ul.list-group(*ngIf="schoolSuggestShow", (clickOutside)="schoolSuggestShow=false")
+              li.list-group-item(*ngFor="let school of schools", (click)="setSchoolInfo(school._source)")
+                p.m-0.school-name {{ school._source.school_name }}
+                p.m-0.district-name {{ school._source.district }}
           .form-group
             label(for="phoneInput") Phone Number
               small &nbsp; [Optional]

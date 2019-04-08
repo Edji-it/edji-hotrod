@@ -34,7 +34,11 @@ export class Sidebar {
         this.closeModal.isDisplayed().then(result => {
           if (result) {
             //Whatever if it is true (displayed)
-            browser.wait(this.EC.elementToBeClickable(this.closeModal), 5000, 'modal close button never became clickable')
+            browser.wait(
+              this.EC.elementToBeClickable(this.closeModal),
+              5000,
+              'modal close button never became clickable',
+            )
             this.closeModal.click()
           }
         })

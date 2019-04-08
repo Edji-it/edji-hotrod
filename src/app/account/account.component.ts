@@ -35,12 +35,8 @@ export class AccountComponent implements OnInit, OnDestroy {
 
   private subscriptions: any[] = []
 
-  constructor(
-    private _auth: AuthService, 
-    public _router: Router,
-    private angulartics: Angulartics2
-  ) { 
-    this.nameInitials = "";
+  constructor(private _auth: AuthService, public _router: Router, private angulartics: Angulartics2) {
+    this.nameInitials = ''
   }
 
   ngOnInit() {

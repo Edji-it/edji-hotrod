@@ -127,11 +127,7 @@ export class Project implements PageObjectInterface {
         this.addTextBtn.isDisplayed().then(result => {
           if (result) {
             // Desktop clicking of the add emoji comment button
-            browser.wait(
-              this.EC.elementToBeClickable(this.addTextBtn),
-              5000,
-              'never found the add text comment button',
-            )
+            browser.wait(this.EC.elementToBeClickable(this.addTextBtn), 5000, 'never found the add text comment button')
             this.addTextBtn.click()
           } else {
             // Mobile clicking of the add emoji comment button
@@ -209,7 +205,11 @@ export class Project implements PageObjectInterface {
   public createEmojiComment(): void {
     let grinningEmoji = this.getEmojiFromKeyboard("[dataname=':grinning:']")
     // Find text to select
-    browser.wait(this.EC.elementToBeClickable(element(by.css(".w[index='18']"))), 10000, 'never found words to click on')
+    browser.wait(
+      this.EC.elementToBeClickable(element(by.css(".w[index='18']"))),
+      10000,
+      'never found words to click on',
+    )
     // Select words using Quick Highlight by clicking
     this.word(26).click()
     this.word(30).click()

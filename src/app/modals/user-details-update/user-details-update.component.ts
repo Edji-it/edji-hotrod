@@ -1,7 +1,8 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core'
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
-import { take } from 'rxjs/operators'
+import { take, debounceTime, map } from 'rxjs/operators'
+import { fromEvent } from 'rxjs'
 
 import { User } from './../../shared/datatypes'
 import { AuthService, BumblebeeService, AcademyService, MailchimpService } from './../../_services'
@@ -10,10 +11,12 @@ import { ALLSPARK } from 'src/app/app.constants'
 @Component({
   selector: 'hot-user-details-update',
   templateUrl: './user-details-update.component.pug',
+  styleUrls: ['user-details-update.component.scss']
 })
 export class UserDetailsUpdateModal implements OnInit {
   @Input() showModal: boolean
   @Output() closeModal: EventEmitter<any> = new EventEmitter()
+  @ViewChild('schoolInput') input: ElementRef
 
   private currentUser: User
   private userDetailsForm: FormGroup
@@ -43,7 +46,21 @@ export class UserDetailsUpdateModal implements OnInit {
     body: string
   } = {
     header: 'Before you begin',
-    body: 'Help us customize your experience. Are you a...',
+    body: 'Help us customize your experience. Are you a...'
+  }
+
+  public schools: any[]
+  public schoolSuggestShow: boolean
+  public schoolInfo: {
+    school_name: string,
+    school_id: string,
+    district_name: string,
+    district_id: string
+  } = {
+    school_name: '',
+    school_id: '',
+    district_name: '',
+    district_id: ''
   }
 
   constructor(
@@ -81,7 +98,7 @@ export class UserDetailsUpdateModal implements OnInit {
         this.currentUser.identities &&
         this.currentUser.identities.includes('administrator') &&
         this.currentUser &&
-        !this.currentUser.school_name)
+        (this.currentUser.school && !this.currentUser.school.district_name))
     ) {
       this.existingUser = true
       this.setFormIdentities(this.currentUser)
@@ -108,11 +125,21 @@ export class UserDetailsUpdateModal implements OnInit {
     }
 
     // Set school and phone if we have it
-    let school = ''
+    let schoolInfo: schoolDistrict
     let phone = ''
     let contactMe = false
     if (form.value.school) {
-      school = form.value.school
+      let districtNameVal = this.schoolInfo.district_name
+      if (this.schoolInfo.school_name==='') {
+        districtNameVal = form.value.school
+      }
+      // set the school and district data here
+      schoolInfo = {
+        school_name: this.schoolInfo.school_name,
+        school_id: this.schoolInfo.school_id,
+        district_name: districtNameVal,
+        district_id: this.schoolInfo.district_id
+      }
     }
     if (form.value.phone) {
       phone = form.value.phone
@@ -122,7 +149,7 @@ export class UserDetailsUpdateModal implements OnInit {
     }
 
     this._auth
-      .updateUser({ identities: identities, school_name: school, phone_number: phone, sales_can_contact: contactMe })
+      .updateUser({ identities: identities, school: schoolInfo, phone_number: phone, sales_can_contact: contactMe })
       .pipe(take(1))
       .subscribe(
         (res: any) => {
@@ -207,7 +234,61 @@ export class UserDetailsUpdateModal implements OnInit {
    */
   private showTeacherForm(): void {
     this.modalHeadings.header = 'Welcome Teacher!'
-    this.modalHeadings.body = "We're honored to have you. Where do you teach?"
+    this.modalHeadings.body = `We're honored to have you. Where do you teach?`
     this.identitySelect = false
+    this.searchOnTypeInIt()
   }
+
+  /**
+   * Set up a keyup event, but debounce the input so we don't bombard our search client with a new search for each keystroke
+   */
+  private searchOnTypeInIt(): void {
+    setTimeout(() => {
+      const example = fromEvent(this.input.nativeElement, 'keyup').pipe(map(i => i))
+      const debouncedInput = example.pipe(debounceTime(250))
+      const searching = debouncedInput.subscribe(async val => {
+        let searchText = this.userDetailsForm.value.school
+        if (searchText!=='') {
+          try {
+            let schoolResults: any[] = []
+            schoolResults = await this._auth.getSchoolDistrict(searchText).toPromise()
+            this.displayResults(schoolResults)
+          } catch (err) {
+            console.error(err)
+          }
+        }
+      })
+    }, 1)
+  }
+
+   /**
+   * Sets up the results that come back so a user can select them
+   * @param results search Results that we get from the school/district lookup
+   */
+  private displayResults(results: any): void {
+    this.schools = results
+    this.schoolSuggestShow = true
+  }
+
+   /**
+   * Set the school name in the field and then set the school details to the form object
+   * @param school is the school that the user selected!
+   */
+  public setSchoolInfo(school: any) {
+    this.schoolSuggestShow = false
+    // set the schoolInfo so we can save it on form submit
+    this.schoolInfo.district_id = school.nces_district_id
+    this.schoolInfo.district_name = school.district
+    this.schoolInfo.school_id = school.nces_school_id
+    this.schoolInfo.school_name = school.school_name
+    // update the form with the selected school
+    this.userDetailsForm.controls.school.setValue(school.school_name)
+  }
+}
+
+interface schoolDistrict {
+  school_id: string
+  school_name: string
+  district_id: string
+  district_name: string
 }
