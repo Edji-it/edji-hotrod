@@ -244,9 +244,9 @@ export class UserDetailsUpdateModal implements OnInit {
    */
   private searchOnTypeInIt(): void {
     setTimeout(() => {
-      const example = fromEvent(this.input.nativeElement, 'keyup').pipe(map(i => i))
-      const debouncedInput = example.pipe(debounceTime(250))
-      const searching = debouncedInput.subscribe(async val => {
+      const keyUpEvent = fromEvent(this.input && this.input.nativeElement, 'keyup').pipe(map(i => i))
+      const debouncedInput = keyUpEvent && keyUpEvent.pipe(debounceTime(250))
+      const searching = this.input && debouncedInput.subscribe(async val => {
         let searchText = this.userDetailsForm.value.school
         if (searchText!=='') {
           try {
