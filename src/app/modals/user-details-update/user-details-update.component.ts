@@ -256,6 +256,8 @@ export class UserDetailsUpdateModal implements OnInit {
           } catch (err) {
             console.error(err)
           }
+        } else {
+          this.schoolSuggestShow = false
         }
       })
     }, 1)
