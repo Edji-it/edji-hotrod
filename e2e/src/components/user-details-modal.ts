@@ -13,6 +13,8 @@ export class UserDetailsModal {
   public submitButton = element(by.id('submitDetailsButton'))
   public finalSubmitButton = element(by.id('finalSubmitButton'))
   public schoolInput = element(by.id('schoolInput'))
+  public schoolSuggest = element(by.id('schoolSuggest'))
+  public firstSchoolSuggest = element.all(by.css('#schoolSuggest li')).first()
 
   /**
    * Complete User Details (defaults to Bot)
@@ -39,6 +41,19 @@ export class UserDetailsModal {
     if (type === 'teacher' || type === 'administrator') {
       // enter a school district name if they are a teacher or admin account type
       this.schoolInput.sendKeys('District Edji')
+      // make sure the suggested schools/districts list shows
+      browser.wait(
+        this.EC.elementToBeClickable(this.schoolSuggest),
+        5000,
+        "school suggestion list never loaded",
+      )
+      // select the first result
+      browser.wait(
+        this.EC.elementToBeClickable(this.firstSchoolSuggest),
+        5000,
+        "first school suggestion never loaded",
+      )
+      this.firstSchoolSuggest.click()
       browser.wait(
         this.EC.elementToBeClickable(this.finalSubmitButton),
         5000,

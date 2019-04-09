@@ -24,7 +24,7 @@
           .form-group
             label(for="schoolInput") School/District
             input#schoolInput(type="text", [formControl]="userDetailsForm.controls['school']", tabindex="0", placeholder="My District", #schoolInput, [ngClass]="[ schoolSuggestShow ? 'marginZero' :' ' ]", autocomplete="off")
-            ul.list-group(*ngIf="schoolSuggestShow && schools.length > 0", (clickOutside)="schoolSuggestShow=false")
+            ul#schoolSuggest.list-group(*ngIf="schoolSuggestShow && schools.length > 0", (clickOutside)="schoolSuggestShow=false")
               li.list-group-item(*ngFor="let school of schools", (click)="setSchoolInfo(school._source)")
                 p.m-0.school-name {{ school._source.school_name }}
                 p.m-0.district-name {{ school._source.district }}
