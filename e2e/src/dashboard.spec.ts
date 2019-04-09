@@ -3,24 +3,13 @@ import { browser, by, element, protractor } from 'protractor'
 import { Dashboard, Login, NewReading, Sidebar } from './page-objects'
 import { reset } from './utils/browser-methods'
 
-/*
-    27 Jan 2017
-    Last Modified: 28 Jan 2017
-    Nicholas Pumper
+const EC = protractor.ExpectedConditions // vital
 
-    e2e test the dashboard page!
-
-    - We log into all types of account.
-*/
-
-// Now into the testing.
 describe('Dashboard Page as a Hero', () => {
-  /* ---- Variable Initialization --------------- */
   let login = new Login()
   let dashboard = new Dashboard()
   let sidebar = new Sidebar()
   let newReading = new NewReading()
-  let EC = protractor.ExpectedConditions // vital
 
   beforeAll(() => {
     // Login as test account that we can fill with junk data
@@ -119,7 +108,7 @@ describe('Dashboard Page as a Hero', () => {
     6.1.17
     */
   describe('Delete Readings & Projects', () => {
-    it('Delete a project off of a new reading.', () => {
+    it('Delete a project on a reading.', () => {
       // Switch to the created readings tab on mobile (will simply skip if on desktop)
       dashboard.goToCreatedTab()
 
@@ -240,5 +229,33 @@ describe('Dashboard Page as a Hero', () => {
       browser.wait(EC.urlContains('project'), 5000, 'clicking on project card did not bring me to a project')
       sidebar.backToDash()
     })
+  })
+})
+
+describe('Dashboard page as a sidekick', () => {
+  let login = new Login()
+  let dashboard = new Dashboard()
+  let sidebar = new Sidebar()
+
+  beforeAll(() => {
+    // Login as test account that we can fill with junk data
+    login.getPage()
+    login.loginAndVerify(login.teacherUser, login.teacherPassword)
+  })
+
+  beforeEach(() => {
+    reset()
+    dashboard.getPage()
+    browser.sleep(1500)
+  })
+
+  afterAll(() => {
+    sidebar.logout()
+  })
+
+  it('should have only two active readings', async () => {
+    const numTotalReadings = await dashboard.readingCards.count()
+    const numTotalArchived = await dashboard.archivedReadingCards.count()
+    expect(numTotalReadings - 2).toEqual(numTotalArchived, 'expected there to be only two active readings on the free user dashboard')
   })
 })

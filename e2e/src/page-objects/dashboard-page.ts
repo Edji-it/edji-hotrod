@@ -7,6 +7,7 @@ export class Dashboard implements PageObjectInterface {
   // Public Instance Variables
   public readingCards = element.all(by.css('.reading-card'))
   public firstReadingCard = this.readingCards.first()
+  public archivedReadingCards = element.all(by.css('.reading-card.archived'))
   public firstReadingTitle = element.all(by.css('.reading-title__text')).first()
   public readingLoader = element(by.css('.e2e-reading-loader'))
   public secondPageFirstReadingTitle = element.all(by.css('.page-2 .reading-title__text')).first()
