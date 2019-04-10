@@ -3,24 +3,13 @@ import { browser, by, element, protractor } from 'protractor'
 import { Dashboard, Login, NewReading, Sidebar } from './page-objects'
 import { reset } from './utils/browser-methods'
 
-/*
-    27 Jan 2017
-    Last Modified: 28 Jan 2017
-    Nicholas Pumper
+const EC = protractor.ExpectedConditions // vital
 
-    e2e test the dashboard page!
-
-    - We log into all types of account.
-*/
-
-// Now into the testing.
 describe('Dashboard Page as a Hero', () => {
-  /* ---- Variable Initialization --------------- */
   let login = new Login()
   let dashboard = new Dashboard()
   let sidebar = new Sidebar()
   let newReading = new NewReading()
-  let EC = protractor.ExpectedConditions // vital
 
   beforeAll(() => {
     // Login as test account that we can fill with junk data
@@ -37,9 +26,9 @@ describe('Dashboard Page as a Hero', () => {
     sidebar.logout()
   })
 
-  // it('should arrive at dashboard', () => {
-  //   browser.wait(EC.urlContains('dashboard'), 15000, 'never arrived at dashboard')
-  // })
+  it('should arrive at dashboard', () => {
+    browser.wait(EC.urlContains('dashboard'), 15000, 'never arrived at dashboard')
+  })
   it('should paginate Created readings', async () => {
     // Wait for Readings to load into Dashboard
     browser.wait(EC.elementToBeClickable(dashboard.firstReadingCard), 8000, 'never found Created Readings on Dashboard')
@@ -119,7 +108,7 @@ describe('Dashboard Page as a Hero', () => {
     6.1.17
     */
   describe('Delete Readings & Projects', () => {
-    it('Delete a project off of a new reading.', () => {
+    it('Delete a project on a reading.', () => {
       // Switch to the created readings tab on mobile (will simply skip if on desktop)
       dashboard.goToCreatedTab()
 
@@ -161,64 +150,6 @@ describe('Dashboard Page as a Hero', () => {
       browser.wait(EC.invisibilityOf(newProjectCard), 5000, 'still see the project card after deleting from the modal')
     })
 
-    it('Make a new reading then delete it.', () => {
-      // Create Unique title for New Reading (for referencing)
-      let uniqueTitle: string = new Date().valueOf().toString()
-      // Create a new reading to control it properly thru the process
-      dashboard.openNewReading()
-      // Enter sample Reading into form
-      newReading.titleInput.sendKeys(uniqueTitle)
-      // Make private to avoid needing grade levels and subjects
-      newReading.privateButton.click()
-      newReading.contentInput.sendKeys(newReading.contentShortString)
-      // Submit New Reading
-      newReading.clickShareAndArchive()
-      browser.wait(
-        EC.elementToBeClickable(newReading.finalizeButton),
-        5000,
-        'finalize reading button never became clickable',
-      )
-      newReading.finalizeButton.click()
-      // Should redirect to Project page for new reading
-      browser.wait(EC.urlContains('project'), 7500, 'never arrived at the reading page after published')
-      // Go to the dashboard
-      sidebar.backToDash()
-      // Switch to the created readings tab on mobile (will simply skip if on desktop)
-      dashboard.goToCreatedTab()
-      // Check for the "options" on newly created reading on Dashboard
-      browser.wait(
-        EC.elementToBeClickable(element(by.css('button[testFindOptions="' + uniqueTitle + '"]'))),
-        8000,
-        'reading card options button never became clickable after load',
-      )
-      // Open Reading options
-      element(by.css('button[testFindOptions="' + uniqueTitle + '"]')).click()
-      // Select "Delete Reading"
-      browser.wait(
-        EC.elementToBeClickable(element(by.css('button[testDelete="' + uniqueTitle + '"]'))),
-        5000,
-        'copy and edit button never became clicakble after options dropdown click',
-      )
-      element(by.css('button[testDelete="' + uniqueTitle + '"]')).click()
-      // Find delete Reading confirmation modal
-      let deleteModal = element(by.id('deleteReadingModal'))
-      browser.wait(EC.presenceOf(deleteModal), 5000, 'never saw a deleteModal')
-      browser.wait(EC.presenceOf(dashboard.deleteConfirm), 5000, 'never saw a deleteConfirm on the deleteModal')
-      browser.wait(
-        EC.elementToBeClickable(dashboard.deleteConfirm),
-        5000,
-        'deleteConfirm on the deleteModal was never clickable',
-      )
-      // Delete modal confirm click has promise issues, so treat it a bit differently
-      dashboard.deleteConfirm.click()
-      // Unable to confirm title
-      browser.wait(
-        EC.invisibilityOf(element(by.cssContainingText('.reading-title-text', uniqueTitle))),
-        8000,
-        "saw the unique readingTitle (END). We aren't supposed to.",
-      )
-    }) // it ("Make a new reading then delete it")
-
     it('should get to a project by entering a code', () => {
       // Use the function to check this as it can handle multiple display types (mobile/desktop/etc)
       dashboard.enterProjectCodeFromNav(login.validProjectCode)
@@ -240,5 +171,33 @@ describe('Dashboard Page as a Hero', () => {
       browser.wait(EC.urlContains('project'), 5000, 'clicking on project card did not bring me to a project')
       sidebar.backToDash()
     })
+  })
+})
+
+describe('Dashboard page as a sidekick', () => {
+  let login = new Login()
+  let dashboard = new Dashboard()
+  let sidebar = new Sidebar()
+
+  beforeAll(() => {
+    // Login as test account that we can fill with junk data
+    login.getPage()
+    login.loginAndVerify(login.teacherUser, login.teacherPassword)
+  })
+
+  beforeEach(() => {
+    reset()
+    dashboard.getPage()
+    browser.sleep(1500)
+  })
+
+  afterAll(() => {
+    sidebar.logout()
+  })
+
+  it('should have only two active readings', async () => {
+    const numTotalReadings = await dashboard.readingCards.count()
+    const numTotalArchived = await dashboard.archivedReadingCards.count()
+    expect(numTotalReadings - 2).toEqual(numTotalArchived, 'expected there to be only two active readings on the free user dashboard')
   })
 })

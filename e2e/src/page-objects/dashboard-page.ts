@@ -1,12 +1,14 @@
 import { browser, by, element, protractor, ElementFinder } from 'protractor'
 import { PageObjectInterface } from './PageObjectInterface'
+import { reset } from '../utils/browser-methods';
 
 export class Dashboard implements PageObjectInterface {
-  private EC = protractor.ExpectedConditions // vital
+  private EC = protractor.ExpectedConditions
 
   // Public Instance Variables
   public readingCards = element.all(by.css('.reading-card'))
   public firstReadingCard = this.readingCards.first()
+  public archivedReadingCards = element.all(by.css('.reading-card.archived'))
   public firstReadingTitle = element.all(by.css('.reading-title__text')).first()
   public readingLoader = element(by.css('.e2e-reading-loader'))
   public secondPageFirstReadingTitle = element.all(by.css('.page-2 .reading-title__text')).first()
@@ -22,6 +24,8 @@ export class Dashboard implements PageObjectInterface {
   public createdListLoading = element(by.css('.created-list.loading'))
   public createdListNextPage = element(by.css('.created-list .ui-paginator-next'))
   public createdListPrevPage = element(by.css('.created-list .ui-paginator-prev'))
+  public getReadingOptionsByTitle = (title: string) => element(by.css('button[testFindOptions="' + title + '"]'))
+  public getReadingDeleteByTitle = (title: string) => element(by.css('button[testDelete="' + title + '"]'))
 
   // Dropdown buttons
   public dropDownMenu = element(by.css('.btn-icon--plain'))
@@ -145,6 +149,39 @@ export class Dashboard implements PageObjectInterface {
         })
       }
     })
+  }
+
+  deleteReadingByTitle(title: string): void {
+    reset()
+    this.getPage()
+    browser.wait(
+      this.EC.elementToBeClickable(this.getReadingOptionsByTitle(title)),
+      8000,
+      'reading card options button never became clickable after load',
+    )
+    // Open Reading options
+    this.getReadingOptionsByTitle(title).click()
+    // Select "Delete Reading"
+    browser.wait(
+      this.EC.elementToBeClickable(this.getReadingDeleteByTitle(title)),
+      5000,
+      'copy and edit button never became clicakble after options dropdown click',
+    )
+    this.getReadingDeleteByTitle(title).click()
+    // Find delete Reading confirmation modal
+    browser.wait(
+      this.EC.elementToBeClickable(this.deleteConfirm),
+      5000,
+      'deleteConfirm on the deleteModal was never clickable',
+    )
+    // Delete modal confirm click has promise issues, so treat it a bit differently
+    this.deleteConfirm.click()
+    // Unable to confirm title
+    browser.wait(
+      this.EC.invisibilityOf(element(by.cssContainingText('.reading-title-text', title))),
+      8000,
+      'expected not to see the reading on the dashboard after deleting it',
+    )
   }
 
   // Entering the project code from the home page

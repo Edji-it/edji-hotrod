@@ -1,25 +1,14 @@
 import * as path from 'path'
 import { browser, by, element, protractor } from 'protractor'
-import { NewReading, Login, Sidebar } from './page-objects'
+import { NewReading, Login, Sidebar, Dashboard } from './page-objects'
 import { reset } from './utils/browser-methods'
-
-/*
-    27 Jan 2017
-    Last Modified: 27 Jan 2017
-    Nicholas Pumper
-
-    e2e test the dashboard page!
-
-    - We log into all types of account.
-*/
 
 // Now into the testing.
 describe('New Reading Page', () => {
-  /* ---- Variable Initialization --------------- */
-
   let newReading = new NewReading()
   let login = new Login()
   let sidebar = new Sidebar()
+  let dashboard = new Dashboard()
   let EC = protractor.ExpectedConditions
 
   beforeAll(() => {
@@ -47,21 +36,10 @@ describe('New Reading Page', () => {
     browser.wait(EC.titleContains(result), 5000, 'Title should contain "Edji".')
   })
 
-  /* ---- New Reading Tests ------------------------ */
-
-  /* Test: Add a reading
-        - Go to Teacher Dashboard
-        - Click add a reading button
-        - Redirect to Add a Reading page
-        - Click on new title box and Enter title
-        - Tab/click to source url, enter URL
-        - Tab/click to contact, paste content or type in content
-        - Tab and hit enter/ click on "Add reading button"
-        - Redirect to reading page of newly created reading
-    */
   it('should add reading when all fields are filled and submitted', () => {
+    const uniqueTitle = newReading.titleString
     // Enter sample Reading into form
-    newReading.titleInput.sendKeys(newReading.titleString)
+    newReading.titleInput.sendKeys(uniqueTitle)
     // Make private to avoid needing grade levels and subjecst
     newReading.privateButton.click()
     newReading.contentInput.sendKeys(newReading.contentShortString)
@@ -80,6 +58,9 @@ describe('New Reading Page', () => {
     newReading.finalizeButton.click()
     // Should redirect to Project page for new reading
     browser.wait(EC.urlContains('project'), 5000, 'never arrived at new reading')
+
+    // clean up after this test
+    dashboard.deleteReadingByTitle(uniqueTitle)
   })
 
   // /* Test: Add reading, don’t enter title and see error
@@ -159,7 +140,7 @@ describe('New Reading Page', () => {
     /**
      * Test: Add reading with pages from a PDF
      */
-    it('should upload a PDF to a reading and save it to the reading', function() {
+    it('should upload a PDF to a reading and save it to the reading', function () {
       browser.wait(EC.elementToBeClickable(newReading.uploadPDfModalButton), 5000)
       newReading.uploadPDfModalButton.click()
       // Select File to upload
@@ -186,7 +167,7 @@ describe('New Reading Page', () => {
     })
 
     // This following test relies on the previous one for a PDF to delete.
-    it('should delete a PDF that was uploaded', function() {
+    it('should delete a PDF that was uploaded', function () {
       browser.wait(
         EC.elementToBeClickable(newReading.uploadPDfModalButton),
         5000,
@@ -198,10 +179,6 @@ describe('New Reading Page', () => {
         5000,
         'insert PDF modal did not become available',
       )
-      // Click the delete button
-      let allPdfCards = element.all(by.id('titleCard'))
-      let pdfCard = element(by.id('titleCard'))
-
       let delBtn = element(by.id('pdfDelBtn'))
       let confirmDelBtn = element(by.id('pdfDelBtnConfirm'))
 
@@ -224,7 +201,7 @@ describe('New Reading Page', () => {
      * - Create reading with image
      * - Verify new reading has image
      */
-    it('should upload an image to a reading and save it to the reading', function() {
+    it('should upload an image to a reading and save it to the reading', function () {
       newReading.insertImageButtonTap()
       browser.wait(
         EC.elementToBeClickable(newReading.imageUploadTrigger),
@@ -283,7 +260,7 @@ describe('New Reading Page', () => {
             - Click on "Publish" button
             - Redirect to reading page of newly created reading
          */
-    it('should add a reading as a draft and return to the same screen with a reading id', function() {
+    it('should add a reading as a draft and return to the same screen with a reading id', function () {
       // Reset user to dashboard
       // sidebar.backToDash()
       browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000)
