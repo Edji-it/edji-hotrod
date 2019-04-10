@@ -103,7 +103,7 @@ export class DashboardComponent implements OnInit {
     if (
       ((this.currentUser.identities && this.currentUser.identities.includes('teacher')) ||
         (this.currentUser.identities && this.currentUser.identities.includes('administrator'))) &&
-      (this.currentUser.school && !this.currentUser.school.district_name)
+      ((this.currentUser.school && !this.currentUser.school.district_name && !this.currentUser['school_name'])) // @deprecated property check of school_name
     ) {
       incomplete = true
     }

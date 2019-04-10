@@ -55,7 +55,7 @@ describe('Project Page', () => {
     })
     beforeEach(() => {
       reset()
-      project.getPage('676r')
+      project.getPage('test-comment')
     })
 
     afterAll(() => {

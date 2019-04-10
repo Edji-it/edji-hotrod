@@ -1,6 +1,6 @@
 import { browser, by, element, protractor } from 'protractor'
 
-import { Project, Sidebar } from './page-objects'
+import { Project, Sidebar, Login } from './page-objects'
 import { LoginModal } from './components'
 import { Home } from './page-objects/home-page'
 
@@ -19,6 +19,7 @@ describe('Project Page as a Project Owner: ', () => {
   /* ---- Variable Initialization --------------- */
   let project = new Project()
   let loginModal = new LoginModal()
+  let login = new Login()
   let sidebar = new Sidebar()
   let home = new Home()
   let EC = protractor.ExpectedConditions // vital
@@ -53,8 +54,8 @@ describe('Project Page as a Project Owner: ', () => {
     )
     loginModal.gotoAccountLoginButton.click()
     expect(loginModal.clickawaySquare.isPresent()).toBeTruthy()
-    loginModal.usernameInput.sendKeys('testsidekick')
-    loginModal.passwordInput.sendKeys('testsidekick16')
+    loginModal.usernameInput.sendKeys(login.heroUser)
+    loginModal.passwordInput.sendKeys(login.heroPassword)
     browser.wait(
       EC.elementToBeClickable(loginModal.accountLoginButton),
       5000,
@@ -142,8 +143,8 @@ describe('Project Page as a Project Owner: ', () => {
     )
     loginModal.gotoAccountLoginButton.click()
     expect(loginModal.clickawaySquare.isPresent()).toBeTruthy()
-    loginModal.usernameInput.sendKeys('testsidekick')
-    loginModal.passwordInput.sendKeys('testsidekick16')
+    loginModal.usernameInput.sendKeys(login.heroUser)
+    loginModal.passwordInput.sendKeys(login.heroPassword)
     browser.wait(
       EC.elementToBeClickable(loginModal.accountLoginButton),
       5000,
