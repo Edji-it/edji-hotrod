@@ -26,9 +26,9 @@ describe('Dashboard Page as a Hero', () => {
     sidebar.logout()
   })
 
-  // it('should arrive at dashboard', () => {
-  //   browser.wait(EC.urlContains('dashboard'), 15000, 'never arrived at dashboard')
-  // })
+  it('should arrive at dashboard', () => {
+    browser.wait(EC.urlContains('dashboard'), 15000, 'never arrived at dashboard')
+  })
   it('should paginate Created readings', async () => {
     // Wait for Readings to load into Dashboard
     browser.wait(EC.elementToBeClickable(dashboard.firstReadingCard), 8000, 'never found Created Readings on Dashboard')
@@ -176,12 +176,12 @@ describe('Dashboard Page as a Hero', () => {
       dashboard.goToCreatedTab()
       // Check for the "options" on newly created reading on Dashboard
       browser.wait(
-        EC.elementToBeClickable(element(by.css('button[testFindOptions="' + uniqueTitle + '"]'))),
+        EC.elementToBeClickable(dashboard.getReadingOptionsByTitle(uniqueTitle)),
         8000,
         'reading card options button never became clickable after load',
       )
       // Open Reading options
-      element(by.css('button[testFindOptions="' + uniqueTitle + '"]')).click()
+      dashboard.getReadingOptionsByTitle(uniqueTitle).click()
       // Select "Delete Reading"
       browser.wait(
         EC.elementToBeClickable(element(by.css('button[testDelete="' + uniqueTitle + '"]'))),

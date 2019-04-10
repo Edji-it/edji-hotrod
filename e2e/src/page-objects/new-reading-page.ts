@@ -62,7 +62,7 @@ export class NewReading implements PageObjectInterface {
   public groupError = element(by.id('msgLabelRequired'))
   public successAlert = element(by.id('msgDraftSaved'))
 
-  public titleString = 'Test (3 Laws) ' + new Date().valueOf() // Keep titles unique
+  public titleString = 'can_delete Test (3 Laws) ' + new Date().valueOf() // Keep titles unique
   public qTitleString = 'When and how, in early human development, did the capacity to ask questions develop?'
   public qPrompt1 = 'Do you really think this timeline is accurate?'
   public qPrompt2 = 'Are you willing to give up the information?'
