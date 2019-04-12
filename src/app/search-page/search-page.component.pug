@@ -133,7 +133,7 @@ nav-bar([showDashboardOptions]="true")
                             i.hidden-md-down.ws-nowrap {{ ' shared ' + (reading.updatedAt | edjidate:'timeAgo':null:secondsAgo) }}
                             .btn.btn-sm.btn-primary.float-right((click)="openReadingPreview(reading)", [class.force-hover]="readingCardHover && previewIndex===i") Preview
                             i.hidden-lg-up.ws-nowrap {{ ' shared ' + (reading.updatedAt | edjidate:'timeAgo':null:secondsAgo) }}
-                        hot-reading-card([reading]="reading", [readOnly]="true", (mouseenter)="readingCardHoverSet(true, i)", (mouseleave)="readingCardHoverSet(false)", [class.card-hover]="readingCardHover && previewIndex===i")
+                        hot-reading-card((click)="openReadingPreview(reading)", [reading]="reading", [readOnly]="true", (mouseenter)="readingCardHoverSet(true, i)", (mouseleave)="readingCardHoverSet(false)", [class.card-hover]="readingCardHover && previewIndex===i")
                 </ng-template>
             </p-dataList>
 //- Reading Preview Modal
