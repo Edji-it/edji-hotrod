@@ -1,11 +1,14 @@
 import { Title } from '@angular/platform-browser'
 import { Observable, Subscription } from 'rxjs'
-import { Router, ActivatedRoute, Params } from '@angular/router'
+import { Router, ActivatedRoute } from '@angular/router'
 import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Store } from '@ngrx/store'
+import { Angulartics2 } from 'angulartics2'
 
 import { AuthService, ProjectService, ReadingService, SocketService, AudioService, AcademyService } from '../_services'
 import { Project, Reading, User } from './../shared/datatypes'
-import { Angulartics2 } from 'angulartics2'
+import { ProjectActions, RetrieveProject } from './../reducers/project.reducers'
+import { take } from 'rxjs/operators'
 
 @Component({
   // moduleId: module.id,
@@ -18,12 +21,6 @@ import { Angulartics2 } from 'angulartics2'
   ],
 })
 export class ProjectPageComponent implements OnInit, OnDestroy {
-  /*
-        Project Page
-        Last Mod: 29 July 2017 - Nick Pumper
-
-        The bones for where a project will sit inside of.
-    */
 
   public project: Project = <Project>{}
   public reading: any = {}
@@ -31,7 +28,6 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
   private joinedRoom: boolean = false
   public error: string
   private user: User
-  // private liveCount: number = 1
   private createdDate: Date
   private createDate: string
   public showLoginModal: boolean = false
@@ -47,7 +43,8 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
     private _readings: ReadingService,
     private _title: Title,
     private angulartics: Angulartics2,
-  ) {}
+    private store: Store<{ project: Project }>
+  ) { }
 
   ngOnInit() {
     // this makes the window always render scrolled to the top
@@ -73,8 +70,11 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
     )
 
     // Set current project AND subscribe to updates from that project
-    this._projects.setCurrentProject(idParam).subscribe(
+    this._projects.setCurrentProject(idParam).pipe(take(1)).subscribe()
+
+    this.store.select('projects').subscribe(
       project => {
+        console.log('GOT PROJECT ON PROJECT PAGE', project)
         if (project) {
           // If the reading is archived, we'll show them a banner or modal
           if (project.archived) {
@@ -124,6 +124,8 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
         }
       },
     )
+
+    // this.store.dispatch(new RetrieveProject(idParam))
   }
 
   ngOnDestroy() {

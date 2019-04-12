@@ -4,13 +4,15 @@ import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs'
 import { map, take } from 'rxjs/operators'
 import { Angulartics2 } from 'angulartics2'
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
+import { Store } from '@ngrx/store'
 
 // Project Dependencies
 import { AuthService } from './auth.service'
 import { SocketService } from './socket.service'
-import { CommentStats, iCommentStats, EdjiComment, Project, User, BaseComment } from '../shared/datatypes'
+import { CommentStats, EdjiComment, Project, User } from '../shared/datatypes'
 import { ReadingService } from './reading.service'
 import { AcademyService } from './academy.service'
+import { ProjectState, ProjectActions, SetProject } from './../reducers/project.reducers'
 
 @Injectable()
 export class ProjectService {
@@ -89,6 +91,7 @@ export class ProjectService {
     private _readings: ReadingService,
     private angulartics: Angulartics2,
     private _academy: AcademyService,
+    private store: Store<{ project: ProjectState }>
   ) {
     // needs to be constructed here or else it returns undefined
     this._commentStats = new CommentStats()
@@ -216,6 +219,7 @@ export class ProjectService {
    * @returns observable with project data
    */
   public setCurrentProject(projectCode: string): Observable<any> {
+    console.log('got id code', projectCode)
     return this._http
       .get(
         this._auth.getUrl() + '/api/v1/projects/' + encodeURIComponent(projectCode) + '?pop[]=reading_id&pop[]=teacher',
@@ -249,6 +253,9 @@ export class ProjectService {
           ) {
             this.getUserInfoFromProject(project)
           }
+
+          // temporarily mimick this behavior in store
+          this.store.dispatch(new SetProject(this.project))
           // Return the project along the current Observable
           return this.project
         }),

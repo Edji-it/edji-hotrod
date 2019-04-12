@@ -22,7 +22,7 @@ Sentry.init({
 
 @Injectable()
 export class SentryErrorHandler implements ErrorHandler {
-  constructor() {}
+  constructor() { }
   handleError(error) {
     // Post error to Sentry
     Sentry.captureException(error.originalError || error)
@@ -132,6 +132,10 @@ import { LicenseWelcomeComponent } from './license-welcome/license-welcome.compo
 import { ReadingRecapComponent } from './project-page/owner-tools/reading-recap/reading-recap.component'
 import { TeamPageComponent } from './team-page/team-page.component'
 import { SearchPage } from './search-page/search-page.component'
+import { StoreModule } from '@ngrx/store'
+import { reducers, metaReducers } from './reducers'
+import { EffectsModule } from '@ngrx/effects';
+import { ProjectEffects } from './reducers/project.effects';
 
 // Configure Hammer.js
 export class MyHammerConfig extends HammerGestureConfig {
@@ -268,6 +272,8 @@ const APP_PROVIDERS = [
     TooltipModule,
     Ng4TwitterTimelineModule,
     NgxPageScrollModule,
+    StoreModule.forRoot(reducers, { metaReducers }),
+    EffectsModule.forRoot([ProjectEffects])
   ],
   providers: [
     // expose our Services and Providers into Angular's dependency injection
@@ -275,4 +281,4 @@ const APP_PROVIDERS = [
     APP_PROVIDERS,
   ],
 }) //@NgModule
-export class AppModule {}
+export class AppModule { }

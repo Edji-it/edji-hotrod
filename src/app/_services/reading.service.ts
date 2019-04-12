@@ -137,7 +137,7 @@ export class ReadingService {
   }
 
   public setReadingObj(reading: any): void {
-    // console.log("Set", reading)
+    console.log("Set", reading)
     if (reading._id) {
       this.readingValue = reading
       this.readingSource.next(this.readingValue)
