@@ -1,5 +1,5 @@
 #readingArchivedModal.modal.fade-in.show
   .modal-dialog
     .modal-content
-      .modal-body
+      .modal-body((clickOutside)="close()")
         p {{ reading.title }}
