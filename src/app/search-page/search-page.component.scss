@@ -110,3 +110,13 @@
 .w.br {
   height: 4px;
 }
+
+.force-hover {
+  box-shadow: 0 0px 15px 0px rgba(33, 192, 241, 0.5);
+  background: #21c0f1;
+  color: #fff;
+}
+
+.card-hover {
+  cursor: pointer;
+}

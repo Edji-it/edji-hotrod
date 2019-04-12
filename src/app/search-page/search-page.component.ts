@@ -54,6 +54,8 @@ export class SearchPage implements OnInit {
 
   // State vars
   public loading: boolean = true
+  public readingCardHover: boolean
+  public previewIndex: number = 0
 
   // MAKE SUBJECTS COMPONENT
   public subjects: { id: string; name: string }[] = [
@@ -256,8 +258,13 @@ export class SearchPage implements OnInit {
    * Opens the reading preview modal for the selected reading
    * @param reading is the reading we want to open the preview modal on
    */
-  public openReadingPreview(reading: Reading) {
+  public openReadingPreview(reading: Reading): void {
     this.showReadingPreviewModal = true
     this.selectedReading = reading
+  }
+
+  public readingCardHoverSet(show: boolean, index?: number): void {
+    this.previewIndex = index ? index : 0
+    this.readingCardHover = show
   }
 }
