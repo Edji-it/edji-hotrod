@@ -5,12 +5,12 @@ import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
 import { AuthService, ReadingService } from '../_services'
-import { User } from '../shared/datatypes'
+import { User, Reading } from '../shared/datatypes'
 
 @Component({
   selector: 'app-search-page',
   templateUrl: './search-page.component.pug',
-  styleUrls: ['./search-page.component.scss'],
+  styleUrls: ['./search-page.component.scss']
 })
 export class SearchPage implements OnInit {
   private subscriptions: Subscription[] = []
@@ -36,6 +36,10 @@ export class SearchPage implements OnInit {
   public first: number = 0
   public rows: number = 15
   public total: number = 15
+
+  // Modal Toggle
+  public showReadingPreviewModal: boolean
+  public selectedReading: Reading
 
   // Search
   public searchTerm: string = ''
@@ -246,5 +250,14 @@ export class SearchPage implements OnInit {
         console.error(err)
       },
     )
+  }
+
+  /**
+   * Opens the reading preview modal for the selected reading
+   * @param reading is the reading we want to open the preview modal on
+   */
+  public openReadingPreview(reading: Reading) {
+    this.showReadingPreviewModal = true
+    this.selectedReading = reading
   }
 }

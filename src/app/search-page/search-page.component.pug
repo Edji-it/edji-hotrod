@@ -131,7 +131,7 @@ nav-bar([showDashboardOptions]="true")
                             .comment__avatar.mb-0 {{reading.owner.fullname.substr(0,2).toUpperCase()}}
                             follow-tag([owner]="reading.owner")
                             i.hidden-md-down.ws-nowrap {{ ' shared ' + (reading.updatedAt | edjidate:'timeAgo':null:secondsAgo) }}
-                            .btn.btn-sm.btn-primary.float-right([routerLink]="['/new-reading']", [queryParams]="{ copyId: reading._id }") Get this Reading
+                            .btn.btn-sm.btn-primary.float-right((click)="openReadingPreview(reading)") Preview
                             i.hidden-lg-up.ws-nowrap {{ ' shared ' + (reading.updatedAt | edjidate:'timeAgo':null:secondsAgo) }}
                         hot-reading-card([reading]="reading", [readOnly]="true")
                         .feed__reading-preview(*ngIf="reading.words_preview")
@@ -150,3 +150,8 @@ nav-bar([showDashboardOptions]="true")
                             span.w &hellip;
                 </ng-template>
             </p-dataList>
+//- Reading Preview Modal
+hot-reading-preview-modal(
+    *ngIf="showReadingPreviewModal",
+    [reading]="selectedReading"
+)
