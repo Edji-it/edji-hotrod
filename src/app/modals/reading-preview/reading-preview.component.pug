@@ -1,5 +1,32 @@
 #readingArchivedModal.modal.fade-in.show
   .modal-dialog
     .modal-content
+      .modal-header
+        .reading-icon.hide-for-archived
+          span {{reading.title.substring(0,2)}}
+        .archived-icon.show-for-archived
+          .icon.icon-folder
+        .reading-title([class.no-version]="!reading.version_count")
+          .reading-title--center-row
+            h1.small.reading-title__text {{reading.title}} 
+              span(*ngIf="!reading.title")
+                i Untitled
+        button.close((click)='close()') &times;
       .modal-body((clickOutside)="close()")
-        p {{ reading.title }}
+        //- Word Loop: reading.words is one big array of individual "words", which can also be puncuation or media
+        span.w(*ngFor="let w of reading.words", [ngClass]="[ w && w.styles ? w.styles.join(' ') : '' ]", [class.read-only]="true")
+          a.w(
+            *ngIf="wHasStyle(w, 'a')",
+            [attr.href]="w.url ? ((w.url.indexOf('//') > -1) ? w.url : ('//' + w.url)) : null",
+            target="_blank"
+          )
+          ng-container(*ngIf="!wHasStyle(w, 'a')")
+            | {{ (!(w && w.styles) || wHasStyle(w, 'space')) ? '&nbsp;' : w && w.str }}
+          .img-wrap(*ngIf="wHasStyle(w, 'img')")
+            img.reading-image(
+                [src]="w.url"
+            )
+          edji-question(
+            *ngIf="wHasStyle(w, 'question') && reading.questions",
+            [question]="reading.questions[w.index]"
+          )
