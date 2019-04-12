@@ -1,32 +1,44 @@
 #readingArchivedModal.modal.fade-in.show
-  .modal-dialog
-    .modal-content
-      .modal-header
-        .reading-icon.hide-for-archived
-          span {{reading.title.substring(0,2)}}
-        .archived-icon.show-for-archived
-          .icon.icon-folder
-        .reading-title([class.no-version]="!reading.version_count")
-          .reading-title--center-row
-            h1.small.reading-title__text {{reading.title}} 
-              span(*ngIf="!reading.title")
-                i Untitled
-        button.close((click)='close()') &times;
-      .modal-body((clickOutside)="close()")
-        //- Word Loop: reading.words is one big array of individual "words", which can also be puncuation or media
-        span.w(*ngFor="let w of reading.words", [ngClass]="[ w && w.styles ? w.styles.join(' ') : '' ]", [class.read-only]="true")
-          a.w(
-            *ngIf="wHasStyle(w, 'a')",
-            [attr.href]="w.url ? ((w.url.indexOf('//') > -1) ? w.url : ('//' + w.url)) : null",
-            target="_blank"
-          )
-          ng-container(*ngIf="!wHasStyle(w, 'a')")
-            | {{ (!(w && w.styles) || wHasStyle(w, 'space')) ? '&nbsp;' : w && w.str }}
-          .img-wrap(*ngIf="wHasStyle(w, 'img')")
-            img.reading-image(
-                [src]="w.url"
-            )
-          edji-question(
-            *ngIf="wHasStyle(w, 'question') && reading.questions",
-            [question]="reading.questions[w.index]"
-          )
+  .modal-dialog((clickOutside)="close()")
+    .modal-content.reading-details
+      .comment__avatar {{reading.owner.fullname.substr(0,2).toUpperCase()}}
+      follow-tag([owner]="reading.owner")
+      .tag-row
+        ng-container(*ngIf="reading.subjects && reading.subjects.length > 0")
+          span.badge-pill.badge-secondary.badge-subject(*ngFor="let subject of reading.subjects") {{ subject | subjectName }}
+      i.icon.lg(*ngIf="reading.public", [innerHTML]="':earth_americas:' | emojione")
+      i.icon.lg(*ngIf="!reading.public", [innerHTML]="':lock:' | emojione")
+    .row
+      .col-10
+        .modal-content
+          .modal-header
+            .reading-icon.hide-for-archived
+              span {{reading.title.substring(0,2)}}
+            .archived-icon.show-for-archived
+              .icon.icon-folder
+            .reading-title([class.no-version]="!reading.version_count")
+              .reading-title--center-row
+                h1.small.reading-title__text {{reading.title}} 
+                  span(*ngIf="!reading.title")
+                    i Untitled
+            button.close((click)='close()') &times;
+          .modal-body
+            //- Annotator-Lite
+            span.w(*ngFor="let w of reading.words", [ngClass]="[ w && w.styles ? w.styles.join(' ') : '' ]", [class.read-only]="true")
+              a.w(
+                *ngIf="wHasStyle(w, 'a')",
+                [attr.href]="w.url ? ((w.url.indexOf('//') > -1) ? w.url : ('//' + w.url)) : null",
+                target="_blank"
+              )
+              ng-container(*ngIf="!wHasStyle(w, 'a')")
+                | {{ (!(w && w.styles) || wHasStyle(w, 'space')) ? '&nbsp;' : w && w.str }}
+              .img-wrap(*ngIf="wHasStyle(w, 'img')")
+                img.reading-image(
+                    [src]="w.url"
+                )
+              edji-question(
+                *ngIf="wHasStyle(w, 'question') && reading.questions",
+                [question]="reading.questions[w.index]"
+              )
+      .col-2
+        .reading-actions

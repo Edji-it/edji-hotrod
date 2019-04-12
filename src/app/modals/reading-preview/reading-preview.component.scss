@@ -1,3 +1,32 @@
 .modal-dialog {
   min-width: calc(100% - 200px);
 }
+
+.reading-details {
+  display: inline;
+  padding: 10px 15px 15px 0px;
+  bottom: 20px;
+}
+
+.comment__avatar {
+  position: relative;
+  display: inline-block;
+  left: 0px;
+  top: 0px;
+  margin: 10px;
+  opacity: 1;
+}
+
+.tag-row {
+  margin: 0px 10px -5px 10px;
+}
+
+.emojioneemoji {
+  height: 1.5em;
+  width: 1.5em;
+}
+
+.lg {
+  height: 1.5em;
+  width: 1.5em;
+}
