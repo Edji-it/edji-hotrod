@@ -27,6 +27,10 @@ export class ReadingPreviewModal implements AfterViewInit, OnInit {
       let fullReading: Reading
       fullReading = await this._readings.get(this.reading._id).toPromise()
       this.reading.words = fullReading.words
+      this.reading.questions = fullReading.questions
+      if (this.reading.questions) {
+        this.updateQuestionNumbers(this.reading.questions)
+      }
     } catch (err) {
       console.error(err)
     }
@@ -39,8 +43,11 @@ export class ReadingPreviewModal implements AfterViewInit, OnInit {
     }, 1)
   }
 
-  public goHome(): void {
-    this._router.navigate(['/dashboard'])
+  /**
+   * Sends user to the New Reading page with the copyId query param
+   */
+  public copyReading(): void {
+    this._router.navigate(['/new-reading'], { queryParams: { copyId: this.reading._id }})
   }
 
   /**
@@ -57,6 +64,13 @@ export class ReadingPreviewModal implements AfterViewInit, OnInit {
   public close(): void {
     if (this.initialized) {
       this.closeModal.emit()
+    }
+  }
+
+  // Adds the question number to each question for proper rendering
+  private updateQuestionNumbers(questions) {
+    for (let i = 0; i < questions.length; i++) {
+      questions[i].question_number = i + 1
     }
   }
 }

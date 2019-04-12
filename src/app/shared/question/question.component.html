@@ -79,7 +79,7 @@
           <!--<i class="icon icon-{{type.type}}-comment icon__answer-type"></i>-->
         </div>
       </div>
-      <div *ngIf="!question.new">
+      <div *ngIf="!question.new && !readOnly">
         <!-- Answer Input  -->
         <div *ngIf="!hasUserAnswered()">
           <open-ended-answers

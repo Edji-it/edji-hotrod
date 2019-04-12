@@ -31,6 +31,8 @@ export class QuestionComponent implements OnInit, OnDestroy {
   public question: EdjiQuestion
   @Input()
   public answers: EdjiComment[]
+  @Input()
+  public readOnly: boolean
   // What kind of answers is this question given?
   // The corresponding one is toggled in the template.
   @Input()

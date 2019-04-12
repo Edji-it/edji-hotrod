@@ -9,7 +9,7 @@
       i.icon.lg(*ngIf="reading.public", [innerHTML]="':earth_americas:' | emojione")
       i.icon.lg(*ngIf="!reading.public", [innerHTML]="':lock:' | emojione")
     .row
-      .col-10
+      .col-sm-10
         .modal-content
           .modal-header
             .reading-icon.hide-for-archived
@@ -38,7 +38,15 @@
                 )
               edji-question(
                 *ngIf="wHasStyle(w, 'question') && reading.questions",
-                [question]="reading.questions[w.index]"
+                [question]="reading.questions[w.index]",
+                [readOnly]="true"
               )
-      .col-2
-        .reading-actions
+      .col-sm-2.p-0
+        .modal-content.reading-actions
+          p Use this Reading
+          button.btn.btn-action.mb-2((click)="shareAction()") 
+            | Share
+            i.icon.icon-create.mr-0.icon--btn-inline
+          button.btn.btn-primary((click)="copyReading()") 
+            | Edit
+            i.icon.icon-create.mr-0.icon--btn-inline
