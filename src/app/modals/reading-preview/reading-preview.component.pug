@@ -43,10 +43,21 @@
               )
       .col-sm-2.p-0
         .modal-content.reading-actions
-          p Use this Reading
-          button.btn.btn-action.mb-2((click)="shareAction()") 
+          p.text-center.actions-title.mb-3 Use this Reading
+          button.btn.btn-action.mb-2((click)="createReading()") 
             | Share
             i.icon.icon-create.mr-0.icon--btn-inline
           button.btn.btn-primary((click)="copyReading()") 
             | Edit
             i.icon.icon-create.mr-0.icon--btn-inline
+//- Create First Group
+hot-add-project-modal.modal-will-fade(
+  *ngIf="showFirstGroupModal",
+  [class.show]="showFirstGroupModal", 
+  [heading]="'Create and Share First Group'",
+  [subheading]="'Your Reading has been saved! Now create your first group to publish this Reading and share with students.'",
+  [reading]="reading", 
+  [groupLabel]="'Group 1'",
+  (groupSaved)="finalizeShare($event)",
+  (closeModal)="showFirstGroupModal = false"
+)

@@ -1,3 +1,5 @@
+@import '../../../sass/base/variables';
+
 .modal-dialog {
   min-width: calc(100% - 200px);
 }
@@ -33,4 +35,10 @@
 .lg {
   height: 1.5em;
   width: 1.5em;
+}
+
+.actions-title {
+  color: $medium-gray;
+  font-size: 12px;
+  font-weight: 500;
 }

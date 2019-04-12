@@ -140,5 +140,6 @@ nav-bar([showDashboardOptions]="true")
 hot-reading-preview-modal(
     *ngIf="showReadingPreviewModal",
     [reading]="selectedReading",
+    [user]="user",
     (closeModal)="showReadingPreviewModal=false"
 )
