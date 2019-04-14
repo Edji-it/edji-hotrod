@@ -144,6 +144,16 @@ hot-reading-preview-modal(
     (closeModal)="showReadingPreviewModal=false",
     (createSuccess)="readingCreateFromPreviewSuccess($event)"
 )
+//- Confirm if user wants to archive a past reading
+hot-confirm-archive-modal.modal-will-fade(
+  *ngIf="showConfirmArchiveModal",
+  [class.show]="showConfirmArchiveModal", 
+  (confirmArchive)="showConfirmArchiveModal=false; showFirstGroupModal = true",
+  (declineArchive)="showConfirmArchiveModal=false",
+  (goHero)="showHeroParam=true",
+  (closeModal)="showConfirmArchiveModal=false",
+  [readingToArchive]="readingToArchive"
+)
 //- Create First Group
 hot-add-project-modal.modal-will-fade(
     *ngIf="showFirstGroupModal",

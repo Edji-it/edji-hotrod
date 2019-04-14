@@ -1,8 +1,8 @@
 #readingArchivedModal.modal.fade-in.show
   .modal-dialog((clickOutside)="close()")
     .modal-content.reading-details
-      .comment__avatar {{reading.owner.fullname.substr(0,2).toUpperCase()}}
-      follow-tag([owner]="reading.owner")
+      .comment__avatar {{reading['owner'].fullname.substr(0,2).toUpperCase()}}
+      follow-tag([owner]="reading['owner']")
       .tag-row
         ng-container(*ngIf="reading.subjects && reading.subjects.length > 0")
           span.badge-pill.badge-secondary.badge-subject(*ngFor="let subject of reading.subjects") {{ subject | subjectName }}
@@ -21,7 +21,7 @@
                 h1.small.reading-title__text {{reading.title}} 
                   span(*ngIf="!reading.title")
                     i Untitled
-            button.close((click)='close()') &times;
+            button#readingPreviewClose.close((click)='close()') &times;
           .modal-body
             //- Annotator-Lite
             span.w(*ngFor="let w of reading.words", [ngClass]="[ w && w.styles ? w.styles.join(' ') : '' ]", [class.read-only]="true")
@@ -44,9 +44,9 @@
       .col-sm-2.p-0
         .modal-content.reading-actions
           p.text-center.actions-title.mb-3 Use this Reading
-          button.btn.btn-action.mb-2((click)="createReading()") 
+          button#shareReadingButton.btn.btn-action.mb-2((click)="createReading()") 
             | Share
             i.icon.icon-create.mr-0.icon--btn-inline
-          button.btn.btn-primary((click)="copyReading()") 
+          button#editReadingButton.btn.btn-primary((click)="copyReading()") 
             | Edit
             i.icon.icon-create.mr-0.icon--btn-inline

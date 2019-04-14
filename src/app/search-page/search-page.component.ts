@@ -10,7 +10,7 @@ import { User, Reading, Project } from '../shared/datatypes'
 @Component({
   selector: 'app-search-page',
   templateUrl: './search-page.component.pug',
-  styleUrls: ['./search-page.component.scss']
+  styleUrls: ['./search-page.component.scss'],
 })
 export class SearchPage implements OnInit {
   private subscriptions: Subscription[] = []
@@ -40,6 +40,7 @@ export class SearchPage implements OnInit {
   // Modal Toggle
   public showReadingPreviewModal: boolean
   public showFirstGroupModal: boolean
+  public showConfirmArchiveModal: boolean
   public selectedReading: Reading
   public createdReading: Reading
 
@@ -135,31 +136,31 @@ export class SearchPage implements OnInit {
         }
         this.loadFeed()
       }),
+      this._readings.currentUserReadings.subscribe(
+        userReadings => {
+          if (!userReadings.readings) {
+            // If no readings, nothing to handle
+            return
+          }
+
+          // If we have readings, don't request created readings again
+          this.readingArchivalSet = true
+          if (!this.user.hero_status && userReadings.readings[1] && !userReadings.readings[1].archived) {
+            // Take the second reading and make sure it is archived
+            this.readingToArchive = userReadings.readings[1]
+            // reading that we'll be setting as our readingsArchivedBefore property on the user - send PUT to server
+            this.readingsArchivedBefore = userReadings.readings[0].createdAt
+          } else {
+            // Clear values
+            delete this.readingToArchive
+            delete this.readingsArchivedBefore
+          }
+        },
+        err => {
+          console.error(err)
+        },
+      ),
     )
-
-    try {
-      let userReadings = await this._readings.currentUserReadings.toPromise()
-
-      if (!userReadings.readings) {
-        // If no readings, nothing to handle
-        return
-      }
-
-      // If we have readings, don't request created readings again
-      this.readingArchivalSet = true
-      if (!this.user.hero_status && userReadings.readings[1] && !userReadings.readings[1].archived) {
-        // Take the second reading and make sure it is archived
-        this.readingToArchive = userReadings.readings[1]
-        // reading that we'll be setting as our readingsArchivedBefore property on the user - send PUT to server
-        this.readingsArchivedBefore = userReadings.readings[0].createdAt
-      } else {
-        // Clear values
-        delete this.readingToArchive
-        delete this.readingsArchivedBefore
-      }
-    } catch (err) {
-      console.error(err)
-    }
   }
 
   /**
@@ -302,11 +303,20 @@ export class SearchPage implements OnInit {
     this.readingCardHover = show
   }
 
-  public readingCreateFromPreviewSuccess(createdReading: Reading): void {
+  /**
+   * Verifies the user can save this reading without having to push one in to the archives
+   * @param createdReading the new reading
+   */
+  public readingCreateFromPreviewSuccess(createdReading: Reading) {
     this.createdReading = createdReading
     // Need to dismiss the reading preview modal and then we can show the new group modal
     this.showReadingPreviewModal = false
-    this.showFirstGroupModal = true
+
+    if (!this.user.hero_status && this.readingToArchive) {
+      this.showConfirmArchiveModal = true
+    } else {
+      this.showFirstGroupModal = true
+    }
   }
 
   /**

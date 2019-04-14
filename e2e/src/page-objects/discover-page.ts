@@ -14,6 +14,12 @@ export class Discover implements PageObjectInterface {
   public unfollowTags = element.all(by.css('.badge-unfollow'))
   public feedReadings = element.all(by.css('.feed__reading'))
   public firstFeedReading = this.feedReadings.first()
+  public feedTitles = element.all(by.css('.feed__reading .reading-title__text'))
+  public firstFeedTitle = this.feedTitles.first()
+  public readingPreview = element(by.id('readingArchivedModal'))
+  public shareReadingBtn = element(by.id('shareReadingButton'))
+  public editReadingBtn = element(by.id('editReadingButton'))
+  public closeReadingPreviewBtn = element(by.id('readingPreviewClose'))
 
   // Discover Filters
   public filterPublic = element(by.id('discoverFilterPublic'))
@@ -74,6 +80,35 @@ export class Discover implements PageObjectInterface {
   hasClass(el: any, cls: string) {
     return el.getAttribute('class').then(classes => {
       return classes.split(' ').indexOf(cls) !== -1
+    })
+  }
+
+  validateReadingTitle(title: string) {
+    return element.all(by.css('.reading-title__text')).reduce((acc, el) => {
+      return el.getText().then(text => {
+        return acc || text.includes(title)
+      })
+    }, false)
+  }
+
+  getReadingTitle(el: any) {
+    return el.getText()
+  }
+
+  public closeReadingPreview(): void {
+    // Click the share button for new reading no matter if it is on desktop or mobile
+    this.closeReadingPreviewBtn.isPresent().then(result => {
+      if (result) {
+        this.closeReadingPreviewBtn.isDisplayed().then(result => {
+          if (result) {
+            browser.wait(
+              this.EC.elementToBeClickable(this.closeReadingPreviewBtn),
+              5000,
+              'failed to close the reading preview',
+            )
+          }
+        })
+      }
     })
   }
 }
