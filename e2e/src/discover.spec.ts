@@ -115,6 +115,13 @@ describe('Discover Feed', () => {
   })
 
   describe('reading preview', () => {
+    beforeAll(() => {
+      sidebar.logout()
+      login.getPage()
+      browser.wait(EC.elementToBeClickable(login.loginButton), 5000)
+      login.loginAndVerify(login.botUser, login.botPassword)
+    })
+
     beforeEach(() => {
       sidebar.navDiscover.click()
     })
@@ -129,11 +136,6 @@ describe('Discover Feed', () => {
       browser.wait(EC.visibilityOf(discover.readingPreview), 5000, 'reading preview was not visible')
       browser.wait(EC.elementToBeClickable(discover.shareReadingBtn), 5000, 'share reading button was not clickable')
       discover.closeReadingPreview()
-      browser.wait(
-        EC.invisibilityOf(discover.readingPreview),
-        5000,
-        'reading preview was visible when it should not be',
-      )
     })
 
     it('should open reading preview and edit a reading then save it', () => {
@@ -142,16 +144,20 @@ describe('Discover Feed', () => {
         5000,
         'first reading in discover feed was not clickable',
       )
-
+      // get the title of the first reading, we will need this to compare later
       let readingTitle = discover.getReadingTitle(discover.firstFeedTitle)
-
       discover.firstFeedReading.click()
       browser.wait(EC.elementToBeClickable(discover.editReadingBtn), 5000, 'share reading button was not clickable')
       discover.editReadingBtn.click()
+      // wait for us to hit the new reading page with the reading from the discover feed
+      browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000, 'never arrived to the new reading page with existing reading')
+      
+      // grab the title of the reading for which we are editing and compare the two
+      let titleValue = discover.getInputFieldText(newReading.titleInput)
+      // expect(readingTitle == titleValue).toBeTruthy('the new reading we are about to create does not match what we just got from the discover feed')
+
+      let newReadingTitle = `rp - ${new Date().valueOf()}`
       newReading.titleInput.clear()
-
-      let newReadingTitle = `${readingTitle} - rp - ${new Date().valueOf()}`
-
       newReading.titleInput.sendKeys(newReadingTitle)
       // Hit save
       newReading.clickShareAndArchive()
@@ -162,6 +168,7 @@ describe('Discover Feed', () => {
       newReading.shareCodeModalCloseClick()
       browser.wait(EC.invisibilityOf(newReading.shareCodeModalClose), 5000, 'share reading code modal never dismissed')
       sidebar.logo.click()
+      browser.wait(EC.elementToBeClickable(dashboard.firstReadingCard), 5000, 'never got back to the dashboard')
       // Check title of most recent readings
       let foundTitle = discover.validateReadingTitle(newReadingTitle)
       expect(foundTitle).toBeTruthy()
@@ -173,6 +180,11 @@ describe('Discover Feed', () => {
       discover.firstFeedReading.click()
       browser.wait(EC.elementToBeClickable(discover.shareReadingBtn), 5000, 'share reading button was not clickable')
       discover.shareReadingBtn.click()
+      browser.wait(
+        EC.invisibilityOf(discover.readingPreview),
+        5000,
+        'failed to close the reading preview',
+      )
       // Hit save
       newReading.clickShareAndArchive()
       // Finalize

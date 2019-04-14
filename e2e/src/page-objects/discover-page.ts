@@ -92,7 +92,15 @@ export class Discover implements PageObjectInterface {
   }
 
   getReadingTitle(el: any) {
-    return el.getText()
+    return el.getText().then(function (text: string) {
+      return text
+    })
+  }
+
+  getInputFieldText(el: any) {
+    return el.getAttribute('value').then(function (value: string) {
+      return value
+    })
   }
 
   public closeReadingPreview(): void {
@@ -101,8 +109,9 @@ export class Discover implements PageObjectInterface {
       if (result) {
         this.closeReadingPreviewBtn.isDisplayed().then(result => {
           if (result) {
+            this.closeReadingPreviewBtn.click()
             browser.wait(
-              this.EC.elementToBeClickable(this.closeReadingPreviewBtn),
+              this.EC.invisibilityOf(this.readingPreview),
               5000,
               'failed to close the reading preview',
             )
