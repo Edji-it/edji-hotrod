@@ -229,8 +229,8 @@ export class ReadingService {
         grade_levels: reading.grade_levels,
         owner_bookmarked: reading.owner_bookmarked,
         // We reset "createdAt" in New Reading when publishing a draft
-        createdAt: reading.createdAt,
-      } // let
+        createdAt: reading.createdAt
+      }
 
       return this._http
         .put(this._auth.getUrl() + '/readings/' + reading['_id'], { reading: putReading }, this._auth.getOptions())
@@ -255,8 +255,8 @@ export class ReadingService {
             return data.reading
           }),
         )
-    } // if
-  } // public save()
+    }
+  }
 
   public getFeed(filters?: FilterObj): Observable<any> {
     let feedParams = new HttpParams()

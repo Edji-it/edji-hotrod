@@ -141,5 +141,17 @@ hot-reading-preview-modal(
     *ngIf="showReadingPreviewModal",
     [reading]="selectedReading",
     [user]="user",
-    (closeModal)="showReadingPreviewModal=false"
+    (closeModal)="showReadingPreviewModal=false",
+    (createSuccess)="readingCreateFromPreviewSuccess($event)"
+)
+//- Create First Group
+hot-add-project-modal.modal-will-fade(
+    *ngIf="showFirstGroupModal",
+    [class.show]="showFirstGroupModal", 
+    [heading]="'Create and Share First Group'",
+    [subheading]="'Your Reading has been saved! Now create your first group to publish this Reading and share with students.'",
+    [reading]="createdReading", 
+    [groupLabel]="'Group 1'",
+    (groupSaved)="finalizeShare($event)",
+    (closeModal)="showFirstGroupModal = false"
 )

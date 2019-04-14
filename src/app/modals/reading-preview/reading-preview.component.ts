@@ -3,8 +3,8 @@ import { Router } from '@angular/router'
 import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
-import { Reading, Project, User } from 'src/app/shared/datatypes'
-import { ReadingService, AcademyService, AuthService } from 'src/app/_services'
+import { Reading, User } from 'src/app/shared/datatypes'
+import { ReadingService, AuthService } from 'src/app/_services'
 
 @Component({
   selector: 'hot-reading-preview-modal',
@@ -15,22 +15,14 @@ export class ReadingPreviewModal implements AfterViewInit, OnInit {
   @Input() reading: Reading
   @Input() user: User
   @Output() closeModal: EventEmitter<any> = new EventEmitter()
+  @Output() createSuccess: EventEmitter<Reading> = new EventEmitter()
 
   // state values
   public initialized: boolean
-  public showFirstGroupModal: boolean
-
-  // Archiving state
-  public readingToArchive: Reading
-  public readingsArchivedBefore: string
-  public readingArchivalSet: boolean = false
-
-  public newGroup: Project
 
   constructor(
     private _router: Router,
     private _readings: ReadingService,
-    private _academy: AcademyService,
     private angulartics: Angulartics2,
     private _auth: AuthService
   ) {}
@@ -46,30 +38,6 @@ export class ReadingPreviewModal implements AfterViewInit, OnInit {
       this.reading.html = fullReading.html
       if (this.reading.questions) {
         this.updateQuestionNumbers(this.reading.questions)
-      }
-    } catch (err) {
-      console.error(err)
-    }
-
-    try {
-      let userReadings = await this._readings.currentUserReadings.toPromise()
-
-      if (!userReadings.readings) {
-        // If no readings, nothing to handle
-        return
-      }
-
-      // If we have readings, don't request created readings again
-      this.readingArchivalSet = true
-      if (!this.user.hero_status && userReadings.readings[1] && !userReadings.readings[1].archived) {
-        // Take the second reading and make sure it is archived
-        this.readingToArchive = userReadings.readings[1]
-        // reading that we'll be setting as our readingsArchivedBefore property on the user - send PUT to server
-        this.readingsArchivedBefore = userReadings.readings[0].createdAt
-      } else {
-        // Clear values
-        delete this.readingToArchive
-        delete this.readingsArchivedBefore
       }
     } catch (err) {
       console.error(err)
@@ -124,11 +92,16 @@ export class ReadingPreviewModal implements AfterViewInit, OnInit {
     delete saveReading.owner_id
     delete saveReading['owner']
     delete saveReading['words_preview']
+    delete saveReading.createdAt
+    delete saveReading.updatedAt
+    if (this.reading.owner_id!==this.user._id) {
+      delete saveReading.version_id
+    }
     try {
       let savedReading: Reading
-      savedReading = await this._readings.save(this.reading).toPromise()
+      savedReading = await this._readings.save(saveReading).toPromise()
       this.createdReadingSuccess()
-      this.showFirstGroupModal = true
+      this.createSuccess.emit(savedReading)
     } catch (err) {
       console.error(err)
     }
@@ -143,56 +116,5 @@ export class ReadingPreviewModal implements AfterViewInit, OnInit {
         label: this._auth.setAnalyticEventLabel(),
       },
     })
-  }
-
-  /**
-   * Opens reading for first group
-   * @param project Project object for first group
-   */
-  public finalizeShare(project: Project) {
-    // Set newly created Group
-    this.newGroup = project
-    // Archive if needed
-    if (this.readingsArchivedBefore) {
-      this.archiveReading()
-      this.shareReading()
-    } else {
-      this.shareReading()
-    }
-  }
-
-  public shareReading(): void {
-    // Send the data to Pipo to log the new reading
-    this._academy.pipoEvent({
-      // standard event info:
-      event_name: 'reading_created',
-      user_id: this.user._id,
-      teacher: this.newGroup.teacher_id === this.user._id,
-      hero: this.user.hero_status || false,
-      institution_id: this.user.institution_ids || [],
-      // event-specific info:
-      reading_id: this.reading._id,
-      group_id: this.newGroup._id,
-      subjects: this.reading.subjects,
-      source: this.reading.source,
-    })
-    // Navigate user to newly created group for reading
-    this._router.navigate(['project', this.newGroup._id], { queryParams: { readingCodeModal: true } })
-  }
-
-  /**
-   * Update user's archived date
-   * @param reading the reading that is to be archived (is an active reading on the created dashboard)
-   * @param form is the new reading we're going to share once we finish archiving the older active reading
-   */
-  public async archiveReading(): Promise<void> {
-    // Make the call to PUT the reading archive value
-    let user = this.user
-    user.archive_readings_before = this.readingsArchivedBefore
-    try {
-      this._auth.updateUser(user).toPromise()
-    } catch (err) {
-      console.error(err)
-    }
   }
 }
