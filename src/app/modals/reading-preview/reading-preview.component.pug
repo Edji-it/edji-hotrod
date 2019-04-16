@@ -24,7 +24,7 @@
             button#readingPreviewClose.close((click)='close()') &times;
           .modal-body
             .reading-preview__words.words--read-only
-              .row.loading(*ngIf="loading")
+              .row.loading(*ngIf="loading && !reading.words")
               //- Annotator-Lite
               span.w(*ngFor="let w of reading.words", [ngClass]="[ w && w.styles ? w.styles.join(' ') : '' ]")
                 a.w(
