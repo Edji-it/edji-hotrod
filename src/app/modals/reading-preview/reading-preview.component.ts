@@ -19,13 +19,14 @@ export class ReadingPreviewModal implements AfterViewInit, OnInit {
 
   // state values
   public initialized: boolean
+  public loading: boolean = true
 
   constructor(
     private _router: Router,
     private _readings: ReadingService,
     private angulartics: Angulartics2,
     private _auth: AuthService
-  ) {}
+  ) { }
 
   async ngOnInit() {
     // The Discover Feed only has the first 100 words, so we need to make a call to get the full reading to attach all words
@@ -39,6 +40,7 @@ export class ReadingPreviewModal implements AfterViewInit, OnInit {
       if (this.reading.questions) {
         this.updateQuestionNumbers(this.reading.questions)
       }
+      this.loading = false
     } catch (err) {
       console.error(err)
     }
@@ -55,7 +57,7 @@ export class ReadingPreviewModal implements AfterViewInit, OnInit {
    * Sends user to the New Reading page with the copyId query param
    */
   public copyReading(): void {
-    this._router.navigate(['/new-reading'], { queryParams: { copyId: this.reading._id }})
+    this._router.navigate(['/new-reading'], { queryParams: { copyId: this.reading._id } })
   }
 
   /**
@@ -94,7 +96,7 @@ export class ReadingPreviewModal implements AfterViewInit, OnInit {
     delete saveReading['words_preview']
     delete saveReading.createdAt
     delete saveReading.updatedAt
-    if (this.reading.owner_id!==this.user._id) {
+    if (this.reading.owner_id !== this.user._id) {
       delete saveReading.version_id
     }
     try {
