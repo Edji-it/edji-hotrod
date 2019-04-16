@@ -57,7 +57,6 @@ export class SearchPage implements OnInit {
 
   // State vars
   public loading: boolean = true
-  public readingCardHover: boolean
   public previewIndex: number = 0
 
   // Archiving state
@@ -95,7 +94,7 @@ export class SearchPage implements OnInit {
     private _academy: AcademyService,
     private route: ActivatedRoute,
     private router: Router,
-  ) {}
+  ) { }
 
   async ngOnInit() {
     if (this.router.url.indexOf('/discover/search') >= 0 || this.searchTerm.length > 0) {
@@ -298,9 +297,12 @@ export class SearchPage implements OnInit {
     this.selectedReading = reading
   }
 
-  public readingCardHoverSet(show: boolean, index?: number): void {
-    this.previewIndex = index ? index : 0
-    this.readingCardHover = show
+  /**
+   * Hover/focus for clickable Reading Cards
+   * @param index Reading result list index 
+   */
+  public readingCardHoverSet(index: number): void {
+    this.previewIndex = index
   }
 
   /**

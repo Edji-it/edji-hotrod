@@ -54,3 +54,12 @@
   color: #656565;
   margin: 0px;
 }
+
+.clickable .reading-card {
+  &:hover, &:focus {
+    cursor: pointer !important;
+    border-color: $blue;
+    border-bottom-color: $blue !important;
+    background: #fafafa;
+  }
+}

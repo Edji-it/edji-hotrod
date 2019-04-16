@@ -1,52 +1,10 @@
 @import '../../sass/base/variables';
 
-.countdown-clock {
-  color: #fff;
-  text-align: center;
-  padding: 20px;
-  font-size: 2em;
-  position: absolute;
-  top: 420px;
-  width: 100%;
-  font-weight: 300;
-  letter-spacing: 5px;
-  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
-
-  @media (max-width: $phone) {
-    font-size: 1.5em;
-    top: 330px;
-  }
-}
-
-.promo-header {
-  color: #fff;
-  font-size: 5.5em;
-  width: 100%;
-  position: absolute;
-  top: 159px;
-  text-shadow: 1px 1px 10px rgba(0, 0, 0, 0.5);
-
-  @media (max-width: $phone) {
-    font-size: 4em;
-    top: 100px;
-  }
-}
-
 .hero-background {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
   top: 40px;
-}
-
-.call-to-action {
-  min-height: 500px;
-  z-index: 1;
-  position: relative;
-
-  @media (max-width: $phone) {
-    min-height: 420px;
-  }
 }
 
 .hero-promo-form {
@@ -109,12 +67,6 @@
 
 .w.br {
   height: 4px;
-}
-
-.force-hover {
-  box-shadow: 0 0px 15px 0px rgba(33, 192, 241, 0.5);
-  background: #21c0f1;
-  color: #fff;
 }
 
 .card-hover {
