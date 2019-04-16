@@ -135,13 +135,29 @@ nav-bar([showDashboardOptions]="true")
                                 [class.force-hover]="previewIndex===i"
                             ) Preview
                             i.hidden-lg-up.ws-nowrap {{ ' shared ' + (reading.updatedAt | edjidate:'timeAgo':null:secondsAgo) }}
-                        hot-reading-card.clickable(
-                            (click)="openReadingPreview(reading)", 
-                            [reading]="reading", 
-                            [readOnly]="true",  
+                        .clickable(
+                            (click)="openReadingPreview(reading)",
                             (mouseenter)="readingCardHoverSet(i)", 
                             (mouseleave)="readingCardHoverSet(-1)"
                         )
+                            hot-reading-card(
+                                [reading]="reading", 
+                                [readOnly]="true"
+                            )
+                            .feed__reading-preview.words--read-only(*ngIf="reading.words_preview")
+                                span.w(
+                                        *ngFor="let w of reading.words_preview", 
+                                        [ngClass]="[ w && w.styles ? w.styles.join(' ') : '' ]"
+                                    )
+                                    | {{ (!(w && w.styles) || (w && w.styles.indexOf('space')) > -1) ? '&nbsp;' : w && w.str }}
+                                    div(*ngIf="w && w.styles && w.styles.indexOf('img') > -1")
+                                        //- Image: Display image for image "word"
+                                        img.reading-image(
+                                            [attr.id]="'readingImage' + i",
+                                            [attr.index]="i",
+                                            [src]="w.url"
+                                        )
+                                span.w &hellip;
                 </ng-template>
             </p-dataList>
 //- Reading Preview Modal

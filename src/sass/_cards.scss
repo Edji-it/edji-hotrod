@@ -55,11 +55,16 @@
   margin: 0px;
 }
 
-.clickable .reading-card {
+.clickable {
   &:hover, &:focus {
-    cursor: pointer !important;
-    border-color: $blue;
-    border-bottom-color: $blue !important;
-    background: #fafafa;
+    .reading-card {
+      cursor: pointer !important;
+      border-color: $blue;
+      border-bottom-color: $blue !important;
+      background: #fafafa;
+    }
+    .feed__reading-preview {
+      border-color: $blue;
+    }
   }
 }

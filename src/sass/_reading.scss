@@ -476,7 +476,7 @@ $quickBlue: #55aef7;
 .w {
   background-position: center;
 
-  &:hover:not(.archived):not(.read-only) {
+  &:hover:not(.archived) {
     cursor: pointer;
     border-bottom: $focusUnderlineWidth solid $hoverBlue;
   }
@@ -510,10 +510,10 @@ $quickBlue: #55aef7;
   }
 
   // Do not present preview words as interactive
-  .feed__reading-preview &,
-  .feed__reading-preview &:hover {
+  .words--read-only &,
+  .words--read-only &:hover {
     cursor: text;
-    border-bottom: 0px solid transparent;
+    border-bottom: 0px solid transparent !important;
   }
 }
 

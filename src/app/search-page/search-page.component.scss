@@ -44,12 +44,25 @@
 .feed__reading-preview {
   border-right: 1px solid #ddd;
   border-left: 1px solid #ddd;
-  border-bottom: 1px dashed #ddd;
+  border-bottom: 1px solid #ddd;
   padding: 15px;
   // Some readings might have a large number line returns
-  max-height: 15em;
+  max-height: 7em;
   overflow-y: hidden;
   width: 100%;
+  cursor: pointer;
+
+  &:after {
+    content: ' ';
+    display: block;
+    width: calc(100% - 2px);
+    height: 4em;
+    position: absolute;
+    bottom: 0;
+    left: 1px;
+    background-image: linear-gradient(to top, transparent 0px, rgba(255, 255, 255, 0.9) 1px, rgba(255, 255, 255, 0));
+    background-position-y: calc(100%-1px);
+  }
 }
 
 .feed__reading-preview > .w.img ~ .w.img:not(:first-child) {
