@@ -118,7 +118,6 @@ describe('Discover Feed', () => {
     beforeAll(() => {
       sidebar.logout()
       login.getPage()
-      browser.wait(EC.elementToBeClickable(login.loginButton), 5000)
       login.loginAndVerify(login.botUser, login.botPassword)
     })
 
