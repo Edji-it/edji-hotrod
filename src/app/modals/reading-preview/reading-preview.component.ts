@@ -89,6 +89,8 @@ export class ReadingPreviewModal implements AfterViewInit, OnInit {
    */
   public async createReading(): Promise<void> {
     let saveReading: Reading = Object.assign({}, this.reading)
+    // Set parent id to reading copied from
+    saveReading.parent_id = this.reading._id
     // remove _id, and other owner properties before we save
     delete saveReading._id
     delete saveReading.owner_id

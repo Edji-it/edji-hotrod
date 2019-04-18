@@ -57,7 +57,7 @@ export class SearchPage implements OnInit {
 
   // State vars
   public loading: boolean = true
-  public previewIndex: number = 0
+  public previewIndex: number = -1
 
   // Archiving state
   public readingToArchive: Reading
