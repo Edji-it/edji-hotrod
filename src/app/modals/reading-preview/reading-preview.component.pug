@@ -22,7 +22,8 @@
                   h1.small.reading-title__text {{reading.title}} 
                     span(*ngIf="!reading.title")
                       i Untitled
-              button#readingPreviewClose.close((click)='close()') &times;
+              button#readingPreviewClose.close.btn-icon--round((click)='close()') 
+                span(aria-hidden="true") &times;
             .modal-body
               .reading-preview__words.words--read-only
                 .row.loading(*ngIf="loading && !reading.words")

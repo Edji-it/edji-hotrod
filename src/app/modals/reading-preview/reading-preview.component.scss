@@ -4,6 +4,11 @@
   min-width: calc(100% - 200px);
 }
 
+.modal-header {
+  background: #fff;
+  border-bottom: 1px solid #cdcdcd;
+}
+
 .reading-details {
   display: inline-block;
   padding: 0 $base-pad/2 0 0;
@@ -50,4 +55,5 @@
 
 .reading-preview__words {
   min-height: 300px;
+  padding: 0px $base-pad;
 }
