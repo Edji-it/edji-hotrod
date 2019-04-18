@@ -5,9 +5,12 @@
 }
 
 .reading-details {
-  display: inline;
-  padding: 10px 15px 15px 0px;
+  display: inline-block;
+  padding: 0 $base-pad/2 0 0;
   bottom: 20px;
+  left: 0;
+  margin: 0 0 0 $base-pad;
+  width: auto;
 }
 
 .reading-actions {

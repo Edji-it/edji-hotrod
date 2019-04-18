@@ -1,54 +1,55 @@
 #readingArchivedModal.modal.fade-in.show
   .modal-dialog((clickOutside)="close()")
     .modal-content.reading-details
-      .comment__avatar {{reading['owner'].fullname.substr(0,2).toUpperCase()}}
-      follow-tag([owner]="reading['owner']")
-      .tag-row
-        ng-container(*ngIf="reading.subjects && reading.subjects.length > 0")
-          span.badge-pill.badge-secondary.badge-subject(*ngFor="let subject of reading.subjects") {{ subject | subjectName }}
-      i.icon.lg(*ngIf="reading.public", [innerHTML]="':earth_americas:' | emojione")
-      i.icon.lg(*ngIf="!reading.public", [innerHTML]="':lock:' | emojione")
-    .row
-      .col-sm-10
-        .modal-content
-          .modal-header
-            .reading-icon.hide-for-archived
-              span {{reading.title.substring(0,2)}}
-            .archived-icon.show-for-archived
-              .icon.icon-folder
-            .reading-title([class.no-version]="!reading.version_count")
-              .reading-title--center-row
-                h1.small.reading-title__text {{reading.title}} 
-                  span(*ngIf="!reading.title")
-                    i Untitled
-            button#readingPreviewClose.close((click)='close()') &times;
-          .modal-body
-            .reading-preview__words.words--read-only
-              .row.loading(*ngIf="loading && !reading.words")
-              //- Annotator-Lite
-              span.w(*ngFor="let w of reading.words", [ngClass]="[ w && w.styles ? w.styles.join(' ') : '' ]")
-                a.w(
-                  *ngIf="wHasStyle(w, 'a')",
-                  [attr.href]="w.url ? ((w.url.indexOf('//') > -1) ? w.url : ('//' + w.url)) : null",
-                  target="_blank"
-                )
-                ng-container(*ngIf="!wHasStyle(w, 'a')")
-                  | {{ (!(w && w.styles) || wHasStyle(w, 'space')) ? '&nbsp;' : w && w.str }}
-                .img-wrap(*ngIf="wHasStyle(w, 'img')")
-                  img.reading-image(
-                      [src]="w.url"
+        .comment__avatar {{reading['owner'].fullname.substr(0,2).toUpperCase()}}
+        follow-tag([owner]="reading['owner']")
+        .tag-row
+          ng-container(*ngIf="reading.subjects && reading.subjects.length > 0")
+            span.badge-pill.badge-secondary.badge-subject(*ngFor="let subject of reading.subjects") {{ subject | subjectName }}
+        i.icon.lg(*ngIf="reading.public", [innerHTML]="':earth_americas:' | emojione")
+        i.icon.lg(*ngIf="!reading.public", [innerHTML]="':lock:' | emojione")
+    .container
+      .row
+        .col-sm-10
+          .modal-content
+            .modal-header
+              .reading-icon.hide-for-archived
+                span {{reading.title.substring(0,2)}}
+              .archived-icon.show-for-archived
+                .icon.icon-folder
+              .reading-title([class.no-version]="!reading.version_count")
+                .reading-title--center-row
+                  h1.small.reading-title__text {{reading.title}} 
+                    span(*ngIf="!reading.title")
+                      i Untitled
+              button#readingPreviewClose.close((click)='close()') &times;
+            .modal-body
+              .reading-preview__words.words--read-only
+                .row.loading(*ngIf="loading && !reading.words")
+                //- Annotator-Lite
+                span.w(*ngFor="let w of reading.words", [ngClass]="[ w && w.styles ? w.styles.join(' ') : '' ]")
+                  a.w(
+                    *ngIf="wHasStyle(w, 'a')",
+                    [attr.href]="w.url ? ((w.url.indexOf('//') > -1) ? w.url : ('//' + w.url)) : null",
+                    target="_blank"
                   )
-                edji-question(
-                  *ngIf="wHasStyle(w, 'question') && reading.questions",
-                  [question]="reading.questions[w.index]",
-                  [readOnly]="true"
-                )
-      .col-sm-2.p-0
-        .modal-content.reading-actions
-          p.text-center.actions-title.mb-3 Use this Reading
-          button#shareReadingButton.btn.btn-action.mb-2((click)="createReading()") 
-            | Share
-            i.icon.icon-megaphone.mr-0.icon--btn-inline
-          button#editReadingButton.btn.btn-primary((click)="copyReading()") 
-            | Edit
-            i.icon.icon-create.mr-0.icon--btn-inline
+                  ng-container(*ngIf="!wHasStyle(w, 'a')")
+                    | {{ (!(w && w.styles) || wHasStyle(w, 'space')) ? '&nbsp;' : w && w.str }}
+                  .img-wrap(*ngIf="wHasStyle(w, 'img')")
+                    img.reading-image(
+                        [src]="w.url"
+                    )
+                  edji-question(
+                    *ngIf="wHasStyle(w, 'question') && reading.questions",
+                    [question]="reading.questions[w.index]",
+                    [readOnly]="true"
+                  )
+        .col-sm-2.p-0
+          .modal-content.reading-actions
+            p.text-center.actions-title.mb-3 Use this Reading
+            button#shareReadingButton.btn.btn-action.mb-2((click)="createReading()") 
+              | Share
+              i.icon.icon-megaphone.mr-0.icon--btn-inline
+            button#editReadingButton.btn.btn-primary((click)="copyReading()") 
+              | Edit
+              i.icon.icon-create.mr-0.icon--btn-inline
