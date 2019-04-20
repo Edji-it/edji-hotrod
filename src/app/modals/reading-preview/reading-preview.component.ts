@@ -44,6 +44,9 @@ export class ReadingPreviewModal implements AfterViewInit, OnInit {
     } catch (err) {
       console.error(err)
     }
+
+    // Workaround: This modal is long enough that it needs to scroll and we don't want two scrollbars
+    document.body.style.overflow = 'hidden'
   }
 
   ngAfterViewInit() {
@@ -57,6 +60,7 @@ export class ReadingPreviewModal implements AfterViewInit, OnInit {
    * Sends user to the New Reading page with the copyId query param
    */
   public copyReading(): void {
+    this.close()
     this._router.navigate(['/new-reading'], { queryParams: { copyId: this.reading._id } })
   }
 
@@ -75,6 +79,8 @@ export class ReadingPreviewModal implements AfterViewInit, OnInit {
     if (this.initialized) {
       this.closeModal.emit()
     }
+    // Workaround: Clear scrollbar hiding
+    document.body.style.overflow = ''
   }
 
   // Adds the question number to each question for proper rendering
@@ -106,6 +112,8 @@ export class ReadingPreviewModal implements AfterViewInit, OnInit {
       savedReading = await this._readings.save(saveReading).toPromise()
       this.createdReadingSuccess()
       this.createSuccess.emit(savedReading)
+      // Workaround: Clear scrollbar hiding 
+      document.body.style.overflow = ''
     } catch (err) {
       console.error(err)
     }
