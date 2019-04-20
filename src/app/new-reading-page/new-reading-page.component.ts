@@ -10,7 +10,7 @@ import { AuthService, ProjectService, ReadingService, UtilToolService, AcademySe
 import { EdjiComment, EdjiQuestion, User, Project, Reading } from '../shared/datatypes'
 import { ReadingShareObject } from './../shared/nav-bar'
 import * as Rangy from 'rangy'
-import { Subscription, Observable } from 'rxjs'
+import { Subscription, Observable, interval } from 'rxjs'
 
 @Component({
   selector: 'new-reading-page',
@@ -35,6 +35,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
   private user: any
   private subscriptions: Subscription[] = []
   private readingType: string = 'newReading' // used for analytics purposes
+  private timerSubscription: Subscription
 
   // Trigger booleans
   public showAlert: boolean = false
@@ -256,12 +257,26 @@ export class NewReadingPage implements OnInit, OnDestroy {
     )
 
     this._title.setTitle('Edji | New Reading')
+
+    // fire up the auto-save
+    this.subscribeToAutosave()
   }
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub: Subscription) => {
       sub.unsubscribe()
     })
+  }
+
+  /**
+   * Auto-saves the new reading every 30 seconds
+   */
+  private subscribeToAutosave(): void {
+    // Subscribe to the timer and run it every minute
+    this.timerSubscription = interval(30000).subscribe(() => {
+      console.log('auto save')
+    })
+    this.subscriptions.push(this.timerSubscription)
   }
 
   private getReading(readingId: string) {
