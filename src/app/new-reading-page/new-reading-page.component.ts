@@ -1,6 +1,6 @@
 import { ActivatedRoute, Router, Params } from '@angular/router'
 import { Title } from '@angular/platform-browser'
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms'
 import { Component, ElementRef, OnInit, ViewChild, OnDestroy } from '@angular/core'
 import { Angulartics2 } from 'angulartics2'
 import { IMultiSelectOption, IMultiSelectSettings } from '../_directives'
@@ -274,7 +274,9 @@ export class NewReadingPage implements OnInit, OnDestroy {
   private subscribeToAutosave(): void {
     // Subscribe to the timer and run it every minute
     this.timerSubscription = interval(30000).subscribe(() => {
-      console.log('auto save')
+      if (this.validateReading(this.readingForm.value, true)) {
+        this.saveReading(this.readingForm.value, true)
+      }
     })
     this.subscriptions.push(this.timerSubscription)
   }
@@ -535,11 +537,13 @@ export class NewReadingPage implements OnInit, OnDestroy {
    * Custom form validation for a New Reading
    * @param form Reading form
    */
-  private validateReading(form): boolean {
+  private validateReading(form: any, autosave?: boolean): boolean {
     let questionsValid: boolean = true
     // Set submitted to show form errors
-    this.submitted = true
-    this.error = ''
+    if (!autosave) {
+      this.submitted = true
+      this.error = ''
+    }
     // Custom empty validation for reading content
     if (
       this.el.nativeElement.querySelector('medium-editor').innerText.trim().length > 0 ||
