@@ -34,6 +34,12 @@
   padding-bottom: 24px;
   border-bottom: $base-border;
   margin-bottom: 24px;
+
+  .reading-preview__words & {
+    border-bottom: none;
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+  }
 }
 
 .question-container__new {

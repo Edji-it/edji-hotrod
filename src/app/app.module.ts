@@ -81,6 +81,7 @@ import {
   DiscoverAddMetaModal,
   ReadingArchivedModal,
   ConfirmArchiveModal,
+  ReadingPreviewModal
 } from './modals'
 import {
   AnnotatorComponent,
@@ -200,6 +201,7 @@ const APP_PROVIDERS = [
     AddProjectModal,
     ReadingArchivedModal,
     ConfirmArchiveModal,
+    ReadingPreviewModal,
     ChangePassComponent,
     ResetPassComponent,
     DeleteCommentModal,

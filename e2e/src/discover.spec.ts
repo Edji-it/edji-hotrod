@@ -109,11 +109,100 @@ describe('Discover Feed', () => {
       browser.wait(EC.urlContains('discover'), 5000, 'never arrived at discover feed as sidekick user')
       browser.wait(EC.elementToBeClickable(discover.firstFeedReading), 5000)
       // Check title of most recent readings
-      let foundTitle = element.all(by.css('.reading-title__text')).reduce((acc, el) => {
-        return el.getText().then(text => {
-          return acc || text.includes(newPublicReadingTitle)
-        })
-      }, false)
+      let foundTitle = discover.validateReadingTitle(newPublicReadingTitle)
+      expect(foundTitle).toBeTruthy()
+    })
+  })
+
+  describe('reading preview', () => {
+    beforeAll(() => {
+      sidebar.logout()
+      login.getPage()
+      login.loginAndVerify(login.botUser, login.botPassword)
+    })
+
+    beforeEach(() => {
+      sidebar.navDiscover.click()
+    })
+
+    it('should open reading preview in discover feed and then close it', () => {
+      browser.wait(
+        EC.elementToBeClickable(discover.firstFeedReading),
+        5000,
+        'first reading in discover feed was not clickable',
+      )
+      discover.firstFeedReading.click()
+      browser.wait(EC.visibilityOf(discover.readingPreview), 5000, 'reading preview was not visible')
+      browser.wait(EC.elementToBeClickable(discover.shareReadingBtn), 5000, 'share reading button was not clickable')
+      discover.closeReadingPreview()
+    })
+
+    it('should open reading preview and edit a reading then save it', () => {
+      browser.wait(
+        EC.elementToBeClickable(discover.firstFeedReading),
+        5000,
+        'first reading in discover feed was not clickable',
+      )
+      // get the title of the first reading, we will need this to compare later
+      let readingTitle = discover.getReadingTitle(discover.firstFeedTitle)
+      discover.firstFeedReading.click()
+      browser.wait(EC.elementToBeClickable(discover.editReadingBtn), 5000, 'share reading button was not clickable')
+      discover.editReadingBtn.click()
+      // wait for us to hit the new reading page with the reading from the discover feed
+      browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000, 'never arrived to the new reading page with existing reading')
+
+      // grab the title of the reading for which we are editing and compare the two
+      let titleValue = discover.getInputFieldText(newReading.titleInput)
+      // expect(readingTitle == titleValue).toBeTruthy('the new reading we are about to create does not match what we just got from the discover feed')
+
+      let newReadingTitle = `rp - ${new Date().valueOf()}`
+      newReading.titleInput.clear()
+      newReading.titleInput.sendKeys(newReadingTitle)
+      // Hit save
+      newReading.clickShareAndArchive()
+      // Finalize
+      newReading.createGroupButtonClick()
+      // Wait for navigation to hit project page after save
+      browser.wait(EC.urlContains('project'), 7500, 'never arrived at published reading')
+      newReading.shareCodeModalCloseClick()
+      browser.wait(EC.invisibilityOf(newReading.shareCodeModalClose), 5000, 'share reading code modal never dismissed')
+      // Go directly to dashboard
+      sidebar.logo.click()
+      // .sleep() excuse: A previously loaded reading card causes the subsequent wait to fire too early
+      browser.sleep(1000)
+      browser.wait(EC.elementToBeClickable(dashboard.firstReadingCard), 5000, 'never got back to the dashboard')
+      // Check title of most recent readings
+      let foundTitle = discover.validateReadingTitle(newReadingTitle)
+      expect(foundTitle).toBeTruthy()
+    })
+
+    it('should open reading preview and share a reading', async () => {
+      browser.wait(EC.visibilityOf(discover.firstFeedReading), 5000, 'first reading in discover feed was not clickable')
+      let readingTitle = await discover.firstFeedTitle.getText()
+      console.log("FOUND READING: " + readingTitle)
+      discover.firstFeedReading.click()
+      browser.wait(EC.elementToBeClickable(discover.shareReadingBtn), 5000, 'share reading button was not clickable')
+      discover.shareReadingBtn.click()
+      browser.wait(
+        EC.invisibilityOf(discover.readingPreview),
+        5000,
+        'failed to close the reading preview',
+      )
+      // Hit save
+      newReading.clickShareAndArchive()
+      // Finalize
+      newReading.createGroupButtonClick()
+      // Wait for navigation to hit project page after save
+      browser.wait(EC.urlContains('project'), 7500, 'never arrived at published reading')
+      newReading.shareCodeModalCloseClick()
+      browser.wait(EC.invisibilityOf(newReading.shareCodeModalClose), 5000, 'share reading code modal never dismissed')
+      // Go directly to dashboard
+      sidebar.logo.click()
+      // .sleep() excuse: A previously loaded reading card causes the subsequent wait to fire too early
+      browser.sleep(1000)
+      browser.wait(EC.elementToBeClickable(dashboard.firstReadingCard), 5000, 'never got back to the dashboard')
+      // Check title of most recent readings
+      let foundTitle = discover.validateReadingTitle(readingTitle)
       expect(foundTitle).toBeTruthy()
     })
   })

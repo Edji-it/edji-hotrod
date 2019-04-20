@@ -4,8 +4,8 @@ import { Subscription } from 'rxjs'
 import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
-import { AuthService, ReadingService } from '../_services'
-import { User } from '../shared/datatypes'
+import { AuthService, ReadingService, AcademyService } from '../_services'
+import { User, Reading, Project } from '../shared/datatypes'
 
 @Component({
   selector: 'app-search-page',
@@ -37,6 +37,13 @@ export class SearchPage implements OnInit {
   public rows: number = 15
   public total: number = 15
 
+  // Modal Toggle
+  public showReadingPreviewModal: boolean
+  public showFirstGroupModal: boolean
+  public showConfirmArchiveModal: boolean
+  public selectedReading: Reading
+  public createdReading: Reading
+
   // Search
   public searchTerm: string = ''
   public searchFieldWidth: number = 100
@@ -50,6 +57,14 @@ export class SearchPage implements OnInit {
 
   // State vars
   public loading: boolean = true
+  public previewIndex: number = -1
+
+  // Archiving state
+  public readingToArchive: Reading
+  public readingsArchivedBefore: string
+  public readingArchivalSet: boolean = false
+
+  public newGroup: Project
 
   // MAKE SUBJECTS COMPONENT
   public subjects: { id: string; name: string }[] = [
@@ -76,11 +91,12 @@ export class SearchPage implements OnInit {
     private _auth: AuthService,
     private _readings: ReadingService,
     private angulartics: Angulartics2,
+    private _academy: AcademyService,
     private route: ActivatedRoute,
     private router: Router,
-  ) {}
+  ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     if (this.router.url.indexOf('/discover/search') >= 0 || this.searchTerm.length > 0) {
       this.isSearching = true
     }
@@ -119,6 +135,30 @@ export class SearchPage implements OnInit {
         }
         this.loadFeed()
       }),
+      this._readings.currentUserReadings.subscribe(
+        userReadings => {
+          if (!userReadings.readings) {
+            // If no readings, nothing to handle
+            return
+          }
+
+          // If we have readings, don't request created readings again
+          this.readingArchivalSet = true
+          if (!this.user.hero_status && userReadings.readings[1] && !userReadings.readings[1].archived) {
+            // Take the second reading and make sure it is archived
+            this.readingToArchive = userReadings.readings[1]
+            // reading that we'll be setting as our readingsArchivedBefore property on the user - send PUT to server
+            this.readingsArchivedBefore = userReadings.readings[0].createdAt
+          } else {
+            // Clear values
+            delete this.readingToArchive
+            delete this.readingsArchivedBefore
+          }
+        },
+        err => {
+          console.error(err)
+        },
+      ),
     )
   }
 
@@ -246,5 +286,89 @@ export class SearchPage implements OnInit {
         console.error(err)
       },
     )
+  }
+
+  /**
+   * Opens the reading preview modal for the selected reading
+   * @param reading is the reading we want to open the preview modal on
+   */
+  public openReadingPreview(reading: Reading): void {
+    this.showReadingPreviewModal = true
+    this.selectedReading = reading
+  }
+
+  /**
+   * Hover/focus for clickable Reading Cards
+   * @param index Reading result list index 
+   */
+  public readingCardHoverSet(index: number): void {
+    this.previewIndex = index
+  }
+
+  /**
+   * Verifies the user can save this reading without having to push one in to the archives
+   * @param createdReading the new reading
+   */
+  public readingCreateFromPreviewSuccess(createdReading: Reading) {
+    this.createdReading = createdReading
+    // Need to dismiss the reading preview modal and then we can show the new group modal
+    this.showReadingPreviewModal = false
+
+    if (!this.user.hero_status && this.readingToArchive) {
+      this.showConfirmArchiveModal = true
+    } else {
+      this.showFirstGroupModal = true
+    }
+  }
+
+  /**
+   * Opens reading for first group
+   * @param project Project object for first group
+   */
+  public finalizeShare(project: Project) {
+    // Set newly created Group
+    this.newGroup = project
+    // Archive if needed
+    if (this.readingsArchivedBefore) {
+      this.archiveReading()
+      this.shareReading()
+    } else {
+      this.shareReading()
+    }
+  }
+
+  public shareReading(): void {
+    // Send the data to Pipo to log the new reading
+    this._academy.pipoEvent({
+      // standard event info:
+      event_name: 'reading_created',
+      user_id: this.user._id,
+      teacher: this.newGroup.teacher_id === this.user._id,
+      hero: this.user.hero_status || false,
+      institution_id: this.user.institution_ids || [],
+      // event-specific info:
+      reading_id: this.createdReading._id,
+      group_id: this.newGroup._id,
+      subjects: this.createdReading.subjects,
+      source: this.createdReading.source,
+    })
+    // Navigate user to newly created group for reading
+    this.router.navigate(['project', this.newGroup._id], { queryParams: { readingCodeModal: true } })
+  }
+
+  /**
+   * Update user's archived date
+   * @param reading the reading that is to be archived (is an active reading on the created dashboard)
+   * @param form is the new reading we're going to share once we finish archiving the older active reading
+   */
+  public async archiveReading(): Promise<void> {
+    // Make the call to PUT the reading archive value
+    let user = this.user
+    user.archive_readings_before = this.readingsArchivedBefore
+    try {
+      this._auth.updateUser(user).toPromise()
+    } catch (err) {
+      console.error(err)
+    }
   }
 }

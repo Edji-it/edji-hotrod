@@ -54,3 +54,17 @@
   color: #656565;
   margin: 0px;
 }
+
+.clickable {
+  &:hover, &:focus {
+    .reading-card {
+      cursor: pointer !important;
+      border-color: $blue;
+      border-bottom-color: $blue !important;
+      background: #fafafa;
+    }
+    .feed__reading-preview {
+      border-color: $blue;
+    }
+  }
+}

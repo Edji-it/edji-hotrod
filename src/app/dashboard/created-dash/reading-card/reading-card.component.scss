@@ -115,12 +115,6 @@
   width: 100%;
 }
 
-.tag-row {
-  white-space: nowrap;
-  overflow: hidden;
-  display: inline-block;
-}
-
 .reading-action-row {
   text-align: right;
   display: inline-block;
@@ -171,17 +165,6 @@ button.new-reading-btn {
 
 .blockquote-footer {
   color: inherit;
-}
-
-.badge-subject {
-  display: inline-block;
-  color: #fff;
-  font-size: 10px;
-  height: 12px;
-  line-height: 12px;
-  background: #79b1f3;
-  text-transform: capitalize;
-  margin-right: 2px;
 }
 
 .version-card {

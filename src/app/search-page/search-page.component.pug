@@ -124,29 +124,68 @@ nav-bar([showDashboardOptions]="true")
                 | There are no readings for "{{searchTerm}}" with your current filters, please try a different term or expanding your filters. 
             .row.loading(*ngIf="loading")
             <p-dataList class="search-datalist" [value]="readings" [paginator]="readings.length > 0" [paginatorPosition]="'both'" [rows]="rows" [lazy]="true" (onLazyLoad)="updateSearchParams('feed_paginate', $event)" [totalRecords]="total" [emptyMessage]="''">
-                <ng-template let-reading pTemplate="item">
+                <ng-template let-reading pTemplate="item" let-i="index">
                    .col-12.feed__reading(*ngIf="reading")
-                        div {{index}}
                         .feed__reading-data.mb-2(*ngIf="reading.owner")
                             .comment__avatar.mb-0 {{reading.owner.fullname.substr(0,2).toUpperCase()}}
                             follow-tag([owner]="reading.owner")
                             i.hidden-md-down.ws-nowrap {{ ' shared ' + (reading.updatedAt | edjidate:'timeAgo':null:secondsAgo) }}
-                            .btn.btn-sm.btn-primary.float-right([routerLink]="['/new-reading']", [queryParams]="{ copyId: reading._id }") Get this Reading
+                            .btn.btn-sm.btn-primary.float-right(
+                                (click)="openReadingPreview(reading)", 
+                                [class.force-hover]="previewIndex===i"
+                            ) Preview
                             i.hidden-lg-up.ws-nowrap {{ ' shared ' + (reading.updatedAt | edjidate:'timeAgo':null:secondsAgo) }}
-                        hot-reading-card([reading]="reading", [readOnly]="true")
-                        .feed__reading-preview(*ngIf="reading.words_preview")
-                            span.w(
-                                    *ngFor="let w of reading.words_preview", 
-                                    [ngClass]="[ w && w.styles ? w.styles.join(' ') : '' ]"
-                                )
-                                | {{ (!(w && w.styles) || (w && w.styles.indexOf('space')) > -1) ? '&nbsp;' : w && w.str }}
-                                div(*ngIf="w && w.styles && w.styles.indexOf('img') > -1")
-                                    //- Image: Display image for image "word"
-                                    img.reading-image(
-                                        [attr.id]="'readingImage' + i",
-                                        [attr.index]="i",
-                                        [src]="w.url"
+                        .clickable(
+                            (click)="openReadingPreview(reading)",
+                            (mouseenter)="readingCardHoverSet(i)", 
+                            (mouseleave)="readingCardHoverSet(-1)"
+                        )
+                            hot-reading-card(
+                                [reading]="reading", 
+                                [readOnly]="true"
+                            )
+                            .feed__reading-preview.words--read-only(*ngIf="reading.words_preview")
+                                span.w(
+                                        *ngFor="let w of reading.words_preview", 
+                                        [ngClass]="[ w && w.styles ? w.styles.join(' ') : '' ]"
                                     )
-                            span.w &hellip;
+                                    | {{ (!(w && w.styles) || (w && w.styles.indexOf('space')) > -1) ? '&nbsp;' : w && w.str }}
+                                    div(*ngIf="w && w.styles && w.styles.indexOf('img') > -1")
+                                        //- Image: Display image for image "word"
+                                        img.reading-image(
+                                            [attr.id]="'readingImage' + i",
+                                            [attr.index]="i",
+                                            [src]="w.url"
+                                        )
+                                span.w &hellip;
                 </ng-template>
             </p-dataList>
+//- Reading Preview Modal
+hot-reading-preview-modal(
+    *ngIf="showReadingPreviewModal",
+    [reading]="selectedReading",
+    [user]="user",
+    (closeModal)="showReadingPreviewModal=false",
+    (createSuccess)="readingCreateFromPreviewSuccess($event)"
+)
+//- Confirm if user wants to archive a past reading
+hot-confirm-archive-modal.modal-will-fade(
+  *ngIf="showConfirmArchiveModal",
+  [class.show]="showConfirmArchiveModal", 
+  (confirmArchive)="showConfirmArchiveModal=false; showFirstGroupModal = true",
+  (declineArchive)="showConfirmArchiveModal=false",
+  (goHero)="showHeroParam=true",
+  (closeModal)="showConfirmArchiveModal=false",
+  [readingToArchive]="readingToArchive"
+)
+//- Create First Group
+hot-add-project-modal.modal-will-fade(
+    *ngIf="showFirstGroupModal",
+    [class.show]="showFirstGroupModal", 
+    [heading]="'Create and Share First Group'",
+    [subheading]="'Your Reading has been saved! Now create your first group to publish this Reading and share with students.'",
+    [reading]="createdReading", 
+    [groupLabel]="'Group 1'",
+    (groupSaved)="finalizeShare($event)",
+    (closeModal)="showFirstGroupModal = false"
+)

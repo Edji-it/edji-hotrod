@@ -125,6 +125,15 @@
   height: 0.5em;
 }
 
+.icon-megaphone {
+  @include icon('icon-megaphone.svg');
+  
+  .btn:hover &,
+  .btn:focus & {
+    @include icon('icon-megaphone-white.svg');
+  }
+}
+
 .icon-create {
   @include icon('icon-create.svg');
   display: inline-block;
