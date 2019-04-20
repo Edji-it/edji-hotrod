@@ -6,7 +6,7 @@ import { Angulartics2 } from 'angulartics2'
 import { IMultiSelectOption, IMultiSelectSettings } from '../_directives'
 import { take } from 'rxjs/operators'
 
-import { AuthService, ProjectService, ReadingService, UtilToolService, AcademyService } from '../_services'
+import { AuthService, ProjectService, ReadingService, UtilToolService, AcademyService, MessageService } from '../_services'
 import { EdjiComment, EdjiQuestion, User, Project, Reading } from '../shared/datatypes'
 import { ReadingShareObject } from './../shared/nav-bar'
 import * as Rangy from 'rangy'
@@ -178,6 +178,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
     private _auth: AuthService,
     private _util: UtilToolService,
     private _academy: AcademyService,
+    private _messages: MessageService
   ) {
     this.readingForm = fb.group({
       title: [null, Validators.required],
@@ -276,9 +277,22 @@ export class NewReadingPage implements OnInit, OnDestroy {
     this.timerSubscription = interval(30000).subscribe(() => {
       if (this.validateReading(this.readingForm.value, true)) {
         this.saveReading(this.readingForm.value, true)
+        // Send toast via message service
+        this._messages.sendToast({
+          message: `Your reading was just saved automatically!`,
+          type: 'info',
+          id: 'reading_autosave'
+        })
       }
     })
     this.subscriptions.push(this.timerSubscription)
+  }
+
+  /**
+   * Turns off the auto-save feature
+   */
+  private unsubscribeFromAutosave(): void {
+    this.timerSubscription.unsubscribe()
   }
 
   private getReading(readingId: string) {
@@ -596,6 +610,9 @@ export class NewReadingPage implements OnInit, OnDestroy {
   public verifyCanShare(form) {
     // Check it reading is ready to Share
     if (this.validateReading(form)) {
+      // turn off the auto-save feature and clear any auto-save messages
+      this.unsubscribeFromAutosave()
+      this._messages.dismissToast('reading_autosave')
       // "Auto-save" for the user
       this.saveReading(form, true)
       if (!this.user.hero_status && this.readingToArchive) {
