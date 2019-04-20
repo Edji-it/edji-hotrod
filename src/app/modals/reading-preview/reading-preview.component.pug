@@ -1,6 +1,7 @@
 #readingArchivedModal.modal.fade-in.show
   .modal-dialog((clickOutside)="close()")
-    .modal-content.reading-details
+    .container
+      .modal-content.reading-details
         .comment__avatar {{reading['owner'].fullname.substr(0,2).toUpperCase()}}
         follow-tag([owner]="reading['owner']")
         .tag-row
@@ -8,9 +9,9 @@
             span.badge-pill.badge-secondary.badge-subject(*ngFor="let subject of reading.subjects") {{ subject | subjectName }}
         i.icon.lg(*ngIf="reading.public", [innerHTML]="':earth_americas:' | emojione")
         i.icon.lg(*ngIf="!reading.public", [innerHTML]="':lock:' | emojione")
-    .container
+      //- .container
       .row
-        .col-sm-10
+        .col-md-10
           .modal-content
             .modal-header
               .reading-icon.hide-for-archived
@@ -45,7 +46,7 @@
                     [question]="reading.questions[w.index]",
                     [readOnly]="true"
                   )
-        .col-sm-2.p-0
+        .col-md-2.p-0
           .modal-content.reading-actions
             p.text-center.actions-title.mb-3 Use this Reading
             button#shareReadingButton.btn.btn-action.mb-2((click)="createReading()") 
