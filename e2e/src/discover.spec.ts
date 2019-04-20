@@ -150,7 +150,7 @@ describe('Discover Feed', () => {
       discover.editReadingBtn.click()
       // wait for us to hit the new reading page with the reading from the discover feed
       browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000, 'never arrived to the new reading page with existing reading')
-      
+
       // grab the title of the reading for which we are editing and compare the two
       let titleValue = discover.getInputFieldText(newReading.titleInput)
       // expect(readingTitle == titleValue).toBeTruthy('the new reading we are about to create does not match what we just got from the discover feed')
@@ -167,6 +167,8 @@ describe('Discover Feed', () => {
       newReading.shareCodeModalCloseClick()
       browser.wait(EC.invisibilityOf(newReading.shareCodeModalClose), 5000, 'share reading code modal never dismissed')
       sidebar.logo.click()
+      // Browse back to Discover Feed
+      sidebar.navDiscover.click()
       browser.wait(EC.elementToBeClickable(dashboard.firstReadingCard), 5000, 'never got back to the dashboard')
       // Check title of most recent readings
       let foundTitle = discover.validateReadingTitle(newReadingTitle)
@@ -193,6 +195,8 @@ describe('Discover Feed', () => {
       newReading.shareCodeModalCloseClick()
       browser.wait(EC.invisibilityOf(newReading.shareCodeModalClose), 5000, 'share reading code modal never dismissed')
       sidebar.logo.click()
+      // Browse back to Discover Feed
+      sidebar.navDiscover.click()
       // Check title of most recent readings
       let foundTitle = discover.validateReadingTitle(readingTitle)
       expect(foundTitle).toBeTruthy()
