@@ -166,9 +166,8 @@ describe('Discover Feed', () => {
       browser.wait(EC.urlContains('project'), 7500, 'never arrived at published reading')
       newReading.shareCodeModalCloseClick()
       browser.wait(EC.invisibilityOf(newReading.shareCodeModalClose), 5000, 'share reading code modal never dismissed')
-      sidebar.logo.click()
-      // Browse back to Discover Feed
-      sidebar.navDiscover.click()
+      // Go directly to dashboard
+      browser.get('/#/dashboard/create')
       browser.wait(EC.elementToBeClickable(dashboard.firstReadingCard), 5000, 'never got back to the dashboard')
       // Check title of most recent readings
       let foundTitle = discover.validateReadingTitle(newReadingTitle)
@@ -194,9 +193,8 @@ describe('Discover Feed', () => {
       browser.wait(EC.urlContains('project'), 7500, 'never arrived at published reading')
       newReading.shareCodeModalCloseClick()
       browser.wait(EC.invisibilityOf(newReading.shareCodeModalClose), 5000, 'share reading code modal never dismissed')
-      sidebar.logo.click()
-      // Browse back to Discover Feed
-      sidebar.navDiscover.click()
+      // Go directly to dashboard
+      browser.get('/#/dashboard/create')
       // Check title of most recent readings
       let foundTitle = discover.validateReadingTitle(readingTitle)
       expect(foundTitle).toBeTruthy()
