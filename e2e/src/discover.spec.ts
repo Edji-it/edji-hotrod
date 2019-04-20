@@ -167,16 +167,19 @@ describe('Discover Feed', () => {
       newReading.shareCodeModalCloseClick()
       browser.wait(EC.invisibilityOf(newReading.shareCodeModalClose), 5000, 'share reading code modal never dismissed')
       // Go directly to dashboard
-      browser.get('/#/dashboard/create')
+      sidebar.logo.click()
+      // .sleep() excuse: A previously loaded reading card causes the subsequent wait to fire too early
+      browser.sleep(500)
       browser.wait(EC.elementToBeClickable(dashboard.firstReadingCard), 5000, 'never got back to the dashboard')
       // Check title of most recent readings
       let foundTitle = discover.validateReadingTitle(newReadingTitle)
       expect(foundTitle).toBeTruthy()
     })
 
-    it('should open reading preview and share a reading', () => {
+    it('should open reading preview and share a reading', async () => {
       browser.wait(EC.visibilityOf(discover.firstFeedReading), 5000, 'first reading in discover feed was not clickable')
-      let readingTitle = discover.getReadingTitle(discover.firstFeedTitle)
+      let readingTitle = await discover.firstFeedTitle.getText()
+      console.log("FOUND READING: " + readingTitle)
       discover.firstFeedReading.click()
       browser.wait(EC.elementToBeClickable(discover.shareReadingBtn), 5000, 'share reading button was not clickable')
       discover.shareReadingBtn.click()
@@ -194,7 +197,10 @@ describe('Discover Feed', () => {
       newReading.shareCodeModalCloseClick()
       browser.wait(EC.invisibilityOf(newReading.shareCodeModalClose), 5000, 'share reading code modal never dismissed')
       // Go directly to dashboard
-      browser.get('/#/dashboard/create')
+      sidebar.logo.click()
+      // .sleep() excuse: A previously loaded reading card causes the subsequent wait to fire too early
+      browser.sleep(500)
+      browser.wait(EC.elementToBeClickable(dashboard.firstReadingCard), 5000, 'never got back to the dashboard')
       // Check title of most recent readings
       let foundTitle = discover.validateReadingTitle(readingTitle)
       expect(foundTitle).toBeTruthy()
