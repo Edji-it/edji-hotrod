@@ -1,7 +1,7 @@
 #readingArchivedModal.modal.fade-in.show
   .modal-dialog((clickOutside)="close()")
     .container
-      .modal-content.reading-details
+      .modal-content.reading-details(*ngIf="reading['owner']")
         .comment__avatar {{reading['owner'].fullname.substr(0,2).toUpperCase()}}
         follow-tag([owner]="reading['owner']")
         .tag-row
