@@ -169,7 +169,7 @@ describe('Discover Feed', () => {
       // Go directly to dashboard
       sidebar.logo.click()
       // .sleep() excuse: A previously loaded reading card causes the subsequent wait to fire too early
-      browser.sleep(500)
+      browser.sleep(1000)
       browser.wait(EC.elementToBeClickable(dashboard.firstReadingCard), 5000, 'never got back to the dashboard')
       // Check title of most recent readings
       let foundTitle = discover.validateReadingTitle(newReadingTitle)
@@ -199,7 +199,7 @@ describe('Discover Feed', () => {
       // Go directly to dashboard
       sidebar.logo.click()
       // .sleep() excuse: A previously loaded reading card causes the subsequent wait to fire too early
-      browser.sleep(500)
+      browser.sleep(1000)
       browser.wait(EC.elementToBeClickable(dashboard.firstReadingCard), 5000, 'never got back to the dashboard')
       // Check title of most recent readings
       let foundTitle = discover.validateReadingTitle(readingTitle)
