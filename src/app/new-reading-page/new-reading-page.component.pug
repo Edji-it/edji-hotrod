@@ -1,6 +1,7 @@
 nav-bar(
     [pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'", 
-    [canPublish]="true", 
+    [canPublish]="true",
+    [saveState]="saveState",
     (saveAction)="saveReading(readingForm.value)", 
     (shareAction)="verifyCanShare(readingForm.value)"
   )

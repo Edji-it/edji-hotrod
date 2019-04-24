@@ -431,8 +431,16 @@
   @include icon('icon-wave.svg');
 }
 
+.icon-in-progress {
+  @include icon('icon-in-progress.svg');
+}
+
 .icon-check {
   @include icon('icon-check.svg');
+}
+
+.icon-check-small {
+  @include icon('icon-check-small.svg');
 }
 
 .icon-search {

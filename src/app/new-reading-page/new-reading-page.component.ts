@@ -26,6 +26,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
   public readingIsBlank: boolean = false
   public submitted: boolean = false
   public isDraft: boolean = true
+  public saveState: AutosaveState = 'unsaved'
   public readingId: any = ''
   public reading: Reading = <Reading>{}
   public projects: any[] = []
@@ -195,8 +196,12 @@ export class NewReadingPage implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.readingId = this._route.snapshot.params['id']
-
+    this.copyId = this._route.snapshot.queryParams['copyId']
     this.alert = this._route.snapshot.queryParams['successAlert']
+    // Set save state
+    if (this.alert || this.readingId) {
+      this.saveState = 'saved'
+    }
     // if the user clicks Go Hero in the confirm archive modal, we need to make sure they save before continuing
     // the only way we can get the modal to show is watching the params because saving a draft triggers a reload
     if (this._route.snapshot.queryParams['showHeroParam']) {
@@ -206,9 +211,6 @@ export class NewReadingPage implements OnInit, OnDestroy {
       this.successObject.readingSuccess = this.alert
       this.showAlert = true
     }
-
-    this.copyId = this._route.snapshot.queryParams['copyId']
-
     // Fetch the Reading if loading a draft that is not yet loaded
     if (this.readingId && (!this.reading || this.readingId !== this.reading._id)) {
       this.getReading(this.readingId)
@@ -274,15 +276,12 @@ export class NewReadingPage implements OnInit, OnDestroy {
    */
   private subscribeToAutosave(): void {
     // Subscribe to the timer and run it every minute
-    this.timerSubscription = interval(30000).subscribe(() => {
+    this.timerSubscription = interval(10000).subscribe(() => {
       if (this.validateReading(this.readingForm.value, true)) {
         this.saveReading(this.readingForm.value, true)
-        // Send toast via message service
-        this._messages.sendToast({
-          message: `Your reading was just saved automatically!`,
-          type: 'info',
-          id: 'reading_autosave'
-        })
+      } else {
+        // Update save state: Unable to save
+        this.saveState = 'unsaved'
       }
     })
     this.subscriptions.push(this.timerSubscription)
@@ -324,7 +323,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
           // TRACK EXCEPTION
           console.error(err)
         },
-      )
+    )
   }
 
   /**
@@ -762,6 +761,9 @@ export class NewReadingPage implements OnInit, OnDestroy {
     if (this.validateReading(form) === false) {
       this.error = ':warning: <b>Empty Fields</b> Not quite, please make sure all highlighted fields are complete!'
       return false
+    } else {
+      // Update save state: Attempting to save
+      this.saveState = 'saving'
     }
     // Prepare Reading object
     let reading = this.formatReading(form)
@@ -821,6 +823,11 @@ export class NewReadingPage implements OnInit, OnDestroy {
             // Update reading values for continuing to edit
             this.readingId = data._id
             this.reading.updatedAt = data.updatedAt
+            // Update save state: Successfully saved
+            setTimeout(() => {
+              // We save readings fast! Give the user a split second to realize something is happening
+              this.saveState = 'saved'
+            }, 500)
           }
           return true
         }
@@ -1057,3 +1064,5 @@ export class NewReadingPage implements OnInit, OnDestroy {
     }
   }
 }
+
+export type AutosaveState = 'unsaved' | 'saving' | 'saved'
