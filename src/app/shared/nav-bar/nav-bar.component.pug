@@ -31,7 +31,7 @@
         | Guide
         .icon.icon-external
     //- Optional Title
-    div(*ngIf="currentPage == 'project' || hideAccountOptions")
+    div(*ngIf="pageTitle || currentPage == 'project'")
       .nav-bar__heading.hidden-md-down(*ngIf="!showProjectInfo")
         h1(
           *ngIf="pageTitle",
