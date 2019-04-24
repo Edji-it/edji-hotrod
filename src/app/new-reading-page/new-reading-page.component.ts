@@ -35,6 +35,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
   private user: any
   private subscriptions: Subscription[] = []
   private readingType: string = 'newReading' // used for analytics purposes
+  private selectedReading: Reading
 
   // Trigger booleans
   public showAlert: boolean = false
@@ -43,6 +44,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
   public showConfirmArchiveModal: boolean = false
   public showHeroSubModal: boolean = false
   public showHeroParam: boolean = false
+  public showReadingPreviewModal: boolean
 
   public errorObject = {
     readingError: '',
@@ -1019,5 +1021,10 @@ export class NewReadingPage implements OnInit, OnDestroy {
     for (let i = 1; i < this.readingHtml.length; i++) {
       this.readingHtml[i].question.question_number = i
     }
+  }
+
+  public openReadingPreview(form: any): void {
+    let reading = this.formatReading(form)
+    this.selectedReading = reading
   }
 }
