@@ -240,6 +240,14 @@ a.on-dark {
   }
 }
 
+.hero-color-text {
+  color: $btnHeroColor;
+
+  button:hover & {
+    color:$btnHeroFocusColor;
+  }
+}
+
 // Text colors: Transitioning to latest Bootstrap v4 styles
 .text-secondary {
   color: $medium-gray;
