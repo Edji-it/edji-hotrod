@@ -117,7 +117,7 @@
           .nav__btn-slider.has-action([class.expanded]="sliderBtnExpanded['code']")
             i.icon.icon-key((click)="toggleSlider('code')")
               .icon-pill-status
-            .btn-slider__value.code((click)="showShareCodeModal = true") {{ currentProject.code }}
+            .btn-slider__value.text-code((click)="showShareCodeModal = true") {{ currentProject.code }}
           .tooltip.tooltip--bottom
             .tooltip-title Group Code
       //- Academy Info
