@@ -95,10 +95,14 @@
     <p-paginator [rows]="rows" [totalRecords]="total" (onPageChange)="loadRecentlyCreated($event)"></p-paginator>
   .col-12.col-sm-3
     h2 Drafts
-    .draft-card(*ngFor="let draft of drafts", [routerLink]="['/new-reading/' + draft._id]")
-      .icon.icon-lg.icon-create
-      .h2.draft-card__title {{ draft.title }}
-      p.draft-card__date Last edited {{ draft.updatedAt | edjidate:'timeAgo':null:secondsAgo }}
+    .draft-card__wrap(*ngFor="let draft of drafts", [class.action-active]="draft.loading")
+      .draft-card([routerLink]="['/new-reading/' + draft._id]")
+        .icon.icon-lg.icon-create
+        .h2.draft-card__title {{ draft.title }}
+        p.draft-card__date Last edited {{ draft.updatedAt | edjidate:'timeAgo':null:secondsAgo }}
+      .draft-card__action.icon-button(title="Delete draft", (click)="deleteDraft(draft); draft.loading = true")
+        span(*ngIf="!draft.loading", [innerHtml]="':x:' | emojione")
+        .icon.icon-loading(*ngIf="draft.loading")
 
 hot-login-req(*ngIf="showLoginReqModal", (closeModal)="showLoginReqModal = false")
 .modal.show(*ngIf="showNewReadingVideoModal", (click)="showNewReadingVideoModal = false")
