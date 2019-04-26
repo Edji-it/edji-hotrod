@@ -1,5 +1,5 @@
 #shareCodeModal.modal.fade-in.show(*ngIf="currentProject && currentProject.code")
-  .modal-dialog(role="document")
+  .modal-dialog.modal-lg(role="document")
     .modal-content
       .modal-header
         h4.modal-title 
@@ -18,7 +18,7 @@
           a.link([routerLink]="'/' + currentProject.code", target="_blank") edji.it/{{ currentProject.code }}
           | &ensp;or entering the code on your dashboard.
         .share-code--block
-          .share-code--code(*ngFor="let codeLetter of currentProject.code.split('')")
+          .share-code--code.text-code(*ngFor="let codeLetter of currentProject.code.split('')")
             span.sc--c([ngClass]="[ isNumber(codeLetter) ? 'sc--c__green' : '' ]") {{ codeLetter }}
           .share-code--label 
             i.icon.icon-key
