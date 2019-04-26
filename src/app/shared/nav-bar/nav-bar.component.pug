@@ -144,6 +144,9 @@
     .nav__btn-wrap(*ngIf="canPublish")
       button#saveDraftButton.btn.btn-link.nav__status-label(*ngIf="!saveState || saveState == 'unsaved'", (click)="saveAction.emit()")
         | Save as Draft
+      button#saveDraftButton.btn.btn-link.nav__status-label(*ngIf="saveState == 'edited'", (click)="saveAction.emit()", title="Click to save draft")
+        .icon.icon-in-progress
+        | Edited...
       span.nav__status-label(*ngIf="saveState == 'saving'")
         .icon.icon-in-progress
         | Saving

@@ -276,7 +276,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
    */
   private subscribeToAutosave(): void {
     // Subscribe to the timer and run it every minute
-    this.timerSubscription = interval(10000).subscribe(() => {
+    this.timerSubscription = interval(30000).subscribe(() => {
       if (this.validateReading(this.readingForm.value, true)) {
         this.saveReading(this.readingForm.value, true)
       } else {
@@ -285,6 +285,13 @@ export class NewReadingPage implements OnInit, OnDestroy {
       }
     })
     this.subscriptions.push(this.timerSubscription)
+  }
+
+  /**
+   * Autosave: indicate that edits have been made and are unsaved
+   */
+  changeMonitor(): void {
+    this.saveState = 'edited'
   }
 
   /**
@@ -1065,4 +1072,4 @@ export class NewReadingPage implements OnInit, OnDestroy {
   }
 }
 
-export type AutosaveState = 'unsaved' | 'saving' | 'saved'
+export type AutosaveState = 'unsaved' | 'saving' | 'saved' | 'edited'

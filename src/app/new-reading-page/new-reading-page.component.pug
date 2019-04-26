@@ -8,7 +8,7 @@ nav-bar(
 .container.pt-4
   .row
     .col-sm-12
-      form([formGroup]="readingForm")
+      form([formGroup]="readingForm", (keyup)="changeMonitor()")
         .reading-page
           //- Error and Success Messaging
           p.alert.alert-danger(*ngIf="error.length > 0",  [innerHtml]="error | emojione")
