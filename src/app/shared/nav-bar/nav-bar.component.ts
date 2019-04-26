@@ -20,6 +20,7 @@ import {
   MessageToast,
 } from '../../_services'
 import { User } from '../datatypes'
+import { AutosaveState } from '../../new-reading-page';
 
 @Component({
   selector: 'nav-bar',
@@ -33,6 +34,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
   @Input() showProjectInfo: boolean
   @Input() showDashboardOptions: boolean
   @Input() hideAccountOptions: boolean
+  @Input() saveState: AutosaveState
 
   @Output() saveAction: EventEmitter<any> = new EventEmitter()
   @Output() shareAction: EventEmitter<ReadingShareObject> = new EventEmitter<ReadingShareObject>()
@@ -102,9 +104,9 @@ export class NavBarComponent implements OnInit, OnDestroy {
     code?: boolean
     academy?: boolean
   } = {
-    // Default expand code
-    code: true,
-  }
+      // Default expand code
+      code: true,
+    }
   // Nav Slider Button loading states
   public sliderBtnLoading: {
     heat?: boolean

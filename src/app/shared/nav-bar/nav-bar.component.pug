@@ -131,36 +131,28 @@
           button.list-group-item.list-group-item-action(*ngFor="let academy of academyState.academies; let i = index", (click)="_auth.setCurrentAcademy(i); showAcademyDropdown = false")
             | {{ academy.name }} ({{academy.abbreviation}})
     //- New Reading actions
-    .nav__btn-wrap
+    .nav__btn-wrap(*ngIf="canPublish")
       //- Share button: Desktop
-      button#addReadingButton.btn.btn-action.nav-bar__btn.hidden-sm-down(*ngIf="canPublish", (click)="this.shareAction.emit()", [class.active]="showShareTooltip") 
+      button#addReadingButton.btn.btn-action.nav-bar__btn.hidden-sm-down((click)="this.shareAction.emit()", [class.active]="showShareTooltip") 
         | Share
         i.icon.icon-megaphone.icon--btn-inline.mr-0
       //- Share button: Mobile
-      button#addReadingButtonMobile.btn.btn-clear.nav-bar__btn.hidden-md-up(*ngIf="canPublish", (click)="this.shareAction.emit()", [class.active]="showShareTooltip") 
+      button#addReadingButtonMobile.btn.btn-clear.nav-bar__btn.hidden-md-up((click)="this.shareAction.emit()", [class.active]="showShareTooltip") 
         | Share
         i.icon.icon-megaphone.icon--btn-inline.mr-0
-      //- Publish Tooltip
-      //- .publish-tooltip(*ngIf="showShareTooltip && !_util.showShareCode")
-      //-   h1.publish-tooltip__title Publish and Share
-      //-   p.sub-label.pb-2F Finished with your reading? Give it a group name, Finalize and get your group code to share with your readers!
-      //-   .form-group(style="margin-bottom: 0px;")
-      //-     label Group Name
-      //-       .input-group
-      //-         input#firstProjectLabel.form-control.form-item--editor.h3.mGroup([(ngModel)]="groupLabel", type="text", placeholder="eg. First Period, Peer review...")
-      //-       #errorGroupLabel.alert.alert-info(*ngIf="groupLabel.length < 1 && messages.groupNameLengthError") Please pick a name for your first Reading Group!
-      //-   .form-group(*ngIf="user.hero_status")
-      //-     label(for="customCodeInput") Custom Code
-      //-       input#customCodeInput.form-control.form-item--editor.h3.mGroup([(ngModel)]="customCode", type="text", placeholder="(optional)", style="text-transform:lowercase;")
-      //-     #errorInvalidCustomCode.alert.alert-warning(*ngIf="messages.invalidCode") Whoops, someone is already using that group code. Could you pick another?
-      //-     #errorServiceResponse.alert.alert-warning(*ngIf="messages.serviceError") Oh no! Something went wrong. If it keeps happening, let us know!
-      //-   button#addReadingFinalizeButton.btn.btn-action((click)="finalizeReadingAndShare({ groupLabel: groupLabel, customCode: customCode })", [class.loading]="shareLoading") Finalize and Share
-      .nav__btn-wrap
-      //- Save button: Desktop
-      button#saveDraftButton.btn.btn-secondary.nav-bar__btn.hidden-sm-down(*ngIf="canPublish", (click)="saveAction.emit()") Save
-      //- Save button: Mobile
-      button#saveDraftButtonMobile.btn.btn-clear.nav-bar__btn.hidden-md-up(*ngIf="canPublish", (click)="saveAction.emit()") Save
-
+    //- Save button and status
+    .nav__btn-wrap(*ngIf="canPublish")
+      button#saveDraftButton.btn.btn-link.nav__status-label(*ngIf="!saveState || saveState == 'unsaved'", (click)="saveAction.emit()")
+        | Save as Draft
+      button#saveDraftButton.btn.btn-link.nav__status-label(*ngIf="saveState == 'edited'", (click)="saveAction.emit()", title="Click to save draft")
+        .icon.icon-in-progress
+        | Edited...
+      span.nav__status-label(*ngIf="saveState == 'saving'")
+        .icon.icon-in-progress
+        | Saving
+      span.nav__status-label.hover--tooltip(*ngIf="saveState == 'saved'", title="Recently autosaved")
+        .icon.icon-check-small
+        | Saved
     //- Join Reading Code
     .row.col-4.col-xl-5.nav__join-code.hidden-md-down(*ngIf="(currentPage != 'project') && !canPublish && !hideAccountOptions")
       .input-group.input-group-lg
