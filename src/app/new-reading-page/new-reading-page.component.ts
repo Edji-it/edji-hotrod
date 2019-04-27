@@ -616,6 +616,8 @@ export class NewReadingPage implements OnInit, OnDestroy {
    * @param form the new reading form data
    */
   public verifyCanShare(form) {
+    // Need to dismiss the reading preview modal and then we can show the new group modal
+    this.showReadingPreviewModal = false
     // Check it reading is ready to Share
     if (this.validateReading(form)) {
       // turn off the auto-save feature and clear any auto-save messages
@@ -1074,8 +1076,8 @@ export class NewReadingPage implements OnInit, OnDestroy {
   }
 
   public openReadingPreview(form: any): void {
-    let reading = this.formatReading(form)
-    this.selectedReading = reading
+    this.selectedReading = this.formatReading(form)
+    this.showReadingPreviewModal = true
   }
 }
 

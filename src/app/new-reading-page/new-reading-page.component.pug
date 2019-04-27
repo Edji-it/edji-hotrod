@@ -2,8 +2,8 @@ nav-bar(
     [pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'", 
     [canPublish]="true",
     [saveState]="saveState",
-    (saveAction)="openReadingPreview(readingForm.value)",
-    (shareAction)="verifyCanShare(readingForm.value)"
+    (saveAction)="saveReading(readingForm.value)",
+    (shareAction)="openReadingPreview(readingForm.value)"
   )
   //- (saveAction)="saveReading(readingForm.value)", 
 .container.pt-4
@@ -199,5 +199,5 @@ hot-reading-preview-modal(
   [reading]="selectedReading",
   [user]="user",
   (closeModal)="showReadingPreviewModal=false",
-  (createSuccess)="readingCreateFromPreviewSuccess($event)"
+  (createSuccess)="verifyCanShare($event)"
 )

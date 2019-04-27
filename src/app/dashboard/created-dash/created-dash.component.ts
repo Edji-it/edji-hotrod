@@ -70,7 +70,7 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
       }),
       this._readings.currentUserReadings.subscribe(
         data => {
-          console.log('updating created readings!')
+          // console.log('updating created readings!')
           this.readings = data.readings || []
           this.total = data.total
           this.pageNo = Math.floor((this.first + 1) / this.rows) + 1
