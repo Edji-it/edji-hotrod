@@ -36,7 +36,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
   private user: any
   private subscriptions: Subscription[] = []
   private readingType: string = 'newReading' // used for analytics purposes
-  private timerSubscription: Subscription
+  private autosaveTimer
 
   // Trigger booleans
   public showAlert: boolean = false
@@ -260,9 +260,6 @@ export class NewReadingPage implements OnInit, OnDestroy {
     )
 
     this._title.setTitle('Edji | New Reading')
-
-    // fire up the auto-save
-    this.subscribeToAutosave()
   }
 
   ngOnDestroy() {
@@ -272,33 +269,39 @@ export class NewReadingPage implements OnInit, OnDestroy {
   }
 
   /**
-   * Auto-saves the new reading every 30 seconds
-   */
-  private subscribeToAutosave(): void {
-    // Subscribe to the timer and run it every minute
-    this.timerSubscription = interval(30000).subscribe(() => {
-      if (this.validateReading(this.readingForm.value, true)) {
-        this.saveReading(this.readingForm.value, true)
-      } else {
-        // Update save state: Unable to save
-        this.saveState = 'unsaved'
-      }
-    })
-    this.subscriptions.push(this.timerSubscription)
-  }
-
-  /**
-   * Autosave: indicate that edits have been made and are unsaved
+   * Auto-save after edits
+   * - indicate that edits have been made and are unsaved
+   * - save after timeout
    */
   changeMonitor(): void {
     this.saveState = 'edited'
+    // Clear active timeout
+    this.cancelAutosave()
+    // Debounce user activity
+    this.autosaveTimer = setTimeout(() => {
+      this.autosave()
+    }, 5000)
+  }
+
+  /**
+   * Autosave the draft
+   */
+  private autosave(): void {
+    if (this.validateReading(this.readingForm.value, true)) {
+      this.saveReading(this.readingForm.value, true)
+    } else {
+      // Update save state: Unable to save
+      this.saveState = 'unsaved'
+    }
   }
 
   /**
    * Turns off the auto-save feature
    */
-  private unsubscribeFromAutosave(): void {
-    this.timerSubscription.unsubscribe()
+  private cancelAutosave(): void {
+    if (this.autosaveTimer) {
+      clearTimeout(this.autosaveTimer)
+    }
   }
 
   private getReading(readingId: string) {
@@ -338,6 +341,9 @@ export class NewReadingPage implements OnInit, OnDestroy {
    * - Enables inserting images at cursor position
    */
   private contentChange(event: Event) {
+    // Trigger autosave
+    this.changeMonitor()
+    // Handle insert position
     if (!Rangy) {
       // Clicking the editor before page is finished loading causes a broken reference to Rangy
       return
@@ -617,7 +623,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
     // Check it reading is ready to Share
     if (this.validateReading(form)) {
       // turn off the auto-save feature and clear any auto-save messages
-      this.unsubscribeFromAutosave()
+      this.cancelAutosave()
       this._messages.dismissToast('reading_autosave')
       // "Auto-save" for the user
       this.saveReading(form, true)

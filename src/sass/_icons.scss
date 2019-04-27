@@ -435,6 +435,10 @@
   @include icon('icon-in-progress.svg');
 }
 
+.icon-save-small {
+  @include icon('icon-save-small.svg');
+}
+
 .icon-check {
   @include icon('icon-check.svg');
 }

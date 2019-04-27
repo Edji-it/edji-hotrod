@@ -261,8 +261,7 @@ describe('New Reading Page', () => {
             - Redirect to reading page of newly created reading
          */
     it('should add a reading as a draft and return to the same screen with a reading id', function () {
-      // Reset user to dashboard
-      // sidebar.backToDash()
+      // Should begin at New Reading page
       browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000)
       // Enter sample Reading into form
       newReading.titleInput.sendKeys(newReading.titleString)
@@ -292,6 +291,64 @@ describe('New Reading Page', () => {
       newReading.finalizeButton.click()
       // Should create a new Reading
       browser.wait(EC.urlContains('project'), 10000, 'never arrived at new reading')
+    })
+
+    it('should create a draft, and find it on the dashboard after manually saving', function () {
+      let manualSaveTitle = 'M ' + newReading.titleString
+      // Reset user to New Reading
+      newReading.getPage()
+      // Should begin at New Reading page
+      browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000)
+      // Enter sample Reading into form
+      newReading.titleInput.sendKeys(manualSaveTitle)
+      // Make private to avoid needing grade levels and subjecst
+      newReading.privateButton.click()
+      // Content fill
+      newReading.contentInput.sendKeys(newReading.contentShortString)
+      newReading.contentInput.sendKeys(protractor.Key.RETURN)
+      // Manually save
+      newReading.draftButton.click()
+      // Wait for "saved" confirmation
+      browser.wait(EC.visibilityOf(element(by.id('draftStatusSaved'))), 3000, 'draft "Saved" confirmation did not appear in nav bar')
+      // Return to dashboard
+      sidebar.backToDash()
+      // Verify 
+      browser.wait(
+        EC.elementToBeClickable(element(by.cssContainingText('.draft-card__title', manualSaveTitle))),
+        5000,
+        'manually saved draft did not appear on dashboard'
+      )
+      // Delete draft
+      element.all(by.css('.e2e-draft-delete')).first().click()
+    })
+
+    it('should create a draft, and find it on the dashboard after letting it autosave', function () {
+      let autosaveTitle = 'A ' + newReading.titleString
+      // Reset user to New Reading
+      newReading.getPage()
+      // Should begin at New Reading page
+      browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000)
+      // Enter sample Reading into form
+      newReading.titleInput.sendKeys(autosaveTitle)
+      // Make private to avoid needing grade levels and subjecst
+      newReading.privateButton.click()
+      // Content fill
+      newReading.contentInput.sendKeys(newReading.contentShortString)
+      newReading.contentInput.sendKeys(protractor.Key.RETURN)
+      // Wait for autosave (fires at 5 seconds)
+      browser.sleep(5000)
+      // Wait for "saved" confirmation
+      browser.wait(EC.visibilityOf(element(by.id('draftStatusSaved'))), 3000, 'draft "Saved" confirmation did not appear in nav bar')
+      // Return to dashboard
+      sidebar.backToDash()
+      // Verify 
+      browser.wait(
+        EC.elementToBeClickable(element(by.cssContainingText('.draft-card__title', autosaveTitle))),
+        5000,
+        'auto-saved draft did not appear on dashboard'
+      )
+      // Delete draft
+      element.all(by.css('.e2e-draft-delete')).first().click()
     })
   })
 })
