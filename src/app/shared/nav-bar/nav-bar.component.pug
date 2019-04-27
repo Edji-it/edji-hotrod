@@ -155,7 +155,7 @@
       span.nav__status-label(*ngIf="saveState == 'saving'")
         .icon.icon-in-progress
         | Saving
-      span.nav__status-label.hover--tooltip(*ngIf="saveState == 'saved'", title="Recently autosaved")
+      span.nav__status-label.hover--tooltip#draftStatusSaved(*ngIf="saveState == 'saved'", title="Recently autosaved")
         .icon.icon-check-small
         | Saved
     //- Join Reading Code
