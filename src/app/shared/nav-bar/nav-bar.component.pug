@@ -64,7 +64,7 @@
           //- Refer
           button#navReferralButton.list-group-item.list-group-item-action(*ngIf="!user.isStudent" type="button", (click)="openReferralModal()") 
             ng-container(*ngIf="user.hero_status")
-              | Refer Teachers
+              | Refer a Friend
               span.list-icon--right([innerHtml]="':satellite:' | emojione")
             ng-container(*ngIf="!user.hero_status")
               span.hero-color-text Get Hero Free
