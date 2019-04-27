@@ -296,8 +296,10 @@ describe('New Reading Page', () => {
 
     it('should create a draft, and find it on the dashboard after manually saving', function () {
       let manualSaveTitle = 'M ' + newReading.titleString
-      // Reset user to dashboard
-      sidebar.backToDash()
+      // Reset user to New Reading
+      newReading.getPage()
+      // Should begin at New Reading page
+      browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000)
       // Enter sample Reading into form
       newReading.titleInput.sendKeys(manualSaveTitle)
       // Make private to avoid needing grade levels and subjecst
@@ -323,8 +325,10 @@ describe('New Reading Page', () => {
 
     it('should create a draft, and find it on the dashboard after letting it autosave', function () {
       let autosaveTitle = 'A ' + newReading.titleString
-      // Reset user to dashboard
-      sidebar.backToDash()
+      // Reset user to New Reading
+      newReading.getPage()
+      // Should begin at New Reading page
+      browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000)
       // Enter sample Reading into form
       newReading.titleInput.sendKeys(autosaveTitle)
       // Make private to avoid needing grade levels and subjecst
