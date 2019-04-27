@@ -8,7 +8,7 @@ nav-bar(
 .container.pt-4
   .row
     .col-sm-12
-      form([formGroup]="readingForm", (keyup)="changeMonitor()")
+      form([formGroup]="readingForm")
         .reading-page
           //- Error and Success Messaging
           p.alert.alert-danger(*ngIf="error.length > 0",  [innerHtml]="error | emojione")
@@ -19,7 +19,12 @@ nav-bar(
           .form-group
             label
               span Title
-              input#readingTitle.form-control.title-input.h1.form-item--editor.mTitle(type="text", placeholder="Reading Title...", [formControl]="readingForm.controls['title']")
+              input#readingTitle.form-control.title-input.h1.form-item--editor.mTitle(
+                  type="text", 
+                  placeholder="Reading Title...", 
+                  [formControl]="readingForm.controls['title']",
+                  (keyup)="changeMonitor()"
+                )
               #errorTitle.alert.alert-danger(*ngIf="readingForm.controls['title'].hasError('required') && (readingForm.controls['title'].dirty || submitted)") 
                 b No Title
                 | Please give your Reading a title!
@@ -28,7 +33,7 @@ nav-bar(
             label Make Public
               p.sub-label Share this Reading with other teachers looking for lessons. <b>Grade Level</b> and <b>Subject</b> are added to Public readings.
             .input-group
-              .form-check.pl-0
+              .form-check.pl-0((click)="changeMonitor()")
                 //- Public option
                 label#readingMakePublic.form-check-label.form-check-btn(
                     [class.active]="readingForm.controls['public'].value == 'true'",
@@ -58,7 +63,7 @@ nav-bar(
           .form-group(*ngIf="readingForm.controls['public'].value == 'true'")
             label Grade Level
               p.sub-label Select which grade levels this reading targets. (Click to select start of range, and click again to select end of range!)
-            grade-selector(formControlName="grade_levels")
+            grade-selector(formControlName="grade_levels", (click)="changeMonitor()")
             #errorTitle.alert.alert-danger.mt-2(*ngIf="readingForm.controls['grade_levels'].hasError('required') && (readingForm.controls['grade_levels'].dirty || submitted)") 
               b No Grades Selected
               | Please select the range of grade levels this Reading is best suited for.
