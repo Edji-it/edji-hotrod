@@ -2,7 +2,6 @@ import * as path from 'path'
 import { browser, by, element, protractor } from 'protractor'
 import { NewReading, Login, Sidebar, Dashboard } from './page-objects'
 import { reset } from './utils/browser-methods'
-import { elementStart } from '@angular/core';
 
 // Now into the testing.
 describe('New Reading Page', () => {
