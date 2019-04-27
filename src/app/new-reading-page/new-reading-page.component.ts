@@ -1077,7 +1077,10 @@ export class NewReadingPage implements OnInit, OnDestroy {
 
   public openReadingPreview(form: any): void {
     this.selectedReading = this.formatReading(form)
-    this.showReadingPreviewModal = true
+    // Check it reading is ready to Share
+    if (this.validateReading(form)) {
+      this.showReadingPreviewModal = true
+    }
   }
 }
 

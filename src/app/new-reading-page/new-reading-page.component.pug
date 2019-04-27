@@ -3,7 +3,8 @@ nav-bar(
     [canPublish]="true",
     [saveState]="saveState",
     (saveAction)="saveReading(readingForm.value)",
-    (shareAction)="openReadingPreview(readingForm.value)"
+    (shareAction)="verifyCanShare(readingForm.value)",
+    (previewAction)="openReadingPreview(readingForm.value)"
   )
   //- (saveAction)="saveReading(readingForm.value)", 
 .container.pt-4
