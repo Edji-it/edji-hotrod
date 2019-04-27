@@ -31,7 +31,7 @@
         | Guide
         .icon.icon-external
     //- Optional Title
-    div(*ngIf="currentPage == 'project' || hideAccountOptions")
+    div(*ngIf="pageTitle || currentPage == 'project'")
       .nav-bar__heading.hidden-md-down(*ngIf="!showProjectInfo")
         h1(
           *ngIf="pageTitle",
@@ -62,8 +62,13 @@
           button#accountButton.list-group-item.list-group-item-action(type="button", (click)="openAccount()") {{ user.fullname }}
             span.list-icon--right([innerHtml]="':gear:' | emojione")
           //- Refer
-          button#navReferralButton.list-group-item.list-group-item-action(*ngIf="!user.isStudent" type="button", (click)="openReferralModal()") Refer Teachers
-            span.list-icon--right([innerHtml]="':satellite:' | emojione")
+          button#navReferralButton.list-group-item.list-group-item-action(*ngIf="!user.isStudent" type="button", (click)="openReferralModal()") 
+            ng-container(*ngIf="user.hero_status")
+              | Refer Teachers
+              span.list-icon--right([innerHtml]="':satellite:' | emojione")
+            ng-container(*ngIf="!user.hero_status")
+              span.hero-color-text Get Hero Free
+              span.list-icon--right([innerHtml]="':gift:' | emojione")
           //- Feedback
           button#navFeedbackButton.list-group-item.list-group-item-action(type="button", (click)="openFeedback()") Contact Us
             span.list-icon--right([innerHtml]="':question:' | emojione")
@@ -112,7 +117,7 @@
           .nav__btn-slider.has-action([class.expanded]="sliderBtnExpanded['code']")
             i.icon.icon-key((click)="toggleSlider('code')")
               .icon-pill-status
-            .btn-slider__value.code((click)="showShareCodeModal = true") {{ currentProject.code }}
+            .btn-slider__value.text-code((click)="showShareCodeModal = true") {{ currentProject.code }}
           .tooltip.tooltip--bottom
             .tooltip-title Group Code
       //- Academy Info
@@ -131,21 +136,28 @@
           button.list-group-item.list-group-item-action(*ngFor="let academy of academyState.academies; let i = index", (click)="_auth.setCurrentAcademy(i); showAcademyDropdown = false")
             | {{ academy.name }} ({{academy.abbreviation}})
     //- New Reading actions
-    .nav__btn-wrap
+    .nav__btn-wrap(*ngIf="canPublish")
       //- Share button: Desktop
-      button#addReadingButton.btn.btn-action.nav-bar__btn.hidden-sm-down(*ngIf="canPublish", (click)="this.shareAction.emit()", [class.active]="showShareTooltip") 
+      button#addReadingButton.btn.btn-action.nav-bar__btn.hidden-sm-down((click)="this.shareAction.emit()", [class.active]="showShareTooltip") 
         | Share
         i.icon.icon-megaphone.icon--btn-inline.mr-0
       //- Share button: Mobile
-      button#addReadingButtonMobile.btn.btn-clear.nav-bar__btn.hidden-md-up(*ngIf="canPublish", (click)="this.shareAction.emit()", [class.active]="showShareTooltip") 
+      button#addReadingButtonMobile.btn.btn-clear.nav-bar__btn.hidden-md-up((click)="this.shareAction.emit()", [class.active]="showShareTooltip") 
         | Share
         i.icon.icon-megaphone.icon--btn-inline.mr-0
-      .nav__btn-wrap
-      //- Save button: Desktop
-      button#saveDraftButton.btn.btn-secondary.nav-bar__btn.hidden-sm-down(*ngIf="canPublish", (click)="saveAction.emit()") Save
-      //- Save button: Mobile
-      button#saveDraftButtonMobile.btn.btn-clear.nav-bar__btn.hidden-md-up(*ngIf="canPublish", (click)="saveAction.emit()") Save
-
+    //- Save button and status
+    .nav__btn-wrap(*ngIf="canPublish")
+      button#saveDraftButton.btn.btn-link.nav__status-label(*ngIf="!saveState || saveState == 'unsaved'", (click)="saveAction.emit()")
+        | Save as Draft
+      button#saveDraftButton.btn.btn-link.nav__status-label(*ngIf="saveState == 'edited'", (click)="saveAction.emit()", title="Click to save draft")
+        .icon.icon-in-progress
+        | Edited...
+      span.nav__status-label(*ngIf="saveState == 'saving'")
+        .icon.icon-in-progress
+        | Saving
+      span.nav__status-label.hover--tooltip(*ngIf="saveState == 'saved'", title="Recently autosaved")
+        .icon.icon-check-small
+        | Saved
     //- Join Reading Code
     .row.col-4.col-xl-5.nav__join-code.hidden-md-down(*ngIf="(currentPage != 'project') && !canPublish && !hideAccountOptions")
       .input-group.input-group-lg

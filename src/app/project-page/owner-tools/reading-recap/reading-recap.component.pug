@@ -4,11 +4,10 @@
     .row
       .col-8
         h1.mb-3.header-text__large(*ngIf="currentUser.hero_status") Reading Recap for
-          p-dropdown#studentSelector(
+          p-dropdown#studentSelector.w-100(
             [options]="students",
             [(ngModel)]="selectedStudent",
             [autoWidth]="false",
-            [style]="[{'width': '100%'}]",
             [scrollHeight]="'90vh'",
             [dropdownIcon]="'filter-arrow-down'", 
             (onChange)="changeStudentSelection()",

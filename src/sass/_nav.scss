@@ -90,9 +90,8 @@
     max-width: 0px;
     padding: 0px;
 
-    &.code {
-      font-family: 'Courier New', Courier, monospace;
-      font-weight: 600;
+    &.text-code {
+      font-size: 14px;
     }
 
     &.with-pill {

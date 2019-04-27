@@ -328,6 +328,15 @@ section.search {
     transform: translate3d(-50%, -50%, 0);
   }
 
+  & .icon {
+    height: 25px;
+    width: 25px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%, -50%, 0);
+  }
+
   &:hover,
   &:active {
     // @include filter(grayscale(0%));
@@ -834,6 +843,8 @@ $readingIconHeight: 60px;
 .prj-code {
   float: right;
   margin-top: 6px;
+  background-color: #fff;
+  font-size: 13px;
 }
 
 .hotspot {

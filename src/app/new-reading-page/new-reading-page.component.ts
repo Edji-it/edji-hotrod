@@ -1,16 +1,16 @@
 import { ActivatedRoute, Router, Params } from '@angular/router'
 import { Title } from '@angular/platform-browser'
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms'
 import { Component, ElementRef, OnInit, ViewChild, OnDestroy } from '@angular/core'
 import { Angulartics2 } from 'angulartics2'
 import { IMultiSelectOption, IMultiSelectSettings } from '../_directives'
 import { take } from 'rxjs/operators'
 
-import { AuthService, ProjectService, ReadingService, UtilToolService, AcademyService } from '../_services'
+import { AuthService, ProjectService, ReadingService, UtilToolService, AcademyService, MessageService } from '../_services'
 import { EdjiComment, EdjiQuestion, User, Project, Reading } from '../shared/datatypes'
 import { ReadingShareObject } from './../shared/nav-bar'
 import * as Rangy from 'rangy'
-import { Subscription, Observable } from 'rxjs'
+import { Subscription, Observable, interval } from 'rxjs'
 
 @Component({
   selector: 'new-reading-page',
@@ -26,6 +26,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
   public readingIsBlank: boolean = false
   public submitted: boolean = false
   public isDraft: boolean = true
+  public saveState: AutosaveState = 'unsaved'
   public readingId: any = ''
   public reading: Reading = <Reading>{}
   public projects: any[] = []
@@ -36,6 +37,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = []
   private readingType: string = 'newReading' // used for analytics purposes
   private selectedReading: Reading
+  private timerSubscription: Subscription
 
   // Trigger booleans
   public showAlert: boolean = false
@@ -179,6 +181,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
     private _auth: AuthService,
     private _util: UtilToolService,
     private _academy: AcademyService,
+    private _messages: MessageService
   ) {
     this.readingForm = fb.group({
       title: [null, Validators.required],
@@ -195,8 +198,12 @@ export class NewReadingPage implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.readingId = this._route.snapshot.params['id']
-
+    this.copyId = this._route.snapshot.queryParams['copyId']
     this.alert = this._route.snapshot.queryParams['successAlert']
+    // Set save state
+    if (this.alert || this.readingId) {
+      this.saveState = 'saved'
+    }
     // if the user clicks Go Hero in the confirm archive modal, we need to make sure they save before continuing
     // the only way we can get the modal to show is watching the params because saving a draft triggers a reload
     if (this._route.snapshot.queryParams['showHeroParam']) {
@@ -206,9 +213,6 @@ export class NewReadingPage implements OnInit, OnDestroy {
       this.successObject.readingSuccess = this.alert
       this.showAlert = true
     }
-
-    this.copyId = this._route.snapshot.queryParams['copyId']
-
     // Fetch the Reading if loading a draft that is not yet loaded
     if (this.readingId && (!this.reading || this.readingId !== this.reading._id)) {
       this.getReading(this.readingId)
@@ -258,12 +262,45 @@ export class NewReadingPage implements OnInit, OnDestroy {
     )
 
     this._title.setTitle('Edji | New Reading')
+
+    // fire up the auto-save
+    this.subscribeToAutosave()
   }
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub: Subscription) => {
       sub.unsubscribe()
     })
+  }
+
+  /**
+   * Auto-saves the new reading every 30 seconds
+   */
+  private subscribeToAutosave(): void {
+    // Subscribe to the timer and run it every minute
+    this.timerSubscription = interval(30000).subscribe(() => {
+      if (this.validateReading(this.readingForm.value, true)) {
+        this.saveReading(this.readingForm.value, true)
+      } else {
+        // Update save state: Unable to save
+        this.saveState = 'unsaved'
+      }
+    })
+    this.subscriptions.push(this.timerSubscription)
+  }
+
+  /**
+   * Autosave: indicate that edits have been made and are unsaved
+   */
+  changeMonitor(): void {
+    this.saveState = 'edited'
+  }
+
+  /**
+   * Turns off the auto-save feature
+   */
+  private unsubscribeFromAutosave(): void {
+    this.timerSubscription.unsubscribe()
   }
 
   private getReading(readingId: string) {
@@ -295,7 +332,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
           // TRACK EXCEPTION
           console.error(err)
         },
-      )
+    )
   }
 
   /**
@@ -522,11 +559,13 @@ export class NewReadingPage implements OnInit, OnDestroy {
    * Custom form validation for a New Reading
    * @param form Reading form
    */
-  private validateReading(form): boolean {
+  private validateReading(form: any, autosave?: boolean): boolean {
     let questionsValid: boolean = true
     // Set submitted to show form errors
-    this.submitted = true
-    this.error = ''
+    if (!autosave) {
+      this.submitted = true
+      this.error = ''
+    }
     // Custom empty validation for reading content
     if (
       this.el.nativeElement.querySelector('medium-editor').innerText.trim().length > 0 ||
@@ -579,6 +618,9 @@ export class NewReadingPage implements OnInit, OnDestroy {
   public verifyCanShare(form) {
     // Check it reading is ready to Share
     if (this.validateReading(form)) {
+      // turn off the auto-save feature and clear any auto-save messages
+      this.unsubscribeFromAutosave()
+      this._messages.dismissToast('reading_autosave')
       // "Auto-save" for the user
       this.saveReading(form, true)
       if (!this.user.hero_status && this.readingToArchive) {
@@ -728,6 +770,9 @@ export class NewReadingPage implements OnInit, OnDestroy {
     if (this.validateReading(form) === false) {
       this.error = ':warning: <b>Empty Fields</b> Not quite, please make sure all highlighted fields are complete!'
       return false
+    } else {
+      // Update save state: Attempting to save
+      this.saveState = 'saving'
     }
     // Prepare Reading object
     let reading = this.formatReading(form)
@@ -787,6 +832,11 @@ export class NewReadingPage implements OnInit, OnDestroy {
             // Update reading values for continuing to edit
             this.readingId = data._id
             this.reading.updatedAt = data.updatedAt
+            // Update save state: Successfully saved
+            setTimeout(() => {
+              // We save readings fast! Give the user a split second to realize something is happening
+              this.saveState = 'saved'
+            }, 500)
           }
           return true
         }
@@ -1028,3 +1078,5 @@ export class NewReadingPage implements OnInit, OnDestroy {
     this.selectedReading = reading
   }
 }
+
+export type AutosaveState = 'unsaved' | 'saving' | 'saved' | 'edited'

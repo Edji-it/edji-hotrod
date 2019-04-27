@@ -170,11 +170,16 @@ export class ReadingService {
     this.readingSource.next(this.readingValue)
   } // public clear(): void
 
-  // It deletes the reading. Fairly straightforward.
-  // No need to return an Observable<Reading> since we don't need to use it after the fact.
-  public delete(targetReading: Reading): Observable<any> {
+  /**
+   * Deletes a reading from the collection, all projects for that reading, and all versions that are based on the said reading from their collections
+   * @param deleteReading is the reading we're passing in to delete 
+   */
+  public delete(deleteReading: Reading): Observable<any> {
     // console.log("Deleting '" + targetReading.title)
-    return this._http.delete(this._auth.getUrl() + '/readings/' + targetReading._id, this._auth.getOptions()).pipe(
+    return this._http.delete(
+      this._auth.getUrl() + `/api/v1/readings/${deleteReading._id}`, 
+      this._auth.getOptions()
+    ).pipe(
       map(value => {
         // Delete was successful
         let readingResponse = this.userReadingsSource.value
@@ -183,7 +188,7 @@ export class ReadingService {
             if (reading.version_count > 1) {
               // Reload content (slower but simpler)
               this.updateCreated(this._auth.getUser())
-            } else if (reading._id == targetReading._id) {
+            } else if (reading._id == deleteReading._id) {
               // Single version readings we can remove instantly
               readingResponse.readings.splice(index, 1)
               readingResponse.total--
@@ -194,7 +199,7 @@ export class ReadingService {
         return value
       }),
     )
-  } // public delete(): void
+  }
 
   /**
    * Remove Project from service maintained list of Readings with nested Projects

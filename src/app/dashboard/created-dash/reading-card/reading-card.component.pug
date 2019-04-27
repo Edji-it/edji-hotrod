@@ -140,7 +140,7 @@
         span.metadata {{ project.student_count ? project.student_count : 0 }} Students
     .col-4.prj-btns.pull-right
       //- Project Code
-      pre.prj-code(style="float:right;") {{project.code || 'none'}}
+      pre.prj-code.text-code(style="float:right;") {{project.code || 'none'}}
   //- Delete Project Button
   .btn--delete-project.icon-button(*ngIf="!readOnly", title="Delete Group", (click)="relevantProject = project; showDeleteProjectModal = true;")
     span([innerHtml]="':x:' | emojione")

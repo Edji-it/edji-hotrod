@@ -44,7 +44,6 @@
     border-bottom: 1px solid transparent;
   }
 }
-
 .draft-card__title {
   font-size: 18px;
 }
@@ -53,6 +52,26 @@
   font-size: 11px;
   color: #656565;
   margin: 0px;
+}
+
+.draft-card__action {
+  opacity: 0;
+  z-index: $zMid;
+  position: absolute;
+  right: -15px;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: opacity 200ms;
+}
+
+.draft-card__wrap {
+  position: relative;
+
+  &:hover, &:focus, &.action-active {
+    & .draft-card__action {
+      opacity: 1;
+    }
+  }
 }
 
 .clickable {

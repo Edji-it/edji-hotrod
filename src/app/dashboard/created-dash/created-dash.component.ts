@@ -58,7 +58,7 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
     private _readings: ReadingService,
     private _projects: ProjectService,
     private angulartics: Angulartics2,
-  ) {}
+  ) { }
 
   ngOnInit() {
     // datalist component intializes by calling loadRecentlyCreated()
@@ -98,7 +98,7 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
     this.loadDrafts()
   } //  ngOnInit()
 
-  ngOnDestroy() {}
+  ngOnDestroy() { }
 
   /**
    * Load Created with Params
@@ -162,7 +162,24 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
         error => {
           console.error(error)
         },
-      )
+    )
+  }
+
+  /**
+   * Delete a draft
+   * @param draftId
+   */
+  public deleteDraft(draft: Reading): void {
+    this._readings.delete(draft)
+      .pipe(take(1))
+      .subscribe(data => {
+        // Remove draft from list
+        this.drafts = this.drafts.filter((existingDraft) => {
+          return existingDraft._id != draft._id
+        })
+      }, err => {
+        console.log("Unable to delete draft")
+      })
   }
 
   /**

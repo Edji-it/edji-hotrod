@@ -60,5 +60,5 @@ form.pb-4.hidden-md-up([formGroup]="codeForm", (ngSubmit)="addSession(codeForm.v
         div(style="clear:both; line-height: 18px; padding: 10px 0px 0px;")
           span(style="color: #cdcdcd; margin-right: 5px;") Created by:
           follow-tag(*ngIf="project.teacher", [owner]="project.teacher")
-          pre.prj-code(style="margin-top: -5px; margin-bottom: 0px;") {{project.code || 'none'}}
+          pre.prj-code.text-code(style="margin-top: -5px; margin-bottom: 0px;") {{project.code || 'none'}}
     <p-paginator [rows]="rows" [totalRecords]="total" (onPageChange)="loadJoinedFeed($event)"></p-paginator>
