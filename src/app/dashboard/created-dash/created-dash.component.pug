@@ -49,6 +49,8 @@
             a.link(target="_blank", [href]="guide.url")
               | {{ guide.displayName }}
   .col-12.col-sm-6.item-list.created-list([ngClass]="['page-'+pageNo]")
+    <p-paginator [rows]="rows" [totalRecords]="total" (onPageChange)="loadRecentlyCreated($event)"></p-paginator>
+    .mb-4
     //- Show readings with date values
     .alert.alert-info.alert-dismissible(role="alert", *ngIf="!loading && readings.length < 1 && !errorObject.readingError && activeFilter === 'recent'")
       .row
