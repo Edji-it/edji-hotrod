@@ -150,11 +150,9 @@
       //- Share button: Desktop
       button#showReadingPreview.btn.btn-primary.nav-bar__btn.hidden-sm-down((click)="this.previewAction.emit()") 
         | Preview
-        i.icon.icon-megaphone.icon--btn-inline.mr-0
       //- Share button: Mobile
       button#showReadingPreview.btn.btn-clear.nav-bar__btn.hidden-md-up((click)="this.previewAction.emit()") 
         | Preview
-        i.icon.icon-megaphone.icon--btn-inline.mr-0
     //- Save button and status
     .nav__btn-wrap(*ngIf="canPublish")
       button#saveDraftButton.btn.btn-link.nav__status-label(*ngIf="!saveState || saveState == 'unsaved'", (click)="saveAction.emit()")
