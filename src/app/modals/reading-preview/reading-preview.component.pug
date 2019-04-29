@@ -54,5 +54,5 @@
               | Share
               i.icon.icon-megaphone.mr-0.icon--btn-inline
             button#editReadingButton.btn.btn-primary((click)="copyReading()") 
-              | Edit
+              | {{ context==='creator' ? 'Keep Editing' : 'Edit' }}
               i.icon.icon-create.mr-0.icon--btn-inline
