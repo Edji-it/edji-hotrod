@@ -133,7 +133,8 @@ scroll-progress([scrollProgress]="currentScroll")
                     [attr.index]="i",
                     [attr.href]="w.url ? ((w.url.indexOf('//') > -1) ? w.url : ('//' + w.url)) : null",
                     target="_blank"
-                )
+                ) 
+                    | {{ w && w.str }}
                 ng-container(*ngIf="!wHasStyle(w, 'a')")
                     //- Non-link Words, show content
                     | {{ (!(w && w.styles) || wHasStyle(w, 'space')) ? '&nbsp;' : w && w.str }}

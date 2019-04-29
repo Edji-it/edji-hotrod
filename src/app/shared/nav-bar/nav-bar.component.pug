@@ -64,7 +64,7 @@
           //- Refer
           button#navReferralButton.list-group-item.list-group-item-action(*ngIf="!user.isStudent" type="button", (click)="openReferralModal()") 
             ng-container(*ngIf="user.hero_status")
-              | Refer Teachers
+              | Refer a Friend
               span.list-icon--right([innerHtml]="':satellite:' | emojione")
             ng-container(*ngIf="!user.hero_status")
               span.hero-color-text Get Hero Free
@@ -158,12 +158,12 @@
       button#saveDraftButton.btn.btn-link.nav__status-label(*ngIf="!saveState || saveState == 'unsaved'", (click)="saveAction.emit()")
         | Save as Draft
       button#saveDraftButton.btn.btn-link.nav__status-label(*ngIf="saveState == 'edited'", (click)="saveAction.emit()", title="Click to save draft")
-        .icon.icon-in-progress
-        | Edited...
+        .icon.icon-save-small
+        | Save Changes
       span.nav__status-label(*ngIf="saveState == 'saving'")
         .icon.icon-in-progress
         | Saving
-      span.nav__status-label.hover--tooltip(*ngIf="saveState == 'saved'", title="Recently autosaved")
+      span.nav__status-label.hover--tooltip#draftStatusSaved(*ngIf="saveState == 'saved'", title="Recently autosaved")
         .icon.icon-check-small
         | Saved
     //- Join Reading Code
