@@ -14,6 +14,7 @@ import { ReadingService, AuthService } from 'src/app/_services'
 export class ReadingPreviewModal implements AfterViewInit, OnInit {
   @Input() reading: Reading
   @Input() user: User
+  @Input() context: string = 'created' // 'created' for readings based on already created || 'creator' for brand new readings
   @Output() closeModal: EventEmitter<any> = new EventEmitter()
   @Output() createSuccess: EventEmitter<Reading> = new EventEmitter()
 
@@ -30,7 +31,7 @@ export class ReadingPreviewModal implements AfterViewInit, OnInit {
 
   async ngOnInit() {
     // since reading preview can be called from the new reading page, let's make sure we don't just send them back here with a blank form
-    if (!this._router.url.includes('/new-reading')) {
+    if (this.context === 'created') {
       // The Discover Feed only has the first 100 words, so we need to make a call to get the full reading to attach all words
       try {
         let fullReading: Reading
@@ -65,7 +66,7 @@ export class ReadingPreviewModal implements AfterViewInit, OnInit {
   public copyReading(): void {
     this.close()
     // since reading preview can be called from the new reading page, let's make sure we don't just send them back here with a blank form
-    if (!this._router.url.includes('/new-reading')) {
+    if (this.context === 'created') {
       this._router.navigate(['/new-reading'], { queryParams: { copyId: this.reading._id } })
     }
   }
@@ -101,7 +102,7 @@ export class ReadingPreviewModal implements AfterViewInit, OnInit {
    */
   public async createReading(): Promise<void> {
     // since reading preview can be called from the new reading page, let's make sure we save this properly
-    if (!this._router.url.includes('/new-reading')) {
+    if (this.context === 'created') {
       let saveReading: Reading = Object.assign({}, this.reading)
       // Set parent id to reading copied from
       saveReading.parent_id = this.reading._id

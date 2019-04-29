@@ -205,5 +205,6 @@ hot-reading-preview-modal(
   [reading]="selectedReading",
   [user]="user",
   (closeModal)="showReadingPreviewModal=false",
-  (createSuccess)="verifyCanShare($event)"
+  (createSuccess)="verifyCanShare($event)",
+  [context]="creator"
 )
