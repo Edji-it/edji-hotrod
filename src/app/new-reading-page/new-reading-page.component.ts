@@ -37,6 +37,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = []
   private readingType: string = 'newReading' // used for analytics purposes
   private autosaveTimer
+  public selectedReading: Reading
 
   // Trigger booleans
   public showAlert: boolean = false
