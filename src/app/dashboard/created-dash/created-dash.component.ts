@@ -46,9 +46,24 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
     { displayName: 'Readings for Math', url: 'http://guide.edji.it/index.php/2017/07/16/using-edji-with-math/' },
     { displayName: 'AVID and WICOR', url: 'http://guide.edji.it/index.php/2018/09/20/using-edji-with-avid-wicor/' },
   ]
+  public filterCount: number = 0
 
   private currentPageNo: number = 0 // used for analytics to determine page up/down direction
   private subscriptions: Subscription[] = []
+
+  // Main display toggle
+  public isSearching: boolean
+
+  // Search
+  public searchTerm: string = ''
+  public searchFieldWidth: number = 100
+
+  // Search alerts
+  public searchAlerts: {
+    serverError?: boolean
+    noResults?: boolean
+    notFollowing?: boolean
+  } = {}
 
   // TypeScript public modifiers
   constructor(
@@ -206,5 +221,52 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
         console.log(error)
       },
     )
+  }
+
+  /**
+   * Primary trigger for updating search
+   * - Passes new params to URL
+   * @param paging Pagination values should only be passed for a pagination event (from the datalist component)
+   */
+  updateSearchParams(action: string, paging?: any) {
+    // Ignore if pagination values are passed and unchanged
+    if (paging && this.first == paging.first && this.rows == paging.rows) {
+      return
+    }
+    let filters = {}
+    let filterParams = {}
+    // Pagination values
+    this.first = filters['from'] = paging && paging.first != undefined ? parseInt(paging.first) - 1 : this.first
+    if (this.first < 0) {
+      this.first = filters['from'] = 0
+    }
+    this.rows = filters['size'] = paging && paging.rows != undefined ? parseInt(paging.rows) : this.rows
+
+    if (this.searchTerm) {
+      this.isSearching = true
+      filterParams['q'] = this.searchTerm
+    }
+    if (this.first) {
+      filterParams['from'] = this.first
+    }
+    // fire an analytic event here for tracking purposes
+    if (action !== '') {
+      this.angulartics.eventTrack.next({
+        action: 'discover_' + action,
+        properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
+      })
+    }
+    // this.router.navigate(['/discover' + (this.isSearching ? '/search' : '')], { queryParams: filterParams })
+  }
+
+  /**
+   * Clear component variables handling applied filters
+   */
+  clearFilterVars(preserveTerm?: boolean) {
+    if (!preserveTerm) {
+      this.searchTerm = ''
+    }
+    this.filterCount = 0
+    this.first = 0
   }
 }
