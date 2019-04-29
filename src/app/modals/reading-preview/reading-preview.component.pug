@@ -35,6 +35,7 @@
                     [attr.href]="w.url ? ((w.url.indexOf('//') > -1) ? w.url : ('//' + w.url)) : null",
                     target="_blank"
                   )
+                    | {{ w && w.str }}
                   ng-container(*ngIf="!wHasStyle(w, 'a')")
                     | {{ (!(w && w.styles) || wHasStyle(w, 'space')) ? '&nbsp;' : w && w.str }}
                   .img-wrap(*ngIf="wHasStyle(w, 'img')")
