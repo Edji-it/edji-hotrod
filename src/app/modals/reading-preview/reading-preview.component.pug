@@ -49,7 +49,7 @@
                   )
         .col-md-2.p-0
           .modal-content.reading-actions
-            p.text-center.actions-title.mb-3 Use this Reading
+            p.text-center.actions-title.mb-3 {{ context==='creator' ? 'Ready to share?' : 'Use this Reading' }}
             button#shareReadingButton.btn.btn-action.mb-2((click)="createReading()") 
               | Share
               i.icon.icon-megaphone.mr-0.icon--btn-inline
