@@ -14,6 +14,7 @@ import { ReadingService, AuthService } from 'src/app/_services'
 export class ReadingPreviewModal implements AfterViewInit, OnInit {
   @Input() reading: Reading
   @Input() user: User
+  @Input() context: string = 'created' // 'created' for readings based on already created || 'creator' for brand new readings
   @Output() closeModal: EventEmitter<any> = new EventEmitter()
   @Output() createSuccess: EventEmitter<Reading> = new EventEmitter()
 
@@ -29,20 +30,23 @@ export class ReadingPreviewModal implements AfterViewInit, OnInit {
   ) { }
 
   async ngOnInit() {
-    // The Discover Feed only has the first 100 words, so we need to make a call to get the full reading to attach all words
-    try {
-      let fullReading: Reading
-      fullReading = await this._readings.get(this.reading._id).toPromise()
-      // add missing properties to the reading
-      this.reading.words = fullReading.words
-      this.reading.questions = fullReading.questions
-      this.reading.html = fullReading.html
-      if (this.reading.questions) {
-        this.updateQuestionNumbers(this.reading.questions)
+    // since reading preview can be called from the new reading page, let's make sure we don't just send them back here with a blank form
+    if (this.context === 'created') {
+      // The Discover Feed only has the first 100 words, so we need to make a call to get the full reading to attach all words
+      try {
+        let fullReading: Reading
+        fullReading = await this._readings.get(this.reading._id).toPromise()
+        // add missing properties to the reading
+        this.reading.words = fullReading.words
+        this.reading.questions = fullReading.questions
+        this.reading.html = fullReading.html
+        if (this.reading.questions) {
+          this.updateQuestionNumbers(this.reading.questions)
+        }
+        this.loading = false
+      } catch (err) {
+        console.error(err)
       }
-      this.loading = false
-    } catch (err) {
-      console.error(err)
     }
 
     // Workaround: This modal is long enough that it needs to scroll and we don't want two scrollbars
@@ -61,7 +65,10 @@ export class ReadingPreviewModal implements AfterViewInit, OnInit {
    */
   public copyReading(): void {
     this.close()
-    this._router.navigate(['/new-reading'], { queryParams: { copyId: this.reading._id } })
+    // since reading preview can be called from the new reading page, let's make sure we don't just send them back here with a blank form
+    if (this.context === 'created') {
+      this._router.navigate(['/new-reading'], { queryParams: { copyId: this.reading._id } })
+    }
   }
 
   /**
@@ -94,28 +101,33 @@ export class ReadingPreviewModal implements AfterViewInit, OnInit {
    * Bypass the new reading page and just create the new reading altogether
    */
   public async createReading(): Promise<void> {
-    let saveReading: Reading = Object.assign({}, this.reading)
-    // Set parent id to reading copied from
-    saveReading.parent_id = this.reading._id
-    // remove _id, and other owner properties before we save
-    delete saveReading._id
-    delete saveReading.owner_id
-    delete saveReading['owner']
-    delete saveReading['words_preview']
-    delete saveReading.createdAt
-    delete saveReading.updatedAt
-    if (this.reading.owner_id !== this.user._id) {
-      delete saveReading.version_id
-    }
-    try {
-      let savedReading: Reading
-      savedReading = await this._readings.save(saveReading).toPromise()
-      this.createdReadingSuccess()
-      this.createSuccess.emit(savedReading)
-      // Workaround: Clear scrollbar hiding 
-      document.body.style.overflow = ''
-    } catch (err) {
-      console.error(err)
+    // since reading preview can be called from the new reading page, let's make sure we save this properly
+    if (this.context === 'created') {
+      let saveReading: Reading = Object.assign({}, this.reading)
+      // Set parent id to reading copied from
+      saveReading.parent_id = this.reading._id
+      // remove _id, and other owner properties before we save
+      delete saveReading._id
+      delete saveReading.owner_id
+      delete saveReading['owner']
+      delete saveReading['words_preview']
+      delete saveReading.createdAt
+      delete saveReading.updatedAt
+      if (this.reading.owner_id !== this.user._id) {
+        delete saveReading.version_id
+      }
+      try {
+        let savedReading: Reading
+        savedReading = await this._readings.save(saveReading).toPromise()
+        this.createdReadingSuccess()
+        this.createSuccess.emit(savedReading)
+        // Workaround: Clear scrollbar hiding 
+        document.body.style.overflow = ''
+      } catch (err) {
+        console.error(err)
+      }
+    } else {
+      this.createSuccess.emit(this.reading)
     }
   }
 

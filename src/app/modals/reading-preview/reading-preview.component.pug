@@ -11,7 +11,7 @@
         i.icon.lg(*ngIf="!reading.public", [innerHTML]="':lock:' | emojione")
       //- .container
       .row
-        .col-md-10
+        .col-md-9
           .modal-content
             .modal-header
               .reading-icon.hide-for-archived
@@ -26,7 +26,7 @@
               button#readingPreviewClose.close.btn-icon--round((click)='close()') 
                 span(aria-hidden="true") &times;
             .modal-body
-              .reading-preview__words.words--read-only
+              #readingPreviewContent.reading-preview__words.words--read-only
                 .row.loading(*ngIf="loading && !reading.words")
                 //- Annotator-Lite
                 span.w(*ngFor="let w of reading.words", [ngClass]="[ w && w.styles ? w.styles.join(' ') : '' ]")
@@ -35,6 +35,7 @@
                     [attr.href]="w.url ? ((w.url.indexOf('//') > -1) ? w.url : ('//' + w.url)) : null",
                     target="_blank"
                   )
+                    | {{ w && w.str }}
                   ng-container(*ngIf="!wHasStyle(w, 'a')")
                     | {{ (!(w && w.styles) || wHasStyle(w, 'space')) ? '&nbsp;' : w && w.str }}
                   .img-wrap(*ngIf="wHasStyle(w, 'img')")
@@ -46,12 +47,12 @@
                     [question]="reading.questions[w.index]",
                     [readOnly]="true"
                   )
-        .col-md-2.p-0
+        .col-md-3.p-0
           .modal-content.reading-actions
-            p.text-center.actions-title.mb-3 Use this Reading
+            p.text-center.actions-title.mb-3 {{ context==='creator' ? 'Ready to share?' : 'Use this Reading' }}
             button#shareReadingButton.btn.btn-action.mb-2((click)="createReading()") 
               | Share
               i.icon.icon-megaphone.mr-0.icon--btn-inline
             button#editReadingButton.btn.btn-primary((click)="copyReading()") 
-              | Edit
+              | {{ context==='creator' ? 'Keep Editing' : 'Edit' }}
               i.icon.icon-create.mr-0.icon--btn-inline

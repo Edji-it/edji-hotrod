@@ -2,9 +2,11 @@ nav-bar(
     [pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'", 
     [canPublish]="true",
     [saveState]="saveState",
-    (saveAction)="saveReading(readingForm.value)", 
-    (shareAction)="verifyCanShare(readingForm.value)"
+    (saveAction)="saveReading(readingForm.value)",
+    (shareAction)="verifyCanShare(readingForm.value)",
+    (previewAction)="openReadingPreview(readingForm.value)"
   )
+  //- (saveAction)="saveReading(readingForm.value)", 
 .container.pt-4
   .row
     .col-sm-12
@@ -196,4 +198,13 @@ hero-subscribe-modal.modal-will-fade(
   [class.show]="showHeroSubModal", 
   (closeModal)="showHeroSubModal=false", 
   (heroWasBorn)="router.navigate(['/dashboard'])"
+)
+//- Reading Preview Modal
+hot-reading-preview-modal(
+  *ngIf="showReadingPreviewModal",
+  [reading]="selectedReading",
+  [user]="user",
+  (closeModal)="showReadingPreviewModal=false",
+  (createSuccess)="verifyCanShare($event)",
+  [context]="'creator'"
 )

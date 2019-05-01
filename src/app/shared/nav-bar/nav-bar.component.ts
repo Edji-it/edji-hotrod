@@ -38,6 +38,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
 
   @Output() saveAction: EventEmitter<any> = new EventEmitter()
   @Output() shareAction: EventEmitter<ReadingShareObject> = new EventEmitter<ReadingShareObject>()
+  @Output() previewAction: EventEmitter<any> = new EventEmitter()
 
   public showAvatarDropdown: boolean = false
   public showAcademyDropdown: boolean = false

@@ -37,6 +37,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = []
   private readingType: string = 'newReading' // used for analytics purposes
   private autosaveTimer
+  public selectedReading: Reading
 
   // Trigger booleans
   public showAlert: boolean = false
@@ -45,6 +46,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
   public showConfirmArchiveModal: boolean = false
   public showHeroSubModal: boolean = false
   public showHeroParam: boolean = false
+  public showReadingPreviewModal: boolean
 
   public errorObject = {
     readingError: '',
@@ -620,6 +622,8 @@ export class NewReadingPage implements OnInit, OnDestroy {
    * @param form the new reading form data
    */
   public verifyCanShare(form) {
+    // Need to dismiss the reading preview modal and then we can show the new group modal
+    this.showReadingPreviewModal = false
     // Check it reading is ready to Share
     if (this.validateReading(form)) {
       // turn off the auto-save feature and clear any auto-save messages
@@ -1074,6 +1078,14 @@ export class NewReadingPage implements OnInit, OnDestroy {
   private updateQuestionNumbers() {
     for (let i = 1; i < this.readingHtml.length; i++) {
       this.readingHtml[i].question.question_number = i
+    }
+  }
+
+  public openReadingPreview(form: any): void {
+    this.selectedReading = this.formatReading(form)
+    // Check it reading is ready to Share
+    if (this.validateReading(form)) {
+      this.showReadingPreviewModal = true
     }
   }
 }
