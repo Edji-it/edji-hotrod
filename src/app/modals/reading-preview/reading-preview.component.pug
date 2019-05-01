@@ -11,7 +11,7 @@
         i.icon.lg(*ngIf="!reading.public", [innerHTML]="':lock:' | emojione")
       //- .container
       .row
-        .col-md-10
+        .col-md-9
           .modal-content
             .modal-header
               .reading-icon.hide-for-archived
@@ -47,7 +47,7 @@
                     [question]="reading.questions[w.index]",
                     [readOnly]="true"
                   )
-        .col-md-2.p-0
+        .col-md-3.p-0
           .modal-content.reading-actions
             p.text-center.actions-title.mb-3 {{ context==='creator' ? 'Ready to share?' : 'Use this Reading' }}
             button#shareReadingButton.btn.btn-action.mb-2((click)="createReading()") 
