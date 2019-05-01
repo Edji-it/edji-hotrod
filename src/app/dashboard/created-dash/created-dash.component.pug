@@ -15,7 +15,7 @@
             input#readingSearch.form-control.form-control-autosize(
               #searchInput,
               name="SearchTermInput", 
-              [(ngModel)]="searchTerm", 
+              [(ngModel)]="searchParams.searchTerm", 
               type="text", 
               style="text-align: left;", 
               placeholder="Search...",
@@ -24,10 +24,10 @@
               (keyup)="searchFieldWidth = dummySearchField.clientWidth"
             )
             .form-control-clear.icon.icon-close(
-              *ngIf="searchTerm.length > 0",
-              (click)="searchTerm = ''; updateSearchParams('')"
+              *ngIf="searchParams.searchTerm.length > 0",
+              (click)="searchParams.searchTerm = ''; updateSearchParams('')"
             )
-            .form-control.form-control-dummysize(#dummySearchField) {{ searchTerm }}
+            .form-control.form-control-dummysize(#dummySearchField) {{ searchParams.searchTerm }}
       div.mt-2
         span Found <b>{{ total || 0 }}</b> readings&nbsp;
         a.link(
@@ -57,7 +57,7 @@
           input#readingSearch.form-control(
             #searchInput,
             name="SearchTermInput", 
-            [(ngModel)]="searchTerm", 
+            [(ngModel)]="searchParams.searchTerm", 
             type="text", 
             style="text-align: left;", 
             placeholder="Search...",
@@ -67,15 +67,15 @@
       div
         button.btn.btn-filter(
           [innerHtml]="':sparkles: Recently Created' | emojione", 
-          [class.active]="activeFilter === 'recent'",
-          (click)="loadFilter('recent')"
+          [class.active]="searchParams.createdCollection === 'recent'",
+          (click)="searchParams.createdCollection = 'recent'; searchParams.first=0; updateSearchParams('filter_recent')"
         )
       //- Bookmarks
       div.hover--tooltip(style="position:relative;")
         button.btn.btn-filter( 
-          [class.active]="activeFilter === 'bookmarked'",
+          [class.active]="searchParams.createdCollection === 'bookmarked'",
           [class.disabled--not-hero]="!user.hero_status",
-          (click)="loadFilter('bookmarked')"
+          (click)="searchParams.createdCollection = 'bookmarked'; searchParams.first=0; updateSearchParams('bookmarked')"
         )
           i.icon.icon-bookmark.mr-2(style="vertical-align:middle;")
           | Bookmarks
@@ -97,10 +97,10 @@
             a.link(target="_blank", [href]="guide.url")
               | {{ guide.displayName }}
   .col-12.col-sm-6.item-list.created-list([ngClass]="['page-'+pageNo]")
-    <p-paginator [rows]="rows" [totalRecords]="total" (onPageChange)="loadRecentlyCreated($event)"></p-paginator>
+    <p-paginator [rows]="rows" [totalRecords]="total" (onPageChange)="updateSearchParams('feed_paginate', $event)"></p-paginator>
     .mb-4
     //- Show readings with date values
-    .alert.alert-info.alert-dismissible(role="alert", *ngIf="!loading && readings.length < 1 && !errorObject.readingError && activeFilter === 'recent'")
+    .alert.alert-info.alert-dismissible(role="alert", *ngIf="!loading && readings.length < 1 && !errorObject.readingError && searchParams.createdCollection === 'recent'")
       .row
         .col-lg-7
           h4.alert-heading Create your first reading!
@@ -112,11 +112,11 @@
       //- https://youtu.be/GPB8i8H8IBc
     .alert.alert-danger.alert-readings(*ngIf="errorObject.readingError", role="alert", [innerHtml]="errorObject.readingError")
     //- Bookmarked: No Readings message
-    .alert.alert-info.alert-readings(*ngIf="!loading && readings.length < 1 && activeFilter === 'bookmarked'")
+    .alert.alert-info.alert-readings(*ngIf="!loading && readings.length < 1 && searchParams.createdCollection === 'bookmarked'")
       b No Bookmarked Readings
       p You do not currently have any Created Readings bookmarked!
     .row.loading.e2e-reading-loader(*ngIf="loading")
-    hot-tutorial-reading(*ngIf="!loading && readings.length < 1 && !errorObject.readingError && user.type !=='temp' && activeFilter === 'recent'")
+    hot-tutorial-reading(*ngIf="!loading && readings.length < 1 && !errorObject.readingError && user.type !=='temp' && searchParams.createdCollection === 'recent'")
     //- Sub headings for specific cases
     .row(*ngIf="activeFilter === 'versions'")
       .col-12        
@@ -142,7 +142,7 @@
           p.pl-4 With Hero, you support Edji’s continued development and can have unlimited active readings - including your currently archived!
           .btn-row.right
             a.btn.btn-hero.btn-sm([routerLink]="['/plans']") Go Hero
-    <p-paginator [rows]="rows" [totalRecords]="total" (onPageChange)="loadRecentlyCreated($event)"></p-paginator>
+    <p-paginator [rows]="rows" [totalRecords]="total" (onPageChange)="updateSearchParams('feed_paginate', $event)"></p-paginator>
   .col-12.col-sm-3
     h2 Drafts
     .draft-card__wrap(*ngFor="let draft of drafts", [class.action-active]="draft.loading")

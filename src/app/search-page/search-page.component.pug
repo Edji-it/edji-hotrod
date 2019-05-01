@@ -61,7 +61,7 @@ nav-bar([showDashboardOptions]="true")
                         button#discoverFilterPublic.btn.btn-filter( 
                             title="See public readings from all users",
                             [class.active]="!activeLibrary || activeLibrary === 'public'",
-                            (click)="activeLibrary = 'public'; updateSearchParams('filter_public')"
+                            (click)="activeLibrary = 'public'; first=0; updateSearchParams('filter_public')"
                         )
                             span([innerHTML]="':earth_americas: Public Library' | emojione")
                     //- Following 
@@ -69,7 +69,7 @@ nav-bar([showDashboardOptions]="true")
                         button#discoverFilterFollowing.btn.btn-filter( 
                             title="Filter by users you follow",
                             [class.active]="activeLibrary === 'following'",
-                            (click)="activeLibrary = 'following'; updateSearchParams('filter_following')"
+                            (click)="activeLibrary = 'following'; first=0; updateSearchParams('filter_following')"
                         )
                             span([innerHTML]="':green_heart: Following' | emojione")
                     //- Academy Libraries

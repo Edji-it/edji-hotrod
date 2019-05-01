@@ -235,6 +235,18 @@ export class SearchPage implements OnInit {
     // Reset results
     this.readings = []
     this.searchAlerts = {}
+
+    // // pass in the arguments to build the queryParam string
+    // this.searchParams = {
+    //   first: this.first,
+    //   searchTerm: this.searchTerm,
+    //   activeLibrary: this.activeLibrary,
+    //   following: this.user.following,
+    //   subjectFilter: this.subjectFilter,
+    //   gradeMin: this.gradeMin,
+    //   gradeMax: this.gradeMax
+    // }
+
     // Construct search query
     let queryString = 'from=' + this.first
     if (this.searchTerm) {

@@ -136,6 +136,54 @@ export class ReadingService {
       .pipe(take(1))
   }
 
+  /**
+   * Takes in filter settings and returns a query param string used to execute search
+   * @param searchParams is our object that contains properties to build a proper query param string
+   */
+  public buildSearchParams(searchParams: ReadingQuery): string {
+    // Construct search query
+    let queryString = `from=${searchParams.first}`
+    if (searchParams.searchTerm) {
+      queryString += `&q=${searchParams.searchTerm}`
+    }
+    // Library
+    if (searchParams.activeLibrary === 'following') {
+      // Loop through and apply following ids
+      let following = searchParams.following
+      following.forEach(userId => {
+        queryString += `&owner_id=${userId}`
+      })
+    } else if (searchParams.activeLibrary !== 'public') {
+      // Handle academy/institution id filter
+    }
+    // Subjects
+    if (searchParams.subjectFilter && searchParams.subjectFilter[0]) {
+      queryString += `&subjects=${searchParams.subjectFilter.join(' ')}`
+    }
+    // grade_levels_lte, grade_levels_gte
+    if (searchParams.gradeMin > -1 && searchParams.gradeMax > -1) {
+      queryString += `&grade_levels_gte=${searchParams.gradeMin}`
+      queryString += `&grade_levels_lte=${searchParams.gradeMax}`
+    }
+    // owner bookmarked
+    if (searchParams.createdCollection==='bookmarked') {
+      queryString += '&owner_bookmarked=true'
+    }
+    // owner-only readings
+    if (searchParams.scope==='owner') {
+      queryString += '&scope=owner'
+    }
+    // Default to sort by most recent, unless using a search term
+    if (!searchParams.searchTerm) {
+      queryString += '&sort=createdAt&sort_order=desc'
+    }
+    // populate the projects
+    if (searchParams.pop) {
+      queryString += `&pop=${searchParams.pop}`
+    }
+    return queryString
+  }
+
   public setReadingObj(reading: any): void {
     // console.log("Set", reading)
     if (reading._id) {
@@ -340,3 +388,21 @@ interface ReadingSearchResponse {
   total: number
   results: Reading
 }
+
+export interface ReadingQuery {
+  first: number
+  searchTerm?: string
+  activeLibrary?: ActiveLibrary
+  following?: any
+  subjectFilter?: any[]
+  gradeMin?: number
+  gradeMax?: number
+  createdCollection?: CreatedCollection
+  scope?: Scope
+  pop?: POP
+}
+
+type POP = 'projects'
+type CreatedCollection = 'bookmarked' | 'recent'
+type Scope = 'public' | 'owner'
+type ActiveLibrary = 'public' | 'following'
