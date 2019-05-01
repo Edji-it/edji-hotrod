@@ -14,7 +14,7 @@ localConf['capabilities']['chromeOptions']['args'] = [
   '--use-fake-ui-for-media-stream',
   '--use-fake-device-for-media-stream',
   '--disable-web-security',
-  '--headless',
+  // '--headless',
   '--window-size=1680,1050',
   '--disable-extensions',
   '--disable-gpu',

@@ -26,7 +26,7 @@
               button#readingPreviewClose.close.btn-icon--round((click)='close()') 
                 span(aria-hidden="true") &times;
             .modal-body
-              .reading-preview__words.words--read-only
+              #readingPreviewContent.reading-preview__words.words--read-only
                 .row.loading(*ngIf="loading && !reading.words")
                 //- Annotator-Lite
                 span.w(*ngFor="let w of reading.words", [ngClass]="[ w && w.styles ? w.styles.join(' ') : '' ]")
