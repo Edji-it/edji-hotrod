@@ -86,7 +86,7 @@
     <p-paginator [rows]="rows" [totalRecords]="total" (onPageChange)="updateSearchParams('feed_paginate', $event)"></p-paginator>
     .mb-4
     //- Show readings with date values
-    .alert.alert-info.alert-dismissible(role="alert", *ngIf="!loading && readings.length < 1 && !errorObject.readingError && searchParams.createdCollection === 'recent'")
+    .alert.alert-info.alert-dismissible(role="alert", *ngIf="!isSearching && !loading && readings.length < 1 && !errorObject.readingError && searchParams.createdCollection === 'recent'")
       .row
         .col-lg-7
           h4.alert-heading Create your first reading!
@@ -97,12 +97,16 @@
             img(src="/assets/images/thumbnail-first-reading.jpg")
       //- https://youtu.be/GPB8i8H8IBc
     .alert.alert-danger.alert-readings(*ngIf="errorObject.readingError", role="alert", [innerHtml]="errorObject.readingError")
+    //- No results message when user is genuinely searching
+    .alert.alert-info(*ngIf="searchAlerts.noResults")
+      b No Readings Found
+      | There are no readings for "{{searchParams.searchTerm}}" with your current filters, please try a different term or expanding your filters. 
     //- Bookmarked: No Readings message
     .alert.alert-info.alert-readings(*ngIf="!loading && readings.length < 1 && searchParams.createdCollection === 'bookmarked'")
       b No Bookmarked Readings
       p You do not currently have any Created Readings bookmarked!
     .row.loading.e2e-reading-loader(*ngIf="loading")
-    hot-tutorial-reading(*ngIf="!loading && readings.length < 1 && !errorObject.readingError && user.type !=='temp' && searchParams.createdCollection === 'recent'")
+    hot-tutorial-reading(*ngIf="!isSearching && !loading && readings.length < 1 && !errorObject.readingError && user.type !=='temp' && searchParams.createdCollection === 'recent'")
     //- Sub headings for specific cases
     .row(*ngIf="activeFilter === 'versions'")
       .col-12        
