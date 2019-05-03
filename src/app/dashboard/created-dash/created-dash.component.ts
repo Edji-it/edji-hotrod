@@ -78,7 +78,7 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    if (this.router.url.indexOf('/dashboard/create/search') >= 0 && this.searchParams.searchTerm.length > 0) {
+    if (this.router.url.indexOf('/dashboard/create/search') >= 0 || this.searchParams.searchTerm.length > 0) {
       this.isSearching = true
     }
     // datalist component intializes by calling loadRecentlyCreated()
