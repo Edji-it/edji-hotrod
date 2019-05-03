@@ -166,7 +166,8 @@ hot-reading-preview-modal(
     [reading]="selectedReading",
     [user]="user",
     (closeModal)="showReadingPreviewModal=false",
-    (createSuccess)="readingCreateFromPreviewSuccess($event)"
+    (createSuccess)="readingCreateFromPreviewSuccess($event)",
+    [context]="'created'"
 )
 //- Confirm if user wants to archive a past reading
 hot-confirm-archive-modal.modal-will-fade(
