@@ -15,7 +15,7 @@ nav-bar([showDashboardOptions]="true")
                             input#readingSearch.form-control.form-control-autosize(
                                 #searchInput,
                                 name="SearchTermInput", 
-                                [(ngModel)]="searchTerm", 
+                                [(ngModel)]="searchParams.searchTerm", 
                                 type="text", 
                                 style="text-align: left;", 
                                 placeholder="Search...",
@@ -24,10 +24,10 @@ nav-bar([showDashboardOptions]="true")
                                 (keyup)="searchFieldWidth = dummySearchField.clientWidth"
                             )
                             .form-control-clear.icon.icon-close(
-                                *ngIf="searchTerm.length > 0",
-                                (click)="searchTerm = ''; updateSearchParams('')"
+                                *ngIf="searchParams.searchTerm.length > 0",
+                                (click)="searchParams.searchTerm = ''; updateSearchParams('')"
                             )
-                            .form-control.form-control-dummysize(#dummySearchField) {{ searchTerm }}
+                            .form-control.form-control-dummysize(#dummySearchField) {{ searchParams.searchTerm }}
                 div.mt-2
                     span Found <b>{{ total || 0 }}</b> readings&nbsp;
                     a.link(
@@ -48,7 +48,7 @@ nav-bar([showDashboardOptions]="true")
                         input#readingSearch.form-control(
                             #searchInput,
                             name="SearchTermInput", 
-                            [(ngModel)]="searchTerm", 
+                            [(ngModel)]="searchParams.searchTerm", 
                             type="text", 
                             style="text-align: left;", 
                             placeholder="Search...",
@@ -121,7 +121,7 @@ nav-bar([showDashboardOptions]="true")
             //- No results message when user is genuinely searching
             .alert.alert-info(*ngIf="searchAlerts.noResults")
                 b No Readings Found
-                | There are no readings for "{{searchTerm}}" with your current filters, please try a different term or expanding your filters. 
+                | There are no readings for "{{searchParams.searchTerm}}" with your current filters, please try a different term or expanding your filters. 
             .row.loading(*ngIf="loading")
             <p-dataList class="search-datalist" [value]="readings" [paginator]="readings.length > 0" [paginatorPosition]="'both'" [rows]="rows" [lazy]="true" (onLazyLoad)="updateSearchParams('feed_paginate', $event)" [totalRecords]="total" [emptyMessage]="''">
                 <ng-template let-reading pTemplate="item" let-i="index">

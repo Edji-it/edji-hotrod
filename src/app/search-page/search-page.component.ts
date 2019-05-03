@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs'
 import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
-import { AuthService, ReadingService, AcademyService } from '../_services'
+import { AuthService, ReadingService, AcademyService, ReadingQuery } from '../_services'
 import { User, Reading, Project } from '../shared/datatypes'
 
 @Component({
@@ -32,6 +32,11 @@ export class SearchPage implements OnInit {
   public gradesSelected: number[] = []
   public gradeMin: number = 0
   public gradeMax: number = 13
+  private searchParams: ReadingQuery = {
+    first: 0,
+    searchTerm: '',
+    activeLibrary: 'public'
+  }
 
   public first: number = 0
   public rows: number = 15
@@ -45,7 +50,6 @@ export class SearchPage implements OnInit {
   public createdReading: Reading
 
   // Search
-  public searchTerm: string = ''
   public searchFieldWidth: number = 100
 
   // Search alerts
@@ -97,7 +101,7 @@ export class SearchPage implements OnInit {
   ) { }
 
   async ngOnInit() {
-    if (this.router.url.indexOf('/discover/search') >= 0 || this.searchTerm.length > 0) {
+    if (this.router.url.indexOf('/discover/search') >= 0 || this.searchParams.searchTerm.length > 0) {
       this.isSearching = true
     }
     this.subscriptions.push(
@@ -109,7 +113,7 @@ export class SearchPage implements OnInit {
       this.route.queryParams.subscribe(params => {
         this.clearFilterVars()
         if (params.q) {
-          this.searchTerm = params.q
+          this.searchParams.searchTerm = params.q
         }
         if (params.library) {
           this.activeLibrary = params.library
@@ -183,9 +187,9 @@ export class SearchPage implements OnInit {
     }
     this.rows = filters['size'] = paging && paging.rows != undefined ? parseInt(paging.rows) : this.rows
 
-    if (this.searchTerm) {
+    if (this.searchParams.searchTerm) {
       this.isSearching = true
-      filterParams['q'] = this.searchTerm
+      filterParams['q'] = this.searchParams.searchTerm
     }
     if (this.activeLibrary) {
       filterParams['library'] = this.activeLibrary
@@ -216,7 +220,7 @@ export class SearchPage implements OnInit {
    */
   clearFilterVars(preserveTerm?: boolean) {
     if (!preserveTerm) {
-      this.searchTerm = ''
+      this.searchParams.searchTerm = ''
     }
     this.filterCount = 0
     this.first = 0
@@ -251,8 +255,8 @@ export class SearchPage implements OnInit {
 
     // Construct search query
     let queryString = 'from=' + this.first
-    if (this.searchTerm) {
-      queryString += '&q=' + this.searchTerm
+    if (this.searchParams.searchTerm) {
+      queryString += '&q=' + this.searchParams.searchTerm
     }
     // Library
     if (this.activeLibrary === 'following') {
@@ -280,7 +284,7 @@ export class SearchPage implements OnInit {
       queryString += '&grade_levels_lte=' + this.gradeMax
     }
     // Default to sort by most recent, unless using a search term
-    if (!this.searchTerm) {
+    if (!this.searchParams.searchTerm) {
       queryString += '&sort=createdAt&sort_order=desc'
     }
 
@@ -290,7 +294,7 @@ export class SearchPage implements OnInit {
         this.loading = false
         this.total = data.total
         // Handle no results messaging
-        if (this.searchTerm && this.readings.length < 1) {
+        if (this.searchParams.searchTerm && this.readings.length < 1) {
           this.searchAlerts.noResults = true
         }
       },
