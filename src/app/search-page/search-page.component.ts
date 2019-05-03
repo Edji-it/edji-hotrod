@@ -28,14 +28,13 @@ export class SearchPage implements OnInit {
   public isSearching: boolean
   // Filters
   public filterCount: number = 0
-  public activeLibrary: string = 'public' // default to Public
   public gradesSelected: number[] = []
   public gradeMin: number = 0
   public gradeMax: number = 13
   private searchParams: ReadingQuery = {
-    first: 0,
-    searchTerm: '',
-    activeLibrary: 'public'
+    first: 0, // defaulted to first page
+    searchTerm: '', // defaulted to empty
+    activeLibrary: 'public' // defaulted to public
   }
 
   public first: number = 0
@@ -116,8 +115,8 @@ export class SearchPage implements OnInit {
           this.searchParams.searchTerm = params.q
         }
         if (params.library) {
-          this.activeLibrary = params.library
-          if (this.activeLibrary !== 'public') {
+          this.searchParams.activeLibrary = params.library
+          if (this.searchParams.activeLibrary !== 'public') {
             this.filterCount++
           }
         }
@@ -191,8 +190,8 @@ export class SearchPage implements OnInit {
       this.isSearching = true
       filterParams['q'] = this.searchParams.searchTerm
     }
-    if (this.activeLibrary) {
-      filterParams['library'] = this.activeLibrary
+    if (this.searchParams.activeLibrary) {
+      filterParams['library'] = this.searchParams.activeLibrary
     }
     if (this.subjectFilter && this.subjectFilter[0]) {
       filterParams['subjects'] = this.subjectFilter.join(' ')
@@ -228,7 +227,7 @@ export class SearchPage implements OnInit {
     this.gradeMax = 13
     this.gradesSelected = []
     this.subjectFilter = []
-    this.activeLibrary = 'public'
+    this.searchParams.activeLibrary = 'public'
   }
 
   /**
@@ -259,7 +258,7 @@ export class SearchPage implements OnInit {
       queryString += '&q=' + this.searchParams.searchTerm
     }
     // Library
-    if (this.activeLibrary === 'following') {
+    if (this.searchParams.activeLibrary === 'following') {
       // Loop through and apply following ids
       let following = this.user.following
       // Display message if not following anyone
@@ -271,7 +270,7 @@ export class SearchPage implements OnInit {
       following.forEach(userId => {
         queryString += '&owner_id=' + userId
       })
-    } else if (this.activeLibrary !== 'public') {
+    } else if (this.searchParams.activeLibrary !== 'public') {
       // Handle academy/institution id filter
     }
     // Subjects

@@ -60,24 +60,24 @@ nav-bar([showDashboardOptions]="true")
                     div
                         button#discoverFilterPublic.btn.btn-filter( 
                             title="See public readings from all users",
-                            [class.active]="!activeLibrary || activeLibrary === 'public'",
-                            (click)="activeLibrary = 'public'; first=0; updateSearchParams('filter_public')"
+                            [class.active]="!searchParams.activeLibrary || searchParams.activeLibrary === 'public'",
+                            (click)="searchParams.activeLibrary = 'public'; first=0; updateSearchParams('filter_public')"
                         )
                             span([innerHTML]="':earth_americas: Public Library' | emojione")
                     //- Following 
                     div
                         button#discoverFilterFollowing.btn.btn-filter( 
                             title="Filter by users you follow",
-                            [class.active]="activeLibrary === 'following'",
-                            (click)="activeLibrary = 'following'; first=0; updateSearchParams('filter_following')"
+                            [class.active]="searchParams.activeLibrary === 'following'",
+                            (click)="searchParams.activeLibrary = 'following'; first=0; updateSearchParams('filter_following')"
                         )
                             span([innerHTML]="':green_heart: Following' | emojione")
                     //- Academy Libraries
                     //- div(*ngFor="let academy of academies")
                     //-     button.btn.btn-filter( 
                     //-         title="Filter by your academy's library",
-                    //-         [class.active]="activeLibrary === 'ACADEMYID'",
-                    //-         (click)="activeLibrary = 'ACADEMYID'; updateSearchParams('filter_academy')"
+                    //-         [class.active]="searchParams.activeLibrary === 'ACADEMYID'",
+                    //-         (click)="searchParams.activeLibrary = 'ACADEMYID'; updateSearchParams('filter_academy')"
                     //-     )
                     //-         span([innerHTML]="':school: Academy Name' | emojione")
                 .form-group
