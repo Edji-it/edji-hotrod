@@ -102,7 +102,7 @@
       b No Readings Found
       | There are no readings for "{{searchParams.searchTerm}}" with your current filters, please try a different term or expanding your filters. 
     //- Bookmarked: No Readings message
-    .alert.alert-info.alert-readings(*ngIf="!loading && readings.length < 1 && searchParams.createdCollection === 'bookmarked'")
+    .alert.alert-info.alert-readings(*ngIf="!isSearching && !loading && readings.length < 1 && searchParams.createdCollection === 'bookmarked'")
       b No Bookmarked Readings
       p You do not currently have any Created Readings bookmarked!
     .row.loading.e2e-reading-loader(*ngIf="loading")

@@ -46,6 +46,7 @@ export class ReadingService {
   }
 
   /**
+   * @deprecated 5/2/2019
    * Get all Created Readings for a user, paginated
    * @param filters object containing pagination values (to eventually include other filters)
    */
@@ -124,13 +125,6 @@ export class ReadingService {
   } // public get(id : string) : Observable<any>
 
   public search(queryString): Observable<any> {
-    // let queryString = ''
-    // let { term } = query
-
-    // if (term) {
-    //   queryString += 'title=' + term + '&html=' + term
-    // }
-
     return this._http
       .get(this._auth.getUrl() + '/api/v1/readings/_search?' + queryString, this._auth.getOptions())
       .pipe(take(1))

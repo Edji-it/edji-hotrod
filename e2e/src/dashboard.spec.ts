@@ -180,7 +180,6 @@ describe('Dashboard page as a sidekick', () => {
   let sidebar = new Sidebar()
 
   beforeAll(() => {
-    // Login as test account that we can fill with junk data
     login.getPage()
     login.loginAndVerify(login.teacherUser, login.teacherPassword)
   })
@@ -199,5 +198,13 @@ describe('Dashboard page as a sidekick', () => {
     const numTotalReadings = await dashboard.readingCards.count()
     const numTotalArchived = await dashboard.archivedReadingCards.count()
     expect(numTotalReadings - 2).toEqual(numTotalArchived, 'expected there to be only two active readings on the free user dashboard')
+  })
+
+  it('should search for readings and get results', async() => {
+
+  })
+
+  it('should search for readings with a bad term and get no results', async() => {
+    
   })
 })

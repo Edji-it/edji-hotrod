@@ -222,6 +222,35 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
 
     this._readings.search(queryString).subscribe(
       data => {
+        if (data.results && !this.user.hero_status && this.user.archive_readings_before) {
+          let archivedBefore = new Date(this.user.archive_readings_before)
+          let readings = data.results.slice()
+          let archivedTally: number = 0
+          // Loop through readings and mark archived
+          for (let i = 0; i < readings.length; i++) {
+            /**
+             * Readings are "archived" if:
+             * - Updated date is prior to archived before date
+             * - Readings before Hero v2 (01-01-2018) are "legacy" and not archived
+             */
+            let readingDate = new Date(readings[i].createdAt)
+            if (readingDate < archivedBefore && readingDate >= new Date('2019-01-01')) {
+              readings[i].archived = true
+              archivedTally++
+              // Limit number of archived shown to 2, and flag begin/end of archive
+              if (archivedTally == 1) {
+                readings[i].archivedBegin = true
+              } else if (archivedTally == 2) {
+                readings[i].archivedEnd = true
+              } else if (archivedTally > 2) {
+                readings.splice(i, 1)
+                i--
+              }
+            }
+          }
+          //  Update return value
+          data.results = readings
+        }
         this.readings = data.results || []
         this.loading = false
         this.total = data.total
