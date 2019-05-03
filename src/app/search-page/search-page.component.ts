@@ -29,10 +29,10 @@ export class SearchPage implements OnInit {
   // Filters
   public filterCount: number = 0
   public gradesSelected: number[] = []
-  public gradeMin: number = 0
-  public gradeMax: number = 13
   private searchParams: ReadingQuery = {
     first: 0, // defaulted to first page
+    gradeMin: 0, // defaulted to min grade available
+    gradeMax: 13, // defaulted to max grade available
     searchTerm: '', // defaulted to empty
     activeLibrary: 'public' // defaulted to public
   }
@@ -125,10 +125,10 @@ export class SearchPage implements OnInit {
           this.filterCount++
         }
         if (params.grade_lte && params.grade_gte) {
-          this.gradeMin = parseInt(params.grade_gte)
-          this.gradeMax = parseInt(params.grade_lte)
+          this.searchParams.gradeMin = parseInt(params.grade_gte)
+          this.searchParams.gradeMax = parseInt(params.grade_lte)
           this.gradesSelected = []
-          for (let i = this.gradeMin; i <= this.gradeMax; i++) {
+          for (let i = this.searchParams.gradeMin; i <= this.searchParams.gradeMax; i++) {
             this.gradesSelected.push(i)
           }
           this.filterCount++
@@ -223,8 +223,8 @@ export class SearchPage implements OnInit {
     }
     this.filterCount = 0
     this.first = 0
-    this.gradeMin = 0
-    this.gradeMax = 13
+    this.searchParams.gradeMin = 0
+    this.searchParams.gradeMax = 13
     this.gradesSelected = []
     this.subjectFilter = []
     this.searchParams.activeLibrary = 'public'
@@ -278,9 +278,9 @@ export class SearchPage implements OnInit {
       queryString += '&subjects=' + this.subjectFilter.join(' ')
     }
     // grade_levels_lte, grade_levels_gte
-    if (this.gradeMin > -1 && this.gradeMax > -1) {
-      queryString += '&grade_levels_gte=' + this.gradeMin
-      queryString += '&grade_levels_lte=' + this.gradeMax
+    if (this.searchParams.gradeMin > -1 && this.searchParams.gradeMax > -1) {
+      queryString += '&grade_levels_gte=' + this.searchParams.gradeMin
+      queryString += '&grade_levels_lte=' + this.searchParams.gradeMax
     }
     // Default to sort by most recent, unless using a search term
     if (!this.searchParams.searchTerm) {
