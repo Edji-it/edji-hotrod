@@ -88,8 +88,6 @@ export class SearchPage implements OnInit {
     dynamicTitleMaxItems: 4,
   }
 
-  public subjectFilter: any = []
-
   constructor(
     private _auth: AuthService,
     private _readings: ReadingService,
@@ -121,7 +119,7 @@ export class SearchPage implements OnInit {
           }
         }
         if (params.subjects) {
-          this.subjectFilter = params.subjects.split(' ')
+          this.searchParams.subjectFilter = params.subjects.split(' ')
           this.filterCount++
         }
         if (params.grade_lte && params.grade_gte) {
@@ -193,8 +191,8 @@ export class SearchPage implements OnInit {
     if (this.searchParams.activeLibrary) {
       filterParams['library'] = this.searchParams.activeLibrary
     }
-    if (this.subjectFilter && this.subjectFilter[0]) {
-      filterParams['subjects'] = this.subjectFilter.join(' ')
+    if (this.searchParams.subjectFilter && this.searchParams.subjectFilter[0]) {
+      filterParams['subjects'] = this.searchParams.subjectFilter.join(' ')
     }
     if (this.gradesSelected.length > 0) {
       let grades = this.gradesSelected
@@ -226,7 +224,7 @@ export class SearchPage implements OnInit {
     this.searchParams.gradeMin = 0
     this.searchParams.gradeMax = 13
     this.gradesSelected = []
-    this.subjectFilter = []
+    this.searchParams.subjectFilter = []
     this.searchParams.activeLibrary = 'public'
   }
 
@@ -274,8 +272,8 @@ export class SearchPage implements OnInit {
       // Handle academy/institution id filter
     }
     // Subjects
-    if (this.subjectFilter && this.subjectFilter[0]) {
-      queryString += '&subjects=' + this.subjectFilter.join(' ')
+    if (this.searchParams.subjectFilter && this.searchParams.subjectFilter[0]) {
+      queryString += '&subjects=' + this.searchParams.subjectFilter.join(' ')
     }
     // grade_levels_lte, grade_levels_gte
     if (this.searchParams.gradeMin > -1 && this.searchParams.gradeMax > -1) {

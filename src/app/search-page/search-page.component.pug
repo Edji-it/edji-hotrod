@@ -83,12 +83,12 @@ nav-bar([showDashboardOptions]="true")
                 .form-group
                     label Subjects
                         button.btn-link.filter-clear(
-                            *ngIf="subjectFilter.length > 0",
-                            (click)="subjectFilter = []; updateSearchParams('')"
+                            *ngIf="searchParams.subjectFilter.length > 0",
+                            (click)="searchParams.subjectFilter = []; updateSearchParams('')"
                         ) Clear
                     ss-multiselect-dropdown(
                         id="subjectDropdown",
-                        [(ngModel)]="subjectFilter",
+                        [(ngModel)]="searchParams.subjectFilter",
                         [options]="subjects", 
                         [settings]="subjectDropSettings",
                         (dropdownClosed)="updateSearchParams('search_filter')"
@@ -103,7 +103,7 @@ nav-bar([showDashboardOptions]="true")
                     grade-selector([(ngModel)]="gradesSelected", (ngModelChange)="updateSearchParams('filter_gradeLevel')")
                 //- .form-group
                 //-     label Subjects
-                    //- ss-multiselect-dropdown([options]="subjects", [(ngModel)]="subjectFilter", [settings]="subjectDropSettings")
+                    //- ss-multiselect-dropdown([options]="subjects", [(ngModel)]="searchParams.subjectFilter", [settings]="subjectDropSettings")
         .col-md-8
             #notFollowingMessage.alert.alert-light(*ngIf="searchAlerts.notFollowing")
                 h4 Time to follow someone!
