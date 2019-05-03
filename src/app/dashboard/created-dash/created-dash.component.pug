@@ -74,7 +74,7 @@
   .col-12.col-sm-6.item-list.created-list([ngClass]="['page-'+pageNo]")
     ng-container(*ngIf="isSearching")
       .found__readings
-        span Found <b>{{ total || 0 }}</b> readings for "{{searchParams.searchTerm}}" with&nbsp;
+        span Found <b id="searchCount">{{ total || 0 }}</b> readings for "{{searchParams.searchTerm}}" with&nbsp;
         a.link(
           tabindex="0", 
           (click)="clearFilterVars(true); searchParams.searchTerm=''; updateSearchParams(''); isSearching=false",

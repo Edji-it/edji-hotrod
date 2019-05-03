@@ -26,6 +26,8 @@ export class Dashboard implements PageObjectInterface {
   public createdListPrevPage = element(by.css('.created-list .ui-paginator-prev'))
   public getReadingOptionsByTitle = (title: string) => element(by.css('button[testFindOptions="' + title + '"]'))
   public getReadingDeleteByTitle = (title: string) => element(by.css('button[testDelete="' + title + '"]'))
+  public searchCount = element(by.id('searchCount'))
+  public searchInput = element(by.id('readingSearch'))
 
   // Dropdown buttons
   public dropDownMenu = element(by.css('.btn-icon--plain'))

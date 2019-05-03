@@ -201,10 +201,42 @@ describe('Dashboard page as a sidekick', () => {
   })
 
   it('should search for readings and get results', async() => {
-
+    // input search term and hit enter
+    browser.wait(
+      EC.visibilityOf(dashboard.searchInput),
+      5000,
+      "search input field was not visible"
+    )
+    dashboard.searchInput.sendKeys('last')
+    dashboard.searchInput.sendKeys(protractor.Key.ENTER)
+    // check search results
+    browser.wait(
+      EC.visibilityOf(dashboard.searchCount),
+      5000,
+      "search results were not visible"
+    )
+    dashboard.searchCount.count().then(count => {
+      expect(count).toBeGreaterThan(0, "expected to see search results when entering a search")
+    })
   })
 
   it('should search for readings with a bad term and get no results', async() => {
-    
+    // input search term and hit enter
+    browser.wait(
+      EC.visibilityOf(dashboard.searchInput),
+      5000,
+      "search input field was not visible"
+    )
+    dashboard.searchInput.sendKeys('%')
+    dashboard.searchInput.sendKeys(protractor.Key.ENTER)
+    // check search results
+    browser.wait(
+      EC.visibilityOf(dashboard.searchCount),
+      5000,
+      "search results were not visible"
+    )
+    dashboard.searchCount.count().then(count => {
+      expect(count).toBe(0, "expected to see no search results when entering a bad search")
+    })
   })
 })

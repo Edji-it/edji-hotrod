@@ -55,7 +55,7 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
 
   // Search
   public searchFieldWidth: number = 100
-  private searchParams: ReadingQuery = {
+  public searchParams: ReadingQuery = {
     first: 0,
     searchTerm: '',
     createdCollection: 'recent'

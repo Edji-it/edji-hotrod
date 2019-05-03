@@ -29,7 +29,7 @@ export class SearchPage implements OnInit {
   // Filters
   public filterCount: number = 0
   public gradesSelected: number[] = []
-  private searchParams: ReadingQuery = {
+  public searchParams: ReadingQuery = {
     first: 0, // defaulted to first page
     gradeMin: 0, // defaulted to min grade available
     gradeMax: 13, // defaulted to max grade available
