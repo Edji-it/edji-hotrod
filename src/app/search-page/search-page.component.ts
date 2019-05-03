@@ -238,51 +238,12 @@ export class SearchPage implements OnInit {
     this.readings = []
     this.searchAlerts = {}
 
-    // // pass in the arguments to build the queryParam string
-    // this.searchParams = {
-    //   first: this.searchParams.first,
-    //   searchTerm: this.searchTerm,
-    //   activeLibrary: this.activeLibrary,
-    //   following: this.user.following,
-    //   subjectFilter: this.subjectFilter,
-    //   gradeMin: this.gradeMin,
-    //   gradeMax: this.gradeMax
-    // }
-
-    // Construct search query
-    let queryString = 'from=' + this.searchParams.first
-    if (this.searchParams.searchTerm) {
-      queryString += '&q=' + this.searchParams.searchTerm
-    }
-    // Library
+    // pass in the arguments to build the queryParam string
     if (this.searchParams.activeLibrary === 'following') {
-      // Loop through and apply following ids
-      let following = this.user.following
-      // Display message if not following anyone
-      if (!following || following.length < 1) {
-        this.searchAlerts.notFollowing = true
-        this.loading = false
-        return
-      }
-      following.forEach(userId => {
-        queryString += '&owner_id=' + userId
-      })
-    } else if (this.searchParams.activeLibrary !== 'public') {
-      // Handle academy/institution id filter
+      this.searchParams.following = this.user.following
     }
-    // Subjects
-    if (this.searchParams.subjectFilter && this.searchParams.subjectFilter[0]) {
-      queryString += '&subjects=' + this.searchParams.subjectFilter.join(' ')
-    }
-    // grade_levels_lte, grade_levels_gte
-    if (this.searchParams.gradeMin > -1 && this.searchParams.gradeMax > -1) {
-      queryString += '&grade_levels_gte=' + this.searchParams.gradeMin
-      queryString += '&grade_levels_lte=' + this.searchParams.gradeMax
-    }
-    // Default to sort by most recent, unless using a search term
-    if (!this.searchParams.searchTerm) {
-      queryString += '&sort=createdAt&sort_order=desc'
-    }
+
+    let queryString = this._readings.buildSearchParams(this.searchParams)
 
     this._readings.search(queryString).subscribe(
       data => {
