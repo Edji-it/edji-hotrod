@@ -62,6 +62,15 @@
           li(*ngFor="let guide of guideLinks")
             a.link(target="_blank", [href]="guide.url")
               | {{ guide.displayName }}
+    .form-group(*ngIf="isSearching")
+      label Public Library
+      div
+        button#publicSearch.btn( 
+          title=`Search for ${searchParams && searchParams.searchTerm} on the discover feed`,
+          (click)="updateSearchParams('', null, true)"
+        )
+          span([innerHTML]=`':earth_americas:' | emojione`) 
+          span &nbsp;Search for "{{searchParams && searchParams.searchTerm}}"
   .col-12.col-sm-6.item-list.created-list([ngClass]="['page-'+pageNo]")
     ng-container(*ngIf="isSearching")
       .found__readings

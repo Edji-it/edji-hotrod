@@ -157,7 +157,7 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
    * @param paging Pagination values should only be passed for a pagination event (from the datalist component)
    * @duplicated with search-page.component.ts
    */
-  updateSearchParams(action: string, paging?: any) {
+  updateSearchParams(action: string, paging?: any, searchDiscover?: boolean) {
     // Ignore if pagination values are passed and unchanged
     if (paging && this.searchParams.first == paging.first && this.rows == paging.rows) {
       return
@@ -181,11 +181,15 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
     // fire an analytic event here for tracking purposes
     if (action !== '') {
       this.angulartics.eventTrack.next({
-        action: 'discover_' + action,
+        action: 'createdDash_' + action,
         properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
       })
     }
-    this.router.navigate(['/dashboard/create' + (this.isSearching ? '/search' : '')], { queryParams: filterParams })
+    if (searchDiscover) {
+      this.router.navigate(['/discover/search'], { queryParams: { q: (this.searchParams.searchTerm ? this.searchParams.searchTerm : '')}})
+    } else {
+      this.router.navigate(['/dashboard/create' + (this.isSearching ? '/search' : '')], { queryParams: filterParams })
+    }
   }
 
   /**
