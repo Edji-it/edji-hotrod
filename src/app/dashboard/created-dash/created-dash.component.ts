@@ -103,9 +103,6 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
         this.loadSearch()
       })
     )
-
-    // Load user's created readings
-    // this.loadRecentlyCreated()
     // Load user's drafts
     this.loadDrafts()
   }
@@ -158,6 +155,7 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
    * - Passes new params to URL
    * @action is the filter that is changing (used for analytics)
    * @param paging Pagination values should only be passed for a pagination event (from the datalist component)
+   * @duplicated with search-page.component.ts
    */
   updateSearchParams(action: string, paging?: any) {
     // Ignore if pagination values are passed and unchanged

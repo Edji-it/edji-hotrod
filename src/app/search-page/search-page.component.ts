@@ -165,7 +165,9 @@ export class SearchPage implements OnInit {
   /**
    * Primary trigger for updating search
    * - Passes new params to URL
+   * @param action is the filter that is changing (used for analytics)
    * @param paging Pagination values should only be passed for a pagination event (from the datalist component)
+   * @duplicated with created-dash.component.ts
    */
   updateSearchParams(action: string, paging?: any) {
     // Ignore if pagination values are passed and unchanged
