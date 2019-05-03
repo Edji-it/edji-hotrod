@@ -37,7 +37,6 @@ export class SearchPage implements OnInit {
     activeLibrary: 'public' // defaulted to public
   }
 
-  public first: number = 0
   public rows: number = 15
   public total: number = 15
 
@@ -132,7 +131,7 @@ export class SearchPage implements OnInit {
           this.filterCount++
         }
         if (params.from) {
-          this.first = parseInt(params.from)
+          this.searchParams.first = parseInt(params.from)
         }
         this.loadFeed()
       }),
@@ -172,15 +171,15 @@ export class SearchPage implements OnInit {
    */
   updateSearchParams(action: string, paging?: any) {
     // Ignore if pagination values are passed and unchanged
-    if (paging && this.first == paging.first && this.rows == paging.rows) {
+    if (paging && this.searchParams.first == paging.first && this.rows == paging.rows) {
       return
     }
     let filters = {}
     let filterParams = {}
     // Pagination values
-    this.first = filters['from'] = paging && paging.first != undefined ? parseInt(paging.first) - 1 : this.first
-    if (this.first < 0) {
-      this.first = filters['from'] = 0
+    this.searchParams.first = filters['from'] = paging && paging.first != undefined ? parseInt(paging.first) - 1 : this.searchParams.first
+    if (this.searchParams.first < 0) {
+      this.searchParams.first = filters['from'] = 0
     }
     this.rows = filters['size'] = paging && paging.rows != undefined ? parseInt(paging.rows) : this.rows
 
@@ -199,8 +198,8 @@ export class SearchPage implements OnInit {
       filterParams['grade_gte'] = Math.min(...grades)
       filterParams['grade_lte'] = Math.max(...grades)
     }
-    if (this.first) {
-      filterParams['from'] = this.first
+    if (this.searchParams.first) {
+      filterParams['from'] = this.searchParams.first
     }
     // fire an analytic event here for tracking purposes
     if (action !== '') {
@@ -220,7 +219,7 @@ export class SearchPage implements OnInit {
       this.searchParams.searchTerm = ''
     }
     this.filterCount = 0
-    this.first = 0
+    this.searchParams.first = 0
     this.searchParams.gradeMin = 0
     this.searchParams.gradeMax = 13
     this.gradesSelected = []
@@ -241,7 +240,7 @@ export class SearchPage implements OnInit {
 
     // // pass in the arguments to build the queryParam string
     // this.searchParams = {
-    //   first: this.first,
+    //   first: this.searchParams.first,
     //   searchTerm: this.searchTerm,
     //   activeLibrary: this.activeLibrary,
     //   following: this.user.following,
@@ -251,7 +250,7 @@ export class SearchPage implements OnInit {
     // }
 
     // Construct search query
-    let queryString = 'from=' + this.first
+    let queryString = 'from=' + this.searchParams.first
     if (this.searchParams.searchTerm) {
       queryString += '&q=' + this.searchParams.searchTerm
     }
