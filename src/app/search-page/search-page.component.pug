@@ -25,7 +25,7 @@ nav-bar([showDashboardOptions]="true")
                             )
                             .form-control-clear.icon.icon-close(
                                 *ngIf="searchParams.searchTerm.length > 0",
-                                (click)="searchParams.searchTerm = ''; updateSearchParams('')"
+                                (click)="searchParams.searchTerm = ''; updateSearchParams(''); isSearching=false"
                             )
                             .form-control.form-control-dummysize(#dummySearchField) {{ searchParams.searchTerm }}
                 div.mt-2
@@ -33,7 +33,7 @@ nav-bar([showDashboardOptions]="true")
                     a.link(
                         *ngIf="filterCount > 0", 
                         tabindex="0", 
-                        (click)="clearFilterVars(true); updateSearchParams('')",
+                        (click)="clearFilterVars(true); updateSearchParams(''); isSearching=false",
                         title="Click to clear"
                     ) 
                         |with {{ filterCount }} filters

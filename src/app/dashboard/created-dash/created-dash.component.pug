@@ -33,7 +33,7 @@
         a.link(
           *ngIf="filterCount > 0", 
           tabindex="0", 
-          (click)="clearFilterVars(true); updateSearchParams('')",
+          (click)="clearFilterVars(true); updateSearchParams(''); isSearching=false",
           title="Click to clear"
         ) 
           |with {{ filterCount }} filters
