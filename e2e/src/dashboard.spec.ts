@@ -215,8 +215,8 @@ describe('Dashboard page as a sidekick', () => {
       5000,
       "search results were not visible"
     )
-    dashboard.searchCount.count().then(count => {
-      expect(count).toBeGreaterThan(0, "expected to see search results when entering a search")
+    dashboard.searchCount.getText().then(count => {
+      expect(parseInt(count)).toBeGreaterThan(0, "expected to see search results when entering a search")
     })
   })
 
@@ -235,8 +235,8 @@ describe('Dashboard page as a sidekick', () => {
       5000,
       "search results were not visible"
     )
-    dashboard.searchCount.count().then(count => {
-      expect(count).toBe(0, "expected to see no search results when entering a bad search")
+    dashboard.searchCount.getText().then(count => {
+      expect(parseInt(count)).toBe(0, "expected to see no search results when entering a bad search")
     })
   })
 })
