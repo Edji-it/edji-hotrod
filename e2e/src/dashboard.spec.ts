@@ -229,6 +229,13 @@ describe('Dashboard page as a sidekick', () => {
     )
     dashboard.searchInput.sendKeys('%')
     dashboard.searchInput.sendKeys(protractor.Key.ENTER)
+    browser.sleep(1000)
+    // wait for loading symbol to not be there
+    browser.wait(
+      EC.invisibilityOf(dashboard.createdListLoading),
+      5000,
+      "loading symbol never disappeared"
+    )
     // check search results
     browser.wait(
       EC.visibilityOf(dashboard.searchCount),
