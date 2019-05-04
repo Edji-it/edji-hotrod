@@ -88,6 +88,18 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
       this._auth.getCurrentUser().subscribe(user => {
         this.user = user
       }),
+      this._readings.currentUserReadings.subscribe(data => {
+        this.readings = data.readings || []
+        this.total = data.total
+        this.errorObject = {}
+        this.loading = false
+      },
+      error => {
+        this.loading = false
+        this.errorObject.readingError =
+          '<b>Error Loading Readings</b> There was an error loading your readings. Please try again later or <a href="mailto:support@edji.it" target="_blank" class="link">contact support</a>.'
+        console.error(error)
+      }),
       // Get search params from URL
       this.route.queryParams.subscribe(params => {
         this.clearFilterVars()
@@ -101,18 +113,6 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
           this.searchParams.createdCollection = params.createdCollection
         }
         this.loadSearch()
-      }),
-      this._readings.currentUserReadings.subscribe(data => {
-        this.readings = data.readings || []
-        this.total = data.total
-        this.errorObject = {}
-        this.loading = false
-      },
-      error => {
-        this.loading = false
-        this.errorObject.readingError =
-          '<b>Error Loading Readings</b> There was an error loading your readings. Please try again later or <a href="mailto:support@edji.it" target="_blank" class="link">contact support</a>.'
-        console.error(error)
       })
     )
     // Load user's drafts
