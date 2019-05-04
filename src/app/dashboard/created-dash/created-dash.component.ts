@@ -101,6 +101,18 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
           this.searchParams.createdCollection = params.createdCollection
         }
         this.loadSearch()
+      }),
+      this._readings.currentUserReadings.subscribe(data => {
+        this.readings = data.readings || []
+        this.total = data.total
+        this.errorObject = {}
+        this.loading = false
+      },
+      error => {
+        this.loading = false
+        this.errorObject.readingError =
+          '<b>Error Loading Readings</b> There was an error loading your readings. Please try again later or <a href="mailto:support@edji.it" target="_blank" class="link">contact support</a>.'
+        console.error(error)
       })
     )
     // Load user's drafts
@@ -170,6 +182,7 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
       this.searchParams.first = filters['from'] = 0
     }
     this.rows = filters['size'] = paging && paging.rows != undefined ? parseInt(paging.rows) : this.rows
+    this.pageNo = Math.floor((this.searchParams.first + 1) / this.rows) + 1
     if (this.searchParams.searchTerm) {
       this.isSearching = true
       filterParams['q'] = this.searchParams.searchTerm
@@ -220,40 +233,14 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
 
     let queryString = this._readings.buildSearchParams(this.searchParams)
 
-    this._readings.search(queryString).subscribe(
+    this._readings.search(queryString, this.user).subscribe(
       data => {
-        if (data.results && !this.user.hero_status && this.user.archive_readings_before) {
-          let archivedBefore = new Date(this.user.archive_readings_before)
-          let readings = data.results.slice()
-          let archivedTally: number = 0
-          // Loop through readings and mark archived
-          for (let i = 0; i < readings.length; i++) {
-            /**
-             * Readings are "archived" if:
-             * - Updated date is prior to archived before date
-             * - Readings before Hero v2 (01-01-2018) are "legacy" and not archived
-             */
-            let readingDate = new Date(readings[i].createdAt)
-            if (readingDate < archivedBefore && readingDate >= new Date('2019-01-01')) {
-              readings[i].archived = true
-              archivedTally++
-              // Limit number of archived shown to 2, and flag begin/end of archive
-              if (archivedTally == 1) {
-                readings[i].archivedBegin = true
-              } else if (archivedTally == 2) {
-                readings[i].archivedEnd = true
-              } else if (archivedTally > 2) {
-                readings.splice(i, 1)
-                i--
-              }
-            }
-          }
-          //  Update return value
-          data.results = readings
-        }
-        this.readings = data.results || []
+        // if (data) {
+        //   this._readings.verifyArchive(data.results, this.user)
+        // }
+        // this.readings = data.results || []
         this.loading = false
-        this.total = data.total
+        // this.total = data.total
         // Handle no results messaging
         if (this.searchParams.searchTerm && this.readings.length < 1) {
           this.searchAlerts.noResults = true

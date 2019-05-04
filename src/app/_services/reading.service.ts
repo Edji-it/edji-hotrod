@@ -75,35 +75,7 @@ export class ReadingService {
       .pipe(take(1))
       .subscribe(
         (data: any) => {
-          if (data.readings && !user.hero_status && user.archive_readings_before) {
-            let archivedBefore = new Date(user.archive_readings_before)
-            let readings = data.readings.slice()
-            let archivedTally: number = 0
-            // Loop through readings and mark archived
-            for (let i = 0; i < readings.length; i++) {
-              /**
-               * Readings are "archived" if:
-               * - Updated date is prior to archived before date
-               * - Readings before Hero v2 (01-01-2018) are "legacy" and not archived
-               */
-              let readingDate = new Date(readings[i].createdAt)
-              if (readingDate < archivedBefore && readingDate >= new Date('2019-01-01')) {
-                readings[i].archived = true
-                archivedTally++
-                // Limit number of archived shown to 2, and flag begin/end of archive
-                if (archivedTally == 1) {
-                  readings[i].archivedBegin = true
-                } else if (archivedTally == 2) {
-                  readings[i].archivedEnd = true
-                } else if (archivedTally > 2) {
-                  readings.splice(i, 1)
-                  i--
-                }
-              }
-            }
-            //  Update return value
-            data.readings = readings
-          }
+          data.readings = this.verifyArchive(data.readings, user)
           this.userReadingsSource.next(data)
         },
         error => {
@@ -124,10 +96,56 @@ export class ReadingService {
     )
   } // public get(id : string) : Observable<any>
 
-  public search(queryString): Observable<any> {
+  public search(queryString, user?: User): Observable<any> {
     return this._http
       .get(this._auth.getUrl() + '/api/v1/readings/_search?' + queryString, this._auth.getOptions())
-      .pipe(take(1))
+      // .pipe(take(1))
+      .pipe(
+        map((data: any) => {
+          if (data && user) {
+            data.readings = this.verifyArchive(data.results, user)
+            this.userReadingsSource.next(data)
+          }
+          return data
+        })
+      )
+  }
+
+  /**
+   * Returns an array of readings with archived flag if conditions are met
+   * @param readings an array of readings from a search or api call
+   * @param user current user
+   */
+  public verifyArchive(readingsArr: any, user: User): any {
+    let readings = readingsArr.slice()
+    if (readings && !user.hero_status && user.archive_readings_before) {
+      let archivedBefore = new Date(user.archive_readings_before)
+      let archivedTally: number = 0
+      // Loop through readings and mark archived
+      for (let i = 0; i < readings.length; i++) {
+        /**
+         * Readings are "archived" if:
+         * - Updated date is prior to archived before date
+         * - Readings before Hero v2 (01-01-2018) are "legacy" and not archived
+         */
+        let readingDate = new Date(readings[i].createdAt)
+        if (readingDate < archivedBefore && readingDate >= new Date('2019-01-01')) {
+          readings[i].archived = true
+          archivedTally++
+          // Limit number of archived shown to 2, and flag begin/end of archive
+          if (archivedTally == 1) {
+            readings[i].archivedBegin = true
+          } else if (archivedTally == 2) {
+            readings[i].archivedEnd = true
+          } else if (archivedTally > 2) {
+            readings.splice(i, 1)
+            i--
+          }
+        }
+      }
+    }
+    //  Update return value
+    return readings
   }
 
   /**
