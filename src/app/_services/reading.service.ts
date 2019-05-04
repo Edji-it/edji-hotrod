@@ -118,6 +118,8 @@ export class ReadingService {
    */
   public verifyArchive(readingsArr: any, user: User): any {
     let readings = readingsArr.slice()
+    let rc = Object.assign({}, readings)
+    console.log(rc)
     if (readings && !user.hero_status && user.archive_readings_before) {
       let archivedBefore = new Date(user.archive_readings_before)
       let archivedTally: number = 0
@@ -144,6 +146,7 @@ export class ReadingService {
         }
       }
     }
+    console.log(readings, user)
     //  Update return value
     return readings
   }

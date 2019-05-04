@@ -101,7 +101,7 @@ nav-bar([showDashboardOptions]="true")
                 follow-tag(
                     id="followEdjiTag",
                     [owner]="edjiOwnerObj",
-                    (followEvent)="loadFeed()"
+                    (followEvent)="loadFeed(); filterCount = filterCount + 1"
                 )
             //- Server error while loading
             .alert.alert-warning(*ngIf="searchAlerts.serverError")

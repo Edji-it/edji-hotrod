@@ -241,6 +241,13 @@ export class SearchPage implements OnInit {
     // pass in the arguments to build the queryParam string
     if (this.searchParams.activeLibrary === 'following') {
       this.searchParams.following = this.user.following
+      if (!this.searchParams.following || this.searchParams.following.length < 1) {	
+        this.searchAlerts.notFollowing = true	
+        this.loading = false	
+        this.isSearching = false
+        this.filterCount = 0
+        return	
+      }
     }
 
     let queryString = this._readings.buildSearchParams(this.searchParams)
