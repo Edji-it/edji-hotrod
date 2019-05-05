@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
-import { ActivatedRoute } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 import { take } from 'rxjs/operators'
 
 // Project Dependencies
@@ -28,7 +28,12 @@ export class LoginModal implements OnInit {
 
   public guestLogin: boolean = true
 
-  constructor(private _project: ProjectService, private _socket: SocketService, private _auth: AuthService) {}
+  constructor(
+    private _project: ProjectService, 
+    private _socket: SocketService, 
+    private _auth: AuthService,
+    private router: Router,
+  ) {}
 
   ngOnInit() {
     if (this.loginOnly) {
@@ -68,6 +73,8 @@ export class LoginModal implements OnInit {
             this.closeModal.emit()
           },
         )
+    } else {
+      this.closeModal.emit()
     }
   }
 

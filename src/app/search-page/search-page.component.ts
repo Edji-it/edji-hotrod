@@ -43,6 +43,7 @@ export class SearchPage implements OnInit {
   public showConfirmArchiveModal: boolean
   public selectedReading: Reading
   public createdReading: Reading
+  public showLoginModal: boolean
 
   // Search
   public searchTerm: string = ''
@@ -53,7 +54,6 @@ export class SearchPage implements OnInit {
     serverError?: boolean
     noResults?: boolean
     notFollowing?: boolean
-    requireLogin?: boolean
   } = {}
 
   // State vars

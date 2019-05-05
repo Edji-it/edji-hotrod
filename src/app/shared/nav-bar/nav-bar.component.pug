@@ -9,7 +9,7 @@
       ng-container(*ngIf="isDevDeployed")
         img#logo.nav-bar__logo(*ngIf="currentPage!='home'", src="assets/images/logo-3.2-mark--dev.svg")
         img#logo.nav-bar__logo-h(*ngIf="currentPage=='home'", src="assets/images/logo-3.2-horizontal--dev.svg")
-    .nav__menu(*ngIf="!showDashboardOptions || currentPage === 'discover'")
+    .nav__menu(*ngIf="!showDashboardOptions || (currentPage === 'discover' && !user.isLoggedIn)")
       a.btn.btn-link([attr.id]="navDiscoverPublic", [routerLink]="['/discover']", routerLinkActive="active", [attr.title]="'Discover Readings from other Teachers'")
         | Discover
     //- Dashboard Nav
