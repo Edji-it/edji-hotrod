@@ -53,6 +53,7 @@ export class SearchPage implements OnInit {
     serverError?: boolean
     noResults?: boolean
     notFollowing?: boolean
+    requireLogin?: boolean
   } = {}
 
   // State vars

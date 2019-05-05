@@ -34,6 +34,10 @@ export class FollowTag implements OnInit {
   }
 
   followUser(userId: string): void {
+    if (!this.user.isLoggedIn) {
+      this.followEvent.emit(true)
+      return
+    }
     this._auth
       .followUser(userId)
       .pipe(take(1))

@@ -1,6 +1,6 @@
 .modal
   .modal-dialog(role='document')
-    #loginModal.modal-content
+    #loginModal.modal-content((clickOutside)="closeModalOutside()")
       .modal-header
         h5.modal-title Log In
       .modal-body

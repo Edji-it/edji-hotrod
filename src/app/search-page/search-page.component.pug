@@ -112,7 +112,7 @@ nav-bar([showDashboardOptions]="true")
                 follow-tag(
                     id="followEdjiTag",
                     [owner]="edjiOwnerObj",
-                    (followEvent)="loadFeed()"
+                    (followEvent)="user.isLoggedIn ? loadFeed() : searchAlerts.requireLogin = true"
                 )
             //- Server error while loading
             .alert.alert-warning(*ngIf="searchAlerts.serverError")
@@ -189,4 +189,11 @@ hot-add-project-modal.modal-will-fade(
     [groupLabel]="'Group 1'",
     (groupSaved)="finalizeShare($event)",
     (closeModal)="showFirstGroupModal = false"
+)
+
+hot-login-modal.modal-will-fade(
+    *ngIf="searchAlerts.requireLogin",
+    [class.show]="searchAlerts.requireLogin", 
+    [loginOnly]="true",
+    (closeModal)="searchAlerts.requireLogin = false"
 )
