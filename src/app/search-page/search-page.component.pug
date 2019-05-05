@@ -128,7 +128,10 @@ nav-bar([showDashboardOptions]="true")
                    .col-12.feed__reading(*ngIf="reading")
                         .feed__reading-data.mb-2(*ngIf="reading.owner")
                             .comment__avatar.mb-0 {{reading.owner.fullname.substr(0,2).toUpperCase()}}
-                            follow-tag([owner]="reading.owner")
+                            follow-tag(
+                                [owner]="reading.owner",
+                                (followEvent)="!user.isLoggedIn ? showLoginModal = true : ''"
+                            )
                             i.hidden-md-down.ws-nowrap {{ ' shared ' + (reading.updatedAt | edjidate:'timeAgo':null:secondsAgo) }}
                             .btn.btn-sm.btn-primary.float-right(
                                 (click)="openReadingPreview(reading)", 
