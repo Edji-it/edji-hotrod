@@ -198,5 +198,5 @@ hot-login-modal.modal-will-fade(
     *ngIf="showLoginModal",
     [class.show]="showLoginModal", 
     [loginOnly]="true",
-    (closeModal)="showLoginModal = false; "
+    (closeModal)="closeLoginModal($event)"
 )

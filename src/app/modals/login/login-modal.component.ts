@@ -37,7 +37,6 @@ export class LoginModal implements AfterViewInit, OnInit {
   ) {}
 
   ngOnInit() {
-    console.log('opened the login modal')
     if (this.loginOnly) {
       this.guestLogin = false
     }
@@ -83,7 +82,7 @@ export class LoginModal implements AfterViewInit, OnInit {
           },
         )
     } else {
-      this.closeModal.emit()
+      this.closeModal.emit('preview')
     }
   }
 

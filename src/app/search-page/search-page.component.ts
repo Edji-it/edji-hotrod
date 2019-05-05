@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs'
 import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
-import { AuthService, ReadingService, AcademyService } from '../_services'
+import { AuthService, ReadingService, AcademyService, LockerService } from '../_services'
 import { User, Reading, Project } from '../shared/datatypes'
 
 @Component({
@@ -66,6 +66,9 @@ export class SearchPage implements OnInit {
   public readingArchivalSet: boolean = false
 
   public newGroup: Project
+  public loginParams: LoginParams = {
+    preview: ''
+  }
 
   // MAKE SUBJECTS COMPONENT
   public subjects: { id: string; name: string }[] = [
@@ -95,6 +98,7 @@ export class SearchPage implements OnInit {
     private _academy: AcademyService,
     private route: ActivatedRoute,
     private router: Router,
+    private _locker: LockerService
   ) { }
 
   async ngOnInit() {
@@ -107,7 +111,11 @@ export class SearchPage implements OnInit {
         this.user = user
       }),
       // Get search params from URL
-      this.route.queryParams.subscribe(params => {
+      this.route.queryParams.subscribe(async params => {
+        this.loginParams = {
+          ...this.loginParams,
+          ...params
+        }
         this.clearFilterVars()
         if (params.q) {
           this.searchTerm = params.q
@@ -135,6 +143,15 @@ export class SearchPage implements OnInit {
           this.first = parseInt(params.from)
         }
         this.loadFeed()
+        if (params.preview) {
+          try {
+            // the link we generate to open the modal direct only contains a reading _id so we need to get that reading
+            this.selectedReading = await this._readings.get(params.preview).toPromise()
+            this.showReadingPreviewModal=true
+          } catch (err) {
+            console.error(err)
+          }
+        }
       }),
       this._readings.currentUserReadings.subscribe(
         userReadings => {
@@ -376,7 +393,20 @@ export class SearchPage implements OnInit {
   public closeReadingPreview(login?: boolean): void {
     this.showReadingPreviewModal=false
     if (login) {
+      this.loginParams.preview = this.selectedReading._id
       this.showLoginModal=true
     }
   }
+
+  public closeLoginModal(context?: string): void {
+    this.showLoginModal = false
+    if (context==='preview') {
+      this.router.navigate(['/discover' + (this.isSearching ? '/search' : '')], { queryParams: this.loginParams })
+    }
+  }
+}
+
+export interface LoginParams {
+  preview?: string
+  [prop: string]: any
 }
