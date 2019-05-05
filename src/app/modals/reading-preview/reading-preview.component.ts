@@ -21,6 +21,18 @@ export class ReadingPreviewModal implements AfterViewInit, OnInit {
   // state values
   public initialized: boolean
   public loading: boolean = true
+  public loggedIn: boolean = true
+  public showLoginModal: boolean
+  
+  public copy: {
+    share: string
+    edit: string
+    actionTitle: string
+  } = {
+    share: 'Share',
+    edit: 'Edit',
+    actionTitle: 'Use this Reading'
+  }
 
   constructor(
     private _router: Router,
@@ -30,25 +42,34 @@ export class ReadingPreviewModal implements AfterViewInit, OnInit {
   ) { }
 
   async ngOnInit() {
-    // since reading preview can be called from the new reading page, let's make sure we don't just send them back here with a blank form
-    if (this.context === 'created') {
-      // The Discover Feed only has the first 100 words, so we need to make a call to get the full reading to attach all words
-      try {
-        let fullReading: Reading
-        fullReading = await this._readings.get(this.reading._id).toPromise()
-        // add missing properties to the reading
-        this.reading.words = fullReading.words
-        this.reading.questions = fullReading.questions
-        this.reading.html = fullReading.html
-        if (this.reading.questions) {
-          this.updateQuestionNumbers(this.reading.questions)
+    switch (this.context) {
+      case 'creator':
+        this.copy.actionTitle = 'Ready to share?'
+        this.copy.edit = 'Keep Editing'
+        break
+      case 'created':
+        if (!this.user || !this.user.isLoggedIn) {
+          this.loggedIn = false
+          this.copy.actionTitle = 'Want this reading?'
         }
-        this.loading = false
-      } catch (err) {
-        console.error(err)
-      }
+        try {
+          // The Discover Feed only has the first 100 words, so we need to make a call to get the full reading to attach all words
+          let fullReading: Reading
+          fullReading = await this._readings.get(this.reading._id).toPromise()
+          // add missing properties to the reading
+          this.reading.words = fullReading.words
+          this.reading.questions = fullReading.questions
+          this.reading.html = fullReading.html
+          if (this.reading.questions) {
+            this.updateQuestionNumbers(this.reading.questions)
+          }
+          this.loading = false
+        } catch (err) {
+          console.error(err)
+        }
+        break
+      default:
     }
-
     // Workaround: This modal is long enough that it needs to scroll and we don't want two scrollbars
     document.body.style.overflow = 'hidden'
   }
@@ -82,9 +103,9 @@ export class ReadingPreviewModal implements AfterViewInit, OnInit {
   /**
    * close the modal only if template has initialized
    */
-  public close(): void {
+  public close(login?: boolean): void {
     if (this.initialized) {
-      this.closeModal.emit()
+      this.closeModal.emit(login)
     }
     // Workaround: Clear scrollbar hiding
     document.body.style.overflow = ''
@@ -131,6 +152,9 @@ export class ReadingPreviewModal implements AfterViewInit, OnInit {
     }
   }
 
+  /**
+   * Fire our analytic event for a created reading from an existing
+   */
   private createdReadingSuccess(): void {
     // fire an analytic event here for tracking purposes
     this.angulartics.eventTrack.next({

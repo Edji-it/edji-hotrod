@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
+import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { take } from 'rxjs/operators'
 
@@ -16,7 +16,7 @@ import { ProjectService, SocketService, AuthService } from './../../_services'
     `,
   ],
 })
-export class LoginModal implements OnInit {
+export class LoginModal implements AfterViewInit, OnInit {
   @Output()
   private closeModal: EventEmitter<any> = new EventEmitter()
 
@@ -27,6 +27,7 @@ export class LoginModal implements OnInit {
   private loginOnly: boolean
 
   public guestLogin: boolean = true
+  public initialized: boolean
 
   constructor(
     private _project: ProjectService, 
@@ -36,9 +37,17 @@ export class LoginModal implements OnInit {
   ) {}
 
   ngOnInit() {
+    console.log('opened the login modal')
     if (this.loginOnly) {
       this.guestLogin = false
     }
+  }
+
+  ngAfterViewInit() {
+    // Need to give the modal time to load before allowing the clickOutside binding to close the modal
+    setTimeout(() => {
+      this.initialized = true
+    }, 1000)
   }
 
   onLoginSuccess() {
@@ -78,9 +87,15 @@ export class LoginModal implements OnInit {
     }
   }
 
+  /**
+   * method to allow the modal to close on click outside
+   * needs to wait for confirmation on intialization so we don't close it right away when other modals are open
+   */
   public closeModalOutside(): void {
-    if (this.loginOnly) {
-      this.closeModal.emit()
+    if (this.initialized) {
+      if (this.loginOnly) {
+        this.closeModal.emit()
+      }
     }
   }
 }

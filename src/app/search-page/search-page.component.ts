@@ -372,4 +372,11 @@ export class SearchPage implements OnInit {
       console.error(err)
     }
   }
+
+  public closeReadingPreview(login?: boolean): void {
+    this.showReadingPreviewModal=false
+    if (login) {
+      this.showLoginModal=true
+    }
+  }
 }

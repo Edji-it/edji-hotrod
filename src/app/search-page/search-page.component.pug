@@ -168,7 +168,7 @@ hot-reading-preview-modal(
     *ngIf="showReadingPreviewModal",
     [reading]="selectedReading",
     [user]="user",
-    (closeModal)="showReadingPreviewModal=false",
+    (closeModal)="closeReadingPreview($event)",
     (createSuccess)="readingCreateFromPreviewSuccess($event)",
     [context]="'created'"
 )
@@ -193,10 +193,10 @@ hot-add-project-modal.modal-will-fade(
     (groupSaved)="finalizeShare($event)",
     (closeModal)="showFirstGroupModal = false"
 )
-
+//- Login modal with option to switch to registration page
 hot-login-modal.modal-will-fade(
     *ngIf="showLoginModal",
     [class.show]="showLoginModal", 
     [loginOnly]="true",
-    (closeModal)="showLoginModal = false; loadFeed()"
+    (closeModal)="showLoginModal = false; "
 )
