@@ -13,7 +13,7 @@ export class MessageToastsComponent implements OnInit {
   public toasts: MessageToast[] = []
   public toastObservable: Observable<MessageToast[]>
 
-  constructor(private _messages: MessageService) {}
+  constructor(private _messages: MessageService) { }
 
   ngOnInit() {
     this.toastObservable = this._messages.toastUpdates
@@ -29,6 +29,7 @@ export class MessageToastsComponent implements OnInit {
       'heat-off': 'icon-vision-flame inactive',
       success: 'icon-check',
       info: 'icon-notice',
+      promo: 'icon-gift'
     }
     return toastTypeMap[toastType] || toastTypeMap['info']
   }

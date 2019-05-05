@@ -43,5 +43,13 @@ export class AppComponent {
     // }
     // Trigger the message service to start
     this._messages.init()
+
+    // Promo toast
+    this._messages.sendToast({
+      id: "salepromo",
+      message: "Promo time!",
+      type: "promo",
+      requireDismiss: true
+    })
   }
 }

@@ -169,7 +169,7 @@ interface GetMessagesResponse {
 
 export interface MessageToast {
   message: string
-  type: string // "info", "heat-on", "heat-off"
+  type: string // "info", "heat-on", "heat-off", "promo"
   id: string
   date?: Date
   limitToPage?: string // identify route where message type should show

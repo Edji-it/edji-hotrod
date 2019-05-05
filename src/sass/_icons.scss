@@ -328,6 +328,10 @@
   cursor: pointer;
 }
 
+.icon-gift {
+  @include icon('icon-gift.svg');
+}
+
 .icon-restart {
   @include icon('icon-restart.svg');
   display: inline-block;
