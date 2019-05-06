@@ -163,7 +163,7 @@ export class HeroPricingComponent implements OnInit, OnDestroy {
       if (this.gifIndex >= this.gifTotal) {
         this.gifIndex = 0
       }
-    }, 3000)
+    }, 5000)
   }
 
   ngOnDestroy() {

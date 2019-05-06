@@ -50,7 +50,7 @@
               .px-1(*ngIf="!sForm.controls['couponCode'].valid")
                 p.small.hero-color-text
                   i.icon.icon-gift.mr-1
-                  b Plus 1 year free as a thank you
+                  b Plus 1 year free when you subscribe today
                 p.ml-3.small Offer applied (Valid May 5th-11th for personal licenses)
             form([formGroup]="sForm")
               #promoCode.form-group([class.has-success]="sForm.controls['couponCode'].valid", [class.has-danger]="sForm.controls['couponCode'].value && sForm.controls['couponCode'].value.length > 0 && !sForm.controls['couponCode'].valid && sForm.controls['couponCode'].touched")
