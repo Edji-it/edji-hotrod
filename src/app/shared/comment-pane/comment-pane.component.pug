@@ -52,9 +52,9 @@
                 //--Add reply buttons--
                 .replyButtonGroup
                   button#addEmojiReply.emoji(*ngIf="project.types.indexOf('emoji') > -1", (click)="addReplyOfType(comment, 'emoji')")
-                    i.icon.icon-emoji-comment
+                    i.icon.icon-comment-emoji
                   button#addTextReply.emoji(*ngIf="project.types.indexOf('text') > -1", (click)="addReplyOfType(comment, 'text')")
-                    i.icon.icon-text-comment
+                    i.icon.icon-comment-text
                   button#addAudioReply.emoji(*ngIf="project.types.indexOf('audio') > -1", (click)="addReplyOfType(comment, 'audio')")
                     i.icon.icon-mic
 .exit-row(*ngIf="visible", (tap)="dismissCommentPane()")

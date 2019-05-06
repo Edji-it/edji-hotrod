@@ -23,13 +23,13 @@ scroll-progress([scrollProgress]="currentScroll")
                 *ngIf="project.types.indexOf('emoji') > -1",
                 (tap)="addCommentOfType('emoji')"
             )
-                i.icon.icon-emoji-comment
+                i.icon.icon-comment-emoji
             //- Text Comment
             button#addTextComment.emoji(
                 *ngIf="project.types.indexOf('text') > -1",
                 (tap)="addCommentOfType('text')"
             )
-                i.icon.icon-text-comment
+                i.icon.icon-comment-text
             //- Audio Comment
             button#addAudioComment.emoji(
                 *ngIf="project.types.indexOf('audio') > -1",
@@ -49,7 +49,7 @@ scroll-progress([scrollProgress]="currentScroll")
                     (tap)="addCommentOfType('emoji')"
                 )
                     button.emoji.comment__options--mobileButton()
-                        i.icon.icon-emoji-comment
+                        i.icon.icon-comment-emoji
                 //-- Text Comment 
                 #addTextCommentMobile.comment__options--mobileCol.btn.btn-icon--circle-shadow.comment-options--mobile(
                     *ngIf="project.types.indexOf('text') > -1",
@@ -58,7 +58,7 @@ scroll-progress([scrollProgress]="currentScroll")
                     (tap)="addCommentOfType('text')"
                 )
                     button.emoji.comment__options--mobileButton()
-                        i.icon.icon-text-comment
+                        i.icon.icon-comment-text
                 //-- Audio Comment
                 #addAudioCommentMobile.comment__options--mobileCol.btn.btn-icon--circle-shadow.comment-options--mobile(
                     *ngIf="project.types.indexOf('audio') > -1",

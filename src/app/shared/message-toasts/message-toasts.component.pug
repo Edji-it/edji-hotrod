@@ -6,7 +6,9 @@
             [class.show]="!toast.limitToPage || (toast.limitToPage == currentPage)"
             role="alert", 
             aria-live="assertive",
-            aria-atomic="true"
+            aria-atomic="true",
+            [class.toast--clickable]="toast.link",
+            [routerLink]="[toast.link]"
             )
             .toast-header
                 i.icon.rounded([ngClass]="[toastIconClass(toast.type)]")

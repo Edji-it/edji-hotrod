@@ -1,5 +1,5 @@
 import { Router, ActivatedRoute } from '@angular/router'
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, OnDestroy } from '@angular/core'
 
 // Project Dependencies
 import { AuthService } from '../_services'
@@ -11,7 +11,7 @@ import { Angulartics2 } from 'angulartics2'
   templateUrl: './hero-pricing.component.pug',
   styleUrls: ['./hero-pricing.component.scss'],
 })
-export class HeroPricingComponent implements OnInit {
+export class HeroPricingComponent implements OnInit, OnDestroy {
   public user: User = <any>{}
   public showLoginModal: boolean
   public showHeroSubModal: boolean
@@ -130,12 +130,20 @@ export class HeroPricingComponent implements OnInit {
 
   private subscriptions: Subscription[] = []
 
+  /**
+   * Thank you promo
+   * @todo Clean out after promo
+   */
+  public gifIndex: number = 0
+  public gifTotal: number = 7
+  public gifInterval
+
   constructor(
     public _router: Router,
     private _auth: AuthService,
     private route: ActivatedRoute,
     private angulartics: Angulartics2,
-  ) {}
+  ) { }
 
   ngOnInit() {
     // Workaround for handling "jump to" fragment/anchor
@@ -149,6 +157,17 @@ export class HeroPricingComponent implements OnInit {
         this.user = user
       }),
     )
+
+    this.gifInterval = setInterval(() => {
+      this.gifIndex++
+      if (this.gifIndex >= this.gifTotal) {
+        this.gifIndex = 0
+      }
+    }, 5000)
+  }
+
+  ngOnDestroy() {
+    clearInterval(this.gifInterval)
   }
 
   goHero(location?: string): void {
