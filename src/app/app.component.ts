@@ -47,7 +47,7 @@ export class AppComponent {
     // Promo toast
     this._messages.sendToast({
       id: "salepromo",
-      message: "Promo time!",
+      message: "Teachers! Click here to see our special thank you for Teacher Appreciation Week!",
       type: "promo",
       requireDismiss: true
     })
