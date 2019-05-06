@@ -49,6 +49,8 @@ export class AppComponent {
       id: "salepromo",
       message: "Teachers! Click here to see our special thank you for Teacher Appreciation Week!",
       type: "promo",
+      limitToPage: "dashboard",
+      link: "/plans",
       requireDismiss: true
     })
   }

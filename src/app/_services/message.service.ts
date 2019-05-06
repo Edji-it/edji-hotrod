@@ -144,14 +144,14 @@ export class MessageService {
                       error => {
                         console.error(error)
                       },
-                    )
+                  )
                 }
               }
             },
             err => {
               console.error(err)
             },
-          )
+        )
       }
     })
   }
@@ -171,6 +171,7 @@ export interface MessageToast {
   message: string
   type: string // "info", "heat-on", "heat-off", "promo"
   id: string
+  link?: string // routerLink path
   date?: Date
   limitToPage?: string // identify route where message type should show
   requireDismiss?: boolean
