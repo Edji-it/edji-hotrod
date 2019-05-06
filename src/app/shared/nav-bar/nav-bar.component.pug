@@ -189,6 +189,7 @@
     //- Go hero action (non-existent if already a hero)
     .nav__btn-wrap(*ngIf="!showProjectInfo && (!user.isLoggedIn || (!user.hero_status && !user.isStudent))")
       a#heroLink.btn.btn-hero.btn-sm.nav-bar__btn.hidden-sm-down([routerLink]="['/plans']", [routerLinkActive]="'hide'", fragment="top") 
+        //- @todo Change back to "Discover hero" after promo
         | {{ currentPage == "home" ? "Thank you Teachers!" : heroBtnCopy }}
       a#goHeroLink.btn.btn-hero.btn-sm.nav-bar__btn.hidden-sm-down(
           *ngIf="user.isLoggedIn && currentPage == 'hero'",
