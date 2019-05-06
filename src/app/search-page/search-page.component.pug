@@ -29,7 +29,7 @@ nav-bar([showDashboardOptions]="true")
                             )
                             .form-control.form-control-dummysize(#dummySearchField) {{ searchTerm }}
                 div.mt-2
-                    span Found <b>{{ total || 0 }}</b> readings&nbsp;
+                    span Found <b id="searchCount">{{ total || 0 }}</b> readings&nbsp;
                     a.link(
                         *ngIf="filterCount > 0", 
                         tabindex="0", 

@@ -20,7 +20,7 @@
                 .icon.icon-folder
               .reading-title([class.no-version]="!reading.version_count")
                 .reading-title--center-row
-                  h1.small.reading-title__text {{reading.title}} 
+                  h1#previewTitle.small.reading-title__text {{reading.title}} 
                     span(*ngIf="!reading.title")
                       i Untitled
               button#readingPreviewClose.close.btn-icon--round((click)='close()') 

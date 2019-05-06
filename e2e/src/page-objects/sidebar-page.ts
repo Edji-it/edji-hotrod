@@ -12,6 +12,7 @@ export class Sidebar {
   public navCreate = element(by.id('navCreate'))
   public navRead = element(by.id('navRead'))
   public navDiscover = element(by.id('navDiscover'))
+  public navDiscoverPublic = element(by.id('navDiscoverPublic'))
   public accountButtonSpan = this.accountButton.element(by.css('span'))
   public logo = element(by.id('logo'))
   public heroLink = element(by.id('heroLink'))
