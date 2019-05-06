@@ -93,8 +93,7 @@ export class DashboardComponent implements OnInit {
     /**
      * @todo Clean out after promo
      */
-    if (!this.currentUser.hero_status && !this.currentUser.isStudent) {
-      // && !this._locker.get('TAWSale2019ToastSent')
+    if (!this.currentUser.hero_status && !this.currentUser.isStudent && this._locker.get('TAWSale2019ToastSent') != true) {
       // Promo toast
       this._messages.sendToast({
         id: "salepromo",
