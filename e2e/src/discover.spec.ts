@@ -206,4 +206,34 @@ describe('Discover Feed', () => {
       expect(foundTitle).toBeTruthy()
     })
   })
+
+  describe('access discover feed from home page', () => {
+    it('should see discover feed link from the home page', () => {
+      
+    })
+
+    it('should access discover feed from home page and see readings', () => {
+      
+    })
+
+    it('should be able to search for readings', async () => {
+
+    })
+
+    it('should not get any readings for a bad search', async () => {
+
+    })
+
+    it('should open login modal when trying to follow a user', async () => {
+
+    })
+
+    it('should open reading preview and see a login button for the only reading action', async () => {
+
+    })
+
+    it('should open reading preview, login, and see share and edit buttons for reading actions', async () => {
+
+    })
+  })
 })

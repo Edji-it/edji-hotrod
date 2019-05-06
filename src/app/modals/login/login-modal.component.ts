@@ -24,7 +24,7 @@ export class LoginModal implements AfterViewInit, OnInit {
   private projectId: string
 
   @Input()
-  private loginOnly: boolean
+  public loginOnly: boolean
 
   public guestLogin: boolean = true
   public initialized: boolean
