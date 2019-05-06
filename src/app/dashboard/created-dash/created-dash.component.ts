@@ -26,7 +26,7 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
   // Set our default values
   public readings: Reading[] = []
   public drafts: Reading[] = []
-  public errorObject: { readingError?: string } = {}
+  public errorObject: { serverError?: boolean } = {}
   public readingToBeRemoved: Reading
 
   public showLoginReqModal: boolean = false
@@ -58,7 +58,7 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
   public searchParams: ReadingQuery = {
     first: 0,
     searchTerm: '',
-    createdCollection: 'recent'
+    createdCollection: 'recent',
   }
 
   // Search alerts
@@ -75,7 +75,7 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
     private _auth: AuthService,
     private _readings: ReadingService,
     private angulartics: Angulartics2,
-  ) { }
+  ) {}
 
   ngOnInit() {
     if (this.router.url.indexOf('/dashboard/create/search') >= 0 || this.searchParams.searchTerm.length > 0) {
@@ -88,18 +88,19 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
       this._auth.getCurrentUser().subscribe(user => {
         this.user = user
       }),
-      this._readings.currentUserReadings.subscribe(data => {
-        this.readings = data.readings || []
-        this.total = data.total
-        this.errorObject = {}
-        this.loading = false
-      },
-      error => {
-        this.loading = false
-        this.errorObject.readingError =
-          '<b>Error Loading Readings</b> There was an error loading your readings. Please try again later or <a href="mailto:support@edji.it" target="_blank" class="link">contact support</a>.'
-        console.error(error)
-      }),
+      this._readings.currentUserReadings.subscribe(
+        data => {
+          this.readings = data.readings || []
+          this.total = data.total
+          this.errorObject = {}
+          this.loading = false
+        },
+        error => {
+          this.loading = false
+          this.errorObject.serverError = true
+          console.error(error)
+        },
+      ),
       // Get search params from URL
       this.route.queryParams.subscribe(params => {
         this.clearFilterVars()
@@ -113,14 +114,14 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
           this.searchParams.createdCollection = params.createdCollection
         }
         this.loadSearch()
-      })
+      }),
     )
     // Load user's drafts
     this.loadDrafts()
   }
 
-  ngOnDestroy() { 
-    this.subscriptions.forEach((sub) => {
+  ngOnDestroy() {
+    this.subscriptions.forEach(sub => {
       sub.unsubscribe()
     })
   }
@@ -142,7 +143,7 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
         error => {
           console.error(error)
         },
-    )
+      )
   }
 
   /**
@@ -150,16 +151,20 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
    * @param draftId
    */
   public deleteDraft(draft: Reading): void {
-    this._readings.delete(draft)
+    this._readings
+      .delete(draft)
       .pipe(take(1))
-      .subscribe(data => {
-        // Remove draft from list
-        this.drafts = this.drafts.filter((existingDraft) => {
-          return existingDraft._id != draft._id
-        })
-      }, err => {
-        console.log("Unable to delete draft")
-      })
+      .subscribe(
+        data => {
+          // Remove draft from list
+          this.drafts = this.drafts.filter(existingDraft => {
+            return existingDraft._id != draft._id
+          })
+        },
+        err => {
+          console.log('Unable to delete draft')
+        },
+      )
   }
 
   /**
@@ -177,7 +182,8 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
     let filters = {}
     let filterParams = {}
     // Pagination values
-    this.searchParams.first = filters['from'] = paging && paging.first != undefined ? parseInt(paging.first) - 1 : this.searchParams.first
+    this.searchParams.first = filters['from'] =
+      paging && paging.first != undefined ? parseInt(paging.first) - 1 : this.searchParams.first
     if (this.searchParams.first < 0) {
       this.searchParams.first = filters['from'] = 0
     }
@@ -199,7 +205,9 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
       })
     }
     if (searchDiscover) {
-      this.router.navigate(['/discover/search'], { queryParams: { q: (this.searchParams.searchTerm ? this.searchParams.searchTerm : '')}})
+      this.router.navigate(['/discover/search'], {
+        queryParams: { q: this.searchParams.searchTerm ? this.searchParams.searchTerm : '' },
+      })
     } else {
       this.router.navigate(['/dashboard/create' + (this.isSearching ? '/search' : '')], { queryParams: filterParams })
     }
