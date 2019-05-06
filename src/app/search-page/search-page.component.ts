@@ -34,7 +34,7 @@ export class SearchPage implements OnInit {
     gradeMin: 0, // defaulted to min grade available
     gradeMax: 13, // defaulted to max grade available
     searchTerm: '', // defaulted to empty
-    activeLibrary: 'public' // defaulted to public
+    activeLibrary: 'public', // defaulted to public
   }
 
   public rows: number = 15
@@ -94,9 +94,9 @@ export class SearchPage implements OnInit {
     private _academy: AcademyService,
     private route: ActivatedRoute,
     private router: Router,
-  ) { }
+  ) {}
 
-  async ngOnInit() {
+  ngOnInit() {
     if (this.router.url.indexOf('/discover/search') >= 0 || this.searchParams.searchTerm.length > 0) {
       this.isSearching = true
     }
@@ -177,7 +177,8 @@ export class SearchPage implements OnInit {
     let filters = {}
     let filterParams = {}
     // Pagination values
-    this.searchParams.first = filters['from'] = paging && paging.first != undefined ? parseInt(paging.first) - 1 : this.searchParams.first
+    this.searchParams.first = filters['from'] =
+      paging && paging.first != undefined ? parseInt(paging.first) - 1 : this.searchParams.first
     if (this.searchParams.first < 0) {
       this.searchParams.first = filters['from'] = 0
     }
@@ -241,12 +242,12 @@ export class SearchPage implements OnInit {
     // pass in the arguments to build the queryParam string
     if (this.searchParams.activeLibrary === 'following') {
       this.searchParams.following = this.user.following
-      if (!this.searchParams.following || this.searchParams.following.length < 1) {	
-        this.searchAlerts.notFollowing = true	
-        this.loading = false	
+      if (!this.searchParams.following || this.searchParams.following.length < 1) {
+        this.searchAlerts.notFollowing = true
+        this.loading = false
         this.isSearching = false
         this.filterCount = 0
-        return	
+        return
       }
     }
 
@@ -281,7 +282,7 @@ export class SearchPage implements OnInit {
 
   /**
    * Hover/focus for clickable Reading Cards
-   * @param index Reading result list index 
+   * @param index Reading result list index
    */
   public readingCardHoverSet(index: number): void {
     this.previewIndex = index
