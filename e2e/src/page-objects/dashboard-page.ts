@@ -69,10 +69,14 @@ export class Dashboard implements PageObjectInterface {
       'never reached the dashboard before clicking new reading button',
     )
     // Close any potentially blocking toasts
-    this.toast.isDisplayed().then(result => {
+    this.toast.isPresent().then(result => {
       if (result) {
-        this.toastClose.close()
-        browser.wait(this.EC.invisibilityOf(this.toast), 3000, 'toast was blocking New Reading button, and did not close')
+        this.createdTab.isDisplayed().then(result => {
+          if (result) {
+            this.toastClose.click()
+            browser.wait(this.EC.invisibilityOf(this.toast), 3000, 'toast was blocking New Reading button, and did not close')
+          }
+        }
       }
     })
     // Click the new reading button on the dashboard for mobile
