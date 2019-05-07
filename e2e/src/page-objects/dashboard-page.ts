@@ -76,7 +76,7 @@ export class Dashboard implements PageObjectInterface {
             this.toastClose.click()
             browser.wait(this.EC.invisibilityOf(this.toast), 3000, 'toast was blocking New Reading button, and did not close')
           }
-        }
+        })
       }
     })
     // Click the new reading button on the dashboard for mobile
