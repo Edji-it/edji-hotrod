@@ -300,7 +300,8 @@ describe('Discover Feed', () => {
 
     it('should open reading preview and see a login button for the only reading action', async () => {
       // reset us back to the discover feed with no active filters
-      reset()
+      sidebar.logo.click()
+      browser.wait(EC.elementToBeClickable(sidebar.navDiscoverPublic), 5000, 'discover feed button on home page was not clickable')
       sidebar.navDiscoverPublic.click()
       browser.wait(
         EC.elementToBeClickable(discover.firstFeedReading),
