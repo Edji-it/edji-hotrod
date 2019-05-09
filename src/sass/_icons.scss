@@ -9,15 +9,12 @@
   background-size: contain;
 }
 
+// Base icon styles
+// - Sizing, context, etc...
+
 .icon {
   width: 1em;
   height: 1em;
-  display: inline-block;
-}
-
-.icon-lg {
-  width: 2em;
-  height: 2em;
   display: inline-block;
 }
 
@@ -49,54 +46,26 @@
   font-weight: bold;
 }
 
-.icon-info {
-  font-family: 'Georgia', 'Times New Roman', Times, serif;
-}
+// Icon Helper classes
+// - Modifiers, helpers, etc...
+// *****************************************************
 
-.icon-heatvision {
+.icon-lg {
+  width: 2em;
+  height: 2em;
   display: inline-block;
-  width: 40px;
-  height: 40px;
-  background: url('/assets/images/icon-heatvision.svg');
-  background-size: 100% 100%;
-  background-position: center center;
-  cursor: pointer;
-
-  &.inactive {
-    background: url('/assets/images/icon-heatvision--off.svg');
-    background-size: 100% 100%;
-  }
 }
 
-.icon-fire-feed {
-  display: inline-block;
-  width: 40px;
-  height: 40px;
-  background: url('/assets/images/icon-fire-feed.svg');
-  background-size: 100% 100%;
-  background-position: center center;
-  cursor: pointer;
+// Icon Overrides
+// - Restyling imported icons, context overrides
+// *****************************************************
 
-  &.inactive {
-    background-size: 100% 100%;
-    filter: grayscale(100%);
-  }
+.ui-paginator-icon.pi {
+  opacity: 0.5;
 }
 
-.icon-reading-recap {
-  display: inline-block;
-  width: 40px;
-  height: 40px;
-  background: url('/assets/images/icon-reading-recap.svg');
-  background-size: 100% 100%;
-  background-position: center center;
-  cursor: pointer;
-
-  &.inactive {
-    background-size: 100% 100%;
-    filter: grayscale(100%);
-  }
-}
+// Icons, A-Z by name
+// *****************************************************
 
 .icon-academy-plate {
   @include icon('icon-academy-plate.svg');
@@ -110,38 +79,12 @@
   cursor: pointer;
 }
 
-.icon-question {
-  @include icon('icon-question.svg');
-  display: inline-block;
-  width: 40px;
-  height: 40px;
-  cursor: pointer;
+.icon-bookmark {
+  @include icon('icon-bookmark.svg');
 }
 
-.icon-carrot {
-  @include icon('carrot.svg');
-  display: inline-block;
-  width: 0.5em;
-  height: 0.5em;
-}
-
-.icon-megaphone {
-  @include icon('icon-megaphone.svg');
-  
-  .btn:hover &,
-  .btn:focus & {
-    @include icon('icon-megaphone-white.svg');
-  }
-}
-
-.icon-create {
-  @include icon('icon-create.svg');
-  display: inline-block;
-
-  .btn:hover &,
-  .btn:focus & {
-    @include icon('icon-create-white.svg');
-  }
+.icon-bookmark-off {
+  @include icon('icon-bookmark-off.svg');
 }
 
 .icon-caret,
@@ -166,49 +109,20 @@
   }
 }
 
-.ui-paginator-icon.pi {
-  opacity: 0.5;
-}
-
-.icon-text-comment {
-  @include icon('icon-text-comment.svg');
+.icon-carrot {
+  @include icon('carrot.svg');
   display: inline-block;
-  width: 1em;
-  height: 1em;
+  width: 0.5em;
+  height: 0.5em;
 }
 
-.icon-emoji-comment {
-  @include icon('icon-emoji-comment.png');
-  display: inline-block;
-  width: 1em;
-  height: 1em;
+.icon-check {
+  @include icon('icon-check.svg');
 }
 
-.icon-audio-comment {
-  @include icon('icon-mic.svg');
-  display: inline-block;
-  width: 1em;
-  height: 1em;
+.icon-check-small {
+  @include icon('icon-check-small.svg');
 }
-
-.icon-comment-filter {
-  @include icon('icon-comment-filter.svg');
-}
-
-.icon-reply-arrow {
-  @include icon('icon-reply-arrow.png');
-  display: inline-block;
-  width: 1em;
-  height: 1em;
-}
-
-.icon-link {
-  @include icon('icon-link.svg');
-  display: inline-block;
-  width: 1em;
-  height: 1em;
-}
-
 .icon-close {
   @include icon('icon-close.svg');
   display: inline-block;
@@ -224,26 +138,40 @@
   }
 }
 
-.icon-google {
-  @include icon('icon-google.svg');
+.icon-comment-audio {
+  @include icon('icon-mic.svg');
   display: inline-block;
   width: 1em;
   height: 1em;
 }
 
-.icon-right_arrow {
-  @include icon('icon-right_arrow.png');
+.icon-comment-emoji {
+  @include icon('icon-comment-emoji.png');
   display: inline-block;
   width: 1em;
   height: 1em;
-  opacity: 0.6;
 }
 
-.icon-more {
-  @include icon('icon-more.svg');
+.icon-comment-filter {
+  @include icon('icon-comment-filter.svg');
+}
+
+.icon-comment-text {
+  @include icon('icon-comment-text.svg');
   display: inline-block;
-  width: 1.5em;
-  height: 1.5em;
+  width: 1em;
+  height: 1em;
+}
+
+
+.icon-create {
+  @include icon('icon-create.svg');
+  display: inline-block;
+
+  .btn:hover &,
+  .btn:focus & {
+    @include icon('icon-create-white.svg');
+  }
 }
 
 .icon-draft {
@@ -255,16 +183,106 @@
   transform: rotate(20deg) translateY(-50%);
 }
 
+.icon-email {
+  @include icon('icon-email.svg');
+  display: inline-block;
+  width: 2em;
+  height: 2em;
+}
+
+.icon-external {
+  @include icon('icon-external-link.svg');
+}
+
+.icon-facebook {
+  @include icon('icon-facebook.svg');
+  display: inline-block;
+  width: 2em;
+  height: 2em;
+}
+
+.icon-fire-feed {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  background: url('/assets/images/icon-fire-feed.svg');
+  background-size: 100% 100%;
+  background-position: center center;
+  cursor: pointer;
+
+  &.inactive {
+    background-size: 100% 100%;
+    filter: grayscale(100%);
+  }
+}
+
+
 .icon-folder {
   @include icon('icon-folder.svg');
 }
 
-.icon-bookmark {
-  @include icon('icon-bookmark.svg');
+.icon-gift {
+  @include icon('icon-gift.svg');
 }
 
-.icon-bookmark-off {
-  @include icon('icon-bookmark-off.svg');
+.icon-google {
+  @include icon('icon-google.svg');
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+}
+
+.icon-group {
+  @include icon('icon-group.svg');
+}
+
+
+.icon-heatvision {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  background: url('/assets/images/icon-heatvision.svg');
+  background-size: 100% 100%;
+  background-position: center center;
+  cursor: pointer;
+
+  &.inactive {
+    background: url('/assets/images/icon-heatvision--off.svg');
+    background-size: 100% 100%;
+  }
+}
+
+.icon-hero {
+  @include icon('graphic-hero.svg');
+  display: inline-block;
+  width: 2em;
+  height: 2em;
+}
+
+.icon-hidden {
+  display: none !important;
+}
+
+
+.icon-info {
+  font-family: 'Georgia', 'Times New Roman', Times, serif;
+}
+
+.icon-in-progress {
+  @include icon('icon-in-progress.svg');
+}
+
+
+.icon-key {
+  @include icon('icon-key.svg');
+}
+
+
+.icon-link {
+  @include icon('icon-link.svg');
+  display: inline-block;
+  width: 1em;
+  height: 1em;
 }
 
 .icon-loading {
@@ -285,6 +303,15 @@
   background-size: 100% 100% !important;
 }
 
+.icon-megaphone {
+  @include icon('icon-megaphone.svg');
+  
+  .btn:hover &,
+  .btn:focus & {
+    @include icon('icon-megaphone-white.svg');
+  }
+}
+
 .icon-mic {
   @include icon('icon-mic.svg');
   display: inline-block;
@@ -298,10 +325,15 @@
   background-image: url('/assets/images/icon-mic--white.svg');
 }
 
-.icon-stop {
-  @extend .icon-mic;
-  background-image: url('/assets/images/icon-stop.svg');
-  background-size: 70% 70%;
+.icon-more {
+  @include icon('icon-more.svg');
+  display: inline-block;
+  width: 1.5em;
+  height: 1.5em;
+}
+
+.icon-notice {
+  @include icon('icon-wave.svg');
 }
 
 .icon-pause {
@@ -312,12 +344,79 @@
   cursor: pointer;
 }
 
+.icon-pill-collapse {
+  @include icon('icon-pill-collapse.svg');
+}
+
+.icon-pill-expand {
+  @include icon('icon-pill-expand.svg');
+}
+
+.icon-pill-status {
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 3px);
+  transform: translateX(-50%);
+  width: 1em;
+  height: 1em;
+
+  @include icon('icon-pill-expand.svg');
+
+  .expanded & {
+    @include icon('icon-pill-collapse.svg');
+  }
+}
+
+.icon:hover .icon-pill-status {
+  opacity: 1;
+}
+
 .icon-play {
   @include icon('icon-play.svg');
   display: inline-block;
   width: 20px;
   height: 20px;
   cursor: pointer;
+}
+
+.icon-question {
+  @include icon('icon-question.svg');
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}
+
+.icon-reading-recap {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  background: url('/assets/images/icon-reading-recap.svg');
+  background-size: 100% 100%;
+  background-position: center center;
+  cursor: pointer;
+
+  &.inactive {
+    background-size: 100% 100%;
+    filter: grayscale(100%);
+  }
+}
+
+.icon-reply-arrow {
+  @include icon('icon-reply-arrow.png');
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+}
+
+.icon-right_arrow {
+  @include icon('icon-right_arrow.png');
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  opacity: 0.6;
 }
 
 .icon-rec-text {
@@ -336,23 +435,18 @@
   cursor: pointer;
 }
 
-.icon-hidden {
-  display: none !important;
+.icon-save-small {
+  @include icon('icon-save-small.svg');
 }
 
-// Sharing Icons
-.icon-email {
-  @include icon('icon-email.svg');
-  display: inline-block;
-  width: 2em;
-  height: 2em;
+.icon-search {
+  @include icon('icon-search.svg');
 }
 
-.icon-facebook {
-  @include icon('icon-facebook.svg');
-  display: inline-block;
-  width: 2em;
-  height: 2em;
+.icon-stop {
+  @extend .icon-mic;
+  background-image: url('/assets/images/icon-stop.svg');
+  background-size: 70% 70%;
 }
 
 .icon-twitter {
@@ -361,6 +455,19 @@
   width: 2em;
   height: 2em;
 }
+
+.icon-vision-flame {
+  @include icon('icon-vision-flame.svg');
+
+  &.inactive,
+  .inactive & {
+    filter: grayscale(100%);
+  }
+}
+
+
+// Misc Icon Styles 
+// *****************************************************
 
 // Referral Icons
 .icon-bam {
@@ -389,87 +496,6 @@
   display: inline-block;
   width: 2em;
   height: 2em;
-}
-
-.icon-hero {
-  @include icon('graphic-hero.svg');
-  display: inline-block;
-  width: 2em;
-  height: 2em;
-}
-
-.icon-external {
-  @include icon('icon-external-link.svg');
-}
-
-.icon-vision-flame {
-  @include icon('icon-vision-flame.svg');
-
-  &.inactive,
-  .inactive & {
-    filter: grayscale(100%);
-  }
-}
-
-.icon-key {
-  @include icon('icon-key.svg');
-}
-
-.icon-group {
-  @include icon('icon-group.svg');
-}
-
-.icon-pill-collapse {
-  @include icon('icon-pill-collapse.svg');
-}
-
-.icon-pill-expand {
-  @include icon('icon-pill-expand.svg');
-}
-
-.icon-notice {
-  @include icon('icon-wave.svg');
-}
-
-.icon-in-progress {
-  @include icon('icon-in-progress.svg');
-}
-
-.icon-save-small {
-  @include icon('icon-save-small.svg');
-}
-
-.icon-check {
-  @include icon('icon-check.svg');
-}
-
-.icon-check-small {
-  @include icon('icon-check-small.svg');
-}
-
-.icon-search {
-  @include icon('icon-search.svg');
-}
-
-.icon-pill-status {
-  opacity: 0;
-  pointer-events: none;
-  position: absolute;
-  left: 50%;
-  bottom: calc(100% + 3px);
-  transform: translateX(-50%);
-  width: 1em;
-  height: 1em;
-
-  @include icon('icon-pill-expand.svg');
-
-  .expanded & {
-    @include icon('icon-pill-collapse.svg');
-  }
-}
-
-.icon:hover .icon-pill-status {
-  opacity: 1;
 }
 
 // Acquired font awesome styles
@@ -507,6 +533,8 @@
   content: '>|';
 }
 
+// Comment pane arrow
+
 .icon-comment-arrow {
   width: 27px;
   height: 45px;
@@ -521,10 +549,6 @@
   @media (max-width: $medium-screen) {
     display: none;
   }
-  // Full width "mobile" comment pane
-  // @media(max-width: $medium-screen) { // <768px
-  //     left: calc(100% - 61px);
-  // }
   // NOTE: "large screen" value is different here to account min-width flexibility
   // Min width pane
   @media (min-width: $medium-screen) and (max-width: 1129px) {

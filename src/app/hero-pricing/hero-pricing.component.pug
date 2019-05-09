@@ -1,5 +1,23 @@
 #top
 nav-bar
+//- @todo Clean out after promo
+.container
+  .row
+    .col-md-4.text-center
+      //- Gifs!
+      .gif-box
+        iframe([class.hide]="gifIndex != 0", src="https://giphy.com/embed/ip6n2oVNZBHiM", frameBorder="0", width="300")
+        iframe([class.hide]="gifIndex != 1", src="https://giphy.com/embed/144Gf2oA74mHQc", frameBorder="0", width="300")
+        iframe([class.hide]="gifIndex != 2", src="https://giphy.com/embed/3o6fJ1l3Wr1ugMu1Rm", frameBorder="0", width="300")
+        iframe([class.hide]="gifIndex != 3", src="https://giphy.com/embed/3oz8xuflXVQerHqDCM", frameBorder="0", width="300")
+        iframe([class.hide]="gifIndex != 4", src="https://giphy.com/embed/26gsjCZpPolPr3sBy", frameBorder="0", width="300")
+        iframe([class.hide]="gifIndex != 5", src="https://giphy.com/embed/26DOMeaD2gdGE44LK", frameBorder="0", width="300")
+        iframe([class.hide]="gifIndex != 6", src="https://giphy.com/embed/FihMsmKxNdStq", frameBorder="0", width="300")
+    .col-md-8
+      .row-xl-pad.pl-2
+        h1.mb-1 Thank you Teachers!
+        p To celebrate Teacher Appreciation Week, we want to #ThankATeacher by giving you a free year of Unlimited Edji when you Go Hero this week!* 
+        p.small <b>*</b>Personal licenses only, valid May 5th - 11th
 .container-fluid
   //- Promo row
   .row.twilight.has-sparks(style="padding-top:100px; padding-bottom: 100px; position: relative; overflow:hidden;")
@@ -43,6 +61,10 @@ nav-bar
           span.pricing
             | $5
             span.small  / month
+          //- @todo Clean out after promo
+          p.small.hero-color-text
+            i.icon.icon-gift.mr-1
+            | Plus 1 year free when you subscribe today
           p.small Charged annually per teacher
           hr
           p.card-text Hero takes the limits off of Edji and gives teachers powerful evaluation and feedback tools to assist and assess their students as they read.

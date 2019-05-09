@@ -49,6 +49,10 @@ export class Dashboard implements PageObjectInterface {
   public groupDeleteModal = element(by.id('deleteProjectModal'))
   public groupDeleteModalConfirmButton = element(by.id('delProjectBtnModal'))
 
+  // Toasts
+  public toast = element(by.css('.toast'))
+  public toastClose = element(by.css('.toast .close'))
+
   // get the dashboard page
   getPage(): void {
     browser.get('/#/dashboard')
@@ -66,6 +70,17 @@ export class Dashboard implements PageObjectInterface {
       10000,
       'never reached the dashboard before clicking new reading button',
     )
+    // Close any potentially blocking toasts
+    this.toast.isPresent().then(result => {
+      if (result) {
+        this.toast.isDisplayed().then(result => {
+          if (result) {
+            this.toastClose.click()
+            browser.wait(this.EC.invisibilityOf(this.toast), 3000, 'toast was blocking New Reading button, and did not close')
+          }
+        })
+      }
+    })
     // Click the new reading button on the dashboard for mobile
     this.createdTab.isPresent().then(result => {
       if (result) {
@@ -89,7 +104,6 @@ export class Dashboard implements PageObjectInterface {
         })
       }
     })
-
     // Click the new reading button on the dashboard for desktop
     this.newReadingButton.isPresent().then(result => {
       if (result) {
