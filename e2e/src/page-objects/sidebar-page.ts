@@ -171,14 +171,7 @@ export class Sidebar {
   }
 
   public academyButtonClick(): void {
-    // Click the confirm archive reading button for new reading
-    this.navAcademyBtn.isPresent().then(result => {
-      if (result) {
-        this.navAcademyBtn.isDisplayed().then(result => {
-          browser.wait(this.EC.elementToBeClickable(this.navAcademyBtn), 5000, 'never saw Academy option in nav bar')
-          this.navAcademyBtn.click()
-        })
-      }
-    })
+    browser.wait(this.EC.elementToBeClickable(this.navAcademyBtn), 5000, 'never saw Academy option in nav bar')
+    this.navAcademyBtn.click()
   }
 } // class Sidebar
