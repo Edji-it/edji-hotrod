@@ -13,13 +13,15 @@
       h1.small.reading-title__text {{reading.title}} 
         span(*ngIf="!reading.title")
           i Untitled
-    .reading-title--center-row(*ngIf="!reading['draft']")
+    .reading-title--center-row(
+      *ngIf="!reading['draft']", 
+      [attr.testVersionNumber]="reading.title"
+    )
       h1.small.reading-title__text {{reading.title}} 
         span(*ngIf="!reading.title")
           i Untitled
       p.reading-details(
-        *ngIf="reading.parent_id", 
-        [attr.testVersionNumber]="reading.title"
+        *ngIf="reading.parent_id"
       ) 
         span.reading-date {{ reading.createdAt | edjidate:'timeAgo':null:secondsAgo }} &nbsp;
         span.reading-version((click)="getVersions(reading.version_id)") 
