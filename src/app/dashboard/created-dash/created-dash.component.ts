@@ -76,9 +76,6 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    if (this.router.url.indexOf('/dashboard/create/search') >= 0 || this.searchParams.searchTerm.length > 0) {
-      this.isSearching = true
-    }
     // datalist component intializes by calling loadRecentlyCreated()
     this.loading = true
 
@@ -104,6 +101,9 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
         this.clearFilterVars()
         if (params.q) {
           this.searchParams.searchTerm = params.q
+          this.isSearching = true
+        } else {
+          this.isSearching = false
         }
         if (params.from) {
           this.searchParams.first = parseInt(params.from)
@@ -241,12 +241,7 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
 
     this._readings.search(queryString, this.user).subscribe(
       data => {
-        // if (data) {
-        //   this._readings.verifyArchive(data.results, this.user)
-        // }
-        // this.readings = data.results || []
         this.loading = false
-        // this.total = data.total
         // Handle no results messaging
         if (this.searchParams.searchTerm && this.readings.length < 1) {
           this.searchAlerts.noResults = true
