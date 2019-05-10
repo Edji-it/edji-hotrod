@@ -17,16 +17,16 @@
   .col-12.col-sm-3
     .mb-2
       .form-group
-        .input-group.input-group
+        .input-group.input-group([class.active]="isSearching")
           .input-group-prepend-icon((click)="searchInput.focus()")
-            i.icon.icon-search
+            i.icon.icon-filter
           input#readingSearch.form-control(
             #searchInput,
             name="SearchTermInput", 
             [(ngModel)]="searchParams.searchTerm", 
             type="text", 
             style="text-align: left;", 
-            placeholder="Search...",
+            placeholder="Find my Reading...",
             (keyup.enter)="updateSearchParams('search_term')"
           )
       //- Recently Created
