@@ -178,7 +178,7 @@ export class SearchPage implements OnInit {
     let filterParams = {}
     // Pagination values
     this.searchParams.first = filters['from'] =
-      paging && paging.first != undefined ? parseInt(paging.first) - 1 : this.searchParams.first
+      paging && paging.first != undefined ? parseInt(paging.first) : this.searchParams.first
     if (this.searchParams.first < 0) {
       this.searchParams.first = filters['from'] = 0
     }

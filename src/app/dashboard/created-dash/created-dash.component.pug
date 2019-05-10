@@ -83,7 +83,7 @@
           |1 filter
           i.icon.icon-close.mx-1
       br
-    <p-paginator [rows]="rows" [totalRecords]="total" (onPageChange)="updateSearchParams('feed_paginate', $event)"></p-paginator>
+    <p-paginator [rows]="rows" [first]="searchParams.first" [totalRecords]="total" (onPageChange)="updateSearchParams('feed_paginate', $event)"></p-paginator>
     .mb-4
     //- Show readings with date values
     .alert.alert-info.alert-dismissible(role="alert", *ngIf="!isSearching && !loading && readings.length < 1 && !searchAlerts.serverError && searchParams.createdCollection === 'recent'")
@@ -134,7 +134,7 @@
           p.pl-4 With Hero, you support Edji’s continued development and can have unlimited active readings - including your currently archived!
           .btn-row.right
             a.btn.btn-hero.btn-sm([routerLink]="['/plans']") Go Hero
-    <p-paginator [rows]="rows" [totalRecords]="total" (onPageChange)="updateSearchParams('feed_paginate', $event)"></p-paginator>
+    <p-paginator [rows]="rows" [first]="searchParams.first" [totalRecords]="total" (onPageChange)="updateSearchParams('feed_paginate', $event)"></p-paginator>
   .col-12.col-sm-3
     h2 Drafts
     .draft-card__wrap(*ngFor="let draft of drafts", [class.action-active]="draft.loading")

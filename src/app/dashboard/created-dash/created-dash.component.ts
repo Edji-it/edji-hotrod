@@ -46,8 +46,6 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
     { displayName: 'AVID and WICOR', url: 'http://guide.edji.it/index.php/2018/09/20/using-edji-with-avid-wicor/' },
   ]
   public filterCount: number = 0
-
-  private currentPageNo: number = 0 // used for analytics to determine page up/down direction
   private subscriptions: Subscription[] = []
 
   // Main display toggle
@@ -183,7 +181,7 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
     let filterParams = {}
     // Pagination values
     this.searchParams.first = filters['from'] =
-      paging && paging.first != undefined ? parseInt(paging.first) - 1 : this.searchParams.first
+      paging && paging.first != undefined ? parseInt(paging.first) : this.searchParams.first
     if (this.searchParams.first < 0) {
       this.searchParams.first = filters['from'] = 0
     }
