@@ -1,9 +1,10 @@
 //- Created Readings View
 .row
   .col-12.col-sm-6
-    h1.no-flow Created Readings
-      i.icon__tooltip(tooltipPosition="bottom", pTooltip="Readings are how you share content on Edji!")
-        span.icon.icon-circle.icon-info  i
+    ng-container
+      h1.no-flow Created Readings
+        i.icon__tooltip(tooltipPosition="bottom", pTooltip="Readings are how you share content on Edji!")
+          span.icon.icon-circle.icon-info  i
   .col-12.col-sm-6.text-right
     button#buttonNewReading.btn.btn-primary.new-reading-btn(*ngIf="user.type == 'temp'", (click)="showLoginReqModal = true") 
       | New Reading
@@ -15,19 +16,32 @@
 .row
   .col-12.col-sm-3
     .mb-2
+      .form-group
+        .input-group.input-group
+          .input-group-prepend-icon((click)="searchInput.focus()")
+            i.icon.icon-search
+          input#readingSearch.form-control(
+            #searchInput,
+            name="SearchTermInput", 
+            [(ngModel)]="searchParams.searchTerm", 
+            type="text", 
+            style="text-align: left;", 
+            placeholder="Search...",
+            (keyup.enter)="updateSearchParams('search_term')"
+          )
       //- Recently Created
       div
         button.btn.btn-filter(
           [innerHtml]="':sparkles: Recently Created' | emojione", 
-          [class.active]="activeFilter === 'recent'",
-          (click)="loadFilter('recent')"
+          [class.active]="searchParams.createdCollection === 'recent'",
+          (click)="searchParams.createdCollection = 'recent'; searchParams.first=0; updateSearchParams('filter_recent')"
         )
       //- Bookmarks
       div.hover--tooltip(style="position:relative;")
         button.btn.btn-filter( 
-          [class.active]="activeFilter === 'bookmarked'",
+          [class.active]="searchParams.createdCollection === 'bookmarked'",
           [class.disabled--not-hero]="!user.hero_status",
-          (click)="loadFilter('bookmarked')"
+          (click)="searchParams.createdCollection = 'bookmarked'; searchParams.first=0; updateSearchParams('bookmarked')"
         )
           i.icon.icon-bookmark.mr-2(style="vertical-align:middle;")
           | Bookmarks
@@ -40,7 +54,7 @@
             *ngIf="activeFilter === 'versions'",
             [innerHtml]="':books: Versions' | emojione", 
         )
-    .card.my-4.hidden-sm-down
+    .card.my-4.hidden-sm-down(*ngIf="!isSearching")
       .card-body.card-body--small.pt-1.px-3.pb-3
         h5.card-title From the Edji Guide
         p.card-text Get ideas and tips for your classroom:
@@ -48,9 +62,31 @@
           li(*ngFor="let guide of guideLinks")
             a.link(target="_blank", [href]="guide.url")
               | {{ guide.displayName }}
+    .form-group(*ngIf="isSearching")
+      label Public Library
+      div
+        button#publicSearch.btn( 
+          title=`Search for ${searchParams && searchParams.searchTerm} on the discover feed`,
+          (click)="updateSearchParams('', null, true)"
+        )
+          span([innerHTML]=`':earth_americas:' | emojione`) 
+          span &nbsp;Search for "{{searchParams && searchParams.searchTerm}}"
   .col-12.col-sm-6.item-list.created-list([ngClass]="['page-'+pageNo]")
+    ng-container(*ngIf="isSearching")
+      .found__readings
+        span Found <b id="searchCount">{{ total || 0 }}</b> readings for "{{searchParams.searchTerm}}" with&nbsp;
+        a.link(
+          tabindex="0", 
+          (click)="clearFilterVars(true); searchParams.searchTerm=''; updateSearchParams(''); isSearching=false",
+          title="Click to clear"
+        ) 
+          |1 filter
+          i.icon.icon-close.mx-1
+      br
+    <p-paginator [rows]="rows" [first]="searchParams.first" [totalRecords]="total" (onPageChange)="updateSearchParams('feed_paginate', $event)"></p-paginator>
+    .mb-4
     //- Show readings with date values
-    .alert.alert-info.alert-dismissible(role="alert", *ngIf="!loading && readings.length < 1 && !errorObject.readingError && activeFilter === 'recent'")
+    .alert.alert-info.alert-dismissible(role="alert", *ngIf="!isSearching && !loading && readings.length < 1 && !searchAlerts.serverError && searchParams.createdCollection === 'recent'")
       .row
         .col-lg-7
           h4.alert-heading Create your first reading!
@@ -60,13 +96,19 @@
             .icon.icon-play
             img(src="/assets/images/thumbnail-first-reading.jpg")
       //- https://youtu.be/GPB8i8H8IBc
-    .alert.alert-danger.alert-readings(*ngIf="errorObject.readingError", role="alert", [innerHtml]="errorObject.readingError")
+    .alert.alert-danger.alert-readings(*ngIf="errorObject.serverError || searchAlerts.serverError", role="alert")
+      b Error Loading Readings
+      | There was an error loading your readings. Please try again later or <a href="mailto:support@edji.it" target="_blank" class="link">contact support</a>.
+    //- No results message when user is genuinely searching
+    .alert.alert-info(*ngIf="searchAlerts.noResults")
+      b No Readings Found
+      | There are no readings for "{{searchParams.searchTerm}}" with your current filters, please try a different term or expanding your filters. 
     //- Bookmarked: No Readings message
-    .alert.alert-info.alert-readings(*ngIf="!loading && readings.length < 1 && activeFilter === 'bookmarked'")
+    .alert.alert-info.alert-readings(*ngIf="!isSearching && !loading && readings.length < 1 && searchParams.createdCollection === 'bookmarked'")
       b No Bookmarked Readings
       p You do not currently have any Created Readings bookmarked!
     .row.loading.e2e-reading-loader(*ngIf="loading")
-    hot-tutorial-reading(*ngIf="!loading && readings.length < 1 && !errorObject.readingError && user.type !=='temp' && activeFilter === 'recent'")
+    hot-tutorial-reading(*ngIf="!isSearching && !loading && readings.length < 1 && !searchAlerts.serverError && user.type !=='temp' && searchParams.createdCollection === 'recent'")
     //- Sub headings for specific cases
     .row(*ngIf="activeFilter === 'versions'")
       .col-12        
@@ -92,7 +134,7 @@
           p.pl-4 With Hero, you support Edji’s continued development and can have unlimited active readings - including your currently archived!
           .btn-row.right
             a.btn.btn-hero.btn-sm([routerLink]="['/plans']") Go Hero
-    <p-paginator [rows]="rows" [totalRecords]="total" (onPageChange)="loadRecentlyCreated($event)"></p-paginator>
+    <p-paginator [rows]="rows" [first]="searchParams.first" [totalRecords]="total" (onPageChange)="updateSearchParams('feed_paginate', $event)"></p-paginator>
   .col-12.col-sm-3
     h2 Drafts
     .draft-card__wrap(*ngFor="let draft of drafts", [class.action-active]="draft.loading")
@@ -118,4 +160,3 @@ hot-login-req(*ngIf="showLoginReqModal", (closeModal)="showLoginReqModal = false
               allow="autoplay; encrypted-media"
               allowfullscreen
           )
-      

@@ -43,6 +43,7 @@ export const ROUTES: Routes = [
       // Root path must be explicitly handled by canActivate, since the parent canActivate is not re-evaluated
       { path: '', pathMatch: 'full', component: DashboardComponent, canActivate: [DashboardGuardService] },
       { path: 'create', component: CreatedDashComponent },
+      { path: 'create/search', component: CreatedDashComponent },
       { path: 'read', component: JoinedDashComponent },
     ],
   },
