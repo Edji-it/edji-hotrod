@@ -51,7 +51,7 @@
       //- Versions
       div
         button.btn.btn-filter.active(
-            *ngIf="activeFilter === 'versions'",
+            *ngIf="searchParams.createdCollection === 'versions'",
             [innerHtml]="':books: Versions' | emojione", 
         )
     .card.my-4.hidden-sm-down(*ngIf="!isSearching")

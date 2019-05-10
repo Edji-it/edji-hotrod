@@ -226,7 +226,7 @@ export class ReadingService {
           this.userReadingsSource.error(err)
         },
       )
-  } // public getAllVersions(versionId : string) : Observable<any>
+  }
 
   public clear(): void {
     this.readingValue = <Reading>{}
@@ -418,6 +418,6 @@ export interface ReadingQuery {
 }
 
 type POP = 'projects'
-type CreatedCollection = 'bookmarked' | 'recent'
+type CreatedCollection = 'bookmarked' | 'recent' | 'versions'
 type Scope = 'public' | 'owner'
 type ActiveLibrary = 'public' | 'following'

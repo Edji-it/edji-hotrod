@@ -85,6 +85,9 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
       }),
       this._readings.currentUserReadings.subscribe(
         data => {
+          if (data.filter) {
+            this.searchParams.createdCollection = data.filter
+          }
           this.readings = data.readings || []
           this.total = data.total
           this.errorObject = {}
@@ -194,7 +197,9 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
     if (this.searchParams.first) {
       filterParams['from'] = this.searchParams.first
     }
-    filterParams['createdCollection'] = this.searchParams.createdCollection
+    if (this.searchParams.createdCollection !== 'versions') {
+      filterParams['createdCollection'] = this.searchParams.createdCollection
+    }
     // fire an analytic event here for tracking purposes
     if (action !== '') {
       this.angulartics.eventTrack.next({
