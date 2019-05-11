@@ -35,11 +35,12 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
   // Filter values
   public activeFilter: string = 'recent'
   public activeFilterValue: string = ''
-  // Joined Readings, p-datalist values
+  // Joined Readings, pagination values
   public loading: boolean = true
   public rows: number = 15 // number of Readings to return
   public total: number = 15 // total Readings
   public pageNo: number = 1
+  public paginationDisabled: boolean = false
   public guideLinks: { displayName: string; url: string }[] = [
     { displayName: 'Lesson Ideas', url: 'http://guide.edji.it/index.php/2017/05/20/getting-started-with-edji/' },
     { displayName: 'Readings for Math', url: 'http://guide.edji.it/index.php/2017/07/16/using-edji-with-math/' },
@@ -73,7 +74,7 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
     private _auth: AuthService,
     private _readings: ReadingService,
     private angulartics: Angulartics2,
-  ) {}
+  ) { }
 
   ngOnInit() {
     // datalist component intializes by calling loadRecentlyCreated()
@@ -88,7 +89,13 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
           if (data.filter) {
             this.searchParams.createdCollection = data.filter
           }
-          this.readings = data.readings || []
+          if (this.isSearching && !this.user.hero_status) {
+            this.paginationDisabled = true
+            this.readings = []
+          } else {
+            this.paginationDisabled = false
+            this.readings = data.readings || []
+          }
           this.total = data.total
           this.errorObject = {}
           this.loading = false
@@ -144,7 +151,7 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
         error => {
           console.error(error)
         },
-      )
+    )
   }
 
   /**
@@ -165,7 +172,7 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
         err => {
           console.log('Unable to delete draft')
         },
-      )
+    )
   }
 
   /**
