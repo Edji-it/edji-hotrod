@@ -54,6 +54,7 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
 
   // Search
   public searchFieldWidth: number = 100
+  public lastSearchTerm: string = ''
   public searchParams: ReadingQuery = {
     first: 0,
     searchTerm: '',
@@ -120,6 +121,9 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
         }
         if (params.createdCollection) {
           this.searchParams.createdCollection = params.createdCollection
+          if (params.createdCollection != 'recent') {
+            this.filterCount++
+          }
         }
         this.loadSearch()
       }),
@@ -199,6 +203,7 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
     this.pageNo = Math.floor((this.searchParams.first + 1) / this.rows) + 1
     if (this.searchParams.searchTerm) {
       this.isSearching = true
+      this.lastSearchTerm = this.searchParams.searchTerm
       filterParams['q'] = this.searchParams.searchTerm
     }
     if (this.searchParams.first) {
