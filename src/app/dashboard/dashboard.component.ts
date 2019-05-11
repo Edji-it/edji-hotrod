@@ -6,7 +6,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { Subscription } from 'rxjs'
 
 // Project Dependencies
-import { AuthService, ReadingService, ProjectService, LockerService, MessageService } from '../_services'
+import { AuthService, ReadingService, ProjectService, LockerService } from '../_services'
 import { User } from './../shared/datatypes'
 
 @Component({
@@ -66,8 +66,7 @@ export class DashboardComponent implements OnInit {
     private _auth: AuthService,
     private _title: Title,
     private _locker: LockerService,
-    private route: ActivatedRoute,
-    private _messages: MessageService
+    private route: ActivatedRoute
   ) {
     // this makes the window always render scrolled to the top
     this._router.events.subscribe(() => {
