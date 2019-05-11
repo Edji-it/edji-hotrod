@@ -11,7 +11,7 @@ import { Angulartics2 } from 'angulartics2'
   templateUrl: './hero-pricing.component.pug',
   styleUrls: ['./hero-pricing.component.scss'],
 })
-export class HeroPricingComponent implements OnInit, OnDestroy {
+export class HeroPricingComponent implements OnInit {
   public user: User = <any>{}
   public showLoginModal: boolean
   public showHeroSubModal: boolean
@@ -149,17 +149,6 @@ export class HeroPricingComponent implements OnInit, OnDestroy {
         this.user = user
       }),
     )
-
-    this.gifInterval = setInterval(() => {
-      this.gifIndex++
-      if (this.gifIndex >= this.gifTotal) {
-        this.gifIndex = 0
-      }
-    }, 5000)
-  }
-
-  ngOnDestroy() {
-    clearInterval(this.gifInterval)
   }
 
   goHero(location?: string): void {
