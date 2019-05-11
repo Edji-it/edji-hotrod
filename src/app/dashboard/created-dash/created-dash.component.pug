@@ -17,41 +17,42 @@
   .col-12.col-sm-3
     .mb-2
       .form-group
-        .input-group.input-group
+        .input-group.input-group([class.active]="isSearching")
           .input-group-prepend-icon((click)="searchInput.focus()")
-            i.icon.icon-search
+            i.icon.icon-filter
           input#readingSearch.form-control(
             #searchInput,
             name="SearchTermInput", 
             [(ngModel)]="searchParams.searchTerm", 
             type="text", 
             style="text-align: left;", 
-            placeholder="Search...",
+            placeholder="Find my Reading...",
             (keyup.enter)="updateSearchParams('search_term')"
           )
       //- Recently Created
-      div
+      .btn-filter-wrap
         button.btn.btn-filter(
-          [innerHtml]="':sparkles: Recently Created' | emojione", 
           [class.active]="searchParams.createdCollection === 'recent'",
           (click)="searchParams.createdCollection = 'recent'; searchParams.first=0; updateSearchParams('filter_recent')"
         )
+          .icon([innerHtml]="':sparkles:' | emojione")
+          | Recently Created
       //- Bookmarks
-      div.hover--tooltip(style="position:relative;")
+      .btn-filter-wrap.hover--tooltip(style="position:relative;")
         button.btn.btn-filter( 
           [class.active]="searchParams.createdCollection === 'bookmarked'",
           [class.disabled--not-hero]="!user.hero_status",
           (click)="searchParams.createdCollection = 'bookmarked'; searchParams.first=0; updateSearchParams('bookmarked')"
         )
-          i.icon.icon-bookmark.mr-2(style="vertical-align:middle;")
+          i.icon.icon-bookmark(style="vertical-align:middle;")
           | Bookmarks
         .tooltip-wrap(*ngIf="!user.hero_status")
           .tooltip
             .tooltip-title Bookmarking is available with <a class="link" [routerLink]="['/plans']">Hero</a>
       //- Versions
-      div
+      .btn-filter-wrap
         button.btn.btn-filter.active(
-            *ngIf="activeFilter === 'versions'",
+            *ngIf="searchParams.createdCollection === 'versions'",
             [innerHtml]="':books: Versions' | emojione", 
         )
     .card.my-4.hidden-sm-down(*ngIf="!isSearching")
@@ -63,14 +64,14 @@
             a.link(target="_blank", [href]="guide.url")
               | {{ guide.displayName }}
     .form-group(*ngIf="isSearching")
-      label Public Library
-      div
-        button#publicSearch.btn( 
+      label Try the Public Library
+      .btn-filter-wrap
+        button#publicSearch.btn.btn-filter( 
           title=`Search for ${searchParams && searchParams.searchTerm} on the discover feed`,
           (click)="updateSearchParams('', null, true)"
         )
-          span([innerHTML]=`':earth_americas:' | emojione`) 
-          span &nbsp;Search for "{{searchParams && searchParams.searchTerm}}"
+          .icon([innerHTML]=`':earth_americas:' | emojione`) 
+          | Search for "{{searchParams && searchParams.searchTerm}}"
   .col-12.col-sm-6.item-list.created-list([ngClass]="['page-'+pageNo]")
     ng-container(*ngIf="isSearching")
       .found__readings
@@ -83,7 +84,7 @@
           |1 filter
           i.icon.icon-close.mx-1
       br
-    <p-paginator [rows]="rows" [first]="searchParams.first" [totalRecords]="total" (onPageChange)="updateSearchParams('feed_paginate', $event)"></p-paginator>
+    <p-paginator *ngIf="!isSearching && !user.hero_status" [rows]="rows" [first]="searchParams.first" [totalRecords]="total" (onPageChange)="updateSearchParams('feed_paginate', $event)"></p-paginator>
     .mb-4
     //- Show readings with date values
     .alert.alert-info.alert-dismissible(role="alert", *ngIf="!isSearching && !loading && readings.length < 1 && !searchAlerts.serverError && searchParams.createdCollection === 'recent'")
@@ -100,7 +101,7 @@
       b Error Loading Readings
       | There was an error loading your readings. Please try again later or <a href="mailto:support@edji.it" target="_blank" class="link">contact support</a>.
     //- No results message when user is genuinely searching
-    .alert.alert-info(*ngIf="searchAlerts.noResults")
+    .alert.alert-info(*ngIf="searchAlerts.noResults && user.hero_status")
       b No Readings Found
       | There are no readings for "{{searchParams.searchTerm}}" with your current filters, please try a different term or expanding your filters. 
     //- Bookmarked: No Readings message
@@ -113,28 +114,38 @@
     .row(*ngIf="activeFilter === 'versions'")
       .col-12        
         h2.w-100.center Versions of &#8220;{{ activeFilterValue }}&#8221;
-    ng-container(*ngFor="let reading of readings; index as i")
-      //- Mark beginning of archived readings
-      .divider--alert(*ngIf="reading.archivedBegin")
-        .alert.small
-          .icon.icon-folder
-          b Recently Archived Readings
-      //- Legacy Readings Header
-      .float-left.w-100(*ngIf="readings[i - 1] && readings[i - 1].archivedEnd")
-        h2.center Legacy Readings
-          i.icon__tooltip(tooltipPosition="bottom", pTooltip="Your Readings created before 2019")
-            span.icon.icon-circle.icon-info  i
-      hot-reading-card(style="margin-bottom: 30px; float:left; width:100%;", [reading]="reading")
-      //- Mark beginning of archived readings
-      .divider--alert(*ngIf="reading.archivedEnd")
-        .archived-fade--above
+    ng-container(*ngIf="!isSearching && !user.hero_status")
+      ng-container(*ngFor="let reading of readings; index as i")
+        //- Mark beginning of archived readings
+        .divider--alert(*ngIf="reading.archivedBegin")
+          .alert.small
+            .icon.icon-folder
+            b Recently Archived Readings
+        //- Legacy Readings Header
+        .float-left.w-100(*ngIf="readings[i - 1] && readings[i - 1].archivedEnd")
+          h2.center Legacy Readings
+            i.icon__tooltip(tooltipPosition="bottom", pTooltip="Your Readings created before 2019")
+              span.icon.icon-circle.icon-info  i
+        hot-reading-card(style="margin-bottom: 30px; float:left; width:100%;", [reading]="reading")
+        //- Mark beginning of archived readings
+        .divider--alert(*ngIf="reading.archivedEnd")
+          .archived-fade--above
+          .alert
+            .hero-h.mr-1 H
+            b Access all Archived with Hero
+            p.pl-4 With Hero, you support Edji’s continued development and can have unlimited active Readings - including your currently archived!
+            .btn-row.right
+              a.btn.btn-hero.btn-sm([routerLink]="['/plans']") Go Hero
+    ng-container(*ngIf="isSearching && !user.hero_status")
+      .divider--alert
+        .archived-fade--above.searching
         .alert
           .hero-h.mr-1 H
-          b Access all Archived with Hero
-          p.pl-4 With Hero, you support Edji’s continued development and can have unlimited active readings - including your currently archived!
+          b Find any of your Readings with Hero
+          p.pl-4 With Hero, you support Edji’s continued development and can have unlimited active Readings - including your currently archived!
           .btn-row.right
             a.btn.btn-hero.btn-sm([routerLink]="['/plans']") Go Hero
-    <p-paginator [rows]="rows" [first]="searchParams.first" [totalRecords]="total" (onPageChange)="updateSearchParams('feed_paginate', $event)"></p-paginator>
+    <p-paginator *ngIf="!isSearching && !user.hero_status" [rows]="rows" [first]="searchParams.first" [totalRecords]="total" (onPageChange)="updateSearchParams('feed_paginate', $event)"></p-paginator>
   .col-12.col-sm-3
     h2 Drafts
     .draft-card__wrap(*ngFor="let draft of drafts", [class.action-active]="draft.loading")

@@ -419,6 +419,6 @@ export interface ReadingQuery {
 }
 
 type POP = 'projects'
-type CreatedCollection = 'bookmarked' | 'recent'
+type CreatedCollection = 'bookmarked' | 'recent' | 'versions'
 type Scope = 'public' | 'owner'
 type ActiveLibrary = 'public' | 'following'

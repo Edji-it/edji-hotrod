@@ -270,13 +270,15 @@ label.border-wrap {
     z-index: $zLow;
     position: absolute;
     top: 50%;
-    left: 0.75em;
+    left: 0.7em;
     transform: translateY(-50%);
-    height: 0.75em;
-    width: 0.75em;
+    height: 1em;
+    width: 1em;
 
     .input-group-lg & {
       left: 0.3em;
+      height: 0.75em;
+      width: 0.75em;
     }
   }
 
