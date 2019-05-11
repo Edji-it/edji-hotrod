@@ -105,6 +105,8 @@ button,
   &.disabled--not-hero {
     pointer-events: none;
     opacity: 0.6;
+    padding-top: 8px !important;
+    padding-right: 25px !important;
 
     & .icon {
       filter: grayscale(100%);
@@ -128,8 +130,8 @@ button,
       z-index: $zMid;
       display: block;
       position: absolute;
-      top: -2px;
-      right: -20px;
+      top: 0px;
+      right: 0px;
     }
   }
 }
