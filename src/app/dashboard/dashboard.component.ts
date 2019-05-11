@@ -89,23 +89,6 @@ export class DashboardComponent implements OnInit {
         this.currentUser = user
       }),
     )
-
-    /**
-     * @todo Clean out after promo
-     */
-    if (!this.userProfileIncomplete() && !this.currentUser.hero_status && !this.currentUser.isStudent && this._locker.get('TAWSale2019ToastSent') != true) {
-      // Promo toast
-      this._messages.sendToast({
-        id: "salepromo",
-        message: "Teachers! Click to get your special offer for Teacher Appreciation Week!",
-        type: "promo",
-        limitToPage: "dashboard",
-        link: "/plans",
-        requireDismiss: true
-      })
-      // Indicate toast was displayed
-      this._locker.set('TAWSale2019ToastSent', true)
-    }
   }
 
   private userProfileIncomplete(): boolean {
