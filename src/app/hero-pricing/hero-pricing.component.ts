@@ -130,14 +130,6 @@ export class HeroPricingComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription[] = []
 
-  /**
-   * Thank you promo
-   * @todo Clean out after promo
-   */
-  public gifIndex: number = 0
-  public gifTotal: number = 7
-  public gifInterval
-
   constructor(
     public _router: Router,
     private _auth: AuthService,
