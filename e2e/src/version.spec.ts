@@ -169,7 +169,7 @@ describe('Versioning - ', () => {
 
     // Verify version 1 of this reading is in the list
     browser.wait(
-      EC.elementToBeClickable(element(by.css('p[testVersionNumber="' + uniqueTitle + '"]'))),
+      EC.elementToBeClickable(element(by.css('[testVersionNumber="' + uniqueTitle + '"]'))),
       5000,
       'past versions never loaded',
     )

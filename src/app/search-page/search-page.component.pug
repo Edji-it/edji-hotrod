@@ -15,7 +15,7 @@ nav-bar([showDashboardOptions]="true")
                             input#readingSearch.form-control.form-control-autosize(
                                 #searchInput,
                                 name="SearchTermInput", 
-                                [(ngModel)]="searchTerm", 
+                                [(ngModel)]="searchParams.searchTerm", 
                                 type="text", 
                                 style="text-align: left;", 
                                 placeholder="Search...",
@@ -24,21 +24,10 @@ nav-bar([showDashboardOptions]="true")
                                 (keyup)="searchFieldWidth = dummySearchField.clientWidth"
                             )
                             .form-control-clear.icon.icon-close(
-                                *ngIf="searchTerm.length > 0",
-                                (click)="searchTerm = ''; updateSearchParams('')"
+                                *ngIf="searchParams.searchTerm.length > 0",
+                                (click)="searchParams.searchTerm = ''; updateSearchParams(''); isSearching=false"
                             )
-                            .form-control.form-control-dummysize(#dummySearchField) {{ searchTerm }}
-                div.mt-2
-                    span Found <b>{{ total || 0 }}</b> readings&nbsp;
-                    a.link(
-                        *ngIf="filterCount > 0", 
-                        tabindex="0", 
-                        (click)="clearFilterVars(true); updateSearchParams('')",
-                        title="Click to clear"
-                    ) 
-                        |with {{ filterCount }} filters
-                        i.icon.icon-close.mx-1
-                br
+                            .form-control.form-control-dummysize(#dummySearchField) {{ searchParams.searchTerm }}
     .row
         .col-md-4
                 .form-group(*ngIf="!isSearching")
@@ -48,7 +37,7 @@ nav-bar([showDashboardOptions]="true")
                         input#readingSearch.form-control(
                             #searchInput,
                             name="SearchTermInput", 
-                            [(ngModel)]="searchTerm", 
+                            [(ngModel)]="searchParams.searchTerm", 
                             type="text", 
                             style="text-align: left;", 
                             placeholder="Search...",
@@ -60,35 +49,35 @@ nav-bar([showDashboardOptions]="true")
                     div
                         button#discoverFilterPublic.btn.btn-filter( 
                             title="See public readings from all users",
-                            [class.active]="!activeLibrary || activeLibrary === 'public'",
-                            (click)="activeLibrary = 'public'; updateSearchParams('filter_public')"
+                            [class.active]="!searchParams.activeLibrary || searchParams.activeLibrary === 'public'",
+                            (click)="searchParams.activeLibrary = 'public'; searchParams.first=0; updateSearchParams('filter_public')"
                         )
                             span([innerHTML]="':earth_americas: Public Library' | emojione")
                     //- Following 
                     div
                         button#discoverFilterFollowing.btn.btn-filter( 
                             title="Filter by users you follow",
-                            [class.active]="activeLibrary === 'following'",
-                            (click)="activeLibrary = 'following'; updateSearchParams('filter_following')"
+                            [class.active]="searchParams.activeLibrary === 'following'",
+                            (click)="searchParams.activeLibrary = 'following'; searchParams.first=0; updateSearchParams('filter_following')"
                         )
                             span([innerHTML]="':green_heart: Following' | emojione")
                     //- Academy Libraries
                     //- div(*ngFor="let academy of academies")
                     //-     button.btn.btn-filter( 
                     //-         title="Filter by your academy's library",
-                    //-         [class.active]="activeLibrary === 'ACADEMYID'",
-                    //-         (click)="activeLibrary = 'ACADEMYID'; updateSearchParams('filter_academy')"
+                    //-         [class.active]="searchParams.activeLibrary === 'ACADEMYID'",
+                    //-         (click)="searchParams.activeLibrary = 'ACADEMYID'; updateSearchParams('filter_academy')"
                     //-     )
                     //-         span([innerHTML]="':school: Academy Name' | emojione")
                 .form-group
                     label Subjects
                         button.btn-link.filter-clear(
-                            *ngIf="subjectFilter.length > 0",
-                            (click)="subjectFilter = []; updateSearchParams('')"
+                            *ngIf="searchParams.subjectFilter.length > 0",
+                            (click)="searchParams.subjectFilter = []; updateSearchParams('')"
                         ) Clear
                     ss-multiselect-dropdown(
                         id="subjectDropdown",
-                        [(ngModel)]="subjectFilter",
+                        [(ngModel)]="searchParams.subjectFilter",
                         [options]="subjects", 
                         [settings]="subjectDropSettings",
                         (dropdownClosed)="updateSearchParams('search_filter')"
@@ -103,7 +92,7 @@ nav-bar([showDashboardOptions]="true")
                     grade-selector([(ngModel)]="gradesSelected", (ngModelChange)="updateSearchParams('filter_gradeLevel')")
                 //- .form-group
                 //-     label Subjects
-                    //- ss-multiselect-dropdown([options]="subjects", [(ngModel)]="subjectFilter", [settings]="subjectDropSettings")
+                    //- ss-multiselect-dropdown([options]="subjects", [(ngModel)]="searchParams.subjectFilter", [settings]="subjectDropSettings")
         .col-md-8
             #notFollowingMessage.alert.alert-light(*ngIf="searchAlerts.notFollowing")
                 h4 Time to follow someone!
@@ -112,7 +101,7 @@ nav-bar([showDashboardOptions]="true")
                 follow-tag(
                     id="followEdjiTag",
                     [owner]="edjiOwnerObj",
-                    (followEvent)="loadFeed()"
+                    (followEvent)="loadFeed(); filterCount = filterCount + 1"
                 )
             //- Server error while loading
             .alert.alert-warning(*ngIf="searchAlerts.serverError")
@@ -121,8 +110,20 @@ nav-bar([showDashboardOptions]="true")
             //- No results message when user is genuinely searching
             .alert.alert-info(*ngIf="searchAlerts.noResults")
                 b No Readings Found
-                | There are no readings for "{{searchTerm}}" with your current filters, please try a different term or expanding your filters. 
+                | There are no readings for "{{searchParams.searchTerm}}" with your current filters, please try a different term or expanding your filters. 
             .row.loading(*ngIf="loading")
+            ng-container(*ngIf="isSearching || filterCount > 0")
+                .found__readings
+                    span Found <b>{{ total || 0 }}</b> readings&nbsp;
+                    a.link(
+                        *ngIf="filterCount > 0", 
+                        tabindex="0", 
+                        (click)="clearFilterVars(true); updateSearchParams(''); isSearching=false",
+                        title="Click to clear"
+                    ) 
+                        |with {{ filterCount }} filters
+                        i.icon.icon-close.mx-1
+                br
             <p-dataList class="search-datalist" [value]="readings" [paginator]="readings.length > 0" [paginatorPosition]="'both'" [rows]="rows" [lazy]="true" (onLazyLoad)="updateSearchParams('feed_paginate', $event)" [totalRecords]="total" [emptyMessage]="''">
                 <ng-template let-reading pTemplate="item" let-i="index">
                    .col-12.feed__reading(*ngIf="reading")

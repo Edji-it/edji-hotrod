@@ -81,7 +81,7 @@ describe('Academy user that has ability to manage licenses for their academy: ',
       let activeLicenseVal = element(by.id('activeLicenseCount'))
       browser.wait(EC.visibilityOf(activeLicenseVal), 3000, 'not able to find the active license value')
       activeLicenseVal.getText().then(count => {
-        expect(count.substring(0, 1)).toBeGreaterThan(1, 'active licenses value is not greater than 1')
+        expect(parseInt(count.substring(0, 1))).toBeGreaterThanOrEqual(1, 'active licenses value should be greater than or equal to 1')
       })
     })
 

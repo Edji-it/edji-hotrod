@@ -105,6 +105,8 @@ button,
   &.disabled--not-hero {
     pointer-events: none;
     opacity: 0.6;
+    padding-top: 8px !important;
+    padding-right: 25px !important;
 
     & .icon {
       filter: grayscale(100%);
@@ -128,8 +130,8 @@ button,
       z-index: $zMid;
       display: block;
       position: absolute;
-      top: -2px;
-      right: -20px;
+      top: 0px;
+      right: 0px;
     }
   }
 }
@@ -376,10 +378,18 @@ button {
   font-weight: 400;
   border: 0px solid transparent;
   border-radius: 4px;
+  // Limit text length to width of filter
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   & img.emojioneemoji {
     margin-top: -2px;
     margin-right: 4px;
+  }
+
+  & > .icon {
+    margin-right: 0.5em;
   }
 
   &:hover,
@@ -396,6 +406,11 @@ button {
     background-color: #ebf9ff !important;
     color: #2399db;
   }
+}
+
+.btn-filter-wrap {
+  width: 100%;
+  position: relative;
 }
 
 // Deprecated button style

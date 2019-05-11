@@ -5,7 +5,7 @@
     span {{reading.title.substring(0,2)}}
   .archived-icon.show-for-archived
     .icon.icon-folder
-  .reading-title([class.no-version]="!reading.version_count")
+  .reading-title([class.no-version]="!reading.parent_id")
     .reading-title--center-row(
       *ngIf="reading['draft']",
       [routerLink]="['/new-reading/' + reading._id]"
@@ -13,17 +13,19 @@
       h1.small.reading-title__text {{reading.title}} 
         span(*ngIf="!reading.title")
           i Untitled
-    .reading-title--center-row(*ngIf="!reading['draft']")
+    .reading-title--center-row(
+      *ngIf="!reading['draft']", 
+      [attr.testVersionNumber]="reading.title"
+    )
       h1.small.reading-title__text {{reading.title}} 
         span(*ngIf="!reading.title")
           i Untitled
       p.reading-details(
-        *ngIf="reading.version_count && reading.version_count > 1", 
-        [attr.testVersionNumber]="reading.title"
+        *ngIf="reading.parent_id"
       ) 
         span.reading-date {{ reading.createdAt | edjidate:'timeAgo':null:secondsAgo }} &nbsp;
         span.reading-version((click)="getVersions(reading.version_id)") 
-          |{{reading.version_count > 0 ? ('1 of ' + reading.version_count) : '' }} Versions
+          | Previous Versions
   i.icon.icon-draft.reading-draft(*ngIf="reading['draft']")
   //- The Dropdown Options Menu
   #optionsWrap.dropdown.reading-options(

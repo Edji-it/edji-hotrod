@@ -46,6 +46,7 @@ export class ReadingService {
   }
 
   /**
+   * @deprecated 5/2/2019
    * Get all Created Readings for a user, paginated
    * @param filters object containing pagination values (to eventually include other filters)
    */
@@ -74,35 +75,7 @@ export class ReadingService {
       .pipe(take(1))
       .subscribe(
         (data: any) => {
-          if (data.readings && !user.hero_status && user.archive_readings_before) {
-            let archivedBefore = new Date(user.archive_readings_before)
-            let readings = data.readings.slice()
-            let archivedTally: number = 0
-            // Loop through readings and mark archived
-            for (let i = 0; i < readings.length; i++) {
-              /**
-               * Readings are "archived" if:
-               * - Updated date is prior to archived before date
-               * - Readings before Hero v2 (01-01-2018) are "legacy" and not archived
-               */
-              let readingDate = new Date(readings[i].createdAt)
-              if (readingDate < archivedBefore && readingDate >= new Date('2019-01-01')) {
-                readings[i].archived = true
-                archivedTally++
-                // Limit number of archived shown to 2, and flag begin/end of archive
-                if (archivedTally == 1) {
-                  readings[i].archivedBegin = true
-                } else if (archivedTally == 2) {
-                  readings[i].archivedEnd = true
-                } else if (archivedTally > 2) {
-                  readings.splice(i, 1)
-                  i--
-                }
-              }
-            }
-            //  Update return value
-            data.readings = readings
-          }
+          data.readings = this.verifyArchive(data.readings, user)
           this.userReadingsSource.next(data)
         },
         error => {
@@ -123,17 +96,107 @@ export class ReadingService {
     )
   } // public get(id : string) : Observable<any>
 
-  public search(queryString): Observable<any> {
-    // let queryString = ''
-    // let { term } = query
-
-    // if (term) {
-    //   queryString += 'title=' + term + '&html=' + term
-    // }
-
+  public search(queryString, user?: User): Observable<any> {
     return this._http
       .get(this._auth.getUrl() + '/api/v1/readings/_search?' + queryString, this._auth.getOptions())
-      .pipe(take(1))
+      // .pipe(take(1))
+      .pipe(
+        map((data: any) => {
+          if (data && user) {
+            data.readings = this.verifyArchive(data.results, user)
+            this.userReadingsSource.next(data)
+          }
+          return data
+        })
+      )
+  }
+
+  /**
+   * Returns an array of readings with archived flag if conditions are met
+   * @param readings an array of readings from a search or api call
+   * @param user current user
+   */
+  public verifyArchive(readingsArr: any, user: User): any {
+    let readings = readingsArr.slice()
+    let rc = Object.assign({}, readings)
+    console.log(rc)
+    if (readings && !user.hero_status && user.archive_readings_before) {
+      let archivedBefore = new Date(user.archive_readings_before)
+      let archivedTally: number = 0
+      // Loop through readings and mark archived
+      for (let i = 0; i < readings.length; i++) {
+        /**
+         * Readings are "archived" if:
+         * - Updated date is prior to archived before date
+         * - Readings before Hero v2 (01-01-2018) are "legacy" and not archived
+         */
+        let readingDate = new Date(readings[i].createdAt)
+        if (readingDate < archivedBefore && readingDate >= new Date('2019-01-01')) {
+          readings[i].archived = true
+          archivedTally++
+          // Limit number of archived shown to 2, and flag begin/end of archive
+          if (archivedTally == 1) {
+            readings[i].archivedBegin = true
+          } else if (archivedTally == 2) {
+            readings[i].archivedEnd = true
+          } else if (archivedTally > 2) {
+            readings.splice(i, 1)
+            i--
+          }
+        }
+      }
+    }
+    console.log(readings, user)
+    //  Update return value
+    return readings
+  }
+
+  /**
+   * Takes in filter settings and returns a query param string used to execute search
+   * @param searchParams is our object that contains properties to build a proper query param string
+   */
+  public buildSearchParams(searchParams: ReadingQuery): string {
+    // Construct search query
+    let queryString = `from=${searchParams.first}`
+    if (searchParams.searchTerm) {
+      queryString += `&q=${searchParams.searchTerm}`
+    }
+    // Library
+    if (searchParams.activeLibrary === 'following') {
+      // Loop through and apply following ids
+      let following = searchParams.following
+      following.forEach(userId => {
+        queryString += `&owner_id=${userId}`
+      })
+    } else if (searchParams.activeLibrary !== 'public') {
+      // Handle academy/institution id filter
+    }
+    // Subjects
+    if (searchParams.subjectFilter && searchParams.subjectFilter[0]) {
+      queryString += `&subjects=${searchParams.subjectFilter.join(' ')}`
+    }
+    // grade_levels_lte, grade_levels_gte
+    if (searchParams.gradeMin > -1 && searchParams.gradeMax > -1) {
+      queryString += `&grade_levels_gte=${searchParams.gradeMin}`
+      queryString += `&grade_levels_lte=${searchParams.gradeMax}`
+    }
+    // owner bookmarked
+    if (searchParams.createdCollection==='bookmarked') {
+      queryString += '&owner_bookmarked=true'
+    }
+    // owner-only readings
+    if (searchParams.scope==='owner') {
+      queryString += '&scope=owner'
+    }
+    // Default to sort by most recent, unless using a search term
+    if (!searchParams.searchTerm) {
+      queryString += '&sort=createdAt&sort_order=desc'
+    }
+    // populate the projects
+    if (searchParams.pop) {
+      queryString += `&pop=${searchParams.pop}`
+    }
+    return queryString
   }
 
   public setReadingObj(reading: any): void {
@@ -163,7 +226,7 @@ export class ReadingService {
           this.userReadingsSource.error(err)
         },
       )
-  } // public getAllVersions(versionId : string) : Observable<any>
+  }
 
   public clear(): void {
     this.readingValue = <Reading>{}
@@ -340,3 +403,21 @@ interface ReadingSearchResponse {
   total: number
   results: Reading
 }
+
+export interface ReadingQuery {
+  first: number
+  searchTerm?: string
+  activeLibrary?: ActiveLibrary
+  following?: any
+  subjectFilter?: any[]
+  gradeMin?: number
+  gradeMax?: number
+  createdCollection?: CreatedCollection
+  scope?: Scope
+  pop?: POP
+}
+
+type POP = 'projects'
+type CreatedCollection = 'bookmarked' | 'recent' | 'versions'
+type Scope = 'public' | 'owner'
+type ActiveLibrary = 'public' | 'following'
