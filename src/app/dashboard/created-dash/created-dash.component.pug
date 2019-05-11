@@ -133,7 +133,7 @@
           .alert
             .hero-h.mr-1 H
             b Access all Archived with Hero
-            p.pl-4 With Hero, you support Edji’s continued development and can have unlimited active readings - including your currently archived!
+            p.pl-4 With Hero, you support Edji’s continued development and can have unlimited active Readings - including your currently archived!
             .btn-row.right
               a.btn.btn-hero.btn-sm([routerLink]="['/plans']") Go Hero
     ng-container(*ngIf="isSearching && !user.hero_status")
@@ -142,7 +142,7 @@
         .alert
           .hero-h.mr-1 H
           b Find any of your Readings with Hero
-          p.pl-4 With Hero, you support Edji’s continued development and can have unlimited active readings - including your currently archived!
+          p.pl-4 With Hero, you support Edji’s continued development and can have unlimited active Readings - including your currently archived!
           .btn-row.right
             a.btn.btn-hero.btn-sm([routerLink]="['/plans']") Go Hero
     <p-paginator *ngIf="!isSearching && !user.hero_status" [rows]="rows" [first]="searchParams.first" [totalRecords]="total" (onPageChange)="updateSearchParams('feed_paginate', $event)"></p-paginator>
