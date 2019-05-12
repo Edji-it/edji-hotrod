@@ -203,7 +203,6 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
     this.pageNo = Math.floor((this.searchParams.first + 1) / this.rows) + 1
     if (this.searchParams.searchTerm) {
       this.isSearching = true
-      this.lastSearchTerm = this.searchParams.searchTerm
       filterParams['q'] = this.searchParams.searchTerm
     }
     if (this.searchParams.first) {
@@ -253,6 +252,8 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
     // pass in the arguments to build the queryParam string
     this.searchParams.scope = 'owner'
     this.searchParams.pop = 'projects'
+    // note search term for display with results
+    this.lastSearchTerm = this.searchParams.searchTerm
 
     let queryString = this._readings.buildSearchParams(this.searchParams)
 
