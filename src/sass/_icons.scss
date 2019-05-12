@@ -1,6 +1,7 @@
 /**
  * # Icons
  */
+$iconGrayOpacity: 0.6;
 
 @mixin icon($file) {
   background-image: url('/assets/images/'+$file);
@@ -93,7 +94,7 @@
   display: inline-block;
   width: 1em;
   height: 1em;
-  opacity: 0.6;
+  opacity: $iconGrayOpacity;
 
   &.left,
   &.pi-caret-left {
@@ -163,7 +164,6 @@
   height: 1em;
 }
 
-
 .icon-create {
   @include icon('icon-create.svg');
   display: inline-block;
@@ -201,6 +201,16 @@
   height: 2em;
 }
 
+.icon-filter {
+  @include icon('icon-filter.svg');
+  opacity: $iconGrayOpacity;
+
+  .active & {
+    opacity: 1;
+    @include icon('icon-filter-blue.svg');
+  }
+}
+
 .icon-fire-feed {
   display: inline-block;
   width: 40px;
@@ -215,7 +225,6 @@
     filter: grayscale(100%);
   }
 }
-
 
 .icon-folder {
   @include icon('icon-folder.svg');
@@ -235,7 +244,6 @@
 .icon-group {
   @include icon('icon-group.svg');
 }
-
 
 .icon-heatvision {
   display: inline-block;
@@ -263,7 +271,6 @@
   display: none !important;
 }
 
-
 .icon-info {
   font-family: 'Georgia', 'Times New Roman', Times, serif;
 }
@@ -272,11 +279,9 @@
   @include icon('icon-in-progress.svg');
 }
 
-
 .icon-key {
   @include icon('icon-key.svg');
 }
-
 
 .icon-link {
   @include icon('icon-link.svg');
@@ -305,7 +310,7 @@
 
 .icon-megaphone {
   @include icon('icon-megaphone.svg');
-  
+
   .btn:hover &,
   .btn:focus & {
     @include icon('icon-megaphone-white.svg');
@@ -416,7 +421,7 @@
   display: inline-block;
   width: 1em;
   height: 1em;
-  opacity: 0.6;
+  opacity: $iconGrayOpacity;
 }
 
 .icon-rec-text {
@@ -465,8 +470,7 @@
   }
 }
 
-
-// Misc Icon Styles 
+// Misc Icon Styles
 // *****************************************************
 
 // Referral Icons

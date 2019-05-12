@@ -180,7 +180,6 @@ describe('Dashboard page as a sidekick', () => {
   let sidebar = new Sidebar()
 
   beforeAll(() => {
-    // Login as test account that we can fill with junk data
     login.getPage()
     login.loginAndVerify(login.teacherUser, login.teacherPassword)
   })
@@ -199,5 +198,52 @@ describe('Dashboard page as a sidekick', () => {
     const numTotalReadings = await dashboard.readingCards.count()
     const numTotalArchived = await dashboard.archivedReadingCards.count()
     expect(numTotalReadings - 2).toEqual(numTotalArchived, 'expected there to be only two active readings on the free user dashboard')
+  })
+
+  it('should search for readings and get results', async() => {
+    // input search term and hit enter
+    browser.wait(
+      EC.visibilityOf(dashboard.searchInput),
+      5000,
+      "search input field was not visible"
+    )
+    dashboard.searchInput.sendKeys('last')
+    dashboard.searchInput.sendKeys(protractor.Key.ENTER)
+    // check search results
+    browser.wait(
+      EC.visibilityOf(dashboard.searchCount),
+      5000,
+      "search results were not visible"
+    )
+    dashboard.searchCount.getText().then(count => {
+      expect(parseInt(count)).toBeGreaterThan(0, "expected to see search results when entering a search")
+    })
+  })
+
+  it('should search for readings with a bad term and get no results', async() => {
+    // input search term and hit enter
+    browser.wait(
+      EC.visibilityOf(dashboard.searchInput),
+      5000,
+      "search input field was not visible"
+    )
+    dashboard.searchInput.sendKeys('%')
+    dashboard.searchInput.sendKeys(protractor.Key.ENTER)
+    browser.sleep(1000)
+    // wait for loading symbol to not be there
+    browser.wait(
+      EC.invisibilityOf(dashboard.createdListLoading),
+      5000,
+      "loading symbol never disappeared"
+    )
+    // check search results
+    browser.wait(
+      EC.visibilityOf(dashboard.searchCount),
+      5000,
+      "search results were not visible"
+    )
+    dashboard.searchCount.getText().then(count => {
+      expect(parseInt(count)).toBe(0, "expected to see no search results when entering a bad search")
+    })
   })
 })

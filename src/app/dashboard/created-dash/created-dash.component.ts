@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs'
 import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
-import { AuthService, ReadingService, ProjectService } from '../../_services'
+import { AuthService, ReadingService, ProjectService, ReadingQuery } from '../../_services'
 import { User, Reading } from '../../shared/datatypes'
 import { take } from 'rxjs/operators'
 
@@ -26,7 +26,7 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
   // Set our default values
   public readings: Reading[] = []
   public drafts: Reading[] = []
-  public errorObject: { readingError?: string } = {}
+  public errorObject: { serverError?: boolean } = {}
   public readingToBeRemoved: Reading
 
   public showLoginReqModal: boolean = false
@@ -35,20 +35,38 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
   // Filter values
   public activeFilter: string = 'recent'
   public activeFilterValue: string = ''
-  // Joined Readings, p-datalist values
+  // Joined Readings, pagination values
   public loading: boolean = true
-  public first: number = 0 // first page
   public rows: number = 15 // number of Readings to return
   public total: number = 15 // total Readings
   public pageNo: number = 1
+  public paginationDisabled: boolean = false
   public guideLinks: { displayName: string; url: string }[] = [
     { displayName: 'Lesson Ideas', url: 'http://guide.edji.it/index.php/2017/05/20/getting-started-with-edji/' },
     { displayName: 'Readings for Math', url: 'http://guide.edji.it/index.php/2017/07/16/using-edji-with-math/' },
     { displayName: 'AVID and WICOR', url: 'http://guide.edji.it/index.php/2018/09/20/using-edji-with-avid-wicor/' },
   ]
-
-  private currentPageNo: number = 0 // used for analytics to determine page up/down direction
+  public filterCount: number = 0
   private subscriptions: Subscription[] = []
+
+  // Main display toggle
+  public isSearching: boolean
+
+  // Search
+  public searchFieldWidth: number = 100
+  public lastSearchTerm: string = ''
+  public searchParams: ReadingQuery = {
+    first: 0,
+    searchTerm: '',
+    createdCollection: 'recent',
+  }
+
+  // Search alerts
+  public searchAlerts: {
+    serverError?: boolean
+    noResults?: boolean
+    notFollowing?: boolean
+  } = {}
 
   // TypeScript public modifiers
   constructor(
@@ -56,7 +74,6 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private _auth: AuthService,
     private _readings: ReadingService,
-    private _projects: ProjectService,
     private angulartics: Angulartics2,
   ) { }
 
@@ -70,79 +87,55 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
       }),
       this._readings.currentUserReadings.subscribe(
         data => {
-          // console.log('updating created readings!')
-          this.readings = data.readings || []
-          this.total = data.total
-          this.pageNo = Math.floor((this.first + 1) / this.rows) + 1
-          // Set display filter
           if (data.filter) {
-            this.activeFilter = data.filter
-            this.activeFilterValue = data.filterValue
+            this.searchParams.createdCollection = data.filter
           }
-          // Clear errors
+          if (this.isSearching && !this.user.hero_status) {
+            this.paginationDisabled = true
+            this.readings = []
+          } else {
+            this.paginationDisabled = false
+            this.readings = data.readings || []
+          }
+          this.total = data.total
           this.errorObject = {}
           this.loading = false
         },
         error => {
           this.loading = false
-          this.errorObject.readingError =
-            '<b>Error Loading Readings</b> There was an error loading your readings. Please try again later or <a href="mailto:support@edji.it" target="_blank" class="link">contact support</a>.'
+          this.errorObject.serverError = true
           console.error(error)
         },
       ),
+      // Get search params from URL
+      this.route.queryParams.subscribe(params => {
+        this.clearFilterVars()
+        if (params.q) {
+          this.searchParams.searchTerm = params.q
+          this.isSearching = true
+        } else {
+          this.isSearching = false
+        }
+        if (params.from) {
+          this.searchParams.first = parseInt(params.from)
+        }
+        if (params.createdCollection) {
+          this.searchParams.createdCollection = params.createdCollection
+          if (params.createdCollection != 'recent') {
+            this.filterCount++
+          }
+        }
+        this.loadSearch()
+      }),
     )
-
-    // Load user's created readings
-    this.loadRecentlyCreated()
     // Load user's drafts
     this.loadDrafts()
-  } //  ngOnInit()
-
-  ngOnDestroy() { }
-
-  /**
-   * Load Created with Params
-   * - This auto-runs on load and every change, called by p-dataList in the template
-   */
-  loadRecentlyCreated(paging?: any): void {
-    window.scrollTo(0, 0)
-    this.readings = []
-    let filters = {}
-    this.loading = true
-
-    // Pagination values
-    this.first = filters['start'] = paging && paging.first != undefined ? parseInt(paging.first) - 1 : this.first
-    if (this.first < 0) {
-      this.first = filters['start'] = 0
-    }
-    this.rows = filters['size'] = paging && paging.rows != undefined ? parseInt(paging.rows) : this.rows
-
-    this._readings.updateCreated(this.user, filters)
-    if (paging && paging !== undefined) {
-      let direction = 'Up'
-      if (this.currentPageNo > paging.page) {
-        direction = 'Down'
-      }
-      // fire an analytic event here for tracking purposes
-      this.angulartics.eventTrack.next({
-        action: 'createdReading_pagination_page' + direction,
-        properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
-      })
-      this.currentPageNo = paging.page
-    }
   }
 
-  /**
-   * Load Owner Bookmarked
-   * - Note: Does not support pagination
-   * - Updates currentUserReadings
-   * - Not available to Free users
-   */
-  private loadOwnerBookmarked(): void {
-    this.loading = true
-
-    // Tell reading service to fetch bookmarked and update currentUserReadings
-    this._readings.getOwnerBookmarked()
+  ngOnDestroy() {
+    this.subscriptions.forEach(sub => {
+      sub.unsubscribe()
+    })
   }
 
   /**
@@ -170,40 +163,111 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
    * @param draftId
    */
   public deleteDraft(draft: Reading): void {
-    this._readings.delete(draft)
+    this._readings
+      .delete(draft)
       .pipe(take(1))
-      .subscribe(data => {
-        // Remove draft from list
-        this.drafts = this.drafts.filter((existingDraft) => {
-          return existingDraft._id != draft._id
-        })
-      }, err => {
-        console.log("Unable to delete draft")
-      })
+      .subscribe(
+        data => {
+          // Remove draft from list
+          this.drafts = this.drafts.filter(existingDraft => {
+            return existingDraft._id != draft._id
+          })
+        },
+        err => {
+          console.log('Unable to delete draft')
+        },
+    )
   }
 
   /**
-   * Load filter
-   * @param filter string key value for filter being applied (recent, bookmarket)
+   * Primary trigger for updating search
+   * - Passes new params to URL
+   * @action is the filter that is changing (used for analytics)
+   * @param paging Pagination values should only be passed for a pagination event (from the datalist component)
+   * @duplicated with search-page.component.ts
    */
-  public loadFilter(filter: string): void {
-    this.activeFilter = filter
-
-    // Handle each sort option
-    if (filter === 'recent') {
-      this.loadRecentlyCreated()
-    } else if (filter === 'bookmarked') {
-      this.loadOwnerBookmarked()
+  updateSearchParams(action: string, paging?: any, searchDiscover?: boolean) {
+    // Ignore if pagination values are passed and unchanged
+    if (paging && this.searchParams.first == paging.first && this.rows == paging.rows) {
+      return
+    }
+    let filters = {}
+    let filterParams = {}
+    // Pagination values
+    this.searchParams.first = filters['from'] =
+      paging && paging.first != undefined ? parseInt(paging.first) : this.searchParams.first
+    if (this.searchParams.first < 0) {
+      this.searchParams.first = filters['from'] = 0
+    }
+    this.rows = filters['size'] = paging && paging.rows != undefined ? parseInt(paging.rows) : this.rows
+    this.pageNo = Math.floor((this.searchParams.first + 1) / this.rows) + 1
+    if (this.searchParams.searchTerm) {
+      this.isSearching = true
+      this.lastSearchTerm = this.searchParams.searchTerm
+      filterParams['q'] = this.searchParams.searchTerm
+    }
+    if (this.searchParams.first) {
+      filterParams['from'] = this.searchParams.first
+    }
+    if (this.searchParams.createdCollection !== 'versions') {
+      filterParams['createdCollection'] = this.searchParams.createdCollection
+    }
+    // fire an analytic event here for tracking purposes
+    if (action !== '') {
+      this.angulartics.eventTrack.next({
+        action: 'createdDash_' + action,
+        properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
+      })
+    }
+    if (searchDiscover) {
+      this.router.navigate(['/discover/search'], {
+        queryParams: { q: this.searchParams.searchTerm ? this.searchParams.searchTerm : '' },
+      })
+    } else {
+      this.router.navigate(['/dashboard/create' + (this.isSearching ? '/search' : '')], { queryParams: filterParams })
     }
   }
 
-  private updateProjectLabel(projectId: string, projectLabel: string) {
-    this._projects.update({ label: projectLabel }, projectId).subscribe(
-      project => {
-        console.log('Project label saved!')
+  /**
+   * Clear component variables handling applied filters
+   */
+  clearFilterVars(preserveTerm?: boolean) {
+    if (!preserveTerm) {
+      this.searchParams.searchTerm = ''
+    }
+    this.filterCount = 0
+    this.searchParams.first = 0
+  }
+
+  /**
+   * Load Feed with Params
+   * - This auto-runs on load and every change, called by p-dataList in the template
+   * @note ONLY triggered by params subscription
+   */
+  loadSearch() {
+    this.loading = true
+    // Reset results
+    this.readings = []
+    this.searchAlerts = {}
+
+    // pass in the arguments to build the queryParam string
+    this.searchParams.scope = 'owner'
+    this.searchParams.pop = 'projects'
+
+    let queryString = this._readings.buildSearchParams(this.searchParams)
+
+    this._readings.search(queryString, this.user).subscribe(
+      data => {
+        this.loading = false
+        // Handle no results messaging
+        if (this.searchParams.searchTerm && this.readings.length < 1) {
+          this.searchAlerts.noResults = true
+        }
       },
-      error => {
-        console.log(error)
+      err => {
+        this.loading = false
+        this.searchAlerts.serverError = true
+        console.error(err)
       },
     )
   }
