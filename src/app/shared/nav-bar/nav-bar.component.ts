@@ -20,7 +20,7 @@ import {
   MessageToast,
 } from '../../_services'
 import { User } from '../datatypes'
-import { AutosaveState } from '../../new-reading-page';
+import { AutosaveState } from '../../new-reading-page'
 
 @Component({
   selector: 'nav-bar',
@@ -105,9 +105,9 @@ export class NavBarComponent implements OnInit, OnDestroy {
     code?: boolean
     academy?: boolean
   } = {
-      // Default expand code
-      code: true,
-    }
+    // Default expand code
+    code: true,
+  }
   // Nav Slider Button loading states
   public sliderBtnLoading: {
     heat?: boolean
@@ -183,6 +183,9 @@ export class NavBarComponent implements OnInit, OnDestroy {
         if (queryParams.readingCodeModal) {
           this.showShareCodeModal = true
           this.isNewReading = true
+        }
+        if (queryParams.showRefer) {
+          this.showReferralModal = true
         }
       }),
     )
