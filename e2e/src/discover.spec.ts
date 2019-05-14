@@ -250,16 +250,10 @@ describe('Discover Feed', () => {
         5000,
         "discover search results were not visible"
       )
-      discover.searchCount.count().then(count => {
-        expect(count).toBeGreaterThan(0, "expected to see discover search results when entering a search")
-      })
+      let searchCount = await discover.searchCount.getText()
+      expect(parseInt(searchCount)).toBeGreaterThan(0, "expected to see discover search results when entering a search")
       // clear the search input
       discover.searchInput.clear()
-      browser.wait(
-        EC.invisibilityOf(discover.clearSearchBtn),
-        5000,
-        "the clear search input button never went away after clearing search input"
-      )
     })
 
     it('should not get any readings for a bad search', async () => {
@@ -277,9 +271,8 @@ describe('Discover Feed', () => {
         5000,
         "discover search results were not visible"
       )
-      discover.searchCount.count().then(count => {
-        expect(count).toBe(0, "expected to see no discover search results when entering a bad search")
-      })
+      let searchCount = await discover.searchCount.getText()
+      expect(parseInt(searchCount)).toBe(0, "expected to see no discover search results when entering a bad search")
     })
 
     it('should open login modal when trying to follow a user', async () => {
@@ -295,17 +288,11 @@ describe('Discover Feed', () => {
         5000,
         "login modal never became visible after attempting to follow Edji on discover without logging in"
       )
-      discover.outsideLoginModal.click()
-      browser.wait(
-        EC.invisibilityOf(discover.loginModalEl),
-        5000,
-        "login modal never dismissed after clicking outside"
-      )
+      reset()
+      discover.getPage()
     })
 
     it('should open reading preview and see a login button for the only reading action', async () => {
-      // reset us back to the discover feed with no active filters
-      sidebar.logo.click()
       browser.wait(EC.elementToBeClickable(sidebar.navDiscoverPublic), 5000, 'discover feed button on home page was not clickable')
       sidebar.navDiscoverPublic.click()
       browser.wait(
@@ -339,9 +326,9 @@ describe('Discover Feed', () => {
         5000,
         'first reading in discover feed was not clickable',
       )
-      let firstTitle = await discover.previewTitle.getText()
       discover.firstFeedReading.click()
       browser.wait(EC.visibilityOf(discover.readingPreview), 5000, 'reading preview was not visible')
+      let firstTitle = await discover.previewTitle.getText()
       browser.wait(
         EC.elementToBeClickable(discover.loginFromPreviewBtn),
         5000,
@@ -353,7 +340,7 @@ describe('Discover Feed', () => {
         5000,
         "login modal never became visible after clicking login action on reading preview"
       )
-      login.loginAndVerify(login.teacherUser, login.teacherPassword)
+      login.loginAndVerify(login.teacherUser, login.teacherPassword, 'discover')
       browser.wait(EC.visibilityOf(discover.readingPreview), 5000, 'reading preview was not visible')
       let secondTitle = await discover.previewTitle.getText()
       let sameTitle = discover.validatePreviewTitle(firstTitle, secondTitle)

@@ -21,6 +21,7 @@ export class Login implements PageObjectInterface {
   public msgBadName = element(by.id('msgBadName'))
   public guestNameInput = element(by.id('guestNameInput'))
   public guestLoginButton = element(by.id('guestLoginButton'))
+  public gotoRegistrationButton = element(by.id('gotoRegistration'))
 
   // Reset password elements
   public resetPasswordOpen = element(by.id('linkForgotPassword'))
@@ -69,14 +70,15 @@ export class Login implements PageObjectInterface {
     this.passwordInput.sendKeys(input)
   } // enterPassword (input : string) : void
 
-  loginAndVerify(user: string, pass: string): void {
+  loginAndVerify(user: string, pass: string, defUrl?: string): void {
+    let url = defUrl ? defUrl : 'dashboard'
     let EC = protractor.ExpectedConditions
     let sidebar = new Sidebar()
     this.enterUsername(user)
     this.enterPassword(pass)
     browser.wait(EC.elementToBeClickable(this.loginButton), 5000)
     this.loginButton.click()
-    browser.wait(EC.urlContains('dashboard'), 5000, 'never arrived at dashboard')
+    browser.wait(EC.urlContains(url), 5000, 'never arrived at dashboard')
     sidebar.closeModals()
   }
 } // class Login
