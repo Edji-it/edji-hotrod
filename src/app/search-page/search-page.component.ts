@@ -271,6 +271,10 @@ export class SearchPage implements OnInit {
 
     let queryString = this._readings.buildSearchParams(this.searchParams)
 
+    if (!this.user.isLoggedIn) {
+      queryString += '&scope=public'
+    }
+
     this._readings.search(queryString).subscribe(
       data => {
         this.readings = data.results || []

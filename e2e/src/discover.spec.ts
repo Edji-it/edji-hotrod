@@ -175,6 +175,8 @@ describe('Discover Feed', () => {
       // Check title of most recent readings
       let foundTitle = discover.validateReadingTitle(newReadingTitle)
       expect(foundTitle).toBeTruthy()
+      reset()
+      discover.getPage()
     })
 
     it('should open reading preview and share a reading', async () => {
@@ -186,7 +188,7 @@ describe('Discover Feed', () => {
       browser.wait(
         EC.invisibilityOf(discover.readingPreview),
         5000,
-        'failed to close the reading preview',
+        'reading preview never dismissed after clicking share button',
       )
       // Hit save
       newReading.clickShareAndArchive()
@@ -209,6 +211,9 @@ describe('Discover Feed', () => {
 
   describe('access discover feed from home page', () => {
     beforeAll(() => {
+      reset()
+      dashboard.getPage()
+      browser.wait(EC.urlContains('dashboard'), 7500, 'never arrived at dashboard before logging out')
       sidebar.logout()
     })
 
