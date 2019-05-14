@@ -68,7 +68,7 @@ export class RegisterFormComponent implements OnInit {
     )
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   //https://angular.io/docs/ts/latest/api/forms/index/FormGroup-class.html
   /** Validates that the passwords are equal and assigns error if not
@@ -165,57 +165,39 @@ export class RegisterFormComponent implements OnInit {
 
           // If there is a failure with registering the user...
         },
-        err => {
+        (err) => {
+          let error = err.error
           this.registerLoading = false
-
-          // ...then let's throw an error
-          switch (err.status) {
-            case 406:
-              let error = err.json() || {}
-              if (error.validationErrors) {
-                // Use these print statements to see what's goin on
-                //console.log("[register.component.ts] ");
-                //console.log( error.validationErrors.username);
-
-                let errorCaught: boolean = false
-                // If the full name has bad words
-                if (error.validationErrors.fullname === 'badWords') {
-                  this.errorObject.badName = ':anguished: Would you mind choosing another name?'
-                  errorCaught = true
-                }
-                // if the username has bad words
-                if (error.validationErrors.username === 'badWords') {
-                  this.errorObject.badUsername = ':anguished: Would you mind choosing another username?'
-                  errorCaught = true
-                }
-
-                // if the username has whitespace
-                if (error.validationErrors.username === 'whitespace') {
-                  this.errorObject.badUsername = 'Whoops! Usernames can not have spaces.'
-                  errorCaught = true
-                } // if whitespaced username
-
-                // If we havent caught an error that we know about yet...
-                if (!errorCaught) {
-                  console.error(err)
-                  // form validation should have caught any other errors
-                }
-              }
-
-              if (error.duplicateFieldError) {
-                let field = error.duplicateFieldError.field
-                if (field === 'username') {
-                  this.errorObject.duplicateUsername = true
-                } else if (field === 'email') {
-                  this.errorObject.duplicateEmail = true
-                } else {
-                  this.errorObject.serverError = true
-                }
-              }
-              break
-            default:
-              this.errorObject.serverError = true
-              console.error(err)
+          let errorCaught: boolean = false
+          if (error.validationErrors) {
+            // If the full name has bad words
+            if (error.validationErrors.fullname === 'badWords') {
+              this.errorObject.badName = ':anguished: Would you mind choosing another name?'
+              errorCaught = true
+            }
+            // if the username has bad words
+            if (error.validationErrors.username === 'badWords') {
+              this.errorObject.badUsername = ':anguished: Would you mind choosing another username?'
+              errorCaught = true
+            }
+            // if the username has whitespace
+            if (error.validationErrors.username === 'whitespace') {
+              this.errorObject.badUsername = 'Whoops! Usernames can not have spaces.'
+              errorCaught = true
+            }
+          } else if (error.duplicateFieldError) {
+            let field = error.duplicateFieldError.field
+            if (field === 'username') {
+              this.errorObject.duplicateUsername = true
+              errorCaught = true
+            } else if (field === 'email') {
+              this.errorObject.duplicateEmail = true
+              errorCaught = true
+            }
+          }
+          if (!errorCaught) {
+            console.error(err)
+            this.errorObject.serverError = true
           }
         },
       )
