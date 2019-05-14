@@ -201,6 +201,12 @@ label textarea {
   transform: translateY(-50%);
   z-index: $zMid;
 
+  &--in-field.icon {
+    left: calc(100% - 2.25em);
+    width: 1.5em;
+    height: 1.5em;
+  }
+
   &.icon-close {
     opacity: 0.4;
   }

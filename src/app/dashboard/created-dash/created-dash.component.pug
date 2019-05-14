@@ -29,6 +29,10 @@
             placeholder="Find my Reading...",
             (keyup.enter)="updateSearchParams('search_term')"
           )
+          .form-control-clear.form-control-clear--in-field.icon.icon-close(
+              *ngIf="searchParams.searchTerm.length > 0",
+              (click)="searchParams.searchTerm = ''; updateSearchParams(''); isSearching=false"
+          )
       //- Recently Created
       .btn-filter-wrap
         button.btn.btn-filter(
@@ -73,15 +77,16 @@
           .icon([innerHTML]=`':earth_americas:' | emojione`) 
           | Search for "{{searchParams && searchParams.searchTerm}}"
   .col-12.col-sm-6.item-list.created-list([ngClass]="['page-'+pageNo]")
-    ng-container(*ngIf="isSearching")
+    ng-container(*ngIf="isSearching && !loading")
       .found__readings
-        span Found <b id="searchCount">{{ total || 0 }}</b> readings for "{{searchParams.searchTerm}}" with&nbsp;
+        span Found <b id="searchCount">{{ total || 0 }}</b> readings for "{{lastSearchTerm}}"&nbsp;
         a.link(
+          *ngIf="filterCount > 0",
           tabindex="0", 
           (click)="clearFilterVars(true); searchParams.searchTerm=''; updateSearchParams(''); isSearching=false",
           title="Click to clear"
         ) 
-          |1 filter
+          |with {{ filterCount }} filters
           i.icon.icon-close.mx-1
       br
     <p-paginator [class.disabled]="paginationDisabled" [rows]="rows" [first]="searchParams.first" [totalRecords]="total" (onPageChange)="updateSearchParams('feed_paginate', $event)"></p-paginator>
