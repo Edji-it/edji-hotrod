@@ -217,16 +217,17 @@ describe('Discover Feed', () => {
       sidebar.logout()
     })
 
-    it('should see discover feed link from the home page', () => {
-      browser.wait(EC.elementToBeClickable(sidebar.logo), 5000, 'logo was not clickable')
-      // go to the home page
-      sidebar.logo.click()
-      browser.wait(EC.elementToBeClickable(sidebar.navDiscoverPublic), 5000, 'discover feed button on home page was not clickable')
-    })
+    // it('should see discover feed link from the home page', () => {
+    //   browser.wait(EC.elementToBeClickable(sidebar.logo), 5000, 'logo was not clickable')
+    //   // go to the home page
+    //   sidebar.logo.click()
+    //   browser.wait(EC.elementToBeClickable(sidebar.navDiscoverPublic), 5000, 'discover feed button on home page was not clickable')
+    // })
 
     it('should access discover feed from home page and see readings', () => {
-      browser.wait(EC.elementToBeClickable(sidebar.navDiscoverPublic), 5000, 'discover feed button on home page was not clickable')
-      sidebar.navDiscoverPublic.click()
+      // browser.wait(EC.elementToBeClickable(sidebar.navDiscoverPublic), 5000, 'discover feed button on home page was not clickable')
+      // sidebar.navDiscoverPublic.click()
+      discover.getPage()
       browser.wait(EC.urlContains('discover'), 5000, 'never arrived at Discover Feed while not logged in')
       browser.wait(
         EC.elementToBeClickable(discover.firstFeedReading),
@@ -293,8 +294,9 @@ describe('Discover Feed', () => {
     })
 
     it('should open reading preview and see a login button for the only reading action', async () => {
-      browser.wait(EC.elementToBeClickable(sidebar.navDiscoverPublic), 5000, 'discover feed button on home page was not clickable')
-      sidebar.navDiscoverPublic.click()
+      // browser.wait(EC.elementToBeClickable(sidebar.navDiscoverPublic), 5000, 'discover feed button on home page was not clickable')
+      // sidebar.navDiscoverPublic.click()
+      discover.getPage()
       browser.wait(
         EC.elementToBeClickable(discover.firstFeedReading),
         5000,
