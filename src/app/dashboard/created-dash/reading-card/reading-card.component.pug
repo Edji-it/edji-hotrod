@@ -46,13 +46,23 @@
         [disabled]="reading.archived"
       ) Create New Group
       //- Copy & Edit dropdown button
-      .icon.icon-create
       button.dropdown-item(
         (click)="showOptions=false;", 
         [routerLink]="['/new-reading/']", 
         [queryParams]="{ copyId: reading._id }",
         [attr.testFindCopyAndEdit]="reading.title"
-      ) Copy and Edit
+      ) 
+        .icon.icon-create
+        | &nbsp; Copy and Edit
+      //- Reading Link dropdown button
+      button.dropdown-item(
+        (click)="showOptions=false;", 
+        [routerLink]="['/new-reading/']", 
+        [queryParams]="{ copyId: reading._id }",
+        [attr.testFindCopyAndEdit]="reading.title"
+      ) 
+        .icon.icon-create
+        | &nbsp; Copy and Edit
       //- Delete dropdown button
       button.dropdown-item(
         (click)="relevantReading = reading; showDeleteReadingModal = true; showOptions = false;", 
