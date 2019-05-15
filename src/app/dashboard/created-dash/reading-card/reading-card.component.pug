@@ -57,12 +57,12 @@
       //- Reading Link dropdown button
       button.dropdown-item(
         (click)="showOptions=false;", 
-        [routerLink]="['/new-reading/']", 
-        [queryParams]="{ copyId: reading._id }",
-        [attr.testFindCopyAndEdit]="reading.title"
+        [routerLink]="['/discover']",
+        [queryParams]="{ preview: reading._id }",
+        [attr.testReadingLink]="reading.title"
       ) 
-        .icon.icon-create
-        | &nbsp; Copy and Edit
+        .icon.icon-reading-link
+        | &nbsp; Reading Link
       //- Delete dropdown button
       button.dropdown-item(
         (click)="relevantReading = reading; showDeleteReadingModal = true; showOptions = false;", 
