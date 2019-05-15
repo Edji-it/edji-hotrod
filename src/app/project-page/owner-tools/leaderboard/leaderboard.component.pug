@@ -11,8 +11,10 @@
       span(style="float:right;")
         span.small.mr-2 Replies
         span.small(style="width:65px;") Comments
-    .user-list-item(*ngFor='let commentUser of commentStats.stats.userStats; let i = index')
-      span.user-list__name([attr.id]="'studentName'+i") {{ commentUser.fullname }}
+    .user-list-item.hover-parent(*ngFor='let commentUser of commentStats.stats.userStats; let i = index')
+      span.user-list__name([attr.id]="'studentName'+i") 
+        | {{ commentUser.fullname }}
+        .btn.btn-icon.hover-show--inline-block([innerHtml]="':gear:' | emojione")
       //- Comment filter shows on hover and when active
       .student-filter__wrap
         .btn.btn-icon.btn-outline-primary.e2e-student-filter(
