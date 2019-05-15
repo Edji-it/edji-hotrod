@@ -54,8 +54,8 @@ export const ROUTES: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'account', component: AccountComponent, canActivate: [AuthService] },
   { path: 'discover/legacy', component: DiscoverFeedComponent, canActivate: [AuthService] },
-  { path: 'discover', component: SearchPage, canActivate: [AuthService] },
-  { path: 'discover/search', component: SearchPage, canActivate: [AuthService] },
+  { path: 'discover', component: SearchPage },
+  { path: 'discover/search', component: SearchPage },
   { path: 'project/:id', component: ProjectPageComponent },
   { path: 'license/accept/:license_id', component: LicenseRedirectComponent, pathMatch: 'full' },
   {

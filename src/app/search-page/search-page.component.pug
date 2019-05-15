@@ -28,6 +28,17 @@ nav-bar([showDashboardOptions]="true")
                                 (click)="searchParams.searchTerm = ''; updateSearchParams(''); isSearching=false"
                             )
                             .form-control.form-control-dummysize(#dummySearchField) {{ searchParams.searchTerm }}
+                div.mt-2
+                    span Found <b id="searchCount">{{ total || 0 }}</b> readings&nbsp;
+                    a.link(
+                        *ngIf="filterCount > 0", 
+                        tabindex="0", 
+                        (click)="clearFilterVars(true); updateSearchParams('')",
+                        title="Click to clear"
+                    ) 
+                        |with {{ filterCount }} filters
+                        i.icon.icon-close.mx-1
+                br
     .row
         .col-md-4
                 .form-group(*ngIf="!isSearching")
@@ -101,7 +112,7 @@ nav-bar([showDashboardOptions]="true")
                 follow-tag(
                     id="followEdjiTag",
                     [owner]="edjiOwnerObj",
-                    (followEvent)="loadFeed(); filterCount = filterCount + 1"
+                    (followEvent)="user.isLoggedIn ? loadFeed() : showLoginModal = true"
                 )
             //- Server error while loading
             .alert.alert-warning(*ngIf="searchAlerts.serverError")
@@ -129,7 +140,10 @@ nav-bar([showDashboardOptions]="true")
                    .col-12.feed__reading(*ngIf="reading")
                         .feed__reading-data.mb-2(*ngIf="reading.owner")
                             .comment__avatar.mb-0 {{reading.owner.fullname.substr(0,2).toUpperCase()}}
-                            follow-tag([owner]="reading.owner")
+                            follow-tag(
+                                [owner]="reading.owner",
+                                (followEvent)="!user.isLoggedIn ? showLoginModal = true : ''"
+                            )
                             i.hidden-md-down.ws-nowrap {{ ' shared ' + (reading.updatedAt | edjidate:'timeAgo':null:secondsAgo) }}
                             .btn.btn-sm.btn-primary.float-right(
                                 (click)="openReadingPreview(reading)", 
@@ -166,7 +180,7 @@ hot-reading-preview-modal(
     *ngIf="showReadingPreviewModal",
     [reading]="selectedReading",
     [user]="user",
-    (closeModal)="showReadingPreviewModal=false",
+    (closeModal)="closeReadingPreview($event)",
     (createSuccess)="readingCreateFromPreviewSuccess($event)",
     [context]="'created'"
 )
@@ -190,4 +204,11 @@ hot-add-project-modal.modal-will-fade(
     [groupLabel]="'Group 1'",
     (groupSaved)="finalizeShare($event)",
     (closeModal)="showFirstGroupModal = false"
+)
+//- Login modal with option to switch to registration page
+hot-login-modal.modal-will-fade(
+    *ngIf="showLoginModal",
+    [class.show]="showLoginModal", 
+    [loginOnly]="true",
+    (closeModal)="closeLoginModal($event)"
 )

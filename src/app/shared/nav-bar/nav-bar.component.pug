@@ -9,8 +9,11 @@
       ng-container(*ngIf="isDevDeployed")
         img#logo.nav-bar__logo(*ngIf="currentPage!='home'", src="assets/images/logo-3.2-mark--dev.svg")
         img#logo.nav-bar__logo-h(*ngIf="currentPage=='home'", src="assets/images/logo-3.2-horizontal--dev.svg")
+    //- .nav__menu(*ngIf="!showDashboardOptions || (currentPage === 'discover' && !user.isLoggedIn)")
+    //-   a#navDiscoverPublic.btn.btn-link([routerLink]="['/discover']", routerLinkActive="active", [attr.title]="'Discover Readings from other Teachers'")
+    //-     | Discover
     //- Dashboard Nav
-    .nav__menu(*ngIf="showDashboardOptions")
+    .nav__menu(*ngIf="showDashboardOptions && user.isLoggedIn")
       ng-container(*ngFor="let link of navLinks")
         a.btn.btn-link([attr.id]="link.id", [routerLink]="[link.route]", routerLinkActive="active", [attr.title]="link.tooltip")
           | {{ link.displayName }}

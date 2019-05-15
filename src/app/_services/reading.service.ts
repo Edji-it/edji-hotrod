@@ -82,7 +82,7 @@ export class ReadingService {
           this.userReadingsSource.error(error)
         },
       )
-  } //getCreated()
+  }
 
   // Pull one reading by ID
   public get(id: string): Observable<any> {
@@ -94,12 +94,16 @@ export class ReadingService {
         return data
       }),
     )
-  } // public get(id : string) : Observable<any>
+  }
 
+  /**
+   * Utilizes Elastic search to find readings based on the queryString
+   * @param queryString the query we're going to search with
+   * @param user we handle search a bit different when we have a logged in user vs. the non-auth'd search
+   */
   public search(queryString, user?: User): Observable<any> {
     return this._http
       .get(this._auth.getUrl() + '/api/v1/readings/_search?' + queryString, this._auth.getOptions())
-      // .pipe(take(1))
       .pipe(
         map((data: any) => {
           if (data && user) {
@@ -118,8 +122,6 @@ export class ReadingService {
    */
   public verifyArchive(readingsArr: any, user: User): any {
     let readings = readingsArr.slice()
-    let rc = Object.assign({}, readings)
-    console.log(rc)
     if (readings && !user.hero_status && user.archive_readings_before) {
       let archivedBefore = new Date(user.archive_readings_before)
       let archivedTally: number = 0
@@ -146,7 +148,6 @@ export class ReadingService {
         }
       }
     }
-    console.log(readings, user)
     //  Update return value
     return readings
   }
@@ -200,7 +201,6 @@ export class ReadingService {
   }
 
   public setReadingObj(reading: any): void {
-    // console.log("Set", reading)
     if (reading._id) {
       this.readingValue = reading
       this.readingSource.next(this.readingValue)
@@ -231,14 +231,13 @@ export class ReadingService {
   public clear(): void {
     this.readingValue = <Reading>{}
     this.readingSource.next(this.readingValue)
-  } // public clear(): void
+  }
 
   /**
    * Deletes a reading from the collection, all projects for that reading, and all versions that are based on the said reading from their collections
    * @param deleteReading is the reading we're passing in to delete 
    */
   public delete(deleteReading: Reading): Observable<any> {
-    // console.log("Deleting '" + targetReading.title)
     return this._http.delete(
       this._auth.getUrl() + `/api/v1/readings/${deleteReading._id}`, 
       this._auth.getOptions()
@@ -257,8 +256,8 @@ export class ReadingService {
               readingResponse.total--
               this.userReadingsSource.next(readingResponse)
             }
-          }, // (reading, index) =>
-        ) // readings.forEach
+          }, 
+        )
         return value
       }),
     )
@@ -326,11 +325,14 @@ export class ReadingService {
     }
   }
 
+  /**
+   * @deprecated 5/1/2019
+   * @param filters 
+   */
   public getFeed(filters?: FilterObj): Observable<any> {
     let feedParams = new HttpParams()
     if (filters && filters['grades']) {
       let grades = filters['grades']
-      // filters['grades'].forEach( grade => { feedParams = feedParams.append("grades", grade + "")})
       feedParams = feedParams.append('grades', Math.min(...grades) + '')
       feedParams = feedParams.append('grades', Math.max(...grades) + '')
     }
@@ -345,7 +347,6 @@ export class ReadingService {
     }
     feedParams = feedParams.append('populate', 'owner').append('populate', 'words_preview')
 
-    //{{url}}/readings/feed?grades[]=1&grades[]=8&populate[]=words_preview&populate[]=owner&start=0
     return this._http.get(this._auth.getUrl() + '/readings/feed', {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
