@@ -14,7 +14,10 @@
     .user-list-item.hover-parent(*ngFor='let commentUser of commentStats.stats.userStats; let i = index')
       span.user-list__name([attr.id]="'studentName'+i") 
         | {{ commentUser.fullname }}
-        .btn.btn-icon.hover-show--inline-block([innerHtml]="':gear:' | emojione")
+        .btn.btn-icon.btn-outline-primary.ml-1.hover-show--inline-block(
+          [innerHtml]="':gear:' | emojione",
+          (click)="confirmCoOwner(commentUser)"
+        )
       //- Comment filter shows on hover and when active
       .student-filter__wrap
         .btn.btn-icon.btn-outline-primary.e2e-student-filter(
@@ -54,3 +57,4 @@
       | {{ appliedFilter.displayName }}
     #studentFilterNext.btn.btn-icon.btn-outline-primary.btn--next((click)="pageStudentFilter(1)")
       .fa.fa-forward
+hot-confirm-co-owner(*ngIf="coOwnerToBe", [student]="coOwnerToBe", (closeModal)="coOwnerToBe = false")

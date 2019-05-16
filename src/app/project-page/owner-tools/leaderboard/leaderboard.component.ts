@@ -27,8 +27,9 @@ export class LeaderboardComponent implements OnInit {
 
   public appliedFilter: CommentFilter
   public showFilterHeroModal: boolean
+  public coOwnerToBe: User
 
-  constructor(private _readings: ReadingService, private _projects: ProjectService, private _auth: AuthService) {}
+  constructor(private _readings: ReadingService, private _projects: ProjectService, private _auth: AuthService) { }
 
   ngOnInit() {
     // Subscribe to current user
@@ -171,5 +172,13 @@ export class LeaderboardComponent implements OnInit {
     } else {
       return false
     }
+  }
+
+  /**
+   * Trigger confirmation modal 
+   */
+  public confirmCoOwner(student: User) {
+    console.log(student)
+    this.coOwnerToBe = student
   }
 }

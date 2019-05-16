@@ -151,6 +151,10 @@ $userListBorderWidth: 2px;
   &:nth-child(odd) {
     background: #f5f8f8;
   }
+
+  &:hover, &:focus {
+    background: #eef7fb;
+  }
 }
 
 .icon-comment-filter {

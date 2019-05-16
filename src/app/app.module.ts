@@ -22,7 +22,7 @@ Sentry.init({
 
 @Injectable()
 export class SentryErrorHandler implements ErrorHandler {
-  constructor() {}
+  constructor() { }
   handleError(error) {
     // Post error to Sentry
     Sentry.captureException(error.originalError || error)
@@ -81,6 +81,7 @@ import {
   DiscoverAddMetaModal,
   ReadingArchivedModal,
   ConfirmArchiveModal,
+  ConfirmCoOwnerModal,
   ReadingPreviewModal
 } from './modals'
 import {
@@ -201,6 +202,7 @@ const APP_PROVIDERS = [
     AddProjectModal,
     ReadingArchivedModal,
     ConfirmArchiveModal,
+    ConfirmCoOwnerModal,
     ReadingPreviewModal,
     ChangePassComponent,
     ResetPassComponent,
@@ -277,4 +279,4 @@ const APP_PROVIDERS = [
     APP_PROVIDERS,
   ],
 }) //@NgModule
-export class AppModule {}
+export class AppModule { }
