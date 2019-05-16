@@ -84,6 +84,12 @@ $iconGrayOpacity: 0.6;
   @include icon('icon-bookmark.svg');
 }
 
+.icon-plus {
+  font-size: 24px;
+  display: inline-block;
+  color: $blue;
+}
+
 .icon-bookmark-off {
   @include icon('icon-bookmark-off.svg');
 }

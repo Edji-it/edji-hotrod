@@ -44,7 +44,9 @@
         (click)="relevantReading = reading; showAddModal = true; showOptions = false;",
         [attr.testFindCreateNewGroup]="reading.title",
         [disabled]="reading.archived"
-      ) Create New Group
+      ) 
+        .icon-plus +
+        | &nbsp; Create New Group
       //- Copy & Edit dropdown button
       button.dropdown-item(
         (click)="showOptions=false;", 
@@ -67,7 +69,9 @@
       button.dropdown-item(
         (click)="relevantReading = reading; showDeleteReadingModal = true; showOptions = false;", 
         [attr.testDelete]="reading.title"
-      ) Delete
+      ) 
+        span([innerHtml]="':x:' | emojione")
+        | &nbsp; Delete
   .reading-data(*ngIf="!reading['draft']")
     //- Subject Tags
     .tag-row.w-75
