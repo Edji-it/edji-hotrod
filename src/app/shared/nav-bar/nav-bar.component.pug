@@ -239,7 +239,7 @@ edji-message-toasts([currentPage]="currentPage")
 referral-modal(
   [showReferral]="showReferralModal",
   [shareReading]="readingLink",
-  (hideReferral)="showReferralModal=false", 
+  (hideReferral)="showReferralModal=false; readingLink=''", 
   (exerciseCoupon)="useCoupon($event)"
 )
 //- Hero Subscribe/Pay

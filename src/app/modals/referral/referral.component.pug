@@ -1,6 +1,6 @@
 .modal-will-fade([class.show]="showModal", *ngIf="showModal")
   .modal#referralModal
-    .modal-dialog(role="document", [ngStyle]="{'max-width': shareReading ? '650px' : '500px'}")
+    .modal-dialog(role="document", [ngStyle]="{'max-width': readingLinkMode ? '650px' : '500px'}")
       .modal-content
         .modal-header
           h4.modal-title {{ modalCopy. title }}
@@ -15,17 +15,17 @@
           .alert.alert-reading.alert-dismissable.fade(*ngIf="alertObject.show && !showReading", [class.show]="alertObject.show", role="alert", [ngClass]="alertObject.type")
             a.close(href="#", (click)="closeAlert()") ×
             p.mb-0([innerHtml]="alertObject.message")
-          div([ngClass]="[shareReading ? 'row' : '']")
-            div([ngClass]="[shareReading ? 'col-sm-6 pr-0' : '']")
+          div([ngClass]="[readingLinkMode ? 'row' : '']")
+            div([ngClass]="[readingLinkMode ? 'col-sm-6 pr-0' : '']")
               //- Overview copy
               p.small.mb-3([innerHtml]="modalCopy.body")
               //- Generated code for copy and share buttons -- Desktop
               .hidden-sm-down
                 .container
                   .row.mb-4
-                    .pl-0([ngClass]="[shareReading ? 'col-12' : 'col-sm-8']")
-                      .form-group([ngClass]="[shareReading ? 'mt-4' : '']")
-                        label(*ngIf="shareReading") Copy Reading Link
+                    .pl-0([ngClass]="[readingLinkMode ? 'col-12' : 'col-sm-8']")
+                      .form-group([ngClass]="[readingLinkMode ? 'mt-4' : '']")
+                        label(*ngIf="readingLinkMode") Copy Reading Link
                         .input-group
                           input#copyReferralCode.form-control(
                             name="ReferralCode",
@@ -43,9 +43,9 @@
                               href="#") Copy
                         small#linkCopySuccess.form-text.text-success(*ngIf="linkCopySuccess")
                           | Link was copied to your clipboard!
-                    div([ngClass]="[shareReading ? 'col-12 pl-0' : 'col-sm-4 pr-0']")
-                      .share-icon__group([ngClass]="[shareReading ? 'float-left' : 'float-right']")
-                        label(*ngIf="shareReading") Share Reading Link
+                    div([ngClass]="[readingLinkMode ? 'col-12 pl-0' : 'col-sm-4 pr-0']")
+                      .share-icon__group([ngClass]="[readingLinkMode ? 'float-left' : 'float-right']")
+                        label(*ngIf="readingLinkMode") Share Reading Link
                         a#referEmailShare(
                           tabindex="0",
                           target="_blank",
@@ -67,7 +67,7 @@
                           (click)="trackReferralLink('facebook')"
                         )
                           .icon-facebook.share-icon
-            div([ngClass]="[shareReading ? 'col-sm-6 pl-0' : '']")
+            div(*ngIf="readingLinkMode", [ngClass]="[readingLinkMode ? 'col-sm-6 pl-0' : '']")
               .share-reading-image__wrap
                 img(src="/assets/images/send-graphic.svg")
               button#closeShareReadingModal.btn.btn-primary.float-right.mt-5(
@@ -116,7 +116,7 @@
                     )
                       .icon-facebook.share-icon((click)="trackReferralLink('facebook')")
           //- More copy
-          ng-container(*ngIf="!shareReading")
+          ng-container(*ngIf="!readingLinkMode")
             h6.small.font-weight-bold Your Path to Hero
             p.small.mb-3 Each teacher you refer that creates a reading will unlock a 20% discount towards Hero for both of you. Complete 5 referrals to get a year of Hero free.
             //- referral "squares" -- Desktop

@@ -41,6 +41,7 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
   }
   public linkCopySuccess: boolean
   private referredByComplete: boolean
+  public readingLinkMode: boolean
 
   public showModal: boolean
 
@@ -63,7 +64,8 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
         // Refresh the check for created readings on modal open
         this._readings.updateCreated(this.user)
         // set up the reading link and detail for modal copy
-        if (this.shareReading) {
+        if (this.shareReading && this.shareReading.length > 0) {
+          this.readingLinkMode = true
           this.referralLink = `${location.origin}/#/discover?preview=${this.shareReading}`
           this.socialLinks = this.formatLinks(this.referralLink, true)
           this.getReadingDetails()
@@ -127,6 +129,11 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
         this.router.navigate([], { queryParams: params })
       })
     }
+    this.modalCopy = {
+      title: 'Give Hero, Get Hero',
+      body: 'Share your unique referral link to give <i>and</i> unlock Hero discounts.'
+    }
+    this.readingLinkMode = false
     this.showModal = false
     this.hideReferral.emit(false)
   }
