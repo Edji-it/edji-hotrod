@@ -64,7 +64,6 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
         this._readings.updateCreated(this.user)
         // set up the reading link and detail for modal copy
         if (this.shareReading) {
-          console.log(this.shareReading)
           this.referralLink = `${location.origin}/#/discover?preview=${this.shareReading}`
           this.socialLinks = this.formatLinks(this.referralLink, true)
           this.getReadingDetails()
@@ -152,8 +151,10 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
           this.evaluateReferralProgress(this.numberReferrals, this.referredByComplete)
           // Set the referral code for copying and sharing
           this.referralCode = userReferrals.code
-          this.referralLink = location.origin + '/#/?r=' + this.referralCode
-          this.socialLinks = this.formatLinks(this.referralLink)
+          if (!this.shareReading) {
+            this.referralLink = location.origin + '/#/?r=' + this.referralCode
+            this.socialLinks = this.formatLinks(this.referralLink)
+          }
         },
         err => {
           console.error(err)
@@ -213,7 +214,7 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
   /**
    * Copies the referral link to the user's clipboard
    */
-  private copyReferralCode() {
+  public copyReferralCode() {
     // Create a new textarea element that we'll not make visible
     let selBox = document.createElement('textarea')
     selBox.style.position = 'fixed'
@@ -265,7 +266,7 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
    * Depending on which share button is clicked, perform a certain action
    * @param shareMedium is the path the user will be using to share their referral code
    */
-  private trackReferralLink(shareMedium: string) {
+  public trackReferralLink(shareMedium: string) {
     // fire an analytic event here for tracking purposes
     if (shareMedium === 'copy') {
       this.copyReferralCode()
@@ -280,7 +281,7 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
    * Depending on the referral square, return the icon name to display
    * @param index is the position on the referral squares where a user has completed a referral
    */
-  private getReferralIcon(index: number) {
+  public getReferralIcon(index: number) {
     switch (index) {
       case 0:
         return 'icon-bam'
@@ -316,11 +317,11 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
   }
 
   // When the user chooses to use the coupon, we'll need to close this modal and pass along the coupon code to the hero subscription modal
-  private useCoupon() {
+  public useCoupon() {
     this.exerciseCoupon.emit(this.getCouponCode())
   }
 
-  private closeAlert() {
+  public closeAlert() {
     this.alertObject = {
       show: false,
       type: '',

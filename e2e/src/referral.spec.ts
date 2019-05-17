@@ -8,7 +8,7 @@ import { LoginForm, RegisterForm, UserDetailsModal } from './components'
  * Referral Tests
  * - Users can refer other users, and be rewarded
  */
-describe('Referral Sharing and Rewards', () => {
+describe('Share', () => {
   let login = new Login()
   let loginForm = new LoginForm()
   let registerForm = new RegisterForm()
@@ -34,7 +34,7 @@ describe('Referral Sharing and Rewards', () => {
   let twitterShare = element(by.id('referTwitterShare'))
   let emailShare = element(by.id('referEmailShare'))
 
-  describe('Test sharing referral code, and referred registration', () => {
+  describe('Account Referral Sharing and Rewards', () => {
     beforeAll(() => {
       login.getPage()
       login.loginAndVerify(login.referUser, login.referPassword)
@@ -206,6 +206,33 @@ describe('Referral Sharing and Rewards', () => {
       referralClose.click()
       // Log out new user
       sidebar.clickLogOutButton()
+    })
+  })
+
+  describe('Reading Link', () => {
+    beforeAll(() => {
+      login.getPage()
+      login.loginAndVerify(login.heroUser, login.heroPassword)
+    })
+
+    afterAll(() => {
+      sidebar.logout()
+    })
+
+    it('should open reading link from created dashboard', () => {
+
+    })
+
+    it('should copy reading link from share modal', () => {
+      
+    })
+
+    it('should open reading link without logging in and get a reading preview in discover', () => {
+      
+    })
+
+    it('should open reading link as testbot and get a reading preview in discover', () => {
+      
     })
   })
 })
