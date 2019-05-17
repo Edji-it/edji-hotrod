@@ -23,6 +23,7 @@ describe('Share', () => {
   let copyReferralLinkBtn = element(by.id('buttonCopyReferralLink'))
   let copySuccessMsg = element(by.id('linkCopySuccess'))
   let referalCodeBox = element(by.id('copyReferralCode'))
+  let referralModal = element(by.id('referralModal'))
   let referralClose = element(by.css('#referralModal .close'))
   let referralStamp1 = element(by.id('referralStamp1'))
   let referralStamp2 = element(by.id('referralStamp2'))
@@ -219,12 +220,65 @@ describe('Share', () => {
       sidebar.logout()
     })
 
-    it('should open reading link from created dashboard', () => {
+    let readingLink = ''
 
+    it('should open reading link from created dashboard', () => {
+      dashboard.goToCreatedTab()
+      // Click the dropdown menu
+      browser.sleep(3000)
+      browser.wait(EC.elementToBeClickable(dashboard.firstDropdownMenu), 5000, 'never saw a reading card dropdown menu')
+      dashboard.firstDropdownMenu.click()
+      browser.wait(
+        EC.elementToBeClickable(dashboard.readingLinkButton),
+        5000,
+        'reading link button was never clickable from dropdown menu',
+      )
+      dashboard.readingLinkButton.click()
+      browser.wait(
+        EC.elementToBeClickable(referralModal),
+        5000,
+        'share reading link modal was never clickable',
+      )
+      browser.wait(
+        EC.elementToBeClickable(referralClose),
+        5000,
+        'share reading link modal close button was never clickable',
+      )
+      referralClose.click()
     })
 
-    it('should copy reading link from share modal', () => {
-      
+    it('should copy reading link from share modal', async () => {
+      browser.sleep(3000)
+      dashboard.firstDropdownMenu.click()
+      browser.wait(
+        EC.elementToBeClickable(dashboard.readingLinkButton),
+        5000,
+        'reading link button was never clickable from dropdown menu',
+      )
+      dashboard.readingLinkButton.click()
+      browser.wait(
+        EC.elementToBeClickable(referralModal),
+        5000,
+        'share reading link modal was never clickable',
+      )
+      browser.wait(EC.elementToBeClickable(copyReferralLinkBtn), 5000, 'never saw the referral modal')
+      // Get referral link and save it for later
+      readingLink = await referalCodeBox.getAttribute('value')
+      // Verify referral link is longer than just "edji.it"
+      expect(readingLink.length).toBeGreaterThan(5)
+      // Verify clicking "Copy" at least shows a success message
+      copyReferralLinkBtn.click()
+      browser.wait(
+        EC.visibilityOf(copySuccessMsg), 
+        3000, 
+        'clicking to copy reading link did not show success message'
+      )
+      browser.wait(
+        EC.elementToBeClickable(referralClose),
+        5000,
+        'share reading link modal close button was never clickable',
+      )
+      referralClose.click()
     })
 
     it('should open reading link without logging in and get a reading preview in discover', () => {

@@ -57,7 +57,7 @@
         .icon.icon-create
         | &nbsp; Copy and Edit
       //- Reading Link dropdown button
-      button.dropdown-item(
+      button.dropdown-item.e2e-reading-link(
         (click)="showOptions=false;",
         [routerLink]="[]",
         [queryParams]="{ showRefer: reading._id }",
