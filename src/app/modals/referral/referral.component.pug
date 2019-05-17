@@ -1,6 +1,6 @@
 .modal-will-fade([class.show]="showModal", *ngIf="showModal")
   .modal#referralModal
-    .modal-dialog(role="document")
+    .modal-dialog(role="document", [ngStyle]="{'max-width': shareReading ? '650px' : '500px'}")
       .modal-content
         .modal-header
           h4.modal-title {{ modalCopy. title }}
@@ -15,60 +15,65 @@
           .alert.alert-reading.alert-dismissable.fade(*ngIf="alertObject.show && !showReading", [class.show]="alertObject.show", role="alert", [ngClass]="alertObject.type")
             a.close(href="#", (click)="closeAlert()") ×
             p.mb-0([innerHtml]="alertObject.message")
-          ng-container([ngClass]="[shareReading ? '.col-sm-6' : '']")
-            //- Overview copy
-            p.small.mb-3([innerHtml]="modalCopy.body")
-            //- Generated code for copy and share buttons -- Desktop
-            .hidden-sm-down
-              .container
-                .row.mb-4
-                  .pl-0([ngClass]="[shareReading ? '.row' : '.col-sm-8']")
-                    .form-group([ngClass]="[shareReading ? 'mt-4' : '']")
-                      .input-group
+          div([ngClass]="[shareReading ? 'row' : '']")
+            div([ngClass]="[shareReading ? 'col-sm-6 pr-0' : '']")
+              //- Overview copy
+              p.small.mb-3([innerHtml]="modalCopy.body")
+              //- Generated code for copy and share buttons -- Desktop
+              .hidden-sm-down
+                .container
+                  .row.mb-4
+                    .pl-0([ngClass]="[shareReading ? 'col-12' : 'col-sm-8']")
+                      .form-group([ngClass]="[shareReading ? 'mt-4' : '']")
                         label(*ngIf="shareReading") Copy Reading Link
-                        input#copyReferralCode.form-control(
-                          name="ReferralCode",
-                          type="text",
-                          disabled="true",
-                          value="{{referralLink}}"
+                        .input-group
+                          input#copyReferralCode.form-control(
+                            name="ReferralCode",
+                            type="text",
+                            disabled="true",
+                            value="{{referralLink}}"
+                          )
+                          .input-group-append
+                            //- e2e: ngIf on copy button ensures link is ready to copy
+                            button#buttonCopyReferralLink.btn.btn-primary.btn-rnd-corner-right(
+                              *ngIf="referralLink && referralLink.length > 0"
+                              type="button", 
+                              (click)="trackReferralLink('copy')", 
+                              name="Copy", 
+                              href="#") Copy
+                        small.form-text.text-success(*ngIf="linkCopySuccess")
+                          | Link was copied to your clipboard!
+                    div([ngClass]="[shareReading ? 'col-12 pl-0' : 'col-sm-4 pr-0']")
+                      .share-icon__group([ngClass]="[shareReading ? 'float-left' : 'float-right']")
+                        label(*ngIf="shareReading") Share Reading Link
+                        a#referEmailShare(
+                          tabindex="0",
+                          target="_blank",
+                          [attr.href]="socialLinks.emailLink",
+                          (click)="trackReferralLink('email')"
                         )
-                        .input-group-append
-                          //- e2e: ngIf on copy button ensures link is ready to copy
-                          button#buttonCopyReferralLink.btn.btn-primary.btn-rnd-corner-right(
-                            *ngIf="referralLink && referralLink.length > 0"
-                            type="button", 
-                            (click)="trackReferralLink('copy')", 
-                            name="Copy", 
-                            href="#") Copy
-                      small.form-text.text-success(*ngIf="linkCopySuccess")
-                        | Link was copied to your clipboard!
-                  .pr-0([ngClass]="[shareReading ? '.row' : '.col-sm-4']")
-                    label(*ngIf="shareReading") Share Reading Link
-                    .share-icon__group.float-right
-                      a#referEmailShare(
-                        tabindex="0",
-                        target="_blank",
-                        [attr.href]="socialLinks.emailLink",
-                        (click)="trackReferralLink('email')"
-                      )
-                        .icon-email.share-icon
-                      a#referTwitterShare(
-                        tabindex="0",
-                        target="_blank",
-                        [attr.href]="socialLinks.twitterLink",
-                        (click)="trackReferralLink('twitter')"
-                      )
-                        .icon-twitter.share-icon
-                      a#referFacebookShare(
-                        tabindex="0",
-                        target="_blank",
-                        [attr.href]="socialLinks.facebookLink",
-                        (click)="trackReferralLink('facebook')"
-                      )
-                        .icon-facebook.share-icon
-          ng-container([ngClass]="[shareReading ? '.col-sm-6' : '']")
-            .share-reading-image__wrap
-              img(src="/assets/images/promo-home.svg")
+                          .icon-email.share-icon
+                        a#referTwitterShare(
+                          tabindex="0",
+                          target="_blank",
+                          [attr.href]="socialLinks.twitterLink",
+                          (click)="trackReferralLink('twitter')"
+                        )
+                          .icon-twitter.share-icon
+                        a#referFacebookShare(
+                          tabindex="0",
+                          target="_blank",
+                          [attr.href]="socialLinks.facebookLink",
+                          (click)="trackReferralLink('facebook')"
+                        )
+                          .icon-facebook.share-icon
+            div([ngClass]="[shareReading ? 'col-sm-6 pl-0' : '']")
+              .share-reading-image__wrap
+                img(src="/assets/images/send-graphic.svg")
+              button#closeShareReadingModal.btn.btn-primary.float-right.mt-5(
+                (click)="closeModal()"
+              ) 
+                | Done
           //- Generated code for copy and share buttons -- Mobile
           .hidden-md-up.w-100
             .container

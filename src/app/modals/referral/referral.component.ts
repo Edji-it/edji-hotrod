@@ -65,6 +65,8 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
         // set up the reading link and detail for modal copy
         if (this.shareReading) {
           console.log(this.shareReading)
+          this.referralLink = `${location.origin}/#/discover?preview=${this.shareReading}`
+          this.socialLinks = this.formatLinks(this.referralLink, true)
           this.getReadingDetails()
         }
       }
@@ -234,16 +236,28 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
     }, 2000)
   }
 
-  private formatLinks(referralLink: string) {
+  private formatLinks(referralLink: string, shareReading?: boolean) {
+    let socialLinks = {
+      emailSubject: 'Go Hero on Edji With Me',
+      emailBody: 'Create%20readings%20on%20Edji%20with%20me%2C%20and%20get%2020%25%20off%20Hero%20',
+      twitter: 'Create%20readings%20on%20Edji%20with%20me%2C%20and%20get%2020%25%20off%20Hero%20',
+      facebook: `https://www.facebook.com/sharer/sharer.php?u=`
+    }
+    if (shareReading) {
+      socialLinks.emailSubject = 'Check Out This Reading'
+      socialLinks.emailBody = 'I%20thought%20you%20would%20like%20this%20reading%2E%20Check%20it%20out%on%20Edji%20'
+      socialLinks.twitter = 'I%20thought%20you%20would%20like%20this%20reading%2E%20Check%20it%20out%on%20Edji%20'
+    }
+    let email = `mailto:?subject=${socialLinks.emailSubject}&body=${socialLinks.emailBody}`
+    let twitter = `https://twitter.com/intent/tweet?text=${socialLinks.twitter}`
+
     return {
       emailLink:
-        'mailto:?subject=Go Hero on Edji With Me&body=Create%20readings%20on%20Edji%20with%20me%2C%20and%20get%2020%25%20off%20Hero%20' +
-        encodeURIComponent(referralLink),
+        `${email}${encodeURIComponent(referralLink)}`,
       twitterLink:
-        'https://twitter.com/intent/tweet?text=Create%20readings%20on%20Edji%20with%20me%2C%20and%20get%2020%25%20off%20Hero%20' +
-        encodeURIComponent(referralLink),
+        `${twitter}${encodeURIComponent(referralLink)}`,
       facebookLink:
-        'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(referralLink) + '&amp;src=sdkpreparse',
+        `${socialLinks.facebook}${encodeURIComponent(referralLink)}&amp;src=sdkpreparse`
     }
   }
 
@@ -315,9 +329,11 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
   }
 
   private async getReadingDetails(): Promise<void> {
-    this.reading = await this._readings.get(this.shareReading).toPromise()
-    this.modalCopy.title = `Send Link to ${this.reading.title}`
     this.modalCopy.body = `Would you like to share this Reading for another teacher to use? 
       <br /> <br />This handy link will allow another teacher to use the same Reading, without accessing your Groups.`
+
+    // need to get the reading title for the next one
+    this.reading = await this._readings.get(this.shareReading).toPromise()
+    this.modalCopy.title = `Send Link to ${this.reading.title}`
   }
 }
