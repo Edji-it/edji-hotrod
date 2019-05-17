@@ -21,6 +21,7 @@ describe('Referral Sharing and Rewards', () => {
 
   // Referral specific element references
   let copyReferralLinkBtn = element(by.id('buttonCopyReferralLink'))
+  let copySuccessMsg = element(by.id('linkCopySuccess'))
   let referalCodeBox = element(by.id('copyReferralCode'))
   let referralClose = element(by.css('#referralModal .close'))
   let referralStamp1 = element(by.id('referralStamp1'))
@@ -53,6 +54,9 @@ describe('Referral Sharing and Rewards', () => {
       referralLink = await referalCodeBox.getAttribute('value')
       // Verify referral link is longer than just "edji.it"
       expect(referralLink.length).toBeGreaterThan(5)
+      // Verify clicking "Copy" at least shows a success message
+      copyReferralLinkBtn.click()
+      browser.wait(EC.visibilityOf(copySuccessMsg), 3000, 'clicking to copy referral link did not show success message')
       // Close referral modal
       referralClose.click()
     })

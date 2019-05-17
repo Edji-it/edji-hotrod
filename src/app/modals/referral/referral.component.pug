@@ -39,7 +39,7 @@
                           (click)="trackReferralLink('copy')", 
                           name="Copy", 
                           href="#") Copy
-                    small.form-text.text-success(*ngIf="linkCopySuccess")
+                    small#linkCopySuccess.form-text.text-success(*ngIf="linkCopySuccess")
                       | Link was copied to your clipboard!
                 .col-sm-4.pr-0
                   .share-icon__group.float-right
