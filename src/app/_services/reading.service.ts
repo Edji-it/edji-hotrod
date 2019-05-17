@@ -122,7 +122,7 @@ export class ReadingService {
    */
   public verifyArchive(readingsArr: any, user: User): any {
     let readings = readingsArr.slice()
-    if (readings && !user.hero_status && user.archive_readings_before) {
+    if (readings && user && !user.hero_status && user.archive_readings_before) {
       let archivedBefore = new Date(user.archive_readings_before)
       let archivedTally: number = 0
       // Loop through readings and mark archived

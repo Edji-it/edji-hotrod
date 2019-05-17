@@ -179,3 +179,12 @@
 .font-xs {
   font-size: 70%;
 }
+
+.share-reading-image__wrap {
+  position: relative;
+
+  & img {
+    height: 250px;
+    max-width: none !important;
+  }
+}

@@ -6,7 +6,7 @@ import { take } from 'rxjs/operators'
 import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
-import { Project, User } from '../../shared/datatypes'
+import { Project, User, Reading } from '../../shared/datatypes'
 import { AuthService, UtilToolService, ProjectService, ReadingService } from './../../_services'
 
 @Component({
@@ -16,51 +16,64 @@ import { AuthService, UtilToolService, ProjectService, ReadingService } from './
 })
 export class ReferralModalComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = []
-  referralLink: string
-  referralCode: string
-  socialLinks = {
+  public referralLink: string
+  private referralCode: string
+  public socialLinks = {
     emailLink: '',
     twitterLink: '',
     facebookLink: '',
   }
-  referralBlocks: any = []
-  numberReferrals: number
-  referralIndex: number = -1
-  referralCouponCopy: any = {}
-  alertObject = {
+  public referralBlocks: any = []
+  public numberReferrals: number
+  public referralIndex: number = -1
+  public referralCouponCopy: any = {}
+  public alertObject = {
     show: false,
     type: '',
     message: '',
   }
-  linkCopySuccess: boolean
-  referredByComplete: boolean
+  public modalCopy: {
+    title: string
+    body: string
+  } = {
+    title: 'Give Hero, Get Hero',
+    body: 'Share your unique referral link to give <i>and</i> unlock Hero discounts.'
+  }
+  public linkCopySuccess: boolean
+  private referredByComplete: boolean
 
-  showModal: boolean
+  public showModal: boolean
 
   private user: User
+  public reading: Reading
 
+  @Input() public shareReading: string
   @Input()
-  set showReferral(showReferral: boolean) {
-    if (showReferral) {
-      // fire an analytic event here for tracking purposes
-      this.angulartics.eventTrack.next({
-        action: 'referral_openModal',
-        properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
-      })
-    }
-    if (typeof showReferral !== 'undefined' && this.showModal !== showReferral) {
-      this.showModal = showReferral
+  set showReferral(show: boolean) {
+    if (typeof show !== 'undefined' && this.showModal !== show) {
+      this.showModal = show
       if (this.showModal) {
+        // fire an analytic event here for tracking purposes
+        this.angulartics.eventTrack.next({
+          action: 'referral_openModal',
+          properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
+        })
         // Get user's referral status
         this.getUserReferralStatus()
         // Refresh the check for created readings on modal open
         this._readings.updateCreated(this.user)
+        // set up the reading link and detail for modal copy
+        if (this.shareReading) {
+          console.log(this.shareReading)
+          this.getReadingDetails()
+        }
       }
     }
   }
   get showReferral(): boolean {
     return this.showModal
   }
+
   @Output() private hideReferral: EventEmitter<boolean> = new EventEmitter()
   @Output() private exerciseCoupon: EventEmitter<any> = new EventEmitter()
 
@@ -104,7 +117,15 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
     })
   }
 
-  private closeModal() {
+  public closeModal() {
+    // drop the showRefer queryParam on close
+    if (this.shareReading) {
+      this.route.queryParams.subscribe((qp) => {
+        let params = { ...qp }
+        delete params['showRefer']
+        this.router.navigate([], { queryParams: params })
+      })
+    }
     this.showModal = false
     this.hideReferral.emit(false)
   }
@@ -291,5 +312,12 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
       type: '',
       message: '',
     }
+  }
+
+  private async getReadingDetails(): Promise<void> {
+    this.reading = await this._readings.get(this.shareReading).toPromise()
+    this.modalCopy.title = `Send Link to ${this.reading.title}`
+    this.modalCopy.body = `Would you like to share this Reading for another teacher to use? 
+      <br /> <br />This handy link will allow another teacher to use the same Reading, without accessing your Groups.`
   }
 }

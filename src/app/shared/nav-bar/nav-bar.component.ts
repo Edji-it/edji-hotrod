@@ -115,6 +115,9 @@ export class NavBarComponent implements OnInit, OnDestroy {
 
   public toasts: MessageToast[] = []
 
+  // Reading Link
+  public readingLink: string
+
   constructor(
     public _route: ActivatedRoute,
     public _auth: AuthService,
@@ -185,6 +188,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
           this.isNewReading = true
         }
         if (queryParams.showRefer) {
+          this.readingLink = queryParams.showRefer
           this.showReferralModal = true
         }
       }),

@@ -58,9 +58,10 @@
         | &nbsp; Copy and Edit
       //- Reading Link dropdown button
       button.dropdown-item(
-        (click)="showOptions=false;", 
-        [routerLink]="['/discover']",
-        [queryParams]="{ preview: reading._id }",
+        (click)="showOptions=false;",
+        [routerLink]="[]",
+        [queryParams]="{ showRefer: reading._id }",
+        queryParamsHandling="merge",
         [attr.testReadingLink]="reading.title"
       ) 
         .icon.icon-reading-link
