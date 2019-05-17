@@ -233,7 +233,7 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
     this.linkCopySuccess = true
     setTimeout(() => {
       this.linkCopySuccess = false
-    }, 2000)
+    }, 3000)
   }
 
   private formatLinks(referralLink: string, shareReading?: boolean) {
@@ -265,7 +265,7 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
    * Depending on which share button is clicked, perform a certain action
    * @param shareMedium is the path the user will be using to share their referral code
    */
-  private trackReferralCode(shareMedium: string) {
+  private trackReferralLink(shareMedium: string) {
     // fire an analytic event here for tracking purposes
     if (shareMedium === 'copy') {
       this.copyReferralCode()

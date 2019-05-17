@@ -21,7 +21,7 @@ export class Login implements PageObjectInterface {
   public msgBadName = element(by.id('msgBadName'))
   public guestNameInput = element(by.id('guestNameInput'))
   public guestLoginButton = element(by.id('guestLoginButton'))
-  public gotoRegistrationButton = element(by.id('gotoRegistration'))
+  public goToRegistrationButton = element(by.id('goToRegistration'))
 
   // Reset password elements
   public resetPasswordOpen = element(by.id('linkForgotPassword'))
