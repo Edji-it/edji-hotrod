@@ -1,7 +1,7 @@
 import { browser, by, element, protractor } from 'protractor'
 
 // Internal
-import { Home, Login, Sidebar, Hero, Dashboard, NewReading } from './page-objects'
+import { Home, Login, Sidebar, Hero, Dashboard, NewReading, Discover } from './page-objects'
 import { LoginForm, RegisterForm, UserDetailsModal } from './components'
 
 /**
@@ -17,6 +17,7 @@ describe('Share', () => {
   let hero = new Hero()
   let dashboard = new Dashboard()
   let newReading = new NewReading()
+  let discover = new Discover()
   let EC = protractor.ExpectedConditions
 
   // Referral specific element references
@@ -221,12 +222,14 @@ describe('Share', () => {
     })
 
     let readingLink = ''
+    let titleToShare = ''
 
-    it('should open reading link from created dashboard', () => {
+    it('should open reading link from created dashboard', async () => {
       dashboard.goToCreatedTab()
       // Click the dropdown menu
       browser.sleep(3000)
       browser.wait(EC.elementToBeClickable(dashboard.firstDropdownMenu), 5000, 'never saw a reading card dropdown menu')
+      titleToShare = await dashboard.firstReadingTitle.getText()
       dashboard.firstDropdownMenu.click()
       browser.wait(
         EC.elementToBeClickable(dashboard.readingLinkButton),
@@ -281,12 +284,62 @@ describe('Share', () => {
       referralClose.click()
     })
 
-    it('should open reading link without logging in and get a reading preview in discover', () => {
-      
+    it('should open reading link without logging in and get a reading preview in discover', async () => {
+      sidebar.logout()
+      // Open referral link
+      browser.get(readingLink)
+      // Verify user lands on discover page
+      browser.wait(
+        EC.urlContains('discover'), 
+        5000, 
+        'reading link never landed on discover page'
+      )
+      // verify reading preview modal is open
+      browser.wait(
+        EC.visibilityOf(discover.readingPreview), 
+        5000, 
+        'reading preview was not visible'
+      )
+      let sharedTitle = await discover.previewTitle.getText()
+      let sameTitle = discover.validatePreviewTitle(titleToShare, sharedTitle)
+      expect(sameTitle).toBeTruthy()
+      // verify not logged in
+      browser.wait(
+        EC.elementToBeClickable(discover.loginFromPreviewBtn),
+        5000,
+        "login action from reading preview was not clickable"
+      )
+      discover.closeReadingPreview()
     })
 
-    it('should open reading link as testbot and get a reading preview in discover', () => {
-      
+    it('should open reading link as testbot and get a reading preview in discover', async () => {
+      // login as testsidekick to try the reading link preview out
+      login.getPage()
+      login.loginAndVerify(login.teacherUser, login.teacherPassword)
+      // Open referral link
+      browser.get(readingLink)
+      // Verify user lands on discover page
+      browser.wait(
+        EC.urlContains('discover'), 
+        5000, 
+        'reading link never landed on discover page'
+      )
+      // verify reading preview modal is open
+      browser.wait(
+        EC.visibilityOf(discover.readingPreview), 
+        5000, 
+        'reading preview was not visible'
+      )
+      let sharedTitle = await discover.previewTitle.getText()
+      let sameTitle = discover.validatePreviewTitle(titleToShare, sharedTitle)
+      expect(sameTitle).toBeTruthy()
+      // verify logged in actions available on preview
+      browser.wait(
+        EC.elementToBeClickable(discover.shareReadingBtn),
+        5000,
+        "share reading action was not clickable"
+      )
+      discover.closeReadingPreview()
     })
   })
 })
