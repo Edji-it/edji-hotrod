@@ -18,28 +18,17 @@
           div
             //- Overview copy
             p.small.mb-3 Share your unique referral link to give <i>and</i> unlock Hero discounts.
-            //- Generated code for copy and share buttons -- Desktop
-            .hidden-sm-down
-              .container
-                .row.mb-4
-                  .pl-0.col-sm-8
-                    .form-group
-                      edji-share-link([link]="referralLink")
-                  .col-sm-4.pr-0
-                    edji-share-social-icons(
-                      [link]="referralLink",
-                      [subjectCopy]="'Join me on Edji'",
-                      [messageCopy]="'Create a reading, and we both unlock 20% off Hero!'"
-                    )
-          //- Generated code for copy and share buttons -- Mobile
-          .hidden-md-up.w-100
-            .container
-              .row.mb-4.text-center
-                .col-sm-6
+            //- Generated code for copy and share buttons
+            .row.mb-4.no-gutters
+              .col-sm-8
+                .form-group
                   edji-share-link([link]="referralLink")
-                .col-sm-6
-                  .share-icon__group
-                    edji-share-social-icons([link]="referralLink")
+              .col-sm-4.text-center
+                edji-share-social-icons(
+                  [link]="referralLink",
+                  [subjectCopy]="'Join me on Edji'",
+                  [messageCopy]="'Create a reading, and we both unlock 20% off Hero!'"
+                )
           //- More copy
         
           h6.small.font-weight-bold Your Path to Hero
@@ -82,7 +71,7 @@
               [ngStyle]="{'float': referralIndex>2 ? 'right' : 'left'}"
             )
               .row(style="flex-wrap: initial;")
-                .col-6.p-0
+                .col-6
                   h6.small.font-xs.font-weight-bold.mb-1 {{referralCouponCopy.header}}
                   p.small.font-xs.mb-3 {{referralCouponCopy.text}}
                 .col-4.p-0.ml-1
