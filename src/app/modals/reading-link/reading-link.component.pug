@@ -3,7 +3,9 @@
     .modal-dialog(role="document", style="max-width:650px")
       .modal-content
         .modal-header
-          h4.modal-title Send Link to &ldquo;{{shareReading.title}}&ldquo;
+          h4.modal-title 
+            .icon.icon-reading-link
+            | Send Link to &ldquo;{{shareReading.title}}&ldquo;
           button.close.btn-icon--round(
               (click)="close()",
               type="button",
