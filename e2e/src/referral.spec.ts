@@ -23,7 +23,7 @@ describe('Share', () => {
   // Referral specific element references
   let copyReferralLinkBtn = element(by.id('buttonCopyReferralLink'))
   let copySuccessMsg = element(by.id('linkCopySuccess'))
-  let referalCodeBox = element(by.id('copyReferralCode'))
+  let referalCodeBox = element(by.id('copyShareLink'))
   let referralModal = element(by.id('referralModal'))
   let referralClose = element(by.css('#referralModal .close'))
   let referralStamp1 = element(by.id('referralStamp1'))
@@ -272,8 +272,8 @@ describe('Share', () => {
       // Verify clicking "Copy" at least shows a success message
       copyReferralLinkBtn.click()
       browser.wait(
-        EC.visibilityOf(copySuccessMsg), 
-        3000, 
+        EC.visibilityOf(copySuccessMsg),
+        3000,
         'clicking to copy reading link did not show success message'
       )
       browser.wait(
@@ -290,14 +290,14 @@ describe('Share', () => {
       browser.get(readingLink)
       // Verify user lands on discover page
       browser.wait(
-        EC.urlContains('discover'), 
-        5000, 
+        EC.urlContains('discover'),
+        5000,
         'reading link never landed on discover page'
       )
       // verify reading preview modal is open
       browser.wait(
-        EC.visibilityOf(discover.readingPreview), 
-        5000, 
+        EC.visibilityOf(discover.readingPreview),
+        5000,
         'reading preview was not visible'
       )
       let sharedTitle = await discover.previewTitle.getText()
@@ -320,14 +320,14 @@ describe('Share', () => {
       browser.get(readingLink)
       // Verify user lands on discover page
       browser.wait(
-        EC.urlContains('discover'), 
-        5000, 
+        EC.urlContains('discover'),
+        5000,
         'reading link never landed on discover page'
       )
       // verify reading preview modal is open
       browser.wait(
-        EC.visibilityOf(discover.readingPreview), 
-        5000, 
+        EC.visibilityOf(discover.readingPreview),
+        5000,
         'reading preview was not visible'
       )
       let sharedTitle = await discover.previewTitle.getText()

@@ -23,7 +23,7 @@ export class ShareLinkComponent implements OnInit {
   /**
    * Copies the referral link to the user's clipboard
    */
-  public copyReferralCode() {
+  public copyShareLink() {
     this._angulartics.eventTrack.next({
       action: 'referral_copy_shareLink',
       properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },

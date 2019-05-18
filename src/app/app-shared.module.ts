@@ -9,7 +9,7 @@ import { RouterModule, PreloadAllModules } from '@angular/router'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 
 // Project Dependencies
-import { NavBarComponent, FooterComponent, FollowTag, FeedbackComponent, MessageToastsComponent } from './shared'
+import { NavBarComponent, FooterComponent, FollowTag, FeedbackComponent, MessageToastsComponent, ShareLinkComponent } from './shared'
 import { ROUTES } from './app.routes'
 // Pipes
 import {
@@ -42,6 +42,7 @@ let SHARED_DECLARATIONS = [
   ReferralModalComponent,
   RequestAcademyModal,
   ShareCodeComponent,
+  ShareLinkComponent,
   SortByDatePipe,
   SubjectPipe,
   UserInitialsPipe,
@@ -69,4 +70,4 @@ let SHARED_IMPORTS = [CommonModule, FormsModule, ReactiveFormsModule]
    */
   exports: [SHARED_DECLARATIONS, SHARED_IMPORTS],
 })
-export class SharedModule {}
+export class SharedModule { }

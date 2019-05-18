@@ -24,11 +24,9 @@
                 .container
                   .row.mb-4
                     .pl-0.col-12
-                      .form-grou.mt-4
+                      .form-group.mt-4
                         label Copy Reading Link
                         edji-share-link([link]="referralLink")
-                        small#linkCopySuccess.form-text.text-success(*ngIf="linkCopySuccess")
-                          | Link was copied to your clipboard!
                     div.col-12.pl-0
                       .share-icon__group.float-left
                         label Share Reading Link

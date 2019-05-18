@@ -134,7 +134,6 @@ import { LicenseWelcomeComponent } from './license-welcome/license-welcome.compo
 import { ReadingRecapComponent } from './project-page/owner-tools/reading-recap/reading-recap.component'
 import { TeamPageComponent } from './team-page/team-page.component'
 import { SearchPage } from './search-page/search-page.component';
-import { ShareLinkComponent } from './shared/share-link/share-link.component'
 
 // Configure Hammer.js
 export class MyHammerConfig extends HammerGestureConfig {
@@ -249,8 +248,7 @@ const APP_PROVIDERS = [
     LicenseRedirectComponent,
     LicenseWelcomeComponent,
     ReadingRecapComponent,
-    TeamPageComponent,
-    ShareLinkComponent,
+    TeamPageComponent
   ],
   /** Components which can be dynamically created */
   entryComponents: [UserDetailsUpdateModal],
