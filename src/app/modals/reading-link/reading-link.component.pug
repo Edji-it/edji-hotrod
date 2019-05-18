@@ -17,7 +17,8 @@
           .row
             .col-11.col-sm-6.pr-0
               //- Overview copy
-              p.small.mb-3 Would you like to share this Reading for another teacher to use?<br/><br/>This handy link will allow another teacher to use the same Reading, without accessing your Groups
+              p.small Send this Reading to another teacher using the link below.
+              p.small(*ngIf="isCreator") This link will allow another teacher to use the same Reading without accessing your Groups.
               //- Generated code for copy and share buttons
               .row.no-gutters.mb-4
                 .col-12

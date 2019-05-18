@@ -14,6 +14,7 @@ export class ReadingLinkModal implements OnInit {
   public readingLink: string
 
   @Input('reading') public shareReading: Reading
+  @Input() public isCreator: boolean
 
   @Output() private closeModal: EventEmitter<boolean> = new EventEmitter()
 

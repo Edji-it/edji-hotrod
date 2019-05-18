@@ -190,5 +190,6 @@ hot-discover-add-meta(
 edji-reading-link(
   *ngIf="showReadingLinkModal", 
   [reading]="reading",
+  [isCreator]="true",
   (closeModal)="showReadingLinkModal = false"
 )
