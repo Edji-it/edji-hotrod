@@ -25,7 +25,8 @@ import { ShareCodeComponent } from './modals/share-code/share-code.component'
 import { ReferralModalComponent, HeroSubscribeComponent, RequestAcademyModal, LicenseInviteComponent } from './modals'
 import { HotChartHzbarComponent } from './shared/hot-chart-hzbar/hot-chart-hzbar.component'
 import { HotChartGaugeComponent } from './shared/hot-chart-gauge/hot-chart-gauge.component'
-import { PromoPageComponent } from './promo/promo.component'
+import { PromoPageComponent } from './promo/promo.component';
+import { ShareSocialIconsComponent } from './shared/share-social-icons/share-social-icons.component'
 
 let SHARED_DECLARATIONS = [
   AddClassPipe,
@@ -63,7 +64,7 @@ let SHARED_IMPORTS = [CommonModule, FormsModule, ReactiveFormsModule]
    * Declarations are private to AppShared
    * - SharedModule shouldn't need any private components
    */
-  declarations: [SHARED_DECLARATIONS, PromoPageComponent],
+  declarations: [SHARED_DECLARATIONS, PromoPageComponent, ShareSocialIconsComponent],
   /**
    * Exports are made available to children modules
    * (essentially PUBLIC DECLARATIONS)

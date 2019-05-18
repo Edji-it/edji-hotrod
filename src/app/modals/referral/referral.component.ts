@@ -18,11 +18,7 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = []
   private referralLink: string
   private referralCode: string
-  public socialLinks = {
-    emailLink: '',
-    twitterLink: '',
-    facebookLink: '',
-  }
+  
   public referralBlocks: any = []
   public numberReferrals: number
   public referralIndex: number = -1
@@ -129,7 +125,6 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
           // Set the referral code for copying and sharing
           this.referralCode = userReferrals.code
           this.referralLink = location.origin + '/#/?r=' + this.referralCode
-          this.socialLinks = this.formatLinks(this.referralLink)
         },
         err => {
           console.error(err)
@@ -184,38 +179,6 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
       }
     }
     this.referralIndex = referralIndex
-  }
-
-  private formatLinks(referralLink: string) {
-    let socialLinks = {
-      emailSubject: 'Go Hero on Edji With Me',
-      emailBody: 'Create%20readings%20on%20Edji%20with%20me%2C%20and%20get%2020%25%20off%20Hero%20',
-      twitter: 'Create%20readings%20on%20Edji%20with%20me%2C%20and%20get%2020%25%20off%20Hero%20',
-      facebook: `https://www.facebook.com/sharer/sharer.php?u=`
-    }
-    let email = `mailto:?subject=${socialLinks.emailSubject}&body=${socialLinks.emailBody}`
-    let twitter = `https://twitter.com/intent/tweet?text=${socialLinks.twitter}`
-
-    return {
-      emailLink:
-        `${email}${encodeURIComponent(referralLink)}`,
-      twitterLink:
-        `${twitter}${encodeURIComponent(referralLink)}`,
-      facebookLink:
-        `${socialLinks.facebook}${encodeURIComponent(referralLink)}&amp;src=sdkpreparse`
-    }
-  }
-
-  /**
-   * Depending on which share button is clicked, perform a certain action
-   * @param shareMedium is the path the user will be using to share their referral code
-   */
-  public trackReferralLink(shareMedium: string) {
-    // fire an analytic event here for tracking purposes
-    this.angulartics.eventTrack.next({
-      action: 'referral_' + shareMedium + '_shareLink',
-      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
-    })
   }
 
   /**

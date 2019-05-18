@@ -26,69 +26,20 @@
                     .form-group
                       edji-share-link([link]="referralLink")
                   .col-sm-4.pr-0
-                    .share-icon__group.float-right
-                      a#referEmailShare(
-                        tabindex="0",
-                        target="_blank",
-                        [attr.href]="socialLinks.emailLink",
-                        (click)="trackReferralLink('email')"
-                      )
-                        .icon-email.share-icon
-                      a#referTwitterShare(
-                        tabindex="0",
-                        target="_blank",
-                        [attr.href]="socialLinks.twitterLink",
-                        (click)="trackReferralLink('twitter')"
-                      )
-                        .icon-twitter.share-icon
-                      a#referFacebookShare(
-                        tabindex="0",
-                        target="_blank",
-                        [attr.href]="socialLinks.facebookLink",
-                        (click)="trackReferralLink('facebook')"
-                      )
-                        .icon-facebook.share-icon
+                    edji-share-social-icons(
+                      [link]="referralLink",
+                      [subjectCopy]="'Join me on Edji'",
+                      [messageCopy]="'Create a reading, and we both unlock 20% off Hero!'"
+                    )
           //- Generated code for copy and share buttons -- Mobile
           .hidden-md-up.w-100
             .container
               .row.mb-4.text-center
                 .col-sm-6
-                  .input-group
-                    input#copyreferralCode.form-control.d-inline-block.input-small(
-                      name="ProjectCodeInput",
-                      type="text",
-                      disabled="true",
-                      value="{{referralLink}}")
-                    .input-group-append
-                      button#buttonCopyReferralLink.btn.btn-primary.btn-rnd-corner-right(
-                        *ngIf="referralLink",
-                        type="button", 
-                        (click)="trackReferralLink('copy')", 
-                        name="Copy", 
-                        href="#") Copy
+                  edji-share-link([link]="referralLink")
                 .col-sm-6
                   .share-icon__group
-                    a#referEmailShare(
-                      tabindex="0",
-                      target="_blank",
-                      [attr.href]="socialLinks.emailLink",
-                      (click)="trackReferralLink('email')"
-                    )
-                      .icon-email.share-icon((click)="trackReferralLink('email')")
-                    a#referTwitterShare(
-                      tabindex="0",
-                      target="_blank",
-                      [attr.href]="socialLinks.twitterLink",
-                      (click)="trackReferralLink('twitter')"
-                    )
-                      .icon-twitter.share-icon((click)="trackReferralLink('twitter')")
-                    a#referFacebookShare(
-                      tabindex="0",
-                      target="_blank",
-                      [attr.href]="socialLinks.facebookLink",
-                      (click)="trackReferralLink('facebook')"
-                    )
-                      .icon-facebook.share-icon((click)="trackReferralLink('facebook')")
+                    edji-share-social-icons([link]="referralLink")
           //- More copy
         
           h6.small.font-weight-bold Your Path to Hero

@@ -1,0 +1,22 @@
+.share-icon__group.float-right
+  a#referEmailShare(
+    tabindex="0",
+    target="_blank",
+    [attr.href]="socialLinks.email",
+    (click)="trackReferralLink('email')"
+  )
+    .icon-email.share-icon
+  a#referTwitterShare(
+    tabindex="0",
+    target="_blank",
+    [attr.href]="socialLinks.twitter",
+    (click)="trackReferralLink('twitter')"
+  )
+    .icon-twitter.share-icon
+  a#referFacebookShare(
+    tabindex="0",
+    target="_blank",
+    [attr.href]="socialLinks.facebook",
+    (click)="trackReferralLink('facebook')"
+  )
+    .icon-facebook.share-icon
