@@ -42,6 +42,7 @@ export class SearchPage implements OnInit {
 
   // Modal Toggle
   public showReadingPreviewModal: boolean
+  public showReadingLinkModal: boolean
   public showFirstGroupModal: boolean
   public showConfirmArchiveModal: boolean
   public selectedReading: Reading
@@ -147,7 +148,7 @@ export class SearchPage implements OnInit {
           try {
             // the link we generate to open the modal direct only contains a reading _id so we need to get that reading
             this.selectedReading = await this._readings.get(params.preview).toPromise()
-            this.showReadingPreviewModal=true
+            this.showReadingPreviewModal = true
           } catch (err) {
             console.error(err)
           }
@@ -378,16 +379,16 @@ export class SearchPage implements OnInit {
   }
 
   public closeReadingPreview(login?: boolean): void {
-    this.showReadingPreviewModal=false
+    this.showReadingPreviewModal = false
     if (login) {
       this.loginParams.preview = this.selectedReading._id
-      this.showLoginModal=true
+      this.showLoginModal = true
     }
   }
 
   public closeLoginModal(context?: string): void {
     this.showLoginModal = false
-    if (context==='preview') {
+    if (context === 'preview') {
       this.router.navigate(['/discover' + (this.isSearching ? '/search' : '')], { queryParams: this.loginParams })
     }
   }

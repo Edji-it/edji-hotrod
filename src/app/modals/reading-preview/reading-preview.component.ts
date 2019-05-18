@@ -17,22 +17,25 @@ export class ReadingPreviewModal implements AfterViewInit, OnInit {
   @Input() context: string = 'created' // 'created' for readings based on already created || 'creator' for brand new readings
   @Output() closeModal: EventEmitter<any> = new EventEmitter()
   @Output() createSuccess: EventEmitter<Reading> = new EventEmitter()
+  @Output() closeAndLink: EventEmitter<Reading> = new EventEmitter()
 
   // state values
   public initialized: boolean
   public loading: boolean = true
   public loggedIn: boolean = true
   public showLoginModal: boolean
-  
+
   public copy: {
     share: string
     edit: string
+    send: string
     actionTitle: string
   } = {
-    share: 'Share',
-    edit: 'Edit',
-    actionTitle: 'Use this Reading'
-  }
+      share: 'Use',
+      edit: 'Edit',
+      send: 'Send Link',
+      actionTitle: 'Use this Reading'
+    }
 
   constructor(
     private _router: Router,
@@ -45,7 +48,10 @@ export class ReadingPreviewModal implements AfterViewInit, OnInit {
     switch (this.context) {
       case 'creator':
         this.copy.actionTitle = 'Ready to share?'
+        this.copy.share = 'Share'
         this.copy.edit = 'Keep Editing'
+        // do not display Send Link while editing
+        this.copy.send = ''
         break
       case 'created':
         if (!this.user || !this.user.isLoggedIn) {
@@ -90,6 +96,14 @@ export class ReadingPreviewModal implements AfterViewInit, OnInit {
     if (this.context === 'created') {
       this._router.navigate(['/new-reading'], { queryParams: { copyId: this.reading._id } })
     }
+  }
+
+  /**
+   * Open Reading Link modal
+   */
+  public sendReading(reading: Reading): void {
+    this.closeAndLink.emit(reading)
+    this.close()
   }
 
   /**
