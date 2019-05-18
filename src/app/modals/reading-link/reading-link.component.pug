@@ -15,7 +15,7 @@
             span(aria-hidden="true") &times;
         .modal-body
           .row
-            .col-sm-6.pr-0
+            .col-11.col-sm-6.pr-0
               //- Overview copy
               p.small.mb-3 Would you like to share this Reading for another teacher to use?<br/><br/>This handy link will allow another teacher to use the same Reading, without accessing your Groups
               //- Generated code for copy and share buttons
@@ -24,14 +24,15 @@
                   .form-group.mt-4
                     label Copy Reading Link
                     edji-share-link([link]="readingLink")
-                .col-sm-4.text-center
+                .col-12
+                  label Share Reading Link
                   edji-share-social-icons(
                     [link]="readingLink",
                     [subjectCopy]="'Check out this Reading!'",
                     [messageCopy]="'I thought you would like this reading, check it out on Edji!'"
                   )
             .col-sm-6.pl-0
-              .share-reading-image__wrap
+              .share-reading-image__wrap.hidden-sm-down
                 img(src="/assets/images/send-graphic.svg")
               button#closeShareReadingModal.btn.btn-primary.float-right.mt-5(
                 (click)="close()"
