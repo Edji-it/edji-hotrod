@@ -18,4 +18,4 @@ Bug fix, feature, docs update, ...
 
 Resolves #
 
-Lastly, [add some  to your PR title](https://gitmoji.carloscuesta.me/)
+Lastly, [add some ✨ to your PR title](https://gitmoji.carloscuesta.me/)
