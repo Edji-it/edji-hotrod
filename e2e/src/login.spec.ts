@@ -67,16 +67,13 @@ describe('Login Page', () => {
       browser.wait(EC.invisibilityOf(login.resetPassSuccess), 3000, 'saw success message for nonexistent account')
     })
 
-    /**
-     * @todo Verify error from server
-     */
-    // it('should show an error for a Google account', () => {
-    //   browser.wait(EC.elementToBeClickable(login.resetAccountField), 3000, 'did not see field to enter username/email')
-    //   login.resetAccountField.sendKeys('google@edji.it')
-    //   login.resetPassSubmit.click()
-    //   browser.wait(EC.visibilityOf(login.resetPassError), 3000, 'did not show error for Google account')
-    //   browser.wait(EC.invisibilityOf(login.resetPassSuccess), 3000, 'saw success message for Google account')
-    // })
+    it('should show an error for a Google account', () => {
+      browser.wait(EC.elementToBeClickable(login.resetAccountField), 3000, 'did not see field to enter username/email')
+      login.resetAccountField.sendKeys('google@edji.it')
+      login.resetPassSubmit.click()
+      browser.wait(EC.visibilityOf(login.resetPassError), 3000, 'did not show error for Google account')
+      browser.wait(EC.invisibilityOf(login.resetPassSuccess), 3000, 'saw success message for Google account')
+    })
 
     it('should show a success message for an existing account username', () => {
       browser.wait(EC.elementToBeClickable(login.resetAccountField), 3000, 'did not see field to enter username/email')
