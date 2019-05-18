@@ -1,19 +1,19 @@
 .share-icon__group
-  a#referEmailShare(
+  a#shareIconEmail(
     tabindex="0",
     target="_blank",
     [attr.href]="socialLinks.email",
     (click)="trackReferralLink('email')"
   )
     .icon-email.share-icon
-  a#referTwitterShare(
+  a#shareIconTwitter(
     tabindex="0",
     target="_blank",
     [attr.href]="socialLinks.twitter",
     (click)="trackReferralLink('twitter')"
   )
     .icon-twitter.share-icon
-  a#referFacebookShare(
+  a#shareIconFacebook(
     tabindex="0",
     target="_blank",
     [attr.href]="socialLinks.facebook",

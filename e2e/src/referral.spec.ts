@@ -21,7 +21,7 @@ describe('Share', () => {
   let EC = protractor.ExpectedConditions
 
   // Referral specific element references
-  let copyReferralLinkBtn = element(by.id('buttonCopyReferralLink'))
+  let copyReferralLinkBtn = element(by.id('buttonCopylink'))
   let copySuccessMsg = element(by.id('linkCopySuccess'))
   let referalCodeBox = element(by.id('copyShareLink'))
   let referralModal = element(by.id('referralModal'))
@@ -32,9 +32,9 @@ describe('Share', () => {
   let referralStamp4 = element(by.id('referralStamp4'))
   let referralStamp5 = element(by.id('referralStamp5'))
   let redeemButton = element(by.id('redeemReferralsButton'))
-  let facebookShare = element(by.id('referFacebookShare'))
-  let twitterShare = element(by.id('referTwitterShare'))
-  let emailShare = element(by.id('referEmailShare'))
+  let facebookShare = element(by.id('shareIconFacebook'))
+  let twitterShare = element(by.id('shareIconTwitter'))
+  let emailShare = element(by.id('shareIconEmail'))
 
   describe('Account Referral Sharing and Rewards', () => {
     beforeAll(() => {
