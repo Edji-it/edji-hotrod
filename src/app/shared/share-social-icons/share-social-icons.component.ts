@@ -34,7 +34,7 @@ export class ShareSocialIconsComponent implements OnInit {
   ngOnInit() {
   }
 
-  private formatLinks(referralLink: string): SocialLinks {
+  private formatLinks(shareLink: string): SocialLinks {
     let socialLinks = {
       emailSubject: this.subjectCopy,
       emailBody: encodeURIComponent(this.messageCopy + '\n'),
@@ -46,11 +46,11 @@ export class ShareSocialIconsComponent implements OnInit {
 
     return {
       email:
-        `${email}${encodeURIComponent(referralLink)}`,
+        `${email}${encodeURIComponent(shareLink)}`,
       twitter:
-        `${twitter}${encodeURIComponent(referralLink)}`,
+        `${twitter}${encodeURIComponent(shareLink)}`,
       facebook:
-        `${socialLinks.facebook}${encodeURIComponent(referralLink)}&amp;src=sdkpreparse`
+        `${socialLinks.facebook}${encodeURIComponent(shareLink)}&amp;src=sdkpreparse`
     }
   }
 
