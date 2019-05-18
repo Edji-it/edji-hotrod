@@ -1,0 +1,103 @@
+.modal-will-fade.show
+  .modal#referralModal
+    .modal-dialog(role="document", style="max-width:650px")
+      .modal-content
+        .modal-header
+          h4.modal-title Send Link to &ldquo;{{shareReading.title}}&ldquo;
+          button.close.btn-icon--round(
+              (click)="close()",
+              type="button",
+              data-dismiss="modal",
+              aria-label="Close"
+             )
+            span(aria-hidden="true") &times;
+        .modal-body
+          .alert.alert-reading.alert-dismissable.fade(*ngIf="alertObject.show && !showReading", [class.show]="alertObject.show", role="alert", [ngClass]="alertObject.type")
+            a.close(href="#", (click)="closeAlert()") ×
+            p.mb-0([innerHtml]="alertObject.message")
+          .row
+            .col-sm-6.pr-0
+              //- Overview copy
+              p.small.mb-3 Would you like to share this Reading for another teacher to use?<br/><br/>This handy link will allow another teacher to use the same Reading, without accessing your Groups
+              //- Generated code for copy and share buttons -- Desktop
+              .hidden-sm-down
+                .container
+                  .row.mb-4
+                    .pl-0.col-12
+                      .form-grou.mt-4
+                        label Copy Reading Link
+                        edji-share-link([link]="referralLink")
+                        small#linkCopySuccess.form-text.text-success(*ngIf="linkCopySuccess")
+                          | Link was copied to your clipboard!
+                    div.col-12.pl-0
+                      .share-icon__group.float-left
+                        label Share Reading Link
+                        a#referEmailShare(
+                          tabindex="0",
+                          target="_blank",
+                          [attr.href]="socialLinks.emailLink",
+                          (click)="trackReferralLink('email')"
+                        )
+                          .icon-email.share-icon
+                        a#referTwitterShare(
+                          tabindex="0",
+                          target="_blank",
+                          [attr.href]="socialLinks.twitterLink",
+                          (click)="trackReferralLink('twitter')"
+                        )
+                          .icon-twitter.share-icon
+                        a#referFacebookShare(
+                          tabindex="0",
+                          target="_blank",
+                          [attr.href]="socialLinks.facebookLink",
+                          (click)="trackReferralLink('facebook')"
+                        )
+                          .icon-facebook.share-icon
+            .col-sm-6.pl-0
+              .share-reading-image__wrap
+                img(src="/assets/images/send-graphic.svg")
+              button#closeShareReadingModal.btn.btn-primary.float-right.mt-5(
+                (click)="close()"
+              ) 
+                | Done
+          //- Generated code for copy and share buttons -- Mobile
+          .hidden-md-up.w-100
+            .container
+              .row.mb-4.text-center
+                .col-sm-6
+                  .input-group
+                    input#copyreferralCode.form-control.d-inline-block.input-small(
+                      name="ProjectCodeInput",
+                      type="text",
+                      disabled="true",
+                      value="{{referralLink}}")
+                    .input-group-append
+                      button#buttonCopyReferralLink.btn.btn-primary.btn-rnd-corner-right(
+                        *ngIf="referralLink",
+                        type="button", 
+                        (click)="trackReferralLink('copy')", 
+                        name="Copy", 
+                        href="#") Copy
+                .col-sm-6
+                  .share-icon__group
+                    a#referEmailShare(
+                      tabindex="0",
+                      target="_blank",
+                      [attr.href]="socialLinks.emailLink",
+                      (click)="trackReferralLink('email')"
+                    )
+                      .icon-email.share-icon((click)="trackReferralLink('email')")
+                    a#referTwitterShare(
+                      tabindex="0",
+                      target="_blank",
+                      [attr.href]="socialLinks.twitterLink",
+                      (click)="trackReferralLink('twitter')"
+                    )
+                      .icon-twitter.share-icon((click)="trackReferralLink('twitter')")
+                    a#referFacebookShare(
+                      tabindex="0",
+                      target="_blank",
+                      [attr.href]="socialLinks.facebookLink",
+                      (click)="trackReferralLink('facebook')"
+                    )
+                      .icon-facebook.share-icon((click)="trackReferralLink('facebook')")

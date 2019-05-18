@@ -58,10 +58,7 @@
         | &nbsp; Copy and Edit
       //- Reading Link dropdown button
       button.dropdown-item.e2e-reading-link(
-        (click)="showOptions=false;",
-        [routerLink]="[]",
-        [queryParams]="{ showRefer: reading._id }",
-        queryParamsHandling="merge",
+        (click)="showOptions=false; showReadingLinkModal=true",
         [attr.testReadingLink]="reading.title"
       ) 
         .icon.icon-reading-link
@@ -183,9 +180,15 @@ hot-del-project(
   [project]="relevantProject",
   (closeModal)="showDeleteProjectModal = false"
 )
-//- 
+//- Add data for making reading public
 hot-discover-add-meta(
   [showModal]="showReadingDiscoverModal", 
   [reading]="reading",
   (closeModal)="showReadingDiscoverModal = false"
+)
+//- Reading link share modal
+edji-reading-link(
+  *ngIf="showReadingLinkModal", 
+  [reading]="reading",
+  (closeModal)="showReadingLinkModal = false"
 )
