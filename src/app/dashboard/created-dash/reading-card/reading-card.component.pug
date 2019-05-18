@@ -45,7 +45,7 @@
         [attr.testFindCreateNewGroup]="reading.title",
         [disabled]="reading.archived"
       ) 
-        .icon-plus +
+        .icon.icon-plus
         | &nbsp; Create New Group
       //- Copy & Edit dropdown button
       button.dropdown-item(
@@ -71,7 +71,7 @@
         (click)="relevantReading = reading; showDeleteReadingModal = true; showOptions = false;", 
         [attr.testDelete]="reading.title"
       ) 
-        span([innerHtml]="':x:' | emojione")
+        .icon.icon-delete
         | &nbsp; Delete
   .reading-data(*ngIf="!reading['draft']")
     //- Subject Tags

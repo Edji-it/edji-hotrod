@@ -84,12 +84,6 @@ $iconGrayOpacity: 0.6;
   @include icon('icon-bookmark.svg');
 }
 
-.icon-plus {
-  font-size: 24px;
-  display: inline-block;
-  color: $blue;
-}
-
 .icon-bookmark-off {
   @include icon('icon-bookmark-off.svg');
 }
@@ -183,6 +177,10 @@ $iconGrayOpacity: 0.6;
 .icon-reading-link {
   @include icon('icon-reading-link.svg');
   display: inline-block;
+}
+
+.icon-delete {
+  @include icon('icon-delete.svg');
 }
 
 .icon-draft {
@@ -395,6 +393,10 @@ $iconGrayOpacity: 0.6;
   width: 20px;
   height: 20px;
   cursor: pointer;
+}
+
+.icon-plus {
+  @include icon('icon-plus.svg');
 }
 
 .icon-question {
