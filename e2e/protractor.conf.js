@@ -50,6 +50,7 @@ exports.config = {
     project: helpers.root('e2e/src/project.spec.ts'),
     question: helpers.root('e2e/src/questions.spec.ts'),
     referral: helpers.root('e2e/src/referral.spec.ts'),
+    readingLink: helpers.root('e2e/src/reading-link.spec.ts'),
     readingrecap: helpers.root('e2e/src/owner-tools__reading-recap.spec.ts'),
     version: helpers.root('e2e/src/version.spec.ts'),
     all: [helpers.root('e2e/src/home.spec.ts'), helpers.root('e2e/src/login.spec.ts')],
@@ -69,11 +70,11 @@ exports.config = {
     includeStackTrace: false, // Reporting is better handled by our SpecReporter below
     // A longer default timeout makes our test suite unusable
     defaultTimeoutInterval: 60000,
-    print: () => {}, // take out the dot logging when tests are run
+    print: () => { }, // take out the dot logging when tests are run
   },
   directConnect: true,
 
-  onPrepare: function() {
+  onPrepare: function () {
     // We do not want to ignoreSynchronization, it defeats the purpose of protractor
     browser.ignoreSynchronization = true
 
