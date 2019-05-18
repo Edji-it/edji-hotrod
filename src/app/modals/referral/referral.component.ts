@@ -6,7 +6,7 @@ import { take } from 'rxjs/operators'
 import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
-import { Project, User, Reading } from '../../shared/datatypes'
+import { Project, User } from '../../shared/datatypes'
 import { AuthService, UtilToolService, ProjectService, ReadingService } from './../../_services'
 
 @Component({
@@ -16,7 +16,7 @@ import { AuthService, UtilToolService, ProjectService, ReadingService } from './
 })
 export class ReferralModalComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = []
-  public referralLink: string
+  private referralLink: string
   private referralCode: string
   public socialLinks = {
     emailLink: '',
@@ -32,23 +32,13 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
     type: '',
     message: '',
   }
-  public modalCopy: {
-    title: string
-    body: string
-  } = {
-    title: 'Give Hero, Get Hero',
-    body: 'Share your unique referral link to give <i>and</i> unlock Hero discounts.'
-  }
   public linkCopySuccess: boolean
   private referredByComplete: boolean
-  public readingLinkMode: boolean
 
   public showModal: boolean
 
   private user: User
-  public reading: Reading
 
-  @Input() public shareReading: string
   @Input()
   set showReferral(show: boolean) {
     if (typeof show !== 'undefined' && this.showModal !== show) {
@@ -63,13 +53,6 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
         this.getUserReferralStatus()
         // Refresh the check for created readings on modal open
         this._readings.updateCreated(this.user)
-        // set up the reading link and detail for modal copy
-        if (this.shareReading && this.shareReading.length > 0) {
-          this.readingLinkMode = true
-          this.referralLink = `${location.origin}/#/discover?preview=${this.shareReading}`
-          this.socialLinks = this.formatLinks(this.referralLink, true)
-          this.getReadingDetails()
-        }
       }
     }
   }
@@ -88,7 +71,7 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
     private _readings: ReadingService,
     private _auth: AuthService,
     private angulartics: Angulartics2,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.user = this._auth.getUser()
@@ -121,19 +104,6 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
   }
 
   public closeModal() {
-    // drop the showRefer queryParam on close
-    if (this.shareReading) {
-      this.route.queryParams.subscribe((qp) => {
-        let params = { ...qp }
-        delete params['showRefer']
-        this.router.navigate([], { queryParams: params })
-      })
-    }
-    this.modalCopy = {
-      title: 'Give Hero, Get Hero',
-      body: 'Share your unique referral link to give <i>and</i> unlock Hero discounts.'
-    }
-    this.readingLinkMode = false
     this.showModal = false
     this.hideReferral.emit(false)
   }
@@ -158,10 +128,8 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
           this.evaluateReferralProgress(this.numberReferrals, this.referredByComplete)
           // Set the referral code for copying and sharing
           this.referralCode = userReferrals.code
-          if (!this.shareReading) {
-            this.referralLink = location.origin + '/#/?r=' + this.referralCode
-            this.socialLinks = this.formatLinks(this.referralLink)
-          }
+          this.referralLink = location.origin + '/#/?r=' + this.referralCode
+          this.socialLinks = this.formatLinks(this.referralLink)
         },
         err => {
           console.error(err)
@@ -171,7 +139,7 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
             message: 'We had some trouble getting your referrals, it might be our fault',
           }
         },
-      )
+    )
   }
   /**
    * Evaluates Referral Progress
@@ -218,43 +186,12 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
     this.referralIndex = referralIndex
   }
 
-  /**
-   * Copies the referral link to the user's clipboard
-   */
-  public copyReferralCode() {
-    // Create a new textarea element that we'll not make visible
-    let selBox = document.createElement('textarea')
-    selBox.style.position = 'fixed'
-    selBox.style.left = '0'
-    selBox.style.top = '0'
-    selBox.style.opacity = '0'
-    // Set the value of the textarea to be the share link with their referral code
-    selBox.value = this.referralLink
-    document.body.appendChild(selBox)
-    // Focus on the element text, select the text, and use a copy command
-    selBox.focus()
-    selBox.select()
-    document.execCommand('copy')
-    // Take this hidden element out of the DOM
-    document.body.removeChild(selBox)
-    // Show a success alert when the code is copied to their clipboard
-    this.linkCopySuccess = true
-    setTimeout(() => {
-      this.linkCopySuccess = false
-    }, 3000)
-  }
-
-  private formatLinks(referralLink: string, shareReading?: boolean) {
+  private formatLinks(referralLink: string) {
     let socialLinks = {
       emailSubject: 'Go Hero on Edji With Me',
       emailBody: 'Create%20readings%20on%20Edji%20with%20me%2C%20and%20get%2020%25%20off%20Hero%20',
       twitter: 'Create%20readings%20on%20Edji%20with%20me%2C%20and%20get%2020%25%20off%20Hero%20',
       facebook: `https://www.facebook.com/sharer/sharer.php?u=`
-    }
-    if (shareReading) {
-      socialLinks.emailSubject = 'Check Out This Reading'
-      socialLinks.emailBody = 'I%20thought%20you%20would%20like%20this%20reading%2E%20Check%20it%20out%on%20Edji%20'
-      socialLinks.twitter = 'I%20thought%20you%20would%20like%20this%20reading%2E%20Check%20it%20out%on%20Edji%20'
     }
     let email = `mailto:?subject=${socialLinks.emailSubject}&body=${socialLinks.emailBody}`
     let twitter = `https://twitter.com/intent/tweet?text=${socialLinks.twitter}`
@@ -275,9 +212,6 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
    */
   public trackReferralLink(shareMedium: string) {
     // fire an analytic event here for tracking purposes
-    if (shareMedium === 'copy') {
-      this.copyReferralCode()
-    }
     this.angulartics.eventTrack.next({
       action: 'referral_' + shareMedium + '_shareLink',
       properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
@@ -334,14 +268,5 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
       type: '',
       message: '',
     }
-  }
-
-  private async getReadingDetails(): Promise<void> {
-    this.modalCopy.body = `Would you like to share this Reading for another teacher to use? 
-      <br /> <br />This handy link will allow another teacher to use the same Reading, without accessing your Groups.`
-
-    // need to get the reading title for the next one
-    this.reading = await this._readings.get(this.shareReading).toPromise()
-    this.modalCopy.title = `Send Link to ${this.reading.title}`
   }
 }
