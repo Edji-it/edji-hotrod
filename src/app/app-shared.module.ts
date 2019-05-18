@@ -44,6 +44,7 @@ let SHARED_DECLARATIONS = [
   RequestAcademyModal,
   ShareCodeComponent,
   ShareLinkComponent,
+  ShareSocialIconsComponent,
   SortByDatePipe,
   SubjectPipe,
   UserInitialsPipe,
@@ -64,7 +65,7 @@ let SHARED_IMPORTS = [CommonModule, FormsModule, ReactiveFormsModule]
    * Declarations are private to AppShared
    * - SharedModule shouldn't need any private components
    */
-  declarations: [SHARED_DECLARATIONS, PromoPageComponent, ShareSocialIconsComponent],
+  declarations: [SHARED_DECLARATIONS, PromoPageComponent],
   /**
    * Exports are made available to children modules
    * (essentially PUBLIC DECLARATIONS)

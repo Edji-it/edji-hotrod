@@ -37,7 +37,7 @@ export class ShareSocialIconsComponent implements OnInit {
   private formatLinks(referralLink: string): SocialLinks {
     let socialLinks = {
       emailSubject: this.subjectCopy,
-      emailBody: encodeURIComponent(this.messageCopy + ' '),
+      emailBody: encodeURIComponent(this.messageCopy + '\n'),
       twitter: encodeURIComponent(this.messageCopy + ' '),
       facebook: `https://www.facebook.com/sharer/sharer.php?u=`
     }
