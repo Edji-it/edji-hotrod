@@ -174,6 +174,15 @@ $iconGrayOpacity: 0.6;
   }
 }
 
+.icon-reading-link {
+  @include icon('icon-reading-link.svg');
+  display: inline-block;
+}
+
+.icon-delete {
+  @include icon('icon-delete.svg');
+}
+
 .icon-draft {
   @include icon('icon-draft.svg');
   margin-right: 2px;
@@ -384,6 +393,10 @@ $iconGrayOpacity: 0.6;
   width: 20px;
   height: 20px;
   cursor: pointer;
+}
+
+.icon-plus {
+  @include icon('icon-plus.svg');
 }
 
 .icon-question {

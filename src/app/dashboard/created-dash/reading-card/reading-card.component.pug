@@ -44,19 +44,32 @@
         (click)="relevantReading = reading; showAddModal = true; showOptions = false;",
         [attr.testFindCreateNewGroup]="reading.title",
         [disabled]="reading.archived"
-      ) Create New Group
+      ) 
+        .icon.icon-plus
+        | &nbsp; Create New Group
       //- Copy & Edit dropdown button
       button.dropdown-item(
         (click)="showOptions=false;", 
         [routerLink]="['/new-reading/']", 
         [queryParams]="{ copyId: reading._id }",
         [attr.testFindCopyAndEdit]="reading.title"
-      ) Copy and Edit
+      ) 
+        .icon.icon-create
+        | &nbsp; Copy and Edit
+      //- Reading Link dropdown button
+      button.dropdown-item.e2e-reading-link(
+        (click)="showOptions=false; showReadingLinkModal=true",
+        [attr.testReadingLink]="reading.title"
+      ) 
+        .icon.icon-reading-link
+        | &nbsp; Reading Link
       //- Delete dropdown button
       button.dropdown-item(
         (click)="relevantReading = reading; showDeleteReadingModal = true; showOptions = false;", 
         [attr.testDelete]="reading.title"
-      ) Delete
+      ) 
+        .icon.icon-delete
+        | &nbsp; Delete
   .reading-data(*ngIf="!reading['draft']")
     //- Subject Tags
     .tag-row.w-75
@@ -167,9 +180,16 @@ hot-del-project(
   [project]="relevantProject",
   (closeModal)="showDeleteProjectModal = false"
 )
-//- 
+//- Add data for making reading public
 hot-discover-add-meta(
   [showModal]="showReadingDiscoverModal", 
   [reading]="reading",
   (closeModal)="showReadingDiscoverModal = false"
+)
+//- Reading link share modal
+edji-reading-link(
+  *ngIf="showReadingLinkModal", 
+  [reading]="reading",
+  [isCreator]="true",
+  (closeModal)="showReadingLinkModal = false"
 )

@@ -1,14 +1,14 @@
 import { browser, by, element, protractor } from 'protractor'
 
 // Internal
-import { Home, Login, Sidebar, Hero, Dashboard, NewReading } from './page-objects'
+import { Home, Login, Sidebar, Hero, Dashboard, NewReading, Discover } from './page-objects'
 import { LoginForm, RegisterForm, UserDetailsModal } from './components'
 
 /**
  * Referral Tests
  * - Users can refer other users, and be rewarded
  */
-describe('Referral Sharing and Rewards', () => {
+describe('Share', () => {
   let login = new Login()
   let loginForm = new LoginForm()
   let registerForm = new RegisterForm()
@@ -17,12 +17,14 @@ describe('Referral Sharing and Rewards', () => {
   let hero = new Hero()
   let dashboard = new Dashboard()
   let newReading = new NewReading()
+  let discover = new Discover()
   let EC = protractor.ExpectedConditions
 
   // Referral specific element references
-  let copyReferralLinkBtn = element(by.id('buttonCopyReferralLink'))
+  let copyReferralLinkBtn = element(by.id('buttonCopylink'))
   let copySuccessMsg = element(by.id('linkCopySuccess'))
-  let referalCodeBox = element(by.id('copyReferralCode'))
+  let referalCodeBox = element(by.id('copyShareLink'))
+  let referralModal = element(by.id('referralModal'))
   let referralClose = element(by.css('#referralModal .close'))
   let referralStamp1 = element(by.id('referralStamp1'))
   let referralStamp2 = element(by.id('referralStamp2'))
@@ -30,11 +32,11 @@ describe('Referral Sharing and Rewards', () => {
   let referralStamp4 = element(by.id('referralStamp4'))
   let referralStamp5 = element(by.id('referralStamp5'))
   let redeemButton = element(by.id('redeemReferralsButton'))
-  let facebookShare = element(by.id('referFacebookShare'))
-  let twitterShare = element(by.id('referTwitterShare'))
-  let emailShare = element(by.id('referEmailShare'))
+  let facebookShare = element(by.id('shareIconFacebook'))
+  let twitterShare = element(by.id('shareIconTwitter'))
+  let emailShare = element(by.id('shareIconEmail'))
 
-  describe('Test sharing referral code, and referred registration', () => {
+  describe('Account Referral Sharing and Rewards', () => {
     beforeAll(() => {
       login.getPage()
       login.loginAndVerify(login.referUser, login.referPassword)

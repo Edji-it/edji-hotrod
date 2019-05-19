@@ -308,6 +308,9 @@ button.new-reading-btn {
 
 .dropdown-item {
   line-height: 1.8em;
+  &:hover {
+    color: $blue;
+  }
 }
 
 .btn--delete-project {

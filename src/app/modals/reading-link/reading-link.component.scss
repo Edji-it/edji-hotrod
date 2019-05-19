@@ -1,0 +1,12 @@
+@import '../../../sass/base/variables';
+
+.share-reading-image__wrap {
+  position: relative;
+  text-align: center;
+
+  & img {
+    display: inline-block;
+    height: 225px;
+    max-width: none !important;
+  }
+}
