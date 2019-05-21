@@ -44,6 +44,11 @@
           ) {{ currentReading.title }}
         .nav-bar__author(*ngIf="projectOwner && projectOwner._id")
           follow-tag([owner]="projectOwner")
+          .badge.badge-pill.badge-button.badge-teacher(
+            *ngIf="user._id == projectOwner._id",
+            [routerLink]="['./']",
+            [queryParams]="{ owner: 'coteach'}"
+          ) +
           .badge.badge-pill([ngClass]="[ liveCount > 1 ? 'badge-primary' : 'badge-secondary']") {{ liveCount }} Reading
 
     //- Login/Register Actions

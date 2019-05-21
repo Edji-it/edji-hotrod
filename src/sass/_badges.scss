@@ -6,6 +6,20 @@
   background-color: #87d87c;
 }
 
+.badge-teacher {
+  background-color: #fff;
+  color: #969696;
+  border: 2px solid $green;
+
+  &.badge-button {
+    &:hover,
+    &:focus {
+      background-color: $green;
+      color: #fff;
+    }
+  }
+}
+
 .badge-secondary {
   background-color: #aaa;
 }

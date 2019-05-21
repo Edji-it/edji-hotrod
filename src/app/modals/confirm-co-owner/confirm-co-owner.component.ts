@@ -6,7 +6,7 @@ import { ProjectService } from '../../_services'
 import { Reading, User } from '../../shared/datatypes'
 
 @Component({
-  selector: 'hot-confirm-co-owner',
+  selector: 'edji-confirm-co-owner',
   templateUrl: './confirm-co-owner.component.pug',
 })
 export class ConfirmCoOwnerModal implements OnInit {
@@ -19,9 +19,9 @@ export class ConfirmCoOwnerModal implements OnInit {
 
   public showError: boolean = false
 
-  constructor(private _projects: ProjectService) { }
+  constructor(private _projects: ProjectService) {}
 
-  ngOnInit() { }
+  ngOnInit() {}
 
   makeCoOwner(student: User): void {
     // this._projects.makeCoOwner(student)
@@ -34,4 +34,4 @@ export class ConfirmCoOwnerModal implements OnInit {
     //     },
     // )
   }
-} 
+}
