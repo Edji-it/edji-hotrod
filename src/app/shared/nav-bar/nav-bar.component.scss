@@ -116,6 +116,11 @@ $purple: rgb(150, 40, 255);
       font-size: 74%;
     }
   }
+
+  @media (max-width: $tablet) {
+    padding: 0px;
+    min-width: 0px;
+  }
 }
 
 .nav__menu {

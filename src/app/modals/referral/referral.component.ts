@@ -16,41 +16,35 @@ import { AuthService, UtilToolService, ProjectService, ReadingService } from './
 })
 export class ReferralModalComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = []
-  referralLink: string
-  referralCode: string
-  socialLinks = {
-    emailLink: '',
-    twitterLink: '',
-    facebookLink: '',
-  }
-  referralBlocks: any = []
-  numberReferrals: number
-  referralIndex: number = -1
-  referralCouponCopy: any = {}
-  alertObject = {
+  private referralLink: string
+  private referralCode: string
+  
+  public referralBlocks: any = []
+  public numberReferrals: number
+  public referralIndex: number = -1
+  public referralCouponCopy: any = {}
+  public alertObject = {
     show: false,
     type: '',
     message: '',
   }
-  linkCopySuccess: boolean
-  referredByComplete: boolean
+  public linkCopySuccess: boolean
+  private referredByComplete: boolean
 
-  showModal: boolean
+  public showModal: boolean
 
   private user: User
 
   @Input()
-  set showReferral(showReferral: boolean) {
-    if (showReferral) {
-      // fire an analytic event here for tracking purposes
-      this.angulartics.eventTrack.next({
-        action: 'referral_openModal',
-        properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
-      })
-    }
-    if (typeof showReferral !== 'undefined' && this.showModal !== showReferral) {
-      this.showModal = showReferral
+  set showReferral(show: boolean) {
+    if (typeof show !== 'undefined' && this.showModal !== show) {
+      this.showModal = show
       if (this.showModal) {
+        // fire an analytic event here for tracking purposes
+        this.angulartics.eventTrack.next({
+          action: 'referral_openModal',
+          properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
+        })
         // Get user's referral status
         this.getUserReferralStatus()
         // Refresh the check for created readings on modal open
@@ -61,6 +55,7 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
   get showReferral(): boolean {
     return this.showModal
   }
+
   @Output() private hideReferral: EventEmitter<boolean> = new EventEmitter()
   @Output() private exerciseCoupon: EventEmitter<any> = new EventEmitter()
 
@@ -72,7 +67,7 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
     private _readings: ReadingService,
     private _auth: AuthService,
     private angulartics: Angulartics2,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.user = this._auth.getUser()
@@ -104,7 +99,7 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
     })
   }
 
-  private closeModal() {
+  public closeModal() {
     this.showModal = false
     this.hideReferral.emit(false)
   }
@@ -130,7 +125,6 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
           // Set the referral code for copying and sharing
           this.referralCode = userReferrals.code
           this.referralLink = location.origin + '/#/?r=' + this.referralCode
-          this.socialLinks = this.formatLinks(this.referralLink)
         },
         err => {
           console.error(err)
@@ -140,7 +134,7 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
             message: 'We had some trouble getting your referrals, it might be our fault',
           }
         },
-      )
+    )
   }
   /**
    * Evaluates Referral Progress
@@ -188,64 +182,10 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Copies the referral link to the user's clipboard
-   */
-  private copyReferralCode() {
-    // Create a new textarea element that we'll not make visible
-    let selBox = document.createElement('textarea')
-    selBox.style.position = 'fixed'
-    selBox.style.left = '0'
-    selBox.style.top = '0'
-    selBox.style.opacity = '0'
-    // Set the value of the textarea to be the share link with their referral code
-    selBox.value = this.referralLink
-    document.body.appendChild(selBox)
-    // Focus on the element text, select the text, and use a copy command
-    selBox.focus()
-    selBox.select()
-    document.execCommand('copy')
-    // Take this hidden element out of the DOM
-    document.body.removeChild(selBox)
-    // Show a success alert when the code is copied to their clipboard
-    this.linkCopySuccess = true
-    setTimeout(() => {
-      this.linkCopySuccess = false
-    }, 3000)
-  }
-
-  private formatLinks(referralLink: string) {
-    return {
-      emailLink:
-        'mailto:?subject=Go Hero on Edji With Me&body=Create%20readings%20on%20Edji%20with%20me%2C%20and%20get%2020%25%20off%20Hero%20' +
-        encodeURIComponent(referralLink),
-      twitterLink:
-        'https://twitter.com/intent/tweet?text=Create%20readings%20on%20Edji%20with%20me%2C%20and%20get%2020%25%20off%20Hero%20' +
-        encodeURIComponent(referralLink),
-      facebookLink:
-        'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(referralLink) + '&amp;src=sdkpreparse',
-    }
-  }
-
-  /**
-   * Depending on which share button is clicked, perform a certain action
-   * @param shareMedium is the path the user will be using to share their referral code
-   */
-  private trackReferralLink(shareMedium: string) {
-    // fire an analytic event here for tracking purposes
-    if (shareMedium === 'copy') {
-      this.copyReferralCode()
-    }
-    this.angulartics.eventTrack.next({
-      action: 'referral_' + shareMedium + '_shareLink',
-      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
-    })
-  }
-
-  /**
    * Depending on the referral square, return the icon name to display
    * @param index is the position on the referral squares where a user has completed a referral
    */
-  private getReferralIcon(index: number) {
+  public getReferralIcon(index: number) {
     switch (index) {
       case 0:
         return 'icon-bam'
@@ -281,11 +221,11 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
   }
 
   // When the user chooses to use the coupon, we'll need to close this modal and pass along the coupon code to the hero subscription modal
-  private useCoupon() {
+  public useCoupon() {
     this.exerciseCoupon.emit(this.getCouponCode())
   }
 
-  private closeAlert() {
+  public closeAlert() {
     this.alertObject = {
       show: false,
       type: '',

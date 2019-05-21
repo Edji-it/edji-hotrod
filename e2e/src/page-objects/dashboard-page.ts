@@ -36,6 +36,7 @@ export class Dashboard implements PageObjectInterface {
   public createNewGroupButton = element(by.cssContainingText('.dropdown-item', 'Create New Group'))
   public deleteButton = element(by.cssContainingText('.dropdown-item', 'Delete'))
   public deleteConfirm = element(by.id('delBtnModal'))
+  public readingLinkButton = element.all(by.css('.e2e-reading-link')).first()
 
   // groups
   public deleteProjectButton = element(by.css('.btn--delete-project'))

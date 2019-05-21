@@ -16,7 +16,7 @@ export class Discover implements PageObjectInterface {
   public firstFeedReading = this.feedReadings.first()
   public feedTitles = element.all(by.css('.feed__reading .reading-title__text'))
   public firstFeedTitle = this.feedTitles.first()
-  public readingPreview = element(by.id('readingArchivedModal'))
+  public readingPreview = element(by.id('readingPreviewModal'))
   public shareReadingBtn = element(by.id('shareReadingButton'))
   public editReadingBtn = element(by.id('editReadingButton'))
   public loginFromPreviewBtn = element(by.id('loginFromPreview'))

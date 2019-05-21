@@ -1,0 +1,17 @@
+.input-group
+  input#copyShareLink.form-control(
+    name="ReferralCode",
+    type="text",
+    disabled="true",
+    value="{{link}}"
+  )
+  .input-group-append
+    //- e2e: ngIf on copy button ensures link is ready to copy
+    button#buttonCopylink.btn.btn-primary.btn-rnd-corner-right(
+      *ngIf="link && link.length > 0"
+      type="button", 
+      (click)="copyShareLink('copy')", 
+      name="Copy", 
+      href="#") Copy
+  small#linkCopySuccess.form-text.text-success(*ngIf="linkCopySuccess")
+    | Link was copied to your clipboard!

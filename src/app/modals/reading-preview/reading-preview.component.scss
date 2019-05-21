@@ -36,6 +36,10 @@
     margin: 0 $base-pad;
     width: calc(100% - #{$base-pad*2});
   }
+
+  & .btn {
+    margin-bottom: 1em;
+  }
 }
 
 .modal-content {

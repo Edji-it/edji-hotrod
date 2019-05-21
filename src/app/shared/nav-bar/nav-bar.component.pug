@@ -236,7 +236,11 @@ share-code(
 //- Message toast display
 edji-message-toasts([currentPage]="currentPage")
 //- Referrals
-referral-modal([showReferral]="showReferralModal", (hideReferral)="showReferralModal=false", (exerciseCoupon)="useCoupon($event)")
+referral-modal(
+  [showReferral]="showReferralModal",
+  (hideReferral)="showReferralModal=false", 
+  (exerciseCoupon)="useCoupon($event)"
+)
 //- Hero Subscribe/Pay
 hero-subscribe-modal.modal-will-fade(
   *ngIf="showHeroSubModal",
