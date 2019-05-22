@@ -1,5 +1,6 @@
 import { Subscription } from 'rxjs'
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
+import { ActivatedRoute, Router } from '@angular/router'
 
 // Project Dependencies
 import { CommentStats, Reading, User } from './../../../shared/datatypes'
@@ -14,7 +15,7 @@ import { CommentFilter } from '../../../_services/project.service'
 export class LeaderboardComponent implements OnInit {
   @Input() visible: boolean = false
   @Input() archived: boolean = false
-  @Output() hide: EventEmitter<any> = new EventEmitter()
+  @Output() visibility: EventEmitter<boolean> = new EventEmitter()
 
   /** This is a reference to the actual commentStats object which has methods for modification of properties */
   @Input() commentStats: CommentStats
@@ -29,7 +30,13 @@ export class LeaderboardComponent implements OnInit {
   public showFilterHeroModal: boolean
   public coOwnerToBe: User
 
-  constructor(private _readings: ReadingService, private _projects: ProjectService, private _auth: AuthService) { }
+  constructor(
+    private _readings: ReadingService,
+    private _projects: ProjectService,
+    private _auth: AuthService,
+    private _route: ActivatedRoute,
+    private router: Router,
+  ) {}
 
   ngOnInit() {
     // Subscribe to current user
@@ -67,6 +74,13 @@ export class LeaderboardComponent implements OnInit {
               this.commentStats.stats.userStats[i],
             )
           }
+        }
+      }),
+      // Watch URL params for quick links
+      this._route.queryParams.subscribe(params => {
+        console.log('PARAM UPDATE', params)
+        if (params.studentList && params.studentList === 'coteach') {
+          this.visibility.emit(true)
         }
       })
   }
@@ -175,10 +189,24 @@ export class LeaderboardComponent implements OnInit {
   }
 
   /**
-   * Trigger confirmation modal 
+   * Trigger confirmation modal
    */
   public confirmCoOwner(student: User) {
     console.log(student)
     this.coOwnerToBe = student
+  }
+
+  /**
+   * Close the student list
+   */
+  public close(): void {
+    console.log('1!')
+    this.router.navigate(['./'], {
+      relativeTo: this._route,
+      queryParams: { studentList: null },
+      queryParamsHandling: 'merge',
+    })
+    console.log('2!')
+    this.visibility.emit(false)
   }
 }

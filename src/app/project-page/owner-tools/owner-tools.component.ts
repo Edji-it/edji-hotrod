@@ -6,6 +6,7 @@ import { Angulartics2 } from 'angulartics2'
 // Project Dependencies
 import { AuthService, ProjectService, ReadingService, SocketService } from '../../_services'
 import { CommentStats, Project, Reading } from './../../shared/datatypes'
+import { ActivatedRoute } from '@angular/router'
 
 @Component({
   selector: 'owner-tools',
@@ -56,8 +57,6 @@ export class OwnerToolsComponent implements OnInit {
           console.error(error)
         },
       ),
-    )
-    this.subscriptions.push(
       this._projects.currentProject.subscribe(
         project => {
           // For transitioning how the server handles teacher/owner ids
@@ -74,9 +73,6 @@ export class OwnerToolsComponent implements OnInit {
           console.error(error)
         },
       ),
-    )
-
-    this.subscriptions.push(
       this._auth.getCurrentUser().subscribe(user => {
         this.user = user
       }),

@@ -47,7 +47,7 @@
           .badge.badge-pill.badge-button.badge-teacher(
             *ngIf="user._id == projectOwner._id",
             [routerLink]="['./']",
-            [queryParams]="{ owner: 'coteach'}"
+            [queryParams]="{ studentList: 'coteach'}"
           ) +
           .badge.badge-pill([ngClass]="[ liveCount > 1 ? 'badge-primary' : 'badge-secondary']") {{ liveCount }} Reading
 

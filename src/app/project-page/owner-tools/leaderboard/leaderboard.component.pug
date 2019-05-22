@@ -3,7 +3,7 @@
   .container-fluid.container--less-pad
     h4
       | {{ commentStats.stats.userStats.length }} Students
-      button.close.stats-close-btn.btn-icon--round((click)='hide.emit()' type='button')
+      button.close.stats-close-btn.btn-icon--round((click)='close()' type='button')
         span(aria-hidden='true') &times;
     p(style='opacity: 0.3; margin-bottom: 14px; white-space: nowrap; border-bottom: 1px solid #cdcdcd;')
       span.small Student
