@@ -1,5 +1,11 @@
 //- Comments Pane
 .sliding-pane.from-left([ngClass]="{ 'slide-in' : visible }")
+  //- .tooltip-wrap
+  .tooltip.tooltip--right([class.show]="true", style="top: 190px;")
+    .tooltip-title
+      | Adding a co-teacher!
+    .tooltiptext.block-with-text
+      | Click that little [BUTTON] to promote to co-teacher
   .container-fluid.container--less-pad
     h4
       | {{ commentStats.stats.userStats.length }} Students

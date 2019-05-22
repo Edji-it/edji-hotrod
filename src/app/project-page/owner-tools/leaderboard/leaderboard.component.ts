@@ -78,7 +78,6 @@ export class LeaderboardComponent implements OnInit {
       }),
       // Watch URL params for quick links
       this._route.queryParams.subscribe(params => {
-        console.log('PARAM UPDATE', params)
         if (params.studentList && params.studentList === 'coteach') {
           this.visibility.emit(true)
         }

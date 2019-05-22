@@ -19,6 +19,7 @@
   font-size: 12px;
   line-height: 12px;
   text-align: center;
+  pointer-events: none;
   filter: drop-shadow(rgba(0, 0, 0, 0.2) 0 2px 6px);
 }
 
@@ -48,6 +49,23 @@
     top: auto !important;
     bottom: 100%;
     border-color: transparent transparent #fff transparent;
+  }
+}
+
+.tooltip.tooltip--right {
+  bottom: auto !important;
+  // top: calc(100% + 10px);
+  top: 50%;
+  transform: translate3d(-10px, -50%, 0);
+  left: calc(100% + 10px);
+  right: auto !important;
+
+  &::after {
+    top: calc(50% - 10px);
+    right: 100%;
+    border-width: 10px;
+    left: auto !important;
+    border-color: transparent #fff transparent transparent;
   }
 }
 
