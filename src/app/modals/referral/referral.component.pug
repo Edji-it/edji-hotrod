@@ -1,6 +1,6 @@
 .modal-will-fade([class.show]="showModal", *ngIf="showModal")
   .modal#referralModal
-    .modal-dialog(role="document")
+    .modal-dialog(role="document", style="max-width:500px;")
       .modal-content
         .modal-header
           h4.modal-title Give Hero, Get Hero
@@ -12,102 +12,27 @@
              )
             span(aria-hidden="true") &times;
         .modal-body
-          .alert.alert-reading.alert-dismissable.fade(*ngIf="alertObject.show", [class.show]="alertObject.show", role="alert", [ngClass]="alertObject.type")
+          .alert.alert-reading.alert-dismissable.fade(*ngIf="alertObject.show && !showReading", [class.show]="alertObject.show", role="alert", [ngClass]="alertObject.type")
             a.close(href="#", (click)="closeAlert()") ×
             p.mb-0([innerHtml]="alertObject.message")
-          //- Overview copy
-          p.small.mb-3 Share your unique referral link to give 
-            i and 
-            | unlock Hero discounts.
-          //- Generated code for copy and share buttons -- Desktop
-          .hidden-sm-down
-            .container
-              .row.mb-4
-                .col-sm-8.pl-0
-                  .form-group
-                    .input-group
-                      input#copyReferralCode.form-control(
-                        name="ReferralCode",
-                        type="text",
-                        disabled="true",
-                        value="{{referralLink}}")
-                      .input-group-append
-                        //- e2e: ngIf on copy button ensures link is ready to copy
-                        button#buttonCopyReferralLink.btn.btn-primary.btn-rnd-corner-right(
-                          *ngIf="referralLink && referralLink.length > 0"
-                          type="button", 
-                          (click)="trackReferralLink('copy')", 
-                          name="Copy", 
-                          href="#") Copy
-                    small.form-text.text-success(*ngIf="linkCopySuccess")
-                      | Link was copied to your clipboard!
-                .col-sm-4.pr-0
-                  .share-icon__group.float-right
-                    a#referEmailShare(
-                      tabindex="0",
-                      target="_blank",
-                      [attr.href]="socialLinks.emailLink",
-                      (click)="trackReferralLink('email')"
-                    )
-                      .icon-email.share-icon
-                    a#referTwitterShare(
-                      tabindex="0",
-                      target="_blank",
-                      [attr.href]="socialLinks.twitterLink",
-                      (click)="trackReferralLink('twitter')"
-                    )
-                      .icon-twitter.share-icon
-                    a#referFacebookShare(
-                      tabindex="0",
-                      target="_blank",
-                      [attr.href]="socialLinks.facebookLink",
-                      (click)="trackReferralLink('facebook')"
-                    )
-                      .icon-facebook.share-icon
-          //- Generated code for copy and share buttons -- Mobile
-          .hidden-md-up.w-100
-            .container
-              .row.mb-4.text-center
-                .col-sm-6
-                  .input-group
-                    input#copyreferralCode.form-control.d-inline-block.input-small(
-                      name="ProjectCodeInput",
-                      type="text",
-                      disabled="true",
-                      value="{{referralLink}}")
-                    .input-group-append
-                      button#buttonCopyReferralLink.btn.btn-primary.btn-rnd-corner-right(
-                        *ngIf="referralLink",
-                        type="button", 
-                        (click)="trackReferralLink('copy')", 
-                        name="Copy", 
-                        href="#") Copy
-                .col-sm-6
-                  .share-icon__group
-                    a#referEmailShare(
-                      tabindex="0",
-                      target="_blank",
-                      [attr.href]="socialLinks.emailLink",
-                      (click)="trackReferralLink('email')"
-                    )
-                      .icon-email.share-icon((click)="trackReferralLink('email')")
-                    a#referTwitterShare(
-                      tabindex="0",
-                      target="_blank",
-                      [attr.href]="socialLinks.twitterLink",
-                      (click)="trackReferralLink('twitter')"
-                    )
-                      .icon-twitter.share-icon((click)="trackReferralLink('twitter')")
-                    a#referFacebookShare(
-                      tabindex="0",
-                      target="_blank",
-                      [attr.href]="socialLinks.facebookLink",
-                      (click)="trackReferralLink('facebook')"
-                    )
-                      .icon-facebook.share-icon((click)="trackReferralLink('facebook')")
+          div
+            //- Overview copy
+            p.small.mb-3 Share your unique referral link to give <i>and</i> unlock Hero discounts.
+            //- Generated code for copy and share buttons
+            .row.mb-4.no-gutters
+              .col-sm-8
+                .form-group
+                  edji-share-link([link]="referralLink")
+              .col-sm-4.text-center
+                edji-share-social-icons(
+                  [link]="referralLink",
+                  [subjectCopy]="'Join me on Edji'",
+                  [messageCopy]="'Create your first Reading, and we both unlock 20% off Hero!'"
+                )
           //- More copy
+        
           h6.small.font-weight-bold Your Path to Hero
-          p.small.mb-3 Each teacher you refer that creates a reading will unlock a 20% discount towards Hero for both of you. Complete 5 referrals to get a whole year of Hero free.
+          p.small.mb-3 Each teacher you refer that creates a reading will unlock a 20% discount towards Hero for both of you. Complete 5 referrals to get a year of Hero free.
           //- referral "squares" -- Desktop
           .hidden-sm-down
             .container
@@ -146,7 +71,7 @@
               [ngStyle]="{'float': referralIndex>2 ? 'right' : 'left'}"
             )
               .row(style="flex-wrap: initial;")
-                .col-6.p-0
+                .col-6
                   h6.small.font-xs.font-weight-bold.mb-1 {{referralCouponCopy.header}}
                   p.small.font-xs.mb-3 {{referralCouponCopy.text}}
                 .col-4.p-0.ml-1

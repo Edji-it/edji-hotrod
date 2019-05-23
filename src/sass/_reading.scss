@@ -125,6 +125,19 @@ article.content {
   &.h3 {
     font-weight: bold;
   }
+
+  &.img {
+    display: block;
+    margin: 6px auto;
+    text-align: center;
+    position: relative;
+    background: transparent !important;
+
+    & .img-wrap {
+      display: inline-block;
+      position: relative;
+    }
+  }
 }
 
 a.w {
@@ -149,16 +162,11 @@ a.w {
   }
 }
 
-// Styles for commenting
+// Styles for ANNOTATABLE content
 .active-content {
   @extend %canSelectText;
 
   & .w.img {
-    display: block;
-    margin: 6px auto;
-    text-align: center;
-    position: relative;
-    background: transparent !important;
     cursor: default;
 
     &::-moz-selection {
@@ -171,8 +179,6 @@ a.w {
   }
 
   & .img-wrap {
-    display: inline-block;
-    position: relative;
     cursor: crosshair; //url('/assets/images/cursor-image.png'), pointer;
   }
 
@@ -316,6 +322,15 @@ section.search {
   & img {
     height: 15px;
     width: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%, -50%, 0);
+  }
+
+  & .icon {
+    height: 25px;
+    width: 25px;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -510,10 +525,10 @@ $quickBlue: #55aef7;
   }
 
   // Do not present preview words as interactive
-  .feed__reading-preview &,
-  .feed__reading-preview &:hover {
+  .words--read-only &,
+  .words--read-only &:hover {
     cursor: text;
-    border-bottom: 0px solid transparent;
+    border-bottom: 0px solid transparent !important;
   }
 }
 
@@ -828,6 +843,8 @@ $readingIconHeight: 60px;
 .prj-code {
   float: right;
   margin-top: 6px;
+  background-color: #fff;
+  font-size: 13px;
 }
 
 .hotspot {

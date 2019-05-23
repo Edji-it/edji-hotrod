@@ -167,9 +167,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     public _comments: CommentService,
     private angulartics: Angulartics2,
     private _audio: AudioService,
-    private _messages: MessageService,
-  ) // private _hotkeysService: HotkeysService
-  {
+    private _messages: MessageService, // private _hotkeysService: HotkeysService
+  ) {
     // this._hotkeysService.add(new Hotkey('t', (event: KeyboardEvent): boolean => {
     //      this.addTextComment({ name: 'Hotkey'})
     //     return false // Prevent bubbling

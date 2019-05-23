@@ -20,6 +20,7 @@ import {
   MessageToast,
 } from '../../_services'
 import { User } from '../datatypes'
+import { AutosaveState } from '../../new-reading-page'
 
 @Component({
   selector: 'nav-bar',
@@ -33,9 +34,11 @@ export class NavBarComponent implements OnInit, OnDestroy {
   @Input() showProjectInfo: boolean
   @Input() showDashboardOptions: boolean
   @Input() hideAccountOptions: boolean
+  @Input() saveState: AutosaveState
 
   @Output() saveAction: EventEmitter<any> = new EventEmitter()
   @Output() shareAction: EventEmitter<ReadingShareObject> = new EventEmitter<ReadingShareObject>()
+  @Output() previewAction: EventEmitter<any> = new EventEmitter()
 
   public showAvatarDropdown: boolean = false
   public showAcademyDropdown: boolean = false
@@ -102,9 +105,9 @@ export class NavBarComponent implements OnInit, OnDestroy {
     code?: boolean
     academy?: boolean
   } = {
-    // Default expand code
-    code: true,
-  }
+      // Default expand code
+      code: true,
+    }
   // Nav Slider Button loading states
   public sliderBtnLoading: {
     heat?: boolean
@@ -155,6 +158,8 @@ export class NavBarComponent implements OnInit, OnDestroy {
       this.currentPage = 'home'
     } else if (this._router.url.indexOf('/hero') > -1 || this._router.url.indexOf('/plans') > -1) {
       this.currentPage = 'hero'
+    } else if (this._router.url.indexOf('/discover') > -1) {
+      this.currentPage = 'discover'
     } else if (this._router.url.indexOf('/dashboard') > -1) {
       this.currentPage = 'dashboard'
     } else {
@@ -178,6 +183,9 @@ export class NavBarComponent implements OnInit, OnDestroy {
         if (queryParams.readingCodeModal) {
           this.showShareCodeModal = true
           this.isNewReading = true
+        }
+        if (queryParams.showRefer) {
+          this.showReferralModal = true
         }
       }),
     )

@@ -1,6 +1,6 @@
 .modal
-  .modal-dialog(role='document')
-    #loginModal.modal-content
+  #loginModalOutsideContent.modal-dialog(role='document')
+    #loginModal.modal-content((clickOutside)="closeModalOutside()")
       .modal-header
         h5.modal-title Log In
       .modal-body
@@ -16,7 +16,11 @@
         p.center Wait! I have an account and want to use it!
         .center
           button#gotoAccountLoginButton.btn.btn-secondary((click)='guestLogin = false') Log In with Account
-      .modal-footer(*ngIf='!guestLogin')
+      .modal-footer(*ngIf='!guestLogin && !loginOnly')
         p Wait! I don't want to login, I just want to comment!
         div
           button#gotoGuestLoginButton((click)='guestLogin = true') Guest Login
+      .modal-footer(*ngIf='!guestLogin && loginOnly')
+        p I don't have an account, but want to register!
+        div
+          button.btn.btn-secondary#goToRegistration((click)="router.navigate(['/register'])") Register

@@ -61,7 +61,7 @@ import {
   QuestionComponent,
   ScrollProgressComponent,
   TutorialBoxComponent,
-  ResetComponent
+  ResetComponent,
 } from './shared'
 import { HomeComponent } from './home'
 import { RegisterPageComponent } from './register-page'
@@ -81,6 +81,8 @@ import {
   DiscoverAddMetaModal,
   ReadingArchivedModal,
   ConfirmArchiveModal,
+  ReadingPreviewModal,
+  ReadingLinkModal
 } from './modals'
 import {
   AnnotatorComponent,
@@ -131,7 +133,7 @@ import { LicenseRedirectComponent } from './license-redirect/license-redirect.co
 import { LicenseWelcomeComponent } from './license-welcome/license-welcome.component'
 import { ReadingRecapComponent } from './project-page/owner-tools/reading-recap/reading-recap.component'
 import { TeamPageComponent } from './team-page/team-page.component'
-import { SearchPage } from './search-page/search-page.component'
+import { SearchPage } from './search-page/search-page.component';
 
 // Configure Hammer.js
 export class MyHammerConfig extends HammerGestureConfig {
@@ -200,6 +202,8 @@ const APP_PROVIDERS = [
     AddProjectModal,
     ReadingArchivedModal,
     ConfirmArchiveModal,
+    ReadingLinkModal,
+    ReadingPreviewModal,
     ChangePassComponent,
     ResetPassComponent,
     DeleteCommentModal,
@@ -244,7 +248,7 @@ const APP_PROVIDERS = [
     LicenseRedirectComponent,
     LicenseWelcomeComponent,
     ReadingRecapComponent,
-    TeamPageComponent,
+    TeamPageComponent
   ],
   /** Components which can be dynamically created */
   entryComponents: [UserDetailsUpdateModal],

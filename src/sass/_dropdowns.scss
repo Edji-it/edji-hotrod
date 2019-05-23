@@ -1,0 +1,8 @@
+// Dropdowns (Bootstrap)
+.dropdown-item {
+    & > .icon {
+        vertical-align: middle;
+        margin-right: 0.2em;
+        margin-bottom: 2px;
+    }
+}

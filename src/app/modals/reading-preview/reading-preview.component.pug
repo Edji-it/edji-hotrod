@@ -1,0 +1,75 @@
+#readingPreviewModal.modal.fade-in.show
+  .modal-dialog((clickOutside)="close()")
+    .container
+      .modal-content.reading-details(*ngIf="reading['owner']")
+        .comment__avatar {{reading['owner'].fullname.substr(0,2).toUpperCase()}}
+        follow-tag([owner]="reading['owner']")
+        .tag-row
+          ng-container(*ngIf="reading.subjects && reading.subjects.length > 0")
+            span.badge-pill.badge-secondary.badge-subject(*ngFor="let subject of reading.subjects") {{ subject | subjectName }}
+        i.icon.lg(*ngIf="reading.public", [innerHTML]="':earth_americas:' | emojione")
+        i.icon.lg(*ngIf="!reading.public", [innerHTML]="':lock:' | emojione")
+      //- .container
+      .row
+        .col-md-9
+          .modal-content
+            .modal-header
+              .reading-icon.hide-for-archived
+                span {{reading.title.substring(0,2)}}
+              .archived-icon.show-for-archived
+                .icon.icon-folder
+              .reading-title([class.no-version]="!reading.version_count")
+                .reading-title--center-row
+                  h1#previewTitle.small.reading-title__text {{reading.title}} 
+                    span(*ngIf="!reading.title")
+                      i Untitled
+              button#readingPreviewClose.close.btn-icon--round((click)='close()') 
+                span(aria-hidden="true") &times;
+            .modal-body
+              #readingPreviewContent.reading-preview__words.words--read-only
+                .row.loading(*ngIf="loading && !reading.words")
+                //- Annotator-Lite
+                span.w(*ngFor="let w of reading.words", [ngClass]="[ w && w.styles ? w.styles.join(' ') : '' ]")
+                  a.w(
+                    *ngIf="wHasStyle(w, 'a')",
+                    [attr.href]="w.url ? ((w.url.indexOf('//') > -1) ? w.url : ('//' + w.url)) : null",
+                    target="_blank"
+                  )
+                    | {{ w && w.str }}
+                  ng-container(*ngIf="!wHasStyle(w, 'a')")
+                    | {{ (!(w && w.styles) || wHasStyle(w, 'space')) ? '&nbsp;' : w && w.str }}
+                  .img-wrap(*ngIf="wHasStyle(w, 'img')")
+                    img.reading-image(
+                        [src]="w.url"
+                    )
+                  edji-question(
+                    *ngIf="wHasStyle(w, 'question') && reading.questions",
+                    [question]="reading.questions[w.index]",
+                    [readOnly]="true"
+                  )
+        .col-md-3.p-0
+          .modal-content.reading-actions
+            p.text-center.actions-title.mb-3 {{ copy.actionTitle }}
+            ng-container(*ngIf="loggedIn")
+              button#shareReadingButton.btn.btn-action(
+                (click)="createReading()",
+                title="Use this Reading with your class"
+              ) 
+                | {{ copy.share }}
+                i.icon.icon-megaphone.mr-0.icon--btn-inline
+              button#editReadingButton.btn.btn-primary(
+                (click)="copyReading()",
+                title="Make a copy of this Reading, and edit it"
+              ) 
+                | {{ copy.edit }}
+                i.icon.icon-create.mr-0.icon--btn-inline
+            ng-container(*ngIf="!loggedIn")
+              button#loginFromPreview.btn.btn-primary((click)="close(true)") 
+                | Log In
+            ng-container(*ngIf="copy.send")
+              button#sendReadingLink.btn.btn-clear(
+                (click)="sendReading(reading)",
+                title="Share a link to this Reading preview"
+              )
+                | Link to Preview
+                i.icon.icon-reading-link.mr-0.icon--btn-inline

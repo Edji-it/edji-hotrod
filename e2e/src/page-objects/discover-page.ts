@@ -14,10 +14,23 @@ export class Discover implements PageObjectInterface {
   public unfollowTags = element.all(by.css('.badge-unfollow'))
   public feedReadings = element.all(by.css('.feed__reading'))
   public firstFeedReading = this.feedReadings.first()
+  public feedTitles = element.all(by.css('.feed__reading .reading-title__text'))
+  public firstFeedTitle = this.feedTitles.first()
+  public readingPreview = element(by.id('readingPreviewModal'))
+  public shareReadingBtn = element(by.id('shareReadingButton'))
+  public editReadingBtn = element(by.id('editReadingButton'))
+  public loginFromPreviewBtn = element(by.id('loginFromPreview'))
+  public closeReadingPreviewBtn = element(by.id('readingPreviewClose'))
+  public loginModalEl = element(by.id('loginModal'))
+  public outsideLoginModal = element(by.id('loginModalOutsideContent'))
+  public previewTitle = element(by.id('previewTitle'))
 
   // Discover Filters
   public filterPublic = element(by.id('discoverFilterPublic'))
   public filterFollowing = element(by.id('discoverFilterFollowing'))
+  public searchCount = element(by.id('searchCount'))
+  public searchInput = element(by.id('readingSearch'))
+  public clearSearchBtn = element(by.css('.form-control-clear.icon.icon-close'))
 
   // get the dashboard page
   getPage(): void {
@@ -74,6 +87,48 @@ export class Discover implements PageObjectInterface {
   hasClass(el: any, cls: string) {
     return el.getAttribute('class').then(classes => {
       return classes.split(' ').indexOf(cls) !== -1
+    })
+  }
+
+  validateReadingTitle(title: string) {
+    return element.all(by.css('.reading-title__text')).reduce((acc, el) => {
+      return el.getText().then(text => {
+        return acc || text.includes(title)
+      })
+    }, false)
+  }
+
+  validatePreviewTitle(firstTitle: string, secondTitle: string): boolean {
+    return firstTitle === secondTitle
+  }
+
+  getReadingTitle(el: any) {
+    return el.getText().then(function (text: string) {
+      return text
+    })
+  }
+
+  getInputFieldText(el: any) {
+    return el.getAttribute('value').then(function (value: string) {
+      return value
+    })
+  }
+
+  public closeReadingPreview(): void {
+    // Click the share button for new reading no matter if it is on desktop or mobile
+    this.closeReadingPreviewBtn.isPresent().then(result => {
+      if (result) {
+        this.closeReadingPreviewBtn.isDisplayed().then(result => {
+          if (result) {
+            this.closeReadingPreviewBtn.click()
+            browser.wait(
+              this.EC.invisibilityOf(this.readingPreview),
+              5000,
+              'failed to close the reading preview',
+            )
+          }
+        })
+      }
     })
   }
 }

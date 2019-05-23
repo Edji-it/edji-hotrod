@@ -1,5 +1,5 @@
 import { Router, ActivatedRoute } from '@angular/router'
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, OnDestroy } from '@angular/core'
 
 // Project Dependencies
 import { AuthService } from '../_services'
@@ -135,7 +135,7 @@ export class HeroPricingComponent implements OnInit {
     private _auth: AuthService,
     private route: ActivatedRoute,
     private angulartics: Angulartics2,
-  ) {}
+  ) { }
 
   ngOnInit() {
     // Workaround for handling "jump to" fragment/anchor

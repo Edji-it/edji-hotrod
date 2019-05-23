@@ -1,52 +1,10 @@
 @import '../../sass/base/variables';
 
-.countdown-clock {
-  color: #fff;
-  text-align: center;
-  padding: 20px;
-  font-size: 2em;
-  position: absolute;
-  top: 420px;
-  width: 100%;
-  font-weight: 300;
-  letter-spacing: 5px;
-  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
-
-  @media (max-width: $phone) {
-    font-size: 1.5em;
-    top: 330px;
-  }
-}
-
-.promo-header {
-  color: #fff;
-  font-size: 5.5em;
-  width: 100%;
-  position: absolute;
-  top: 159px;
-  text-shadow: 1px 1px 10px rgba(0, 0, 0, 0.5);
-
-  @media (max-width: $phone) {
-    font-size: 4em;
-    top: 100px;
-  }
-}
-
 .hero-background {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
   top: 40px;
-}
-
-.call-to-action {
-  min-height: 500px;
-  z-index: 1;
-  position: relative;
-
-  @media (max-width: $phone) {
-    min-height: 420px;
-  }
 }
 
 .hero-promo-form {
@@ -86,12 +44,25 @@
 .feed__reading-preview {
   border-right: 1px solid #ddd;
   border-left: 1px solid #ddd;
-  border-bottom: 1px dashed #ddd;
+  border-bottom: 1px solid #ddd;
   padding: 15px;
   // Some readings might have a large number line returns
-  max-height: 15em;
+  max-height: 7em;
   overflow-y: hidden;
   width: 100%;
+  cursor: pointer;
+
+  &:after {
+    content: ' ';
+    display: block;
+    width: calc(100% - 2px);
+    height: 4em;
+    position: absolute;
+    bottom: 0;
+    left: 1px;
+    background-image: linear-gradient(to top, transparent 0px, rgba(255, 255, 255, 0.9) 1px, rgba(255, 255, 255, 0));
+    background-position-y: calc(100%-1px);
+  }
 }
 
 .feed__reading-preview > .w.img ~ .w.img:not(:first-child) {
@@ -109,4 +80,12 @@
 
 .w.br {
   height: 4px;
+}
+
+.card-hover {
+  cursor: pointer;
+}
+
+.found__readings {
+  margin-bottom: -50px;
 }

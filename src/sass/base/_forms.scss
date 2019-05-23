@@ -201,6 +201,12 @@ label textarea {
   transform: translateY(-50%);
   z-index: $zMid;
 
+  &--in-field.icon {
+    left: calc(100% - 2.25em);
+    width: 1.5em;
+    height: 1.5em;
+  }
+
   &.icon-close {
     opacity: 0.4;
   }
@@ -270,13 +276,15 @@ label.border-wrap {
     z-index: $zLow;
     position: absolute;
     top: 50%;
-    left: 0.75em;
+    left: 0.7em;
     transform: translateY(-50%);
-    height: 0.75em;
-    width: 0.75em;
+    height: 1em;
+    width: 1em;
 
     .input-group-lg & {
       left: 0.3em;
+      height: 0.75em;
+      width: 0.75em;
     }
   }
 

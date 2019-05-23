@@ -4,8 +4,8 @@ import { Subscription } from 'rxjs'
 import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
-import { AuthService, ReadingService } from '../_services'
-import { User } from '../shared/datatypes'
+import { AuthService, ReadingService, AcademyService, LockerService, ReadingQuery } from '../_services'
+import { User, Reading, Project } from '../shared/datatypes'
 
 @Component({
   selector: 'app-search-page',
@@ -28,17 +28,28 @@ export class SearchPage implements OnInit {
   public isSearching: boolean
   // Filters
   public filterCount: number = 0
-  public activeLibrary: string = 'public' // default to Public
   public gradesSelected: number[] = []
-  public gradeMin: number = 0
-  public gradeMax: number = 13
+  public searchParams: ReadingQuery = {
+    first: 0, // defaulted to first page
+    gradeMin: 0, // defaulted to min grade available
+    gradeMax: 13, // defaulted to max grade available
+    searchTerm: '', // defaulted to empty
+    activeLibrary: 'public', // defaulted to public
+  }
 
-  public first: number = 0
   public rows: number = 15
   public total: number = 15
 
+  // Modal Toggle
+  public showReadingPreviewModal: boolean
+  public showReadingLinkModal: boolean
+  public showFirstGroupModal: boolean
+  public showConfirmArchiveModal: boolean
+  public selectedReading: Reading
+  public createdReading: Reading
+  public showLoginModal: boolean
+
   // Search
-  public searchTerm: string = ''
   public searchFieldWidth: number = 100
 
   // Search alerts
@@ -50,6 +61,17 @@ export class SearchPage implements OnInit {
 
   // State vars
   public loading: boolean = true
+  public previewIndex: number = -1
+
+  // Archiving state
+  public readingToArchive: Reading
+  public readingsArchivedBefore: string
+  public readingArchivalSet: boolean = false
+
+  public newGroup: Project
+  public loginParams: LoginParams = {
+    preview: ''
+  }
 
   // MAKE SUBJECTS COMPONENT
   public subjects: { id: string; name: string }[] = [
@@ -70,18 +92,18 @@ export class SearchPage implements OnInit {
     dynamicTitleMaxItems: 4,
   }
 
-  public subjectFilter: any = []
-
   constructor(
     private _auth: AuthService,
     private _readings: ReadingService,
     private angulartics: Angulartics2,
+    private _academy: AcademyService,
     private route: ActivatedRoute,
     private router: Router,
-  ) {}
+    private _locker: LockerService
+  ) { }
 
   ngOnInit() {
-    if (this.router.url.indexOf('/discover/search') >= 0 || this.searchTerm.length > 0) {
+    if (this.router.url.indexOf('/discover/search') >= 0 || this.searchParams.searchTerm.length > 0) {
       this.isSearching = true
     }
     this.subscriptions.push(
@@ -90,74 +112,114 @@ export class SearchPage implements OnInit {
         this.user = user
       }),
       // Get search params from URL
-      this.route.queryParams.subscribe(params => {
+      this.route.queryParams.subscribe(async params => {
+        this.loginParams = {
+          ...this.loginParams,
+          ...params
+        }
         this.clearFilterVars()
         if (params.q) {
-          this.searchTerm = params.q
+          this.searchParams.searchTerm = params.q
         }
         if (params.library) {
-          this.activeLibrary = params.library
-          if (this.activeLibrary !== 'public') {
+          this.searchParams.activeLibrary = params.library
+          if (this.searchParams.activeLibrary !== 'public') {
             this.filterCount++
           }
         }
         if (params.subjects) {
-          this.subjectFilter = params.subjects.split(' ')
+          this.searchParams.subjectFilter = params.subjects.split(' ')
           this.filterCount++
         }
         if (params.grade_lte && params.grade_gte) {
-          this.gradeMin = parseInt(params.grade_gte)
-          this.gradeMax = parseInt(params.grade_lte)
+          this.searchParams.gradeMin = parseInt(params.grade_gte)
+          this.searchParams.gradeMax = parseInt(params.grade_lte)
           this.gradesSelected = []
-          for (let i = this.gradeMin; i <= this.gradeMax; i++) {
+          for (let i = this.searchParams.gradeMin; i <= this.searchParams.gradeMax; i++) {
             this.gradesSelected.push(i)
           }
           this.filterCount++
         }
         if (params.from) {
-          this.first = parseInt(params.from)
+          this.searchParams.first = parseInt(params.from)
         }
         this.loadFeed()
+        if (params.preview) {
+          try {
+            // the link we generate to open the modal direct only contains a reading _id so we need to get that reading
+            this.selectedReading = await this._readings.get(params.preview).toPromise()
+            this.showReadingPreviewModal = true
+          } catch (err) {
+            console.error(err)
+          }
+        }
       }),
+      this._readings.currentUserReadings.subscribe(
+        userReadings => {
+          if (!userReadings.readings) {
+            // If no readings, nothing to handle
+            return
+          }
+
+          // If we have readings, don't request created readings again
+          this.readingArchivalSet = true
+          if (!this.user.hero_status && userReadings.readings[1] && !userReadings.readings[1].archived) {
+            // Take the second reading and make sure it is archived
+            this.readingToArchive = userReadings.readings[1]
+            // reading that we'll be setting as our readingsArchivedBefore property on the user - send PUT to server
+            this.readingsArchivedBefore = userReadings.readings[0].createdAt
+          } else {
+            // Clear values
+            delete this.readingToArchive
+            delete this.readingsArchivedBefore
+          }
+        },
+        err => {
+          console.error(err)
+        },
+      ),
     )
   }
 
   /**
    * Primary trigger for updating search
    * - Passes new params to URL
+   * @param action is the filter that is changing (used for analytics)
    * @param paging Pagination values should only be passed for a pagination event (from the datalist component)
+   * @duplicated with created-dash.component.ts
    */
   updateSearchParams(action: string, paging?: any) {
     // Ignore if pagination values are passed and unchanged
-    if (paging && this.first == paging.first && this.rows == paging.rows) {
+    if (paging && this.searchParams.first == paging.first && this.rows == paging.rows) {
       return
     }
     let filters = {}
     let filterParams = {}
     // Pagination values
-    this.first = filters['from'] = paging && paging.first != undefined ? parseInt(paging.first) - 1 : this.first
-    if (this.first < 0) {
-      this.first = filters['from'] = 0
+    this.searchParams.first = filters['from'] =
+      paging && paging.first != undefined ? parseInt(paging.first) : this.searchParams.first
+    if (this.searchParams.first < 0) {
+      this.searchParams.first = filters['from'] = 0
     }
     this.rows = filters['size'] = paging && paging.rows != undefined ? parseInt(paging.rows) : this.rows
 
-    if (this.searchTerm) {
+    if (this.searchParams.searchTerm) {
       this.isSearching = true
-      filterParams['q'] = this.searchTerm
+      filterParams['q'] = this.searchParams.searchTerm
     }
-    if (this.activeLibrary) {
-      filterParams['library'] = this.activeLibrary
+    if (this.searchParams.activeLibrary) {
+      filterParams['library'] = this.searchParams.activeLibrary
     }
-    if (this.subjectFilter && this.subjectFilter[0]) {
-      filterParams['subjects'] = this.subjectFilter.join(' ')
+    if (this.searchParams.subjectFilter && this.searchParams.subjectFilter[0]) {
+      filterParams['subjects'] = this.searchParams.subjectFilter.join(' ')
     }
     if (this.gradesSelected.length > 0) {
       let grades = this.gradesSelected
       filterParams['grade_gte'] = Math.min(...grades)
       filterParams['grade_lte'] = Math.max(...grades)
     }
-    if (this.first) {
-      filterParams['from'] = this.first
+    if (this.searchParams.first) {
+      filterParams['from'] = this.searchParams.first
     }
     // fire an analytic event here for tracking purposes
     if (action !== '') {
@@ -174,15 +236,15 @@ export class SearchPage implements OnInit {
    */
   clearFilterVars(preserveTerm?: boolean) {
     if (!preserveTerm) {
-      this.searchTerm = ''
+      this.searchParams.searchTerm = ''
     }
     this.filterCount = 0
-    this.first = 0
-    this.gradeMin = 0
-    this.gradeMax = 13
+    this.searchParams.first = 0
+    this.searchParams.gradeMin = 0
+    this.searchParams.gradeMax = 13
     this.gradesSelected = []
-    this.subjectFilter = []
-    this.activeLibrary = 'public'
+    this.searchParams.subjectFilter = []
+    this.searchParams.activeLibrary = 'public'
   }
 
   /**
@@ -195,39 +257,23 @@ export class SearchPage implements OnInit {
     // Reset results
     this.readings = []
     this.searchAlerts = {}
-    // Construct search query
-    let queryString = 'from=' + this.first
-    if (this.searchTerm) {
-      queryString += '&q=' + this.searchTerm
-    }
-    // Library
-    if (this.activeLibrary === 'following') {
-      // Loop through and apply following ids
-      let following = this.user.following
-      // Display message if not following anyone
-      if (!following || following.length < 1) {
+
+    // pass in the arguments to build the queryParam string
+    if (this.searchParams.activeLibrary === 'following') {
+      this.searchParams.following = this.user.following
+      if (!this.searchParams.following || this.searchParams.following.length < 1) {
         this.searchAlerts.notFollowing = true
         this.loading = false
+        this.isSearching = false
+        this.filterCount = 0
         return
       }
-      following.forEach(userId => {
-        queryString += '&owner_id=' + userId
-      })
-    } else if (this.activeLibrary !== 'public') {
-      // Handle academy/institution id filter
     }
-    // Subjects
-    if (this.subjectFilter && this.subjectFilter[0]) {
-      queryString += '&subjects=' + this.subjectFilter.join(' ')
-    }
-    // grade_levels_lte, grade_levels_gte
-    if (this.gradeMin > -1 && this.gradeMax > -1) {
-      queryString += '&grade_levels_gte=' + this.gradeMin
-      queryString += '&grade_levels_lte=' + this.gradeMax
-    }
-    // Default to sort by most recent, unless using a search term
-    if (!this.searchTerm) {
-      queryString += '&sort=createdAt&sort_order=desc'
+
+    let queryString = this._readings.buildSearchParams(this.searchParams)
+
+    if (!this.user.isLoggedIn) {
+      queryString += '&scope=public'
     }
 
     this._readings.search(queryString).subscribe(
@@ -236,7 +282,7 @@ export class SearchPage implements OnInit {
         this.loading = false
         this.total = data.total
         // Handle no results messaging
-        if (this.searchTerm && this.readings.length < 1) {
+        if (this.searchParams.searchTerm && this.readings.length < 1) {
           this.searchAlerts.noResults = true
         }
       },
@@ -247,4 +293,108 @@ export class SearchPage implements OnInit {
       },
     )
   }
+
+  /**
+   * Opens the reading preview modal for the selected reading
+   * @param reading is the reading we want to open the preview modal on
+   */
+  public openReadingPreview(reading: Reading): void {
+    this.showReadingPreviewModal = true
+    this.selectedReading = reading
+  }
+
+  /**
+   * Hover/focus for clickable Reading Cards
+   * @param index Reading result list index
+   */
+  public readingCardHoverSet(index: number): void {
+    this.previewIndex = index
+  }
+
+  /**
+   * Verifies the user can save this reading without having to push one in to the archives
+   * @param createdReading the new reading
+   */
+  public readingCreateFromPreviewSuccess(createdReading: Reading) {
+    this.createdReading = createdReading
+    // Need to dismiss the reading preview modal and then we can show the new group modal
+    this.showReadingPreviewModal = false
+
+    if (!this.user.hero_status && this.readingToArchive) {
+      this.showConfirmArchiveModal = true
+    } else {
+      this.showFirstGroupModal = true
+    }
+  }
+
+  /**
+   * Opens reading for first group
+   * @param project Project object for first group
+   */
+  public finalizeShare(project: Project) {
+    // Set newly created Group
+    this.newGroup = project
+    // Archive if needed
+    if (this.readingsArchivedBefore) {
+      this.archiveReading()
+      this.shareReading()
+    } else {
+      this.shareReading()
+    }
+  }
+
+  public shareReading(): void {
+    // Send the data to Pipo to log the new reading
+    this._academy.pipoEvent({
+      // standard event info:
+      event_name: 'reading_created',
+      user_id: this.user._id,
+      teacher: this.newGroup.teacher_id === this.user._id,
+      hero: this.user.hero_status || false,
+      institution_id: this.user.institution_ids || [],
+      // event-specific info:
+      reading_id: this.createdReading._id,
+      group_id: this.newGroup._id,
+      subjects: this.createdReading.subjects,
+      source: this.createdReading.source,
+    })
+    // Navigate user to newly created group for reading
+    this.router.navigate(['project', this.newGroup._id], { queryParams: { readingCodeModal: true } })
+  }
+
+  /**
+   * Update user's archived date
+   * @param reading the reading that is to be archived (is an active reading on the created dashboard)
+   * @param form is the new reading we're going to share once we finish archiving the older active reading
+   */
+  public async archiveReading(): Promise<void> {
+    // Make the call to PUT the reading archive value
+    let user = this.user
+    user.archive_readings_before = this.readingsArchivedBefore
+    try {
+      this._auth.updateUser(user).toPromise()
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  public closeReadingPreview(login?: boolean): void {
+    this.showReadingPreviewModal = false
+    if (login) {
+      this.loginParams.preview = this.selectedReading._id
+      this.showLoginModal = true
+    }
+  }
+
+  public closeLoginModal(context?: string): void {
+    this.showLoginModal = false
+    if (context === 'preview') {
+      this.router.navigate(['/discover' + (this.isSearching ? '/search' : '')], { queryParams: this.loginParams })
+    }
+  }
+}
+
+export interface LoginParams {
+  preview?: string
+  [prop: string]: any
 }

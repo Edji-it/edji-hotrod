@@ -40,7 +40,8 @@ button,
 
   &:hover,
   &:active,
-  &:focus {
+  &:focus,
+  &.force-hover {
     background: darken($btnSecondaryBg, 10%);
     color: $btnSecondaryColor;
   }
@@ -80,8 +81,8 @@ button,
     display: inline-block;
     width: 1.5em;
     height: 1.5em;
-    top: -0.1em;
-    margin: 0 0.5em;
+    top: -0.4em;
+    margin: 0 0.5em -0.5em 0.5em;
     position: relative;
     vertical-align: middle;
   }
@@ -104,6 +105,8 @@ button,
   &.disabled--not-hero {
     pointer-events: none;
     opacity: 0.6;
+    padding-top: 8px !important;
+    padding-right: 25px !important;
 
     & .icon {
       filter: grayscale(100%);
@@ -127,8 +130,8 @@ button,
       z-index: $zMid;
       display: block;
       position: absolute;
-      top: -2px;
-      right: -20px;
+      top: 0px;
+      right: 0px;
     }
   }
 }
@@ -246,7 +249,8 @@ button {
 
   &:hover,
   &:active,
-  &:focus {
+  &:focus,
+  &.force-hover {
     box-shadow: 0 0px 15px 0px rgba($btnPrimaryFocusColor, 0.5);
     background: $btnPrimaryFocusColor;
     color: #fff;
@@ -319,7 +323,8 @@ button {
 
   &:hover,
   &:active,
-  &:focus {
+  &:focus,
+  &.force-hover {
     background: $btnSecondaryFocusColor;
     border-color: $btnSecondaryColor;
     color: #fff;
@@ -373,10 +378,18 @@ button {
   font-weight: 400;
   border: 0px solid transparent;
   border-radius: 4px;
+  // Limit text length to width of filter
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   & img.emojioneemoji {
     margin-top: -2px;
     margin-right: 4px;
+  }
+
+  & > .icon {
+    margin-right: 0.5em;
   }
 
   &:hover,
@@ -393,6 +406,11 @@ button {
     background-color: #ebf9ff !important;
     color: #2399db;
   }
+}
+
+.btn-filter-wrap {
+  width: 100%;
+  position: relative;
 }
 
 // Deprecated button style

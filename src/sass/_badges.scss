@@ -21,3 +21,20 @@
 .badge-grades {
   background: lighten($green, 10%);
 }
+
+.badge-subject {
+  display: inline-block;
+  color: #fff;
+  font-size: 10px;
+  height: 12px;
+  line-height: 12px;
+  background: #79b1f3;
+  text-transform: capitalize;
+  margin-right: 2px;
+}
+
+.tag-row {
+  white-space: nowrap;
+  overflow: hidden;
+  display: inline-block;
+}

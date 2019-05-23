@@ -12,6 +12,7 @@ export class Sidebar {
   public navCreate = element(by.id('navCreate'))
   public navRead = element(by.id('navRead'))
   public navDiscover = element(by.id('navDiscover'))
+  public navDiscoverPublic = element(by.id('navDiscoverPublic'))
   public accountButtonSpan = this.accountButton.element(by.css('span'))
   public logo = element(by.id('logo'))
   public heroLink = element(by.id('heroLink'))
@@ -34,7 +35,11 @@ export class Sidebar {
         this.closeModal.isDisplayed().then(result => {
           if (result) {
             //Whatever if it is true (displayed)
-            browser.wait(this.EC.elementToBeClickable(this.closeModal), 5000, 'modal close button never became clickable')
+            browser.wait(
+              this.EC.elementToBeClickable(this.closeModal),
+              5000,
+              'modal close button never became clickable',
+            )
             this.closeModal.click()
           }
         })
@@ -166,14 +171,7 @@ export class Sidebar {
   }
 
   public academyButtonClick(): void {
-    // Click the confirm archive reading button for new reading
-    this.navAcademyBtn.isPresent().then(result => {
-      if (result) {
-        this.navAcademyBtn.isDisplayed().then(result => {
-          browser.wait(this.EC.elementToBeClickable(this.navAcademyBtn), 5000, 'never saw Academy option in nav bar')
-          this.navAcademyBtn.click()
-        })
-      }
-    })
+    browser.wait(this.EC.elementToBeClickable(this.navAcademyBtn), 5000, 'never saw Academy option in nav bar')
+    this.navAcademyBtn.click()
   }
 } // class Sidebar

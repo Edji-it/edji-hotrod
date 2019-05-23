@@ -1,0 +1,83 @@
+@import '../../../sass/base/variables';
+
+.modal-dialog {
+  min-width: 100%;
+
+  @media(min-width: $desktop) {
+    min-width: calc(100% - 200px);
+  }
+}
+
+.modal-header {
+  background: #fff;
+  border-bottom: 1px solid #cdcdcd;
+}
+
+.reading-details {
+  display: inline-block;
+  padding: 0 $base-pad/2 0 0;
+  bottom: 20px;
+  left: 0;
+  margin: 0;
+  width: auto;
+
+  @media(max-width: $tablet) {
+    bottom: 0px;
+  }
+}
+
+.reading-actions {
+  padding: 20px;
+  position: sticky;
+  top: $base-pad;
+  min-width: 145px;
+
+  @media(max-width: $tablet) {
+    margin: 0 $base-pad;
+    width: calc(100% - #{$base-pad*2});
+  }
+
+  & .btn {
+    margin-bottom: 1em;
+  }
+}
+
+.modal-content {
+  @media(max-width: $tablet) {
+    margin-bottom: $base-pad;
+  }
+}
+
+.comment__avatar {
+  position: relative;
+  display: inline-block;
+  left: 0px;
+  top: 0px;
+  margin: 10px;
+  opacity: 1;
+}
+
+.tag-row {
+  margin: 0px 10px -5px 10px;
+}
+
+.emojioneemoji {
+  height: 1.5em;
+  width: 1.5em;
+}
+
+.lg {
+  height: 1.5em;
+  width: 1.5em;
+}
+
+.actions-title {
+  color: $medium-gray;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.reading-preview__words {
+  min-height: 300px;
+  padding: 0px $base-pad;
+}

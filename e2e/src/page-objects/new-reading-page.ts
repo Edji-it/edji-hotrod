@@ -34,14 +34,18 @@ export class NewReading implements PageObjectInterface {
   public draftButton = element(by.id('saveDraftButton'))
   public draftButtonMobile = element(by.id('saveDraftButtonMobile'))
   public questionDelete = element.all(by.css('button.inline-delete.question-delete')).last()
+  // Preview modal
+  public previewButton = element(by.id('showReadingPreview'))
+  public previewContent = element(by.id('readingPreviewContent'))
+  public previewClose = element(by.id('readingPreviewClose'))
 
   public uploadImageModalButton = element(by.css('#buttonUploadImage'))
   public uploadImageModalButtonMobile = element(by.css('#buttonUploadImageMobile'))
   public imageUploadTrigger = element(by.id('buttonBeginImageUpload'))
   public imageFileInput = element(by.css('#imageFileInput'))
   public uploadedImage = element(by.css('.upload-list-item.new'))
-  public emojiAnswerButton = element(by.css('.icon-emoji-comment.icon__answer-type'))
-  public textAnswerButton = element(by.css('.icon-text-comment.icon__answer-type'))
+  public emojiAnswerButton = element(by.css('.icon-comment-emoji.icon__answer-type'))
+  public textAnswerButton = element(by.css('.icon-comment-text.icon__answer-type'))
 
   public uploadPDfModalButton = element(by.css('#buttonUploadPdf'))
   public pdfUploadTrigger = element(by.id('buttonBeginPdfUpload'))
@@ -62,13 +66,14 @@ export class NewReading implements PageObjectInterface {
   public groupError = element(by.id('msgLabelRequired'))
   public successAlert = element(by.id('msgDraftSaved'))
 
-  public titleString = 'Test (3 Laws) ' + new Date().valueOf() // Keep titles unique
+  public titleString = 'can_delete Test (3 Laws) ' + new Date().valueOf() // Keep titles unique
   public qTitleString = 'When and how, in early human development, did the capacity to ask questions develop?'
   public qPrompt1 = 'Do you really think this timeline is accurate?'
   public qPrompt2 = 'Are you willing to give up the information?'
   public titleImageString = 'Test: Image' + new Date().valueOf()
   public contentString =
     'Many ancient mythologies, and most modern religions include artificial people, such as the mechanical servants built by the Greek god Hephaestus[16] (Vulcan to the Romans), the clay golems of Jewish legend and clay giants of Norse legend, and Galatea, the mythical statue of Pygmalion that came to life. Since circa 400 BC, myths of Crete include Talos, a man of bronze who guarded the Cretan island of Europa from pirates.\nWashstand automaton reconstruction, as described by Philo of Byzantium (Greece, 3rd century BC).'
+  public contentHtml = "<b>Bold</b><br/><a href='edji.it'>Link</a>"
   public qContentString1 = 'Text before first question.'
   public qContentString2 = 'Text. AFTER Q'
   public qSourceString =

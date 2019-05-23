@@ -9,8 +9,11 @@
       ng-container(*ngIf="isDevDeployed")
         img#logo.nav-bar__logo(*ngIf="currentPage!='home'", src="assets/images/logo-3.2-mark--dev.svg")
         img#logo.nav-bar__logo-h(*ngIf="currentPage=='home'", src="assets/images/logo-3.2-horizontal--dev.svg")
+    //- .nav__menu(*ngIf="!showDashboardOptions || (currentPage === 'discover' && !user.isLoggedIn)")
+    //-   a#navDiscoverPublic.btn.btn-link([routerLink]="['/discover']", routerLinkActive="active", [attr.title]="'Discover Readings from other Teachers'")
+    //-     | Discover
     //- Dashboard Nav
-    .nav__menu(*ngIf="showDashboardOptions")
+    .nav__menu(*ngIf="showDashboardOptions && user.isLoggedIn")
       ng-container(*ngFor="let link of navLinks")
         a.btn.btn-link([attr.id]="link.id", [routerLink]="[link.route]", routerLinkActive="active", [attr.title]="link.tooltip")
           | {{ link.displayName }}
@@ -31,7 +34,7 @@
         | Guide
         .icon.icon-external
     //- Optional Title
-    div(*ngIf="currentPage == 'project' || hideAccountOptions")
+    div(*ngIf="pageTitle || currentPage == 'project'")
       .nav-bar__heading.hidden-md-down(*ngIf="!showProjectInfo")
         h1(
           *ngIf="pageTitle",
@@ -62,8 +65,13 @@
           button#accountButton.list-group-item.list-group-item-action(type="button", (click)="openAccount()") {{ user.fullname }}
             span.list-icon--right([innerHtml]="':gear:' | emojione")
           //- Refer
-          button#navReferralButton.list-group-item.list-group-item-action(*ngIf="!user.isStudent" type="button", (click)="openReferralModal()") Refer Teachers
-            span.list-icon--right([innerHtml]="':satellite:' | emojione")
+          button#navReferralButton.list-group-item.list-group-item-action(*ngIf="!user.isStudent" type="button", (click)="openReferralModal()") 
+            ng-container(*ngIf="user.hero_status")
+              | Refer a Friend
+              span.list-icon--right([innerHtml]="':satellite:' | emojione")
+            ng-container(*ngIf="!user.hero_status")
+              span.hero-color-text Get Hero Free
+              span.list-icon--right([innerHtml]="':gift:' | emojione")
           //- Feedback
           button#navFeedbackButton.list-group-item.list-group-item-action(type="button", (click)="openFeedback()") Contact Us
             span.list-icon--right([innerHtml]="':question:' | emojione")
@@ -112,7 +120,7 @@
           .nav__btn-slider.has-action([class.expanded]="sliderBtnExpanded['code']")
             i.icon.icon-key((click)="toggleSlider('code')")
               .icon-pill-status
-            .btn-slider__value.code((click)="showShareCodeModal = true") {{ currentProject.code }}
+            .btn-slider__value.text-code((click)="showShareCodeModal = true") {{ currentProject.code }}
           .tooltip.tooltip--bottom
             .tooltip-title Group Code
       //- Academy Info
@@ -131,32 +139,36 @@
           button.list-group-item.list-group-item-action(*ngFor="let academy of academyState.academies; let i = index", (click)="_auth.setCurrentAcademy(i); showAcademyDropdown = false")
             | {{ academy.name }} ({{academy.abbreviation}})
     //- New Reading actions
-    .nav__btn-wrap
+    .nav__btn-wrap(*ngIf="canPublish")
       //- Share button: Desktop
-      button#addReadingButton.btn.btn-action.nav-bar__btn.hidden-sm-down(*ngIf="canPublish", (click)="this.shareAction.emit()", [class.active]="showShareTooltip") Share
+      button#addReadingButton.btn.btn-action.nav-bar__btn.hidden-sm-down((click)="this.shareAction.emit()", [class.active]="showShareTooltip") 
+        | Share
+        i.icon.icon-megaphone.icon--btn-inline.mr-0
       //- Share button: Mobile
-      button#addReadingButtonMobile.btn.btn-clear.nav-bar__btn.hidden-md-up(*ngIf="canPublish", (click)="this.shareAction.emit()", [class.active]="showShareTooltip") Share
-      //- Publish Tooltip
-      //- .publish-tooltip(*ngIf="showShareTooltip && !_util.showShareCode")
-      //-   h1.publish-tooltip__title Publish and Share
-      //-   p.sub-label.pb-2F Finished with your reading? Give it a group name, Finalize and get your group code to share with your readers!
-      //-   .form-group(style="margin-bottom: 0px;")
-      //-     label Group Name
-      //-       .input-group
-      //-         input#firstProjectLabel.form-control.form-item--editor.h3.mGroup([(ngModel)]="groupLabel", type="text", placeholder="eg. First Period, Peer review...")
-      //-       #errorGroupLabel.alert.alert-info(*ngIf="groupLabel.length < 1 && messages.groupNameLengthError") Please pick a name for your first Reading Group!
-      //-   .form-group(*ngIf="user.hero_status")
-      //-     label(for="customCodeInput") Custom Code
-      //-       input#customCodeInput.form-control.form-item--editor.h3.mGroup([(ngModel)]="customCode", type="text", placeholder="(optional)", style="text-transform:lowercase;")
-      //-     #errorInvalidCustomCode.alert.alert-warning(*ngIf="messages.invalidCode") Whoops, someone is already using that group code. Could you pick another?
-      //-     #errorServiceResponse.alert.alert-warning(*ngIf="messages.serviceError") Oh no! Something went wrong. If it keeps happening, let us know!
-      //-   button#addReadingFinalizeButton.btn.btn-action((click)="finalizeReadingAndShare({ groupLabel: groupLabel, customCode: customCode })", [class.loading]="shareLoading") Finalize and Share
-      .nav__btn-wrap
-      //- Save button: Desktop
-      button#saveDraftButton.btn.btn-secondary.nav-bar__btn.hidden-sm-down(*ngIf="canPublish", (click)="saveAction.emit()") Save
-      //- Save button: Mobile
-      button#saveDraftButtonMobile.btn.btn-clear.nav-bar__btn.hidden-md-up(*ngIf="canPublish", (click)="saveAction.emit()") Save
-
+      button#addReadingButtonMobile.btn.btn-clear.nav-bar__btn.hidden-md-up((click)="this.shareAction.emit()", [class.active]="showShareTooltip") 
+        | Share
+        i.icon.icon-megaphone.icon--btn-inline.mr-0
+    //- Reading Preview
+    .nav__btn-wrap(*ngIf="canPublish")
+      //- Share button: Desktop
+      button#showReadingPreview.btn.btn-primary.nav-bar__btn.hidden-sm-down((click)="this.previewAction.emit()") 
+        | Preview
+      //- Share button: Mobile
+      button#showReadingPreview.btn.btn-clear.nav-bar__btn.hidden-md-up((click)="this.previewAction.emit()") 
+        | Preview
+    //- Save button and status
+    .nav__btn-wrap(*ngIf="canPublish")
+      button#saveDraftButton.btn.btn-link.nav__status-label(*ngIf="!saveState || saveState == 'unsaved'", (click)="saveAction.emit()")
+        | Save as Draft
+      button#saveDraftButton.btn.btn-link.nav__status-label(*ngIf="saveState == 'edited'", (click)="saveAction.emit()", title="Click to save draft")
+        .icon.icon-save-small
+        | Save Changes
+      span.nav__status-label(*ngIf="saveState == 'saving'")
+        .icon.icon-in-progress
+        | Saving
+      span.nav__status-label.hover--tooltip#draftStatusSaved(*ngIf="saveState == 'saved'", title="Recently autosaved")
+        .icon.icon-check-small
+        | Saved
     //- Join Reading Code
     .row.col-4.col-xl-5.nav__join-code.hidden-md-down(*ngIf="(currentPage != 'project') && !canPublish && !hideAccountOptions")
       .input-group.input-group-lg
@@ -224,7 +236,11 @@ share-code(
 //- Message toast display
 edji-message-toasts([currentPage]="currentPage")
 //- Referrals
-referral-modal([showReferral]="showReferralModal", (hideReferral)="showReferralModal=false", (exerciseCoupon)="useCoupon($event)")
+referral-modal(
+  [showReferral]="showReferralModal",
+  (hideReferral)="showReferralModal=false", 
+  (exerciseCoupon)="useCoupon($event)"
+)
 //- Hero Subscribe/Pay
 hero-subscribe-modal.modal-will-fade(
   *ngIf="showHeroSubModal",

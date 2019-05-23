@@ -116,6 +116,11 @@ $purple: rgb(150, 40, 255);
       font-size: 74%;
     }
   }
+
+  @media (max-width: $tablet) {
+    padding: 0px;
+    min-width: 0px;
+  }
 }
 
 .nav__menu {
@@ -215,6 +220,30 @@ a.nav-bar__link {
     text-decoration: none;
     // background: #474a4e;
     color: $blue;
+  }
+}
+
+.nav__status-label {
+  line-height: 68px;
+  font-size: 13px;
+  font-weight: normal;
+  color: $dark-gray;
+
+  & .icon, & .emojioneemoji {
+    margin-right: 5px;
+    vertical-align: middle;
+    margin-bottom: 2px;
+  }
+
+  &.btn {
+    border-bottom: none;
+    text-decoration: underline;
+    padding: 0px !important;
+
+    &:hover, &:focus {
+      color: $blue;
+      text-decoration-color: $blue;
+    }
   }
 }
 

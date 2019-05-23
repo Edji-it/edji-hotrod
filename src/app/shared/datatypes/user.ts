@@ -45,7 +45,13 @@ interface BaseUser {
   license_ids?: string[]
   institution_ids?: string[]
   isAcademyAdmin?: boolean
-  school_name: string
+  // school_name: string, // @deprecated 3/26/2019
+  school: {
+    school_name: String
+    school_id: String // these are not ObjectIds, but these are Ids from the NCES data collection
+    district_name: String
+    district_id: String // these are not ObjectIds, but these are Ids from the NCES data collection
+  }
   phone_number: string
   archive_readings_before?: string
   oauth?: Array<{

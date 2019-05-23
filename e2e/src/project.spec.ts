@@ -55,7 +55,7 @@ describe('Project Page', () => {
     })
     beforeEach(() => {
       reset()
-      project.getPage('676r')
+      project.getPage('test-comment')
     })
 
     afterAll(() => {
@@ -83,11 +83,7 @@ describe('Project Page', () => {
 
       // Use emoji keyboard filter, and type an emoji from further down
       const dollaDolla = project.getEmojiFromKeyboard("[dataname=':dollar:'")
-      browser.wait(
-        EC.elementToBeClickable(dollaDolla),
-        5000,
-        'never scrolled to the dollars emoji',
-      )
+      browser.wait(EC.elementToBeClickable(dollaDolla), 5000, 'never scrolled to the dollars emoji')
       dollaDolla.click()
 
       // Save emoji comment
@@ -105,8 +101,7 @@ describe('Project Page', () => {
     it('should make a comment on an image by clicking on image', async () => {
       // Find and click on image
       browser.wait(EC.presenceOf(project.image), 10000, 'never found the image')
-      await browser
-        .executeScript('window.scrollTo(0, document.querySelector("article .img-wrap > img").scrollTop);')
+      await browser.executeScript('window.scrollTo(0, document.querySelector("article .img-wrap > img").scrollTop);')
       browser.wait(EC.elementToBeClickable(project.image), 5000, 'never scrolled and saw the image')
       project.image.click()
       // click the tool tip
@@ -127,11 +122,7 @@ describe('Project Page', () => {
       browser.wait(EC.elementToBeClickable(project.emojiCommentDelete), 5000, 'could not find delete button')
       project.emojiCommentDelete.click()
       // make sure it's deleted
-      browser.wait(
-        EC.invisibilityOf(project.textCommentInput),
-        5000,
-        'text comment never went away after deleting it',
-      )
+      browser.wait(EC.invisibilityOf(project.textCommentInput), 5000, 'text comment never went away after deleting it')
       // close the comment pane
       browser.wait(EC.elementToBeClickable(project.closePane), 5000, 'could not find close pane button')
       project.closePane.click()
