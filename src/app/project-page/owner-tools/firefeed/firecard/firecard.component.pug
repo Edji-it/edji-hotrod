@@ -1,6 +1,6 @@
 .fireBound
   .user-icon.firefeed
-    .user-icon__initials {{fireComment.author.substring(0,2)}}
+    .user-icon__initials {{fireComment && fireComment.author && fireComment.author.substring(0,2)}}
   .fireBlock
     .list-item.list-item--block.fireTime-card
       | {{fireComment.author}}
