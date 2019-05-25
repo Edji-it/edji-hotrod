@@ -9,12 +9,12 @@
 .badge-teacher {
   background-color: #fff;
   color: #969696;
-  border: 2px solid $green;
+  border: 2px solid $actionGreen;
 
   &.badge-button {
     &:hover,
     &:focus {
-      background-color: $green;
+      background-color: $actionGreen;
       color: #fff;
     }
   }

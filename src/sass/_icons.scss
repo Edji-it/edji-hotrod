@@ -386,6 +386,10 @@ $iconGrayOpacity: 0.6;
   cursor: pointer;
 }
 
+.icon-promote {
+  @include icon('icon-promote.svg');
+}
+
 .icon-question {
   @include icon('icon-question.svg');
   display: inline-block;

@@ -43,13 +43,15 @@
           title="{{ currentReading.title }}"
           ) {{ currentReading.title }}
         .nav-bar__author(*ngIf="projectOwner && projectOwner._id")
-          follow-tag([owner]="projectOwner")
-          .badge.badge-pill.badge-button.badge-teacher(
-            *ngIf="user._id == projectOwner._id",
-            [routerLink]="['./']",
-            [queryParams]="{ studentList: 'coteach'}"
-          ) +
-          .badge.badge-pill([ngClass]="[ liveCount > 1 ? 'badge-primary' : 'badge-secondary']") {{ liveCount }} Reading
+          span.label.mr-1 Teacher
+          .user-tag-group--teacher
+            follow-tag([owner]="projectOwner")
+            .badge.badge-pill.badge-button.badge-teacher(
+              *ngIf="user._id == projectOwner._id",
+              [routerLink]="['./']",
+              [queryParams]="{ studentList: 'coteach'}"
+            ) +
+            .badge.badge-pill([ngClass]="[ liveCount > 1 ? 'badge-primary' : 'badge-secondary']") {{ liveCount }} Reading
 
     //- Login/Register Actions
     .nav__btn-wrap(*ngIf="!user.isLoggedIn && !hideAccountOptions")
