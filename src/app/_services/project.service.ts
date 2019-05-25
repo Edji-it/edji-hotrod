@@ -193,7 +193,7 @@ export class ProjectService {
           data.projects = projects
           return data
         }),
-      )
+    )
   }
 
   /**
@@ -220,13 +220,14 @@ export class ProjectService {
       .get(
         this._auth.getUrl() + '/api/v1/projects/' + encodeURIComponent(projectCode) + '?pop[]=reading_id&pop[]=teacher',
         this._auth.getOptions(),
-      )
+    )
       .pipe(
         map((data: any) => {
           let project = data.project //can later have local setter to do validation/data manipulation before passing through observable
           let teacher = project.teacher
           // Decorate project if archived
           project = this.decorateArchivedProject(project)
+          // 
           // Clear stats object
           this._commentStats.resetStats()
           /**
@@ -252,7 +253,7 @@ export class ProjectService {
           // Return the project along the current Observable
           return this.project
         }),
-      )
+    )
   }
 
   /**
@@ -267,12 +268,12 @@ export class ProjectService {
       /**
        * Readings are "archived" if all are true:
        * - Updated date is prior to archived before date
-       * - Readings before Hero v2 (01-01-2018) are "legacy" and not archived
+       * - Readings before Hero v2 (2019-01-01) are "legacy" and not archived
        * - Teacher is NOT Hero
        */
       let archivedBefore = new Date(teacher.archive_readings_before)
       let projectDate = new Date(project.createdAt)
-      if (projectDate < archivedBefore && projectDate > new Date('01-01-2019')) {
+      if (projectDate < archivedBefore && projectDate > new Date('2019-01-01')) {
         project.archived = true
       }
     }
@@ -352,9 +353,9 @@ export class ProjectService {
   public processComments(
     project: Project,
   ): {
-    commentsByIndex: EdjiComment[][]
-    highlightArrays: { alwaysHighlightArray: number[]; highlightArray: number[] }
-  } {
+      commentsByIndex: EdjiComment[][]
+      highlightArrays: { alwaysHighlightArray: number[]; highlightArray: number[] }
+    } {
     this.initializeProjectObservables()
     // these empty arrays will be passed into their modifier functions throughout this function
     let commentsByIndex: EdjiComment[][] = []
@@ -517,9 +518,9 @@ export class ProjectService {
     alwaysHighlightArray: number[],
     highlightArray: number[],
   ): {
-    alwaysHighlightArray: number[]
-    highlightArray: number[]
-  } {
+      alwaysHighlightArray: number[]
+      highlightArray: number[]
+    } {
     // conditional determines which array we'll sort to - students only see highlightArray w/o heat vision on
     let alwaysHighlight = userId === comment.user_id || project.teacher_id == comment.user_id
 
@@ -593,7 +594,7 @@ export class ProjectService {
           this.currentProjectSource.next(this.project)
           return this.project
         }),
-      )
+    )
   }
 
   /**
@@ -613,7 +614,7 @@ export class ProjectService {
           this.currentProjectSource.next(this.project)
           return this.project
         }),
-      )
+    )
   } // public update (updateObj: any, projectId: string): Observable<any>
 
   /** .
@@ -627,7 +628,7 @@ export class ProjectService {
         map(data => {
           this._readings.removeProject(targetProject)
         }),
-      )
+    )
   } // public delete(projectId)
 
   /**
@@ -727,7 +728,7 @@ export class ProjectService {
       .delete(
         this._auth.getUrl() + '/api/v1/projects/' + projectId + '/comments' + search_params,
         this._auth.getOptions(),
-      )
+    )
       .pipe(
         map(data => {
           // Tell other Project views that the comment is gone
@@ -745,7 +746,7 @@ export class ProjectService {
           this.buildCommentsByPos()
           return data
         }),
-      )
+    )
       .toPromise()
   } //  public deleteComment(comment): Promise<any>
 
@@ -828,7 +829,7 @@ export class ProjectService {
       .delete(
         this._auth.getUrl() + '/api/v1/projects/' + projectId + '/answers' + search_params,
         this._auth.getOptions(),
-      )
+    )
       .pipe(
         map(data => {
           // Tell other Project views that the comment is gone
@@ -836,7 +837,7 @@ export class ProjectService {
           this.removeAnswerFromAnswers(answer)
           return data
         }),
-      )
+    )
       .toPromise()
   }
 
