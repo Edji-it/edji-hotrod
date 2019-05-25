@@ -138,7 +138,7 @@ export class ProjectService {
        * groupUpdate.type is the identifier for specific events
        */
       this._socket.groupUpdate.subscribe(groupUpdate => {
-        if (groupUpdate.type === 'refreshLeaderboard' && this.user._id === this.project.teacher_id) {
+        if (groupUpdate.type === 'refreshLeaderboard' && this.project.isTeaching) {
           this.addUserInfoToProject(groupUpdate)
         }
       }),
@@ -680,7 +680,7 @@ export class ProjectService {
         // standard event info:
         event_name: 'comment_action',
         user_id: this.user._id,
-        teacher: this.project.teacher._id === this.user._id,
+        teacher: this.project.isTeaching,
         hero: this.user.hero_status || false,
         institution_id: this.user.institution_ids || [],
         // event-specific info:
@@ -789,7 +789,7 @@ export class ProjectService {
         // standard event info:
         event_name: 'comment_action',
         user_id: this.user._id,
-        teacher: this.project.teacher._id === this.user._id,
+        teacher: this.project.isTeaching,
         hero: this.user.hero_status || false,
         institution_id: this.user.institution_ids || [],
         // event-specific info:
@@ -873,7 +873,7 @@ export class ProjectService {
       let dataInComment =
         (comment.data && comment.data != '') || (comment.url && comment.url != '') || comment.user_id == this.user._id
       // If user is current reading Owner/Teacher or Heat Vision is on, show all comments
-      let heatVisible = this.project.heat_vision || this.user._id == this.project.teacher_id
+      let heatVisible = this.project.heat_vision || this.project.isTeaching
       // Your own comments and the Owner/Teacher's comments are ALWAYS visible
       let alwaysVisible = comment.user_id == this.user._id || comment.user_id == this.project.teacher_id
 

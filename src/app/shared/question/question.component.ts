@@ -217,7 +217,7 @@ export class QuestionComponent implements OnInit, OnDestroy {
    * Test if an answer should be visible
    */
   private isAnswerVisible(answer): boolean {
-    let isReadingOwner = this.user._id === this.project.teacher_id
+    let isReadingOwner = this.project.isTeaching
     let isAnswerer = answer.user_id === this.user._id
     // isCommentVisible accounts for comment filters
     return (isReadingOwner || isAnswerer) && this._projects.isCommentVisible(answer)
