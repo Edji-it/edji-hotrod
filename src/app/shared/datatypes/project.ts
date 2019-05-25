@@ -5,7 +5,9 @@ import { Reading } from './reading'
 export interface Project extends BaseProject {
   students: { _id: string; fullname: string; username: string; userType: string }[] // front end properties to add more reference info to students
   temps: { _id: string; fullname: string; userType: string }[] // front end properties to add more reference info to temps
+  // Front end convenience flags
   archived?: boolean
+  isTeaching?: boolean
 }
 
 /** The project object as it is returned from the server */

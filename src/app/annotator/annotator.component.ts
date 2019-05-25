@@ -1147,7 +1147,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         highlightCount += this.filterHighlightArray[i]
       }
     } else {
-      if ((this.project.heat_vision || this.user._id == this.project.teacher_id) && this.highlightArray[i]) {
+      if ((this.project.heat_vision || this.project.isTeaching) && this.highlightArray[i]) {
         highlightCount += this.highlightArray[i]
       }
       if (this.alwaysHighlightArray[i]) {

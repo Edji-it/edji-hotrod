@@ -205,7 +205,7 @@ export class AcademyService implements CanActivate {
         // standard event info:
         event_name: 'reading_tick',
         user_id: user._id,
-        teacher: project.teacher._id === user._id,
+        teacher: project.isTeaching,
         hero: user.hero_status || false,
         institution_id: user.institution_ids || [],
         // event-specific info:
