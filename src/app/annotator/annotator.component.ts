@@ -261,6 +261,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
               }
             }
             // Set aside feedback for current user
+            console.log(this.project.report_evals)
             if (this.project.report_evals) {
               this.feedbackForUser = this.project.report_evals.filter(feedback => {
                 return this.user._id == feedback.user_id
@@ -960,7 +961,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     } else {
       // Browser API selection
       let selection = Rangy.getSelection()
-      let getNodeIndex = function(node: any): number {
+      let getNodeIndex = function (node: any): number {
         // Selections often happen at the text node level, inside the actual element
         // In which case we need to reference its parent node
         // Note: we tried node.hasOwnProperty here and would sometimes get a false true resolution of the if statement... not sure how that is possible
@@ -1042,7 +1043,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // Found a text node!
 
         // Split text inside child nodes
-        let nodeWords = node.textContent.split(/(?:([^a-zA-Z0-9]))/).filter(function(el) {
+        let nodeWords = node.textContent.split(/(?:([^a-zA-Z0-9]))/).filter(function (el) {
           return el.replace(/([\n])/g, '')
         })
 
