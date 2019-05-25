@@ -14,6 +14,7 @@ interface BaseProject {
   reading_id: Reading
   teacher: User
   teacher_id: any
+  co_owner_ids?: string[]
   owner_id: any
   comments: EdjiComment[]
   answers?: EdjiComment[]

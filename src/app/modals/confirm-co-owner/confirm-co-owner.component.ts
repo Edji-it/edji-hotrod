@@ -24,14 +24,14 @@ export class ConfirmCoOwnerModal implements OnInit {
   ngOnInit() {}
 
   makeCoOwner(student: User): void {
-    // this._projects.makeCoOwner(student)
-    //   .subscribe(
-    //     data => {
-    //       this.closeModal.emit()
-    //     },
-    //     err => {
-    //       this.showError = true
-    //     },
-    // )
+    this._projects.makeCoOwner(student).subscribe(
+      data => {
+        console.log(data)
+        this.closeModal.emit()
+      },
+      err => {
+        this.showError = true
+      },
+    )
   }
 }

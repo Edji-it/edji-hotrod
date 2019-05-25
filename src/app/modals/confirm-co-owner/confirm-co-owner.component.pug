@@ -2,14 +2,14 @@
   .modal-dialog
     .modal-content
       .modal-header
-        h4.modal-title Make <b>{{ student.fullname }}</b> a Group co-owner
+        h4.modal-title Make <b>{{ student.fullname }}</b> a Group co-teacher
         button((click)="closeModal.emit()", type="button", class="close") &times;
       .modal-body
-        p By making {{ student.fullname }} a co-owner of this Group, they will be able to access the Owner Tools, such as Heat Vision, and delete comments. Would you like to proceed?
+        p By making {{ student.fullname }} a co-teacher of this Group, they will be able to access the teacher Tools, such as Heat Vision, and delete comments. Would you like to proceed?
       .modal-footer
         div(*ngIf="showError", class="alert alert-danger", role="alert")
           strong Error Updating User
-          | There was an error upgrading the student to co-owner, please try again or contact support.
+          | There was an error upgrading the student to co-teacher, please try again or contact support.
         .btn-row.right
           button.btn((click)="closeModal.emit()", type="button", data-dismiss="modal") Cancel
-          button#delBtnModal.btn.btn-primary((click)="closeModal.emit(); deleteThisReading(reading);") Yes, make co-owner
+          button#delBtnModal.btn.btn-primary((click)="closeModal.emit(); makeCoOwner(student);") Yes, make co-teacher

@@ -968,6 +968,20 @@ export class ProjectService {
     this.activeFilter = commentFilter
     this.filterUpdatesSource.next(this.activeFilter)
   }
+
+  /**
+   * Add a user to the co-owner ids array
+   */
+  public makeCoOwner(student: User, project?: Project) {
+    if (!project) {
+      project = this.currentProjectSource.value
+    }
+    let coOwnerArray: string[] = project.co_owner_ids || []
+    if (!coOwnerArray.includes(student._id)) {
+      coOwnerArray.push(student._id)
+    }
+    return this.update({ co_owner_ids: coOwnerArray }, project._id)
+  }
 } // _project
 
 /**
