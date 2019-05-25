@@ -406,12 +406,14 @@ export class ProjectService {
    */
   private addCommentToArray(comment: EdjiComment, project: Project, user: User, arr: EdjiComment[][]): EdjiComment[][] {
     comment.project_id = project._id
-
+    // Is this a teacher comment?
+    if (comment.user_id === this.project.teacher_id || this.project.co_owner_ids.indexOf(comment.user_id) > -1) {
+      comment.isTeacher = true
+    }
     // get the user help decorate the comment
-    if (comment.user_id === user._id || comment.user_id === this.project.teacher_id) {
+    if (comment.user_id === user._id || comment.isTeacher) {
       comment.showAvatar = true
     }
-
     // if (comment.loc && comment.loc.y && comment.text==="") {
     //     comment.imagePos = Math.round(comment.loc.y/8)*8
     // }

@@ -2,7 +2,10 @@
 .user-icon.pointer.hidden-sm-down(
   *ngIf="indexOnLine<9",
   (tap)='triggerCommentPane(true)',
-  [ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '','avatar-count-' + indexOnLine, 'avatar-' + comment.type, active ? 'active' : '' ]"
+  [ngClass]="['avatar-count-' + indexOnLine, 'avatar-' + comment.type]",
+  [class.active]="active",
+  [class.mobileBlock-mobile-comment]="commentMobile",
+  [class.is-teacher]="comment.isTeacher"
 )
   span.tooltipbody(*ngIf="indexOnLine<8")
     .tooltip-title([class.inline-center]="comment.type == 'audio'")
