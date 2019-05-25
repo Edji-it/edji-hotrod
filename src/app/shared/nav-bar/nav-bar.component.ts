@@ -449,7 +449,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
    */
   public toggleHeatVision(toggleTo: boolean): void {
     // Do not attempt if user does not own project
-    if (this.projectOwner._id != this.user._id) {
+    if (!this.currentProject.isTeaching) {
       return
     }
 

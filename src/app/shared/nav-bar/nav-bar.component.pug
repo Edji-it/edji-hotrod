@@ -47,7 +47,7 @@
           .user-tag-group--teacher
             follow-tag([owner]="projectOwner")
             .badge.badge-pill.badge-button.badge-teacher(
-              *ngIf="user._id == projectOwner._id",
+              *ngIf="currentProject.isTeaching",
               [routerLink]="['./']",
               [queryParams]="{ studentList: 'coteach'}"
             ) +
@@ -93,16 +93,16 @@
           .nav__btn-slider(
               [class.expanded]="sliderBtnExpanded['heat']",
               [class.loading]="sliderBtnLoading['heat']",
-              [class.has-action]="projectOwner._id == user._id",
+              [class.has-action]="currentProject.isTeaching",
               [class.inactive]="!currentProject.heat_vision"
               )
-            ng-container(*ngIf="projectOwner._id == user._id")
+            ng-container(*ngIf="currentProject.isTeaching")
               i.icon.icon-vision-flame((click)="toggleSlider('heat')")
                 .icon-pill-status
               .btn-slider__value.hover-parent((click)="toggleHeatVision(!currentProject.heat_vision)") 
                 .hover-show--inline-block(style="width: 85px; text-align:center;") Turn {{ currentProject.heat_vision ? 'Off' : 'On' }}
                 .hover-hide Heat Vision {{ currentProject.heat_vision ? 'On' : 'Off' }}
-            ng-container(*ngIf="projectOwner._id != user._id")
+            ng-container(*ngIf="!currentProject.isTeaching")
               i.icon.icon-vision-flame((click)="toggleSlider('heat')")
                 .icon-pill-status
               .btn-slider__value

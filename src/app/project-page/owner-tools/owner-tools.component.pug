@@ -1,4 +1,4 @@
-.owner-bar.hidden-md-down(*ngIf="currentProject && user._id == currentProject.owner_id")
+.owner-bar.hidden-md-down(*ngIf="currentProject && currentProject.isTeaching")
   label.bar-title Owner
   //- Buttons for toggling panes and tools
     - Desktop Buttons
