@@ -217,6 +217,7 @@ export class ReadingRecapComponent implements OnInit {
   private populateStudentList(initialPass?: boolean): void {
     let removePos = -1
     // set the dropdown filter for all students
+    this.students = []
     this.commentStats.stats.userStats.forEach((student, index) => {
       if (student._id !== this.teacherId) {
         this.students.push({ label: student.fullname, value: student._id })
