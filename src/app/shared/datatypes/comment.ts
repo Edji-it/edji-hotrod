@@ -13,7 +13,7 @@ export interface EdjiComment extends BaseComment {
   project_id: string
   active: boolean
   showAvatar: boolean
-  isTeacher: boolean
+  authorIsTeacher: boolean
   imagePos: number
   selected: boolean
 }

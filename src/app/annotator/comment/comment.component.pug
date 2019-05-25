@@ -94,7 +94,7 @@ div(*ngIf="commentPaneActive", [id]="'comment-' + comment._id")
         .user-icon(
                 *ngIf="!readingReport", 
                 [class.selected]="comment.selected",
-                [class.is-teacher]="comment.isTeacher", 
+                [class.is-teacher]="comment.authorIsTeacher", 
                 [ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '' ]"
             )
             span.user-icon__initials {{comment.author.substring(0,2)}}

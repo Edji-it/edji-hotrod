@@ -407,11 +407,11 @@ export class ProjectService {
   private addCommentToArray(comment: EdjiComment, project: Project, user: User, arr: EdjiComment[][]): EdjiComment[][] {
     comment.project_id = project._id
     // Is this a teacher comment?
-    if (comment.user_id === this.project.teacher_id || this.project.co_owner_ids.indexOf(comment.user_id) > -1) {
-      comment.isTeacher = true
+    if (comment.user_id === this.project.teacher_id || (this.project.co_owner_ids && this.project.co_owner_ids.indexOf(comment.user_id) > -1)) {
+      comment.authorIsTeacher = true
     }
     // get the user help decorate the comment
-    if (comment.user_id === user._id || comment.isTeacher) {
+    if (comment.user_id === user._id || comment.authorIsTeacher) {
       comment.showAvatar = true
     }
     // if (comment.loc && comment.loc.y && comment.text==="") {
@@ -913,7 +913,7 @@ export class ProjectService {
         heatVisible = this.project.heat_vision || this.project.isTeaching
       }
       // Your own comments and the Owner/Teacher's comments are ALWAYS visible
-      let alwaysVisible = comment.user_id == this.user._id || this.project.isTeaching
+      let alwaysVisible = comment.user_id == this.user._id || comment.isTeacher
       return heatVisible || alwaysVisible
     }
   }
