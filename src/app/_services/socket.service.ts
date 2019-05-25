@@ -21,10 +21,6 @@ export class SocketService {
   private heatVision: Subject<any> = new Subject()
   public heatVisionUpdates: Observable<any> = this.heatVision.asObservable()
 
-  // Feedback updates observable
-  private feedbackSubject: Subject<any> = new Subject()
-  public feedbackUpdates: Observable<any> = this.feedbackSubject.asObservable()
-
   // Refresh Leaderboard Update observable
   private groupUpdateSubj: Subject<any> = new Subject()
   public groupUpdate: Observable<any> = this.groupUpdateSubj.asObservable()
@@ -73,11 +69,6 @@ export class SocketService {
       this.heatVision.next(heatToggle)
     })
 
-    // Watch feedback updates
-    this.socket.on('updateFeedback', feedbackUpdate => {
-      this.heatVision.next(feedbackUpdate)
-    })
-
     /**
      * Watch any project updates
      * Trigger socket response generically
@@ -104,14 +95,6 @@ export class SocketService {
       heatVision: heatToggle,
     }
     this.socket.emit('heatVision', projectPowers)
-  }
-
-  /**
-   * Update the Student view (and co-teacher if any) to let them know there is feedback!
-   * @param feedback is the new feedback to emit
-   */
-  public updateFeedback(feedback: any) {
-    this.socket.emit('updateFeedback', feedback)
   }
 
   /**

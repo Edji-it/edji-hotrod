@@ -9,7 +9,7 @@ import { Angulartics2 } from 'angulartics2'
 // Project Dependencies
 import { CommentFilter, ProjectService } from 'src/app/_services/project.service'
 import { User, Project, EdjiComment, CommentStats } from '../../../shared/datatypes'
-import { AuthService, AcademyService } from '../../../_services'
+import { AuthService, AcademyService, SocketService } from '../../../_services'
 import { ALLSPARK } from '../../../app.constants'
 import { EdjiDatePipe } from '../../../_pipes/edjidate.pipe'
 
@@ -69,6 +69,7 @@ export class ReadingRecapComponent implements OnInit {
     private _fb: FormBuilder,
     private _academy: AcademyService,
     private angulartics: Angulartics2,
+    private _socket: SocketService
   ) {
     this.evaluationForm = _fb.group({
       email: [null, [Validators.required, this.emailValidator]],
@@ -295,7 +296,7 @@ export class ReadingRecapComponent implements OnInit {
 
             // user our academy service to package up the email details and send it off to our api if the project successfully updated
             this._academy.sendReadingRecap(formValue, pdfData).subscribe(
-              data => {},
+              data => { },
               error => {
                 console.error(error)
               },
@@ -339,6 +340,10 @@ export class ReadingRecapComponent implements OnInit {
     this._projects.update(projectToUpdate, this.project._id).subscribe(project => {
       // update our project so evaluation shows in the page
       this.evaluations.push(evalObj)
+      this._socket.groupUpdateEvent({
+        type: 'feedbackUpdate',
+        feedback: evalObj
+      })
     }),
       error => {
         console.error(error)

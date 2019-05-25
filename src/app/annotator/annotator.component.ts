@@ -261,11 +261,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
               }
             }
             // Set aside feedback for current user
-            console.log(this.project.report_evals)
             if (this.project.report_evals) {
-              this.feedbackForUser = this.project.report_evals.filter(feedback => {
-                return this.user._id == feedback.user_id
-              })
+              this.setFeedback()
             }
             // Display heat vision status on initial load
             this.showHeatVisionToast(this.project.heat_vision)
@@ -378,6 +375,19 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // We send the message here because we only care to show it when the user has the reading loaded
         this.showHeatVisionToast(this.project.heat_vision)
       }),
+    )
+
+    /**
+     * Our socket handler for group-specific socket update events
+     * groupUpdate.type is the identifier for specific events
+     */
+    this.subscriptions.push(
+      // Subscribe to feedback updates
+      this._socket.groupUpdate.subscribe(groupUpdate => {
+        if (groupUpdate.type === 'feedbackUpdate') {
+          this.setFeedback(groupUpdate['feedback'])
+        }
+      })
     )
 
     // Subscribe to updates on where to move the lastWord for the infinity scroll
@@ -1397,6 +1407,17 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.project.comments.splice(i, 1)
         i--
       }
+    }
+  }
+
+  // Sets the feedback display for students
+  private setFeedback(feedback?: any): void {
+    this.feedbackForUser = this.project.report_evals.filter(feedback => {
+      return this.user._id == feedback.user_id
+    })
+    // the socket update needs to have the latest feedback pushed in
+    if (feedback) {
+      this.feedbackForUser.push(feedback)
     }
   }
 }
