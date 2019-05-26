@@ -3,7 +3,7 @@ import { Observable } from 'rxjs'
 
 // Project Dependencies
 import { MessageToast, MessageService } from 'src/app/_services'
-import { Router } from '@angular/router';
+import { Router } from '@angular/router'
 @Component({
   selector: 'edji-message-toasts',
   templateUrl: './message-toasts.component.pug',
@@ -14,10 +14,7 @@ export class MessageToastsComponent implements OnInit {
   public toasts: MessageToast[] = []
   public toastObservable: Observable<MessageToast[]>
 
-  constructor(
-    private _messages: MessageService,
-    public _router: Router,
-  ) { }
+  constructor(private _messages: MessageService, public _router: Router) {}
 
   ngOnInit() {
     this.toastObservable = this._messages.toastUpdates
@@ -33,7 +30,8 @@ export class MessageToastsComponent implements OnInit {
       'heat-off': 'icon-vision-flame inactive',
       success: 'icon-check',
       info: 'icon-notice',
-      promo: 'icon-gift'
+      promo: 'icon-gift',
+      'new-feedback': 'icon-feedback',
     }
     return toastTypeMap[toastType] || toastTypeMap['info']
   }
@@ -49,7 +47,7 @@ export class MessageToastsComponent implements OnInit {
       let link = toast.link
       if (toast.id == 'feedback') {
         const fbEl = document.querySelector("[name='#fb-" + toast.link + "']")
-        fbEl.scrollIntoView({ behavior: "smooth" })
+        fbEl.scrollIntoView({ behavior: 'smooth' })
         return
       }
       this._router.navigate([link])

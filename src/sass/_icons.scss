@@ -210,6 +210,10 @@ $iconGrayOpacity: 0.6;
   height: 2em;
 }
 
+.icon-feedback {
+  @include icon('icon-feedback.svg');
+}
+
 .icon-filter {
   @include icon('icon-filter.svg');
   opacity: $iconGrayOpacity;

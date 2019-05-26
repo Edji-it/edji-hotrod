@@ -503,8 +503,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     // Send toast via message service
     this._messages.sendToast({
       message: 'You have new feedback from your teacher',
-      type: 'newFeedback',
-      id: 'feedback',
+      type: 'new-feedback',
+      id: 'newFeedback',
       link: feedback._id,
       limitToPage: 'project',
       requireDismiss: true,
