@@ -45,7 +45,7 @@ export class MessageToastsComponent implements OnInit {
     // jump to route if we have the link property on toast
     if (toast.link) {
       let link = toast.link
-      if (toast.id == 'feedback') {
+      if (toast.id == 'newFeedback') {
         const fbEl = document.querySelector("[name='#fb-" + toast.link + "']")
         fbEl.scrollIntoView({ behavior: 'smooth' })
         return
