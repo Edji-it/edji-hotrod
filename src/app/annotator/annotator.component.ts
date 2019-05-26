@@ -385,7 +385,11 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
       // Subscribe to feedback updates
       this._socket.groupUpdate.subscribe(groupUpdate => {
         if (groupUpdate.type === 'feedbackUpdate') {
-          this.setFeedback(groupUpdate['feedback'])
+          let feedback = groupUpdate['feedback']
+          this.setFeedback(feedback)
+          if (feedback.user_id === this.user._id) {
+            this.showFeedbackToast(feedback)
+          }
         }
       })
     )
@@ -422,6 +426,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
     // Clear heat vision message
     this._messages.dismissToast('heat')
+    // Clear feedback message
+    this._messages.dismissToast('feedback')
   }
 
   /**
@@ -486,6 +492,22 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
       type: 'heat-' + heatStatus,
       id: 'heat',
       limitToPage: 'project',
+    })
+  }
+
+  /**
+   * Display new feedback toast
+   * @param feedback is the new feedback from the teacher
+   */
+  private showFeedbackToast(feedback: any) {
+    // Send toast via message service
+    this._messages.sendToast({
+      message: 'You have new feedback from your teacher',
+      type: 'newFeedback',
+      id: 'feedback',
+      link: feedback._id,
+      limitToPage: 'project',
+      requireDismiss: true,
     })
   }
 
@@ -1419,5 +1441,13 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     if (feedback) {
       this.feedbackForUser.push(feedback)
     }
+  }
+
+  /**
+   * Assign the feedback with _id to set up the attribute
+   * @param feedback is the feedback record
+   */
+  public feedbackAttribute(feedback: any): string {
+    return `#fb-${feedback && feedback._id}`
   }
 }

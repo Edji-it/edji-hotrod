@@ -177,6 +177,7 @@ scroll-progress([scrollProgress]="currentScroll")
                             | {{ project.teacher.fullname }}
                             i &nbsp;{{ feedback.createdAt | edjidate:'timeAgo':null:secondsAgo }}
                         p.feedback-bubble {{ feedback.evaluation ? feedback.evaluation : '' }}
+                        div([attr.name]="feedbackAttribute(feedback)")
         .row.mb-4(*ngIf="lastWord < reading.words.length")
             .loading(style="margin: 0 auto;")
 //- End of Reading options

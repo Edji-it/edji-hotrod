@@ -144,14 +144,14 @@ export class MessageService {
                       error => {
                         console.error(error)
                       },
-                  )
+                    )
                 }
               }
             },
             err => {
               console.error(err)
             },
-        )
+          )
       }
     })
   }
@@ -169,7 +169,7 @@ interface GetMessagesResponse {
 
 export interface MessageToast {
   message: string
-  type: string // "info", "heat-on", "heat-off", "promo"
+  type: string // "info", "heat-on", "heat-off", "promo", "newFeedback"
   id: string
   link?: string // routerLink path
   date?: Date

@@ -339,11 +339,12 @@ export class ReadingRecapComponent implements OnInit {
 
     // update the project with the new evaluation, create the pdf, and then email it out
     this._projects.update(projectToUpdate, this.project._id).subscribe(project => {
+      const newEval = project.report_evals[project.report_evals.length - 1]
       // update our project so evaluation shows in the page
-      this.evaluations.push(evalObj)
+      this.evaluations.push(newEval)
       this._socket.groupUpdateEvent({
         type: 'feedbackUpdate',
-        feedback: evalObj
+        feedback: newEval
       })
     }),
       error => {
