@@ -6,6 +6,7 @@ import { map, take } from 'rxjs/operators'
 
 // Project Dependencies
 import { AuthService } from './auth.service'
+import { NavigationExtras } from '@angular/router'
 
 const TOAST_TIME: number = 10000
 @Injectable()
@@ -172,6 +173,7 @@ export interface MessageToast {
   type: string // "info", "heat-on", "heat-off", "promo", "new-feedback"
   id: string
   link?: string // routerLink path
+  linkFragment?: string
   date?: Date
   limitToPage?: string // identify route where message type should show
   requireDismiss?: boolean
