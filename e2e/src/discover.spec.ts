@@ -138,7 +138,7 @@ describe('Discover Feed', () => {
       discover.closeReadingPreview()
     })
 
-    it('should open reading preview and edit a reading then save it', () => {
+    it('should open reading preview and edit a reading then save it', async () => {
       browser.wait(
         EC.elementToBeClickable(discover.firstFeedReading),
         5000,
@@ -173,7 +173,7 @@ describe('Discover Feed', () => {
       browser.sleep(1000)
       browser.wait(EC.elementToBeClickable(dashboard.firstReadingCard), 5000, 'never got back to the dashboard')
       // Check title of most recent readings
-      let foundTitle = discover.validateReadingTitle(newReadingTitle)
+      let foundTitle = await discover.validateReadingTitle(newReadingTitle)
       expect(foundTitle).toBeTruthy()
       reset()
       discover.getPage()
@@ -278,8 +278,8 @@ describe('Discover Feed', () => {
 
     it('should open login modal when trying to follow a user', async () => {
       browser.wait(
-        EC.elementToBeClickable(discover.filterFollowing), 
-        5000, 
+        EC.elementToBeClickable(discover.filterFollowing),
+        5000,
         'following filter button on discover feed was not clickable'
       )
       discover.filterFollowing.click()
