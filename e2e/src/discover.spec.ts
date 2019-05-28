@@ -138,7 +138,7 @@ describe('Discover Feed', () => {
       discover.closeReadingPreview()
     })
 
-    it('should open reading preview and edit a reading then save it', async () => {
+    it('should open reading preview and edit a reading then save it', () => {
       browser.wait(
         EC.elementToBeClickable(discover.firstFeedReading),
         5000,
@@ -173,7 +173,8 @@ describe('Discover Feed', () => {
       browser.sleep(1000)
       browser.wait(EC.elementToBeClickable(dashboard.firstReadingCard), 5000, 'never got back to the dashboard')
       // Check title of most recent readings
-      let foundTitle = await discover.validateReadingTitle(newReadingTitle)
+      let foundTitle = discover.validateReadingTitle(newReadingTitle)
+      browser.sleep(1000)
       expect(foundTitle).toBeTruthy()
       reset()
       discover.getPage()
