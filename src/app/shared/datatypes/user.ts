@@ -8,6 +8,14 @@ export interface User extends BaseUser {
   stripe_customer_id: string
 }
 
+export interface PublicUser {
+  _id: string
+  username?: string
+  fullname: string
+  hero_status?: boolean
+  userType?: string
+}
+
 /**
  *  The user we get back from the server
  *  If any properties are added on the front end, they should be added to the User interface

@@ -42,10 +42,11 @@
           *ngIf="currentReading.title",
           title="{{ currentReading.title }}"
           ) {{ currentReading.title }}
-        .nav-bar__author(*ngIf="projectOwner && projectOwner._id")
-          span.label.mr-1 Teacher
+        .nav-bar__author(*ngIf="currentProject.owners && currentProject.owners[0]")
+          span.label.mr-1 Teacher{{currentProject.owners[1] && 's'}}
           .user-tag-group--teacher
-            follow-tag([owner]="projectOwner")
+            ng-container(*ngFor="let owner of currentProject.owners")
+              follow-tag([owner]="owner")
             .badge.badge-pill.badge-button.badge-teacher(
               *ngIf="currentProject.isTeaching",
               [routerLink]="['./']",
@@ -87,7 +88,7 @@
             span.list-icon--right([innerHtml]="':outbox_tray:' | emojione")
     //- Project Info (Desktop & Mobile)
     .nav-bar__project-data
-      ng-container(*ngIf="showProjectInfo && currentProject && currentProject._id && projectOwner")
+      ng-container(*ngIf="showProjectInfo && currentProject && currentProject._id && currentProject.owners[0]")
         //- Heat Vision Status
         .nav__btn-slider__wrap.hover--tooltip
           .nav__btn-slider(

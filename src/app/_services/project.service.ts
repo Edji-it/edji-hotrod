@@ -218,7 +218,10 @@ export class ProjectService {
   public setCurrentProject(projectCode: string): Observable<any> {
     return this._http
       .get(
-        this._auth.getUrl() + '/api/v1/projects/' + encodeURIComponent(projectCode) + '?pop[]=reading_id&pop[]=teacher',
+        this._auth.getUrl() +
+          '/api/v1/projects/' +
+          encodeURIComponent(projectCode) +
+          '?pop[]=reading_id&pop[]=teacher&pop[]=co_owners',
         this._auth.getOptions(),
       )
       .pipe(
@@ -230,6 +233,12 @@ export class ProjectService {
           // Decorate with isTeaching
           if (this.user._id === project.teacher_id || project.co_owner_ids.indexOf(this.user._id) > -1) {
             project.isTeaching = true
+          }
+          //
+          project.owners = [project.teacher]
+          // Populate projectOwners with co-teachers if available
+          if (project.co_owners) {
+            project.owners = project.owners.concat(project.co_owners)
           }
           // Clear stats object
           this._commentStats.resetStats()
@@ -407,7 +416,10 @@ export class ProjectService {
   private addCommentToArray(comment: EdjiComment, project: Project, user: User, arr: EdjiComment[][]): EdjiComment[][] {
     comment.project_id = project._id
     // Is this a teacher comment?
-    if (comment.user_id === this.project.teacher_id || (this.project.co_owner_ids && this.project.co_owner_ids.indexOf(comment.user_id) > -1)) {
+    if (
+      comment.user_id === this.project.teacher_id ||
+      (this.project.co_owner_ids && this.project.co_owner_ids.indexOf(comment.user_id) > -1)
+    ) {
       comment.authorIsTeacher = true
     }
     // get the user help decorate the comment

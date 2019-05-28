@@ -19,7 +19,7 @@ import {
   MessageService,
   MessageToast,
 } from '../../_services'
-import { User } from '../datatypes'
+import { User, Project } from '../datatypes'
 import { AutosaveState } from '../../new-reading-page'
 
 @Component({
@@ -46,8 +46,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
   public user: any
   public academyState: AcademyState = {}
   public currentAcademy: Academy = {}
-  public currentProject: any
-  public projectOwner: any
+  public currentProject: Project
   public createdDate: string
   public liveCount: number = 1
   public currentReading: any
@@ -194,7 +193,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
         this._projects.currentProject.subscribe(
           project => {
             this.currentProject = project
-            this.projectOwner = project.teacher
             this.createdDate = new Date(project.createdAt).toDateString()
           },
           error => {

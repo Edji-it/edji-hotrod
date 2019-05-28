@@ -28,7 +28,6 @@ $defaultTagColor: #767676;
   }
 }
 
-
 .user-tag {
   line-height: 12px;
   vertical-align: middle;
@@ -47,6 +46,7 @@ $defaultTagColor: #767676;
 
   & .user-tag {
     border: 2px solid $actionGreen;
+    margin-right: 2px;
   }
 }
 
