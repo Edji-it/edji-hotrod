@@ -9,6 +9,7 @@ import {
   ViewChildren,
   HostListener,
   ViewChild,
+  AfterViewInit,
 } from '@angular/core'
 import { Subject, Subscription } from 'rxjs'
 import * as Rangy from 'rangy'
@@ -28,13 +29,14 @@ import {
 } from '../_services'
 import { CommentPermissions, EdjiComment, Project, Reading, Feedback } from './../shared/datatypes'
 import { ALLSPARK } from '../app.constants'
+import { ActivatedRoute } from '@angular/router'
 
 @Component({
   selector: 'annotator',
   templateUrl: './annotator.component.pug',
   styleUrls: ['annotator.component.scss'],
 })
-export class AnnotatorComponent implements OnInit, OnDestroy {
+export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   /*
         Annotator Component
         Last Mod: 5 Aug 2017 - Josh Kyburz
@@ -167,16 +169,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     public _comments: CommentService,
     private angulartics: Angulartics2,
     private _audio: AudioService,
-    private _messages: MessageService, // private _hotkeysService: HotkeysService
+    private _messages: MessageService,
+    private route: ActivatedRoute
   ) {
-    // this._hotkeysService.add(new Hotkey('t', (event: KeyboardEvent): boolean => {
-    //      this.addTextComment({ name: 'Hotkey'})
-    //     return false // Prevent bubbling
-    // }))
-    // this._hotkeysService.add(new Hotkey('e', (event: KeyboardEvent): boolean => {
-    //      this.addEmojiComment({ name: 'Hotkey'})
-    //     return false // Prevent bubbling
-    // }))
     this.window = window
   }
 
@@ -201,6 +196,17 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     // Update scroll progress on resize
     this.currentDocHeight = 0
     this.preScrollHeightUpdate()
+  }
+
+  ngAfterViewInit(): void {
+    this.subscriptions.push(
+      this.route.fragment.subscribe(async fragment => {
+        const fbEl = await document.querySelector("[id='" + fragment + "']")
+        if (fragment && fbEl) {
+          fbEl.scrollIntoView({ behavior: "smooth" })
+        }
+      })
+    )
   }
 
   ngOnInit() {
@@ -1448,6 +1454,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
    * @param feedback is the feedback record
    */
   public feedbackAttribute(feedback: any): string {
-    return `#fb-${feedback && feedback._id}`
+    return `fb-${feedback && feedback._id}`
   }
 }

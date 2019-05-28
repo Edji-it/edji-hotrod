@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core'
 import { Observable } from 'rxjs'
+import { Location } from '@angular/common'
 
 // Project Dependencies
 import { MessageToast, MessageService } from 'src/app/_services'
@@ -14,7 +15,11 @@ export class MessageToastsComponent implements OnInit {
   public toasts: MessageToast[] = []
   public toastObservable: Observable<MessageToast[]>
 
-  constructor(private _messages: MessageService, public _router: Router) {}
+  constructor(
+    private _messages: MessageService,
+    public _router: Router,
+    public location: Location
+  ) { }
 
   ngOnInit() {
     this.toastObservable = this._messages.toastUpdates
@@ -46,8 +51,15 @@ export class MessageToastsComponent implements OnInit {
     if (toast.link) {
       let link = toast.link
       if (toast.id == 'newFeedback') {
-        const fbEl = document.querySelector("[name='#fb-" + toast.link + "']")
-        fbEl.scrollIntoView({ behavior: 'smooth' })
+        let currentUrl = this._router.url
+        if (this._router.url.indexOf('%23fb') !== -1) {
+          currentUrl = this._router.url.split('%23fb')[0]
+        } else {
+          currentUrl = this._router.url.split('#fb')[0]
+          const pathWithoutHash = this.location.path(false)
+          this.location.replaceState(pathWithoutHash)
+        }
+        this._router.navigate([currentUrl], { fragment: `fb-${toast.link}` })
         return
       }
       this._router.navigate([link])
