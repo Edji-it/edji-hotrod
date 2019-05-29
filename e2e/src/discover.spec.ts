@@ -172,9 +172,10 @@ describe('Discover Feed', () => {
       // .sleep() excuse: A previously loaded reading card causes the subsequent wait to fire too early
       browser.sleep(1000)
       browser.wait(EC.elementToBeClickable(dashboard.firstReadingCard), 5000, 'never got back to the dashboard')
+      // also need to wait until the draft cards load in for us to check the title
+      browser.wait(EC.elementToBeClickable(dashboard.firstDraftCard), 7000, 'reading draft cards never loaded')
       // Check title of most recent readings
       let foundTitle = discover.validateReadingTitle(newReadingTitle)
-      browser.sleep(1000)
       expect(foundTitle).toBeTruthy()
       reset()
       discover.getPage()
@@ -204,6 +205,8 @@ describe('Discover Feed', () => {
       // .sleep() excuse: A previously loaded reading card causes the subsequent wait to fire too early
       browser.sleep(1000)
       browser.wait(EC.elementToBeClickable(dashboard.firstReadingCard), 5000, 'never got back to the dashboard')
+      // also need to wait until the draft cards load in for us to check the title
+      browser.wait(EC.elementToBeClickable(dashboard.firstDraftCard), 7000, 'reading draft cards never loaded')
       // Check title of most recent readings
       let foundTitle = discover.validateReadingTitle(readingTitle)
       expect(foundTitle).toBeTruthy()
