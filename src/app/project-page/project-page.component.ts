@@ -150,6 +150,14 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
     this._academy.startReadingTimer(user, project)
     // this will set the user's status on the leaderboard
     this._projects.commentStats.userStatus(this.user, 'active')
+    if (this.user._id !== this.project.teacher_id) {
+      // emit the socket back to the teacher
+      this._socket.groupUpdateEvent({
+        type: 'updateUserStatus',
+        status: 'active',
+        user: this.user
+      })
+    }
   }
 
   private addToLeaderboard() {

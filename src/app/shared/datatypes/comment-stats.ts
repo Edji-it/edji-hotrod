@@ -1,5 +1,5 @@
 import { EdjiComment, iCommentStats, Project, User } from './'
-import { UserCommentStats } from './comment'
+import { UserCommentStats, userReadingStatus } from './comment'
 
 export class CommentStats {
   public _stats: iCommentStats = {
@@ -56,6 +56,7 @@ export class CommentStats {
         audio_comment_count: 0,
         fullname: student.fullname,
         comments: [],
+        status: 'offline',
       })
     }
 
@@ -73,6 +74,7 @@ export class CommentStats {
         audio_comment_count: 0,
         fullname: student.fullname,
         comments: [],
+        status: 'offline',
       })
     }
     return commentStats
@@ -101,6 +103,7 @@ export class CommentStats {
           audio_comment_count: 0,
           fullname: student.fullname,
           comments: [],
+          status: 'active',
         })
       }
     }
@@ -121,6 +124,7 @@ export class CommentStats {
           audio_comment_count: 0,
           fullname: student.fullname,
           comments: [],
+          status: 'active',
         })
       }
     }
@@ -169,6 +173,7 @@ export class CommentStats {
         text_comment_count: comment.type === 'text' && !isReply ? 1 : 0,
         audio_comment_count: comment.type === 'audio' && !isReply ? 1 : 0,
         comments: [comment],
+        status: 'active',
       })
     } else if (student) {
       if (isReply) {
@@ -264,8 +269,17 @@ export class CommentStats {
     this._stats.comment_avg = Math.round(avgSum / userLength)
   }
 
-  public userStatus(user: User, status: string) {
-    console.log(`${user._id} is now ${status}`)
+  /**
+   * Updates the user status on the commentStats.userStats
+   * @param user current user
+   * @param status is of type userReadingStatus (offline, idle, or active)
+   */
+  public userStatus(user: User, status: userReadingStatus) {
+    let student = this.findStudent(user._id)
+    if (student) {
+      student.status = status
+    }
+    console.log(this._stats)
   }
 }
 

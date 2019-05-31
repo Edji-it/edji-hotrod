@@ -214,7 +214,6 @@ export class AcademyService implements CanActivate {
     // Kick off the reading timer subscription
     this.readingTimerSubscription = interval(30000).subscribe(() => {
       if (this.userActive) {
-        console.log('sent data to pipo :)')
         // send the data to Pipo to log the new reading
         this.pipoEvent({
           // standard event info:
@@ -229,8 +228,6 @@ export class AcademyService implements CanActivate {
           reading_owner: project.teacher._id,
           reading_time: 30,
         })
-      } else {
-        console.log('user has no activity :(')
       }
     })
   }

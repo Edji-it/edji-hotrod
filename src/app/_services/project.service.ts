@@ -140,6 +140,8 @@ export class ProjectService {
       this._socket.groupUpdate.subscribe(groupUpdate => {
         if (groupUpdate.type === 'refreshLeaderboard' && this.user._id === this.project.teacher_id) {
           this.addUserInfoToProject(groupUpdate)
+        } else if (groupUpdate.type === 'updateUserStatus' && this.user._id === this.project.teacher_id) {
+          this.commentStats.userStatus(groupUpdate.user, groupUpdate.status)
         }
       }),
       /**
@@ -149,6 +151,13 @@ export class ProjectService {
       this._academy.userStatus.subscribe(userStatus => {
         if (this.user._id === this.project.teacher_id) {
           this.commentStats.userStatus(this.user, userStatus.status)
+        } else {
+          // emit the socket back to the teacher
+          this._socket.groupUpdateEvent({
+            type: 'updateUserStatus',
+            status: userStatus.status,
+            user: this.user
+          })
         }
       }),
       /**

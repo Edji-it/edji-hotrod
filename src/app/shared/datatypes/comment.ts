@@ -57,6 +57,7 @@ export interface UserCommentStats {
   text_comment_count: number
   audio_comment_count: number
   comments?: EdjiComment[]
+  status: userReadingStatus
 }
 
 export interface iCommentStats {
@@ -67,3 +68,5 @@ export interface iCommentStats {
   reply_count: number
   userStats: UserCommentStats[]
 }
+
+export type userReadingStatus = 'offline' | 'idle' | 'active'
