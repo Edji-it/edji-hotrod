@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs'
 import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
-import { AuthService, ReadingService, AcademyService, ReadingQuery } from '../_services'
+import { AuthService, ReadingService, AcademyService, LockerService, ReadingQuery } from '../_services'
 import { User, Reading, Project } from '../shared/datatypes'
 
 @Component({
@@ -42,10 +42,12 @@ export class SearchPage implements OnInit {
 
   // Modal Toggle
   public showReadingPreviewModal: boolean
+  public showReadingLinkModal: boolean
   public showFirstGroupModal: boolean
   public showConfirmArchiveModal: boolean
   public selectedReading: Reading
   public createdReading: Reading
+  public showLoginModal: boolean
 
   // Search
   public searchFieldWidth: number = 100
@@ -67,6 +69,9 @@ export class SearchPage implements OnInit {
   public readingArchivalSet: boolean = false
 
   public newGroup: Project
+  public loginParams: LoginParams = {
+    preview: ''
+  }
 
   // MAKE SUBJECTS COMPONENT
   public subjects: { id: string; name: string }[] = [
@@ -94,7 +99,8 @@ export class SearchPage implements OnInit {
     private _academy: AcademyService,
     private route: ActivatedRoute,
     private router: Router,
-  ) {}
+    private _locker: LockerService
+  ) { }
 
   ngOnInit() {
     if (this.router.url.indexOf('/discover/search') >= 0 || this.searchParams.searchTerm.length > 0) {
@@ -106,7 +112,11 @@ export class SearchPage implements OnInit {
         this.user = user
       }),
       // Get search params from URL
-      this.route.queryParams.subscribe(params => {
+      this.route.queryParams.subscribe(async params => {
+        this.loginParams = {
+          ...this.loginParams,
+          ...params
+        }
         this.clearFilterVars()
         if (params.q) {
           this.searchParams.searchTerm = params.q
@@ -134,6 +144,15 @@ export class SearchPage implements OnInit {
           this.searchParams.first = parseInt(params.from)
         }
         this.loadFeed()
+        if (params.preview) {
+          try {
+            // the link we generate to open the modal direct only contains a reading _id so we need to get that reading
+            this.selectedReading = await this._readings.get(params.preview).toPromise()
+            this.showReadingPreviewModal = true
+          } catch (err) {
+            console.error(err)
+          }
+        }
       }),
       this._readings.currentUserReadings.subscribe(
         userReadings => {
@@ -253,6 +272,10 @@ export class SearchPage implements OnInit {
 
     let queryString = this._readings.buildSearchParams(this.searchParams)
 
+    if (!this.user.isLoggedIn) {
+      queryString += '&scope=public'
+    }
+
     this._readings.search(queryString).subscribe(
       data => {
         this.readings = data.results || []
@@ -354,4 +377,24 @@ export class SearchPage implements OnInit {
       console.error(err)
     }
   }
+
+  public closeReadingPreview(login?: boolean): void {
+    this.showReadingPreviewModal = false
+    if (login) {
+      this.loginParams.preview = this.selectedReading._id
+      this.showLoginModal = true
+    }
+  }
+
+  public closeLoginModal(context?: string): void {
+    this.showLoginModal = false
+    if (context === 'preview') {
+      this.router.navigate(['/discover' + (this.isSearching ? '/search' : '')], { queryParams: this.loginParams })
+    }
+  }
+}
+
+export interface LoginParams {
+  preview?: string
+  [prop: string]: any
 }

@@ -8,6 +8,7 @@ export class Dashboard implements PageObjectInterface {
   // Public Instance Variables
   public readingCards = element.all(by.css('.reading-card'))
   public firstReadingCard = this.readingCards.first()
+  public firstDraftCard = element.all(by.css('.draft-card')).first()
   public archivedReadingCards = element.all(by.css('.reading-card.archived'))
   public firstReadingTitle = element.all(by.css('.reading-title__text')).first()
   public readingLoader = element(by.css('.e2e-reading-loader'))
@@ -36,6 +37,7 @@ export class Dashboard implements PageObjectInterface {
   public createNewGroupButton = element(by.cssContainingText('.dropdown-item', 'Create New Group'))
   public deleteButton = element(by.cssContainingText('.dropdown-item', 'Delete'))
   public deleteConfirm = element(by.id('delBtnModal'))
+  public readingLinkButton = element.all(by.css('.e2e-reading-link')).first()
 
   // groups
   public deleteProjectButton = element(by.css('.btn--delete-project'))

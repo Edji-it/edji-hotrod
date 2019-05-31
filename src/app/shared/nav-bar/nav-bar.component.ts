@@ -104,9 +104,9 @@ export class NavBarComponent implements OnInit, OnDestroy {
     code?: boolean
     academy?: boolean
   } = {
-    // Default expand code
-    code: true,
-  }
+      // Default expand code
+      code: true,
+    }
   // Nav Slider Button loading states
   public sliderBtnLoading: {
     heat?: boolean
@@ -157,6 +157,8 @@ export class NavBarComponent implements OnInit, OnDestroy {
       this.currentPage = 'home'
     } else if (this._router.url.indexOf('/hero') > -1 || this._router.url.indexOf('/plans') > -1) {
       this.currentPage = 'hero'
+    } else if (this._router.url.indexOf('/discover') > -1) {
+      this.currentPage = 'discover'
     } else if (this._router.url.indexOf('/dashboard') > -1) {
       this.currentPage = 'dashboard'
     } else {

@@ -16,14 +16,21 @@ export class Discover implements PageObjectInterface {
   public firstFeedReading = this.feedReadings.first()
   public feedTitles = element.all(by.css('.feed__reading .reading-title__text'))
   public firstFeedTitle = this.feedTitles.first()
-  public readingPreview = element(by.id('readingArchivedModal'))
+  public readingPreview = element(by.id('readingPreviewModal'))
   public shareReadingBtn = element(by.id('shareReadingButton'))
   public editReadingBtn = element(by.id('editReadingButton'))
+  public loginFromPreviewBtn = element(by.id('loginFromPreview'))
   public closeReadingPreviewBtn = element(by.id('readingPreviewClose'))
+  public loginModalEl = element(by.id('loginModal'))
+  public outsideLoginModal = element(by.id('loginModalOutsideContent'))
+  public previewTitle = element(by.id('previewTitle'))
 
   // Discover Filters
   public filterPublic = element(by.id('discoverFilterPublic'))
   public filterFollowing = element(by.id('discoverFilterFollowing'))
+  public searchCount = element(by.id('searchCount'))
+  public searchInput = element(by.id('readingSearch'))
+  public clearSearchBtn = element(by.css('.form-control-clear.icon.icon-close'))
 
   // get the dashboard page
   getPage(): void {
@@ -89,6 +96,10 @@ export class Discover implements PageObjectInterface {
         return acc || text.includes(title)
       })
     }, false)
+  }
+
+  validatePreviewTitle(firstTitle: string, secondTitle: string): boolean {
+    return firstTitle === secondTitle
   }
 
   getReadingTitle(el: any) {

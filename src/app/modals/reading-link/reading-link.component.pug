@@ -1,0 +1,42 @@
+.modal-will-fade.show
+  .modal#readingLinkModal
+    .modal-dialog(role="document", style="max-width:650px")
+      .modal-content
+        .modal-header
+          h4.modal-title 
+            .icon.icon-reading-link
+            | Send Link to &ldquo;{{shareReading.title}}&ldquo;
+          button.close.btn-icon--round(
+              (click)="close()",
+              type="button",
+              data-dismiss="modal",
+              aria-label="Close"
+             )
+            span(aria-hidden="true") &times;
+        .modal-body
+          .row
+            .col-11.col-sm-6.pr-0
+              //- Overview copy
+              p.small Send this Reading to another teacher using the link below.
+              p.small(*ngIf="isCreator") This link will allow another teacher to use the same Reading without accessing your Groups.
+              //- Generated code for copy and share buttons
+              .row.no-gutters.mb-4
+                .col-12
+                  .form-group.mt-4
+                    label Copy Reading Link
+                    edji-share-link([link]="readingLink")
+                .col-12
+                  label Share Reading Link
+                  edji-share-social-icons(
+                    [link]="readingLink",
+                    [subjectCopy]="'Check out this Reading!'",
+                    [messageCopy]="'I thought you would like this reading, check it out on Edji!'"
+                  )
+            .col-sm-6.pl-0
+              .share-reading-image__wrap.hidden-sm-down
+                img(src="/assets/images/send-graphic.svg")
+              button#closeShareReadingModal.btn.btn-primary.float-right.mt-5(
+                (click)="close()"
+              ) 
+                | Done
+      

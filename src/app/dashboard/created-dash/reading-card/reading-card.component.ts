@@ -34,6 +34,7 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
   public relevantProject: Project
   public showAddModal: boolean = false
   public showDeleteReadingModal: boolean = false
+  public showReadingLinkModal: boolean = false
   public showDeleteProjectModal: boolean = false
   public togglePublicFlag: boolean
   public currentPublicFlag: boolean
@@ -51,7 +52,7 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
     private _readings: ReadingService,
     private angulartics: Angulartics2,
     private _auth: AuthService,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.subscriptions.push(
@@ -208,6 +209,6 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
           // Display error to user
           console.error(err)
         },
-      )
+    )
   }
 } // @Component

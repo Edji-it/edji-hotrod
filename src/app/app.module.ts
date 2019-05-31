@@ -22,7 +22,7 @@ Sentry.init({
 
 @Injectable()
 export class SentryErrorHandler implements ErrorHandler {
-  constructor() { }
+  constructor() {}
   handleError(error) {
     // Post error to Sentry
     Sentry.captureException(error.originalError || error)
@@ -82,7 +82,8 @@ import {
   ReadingArchivedModal,
   ConfirmArchiveModal,
   ConfirmCoOwnerModal,
-  ReadingPreviewModal
+  ReadingPreviewModal,
+  ReadingLinkModal,
 } from './modals'
 import {
   AnnotatorComponent,
@@ -127,7 +128,7 @@ import { DataListModule } from 'primeng/datalist'
 import { PaginatorModule } from 'primeng/paginator'
 import { TooltipModule } from 'primeng/tooltip'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
-import { RouterModule, PreloadAllModules, Router } from '@angular/router'
+import { RouterModule, PreloadAllModules, Router, ExtraOptions } from '@angular/router'
 import { ROUTES } from './app.routes'
 import { LicenseRedirectComponent } from './license-redirect/license-redirect.component'
 import { LicenseWelcomeComponent } from './license-welcome/license-welcome.component'
@@ -171,6 +172,11 @@ const APP_PROVIDERS = [
   // { provide: RouteReuseStrategy, useClass: ReuseStrategy }
 ] // const APP_PROVIDERS
 
+const routerOptions: ExtraOptions = {
+  useHash: true,
+  anchorScrolling: 'enabled',
+}
+
 /**
  * `AppModule` is the main entry point into Angular2's bootstraping process
  */
@@ -203,6 +209,7 @@ const APP_PROVIDERS = [
     ReadingArchivedModal,
     ConfirmArchiveModal,
     ConfirmCoOwnerModal,
+    ReadingLinkModal,
     ReadingPreviewModal,
     ChangePassComponent,
     ResetPassComponent,
@@ -266,7 +273,7 @@ const APP_PROVIDERS = [
         clearIds: true,
       },
     }),
-    RouterModule.forRoot(ROUTES, { useHash: true }),
+    RouterModule.forRoot(ROUTES, routerOptions),
     DataListModule,
     PaginatorModule,
     TooltipModule,
@@ -279,4 +286,4 @@ const APP_PROVIDERS = [
     APP_PROVIDERS,
   ],
 }) //@NgModule
-export class AppModule { }
+export class AppModule {}
