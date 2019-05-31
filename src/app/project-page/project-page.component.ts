@@ -1,6 +1,6 @@
 import { Title } from '@angular/platform-browser'
-import { Observable, Subscription } from 'rxjs'
-import { Router, ActivatedRoute, Params } from '@angular/router'
+import { Subscription } from 'rxjs'
+import { Router, ActivatedRoute } from '@angular/router'
 import { Component, OnDestroy, OnInit } from '@angular/core'
 
 import { AuthService, ProjectService, ReadingService, SocketService, AudioService, AcademyService } from '../_services'
@@ -47,7 +47,7 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
     private _readings: ReadingService,
     private _title: Title,
     private angulartics: Angulartics2,
-  ) {}
+  ) { }
 
   ngOnInit() {
     // this makes the window always render scrolled to the top
