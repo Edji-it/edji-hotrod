@@ -43,13 +43,9 @@ $selectedOrange: rgb(255, 182, 63);
     @extend .user-icon;
     background: #f0f0f0;
   }
-  &.is-teacher,
   &.selected {
     border-width: 2px;
     border-style: solid;
-  }
-  &.is-teacher {
-    border-color: $actionGreen !important;
   }
   &.selected {
     border-color: rgba(236, 167, 54, 0);
@@ -197,4 +193,24 @@ $selectedOrange: rgb(255, 182, 63);
   color: white;
   vertical-align: top;
   line-height: 8px;
+}
+
+.has-teacher-tag {
+  &::after {
+    background-color: $blue;
+    display: block;
+    content: 'T';
+    font-weight: 800;
+    font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+    font-size: 8px;
+    position: absolute;
+    bottom: -1px;
+    right: -1px;
+    text-align: center;
+    min-width: 12px;
+    height: 10px;
+    color: white;
+    border-radius: 6px;
+    line-height: 11px;
+  }
 }
