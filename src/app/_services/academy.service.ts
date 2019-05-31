@@ -200,10 +200,6 @@ export class AcademyService implements CanActivate {
    */
   public stopReadingTimer(): void {
     this.readingTimerSubscription && this.readingTimerSubscription.unsubscribe()
-    // this will set the user's status on the leaderboard to offline
-    this.userStatusSubj.next({
-      status: 'offline'
-    })
   }
 
   /**

@@ -3,15 +3,18 @@ import * as io from 'socket.io-client'
 import { Observable, Subject } from 'rxjs'
 
 import { AuthService } from './auth.service'
+import { userReadingStatus } from '../shared/datatypes';
 
 @Injectable()
 export class SocketService {
-  private url
-  private socket
+  private url: any
+  private socket: any
 
   // User count observable
-  private userCount: Subject<any> = new Subject()
-  public liveUsersCount: Observable<any> = this.userCount.asObservable()
+  private userCount: any[] = []
+  private newLiveUsers: any[] = []
+  private userCountSubj: Subject<any> = new Subject()
+  public liveUsersCount: Observable<any> = this.userCountSubj.asObservable()
 
   // Comment Update observable
   private commentSubject: Subject<any> = new Subject()
@@ -56,7 +59,16 @@ export class SocketService {
 
     // Watch user count
     this.socket.on('liveUsers', liveCount => {
-      this.userCount.next(liveCount)
+      // Check for users that went offline that were previously online
+      const prevUsers = [...this.userCount]
+
+      // check for new users first, change status to active
+      this.toggleUserStatus(liveCount, prevUsers, 'active')
+      // // check for offline users second, change status to offline
+      this.toggleUserStatus(prevUsers, liveCount, 'offline')
+
+      this.userCount = liveCount
+      this.userCountSubj.next(liveCount)
     })
 
     // Watch comment udpates
@@ -104,6 +116,53 @@ export class SocketService {
    */
   public groupUpdateEvent(groupUpdate: any): void {
     this.socket.emit('groupUpdate', groupUpdate)
+  }
+
+  private toggleUserStatus(userList1: any[], userList2: any[], statusChange: userReadingStatus): void {
+    console.log('ul1:', userList1)
+    console.log('ul2:', userList2)
+    const len1 = userList1.length
+    const len2 = userList2.length
+    let newListCheck: any
+    let foundUser: any
+
+    for (let i = 0; i < len1; i++) {
+      let user1 = userList1[i]
+      // check the previous users list (if empty, that means we're initializing)
+      if (len2 > 0) {
+        foundUser = userList2.find((user2) => {
+          return user1.userId === user2.userId
+        })
+      } else {
+        this.newLiveUsers = [...userList1]
+      }
+
+      // if we're checking for new users and found an outlier, add it to this list so we skip over the check for offline outliers
+      if (!foundUser && statusChange == 'active' && len2 > 0) {
+        this.newLiveUsers.push(foundUser)
+      }
+      if (statusChange == 'offline' && this.newLiveUsers.length > 0) {
+        newListCheck = this.newLiveUsers.find((newUser) => {
+          return user1.userId === newUser && newUser.userId
+        })
+      }
+      if (!foundUser && !newListCheck) {
+        this.changeUserStatus(user1, statusChange)
+      }
+      foundUser = undefined
+      newListCheck = undefined
+    }
+
+    console.log('nlu:', this.newLiveUsers)
+  }
+
+  private changeUserStatus(liveUser: any, status: userReadingStatus) {
+    console.log('statusChangeRequest', status)
+    this.groupUpdateEvent({
+      type: 'updateUserStatus',
+      status: status,
+      user: { _id: liveUser.userId }
+    })
   }
 }
 
