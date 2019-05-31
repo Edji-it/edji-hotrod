@@ -169,7 +169,8 @@ scroll-progress([scrollProgress]="currentScroll")
             </span>
             //- Teacher's Feedback
             .row.lesson-block(*ngIf="feedbackForUser && feedbackForUser.length > 0")
-                .lesson-block__indicator([innerHtml]="':tada:' | emojione")
+                .lesson-block__indicator
+                    .icon.icon-feedback
                 .lesson-block__body
                     .lesson-block__header Teacher's Feedback For You
                     ng-container(*ngFor="let feedback of feedbackForUser")
@@ -177,6 +178,7 @@ scroll-progress([scrollProgress]="currentScroll")
                             | {{ project.teacher.fullname }}
                             i &nbsp;{{ feedback.createdAt | edjidate:'timeAgo':null:secondsAgo }}
                         p.feedback-bubble {{ feedback.evaluation ? feedback.evaluation : '' }}
+                        div([attr.id]="feedbackAttribute(feedback)")
         .row.mb-4(*ngIf="lastWord < reading.words.length")
             .loading(style="margin: 0 auto;")
 //- End of Reading options

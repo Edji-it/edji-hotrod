@@ -127,7 +127,7 @@ import { DataListModule } from 'primeng/datalist'
 import { PaginatorModule } from 'primeng/paginator'
 import { TooltipModule } from 'primeng/tooltip'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
-import { RouterModule, PreloadAllModules, Router } from '@angular/router'
+import { RouterModule, PreloadAllModules, Router, ExtraOptions } from '@angular/router'
 import { ROUTES } from './app.routes'
 import { LicenseRedirectComponent } from './license-redirect/license-redirect.component'
 import { LicenseWelcomeComponent } from './license-welcome/license-welcome.component'
@@ -170,6 +170,11 @@ const APP_PROVIDERS = [
   // { provide: ErrorHandler, useClass: SentryErrorHandler }
   // { provide: RouteReuseStrategy, useClass: ReuseStrategy }
 ] // const APP_PROVIDERS
+
+const routerOptions: ExtraOptions = {
+  useHash: true,
+  anchorScrolling: 'enabled'
+}
 
 /**
  * `AppModule` is the main entry point into Angular2's bootstraping process
@@ -266,7 +271,7 @@ const APP_PROVIDERS = [
         clearIds: true,
       },
     }),
-    RouterModule.forRoot(ROUTES, { useHash: true }),
+    RouterModule.forRoot(ROUTES, routerOptions),
     DataListModule,
     PaginatorModule,
     TooltipModule,

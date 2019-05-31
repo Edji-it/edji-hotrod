@@ -9,6 +9,7 @@ import {
   ViewChildren,
   HostListener,
   ViewChild,
+  AfterViewInit,
 } from '@angular/core'
 import { Subject, Subscription } from 'rxjs'
 import * as Rangy from 'rangy'
@@ -28,13 +29,14 @@ import {
 } from '../_services'
 import { CommentPermissions, EdjiComment, Project, Reading, Feedback } from './../shared/datatypes'
 import { ALLSPARK } from '../app.constants'
+import { ActivatedRoute } from '@angular/router'
 
 @Component({
   selector: 'annotator',
   templateUrl: './annotator.component.pug',
   styleUrls: ['annotator.component.scss'],
 })
-export class AnnotatorComponent implements OnInit, OnDestroy {
+export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   /*
         Annotator Component
         Last Mod: 5 Aug 2017 - Josh Kyburz
@@ -167,16 +169,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     public _comments: CommentService,
     private angulartics: Angulartics2,
     private _audio: AudioService,
-    private _messages: MessageService, // private _hotkeysService: HotkeysService
+    private _messages: MessageService,
+    private route: ActivatedRoute,
   ) {
-    // this._hotkeysService.add(new Hotkey('t', (event: KeyboardEvent): boolean => {
-    //      this.addTextComment({ name: 'Hotkey'})
-    //     return false // Prevent bubbling
-    // }))
-    // this._hotkeysService.add(new Hotkey('e', (event: KeyboardEvent): boolean => {
-    //      this.addEmojiComment({ name: 'Hotkey'})
-    //     return false // Prevent bubbling
-    // }))
     this.window = window
   }
 
@@ -201,6 +196,17 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     // Update scroll progress on resize
     this.currentDocHeight = 0
     this.preScrollHeightUpdate()
+  }
+
+  ngAfterViewInit(): void {
+    this.subscriptions.push(
+      this.route.fragment.subscribe(async fragment => {
+        const fbEl = await document.querySelector("[id='" + fragment + "']")
+        if (fragment && fbEl) {
+          fbEl.scrollIntoView({ behavior: 'smooth' })
+        }
+      }),
+    )
   }
 
   ngOnInit() {
@@ -262,9 +268,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             }
             // Set aside feedback for current user
             if (this.project.report_evals) {
-              this.feedbackForUser = this.project.report_evals.filter(feedback => {
-                return this.user._id == feedback.user_id
-              })
+              this.setFeedback()
             }
             // Display heat vision status on initial load
             this.showHeatVisionToast(this.project.heat_vision)
@@ -379,6 +383,23 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
       }),
     )
 
+    /**
+     * Our socket handler for group-specific socket update events
+     * groupUpdate.type is the identifier for specific events
+     */
+    this.subscriptions.push(
+      // Subscribe to feedback updates
+      this._socket.groupUpdate.subscribe(groupUpdate => {
+        if (groupUpdate.type === 'feedbackUpdate') {
+          let feedback = groupUpdate['feedback']
+          this.setFeedback(feedback)
+          if (feedback.user_id === this.user._id) {
+            this.showFeedbackToast(feedback)
+          }
+        }
+      }),
+    )
+
     // Subscribe to updates on where to move the lastWord for the infinity scroll
     this.subscriptions.push(
       this._projects.lastWordUpdateState.subscribe(lastWord => {
@@ -411,6 +432,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
     // Clear heat vision message
     this._messages.dismissToast('heat')
+    // Clear feedback message
+    this._messages.dismissToast('feedback')
   }
 
   /**
@@ -475,6 +498,23 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
       type: 'heat-' + heatStatus,
       id: 'heat',
       limitToPage: 'project',
+    })
+  }
+
+  /**
+   * Display new feedback toast
+   * @param feedback is the new feedback from the teacher
+   */
+  private showFeedbackToast(feedback: any) {
+    // Send toast via message service
+    this._messages.sendToast({
+      message: 'You have new feedback from your teacher',
+      type: 'new-feedback',
+      id: 'newFeedback',
+      link: './',
+      linkFragment: 'fb-' + feedback._id,
+      limitToPage: 'project',
+      requireDismiss: true,
     })
   }
 
@@ -960,7 +1000,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     } else {
       // Browser API selection
       let selection = Rangy.getSelection()
-      let getNodeIndex = function(node: any): number {
+      let getNodeIndex = function (node: any): number {
         // Selections often happen at the text node level, inside the actual element
         // In which case we need to reference its parent node
         // Note: we tried node.hasOwnProperty here and would sometimes get a false true resolution of the if statement... not sure how that is possible
@@ -1042,7 +1082,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // Found a text node!
 
         // Split text inside child nodes
-        let nodeWords = node.textContent.split(/(?:([^a-zA-Z0-9]))/).filter(function(el) {
+        let nodeWords = node.textContent.split(/(?:([^a-zA-Z0-9]))/).filter(function (el) {
           return el.replace(/([\n])/g, '')
         })
 
@@ -1397,5 +1437,25 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         i--
       }
     }
+  }
+
+  // Sets the feedback display for students
+  private setFeedback(feedback?: any): void {
+    if (!feedback) {
+      this.feedbackForUser = this.project.report_evals.filter(feedback => {
+        return this.user._id == feedback.user_id
+      })
+    } else {
+      // the socket update needs to have the latest feedback pushed in
+      this.feedbackForUser.push(feedback)
+    }
+  }
+
+  /**
+   * Assign the feedback with _id to set up the attribute
+   * @param feedback is the feedback record
+   */
+  public feedbackAttribute(feedback: any): string {
+    return `fb-${feedback && feedback._id}`
   }
 }
