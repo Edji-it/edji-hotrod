@@ -22,18 +22,16 @@ export class AcademyService implements CanActivate {
   // User status in project
   private userActivity: any
   private userActive: boolean = true
-  public userInactive: Subject<any> = new Subject()
+
+  public userStatusSubj: Subject<any> = new Subject()
+  public userStatus: Observable<any> = this.userStatusSubj.asObservable()
 
   constructor(
     private _http: HttpClient,
     private _auth: AuthService,
     private _router: Router,
     private _locker: LockerService,
-  ) {
-    this.userInactive.subscribe((user: User) => {
-      console.log(`${user && user.fullname} user has been inactive for 6s`)
-    })
-  }
+  ) { }
 
   /**
    * Accepts a license that is shared with the user
@@ -245,13 +243,22 @@ export class AcademyService implements CanActivate {
    */
   private monitorUserReadingStatus(resume?: boolean): void {
     this.userActivity = setTimeout(() => {
-      this.userInactive.next(this.user)
       this.userActive = false
+      // this will set the user's status on the leaderboard to idle
+      this.userStatusSubj.next({
+        status: 'idle'
+      })
     }, 120000) // if the user status indicator is going idle too much, then add more time here!
   }
 
   public trackActivity(): void {
     clearTimeout(this.userActivity)
+    // this will set the user's status on the leaderboard to active
+    if (!this.userActive) {
+      this.userStatusSubj.next({
+        status: 'active'
+      })
+    }
     this.userActive = true
     this.monitorUserReadingStatus()
   }

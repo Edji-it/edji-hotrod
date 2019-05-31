@@ -133,6 +133,8 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
     // End socket connections
     this._socket.leaveRoom()
     this._academy.stopReadingTimer()
+    // this will set the user's status on the leaderboard
+    this._projects.commentStats.userStatus(this.user, 'offline')
   }
 
   /**
@@ -146,6 +148,8 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
     this._socket.joinSocketRoom(project._id, user._id)
     // Start Reading Timer
     this._academy.startReadingTimer(user, project)
+    // this will set the user's status on the leaderboard
+    this._projects.commentStats.userStatus(this.user, 'active')
   }
 
   private addToLeaderboard() {

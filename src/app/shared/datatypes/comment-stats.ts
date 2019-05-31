@@ -1,4 +1,4 @@
-import { EdjiComment, iCommentStats, Project } from './'
+import { EdjiComment, iCommentStats, Project, User } from './'
 import { UserCommentStats } from './comment'
 
 export class CommentStats {
@@ -263,4 +263,9 @@ export class CommentStats {
     this._stats.comment_min = lowest
     this._stats.comment_avg = Math.round(avgSum / userLength)
   }
+
+  public userStatus(user: User, status: string) {
+    console.log(`${user._id} is now ${status}`)
+  }
 }
+

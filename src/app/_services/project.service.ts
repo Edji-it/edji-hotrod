@@ -8,7 +8,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
 // Project Dependencies
 import { AuthService } from './auth.service'
 import { SocketService } from './socket.service'
-import { CommentStats, iCommentStats, EdjiComment, Project, User, BaseComment } from '../shared/datatypes'
+import { CommentStats, EdjiComment, Project, User } from '../shared/datatypes'
 import { ReadingService } from './reading.service'
 import { AcademyService } from './academy.service'
 
@@ -140,6 +140,15 @@ export class ProjectService {
       this._socket.groupUpdate.subscribe(groupUpdate => {
         if (groupUpdate.type === 'refreshLeaderboard' && this.user._id === this.project.teacher_id) {
           this.addUserInfoToProject(groupUpdate)
+        }
+      }),
+      /**
+       * We have to update the user status through the commentStats
+       * commentStats is initialized here, so we observe the state changes from other components and services here
+       */
+      this._academy.userStatus.subscribe(userStatus => {
+        if (this.user._id === this.project.teacher_id) {
+          this.commentStats.userStatus(this.user, userStatus.status)
         }
       }),
       /**
