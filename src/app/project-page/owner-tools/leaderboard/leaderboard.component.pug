@@ -12,6 +12,8 @@
         span.small.mr-2 Replies
         span.small(style="width:65px;") Comments
     .user-list-item(*ngFor='let commentUser of commentStats.stats.userStats; let i = index')
+      span.answer-circle__group.mr-2
+        .circle.filled([ngClass]="commentUser.status")
       span.user-list__name([attr.id]="'studentName'+i") {{ commentUser.fullname }}
       //- Comment filter shows on hover and when active
       .student-filter__wrap

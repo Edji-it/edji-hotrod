@@ -103,7 +103,7 @@ export class CommentStats {
           audio_comment_count: 0,
           fullname: student.fullname,
           comments: [],
-          status: 'active',
+          status: 'offline',
         })
       }
     }
@@ -124,7 +124,7 @@ export class CommentStats {
           audio_comment_count: 0,
           fullname: student.fullname,
           comments: [],
-          status: 'active',
+          status: 'offline',
         })
       }
     }

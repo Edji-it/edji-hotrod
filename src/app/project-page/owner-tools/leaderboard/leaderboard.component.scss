@@ -19,10 +19,29 @@
   -o-transition: background-color 0.5s ease-in-out;
   -ms-transition: background-color 0.5s ease-in-out;
   transition: background-color 0.5s ease-in-out;
-}
 
-.circle.filled {
-  background-color: #8ed9ff;
+  &.active {
+    border-color: green;
+  }
+  &.idle {
+    border-color: yellow;
+  }
+  &.offline {
+    border-color: gray;
+  }
+
+  &.filled {
+    background-color: #8ed9ff;
+    &.active {
+      background-color: green;
+    }
+    &.idle {
+      background-color: yellow;
+    }
+    &.offline {
+      background-color: gray;
+    }
+  }
 }
 
 .answer-designate {

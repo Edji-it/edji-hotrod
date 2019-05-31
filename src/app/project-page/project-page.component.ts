@@ -135,6 +135,14 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
     this._academy.stopReadingTimer()
     // this will set the user's status on the leaderboard
     this._projects.commentStats.userStatus(this.user, 'offline')
+    if (this.user._id !== this.project.teacher_id) {
+      // emit the socket back to the teacher
+      this._socket.groupUpdateEvent({
+        type: 'updateUserStatus',
+        status: 'offline',
+        user: this.user
+      })
+    }
   }
 
   /**
