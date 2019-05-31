@@ -61,7 +61,6 @@ export class SocketService {
     this.socket.on('liveUsers', liveCount => {
       // Check for users that went offline that were previously online
       const prevUsers = [...this.userCount]
-
       // check for new users first, change status to active
       this.toggleUserStatus(liveCount, prevUsers, 'active')
       // // check for offline users second, change status to offline
@@ -119,8 +118,6 @@ export class SocketService {
   }
 
   private toggleUserStatus(userList1: any[], userList2: any[], statusChange: userReadingStatus): void {
-    console.log('ul1:', userList1)
-    console.log('ul2:', userList2)
     const len1 = userList1.length
     const len2 = userList2.length
     let newListCheck: any
@@ -152,12 +149,9 @@ export class SocketService {
       foundUser = undefined
       newListCheck = undefined
     }
-
-    console.log('nlu:', this.newLiveUsers)
   }
 
   private changeUserStatus(liveUser: any, status: userReadingStatus) {
-    console.log('statusChangeRequest', status)
     this.groupUpdateEvent({
       type: 'updateUserStatus',
       status: status,

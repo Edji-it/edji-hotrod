@@ -275,12 +275,10 @@ export class CommentStats {
    * @param status is of type userReadingStatus (offline, idle, or active)
    */
   public userStatus(user: any, status: userReadingStatus) {
-    console.log(`request to change ${user._id} status to ${status}`)
     let student = this.findStudent(user._id)
     if (student) {
       student.status = status
     }
-    console.log(this._stats)
   }
 }
 
