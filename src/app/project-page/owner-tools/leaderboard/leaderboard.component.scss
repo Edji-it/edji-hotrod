@@ -152,7 +152,8 @@ $userListBorderWidth: 2px;
     background: #f5f8f8;
   }
 
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     background: #eef7fb;
   }
 }
@@ -181,6 +182,7 @@ $userListBorderWidth: 2px;
   &.active {
     border-color: $blue;
     color: $blue;
+    background: #fff;
   }
 }
 
@@ -195,4 +197,10 @@ $userListBorderWidth: 2px;
   text-align: center;
   float: right;
   width: 60px;
+}
+
+.student-settings__wrap {
+  float: right;
+  text-align: right;
+  width: 40px;
 }

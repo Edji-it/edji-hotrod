@@ -22,8 +22,10 @@ export class LeaderboardComponent implements OnInit {
   }
   @Output() setVisibility: EventEmitter<boolean> = new EventEmitter()
   set visibility(val) {
-    this.visible = val
-    this.setVisibility.emit(this.visible)
+    if (this.visible !== val) {
+      this.visible = val
+      this.setVisibility.emit(this.visible)
+    }
   }
 
   /** This is a reference to the actual commentStats object which has methods for modification of properties */
@@ -38,6 +40,8 @@ export class LeaderboardComponent implements OnInit {
   public appliedFilter: CommentFilter
   public showFilterHeroModal: boolean
   public coOwnerToBe: User
+  // Determines display of co-owner tooltips
+  public coOwnerTooltipIndex: number = -1
 
   constructor(
     private _readings: ReadingService,
@@ -88,6 +92,7 @@ export class LeaderboardComponent implements OnInit {
         this._route.queryParams.subscribe(params => {
           if (params.studentList && params.studentList === 'coteach') {
             this.visibility = true
+            this.coOwnerTooltipIndex = 0
           }
         }),
       )
@@ -200,7 +205,21 @@ export class LeaderboardComponent implements OnInit {
    * Trigger confirmation modal
    */
   public confirmCoOwner(student: User) {
+    // Clear coowner tooltips
+    this.coOwnerTooltipIndex = -1
     this.coOwnerToBe = student
+  }
+
+  /**
+   * Progress the co-owner guide tooltip
+   */
+  public coOwnerTooltipNext(): void {
+    if (this.coOwnerTooltipIndex > -1) {
+      this.coOwnerTooltipIndex++
+    }
+    if (this.coOwnerTooltipIndex > 1) {
+      this.coOwnerTooltipIndex = -1
+    }
   }
 
   /**
@@ -213,5 +232,7 @@ export class LeaderboardComponent implements OnInit {
       queryParamsHandling: 'merge',
     })
     this.visibility = false
+    // Clear tooltips
+    this.coOwnerTooltipIndex = -1
   }
 }

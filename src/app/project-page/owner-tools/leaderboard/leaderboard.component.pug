@@ -1,11 +1,18 @@
 //- Comments Pane
 .sliding-pane.from-left([ngClass]="{ 'slide-in' : visible }")
   //- .tooltip-wrap
-  .tooltip.tooltip--right([class.show]="true", style="top: 190px;")
+  .tooltip.tooltip--clickable.tooltip--right(
+    [class.show]="coOwnerTooltipIndex > -1", 
+    style="top: 190px;",
+    (click)="coOwnerTooltipNext()"
+  )
     .tooltip-title
-      | Adding a co-teacher!
+      b.mb-1 Adding a Co-Teacher
     .tooltiptext.block-with-text
-      | Click that little BUTTON to promote to co-teacher
+      .text-left(*ngIf="coOwnerTooltipIndex === 0")
+        | To add a co-teacher, have the user join this Group, then access their settings here
+      .text-left(*ngIf="coOwnerTooltipIndex === 1")
+        | Select "Promote to co-teacher", and they will be given the same teacher abilities you have
   .container-fluid.container--less-pad
     h4
       | {{ commentStats.stats.userStats.length }} Students
@@ -15,15 +22,36 @@
       span.small Student
       //- img(style='height: 1em; width: auto; float: right' src='assets/images/icon-comment.svg')
       span(style="float:right;")
-        span.small.mr-2 Replies
-        span.small(style="width:65px;") Comments
+        //- span.small.mr-2 Replies
+        span.small(style="width:65px; margin-right: 40px;") Comments
     .user-list-item.hover-parent(*ngFor='let commentUser of commentStats.stats.userStats; let i = index')
       span.user-list__name([attr.id]="'studentName'+i") 
         | {{ commentUser.fullname }}
-        .btn.btn-icon--round.ml-1.hover-show--inline-block(
-          (click)="confirmCoOwner(commentUser)"
+
+      //- //- Reply Count
+      //- .student-replies__wrap {{ commentUser.reply_count }}
+      .student-settings__wrap
+        .dropdown.student-options( 
+          [class.show]="commentUser.showOptions"
         )
-          .icon.icon-promote
+          button.btn.btn-icon.btn-outline-primary(
+            (click)="commentUser.showOptions = !commentUser.showOptions; coOwnerTooltipNext()",
+            [innerHtml]="':gear:' | emojione"
+          )
+          //- dropdown buttons
+          .dropdown-menu.dropdown-menu-right.reading-card-menu([class.show]="commentUser.showOptions")
+            //- View student filter
+            button.dropdown-item(
+              (click)="viewStudentFilter(commentUser)"
+            ) 
+              .icon.icon-comment-filter
+              | &nbsp; View student filter
+            //- 
+            button.dropdown-item.e2e-new-group(
+              (click)="confirmCoOwner(commentUser)"
+            ) 
+              .icon.icon-promote
+              | &nbsp; Promote to co-teacher
       //- Comment filter shows on hover and when active
       .student-filter__wrap
         .btn.btn-icon.btn-outline-primary.e2e-student-filter(
@@ -34,8 +62,7 @@
           ) 
           .icon.icon-comment-filter.mr-1
           | {{ commentUser.comment_count }}
-      //- Reply Count
-      .student-replies__wrap {{ commentUser.reply_count }}
+
       .question-answer-status__block(*ngIf='commentUser && currentReading.questions && currentReading.questions.length > 0')
         .answer-designate Answers:
         ng-container(*ngFor='let answer of userAnswers')

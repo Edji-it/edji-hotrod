@@ -21,6 +21,11 @@
   text-align: center;
   pointer-events: none;
   filter: drop-shadow(rgba(0, 0, 0, 0.2) 0 2px 6px);
+
+  &.tooltip--clickable {
+    pointer-events: all;
+    cursor: pointer;
+  }
 }
 
 .hover--tooltip:hover .tooltip,
