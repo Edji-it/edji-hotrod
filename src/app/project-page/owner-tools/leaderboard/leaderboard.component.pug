@@ -32,14 +32,14 @@
       //- .student-replies__wrap {{ commentUser.reply_count }}
       .student-settings__wrap
         .dropdown.student-options( 
-          [class.show]="commentUser.showOptions"
+          [class.show]="studentSettingsIndex == i"
         )
           button.btn.btn-icon.btn-outline-primary(
-            (click)="commentUser.showOptions = !commentUser.showOptions; coOwnerTooltipNext()",
+            (click)="toggleStudentSettings(i)",
             [innerHtml]="':gear:' | emojione"
           )
           //- dropdown buttons
-          .dropdown-menu.dropdown-menu-right.reading-card-menu([class.show]="commentUser.showOptions")
+          .dropdown-menu.dropdown-menu-right.reading-card-menu([class.show]="studentSettingsIndex == i")
             //- View student filter
             button.dropdown-item(
               (click)="viewStudentFilter(commentUser)"

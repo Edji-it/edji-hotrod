@@ -42,6 +42,8 @@ export class LeaderboardComponent implements OnInit {
   public coOwnerToBe: User
   // Determines display of co-owner tooltips
   public coOwnerTooltipIndex: number = -1
+  // Student settings display
+  public studentSettingsIndex: number = -1
 
   constructor(
     private _readings: ReadingService,
@@ -150,6 +152,9 @@ export class LeaderboardComponent implements OnInit {
    * @param student User needs "_id" and "fullname"/"username"
    */
   public viewStudentFilter(student: any): void {
+    // Hide dropdown
+    this.studentSettingsIndex = -1
+    // Show filter
     this._projects.filterByUser(student)
   }
 
@@ -202,9 +207,25 @@ export class LeaderboardComponent implements OnInit {
   }
 
   /**
+   * Toggle Student settings dropdown
+   * @param studentIndex
+   */
+  public toggleStudentSettings(studentIndex: number): void {
+    if (this.studentSettingsIndex === studentIndex) {
+      this.studentSettingsIndex = -1
+    } else {
+      this.studentSettingsIndex = studentIndex
+    }
+    // Progress guidance tooltips
+    this.coOwnerTooltipNext()
+  }
+
+  /**
    * Trigger confirmation modal
    */
   public confirmCoOwner(student: User) {
+    // Hide dropdown
+    this.studentSettingsIndex = -1
     // Clear coowner tooltips
     this.coOwnerTooltipIndex = -1
     this.coOwnerToBe = student
@@ -234,5 +255,7 @@ export class LeaderboardComponent implements OnInit {
     this.visibility = false
     // Clear tooltips
     this.coOwnerTooltipIndex = -1
+    // Close dropdowns
+    this.studentSettingsIndex = -1
   }
 }

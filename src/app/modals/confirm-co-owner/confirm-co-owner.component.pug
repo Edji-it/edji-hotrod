@@ -5,7 +5,7 @@
         h4.modal-title Make <b>{{ student.fullname }}</b> a Group co-teacher
         button((click)="closeModal.emit()", type="button", class="close") &times;
       .modal-body
-        p By making {{ student.fullname }} a co-teacher of this Group, they will be able to access the teacher Tools, such as Heat Vision, and delete comments. Would you like to proceed?
+        p By making {{ student.fullname }} a co-teacher of this Group, they will be able to access teacher tools, such as Heat Vision, and deleting comments. Would you like to proceed?
       .modal-footer
         div(*ngIf="showError", class="alert alert-danger", role="alert")
           strong Error Updating User
