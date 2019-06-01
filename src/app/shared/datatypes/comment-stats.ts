@@ -173,7 +173,7 @@ export class CommentStats {
         text_comment_count: comment.type === 'text' && !isReply ? 1 : 0,
         audio_comment_count: comment.type === 'audio' && !isReply ? 1 : 0,
         comments: [comment],
-        status: 'active',
+        status: this.findStudentStatus(comment.user_id),
       })
     } else if (student) {
       if (isReply) {
@@ -225,6 +225,18 @@ export class CommentStats {
     return this._stats.userStats.find(student => {
       return student._id == _id
     })
+  }
+
+  /**
+   * Returns the current status for the comment user
+   * Primarily used when populating comments because we can't assign a status multiple times (we'll let the student user indicate their status with sockets)
+   * @param _id the comment user's _id
+   */
+  private findStudentStatus(_id: string): userReadingStatus {
+    let student = this._stats.userStats.find(student => {
+      return student._id === _id
+    })
+    return student && student.status || 'offline'
   }
 
   /**

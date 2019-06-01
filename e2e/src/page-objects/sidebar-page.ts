@@ -25,7 +25,7 @@ export class Sidebar {
   public nextStudentButton = element(by.id('studentFilterNext'))
   public studentFilterClose = element(by.css('.filter-bubble .close'))
   public leaderboardClose = element(by.id('leaderboard--close'))
-  public leaderLiveStatus = element.all(by.css('live--status')).first()
+  public leaderLiveStatus = element.all(by.css('.live-status')).first()
   public heatButton = element(by.id('toggleHeatVision'))
   public heatButtonMobile = element(by.id('toggleHeatVisionMobile'))
   public ownerToolToggleButton = element(by.id('buttonOwnerToolToggle'))
