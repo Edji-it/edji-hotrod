@@ -39,6 +39,10 @@ $defaultTagColor: #767676;
   border: 1px solid #e0e0e0;
   white-space: nowrap;
   display: inline-block;
+
+  & .badge {
+    margin-top: 1px;
+  }
 }
 
 .user-tag-group--teacher {
@@ -46,7 +50,7 @@ $defaultTagColor: #767676;
   position: relative;
 
   & .user-tag,
-  & .badge {
+  & .badge-teacher--label {
     // border: 2px solid $blue;
     margin-right: 2px;
   }

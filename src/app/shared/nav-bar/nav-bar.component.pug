@@ -47,10 +47,11 @@
           ) {{ currentReading.title }}
         .nav-bar__author(*ngIf="currentProject.owners && currentProject.owners[0]")
           //- span.label.mr-1 Teacher{{currentProject.owners[1] && 's'}}
-          .user-tag-group--teacher.hover--tooltip
-            .tooltip.tooltip--top
-              .tooltip-title Teachers!
-            .badge.badge-pill.badge-teacher--label T
+          .user-tag-group--teacher
+            .badge.badge-pill.badge-teacher--label.hover--tooltip(style="position:relative;")
+              | T
+              .tooltip.tooltip--top
+                .tooltip-title Teacher{{currentProject.owners[1] && 's'}} for this Reading Group
             ng-container(*ngFor="let owner of currentProject.owners")
               follow-tag([owner]="owner")
             .badge.badge-pill.badge-button.badge-teacher(
