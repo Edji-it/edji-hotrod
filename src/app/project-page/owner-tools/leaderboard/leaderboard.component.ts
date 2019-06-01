@@ -13,9 +13,18 @@ import { CommentFilter } from '../../../_services/project.service'
   styleUrls: ['./leaderboard.component.scss'],
 })
 export class LeaderboardComponent implements OnInit {
-  @Input() visible: boolean = false
   @Input() archived: boolean = false
-  @Output() visibility: EventEmitter<boolean> = new EventEmitter()
+  // Manage visibility with 2 way binding
+  private visible: boolean = false
+  @Input()
+  get visibility() {
+    return this.visible
+  }
+  @Output() setVisibility: EventEmitter<boolean> = new EventEmitter()
+  set visibility(val) {
+    this.visible = val
+    this.setVisibility.emit(this.visible)
+  }
 
   /** This is a reference to the actual commentStats object which has methods for modification of properties */
   @Input() commentStats: CommentStats
@@ -53,35 +62,35 @@ export class LeaderboardComponent implements OnInit {
             console.error(error)
           },
         ),
-      ),
-      // Subscribe to updates to the answer reference object
-      this._projects.answersById.subscribe(
-        answersById => {
-          this.answersById = answersById
-          this.questionAnswerStatus()
-        },
-        error => {
-          console.error(error)
-        },
-      ),
-      // Get Updates about applied comment filters so we can show the user
-      this._projects.filterUpdates.subscribe(filter => {
-        this.appliedFilter = filter
+        // Subscribe to updates to the answer reference object
+        this._projects.answersById.subscribe(
+          answersById => {
+            this.answersById = answersById
+            this.questionAnswerStatus()
+          },
+          error => {
+            console.error(error)
+          },
+        ),
+        // Get Updates about applied comment filters so we can show the user
+        this._projects.filterUpdates.subscribe(filter => {
+          this.appliedFilter = filter
 
-        if (this.commentStats.stats.userStats) {
-          for (let i = 0; i < this.commentStats.stats.userStats.length; i++) {
-            this.commentStats.stats.userStats[i]['filtered'] = this.isStudentFiltered(
-              this.commentStats.stats.userStats[i],
-            )
+          if (this.commentStats.stats.userStats) {
+            for (let i = 0; i < this.commentStats.stats.userStats.length; i++) {
+              this.commentStats.stats.userStats[i]['filtered'] = this.isStudentFiltered(
+                this.commentStats.stats.userStats[i],
+              )
+            }
           }
-        }
-      }),
-      // Watch URL params for quick links
-      this._route.queryParams.subscribe(params => {
-        if (params.studentList && params.studentList === 'coteach') {
-          this.visibility.emit(true)
-        }
-      })
+        }),
+        // Watch URL params for quick links
+        this._route.queryParams.subscribe(params => {
+          if (params.studentList && params.studentList === 'coteach') {
+            this.visibility = true
+          }
+        }),
+      )
   }
 
   ngOnDestroy() {
@@ -191,7 +200,6 @@ export class LeaderboardComponent implements OnInit {
    * Trigger confirmation modal
    */
   public confirmCoOwner(student: User) {
-    console.log(student)
     this.coOwnerToBe = student
   }
 
@@ -199,13 +207,11 @@ export class LeaderboardComponent implements OnInit {
    * Close the student list
    */
   public close(): void {
-    console.log('1!')
     this.router.navigate(['./'], {
       relativeTo: this._route,
       queryParams: { studentList: null },
       queryParamsHandling: 'merge',
     })
-    console.log('2!')
-    this.visibility.emit(false)
+    this.visibility = false
   }
 }

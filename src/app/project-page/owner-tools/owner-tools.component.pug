@@ -98,7 +98,11 @@
     span(style="font-size: 11px;") Tools
 
 //- Leaderboard goes here
-hot-leaderboard((visibility)="showCommentCounts=$event", [commentStats]="commentStats", [visible]="showCommentCounts", [archived]="currentProject.archived")
+hot-leaderboard(
+  [(visibility)]="showCommentCounts", 
+  [commentStats]="commentStats", 
+  [archived]="currentProject.archived"
+  )
 
 //- Fire Feed goes here
 hot-firefeed((hide)="showFireFeed=false", [visible]="showFireFeed")
