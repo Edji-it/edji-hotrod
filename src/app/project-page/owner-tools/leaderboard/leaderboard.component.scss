@@ -21,25 +21,25 @@
   transition: background-color 0.5s ease-in-out;
 
   &.active {
-    border-color: green;
+    border-color: #18c042;
   }
   &.idle {
-    border-color: yellow;
+    border-color: #fa9b5c;
   }
   &.offline {
-    border-color: gray;
+    border-color: #aaaaaa;
   }
 
   &.filled {
     background-color: #8ed9ff;
     &.active {
-      background-color: green;
+      background-color: #18c042;
     }
     &.idle {
-      background-color: yellow;
+      background-color: #fa9b5c;
     }
     &.offline {
-      background-color: gray;
+      background-color: #aaaaaa;
     }
   }
 }
