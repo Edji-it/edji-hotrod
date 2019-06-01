@@ -3,7 +3,7 @@
  */
 import { browser, by, element, protractor } from 'protractor'
 
-import { Project, Sidebar } from './page-objects'
+import { Project, Sidebar, Login } from './page-objects'
 import { LoginModal } from './components'
 import { Home } from './page-objects/home-page'
 
@@ -14,17 +14,18 @@ describe('Project Page as an owner wishing to filter by student: ', () => {
   let sidebar = new Sidebar()
   let home = new Home()
   let EC = protractor.ExpectedConditions // vital
+  let login = new Login()
 
   /* ---- beforeEach ---------------------------- */
 
-  beforeEach(() => {
+  beforeAll(() => {
     // Id for Owner Tools Test Reading owned by Teach/Teach
     browser.get('/#/home')
     // Open Test project
     home.enterProjectCodeFromHome('testhero')
   })
 
-  afterEach(() => {
+  afterAll(() => {
     // log out
     sidebar.logout()
   })
@@ -45,8 +46,8 @@ describe('Project Page as an owner wishing to filter by student: ', () => {
     )
     loginModal.gotoAccountLoginButton.click()
     expect(loginModal.clickawaySquare.isPresent()).toBeTruthy()
-    loginModal.usernameInput.sendKeys('testhero')
-    loginModal.passwordInput.sendKeys('testhero16')
+    loginModal.usernameInput.sendKeys(login.heroUser)
+    loginModal.passwordInput.sendKeys(login.heroPassword)
     browser.wait(
       EC.elementToBeClickable(loginModal.accountLoginButton),
       5000,
@@ -127,5 +128,37 @@ describe('Project Page as an owner wishing to filter by student: ', () => {
       .then(count => {
         expect(count == totalCount).toBeTruthy('all comments did not show after clearing student filter')
       })
+
+    // close the leaderboard
+    browser.wait(
+      EC.elementToBeClickable(sidebar.leaderboardClose),
+      5000,
+      'never found the close leaderboard button',
+    )
+    sidebar.leaderboardClose.click()
+  })
+
+  it('should open the Leaderboard and see a live status indicator next to the user name', () => {
+    // Open Leaderboard
+    browser.wait(
+      EC.elementToBeClickable(sidebar.leaderboardButton),
+      5000,
+      'never found the leaderboard owner tool button',
+    )
+    sidebar.leaderboardButton.click()
+
+    browser.wait(
+      EC.elementToBeClickable(sidebar.leaderLiveStatus),
+      5000,
+      'never found the live status indicator',
+    )
+
+    // close the leaderboard
+    browser.wait(
+      EC.elementToBeClickable(sidebar.leaderboardClose),
+      5000,
+      'never found the close leaderboard button',
+    )
+    sidebar.leaderboardClose.click()
   })
 })
