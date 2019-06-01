@@ -117,20 +117,30 @@ export class SocketService {
     this.socket.emit('groupUpdate', groupUpdate)
   }
 
+  /**
+   * Works in 2 directions, based on statusChange
+   * @param userList1 socket room user list -- either the previous list or the current
+   * @param userList2 socket room user list -- either the previous list or the current
+   * @param statusChange set the status to either active or offline
+   *  - active: sets user to active if they weren't previously in the socket room, but are in it now
+   *  - offline: sets user to offline if they were in the socket room previously, but are not now
+   */
   private toggleUserStatus(userList1: any[], userList2: any[], statusChange: userReadingStatus): void {
     const len1 = userList1.length
     const len2 = userList2.length
     let newListCheck: any
     let foundUser: any
 
+    // loop through all socket room userId's
     for (let i = 0; i < len1; i++) {
       let user1 = userList1[i]
-      // check the previous users list (if empty, that means we're initializing)
+      // check the previous users list (if empty, that means we're initializing the project)
       if (len2 > 0) {
         foundUser = userList2.find((user2) => {
           return user1.userId === user2.userId
         })
       } else {
+        // this happens when the project is first loaded, so all of the users in the list are considered new live users
         this.newLiveUsers = [...userList1]
       }
 
@@ -138,19 +148,30 @@ export class SocketService {
       if (!foundUser && statusChange == 'active' && len2 > 0) {
         this.newLiveUsers.push(foundUser)
       }
+
+      // when checking to see who left the room, check against those that are joining the reading that weren't here previously first
+      // that way we do not unintentionally mark the user as offline when they are actually active
       if (statusChange == 'offline' && this.newLiveUsers.length > 0) {
         newListCheck = this.newLiveUsers.find((newUser) => {
           return user1.userId === newUser && newUser.userId
         })
       }
+      // if the user wasn't previously in the list -> set the status to active
+      // if the user was in the previous list and isn't now -> set status to offline
       if (!foundUser && !newListCheck) {
         this.changeUserStatus(user1, statusChange)
       }
+      // reset these to undefined so we don't have a logic fallacy
       foundUser = undefined
       newListCheck = undefined
     }
   }
 
+  /**
+   * Convenience method to update the user's status -- either active or offline here
+   * @param liveUser is our current user from the socket room and contains the user _id as userId
+   * @param status the status we're going to broadcast out via sockets
+   */
   private changeUserStatus(liveUser: any, status: userReadingStatus) {
     this.groupUpdateEvent({
       type: 'updateUserStatus',
