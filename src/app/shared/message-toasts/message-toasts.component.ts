@@ -32,6 +32,7 @@ export class MessageToastsComponent implements OnInit {
       success: 'icon-check',
       info: 'icon-notice',
       promo: 'icon-gift',
+      promoted: 'icon-promote',
       'new-feedback': 'icon-feedback',
     }
     return toastTypeMap[toastType] || toastTypeMap['info']

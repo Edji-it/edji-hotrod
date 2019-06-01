@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 import { take } from 'rxjs/operators'
 
 // Project Dependencies
-import { ProjectService } from '../../_services'
+import { ProjectService, SocketService } from '../../_services'
 import { Reading, User } from '../../shared/datatypes'
 
 @Component({
@@ -19,13 +19,18 @@ export class ConfirmCoOwnerModal implements OnInit {
 
   public showError: boolean = false
 
-  constructor(private _projects: ProjectService) {}
+  constructor(private _projects: ProjectService, private _socket: SocketService) {}
 
   ngOnInit() {}
 
   makeCoOwner(student: User): void {
     this._projects.makeCoOwner(student).subscribe(
       data => {
+        // Push update to notify user
+        this._socket.groupUpdateEvent({
+          type: 'coteacherPromote',
+          user: student,
+        })
         console.log(data)
         this.closeModal.emit()
       },

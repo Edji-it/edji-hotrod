@@ -396,6 +396,11 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
           if (feedback.user_id === this.user._id) {
             this.showFeedbackToast(feedback)
           }
+        } else if (groupUpdate.type === 'coteacherPromote') {
+          // Show promotion toast for user
+          if (groupUpdate.user._id === this.user._id) {
+            this.showPromotedToast()
+          }
         }
       }),
     )
@@ -513,6 +518,16 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       id: 'newFeedback',
       link: './',
       linkFragment: 'fb-' + feedback._id,
+      limitToPage: 'project',
+      requireDismiss: true,
+    })
+  }
+
+  private showPromotedToast(): void {
+    this._messages.sendToast({
+      message: 'You have been promoted to co-teacher, please refresh!',
+      type: 'promoted',
+      id: 'coteacherPromoted',
       limitToPage: 'project',
       requireDismiss: true,
     })
@@ -1000,7 +1015,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     } else {
       // Browser API selection
       let selection = Rangy.getSelection()
-      let getNodeIndex = function (node: any): number {
+      let getNodeIndex = function(node: any): number {
         // Selections often happen at the text node level, inside the actual element
         // In which case we need to reference its parent node
         // Note: we tried node.hasOwnProperty here and would sometimes get a false true resolution of the if statement... not sure how that is possible
@@ -1082,7 +1097,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
         // Found a text node!
 
         // Split text inside child nodes
-        let nodeWords = node.textContent.split(/(?:([^a-zA-Z0-9]))/).filter(function (el) {
+        let nodeWords = node.textContent.split(/(?:([^a-zA-Z0-9]))/).filter(function(el) {
           return el.replace(/([\n])/g, '')
         })
 
