@@ -90,13 +90,6 @@ export class LeaderboardComponent implements OnInit {
             }
           }
         }),
-        // Watch URL params for quick links
-        this._route.queryParams.subscribe(params => {
-          if (params.studentList && params.studentList === 'coteach') {
-            this.visibility = true
-            this.coOwnerTooltipIndex = 0
-          }
-        }),
       )
   }
 

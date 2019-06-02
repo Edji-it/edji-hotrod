@@ -22,10 +22,10 @@ export class OwnerToolsComponent implements OnInit {
   public currentProject: Project
   public currentReading: Reading
   public user: any = {}
-  public showFireFeed: boolean
-  public showCommentCounts: boolean
-  public showQuestionFeed: boolean
-  public showReadingRecap: boolean
+  public showFireFeed: boolean = false
+  public showCommentCounts: boolean = false
+  public showQuestionFeed: boolean = false
+  public showReadingRecap: boolean = false
   public ownerToolBlockHeight: string
 
   // State vars
@@ -37,6 +37,7 @@ export class OwnerToolsComponent implements OnInit {
     private _socket: SocketService,
     private _readings: ReadingService,
     private angulartics: Angulartics2,
+    private _route: ActivatedRoute,
   ) {
     this.commentStats = this._projects.commentStats
   }
@@ -75,6 +76,12 @@ export class OwnerToolsComponent implements OnInit {
       ),
       this._auth.getCurrentUser().subscribe(user => {
         this.user = user
+      }),
+      // Watch URL params for quick links
+      this._route.queryParams.subscribe(params => {
+        if (params.studentList && params.studentList === 'coteach') {
+          this.showCommentCounts = true
+        }
       }),
     )
   }
