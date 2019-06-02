@@ -14,6 +14,14 @@ import { CommentFilter } from '../../../_services/project.service'
 })
 export class LeaderboardComponent implements OnInit {
   @Input() archived: boolean = false
+  @Input()
+  set coOwnerGuide(val) {
+    if (val === true) {
+      if (this.coOwnerTooltipIndex < 0) {
+        this.coOwnerTooltipIndex = 0
+      }
+    }
+  }
   // Manage visibility with 2 way binding
   private visible: boolean = false
   @Output() visibilityChange: EventEmitter<boolean> = new EventEmitter()

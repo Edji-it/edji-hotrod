@@ -33,8 +33,23 @@
   }
 }
 
+.badge-primary {
+  &.badge-button {
+    &:hover,
+    &:focus {
+      background-color: #008fd9;
+    }
+  }
+}
+
 .badge-secondary {
   background-color: #aaa;
+  &.badge-button {
+    &:hover,
+    &:focus {
+      background-color: #777;
+    }
+  }
 }
 
 .badge-info {

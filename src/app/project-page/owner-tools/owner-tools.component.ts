@@ -26,6 +26,7 @@ export class OwnerToolsComponent implements OnInit {
   public showCommentCounts: boolean = false
   public showQuestionFeed: boolean = false
   public showReadingRecap: boolean = false
+  public showCoOwnerGuide: boolean = false
   public ownerToolBlockHeight: string
 
   // State vars
@@ -79,8 +80,11 @@ export class OwnerToolsComponent implements OnInit {
       }),
       // Watch URL params for quick links
       this._route.queryParams.subscribe(params => {
-        if (params.studentList && params.studentList === 'coteach') {
+        if (params.studentList) {
           this.showCommentCounts = true
+          if (params.studentList === 'coteach') {
+            this.showCoOwnerGuide = true
+          }
         }
       }),
     )
