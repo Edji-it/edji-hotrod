@@ -2,6 +2,11 @@
   border: dashed 2px #dcdcdc;
 }
 
+// allow dropdown to push content in reading recap
+.sliding-pane .container {
+  overflow: visible;
+}
+
 .text-md {
   font-size: 14px;
 }

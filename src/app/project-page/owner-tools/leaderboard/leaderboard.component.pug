@@ -13,7 +13,7 @@
         | To add a co-teacher, have the user join this Group, then access their settings here
       .text-left(*ngIf="coOwnerTooltipIndex === 1")
         | Select "Promote to co-teacher", and they will be given the same teacher abilities you have
-  .container-fluid.container--less-pad
+  #studentListContent.container-fluid.container--less-pad
     h4
       | {{ commentStats.stats.userStats.length }} Students
       button.close.stats-close-btn.btn-icon--round((click)='close()' type='button')

@@ -15,11 +15,6 @@ $slidingPaneWidth: 265px;
   z-index: $zMid + 1000;
   overflow: visible;
 
-  & .container,
-  & .container-fluid {
-    overflow-y: auto;
-  }
-
   .keyboard-adjust & {
     height: 70%; // calc(70% - #{ $navBarHeight - 13px });
   }
