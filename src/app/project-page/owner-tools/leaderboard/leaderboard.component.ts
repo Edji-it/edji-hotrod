@@ -16,15 +16,15 @@ export class LeaderboardComponent implements OnInit {
   @Input() archived: boolean = false
   // Manage visibility with 2 way binding
   private visible: boolean = false
+  @Output() visibilityChange: EventEmitter<boolean> = new EventEmitter()
   @Input()
   get visibility() {
     return this.visible
   }
-  @Output() setVisibility: EventEmitter<boolean> = new EventEmitter()
   set visibility(val) {
     if (this.visible !== val) {
       this.visible = val
-      this.setVisibility.emit(this.visible)
+      this.visibilityChange.emit(this.visible)
     }
   }
 
