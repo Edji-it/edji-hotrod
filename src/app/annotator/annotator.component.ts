@@ -244,20 +244,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
             this._projects.filterByUser(this.user)
           }
           if (project) {
+            let initialLoad = this.project._id != project._id
             this.project = project
             this.setLinePositions()
-            // Check if audio is supported
-            if (this.project.types.indexOf('audio') > -1 && !this._audio.isSupported()) {
-              this.audioSupportError = true
-              // if audio is not supported, let analytics know
-              this.angulartics.eventTrack.next({
-                action: 'noAudioSupport',
-                properties: {
-                  category: this._auth.setAnalyticEventCategory(),
-                  label: this._auth.setAnalyticEventLabel(),
-                },
-              })
-            }
             this.directCommentOptions = []
             for (let i = 0; i < this.project.types.length; i++) {
               // Ignore comment types that can't be made on a word
@@ -270,8 +259,23 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
             if (this.project.report_evals) {
               this.setFeedback()
             }
-            // Display heat vision status on initial load
-            this.showHeatVisionToast(this.project.heat_vision)
+            // Initial Load events
+            if (initialLoad) {
+              // Display heat vision status on initial load
+              this.showHeatVisionToast(this.project.heat_vision)
+              // Check if audio is supported
+              if (this.project.types.indexOf('audio') > -1 && !this._audio.isSupported()) {
+                this.audioSupportError = true
+                // if audio is not supported, let analytics know
+                this.angulartics.eventTrack.next({
+                  action: 'noAudioSupport',
+                  properties: {
+                    category: this._auth.setAnalyticEventCategory(),
+                    label: this._auth.setAnalyticEventLabel(),
+                  },
+                })
+              }
+            }
           }
         },
         error => {

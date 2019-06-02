@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 import { take } from 'rxjs/operators'
 
 // Project Dependencies
-import { ProjectService, SocketService } from '../../_services'
+import { ProjectService, SocketService, MessageService } from '../../_services'
 import { Reading, User } from '../../shared/datatypes'
 
 @Component({
@@ -19,7 +19,7 @@ export class ConfirmCoOwnerModal implements OnInit {
 
   public showError: boolean = false
 
-  constructor(private _projects: ProjectService, private _socket: SocketService) {}
+  constructor(private _projects: ProjectService, private _socket: SocketService, private _messages: MessageService) {}
 
   ngOnInit() {}
 
@@ -30,6 +30,12 @@ export class ConfirmCoOwnerModal implements OnInit {
         this._socket.groupUpdateEvent({
           type: 'coteacherPromote',
           user: student,
+        })
+        // Display confirmation toast
+        this._messages.sendToast({
+          id: 'coteacherPromoted',
+          type: 'promoted',
+          message: '<b>' + student.fullname + '</b> has been promoted to co-teacher',
         })
         console.log(data)
         this.closeModal.emit()
