@@ -420,6 +420,7 @@ export class ProjectService {
       comment.user_id === this.project.teacher_id ||
       (this.project.co_owner_ids && this.project.co_owner_ids.indexOf(comment.user_id) > -1)
     ) {
+      // preset authorIsTeacher for existing data
       comment.authorIsTeacher = true
     }
     // get the user help decorate the comment
