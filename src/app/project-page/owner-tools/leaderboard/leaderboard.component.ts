@@ -92,7 +92,7 @@ export class LeaderboardComponent implements OnInit {
           project => {
             this.currentProject = project
           }
-        )
+        ),
         // Get Updates about applied comment filters so we can show the user
         this._projects.filterUpdates.subscribe(filter => {
           this.appliedFilter = filter
