@@ -50,7 +50,7 @@
           .user-tag-group--teacher
             .badge.badge-pill.badge-teacher--label.hover--tooltip
               | T
-              .tooltip.tooltip--top
+              .tooltip.tooltip--top-right
                 .tooltip-title Teacher{{currentProject.owners[1] && 's'}} for this Reading Group
             ng-container(*ngFor="let owner of currentProject.owners")
               follow-tag([owner]="owner")

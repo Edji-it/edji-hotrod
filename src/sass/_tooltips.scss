@@ -33,6 +33,10 @@
   visibility: visible;
   opacity: 1;
   transform: translate3d(-50%, 0px, 0);
+
+  &.tooltip--top-right {
+    transform: translate3d(-27px, 0px, 0);
+  }
 }
 
 .tooltip::after {
@@ -54,6 +58,15 @@
     top: auto !important;
     bottom: 100%;
     border-color: transparent transparent #fff transparent;
+  }
+}
+
+.tooltip.tooltip--top-right {
+  left: 100%;
+  transform: translate3d(-27px, 5px, 0);
+
+  &::after {
+    left: 10px;
   }
 }
 
