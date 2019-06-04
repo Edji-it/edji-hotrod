@@ -3,16 +3,6 @@ import { Account, Login } from './page-objects'
 import * as path from 'path'
 import { Sidebar } from './page-objects/sidebar-page'
 
-/*
-    27 Jan 2017
-    Last Modified: 3 July 2017
-    Nicholas Pumper
-
-    e2e test the account page!
-
-    - We log into all types of account.
-*/
-
 // Now into the testing.
 describe('Account Page', () => {
   /* ---- Variable Initialization --------------- */
