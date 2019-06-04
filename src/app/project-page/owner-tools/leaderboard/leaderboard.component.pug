@@ -27,6 +27,13 @@
     .user-list-item.hover-parent(*ngFor='let commentUser of commentStats.stats.userStats; let i = index')
       span.user-list__name([attr.id]="'studentName'+i") 
         | {{ commentUser.fullname }}
+        .ml-1.badge.badge-pill.badge-teacher--label.hover--tooltip(
+          *ngIf="isStudentCoTeacher(commentUser)",
+            style="position:relative;"
+          )
+          | T
+          .tooltip.tooltip--top
+            .tooltip-title Co-teacher
 
       //- //- Reply Count
       //- .student-replies__wrap {{ commentUser.reply_count }}

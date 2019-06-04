@@ -48,7 +48,7 @@
         .nav-bar__author(*ngIf="currentProject.owners && currentProject.owners[0]")
           //- span.label.mr-1 Teacher{{currentProject.owners[1] && 's'}}
           .user-tag-group--teacher
-            .badge.badge-pill.badge-teacher--label.hover--tooltip(style="position:relative;")
+            .badge.badge-pill.badge-teacher--label.hover--tooltip
               | T
               .tooltip.tooltip--top
                 .tooltip-title Teacher{{currentProject.owners[1] && 's'}} for this Reading Group

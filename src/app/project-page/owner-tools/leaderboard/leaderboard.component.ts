@@ -3,7 +3,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 
 // Project Dependencies
-import { CommentStats, Reading, User } from './../../../shared/datatypes'
+import { CommentStats, Reading, User, Project, PublicUser } from './../../../shared/datatypes'
 import { ProjectService, ReadingService, AuthService } from '../../../_services'
 import { CommentFilter } from '../../../_services/project.service'
 
@@ -41,6 +41,7 @@ export class LeaderboardComponent implements OnInit {
 
   private currentUser: User
   private currentReading: Reading
+  private currentProject: Project
   private subscriptions: Subscription[] = []
   private answersById: any = {}
   private userAnswers: any[] = []
@@ -86,6 +87,12 @@ export class LeaderboardComponent implements OnInit {
             console.error(error)
           },
         ),
+        // Subscribe to updates to the project
+        this._projects.currentProject.subscribe(
+          project => {
+            this.currentProject = project
+          }
+        )
         // Get Updates about applied comment filters so we can show the user
         this._projects.filterUpdates.subscribe(filter => {
           this.appliedFilter = filter
@@ -199,12 +206,20 @@ export class LeaderboardComponent implements OnInit {
   /**
    * Is Student Filtered
    */
-  public isStudentFiltered(student: any): boolean {
+  public isStudentFiltered(student: PublicUser): boolean {
     if (this.appliedFilter && this.appliedFilter.propertyFilters.user_id) {
       return this.appliedFilter.propertyFilters.user_id.test(student._id)
     } else {
       return false
     }
+  }
+
+  /**
+   * Returns if user is co-teacher
+   * @param student id 
+   */
+  public isStudentCoTeacher(student: PublicUser): boolean {
+    return this.currentProject.co_owner_ids && this.currentProject.co_owner_ids.indexOf(student._id) > -1
   }
 
   /**

@@ -52,6 +52,7 @@ $defaultTagColor: #767676;
   & .user-tag,
   & .badge-teacher--label {
     // border: 2px solid $blue;
+    position: relative; // for tooltip
     margin-right: 2px;
   }
 }

@@ -8,7 +8,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
 // Project Dependencies
 import { AuthService } from './auth.service'
 import { SocketService } from './socket.service'
-import { CommentStats, iCommentStats, EdjiComment, Project, User, BaseComment } from '../shared/datatypes'
+import { CommentStats, iCommentStats, EdjiComment, Project, User, PublicUser } from '../shared/datatypes'
 import { ReadingService } from './reading.service'
 import { AcademyService } from './academy.service'
 
@@ -140,6 +140,13 @@ export class ProjectService {
       this._socket.groupUpdate.subscribe(groupUpdate => {
         if (groupUpdate.type === 'refreshLeaderboard' && this.project.isTeaching) {
           this.addUserInfoToProject(groupUpdate)
+        } else if (groupUpdate.type === 'coteacherPromote') {
+          // Push user into co-owner array
+          if (this.project.co_owner_ids.indexOf(groupUpdate.user._id) === -1) {
+            this.project.co_owner_ids.push(groupUpdate.user._id)
+            this.project.co_owners.push(groupUpdate.user)
+            this.currentProjectSource.next(this.project)
+          }
         }
       }),
       /**
