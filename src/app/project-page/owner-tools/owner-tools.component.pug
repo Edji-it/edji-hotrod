@@ -51,7 +51,7 @@
     i#toggleReadingRecap.icon-reading-recap(*ngIf="currentProject")
     label Recap
 
-.owner-tools-button__mobile.hidden-lg-up(*ngIf="currentProject && user._id == currentProject.owner_id")
+.owner-tools-button__mobile.hidden-lg-up(*ngIf="currentProject && currentProject.isTeaching")
   //- Mobile Buttons
   .owner-options-group--mobile([class.btn-group-show--animation]="ownerToolShow", [style.max-height]="ownerToolBlockHeight")
     //- Comment Stats pane
