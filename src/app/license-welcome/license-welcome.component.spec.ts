@@ -7,16 +7,19 @@ import { EmojiOnePipe } from '../_pipes'
 import { AcademyService } from '../_services'
 import { of } from 'rxjs'
 
+/**
+ * This test is an example of using the component directly, rather than compiling it
+ */
 describe('LicenseWelcomeComponent', () => {
   let component: LicenseWelcomeComponent
-  let fixture: ComponentFixture<LicenseWelcomeComponent>
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       imports: [RouterTestingModule],
-      declarations: [LicenseWelcomeComponent, EmojiOnePipe],
+      declarations: [EmojiOnePipe],
       providers: [
+        LicenseWelcomeComponent,
         {
           provide: AcademyService,
           useValue: {
@@ -30,9 +33,7 @@ describe('LicenseWelcomeComponent', () => {
   }))
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(LicenseWelcomeComponent)
-    component = fixture.componentInstance
-    fixture.detectChanges()
+    component = TestBed.get(LicenseWelcomeComponent)
   })
 
   it('should create', () => {
