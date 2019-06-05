@@ -202,13 +202,13 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
       .save(reading)
       .pipe(take(1))
       .subscribe(
-        data => {
+        () => {
           // Bookmarking successful
         },
         err => {
           // Display error to user
           console.error(err)
         },
-    )
+      )
   }
 } // @Component
