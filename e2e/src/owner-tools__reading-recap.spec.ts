@@ -72,7 +72,7 @@ describe('Project Page as an owner using reading report: ', () => {
     browser.wait(
       EC.elementToBeClickable(recapStudentOptions.get(0)),
       5000,
-      'recap student selector never became clickable',
+      'recap student selector options never became clickable',
     )
     recapStudentOptions.first().click()
 
@@ -86,7 +86,7 @@ describe('Project Page as an owner using reading report: ', () => {
 
   // add an evaluation and verify it shows up
   it('should add an evaluation and verify it shows up', () => {
-    browser.wait(EC.visibilityOf(readingEvalFirst), 5000, 'previous reading evals never became visible')
+    browser.wait(EC.visibilityOf(readingEvalFirst), 7000, 'previous reading evals never became visible')
     browser.wait(
       EC.elementToBeClickable(element(by.id('evalFormText'))),
       3000,
@@ -123,7 +123,7 @@ describe('Project Page as an owner using reading report: ', () => {
       browser.wait(
         EC.elementToBeClickable(recapStudentOptions.get(1)),
         3000,
-        'recap student selector never became clickable',
+        'recap student selector options never became clickable',
       )
       recapStudentOptions.first().click()
     })
