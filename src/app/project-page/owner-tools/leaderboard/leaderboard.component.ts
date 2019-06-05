@@ -88,11 +88,9 @@ export class LeaderboardComponent implements OnInit {
           },
         ),
         // Subscribe to updates to the project
-        this._projects.currentProject.subscribe(
-          project => {
-            this.currentProject = project
-          }
-        ),
+        this._projects.currentProject.subscribe(project => {
+          this.currentProject = project
+        }),
         // Get Updates about applied comment filters so we can show the user
         this._projects.filterUpdates.subscribe(filter => {
           this.appliedFilter = filter
@@ -162,8 +160,12 @@ export class LeaderboardComponent implements OnInit {
   public viewStudentFilter(student: any): void {
     // Hide dropdown
     this.studentSettingsIndex = -1
-    // Show filter
-    this._projects.filterByUser(student)
+    // Toggle filter
+    if (!this.isStudentFiltered(student)) {
+      this._projects.filterByUser(student)
+    } else {
+      this._projects.clearFilters()
+    }
   }
 
   /**
@@ -216,7 +218,7 @@ export class LeaderboardComponent implements OnInit {
 
   /**
    * Returns if user is co-teacher
-   * @param student id 
+   * @param student id
    */
   public isStudentCoTeacher(student: PublicUser): boolean {
     return this.currentProject.co_owner_ids && this.currentProject.co_owner_ids.indexOf(student._id) > -1
