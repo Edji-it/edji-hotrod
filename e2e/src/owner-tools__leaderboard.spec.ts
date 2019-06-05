@@ -136,6 +136,11 @@ describe('Project Page as an owner wishing to filter by student: ', () => {
       'never found the close leaderboard button',
     )
     sidebar.leaderboardClose.click()
+    browser.wait(
+      EC.invisibilityOf(sidebar.leaderboard),
+      5000,
+      'leaderboard never closed',
+    )
   })
 
   it('should open the Leaderboard and see a live status indicator next to the user name', () => {

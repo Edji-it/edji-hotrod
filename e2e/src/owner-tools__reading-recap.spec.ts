@@ -86,7 +86,7 @@ describe('Project Page as an owner using reading report: ', () => {
 
   // add an evaluation and verify it shows up
   it('should add an evaluation and verify it shows up', () => {
-    browser.wait(EC.visibilityOf(readingEvalFirst), 3000, 'previous reading evals never became visible')
+    browser.wait(EC.visibilityOf(readingEvalFirst), 5000, 'previous reading evals never became visible')
     browser.wait(
       EC.elementToBeClickable(element(by.id('evalFormText'))),
       3000,
@@ -116,7 +116,7 @@ describe('Project Page as an owner using reading report: ', () => {
 
   // verify you can open the dropdown for student selection and change the student
   it('should verify you can open the dropdown for student selection and change the student', () => {
-    browser.executeScript('document.querySelector(".reading-recap").scrollTo(0,0);').then(function() {
+    browser.executeScript('document.querySelector(".reading-recap").scrollTo(0,0);').then(function () {
       // Select first student
       browser.wait(EC.elementToBeClickable(recapStudentDropdown), 5000, 'recap student selector never became clickable')
       recapStudentDropdown.click()
@@ -159,7 +159,7 @@ describe('Project Page as an owner using reading report: ', () => {
 
   // close the report and make sure it closes
   it('should close the report and make sure it closes', () => {
-    browser.executeScript('document.querySelector(".reading-recap").scrollTo(0,0);').then(function() {
+    browser.executeScript('document.querySelector(".reading-recap").scrollTo(0,0);').then(function () {
       // Close Reading Report
       browser.wait(EC.elementToBeClickable(element(by.id('closeReadingRecap'))), 3000, 'never saw close button')
       element(by.id('closeReadingRecap')).click()
