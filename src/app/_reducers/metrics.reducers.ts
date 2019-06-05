@@ -1,7 +1,10 @@
 import { Action } from '@ngrx/store'
 
-export interface MetricsState {
-  metricsLoaded: boolean,
+export interface MetricsState extends NumericMetrics {
+  metricsLoaded: boolean
+}
+
+interface NumericMetrics {
   hero_page_load_count: number
 }
 
@@ -29,15 +32,8 @@ export class SetState implements Action {
 export type MetricsActionsUnion = IncrementMetric | SetState
 
 export function metricsReducer(state: MetricsState = initialState, action: MetricsActionsUnion) {
-  console.log('got new action of type', action.type)
   switch (action.type) {
-    // case MetricsActions.IncrementMetric:
-    //   return {
-    //     ...state,
-    //     [action.payload]: ++state[action.payload]
-    //   }
     case MetricsActions.SetState:
-      console.log('setting the state, boi')
       return {
         ...state,
         ...action.payload
