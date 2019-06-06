@@ -10,7 +10,9 @@ export class Dashboard implements PageObjectInterface {
   public firstReadingCard = this.readingCards.first()
   public firstDraftCard = element.all(by.css('.draft-card')).first()
   public archivedReadingCards = element.all(by.css('.reading-card.archived'))
-  public firstReadingTitle = element.all(by.css('.reading-title__text')).first()
+  public readingTitles = element.all(by.css('.reading-title__text'))
+  public firstReadingTitle = this.readingTitles.first()
+  public readingTitleText = (title: string) => element(by.cssContainingText('.reading-title__text', title))
   public readingLoader = element(by.css('.e2e-reading-loader'))
   public secondPageFirstReadingTitle = element.all(by.css('.page-2 .reading-title__text')).first()
   public projectCards = element.all(by.css('.project-card'))
@@ -29,6 +31,16 @@ export class Dashboard implements PageObjectInterface {
   public getReadingDeleteByTitle = (title: string) => element(by.css('button[testDelete="' + title + '"]'))
   public searchCount = element(by.id('searchCount'))
   public searchInput = element(by.id('readingSearch'))
+  public bookmarksBtn = element(by.id('bookmarksBtn'))
+
+  // public toggle and status
+  public publicStatusTitle = 'Public Status <Do Not Delete or Use>'
+  public publicToggleBtnOld = element(by.id('togglePublic'))
+  public publicToggleBtn = (title: string) => element(by.css('div[testFindTogglePublic="' + title + '"]'))
+  public publicReadingStatus = element(by.id('readingPublic'))
+  public privateReadingStatus = element(by.id('readingPrivate'))
+  public readingMakePublic = element(by.id('readingMakePublic'))
+  public readingMakePrivate = element(by.id('readingMakePrivate'))
 
   // Dropdown buttons
   public dropDownMenu = element(by.css('.btn-icon--plain'))

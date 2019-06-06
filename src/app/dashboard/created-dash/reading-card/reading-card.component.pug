@@ -88,14 +88,15 @@
       )
         i.icon.icon-link
       //- Private/Public Toggle
-      .btn.btn-icon--round.reading-access-icon.reading-action(
+      #togglePublic.btn.btn-icon--round.reading-access-icon.reading-action(
         [attr.title]="reading.public ? 'Public Reading' : 'Private Reading'", 
         (click)="togglePublicTooltip()",
         [class.access-icon__hover]="_route.snapshot.routeConfig.path!='discover'",
-        [class.disabled]="reading.archived"
+        [class.disabled]="reading.archived",
+        [attr.testFindTogglePublic]="reading.title"
       )
-        i.icon(*ngIf="reading.public", [innerHTML]="':earth_americas:' | emojione")
-        i.icon(*ngIf="!reading.public", [innerHTML]="':lock:' | emojione")
+        i#readingPublic.icon(*ngIf="reading.public", [innerHTML]="':earth_americas:' | emojione")
+        i#readingPrivate.icon(*ngIf="!reading.public", [innerHTML]="':lock:' | emojione")
         .tooltip-wrap
           .tooltip([class.show]="togglePublicFlag", [class.no-link]="!reading.source")
             .tooltip-title
