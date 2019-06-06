@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
-import { AcademyService } from '../../_services'
 
 @Component({
   selector: 'license-invite-support',
@@ -13,7 +12,7 @@ export class LicenseInviteComponent implements OnInit {
 
   public licenseInvite: FormGroup
 
-  constructor(private _fb: FormBuilder, private _academy: AcademyService) {
+  constructor(private _fb: FormBuilder) {
     this.licenseInvite = this._fb.group({
       // name: [null, Validators.required],
       // email: [null, [Validators.required, this.emailValidator]]
