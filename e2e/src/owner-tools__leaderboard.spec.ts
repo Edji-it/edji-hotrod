@@ -107,6 +107,7 @@ describe('Project Page as an owner wishing to filter by student: ', () => {
     // Paginate to previous Student
     browser.wait(EC.elementToBeClickable(sidebar.prevStudentButton), 5000, 'never saw "previous" student filter button')
     sidebar.prevStudentButton.click()
+    browser.sleep(1000)
     // First commenter's comment should no longer be visible
     browser.wait(
       EC.invisibilityOf(firstCommenterComments.first()),
@@ -135,15 +136,11 @@ describe('Project Page as an owner wishing to filter by student: ', () => {
       5000,
       'never found the close leaderboard button',
     )
-    sidebar.leaderboardClose.click()
-    browser.wait(
-      EC.invisibilityOf(sidebar.leaderboard),
-      5000,
-      'leaderboard never closed',
-    )
+    sidebar.closeLeaderboard()
   })
 
   it('should open the Leaderboard and see a live status indicator next to the user name', () => {
+    sidebar.closeLeaderboard()
     // Open Leaderboard
     browser.wait(
       EC.elementToBeClickable(sidebar.leaderboardButton),

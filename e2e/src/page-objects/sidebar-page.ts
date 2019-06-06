@@ -160,6 +160,23 @@ export class Sidebar {
     })
   }
 
+  public closeLeaderboard(): void {
+    this.leaderboard.isPresent().then(result => {
+      if (result) {
+        this.leaderboard.isDisplayed().then(result => {
+          if (result) {
+            this.leaderboardClose.click()
+            browser.wait(
+              this.EC.invisibilityOf(this.leaderboard),
+              5000,
+              'leaderboard never closed',
+            )
+          }
+        })
+      }
+    })
+  }
+
   public logout(): void {
     this.closeModals()
     this.clickLogOutButton()
