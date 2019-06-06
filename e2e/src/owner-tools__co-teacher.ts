@@ -1,0 +1,29 @@
+import { browser, by, element, protractor } from 'protractor'
+
+import { Project, Sidebar, Login } from './page-objects'
+import { LoginModal } from './components'
+import { Home } from './page-objects/home-page'
+
+// Now into the testing.
+describe('Project Page as a Co-Teacher: ', () => {
+  /* ---- Variable Initialization --------------- */
+  let project = new Project()
+  let loginModal = new LoginModal()
+  let login = new Login()
+  let sidebar = new Sidebar()
+  let home = new Home()
+  let EC = protractor.ExpectedConditions // vital
+
+  /* ---- beforeEach ---------------------------- */
+
+  beforeEach(() => {
+    browser.get('/#/home')
+    // Open Test project
+    home.enterProjectCodeFromHome('coteach')
+  })
+
+  afterEach(() => {
+    // log out
+    sidebar.logout()
+  })
+})
