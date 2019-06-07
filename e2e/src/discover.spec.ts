@@ -99,19 +99,19 @@ describe('Discover Feed', () => {
       sidebar.logout()
     })
 
-    it("should see testbot's new public reading in public feed", () => {
+    it("should see testbot's new public reading in public feed", async () => {
       // Login as another user
       login.getPage()
-      browser.wait(EC.elementToBeClickable(login.loginButton), 5000)
+      browser.wait(EC.elementToBeClickable(login.loginButton), 5000, 'never got the login page')
       login.loginAndVerify(login.teacherUser, login.teacherPassword)
 
       // Got to Discover Feed
       sidebar.navDiscover.click()
       browser.wait(EC.urlContains('discover'), 5000, 'never arrived at discover feed as sidekick user')
-      browser.wait(EC.elementToBeClickable(discover.firstFeedReading), 5000)
+      browser.wait(EC.elementToBeClickable(discover.firstFeedReading), 5000, 'discover feed readings never loaded')
       // Check title of most recent readings
-      let foundTitle = discover.validateReadingTitle(newPublicReadingTitle)
-      expect(foundTitle).toBeTruthy()
+      let foundTitle = await discover.validateReadingTitle(newPublicReadingTitle)
+      expect(foundTitle).toBeTruthy('never found testbots new reading in the discover feed')
     })
   })
 
@@ -138,7 +138,7 @@ describe('Discover Feed', () => {
       discover.closeReadingPreview()
     })
 
-    it('should open reading preview and edit a reading then save it', () => {
+    it('should open reading preview and edit a reading then save it', async () => {
       browser.wait(
         EC.elementToBeClickable(discover.firstFeedReading),
         5000,
@@ -175,8 +175,9 @@ describe('Discover Feed', () => {
       // also need to wait until the draft cards load in for us to check the title
       browser.wait(EC.elementToBeClickable(dashboard.firstDraftCard), 7000, 'reading draft cards never loaded')
       // Check title of most recent readings
-      let foundTitle = discover.validateReadingTitle(newReadingTitle)
-      expect(foundTitle).toBeTruthy()
+      // browser.wait(EC.visibilityOf(element(by.cssContainingText('.reading-title__text', newReadingTitle))), 5000, 'the newly created reading title did not match the first reading in the dashboard')
+      let foundTitle = await discover.validateReadingTitle(newReadingTitle)
+      expect(foundTitle).toBeTruthy('the newly created reading title did not match the first reading in the dashboard')
       reset()
       discover.getPage()
     })
@@ -208,7 +209,7 @@ describe('Discover Feed', () => {
       // also need to wait until the draft cards load in for us to check the title
       browser.wait(EC.elementToBeClickable(dashboard.firstDraftCard), 7000, 'reading draft cards never loaded')
       // Check title of most recent readings
-      let foundTitle = discover.validateReadingTitle(readingTitle)
+      let foundTitle = await discover.validateReadingTitle(readingTitle)
       expect(foundTitle).toBeTruthy()
     })
   })
@@ -276,8 +277,9 @@ describe('Discover Feed', () => {
         5000,
         "discover search results were not visible"
       )
-      let searchCount = await discover.searchCount.getText()
-      expect(parseInt(searchCount)).toBe(0, "expected to see no discover search results when entering a bad search")
+      browser.sleep(1000) // give browser a second to make sure the count value updates to 0
+      let searchCountBad = await discover.searchCount.getText()
+      expect(parseInt(searchCountBad)).toBe(0, "expected to see no discover search results when entering a bad search")
     })
 
     it('should open login modal when trying to follow a user', async () => {
