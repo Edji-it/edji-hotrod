@@ -108,11 +108,19 @@ describe('Project Page as an owner wishing to filter by student: ', () => {
     sidebar.prevStudentButton.click()
     browser.sleep(1000)
     // First commenter's comment should no longer be visible
-    sidebar.checkFirstCommenterComment(false)
+    browser.wait(
+      EC.invisibilityOf(sidebar.firstCommenterFirstComment),
+      5000,
+      "previous student filter did not hide previous student's comments",
+    )
     // Close student filter
     sidebar.studentFilterClose.click()
     // Ensure First Commenter's comment is visible again
-    sidebar.checkFirstCommenterComment(true)
+    browser.wait(
+      EC.elementToBeClickable(sidebar.firstCommenterFirstComment),
+      3000,
+      "never saw First Commenter's comment after clearing",
+    )
     // Ensure all comments are showing again
     element
       .all(by.css('edji-comment:not(.hidden)'))

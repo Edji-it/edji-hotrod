@@ -179,30 +179,6 @@ export class Sidebar {
     })
   }
 
-  public checkFirstCommenterComment(shouldBeVisible?: boolean): void {
-    this.firstCommenterFirstComment.isPresent().then(result => {
-      if (result) {
-        this.firstCommenterFirstComment.isDisplayed().then(result => {
-          if (result) {
-            if (shouldBeVisible) {
-              browser.wait(
-                this.EC.elementToBeClickable(this.firstCommenterFirstComment),
-                3000,
-                "never saw First Commenter's comment after clearing",
-              )
-            } else {
-              browser.wait(
-                this.EC.invisibilityOf(this.firstCommenterFirstComment),
-                5000,
-                "previous student filter did not hide previous student's comments",
-              )
-            }
-          }
-        })
-      }
-    })
-  }
-
   public logout(): void {
     this.closeModals()
     this.clickLogOutButton()
