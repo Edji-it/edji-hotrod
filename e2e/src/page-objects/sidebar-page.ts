@@ -21,6 +21,8 @@ export class Sidebar {
 
   // Owner Tools
   public leaderboardButton = element(by.id('toggleLeaderboard'))
+  public firstCommenterComments = element.all(by.css('.e2e-comment--First-Commenter .user-icon')) // User icon is a more reliable indicator of visibility
+  public firstCommenterFirstComment = this.firstCommenterComments.first()
   public prevStudentButton = element(by.id('studentFilterPrev'))
   public nextStudentButton = element(by.id('studentFilterNext'))
   public studentFilterClose = element(by.css('.filter-bubble .close'))
@@ -171,6 +173,30 @@ export class Sidebar {
               5000,
               'leaderboard never closed',
             )
+          }
+        })
+      }
+    })
+  }
+
+  public checkFirstCommenterComment(shouldBeVisible?: boolean): void {
+    this.firstCommenterFirstComment.isPresent().then(result => {
+      if (result) {
+        this.firstCommenterFirstComment.isDisplayed().then(result => {
+          if (result) {
+            if (shouldBeVisible) {
+              browser.wait(
+                this.EC.elementToBeClickable(this.firstCommenterFirstComment),
+                3000,
+                "never saw First Commenter's comment after clearing",
+              )
+            } else {
+              browser.wait(
+                this.EC.invisibilityOf(this.firstCommenterFirstComment),
+                5000,
+                "previous student filter did not hide previous student's comments",
+              )
+            }
           }
         })
       }

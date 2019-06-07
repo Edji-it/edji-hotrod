@@ -95,13 +95,12 @@ describe('Project Page as an owner wishing to filter by student: ', () => {
     firstCommenterFilter.click()
 
     // First Commenter should only have one comment
-    let firstCommenterComments = element.all(by.css('.e2e-comment--First-Commenter .user-icon')) // User icon is a more reliable indicator of visibility
     browser.wait(
-      EC.visibilityOf(firstCommenterComments.first()),
+      EC.visibilityOf(sidebar.firstCommenterFirstComment),
       3000,
       "not able to see First Commenter's comment when filtering",
     )
-    firstCommenterComments.count().then(count => {
+    sidebar.firstCommenterComments.count().then(count => {
       expect(count).toBe(1, "found more or less than First Commenter's single comment despite filtering")
     })
     // Paginate to previous Student
@@ -109,19 +108,11 @@ describe('Project Page as an owner wishing to filter by student: ', () => {
     sidebar.prevStudentButton.click()
     browser.sleep(1000)
     // First commenter's comment should no longer be visible
-    browser.wait(
-      EC.invisibilityOf(firstCommenterComments.first()),
-      5000,
-      "previous student filter did not hide previous student's comments",
-    )
+    sidebar.checkFirstCommenterComment(false)
     // Close student filter
     sidebar.studentFilterClose.click()
     // Ensure First Commenter's comment is visible again
-    browser.wait(
-      EC.elementToBeClickable(firstCommenterComments.first()),
-      3000,
-      "never saw First Commenter's comment after clearing",
-    )
+    sidebar.checkFirstCommenterComment(true)
     // Ensure all comments are showing again
     element
       .all(by.css('edji-comment:not(.hidden)'))
