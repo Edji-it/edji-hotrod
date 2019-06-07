@@ -3,16 +3,13 @@ import { browser, by, element, protractor } from 'protractor'
 import { NewReading, Login, Sidebar, Dashboard } from './page-objects'
 import { reset } from './utils/browser-methods'
 
-// Now into the testing.
-describe('New Reading Page', () => {
+describe('Reading Media', () => {
   let newReading = new NewReading()
   let login = new Login()
   let sidebar = new Sidebar()
-  let dashboard = new Dashboard()
   let EC = protractor.ExpectedConditions
 
   beforeAll(() => {
-    // Login as test account that we can fill with junk data
     login.getPage()
     login.loginAndVerify(login.botUser, login.botPassword)
   })
@@ -25,17 +22,8 @@ describe('New Reading Page', () => {
   afterAll(() => {
     sidebar.logout()
   })
-  /* Test: Upload a PDF and create a Reading with
-        - Open New Reading page
-        - Open PDF upload modal
-        - Select and upload a PDF
-        - Insert PDF into the Reading
-        - Delete PDF
-    */
+
   describe('PDF upload', () => {
-    /**
-     * Test: Add reading with pages from a PDF
-     */
     it('should upload a PDF to a reading and save it to the reading', function () {
       browser.wait(EC.elementToBeClickable(newReading.uploadPDfModalButton), 5000)
       newReading.uploadPDfModalButton.click()
@@ -83,20 +71,10 @@ describe('New Reading Page', () => {
 
       browser.wait(EC.elementToBeClickable(confirmDelBtn), 5000, 'confirm delete button never became clickable')
       confirmDelBtn.click()
-
-      // TO-DO: We've had issues tracking this via count
-      // browser.wait(EC.invisibilityOf(delBtn), 5000, 'delete button should not be visible.')
     })
   })
 
   describe('Image upload', () => {
-    /**
-     * Test: Add reading with an image
-     * - Upload image
-     * - Insert image
-     * - Create reading with image
-     * - Verify new reading has image
-     */
     it('should upload an image to a reading and save it to the reading', function () {
       newReading.insertImageButtonTap()
       browser.wait(

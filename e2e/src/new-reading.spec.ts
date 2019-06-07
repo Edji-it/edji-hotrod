@@ -3,7 +3,6 @@ import { browser, by, element, protractor } from 'protractor'
 import { NewReading, Login, Sidebar, Dashboard } from './page-objects'
 import { reset } from './utils/browser-methods'
 
-// Now into the testing.
 describe('New Reading Page', () => {
   let newReading = new NewReading()
   let login = new Login()
@@ -12,7 +11,6 @@ describe('New Reading Page', () => {
   let EC = protractor.ExpectedConditions
 
   beforeAll(() => {
-    // Login as test account that we can fill with junk data
     login.getPage()
     login.loginAndVerify(login.botUser, login.botPassword)
   })
@@ -24,16 +22,6 @@ describe('New Reading Page', () => {
 
   afterAll(() => {
     sidebar.logout()
-  })
-
-  /* ---- Vital Super Basic Test  --------------- */
-
-  /* Test: Extremely Basic Test.
-    - IF THIS FAILS: You are not running Protractor correctly
-    */
-  it('should see Edji in the title', () => {
-    let result = 'Edji'
-    browser.wait(EC.titleContains(result), 5000, 'Title should contain "Edji".')
   })
 
   it('should add reading when all fields are filled and submitted', () => {
@@ -63,12 +51,6 @@ describe('New Reading Page', () => {
     dashboard.deleteReadingByTitle(uniqueTitle)
   })
 
-  // /* Test: Add reading, don’t enter title and see error
-  //     - Open New Reading page
-  //     - Fill all fields *but* title
-  //     - Tab and hit enter/ click on "Add reading button"
-  //     - Receive error message asking to give reading a title
-  // */
   it('should display an error if the title is not filled', () => {
     // Enter sample Reading into form, excluding title
     newReading.titleInput.clear()
@@ -81,12 +63,6 @@ describe('New Reading Page', () => {
     browser.wait(EC.presenceOf(newReading.titleError), 5000, 'never saw an error for empty title')
   })
 
-  //  /* Test: Add reading, don’t enter content and see error
-  //     - Open New Reading page
-  //     - Fill all fields *but* content
-  //     - Tab and hit enter/ click on "Add reading button"
-  //     - Receive error message asking to give reading content
-  // */
   it('should display an error if no content is entered', () => {
     // Enter sample Reading data into form, but clear content
     newReading.titleInput.sendKeys(newReading.titleString)
@@ -97,12 +73,6 @@ describe('New Reading Page', () => {
     browser.wait(EC.presenceOf(newReading.contentError), 5000, 'never saw an error for empty content')
   })
 
-  /* Test: Add reading, but clear Group Label and see error
-        - Open New Reading page
-        - Fill all fields *but* group label
-        - Tab and hit enter/ click on "Add reading button"
-        - Receive error message asking to give reading a group label
-    */
   it('should display an error if no group label is entered', () => {
     // Enter sample Reading into form, but clear group label
     newReading.titleInput.sendKeys(newReading.titleString)
@@ -130,17 +100,6 @@ describe('New Reading Page', () => {
   })
 
   describe('Reading draft', () => {
-    /**
-         * Test: Add reading as a draft
-            - Click on new title box and Enter title
-            - Tab/click to source url, enter URL
-            - Tab/click to contact, paste content or type in content
-            - Click on "Save as Draft" button
-            - Make sure the success alert shows up
-            - Check to make sure the returned content matches what went in
-            - Click on "Publish" button
-            - Redirect to reading page of newly created reading
-         */
     it('should add a reading as a draft and return to the same screen with a reading id', function () {
       // Should begin at New Reading page
       browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000)
