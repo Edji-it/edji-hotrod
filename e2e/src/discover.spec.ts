@@ -96,6 +96,9 @@ describe('Discover Feed', () => {
       browser.wait(EC.urlContains('project'), 7500, 'never arrived at published reading')
       newReading.shareCodeModalCloseClick()
       browser.wait(EC.invisibilityOf(newReading.shareCodeModalClose), 5000, 'share reading code modal never dismissed')
+      // need to go back to the dashboard before logging out
+      dashboard.getPage()
+      browser.wait(EC.urlContains('dashboard'), 7500, 'never arrived at dashboard before logging out')
       sidebar.logout()
     })
 
