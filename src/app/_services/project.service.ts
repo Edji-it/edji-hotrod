@@ -1,6 +1,6 @@
 import { ActivatedRoute, Params } from '@angular/router'
 import { Injectable } from '@angular/core'
-import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs'
+import { BehaviorSubject, Observable, Subject, Subscription, of } from 'rxjs'
 import { map, take } from 'rxjs/operators'
 import { Angulartics2 } from 'angulartics2'
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
@@ -156,7 +156,7 @@ export class ProjectService {
           this._socket.groupUpdateEvent({
             type: 'updateUserStatus',
             status: userStatus.status,
-            user: this.user
+            user: this.user,
           })
         }
       }),
@@ -865,11 +865,18 @@ export class ProjectService {
    * @returns Observable which will not contain any data
    */
   public addUserToProject(projectId: string): Observable<any> {
-    return this._http.put(
-      this._auth.getUrl() + '/api/v1/projects/' + projectId + '/students',
-      {},
-      this._auth.getOptions(),
-    )
+    let project = this.currentProjectSource.value
+    // We only need to check for student ids, temp users will not attemp "re-adding"
+    let alreadyJoined = project && project.students_ids.indexOf(this.user._id)
+    if (projectId === project._id && alreadyJoined) {
+      return of({ status: 'success' }) // mock response
+    } else {
+      return this._http.put(
+        this._auth.getUrl() + '/api/v1/projects/' + projectId + '/students',
+        {},
+        this._auth.getOptions(),
+      )
+    }
   }
 
   /**
