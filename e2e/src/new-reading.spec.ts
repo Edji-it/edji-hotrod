@@ -24,6 +24,16 @@ describe('New Reading Page', () => {
     sidebar.logout()
   })
 
+  afterEach(() => {
+    browser.manage().logs().get('browser').then(browserLog => {
+      if (browserLog.length > 0) {
+        browserLog.forEach(log => {
+          console.error(log.message)
+        })
+      }
+    })
+  })
+
   it('should add reading when all fields are filled and submitted', () => {
     const uniqueTitle = newReading.titleString
     // Enter sample Reading into form

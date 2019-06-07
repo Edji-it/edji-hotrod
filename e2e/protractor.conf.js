@@ -30,6 +30,11 @@ exports.config = {
     },
     shardTestFiles: true,
     maxInstances: 5,
+    loggingPrefs: {
+      driver: 'SEVERE',
+      server: 'SEVERE',
+      browser: 'SEVERE'
+    }
   },
 
   /*
@@ -83,7 +88,7 @@ exports.config = {
     jasmine.getEnv().addReporter(
       new SpecReporter({
         spec: {
-          displayStacktrace: true,
+          displayStacktrace: false, // turned off as we are tracking console errors per test
         },
       }),
     )

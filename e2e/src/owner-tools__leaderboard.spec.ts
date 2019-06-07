@@ -1,6 +1,3 @@
-/**
- * Leaderboard/Student Panel tests
- */
 import { browser, by, element, protractor } from 'protractor'
 
 import { Project, Sidebar, Login } from './page-objects'
@@ -19,21 +16,25 @@ describe('Project Page as an owner wishing to filter by student: ', () => {
   /* ---- beforeEach ---------------------------- */
 
   beforeAll(() => {
-    // Id for Owner Tools Test Reading owned by Teach/Teach
     browser.get('/#/home')
-    // Open Test project
     home.enterProjectCodeFromHome('testhero')
   })
 
   afterAll(() => {
-    // log out
     sidebar.logout()
   })
 
-  /* ---- Project Tests ------------------------- */
+  afterEach(() => {
+    browser.manage().logs().get('browser').then(browserLog => {
+      if (browserLog.length > 0) {
+        browserLog.forEach(log => {
+          console.error(log.message)
+        })
+      }
+    })
+  })
 
   it('should open the Leaderboard and filter by student', () => {
-    // initial validation
     browser.wait(EC.presenceOf(loginModal.guestLoginHeader), 5000, "never saw the login modal's header")
     expect(loginModal.guestLoginHeader.isPresent()).toBeTruthy()
     expect(loginModal.clickawaySquare.isPresent()).toBeFalsy()

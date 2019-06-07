@@ -26,6 +26,16 @@ describe('Discover Feed', () => {
     sidebar.logout()
   })
 
+  afterEach(() => {
+    browser.manage().logs().get('browser').then(browserLog => {
+      if (browserLog.length > 0) {
+        browserLog.forEach(log => {
+          console.error(log.message)
+        })
+      }
+    })
+  })
+
   it('should arrive at Discover Feed', () => {
     sidebar.navDiscover.click()
     browser.wait(EC.urlContains('discover'), 5000, 'never arrived at Discover Feed')

@@ -33,21 +33,23 @@ describe('Project Page as an owner using reading report: ', () => {
     home.enterProjectCodeFromHome('readingrecap')
   })
 
-  // beforeEach(() => {
-  //   // Go to dashboard
-  //   browser.get("/#/dashboard")
-  //   // Enter reading recap test reading code
-  //   home.enterProjectCodeFromHome('readingrecap')
-  // })
-
   afterAll(() => {
     // log out
     sidebar.logout()
   })
 
+  afterEach(() => {
+    browser.manage().logs().get('browser').then(browserLog => {
+      if (browserLog.length > 0) {
+        browserLog.forEach(log => {
+          console.error(log.message)
+        })
+      }
+    })
+  })
+
   /* ---- Reading Report Tests ------------------------- */
 
-  // open the reading report and verify it's open
   it("should open the reading report and verify it's open", () => {
     // Need to check for and click the owner tools button if its showing
     sidebar.ownerToolToggle()
@@ -64,7 +66,6 @@ describe('Project Page as an owner using reading report: ', () => {
     )
   })
 
-  // verify there is a comment in the count and the count is greater than 0 for the initial student
   it('verify there is a comment in the count and the count is greater than 0 for the initial student', () => {
     // Select a student from dropdown
     browser.wait(EC.elementToBeClickable(recapStudentDropdown), 5000, 'recap student selector never became clickable')
@@ -84,7 +85,6 @@ describe('Project Page as an owner using reading report: ', () => {
     })
   })
 
-  // add an evaluation and verify it shows up
   it('should add an evaluation and verify it shows up', () => {
     browser.wait(EC.visibilityOf(readingEvalFirst), 7000, 'previous reading evals never became visible')
     browser.wait(
@@ -114,7 +114,6 @@ describe('Project Page as an owner using reading report: ', () => {
     )
   })
 
-  // verify you can open the dropdown for student selection and change the student
   it('should verify you can open the dropdown for student selection and change the student', () => {
     browser.executeScript('document.querySelector(".reading-recap").scrollTo(0,0);').then(function () {
       // Select first student
@@ -157,7 +156,6 @@ describe('Project Page as an owner using reading report: ', () => {
       })
   })
 
-  // close the report and make sure it closes
   it('should close the report and make sure it closes', () => {
     browser.executeScript('document.querySelector(".reading-recap").scrollTo(0,0);').then(function () {
       // Close Reading Report
