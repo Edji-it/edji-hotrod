@@ -1,5 +1,5 @@
-import { EdjiComment, iCommentStats, Project } from './'
-import { UserCommentStats } from './comment'
+import { EdjiComment, iCommentStats, Project, User } from './'
+import { UserCommentStats, userReadingStatus } from './comment'
 
 export class CommentStats {
   public _stats: iCommentStats = {
@@ -56,6 +56,7 @@ export class CommentStats {
         audio_comment_count: 0,
         fullname: student.fullname,
         comments: [],
+        status: 'offline',
       })
     }
 
@@ -73,6 +74,7 @@ export class CommentStats {
         audio_comment_count: 0,
         fullname: student.fullname,
         comments: [],
+        status: 'offline',
       })
     }
     return commentStats
@@ -101,6 +103,7 @@ export class CommentStats {
           audio_comment_count: 0,
           fullname: student.fullname,
           comments: [],
+          status: 'offline',
         })
       }
     }
@@ -121,6 +124,7 @@ export class CommentStats {
           audio_comment_count: 0,
           fullname: student.fullname,
           comments: [],
+          status: 'offline',
         })
       }
     }
@@ -169,6 +173,7 @@ export class CommentStats {
         text_comment_count: comment.type === 'text' && !isReply ? 1 : 0,
         audio_comment_count: comment.type === 'audio' && !isReply ? 1 : 0,
         comments: [comment],
+        status: this.findStudentStatus(comment.user_id),
       })
     } else if (student) {
       if (isReply) {
@@ -223,6 +228,18 @@ export class CommentStats {
   }
 
   /**
+   * Returns the current status for the comment user
+   * Primarily used when populating comments because we can't assign a status multiple times (we'll let the student user indicate their status with sockets)
+   * @param _id the comment user's _id
+   */
+  private findStudentStatus(_id: string): userReadingStatus {
+    let student = this._stats.userStats.find(student => {
+      return student._id === _id
+    })
+    return student && student.status || 'offline'
+  }
+
+  /**
    * Compares two students' counts together and returns number to match API of Array.prototype.sort()
    *  used to sort the array of students
    */
@@ -263,4 +280,17 @@ export class CommentStats {
     this._stats.comment_min = lowest
     this._stats.comment_avg = Math.round(avgSum / userLength)
   }
+
+  /**
+   * Updates the user status on the commentStats.userStats
+   * @param user current user
+   * @param status is of type userReadingStatus (offline, idle, or active)
+   */
+  public userStatus(user: any, status: userReadingStatus) {
+    let student = this.findStudent(user._id)
+    if (student) {
+      student.status = status
+    }
+  }
 }
+

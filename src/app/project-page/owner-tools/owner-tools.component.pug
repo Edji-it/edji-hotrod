@@ -55,7 +55,7 @@
   //- Mobile Buttons
   .owner-options-group--mobile([class.btn-group-show--animation]="ownerToolShow", [style.max-height]="ownerToolBlockHeight")
     //- Comment Stats pane
-    button#toggleLeaderboard.btn.btn-icon--circle-shadow.owner-options--mobile(
+    button#toggleLeaderboard--narrow-viewport.btn.btn-icon--circle-shadow.owner-options--mobile(
       type="button",
       (tap)="showElseFalse('showCommentCounts'); ownerToolShow=!ownerToolShow", 
       [class.btn-show--animation]="ownerToolShow", 

@@ -26,6 +26,7 @@ import {
   SocketService,
   UtilToolService,
   MessageService,
+  AcademyService,
 } from '../_services'
 import { CommentPermissions, EdjiComment, Project, Reading, Feedback } from './../shared/datatypes'
 import { ALLSPARK } from '../app.constants'
@@ -171,6 +172,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     private _audio: AudioService,
     private _messages: MessageService,
     private route: ActivatedRoute,
+    private _academy: AcademyService
   ) {
     this.window = window
   }
@@ -196,6 +198,15 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     // Update scroll progress on resize
     this.currentDocHeight = 0
     this.preScrollHeightUpdate()
+  }
+
+  /**
+   * Track Activity
+   * when the user moves the mouse, let academy service know so we can keep tracking reading ticks
+   * and we also make sure they have a "live" status on the indicator
+   */
+  @HostListener('window:mousemove') refreshUserState() {
+    this._academy.trackActivity()
   }
 
   ngAfterViewInit(): void {

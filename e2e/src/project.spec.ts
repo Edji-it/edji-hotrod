@@ -4,51 +4,26 @@ import { Project, Sidebar, Home } from './page-objects'
 import { LoginModal, GuestLoginForm } from './components'
 import { reset } from './utils/browser-methods'
 
-/*
-    27 Jan 2017
-    Last Modified: 8 Aug 2017
-    Nicholas Pumper
-
-    e2e test the Project page!
-
-    - We log into all types of account.
-*/
-
-// Now into the testing.
 describe('Project Page', () => {
-  /* ---- Variable Initialization --------------- */
   let project = new Project()
   let home = new Home()
   let sidebar = new Sidebar()
   let loginModal = new LoginModal()
-  let EC = protractor.ExpectedConditions // vital
+  let EC = protractor.ExpectedConditions
   let guestForm = new GuestLoginForm()
 
-  /* ---- beforeEach ---------------------------- */
-
-  // beforeAll(() => {
-  //     project.getPage();
-  // });
-
-  /* ---- Project Tests ------------------------- */
-
-  /**
-   * Test:
-   * - Go to a project page
-   * - Login with guest name
-   * - Make sure that the guest name is on the account button
-   */
-
-  // describe("Login modal errors", () => {
-  //     home.getPage();
-  //     // Go to project to see login modal
-  //     home.enterProjectCodeFromHome('test')
-  //     loginModal.testLoginModalErrors()
-  // })
+  afterEach(() => {
+    browser.manage().logs().get('browser').then(browserLog => {
+      if (browserLog.length > 0) {
+        browserLog.forEach(log => {
+          console.error(log.message)
+        })
+      }
+    })
+  })
 
   describe('Commenting', () => {
     beforeAll(() => {
-      // Login
       project.getPage('test')
       guestForm.loginAsGuest()
       browser.wait(EC.elementToBeClickable(sidebar.avatarActionIcon))
@@ -224,34 +199,4 @@ describe('Project Page', () => {
       )
     })
   })
-
-  // beforeAll(() => {
-  //   // Join project from the homepage
-  //   home.getPage()
-  //   home.enterProjectCodeFromHome('audio')
-  //   // Login
-  //   guestForm.loginAsGuest()
-  //   browser.wait(EC.elementToBeClickable(sidebar.avatarActionIcon))
-  // })
-
-  // afterAll(() => {
-  //   // log out
-  //   browser.wait(EC.elementToBeClickable(sidebar.avatarActionIcon), 5000, 'never found the avatar dropdown button')
-  //   sidebar.clickLogOutButton()
-  // })
-
-  // beforeAll(() => {
-  //   // Join reply project from the homepage
-  //   home.getPage()
-  //   home.enterProjectCodeFromHome('reply')
-  //   // Login
-  //   guestForm.loginAsGuest()
-  //   browser.wait(EC.elementToBeClickable(sidebar.avatarActionIcon))
-  // })
-
-  // afterAll(() => {
-  //   // log out
-  //   browser.wait(EC.elementToBeClickable(sidebar.avatarActionIcon), 5000, 'never found the avatar dropdown button')
-  //   sidebar.clickLogOutButton()
-  // })
-}) // describe 'Dashboard Page'
+})
