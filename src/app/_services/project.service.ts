@@ -348,6 +348,9 @@ export class ProjectService {
    * @param groupUpdate the object that contains user properties to properly add student to leaderboard
    */
   private addUserInfoToProject(groupUpdate: any) {
+    // Make sure student and temp arrays exist
+    if (!this.project.students) this.project.students = []
+    if (!this.project.temps) this.project.temps = []
     // if the student that joined is registered, here is their info
     if (groupUpdate.userType && groupUpdate.userType === 'registered') {
       this.project.students.push({
