@@ -6,7 +6,7 @@ const initialState = {
   hero_page_load_count: 0
 }
 
-describe('metrics reducer actions', () => {
+describe('metrics actions', () => {
   describe('undefined action', () => {
     it('should return default state for undefined action', () => {
       const action = { type: 'NOOP' } as any
