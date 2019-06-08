@@ -1,6 +1,6 @@
 import { ActivatedRoute, Params } from '@angular/router'
 import { Injectable } from '@angular/core'
-import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs'
+import { BehaviorSubject, Observable, Subject, Subscription, of } from 'rxjs'
 import { map, take } from 'rxjs/operators'
 import { Angulartics2 } from 'angulartics2'
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
@@ -8,7 +8,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
 // Project Dependencies
 import { AuthService } from './auth.service'
 import { SocketService } from './socket.service'
-import { CommentStats, iCommentStats, EdjiComment, Project, User, PublicUser } from '../shared/datatypes'
+import { CommentStats, EdjiComment, Project, User } from '../shared/datatypes'
 import { ReadingService } from './reading.service'
 import { AcademyService } from './academy.service'
 
@@ -147,6 +147,24 @@ export class ProjectService {
             this.project.co_owners.push(groupUpdate.user)
             this.currentProjectSource.next(this.project)
           }
+        } else if (groupUpdate.type === 'updateUserStatus' && this.user._id === this.project.teacher_id) {
+          this.commentStats.userStatus(groupUpdate.user, groupUpdate.status)
+        }
+      }),
+      /**
+       * We have to update the user status through the commentStats
+       * commentStats is initialized here, so we observe the state changes from other components and services here
+       */
+      this._academy.userStatus.subscribe(userStatus => {
+        if (this.user._id === this.project.teacher_id) {
+          this.commentStats.userStatus(this.user, userStatus.status)
+        } else {
+          // emit the socket back to the teacher
+          this._socket.groupUpdateEvent({
+            type: 'updateUserStatus',
+            status: userStatus.status,
+            user: this.user,
+          })
         }
       }),
       /**
@@ -870,11 +888,18 @@ export class ProjectService {
    * @returns Observable which will not contain any data
    */
   public addUserToProject(projectId: string): Observable<any> {
-    return this._http.put(
-      this._auth.getUrl() + '/api/v1/projects/' + projectId + '/students',
-      {},
-      this._auth.getOptions(),
-    )
+    let project = this.currentProjectSource.value
+    // We only need to check for student ids, temp users will not attemp "re-adding"
+    let alreadyJoined = project && project.students_ids.indexOf(this.user._id)
+    if (projectId === project._id && alreadyJoined) {
+      return of({ status: 'success' }) // mock response
+    } else {
+      return this._http.put(
+        this._auth.getUrl() + '/api/v1/projects/' + projectId + '/students',
+        {},
+        this._auth.getOptions(),
+      )
+    }
   }
 
   /**

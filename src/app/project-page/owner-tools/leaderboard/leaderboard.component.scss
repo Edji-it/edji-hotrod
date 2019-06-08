@@ -26,10 +26,29 @@
   -o-transition: background-color 0.5s ease-in-out;
   -ms-transition: background-color 0.5s ease-in-out;
   transition: background-color 0.5s ease-in-out;
-}
 
-.circle.filled {
-  background-color: #8ed9ff;
+  &.active {
+    border-color: #18c042;
+  }
+  &.idle {
+    border-color: #fa9b5c;
+  }
+  &.offline {
+    border-color: #aaaaaa;
+  }
+
+  &.filled {
+    background-color: #8ed9ff;
+    &.active {
+      background-color: #18c042;
+    }
+    &.idle {
+      background-color: #fa9b5c;
+    }
+    &.offline {
+      background-color: #aaaaaa;
+    }
+  }
 }
 
 .answer-designate {

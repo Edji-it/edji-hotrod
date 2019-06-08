@@ -3,59 +3,48 @@ import { browser, by, element, protractor } from 'protractor'
 import { Home, Login, Sidebar } from './page-objects'
 import { LoginForm } from './components'
 
-/*
-    23 Jan 2017
-    Last Modified: 28 Jan 2017
-    Nicholas Pumper
-
-    e2e test the home page!
-*/
-
-// Now into the testing.
 describe('Login Page', () => {
-  /* ---- Variable Initialization --------------- */
   let login = new Login()
   let loginForm = new LoginForm()
   let home = new Home()
   let sidebar = new Sidebar()
-  let EC = protractor.ExpectedConditions // vital
+  let EC = protractor.ExpectedConditions
 
-  /* ---- beforeEach ---------------------------- */
   beforeEach(() => {
     login.getPage()
   })
 
-  /* ---- Generic Login Tests ---------------------------- */
+  afterEach(() => {
+    browser.manage().logs().get('browser').then(browserLog => {
+      if (browserLog.length > 0) {
+        browserLog.forEach(log => {
+          console.error(log.message)
+        })
+      }
+    })
+  })
 
-  // Test all login errors
   describe('Login errors', () => {
     loginForm.testLoginErrors()
   })
 
-  // Test successful login flow
   describe('Successful login', () => {
     afterEach(() => {
       sidebar.logout()
     })
 
     it('should login and navigate to the dashboard', () => {
-      // log in a user
       loginForm.login()
-
-      // verify that we reach the dashboard after login
       browser.wait(EC.urlContains('dashboard'), 5000, 'never reached the dashboard after loggin in')
     })
   })
 
-  // Test Reset password form
   describe('Reset password modal should handle multiple account cases', () => {
     beforeEach(() => {
-      // Open reset modal
       login.resetPasswordOpen.click()
     })
 
     afterEach(() => {
-      // Close reset modal to clear it
       login.resetPassModalClose.click()
     })
 
@@ -99,4 +88,4 @@ describe('Login Page', () => {
       browser.wait(EC.invisibilityOf(login.resetPassError), 3000, 'saw error message for existing account email')
     })
   })
-}) // describe Login Page
+})

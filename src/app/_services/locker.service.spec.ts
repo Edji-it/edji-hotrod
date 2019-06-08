@@ -1,11 +1,12 @@
 import { TestBed, inject } from '@angular/core/testing'
+import { Locker } from 'angular-safeguard'
 
 import { LockerService } from './locker.service'
 
 describe('LockerService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [LockerService],
+      providers: [LockerService, { provide: Locker, useValue: {} }],
     })
   })
 

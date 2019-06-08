@@ -26,6 +26,7 @@ import {
   SocketService,
   UtilToolService,
   MessageService,
+  AcademyService,
 } from '../_services'
 import { CommentPermissions, EdjiComment, Project, Reading, Feedback } from './../shared/datatypes'
 import { ALLSPARK } from '../app.constants'
@@ -128,18 +129,18 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   public guideContent = [
     {
       title: 'Try Highlighting!',
-      image: '/assets/guide/add-highlight.gif',
-      body: 'Highlight text or click on an image to see the comment types.',
+      image: '/assets/guide/add-highlight-v2.gif',
+      body: 'Select text by clicking 1 or 2 words. Or click on an image to place a dot!',
     },
     {
       title: 'Add a Comment!',
-      image: '/assets/guide/add-comment-type.gif',
-      body: 'Choose to leave a Text or Emoji comment.',
+      image: '/assets/guide/add-comment-type-v2.gif',
+      body: 'Choose the type of comment you want to make to create your highlight.',
     },
     {
       title: 'Who sees my comment?',
       // image: "/assets/guide/add-comment-type.gif",
-      body: 'Your comment can be seen by the reading creator. If they turn Heat Vision on, everyone can see it!',
+      body: 'Your comment can be seen by the teacher. If they turn Heat Vision on, everyone can see it!',
     },
   ]
   public guideStepNo = 1
@@ -171,6 +172,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     private _audio: AudioService,
     private _messages: MessageService,
     private route: ActivatedRoute,
+    private _academy: AcademyService
   ) {
     this.window = window
   }
@@ -196,6 +198,15 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     // Update scroll progress on resize
     this.currentDocHeight = 0
     this.preScrollHeightUpdate()
+  }
+
+  /**
+   * Track Activity
+   * when the user moves the mouse, let academy service know so we can keep tracking reading ticks
+   * and we also make sure they have a "live" status on the indicator
+   */
+  @HostListener('window:mousemove') refreshUserState() {
+    this._academy.trackActivity()
   }
 
   ngAfterViewInit(): void {
