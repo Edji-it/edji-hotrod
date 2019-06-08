@@ -30,6 +30,11 @@ exports.config = {
     },
     shardTestFiles: true,
     maxInstances: 5,
+    loggingPrefs: {
+      driver: 'SEVERE',
+      server: 'SEVERE',
+      browser: 'SEVERE'
+    }
   },
 
   /*
@@ -46,6 +51,7 @@ exports.config = {
     license: helpers.root('e2e/src/license.spec.ts'),
     login: helpers.root('e2e/src/login.spec.ts'),
     newReading: helpers.root('e2e/src/new-reading.spec.ts'),
+    readingMedia: helpers.root('e2e/src/reading-media.spec.ts'),
     ownerTools: helpers.root('e2e/src/owner-tools.spec.ts'),
     project: helpers.root('e2e/src/project.spec.ts'),
     question: helpers.root('e2e/src/questions.spec.ts'),
@@ -82,7 +88,7 @@ exports.config = {
     jasmine.getEnv().addReporter(
       new SpecReporter({
         spec: {
-          displayStacktrace: true,
+          displayStacktrace: false, // turned off as we are tracking console errors per test
         },
       }),
     )

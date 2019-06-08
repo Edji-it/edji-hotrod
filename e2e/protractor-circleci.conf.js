@@ -46,7 +46,7 @@ localConf.onPrepare = () => {
   jasmine.getEnv().addReporter(
     new SpecReporter({
       spec: {
-        displayStacktrace: true,
+        displayStacktrace: false, // turned off as we are tracking console errors per test
       },
     }),
   )

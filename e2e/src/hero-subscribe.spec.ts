@@ -3,21 +3,27 @@ import { browser, by, element, protractor } from 'protractor'
 import { Home, Hero, Login, Sidebar } from './page-objects'
 import { LoginForm } from './components'
 
-// Now into the testing.
 describe('Hero Subscription Management', () => {
-  /* ---- Variable Initialization --------------- */
   let login = new Login()
   let loginForm = new LoginForm()
   let hero = new Hero()
   let home = new Home()
   let sidebar = new Sidebar()
-  let EC = protractor.ExpectedConditions // vital
+  let EC = protractor.ExpectedConditions
 
   afterAll(() => {
     sidebar.logout()
   })
 
-  /* ---- Generic Login Tests ---------------------------- */
+  afterEach(() => {
+    browser.manage().logs().get('browser').then(browserLog => {
+      if (browserLog.length > 0) {
+        browserLog.forEach(log => {
+          console.error(log.message)
+        })
+      }
+    })
+  })
 
   describe('Test Hero subscription modal as a Sidekick', () => {
     it('should login and navigate to the hero subscription page', () => {
@@ -62,4 +68,4 @@ describe('Hero Subscription Management', () => {
       hero.subscribeModalClose.click()
     })
   })
-}) // describe Login Page
+})

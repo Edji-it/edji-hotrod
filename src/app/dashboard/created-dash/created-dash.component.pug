@@ -43,7 +43,7 @@
           | Recently Created
       //- Bookmarks
       .btn-filter-wrap.hover--tooltip(style="position:relative;")
-        button.btn.btn-filter( 
+        button#bookmarksBtn.btn.btn-filter( 
           [class.active]="searchParams.createdCollection === 'bookmarked'",
           [class.disabled--not-hero]="!user.hero_status",
           (click)="searchParams.createdCollection = 'bookmarked'; searchParams.first=0; updateSearchParams('bookmarked')"

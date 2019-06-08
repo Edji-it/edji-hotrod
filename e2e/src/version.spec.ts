@@ -1,23 +1,19 @@
-//import * as webdriver from 'webdriver';
 import { browser, by, element, protractor } from 'protractor'
 import { Dashboard, Login, NewReading, Sidebar, Home } from './page-objects'
 import { LoginForm } from './components'
 
-/* ---- Versioning Tests ------------------------ */
 describe('Versioning - ', () => {
-  /* ---- Variable Initialization --------------- */
   let login = new Login()
   let dashboard = new Dashboard()
   let loginForm = new LoginForm()
   let sidebar = new Sidebar()
   let newReading = new NewReading()
   let home = new Home()
-  let EC = protractor.ExpectedConditions // vital
+  let EC = protractor.ExpectedConditions
   var uniqueTitle: string = new Date().valueOf().toString()
   let titleUpdate = uniqueTitle + 'update'
 
   beforeAll(() => {
-    // Login as test account that we can fill with junk data
     login.getPage()
     browser.wait(EC.elementToBeClickable(login.loginButton), 5000)
     login.enterUsername(login.heroUser)
@@ -28,8 +24,15 @@ describe('Versioning - ', () => {
   })
 
   afterEach(() => {
-    // navigate back to the dashboard after every test
     sidebar.backToDash()
+
+    browser.manage().logs().get('browser').then(browserLog => {
+      if (browserLog.length > 0) {
+        browserLog.forEach(log => {
+          console.error(log.message)
+        })
+      }
+    })
   })
 
   afterAll(() => {
@@ -42,16 +45,6 @@ describe('Versioning - ', () => {
     browser.wait(EC.titleContains(result), 5000, 'Title should contain "Edji".')
   })
 
-  /* Test: Add a reading
-        - Click the 'Copy and Edit' button
-        - Be redirected to the "new reading page"
-        - Page should be populated with 'old' reading (formating, pictures and pdf's should be the same)
-        - User should be able to save as draft.
-        - Newly created version should have version number = old version number + 1
-            - Users should be able to return to new version and publish
-        - Create a new group for an old version
-    */
-  //
   it('should create a new reading with a specific title', () => {
     // Create a new reading to control it properly thru the process
     // Open and wait for New Reading page
@@ -81,7 +74,6 @@ describe('Versioning - ', () => {
   })
 
   it('should go to new reading page with existing reading and validate the reading; then save it as a draft', () => {
-    // Switch to the created readings tab on mobile (will simply skip if on desktop)
     dashboard.goToCreatedTab()
 
     // Make a new version of that reading
@@ -106,8 +98,8 @@ describe('Versioning - ', () => {
 
     // Make sure the copyId is valid
     browser.wait(
-      function() {
-        return browser.getCurrentUrl().then(function(url) {
+      function () {
+        return browser.getCurrentUrl().then(function (url) {
           return newReading.findIdExp.test(url)
         })
       },
