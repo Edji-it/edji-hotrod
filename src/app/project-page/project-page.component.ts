@@ -75,7 +75,6 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
     // Set current project AND subscribe to updates from that project
     this._projects.setCurrentProject(idParam).subscribe(
       project => {
-        console.log('Got project?', project)
         if (project) {
           // If the reading is archived, we'll show them a banner or modal
           if (project.archived) {

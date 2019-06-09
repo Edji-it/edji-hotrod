@@ -33,8 +33,8 @@ exports.config = {
     loggingPrefs: {
       driver: 'SEVERE',
       server: 'SEVERE',
-      browser: 'SEVERE'
-    }
+      browser: 'SEVERE',
+    },
   },
 
   /*
@@ -43,6 +43,7 @@ exports.config = {
   */
   suites: {
     account: helpers.root('e2e/src/account.spec.ts'),
+    coteacher: helpers.root('e2e/src/owner-tools__co-teacher.spec.ts'),
     dashboard: helpers.root('e2e/src/dashboard.spec.ts'),
     discover: helpers.root('e2e/src/discover.spec.ts'),
     heroSubscribe: helpers.root('e2e/src/hero-subscribe.spec.ts'),
@@ -76,11 +77,11 @@ exports.config = {
     includeStackTrace: false, // Reporting is better handled by our SpecReporter below
     // A longer default timeout makes our test suite unusable
     defaultTimeoutInterval: 60000,
-    print: () => { }, // take out the dot logging when tests are run
+    print: () => {}, // take out the dot logging when tests are run
   },
   directConnect: true,
 
-  onPrepare: function () {
+  onPrepare: function() {
     // We do not want to ignoreSynchronization, it defeats the purpose of protractor
     browser.ignoreSynchronization = true
 

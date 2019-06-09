@@ -1,7 +1,7 @@
 //- Comments Pane
 #leaderboard.sliding-pane.from-left([ngClass]="{ 'slide-in' : visibility }")
   //- .tooltip-wrap
-  .tooltip.tooltip--clickable.tooltip--right(
+  #coTeacherTooltip.tooltip.tooltip--clickable.tooltip--right(
     [class.show]="coOwnerTooltipIndex > -1", 
     style="top: 190px;",
     (click)="coOwnerTooltipNext()"

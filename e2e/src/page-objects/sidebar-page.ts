@@ -33,11 +33,7 @@ export class Sidebar {
   public heatButtonMobile = element(by.id('toggleHeatVisionMobile'))
   public ownerToolToggleButton = element(by.id('buttonOwnerToolToggle'))
   public readingReportButton = element(by.id('toggleReadingRecap'))
-  // Student List
-  public studentListFirstSettings = element.all(by.css('.e2e-student-settings')).first()
-  public settingsOptionPromote = element(by.id('promoteCoTeacherOption'))
   public addCoTeacherButton = element(by.id('addCoTeacherBtn'))
-  public confirmCoTeacherButton = element(by.id('confirmCoTeacherBtn'))
 
   public backToDash(): void {
     this.closeModal.isPresent().then(result => {
