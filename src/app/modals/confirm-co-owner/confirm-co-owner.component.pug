@@ -13,4 +13,4 @@
           | There was an error upgrading the student to co-teacher, please try again or contact support.
         .btn-row.right
           button.btn((click)="closeModal.emit()", type="button", data-dismiss="modal") Cancel
-          button#delBtnModal.btn.btn-primary((click)="closeModal.emit(); makeCoOwner(student);") Yes, make co-teacher
+          button#confirmCoTeacherBtn.btn.btn-primary((click)="closeModal.emit(); makeCoOwner(student);") Yes, make co-teacher

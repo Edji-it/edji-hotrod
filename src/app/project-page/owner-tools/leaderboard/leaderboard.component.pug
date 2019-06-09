@@ -41,7 +41,7 @@
         .dropdown.student-options( 
           [class.show]="studentSettingsIndex == i"
         )
-          button.btn.btn-icon.btn-outline-primary(
+          button.btn.btn-icon.btn-outline-primary.e2e-student-settings(
             (click)="toggleStudentSettings(i)",
             [innerHtml]="':gear:' | emojione"
           )
@@ -54,7 +54,7 @@
               .icon.icon-comment-filter
               | &nbsp; View student filter
             //- 
-            button.dropdown-item.e2e-new-group(
+            button#promoteCoTeacherOption.dropdown-item.e2e-new-group(
               (click)="confirmCoOwner(commentUser)"
             ) 
               .icon.icon-promote

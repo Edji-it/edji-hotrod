@@ -100,6 +100,8 @@ export class ProjectService {
     this.subscriptions.push(
       this._auth.getCurrentUser().subscribe(user => {
         this.user = user
+        // Update project if necessary
+        this.updateCurrentProjectPermissions(this.currentProjectSource.value, this.user, true)
       }),
       this._socket.commentUpdates.subscribe(
         commentUpdate => {
@@ -256,10 +258,8 @@ export class ProjectService {
           // Decorate project if archived
           project = this.decorateArchivedProject(project)
           // Decorate with isTeaching
-          if (this.user._id === project.teacher_id || project.co_owner_ids.indexOf(this.user._id) > -1) {
-            project.isTeaching = true
-          }
-          //
+          project = this.updateCurrentProjectPermissions(project, this.user)
+          // Attach convenience owners array (used for display)
           project.owners = [project.teacher]
           // Populate projectOwners with co-teachers if available
           if (project.co_owners) {
@@ -288,6 +288,28 @@ export class ProjectService {
           return this.project
         }),
       )
+  }
+
+  /**
+   * Decorate current project with appropriate permissions
+   * @fires this.currentProjectSource
+   * @param user Current user
+   */
+  public updateCurrentProjectPermissions(project: Project, user: User, emit?: boolean): Project {
+    if (!user || !user._id || !project._id) {
+      // Do nothing if no valid user
+      return project
+    }
+    // Check co-owners array
+    let isTeacher: boolean = this.user._id === project.teacher_id
+    let isCoOwner: boolean = project.co_owner_ids && project.co_owner_ids.indexOf(this.user._id) > -1
+    project.isTeaching = isTeacher || isCoOwner
+    // Update observable
+    if (emit) {
+      // Check teacher id
+      this.currentProjectSource.next(project)
+    }
+    return project
   }
 
   /**

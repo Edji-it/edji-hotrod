@@ -40,7 +40,7 @@
           *ngIf="pageTitle",
           title="{{ pageTitle }}"
           ) {{ pageTitle }}
-      .nav-bar__heading.hidden-md-down(*ngIf="showProjectInfo")
+      #inProjectReadingTitle.nav-bar__heading.hidden-md-down(*ngIf="showProjectInfo")
         h1.with-nav-sub(
           *ngIf="currentReading.title",
           title="{{ currentReading.title }}"
@@ -54,7 +54,7 @@
                 .tooltip-title Teacher{{currentProject.owners[1] && 's'}} for this Reading Group
             ng-container(*ngFor="let owner of currentProject.owners")
               follow-tag([owner]="owner")
-            .badge.badge-pill.badge-button.badge-teacher(
+            #addCoTeacherBtn.badge.badge-pill.badge-button.badge-teacher(
               *ngIf="currentProject.isTeaching",
               [routerLink]="['./']",
               [queryParams]="{ studentList: 'coteach'}"
@@ -225,7 +225,7 @@
         ) Go Hero
   //- Page title/reading title
   h1.hidden-md-up.mobile-heading(*ngIf="(pageTitle && !showProjectInfo) || hideAccountOptions") {{ pageTitle }}
-  h1.hidden-md-up.mobile-heading(*ngIf="showProjectInfo || hideAccountOptions") {{ currentReading.title }}
+  h1#inProjectReadingTitle.hidden-md-up.mobile-heading(*ngIf="showProjectInfo || hideAccountOptions") {{ currentReading.title }}
 
 //- Join Reading Code
 //- .container

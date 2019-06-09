@@ -172,7 +172,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     private _audio: AudioService,
     private _messages: MessageService,
     private route: ActivatedRoute,
-    private _academy: AcademyService
+    private _academy: AcademyService,
   ) {
     this.window = window
   }
@@ -251,6 +251,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       // Get Project from project service
       this._projects.currentProject.subscribe(
         project => {
+          console.log('Anno Got project?', project)
           if (project.archived) {
             this._projects.filterByUser(this.user)
           }

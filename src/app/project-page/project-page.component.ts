@@ -47,7 +47,7 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
     private _readings: ReadingService,
     private _title: Title,
     private angulartics: Angulartics2,
-  ) { }
+  ) {}
 
   ngOnInit() {
     // this makes the window always render scrolled to the top
@@ -75,6 +75,7 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
     // Set current project AND subscribe to updates from that project
     this._projects.setCurrentProject(idParam).subscribe(
       project => {
+        console.log('Got project?', project)
         if (project) {
           // If the reading is archived, we'll show them a banner or modal
           if (project.archived) {
@@ -153,7 +154,7 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
       this._socket.groupUpdateEvent({
         type: 'updateUserStatus',
         status: 'active',
-        user: this.user
+        user: this.user,
       })
     }
   }
