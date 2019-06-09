@@ -19,11 +19,7 @@ describe('Project Page as a Co-Teacher: ', () => {
 
   /* ---- before and after Each --------------- */
 
-  beforeEach(() => {
-    browser.get('/#/home')
-    // Open Test project
-    project.joinProjectCodeAndLogIn('coteach', login.heroUser, login.heroPassword)
-  })
+  beforeEach(() => {})
 
   afterEach(() => {
     // log out
@@ -35,9 +31,11 @@ describe('Project Page as a Co-Teacher: ', () => {
    */
 
   /**
-   *
+   * Simple verification of the user promotion workflow
    */
   it('should promote student to teacher, and see confirmation toast', () => {
+    // Open Test project
+    project.joinProjectCodeAndLogIn('coteach', login.heroUser, login.heroPassword)
     // testhero owns the "coteach" Reading, and should be able to promote users
     browser.wait(EC.elementToBeClickable(sidebar.addCoTeacherButton), 5000, 'did not see "Add Teacher" button in Nav')
     sidebar.addCoTeacherButton.click()
@@ -78,12 +76,27 @@ describe('Project Page as a Co-Teacher: ', () => {
   })
 
   /**
-   *
+   * Simple verification of a co-teacher's access
    */
-  it('should access Reading Group as co-teacher, and have owner tools', () => {})
-
-  /**
-   *
-   */
-  it('should not show students "Add Teacher" option', () => {})
+  it('should access Reading Group as co-teacher, and have owner tools', () => {
+    // Open Test project as co-teacher (testbot is a co-teacher on "coteach")
+    project.joinProjectCodeAndLogIn('coteach', login.botUser, login.botPassword)
+    // Need to check for and click the owner tools button if its showing (mobile)
+    sidebar.ownerToolToggle()
+    // Verify Student List owner tool is available and toggle-able
+    browser.wait(
+      EC.elementToBeClickable(studentList.studentListToggle),
+      3000,
+      'Student List owner tool button was not available for a co-teacher',
+    )
+    studentList.studentListToggle.click()
+    // Verify Student List shows
+    browser.wait(EC.visibilityOf(studentList.content), 3000, 'Student List content did not show for a co-teacher')
+    // Close
+    studentList.close.click()
+    browser.wait(EC.invisibilityOf(studentList.content), 3000, 'Student List did not close for co-teacher')
+    // Verify co-teacher name shows in Nav
+    let coTeacherTag = element(by.cssContainingText('.user-tag__name', 'Test Bot'))
+    expect(EC.visibilityOf(coTeacherTag)).toBeTruthy('co-teacher name was not displayed in the Nav Bar')
+  })
 })
