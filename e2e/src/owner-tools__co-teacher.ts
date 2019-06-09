@@ -11,19 +11,37 @@ describe('Project Page as a Co-Teacher: ', () => {
   let loginModal = new LoginModal()
   let login = new Login()
   let sidebar = new Sidebar()
-  let home = new Home()
   let EC = protractor.ExpectedConditions // vital
 
-  /* ---- beforeEach ---------------------------- */
+  /* ---- before and after Each --------------- */
 
   beforeEach(() => {
     browser.get('/#/home')
     // Open Test project
-    home.enterProjectCodeFromHome('coteach')
+    project.joinProjectCodeAndLogIn('coteach', login.heroUser, login.heroPassword)
   })
 
   afterEach(() => {
     // log out
     sidebar.logout()
   })
+
+  /**
+   * Test steps
+   */
+
+  /**
+   *
+   */
+  it('should promote student to teacher, and see confirmation toast', () => {})
+
+  /**
+   *
+   */
+  it('should access Reading Group as co-teacher, and have owner tools', () => {})
+
+  /**
+   *
+   */
+  it('should not show students "Add Teacher" option', () => {})
 })
