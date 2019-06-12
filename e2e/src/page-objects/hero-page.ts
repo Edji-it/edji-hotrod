@@ -16,6 +16,7 @@ export class Hero implements PageObjectInterface {
   public academyCouponMsg = element(by.id('academyCouponMsg'))
   // Coupon codes
   public validCoupon = 'TEST50'
+  public validCouponHundred = 'TEST100'
   public invalidCoupon = 'FAKE_COUPON'
   public academyCoupon = 'HA-TEST100'
 

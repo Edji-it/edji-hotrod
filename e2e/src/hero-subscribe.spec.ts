@@ -1,13 +1,11 @@
-import { browser, by, element, protractor } from 'protractor'
+import { browser, protractor } from 'protractor'
 
-import { Home, Hero, Login, Sidebar } from './page-objects'
-import { LoginForm } from './components'
+import { Hero, Sidebar } from './page-objects'
+import { LoginForm, RegisterForm, UserDetailsModal } from './components'
 
 describe('Hero Subscription Management', () => {
-  let login = new Login()
   let loginForm = new LoginForm()
   let hero = new Hero()
-  let home = new Home()
   let sidebar = new Sidebar()
   let EC = protractor.ExpectedConditions
 
@@ -66,6 +64,72 @@ describe('Hero Subscription Management', () => {
       browser.wait(EC.presenceOf(hero.invalidCouponMsg), 5000, 'never saw invalid coupon message')
       // Close subscription modal
       hero.subscribeModalClose.click()
+    })
+  })
+
+  describe('Subscribe to Hero', () => {
+    beforeAll(() => {
+      sidebar.logout()
+    })
+
+    afterEach(() => {
+      sidebar.logout()
+    })
+
+    it('should subscribe to hero with no discount', () => {
+      this.registerAndConfirm()
+      // Navigate to the Hero promo page
+      sidebar.clickHeroLink()
+      // Verify we made it there
+      browser.wait(EC.urlContains('plans'), 5000, 'never reached the Hero promo page')
+
+      browser.wait(EC.elementToBeClickable(hero.topCTAbutton), 3000, 'never saw Hero call to action button')
+      hero.topCTAbutton.click()
+      // Verify modal popped up
+      browser.wait(EC.elementToBeClickable(hero.subscribeModalHeader), 3000, 'never saw Hero subscription modal')
+
+    })
+
+    it('should subscribe to hero with a partial discount', () => {
+      this.registerAndConfirm()
+      // Navigate to the Hero promo page
+      sidebar.clickHeroLink()
+      // Verify we made it there
+      browser.wait(EC.urlContains('plans'), 5000, 'never reached the Hero promo page')
+
+      browser.wait(EC.elementToBeClickable(hero.topCTAbutton), 3000, 'never saw Hero call to action button')
+      hero.topCTAbutton.click()
+      // Verify modal popped up
+      browser.wait(EC.elementToBeClickable(hero.subscribeModalHeader), 3000, 'never saw Hero subscription modal')
+
+      // Valid coupon - 50% off
+      browser.wait(EC.elementToBeClickable(hero.couponInput), 3000)
+      hero.couponInput.sendKeys(hero.validCoupon)
+      // Blur field
+      hero.couponInput.sendKeys(protractor.Key.TAB)
+      browser.wait(EC.presenceOf(hero.validCouponMsg), 5000, 'never saw valid coupon success message')
+
+    })
+
+    it('should subscribe to hero with a 100% discount', () => {
+      this.registerAndConfirm()
+      // Navigate to the Hero promo page
+      sidebar.clickHeroLink()
+      // Verify we made it there
+      browser.wait(EC.urlContains('plans'), 5000, 'never reached the Hero promo page')
+
+      browser.wait(EC.elementToBeClickable(hero.topCTAbutton), 3000, 'never saw Hero call to action button')
+      hero.topCTAbutton.click()
+      // Verify modal popped up
+      browser.wait(EC.elementToBeClickable(hero.subscribeModalHeader), 3000, 'never saw Hero subscription modal')
+
+      // Valid coupon - 100% off
+      browser.wait(EC.elementToBeClickable(hero.couponInput), 3000)
+      hero.couponInput.sendKeys(hero.validCouponHundred)
+      // Blur field
+      hero.couponInput.sendKeys(protractor.Key.TAB)
+      browser.wait(EC.presenceOf(hero.validCouponMsg), 5000, 'never saw valid coupon success message')
+
     })
   })
 })
