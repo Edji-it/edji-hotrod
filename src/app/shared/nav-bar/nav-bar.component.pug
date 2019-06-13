@@ -109,7 +109,7 @@
             span.list-icon--right([innerHtml]="':outbox_tray:' | emojione")
     //- Project Info (Desktop & Mobile)
     .nav-bar__project-data
-      ng-container(*ngIf="showProjectInfo && currentProject && currentProject._id && currentProject.owners[0]")
+      ng-container(*ngIf="showProjectInfo && currentProject && currentProject._id && currentProject.owners")
         //- Heat Vision Status
         .nav__btn-slider__wrap.hover--tooltip
           .nav__btn-slider(
