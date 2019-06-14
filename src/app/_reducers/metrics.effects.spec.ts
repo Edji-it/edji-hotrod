@@ -1,28 +1,13 @@
 // library imports
 import { TestBed } from '@angular/core/testing'
 import { provideMockActions } from '@ngrx/effects/testing'
-import { Actions } from '@ngrx/effects'
 import { cold, hot } from 'jasmine-marbles'
-import { Observable, empty } from 'rxjs'
+import { Observable } from 'rxjs'
 
 // project imports
 import { MetricsEffects } from './metrics.effects'
 import { IncrementMetric, SetState } from './metrics.reducers'
 import { StateService } from './../_services'
-
-export class TestActions extends Actions {
-  constructor() {
-    super(empty());
-  }
-
-  set stream(source: Observable<any>) {
-    this.source = source;
-  }
-}
-
-export function getActions() {
-  return new TestActions();
-}
 
 describe('metrics effects', () => {
   let effects: MetricsEffects
@@ -59,7 +44,6 @@ describe('metrics effects', () => {
     const response = cold('-a|', { a: { hero_page_load_count: 2 } })
     spyOn(stateService, 'getState').and.returnValue(response)
     const expected = cold('--b', { b: outcome })
-
     expect(effects.incrementMetric$).toBeObservable(expected)
   })
 })

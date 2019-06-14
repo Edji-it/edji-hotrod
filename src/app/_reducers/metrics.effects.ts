@@ -4,7 +4,8 @@ import { Effect, Actions, ofType } from '@ngrx/effects'
 import { MetricsActions, IncrementMetric, SetState } from './metrics.reducers'
 import { switchMap, mergeMap, tap, map, catchError } from "rxjs/operators"
 import { StateService } from './../_services/state.service'
-import { of } from "rxjs";
+import { Action } from '@ngrx/store'
+import { of, Observable } from "rxjs"
 
 @Injectable()
 export class MetricsEffects {
