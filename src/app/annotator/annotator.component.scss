@@ -4,6 +4,12 @@ $sessionAccent: #ff7583;
 $sessionPanelWidth: 150px;
 $midGray: #f7f7f7;
 
+.w-box {
+  background: rgba(red, 0.3);
+  position: absolute;
+  display: block;
+}
+
 .header {
   margin-top: $base-pad;
 }

@@ -111,7 +111,7 @@ export class ReadingService {
             this.userReadingsSource.next(data)
           }
           return data
-        })
+        }),
       )
   }
 
@@ -182,11 +182,11 @@ export class ReadingService {
       queryString += `&grade_levels_lte=${searchParams.gradeMax}`
     }
     // owner bookmarked
-    if (searchParams.createdCollection==='bookmarked') {
+    if (searchParams.createdCollection === 'bookmarked') {
       queryString += '&owner_bookmarked=true'
     }
     // owner-only readings
-    if (searchParams.scope==='owner') {
+    if (searchParams.scope === 'owner') {
       queryString += '&scope=owner'
     }
     // Default to sort by most recent, unless using a search term
@@ -201,10 +201,57 @@ export class ReadingService {
   }
 
   public setReadingObj(reading: any): void {
-    if (reading._id) {
-      this.readingValue = reading
-      this.readingSource.next(this.readingValue)
+    if (!reading._id) {
+      return
     }
+    // Check for PDF words
+    if (reading.words && reading.words.length > 0) {
+      for (let i = 0; i < reading.words.length; i++) {
+        let word = reading.words[i]
+        if (word.ocr) {
+          this.getDataForPDF(word.ocr.id, word.ocr.page).then(boxes => {
+            word.boxes = boxes
+          })
+        }
+      }
+    }
+    console.log('Updated reading: ', reading)
+    this.readingValue = reading
+    this.readingSource.next(this.readingValue)
+  }
+
+  /**
+   * @todo add pdf data type
+   */
+  public getDataForPDF(id: string, page: number): Promise<any> {
+    /**
+     * @todo where should we handle adding PDF data?
+     * examples: pdf_article-parse.json, KyburzResume-parse.json, EdSurge-parse.json
+     */
+
+    return this._http
+      .get('/assets/test-pdf/pdf_article-parse.json')
+      .pipe(
+        map(data => {
+          let wordBoxes = []
+          let pages = data['ParsedResults']
+          let overlay = pages[page - 1] && pages[page - 1]['TextOverlay'] ? pages[page - 1]['TextOverlay'] : {}
+          overlay['Lines'] &&
+            overlay['Lines'].forEach((line: { Words: any; MaxHeight: any; MinTop: any }) => {
+              wordBoxes = wordBoxes.concat(line.Words)
+            })
+          // WordText	Name:
+          // Left	97
+          // Top	97
+          // Height	9
+          // Width	38
+          return wordBoxes
+        }),
+      )
+      .toPromise()
+    // .catch(err => {
+    //   return { error: err }
+    // })
   }
 
   // Pull all versions of a particular reading
@@ -235,18 +282,16 @@ export class ReadingService {
 
   /**
    * Deletes a reading from the collection, all projects for that reading, and all versions that are based on the said reading from their collections
-   * @param deleteReading is the reading we're passing in to delete 
+   * @param deleteReading is the reading we're passing in to delete
    */
   public delete(deleteReading: Reading): Observable<any> {
-    return this._http.delete(
-      this._auth.getUrl() + `/api/v1/readings/${deleteReading._id}`, 
-      this._auth.getOptions()
-    ).pipe(
-      map(value => {
-        // Delete was successful
-        let readingResponse = this.userReadingsSource.value
-        readingResponse.readings.forEach(
-          (reading, index) => {
+    return this._http
+      .delete(this._auth.getUrl() + `/api/v1/readings/${deleteReading._id}`, this._auth.getOptions())
+      .pipe(
+        map(value => {
+          // Delete was successful
+          let readingResponse = this.userReadingsSource.value
+          readingResponse.readings.forEach((reading, index) => {
             if (reading.version_count > 1) {
               // Reload content (slower but simpler)
               this.updateCreated(this._auth.getUser())
@@ -256,11 +301,10 @@ export class ReadingService {
               readingResponse.total--
               this.userReadingsSource.next(readingResponse)
             }
-          }, 
-        )
-        return value
-      }),
-    )
+          })
+          return value
+        }),
+      )
   }
 
   /**
@@ -296,7 +340,7 @@ export class ReadingService {
         grade_levels: reading.grade_levels,
         owner_bookmarked: reading.owner_bookmarked,
         // We reset "createdAt" in New Reading when publishing a draft
-        createdAt: reading.createdAt
+        createdAt: reading.createdAt,
       }
 
       return this._http
@@ -327,7 +371,7 @@ export class ReadingService {
 
   /**
    * @deprecated 5/1/2019
-   * @param filters 
+   * @param filters
    */
   public getFeed(filters?: FilterObj): Observable<any> {
     let feedParams = new HttpParams()

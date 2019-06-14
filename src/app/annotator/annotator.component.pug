@@ -139,6 +139,20 @@ scroll-progress([scrollProgress]="currentScroll")
                     //- Non-link Words, show content
                     | {{ (!(w && w.styles) || wHasStyle(w, 'space')) ? '&nbsp;' : w && w.str }}
                 .img-wrap(*ngIf="wHasStyle(w, 'img')")
+                    .badge.badge-danger(*ngIf="w.ocr") Has OCR!
+                    //- WordText	Name:
+                    //- Left	97
+                    //- Top	97
+                    //- Height	9
+                    //- Width	38
+                    ng-container(*ngIf="w.boxes")
+                        .w-box(
+                            *ngFor="let box of w.boxes", 
+                            [style.top]="box.Top + 'px'", 
+                            [style.left]="box.Left + 'px'",
+                            [style.width]="box.Width + 'px'",
+                            [style.height]="box.Height + 'px'"
+                        )
                     //- Placeholder image hotspot
                     .hotspot(
                         *ngIf="imageHotspotPlaceholder.index == i && (imageHotspotPlaceholder.focus || imageHotspotPlaceholder.preview)",
