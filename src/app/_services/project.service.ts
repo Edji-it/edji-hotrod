@@ -353,13 +353,13 @@ export class ProjectService {
     project: Project,
   ): {
     commentsByIndex: EdjiComment[][]
-    highlightArrays: { alwaysHighlightArray: number[]; highlightArray: number[] }
+    highlightArrays: { alwaysHighlightArray: number[][]; highlightArray: number[][] }
   } {
     this.initializeProjectObservables()
     // these empty arrays will be passed into their modifier functions throughout this function
     let commentsByIndex: EdjiComment[][] = []
-    let alwaysHighlightArray: number[] = []
-    let highlightArray: number[] = []
+    let alwaysHighlightArray: number[][] = []
+    let highlightArray: number[][] = []
     this._commentStats.initStats(project)
     let user = this._auth.getUser()
 
@@ -514,11 +514,11 @@ export class ProjectService {
     comment: EdjiComment,
     userId: string,
     project: Project,
-    alwaysHighlightArray: number[],
-    highlightArray: number[],
+    alwaysHighlightArray: number[][],
+    highlightArray: number[][],
   ): {
-    alwaysHighlightArray: number[]
-    highlightArray: number[]
+    alwaysHighlightArray: number[][]
+    highlightArray: number[][]
   } {
     // conditional determines which array we'll sort to - students only see highlightArray w/o heat vision on
     let alwaysHighlight = userId === comment.user_id || project.teacher_id == comment.user_id
@@ -538,14 +538,21 @@ export class ProjectService {
    * @param comment Comment relevant comment highlights should be accounted for
    * @param highlightArray number[] array of values to increment
    */
-  private incrementHighlightIndices(comment: EdjiComment, highlightArray: number[]): number[] {
+  private incrementHighlightIndices(comment: EdjiComment, highlightArray: number[][]): number[][] {
     // loop through all of the indexes (corresponding to words) and increment their highlights
     for (var i = comment.start; i <= comment.end; i++) {
       if (this.isCommentVisible(comment, null, true)) {
-        if (highlightArray[i]) {
-          highlightArray[i]++
-        } else {
-          highlightArray[i] = 1
+        let bstart = comment.box ? comment.box.start : 0
+        let bend = comment.box ? comment.box.end : 0
+
+        for (let bi = bstart; bi <= bend; bi++) {
+          if (highlightArray[i]) {
+            if (!highlightArray[i][bi]) highlightArray[i][bi] = 0
+            highlightArray[i][bi]++
+          } else {
+            if (!highlightArray[i]) highlightArray[i] = []
+            highlightArray[i][bi] = 1
+          }
         }
       }
     }
@@ -985,7 +992,7 @@ interface ProjectFilters {
 
 export interface CommentFilter {
   propertyFilters: CommentPropertyFilters
-  filterHighlightArray?: number[]
+  filterHighlightArray?: number[][]
   displayType: string
   displayName: string
 }

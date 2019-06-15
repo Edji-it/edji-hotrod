@@ -24,7 +24,7 @@ import {
   ReadingService,
   SocketService,
   UtilToolService,
-  MessageService,
+  MessageService
 } from '../_services'
 import { CommentPermissions, EdjiComment, Project, Reading, Feedback } from './../shared/datatypes'
 import { ALLSPARK } from '../app.constants'
@@ -70,17 +70,19 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
   public focusOverride: boolean = false
 
   // Indices highlighted by users other than owner or current user
-  public highlightArray: number[] = []
+  public highlightArray: number[][] = []
   // Indices highlighted by current user or reading owner
-  public alwaysHighlightArray: number[] = []
+  public alwaysHighlightArray: number[][] = []
   // Indices for highlights of a selected filter
-  public filterHighlightArray: number[]
+  public filterHighlightArray: number[][]
   public focusArray: (boolean | boolean[])[] = []
   // Word/Hit boxes on images
   /**
    * @todo add layered highlighting to boxes
    */
-  // public boxHighlightArray: number[]
+  // public boxHighlightArray: number[][]
+  // public boxAlwaysHighlightArray: number[][]
+  // public boxFilterHighlightArray: number[][]
 
   // Line Count
   public lineCountRunning: boolean = false
@@ -641,7 +643,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
       }
     } else {
-      this.clearQuickSelect()
+      delete this.quickSelect.boxes
       // Functions as "click outside" for images
       this.optionsShow = false
       this.imageHotspotPlaceholder.preview = false
@@ -752,22 +754,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     }
   }
 
-  getBoxHighlight(i: number, bi: number): string {
-    let classString = ''
-    // console.log('getboxhigh', this.focusArray[i])
-    // Apply focus class to words of focused comments
-    if (this.focusArray[i] && this.focusArray[i][bi]) {
-      classString = 'h-f'
-      // console.log
-    }
-    //
-    if (this.quickSelect.boxes && (bi == this.quickSelect.boxes.start || bi == this.quickSelect.boxes.end)) {
-      classString += ' quick-select--click'
-    }
-    return classString
-    //+ ' h-' + highlightCount
-  }
-
   updateImageHeights(): void {
     let images: any[] = Array.from(document.querySelectorAll('#annotatorContent .img-wrap img'))
     for (let i = 0; i < images.length; i++) {
@@ -806,21 +792,29 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
   /**
    * Add new highlights to local array
    */
-  incrementHighlights(alwaysHighlight: boolean, start: number, end: number): void {
-    if (alwaysHighlight) {
-      for (var i = start; i <= end; i++) {
-        if (this.alwaysHighlightArray[i]) {
-          this.alwaysHighlightArray[i]++
-        } else {
-          this.alwaysHighlightArray[i] = 1
+  incrementHighlights(alwaysHighlight: boolean, start: number, end: number, bstart?: number, bend?: number): void {
+    if (!bstart) {
+      bstart = 0
+      bend = 0
+    }
+    for (let bi = bstart; bi <= bend; bi++) {
+      if (alwaysHighlight) {
+        for (var i = start; i <= end; i++) {
+          if (this.alwaysHighlightArray[i]) {
+            this.alwaysHighlightArray[i][bi]++
+          } else {
+            if (!this.alwaysHighlightArray[i]) this.alwaysHighlightArray[i] = []
+            this.alwaysHighlightArray[i][bi] = 1
+          }
         }
-      }
-    } else {
-      for (var i = start; i <= end; i++) {
-        if (this.highlightArray[i]) {
-          this.highlightArray[i]++
-        } else {
-          this.highlightArray[i] = 1
+      } else {
+        for (var i = start; i <= end; i++) {
+          if (this.highlightArray[i]) {
+            this.highlightArray[i][bi]++
+          } else {
+            if (!this.highlightArray[i]) this.highlightArray[i] = []
+            this.highlightArray[i][bi] = 1
+          }
         }
       }
     }
@@ -829,21 +823,29 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
   /**
    * Removes highlights from local array
    */
-  decrementHighlights(alwaysHighlight: boolean, start: number, end: number): void {
-    if (alwaysHighlight) {
-      for (var i = start; i <= end; i++) {
-        if (this.alwaysHighlightArray[i] && this.alwaysHighlightArray[i] > 0) {
-          this.alwaysHighlightArray[i]--
-        } else {
-          this.alwaysHighlightArray[i] = 0
+  decrementHighlights(alwaysHighlight: boolean, start: number, end: number, bstart?: number, bend?: number): void {
+    if (!bstart) {
+      bstart = 0
+      bend = 0
+    }
+    for (let bi = bstart; bi <= bend; bi++) {
+      if (alwaysHighlight) {
+        for (var i = start; i <= end; i++) {
+          if (this.alwaysHighlightArray[i] && this.alwaysHighlightArray[i][bi] > 0) {
+            this.alwaysHighlightArray[i][bi]--
+          } else {
+            if (!this.alwaysHighlightArray[i]) this.alwaysHighlightArray[i] = []
+            this.alwaysHighlightArray[i][bi] = 0
+          }
         }
-      }
-    } else {
-      for (var i = start; i <= end; i++) {
-        if (this.highlightArray[i] && this.highlightArray[i] > 0) {
-          this.highlightArray[i]--
-        } else {
-          this.highlightArray[i] = 0
+      } else {
+        for (var i = start; i <= end; i++) {
+          if (this.highlightArray[i] && this.highlightArray[i][bi] > 0) {
+            this.highlightArray[i][bi]--
+          } else {
+            if (!this.highlightArray[i]) this.highlightArray[i] = []
+            this.highlightArray[i][bi] = 0
+          }
         }
       }
     }
@@ -1193,7 +1195,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
    * @param end Index for last word
    */
   private focusHighlight(start, end, location?: any, boxes?: { start: number, end: number }): void {
-    console.log("Focus, optionsshow?", this.optionsShow)
     if (this.optionsShow == true) {
       return
     }
@@ -1254,27 +1255,30 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
   /**
    * Keep this light! It runs for every word instance
-   * @param i is the word index
+   * @param i is the word index (use decimals to reference box indices)
    */
-  public getHighlightClass(i: number): string {
+  public getHighlightClass(i: number, bi?: number): string {
     let classString = ''
     let highlightCount = 0
+    if (!bi) {
+      bi = 0
+    }
 
     // If a filter is applied, use filter highlights
     if (this.filterHighlightArray) {
-      if (this.filterHighlightArray[i]) {
-        highlightCount += this.filterHighlightArray[i]
+      if (this.filterHighlightArray[i] && this.filterHighlightArray[i][bi]) {
+        highlightCount += this.filterHighlightArray[i][bi]
       }
     } else {
-      if ((this.project.heat_vision || this.user._id == this.project.teacher_id) && this.highlightArray[i]) {
-        highlightCount += this.highlightArray[i]
+      if ((this.project.heat_vision || this.user._id == this.project.teacher_id) && this.highlightArray[i] && this.highlightArray[i][bi]) {
+        highlightCount += this.highlightArray[i][bi]
       }
-      if (this.alwaysHighlightArray[i]) {
-        highlightCount += this.alwaysHighlightArray[i]
+      if (this.alwaysHighlightArray[i] && this.alwaysHighlightArray[i][bi]) {
+        highlightCount += this.alwaysHighlightArray[i][bi]
       }
     }
     // Apply focus class to words of focused comments
-    if (this.focusArray[i]) {
+    if (this.focusArray[i] === true || (this.focusArray[i] && this.focusArray[i][bi])) {
       classString = 'h-f'
     }
     //
@@ -1282,6 +1286,17 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
       classString += ' quick-select--click'
     }
     return classString + ' h-' + highlightCount
+  }
+
+  getBoxHighlight(i: number, bi: number): string {
+    // let decimal = parseFloat(i + '.' + bi)
+    let classString = this.getHighlightClass(i, bi)
+    //
+    if (this.quickSelect.boxes && (bi == this.quickSelect.boxes.start || bi == this.quickSelect.boxes.end)) {
+      classString += ' quick-select--click'
+    }
+    return classString
+    //+ ' h-' + highlightCount
   }
 
   /**
