@@ -101,7 +101,11 @@ export class MediaService {
     return uploadSource.asObservable()
   }
 
-  uploadPdf(file: File): Observable<any> {
+  uploadPdf(file: File, enableOCR: boolean): Observable<any> {
+    /**
+     * @todo 6/15/19 update service to accept boolean for enable OCR
+     * enableOCR will tell our service whether or not to use the OCR service on the PDF.. need to update our service call for this one
+     */
     let uploadSource = new Subject()
 
     this.http.put(this.imageService + '/v1/pdf', file).subscribe(
@@ -115,7 +119,7 @@ export class MediaService {
     )
 
     return uploadSource.asObservable()
-  } // uploadPdf
+  }
 
   pdfCheck(fileId: string): Observable<any> {
     return this.http.get(this.pdfBucket + '/' + fileId + '/spark.json').pipe(

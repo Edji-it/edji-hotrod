@@ -22,6 +22,7 @@ export class UploadPdfModalComponent implements OnInit {
   public uploadedDocs: any[] = []
   public file: any = {}
   public title: string = ''
+  public enableOCR: boolean = true
   public selectedFiles: any[] = []
   public uploading: boolean = false
   public noUploadAllowed: boolean = true
@@ -93,7 +94,7 @@ export class UploadPdfModalComponent implements OnInit {
 
     this.uploading = true
 
-    this._media.uploadPdf(this.file).subscribe(
+    this._media.uploadPdf(this.file, this.enableOCR).subscribe(
       data => {
         this.uploading = false
         // Set converted property

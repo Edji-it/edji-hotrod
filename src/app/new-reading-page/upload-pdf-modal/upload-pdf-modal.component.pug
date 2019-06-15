@@ -28,6 +28,16 @@
                 span.input-group-append
                   button#pdfBrowseButton.btn.btn-default.btn-file(type="button", (click)="browseInput.click()") Browse
                     input(#browseInput, [attr.id]="pdfFileInputId", type="file", accept=".pdf", (change)="updateUploadFile()", style="display:none;")
+            //- give user the option to gather word position detail via ocr
+            .form-group
+              .input-group 
+                input(
+                  name="enableOCR",
+                  [(ngModel)]="enableOCR",
+                  type="checkbox",
+                  value=""
+                )
+                label Enable Word Identification
             .form-group
               label Title
               input(name="title", [(ngModel)]="title", type="text")
