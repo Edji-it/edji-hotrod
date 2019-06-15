@@ -1189,22 +1189,17 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Adds focus text highlighted for the relevant comment
-   * @param start Index for first word
-   * @param end Index for last word
+   * Update focusArray for a specified selection
+   * @param value true or false - are you adding or removing focus?
    */
-  private focusHighlight(start, end, location?: any, boxes?: { start: number, end: number }): void {
-    if (this.optionsShow == true) {
-      return
-    }
+  private updateFocusArray(value: boolean, start, end, boxes?: { start: number, end: number }): void {
     // Make sure start and end are in order
     if (start > end) {
       end = [start, (start = end)][0] // Swap start and end values
     }
     if (!boxes) {
-      console.log("1!")
       for (var i = start; i <= end; i++) {
-        this.focusArray[i] = true
+        this.focusArray[i] = value
       }
     } else {
       // Handle box highlighting
@@ -1216,13 +1211,24 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
       if (boxes.start > boxes.end) {
         boxes.end = [boxes.start, (boxes.start = boxes.end)][0] // Swap start and end values
       }
-      console.log("Focus boxes?", boxes)
       for (let bi = boxes.start; bi <= boxes.end; bi++) {
-        this.focusArray[start][bi] = true
+        this.focusArray[start][bi] = value
       }
-      console.log("Set focus array:", this.focusArray[start])
     }
+  }
 
+  /**
+   * Adds focus text highlighted for the relevant comment
+   * @param start Index for first word
+   * @param end Index for last word
+   */
+  public focusHighlight(start, end, location?: any, boxes?: { start: number, end: number }): void {
+    if (this.optionsShow == true) {
+      return
+    }
+    // Apply focus underline
+    this.updateFocusArray(true, start, end, boxes)
+    // Hot-spot focus
     if (location && location.x && location.y) {
       this.imageHotspotPlaceholder = {
         index: start,
@@ -1238,17 +1244,13 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
    * @param start Index for first word
    * @param end Index for last word
    */
-  private unfocusHighlight(start, end, location?: any): void {
+  public unfocusHighlight(start, end, location?: any, boxes?: { start: number, end: number }): void {
     if (this.focusOverride) {
       return
     }
-    // Make sure start and end are in order
-    if (start > end) {
-      end = [start, (start = end)][0] // Swap start and end values
-    }
-    for (var i = start; i <= end; i++) {
-      this.focusArray[i] = false
-    }
+    // Remove focus underline
+    this.updateFocusArray(false, start, end, boxes)
+    // Remove hot-spot focus
     this.imageHotspotPlaceholder['focus'] = false
   }
 
