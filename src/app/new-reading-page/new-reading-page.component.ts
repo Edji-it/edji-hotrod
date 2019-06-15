@@ -6,7 +6,7 @@ import { Angulartics2 } from 'angulartics2'
 import { IMultiSelectOption, IMultiSelectSettings } from '../_directives'
 import { take } from 'rxjs/operators'
 
-import { AuthService, ProjectService, ReadingService, UtilToolService, AcademyService, MessageService } from '../_services'
+import { AuthService, ProjectService, ReadingService, UtilToolService, AcademyService, MessageService, MediaService } from '../_services'
 import { EdjiComment, EdjiQuestion, User, Project, Reading } from '../shared/datatypes'
 import { ReadingShareObject } from './../shared/nav-bar'
 import * as Rangy from 'rangy'
@@ -83,6 +83,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
   // Used for processing reading
   public words: any[] = []
   public previousWordY: number = 0
+  public pdfJSON: any[] = []
 
   // Configuration Options for Medium Editor
   public mediumEditorConfig: any = {
@@ -181,7 +182,8 @@ export class NewReadingPage implements OnInit, OnDestroy {
     private _auth: AuthService,
     private _util: UtilToolService,
     private _academy: AcademyService,
-    private _messages: MessageService
+    private _messages: MessageService,
+    private _media: MediaService
   ) {
     this.readingForm = fb.group({
       title: [null, Validators.required],
@@ -335,7 +337,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
           // TRACK EXCEPTION
           console.error(err)
         },
-    )
+      )
   }
 
   /**
@@ -484,11 +486,24 @@ export class NewReadingPage implements OnInit, OnDestroy {
       }
 
       if (tagName === 'img') {
-        this.words.push({
+        let imgUrl = element.getAttribute('src')
+        let imgObj = {
           str: '', // to be used for image title
-          url: element.getAttribute('src'),
-          styles: ['img'],
+          url: imgUrl,
+          styles: ['img']
+        }
+
+        // Determine if we have OCR JSON data for a PDF
+        let boxData = this.pdfJSON.find(pdfJSON => {
+          return pdfJSON.url.substr(0, pdfJSON.url.lastIndexOf(".")) == imgUrl
         })
+
+        // if we get a match on the url (without file extension), 
+        // then we know the JSON data lines up and we will add it to the words object for this image
+        if (boxData) {
+          imgObj['boxes'] = boxData.pdfJSON
+        }
+        this.words.push(imgObj)
       }
 
       if (tagName === 'a' && !ignoreText) {
@@ -895,16 +910,32 @@ export class NewReadingPage implements OnInit, OnDestroy {
   public addImages(images: { title: string; url: string }[]) {
     if (this.insertNode && this.insertNode.parentNode) {
       // If there is a reference node for cursor position, insert at cursor
-      images.forEach(image => {
+      images.forEach(async image => {
         let imgString = '<img src="' + image.url + '" title="' + image.title + '" />'
+
+        // get the json data for pdf (if legacy file or user skips OCR, this will be undefined)
+        let pdfUrl = image.url.substr(0, image.url.lastIndexOf(".")) + '.json'
+        // let pdfJSON = image.url.substr(0, image.url.lastIndexOf(".")) + '.json'
+        let pdfJSON = await this._media.getPdfJsonData('http://pdf-dev.edji.it/96867346-2a97-4394-99a6-6db358e0aff4/5983175d-bddb-48a2-acf9-9add5ca3bbe7-0.json').toPromise()
+        console.log(pdfJSON)
+        if (pdfJSON) {
+          this.pdfJSON.push({ url: pdfUrl, json: pdfJSON })
+        }
+
         this.insertAfter(this.insertNode.parentNode, imgString, this.insertNode)
         this.insertAfter(this.insertNode.parentNode, '<p>&#65279;</p>', this.insertNode)
       })
     } else {
       // If no reference node (field has not been interacted with) insert image at end
       let imgString = ''
-      images.forEach(image => {
+      images.forEach(async image => {
         imgString += '<img src="' + image.url + '" title="' + image.title + '" /><p>&#65279;</p>'
+        let pdfUrl = image.url.substr(0, image.url.lastIndexOf(".")) + '.json'
+        let pdfJSON = await this._media.getPdfJsonData('http://pdf-dev.edji.it/96867346-2a97-4394-99a6-6db358e0aff4/5983175d-bddb-48a2-acf9-9add5ca3bbe7-0.json').toPromise()
+        console.log(pdfJSON)
+        if (pdfJSON) {
+          this.pdfJSON.push({ url: pdfUrl, json: pdfJSON })
+        }
       })
       this.readingHtml[this.readingHtml.length - 1].text += imgString
     }
