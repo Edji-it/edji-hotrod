@@ -8,17 +8,11 @@ import { LockerService } from '../../_services/locker.service'
 
 @Component({
   selector: 'upload-pdf-modal',
-  templateUrl: './upload-pdf-modal.component.html',
+  templateUrl: './upload-pdf-modal.component.pug',
   styleUrls: ['./upload-pdf-modal.component.scss'],
   providers: [MediaService],
 })
 export class UploadPdfModalComponent implements OnInit {
-  /*
-  Last modified: 17 June 2017
-  
-  Upload a PDF with this modal!
-  */
-
   @Output() closeModal: EventEmitter<any> = new EventEmitter()
   @Output() returnImage: EventEmitter<any> = new EventEmitter()
 
@@ -35,18 +29,16 @@ export class UploadPdfModalComponent implements OnInit {
   public pdfFileInputId: string = 'pdfFileInput'
   public confirmDelete: boolean = false
 
-  constructor(private _locker: LockerService, private _media: MediaService, private _auth: AuthService) {}
+  constructor(private _locker: LockerService, private _media: MediaService, private _auth: AuthService) { }
 
   ngOnInit() {
     // Load previously uploaded docs
-    // (6.15.17) NOTE: We tried changing this here first if tree and everything went to hell. Be careful.
     if (this._locker.get('uploadedDocs')) {
       this.uploadedDocs = this._locker.get('uploadedDocs')
     } else if (this._auth.getUser().media && this._auth.getUser().media.documents) {
       this.uploadedDocs = this._auth.getUser().media.documents
     }
     // Check existing Uploaded Docs for any not yet marked as converted
-    // So we can check on them!
     this.uploadedDocs.forEach(doc => {
       if (doc.converted === false) {
         this.checkConversion(doc.uuid)
@@ -64,14 +56,11 @@ export class UploadPdfModalComponent implements OnInit {
       })
   }
 
-  /**
-   * Set 'file' variable and validate file
-   */
+  // Set 'file' variable and validate file
   updateUploadFile() {
-    // 6.15
     if (document.getElementById(this.pdfFileInputId) == null) {
       console.error('Could not find the pdfFileInput element!')
-    } // if
+    }
 
     const files = document.getElementById(this.pdfFileInputId)['files']
     this.file = files[0]
@@ -87,9 +76,8 @@ export class UploadPdfModalComponent implements OnInit {
       this.errorMsg = ''
     }
   }
-  /**
-   * Upload image and add image to modal for selection
-   */
+
+  // Upload image and add image to modal for selection
   beginUpload() {
     this.updateUploadFile()
 
@@ -127,10 +115,8 @@ export class UploadPdfModalComponent implements OnInit {
     )
   }
 
-  /**
-   * Run check until document is confirmed as processed
-   */
-  checkConversion(fileId): void {
+  // Run check until document is confirmed as processed
+  checkConversion(fileId: any): void {
     let ONE_HOUR = 60 * 60 * 1000
 
     this._media
@@ -156,15 +142,13 @@ export class UploadPdfModalComponent implements OnInit {
             }, 1500)
           }
         },
-        error => {
-          // Handle this?
+        err => {
+          console.error(err)
         },
       )
   }
 
-  /**
-   * Update a single document, and propagate changes
-   */
+  // Update a single document, and propagate changes
   updateUploadedDoc(updatedDoc: any) {
     this.uploadedDocs.forEach((doc, index) => {
       if (updatedDoc.uuid === doc.uuid) {
@@ -174,22 +158,16 @@ export class UploadPdfModalComponent implements OnInit {
     this.saveUploadedDocs()
   }
 
-  /*
-  6.17.17
-  Trigger the process for the user to confirm that they want to delete a PDF.
-  */
+  // Trigger the process for the user to confirm that they want to delete a PDF.
   confirmDeleteMiniModal(): void {
     this.confirmDelete = true
-  } // confirmDeleteMiniModal ()
+  }
 
-  /**
-   * 6.15.17
-   * Delete a PDF through front end magic. Since things are stored locally and through AWS, no need to do a server call.
-   */
+  // Delete a PDF through front end magic. Since things are stored locally and through AWS, no need to do a server call.
   removeUploadedDoc(docToDelete: any) {
     // Since the PDF's are just stored locally, deleting an uploaded PDF is mostly
     // gonna be front end magic. We're gonna dive into the user prefs as found in
-    // auth.service.ts and remove that sucker.
+    // auth.service.ts
 
     // Edit our front-end listing...
     this.uploadedDocs.forEach((doc, index) => {
@@ -202,13 +180,10 @@ export class UploadPdfModalComponent implements OnInit {
     // and now overwrite the list of docs in user prefs so that this carries across page loads.
     this._auth.forceUpdateDocuments(this.uploadedDocs).subscribe(() => {
       this.uploadedDocs = this._auth.getUser().media.documents
-      // console.log("Deleting a PDF should be done now.");
     })
-  } //  removeUploadedDoc(docToDelete: any)
+  }
 
-  /**
-   * Add upload URL to array and localStorage
-   */
+  // Add upload URL to array and localStorage
   addUpload(data: any): void {
     // Add document object
     this.uploadedDocs.unshift(data)
@@ -218,9 +193,7 @@ export class UploadPdfModalComponent implements OnInit {
     this.checkConversion(data.uuid)
   }
 
-  /**
-   * Save Uploaded Doc list to localStorage AND user object
-   */
+  // Save Uploaded Doc list to localStorage AND user object
   saveUploadedDocs(): void {
     this._locker.set('uploadedDocs', this.uploadedDocs)
     let user = this._auth.getUser()
