@@ -617,7 +617,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
           }
         }
         // Only get coordinates for first word
-        if (!this.quickSelect.boxes.end || this.quickSelect.boxes.end > this.quickSelect.boxes.start) {
+        if (!this.quickSelect.boxes.end || this.quickSelect.boxes.end < this.quickSelect.boxes.start) {
           // Set click coordinates from box
           this.imageCoords = this.getBoxCoords(target)
         }
@@ -793,6 +793,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
    * Add new highlights to local array
    */
   incrementHighlights(alwaysHighlight: boolean, start: number, end: number, bstart?: number, bend?: number): void {
+    console.log("Increment!", bstart, bend)
     if (!bstart) {
       bstart = 0
       bend = 0
@@ -801,6 +802,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
       if (alwaysHighlight) {
         for (var i = start; i <= end; i++) {
           if (this.alwaysHighlightArray[i]) {
+            if (!this.alwaysHighlightArray[i][bi]) this.alwaysHighlightArray[i][bi] = 0
             this.alwaysHighlightArray[i][bi]++
           } else {
             if (!this.alwaysHighlightArray[i]) this.alwaysHighlightArray[i] = []
@@ -810,6 +812,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
       } else {
         for (var i = start; i <= end; i++) {
           if (this.highlightArray[i]) {
+            if (!this.highlightArray[i][bi]) this.highlightArray[i][bi] = 0
             this.highlightArray[i][bi]++
           } else {
             if (!this.highlightArray[i]) this.highlightArray[i] = []
@@ -1092,6 +1095,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
       span.boxStart = this.quickSelect.boxes.start
       span.boxEnd = this.quickSelect.boxes.end ? this.quickSelect.boxes.end : span.boxStart
     }
+    // Make sure box start and end are sequential
+    if (span.boxStart > span.boxEnd) {
+      span.boxEnd = [span.boxStart, (span.boxStart = span.boxEnd)][0] // Swap start and end values
+    }
     return span
   }
 
@@ -1108,7 +1115,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     }
 
     // Increment highlight array
-    this.incrementHighlights(true, span.start, span.end)
+    this.incrementHighlights(true, span.start, span.end, span.boxStart, span.boxEnd)
 
     // Tell the server we've got a comment!
     this.createComment(span, type)
@@ -1192,7 +1199,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
    * Update focusArray for a specified selection
    * @param value true or false - are you adding or removing focus?
    */
-  private updateFocusArray(value: boolean, start, end, boxes?: { start: number, end: number }): void {
+  private updateFocusArray(value: boolean, start: number, end: number, boxes?: { start: number, end: number }): void {
     // Make sure start and end are in order
     if (start > end) {
       end = [start, (start = end)][0] // Swap start and end values
