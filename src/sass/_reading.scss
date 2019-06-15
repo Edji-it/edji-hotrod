@@ -452,8 +452,8 @@ $nextB: 68;
 }
 
 $commentFadeOpacity: 0.35;
-$hoverBlue: #c4e4ff;
-$quickBlue: #55aef7;
+$hoverBlue: #b5deffc7;
+$quickBlue: #6fbaf887; //#55aef7;
 
 /**
  * WIP: Does not work on iOS Safari
@@ -503,7 +503,7 @@ $quickBlue: #55aef7;
     // TO-DO: Material ripple style
     // background: $hoverBlue radial-gradient(circle, $quickBlue 1%, $quickBlue 5%, transparent 5%) center;
     // animation: material-ripple 300ms;
-    background: $hoverBlue;
+    background-color: $hoverBlue;
     animation: quick-select-pulse 1s;
     animation-fill-mode: forwards;
     animation-timing-function: ease;
@@ -513,7 +513,7 @@ $quickBlue: #55aef7;
   &.img,
   &.question,
   &.br {
-    background: transparent !important;
+    background-color: transparent !important;
     border-color: transparent !important;
     animation: none !important;
 
@@ -535,13 +535,16 @@ $quickBlue: #55aef7;
 // Word/hit boxes on images/pdfs
 .w-box {
   // background: rgba(red, 0.3);
-  border: 2px solid hotpink;
+  border: 1px solid hotpink;
   padding: 4px 2px;
   margin-top: -2px;
   margin-left: -1px;
   position: absolute;
   display: block;
   border-bottom-color: transparent;
+  // Prevent text from "washing out" by blending
+  background-blend-mode: multiply !important;
+  mix-blend-mode: multiply;
 }
 
 // Focus Highlight styles (for on comment hover)
@@ -562,7 +565,7 @@ article.content {
   &.quick-select--begin .w.h-f {
     border-bottom-style: dotted;
     border-color: $quickBlue;
-    background: $hoverBlue;
+    background-color: $hoverBlue;
   }
 
   &.quick-select--end .w.h-f {
