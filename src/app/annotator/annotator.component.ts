@@ -619,7 +619,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             }
           }
         }
-        console.log("QuickSelect set", this.quickSelect)
+        console.log("QuickSelect set", this.quickSelect, wordIndex)
         this.focusHighlight(wordIndex, wordIndex, null, { start: this.quickSelect.boxes.start, end: this.quickSelect.boxes.end })
       } else {
         // Create placeholder spot
@@ -645,15 +645,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
       }
     }
 
-    /**
-     * Make sure selection exists, and is within highlightable content
-     * - Runs when:
-     *      - Regular selection is being made
-     *      - Image hotspot is made
-     * - Should:
-     *      - Clear Quick Select
-     */
-    if (
+    if (hitBox) {
+      // do something
+    } else if (
       sel &&
       (this.imageHotspotPlaceholder.preview || sel.toString()) &&
       ((sel.focusNode.classList && sel.focusNode.classList.contains('w')) ||
@@ -662,6 +656,14 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
       ((sel.anchorNode.classList && sel.anchorNode.classList.contains('w')) ||
         (sel.anchorNode.parentNode.classList.contains('w') || sel.anchorNode.parentNode.classList.contains('img-wrap')))
     ) {
+      /**
+      * Make sure selection exists, and is within highlightable content
+      * - Runs when:
+      *      - Regular selection is being made
+      *      - Image hotspot is made
+      * - Should:
+      *      - Clear Quick Select
+      */
       let focusY
       // Clear Quick Select
       this.clearQuickSelect()
@@ -692,6 +694,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
       !target.classList.contains('question') &&
       !target.classList.contains('br')
     ) {
+      console.log("Quick select detection!")
       /**
        * Quick Select
        * - Runs when words are tapped
@@ -1151,6 +1154,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
    * @param end Index for last word
    */
   private focusHighlight(start, end, location?: any, boxes?: { start: number, end: number }): void {
+    console.log("Focus, optionsshow?", this.optionsShow)
     if (this.optionsShow == true) {
       return
     }
@@ -1159,6 +1163,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
       end = [start, (start = end)][0] // Swap start and end values
     }
     if (!boxes) {
+      console.log("1!")
       for (var i = start; i <= end; i++) {
         this.focusArray[i] = true
       }
@@ -1166,11 +1171,14 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
       // Handle box highlighting
       this.focusArray[start] = []
       let boxEnd = boxes.end || boxes.start
+      if (boxes.start > boxEnd) {
+        boxEnd = [boxes.start, (boxes.start = boxEnd)][0] // Swap start and end values
+      }
       console.log("Focus boxes?", boxes)
       for (let bi = boxes.start; bi <= boxEnd; bi++) {
         this.focusArray[start][bi] = true
       }
-      console.log("Set focus array:", this.focusArray[i])
+      console.log("Set focus array:", this.focusArray[start])
     }
 
     if (location && location.x && location.y) {

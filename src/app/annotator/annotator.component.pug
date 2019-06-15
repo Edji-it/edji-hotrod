@@ -88,12 +88,13 @@ scroll-progress([scrollProgress]="currentScroll")
             | for your desktop device.
         //- Create components after load for reading
         //- Note: -1 tabindex for disabling "Touch to Search" on mobile https://developers.google.com/web/updates/2015/10/tap-to-search
+        //- @todo SIMPLIFY ngCLASS quickselect situation
         article#annotatorContent.content.active-content.pt-4(
             (mouseup)="showCommentOptions($event)",
             (touchstart)="logScrollStart($event)",
             (touchend)="showCommentOptions($event)",
             (clickOutside)="hideCommentOptions()",
-            [ngClass]="[ quickSelect.anchor != null ? 'quick-select--begin' : '', quickSelect.focus != null ? 'quick-select--end':'']"
+            [ngClass]="[ (quickSelect.anchor != null || quickSelect.boxes)? 'quick-select--begin' : '', (quickSelect.focus != null || (quickSelect.boxes && quickSelect.boxes.end)) ? 'quick-select--end':'']"
             #article,
             tabindex="-1"
         )
