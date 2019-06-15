@@ -532,6 +532,14 @@ $quickBlue: #55aef7;
   }
 }
 
+// Word/hit boxes on images/pdfs
+.w-box {
+  background: rgba(red, 0.3);
+  position: absolute;
+  display: block;
+  border-bottom-color: transparent;
+}
+
 // Focus Highlight styles (for on comment hover)
 article.content .w.h-f {
   // background: blue;
