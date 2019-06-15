@@ -125,8 +125,8 @@ scroll-progress([scrollProgress]="currentScroll")
                     (collapseLine)="expandLine($event, false)",
                     (toggleCommentPane)="toggleCommentPane($event, comment)",
                     (commentReply)="discReplyFire(comment)",
-                    [class.imageComment]="comment['loc']",
-                    [style.top]="comment['loc'] ? comment.imageY + 'px' : '0px'"
+                    [class.imageComment]="comment.imageY",
+                    [style.top]="comment.imageY ? comment.imageY + 'px' : '0px'"
                 ) <!-- edji-comment -->
                 //- Link Words: If a word is actually a link, handle it differently
                 a.w(
@@ -140,7 +140,6 @@ scroll-progress([scrollProgress]="currentScroll")
                     //- Non-link Words, show content
                     | {{ (!(w && w.styles) || wHasStyle(w, 'space')) ? '&nbsp;' : w && w.str }}
                 .img-wrap(*ngIf="wHasStyle(w, 'img')")
-                    .badge.badge-danger(*ngIf="w.ocr") Has OCR!
                     //- Word/Hit Boxes
                     ng-container(*ngIf="w.boxes")
                         .w.w-box(
