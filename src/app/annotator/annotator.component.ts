@@ -850,26 +850,45 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
    * @param end Index of last word
    * @param type What kind of comment: emoji, text...
    */
-  createComment(start: number, end: number, type: string): void {
+  createComment(span: SelectionSpan, type: string): void {
+    let isBox = span.boxStart && span.boxEnd
     // We need to make sure they aren't already editing a comment
     this.inactivateComment()
 
-    // STEP: We're prepping a comment to send to ProjectService for saving.
-
+    // Attach highlighted text to comment
     let text: string = ''
-    for (var i = start; i <= end; i++) {
-      text += this.reading.words[i] && this.reading.words[i].str ? this.reading.words[i].str : ' '
+    if (!isBox) {
+      // Regular text highlight
+      for (let i = span.start; i <= span.end; i++) {
+        text += this.reading.words[i] && this.reading.words[i].str ? this.reading.words[i].str : ' '
+      }
+    } else {
+      // Text/hit-box in image/pdf highlight
+      // WordText
+      for (let i = span.start; i <= span.end; i++) {
+        let page = this.reading.words[i]
+        for (let bi = span.boxStart; bi <= span.boxEnd; bi++) {
+          text += (page.boxes[bi] && page.boxes[bi]['WordText']) ? (page.boxes[bi]['WordText'] + ' ') : ''
+        }
+      }
     }
     // We don't want trailing whitespaces saved for highlighted text
     text = text.trim()
     // Build comment
     let comment = <EdjiComment>{
       data: '',
-      start: start,
-      end: end,
+      start: span.start,
+      end: span.end,
       type: type,
       text: text,
-      loc: this.imageCoords,
+      loc: this.imageCoords
+    }
+    // Attach box indices
+    if (isBox) {
+      comment.box = {
+        start: span.boxStart,
+        end: span.boxEnd
+      }
     }
     // Tell server we've added a comment
     this._projects
@@ -880,7 +899,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
           // Add setting to trigger focus on new comment
           comment.new = true // this is basically to tell our test cases which comment was just made
           this.inactivateComment()
-          this.commentsByIndexAdd(comment, start)
+          this.commentsByIndexAdd(comment, span.start)
         } else {
           console.warn("Didn't get a comment back from server!")
         }
@@ -1003,11 +1022,15 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
    * Returns Start and End word indices of text selection
    * @description Provides start/end AND clears selection
    */
-  getSelectionSpan(): any {
+  getSelectionSpan(): SelectionSpan {
     let start: number
     let end: number
+    let span: SelectionSpan
 
-    if (this.imageHotspotPlaceholder && this.imageHotspotPlaceholder.preview && this.imageHotspotPlaceholder.index) {
+    if (this.quickSelect.boxes && this.quickSelect.boxes.word) {
+      // Image/PDF hit/word box
+      start = this.quickSelect.boxes.word
+    } else if (this.imageHotspotPlaceholder && this.imageHotspotPlaceholder.preview && this.imageHotspotPlaceholder.index) {
       // Image Selection
       start = this.imageHotspotPlaceholder.index
     } else if (this.quickSelect.anchor != null) {
@@ -1051,8 +1074,13 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     if (!end && end != 0) {
       end = start
     }
-
-    return { start: start, end: end }
+    span = { start: start, end: end }
+    // Attach box indices
+    if (this.quickSelect.boxes && this.quickSelect.boxes.start) {
+      span.boxStart = this.quickSelect.boxes.start
+      span.boxEnd = this.quickSelect.boxes.end ? this.quickSelect.boxes.end : span.boxStart
+    }
+    return span
   }
 
   /**
@@ -1070,7 +1098,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     this.incrementHighlights(true, span.start, span.end)
 
     // Tell the server we've got a comment!
-    this.createComment(span.start, span.end, type)
+    this.createComment(span, type)
   }
 
   /**
@@ -1477,4 +1505,11 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
       }
     }
   }
+}
+
+interface SelectionSpan {
+  start: number,
+  end: number,
+  boxStart?: number,
+  boxEnd?: number
 }
