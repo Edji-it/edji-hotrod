@@ -94,7 +94,7 @@ export class CommentComponent implements OnInit, OnDestroy {
     private _util: UtilToolService,
     public el: ElementRef,
     private _academy: AcademyService,
-  ) {}
+  ) { }
 
   ngOnInit() {
     // Set initial values if passed
@@ -195,13 +195,14 @@ export class CommentComponent implements OnInit, OnDestroy {
       // This will need to re-decorate on resize
       // For a period we were erroneously saving comments on text with image coords
       // *Fixed March 2019, but allow for legacy comments by checking for commentImage
-      if (commentImage && this.comment.loc && this.comment.loc.y) {
+      if (commentImage && ((this.comment.loc && this.comment.loc.y) || this.comment.box)) {
         // Set comment on image position
         this.setLineYAttempts = 0
         let imageTop: number = commentImage.getBoundingClientRect().top
         let imageHeight = commentImage.clientHeight
+        let y = this.comment.box ? this.comment.box.start_y : this.comment.loc.y
         // Get nearest baseline (Y) of comment within image
-        let imageY = (this.comment.loc.y / 100) * imageHeight
+        let imageY = (y / 100) * imageHeight
         this.comment.imageY = imageY = this.nearestLine(imageY)
 
         // Get image offset for Line Y value

@@ -141,18 +141,14 @@ scroll-progress([scrollProgress]="currentScroll")
                     | {{ (!(w && w.styles) || wHasStyle(w, 'space')) ? '&nbsp;' : w && w.str }}
                 .img-wrap(*ngIf="wHasStyle(w, 'img')")
                     .badge.badge-danger(*ngIf="w.ocr") Has OCR!
-                    //- WordText	Name:
-                    //- Left	97
-                    //- Top	97
-                    //- Height	9
-                    //- Width	38
+                    //- Word/Hit Boxes
                     ng-container(*ngIf="w.boxes")
                         .w.w-box(
                             *ngFor="let box of w.boxes; let bi = index", 
-                            [style.top]="box.Top + 'px'", 
-                            [style.left]="box.Left + 'px'",
-                            [style.width]="box.Width + 'px'",
-                            [style.height]="box.Height + 'px'",
+                            [style.top]="(box.y/1.33) + '%'", 
+                            [style.height]="(box.h/1.33) + '%'",
+                            [style.left]="(box.x/1.33) + '%'",
+                            [style.width]="(box.w/1.33) + '%'",
                             [attr.w-index]="i",
                             [attr.index]="bi",
                             [ngClass]="[getBoxHighlight(i, bi)]"

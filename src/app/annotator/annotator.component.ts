@@ -24,7 +24,7 @@ import {
   ReadingService,
   SocketService,
   UtilToolService,
-  MessageService,
+  MessageService
 } from '../_services'
 import { CommentPermissions, EdjiComment, Project, Reading, Feedback } from './../shared/datatypes'
 import { ALLSPARK } from '../app.constants'
@@ -70,17 +70,19 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
   public focusOverride: boolean = false
 
   // Indices highlighted by users other than owner or current user
-  public highlightArray: number[] = []
+  public highlightArray: number[][] = []
   // Indices highlighted by current user or reading owner
-  public alwaysHighlightArray: number[] = []
+  public alwaysHighlightArray: number[][] = []
   // Indices for highlights of a selected filter
-  public filterHighlightArray: number[]
+  public filterHighlightArray: number[][]
   public focusArray: (boolean | boolean[])[] = []
   // Word/Hit boxes on images
   /**
    * @todo add layered highlighting to boxes
    */
-  // public boxHighlightArray: number[]
+  // public boxHighlightArray: number[][]
+  // public boxAlwaysHighlightArray: number[][]
+  // public boxFilterHighlightArray: number[][]
 
   // Line Count
   public lineCountRunning: boolean = false
@@ -108,7 +110,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
   public mobileIndex = 0
   public commentHeightPos = 0
 
-  public imageCoords = {}
+  public imageCoords: { x?: number, y?: number } = {}
   public imageHotspotPlaceholder: any = {
     index: -1,
     x: 0,
@@ -601,8 +603,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
       if (hitBox) {
         console.log("Word box clicked!")
         this.optionsShow = false
-        let boxIndex = target.getAttribute('index')
-        let wordIndex = target.getAttribute('w-index')
+        let boxIndex: number = parseInt(target.getAttribute('index'))
+        let wordIndex: number = parseInt(target.getAttribute('w-index'))
         if (this.quickSelect.boxes && this.quickSelect.boxes.start && !this.quickSelect.boxes.end) {
           // indicates box index
           this.quickSelect.boxes.end = boxIndex
@@ -614,11 +616,17 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             start: boxIndex
           }
         }
+        // Only get coordinates for first word
+        if (!this.quickSelect.boxes.end || this.quickSelect.boxes.end > this.quickSelect.boxes.start) {
+          // Set click coordinates from box
+          this.imageCoords = this.getBoxCoords(target)
+        }
         console.log("QuickSelect set", this.quickSelect, wordIndex)
         this.focusHighlight(wordIndex, wordIndex, null, { start: this.quickSelect.boxes.start, end: this.quickSelect.boxes.end })
       } else {
-        // when they click the picture, we need to create the selection for them
+        // Set click coordinates
         this.imageCoords = this.getRelativeCoords(event)
+        // when they click the picture, we need to create the selection for them
         let range = Rangy.createRange()
         range.selectNodeContents(target['parentNode'])
         // this makes sure there are no other selections made
@@ -635,7 +643,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
       }
     } else {
-      this.clearQuickSelect()
+      delete this.quickSelect.boxes
       // Functions as "click outside" for images
       this.optionsShow = false
       this.imageHotspotPlaceholder.preview = false
@@ -746,22 +754,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     }
   }
 
-  getBoxHighlight(i: number, bi: number): string {
-    let classString = ''
-    // console.log('getboxhigh', this.focusArray[i])
-    // Apply focus class to words of focused comments
-    if (this.focusArray[i] && this.focusArray[i][bi]) {
-      classString = 'h-f'
-      // console.log
-    }
-    //
-    if (this.quickSelect.boxes && (bi == this.quickSelect.boxes.start || bi == this.quickSelect.boxes.end)) {
-      classString += ' quick-select--click'
-    }
-    return classString
-    //+ ' h-' + highlightCount
-  }
-
   updateImageHeights(): void {
     let images: any[] = Array.from(document.querySelectorAll('#annotatorContent .img-wrap img'))
     for (let i = 0; i < images.length; i++) {
@@ -800,21 +792,29 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
   /**
    * Add new highlights to local array
    */
-  incrementHighlights(alwaysHighlight: boolean, start: number, end: number): void {
-    if (alwaysHighlight) {
-      for (var i = start; i <= end; i++) {
-        if (this.alwaysHighlightArray[i]) {
-          this.alwaysHighlightArray[i]++
-        } else {
-          this.alwaysHighlightArray[i] = 1
+  incrementHighlights(alwaysHighlight: boolean, start: number, end: number, bstart?: number, bend?: number): void {
+    if (!bstart) {
+      bstart = 0
+      bend = 0
+    }
+    for (let bi = bstart; bi <= bend; bi++) {
+      if (alwaysHighlight) {
+        for (var i = start; i <= end; i++) {
+          if (this.alwaysHighlightArray[i]) {
+            this.alwaysHighlightArray[i][bi]++
+          } else {
+            if (!this.alwaysHighlightArray[i]) this.alwaysHighlightArray[i] = []
+            this.alwaysHighlightArray[i][bi] = 1
+          }
         }
-      }
-    } else {
-      for (var i = start; i <= end; i++) {
-        if (this.highlightArray[i]) {
-          this.highlightArray[i]++
-        } else {
-          this.highlightArray[i] = 1
+      } else {
+        for (var i = start; i <= end; i++) {
+          if (this.highlightArray[i]) {
+            this.highlightArray[i][bi]++
+          } else {
+            if (!this.highlightArray[i]) this.highlightArray[i] = []
+            this.highlightArray[i][bi] = 1
+          }
         }
       }
     }
@@ -823,21 +823,29 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
   /**
    * Removes highlights from local array
    */
-  decrementHighlights(alwaysHighlight: boolean, start: number, end: number): void {
-    if (alwaysHighlight) {
-      for (var i = start; i <= end; i++) {
-        if (this.alwaysHighlightArray[i] && this.alwaysHighlightArray[i] > 0) {
-          this.alwaysHighlightArray[i]--
-        } else {
-          this.alwaysHighlightArray[i] = 0
+  decrementHighlights(alwaysHighlight: boolean, start: number, end: number, bstart?: number, bend?: number): void {
+    if (!bstart) {
+      bstart = 0
+      bend = 0
+    }
+    for (let bi = bstart; bi <= bend; bi++) {
+      if (alwaysHighlight) {
+        for (var i = start; i <= end; i++) {
+          if (this.alwaysHighlightArray[i] && this.alwaysHighlightArray[i][bi] > 0) {
+            this.alwaysHighlightArray[i][bi]--
+          } else {
+            if (!this.alwaysHighlightArray[i]) this.alwaysHighlightArray[i] = []
+            this.alwaysHighlightArray[i][bi] = 0
+          }
         }
-      }
-    } else {
-      for (var i = start; i <= end; i++) {
-        if (this.highlightArray[i] && this.highlightArray[i] > 0) {
-          this.highlightArray[i]--
-        } else {
-          this.highlightArray[i] = 0
+      } else {
+        for (var i = start; i <= end; i++) {
+          if (this.highlightArray[i] && this.highlightArray[i][bi] > 0) {
+            this.highlightArray[i][bi]--
+          } else {
+            if (!this.highlightArray[i]) this.highlightArray[i] = []
+            this.highlightArray[i][bi] = 0
+          }
         }
       }
     }
@@ -850,27 +858,50 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
    * @param end Index of last word
    * @param type What kind of comment: emoji, text...
    */
-  createComment(start: number, end: number, type: string): void {
+  createComment(span: SelectionSpan, type: string): void {
+    let isBox = span.boxStart && span.boxEnd
     // We need to make sure they aren't already editing a comment
     this.inactivateComment()
 
-    // STEP: We're prepping a comment to send to ProjectService for saving.
-
+    // Attach highlighted text to comment
     let text: string = ''
-    for (var i = start; i <= end; i++) {
-      text += this.reading.words[i] && this.reading.words[i].str ? this.reading.words[i].str : ' '
+    if (!isBox) {
+      // Regular text highlight
+      for (let i = span.start; i <= span.end; i++) {
+        text += this.reading.words[i] && this.reading.words[i].str ? this.reading.words[i].str : ' '
+      }
+    } else {
+      // Text/hit-box in image/pdf highlight
+      for (let i = span.start; i <= span.end; i++) {
+        let page = this.reading.words[i]
+        for (let bi = span.boxStart; bi <= span.boxEnd; bi++) {
+          text += (page.boxes[bi] && page.boxes[bi]['str']) ? (page.boxes[bi]['str'] + ' ') : ''
+        }
+      }
     }
     // We don't want trailing whitespaces saved for highlighted text
     text = text.trim()
     // Build comment
     let comment = <EdjiComment>{
       data: '',
-      start: start,
-      end: end,
+      start: span.start,
+      end: span.end,
       type: type,
       text: text,
-      loc: this.imageCoords,
+      loc: this.imageCoords
     }
+    // Attach box indices
+    if (isBox) {
+      comment.box = {
+        start: span.boxStart,
+        end: span.boxEnd,
+        start_x: this.imageCoords.x,
+        start_y: this.imageCoords.y
+      }
+      // remove coords
+      delete comment.loc
+    }
+    console.log("Create!", comment)
     // Tell server we've added a comment
     this._projects
       .saveComment(comment)
@@ -880,7 +911,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
           // Add setting to trigger focus on new comment
           comment.new = true // this is basically to tell our test cases which comment was just made
           this.inactivateComment()
-          this.commentsByIndexAdd(comment, start)
+          this.commentsByIndexAdd(comment, span.start)
         } else {
           console.warn("Didn't get a comment back from server!")
         }
@@ -1003,11 +1034,15 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
    * Returns Start and End word indices of text selection
    * @description Provides start/end AND clears selection
    */
-  getSelectionSpan(): any {
+  getSelectionSpan(): SelectionSpan {
     let start: number
     let end: number
+    let span: SelectionSpan
 
-    if (this.imageHotspotPlaceholder && this.imageHotspotPlaceholder.preview && this.imageHotspotPlaceholder.index) {
+    if (this.quickSelect.boxes && this.quickSelect.boxes.word) {
+      // Image/PDF hit/word box
+      start = this.quickSelect.boxes.word
+    } else if (this.imageHotspotPlaceholder && this.imageHotspotPlaceholder.preview && this.imageHotspotPlaceholder.index) {
       // Image Selection
       start = this.imageHotspotPlaceholder.index
     } else if (this.quickSelect.anchor != null) {
@@ -1051,8 +1086,13 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     if (!end && end != 0) {
       end = start
     }
-
-    return { start: start, end: end }
+    span = { start: start, end: end }
+    // Attach box indices
+    if (this.quickSelect.boxes && this.quickSelect.boxes.start) {
+      span.boxStart = this.quickSelect.boxes.start
+      span.boxEnd = this.quickSelect.boxes.end ? this.quickSelect.boxes.end : span.boxStart
+    }
+    return span
   }
 
   /**
@@ -1062,6 +1102,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
   addCommentOfType(type: string): void {
     // Get selection indices
     let span = this.getSelectionSpan()
+    console.log("ADD!", span)
     if (!(span.start >= 0) || !(span.end >= 0)) {
       return
     }
@@ -1070,7 +1111,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     this.incrementHighlights(true, span.start, span.end)
 
     // Tell the server we've got a comment!
-    this.createComment(span.start, span.end, type)
+    this.createComment(span, type)
   }
 
   /**
@@ -1153,7 +1194,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
    * @param end Index for last word
    */
   private focusHighlight(start, end, location?: any, boxes?: { start: number, end: number }): void {
-    console.log("Focus, optionsshow?", this.optionsShow)
     if (this.optionsShow == true) {
       return
     }
@@ -1214,27 +1254,30 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
   /**
    * Keep this light! It runs for every word instance
-   * @param i is the word index
+   * @param i is the word index (use decimals to reference box indices)
    */
-  public getHighlightClass(i: number): string {
+  public getHighlightClass(i: number, bi?: number): string {
     let classString = ''
     let highlightCount = 0
+    if (!bi) {
+      bi = 0
+    }
 
     // If a filter is applied, use filter highlights
     if (this.filterHighlightArray) {
-      if (this.filterHighlightArray[i]) {
-        highlightCount += this.filterHighlightArray[i]
+      if (this.filterHighlightArray[i] && this.filterHighlightArray[i][bi]) {
+        highlightCount += this.filterHighlightArray[i][bi]
       }
     } else {
-      if ((this.project.heat_vision || this.user._id == this.project.teacher_id) && this.highlightArray[i]) {
-        highlightCount += this.highlightArray[i]
+      if ((this.project.heat_vision || this.user._id == this.project.teacher_id) && this.highlightArray[i] && this.highlightArray[i][bi]) {
+        highlightCount += this.highlightArray[i][bi]
       }
-      if (this.alwaysHighlightArray[i]) {
-        highlightCount += this.alwaysHighlightArray[i]
+      if (this.alwaysHighlightArray[i] && this.alwaysHighlightArray[i][bi]) {
+        highlightCount += this.alwaysHighlightArray[i][bi]
       }
     }
     // Apply focus class to words of focused comments
-    if (this.focusArray[i]) {
+    if (this.focusArray[i] === true || (this.focusArray[i] && this.focusArray[i][bi])) {
       classString = 'h-f'
     }
     //
@@ -1242,6 +1285,17 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
       classString += ' quick-select--click'
     }
     return classString + ' h-' + highlightCount
+  }
+
+  getBoxHighlight(i: number, bi: number): string {
+    // let decimal = parseFloat(i + '.' + bi)
+    let classString = this.getHighlightClass(i, bi)
+    //
+    if (this.quickSelect.boxes && (bi == this.quickSelect.boxes.start || bi == this.quickSelect.boxes.end)) {
+      classString += ' quick-select--click'
+    }
+    return classString
+    //+ ' h-' + highlightCount
   }
 
   /**
@@ -1260,9 +1314,21 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * For image hit/word box comments: Determines relative middle of word
+   */
+  private getBoxCoords(el: HTMLElement): { x: number, y: number } {
+    let top = parseFloat(el.style.top.replace('%', '').replace('px', ''))
+    let left = parseFloat(el.style.left.replace('%', '').replace('px', ''))
+    let height = parseFloat(el.style.height.replace('%', '').replace('px', ''))
+    let width = parseFloat(el.style.width.replace('%', '').replace('px', ''))
+
+    return { x: left + width / 2, y: top + height / 2 }
+  }
+
+  /**
    * For image comments: Determines relative location of hotspot
    */
-  private getRelativeCoords(e: Event): any {
+  private getRelativeCoords(e: Event): { x: number, y: number } {
     let target = e.target
     let PosX = 0
     let PosY = 0
@@ -1299,8 +1365,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
       PosY = e['clientY'] + document.body.scrollTop + document.documentElement.scrollTop
     }
     return {
-      x: (((PosX - ImgPos[0]) / target['clientWidth']) * 100).toFixed(3),
-      y: (((PosY = PosY - ImgPos[1]) / target['clientHeight']) * 100).toFixed(3),
+      x: parseFloat((((PosX - ImgPos[0]) / target['clientWidth']) * 100).toFixed(3)),
+      y: parseFloat((((PosY = PosY - ImgPos[1]) / target['clientHeight']) * 100).toFixed(3)),
     }
   }
 
@@ -1477,4 +1543,11 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
       }
     }
   }
+}
+
+interface SelectionSpan {
+  start: number,
+  end: number,
+  boxStart?: number,
+  boxEnd?: number
 }
