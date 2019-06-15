@@ -28,6 +28,7 @@ import {
 } from '../_services'
 import { CommentPermissions, EdjiComment, Project, Reading, Feedback } from './../shared/datatypes'
 import { ALLSPARK } from '../app.constants'
+import { start } from 'repl';
 
 @Component({
   selector: 'annotator',
@@ -74,7 +75,12 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
   public alwaysHighlightArray: number[] = []
   // Indices for highlights of a selected filter
   public filterHighlightArray: number[]
-  public focusArray: boolean[] = []
+  public focusArray: (boolean | boolean[])[] = []
+  // Word/Hit boxes on images
+  /**
+   * @todo add layered highlighting to boxes
+   */
+  // public boxHighlightArray: number[]
 
   // Line Count
   public lineCountRunning: boolean = false
@@ -148,10 +154,12 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
   public window: any
   public audioSupportError: boolean = false
 
-  public quickSelect: { anchor: number; focus: number } = {
+  public quickSelect: { anchor: number; focus: number, boxes?: { word: number, start: number, end?: number } } = {
     anchor: null,
     focus: null,
+    boxes: null
   }
+
 
   // For debouncing/wait on showCommentOptions
   private showCommentOptionsWait: boolean = false
@@ -574,8 +582,17 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
     /**
      * Handle creating selection and coordinates for comments on images
+     * + Spot highlights
+     * + Word/hit box highlights
      */
-    if (target.classList && target.classList.contains('reading-image') && target['parentNode']) {
+    let hitImage: boolean
+    let hitBox: boolean
+    if (target.classList) {
+      hitImage = target.classList.contains('reading-image')
+      hitBox = target.classList.contains('w-box')
+    }
+
+    if ((hitImage || hitBox) && target['parentNode']) {
       // When tapping image, clear in progress Quick Select
       this.clearQuickSelect()
       // when they click the picture, we need to create the selection for them
@@ -583,12 +600,36 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
       let range = Rangy.createRange()
       range.selectNodeContents(target['parentNode'])
 
-      // Create placeholder spot
-      this.imageHotspotPlaceholder = {
-        index: target.getAttribute('index'),
-        x: this.imageCoords['x'],
-        y: this.imageCoords['y'],
-        preview: true,
+      // Determine SPOT or BOX
+      if (hitBox) {
+        console.log("Word box clicked!")
+        let boxIndex = target.getAttribute('index')
+        let wordIndex = target.getAttribute('w-index')
+
+        if (this.quickSelect.boxes && this.quickSelect.boxes.start && !this.quickSelect.boxes.end) {
+          // indicates box index
+          this.quickSelect.boxes.end = boxIndex
+        } else {
+          this.quickSelect = {
+            focus: null,
+            anchor: null,
+            boxes: {
+              word: wordIndex,
+              start: boxIndex
+            }
+          }
+        }
+        console.log("QuickSelect set", this.quickSelect)
+        this.focusHighlight(wordIndex, wordIndex, null, { start: this.quickSelect.boxes.start, end: this.quickSelect.boxes.end })
+      } else {
+        // Create placeholder spot
+        this.imageHotspotPlaceholder = {
+          index: target.getAttribute('index'),
+          x: this.imageCoords['x'],
+          y: this.imageCoords['y'],
+          preview: true,
+        }
+
       }
 
       // this makes sure there are no other selections made
@@ -701,6 +742,22 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
       this.clearQuickSelect()
       this.optionsShow = false
     }
+  }
+
+  getBoxHighlight(i: number, bi: number): string {
+    let classString = ''
+    // console.log('getboxhigh', this.focusArray[i])
+    // Apply focus class to words of focused comments
+    if (this.focusArray[i] && this.focusArray[i][bi]) {
+      classString = 'h-f'
+      // console.log
+    }
+    //
+    if (this.quickSelect.boxes && (bi == this.quickSelect.boxes.start || bi == this.quickSelect.boxes.end)) {
+      classString += ' quick-select--click'
+    }
+    return classString
+    //+ ' h-' + highlightCount
   }
 
   updateImageHeights(): void {
@@ -960,7 +1017,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     } else {
       // Browser API selection
       let selection = Rangy.getSelection()
-      let getNodeIndex = function(node: any): number {
+      let getNodeIndex = function (node: any): number {
         // Selections often happen at the text node level, inside the actual element
         // In which case we need to reference its parent node
         // Note: we tried node.hasOwnProperty here and would sometimes get a false true resolution of the if statement... not sure how that is possible
@@ -1042,7 +1099,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // Found a text node!
 
         // Split text inside child nodes
-        let nodeWords = node.textContent.split(/(?:([^a-zA-Z0-9]))/).filter(function(el) {
+        let nodeWords = node.textContent.split(/(?:([^a-zA-Z0-9]))/).filter(function (el) {
           return el.replace(/([\n])/g, '')
         })
 
@@ -1093,7 +1150,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
    * @param start Index for first word
    * @param end Index for last word
    */
-  private focusHighlight(start, end, location?: any): void {
+  private focusHighlight(start, end, location?: any, boxes?: { start: number, end: number }): void {
     if (this.optionsShow == true) {
       return
     }
@@ -1101,9 +1158,21 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     if (start > end) {
       end = [start, (start = end)][0] // Swap start and end values
     }
-    for (var i = start; i <= end; i++) {
-      this.focusArray[i] = true
+    if (!boxes) {
+      for (var i = start; i <= end; i++) {
+        this.focusArray[i] = true
+      }
+    } else {
+      // Handle box highlighting
+      this.focusArray[start] = []
+      let boxEnd = boxes.end || boxes.start
+      console.log("Focus boxes?", boxes)
+      for (let bi = boxes.start; bi <= boxEnd; bi++) {
+        this.focusArray[start][bi] = true
+      }
+      console.log("Set focus array:", this.focusArray[i])
     }
+
     if (location && location.x && location.y) {
       this.imageHotspotPlaceholder = {
         index: start,

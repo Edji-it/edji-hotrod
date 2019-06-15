@@ -146,12 +146,15 @@ scroll-progress([scrollProgress]="currentScroll")
                     //- Height	9
                     //- Width	38
                     ng-container(*ngIf="w.boxes")
-                        .w-box(
-                            *ngFor="let box of w.boxes", 
+                        .w.w-box(
+                            *ngFor="let box of w.boxes; let bi = index", 
                             [style.top]="box.Top + 'px'", 
                             [style.left]="box.Left + 'px'",
                             [style.width]="box.Width + 'px'",
-                            [style.height]="box.Height + 'px'"
+                            [style.height]="box.Height + 'px'",
+                            [attr.w-index]="i",
+                            [attr.index]="bi",
+                            [ngClass]="[getBoxHighlight(i, bi)]"
                         )
                     //- Placeholder image hotspot
                     .hotspot(
