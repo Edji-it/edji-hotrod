@@ -144,10 +144,10 @@ scroll-progress([scrollProgress]="currentScroll")
                     ng-container(*ngIf="w.boxes")
                         .w.w-box(
                             *ngFor="let box of w.boxes; let bi = index", 
-                            [style.top]="(box.y/1.33) + '%'", 
-                            [style.height]="(box.h/1.33) + '%'",
-                            [style.left]="(box.x/1.33) + '%'",
-                            [style.width]="(box.w/1.33) + '%'",
+                            [style.top]="box.y + '%'", 
+                            [style.height]="box.h + '%'",
+                            [style.left]="box.x + '%'",
+                            [style.width]="box.w + '%'",
                             [attr.w-index]="i",
                             [attr.index]="bi",
                             [ngClass]="[getBoxHighlight(i, bi)]"
