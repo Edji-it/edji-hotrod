@@ -108,7 +108,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
   public mobileIndex = 0
   public commentHeightPos = 0
 
-  public imageCoords = {}
+  public imageCoords: { x?: number, y?: number } = {}
   public imageHotspotPlaceholder: any = {
     index: -1,
     x: 0,
@@ -614,11 +614,17 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             start: boxIndex
           }
         }
+        // Only get coordinates for first word
+        if (!this.quickSelect.boxes.end || this.quickSelect.boxes.end > this.quickSelect.boxes.start) {
+          // Set click coordinates from box
+          this.imageCoords = this.getBoxCoords(target)
+        }
         console.log("QuickSelect set", this.quickSelect, wordIndex)
         this.focusHighlight(wordIndex, wordIndex, null, { start: this.quickSelect.boxes.start, end: this.quickSelect.boxes.end })
       } else {
-        // when they click the picture, we need to create the selection for them
+        // Set click coordinates
         this.imageCoords = this.getRelativeCoords(event)
+        // when they click the picture, we need to create the selection for them
         let range = Rangy.createRange()
         range.selectNodeContents(target['parentNode'])
         // this makes sure there are no other selections made
@@ -887,9 +893,14 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     if (isBox) {
       comment.box = {
         start: span.boxStart,
-        end: span.boxEnd
+        end: span.boxEnd,
+        start_x: this.imageCoords.x,
+        start_y: this.imageCoords.y
       }
+      // remove coords
+      delete comment.loc
     }
+    console.log("Create!", comment)
     // Tell server we've added a comment
     this._projects
       .saveComment(comment)
@@ -1090,6 +1101,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
   addCommentOfType(type: string): void {
     // Get selection indices
     let span = this.getSelectionSpan()
+    console.log("ADD!", span)
     if (!(span.start >= 0) || !(span.end >= 0)) {
       return
     }
@@ -1288,9 +1300,21 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * For image hit/word box comments: Determines relative middle of word
+   */
+  private getBoxCoords(el: HTMLElement): { x: number, y: number } {
+    let top = parseFloat(el.style.top.replace('%', '').replace('px', ''))
+    let left = parseFloat(el.style.left.replace('%', '').replace('px', ''))
+    let height = parseFloat(el.style.height.replace('%', '').replace('px', ''))
+    let width = parseFloat(el.style.width.replace('%', '').replace('px', ''))
+
+    return { x: left + width / 2, y: top + height / 2 }
+  }
+
+  /**
    * For image comments: Determines relative location of hotspot
    */
-  private getRelativeCoords(e: Event): any {
+  private getRelativeCoords(e: Event): { x: number, y: number } {
     let target = e.target
     let PosX = 0
     let PosY = 0
@@ -1327,8 +1351,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
       PosY = e['clientY'] + document.body.scrollTop + document.documentElement.scrollTop
     }
     return {
-      x: (((PosX - ImgPos[0]) / target['clientWidth']) * 100).toFixed(3),
-      y: (((PosY = PosY - ImgPos[1]) / target['clientHeight']) * 100).toFixed(3),
+      x: parseFloat((((PosX - ImgPos[0]) / target['clientWidth']) * 100).toFixed(3)),
+      y: parseFloat((((PosY = PosY - ImgPos[1]) / target['clientHeight']) * 100).toFixed(3)),
     }
   }
 
