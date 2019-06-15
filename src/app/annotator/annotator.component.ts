@@ -617,7 +617,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
           }
         }
         // Only get coordinates for first word
-        if (!this.quickSelect.boxes.end || this.quickSelect.boxes.end > this.quickSelect.boxes.start) {
+        if (!this.quickSelect.boxes.end || this.quickSelect.boxes.end < this.quickSelect.boxes.start) {
           // Set click coordinates from box
           this.imageCoords = this.getBoxCoords(target)
         }
@@ -1094,6 +1094,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     if (this.quickSelect.boxes && this.quickSelect.boxes.start) {
       span.boxStart = this.quickSelect.boxes.start
       span.boxEnd = this.quickSelect.boxes.end ? this.quickSelect.boxes.end : span.boxStart
+    }
+    // Make sure box start and end are sequential
+    if (span.boxStart > span.boxEnd) {
+      span.boxEnd = [span.boxStart, (span.boxStart = span.boxEnd)][0] // Swap start and end values
     }
     return span
   }
