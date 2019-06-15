@@ -101,14 +101,19 @@ export class MediaService {
     return uploadSource.asObservable()
   }
 
-  uploadPdf(file: File, enableOCR: boolean): Observable<any> {
+  uploadPdf(file: File, disableOCR: boolean): Observable<any> {
     /**
      * @todo 6/15/19 update service to accept boolean for enable OCR
      * enableOCR will tell our service whether or not to use the OCR service on the PDF.. need to update our service call for this one
      */
     let uploadSource = new Subject()
+    let ocrQueryParam: string = '?ocr=true'
 
-    this.http.put(this.imageService + '/v1/pdf', file).subscribe(
+    if (disableOCR) {
+      ocrQueryParam = '?ocr=false'
+    }
+
+    this.http.put(`${this.imageService}/v1/pdf${ocrQueryParam}`, file).subscribe(
       res => {
         let doc = res.json() || {}
         uploadSource.next(doc)

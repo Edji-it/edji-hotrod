@@ -94,7 +94,9 @@ export class UploadPdfModalComponent implements OnInit {
 
     this.uploading = true
 
-    this._media.uploadPdf(this.file, this.enableOCR).subscribe(
+    let disableOCR = !this.enableOCR
+
+    this._media.uploadPdf(this.file, disableOCR).subscribe(
       data => {
         this.uploading = false
         // Set converted property
