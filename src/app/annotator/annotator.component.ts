@@ -603,8 +603,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
       if (hitBox) {
         console.log("Word box clicked!")
         this.optionsShow = false
-        let boxIndex = target.getAttribute('index')
-        let wordIndex = target.getAttribute('w-index')
+        let boxIndex: number = parseInt(target.getAttribute('index'))
+        let wordIndex: number = parseInt(target.getAttribute('w-index'))
         if (this.quickSelect.boxes && this.quickSelect.boxes.start && !this.quickSelect.boxes.end) {
           // indicates box index
           this.quickSelect.boxes.end = boxIndex
