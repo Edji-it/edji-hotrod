@@ -915,9 +915,9 @@ export class NewReadingPage implements OnInit, OnDestroy {
 
         // get the json data for pdf (if legacy file or user skips OCR, this will be undefined)
         let pdfUrl = image.url.substr(0, image.url.lastIndexOf(".")) + '.json'
-        // let pdfJSON = image.url.substr(0, image.url.lastIndexOf(".")) + '.json'
-        let pdfJSON = await this._media.getPdfJsonData('http://pdf-dev.edji.it/96867346-2a97-4394-99a6-6db358e0aff4/5983175d-bddb-48a2-acf9-9add5ca3bbe7-0.json').toPromise()
-        console.log(pdfJSON)
+        // pdfUrl = 'http://pdf-dev.edji.it/96867346-2a97-4394-99a6-6db358e0aff4/5983175d-bddb-48a2-acf9-9add5ca3bbe7-0.json'
+        let pdfJSON = await this._media.getPdfJsonData(pdfUrl).toPromise()
+        // console.log(pdfJSON)
         if (pdfJSON) {
           this.pdfJSON.push({ url: pdfUrl, json: pdfJSON })
         }
@@ -930,9 +930,12 @@ export class NewReadingPage implements OnInit, OnDestroy {
       let imgString = ''
       images.forEach(async image => {
         imgString += '<img src="' + image.url + '" title="' + image.title + '" /><p>&#65279;</p>'
+
+        // get the json data for pdf (if legacy file or user skips OCR, this will be undefined)
         let pdfUrl = image.url.substr(0, image.url.lastIndexOf(".")) + '.json'
-        let pdfJSON = await this._media.getPdfJsonData('http://pdf-dev.edji.it/96867346-2a97-4394-99a6-6db358e0aff4/5983175d-bddb-48a2-acf9-9add5ca3bbe7-0.json').toPromise()
-        console.log(pdfJSON)
+        // pdfUrl = 'http://pdf-dev.edji.it/96867346-2a97-4394-99a6-6db358e0aff4/5983175d-bddb-48a2-acf9-9add5ca3bbe7-0.json'
+        let pdfJSON = await this._media.getPdfJsonData(pdfUrl).toPromise()
+        // console.log(pdfJSON)
         if (pdfJSON) {
           this.pdfJSON.push({ url: pdfUrl, json: pdfJSON })
         }
