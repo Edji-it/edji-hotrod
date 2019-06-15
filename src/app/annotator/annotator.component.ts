@@ -505,8 +505,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
       // We can safely clear all highlight values
       this.focusArray = []
     }
-    this.quickSelect.focus = null
-    this.quickSelect.anchor = null
+    this.quickSelect = {
+      focus: null,
+      anchor: null
+    }
   }
 
   /**
@@ -593,35 +595,36 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     }
 
     if ((hitImage || hitBox) && target['parentNode']) {
-      // When tapping image, clear in progress Quick Select
-      this.clearQuickSelect()
-      // when they click the picture, we need to create the selection for them
-      this.imageCoords = this.getRelativeCoords(event)
-      let range = Rangy.createRange()
-      range.selectNodeContents(target['parentNode'])
-
+      //  Clear current focus style
+      this.focusArray = []
       // Determine SPOT or BOX
       if (hitBox) {
         console.log("Word box clicked!")
+        this.optionsShow = false
         let boxIndex = target.getAttribute('index')
         let wordIndex = target.getAttribute('w-index')
-
         if (this.quickSelect.boxes && this.quickSelect.boxes.start && !this.quickSelect.boxes.end) {
           // indicates box index
           this.quickSelect.boxes.end = boxIndex
         } else {
-          this.quickSelect = {
-            focus: null,
-            anchor: null,
-            boxes: {
-              word: wordIndex,
-              start: boxIndex
-            }
+          // Clear and begin new Quick Select
+          this.clearQuickSelect()
+          this.quickSelect.boxes = {
+            word: wordIndex,
+            start: boxIndex
           }
         }
         console.log("QuickSelect set", this.quickSelect, wordIndex)
         this.focusHighlight(wordIndex, wordIndex, null, { start: this.quickSelect.boxes.start, end: this.quickSelect.boxes.end })
       } else {
+        // when they click the picture, we need to create the selection for them
+        this.imageCoords = this.getRelativeCoords(event)
+        let range = Rangy.createRange()
+        range.selectNodeContents(target['parentNode'])
+        // this makes sure there are no other selections made
+        sel.setSingleRange(range)
+        // When tapping image, clear in progress Quick Select
+        this.clearQuickSelect()
         // Create placeholder spot
         this.imageHotspotPlaceholder = {
           index: target.getAttribute('index'),
@@ -631,10 +634,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         }
 
       }
-
-      // this makes sure there are no other selections made
-      sel.setSingleRange(range)
     } else {
+      this.clearQuickSelect()
       // Functions as "click outside" for images
       this.optionsShow = false
       this.imageHotspotPlaceholder.preview = false
@@ -645,11 +646,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
       }
     }
 
-    if (hitBox) {
-      // do something
-    } else if (
+    if (
       sel &&
-      (this.imageHotspotPlaceholder.preview || sel.toString()) &&
+      (this.imageHotspotPlaceholder.preview || this.quickSelect.boxes || sel.toString()) &&
       ((sel.focusNode.classList && sel.focusNode.classList.contains('w')) ||
         (sel.focusNode.parentNode.classList.contains('w') ||
           sel.focusNode.parentNode.classList.contains('img-wrap'))) &&
@@ -666,7 +665,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
       */
       let focusY
       // Clear Quick Select
-      this.clearQuickSelect()
+      !this.quickSelect.boxes && this.clearQuickSelect()
       // Find Y position of selection (for comment options)
       if (!!sel.focusNode.getBoundingClientRect) {
         focusY = sel.focusNode.getBoundingClientRect().top
@@ -1170,12 +1169,15 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     } else {
       // Handle box highlighting
       this.focusArray[start] = []
-      let boxEnd = boxes.end || boxes.start
-      if (boxes.start > boxEnd) {
-        boxEnd = [boxes.start, (boxes.start = boxEnd)][0] // Swap start and end values
+      // let boxEnd = boxes.end || boxes.start
+      if (!boxes.end) {
+        boxes.end = boxes.start
+      }
+      if (boxes.start > boxes.end) {
+        boxes.end = [boxes.start, (boxes.start = boxes.end)][0] // Swap start and end values
       }
       console.log("Focus boxes?", boxes)
-      for (let bi = boxes.start; bi <= boxEnd; bi++) {
+      for (let bi = boxes.start; bi <= boxes.end; bi++) {
         this.focusArray[start][bi] = true
       }
       console.log("Set focus array:", this.focusArray[start])
