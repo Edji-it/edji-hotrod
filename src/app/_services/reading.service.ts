@@ -205,17 +205,17 @@ export class ReadingService {
       return
     }
     // Check for PDF words
-    if (reading.words && reading.words.length > 0) {
-      for (let i = 0; i < reading.words.length; i++) {
-        let word = reading.words[i]
-        if (word.ocr) {
-          this.getDataForPDF(word.ocr.id, word.ocr.page).then(boxes => {
-            word.boxes = boxes
-          })
-        }
-      }
-    }
-    console.log('Updated reading: ', reading)
+    // if (reading.words && reading.words.length > 0) {
+    //   for (let i = 0; i < reading.words.length; i++) {
+    //     let word = reading.words[i]
+    //     if (word.ocr) {
+    //       this.getDataForPDF(word.ocr.id, word.ocr.page).then(boxes => {
+    //         word.boxes = boxes
+    //       })
+    //     }
+    //   }
+    // }
+    // console.log('Updated reading: ', reading)
     this.readingValue = reading
     this.readingSource.next(this.readingValue)
   }

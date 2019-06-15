@@ -872,11 +872,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
       }
     } else {
       // Text/hit-box in image/pdf highlight
-      // WordText
       for (let i = span.start; i <= span.end; i++) {
         let page = this.reading.words[i]
         for (let bi = span.boxStart; bi <= span.boxEnd; bi++) {
-          text += (page.boxes[bi] && page.boxes[bi]['WordText']) ? (page.boxes[bi]['WordText'] + ' ') : ''
+          text += (page.boxes[bi] && page.boxes[bi]['str']) ? (page.boxes[bi]['str'] + ' ') : ''
         }
       }
     }
