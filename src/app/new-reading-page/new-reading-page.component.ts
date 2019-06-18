@@ -495,14 +495,16 @@ export class NewReadingPage implements OnInit, OnDestroy {
 
         // Determine if we have OCR JSON data for a PDF
         let boxData = this.pdfJSON.find(pdfJSON => {
-          return pdfJSON.url.substr(0, pdfJSON.url.lastIndexOf(".")) == imgUrl
+          return pdfJSON.url.substr(0, pdfJSON.url.lastIndexOf(".")) == imgUrl.substr(0, imgUrl.lastIndexOf("."))
         })
+        console.log(boxData)
 
         // if we get a match on the url (without file extension), 
         // then we know the JSON data lines up and we will add it to the words object for this image
-        if (boxData) {
-          imgObj['boxes'] = boxData.pdfJSON
+        if (boxData && boxData.json) {
+          imgObj['boxes'] = boxData.json.word_boxes
         }
+        console.log(imgObj)
         this.words.push(imgObj)
       }
 
