@@ -27,7 +27,7 @@ export class MetricsEffects {
   )
 
   /** update the metrics state with payload */
-  @Effect({ dispatch: false })
+  @Effect()
   incrementMetric$ = this.actions$.pipe(
     ofType(MetricsActions.SetState),
     switchMap(({ payload }: SetState) => {

@@ -42,8 +42,8 @@ describe('metrics effects', () => {
 
     actions = hot('-a', { a: action })
     const response = cold('-a|', { a: { hero_page_load_count: 2 } })
-    spyOn(stateService, 'getState').and.returnValue(response)
     const expected = cold('--b', { b: outcome })
-    expect(effects.incrementMetric$).toBeObservable(expected)
+    spyOn(stateService, 'getState').and.returnValue(response)
+    expect(effects.loadMetrics$).toBeObservable(expected)
   })
 })
