@@ -154,7 +154,10 @@ export class AuthService implements CanActivate {
     this.currentUserSource.next(user)
     this._locker.set('user', user)
     if (user._id && user._id.length > 0) {
-      this.ga.setUsername(user._id) // Set the user ID using signed-in user_id.
+      this.ga.setUserProperties({
+        user_id: user._id
+      }) // Set the user ID using signed-in user_id.
+      // this.ga.setUsername(user._id) // Set the user ID using signed-in user_id.
     }
     return user
   }
@@ -687,12 +690,12 @@ export class AuthService implements CanActivate {
 
     return this._http.post<any>(
       this.baseUrl +
-        '/api/v1/users/tokens/' +
-        resetObject.type +
-        '/' +
-        resetObject.token +
-        '/?user_id=' +
-        resetObject.userId,
+      '/api/v1/users/tokens/' +
+      resetObject.type +
+      '/' +
+      resetObject.token +
+      '/?user_id=' +
+      resetObject.userId,
       { [resetObject.type]: resetObject.newValue },
       {
         headers: newHeaders,
@@ -1125,9 +1128,9 @@ export class AuthService implements CanActivate {
         })
       }
     )
-    .pipe(map((res) => {
-      return res.hits.hits
-    }))
+      .pipe(map((res) => {
+        return res.hits.hits
+      }))
   }
 }
 
