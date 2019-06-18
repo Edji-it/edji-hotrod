@@ -379,4 +379,36 @@ describe('Discover Feed', () => {
       discover.closeReadingPreview()
     })
   })
+
+  describe('Strategy Templates', () => {
+    beforeAll(() => {
+      sidebar.logout()
+      login.getPage()
+      login.loginAndVerify(login.botUser, login.botPassword)
+    })
+
+    beforeEach(() => {
+      sidebar.navDiscover.click()
+    })
+
+    it('should open strategies collection and see strategy templates banner', () => {
+      browser.wait(
+        EC.elementToBeClickable(discover.firstFeedReading),
+        5000,
+        'never saw first reading in discover feed public view',
+      )
+      // View strategies collection
+      browser.wait(
+        EC.elementToBeClickable(discover.filterStrategies),
+        5000,
+        'strategies collection button was not clickable',
+      )
+      discover.filterStrategies.click()
+      browser.wait(
+        EC.elementToBeClickable(discover.strategiesBanner),
+        5000,
+        'never saw strategies collection',
+      )
+    })
+  })
 })
