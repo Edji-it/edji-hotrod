@@ -117,12 +117,12 @@ nav-bar([showDashboardOptions]="true")
         .col-md-8
             #discoverStrategies.strategies-banner.mb-5.p-3(*ngIf="searchParams.activeLibrary === 'strategies'")
                 .row
-                    .col-2.p-4
+                    .col-2.px-4.py-0
                         i.icon-strategies-lg.d-inline-block.w-100.h-100
                     .col-6.p-0
-                        h1 Strategy Templates!
-                        p Reading strategy templates for trying new approaches in your classroom
-                    .col-4.p-4
+                        h2.mb-1 Strategy Templates!
+                        p.banner-text.mb-0 Reading strategy templates for trying new approaches in your classroom
+                    .col-4.px-4.py-0
                         //- , style="max-width: 400px;"
                         img(src="/assets/images/graphic-strategies.svg") 
             #notFollowingMessage.alert.alert-light(*ngIf="searchAlerts.notFollowing")
