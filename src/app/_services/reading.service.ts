@@ -170,7 +170,9 @@ export class ReadingService {
         queryString += `&owner_id=${userId}`
       })
     } else if (searchParams.activeLibrary === 'strategies') {
-      // handle the strategies filter
+      // strategies filter will hard-code to the edji strategies account
+      const edjiStrategies = ''
+      queryString += `&owner_id=${edjiStrategies}`
     } else if (searchParams.activeLibrary !== 'public') {
       // Handle academy/institution id filter
     }
