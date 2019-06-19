@@ -16,12 +16,10 @@ export class MetricsEffects {
   loadMetrics$ = this.actions$.pipe(
     ofType(MetricsActions.IncrementMetric),
     switchMap(({ payload }: IncrementMetric) => {
-      console.log('effect intercepted increment', payload)
       return this._state.getState('metrics').pipe(
-        map((metrics) => new SetState({ ...metrics, [payload]: ++metrics[payload] })
+        map(metrics => new SetState({ ...metrics, [payload]: ++metrics[payload], metricsLoaded: true })
         ),
-        /** @todo handle error */
-        catchError(() => of())
+        catchError((err) => { console.error(err); return of() })
       )
     })
   )
@@ -31,7 +29,6 @@ export class MetricsEffects {
   incrementMetric$ = this.actions$.pipe(
     ofType(MetricsActions.SetState),
     switchMap(({ payload }: SetState) => {
-      console.log('setting new state as', payload)
       return this._state.setState('metrics', payload)
         .pipe(
           catchError((err) => { console.error(err); return of() })

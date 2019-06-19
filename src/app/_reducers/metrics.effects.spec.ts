@@ -22,7 +22,8 @@ describe('metrics effects', () => {
         provideMockActions(() => actions),
         {
           provide: StateService, useValue: {
-            getState: () => { }
+            getState: () => { },
+            setState: () => { }
           }
         }
       ]
@@ -36,14 +37,31 @@ describe('metrics effects', () => {
     expect(effects).toBeTruthy()
   })
 
-  it('should work', () => {
-    const action = new IncrementMetric('hero_page_load_count')
-    const outcome = new SetState(<any>{ hero_page_load_count: 3 })
+  describe('loadMetrics$', () => {
+    it('should return new SetState with the new state', () => {
+      const action = new IncrementMetric('hero_page_load_count')
+      const outcome = new SetState(<any>{ hero_page_load_count: 3, metricsLoaded: true })
 
-    actions = hot('-a', { a: action })
-    const response = cold('-a|', { a: { hero_page_load_count: 2 } })
-    const expected = cold('--b', { b: outcome })
-    spyOn(stateService, 'getState').and.returnValue(response)
-    expect(effects.loadMetrics$).toBeObservable(expected)
+      actions = hot('-a', { a: action })
+      const response = cold('-a|', { a: { hero_page_load_count: 2 } })
+      const expected = cold('--b', { b: outcome })
+
+      stateService.getState = () => response
+      expect(effects.loadMetrics$).toBeObservable(expected)
+    })
+    // no error handling tests as there's not yet in-app success or failure implecations
+  })
+  describe('incrementMetric$', () => {
+    it('should update the state', () => {
+      const action = new SetState(<any>{ hero_page_load_count: 5 })
+
+      actions = hot('--a', { a: action })
+      const response = cold('-a|', { a: {} })
+      const expected = cold('---b', { b: {} })
+
+      stateService.setState = () => response
+      expect(effects.incrementMetric$).toBeObservable(expected)
+    })
+    // also no error handling tests because nothing critical is depending on success
   })
 })
