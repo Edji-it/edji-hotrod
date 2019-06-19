@@ -169,6 +169,8 @@ export class ReadingService {
       following.forEach(userId => {
         queryString += `&owner_id=${userId}`
       })
+    } else if (searchParams.activeLibrary === 'strategies') {
+      // handle the strategies filter
     } else if (searchParams.activeLibrary !== 'public') {
       // Handle academy/institution id filter
     }
@@ -182,11 +184,11 @@ export class ReadingService {
       queryString += `&grade_levels_lte=${searchParams.gradeMax}`
     }
     // owner bookmarked
-    if (searchParams.createdCollection==='bookmarked') {
+    if (searchParams.createdCollection === 'bookmarked') {
       queryString += '&owner_bookmarked=true'
     }
     // owner-only readings
-    if (searchParams.scope==='owner') {
+    if (searchParams.scope === 'owner') {
       queryString += '&scope=owner'
     }
     // Default to sort by most recent, unless using a search term
@@ -239,7 +241,7 @@ export class ReadingService {
    */
   public delete(deleteReading: Reading): Observable<any> {
     return this._http.delete(
-      this._auth.getUrl() + `/api/v1/readings/${deleteReading._id}`, 
+      this._auth.getUrl() + `/api/v1/readings/${deleteReading._id}`,
       this._auth.getOptions()
     ).pipe(
       map(value => {
@@ -256,7 +258,7 @@ export class ReadingService {
               readingResponse.total--
               this.userReadingsSource.next(readingResponse)
             }
-          }, 
+          },
         )
         return value
       }),
@@ -421,4 +423,4 @@ export interface ReadingQuery {
 type POP = 'projects'
 type CreatedCollection = 'bookmarked' | 'recent' | 'versions'
 type Scope = 'public' | 'owner'
-type ActiveLibrary = 'public' | 'following'
+type ActiveLibrary = 'public' | 'following' | 'strategies'

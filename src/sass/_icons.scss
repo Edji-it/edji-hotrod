@@ -88,6 +88,14 @@ $iconGrayOpacity: 0.6;
   @include icon('icon-bookmark-off.svg');
 }
 
+.icon-strategies-sm {
+  @include icon('icon-strategies-sm.svg');
+}
+
+.icon-strategies-lg {
+  @include icon('icon-strategies-lg.svg');
+}
+
 .icon-caret,
 .ui-paginator-icon.pi {
   @include icon('icon-caret-right.svg');

@@ -81,6 +81,16 @@ nav-bar([showDashboardOptions]="true")
                     //-     )
                     //-         span([innerHTML]="':school: Academy Name' | emojione")
                 .form-group
+                    label Collections
+                    div
+                        button.btn.btn-filter#discoverFilterStrategies(
+                            title="Find strategy templates by Edji to get you started",
+                            [class.active]="searchParams.activeLibrary === 'strategies'",
+                            (click)="searchParams.activeLibrary = 'strategies'; searchParams.first=0; updateSearchParams('filter_following')"
+                        )
+                            i.icon.icon-strategies-sm(style="vertical-align:middle;")
+                            | Strategies
+                .form-group
                     label Subjects
                         button.btn-link.filter-clear(
                             *ngIf="searchParams.subjectFilter.length > 0",
@@ -105,6 +115,16 @@ nav-bar([showDashboardOptions]="true")
                 //-     label Subjects
                     //- ss-multiselect-dropdown([options]="subjects", [(ngModel)]="searchParams.subjectFilter", [settings]="subjectDropSettings")
         .col-md-8
+            #discoverStrategies.strategies-banner.mb-5.p-3(*ngIf="searchParams.activeLibrary === 'strategies'")
+                .row
+                    .col-2.p-4
+                        i.icon-strategies-lg.d-inline-block.w-100.h-100
+                    .col-6.p-0
+                        h1 Strategy Templates!
+                        p Reading strategy templates for trying new approaches in your classroom
+                    .col-4.p-4
+                        //- , style="max-width: 400px;"
+                        img(src="/assets/images/graphic-strategies.svg") 
             #notFollowingMessage.alert.alert-light(*ngIf="searchAlerts.notFollowing")
                 h4 Time to follow someone!
                 p Follow Edji to see some of our latest curated Readings.
