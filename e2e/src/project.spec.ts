@@ -199,4 +199,17 @@ describe('Project Page', () => {
       )
     })
   })
+
+  describe('Live Notifications', () => {
+    // Student gets a toast when their comment is replied to
+    // Student can click on toast to open the relevant comment
+    // Student can see replies if heat vision is off
+    // Query parameter is used to link to the comment with reply
+    // Student replying to own comment does not receive toast
+
+    // e2e test which opens a reading with the query parameter
+    it('should open a reading with the query param for a live reply and see that reply', () => {
+
+    })
+  })
 })
