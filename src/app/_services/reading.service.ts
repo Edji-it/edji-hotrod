@@ -171,7 +171,7 @@ export class ReadingService {
       })
     } else if (searchParams.activeLibrary === 'strategies') {
       // strategies filter will hard-code to the edji strategies account
-      const edjiStrategies = ''
+      const edjiStrategies = '5cc65d8d156b5300215670fe'
       queryString += `&owner_id=${edjiStrategies}`
     } else if (searchParams.activeLibrary !== 'public') {
       // Handle academy/institution id filter
