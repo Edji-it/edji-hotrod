@@ -1,6 +1,6 @@
 import { browser, by, element, protractor } from 'protractor'
 
-import { Project, Sidebar, Home } from './page-objects'
+import { Project, Sidebar, Home, Login, Dashboard } from './page-objects'
 import { LoginModal, GuestLoginForm } from './components'
 import { reset } from './utils/browser-methods'
 
@@ -11,6 +11,8 @@ describe('Project Page', () => {
   let loginModal = new LoginModal()
   let EC = protractor.ExpectedConditions
   let guestForm = new GuestLoginForm()
+  let login = new Login()
+  let dashboard = new Dashboard()
 
   afterEach(() => {
     browser.manage().logs().get('browser').then(browserLog => {
@@ -201,15 +203,22 @@ describe('Project Page', () => {
   })
 
   describe('Live Notifications', () => {
-    // Student gets a toast when their comment is replied to
-    // Student can click on toast to open the relevant comment
-    // Student can see replies if heat vision is off
-    // Query parameter is used to link to the comment with reply
-    // Student replying to own comment does not receive toast
+    beforeAll(() => {
+      login.loginAndVerify(login.studentUser, login.studentPassword)
+      project.getPage('test-comment') // update
+      browser.wait(EC.elementToBeClickable(sidebar.avatarActionIcon))
+    })
 
-    // e2e test which opens a reading with the query parameter
-    it('should open a reading with the query param for a live reply and see that reply', () => {
-
+    it('should open a project with the query param for a live reply and see that reply', () => {
+      let replyId = '5d0c1fa191c20f0a8d2982d1' // update
+      // verify the query param shows up in the url
+      browser.wait(EC.urlContains(`#comment-${replyId}`), 15000, 'live reply query param never showed in project url')
+      // should see the toast
+      browser.wait(EC.visibilityOf(dashboard.toast), 3000, 'should see the toast message')
+      // verify the comment pane opens
+      browser.wait(EC.visibilityOf(project.closePane), 3000, 'comment pane never opened up')
+      // verify we scroll to the reply and can see it
+      browser.wait(EC.visibilityOf(element(by.id(`#comment-${replyId}`))), 3000, 'never found the reply comment')
     })
   })
 })
