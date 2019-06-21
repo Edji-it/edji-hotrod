@@ -405,7 +405,17 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
           let feedback = groupUpdate['feedback']
           this.setFeedback(feedback)
           if (feedback.user_id === this.user._id) {
-            this.showFeedbackToast(feedback)
+            this.showFeedbackToast(feedback, 'feedback')
+          }
+        } else if (groupUpdate.type === 'replyUpdate') {
+          const reply = groupUpdate['reply']
+          const parentCommentId = groupUpdate['pComment']
+          let parentComment = this.project.comments.find(comment => {
+            return parentCommentId == comment._id
+          })
+          // reference the parent comment and make sure it's
+          if (reply.user_id !== this.user._id && parentComment['user_id'] === this.user._id) {
+            this.showFeedbackToast(reply, 'reply')
           }
         }
       }),
@@ -513,20 +523,34 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   /**
-   * Display new feedback toast
-   * @param feedback is the new feedback from the teacher
+   * Display new live interaction toast
+   * @param content is the content object of the live interaction type
+   * @param toastType is the type of live interaction (feedback, reply)
    */
-  private showFeedbackToast(feedback: any) {
-    // Send toast via message service
-    this._messages.sendToast({
-      message: 'You have new feedback from your teacher',
-      type: 'new-feedback',
-      id: 'newFeedback',
-      link: './',
-      linkFragment: 'fb-' + feedback._id,
-      limitToPage: 'project',
-      requireDismiss: true,
-    })
+  private showFeedbackToast(content: any, toastType: toastType) {
+    if (toastType === 'feedback') {
+      // Send toast via message service
+      this._messages.sendToast({
+        message: 'You have new feedback from your teacher',
+        type: 'new-feedback',
+        id: 'newFeedback',
+        link: './',
+        linkFragment: 'fb-' + content._id,
+        limitToPage: 'project',
+        requireDismiss: true,
+      })
+    } else if (toastType === 'reply') {
+      // Send toast via message service
+      this._messages.sendToast({
+        message: `You have a new reply to your comment from ${content.author}`,
+        type: 'new-reply',
+        id: 'newReply',
+        link: './',
+        linkFragment: 'comment-' + content._id,
+        limitToPage: 'project',
+        requireDismiss: true,
+      })
+    }
   }
 
   /**
@@ -1470,3 +1494,5 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     return `fb-${feedback && feedback._id}`
   }
 }
+
+export type toastType = 'feedback' | 'reply'

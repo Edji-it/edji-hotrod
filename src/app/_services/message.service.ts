@@ -170,7 +170,7 @@ interface GetMessagesResponse {
 
 export interface MessageToast {
   message: string
-  type: string // "info", "heat-on", "heat-off", "promo", "new-feedback"
+  type: string // "info", "heat-on", "heat-off", "promo", "new-feedback", "new-reply"
   id: string
   link?: string // routerLink path
   linkFragment?: string

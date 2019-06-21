@@ -2,7 +2,7 @@ import { Subscription } from 'rxjs'
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, SimpleChange } from '@angular/core'
 
 // Project Dependencies
-import { AuthService, CommentService, ProjectService, UtilToolService, AcademyService } from '../../_services'
+import { AuthService, CommentService, ProjectService, UtilToolService, AcademyService, SocketService } from '../../_services'
 import { EdjiComment, CommentPermissions, EdjiQuestion } from './../../shared/datatypes'
 import { ALLSPARK } from './../../app.constants'
 
@@ -94,7 +94,8 @@ export class CommentComponent implements OnInit, OnDestroy {
     private _util: UtilToolService,
     public el: ElementRef,
     private _academy: AcademyService,
-  ) {}
+    private _socket: SocketService
+  ) { }
 
   ngOnInit() {
     // Set initial values if passed
@@ -281,6 +282,15 @@ export class CommentComponent implements OnInit, OnDestroy {
         .then(comment => {
           this.isLoading = false
           this.commentUpdated.emit()
+
+          // let the student that made the comment know there is a reply
+          if (this.commentContext === 'reply') {
+            this._socket.groupUpdateEvent({
+              type: 'replyUpdate',
+              reply: this.comment,
+              pComment: this.comment.reply_to
+            })
+          }
 
           this.justSaved = true
           setTimeout(() => {
