@@ -10,10 +10,21 @@ import { User } from '../shared/datatypes'
 @Injectable()
 export class BumblebeeService {
   private url: string = '//bumblebee.edji.it'
+  private flakUrl: string
   private isProd: boolean = true
 
   constructor(private _auth: AuthService, private _http: HttpClient) {
-    this.isProd = this._auth.getEnv() == 'prod'
+    this.isProd = this._auth.getEnv() === 'prod'
+    this.flakUrl = `//flak${this.isProd ? '' : '-dev'}.edji.it`
+  }
+
+  public postMessage(options: {
+    target: string
+    message: string
+    target_type?: MessageTarget
+  }): Observable<any> {
+    console.log('posting message with', options)
+    return this._http.post(this.flakUrl, options)
   }
 
   public sendUserDetails(userDetails: User, sendType?: string): void {
@@ -22,7 +33,7 @@ export class BumblebeeService {
         .post(this.url + '/newuser', { userDetails: userDetails, sendType: sendType }, this._auth.getOptions())
         .pipe(take(1))
         .subscribe(
-          success => {},
+          success => { },
           error => {
             console.error(error)
           },
@@ -42,7 +53,7 @@ export class BumblebeeService {
         .post(this.url + '/hero', { user: user, action: action }, this._auth.getOptions())
         .pipe(take(1))
         .subscribe(
-          success => {},
+          success => { },
           error => {
             console.error(error)
           },
@@ -56,7 +67,7 @@ export class BumblebeeService {
         .post(this.url + '/error', { error: error }, this._auth.getOptions())
         .pipe(take(1))
         .subscribe(
-          success => {},
+          success => { },
           error => {
             console.error(error)
           },
@@ -64,3 +75,5 @@ export class BumblebeeService {
     }
   }
 }
+
+type MessageTarget = 'user' | 'channel'

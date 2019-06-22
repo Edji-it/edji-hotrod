@@ -7,7 +7,7 @@ import { Observable } from 'rxjs'
 // project imports
 import { MetricsEffects } from './metrics.effects'
 import { IncrementMetric, SetState } from './metrics.reducers'
-import { StateService } from './../_services'
+import { StateService, BumblebeeService } from './../_services'
 
 describe('metrics effects', () => {
   let effects: MetricsEffects
@@ -24,6 +24,11 @@ describe('metrics effects', () => {
           provide: StateService, useValue: {
             getState: () => { },
             setState: () => { }
+          }
+        },
+        {
+          provide: BumblebeeService, useValue: {
+            postMessage: () => { }
           }
         }
       ]
