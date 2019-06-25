@@ -133,7 +133,8 @@ import { LicenseRedirectComponent } from './license-redirect/license-redirect.co
 import { LicenseWelcomeComponent } from './license-welcome/license-welcome.component'
 import { ReadingRecapComponent } from './project-page/owner-tools/reading-recap/reading-recap.component'
 import { TeamPageComponent } from './team-page/team-page.component'
-import { SearchPage } from './search-page/search-page.component';
+import { SearchPage } from './search-page/search-page.component'
+import { TeacherFeedbackComponent } from './annotator/teacher-feedback/teacher-feedback.component'
 
 // Configure Hammer.js
 export class MyHammerConfig extends HammerGestureConfig {
@@ -187,6 +188,7 @@ const routerOptions: ExtraOptions = {
     RegisterPageComponent,
     CommentPaneComponent,
     CommentComponent,
+    TeacherFeedbackComponent,
     AvatarPortalComponent,
     TextCommentComponent,
     EmojiCommentComponent,

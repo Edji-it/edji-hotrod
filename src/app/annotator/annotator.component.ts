@@ -31,6 +31,7 @@ import {
 import { CommentPermissions, EdjiComment, Project, Reading, Feedback } from './../shared/datatypes'
 import { ALLSPARK } from '../app.constants'
 import { ActivatedRoute } from '@angular/router'
+import { TeacherFeedbackComponent } from './teacher-feedback/teacher-feedback.component'
 
 @Component({
   selector: 'annotator',
@@ -56,6 +57,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChildren(CommentComponent) commentComponents: QueryList<CommentComponent>
   @ViewChildren('words') wordEls
   @ViewChild('article') articleEl: ElementRef
+  @ViewChildren(TeacherFeedbackComponent) feedbackEl: QueryList<TeacherFeedbackComponent>
 
   public reading: Reading = <Reading>{}
   public project: Project = <Project>{}
@@ -211,10 +213,16 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.subscriptions.push(
-      this.route.fragment.subscribe(async fragment => {
-        const fbEl = await document.querySelector("[id='" + fragment + "']")
-        if (fragment && fbEl) {
-          fbEl.scrollIntoView({ behavior: 'smooth' })
+      this.route.fragment.subscribe(fragment => {
+        if (fragment) {
+          let fragmentType = fragment.split("-")[0] // available types are fb (feedback), comment (comment/reply)
+          // handler for feedback
+          if (fragmentType === 'fb') {
+            let feedbackEl = this.feedbackEl.toArray().find(feedbackEl => {
+              return feedbackEl.feedback._id === fragment.split("-")[1]
+            })
+            feedbackEl.element.nativeElement.scrollIntoView({ behavior: 'smooth' })
+          }
         }
       }),
     )
@@ -1484,14 +1492,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       // the socket update needs to have the latest feedback pushed in
       this.feedbackForUser.push(feedback)
     }
-  }
-
-  /**
-   * Assign the feedback with _id to set up the attribute
-   * @param feedback is the feedback record
-   */
-  public feedbackAttribute(feedback: any): string {
-    return `fb-${feedback && feedback._id}`
   }
 }
 
