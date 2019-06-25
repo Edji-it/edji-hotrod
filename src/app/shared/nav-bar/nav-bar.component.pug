@@ -53,7 +53,7 @@
               .tooltip.tooltip--top-right
                 .tooltip-title Teacher{{currentProject.owners[1] && 's'}} for this Reading Group
             ng-container(*ngFor="let owner of currentProject.owners")
-              follow-tag([owner]="owner")
+              follow-tag(data-test="owner-tag", [owner]="owner")
             #addCoTeacherBtn.badge.badge-pill.badge-button.badge-teacher(
               *ngIf="currentProject.isTeaching",
               [routerLink]="['./']",

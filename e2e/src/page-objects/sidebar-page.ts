@@ -35,6 +35,7 @@ export class Sidebar {
   public ownerToolToggleButton = element(by.id('buttonOwnerToolToggle'))
   public readingReportButton = element(by.id('toggleReadingRecap'))
   public addCoTeacherButton = element(by.id('addCoTeacherBtn'))
+  public ownerName = element.all(by.css('[data-test="owner-tag"]')).first()
 
   public backToDash(): void {
     this.closeModal.isPresent().then(result => {

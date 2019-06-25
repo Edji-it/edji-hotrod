@@ -209,12 +209,18 @@ describe('Project Page', () => {
      * Verify students can't do things they shouldn't
      */
     it('should not give students owner tools', () => {
+      // Student should see teacher names
+      expect(browser.isElementPresent(sidebar.ownerName)).toBeTruthy(
+        'student should see at least one owner/teacher for the reading',
+      )
       // Student should not have co-teacher button
-      expect(EC.visibilityOf(sidebar.addCoTeacherButton)).toBeFalsy('student should not see "Add Teacher" in reading')
+      expect(browser.isElementPresent(sidebar.addCoTeacherButton)).toBeFalsy(
+        'student should not see "Add Teacher" in reading',
+      )
       // Student should not see owner tools
-      expect(EC.visibilityOf(sidebar.ownerTools)).toBeFalsy('student should not see Owner Tools in reading')
+      expect(browser.isElementPresent(sidebar.ownerTools)).toBeFalsy('student should not see Owner Tools in reading')
       // Student should not see student list toggle
-      expect(EC.visibilityOf(studentList.studentListToggle)).toBeFalsy(
+      expect(browser.isElementPresent(studentList.studentListToggle)).toBeFalsy(
         'student should not see Student List toggle in reading',
       )
     })
