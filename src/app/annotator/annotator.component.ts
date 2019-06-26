@@ -222,6 +222,28 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
               return feedbackEl.feedback._id === fragment.split("-")[1]
             })
             feedbackEl.element.nativeElement.scrollIntoView({ behavior: 'smooth' })
+          } else if (fragmentType === 'comment') {
+            // set default to position to the comment (if not a reply)
+            let idIndex = 1
+            if (fragment.includes('parent')) {
+              // this means we have a reply and need to locate the parent comment
+              idIndex = 3
+            }
+            let commentEl = this.commentComponents.toArray().find(commentEl => {
+              return commentEl.comment._id === fragment.split("-")[idIndex]
+            })
+            // scroll to that comment element
+            commentEl && commentEl.el.nativeElement.scrollIntoView({ behavior: 'smooth' })
+
+            setTimeout(() => {
+              // activate the comment in the service
+              this._comments.activeComment = commentEl.comment
+              // access the comment component to select the comment and toggle the comment pane
+              commentEl.comment.selected = true
+              commentEl.toggleCPane(commentEl.comment, true)
+            }, 1)
+            // scroll to the line where the comment is
+            // scroll in comment pane to that comment
           }
         }
       }),
@@ -421,6 +443,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
           let parentComment = this.project.comments.find(comment => {
             return parentCommentId == comment._id
           })
+          // set the parent comment id so we can find it later
+          reply.parent = parentCommentId
           // reference the parent comment and make sure it's
           if (reply.user_id !== this.user._id && parentComment['user_id'] === this.user._id) {
             this.showFeedbackToast(reply, 'reply')
@@ -554,7 +578,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
         type: 'new-reply',
         id: 'newReply',
         link: './',
-        linkFragment: 'comment-' + content._id,
+        linkFragment: `comment-${content._id}-parent-${content.parent}`,
         limitToPage: 'project',
         requireDismiss: true,
       })
