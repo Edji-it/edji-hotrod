@@ -251,7 +251,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       // Get Project from project service
       this._projects.currentProject.subscribe(
         project => {
-          console.log('Anno Got project?', project)
           if (project.archived) {
             this._projects.filterByUser(this.user)
           }

@@ -25,6 +25,12 @@ export class MessageService {
   constructor(private _http: HttpClient, private angulartics: Angulartics2, private _auth: AuthService) {
     this.toastUpdatesSource = new BehaviorSubject([])
     this.toastUpdates = this.toastUpdatesSource.asObservable()
+
+    // Clear all toasts on logout, etc.
+    this._auth.clearAll.subscribe(clear => {
+      // Clear all toasts
+      this.toastUpdatesSource.next([])
+    })
   }
 
   /**
