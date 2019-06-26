@@ -105,6 +105,11 @@ $slidingPaneWidth: 265px;
   }
 }
 
+.sliding-pane__header {
+  display: block;
+  position: relative;
+}
+
 .user-list-item {
   font-family: 'Open Sans';
   margin: 6px 0px;

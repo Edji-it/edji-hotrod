@@ -14,7 +14,7 @@
       .text-left(*ngIf="coOwnerTooltipIndex === 1")
         | Select "Promote to co-teacher", and they will be given the same teacher abilities you have
   #studentListContent.container-fluid.container--less-pad
-    h4
+    h4.sliding-pane__header
       | {{ commentStats.stats.userStats.length }} Students
       button#leaderboard--close.close.stats-close-btn.btn-icon--round((click)='close()' type='button')
         span(aria-hidden='true') &times;
