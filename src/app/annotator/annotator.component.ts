@@ -32,6 +32,7 @@ import { CommentPermissions, EdjiComment, Project, Reading, Feedback } from './.
 import { ALLSPARK } from '../app.constants'
 import { ActivatedRoute } from '@angular/router'
 import { TeacherFeedbackComponent } from './teacher-feedback/teacher-feedback.component'
+import { CommentPaneComponent } from '../shared/comment-pane/comment-pane.component';
 
 @Component({
   selector: 'annotator',
@@ -58,11 +59,14 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChildren('words') wordEls
   @ViewChild('article') articleEl: ElementRef
   @ViewChildren(TeacherFeedbackComponent) feedbackEl: QueryList<TeacherFeedbackComponent>
+  @ViewChild(CommentPaneComponent) commentPaneEl: CommentPaneComponent
 
   public reading: Reading = <Reading>{}
   public project: Project = <Project>{}
   // Feedback for current user
   public feedbackForUser: Feedback[] = []
+  public paneCommentComponentUpdates: CommentComponent[]
+  private replyScrollReady: boolean
   // Determines when infinite scroll should begin
   public lastWord: number = 4000
   public lastWordImageOffset: number = 100
@@ -152,6 +156,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public window: any
   public audioSupportError: boolean = false
+  private fragment: string
 
   public quickSelect: { anchor: number; focus: number } = {
     anchor: null,
@@ -213,8 +218,13 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.subscriptions.push(
+      this.commentPaneEl.commentComponents.changes.subscribe((change) => {
+        this.paneCommentComponentUpdates = this.commentPaneEl.commentComponents.toArray()
+        this.scrollToReply()
+      }),
       this.route.fragment.subscribe(fragment => {
         if (fragment) {
+          this.fragment = fragment
           let fragmentType = fragment.split("-")[0] // available types are fb (feedback), comment (comment/reply)
           // handler for feedback
           if (fragmentType === 'fb') {
@@ -235,19 +245,37 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
             // scroll to that comment element
             commentEl && commentEl.el.nativeElement.scrollIntoView({ behavior: 'smooth' })
 
+            // settimeout here to prevent errors where expression changes after checked
             setTimeout(() => {
               // activate the comment in the service
               this._comments.activeComment = commentEl.comment
               // access the comment component to select the comment and toggle the comment pane
               commentEl.comment.selected = true
               commentEl.toggleCPane(commentEl.comment, true)
+              // pop open the replies on that comment
+              if (fragment.includes('parent')) {
+                this.commentPaneEl.commentReplyEmitter(commentEl.comment)
+                // allow browser to scroll to the reply
+                this.replyScrollReady = true
+              }
             }, 1)
-            // scroll to the line where the comment is
-            // scroll in comment pane to that comment
           }
         }
       }),
     )
+  }
+
+  scrollToReply(): void {
+    // find the reply
+    let replyEl = this.paneCommentComponentUpdates.find(replyEl => {
+      return replyEl.comment._id === this.fragment.split("-")[1]
+    })
+    // scroll to that reply element
+    setTimeout(() => {
+      replyEl && replyEl.el.nativeElement.scrollIntoView({ behavior: 'smooth' })
+    }, 250)
+    // prevent reply scrolling on user directed comment pane updates
+    this.replyScrollReady = false
   }
 
   ngOnInit() {

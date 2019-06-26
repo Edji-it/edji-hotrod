@@ -1,17 +1,21 @@
 import { Project, User } from '../datatypes'
 import { Subscription } from 'rxjs'
 import { CommentPermissions, EdjiComment } from '../datatypes/index'
-import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, ViewChildren, QueryList } from '@angular/core'
 
 // Project Dependencies
 import { AuthService, ProjectService, CommentService, SocketService } from '../../_services'
 import { Angulartics2 } from 'angulartics2'
+import { CommentComponent } from 'src/app/annotator/comment/comment.component'
 @Component({
   selector: 'comment-pane',
   templateUrl: './comment-pane.component.pug',
   styleUrls: ['./comment-pane.component.scss'],
 })
 export class CommentPaneComponent implements OnInit, OnDestroy {
+  @ViewChild('commentPane') private commentPane: ElementRef
+  @ViewChildren(CommentComponent) commentComponents: QueryList<CommentComponent>
+
   // General variables for the comment pane component
   public lineNum: number = 0
   public commentCount: number = 0
@@ -63,8 +67,6 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
   @Output() commentUpdated: EventEmitter<any> = new EventEmitter()
   @Output() commentReply = new EventEmitter()
 
-  @ViewChild('commentPane') private commentPane: ElementRef
-
   constructor(
     private _projects: ProjectService,
     private _socket: SocketService,
@@ -72,7 +74,7 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
     private _auth: AuthService,
     private _comments: CommentService,
     private angulartics: Angulartics2,
-  ) {}
+  ) { }
 
   ngOnInit() {
     // Subscribe to updates to the comment by line number position array
@@ -192,7 +194,7 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
     this.commentUpdated.emit()
   }
 
-  commentReplyEmitter(comment) {
+  commentReplyEmitter(comment: EdjiComment) {
     // Toggle display of
     this.repliesToggleById[comment._id] = !this.repliesToggleById[comment._id]
     // this.commentReply.emit(comment)
