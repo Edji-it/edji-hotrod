@@ -1,100 +1,100 @@
 //- Comments Pane
-#leaderboard.sliding-pane.from-left([ngClass]="{ 'slide-in' : visibility }")
-  //- .tooltip-wrap
+.sliding-pane__wrap.from-left([ngClass]="{ 'slide-in' : visibility }")
   #coTeacherTooltip.tooltip.tooltip--clickable.tooltip--right(
-    [class.show]="coOwnerTooltipIndex > -1", 
-    style="top: 190px;",
-    (click)="coOwnerTooltipNext()"
-  )
-    .tooltip-title
-      b.mb-1 Adding a Co-Teacher
-    .tooltiptext.block-with-text
-      .text-left(*ngIf="coOwnerTooltipIndex === 0")
-        | To add a co-teacher, have the user join this Group, then access their settings here
-      .text-left(*ngIf="coOwnerTooltipIndex === 1")
-        | Select "Promote to co-teacher", and they will be given the same teacher abilities you have
-  #studentListContent.container-fluid.container--less-pad
-    h4.sliding-pane__header
-      | {{ commentStats.stats.userStats.length }} Students
-      button#leaderboard--close.close.stats-close-btn.btn-icon--round((click)='close()' type='button')
-        span(aria-hidden='true') &times;
-    p(style='opacity: 0.3; margin-bottom: 14px; white-space: nowrap; border-bottom: 1px solid #cdcdcd;')
-      span.small(style="padding-left: 23px") Student
-      //- img(style='height: 1em; width: auto; float: right' src='assets/images/icon-comment.svg')
-      span(style="float:right;")
-        //- span.small.mr-2 Replies
-        span.small Comments & Options
-    .user-list-item.hover-parent(*ngFor='let commentUser of commentStats.stats.userStats; let i = index')
-      span.answer-circle__group.mr-2.live-status([attr.title]="commentUser.fullname + ' is ' + commentUser.status")
-        .circle.filled([ngClass]="commentUser.status")
-      span.user-list__name([attr.id]="'studentName'+i") 
-        | {{ commentUser.fullname }}
-        .ml-1.badge.badge-pill.badge-teacher--label.hover--tooltip(
-          *ngIf="isStudentCoTeacher(commentUser)",
-            style="position:relative;"
+      [class.show]="coOwnerTooltipIndex > -1", 
+      style="top: 190px;",
+      (click)="coOwnerTooltipNext()"
+    )
+      .tooltip-title
+        b.mb-1 Adding a Co-Teacher
+      .tooltiptext.block-with-text
+        .text-left(*ngIf="coOwnerTooltipIndex === 0")
+          | To add a co-teacher, have the user join this Group, then access their settings here
+        .text-left(*ngIf="coOwnerTooltipIndex === 1")
+          | Select "Promote to co-teacher", and they will be given the same teacher abilities you have
+  #leaderboard.sliding-pane
+    #studentListContent.container-fluid.container--less-pad
+      h4.sliding-pane__header
+        | {{ commentStats.stats.userStats.length }} Students
+        button#leaderboard--close.close.stats-close-btn.btn-icon--round((click)='close()' type='button')
+          span(aria-hidden='true') &times;
+      p(style='opacity: 0.3; margin-bottom: 14px; white-space: nowrap; border-bottom: 1px solid #cdcdcd;')
+        span.small(style="padding-left: 23px") Student
+        //- img(style='height: 1em; width: auto; float: right' src='assets/images/icon-comment.svg')
+        span(style="float:right;")
+          //- span.small.mr-2 Replies
+          span.small Comments & Options
+      .user-list-item.hover-parent(*ngFor='let commentUser of commentStats.stats.userStats; let i = index')
+        span.answer-circle__group.mr-2.live-status([attr.title]="commentUser.fullname + ' is ' + commentUser.status")
+          .circle.filled([ngClass]="commentUser.status")
+        span.user-list__name([attr.id]="'studentName'+i") 
+          | {{ commentUser.fullname }}
+          .ml-1.badge.badge-pill.badge-teacher--label.hover--tooltip(
+            *ngIf="isStudentCoTeacher(commentUser)",
+              style="position:relative;"
+            )
+            | T
+            .tooltip.tooltip--top
+              .tooltip-title Co-teacher
+        //- User settings
+        .user-list__action
+          .dropdown.student-options( 
+            [class.show]="studentSettingsIndex == i"
           )
-          | T
-          .tooltip.tooltip--top
-            .tooltip-title Co-teacher
-      //- User settings
-      .user-list__action
-        .dropdown.student-options( 
-          [class.show]="studentSettingsIndex == i"
-        )
-          button.btn.btn-icon.btn-outline-primary.e2e-student-settings(
-            (click)="toggleStudentSettings(i)",
-            [innerHtml]="':gear:' | emojione"
-          )
-          //- dropdown buttons
-          .dropdown-menu.dropdown-menu-right.reading-card-menu([class.show]="studentSettingsIndex == i")
-            //- View student filter
-            button.dropdown-item(
-              (click)="viewStudentFilter(commentUser)"
+            button.btn.btn-icon.btn-outline-primary.e2e-student-settings(
+              (click)="toggleStudentSettings(i)",
+              [innerHtml]="':gear:' | emojione"
+            )
+            //- dropdown buttons
+            .dropdown-menu.dropdown-menu-right.reading-card-menu([class.show]="studentSettingsIndex == i")
+              //- View student filter
+              button.dropdown-item(
+                (click)="viewStudentFilter(commentUser)"
+              ) 
+                .icon.icon-comment-filter
+                | &nbsp; View student filter
+              //- 
+              button#promoteCoTeacherOption.dropdown-item.e2e-new-group(
+                (click)="confirmCoOwner(commentUser)"
+              ) 
+                .icon.icon-promote
+                | &nbsp; Promote to co-teacher
+        //- Comment count
+        .user-list__action
+          .btn.btn-icon.btn-outline-primary.e2e-student-filter(
+              [attr.id]="'studentFilterBtn'+i",
+              [class.active]="commentUser.filtered",
+              (click)="viewStudentFilter(commentUser)", 
+              title="View only {{commentUser.fullname}}'s comments"
             ) 
-              .icon.icon-comment-filter
-              | &nbsp; View student filter
-            //- 
-            button#promoteCoTeacherOption.dropdown-item.e2e-new-group(
-              (click)="confirmCoOwner(commentUser)"
-            ) 
-              .icon.icon-promote
-              | &nbsp; Promote to co-teacher
-      //- Comment count
-      .user-list__action
-        .btn.btn-icon.btn-outline-primary.e2e-student-filter(
-            [attr.id]="'studentFilterBtn'+i",
-            [class.active]="commentUser.filtered",
-            (click)="viewStudentFilter(commentUser)", 
-            title="View only {{commentUser.fullname}}'s comments"
-          ) 
-          .icon.icon-comment-filter.mr-1
-          | {{ commentUser.comment_count }}
+            .icon.icon-comment-filter.mr-1
+            | {{ commentUser.comment_count }}
 
-      .question-answer-status__block(*ngIf='commentUser && currentReading.questions && currentReading.questions.length > 0')
-        .answer-designate Answers:
-        ng-container(*ngFor='let answer of userAnswers')
-          .answer-circle__group(*ngIf='answer.user===commentUser._id')
-            .circle([class.filled]="answer.answered")
-.filter-bubble(
-    [class.slide-in]="appliedFilter && !archived",
-    (swipeleft)="pageStudentFilter(-1)",
-    (swiperight)="pageStudentFilter(1)"
-  )
-  ng-container(*ngIf="appliedFilter")
-    button.close.btn-icon--round(
-        (click)="clearFilter()",
-        type="button",
-        data-dismiss="modal",
-        aria-label="Close"
-        )
-      span(aria-hidden="true") &times;
-    .filter-bubble__descriptor 
-      .icon.icon-comment-filter.mr-1
-      | Viewing {{ appliedFilter.displayType }}
-    #studentFilterPrev.btn.btn-icon.btn-outline-primary.btn--prev((click)="pageStudentFilter(-1)")
-        .fa.fa-backward
-    .filter-bubble__name
-      | {{ appliedFilter.displayName }}
-    #studentFilterNext.btn.btn-icon.btn-outline-primary.btn--next((click)="pageStudentFilter(1)")
-      .fa.fa-forward
+        .question-answer-status__block(*ngIf='commentUser && currentReading.questions && currentReading.questions.length > 0')
+          .answer-designate Answers:
+          ng-container(*ngFor='let answer of userAnswers')
+            .answer-circle__group(*ngIf='answer.user===commentUser._id')
+              .circle([class.filled]="answer.answered")
+  .filter-bubble(
+      [class.slide-in]="appliedFilter && !archived",
+      (swipeleft)="pageStudentFilter(-1)",
+      (swiperight)="pageStudentFilter(1)"
+    )
+    ng-container(*ngIf="appliedFilter")
+      button.close.btn-icon--round(
+          (click)="clearFilter()",
+          type="button",
+          data-dismiss="modal",
+          aria-label="Close"
+          )
+        span(aria-hidden="true") &times;
+      .filter-bubble__descriptor 
+        .icon.icon-comment-filter.mr-1
+        | Viewing {{ appliedFilter.displayType }}
+      #studentFilterPrev.btn.btn-icon.btn-outline-primary.btn--prev((click)="pageStudentFilter(-1)")
+          .fa.fa-backward
+      .filter-bubble__name
+        | {{ appliedFilter.displayName }}
+      #studentFilterNext.btn.btn-icon.btn-outline-primary.btn--next((click)="pageStudentFilter(1)")
+        .fa.fa-forward
 edji-confirm-co-owner(*ngIf="coOwnerToBe", [student]="coOwnerToBe", (closeModal)="coOwnerToBe = false")

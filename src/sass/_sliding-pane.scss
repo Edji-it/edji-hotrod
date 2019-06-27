@@ -13,7 +13,8 @@ $slidingPaneWidth: 265px;
   left: 0;
   background: #fff; //$midGray; //$gray;
   z-index: $zMid + 1000;
-  overflow: visible;
+  overflow-x: hidden;
+  overflow-y: auto;
 
   .keyboard-adjust & {
     height: 70%; // calc(70% - #{ $navBarHeight - 13px });
@@ -74,6 +75,21 @@ $slidingPaneWidth: 265px;
 
   .keyboard-adjust & {
     height: 70%;
+  }
+}
+
+// Used when overflow:visible is needed
+.sliding-pane__wrap {
+  @extend .sliding-pane;
+  padding: 0px;
+  overflow: visible !important;
+
+  // Wrap acts as pane, so sliding-pane becomes simple content class
+  & .sliding-pane {
+    height: 100%;
+    width: 100% !important;
+    position: absolute;
+    box-shadow: none;
   }
 }
 
