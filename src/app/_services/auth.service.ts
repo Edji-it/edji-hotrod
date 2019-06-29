@@ -15,6 +15,8 @@ import { environment } from '../../environments/environment'
 import { AcademyService } from './academy.service'
 const { version: appVersion } = require('../../../package.json')
 
+declare var gtag: any
+
 @Injectable()
 export class AuthService implements CanActivate {
   /*
@@ -53,6 +55,8 @@ export class AuthService implements CanActivate {
     this.clearAll = this.clearAllSource.asObservable()
 
     this.user = this.getUser()
+    // Initalize Analytics user
+    this.updateAnalyticsUser(this.user)
     this.currentUserSource = new BehaviorSubject<any>(this.user)
     this.currentUser = this.currentUserSource.asObservable()
 
@@ -153,13 +157,22 @@ export class AuthService implements CanActivate {
     //  Store user object
     this.currentUserSource.next(user)
     this._locker.set('user', user)
-    if (user._id && user._id.length > 0) {
-      this.ga.setUserProperties({
-        user_id: user._id
-      }) // Set the user ID using signed-in user_id.
-      // this.ga.setUsername(user._id) // Set the user ID using signed-in user_id.
-    }
+    // Update Analytics
+    this.updateAnalyticsUser(user)
     return user
+  }
+
+  private updateAnalyticsUser(user): void {
+    // Ignore if google site tag object is not available
+    if (!gtag) {
+      return
+    }
+    if (user._id && user._id.length > 0) {
+      // Use Global Site Tag to set user id directly
+      gtag('set', 'user_id', user._id)
+    } else {
+      gtag('set', 'user_id', '')
+    }
   }
 
   /**
@@ -690,12 +703,12 @@ export class AuthService implements CanActivate {
 
     return this._http.post<any>(
       this.baseUrl +
-      '/api/v1/users/tokens/' +
-      resetObject.type +
-      '/' +
-      resetObject.token +
-      '/?user_id=' +
-      resetObject.userId,
+        '/api/v1/users/tokens/' +
+        resetObject.type +
+        '/' +
+        resetObject.token +
+        '/?user_id=' +
+        resetObject.userId,
       { [resetObject.type]: resetObject.newValue },
       {
         headers: newHeaders,
@@ -1116,21 +1129,22 @@ export class AuthService implements CanActivate {
   }
 
   /**
-  * Searches for a school or district and returns a list from the NCES data set
-  * @param searchText is the text string passed in that we want to search with flak
-  */
+   * Searches for a school or district and returns a list from the NCES data set
+   * @param searchText is the text string passed in that we want to search with flak
+   */
   public getSchoolDistrict(searchText: string): Observable<any> {
     searchText = encodeURIComponent(searchText)
-    return this._http.get<any>(
-      this.flakBaseUrl + `/schools?school_name=${searchText}&district=${searchText}&fuzziness=2`, {
+    return this._http
+      .get<any>(this.flakBaseUrl + `/schools?school_name=${searchText}&district=${searchText}&fuzziness=2`, {
         headers: new HttpHeaders({
-          'Content-Type': 'application/json'
-        })
-      }
-    )
-      .pipe(map((res) => {
-        return res.hits.hits
-      }))
+          'Content-Type': 'application/json',
+        }),
+      })
+      .pipe(
+        map(res => {
+          return res.hits.hits
+        }),
+      )
   }
 }
 
