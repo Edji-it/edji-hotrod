@@ -27,13 +27,17 @@ describe('Discover Feed', () => {
   })
 
   afterEach(() => {
-    browser.manage().logs().get('browser').then(browserLog => {
-      if (browserLog.length > 0) {
-        browserLog.forEach(log => {
-          console.error(log.message)
-        })
-      }
-    })
+    browser
+      .manage()
+      .logs()
+      .get('browser')
+      .then(browserLog => {
+        if (browserLog.length > 0) {
+          browserLog.forEach(log => {
+            console.error(log.message)
+          })
+        }
+      })
   })
 
   it('should arrive at Discover Feed', () => {
@@ -79,55 +83,6 @@ describe('Discover Feed', () => {
     browser.wait(EC.stalenessOf(discover.firstFeedReading), 5000, 'should not see any readings in following feed')
   })
 
-  describe('Create new public reading, and verify it shows in Public feed', () => {
-    let newPublicReadingTitle = 'Public Reading ' + new Date().valueOf()
-    // Discover Feed should exist and load for every user
-    it('should create new public reading as testbot', () => {
-      // Open New Reading page
-      sidebar.navCreate.click()
-      dashboard.openNewReading()
-      browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000)
-      // Enter Title
-      newReading.titleInput.sendKeys(newPublicReadingTitle)
-      // Select Grade Range
-      newReading.gradeTileK.click()
-      newReading.gradeTileU.click()
-      // Select Subject
-      newReading.subjectDropdown.click()
-      newReading.subjectFirstOption.click()
-      // Enter sample content
-      browser.wait(EC.elementToBeClickable(newReading.contentInput), 5000, 'should see reading content input')
-      newReading.contentInput.sendKeys(newReading.contentShortString)
-      // Hit save
-      newReading.clickShareAndArchive()
-      // Finalize
-      newReading.createGroupButtonClick()
-      // Wait for navigation to hit project page after save
-      browser.wait(EC.urlContains('project'), 7500, 'never arrived at published reading')
-      newReading.shareCodeModalCloseClick()
-      browser.wait(EC.invisibilityOf(newReading.shareCodeModalClose), 5000, 'share reading code modal never dismissed')
-      // need to go back to the dashboard before logging out
-      dashboard.getPage()
-      browser.wait(EC.urlContains('dashboard'), 7500, 'never arrived at dashboard before logging out')
-      sidebar.logout()
-    })
-
-    it("should see testbot's new public reading in public feed", async () => {
-      // Login as another user
-      login.getPage()
-      browser.wait(EC.elementToBeClickable(login.loginButton), 5000, 'never got the login page')
-      login.loginAndVerify(login.teacherUser, login.teacherPassword)
-
-      // Got to Discover Feed
-      sidebar.navDiscover.click()
-      browser.wait(EC.urlContains('discover'), 5000, 'never arrived at discover feed as sidekick user')
-      browser.wait(EC.elementToBeClickable(discover.firstFeedReading), 5000, 'discover feed readings never loaded')
-      // Check title of most recent readings
-      let foundTitle = await discover.validateReadingTitle(newPublicReadingTitle)
-      expect(foundTitle).toBeTruthy('never found testbots new reading in the discover feed')
-    })
-  })
-
   describe('reading preview', () => {
     beforeAll(() => {
       sidebar.logout()
@@ -163,7 +118,11 @@ describe('Discover Feed', () => {
       browser.wait(EC.elementToBeClickable(discover.editReadingBtn), 5000, 'share reading button was not clickable')
       discover.editReadingBtn.click()
       // wait for us to hit the new reading page with the reading from the discover feed
-      browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000, 'never arrived to the new reading page with existing reading')
+      browser.wait(
+        EC.elementToBeClickable(newReading.titleInput),
+        5000,
+        'never arrived to the new reading page with existing reading',
+      )
 
       // grab the title of the reading for which we are editing and compare the two
       let titleValue = discover.getInputFieldText(newReading.titleInput)
@@ -256,57 +215,41 @@ describe('Discover Feed', () => {
 
     it('should be able to search for readings', async () => {
       // input search term and hit enter
-      browser.wait(
-        EC.visibilityOf(discover.searchInput),
-        5000,
-        "discover search input field was not visible"
-      )
+      browser.wait(EC.visibilityOf(discover.searchInput), 5000, 'discover search input field was not visible')
       discover.searchInput.sendKeys('last')
       discover.searchInput.sendKeys(protractor.Key.ENTER)
       // check search results
-      browser.wait(
-        EC.visibilityOf(discover.searchCount),
-        5000,
-        "discover search results were not visible"
-      )
+      browser.wait(EC.visibilityOf(discover.searchCount), 5000, 'discover search results were not visible')
       let searchCount = await discover.searchCount.getText()
-      expect(parseInt(searchCount)).toBeGreaterThan(0, "expected to see discover search results when entering a search")
+      expect(parseInt(searchCount)).toBeGreaterThan(0, 'expected to see discover search results when entering a search')
       // clear the search input
       discover.searchInput.clear()
     })
 
     it('should not get any readings for a bad search', async () => {
       // input search term and hit enter
-      browser.wait(
-        EC.visibilityOf(discover.searchInput),
-        5000,
-        "discover search input field was not visible"
-      )
+      browser.wait(EC.visibilityOf(discover.searchInput), 5000, 'discover search input field was not visible')
       discover.searchInput.sendKeys('%')
       discover.searchInput.sendKeys(protractor.Key.ENTER)
       // check search results
-      browser.wait(
-        EC.visibilityOf(discover.searchCount),
-        5000,
-        "discover search results were not visible"
-      )
+      browser.wait(EC.visibilityOf(discover.searchCount), 5000, 'discover search results were not visible')
       browser.sleep(1000) // give browser a second to make sure the count value updates to 0
       let searchCountBad = await discover.searchCount.getText()
-      expect(parseInt(searchCountBad)).toBe(0, "expected to see no discover search results when entering a bad search")
+      expect(parseInt(searchCountBad)).toBe(0, 'expected to see no discover search results when entering a bad search')
     })
 
     it('should open login modal when trying to follow a user', async () => {
       browser.wait(
         EC.elementToBeClickable(discover.filterFollowing),
         5000,
-        'following filter button on discover feed was not clickable'
+        'following filter button on discover feed was not clickable',
       )
       discover.filterFollowing.click()
       discover.toggleFollowEdji(true)
       browser.wait(
         EC.visibilityOf(discover.loginModalEl),
         5000,
-        "login modal never became visible after attempting to follow Edji on discover without logging in"
+        'login modal never became visible after attempting to follow Edji on discover without logging in',
       )
       reset()
       discover.getPage()
@@ -326,17 +269,17 @@ describe('Discover Feed', () => {
       browser.wait(
         EC.invisibilityOf(discover.shareReadingBtn),
         5000,
-        "share reading action was clickable when it should not be"
+        'share reading action was clickable when it should not be',
       )
       browser.wait(
         EC.invisibilityOf(discover.editReadingBtn),
         5000,
-        "edit reading action was clickable when it should not be"
+        'edit reading action was clickable when it should not be',
       )
       browser.wait(
         EC.elementToBeClickable(discover.loginFromPreviewBtn),
         5000,
-        "login action from reading preview was not clickable"
+        'login action from reading preview was not clickable',
       )
       discover.closeReadingPreview()
     })
@@ -353,29 +296,21 @@ describe('Discover Feed', () => {
       browser.wait(
         EC.elementToBeClickable(discover.loginFromPreviewBtn),
         5000,
-        "login action from reading preview was not clickable"
+        'login action from reading preview was not clickable',
       )
       discover.loginFromPreviewBtn.click()
       browser.wait(
         EC.visibilityOf(discover.loginModalEl),
         5000,
-        "login modal never became visible after clicking login action on reading preview"
+        'login modal never became visible after clicking login action on reading preview',
       )
       login.loginAndVerify(login.teacherUser, login.teacherPassword, 'discover')
       browser.wait(EC.visibilityOf(discover.readingPreview), 5000, 'reading preview was not visible')
       let secondTitle = await discover.previewTitle.getText()
       let sameTitle = discover.validatePreviewTitle(firstTitle, secondTitle)
       expect(sameTitle).toBeTruthy()
-      browser.wait(
-        EC.elementToBeClickable(discover.shareReadingBtn),
-        5000,
-        "share reading action was not clickable"
-      )
-      browser.wait(
-        EC.elementToBeClickable(discover.editReadingBtn),
-        5000,
-        "edit reading action was not clickable"
-      )
+      browser.wait(EC.elementToBeClickable(discover.shareReadingBtn), 5000, 'share reading action was not clickable')
+      browser.wait(EC.elementToBeClickable(discover.editReadingBtn), 5000, 'edit reading action was not clickable')
       discover.closeReadingPreview()
     })
   })
