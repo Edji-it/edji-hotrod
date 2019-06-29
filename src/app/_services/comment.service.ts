@@ -138,7 +138,7 @@ export class CommentService {
   public getCommentPermissions(comment: any, user: any, project: Project): number {
     if (user._id == comment.user_id) {
       return CommentPermissions.EDIT
-    } else if (user._id == project.teacher_id) {
+    } else if (project.isTeaching) {
       return CommentPermissions.DELETE
     } else {
       return CommentPermissions.READ

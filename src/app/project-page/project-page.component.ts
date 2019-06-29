@@ -47,7 +47,7 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
     private _readings: ReadingService,
     private _title: Title,
     private angulartics: Angulartics2,
-  ) { }
+  ) {}
 
   ngOnInit() {
     // this makes the window always render scrolled to the top
@@ -153,7 +153,7 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
       this._socket.groupUpdateEvent({
         type: 'updateUserStatus',
         status: 'active',
-        user: this.user
+        user: this.user,
       })
     }
   }

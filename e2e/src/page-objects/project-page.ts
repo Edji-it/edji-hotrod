@@ -1,5 +1,6 @@
 import { browser, by, element, protractor, ElementFinder } from 'protractor'
 import { PageObjectInterface } from './PageObjectInterface'
+import { LoginModal } from '../components'
 
 export class Project implements PageObjectInterface {
   /*
@@ -8,6 +9,10 @@ export class Project implements PageObjectInterface {
   Easily reference parts of the project page test page.
   */
   private EC = protractor.ExpectedConditions
+  private loginModal = new LoginModal()
+
+  // Reading elements
+  public readingTitle = element(by.id('inProjectReadingTitle'))
 
   // Element References
   public addEmojiBtn = element(by.id('addEmojiComment'))
@@ -62,6 +67,8 @@ export class Project implements PageObjectInterface {
     // browser.refresh();
     // Load a good sample Project with Emoji and Text commenting (owned by teach/teach)
     browser.get(`/#/project/${id}`)
+    // Wait for page to load
+    browser.wait(this.EC.visibilityOf(this.readingTitle), 10000, 'did not see title when trying to load project page')
   }
 
   public getAudioPage(): void {
@@ -83,6 +90,43 @@ export class Project implements PageObjectInterface {
   public getReadingRecapPage(): void {
     // Open Reading Report project
     browser.get('/#/project/readingrecap')
+  }
+
+  /**
+   * Join project via URL and login
+   * @param code or id of project
+   * @param username
+   * @param password
+   */
+  joinProjectCodeAndLogIn(code: string, username: string, password: string): void {
+    // Join page via URL
+    this.getPage(code)
+    // Ensure login modal loaded
+    browser.wait(this.EC.presenceOf(this.loginModal.guestLoginHeader), 5000, "never saw the login modal's header")
+    expect(this.loginModal.guestLoginHeader.isPresent()).toBeTruthy()
+    expect(this.loginModal.clickawaySquare.isPresent()).toBeFalsy()
+    // switch to login section and validate
+    browser.wait(
+      this.EC.elementToBeClickable(this.loginModal.gotoAccountLoginButton),
+      5000,
+      'never found button to go to account login',
+    )
+    this.loginModal.gotoAccountLoginButton.click()
+    expect(this.loginModal.clickawaySquare.isPresent()).toBeTruthy()
+    this.loginModal.usernameInput.sendKeys(username)
+    this.loginModal.passwordInput.sendKeys(password)
+    browser.wait(
+      this.EC.elementToBeClickable(this.loginModal.accountLoginButton),
+      5000,
+      'never found the account login button on modal',
+    )
+    this.loginModal.accountLoginButton.submit()
+    // Wait for modal to dismiss
+    browser.wait(
+      this.EC.invisibilityOf(this.loginModal.modal),
+      3000,
+      "did not dismiss login modal after pressing 'Log In'",
+    )
   }
 
   public skipTutorial(): void {

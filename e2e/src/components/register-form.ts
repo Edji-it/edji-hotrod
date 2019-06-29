@@ -1,4 +1,5 @@
 import { browser, by, element, protractor } from 'protractor'
+import { UserDetailsModal } from './user-details-modal'
 
 export class RegisterForm {
   private EC = protractor.ExpectedConditions // vital
@@ -14,7 +15,7 @@ export class RegisterForm {
   /**
    * Tests all Registration Form errors
    */
-  public testRegisterErrors(): void {}
+  public testRegisterErrors(): void { }
 
   /**
    * Clear registration form
@@ -30,7 +31,6 @@ export class RegisterForm {
 
   /**
    * Register a User
-   *
    */
   public submit(username?: string, fullname?: string, email?: string, password?: string): void {
     // If login function not passed credentials, default to teacher user
@@ -64,5 +64,23 @@ export class RegisterForm {
       'register button not clickable after register form entry',
     )
     this.registerButton.submit()
+  }
+
+  /**
+   * Registers a user and confirms their type as teacher
+   */
+  public registerAndConfirm(): void {
+    let userDetails = new UserDetailsModal()
+
+    // Open registration page
+    browser.get('/#/register')
+    // Verify user lands on Registration page
+    browser.wait(this.EC.urlContains('register'), 5000, 'referral link never landed on registration page')
+    // Attempt registration
+    this.submit()
+    // Created user should land on Dashboard
+    browser.wait(this.EC.urlContains('dashboard'), 5000, 'referred user failed to register')
+    // Confirm account type
+    userDetails.confirmBot('teacher')
   }
 }

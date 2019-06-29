@@ -6,7 +6,7 @@ owner-tools
     //- Archived alert for owner
     .alert.alert-info.fade.show.text-center.alert--fixed(
       role="alert",
-      *ngIf="project.archived && user._id === project.teacher._id"
+      *ngIf="project.archived && project.isTeaching"
     )
       p.mb-0 
         i.icon.icon-folder.mr-1
@@ -19,7 +19,7 @@ owner-tools
     //- Archived alert for student
     .alert.alert-info.fade.show.text-center.alert--fixed(
       role="alert",
-      *ngIf="project.archived && user._id !== project.teacher._id"
+      *ngIf="project.archived && !project.isTeaching"
     )
       p.mb-0
         i.icon.icon-folder.mr-1

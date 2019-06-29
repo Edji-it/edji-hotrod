@@ -950,15 +950,16 @@ textarea.text-comment-input,
     background-image: url('../assets/images/icon-comment--blue.svg');
   }
 
-  &.avatar__reply {
-    opacity: 1;
-    background-image: url('../assets/images/icon-comment--green.svg');
-    min-width: initial;
-    width: 12px;
-    height: 12px;
-    left: 5px;
-    bottom: -8px;
-  }
+  // Comment icon style
+  // &.avatar__reply {
+  //   opacity: 1;
+  //   background-image: url('../assets/images/icon-comment--green.svg');
+  //   min-width: initial;
+  //   width: 12px;
+  //   height: 12px;
+  //   left: 5px;
+  //   bottom: -8px;
+  // }
 }
 
 .comment__count--mobile {

@@ -44,7 +44,11 @@ $selectedOrange: rgb(255, 182, 63);
     background: #f0f0f0;
   }
   &.selected {
-    border: 2px solid rgba(236, 167, 54, 0);
+    border-width: 2px;
+    border-style: solid;
+  }
+  &.selected {
+    border-color: rgba(236, 167, 54, 0);
     box-shadow: 0px 0px 0px 0px rgba($selectedOrange, 0);
     transition: border-color ease 1s;
     animation: border-pulsate 2s ease-in-out 4;
@@ -189,4 +193,44 @@ $selectedOrange: rgb(255, 182, 63);
   color: white;
   vertical-align: top;
   line-height: 8px;
+}
+
+.reply-tag {
+  // Shown in middle, teacher icon shown to right
+  background-color: $actionGreen;
+  display: block;
+  font-weight: 800;
+  font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+  font-size: 8px;
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  min-width: 12px;
+  height: 10px;
+  color: white;
+  border-radius: 6px;
+  line-height: 11px;
+}
+
+.has-teacher-tag {
+  &::after {
+    background-color: $blue;
+    display: block;
+    content: 'T';
+    font-weight: 800;
+    font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+    font-size: 8px;
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+    text-align: center;
+    min-width: 12px;
+    height: 10px;
+    color: white;
+    border-radius: 6px;
+    line-height: 11px;
+    text-shadow: 0.5px -0.5px 0px #acdef9;
+  }
 }
