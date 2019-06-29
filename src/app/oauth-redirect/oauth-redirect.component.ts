@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
 import { take } from 'rxjs/operators'
+import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
 import { AuthService, LockerService, MessageService, BumblebeeService } from './../_services'
@@ -43,7 +44,8 @@ export class OAuthComponent implements OnInit {
     private _locker: LockerService,
     private route: ActivatedRoute,
     private _messages: MessageService,
-  ) {}
+    private angulartics: Angulartics2,
+  ) { }
 
   ngOnInit() {
     this.currentUser = this._auth.getUser()
@@ -108,6 +110,14 @@ export class OAuthComponent implements OnInit {
             this._router.navigate(['/license/accept/' + this.licenseId])
             return
           }
+          // fire an analytic event here for tracking purposes
+          this.angulartics.eventTrack.next({
+            action: 'login',
+            properties: {
+              category: this._auth.setAnalyticEventCategory(),
+              label: this._auth.setAnalyticEventLabel(),
+            },
+          })
           this._router.navigateByUrl(this.redirectRouteUrl)
         },
         err => {
