@@ -1,0 +1,16 @@
+#coOwnerModal.modal.fade-in.show
+  .modal-dialog
+    .modal-content
+      .modal-header
+        h4.modal-title Make <b>{{ student.fullname }}</b> a Group co-teacher
+        button((click)="closeModal.emit()", type="button", class="close") &times;
+      .modal-body
+        p By making {{ student.fullname }} a co-teacher of this Group, they will be able to access all teacher tools, and will be able to activate Heat Vision, delete comments, or access student Reading Recaps. 
+        p Would you like to proceed?
+      .modal-footer
+        div(*ngIf="showError", class="alert alert-danger", role="alert")
+          strong Error Updating User
+          | There was an error upgrading the student to co-teacher, please try again or contact support.
+        .btn-row.right
+          button.btn((click)="closeModal.emit()", type="button", data-dismiss="modal") Cancel
+          button#confirmCoTeacherBtn.btn.btn-primary((click)="closeModal.emit(); makeCoOwner(student);") Yes, make co-teacher

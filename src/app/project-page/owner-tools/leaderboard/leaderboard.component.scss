@@ -1,5 +1,12 @@
 @import '../../../../sass/base/variables';
 
+// Leaderboard only, bottom padding for dropdown menus
+.container-fluid {
+  min-height: 100%;
+  overflow-y: auto;
+  padding-bottom: 50px;
+}
+
 .circle {
   border: 2px solid #8ed9ff;
   border-radius: 50%;
@@ -170,6 +177,11 @@ $userListBorderWidth: 2px;
   &:nth-child(odd) {
     background: #f5f8f8;
   }
+
+  &:hover,
+  &:focus {
+    background: #eef7fb;
+  }
 }
 
 .icon-comment-filter {
@@ -196,18 +208,21 @@ $userListBorderWidth: 2px;
   &.active {
     border-color: $blue;
     color: $blue;
+    background: #fff;
   }
 }
 
-.student-filter__wrap {
-  width: 65px;
+.user-list__action {
+  position: relative;
   float: right;
-  text-align: center;
-  margin-top: -2px;
+  margin-left: 5px;
+
+  & .btn {
+    z-index: 1;
+  }
 }
 
-.student-replies__wrap {
-  text-align: center;
-  float: right;
-  width: 60px;
+//  Guide tooltips should show above pane
+.tooltip {
+  z-index: $zTop - 1000;
 }

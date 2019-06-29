@@ -1,5 +1,13 @@
+@import '../../../../sass/base/variables';
+
 #readingReport {
   border: dashed 2px #dcdcdc;
+}
+
+// allow dropdown to push content in reading recap
+.sliding-pane .container {
+  overflow: visible;
+  padding-bottom: $base-pad * 2;
 }
 
 .text-md {

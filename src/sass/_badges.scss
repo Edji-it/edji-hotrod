@@ -6,8 +6,50 @@
   background-color: #87d87c;
 }
 
+.badge-teacher {
+  background-color: #fff;
+  color: #969696;
+  border: 2px solid $blue;
+
+  &.badge-button {
+    &:hover,
+    &:focus {
+      background-color: $blue;
+      color: #fff;
+    }
+  }
+
+  &--label {
+    display: inline-block;
+    padding: 0px 0.5em;
+    font-weight: 700;
+    vertical-align: middle;
+    margin-bottom: 0px;
+    background: $blue;
+    border-radius: 7px;
+    color: #fff;
+    height: 14px;
+    line-height: 14px;
+  }
+}
+
+.badge-primary {
+  &.badge-button {
+    &:hover,
+    &:focus {
+      background-color: #008fd9;
+    }
+  }
+}
+
 .badge-secondary {
   background-color: #aaa;
+  &.badge-button {
+    &:hover,
+    &:focus {
+      background-color: #777;
+    }
+  }
 }
 
 .badge-info {

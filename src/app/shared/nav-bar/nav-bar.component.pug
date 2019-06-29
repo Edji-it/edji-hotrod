@@ -40,15 +40,41 @@
           *ngIf="pageTitle",
           title="{{ pageTitle }}"
           ) {{ pageTitle }}
-      .nav-bar__heading.hidden-md-down(*ngIf="showProjectInfo")
+      #inProjectReadingTitle.nav-bar__heading.hidden-md-down(*ngIf="showProjectInfo")
         h1.with-nav-sub(
           *ngIf="currentReading.title",
           title="{{ currentReading.title }}"
           ) {{ currentReading.title }}
-        .nav-bar__author(*ngIf="projectOwner && projectOwner._id")
-          follow-tag([owner]="projectOwner")
-          .badge.badge-pill([ngClass]="[ liveCount > 1 ? 'badge-primary' : 'badge-secondary']") {{ liveCount }} Reading
-
+        .nav-bar__author(*ngIf="currentProject.owners && currentProject.owners[0]")
+          //- span.label.mr-1 Teacher{{currentProject.owners[1] && 's'}}
+          .user-tag-group--teacher
+            .badge.badge-pill.badge-teacher--label.hover--tooltip
+              | T
+              .tooltip.tooltip--top-right
+                .tooltip-title Teacher{{currentProject.owners[1] && 's'}} for this Reading Group
+            ng-container(*ngFor="let owner of currentProject.owners")
+              follow-tag(data-test="owner-tag", [owner]="owner")
+            #addCoTeacherBtn.badge.badge-pill.badge-button.badge-teacher(
+              *ngIf="currentProject.isTeaching",
+              [routerLink]="['./']",
+              [queryParams]="{ studentList: 'coteach'}"
+            ) Add a teacher 
+              //- OR add Co-teacher
+            //- Live Reader Count
+            //- - Student display
+            .badge.badge-pill(
+              *ngIf="!currentProject.isTeaching",
+              [ngClass]="[ liveCount > 1 ? 'badge-primary' : 'badge-secondary']"
+            ) 
+              | {{ liveCount }} Reading
+            //- - Teacher display
+            .badge.badge-pill.badge-button(
+              *ngIf="currentProject.isTeaching",
+              [ngClass]="[ liveCount > 1 ? 'badge-primary' : 'badge-secondary']",
+              [routerLink]="['./']",
+              [queryParams]="{ studentList: 'open'}"
+            ) 
+              | {{ liveCount }} Reading
     //- Login/Register Actions
     .nav__btn-wrap(*ngIf="!user.isLoggedIn && !hideAccountOptions")
       a#loginLink.btn.btn-primary.nav-bar__btn([routerLink]="['/login']") Log In
@@ -83,22 +109,22 @@
             span.list-icon--right([innerHtml]="':outbox_tray:' | emojione")
     //- Project Info (Desktop & Mobile)
     .nav-bar__project-data
-      ng-container(*ngIf="showProjectInfo && currentProject && currentProject._id && projectOwner")
+      ng-container(*ngIf="showProjectInfo && currentProject && currentProject._id && currentProject.owners")
         //- Heat Vision Status
         .nav__btn-slider__wrap.hover--tooltip
           .nav__btn-slider(
               [class.expanded]="sliderBtnExpanded['heat']",
               [class.loading]="sliderBtnLoading['heat']",
-              [class.has-action]="projectOwner._id == user._id",
+              [class.has-action]="currentProject.isTeaching",
               [class.inactive]="!currentProject.heat_vision"
               )
-            ng-container(*ngIf="projectOwner._id == user._id")
+            ng-container(*ngIf="currentProject.isTeaching")
               i.icon.icon-vision-flame((click)="toggleSlider('heat')")
                 .icon-pill-status
               .btn-slider__value.hover-parent((click)="toggleHeatVision(!currentProject.heat_vision)") 
                 .hover-show--inline-block(style="width: 85px; text-align:center;") Turn {{ currentProject.heat_vision ? 'Off' : 'On' }}
                 .hover-hide Heat Vision {{ currentProject.heat_vision ? 'On' : 'Off' }}
-            ng-container(*ngIf="projectOwner._id != user._id")
+            ng-container(*ngIf="!currentProject.isTeaching")
               i.icon.icon-vision-flame((click)="toggleSlider('heat')")
                 .icon-pill-status
               .btn-slider__value
@@ -199,7 +225,7 @@
         ) Go Hero
   //- Page title/reading title
   h1.hidden-md-up.mobile-heading(*ngIf="(pageTitle && !showProjectInfo) || hideAccountOptions") {{ pageTitle }}
-  h1.hidden-md-up.mobile-heading(*ngIf="showProjectInfo || hideAccountOptions") {{ currentReading.title }}
+  h1#inProjectReadingTitle.hidden-md-up.mobile-heading(*ngIf="showProjectInfo || hideAccountOptions") {{ currentReading.title }}
 
 //- Join Reading Code
 //- .container

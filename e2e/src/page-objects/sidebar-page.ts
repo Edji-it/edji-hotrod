@@ -20,6 +20,7 @@ export class Sidebar {
   public navAcademyBtn = element(by.id('navAcademy'))
 
   // Owner Tools
+  public ownerTools = element(by.id('ownerToolsBar'))
   public leaderboardButton = element(by.id('toggleLeaderboard'))
   public firstCommenterComments = element.all(by.css('.e2e-comment--First-Commenter .user-icon')) // User icon is a more reliable indicator of visibility
   public firstCommenterFirstComment = this.firstCommenterComments.first()
@@ -33,6 +34,8 @@ export class Sidebar {
   public heatButtonMobile = element(by.id('toggleHeatVisionMobile'))
   public ownerToolToggleButton = element(by.id('buttonOwnerToolToggle'))
   public readingReportButton = element(by.id('toggleReadingRecap'))
+  public addCoTeacherButton = element(by.id('addCoTeacherBtn'))
+  public ownerName = element.all(by.css('[data-test="owner-tag"]')).first()
 
   public backToDash(): void {
     this.closeModal.isPresent().then(result => {
@@ -168,11 +171,7 @@ export class Sidebar {
         this.leaderboard.isDisplayed().then(result => {
           if (result) {
             this.leaderboardClose.click()
-            browser.wait(
-              this.EC.invisibilityOf(this.leaderboard),
-              5000,
-              'leaderboard never closed',
-            )
+            browser.wait(this.EC.invisibilityOf(this.leaderboard), 5000, 'leaderboard never closed')
           }
         })
       }

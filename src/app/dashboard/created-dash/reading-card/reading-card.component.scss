@@ -306,13 +306,6 @@ button.new-reading-btn {
   z-index: 1001;
 }
 
-.dropdown-item {
-  line-height: 1.8em;
-  &:hover {
-    color: $blue;
-  }
-}
-
 .btn--delete-project {
   opacity: 0.5;
   filter: grayscale(100%);
