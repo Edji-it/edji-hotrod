@@ -57,23 +57,30 @@ describe('Discover Feed', () => {
   })
 
   it('should not see readings in following feed if not following anyone', () => {
+    // Ensure we start NOT following Edji
     discover.toggleFollowEdji(false)
+    // refresh if needed to unfollow Edji
+    reset()
+    discover.getPage()
+    // View following feed
+    discover.filterFollowing.click()
+    browser.wait(discover.hasClass(discover.filterFollowing, 'active'), 5000, 'following filter never became active')
     browser.wait(EC.presenceOf(discover.followEdjiMsg), 7500, 'never saw message to follow Edji')
     browser.wait(EC.stalenessOf(discover.firstFeedReading), 5000, 'should not see readings in following feed')
   })
 
   it('should see readings in following feed after following Edji', () => {
+    // Previous test ensures we are not following Edji, now follow Edji
     discover.toggleFollowEdji(true)
+    // UI should load readings ON following Edji
     browser.wait(EC.presenceOf(discover.firstFeedReading), 5000, 'followed Edji account reading not showing')
   })
 
   it('should see the follow Edji account in following feed after unfollowing Edji', () => {
     discover.toggleFollowEdji(false)
     // Reload feed
-    browser.wait(EC.elementToBeClickable(sidebar.navCreate), 3000, 'Create nav button did not become clickable')
-    sidebar.navCreate.click()
-    browser.wait(EC.elementToBeClickable(sidebar.navDiscover), 3000, 'Discover nav button did not become clickable')
-    sidebar.navDiscover.click()
+    reset()
+    discover.getPage()
     browser.wait(
       EC.elementToBeClickable(discover.firstFeedReading),
       5000,
@@ -224,8 +231,14 @@ describe('Discover Feed', () => {
       browser.wait(EC.visibilityOf(discover.searchCount), 5000, 'discover search results were not visible')
       let searchCount = await discover.searchCount.getText()
       expect(parseInt(searchCount)).toBeGreaterThan(0, 'expected to see discover search results when entering a search')
-      // clear the search input
+      // Clear search term
       discover.searchInput.clear()
+      // Wait for default results to show again
+      browser.wait(
+        EC.visibilityOf(discover.searchCount),
+        5000,
+        'discover results were not visible after clearing search',
+      )
     })
 
     it('should not get any readings for a bad search', async () => {
