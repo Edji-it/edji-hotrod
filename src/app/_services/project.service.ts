@@ -976,7 +976,7 @@ export class ProjectService {
     this.commentByPosSubject.next(this.commentByPosSource)
   }
 
-  public isCommentVisible(comment: any, inProgressFilter?: CommentFilter, initiateComments?: boolean): boolean {
+  public isCommentVisible(comment: EdjiComment, inProgressFilter?: CommentFilter, initiateComments?: boolean): boolean {
     let filter = this.activeFilter || inProgressFilter
     if (filter) {
       // If a comment filter is active, only show filtered comments
@@ -996,7 +996,7 @@ export class ProjectService {
         heatVisible = this.project.heat_vision || this.project.isTeaching
       }
       // Your own comments and the Owner/Teacher's comments are ALWAYS visible
-      let alwaysVisible = comment.user_id == this.user._id || comment.isTeacher
+      let alwaysVisible = comment.user_id == this.user._id || comment.authorIsTeacher
       return heatVisible || alwaysVisible
     }
   }
