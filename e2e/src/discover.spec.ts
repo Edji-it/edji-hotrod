@@ -70,7 +70,12 @@ describe('Discover Feed', () => {
   it('should see the follow Edji account in following feed after unfollowing Edji', () => {
     discover.toggleFollowEdji(false)
     // Reload feed
-    sidebar.navCreate.click()
+    /**
+     * Replacing sidebar.navCreate.click() with a direct element reference resolved a stale element
+     * issue which was frequent on CircleCI, and reproducable using "headless" locally (running 2-3 times)
+     * - Cody
+     */
+    element(by.id('navCreate')).click()
     sidebar.navDiscover.click()
     browser.wait(
       EC.elementToBeClickable(discover.firstFeedReading),
