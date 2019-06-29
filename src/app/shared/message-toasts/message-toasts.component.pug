@@ -3,6 +3,7 @@
 .toast-wrap
     ng-container(*ngFor="let toast of toastObservable | async")
         .toast(
+            [attr.id]="toast.id",
             [class.show]="!toast.limitToPage || (toast.limitToPage == currentPage)"
             role="alert", 
             aria-live="assertive",

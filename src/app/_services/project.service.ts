@@ -8,7 +8,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
 // Project Dependencies
 import { AuthService } from './auth.service'
 import { SocketService } from './socket.service'
-import { CommentStats, EdjiComment, Project, User } from '../shared/datatypes'
+import { CommentStats, EdjiComment, Project, User, PublicUser } from '../shared/datatypes'
 import { ReadingService } from './reading.service'
 import { AcademyService } from './academy.service'
 
@@ -100,6 +100,8 @@ export class ProjectService {
     this.subscriptions.push(
       this._auth.getCurrentUser().subscribe(user => {
         this.user = user
+        // Update project if necessary
+        this.updateCurrentProjectPermissions(this.currentProjectSource.value, this.user, true)
       }),
       this._socket.commentUpdates.subscribe(
         commentUpdate => {
@@ -138,8 +140,10 @@ export class ProjectService {
        * groupUpdate.type is the identifier for specific events
        */
       this._socket.groupUpdate.subscribe(groupUpdate => {
-        if (groupUpdate.type === 'refreshLeaderboard' && this.user._id === this.project.teacher_id) {
+        if (groupUpdate.type === 'refreshLeaderboard' && this.project.isTeaching) {
           this.addUserInfoToProject(groupUpdate)
+        } else if (groupUpdate.type === 'coteacherPromote') {
+          this.addProjectOwner(groupUpdate.user)
         } else if (groupUpdate.type === 'updateUserStatus' && this.user._id === this.project.teacher_id) {
           this.commentStats.userStatus(groupUpdate.user, groupUpdate.status)
         }
@@ -171,6 +175,24 @@ export class ProjectService {
       }),
     )
   } // constructor
+
+  /**
+   * Update project owners (designed for adding co-teacher)
+   * @calls currentProjectSource
+   */
+  public addProjectOwner(newOwner: PublicUser): void {
+    // Ensure co_owner_ids array exists
+    if (!this.project.co_owner_ids) {
+      this.project.co_owner_ids = []
+    }
+    // Push user into co-owner array
+    if (this.project.co_owner_ids.indexOf(newOwner._id) === -1) {
+      this.project.co_owner_ids.push(newOwner._id)
+      this.project.co_owners.push(newOwner)
+      this.project.owners.push(newOwner)
+      this.currentProjectSource.next(this.project)
+    }
+  }
 
   /**
    * Pulls projects user has joined, paginated
@@ -236,7 +258,10 @@ export class ProjectService {
   public setCurrentProject(projectCode: string): Observable<any> {
     return this._http
       .get(
-        this._auth.getUrl() + '/api/v1/projects/' + encodeURIComponent(projectCode) + '?pop[]=reading_id&pop[]=teacher',
+        this._auth.getUrl() +
+          '/api/v1/projects/' +
+          encodeURIComponent(projectCode) +
+          '?pop[]=reading_id&pop[]=teacher&pop[]=co_owners',
         this._auth.getOptions(),
       )
       .pipe(
@@ -245,6 +270,14 @@ export class ProjectService {
           let teacher = project.teacher
           // Decorate project if archived
           project = this.decorateArchivedProject(project)
+          // Decorate with isTeaching
+          project = this.updateCurrentProjectPermissions(project, this.user)
+          // Attach convenience owners array (used for display)
+          project.owners = [project.teacher]
+          // Populate projectOwners with co-teachers if available
+          if (project.co_owners) {
+            project.owners = project.owners.concat(project.co_owners)
+          }
           // Clear stats object
           this._commentStats.resetStats()
           /**
@@ -261,16 +294,35 @@ export class ProjectService {
           this.project = project
           this.currentProjectSource.next(this.project)
           // Get and attach user information to the students_ids and temp_ids if we have at least 1 of either
-          if (
-            (project.students_ids.length > 0 || project.temp_ids.length > 0) &&
-            this.user._id === this.project.teacher_id
-          ) {
+          if ((project.students_ids.length > 0 || project.temp_ids.length > 0) && this.project.isTeaching) {
             this.getUserInfoFromProject(project)
           }
           // Return the project along the current Observable
           return this.project
         }),
       )
+  }
+
+  /**
+   * Decorate current project with appropriate permissions
+   * @fires this.currentProjectSource
+   * @param user Current user
+   */
+  public updateCurrentProjectPermissions(project: Project, user: User, emit?: boolean): Project {
+    if (!user || !user._id || !project._id) {
+      // Do nothing if no valid user
+      return project
+    }
+    // Check co-owners array
+    let isTeacher: boolean = this.user._id === project.teacher_id
+    let isCoOwner: boolean = project.co_owner_ids && project.co_owner_ids.indexOf(this.user._id) > -1
+    project.isTeaching = isTeacher || isCoOwner
+    // Update observable
+    if (emit) {
+      // Check teacher id
+      this.currentProjectSource.next(project)
+    }
+    return project
   }
 
   /**
@@ -285,12 +337,12 @@ export class ProjectService {
       /**
        * Readings are "archived" if all are true:
        * - Updated date is prior to archived before date
-       * - Readings before Hero v2 (01-01-2018) are "legacy" and not archived
+       * - Readings before Hero v2 (2019-01-01) are "legacy" and not archived
        * - Teacher is NOT Hero
        */
       let archivedBefore = new Date(teacher.archive_readings_before)
       let projectDate = new Date(project.createdAt)
-      if (projectDate < archivedBefore && projectDate > new Date('01-01-2019')) {
+      if (projectDate < archivedBefore && projectDate > new Date('2019-01-01')) {
         project.archived = true
       }
     }
@@ -331,6 +383,9 @@ export class ProjectService {
    * @param groupUpdate the object that contains user properties to properly add student to leaderboard
    */
   private addUserInfoToProject(groupUpdate: any) {
+    // Make sure student and temp arrays exist
+    if (!this.project.students) this.project.students = []
+    if (!this.project.temps) this.project.temps = []
     // if the student that joined is registered, here is their info
     if (groupUpdate.userType && groupUpdate.userType === 'registered') {
       this.project.students.push({
@@ -423,12 +478,18 @@ export class ProjectService {
    */
   private addCommentToArray(comment: EdjiComment, project: Project, user: User, arr: EdjiComment[][]): EdjiComment[][] {
     comment.project_id = project._id
-
+    // Is this a teacher comment?
+    if (
+      comment.user_id === this.project.teacher_id ||
+      (this.project.co_owner_ids && this.project.co_owner_ids.indexOf(comment.user_id) > -1)
+    ) {
+      // preset authorIsTeacher for existing data
+      comment.authorIsTeacher = true
+    }
     // get the user help decorate the comment
-    if (comment.user_id === user._id || comment.user_id === this.project.teacher_id) {
+    if (comment.user_id === user._id || comment.authorIsTeacher) {
       comment.showAvatar = true
     }
-
     // if (comment.loc && comment.loc.y && comment.text==="") {
     //     comment.imagePos = Math.round(comment.loc.y/8)*8
     // }
@@ -697,7 +758,7 @@ export class ProjectService {
         // standard event info:
         event_name: 'comment_action',
         user_id: this.user._id,
-        teacher: this.project.teacher._id === this.user._id,
+        teacher: this.project.isTeaching,
         hero: this.user.hero_status || false,
         institution_id: this.user.institution_ids || [],
         // event-specific info:
@@ -806,7 +867,7 @@ export class ProjectService {
         // standard event info:
         event_name: 'comment_action',
         user_id: this.user._id,
-        teacher: this.project.teacher._id === this.user._id,
+        teacher: this.project.isTeaching,
         hero: this.user.hero_status || false,
         institution_id: this.user.institution_ids || [],
         // event-specific info:
@@ -887,7 +948,7 @@ export class ProjectService {
     // Re-initialize the comment by position array
     this.commentByPosSource = []
     // Copy then reverse the array
-    let commentsArray = this.project.comments.slice().reverse()
+    let commentsArray = this.project.comments ? this.project.comments.slice().reverse() : []
     // Loop through each comment to group comments together by line number
     let len2 = commentsArray.length
     for (let i = 0; i < len2; i++) {
@@ -897,7 +958,7 @@ export class ProjectService {
       let dataInComment =
         (comment.data && comment.data != '') || (comment.url && comment.url != '') || comment.user_id == this.user._id
       // If user is current reading Owner/Teacher or Heat Vision is on, show all comments
-      let heatVisible = this.project.heat_vision || this.user._id == this.project.teacher_id
+      let heatVisible = this.project.heat_vision || this.project.isTeaching
       // Your own comments and the Owner/Teacher's comments are ALWAYS visible
       let alwaysVisible = comment.user_id == this.user._id || comment.user_id == this.project.teacher_id
 
@@ -932,10 +993,10 @@ export class ProjectService {
       // If user is current reading Owner/Teacher or Heat Vision is on, show all comments
       let heatVisible = true
       if (!initiateComments) {
-        heatVisible = this.project.heat_vision || this.user._id == this.project.teacher_id
+        heatVisible = this.project.heat_vision || this.project.isTeaching
       }
       // Your own comments and the Owner/Teacher's comments are ALWAYS visible
-      let alwaysVisible = comment.user_id == this.user._id || comment.user_id == this.project.teacher_id
+      let alwaysVisible = comment.user_id == this.user._id || comment.isTeacher
       return heatVisible || alwaysVisible
     }
   }
@@ -992,6 +1053,22 @@ export class ProjectService {
     // Announce the completed filter to components!
     this.activeFilter = commentFilter
     this.filterUpdatesSource.next(this.activeFilter)
+  }
+
+  /**
+   * Add a user to the co-owner ids array
+   */
+  public makeCoOwner(student: User, project?: Project) {
+    if (!project) {
+      project = this.currentProjectSource.value
+    }
+    let coOwnerArray: string[] = project.co_owner_ids || []
+    if (!coOwnerArray.includes(student._id)) {
+      coOwnerArray.push(student._id)
+    }
+    // Assume update will succeed, since owner_ids array will be updated and can't be checked
+    this.addProjectOwner(student)
+    return this.update({ co_owner_ids: coOwnerArray }, project._id)
   }
 } // _project
 

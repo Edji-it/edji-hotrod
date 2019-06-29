@@ -1,6 +1,7 @@
 /**
 * Tags
-* Elements used to sort Readings and Projects
+* - Categories used to sort Readings and Projects
+* - User "tag" name display
 */
 
 $defaultTagColor: #767676;
@@ -25,4 +26,39 @@ $defaultTagColor: #767676;
   &:focus {
     background: darken($defaultTagColor, 10%);
   }
+}
+
+.user-tag {
+  line-height: 12px;
+  vertical-align: middle;
+  font-size: 12px;
+  width: auto;
+  border-radius: 8px;
+  padding: 0px 1px 1px 1px;
+  padding-left: 10px;
+  border: 1px solid #e0e0e0;
+  white-space: nowrap;
+  display: inline-block;
+
+  & .badge {
+    margin-top: 1px;
+  }
+}
+
+.user-tag-group--teacher {
+  display: inline-block;
+  position: relative;
+
+  & .user-tag,
+  & .badge-teacher--label {
+    // border: 2px solid $blue;
+    position: relative; // for tooltip
+    margin-right: 2px;
+  }
+}
+
+.user-tag__name {
+  display: inline-block;
+  margin-right: 8px;
+  font-size: 11px;
 }

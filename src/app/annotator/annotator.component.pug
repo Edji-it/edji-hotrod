@@ -38,7 +38,7 @@ scroll-progress([scrollProgress]="currentScroll")
             )
                 i.icon.icon-mic
         //- Mobile buttons
-        .comment-options__mobile-wrap.hidden-lg-up([class.bottom-bar-offset]="user._id == project.teacher_id")
+        .comment-options__mobile-wrap.hidden-lg-up([class.bottom-bar-offset]="project.isTeaching")
             //- .mobile-carrot-pointer &#9654;
             .comment__options--mobileRow.comment-options-group--mobile([class.btn-group-show--animation]="optionsShow")
                 //- Emoji Comment 
@@ -203,7 +203,7 @@ scroll-progress([scrollProgress]="currentScroll")
 
 //- Bottom of the page Options
 .fixed-btn-row--SE.hidden-sm-down(
-    [class.bottom-bar-offset]="user._id == project.teacher_id._id"
+    [class.bottom-bar-offset]="project.isTeaching"
 )
     tutorial-box(
         [tutorialName]="'highlighting'",

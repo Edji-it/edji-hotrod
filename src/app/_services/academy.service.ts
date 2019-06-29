@@ -213,22 +213,20 @@ export class AcademyService implements CanActivate {
     this.monitorUserReadingStatus()
     // Kick off the reading timer subscription
     this.readingTimerSubscription = interval(30000).subscribe(() => {
-      if (this.userActive) {
-        // send the data to Pipo to log the new reading
-        this.pipoEvent({
-          // standard event info:
-          event_name: 'reading_tick',
-          user_id: user._id,
-          teacher: project.teacher._id === user._id,
-          hero: user.hero_status || false,
-          institution_id: user.institution_ids || [],
-          // event-specific info:
-          reading_id: project.reading_id._id,
-          group_id: project._id,
-          reading_owner: project.teacher._id,
-          reading_time: 30,
-        })
-      }
+      // send the data to Pipo to log the new reading
+      this.pipoEvent({
+        // standard event info:
+        event_name: 'reading_tick',
+        user_id: user._id,
+        teacher: project.isTeaching,
+        hero: user.hero_status || false,
+        institution_id: user.institution_ids || [],
+        // event-specific info:
+        reading_id: project.reading_id._id,
+        group_id: project._id,
+        reading_owner: project.teacher._id,
+        reading_time: 30,
+      })
     })
   }
 

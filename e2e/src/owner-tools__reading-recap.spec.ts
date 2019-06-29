@@ -39,13 +39,17 @@ describe('Project Page as an owner using reading report: ', () => {
   })
 
   afterEach(() => {
-    browser.manage().logs().get('browser').then(browserLog => {
-      if (browserLog.length > 0) {
-        browserLog.forEach(log => {
-          console.error(log.message)
-        })
-      }
-    })
+    browser
+      .manage()
+      .logs()
+      .get('browser')
+      .then(browserLog => {
+        if (browserLog.length > 0) {
+          browserLog.forEach(log => {
+            console.error(log.message)
+          })
+        }
+      })
   })
 
   /* ---- Reading Report Tests ------------------------- */
@@ -99,7 +103,11 @@ describe('Project Page as an owner using reading report: ', () => {
       3000,
       'send evaluation button never became clickable',
     )
-    element(by.id('sendEvalBtn')).click()
+    // Scroll to button at bottom of form
+    browser.executeScript('document.querySelector("#sendEvalBtn").scrollIntoView()').then(function() {
+      // Send Feedback
+      element(by.id('sendEvalBtn')).click()
+    })
     // Verify eval input was cleared
     browser.wait(
       EC.visibilityOf(element(by.css('#sendEvalBtn:disabled'))),
@@ -115,7 +123,7 @@ describe('Project Page as an owner using reading report: ', () => {
   })
 
   it('should verify you can open the dropdown for student selection and change the student', () => {
-    browser.executeScript('document.querySelector(".reading-recap").scrollTo(0,0);').then(function () {
+    browser.executeScript('document.querySelector(".reading-recap").scrollTo(0,0);').then(function() {
       // Select first student
       browser.wait(EC.elementToBeClickable(recapStudentDropdown), 5000, 'recap student selector never became clickable')
       recapStudentDropdown.click()
@@ -138,13 +146,11 @@ describe('Project Page as an owner using reading report: ', () => {
     // Click on the student dropdown to open it up
     browser.wait(EC.elementToBeClickable(recapStudentDropdown), 3000, 'never saw student selection dropdown')
     recapStudentDropdown.click()
+    // Find second student
+    let secondStudent = recapStudentOptions.get(1)
     // Click on the other student in the dropdown
-    browser.wait(
-      EC.elementToBeClickable(element(by.css('li.ui-dropdown-item:nth-child(2)'))),
-      3000,
-      'never saw second student in the dropdown',
-    )
-    element(by.css('li.ui-dropdown-item:nth-child(2)')).click()
+    browser.wait(EC.elementToBeClickable(secondStudent), 3000, 'never saw second student in the dropdown')
+    secondStudent.click()
     // verify the audio comment count is 0 for the second student (Josh)
     element
       .all(by.css('.count-block.count-block__audio'))
@@ -157,7 +163,7 @@ describe('Project Page as an owner using reading report: ', () => {
   })
 
   it('should close the report and make sure it closes', () => {
-    browser.executeScript('document.querySelector(".reading-recap").scrollTo(0,0);').then(function () {
+    browser.executeScript('document.querySelector(".reading-recap").scrollTo(0,0);').then(function() {
       // Close Reading Report
       browser.wait(EC.elementToBeClickable(element(by.id('closeReadingRecap'))), 3000, 'never saw close button')
       element(by.id('closeReadingRecap')).click()

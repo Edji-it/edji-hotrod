@@ -1,11 +1,16 @@
 import { EdjiComment, User } from '.'
 import { Reading } from './reading'
+import { PublicUser } from './user'
 
 /** Project properties we add on the front end */
 export interface Project extends BaseProject {
-  students: { _id: string; fullname: string; username: string; userType: string }[] // front end properties to add more reference info to students
-  temps: { _id: string; fullname: string; userType: string }[] // front end properties to add more reference info to temps
+  students: PublicUser[] // front end properties to add more reference info to students
+  temps: PublicUser[] // front end properties to add more reference info to temps
+  co_owners: PublicUser[]
+  owners: PublicUser[]
+  // Front end convenience flags
   archived?: boolean
+  isTeaching?: boolean
 }
 
 /** The project object as it is returned from the server */
@@ -14,6 +19,7 @@ interface BaseProject {
   reading_id: Reading
   teacher: User
   teacher_id: any
+  co_owner_ids?: string[]
   owner_id: any
   comments: EdjiComment[]
   answers?: EdjiComment[]

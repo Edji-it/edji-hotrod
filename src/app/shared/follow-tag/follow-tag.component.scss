@@ -1,21 +1,4 @@
-.user-tag {
-  line-height: 12px;
-  vertical-align: middle;
-  font-size: 12px;
-  width: auto;
-  border-radius: 8px;
-  padding: 0px 1px 1px 1px;
-  padding-left: 10px;
-  border: 1px solid #e0e0e0;
-  white-space: nowrap;
-  display: inline-block;
-}
-
-.user-tag__name {
-  display: inline-block;
-  margin-right: 8px;
-  font-size: 11px;
-}
+@import '../../../sass/base/variables';
 
 .badge-unfollow {
   & .on-hover {
