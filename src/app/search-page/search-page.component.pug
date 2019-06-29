@@ -29,7 +29,7 @@ nav-bar([showDashboardOptions]="true")
                             )
                             .form-control.form-control-dummysize(#dummySearchField) {{ searchParams.searchTerm }}
                 div.mt-2
-                    span Found <b id="searchCount">{{ total || 0 }}</b> readings&nbsp;
+                    span(*ngIf="!loading") Found <b data-test="searchCount" id="searchCount">{{ total || 0 }}</b> readings&nbsp;
                     a.link(
                         *ngIf="filterCount > 0", 
                         tabindex="0", 
@@ -125,7 +125,7 @@ nav-bar([showDashboardOptions]="true")
             .row.loading(*ngIf="loading")
             ng-container(*ngIf="isSearching || filterCount > 0")
                 .found__readings
-                    span Found <b>{{ total || 0 }}</b> readings&nbsp;
+                    span(*ngIf="!loading") Found <b data-test="searchCount">{{ total || 0 }}</b> readings&nbsp;
                     a.link(
                         *ngIf="filterCount > 0", 
                         tabindex="0", 
