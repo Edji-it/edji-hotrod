@@ -146,13 +146,11 @@ describe('Project Page as an owner using reading report: ', () => {
     // Click on the student dropdown to open it up
     browser.wait(EC.elementToBeClickable(recapStudentDropdown), 3000, 'never saw student selection dropdown')
     recapStudentDropdown.click()
+    // Find second student
+    let secondStudent = recapStudentOptions.get(1)
     // Click on the other student in the dropdown
-    browser.wait(
-      EC.elementToBeClickable(element(by.css('li.ui-dropdown-item:nth-child(2)'))),
-      3000,
-      'never saw second student in the dropdown',
-    )
-    element(by.css('li.ui-dropdown-item:nth-child(2)')).click()
+    browser.wait(EC.elementToBeClickable(secondStudent), 3000, 'never saw second student in the dropdown')
+    secondStudent.click()
     // verify the audio comment count is 0 for the second student (Josh)
     element
       .all(by.css('.count-block.count-block__audio'))
