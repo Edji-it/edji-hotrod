@@ -23,7 +23,8 @@
     "e2e:mobile": "ng e2e --protractor-config e2e/protractor-mobile.conf.js",
     "postinstall": "node ./ng-add-pug-loader.js",
     "release": "yarn standard-version",
-    "server:ci": "http-server dist/edji-hotrod -p 3375 --cors --silent"
+    "server:ci": "http-server dist/edji-hotrod -p 3375 --cors --silent",
+    "webdriver": "webdriver-manager update"
   },
   "private": true,
   "dependencies": {
