@@ -216,6 +216,10 @@ $userListBorderWidth: 2px;
   position: relative;
   float: right;
   margin-left: 5px;
+
+  & .btn {
+    z-index: 1;
+  }
 }
 
 //  Guide tooltips should show above pane
