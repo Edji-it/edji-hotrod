@@ -259,11 +259,13 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
             this.project = project
             this.setLinePositions()
             this.directCommentOptions = []
-            for (let i = 0; i < this.project.types.length; i++) {
-              // Ignore comment types that can't be made on a word
-              // - add other types not display in text-options to the array below
-              if (['reply'].indexOf(this.project.types[i]) < 0) {
-                this.directCommentOptions.push(this.project.types[i])
+            if (this.project.types) {
+              for (let i = 0; i < this.project.types.length; i++) {
+                // Ignore comment types that can't be made on a word
+                // - add other types not display in text-options to the array below
+                if (['reply'].indexOf(this.project.types[i]) < 0) {
+                  this.directCommentOptions.push(this.project.types[i])
+                }
               }
             }
             // Set aside feedback for current user

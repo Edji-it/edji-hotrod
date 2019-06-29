@@ -935,7 +935,7 @@ export class ProjectService {
     // Re-initialize the comment by position array
     this.commentByPosSource = []
     // Copy then reverse the array
-    let commentsArray = this.project.comments.slice().reverse()
+    let commentsArray = this.project.comments ? this.project.comments.slice().reverse() : []
     // Loop through each comment to group comments together by line number
     let len2 = commentsArray.length
     for (let i = 0; i < len2; i++) {
