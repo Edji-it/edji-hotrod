@@ -10,7 +10,7 @@ export class CommentStats {
     comment_avg: 0,
     userStats: [],
   }
-  public teacherId: string
+  public teacherIds: string[]
 
   constructor(project?: Project) {
     this._stats = this.initStats(project)
@@ -37,9 +37,19 @@ export class CommentStats {
     if (!project) {
       return commentStats
     }
-
-    this.teacherId = project && project.teacher_id ? project.teacher_id : ''
-
+    /**
+     * @todo Teacher ids should be referenced directly from the project, so they are kept up to date
+     * - This should be done as comment stats logic is pushed into either the project service or a separate one
+     */
+    this.teacherIds = []
+    // Push teacher id
+    if (project && project.teacher_id) {
+      this.teacherIds.push(project.teacher_id)
+    }
+    // Push co-teacher ids
+    if (project && project.co_owner_ids) {
+      this.teacherIds = this.teacherIds.concat(project.co_owner_ids)
+    }
     // loop through student ids and add them to the array
     //  we have to do this because some students won't make a comment, so this is their only data on the project
     //  looping through addCommentToStats will later increment the count
@@ -97,6 +107,7 @@ export class CommentStats {
         commentStats.userStats.push({
           _id: student._id,
           comment_count: 0,
+
           reply_count: 0,
           emoji_comment_count: 0,
           text_comment_count: 0,
@@ -118,6 +129,7 @@ export class CommentStats {
         commentStats.userStats.push({
           _id: student._id,
           comment_count: 0,
+
           reply_count: 0,
           emoji_comment_count: 0,
           text_comment_count: 0,
@@ -267,7 +279,7 @@ export class CommentStats {
 
     for (var i = userLength - 1; i >= 0; i--) {
       // only calculate these stats for the students
-      if (this._stats.userStats[i]._id !== this.teacherId) {
+      if (this.teacherIds.indexOf(this._stats.userStats[i]._id) === -1) {
         tmp = this._stats.userStats[i].comment_count
         avgSum += this._stats.userStats[i].comment_count
         if (tmp < lowest) lowest = tmp

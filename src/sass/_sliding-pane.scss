@@ -13,6 +13,7 @@ $slidingPaneWidth: 265px;
   left: 0;
   background: #fff; //$midGray; //$gray;
   z-index: $zMid + 1000;
+  overflow-x: hidden;
   overflow-y: auto;
 
   .keyboard-adjust & {
@@ -77,6 +78,21 @@ $slidingPaneWidth: 265px;
   }
 }
 
+// Used when overflow:visible is needed
+.sliding-pane__wrap {
+  @extend .sliding-pane;
+  padding: 0px;
+  overflow: visible !important;
+
+  // Wrap acts as pane, so sliding-pane becomes simple content class
+  & .sliding-pane {
+    height: 100%;
+    width: 100% !important;
+    position: absolute;
+    box-shadow: none;
+  }
+}
+
 .sliding-pane-comment {
   padding: 0px;
   z-index: $zMid + 1000;
@@ -103,6 +119,11 @@ $slidingPaneWidth: 265px;
   &.replies {
     overflow-y: hidden;
   }
+}
+
+.sliding-pane__header {
+  display: block;
+  position: relative;
 }
 
 .user-list-item {

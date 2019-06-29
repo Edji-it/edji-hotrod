@@ -3,26 +3,32 @@ import { browser, by, element, protractor } from 'protractor'
 import { Project, Sidebar, Home } from './page-objects'
 import { LoginModal, GuestLoginForm } from './components'
 import { reset } from './utils/browser-methods'
+import { StudentList } from './components/student-list'
 
 describe('Project Page', () => {
   let project = new Project()
   let home = new Home()
   let sidebar = new Sidebar()
+  let studentList = new StudentList()
   let loginModal = new LoginModal()
   let EC = protractor.ExpectedConditions
   let guestForm = new GuestLoginForm()
 
   afterEach(() => {
-    browser.manage().logs().get('browser').then(browserLog => {
-      if (browserLog.length > 0) {
-        browserLog.forEach(log => {
-          console.error(log.message)
-        })
-      }
-    })
+    browser
+      .manage()
+      .logs()
+      .get('browser')
+      .then(browserLog => {
+        if (browserLog.length > 0) {
+          browserLog.forEach(log => {
+            console.error(log.message)
+          })
+        }
+      })
   })
 
-  describe('Commenting', () => {
+  describe('Commenting and student interactions', () => {
     beforeAll(() => {
       project.getPage('test')
       guestForm.loginAsGuest()
@@ -196,6 +202,26 @@ describe('Project Page', () => {
         EC.invisibilityOf(project.textReplyComment),
         5000,
         'text reply comment never went away after deleting it',
+      )
+    })
+
+    /**
+     * Verify students can't do things they shouldn't
+     */
+    it('should not give students owner tools', () => {
+      // Student should see teacher names
+      expect(browser.isElementPresent(sidebar.ownerName)).toBeTruthy(
+        'student should see at least one owner/teacher for the reading',
+      )
+      // Student should not have co-teacher button
+      expect(browser.isElementPresent(sidebar.addCoTeacherButton)).toBeFalsy(
+        'student should not see "Add Teacher" in reading',
+      )
+      // Student should not see owner tools
+      expect(browser.isElementPresent(sidebar.ownerTools)).toBeFalsy('student should not see Owner Tools in reading')
+      // Student should not see student list toggle
+      expect(browser.isElementPresent(studentList.studentListToggle)).toBeFalsy(
+        'student should not see Student List toggle in reading',
       )
     })
   })

@@ -1,6 +1,6 @@
 import { browser, by, element, protractor, ElementFinder } from 'protractor'
 import { PageObjectInterface } from './PageObjectInterface'
-import { reset } from '../utils/browser-methods';
+import { reset } from '../utils/browser-methods'
 
 export class Dashboard implements PageObjectInterface {
   private EC = protractor.ExpectedConditions
@@ -70,6 +70,8 @@ export class Dashboard implements PageObjectInterface {
   // get the dashboard page
   getPage(): void {
     browser.get('/#/dashboard')
+    // Allow dashboard to display reading cards, and avoid interacting with previous data that may flash/render
+    browser.sleep(1500)
   } //getPage(): void
 
   // get the dashboard page
@@ -90,7 +92,11 @@ export class Dashboard implements PageObjectInterface {
         this.toast.isDisplayed().then(result => {
           if (result) {
             this.toastClose.click()
-            browser.wait(this.EC.invisibilityOf(this.toast), 3000, 'toast was blocking New Reading button, and did not close')
+            browser.wait(
+              this.EC.invisibilityOf(this.toast),
+              3000,
+              'toast was blocking New Reading button, and did not close',
+            )
           }
         })
       }
