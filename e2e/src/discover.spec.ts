@@ -70,7 +70,9 @@ describe('Discover Feed', () => {
   it('should see the follow Edji account in following feed after unfollowing Edji', () => {
     discover.toggleFollowEdji(false)
     // Reload feed
+    browser.wait(EC.elementToBeClickable(sidebar.navCreate), 3000, 'Create nav button did not become clickable')
     sidebar.navCreate.click()
+    browser.wait(EC.elementToBeClickable(sidebar.navDiscover), 3000, 'Discover nav button did not become clickable')
     sidebar.navDiscover.click()
     browser.wait(
       EC.elementToBeClickable(discover.firstFeedReading),
