@@ -92,6 +92,8 @@ describe('Project Page as a Co-Teacher: ', () => {
       'Student List owner tool button was not available for a co-teacher',
     )
     studentList.studentListToggle.click()
+    // Wait for slident pane animation
+    browser.sleep(500)
     // Verify Student List shows
     browser.wait(EC.visibilityOf(studentList.content), 3000, 'Student List content did not show for a co-teacher')
     // Close
