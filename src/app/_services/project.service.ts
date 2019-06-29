@@ -8,7 +8,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
 // Project Dependencies
 import { AuthService } from './auth.service'
 import { SocketService } from './socket.service'
-import { CommentStats, EdjiComment, Project, User } from '../shared/datatypes'
+import { CommentStats, EdjiComment, Project, User, PublicUser } from '../shared/datatypes'
 import { ReadingService } from './reading.service'
 import { AcademyService } from './academy.service'
 
@@ -143,12 +143,7 @@ export class ProjectService {
         if (groupUpdate.type === 'refreshLeaderboard' && this.project.isTeaching) {
           this.addUserInfoToProject(groupUpdate)
         } else if (groupUpdate.type === 'coteacherPromote') {
-          // Push user into co-owner array
-          if (this.project.co_owner_ids.indexOf(groupUpdate.user._id) === -1) {
-            this.project.co_owner_ids.push(groupUpdate.user._id)
-            this.project.co_owners.push(groupUpdate.user)
-            this.currentProjectSource.next(this.project)
-          }
+          this.addProjectOwner(groupUpdate.user)
         } else if (groupUpdate.type === 'updateUserStatus' && this.user._id === this.project.teacher_id) {
           this.commentStats.userStatus(groupUpdate.user, groupUpdate.status)
         }
@@ -180,6 +175,24 @@ export class ProjectService {
       }),
     )
   } // constructor
+
+  /**
+   * Update project owners (designed for adding co-teacher)
+   * @calls currentProjectSource
+   */
+  public addProjectOwner(newOwner: PublicUser): void {
+    // Ensure co_owner_ids array exists
+    if (!this.project.co_owner_ids) {
+      this.project.co_owner_ids = []
+    }
+    // Push user into co-owner array
+    if (this.project.co_owner_ids.indexOf(newOwner._id) === -1) {
+      this.project.co_owner_ids.push(newOwner._id)
+      this.project.co_owners.push(newOwner)
+      this.project.owners.push(newOwner)
+      this.currentProjectSource.next(this.project)
+    }
+  }
 
   /**
    * Pulls projects user has joined, paginated
@@ -1053,6 +1066,8 @@ export class ProjectService {
     if (!coOwnerArray.includes(student._id)) {
       coOwnerArray.push(student._id)
     }
+    // Assume update will succeed, since owner_ids array will be updated and can't be checked
+    this.addProjectOwner(student)
     return this.update({ co_owner_ids: coOwnerArray }, project._id)
   }
 } // _project
