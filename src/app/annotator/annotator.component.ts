@@ -259,15 +259,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
             this.project = project
             this.setLinePositions()
             this.directCommentOptions = []
-            if (this.project.types) {
-              for (let i = 0; i < this.project.types.length; i++) {
-                // Ignore comment types that can't be made on a word
-                // - add other types not display in text-options to the array below
-                if (['reply'].indexOf(this.project.types[i]) < 0) {
-                  this.directCommentOptions.push(this.project.types[i])
-                }
-              }
-            }
             // Set aside feedback for current user
             if (this.project.report_evals) {
               this.setFeedback()
@@ -276,17 +267,27 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
             if (initialLoad) {
               // Display heat vision status on initial load
               this.showHeatVisionToast(this.project.heat_vision)
-              // Check if audio is supported
-              if (this.project.types.indexOf('audio') > -1 && !this._audio.isSupported()) {
-                this.audioSupportError = true
-                // if audio is not supported, let analytics know
-                this.angulartics.eventTrack.next({
-                  action: 'noAudioSupport',
-                  properties: {
-                    category: this._auth.setAnalyticEventCategory(),
-                    label: this._auth.setAnalyticEventLabel(),
-                  },
-                })
+              // Set comment types
+              if (this.project.types) {
+                for (let i = 0; i < this.project.types.length; i++) {
+                  // Ignore comment types that can't be made on a word
+                  // - add other types not display in text-options to the array below
+                  if (['reply'].indexOf(this.project.types[i]) < 0) {
+                    this.directCommentOptions.push(this.project.types[i])
+                  }
+                }
+                // Check if audio is supported
+                if (this.project.types.indexOf('audio') > -1 && !this._audio.isSupported()) {
+                  this.audioSupportError = true
+                  // if audio is not supported, let analytics know
+                  this.angulartics.eventTrack.next({
+                    action: 'noAudioSupport',
+                    properties: {
+                      category: this._auth.setAnalyticEventCategory(),
+                      label: this._auth.setAnalyticEventLabel(),
+                    },
+                  })
+                }
               }
             }
           }

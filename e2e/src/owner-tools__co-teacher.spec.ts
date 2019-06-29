@@ -40,6 +40,8 @@ describe('Project Page as a Co-Teacher: ', () => {
     browser.wait(EC.elementToBeClickable(sidebar.addCoTeacherButton), 5000, 'did not see "Add Teacher" button in Nav')
     sidebar.addCoTeacherButton.click()
     // Button opens student list, where a user can be promoted from their settings
+    // Wait for sliding pane transition (slidingPaneTime)
+    browser.sleep(500)
     // Verify tooltip explanation shows
     browser.wait(
       EC.elementToBeClickable(studentList.coTeacherTooltip),
@@ -93,6 +95,7 @@ describe('Project Page as a Co-Teacher: ', () => {
     // Verify Student List shows
     browser.wait(EC.visibilityOf(studentList.content), 3000, 'Student List content did not show for a co-teacher')
     // Close
+    browser.wait(EC.elementToBeClickable(studentList.close), 3000, 'Student List close button did not become clickable')
     studentList.close.click()
     browser.wait(EC.invisibilityOf(studentList.content), 3000, 'Student List did not close for co-teacher')
     // Verify co-teacher name shows in Nav
