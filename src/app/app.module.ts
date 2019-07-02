@@ -272,6 +272,9 @@ const routerOptions: ExtraOptions = {
       pageTracking: {
         clearIds: true,
       },
+      // gst: {
+      //   trackingIds: ['UA-83792906-1'],
+      // }
     }),
     RouterModule.forRoot(ROUTES, routerOptions),
     DataListModule,

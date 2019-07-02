@@ -258,13 +258,13 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
             let initialLoad = this.project._id != project._id
             this.project = project
             this.setLinePositions()
-            this.directCommentOptions = []
             // Set aside feedback for current user
             if (this.project.report_evals) {
               this.setFeedback()
             }
             // Initial Load events
             if (initialLoad) {
+              this.directCommentOptions = []
               // Display heat vision status on initial load
               this.showHeatVisionToast(this.project.heat_vision)
               // Set comment types

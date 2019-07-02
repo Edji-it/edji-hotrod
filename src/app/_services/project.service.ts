@@ -273,7 +273,11 @@ export class ProjectService {
           // Decorate with isTeaching
           project = this.updateCurrentProjectPermissions(project, this.user)
           // Attach convenience owners array (used for display)
-          project.owners = [project.teacher]
+          if (project.co_owner_ids && project.co_owner_ids.indexOf(teacher._id) > -1) {
+            project.owners = []
+          } else {
+            project.owners = [project.teacher]
+          }
           // Populate projectOwners with co-teachers if available
           if (project.co_owners) {
             project.owners = project.owners.concat(project.co_owners)
@@ -976,7 +980,7 @@ export class ProjectService {
     this.commentByPosSubject.next(this.commentByPosSource)
   }
 
-  public isCommentVisible(comment: any, inProgressFilter?: CommentFilter, initiateComments?: boolean): boolean {
+  public isCommentVisible(comment: EdjiComment, inProgressFilter?: CommentFilter, initiateComments?: boolean): boolean {
     let filter = this.activeFilter || inProgressFilter
     if (filter) {
       // If a comment filter is active, only show filtered comments
@@ -996,7 +1000,7 @@ export class ProjectService {
         heatVisible = this.project.heat_vision || this.project.isTeaching
       }
       // Your own comments and the Owner/Teacher's comments are ALWAYS visible
-      let alwaysVisible = comment.user_id == this.user._id || comment.isTeacher
+      let alwaysVisible = comment.user_id == this.user._id || comment.authorIsTeacher
       return heatVisible || alwaysVisible
     }
   }
@@ -1068,6 +1072,11 @@ export class ProjectService {
     }
     // Assume update will succeed, since owner_ids array will be updated and can't be checked
     this.addProjectOwner(student)
+    // Track in analytics
+    this.angulartics.eventTrack.next({
+      action: 'coTeaching_promote',
+      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
+    })
     return this.update({ co_owner_ids: coOwnerArray }, project._id)
   }
 } // _project
