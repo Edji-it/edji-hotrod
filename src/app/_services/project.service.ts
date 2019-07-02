@@ -273,7 +273,11 @@ export class ProjectService {
           // Decorate with isTeaching
           project = this.updateCurrentProjectPermissions(project, this.user)
           // Attach convenience owners array (used for display)
-          project.owners = [project.teacher]
+          if (project.co_owner_ids.indexOf(teacher._id) > -1) {
+            project.owners = []
+          } else {
+            project.owners = [project.teacher]
+          }
           // Populate projectOwners with co-teachers if available
           if (project.co_owners) {
             project.owners = project.owners.concat(project.co_owners)
