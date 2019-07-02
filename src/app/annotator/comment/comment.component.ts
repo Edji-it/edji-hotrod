@@ -1,32 +1,18 @@
 import { Subscription } from 'rxjs'
-import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, SimpleChange } from '@angular/core'
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, SimpleChange, AfterViewInit } from '@angular/core'
 
 // Project Dependencies
 import { AuthService, CommentService, ProjectService, UtilToolService, AcademyService, SocketService } from '../../_services'
 import { EdjiComment, CommentPermissions, EdjiQuestion } from './../../shared/datatypes'
 import { ALLSPARK } from './../../app.constants'
+import { ActivatedRoute } from '@angular/router'
 
 @Component({
   selector: 'edji-comment',
   templateUrl: './comment.component.pug',
   styleUrls: ['./comment.component.scss'],
 })
-export class CommentComponent implements OnInit, OnDestroy {
-  /*
-  Front end implementation of a comment.
-  Last Mod: 5 Aug 2017
-
-  NOTES:
-    commentContext : string - 8.5.17
-      For saying what context the comment is used in. Use 'normal' for normal comments,
-      'reply' for comment replies, and 'answer' for answers to questions.
-
-  What you'll need for:
-    - making comment as an answer
-      - commentContext
-      - assignedQuestion
-  */
-
+export class CommentComponent implements OnInit, OnDestroy, AfterViewInit {
   public lineCount: number = 1
   public indexOnLine: number = 1
   public repliesShowing: boolean = false
@@ -46,6 +32,7 @@ export class CommentComponent implements OnInit, OnDestroy {
   private commentPane: boolean
   private indicatesPane: boolean
   private setLineYAttempts: number = 0
+  private fragment: string
 
   @Input() public comment: EdjiComment
   @Input() private readOnly: boolean = false
@@ -94,7 +81,8 @@ export class CommentComponent implements OnInit, OnDestroy {
     private _util: UtilToolService,
     public el: ElementRef,
     private _academy: AcademyService,
-    private _socket: SocketService
+    private _socket: SocketService,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit() {
@@ -166,6 +154,48 @@ export class CommentComponent implements OnInit, OnDestroy {
         this.updateLineCount()
       }),
     )
+  }
+
+  ngAfterViewInit(): void {
+    this.subscriptions.push(
+      this.route.fragment.subscribe(fragment => {
+        if (fragment) {
+          this.fragment = fragment
+          let fragmentType = fragment.split("-")[0] // available types are fb (feedback), comment (comment/reply)
+          if (fragmentType === 'comment') {
+            // set default to position to the comment (if not a reply)
+            let idIndex = 1
+            if (fragment.includes('parent')) {
+              // this means we have a reply and need to locate the parent comment
+              idIndex = 3
+            }
+            // let commentEl = this.commentComponents.toArray().find(commentEl => {
+            //   return commentEl.comment._id === fragment.split("-")[idIndex]
+            // })
+            // settimeout here to prevent errors where expression changes after checked
+            setTimeout(() => {
+              // pop open the replies on that comment
+              //  && this.el.nativeElement.classList.includes('replyCommentBlock')
+              if (fragment.includes('parent') && fragment.includes(this.comment._id) && this.el.nativeElement.className.includes('replyCommentBlock')) {
+                this.scrollToReply()
+              }
+            }, 1)
+          }
+        }
+      }),
+    )
+  }
+
+  scrollToReply(): void {
+    // find the reply
+    // let replyEl = this.commentComponents.find(replyEl => {
+    //   return replyEl.comment._id === this.fragment.split("-")[1]
+    // })
+    // scroll to that reply element
+    setTimeout(() => {
+      this.el && this.el.nativeElement.scrollIntoView({ behavior: 'smooth' })
+      console.log(this.el)
+    }, 250)
   }
 
   /**

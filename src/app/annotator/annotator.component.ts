@@ -218,9 +218,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.subscriptions.push(
-      this.commentPaneEl.commentComponents.changes.subscribe((change) => {
+      this.commentPaneEl.commentComponents.changes.subscribe(() => {
         this.paneCommentComponentUpdates = this.commentPaneEl.commentComponents.toArray()
-        this.scrollToReply()
+        // this.scrollToReply()
       }),
       this.route.fragment.subscribe(fragment => {
         if (fragment) {
