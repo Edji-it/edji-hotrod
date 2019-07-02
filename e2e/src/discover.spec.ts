@@ -335,9 +335,6 @@ describe('Discover Feed', () => {
       sidebar.logout()
       login.getPage()
       login.loginAndVerify(login.botUser, login.botPassword)
-    })
-
-    beforeEach(() => {
       sidebar.navDiscover.click()
     })
 
@@ -354,6 +351,22 @@ describe('Discover Feed', () => {
         'strategies collection button was not clickable',
       )
       discover.filterStrategies.click()
+      browser.wait(
+        EC.elementToBeClickable(discover.strategiesBanner),
+        5000,
+        'never saw strategies collection',
+      )
+    })
+
+    it('should open strategies collection from the user dashboard', () => {
+      sidebar.navCreate.click()
+      // View strategies collection
+      browser.wait(
+        EC.elementToBeClickable(dashboard.strategiesBtn),
+        5000,
+        'strategies collection button was not clickable',
+      )
+      dashboard.strategiesBtn.click()
       browser.wait(
         EC.elementToBeClickable(discover.strategiesBanner),
         5000,

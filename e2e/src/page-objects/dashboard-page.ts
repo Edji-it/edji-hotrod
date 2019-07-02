@@ -32,6 +32,7 @@ export class Dashboard implements PageObjectInterface {
   public searchCount = element(by.id('searchCount'))
   public searchInput = element(by.id('readingSearch'))
   public bookmarksBtn = element(by.id('bookmarksBtn'))
+  public strategiesBtn = element(by.id('dashboardFilterStrategies'))
 
   // public toggle and status
   public publicStatusTitle = 'Public Status <Do Not Delete or Use>'

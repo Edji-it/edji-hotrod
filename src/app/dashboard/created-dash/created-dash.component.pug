@@ -59,6 +59,15 @@
             *ngIf="searchParams.createdCollection === 'versions'",
             [innerHtml]="':books: Versions' | emojione", 
         )
+      //- Strategies
+      .btn-filter-wrap.hover--tooltip(style="position:relative;")
+        button#dashboardFilterStrategies.btn.btn-filter(
+          title="Find strategy templates by Edji to get you started",
+          [routerLink]="['/discover']",
+          [queryParams]="{library: 'strategies'}"
+        )
+          i.icon.icon-strategies-sm(style="vertical-align:middle;")
+          | Strategies
     .card.my-4.hidden-sm-down(*ngIf="!isSearching")
       .card-body.card-body--small.pt-1.px-3.pb-3
         h5.card-title From the Edji Guide
