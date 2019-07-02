@@ -6,6 +6,7 @@ import { Angulartics2 } from 'angulartics2'
 // Project Dependencies
 import { AuthService, ProjectService, ReadingService, SocketService } from '../../_services'
 import { CommentStats, Project, Reading } from './../../shared/datatypes'
+import { ActivatedRoute } from '@angular/router'
 
 @Component({
   selector: 'owner-tools',
@@ -21,10 +22,11 @@ export class OwnerToolsComponent implements OnInit {
   public currentProject: Project
   public currentReading: Reading
   public user: any = {}
-  public showFireFeed: boolean
-  public showCommentCounts: boolean
-  public showQuestionFeed: boolean
-  public showReadingRecap: boolean
+  public showFireFeed: boolean = false
+  public showCommentCounts: boolean = false
+  public showQuestionFeed: boolean = false
+  public showReadingRecap: boolean = false
+  public showCoOwnerGuide: boolean = false
   public ownerToolBlockHeight: string
 
   // State vars
@@ -36,6 +38,7 @@ export class OwnerToolsComponent implements OnInit {
     private _socket: SocketService,
     private _readings: ReadingService,
     private angulartics: Angulartics2,
+    private _route: ActivatedRoute,
   ) {
     this.commentStats = this._projects.commentStats
   }
@@ -56,8 +59,6 @@ export class OwnerToolsComponent implements OnInit {
           console.error(error)
         },
       ),
-    )
-    this.subscriptions.push(
       this._projects.currentProject.subscribe(
         project => {
           // For transitioning how the server handles teacher/owner ids
@@ -74,11 +75,17 @@ export class OwnerToolsComponent implements OnInit {
           console.error(error)
         },
       ),
-    )
-
-    this.subscriptions.push(
       this._auth.getCurrentUser().subscribe(user => {
         this.user = user
+      }),
+      // Watch URL params for quick links
+      this._route.queryParams.subscribe(params => {
+        if (params.studentList) {
+          this.showCommentCounts = true
+          if (params.studentList === 'coteach') {
+            this.showCoOwnerGuide = true
+          }
+        }
       }),
     )
   }

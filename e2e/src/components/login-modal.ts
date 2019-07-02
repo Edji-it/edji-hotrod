@@ -13,6 +13,7 @@ export class LoginModal {
   }
 
   // html elements for guest login
+  public modal = element(by.id('loginModal'))
   public guestLoginHeader = element(by.id('guestLoginHeader'))
   public guestNameInput = element(by.id('guestNameInput'))
   public guestLoginButton = element(by.id('guestLoginButton'))

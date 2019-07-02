@@ -2,7 +2,10 @@
 .user-icon.pointer.hidden-sm-down(
   *ngIf="indexOnLine<9",
   (tap)='triggerCommentPane(true)',
-  [ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '','avatar-count-' + indexOnLine, 'avatar-' + comment.type, active ? 'active' : '' ]"
+  [ngClass]="['avatar-count-' + indexOnLine, 'avatar-' + comment.type]",
+  [class.active]="active",
+  [class.mobileBlock-mobile-comment]="commentMobile",
+  [class.has-teacher-tag]="comment.authorIsTeacher"
 )
   span.tooltipbody(*ngIf="indexOnLine<8")
     .tooltip-title([class.inline-center]="comment.type == 'audio'")
@@ -24,7 +27,8 @@
     .tooltiptext.tooltipcount {{commentsByPos[comment.lineY] && commentsByPos[comment.lineY].length}} Comments
   span.user-icon__initials(*ngIf="indexOnLine<8") {{comment.author.substring(0,2)}}
   span.user-icon__overflow(*ngIf="indexOnLine==8") +{{commentsByPos[comment.lineY] && commentsByPos[comment.lineY].length - 7}}
-  .comment__button--mobile.avatar__reply(*ngIf="repliesById[comment._id] && repliesById[comment._id].length>0")
+  .reply-tag(*ngIf="repliesById[comment._id] && repliesById[comment._id].length>0")
+    | {{repliesById[comment._id].length}}
 
 //- Mobile Icon
 .comment__button--mobile.hidden-md-up((tap)='triggerCommentPane(false)', [ngClass]="[ active ? 'active' : '' ]")

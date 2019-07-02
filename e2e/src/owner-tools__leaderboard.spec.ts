@@ -9,15 +9,13 @@ describe('Project Page as an owner wishing to filter by student: ', () => {
   let project = new Project()
   let loginModal = new LoginModal()
   let sidebar = new Sidebar()
-  let home = new Home()
   let EC = protractor.ExpectedConditions // vital
   let login = new Login()
 
   /* ---- beforeEach ---------------------------- */
 
   beforeAll(() => {
-    browser.get('/#/home')
-    home.enterProjectCodeFromHome('testhero')
+    project.joinProjectCodeAndLogIn('testhero', login.heroUser, login.heroPassword)
   })
 
   afterAll(() => {
@@ -25,41 +23,22 @@ describe('Project Page as an owner wishing to filter by student: ', () => {
   })
 
   afterEach(() => {
-    browser.manage().logs().get('browser').then(browserLog => {
-      if (browserLog.length > 0) {
-        browserLog.forEach(log => {
-          console.error(log.message)
-        })
-      }
-    })
+    browser
+      .manage()
+      .logs()
+      .get('browser')
+      .then(browserLog => {
+        if (browserLog.length > 0) {
+          browserLog.forEach(log => {
+            console.error(log.message)
+          })
+        }
+      })
   })
 
   it('should open the Leaderboard and filter by student', () => {
-    browser.wait(EC.presenceOf(loginModal.guestLoginHeader), 5000, "never saw the login modal's header")
-    expect(loginModal.guestLoginHeader.isPresent()).toBeTruthy()
-    expect(loginModal.clickawaySquare.isPresent()).toBeFalsy()
-
-    // switch to login section and validate
-    browser.wait(
-      EC.elementToBeClickable(loginModal.gotoAccountLoginButton),
-      5000,
-      'never found button to go to account login',
-    )
-    loginModal.gotoAccountLoginButton.click()
-    expect(loginModal.clickawaySquare.isPresent()).toBeTruthy()
-    loginModal.usernameInput.sendKeys(login.heroUser)
-    loginModal.passwordInput.sendKeys(login.heroPassword)
-    browser.wait(
-      EC.elementToBeClickable(loginModal.accountLoginButton),
-      5000,
-      'never found the account login button on modal',
-    )
-
-    loginModal.accountLoginButton.submit()
-
     // Need to check for and click the owner tools button if its showing
     sidebar.ownerToolToggle()
-
     // Open Leaderboard
     browser.wait(
       EC.elementToBeClickable(sidebar.leaderboardButton),

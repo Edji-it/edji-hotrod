@@ -98,7 +98,7 @@
         i#readingPublic.icon(*ngIf="reading.public", [innerHTML]="':earth_americas:' | emojione")
         i#readingPrivate.icon(*ngIf="!reading.public", [innerHTML]="':lock:' | emojione")
         .tooltip-wrap
-          .tooltip([class.show]="togglePublicFlag", [class.no-link]="!reading.source")
+          .tooltip.tooltip--interactive([class.show]="togglePublicFlag", [class.no-link]="!reading.source")
             .tooltip-title
               | Make public for others to Discover?
             .tooltiptext.block-with-text
@@ -127,7 +127,7 @@
         i.icon.icon-bookmark.hide-inactive
         i.icon.icon-bookmark-off.hide-active
         .tooltip-wrap
-          .tooltip
+          .tooltip.tooltip--interactive
             .tooltip-title(*ngIf="!user.hero_status") Bookmarking is available with <a class="link" [routerLink]="['/plans']">Hero</a>
             .tooltip-title(*ngIf="user.hero_status") {{ reading.owner_bookmarked ? "Bookmarked" : "Not Bookmarked" }}
   //- Delete Reading if Draft Button
