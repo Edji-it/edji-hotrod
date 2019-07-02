@@ -69,16 +69,17 @@ describe('Reading Media', () => {
       )
       newReading.uploadPDfModalButton.click()
       browser.wait(
-        EC.elementToBeClickable(element(by.id('titleCard'))),
+        EC.elementToBeClickable(element.all(by.id('titleCard')).first()),
         5000,
         'insert PDF modal did not become available',
       )
-      let delBtn = element(by.id('pdfDelBtn'))
-      let confirmDelBtn = element(by.id('pdfDelBtnConfirm'))
+      let delBtn = element.all(by.id('pdfDelBtn')).first()
+      let confirmDelBtn = element.all(by.id('pdfDelBtnConfirm')).first()
 
       browser.wait(EC.elementToBeClickable(delBtn), 5000, 'delBtn never became clickable')
       delBtn.click()
 
+      browser.sleep(1000) // Give the confirm modal a second to pop up before we immediately dismiss the check
       browser.wait(EC.elementToBeClickable(confirmDelBtn), 5000, 'confirm delete button never became clickable')
       confirmDelBtn.click()
     })
