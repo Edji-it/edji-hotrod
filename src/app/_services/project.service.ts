@@ -1068,6 +1068,11 @@ export class ProjectService {
     }
     // Assume update will succeed, since owner_ids array will be updated and can't be checked
     this.addProjectOwner(student)
+    // Track in analytics
+    this.angulartics.eventTrack.next({
+      action: 'coTeaching_promote',
+      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
+    })
     return this.update({ co_owner_ids: coOwnerArray }, project._id)
   }
 } // _project
