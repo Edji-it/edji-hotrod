@@ -179,7 +179,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     private _audio: AudioService,
     private _messages: MessageService,
     private route: ActivatedRoute,
-    private _academy: AcademyService
+    private _academy: AcademyService,
   ) {
     this.window = window
   }
@@ -313,34 +313,41 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
             this._projects.filterByUser(this.user)
           }
           if (project) {
+            let initialLoad = this.project._id != project._id
             this.project = project
             this.setLinePositions()
-            // Check if audio is supported
-            if (this.project.types.indexOf('audio') > -1 && !this._audio.isSupported()) {
-              this.audioSupportError = true
-              // if audio is not supported, let analytics know
-              this.angulartics.eventTrack.next({
-                action: 'noAudioSupport',
-                properties: {
-                  category: this._auth.setAnalyticEventCategory(),
-                  label: this._auth.setAnalyticEventLabel(),
-                },
-              })
-            }
-            this.directCommentOptions = []
-            for (let i = 0; i < this.project.types.length; i++) {
-              // Ignore comment types that can't be made on a word
-              // - add other types not display in text-options to the array below
-              if (['reply'].indexOf(this.project.types[i]) < 0) {
-                this.directCommentOptions.push(this.project.types[i])
-              }
-            }
             // Set aside feedback for current user
             if (this.project.report_evals) {
               this.setFeedback()
             }
-            // Display heat vision status on initial load
-            this.showHeatVisionToast(this.project.heat_vision)
+            // Initial Load events
+            if (initialLoad) {
+              this.directCommentOptions = []
+              // Display heat vision status on initial load
+              this.showHeatVisionToast(this.project.heat_vision)
+              // Set comment types
+              if (this.project.types) {
+                for (let i = 0; i < this.project.types.length; i++) {
+                  // Ignore comment types that can't be made on a word
+                  // - add other types not display in text-options to the array below
+                  if (['reply'].indexOf(this.project.types[i]) < 0) {
+                    this.directCommentOptions.push(this.project.types[i])
+                  }
+                }
+                // Check if audio is supported
+                if (this.project.types.indexOf('audio') > -1 && !this._audio.isSupported()) {
+                  this.audioSupportError = true
+                  // if audio is not supported, let analytics know
+                  this.angulartics.eventTrack.next({
+                    action: 'noAudioSupport',
+                    properties: {
+                      category: this._auth.setAnalyticEventCategory(),
+                      label: this._auth.setAnalyticEventLabel(),
+                    },
+                  })
+                }
+              }
+            }
           }
         },
         error => {
@@ -477,6 +484,11 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
           if (reply.user_id !== this.user._id && parentComment['user_id'] === this.user._id) {
             this.showFeedbackToast(reply, 'reply')
           }
+        } else if (groupUpdate.type === 'coteacherPromote') {
+          // Show promotion toast for user
+          if (groupUpdate.user._id === this.user._id) {
+            this.showPromotedToast()
+          }
         }
       }),
     )
@@ -611,6 +623,16 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
         requireDismiss: true,
       })
     }
+  }
+
+  private showPromotedToast(): void {
+    this._messages.sendToast({
+      message: 'You have been promoted to co-teacher, please refresh!',
+      type: 'promoted',
+      id: 'coteacherPromoted',
+      limitToPage: 'project',
+      requireDismiss: true,
+    })
   }
 
   /**
@@ -1282,7 +1304,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
         highlightCount += this.filterHighlightArray[i]
       }
     } else {
-      if ((this.project.heat_vision || this.user._id == this.project.teacher_id) && this.highlightArray[i]) {
+      if ((this.project.heat_vision || this.project.isTeaching) && this.highlightArray[i]) {
         highlightCount += this.highlightArray[i]
       }
       if (this.alwaysHighlightArray[i]) {

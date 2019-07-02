@@ -125,6 +125,6 @@
           button#subHero.btn.btn-primary(*ngIf="!previouslyCancelled", [class.loading]="loading", (click)="checkout()") Subscribe
           button#subHero.btn.btn-primary(*ngIf="previouslyCancelled", [class.loading]="loading", (click)="resumeHero()") Resubscribe to Hero
         .btn-row.right(*ngIf="userNowHero")
-          button.btn((click)="heroWasBorn.emit(); closeModal.emit()" type="button" data-dismiss="modal") Awesome!
+          button#confirmedHero.btn((click)="heroWasBorn.emit(); closeModal.emit()" type="button" data-dismiss="modal") Awesome!
         .btn-row.right(*ngIf="resubscribeSent")
           button.btn((click)="closeModal.emit()" type="button" data-dismiss="modal") Close

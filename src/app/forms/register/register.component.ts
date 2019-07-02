@@ -48,7 +48,6 @@ export class RegisterFormComponent implements OnInit {
   constructor(
     private _auth: AuthService,
     private _project: ProjectService,
-    private angulartics: Angulartics2,
     private _fb: FormBuilder,
     private _title: Title,
     private _locker: LockerService,
@@ -120,14 +119,6 @@ export class RegisterFormComponent implements OnInit {
         (data: any) => {
           this.registerLoading = false
           if (data.user) {
-            // fire an analytic event here for tracking purposes
-            this.angulartics.eventTrack.next({
-              action: 'registration',
-              properties: {
-                category: this._auth.setAnalyticEventCategory(),
-                label: this._auth.setAnalyticEventLabel(),
-              },
-            })
             if (this.readingToAdd && this.tempUserId) {
               this._auth
                 .convertTempUser(this.tempUserId)

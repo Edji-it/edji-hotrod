@@ -118,6 +118,7 @@ export class CommentComponent implements OnInit, OnDestroy, AfterViewInit {
         project => {
           if (project) {
             this.project = project
+            this.setAuthorOwner(project)
           }
         },
         error => {
@@ -196,6 +197,22 @@ export class CommentComponent implements OnInit, OnDestroy, AfterViewInit {
       this.el && this.el.nativeElement.scrollIntoView({ behavior: 'smooth' })
       console.log(this.el)
     }, 250)
+  }
+
+  /**
+   * Set display flag for Teachers/Owners/Co-Owners
+   * @description provides reset when co-owners change, and handles live comments
+   * @param project
+   */
+  private setAuthorOwner(project): void {
+    if (
+      this.comment.user_id === project.teacher_id ||
+      (project.co_owner_ids && project.co_owner_ids.indexOf(this.comment.user_id) > -1)
+    ) {
+      this.comment.authorIsTeacher = true
+    } else {
+      this.comment.authorIsTeacher = false
+    }
   }
 
   /**

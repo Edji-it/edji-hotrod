@@ -81,8 +81,9 @@ import {
   DiscoverAddMetaModal,
   ReadingArchivedModal,
   ConfirmArchiveModal,
+  ConfirmCoOwnerModal,
   ReadingPreviewModal,
-  ReadingLinkModal
+  ReadingLinkModal,
 } from './modals'
 import {
   AnnotatorComponent,
@@ -174,7 +175,7 @@ const APP_PROVIDERS = [
 
 const routerOptions: ExtraOptions = {
   useHash: true,
-  anchorScrolling: 'enabled'
+  anchorScrolling: 'enabled',
 }
 
 /**
@@ -209,6 +210,7 @@ const routerOptions: ExtraOptions = {
     AddProjectModal,
     ReadingArchivedModal,
     ConfirmArchiveModal,
+    ConfirmCoOwnerModal,
     ReadingLinkModal,
     ReadingPreviewModal,
     ChangePassComponent,
@@ -255,7 +257,7 @@ const routerOptions: ExtraOptions = {
     LicenseRedirectComponent,
     LicenseWelcomeComponent,
     ReadingRecapComponent,
-    TeamPageComponent
+    TeamPageComponent,
   ],
   /** Components which can be dynamically created */
   entryComponents: [UserDetailsUpdateModal],
@@ -272,6 +274,9 @@ const routerOptions: ExtraOptions = {
       pageTracking: {
         clearIds: true,
       },
+      // gst: {
+      //   trackingIds: ['UA-83792906-1'],
+      // }
     }),
     RouterModule.forRoot(ROUTES, routerOptions),
     DataListModule,

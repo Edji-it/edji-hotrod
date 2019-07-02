@@ -3,6 +3,7 @@ import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_di
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { take, debounceTime, map } from 'rxjs/operators'
 import { fromEvent } from 'rxjs'
+import { Angulartics2 } from 'angulartics2'
 
 import { User } from './../../shared/datatypes'
 import { AuthService, BumblebeeService, AcademyService, MailchimpService } from './../../_services'
@@ -25,14 +26,14 @@ export class UserDetailsUpdateModal implements OnInit {
     id: string
     checkboxCopy: string
   }[] = [
-    { name: 'student', id: 'typeStudentInput', checkboxCopy: 'Student :writing_hand:' },
-    { name: 'teacher', id: 'typeTeacherInput', checkboxCopy: 'Teacher :apple:' },
-    { name: 'administrator', id: 'typeAdministratorInput', checkboxCopy: 'Tech Coach/Administrator :clipboard:' },
-    { name: 'business', id: 'typeBusinessInput', checkboxCopy: 'Business Application :briefcase:' },
-    { name: 'personal', id: 'typePersonalInput', checkboxCopy: 'Personal Reading Platform :books:' },
-    { name: 'robot', id: 'typeRobotInput', checkboxCopy: "I'm a robot. :robot_face:" },
-    { name: 'other', id: 'typeOtherInput', checkboxCopy: 'Other :sparkles:' },
-  ]
+      { name: 'student', id: 'typeStudentInput', checkboxCopy: 'Student :writing_hand:' },
+      { name: 'teacher', id: 'typeTeacherInput', checkboxCopy: 'Teacher :apple:' },
+      { name: 'administrator', id: 'typeAdministratorInput', checkboxCopy: 'Tech Coach/Administrator :clipboard:' },
+      { name: 'business', id: 'typeBusinessInput', checkboxCopy: 'Business Application :briefcase:' },
+      { name: 'personal', id: 'typePersonalInput', checkboxCopy: 'Personal Reading Platform :books:' },
+      { name: 'robot', id: 'typeRobotInput', checkboxCopy: "I'm a robot. :robot_face:" },
+      { name: 'other', id: 'typeOtherInput', checkboxCopy: 'Other :sparkles:' },
+    ]
   public identitySelect: boolean = true
   private existingUser: boolean
 
@@ -45,9 +46,9 @@ export class UserDetailsUpdateModal implements OnInit {
     header: string
     body: string
   } = {
-    header: 'Before you begin',
-    body: 'Help us customize your experience. Are you a...'
-  }
+      header: 'Before you begin',
+      body: 'Help us customize your experience. Are you a...'
+    }
 
   public schools: any[]
   public schoolSuggestShow: boolean
@@ -57,11 +58,11 @@ export class UserDetailsUpdateModal implements OnInit {
     district_name: string,
     district_id: string
   } = {
-    school_name: '',
-    school_id: '',
-    district_name: '',
-    district_id: ''
-  }
+      school_name: '',
+      school_id: '',
+      district_name: '',
+      district_id: ''
+    }
 
   constructor(
     private _academy: AcademyService,
@@ -69,6 +70,7 @@ export class UserDetailsUpdateModal implements OnInit {
     private _bumble: BumblebeeService,
     private _chimp: MailchimpService,
     _fb: FormBuilder,
+    private angulartics: Angulartics2
   ) {
     this.userDetailsForm = _fb.group({
       school: [null, Validators.required],
@@ -130,7 +132,7 @@ export class UserDetailsUpdateModal implements OnInit {
     let contactMe = false
     if (form.value.school) {
       let districtNameVal = this.schoolInfo.district_name
-      if (this.schoolInfo.school_name==='') {
+      if (this.schoolInfo.school_name === '') {
         districtNameVal = form.value.school
       }
       // set the school and district data here
@@ -178,6 +180,14 @@ export class UserDetailsUpdateModal implements OnInit {
               teacher: true,
               hero: res.user.hero_status || false,
               institution_id: res.user.institution_ids || [],
+            })
+            // fire an analytic event here for tracking purposes
+            this.angulartics.eventTrack.next({
+              action: 'registration',
+              properties: {
+                category: this._auth.setAnalyticEventCategory(),
+                label: this._auth.setAnalyticEventLabel(),
+              },
             })
           }
         },
@@ -248,7 +258,7 @@ export class UserDetailsUpdateModal implements OnInit {
       const debouncedInput = keyUpEvent && keyUpEvent.pipe(debounceTime(250))
       const searching = this.input && debouncedInput.subscribe(async val => {
         let searchText = this.userDetailsForm.value.school
-        if (searchText!=='') {
+        if (searchText !== '') {
           try {
             let schoolResults: any[] = []
             schoolResults = await this._auth.getSchoolDistrict(searchText).toPromise()
@@ -263,19 +273,19 @@ export class UserDetailsUpdateModal implements OnInit {
     }, 1)
   }
 
-   /**
-   * Sets up the results that come back so a user can select them
-   * @param results search Results that we get from the school/district lookup
-   */
+  /**
+  * Sets up the results that come back so a user can select them
+  * @param results search Results that we get from the school/district lookup
+  */
   private displayResults(results: any): void {
     this.schools = results
     this.schoolSuggestShow = true
   }
 
-   /**
-   * Set the school name in the field and then set the school details to the form object
-   * @param school is the school that the user selected!
-   */
+  /**
+  * Set the school name in the field and then set the school details to the form object
+  * @param school is the school that the user selected!
+  */
   public setSchoolInfo(school: any) {
     this.schoolSuggestShow = false
     // set the schoolInfo so we can save it on form submit

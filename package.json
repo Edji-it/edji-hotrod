@@ -1,6 +1,6 @@
 {
   "name": "edji-hotrod",
-  "version": "4.10.8",
+  "version": "4.10.12",
   "description": "Hot Rod is Edji's roaring Front End!",
   "author": "Edji, Inc.",
   "homepage": "https://edji.it/",
@@ -19,15 +19,18 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "e2e:ci": "protractor-flake --parser standard --max-attempts=3 -- e2e/protractor-circleci.conf.js",
+    "e2e:dev": "protractor-flake --parser standard --max-attempts=3 -- e2e/protractor.conf.js",
     "e2e:headless": "ng e2e --protractor-config e2e/protractor-circleci.conf.js",
     "e2e:mobile": "ng e2e --protractor-config e2e/protractor-mobile.conf.js",
     "postinstall": "node ./ng-add-pug-loader.js",
     "release": "yarn standard-version",
-    "server:ci": "http-server dist/edji-hotrod -p 3375 --cors --silent"
+    "server:ci": "http-server dist/edji-hotrod -p 3375 --cors --silent",
+    "webdriver": "webdriver-manager update"
   },
   "private": true,
   "dependencies": {
     "@angular/animations": "^7.2.5",
+    "@angular/cdk": "^7.2.5",
     "@angular/common": "^7.2.5",
     "@angular/compiler": "^7.2.5",
     "@angular/core": "^7.2.5",

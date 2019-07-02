@@ -22,13 +22,17 @@ describe('Project Page as a Project Owner: ', () => {
   })
 
   afterEach(() => {
-    browser.manage().logs().get('browser').then(browserLog => {
-      if (browserLog.length > 0) {
-        browserLog.forEach(log => {
-          console.error(log.message)
-        })
-      }
-    })
+    browser
+      .manage()
+      .logs()
+      .get('browser')
+      .then(browserLog => {
+        if (browserLog.length > 0) {
+          browserLog.forEach(log => {
+            console.error(log.message)
+          })
+        }
+      })
   })
 
   it('should toggle on Heat Vision as Project Owner', () => {
@@ -57,6 +61,9 @@ describe('Project Page as a Project Owner: ', () => {
     // Need to check for and click the owner tools button if its showing
     sidebar.ownerToolToggle()
 
+    /**
+     * @todo this test will pass if no heat vision button is found
+     */
     // Desktop Heat Vision Button toggle
     sidebar.heatButton.isPresent().then(result => {
       if (result) {
