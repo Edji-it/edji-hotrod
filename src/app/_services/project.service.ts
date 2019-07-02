@@ -273,7 +273,11 @@ export class ProjectService {
           // Decorate with isTeaching
           project = this.updateCurrentProjectPermissions(project, this.user)
           // Attach convenience owners array (used for display)
-          project.owners = [project.teacher]
+          if (project.co_owner_ids && project.co_owner_ids.indexOf(teacher._id) > -1) {
+            project.owners = []
+          } else {
+            project.owners = [project.teacher]
+          }
           // Populate projectOwners with co-teachers if available
           if (project.co_owners) {
             project.owners = project.owners.concat(project.co_owners)
@@ -1068,6 +1072,11 @@ export class ProjectService {
     }
     // Assume update will succeed, since owner_ids array will be updated and can't be checked
     this.addProjectOwner(student)
+    // Track in analytics
+    this.angulartics.eventTrack.next({
+      action: 'coTeaching_promote',
+      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
+    })
     return this.update({ co_owner_ids: coOwnerArray }, project._id)
   }
 } // _project
