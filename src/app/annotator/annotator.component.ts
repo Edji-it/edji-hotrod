@@ -220,7 +220,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     this.subscriptions.push(
       this.commentPaneEl.commentComponents.changes.subscribe(() => {
         this.paneCommentComponentUpdates = this.commentPaneEl.commentComponents.toArray()
-        // this.scrollToReply()
+        this.scrollToReply()
       }),
       this.route.fragment.subscribe(fragment => {
         if (fragment) {
@@ -250,13 +250,14 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
               // activate the comment in the service
               this._comments.activeComment = commentEl.comment
               // access the comment component to select the comment and toggle the comment pane
-              commentEl.comment.selected = true
               commentEl.toggleCPane(commentEl.comment, true)
               // pop open the replies on that comment
               if (fragment.includes('parent')) {
                 this.commentPaneEl.commentReplyEmitter(commentEl.comment)
                 // allow browser to scroll to the reply
                 this.replyScrollReady = true
+              } else {
+                commentEl.comment.selected = true
               }
             }, 1)
           }
@@ -266,16 +267,22 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   scrollToReply(): void {
-    // find the reply
-    let replyEl = this.paneCommentComponentUpdates.find(replyEl => {
-      return replyEl.comment._id === this.fragment.split("-")[1]
-    })
-    // scroll to that reply element
-    setTimeout(() => {
-      replyEl && replyEl.el.nativeElement.scrollIntoView({ behavior: 'smooth' })
-    }, 250)
-    // prevent reply scrolling on user directed comment pane updates
-    this.replyScrollReady = false
+    if (this.replyScrollReady) {
+      // find the reply
+      let replyEl = this.paneCommentComponentUpdates.find(replyEl => {
+        return replyEl.comment._id === this.fragment.split("-")[1]
+      })
+      // scroll to that reply element
+      if (replyEl) {
+        setTimeout(() => {
+          replyEl.comment.selected = true
+          this.commentPaneEl.scrollToComment(replyEl.comment, true)
+          // replyEl && replyEl.el.nativeElement.scrollIntoView({ behavior: 'smooth' })
+        }, 1)
+      }
+      // prevent reply scrolling on user directed comment pane updates
+      this.replyScrollReady = false
+    }
   }
 
   ngOnInit() {

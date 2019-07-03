@@ -148,14 +148,17 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
    * Scroll to Comment
    * @param targetComment Comment to scroll to
    */
-  scrollToComment(targetComment: EdjiComment) {
+  scrollToComment(targetComment: EdjiComment, isReply?: boolean) {
+    console.log(targetComment)
     setTimeout(() => {
       let commentEl = document.getElementById('comment-' + targetComment._id)
       // Found comment, scroll!
       if (commentEl && commentEl.scrollIntoView) {
         commentEl.scrollIntoView()
         // Offset for comment pane sticky header (60px) and nav bar (70px), and a lil padding
-        this.commentPane.nativeElement.scrollTop -= 150
+        if (!isReply) {
+          this.commentPane.nativeElement.scrollTop -= 150
+        }
       }
     }, 1)
   }
