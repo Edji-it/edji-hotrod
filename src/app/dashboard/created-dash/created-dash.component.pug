@@ -59,24 +59,28 @@
             *ngIf="searchParams.createdCollection === 'versions'",
             [innerHtml]="':books: Versions' | emojione", 
         )
-      //- Strategies
-      label Collections
-      .btn-filter-wrap.hover--tooltip(style="position:relative;")
-        button#dashboardFilterStrategies.btn.btn-filter(
-          title="Find strategy templates by Edji to get you started",
-          [routerLink]="['/discover']",
-          [queryParams]="{library: 'strategies'}"
-        )
-          i.icon.icon-strategies-sm(style="vertical-align:middle;")
-          | Strategies
-    .card.my-4.hidden-sm-down(*ngIf="!isSearching")
-      .card-body.card-body--small.pt-1.px-3.pb-3
-        h5.card-title From the Edji Guide
-        p.card-text Get ideas and tips for your classroom:
-        ul.link-list
-          li(*ngFor="let guide of guideLinks")
-            a.link(target="_blank", [href]="guide.url")
-              | {{ guide.displayName }}
+    //- Promo content
+    ng-container(*ngIf="!isSearching && !(user && user.isStudent)")
+      .card.my-4.hidden-sm-down
+        .card-body.card-body--small.pt-1.px-3.pb-3
+          .label.card-title From the Edji Guide
+          p.card-text Get ideas and tips for your classroom:
+          ul.link-list
+            li(*ngFor="let guide of guideLinks")
+              a.link(target="_blank", [href]="guide.url")
+                | {{ guide.displayName }}
+      .card.hidden-sm-down
+        .card-body.card-body--small.pt-1.px-3.pb-1
+          .label.card-title Discover Readings
+          //- p.card-text Get ideas and tips for your classroom:
+          .btn-filter-wrap.hover--tooltip(style="position:relative;")
+            button#dashboardFilterStrategies.btn.btn-filter(
+              title="Find strategy templates by Edji to get you started",
+              [routerLink]="['/discover']",
+              [queryParams]="{library: 'strategies'}"
+            )
+              i.icon.icon-strategies-sm(style="vertical-align:middle;")
+              | Strategies
     .form-group(*ngIf="isSearching")
       label Try the Public Library
       .btn-filter-wrap
