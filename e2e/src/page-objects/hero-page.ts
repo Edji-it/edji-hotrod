@@ -42,6 +42,15 @@ export class Hero implements PageObjectInterface {
     browser.get('/#/hero')
   }
 
+  public openHeroModalViaCTA(): void {
+    browser.wait(this.EC.elementToBeClickable(this.topCTAbutton), 3000, 'never saw Hero call to action button')
+    this.topCTAbutton.click()
+    // Wait for modal animation
+    browser.sleep(500)
+    // Verify modal popped up
+    browser.wait(this.EC.elementToBeClickable(this.subscribeModalHeader), 3000, 'never saw Hero subscription modal')
+  }
+
   /**
    * Utility method for switching to the stripe iframe field and putting credit card info in
    * Requires no inputs
