@@ -76,7 +76,7 @@ export class Hero implements PageObjectInterface {
     // Zip/Postal code field animates in, allow for 400ms animation
     // -> this may change since Stripe handles display
     browser.sleep(500)
-    browser.wait(this.EC.elementToBeClickable(this.creditCardZip), 3000, 'credit card zip field was not clickable')
+    browser.wait(this.EC.presenceOf(this.creditCardZip), 3000, 'credit card zip field was not present')
     this.creditCardZip.sendKeys(this.edjiZip)
 
     // switch back to our main content
