@@ -104,12 +104,14 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // Status Booleans
   public isMobile = false
+  private commentFragScrollReady = false
 
   public highlightY = 200
   public highlightX = 20
   public optionLeft = true
   public mobileIndex = 0
   public commentHeightPos = 0
+  private renderTimeout = 3000
 
   public imageCoords = {}
   public imageHotspotPlaceholder: any = {
@@ -242,11 +244,27 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
             let commentEl = this.commentComponents.toArray().find(commentEl => {
               return commentEl.comment._id === fragment.split("-")[idIndex]
             })
-            // scroll to that comment element
-            commentEl && commentEl.el.nativeElement.scrollIntoView({ behavior: 'smooth' })
 
+            // when the page loads with a fragment that links to a comment that is on a word that has not yet rendered
+            if (commentEl.comment.start > this.lastWord) {
+              this.lastWord = commentEl.comment.start + 800
+              // Make sure we broadcast lastWord position out to listening components
+              this._projects.lastWordUpdateSubj.next(this.lastWord)
+            }
+
+            // Hack that follows same settimeout as the below for updating image heights
+            // We have to wait for images and questions to load in order for the scroll on load to be accurate
+            // after the intitial load, we only want a 1ms timeout to prevent errors is all
+            let scrollTimeout = this.renderTimeout
+            if (this.commentFragScrollReady) {
+              scrollTimeout = 1
+            }
             // settimeout here to prevent errors where expression changes after checked
             setTimeout(() => {
+              // Re-run the line positions so comment avatars show up in the right spot
+              this.setLinePositions()
+              // scroll to that comment element
+              commentEl && commentEl.el.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' })
               // activate the comment in the service
               this._comments.activeComment = commentEl.comment
               // access the comment component to select the comment and toggle the comment pane
@@ -259,7 +277,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
               } else {
                 commentEl.comment.selected = true
               }
-            }, 1)
+            }, scrollTimeout)
           }
         }
       }),
@@ -277,7 +295,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
         setTimeout(() => {
           replyEl.comment.selected = true
           this.commentPaneEl.scrollToComment(replyEl.comment, true)
-          // replyEl && replyEl.el.nativeElement.scrollIntoView({ behavior: 'smooth' })
         }, 1)
       }
       // prevent reply scrolling on user directed comment pane updates
@@ -514,7 +531,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     // Hacky McHackFace since images render later, and need to be rendered to determine comment position
     setTimeout(() => {
       this.setLinePositions()
-    }, 3000)
+      this.commentFragScrollReady = true
+    }, this.renderTimeout)
 
     // Only supported by modern browsers, but very reliable in those cases
     document.addEventListener('selectionchange', event => {
