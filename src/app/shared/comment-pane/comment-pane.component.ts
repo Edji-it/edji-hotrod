@@ -149,7 +149,6 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
    * @param targetComment Comment to scroll to
    */
   scrollToComment(targetComment: EdjiComment, isReply?: boolean) {
-    console.log(targetComment)
     setTimeout(() => {
       let commentEl = document.getElementById('comment-' + targetComment._id)
       // Found comment, scroll!
@@ -165,7 +164,6 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
 
   commentActivationEmitter(shouldActivate, comment?: any) {
     let wordIndex = comment.start
-    // let processedCommentData = this._projects.processComments(this.project)
     let commentsByIndex = this._projects.commentsByIndex
 
     let commentIndex = 0
@@ -197,10 +195,8 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
     this.commentUpdated.emit()
   }
 
-  commentReplyEmitter(comment: EdjiComment) {
-    // Toggle display of
-    this.repliesToggleById[comment._id] = !this.repliesToggleById[comment._id]
-    // this.commentReply.emit(comment)
+  commentReplyEmitter(comment: EdjiComment, forceShow?: boolean): void {
+    this.repliesToggleById[comment._id] = forceShow || !this.repliesToggleById[comment._id]
   }
 
   /**

@@ -253,7 +253,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
               commentEl.toggleCPane(commentEl.comment, true)
               // pop open the replies on that comment
               if (fragment.includes('parent')) {
-                this.commentPaneEl.commentReplyEmitter(commentEl.comment)
+                this.commentPaneEl.commentReplyEmitter(commentEl.comment, true)
                 // allow browser to scroll to the reply
                 this.replyScrollReady = true
               } else {
@@ -712,8 +712,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
    * Show tooltip to the side with buttons for adding comment types
    */
   showCommentOptions(event): void {
-    // Debug with:
-    // console.log("showCommentOptions fired from ", event.type)
     if (
       this.showCommentOptionsWait ||
       (event.type == 'touchend' && this.checkIfScrolling(event)) ||

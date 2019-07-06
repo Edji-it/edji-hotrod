@@ -15,7 +15,7 @@ export class MessageToastsComponent implements OnInit {
   public toasts: MessageToast[] = []
   public toastObservable: Observable<MessageToast[]>
 
-  constructor(private _messages: MessageService, public _router: Router, public location: Location) {}
+  constructor(private _messages: MessageService, public _router: Router, public location: Location) { }
 
   ngOnInit() {
     this.toastObservable = this._messages.toastUpdates
