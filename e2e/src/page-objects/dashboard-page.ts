@@ -27,8 +27,8 @@ export class Dashboard implements PageObjectInterface {
   public createdListLoading = element(by.css('.created-list.loading'))
   public createdListNextPage = element(by.css('.created-list .ui-paginator-next'))
   public createdListPrevPage = element(by.css('.created-list .ui-paginator-prev'))
-  public getReadingOptionsByTitle = (title: string) => element(by.css('button[testFindOptions="' + title + '"]'))
-  public getReadingDeleteByTitle = (title: string) => element(by.css('button[testDelete="' + title + '"]'))
+  public getReadingOptionsByTitle = (title: string) => element(by.css('button[data-test="options-' + title + '"]'))
+  public getReadingDeleteByTitle = (title: string) => element(by.css('button[data-test="delete-' + title + '"]'))
   public searchCount = element(by.id('searchCount'))
   public searchInput = element(by.id('readingSearch'))
   public bookmarksBtn = element(by.id('bookmarksBtn'))
@@ -188,6 +188,10 @@ export class Dashboard implements PageObjectInterface {
     })
   }
 
+  /**
+   * Deletes a reading via options menu on dashboard
+   * @param title Reading Title
+   */
   deleteReadingByTitle(title: string): void {
     reset()
     this.getPage()
