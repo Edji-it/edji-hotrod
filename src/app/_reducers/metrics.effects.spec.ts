@@ -7,7 +7,7 @@ import { Observable } from 'rxjs'
 // project imports
 import { MetricsEffects } from './metrics.effects'
 import { IncrementMetric, SetState } from './metrics.reducers'
-import { StateService, BumblebeeService } from './../_services'
+import { StateService, BumblebeeService, AuthService } from './../_services'
 
 describe('metrics effects', () => {
   let effects: MetricsEffects
@@ -29,6 +29,11 @@ describe('metrics effects', () => {
         {
           provide: BumblebeeService, useValue: {
             postMessage: () => { }
+          }
+        },
+        {
+          provide: AuthService, useValue: {
+            getUser: () => { }
           }
         }
       ]
@@ -62,7 +67,7 @@ describe('metrics effects', () => {
 
       actions = hot('--a', { a: action })
       const response = cold('-a|', { a: {} })
-      const expected = cold('---b', { b: {} })
+      const expected = cold('---b', { b: undefined })
 
       stateService.setState = () => response
       expect(effects.incrementMetric$).toBeObservable(expected)

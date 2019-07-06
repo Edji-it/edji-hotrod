@@ -9,6 +9,7 @@ import { User } from '../shared/datatypes'
 import { Angulartics2 } from 'angulartics2'
 import { AppState } from './../_reducers'
 import { IncrementMetric } from '../_reducers/metrics.reducers'
+import { map, take } from 'rxjs/operators';
 @Component({
   selector: 'hero-pricing',
   templateUrl: './hero-pricing.component.pug',
@@ -149,18 +150,18 @@ export class HeroPricingComponent implements OnInit {
     }
 
     this.subscriptions.push(
-      this._auth.getCurrentUser().subscribe(user => {
+      this._auth.getCurrentUser().pipe(
+        map(user => {
+          if (user.email) {
+            // this.store.select('metrics').pipe(take(1)).subscribe(metrics => this.store.dispatch(new IncrementMetric('hero_page_load_count')))
+            this.store.dispatch(new IncrementMetric('hero_page_load_count'))
+          }
+          return user
+        })
+      ).subscribe(user => {
         this.user = user
       }),
     )
-
-    console.log('subscribing...')
-    this.store.select('metrics').subscribe(metrics => {
-      console.log('got metrics state update', metrics)
-    })
-
-    setTimeout(() => { console.log('dispatching...'); this.store.dispatch(new IncrementMetric('hero_page_load_count')) }, 1000)
-
   }
 
   goHero(location?: string): void {

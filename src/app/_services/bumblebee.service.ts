@@ -16,15 +16,15 @@ export class BumblebeeService {
   constructor(private _auth: AuthService, private _http: HttpClient) {
     this.isProd = this._auth.getEnv() === 'prod'
     this.flakUrl = `//flak${this.isProd ? '' : '-dev'}.edji.it`
+    // this.flakUrl = '//localhost:4200'
   }
 
   public postMessage(options: {
     target: string
     message: string
     target_type?: MessageTarget
-  }): Observable<any> {
-    console.log('posting message with', options)
-    return this._http.post(this.flakUrl, options)
+  }): void {
+    this._http.post(`${this.flakUrl}/bumblebee/messages`, options).toPromise()
   }
 
   public sendUserDetails(userDetails: User, sendType?: string): void {
