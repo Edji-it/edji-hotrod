@@ -261,14 +261,12 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
             }
             // settimeout here to prevent errors where expression changes after checked
             setTimeout(() => {
-              // Re-run the line positions so comment avatars show up in the right spot
-              this.setLinePositions()
               // scroll to that comment element
-              commentEl && commentEl.el.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' })
+              commentEl && commentEl.el.nativeElement.scrollIntoView({ behavior: 'smooth' })
               // activate the comment in the service
               this._comments.activeComment = commentEl.comment
               // access the comment component to select the comment and toggle the comment pane
-              commentEl.toggleCPane(commentEl.comment, true)
+              this.toggleCommentPane(true, commentEl.comment)
               // pop open the replies on that comment
               if (fragment.includes('parent')) {
                 this.commentPaneEl.commentReplyEmitter(commentEl.comment, true)

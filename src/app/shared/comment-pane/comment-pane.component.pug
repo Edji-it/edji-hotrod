@@ -42,7 +42,8 @@
                     [isActive]="replyComment.active",
                     [reply]="true",
                     [userPermission]="getCommentPermissions(replyComment)",
-                    (commentActivation)="commentActivationEmitter($event, replyComment)"
+                    (commentActivation)="commentActivationEmitter($event, replyComment)",
+                    [attr.replyId]="replyComment._id"
                   )
               //--Reply input--
               .reply-row

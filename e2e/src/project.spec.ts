@@ -229,22 +229,35 @@ describe('Project Page', () => {
   })
 
   describe('Live Notifications', () => {
+    let commentId = '5d21289421d995dd649174aa'
+    let replyId = '5d212ebc21d995dd649174ae'
+
     beforeAll(() => {
+      login.getPage()
+      browser.wait(EC.elementToBeClickable(login.loginButton), 5000)
       login.loginAndVerify(login.studentUser, login.studentPassword)
-      project.getPage('test-comment') // update
+    })
+
+    it('should open a project with the query param for a live comment and see that comment', () => {
+      project.getPage(`test-live#comment-${commentId}`)
       browser.wait(EC.elementToBeClickable(sidebar.avatarActionIcon))
+      // verify the query param shows up in the url
+      browser.wait(EC.urlContains(`#comment-${commentId}`), 15000, 'live comment query param never showed in project url')
+      // verify the comment pane opens
+      browser.wait(EC.visibilityOf(project.closePane), 5000, 'comment pane never opened up')
+      // verify we scroll to the reply and can see it
+      browser.wait(EC.visibilityOf(element(by.css(`#comment-${commentId}`))), 5000, 'never found the comment')
     })
 
     it('should open a project with the query param for a live reply and see that reply', () => {
-      let replyId = '5d0c1fa191c20f0a8d2982d1' // update
+      project.getPage(`test-live#comment-${replyId}-parent-${commentId}`)
+      browser.wait(EC.elementToBeClickable(sidebar.avatarActionIcon))
       // verify the query param shows up in the url
-      browser.wait(EC.urlContains(`#comment-${replyId}`), 15000, 'live reply query param never showed in project url')
-      // should see the toast
-      browser.wait(EC.visibilityOf(dashboard.toast), 3000, 'should see the toast message')
+      browser.wait(EC.urlContains(`#comment-${replyId}-parent-${commentId}`), 15000, 'live reply query param never showed in project url')
       // verify the comment pane opens
-      browser.wait(EC.visibilityOf(project.closePane), 3000, 'comment pane never opened up')
+      browser.wait(EC.visibilityOf(project.closePane), 5000, 'comment pane never opened up')
       // verify we scroll to the reply and can see it
-      browser.wait(EC.visibilityOf(element(by.id(`#comment-${replyId}`))), 3000, 'never found the reply comment')
+      browser.wait(EC.visibilityOf(element(by.css(`.replyCommentBlock[replyId="${replyId}"]`))), 5000, 'never found the reply')
     })
   })
 })
