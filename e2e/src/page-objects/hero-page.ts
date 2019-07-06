@@ -78,9 +78,16 @@ export class Hero implements PageObjectInterface {
     browser.sleep(500)
     browser.wait(this.EC.presenceOf(this.creditCardZip), 3000, 'credit card zip field was not present')
     this.creditCardZip.sendKeys(this.edjiZip)
-
     // switch back to our main content
     browser.switchTo().defaultContent()
-    // browser.waitForAngular()
+    // Verify we do not see Stripe entry form errors (useful to know when debugging)
+    browser.sleep(200)
+    let stripeError = element(by.id('card-errors'))
+    browser.wait(
+      this.EC.invisibilityOf(stripeError),
+      3000,
+      'an error was returned by Stripe, card information may not have been entered correctly',
+    )
+    browser.wait
   }
 }
