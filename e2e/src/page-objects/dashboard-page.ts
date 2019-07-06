@@ -152,6 +152,9 @@ export class Dashboard implements PageObjectInterface {
     let groupNameInput = this.projectLabel
     let createGroupButton = element(by.id('buttonCreateGroup'))
 
+    // Wait for new group modal animation
+    browser.sleep(500)
+
     browser.wait(this.EC.presenceOf(groupNameInput), 5000, 'never saw a groupNameInput')
     browser.wait(this.EC.elementToBeClickable(groupNameInput), 5000, 'groupNameInput was never clickable')
 
