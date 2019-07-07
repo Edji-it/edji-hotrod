@@ -55,7 +55,7 @@ export class Hero implements PageObjectInterface {
    * Utility method for switching to the stripe iframe field and putting credit card info in
    * Requires no inputs
    */
-  public enterCreditCardInfo(): void {
+  public enterCreditCardAndSubmit(): void {
     // switch to the stripe iframe selectors
     var driver = browser.driver
     var loc = by.css('#card-element iframe')
@@ -80,14 +80,16 @@ export class Hero implements PageObjectInterface {
     this.creditCardZip.sendKeys(this.edjiZip)
     // switch back to our main content
     browser.switchTo().defaultContent()
+    // Submit form
+    browser.wait(this.EC.elementToBeClickable(this.subscribeButton), 3000, 'never saw Hero subscribe button')
+    this.subscribeButton.click()
     // Verify we do not see Stripe entry form errors (useful to know when debugging)
     browser.sleep(200)
     let stripeError = element(by.id('card-errors'))
     browser.wait(
       this.EC.invisibilityOf(stripeError),
       3000,
-      'an error was returned by Stripe, card information may not have been entered correctly',
+      'error returned by Stripe, card information may not have been entered correctly',
     )
-    browser.wait
   }
 }

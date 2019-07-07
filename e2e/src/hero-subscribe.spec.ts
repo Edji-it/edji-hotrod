@@ -80,9 +80,7 @@ describe('Hero Subscription Management', () => {
       // Verify we made it there
       browser.wait(EC.urlContains('plans'), 5000, 'never reached the Hero promo page')
       hero.openHeroModalViaCTA()
-      hero.enterCreditCardInfo()
-      browser.wait(EC.elementToBeClickable(hero.subscribeButton), 3000, 'never saw Hero subscribe button')
-      hero.subscribeButton.click()
+      hero.enterCreditCardAndSubmit()
 
       // wait for awesome button (means we just became a hero), then click it
       browser.wait(EC.elementToBeClickable(hero.confirmedHero), 10000, 'never saw Awesome button') // requires a long wait, since we have to wait for stripe and optimus
@@ -104,10 +102,7 @@ describe('Hero Subscription Management', () => {
       hero.couponInput.sendKeys(protractor.Key.TAB)
       browser.wait(EC.presenceOf(hero.validCouponMsg), 5000, 'never saw valid coupon success message')
 
-      hero.enterCreditCardInfo()
-
-      browser.wait(EC.elementToBeClickable(hero.subscribeButton), 3000, 'never saw Hero subscribe button')
-      hero.subscribeButton.click()
+      hero.enterCreditCardAndSubmit()
 
       // wait for awesome button (means we just became a hero), then click it
       browser.wait(EC.elementToBeClickable(hero.confirmedHero), 10000, 'never saw Awesome button') // requires a long wait, since we have to wait for stripe and optimus
