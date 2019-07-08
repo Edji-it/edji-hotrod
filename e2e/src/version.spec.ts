@@ -72,7 +72,7 @@ describe('Versioning - ', () => {
     )
     newReading.finalizeButton.click()
     // Should redirect to Project page for new reading
-    browser.wait(EC.urlContains('project'), 7500, 'never arrived at the reading page after published')
+    browser.wait(EC.urlContains('project'), 10000, 'never arrived at the reading page after published')
     // Go to the dashboard
     sidebar.backToDash()
   })

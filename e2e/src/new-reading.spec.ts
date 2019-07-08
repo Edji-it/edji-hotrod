@@ -59,7 +59,7 @@ describe('New Reading Page', () => {
     // Save first group
     newReading.finalizeButton.click()
     // Should redirect to Project page for new reading
-    browser.wait(EC.urlContains('project'), 5000, 'never arrived at new reading')
+    browser.wait(EC.urlContains('project'), 10000, 'never arrived at new reading')
     // Give Optimus/Elastic a BRIEF moment to index the new reading
     browser.sleep(100)
     // clean up after this test
@@ -173,6 +173,8 @@ describe('New Reading Page', () => {
       browser.sleep(100)
       // Return to dashboard
       sidebar.backToDash()
+      // Give dashboard a second to load
+      browser.sleep(1000)
       // Verify
       browser.wait(
         EC.elementToBeClickable(element(by.cssContainingText('.draft-card__title', manualSaveTitle))),

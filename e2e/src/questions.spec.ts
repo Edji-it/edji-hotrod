@@ -14,13 +14,17 @@ describe('Questions', () => {
   let dashboard = new Dashboard()
 
   afterEach(() => {
-    browser.manage().logs().get('browser').then(browserLog => {
-      if (browserLog.length > 0) {
-        browserLog.forEach(log => {
-          console.error(log.message)
-        })
-      }
-    })
+    browser
+      .manage()
+      .logs()
+      .get('browser')
+      .then(browserLog => {
+        if (browserLog.length > 0) {
+          browserLog.forEach(log => {
+            console.error(log.message)
+          })
+        }
+      })
   })
 
   describe('Create', () => {
@@ -120,7 +124,7 @@ describe('Questions', () => {
       newReading.finalizeButton.click()
 
       // Should close the reading share code modal after creating a new reading
-      browser.wait(EC.urlContains('project'), 5000, 'never arrived at new reading')
+      browser.wait(EC.urlContains('project'), 10000, 'never arrived at new reading')
 
       browser.wait(
         EC.elementToBeClickable(newReading.shareCodeModalClose),

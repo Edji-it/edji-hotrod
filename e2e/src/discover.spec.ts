@@ -145,7 +145,7 @@ describe('Discover Feed', () => {
       // Finalize
       newReading.createGroupButtonClick()
       // Wait for navigation to hit project page after save
-      browser.wait(EC.urlContains('project'), 7500, 'never arrived at published reading')
+      browser.wait(EC.urlContains('project'), 10000, 'never arrived at published reading')
       newReading.shareCodeModalCloseClick()
       browser.wait(EC.invisibilityOf(newReading.shareCodeModalClose), 5000, 'share reading code modal never dismissed')
       // Go directly to dashboard
