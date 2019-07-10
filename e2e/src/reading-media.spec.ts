@@ -72,6 +72,7 @@ describe('Reading Media', () => {
       browser.wait(EC.elementToBeClickable(delBtn), 5000, 'delBtn never became clickable')
       delBtn.click()
 
+      browser.sleep(1000) // Give the confirm modal a second to pop up before we immediately dismiss the check
       browser.wait(EC.elementToBeClickable(confirmDelBtn), 5000, 'confirm delete button never became clickable')
       confirmDelBtn.click()
     })

@@ -23,7 +23,74 @@ describe('Hero Subscription Management', () => {
       })
   })
 
-  describe('Test Hero subscription modal as a Sidekick', () => {
+  // describe('Subscribe to Hero', () => {
+  //   let registerForm = new RegisterForm()
+
+  //   afterEach(() => {
+  //     sidebar.logout()
+  //   })
+
+  //   it('should subscribe to hero with no discount', () => {
+  //     registerForm.registerAndConfirm()
+  //     // Navigate to the Hero promo page
+  //     sidebar.clickHeroLink()
+  //     // Verify we made it there
+  //     browser.wait(EC.urlContains('plans'), 5000, 'never reached the Hero promo page')
+  //     hero.openHeroModalViaCTA()
+  //     hero.enterCreditCardAndSubmit()
+
+  //     // wait for awesome button (means we just became a hero), then click it
+  //     browser.wait(EC.elementToBeClickable(hero.confirmedHero), 10000, 'never saw Awesome button') // requires a long wait, since we have to wait for stripe and optimus
+  //     hero.confirmedHero.click()
+  //   })
+
+  //   it('should subscribe to hero with a partial discount', () => {
+  //     registerForm.registerAndConfirm()
+  //     // Navigate to the Hero promo page
+  //     sidebar.clickHeroLink()
+  //     // Verify we made it there
+  //     browser.wait(EC.urlContains('plans'), 5000, 'never reached the Hero promo page')
+  //     // Open Hero Modal
+  //     hero.openHeroModalViaCTA()
+  //     // Valid coupon - 50% off
+  //     browser.wait(EC.elementToBeClickable(hero.couponInput), 3000)
+  //     hero.couponInput.sendKeys(hero.validCoupon)
+  //     // Blur field
+  //     hero.couponInput.sendKeys(protractor.Key.TAB)
+  //     browser.wait(EC.presenceOf(hero.validCouponMsg), 5000, 'never saw valid coupon success message')
+
+  //     hero.enterCreditCardAndSubmit()
+
+  //     // wait for awesome button (means we just became a hero), then click it
+  //     browser.wait(EC.elementToBeClickable(hero.confirmedHero), 10000, 'never saw Awesome button') // requires a long wait, since we have to wait for stripe and optimus
+  //     hero.confirmedHero.click()
+  //   })
+
+  //   it('should subscribe to hero with a 100% discount', () => {
+  //     registerForm.registerAndConfirm()
+  //     // Navigate to the Hero promo page
+  //     sidebar.clickHeroLink()
+  //     // Verify we made it there
+  //     browser.wait(EC.urlContains('plans'), 5000, 'never reached the Hero promo page')
+  //     // Open Hero Modal
+  //     hero.openHeroModalViaCTA()
+  //     // Valid coupon - 100% off
+  //     browser.wait(EC.elementToBeClickable(hero.couponInput), 3000)
+  //     hero.couponInput.sendKeys(hero.validCouponHundred)
+  //     // Blur field
+  //     hero.couponInput.sendKeys(protractor.Key.TAB)
+  //     browser.wait(EC.presenceOf(hero.validCouponMsg), 5000, 'never saw valid coupon success message')
+
+  //     browser.wait(EC.elementToBeClickable(hero.subscribeButton), 3000, 'never saw Hero subscribe button')
+  //     hero.subscribeButton.click()
+
+  //     // wait for awesome button (means we just became a hero), then click it
+  //     browser.wait(EC.elementToBeClickable(hero.confirmedHero), 10000, 'never saw Awesome button')
+  //     hero.confirmedHero.click()
+  //   })
+  // })
+
+  describe('Test Hero subscription modal coupon codes', () => {
     afterAll(() => {
       sidebar.logout()
     })
@@ -63,73 +130,6 @@ describe('Hero Subscription Management', () => {
       browser.wait(EC.presenceOf(hero.invalidCouponMsg), 5000, 'never saw invalid coupon message')
       // Close subscription modal
       hero.subscribeModalClose.click()
-    })
-  })
-
-  describe('Subscribe to Hero', () => {
-    let registerForm = new RegisterForm()
-
-    afterEach(() => {
-      sidebar.logout()
-    })
-
-    it('should subscribe to hero with no discount', () => {
-      registerForm.registerAndConfirm()
-      // Navigate to the Hero promo page
-      sidebar.clickHeroLink()
-      // Verify we made it there
-      browser.wait(EC.urlContains('plans'), 5000, 'never reached the Hero promo page')
-      hero.openHeroModalViaCTA()
-      hero.enterCreditCardAndSubmit()
-
-      // wait for awesome button (means we just became a hero), then click it
-      browser.wait(EC.elementToBeClickable(hero.confirmedHero), 10000, 'never saw Awesome button') // requires a long wait, since we have to wait for stripe and optimus
-      hero.confirmedHero.click()
-    })
-
-    it('should subscribe to hero with a partial discount', () => {
-      registerForm.registerAndConfirm()
-      // Navigate to the Hero promo page
-      sidebar.clickHeroLink()
-      // Verify we made it there
-      browser.wait(EC.urlContains('plans'), 5000, 'never reached the Hero promo page')
-      // Open Hero Modal
-      hero.openHeroModalViaCTA()
-      // Valid coupon - 50% off
-      browser.wait(EC.elementToBeClickable(hero.couponInput), 3000)
-      hero.couponInput.sendKeys(hero.validCoupon)
-      // Blur field
-      hero.couponInput.sendKeys(protractor.Key.TAB)
-      browser.wait(EC.presenceOf(hero.validCouponMsg), 5000, 'never saw valid coupon success message')
-
-      hero.enterCreditCardAndSubmit()
-
-      // wait for awesome button (means we just became a hero), then click it
-      browser.wait(EC.elementToBeClickable(hero.confirmedHero), 10000, 'never saw Awesome button') // requires a long wait, since we have to wait for stripe and optimus
-      hero.confirmedHero.click()
-    })
-
-    it('should subscribe to hero with a 100% discount', () => {
-      registerForm.registerAndConfirm()
-      // Navigate to the Hero promo page
-      sidebar.clickHeroLink()
-      // Verify we made it there
-      browser.wait(EC.urlContains('plans'), 5000, 'never reached the Hero promo page')
-      // Open Hero Modal
-      hero.openHeroModalViaCTA()
-      // Valid coupon - 100% off
-      browser.wait(EC.elementToBeClickable(hero.couponInput), 3000)
-      hero.couponInput.sendKeys(hero.validCouponHundred)
-      // Blur field
-      hero.couponInput.sendKeys(protractor.Key.TAB)
-      browser.wait(EC.presenceOf(hero.validCouponMsg), 5000, 'never saw valid coupon success message')
-
-      browser.wait(EC.elementToBeClickable(hero.subscribeButton), 3000, 'never saw Hero subscribe button')
-      hero.subscribeButton.click()
-
-      // wait for awesome button (means we just became a hero), then click it
-      browser.wait(EC.elementToBeClickable(hero.confirmedHero), 5000, 'never saw Awesome button')
-      hero.confirmedHero.click()
     })
   })
 })

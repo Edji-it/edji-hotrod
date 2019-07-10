@@ -26,7 +26,7 @@ export class Hero implements PageObjectInterface {
   // Stripe references
   public creditCardElement = element(by.id('card-element'))
   // public edjiCreditCard = '4242 4242 4242 4242 424 242 42424'
-  public edjiCreditCard = '4242424242424242'
+  public edjiCreditCard = '4000000760000002' // Brazil Credit Card
   public edjiCreditExpiry = '0424'
   public edjiCvc = '242'
   public edjiZip = '42424'
@@ -67,34 +67,39 @@ export class Hero implements PageObjectInterface {
 
     // input the test credit card info
     browser.wait(this.EC.elementToBeClickable(this.creditCardInput), 3000, 'credit card number field was not clickable')
+    // Click field to ensure form updates
+    this.creditCardInput.click()
     this.creditCardInput.sendKeys(this.edjiCreditCard)
-    browser.sleep(400)
     browser.wait(
       this.EC.elementToBeClickable(this.creditCardExpiry),
       3000,
       'credit card expiry field was not clickable',
     )
+    // Click field to ensure form updates
+    this.creditCardExpiry.click()
     this.creditCardExpiry.sendKeys(this.edjiCreditExpiry)
-    browser.sleep(400)
     browser.wait(this.EC.elementToBeClickable(this.creditCardCvc), 3000, 'credit card cvc field was not clickable')
     this.creditCardCvc.sendKeys(this.edjiCvc)
-    // Zip/Postal code field animates in, allow for 400ms animation
-    // -> this may change since Stripe handles display
-    browser.sleep(800)
-    browser.wait(this.EC.presenceOf(this.creditCardZip), 3000, 'credit card zip field was not present')
-    this.creditCardZip.sendKeys(this.edjiZip)
+    // We use an international credit card to avoid zip code entry
+    // // Zip/Postal code field animates in, allow for 400ms animation
+    // // -> this may change since Stripe handles display
+    // browser.sleep(500)
+    // browser.wait(this.EC.elementToBeClickable(this.creditCardZip), 3000, 'credit card zip field was not clickable')
+    // // Click field to ensure form updates
+    // this.creditCardZip.click()
+    // this.creditCardZip.sendKeys(this.edjiZip)
     // switch back to our main content
     browser.switchTo().defaultContent()
     // Submit form
     browser.wait(this.EC.elementToBeClickable(this.subscribeButton), 3000, 'never saw Hero subscribe button')
     this.subscribeButton.click()
     // Verify we do not see Stripe entry form errors (useful to know when debugging)
-    browser.sleep(200)
-    let stripeError = element(by.id('card-errors'))
-    browser.wait(
-      this.EC.invisibilityOf(stripeError),
-      3000,
-      'error returned by Stripe, card information may not have been entered correctly',
-    )
+    browser.sleep(1000) // In an ideal world this sleep should be drastically reduced
+    // let stripeError = element(by.id('card-errors'))
+    // browser.wait(
+    //   this.EC.invisibilityOf(stripeError),
+    //   3000,
+    //   'error returned by Stripe, card information may not have been entered correctly',
+    // )
   }
 }

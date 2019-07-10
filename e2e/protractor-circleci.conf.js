@@ -46,7 +46,8 @@ localConf.onPrepare = () => {
   jasmine.getEnv().addReporter(
     new SpecReporter({
       spec: {
-        displayStacktrace: false, // turned off as we are tracking console errors per test
+        // Protractor-flake needs stack trace find the correct specs to run
+        displayStacktrace: true,
       },
     }),
   )
