@@ -40,7 +40,7 @@ describe('Hero Subscription Management', () => {
       hero.enterCreditCardAndSubmit()
 
       // wait for awesome button (means we just became a hero), then click it
-      browser.wait(EC.elementToBeClickable(hero.confirmedHero), 3000, 'never saw Awesome button') // requires a long wait, since we have to wait for stripe and optimus
+      browser.wait(EC.elementToBeClickable(hero.confirmedHero), 10000, 'never saw Awesome button') // requires a long wait, since we have to wait for stripe and optimus
       hero.confirmedHero.click()
     })
 
@@ -62,7 +62,7 @@ describe('Hero Subscription Management', () => {
       hero.enterCreditCardAndSubmit()
 
       // wait for awesome button (means we just became a hero), then click it
-      browser.wait(EC.elementToBeClickable(hero.confirmedHero), 3000, 'never saw Awesome button') // requires a long wait, since we have to wait for stripe and optimus
+      browser.wait(EC.elementToBeClickable(hero.confirmedHero), 10000, 'never saw Awesome button') // requires a long wait, since we have to wait for stripe and optimus
       hero.confirmedHero.click()
     })
 
@@ -85,7 +85,7 @@ describe('Hero Subscription Management', () => {
       hero.subscribeButton.click()
 
       // wait for awesome button (means we just became a hero), then click it
-      browser.wait(EC.elementToBeClickable(hero.confirmedHero), 5000, 'never saw Awesome button')
+      browser.wait(EC.elementToBeClickable(hero.confirmedHero), 10000, 'never saw Awesome button')
       hero.confirmedHero.click()
     })
   })
