@@ -145,7 +145,7 @@ describe('Discover Feed', () => {
       // Finalize
       newReading.createGroupButtonClick()
       // Wait for navigation to hit project page after save
-      browser.wait(EC.urlContains('project'), 7500, 'never arrived at published reading')
+      browser.wait(EC.urlContains('project'), 10000, 'never arrived at published reading')
       newReading.shareCodeModalCloseClick()
       browser.wait(EC.invisibilityOf(newReading.shareCodeModalClose), 5000, 'share reading code modal never dismissed')
       // Go directly to dashboard
@@ -327,6 +327,51 @@ describe('Discover Feed', () => {
       browser.wait(EC.elementToBeClickable(discover.shareReadingBtn), 5000, 'share reading action was not clickable')
       browser.wait(EC.elementToBeClickable(discover.editReadingBtn), 5000, 'edit reading action was not clickable')
       discover.closeReadingPreview()
+    })
+  })
+
+  describe('Strategy Templates', () => {
+    beforeAll(() => {
+      sidebar.logout()
+      login.getPage()
+      login.loginAndVerify(login.botUser, login.botPassword)
+      sidebar.navDiscover.click()
+    })
+
+    it('should open strategies collection and see strategy templates banner', () => {
+      browser.wait(
+        EC.elementToBeClickable(discover.firstFeedReading),
+        5000,
+        'never saw first reading in discover feed public view',
+      )
+      // View strategies collection
+      browser.wait(
+        EC.elementToBeClickable(discover.filterStrategies),
+        5000,
+        'strategies collection button was not clickable',
+      )
+      discover.filterStrategies.click()
+      browser.wait(
+        EC.elementToBeClickable(discover.strategiesBanner),
+        5000,
+        'never saw strategies collection',
+      )
+    })
+
+    it('should open strategies collection from the user dashboard', () => {
+      sidebar.navCreate.click()
+      // View strategies collection
+      browser.wait(
+        EC.elementToBeClickable(dashboard.strategiesBtn),
+        5000,
+        'strategies collection button was not clickable',
+      )
+      dashboard.strategiesBtn.click()
+      browser.wait(
+        EC.elementToBeClickable(discover.strategiesBanner),
+        5000,
+        'never saw strategies collection',
+      )
     })
   })
 })
