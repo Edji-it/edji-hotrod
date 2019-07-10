@@ -10,13 +10,17 @@ describe('Hero Subscription Management', () => {
   let EC = protractor.ExpectedConditions
 
   afterEach(() => {
-    browser.manage().logs().get('browser').then(browserLog => {
-      if (browserLog.length > 0) {
-        browserLog.forEach(log => {
-          console.error(log.message)
-        })
-      }
-    })
+    browser
+      .manage()
+      .logs()
+      .get('browser')
+      .then(browserLog => {
+        if (browserLog.length > 0) {
+          browserLog.forEach(log => {
+            console.error(log.message)
+          })
+        }
+      })
   })
 
   describe('Test Hero subscription modal as a Sidekick', () => {
@@ -36,14 +40,9 @@ describe('Hero Subscription Management', () => {
       browser.wait(EC.urlContains('plans'), 5000, 'never reached the Hero promo page')
     })
 
-    it('should open the Hero subscription modal', () => {
-      browser.wait(EC.elementToBeClickable(hero.topCTAbutton), 3000, 'never saw Hero call to action button')
-      hero.topCTAbutton.click()
-      // Verify modal popped up
-      browser.wait(EC.elementToBeClickable(hero.subscribeModalHeader), 3000, 'never saw Hero subscription modal')
-    })
-
     it('should test coupon code validation', () => {
+      // Open Hero Modal
+      hero.openHeroModalViaCTA()
       // Valid coupon
       browser.wait(EC.elementToBeClickable(hero.couponInput), 3000)
       hero.couponInput.sendKeys(hero.validCoupon)
@@ -80,16 +79,8 @@ describe('Hero Subscription Management', () => {
       sidebar.clickHeroLink()
       // Verify we made it there
       browser.wait(EC.urlContains('plans'), 5000, 'never reached the Hero promo page')
-
-      browser.wait(EC.elementToBeClickable(hero.topCTAbutton), 3000, 'never saw Hero call to action button')
-      hero.topCTAbutton.click()
-      // Verify modal popped up
-      browser.wait(EC.elementToBeClickable(hero.subscribeModalHeader), 3000, 'never saw Hero subscription modal')
-
-      hero.enterCreditCardInfo()
-
-      browser.wait(EC.elementToBeClickable(hero.subscribeButton), 3000, 'never saw Hero subscribe button')
-      hero.subscribeButton.click()
+      hero.openHeroModalViaCTA()
+      hero.enterCreditCardAndSubmit()
 
       // wait for awesome button (means we just became a hero), then click it
       browser.wait(EC.elementToBeClickable(hero.confirmedHero), 10000, 'never saw Awesome button') // requires a long wait, since we have to wait for stripe and optimus
@@ -102,12 +93,8 @@ describe('Hero Subscription Management', () => {
       sidebar.clickHeroLink()
       // Verify we made it there
       browser.wait(EC.urlContains('plans'), 5000, 'never reached the Hero promo page')
-
-      browser.wait(EC.elementToBeClickable(hero.topCTAbutton), 3000, 'never saw Hero call to action button')
-      hero.topCTAbutton.click()
-      // Verify modal popped up
-      browser.wait(EC.elementToBeClickable(hero.subscribeModalHeader), 3000, 'never saw Hero subscription modal')
-
+      // Open Hero Modal
+      hero.openHeroModalViaCTA()
       // Valid coupon - 50% off
       browser.wait(EC.elementToBeClickable(hero.couponInput), 3000)
       hero.couponInput.sendKeys(hero.validCoupon)
@@ -115,10 +102,7 @@ describe('Hero Subscription Management', () => {
       hero.couponInput.sendKeys(protractor.Key.TAB)
       browser.wait(EC.presenceOf(hero.validCouponMsg), 5000, 'never saw valid coupon success message')
 
-      hero.enterCreditCardInfo()
-
-      browser.wait(EC.elementToBeClickable(hero.subscribeButton), 3000, 'never saw Hero subscribe button')
-      hero.subscribeButton.click()
+      hero.enterCreditCardAndSubmit()
 
       // wait for awesome button (means we just became a hero), then click it
       browser.wait(EC.elementToBeClickable(hero.confirmedHero), 10000, 'never saw Awesome button') // requires a long wait, since we have to wait for stripe and optimus
@@ -131,12 +115,8 @@ describe('Hero Subscription Management', () => {
       sidebar.clickHeroLink()
       // Verify we made it there
       browser.wait(EC.urlContains('plans'), 5000, 'never reached the Hero promo page')
-
-      browser.wait(EC.elementToBeClickable(hero.topCTAbutton), 3000, 'never saw Hero call to action button')
-      hero.topCTAbutton.click()
-      // Verify modal popped up
-      browser.wait(EC.elementToBeClickable(hero.subscribeModalHeader), 3000, 'never saw Hero subscription modal')
-
+      // Open Hero Modal
+      hero.openHeroModalViaCTA()
       // Valid coupon - 100% off
       browser.wait(EC.elementToBeClickable(hero.couponInput), 3000)
       hero.couponInput.sendKeys(hero.validCouponHundred)

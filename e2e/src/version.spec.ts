@@ -26,13 +26,17 @@ describe('Versioning - ', () => {
   afterEach(() => {
     sidebar.backToDash()
 
-    browser.manage().logs().get('browser').then(browserLog => {
-      if (browserLog.length > 0) {
-        browserLog.forEach(log => {
-          console.error(log.message)
-        })
-      }
-    })
+    browser
+      .manage()
+      .logs()
+      .get('browser')
+      .then(browserLog => {
+        if (browserLog.length > 0) {
+          browserLog.forEach(log => {
+            console.error(log.message)
+          })
+        }
+      })
   })
 
   afterAll(() => {
@@ -68,7 +72,7 @@ describe('Versioning - ', () => {
     )
     newReading.finalizeButton.click()
     // Should redirect to Project page for new reading
-    browser.wait(EC.urlContains('project'), 7500, 'never arrived at the reading page after published')
+    browser.wait(EC.urlContains('project'), 10000, 'never arrived at the reading page after published')
     // Go to the dashboard
     sidebar.backToDash()
   })
@@ -79,11 +83,11 @@ describe('Versioning - ', () => {
     // Make a new version of that reading
     // Click the options, then copy and edit button
     browser.wait(
-      EC.elementToBeClickable(element(by.css('button[testFindOptions="' + uniqueTitle + '"]'))),
+      EC.elementToBeClickable(dashboard.getReadingOptionsByTitle(uniqueTitle)),
       8000,
       'reading card options button never became clickable after load',
     )
-    element(by.css('button[testFindOptions="' + uniqueTitle + '"]')).click()
+    dashboard.getReadingOptionsByTitle(uniqueTitle).click()
 
     browser.wait(
       EC.elementToBeClickable(element(by.css('button[testFindCopyAndEdit="' + uniqueTitle + '"]'))),
@@ -98,8 +102,8 @@ describe('Versioning - ', () => {
 
     // Make sure the copyId is valid
     browser.wait(
-      function () {
-        return browser.getCurrentUrl().then(function (url) {
+      function() {
+        return browser.getCurrentUrl().then(function(url) {
           return newReading.findIdExp.test(url)
         })
       },
@@ -166,12 +170,11 @@ describe('Versioning - ', () => {
       'past versions never loaded',
     )
     browser.wait(
-      EC.elementToBeClickable(element(by.css('button[testFindOptions="' + uniqueTitle + '"]'))),
+      EC.elementToBeClickable(dashboard.getReadingOptionsByTitle(uniqueTitle)),
       8000,
       'reading card options for versionbutton never became clickable after load',
     )
-    element(by.css('button[testFindOptions="' + uniqueTitle + '"]')).click()
-
+    dashboard.getReadingOptionsByTitle(uniqueTitle).click()
     // Make sure the Create New Group button shows up and then click on it
     browser.wait(
       EC.elementToBeClickable(element(by.css('button[testFindCreateNewGroup="' + uniqueTitle + '"]'))),

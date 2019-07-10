@@ -24,19 +24,22 @@ describe('Reading Media', () => {
   })
 
   afterEach(() => {
-    browser.manage().logs().get('browser').then(browserLog => {
-      if (browserLog.length > 0) {
-        browserLog.forEach(log => {
-          console.error(log.message)
-        })
-      }
-    })
+    browser
+      .manage()
+      .logs()
+      .get('browser')
+      .then(browserLog => {
+        if (browserLog.length > 0) {
+          browserLog.forEach(log => {
+            console.error(log.message)
+          })
+        }
+      })
   })
 
   describe('PDF upload', () => {
-    it('should upload a PDF to a reading and save it to the reading', function () {
-      browser.wait(EC.elementToBeClickable(newReading.uploadPDfModalButton), 5000)
-      newReading.uploadPDfModalButton.click()
+    it('should upload a PDF to a reading and save it to the reading', function() {
+      newReading.openInsertPdfModal()
       // Select File to upload
       let fileToUpload = 'assets/2-pages.pdf'
       let absolutePath = path.resolve(__dirname, fileToUpload)
@@ -61,20 +64,10 @@ describe('Reading Media', () => {
     })
 
     // This following test relies on the previous one for a PDF to delete.
-    it('should delete a PDF that was uploaded', function () {
-      browser.wait(
-        EC.elementToBeClickable(newReading.uploadPDfModalButton),
-        5000,
-        'insert PDF button was not clickable',
-      )
-      newReading.uploadPDfModalButton.click()
-      browser.wait(
-        EC.elementToBeClickable(element.all(by.id('titleCard')).first()),
-        5000,
-        'insert PDF modal did not become available',
-      )
-      let delBtn = element.all(by.id('pdfDelBtn')).first()
-      let confirmDelBtn = element.all(by.id('pdfDelBtnConfirm')).first()
+    it('should delete a PDF that was uploaded', function() {
+      newReading.openInsertPdfModal()
+      let delBtn = element(by.id('pdfDelBtn'))
+      let confirmDelBtn = element(by.id('pdfDelBtnConfirm'))
 
       browser.wait(EC.elementToBeClickable(delBtn), 5000, 'delBtn never became clickable')
       delBtn.click()
@@ -86,8 +79,8 @@ describe('Reading Media', () => {
   })
 
   describe('Image upload', () => {
-    it('should upload an image to a reading and save it to the reading', function () {
-      newReading.insertImageButtonTap()
+    it('should upload an image to a reading and save it to the reading', function() {
+      newReading.openInsertImageModal()
       browser.wait(
         EC.elementToBeClickable(newReading.imageUploadTrigger),
         6000,

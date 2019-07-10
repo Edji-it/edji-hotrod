@@ -57,7 +57,7 @@
     "ngx-page-scroll": "^5.0.0",
     "opus-recorder": "^4.1.4",
     "primeng": "^7.0.5",
-    "protractor-flake": "^3.3.0",
+    "protractor-flake": "^4.0.0",
     "rangy": "^1.3.0",
     "rxjs": "^6.4.0",
     "standard-version": "^4.4.0",

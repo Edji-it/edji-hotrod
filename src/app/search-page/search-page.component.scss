@@ -89,3 +89,14 @@
 .found__readings {
   margin-bottom: -50px;
 }
+
+.strategies-banner {
+  border: 1px solid #FDF9A3;
+  .banner-text {
+    font-weight: 200;
+  }
+}
+
+.icon-strategies-lg {
+  background-color: transparent; // our highlight class h- causes this element bkgnd to turn in to a crimson red
+}

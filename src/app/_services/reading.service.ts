@@ -169,6 +169,10 @@ export class ReadingService {
       following.forEach(userId => {
         queryString += `&owner_id=${userId}`
       })
+    } else if (searchParams.activeLibrary === 'strategies') {
+      // strategies filter will hard-code to the edji strategies account
+      const edjiStrategies = '5cc65d8d156b5300215670fe'
+      queryString += `&owner_id=${edjiStrategies}`
     } else if (searchParams.activeLibrary !== 'public') {
       // Handle academy/institution id filter
     }
@@ -417,4 +421,4 @@ export interface ReadingQuery {
 type POP = 'projects'
 type CreatedCollection = 'bookmarked' | 'recent' | 'versions'
 type Scope = 'public' | 'owner'
-type ActiveLibrary = 'public' | 'following'
+type ActiveLibrary = 'public' | 'following' | 'strategies'
