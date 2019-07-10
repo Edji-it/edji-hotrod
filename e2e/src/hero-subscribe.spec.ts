@@ -23,49 +23,6 @@ describe('Hero Subscription Management', () => {
       })
   })
 
-  describe('Test Hero subscription modal as a Sidekick', () => {
-    afterAll(() => {
-      sidebar.logout()
-    })
-
-    it('should login and navigate to the hero subscription page', () => {
-      browser.get('/#/login')
-      // log in a user
-      loginForm.login()
-      // verify that we reach the dashboard after login
-      browser.wait(EC.urlContains('dashboard'), 5000, 'never reached the dashboard after loggin in')
-      // Navigate to the Hero promo page
-      sidebar.clickHeroLink()
-      // Verify we made it there
-      browser.wait(EC.urlContains('plans'), 5000, 'never reached the Hero promo page')
-    })
-
-    it('should test coupon code validation', () => {
-      // Open Hero Modal
-      hero.openHeroModalViaCTA()
-      // Valid coupon
-      browser.wait(EC.elementToBeClickable(hero.couponInput), 3000)
-      hero.couponInput.sendKeys(hero.validCoupon)
-      // Blur field
-      hero.couponInput.sendKeys(protractor.Key.TAB)
-      browser.wait(EC.presenceOf(hero.validCouponMsg), 5000, 'never saw valid coupon success message')
-      // Academy coupon
-      hero.couponInput.clear()
-      hero.couponInput.sendKeys(hero.academyCoupon)
-      // Blur field
-      hero.couponInput.sendKeys(protractor.Key.TAB)
-      browser.wait(EC.presenceOf(hero.academyCouponMsg), 5000, 'never saw academy coupon success message')
-      // Invalid coupon
-      hero.couponInput.clear()
-      hero.couponInput.sendKeys(hero.invalidCoupon)
-      // Blur field
-      hero.subscribeButton.click()
-      browser.wait(EC.presenceOf(hero.invalidCouponMsg), 5000, 'never saw invalid coupon message')
-      // Close subscription modal
-      hero.subscribeModalClose.click()
-    })
-  })
-
   describe('Subscribe to Hero', () => {
     let registerForm = new RegisterForm()
 
@@ -130,6 +87,49 @@ describe('Hero Subscription Management', () => {
       // wait for awesome button (means we just became a hero), then click it
       browser.wait(EC.elementToBeClickable(hero.confirmedHero), 5000, 'never saw Awesome button')
       hero.confirmedHero.click()
+    })
+  })
+
+  describe('Test Hero subscription modal coupon codes', () => {
+    afterAll(() => {
+      sidebar.logout()
+    })
+
+    it('should login and navigate to the hero subscription page', () => {
+      browser.get('/#/login')
+      // log in a user
+      loginForm.login()
+      // verify that we reach the dashboard after login
+      browser.wait(EC.urlContains('dashboard'), 5000, 'never reached the dashboard after loggin in')
+      // Navigate to the Hero promo page
+      sidebar.clickHeroLink()
+      // Verify we made it there
+      browser.wait(EC.urlContains('plans'), 5000, 'never reached the Hero promo page')
+    })
+
+    it('should test coupon code validation', () => {
+      // Open Hero Modal
+      hero.openHeroModalViaCTA()
+      // Valid coupon
+      browser.wait(EC.elementToBeClickable(hero.couponInput), 3000)
+      hero.couponInput.sendKeys(hero.validCoupon)
+      // Blur field
+      hero.couponInput.sendKeys(protractor.Key.TAB)
+      browser.wait(EC.presenceOf(hero.validCouponMsg), 5000, 'never saw valid coupon success message')
+      // Academy coupon
+      hero.couponInput.clear()
+      hero.couponInput.sendKeys(hero.academyCoupon)
+      // Blur field
+      hero.couponInput.sendKeys(protractor.Key.TAB)
+      browser.wait(EC.presenceOf(hero.academyCouponMsg), 5000, 'never saw academy coupon success message')
+      // Invalid coupon
+      hero.couponInput.clear()
+      hero.couponInput.sendKeys(hero.invalidCoupon)
+      // Blur field
+      hero.subscribeButton.click()
+      browser.wait(EC.presenceOf(hero.invalidCouponMsg), 5000, 'never saw invalid coupon message')
+      // Close subscription modal
+      hero.subscribeModalClose.click()
     })
   })
 })
