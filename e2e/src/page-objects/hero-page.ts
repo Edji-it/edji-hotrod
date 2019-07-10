@@ -67,19 +67,25 @@ export class Hero implements PageObjectInterface {
 
     // input the test credit card info
     browser.wait(this.EC.elementToBeClickable(this.creditCardInput), 3000, 'credit card number field was not clickable')
+    // Click field to ensure form updates
+    this.creditCardInput.click()
     this.creditCardInput.sendKeys(this.edjiCreditCard)
     browser.wait(
       this.EC.elementToBeClickable(this.creditCardExpiry),
       3000,
       'credit card expiry field was not clickable',
     )
+    // Click field to ensure form updates
+    this.creditCardExpiry.click()
     this.creditCardExpiry.sendKeys(this.edjiCreditExpiry)
     browser.wait(this.EC.elementToBeClickable(this.creditCardCvc), 3000, 'credit card cvc field was not clickable')
     this.creditCardCvc.sendKeys(this.edjiCvc)
     // Zip/Postal code field animates in, allow for 400ms animation
     // -> this may change since Stripe handles display
     browser.sleep(500)
-    browser.wait(this.EC.presenceOf(this.creditCardZip), 3000, 'credit card zip field was not present')
+    browser.wait(this.EC.elementToBeClickable(this.creditCardZip), 3000, 'credit card zip field was not clickable')
+    // Click field to ensure form updates
+    this.creditCardZip.click()
     this.creditCardZip.sendKeys(this.edjiZip)
     // switch back to our main content
     browser.switchTo().defaultContent()
