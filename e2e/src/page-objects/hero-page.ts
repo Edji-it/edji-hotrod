@@ -59,6 +59,9 @@ export class Hero implements PageObjectInterface {
     // switch to the stripe iframe selectors
     var driver = browser.driver
     var loc = by.css('#card-element iframe')
+    // Wait for Stripe form to definitely be available
+    // *note* CircleCI will not have a cached version of the Stripe script
+    browser.wait(this.EC.presenceOf(element(loc)), 6000, 'Stripe iframe did not become available to enter credit card')
     var el = driver.findElement(loc)
     browser.switchTo().frame(el)
 
