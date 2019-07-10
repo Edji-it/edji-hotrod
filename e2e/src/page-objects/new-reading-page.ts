@@ -39,8 +39,7 @@ export class NewReading implements PageObjectInterface {
   public previewContent = element(by.id('readingPreviewContent'))
   public previewClose = element(by.id('readingPreviewClose'))
 
-  public uploadImageModalButton = element(by.css('#buttonUploadImage'))
-  public uploadImageModalButtonMobile = element(by.css('#buttonUploadImageMobile'))
+  public uploadImageModalButton = element(by.css('[data-test="buttonUploadImage"]'))
   public imageUploadTrigger = element(by.id('buttonBeginImageUpload'))
   public imageFileInput = element(by.css('#imageFileInput'))
   public uploadedImage = element(by.css('.upload-list-item.new'))
@@ -137,8 +136,34 @@ export class NewReading implements PageObjectInterface {
     })
   }
 
+  /**
+   * Opens PDf modal from New Reading page
+   * - Waits for animation
+   */
+  public openInsertPdfModal(): void {
+    // Wait for form to load
+    browser.wait(this.EC.elementToBeClickable(this.titleInput), 5000)
+    // Trigger modal
+    this.uploadPDfModalButton.click()
+    // Let modal fade in
+    browser.sleep(500)
+  }
+
+  /**
+   * Opens Image modal from New Reading page
+   * - Waits for animation
+   */
+  public openInsertImageModal(): void {
+    // Wait for form to load
+    browser.wait(this.EC.elementToBeClickable(this.titleInput), 5000)
+    // Trigger modal
+    this.insertImageButtonTap()
+    // Let modal fade in
+    browser.sleep(500)
+  }
+
   // Click the insert image button if we're on a mobile view
-  public insertImageButtonTap(): void {
+  private insertImageButtonTap(): void {
     // Toggle the owner tools on mobile if the Owner Tools button is present
     this.insertToolToggleButton.isPresent().then(result => {
       if (result) {
@@ -151,23 +176,15 @@ export class NewReading implements PageObjectInterface {
               'never found the insert tool button',
             )
             this.insertToolToggleButton.click()
-
-            // Click the image upload button for mobile
-            browser.wait(
-              this.EC.elementToBeClickable(this.uploadImageModalButtonMobile),
-              5000,
-              'image upload modal button never became clickable',
-            )
-            this.uploadImageModalButtonMobile.click()
-          } else {
-            // Click the image upload button for desktop
-            browser.wait(
-              this.EC.elementToBeClickable(this.uploadImageModalButton),
-              5000,
-              'image upload modal button never became clickable',
-            )
-            this.uploadImageModalButton.click()
           }
+
+          // Click the image upload button
+          browser.wait(
+            this.EC.elementToBeClickable(this.uploadImageModalButton),
+            5000,
+            'image upload modal button never became clickable',
+          )
+          this.uploadImageModalButton.click()
         })
       }
     })

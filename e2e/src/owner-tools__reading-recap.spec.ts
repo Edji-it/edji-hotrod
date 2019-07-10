@@ -68,6 +68,9 @@ describe('Project Page as an owner using reading report: ', () => {
       3000,
       'never saw student filter dropdown on reading report',
     )
+
+    // Wait for Sliding Pane animation
+    browser.sleep(500)
   })
 
   it('verify there is a comment in the count and the count is greater than 0 for the initial student', () => {
@@ -77,7 +80,7 @@ describe('Project Page as an owner using reading report: ', () => {
     browser.wait(
       EC.elementToBeClickable(recapStudentOptions.get(0)),
       5000,
-      'recap student selector options never became clickable',
+      'recap student dropdown options never became clickable',
     )
     recapStudentOptions.first().click()
 

@@ -26,10 +26,12 @@ export class Discover implements PageObjectInterface {
   public loginModalEl = element(by.id('loginModal'))
   public outsideLoginModal = element(by.id('loginModalOutsideContent'))
   public previewTitle = element(by.id('previewTitle'))
+  public strategiesBanner = element(by.id('discoverStrategies'))
 
   // Discover Filters
   public filterPublic = element(by.id('discoverFilterPublic'))
   public filterFollowing = element(by.id('discoverFilterFollowing'))
+  public filterStrategies = element(by.id('discoverFilterStrategies'))
   public searchCount = element(by.css('[data-test="searchCount"]'))
   public searchInput = element(by.id('readingSearch'))
   public clearSearchBtn = element(by.css('.form-control-clear.icon.icon-close'))
@@ -118,13 +120,13 @@ export class Discover implements PageObjectInterface {
   }
 
   getReadingTitle(el: any) {
-    return el.getText().then(function(text: string) {
+    return el.getText().then(function (text: string) {
       return text
     })
   }
 
   getInputFieldText(el: any) {
-    return el.getAttribute('value').then(function(value: string) {
+    return el.getAttribute('value').then(function (value: string) {
       return value
     })
   }

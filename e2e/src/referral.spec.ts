@@ -180,7 +180,7 @@ describe('Share', () => {
       newReading.groupInput.sendKeys(newReading.groupString)
       newReading.finalizeButton.click()
       // Should redirect to Project page for new reading
-      browser.wait(EC.urlContains('project'), 5000, 'never arrived at new reading')
+      browser.wait(EC.urlContains('project'), 10000, 'never arrived at new reading')
       // Reset user to dashboard
       sidebar.backToDash()
       /**

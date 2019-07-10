@@ -118,7 +118,10 @@ nav-bar(
               span.editor-button-bar__title Insert
               //- Upload Image Button 
                   - Opens Modal.
-              a#buttonUploadImage.btn.btn-icon--plain((click)="showUploadModal = true")
+              a#buttonUploadImage.btn.btn-icon--plain(
+                  (click)="showUploadModal = true",
+                  data-test="buttonUploadImage"
+                )
                 img(title="Add Picture" src="/assets/images/icon-picture.svg")
               //- Upload PDF Button 
                   - Opens Modal
@@ -136,7 +139,8 @@ nav-bar(
               .insert-options-group--mobile([class.btn-group-show--animation]="insertOptionShow")
                 a#buttonUploadImageMobile.btn.btn-icon--circle-shadow.insert-options--mobile(
                   (tap)="showUploadModal = true; insertOptionShow=!insertOptionShow", 
-                  [class.btn-show--animation]="insertOptionShow"
+                  [class.btn-show--animation]="insertOptionShow",
+                  data-test="buttonUploadImage"
                 )
                   img(title="Add Picture", src="/assets/images/icon-picture.svg", [class.hide]="!insertOptionShow")
                 //- Upload PDF Button 

@@ -27,11 +27,12 @@ export class Dashboard implements PageObjectInterface {
   public createdListLoading = element(by.css('.created-list.loading'))
   public createdListNextPage = element(by.css('.created-list .ui-paginator-next'))
   public createdListPrevPage = element(by.css('.created-list .ui-paginator-prev'))
-  public getReadingOptionsByTitle = (title: string) => element(by.css('button[testFindOptions="' + title + '"]'))
-  public getReadingDeleteByTitle = (title: string) => element(by.css('button[testDelete="' + title + '"]'))
+  public getReadingOptionsByTitle = (title: string) => element(by.css('button[data-test="options-' + title + '"]'))
+  public getReadingDeleteByTitle = (title: string) => element(by.css('button[data-test="delete-' + title + '"]'))
   public searchCount = element(by.id('searchCount'))
   public searchInput = element(by.id('readingSearch'))
   public bookmarksBtn = element(by.id('bookmarksBtn'))
+  public strategiesBtn = element(by.id('dashboardFilterStrategies'))
 
   // public toggle and status
   public publicStatusTitle = 'Public Status <Do Not Delete or Use>'
@@ -151,6 +152,9 @@ export class Dashboard implements PageObjectInterface {
     let groupNameInput = this.projectLabel
     let createGroupButton = element(by.id('buttonCreateGroup'))
 
+    // Wait for new group modal animation
+    browser.sleep(500)
+
     browser.wait(this.EC.presenceOf(groupNameInput), 5000, 'never saw a groupNameInput')
     browser.wait(this.EC.elementToBeClickable(groupNameInput), 5000, 'groupNameInput was never clickable')
 
@@ -187,6 +191,10 @@ export class Dashboard implements PageObjectInterface {
     })
   }
 
+  /**
+   * Deletes a reading via options menu on dashboard
+   * @param title Reading Title
+   */
   deleteReadingByTitle(title: string): void {
     reset()
     this.getPage()
