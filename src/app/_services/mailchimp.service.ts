@@ -41,15 +41,15 @@ export class MailchimpService {
    * Add newly registered users to the sign up Mailchimp list
    */
   public async addToNewUsersList(user: User): Promise<void> {
-    // if (this.isProd) {
-    let body: MailChimpPost = {
-      ...this.makeChimpUser(user),
-      list: 'new',
+    if (this.isProd) {
+      let body: MailChimpPost = {
+        ...this.makeChimpUser(user),
+        list: 'new',
+      }
+      await this._http.post(this._auth.getUrl() + '/mailchimp/add', body, this._auth.getOptions()).toPromise()
+    } else {
+      console.info('Dev: Not adding user to mailing list')
     }
-    await this._http.post(this._auth.getUrl() + '/mailchimp/add', body, this._auth.getOptions()).toPromise()
-    // } else {
-    //   console.info("Dev: Not adding user to mailing list")
-    // }
   }
 }
 
