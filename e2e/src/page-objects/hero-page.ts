@@ -26,7 +26,7 @@ export class Hero implements PageObjectInterface {
   // Stripe references
   public creditCardElement = element(by.id('card-element'))
   // public edjiCreditCard = '4242 4242 4242 4242 424 242 42424'
-  public edjiCreditCard = '4242424242424242'
+  public edjiCreditCard = '4000000760000002' // Brazil Credit Card
   public edjiCreditExpiry = '0424'
   public edjiCvc = '242'
   public edjiZip = '42424'
@@ -80,13 +80,14 @@ export class Hero implements PageObjectInterface {
     this.creditCardExpiry.sendKeys(this.edjiCreditExpiry)
     browser.wait(this.EC.elementToBeClickable(this.creditCardCvc), 3000, 'credit card cvc field was not clickable')
     this.creditCardCvc.sendKeys(this.edjiCvc)
-    // Zip/Postal code field animates in, allow for 400ms animation
-    // -> this may change since Stripe handles display
-    browser.sleep(500)
-    browser.wait(this.EC.elementToBeClickable(this.creditCardZip), 3000, 'credit card zip field was not clickable')
-    // Click field to ensure form updates
-    this.creditCardZip.click()
-    this.creditCardZip.sendKeys(this.edjiZip)
+    // We use an international credit card to avoid zip code entry
+    // // Zip/Postal code field animates in, allow for 400ms animation
+    // // -> this may change since Stripe handles display
+    // browser.sleep(500)
+    // browser.wait(this.EC.elementToBeClickable(this.creditCardZip), 3000, 'credit card zip field was not clickable')
+    // // Click field to ensure form updates
+    // this.creditCardZip.click()
+    // this.creditCardZip.sendKeys(this.edjiZip)
     // switch back to our main content
     browser.switchTo().defaultContent()
     // Submit form
