@@ -94,7 +94,7 @@ export class Hero implements PageObjectInterface {
     browser.wait(this.EC.elementToBeClickable(this.subscribeButton), 3000, 'never saw Hero subscribe button')
     this.subscribeButton.click()
     // Verify we do not see Stripe entry form errors (useful to know when debugging)
-    browser.sleep(200)
+    browser.sleep(10000) // In an ideal world this sleep should be drastically reduced
     let stripeError = element(by.id('card-errors'))
     browser.wait(
       this.EC.invisibilityOf(stripeError),
