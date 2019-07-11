@@ -6,5 +6,5 @@ module.exports = {
     '\\.(pug)$': '<rootDir>/node_modules/pug-jest',
   },
   reporters: ['default', 'jest-junit'],
-  testMatch: ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec).[jt]s?(x)']
+  testMatch: ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec).[jt]s?(x)'],
 }
