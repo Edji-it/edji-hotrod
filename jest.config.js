@@ -5,15 +5,6 @@ module.exports = {
   transform: {
     '\\.(pug)$': '<rootDir>/node_modules/pug-jest',
   },
-  reporters: [
-    'default',
-    'jest-junit',
-    // [
-    //   'jest-junit',
-    //   {
-    //     outputName: './test.xml',
-    //     outputDirectory: './output',
-    //   },
-    // ],
-  ],
+  reporters: ['default', 'jest-junit'],
+  testMatch: ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec).[jt]s?(x)']
 }
